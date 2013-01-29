@@ -9,7 +9,6 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.NonterminalGrammarSlot;
 import org.jgll.grammar.TerminalGrammarSlot;
-import org.jgll.lexer.GLLLexer;
 import org.jgll.lookup.Lookup;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonPackedNodeWithChildren;

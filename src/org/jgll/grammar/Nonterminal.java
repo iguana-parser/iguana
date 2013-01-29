@@ -4,11 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.lexer.GLLLexer;
-
 public class Nonterminal implements Serializable {
-
-	private final List<GrammarSlot> alternates;
+  private static final long serialVersionUID = 1890711559136311884L;
+  private final List<GrammarSlot> alternates;
 	private final int id;
 	private final String name;
 	private final boolean nullable;
@@ -35,12 +33,7 @@ public class Nonterminal implements Serializable {
 	public boolean isNullable() {
 		return nullable;
 	}
-	
-	public void execute(int inputIndex, GLLLexer lexer) {
-		for(GrammarSlot slot : alternates) {
-		}
-	}
-	
+		
 	public String code() {
 		String s = "";
 		
