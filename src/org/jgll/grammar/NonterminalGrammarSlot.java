@@ -25,6 +25,14 @@ public class NonterminalGrammarSlot extends GrammarSlot {
 		return nonterminal;
 	}
 	
+	public void execute() {
+		if(previous == null) {
+			
+		} else {
+			
+		}
+	}
+	
 	@Override
 	public void code(Writer writer) throws IOException {
 		

@@ -17,13 +17,14 @@ import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.InputUtil;
 
 /**
- * GLLParser is the abstract base class for all the generated GLL parsers which
- * provides common methods for SPPF and GSS construction.
+ * GLLParser is the abstract base class for all the generated GLL parsers.
+ * This class provides common methods for SPPF and GSS construction.
  * 
- * Based on the paper "GLL: cubic time SPPF generation."
+ * Based on the paper "GLL: parse tree generation."
  * 
  * @author Maarten Manders
- * @author Ali Afroozeh
+ * 
+ * @author Ali Afroozeh 	<afroozeh@gmail.com>
  */
 public abstract class GLLParser {
 	
@@ -89,7 +90,7 @@ public abstract class GLLParser {
 	 * @throws ParsingFailedException an instance of {@link ParsingFailedException} if the descriptor set is empty, but
 	 * no SPPF root has been found.
 	 */
-	public abstract SPPFNode parse(String input) throws ParsingFailedException;
+	public abstract SPPFNode parse(String input, Grammar grammar) throws ParsingFailedException;
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -107,8 +108,6 @@ public abstract class GLLParser {
 
 	/**
 	 * initialized the parser's state before a new parse.
-	 *
-	 * This should be called in a generated parse method.
 	 * 
 	 */
 	protected abstract void init(int inputSize);
@@ -124,8 +123,6 @@ public abstract class GLLParser {
 	 * }
 	 */
 	public final void add(int label, GSSNode u, int inputIndex, NonPackedNode w) {
-		
-		
 		Descriptor d = new Descriptor(label, u, inputIndex, w);
 //		d.setColumn(inputUtil.getLineNumber(inputIndex).getColumnNumber());
 		descriptorSet.add(d);
