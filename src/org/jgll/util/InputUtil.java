@@ -53,6 +53,17 @@ public class InputUtil {
 
 		return sb.toString();
 	}
+	
+	public static String read(InputStream is) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		BufferedInputStream in = new BufferedInputStream(is);
+		int c = 0;
+		while((c = in.read()) != -1) {
+			sb.append((char) c);
+		}
+		in.close();
+		return sb.toString();
+	}
 
 	public ErrorLocation getLineNumber(int index) {
 
