@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Set;
 
 /**
@@ -27,9 +29,7 @@ public class TerminalGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public String code() {
-		
-		String s = "";
+	public void code(Writer writer) throws IOException {
 		
 		// code(A ::= ε) = 
 		// 					cR := getNodeT(ε,cI); 
@@ -37,10 +37,10 @@ public class TerminalGrammarSlot extends GrammarSlot {
 		// 					pop(cU , cI , cN ); 
 		// 					goto L0
 		if(previous == null && next == null) {
-			s += "   cr = getNodeT(-1, ci, ci);\n";
-			s += "   cn = getNodeP(" + id + ", cn, cr);\n";
-			s += "   pop(cu, ci, cn);\n";
-			s += "   label = L0;\n}\n";
+			writer.append("   cr = getNodeT(-1, ci, ci);\n");
+			writer.append("   cn = getNodeP(" + id + ", cn, cr);\n");
+			writer.append("   pop(cu, ci, cn);\n");
+			writer.append("   label = L0;\n}\n");
 		}
 		
 		// code(A::= x1) = 
@@ -50,30 +50,30 @@ public class TerminalGrammarSlot extends GrammarSlot {
 		//		 		  pop(cU,cI,cN); 
 		//				  gotoL0
 		else if(previous == null && next.next == null) {
-			s += checkInput(terminal);
-			s += "   cr = getNodeT(" + terminal.id + ", ci, ci + 1);\n";
-			s += elseCheckInput();
-			s += "   ci = ci + 1;\n";
-			s += "   cn = getNodeP(" + next.id + ", cn, cr);\n";
-			s += "   pop(cu, ci, cn);\n";
-			s += "   label = L0;\n}\n";
+			writer.append(checkInput(terminal));
+			writer.append("   cr = getNodeT(" + terminal.id + ", ci, ci + 1);\n");
+			writer.append(elseCheckInput());
+			writer.append("   ci = ci + 1;\n");
+			writer.append("   cn = getNodeP(" + next.id + ", cn, cr);\n");
+			writer.append("   pop(cu, ci, cn);\n");
+			writer.append("   label = L0;\n}\n");
 		}
 		
 		// If f ≥ 2 and x1 is a terminal
 		else if(previous == null && !(next.next == null)) {
-			s += checkInput(terminal);
-			s += "   cn = getNodeT(" + terminal.id + ", ci, ci + 1);\n";
-			s += elseCheckInput();
-			s += "   ci = ci + 1;\n";
+			writer.append(checkInput(terminal));
+			writer.append("   cn = getNodeT(" + terminal.id + ", ci, ci + 1);\n");
+			writer.append(elseCheckInput());
+			writer.append("   ci = ci + 1;\n");
 			
 			GrammarSlot slot = next;
 			// while slot is one before the end, i.e, α . x
 			while(slot.next != null) {
-				s += slot.code();
+				slot.code(writer);
 				slot = slot.next;
 			}
-			s += "   pop(cu, ci, cn);\n";
-			s += "   label = L0;\n}\n";
+			writer.append("   pop(cu, ci, cn);\n");
+			writer.append("   label = L0;\n}\n");
 		}
 		
 		// code(A::=α·aβ) = 
@@ -83,17 +83,15 @@ public class TerminalGrammarSlot extends GrammarSlot {
 		// 					cI :=cI +1; 
 		//					cN :=getNodeP(A::=αa·β,cN,cR)
 		else {
-			s += checkInput(terminal);
-			s += "     cr = getNodeT(" + terminal.id + ", ci, ci + 1);\n";
-			s += "   } else {\n";
-			s += "     label = L0; return;\n";
-			s += "   }\n";
+			writer.append(checkInput(terminal));
+			writer.append("     cr = getNodeT(" + terminal.id + ", ci, ci + 1);\n");
+			writer.append("   } else {\n");
+			writer.append("     label = L0; return;\n");
+			writer.append("   }\n");
 			
-			s += "   ci = ci + 1;\n";
-			s += "   cn = getNodeP(" + next.getId() + ", cn, cr);\n";
+			writer.append("   ci = ci + 1;\n");
+			writer.append("   cn = getNodeP(" + next.getId() + ", cn, cr);\n");
 		}
-		
-		return s;
 	}
 	
 	private String checkInput(Terminal terminal) {

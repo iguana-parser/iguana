@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Set;
 
 /**
@@ -24,22 +26,21 @@ public class NonterminalGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public String code() {
-		String s = "";
+	public void code(Writer writer) throws IOException {
 		
 		if(previous == null) {
-			s += "   cu = create(" + next.id + ", cu, ci, cn);\n";
-			s += "   label = " + nonterminal.getId() + "; \n}\n";
-			s += "// " + next.getName() + "\n";
-			s += "private void parse_" + next.id + "() {\n";
+			writer.append("   cu = create(" + next.id + ", cu, ci, cn);\n");
+			writer.append("   label = " + nonterminal.getId() + "; \n}\n");
+			writer.append("// " + next.getName() + "\n");
+			writer.append("private void parse_" + next.id + "() {\n");
 			
 			GrammarSlot slot = next;
 			while(slot.next != null) {
-				s += slot.code();
+				slot.code(writer);
 				slot = slot.next;
 			}
-			s += "   pop(cu, ci, cn);\n";
-			s += "   label = L0;\n}\n";
+			writer.append("   pop(cu, ci, cn);\n");
+			writer.append("   label = L0;\n}\n");
 		} 
 		
 		else { 
@@ -52,12 +53,11 @@ public class NonterminalGrammarSlot extends GrammarSlot {
 			//						}
 			// 						else goto L0
 			// RXl:
-			s += "   cu = create(" + next.id + ", cu, ci, cn);\n";
-			s += "   label = " + nonterminal.getId() + ";\n}\n";
-			s += "// " + next.getName() + "\n";
-			s += "private void parse_" + next.id + "(){\n";
+			writer.append("   cu = create(" + next.id + ", cu, ci, cn);\n");
+			writer.append("   label = " + nonterminal.getId() + ";\n}\n");
+			writer.append("// " + next.getName() + "\n");
+			writer.append("private void parse_" + next.id + "(){\n");
 		}
-		return s;
 	}
 	
 	@Override

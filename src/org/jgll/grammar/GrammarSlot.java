@@ -1,6 +1,8 @@
 package org.jgll.grammar;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.Set;
 
 /**
@@ -37,7 +39,7 @@ public abstract class GrammarSlot implements Serializable {
 	
 	public abstract Set<Integer> getTestSet();
 	
-	public abstract String code();
+	public abstract void code(Writer writer) throws IOException;
 	
 	public int getId() {
 		return id;

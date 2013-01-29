@@ -1,6 +1,8 @@
 package org.jgll.grammar;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,6 +21,28 @@ public final class Grammar implements Serializable {
 		this.nonterminals = Collections.unmodifiableList(nonterminals);
 		this.slots = Collections.unmodifiableList(slots);
 		this.startSymbol = startSymbol;
+	}
+	
+	public void code(Writer writer) throws IOException {
+		
+		for(Nonterminal nonterminal : nonterminals) {
+			writer.append("case " + nonterminal.getId() + ":\n");
+			writer.append("// " + nonterminal.getName() + "\n");
+			writer.append("parse_" + nonterminal.getId() + "()\n");
+			writer.append("break;\n");
+		}
+		
+		for(GrammarSlot slot : slots) {
+			if(!(slot.previous instanceof TerminalGrammarSlot)) {
+				writer.append("case " + slot.getId() + ":\n");
+				writer.append("parse_" + slot.getId() + "()\n");
+				writer.append("break;\n");
+			}
+		}
+		
+		for(Nonterminal nonterminal : nonterminals) {
+			nonterminal.code(writer);
+		}
 	}
 	
 	public String getName() {

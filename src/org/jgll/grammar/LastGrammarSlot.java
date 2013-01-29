@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Set;
 
 /**
@@ -30,8 +32,9 @@ public class LastGrammarSlot extends GrammarSlot {
 	}
 
 	@Override
-	public String code() {
-		return null;
+	public void code(Writer writer) throws IOException {
+		throw new UnsupportedOperationException();
 	}
+
 
 }
