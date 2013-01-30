@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jgll.exception.ParsingFailedException;
+import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
@@ -122,7 +123,7 @@ public abstract class GLLParser {
 	 *   } 
 	 * }
 	 */
-	public final void add(int label, GSSNode u, int inputIndex, NonPackedNode w) {
+	public final void add(GrammarSlot label, GSSNode u, int inputIndex, NonPackedNode w) {
 		Descriptor d = new Descriptor(label, u, inputIndex, w);
 //		d.setColumn(inputUtil.getLineNumber(inputIndex).getColumnNumber());
 		descriptorSet.add(d);
@@ -152,7 +153,8 @@ public abstract class GLLParser {
 			lookup.addToPoppedElements(u, z);
 			
 			for(GSSEdge edge : u.getEdges()) {
-				NonPackedNode x = getNodeP(u.getLabel(), edge.getSppfNode(), z);
+				assert u.getLabel() instanceof BodyGrammarSlot;
+				NonPackedNode x = getNodeP((BodyGrammarSlot) u.getLabel(), edge.getSppfNode(), z);
 				add(u.getLabel(), edge.getDestination(), i, x);
 			}			
 		}
@@ -186,14 +188,16 @@ public abstract class GLLParser {
 	 * @return the created GSSNode
      *
 	 */
-	public final GSSNode create(int L, GSSNode u, int i, NonPackedNode w) {
+	public final GSSNode create(GrammarSlot L, GSSNode u, int i, NonPackedNode w) {
+		assert L instanceof BodyGrammarSlot;
+		
 		GSSNode v = lookup.getGSSNode(L, i);
 		
 		if(!lookup.getGSSEdge(v, w, u)) {
 			List<NonPackedNode> edgeLabels = lookup.getEdgeLabels(v);
 			if(edgeLabels != null) {
 				for (NonPackedNode z : edgeLabels) {
-					NonPackedNode x = getNodeP(L, w, z);
+					NonPackedNode x = getNodeP((BodyGrammarSlot) L, w, z);
 					add(L, u, z.getRightExtent(), x);
 				}			
 			}
@@ -237,9 +241,7 @@ public abstract class GLLParser {
 	  * 	}
 	  * }
 	  */
-	public final NonPackedNode getNodeP(int position, NonPackedNode leftChild, NonPackedNode rightChild) {
-		
-		GrammarSlot slot = grammar.getGrammarSlot(position);
+	public final NonPackedNode getNodeP(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
 		if (slot.getPosition() == 1 && 
@@ -248,13 +250,13 @@ public abstract class GLLParser {
 			 slot.previous() instanceof NonterminalGrammarSlot && !((NonterminalGrammarSlot) slot.previous()).getNonterminal().isNullable())) {
 				return rightChild;
 		} else {
-			int label;
 			
+			GrammarSlot t;
 			// if (beta = empty)
 			if (slot instanceof LastGrammarSlot) {
-				label = ((LastGrammarSlot) slot).getHead().getId();
+				t = ((LastGrammarSlot) slot).getHead();
 			} else {
-				label = position;
+				t = slot;
 			}
 
 			// if (z != $)
@@ -267,9 +269,9 @@ public abstract class GLLParser {
 				leftExtent = rightChild.getLeftExtent();
 			}
 			
-			NonPackedNode newNode = lookup.getNonPackedNode(label, leftExtent, rightExtent);
+			NonPackedNode newNode = lookup.getNonPackedNode(t, leftExtent, rightExtent);
 
-			lookup.createPackedNode(position, rightChild.getLeftExtent(), (NonPackedNodeWithChildren) newNode, leftChild, rightChild);
+			lookup.createPackedNode(slot, rightChild.getLeftExtent(), (NonPackedNodeWithChildren) newNode, leftChild, rightChild);
 			
 			return newNode;
 		}

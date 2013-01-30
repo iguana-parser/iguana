@@ -10,11 +10,11 @@ import java.util.Set;
  * @author Ali Afroozeh	<afroozeh@gmail.com>
  *
  */
-public class TerminalGrammarSlot extends GrammarSlot {
+public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	private final Terminal terminal;
 
-	public TerminalGrammarSlot(int id, String label, int position, GrammarSlot previous, Terminal terminal) {
+	public TerminalGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, Terminal terminal) {
 		super(id, label, position, previous);
 		this.terminal = terminal;
 	}
@@ -24,7 +24,7 @@ public class TerminalGrammarSlot extends GrammarSlot {
 	}
 
 	@Override
-	public Set<Integer> getTestSet() {
+	public Set<Terminal> getTestSet() {
 		return null;
 	}
 	
@@ -38,7 +38,7 @@ public class TerminalGrammarSlot extends GrammarSlot {
 		// 					goto L0
 		if(previous == null && next == null) {
 			writer.append("   cr = getNodeT(-1, ci, ci);\n");
-			writer.append("   cn = getNodeP(" + id + ", cn, cr);\n");
+			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + id + "), cn, cr);\n");
 			writer.append("   pop(cu, ci, cn);\n");
 			writer.append("   label = L0;\n}\n");
 		}
@@ -54,7 +54,7 @@ public class TerminalGrammarSlot extends GrammarSlot {
 			writer.append("   cr = getNodeT(" + terminal.id + ", ci, ci + 1);\n");
 			writer.append(elseCheckInput());
 			writer.append("   ci = ci + 1;\n");
-			writer.append("   cn = getNodeP(" + next.id + ", cn, cr);\n");
+			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + next.id + "), cn, cr);\n");
 			writer.append("   pop(cu, ci, cn);\n");
 			writer.append("   label = L0;\n}\n");
 		}
@@ -66,7 +66,7 @@ public class TerminalGrammarSlot extends GrammarSlot {
 			writer.append(elseCheckInput());
 			writer.append("   ci = ci + 1;\n");
 			
-			GrammarSlot slot = next;
+			BodyGrammarSlot slot = next;
 			// while slot is one before the end, i.e, α . x
 			while(slot.next != null) {
 				slot.code(writer);
@@ -90,7 +90,7 @@ public class TerminalGrammarSlot extends GrammarSlot {
 			writer.append("   }\n");
 			
 			writer.append("   ci = ci + 1;\n");
-			writer.append("   cn = getNodeP(" + next.getId() + ", cn, cr);\n");
+			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + next.getId() + "), cn, cr);\n");
 		}
 	}
 	

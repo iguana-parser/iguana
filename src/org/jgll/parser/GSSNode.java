@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.BodyGrammarSlot;
+import org.jgll.grammar.L0;
+import org.jgll.grammar.GrammarSlot;
 import org.jgll.util.HashCode;
 
 /**
@@ -19,15 +22,15 @@ import org.jgll.util.HashCode;
  * A {@code GSSNode} has children which are labeled by an {@code SPPFNode}.
  * These children define the structure of a Graph Structured Stack.
  * 
- * @author Maarten Manders
- * @author Ali Afroozeh
+ * @author Maarten Manders	<m.w.manders@tue.nl>
+ * @author Ali Afroozeh		<afroozeh@gmail.com>
  * 
  */
 public class GSSNode {
 
-	public static final GSSNode DUMMY = new GSSNode(-1, 0);
+	public static final GSSNode DUMMY = new GSSNode(L0.getInstance(), 0);
 
-	private final int label;
+	private final GrammarSlot label;
 
 	private final int inputIndex;
 
@@ -46,12 +49,12 @@ public class GSSNode {
 	 * @param position
 	 * @param inputIndex
 	 */
-	public GSSNode(int label, int inputIndex) {
+	public GSSNode(GrammarSlot label, int inputIndex) {
 		this.label = label;
 		this.inputIndex = inputIndex;
 		this.edges = new ArrayList<>();
 		
-		hash = HashCode.hashCode(label, inputIndex);
+		hash = HashCode.hashCode(label.getId(), inputIndex);
 	}
 	
 	public void addEdge(GSSEdge edge) {
@@ -62,7 +65,7 @@ public class GSSNode {
 		return edges;
 	}
 
-	public final int getLabel() {
+	public final GrammarSlot getLabel() {
 		return label;
 	}
 

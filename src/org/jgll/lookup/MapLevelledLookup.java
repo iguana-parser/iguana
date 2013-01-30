@@ -2,7 +2,9 @@ package org.jgll.lookup;
 
 import java.util.Map;
 
+import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonPackedNodeWithChildren;
@@ -32,13 +34,13 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	}
 	
 	@Override
-	public NonPackedNode getNonPackedNode(int grammarIndex, int leftExtent, int rightExtent) {
+	public NonPackedNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 
 		NonPackedNode key;
-		if(grammarIndex < grammar.getNonterminals().size()) {
-			key = new NonterminalSymbolNode(grammarIndex, leftExtent, rightExtent);
+		if(slot.getId() < grammar.getNonterminals().size()) {
+			key = new NonterminalSymbolNode(slot.getId(), leftExtent, rightExtent);
 		} else {
-			key = new IntermediateNode(grammarIndex, leftExtent, rightExtent);
+			key = new IntermediateNode(slot.getId(), leftExtent, rightExtent);
 		}
 		
 		if(levels[rightExtent] == null) {
@@ -59,15 +61,15 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	}
 	
 	@Override
-	public void createPackedNode(int grammarPosition, int pivot, NonPackedNodeWithChildren parent, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public void createPackedNode(BodyGrammarSlot grammarPosition, int pivot, NonPackedNodeWithChildren parent, NonPackedNode leftChild, NonPackedNode rightChild) {
 		
-		PackedNode packedNode = new PackedNode(grammarPosition, pivot, parent);
+		PackedNode packedNode = new PackedNode(grammarPosition.getId(), pivot, parent);
 		
 		if(parent.countPackedNode() == 0) {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
 		} 
 		
-		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition, pivot)) {
+		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition.getId(), pivot)) {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
 			Map<SPPFNode, SPPFNode> map = levels[parent.getRightExtent()];
 			map.put(parent.getFirstPackedNode(), parent.getFirstPackedNode());
@@ -79,6 +81,7 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 		}
 	}
 	
+	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent, int rightExtent) {
 
 		TerminalSymbolNode key = new TerminalSymbolNode(terminalIndex, leftExtent, rightExtent);

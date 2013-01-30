@@ -8,12 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlot;
 import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonPackedNodeWithChildren;
-import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.OpenAddressingHashSet;
 
 public abstract class DefaultLookup implements Lookup {
@@ -46,10 +44,6 @@ public abstract class DefaultLookup implements Lookup {
 		poppedElements = new HashMap<GSSNode, List<NonPackedNode>>(DEFAULT_HASHMAP_SIZE);
 	}
 
-	public abstract TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent, int rightExtent);
-	
-	public abstract NonPackedNode getNonPackedNode(int grammarIndex, int leftExtent, int rightExtent);
-
 	@Override
 	public boolean getGSSEdge(GSSNode source, NonPackedNode label, GSSNode destination) {
 		GSSEdge key = new GSSEdge(source, label, destination);
@@ -63,8 +57,8 @@ public abstract class DefaultLookup implements Lookup {
 	}
 
 	@Override
-	public GSSNode getGSSNode(int label, int inputIndex) {
-		int index = label - grammar.getNonterminals().size();
+	public GSSNode getGSSNode(GrammarSlot label, int inputIndex) {
+		int index = label.getId() - grammar.getNonterminals().size();
 		if(gssNodes[index] == null) {
 			gssNodes[index] = new GSSNode[inputSize + 1];
 		}
@@ -87,17 +81,11 @@ public abstract class DefaultLookup implements Lookup {
 		nodeList.add(sppfNode);
 	}
 	
-	public abstract void createPackedNode(int grammarPosition, int pivot, NonPackedNodeWithChildren parent, NonPackedNode leftChild, NonPackedNode rightChild);
-	
 	@Override
 	public List<NonPackedNode> getEdgeLabels(GSSNode gssNode) {
 		return poppedElements.get(gssNode);
 	}
 
-	public abstract NonterminalSymbolNode getStartSymbol();
-
-	public abstract int sizeNonPackedNodes();
-	
 	@Override
 	public int countGSSNodes() {
 		return getGSSNodes().size();

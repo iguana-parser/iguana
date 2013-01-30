@@ -10,12 +10,12 @@ import java.util.Set;
  * @author Ali Afroozeh <afroozeh@gmail.com>
  *
  */
-public class NonterminalGrammarSlot extends GrammarSlot {
+public class NonterminalGrammarSlot extends BodyGrammarSlot implements Codeable {
 
 	private final Nonterminal nonterminal;
 	private final Set<Terminal> testSet;
 
-	public NonterminalGrammarSlot(int id, String label, int position, GrammarSlot previous, Nonterminal nonterminal, Set<Terminal> testSet) {
+	public NonterminalGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, Nonterminal nonterminal, Set<Terminal> testSet) {
 		super(id, label, position, previous);
 		this.nonterminal = nonterminal;
 		this.testSet = testSet;
@@ -37,12 +37,12 @@ public class NonterminalGrammarSlot extends GrammarSlot {
 	public void code(Writer writer) throws IOException {
 		
 		if(previous == null) {
-			writer.append("   cu = create(" + next.id + ", cu, ci, cn);\n");
+			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
 			writer.append("   label = " + nonterminal.getId() + "; \n}\n");
 			writer.append("// " + next.getName() + "\n");
 			writer.append("private void parse_" + next.id + "() {\n");
 			
-			GrammarSlot slot = next;
+			BodyGrammarSlot slot = next;
 			while(slot.next != null) {
 				slot.code(writer);
 				slot = slot.next;
@@ -61,7 +61,7 @@ public class NonterminalGrammarSlot extends GrammarSlot {
 			//						}
 			// 						else goto L0
 			// RXl:
-			writer.append("   cu = create(" + next.id + ", cu, ci, cn);\n");
+			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
 			writer.append("   label = " + nonterminal.getId() + ";\n}\n");
 			writer.append("// " + next.getName() + "\n");
 			writer.append("private void parse_" + next.id + "(){\n");
@@ -69,7 +69,7 @@ public class NonterminalGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public Set<Integer> getTestSet() {
+	public Set<Terminal> getTestSet() {
 		return null;
 //		return testSet;
 	}

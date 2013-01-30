@@ -1,9 +1,7 @@
 package org.jgll.grammar;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.io.Writer;
-import java.util.Set;
+
 
 /**
  * A GrammarSlot is the position immediately before or after
@@ -14,32 +12,15 @@ import java.util.Set;
  * @author Ali Afroozeh
  *
  */
-public abstract class GrammarSlot implements Serializable {
+public abstract class GrammarSlot implements Codeable, Serializable {
 	
 	protected final int id;
-	private final String name;
-	protected final GrammarSlot previous;
-	protected GrammarSlot next;
+	protected final String name;
 	
-	/**
-	 * The position from the beginning of the alternate.
-	 * Positions start from zero.
-	 */
-	protected final int position;
-	
-	public GrammarSlot(int id, String label, int position, GrammarSlot previous) {
+	public GrammarSlot(int id, String label) {
 		this.id = id;
 		this.name = label;
-		this.position = position;
-		this.previous = previous;
-		if(previous != null) {
-			previous.next = this;
-		}
 	}
-	
-	public abstract Set<Integer> getTestSet();
-	
-	public abstract void code(Writer writer) throws IOException;
 	
 	public int getId() {
 		return id;
@@ -48,19 +29,7 @@ public abstract class GrammarSlot implements Serializable {
 	public String getName() {
 		return name;
 	}
-	
-	public GrammarSlot next() {
-		return next;
-	}
-	
-	public GrammarSlot previous() {
-		return previous;
-	}
-	
-	public int getPosition() {
-		return position;
-	}
-	
+		
 	@Override
 	public String toString() {
 		return name;

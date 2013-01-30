@@ -1,5 +1,6 @@
 package org.jgll.parser;
 
+import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.HashCode;
 
@@ -23,11 +24,12 @@ import org.jgll.util.HashCode;
  */
 
 public class Descriptor {
+	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
 	 * nonterminal.
 	 */
-	private final int label;
+	private final GrammarSlot label;
 	
 	/**
 	 * The associated GSSNode.
@@ -50,17 +52,17 @@ public class Descriptor {
 	 */
 	private final int hash;
 	
-	public Descriptor(int label, GSSNode gssNode, int inputIdex, NonPackedNode sppfNode) {
+	public Descriptor(GrammarSlot label, GSSNode gssNode, int inputIdex, NonPackedNode sppfNode) {
 		
 		this.label = label;
 		this.gssNode = gssNode;
 		this.inputIndex = inputIdex;
 		this.sppfNode = sppfNode;
 		
-		this.hash = HashCode.hashCode(label, sppfNode.getLeftExtent(), inputIdex, gssNode.getLabel(), sppfNode.getGrammarIndex()); 
+		this.hash = HashCode.hashCode(label.getId(), sppfNode.getLeftExtent(), inputIdex, gssNode.getLabel().getId(), sppfNode.getGrammarIndex()); 
 	}
 	
-	public int getLabel() {
+	public GrammarSlot getLabel() {
 		return label;
 	}
 

@@ -13,8 +13,8 @@ import org.jgll.util.HashCode;
  * SPPF node's grammar label, and the Destination GSS node's
  * grammar label and input index.
  * 
- * Note that the SPPF's left extent is equal to destination node's
- * input index and it's right extent is equal to source node's
+ * Note that the SPPF's left extent is equal to the destination node's
+ * input index and its right extent is equal to the source node's
  * input index. However, since Dummy nodes don't have input
  * indices, we use the input indices from GSS nodes to 
  * uniquely identify a GSS edge.
@@ -37,11 +37,11 @@ public class GSSEdge {
 		this.sppfNode = sppfNode;
 		this.dst = dst;
 		
-		hash = HashCode.hashCode(src.getLabel(), 
+		hash = HashCode.hashCode(src.getLabel().getId(), 
 								 src.getIndex(), 
 								 sppfNode.getGrammarIndex(), 
 								 dst.getIndex(), 
-								 dst.getLabel());
+								 dst.getLabel().getId());
 	}
 	
 	public NonPackedNode getSppfNode() {
