@@ -5,6 +5,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.parser.ParserInterpreter;
+
 /**
  * 
  * @author Ali Afroozeh <afroozeh@gmail.com>
@@ -27,6 +29,17 @@ public class Nonterminal extends GrammarSlot {
 
 	public boolean isNullable() {
 		return nullable;
+	}
+	
+	@Override
+	public Object execute(ParserInterpreter parser) {
+		
+		for(BodyGrammarSlot slot : alternates) {
+			parser.create(slot);
+		}
+		
+		L0.getInstance().execute(parser);
+		return null;
 	}
 
 	@Override

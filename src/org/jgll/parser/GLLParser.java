@@ -1,6 +1,5 @@
 package org.jgll.parser;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.jgll.exception.ParsingFailedException;
@@ -67,6 +66,9 @@ public abstract class GLLParser {
 	 */
 	protected GSSNode u0;
 	
+	/**
+	 * 
+	 */
 	protected Grammar grammar;
 
 	/**
@@ -128,6 +130,11 @@ public abstract class GLLParser {
 //		d.setColumn(inputUtil.getLineNumber(inputIndex).getColumnNumber());
 		descriptorSet.add(d);
 	}
+	
+	
+	public final void pop() {
+		pop(cu, ci, cn);
+	}
 
 	/**
 	 * Pops the current element from GSS. When the top element, cu, is poped, there
@@ -160,6 +167,10 @@ public abstract class GLLParser {
 		}
 	}
 	
+	public final GSSNode create(GrammarSlot L) {
+		return create(L, cu, ci, cn);
+	}
+	
 	/**
 	 * 
 	 * create(L,A ::= alpha . beta) {
@@ -184,8 +195,8 @@ public abstract class GLLParser {
 	 * @param alternateIndex the index of the alternate of the rule where this position refers to.
 	 * 
 	 * @param position the position in the body of the rule where this position referes to
+	 * @return 
 	 * 
-	 * @return the created GSSNode
      *
 	 */
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, NonPackedNode w) {
@@ -203,6 +214,7 @@ public abstract class GLLParser {
 			}
 		}
 		
+		cu = v;
 		return v;
 	}
 
@@ -211,9 +223,20 @@ public abstract class GLLParser {
 	 * 		if there is no SPPF node labelled (a, i, i + 1) create one
 	 * 		return the SPPF node labelled (a, i, i + 1) 
 	 *  }
+	 * @return 
 	 */
-	public final TerminalSymbolNode getNodeT(int terminalIndex, int inputIndex, int nextIndex) {
-		return lookup.getTerminalNode(terminalIndex, inputIndex, nextIndex);
+	public final NonPackedNode getNodeT(int x, int i) {
+		int h;
+		if(x == -2) {
+			h = i;
+		} else {
+			h = i + 1;
+		}
+		return lookup.getTerminalNode(x, i, h);
+	}
+	
+	public final NonPackedNode getNodeP(BodyGrammarSlot slot) {
+		return getNodeP(slot, cn, cr);
 	}
 
 	 /**
@@ -248,6 +271,7 @@ public abstract class GLLParser {
 			!(slot instanceof LastGrammarSlot) &&
 			(slot.previous() instanceof TerminalGrammarSlot ||
 			 slot.previous() instanceof NonterminalGrammarSlot && !((NonterminalGrammarSlot) slot.previous()).getNonterminal().isNullable())) {
+				cn = rightChild;
 				return rightChild;
 		} else {
 			
@@ -273,11 +297,8 @@ public abstract class GLLParser {
 
 			lookup.createPackedNode(slot, rightChild.getLeftExtent(), (NonPackedNodeWithChildren) newNode, leftChild, rightChild);
 			
+			cn = newNode;
 			return newNode;
 		}
 	}	
-	
-	public Collection<GSSNode> getGSSNodes() {
-		return lookup.getGSSNodes();
-	}
 }

@@ -25,12 +25,12 @@ public class TerminalSymbolNode extends NonPackedNode {
 	
 	@Override
 	public String getLabel() {
-		return grammarIndex + "";
+		return grammarIndex == -1 ? "\u03B5" : (char)grammarIndex + "";
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", grammarIndex, leftExtent, rightExtent);
+		return String.format("(%s, %d, %d)", getLabel(), leftExtent, rightExtent);
 	}
 	
 	@Override

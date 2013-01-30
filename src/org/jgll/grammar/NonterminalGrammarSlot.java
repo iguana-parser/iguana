@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
 
+import org.jgll.parser.ParserInterpreter;
+
 /**
  * A grammar slot immediately before a nonterminal.
  * 
  * @author Ali Afroozeh <afroozeh@gmail.com>
  *
  */
-public class NonterminalGrammarSlot extends BodyGrammarSlot implements Codeable {
+public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	private final Nonterminal nonterminal;
 	private final Set<Terminal> testSet;
@@ -25,12 +27,11 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot implements Codeable 
 		return nonterminal;
 	}
 	
-	public void execute() {
-		if(previous == null) {
-			
-		} else {
-			
-		}
+	@Override
+	public Object execute(ParserInterpreter parser) {
+		parser.create(next);
+		nonterminal.execute(parser);
+		return null;
 	}
 	
 	@Override
@@ -43,12 +44,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot implements Codeable 
 			writer.append("private void parse_" + next.id + "() {\n");
 			
 			BodyGrammarSlot slot = next;
-			while(slot.next != null) {
+			while(slot != null) {
 				slot.code(writer);
 				slot = slot.next;
 			}
-			writer.append("   pop(cu, ci, cn);\n");
-			writer.append("   label = L0;\n}\n");
 		} 
 		
 		else { 

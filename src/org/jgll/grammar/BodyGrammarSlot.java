@@ -5,7 +5,7 @@ import java.util.Set;
 
 public abstract class BodyGrammarSlot extends GrammarSlot implements Serializable {
 	
-	protected final GrammarSlot previous;
+	protected final BodyGrammarSlot previous;
 	protected BodyGrammarSlot next;
 	
 	/**

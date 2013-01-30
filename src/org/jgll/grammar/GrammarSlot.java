@@ -1,6 +1,10 @@
 package org.jgll.grammar;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
+
+import org.jgll.parser.ParserInterpreter;
 
 
 /**
@@ -12,7 +16,7 @@ import java.io.Serializable;
  * @author Ali Afroozeh
  *
  */
-public abstract class GrammarSlot implements Codeable, Serializable {
+public abstract class GrammarSlot implements Serializable {
 	
 	protected final int id;
 	protected final String name;
@@ -21,6 +25,10 @@ public abstract class GrammarSlot implements Codeable, Serializable {
 		this.id = id;
 		this.name = label;
 	}
+	
+	public abstract void code(Writer writer) throws IOException;
+	
+	public abstract Object execute(ParserInterpreter parser);
 	
 	public int getId() {
 		return id;

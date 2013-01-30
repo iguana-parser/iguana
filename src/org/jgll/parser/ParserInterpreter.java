@@ -2,7 +2,9 @@ package org.jgll.parser;
 
 import org.jgll.exception.ParsingFailedException;
 import org.jgll.grammar.Grammar;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.lookup.Lookup;
+import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,33 +16,65 @@ import org.slf4j.LoggerFactory;
  */
 public class ParserInterpreter extends GLLParser {
 	
-	private int label;
-	
 	private static final Logger log = LoggerFactory.getLogger(ParserInterpreter.class);
 	
-	private static final int L0 = -1;
-
 	@Override
-	public SPPFNode parse(String input, Grammar grammar) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(String input, Grammar grammar) throws ParsingFailedException {
 		log.info("Input size: {}", input.length());
 
-		long start = System.nanoTime();
-
+		this.grammar = grammar;
 		init(input.length());
-
-		long end = System.nanoTime();
-		log.info("Initialization time: {} ms", (end - start) / 1000000);
-
-		start = System.nanoTime();
-
-		while (true) {
-			// to be filled in!
-		}
+		
+		return (NonterminalSymbolNode) grammar.getStartSymbol().execute(this);
 	}
 
 	@Override
 	protected void init(int inputSize) {
-		
+		lookup = new org.jgll.lookup.MapLevelledLookup(grammar, inputSize);
+		descriptorSet = new org.jgll.parser.LevelledDescritorSet(inputSize + 1, (org.jgll.lookup.LevelledLookup) lookup);
+
+		ci = 0;
+		cu = u0 = GSSNode.DUMMY;
+		cn = DUMMY;
+	}
+	
+	public DescriptorSet getDescriptorSet() {
+		return descriptorSet;
+	}
+	
+	public Lookup getLookup() {
+		return lookup;
+	}
+	
+	public GSSNode getCurrentGSSNode() {
+		return cu;
+	}
+	
+	public NonPackedNode getCN() {
+		return cn;
+	}
+	
+	public void setCN(NonPackedNode node) {
+		cn = node;
 	}
 
+	public void setCR(NonPackedNode node) {
+		cr = node;
+	}
+	
+	public NonPackedNode getCR() {
+		return cr;
+	}
+	
+	public int getCurrentInpuIndex() {
+		return ci;
+	}
+	
+	public int getCurrentInputValue() {
+		return I[ci];
+	}
+	
+	public void moveInputPointer() {
+		ci = ci + 1;
+	}
 }

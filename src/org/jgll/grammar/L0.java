@@ -3,6 +3,11 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.parser.Descriptor;
+import org.jgll.parser.DescriptorSet;
+import org.jgll.parser.ParserInterpreter;
+import org.jgll.sppf.NonterminalSymbolNode;
+
 /**
  * 
  * 
@@ -20,11 +25,27 @@ public class L0 extends GrammarSlot {
 		return instance;
 	}
 	
-	
 	private L0() {
 		super(-1, "$");
 	}
-
+	
+	@Override
+	public Object execute(ParserInterpreter parser) {
+		DescriptorSet descriptorSet = parser.getDescriptorSet();
+		if (!descriptorSet.isEmpty()) {
+			Descriptor descriptor = descriptorSet.nextDescriptor();
+			GrammarSlot slot = descriptor.getLabel();
+			slot.execute(parser);
+		} else {
+			NonterminalSymbolNode root = parser.getLookup().getStartSymbol();
+			if (root == null) {
+				throw new RuntimeException("Parsing Failed");
+			}
+			return root;
+		}
+		
+		throw new RuntimeException("Should not be here!");
+	}
 
 	@Override
 	public void code(Writer writer) throws IOException {
