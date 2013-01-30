@@ -5,7 +5,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.parser.ParserInterpreter;
+import org.jgll.parser.GrammarInterpreter;
 
 /**
  * 
@@ -32,14 +32,10 @@ public class Nonterminal extends GrammarSlot {
 	}
 	
 	@Override
-	public Object execute(ParserInterpreter parser) {
-		
+	public void execute(GrammarInterpreter parser) {
 		for(BodyGrammarSlot slot : alternates) {
-			parser.create(slot);
+			parser.add(slot);
 		}
-		
-		L0.getInstance().execute(parser);
-		return null;
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
 
-import org.jgll.parser.ParserInterpreter;
+import org.jgll.parser.GrammarInterpreter;
 
 
 /**
@@ -30,10 +30,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public Object execute(ParserInterpreter parser) {
+	public void execute(GrammarInterpreter parser) {
 		parser.pop();
-		L0.getInstance().execute(parser);
-		return null;
 	}
 
 	@Override

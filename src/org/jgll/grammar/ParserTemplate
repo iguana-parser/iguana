@@ -27,10 +27,10 @@ public class ${className}Parser extends GLLParser {
 	private int label;
 		
 	@Override
-	public void init(int inputSize) {
+	public void init() {
 			
-		lookup = new org.jgll.lookup.MapLevelledLookup(grammar, inputSize);
-		descriptorSet =  new org.jgll.parser.LevelledDescritorSet(inputSize + 1, (org.jgll.lookup.LevelledLookup) lookup);
+		lookup = new org.jgll.lookup.MapLevelledLookup(grammar, I.length);
+		descriptorSet =  new org.jgll.parser.LevelledDescritorSet(I.length, (org.jgll.lookup.LevelledLookup) lookup);
 			
 		ci = 0;
 		cu = u0 = GSSNode.DUMMY;
@@ -52,20 +52,17 @@ public class ${className}Parser extends GLLParser {
 	
 		
 	@Override
-	public NonterminalSymbolNode parse(String input, Grammar grammar) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar) throws ParsingFailedException {
 	
 		this.grammar = grammar;
 
-		I = new int[input.length() + 1];
-		for (int i = 0; i < input.length(); i++) {
-			I[i] = input.charAt(i);
-		}
-		I[input.length()] = -1;
-		log.info("Input size: {}", input.length());
+		I = input;
+
+		log.info("Input size: {}", input.length);
 		
 		long start = System.nanoTime();
 		
-		init(input.length());
+		init();
 	
 		label = ${grammar.startSymbol.id};
 		

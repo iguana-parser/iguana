@@ -5,8 +5,7 @@ import java.io.Writer;
 
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.DescriptorSet;
-import org.jgll.parser.ParserInterpreter;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.parser.GrammarInterpreter;
 
 /**
  * 
@@ -30,21 +29,16 @@ public class L0 extends GrammarSlot {
 	}
 	
 	@Override
-	public Object execute(ParserInterpreter parser) {
+	public void execute(GrammarInterpreter parser) {
 		DescriptorSet descriptorSet = parser.getDescriptorSet();
-		if (!descriptorSet.isEmpty()) {
+		while(!descriptorSet.isEmpty()) {
 			Descriptor descriptor = descriptorSet.nextDescriptor();
+			parser.setCN(descriptor.getSPPFNode());
+			parser.setCU(descriptor.getGSSNode());
+			parser.setInputIndex(descriptor.getInputIndex());
 			GrammarSlot slot = descriptor.getLabel();
 			slot.execute(parser);
-		} else {
-			NonterminalSymbolNode root = parser.getLookup().getStartSymbol();
-			if (root == null) {
-				throw new RuntimeException("Parsing Failed");
-			}
-			return root;
 		}
-		
-		throw new RuntimeException("Should not be here!");
 	}
 
 	@Override
@@ -63,7 +57,7 @@ public class L0 extends GrammarSlot {
 		writer.append("NonterminalSymbolNode root = lookup.getStartSymbol();\n");
 		writer.append("if (root == null) {");
 		writer.append("log.info(\"Parsing failed.\");\n");
-		writer.append("throw new ParsingFailedException(errorNonterminal, errorIndex, input);\n");
+		writer.append("throw new ParsingFailedException(errorNonterminal, errorIndex, \"\");\n");
 		writer.append("}\n");
 		writer.append("return root;\n");
 		writer.append("}\n");

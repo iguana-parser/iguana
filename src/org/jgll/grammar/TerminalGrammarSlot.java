@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
 
-import org.jgll.parser.ParserInterpreter;
+import org.jgll.parser.GrammarInterpreter;
 import org.jgll.sppf.NonPackedNode;
 
 /**
@@ -32,51 +32,44 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public Object execute(ParserInterpreter parser) {
+	public void execute(GrammarInterpreter parser) {
+		
+		// A ::= ε
 		if(previous == null && next == null) {
-			NonPackedNode cr = parser.getNodeT(-2, parser.getCurrentInpuIndex());
-			parser.setCR(cr);
-			parser.getNodeP(this, parser.getCN(), parser.getCR());
+			parser.setCR(parser.getNodeT(-2, parser.getCurrentInpuIndex()));
+			parser.setCN(parser.getNodeP(this));
 			parser.pop();
-			L0.getInstance().execute(parser);
 		} 
 		
+		// A::= x1
 		else if(previous == null && next.next == null) {
 			if(terminal.match(parser.getCurrentInputValue())) {
-				NonPackedNode cr = parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex());
-				parser.setCR(cr);
+				parser.setCR(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
 				parser.moveInputPointer();
-				parser.getNodeP(next);
+				parser.setCN(parser.getNodeP(next));
 				parser.pop();
-			} else {
-				L0.getInstance().execute(parser);
-			}
+			} 
 		}
 		
+		// A ::= x1...xf, f ≥ 2
 		else if(previous == null && !(next.next == null)) {
 			if(terminal.match(parser.getCurrentInputValue())) {
-				NonPackedNode cn = parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex());
-				parser.setCN(cn);
+				parser.setCN(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
 				parser.moveInputPointer();
 				next.execute(parser);
-			} else {
-				L0.getInstance().execute(parser);
 			}
 		}
 		
+		// A ::= α · a β
 		else {
 			if(terminal.match(parser.getCurrentInputValue())) {
-				NonPackedNode cr = parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex());
-				parser.setCR(cr);
+				parser.setCR(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
 				parser.moveInputPointer();
-				parser.getNodeP(next);
+				parser.setCN(parser.getNodeP(next));
 				next.execute(parser);
-			} else {
-				L0.getInstance().execute(parser);
 			}
 		}
 		
-		return null;
 	}
 	
 	@Override
@@ -88,7 +81,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		// 					pop(cU , cI , cN ); 
 		// 					goto L0
 		if(previous == null && next == null) {
-			writer.append("   cr = getNodeT(-1, ci);\n");
+			writer.append("   cr = getNodeT(-2, ci);\n");
 			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + id + "), cn, cr);\n");
 			writer.append("   pop(cu, ci, cn);\n");
 			writer.append("   label = L0;\n}\n");
@@ -110,7 +103,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 			writer.append("   label = L0;\n}\n");
 		}
 		
-		// If f ≥ 2 and x1 is a terminal
+		// A ::= x1...xf, f ≥ 2
 		else if(previous == null && !(next.next == null)) {
 			writer.append(checkInput(terminal));
 			writer.append("   cn = getNodeT(I[ci], ci);\n");
@@ -125,7 +118,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 			}
 		}
 		
-		// code(A::=α·aβ) = 
+		// code(A ::= α · a β) = 
 		//					if(I[cI] = a)
 		//						cR := getNodeT(a,cI) 
 		//					else gotoL0

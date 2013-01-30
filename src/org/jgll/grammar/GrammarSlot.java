@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
-import org.jgll.parser.ParserInterpreter;
+import org.jgll.parser.GrammarInterpreter;
 
 
 /**
@@ -28,7 +28,7 @@ public abstract class GrammarSlot implements Serializable {
 	
 	public abstract void code(Writer writer) throws IOException;
 	
-	public abstract Object execute(ParserInterpreter parser);
+	public abstract void execute(GrammarInterpreter parser);
 	
 	public int getId() {
 		return id;

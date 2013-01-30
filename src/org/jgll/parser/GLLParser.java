@@ -12,7 +12,7 @@ import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.lookup.Lookup;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonPackedNodeWithChildren;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.InputUtil;
 
@@ -83,6 +83,15 @@ public abstract class GLLParser {
 	
 	protected int column;
 	
+	public NonterminalSymbolNode parse(String input, Grammar grammar) throws ParsingFailedException {
+		I = new int[input.length() + 1];
+		for (int i = 0; i < input.length(); i++) {
+			I[i] = input.charAt(i);
+		}
+		I[input.length()] = -1;
+		return parse(I, grammar);
+	}
+
 	/**
 	 * Parses the given input string. If the parsing of input was successful,
 	 * the root of SPPF is returned.
@@ -91,9 +100,9 @@ public abstract class GLLParser {
 	 * @return 
 	 * 
 	 * @throws ParsingFailedException an instance of {@link ParsingFailedException} if the descriptor set is empty, but
-	 * no SPPF root has been found.
+	 * 								  no SPPF root has been found.
 	 */
-	public abstract SPPFNode parse(String input, Grammar grammar) throws ParsingFailedException;
+	public abstract NonterminalSymbolNode parse(int[] input, Grammar grammar) throws ParsingFailedException;
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -113,7 +122,12 @@ public abstract class GLLParser {
 	 * initialized the parser's state before a new parse.
 	 * 
 	 */
-	protected abstract void init(int inputSize);
+	protected abstract void init();
+	
+
+	public final void add(GrammarSlot label) {
+		add(label, cu, ci, DUMMY);
+	}
 	
 	/**
 	 * Corresponds to the add method from the paper:
@@ -214,7 +228,6 @@ public abstract class GLLParser {
 			}
 		}
 		
-		cu = v;
 		return v;
 	}
 
@@ -297,7 +310,6 @@ public abstract class GLLParser {
 
 			lookup.createPackedNode(slot, rightChild.getLeftExtent(), (NonPackedNodeWithChildren) newNode, leftChild, rightChild);
 			
-			cn = newNode;
 			return newNode;
 		}
 	}	

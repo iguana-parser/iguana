@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
 
-import org.jgll.parser.ParserInterpreter;
+import org.jgll.parser.GSSNode;
+import org.jgll.parser.GrammarInterpreter;
 
 /**
  * A grammar slot immediately before a nonterminal.
@@ -28,10 +29,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public Object execute(ParserInterpreter parser) {
-		parser.create(next);
+	public void execute(GrammarInterpreter parser) {
+		parser.setCU(parser.create(next));
 		nonterminal.execute(parser);
-		return null;
 	}
 	
 	@Override

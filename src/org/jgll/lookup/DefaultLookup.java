@@ -60,7 +60,7 @@ public abstract class DefaultLookup implements Lookup {
 	public GSSNode getGSSNode(GrammarSlot label, int inputIndex) {
 		int index = label.getId() - grammar.getNonterminals().size();
 		if(gssNodes[index] == null) {
-			gssNodes[index] = new GSSNode[inputSize + 1];
+			gssNodes[index] = new GSSNode[inputSize];
 		}
 		if(gssNodes[index][inputIndex] == null) {
 			gssNodes[index][inputIndex] = new GSSNode(label, inputIndex);

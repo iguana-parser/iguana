@@ -19,7 +19,7 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	private int currentLevel;
 	
-	private Map<SPPFNode, SPPFNode>[] levels = new Map[inputSize + 1];
+	private Map<SPPFNode, SPPFNode>[] levels = new Map[inputSize];
 	
 	private int countNonPackedNodes;
 	
@@ -108,7 +108,7 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	
 	@Override
 	public NonterminalSymbolNode getStartSymbol() {
-		return (NonterminalSymbolNode) levels[inputSize].get(new NonterminalSymbolNode(grammar.getStartSymbol().getId(), 0, inputSize));
+		return (NonterminalSymbolNode) levels[inputSize - 1].get(new NonterminalSymbolNode(grammar.getStartSymbol().getId(), 0, inputSize - 1));
 	}
 
 	@Override
