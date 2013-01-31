@@ -25,14 +25,21 @@ public class GrammarInterpreter extends GLLParser {
 		this.grammar = grammar;
 		init();
 		
+		long start = System.nanoTime();
+		
 		grammar.getStartSymbol().execute(this);
 		
 		L0.getInstance().execute(this);
 		
+		long end = System.nanoTime();
+		
 		NonterminalSymbolNode root = lookup.getStartSymbol();
 		if (root == null) {
+			// TODO put ParsingFailedException back
 			throw new RuntimeException("Parsing Failed");
 		}
+		
+		logParseStatistics(end - start);
 		
 		return root;
 	}
@@ -46,6 +53,17 @@ public class GrammarInterpreter extends GLLParser {
 		cu = u0 = GSSNode.DUMMY;
 		cn = DUMMY;
 	}
+	
+	private void logParseStatistics(long duration) {
+		log.info("Parsing Time: {} ms", duration/1000000);
+		int mb = 1024 * 1024;
+		Runtime runtime = Runtime.getRuntime();
+		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.info("Descriptors: {}", descriptorSet.sizeAll());
+		log.info("GSSNodes: {}", lookup.getGSSNodes().size());
+		log.info("Non-packed nodes: {}", lookup.sizeNonPackedNodes());
+	}
+
 	
 	public DescriptorSet getDescriptorSet() {
 		return descriptorSet;
