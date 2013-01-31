@@ -13,6 +13,8 @@ import org.jgll.parser.GrammarInterpreter;
  * 
  */
 public class Nonterminal extends GrammarSlot {
+	
+	private static final long serialVersionUID = 1L;
 
 	private final List<BodyGrammarSlot> alternates;
 	private final boolean nullable;

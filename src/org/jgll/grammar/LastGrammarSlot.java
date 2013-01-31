@@ -14,6 +14,8 @@ import org.jgll.parser.GrammarInterpreter;
  *
  */
 public class LastGrammarSlot extends BodyGrammarSlot {
+	
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 

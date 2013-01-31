@@ -14,6 +14,8 @@ import org.jgll.parser.GrammarInterpreter;
  *
  */
 public class L0 extends GrammarSlot {
+	
+	private static final long serialVersionUID = 1L;
 
 	private static L0 instance;
 	

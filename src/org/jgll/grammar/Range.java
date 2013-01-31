@@ -1,6 +1,8 @@
 package org.jgll.grammar;
 
 public class Range extends Terminal {
+	
+	private static final long serialVersionUID = 1L;
 
 	private final int start;
 	private final int end;

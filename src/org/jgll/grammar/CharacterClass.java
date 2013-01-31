@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -9,11 +10,13 @@ import java.util.List;
  *
  */
 public class CharacterClass extends Terminal {
+	
+	private static final long serialVersionUID = 1L;
 
 	private final List<Range> ranges;
 
 	public CharacterClass(List<Range> ranges) {
-		this.ranges = ranges;
+		this.ranges = Collections.unmodifiableList(ranges);
 	}
 	
 	@Override

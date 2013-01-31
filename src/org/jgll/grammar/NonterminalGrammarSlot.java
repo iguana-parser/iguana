@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
 
-import org.jgll.parser.GSSNode;
 import org.jgll.parser.GrammarInterpreter;
 
 /**
@@ -14,6 +13,8 @@ import org.jgll.parser.GrammarInterpreter;
  *
  */
 public class NonterminalGrammarSlot extends BodyGrammarSlot {
+	
+	private static final long serialVersionUID = 1L;
 
 	private final Nonterminal nonterminal;
 	private final Set<Terminal> testSet;

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public abstract class Terminal implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
 	protected int id;
 	
 	public abstract boolean match(int i);

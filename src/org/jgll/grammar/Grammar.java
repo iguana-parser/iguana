@@ -10,6 +10,8 @@ import org.jgll.util.InputUtil;
 
 public final class Grammar implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private final List<Nonterminal> nonterminals;
 	
 	private final List<BodyGrammarSlot> slots;

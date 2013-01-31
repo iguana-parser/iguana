@@ -5,7 +5,6 @@ import java.io.Writer;
 import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
-import org.jgll.sppf.NonPackedNode;
 
 /**
  * A grammar slot whose next immediate symbol is a terminal.
@@ -14,6 +13,8 @@ import org.jgll.sppf.NonPackedNode;
  *
  */
 public class TerminalGrammarSlot extends BodyGrammarSlot {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private final Terminal terminal;
 

@@ -18,6 +18,8 @@ import org.jgll.parser.GrammarInterpreter;
  */
 public abstract class GrammarSlot implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
 	protected final int id;
 	protected final String name;
 	
