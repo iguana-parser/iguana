@@ -25,4 +25,9 @@ public class Range extends Terminal {
 		return start <= i  && i <= end;
 	}
 	
+	@Override
+	public String toString() {
+		return "[" + start + "-" + end + "]";
+	}
+	
 }

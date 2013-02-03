@@ -13,6 +13,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected BodyGrammarSlot next;
 	
+	private final String label;
+	
 	/**
 	 * The position from the beginning of the alternate.
 	 * Positions start from zero.
@@ -26,7 +28,17 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		if(previous != null) {
 			previous.next = this;
 		}
-		this.previous = previous;		
+		this.previous = previous;
+		
+		String tmp = rule.getHead() + " ::= ";
+		int i = 0;
+		for(Symbol s : rule.getBody()) {
+			if(i++ == position) {
+				tmp += " . ";
+			}
+			tmp += s + " ";
+		}
+		label = tmp;
 	}
 	
 	public abstract Set<Terminal> getTestSet();
@@ -45,6 +57,11 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	public int getPosition() {
 		return position;
+	}
+	
+	@Override
+	public String toString() {
+		return label;
 	}
 	
 }
