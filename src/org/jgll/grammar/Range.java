@@ -22,7 +22,7 @@ public class Range extends Terminal {
 	
 	@Override
 	public boolean match(int i) {
-		return false;
+		return start <= i  && i <= end;
 	}
 	
 }

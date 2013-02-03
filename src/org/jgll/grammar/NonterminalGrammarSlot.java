@@ -17,10 +17,11 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	private static final long serialVersionUID = 1L;
 
 	private final Nonterminal nonterminal;
+	
 	private final Set<Terminal> testSet;
-
-	public NonterminalGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, Nonterminal nonterminal, Set<Terminal> testSet) {
-		super(id, label, position, previous);
+	
+	public NonterminalGrammarSlot(Nonterminal head, int id, int position, BodyGrammarSlot previous, Nonterminal nonterminal, Set<Terminal> testSet) {
+		super(head, id, position, previous);
 		this.nonterminal = nonterminal;
 		this.testSet = testSet;
 	}
@@ -41,7 +42,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(previous == null) {
 			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
 			writer.append("   label = " + nonterminal.getId() + "; \n}\n");
-			writer.append("// " + next.getName() + "\n");
+			writer.append("// " + next + "\n");
 			writer.append("private void parse_" + next.id + "() {\n");
 			
 			BodyGrammarSlot slot = next;
@@ -63,7 +64,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			// RXl:
 			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
 			writer.append("   label = " + nonterminal.getId() + ";\n}\n");
-			writer.append("// " + next.getName() + "\n");
+			writer.append("// " + next + "\n");
 			writer.append("private void parse_" + next.id + "(){\n");
 		}
 	}

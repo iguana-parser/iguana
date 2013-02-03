@@ -5,6 +5,7 @@ import java.util.Map;
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.Nonterminal;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonPackedNodeWithChildren;
@@ -107,8 +108,8 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	
 	@Override
-	public NonterminalSymbolNode getStartSymbol() {
-		return (NonterminalSymbolNode) levels[inputSize - 1].get(new NonterminalSymbolNode(grammar.getStartSymbol().getId(), 0, inputSize - 1));
+	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol) {
+		return (NonterminalSymbolNode) levels[inputSize - 1].get(new NonterminalSymbolNode(startSymbol.getId(), 0, inputSize - 1));
 	}
 
 	@Override

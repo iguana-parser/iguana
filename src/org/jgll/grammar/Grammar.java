@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.jgll.util.InputUtil;
 
@@ -16,23 +19,25 @@ public final class Grammar implements Serializable {
 	
 	private final List<BodyGrammarSlot> slots;
 	
-	private final Nonterminal startSymbol;
+	private final Map<String, Nonterminal> startSymbols;
 	
 	private final String name;
 	
-	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Nonterminal startSymbol) {
+	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Set<Nonterminal> startSymbols) {
 		this.name = name;
 		this.nonterminals = Collections.unmodifiableList(nonterminals);
 		this.slots = Collections.unmodifiableList(slots);
-		this.startSymbol = startSymbol;
+		this.startSymbols = new HashMap<>();
+		for(Nonterminal startSymbol : startSymbols) {
+			this.startSymbols.put(startSymbol.getName(), startSymbol);
+		}
 	}
 	
 	public void code(Writer writer, String packageName) throws IOException {
 	
 		String header = InputUtil.read(this.getClass().getResourceAsStream("ParserTemplate"));
 		header = header.replace("${className}", name)
-					   .replace("${packageName}", packageName)
-				       .replace("${grammar.startSymbol.id}", startSymbol.getId() + "");
+					   .replace("${packageName}", packageName);
 		writer.append(header);
 		
 		// case L0:
@@ -41,7 +46,7 @@ public final class Grammar implements Serializable {
 		
 		for(Nonterminal nonterminal : nonterminals) {
 			writer.append("case " + nonterminal.getId() + ":\n");
-			writer.append("// " + nonterminal.getName() + "\n");
+			writer.append("// " + nonterminal + "\n");
 			writer.append("parse_" + nonterminal.getId() + "();\n");
 			writer.append("break;\n");
 		}
@@ -74,17 +79,17 @@ public final class Grammar implements Serializable {
 	public BodyGrammarSlot getGrammarSlot(int id) {
 		return slots.get(id - nonterminals.size());
 	}
-	
-	public Nonterminal getStartSymbol() {
-		return startSymbol;
-	}
-	
+		
 	public List<Nonterminal> getNonterminals() {
 		return nonterminals;
 	}
 	
 	public List<BodyGrammarSlot> getGrammarSlots() {
 		return slots;
+	}
+	
+	public Nonterminal getNonterminalByName(String name) {
+		return startSymbols.get(name);
 	}
 
 }

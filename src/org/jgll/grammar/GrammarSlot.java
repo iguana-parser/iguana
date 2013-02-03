@@ -20,12 +20,14 @@ public abstract class GrammarSlot implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * A unique integer specifying this grammar slot.
+	 * The id field is used later for looking up grammar slots.
+	 */
 	protected final int id;
-	protected final String name;
 	
-	public GrammarSlot(int id, String label) {
+	public GrammarSlot(int id) {
 		this.id = id;
-		this.name = label;
 	}
 	
 	public abstract void code(Writer writer) throws IOException;
@@ -34,14 +36,5 @@ public abstract class GrammarSlot implements Serializable {
 	
 	public int getId() {
 		return id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-		
-	@Override
-	public String toString() {
-		return name;
-	}
+	}	
 }

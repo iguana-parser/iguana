@@ -27,7 +27,7 @@ public class L0 extends GrammarSlot {
 	}
 	
 	private L0() {
-		super(-1, "$");
+		super(-1);
 	}
 	
 	@Override
@@ -63,6 +63,11 @@ public class L0 extends GrammarSlot {
 		writer.append("}\n");
 		writer.append("return root;\n");
 		writer.append("}\n");
+	}
+	
+	@Override
+	public String toString() {
+		return "L0";
 	}
 
 }

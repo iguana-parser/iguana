@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.Nonterminal;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonPackedNodeWithChildren;
@@ -17,7 +18,7 @@ public interface Lookup {
 	
 	public NonPackedNode getNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
-	public NonterminalSymbolNode getStartSymbol();
+	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol);
 	
 	public boolean getGSSEdge(GSSNode source, NonPackedNode label, GSSNode destination);
 

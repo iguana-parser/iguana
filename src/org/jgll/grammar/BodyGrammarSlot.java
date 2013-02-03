@@ -7,7 +7,10 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	private static final long serialVersionUID = 1L;
 	
+	public final Nonterminal head;
+	
 	protected final BodyGrammarSlot previous;
+	
 	protected BodyGrammarSlot next;
 	
 	/**
@@ -15,15 +18,15 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 * Positions start from zero.
 	 */
 	protected final int position;
-
-	
-	public BodyGrammarSlot(int id, String name, int position, BodyGrammarSlot previous) {
-		super(id, name);
+		
+	public BodyGrammarSlot(Nonterminal head, int id, int position, BodyGrammarSlot previous) {
+		super(id);
 		this.position = position;
-		this.previous = previous;
+		this.head = head;
 		if(previous != null) {
 			previous.next = this;
 		}
+		this.previous = previous;		
 	}
 	
 	public abstract Set<Terminal> getTestSet();
@@ -36,8 +39,12 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return previous;
 	}
 	
+	public Nonterminal getHead() {
+		return head;
+	}
+	
 	public int getPosition() {
 		return position;
 	}
-
+	
 }

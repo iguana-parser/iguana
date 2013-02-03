@@ -3,6 +3,7 @@ package org.jgll.parser;
 import org.jgll.exception.ParsingFailedException;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.L0;
+import org.jgll.grammar.Nonterminal;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class GrammarInterpreter extends GLLParser {
 	private static final Logger log = LoggerFactory.getLogger(GrammarInterpreter.class);
 	
 	@Override
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParsingFailedException {
 		log.info("Input size: {}", input.length);
 
 		this.grammar = grammar;
@@ -27,13 +28,13 @@ public class GrammarInterpreter extends GLLParser {
 		
 		long start = System.nanoTime();
 		
-		grammar.getStartSymbol().execute(this);
+		startSymbol.execute(this);
 		
 		L0.getInstance().execute(this);
 		
 		long end = System.nanoTime();
 		
-		NonterminalSymbolNode root = lookup.getStartSymbol();
+		NonterminalSymbolNode root = lookup.getStartSymbol(startSymbol);
 		if (root == null) {
 			// TODO put ParsingFailedException back
 			throw new RuntimeException("Parsing Failed");

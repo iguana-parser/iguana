@@ -18,9 +18,11 @@ public class Nonterminal extends GrammarSlot {
 
 	private final List<BodyGrammarSlot> alternates;
 	private final boolean nullable;
+	private String name;
 
 	public Nonterminal(int id, String name, boolean nullable) {
-		super(id, name);
+		super(id);
+		this.name = name;
 		this.nullable = nullable;
 		this.alternates = new ArrayList<>();
 	}
@@ -45,21 +47,26 @@ public class Nonterminal extends GrammarSlot {
 		writer.append("// " + name + "\n");
 		writer.append("private void parse_" + id + "() {\n");
 		for (GrammarSlot slot : alternates) {
-			writer.append("   //" + slot.getName() + "\n");
+			writer.append("   //" + slot + "\n");
 			writer.append("   add(grammar.getGrammarSlot(" + slot.id + "), cu, ci, DUMMY);\n");
 		}
 		writer.append("   label = L0;\n");
 		writer.append("}\n");
 
 		for (BodyGrammarSlot slot : alternates) {
-			writer.append("// " + slot.getName() + "\n");
+			writer.append("// " + slot + "\n");
 			writer.append("private void parse_" + slot.id + "() {\n");
 			slot.code(writer);
 		}
 	}
 
+	public String getName() {
+		return name;
+	}
+	
 	@Override
 	public String toString() {
 		return name;
 	}
+
 }

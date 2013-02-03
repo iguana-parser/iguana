@@ -18,8 +18,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	private final Terminal terminal;
 
-	public TerminalGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, Terminal terminal) {
-		super(id, label, position, previous);
+	public TerminalGrammarSlot(Nonterminal head, int id, int position, BodyGrammarSlot previous, Terminal terminal) {
+		super(head, id, position, previous);
 		this.terminal = terminal;
 	}
 	

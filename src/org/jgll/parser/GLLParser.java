@@ -7,6 +7,7 @@ import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
+import org.jgll.grammar.Nonterminal;
 import org.jgll.grammar.NonterminalGrammarSlot;
 import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.lookup.Lookup;
@@ -83,13 +84,13 @@ public abstract class GLLParser {
 	
 	protected int column;
 	
-	public NonterminalSymbolNode parse(String input, Grammar grammar) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(String input, Grammar grammar, String startSymbol) throws ParsingFailedException {
 		I = new int[input.length() + 1];
 		for (int i = 0; i < input.length(); i++) {
 			I[i] = input.charAt(i);
 		}
 		I[input.length()] = -1;
-		return parse(I, grammar);
+		return parse(I, grammar, startSymbol);
 	}
 
 	/**
@@ -102,7 +103,11 @@ public abstract class GLLParser {
 	 * @throws ParsingFailedException an instance of {@link ParsingFailedException} if the descriptor set is empty, but
 	 * 								  no SPPF root has been found.
 	 */
-	public abstract NonterminalSymbolNode parse(int[] input, Grammar grammar) throws ParsingFailedException;
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar, String startSymbol) throws ParsingFailedException {
+		return parse(input, grammar, grammar.getNonterminalByName(startSymbol));
+	}
+	
+	public abstract NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParsingFailedException;
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -291,7 +296,7 @@ public abstract class GLLParser {
 			GrammarSlot t;
 			// if (beta = empty)
 			if (slot instanceof LastGrammarSlot) {
-				t = ((LastGrammarSlot) slot).getHead();
+				t = slot.getHead();
 			} else {
 				t = slot;
 			}

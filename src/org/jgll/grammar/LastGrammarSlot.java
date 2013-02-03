@@ -17,20 +17,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	private final Nonterminal head;
-	
-	public LastGrammarSlot(int id, String label, int position, Nonterminal head, BodyGrammarSlot previous) {
-		super(id, label, position, previous);
-		this.head = head;
+	public LastGrammarSlot(Nonterminal head, int id, int position, BodyGrammarSlot previous) {
+		super(head, id, position, previous);
 	}
-	
-	public Nonterminal getHead() {
-		return head;
-	}
-	
+		
 	@Override
 	public void execute(GrammarInterpreter parser) {
 		parser.pop();
