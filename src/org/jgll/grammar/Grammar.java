@@ -11,6 +11,8 @@ import java.util.Set;
 
 import org.jgll.util.InputUtil;
 
+import com.google.common.collect.Sets;
+
 public final class Grammar implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -22,6 +24,10 @@ public final class Grammar implements Serializable {
 	private final Map<String, Nonterminal> startSymbols;
 	
 	private final String name;
+	
+	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Nonterminal startSymbol) {
+		this(name, nonterminals, slots, Sets.newHashSet(startSymbol));
+	}
 	
 	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Set<Nonterminal> startSymbols) {
 		this.name = name;
@@ -91,5 +97,4 @@ public final class Grammar implements Serializable {
 	public Nonterminal getNonterminalByName(String name) {
 		return startSymbols.get(name);
 	}
-
 }

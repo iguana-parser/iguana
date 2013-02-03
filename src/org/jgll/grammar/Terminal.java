@@ -2,7 +2,7 @@ package org.jgll.grammar;
 
 import java.io.Serializable;
 
-public abstract class Terminal implements Serializable {
+public abstract class Terminal implements Serializable, Symbol {
 	
 	private static final long serialVersionUID = 1L;
 	

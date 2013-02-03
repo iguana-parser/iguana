@@ -12,7 +12,7 @@ import org.jgll.parser.GrammarInterpreter;
  * @author Ali Afroozeh <afroozeh@gmail.com>
  * 
  */
-public class Nonterminal extends GrammarSlot {
+public class Nonterminal extends GrammarSlot implements Symbol {
 	
 	private static final long serialVersionUID = 1L;
 
