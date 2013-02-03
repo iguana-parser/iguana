@@ -20,8 +20,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private final Set<Terminal> testSet;
 	
-	public NonterminalGrammarSlot(Nonterminal head, int id, int position, BodyGrammarSlot previous, Nonterminal nonterminal, Set<Terminal> testSet) {
-		super(head, id, position, previous);
+	public NonterminalGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Nonterminal nonterminal, Set<Terminal> testSet) {
+		super(rule, id, position, previous);
 		this.nonterminal = nonterminal;
 		this.testSet = testSet;
 	}

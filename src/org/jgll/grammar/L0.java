@@ -56,7 +56,7 @@ public class L0 extends GrammarSlot {
 		writer.append("} else {\n");
 		writer.append("end = System.nanoTime();\n");
 		writer.append("log(start, end);\n");
-		writer.append("NonterminalSymbolNode root = lookup.getStartSymbol();\n");
+		writer.append("NonterminalSymbolNode root = lookup.getStartSymbol(startSymbol);\n");
 		writer.append("if (root == null) {");
 		writer.append("log.info(\"Parsing failed.\");\n");
 		writer.append("throw new ParsingFailedException(errorNonterminal, errorIndex, \"\");\n");

@@ -17,8 +17,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	public LastGrammarSlot(Nonterminal head, int id, int position, BodyGrammarSlot previous) {
-		super(head, id, position, previous);
+	public LastGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous) {
+		super(rule, id, position, previous);
 	}
 		
 	@Override

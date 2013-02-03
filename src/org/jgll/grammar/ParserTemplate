@@ -10,6 +10,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
 import org.jgll.exception.ParsingFailedException;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.Nonterminal;
 import org.jgll.sppf.NonterminalSymbolNode;
 
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class ${className}Parser extends GLLParser {
 	
 		
 	@Override
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParsingFailedException {
 	
 		this.grammar = grammar;
 
@@ -64,7 +65,7 @@ public class ${className}Parser extends GLLParser {
 		
 		init();
 	
-		label = ${grammar.startSymbol.id};
+		label = startSymbol.getId();
 		
 		long end = System.nanoTime();
 		log.info("Initialization time: {} ms", (end - start) / 1000000);		
