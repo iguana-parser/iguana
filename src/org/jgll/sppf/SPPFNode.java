@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.List;
 
+
 /**
  * An SPPF node is a node in an Shared Packed Parse Forest. This data structure
  * is used to store the parse forest that is the result of parsing an input
@@ -13,29 +14,17 @@ import java.util.List;
  */
 
 public abstract class SPPFNode {
-	
-	public abstract void addChild(SPPFNode node);
-
-	public abstract void replaceByChildren(SPPFNode node);
-
-	public abstract int sizeChildren();
-
-	public abstract List<SPPFNode> getChildren();
-	
-	public abstract SPPFNode firstChild();
-	
-	public abstract SPPFNode childAt(int index);
-	
-	public abstract void removeChild(SPPFNode node);
-	
-	public abstract void removeChildren(List<SPPFNode> node);
-	
-	public abstract void setChildren(List<SPPFNode> children);
-	
+		
 	public abstract String getId();
 	
 	public abstract String getLabel();
-
+	
+	public abstract List<SPPFNode> getChildren();
+	
+	public abstract int getLeftExtent();
+	
+	public abstract int getRightExtent();
+	
 	private boolean visited;
 
 	public void setVisited() {

@@ -1,5 +1,6 @@
 package org.jgll.lookup;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.jgll.grammar.BodyGrammarSlot;
@@ -8,18 +9,18 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.Nonterminal;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonPackedNodeWithChildren;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.util.OpenAddressingHashMap;
+//import org.jgll.util.OpenAddressingHashMap;
 
 
 public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	private int currentLevel;
 	
+	@SuppressWarnings("unchecked")
 	private Map<SPPFNode, SPPFNode>[] levels = new Map[inputSize];
 	
 	private int countNonPackedNodes;
@@ -35,23 +36,23 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	}
 	
 	@Override
-	public NonPackedNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 
-		NonPackedNode key;
+		SPPFNode key;
 		if(slot.getId() < grammar.getNonterminals().size()) {
-			key = new NonterminalSymbolNode(slot.getId(), leftExtent, rightExtent);
+			key = new NonterminalSymbolNode(slot, leftExtent, rightExtent);
 		} else {
-			key = new IntermediateNode(slot.getId(), leftExtent, rightExtent);
+			key = new IntermediateNode(slot, leftExtent, rightExtent);
 		}
 		
 		if(levels[rightExtent] == null) {
-			levels[rightExtent] = new OpenAddressingHashMap<>();
+			levels[rightExtent] = new HashMap<>();
 			levels[rightExtent].put(key, key);
 			countNonPackedNodes++;
 			return key;
 		}
 		
-		NonPackedNode node = (NonPackedNode) levels[rightExtent].get(key);
+		SPPFNode node = (SPPFNode) levels[rightExtent].get(key);
 		if(node == null) {
 			node = key;
 			levels[rightExtent].put(key, node);
@@ -62,15 +63,15 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	}
 	
 	@Override
-	public void createPackedNode(BodyGrammarSlot grammarPosition, int pivot, NonPackedNodeWithChildren parent, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public void createPackedNode(BodyGrammarSlot grammarPosition, int pivot, NonPackedNode parent, SPPFNode leftChild, SPPFNode rightChild) {
 		
-		PackedNode packedNode = new PackedNode(grammarPosition.getId(), pivot, parent);
+		PackedNode packedNode = new PackedNode(grammarPosition, pivot, parent);
 		
 		if(parent.countPackedNode() == 0) {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
 		} 
 		
-		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition.getId(), pivot)) {
+		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition, pivot)) {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
 			Map<SPPFNode, SPPFNode> map = levels[parent.getRightExtent()];
 			map.put(parent.getFirstPackedNode(), parent.getFirstPackedNode());
@@ -83,12 +84,19 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	}
 	
 	@Override
-	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent, int rightExtent) {
+	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
+		
+		int rightExtent;
+		if(terminalIndex == -2) {
+			rightExtent = leftExtent;
+		} else {
+			rightExtent = leftExtent + 1;
+		}
 
-		TerminalSymbolNode key = new TerminalSymbolNode(terminalIndex, leftExtent, rightExtent);
+		TerminalSymbolNode key = new TerminalSymbolNode(terminalIndex, leftExtent);
 
 		if(levels[rightExtent] == null) {
-			levels[rightExtent] = new OpenAddressingHashMap<>();
+			levels[rightExtent] = new HashMap<>();
 			levels[rightExtent].put(key, key);
 			countNonPackedNodes++;
 			return key;
@@ -109,7 +117,7 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	
 	@Override
 	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol) {
-		return (NonterminalSymbolNode) levels[inputSize - 1].get(new NonterminalSymbolNode(startSymbol.getId(), 0, inputSize - 1));
+		return (NonterminalSymbolNode) levels[inputSize - 1].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 
 	@Override

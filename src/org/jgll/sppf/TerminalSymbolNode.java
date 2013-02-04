@@ -3,94 +3,77 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TerminalSymbolNode extends NonPackedNode {
+import org.jgll.util.HashCode;
+
+/**
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
+public class TerminalSymbolNode extends SPPFNode {
 	
-	public TerminalSymbolNode(int grammarIndex, int leftExtent, int rightExtent, String lexeme) {
-		super(grammarIndex, leftExtent, rightExtent);
-	}	
+	public static final int EPSILON = -2;
 	
-	public TerminalSymbolNode(int grammarIndex, int leftExtent, int rightExtent) {
-		super(grammarIndex, leftExtent, rightExtent);
+	private final int matchedChar;
+	private final int inputIndex;
+
+	public TerminalSymbolNode(int matchedChar, int inputIndex) {
+		this.matchedChar = matchedChar;
+		this.inputIndex = inputIndex;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
 
 		if (!(obj instanceof TerminalSymbolNode)) {
 			return false;
 		}
 		
-		return super.equals(obj);
+		TerminalSymbolNode other = (TerminalSymbolNode) obj;
+		
+		return matchedChar == other.matchedChar &&
+			   inputIndex == other.inputIndex;
+	}
+	
+	@Override
+	public int hashCode() {
+		return HashCode.hashCode(matchedChar, inputIndex);
 	}
 	
 	@Override
 	public String getLabel() {
-		return grammarIndex == -1 ? "\u03B5" : (char)grammarIndex + "";
+		return matchedChar == EPSILON ? "\u03B5" : (char) matchedChar + "";
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", getLabel(), leftExtent, rightExtent);
+		return String.format("(%s, %d, %d)", getLabel(), inputIndex, getRightExtent());
 	}
 	
 	@Override
 	public String getId() {
-		return "t" + grammarIndex + "," + leftExtent + "," + rightExtent;
+		return "t" + matchedChar + "," + inputIndex + "," + getRightExtent();
 	}
 
-	@Override
-	public void addChild(SPPFNode node) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int sizeChildren() {
-		return 0;
-	}
-
-	@Override
-	public void replaceByChildren(SPPFNode node) {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	@Override
 	public List<SPPFNode> getChildren() {
-		return new ArrayList<SPPFNode>();
+		return new ArrayList<>();
 	}
 
 	@Override
-	public SPPFNode firstChild() {
-		throw new UnsupportedOperationException();
+	public int getLeftExtent() {
+		return inputIndex;
 	}
 
 	@Override
-	public void removeChild(SPPFNode node) {
-		throw new UnsupportedOperationException();		
-	}
-
-	@Override
-	public void setChildren(List<SPPFNode> children) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public SPPFNode childAt(int index) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void removeChildren(List<SPPFNode> node) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean isAmbiguous() {
-		return false;
-	}
-
-	@Override
-	public void addPackedNode(PackedNode newPackedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
-		throw new UnsupportedOperationException();
+	public int getRightExtent() {
+		return matchedChar == EPSILON ? inputIndex : inputIndex + 1;
 	}
 
 }

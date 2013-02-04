@@ -3,6 +3,7 @@ package org.jgll.lookup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,8 +12,8 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.OpenAddressingHashSet;
+import org.jgll.sppf.SPPFNode;
+//import org.jgll.util.OpenAddressingHashSet;
 
 public abstract class DefaultLookup implements Lookup {
 	
@@ -32,7 +33,7 @@ public abstract class DefaultLookup implements Lookup {
 	 * The popElements corresponds to P in the algorithm which keeps the links
 	 * between a GSSNode and the SPPFNodes which are links to other GSSNodes.
 	 */
-	protected Map<GSSNode, List<NonPackedNode>> poppedElements;
+	protected Map<GSSNode, List<SPPFNode>> poppedElements;
 
 	protected final int inputSize;
 	
@@ -40,12 +41,12 @@ public abstract class DefaultLookup implements Lookup {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
 		gssNodes = new GSSNode[grammar.getGrammarSlots().size()][];
-		gssEdges = new OpenAddressingHashSet<>(inputSize);
-		poppedElements = new HashMap<GSSNode, List<NonPackedNode>>(DEFAULT_HASHMAP_SIZE);
+		gssEdges = new HashSet<>(inputSize);
+		poppedElements = new HashMap<GSSNode, List<SPPFNode>>(DEFAULT_HASHMAP_SIZE);
 	}
 
 	@Override
-	public boolean getGSSEdge(GSSNode source, NonPackedNode label, GSSNode destination) {
+	public boolean getGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
 		GSSEdge key = new GSSEdge(source, label, destination);
 		
 		if(gssEdges.add(key)) {
@@ -70,19 +71,19 @@ public abstract class DefaultLookup implements Lookup {
 	}
 
 	@Override
-	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
+	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
 		
 		// Add (cu, cn) to P
-		List<NonPackedNode> nodeList = poppedElements.get(gssNode);
+		List<SPPFNode> nodeList = poppedElements.get(gssNode);
 		if (nodeList == null) {
-			nodeList = new ArrayList<NonPackedNode>();
+			nodeList = new ArrayList<SPPFNode>();
 			poppedElements.put(gssNode, nodeList);
 		}
 		nodeList.add(sppfNode);
 	}
 	
 	@Override
-	public List<NonPackedNode> getEdgeLabels(GSSNode gssNode) {
+	public List<SPPFNode> getEdgeLabels(GSSNode gssNode) {
 		return poppedElements.get(gssNode);
 	}
 

@@ -48,7 +48,7 @@ public class Nonterminal extends GrammarSlot implements Symbol {
 		writer.append("private void parse_" + id + "() {\n");
 		for (GrammarSlot slot : alternates) {
 			writer.append("   //" + slot + "\n");
-			writer.append("   add(grammar.getGrammarSlot(" + slot.id + "), cu, ci, DUMMY);\n");
+			writer.append("   add(grammar.getGrammarSlot(" + slot.id + "), cu, ci, DummyNode.getInstance());\n");
 		}
 		writer.append("   label = L0;\n");
 		writer.append("}\n");

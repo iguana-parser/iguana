@@ -2,11 +2,8 @@ package org.jgll.parser;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.L0;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.util.HashCode;
@@ -30,7 +27,7 @@ public class GSSNode {
 
 	public static final GSSNode DUMMY = new GSSNode(L0.getInstance(), 0);
 
-	private final GrammarSlot label;
+	private final GrammarSlot slot;
 
 	private final int inputIndex;
 
@@ -45,16 +42,16 @@ public class GSSNode {
 	 * Creates a new {@code GSSNode} with the given {@code label},
 	 * {@code position} and {@code index}
 	 * 
-	 * @param label
+	 * @param slot
 	 * @param position
 	 * @param inputIndex
 	 */
-	public GSSNode(GrammarSlot label, int inputIndex) {
-		this.label = label;
+	public GSSNode(GrammarSlot slot, int inputIndex) {
+		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.edges = new ArrayList<>();
 		
-		hash = HashCode.hashCode(label.getId(), inputIndex);
+		hash = HashCode.hashCode(slot, inputIndex);
 	}
 	
 	public void addEdge(GSSEdge edge) {
@@ -66,7 +63,7 @@ public class GSSNode {
 	}
 
 	public final GrammarSlot getLabel() {
-		return label;
+		return slot;
 	}
 
 	public final int getIndex() {
@@ -86,7 +83,7 @@ public class GSSNode {
 		GSSNode other = (GSSNode) obj;
 
 		return  other.hash == hash &&
-				other.label == label &&
+				other.slot.equals(slot) &&
 				other.inputIndex == inputIndex;
 	}
 
@@ -97,7 +94,7 @@ public class GSSNode {
 
 	@Override
 	public String toString() {
-		return label + "," + inputIndex;
+		return slot + "," + inputIndex;
 	}
 
 }

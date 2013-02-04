@@ -4,8 +4,9 @@ import org.jgll.exception.ParsingFailedException;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.L0;
 import org.jgll.grammar.Nonterminal;
-import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +53,7 @@ public class GrammarInterpreter extends GLLParser {
 
 		ci = 0;
 		cu = u0 = GSSNode.DUMMY;
-		cn = DUMMY;
+		cn = DummyNode.getInstance();
 	}
 	
 	private void logParseStatistics(long duration) {
@@ -82,19 +83,19 @@ public class GrammarInterpreter extends GLLParser {
 		ci = index;
 	}
 	
-	public NonPackedNode getCN() {
+	public SPPFNode getCN() {
 		return cn;
 	}
 	
-	public void setCN(NonPackedNode node) {
+	public void setCN(SPPFNode node) {
 		cn = node;
 	}
 
-	public void setCR(NonPackedNode node) {
+	public void setCR(SPPFNode node) {
 		cr = node;
 	}
 	
-	public NonPackedNode getCR() {
+	public SPPFNode getCR() {
 		return cr;
 	}
 	

@@ -1,6 +1,6 @@
 package org.jgll.parser;
 
-import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.HashCode;
 
 /**
@@ -27,24 +27,20 @@ import org.jgll.util.HashCode;
 public class GSSEdge {
 
 	private final GSSNode src;
-	private final NonPackedNode sppfNode;
+	private final SPPFNode sppfNode;
 	private final GSSNode dst;
 	
 	private final int hash;
 	
-	public GSSEdge(GSSNode source, NonPackedNode sppfNode, GSSNode dst) {
+	public GSSEdge(GSSNode source, SPPFNode sppfNode, GSSNode dst) {
 		this.src = source;
 		this.sppfNode = sppfNode;
 		this.dst = dst;
 		
-		hash = HashCode.hashCode(src.getLabel().getId(), 
-								 src.getIndex(), 
-								 sppfNode.getGrammarIndex(), 
-								 dst.getIndex(), 
-								 dst.getLabel().getId());
+		hash = HashCode.hashCode(src, sppfNode, dst);
 	}
 	
-	public NonPackedNode getSppfNode() {
+	public SPPFNode getSppfNode() {
 		return sppfNode;
 	}
 	
@@ -71,12 +67,9 @@ public class GSSEdge {
 		GSSEdge other = (GSSEdge) o;
 		
 		return hash == other.hash && 
-			   src.getLabel() == other.src.getLabel() &&
-			   src.getIndex() == other.src.getIndex() &&
-			   sppfNode.getGrammarIndex() == other.sppfNode.getGrammarIndex() &&
-			   dst.getIndex() == other.dst.getIndex() &&
-			   dst.getLabel() == other.dst.getLabel();
-		
+			   src.equals(other.src) &&
+			   sppfNode.equals(other.sppfNode) &&
+			   dst.equals(other.dst);
 	}
 	
 }

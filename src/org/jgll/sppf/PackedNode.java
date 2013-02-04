@@ -4,26 +4,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jgll.grammar.GrammarSlot;
 import org.jgll.util.HashCode;
 
-public class PackedNode extends SPPFNode {
+public class PackedNode extends SPPFNode implements Modifiable {
 	
 	private final int pivot;
-	private final int grammarPosition;
-	private final NonPackedNode parent;
+	private final GrammarSlot slot;
+	private final SPPFNode parent;
 	
 	private List<SPPFNode> children;
 	
 	private final int hash;
 	
-	public PackedNode(int grammarPosition, int pivot, NonPackedNode parent) {
-		this.grammarPosition = grammarPosition;
+	public PackedNode(GrammarSlot slot, int pivot, SPPFNode parent) {
+		this.slot = slot;
 		this.pivot = pivot;
 		this.parent = parent;
 		
 		children = new ArrayList<>(2);
 		
-		hash = HashCode.hashCode(grammarPosition, pivot, parent.grammarIndex, parent.leftExtent, parent.rightExtent);
+		hash = HashCode.hashCode(slot, pivot, parent);
 	}
 			
 	@Override
@@ -39,22 +40,20 @@ public class PackedNode extends SPPFNode {
 		PackedNode other = (PackedNode) obj;
 		
 		return  hash == other.hash &&
-				grammarPosition == other.grammarPosition &&
+				slot.equals(other.slot) &&
 		        pivot == other.pivot &&
-		        parent.grammarIndex == other.parent.grammarIndex &&
-		        parent.leftExtent == other.parent.leftExtent &&
-		        parent.rightExtent == other.parent.rightExtent;
+		        parent.equals(other.parent);
 	}
 	
 	public int getPivot() {
 		return pivot;
 	}
 	
-	public int getGrammarPosition() {
-		return grammarPosition;
+	public GrammarSlot getGrammarSlot() {
+		return slot;
 	}
 	
-	public NonPackedNode getParent() {
+	public SPPFNode getParent() {
 		return parent;
 	}
 	
@@ -75,12 +74,12 @@ public class PackedNode extends SPPFNode {
 	
 	@Override
 	public String getLabel() {
-		return grammarPosition + "";
+		return slot.toString();
 	}
 	
 	@Override
 	public String getId() {
-		return parent.getId() + "," + grammarPosition + "," + pivot;
+		return parent.getId() + "," + slot.getId() + "," + pivot;
 	}
 
 	@Override
@@ -122,6 +121,16 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public void removeChildren(List<SPPFNode> node) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int getLeftExtent() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int getRightExtent() {
 		throw new UnsupportedOperationException();
 	}
 	

@@ -30,6 +30,27 @@ public abstract class GrammarSlot implements Serializable {
 		this.id = id;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof GrammarSlot)) {
+			return false;
+		}
+		
+		GrammarSlot other = (GrammarSlot) obj;
+		
+		return id == other.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return 17 + 31 * id;
+	}
+	
 	public abstract void code(Writer writer) throws IOException;
 	
 	public abstract void execute(GrammarInterpreter parser);

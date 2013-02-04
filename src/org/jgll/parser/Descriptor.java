@@ -1,7 +1,7 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.HashCode;
 
 /**
@@ -29,7 +29,7 @@ public class Descriptor {
 	 * The label that indicates the parser code to execute for the encountered
 	 * nonterminal.
 	 */
-	private final GrammarSlot label;
+	private final GrammarSlot slot;
 	
 	/**
 	 * The associated GSSNode.
@@ -45,25 +45,25 @@ public class Descriptor {
 	 * The SPPF node that was created before parsing the encountered 
 	 * nonterminal.
 	 */
-	private final NonPackedNode sppfNode;
+	private final SPPFNode sppfNode;
 	
 	/**
-	 * Pre-computed hash code
+	 * Precomputed hash code
 	 */
 	private final int hash;
 	
-	public Descriptor(GrammarSlot label, GSSNode gssNode, int inputIdex, NonPackedNode sppfNode) {
+	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIdex, SPPFNode sppfNode) {
 		
-		this.label = label;
+		this.slot = slot;
 		this.gssNode = gssNode;
 		this.inputIndex = inputIdex;
 		this.sppfNode = sppfNode;
 		
-		this.hash = HashCode.hashCode(label.getId(), sppfNode.getLeftExtent(), inputIdex, gssNode.getLabel().getId(), sppfNode.getGrammarIndex()); 
+		this.hash = HashCode.hashCode(slot, sppfNode, inputIdex, gssNode); 
 	}
 	
 	public GrammarSlot getLabel() {
-		return label;
+		return slot;
 	}
 
 	public GSSNode getGSSNode() {
@@ -74,7 +74,7 @@ public class Descriptor {
 		return inputIndex;
 	}
 
-	public NonPackedNode getSPPFNode() {
+	public SPPFNode getSPPFNode() {
 		return sppfNode;
 	}
 	
@@ -96,11 +96,10 @@ public class Descriptor {
 		Descriptor other = (Descriptor) obj;
 
 		return hash == other.hash &&
-			   label == other.getLabel() &&
 			   inputIndex == other.getInputIndex() &&
-			   sppfNode.getLeftExtent() == other.getSPPFNode().getLeftExtent() &&
-			   sppfNode.getGrammarIndex() == other.getSPPFNode().getGrammarIndex() &&				
-			   gssNode.getLabel() == other.getGSSNode().getLabel();
+			   slot.equals(other.slot) &&
+			   sppfNode.equals(other.getSPPFNode()) &&
+			   gssNode.equals(other.getGSSNode());
 	}
 	
 }

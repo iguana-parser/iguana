@@ -8,27 +8,27 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.Nonterminal;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonPackedNodeWithChildren;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 
 public interface Lookup {
 	
-	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent, int rightExtent);
+	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent);
 	
-	public NonPackedNode getNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public SPPFNode getNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
 	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol);
 	
-	public boolean getGSSEdge(GSSNode source, NonPackedNode label, GSSNode destination);
+	public boolean getGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
 
 	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
 	
-	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
+	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode);
 	
-	public List<NonPackedNode> getEdgeLabels(GSSNode gssNode);
+	public List<SPPFNode> getEdgeLabels(GSSNode gssNode);
 	
-	public void createPackedNode(BodyGrammarSlot grammarSlot, int pivot, NonPackedNodeWithChildren parent, NonPackedNode leftChild, NonPackedNode rightChild);
+	public void createPackedNode(BodyGrammarSlot grammarSlot, int pivot, NonPackedNode parent, SPPFNode leftChild, SPPFNode rightChild);
 	
 	public int sizeNonPackedNodes();
 	

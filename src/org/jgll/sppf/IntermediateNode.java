@@ -1,9 +1,11 @@
 package org.jgll.sppf;
 
-public class IntermediateNode extends NonPackedNodeWithChildren {
+import org.jgll.grammar.GrammarSlot;
+
+public class IntermediateNode extends NonPackedNode {
 		
-	public IntermediateNode(int position, int leftExtent, int rightExtent) {
-		super(position, leftExtent, rightExtent);
+	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -14,11 +16,6 @@ public class IntermediateNode extends NonPackedNodeWithChildren {
 		}
 		
 		return super.equals(obj);
-	}
-	
-	@Override
-	public String getLabel() {
-		return grammarIndex + "";
 	}
 
 }

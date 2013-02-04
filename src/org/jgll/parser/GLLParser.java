@@ -11,9 +11,10 @@ import org.jgll.grammar.Nonterminal;
 import org.jgll.grammar.NonterminalGrammarSlot;
 import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.lookup.Lookup;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonPackedNodeWithChildren;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.InputUtil;
 
@@ -29,8 +30,6 @@ import org.jgll.util.InputUtil;
  */
 public abstract class GLLParser {
 	
-	public final static NonPackedNode DUMMY = new TerminalSymbolNode(-1, -1, -1, "$"); 
-	
 	protected InputUtil inputUtil;
 	
 	protected Lookup lookup;
@@ -45,12 +44,12 @@ public abstract class GLLParser {
 	/**
 	 * The current SPPF node.
 	 */
-	protected NonPackedNode cn;
+	protected SPPFNode cn;
 
 	/**
 	 * The current right SPPF node.
 	 */
-	protected NonPackedNode cr;
+	protected SPPFNode cr;
 
 	/**
 	 * The current input index.
@@ -131,7 +130,7 @@ public abstract class GLLParser {
 	
 
 	public final void add(GrammarSlot label) {
-		add(label, cu, ci, DUMMY);
+		add(label, cu, ci, DummyNode.getInstance());
 	}
 	
 	/**
@@ -144,7 +143,7 @@ public abstract class GLLParser {
 	 *   } 
 	 * }
 	 */
-	public final void add(GrammarSlot label, GSSNode u, int inputIndex, NonPackedNode w) {
+	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor d = new Descriptor(label, u, inputIndex, w);
 //		d.setColumn(inputUtil.getLineNumber(inputIndex).getColumnNumber());
 		descriptorSet.add(d);
@@ -152,6 +151,7 @@ public abstract class GLLParser {
 	
 	
 	public final void pop() {
+		assert cn instanceof NonPackedNode;
 		pop(cu, ci, cn);
 	}
 
@@ -171,7 +171,7 @@ public abstract class GLLParser {
 	 *      } 
 	 * }
 	 */
-	public final void pop(GSSNode u, int i, NonPackedNode z) {
+	public final void pop(GSSNode u, int i, SPPFNode z) {
 		
 		if (!u.equals(u0)) {
 			
@@ -180,14 +180,15 @@ public abstract class GLLParser {
 			
 			for(GSSEdge edge : u.getEdges()) {
 				assert u.getLabel() instanceof BodyGrammarSlot;
-				NonPackedNode x = getNodeP((BodyGrammarSlot) u.getLabel(), edge.getSppfNode(), z);
+				SPPFNode x = getNodeP((BodyGrammarSlot) u.getLabel(), edge.getSppfNode(), z);
 				add(u.getLabel(), edge.getDestination(), i, x);
 			}			
 		}
 	}
 	
 	public final GSSNode create(GrammarSlot L) {
-		return create(L, cu, ci, cn);
+		assert cn instanceof NonPackedNode;
+		return create(L, cu, ci, (NonPackedNode) cn);
 	}
 	
 	/**
@@ -218,16 +219,16 @@ public abstract class GLLParser {
 	 * 
      *
 	 */
-	public final GSSNode create(GrammarSlot L, GSSNode u, int i, NonPackedNode w) {
+	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
 		assert L instanceof BodyGrammarSlot;
 		
 		GSSNode v = lookup.getGSSNode(L, i);
 		
 		if(!lookup.getGSSEdge(v, w, u)) {
-			List<NonPackedNode> edgeLabels = lookup.getEdgeLabels(v);
+			List<SPPFNode> edgeLabels = lookup.getEdgeLabels(v);
 			if(edgeLabels != null) {
-				for (NonPackedNode z : edgeLabels) {
-					NonPackedNode x = getNodeP((BodyGrammarSlot) L, w, z);
+				for (SPPFNode z : edgeLabels) {
+					SPPFNode x = getNodeP((BodyGrammarSlot) L, w, z);
 					add(L, u, z.getRightExtent(), x);
 				}			
 			}
@@ -243,17 +244,11 @@ public abstract class GLLParser {
 	 *  }
 	 * @return 
 	 */
-	public final NonPackedNode getNodeT(int x, int i) {
-		int h;
-		if(x == -2) {
-			h = i;
-		} else {
-			h = i + 1;
-		}
-		return lookup.getTerminalNode(x, i, h);
+	public final TerminalSymbolNode getNodeT(int x, int i) {
+		return lookup.getTerminalNode(x, i);
 	}
 	
-	public final NonPackedNode getNodeP(BodyGrammarSlot slot) {
+	public final SPPFNode getNodeP(BodyGrammarSlot slot) {
 		return getNodeP(slot, cn, cr);
 	}
 
@@ -282,7 +277,7 @@ public abstract class GLLParser {
 	  * 	}
 	  * }
 	  */
-	public final NonPackedNode getNodeP(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public final SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
 		if (slot.getPosition() == 1 && 
@@ -305,15 +300,16 @@ public abstract class GLLParser {
 			int leftExtent;
 			int rightExtent = rightChild.getRightExtent();
 			
-			if (!leftChild.equals(DUMMY)) {
+			if (!leftChild.equals(DummyNode.getInstance())) {
 				leftExtent = leftChild.getLeftExtent();
 			} else {
 				leftExtent = rightChild.getLeftExtent();
 			}
 			
-			NonPackedNode newNode = lookup.getNonPackedNode(t, leftExtent, rightExtent);
+			SPPFNode newNode = lookup.getNonPackedNode(t, leftExtent, rightExtent);
 
-			lookup.createPackedNode(slot, rightChild.getLeftExtent(), (NonPackedNodeWithChildren) newNode, leftChild, rightChild);
+			assert newNode instanceof NonPackedNode;
+			lookup.createPackedNode(slot, rightChild.getLeftExtent(), (NonPackedNode) newNode, leftChild, rightChild);
 			
 			return newNode;
 		}

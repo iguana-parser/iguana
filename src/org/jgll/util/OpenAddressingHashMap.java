@@ -61,7 +61,7 @@ public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 	@Override
 	public V get(Object key) {
 		
-		int j = hash(key.hashCode());
+		int j = indexFor(key.hashCode());
 		
 		do {
 			if(table[j] == null) {
@@ -78,7 +78,7 @@ public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 	}
 	
 	public V put(K key, V value) {		
-		int j = hash(key.hashCode());
+		int j = indexFor(key.hashCode());
 		
 		do {
 			if(table[j] == null) {
@@ -119,7 +119,7 @@ public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 		for(Entry<K, V> entry : table) {
 			if(entry != null) {
 				
-				int j = hash(entry.getKey().hashCode());
+				int j = indexFor(entry.getKey().hashCode());
 				
 				do {
 					if(newTable[j] == null) {
@@ -138,7 +138,7 @@ public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 		rehashCount++;
 	}
 	
-	private int hash(int hash) {
+	private int indexFor(int hash) {
 		return (hash >> (32 - p)) & bitMask;		
 	}
 		

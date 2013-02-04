@@ -1,9 +1,11 @@
 package org.jgll.sppf;
 
-public class NonterminalSymbolNode extends NonPackedNodeWithChildren {
+import org.jgll.grammar.GrammarSlot;
+
+public class NonterminalSymbolNode extends NonPackedNode {
 	
-	public NonterminalSymbolNode(int grammarIndex, int leftExtent, int rightExtent) {
-		super(grammarIndex, leftExtent, rightExtent);
+	public NonterminalSymbolNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -20,10 +22,4 @@ public class NonterminalSymbolNode extends NonPackedNodeWithChildren {
 		
 		return super.equals(obj);
 	}
-
-	@Override
-	public String getLabel() {
-		return grammarIndex + "";
-	}
-
 }
