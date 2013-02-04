@@ -23,10 +23,6 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		this.terminal = terminal;
 	}
 	
-	public Terminal getTerminal() {
-		return terminal;
-	}
-
 	@Override
 	public Set<Terminal> getTestSet() {
 		return null;
@@ -34,16 +30,9 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public void execute(GrammarInterpreter parser) {
-		
-		// A ::= ε
-		if(previous == null && next == null) {
-			parser.setCR(parser.getNodeT(-2, parser.getCurrentInpuIndex()));
-			parser.setCN(parser.getNodeP(this));
-			parser.pop();
-		} 
-		
+				
 		// A::= x1
-		else if(previous == null && next.next == null) {
+		if(previous == null && next.next == null) {
 			if(terminal.match(parser.getCurrentInputValue())) {
 				parser.setCR(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
 				parser.moveInputPointer();
@@ -76,25 +65,13 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void code(Writer writer) throws IOException {
 		
-		// code(A ::= ε) = 
-		// 					cR := getNodeT(ε,cI); 
-		// 					cN := getNodeP(A ::= ·,cN,cR)
-		// 					pop(cU , cI , cN ); 
-		// 					goto L0
-		if(previous == null && next == null) {
-			writer.append("   cr = getNodeT(-2, ci);\n");
-			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + id + "), cn, cr);\n");
-			writer.append("   pop(cu, ci, cn);\n");
-			writer.append("   label = L0;\n}\n");
-		}
-		
 		// code(A::= x1) = 
 		//				  cR := getNodeT(x1,cI); 
 		//				  cI :=cI +1 
 		// 				  cN := getNodeP(X ::= x1., cN , cR)
 		//		 		  pop(cU,cI,cN); 
 		//				  gotoL0
-		else if(previous == null && next.next == null) {
+		if(previous == null && next.next == null) {
 			writer.append(checkInput(terminal));
 			writer.append("   cr = getNodeT(I[ci], ci);\n");
 			writer.append(elseCheckInput());
