@@ -59,7 +59,6 @@ public class TerminalSymbolNode extends SPPFNode {
 	public String getId() {
 		return "t" + matchedChar + "," + inputIndex + "," + getRightExtent();
 	}
-
 	
 	@Override
 	public List<SPPFNode> getChildren() {

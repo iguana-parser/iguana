@@ -27,6 +27,8 @@ public class GraphVizUtil {
 		sb.append("nodesep=.6").append(lineSeparator);
 		sb.append("ranksep=.4").append(lineSeparator);
 		sb.append("ordering=out").append(lineSeparator);
+		// Replace the Java-style unicode char for epsilon with the graphviz one
+		content = content.replace("\u03B5", "&epsilon;");
 		sb.append(content).append(lineSeparator);
 		sb.append("}");
 		
