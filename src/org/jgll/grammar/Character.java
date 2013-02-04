@@ -24,4 +24,9 @@ public class Character extends Terminal {
 		return (char) c + "";
 	}
 
+	@Override
+	public String getMatchCode() {
+		return "I[ci] == " + c;
+	}
+
 }

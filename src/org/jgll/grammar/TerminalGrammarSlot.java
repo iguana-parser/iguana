@@ -2,7 +2,6 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
 
@@ -21,11 +20,6 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	public TerminalGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Terminal terminal) {
 		super(rule, id, position, previous);
 		this.terminal = terminal;
-	}
-	
-	@Override
-	public Set<Terminal> getTestSet() {
-		return null;
 	}
 	
 	@Override

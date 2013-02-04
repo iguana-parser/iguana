@@ -151,7 +151,6 @@ public abstract class GLLParser {
 	
 	
 	public final void pop() {
-		assert cn instanceof NonPackedNode;
 		pop(cu, ci, cn);
 	}
 
@@ -187,8 +186,7 @@ public abstract class GLLParser {
 	}
 	
 	public final GSSNode create(GrammarSlot L) {
-		assert cn instanceof NonPackedNode;
-		return create(L, cu, ci, (NonPackedNode) cn);
+		return create(L, cu, ci, cn);
 	}
 	
 	/**
@@ -220,8 +218,6 @@ public abstract class GLLParser {
      *
 	 */
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
-		assert L instanceof BodyGrammarSlot;
-		
 		GSSNode v = lookup.getGSSNode(L, i);
 		
 		if(!lookup.getGSSEdge(v, w, u)) {

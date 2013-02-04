@@ -46,4 +46,13 @@ public class CharacterClass extends Terminal {
 		return s;
 	}
 
+	@Override
+	public String getMatchCode() {
+		StringBuilder sb = new StringBuilder();
+		for(Range range : ranges) {
+			sb.append(range.getMatchCode()).append(" || ");
+		}
+		return sb.toString();
+	}
+
 }

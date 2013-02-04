@@ -1,7 +1,6 @@
 package org.jgll.grammar;
 
 import java.io.Serializable;
-import java.util.Set;
 
 public abstract class BodyGrammarSlot extends GrammarSlot implements Serializable {
 	
@@ -40,8 +39,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		}
 		label = tmp;
 	}
-	
-	public abstract Set<Terminal> getTestSet();
 	
 	public GrammarSlot next() {
 		return next;

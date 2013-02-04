@@ -3,6 +3,7 @@ package org.jgll.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.sppf.Modifiable;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -63,6 +64,6 @@ public class RemoveEBNFNodes implements VisitAction {
 			}
 		}
 		
-		node.setChildren(newChildren);	
+		((Modifiable) node).setChildren(newChildren);	
 	}
 }

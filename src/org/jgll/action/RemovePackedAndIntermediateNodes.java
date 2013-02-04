@@ -1,6 +1,7 @@
 package org.jgll.action;
 
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.Modifiable;
 import org.jgll.sppf.SPPFNode;
 
 public class RemovePackedAndIntermediateNodes implements VisitAction {
@@ -8,16 +9,23 @@ public class RemovePackedAndIntermediateNodes implements VisitAction {
 	@Override
 	public void execute(SPPFNode node) {
 		
-		if(node.sizeChildren() == 0) {
+		if(!(node instanceof Modifiable)) {
 			return;
 		}
 		
-		if (node.firstChild() instanceof IntermediateNode) {
+		
+		Modifiable m = (Modifiable) node;
+		
+		if(m.sizeChildren() == 0) {
+			System.out.println("Dafuq!?");
+		}
+		
+		if (m.firstChild() instanceof IntermediateNode) {
 						
-			IntermediateNode intermediateNode = (IntermediateNode) node.firstChild();
+			IntermediateNode intermediateNode = (IntermediateNode) m.firstChild();
 			
 			if(!intermediateNode.isAmbiguous()) {
-				node.replaceByChildren(intermediateNode);
+				m.replaceByChildren(intermediateNode);
 			}
 		}
 	}

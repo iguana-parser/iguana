@@ -2,7 +2,6 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
 
@@ -30,11 +29,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public void code(Writer writer) throws IOException {
 		writer.append("   pop(cu, ci, cn);\n");
 		writer.append("   label = L0;\n}\n");
-	}
-
-	@Override
-	public Set<Terminal> getTestSet() {
-		return null;
 	}
 
 }

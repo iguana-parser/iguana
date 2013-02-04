@@ -71,7 +71,7 @@ public class LevelledDescritorSet implements DescriptorSet {
 		// if no descriptor with the given index is added before
 		if(r[index] == null) {
 			r[index] = new ArrayDeque<Descriptor>();
-			u[index] =  new OpenAddressingHashSet<>();
+			u[index] =  new HashSet<>();
 			r[index].add(descriptor);
 			u[index].add(descriptor);
 			size++;

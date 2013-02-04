@@ -14,8 +14,10 @@ public class RemoveEpsilonTerminals implements VisitAction {
 		if (! (node instanceof NonterminalSymbolNode)) {
 			return;
 		}
+		
+		NonterminalSymbolNode nt = (NonterminalSymbolNode) node;
 				
-		for(SPPFNode child : node.getChildren()) {
+		for(SPPFNode child : nt.getChildren()) {
 			
 			if(!(child instanceof TerminalSymbolNode)) {
 				return;
@@ -25,7 +27,7 @@ public class RemoveEpsilonTerminals implements VisitAction {
 			
 			// Leaf nodes should not be removed.
 			if(terminalSymbolNode.getLabel().equals("")) {
-				node.setChildren(new ArrayList<SPPFNode>());
+				nt.setChildren(new ArrayList<SPPFNode>());
 			}
 		}
 	}

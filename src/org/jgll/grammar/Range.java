@@ -29,5 +29,10 @@ public class Range extends Terminal {
 	public String toString() {
 		return "[" + start + "-" + end + "]";
 	}
+
+	@Override
+	public String getMatchCode() {
+		return "(I[ci] >= " + start + " && I[ci] <= " + end + ")";
+	}
 	
 }

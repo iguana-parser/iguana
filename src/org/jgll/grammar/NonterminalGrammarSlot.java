@@ -40,8 +40,12 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public void code(Writer writer) throws IOException {
 		
 		if(previous == null) {
+			addTestSetCheck(writer);
 			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
 			writer.append("   label = " + nonterminal.getId() + "; \n}\n");
+			writer.append("else { label = L0; } \n");
+			writer.append("}\n");
+			
 			writer.append("// " + next + "\n");
 			writer.append("private void parse_" + next.id + "() {\n");
 			
@@ -62,17 +66,27 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			//						}
 			// 						else goto L0
 			// RXl:
+			addTestSetCheck(writer);
 			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
 			writer.append("   label = " + nonterminal.getId() + ";\n}\n");
+			writer.append("else { label = L0; } \n");
+			writer.append("}\n");
+			
 			writer.append("// " + next + "\n");
 			writer.append("private void parse_" + next.id + "(){\n");
 		}
 	}
 	
-	@Override
-	public Set<Terminal> getTestSet() {
-		return null;
-//		return testSet;
+	private void addTestSetCheck(Writer writer) throws IOException {
+		writer.append("if (");
+		int i = 0;
+		for(Terminal terminal : testSet) {
+			writer.append(terminal.getMatchCode());
+			if(++i < testSet.size()) {
+				writer.append(" || ");
+			}
+		}
+		writer.append(") {\n");
 	}
-
+	
 }

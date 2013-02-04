@@ -10,6 +10,8 @@ public abstract class Terminal implements Serializable, Symbol {
 	
 	public abstract boolean match(int i);
 	
+	public abstract String getMatchCode();
+	
 	public int getId() {
 		return id;
 	}
