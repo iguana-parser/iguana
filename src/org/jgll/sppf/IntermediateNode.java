@@ -1,7 +1,7 @@
 package org.jgll.sppf;
 
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.traversal.VisitAction;
+import org.jgll.traversal.SPPFVisitor;
 
 public class IntermediateNode extends NonPackedNode {
 		
@@ -20,7 +20,7 @@ public class IntermediateNode extends NonPackedNode {
 	}
 
 	@Override
-	public void accept(VisitAction visitAction) {
+	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
 	}
 

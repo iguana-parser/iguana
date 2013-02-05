@@ -204,4 +204,8 @@ public abstract class NonPackedNode extends SPPFNode implements Modifiable {
 		return new PackedNode(firstPackedNodeGrammarSlot, firstPackedNodePivot, this);
 	}
 
+	public GrammarSlot getFirstPackedNodeGrammarSlot() {
+		return firstPackedNodeGrammarSlot;
+	}
+
 }

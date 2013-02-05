@@ -1,18 +1,14 @@
 package org.jgll.traversal;
 
+import java.util.List;
+
 public interface SPPFListener {
 	
-	public Object startNode(Object object);
+	public void startNode(Object object);
 	
 	public Object endNode(Object object);
 	
-	public Object startAmbiguityNode();
-	
-	public Object endAmbiguityNode();
-	
-	public Object startPackedNode();
-	
-	public Object endPackedNode();
+	public Object buildAmbiguityNode(List<Object> list);
 	
 	public Object terminal(int c);
 }

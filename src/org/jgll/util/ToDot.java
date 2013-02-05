@@ -10,16 +10,17 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.traversal.VisitAction;
+import org.jgll.traversal.DefaultSPPFVisitor;
+import org.jgll.traversal.SPPFVisitor;
 
 /**
  * Creates a Graphviz's dot format representation of an SPPF node.
  * 
  * @author Ali Afroozeh
  * 
- * @see VisitAction
+ * @see SPPFVisitor
  */
-public class ToDot implements VisitAction {
+public class ToDot extends DefaultSPPFVisitor {
 	
 	private StringBuilder sb;
 	
@@ -46,7 +47,9 @@ public class ToDot implements VisitAction {
 		node.setVisited();
 
 		sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
-		addEdgesToChildren(node);					
+		addEdgesToChildren(node);
+		
+		visitChildren(node);
 	}
 
 	@Override
@@ -57,7 +60,9 @@ public class ToDot implements VisitAction {
 		node.setVisited();
 
 		sb.append("\"" + node.getId() + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(node.toString())) + "\n");
-		addEdgesToChildren(node);		
+		addEdgesToChildren(node);
+
+		visitChildren(node);
 	}
 
 	@Override
@@ -68,7 +73,9 @@ public class ToDot implements VisitAction {
 		node.setVisited();
 
 		sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
-		addEdgesToChildren(node);		
+		addEdgesToChildren(node);
+		
+		visitChildren(node);
 	}
 	
 	private void addEdgesToChildren(SPPFNode node) {

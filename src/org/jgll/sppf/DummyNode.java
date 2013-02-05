@@ -3,7 +3,7 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.traversal.VisitAction;
+import org.jgll.traversal.SPPFVisitor;
 
 public class DummyNode extends SPPFNode {
 	
@@ -49,7 +49,7 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
-	public void accept(VisitAction visitAction) {
+	public void accept(SPPFVisitor visitAction) {
 	}
 
 }

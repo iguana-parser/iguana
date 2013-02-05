@@ -1,12 +1,15 @@
 package org.jgll.traversal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 
-public class TraverseAction implements VisitAction {
+public class TraverseAction extends DefaultSPPFVisitor {
 	
 	private SPPFListener listener;
 	
@@ -21,7 +24,9 @@ public class TraverseAction implements VisitAction {
 		}
 		node.setVisited();
 		TerminalSymbolNode terminal = (TerminalSymbolNode) node;
-		listener.terminal(terminal.getMatchedChar());
+		if(terminal.getMatchedChar() != TerminalSymbolNode.EPSILON) {
+			listener.terminal(terminal.getMatchedChar());
+		}
 	}
 
 	@Override
@@ -32,21 +37,26 @@ public class TraverseAction implements VisitAction {
 		node.setVisited();
 		NonterminalSymbolNode nonterminalSymbolNode = (NonterminalSymbolNode) node;
 		if(nonterminalSymbolNode.isAmbiguous()) {
-			listener.startAmbiguityNode();
 			
-			for(SPPFNode packedNode : nonterminalSymbolNode.getChildren()) {
-				listener.startPackedNode();
+			List<Object> list = new ArrayList<>();
+			
+			for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
+				PackedNode packedNode = (PackedNode) child;
+				listener.startNode(packedNode.getGrammarSlot());
 				packedNode.accept(this);
-				listener.endPackedNode();
+				Object o = listener.endNode(packedNode.getGrammarSlot());
+				if(o != null) {
+					list.add(o);
+				}
 			}
 			
-			listener.endAmbiguityNode();
+			listener.buildAmbiguityNode(list);
 		} else {
-			listener.startNode(nonterminalSymbolNode.getGrammarSlot());
+			listener.startNode(nonterminalSymbolNode.getFirstPackedNodeGrammarSlot());
 			for(SPPFNode child : node.getChildren()) {
 				child.accept(this);
 			}
-			listener.endNode(nonterminalSymbolNode.getGrammarSlot());
+			listener.endNode(nonterminalSymbolNode.getFirstPackedNodeGrammarSlot());
 		}
 	}
 

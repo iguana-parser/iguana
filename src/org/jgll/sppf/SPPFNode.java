@@ -2,7 +2,7 @@ package org.jgll.sppf;
 
 import java.util.List;
 
-import org.jgll.traversal.VisitAction;
+import org.jgll.traversal.SPPFVisitor;
 
 
 /**
@@ -27,7 +27,7 @@ public abstract class SPPFNode {
 	
 	public abstract int getRightExtent();
 	
-	public abstract void accept(VisitAction visitAction);
+	public abstract void accept(SPPFVisitor visitAction);
 	
 	private boolean visited;
 

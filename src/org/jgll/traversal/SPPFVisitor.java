@@ -14,7 +14,7 @@ import org.jgll.sppf.TerminalSymbolNode;
  * @see org.jgll.visitor.Visitor
  *
  */
-public interface VisitAction {
+public interface SPPFVisitor {
 
 	public void visit(TerminalSymbolNode node);
 
