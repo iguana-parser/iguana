@@ -3,6 +3,8 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.traversal.VisitAction;
+
 public class DummyNode extends SPPFNode {
 	
 	private static DummyNode instance;
@@ -44,6 +46,10 @@ public class DummyNode extends SPPFNode {
 	@Override
 	public int getRightExtent() {
 		return -1;
+	}
+
+	@Override
+	public void accept(VisitAction visitAction) {
 	}
 
 }

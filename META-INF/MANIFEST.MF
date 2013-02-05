@@ -5,7 +5,6 @@ Bundle-SymbolicName: jigll
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: jigll.jar
 Export-Package: 
- org.jgll.action;uses:="org.jgll.sppf",
  org.jgll.exception;uses:="org.jgll.sppf",
  org.jgll.grammar;uses:="org.jgll.parser",
  org.jgll.lookup;uses:="org.jgll.parser,org.jgll.sppf,org.jgll.grammar",
@@ -15,5 +14,4 @@ Export-Package:
    org.jgll.lookup,
    org.jgll.grammar",
  org.jgll.sppf,
- org.jgll.util,
- org.jgll.visitor;uses:="org.jgll.sppf"
+ org.jgll.util;uses:="org.jgll.sppf"

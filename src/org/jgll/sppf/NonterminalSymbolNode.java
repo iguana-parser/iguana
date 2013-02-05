@@ -1,6 +1,7 @@
 package org.jgll.sppf;
 
 import org.jgll.grammar.GrammarSlot;
+import org.jgll.traversal.VisitAction;
 
 public class NonterminalSymbolNode extends NonPackedNode {
 	
@@ -21,5 +22,10 @@ public class NonterminalSymbolNode extends NonPackedNode {
 		}
 		
 		return super.equals(obj);
+	}
+
+	@Override
+	public void accept(VisitAction visitAction) {
+		visitAction.visit(this);
 	}
 }

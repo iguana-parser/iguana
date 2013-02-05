@@ -2,6 +2,8 @@ package org.jgll.sppf;
 
 import java.util.List;
 
+import org.jgll.traversal.VisitAction;
+
 
 /**
  * An SPPF node is a node in an Shared Packed Parse Forest. This data structure
@@ -24,6 +26,8 @@ public abstract class SPPFNode {
 	public abstract int getLeftExtent();
 	
 	public abstract int getRightExtent();
+	
+	public abstract void accept(VisitAction visitAction);
 	
 	private boolean visited;
 

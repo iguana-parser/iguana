@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.traversal.VisitAction;
 import org.jgll.util.HashCode;
 
 /**
@@ -16,6 +17,7 @@ public class TerminalSymbolNode extends SPPFNode {
 	public static final int EPSILON = -2;
 	
 	private final int matchedChar;
+	
 	private final int inputIndex;
 
 	public TerminalSymbolNode(int matchedChar, int inputIndex) {
@@ -60,6 +62,10 @@ public class TerminalSymbolNode extends SPPFNode {
 		return "t" + matchedChar + "," + inputIndex + "," + getRightExtent();
 	}
 	
+	public int getMatchedChar() {
+		return matchedChar;
+	}
+	
 	@Override
 	public List<SPPFNode> getChildren() {
 		return new ArrayList<>();
@@ -73,6 +79,11 @@ public class TerminalSymbolNode extends SPPFNode {
 	@Override
 	public int getRightExtent() {
 		return matchedChar == EPSILON ? inputIndex : inputIndex + 1;
+	}
+
+	@Override
+	public void accept(VisitAction visitAction) {
+		visitAction.visit(this);
 	}
 
 }

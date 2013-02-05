@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
+import org.jgll.traversal.VisitAction;
 import org.jgll.util.HashCode;
 
 public class PackedNode extends SPPFNode implements Modifiable {
@@ -132,6 +133,11 @@ public class PackedNode extends SPPFNode implements Modifiable {
 	@Override
 	public int getRightExtent() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void accept(VisitAction visitAction) {
+		visitAction.visit(this);
 	}
 	
 }
