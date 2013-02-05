@@ -15,7 +15,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 //import org.jgll.util.OpenAddressingHashMap;
 
-
 public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	private int currentLevel;
@@ -74,7 +73,8 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition, pivot)) {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
 			Map<SPPFNode, SPPFNode> map = levels[parent.getRightExtent()];
-			map.put(parent.getFirstPackedNode(), parent.getFirstPackedNode());
+			PackedNode firstPackedNode = parent.getFirstPackedNode();
+			map.put(firstPackedNode, firstPackedNode);
 			map.put(packedNode, packedNode);
 		}
 		

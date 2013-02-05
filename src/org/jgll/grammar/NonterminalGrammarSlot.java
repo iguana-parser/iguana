@@ -32,18 +32,20 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public void execute(GrammarInterpreter parser) {
-		parser.setCU(parser.create(next));
-		nonterminal.execute(parser);
+		if(checkAgainstTestSet(parser.getCurrentInputValue())) {
+			parser.setCU(parser.create(next));
+			nonterminal.execute(parser);
+		}
 	}
 	
 	@Override
 	public void code(Writer writer) throws IOException {
 		
 		if(previous == null) {
-			addTestSetCheck(writer);
+			codeIfTestSetCheck(writer);
 			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
-			writer.append("   label = " + nonterminal.getId() + "; \n}\n");
-			writer.append("else { label = L0; } \n");
+			writer.append("   label = " + nonterminal.getId() + ";\n");
+			codeElseTestSetCheck(writer);
 			writer.append("}\n");
 			
 			writer.append("// " + next + "\n");
@@ -66,10 +68,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			//						}
 			// 						else goto L0
 			// RXl:
-			addTestSetCheck(writer);
+			codeIfTestSetCheck(writer);
 			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
-			writer.append("   label = " + nonterminal.getId() + ";\n}\n");
-			writer.append("else { label = L0; } \n");
+			writer.append("   label = " + nonterminal.getId() + ";\n");
+			codeElseTestSetCheck(writer);
 			writer.append("}\n");
 			
 			writer.append("// " + next + "\n");
@@ -77,7 +79,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		}
 	}
 	
-	private void addTestSetCheck(Writer writer) throws IOException {
+	@Override
+	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		writer.append("if (");
 		int i = 0;
 		for(Terminal terminal : testSet) {
@@ -87,6 +90,16 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			}
 		}
 		writer.append(") {\n");
+	}
+
+	@Override
+	public boolean checkAgainstTestSet(int i) {
+		for(Terminal t : testSet) {
+			if(t.match(i)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

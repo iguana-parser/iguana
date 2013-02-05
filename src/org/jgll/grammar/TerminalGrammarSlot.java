@@ -68,7 +68,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		if(previous == null && next.next == null) {
 			writer.append(checkInput(terminal));
 			writer.append("   cr = getNodeT(I[ci], ci);\n");
-			writer.append(elseCheckInput());
+			codeElseTestSetCheck(writer);
 			writer.append("   ci = ci + 1;\n");
 			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + next.id + "), cn, cr);\n");
 			writer.append("   pop(cu, ci, cn);\n");
@@ -79,7 +79,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		else if(previous == null && !(next.next == null)) {
 			writer.append(checkInput(terminal));
 			writer.append("   cn = getNodeT(I[ci], ci);\n");
-			writer.append(elseCheckInput());
+			codeElseTestSetCheck(writer);
 			writer.append("   ci = ci + 1;\n");
 			
 			BodyGrammarSlot slot = next;
@@ -117,9 +117,15 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		}
 		return s;
 	}
-	
-	private String elseCheckInput() {
-		return "    } else {label = L0; return; }\n";
+
+	@Override
+	public boolean checkAgainstTestSet(int i) {
+		return terminal.match(i);
+	}
+
+	@Override
+	public void codeIfTestSetCheck(Writer writer) throws IOException {
+		writer.append("if (").append(terminal.getMatchCode()).append(") {\n");
 	}
 
 }

@@ -1,6 +1,8 @@
 package org.jgll.grammar;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
 
 public abstract class BodyGrammarSlot extends GrammarSlot implements Serializable {
 	
@@ -38,6 +40,18 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			tmp += s + " ";
 		}
 		label = tmp;
+	}
+	
+	/**
+	 * Checks whether the provide input belogs to the first set, and follow set
+	 * in case the first set contains epsilon.  
+	 */
+	public abstract boolean checkAgainstTestSet(int i);
+	
+	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
+	
+	public void codeElseTestSetCheck(Writer writer) throws IOException {
+		writer.append("} else { label = L0; } \n");
 	}
 	
 	public GrammarSlot next() {

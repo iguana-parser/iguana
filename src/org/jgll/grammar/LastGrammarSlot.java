@@ -31,4 +31,14 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		writer.append("   label = L0;\n}\n");
 	}
 
+	@Override
+	public boolean checkAgainstTestSet(int i) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void codeIfTestSetCheck(Writer writer) throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
 }

@@ -51,21 +51,22 @@ public final class Grammar implements Serializable {
 		L0.getInstance().code(writer);
 		
 		for(Nonterminal nonterminal : nonterminals) {
-			writer.append("case " + nonterminal.getId() + ":\n");
 			writer.append("// " + nonterminal + "\n");
+			writer.append("case " + nonterminal.getId() + ":\n");
 			writer.append("parse_" + nonterminal.getId() + "();\n");
 			writer.append("break;\n");
 		}
 				
 		for(BodyGrammarSlot slot : slots) {
 			if(!(slot.previous instanceof TerminalGrammarSlot)) {
+				writer.append("// " + slot + "\n");
 				writer.append("case " + slot.getId() + ":\n");
 				writer.append("parse_" + slot.getId() + "();\n");
 				writer.append("break;\n");
 			}
 		}
 		
-		writer.append("} } }");
+		writer.append("} } }\n");
 		
 		for(Nonterminal nonterminal : nonterminals) {
 			nonterminal.code(writer);

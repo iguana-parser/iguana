@@ -38,7 +38,9 @@ public class Nonterminal extends GrammarSlot implements Symbol {
 	@Override
 	public void execute(GrammarInterpreter parser) {
 		for(BodyGrammarSlot slot : alternates) {
-			parser.add(slot);
+			if(slot.checkAgainstTestSet(parser.getCurrentInputValue())) {
+				parser.add(slot);
+			}
 		}
 	}
 
@@ -46,9 +48,11 @@ public class Nonterminal extends GrammarSlot implements Symbol {
 	public void code(Writer writer) throws IOException {
 		writer.append("// " + name + "\n");
 		writer.append("private void parse_" + id + "() {\n");
-		for (GrammarSlot slot : alternates) {
+		for (BodyGrammarSlot slot : alternates) {
 			writer.append("   //" + slot + "\n");
+			slot.codeIfTestSetCheck(writer);			
 			writer.append("   add(grammar.getGrammarSlot(" + slot.id + "), cu, ci, DummyNode.getInstance());\n");
+			writer.append("}\n");
 		}
 		writer.append("   label = L0;\n");
 		writer.append("}\n");

@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -9,9 +10,11 @@ import org.jgll.sppf.TerminalSymbolNode;
 public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
+	private final Set<Terminal> testSet;
 	
-	public EpsilonGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous) {
+	public EpsilonGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Set<Terminal> testSet) {
 		super(rule, id, position, previous);
+		this.testSet = testSet;
 	}
 	
 	@Override
@@ -33,6 +36,29 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + id + "), cn, cr);\n");
 		writer.append("   pop(cu, ci, cn);\n");
 		writer.append("   label = L0;\n}\n");
+	}
+	
+	@Override
+	public void codeIfTestSetCheck(Writer writer) throws IOException {
+		writer.append("if (");
+		int i = 0;
+		for(Terminal terminal : testSet) {
+			writer.append(terminal.getMatchCode());
+			if(++i < testSet.size()) {
+				writer.append(" || ");
+			}
+		}
+		writer.append(") {\n");
+	}
+
+	@Override
+	public boolean checkAgainstTestSet(int i) {
+		for(Terminal t : testSet) {
+			if(t.match(i)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
