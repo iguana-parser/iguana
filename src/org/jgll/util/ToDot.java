@@ -22,7 +22,7 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class ToDot extends DefaultSPPFVisitor {
 	
-	private StringBuilder sb;
+	protected StringBuilder sb;
 	
 	public ToDot(StringBuilder sb) {
 		this.sb = sb;
@@ -78,10 +78,14 @@ public class ToDot extends DefaultSPPFVisitor {
 		visitChildren(node);
 	}
 	
-	private void addEdgesToChildren(SPPFNode node) {
+	protected void addEdgesToChildren(SPPFNode node) {
 		for (SPPFNode child : node.getChildren()) {
-			sb.append(EDGE + "\"" + node.getId() + "\"" + "->" + "{\"" + child.getId() + "\"}" + "\n");
+			addEdgeToChild(node, child);
 		}
+	}
+	
+	protected void addEdgeToChild(SPPFNode parent, SPPFNode child) {
+		sb.append(EDGE + "\"" + parent.getId() + "\"" + "->" + "{\"" + child.getId() + "\"}" + "\n");
 	}
 	
 	private String replaceWhiteSpace(String s) {
