@@ -19,7 +19,7 @@ public class TerminalSymbolNode extends SPPFNode {
 	private final int matchedChar;
 	
 	private final int inputIndex;
-
+	
 	public TerminalSymbolNode(int matchedChar, int inputIndex) {
 		this.matchedChar = matchedChar;
 		this.inputIndex = inputIndex;
@@ -85,5 +85,4 @@ public class TerminalSymbolNode extends SPPFNode {
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
 	}
-
 }

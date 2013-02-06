@@ -26,6 +26,7 @@ public abstract class GrammarSlot implements Serializable {
 	 */
 	protected final int id;
 	
+	
 	public GrammarSlot(int id) {
 		this.id = id;
 	}

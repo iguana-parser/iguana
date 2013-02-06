@@ -33,7 +33,7 @@ public class ToDot extends DefaultSPPFVisitor {
 		if(node.isVisited()) {
 			return;
 		}
-		node.setVisited();
+		node.setVisited(true);
 
 		sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
 		addEdgesToChildren(node);					
@@ -44,7 +44,7 @@ public class ToDot extends DefaultSPPFVisitor {
 		if(node.isVisited()) {
 			return;
 		}
-		node.setVisited();
+		node.setVisited(true);
 
 		sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
 		addEdgesToChildren(node);
@@ -57,7 +57,7 @@ public class ToDot extends DefaultSPPFVisitor {
 		if(node.isVisited()) {
 			return;
 		}
-		node.setVisited();
+		node.setVisited(true);
 
 		sb.append("\"" + node.getId() + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(node.toString())) + "\n");
 		addEdgesToChildren(node);
@@ -70,7 +70,7 @@ public class ToDot extends DefaultSPPFVisitor {
 		if(node.isVisited()) {
 			return;
 		}
-		node.setVisited();
+		node.setVisited(true);
 
 		sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
 		addEdgesToChildren(node);

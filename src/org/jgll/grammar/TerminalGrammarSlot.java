@@ -21,7 +21,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		super(rule, id, position, previous);
 		this.terminal = terminal;
 	}
-	
+		
 	@Override
 	public void execute(GrammarInterpreter parser) {
 				

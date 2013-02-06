@@ -16,6 +16,10 @@ import org.jgll.traversal.SPPFVisitor;
  */
 
 public abstract class SPPFNode {
+	
+	private boolean visited;
+	
+	private Object object;
 		
 	public abstract String getId();
 	
@@ -29,18 +33,19 @@ public abstract class SPPFNode {
 	
 	public abstract void accept(SPPFVisitor visitAction);
 	
-	private boolean visited;
-
-	public void setVisited() {
-		visited = true;
-	}
-
-	public void clearVisited() {
-		visited = false;
-	}
-
 	public boolean isVisited() {
 		return visited;
 	}
-
+	
+	public void setVisited(boolean visited) {
+		this.visited = visited;
+	}
+	
+	public Object getObject() {
+		return object;
+	}
+	
+	public void setObject(Object object) {
+		this.object = object;
+	}
 }

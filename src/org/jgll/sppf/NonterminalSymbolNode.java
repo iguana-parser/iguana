@@ -28,4 +28,5 @@ public class NonterminalSymbolNode extends NonPackedNode {
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
 	}
+
 }

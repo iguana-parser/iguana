@@ -3,6 +3,7 @@ package org.jgll.traversal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -19,44 +20,56 @@ public class TraverseAction extends DefaultSPPFVisitor {
 
 	@Override
 	public void visit(TerminalSymbolNode node) {
+		TerminalSymbolNode terminal = (TerminalSymbolNode) node;
 		if(node.isVisited()) {
+			listener.terminal(terminal.getMatchedChar(), node.getObject());
 			return;
 		}
-		node.setVisited();
-		TerminalSymbolNode terminal = (TerminalSymbolNode) node;
+		node.setVisited(true);
 		if(terminal.getMatchedChar() != TerminalSymbolNode.EPSILON) {
-			listener.terminal(terminal.getMatchedChar());
+			Object result = listener.terminal(terminal.getMatchedChar(), null);
+			node.setObject(result);
 		}
 	}
 
 	@Override
 	public void visit(NonterminalSymbolNode node) {
+		
+		NonterminalSymbolNode nonterminalSymbolNode = (NonterminalSymbolNode) node;
+		
 		if(node.isVisited()) {
+			LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
+			listener.startNode(slot.getObject());
+			listener.endNode(slot.getObject(), nonterminalSymbolNode.getObject());
 			return;
 		}
-		node.setVisited();
-		NonterminalSymbolNode nonterminalSymbolNode = (NonterminalSymbolNode) node;
+		
+		node.setVisited(true);
+		
 		if(nonterminalSymbolNode.isAmbiguous()) {
 			
 			List<Object> list = new ArrayList<>();
 			
 			for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
 				PackedNode packedNode = (PackedNode) child;
-				listener.startNode(packedNode.getGrammarSlot());
+				LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
+				listener.startNode(slot.getObject());
 				packedNode.accept(this);
-				Object o = listener.endNode(packedNode.getGrammarSlot());
-				if(o != null) {
-					list.add(o);
-				}
+				Object result = listener.endNode(slot.getObject(), null);
+				packedNode.setObject(result);
+				list.add(packedNode);
 			}
 			
 			listener.buildAmbiguityNode(list);
+			
 		} else {
-			listener.startNode(nonterminalSymbolNode.getFirstPackedNodeGrammarSlot());
+			LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
+			listener.startNode(slot.getObject());
 			for(SPPFNode child : node.getChildren()) {
 				child.accept(this);
 			}
-			listener.endNode(nonterminalSymbolNode.getFirstPackedNodeGrammarSlot());
+			Object result = listener.endNode(slot.getObject(), null);
+			nonterminalSymbolNode.setObject(result);
 		}
 	}
 
@@ -65,7 +78,7 @@ public class TraverseAction extends DefaultSPPFVisitor {
 		if(node.isVisited()) {
 			return;
 		}
-		node.setVisited();
+		node.setVisited(true);
 		for(SPPFNode child : node.getChildren()) {
 			child.accept(this);
 		}
@@ -76,7 +89,7 @@ public class TraverseAction extends DefaultSPPFVisitor {
 		if(node.isVisited()) {
 			return;
 		}
-		node.setVisited();
+		node.setVisited(true);
 		for(SPPFNode child : node.getChildren()) {
 			child.accept(this);
 		}		

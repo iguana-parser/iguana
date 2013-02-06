@@ -15,6 +15,15 @@ import org.jgll.parser.GrammarInterpreter;
 public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * An arbitrary data object that can be put in this grammar slot and
+	 * retrieved later when traversing the parse tree.
+	 * This object will appear as a property of nonterminal symbol nodes in a parse tree.
+	 * 
+	 */
+	private Object object;
+
 
 	public LastGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous) {
 		super(rule, id, position, previous);
@@ -39,6 +48,14 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		throw new UnsupportedOperationException();
+	}
+	
+	public void setObject(Object object) {
+		this.object = object;
+	}
+	
+	public Object getObject() {
+		return object;
 	}
 
 }

@@ -25,7 +25,7 @@ public class ToDotWithoutIntermediateNodes extends ToDot {
 		if(node.isVisited()) {
 			return;
 		}
-		node.setVisited();
+		node.setVisited(true);
 
 		visitChildren(node);
 	}
