@@ -23,9 +23,16 @@ import org.jgll.traversal.SPPFVisitor;
 public class ToDot extends DefaultSPPFVisitor {
 	
 	protected StringBuilder sb;
+	private final boolean showPackedNodeLabel;
+	
 	
 	public ToDot(StringBuilder sb) {
+		this(sb, false);
+	}
+	
+	public ToDot(StringBuilder sb, boolean showPackedNodeLabel) {
 		this.sb = sb;
+		this.showPackedNodeLabel = showPackedNodeLabel;
 	}
 
 	@Override
@@ -72,7 +79,11 @@ public class ToDot extends DefaultSPPFVisitor {
 		}
 		node.setVisited(true);
 
-		sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
+		if(showPackedNodeLabel) {
+			sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
+		} else {
+			sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, "") + "\n");
+		}
 		addEdgesToChildren(node);
 		
 		visitChildren(node);
