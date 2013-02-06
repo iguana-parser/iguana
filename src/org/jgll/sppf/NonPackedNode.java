@@ -14,10 +14,10 @@ import org.jgll.util.HashCode;
  * in the body of production rules.
  * 
  * 
- * @author Ali Afroozeh	<afroozeh@gmail.com>
+ * @author Ali Afroozeh
  *
  */
-public abstract class NonPackedNode extends SPPFNode implements Modifiable {
+public abstract class NonPackedNode extends SPPFNode {
 	
 	protected final GrammarSlot slot;
 	
@@ -94,50 +94,8 @@ public abstract class NonPackedNode extends SPPFNode implements Modifiable {
 	}
 	
 	@Override
-	public void addChild(SPPFNode node) {
-		children.add(node);
-	}
-	
-	@Override
-	public int sizeChildren() {
-		return children.size();
-	}
-	
-	@Override
-	public void replaceByChildren(SPPFNode node) {
-		int index = children.indexOf(node);
-		children.remove(index);
-		children.addAll(index, node.getChildren());
-	}
-
-	@Override
 	public List<SPPFNode> getChildren() {
 		return Collections.unmodifiableList(children);
-	}
-	
-	@Override
-	public SPPFNode firstChild() {
-		return children.get(0);
-	}
-	
-	@Override
-	public SPPFNode childAt(int index) {
-		return children.get(index);
-	}
-	
-	@Override
-	public void removeChildren(List<SPPFNode> node) {
-		children.removeAll(node);
-	}
-	
-	@Override
-	public void removeChild(SPPFNode node) {
-		children.remove(node);
-	}
-	
-	@Override
-	public void setChildren(List<SPPFNode> children) {
-		this.children = children;
 	}
 	
 	public void addPackedNode(PackedNode newPackedNode, SPPFNode leftChild, SPPFNode rightChild) {
@@ -195,6 +153,9 @@ public abstract class NonPackedNode extends SPPFNode implements Modifiable {
 		return packedNodeCount > 1;
 	}
 	
+	public void addChild(SPPFNode node) {
+		children.add(node);
+	}
 	
 	public int countPackedNode() {
 		return packedNodeCount;

@@ -8,7 +8,13 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.util.HashCode;
 
-public class PackedNode extends SPPFNode implements Modifiable {
+/**
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
+public class PackedNode extends SPPFNode {
 	
 	private final int pivot;
 	private final GrammarSlot slot;
@@ -58,7 +64,6 @@ public class PackedNode extends SPPFNode implements Modifiable {
 		return parent;
 	}
 	
-	@Override
 	public void addChild(SPPFNode node) {
 		children.add(node);
 	}
@@ -84,45 +89,8 @@ public class PackedNode extends SPPFNode implements Modifiable {
 	}
 
 	@Override
-	public void replaceByChildren(SPPFNode node) {
-		int index = children.indexOf(node);
-		children.remove(index);
-		children.addAll(index, node.getChildren());
-	}
-
-	@Override
-	public int sizeChildren() {
-		return children.size();
-	}
-
-	@Override
 	public List<SPPFNode> getChildren() {
 		return Collections.unmodifiableList(children);
-	}
-
-	@Override
-	public SPPFNode firstChild() {
-		return children.get(0);
-	}
-
-	@Override
-	public void removeChild(SPPFNode node) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setChildren(List<SPPFNode> children) {
-		this.children = children;
-	}
-
-	@Override
-	public SPPFNode childAt(int index) {
-		return children.get(index);
-	}
-
-	@Override
-	public void removeChildren(List<SPPFNode> node) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

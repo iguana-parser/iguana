@@ -1,6 +1,10 @@
 package org.jgll.grammar;
 
-
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class Character extends Terminal {
 	
 	private static final long serialVersionUID = 1L;

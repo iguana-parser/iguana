@@ -1,8 +1,12 @@
 package org.jgll.grammar;
 
-import java.io.Serializable;
 
-public abstract class Terminal implements Serializable, Symbol {
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
+public abstract class Terminal implements Symbol {
 	
 	private static final long serialVersionUID = 1L;
 	

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 
  * 
- * @author Ali Afroozeh		<afroozeh@gmail.com>
+ * @author Ali Afroozeh
  *
  */
 public class GrammarInterpreter extends GLLParser {

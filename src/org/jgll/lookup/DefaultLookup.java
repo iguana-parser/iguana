@@ -15,6 +15,11 @@ import org.jgll.parser.GSSNode;
 import org.jgll.sppf.SPPFNode;
 //import org.jgll.util.OpenAddressingHashSet;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public abstract class DefaultLookup implements Lookup {
 	
 	/**

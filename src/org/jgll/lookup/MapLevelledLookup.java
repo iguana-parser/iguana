@@ -15,6 +15,11 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 //import org.jgll.util.OpenAddressingHashMap;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	private int currentLevel;

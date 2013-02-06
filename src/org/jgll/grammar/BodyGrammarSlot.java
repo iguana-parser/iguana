@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public abstract class BodyGrammarSlot extends GrammarSlot implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

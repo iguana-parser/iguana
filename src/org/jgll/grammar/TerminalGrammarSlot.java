@@ -8,7 +8,7 @@ import org.jgll.parser.GrammarInterpreter;
 /**
  * A grammar slot whose next immediate symbol is a terminal.
  * 
- * @author Ali Afroozeh	<afroozeh@gmail.com>
+ * @author Ali Afroozeh
  *
  */
 public class TerminalGrammarSlot extends BodyGrammarSlot {

@@ -5,9 +5,6 @@ import org.jgll.util.HashCode;
 
 /**
  * 
- * 
- * @author Ali Afroozeh
- * 
  * The values needed to uniquely identify a GSS edge are
  * the Source GSS node's grammar label, input index,
  * SPPF node's grammar label, and the Destination GSS node's
@@ -22,7 +19,8 @@ import org.jgll.util.HashCode;
  * src (L1, j)
  * dst (L2, i)
  * node (L, i, j)
- *
+ * 
+ * @author Ali Afroozeh
  */
 public class GSSEdge {
 

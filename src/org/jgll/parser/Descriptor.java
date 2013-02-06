@@ -18,8 +18,8 @@ import org.jgll.util.HashCode;
  * 
  * Note: this class has a natural ordering that is inconsistent with equals.
  * 
- * @author Maarten Manders  <m.w.manders@tue.nl>
- * @author Ali Afroozeh		<afroozeh@gmail.com>
+ * @author Maarten Manders
+ * @author Ali Afroozeh
  * 
  */
 

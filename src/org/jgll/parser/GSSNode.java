@@ -19,8 +19,8 @@ import org.jgll.util.HashCode;
  * A {@code GSSNode} has children which are labeled by an {@code SPPFNode}.
  * These children define the structure of a Graph Structured Stack.
  * 
- * @author Maarten Manders	<m.w.manders@tue.nl>
- * @author Ali Afroozeh		<afroozeh@gmail.com>
+ * @author Maarten Manders
+ * @author Ali Afroozeh
  * 
  */
 public class GSSNode {

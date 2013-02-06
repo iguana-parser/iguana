@@ -3,6 +3,11 @@ package org.jgll.sppf;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class IntermediateNode extends NonPackedNode {
 		
 	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {

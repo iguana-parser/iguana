@@ -9,7 +9,7 @@ import java.util.List;
  * either [A-Z], [a-z] or [0-9]
  * 
  * 
- * @author Ali Afroozeh <afroozeh@gmail.com>
+ * @author Ali Afroozeh
  *
  */
 public class CharacterClass extends Terminal {

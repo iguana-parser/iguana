@@ -11,7 +11,7 @@ package org.jgll.parser;
  * should maintain a history of added elements and do not add an element
  * if it's already added.
  * 
- * @author Ali Afroozeh <afroozeh@gmail.com>
+ * @author Ali Afroozeh
  *
  */
 public interface DescriptorSet {

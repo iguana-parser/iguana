@@ -12,6 +12,11 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public interface Lookup {
 	
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent);

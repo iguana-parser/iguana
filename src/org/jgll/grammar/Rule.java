@@ -3,6 +3,11 @@ package org.jgll.grammar;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class Rule implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

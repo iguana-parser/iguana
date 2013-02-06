@@ -25,8 +25,7 @@ import org.jgll.util.InputUtil;
  * Based on the paper "GLL: parse tree generation."
  * 
  * @author Maarten Manders
- * 
- * @author Ali Afroozeh 	<afroozeh@gmail.com>
+ * @author Ali Afroozeh
  */
 public abstract class GLLParser {
 	

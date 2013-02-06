@@ -6,8 +6,13 @@ import java.util.Queue;
 import java.util.Set;
 
 import org.jgll.lookup.LevelledLookup;
-import org.jgll.util.OpenAddressingHashSet;
+//import org.jgll.util.OpenAddressingHashSet;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class LevelledDescritorSet implements DescriptorSet {
 
 	private Set<Descriptor>[] u;

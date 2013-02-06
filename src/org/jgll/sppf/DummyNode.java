@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.jgll.traversal.SPPFVisitor;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class DummyNode extends SPPFNode {
 	
 	private static DummyNode instance;

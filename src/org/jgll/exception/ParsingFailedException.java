@@ -4,6 +4,11 @@ import org.jgll.util.ErrorLocation;
 import org.jgll.util.InputUtil;
 
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 @SuppressWarnings("serial")
 public class ParsingFailedException extends RuntimeException {
 	

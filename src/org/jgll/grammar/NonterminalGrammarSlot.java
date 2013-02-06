@@ -9,7 +9,7 @@ import org.jgll.parser.GrammarInterpreter;
 /**
  * A grammar slot immediately before a nonterminal.
  * 
- * @author Ali Afroozeh <afroozeh@gmail.com>
+ * @author Ali Afroozeh
  *
  */
 public class NonterminalGrammarSlot extends BodyGrammarSlot {

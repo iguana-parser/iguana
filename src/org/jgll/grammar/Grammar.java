@@ -13,6 +13,11 @@ import org.jgll.util.InputUtil;
 
 import com.google.common.collect.Sets;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public final class Grammar implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

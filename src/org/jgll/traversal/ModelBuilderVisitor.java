@@ -10,11 +10,28 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 
-public class TraverseAction extends DefaultSPPFVisitor {
+/**
+ * ModelBuilderVisitor builds a data model by visiting an SPPF and 
+ * calling appropriate models to the provided {@link NodeListener} 
+ * interface.
+ * 
+ * The meta-data uneeded for building models, stored in grammar slots,
+ * is automatically retrieved and passed to the given node listener.
+ * 
+ * Because an ambiguous SPPF can have shared subtrees, the 
+ * partially computed results are stored in nodes and given
+ * to the node listener when a node is visited again.
+ * 
+ * @author Ali Afroozeh
+ * 
+ * @see NodeListener
+ *
+ */
+public class ModelBuilderVisitor extends DefaultSPPFVisitor {
 	
-	private SPPFListener listener;
+	private NodeListener listener;
 	
-	public TraverseAction(SPPFListener listener) {
+	public ModelBuilderVisitor(NodeListener listener) {
 		this.listener = listener;
 	}
 

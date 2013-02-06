@@ -2,7 +2,14 @@ package org.jgll.traversal;
 
 import java.util.List;
 
-public interface SPPFListener {
+/**
+ * 
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
+public interface NodeListener {
 	
 	public void startNode(Object stored);
 	

@@ -9,7 +9,7 @@ import org.jgll.parser.GrammarInterpreter;
 
 /**
  * 
- * @author Ali Afroozeh <afroozeh@gmail.com>
+ * @author Ali Afroozeh
  * 
  */
 public class Nonterminal extends GrammarSlot implements Symbol {

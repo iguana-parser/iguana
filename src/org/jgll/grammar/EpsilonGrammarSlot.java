@@ -7,6 +7,11 @@ import java.util.Set;
 import org.jgll.parser.GrammarInterpreter;
 import org.jgll.sppf.TerminalSymbolNode;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
