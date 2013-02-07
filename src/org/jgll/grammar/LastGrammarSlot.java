@@ -28,6 +28,11 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public LastGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous) {
 		super(rule, id, position, previous);
 	}
+	
+	public LastGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Object object) {
+		super(rule, id, position, previous);
+		this.object = object;
+	}
 		
 	@Override
 	public void execute(GrammarInterpreter parser) {
@@ -50,12 +55,12 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		throw new UnsupportedOperationException();
 	}
 	
-	public void setObject(Object object) {
-		this.object = object;
-	}
-	
 	public Object getObject() {
 		return object;
+	}
+	
+	public void setObject(Object object) {
+		this.object = object;
 	}
 
 }

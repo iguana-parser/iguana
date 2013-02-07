@@ -5,13 +5,12 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jgll.util.InputUtil;
-
-import com.google.common.collect.Sets;
 
 /**
  * 
@@ -31,7 +30,13 @@ public final class Grammar implements Serializable {
 	private final String name;
 	
 	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Nonterminal startSymbol) {
-		this(name, nonterminals, slots, Sets.newHashSet(startSymbol));
+		this(name, nonterminals, slots, createHashSet(startSymbol));
+	}
+	
+	private static Set<Nonterminal> createHashSet(Nonterminal nt) {
+		Set<Nonterminal> set = new HashSet<>();
+		set.add(nt);
+		return set;
 	}
 	
 	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Set<Nonterminal> startSymbols) {
