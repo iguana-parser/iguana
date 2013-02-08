@@ -1,11 +1,10 @@
 package org.jgll.sppf;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.util.HashCode;
 
 /**
  * A NonPackedNode corresponds to nonterminal symbol nodes or
@@ -25,7 +24,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	protected final int rightExtent;
 	
-	protected List<SPPFNode> children;
+	protected final List<SPPFNode> children;
 	
 	private int packedNodeCount;
 	
@@ -40,7 +39,12 @@ public abstract class NonPackedNode extends SPPFNode {
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
 		children = new ArrayList<>(2);
-		hash = HashCode.hashCode(slot, leftExtent, rightExtent);
+		
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + leftExtent;
+		result += 31 * result + rightExtent;
+		hash = result;
 	}
 	
 	@Override
@@ -91,11 +95,6 @@ public abstract class NonPackedNode extends SPPFNode {
 	@Override
 	public String getLabel() {
 		return slot.toString();
-	}
-	
-	@Override
-	public List<SPPFNode> getChildren() {
-		return Collections.unmodifiableList(children);
 	}
 	
 	public void addPackedNode(PackedNode newPackedNode, SPPFNode leftChild, SPPFNode rightChild) {
@@ -157,6 +156,20 @@ public abstract class NonPackedNode extends SPPFNode {
 		children.add(node);
 	}
 	
+	public void removeChild(SPPFNode node) {
+		children.remove(node);
+	}
+	
+	public void replaceWithChildren(SPPFNode node) {
+		int index = children.indexOf(node);
+		children.remove(node);
+		if(index > 0) {
+			for(SPPFNode child : node) {
+				children.add(index++, child);				
+			}
+		}
+	}
+	
 	public int countPackedNode() {
 		return packedNodeCount;
 	}
@@ -167,6 +180,37 @@ public abstract class NonPackedNode extends SPPFNode {
 
 	public GrammarSlot getFirstPackedNodeGrammarSlot() {
 		return firstPackedNodeGrammarSlot;
+	}
+	
+	@Override
+	public SPPFNode get(int index) {
+		if(children.size() > index) {
+			return children.get(index);
+		}
+		return null;
+	}
+	
+	@Override
+	public Iterator<SPPFNode> iterator() {
+		return new Iterator<SPPFNode>() {
+
+			int i = 0;
+			
+			@Override
+			public boolean hasNext() {
+				return i < children.size();
+			}
+
+			@Override
+			public SPPFNode next() {
+				return children.get(i++);
+			}
+
+			@Override
+			public void remove() {
+				children.remove(i);
+			}
+		};
 	}
 
 }

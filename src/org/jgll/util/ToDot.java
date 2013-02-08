@@ -90,7 +90,7 @@ public class ToDot extends DefaultSPPFVisitor {
 	}
 	
 	protected void addEdgesToChildren(SPPFNode node) {
-		for (SPPFNode child : node.getChildren()) {
+		for (SPPFNode child : node) {
 			addEdgeToChild(node, child);
 		}
 	}

@@ -1,10 +1,9 @@
 package org.jgll.sppf;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Iterator;
 
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.HashCode;
 
 /**
  * 
@@ -44,7 +43,10 @@ public class TerminalSymbolNode extends SPPFNode {
 	
 	@Override
 	public int hashCode() {
-		return HashCode.hashCode(matchedChar, inputIndex);
+		int result = 17;
+		result += 31 * result + matchedChar;
+		result += 31 * result + inputIndex;
+		return result;
 	}
 	
 	@Override
@@ -67,11 +69,6 @@ public class TerminalSymbolNode extends SPPFNode {
 	}
 	
 	@Override
-	public List<SPPFNode> getChildren() {
-		return new ArrayList<>();
-	}
-
-	@Override
 	public int getLeftExtent() {
 		return inputIndex;
 	}
@@ -84,5 +81,20 @@ public class TerminalSymbolNode extends SPPFNode {
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
+	}
+
+	@Override
+	public Iterator<SPPFNode> iterator() {
+		return Collections.<SPPFNode>emptyList().iterator();
+	}
+
+	@Override
+	public SPPFNode get(int index) {
+		return null;
+	}
+
+	@Override
+	public int size() {
+		return 0;
 	}
 }

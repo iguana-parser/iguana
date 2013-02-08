@@ -1,7 +1,6 @@
 package org.jgll.parser;
 
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.HashCode;
 
 /**
  * 
@@ -35,7 +34,11 @@ public class GSSEdge {
 		this.sppfNode = sppfNode;
 		this.dst = dst;
 		
-		hash = HashCode.hashCode(src, sppfNode, dst);
+		int result = 17;
+		result += 31 * result + src.hashCode();
+		result += 31 * result + sppfNode.hashCode();
+		result += 31 * result + dst.hashCode();
+		hash = result;
 	}
 	
 	public SPPFNode getSppfNode() {

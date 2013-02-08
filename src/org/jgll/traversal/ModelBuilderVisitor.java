@@ -67,7 +67,7 @@ public class ModelBuilderVisitor extends DefaultSPPFVisitor {
 			
 			List<Object> list = new ArrayList<>();
 			
-			for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
+			for(SPPFNode child : nonterminalSymbolNode) {
 				PackedNode packedNode = (PackedNode) child;
 				LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
 				listener.startNode(slot.getObject());
@@ -82,7 +82,7 @@ public class ModelBuilderVisitor extends DefaultSPPFVisitor {
 		} else {
 			LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 			listener.startNode(slot.getObject());
-			for(SPPFNode child : node.getChildren()) {
+			for(SPPFNode child : node) {
 				child.accept(this);
 			}
 			Object result = listener.endNode(slot.getObject(), null);
@@ -96,7 +96,7 @@ public class ModelBuilderVisitor extends DefaultSPPFVisitor {
 			return;
 		}
 		node.setVisited(true);
-		for(SPPFNode child : node.getChildren()) {
+		for(SPPFNode child : node) {
 			child.accept(this);
 		}
 	}
@@ -107,7 +107,7 @@ public class ModelBuilderVisitor extends DefaultSPPFVisitor {
 			return;
 		}
 		node.setVisited(true);
-		for(SPPFNode child : node.getChildren()) {
+		for(SPPFNode child : node) {
 			child.accept(this);
 		}		
 	}

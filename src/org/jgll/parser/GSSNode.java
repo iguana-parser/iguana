@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jgll.grammar.L0;
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.util.HashCode;
+import org.jgll.grammar.L0;
 
 /**
  * A {@code GSSNode} is a representation of a node in an Graph Structured Stack.
@@ -51,7 +50,10 @@ public class GSSNode {
 		this.inputIndex = inputIndex;
 		this.edges = new ArrayList<>();
 		
-		hash = HashCode.hashCode(slot, inputIndex);
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + inputIndex;
+		hash = result;
 	}
 	
 	public void addEdge(GSSEdge edge) {

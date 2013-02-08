@@ -29,4 +29,9 @@ public class IntermediateNode extends NonPackedNode {
 		visitAction.visit(this);
 	}
 
+	@Override
+	public int size() {
+		return children.size();
+	}
+
 }

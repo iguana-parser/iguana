@@ -1,7 +1,5 @@
 package org.jgll.sppf;
 
-import java.util.List;
-
 import org.jgll.traversal.SPPFVisitor;
 
 
@@ -15,7 +13,7 @@ import org.jgll.traversal.SPPFVisitor;
  * 
  */
 
-public abstract class SPPFNode {
+public abstract class SPPFNode implements Iterable<SPPFNode> {
 	
 	private boolean visited;
 	
@@ -25,7 +23,9 @@ public abstract class SPPFNode {
 	
 	public abstract String getLabel();
 	
-	public abstract List<SPPFNode> getChildren();
+	public abstract SPPFNode get(int index);
+	
+	public abstract int size();
 	
 	public abstract int getLeftExtent();
 	

@@ -1,7 +1,7 @@
 package org.jgll.sppf;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.channels.UnsupportedAddressTypeException;
+import java.util.Iterator;
 
 import org.jgll.traversal.SPPFVisitor;
 
@@ -39,11 +39,6 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
-	public List<SPPFNode> getChildren() {
-		return new ArrayList<>();
-	}
-
-	@Override
 	public int getLeftExtent() {
 		return -1;
 	}
@@ -55,6 +50,21 @@ public class DummyNode extends SPPFNode {
 
 	@Override
 	public void accept(SPPFVisitor visitAction) {
+	}
+
+	@Override
+	public Iterator<SPPFNode> iterator() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public SPPFNode get(int index) {
+		throw new UnsupportedAddressTypeException();
+	}
+
+	@Override
+	public int size() {
+		return 0;
 	}
 
 }

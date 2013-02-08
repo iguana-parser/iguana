@@ -33,7 +33,7 @@ public class ToDotWithoutIntermediateNodes extends ToDot {
 	@Override
 	protected void addEdgeToChild(SPPFNode parent, SPPFNode child) {
 		if(child instanceof IntermediateNode) {
-			for(SPPFNode childOfIntermediate : child.getChildren()) {
+			for(SPPFNode childOfIntermediate : child) {
 				addEdgeToChild(parent, childOfIntermediate);
 			}
 		} else {

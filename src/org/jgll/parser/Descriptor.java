@@ -2,7 +2,6 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.HashCode;
 
 /**
  * A {@code Descriptor} is used by the GLL parser to keep track of the 
@@ -59,7 +58,12 @@ public class Descriptor {
 		this.inputIndex = inputIdex;
 		this.sppfNode = sppfNode;
 		
-		this.hash = HashCode.hashCode(slot, sppfNode, inputIdex, gssNode); 
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + sppfNode.hashCode();
+		result += 31 * result + inputIdex;
+		result += 31 * result + gssNode.hashCode();
+		hash = result;
 	}
 	
 	public GrammarSlot getLabel() {

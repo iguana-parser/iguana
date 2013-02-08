@@ -1,12 +1,11 @@
 package org.jgll.sppf;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.HashCode;
 
 /**
  * 
@@ -20,18 +19,23 @@ public class PackedNode extends SPPFNode {
 	private final GrammarSlot slot;
 	private final SPPFNode parent;
 	
-	private List<SPPFNode> children;
+	private final List<SPPFNode> children;
 	
 	private final int hash;
 	
-	public PackedNode(GrammarSlot slot, int pivot, SPPFNode parent) {
+	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
 		this.slot = slot;
 		this.pivot = pivot;
 		this.parent = parent;
 		
 		children = new ArrayList<>(2);
 		
-		hash = HashCode.hashCode(slot, pivot, parent);
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + pivot;
+		result += 31 * result + parent.hashCode();
+
+		hash = result;
 	}
 			
 	@Override
@@ -68,6 +72,21 @@ public class PackedNode extends SPPFNode {
 		children.add(node);
 	}
 	
+
+	public void removeChild(SPPFNode node) {
+		children.remove(node);
+	}
+	
+	public void replaceWithChildren(SPPFNode node) {
+		int index = children.indexOf(node);
+		children.remove(node);
+		if(index >= 0) {
+			for(SPPFNode child : node) {
+				children.add(index++, child);				
+			}
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		return hash;
@@ -89,11 +108,6 @@ public class PackedNode extends SPPFNode {
 	}
 
 	@Override
-	public List<SPPFNode> getChildren() {
-		return Collections.unmodifiableList(children);
-	}
-
-	@Override
 	public int getLeftExtent() {
 		throw new UnsupportedOperationException();
 	}
@@ -106,6 +120,24 @@ public class PackedNode extends SPPFNode {
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
+	}
+
+	@Override
+	public Iterator<SPPFNode> iterator() {
+		return children.iterator();
+	}
+
+	@Override
+	public SPPFNode get(int index) {
+		if(children.size() > index) {
+			return children.get(index);
+		}
+		return null;
+	}
+
+	@Override
+	public int size() {
+		return children.size();
 	}
 	
 }
