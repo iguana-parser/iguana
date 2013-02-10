@@ -21,21 +21,12 @@ public class PackedNode extends SPPFNode {
 	
 	private final List<SPPFNode> children;
 	
-	private final int hash;
-	
 	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
 		this.slot = slot;
 		this.pivot = pivot;
 		this.parent = parent;
 		
 		children = new ArrayList<>(2);
-		
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + pivot;
-		result += 31 * result + parent.hashCode();
-
-		hash = result;
 	}
 			
 	@Override
@@ -50,8 +41,7 @@ public class PackedNode extends SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  hash == other.hash &&
-				slot.equals(other.slot) &&
+		return  slot.equals(other.slot) &&
 		        pivot == other.pivot &&
 		        parent.equals(other.parent);
 	}
@@ -89,7 +79,11 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return hash;
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + pivot;
+		result += 31 * result + parent.hashCode();
+		return result;
 	}
 
 	@Override

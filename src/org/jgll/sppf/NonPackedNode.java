@@ -28,24 +28,20 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	private GrammarSlot firstPackedNodeGrammarSlot = null;
 	
-	private final int hash;
-	
 	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		this.slot = slot;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
-		children = new ArrayList<>(2);
-		
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + leftExtent;
-		result += 31 * result + rightExtent;
-		hash = result;
+		children = new ArrayList<>(2);		
 	}
 	
 	@Override
 	public int hashCode() {
-		return hash;
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + leftExtent;
+		result += 31 * result + rightExtent;
+		return result;
 	}
 	
 	@Override
@@ -61,8 +57,7 @@ public abstract class NonPackedNode extends SPPFNode {
 		
 		NonPackedNode other = (NonPackedNode) obj;
 
-		return  hash == other.hash &&
-				slot.equals(other.slot) &&
+		return  slot.equals(other.slot) &&
 				leftExtent == other.leftExtent &&
 				rightExtent == other.rightExtent;
 	}

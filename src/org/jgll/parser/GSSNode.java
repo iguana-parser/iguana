@@ -33,11 +33,6 @@ public class GSSNode {
 	private final List<GSSEdge> edges;
 	
 	/**
-	 * precoumputed hash node
-	 */
-	private final int hash;
-
-	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
 	 * {@code position} and {@code index}
 	 * 
@@ -48,12 +43,7 @@ public class GSSNode {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.edges = new ArrayList<>();
-		
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + inputIndex;
-		hash = result;
+		this.edges = new ArrayList<>();		
 	}
 	
 	public void addEdge(GSSEdge edge) {
@@ -84,14 +74,16 @@ public class GSSNode {
 		
 		GSSNode other = (GSSNode) obj;
 
-		return  other.hash == hash &&
-				other.slot.equals(slot) &&
+		return  other.slot.equals(slot) &&
 				other.inputIndex == inputIndex;
 	}
 
 	@Override
 	public int hashCode() {
-		return hash;
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + inputIndex;
+		return result;
 	}
 
 	@Override

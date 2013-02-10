@@ -46,24 +46,12 @@ public class Descriptor {
 	 */
 	private final SPPFNode sppfNode;
 	
-	/**
-	 * Precomputed hash code
-	 */
-	private final int hash;
 	
-	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIdex, SPPFNode sppfNode) {
-		
+	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		this.slot = slot;
 		this.gssNode = gssNode;
-		this.inputIndex = inputIdex;
+		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
-		
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + sppfNode.hashCode();
-		result += 31 * result + inputIdex;
-		result += 31 * result + gssNode.hashCode();
-		hash = result;
 	}
 	
 	public GrammarSlot getLabel() {
@@ -84,7 +72,12 @@ public class Descriptor {
 	
 	@Override
 	public int hashCode() {
-		return hash;
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + sppfNode.hashCode();
+		result += 31 * result + inputIndex;
+		result += 31 * result + gssNode.hashCode();
+		return result;
 	}
 	
 	@Override
@@ -99,8 +92,7 @@ public class Descriptor {
 		
 		Descriptor other = (Descriptor) obj;
 
-		return hash == other.hash &&
-			   inputIndex == other.getInputIndex() &&
+		return inputIndex == other.getInputIndex() &&
 			   slot.equals(other.slot) &&
 			   sppfNode.equals(other.getSPPFNode()) &&
 			   gssNode.equals(other.getGSSNode());
