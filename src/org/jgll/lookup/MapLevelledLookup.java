@@ -77,13 +77,14 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 		
 		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition, pivot)) {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
-			Map<SPPFNode, SPPFNode> map = levels[parent.getRightExtent()];
+
 			PackedNode firstPackedNode = parent.getFirstPackedNode();
+			Map<SPPFNode, SPPFNode> map = levels[parent.getRightExtent()];
 			map.put(firstPackedNode, firstPackedNode);
 			map.put(packedNode, packedNode);
 		}
 		
-		if(parent.isAmbiguous() && levels[parent.getRightExtent()].put(packedNode, packedNode) == null) {
+		else if(parent.isAmbiguous() && levels[parent.getRightExtent()].put(packedNode, packedNode) == null) {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
 		}
 	}

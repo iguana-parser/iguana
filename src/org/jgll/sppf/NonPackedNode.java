@@ -26,10 +26,6 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	protected final List<SPPFNode> children;
 	
-	private int packedNodeCount;
-	
-	private int firstPackedNodePivot = -1;
-	
 	private GrammarSlot firstPackedNodeGrammarSlot = null;
 	
 	private final int hash;
@@ -98,21 +94,21 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public void addPackedNode(PackedNode newPackedNode, SPPFNode leftChild, SPPFNode rightChild) {
+		
+		int packedNodeCount = countPackedNode();
+		
 		// Don't store the first packed node as the node may not be ambiguous
 		if(packedNodeCount == 0) {
 			firstPackedNodeGrammarSlot = newPackedNode.getGrammarSlot();
-			firstPackedNodePivot = newPackedNode.getPivot();
 			if(!leftChild.equals(DummyNode.getInstance())) {
 				children.add(leftChild);
 			}
 			children.add(rightChild);
-			packedNodeCount++;
-			return;
 		}
 		
 		// When the second packed node is about to be added, create the first packed
 		// node and add it. Then create the next packed node.
-		if (packedNodeCount == 1) {
+		else if (packedNodeCount == 1) {
 			
 			PackedNode firstPackedNode = getFirstPackedNode();
 
@@ -133,12 +129,11 @@ public abstract class NonPackedNode extends SPPFNode {
 			children.add(newPackedNode);
 		}
 		
-		packedNodeCount++;
 	}
 	
 	public boolean hasPackedNode(GrammarSlot grammarSlot, int pivot) {
 		return firstPackedNodeGrammarSlot.equals(grammarSlot) &&
-			   firstPackedNodePivot == pivot;
+			   getPivot() == pivot;
 	}
 	
 	private static void addChildren(PackedNode parent, SPPFNode leftChild, SPPFNode rightChild) {
@@ -149,7 +144,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public boolean isAmbiguous() {
-		return packedNodeCount > 1;
+		return countPackedNode() > 1;
 	}
 	
 	public void addChild(SPPFNode node) {
@@ -171,11 +166,18 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public int countPackedNode() {
-		return packedNodeCount;
+		if(firstPackedNodeGrammarSlot == null) {
+			return 0;
+		} else {
+			return children.get(0) instanceof PackedNode ? children.size() : 1;
+		}
 	}
 	
 	public PackedNode getFirstPackedNode() {
-		return new PackedNode(firstPackedNodeGrammarSlot, firstPackedNodePivot, this);
+		if(isAmbiguous()) {
+			return (PackedNode) children.get(0);
+		}
+		return new PackedNode(firstPackedNodeGrammarSlot, getPivot(), this);
 	}
 
 	public GrammarSlot getFirstPackedNodeGrammarSlot() {
@@ -188,6 +190,16 @@ public abstract class NonPackedNode extends SPPFNode {
 			return children.get(index);
 		}
 		return null;
+	}
+	
+	private int getPivot() {
+		if(children.size() == 1) {
+			return children.get(0).getLeftExtent();
+		} else if (children.size() == 2) {
+			return children.get(1).getLeftExtent();
+		}
+		
+		throw new RuntimeException("Should not be here!");
 	}
 	
 	@Override
