@@ -37,56 +37,52 @@ public class ToDot extends DefaultSPPFVisitor {
 
 	@Override
 	public void visit(TerminalSymbolNode node) {
-		if(node.isVisited()) {
-			return;
+		if(!node.isVisited()) {
+			node.setVisited(true);
+	
+			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			addEdgesToChildren(node);
 		}
-		node.setVisited(true);
-
-		sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
-		addEdgesToChildren(node);					
 	}
 
 	@Override
 	public void visit(NonterminalSymbolNode node) {
-		if(node.isVisited()) {
-			return;
+		if(!node.isVisited()) {
+			node.setVisited(true);
+	
+			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			addEdgesToChildren(node);
+			
+			visitChildren(node);
 		}
-		node.setVisited(true);
-
-		sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
-		addEdgesToChildren(node);
-		
-		visitChildren(node);
 	}
 
 	@Override
 	public void visit(IntermediateNode node) {
-		if(node.isVisited()) {
-			return;
+		if(!node.isVisited()) {
+			node.setVisited(true);
+	
+			sb.append("\"" + node.getId() + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			addEdgesToChildren(node);
+	
+			visitChildren(node);
 		}
-		node.setVisited(true);
-
-		sb.append("\"" + node.getId() + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(node.toString())) + "\n");
-		addEdgesToChildren(node);
-
-		visitChildren(node);
 	}
 
 	@Override
 	public void visit(PackedNode node) {
-		if(node.isVisited()) {
-			return;
+		if(!node.isVisited()) {
+			node.setVisited(true);
+	
+			if(showPackedNodeLabel) {
+				sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			} else {
+				sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, "") + "\n");
+			}
+			addEdgesToChildren(node);
+			
+			visitChildren(node);
 		}
-		node.setVisited(true);
-
-		if(showPackedNodeLabel) {
-			sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
-		} else {
-			sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, "") + "\n");
-		}
-		addEdgesToChildren(node);
-		
-		visitChildren(node);
 	}
 	
 	protected void addEdgesToChildren(SPPFNode node) {

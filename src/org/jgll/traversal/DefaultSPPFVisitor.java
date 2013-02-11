@@ -16,14 +16,16 @@ import org.jgll.sppf.SPPFNode;
  *
  */
 public abstract class DefaultSPPFVisitor implements SPPFVisitor {
+	
+	public static int i;
 
 	protected void visitChildren(SPPFNode node) {
 		for(SPPFNode child : node) {
 			child.accept(this);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Removes the intermediate nodes under a nonterminal symbol node.
 	 * 
@@ -47,19 +49,20 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 	 */
 	protected void removeIntermediateNode(NonterminalSymbolNode parent) {
 		if(parent.get(0) instanceof IntermediateNode) {
-			IntermediateNode intermediateNode = (IntermediateNode) parent.get(0);
 			
+			IntermediateNode intermediateNode = (IntermediateNode) parent.get(0);
+
 			if(intermediateNode.isAmbiguous()) {
-				
+				i++;
 				List<SPPFNode> restOfChildren = new ArrayList<>();
-				
+
 				parent.removeChild(intermediateNode);
-				
+
 				while(parent.size() > 0) {
 					restOfChildren.add(parent.get(0));
 					parent.removeChild(parent.get(0));
 				}
-				
+
 				for(SPPFNode child : intermediateNode) {
 					// For each packed node of the intermediate node create a new packed node
 					PackedNode pn = (PackedNode) child;
@@ -67,24 +70,23 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 					for(SPPFNode sn : pn) {
 						newPackedNode.addChild(sn);					
 					}
-	
+
 					for(SPPFNode c : restOfChildren) {
 						newPackedNode.addChild(c);
 					}
-					
-					// Remove the ambiguous intermediate node
+
 					parent.addChild(newPackedNode);
+					removeIntermediateNode(newPackedNode);
 				}
-				
+
 			} else {
 				parent.replaceWithChildren(intermediateNode);
+				removeIntermediateNode(parent);
 			}
-			
-			parent.accept(this);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Removes the intermediate nodes under a packed node. 
      *
@@ -103,8 +105,8 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 	 *                  N                   
 	 *                /   \
 	 * 			     P     P...                                        N         
-	 *             /   \                                    /          |         \
-	 *            I     Other   =>                        P            P         Other
+	 *             /   \                                    /          |          \
+	 *            I     Other   =>                        P            P          Other
 	 *          /   \							        / | \        / | \
 	 *         P     P                               c1 c2 Other  c3 c4 Other
 	 *        / \   / \
@@ -118,22 +120,22 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 	 */
 	protected void removeIntermediateNode(PackedNode parent) {
 		if(parent.get(0) instanceof IntermediateNode) {
-			
+
 			IntermediateNode intermediateNode = (IntermediateNode) parent.get(0);
 
 			if(intermediateNode.isAmbiguous()) {
-				
+				i++;
 				NonPackedNode parentOfPackedNode = (NonPackedNode) parent.getParent();
-	
+
 				List<SPPFNode> restOfChildren = new ArrayList<>();
-				
+
 				parentOfPackedNode.removeChild(parent);
 				parent.removeChild(intermediateNode);
-	
+
 				for(SPPFNode sn : parent) {
 					restOfChildren.add(sn);
 				}
-				
+
 				for(SPPFNode child : intermediateNode) {
 					// For each packed node of the intermediate node create a new packed node
 					PackedNode pn = (PackedNode) child;
@@ -141,19 +143,20 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 					for(SPPFNode sn : pn) {
 						newPackedNode.addChild(sn);					
 					}
-	
+
 					for(SPPFNode c : restOfChildren) {
 						newPackedNode.addChild(c);
 					}
-					
+
 					parentOfPackedNode.addChild(newPackedNode);
+					removeIntermediateNode(newPackedNode);
 				}
-				
+
 			} else {
 				parent.replaceWithChildren(intermediateNode);
-				parent.accept(this);
+				removeIntermediateNode(parent);
 			}
 		}
 	}
-	
+
 }
