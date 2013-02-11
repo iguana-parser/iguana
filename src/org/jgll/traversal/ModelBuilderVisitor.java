@@ -1,8 +1,5 @@
 package org.jgll.traversal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -18,98 +15,74 @@ import org.jgll.sppf.TerminalSymbolNode;
  * The meta-data uneeded for building models, stored in grammar slots,
  * is automatically retrieved and passed to the given node listener.
  * 
- * Because an ambiguous SPPF can have shared subtrees, the 
- * partially computed results are stored in nodes and given
- * to the node listener when a node is visited again.
- * 
  * @author Ali Afroozeh
  * 
  * @see NodeListener
  *
  */
-public class ModelBuilderVisitor extends DefaultSPPFVisitor {
+@SuppressWarnings("unchecked")
+public class ModelBuilderVisitor<T> extends DefaultSPPFVisitor {
 	
-	private NodeListener listener;
+	private NodeListener<T> listener;
 	
-	public ModelBuilderVisitor(NodeListener listener) {
+	public ModelBuilderVisitor(NodeListener<T> listener) {
 		this.listener = listener;
 	}
 
 	@Override
-	public void visit(TerminalSymbolNode node) {
-		TerminalSymbolNode terminal = (TerminalSymbolNode) node;
-		if(node.isVisited()) {
-			listener.terminal(terminal.getMatchedChar(), node.getObject());
-			return;
-		}
-		node.setVisited(true);
-		if(terminal.getMatchedChar() != TerminalSymbolNode.EPSILON) {
-			Object result = listener.terminal(terminal.getMatchedChar(), null);
-			node.setObject(result);
-		}
+	public void visit(TerminalSymbolNode terminal) {
+		if(!terminal.isVisited()) {
+			terminal.setVisited(true);
+			if(terminal.getMatchedChar() != TerminalSymbolNode.EPSILON) {
+				Object result = listener.terminal(terminal.getMatchedChar());
+				terminal.setObject(result);
+			}
+		}		
 	}
 
 	@Override
-	public void visit(NonterminalSymbolNode node) {
+	public void visit(NonterminalSymbolNode nonterminalSymbolNode) {
+		removeIntermediateNode(nonterminalSymbolNode);
 		
-		NonterminalSymbolNode nonterminalSymbolNode = (NonterminalSymbolNode) node;
+		if(!nonterminalSymbolNode.isVisited()) {
 		
-		if(node.isVisited()) {
-			LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
-			listener.startNode(slot.getObject());
-			listener.endNode(slot.getObject(), nonterminalSymbolNode.getObject());
-			return;
-		}
-		
-		node.setVisited(true);
-		
-		if(nonterminalSymbolNode.isAmbiguous()) {
+			nonterminalSymbolNode.setVisited(true);
 			
-			List<Object> list = new ArrayList<>();
-			
-			for(SPPFNode child : nonterminalSymbolNode) {
-				PackedNode packedNode = (PackedNode) child;
-				LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
-				listener.startNode(slot.getObject());
-				packedNode.accept(this);
-				Object result = listener.endNode(slot.getObject(), null);
-				packedNode.setObject(result);
-				list.add(packedNode);
+			if(nonterminalSymbolNode.isAmbiguous()) {
+				
+				for(SPPFNode child : nonterminalSymbolNode) {
+					PackedNode packedNode = (PackedNode) child;
+					LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
+					listener.startNode((T) slot.getObject());
+					packedNode.accept(this);
+					Object result = listener.endNode((T) slot.getObject(), (Iterable<T>) packedNode.childrenValues());
+					packedNode.setObject(result);
+				}
+				
+				listener.buildAmbiguityNode((Iterable<T>) nonterminalSymbolNode.childrenValues());
+				
+			} else {
+				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
+				listener.startNode((T) slot.getObject());
+				visitChildren(nonterminalSymbolNode);
+				Object result = listener.endNode((T) slot.getObject(), (Iterable<T>) nonterminalSymbolNode.childrenValues());
+				nonterminalSymbolNode.setObject(result);
 			}
-			
-			listener.buildAmbiguityNode(list);
-			
-		} else {
-			LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
-			listener.startNode(slot.getObject());
-			for(SPPFNode child : node) {
-				child.accept(this);
-			}
-			Object result = listener.endNode(slot.getObject(), null);
-			nonterminalSymbolNode.setObject(result);
 		}
 	}
 
 	@Override
 	public void visit(IntermediateNode node) {
-		if(node.isVisited()) {
-			return;
-		}
-		node.setVisited(true);
-		for(SPPFNode child : node) {
-			child.accept(this);
-		}
+		throw new RuntimeException("Should not be here!");
 	}
 
 	@Override
-	public void visit(PackedNode node) {
-		if(node.isVisited()) {
-			return;
+	public void visit(PackedNode packedNode) {
+		removeIntermediateNode(packedNode);
+		if(!packedNode.isVisited()) {
+			packedNode.setVisited(true);
+			visitChildren(packedNode);
 		}
-		node.setVisited(true);
-		for(SPPFNode child : node) {
-			child.accept(this);
-		}		
 	}
 	
 }

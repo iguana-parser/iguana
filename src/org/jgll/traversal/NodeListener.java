@@ -1,6 +1,5 @@
 package org.jgll.traversal;
 
-import java.util.List;
 
 /**
  * 
@@ -9,13 +8,13 @@ import java.util.List;
  * @author Ali Afroozeh
  *
  */
-public interface NodeListener {
+public interface NodeListener<T> {
 	
-	public void startNode(Object stored);
+	public void startNode(T type);
 	
-	public Object endNode(Object stored, Object result);
+	public Object endNode(T type, Iterable<T> children);
 	
-	public Object buildAmbiguityNode(List<Object> result);
+	public Object buildAmbiguityNode(Iterable<T> children);
 	
-	public Object terminal(int c, Object result);
+	public Object terminal(int c);
 }
