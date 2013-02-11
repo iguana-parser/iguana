@@ -153,7 +153,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	public void replaceWithChildren(SPPFNode node) {
 		int index = children.indexOf(node);
 		children.remove(node);
-		if(index > 0) {
+		if(index >= 0) {
 			for(SPPFNode child : node) {
 				children.add(index++, child);				
 			}
