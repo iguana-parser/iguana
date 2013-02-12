@@ -55,17 +55,17 @@ public class ModelBuilderVisitor<T> extends DefaultSPPFVisitor {
 					LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
 					listener.startNode((T) slot.getObject());
 					packedNode.accept(this);
-					Object result = listener.endNode((T) slot.getObject(), (Iterable<T>) packedNode.childrenValues());
+					Object result = listener.endNode((T) slot.getObject(), packedNode.childrenValues());
 					packedNode.setObject(result);
 				}
 				
-				listener.buildAmbiguityNode((Iterable<T>) nonterminalSymbolNode.childrenValues());
+				listener.buildAmbiguityNode(nonterminalSymbolNode.childrenValues());
 				
 			} else {
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
 				visitChildren(nonterminalSymbolNode);
-				Object result = listener.endNode((T) slot.getObject(), (Iterable<T>) nonterminalSymbolNode.childrenValues());
+				Object result = listener.endNode((T) slot.getObject(), nonterminalSymbolNode.childrenValues());
 				nonterminalSymbolNode.setObject(result);
 			}
 		}
