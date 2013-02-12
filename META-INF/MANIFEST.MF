@@ -14,6 +14,7 @@ Export-Package:
    org.jgll.lookup,
    org.jgll.grammar",
  org.jgll.sppf,
+ org.jgll.traversal,
  org.jgll.util;uses:="org.jgll.sppf"
 Require-Bundle: org.slf4j.log4j;bundle-version="1.6.4",
  org.slf4j.api;bundle-version="1.6.4"
