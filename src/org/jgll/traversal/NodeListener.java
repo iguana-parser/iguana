@@ -8,13 +8,13 @@ package org.jgll.traversal;
  * @author Ali Afroozeh
  *
  */
-public interface NodeListener<T> {
+public interface NodeListener<T, U> {
 	
 	public void startNode(T type);
 	
-	public Object endNode(T type, Iterable<Object> children);
+	public U endNode(T type, Iterable<U> children);
 	
-	public Object buildAmbiguityNode(Iterable<Object> children);
+	public U buildAmbiguityNode(Iterable<U> children);
 	
-	public Object terminal(int c);
+	public U terminal(int c);
 }

@@ -21,11 +21,11 @@ import org.jgll.sppf.TerminalSymbolNode;
  *
  */
 @SuppressWarnings("unchecked")
-public class ModelBuilderVisitor<T> extends DefaultSPPFVisitor {
+public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor {
 	
-	private NodeListener<T> listener;
+	private NodeListener<T, U> listener;
 	
-	public ModelBuilderVisitor(NodeListener<T> listener) {
+	public ModelBuilderVisitor(NodeListener<T, U> listener) {
 		this.listener = listener;
 	}
 
@@ -55,17 +55,18 @@ public class ModelBuilderVisitor<T> extends DefaultSPPFVisitor {
 					LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
 					listener.startNode((T) slot.getObject());
 					packedNode.accept(this);
-					Object result = listener.endNode((T) slot.getObject(), packedNode.childrenValues());
+					Object result = listener.endNode((T) slot.getObject(), (Iterable<U>) packedNode.childrenValues());
 					packedNode.setObject(result);
 				}
 				
-				listener.buildAmbiguityNode(nonterminalSymbolNode.childrenValues());
+				U result = listener.buildAmbiguityNode((Iterable<U>) nonterminalSymbolNode.childrenValues());
+				nonterminalSymbolNode.setObject(result);
 				
 			} else {
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
 				visitChildren(nonterminalSymbolNode);
-				Object result = listener.endNode((T) slot.getObject(), nonterminalSymbolNode.childrenValues());
+				Object result = listener.endNode((T) slot.getObject(), (Iterable<U>) nonterminalSymbolNode.childrenValues());
 				nonterminalSymbolNode.setObject(result);
 			}
 		}
