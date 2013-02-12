@@ -29,6 +29,8 @@ public final class Grammar implements Serializable {
 	
 	private final String name;
 	
+	private int longestTerminalChain;
+	
 	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Nonterminal startSymbol) {
 		this(name, nonterminals, slots, createHashSet(startSymbol));
 	}
@@ -107,5 +109,13 @@ public final class Grammar implements Serializable {
 	
 	public Nonterminal getNonterminalByName(String name) {
 		return startSymbols.get(name);
+	}
+	
+	public int getLongestTerminalChain() {
+		return longestTerminalChain;
+	}
+	
+	public void setLongestTerminalChain(int longestTerminalChain) {
+		this.longestTerminalChain = longestTerminalChain;
 	}
 }

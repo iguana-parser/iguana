@@ -20,23 +20,33 @@ import org.jgll.sppf.TerminalSymbolNode;
  * @author Ali Afroozeh
  *
  */
+@SuppressWarnings("unchecked")
 public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	private int currentLevel;
 	
-	@SuppressWarnings("unchecked")
-	private Map<SPPFNode, SPPFNode>[] levels = new Map[inputSize];
+	private Map<SPPFNode, Integer>[] validity;
+	
+	private Map<SPPFNode, SPPFNode>[] levels;
 	
 	private int countNonPackedNodes;
+
+	private int longestTerminalChain;
 	
 	public MapLevelledLookup(Grammar grammar, int inputSize) {
-		super(grammar, inputSize);	
+		super(grammar, inputSize);
+		longestTerminalChain = grammar.getLongestTerminalChain();
+		validity = new Map[longestTerminalChain];
+		levels = new Map[longestTerminalChain];
 	}
 	
 	@Override
 	public void nextLevel(int level) {
-		levels[currentLevel] = null;
 		currentLevel = level;
+	}
+	
+	private int indexFor(int inputIndex) {
+		return (inputIndex - currentLevel) % longestTerminalChain;
 	}
 	
 	@Override
@@ -47,6 +57,17 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 			key = new NonterminalSymbolNode(slot, leftExtent, rightExtent);
 		} else {
 			key = new IntermediateNode(slot, leftExtent, rightExtent);
+		}
+		
+		int index = indexFor(rightExtent);
+		if(validity[index].get(key) != rightExtent) {
+			validity[index].put(key, rightExtent);
+			levels[index].put(key, key);
+			return key;
+		}
+		
+		if(validity[index].get(key) == rightExtent && levels[index].containsKey(key)) {
+			
 		}
 		
 		if(levels[rightExtent] == null) {
