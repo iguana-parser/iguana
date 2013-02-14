@@ -40,9 +40,12 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		int i = 0;
 		for(Symbol s : rule.getBody()) {
 			if(i++ == position) {
-				tmp += " . ";
+				tmp += ". ";
 			}
 			tmp += s + " ";
+		}
+		if(position == rule.getBody().size()) {
+			tmp += ".";
 		}
 		label = tmp;
 	}
@@ -79,5 +82,4 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public String toString() {
 		return label;
 	}
-	
 }

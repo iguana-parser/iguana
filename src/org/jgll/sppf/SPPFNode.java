@@ -2,6 +2,8 @@ package org.jgll.sppf;
 
 import java.util.Iterator;
 
+import org.jgll.traversal.Node;
+import org.jgll.traversal.Result;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -14,17 +16,19 @@ import org.jgll.traversal.SPPFVisitor;
  * 
  */
 
-public abstract class SPPFNode implements Iterable<SPPFNode> {
+public abstract class SPPFNode implements Node {
 
 	private boolean visited;
-
-	private Object object;
+	
+	private Result<Object> object;
 
 	public abstract String getId();
 
 	public abstract String getLabel();
 
 	public abstract SPPFNode get(int index);
+	
+	public abstract Iterable<SPPFNode> getChildren();
 
 	public abstract int size();
 
@@ -33,10 +37,20 @@ public abstract class SPPFNode implements Iterable<SPPFNode> {
 	public abstract int getRightExtent();
 
 	public abstract void accept(SPPFVisitor visitAction);
+	
+	@SuppressWarnings("unchecked")
+	public <T> Result<T> getResult() {
+		return (Result<T>) object;
+	}
 
+	@SuppressWarnings("unchecked")
+	public <T> void setObject(Result<T> result) {
+		this.object = (Result<Object>) result;
+	}
+	
 	public Iterable<Object> childrenValues() {
 
-		final Iterator<SPPFNode> iterator = iterator();
+		final Iterator<SPPFNode> iterator = getChildren().iterator();
 
 		return new Iterable<Object>() {
 
@@ -44,19 +58,26 @@ public abstract class SPPFNode implements Iterable<SPPFNode> {
 			public Iterator<Object> iterator() {
 				return new Iterator<Object>() {
 
-					private SPPFNode next;
+					private NonterminalSymbolNode next;
 
 					@Override
 					public boolean hasNext() {
-						while (iterator.hasNext() && (next = iterator.next()).getObject() != null) {
-							return true;
+						while (iterator.hasNext()) {
+							next = (NonterminalSymbolNode) iterator.next();
+							if(next.getResult() == Result.filter()) {
+								object = Result.filter();
+							} else if(next.getResult() == Result.skip()) {
+								// Do nothing
+							} else {
+								return true;								
+							}
 						}
 						return false;
 					}
 
 					@Override
 					public Object next() {
-						return next.getObject();
+						return ((NonterminalSymbolNode) next).getResult().getObject();
 					}
 
 					@Override
@@ -64,10 +85,27 @@ public abstract class SPPFNode implements Iterable<SPPFNode> {
 						throw new UnsupportedOperationException();
 					}
 				};
-
+				
 			}
 		};
 	}
+	
+	public int getStart() {
+		return getLeftExtent();
+	}
+	
+	public int getOffset() {
+		return getRightExtent() - getLeftExtent();
+	}
+
+	public int getLineNumber() {
+		return 0;
+	}
+	
+	public int getColumn() {
+		return 0;
+	}
+
 
 	public boolean isVisited() {
 		return visited;
@@ -77,11 +115,4 @@ public abstract class SPPFNode implements Iterable<SPPFNode> {
 		this.visited = visited;
 	}
 
-	public Object getObject() {
-		return object;
-	}
-
-	public void setObject(Object object) {
-		this.object = object;
-	}
 }

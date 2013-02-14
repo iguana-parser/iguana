@@ -94,6 +94,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean checkAgainstTestSet(int i) {
+		if(testSet.isEmpty()) {
+			return true;
+		}
 		for(Terminal t : testSet) {
 			if(t.match(i)) {
 				return true;

@@ -1,8 +1,5 @@
 package org.jgll.sppf;
 
-import java.nio.channels.UnsupportedAddressTypeException;
-import java.util.Iterator;
-
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -53,18 +50,18 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
-	public Iterator<SPPFNode> iterator() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public SPPFNode get(int index) {
-		throw new UnsupportedAddressTypeException();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public int size() {
 		return 0;
+	}
+
+	@Override
+	public Iterable<SPPFNode> getChildren() {
+		throw new UnsupportedOperationException();
 	}
 
 }

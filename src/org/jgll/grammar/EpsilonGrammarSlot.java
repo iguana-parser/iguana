@@ -17,6 +17,11 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	private static final long serialVersionUID = 1L;
 	private final Set<Terminal> testSet;
 	
+	public EpsilonGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Set<Terminal> testSet, Object object) {
+		super(rule, id, position, previous, object);
+		this.testSet = testSet;
+	}
+	
 	public EpsilonGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Set<Terminal> testSet) {
 		super(rule, id, position, previous);
 		this.testSet = testSet;
@@ -58,12 +63,15 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	@Override
 	public boolean checkAgainstTestSet(int i) {
-		for(Terminal t : testSet) {
+		if(testSet.isEmpty()) {
+			return true;
+		}
+ 		for(Terminal t : testSet) {
 			if(t.match(i)) {
 				return true;
 			}
 		}
 		return false;
 	}
-
+	
 }

@@ -12,9 +12,9 @@ public interface NodeListener<T, U> {
 	
 	public void startNode(T type);
 	
-	public U endNode(T type, Iterable<U> children);
+	public Result<U> endNode(T type, Iterable<U> children, Node node);
 	
-	public U buildAmbiguityNode(Iterable<U> children);
+	public Result<U> buildAmbiguityNode(Iterable<U> children, Node node);
 	
-	public U terminal(int c);
+	public Result<U> terminal(int c, Node node);
 }
