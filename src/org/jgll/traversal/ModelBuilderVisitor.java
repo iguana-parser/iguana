@@ -33,7 +33,9 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor {
 	public void visit(TerminalSymbolNode terminal) {
 		if(!terminal.isVisited()) {
 			terminal.setVisited(true);
-			if(terminal.getMatchedChar() != TerminalSymbolNode.EPSILON) {
+			if(terminal.getMatchedChar() == TerminalSymbolNode.EPSILON) {
+				terminal.setObject(Result.skip());
+			} else {
 				Result<U> result = listener.terminal(terminal.getMatchedChar(), terminal);
 				terminal.setObject(result);
 			}

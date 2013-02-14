@@ -102,12 +102,12 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int getLeftExtent() {
-		throw new UnsupportedOperationException();
+		return parent.getLeftExtent();
 	}
 
 	@Override
 	public int getRightExtent() {
-		throw new UnsupportedOperationException();
+		return parent.getRightExtent();
 	}
 
 	@Override

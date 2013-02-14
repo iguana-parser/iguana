@@ -17,6 +17,9 @@ public class Result<T> {
 	}	
 	
 	public static <K> Result<K> accept(K k) {
+		if(k == null) {
+			throw new IllegalArgumentException(k + "should not be null.");
+		}
 		return new Result<K>(k);
 	}
 	

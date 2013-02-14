@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.Iterator;
 
+import org.jgll.grammar.Symbol;
 import org.jgll.traversal.Node;
 import org.jgll.traversal.Result;
 import org.jgll.traversal.SPPFVisitor;
@@ -58,12 +59,12 @@ public abstract class SPPFNode implements Node {
 			public Iterator<Object> iterator() {
 				return new Iterator<Object>() {
 
-					private NonterminalSymbolNode next;
+					private SPPFNode next;
 
 					@Override
 					public boolean hasNext() {
 						while (iterator.hasNext()) {
-							next = (NonterminalSymbolNode) iterator.next();
+							next = iterator.next();
 							if(next.getResult() == Result.filter()) {
 								object = Result.filter();
 							} else if(next.getResult() == Result.skip()) {
@@ -77,7 +78,7 @@ public abstract class SPPFNode implements Node {
 
 					@Override
 					public Object next() {
-						return ((NonterminalSymbolNode) next).getResult().getObject();
+						return next.getResult().getObject();
 					}
 
 					@Override
