@@ -35,6 +35,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(checkAgainstTestSet(parser.getCurrentInputValue())) {
 			parser.setCU(parser.create(next));
 			nonterminal.execute(parser);
+		} else {
+			parser.newParseError(this, parser.getCurrentInpuIndex());
 		}
 	}
 	

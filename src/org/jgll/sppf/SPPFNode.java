@@ -2,7 +2,6 @@ package org.jgll.sppf;
 
 import java.util.Iterator;
 
-import org.jgll.grammar.Symbol;
 import org.jgll.traversal.Node;
 import org.jgll.traversal.Result;
 import org.jgll.traversal.SPPFVisitor;

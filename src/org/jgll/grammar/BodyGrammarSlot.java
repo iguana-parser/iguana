@@ -59,7 +59,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	
 	public void codeElseTestSetCheck(Writer writer) throws IOException {
-		writer.append("} else { label = L0; } \n");
+		writer.append("} else { newParseError(grammar.getGrammarSlot(" + this.id +  "), ci); label = L0; } \n");
 	}
 	
 	public GrammarSlot next() {

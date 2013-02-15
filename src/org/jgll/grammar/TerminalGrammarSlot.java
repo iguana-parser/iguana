@@ -32,7 +32,10 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				parser.moveInputPointer();
 				parser.setCN(parser.getNodeP(next));
 				parser.pop();
-			} 
+			} else {
+				parser.newParseError(this, parser.getCurrentInpuIndex());
+			}
+
 		}
 		
 		// A ::= x1...xf, f ≥ 2
@@ -41,6 +44,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				parser.setCN(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
 				parser.moveInputPointer();
 				next.execute(parser);
+			} else {
+				parser.newParseError(this, parser.getCurrentInpuIndex());
 			}
 		}
 		
@@ -51,6 +56,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				parser.moveInputPointer();
 				parser.setCN(parser.getNodeP(next));
 				next.execute(parser);
+			} else {
+				parser.newParseError(this, parser.getCurrentInpuIndex());
 			}
 		}
 		
@@ -99,9 +106,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		else {
 			writer.append(checkInput(terminal));
 			writer.append("     cr = getNodeT(I[ci], ci);\n");
-			writer.append("   } else {\n");
-			writer.append("     label = L0; return;\n");
-			writer.append("   }\n");
+			codeElseTestSetCheck(writer);
 			
 			writer.append("   ci = ci + 1;\n");
 			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + next.getId() + "), cn, cr);\n");

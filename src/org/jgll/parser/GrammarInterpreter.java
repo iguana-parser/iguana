@@ -1,6 +1,5 @@
 package org.jgll.parser;
 
-import org.jgll.exception.ParsingFailedException;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.L0;
 import org.jgll.grammar.Nonterminal;
@@ -21,7 +20,7 @@ public class GrammarInterpreter extends GLLParser {
 	private static final Logger log = LoggerFactory.getLogger(GrammarInterpreter.class);
 	
 	@Override
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParseError {
 		log.info("Input size: {}", input.length);
 
 		this.grammar = grammar;

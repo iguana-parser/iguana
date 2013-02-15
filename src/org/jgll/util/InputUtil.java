@@ -5,23 +5,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class InputUtil {
 
-	private String input;
+	private int[] input;
 
-	/**
-	 * The {@code lines} list keeps the size of each line, in number of
-	 * characters.
-	 */
-	private List<Integer> lines = new ArrayList<Integer>();
+	private LineColumn[] lineColumns;
 
-	public InputUtil(String input) {
+	public static InputUtil inputUtil = new InputUtil();
+
+	private InputUtil() {};
+	
+	public void setInput(String input) {
+		setInput(fromString(input));
+	}
+
+	public void setInput(int[] input) {
 		this.input = input;
+		lineColumns = new LineColumn[input.length - 1];
 		calculateLineLengths();
 	}
 
@@ -29,6 +30,15 @@ public class InputUtil {
 		return readTextFromFile(new File(parentDir, fileName));
 	}
 
+	public static int[] fromString(String s) {
+		int[] input = new int[s.length() + 1];
+		for (int i = 0; i < s.length(); i++) {
+			input[i] = s.charAt(i);
+		}
+		input[s.length()] = -1;
+		return input;
+	}
+	
 	/**
 	 * Returns the whole contents of a text file as a string.
 	 * 
@@ -48,88 +58,46 @@ public class InputUtil {
 		while ((c = in.read()) != -1) {
 			sb.append((char) c);
 		}
-		
+
 		in.close();
 
 		return sb.toString();
 	}
-	
+
 	public static String read(InputStream is) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		BufferedInputStream in = new BufferedInputStream(is);
 		int c = 0;
-		while((c = in.read()) != -1) {
+		while ((c = in.read()) != -1) {
 			sb.append((char) c);
 		}
 		in.close();
 		return sb.toString();
 	}
 
-	public ErrorLocation getLineNumber(int index) {
-
-		if (input.isEmpty()) {
-			return new ErrorLocation(1, 1);
-		}
-
-		int lineNumber;
-		int columnNumber;
-
-		// Error happens at the EOF character
-		if (index == input.length()) {
-			lineNumber = lines.size();
-			columnNumber = lines.get(lines.size() - 1) + 1;
-		} else {
-			int acc = 0;
-			lineNumber = 1;
-			columnNumber = 0;
-			for (int size : lines) {
-				acc += size;
-				if (acc > index) {
-					columnNumber = index - (acc - size) + 1;
-					break;
-				}
-				lineNumber++;
-			}
-		}
-
-		ErrorLocation errorLocation = new ErrorLocation(lineNumber, columnNumber);
-		return errorLocation;
+	public LineColumn getLineNumber(int index) {
+		return lineColumns[index];
 	}
 
-	/**
-	 * Populates the {@code lines} list, which holds the length of each line.
-	 */
 	private void calculateLineLengths() {
+		int lineNumber = 1;
+		int columnNumber = 1;
 
-		Pattern pattern = Pattern.compile("\\r?\\n");
-		Matcher m = pattern.matcher(input);
-
-		// keeps the lines and delimiters
-		List<String> ret = new ArrayList<String>();
-		int start = 0;
-		while (m.find()) {
-			ret.add(input.substring(start, m.start()));
-			ret.add(m.group());
-			start = m.end();
-		}
-
-		// Collect the last chunk of text after the last newline character.
-		if (start < input.length()) {
-			ret.add(input.substring(start, input.length()));
-		}
-
-		int i = 0;
-		while (i < ret.size()) {
-			// The end of the line character is counted as the last character of
-			// the first line.
-			// ret.get(i + 1) determines the delimiter
-			if (i + 1 < ret.size()) {
-				lines.add(ret.get(i).length() + ret.get(i + 1).length());
+		for (int i = 0; i < input.length - 1; i++) {
+			lineColumns[i] = new LineColumn(lineNumber, columnNumber);
+			if (input[i] == '\n') {
+				lineNumber++;
+				columnNumber = 1;
+			} else if(input[i] == '\r' && i < input.length - 2 && input[i + 1] == '\n') {
+				columnNumber = 1;
+				lineNumber++;
+				i++;
+			} else if (input[i] == '\r') {
+				lineNumber++;
+				columnNumber = 1;
 			} else {
-				lines.add(ret.get(i).length());
+				columnNumber++;
 			}
-
-			i += 2;
 		}
 	}
 }
