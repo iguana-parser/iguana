@@ -40,11 +40,11 @@ public class ParseError extends RuntimeException {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Parse error at " + getSlot()  + " at line:" + lineNumber + " column:" + columnNumber);
-		sb.append(" Expected: ");
+		sb.append(" expected: ");
 		for(Terminal t : slot.getTestSet()) {
 			sb.append(t).append(" ");
 		}
-		sb.append(" But found: " + (char) InputUtil.getInstance().charAt(inputIndex));
+		sb.append(" but found: " + (char) InputUtil.getInstance().charAt(inputIndex));
 		return sb.toString();
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.jgll.traversal.Node;
 import org.jgll.traversal.Result;
 import org.jgll.traversal.SPPFVisitor;
+import org.jgll.util.InputUtil;
 
 /**
  * An SPPF node is a node in an Shared Packed Parse Forest. This data structure
@@ -99,11 +100,11 @@ public abstract class SPPFNode implements Node {
 	}
 
 	public int getLineNumber() {
-		return 0;
+		return InputUtil.getInstance().getLineNumber(getLeftExtent()).getLineNumber();
 	}
 	
 	public int getColumn() {
-		return 0;
+		return InputUtil.getInstance().getLineNumber(getLeftExtent()).getColumnNumber();
 	}
 
 
