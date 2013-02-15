@@ -40,7 +40,7 @@ public class CharacterClass extends Terminal {
 	public String toString() {
 		String s = "[";
 		for(Range range : ranges) {
-			s += range.getStart() + "-" + range.getEnd();
+			s += (char) range.getStart() + "-" + (char) range.getEnd();
 		}
 		s += "]";
 		return s;

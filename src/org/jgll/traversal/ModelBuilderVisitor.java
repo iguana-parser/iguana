@@ -21,11 +21,11 @@ import org.jgll.sppf.TerminalSymbolNode;
  *
  */
 @SuppressWarnings("unchecked")
-public class ModelBuilderVisitor<T> extends DefaultSPPFVisitor {
+public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor {
 	
-	private NodeListener<T> listener;
+	private NodeListener<T, U> listener;
 	
-	public ModelBuilderVisitor(NodeListener<T> listener) {
+	public ModelBuilderVisitor(NodeListener<T, U> listener) {
 		this.listener = listener;
 	}
 
@@ -33,8 +33,10 @@ public class ModelBuilderVisitor<T> extends DefaultSPPFVisitor {
 	public void visit(TerminalSymbolNode terminal) {
 		if(!terminal.isVisited()) {
 			terminal.setVisited(true);
-			if(terminal.getMatchedChar() != TerminalSymbolNode.EPSILON) {
-				Object result = listener.terminal(terminal.getMatchedChar());
+			if(terminal.getMatchedChar() == TerminalSymbolNode.EPSILON) {
+				terminal.setObject(Result.skip());
+			} else {
+				Result<U> result = listener.terminal(terminal.getMatchedChar(), terminal);
 				terminal.setObject(result);
 			}
 		}		
@@ -50,22 +52,30 @@ public class ModelBuilderVisitor<T> extends DefaultSPPFVisitor {
 			
 			if(nonterminalSymbolNode.isAmbiguous()) {
 				
-				for(SPPFNode child : nonterminalSymbolNode) {
+				int nPackedNodes = 0;
+				
+				for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
 					PackedNode packedNode = (PackedNode) child;
 					LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
 					listener.startNode((T) slot.getObject());
 					packedNode.accept(this);
-					Object result = listener.endNode((T) slot.getObject(), (Iterable<T>) packedNode.childrenValues());
+					Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) packedNode.childrenValues(), packedNode);
 					packedNode.setObject(result);
+					if(result != Result.filter()) {
+						nPackedNodes++;
+					}
 				}
 				
-				listener.buildAmbiguityNode((Iterable<T>) nonterminalSymbolNode.childrenValues());
+				if(nPackedNodes > 1) {
+					Result<U> result = listener.buildAmbiguityNode((Iterable<U>) nonterminalSymbolNode.childrenValues(), nonterminalSymbolNode);
+					nonterminalSymbolNode.setObject(result);
+				}
 				
 			} else {
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
 				visitChildren(nonterminalSymbolNode);
-				Object result = listener.endNode((T) slot.getObject(), (Iterable<T>) nonterminalSymbolNode.childrenValues());
+				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) nonterminalSymbolNode.childrenValues(), nonterminalSymbolNode);
 				nonterminalSymbolNode.setObject(result);
 			}
 		}

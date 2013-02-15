@@ -1,12 +1,12 @@
 package org.jgll.parser;
 
-import org.jgll.exception.ParsingFailedException;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.L0;
 import org.jgll.grammar.Nonterminal;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.InputUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,9 @@ public class GrammarInterpreter extends GLLParser {
 	private static final Logger log = LoggerFactory.getLogger(GrammarInterpreter.class);
 	
 	@Override
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParseError {
+		
+		InputUtil.getInstance().setInput(input);
 		log.info("Input size: {}", input.length);
 
 		this.grammar = grammar;

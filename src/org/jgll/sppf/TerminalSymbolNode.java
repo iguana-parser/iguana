@@ -1,9 +1,9 @@
 package org.jgll.sppf;
 
 import java.util.Collections;
-import java.util.Iterator;
 
 import org.jgll.traversal.SPPFVisitor;
+import org.jgll.traversal.Node;
 
 /**
  * 
@@ -11,7 +11,7 @@ import org.jgll.traversal.SPPFVisitor;
  * @author Ali Afroozeh
  *
  */
-public class TerminalSymbolNode extends SPPFNode {
+public class TerminalSymbolNode extends SPPFNode implements Node {
 	
 	public static final int EPSILON = -2;
 	
@@ -84,17 +84,37 @@ public class TerminalSymbolNode extends SPPFNode {
 	}
 
 	@Override
-	public Iterator<SPPFNode> iterator() {
-		return Collections.<SPPFNode>emptyList().iterator();
-	}
-
-	@Override
 	public SPPFNode get(int index) {
 		return null;
 	}
 
 	@Override
 	public int size() {
+		return 0;
+	}
+
+	@Override
+	public Iterable<SPPFNode> getChildren() {
+		return Collections.emptyList();
+	}
+	
+	@Override
+	public int getStart() {
+		return getLeftExtent();
+	}
+	
+	@Override
+	public int getOffset() {
+		return getRightExtent() - getLeftExtent();
+	}
+
+	@Override
+	public int getLineNumber() {
+		return 0;
+	}
+	
+	@Override
+	public int getColumn() {
 		return 0;
 	}
 }

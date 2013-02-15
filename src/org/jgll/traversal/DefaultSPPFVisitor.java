@@ -20,7 +20,7 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 	public static int i;
 
 	protected void visitChildren(SPPFNode node) {
-		for(SPPFNode child : node) {
+		for(SPPFNode child : node.getChildren()) {
 			child.accept(this);
 		}
 	}
@@ -63,11 +63,11 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 					parent.removeChild(parent.get(0));
 				}
 
-				for(SPPFNode child : intermediateNode) {
+				for(SPPFNode child : intermediateNode.getChildren()) {
 					// For each packed node of the intermediate node create a new packed node
 					PackedNode pn = (PackedNode) child;
 					PackedNode newPackedNode = new PackedNode(parent.getFirstPackedNodeGrammarSlot(), parent.size(), parent);
-					for(SPPFNode sn : pn) {
+					for(SPPFNode sn : pn.getChildren()) {
 						newPackedNode.addChild(sn);					
 					}
 
@@ -132,15 +132,15 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 				parentOfPackedNode.removeChild(parent);
 				parent.removeChild(intermediateNode);
 
-				for(SPPFNode sn : parent) {
+				for(SPPFNode sn : parent.getChildren()) {
 					restOfChildren.add(sn);
 				}
 
-				for(SPPFNode child : intermediateNode) {
+				for(SPPFNode child : intermediateNode.getChildren()) {
 					// For each packed node of the intermediate node create a new packed node
 					PackedNode pn = (PackedNode) child;
 					PackedNode newPackedNode = new PackedNode(parentOfPackedNode.getFirstPackedNodeGrammarSlot(), parentOfPackedNode.size(), parentOfPackedNode);
-					for(SPPFNode sn : pn) {
+					for(SPPFNode sn : pn.getChildren()) {
 						newPackedNode.addChild(sn);					
 					}
 

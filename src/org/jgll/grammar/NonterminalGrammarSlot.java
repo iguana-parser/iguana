@@ -35,6 +35,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(checkAgainstTestSet(parser.getCurrentInputValue())) {
 			parser.setCU(parser.create(next));
 			nonterminal.execute(parser);
+		} else {
+			parser.newParseError(this, parser.getCurrentInpuIndex());
 		}
 	}
 	
@@ -94,12 +96,20 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean checkAgainstTestSet(int i) {
+		if(testSet.isEmpty()) {
+			return true;
+		}
 		for(Terminal t : testSet) {
 			if(t.match(i)) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public Iterable<Terminal> getTestSet() {
+		return testSet;
 	}
 	
 }

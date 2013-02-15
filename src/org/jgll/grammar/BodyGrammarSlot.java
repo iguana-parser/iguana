@@ -40,9 +40,12 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		int i = 0;
 		for(Symbol s : rule.getBody()) {
 			if(i++ == position) {
-				tmp += " . ";
+				tmp += ". ";
 			}
 			tmp += s + " ";
+		}
+		if(position == rule.getBody().size()) {
+			tmp += ".";
 		}
 		label = tmp;
 	}
@@ -56,7 +59,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	
 	public void codeElseTestSetCheck(Writer writer) throws IOException {
-		writer.append("} else { label = L0; } \n");
+		writer.append("} else { newParseError(grammar.getGrammarSlot(" + this.id +  "), ci); label = L0; return; } \n");
 	}
 	
 	public GrammarSlot next() {
@@ -80,4 +83,5 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return label;
 	}
 	
+	public abstract Iterable<Terminal> getTestSet();
 }

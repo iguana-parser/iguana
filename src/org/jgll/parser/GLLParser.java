@@ -2,7 +2,6 @@ package org.jgll.parser;
 
 import java.util.List;
 
-import org.jgll.exception.ParsingFailedException;
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
@@ -71,24 +70,18 @@ public abstract class GLLParser {
 	protected Grammar grammar;
 
 	/**
-	 * The nonterminal head at which a parser error has occured. 
+	 * The grammar slot at which a parse error has occured. 
 	 */
-	protected String errorNonterminal;
+	protected BodyGrammarSlot slot;
 	
 	/**
 	 * The last input index at which an error has occured. 
 	 */
 	protected int errorIndex = -1;
 	
-	protected int column;
 	
-	public NonterminalSymbolNode parse(String input, Grammar grammar, String startSymbol) throws ParsingFailedException {
-		I = new int[input.length() + 1];
-		for (int i = 0; i < input.length(); i++) {
-			I[i] = input.charAt(i);
-		}
-		I[input.length()] = -1;
-		return parse(I, grammar, startSymbol);
+	public NonterminalSymbolNode parse(String input, Grammar grammar, String startSymbol) throws ParseError {
+		return parse(InputUtil.fromString(input), grammar, startSymbol);
 	}
 
 	/**
@@ -98,14 +91,14 @@ public abstract class GLLParser {
 	 * @param input the input string to be parsed.
 	 * @return 
 	 * 
-	 * @throws ParsingFailedException an instance of {@link ParsingFailedException} if the descriptor set is empty, but
+	 * @throws ParseError an instance of {@link ParseError} if the descriptor set is empty, but
 	 * 								  no SPPF root has been found.
 	 */
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar, String startSymbol) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar, String startSymbol) throws ParseError {
 		return parse(input, grammar, grammar.getNonterminalByName(startSymbol));
 	}
 	
-	public abstract NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParsingFailedException;
+	public abstract NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParseError;
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -114,10 +107,10 @@ public abstract class GLLParser {
 	 * the next position of input.
 	 * 
 	 */
-	protected void newError(String errorNonterminal, int errorIndex) {
+	public void newParseError(BodyGrammarSlot slot, int errorIndex) {
 		if (errorIndex >= this.errorIndex) {
 			this.errorIndex = errorIndex;
-			this.errorNonterminal = errorNonterminal;
+			this.slot = slot;
 		}
 	}
 
@@ -144,7 +137,6 @@ public abstract class GLLParser {
 	 */
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor d = new Descriptor(label, u, inputIndex, w);
-//		d.setColumn(inputUtil.getLineNumber(inputIndex).getColumnNumber());
 		descriptorSet.add(d);
 	}
 	

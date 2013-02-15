@@ -2,6 +2,8 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
 
@@ -32,7 +34,10 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				parser.moveInputPointer();
 				parser.setCN(parser.getNodeP(next));
 				parser.pop();
-			} 
+			} else {
+				parser.newParseError(this, parser.getCurrentInpuIndex());
+			}
+
 		}
 		
 		// A ::= x1...xf, f ≥ 2
@@ -41,6 +46,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				parser.setCN(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
 				parser.moveInputPointer();
 				next.execute(parser);
+			} else {
+				parser.newParseError(this, parser.getCurrentInpuIndex());
 			}
 		}
 		
@@ -51,6 +58,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				parser.moveInputPointer();
 				parser.setCN(parser.getNodeP(next));
 				next.execute(parser);
+			} else {
+				parser.newParseError(this, parser.getCurrentInpuIndex());
 			}
 		}
 		
@@ -99,9 +108,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		else {
 			writer.append(checkInput(terminal));
 			writer.append("     cr = getNodeT(I[ci], ci);\n");
-			writer.append("   } else {\n");
-			writer.append("     label = L0; return;\n");
-			writer.append("   }\n");
+			codeElseTestSetCheck(writer);
 			
 			writer.append("   ci = ci + 1;\n");
 			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + next.getId() + "), cn, cr);\n");
@@ -127,5 +134,12 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		writer.append("if (").append(terminal.getMatchCode()).append(") {\n");
 	}
+
+	@Override
+	public Iterable<Terminal> getTestSet() {
+		Set<Terminal> set = new HashSet<>();
+		set.add(terminal);
+		return set;
+	}	
 
 }

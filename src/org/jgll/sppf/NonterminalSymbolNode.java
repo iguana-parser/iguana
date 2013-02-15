@@ -15,23 +15,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-
-		if (!(obj instanceof NonterminalSymbolNode)) {
-			return false;
-		}
-		
-		return super.equals(obj);
-	}
-
-	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
 	}
-
-	@Override
-	public int size() {
-		return children.size();
-	}
-
 }

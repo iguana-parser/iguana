@@ -1,7 +1,6 @@
 package org.jgll.sppf;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
@@ -71,7 +70,7 @@ public class PackedNode extends SPPFNode {
 		int index = children.indexOf(node);
 		children.remove(node);
 		if(index >= 0) {
-			for(SPPFNode child : node) {
+			for(SPPFNode child : node.getChildren()) {
 				children.add(index++, child);				
 			}
 		}
@@ -103,22 +102,17 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int getLeftExtent() {
-		throw new UnsupportedOperationException();
+		return parent.getLeftExtent();
 	}
 
 	@Override
 	public int getRightExtent() {
-		throw new UnsupportedOperationException();
+		return parent.getRightExtent();
 	}
 
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
-	}
-
-	@Override
-	public Iterator<SPPFNode> iterator() {
-		return children.iterator();
 	}
 
 	@Override
@@ -132,6 +126,11 @@ public class PackedNode extends SPPFNode {
 	@Override
 	public int size() {
 		return children.size();
+	}
+
+	@Override
+	public Iterable<SPPFNode> getChildren() {
+		return children;
 	}
 	
 }

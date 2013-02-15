@@ -8,7 +8,7 @@ package ${packageName};
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
-import org.jgll.exception.ParsingFailedException;
+import org.jgll.parser.ParseError;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.Nonterminal;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -39,7 +39,7 @@ public class ${className}Parser extends GLLParser {
 		cn = DummyNode.getInstance();
 
 		errorIndex = -1;
-		errorNonterminal = null;
+		slot = null;
 	}
 	
 	private void log(long start, long end) {
@@ -54,12 +54,13 @@ public class ${className}Parser extends GLLParser {
 	
 		
 	@Override
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParsingFailedException {
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParseError {
 	
 		this.grammar = grammar;
 
 		I = input;
 
+		InputUtil.getInstance().setInput(input);
 		log.info("Input size: {}", input.length);
 		
 		long start = System.nanoTime();
