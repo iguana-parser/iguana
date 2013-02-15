@@ -63,4 +63,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		this.object = object;
 	}
 
+	@Override
+	public Iterable<Terminal> getTestSet() {
+		throw new UnsupportedOperationException();
+	}
+
 }

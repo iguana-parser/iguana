@@ -60,6 +60,7 @@ public class ${className}Parser extends GLLParser {
 
 		I = input;
 
+		InputUtil.getInstance().setInput(input);
 		log.info("Input size: {}", input.length);
 		
 		long start = System.nanoTime();

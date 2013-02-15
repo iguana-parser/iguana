@@ -106,5 +106,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		}
 		return false;
 	}
+
+	@Override
+	public Iterable<Terminal> getTestSet() {
+		return testSet;
+	}
 	
 }

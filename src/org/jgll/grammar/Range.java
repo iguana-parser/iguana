@@ -33,7 +33,7 @@ public class Range extends Terminal {
 	
 	@Override
 	public String toString() {
-		return "[" + start + "-" + end + "]";
+		return "[" + (char) start + "-" + (char) end + "]";
 	}
 
 	@Override

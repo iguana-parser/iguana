@@ -2,15 +2,21 @@ package org.jgll.util;
 
 import static junit.framework.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class InputUtilTest {
 	
+	private InputUtil inputUtil;
+
+	@Before
+	public void init() {
+		inputUtil = InputUtil.getInstance();
+	}
+	
 	@Test
 	public void test1() {
-		String s = "big\n brother";
-		InputUtil inputUtil = InputUtil.inputUtil;
-		inputUtil.setInput(s);
+		inputUtil.setInput("big\n brother");
 		LineColumn lineColumn = inputUtil.getLineNumber(0);
 		assertEquals(new LineColumn(1, 1), lineColumn);
 		
@@ -26,9 +32,7 @@ public class InputUtilTest {
 	
 	@Test
 	public void test2() {
-		String s = "big\r\n brother";
-		InputUtil inputUtil = InputUtil.inputUtil;
-		inputUtil.setInput(s);
+		inputUtil.setInput("big\r\n brother");
 		LineColumn lineColumn = inputUtil.getLineNumber(0);
 		assertEquals(new LineColumn(1, 1), lineColumn);
 		

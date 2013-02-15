@@ -12,7 +12,15 @@ public class InputUtil {
 
 	private LineColumn[] lineColumns;
 
-	public static InputUtil inputUtil = new InputUtil();
+	private static InputUtil instance;
+	
+	public synchronized static InputUtil getInstance() {
+		if(instance == null) {
+			instance = new InputUtil();
+		}
+		
+		return instance;
+	}
 
 	private InputUtil() {};
 	
@@ -24,6 +32,10 @@ public class InputUtil {
 		this.input = input;
 		lineColumns = new LineColumn[input.length - 1];
 		calculateLineLengths();
+	}
+	
+	public int charAt(int index) {
+		return input[index];
 	}
 
 	public static String readTextFromFile(String parentDir, String fileName) throws IOException {

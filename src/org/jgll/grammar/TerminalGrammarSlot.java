@@ -2,6 +2,8 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
 
@@ -132,5 +134,12 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		writer.append("if (").append(terminal.getMatchCode()).append(") {\n");
 	}
+
+	@Override
+	public Iterable<Terminal> getTestSet() {
+		Set<Terminal> set = new HashSet<>();
+		set.add(terminal);
+		return set;
+	}	
 
 }

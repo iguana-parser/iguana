@@ -70,16 +70,15 @@ public abstract class GLLParser {
 	protected Grammar grammar;
 
 	/**
-	 * The nonterminal head at which a parser error has occured. 
+	 * The grammar slot at which a parse error has occured. 
 	 */
-	protected GrammarSlot slot;
+	protected BodyGrammarSlot slot;
 	
 	/**
 	 * The last input index at which an error has occured. 
 	 */
 	protected int errorIndex = -1;
 	
-	protected int column;
 	
 	public NonterminalSymbolNode parse(String input, Grammar grammar, String startSymbol) throws ParseError {
 		return parse(InputUtil.fromString(input), grammar, startSymbol);
@@ -108,7 +107,7 @@ public abstract class GLLParser {
 	 * the next position of input.
 	 * 
 	 */
-	public void newParseError(GrammarSlot slot, int errorIndex) {
+	public void newParseError(BodyGrammarSlot slot, int errorIndex) {
 		if (errorIndex >= this.errorIndex) {
 			this.errorIndex = errorIndex;
 			this.slot = slot;
@@ -138,7 +137,6 @@ public abstract class GLLParser {
 	 */
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor d = new Descriptor(label, u, inputIndex, w);
-//		d.setColumn(inputUtil.getLineNumber(inputIndex).getColumnNumber());
 		descriptorSet.add(d);
 	}
 	

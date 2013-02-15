@@ -123,6 +123,9 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	
 	@Override
 	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol) {
+		if(levels[inputSize - 1] == null) {
+			return null;
+		}
 		return (NonterminalSymbolNode) levels[inputSize - 1].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 
