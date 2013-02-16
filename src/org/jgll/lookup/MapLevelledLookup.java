@@ -25,7 +25,7 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	private int currentLevel;
 	
-	private Map<SPPFNode, Integer>[] validity;
+//	private Map<SPPFNode, Integer>[] validity;
 	
 	private Map<SPPFNode, SPPFNode>[] levels;
 	
@@ -38,20 +38,26 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	public MapLevelledLookup(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		longestTerminalChain = grammar.getLongestTerminalChain();
-		validity = new Map[longestTerminalChain + 1];
-		levels = new Map[longestTerminalChain + 1];
+//		validity = new Map[longestTerminalChain];
+		levels = new Map[longestTerminalChain];
 		
 		for(int i = 0; i < longestTerminalChain; i++) {
-			validity[i] = new HashMap<>();
+//			validity[i] = new HashMap<>();
 			levels[i] = new HashMap<>();
 		}
 		
-		terminals = new TerminalSymbolNode[2 * inputSize];
+		terminals = new TerminalSymbolNode[2 * inputSize + 1];
 	}
 	
 	@Override
 	public void nextLevel(int level) {
 		currentLevel = level;
+		
+		levels = new Map[longestTerminalChain];
+		
+		for(int i = 0; i < longestTerminalChain; i++) {
+			levels[i] = new HashMap<>();
+		}
 	}
 	
 	private int indexFor(int inputIndex) {
@@ -69,23 +75,21 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 		}
 		
 		int index = indexFor(rightExtent);
-		if(validity[index].containsKey(key) && validity[index].get(key) != rightExtent) {
-			validity[index].put(key, rightExtent);
-			levels[index].put(key, key);
-			countNonPackedNodes++;
-			return key;
-		} else {
+//		if(validity[index].containsKey(key) && validity[index].get(key) != rightExtent) {
+//			validity[index].put(key, rightExtent);
+//			levels[index].put(key, key);
+//			countNonPackedNodes++;
+//			return key;
+//		} else {
 			SPPFNode value = levels[index].get(key);
-			if(value != null) {
-				return levels[index].get(key);
-			} else {
+			if(value == null) {
 				value = key;
-				validity[index].put(key, rightExtent);
+//				validity[index].put(key, rightExtent);
 				levels[index].put(key, value);
 				countNonPackedNodes++;
 			}			
 			return value;
-		}
+//		}
 	}
 	
 	@Override
@@ -114,17 +118,18 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
 		int index = leftExtent;
-		if(terminalIndex == -2) {
+		if(terminalIndex != -2) {
 			index = leftExtent + 1;
 		}
 
-		if(terminals[index] == null) {
-			TerminalSymbolNode terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
+		TerminalSymbolNode terminal = terminals[index];
+		if(terminal == null) {
+			terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
+			countNonPackedNodes++;
 			terminals[index] = terminal;
-			return terminal;
-		} else {
-			return terminals[index];
 		}
+		
+		return terminal;
 	}
 
 	
