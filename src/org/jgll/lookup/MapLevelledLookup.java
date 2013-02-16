@@ -101,12 +101,12 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
 
 			PackedNode firstPackedNode = parent.getFirstPackedNode();
-			Map<SPPFNode, SPPFNode> map = levels[parent.getRightExtent()];
+			Map<SPPFNode, SPPFNode> map = levels[indexFor(parent.getRightExtent())];
 			map.put(firstPackedNode, firstPackedNode);
 			map.put(packedNode, packedNode);
 		}
 		
-		else if(parent.isAmbiguous() && levels[parent.getRightExtent()].put(packedNode, packedNode) == null) {
+		else if(parent.isAmbiguous() && levels[indexFor(parent.getRightExtent())].put(packedNode, packedNode) == null) {
 			parent.addPackedNode(packedNode, leftChild, rightChild);
 		}
 	}
