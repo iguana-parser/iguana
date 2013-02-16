@@ -33,11 +33,20 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	private int longestTerminalChain;
 	
+	private TerminalSymbolNode[] terminals;
+	
 	public MapLevelledLookup(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		longestTerminalChain = grammar.getLongestTerminalChain();
-		validity = new Map[longestTerminalChain];
-		levels = new Map[longestTerminalChain];
+		validity = new Map[longestTerminalChain + 1];
+		levels = new Map[longestTerminalChain + 1];
+		
+		for(int i = 0; i < longestTerminalChain; i++) {
+			validity[i] = new HashMap<>();
+			levels[i] = new HashMap<>();
+		}
+		
+		terminals = new TerminalSymbolNode[2 * inputSize];
 	}
 	
 	@Override
@@ -60,31 +69,23 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 		}
 		
 		int index = indexFor(rightExtent);
-		if(validity[index].get(key) != rightExtent) {
+		if(validity[index].containsKey(key) && validity[index].get(key) != rightExtent) {
 			validity[index].put(key, rightExtent);
 			levels[index].put(key, key);
-			return key;
-		}
-		
-		if(validity[index].get(key) == rightExtent && levels[index].containsKey(key)) {
-			
-		}
-		
-		if(levels[rightExtent] == null) {
-			levels[rightExtent] = new HashMap<>();
-			levels[rightExtent].put(key, key);
 			countNonPackedNodes++;
 			return key;
+		} else {
+			SPPFNode value = levels[index].get(key);
+			if(value != null) {
+				return levels[index].get(key);
+			} else {
+				value = key;
+				validity[index].put(key, rightExtent);
+				levels[index].put(key, value);
+				countNonPackedNodes++;
+			}			
+			return value;
 		}
-		
-		SPPFNode node = (SPPFNode) levels[rightExtent].get(key);
-		if(node == null) {
-			node = key;
-			levels[rightExtent].put(key, node);
-			countNonPackedNodes++;
-		}
-		
-		return node;
 	}
 	
 	@Override
@@ -112,42 +113,28 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
-		
-		int rightExtent;
+		int index = leftExtent;
 		if(terminalIndex == -2) {
-			rightExtent = leftExtent;
+			index = leftExtent + 1;
+		}
+
+		if(terminals[index] == null) {
+			TerminalSymbolNode terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
+			terminals[index] = terminal;
+			return terminal;
 		} else {
-			rightExtent = leftExtent + 1;
+			return terminals[index];
 		}
-
-		TerminalSymbolNode key = new TerminalSymbolNode(terminalIndex, leftExtent);
-
-		if(levels[rightExtent] == null) {
-			levels[rightExtent] = new HashMap<>();
-			levels[rightExtent].put(key, key);
-			countNonPackedNodes++;
-			return key;
-		}
-
-		Map<SPPFNode, SPPFNode> map = levels[rightExtent];
-		
-		SPPFNode sppfNode = map.get(key);
-			
-		if(sppfNode == null) {
-			sppfNode = key;
-			map.put(key, sppfNode);
-		}
-		
-		return (TerminalSymbolNode) sppfNode;
 	}
 
 	
 	@Override
 	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol) {
-		if(levels[inputSize - 1] == null) {
+		int index = indexFor(inputSize - 1); 
+		if(levels[index] == null) {
 			return null;
 		}
-		return (NonterminalSymbolNode) levels[inputSize - 1].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
+		return (NonterminalSymbolNode) levels[index].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 
 	@Override

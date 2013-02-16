@@ -17,7 +17,7 @@ import org.jgll.util.InputUtil;
  * @author Ali Afroozeh
  *
  */
-public final class Grammar implements Serializable {
+public class Grammar implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

@@ -13,6 +13,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.Nonterminal;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.DummyNode;
+import org.jgll.util.InputUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
