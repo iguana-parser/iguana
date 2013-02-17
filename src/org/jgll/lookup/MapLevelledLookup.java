@@ -39,29 +39,24 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 		super(grammar, inputSize);
 		longestTerminalChain = grammar.getLongestTerminalChain();
 //		validity = new Map[longestTerminalChain];
-		levels = new Map[longestTerminalChain];
+		levels = new Map[longestTerminalChain + 1];
 		
-		for(int i = 0; i < longestTerminalChain; i++) {
+		for(int i = 0; i < longestTerminalChain + 1; i++) {
 //			validity[i] = new HashMap<>();
 			levels[i] = new HashMap<>();
 		}
 		
-		terminals = new TerminalSymbolNode[2 * inputSize + 1];
+		terminals = new TerminalSymbolNode[2 * inputSize];
 	}
 	
 	@Override
-	public void nextLevel(int level) {
-		currentLevel = level;
-		
-		levels = new Map[longestTerminalChain];
-		
-		for(int i = 0; i < longestTerminalChain; i++) {
-			levels[i] = new HashMap<>();
-		}
+	public void nextLevel() {
+		levels[indexFor(currentLevel)] = new HashMap<>();
+		currentLevel++;
 	}
 	
 	private int indexFor(int inputIndex) {
-		return (inputIndex - currentLevel) % longestTerminalChain;
+		return inputIndex % (longestTerminalChain + 1);
 	}
 	
 	@Override
@@ -117,9 +112,9 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
-		int index = leftExtent;
+		int index = 2 * leftExtent;
 		if(terminalIndex != -2) {
-			index = leftExtent + 1;
+			index = 2 * leftExtent + 1;
 		}
 
 		TerminalSymbolNode terminal = terminals[index];

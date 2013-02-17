@@ -57,7 +57,7 @@ public class LevelledDescritorSet implements DescriptorSet {
 				currentLevel++;
 			}
 			
-			lookup.nextLevel(currentLevel);
+			lookup.nextLevel();
 		}
 		size--;
 		return r[currentLevel].remove(); 
