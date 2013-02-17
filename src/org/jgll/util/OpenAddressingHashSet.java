@@ -6,9 +6,14 @@ import java.util.Set;
 
 
 public class OpenAddressingHashSet<E> implements Set<E> {
+	
+	/**
+	 * The constant suggested by Knuth for multiplicative hashing
+	 */
+	private static final long a = 2654435769L;
 
-	private static final int DEFAULT_INITIAL_CAPACITY = 16;
-	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+	private static final int DEFAULT_INITIAL_CAPACITY = 32;
+	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
 	
 	private int capacity;
 	
@@ -60,7 +65,7 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 	@Override
 	public boolean contains(Object key) {
 		
-		int j = hash(key.hashCode());
+		int j = indexFor(key.hashCode());
 		
 		do {
 			if(table[j] == null) {
@@ -79,7 +84,7 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 	@Override
 	public boolean add(Object key) {
 				
-		int j = hash(key.hashCode());
+		int j = indexFor(key.hashCode());
 		do {
 			if(table[j] == null) {
 				table[j] = key;
@@ -111,7 +116,7 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 		for(Object key : table) {
 			if(key != null) {
 				
-				int j = hash(key.hashCode());
+				int j = indexFor(key.hashCode());
 
 				do {
 					if(newTable[j] == null) {
@@ -129,8 +134,8 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 		rehashCount++;
 	}
 	
-	private int hash(int hash) {
-		return (hash >> (32 - p)) & bitMask;		
+	private int indexFor(int hash) {
+		return  ((int)(a * hash) >> (32 - p)) & bitMask;		
 	}
 		
 	private int next(int j) {

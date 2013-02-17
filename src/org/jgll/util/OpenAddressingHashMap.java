@@ -7,6 +7,11 @@ import java.util.Set;
 
 public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 	
+	/**
+	 * The constant suggested by Knuth for multiplicative hashing
+	 */
+	private static final long a = 2654435769L;
+	
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 	
@@ -113,6 +118,7 @@ public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 		p += 1;
 		bitMask = capacity - 1;
 		
+		@SuppressWarnings("unchecked")
 		Entry<K, V>[] newTable = new KeyValue[capacity];
 		
 		label:
@@ -139,7 +145,7 @@ public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 	}
 	
 	private int indexFor(int hash) {
-		return (hash >> (32 - p)) & bitMask;		
+		return  ((int)(a * hash) >> (32 - p)) & bitMask;		
 	}
 		
 	private int next(int j) {
@@ -179,6 +185,7 @@ public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 		throw new UnsupportedOperationException();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
 		table = new Entry[capacity];
