@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.lookup.LevelledLookup;
 //import org.jgll.util.OpenAddressingHashSet;
 
@@ -35,32 +36,38 @@ public class LevelledDescritorSet implements DescriptorSet {
 	private int currentLevel;
 
 	private final LevelledLookup lookup;
+
+	private final int longestTerminalChain;
 	
 	@SuppressWarnings("unchecked")
-	public LevelledDescritorSet(int inputSize, LevelledLookup lookup) {
+	public LevelledDescritorSet(Grammar grammar, LevelledLookup lookup) {
+		this.longestTerminalChain = grammar.getLongestTerminalChain();
 		this.lookup = lookup;
-		u = new Set[inputSize];
-		r = new Queue[inputSize];
+		u = new Set[longestTerminalChain + 1];
+		r = new Queue[longestTerminalChain + 1];
+		
+		for(int i = 0; i < longestTerminalChain + 1; i++) {
+			u[i] = new HashSet<>();
+			r[i] = new ArrayDeque<>();
+		}
+	}
+	
+	private int indexFor(int inputIndex) {
+		return inputIndex % (longestTerminalChain + 1);
 	}
 	
 	@Override
 	public Descriptor nextDescriptor() {
-		if(r[currentLevel].isEmpty()) {
-//			System.out.println(u[currentLevel].getRehashCount());
-//			System.out.println("size: " + u[currentLevel].size());
-			u[currentLevel] = null;
-			r[currentLevel] = null;
-			
-			
+		int index = indexFor(currentLevel); 
+		if(!r[index].isEmpty()) {
+			size--;
+			return r[index].remove();
+		} else {
+			u[index] = new HashSet<>();			
 			currentLevel++;
-			while(r[currentLevel] == null) {
-				currentLevel++;
-			}
-			
 			lookup.nextLevel();
+			return nextDescriptor();
 		}
-		size--;
-		return r[currentLevel].remove(); 
 	}
 
 	@Override
@@ -71,18 +78,7 @@ public class LevelledDescritorSet implements DescriptorSet {
 	@Override
 	public void add(Descriptor descriptor) {
 	
-		int index = descriptor.getInputIndex();
-		
-		// if no descriptor with the given index is added before
-		if(r[index] == null) {
-			r[index] = new ArrayDeque<Descriptor>();
-			u[index] =  new HashSet<>();
-			r[index].add(descriptor);
-			u[index].add(descriptor);
-			size++;
-			all++;
-			return;
-		}
+		int index = indexFor(descriptor.getInputIndex());
 		
 		if(! u[index].contains(descriptor)) {
 			 r[index].add(descriptor);

@@ -51,7 +51,7 @@ public class GrammarInterpreter extends GLLParser {
 	@Override
 	protected void init() {
 		lookup = new org.jgll.lookup.MapLevelledLookup(grammar, I.length);
-		descriptorSet = new org.jgll.parser.LevelledDescritorSet(I.length, (org.jgll.lookup.LevelledLookup) lookup);
+		descriptorSet = new org.jgll.parser.LevelledDescritorSet(grammar, (org.jgll.lookup.LevelledLookup) lookup);
 
 		ci = 0;
 		cu = u0 = GSSNode.DUMMY;

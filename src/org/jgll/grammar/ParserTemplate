@@ -33,7 +33,7 @@ public class ${className}Parser extends GLLParser {
 	public void init() {
 			
 		lookup = new org.jgll.lookup.MapLevelledLookup(grammar, I.length);
-		descriptorSet =  new org.jgll.parser.LevelledDescritorSet(I.length, (org.jgll.lookup.LevelledLookup) lookup);
+		descriptorSet =  new org.jgll.parser.LevelledDescritorSet(grammar, (org.jgll.lookup.LevelledLookup) lookup);
 			
 		ci = 0;
 		cu = u0 = GSSNode.DUMMY;
@@ -44,13 +44,16 @@ public class ${className}Parser extends GLLParser {
 	}
 	
 	private void log(long start, long end) {
-		log.info("Parsing Time: {} ms", (end - start)/1000000);
-		
+		log.info("Parsing Time: {} ms", (end - start) / 1000000);
+
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.info("Memory used: {} mb",
+				(runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.info("Descriptors: {}", descriptorSet.sizeAll());
 		log.info("Non-packed nodes: {}", lookup.sizeNonPackedNodes());
+		log.info("GSS Nodes: {}", lookup.countGSSNodes());
+		log.info("GSS Edges: {}", lookup.countGSSEdges());
 	}
 	
 		
