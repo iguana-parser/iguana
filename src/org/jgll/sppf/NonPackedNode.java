@@ -134,7 +134,8 @@ public abstract class NonPackedNode extends SPPFNode {
 			addChildren(secondPackedNode, leftChild, rightChild);
 			children.add(secondPackedNode);
 			
-			packedNodesIndex = new BitSet(range * slots);
+//			packedNodesIndex = new BitSet(range * slots);
+			packedNodesIndex = new BitSet();
 			packedNodesIndex.set(firstPackedNode.getPivot() * range + firstPackedNode.getGrammarSlot().getId() - nonterminals);
 			packedNodesIndex.set(secondPackedNode.getPivot() * range + secondPackedNode.getGrammarSlot().getId() - nonterminals);
 		} 
