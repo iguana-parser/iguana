@@ -33,8 +33,6 @@ public interface Lookup {
 	
 	public List<SPPFNode> getEdgeLabels(GSSNode gssNode);
 	
-	public void createPackedNode(BodyGrammarSlot grammarSlot, int pivot, NonPackedNode parent, SPPFNode leftChild, SPPFNode rightChild);
-	
 	public int sizeNonPackedNodes();
 	
 	public int countGSSNodes();

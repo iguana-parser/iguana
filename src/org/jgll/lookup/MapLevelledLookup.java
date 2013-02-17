@@ -25,8 +25,6 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	private int currentLevel;
 	
-//	private Map<SPPFNode, Integer>[] validity;
-	
 	private Map<SPPFNode, SPPFNode>[] levels;
 	
 	private int countNonPackedNodes;
@@ -38,11 +36,9 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	public MapLevelledLookup(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		longestTerminalChain = grammar.getLongestTerminalChain();
-//		validity = new Map[longestTerminalChain];
 		levels = new Map[longestTerminalChain + 1];
 		
 		for(int i = 0; i < longestTerminalChain + 1; i++) {
-//			validity[i] = new HashMap<>();
 			levels[i] = new HashMap<>();
 		}
 		
@@ -70,45 +66,37 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 		}
 		
 		int index = indexFor(rightExtent);
-//		if(validity[index].containsKey(key) && validity[index].get(key) != rightExtent) {
-//			validity[index].put(key, rightExtent);
-//			levels[index].put(key, key);
-//			countNonPackedNodes++;
-//			return key;
-//		} else {
 			SPPFNode value = levels[index].get(key);
 			if(value == null) {
 				value = key;
-//				validity[index].put(key, rightExtent);
 				levels[index].put(key, value);
 				countNonPackedNodes++;
 			}			
 			return value;
-//		}
 	}
 	
-	@Override
-	public void createPackedNode(BodyGrammarSlot grammarPosition, int pivot, NonPackedNode parent, SPPFNode leftChild, SPPFNode rightChild) {
-		
-		PackedNode packedNode = new PackedNode(grammarPosition, pivot, parent);
-		
-		if(parent.countPackedNode() == 0) {
-			parent.addPackedNode(packedNode, leftChild, rightChild);
-		} 
-		
-		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition, pivot)) {
-			parent.addPackedNode(packedNode, leftChild, rightChild);
-
-			PackedNode firstPackedNode = parent.getFirstPackedNode();
-			Map<SPPFNode, SPPFNode> map = levels[indexFor(parent.getRightExtent())];
-			map.put(firstPackedNode, firstPackedNode);
-			map.put(packedNode, packedNode);
-		}
-		
-		else if(parent.isAmbiguous() && levels[indexFor(parent.getRightExtent())].put(packedNode, packedNode) == null) {
-			parent.addPackedNode(packedNode, leftChild, rightChild);
-		}
-	}
+//	@Override
+//	public void createPackedNode(BodyGrammarSlot grammarPosition, int pivot, NonPackedNode parent, SPPFNode leftChild, SPPFNode rightChild) {
+//		
+//		PackedNode packedNode = new PackedNode(grammarPosition, pivot, parent);
+//		
+//		if(parent.countPackedNode() == 0) {
+//			parent.addPackedNode(packedNode, leftChild, rightChild);
+//		} 
+//		
+//		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition, pivot)) {
+//			parent.addPackedNode(packedNode, leftChild, rightChild);
+//
+//			PackedNode firstPackedNode = parent.getFirstPackedNode();
+//			Map<SPPFNode, SPPFNode> map = levels[indexFor(parent.getRightExtent())];
+//			map.put(firstPackedNode, firstPackedNode);
+//			map.put(packedNode, packedNode);
+//		}
+//		
+//		else if(parent.isAmbiguous() && levels[indexFor(parent.getRightExtent())].put(packedNode, packedNode) == null) {
+//			parent.addPackedNode(packedNode, leftChild, rightChild);
+//		}
+//	}
 	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {

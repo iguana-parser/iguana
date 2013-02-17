@@ -1,8 +1,10 @@
 package org.jgll.sppf;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 
 /**
@@ -27,11 +29,13 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	private GrammarSlot firstPackedNodeGrammarSlot = null;
 	
+	private BitSet packedNodesIndex;
+	
 	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		this.slot = slot;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
-		children = new ArrayList<>(2);		
+		children = new ArrayList<>();		
 	}
 	
 	@Override
@@ -91,13 +95,18 @@ public abstract class NonPackedNode extends SPPFNode {
 		return slot.toString();
 	}
 	
-	public void addPackedNode(PackedNode newPackedNode, SPPFNode leftChild, SPPFNode rightChild) {
+	public void addPackedNode(GrammarSlot packedNodeSlot, int pivot, SPPFNode leftChild, SPPFNode rightChild, Grammar grammar) {
 		
 		int packedNodeCount = countPackedNode();
 		
+		int range = rightExtent - leftExtent;
+		int nonterminals = grammar.getNonterminals().size();
+		int slots = grammar.getGrammarSlots().size() - nonterminals;
+
+		
 		// Don't store the first packed node as the node may not be ambiguous
 		if(packedNodeCount == 0) {
-			firstPackedNodeGrammarSlot = newPackedNode.getGrammarSlot();
+			firstPackedNodeGrammarSlot = packedNodeSlot;
 			if(!leftChild.equals(DummyNode.getInstance())) {
 				children.add(leftChild);
 			}
@@ -108,6 +117,10 @@ public abstract class NonPackedNode extends SPPFNode {
 		// node and add it. Then create the next packed node.
 		else if (packedNodeCount == 1) {
 			
+			if(firstPackedNodeGrammarSlot.equals(packedNodeSlot) && getPivot() == pivot) {
+				return;
+			}
+			
 			PackedNode firstPackedNode = getFirstPackedNode();
 
 			for(SPPFNode child : children) {
@@ -117,23 +130,29 @@ public abstract class NonPackedNode extends SPPFNode {
 			children.clear();
 			children.add(firstPackedNode);
 			
-			// the second packed node
-			addChildren(newPackedNode, leftChild, rightChild);
-			children.add(newPackedNode);
+			PackedNode secondPackedNode = new PackedNode(packedNodeSlot, pivot, this);
+			addChildren(secondPackedNode, leftChild, rightChild);
+			children.add(secondPackedNode);
+			
+			packedNodesIndex = new BitSet(range * slots);
+			packedNodesIndex.set(firstPackedNode.getPivot() * range + firstPackedNode.getGrammarSlot().getId() - nonterminals);
+			packedNodesIndex.set(secondPackedNode.getPivot() * range + secondPackedNode.getGrammarSlot().getId() - nonterminals);
 		} 
 		
 		else {
-			addChildren(newPackedNode, leftChild, rightChild);
-			children.add(newPackedNode);
+			
+			if(packedNodesIndex.get(pivot * range + packedNodeSlot.getId() - nonterminals)) {
+				return;
+			}
+			
+			PackedNode packedNode = new PackedNode(packedNodeSlot, pivot, this);
+			addChildren(packedNode, leftChild, rightChild);
+			children.add(packedNode);
+			packedNodesIndex.set(packedNode.getPivot() * range + packedNode.getGrammarSlot().getId() - nonterminals);
 		}
 		
 	}
-	
-	public boolean hasPackedNode(GrammarSlot grammarSlot, int pivot) {
-		return firstPackedNodeGrammarSlot.equals(grammarSlot) &&
-			   getPivot() == pivot;
-	}
-	
+		
 	private static void addChildren(PackedNode parent, SPPFNode leftChild, SPPFNode rightChild) {
 		if (!leftChild.equals(DummyNode.getInstance())) {
 			parent.addChild(leftChild);

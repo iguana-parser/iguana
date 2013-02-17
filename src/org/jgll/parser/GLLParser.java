@@ -293,10 +293,9 @@ public abstract class GLLParser {
 				leftExtent = rightChild.getLeftExtent();
 			}
 			
-			SPPFNode newNode = lookup.getNonPackedNode(t, leftExtent, rightExtent);
-
-			assert newNode instanceof NonPackedNode;
-			lookup.createPackedNode(slot, rightChild.getLeftExtent(), (NonPackedNode) newNode, leftChild, rightChild);
+			NonPackedNode newNode = (NonPackedNode) lookup.getNonPackedNode(t, leftExtent, rightExtent);
+			
+			newNode.addPackedNode(slot, rightChild.getLeftExtent(), leftChild, rightChild, grammar);
 			
 			return newNode;
 		}
