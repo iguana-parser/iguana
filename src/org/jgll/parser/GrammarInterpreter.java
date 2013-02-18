@@ -51,9 +51,7 @@ public class GrammarInterpreter extends GLLParser {
 
 	@Override
 	protected void init() {
-		lookupTable = new org.jgll.lookup.MapLevelledLookup(grammar, I.length);
-//		descriptorSet = new org.jgll.parser.LevelledDescritorSet(grammar, (org.jgll.lookup.LevelledLookup) lookup);
-
+		lookupTable = new org.jgll.lookup.LevelSynchronizedLookupTable(grammar, I.length);
 		ci = 0;
 		cu = u0 = GSSNode.DUMMY;
 		cn = DummyNode.getInstance();
@@ -64,9 +62,11 @@ public class GrammarInterpreter extends GLLParser {
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
 		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.info("Descriptors: {}", descriptorSet.sizeAll());
+		log.info("Descriptors: {}", lookupTable.getDescriptorsCount());
 		log.info("GSSNodes: {}", lookupTable.getGSSNodes().size());
 		log.info("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
+		log.info("GSS Nodes: {}", lookupTable.getGSSNodesCount());
+		log.info("GSS Edges: {}", lookupTable.getGSSEdgesCount());
 	}
 
 

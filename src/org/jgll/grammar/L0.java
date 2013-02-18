@@ -5,7 +5,6 @@ import java.io.Writer;
 
 import org.jgll.lookup.LookupTable;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.DescriptorSet;
 import org.jgll.parser.GrammarInterpreter;
 
 /**
@@ -57,7 +56,7 @@ public class L0 extends GrammarSlot {
 		writer.append("} else {\n");
 		writer.append("end = System.nanoTime();\n");
 		writer.append("log(start, end);\n");
-		writer.append("NonterminalSymbolNode root = lookup.getStartSymbol(startSymbol);\n");
+		writer.append("NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);\n");
 		writer.append("if (root == null) {");
 		writer.append("log.info(\"Parsing failed.\");\n");
 		writer.append("throw new ParseError(slot, errorIndex);\n");

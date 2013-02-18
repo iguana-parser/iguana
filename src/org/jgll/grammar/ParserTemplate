@@ -32,8 +32,7 @@ public class ${className}Parser extends GLLParser {
 	@Override
 	public void init() {
 			
-		lookup = new org.jgll.lookup.MapLevelledLookup(grammar, I.length);
-		descriptorSet =  new org.jgll.parser.LevelledDescritorSet(grammar, (org.jgll.lookup.LevelledLookup) lookup);
+		lookupTable = new org.jgll.lookup.LevelSynchronizedLookupTable(grammar, I.length);
 			
 		ci = 0;
 		cu = u0 = GSSNode.DUMMY;
@@ -48,12 +47,13 @@ public class ${className}Parser extends GLLParser {
 
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.info("Memory used: {} mb",
-				(runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.info("Descriptors: {}", descriptorSet.sizeAll());
-		log.info("Non-packed nodes: {}", lookup.sizeNonPackedNodes());
-		log.info("GSS Nodes: {}", lookup.countGSSNodes());
-		log.info("GSS Edges: {}", lookup.countGSSEdges());
+		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.info("Descriptors: {}", lookupTable.getDescriptorsCount());
+		log.info("GSSNodes: {}", lookupTable.getGSSNodes().size());
+		log.info("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
+		log.info("GSS Nodes: {}", lookupTable.getGSSNodesCount());
+		log.info("GSS Edges: {}", lookupTable.getGSSEdgesCount());
 	}
 	
 		

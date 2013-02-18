@@ -22,7 +22,7 @@ import org.jgll.sppf.TerminalSymbolNode;
  *
  */
 @SuppressWarnings("unchecked")
-public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
+public class LevelSynchronizedLookupTable extends DefaultLookup {
 
 	private int currentLevel;
 	
@@ -48,7 +48,7 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	 */
 	private int all;
 	
-	public MapLevelledLookup(Grammar grammar, int inputSize) {
+	public LevelSynchronizedLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		this.longestTerminalChain = grammar.getLongestTerminalChain();
 		levels = new Map[longestTerminalChain + 1];
@@ -69,8 +69,7 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 
 	}
 	
-	@Override
-	public void nextLevel() {
+	private void nextLevel() {
 		levels[indexFor(currentLevel)] = new HashMap<>();
 	}
 	
@@ -143,7 +142,7 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 			size--;
 			return r[index].remove();
 		} else {
-			u[index] = new HashSet<>();			
+			u[index] = new HashSet<>();
 			nextLevel();
 			currentLevel++;
 			return nextDescriptor();

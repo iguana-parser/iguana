@@ -33,12 +33,7 @@ public abstract class GLLParser {
 	protected LookupTable lookupTable;
 	
 	protected int[] I;
-	
-	/**
-	 * 
-	 */
-	protected DescriptorSet descriptorSet;
-	
+
 	/**
 	 * The current SPPF node.
 	 */
