@@ -1,19 +1,20 @@
 package org.jgll.lookup;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.Nonterminal;
+import org.jgll.parser.Descriptor;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-//import org.jgll.util.OpenAddressingHashMap;
 
 /**
  * 
@@ -33,9 +34,23 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	
 	private TerminalSymbolNode[] terminals;
 	
+	private Set<Descriptor>[] u;
+	
+	private Queue<Descriptor>[] r;
+	
+	/**
+	 * The number of descriptors waiting to be processed.
+	 */
+	private int size;
+	
+	/**
+	 * The total number of descriptors added
+	 */
+	private int all;
+	
 	public MapLevelledLookup(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
-		longestTerminalChain = grammar.getLongestTerminalChain();
+		this.longestTerminalChain = grammar.getLongestTerminalChain();
 		levels = new Map[longestTerminalChain + 1];
 		
 		for(int i = 0; i < longestTerminalChain + 1; i++) {
@@ -43,12 +58,20 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 		}
 		
 		terminals = new TerminalSymbolNode[2 * inputSize];
+		
+		u = new Set[longestTerminalChain + 1];
+		r = new Queue[longestTerminalChain + 1];
+		
+		for(int i = 0; i < longestTerminalChain + 1; i++) {
+			u[i] = new HashSet<>();
+			r[i] = new ArrayDeque<>();
+		}
+
 	}
 	
 	@Override
 	public void nextLevel() {
 		levels[indexFor(currentLevel)] = new HashMap<>();
-		currentLevel++;
 	}
 	
 	private int indexFor(int inputIndex) {
@@ -75,28 +98,6 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 			return value;
 	}
 	
-//	@Override
-//	public void createPackedNode(BodyGrammarSlot grammarPosition, int pivot, NonPackedNode parent, SPPFNode leftChild, SPPFNode rightChild) {
-//		
-//		PackedNode packedNode = new PackedNode(grammarPosition, pivot, parent);
-//		
-//		if(parent.countPackedNode() == 0) {
-//			parent.addPackedNode(packedNode, leftChild, rightChild);
-//		} 
-//		
-//		else if(parent.countPackedNode() == 1 && !parent.hasPackedNode(grammarPosition, pivot)) {
-//			parent.addPackedNode(packedNode, leftChild, rightChild);
-//
-//			PackedNode firstPackedNode = parent.getFirstPackedNode();
-//			Map<SPPFNode, SPPFNode> map = levels[indexFor(parent.getRightExtent())];
-//			map.put(firstPackedNode, firstPackedNode);
-//			map.put(packedNode, packedNode);
-//		}
-//		
-//		else if(parent.isAmbiguous() && levels[indexFor(parent.getRightExtent())].put(packedNode, packedNode) == null) {
-//			parent.addPackedNode(packedNode, leftChild, rightChild);
-//		}
-//	}
 	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
@@ -126,8 +127,44 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 	}
 
 	@Override
-	public int sizeNonPackedNodes() {
+	public int getNonPackedNodesCount() {
 		return countNonPackedNodes;
+	}
+
+	@Override
+	public boolean hasNextDescriptor() {
+		return size > 0;
+	}
+
+	@Override
+	public Descriptor nextDescriptor() {
+		int index = indexFor(currentLevel); 
+		if(!r[index].isEmpty()) {
+			size--;
+			return r[index].remove();
+		} else {
+			u[index] = new HashSet<>();			
+			currentLevel++;
+			nextLevel();
+			return nextDescriptor();
+		}
+	}
+
+	@Override
+	public void addDescriptor(Descriptor descriptor) {
+		int index = indexFor(descriptor.getInputIndex());
+		
+		if(! u[index].contains(descriptor)) {
+			 r[index].add(descriptor);
+			 u[index].add(descriptor);
+			 size++;
+			 all++;
+		}		
+	}
+
+	@Override
+	public int getDescriptorsCount() {
+		return all;
 	}
 
 }

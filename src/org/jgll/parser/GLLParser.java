@@ -9,7 +9,7 @@ import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.Nonterminal;
 import org.jgll.grammar.NonterminalGrammarSlot;
 import org.jgll.grammar.TerminalGrammarSlot;
-import org.jgll.lookup.Lookup;
+import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -30,7 +30,7 @@ public abstract class GLLParser {
 	
 	protected InputUtil inputUtil;
 	
-	protected Lookup lookup;
+	protected LookupTable lookupTable;
 	
 	protected int[] I;
 	
@@ -136,8 +136,7 @@ public abstract class GLLParser {
 	 * }
 	 */
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
-		Descriptor d = new Descriptor(label, u, inputIndex, w);
-		descriptorSet.add(d);
+		lookupTable.addDescriptor(new Descriptor(label, u, inputIndex, w));
 	}
 	
 	
@@ -166,7 +165,7 @@ public abstract class GLLParser {
 		if (!u.equals(u0)) {
 			
 			// Add (cu, cn) to P
-			lookup.addToPoppedElements(u, z);
+			lookupTable.addToPoppedElements(u, z);
 			
 			for(GSSEdge edge : u.getEdges()) {
 				assert u.getLabel() instanceof BodyGrammarSlot;
@@ -209,10 +208,10 @@ public abstract class GLLParser {
      *
 	 */
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
-		GSSNode v = lookup.getGSSNode(L, i);
+		GSSNode v = lookupTable.getGSSNode(L, i);
 		
-		if(!lookup.getGSSEdge(v, w, u)) {
-			List<SPPFNode> edgeLabels = lookup.getEdgeLabels(v);
+		if(!lookupTable.getGSSEdge(v, w, u)) {
+			List<SPPFNode> edgeLabels = lookupTable.getEdgeLabels(v);
 			if(edgeLabels != null) {
 				for (SPPFNode z : edgeLabels) {
 					SPPFNode x = getNodeP((BodyGrammarSlot) L, w, z);
@@ -232,7 +231,7 @@ public abstract class GLLParser {
 	 * @return 
 	 */
 	public final TerminalSymbolNode getNodeT(int x, int i) {
-		return lookup.getTerminalNode(x, i);
+		return lookupTable.getTerminalNode(x, i);
 	}
 	
 	public final SPPFNode getNodeP(BodyGrammarSlot slot) {
@@ -293,7 +292,7 @@ public abstract class GLLParser {
 				leftExtent = rightChild.getLeftExtent();
 			}
 			
-			NonPackedNode newNode = (NonPackedNode) lookup.getNonPackedNode(t, leftExtent, rightExtent);
+			NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(t, leftExtent, rightExtent);
 			
 			newNode.addPackedNode(slot, rightChild.getLeftExtent(), leftChild, rightChild, grammar);
 			

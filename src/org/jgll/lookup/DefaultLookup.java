@@ -20,7 +20,7 @@ import org.jgll.sppf.SPPFNode;
  * @author Ali Afroozeh
  *
  */
-public abstract class DefaultLookup implements Lookup {
+public abstract class DefaultLookup implements LookupTable {
 	
 	/**
 	 * Default 
@@ -93,12 +93,12 @@ public abstract class DefaultLookup implements Lookup {
 	}
 
 	@Override
-	public int countGSSNodes() {
+	public int getGSSNodesCount() {
 		return getGSSNodes().size();
 	}
 	
 	@Override
-	public int countGSSEdges() {
+	public int getGSSEdgesCount() {
 		return gssEdges.size();
 	}
 	

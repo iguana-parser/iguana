@@ -3,6 +3,7 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.lookup.LookupTable;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.DescriptorSet;
 import org.jgll.parser.GrammarInterpreter;
@@ -32,9 +33,9 @@ public class L0 extends GrammarSlot {
 	
 	@Override
 	public void execute(GrammarInterpreter parser) {
-		DescriptorSet descriptorSet = parser.getDescriptorSet();
-		while(!descriptorSet.isEmpty()) {
-			Descriptor descriptor = descriptorSet.nextDescriptor();
+		LookupTable lookupTable = parser.getLookupTable();
+		while(lookupTable.hasNextDescriptor()) {
+			Descriptor descriptor = lookupTable.nextDescriptor();
 			parser.setCN(descriptor.getSPPFNode());
 			parser.setCU(descriptor.getGSSNode());
 			parser.setInputIndex(descriptor.getInputIndex());
@@ -46,8 +47,8 @@ public class L0 extends GrammarSlot {
 	@Override
 	public void code(Writer writer) throws IOException {
 		writer.append("case L0:\n");
-		writer.append("if (!descriptorSet.isEmpty()) {\n");
-		writer.append("Descriptor descriptor = descriptorSet.nextDescriptor();\n");
+		writer.append("if (lookupTable.hasNextDescriptor()) {\n");
+		writer.append("Descriptor descriptor = lookupTable.nextDescriptor();\n");
 		writer.append("cu = descriptor.getGSSNode();\n");
 		writer.append("ci = descriptor.getInputIndex();\n");
 		writer.append("cn = descriptor.getSPPFNode();\n");

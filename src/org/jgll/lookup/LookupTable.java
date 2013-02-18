@@ -3,11 +3,10 @@ package org.jgll.lookup;
 import java.util.Collection;
 import java.util.List;
 
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.Nonterminal;
+import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -17,7 +16,13 @@ import org.jgll.sppf.TerminalSymbolNode;
  * @author Ali Afroozeh
  *
  */
-public interface Lookup {
+public interface LookupTable {
+	
+	public boolean hasNextDescriptor();
+	
+	public Descriptor nextDescriptor();
+	
+	public void addDescriptor(Descriptor descriptor);
 	
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent);
 	
@@ -33,11 +38,13 @@ public interface Lookup {
 	
 	public List<SPPFNode> getEdgeLabels(GSSNode gssNode);
 	
-	public int sizeNonPackedNodes();
+	public int getNonPackedNodesCount();
 	
-	public int countGSSNodes();
+	public int getGSSNodesCount();
 	
-	public int countGSSEdges();
+	public int getGSSEdgesCount();
+	
+	public int getDescriptorsCount();
 	
 	public Collection<GSSNode> getGSSNodes();
 	

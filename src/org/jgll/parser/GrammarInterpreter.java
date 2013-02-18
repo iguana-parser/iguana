@@ -3,6 +3,7 @@ package org.jgll.parser;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.L0;
 import org.jgll.grammar.Nonterminal;
+import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -37,7 +38,7 @@ public class GrammarInterpreter extends GLLParser {
 		
 		long end = System.nanoTime();
 		
-		NonterminalSymbolNode root = lookup.getStartSymbol(startSymbol);
+		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);
 		if (root == null) {
 			// TODO put ParsingFailedException back
 			throw new RuntimeException("Parsing Failed");
@@ -50,8 +51,8 @@ public class GrammarInterpreter extends GLLParser {
 
 	@Override
 	protected void init() {
-		lookup = new org.jgll.lookup.MapLevelledLookup(grammar, I.length);
-		descriptorSet = new org.jgll.parser.LevelledDescritorSet(grammar, (org.jgll.lookup.LevelledLookup) lookup);
+		lookupTable = new org.jgll.lookup.MapLevelledLookup(grammar, I.length);
+//		descriptorSet = new org.jgll.parser.LevelledDescritorSet(grammar, (org.jgll.lookup.LevelledLookup) lookup);
 
 		ci = 0;
 		cu = u0 = GSSNode.DUMMY;
@@ -64,13 +65,13 @@ public class GrammarInterpreter extends GLLParser {
 		Runtime runtime = Runtime.getRuntime();
 		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.info("Descriptors: {}", descriptorSet.sizeAll());
-		log.info("GSSNodes: {}", lookup.getGSSNodes().size());
-		log.info("Non-packed nodes: {}", lookup.sizeNonPackedNodes());
+		log.info("GSSNodes: {}", lookupTable.getGSSNodes().size());
+		log.info("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
 	}
 
-	
-	public DescriptorSet getDescriptorSet() {
-		return descriptorSet;
+
+	public LookupTable getLookupTable() {
+		return lookupTable;
 	}
 	
 	public GSSNode getCU() {
