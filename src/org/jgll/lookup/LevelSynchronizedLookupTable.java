@@ -32,7 +32,7 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 
 	private int longestTerminalChain;
 	
-	private TerminalSymbolNode[] terminals;
+	private TerminalSymbolNode[][] terminals;
 	
 	private Set<Descriptor>[] u;
 	
@@ -57,7 +57,7 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 			levels[i] = new HashMap<>();
 		}
 		
-		terminals = new TerminalSymbolNode[2 * inputSize];
+		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
 		u = new Set[longestTerminalChain + 1];
 		r = new Queue[longestTerminalChain + 1];
@@ -71,6 +71,8 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 	
 	private void nextLevel() {
 		levels[indexFor(currentLevel)] = new HashMap<>();
+		terminals[indexFor(currentLevel)][0] = null;
+		terminals[indexFor(currentLevel)][1] = null;
 	}
 	
 	private int indexFor(int inputIndex) {
@@ -100,16 +102,24 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
-		int index = 2 * leftExtent;
-		if(terminalIndex != -2) {
-			index = 2 * leftExtent + 1;
+		
+		int index2;
+		int rightExtent;
+		if(terminalIndex == -2) {
+			rightExtent = leftExtent;
+			index2 = 1;
+		} else {
+			rightExtent = leftExtent + 1;
+			index2 = 0;
 		}
+		
+		int index = indexFor(rightExtent);
 
-		TerminalSymbolNode terminal = terminals[index];
+		TerminalSymbolNode terminal = terminals[index][index2];
 		if(terminal == null) {
 			terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
 			countNonPackedNodes++;
-			terminals[index] = terminal;
+			terminals[index][index2] = terminal;
 		}
 		
 		return terminal;
