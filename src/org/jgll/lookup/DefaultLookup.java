@@ -22,11 +22,6 @@ import org.jgll.sppf.SPPFNode;
  */
 public abstract class DefaultLookup implements LookupTable {
 	
-	/**
-	 * Default 
-	 * TODO: allow the user to control it.
-	 */
-	public static final int DEFAULT_HASHMAP_SIZE = 1024;
 	
 	protected final Grammar grammar;
 	
@@ -47,7 +42,7 @@ public abstract class DefaultLookup implements LookupTable {
 		this.grammar = grammar;
 		gssNodes = new GSSNode[grammar.getGrammarSlots().size()][];
 		gssEdges = new HashSet<>(inputSize);
-		poppedElements = new HashMap<GSSNode, List<SPPFNode>>(DEFAULT_HASHMAP_SIZE);
+		poppedElements = new HashMap<GSSNode, List<SPPFNode>>(inputSize);
 	}
 
 	@Override
