@@ -144,8 +144,8 @@ public class MapLevelledLookup extends DefaultLookup implements LevelledLookup {
 			return r[index].remove();
 		} else {
 			u[index] = new HashSet<>();			
-			currentLevel++;
 			nextLevel();
+			currentLevel++;
 			return nextDescriptor();
 		}
 	}
