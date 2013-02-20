@@ -70,4 +70,9 @@ public class L0 extends GrammarSlot {
 		return "L0";
 	}
 
+	@Override
+	public String getName() {
+		return "L0";
+	}
+
 }

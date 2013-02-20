@@ -36,6 +36,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		}
 		this.previous = previous;
 		
+		
+		// TODO: use getName() to generate the full slot presentation.
 		String tmp = rule.getHead() + " ::= ";
 		int i = 0;
 		for(Symbol s : rule.getBody()) {
@@ -62,14 +64,20 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		writer.append("} else { newParseError(grammar.getGrammarSlot(" + this.id +  "), ci); label = L0; return; } \n");
 	}
 	
-	public GrammarSlot next() {
+	public BodyGrammarSlot next() {
 		return next;
 	}
 	
-	public GrammarSlot previous() {
+	public BodyGrammarSlot previous() {
 		return previous;
 	}
 	
+	/**
+	 * Head ::= alpha . beta
+	 * TODO: change this!
+	 * 
+	 * @return
+	 */
 	public Nonterminal getHead() {
 		return rule.getHead();
 	}

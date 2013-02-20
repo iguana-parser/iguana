@@ -16,7 +16,7 @@ public class Nonterminal extends GrammarSlot implements Symbol {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final List<BodyGrammarSlot> alternates;
+	private ArrayList<BodyGrammarSlot> alternates;
 	private final boolean nullable;
 	private String name;
 
@@ -64,6 +64,7 @@ public class Nonterminal extends GrammarSlot implements Symbol {
 		}
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -71,6 +72,11 @@ public class Nonterminal extends GrammarSlot implements Symbol {
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<BodyGrammarSlot> getAlternates() {
+		return (List<BodyGrammarSlot>) alternates.clone();
 	}
 
 }

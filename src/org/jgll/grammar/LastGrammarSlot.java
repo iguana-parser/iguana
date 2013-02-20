@@ -67,5 +67,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public Iterable<Terminal> getTestSet() {
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public String getName() {
+		return ".";
+	}
 
 }

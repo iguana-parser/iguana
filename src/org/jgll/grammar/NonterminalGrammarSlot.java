@@ -16,18 +16,28 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final Nonterminal nonterminal;
+	private Nonterminal nonterminal;
 	
 	private final Set<Terminal> testSet;
 	
 	public NonterminalGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Nonterminal nonterminal, Set<Terminal> testSet) {
 		super(rule, id, position, previous);
+		if(nonterminal == null) {
+			throw new IllegalArgumentException("Nonterminal cannot be null.");
+		}
+		if(testSet == null) {
+			throw new IllegalArgumentException("TestSet cannot be null.");
+		}
 		this.nonterminal = nonterminal;
 		this.testSet = testSet;
 	}
 	
 	public Nonterminal getNonterminal() {
 		return nonterminal;
+	}
+	
+	public void setNonterminal(Nonterminal nonterminal) {
+		this.nonterminal = nonterminal;
 	}
 	
 	@Override
@@ -110,6 +120,11 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public Iterable<Terminal> getTestSet() {
 		return testSet;
+	}
+	
+	@Override
+	public String getName() {
+		return "." + nonterminal.getName();
 	}
 	
 }

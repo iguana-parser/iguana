@@ -30,6 +30,8 @@ public class Grammar implements Serializable {
 	private final String name;
 	
 	private int longestTerminalChain;
+
+	private final Set<Nonterminal> startSymbolsSet;
 	
 	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Nonterminal startSymbol) {
 		this(name, nonterminals, slots, createHashSet(startSymbol));
@@ -43,6 +45,7 @@ public class Grammar implements Serializable {
 	
 	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Set<Nonterminal> startSymbols) {
 		this.name = name;
+		startSymbolsSet = startSymbols;
 		this.nonterminals = Collections.unmodifiableList(nonterminals);
 		this.slots = Collections.unmodifiableList(slots);
 		this.startSymbols = new HashMap<>();
@@ -118,4 +121,32 @@ public class Grammar implements Serializable {
 	public void setLongestTerminalChain(int longestTerminalChain) {
 		this.longestTerminalChain = longestTerminalChain;
 	}
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for(Nonterminal nonterminal : nonterminals) {
+			for(BodyGrammarSlot slot : nonterminal.getAlternates()) {
+				sb.append(nonterminal.getName() + " -> ");
+				BodyGrammarSlot next = slot;
+				do {
+					sb.append(" " + next.getName());
+					if(next instanceof LastGrammarSlot) {
+						sb.append("\n");
+					}
+				} 
+				while((next = next.next) != null);
+			}
+			
+		}
+		
+		return sb.toString();
+	}
+	
+	public Set<Nonterminal> getStartSymbols() {
+		return startSymbolsSet;
+	}
+	
 }

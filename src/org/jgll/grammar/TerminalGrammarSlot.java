@@ -140,6 +140,11 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		Set<Terminal> set = new HashSet<>();
 		set.add(terminal);
 		return set;
+	}
+
+	@Override
+	public String getName() {
+		return "." + terminal;
 	}	
 
 }

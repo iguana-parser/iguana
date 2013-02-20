@@ -56,6 +56,8 @@ public abstract class GrammarSlot implements Serializable {
 	
 	public abstract void execute(GrammarInterpreter parser);
 	
+	public abstract String getName();
+	
 	public int getId() {
 		return id;
 	}	
