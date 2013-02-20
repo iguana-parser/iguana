@@ -67,7 +67,7 @@ public abstract class GLLParser {
 	/**
 	 * The grammar slot at which a parse error has occured. 
 	 */
-	protected BodyGrammarSlot slot;
+	protected BodyGrammarSlot errorSlot;
 	
 	/**
 	 * The last input index at which an error has occured. 
@@ -105,7 +105,7 @@ public abstract class GLLParser {
 	public void newParseError(BodyGrammarSlot slot, int errorIndex) {
 		if (errorIndex >= this.errorIndex) {
 			this.errorIndex = errorIndex;
-			this.slot = slot;
+			this.errorSlot = slot;
 		}
 	}
 

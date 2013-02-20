@@ -26,6 +26,8 @@ public class GrammarInterpreter extends GLLParser {
 		
 		InputUtil.getInstance().setInput(input);
 		log.info("Input size: {}", input.length);
+		
+		this.I = input;
 
 		this.grammar = grammar;
 		init();
@@ -40,8 +42,7 @@ public class GrammarInterpreter extends GLLParser {
 		
 		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);
 		if (root == null) {
-			// TODO put ParsingFailedException back
-			throw new RuntimeException("Parsing Failed");
+			throw new ParseError(errorSlot, errorIndex);
 		}
 		
 		logParseStatistics(end - start);

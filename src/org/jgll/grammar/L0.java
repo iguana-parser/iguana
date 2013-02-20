@@ -59,7 +59,7 @@ public class L0 extends GrammarSlot {
 		writer.append("NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);\n");
 		writer.append("if (root == null) {");
 		writer.append("log.info(\"Parsing failed.\");\n");
-		writer.append("throw new ParseError(slot, errorIndex);\n");
+		writer.append("throw new ParseError(errorSlot, errorIndex);\n");
 		writer.append("}\n");
 		writer.append("return root;\n");
 		writer.append("}\n");

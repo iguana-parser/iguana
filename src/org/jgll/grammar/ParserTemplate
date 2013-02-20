@@ -39,7 +39,7 @@ public class ${className}Parser extends GLLParser {
 		cn = DummyNode.getInstance();
 
 		errorIndex = -1;
-		slot = null;
+		errorSlot = null;
 	}
 	
 	private void log(long start, long end) {
