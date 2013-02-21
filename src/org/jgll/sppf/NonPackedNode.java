@@ -101,8 +101,6 @@ public abstract class NonPackedNode extends SPPFNode {
 		
 		int range = rightExtent - leftExtent;
 		int nonterminals = grammar.getNonterminals().size();
-		int slots = grammar.getGrammarSlots().size() - nonterminals;
-
 		
 		// Don't store the first packed node as the node may not be ambiguous
 		if(packedNodeCount == 0) {
