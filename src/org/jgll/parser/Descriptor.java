@@ -98,4 +98,9 @@ public class Descriptor {
 			   gssNode.equals(other.getGSSNode());
 	}
 	
+	@Override
+	public String toString() {
+		return "(" + slot + ", " + inputIndex + ", " + gssNode.getLabel() + ", " + sppfNode + ")";
+	}
+	
 }

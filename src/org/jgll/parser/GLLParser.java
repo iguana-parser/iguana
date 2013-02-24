@@ -1,5 +1,6 @@
 package org.jgll.parser;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.jgll.grammar.BodyGrammarSlot;
@@ -16,6 +17,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.InputUtil;
+import org.slf4j.Logger;
 
 /**
  * GLLParser is the abstract base class for all the generated GLL parsers.
@@ -29,6 +31,8 @@ import org.jgll.util.InputUtil;
 public abstract class GLLParser {
 	
 	protected InputUtil inputUtil;
+	
+	protected Logger log;
 	
 	protected LookupTable lookupTable;
 	
@@ -131,7 +135,9 @@ public abstract class GLLParser {
 	 * }
 	 */
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
-		lookupTable.addDescriptor(new Descriptor(label, u, inputIndex, w));
+		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
+		boolean result = lookupTable.addDescriptor(descriptor);
+		log.debug("Descriptor added: {} : {}", descriptor, result);
 	}
 	
 	
@@ -198,11 +204,13 @@ public abstract class GLLParser {
 	 * @param alternateIndex the index of the alternate of the rule where this position refers to.
 	 * 
 	 * @param position the position in the body of the rule where this position referes to
+	 *
 	 * @return 
 	 * 
      *
 	 */
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
+		log.debug("GSSNode created: " +  L + ", " + i);
 		GSSNode v = lookupTable.getGSSNode(L, i);
 		
 		if(!lookupTable.getGSSEdge(v, w, u)) {
@@ -293,5 +301,9 @@ public abstract class GLLParser {
 			
 			return newNode;
 		}
-	}	
+	}
+	
+	public Collection<GSSNode> getGSSNodes() {
+		return lookupTable.getGSSNodes();
+	}
 }

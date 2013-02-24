@@ -70,7 +70,6 @@ public class GrammarInterpreter extends GLLParser {
 		log.info("GSS Edges: {}", lookupTable.getGSSEdgesCount());
 	}
 
-
 	public LookupTable getLookupTable() {
 		return lookupTable;
 	}

@@ -160,7 +160,7 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 	}
 
 	@Override
-	public void addDescriptor(Descriptor descriptor) {
+	public boolean addDescriptor(Descriptor descriptor) {
 		int index = indexFor(descriptor.getInputIndex());
 		
 		if(! u[index].contains(descriptor)) {
@@ -168,7 +168,10 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 			 u[index].add(descriptor);
 			 size++;
 			 all++;
-		}		
+			 return true;
+		}
+		
+		return false;
 	}
 
 	@Override

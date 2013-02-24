@@ -47,6 +47,7 @@ public class DummyNode extends SPPFNode {
 
 	@Override
 	public void accept(SPPFVisitor visitAction) {
+		// do nothing
 	}
 
 	@Override
@@ -62,6 +63,11 @@ public class DummyNode extends SPPFNode {
 	@Override
 	public Iterable<SPPFNode> getChildren() {
 		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public String toString() {
+		return "$";
 	}
 
 }

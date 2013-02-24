@@ -47,13 +47,14 @@ public class RecursiveDescentLookupTable extends DefaultLookup {
 	}
 
 	@Override
-	public void addDescriptor(Descriptor descriptor) {
+	public boolean addDescriptor(Descriptor descriptor) {
 		if(descriptorsSet.contains(descriptor)) {
-			return;
+			return false;
 		}
 
 		descriptorsStack.push(descriptor);
-		descriptorsSet.add(descriptor);		
+		descriptorsSet.add(descriptor);
+		return true;
 	}
 
 	@Override
