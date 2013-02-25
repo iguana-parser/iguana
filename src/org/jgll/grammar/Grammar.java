@@ -128,7 +128,7 @@ public class Grammar implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		
 		for(Nonterminal nonterminal : nonterminals) {
-			for(BodyGrammarSlot slot : nonterminal.getAlternates()) {
+			for(BodyGrammarSlot slot : nonterminal.copyAlternates()) {
 				sb.append(nonterminal.getName() + " -> ");
 				BodyGrammarSlot next = slot;
 				do {

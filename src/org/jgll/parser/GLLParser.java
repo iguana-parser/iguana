@@ -163,7 +163,9 @@ public abstract class GLLParser {
 	 */
 	public final void pop(GSSNode u, int i, SPPFNode z) {
 		
-		if (!u.equals(u0)) {
+		if (u != u0) {
+			
+			log.debug("Pop {} at {}", u.getLabel(), i);
 			
 			// Add (cu, cn) to P
 			lookupTable.addToPoppedElements(u, z);
