@@ -19,7 +19,11 @@ import org.slf4j.LoggerFactory;
  */
 public class GrammarInterpreter extends GLLParser {
 	
-	private static final Logger log = LoggerFactory.getLogger(GrammarInterpreter.class);
+	
+	public GrammarInterpreter() {
+		log = LoggerFactory.getLogger(GrammarInterpreter.class);		
+	}
+	
 	
 	@Override
 	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParseError {
@@ -112,5 +116,9 @@ public class GrammarInterpreter extends GLLParser {
 	
 	public void moveInputPointer() {
 		ci = ci + 1;
+	}
+	
+	public Logger getLogger() {
+		return log;
 	}
 }

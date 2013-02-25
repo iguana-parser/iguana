@@ -83,6 +83,7 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor {
 
 	@Override
 	public void visit(IntermediateNode node) {
+		// Intermediate nodes should be removed when visiting their parents.
 		throw new RuntimeException("Should not be here!");
 	}
 

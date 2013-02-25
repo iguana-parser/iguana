@@ -9,7 +9,7 @@ import org.jgll.traversal.SPPFVisitor;
  *
  */
 public class NonterminalSymbolNode extends NonPackedNode {
-	
+
 	public NonterminalSymbolNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
