@@ -15,8 +15,12 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RecursiveDescentLookupTable extends DefaultLookup {
+	
+	private static final Logger log = LoggerFactory.getLogger(RecursiveDescentLookupTable.class);
 
 	private Stack<Descriptor> descriptorsStack;
 	
@@ -67,6 +71,7 @@ public class RecursiveDescentLookupTable extends DefaultLookup {
 		TerminalSymbolNode terminal = terminals[index];
 		if(terminal == null) {
 			terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
+			log.debug("Terminal node created: {}", terminal);
 			terminals[index] = terminal;
 			nonPackedNodesCount++;
 		}
@@ -87,6 +92,8 @@ public class RecursiveDescentLookupTable extends DefaultLookup {
 		if(value == null) {
 			value = key;
 			nonPackedNodes.put(key, value);
+			log.debug("Nonterminal node created: {}", value);
+			nonPackedNodesCount++;
 		}
 		
 		return value;

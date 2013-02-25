@@ -15,12 +15,9 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.DummyNode;
 import org.jgll.util.InputUtil;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ${className}Parser extends GLLParser {
-	
-	private static final Logger log = LoggerFactory.getLogger(${className}Parser.class);
 	
 	private static final int L0 = -1; 
 	
@@ -28,6 +25,10 @@ public class ${className}Parser extends GLLParser {
 	 * The current grammar label
 	 */
 	private int label;
+		
+	public ${className}Parser() {
+		log = LoggerFactory.getLogger(${className}Parser.class);		
+	}
 		
 	@Override
 	public void init() {
@@ -48,10 +49,8 @@ public class ${className}Parser extends GLLParser {
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
 		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.info("Descriptors: {}", lookupTable.getDescriptorsCount());
-		log.info("GSSNodes: {}", lookupTable.getGSSNodes().size());
-		log.info("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
+		log.info("Non-packed nodes: {}", lookupTable.getNonPackedNodesCount());
 		log.info("GSS Nodes: {}", lookupTable.getGSSNodesCount());
 		log.info("GSS Edges: {}", lookupTable.getGSSEdgesCount());
 	}
