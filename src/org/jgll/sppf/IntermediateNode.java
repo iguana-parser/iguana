@@ -18,5 +18,13 @@ public class IntermediateNode extends NonPackedNode {
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof IntermediateNode)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
 
 }

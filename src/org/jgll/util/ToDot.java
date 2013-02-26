@@ -6,6 +6,7 @@ import static org.jgll.util.GraphVizUtil.PACKED_NODE;
 import static org.jgll.util.GraphVizUtil.SYMBOL_NODE;
 
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -97,6 +98,11 @@ public class ToDot extends DefaultSPPFVisitor {
 	
 	private String replaceWhiteSpace(String s) {
 		return s.replace("\\", "\\\\").replace("\t", "\\\\t").replace("\n", "\\\\n").replace("\r", "\\\\r").replace("\"", "\\\"");
+	}
+
+	@Override
+	public void visit(ListSymbolNode node) {
+		visit((NonterminalSymbolNode)node);
 	}
 
 }

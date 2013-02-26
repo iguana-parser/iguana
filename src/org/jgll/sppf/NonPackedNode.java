@@ -54,11 +54,7 @@ public abstract class NonPackedNode extends SPPFNode {
 			return true;
 		}
 		
-		if(obj == null) {
-			return false;
-		}
-		
-		if(this.getClass() != obj.getClass()) {
+		if(!(obj instanceof NonPackedNode)) {
 			return false;
 		}
 		
@@ -171,6 +167,11 @@ public abstract class NonPackedNode extends SPPFNode {
 		children.remove(node);
 	}
 	
+	/**
+	 * Replaces the given node with its children.
+	 * If this does node have the given node as child,
+	 * nothing will happen.  
+	 */
 	public void replaceWithChildren(SPPFNode node) {
 		int index = children.indexOf(node);
 		children.remove(node);

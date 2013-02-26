@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -17,8 +18,6 @@ import org.jgll.sppf.SPPFNode;
  */
 public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 	
-	public static int i;
-
 	protected void visitChildren(SPPFNode node) {
 		for(SPPFNode child : node.getChildren()) {
 			child.accept(this);
@@ -53,7 +52,6 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 			IntermediateNode intermediateNode = (IntermediateNode) parent.get(0);
 
 			if(intermediateNode.isAmbiguous()) {
-				i++;
 				List<SPPFNode> restOfChildren = new ArrayList<>();
 
 				parent.removeChild(intermediateNode);
@@ -124,7 +122,6 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 			IntermediateNode intermediateNode = (IntermediateNode) parent.get(0);
 
 			if(intermediateNode.isAmbiguous()) {
-				i++;
 				NonPackedNode parentOfPackedNode = (NonPackedNode) parent.getParent();
 
 				List<SPPFNode> restOfChildren = new ArrayList<>();
@@ -155,6 +152,17 @@ public abstract class DefaultSPPFVisitor implements SPPFVisitor {
 			} else {
 				parent.replaceWithChildren(intermediateNode);
 				removeIntermediateNode(parent);
+			}
+		}
+	}
+	
+	protected void removeListSymbolNode(ListSymbolNode node) {
+		if(!node.isAmbiguous()) {
+			removeIntermediateNode(node);
+			if(node.get(0) instanceof ListSymbolNode) {
+				ListSymbolNode child = (ListSymbolNode) node.get(0);
+				node.replaceWithChildren(child);
+				removeListSymbolNode(node);
 			}
 		}
 	}

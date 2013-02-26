@@ -2,6 +2,7 @@ package org.jgll.traversal;
 
 import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -93,6 +94,19 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor {
 		if(!packedNode.isVisited()) {
 			packedNode.setVisited(true);
 			visitChildren(packedNode);
+		}
+	}
+
+	@Override
+	public void visit(ListSymbolNode node) {
+		if(node.isAmbiguous()) {
+			
+		} else {
+			if(node.get(0) instanceof ListSymbolNode) {
+				ListSymbolNode child = (ListSymbolNode) node.get(0);
+				node.replaceWithChildren(child);
+				visit(child);
+			}
 		}
 	}
 	

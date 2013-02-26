@@ -279,12 +279,10 @@ public abstract class GLLParser {
 				return rightChild;
 		} else {
 			
-			GrammarSlot t;
+			GrammarSlot t = slot;
 			// if (beta = empty)
 			if (slot instanceof LastGrammarSlot) {
 				t = slot.getHead();
-			} else {
-				t = slot;
 			}
 
 			// if (z != $)

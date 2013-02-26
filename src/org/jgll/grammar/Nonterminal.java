@@ -19,15 +19,32 @@ public class Nonterminal extends GrammarSlot implements Symbol {
 	private static final long serialVersionUID = 1L;
 
 	private final ArrayList<BodyGrammarSlot> alternates;
+	
 	private final boolean nullable;
+	
 	private final String name;
 
+	/**
+	 * Whether this nonterminal is an converted ebnf node.
+	 */
+	private final boolean ebnfList;
+	
+	public Nonterminal(int id, String name) {
+		this(id, name, false, false);
+	}
+	
 	public Nonterminal(int id, String name, boolean nullable) {
+		this(id, name, nullable, false);
+	}
+	
+	public Nonterminal(int id, String name, boolean nullable, boolean ebnfList) {
 		super(id);
 		this.name = name;
 		this.nullable = nullable;
 		this.alternates = new ArrayList<>();
+		this.ebnfList = ebnfList;
 	}
+
 
 	public void addAlternate(BodyGrammarSlot slot) {
 		alternates.add(slot);
@@ -78,6 +95,10 @@ public class Nonterminal extends GrammarSlot implements Symbol {
 	
 	public Iterable<BodyGrammarSlot> getAlternates() {
 		return alternates;
+	}
+	
+	public boolean isEbnfList() {
+		return ebnfList;
 	}
 	
 	public Iterable<BodyGrammarSlot> getReverseAlternates() {
