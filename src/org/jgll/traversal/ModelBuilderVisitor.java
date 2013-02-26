@@ -53,24 +53,7 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor {
 			
 			if(nonterminalSymbolNode.isAmbiguous()) {
 				
-				int nPackedNodes = 0;
-				
-				for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
-					PackedNode packedNode = (PackedNode) child;
-					LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
-					listener.startNode((T) slot.getObject());
-					packedNode.accept(this);
-					Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) packedNode.childrenValues(), packedNode);
-					packedNode.setObject(result);
-					if(result != Result.filter()) {
-						nPackedNodes++;
-					}
-				}
-				
-				if(nPackedNodes > 1) {
-					Result<U> result = listener.buildAmbiguityNode((Iterable<U>) nonterminalSymbolNode.childrenValues(), nonterminalSymbolNode);
-					nonterminalSymbolNode.setObject(result);
-				}
+				buildAmbiguityNode(nonterminalSymbolNode);
 				
 			} else {
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
@@ -79,6 +62,27 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor {
 				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) nonterminalSymbolNode.childrenValues(), nonterminalSymbolNode);
 				nonterminalSymbolNode.setObject(result);
 			}
+		}
+	}
+
+	private void buildAmbiguityNode(NonterminalSymbolNode nonterminalSymbolNode) {
+		int nPackedNodes = 0;
+		
+		for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
+			PackedNode packedNode = (PackedNode) child;
+			LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
+			listener.startNode((T) slot.getObject());
+			packedNode.accept(this);
+			Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) packedNode.childrenValues(), packedNode);
+			packedNode.setObject(result);
+			if(result != Result.filter()) {
+				nPackedNodes++;
+			}
+		}
+		
+		if(nPackedNodes > 1) {
+			Result<U> result = listener.buildAmbiguityNode((Iterable<U>) nonterminalSymbolNode.childrenValues(), nonterminalSymbolNode);
+			nonterminalSymbolNode.setObject(result);
 		}
 	}
 
@@ -99,13 +103,17 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor {
 
 	@Override
 	public void visit(ListSymbolNode node) {
-		if(node.isAmbiguous()) {
-			
-		} else {
-			if(node.get(0) instanceof ListSymbolNode) {
-				ListSymbolNode child = (ListSymbolNode) node.get(0);
-				node.replaceWithChildren(child);
-				visit(child);
+		removeListSymbolNode(node);
+		if(!node.isVisited()) {
+			node.setVisited(true);
+			if(node.isAmbiguous()) {
+				buildAmbiguityNode(node);
+			} else {
+				LastGrammarSlot slot = (LastGrammarSlot) node.getFirstPackedNodeGrammarSlot();
+				listener.startNode((T) slot.getObject());
+				visitChildren(node);
+				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) node.childrenValues(), node);
+				node.setObject(result);
 			}
 		}
 	}
