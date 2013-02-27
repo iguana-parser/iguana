@@ -12,8 +12,17 @@ public abstract class Terminal implements Symbol {
 	
 	protected int id;
 	
+	/**
+	 * Checks whether this terminal matches the given character from input
+	 * 
+	 * @param i the given input
+	 *  
+	 */
 	public abstract boolean match(int i);
 	
+	/**
+	 * Generates the code for matching against the current input 
+	 */
 	public abstract String getMatchCode();
 	
 	public int getId() {

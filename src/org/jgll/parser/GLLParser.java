@@ -9,6 +9,7 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.Nonterminal;
 import org.jgll.grammar.NonterminalGrammarSlot;
+import org.jgll.grammar.Terminal;
 import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
@@ -303,7 +304,38 @@ public abstract class GLLParser {
 		}
 	}
 	
+	/**
+	 * Retuns the list of created GSSNodes. This list may be useful for analysis
+	 * or visulaization of GSS nodes after the parsing. 
+	 */
 	public Collection<GSSNode> getGSSNodes() {
 		return lookupTable.getGSSNodes();
 	}
+	
+	/**
+	 * Checks whether the provided list of terminals match a part of the input
+	 * from the given input index.
+	 * 
+	 * @param l      the given list of terminals
+	 * @param inputIndex the current input index
+	 * @return false when the list of terminals is longer than the part of the input
+	 * 				 from the given input index, or at least one of the provided terminals
+	 *               cannot match. Otherwise, this method returns true.
+	 */
+	public boolean test(List<Terminal> l) {
+		if(l.size() > I.length - 1) {
+			return false;
+		}
+		int i = ci;
+		for(Terminal t : l) {
+			if(!t.match(I[i++])) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
+
+
+
+
