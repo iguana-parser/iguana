@@ -5,10 +5,8 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.jgll.util.InputUtil;
 
@@ -25,32 +23,24 @@ public class Grammar implements Serializable {
 	
 	private final List<BodyGrammarSlot> slots;
 	
-	private final Map<String, HeadGrammarSlot> startSymbols;
+	/**
+	 * A map from nonterminal names to their corresponding head slots.
+	 * This map is used to locate head grammar slots by name for parsing
+	 * from any arbitrary nonterminal.
+	 */
+	private final Map<String, HeadGrammarSlot> nameToHeadSlots;
 	
 	private final String name;
 	
 	private int longestTerminalChain;
 
-	private final Set<HeadGrammarSlot> startSymbolsSet;
-	
-	public Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, HeadGrammarSlot startSymbol) {
-		this(name, nonterminals, slots, createHashSet(startSymbol));
-	}
-	
-	private static Set<HeadGrammarSlot> createHashSet(HeadGrammarSlot nt) {
-		Set<HeadGrammarSlot> set = new HashSet<>();
-		set.add(nt);
-		return set;
-	}
-	
-	public Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, Set<HeadGrammarSlot> startSymbols) {
+	public Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots) {
 		this.name = name;
-		startSymbolsSet = startSymbols;
 		this.nonterminals = Collections.unmodifiableList(nonterminals);
 		this.slots = Collections.unmodifiableList(slots);
-		this.startSymbols = new HashMap<>();
-		for(HeadGrammarSlot startSymbol : startSymbols) {
-			this.startSymbols.put(startSymbol.getName(), startSymbol);
+		this.nameToHeadSlots = new HashMap<>();
+		for(HeadGrammarSlot startSymbol : nonterminals) {
+			this.nameToHeadSlots.put(startSymbol.getName(), startSymbol);
 		}
 	}
 	
@@ -111,7 +101,7 @@ public class Grammar implements Serializable {
 	}
 	
 	public HeadGrammarSlot getNonterminalByName(String name) {
-		return startSymbols.get(name);
+		return nameToHeadSlots.get(name);
 	}
 	
 	public int getLongestTerminalChain() {
@@ -143,10 +133,6 @@ public class Grammar implements Serializable {
 		}
 		
 		return sb.toString();
-	}
-	
-	public Set<HeadGrammarSlot> getStartSymbols() {
-		return startSymbolsSet;
 	}
 	
 }
