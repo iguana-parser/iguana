@@ -31,19 +31,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		}
 		this.previous = previous;
 		
-//		// TODO: use getName() to generate the full slot presentation.
-//		String tmp = rule.getHead() + " ::= ";
-//		int i = 0;
-//		for(Symbol s : rule.getBody()) {
-//			if(i++ == position) {
-//				tmp += ". ";
-//			}
-//			tmp += s + " ";
-//		}
-//		if(position == rule.getBody().size()) {
-//			tmp += ".";
-//		}
-//		label = tmp;
 	}
 	
 	/**
@@ -72,8 +59,22 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	@Override
 	public String toString() {
-		//TODO: add this
-		return "";
+		StringBuilder sb = new StringBuilder();
+		BodyGrammarSlot current = previous;
+		while(current != null) {
+			sb.insert(0, current.getName());
+			current = current.previous;
+		}
+		sb.append(".");
+		sb.append(getName());
+		current = next;
+		while(current != null) {
+			sb.append(current.getName());
+			current = current.next;
+		}
+		
+		sb.insert(0, " ::= ");
+		return sb.toString();
 	}
 	
 	public abstract Iterable<Terminal> getTestSet();

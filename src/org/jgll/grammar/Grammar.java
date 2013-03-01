@@ -3,8 +3,10 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +44,39 @@ public class Grammar implements Serializable {
 		for(HeadGrammarSlot startSymbol : nonterminals) {
 			this.nameToHeadSlots.put(startSymbol.getName(), startSymbol);
 		}
+	}
+	
+	public static Grammar fromRules(String name, Iterable<Rule> rules) {
+		Map<Nonterminal, HeadGrammarSlot> nonterminalMap = new HashMap<>();
+		List<BodyGrammarSlot> slots = new ArrayList<>();
+		List<HeadGrammarSlot> nonterminals = new ArrayList<>();
+
+		for (Rule rule : rules) {
+			nonterminalMap.put(rule.getHead(), new HeadGrammarSlot(nonterminalMap.size(), rule.getHead(), false));
+		}
+
+		for (Rule rule : rules) {
+			BodyGrammarSlot slot = null;
+			HeadGrammarSlot head = nonterminalMap.get(rule.getHead());
+			int index = 0;
+			for (Symbol symbol : rule.getBody()) {
+				if (symbol instanceof Terminal) {
+					slot = new TerminalGrammarSlot(slots.size() + nonterminals.size(), index, slot, (Terminal) symbol);
+				} else {
+					slot = new NonterminalGrammarSlot(slots.size() + nonterminals.size(), index, slot,
+													  nonterminalMap.get(symbol), new HashSet<Terminal>());
+				}
+				slots.add(slot);
+
+				if (index == 0) {
+					head.addAlternate(slot);
+				}
+				index++;
+			}
+			slots.add(new LastGrammarSlot(slots.size() + nonterminals.size(), index, slot, head, rule.getObject()));
+		}
+
+		return new Grammar(name, nonterminals, slots);
 	}
 	
 	public void code(Writer writer, String packageName) throws IOException {

@@ -5,7 +5,7 @@ package org.jgll.grammar;
  * @author Ali Afroozeh
  *
  */
-public class Character extends Terminal {
+public class Character implements Terminal {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -32,6 +32,24 @@ public class Character extends Terminal {
 	@Override
 	public String getMatchCode() {
 		return "I[ci] == " + c;
+	}
+
+	@Override
+	public int hashCode() {
+		return 31 * 17 + c;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Character)) {
+			return false;
+		}
+		Character other = (Character) obj;
+		
+		return c == other.c;
 	}
 
 }

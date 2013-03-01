@@ -144,7 +144,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public String getName() {
-		return "." + terminal;
+		return terminal.toString();
 	}	
 
 }

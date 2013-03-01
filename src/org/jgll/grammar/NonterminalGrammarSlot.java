@@ -124,7 +124,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public String getName() {
-		return "." + nonterminal.getName();
+		return nonterminal.getName();
 	}
 	
 }

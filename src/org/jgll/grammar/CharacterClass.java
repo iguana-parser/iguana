@@ -12,13 +12,16 @@ import java.util.List;
  * @author Ali Afroozeh
  *
  */
-public class CharacterClass extends Terminal {
+public class CharacterClass implements Terminal {
 	
 	private static final long serialVersionUID = 1L;
 
 	private final List<Range> ranges;
 
 	public CharacterClass(List<Range> ranges) {
+		if(ranges == null || ranges.size() == 0) {
+			throw new IllegalArgumentException("Ranges cannot be null or empty.");
+		}
 		this.ranges = Collections.unmodifiableList(ranges);
 	}
 	
@@ -54,5 +57,26 @@ public class CharacterClass extends Terminal {
 		}
 		return sb.toString();
 	}
+	
+	@Override
+	public int hashCode() {
+		return 31 * 17 + ranges.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof CharacterClass)) {
+			return false;
+		}
+		
+		CharacterClass other = (CharacterClass) obj;
+
+		return ranges.equals(other.ranges);
+	}
+
 
 }

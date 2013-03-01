@@ -80,7 +80,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public String getName() {
-		return ".";
+		return "";
 	}
 
 }

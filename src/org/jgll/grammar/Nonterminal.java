@@ -5,6 +5,7 @@ public class Nonterminal implements Symbol {
 	private static final long serialVersionUID = 1L;
 	
 	private final String name;
+	
 	private final boolean ebnfList;
 	
 	public Nonterminal(String name) {
@@ -22,6 +23,31 @@ public class Nonterminal implements Symbol {
 	
 	public boolean isEbnfList() {
 		return ebnfList;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof Nonterminal)) {
+			return false;
+		}
+		
+		Nonterminal other = (Nonterminal) obj;
+		
+		return name.equals(other.name);
+	}
+	
+	@Override
+	public int hashCode() {
+		return 31 * 17 + name.hashCode();
 	}
 
 }
