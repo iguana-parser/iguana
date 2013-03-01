@@ -16,12 +16,12 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	private Nonterminal nonterminal;
+	private HeadGrammarSlot nonterminal;
 	
 	private final Set<Terminal> testSet;
 	
-	public NonterminalGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Nonterminal nonterminal, Set<Terminal> testSet) {
-		super(rule, id, position, previous);
+	public NonterminalGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, Set<Terminal> testSet) {
+		super(id, position, previous);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -32,11 +32,11 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		this.testSet = testSet;
 	}
 	
-	public Nonterminal getNonterminal() {
+	public HeadGrammarSlot getNonterminal() {
 		return nonterminal;
 	}
 	
-	public void setNonterminal(Nonterminal nonterminal) {
+	public void setNonterminal(HeadGrammarSlot nonterminal) {
 		this.nonterminal = nonterminal;
 	}
 	

@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.grammar.Nonterminal;
+import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -28,7 +28,7 @@ public interface LookupTable {
 	
 	public SPPFNode getNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
-	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol);
+	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol);
 	
 	public boolean getGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
 

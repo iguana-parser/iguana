@@ -2,7 +2,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.L0;
-import org.jgll.grammar.Nonterminal;
+import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -26,7 +26,7 @@ public class GrammarInterpreter extends GLLParser {
 	
 	
 	@Override
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParseError {
+	public NonterminalSymbolNode parse(int[] input, Grammar grammar, HeadGrammarSlot startSymbol) throws ParseError {
 		
 		InputUtil.getInstance().setInput(input);
 		log.info("Input size: {}", input.length);

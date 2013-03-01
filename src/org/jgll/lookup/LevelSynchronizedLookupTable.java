@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.grammar.Nonterminal;
+import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -84,9 +84,9 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 
 		SPPFNode key;
-		if(slot instanceof Nonterminal) {
-			Nonterminal nt = (Nonterminal) slot;
-			if(nt.isEbnfList()) {
+		if(slot instanceof HeadGrammarSlot) {
+			HeadGrammarSlot head = (HeadGrammarSlot) slot;
+			if(head.getNonterminal().isEbnfList()) {
 				key = new ListSymbolNode(slot, leftExtent, rightExtent);
 			} else {
 				key = new NonterminalSymbolNode(slot, leftExtent, rightExtent);
@@ -133,7 +133,7 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 
 	
 	@Override
-	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol) {
+	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
 		int index = indexFor(inputSize - 1); 
 		if(levels[index] == null) {
 			return null;

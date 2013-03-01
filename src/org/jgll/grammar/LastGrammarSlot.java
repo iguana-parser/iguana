@@ -26,14 +26,13 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	private Object object;
 	
 	private Set<List<Terminal>> followRestrictions;
-
-	public LastGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous) {
-		super(rule, id, position, previous);
-	}
 	
-	public LastGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Object object) {
-		super(rule, id, position, previous);
+	private HeadGrammarSlot head;
+
+	public LastGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
+		super(id, position, previous);
 		this.object = object;
+		this.head = head;
 	}
 		
 	@Override
@@ -60,6 +59,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		throw new UnsupportedOperationException();
+	}
+	
+	public HeadGrammarSlot getHead() {
+		return head;
 	}
 	
 	public Object getObject() {

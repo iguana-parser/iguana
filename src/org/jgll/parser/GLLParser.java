@@ -7,7 +7,7 @@ import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
-import org.jgll.grammar.Nonterminal;
+import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.NonterminalGrammarSlot;
 import org.jgll.grammar.Terminal;
 import org.jgll.grammar.TerminalGrammarSlot;
@@ -98,7 +98,7 @@ public abstract class GLLParser {
 		return parse(input, grammar, grammar.getNonterminalByName(startSymbol));
 	}
 	
-	public abstract NonterminalSymbolNode parse(int[] input, Grammar grammar, Nonterminal startSymbol) throws ParseError;
+	public abstract NonterminalSymbolNode parse(int[] input, Grammar grammar, HeadGrammarSlot startSymbol) throws ParseError;
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -283,7 +283,7 @@ public abstract class GLLParser {
 			GrammarSlot t = slot;
 			// if (beta = empty)
 			if (slot instanceof LastGrammarSlot) {
-				t = slot.getHead();
+				t = ((LastGrammarSlot) slot).getHead();
 			}
 
 			// if (z != $)

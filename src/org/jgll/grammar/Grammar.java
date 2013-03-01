@@ -21,35 +21,35 @@ public class Grammar implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final List<Nonterminal> nonterminals;
+	private final List<HeadGrammarSlot> nonterminals;
 	
 	private final List<BodyGrammarSlot> slots;
 	
-	private final Map<String, Nonterminal> startSymbols;
+	private final Map<String, HeadGrammarSlot> startSymbols;
 	
 	private final String name;
 	
 	private int longestTerminalChain;
 
-	private final Set<Nonterminal> startSymbolsSet;
+	private final Set<HeadGrammarSlot> startSymbolsSet;
 	
-	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Nonterminal startSymbol) {
+	public Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, HeadGrammarSlot startSymbol) {
 		this(name, nonterminals, slots, createHashSet(startSymbol));
 	}
 	
-	private static Set<Nonterminal> createHashSet(Nonterminal nt) {
-		Set<Nonterminal> set = new HashSet<>();
+	private static Set<HeadGrammarSlot> createHashSet(HeadGrammarSlot nt) {
+		Set<HeadGrammarSlot> set = new HashSet<>();
 		set.add(nt);
 		return set;
 	}
 	
-	public Grammar(String name, List<Nonterminal> nonterminals, List<BodyGrammarSlot> slots, Set<Nonterminal> startSymbols) {
+	public Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, Set<HeadGrammarSlot> startSymbols) {
 		this.name = name;
 		startSymbolsSet = startSymbols;
 		this.nonterminals = Collections.unmodifiableList(nonterminals);
 		this.slots = Collections.unmodifiableList(slots);
 		this.startSymbols = new HashMap<>();
-		for(Nonterminal startSymbol : startSymbols) {
+		for(HeadGrammarSlot startSymbol : startSymbols) {
 			this.startSymbols.put(startSymbol.getName(), startSymbol);
 		}
 	}
@@ -65,7 +65,7 @@ public class Grammar implements Serializable {
 		writer.append("case " + L0.getInstance().getId() + ":\n");
 		L0.getInstance().code(writer);
 		
-		for(Nonterminal nonterminal : nonterminals) {
+		for(HeadGrammarSlot nonterminal : nonterminals) {
 			writer.append("// " + nonterminal + "\n");
 			writer.append("case " + nonterminal.getId() + ":\n");
 			writer.append("parse_" + nonterminal.getId() + "();\n");
@@ -83,7 +83,7 @@ public class Grammar implements Serializable {
 		
 		writer.append("} } }\n");
 		
-		for(Nonterminal nonterminal : nonterminals) {
+		for(HeadGrammarSlot nonterminal : nonterminals) {
 			nonterminal.code(writer);
 		}
 		
@@ -94,7 +94,7 @@ public class Grammar implements Serializable {
 		return name;
 	}
 	
-	public Nonterminal getNonterminal(int id) {
+	public HeadGrammarSlot getNonterminal(int id) {
 		return nonterminals.get(id);
 	}
 		
@@ -102,7 +102,7 @@ public class Grammar implements Serializable {
 		return slots.get(id - nonterminals.size());
 	}
 		
-	public List<Nonterminal> getNonterminals() {
+	public List<HeadGrammarSlot> getNonterminals() {
 		return nonterminals;
 	}
 	
@@ -110,7 +110,7 @@ public class Grammar implements Serializable {
 		return slots;
 	}
 	
-	public Nonterminal getNonterminalByName(String name) {
+	public HeadGrammarSlot getNonterminalByName(String name) {
 		return startSymbols.get(name);
 	}
 	
@@ -127,7 +127,7 @@ public class Grammar implements Serializable {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for(Nonterminal nonterminal : nonterminals) {
+		for(HeadGrammarSlot nonterminal : nonterminals) {
 			for(BodyGrammarSlot slot : nonterminal.copyAlternates()) {
 				sb.append(nonterminal.getName() + " -> ");
 				BodyGrammarSlot next = slot;
@@ -145,7 +145,7 @@ public class Grammar implements Serializable {
 		return sb.toString();
 	}
 	
-	public Set<Nonterminal> getStartSymbols() {
+	public Set<HeadGrammarSlot> getStartSymbols() {
 		return startSymbolsSet;
 	}
 	

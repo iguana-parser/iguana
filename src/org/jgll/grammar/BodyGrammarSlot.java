@@ -13,13 +13,9 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected final Rule rule;
-	
 	protected final BodyGrammarSlot previous;
 	
 	protected BodyGrammarSlot next;
-	
-	private final String label;
 	
 	/**
 	 * The position from the beginning of the alternate.
@@ -27,29 +23,27 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 */
 	protected final int position;
 		
-	public BodyGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous) {
+	public BodyGrammarSlot(int id, int position, BodyGrammarSlot previous) {
 		super(id);
 		this.position = position;
-		this.rule = rule;
 		if(previous != null) {
 			previous.next = this;
 		}
 		this.previous = previous;
 		
-		
-		// TODO: use getName() to generate the full slot presentation.
-		String tmp = rule.getHead() + " ::= ";
-		int i = 0;
-		for(Symbol s : rule.getBody()) {
-			if(i++ == position) {
-				tmp += ". ";
-			}
-			tmp += s + " ";
-		}
-		if(position == rule.getBody().size()) {
-			tmp += ".";
-		}
-		label = tmp;
+//		// TODO: use getName() to generate the full slot presentation.
+//		String tmp = rule.getHead() + " ::= ";
+//		int i = 0;
+//		for(Symbol s : rule.getBody()) {
+//			if(i++ == position) {
+//				tmp += ". ";
+//			}
+//			tmp += s + " ";
+//		}
+//		if(position == rule.getBody().size()) {
+//			tmp += ".";
+//		}
+//		label = tmp;
 	}
 	
 	/**
@@ -72,23 +66,14 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return previous;
 	}
 	
-	/**
-	 * Head ::= alpha . beta
-	 * TODO: change this!
-	 * 
-	 * @return
-	 */
-	public Nonterminal getHead() {
-		return rule.getHead();
-	}
-	
 	public int getPosition() {
 		return position;
 	}
 	
 	@Override
 	public String toString() {
-		return label;
+		//TODO: add this
+		return "";
 	}
 	
 	public abstract Iterable<Terminal> getTestSet();

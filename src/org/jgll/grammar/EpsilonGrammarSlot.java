@@ -8,6 +8,7 @@ import org.jgll.parser.GrammarInterpreter;
 import org.jgll.sppf.TerminalSymbolNode;
 
 /**
+ * The grammar slot repersing an empty body.
  * 
  * @author Ali Afroozeh
  *
@@ -17,13 +18,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	private static final long serialVersionUID = 1L;
 	private final Set<Terminal> testSet;
 	
-	public EpsilonGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Set<Terminal> testSet, Object object) {
-		super(rule, id, position, previous, object);
-		this.testSet = testSet;
-	}
-	
-	public EpsilonGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Set<Terminal> testSet) {
-		super(rule, id, position, previous);
+	public EpsilonGrammarSlot(int id, int position, BodyGrammarSlot previous, Set<Terminal> testSet, HeadGrammarSlot head, Object object) {
+		super(id, position, previous, head, object);
 		this.testSet = testSet;
 	}
 	

@@ -8,7 +8,7 @@ import java.util.Stack;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.grammar.Nonterminal;
+import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
@@ -100,7 +100,7 @@ public class RecursiveDescentLookupTable extends DefaultLookup {
 	}
 
 	@Override
-	public NonterminalSymbolNode getStartSymbol(Nonterminal startSymbol) {
+	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
 		return (NonterminalSymbolNode) nonPackedNodes.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 

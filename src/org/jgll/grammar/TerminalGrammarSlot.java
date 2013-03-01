@@ -19,8 +19,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	private final Terminal terminal;
 
-	public TerminalGrammarSlot(Rule rule, int id, int position, BodyGrammarSlot previous, Terminal terminal) {
-		super(rule, id, position, previous);
+	public TerminalGrammarSlot(int id, int position, BodyGrammarSlot previous, Terminal terminal) {
+		super(id, position, previous);
 		this.terminal = terminal;
 	}
 		
