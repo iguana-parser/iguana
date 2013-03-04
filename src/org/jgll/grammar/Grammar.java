@@ -153,11 +153,11 @@ public class Grammar implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		
 		for(HeadGrammarSlot nonterminal : nonterminals) {
-			for(BodyGrammarSlot slot : nonterminal.copyAlternates()) {
-				sb.append(nonterminal.getName() + " -> ");
+			for(BodyGrammarSlot slot : nonterminal.getAlternates()) {
+				sb.append(nonterminal.getName() + " ::= ");
 				BodyGrammarSlot next = slot;
 				do {
-					sb.append(" " + next.getName());
+					sb.append(" ").append(next.getName());
 					if(next instanceof LastGrammarSlot) {
 						sb.append("\n");
 					}
