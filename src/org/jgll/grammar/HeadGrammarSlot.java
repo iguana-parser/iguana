@@ -35,7 +35,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	 * of rules. These links are used for fast calculation of follow
 	 * sets.
 	 */
-	private final Set<BodyGrammarSlot> instances;
+	private final Set<NonterminalGrammarSlot> instances;
 	
 	public HeadGrammarSlot(int id, Nonterminal nonterminal) {
 		super(id);
@@ -148,11 +148,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return followSet;
 	}
 	
-	public Iterable<BodyGrammarSlot> getInstances() {
+	public Iterable<NonterminalGrammarSlot> getInstances() {
 		return instances;
 	}
 	
-	public void addInstance(BodyGrammarSlot slot) {
+	public void addInstance(NonterminalGrammarSlot slot) {
 		instances.add(slot);
 	}
 	

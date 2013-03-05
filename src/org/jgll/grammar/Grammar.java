@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import org.jgll.util.InputUtil;
 
 /**
@@ -47,6 +49,7 @@ public class Grammar implements Serializable {
 	
 	public void calculateFirstAndFollowSets() {
 		calculateFirstSets();
+		calculateFollowSets();
 	}
 	
 	public static Grammar fromRules(String name, Iterable<Rule> rules) {
@@ -192,46 +195,58 @@ public class Grammar implements Serializable {
 			for(HeadGrammarSlot head : nonterminals) {
 				
 				for(BodyGrammarSlot alternate : head.getAlternates()) {
-					changed = addFirstSet(head, alternate, changed);					
+					changed |= addFirstSet(head.getFirstSet(), alternate, changed);					
  				}
 			}
 		}
 	}
 	
 	/**
-	 * Updates the first set of the head nonterminal using the information in the 
-	 * current slot. 
+	 * Adds the first set of the current slot to the given set.
 	 * 
-	 * @param head
+	 * @param set
 	 * @param currentSlot
 	 * @param changed
 	 * 
 	 * @return true if adding any new terminals are added to the first set.
 	 */
-	private boolean addFirstSet(HeadGrammarSlot head, BodyGrammarSlot currentSlot, boolean changed) {
+	private boolean addFirstSet(Set<Terminal> set, BodyGrammarSlot currentSlot, boolean changed) {
 		
 		if(currentSlot instanceof EpsilonGrammarSlot) {
-			return head.getFirstSet().add(Epsilon.getInstance()) || changed;
+			return set.add(Epsilon.getInstance()) || changed;
 		}
 		
 		else if(currentSlot instanceof TerminalGrammarSlot) {
-			return head.getFirstSet().add(((TerminalGrammarSlot) currentSlot).getTerminal()) || changed;
+			return set.add(((TerminalGrammarSlot) currentSlot).getTerminal()) || changed;
 		}
 		
 		else if(currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
-			changed = head.getFirstSet().addAll(nonterminalGrammarSlot.getNonterminal().getFirstSet()) || changed;
+			changed = set.addAll(nonterminalGrammarSlot.getNonterminal().getFirstSet()) || changed;
 			if(nonterminalGrammarSlot.getNonterminal().isNullable()) {
-				return addFirstSet(head, currentSlot.next, changed) || changed;
+				return addFirstSet(set, currentSlot.next, changed) || changed;
 			}
 			return changed;
 		} 
 		
-		// LastGrammarSlot: ignore
+		// ignore LastGrammarSlot
 		else {
 			return changed;
 		}
-
+	}
+	
+	
+	private boolean isChainNullable(BodyGrammarSlot slot) {
+		if(!(slot instanceof LastGrammarSlot)) {
+			if(slot instanceof TerminalGrammarSlot) {
+				return false;
+			}
+			
+			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
+			return ntGrammarSlot.getNonterminal().isNullable() && isChainNullable(ntGrammarSlot.next);
+		}
+		
+		return true;
 	}
 	
 	private void calculateFollowSets() {
@@ -240,13 +255,33 @@ public class Grammar implements Serializable {
 		while(changed) {
 			changed = false;
 			for(HeadGrammarSlot head : nonterminals) {
-				
+				for(NonterminalGrammarSlot instance : head.getInstances()) {
+					
+					BodyGrammarSlot next = instance.next;
+					
+					if(next instanceof LastGrammarSlot) {
+						changed |= instance.getNonterminal().getFollowSet().addAll(head.getFollowSet());
+						continue;
+					}
+					
+					Set<Terminal> followSet = head.getFollowSet();
+					changed |= addFirstSet(followSet, next, changed);
+					
+					if(isChainNullable(next)) {
+						changed |= instance.getNonterminal().getFollowSet().addAll(head.getFollowSet());
+					}
+				}
 			}
 		}
+		
+		for(HeadGrammarSlot head : nonterminals) {
+			// Remove the epsilon which may have been added from nullable nonterminals 
+			head.getFollowSet().remove(Epsilon.getInstance());
+			
+			// Add the EOF to all nonterminals as each nonterminal can be used as
+			// the start symbol.
+			head.getFollowSet().add(EOF.getInstance());
+		}
 	} 
-	
-	
-	
-	
 	
 }

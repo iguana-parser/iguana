@@ -22,7 +22,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 * Positions start from zero.
 	 */
 	protected final int position;
-		
+	
 	public BodyGrammarSlot(int id, int position, BodyGrammarSlot previous) {
 		super(id);
 		this.position = position;
@@ -30,7 +30,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			previous.next = this;
 		}
 		this.previous = previous;
-		
 	}
 	
 	/**
