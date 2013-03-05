@@ -18,8 +18,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	private static final long serialVersionUID = 1L;
 	private final Set<Terminal> testSet;
 	
-	public EpsilonGrammarSlot(int id, int position, BodyGrammarSlot previous, Set<Terminal> testSet, HeadGrammarSlot head, Object object) {
-		super(id, position, previous, head, object);
+	public EpsilonGrammarSlot(int id, int position, Set<Terminal> testSet, HeadGrammarSlot head, Object object) {
+		super(id, position, null, head, object);
 		this.testSet = testSet;
 	}
 	

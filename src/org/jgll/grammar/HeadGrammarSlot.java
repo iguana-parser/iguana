@@ -3,9 +3,11 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
 
@@ -22,15 +24,15 @@ public class HeadGrammarSlot extends GrammarSlot {
 
 	private final ArrayList<BodyGrammarSlot> alternates;
 	
-	private final boolean nullable;
-	
 	private final Nonterminal nonterminal;
+	
+	private final Set<Terminal> firstSet;
 
-	public HeadGrammarSlot(int id, Nonterminal nonterminal, boolean nullable) {
+	public HeadGrammarSlot(int id, Nonterminal nonterminal) {
 		super(id);
 		this.nonterminal = nonterminal;
-		this.nullable = nullable;
 		this.alternates = new ArrayList<>();
+		this.firstSet = new HashSet<>();
 	}
 
 
@@ -39,7 +41,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 
 	public boolean isNullable() {
-		return nullable;
+		return firstSet.contains(Epsilon.getInstance());
 	}
 	
 	@Override
@@ -88,7 +90,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
-	
+		
 	public Iterable<BodyGrammarSlot> getReverseAlternates() {
 		return new Iterable<BodyGrammarSlot>() {
 			
@@ -125,6 +127,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@SuppressWarnings("unchecked")
 	public List<BodyGrammarSlot> copyAlternates() {
 		return (List<BodyGrammarSlot>) alternates.clone();
+	}
+	
+	public Set<Terminal> getFirstSet() {
+		return firstSet;
 	}
 
 }

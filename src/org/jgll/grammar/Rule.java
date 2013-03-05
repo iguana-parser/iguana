@@ -45,6 +45,10 @@ public class Rule implements Serializable {
 		return body;
 	}
 	
+	public int getBodyLength() {
+		return body.size();
+	}
+	
 	public Object getObject() {
 		return object;
 	}

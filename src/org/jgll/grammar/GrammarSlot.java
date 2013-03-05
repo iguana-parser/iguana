@@ -11,7 +11,12 @@ import org.jgll.parser.GrammarInterpreter;
  * A GrammarSlot is the position immediately before or after
  * any symbol in an alternate. They are denoted by LR(0) items. 
  * In X ::= alpha . beta, the grammar symbol denoted by . is after
- * alpha and before beta.  
+ * alpha and before beta.
+ * 
+ * Note: the equality of two grammar slots is based on their
+ * referential equality, i.e., if they refer to the same object.
+ * Thet's why these classes inherit the implementation from the
+ * Object class.
  * 
  * @author Ali Afroozeh
  *
@@ -29,27 +34,6 @@ public abstract class GrammarSlot implements Serializable {
 	
 	public GrammarSlot(int id) {
 		this.id = id;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(this == obj) {
-			return true;
-		}
-		
-		if(!(obj instanceof GrammarSlot)) {
-			return false;
-		}
-		
-		GrammarSlot other = (GrammarSlot) obj;
-		
-		return id == other.id;
-	}
-
-	@Override
-	public int hashCode() {
-		return 17 + 31 * id;
 	}
 	
 	public abstract void code(Writer writer) throws IOException;

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import org.jgll.util.InputUtil;
 
 /**
@@ -35,7 +34,7 @@ public class Grammar implements Serializable {
 	private final String name;
 	
 	private int longestTerminalChain;
-
+	
 	public Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots) {
 		this.name = name;
 		this.nonterminals = Collections.unmodifiableList(nonterminals);
@@ -46,25 +45,40 @@ public class Grammar implements Serializable {
 		}
 	}
 	
+	public void calculateFirstAndFollowSets() {
+		calculateFirstSets();
+	}
+	
 	public static Grammar fromRules(String name, Iterable<Rule> rules) {
 		Map<Nonterminal, HeadGrammarSlot> nonterminalMap = new HashMap<>();
 		List<BodyGrammarSlot> slots = new ArrayList<>();
 		List<HeadGrammarSlot> nonterminals = new ArrayList<>();
 
 		for (Rule rule : rules) {
-			nonterminalMap.put(rule.getHead(), new HeadGrammarSlot(nonterminalMap.size(), rule.getHead(), false));
+			if(!nonterminalMap.containsKey(rule.getHead())) {
+				HeadGrammarSlot head = new HeadGrammarSlot(nonterminalMap.size(), rule.getHead());
+				nonterminals.add(head);
+				nonterminalMap.put(rule.getHead(), head);				
+			}
 		}
 
 		for (Rule rule : rules) {
 			BodyGrammarSlot slot = null;
 			HeadGrammarSlot head = nonterminalMap.get(rule.getHead());
 			int index = 0;
+			
+			if(rule.getBodyLength() == 0) {
+				slot = new EpsilonGrammarSlot(slots.size(), 0, new HashSet<Terminal>(), head, rule.getObject());
+				head.addAlternate(slot);
+				slots.add(slot);
+				continue;
+			}
+			
 			for (Symbol symbol : rule.getBody()) {
 				if (symbol instanceof Terminal) {
-					slot = new TerminalGrammarSlot(slots.size() + nonterminals.size(), index, slot, (Terminal) symbol);
+					slot = new TerminalGrammarSlot(slots.size(), index, slot, (Terminal) symbol);
 				} else {
-					slot = new NonterminalGrammarSlot(slots.size() + nonterminals.size(), index, slot,
-													  nonterminalMap.get(symbol), new HashSet<Terminal>());
+					slot = new NonterminalGrammarSlot(slots.size() + nonterminals.size(), index, slot, nonterminalMap.get(symbol), new HashSet<Terminal>());
 				}
 				slots.add(slot);
 
@@ -168,6 +182,36 @@ public class Grammar implements Serializable {
 		}
 		
 		return sb.toString();
+	}
+	
+	private void calculateFirstSets() {
+		boolean changed = true;
+		
+		while(changed) {
+			changed = false;
+			for(HeadGrammarSlot head : nonterminals) {
+				
+				for(BodyGrammarSlot alternate : head.getAlternates()) {
+					BodyGrammarSlot currentSlot = alternate;
+					
+					if(currentSlot instanceof EpsilonGrammarSlot) {
+						changed |= head.getFirstSet().add(Epsilon.getInstance());
+						continue;
+					}
+					else if(currentSlot instanceof TerminalGrammarSlot) {
+						changed |= head.getFirstSet().add(((TerminalGrammarSlot) currentSlot).getTerminal());
+					} 
+					else if(currentSlot instanceof NonterminalGrammarSlot) {
+						changed |= head.getFirstSet().addAll(((NonterminalGrammarSlot) currentSlot).getNonterminal().getFirstSet());
+					} 
+					else if(currentSlot instanceof LastGrammarSlot) {
+						continue;
+					}
+					
+					currentSlot = currentSlot.next;
+ 				}
+			}
+		}
 	}
 	
 }

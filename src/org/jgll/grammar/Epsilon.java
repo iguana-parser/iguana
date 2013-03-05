@@ -25,13 +25,8 @@ public class Epsilon implements Terminal {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		return obj == this;
-	}
-	
-	@Override
-	public int hashCode() {
-		return 31;
+	public String toString() {
+		return "epsilon";
 	}
 
 }
