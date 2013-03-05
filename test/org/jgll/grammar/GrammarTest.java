@@ -18,7 +18,16 @@ public class GrammarTest {
 		assertEquals(false, gamma2.getNonterminalByName("A").isNullable());
 	}
 	
-	
+	@Test
+	public void leftFactorizedArithmeticExpressions() {
+		Grammar leftFactorized = SampleGrammars.leftFactorizedArithmeticExpressions();
+		leftFactorized.calculateFirstAndFollowSets();
+		assertEquals(set(new Character('('), new Character('a')), leftFactorized.getNonterminalByName("E").getFirstSet());
+		assertEquals(set(new Character('+'), Epsilon.getInstance()), leftFactorized.getNonterminalByName("E1").getFirstSet());
+		assertEquals(set(new Character('*'), Epsilon.getInstance()), leftFactorized.getNonterminalByName("T1").getFirstSet());
+		assertEquals(set(new Character('('), new Character('a')), leftFactorized.getNonterminalByName("T").getFirstSet());
+		assertEquals(set(new Character('('), new Character('a')), leftFactorized.getNonterminalByName("F").getFirstSet());
+	}
 	
 	@SafeVarargs
 	private static <T> Set<T> set(T...objects) {

@@ -192,26 +192,61 @@ public class Grammar implements Serializable {
 			for(HeadGrammarSlot head : nonterminals) {
 				
 				for(BodyGrammarSlot alternate : head.getAlternates()) {
-					BodyGrammarSlot currentSlot = alternate;
-					
-					if(currentSlot instanceof EpsilonGrammarSlot) {
-						changed |= head.getFirstSet().add(Epsilon.getInstance());
-						continue;
-					}
-					else if(currentSlot instanceof TerminalGrammarSlot) {
-						changed |= head.getFirstSet().add(((TerminalGrammarSlot) currentSlot).getTerminal());
-					} 
-					else if(currentSlot instanceof NonterminalGrammarSlot) {
-						changed |= head.getFirstSet().addAll(((NonterminalGrammarSlot) currentSlot).getNonterminal().getFirstSet());
-					} 
-					else if(currentSlot instanceof LastGrammarSlot) {
-						continue;
-					}
-					
-					currentSlot = currentSlot.next;
+					changed = addFirstSet(head, alternate, changed);					
  				}
 			}
 		}
 	}
+	
+	/**
+	 * Updates the first set of the head nonterminal using the information in the 
+	 * current slot. 
+	 * 
+	 * @param head
+	 * @param currentSlot
+	 * @param changed
+	 * 
+	 * @return true if adding any new terminals are added to the first set.
+	 */
+	private boolean addFirstSet(HeadGrammarSlot head, BodyGrammarSlot currentSlot, boolean changed) {
+		
+		if(currentSlot instanceof EpsilonGrammarSlot) {
+			return head.getFirstSet().add(Epsilon.getInstance()) || changed;
+		}
+		
+		else if(currentSlot instanceof TerminalGrammarSlot) {
+			return head.getFirstSet().add(((TerminalGrammarSlot) currentSlot).getTerminal()) || changed;
+		}
+		
+		else if(currentSlot instanceof NonterminalGrammarSlot) {
+			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
+			changed = head.getFirstSet().addAll(nonterminalGrammarSlot.getNonterminal().getFirstSet()) || changed;
+			if(nonterminalGrammarSlot.getNonterminal().isNullable()) {
+				return addFirstSet(head, currentSlot.next, changed) || changed;
+			}
+			return changed;
+		} 
+		
+		// LastGrammarSlot: ignore
+		else {
+			return changed;
+		}
+
+	}
+	
+	private void calculateFollowSets() {
+		boolean changed = true;
+		
+		while(changed) {
+			changed = false;
+			for(HeadGrammarSlot head : nonterminals) {
+				
+			}
+		}
+	} 
+	
+	
+	
+	
 	
 }
