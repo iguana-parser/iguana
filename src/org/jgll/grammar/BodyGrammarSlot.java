@@ -17,19 +17,22 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected BodyGrammarSlot next;
 	
+	protected final HeadGrammarSlot head;
+	
 	/**
 	 * The position from the beginning of the alternate.
 	 * Positions start from zero.
 	 */
 	protected final int position;
 	
-	public BodyGrammarSlot(int id, int position, BodyGrammarSlot previous) {
+	public BodyGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(id);
 		this.position = position;
 		if(previous != null) {
 			previous.next = this;
 		}
 		this.previous = previous;
+		this.head = head;
 	}
 	
 	/**
@@ -77,4 +80,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	}
 	
 	public abstract Iterable<Terminal> getTestSet();
+	
+	public HeadGrammarSlot getHead() {
+		return head;
+	}
 }

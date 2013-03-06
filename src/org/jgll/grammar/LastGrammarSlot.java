@@ -27,11 +27,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	private Set<List<Terminal>> followRestrictions;
 
-	private HeadGrammarSlot head;
-	
 	public LastGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
-		super(id, position, previous);
-		this.head = head;
+		super(id, position, previous, head);
 		this.object = object;
 	}
 		
@@ -79,8 +76,4 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		return "";
 	}
 	
-	public HeadGrammarSlot getHead() {
-		return head;
-	}
-
 }

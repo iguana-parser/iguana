@@ -17,5 +17,11 @@ public class EOF extends Character {
 		super(-1);
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "$";
+	}
+	
 
 }

@@ -79,9 +79,9 @@ public class Grammar implements Serializable {
 			
 			for (Symbol symbol : rule.getBody()) {
 				if (symbol instanceof Terminal) {
-					slot = new TerminalGrammarSlot(slots.size(), index, slot, (Terminal) symbol);
+					slot = new TerminalGrammarSlot(slots.size(), index, slot, (Terminal) symbol, head);
 				} else {
-					slot = new NonterminalGrammarSlot(slots.size() + nonterminals.size(), index, slot, nonterminalMap.get(symbol), new HashSet<Terminal>());
+					slot = new NonterminalGrammarSlot(slots.size() + nonterminals.size(), index, slot, head, nonterminalMap.get(symbol));
 				}
 				slots.add(slot);
 
@@ -254,21 +254,26 @@ public class Grammar implements Serializable {
 		
 		while(changed) {
 			changed = false;
-			for(HeadGrammarSlot head : nonterminals) {
-				for(NonterminalGrammarSlot instance : head.getInstances()) {
+			for(HeadGrammarSlot nonterminal : nonterminals) {
+				for(NonterminalGrammarSlot instance : nonterminal.getInstances()) {
 					
 					BodyGrammarSlot next = instance.next;
 					
+					// For rules of the form X ::= alpha B, add the follow set of X to the
+					// follow set of B.
 					if(next instanceof LastGrammarSlot) {
-						changed |= instance.getNonterminal().getFollowSet().addAll(head.getFollowSet());
+						changed |= nonterminal.getFollowSet().addAll(instance.getHead().getFollowSet());
 						continue;
 					}
 					
-					Set<Terminal> followSet = head.getFollowSet();
+					// For rules of the form X ::= alpha B beta, add the first set of beta to
+					// the follow set of B.
+					Set<Terminal> followSet = nonterminal.getFollowSet();
 					changed |= addFirstSet(followSet, next, changed);
 					
+					// If beta is nullable, then add the follow set of X to the follow set of B.
 					if(isChainNullable(next)) {
-						changed |= instance.getNonterminal().getFollowSet().addAll(head.getFollowSet());
+						changed |= nonterminal.getFollowSet().addAll(instance.getHead().getFollowSet());
 					}
 				}
 			}

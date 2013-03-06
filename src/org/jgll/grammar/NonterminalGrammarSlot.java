@@ -18,19 +18,15 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	private HeadGrammarSlot pointer;
 	
-	private final Set<Terminal> testSet;
+	private Set<Terminal> testSet;
 	
-	public NonterminalGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot pointer, Set<Terminal> testSet) {
-		super(id, position, previous);
+	public NonterminalGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head, HeadGrammarSlot pointer) {
+		super(id, position, previous, head);
 		if(pointer == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
-		if(testSet == null) {
-			throw new IllegalArgumentException("TestSet cannot be null.");
-		}
 		this.pointer = pointer;
 		pointer.addInstance(this);
-		this.testSet = testSet;
 	}
 	
 	public HeadGrammarSlot getNonterminal() {
@@ -38,6 +34,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	public void setNonterminal(HeadGrammarSlot nonterminal) {
+		pointer.getInstances().remove(this);
+		nonterminal.getInstances().add(this);
 		this.pointer = nonterminal;
 	}
 	

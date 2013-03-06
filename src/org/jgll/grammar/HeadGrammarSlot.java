@@ -148,7 +148,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return followSet;
 	}
 	
-	public Iterable<NonterminalGrammarSlot> getInstances() {
+	public Set<NonterminalGrammarSlot> getInstances() {
 		return instances;
 	}
 	
