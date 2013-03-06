@@ -30,19 +30,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private final Set<Terminal> followSet;
 	
-	/**
-	 * The instances of this nonterminal head appearing on the body
-	 * of rules. These links are used for fast calculation of follow
-	 * sets.
-	 */
-	private final Set<NonterminalGrammarSlot> instances;
-	
 	public HeadGrammarSlot(int id, Nonterminal nonterminal) {
 		super(id);
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();
-		this.instances = new HashSet<>();
 		this.followSet = new HashSet<>();
 	}
 
@@ -146,14 +138,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public Set<Terminal> getFollowSet() {
 		return followSet;
-	}
-	
-	public Set<NonterminalGrammarSlot> getInstances() {
-		return instances;
-	}
-	
-	public void addInstance(NonterminalGrammarSlot slot) {
-		instances.add(slot);
 	}
 	
 }

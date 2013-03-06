@@ -79,9 +79,9 @@ public class Grammar implements Serializable {
 			
 			for (Symbol symbol : rule.getBody()) {
 				if (symbol instanceof Terminal) {
-					slot = new TerminalGrammarSlot(slots.size(), index, slot, (Terminal) symbol, head);
+					slot = new TerminalGrammarSlot(slots.size(), index, slot, (Terminal) symbol);
 				} else {
-					slot = new NonterminalGrammarSlot(slots.size() + nonterminals.size(), index, slot, head, nonterminalMap.get(symbol));
+					slot = new NonterminalGrammarSlot(slots.size() + nonterminals.size(), index, slot, nonterminalMap.get(symbol));
 				}
 				slots.add(slot);
 
@@ -254,26 +254,37 @@ public class Grammar implements Serializable {
 		
 		while(changed) {
 			changed = false;
-			for(HeadGrammarSlot nonterminal : nonterminals) {
-				for(NonterminalGrammarSlot instance : nonterminal.getInstances()) {
+			for(HeadGrammarSlot head : nonterminals) {
+				
+				for(BodyGrammarSlot alternate : head.getAlternates()) {
+					BodyGrammarSlot currentSlot = alternate;
 					
-					BodyGrammarSlot next = instance.next;
-					
-					// For rules of the form X ::= alpha B, add the follow set of X to the
-					// follow set of B.
-					if(next instanceof LastGrammarSlot) {
-						changed |= nonterminal.getFollowSet().addAll(instance.getHead().getFollowSet());
-						continue;
-					}
-					
-					// For rules of the form X ::= alpha B beta, add the first set of beta to
-					// the follow set of B.
-					Set<Terminal> followSet = nonterminal.getFollowSet();
-					changed |= addFirstSet(followSet, next, changed);
-					
-					// If beta is nullable, then add the follow set of X to the follow set of B.
-					if(isChainNullable(next)) {
-						changed |= nonterminal.getFollowSet().addAll(instance.getHead().getFollowSet());
+					while(!(currentSlot instanceof LastGrammarSlot)) {
+						
+						if(currentSlot instanceof NonterminalGrammarSlot) {
+							
+							NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
+							BodyGrammarSlot next = currentSlot.next;
+							
+							// For rules of the form X ::= alpha B, add the follow set of X to the
+							// follow set of B.
+							if(next instanceof LastGrammarSlot) {
+								changed |= nonterminalGrammarSlot.getNonterminal().getFollowSet().addAll(head.getFollowSet());
+								break;
+							}
+							
+							// For rules of the form X ::= alpha B beta, add the first set of beta to
+							// the follow set of B.
+							Set<Terminal> followSet = nonterminalGrammarSlot.getNonterminal().getFollowSet();
+							changed |= addFirstSet(followSet, currentSlot.next, changed);
+							
+							// If beta is nullable, then add the follow set of X to the follow set of B.
+							if(isChainNullable(next)) {
+								changed |= nonterminalGrammarSlot.getNonterminal().getFollowSet().addAll(head.getFollowSet());
+							}
+						}
+						
+						currentSlot = currentSlot.next;
 					}
 				}
 			}

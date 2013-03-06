@@ -16,34 +16,31 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	private HeadGrammarSlot pointer;
+	private HeadGrammarSlot nonterminal;
 	
 	private Set<Terminal> testSet;
 	
-	public NonterminalGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head, HeadGrammarSlot pointer) {
-		super(id, position, previous, head);
-		if(pointer == null) {
+	public NonterminalGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal) {
+		super(id, position, previous);
+		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
-		this.pointer = pointer;
-		pointer.addInstance(this);
+		this.nonterminal = nonterminal;
 	}
 	
 	public HeadGrammarSlot getNonterminal() {
-		return pointer;
+		return nonterminal;
 	}
 	
 	public void setNonterminal(HeadGrammarSlot nonterminal) {
-		pointer.getInstances().remove(this);
-		nonterminal.getInstances().add(this);
-		this.pointer = nonterminal;
+		this.nonterminal = nonterminal;
 	}
 	
 	@Override
 	public void execute(GrammarInterpreter parser) {
 		if(checkAgainstTestSet(parser.getCurrentInputValue())) {
 			parser.setCU(parser.create(next));
-			pointer.execute(parser);
+			nonterminal.execute(parser);
 		} else {
 			parser.newParseError(this, parser.getCurrentInpuIndex());
 		}
@@ -55,7 +52,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(previous == null) {
 			codeIfTestSetCheck(writer);
 			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
-			writer.append("   label = " + pointer.getId() + ";\n");
+			writer.append("   label = " + nonterminal.getId() + ";\n");
 			codeElseTestSetCheck(writer);
 			writer.append("}\n");
 			
@@ -81,7 +78,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			// RXl:
 			codeIfTestSetCheck(writer);
 			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
-			writer.append("   label = " + pointer.getId() + ";\n");
+			writer.append("   label = " + nonterminal.getId() + ";\n");
 			codeElseTestSetCheck(writer);
 			writer.append("}\n");
 			
@@ -123,7 +120,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public String getName() {
-		return pointer.getName();
+		return nonterminal.getName();
 	}
 	
 }
