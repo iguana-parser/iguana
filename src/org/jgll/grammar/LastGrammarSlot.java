@@ -2,8 +2,6 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
-import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
 
@@ -25,8 +23,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private Object object;
 	
-	private Set<List<Terminal>> followRestrictions;
-
 	private HeadGrammarSlot head;
 	
 	public LastGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
@@ -37,11 +33,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		
 	@Override
 	public void execute(GrammarInterpreter parser) {
-		for(List<Terminal> l : followRestrictions) {
-			if(parser.test(l)) {
-				return;			
-			}
-		}
 		parser.pop();
 	}
 

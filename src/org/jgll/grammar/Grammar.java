@@ -47,9 +47,10 @@ public class Grammar implements Serializable {
 		}
 	}
 	
-	public void calculateFirstAndFollowSets() {
+	private void calculateFirstAndFollowSets() {
 		calculateFirstSets();
 		calculateFollowSets();
+		setTestSets();
 	}
 	
 	public static Grammar fromRules(String name, Iterable<Rule> rules) {
@@ -93,7 +94,9 @@ public class Grammar implements Serializable {
 			slots.add(new LastGrammarSlot(slots.size() + nonterminals.size(), index, slot, head, rule.getObject()));
 		}
 
-		return new Grammar(name, nonterminals, slots);
+		Grammar grammar =  new Grammar(name, nonterminals, slots);
+		grammar.calculateFirstAndFollowSets();
+		return grammar;
 	}
 	
 	public void code(Writer writer, String packageName) throws IOException {
@@ -298,6 +301,22 @@ public class Grammar implements Serializable {
 			// the start symbol.
 			head.getFollowSet().add(EOF.getInstance());
 		}
-	} 
+	}
+	
+	private void setTestSets() {
+		for(HeadGrammarSlot head : nonterminals) {
+			for(BodyGrammarSlot current : head.getAlternates()) {
+				if(current instanceof NonterminalGrammarSlot) {
+					Set<Terminal> testSet = new HashSet<>();
+					addFirstSet(testSet, current, false);
+					if(testSet.contains(Epsilon.getInstance())) {
+						testSet.addAll(head.getFollowSet());
+					}
+					testSet.remove(Epsilon.getInstance());
+					((NonterminalGrammarSlot) current).setTestSet(testSet);
+				}
+			}
+		}
+	}
 	
 }

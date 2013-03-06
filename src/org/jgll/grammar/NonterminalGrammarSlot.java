@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.parser.GrammarInterpreter;
@@ -26,6 +27,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
 		this.nonterminal = nonterminal;
+		testSet = new HashSet<>();
 	}
 	
 	public HeadGrammarSlot getNonterminal() {
@@ -116,6 +118,13 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public Iterable<Terminal> getTestSet() {
 		return testSet;
+	}
+	
+	public void setTestSet(Set<Terminal> testSet) {
+		if(testSet == null || testSet.isEmpty()) {
+			throw new IllegalArgumentException("Test set cannot be null or empty");
+		}
+		this.testSet = testSet;
 	}
 	
 	@Override
