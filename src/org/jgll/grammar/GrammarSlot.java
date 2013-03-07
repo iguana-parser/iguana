@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
-import org.jgll.parser.GrammarInterpreter;
 
 
 /**

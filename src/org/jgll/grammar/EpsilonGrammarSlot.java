@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
 
-import org.jgll.parser.GrammarInterpreter;
 import org.jgll.sppf.TerminalSymbolNode;
 
 /**

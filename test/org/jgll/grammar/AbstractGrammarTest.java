@@ -3,19 +3,20 @@ package org.jgll.grammar;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.parser.GrammarInterpreter;
 import org.junit.Before;
 
 public abstract class AbstractGrammarTest {
 
 	protected Grammar grammar;
-	protected GrammarInterpreter parser;
+	protected GrammarInterpreter rdParser;
+	protected GrammarInterpreter levelParser;
 	protected String outputDir;
 	
 	@Before
 	public void init() {
 		grammar = initGrammar();
-		parser = new GrammarInterpreter();
+		rdParser = new RecursiveDescentGrammarInterpreter();
+		levelParser = new LevelSynchronizedGrammarInterpretter();
 		outputDir = System.getProperty("user.home") + "/output";
 	}
 	

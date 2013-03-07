@@ -115,5 +115,44 @@ public abstract class SPPFNode implements Node {
 	public void setVisited(boolean visited) {
 		this.visited = visited;
 	}
+	
+	/**
+	 * Compares this SPPFNode with the given node and their 
+	 * children. 
+	 * 
+	 * @return true if this node is equal to the given node, and
+	 * 				this node has the same number of children as
+	 * 				the other node, and children at corresponding
+	 * 				indices are equals using the deepEquals method.
+	 * 
+	 * Note: The standard equals method on SPPF nodes only compares
+	 * 		 nodes ignoring their children. While parsing, the standard
+	 * 		 equals method is sufficient, but for comparing parse trees,
+	 * 		 the client should use deepEquals.
+	 * 
+	 */
+	public boolean deepEquals(SPPFNode node) {
+		
+		if(!this.equals(node)) {
+			return false;
+		}
+		
+		if(size() != node.size()) {
+			return false;
+		}
+		
+		Iterator<SPPFNode> thisIt = getChildren().iterator();
+		Iterator<SPPFNode> otherIt = node.getChildren().iterator();
+		
+		while(thisIt.hasNext() && otherIt.hasNext()) {
+			SPPFNode thisChild = thisIt.next();
+			SPPFNode otherChild = otherIt.next();
+			if(!thisChild.deepEquals(otherChild)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
 }

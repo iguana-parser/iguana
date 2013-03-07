@@ -5,7 +5,7 @@ import java.io.Writer;
 
 import org.jgll.lookup.LookupTable;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.GrammarInterpreter;
+import org.jgll.parser.GLLParser;
 
 /**
  * 
@@ -35,7 +35,7 @@ public class L0 extends GrammarSlot {
 		LookupTable lookupTable = parser.getLookupTable();
 		while(lookupTable.hasNextDescriptor()) {
 			Descriptor descriptor = lookupTable.nextDescriptor();
-			parser.getLogger().debug("Processing {}: ", descriptor);
+			GLLParser.log.debug("Processing {}: ", descriptor);
 			parser.setCN(descriptor.getSPPFNode());
 			parser.setCU(descriptor.getGSSNode());
 			parser.setInputIndex(descriptor.getInputIndex());

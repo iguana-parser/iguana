@@ -1,12 +1,11 @@
 package org.jgll.grammar;
 
+import static junit.framework.Assert.assertEquals;
+
 import java.util.Arrays;
 
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.util.GraphVizUtil;
 import org.junit.Test;
-
-import static junit.framework.Assert.*;
 
 public class AddGrammarTest extends AbstractGrammarTest {
 
@@ -24,9 +23,10 @@ public class AddGrammarTest extends AbstractGrammarTest {
 	}
 	
 	@Test
-	public void parse() {
-		NonterminalSymbolNode sppf = parser.parse("a+a", grammar, "E");
-		GraphVizUtil.generateGraph(sppf, outputDir, "graph");
+	public void testParsers() {
+		NonterminalSymbolNode sppf1 = rdParser.parse("a+a", grammar, "E");
+		NonterminalSymbolNode sppf2 = levelParser.parse("a+a", grammar, "E");
+		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
  
 }

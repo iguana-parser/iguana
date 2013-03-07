@@ -3,7 +3,6 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.parser.GrammarInterpreter;
 
 
 /**

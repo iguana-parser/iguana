@@ -4,8 +4,8 @@ package org.jgll.grammar;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 
-import org.jgll.parser.GrammarInterpreter;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.util.GraphVizUtil;
 import org.junit.Test;
 
 public class Gamma0Test extends AbstractGrammarTest {
@@ -47,9 +47,17 @@ public class Gamma0Test extends AbstractGrammarTest {
 	}
 	
 	@Test
+	public void testParsers() {
+		NonterminalSymbolNode sppf1 = rdParser.parse("aad", grammar, "S");
+		NonterminalSymbolNode sppf2 = levelParser.parse("aad", grammar, "S");
+		GraphVizUtil.generateGraph(sppf1, outputDir, "graph1");
+		GraphVizUtil.generateGraph(sppf2, outputDir, "graph");
+		assertEquals(true, sppf1.deepEquals(sppf2));
+	}
+	
+	@Test
 	public void test() {
-		GrammarInterpreter parser = new GrammarInterpreter();
-		NonterminalSymbolNode sppf = parser.parse("aad", grammar, "S");
+		NonterminalSymbolNode sppf = levelParser.parse("aad", grammar, "S");
 		System.out.println(sppf);
 	}
 	

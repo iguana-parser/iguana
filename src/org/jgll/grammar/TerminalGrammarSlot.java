@@ -5,7 +5,6 @@ import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.parser.GrammarInterpreter;
 
 /**
  * A grammar slot whose next immediate symbol is a terminal.

@@ -18,6 +18,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.InputUtil;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * GLLParser is the abstract base class for all the generated GLL parsers.
@@ -32,7 +33,7 @@ public abstract class GLLParser {
 	
 	protected InputUtil inputUtil;
 	
-	protected Logger log;
+	public static final Logger log = LoggerFactory.getLogger(GLLParser.class);
 	
 	protected LookupTable lookupTable;
 	
@@ -67,6 +68,11 @@ public abstract class GLLParser {
 	 * 
 	 */
 	protected Grammar grammar;
+	
+	/**
+	 * The nonterminal from which the parsing will be started.
+	 */
+	protected HeadGrammarSlot startSymbol;
 
 	/**
 	 * The grammar slot at which a parse error has occured. 
@@ -79,25 +85,69 @@ public abstract class GLLParser {
 	protected int errorIndex = -1;
 	
 	
-	public NonterminalSymbolNode parse(String input, Grammar grammar, String startSymbol) throws ParseError {
-		return parse(InputUtil.fromString(input), grammar, startSymbol);
+	public final NonterminalSymbolNode parse(String input, Grammar grammar, String startSymbolName) throws ParseError {
+		return parse(InputUtil.fromString(input), grammar, startSymbolName);
 	}
 
 	/**
-	 * Parses the given input string. If the parsing of input was successful,
+	 * Parses the given input string. If the parsing of the input was successful,
 	 * the root of SPPF is returned.
 	 * 
 	 * @param input the input string to be parsed.
-	 * @return 
+	 * @return the SPPF root resulting from parsing the input
 	 * 
-	 * @throws ParseError an instance of {@link ParseError} if the descriptor set is empty, but
+	 * @throws ParseError a {@link ParseError} if the descriptor set is empty, but
 	 * 								  no SPPF root has been found.
+	 * @throws RuntimeException if no nonterminal with the given start symbol name is found.
 	 */
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar, String startSymbol) throws ParseError {
-		return parse(input, grammar, grammar.getNonterminalByName(startSymbol));
+	public final NonterminalSymbolNode parse(int[] input, Grammar grammar, String startSymbolName) throws ParseError {
+		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(startSymbolName);
+		if(startSymbol == null) {
+			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
+		}
+		return parse(input, grammar, startSymbol);
 	}
 	
-	public abstract NonterminalSymbolNode parse(int[] input, Grammar grammar, HeadGrammarSlot startSymbol) throws ParseError;
+	private final NonterminalSymbolNode parse(int[] input, Grammar grammar, HeadGrammarSlot startSymbol) throws ParseError {
+		this.I = input;
+		this.grammar = grammar;
+		this.startSymbol = startSymbol;
+		
+		init();
+	
+		long start = System.nanoTime();
+
+		parse();
+		
+		long end = System.nanoTime();
+		
+		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);
+		if (root == null) {
+			throw new ParseError(errorSlot, errorIndex);
+		}
+		
+		logParseStatistics(end - start);
+		return root;
+	}
+	
+	/**
+	 * Subclasses should provide implementations for this method. 
+	 * 
+	 */
+	protected abstract void parse();
+	
+	private void logParseStatistics(long duration) {
+		log.info("Parsing Time: {} ms", duration/1000000);
+		int mb = 1024 * 1024;
+		Runtime runtime = Runtime.getRuntime();
+		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.info("Descriptors: {}", lookupTable.getDescriptorsCount());
+		log.info("GSSNodes: {}", lookupTable.getGSSNodes().size());
+		log.info("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
+		log.info("GSS Nodes: {}", lookupTable.getGSSNodesCount());
+		log.info("GSS Edges: {}", lookupTable.getGSSEdgesCount());
+	}
+
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -115,7 +165,6 @@ public abstract class GLLParser {
 
 	/**
 	 * initialized the parser's state before a new parse.
-	 * 
 	 */
 	protected abstract void init();
 	
@@ -312,7 +361,3 @@ public abstract class GLLParser {
 	}
 	
 }
-
-
-
-

@@ -67,7 +67,6 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 			u[i] = new HashSet<>();
 			r[i] = new ArrayDeque<>();
 		}
-
 	}
 	
 	private void nextLevel() {
