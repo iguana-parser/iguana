@@ -3,9 +3,15 @@ package org.jgll.util;
 import java.io.FileWriter;
 import java.io.Writer;
 
+import org.jgll.sppf.SPPFNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class GraphVizUtil {
 	
 	private static final Logger log = LoggerFactory.getLogger(GraphVizUtil.class);
@@ -18,7 +24,14 @@ public class GraphVizUtil {
 	public static final String GSS_NODE = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	public static final String GSS_EDGE = "edge [color=black, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
 
-	public static void generateGraph(String content, String directory, String name) {
+	/**
+	 * Generates a graph from the given SPPF.
+	 * 
+	 * @param sppf
+	 * @param directory
+	 * @param name
+	 */
+	public static void generateGraph(SPPFNode sppf, String directory, String name) {
 		StringBuilder sb = new StringBuilder();
 		String lineSeparator = System.getProperty("line.separator");
 		
@@ -27,9 +40,10 @@ public class GraphVizUtil {
 		sb.append("nodesep=.6").append(lineSeparator);
 		sb.append("ranksep=.4").append(lineSeparator);
 		sb.append("ordering=out").append(lineSeparator);
-		// Replace the Java-style unicode char for epsilon with the graphviz one
-		content = content.replace("\u03B5", "&epsilon;");
-		sb.append(content).append(lineSeparator);
+		
+		sppf.accept(new ToDot(sb));
+
+		sb.append(lineSeparator);
 		sb.append("}");
 		
 		String fileName = directory + "/" + name;

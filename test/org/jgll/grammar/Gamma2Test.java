@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.jgll.parser.GrammarInterpreter;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
 
 public class Gamma2Test extends AbstractGrammarTest {
 
@@ -16,6 +17,12 @@ public class Gamma2Test extends AbstractGrammarTest {
 		Rule rule2 = new Rule.Builder().head(new Nonterminal("S")).body(new Nonterminal("S"), new Nonterminal("S")).build();
 		Rule rule3 = new Rule.Builder().head(new Nonterminal("S")).body(new Character('b')).build();
 		return Grammar.fromRules("gamma2", Arrays.asList(rule1, rule2, rule3));
+	}
+	
+	
+	@Test
+	public void testLongestTerminalChain() {
+		assertEquals(1, grammar.getLongestTerminalChain());
 	}
 		
 	@Test

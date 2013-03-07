@@ -23,7 +23,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private Object object;
 	
-	private HeadGrammarSlot head;
+	protected HeadGrammarSlot head;
 	
 	public LastGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(id, position, previous);

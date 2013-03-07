@@ -20,8 +20,12 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	/**
 	 * The position from the beginning of the alternate.
 	 * Positions start from zero.
+	 * TODO: see if can be removed
 	 */
 	protected final int position;
+	
+	private String label;
+	
 	
 	public BodyGrammarSlot(int id, int position, BodyGrammarSlot previous) {
 		super(id);
@@ -58,22 +62,44 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		BodyGrammarSlot current = previous;
-		while(current != null) {
-			sb.insert(0, current.getName());
-			current = current.previous;
+		if(label == null) {
+			StringBuilder sb = new StringBuilder();
+			
+			// Before
+			BodyGrammarSlot current = previous;
+			while(current != null) {
+				sb.insert(0, current.getName());
+				current = current.previous;
+			}
+			
+			HeadGrammarSlot head = null;
+			if(this instanceof LastGrammarSlot) {
+				head = ((LastGrammarSlot) this).getHead();
+			}
+			
+			// This slot
+			sb.append(".");
+			sb.append(getName());
+			
+			// Next
+			current = next;
+			while(current != null) {
+				if(current instanceof LastGrammarSlot) {
+					head = ((LastGrammarSlot) current).getHead();
+				}
+				sb.append(current.getName());
+				current = current.next;
+			}
+
+			sb.insert(0, " ::= ");
+			
+			if(head == null) {
+				System.out.println("WTF?");
+			}
+			sb.insert(0, head.getName());
+			label = sb.toString();
 		}
-		sb.append(".");
-		sb.append(getName());
-		current = next;
-		while(current != null) {
-			sb.append(current.getName());
-			current = current.next;
-		}
-		
-		sb.insert(0, " ::= ");
-		return sb.toString();
+		return label;
 	}
 	
 	public abstract Iterable<Terminal> getTestSet();

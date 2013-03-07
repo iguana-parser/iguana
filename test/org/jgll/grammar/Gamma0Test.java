@@ -4,6 +4,8 @@ package org.jgll.grammar;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 
+import org.jgll.parser.GrammarInterpreter;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.junit.Test;
 
 public class Gamma0Test extends AbstractGrammarTest {
@@ -28,6 +30,11 @@ public class Gamma0Test extends AbstractGrammarTest {
 	}
 	
 	@Test
+	public void testLongestGrammarChain() {
+		assertEquals(1, grammar.getLongestTerminalChain());
+	}
+	
+	@Test
 	public void testFirstSets() {
 		assertEquals(set(new Character('a'), Epsilon.getInstance()), grammar.getNonterminalByName("S").getFirstSet());
 		assertEquals(set(new Character('a')), grammar.getNonterminalByName("A").getFirstSet());
@@ -37,6 +44,13 @@ public class Gamma0Test extends AbstractGrammarTest {
 	public void testFollowSets() {
 		assertEquals(set(new Character('a'), new Character('d'), EOF.getInstance()), grammar.getNonterminalByName("A").getFollowSet());
 		assertEquals(set(new Character('d'), EOF.getInstance()), grammar.getNonterminalByName("S").getFollowSet());
+	}
+	
+	@Test
+	public void test() {
+		GrammarInterpreter parser = new GrammarInterpreter();
+		NonterminalSymbolNode sppf = parser.parse("aad", grammar, "S");
+		System.out.println(sppf);
 	}
 	
 	

@@ -47,7 +47,8 @@ public class Grammar implements Serializable {
 		}
 	}
 	
-	private void calculateFirstAndFollowSets() {
+	private void initializeGrammarProrperties() {
+		calculateLongestTerminalChain();
 		calculateFirstSets();
 		calculateFollowSets();
 		setTestSets();
@@ -95,7 +96,7 @@ public class Grammar implements Serializable {
 		}
 
 		Grammar grammar =  new Grammar(name, nonterminals, slots);
-		grammar.calculateFirstAndFollowSets();
+		grammar.initializeGrammarProrperties();
 		return grammar;
 	}
 	
@@ -188,6 +189,39 @@ public class Grammar implements Serializable {
 		}
 		
 		return sb.toString();
+	}
+	
+	/**
+	 * Calculates the longest chain of terminals in a body of a production rule. 
+	 */
+	private void calculateLongestTerminalChain() {
+		
+		int longestTerminalChain = 0;
+		
+		for(HeadGrammarSlot head : nonterminals) {
+			for(BodyGrammarSlot alternate : head.getAlternates()) {
+				BodyGrammarSlot slot = alternate;
+				int length = 0; // The length of the longest terminal chain for this rule
+				while(!(slot instanceof LastGrammarSlot)) {
+					if(slot instanceof TerminalGrammarSlot) {
+						length++;
+					} 
+					else {
+						// If a terminal is seen reset the length of the longest chain
+						if(length > longestTerminalChain) {
+							longestTerminalChain = length;
+						}
+						length = 0;
+					}
+					slot = slot.next;
+				}
+				if(length > longestTerminalChain) {
+					longestTerminalChain = length;
+				}
+			}
+		}
+		
+		this.longestTerminalChain = longestTerminalChain;
 	}
 	
 	private void calculateFirstSets() {

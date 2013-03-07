@@ -70,4 +70,9 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		return false;
 	}
 	
+	@Override
+	public String toString() {
+		return head.getName() + " ::= .";
+	}
+	
 }

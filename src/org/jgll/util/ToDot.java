@@ -26,7 +26,6 @@ public class ToDot extends DefaultSPPFVisitor {
 	protected StringBuilder sb;
 	private final boolean showPackedNodeLabel;
 	
-	
 	public ToDot(StringBuilder sb) {
 		this(sb, false);
 	}
@@ -40,8 +39,10 @@ public class ToDot extends DefaultSPPFVisitor {
 	public void visit(TerminalSymbolNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
-	
-			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			String label = node.toString();
+			// Replace the Java-style unicode char for epsilon with the graphviz one
+			label.replace("\u03B5", "&epsilon;");
+			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);
 		}
 	}
