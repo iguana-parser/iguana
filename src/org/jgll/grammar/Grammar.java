@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.util.InputUtil;
+import org.jgll.util.Tuple;
 
 /**
  * 
@@ -37,14 +38,21 @@ public class Grammar implements Serializable {
 	
 	private int longestTerminalChain;
 	
-	public Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots) {
+	private final Map<Tuple<Rule, Integer>, BodyGrammarSlot> slotsMap;
+	
+	private final Map<Rule, BodyGrammarSlot> alternatesMap;
+	
+	private Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, Map<Tuple<Rule, Integer>, 
+					BodyGrammarSlot> slotsMap, Map<Rule, BodyGrammarSlot> alternatesMap) {
 		this.name = name;
 		this.nonterminals = Collections.unmodifiableList(nonterminals);
 		this.slots = Collections.unmodifiableList(slots);
 		this.nameToHeadSlots = new HashMap<>();
+		this.slotsMap = slotsMap;
 		for(HeadGrammarSlot startSymbol : nonterminals) {
 			this.nameToHeadSlots.put(startSymbol.getName(), startSymbol);
 		}
+		this.alternatesMap = alternatesMap;
 	}
 	
 	private void initializeGrammarProrperties() {
@@ -58,6 +66,8 @@ public class Grammar implements Serializable {
 		Map<Nonterminal, HeadGrammarSlot> nonterminalMap = new HashMap<>();
 		List<BodyGrammarSlot> slots = new ArrayList<>();
 		List<HeadGrammarSlot> nonterminals = new ArrayList<>();
+		Map<Tuple<Rule, Integer>, BodyGrammarSlot> slotsMap = new HashMap<>();
+		Map<Rule, BodyGrammarSlot> alternatesMap = new HashMap<>();
 
 		for (Rule rule : rules) {
 			if(!nonterminalMap.containsKey(rule.getHead())) {
@@ -76,6 +86,7 @@ public class Grammar implements Serializable {
 				slot = new EpsilonGrammarSlot(slots.size(), 0, new HashSet<Terminal>(), head, rule.getObject());
 				head.addAlternate(slot);
 				slots.add(slot);
+				slotsMap.put(new Tuple<Rule, Integer>(rule, 0), slot);
 				continue;
 			}
 			
@@ -83,19 +94,21 @@ public class Grammar implements Serializable {
 				if (symbol instanceof Terminal) {
 					slot = new TerminalGrammarSlot(slots.size(), index, slot, (Terminal) symbol);
 				} else {
-					slot = new NonterminalGrammarSlot(slots.size() + nonterminals.size(), index, slot, nonterminalMap.get(symbol));
+					slot = new NonterminalGrammarSlot(slots.size(), index, slot, nonterminalMap.get(symbol));
 				}
 				slots.add(slot);
+				slotsMap.put(new Tuple<Rule, Integer>(rule, index), slot);
 
 				if (index == 0) {
 					head.addAlternate(slot);
+					alternatesMap.put(rule, slot);
 				}
 				index++;
 			}
 			slots.add(new LastGrammarSlot(slots.size() + nonterminals.size(), index, slot, head, rule.getObject()));
 		}
 
-		Grammar grammar =  new Grammar(name, nonterminals, slots);
+		Grammar grammar =  new Grammar(name, nonterminals, slots, slotsMap, alternatesMap);
 		grammar.initializeGrammarProrperties();
 		return grammar;
 	}
@@ -160,14 +173,42 @@ public class Grammar implements Serializable {
 		return nameToHeadSlots.get(name);
 	}
 	
+	public BodyGrammarSlot getGrammarSlot(Rule rule, int position) {
+		return slotsMap.get(new Tuple<Rule, Integer>(rule, position));
+	}
+	
+	public BodyGrammarSlot getAlternateHead(Rule rule) {
+		return alternatesMap.get(rule);
+	}
+	
 	public int getLongestTerminalChain() {
 		return longestTerminalChain;
 	}
 	
-	public void setLongestTerminalChain(int longestTerminalChain) {
-		this.longestTerminalChain = longestTerminalChain;
-	}
-	
+	public void filter(Rule rule, int position, Set<Rule> filterList) {
+		
+		Map<Set<Rule>, HeadGrammarSlot> restrictedNonterminals = new HashMap<>();
+		
+		BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<Rule, Integer>(rule, position));
+		assert grammarSlot instanceof NonterminalGrammarSlot;
+		
+		NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) grammarSlot;
+		
+			HeadGrammarSlot restrictedNonterminal = restrictedNonterminals.get(filterList);
+			if(restrictedNonterminal == null) {
+				
+				List<BodyGrammarSlot> filteredAlternates = new ArrayList<>();
+				for(Rule restrictedRule : filterList) {
+					filteredAlternates.add(alternatesMap.get(restrictedRule));
+				}
+				
+				restrictedNonterminal = new HeadGrammarSlot(ntGrammarSlot.getNonterminal(), filteredAlternates);
+				restrictedNonterminals.put(filterList, restrictedNonterminal);
+			}
+
+			ntGrammarSlot.setNonterminal(restrictedNonterminal);
+		}		
+		
 	@Override
 	public String toString() {
 		

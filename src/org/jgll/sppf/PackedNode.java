@@ -132,5 +132,10 @@ public class PackedNode extends SPPFNode {
 	public Iterable<SPPFNode> getChildren() {
 		return children;
 	}
+
+	@Override
+	public boolean isAmbiguous() {
+		return false;
+	}
 	
 }

@@ -2,7 +2,7 @@ package org.jgll.grammar;
 
 import org.jgll.lookup.RecursiveDescentLookupTable;
 
-class RecursiveDescentGrammarInterpreter extends GrammarInterpreter {
+public class RecursiveDescentGrammarInterpreter extends GrammarInterpreter {
 
 	@Override
 	protected void init() {

@@ -70,4 +70,9 @@ public class DummyNode extends SPPFNode {
 		return "$";
 	}
 
+	@Override
+	public boolean isAmbiguous() {
+		return false;
+	}
+
 }

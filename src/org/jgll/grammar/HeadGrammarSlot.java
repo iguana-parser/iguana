@@ -36,7 +36,19 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.firstSet = new HashSet<>();
 		this.followSet = new HashSet<>();
 	}
+	
+	public HeadGrammarSlot(HeadGrammarSlot head, List<BodyGrammarSlot> alternateHeads) {
+		super(head.id);
+		this.nonterminal = head.nonterminal;
+		this.alternates = head.alternates;
 
+		for(BodyGrammarSlot slot : alternateHeads) {
+			alternates.remove(slot);
+		}
+		
+		this.firstSet = head.firstSet;
+		this.followSet = head.followSet;
+	}
 
 	public void addAlternate(BodyGrammarSlot slot) {
 		alternates.add(slot);

@@ -28,5 +28,8 @@ public class AddGrammarTest extends AbstractGrammarTest {
 		NonterminalSymbolNode sppf2 = levelParser.parse("a+a", grammar, "E");
 		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
+	
+	public void testLefAssociativeFilter() {
+	}
  
 }

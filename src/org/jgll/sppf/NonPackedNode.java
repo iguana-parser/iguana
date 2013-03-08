@@ -155,6 +155,7 @@ public abstract class NonPackedNode extends SPPFNode {
 		parent.addChild(rightChild);
 	}
 	
+	@Override
 	public boolean isAmbiguous() {
 		return countPackedNode() > 1;
 	}

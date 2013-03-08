@@ -117,4 +117,9 @@ public class TerminalSymbolNode extends SPPFNode implements Node {
 	public int getColumn() {
 		return 0;
 	}
+
+	@Override
+	public boolean isAmbiguous() {
+		return false;
+	}
 }

@@ -30,6 +30,8 @@ public abstract class SPPFNode implements Node {
 	public abstract SPPFNode get(int index);
 	
 	public abstract Iterable<SPPFNode> getChildren();
+	
+	public abstract boolean isAmbiguous();
 
 	public abstract int size();
 

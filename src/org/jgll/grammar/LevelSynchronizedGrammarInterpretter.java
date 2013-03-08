@@ -2,7 +2,7 @@ package org.jgll.grammar;
 
 import org.jgll.lookup.LevelSynchronizedLookupTable;
 
-class LevelSynchronizedGrammarInterpretter extends GrammarInterpreter {
+public class LevelSynchronizedGrammarInterpretter extends GrammarInterpreter {
 	
 	@Override
 	protected void init() {
