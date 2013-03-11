@@ -36,7 +36,7 @@ public class Grammar implements Serializable {
 	private final Map<String, HeadGrammarSlot> nameToHeadSlots;
 	
 	private final String name;
-	
+
 	private int longestTerminalChain;
 
 	private final Map<Tuple<Rule, Integer>, BodyGrammarSlot> slotsMap;
@@ -86,14 +86,14 @@ public class Grammar implements Serializable {
 				nonterminalMap.put(rule.getHead(), head);				
 			}
 		}
-
+		
 		for (Rule rule : rules) {
 			BodyGrammarSlot slot = null;
 			HeadGrammarSlot head = nonterminalMap.get(rule.getHead());
 			int index = 0;
 			
 			if(rule.getBodyLength() == 0) {
-				slot = new EpsilonGrammarSlot(slots.size(), 0, new HashSet<Terminal>(), head, rule.getObject());
+				slot = new EpsilonGrammarSlot(nonterminals.size() + slots.size(), 0, new HashSet<Terminal>(), head, rule.getObject());
 				head.addAlternate(slot);
 				slots.add(slot);
 				slotsMap.put(new Tuple<Rule, Integer>(rule, 0), slot);
@@ -102,9 +102,9 @@ public class Grammar implements Serializable {
 			
 			for (Symbol symbol : rule.getBody()) {
 				if (symbol instanceof Terminal) {
-					slot = new TerminalGrammarSlot(slots.size(), index, slot, (Terminal) symbol);
+					slot = new TerminalGrammarSlot(nonterminals.size() + slots.size(), index, slot, (Terminal) symbol);
 				} else {
-					slot = new NonterminalGrammarSlot(slots.size(), index, slot, nonterminalMap.get(symbol));
+					slot = new NonterminalGrammarSlot(nonterminals.size() + slots.size(), index, slot, nonterminalMap.get(symbol));
 				}
 				slots.add(slot);
 				slotsMap.put(new Tuple<Rule, Integer>(rule, index), slot);

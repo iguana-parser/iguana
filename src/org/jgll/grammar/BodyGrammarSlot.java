@@ -44,6 +44,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	
+	public abstract Iterable<Terminal> getTestSet();
+	
 	public void codeElseTestSetCheck(Writer writer) throws IOException {
 		writer.append("} else { newParseError(grammar.getGrammarSlot(" + this.id +  "), ci); label = L0; return; } \n");
 	}
@@ -68,7 +70,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			// Before
 			BodyGrammarSlot current = previous;
 			while(current != null) {
-				sb.insert(0, current.getName());
+				sb.insert(0, current.getName()).append(" ");
 				current = current.previous;
 			}
 			
@@ -78,7 +80,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			}
 			
 			// This slot
-			sb.append(".");
+			sb.append(". ");
 			sb.append(getName());
 			
 			// Next
@@ -87,21 +89,16 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 				if(current instanceof LastGrammarSlot) {
 					head = ((LastGrammarSlot) current).getHead();
 				}
-				sb.append(current.getName());
+				sb.append(current.getName()).append(" ");
 				current = current.next;
 			}
 
 			sb.insert(0, " ::= ");
 			
-			if(head == null) {
-				System.out.println("WTF?");
-			}
 			sb.insert(0, head.getName());
 			label = sb.toString();
 		}
 		return label;
 	}
-	
-	public abstract Iterable<Terminal> getTestSet();
 	
 }
