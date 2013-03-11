@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,10 +38,19 @@ public class Grammar implements Serializable {
 	private final String name;
 	
 	private int longestTerminalChain;
-	
+
 	private final Map<Tuple<Rule, Integer>, BodyGrammarSlot> slotsMap;
 	
+	/**
+	 * Mapping from each rule to its first grammar slot. 
+	 */
 	private final Map<Rule, BodyGrammarSlot> alternatesMap;
+	
+	/**
+	 * Nonterminals which are introduced as the result of filtering
+	 */
+	Map<Set<Rule>, HeadGrammarSlot> filteredNonterminals = new LinkedHashMap<>();
+
 	
 	private Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, Map<Tuple<Rule, Integer>, 
 					BodyGrammarSlot> slotsMap, Map<Rule, BodyGrammarSlot> alternatesMap) {
@@ -185,16 +195,40 @@ public class Grammar implements Serializable {
 		return longestTerminalChain;
 	}
 	
+	/**
+	 * Filters the nonterminal at the given position of the rule by disallowing
+	 * the nonterminal to produce the given filter rules. The rules which should
+	 * be filtered should have the same nonterminal head as the nonterminal
+	 * at the position.  
+	 * 
+	 * @param rule
+	 * @param position
+	 * @param filterList
+	 * 
+	 * @throws IllegalArgumentException if the symbol at the position is not a
+	 * 									nonterminal.
+	 * @throws IllegalArgumentException if filter rules's head is not the same
+	 * 									as the nonterminal as the given position.
+	 * 									
+	 */
 	public void filter(Rule rule, int position, Set<Rule> filterList) {
 		
-		Map<Set<Rule>, HeadGrammarSlot> restrictedNonterminals = new HashMap<>();
+		if(!(rule.get(position) instanceof Nonterminal)) {
+			throw new IllegalArgumentException("Only nonterminals can be filtered.");
+		}
+		
+		for(Rule r : filterList) {
+			if(!r.getHead().equals(rule.get(position))) {
+				throw new IllegalArgumentException("The nonterminal at position " + position);
+			}
+		}
 		
 		BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<Rule, Integer>(rule, position));
 		assert grammarSlot instanceof NonterminalGrammarSlot;
 		
 		NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) grammarSlot;
 		
-			HeadGrammarSlot restrictedNonterminal = restrictedNonterminals.get(filterList);
+			HeadGrammarSlot restrictedNonterminal = filteredNonterminals.get(filterList);
 			if(restrictedNonterminal == null) {
 				
 				List<BodyGrammarSlot> filteredAlternates = new ArrayList<>();
@@ -202,8 +236,10 @@ public class Grammar implements Serializable {
 					filteredAlternates.add(alternatesMap.get(restrictedRule));
 				}
 				
-				restrictedNonterminal = new HeadGrammarSlot(ntGrammarSlot.getNonterminal(), filteredAlternates);
-				restrictedNonterminals.put(filterList, restrictedNonterminal);
+				int id = filteredNonterminals.size() + 1;
+				Nonterminal nonterminal = new Nonterminal(ntGrammarSlot.getNonterminal().getName() + id);
+				restrictedNonterminal = new HeadGrammarSlot(id, nonterminal, ntGrammarSlot.getNonterminal(), filteredAlternates);
+				filteredNonterminals.put(filterList, restrictedNonterminal);
 			}
 
 			ntGrammarSlot.setNonterminal(restrictedNonterminal);
@@ -214,22 +250,31 @@ public class Grammar implements Serializable {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for(HeadGrammarSlot nonterminal : nonterminals) {
-			for(BodyGrammarSlot slot : nonterminal.getAlternates()) {
-				sb.append(nonterminal.getName() + " ::= ");
-				BodyGrammarSlot next = slot;
-				do {
-					sb.append(" ").append(next.getName());
-					if(next instanceof LastGrammarSlot) {
-						sb.append("\n");
-					}
-				} 
-				while((next = next.next) != null);
+		for(HeadGrammarSlot head : nonterminals) {
+			for(BodyGrammarSlot slot : head.getAlternates()) {
+				ruleToString(sb, head, slot);
 			}
-			
+		}
+		
+		for(HeadGrammarSlot head : filteredNonterminals.values()) {
+			for(BodyGrammarSlot slot : head.getAlternates()) {
+				ruleToString(sb, head, slot);
+			}
 		}
 		
 		return sb.toString();
+	}
+
+	private void ruleToString(StringBuilder sb, HeadGrammarSlot head, BodyGrammarSlot alternate) {
+		sb.append(head.getName() + " ::= ");
+		BodyGrammarSlot next = alternate;
+		do {
+			sb.append(" ").append(next.getName());
+			if(next instanceof LastGrammarSlot) {
+				sb.append("\n");
+			}
+		} 
+		while((next = next.next) != null);
 	}
 	
 	/**

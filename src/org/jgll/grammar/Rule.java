@@ -53,6 +53,19 @@ public class Rule implements Serializable {
 		return object;
 	}
 	
+	/**
+	 * Returns the symbols at the given  
+	 * 
+	 * @throws IllegalArgumentException if {@code index} is greater than the number of body symbols.
+	 */
+	public Symbol get(int index) {
+		if(index > body.size()) {
+			throw new IllegalArgumentException(index + " cannot be greater than " + body.size());
+		}
+		
+		return body.get(index);
+	}
+	
 	public static class Builder {
 		private List<Symbol> body = new ArrayList<>();
 		private Nonterminal head;

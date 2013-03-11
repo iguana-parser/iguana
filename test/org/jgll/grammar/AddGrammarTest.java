@@ -9,11 +9,15 @@ import org.junit.Test;
 
 public class AddGrammarTest extends AbstractGrammarTest {
 
+	private Rule rule1;
+	private Rule rule2;
+
 	@Override
 	protected Grammar initGrammar() {
-		// E ::= E + E | a
-		Rule rule1 = new Rule.Builder().head(new Nonterminal("E")).body(new Nonterminal("E"), new Character('+'), new Nonterminal("E")).build();
-		Rule rule2 = new Rule.Builder().head(new Nonterminal("E")).body(new Character('a')).build();
+		// E ::= E + E
+		rule1 = new Rule.Builder().head(new Nonterminal("E")).body(new Nonterminal("E"), new Character('+'), new Nonterminal("E")).build();
+		// E ::= a
+		rule2 = new Rule.Builder().head(new Nonterminal("E")).body(new Character('a')).build();
 		return Grammar.fromRules("gamma2", Arrays.asList(rule1, rule2));
 	}
 	
@@ -29,7 +33,10 @@ public class AddGrammarTest extends AbstractGrammarTest {
 		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
 	
+	@Test
 	public void testLefAssociativeFilter() {
+		grammar.filter(rule1, 2, set(rule1));
+		System.out.println(grammar);
 	}
  
 }

@@ -14,3 +14,4 @@ Export-Package:
  org.jgll.sppf,
  org.jgll.traversal,
  org.jgll.util;uses:="org.jgll.sppf"
+Require-Bundle: org.slf4j.api;bundle-version="1.7.2"

@@ -37,10 +37,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.followSet = new HashSet<>();
 	}
 	
-	public HeadGrammarSlot(HeadGrammarSlot head, List<BodyGrammarSlot> alternateHeads) {
-		super(head.id);
-		this.nonterminal = head.nonterminal;
-		this.alternates = head.alternates;
+	public HeadGrammarSlot(int id, Nonterminal nonterminal, HeadGrammarSlot head, List<BodyGrammarSlot> alternateHeads) {
+		super(id);
+		this.nonterminal = nonterminal;
+		this.alternates = new ArrayList<>(head.alternates);
 
 		for(BodyGrammarSlot slot : alternateHeads) {
 			alternates.remove(slot);
