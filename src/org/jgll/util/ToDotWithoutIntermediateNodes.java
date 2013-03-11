@@ -12,20 +12,16 @@ import org.jgll.traversal.SPPFVisitor;
  * @see SPPFVisitor
  */
 public class ToDotWithoutIntermediateNodes extends ToDot {
-
-	public ToDotWithoutIntermediateNodes(StringBuilder sb) {
-		super(sb);
+	
+	@Override
+	public void visit(PackedNode node, StringBuilder sb) {
+		removeIntermediateNode(node);
+		super.visit(node, sb);
 	}
 	
 	@Override
-	public void visit(PackedNode node) {
+	public void visit(NonterminalSymbolNode node, StringBuilder sb) {
 		removeIntermediateNode(node);
-		super.visit(node);
-	}
-	
-	@Override
-	public void visit(NonterminalSymbolNode node) {
-		removeIntermediateNode(node);
-		super.visit(node);
+		super.visit(node, sb);
 	}
 }

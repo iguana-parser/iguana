@@ -39,7 +39,7 @@ public abstract class SPPFNode implements Node {
 
 	public abstract int getRightExtent();
 
-	public abstract void accept(SPPFVisitor visitAction);
+	public abstract <T> void accept(SPPFVisitor<T> visitAction, T t);
 	
 	@SuppressWarnings("unchecked")
 	public <T> Result<T> getResult() {

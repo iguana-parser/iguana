@@ -79,8 +79,8 @@ public class TerminalSymbolNode extends SPPFNode implements Node {
 	}
 
 	@Override
-	public void accept(SPPFVisitor visitAction) {
-		visitAction.visit(this);
+	public <T> void accept(SPPFVisitor<T> visitAction, T acc) {
+		visitAction.visit(this, acc);
 	}
 
 	@Override
@@ -122,4 +122,5 @@ public class TerminalSymbolNode extends SPPFNode implements Node {
 	public boolean isAmbiguous() {
 		return false;
 	}
+
 }

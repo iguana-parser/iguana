@@ -111,8 +111,8 @@ public class PackedNode extends SPPFNode {
 	}
 
 	@Override
-	public void accept(SPPFVisitor visitAction) {
-		visitAction.visit(this);
+	public <T> void accept(SPPFVisitor<T> visitAction, T acc) {
+		visitAction.visit(this, acc);
 	}
 
 	@Override
@@ -137,5 +137,5 @@ public class PackedNode extends SPPFNode {
 	public boolean isAmbiguous() {
 		return false;
 	}
-	
+
 }

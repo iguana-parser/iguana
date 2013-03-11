@@ -15,16 +15,16 @@ public class IntermediateNode extends NonPackedNode {
 	}
 
 	@Override
-	public void accept(SPPFVisitor visitAction) {
-		visitAction.visit(this);
-	}
-	
-	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof IntermediateNode)) {
 			return false;
 		}
 		return super.equals(obj);
+	}
+
+	@Override
+	public <T> void accept(SPPFVisitor<T> visitAction, T acc) {
+		visitAction.visit(this, acc);
 	}
 
 }

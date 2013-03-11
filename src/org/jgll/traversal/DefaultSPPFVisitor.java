@@ -16,11 +16,11 @@ import org.jgll.sppf.SPPFNode;
  * @author Ali Afroozeh
  *
  */
-public abstract class DefaultSPPFVisitor implements SPPFVisitor {
+public abstract class DefaultSPPFVisitor<T> implements SPPFVisitor<T> {
 	
-	protected void visitChildren(SPPFNode node) {
+	protected void visitChildren(SPPFNode node, T t) {
 		for(SPPFNode child : node.getChildren()) {
-			child.accept(this);
+			child.accept(this, t);
 		}
 	}
 

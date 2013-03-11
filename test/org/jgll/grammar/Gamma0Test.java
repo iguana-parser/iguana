@@ -5,7 +5,6 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.util.GraphVizUtil;
 import org.junit.Test;
 
 public class Gamma0Test extends AbstractGrammarTest {
@@ -50,8 +49,6 @@ public class Gamma0Test extends AbstractGrammarTest {
 	public void testParsers() {
 		NonterminalSymbolNode sppf1 = rdParser.parse("aad", grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse("aad", grammar, "S");
-		GraphVizUtil.generateGraph(sppf1, outputDir, "graph1");
-		GraphVizUtil.generateGraph(sppf2, outputDir, "graph");
 		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
 	

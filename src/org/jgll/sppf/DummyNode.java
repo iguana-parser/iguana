@@ -1,5 +1,7 @@
 package org.jgll.sppf;
 
+import java.util.Collections;
+
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -46,13 +48,8 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
-	public void accept(SPPFVisitor visitAction) {
-		// do nothing
-	}
-
-	@Override
 	public SPPFNode get(int index) {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	@Override
@@ -62,7 +59,7 @@ public class DummyNode extends SPPFNode {
 
 	@Override
 	public Iterable<SPPFNode> getChildren() {
-		throw new UnsupportedOperationException();
+		return Collections.emptyList();
 	}
 	
 	@Override
@@ -73,6 +70,11 @@ public class DummyNode extends SPPFNode {
 	@Override
 	public boolean isAmbiguous() {
 		return false;
+	}
+
+	@Override
+	public <T> void accept(SPPFVisitor<T> visitAction, T t) {
+		// do nothing
 	}
 
 }

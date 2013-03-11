@@ -4,15 +4,11 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
-
-	public ToDotWithoutIntermeidateAndLists(StringBuilder sb) {
-		super(sb);
-	}
 	
 	@Override
-	public void visit(ListSymbolNode node) {
+	public void visit(ListSymbolNode node, StringBuilder sb) {
 		removeListSymbolNode(node);
-		visit((NonterminalSymbolNode)node);
+		visit((NonterminalSymbolNode)node, sb);
 	}
 
 }

@@ -21,58 +21,56 @@ import org.jgll.traversal.SPPFVisitor;
  * 
  * @see SPPFVisitor
  */
-public class ToDot extends DefaultSPPFVisitor {
+public class ToDot extends DefaultSPPFVisitor<StringBuilder> {
 	
-	protected StringBuilder sb;
 	private final boolean showPackedNodeLabel;
 	
-	public ToDot(StringBuilder sb) {
-		this(sb, false);
+	public ToDot() {
+		showPackedNodeLabel = false;
 	}
 	
-	public ToDot(StringBuilder sb, boolean showPackedNodeLabel) {
-		this.sb = sb;
+	public ToDot(boolean showPackedNodeLabel) {
 		this.showPackedNodeLabel = showPackedNodeLabel;
 	}
 
 	@Override
-	public void visit(TerminalSymbolNode node) {
+	public void visit(TerminalSymbolNode node, StringBuilder sb) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			String label = node.toString();
 			// Replace the Java-style unicode char for epsilon with the graphviz one
 			label.replace("\u03B5", "&epsilon;");
 			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
-			addEdgesToChildren(node);
+			addEdgesToChildren(node, sb);
 		}
 	}
 
 	@Override
-	public void visit(NonterminalSymbolNode node) {
+	public void visit(NonterminalSymbolNode node, StringBuilder sb) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
 			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
-			addEdgesToChildren(node);
+			addEdgesToChildren(node, sb);
 			
-			visitChildren(node);
+			visitChildren(node, sb);
 		}
 	}
 
 	@Override
-	public void visit(IntermediateNode node) {
+	public void visit(IntermediateNode node, StringBuilder sb) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
 			sb.append("\"" + node.getId() + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(node.toString())) + "\n");
-			addEdgesToChildren(node);
+			addEdgesToChildren(node, sb);
 	
-			visitChildren(node);
+			visitChildren(node, sb);
 		}
 	}
 
 	@Override
-	public void visit(PackedNode node) {
+	public void visit(PackedNode node, StringBuilder sb) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
@@ -81,19 +79,19 @@ public class ToDot extends DefaultSPPFVisitor {
 			} else {
 				sb.append("\"" + node.getId() + "\"" + String.format(PACKED_NODE, "") + "\n");
 			}
-			addEdgesToChildren(node);
+			addEdgesToChildren(node, sb);
 			
-			visitChildren(node);
+			visitChildren(node, sb);
 		}
 	}
 	
-	protected void addEdgesToChildren(SPPFNode node) {
+	protected void addEdgesToChildren(SPPFNode node, StringBuilder sb) {
 		for (SPPFNode child : node.getChildren()) {
-			addEdgeToChild(node, child);
+			addEdgeToChild(node, child, sb);
 		}
 	}
 	
-	protected void addEdgeToChild(SPPFNode parent, SPPFNode child) {
+	protected void addEdgeToChild(SPPFNode parent, SPPFNode child, StringBuilder sb) {
 		sb.append(EDGE + "\"" + parent.getId() + "\"" + "->" + "{\"" + child.getId() + "\"}" + "\n");
 	}
 	
@@ -102,8 +100,8 @@ public class ToDot extends DefaultSPPFVisitor {
 	}
 
 	@Override
-	public void visit(ListSymbolNode node) {
-		visit((NonterminalSymbolNode)node);
+	public void visit(ListSymbolNode node, StringBuilder sb) {
+		visit((NonterminalSymbolNode)node, sb);
 	}
 
 }

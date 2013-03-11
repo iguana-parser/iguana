@@ -3,6 +3,9 @@ package org.jgll.grammar;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.sppf.SPPFNode;
+import org.jgll.util.GraphVizUtil;
+import org.jgll.util.ToDotWithoutIntermediateNodes;
 import org.junit.Before;
 
 public abstract class AbstractGrammarTest {
@@ -29,6 +32,10 @@ public abstract class AbstractGrammarTest {
 			set.add(t);
 		}
 		return set;
+	}
+	
+	protected void generateGraph(SPPFNode sppf) {
+		GraphVizUtil.generateGraph(sppf, new ToDotWithoutIntermediateNodes(), outputDir, "graph");
 	}
 	
 }
