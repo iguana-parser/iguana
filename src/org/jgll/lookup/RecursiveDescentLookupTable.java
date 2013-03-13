@@ -71,7 +71,7 @@ public class RecursiveDescentLookupTable extends DefaultLookup {
 		TerminalSymbolNode terminal = terminals[index];
 		if(terminal == null) {
 			terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
-			log.debug("Terminal node created: {}", terminal);
+			log.trace("Terminal node created: {}", terminal);
 			terminals[index] = terminal;
 			nonPackedNodesCount++;
 		}
@@ -92,7 +92,7 @@ public class RecursiveDescentLookupTable extends DefaultLookup {
 		if(value == null) {
 			value = key;
 			nonPackedNodes.put(key, value);
-			log.debug("Nonterminal node created: {}", value);
+			log.trace("Nonterminal node created: {}", value);
 			nonPackedNodesCount++;
 		}
 		

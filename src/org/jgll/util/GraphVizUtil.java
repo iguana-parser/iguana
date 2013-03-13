@@ -61,12 +61,11 @@ public class GraphVizUtil {
 
 	private static void generatePNGImage(String fileName) {
 		String cmd = "/usr/local/bin/dot" + " -Tpdf " + "-o " + fileName + ".pdf" + " " + fileName + ".txt";
-		log.debug("Running " + cmd);
+		log.info("Running " + cmd);
 
 		try {
 			Runtime run = Runtime.getRuntime();
 			Process pr = run.exec(cmd);
-
 			pr.waitFor();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -26,7 +26,7 @@ public class Character implements Terminal {
 	
 	@Override
 	public String toString() {
-		return (char) c + "";
+		return "[" + (char)c + "]";
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.GraphVizUtil;
+import org.jgll.util.ToDot;
 import org.jgll.util.ToDotWithoutIntermediateNodes;
 import org.junit.Before;
 
@@ -34,8 +35,13 @@ public abstract class AbstractGrammarTest {
 		return set;
 	}
 	
-	protected void generateGraph(SPPFNode sppf) {
+	protected void generateGraphWithoutIntermeiateNodes(SPPFNode sppf) {
 		GraphVizUtil.generateGraph(sppf, new ToDotWithoutIntermediateNodes(), outputDir, "graph");
 	}
+	
+	protected void generateGraphWithIntermeiateNodes(SPPFNode sppf) {
+		GraphVizUtil.generateGraph(sppf, new ToDot(), outputDir, "graph");
+	}
+
 	
 }

@@ -138,14 +138,15 @@ public abstract class GLLParser {
 	
 	private void logParseStatistics(long duration) {
 		log.info("Parsing Time: {} ms", duration/1000000);
+		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.info("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.info("Descriptors: {}", lookupTable.getDescriptorsCount());
-		log.info("GSSNodes: {}", lookupTable.getGSSNodes().size());
-		log.info("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
-		log.info("GSS Nodes: {}", lookupTable.getGSSNodesCount());
-		log.info("GSS Edges: {}", lookupTable.getGSSEdgesCount());
+		log.debug("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.debug("Descriptors: {}", lookupTable.getDescriptorsCount());
+		log.debug("GSSNodes: {}", lookupTable.getGSSNodes().size());
+		log.debug("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
+		log.debug("GSS Nodes: {}", lookupTable.getGSSNodesCount());
+		log.debug("GSS Edges: {}", lookupTable.getGSSEdgesCount());
 	}
 
 	
@@ -186,7 +187,7 @@ public abstract class GLLParser {
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
 		boolean result = lookupTable.addDescriptor(descriptor);
-		log.debug("Descriptor added: {} : {}", descriptor, result);
+		log.trace("Descriptor added: {} : {}", descriptor, result);
 	}
 	
 	
@@ -212,7 +213,7 @@ public abstract class GLLParser {
 	 */
 	public final void pop(GSSNode u, int i, SPPFNode z) {
 		
-		log.debug("Pop {}, {}, {}", u.getLabel(), i, z);
+		log.trace("Pop {}, {}, {}", u.getLabel(), i, z);
 		
 		if (u != u0) {
 			
@@ -261,7 +262,7 @@ public abstract class GLLParser {
      *
 	 */
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
-		log.debug("GSSNode created: " +  L + ", " + i);
+		log.trace("GSSNode created: " +  L + ", " + i);
 		GSSNode v = lookupTable.getGSSNode(L, i);
 		
 		if(!lookupTable.getGSSEdge(v, w, u)) {

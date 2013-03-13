@@ -14,6 +14,8 @@ import java.util.Set;
 
 import org.jgll.util.InputUtil;
 import org.jgll.util.Tuple;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -21,6 +23,8 @@ import org.jgll.util.Tuple;
  *
  */
 public class Grammar implements Serializable {
+	
+	private static final Logger log = LoggerFactory.getLogger(Grammar.class);
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -73,6 +77,9 @@ public class Grammar implements Serializable {
 	}
 	
 	public static Grammar fromRules(String name, Iterable<Rule> rules) {
+		
+		long start = System.nanoTime();
+		
 		Map<Nonterminal, HeadGrammarSlot> nonterminalMap = new HashMap<>();
 		List<BodyGrammarSlot> slots = new ArrayList<>();
 		List<HeadGrammarSlot> nonterminals = new ArrayList<>();
@@ -118,8 +125,16 @@ public class Grammar implements Serializable {
 			slots.add(new LastGrammarSlot(slots.size() + nonterminals.size(), index, slot, head, rule.getObject()));
 		}
 
+		long end = System.nanoTime();
 		Grammar grammar =  new Grammar(name, nonterminals, slots, slotsMap, alternatesMap);
+		log.debug("Grammar graph creation completed in {} ms.", (end - start)/1000_000);
+
+		start = System.nanoTime();
 		grammar.initializeGrammarProrperties();
+		end = System.nanoTime();
+		log.debug("First and follow set computation completed in {} ms.", (end - start)/1000_000);
+		
+		
 		return grammar;
 	}
 	

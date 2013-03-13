@@ -35,7 +35,7 @@ public class L0 extends GrammarSlot {
 		LookupTable lookupTable = parser.getLookupTable();
 		while(lookupTable.hasNextDescriptor()) {
 			Descriptor descriptor = lookupTable.nextDescriptor();
-			GLLParser.log.debug("Processing {}: ", descriptor);
+			GLLParser.log.trace("Processing {}: ", descriptor);
 			parser.setCN(descriptor.getSPPFNode());
 			parser.setCU(descriptor.getGSSNode());
 			parser.setInputIndex(descriptor.getInputIndex());

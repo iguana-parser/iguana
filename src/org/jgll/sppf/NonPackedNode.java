@@ -95,8 +95,8 @@ public abstract class NonPackedNode extends SPPFNode {
 		
 		int packedNodeCount = countPackedNode();
 		
+		// pivot range
 		int range = rightExtent - leftExtent;
-		int nonterminals = grammar.getNonterminals().size();
 		
 		// Don't store the first packed node as the node may not be ambiguous
 		if(packedNodeCount == 0) {
@@ -130,20 +130,23 @@ public abstract class NonPackedNode extends SPPFNode {
 			
 //			packedNodesIndex = new BitSet(range * slots);
 			packedNodesIndex = new BitSet();
-			packedNodesIndex.set(firstPackedNode.getPivot() * range + firstPackedNode.getGrammarSlot().getId() - nonterminals);
-			packedNodesIndex.set(secondPackedNode.getPivot() * range + secondPackedNode.getGrammarSlot().getId() - nonterminals);
+			
+			int countNonterminals = grammar.getNonterminals().size();
+			packedNodesIndex.set(firstPackedNode.getPivot() * range + firstPackedNode.getGrammarSlot().getId() - countNonterminals);
+			packedNodesIndex.set(secondPackedNode.getPivot() * range + secondPackedNode.getGrammarSlot().getId() - countNonterminals);
 		} 
 		
 		else {
 			
-			if(packedNodesIndex.get(pivot * range + packedNodeSlot.getId() - nonterminals)) {
+			int countNonterminals = grammar.getNonterminals().size();
+			if(packedNodesIndex.get(pivot * range + packedNodeSlot.getId() - countNonterminals)) {
 				return;
 			}
 			
 			PackedNode packedNode = new PackedNode(packedNodeSlot, pivot, this);
 			addChildren(packedNode, leftChild, rightChild);
 			children.add(packedNode);
-			packedNodesIndex.set(packedNode.getPivot() * range + packedNode.getGrammarSlot().getId() - nonterminals);
+			packedNodesIndex.set(packedNode.getPivot() * range + packedNode.getGrammarSlot().getId() - countNonterminals);
 		}
 		
 	}
