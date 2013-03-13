@@ -89,7 +89,7 @@ public class TijsGrammarTest extends AbstractGrammarTest {
 	public void test() {
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse("abc", grammar, "Pattern");
-		generateGraphWithIntermeiateNodes(sppf);
+		generateGraph(sppf);
 	}
 	
 	

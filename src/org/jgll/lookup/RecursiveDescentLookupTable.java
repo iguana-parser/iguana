@@ -10,7 +10,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -18,7 +17,7 @@ import org.jgll.sppf.TerminalSymbolNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RecursiveDescentLookupTable extends DefaultLookup {
+public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private static final Logger log = LoggerFactory.getLogger(RecursiveDescentLookupTable.class);
 
@@ -64,7 +63,7 @@ public class RecursiveDescentLookupTable extends DefaultLookup {
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
 		int index = 2 * leftExtent;
-		if(terminalIndex != -2) {
+		if(terminalIndex != TerminalSymbolNode.EPSILON) {
 			index = index + 1;
 		}
 
@@ -81,13 +80,9 @@ public class RecursiveDescentLookupTable extends DefaultLookup {
 
 	@Override
 	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		NonPackedNode key;
-		if(slot.getId() < grammar.getNonterminals().size()) {
-			key = new NonterminalSymbolNode(slot, leftExtent, rightExtent);
-		} else {
-			key = new IntermediateNode(slot, leftExtent, rightExtent);
-		}
-
+		
+		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
+		
 		NonPackedNode value = nonPackedNodes.get(key);
 		if(value == null) {
 			value = key;

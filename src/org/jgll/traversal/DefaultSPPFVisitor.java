@@ -155,7 +155,7 @@ public abstract class DefaultSPPFVisitor<T> implements SPPFVisitor<T> {
 			}
 		}
 	}
-	
+
 	protected void removeListSymbolNode(ListSymbolNode node) {
 		if(!node.isAmbiguous()) {
 			removeIntermediateNode(node);
@@ -166,5 +166,5 @@ public abstract class DefaultSPPFVisitor<T> implements SPPFVisitor<T> {
 			}
 		}
 	}
-
+	
 }

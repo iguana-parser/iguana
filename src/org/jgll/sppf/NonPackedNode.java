@@ -15,6 +15,8 @@ import org.jgll.grammar.GrammarSlot;
  * 
  * 
  * @author Ali Afroozeh
+ * 
+ * TODO: rename this class! The current name does not make much sense.
  *
  */
 public abstract class NonPackedNode extends SPPFNode {

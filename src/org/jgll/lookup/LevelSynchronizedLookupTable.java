@@ -11,8 +11,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -23,7 +21,7 @@ import org.jgll.sppf.TerminalSymbolNode;
  *
  */
 @SuppressWarnings("unchecked")
-public class LevelSynchronizedLookupTable extends DefaultLookup {
+public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 
 	private int currentLevel;
 	
@@ -82,18 +80,7 @@ public class LevelSynchronizedLookupTable extends DefaultLookup {
 	@Override
 	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 
-		SPPFNode key;
-		if(slot instanceof HeadGrammarSlot) {
-			HeadGrammarSlot head = (HeadGrammarSlot) slot;
-			if(head.getNonterminal().isEbnfList()) {
-				key = new ListSymbolNode(slot, leftExtent, rightExtent);
-			} else {
-				key = new NonterminalSymbolNode(slot, leftExtent, rightExtent);
-			}
-		} else {
-			key = new IntermediateNode(slot, leftExtent, rightExtent);
-		}
-		
+		SPPFNode key = createNonPackedNode(slot, leftExtent, rightExtent);		
 		int index = indexFor(rightExtent);
 			SPPFNode value = levels[index].get(key);
 			if(value == null) {

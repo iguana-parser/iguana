@@ -41,7 +41,6 @@ public class ToDot extends DefaultSPPFVisitor<StringBuilder> {
 			// Replace the Java-style unicode char for epsilon with the graphviz one
 			label.replace("\u03B5", "&epsilon;");
 			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
-			addEdgesToChildren(node, sb);
 		}
 	}
 
@@ -95,7 +94,7 @@ public class ToDot extends DefaultSPPFVisitor<StringBuilder> {
 		sb.append(EDGE + "\"" + parent.getId() + "\"" + "->" + "{\"" + child.getId() + "\"}" + "\n");
 	}
 	
-	private String replaceWhiteSpace(String s) {
+	protected String replaceWhiteSpace(String s) {
 		return s.replace("\\", "\\\\").replace("\t", "\\\\t").replace("\n", "\\\\n").replace("\r", "\\\\r").replace("\"", "\\\"");
 	}
 
