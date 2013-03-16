@@ -55,7 +55,7 @@ public class Gamma0Test extends AbstractGrammarTest {
 	@Test
 	public void test() {
 		NonterminalSymbolNode sppf = levelParser.parse("aad", grammar, "S");
-		System.out.println(sppf);
+		generateGraphWithPackedNodeNames(sppf);
 	}
 	
 	

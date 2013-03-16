@@ -44,6 +44,10 @@ public abstract class AbstractGrammarTest {
 		GraphVizUtil.generateGraph(sppf, new ToDot(), outputDir, "graph");
 	}
 	
+	protected void generateGraphWithPackedNodeNames(SPPFNode sppf) {
+		GraphVizUtil.generateGraph(sppf, new ToDot(true), outputDir, "graph");
+	}
+	
 	protected void generateGraphWithIntermeiateAndListNodes(SPPFNode sppf) {
 		GraphVizUtil.generateGraph(sppf, new ToDotWithoutIntermeidateAndLists(), outputDir, "graph");
 	}
