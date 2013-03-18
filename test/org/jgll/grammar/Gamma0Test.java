@@ -48,6 +48,7 @@ public class Gamma0Test extends AbstractGrammarTest {
 	@Test
 	public void testParsers() {
 		NonterminalSymbolNode sppf1 = rdParser.parse("aad", grammar, "S");
+		generateGraph(sppf1);
 		NonterminalSymbolNode sppf2 = levelParser.parse("aad", grammar, "S");
 		assertEquals(true, sppf1.deepEquals(sppf2));
 	}

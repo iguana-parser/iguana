@@ -8,6 +8,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import static org.jgll.traversal.SPPFVisitorUtil.*;
 
 /**
  * ModelBuilderVisitor builds a data model by visiting an SPPF and 
@@ -25,7 +26,7 @@ import org.jgll.util.Input;
 
 // TODO: check if the conversions are really type safe! 
 @SuppressWarnings("unchecked")
-public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor<Object> {
+public class ModelBuilderVisitor<T, U> implements SPPFVisitor<Object> {
 	
 	private NodeListener<T, U> listener;
 	private Input input;
@@ -63,7 +64,7 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor<Object> {
 			} else {
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
-				visitChildren(nonterminalSymbolNode, object);
+				visitChildren(nonterminalSymbolNode, this, object);
 				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) nonterminalSymbolNode.childrenValues(), PositionInfo.fromNode(nonterminalSymbolNode, input));
 				nonterminalSymbolNode.setObject(result);
 			}
@@ -102,7 +103,7 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor<Object> {
 		removeIntermediateNode(packedNode);
 		if(!packedNode.isVisited()) {
 			packedNode.setVisited(true);
-			visitChildren(packedNode, object);
+			visitChildren(packedNode, this, object);
 		}
 	}
 
@@ -116,7 +117,7 @@ public class ModelBuilderVisitor<T, U> extends DefaultSPPFVisitor<Object> {
 			} else {
 				LastGrammarSlot slot = (LastGrammarSlot) listNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
-				visitChildren(listNode, object);
+				visitChildren(listNode, this, object);
 				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) listNode.childrenValues(), PositionInfo.fromNode(listNode,  input));
 				listNode.setObject(result);
 			}

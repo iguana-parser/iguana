@@ -11,7 +11,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.traversal.DefaultSPPFVisitor;
+import org.jgll.traversal.SPPFVisitorUtil;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -21,7 +21,7 @@ import org.jgll.traversal.SPPFVisitor;
  * 
  * @see SPPFVisitor
  */
-public class ToDot extends DefaultSPPFVisitor<StringBuilder> {
+public class ToDot implements SPPFVisitor<StringBuilder> {
 	
 	private final boolean showPackedNodeLabel;
 	
@@ -52,7 +52,7 @@ public class ToDot extends DefaultSPPFVisitor<StringBuilder> {
 			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
 			addEdgesToChildren(node, sb);
 			
-			visitChildren(node, sb);
+			SPPFVisitorUtil.visitChildren(node, this, sb);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class ToDot extends DefaultSPPFVisitor<StringBuilder> {
 			sb.append("\"" + node.getId() + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(node.toString())) + "\n");
 			addEdgesToChildren(node, sb);
 	
-			visitChildren(node, sb);
+			SPPFVisitorUtil.visitChildren(node, this, sb);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class ToDot extends DefaultSPPFVisitor<StringBuilder> {
 			}
 			addEdgesToChildren(node, sb);
 			
-			visitChildren(node, sb);
+			SPPFVisitorUtil.visitChildren(node, this, sb);
 		}
 	}
 	

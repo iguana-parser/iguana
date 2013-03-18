@@ -6,6 +6,7 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.traversal.SPPFVisitorUtil;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
@@ -22,13 +23,13 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 				}
 			}
 			
-			visitChildren(node, sb);
+			SPPFVisitorUtil.visitChildren(node, this, sb);
 		}
 	}
 	
 	@Override
 	public void visit(ListSymbolNode node, StringBuilder sb) {
-		removeListSymbolNode(node);
+		SPPFVisitorUtil.removeListSymbolNode(node);
 		visit((NonterminalSymbolNode)node, sb);
 	}
 	

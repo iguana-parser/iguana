@@ -16,14 +16,13 @@ import org.jgll.sppf.SPPFNode;
  * @author Ali Afroozeh
  *
  */
-public abstract class DefaultSPPFVisitor<T> implements SPPFVisitor<T> {
+public class SPPFVisitorUtil {
 	
-	protected void visitChildren(SPPFNode node, T t) {
+	public static <T> void visitChildren(SPPFNode node, SPPFVisitor<T> visitor, T t) {
 		for(SPPFNode child : node.getChildren()) {
-			child.accept(this, t);
+			child.accept(visitor, t);
 		}
 	}
-
 
 	/**
 	 * Removes the intermediate nodes under a nonterminal symbol node.
@@ -46,7 +45,7 @@ public abstract class DefaultSPPFVisitor<T> implements SPPFVisitor<T> {
 	 * The process terminates when all intermediate nodes are removed.
 	 *       
 	 */
-	protected void removeIntermediateNode(NonterminalSymbolNode parent) {
+	public static void removeIntermediateNode(NonterminalSymbolNode parent) {
 		if(parent.get(0) instanceof IntermediateNode) {
 			
 			IntermediateNode intermediateNode = (IntermediateNode) parent.get(0);
@@ -116,7 +115,7 @@ public abstract class DefaultSPPFVisitor<T> implements SPPFVisitor<T> {
 	 * The process terminates when all intermediate nodes are removed.
 	 * 
 	 */
-	protected void removeIntermediateNode(PackedNode parent) {
+	public static void removeIntermediateNode(PackedNode parent) {
 		if(parent.get(0) instanceof IntermediateNode) {
 
 			IntermediateNode intermediateNode = (IntermediateNode) parent.get(0);
@@ -156,7 +155,7 @@ public abstract class DefaultSPPFVisitor<T> implements SPPFVisitor<T> {
 		}
 	}
 
-	protected void removeListSymbolNode(ListSymbolNode node) {
+	public static void removeListSymbolNode(ListSymbolNode node) {
 		if(!node.isAmbiguous()) {
 			removeIntermediateNode(node);
 			if(node.get(0) instanceof ListSymbolNode) {
