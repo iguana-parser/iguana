@@ -73,7 +73,7 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
-	public <T> void accept(SPPFVisitor<T> visitAction, T t) {
+	public void accept(SPPFVisitor visitAction) {
 		// do nothing
 	}
 

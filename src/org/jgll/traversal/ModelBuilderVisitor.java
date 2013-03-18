@@ -26,7 +26,7 @@ import static org.jgll.traversal.SPPFVisitorUtil.*;
 
 // TODO: check if the conversions are really type safe! 
 @SuppressWarnings("unchecked")
-public class ModelBuilderVisitor<T, U> implements SPPFVisitor<Object> {
+public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	
 	private NodeListener<T, U> listener;
 	private Input input;
@@ -37,7 +37,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor<Object> {
 	}
 
 	@Override
-	public void visit(TerminalSymbolNode terminal, Object object) {
+	public void visit(TerminalSymbolNode terminal) {
 		if(!terminal.isVisited()) {
 			terminal.setVisited(true);
 			if(terminal.getMatchedChar() == TerminalSymbolNode.EPSILON) {
@@ -50,7 +50,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor<Object> {
 	}
 
 	@Override
-	public void visit(NonterminalSymbolNode nonterminalSymbolNode, Object object) {
+	public void visit(NonterminalSymbolNode nonterminalSymbolNode) {
 		removeIntermediateNode(nonterminalSymbolNode);
 		
 		if(!nonterminalSymbolNode.isVisited()) {
@@ -59,26 +59,26 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor<Object> {
 			
 			if(nonterminalSymbolNode.isAmbiguous()) {
 				
-				buildAmbiguityNode(nonterminalSymbolNode, object);
+				buildAmbiguityNode(nonterminalSymbolNode);
 				
 			} else {
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
-				visitChildren(nonterminalSymbolNode, this, object);
+				visitChildren(nonterminalSymbolNode, this);
 				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) nonterminalSymbolNode.childrenValues(), PositionInfo.fromNode(nonterminalSymbolNode, input));
 				nonterminalSymbolNode.setObject(result);
 			}
 		}
 	}
 
-	private void buildAmbiguityNode(NonterminalSymbolNode nonterminalSymbolNode, Object object) {
+	private void buildAmbiguityNode(NonterminalSymbolNode nonterminalSymbolNode) {
 		int nPackedNodes = 0;
 		
 		for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
 			PackedNode packedNode = (PackedNode) child;
 			LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
 			listener.startNode((T) slot.getObject());
-			packedNode.accept(this, object);
+			packedNode.accept(this);
 			Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) packedNode.childrenValues(), PositionInfo.fromNode(packedNode, input));
 			packedNode.setObject(result);
 			if(result != Result.filter()) {
@@ -93,31 +93,31 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor<Object> {
 	}
 
 	@Override
-	public void visit(IntermediateNode node, Object object) {
+	public void visit(IntermediateNode node) {
 		// Intermediate nodes should be removed when visiting their parents.
 		throw new RuntimeException("Should not be here!");
 	}
 
 	@Override
-	public void visit(PackedNode packedNode, Object object) {
+	public void visit(PackedNode packedNode) {
 		removeIntermediateNode(packedNode);
 		if(!packedNode.isVisited()) {
 			packedNode.setVisited(true);
-			visitChildren(packedNode, this, object);
+			visitChildren(packedNode, this);
 		}
 	}
 
 	@Override
-	public void visit(ListSymbolNode listNode, Object object) {
+	public void visit(ListSymbolNode listNode) {
 		removeListSymbolNode(listNode);
 		if(!listNode.isVisited()) {
 			listNode.setVisited(true);
 			if(listNode.isAmbiguous()) {
-				buildAmbiguityNode(listNode, object);
+				buildAmbiguityNode(listNode);
 			} else {
 				LastGrammarSlot slot = (LastGrammarSlot) listNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
-				visitChildren(listNode, this, object);
+				visitChildren(listNode, this);
 				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) listNode.childrenValues(), PositionInfo.fromNode(listNode,  input));
 				listNode.setObject(result);
 			}

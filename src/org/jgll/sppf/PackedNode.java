@@ -111,8 +111,8 @@ public class PackedNode extends SPPFNode {
 	}
 
 	@Override
-	public <T> void accept(SPPFVisitor<T> visitAction, T acc) {
-		visitAction.visit(this, acc);
+	public void accept(SPPFVisitor visitAction) {
+		visitAction.visit(this);
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import org.jgll.traversal.SPPFVisitorUtil;
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
 	@Override
-	public void visit(NonterminalSymbolNode node, StringBuilder sb) {
+	public void visit(NonterminalSymbolNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
@@ -19,22 +19,22 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 			
 			for (SPPFNode child : node.getChildren()) {
 				if(!(child instanceof TerminalSymbolNode && ((TerminalSymbolNode) child).getMatchedChar() == -2)) {
-					addEdgeToChild(node, child, sb);					
+					addEdgeToChild(node, child);					
 				}
 			}
 			
-			SPPFVisitorUtil.visitChildren(node, this, sb);
+			SPPFVisitorUtil.visitChildren(node, this);
 		}
 	}
 	
 	@Override
-	public void visit(ListSymbolNode node, StringBuilder sb) {
+	public void visit(ListSymbolNode node) {
 		SPPFVisitorUtil.removeListSymbolNode(node);
-		visit((NonterminalSymbolNode)node, sb);
+		visit((NonterminalSymbolNode)node);
 	}
 	
 	@Override
-	public void visit(TerminalSymbolNode terminal, StringBuilder sb) {
+	public void visit(TerminalSymbolNode terminal) {
 		if(!terminal.isVisited()) {
 			terminal.setVisited(true);
 			if(terminal.getMatchedChar() != TerminalSymbolNode.EPSILON) {

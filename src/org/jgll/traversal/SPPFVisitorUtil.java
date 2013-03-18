@@ -18,9 +18,9 @@ import org.jgll.sppf.SPPFNode;
  */
 public class SPPFVisitorUtil {
 	
-	public static <T> void visitChildren(SPPFNode node, SPPFVisitor<T> visitor, T t) {
+	public static <T> void visitChildren(SPPFNode node, SPPFVisitor visitor) {
 		for(SPPFNode child : node.getChildren()) {
-			child.accept(visitor, t);
+			child.accept(visitor);
 		}
 	}
 

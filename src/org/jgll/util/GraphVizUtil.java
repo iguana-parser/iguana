@@ -42,7 +42,8 @@ public class GraphVizUtil {
 		sb.append("ranksep=.4").append(lineSeparator);
 		sb.append("ordering=out").append(lineSeparator);
 		
-		sppf.accept(toDot, sb);
+		sppf.accept(toDot);
+		sb.append(toDot.getString());
 
 		sb.append(lineSeparator);
 		sb.append("}");

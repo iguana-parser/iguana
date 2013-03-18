@@ -7,30 +7,30 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
 
-public class ToJavaCode implements SPPFVisitor<StringBuilder> {
+public class ToJavaCode implements SPPFVisitor {
 
 	@Override
-	public void visit(TerminalSymbolNode node, StringBuilder t) {
+	public void visit(TerminalSymbolNode node) {
 		
 	}
 
 	@Override
-	public void visit(NonterminalSymbolNode node, StringBuilder t) {
+	public void visit(NonterminalSymbolNode node) {
 		
 	}
 
 	@Override
-	public void visit(IntermediateNode node, StringBuilder t) {
+	public void visit(IntermediateNode node) {
 		
 	}
 
 	@Override
-	public void visit(PackedNode node, StringBuilder t) {
+	public void visit(PackedNode node) {
 		
 	}
 
 	@Override
-	public void visit(ListSymbolNode node, StringBuilder t) {
+	public void visit(ListSymbolNode node) {
 		
 	}
 

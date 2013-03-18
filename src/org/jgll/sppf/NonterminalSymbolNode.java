@@ -15,8 +15,8 @@ public class NonterminalSymbolNode extends NonPackedNode {
 	}
 	
 	@Override
-	public <T> void accept(SPPFVisitor<T> visitAction, T t) {
-		visitAction.visit(this, t);
+	public void accept(SPPFVisitor visitAction) {
+		visitAction.visit(this);
 	}
 	
 	@Override

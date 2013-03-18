@@ -37,7 +37,7 @@ public abstract class SPPFNode {
 
 	public abstract int getRightExtent();
 
-	public abstract <T> void accept(SPPFVisitor<T> visitAction, T t);
+	public abstract void accept(SPPFVisitor visitAction);
 	
 	@SuppressWarnings("unchecked")
 	public <T> Result<T> getResult() {

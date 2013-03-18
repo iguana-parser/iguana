@@ -15,15 +15,16 @@ import org.jgll.sppf.TerminalSymbolNode;
  * @see org.jgll.visitor.Visitor
  *
  */
-public interface SPPFVisitor<T> {
+public interface SPPFVisitor {
 
-	public void visit(TerminalSymbolNode node, T t);
+	public void visit(TerminalSymbolNode node);
 
-	public void visit(NonterminalSymbolNode node, T t);
+	public void visit(NonterminalSymbolNode node);
 	
-	public void visit(IntermediateNode node, T t);
+	public void visit(IntermediateNode node);
 	
-	public void visit(PackedNode node, T t);
+	public void visit(PackedNode node);
 	
-	public void visit(ListSymbolNode node, T t);
+	public void visit(ListSymbolNode node);
+
 }
