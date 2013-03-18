@@ -5,6 +5,11 @@ import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.util.Input;
+
 
 /**
  * A grammar slot immediately before a nonterminal.
@@ -37,14 +42,15 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		this.nonterminal = nonterminal;
 	}
 	
+	
 	@Override
-	public void execute(GrammarInterpreter parser) {
-		if(checkAgainstTestSet(parser.getCurrentInputValue())) {
-			parser.setCU(parser.create(next));
-			nonterminal.execute(parser);
+	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
+		if(checkAgainstTestSet(input.get(ci))) {
+			cu = parser.create(next, cu, ci, cn);
+			nonterminal.parse(parser, input, cu, cn, ci);
 		} else {
-			parser.newParseError(this, parser.getCurrentInpuIndex());
-		}
+			parser.newParseError(this, ci);
+		}		
 	}
 	
 	@Override

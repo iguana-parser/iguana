@@ -3,9 +3,13 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.lookup.LookupTable;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.util.Input;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -14,6 +18,8 @@ import org.jgll.parser.GLLParser;
  *
  */
 public class L0 extends GrammarSlot {
+	
+	private static final Logger log = LoggerFactory.getLogger(L0.class);
 	
 	private static final long serialVersionUID = 1L;
 
@@ -31,16 +37,15 @@ public class L0 extends GrammarSlot {
 	}
 	
 	@Override
-	public void execute(GrammarInterpreter parser) {
-		LookupTable lookupTable = parser.getLookupTable();
-		while(lookupTable.hasNextDescriptor()) {
-			Descriptor descriptor = lookupTable.nextDescriptor();
-			GLLParser.log.trace("Processing {}: ", descriptor);
-			parser.setCN(descriptor.getSPPFNode());
-			parser.setCU(descriptor.getGSSNode());
-			parser.setInputIndex(descriptor.getInputIndex());
+	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
+		while(parser.hasNextDescriptor()) {
+			Descriptor descriptor = parser.nextDescriptor();
 			GrammarSlot slot = descriptor.getLabel();
-			slot.execute(parser);
+			cu = descriptor.getGSSNode();
+			cn = descriptor.getSPPFNode();
+			ci = descriptor.getInputIndex();
+			log.trace("Processing ({}, {}, {}, {})", slot, ci, cu, cn);
+			slot.parse(parser, input, cu, cn, ci);
 		}
 	}
 

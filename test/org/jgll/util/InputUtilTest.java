@@ -1,49 +1,44 @@
 package org.jgll.util;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class InputUtilTest {
 	
-	private InputUtil inputUtil;
+	private Input input;
 
-	@Before
-	public void init() {
-		inputUtil = InputUtil.getInstance();
-	}
-	
 	@Test
 	public void test1() {
-		inputUtil.setInput("big\n brother");
-		LineColumn lineColumn = inputUtil.getLineNumber(0);
-		assertEquals(new LineColumn(1, 1), lineColumn);
+		input = new Input("big\n brother");
+		assertEquals(1, input.getLineNumber(0));
+		assertEquals(1, input.getColumnNumber(0));
 		
-		lineColumn = inputUtil.getLineNumber(1);
-		assertEquals(new LineColumn(1, 2), lineColumn);
+		assertEquals(1, input.getLineNumber(1));
+		assertEquals(2, input.getColumnNumber(1));
 		
-		lineColumn = inputUtil.getLineNumber(3);
-		assertEquals(new LineColumn(1, 4), lineColumn);
+		assertEquals(1, input.getLineNumber(3));
+		assertEquals(4, input.getColumnNumber(3));
 		
-		lineColumn = inputUtil.getLineNumber(5);
-		assertEquals(new LineColumn(2, 2), lineColumn);
+		assertEquals(2, input.getLineNumber(5));
+		assertEquals(2, input.getColumnNumber(5));
 	}
 	
 	@Test
 	public void test2() {
-		inputUtil.setInput("big\r\n brother");
-		LineColumn lineColumn = inputUtil.getLineNumber(0);
-		assertEquals(new LineColumn(1, 1), lineColumn);
+		input = new Input("big\r\n brother");
+
+		assertEquals(1, input.getLineNumber(0));
+		assertEquals(1, input.getColumnNumber(0));
+
+		assertEquals(1, input.getLineNumber(1));
+		assertEquals(2, input.getColumnNumber(1));
 		
-		lineColumn = inputUtil.getLineNumber(1);
-		assertEquals(new LineColumn(1, 2), lineColumn);
+		assertEquals(1, input.getLineNumber(3));
+		assertEquals(4, input.getColumnNumber(3));
 		
-		lineColumn = inputUtil.getLineNumber(3);
-		assertEquals(new LineColumn(1, 4), lineColumn);
-		
-		lineColumn = inputUtil.getLineNumber(6);
-		assertEquals(new LineColumn(2, 2), lineColumn);
+		assertEquals(2, input.getLineNumber(6));
+		assertEquals(2, input.getColumnNumber(6));
 	}
 
 

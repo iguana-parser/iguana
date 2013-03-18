@@ -6,29 +6,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class InputUtil {
+public class Input {
 
 	private int[] input;
 
 	private LineColumn[] lineColumns;
 
-	private static InputUtil instance;
-	
-	public synchronized static InputUtil getInstance() {
-		if(instance == null) {
-			instance = new InputUtil();
-		}
-		
-		return instance;
+	public Input(String input) {
+		this(fromString(input));
 	}
 
-	private InputUtil() {};
-	
-	public void setInput(String input) {
-		setInput(fromString(input));
-	}
-
-	public void setInput(int[] input) {
+	public Input(int[] input) {
 		this.input = input;
 		lineColumns = new LineColumn[input.length - 1];
 		calculateLineLengths();
@@ -49,6 +37,14 @@ public class InputUtil {
 		}
 		input[s.length()] = -1;
 		return input;
+	}
+	
+	public int get(int index) {
+		return input[index];
+	}
+	
+	public int size() {
+		return input.length;
 	}
 	
 	/**
@@ -87,8 +83,12 @@ public class InputUtil {
 		return sb.toString();
 	}
 
-	public LineColumn getLineNumber(int index) {
-		return lineColumns[index];
+	public int getLineNumber(int index) {
+		return lineColumns[index].getLineNumber();
+	}
+	
+	public int getColumnNumber(int index) {
+		return lineColumns[index].getColumnNumber();
 	}
 
 	private void calculateLineLengths() {
@@ -110,6 +110,44 @@ public class InputUtil {
 			} else {
 				columnNumber++;
 			}
+		}
+	}
+	
+	private static class LineColumn {
+
+		private int lineNumber;
+		private int columnNumber;
+		
+		public LineColumn(int lineNumber, int columnNumber) {
+			this.lineNumber = lineNumber;
+			this.columnNumber = columnNumber;
+		}
+		
+		public int getLineNumber() {
+			return lineNumber;
+		}
+		
+		public int getColumnNumber() {
+			return columnNumber;
+		}
+		
+		@Override
+		public String toString() {
+			return "(" + lineNumber + ":" + columnNumber + ")";
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(this == obj) {
+				return true;
+			}
+			
+			if(!(obj instanceof LineColumn)) {
+				return false;
+			}
+			
+			LineColumn other = (LineColumn) obj;
+			return lineNumber == other.lineNumber && columnNumber == other.columnNumber;
 		}
 	}
 }

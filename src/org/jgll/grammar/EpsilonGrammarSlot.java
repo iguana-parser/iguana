@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
 
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.Input;
 
 /**
  * The grammar slot repersing an empty body.
@@ -23,11 +27,11 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public void execute(GrammarInterpreter parser) {
+	public void parse(GLLParser parser, Input intput, GSSNode cu, SPPFNode cn, int ci) {
 		// A ::= ε
-		parser.setCR(parser.getNodeT(TerminalSymbolNode.EPSILON, parser.getCurrentInpuIndex()));
-		parser.setCN(parser.getNodeP(this));
-		parser.pop();
+		TerminalSymbolNode cr = parser.getNodeT(TerminalSymbolNode.EPSILON, ci);
+		SPPFNode newNode = parser.getNodeP(this, cn, cr);
+		parser.pop(cu, ci, newNode);
 	}
 	
 	@Override

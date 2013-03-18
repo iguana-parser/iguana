@@ -5,6 +5,12 @@ import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.Input;
+
 
 /**
  * A grammar slot whose next immediate symbol is a terminal.
@@ -24,41 +30,40 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 		
 	@Override
-	public void execute(GrammarInterpreter parser) {
+	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
 				
 		// A::= x1
 		if(previous == null && next.next == null) {
-			if(terminal.match(parser.getCurrentInputValue())) {
-				parser.setCR(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
-				parser.moveInputPointer();
-				parser.setCN(parser.getNodeP(next));
-				parser.pop();
+			if(terminal.match(ci)) {
+				TerminalSymbolNode cr = parser.getNodeT(input.get(ci), ci);
+				ci++;
+				cn = parser.getNodeP(next, cn, cr);
+				parser.pop(cu, ci, cn);
 			} else {
-				parser.newParseError(this, parser.getCurrentInpuIndex());
+				parser.newParseError(this, ci);
 			}
-
 		}
 		
 		// A ::= x1...xf, f ≥ 2
 		else if(previous == null && !(next.next == null)) {
-			if(terminal.match(parser.getCurrentInputValue())) {
-				parser.setCN(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
-				parser.moveInputPointer();
-				next.execute(parser);
+			if(terminal.match(input.get(ci))) {
+				cn = parser.getNodeT(input.get(ci), ci);
+				ci++;
+				next.parse(parser, input, cu, cn, ci);
 			} else {
-				parser.newParseError(this, parser.getCurrentInpuIndex());
+				parser.newParseError(this, ci);
 			}
 		}
 		
 		// A ::= α · a β
 		else {
-			if(terminal.match(parser.getCurrentInputValue())) {
-				parser.setCR(parser.getNodeT(parser.getCurrentInputValue(), parser.getCurrentInpuIndex()));
-				parser.moveInputPointer();
-				parser.setCN(parser.getNodeP(next));
-				next.execute(parser);
+			if(terminal.match(input.get(ci))) {
+				TerminalSymbolNode cr = parser.getNodeT(input.get(ci), ci);
+				ci++;
+				cn = parser.getNodeP(next, cn, cr);
+				next.parse(parser, input, cu, cn, ci);
 			} else {
-				parser.newParseError(this, parser.getCurrentInpuIndex());
+				parser.newParseError(this, ci);
 			}
 		}
 		

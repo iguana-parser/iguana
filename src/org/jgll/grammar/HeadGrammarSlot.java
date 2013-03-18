@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.util.Input;
+
 
 /**
  * 
@@ -59,12 +64,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public void execute(GrammarInterpreter parser) {
+	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
 		for(BodyGrammarSlot slot : getReverseAlternates()) {
-			if(slot.checkAgainstTestSet(parser.getCurrentInputValue())) {
-				parser.add(slot);
+			if(slot.checkAgainstTestSet(input.get(ci))) {
+				parser.add(slot, cu, ci, cn);
 			}
 		}
+		L0.getInstance().parse(parser, input, cu, cn, ci);
 	}
 
 	@Override

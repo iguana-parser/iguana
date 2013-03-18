@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.util.Input;
+
 
 
 /**
@@ -37,7 +42,7 @@ public abstract class GrammarSlot implements Serializable {
 	
 	public abstract void code(Writer writer) throws IOException;
 	
-	public abstract void execute(GrammarInterpreter parser);
+	public abstract void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci);
 	
 	public abstract String getName();
 	

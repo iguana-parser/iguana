@@ -1,10 +1,7 @@
 package org.jgll.parser;
 
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.grammar.Terminal;
-import org.jgll.util.LineColumn;
-import org.jgll.util.InputUtil;
+import org.jgll.util.Input;
 
 
 /**
@@ -15,11 +12,13 @@ import org.jgll.util.InputUtil;
 @SuppressWarnings("serial")
 public class ParseError extends RuntimeException {
 
-	private BodyGrammarSlot slot;
+	private GrammarSlot slot;
 	private final int inputIndex;
+	private Input input;
 	
-	public ParseError(BodyGrammarSlot slot, int inputIndex) {
+	public ParseError(GrammarSlot slot, Input input, int inputIndex) {
 		this.slot = slot;
+		this.input = input;
 		this.inputIndex = inputIndex;
 	}
 	
@@ -34,17 +33,18 @@ public class ParseError extends RuntimeException {
 	@Override
 	public String toString() {
 		
-		LineColumn loc = InputUtil.getInstance().getLineNumber(inputIndex);
-		int lineNumber = loc.getLineNumber();
-		int columnNumber = loc.getColumnNumber();
+		int lineNumber = input.getLineNumber(inputIndex);
+		int columnNumber = input.getColumnNumber(inputIndex);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Parse error at " + getSlot()  + " at line:" + lineNumber + " column:" + columnNumber);
-		sb.append(" expected: ");
-		for(Terminal t : slot.getTestSet()) {
-			sb.append(t).append(" ");
-		}
-		sb.append(" but found: " + (char) InputUtil.getInstance().charAt(inputIndex));
+		
+		//TODO: fix it! 
+//		sb.append(" expected: ");
+//		for(Terminal t : slot.getTestSet()) {
+//			sb.append(t).append(" ");
+//		}
+//		sb.append(" but found: " + (char) InputUtil.getInstance().charAt(inputIndex));
 		return sb.toString();
 	}
 	

@@ -1,14 +1,15 @@
 package org.jgll.grammar;
 
-import org.jgll.lookup.LevelSynchronizedLookupTable;
+import org.jgll.lookup.RecursiveDescentLookupTable;
 import org.jgll.parser.AbstractGLLParser;
 import org.jgll.sppf.DummyNode;
 
-public class LevelSynchronizedGrammarInterpretter extends AbstractGLLParser {
-	
+
+public class RecursiveDescentParser extends AbstractGLLParser {
+
 	@Override
 	protected void init() {
-		lookupTable = new LevelSynchronizedLookupTable(grammar, input.size());
+		lookupTable = new RecursiveDescentLookupTable(grammar, input.size());
 	}
 
 	@Override

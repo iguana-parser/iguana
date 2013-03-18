@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.util.InputUtil;
+import org.jgll.util.Input;
 import org.jgll.util.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,7 +141,7 @@ public class Grammar implements Serializable {
 	
 	public void code(Writer writer, String packageName) throws IOException {
 	
-		String header = InputUtil.read(this.getClass().getResourceAsStream("ParserTemplate"));
+		String header = Input.read(this.getClass().getResourceAsStream("ParserTemplate"));
 		header = header.replace("${className}", name)
 					   .replace("${packageName}", packageName);
 		writer.append(header);

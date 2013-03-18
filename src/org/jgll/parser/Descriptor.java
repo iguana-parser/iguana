@@ -48,6 +48,12 @@ public class Descriptor {
 	
 	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
+		
+		assert slot != null;
+		assert gssNode != null;
+		assert inputIndex >= 0;
+		assert sppfNode != null;
+		
 		this.slot = slot;
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
