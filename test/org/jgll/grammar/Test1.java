@@ -1,8 +1,12 @@
 package org.jgll.grammar;
 
 import static java.util.Arrays.asList;
+import junit.framework.Assert;
 
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.ToJavaCode;
 import org.junit.Test;
 
 // A ::= epsilon
@@ -17,7 +21,18 @@ public class Test1 extends AbstractGrammarTest {
 	@Test
 	public void test() {
 		NonterminalSymbolNode sppf = rdParser.parse("", grammar, "A");
-		generateGraph(sppf);
+		ToJavaCode toJavaCode = new ToJavaCode();
+		sppf.accept(toJavaCode);
+		System.out.println(toJavaCode.getString());
+		Assert.assertEquals(true, sppf.deepEquals(expectedSPPF()));
+	}
+	
+	
+	private SPPFNode expectedSPPF() {
+		TerminalSymbolNode node0 = new TerminalSymbolNode(-2, 0);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminal(0), 0, 0);
+		node1.addChild(node0);
+		return node1;
 	}
 
 }

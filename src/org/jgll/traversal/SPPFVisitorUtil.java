@@ -18,7 +18,7 @@ import org.jgll.sppf.SPPFNode;
  */
 public class SPPFVisitorUtil {
 	
-	public static <T> void visitChildren(SPPFNode node, SPPFVisitor visitor) {
+	public static void visitChildren(SPPFNode node, SPPFVisitor visitor) {
 		for(SPPFNode child : node.getChildren()) {
 			child.accept(visitor);
 		}
@@ -30,7 +30,7 @@ public class SPPFVisitorUtil {
 	 * If the intermediate node is not ambiguous, the node is simply replaced
 	 * by its children.
 	 * <br>
-	 * If the intermediate node is ambiguous, chilren of each of its packed nodes
+	 * If the intermediate node is ambiguous, children of each of its packed nodes
 	 * and its other children are merged to create new packed nodes for the parent.
 	 * 
 	 * 			     N                                           N
@@ -45,25 +45,25 @@ public class SPPFVisitorUtil {
 	 * The process terminates when all intermediate nodes are removed.
 	 *       
 	 */
-	public static void removeIntermediateNode(NonterminalSymbolNode parent) {
-		if(parent.get(0) instanceof IntermediateNode) {
+	public static void removeIntermediateNode(NonterminalSymbolNode node) {
+		if(node.get(0) instanceof IntermediateNode) {
 			
-			IntermediateNode intermediateNode = (IntermediateNode) parent.get(0);
+			IntermediateNode intermediateNode = (IntermediateNode) node.get(0);
 
 			if(intermediateNode.isAmbiguous()) {
 				List<SPPFNode> restOfChildren = new ArrayList<>();
 
-				parent.removeChild(intermediateNode);
+				node.removeChild(intermediateNode);
 
-				while(parent.size() > 0) {
-					restOfChildren.add(parent.get(0));
-					parent.removeChild(parent.get(0));
+				while(node.size() > 0) {
+					restOfChildren.add(node.get(0));
+					node.removeChild(node.get(0));
 				}
 
 				for(SPPFNode child : intermediateNode.getChildren()) {
 					// For each packed node of the intermediate node create a new packed node
 					PackedNode pn = (PackedNode) child;
-					PackedNode newPackedNode = new PackedNode(parent.getFirstPackedNodeGrammarSlot(), parent.size(), parent);
+					PackedNode newPackedNode = new PackedNode(node.getFirstPackedNodeGrammarSlot(), node.size(), node);
 					for(SPPFNode sn : pn.getChildren()) {
 						newPackedNode.addChild(sn);					
 					}
@@ -72,13 +72,13 @@ public class SPPFVisitorUtil {
 						newPackedNode.addChild(c);
 					}
 
-					parent.addChild(newPackedNode);
+					node.addChild(newPackedNode);
 					removeIntermediateNode(newPackedNode);
 				}
 
 			} else {
-				parent.replaceWithChildren(intermediateNode);
-				removeIntermediateNode(parent);
+				node.replaceWithChildren(intermediateNode);
+				removeIntermediateNode(node);
 			}
 		}
 	}

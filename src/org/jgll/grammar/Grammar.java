@@ -88,7 +88,7 @@ public class Grammar implements Serializable {
 
 		for (Rule rule : rules) {
 			if(!nonterminalMap.containsKey(rule.getHead())) {
-				HeadGrammarSlot head = new HeadGrammarSlot(nonterminalMap.size(), rule.getHead());
+				HeadGrammarSlot head = new HeadGrammarSlot(nonterminals.size(), rule.getHead());
 				nonterminals.add(head);
 				nonterminalMap.put(rule.getHead(), head);				
 			}

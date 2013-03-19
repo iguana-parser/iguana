@@ -16,6 +16,8 @@ public class PackedNode extends SPPFNode {
 	
 	private final int pivot;
 	private final GrammarSlot slot;
+	
+	// TODO: check to see how to remove this
 	private final SPPFNode parent;
 	
 	private final List<SPPFNode> children;
