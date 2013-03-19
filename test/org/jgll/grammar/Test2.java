@@ -8,24 +8,24 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.junit.Test;
 
-// A ::= 'a'
-public class Test1 extends AbstractGrammarTest {
+// A ::= a
+public class Test2 extends AbstractGrammarTest {
 
 	@Override
 	protected Grammar initGrammar() {
-		Rule r1 = new Rule.Builder().head(new Nonterminal("A")).body().build();
+		Rule r1 = new Rule.Builder().head(new Nonterminal("A")).body(new Character('a')).build();
 		return Grammar.fromRules("gamma1", asList(r1));
 	}
 	
 	@Test
 	public void test() {
-		NonterminalSymbolNode sppf = rdParser.parse("", grammar, "A");
+		NonterminalSymbolNode sppf = rdParser.parse("a", grammar, "A");
 		Assert.assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	
 	private SPPFNode expectedSPPF() {
-		TerminalSymbolNode node0 = new TerminalSymbolNode(-2, 0);
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminal(0), 0, 0);
+		TerminalSymbolNode node0 = new TerminalSymbolNode('a', 0);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminal(0), 0, 1);
 		node1.addChild(node0);
 		return node1;
 	}
