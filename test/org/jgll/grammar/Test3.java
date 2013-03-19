@@ -23,17 +23,21 @@ public class Test3 extends AbstractGrammarTest {
 	
 	@Test
 	public void test() {
-		System.out.println(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse("bc", grammar, "A");
-		generateGraph(sppf);
 		Assert.assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	
 	private SPPFNode expectedSPPF() {
-		TerminalSymbolNode node0 = new TerminalSymbolNode('a', 0);
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminal(0), 0, 1);
+		TerminalSymbolNode node0 = new TerminalSymbolNode('b', 0);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
 		node1.addChild(node0);
-		return node1;
+		TerminalSymbolNode node2 = new TerminalSymbolNode('c', 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 1, 2);
+		node3.addChild(node2);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
+		node4.addChild(node1);
+		node4.addChild(node3);
+		return node4;
 	}
 
 }

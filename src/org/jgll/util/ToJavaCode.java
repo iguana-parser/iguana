@@ -1,6 +1,9 @@
 package org.jgll.util;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -14,7 +17,7 @@ public class ToJavaCode implements SPPFVisitor {
 	
 	private int count;
 	private StringBuilder sb = new StringBuilder();
-	Stack<String> stack = new Stack<>();
+	private Deque<String> stack = new ArrayDeque<>();
 
 	@Override
 	public void visit(TerminalSymbolNode node) {
@@ -27,7 +30,7 @@ public class ToJavaCode implements SPPFVisitor {
 	public void visit(NonterminalSymbolNode node) {
 		visitChildren(node);
 		sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-					"grammar.getNonterminal(" + node.getGrammarSlot().getId()  + "), " + 
+					"grammar.getNonterminalByName(\"" + node.getGrammarSlot().getName()  + "\"), " + 
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
 		
@@ -41,7 +44,7 @@ public class ToJavaCode implements SPPFVisitor {
 	public void visit(IntermediateNode node) {
 		visitChildren(node);
 		sb.append("Intermediate node" + count + " = new IntermediateNode(" +
-					"grammar.getGrammarSlot(" + node.getGrammarSlot().getId()  + "), " + 
+					"grammar.getGrammarSlotByName(\"" + node.getGrammarSlot().getName()  + "\"), " + 
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
 		
@@ -55,8 +58,8 @@ public class ToJavaCode implements SPPFVisitor {
 	public void visit(PackedNode node) {
 		visitChildren(node);
 		sb.append("PackedNode node" + count + " = new PackedNode(" +
-					"grammar.getGrammarSlot(" + node.getGrammarSlot().getId()  + "), " + 
-					node.getPivot() + ");\n");
+				  "grammar.getGrammarSlotByName(\"" + node.getGrammarSlot().getName()  + "\"), " + 
+				  node.getPivot() + ");\n");
 		
 		addChildren(node);
 		
@@ -68,9 +71,9 @@ public class ToJavaCode implements SPPFVisitor {
 	public void visit(ListSymbolNode node) {
 		visitChildren(node);
 		sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
-					"grammar.getGrammarSlot(" + node.getGrammarSlot().getId()  + "), " + 
-					node.getLeftExtent() + ", " + 
-					node.getRightExtent() + ");\n");
+				  "grammar.getNonterminalByName(\"" + node.getGrammarSlot().getName()  + "\"), " + 
+				  node.getLeftExtent() + ", " + 
+				  node.getRightExtent() + ");\n");
 		
 		addChildren(node);
 		
@@ -86,8 +89,13 @@ public class ToJavaCode implements SPPFVisitor {
 	}
 	
 	private void addChildren(SPPFNode node) {
+		List<String> childrenNames = new ArrayList<>(node.size());
 		for(@SuppressWarnings("unused") SPPFNode child : node.getChildren()) {
-			sb.append("node" + count + ".addChild(" + stack.pop() + ");\n");
+			childrenNames.add(0, stack.pop());
+		}
+		
+		for(String childName : childrenNames) {
+			sb.append("node" + count + ".addChild(" + childName + ");\n");			
 		}
 	}
 	

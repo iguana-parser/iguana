@@ -37,7 +37,9 @@ public class Grammar implements Serializable {
 	 * This map is used to locate head grammar slots by name for parsing
 	 * from any arbitrary nonterminal.
 	 */
-	private final Map<String, HeadGrammarSlot> nameToHeadSlots;
+	private final Map<String, HeadGrammarSlot> nameToNonterminals;
+	
+	private final Map<String, BodyGrammarSlot> nameToSlots;
 	
 	private final String name;
 
@@ -54,19 +56,24 @@ public class Grammar implements Serializable {
 	 * Nonterminals which are introduced as the result of filtering
 	 */
 	Map<Set<Rule>, HeadGrammarSlot> filteredNonterminals = new LinkedHashMap<>();
-
 	
 	private Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, Map<Tuple<Rule, Integer>, 
 					BodyGrammarSlot> slotsMap, Map<Rule, BodyGrammarSlot> alternatesMap) {
 		this.name = name;
 		this.nonterminals = Collections.unmodifiableList(nonterminals);
 		this.slots = Collections.unmodifiableList(slots);
-		this.nameToHeadSlots = new HashMap<>();
+		this.nameToNonterminals = new HashMap<>();
+		this.nameToSlots = new HashMap<>();
 		this.slotsMap = slotsMap;
-		for(HeadGrammarSlot startSymbol : nonterminals) {
-			this.nameToHeadSlots.put(startSymbol.getName(), startSymbol);
-		}
 		this.alternatesMap = alternatesMap;
+
+		for(HeadGrammarSlot nontermianl : nonterminals) {
+			nameToNonterminals.put(nontermianl.getName(), nontermianl);
+		}
+		
+		for(BodyGrammarSlot slot : slots) {
+			nameToSlots.put(slot.getName(), slot);
+		}
 	}
 	
 	private void initializeGrammarProrperties() {
@@ -196,11 +203,15 @@ public class Grammar implements Serializable {
 	}
 	
 	public HeadGrammarSlot getNonterminalByName(String name) {
-		return nameToHeadSlots.get(name);
+		return nameToNonterminals.get(name);
 	}
 	
 	public BodyGrammarSlot getGrammarSlot(Rule rule, int position) {
 		return slotsMap.get(new Tuple<Rule, Integer>(rule, position));
+	}
+	
+	public BodyGrammarSlot getGrammarSlotByName(String name) {
+		return nameToSlots.get(name);
 	}
 	
 	public BodyGrammarSlot getAlternateHead(Rule rule) {
