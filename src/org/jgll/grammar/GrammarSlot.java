@@ -18,8 +18,8 @@ import org.jgll.util.Input;
  * 
  * Note: the equality of two grammar slots is based on their
  * referential equality, i.e., if they refer to the same object.
- * Thet's why these classes inherit the implementation from the
- * Object class.
+ * Thet's why these classes inherit the equals and hash code implementations 
+ * from the Object class.
  * 
  * @author Ali Afroozeh
  *
