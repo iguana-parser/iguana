@@ -2,7 +2,6 @@ package org.jgll.sppf;
 
 import java.util.Iterator;
 
-import org.jgll.traversal.Result;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -19,7 +18,7 @@ public abstract class SPPFNode {
 
 	private boolean visited;
 	
-	private Result<Object> object;
+	private Object object;
 
 	public abstract String getId();
 
@@ -39,58 +38,14 @@ public abstract class SPPFNode {
 
 	public abstract void accept(SPPFVisitor visitAction);
 	
-	@SuppressWarnings("unchecked")
-	public <T> Result<T> getResult() {
-		return (Result<T>) object;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> void setObject(Result<T> result) {
-		this.object = (Result<Object>) result;
+	public Object getObject() {
+		return object;
 	}
 	
-	public Iterable<Object> childrenValues() {
-
-		final Iterator<SPPFNode> iterator = getChildren().iterator();
-
-		return new Iterable<Object>() {
-
-			@Override
-			public Iterator<Object> iterator() {
-				return new Iterator<Object>() {
-
-					private SPPFNode next;
-
-					@Override
-					public boolean hasNext() {
-						while (iterator.hasNext()) {
-							next = iterator.next();
-							if(next.getResult() == Result.filter()) {
-								object = Result.filter();
-							} else if(next.getResult() == Result.skip()) {
-								// Do nothing
-							} else {
-								return true;								
-							}
-						}
-						return false;
-					}
-
-					@Override
-					public Object next() {
-						return next.getResult().getObject();
-					}
-
-					@Override
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-				
-			}
-		};
+	public void setObject(Object object) {
+		this.object = object;
 	}
-
+	
 	public boolean isVisited() {
 		return visited;
 	}

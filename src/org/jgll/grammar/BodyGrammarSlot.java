@@ -70,7 +70,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			// Before
 			BodyGrammarSlot current = previous;
 			while(current != null) {
-				sb.insert(0, current.getName()).append(" ");
+				sb.insert(0, current.getName() + " ");
 				current = current.previous;
 			}
 			
@@ -96,8 +96,10 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			sb.insert(0, " ::= ");
 			
 			sb.insert(0, head.getName());
+			sb.delete(sb.length() - 1, sb.length());
 			label = sb.toString();
 		}
+		
 		return label;
 	}
 	

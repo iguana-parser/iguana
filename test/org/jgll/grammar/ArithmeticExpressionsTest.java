@@ -56,7 +56,7 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 		grammar.filter(rule2, 0, set(rule1));
 		grammar.filter(rule2, 2, set(rule1, rule2));
 		System.out.println(grammar);
-		NonterminalSymbolNode sppf = levelParser.parse("a+a", grammar, "E");
+		NonterminalSymbolNode sppf = levelParser.parse("a+a+a", grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}
 	

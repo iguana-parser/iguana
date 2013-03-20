@@ -72,7 +72,7 @@ public class Grammar implements Serializable {
 		}
 		
 		for(BodyGrammarSlot slot : slots) {
-			nameToSlots.put(slot.getName(), slot);
+			nameToSlots.put(slot.toString(), slot);
 		}
 	}
 	
@@ -116,7 +116,6 @@ public class Grammar implements Serializable {
 			
 			for (Symbol symbol : rule.getBody()) {
 				if (symbol instanceof Terminal) {
-
 					slot = new TerminalGrammarSlot(nonterminals.size() + slots.size(), index, slot, (Terminal) symbol);
 				} else {
 					slot = new NonterminalGrammarSlot(nonterminals.size() + slots.size(), index, slot, nonterminalMap.get(symbol));

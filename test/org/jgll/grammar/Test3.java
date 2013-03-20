@@ -37,7 +37,8 @@ public class Test3 extends AbstractGrammarTest {
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
 		node4.addChild(node1);
 		node4.addChild(node3);
+		
 		return node4;
 	}
-
+	
 }

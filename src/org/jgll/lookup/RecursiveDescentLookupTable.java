@@ -1,10 +1,11 @@
 package org.jgll.lookup;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
@@ -21,7 +22,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private static final Logger log = LoggerFactory.getLogger(RecursiveDescentLookupTable.class);
 
-	private Stack<Descriptor> descriptorsStack;
+	private Deque<Descriptor> descriptorsStack;
 	
 	private Set<Descriptor> descriptorsSet;
 	
@@ -33,7 +34,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	public RecursiveDescentLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
-		descriptorsStack = new Stack<>();
+		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new HashSet<>();
 		terminals = new TerminalSymbolNode[2 * inputSize];
 		nonPackedNodes = new HashMap<NonPackedNode, NonPackedNode>(inputSize);
