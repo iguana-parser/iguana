@@ -5,6 +5,7 @@ import static junit.framework.Assert.assertEquals;
 import java.util.Arrays;
 
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.util.Input;
 import org.junit.Test;
 
 public class ArithmeticExpressionsTest extends AbstractGrammarTest {
@@ -31,8 +32,8 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 	
 	@Test
 	public void testParsers() {
-		NonterminalSymbolNode sppf1 = rdParser.parse("a+a", grammar, "E");
-		NonterminalSymbolNode sppf2 = levelParser.parse("a+a", grammar, "E");
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a"), grammar, "E");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
 		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
 	
@@ -56,7 +57,7 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 		grammar.filter(rule2, 0, set(rule1));
 		grammar.filter(rule2, 2, set(rule1, rule2));
 		System.out.println(grammar);
-		NonterminalSymbolNode sppf = levelParser.parse("a+a+a", grammar, "E");
+		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}
 	

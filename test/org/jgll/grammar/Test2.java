@@ -6,6 +6,7 @@ import junit.framework.Assert;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.Input;
 import org.junit.Test;
 
 // A ::= a
@@ -19,7 +20,7 @@ public class Test2 extends AbstractGrammarTest {
 	
 	@Test
 	public void test() {
-		NonterminalSymbolNode sppf = rdParser.parse("a", grammar, "A");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a"), grammar, "A");
 		Assert.assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	

@@ -58,10 +58,6 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 */
 	protected int errorIndex = -1;
 	
-	
-	public final NonterminalSymbolNode parse(String input, Grammar grammar, String startSymbolName) throws ParseError {
-		return parse(Input.fromString(input), grammar, startSymbolName);
-	}
 
 	/**
 	 * Parses the given input string. If the parsing of the input was successful,
@@ -74,16 +70,14 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * 								  no SPPF root has been found.
 	 * @throws RuntimeException if no nonterminal with the given start symbol name is found.
 	 */
-	public final NonterminalSymbolNode parse(int[] input, Grammar grammar, String startSymbolName) throws ParseError {
+	@Override
+	public final NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError {
 		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(startSymbolName);
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
 		}
-		return parse(input, grammar, startSymbol);
-	}
-	
-	private final NonterminalSymbolNode parse(int[] input, Grammar grammar, HeadGrammarSlot startSymbol) throws ParseError {
-		this.input = new Input(input);
+
+		this.input = input;
 		this.grammar = grammar;
 		
 		init();

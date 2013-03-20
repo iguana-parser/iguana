@@ -6,6 +6,7 @@ import java.io.Writer;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
+import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 import org.slf4j.Logger;
@@ -48,6 +49,19 @@ public class L0 extends GrammarSlot {
 			slot.parse(parser, input, cu, cn, ci);
 		}
 	}
+	
+	@Override
+	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
+		while(recognizer.hasNextDescriptor()) {
+			org.jgll.recognizer.Descriptor descriptor = recognizer.nextDescriptor();
+			GrammarSlot slot = descriptor.getLabel();
+			cu = descriptor.getGSSNode();
+			ci = descriptor.getInputIndex();
+			log.trace("Processing ({}, {}, {})", slot, ci, cu);
+			slot.recognize(recognizer, input, cu, ci);
+		}
+	}
+
 
 	@Override
 	public void code(Writer writer) throws IOException {

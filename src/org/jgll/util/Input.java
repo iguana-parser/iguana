@@ -11,12 +11,26 @@ public class Input {
 	private int[] input;
 
 	private LineColumn[] lineColumns;
+	
+	public static Input fromString(String s) {
+		int[] input = new int[s.length() + 1];
+		for (int i = 0; i < s.length(); i++) {
+			input[i] = s.charAt(i);
+		}
+		input[s.length()] = -1;
 
-	public Input(String input) {
-		this(fromString(input));
+		return new Input(input);
+	}
+	
+	public static Input fromIntArray(int[] input) {
+		return new Input(input);
+	}
+	
+	public static Input fromPath(String path) throws IOException {
+		return fromString(readTextFromFile(path));
 	}
 
-	public Input(int[] input) {
+	private Input(int[] input) {
 		this.input = input;
 		lineColumns = new LineColumn[input.length - 1];
 		calculateLineLengths();
@@ -26,19 +40,6 @@ public class Input {
 		return input[index];
 	}
 
-	public static String readTextFromFile(String parentDir, String fileName) throws IOException {
-		return readTextFromFile(new File(parentDir, fileName));
-	}
-
-	public static int[] fromString(String s) {
-		int[] input = new int[s.length() + 1];
-		for (int i = 0; i < s.length(); i++) {
-			input[i] = s.charAt(i);
-		}
-		input[s.length()] = -1;
-		return input;
-	}
-	
 	public int get(int index) {
 		return input[index];
 	}
@@ -54,11 +55,11 @@ public class Input {
 	 *            the path to the text file
 	 * @throws IOException
 	 */
-	public static String readTextFromFile(String path) throws IOException {
+	private static String readTextFromFile(String path) throws IOException {
 		return readTextFromFile(new File(path));
 	}
 
-	public static String readTextFromFile(File file) throws IOException {
+	private static String readTextFromFile(File file) throws IOException {
 		StringBuilder sb = new StringBuilder();
 
 		InputStream in = new BufferedInputStream(new FileInputStream(file));

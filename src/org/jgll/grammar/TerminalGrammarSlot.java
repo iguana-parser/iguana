@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
+import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
@@ -68,6 +69,10 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				parser.newParseError(this, ci);
 			}
 		}
+	}
+	
+	@Override
+	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
 		
 	}
 	

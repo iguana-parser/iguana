@@ -9,6 +9,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.Input;
 import org.jgll.util.ToJavaCode;
 import org.junit.Test;
 
@@ -52,18 +53,18 @@ public class Gamma0Test extends AbstractGrammarTest {
 	
 	@Test
 	public void testParsers() {
-		NonterminalSymbolNode sppf1 = rdParser.parse("aad", grammar, "S");
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aad"), grammar, "S");
 		ToJavaCode visitAction = new ToJavaCode();
 		sppf1.accept(visitAction);
 		System.out.println(visitAction.getString());
 		generateGraph(sppf1);
-		NonterminalSymbolNode sppf2 = levelParser.parse("aad", grammar, "S");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aad"), grammar, "S");
 		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
 
 	@Test
 	public void testSPPF() {
-		NonterminalSymbolNode sppf = rdParser.parse("aad", grammar, "S");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aad"), grammar, "S");
 		assertEquals(true, sppf.deepEquals(getSPPF()));
 	}
 	

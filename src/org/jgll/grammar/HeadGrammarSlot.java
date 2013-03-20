@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
+import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
@@ -72,6 +73,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 			}
 		}
 		L0.getInstance().parse(parser, input, cu, cn, ci);
+	}
+	
+	@Override
+	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
+		
 	}
 
 	@Override

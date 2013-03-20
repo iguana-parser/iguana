@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.util.Input;
 import org.junit.Test;
 
 public class EBNFTest extends AbstractGrammarTest {
@@ -15,7 +16,7 @@ public class EBNFTest extends AbstractGrammarTest {
 	
 	@Test
 	public void test() {
-		NonterminalSymbolNode sppf = rdParser.parse("aaa", grammar, "A*");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa"), grammar, "A*");
 		generateGraphWithIntermeiateAndListNodes(sppf);
 	}
 

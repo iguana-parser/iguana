@@ -10,7 +10,7 @@ public class InputUtilTest {
 
 	@Test
 	public void test1() {
-		input = new Input("big\n brother");
+		input = Input.fromString("big\n brother");
 		assertEquals(1, input.getLineNumber(0));
 		assertEquals(1, input.getColumnNumber(0));
 		
@@ -26,7 +26,7 @@ public class InputUtilTest {
 	
 	@Test
 	public void test2() {
-		input = new Input("big\r\n brother");
+		input = Input.fromString("big\r\n brother");
 
 		assertEquals(1, input.getLineNumber(0));
 		assertEquals(1, input.getColumnNumber(0));

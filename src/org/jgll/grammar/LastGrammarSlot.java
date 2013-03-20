@@ -5,6 +5,7 @@ import java.io.Writer;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
+import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
@@ -38,6 +39,11 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
 		parser.pop(cu, ci, cn);
+	}
+	
+	@Override
+	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
+		recognizer.pop(cu, ci);
 	}
 
 	@Override

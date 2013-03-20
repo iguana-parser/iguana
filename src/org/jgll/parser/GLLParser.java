@@ -6,12 +6,11 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.Input;
 
 public interface GLLParser {
 	
-	public NonterminalSymbolNode parse(String input, Grammar grammar, String startSymbolName) throws ParseError;
-	
-	public NonterminalSymbolNode parse(int[] input, Grammar grammar, String startSymbolName) throws ParseError;
+	public NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError;
 	
 	public void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w);
 

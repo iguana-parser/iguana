@@ -1,15 +1,17 @@
 package org.jgll.recognizer;
 
-public class GrammarInterpreterRecognizer extends GLLRecognizer {
+import org.jgll.grammar.HeadGrammarSlot;
 
-	@Override
-	protected void recognize() {
-		
-	}
+public class GrammarInterpreterRecognizer extends AbstractGLLRecognizer {
 
 	@Override
 	protected void init() {
 		
+	}
+
+	@Override
+	protected void recognize(HeadGrammarSlot startSymbol) {
+		startSymbol.recognize(this, input, u0, 0);
 	}
 
 }

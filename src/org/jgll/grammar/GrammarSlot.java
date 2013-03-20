@@ -6,10 +6,9 @@ import java.io.Writer;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
+import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
-
-
 
 /**
  * A GrammarSlot is the position immediately before or after
@@ -43,6 +42,8 @@ public abstract class GrammarSlot implements Serializable {
 	public abstract void code(Writer writer) throws IOException;
 	
 	public abstract void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci);
+	
+	public abstract void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci);
 	
 	public abstract String getName();
 	
