@@ -32,7 +32,7 @@ public abstract class GrammarSlot implements Serializable {
 	 * A unique integer specifying this grammar slot.
 	 * The id field is used later for looking up grammar slots.
 	 */
-	protected final int id;
+	protected int id;
 	
 	
 	public GrammarSlot(int id) {

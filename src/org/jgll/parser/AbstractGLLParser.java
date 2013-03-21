@@ -8,8 +8,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.NonterminalGrammarSlot;
-import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -218,7 +216,8 @@ public abstract class AbstractGLLParser implements GLLParser {
      *
 	 */
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
-		log.trace("GSSNode created: " +  L + ", " + i);
+		log.trace("GSSNode created: ({}, {})",  L, i);
+		
 		GSSNode v = lookupTable.getGSSNode(L, i);
 		
 		if(!lookupTable.getGSSEdge(v, w, u)) {
@@ -275,16 +274,15 @@ public abstract class AbstractGLLParser implements GLLParser {
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
 		if (slot.getPosition() == 1 && 
-			!(slot instanceof LastGrammarSlot) &&
-			(slot.previous() instanceof TerminalGrammarSlot ||
-			 slot.previous() instanceof NonterminalGrammarSlot && !((NonterminalGrammarSlot) slot.previous()).getNonterminal().isNullable())) {
+			!(slot.isLastSlot()) &&
+			(slot.previous().isTerminalSlot() || !slot.previous().isNullable())) {
 				return rightChild;
 		} else {
 			
 			GrammarSlot t = slot;
 			// if (beta = empty)
-			if (slot instanceof LastGrammarSlot) {
-				t = ((LastGrammarSlot) slot).getHead();
+			if (slot.isLastSlot()) {
+				t = slot.getHead();
 			}
 
 			// if (z != $)

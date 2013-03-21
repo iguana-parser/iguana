@@ -13,7 +13,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected final BodyGrammarSlot previous;
+	protected BodyGrammarSlot previous;
 	
 	protected BodyGrammarSlot next;
 	
@@ -25,11 +25,13 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	protected final int position;
 	
 	private String label;
+
+	protected HeadGrammarSlot head;
 	
-	
-	public BodyGrammarSlot(int id, int position, BodyGrammarSlot previous) {
+	public BodyGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(id);
 		this.position = position;
+		this.head = head;
 		if(previous != null) {
 			previous.next = this;
 		}
@@ -37,7 +39,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	}
 	
 	/**
-	 * Checks whether the provide input belogs to the first set, and follow set
+	 * Checks whether the provide input belongs to the first set, and follow set
 	 * in case the first set contains epsilon.  
 	 */
 	public abstract boolean checkAgainstTestSet(int i);
@@ -62,7 +64,21 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return position;
 	}
 	
+	public HeadGrammarSlot getHead() {
+		return head;
+	}
+	
+	public abstract boolean isTerminalSlot();
+	
+	public abstract boolean isNonterminalSlot();
+	
+	public abstract boolean isLastSlot();
+	
+	public abstract boolean isNullable();
+	
 	@Override
+	// TODO: Change it! too complicated and not necessary. 
+	// Compute labels beforehand and then insert them.
 	public String toString() {
 		if(label == null) {
 			StringBuilder sb = new StringBuilder();
@@ -74,10 +90,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 				current = current.previous;
 			}
 			
-			HeadGrammarSlot head = null;
-			if(this instanceof LastGrammarSlot) {
-				head = ((LastGrammarSlot) this).getHead();
-			}
 			
 			// This slot
 			sb.append(". ");
@@ -86,16 +98,12 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			// Next
 			current = next;
 			while(current != null) {
-				if(current instanceof LastGrammarSlot) {
-					head = ((LastGrammarSlot) current).getHead();
-				}
 				sb.append(current.getName()).append(" ");
 				current = current.next;
 			}
 
 			sb.insert(0, " ::= ");
 			
-			sb.insert(0, head.getName());
 			sb.delete(sb.length() - 1, sb.length());
 			label = sb.toString();
 		}

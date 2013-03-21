@@ -36,4 +36,9 @@ public class Tuple<T, V> {
 		return t.equals(other.t) && v.equals(other.v);
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "(" + t.toString() + ", " + v.toString() + ")";
+	}
 }

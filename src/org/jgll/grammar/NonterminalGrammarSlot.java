@@ -26,8 +26,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private Set<Terminal> testSet;
 	
-	public NonterminalGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal) {
-		super(id, position, previous);
+	public NonterminalGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(id, position, previous, head);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -141,6 +141,26 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public String getName() {
 		return nonterminal.getName();
+	}
+
+	@Override
+	public boolean isTerminalSlot() {
+		return false;
+	}
+
+	@Override
+	public boolean isNonterminalSlot() {
+		return true;
+	}
+
+	@Override
+	public boolean isLastSlot() {
+		return false;
+	}
+
+	@Override
+	public boolean isNullable() {
+		return nonterminal.isNullable();
 	}
 	
 }

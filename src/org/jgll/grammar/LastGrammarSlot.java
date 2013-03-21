@@ -24,15 +24,12 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	/**
 	 * An arbitrary data object that can be put in this grammar slot and
 	 * retrieved later when traversing the parse tree.
-	 * This object will appear as a property of nonterminal symbol nodes in a parse tree.
+	 * This object can be accessed via the getObject() method of a nonterminal symbol node.
 	 */
 	private Object object;
 	
-	protected HeadGrammarSlot head;
-	
 	public LastGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
-		super(id, position, previous);
-		this.head = head;
+		super(id, position, previous, head);
 		this.object = object;
 	}
 		
@@ -80,8 +77,24 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		return "";
 	}
 	
-	public HeadGrammarSlot getHead() {
-		return head;
+	@Override
+	public boolean isTerminalSlot() {
+		return false;
+	}
+
+	@Override
+	public boolean isNonterminalSlot() {
+		return false;
+	}
+
+	@Override
+	public boolean isLastSlot() {
+		return true;
+	}
+
+	@Override
+	public boolean isNullable() {
+		return false;
 	}
 
 }

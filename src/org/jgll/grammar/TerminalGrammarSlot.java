@@ -25,8 +25,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	private final Terminal terminal;
 
-	public TerminalGrammarSlot(int id, int position, BodyGrammarSlot previous, Terminal terminal) {
-		super(id, position, previous);
+	public TerminalGrammarSlot(int id, int position, BodyGrammarSlot previous, Terminal terminal, HeadGrammarSlot head) {
+		super(id, position, previous, head);
 		this.terminal = terminal;
 	}
 		
@@ -160,6 +160,26 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	public Terminal getTerminal() {
 		return terminal;
+	}
+
+	@Override
+	public boolean isTerminalSlot() {
+		return true;
+	}
+
+	@Override
+	public boolean isNonterminalSlot() {
+		return false;
+	}
+
+	@Override
+	public boolean isLastSlot() {
+		return false;
+	}
+
+	@Override
+	public boolean isNullable() {
+		return false;
 	}
 
 }

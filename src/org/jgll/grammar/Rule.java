@@ -45,7 +45,7 @@ public class Rule implements Serializable {
 		return body;
 	}
 	
-	public int getBodyLength() {
+	public int size() {
 		return body.size();
 	}
 	
@@ -107,4 +107,27 @@ public class Rule implements Serializable {
 		}
 		return sb.toString();
 	} 
+	
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof Rule)) {
+			return false;
+		}
+		
+		Rule other = (Rule) obj;
+		
+		return head.equals(other.head) && body.equals(other.body);
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result += 31 * result + head.hashCode();
+		result += 31 * result + body.hashCode();
+		return result;
+	}
 }
