@@ -1,6 +1,8 @@
 package org.jgll.grammar;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jgll.parser.GLLParser;
@@ -35,6 +37,15 @@ public abstract class AbstractGrammarTest {
 			set.add(t);
 		}
 		return set;
+	}
+	
+	@SafeVarargs
+	protected static <T> List<T> list(T...objects){
+		List<T> list = new ArrayList<>();
+		for(T t : objects) {
+			list.add(t);
+		}
+		return list;
 	}
 	
 	protected void generateGraphWithoutIntermeiateNodes(SPPFNode sppf) {

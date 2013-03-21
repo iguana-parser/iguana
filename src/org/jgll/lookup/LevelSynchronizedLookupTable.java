@@ -171,4 +171,10 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		return all;
 	}
 
+	@Override
+	public boolean removeDescriptor(Descriptor descriptor) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

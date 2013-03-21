@@ -28,7 +28,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final ArrayList<BodyGrammarSlot> alternates;
+	private ArrayList<BodyGrammarSlot> alternates;
 	
 	private final Nonterminal nonterminal;
 	
@@ -44,6 +44,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.followSet = new HashSet<>();
 	}
 	
+	// TODO: what's this method good for? 
 	public HeadGrammarSlot(int id, Nonterminal nonterminal, HeadGrammarSlot head, List<BodyGrammarSlot> alternateHeads) {
 		super(id);
 		this.nonterminal = nonterminal;
@@ -56,7 +57,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.firstSet = head.firstSet;
 		this.followSet = head.followSet;
 	}
-
+		
 	public void addAlternate(BodyGrammarSlot slot) {
 		alternates.add(slot);
 	}
@@ -114,6 +115,18 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return alternates;
 	}
 	
+	public void replaceAlternate(BodyGrammarSlot oldSlot, BodyGrammarSlot newSlot) {
+		ArrayList<BodyGrammarSlot> newAlternates = new ArrayList<>();
+		for(BodyGrammarSlot alternate : alternates) {
+			if(alternate == oldSlot) {
+				newAlternates.add(newSlot);
+			} else {
+				newAlternates.add(alternate);
+			}
+		}
+		alternates = newAlternates;
+	}
+	
 	public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
@@ -145,17 +158,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 			}
 		};
 	}
-	
-	
-	/**
-	 * Returns a shallow copy of the alternates. This method is useful when
-	 * one defines filters based on the existing alternates.
-	 */
-	@SuppressWarnings("unchecked")
-	public List<BodyGrammarSlot> copyAlternates() {
-		return (List<BodyGrammarSlot>) alternates.clone();
-	}
-	
+		
 	public Set<Terminal> getFirstSet() {
 		return firstSet;
 	}

@@ -54,7 +54,7 @@ public class Grammar implements Serializable {
 	/**
 	 * Nonterminals which are introduced as the result of filtering
 	 */
-	Map<Set<Rule>, HeadGrammarSlot> filteredNonterminals = new LinkedHashMap<>();
+	private Map<Set<Rule>, HeadGrammarSlot> filteredNonterminals = new LinkedHashMap<>();
 	
 	private Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, Map<Tuple<Rule, Integer>, 
 					BodyGrammarSlot> slotsMap, Map<Rule, BodyGrammarSlot> alternatesMap) {
@@ -286,21 +286,24 @@ public class Grammar implements Serializable {
 			throw new IllegalArgumentException("newSlot cannot be null.");
 		}
 		
-		Tuple<Rule, Integer> originalSlot = new Tuple<Rule, Integer>(rule, index);
-		BodyGrammarSlot bodyGrammarSlot = slotsMap.get(originalSlot );
+		Tuple<Rule, Integer> tuple = new Tuple<Rule, Integer>(rule, index);
+		BodyGrammarSlot oldSlot = slotsMap.get(tuple );
 		
-		if(bodyGrammarSlot.previous != null) {
-			bodyGrammarSlot.previous.next = newSlot;
+		if(oldSlot.previous != null) {
+			oldSlot.previous.next = newSlot;
+			newSlot.previous = oldSlot.previous;
+		} else {
+			// First nonterminal
+			oldSlot.head.replaceAlternate(oldSlot, newSlot);
 		}
 		
-		if(bodyGrammarSlot.next != null) {
-			bodyGrammarSlot.next.previous = newSlot;
+		if(oldSlot.next != null) {
+			oldSlot.next.previous = newSlot;
+			newSlot.next= oldSlot.next;
 		}
 		
-		newSlot.previous = bodyGrammarSlot.previous;
-		newSlot.next= bodyGrammarSlot.next;
-		slotsMap.put(originalSlot, newSlot);
-		newSlot.id = bodyGrammarSlot.id;
+		slotsMap.put(tuple, newSlot);
+		newSlot.id = oldSlot.id;
 		slots.set(newSlot.id - nonterminals.size(), newSlot);
 	}
 		

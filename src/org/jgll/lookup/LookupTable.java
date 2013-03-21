@@ -22,6 +22,8 @@ public interface LookupTable {
 	
 	public Descriptor nextDescriptor();
 	
+	public boolean removeDescriptor(Descriptor descriptor);
+	
 	public boolean addDescriptor(Descriptor descriptor);
 	
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent);

@@ -46,23 +46,23 @@ public class WrapperSlot extends BodyGrammarSlot {
 	@Override
 	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
 		if(beforeAction != null) {
-			beforeAction.execute(slot);
+			beforeAction.execute(slot, parser, input, ci, cu, cn);
 		}
 		slot.parse(parser, input, cu, cn, ci);
 		if(afterAction != null) {
-			afterAction.execute(slot);
+			afterAction.execute(slot, parser, input, ci, cu, cn);
 		}
 	}
 
 	@Override
 	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
-		if(beforeAction != null) {
-			beforeAction.execute(slot);
-		}
-		slot.recognize(recognizer, input, cu, ci);
-		if(afterAction != null) {
-			afterAction.execute(slot);
-		}		
+//		if(beforeAction != null) {
+//			beforeAction.execute(slot);
+//		}
+//		slot.recognize(recognizer, input, cu, ci);
+//		if(afterAction != null) {
+//			afterAction.execute(slot);
+//		}		
 	}
 
 	@Override

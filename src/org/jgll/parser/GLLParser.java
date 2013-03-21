@@ -26,6 +26,8 @@ public interface GLLParser {
 	
 	public Descriptor nextDescriptor();
 	
+	public void removeDescriptor(Descriptor descriptor);
+	
 	public void newParseError(GrammarSlot slot, int inputIndex);
 	
 }

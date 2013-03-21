@@ -313,6 +313,11 @@ public abstract class AbstractGLLParser implements GLLParser {
 		return lookupTable.nextDescriptor();
 	}
 	
+	@Override
+	public void removeDescriptor(Descriptor descriptor) {
+		lookupTable.removeDescriptor(descriptor);
+	}
+	
 	/**
 	 * Retuns the list of created GSSNodes. This list may be useful for analysis
 	 * or visulaization of GSS nodes after the parsing. 

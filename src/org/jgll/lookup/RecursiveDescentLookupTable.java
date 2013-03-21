@@ -110,4 +110,9 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		return descriptorsSet.size();
 	}
 
+	@Override
+	public boolean removeDescriptor(Descriptor descriptor) {
+		return descriptorsStack.remove(descriptor);
+	}
+
 }
