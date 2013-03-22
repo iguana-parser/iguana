@@ -31,8 +31,11 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 		
 	@Override
-	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
+	public GrammarSlot parse(GLLParser parser, Input input) {
 				
+		int ci = parser.getCi();
+		SPPFNode cn = parser.getCn();
+		GSSNode cu = parser.getCu();
 		int charAtCi = input.get(ci);
 		
 		// A::= x1
@@ -41,9 +44,10 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				TerminalSymbolNode cr = parser.getNodeT(charAtCi, ci);
 				ci++;
 				cn = parser.getNodeP(next, cn, cr);
-				parser.pop(cu, ci, cn);
+				parser.update(cu, cn, ci);
 			} else {
 				parser.newParseError(this, ci);
+				return null;
 			}
 		}
 		
@@ -52,9 +56,10 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 			if(terminal.match(charAtCi)) {
 				cn = parser.getNodeT(charAtCi, ci);
 				ci++;
-				next.parse(parser, input, cu, cn, ci);
+				parser.update(cu, cn, ci);
 			} else {
 				parser.newParseError(this, ci);
+				return null;
 			}
 		}
 		
@@ -64,11 +69,14 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				TerminalSymbolNode cr = parser.getNodeT(charAtCi, ci);
 				ci++;
 				cn = parser.getNodeP(next, cn, cr);
-				next.parse(parser, input, cu, cn, ci);
+				parser.update(cu, cn, ci);
 			} else {
 				parser.newParseError(this, ci);
+				return null;
 			}
 		}
+		
+		return next;
 	}
 	
 	@Override

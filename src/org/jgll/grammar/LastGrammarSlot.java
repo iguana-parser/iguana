@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 
@@ -34,8 +32,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 		
 	@Override
-	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
-		parser.pop(cu, ci, cn);
+	public GrammarSlot parse(GLLParser parser, Input input) {
+		parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
+		return null;
 	}
 	
 	@Override

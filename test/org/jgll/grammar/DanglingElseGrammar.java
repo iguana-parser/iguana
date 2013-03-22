@@ -2,13 +2,10 @@ package org.jgll.grammar;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.List;
 
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -45,8 +42,8 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		grammar.replace(rule1, 0, WrapperSlot.before(grammarSlot, new SlotAction() {
 
 			@Override
-			public void execute(GrammarSlot slot, GLLParser parser, Input input, int ci, GSSNode cu, SPPFNode cn) {
-				Descriptor descriptor = new Descriptor(grammar.getGrammarSlot(rule2, 0), cu, ci, cn);
+			public void execute(GrammarSlot slot, GLLParser parser, Input input) {
+				Descriptor descriptor = new Descriptor(grammar.getGrammarSlot(rule2, 0), parser.getCu(), parser.getCi(), parser.getCn());
 				System.out.println("Descriptor recorded: " + descriptor);
 				stack.push(descriptor);
 			}
@@ -57,7 +54,7 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		grammar.replace(rule1, 4, WrapperSlot.after(grammarSlot, new SlotAction() {
 
 			@Override
-			public void execute(GrammarSlot slot, GLLParser parser, Input input, int ci, GSSNode cu, SPPFNode cn) {
+			public void execute(GrammarSlot slot, GLLParser parser, Input input) {
 				System.out.println("Hi");
 				parser.removeDescriptor(stack.pop());
 			}

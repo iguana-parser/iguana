@@ -28,6 +28,14 @@ public interface GLLParser {
 	
 	public void removeDescriptor(Descriptor descriptor);
 	
+	public void update(GSSNode cu, SPPFNode cn, int ci);
+	
+	public GSSNode getCu();
+	
+	public int getCi();
+	
+	public SPPFNode getCn();
+	
 	public void newParseError(GrammarSlot slot, int inputIndex);
 	
 }

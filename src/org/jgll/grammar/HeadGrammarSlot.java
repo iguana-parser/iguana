@@ -13,7 +13,6 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 
@@ -67,13 +66,15 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
+	public GrammarSlot parse(GLLParser parser, Input input) {
 		for(BodyGrammarSlot slot : getReverseAlternates()) {
+			GSSNode cu = parser.getCu();
+			int ci = parser.getCi();
 			if(slot.checkAgainstTestSet(input.get(ci))) {
 				parser.add(slot, cu, ci, DummyNode.getInstance());
 			}
 		}
-		L0.getInstance().parse(parser, input, cu, cn, ci);
+		return null;
 	}
 	
 	@Override

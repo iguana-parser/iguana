@@ -37,17 +37,47 @@ public class L0 extends GrammarSlot {
 		super(-1);
 	}
 	
+	public GrammarSlot parse(GLLParser parser, Input input, GrammarSlot start) {
+		
+		GrammarSlot slot = start.parse(parser, input);
+		
+		while(slot != null) {
+			slot = slot.parse(parser, input);
+		}
+		
+		while(parser.hasNextDescriptor()) {
+			Descriptor descriptor = parser.nextDescriptor();
+			slot = descriptor.getLabel();
+			GSSNode cu = descriptor.getGSSNode();
+			SPPFNode cn = descriptor.getSPPFNode();
+			int ci = descriptor.getInputIndex();
+			parser.update(cu, cn, ci);
+			log.trace("Processing ({}, {}, {}, {})", slot, ci, cu, cn);
+			slot = slot.parse(parser, input);
+		
+			while(slot != null) {
+				slot = slot.parse(parser, input);
+			}
+		}
+		return null;
+	}
+	
 	@Override
-	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
+	public GrammarSlot parse(GLLParser parser, Input input) {
 		while(parser.hasNextDescriptor()) {
 			Descriptor descriptor = parser.nextDescriptor();
 			GrammarSlot slot = descriptor.getLabel();
-			cu = descriptor.getGSSNode();
-			cn = descriptor.getSPPFNode();
-			ci = descriptor.getInputIndex();
+			GSSNode cu = descriptor.getGSSNode();
+			SPPFNode cn = descriptor.getSPPFNode();
+			int ci = descriptor.getInputIndex();
+			parser.update(cu, cn, ci);
 			log.trace("Processing ({}, {}, {}, {})", slot, ci, cu, cn);
-			slot.parse(parser, input, cu, cn, ci);
+			slot = slot.parse(parser, input);
+			while(slot != null) {
+				slot = slot.parse(parser, input);
+			}
 		}
+		return null;
 	}
 	
 	@Override

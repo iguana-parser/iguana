@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 /**
@@ -44,14 +42,15 @@ public class WrapperSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
+	public GrammarSlot parse(GLLParser parser, Input input) {
 		if(beforeAction != null) {
-			beforeAction.execute(slot, parser, input, ci, cu, cn);
+			beforeAction.execute(slot, parser, input);
 		}
-		slot.parse(parser, input, cu, cn, ci);
+		GrammarSlot s = slot.parse(parser, input);
 		if(afterAction != null) {
-			afterAction.execute(slot, parser, input, ci, cu, cn);
+			afterAction.execute(slot, parser, input);
 		}
+		return s;
 	}
 
 	@Override

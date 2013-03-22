@@ -27,11 +27,16 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public void parse(GLLParser parser, Input intput, GSSNode cu, SPPFNode cn, int ci) {
+	public GrammarSlot parse(GLLParser parser, Input intput) {
 		// A ::= ε
+		int ci = parser.getCi();
+		SPPFNode cn = parser.getCn();
+		GSSNode cu = parser.getCu();
 		TerminalSymbolNode cr = parser.getNodeT(TerminalSymbolNode.EPSILON, ci);
 		SPPFNode newNode = parser.getNodeP(this, cn, cr);
+		parser.update(cu, cn, ci);
 		parser.pop(cu, ci, newNode);
+		return null;
 	}
 	
 	@Override

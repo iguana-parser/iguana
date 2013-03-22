@@ -6,7 +6,6 @@ import java.util.List;
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
-import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
@@ -32,14 +31,21 @@ public abstract class AbstractGLLParser implements GLLParser {
 	
 	private static final Logger log = LoggerFactory.getLogger(AbstractGLLParser.class);
 	
+	protected static final GSSNode u0 = GSSNode.DUMMY;
+
 	protected LookupTable lookupTable;
+	
+	protected GSSNode cu = u0;
+	
+	protected SPPFNode cn = DummyNode.getInstance();
+	
+	protected int ci = 0;
 	
 	protected Input input;
 
 	/**
 	 * u0 is the bottom of the GSS.
 	 */
-	protected GSSNode u0 = GSSNode.DUMMY;
 	
 	/**
 	 * 
@@ -316,6 +322,28 @@ public abstract class AbstractGLLParser implements GLLParser {
 	@Override
 	public void removeDescriptor(Descriptor descriptor) {
 		lookupTable.removeDescriptor(descriptor);
+	}
+	
+	@Override
+	public void update(GSSNode cu, SPPFNode cn, int ci) {
+		this.cu = cu;
+		this.cn = cn;
+		this.ci = ci;
+	}
+	
+	@Override
+	public int getCi() {
+		return ci;
+	}
+	
+	@Override
+	public SPPFNode getCn() {
+		return cn;
+	}
+	
+	@Override
+	public GSSNode getCu() {
+		return cu;
 	}
 	
 	/**

@@ -45,12 +45,16 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	
 	@Override
-	public void parse(GLLParser parser, Input input, GSSNode cu, SPPFNode cn, int ci) {
+	public GrammarSlot parse(GLLParser parser, Input input) {
+		int ci = parser.getCi();
+		GSSNode cu = parser.getCu();
+		SPPFNode cn = parser.getCn();
 		if(checkAgainstTestSet(input.get(ci))) {
-			cu = parser.create(next, cu, ci, cn);
-			nonterminal.parse(parser, input, cu, cn, ci);
+			parser.update(parser.create(next, cu, ci, cn), cn, ci);
+			return nonterminal;
 		} else {
 			parser.newParseError(this, ci);
+			return null;
 		}		
 	}
 	
