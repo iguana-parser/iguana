@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.jgll.sppf.SPPFNode;
+import org.jgll.traversal.PositionInfo;
+
 public class Input {
 
 	private int[] input;
@@ -32,7 +35,7 @@ public class Input {
 
 	private Input(int[] input) {
 		this.input = input;
-		lineColumns = new LineColumn[input.length - 1];
+		lineColumns = new LineColumn[input.length];
 		calculateLineLengths();
 	}
 	
@@ -91,6 +94,15 @@ public class Input {
 	public int getColumnNumber(int index) {
 		return lineColumns[index].getColumnNumber();
 	}
+	
+	public PositionInfo getPositionInfo(SPPFNode node) {
+		return new PositionInfo(node.getLeftExtent(), 
+				node.getRightExtent() - node.getLeftExtent(), 
+				getLineNumber(node.getLeftExtent()), 
+				getColumnNumber(node.getLeftExtent()), 
+				getLineNumber(node.getRightExtent()), 
+				getColumnNumber(node.getRightExtent()));
+	}
 
 	private void calculateLineLengths() {
 		int lineNumber = 1;
@@ -112,6 +124,9 @@ public class Input {
 				columnNumber++;
 			}
 		}
+		
+		// The end of the line char column as the last character
+		lineColumns[input.length - 1] = new LineColumn(lineColumns[input.length - 2]);
 	}
 	
 	private static class LineColumn {
@@ -122,6 +137,11 @@ public class Input {
 		public LineColumn(int lineNumber, int columnNumber) {
 			this.lineNumber = lineNumber;
 			this.columnNumber = columnNumber;
+		}
+		
+		public LineColumn(LineColumn lineColumn) {
+			this.lineNumber = lineColumn.lineNumber;
+			this.columnNumber = lineColumn.columnNumber; 
 		}
 		
 		public int getLineNumber() {

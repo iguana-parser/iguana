@@ -1,7 +1,5 @@
 package org.jgll.traversal;
 
-import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 /**
  * 
@@ -24,15 +22,6 @@ public class PositionInfo {
 		this.startColumnNumber = columnNumber;
 		this.endLineNumber = endLineNumber;
 		this.endColumnNumber = endColumnNumber;
-	}
-	
-	public static PositionInfo fromNode(SPPFNode node, Input input) {
-		return new PositionInfo(node.getLeftExtent(), 
-								node.getRightExtent() - node.getLeftExtent(), 
-								input.getLineNumber(node.getLeftExtent()), 
-								input.getColumnNumber(node.getLeftExtent()), 
-								input.getLineNumber(node.getRightExtent()), 
-								input.getColumnNumber(node.getRightExtent()));
 	}
 	
 	public int getStart() {

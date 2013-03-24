@@ -26,7 +26,6 @@ import static org.jgll.traversal.SPPFVisitorUtil.*;
  *
  */
 
-// TODO: check if the conversions are really type safe! 
 @SuppressWarnings("unchecked")
 public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	
@@ -45,7 +44,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			if(terminal.getMatchedChar() == TerminalSymbolNode.EPSILON) {
 				terminal.setObject(Result.skip());
 			} else {
-				Result<U> result = listener.terminal(terminal.getMatchedChar(), PositionInfo.fromNode(terminal, input));
+				Result<U> result = listener.terminal(terminal.getMatchedChar(), input.getPositionInfo(terminal));
 				terminal.setObject(result);
 			}
 		}		
@@ -67,7 +66,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
 				visitChildren(nonterminalSymbolNode, this);
-				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) getChildrenValues(nonterminalSymbolNode), PositionInfo.fromNode(nonterminalSymbolNode, input));
+				Result<U> result = listener.endNode((T) slot.getObject(), getChildrenValues(nonterminalSymbolNode), input.getPositionInfo(nonterminalSymbolNode));
 				nonterminalSymbolNode.setObject(result);
 			}
 		}
@@ -81,7 +80,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
 			listener.startNode((T) slot.getObject());
 			packedNode.accept(this);
-			Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) getChildrenValues(packedNode), PositionInfo.fromNode(packedNode, input));
+			Result<U> result = listener.endNode((T) slot.getObject(), getChildrenValues(packedNode), input.getPositionInfo(packedNode));
 			packedNode.setObject(result);
 			if(result != Result.filter()) {
 				nPackedNodes++;
@@ -89,7 +88,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		}
 		
 		if(nPackedNodes > 1) {
-			Result<U> result = listener.buildAmbiguityNode((Iterable<U>) getChildrenValues(nonterminalSymbolNode), PositionInfo.fromNode(nonterminalSymbolNode,  input));
+			Result<U> result = listener.buildAmbiguityNode(getChildrenValues(nonterminalSymbolNode), input.getPositionInfo(nonterminalSymbolNode));
 			nonterminalSymbolNode.setObject(result);
 		}
 	}
@@ -120,21 +119,21 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				LastGrammarSlot slot = (LastGrammarSlot) listNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
 				visitChildren(listNode, this);
-				Result<U> result = listener.endNode((T) slot.getObject(), (Iterable<U>) getChildrenValues(listNode), PositionInfo.fromNode(listNode,  input));
+				Result<U> result = listener.endNode((T) slot.getObject(), getChildrenValues(listNode), input.getPositionInfo(listNode));
 				listNode.setObject(result);
 			}
 		}
 	}
 	
-	public Iterable<Object> getChildrenValues(final SPPFNode node) {
+	private Iterable<U> getChildrenValues(final SPPFNode node) {
 
 		final Iterator<SPPFNode> iterator = node.getChildren().iterator();
 
-		return new Iterable<Object>() {
+		return new Iterable<U>() {
 
 			@Override
-			public Iterator<Object> iterator() {
-				return new Iterator<Object>() {
+			public Iterator<U> iterator() {
+				return new Iterator<U>() {
 
 					private SPPFNode next;
 
@@ -142,15 +141,26 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 					public boolean hasNext() {
 						while (iterator.hasNext()) {
 							next = iterator.next();
+							
 							if(next.getObject() == Result.filter()) {
 								node.setObject(Result.filter());
-							} else if(next.getObject() == Result.skip()) {
 								// Go to the next child
 								if(!iterator.hasNext()) {
 									return false;
 								}
 								next = iterator.next();
-							} else {
+								
+							} 
+							
+							else if(next.getObject() == Result.skip()) {
+								// Go to the next child
+								if(!iterator.hasNext()) {
+									return false;
+								}
+								next = iterator.next();
+							} 
+							
+							else {
 								return true;								
 							}
 						}
@@ -158,8 +168,8 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 					}
 
 					@Override
-					public Object next() {
-						return next.getObject();
+					public U next() {
+						return ((Result<U>) next.getObject()).getObject();
 					}
 
 					@Override
