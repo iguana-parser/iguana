@@ -34,7 +34,7 @@ public class L0 extends GrammarSlot {
 	}
 	
 	private L0() {
-		super(-1);
+		super(-1, "L0");
 	}
 	
 	public GrammarSlot parse(GLLParser parser, Input input, GrammarSlot start) {
@@ -81,20 +81,12 @@ public class L0 extends GrammarSlot {
 	}
 	
 	@Override
-	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
-		while(recognizer.hasNextDescriptor()) {
-			org.jgll.recognizer.Descriptor descriptor = recognizer.nextDescriptor();
-			GrammarSlot slot = descriptor.getLabel();
-			cu = descriptor.getGSSNode();
-			ci = descriptor.getInputIndex();
-			log.trace("Processing ({}, {}, {})", slot, ci, cu);
-			slot.recognize(recognizer, input, cu, ci);
-		}
+	public void recognize(GLLRecognizer recognizer, Input input) {
 	}
 
 
 	@Override
-	public void code(Writer writer) throws IOException {
+	public void codeParser(Writer writer) throws IOException {
 		writer.append("case L0:\n");
 		writer.append("if (lookupTable.hasNextDescriptor()) {\n");
 		writer.append("Descriptor descriptor = lookupTable.nextDescriptor();\n");
@@ -115,14 +107,9 @@ public class L0 extends GrammarSlot {
 		writer.append("return root;\n");
 		writer.append("}\n");
 	}
-	
-	@Override
-	public String toString() {
-		return "L0";
-	}
 
 	@Override
-	public String getName() {
+	public String getSymbolName() {
 		return "L0";
 	}
 

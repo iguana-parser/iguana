@@ -26,8 +26,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private Set<Terminal> testSet;
 	
-	public NonterminalGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(id, position, previous, head);
+	public NonterminalGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(id, label, position, previous, head);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -59,12 +59,12 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
+	public void recognize(GLLRecognizer recognizer, Input input) {
 		
 	}
 	
 	@Override
-	public void code(Writer writer) throws IOException {
+	public void codeParser(Writer writer) throws IOException {
 		
 		if(previous == null) {
 			codeIfTestSetCheck(writer);
@@ -78,7 +78,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			
 			BodyGrammarSlot slot = next;
 			while(slot != null) {
-				slot.code(writer);
+				slot.codeParser(writer);
 				slot = slot.next;
 			}
 		} 
@@ -143,11 +143,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public String getName() {
-		return nonterminal.getName();
-	}
-
-	@Override
 	public boolean isTerminalSlot() {
 		return false;
 	}
@@ -165,6 +160,11 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public boolean isNullable() {
 		return nonterminal.isNullable();
+	}
+
+	@Override
+	public String getSymbolName() {
+		return nonterminal.getNonterminal().getName();
 	}
 	
 }

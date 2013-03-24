@@ -61,7 +61,7 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 			
 		}));
 		
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aasbs"), grammar, "S");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaaaasbs"), grammar, "S");
 		generateGraph(sppf);
 	}
 

@@ -36,7 +36,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	private final Set<Terminal> followSet;
 	
 	public HeadGrammarSlot(int id, Nonterminal nonterminal) {
-		super(id);
+		super(id, nonterminal.getName());
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();
@@ -45,7 +45,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	// TODO: what's this method good for? 
 	public HeadGrammarSlot(int id, Nonterminal nonterminal, HeadGrammarSlot head, List<BodyGrammarSlot> alternateHeads) {
-		super(id);
+		super(id, nonterminal.getName());
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>(head.alternates);
 
@@ -78,12 +78,12 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
+	public void recognize(GLLRecognizer recognizer, Input input) {
 		
 	}
-
+	
 	@Override
-	public void code(Writer writer) throws IOException {
+	public void codeParser(Writer writer) throws IOException {
 		writer.append("// " + nonterminal.getName() + "\n");
 		writer.append("private void parse_" + id + "() {\n");
 		for (BodyGrammarSlot slot : getReverseAlternates()) {
@@ -98,20 +98,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 		for (BodyGrammarSlot slot : getReverseAlternates()) {
 			writer.append("// " + slot + "\n");
 			writer.append("private void parse_" + slot.id + "() {\n");
-			slot.code(writer);
+			slot.codeParser(writer);
 		}
 	}
 
-	@Override
-	public String getName() {
-		return nonterminal.getName();
-	}
-	
-	@Override
-	public String toString() {
-		return nonterminal.getName();
-	}
-	
 	public Iterable<BodyGrammarSlot> getAlternates() {
 		return alternates;
 	}
@@ -166,6 +156,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public Set<Terminal> getFollowSet() {
 		return followSet;
+	}
+
+	@Override
+	public String getSymbolName() {
+		return nonterminal.getName();
 	}
 	
 }

@@ -25,8 +25,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	private final Terminal terminal;
 
-	public TerminalGrammarSlot(int id, int position, BodyGrammarSlot previous, Terminal terminal, HeadGrammarSlot head) {
-		super(id, position, previous, head);
+	public TerminalGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, Terminal terminal, HeadGrammarSlot head) {
+		super(id, label, position, previous, head);
 		this.terminal = terminal;
 	}
 		
@@ -80,12 +80,12 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
+	public void recognize(GLLRecognizer recognizer, Input input) {
 		
 	}
 	
 	@Override
-	public void code(Writer writer) throws IOException {
+	public void codeParser(Writer writer) throws IOException {
 		
 		// code(A::= x1) = 
 		//				  cR := getNodeT(x1,cI); 
@@ -113,7 +113,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 			BodyGrammarSlot slot = next;
 			// while slot is one before the end, i.e, α . x
 			while(slot != null) {
-				slot.code(writer);
+				slot.codeParser(writer);
 				slot = slot.next;
 			}
 		}
@@ -161,11 +161,6 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		return set;
 	}
 
-	@Override
-	public String getName() {
-		return terminal.toString();
-	}
-	
 	public Terminal getTerminal() {
 		return terminal;
 	}
@@ -188,6 +183,11 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public boolean isNullable() {
 		return false;
+	}
+
+	@Override
+	public String getSymbolName() {
+		return terminal.toString();
 	}
 
 }

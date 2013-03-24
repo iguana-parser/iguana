@@ -24,13 +24,13 @@ public abstract class SPPFNode {
 
 	public abstract String getLabel();
 
-	public abstract SPPFNode get(int index);
+	public abstract SPPFNode getChildAt(int index);
 	
 	public abstract Iterable<SPPFNode> getChildren();
 	
 	public abstract boolean isAmbiguous();
 
-	public abstract int size();
+	public abstract int childrenCount();
 
 	public abstract int getLeftExtent();
 
@@ -59,14 +59,14 @@ public abstract class SPPFNode {
 	 * children. 
 	 * 
 	 * @return true if this node is equal to the given node, and
-	 * 				this node has the same number of children as
-	 * 				the other node, and children at corresponding
-	 * 				indices are equals using the deepEquals method.
+	 * 				its children are equal to the corresponding
+	 * 				(same order) children of the given node. 
 	 * 
 	 * Note: The standard equals method on SPPF nodes only compares
-	 * 		 nodes ignoring their children. While parsing, the standard
-	 * 		 equals method is sufficient, but for comparing parse trees,
-	 * 		 the client should use deepEquals.
+	 * 		 nodes based on their labels, ignoring their children. 
+	 * 		 While parsing, the standard equals method is sufficient, 
+	 * 		 but for comparing parse trees, the client should use deepEquals.
+	 * 		 The deepEquals method is provided for testing purposes.
 	 * 
 	 */
 	public boolean deepEquals(SPPFNode node) {
@@ -75,13 +75,41 @@ public abstract class SPPFNode {
 			return false;
 		}
 		
-		if(size() != node.size()) {
+		if(this.childrenCount() != node.childrenCount()) {
 			return false;
+		}
+		
+		if(this.isAmbiguous() ^ node.isAmbiguous()) {
+			return false;
+		}
+		
+		// Packed nodes are not ordered, so we have to search
+		// through the packed nodes of the given node to match
+		// a packed node. This implementation may not be efficient for
+		// ambiguous nodes having many packed nodes.
+		
+		if(this.isAmbiguous() && node.isAmbiguous()) {
+			Iterator<SPPFNode> thisIt = getChildren().iterator();
+
+			outer:
+			while(thisIt.hasNext()) {
+				SPPFNode thisChild = thisIt.next();
+				Iterator<SPPFNode> otherIt = node.getChildren().iterator();
+				while(otherIt.hasNext()) {
+					SPPFNode otherChild = otherIt.next();
+					if(!thisChild.deepEquals(otherChild)) {
+						continue outer;
+					}
+				} 
+				return false;
+			}
+			
+			return true;
 		}
 		
 		Iterator<SPPFNode> thisIt = getChildren().iterator();
 		Iterator<SPPFNode> otherIt = node.getChildren().iterator();
-		
+
 		while(thisIt.hasNext() && otherIt.hasNext()) {
 			SPPFNode thisChild = thisIt.next();
 			SPPFNode otherChild = otherIt.next();

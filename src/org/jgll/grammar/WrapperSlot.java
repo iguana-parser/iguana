@@ -30,15 +30,15 @@ public class WrapperSlot extends BodyGrammarSlot {
 	}
 
 	public WrapperSlot(BodyGrammarSlot slot, SlotAction before, SlotAction after) {
-		super(slot.id, slot.position, slot.previous, slot.getHead());
+		super(slot.id, slot.getLabel(), slot.position, slot.previous, slot.getHead());
 		this.slot = slot;
 		this.beforeAction = before;
 		this.afterAction = after;
 	}
 
 	@Override
-	public void code(Writer writer) throws IOException {
-		slot.code(writer);
+	public void codeParser(Writer writer) throws IOException {
+		slot.codeParser(writer);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class WrapperSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
+	public void recognize(GLLRecognizer recognizer, Input input) {
 //		if(beforeAction != null) {
 //			beforeAction.execute(slot);
 //		}
@@ -62,11 +62,6 @@ public class WrapperSlot extends BodyGrammarSlot {
 //		if(afterAction != null) {
 //			afterAction.execute(slot);
 //		}		
-	}
-
-	@Override
-	public String getName() {
-		return slot.getName();
 	}
 
 	@Override
@@ -102,6 +97,11 @@ public class WrapperSlot extends BodyGrammarSlot {
 	@Override
 	public boolean isNullable() {
 		return slot.isNullable();
+	}
+
+	@Override
+	public String getSymbolName() {
+		return slot.getSymbolName();
 	}
 	
 }

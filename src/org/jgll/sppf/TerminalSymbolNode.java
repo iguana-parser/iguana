@@ -83,12 +83,12 @@ public class TerminalSymbolNode extends SPPFNode {
 	}
 
 	@Override
-	public SPPFNode get(int index) {
+	public SPPFNode getChildAt(int index) {
 		return null;
 	}
 
 	@Override
-	public int size() {
+	public int childrenCount() {
 		return 0;
 	}
 

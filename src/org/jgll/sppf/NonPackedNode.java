@@ -166,6 +166,9 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public void addChild(SPPFNode node) {
+		if(node instanceof PackedNode) {
+			firstPackedNodeGrammarSlot = ((PackedNode) node).getGrammarSlot();
+		}
 		children.add(node);
 	}
 	
@@ -208,7 +211,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	@Override
-	public SPPFNode get(int index) {
+	public SPPFNode getChildAt(int index) {
 		if(children.size() > index) {
 			return children.get(index);
 		}
@@ -231,7 +234,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	@Override
-	public int size() {
+	public int childrenCount() {
 		return children.size();
 	}
 	

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
+import org.jgll.parser.RecursiveDescentParser;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.GraphVizUtil;
 import org.jgll.util.ToDot;

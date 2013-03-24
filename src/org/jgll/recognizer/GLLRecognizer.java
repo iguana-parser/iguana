@@ -18,4 +18,8 @@ public interface GLLRecognizer {
 	
 	public Descriptor nextDescriptor();
 	
+	public int getCi();
+	
+	public GSSNode getCu();
+	
 }

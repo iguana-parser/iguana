@@ -32,20 +32,38 @@ public abstract class GrammarSlot implements Serializable {
 	 */
 	protected int id;
 	
+	/**
+	 * A string representation of this grammar slot
+	 */
+	protected String label;
 	
-	public GrammarSlot(int id) {
+	public GrammarSlot(int id, String label) {
 		this.id = id;
+		this.label = label;
 	}
 	
-	public abstract void code(Writer writer) throws IOException;
+	public abstract void codeParser(Writer writer) throws IOException;
 	
 	public abstract GrammarSlot parse(GLLParser parser, Input input);
 	
-	public abstract void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci);
+	public abstract void recognize(GLLRecognizer recognizer, Input input);
 	
-	public abstract String getName();
+	/**
+	 * The name of the grammar symbol immediately after this grammar slot
+	 */
+	public abstract String getSymbolName();
 	
 	public int getId() {
 		return id;
-	}	
+	}
+	
+	public String getLabel() {
+		return label;
+	}
+	
+	@Override
+	public String toString() {
+		return label;
+	}
+	
 }

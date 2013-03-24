@@ -1,7 +1,8 @@
-package org.jgll.grammar;
+package org.jgll.parser;
 
+import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.L0;
 import org.jgll.lookup.RecursiveDescentLookupTable;
-import org.jgll.parser.AbstractGLLParser;
 
 
 public class RecursiveDescentParser extends AbstractGLLParser {

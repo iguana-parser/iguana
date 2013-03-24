@@ -24,12 +24,10 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 */
 	protected final int position;
 	
-	private String label;
-
 	protected HeadGrammarSlot head;
 	
-	public BodyGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		super(id);
+	public BodyGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		super(id, label);
 		this.position = position;
 		this.head = head;
 		if(previous != null) {
@@ -75,40 +73,5 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public abstract boolean isLastSlot();
 	
 	public abstract boolean isNullable();
-	
-	@Override
-	// TODO: Change it! too complicated and not necessary. 
-	// Compute labels beforehand and then insert them.
-	public String toString() {
-		if(label == null) {
-			StringBuilder sb = new StringBuilder();
-			
-			// Before
-			BodyGrammarSlot current = previous;
-			while(current != null) {
-				sb.insert(0, current.getName() + " ");
-				current = current.previous;
-			}
-			
-			
-			// This slot
-			sb.append(". ");
-			sb.append(getName());
-			
-			// Next
-			current = next;
-			while(current != null) {
-				sb.append(current.getName()).append(" ");
-				current = current.next;
-			}
-
-			sb.insert(0, " ::= ");
-			
-			sb.delete(sb.length() - 1, sb.length());
-			label = sb.toString();
-		}
-		
-		return label;
-	}
 	
 }

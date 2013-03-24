@@ -14,8 +14,9 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class PackedNode extends SPPFNode {
 	
-	private final int pivot;
 	private final GrammarSlot slot;
+
+	private final int pivot;
 	
 	// TODO: check to see how to remove this
 	private final SPPFNode parent;
@@ -23,6 +24,19 @@ public class PackedNode extends SPPFNode {
 	private final List<SPPFNode> children;
 	
 	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
+		
+		if(slot == null) {
+			throw new IllegalArgumentException("Gramar slot cannot be null.");
+		}
+		
+		if(pivot < 0) {
+			throw new IllegalArgumentException("Pivot should be a positive integer number.");
+		}
+		
+		if(parent == null) {
+			throw new IllegalArgumentException("The parent node cannot be null.");
+		}
+		
 		this.slot = slot;
 		this.pivot = pivot;
 		this.parent = parent;
@@ -62,7 +76,6 @@ public class PackedNode extends SPPFNode {
 	public void addChild(SPPFNode node) {
 		children.add(node);
 	}
-	
 
 	public void removeChild(SPPFNode node) {
 		children.remove(node);
@@ -118,7 +131,7 @@ public class PackedNode extends SPPFNode {
 	}
 
 	@Override
-	public SPPFNode get(int index) {
+	public SPPFNode getChildAt(int index) {
 		if(children.size() > index) {
 			return children.get(index);
 		}
@@ -126,7 +139,7 @@ public class PackedNode extends SPPFNode {
 	}
 
 	@Override
-	public int size() {
+	public int childrenCount() {
 		return children.size();
 	}
 

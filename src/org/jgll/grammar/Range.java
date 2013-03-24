@@ -63,5 +63,4 @@ public class Range implements Terminal {
 		return start == other.start && end == other.end;
 	}
 	
-	
 }

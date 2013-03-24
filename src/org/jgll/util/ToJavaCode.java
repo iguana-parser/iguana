@@ -29,7 +29,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-					"grammar.getNonterminalByName(\"" + node.getGrammarSlot().getName()  + "\"), " + 
+					"grammar.getNonterminalByName(\"" + node.getGrammarSlot()  + "\"), " + 
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
 			
@@ -48,7 +48,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("IntermediateNode node" + count + " = new IntermediateNode(" +
-						"grammar.getGrammarSlotByName(\"" + node.getGrammarSlot().toString()  + "\"), " + 
+						"grammar.getGrammarSlotByName(\"" + node.getGrammarSlot()  + "\"), " + 
 						node.getLeftExtent() + ", " + 
 						node.getRightExtent() + ");\n");
 			
@@ -67,7 +67,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			sb.append("PackedNode node" + count + " = new PackedNode(" +
-					  "grammar.getGrammarSlotByName(\"" + node.getGrammarSlot().toString()  + "\"), " + 
+					  "grammar.getGrammarSlotByName(\"" + node.getGrammarSlot()  + "\"), " + 
 					  node.getPivot() + ", " + node.getParent().getObject() + ");\n");
 			
 			count++;
@@ -85,7 +85,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
-					  "grammar.getNonterminalByName(\"" + node.getGrammarSlot().getName()  + "\"), " + 
+					  "grammar.getNonterminalByName(\"" + node.getGrammarSlot()  + "\"), " + 
 					  node.getLeftExtent() + ", " + 
 					  node.getRightExtent() + ");\n");
 			

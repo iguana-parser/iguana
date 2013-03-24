@@ -26,8 +26,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private Object object;
 	
-	public LastGrammarSlot(int id, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
-		super(id, position, previous, head);
+	public LastGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
+		super(id, label, position, previous, head);
 		this.object = object;
 	}
 		
@@ -38,12 +38,12 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public void recognize(GLLRecognizer recognizer, Input input, org.jgll.recognizer.GSSNode cu, int ci) {
-		recognizer.pop(cu, ci);
+	public void recognize(GLLRecognizer recognizer, Input input) {
+		recognizer.pop(recognizer.getCu(), recognizer.getCi());
 	}
 
 	@Override
-	public void code(Writer writer) throws IOException {
+	public void codeParser(Writer writer) throws IOException {
 		writer.append("   pop(cu, ci, cn);\n");
 		writer.append("   label = L0;\n}\n");
 	}
@@ -72,11 +72,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public String getName() {
-		return "";
-	}
-	
-	@Override
 	public boolean isTerminalSlot() {
 		return false;
 	}
@@ -94,6 +89,11 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public boolean isNullable() {
 		return false;
+	}
+
+	@Override
+	public String getSymbolName() {
+		return "";
 	}
 
 }

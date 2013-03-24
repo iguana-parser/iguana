@@ -21,8 +21,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	private static final long serialVersionUID = 1L;
 	private final Set<Terminal> testSet;
 	
-	public EpsilonGrammarSlot(int id, int position, Set<Terminal> testSet, HeadGrammarSlot head, Object object) {
-		super(id, position, null, head, object);
+	public EpsilonGrammarSlot(int id, String label, int position, Set<Terminal> testSet, HeadGrammarSlot head, Object object) {
+		super(id, label, position, null, head, object);
 		this.testSet = testSet;
 	}
 	
@@ -40,7 +40,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public void code(Writer writer) throws IOException {
+	public void codeParser(Writer writer) throws IOException {
 		// code(A ::= ε) = 
 		// 					cR := getNodeT(ε,cI); 
 		// 					cN := getNodeP(A ::= ·,cN,cR)
@@ -77,10 +77,4 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		}
 		return false;
 	}
-	
-	@Override
-	public String toString() {
-		return head.getName() + " ::= .";
-	}
-	
 }
