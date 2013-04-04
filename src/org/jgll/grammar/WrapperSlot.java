@@ -54,11 +54,11 @@ public class WrapperSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void recognize(GLLRecognizer recognizer, Input input) {
+	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 //		if(beforeAction != null) {
 //			beforeAction.execute(slot);
 //		}
-//		slot.recognize(recognizer, input, cu, ci);
+		return slot.recognize(recognizer, input);
 //		if(afterAction != null) {
 //			afterAction.execute(slot);
 //		}		

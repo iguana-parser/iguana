@@ -80,8 +80,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public void recognize(GLLRecognizer recognizer, Input input) {
-		
+	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+		return null;
 	}
 	
 	@Override

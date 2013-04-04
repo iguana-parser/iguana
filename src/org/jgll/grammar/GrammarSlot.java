@@ -9,10 +9,12 @@ import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
 
 /**
- * A GrammarSlot is the position immediately before or after
- * any symbol in an alternate. They are denoted by LR(0) items. 
- * In X ::= alpha . beta, the grammar symbol denoted by . is after
- * alpha and before beta.
+ * A GrammarSlot is a position immediately before or after
+ * a symbol in the body of a production rule. 
+ * Grammar slots, similar to LR items, are represented by  
+ * For example, in the rule X ::= alpha . beta, the grammar 
+ * slot, denoted by ., is after
+ * alpha and before beta, where alpha are a list of grammar symbols.
  * 
  * Note: the equality of two grammar slots is based on their
  * referential equality, i.e., if they refer to the same object.
@@ -46,7 +48,7 @@ public abstract class GrammarSlot implements Serializable {
 	
 	public abstract GrammarSlot parse(GLLParser parser, Input input);
 	
-	public abstract void recognize(GLLRecognizer recognizer, Input input);
+	public abstract GrammarSlot recognize(GLLRecognizer recognizer, Input input);
 	
 	/**
 	 * The name of the grammar symbol immediately after this grammar slot
