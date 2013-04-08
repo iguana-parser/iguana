@@ -39,23 +39,23 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 	
 	@Test
 	public void testLefAssociativeFilter() {
-		grammar.filter(new Filter(rule1, 2, set(rule1), null));
-		grammar.filter(new Filter(rule2, 2, set(rule2), null));
+		grammar.filter(rule1, 2, new Filter(set(rule1), null));
+		grammar.filter(rule2, 2, new Filter(set(rule2), null));
 		System.out.println(grammar);
 	}
 	
 	@Test
 	public void testPriority() {
-		grammar.filter(new Filter(rule2, 0, set(rule1), null));
-		grammar.filter(new Filter(rule2, 2, set(rule1), null));
+		grammar.filter(rule2, 0, new Filter(set(rule1), null));
+		grammar.filter(rule2, 2, new Filter(set(rule1), null));
 		System.out.println(grammar);
 	}
 	
 	@Test
 	public void testAssociativityAndPriority() {
-		grammar.filter(new Filter(rule1, 2, set(rule1), null));
-		grammar.filter(new Filter(rule2, 0, set(rule1), null));
-		grammar.filter(new Filter(rule2, 2, set(rule1, rule2), null));
+		grammar.filter(rule1, 2, new Filter(set(rule1), null));
+		grammar.filter(rule2, 0, new Filter(set(rule1), null));
+		grammar.filter(rule2, 2, new Filter(set(rule1, rule2), null));
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);

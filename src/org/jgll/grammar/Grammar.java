@@ -54,7 +54,7 @@ public class Grammar implements Serializable {
 	/**
 	 * Nonterminals which are introduced as the result of filtering
 	 */
-	private Map<Set<Rule>, HeadGrammarSlot> filteredNonterminals = new LinkedHashMap<>();
+	private Map<Filter, HeadGrammarSlot> filteredNonterminals = new LinkedHashMap<>();
 	
 	private Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, Map<Tuple<Rule, Integer>, 
 					BodyGrammarSlot> slotsMap, Map<Rule, BodyGrammarSlot> alternatesMap) {
@@ -259,14 +259,29 @@ public class Grammar implements Serializable {
 	 * 									as the nonterminal as the given position.
 	 * 									
 	 */
-	public void filter(Filter filter) {
+	public void filter(Rule rule, int position, Filter filter) {
 		
-		BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<Rule, Integer>(filter.getRule(), filter.getPosition()));
+		if(rule == null) {
+			throw new IllegalArgumentException("Rule cannot be null.");
+		}
+		
+		if(!(rule.getSymbol(position) instanceof Nonterminal)) {
+			throw new IllegalArgumentException("Only nonterminals can be filtered.");
+		}
+		
+		for(Rule r : filter.getFilteredRules()) {
+			if(!r.getHead().equals(rule.getSymbol(position))) {
+				throw new IllegalArgumentException("The nonterminal at position " + position + " should be " + rule.getSymbol(position));
+			}
+		}
+		
+		BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<Rule, Integer>(rule, position));
 		assert grammarSlot instanceof NonterminalGrammarSlot;
 		
 		NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) grammarSlot;
 		
-		HeadGrammarSlot restrictedNonterminal = filteredNonterminals.get(filter.getFilteredRules());
+		HeadGrammarSlot restrictedNonterminal = filteredNonterminals.get(filter);
+		
 		if(restrictedNonterminal == null) {
 			
 			List<BodyGrammarSlot> filteredAlternates = new ArrayList<>();
@@ -277,7 +292,7 @@ public class Grammar implements Serializable {
 			int id = filteredNonterminals.size() + 1;
 			Nonterminal nonterminal = new Nonterminal(ntGrammarSlot.getNonterminal().getNonterminal().getName() + id);
 			restrictedNonterminal = new HeadGrammarSlot(id, nonterminal, ntGrammarSlot.getNonterminal(), filteredAlternates);
-			filteredNonterminals.put(filter.getFilteredRules(), restrictedNonterminal);
+			filteredNonterminals.put(filter, restrictedNonterminal);
 		}
 
 		ntGrammarSlot.setNonterminal(restrictedNonterminal);
