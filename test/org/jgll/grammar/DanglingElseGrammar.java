@@ -38,6 +38,7 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		
 		final Deque<Descriptor> stack = new ArrayDeque<>();
 		
+		
 		BodyGrammarSlot grammarSlot = grammar.getGrammarSlot(rule1, 0);
 		grammar.replace(rule1, 0, WrapperSlot.before(grammarSlot, new SlotAction() {
 
