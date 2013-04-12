@@ -283,7 +283,7 @@ public class Grammar implements Serializable {
 		HeadGrammarSlot restrictedNonterminal = filteredNonterminals.get(filter);
 		
 		if(restrictedNonterminal == null) {
-			
+						
 			List<BodyGrammarSlot> filteredAlternates = new ArrayList<>();
 			for(Rule restrictedRule : filter.getFilteredRules()) {
 				filteredAlternates.add(alternatesMap.get(restrictedRule));

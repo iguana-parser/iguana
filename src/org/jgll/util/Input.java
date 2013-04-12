@@ -108,6 +108,12 @@ public class Input {
 		int lineNumber = 1;
 		int columnNumber = 1;
 
+		// Empty input: only the end of line symbol
+		if(input.length == 1) {
+			lineColumns[0] = new LineColumn(lineNumber, columnNumber);
+			return;
+		}
+		
 		for (int i = 0; i < input.length - 1; i++) {
 			lineColumns[i] = new LineColumn(lineNumber, columnNumber);
 			if (input[i] == '\n') {
