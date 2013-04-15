@@ -56,7 +56,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.firstSet = head.firstSet;
 		this.followSet = head.followSet;
 	}
-		
+	
 	public void addAlternate(BodyGrammarSlot slot) {
 		alternates.add(slot);
 	}
@@ -162,5 +162,5 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public String getSymbolName() {
 		return nonterminal.getName();
 	}
-	
+
 }

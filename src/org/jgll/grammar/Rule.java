@@ -58,7 +58,7 @@ public class Rule implements Serializable {
 	 * 
 	 * @throws IllegalArgumentException if {@code index} is greater than the number of body symbols.
 	 */
-	public Symbol getSymbol(int index) {
+	public Symbol getSymbolAt(int index) {
 		if(index > body.size()) {
 			throw new IllegalArgumentException(index + " cannot be greater than " + body.size());
 		}

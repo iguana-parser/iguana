@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -54,7 +55,7 @@ public class Grammar implements Serializable {
 	/**
 	 * Nonterminals which are introduced as the result of filtering
 	 */
-	private Map<Filter, HeadGrammarSlot> filteredNonterminals = new LinkedHashMap<>();
+	private Map<Collection<Rule>, HeadGrammarSlot> filteredNonterminals = new LinkedHashMap<>();
 	
 	private Grammar(String name, List<HeadGrammarSlot> nonterminals, List<BodyGrammarSlot> slots, Map<Tuple<Rule, Integer>, 
 					BodyGrammarSlot> slotsMap, Map<Rule, BodyGrammarSlot> alternatesMap) {
@@ -191,7 +192,7 @@ public class Grammar implements Serializable {
 			if(i == index) {
 				sb.append(". ");
 			}
-			sb.append(rule.getSymbol(i)).append(" ");
+			sb.append(rule.getSymbolAt(i)).append(" ");
 		}
 		
 		sb.delete(sb.length() - 1, sb.length());
@@ -259,43 +260,77 @@ public class Grammar implements Serializable {
 	 * 									as the nonterminal as the given position.
 	 * 									
 	 */
-	public void filter(Rule rule, int position, Filter filter) {
+	public void filter(Iterable<Filter> filters) {
 		
-		if(rule == null) {
-			throw new IllegalArgumentException("Rule cannot be null.");
-		}
-		
-		if(!(rule.getSymbol(position) instanceof Nonterminal)) {
-			throw new IllegalArgumentException("Only nonterminals can be filtered.");
-		}
-		
-		for(Rule r : filter.getFilteredRules()) {
-			if(!r.getHead().equals(rule.getSymbol(position))) {
-				throw new IllegalArgumentException("The nonterminal at position " + position + " should be " + rule.getSymbol(position));
+		for(Filter filter : filters) {
+			
+			Rule rule = filter.getRule();
+			
+			BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<Rule, Integer>(rule, filter.getPosition()));
+			assert grammarSlot instanceof NonterminalGrammarSlot;
+			
+			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) grammarSlot;
+			
+			HeadGrammarSlot restrictedNonterminal = filteredNonterminals.get(filter.getFilteredRules());
+			
+			if(restrictedNonterminal == null) {
+							
+				List<BodyGrammarSlot> filteredAlternates = new ArrayList<>();
+				for(Rule restrictedRule : filter.getFilteredRules()) {
+					filteredAlternates.add(alternatesMap.get(restrictedRule));
+				}
+				
+				int id = filteredNonterminals.size() + 1;
+				Nonterminal nonterminal = new Nonterminal(ntGrammarSlot.getNonterminal().getNonterminal().getName() + id);
+				restrictedNonterminal = new HeadGrammarSlot(id, nonterminal, ntGrammarSlot.getNonterminal(), filteredAlternates);
+				filteredNonterminals.put(filter.getFilteredRules(), restrictedNonterminal);
 			}
+	
+			ntGrammarSlot.setNonterminal(restrictedNonterminal);
 		}
 		
-		BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<Rule, Integer>(rule, position));
-		assert grammarSlot instanceof NonterminalGrammarSlot;
 		
-		NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) grammarSlot;
+	}
+	
+	/**
+	 * 
+	 * Copies a head grammar slot including all of its alternates.
+	 * The copying is done only at one level.
+	 * 
+	 */
+	private HeadGrammarSlot copy(HeadGrammarSlot slot) {
 		
-		HeadGrammarSlot restrictedNonterminal = filteredNonterminals.get(filter);
+		HeadGrammarSlot newHeadSlot = new HeadGrammarSlot(slot.getId(), slot.getNonterminal());
 		
-		if(restrictedNonterminal == null) {
-						
-			List<BodyGrammarSlot> filteredAlternates = new ArrayList<>();
-			for(Rule restrictedRule : filter.getFilteredRules()) {
-				filteredAlternates.add(alternatesMap.get(restrictedRule));
+		BodyGrammarSlot copy = null;
+		for(BodyGrammarSlot s : slot.getAlternates()) {
+			if(s.isTerminalSlot()) {
+				copy = new TerminalGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, ((TerminalGrammarSlot)s).getTerminal(), s.getHead());
+			} else if (s.isNonterminalSlot()){
+				copy = new NonterminalGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, ((NonterminalGrammarSlot)s).getNonterminal(), s.getHead());
+			} else if (s.isLastSlot()) {
+				copy = new LastGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, s.getHead(), ((LastGrammarSlot)s).getObject());
 			}
 			
-			int id = filteredNonterminals.size() + 1;
-			Nonterminal nonterminal = new Nonterminal(ntGrammarSlot.getNonterminal().getNonterminal().getName() + id);
-			restrictedNonterminal = new HeadGrammarSlot(id, nonterminal, ntGrammarSlot.getNonterminal(), filteredAlternates);
-			filteredNonterminals.put(filter, restrictedNonterminal);
+			newHeadSlot.addAlternate(copy);
 		}
-
-		ntGrammarSlot.setNonterminal(restrictedNonterminal);
+		
+		return newHeadSlot;
+	}
+	
+	private boolean isBinaryRule(Rule rule) {
+		return rule.getHead().equals(rule.getSymbolAt(0)) &&
+			   rule.getHead().equals(rule.getSymbolAt(rule.size()));
+	}
+	
+	private boolean isUnaryPrefix(Rule rule) {
+		return ! rule.getHead().equals(rule.getSymbolAt(0)) &&
+				 rule.getHead().equals(rule.getSymbolAt(rule.size()));
+	}
+	
+	private boolean isUnaryPostfix(Rule rule) {
+		return ! rule.getHead().equals(rule.getSymbolAt(rule.size())) &&
+				 rule.getHead().equals(rule.getSymbolAt(0));
 	}
 	
 	public void replace(Rule rule, int index, BodyGrammarSlot newSlot) {

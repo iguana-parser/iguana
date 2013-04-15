@@ -6,32 +6,50 @@ import java.util.Set;
 
 public class Filter {
 		
+	private final Rule rule;
+	private final int position;
 	private final Set<Rule> filteredRules;
 	
-	private final Filter child;
-	
-	public Filter(Collection<Rule> filterList, Filter child) {
+	public Filter(Rule rule, int position, Collection<Rule> filterList) {
+		
+		if(rule == null) {
+			throw new IllegalArgumentException("Rule cannot be null.");
+		}
+		
+		if(!(rule.getSymbolAt(position) instanceof Nonterminal)) {
+			throw new IllegalArgumentException("Only nonterminals can be filtered.");
+		}
 		
 		if(filterList == null) {
 			throw new IllegalArgumentException("The filter list cannot be empty.");
 		}
 		
+		for(Rule r : filterList) {
+			if(!r.getHead().equals(rule.getSymbolAt(position))) {
+				throw new IllegalArgumentException("The nonterminal at position " + position + " should be " + rule.getSymbolAt(position));
+			}
+		}
+		
+		this.rule = rule;
+		this.position = position;
 		this.filteredRules = new HashSet<>(filterList);
-		this.child = child;
 	}
 	
 	public Set<Rule> getFilteredRules() {
 		return filteredRules;
 	}
 	
-	public Filter getChild() {
-		return child;
+	public Rule getRule() {
+		return rule;
 	}
-
+	
+	public int getPosition() {
+		return position;
+	}
+	
 	@Override
 	public int hashCode() {
 		int result = 17;
-		result = 31 * result + ((child == null) ? 0 : child.hashCode());
 		result = 31 * result + filteredRules.hashCode();
 		return result;
 	}
@@ -48,7 +66,6 @@ public class Filter {
 		
 		Filter other = (Filter) obj;
 		
-		return child == null ? other.child == null : child.equals(other.child) && 
-			   filteredRules.equals(other.filteredRules);
+		return filteredRules.equals(other.filteredRules);
 	}	
 }
