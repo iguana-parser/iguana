@@ -262,28 +262,45 @@ public class Grammar implements Serializable {
 	 */
 	public void filter(Iterable<Filter> filters) {
 		
+		Map<BodyGrammarSlot, Rule> secondLevelFilter = new HashMap<>();
+		
 		for(Filter filter : filters) {
 			
 			Rule rule = filter.getRule();
+			Set<Rule> filteredRules = filter.getFilteredRules();
 			
-			BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<Rule, Integer>(rule, filter.getPosition()));
+			if(isBinaryRule(rule)) {
+				for(Rule filterRule : filteredRules) {
+					if(isUnaryPrefix(filterRule)) {
+						secondLevelFilter.put(slotsMap.get(new Tuple<>(rule, 0)), filterRule);
+						break;
+					} 
+					
+					if(isUnaryPostfix(filterRule)) {
+						secondLevelFilter.put(slotsMap.get(new Tuple<>(rule, rule.size())), filterRule);
+						break;
+					}
+				}
+			}
+			
+			BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<>(rule, filter.getPosition()));
 			assert grammarSlot instanceof NonterminalGrammarSlot;
 			
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) grammarSlot;
 			
-			HeadGrammarSlot restrictedNonterminal = filteredNonterminals.get(filter.getFilteredRules());
+			HeadGrammarSlot restrictedNonterminal = filteredNonterminals.get(filteredRules);
 			
 			if(restrictedNonterminal == null) {
 							
 				List<BodyGrammarSlot> filteredAlternates = new ArrayList<>();
-				for(Rule restrictedRule : filter.getFilteredRules()) {
+				for(Rule restrictedRule : filteredRules) {
 					filteredAlternates.add(alternatesMap.get(restrictedRule));
 				}
 				
 				int id = filteredNonterminals.size() + 1;
 				Nonterminal nonterminal = new Nonterminal(ntGrammarSlot.getNonterminal().getNonterminal().getName() + id);
 				restrictedNonterminal = new HeadGrammarSlot(id, nonterminal, ntGrammarSlot.getNonterminal(), filteredAlternates);
-				filteredNonterminals.put(filter.getFilteredRules(), restrictedNonterminal);
+				filteredNonterminals.put(filteredRules, restrictedNonterminal);
 			}
 	
 			ntGrammarSlot.setNonterminal(restrictedNonterminal);
