@@ -67,5 +67,20 @@ public class Filter {
 		Filter other = (Filter) obj;
 		
 		return filteredRules.equals(other.filteredRules);
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<").append(rule).append(", ").append(position);
+		sb.append(", {");
+		for(Rule filteredRule : filteredRules) {
+			sb.append(filteredRule).append(", ");
+		}
+		sb.delete(sb.length() - 2, sb.length());
+		sb.append("}");
+		sb.append(">");
+		return sb.toString();
+	}
+	
 }

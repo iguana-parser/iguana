@@ -10,8 +10,10 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.grammar.Rule.Builder;
 import org.jgll.util.Input;
 import org.jgll.util.Tuple;
 import org.slf4j.Logger;
@@ -45,7 +47,13 @@ public class Grammar implements Serializable {
 
 	private int longestTerminalChain;
 
+	/**
+	 * Map from <Rule, Position> to their corresponding grammar slot.
+	 */
 	private final Map<Tuple<Rule, Integer>, BodyGrammarSlot> slotsMap;
+	
+	
+	private Map<Tuple<Rule, Integer>, BodyGrammarSlot> secondLevelSlotsMap;
 	
 	/**
 	 * Mapping from each rule to its first grammar slot. 
@@ -92,6 +100,7 @@ public class Grammar implements Serializable {
 		List<HeadGrammarSlot> nonterminals = new ArrayList<>();
 		Map<Tuple<Rule, Integer>, BodyGrammarSlot> slotsMap = new HashMap<>();
 		Map<Rule, BodyGrammarSlot> alternatesMap = new HashMap<>();
+		Map<BodyGrammarSlot, Rule> revereseAlternatesMap = new HashMap<>();
 
 		for (Rule rule : rules) {
 			if(!nonterminalMap.containsKey(rule.getHead())) {
@@ -126,6 +135,7 @@ public class Grammar implements Serializable {
 				if (index == 0) {
 					head.addAlternate(slot);
 					alternatesMap.put(rule, slot);
+					revereseAlternatesMap.put(slot, rule);
 				}
 				index++;
 			}
@@ -262,26 +272,10 @@ public class Grammar implements Serializable {
 	 */
 	public void filter(Iterable<Filter> filters) {
 		
-		Map<BodyGrammarSlot, Rule> secondLevelFilter = new HashMap<>();
-		
 		for(Filter filter : filters) {
 			
 			Rule rule = filter.getRule();
 			Set<Rule> filteredRules = filter.getFilteredRules();
-			
-			if(isBinaryRule(rule)) {
-				for(Rule filterRule : filteredRules) {
-					if(isUnaryPrefix(filterRule)) {
-						secondLevelFilter.put(slotsMap.get(new Tuple<>(rule, 0)), filterRule);
-						break;
-					} 
-					
-					if(isUnaryPostfix(filterRule)) {
-						secondLevelFilter.put(slotsMap.get(new Tuple<>(rule, rule.size())), filterRule);
-						break;
-					}
-				}
-			}
 			
 			BodyGrammarSlot grammarSlot = slotsMap.get(new Tuple<>(rule, filter.getPosition()));
 			assert grammarSlot instanceof NonterminalGrammarSlot;
@@ -307,6 +301,45 @@ public class Grammar implements Serializable {
 		}
 		
 		
+		// Second level filtering
+		Map<NonterminalGrammarSlot, Rule> secondLevelFilter = new HashMap<>();
+		for(Filter filter : filters) {
+			Rule rule = filter.getRule();
+			Set<Rule> filteredRules = filter.getFilteredRules();
+
+			if(isBinaryRule(rule)) {
+				for(Rule filterRule : filteredRules) {
+					if(isUnaryPrefix(filterRule)) {
+						secondLevelFilter.put((NonterminalGrammarSlot) slotsMap.get(new Tuple<>(rule, 0)), filterRule);
+					} else if(isUnaryPostfix(filterRule)) {
+						secondLevelFilter.put((NonterminalGrammarSlot) slotsMap.get(new Tuple<>(rule, rule.size())), filterRule);
+					}
+				}
+			}
+		}
+
+
+		// For each right most expression E which is derived from a binary
+		// rule of the form E ::= . E op E in which the E is filtered a
+		// unary operator, copy the nonterminal and apply the unary rule
+		// there.
+		for(Entry<NonterminalGrammarSlot, Rule> e : secondLevelFilter.entrySet()) {
+			
+			if(isUnaryPrefix(e.getValue())) {
+				for(BodyGrammarSlot slot : getLastSlots(e.getKey().getNonterminal())) {
+					HeadGrammarSlot newHead = copy(((NonterminalGrammarSlot) slot).getNonterminal());
+
+					int id = filteredNonterminals.size() + 1;
+					Nonterminal nonterminal = new Nonterminal(newHead.getNonterminal().getName() + id);
+					List<BodyGrammarSlot> filteredAlternates = new ArrayList<>();
+					filteredAlternates.add(null);
+					HeadGrammarSlot filtered = new HeadGrammarSlot(id, nonterminal, newHead, filteredAlternates);
+					
+					((NonterminalGrammarSlot) slot).setNonterminal(filtered);
+				}
+			}
+		}
+		
 	}
 	
 	/**
@@ -319,16 +352,29 @@ public class Grammar implements Serializable {
 		
 		HeadGrammarSlot newHeadSlot = new HeadGrammarSlot(slot.getId(), slot.getNonterminal());
 		
+
 		BodyGrammarSlot copy = null;
-		for(BodyGrammarSlot s : slot.getAlternates()) {
-			if(s.isTerminalSlot()) {
-				copy = new TerminalGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, ((TerminalGrammarSlot)s).getTerminal(), s.getHead());
-			} else if (s.isNonterminalSlot()){
-				copy = new NonterminalGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, ((NonterminalGrammarSlot)s).getNonterminal(), s.getHead());
-			} else if (s.isLastSlot()) {
-				copy = new LastGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, s.getHead(), ((LastGrammarSlot)s).getObject());
+		for(BodyGrammarSlot head : slot.getAlternates()) {
+
+			Builder builder = new Rule.Builder();
+			builder.head(slot.getNonterminal());
+			
+			BodyGrammarSlot s = head;
+			while(s != null) {
+				if(s.isTerminalSlot()) {
+					copy = new TerminalGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, ((TerminalGrammarSlot)s).getTerminal(), s.getHead());
+					builder.addSymbol(((TerminalGrammarSlot)s).getTerminal());
+				} else if (s.isNonterminalSlot()){
+					copy = new NonterminalGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, ((NonterminalGrammarSlot)s).getNonterminal(), s.getHead());
+					builder.addSymbol(((NonterminalGrammarSlot)s).getNonterminal().getNonterminal());
+				} else if (s.isLastSlot()) {
+					copy = new LastGrammarSlot(s.getId(), s.getLabel(), s.getPosition(), copy, s.getHead(), ((LastGrammarSlot)s).getObject());
+				}
+				
+				s = s.next;
 			}
 			
+			alternatesMap.put(builder.build(), copy);
 			newHeadSlot.addAlternate(copy);
 		}
 		
@@ -337,17 +383,31 @@ public class Grammar implements Serializable {
 	
 	private boolean isBinaryRule(Rule rule) {
 		return rule.getHead().equals(rule.getSymbolAt(0)) &&
-			   rule.getHead().equals(rule.getSymbolAt(rule.size()));
+			   rule.getHead().equals(rule.getSymbolAt(rule.size() - 1));
 	}
 	
 	private boolean isUnaryPrefix(Rule rule) {
 		return ! rule.getHead().equals(rule.getSymbolAt(0)) &&
-				 rule.getHead().equals(rule.getSymbolAt(rule.size()));
+				 rule.getHead().equals(rule.getSymbolAt(rule.size() - 1));
 	}
 	
 	private boolean isUnaryPostfix(Rule rule) {
-		return ! rule.getHead().equals(rule.getSymbolAt(rule.size())) &&
+		return ! rule.getHead().equals(rule.getSymbolAt(rule.size() - 1)) &&
 				 rule.getHead().equals(rule.getSymbolAt(0));
+	}
+	
+	private Iterable<BodyGrammarSlot> getLastSlots(HeadGrammarSlot head) {
+		
+		List<BodyGrammarSlot> slots = new ArrayList<>();
+		
+		for(BodyGrammarSlot slot : head.getAlternates()) {
+			BodyGrammarSlot current = slot;
+			while(!current.next.isLastSlot()) {
+				current = current.next;
+			}
+			slots.add(current);
+		}
+		return slots;
 	}
 	
 	public void replace(Rule rule, int index, BodyGrammarSlot newSlot) {

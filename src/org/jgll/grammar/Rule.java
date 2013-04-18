@@ -25,7 +25,7 @@ public class Rule implements Serializable {
 		this.body = builder.body;
 	}
 	
-	public Rule(Nonterminal head, List<Symbol> body, Object object) {
+	public Rule(Nonterminal head, Iterable<Symbol> body, Object object) {
 		if(head == null) {
 			throw new IllegalArgumentException("head cannot be null.");
 		}
@@ -33,8 +33,23 @@ public class Rule implements Serializable {
 			throw new IllegalArgumentException("Object cannot be null.");
 		}
 		this.head = head;
-		this.body = body;
+		
+		this.body = new ArrayList<>();
+		for(Symbol symbol : body) {
+			this.body.add(symbol);
+		}
+		
 		this.object = object;
+	}
+	
+	/**
+	 * Creates a rule using the given new head and the body of the given rule.
+	 * 
+	 * @param head
+	 * @param rule
+	 */
+	public Rule(Nonterminal head, Rule rule) {
+		this(head, rule.getBody(), rule.getObject());
 	}
 	
 	public Nonterminal getHead() {
