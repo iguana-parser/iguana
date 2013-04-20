@@ -27,7 +27,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<BodyGrammarSlot> alternates;
+	private List<BodyGrammarSlot> alternates;
 	
 	private final Nonterminal nonterminal;
 	
