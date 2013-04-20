@@ -16,11 +16,7 @@ import org.jgll.util.Input;
  * slot, denoted by ., is after
  * alpha and before beta, where alpha are a list of grammar symbols.
  * 
- * Note: the equality of two grammar slots is based on their
- * referential equality, i.e., if they refer to the same object.
- * Thet's why these classes inherit the equals and hash code implementations 
- * from the Object class.
- * 
+ *
  * @author Ali Afroozeh
  *
  */
@@ -66,6 +62,26 @@ public abstract class GrammarSlot implements Serializable {
 	@Override
 	public String toString() {
 		return label;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 17 + 31 * id;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		}
+		
+		if(!(obj instanceof GrammarSlot)) {
+			return false;
+		}
+		
+		GrammarSlot other = (GrammarSlot) obj;
+		
+		return other.id == id;
 	}
 	
 }
