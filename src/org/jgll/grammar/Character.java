@@ -26,7 +26,7 @@ public class Character implements Terminal {
 	
 	@Override
 	public String toString() {
-		return "[" + (char)c + "]";
+		return getName();
 	}
 
 	@Override
@@ -50,6 +50,21 @@ public class Character implements Terminal {
 		Character other = (Character) obj;
 		
 		return c == other.c;
+	}
+
+	@Override
+	public boolean isTerminal() {
+		return true;
+	}
+
+	@Override
+	public boolean isNonterminal() {
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		return "[" + (char)c + "]";
 	}
 
 }

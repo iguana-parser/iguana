@@ -27,7 +27,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	private List<BodyGrammarSlot> alternates;
+	private List<Alternate> alternates;
 	
 	private final Nonterminal nonterminal;
 	
@@ -35,30 +35,31 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private final Set<Terminal> followSet;
 	
+	private final Set<Integer> alternatesSet;
+	
 	public HeadGrammarSlot(int id, Nonterminal nonterminal) {
 		super(id, nonterminal.getName());
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();
 		this.followSet = new HashSet<>();
-	}
-	
-	// TODO: what's this method good for? 
-	public HeadGrammarSlot(int id, Nonterminal nonterminal, HeadGrammarSlot head, List<BodyGrammarSlot> alternateHeads) {
-		super(id, nonterminal.getName());
-		this.nonterminal = nonterminal;
-		this.alternates = new ArrayList<>(head.alternates);
-
-		for(BodyGrammarSlot slot : alternateHeads) {
-			alternates.remove(slot);
-		}
+		this.alternatesSet = new HashSet<>(alternates.size());
 		
-		this.firstSet = head.firstSet;
-		this.followSet = head.followSet;
+		for(int i = 0; i < alternates.size(); i++) {
+			alternatesSet.add(i);
+		}
 	}
 	
-	public void addAlternate(BodyGrammarSlot slot) {
-		alternates.add(slot);
+	public void addAlternate(Alternate alternate) {
+		alternates.add(alternate);
+		alternatesSet.add(alternates.size() - 0);
+	}
+	
+	public void removeAlternate(Set<Integer> set) {
+		alternatesSet.removeAll(set);
+		for(int i : set) {
+			alternates.set(i, null);			
+		}
 	}
 
 	public boolean isNullable() {
@@ -67,11 +68,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
-		for(BodyGrammarSlot slot : getReverseAlternates()) {
+		for(Alternate alternate : getReverseAlternates()) {
 			GSSNode cu = parser.getCu();
 			int ci = parser.getCi();
-			if(slot.checkAgainstTestSet(input.get(ci))) {
-				parser.add(slot, cu, ci, DummyNode.getInstance());
+			if(alternate.getFirstSlot().checkAgainstTestSet(input.get(ci))) {
+				parser.add(alternate.getFirstSlot(), cu, ci, DummyNode.getInstance());
 			}
 		}
 		return null;
@@ -86,50 +87,38 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void codeParser(Writer writer) throws IOException {
 		writer.append("// " + nonterminal.getName() + "\n");
 		writer.append("private void parse_" + id + "() {\n");
-		for (BodyGrammarSlot slot : getReverseAlternates()) {
-			writer.append("   //" + slot + "\n");
-			slot.codeIfTestSetCheck(writer);			
-			writer.append("   add(grammar.getGrammarSlot(" + slot.id + "), cu, ci, DummyNode.getInstance());\n");
+		for (Alternate alternate : getReverseAlternates()) {
+			writer.append("   //" + alternate.getFirstSlot() + "\n");
+			alternate.getFirstSlot().codeIfTestSetCheck(writer);			
+			writer.append("   add(grammar.getGrammarSlot(" + alternate.getFirstSlot().id + "), cu, ci, DummyNode.getInstance());\n");
 			writer.append("}\n");
 		}
 		writer.append("   label = L0;\n");
 		writer.append("}\n");
 
-		for (BodyGrammarSlot slot : getReverseAlternates()) {
-			writer.append("// " + slot + "\n");
-			writer.append("private void parse_" + slot.id + "() {\n");
-			slot.codeParser(writer);
+		for (Alternate alternate : getReverseAlternates()) {
+			writer.append("// " + alternate + "\n");
+			writer.append("private void parse_" + alternate.getFirstSlot().getId() + "() {\n");
+			alternate.getFirstSlot().codeParser(writer);
 		}
 	}
 
-	public Iterable<BodyGrammarSlot> getAlternates() {
+	public Iterable<Alternate> getAlternates() {
 		return alternates;
-	}
-	
-	public void replaceAlternate(BodyGrammarSlot oldSlot, BodyGrammarSlot newSlot) {
-		ArrayList<BodyGrammarSlot> newAlternates = new ArrayList<>();
-		for(BodyGrammarSlot alternate : alternates) {
-			if(alternate == oldSlot) {
-				newAlternates.add(newSlot);
-			} else {
-				newAlternates.add(alternate);
-			}
-		}
-		alternates = newAlternates;
 	}
 	
 	public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
 		
-	public Iterable<BodyGrammarSlot> getReverseAlternates() {
-		return new Iterable<BodyGrammarSlot>() {
+	public Iterable<Alternate> getReverseAlternates() {
+		return new Iterable<Alternate>() {
 			
 			@Override
-			public Iterator<BodyGrammarSlot> iterator() {
-				return new Iterator<BodyGrammarSlot>() {
+			public Iterator<Alternate> iterator() {
+				return new Iterator<Alternate>() {
 
-					ListIterator<BodyGrammarSlot> listIterator = alternates.listIterator(alternates.size());
+					ListIterator<Alternate> listIterator = alternates.listIterator(alternates.size());
 					
 					@Override
 					public boolean hasNext() {
@@ -137,7 +126,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 					}
 
 					@Override
-					public BodyGrammarSlot next() {
+					public Alternate next() {
 						return listIterator.previous();
 					}
 
@@ -161,6 +150,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public String getSymbolName() {
 		return nonterminal.getName();
+	}
+	
+	public boolean contains(Set<Integer> set) {
+		return alternatesSet.containsAll(set);
 	}
 
 }

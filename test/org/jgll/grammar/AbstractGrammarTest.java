@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +51,10 @@ public abstract class AbstractGrammarTest {
 		return list;
 	}
 	
+	protected static List<Symbol> emptyList() {
+		return Collections.emptyList();
+	}
+	 
 	protected void generateGraphWithoutIntermeiateNodes(SPPFNode sppf) {
 		GraphVizUtil.generateGraph(sppf, new ToDotWithoutIntermediateNodes(), outputDir, "graph");
 	}

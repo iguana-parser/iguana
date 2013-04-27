@@ -41,12 +41,7 @@ public class CharacterClass implements Terminal {
 	
 	@Override
 	public String toString() {
-		String s = "[";
-		for(Range range : ranges) {
-			s += (char) range.getStart() + "-" + (char) range.getEnd();
-		}
-		s += "]";
-		return s;
+		return getName();
 	}
 
 	@Override
@@ -76,6 +71,28 @@ public class CharacterClass implements Terminal {
 		CharacterClass other = (CharacterClass) obj;
 
 		return ranges.equals(other.ranges);
+	}
+
+	@Override
+	public boolean isTerminal() {
+		return true;
+	}
+
+	@Override
+	public boolean isNonterminal() {
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("[");
+		for(Range range : ranges) {
+			sb.append((char) range.getStart()).append("-").append((char) range.getEnd());
+		}
+		sb.append("]");
+		return sb.toString();
 	}
 
 

@@ -1,7 +1,6 @@
 package org.jgll.grammar;
 
 
-import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 
 import org.jgll.sppf.IntermediateNode;
@@ -16,16 +15,30 @@ import org.junit.Test;
 public class Gamma0Test extends AbstractGrammarTest {
 
 	/**
-	 *	S ::= a S | A S d | epsilon
+	 *	S ::= a S 
+	 *       | A S d 
+	 *       | epsilon
+	 *       
 	 * 	A ::= a
 	 */
 	@Override
 	protected Grammar initGrammar() {
-		Rule r1 = new Rule.Builder().head(new Nonterminal("S")).body(new Character('a'), new Nonterminal("S")).build();
-		Rule r2 = new Rule.Builder().head(new Nonterminal("S")).body(new Nonterminal("A"), new Nonterminal("S"), new Character('d')).build();
-		Rule r3 = new Rule.Builder().head(new Nonterminal("S")).build();
-		Rule r4 = new Rule.Builder().head(new Nonterminal("A")).body(new Character('a')).build();
-		return Grammar.fromRules("gamma1", asList(r1, r2, r3, r4));
+		
+		GrammarBuilder builder = new GrammarBuilder("gamma1");
+		
+		Rule r1 = new Rule(new Nonterminal("S"), list(new Character('a'), new Nonterminal("S")));
+		builder.addRule(r1);
+		
+		Rule r2 = new Rule(new Nonterminal("S"), list(new Nonterminal("A"), new Nonterminal("S"), new Character('d')));
+		builder.addRule(r2);
+		
+		Rule r3 = new Rule(new Nonterminal("S"), emptyList());
+		builder.addRule(r3);
+		
+		Rule r4 = new Rule(new Nonterminal("A"), list(new Character('a')));
+		builder.addRule(r4);
+		
+		return builder.build();
 	}
 	
 	@Test

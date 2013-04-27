@@ -1,6 +1,5 @@
 package org.jgll.grammar;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,25 +25,34 @@ public class FilterTest1 extends AbstractGrammarTest {
 
 	@Override
 	protected Grammar initGrammar() {
+		
+		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
+		
 		// E ::= E + E
-		rule1 = new Rule.Builder().head(new Nonterminal("E")).body(new Nonterminal("E"), new Character('+'), new Nonterminal("E")).build();
+		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E")));
+		builder.addRule(rule1);
+		
 		// E ::= - E
-		rule2 = new Rule.Builder().head(new Nonterminal("E")).body(new Character('-'), new Nonterminal("E")).build();
+		rule2 = new Rule(new Nonterminal("E"), list(new Character('-'), new Nonterminal("E")));
+		builder.addRule(rule2);
+		
 		// E ::= a
-		rule3 = new Rule.Builder().head(new Nonterminal("E")).body(new Character('a')).build();
-		return Grammar.fromRules("gamma2", Arrays.asList(rule1, rule2, rule3));
+		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
+		builder.addRule(rule3);
+		return builder.build();
 	}
 	
-	
+
 	@Test
 	public void testAssociativityAndPriority() {
 		Set<Filter> filters = new HashSet<>();
-		filters.add(new Filter(rule1, 2, set(rule1)));
-		filters.add(new Filter(rule1, 0, set(rule2)));
+		filters.add(new Filter(rule1, 2, set(0)));
+		filters.add(new Filter(rule1, 0, set(1)));
 		grammar.filter(filters);
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}
 	
+
 }

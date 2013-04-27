@@ -8,10 +8,19 @@ public class EBNFTest extends AbstractGrammarTest {
 
 	@Override
 	protected Grammar initGrammar() {
-		Rule rule1 = new Rule.Builder().head(new Nonterminal("A*", true)).body(new Nonterminal("A*"), new Nonterminal("A")).build();
-		Rule rule2 = new Rule.Builder().head(new Nonterminal("A*", true)).body().build();
-		Rule rule3 = new Rule.Builder().head(new Nonterminal("A")).body(new Character('a')).build();
-		return Grammar.fromRules("A*", set(rule1, rule2, rule3));
+		
+		GrammarBuilder builder = new GrammarBuilder("A*");
+		
+		Rule rule1 = new Rule(new Nonterminal("A*", true), list(new Nonterminal("A*"), new Nonterminal("A")));
+		builder.addRule(rule1);
+		
+		Rule rule2 = new Rule(new Nonterminal("A*", true), emptyList());
+		builder.addRule(rule2);
+		
+		Rule rule3 = new Rule(new Nonterminal("A"), list(new Character('a')));
+		builder.addRule(rule3);
+		
+		return builder.build();
 	}
 	
 	@Test

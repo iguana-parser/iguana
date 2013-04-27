@@ -33,7 +33,7 @@ public class Range implements Terminal {
 	
 	@Override
 	public String toString() {
-		return "[" + (char) start + "-" + (char) end + "]";
+		return getName();
 	}
 
 	@Override
@@ -61,6 +61,21 @@ public class Range implements Terminal {
 		Range other = (Range) obj;
 		
 		return start == other.start && end == other.end;
+	}
+
+	@Override
+	public boolean isTerminal() {
+		return true;
+	}
+
+	@Override
+	public boolean isNonterminal() {
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		return  "[" + (char) start + "-" + (char) end + "]";
 	}
 	
 }

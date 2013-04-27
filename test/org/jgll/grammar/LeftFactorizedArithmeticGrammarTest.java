@@ -1,30 +1,36 @@
 package org.jgll.grammar;
 
-import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 
 import org.junit.Test;
 
+/**
+ * 	E  ::= T E1
+ * 	E1 ::= + T E1 | epsilon
+ *  T  ::= F T1
+ *  T1 ::= * F T1 |  epsilon
+ *  F  ::= (E) | a
+ *  
+ */
 public class LeftFactorizedArithmeticGrammarTest extends AbstractGrammarTest {
 	
 	@Override
 	protected Grammar initGrammar() {
-		/**
-		 * 	E  ::= T E1
-		 * 	E1 ::= + T E1 | epsilon
-		 *  T  ::= F T1
-		 *  T1 ::= * F T1 |  epsilon
-		 *  F  ::= (E) | a
-		 */
-		Rule r1 = new Rule.Builder().head(new Nonterminal("E")).body(new Nonterminal("T"), new Nonterminal("E1")).build();
-		Rule r2 = new Rule.Builder().head(new Nonterminal("E1")).body(new Character('+'), new Nonterminal("T"), new Nonterminal("E1")).build();
-		Rule r3 = new Rule.Builder().head(new Nonterminal("E1")).build();
-		Rule r4 = new Rule.Builder().head(new Nonterminal("T")).body(new Nonterminal("F"), new Nonterminal("T1")).build();
-		Rule r5 = new Rule.Builder().head(new Nonterminal("T1")).body(new Character('*'), new Nonterminal("F"), new Nonterminal("T1")).build();
-		Rule r6 = new Rule.Builder().head(new Nonterminal("T1")).build();
-		Rule r7 = new Rule.Builder().head(new Nonterminal("F")).body(new Character('('), new Nonterminal("E"), new Character(')')).build();
-		Rule r8 = new Rule.Builder().head(new Nonterminal("F")).body(new Character('a')).build();
-		return Grammar.fromRules("LeftFactorizedArithmeticExpressions", asList(r1, r2, r3, r4, r5, r6, r7, r8));
+
+		GrammarBuilder builder = new GrammarBuilder("LeftFactorizedArithmeticExpressions");
+		
+		Rule r1 = new Rule(new Nonterminal("E"), list(new Nonterminal("T"), new Nonterminal("E1")));
+		Rule r2 = new Rule(new Nonterminal("E1"), list(new Character('+'), new Nonterminal("T"), new Nonterminal("E1")));
+		Rule r3 = new Rule(new Nonterminal("E1"), emptyList());
+		Rule r4 = new Rule(new Nonterminal("T"), list(new Nonterminal("F"), new Nonterminal("T1")));
+		Rule r5 = new Rule(new Nonterminal("T1"), list(new Character('*'), new Nonterminal("F"), new Nonterminal("T1")));
+		Rule r6 = new Rule(new Nonterminal("T1"), emptyList());
+		Rule r7 = new Rule(new Nonterminal("F"), list(new Character('('), new Nonterminal("E"), new Character(')')));
+		Rule r8 = new Rule(new Nonterminal("F"), list(new Character('a')));
+		
+		
+		builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8);
+		return builder.build();
 	}
 	
 	@Test

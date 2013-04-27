@@ -1,6 +1,5 @@
 package org.jgll.grammar;
 
-import static java.util.Arrays.asList;
 import junit.framework.Assert;
 
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -9,17 +8,22 @@ import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
 
-// A ::= B C
-// B ::= 'b'
-// C ::= 'c'
+/**
+ * A ::= B C
+ * B ::= 'b'
+ * C ::= 'c'
+ * 
+ * @author Afroozeh
+ *
+ */
 public class Test3 extends AbstractGrammarTest {
 
 	@Override
 	protected Grammar initGrammar() {
-		Rule r1 = new Rule.Builder().head(new Nonterminal("A")).body(new Nonterminal("B"), new Nonterminal("C")).build();
-		Rule r2 = new Rule.Builder().head(new Nonterminal("B")).body(new Character('b')).build();
-		Rule r3 = new Rule.Builder().head(new Nonterminal("C")).body(new Character('c')).build();
-		return Grammar.fromRules("test3", asList(r1, r2, r3));
+		Rule r1 = new Rule(new Nonterminal("A"), list(new Nonterminal("B"), new Nonterminal("C")));
+		Rule r2 = new Rule(new Nonterminal("B"), list(new Character('b')));
+		Rule r3 = new Rule(new Nonterminal("C"), list(new Character('c')));
+		return new GrammarBuilder("test3").addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
 	@Test

@@ -1,6 +1,5 @@
 package org.jgll.grammar;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,9 +7,9 @@ public class Filter {
 		
 	private final Rule rule;
 	private final int position;
-	private final Set<Rule> filteredRules;
+	private final Set<Integer> filteredRules;
 	
-	public Filter(Rule rule, int position, Collection<Rule> filterList) {
+	public Filter(Rule rule, int position, Set<Integer> filterList) {
 		
 		if(rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
@@ -23,19 +22,13 @@ public class Filter {
 		if(filterList == null) {
 			throw new IllegalArgumentException("The filter list cannot be empty.");
 		}
-		
-		for(Rule r : filterList) {
-			if(!r.getHead().equals(rule.getSymbolAt(position))) {
-				throw new IllegalArgumentException("The nonterminal at position " + position + " should be " + rule.getSymbolAt(position));
-			}
-		}
-		
+				
 		this.rule = rule;
 		this.position = position;
 		this.filteredRules = new HashSet<>(filterList);
 	}
 	
-	public Set<Rule> getFilteredRules() {
+	public Set<Integer> getFilteredRules() {
 		return filteredRules;
 	}
 	
@@ -74,7 +67,7 @@ public class Filter {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<").append(rule).append(", ").append(position);
 		sb.append(", {");
-		for(Rule filteredRule : filteredRules) {
+		for(Integer filteredRule : filteredRules) {
 			sb.append(filteredRule).append(", ");
 		}
 		sb.delete(sb.length() - 2, sb.length());

@@ -64,24 +64,4 @@ public abstract class GrammarSlot implements Serializable {
 		return label;
 	}
 	
-	@Override
-	public int hashCode() {
-		return 17 + 31 * id;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj == this) {
-			return true;
-		}
-		
-		if(!(obj instanceof GrammarSlot)) {
-			return false;
-		}
-		
-		GrammarSlot other = (GrammarSlot) obj;
-		
-		return other.id == id;
-	}
-	
 }

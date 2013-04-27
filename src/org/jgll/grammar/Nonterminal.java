@@ -50,4 +50,14 @@ public class Nonterminal implements Symbol {
 		return 31 * 17 + name.hashCode();
 	}
 
+	@Override
+	public boolean isTerminal() {
+		return false;
+	}
+
+	@Override
+	public boolean isNonterminal() {
+		return true;
+	}
+
 }

@@ -19,13 +19,11 @@ public class Rule implements Serializable {
 	
 	private final Object object;
 	
-	public Rule(Builder builder) {
-		this.head = builder.head;
-		this.object = builder.object;
-		this.body = builder.body;
+	public Rule(Nonterminal head, List<? extends Symbol> body) {
+		this(head, body, null);
 	}
 	
-	public Rule(Nonterminal head, Iterable<Symbol> body, Object object) {
+	public Rule(Nonterminal head, List<? extends Symbol> body, Object object) {
 		if(head == null) {
 			throw new IllegalArgumentException("head cannot be null.");
 		}
@@ -34,29 +32,16 @@ public class Rule implements Serializable {
 		}
 		this.head = head;
 		
-		this.body = new ArrayList<>();
-		for(Symbol symbol : body) {
-			this.body.add(symbol);
-		}
+		this.body = new ArrayList<>(body);
 		
 		this.object = object;
 	}
-	
-	/**
-	 * Creates a rule using the given new head and the body of the given rule.
-	 * 
-	 * @param head
-	 * @param rule
-	 */
-	public Rule(Nonterminal head, Rule rule) {
-		this(head, rule.getBody(), rule.getObject());
-	}
-	
+		
 	public Nonterminal getHead() {
 		return head;
 	}
 	
-	public Iterable<Symbol> getBody() {
+	public List<Symbol> getBody() {
 		return body;
 	}
 	
@@ -81,38 +66,22 @@ public class Rule implements Serializable {
 		return body.get(index);
 	}
 	
-	public static class Builder {
-		private List<Symbol> body = new ArrayList<>();
-		private Nonterminal head;
-		private Object object;
-		
-		public Builder head(Nonterminal head) {
-			this.head = head;
-			return this;
-		}
-		
-		public Builder addSymbol(Symbol s) {
-			body.add(s);
-			return this;
-		}
-		
-		public Builder body(Symbol...symbols) {
-			for(Symbol s : symbols) {
-				body.add(s);
-			}
-			return this;
-		}
-		
-		public Builder addObject(Object object) {
-			this.object = object;
-			return this;
-		}
-		
-		public Rule build() {
-			return new Rule(this);
-		}
+	public boolean isBinary() {
+		return head.equals(getSymbolAt(0)) &&
+			   head.equals(getSymbolAt(size() - 1));
 	}
 	
+	public boolean isUnaryPrefix() {
+		return ! head.equals(getSymbolAt(0)) &&
+				 head.equals(getSymbolAt(size() - 1));
+	}
+	
+	public boolean isUnaryPostfix() {
+		return ! head.equals(getSymbolAt(size() - 1)) &&
+				 head.equals(getSymbolAt(0));
+	}
+
+		
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

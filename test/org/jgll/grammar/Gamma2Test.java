@@ -1,22 +1,37 @@
 package org.jgll.grammar;
 
-import java.util.Arrays;
+import static junit.framework.Assert.assertEquals;
 
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
-import static junit.framework.Assert.assertEquals;
 
+/**
+ * 
+ *  S ::= S S S 
+ *      | S S 
+ *      | b
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class Gamma2Test extends AbstractGrammarTest {
 
 	@Override
 	protected Grammar initGrammar() {
-		// S ::= S S S | S S | b
-		Rule rule1 = new Rule.Builder().head(new Nonterminal("S"))
-									   .body(new Nonterminal("S"), new Nonterminal("S"), new Nonterminal("S")).build();
-		Rule rule2 = new Rule.Builder().head(new Nonterminal("S")).body(new Nonterminal("S"), new Nonterminal("S")).build();
-		Rule rule3 = new Rule.Builder().head(new Nonterminal("S")).body(new Character('b')).build();
-		return Grammar.fromRules("gamma2", Arrays.asList(rule1, rule2, rule3));
+		
+		GrammarBuilder builder = new GrammarBuilder("gamma2");
+		
+		Rule rule1 = new Rule(new Nonterminal("S"), list(new Nonterminal("S"), new Nonterminal("S"), new Nonterminal("S")));
+		builder.addRule(rule1);
+		
+		Rule rule2 = new Rule(new Nonterminal("S"), list(new Nonterminal("S"), new Nonterminal("S")));
+		builder.addRule(rule2);
+		
+		Rule rule3 = new Rule(new Nonterminal("S"), list(new Character('b')));
+		builder.addRule(rule3);
+		
+		return builder.build();
 	}
 	
 	@Test
