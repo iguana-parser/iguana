@@ -57,7 +57,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 		
 		alternates.add(alternate);
-		alternatesSet.add(alternates.size() - 0);
+		alternatesSet.add(alternates.size() - 1);
 	}
 	
 	public void removeAlternate(Set<Integer> set) {
@@ -109,7 +109,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 
 	public Iterable<Alternate> getAlternates() {
-		return alternates;
+		List<Alternate> newList = new ArrayList<>();
+		for(Alternate alternate : alternates) {
+			if(alternate != null) {
+				newList.add(alternate);
+			}
+		}
+		return newList;
 	}
 	
 	public Nonterminal getNonterminal() {
@@ -145,13 +151,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public HeadGrammarSlot copy() {
-		HeadGrammarSlot head = new HeadGrammarSlot(id, nonterminal);
+		HeadGrammarSlot copyHead = new HeadGrammarSlot(id, new Nonterminal(nonterminal.getName()));
 		
 		for(Alternate alternate : alternates) {
-			head.addAlternate(alternate.copy(head));
+			copyHead.addAlternate(alternate.copy());
 		}
 		
-		return head;
+		return copyHead;
 	}
 		
 	public Set<Terminal> getFirstSet() {
@@ -169,6 +175,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public boolean contains(Set<Integer> set) {
 		return alternatesSet.containsAll(set);
+	}
+	
+	@Override
+	public String toString() {
+		return nonterminal.toString();
 	}
 
 }

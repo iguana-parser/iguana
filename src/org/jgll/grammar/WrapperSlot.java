@@ -105,7 +105,7 @@ public class WrapperSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public BodyGrammarSlot copy(HeadGrammarSlot head, BodyGrammarSlot previous) {
+	public BodyGrammarSlot copy(BodyGrammarSlot previous) {
 		// TODO Auto-generated method stub
 		return null;
 	}

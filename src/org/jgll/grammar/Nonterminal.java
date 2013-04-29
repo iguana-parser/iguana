@@ -8,6 +8,8 @@ public class Nonterminal implements Symbol {
 	
 	private final boolean ebnfList;
 	
+	private int index;
+	
 	public Nonterminal(String name) {
 		this(name, false);
 	}
@@ -27,7 +29,7 @@ public class Nonterminal implements Symbol {
 	
 	@Override
 	public String toString() {
-		return name;
+		return name + (index > 0 ? index : "");
 	}
 	
 	@Override
@@ -42,12 +44,15 @@ public class Nonterminal implements Symbol {
 		
 		Nonterminal other = (Nonterminal) obj;
 		
-		return name.equals(other.name);
+		return name.equals(other.name) && index == other.index;
 	}
 	
 	@Override
 	public int hashCode() {
-		return 31 * 17 + name.hashCode();
+		int result = 17;
+		result = 31 * result + name.hashCode();
+		result = 31 * result + index;
+		return result;
 	}
 
 	@Override
@@ -59,5 +64,12 @@ public class Nonterminal implements Symbol {
 	public boolean isNonterminal() {
 		return true;
 	}
-
+	
+	public int getIndex() {
+		return index;
+	}
+	
+	public void setIndex(int index) {
+		this.index = index;
+	}
 }

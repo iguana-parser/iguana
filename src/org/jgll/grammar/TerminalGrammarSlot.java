@@ -191,7 +191,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public BodyGrammarSlot copy(HeadGrammarSlot head, BodyGrammarSlot previous) {
+	public BodyGrammarSlot copy(BodyGrammarSlot previous) {
 		return new TerminalGrammarSlot(id, label, position, previous, terminal, head);
 	}
 

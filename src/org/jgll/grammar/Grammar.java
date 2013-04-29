@@ -153,19 +153,28 @@ public class Grammar implements Serializable {
 		return longestTerminalChain;
 	}
 	
+	int filteredNonterminals = 1;
+	
 	public void filter(Set<Filter> filters) {
+		
+		List<HeadGrammarSlot> newNonterminals = new ArrayList<>();
+		
 		for(HeadGrammarSlot head : nonterminals) {
 			for(Alternate alternate : head.getAlternates()) {
 				for(Filter filter : filters) {
 					if(alternate.match(filter)) {
 						 HeadGrammarSlot headToBeFiltered = alternate.getNonterminalAt(filter.getPosition());
 						 HeadGrammarSlot copy = headToBeFiltered.copy();
+						 copy.getNonterminal().setIndex(filteredNonterminals++);
+						 newNonterminals.add(copy);
 						 copy.removeAlternate(filter.getFilteredRules());
 						 alternate.setNonterminalAt(filter.getPosition(), copy);
 					}
 				}
 			}
 		}
+		
+		nonterminals.addAll(newNonterminals);
 	}
 	
 	private Iterable<BodyGrammarSlot> getLastSlots(HeadGrammarSlot head) {

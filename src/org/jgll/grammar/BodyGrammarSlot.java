@@ -50,7 +50,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	public abstract Iterable<Terminal> getTestSet();
 	
-	public abstract BodyGrammarSlot copy(HeadGrammarSlot head, BodyGrammarSlot previous);
+	public abstract BodyGrammarSlot copy(BodyGrammarSlot previous);
 	
 	public void codeElseTestSetCheck(Writer writer) throws IOException {
 		writer.append("} else { newParseError(grammar.getGrammarSlot(" + this.id +  "), ci); label = L0; return; } \n");

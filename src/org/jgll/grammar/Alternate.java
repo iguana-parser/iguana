@@ -51,17 +51,19 @@ class Alternate {
 		((NonterminalGrammarSlot)bodyGrammarSlot).setNonterminal(head);
 	}
 	
-	public Alternate copy(HeadGrammarSlot head) {
+	public Alternate copy() {
 		
-		BodyGrammarSlot current = firstSlot;
-		BodyGrammarSlot copy = null;
+		BodyGrammarSlot copyFirstSlot = firstSlot.copy(null);
+		
+		BodyGrammarSlot current = firstSlot.next;
+		BodyGrammarSlot copy = copyFirstSlot;
 		
 		while(current != null) {
-			copy = current.copy(head, copy);
+			copy = current.copy(copy);
 			current = current.next;
 		}
 		 
-		return new Alternate(copy);
+		return new Alternate(copyFirstSlot);
 	}
 
 	
@@ -70,25 +72,32 @@ class Alternate {
 		Iterator<BodyGrammarSlot> it1 = symbols.iterator();
 		Iterator<Symbol> it2 = filter.getRule().getBody().iterator();
 		
+		int i = 0;
+		
 		while(it1.hasNext() && it2.hasNext()) {			
-			BodyGrammarSlot next1 = it1.next();
-			Symbol next2 = it2.next();
+			BodyGrammarSlot alternateSymbol = it1.next();
+			Symbol filterSymbol = it2.next();
 			
-			if((next1.isTerminalSlot() && next2.isNonterminal()) ||
-			   (next1.isNonterminalSlot() && next2.isTerminal())) {
+			if((alternateSymbol.isTerminalSlot() && filterSymbol.isNonterminal()) ||
+			   (alternateSymbol.isNonterminalSlot() && filterSymbol.isTerminal())) {
 				return false;
 			}
 			
-			if(! next1.getSymbolName().equals(next2.getName())) {
+			if(! alternateSymbol.getSymbolName().equals(filterSymbol.getName())) {
 				return false;
 			}
 			
-			if(next1.isNonterminalSlot() && next2.isNonterminal()) {
-				NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) next1;
-				if(ntSlot.getNonterminal().contains(filter.getFilteredRules())) {
-					ntSlot.getNonterminal().removeAlternate(filter.getFilteredRules());
+			
+			if(filter.getPosition() == i) {
+				if(alternateSymbol.isNonterminalSlot() && filterSymbol.isNonterminal()) {
+					NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) alternateSymbol;
+					if(! ntSlot.getNonterminal().contains(filter.getFilteredRules())) {
+						return false;
+					}
 				}
 			}
+			
+			i++; 
 		}
 		
 		return true;
