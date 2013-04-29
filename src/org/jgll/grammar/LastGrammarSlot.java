@@ -97,4 +97,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		return "";
 	}
 
+	@Override
+	public BodyGrammarSlot copy(HeadGrammarSlot head, BodyGrammarSlot previous) {
+		return new LastGrammarSlot(id, label, position, previous, head, object);
+	}
+
 }

@@ -166,5 +166,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public String getSymbolName() {
 		return nonterminal.getNonterminal().getName();
 	}
+
+	@Override
+	public BodyGrammarSlot copy(HeadGrammarSlot head, BodyGrammarSlot previous) {
+		return new NonterminalGrammarSlot(id, label, position, previous, nonterminal, head);
+	}
 	
 }

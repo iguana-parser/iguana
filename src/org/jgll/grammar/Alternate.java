@@ -25,13 +25,45 @@ class Alternate {
 			symbols.add(current);
 			current = current.next();
 		}
-		
 	}
 	
 	public BodyGrammarSlot getFirstSlot() {
 		return firstSlot;
 	}
 	
+	public HeadGrammarSlot getNonterminalAt(int index) {
+		BodyGrammarSlot bodyGrammarSlot = symbols.get(index);
+		
+		if(!bodyGrammarSlot.isNonterminalSlot()) {
+			throw new RuntimeException("The symbol at " + index + " should be a nonterminal.");
+		}
+		
+		return ((NonterminalGrammarSlot)bodyGrammarSlot).getHead();
+	}
+	
+	public void setNonterminalAt(int index, HeadGrammarSlot head) {
+		BodyGrammarSlot bodyGrammarSlot = symbols.get(index);
+		
+		if(!bodyGrammarSlot.isNonterminalSlot()) {
+			throw new RuntimeException("The symbol at " + index + " should be a nonterminal.");
+		}
+		
+		((NonterminalGrammarSlot)bodyGrammarSlot).setNonterminal(head);
+	}
+	
+	public Alternate copy(HeadGrammarSlot head) {
+		
+		BodyGrammarSlot current = firstSlot;
+		BodyGrammarSlot copy = null;
+		
+		while(current != null) {
+			copy = current.copy(head, copy);
+			current = current.next;
+		}
+		 
+		return new Alternate(copy);
+	}
+
 	
 	public boolean match(Filter filter) {
 
@@ -42,8 +74,8 @@ class Alternate {
 			BodyGrammarSlot next1 = it1.next();
 			Symbol next2 = it2.next();
 			
-			if(next1.isTerminalSlot() && next2.isTerminal() ||
-			   next1.isNonterminalSlot() && next2.isNonterminal()) {
+			if((next1.isTerminalSlot() && next2.isNonterminal()) ||
+			   (next1.isNonterminalSlot() && next2.isTerminal())) {
 				return false;
 			}
 			
@@ -60,6 +92,15 @@ class Alternate {
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(BodyGrammarSlot s : symbols) {
+			sb.append(s.getSymbolName()).append(" ");
+		}
+		return sb.toString();
 	}
 	
 }

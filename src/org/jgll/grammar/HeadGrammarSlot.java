@@ -51,6 +51,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public void addAlternate(Alternate alternate) {
+		
+		if(alternate == null) {
+			throw new IllegalArgumentException("Alternate cannot be null.");
+		}
+		
 		alternates.add(alternate);
 		alternatesSet.add(alternates.size() - 0);
 	}
@@ -137,6 +142,16 @@ public class HeadGrammarSlot extends GrammarSlot {
 				};
 			}
 		};
+	}
+	
+	public HeadGrammarSlot copy() {
+		HeadGrammarSlot head = new HeadGrammarSlot(id, nonterminal);
+		
+		for(Alternate alternate : alternates) {
+			head.addAlternate(alternate.copy(head));
+		}
+		
+		return head;
 	}
 		
 	public Set<Terminal> getFirstSet() {

@@ -5,11 +5,9 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -156,7 +154,18 @@ public class Grammar implements Serializable {
 	}
 	
 	public void filter(Set<Filter> filters) {
-		
+		for(HeadGrammarSlot head : nonterminals) {
+			for(Alternate alternate : head.getAlternates()) {
+				for(Filter filter : filters) {
+					if(alternate.match(filter)) {
+						 HeadGrammarSlot headToBeFiltered = alternate.getNonterminalAt(filter.getPosition());
+						 HeadGrammarSlot copy = headToBeFiltered.copy();
+						 copy.removeAlternate(filter.getFilteredRules());
+						 alternate.setNonterminalAt(filter.getPosition(), copy);
+					}
+				}
+			}
+		}
 	}
 	
 	private Iterable<BodyGrammarSlot> getLastSlots(HeadGrammarSlot head) {
@@ -214,7 +223,5 @@ public class Grammar implements Serializable {
 				
 		return sb.toString();
 	}
-	
-	
 		
 }
