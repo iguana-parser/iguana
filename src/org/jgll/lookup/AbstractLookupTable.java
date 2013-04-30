@@ -71,7 +71,7 @@ public abstract class AbstractLookupTable implements LookupTable {
 
 	@Override
 	public GSSNode getGSSNode(GrammarSlot label, int inputIndex) {
-		int index = label.getId() - grammar.getNonterminals().size();
+		int index = label.getId();
 		if(gssNodes[index] == null) {
 			gssNodes[index] = new GSSNode[inputSize];
 		}

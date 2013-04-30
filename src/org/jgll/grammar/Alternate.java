@@ -51,22 +51,6 @@ class Alternate {
 		((NonterminalGrammarSlot)bodyGrammarSlot).setNonterminal(head);
 	}
 	
-	public Alternate copy() {
-		
-		BodyGrammarSlot copyFirstSlot = firstSlot.copy(null);
-		
-		BodyGrammarSlot current = firstSlot.next;
-		BodyGrammarSlot copy = copyFirstSlot;
-		
-		while(current != null) {
-			copy = current.copy(copy);
-			current = current.next;
-		}
-		 
-		return new Alternate(copyFirstSlot);
-	}
-
-	
 	public boolean match(Filter filter) {
 
 		Iterator<BodyGrammarSlot> it1 = symbols.iterator();

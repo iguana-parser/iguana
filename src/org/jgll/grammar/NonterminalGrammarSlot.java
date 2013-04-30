@@ -167,10 +167,5 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		int index = nonterminal.getNonterminal().getIndex();
 		return nonterminal.getNonterminal().getName() + "" + (index > 0 ? index : "");
 	}
-
-	@Override
-	public BodyGrammarSlot copy(BodyGrammarSlot previous) {
-		return new NonterminalGrammarSlot(id, label, position, previous, nonterminal, head);
-	}
 	
 }

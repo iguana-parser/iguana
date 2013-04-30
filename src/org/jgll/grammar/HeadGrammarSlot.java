@@ -149,16 +149,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 			}
 		};
 	}
-	
-	public HeadGrammarSlot copy() {
-		HeadGrammarSlot copyHead = new HeadGrammarSlot(id, new Nonterminal(nonterminal.getName()));
-		
-		for(Alternate alternate : alternates) {
-			copyHead.addAlternate(alternate.copy());
-		}
-		
-		return copyHead;
-	}
 		
 	public Set<Terminal> getFirstSet() {
 		return firstSet;

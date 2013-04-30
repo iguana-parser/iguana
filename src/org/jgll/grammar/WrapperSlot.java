@@ -104,10 +104,4 @@ public class WrapperSlot extends BodyGrammarSlot {
 		return slot.getSymbolName();
 	}
 
-	@Override
-	public BodyGrammarSlot copy(BodyGrammarSlot previous) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

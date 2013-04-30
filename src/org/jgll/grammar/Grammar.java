@@ -189,7 +189,7 @@ public class Grammar implements Serializable {
 			
 			if(newNonterminal == null) {
 				HeadGrammarSlot headToBeFiltered = alternate.getNonterminalAt(filter.getPosition());
-				newNonterminal = headToBeFiltered.copy();
+				newNonterminal = copy(headToBeFiltered);
 				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
 				newNonterminals.add(newNonterminal);
 				newNonterminal.removeAlternate(filter.getFilteredRules());
@@ -199,6 +199,50 @@ public class Grammar implements Serializable {
 				alternate.setNonterminalAt(filter.getPosition(), newNonterminal);
 			}
 		}
+	}
+	
+	private HeadGrammarSlot copy(HeadGrammarSlot head) {
+		
+		HeadGrammarSlot copyHead = new HeadGrammarSlot(nonterminals.size() + filterNonterminalMap.size(), new Nonterminal(head.getNonterminal().getName()));
+		
+		for(Alternate alternate : head.getAlternates()) {
+			copyHead.addAlternate(copy(alternate));
+		}
+		
+		return copyHead;
+	}
+	
+	private Alternate copy(Alternate alternate) {
+		BodyGrammarSlot copyFirstSlot = copy(alternate.getFirstSlot(), null);
+		
+		BodyGrammarSlot current = alternate.getFirstSlot().next;
+		BodyGrammarSlot copy = copyFirstSlot;
+		
+		while(current != null) {
+			copy = copy(current, copy);
+			current = current.next;
+		}
+		 
+		return new Alternate(copyFirstSlot);
+	}
+	
+	private BodyGrammarSlot copy(BodyGrammarSlot slot, BodyGrammarSlot previous) {
+
+		BodyGrammarSlot copy;
+		
+		if(slot.isLastSlot()) {
+			copy = new LastGrammarSlot(slots.size(), slot.label, slot.position, previous, slot.head, ((LastGrammarSlot) slot).getObject());
+		} 
+		else if(slot.isNonterminalSlot()) {
+			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) slot;
+			copy = new NonterminalGrammarSlot(slots.size(), slot.label, slot.position, previous, ntSlot.getNonterminal(), ntSlot.getHead());
+		} 
+		else {
+			copy = new TerminalGrammarSlot(slots.size(), slot.label, slot.position, previous, ((TerminalGrammarSlot) slot).getTerminal(), slot.head);
+		}
+
+		slots.add(copy);
+		return copy;
 	}
 	
 	private Iterable<BodyGrammarSlot> getLastSlots(HeadGrammarSlot head) {

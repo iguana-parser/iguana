@@ -190,9 +190,4 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		return terminal.toString();
 	}
 
-	@Override
-	public BodyGrammarSlot copy(BodyGrammarSlot previous) {
-		return new TerminalGrammarSlot(id, label, position, previous, terminal, head);
-	}
-
 }

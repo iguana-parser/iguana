@@ -41,7 +41,7 @@ public class GrammarBuilder {
 		BodyGrammarSlot currentSlot = null;
 		
 		if(body.size() == 0) {
-			currentSlot = new EpsilonGrammarSlot(nonterminals.size() + slots.size(), grammarSlotToString(head, body, 0), 0, new HashSet<Terminal>(), headGrammarSlot, rule.getObject());
+			currentSlot = new EpsilonGrammarSlot(slots.size(), grammarSlotToString(head, body, 0), 0, new HashSet<Terminal>(), headGrammarSlot, rule.getObject());
 			headGrammarSlot.addAlternate(new Alternate(currentSlot));
 			slots.add(currentSlot);
 		} 
@@ -51,9 +51,9 @@ public class GrammarBuilder {
 			BodyGrammarSlot firstSlot = null;
 			for (Symbol symbol : body) {
 				if (symbol instanceof Terminal) {
-					currentSlot = new TerminalGrammarSlot(nonterminals.size() + slots.size(), grammarSlotToString(head, body, index), index, currentSlot, (Terminal) symbol, headGrammarSlot);
+					currentSlot = new TerminalGrammarSlot(slots.size(), grammarSlotToString(head, body, index), index, currentSlot, (Terminal) symbol, headGrammarSlot);
 				} else {
-					currentSlot = new NonterminalGrammarSlot(nonterminals.size() + slots.size(), grammarSlotToString(head, body, index), index, currentSlot, getHeadGrammarSlot((Nonterminal) symbol), headGrammarSlot);
+					currentSlot = new NonterminalGrammarSlot(slots.size(), grammarSlotToString(head, body, index), index, currentSlot, getHeadGrammarSlot((Nonterminal) symbol), headGrammarSlot);
 				}
 				slots.add(currentSlot);
 
@@ -63,7 +63,7 @@ public class GrammarBuilder {
 				index++;
 			}
 			
-			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(slots.size() + nonterminals.size(), grammarSlotToString(head, body, index), index, currentSlot, headGrammarSlot, rule.getObject());
+			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(nonterminals.size(), grammarSlotToString(head, body, index), index, currentSlot, headGrammarSlot, rule.getObject());
 			slots.add(lastGrammarSlot);
 			headGrammarSlot.addAlternate(new Alternate(firstSlot));
 
