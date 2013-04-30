@@ -155,30 +155,54 @@ public class Grammar implements Serializable {
 	
 	int filteredNonterminals = 1;
 	
+	Map<Filter, HeadGrammarSlot> filterNonterminalMap = new HashMap<>();
+	
+	List<HeadGrammarSlot> newNonterminals = new ArrayList<>();
+	
 	public void filter(Set<Filter> filters) {
-		
-		List<HeadGrammarSlot> newNonterminals = new ArrayList<>();
 		
 		for(HeadGrammarSlot head : nonterminals) {
 			for(Alternate alternate : head.getAlternates()) {
 				for(Filter filter : filters) {
-					if(alternate.match(filter)) {
-						 HeadGrammarSlot headToBeFiltered = alternate.getNonterminalAt(filter.getPosition());
-						 HeadGrammarSlot copy = headToBeFiltered.copy();
-						 copy.getNonterminal().setIndex(filteredNonterminals++);
-						 newNonterminals.add(copy);
-						 copy.removeAlternate(filter.getFilteredRules());
-						 alternate.setNonterminalAt(filter.getPosition(), copy);
-					}
+					filter(alternate, filter);
 				}
 			}
+		}
+		
+		for(HeadGrammarSlot head : newNonterminals) {
+			for(Alternate alternate : head.getAlternates()) {
+				for(Filter filter : filters) {
+					filter(alternate, filter);
+				}
+			}			
 		}
 		
 		nonterminals.addAll(newNonterminals);
 	}
 	
+	private void filter(Alternate alternate, Filter filter) {
+		if(alternate.match(filter)) {
+			
+			log.trace("Filter {} matches the alternate {}", filter, alternate);
+			
+			HeadGrammarSlot newNonterminal = filterNonterminalMap.get(filter);
+			
+			if(newNonterminal == null) {
+				HeadGrammarSlot headToBeFiltered = alternate.getNonterminalAt(filter.getPosition());
+				newNonterminal = headToBeFiltered.copy();
+				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
+				newNonterminals.add(newNonterminal);
+				newNonterminal.removeAlternate(filter.getFilteredRules());
+				alternate.setNonterminalAt(filter.getPosition(), newNonterminal);
+				filterNonterminalMap.put(filter, newNonterminal);
+			} else {
+				alternate.setNonterminalAt(filter.getPosition(), newNonterminal);
+			}
+		}
+	}
+	
 	private Iterable<BodyGrammarSlot> getLastSlots(HeadGrammarSlot head) {
-		
+
 		List<BodyGrammarSlot> slots = new ArrayList<>();
 		
 		for(Alternate alternate : head.getAlternates()) {

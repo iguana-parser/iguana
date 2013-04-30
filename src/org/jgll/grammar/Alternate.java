@@ -83,17 +83,19 @@ class Alternate {
 				return false;
 			}
 			
-			if(! alternateSymbol.getSymbolName().equals(filterSymbol.getName())) {
+			if(alternateSymbol.isTerminalSlot()) {
+				continue;
+			}
+
+			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) alternateSymbol;
+			
+			if(! ntSlot.getNonterminal().getNonterminal().getName().equals(filterSymbol.getName())) {
 				return false;
 			}
 			
-			
 			if(filter.getPosition() == i) {
-				if(alternateSymbol.isNonterminalSlot() && filterSymbol.isNonterminal()) {
-					NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) alternateSymbol;
-					if(! ntSlot.getNonterminal().contains(filter.getFilteredRules())) {
-						return false;
-					}
+				if(! ntSlot.getNonterminal().contains(filter.getFilteredRules())) {
+					return false;
 				}
 			}
 			
