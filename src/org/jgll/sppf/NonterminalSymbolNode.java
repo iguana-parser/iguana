@@ -1,6 +1,7 @@
 package org.jgll.sppf;
 
 import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -25,6 +26,14 @@ public class NonterminalSymbolNode extends NonPackedNode {
 			return false;
 		}
 		return super.equals(obj);
+	}
+	
+	@Override
+	public String getLabel() {
+		// TODO: fix it later: the names are not good. Use a better way to separate name
+		// and indices.
+		assert slot instanceof HeadGrammarSlot;
+		return ((HeadGrammarSlot) slot).getNonterminal().getName();
 	}
 
 }
