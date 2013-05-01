@@ -3,27 +3,25 @@ package org.jgll.grammar;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Filter {
+class Filter {
 		
-	private final Rule rule;
+	private final HeadGrammarSlot nonterminal;
+	private final int alternateIndex;
 	private final int position;
 	private final Set<Integer> filteredRules;
 	
-	public Filter(Rule rule, int position, Set<Integer> filterList) {
+	public Filter(HeadGrammarSlot nonterminal, int alternateIndex, int position, Set<Integer> filterList) {
 		
-		if(rule == null) {
+		if(nonterminal == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
-		}
-		
-		if(!(rule.getSymbolAt(position) instanceof Nonterminal)) {
-			throw new IllegalArgumentException("Only nonterminals can be filtered.");
 		}
 		
 		if(filterList == null) {
 			throw new IllegalArgumentException("The filter list cannot be empty.");
 		}
 				
-		this.rule = rule;
+		this.nonterminal = nonterminal;
+		this.alternateIndex = alternateIndex;
 		this.position = position;
 		this.filteredRules = new HashSet<>(filterList);
 	}
@@ -32,8 +30,12 @@ public class Filter {
 		return filteredRules;
 	}
 	
-	public Rule getRule() {
-		return rule;
+	public HeadGrammarSlot getNonterminal() {
+		return nonterminal;
+	}
+	
+	public int getAlternateIndex() {
+		return alternateIndex;
 	}
 	
 	public int getPosition() {
@@ -65,7 +67,8 @@ public class Filter {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<").append(rule).append(", ").append(position);
+		sb.append("<").append(nonterminal).append(", ")
+		  .append(alternateIndex).append(", ").append(position);
 		sb.append(", {");
 		for(Integer filteredRule : filteredRules) {
 			sb.append(filteredRule).append(", ");

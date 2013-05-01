@@ -1,8 +1,5 @@
 package org.jgll.grammar;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
@@ -45,12 +42,11 @@ public class FilterTest1 extends AbstractGrammarTest {
 
 	@Test
 	public void testAssociativityAndPriority() {
-		Set<Filter> filters = new HashSet<>();
-		filters.add(new Filter(rule1, 2, set(0)));
-		filters.add(new Filter(rule1, 0, set(1)));
-		grammar.filter(filters);
+		grammar.addFilter("E", 0, 2, set(0));
+		grammar.addFilter("E", 0, 0, set(1));
+		grammar.filter();
 		System.out.println(grammar);
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a"), grammar, "E");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a+a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}
 	

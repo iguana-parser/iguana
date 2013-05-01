@@ -1,7 +1,6 @@
 package org.jgll.grammar;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 class Alternate {
@@ -9,14 +8,17 @@ class Alternate {
 	private final List<BodyGrammarSlot> symbols;
 	
 	private final BodyGrammarSlot firstSlot;
+	
+	private final int index;
 
-	public Alternate(BodyGrammarSlot firstSlot) {
+	public Alternate(BodyGrammarSlot firstSlot, int index) {
 		
 		if(firstSlot == null) {
 			throw new IllegalArgumentException("firstSlot cannot be null.");
 		}
 		
 		this.firstSlot = firstSlot;
+		this.index = index;
 		
 		symbols = new ArrayList<>();
 		
@@ -52,41 +54,22 @@ class Alternate {
 	}
 	
 	public boolean match(Filter filter) {
-
-		Iterator<BodyGrammarSlot> it1 = symbols.iterator();
-		Iterator<Symbol> it2 = filter.getRule().getBody().iterator();
 		
-		int i = 0;
-		
-		while(it1.hasNext() && it2.hasNext()) {			
-			BodyGrammarSlot alternateSymbol = it1.next();
-			Symbol filterSymbol = it2.next();
+		if(index == filter.getAlternateIndex()) {
+			BodyGrammarSlot bodyGrammarSlot = symbols.get(filter.getPosition());
 			
-			if((alternateSymbol.isTerminalSlot() && filterSymbol.isNonterminal()) ||
-			   (alternateSymbol.isNonterminalSlot() && filterSymbol.isTerminal())) {
+			assert bodyGrammarSlot instanceof NonterminalGrammarSlot;
+			
+			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) bodyGrammarSlot;
+			
+			if(! ntSlot.getNonterminal().contains(filter.getFilteredRules())) {
 				return false;
 			}
 			
-			if(alternateSymbol.isTerminalSlot()) {
-				continue;
-			}
-
-			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) alternateSymbol;
-			
-			if(! ntSlot.getNonterminal().getNonterminal().getName().equals(filterSymbol.getName())) {
-				return false;
-			}
-			
-			if(filter.getPosition() == i) {
-				if(! ntSlot.getNonterminal().contains(filter.getFilteredRules())) {
-					return false;
-				}
-			}
-			
-			i++; 
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 	
 	@Override

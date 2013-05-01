@@ -107,6 +107,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 			alternate.getFirstSlot().codeParser(writer);
 		}
 	}
+	
+	public Alternate getAlternateAt(int index) {
+		return alternates.get(index);
+	}
 
 	public List<Alternate> getAlternates() {
 		List<Alternate> newList = new ArrayList<>();
@@ -156,6 +160,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public Set<Terminal> getFollowSet() {
 		return followSet;
+	}
+	
+	public int getCountAlternates() {
+		return getAlternates().size();
 	}
 
 	@Override

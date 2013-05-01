@@ -44,6 +44,7 @@ public class Grammar implements Serializable {
 
 	private int longestTerminalChain;
 	
+	private List<Filter> filters;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -61,6 +62,8 @@ public class Grammar implements Serializable {
 		}
 		
 		this.longestTerminalChain = builder.longestTerminalChain;
+		
+		this.filters = new ArrayList<>();
 	}
 	
 	
@@ -159,7 +162,7 @@ public class Grammar implements Serializable {
 	
 	List<HeadGrammarSlot> newNonterminals = new ArrayList<>();
 	
-	public void filter(Set<Filter> filters) {
+	public void filter() {
 		
 		for(HeadGrammarSlot head : nonterminals) {
 			for(Alternate alternate : head.getAlternates()) {
@@ -205,14 +208,15 @@ public class Grammar implements Serializable {
 		
 		HeadGrammarSlot copyHead = new HeadGrammarSlot(nonterminals.size() + filterNonterminalMap.size(), new Nonterminal(head.getNonterminal().getName()));
 		
+		int index = 0;
 		for(Alternate alternate : head.getAlternates()) {
-			copyHead.addAlternate(copy(alternate, copyHead));
+			copyHead.addAlternate(copy(alternate, index++, copyHead));
 		}
 		
 		return copyHead;
 	}
 	
-	private Alternate copy(Alternate alternate, HeadGrammarSlot head) {
+	private Alternate copy(Alternate alternate, int alternateIndex, HeadGrammarSlot head) {
 		BodyGrammarSlot copyFirstSlot = copy(alternate.getFirstSlot(), null, head);
 		
 		BodyGrammarSlot current = alternate.getFirstSlot().next;
@@ -223,7 +227,7 @@ public class Grammar implements Serializable {
 			current = current.next;
 		}
 		 
-		return new Alternate(copyFirstSlot);
+		return new Alternate(copyFirstSlot, alternateIndex);
 	}
 	
 	private BodyGrammarSlot copy(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {
@@ -257,6 +261,12 @@ public class Grammar implements Serializable {
 			slots.add(current);
 		}
 		return slots;
+	}
+	
+	
+	public void addFilter(String nonterminal, int alternateIndex, int position, Set<Integer> filterdAlternates) {
+		HeadGrammarSlot head = nameToNonterminals.get(nonterminal);
+		filters.add(new Filter(head, alternateIndex, position, filterdAlternates));
 	}
 	
 	@Override
