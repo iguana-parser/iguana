@@ -2,9 +2,6 @@ package org.jgll.grammar;
 
 import static junit.framework.Assert.assertEquals;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
@@ -49,29 +46,26 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 	
 	@Test
 	public void testLefAssociativeFilter() {
-		Set<Filter> filters = new HashSet<>();
-		filters.add(new Filter(rule1, 2, set(0)));
-		filters.add(new Filter(rule2, 2, set(1)));
-		grammar.filter(filters);
+		grammar.addFilter("E", 0, 2, set(0));
+		grammar.addFilter("E", 1, 2, set(1));
+		grammar.filter();
 		System.out.println(grammar);
 	}
 	
 	@Test
 	public void testPriority() {
-		Set<Filter> filters = new HashSet<>();
-		filters.add(new Filter(rule2, 0, set(0)));
-		filters.add(new Filter(rule2, 2, set(0)));
-		grammar.filter(filters);
+		grammar.addFilter("E", 1, 0, set(0));
+		grammar.addFilter("E", 1, 2, set(0));
+		grammar.filter();
 		System.out.println(grammar);
 	}
 	
 	@Test
 	public void testAssociativityAndPriority() {
-		Set<Filter> filters = new HashSet<>();
-		filters.add(new Filter(rule1, 2, set(0)));
-		filters.add(new Filter(rule2, 0, set(0)));
-		filters.add(new Filter(rule2, 2, set(0, 1)));
-		grammar.filter(filters);
+		grammar.addFilter("E", 0, 2, set(0));
+		grammar.addFilter("E", 1, 0, set(0));
+		grammar.addFilter("E", 1, 2, set(0, 1));
+		grammar.filter();
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
