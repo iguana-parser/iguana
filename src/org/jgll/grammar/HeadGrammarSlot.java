@@ -108,7 +108,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 	}
 
-	public Iterable<Alternate> getAlternates() {
+	public List<Alternate> getAlternates() {
 		List<Alternate> newList = new ArrayList<>();
 		for(Alternate alternate : alternates) {
 			if(alternate != null) {
@@ -129,7 +129,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 			public Iterator<Alternate> iterator() {
 				return new Iterator<Alternate>() {
 
-					ListIterator<Alternate> listIterator = alternates.listIterator(alternates.size());
+					ListIterator<Alternate> listIterator = getAlternates().listIterator(getAlternates().size());
 					
 					@Override
 					public boolean hasNext() {

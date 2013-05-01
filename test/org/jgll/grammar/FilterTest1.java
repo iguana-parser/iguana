@@ -50,7 +50,7 @@ public class FilterTest1 extends AbstractGrammarTest {
 		filters.add(new Filter(rule1, 0, set(1)));
 		grammar.filter(filters);
 		System.out.println(grammar);
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a+a"), grammar, "E");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+-a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}
 	

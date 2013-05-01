@@ -19,6 +19,7 @@ import org.jgll.grammar.GrammarSlot;
  * TODO: rename this class! The current name does not make much sense.
  *
  */
+
 public abstract class NonPackedNode extends SPPFNode {
 	
 	protected final GrammarSlot slot;
@@ -133,22 +134,20 @@ public abstract class NonPackedNode extends SPPFNode {
 //			packedNodesIndex = new BitSet(range * slots);
 			packedNodesIndex = new BitSet();
 			
-			int countNonterminals = grammar.getNonterminals().size();
-			packedNodesIndex.set(firstPackedNode.getPivot() * range + firstPackedNode.getGrammarSlot().getId() - countNonterminals);
-			packedNodesIndex.set(secondPackedNode.getPivot() * range + secondPackedNode.getGrammarSlot().getId() - countNonterminals);
+			packedNodesIndex.set(firstPackedNode.getPivot() * range + firstPackedNode.getGrammarSlot().getId());
+			packedNodesIndex.set(secondPackedNode.getPivot() * range + secondPackedNode.getGrammarSlot().getId());
 		} 
 		
 		else {
 			
-			int countNonterminals = grammar.getNonterminals().size();
-			if(packedNodesIndex.get(pivot * range + packedNodeSlot.getId() - countNonterminals)) {
+			if(packedNodesIndex.get(pivot * range + packedNodeSlot.getId())) {
 				return;
 			}
 			
 			PackedNode packedNode = new PackedNode(packedNodeSlot, pivot, this);
 			addChildren(packedNode, leftChild, rightChild);
 			children.add(packedNode);
-			packedNodesIndex.set(packedNode.getPivot() * range + packedNode.getGrammarSlot().getId() - countNonterminals);
+			packedNodesIndex.set(packedNode.getPivot() * range + packedNode.getGrammarSlot().getId());
 		}
 		
 	}

@@ -206,39 +206,39 @@ public class Grammar implements Serializable {
 		HeadGrammarSlot copyHead = new HeadGrammarSlot(nonterminals.size() + filterNonterminalMap.size(), new Nonterminal(head.getNonterminal().getName()));
 		
 		for(Alternate alternate : head.getAlternates()) {
-			copyHead.addAlternate(copy(alternate));
+			copyHead.addAlternate(copy(alternate, copyHead));
 		}
 		
 		return copyHead;
 	}
 	
-	private Alternate copy(Alternate alternate) {
-		BodyGrammarSlot copyFirstSlot = copy(alternate.getFirstSlot(), null);
+	private Alternate copy(Alternate alternate, HeadGrammarSlot head) {
+		BodyGrammarSlot copyFirstSlot = copy(alternate.getFirstSlot(), null, head);
 		
 		BodyGrammarSlot current = alternate.getFirstSlot().next;
 		BodyGrammarSlot copy = copyFirstSlot;
 		
 		while(current != null) {
-			copy = copy(current, copy);
+			copy = copy(current, copy, head);
 			current = current.next;
 		}
 		 
 		return new Alternate(copyFirstSlot);
 	}
 	
-	private BodyGrammarSlot copy(BodyGrammarSlot slot, BodyGrammarSlot previous) {
+	private BodyGrammarSlot copy(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {
 
 		BodyGrammarSlot copy;
 		
 		if(slot.isLastSlot()) {
-			copy = new LastGrammarSlot(slots.size(), slot.label, slot.position, previous, slot.head, ((LastGrammarSlot) slot).getObject());
+			copy = new LastGrammarSlot(slots.size(), slot.label, slot.position, previous, head, ((LastGrammarSlot) slot).getObject());
 		} 
 		else if(slot.isNonterminalSlot()) {
 			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) slot;
-			copy = new NonterminalGrammarSlot(slots.size(), slot.label, slot.position, previous, ntSlot.getNonterminal(), ntSlot.getHead());
+			copy = new NonterminalGrammarSlot(slots.size(), slot.label, slot.position, previous, ntSlot.getNonterminal(), head);
 		} 
 		else {
-			copy = new TerminalGrammarSlot(slots.size(), slot.label, slot.position, previous, ((TerminalGrammarSlot) slot).getTerminal(), slot.head);
+			copy = new TerminalGrammarSlot(slots.size(), slot.label, slot.position, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
 		}
 
 		slots.add(copy);
