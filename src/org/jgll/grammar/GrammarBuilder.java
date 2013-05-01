@@ -63,7 +63,7 @@ public class GrammarBuilder {
 				index++;
 			}
 			
-			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(nonterminals.size(), grammarSlotToString(head, body, index), index, currentSlot, headGrammarSlot, rule.getObject());
+			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(slots.size(), grammarSlotToString(head, body, index), index, currentSlot, headGrammarSlot, rule.getObject());
 			slots.add(lastGrammarSlot);
 			headGrammarSlot.addAlternate(new Alternate(firstSlot));
 
