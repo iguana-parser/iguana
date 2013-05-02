@@ -183,11 +183,20 @@ public class Grammar implements Serializable {
 		}
 		
 		nonterminals.addAll(newNonterminals);
+		System.out.println(secondLevel);
 	}
 	
 	private void filter(Alternate alternate, Filter filter) {
 		
 		if(alternate.match(filter)) {
+			
+			if(alternate.isBinary()) {
+				for(int i : filter.getFilteredRules()) {
+					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
+						secondLevel.put((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(filter.getAlternateIndex()), i);
+					}					
+				}
+			}
 			
 			log.trace("Filter {} matches the alternate {}", filter, alternate);
 			

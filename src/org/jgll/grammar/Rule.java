@@ -66,21 +66,6 @@ public class Rule implements Serializable {
 		return body.get(index);
 	}
 	
-	public boolean isBinary() {
-		return head.equals(getSymbolAt(0)) &&
-			   head.equals(getSymbolAt(size() - 1));
-	}
-	
-	public boolean isUnaryPrefix() {
-		return ! head.equals(getSymbolAt(0)) &&
-				 head.equals(getSymbolAt(size() - 1));
-	}
-	
-	public boolean isUnaryPostfix() {
-		return ! head.equals(getSymbolAt(size() - 1)) &&
-				 head.equals(getSymbolAt(0));
-	}
-
 		
 	@Override
 	public String toString() {

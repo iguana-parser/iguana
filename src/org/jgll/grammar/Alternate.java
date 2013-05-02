@@ -40,6 +40,10 @@ class Alternate {
 		return firstSlot;
 	}
 	
+	public BodyGrammarSlot getBodyGrammarSlotAt(int index) {
+		return symbols.get(index);
+	}
+	
 	public HeadGrammarSlot getNonterminalAt(int index) {
 		BodyGrammarSlot bodyGrammarSlot = symbols.get(index);
 		
@@ -87,6 +91,47 @@ class Alternate {
 			sb.append(s.getSymbolName()).append(" ");
 		}
 		return sb.toString();
+	}
+	
+	public boolean isBinary() {
+		if(! (symbols.get(0).isNonterminalSlot() && symbols.get(symbols.size() - 1).isNonterminalSlot())) {
+			return false;
+		}
+		
+		NonterminalGrammarSlot firstNonterminal = (NonterminalGrammarSlot) symbols.get(0);
+		NonterminalGrammarSlot lastNonterminal = (NonterminalGrammarSlot) symbols.get(symbols.size() - 1);
+		
+		return head.getNonterminal().getName().equals(firstNonterminal.getNonterminal().getNonterminal().getName()) &&
+			   head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
+	}
+	
+	public boolean isUnaryPrefix() {
+		
+		if(isBinary()) {
+			return false;
+		}
+		
+		if(! symbols.get(0).isNonterminalSlot()) {
+			return false;
+		}
+		
+		NonterminalGrammarSlot firstNonterminal = (NonterminalGrammarSlot) symbols.get(0);
+		
+		return head.getNonterminal().getName().equals(firstNonterminal.getNonterminal().getNonterminal().getName());
+	}
+	
+	public boolean isUnaryPostfix() {
+		if(isBinary()) {
+			return false;
+		}
+		
+		if(! symbols.get(symbols.size() - 1).isNonterminalSlot()) {
+			return false;
+		}
+		
+		NonterminalGrammarSlot lastNonterminal = (NonterminalGrammarSlot) symbols.get(symbols.size() - 1);
+		
+		return head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
 	}
 	
 }

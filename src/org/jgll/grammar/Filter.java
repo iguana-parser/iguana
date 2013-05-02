@@ -37,6 +37,15 @@ class Filter {
 	public int getAlternateIndex() {
 		return alternateIndex;
 	}
+
+	public Alternate getFilterAlternate(int index) {
+
+		if(!filteredRules.contains(index)) {
+			throw new IllegalArgumentException("The index " + index + " does not exist in " + filteredRules);
+		}
+		
+		return nonterminal.getAlternateAt(index);
+	}
 	
 	public int getPosition() {
 		return position;
