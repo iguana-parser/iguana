@@ -162,6 +162,8 @@ public class Grammar implements Serializable {
 	
 	List<HeadGrammarSlot> newNonterminals = new ArrayList<>();
 	
+	Map<NonterminalGrammarSlot, Integer> secondLevel = new HashMap<>();
+	
 	public void filter() {
 		
 		for(HeadGrammarSlot head : nonterminals) {
@@ -184,6 +186,7 @@ public class Grammar implements Serializable {
 	}
 	
 	private void filter(Alternate alternate, Filter filter) {
+		
 		if(alternate.match(filter)) {
 			
 			log.trace("Filter {} matches the alternate {}", filter, alternate);
@@ -227,7 +230,7 @@ public class Grammar implements Serializable {
 			current = current.next;
 		}
 		 
-		return new Alternate(copyFirstSlot, alternateIndex);
+		return new Alternate(head, copyFirstSlot, alternateIndex);
 	}
 	
 	private BodyGrammarSlot copy(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {

@@ -5,18 +5,25 @@ import java.util.List;
 
 class Alternate {
 	
+	private final HeadGrammarSlot head;
+	
 	private final List<BodyGrammarSlot> symbols;
 	
 	private final BodyGrammarSlot firstSlot;
 	
 	private final int index;
 
-	public Alternate(BodyGrammarSlot firstSlot, int index) {
+	public Alternate(HeadGrammarSlot head, BodyGrammarSlot firstSlot, int index) {
+		
+		if(head == null) {
+			throw new IllegalArgumentException("head cannot be null.");
+		}
 		
 		if(firstSlot == null) {
 			throw new IllegalArgumentException("firstSlot cannot be null.");
 		}
 		
+		this.head = head;
 		this.firstSlot = firstSlot;
 		this.index = index;
 		
@@ -75,6 +82,7 @@ class Alternate {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(head).append(" ::= ");
 		for(BodyGrammarSlot s : symbols) {
 			sb.append(s.getSymbolName()).append(" ");
 		}
