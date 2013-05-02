@@ -44,6 +44,10 @@ class Alternate {
 		return symbols.get(index);
 	}
 	
+	public BodyGrammarSlot getLastSlot() {
+		return symbols.get(symbols.size() - 1);
+	}
+	
 	public HeadGrammarSlot getNonterminalAt(int index) {
 		BodyGrammarSlot bodyGrammarSlot = symbols.get(index);
 		

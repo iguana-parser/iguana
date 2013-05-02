@@ -50,21 +50,23 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 	}
 	
-	public void addAlternate(Alternate alternate) {
-		
-		if(alternate == null) {
-			throw new IllegalArgumentException("Alternate cannot be null.");
-		}
-		
+	public void addAlternate(Alternate alternate) {		
 		alternates.add(alternate);
-		alternatesSet.add(alternates.size() - 1);
+		if(alternate != null) {
+			alternatesSet.add(alternates.size() - 1);
+		}
 	}
 	
-	public void removeAlternate(Set<Integer> set) {
+	public void removeAlternates(Set<Integer> set) {
 		alternatesSet.removeAll(set);
 		for(int i : set) {
 			alternates.set(i, null);			
 		}
+	}
+	
+	public void removeAlternate(int i) {
+		alternatesSet.remove(i);
+		alternates.set(i, null);
 	}
 
 	public boolean isNullable() {
@@ -110,6 +112,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public Alternate getAlternateAt(int index) {
 		return alternates.get(index);
+	}
+	
+	public List<Alternate> getAlternatesIncludingNull() {
+		return alternates;
 	}
 
 	public List<Alternate> getAlternates() {
