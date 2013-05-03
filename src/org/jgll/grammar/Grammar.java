@@ -45,7 +45,7 @@ public class Grammar implements Serializable {
 
 	private int longestTerminalChain;
 	
-	private List<Filter> filters;
+	private Map<Filter, Filter> filters;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -64,7 +64,7 @@ public class Grammar implements Serializable {
 		
 		this.longestTerminalChain = builder.longestTerminalChain;
 		
-		this.filters = new ArrayList<>();
+		this.filters = new HashMap<>();
 	}
 	
 	
@@ -148,7 +148,7 @@ public class Grammar implements Serializable {
 		
 		for(HeadGrammarSlot head : nonterminals) {
 			for(Alternate alternate : head.getAlternates()) {
-				for(Filter filter : filters) {
+				for(Filter filter : filters.values()) {
 					filter(alternate, filter);
 				}
 			}
@@ -156,7 +156,7 @@ public class Grammar implements Serializable {
 		
 		for(HeadGrammarSlot head : newNonterminals) {
 			for(Alternate alternate : head.getAlternates()) {
-				for(Filter filter : filters) {
+				for(Filter filter : filters.values()) {
 					filter(alternate, filter);
 				}
 			}			
@@ -167,23 +167,23 @@ public class Grammar implements Serializable {
 		Set<NonterminalGrammarSlot> lastSlots = new HashSet<>();
 		
 		// Process the second level filters
-		for(Entry<NonterminalGrammarSlot, Integer> entry : secondLevel.entrySet()) {
-			for(NonterminalGrammarSlot lastSlot : getLastSlots(entry.getKey().getNonterminal(), "E")) {
-				
-				if(lastSlots.contains(lastSlot)) {
-					continue;
-				} else {
-					lastSlots.add(lastSlot);
-				}
-				
-				HeadGrammarSlot headToBeFiltered = lastSlot.getNonterminal();
-				HeadGrammarSlot newNonterminal = copy(headToBeFiltered);
-				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
-				newNonterminals.add(newNonterminal);
-				newNonterminal.removeAlternate(entry.getValue());
-				lastSlot.setNonterminal(newNonterminal);
-			}
-		}
+//		for(Entry<NonterminalGrammarSlot, Integer> entry : secondLevel.entrySet()) {
+//			for(NonterminalGrammarSlot lastSlot : getLastSlots(entry.getKey().getNonterminal(), "E")) {
+//				
+//				if(lastSlots.contains(lastSlot)) {
+//					continue;
+//				} else {
+//					lastSlots.add(lastSlot);
+//				}
+//				
+//				HeadGrammarSlot headToBeFiltered = lastSlot.getNonterminal();
+//				HeadGrammarSlot newNonterminal = copy(headToBeFiltered);
+//				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
+//				newNonterminals.add(newNonterminal);
+//				newNonterminal.removeAlternate(entry.getValue());
+//				lastSlot.setNonterminal(newNonterminal);
+//			}
+//		}
 	}
 	
 	private void filter(Alternate alternate, Filter filter) {
@@ -281,11 +281,32 @@ public class Grammar implements Serializable {
 		}
 		return slots;
 	}
-	
-	
+
+	/**
+	 * 
+	 * Adds the given filter to the set of filters. If a filter with the same nonterminal, alternate index, and
+	 * alternate index already exists, only the given filter alternates are added to the existing filter,
+	 * effectively updating the filter.
+	 * 
+	 * @param nonterminal
+	 * @param alternateIndex
+	 * @param position
+	 * @param filterdAlternates
+	 * 
+	 */
 	public void addFilter(String nonterminal, int alternateIndex, int position, Set<Integer> filterdAlternates) {
 		HeadGrammarSlot head = nameToNonterminals.get(nonterminal);
-		filters.add(new Filter(head, alternateIndex, position, filterdAlternates));
+		Filter key = new Filter(head, alternateIndex, position, filterdAlternates);
+		Filter filter = filters.get(key);
+		
+		if(filter == null) {
+			filters.put(key, key);
+			return;
+		}
+		
+		for(int i : filterdAlternates) {
+			filter.addFilterRule(i);
+		}
 	}
 	
 	@Override

@@ -37,6 +37,10 @@ class Filter {
 	public int getAlternateIndex() {
 		return alternateIndex;
 	}
+	
+	public void addFilterRule(int index) {
+		filteredRules.add(index);
+	}
 
 	public Alternate getFilterAlternate(int index) {
 
@@ -54,7 +58,9 @@ class Filter {
 	@Override
 	public int hashCode() {
 		int result = 17;
-		result = 31 * result + filteredRules.hashCode();
+		result = 31 * result + nonterminal.hashCode();
+		result = 31 * result + alternateIndex;
+		result = 31 * result + position;
 		return result;
 	}
 
@@ -70,7 +76,9 @@ class Filter {
 		
 		Filter other = (Filter) obj;
 		
-		return filteredRules.equals(other.filteredRules);
+		return nonterminal.equals(other.nonterminal) &&
+			   alternateIndex == other.alternateIndex &&
+			   position == other.position;
 	}
 	
 	@Override
