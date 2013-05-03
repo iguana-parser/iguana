@@ -64,6 +64,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 	}
 	
+	public Set<Integer> getAlternatesSet() {
+		return alternatesSet;
+	}
+	
 	public void removeAlternate(int i) {
 		alternatesSet.remove(i);
 		alternates.set(i, null);

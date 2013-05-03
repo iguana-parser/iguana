@@ -14,8 +14,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Input;
+import org.jgll.util.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.core.subst.Token;
 
 /**
  * 
@@ -140,6 +143,8 @@ public class Grammar implements Serializable {
 	
 	Map<Filter, HeadGrammarSlot> filterNonterminalMap = new HashMap<>();
 	
+	Map<Tuple<String, Set<Integer>>, HeadGrammarSlot> filterNonterminalMap2 = new HashMap<>();
+	
 	List<HeadGrammarSlot> newNonterminals = new ArrayList<>();
 	
 	Map<NonterminalGrammarSlot, Integer> secondLevel = new HashMap<>();
@@ -167,23 +172,23 @@ public class Grammar implements Serializable {
 		Set<NonterminalGrammarSlot> lastSlots = new HashSet<>();
 		
 		// Process the second level filters
-//		for(Entry<NonterminalGrammarSlot, Integer> entry : secondLevel.entrySet()) {
-//			for(NonterminalGrammarSlot lastSlot : getLastSlots(entry.getKey().getNonterminal(), "E")) {
-//				
-//				if(lastSlots.contains(lastSlot)) {
-//					continue;
-//				} else {
-//					lastSlots.add(lastSlot);
-//				}
-//				
-//				HeadGrammarSlot headToBeFiltered = lastSlot.getNonterminal();
-//				HeadGrammarSlot newNonterminal = copy(headToBeFiltered);
-//				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
-//				newNonterminals.add(newNonterminal);
-//				newNonterminal.removeAlternate(entry.getValue());
-//				lastSlot.setNonterminal(newNonterminal);
-//			}
-//		}
+		for(Entry<NonterminalGrammarSlot, Integer> entry : secondLevel.entrySet()) {
+			for(NonterminalGrammarSlot lastSlot : getLastSlots(entry.getKey().getNonterminal(), "E")) {
+				
+				if(lastSlots.contains(lastSlot)) {
+					continue;
+				} else {
+					lastSlots.add(lastSlot);
+				}
+				
+				HeadGrammarSlot headToBeFiltered = lastSlot.getNonterminal();
+				HeadGrammarSlot newNonterminal = copy(headToBeFiltered);
+				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
+				newNonterminals.add(newNonterminal);
+				newNonterminal.removeAlternate(entry.getValue());
+				lastSlot.setNonterminal(newNonterminal);
+			}
+		}
 	}
 	
 	private void filter(Alternate alternate, Filter filter) {
@@ -199,8 +204,8 @@ public class Grammar implements Serializable {
 			}
 			
 			log.trace("Filter {} matches the alternate {}", filter, alternate);
-			
-			HeadGrammarSlot newNonterminal = filterNonterminalMap.get(filter);
+			Tuple<String, Set<Integer>> tuple = get(alternate.getNonterminalAt(filter.getAlternateIndex()), filter);
+			HeadGrammarSlot newNonterminal = filterNonterminalMap2.get(tuple);
 			
 			if(newNonterminal == null) {
 				HeadGrammarSlot headToBeFiltered = alternate.getNonterminalAt(filter.getPosition());
@@ -209,11 +214,18 @@ public class Grammar implements Serializable {
 				newNonterminals.add(newNonterminal);
 				newNonterminal.removeAlternates(filter.getFilteredRules());
 				alternate.setNonterminalAt(filter.getPosition(), newNonterminal);
-				filterNonterminalMap.put(filter, newNonterminal);
+				filterNonterminalMap2.put(tuple, newNonterminal);
 			} else {
 				alternate.setNonterminalAt(filter.getPosition(), newNonterminal);
 			}
 		}
+	}
+	
+	private Tuple<String, Set<Integer>> get(HeadGrammarSlot head, Filter filter) {
+		String name = head.getNonterminal().getName();
+		Set<Integer> alternates = new HashSet<>(head.getAlternatesSet());
+		alternates.removeAll(filter.getFilteredRules());
+		return new Tuple<String, Set<Integer>>(name, alternates);
 	}
 	
 	private HeadGrammarSlot copy(HeadGrammarSlot head) {
@@ -262,6 +274,15 @@ public class Grammar implements Serializable {
 
 		slots.add(copy);
 		return copy;
+	}
+	
+	@SafeVarargs
+	private static <T> Set<T> set(T...objects) {
+		Set<T>  set = new HashSet<>();
+		for(T t : objects) {
+			set.add(t);
+		}
+		return set;
 	}
 	
 	private Iterable<NonterminalGrammarSlot> getLastSlots(HeadGrammarSlot head, String name) {

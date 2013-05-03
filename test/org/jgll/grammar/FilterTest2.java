@@ -53,7 +53,6 @@ public class FilterTest2 extends AbstractGrammarTest {
 		
 		// ^ has higher priority than +
 		grammar.addFilter("E", 0, 0, set(1));
-		
 		grammar.addFilter("E", 0, 2, set(1));
 		
 		grammar.filter();
