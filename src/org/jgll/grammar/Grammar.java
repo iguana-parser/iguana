@@ -18,8 +18,6 @@ import org.jgll.util.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.core.subst.Token;
-
 /**
  * 
  * @author Ali Afroozeh
@@ -149,23 +147,34 @@ public class Grammar implements Serializable {
 	
 	Map<NonterminalGrammarSlot, Integer> secondLevel = new HashMap<>();
 	
+	Set<Filter> newFilters = new HashSet<>();
+	
 	public void filter() {
 		
-		for(HeadGrammarSlot head : nonterminals) {
-			for(Alternate alternate : head.getAlternates()) {
-				for(Filter filter : filters.values()) {
-					filter(alternate, filter);
-				}
-			}
+		for(Filter filter : filters.values()) {
+			filter(filter);
 		}
 		
-		for(HeadGrammarSlot head : newNonterminals) {
-			for(Alternate alternate : head.getAlternates()) {
-				for(Filter filter : filters.values()) {
-					filter(alternate, filter);
-				}
-			}			
+		for(Filter filter : newFilters) {
+			filter(filter);
 		}
+
+		
+//		for(HeadGrammarSlot head : nonterminals) {
+//			for(Alternate alternate : head.getAlternates()) {
+//				for(Filter filter : filters.values()) {
+//					filter(alternate, filter);
+//				}
+//			}
+//		}
+//		
+//		for(HeadGrammarSlot head : newNonterminals) {
+//			for(Alternate alternate : head.getAlternates()) {
+//				for(Filter filter : filters.values()) {
+//					filter(alternate, filter);
+//				}
+//			}			
+//		}
 		
 		nonterminals.addAll(newNonterminals);
 		
@@ -191,39 +200,47 @@ public class Grammar implements Serializable {
 		}
 	}
 	
-	private void filter(Alternate alternate, Filter filter) {
+	private void filter(Filter filter) {
 		
-		if(alternate.match(filter)) {
+		if(filter.match()) {
 			
-			if(alternate.isBinary()) {
-				for(int i : filter.getFilteredRules()) {
-					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
-						secondLevel.put((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(filter.getPosition()), i);
-					}					
-				}
-			}
+//			if(alternate.isBinary()) {
+//				for(int i : filter.getFilteredRules()) {
+//					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
+//						secondLevel.put((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(filter.getPosition()), i);
+//					}					
+//				}
+//			}
 			
-			log.trace("Filter {} matches the alternate {}", filter, alternate);
-			Tuple<String, Set<Integer>> tuple = get(alternate.getNonterminalAt(filter.getAlternateIndex()), filter);
+			log.trace("Filter {} matches.", filter);
+			Tuple<String, Set<Integer>> tuple = get(filter);
 			HeadGrammarSlot newNonterminal = filterNonterminalMap2.get(tuple);
 			
 			if(newNonterminal == null) {
-				HeadGrammarSlot headToBeFiltered = alternate.getNonterminalAt(filter.getPosition());
+				HeadGrammarSlot headToBeFiltered = filter.getNonterminal();
 				newNonterminal = copy(headToBeFiltered);
 				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
 				newNonterminals.add(newNonterminal);
 				newNonterminal.removeAlternates(filter.getFilteredRules());
-				alternate.setNonterminalAt(filter.getPosition(), newNonterminal);
 				filterNonterminalMap2.put(tuple, newNonterminal);
-			} else {
-				alternate.setNonterminalAt(filter.getPosition(), newNonterminal);
-			}
+				
+				for(Filter f : filters.values()) {
+					for(int alternateIndex : newNonterminal.getAlternatesSet()) {
+						if(f.getAlternateIndex() == alternateIndex) {
+							newFilters.add(new Filter(newNonterminal, alternateIndex, f.getPosition(), f.getFilteredRules()));
+						}
+					}					
+				}
+				
+			} 
+			
+			filter.setNewNonterminal(newNonterminal);
 		}
 	}
 	
-	private Tuple<String, Set<Integer>> get(HeadGrammarSlot head, Filter filter) {
-		String name = head.getNonterminal().getName();
-		Set<Integer> alternates = new HashSet<>(head.getAlternatesSet());
+	private Tuple<String, Set<Integer>> get(Filter filter) {
+		String name = filter.getNonterminalName();
+		Set<Integer> alternates = new HashSet<>(filter.getNonterminal().getAlternatesSet());
 		alternates.removeAll(filter.getFilteredRules());
 		return new Tuple<String, Set<Integer>>(name, alternates);
 	}
@@ -274,15 +291,6 @@ public class Grammar implements Serializable {
 
 		slots.add(copy);
 		return copy;
-	}
-	
-	@SafeVarargs
-	private static <T> Set<T> set(T...objects) {
-		Set<T>  set = new HashSet<>();
-		for(T t : objects) {
-			set.add(t);
-		}
-		return set;
 	}
 	
 	private Iterable<NonterminalGrammarSlot> getLastSlots(HeadGrammarSlot head, String name) {

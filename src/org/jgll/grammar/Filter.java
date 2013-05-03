@@ -5,14 +5,16 @@ import java.util.Set;
 
 class Filter {
 		
-	private final HeadGrammarSlot nonterminal;
+	private final HeadGrammarSlot head;
 	private final int alternateIndex;
 	private final int position;
 	private final Set<Integer> filteredRules;
 	
-	public Filter(HeadGrammarSlot nonterminal, int alternateIndex, int position, Set<Integer> filterList) {
+	private NonterminalGrammarSlot nonterminalSlot;
+	
+	public Filter(HeadGrammarSlot head, int alternateIndex, int position, Set<Integer> filterList) {
 		
-		if(nonterminal == null) {
+		if(head == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
 		}
 		
@@ -20,18 +22,35 @@ class Filter {
 			throw new IllegalArgumentException("The filter list cannot be empty.");
 		}
 				
-		this.nonterminal = nonterminal;
+		this.head = head;
 		this.alternateIndex = alternateIndex;
 		this.position = position;
 		this.filteredRules = new HashSet<>(filterList);
+		
+		nonterminalSlot = (NonterminalGrammarSlot) head.getAlternateAt(alternateIndex).getBodyGrammarSlotAt(position);
 	}
 	
 	public Set<Integer> getFilteredRules() {
 		return filteredRules;
 	}
 	
+	public boolean match() {
+		return nonterminalSlot.getNonterminal().contains(filteredRules);
+	}
+	
+	/**
+	 * The name of the nonterminal at the given position which should be filtered 
+	 */
+	public String getNonterminalName() {
+		return nonterminalSlot.getNonterminal().getNonterminal().getName();
+	}
+	
 	public HeadGrammarSlot getNonterminal() {
-		return nonterminal;
+		return nonterminalSlot.getNonterminal();
+	}
+	
+	public void setNewNonterminal(HeadGrammarSlot slot) {
+		nonterminalSlot.setNonterminal(slot);
 	}
 	
 	public int getAlternateIndex() {
@@ -48,7 +67,7 @@ class Filter {
 			throw new IllegalArgumentException("The index " + index + " does not exist in " + filteredRules);
 		}
 		
-		return nonterminal.getAlternateAt(index);
+		return head.getAlternateAt(index);
 	}
 	
 	public int getPosition() {
@@ -58,7 +77,7 @@ class Filter {
 	@Override
 	public int hashCode() {
 		int result = 17;
-		result = 31 * result + nonterminal.hashCode();
+		result = 31 * result + head.hashCode();
 		result = 31 * result + alternateIndex;
 		result = 31 * result + position;
 		return result;
@@ -76,7 +95,7 @@ class Filter {
 		
 		Filter other = (Filter) obj;
 		
-		return nonterminal.equals(other.nonterminal) &&
+		return head.equals(other.head) &&
 			   alternateIndex == other.alternateIndex &&
 			   position == other.position;
 	}
@@ -84,11 +103,11 @@ class Filter {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<").append(nonterminal).append(", ")
-		  .append(nonterminal.getAlternateAt(alternateIndex)).append(", ").append(position);
+		sb.append("<").append(head).append(", ")
+		  .append(head.getAlternateAt(alternateIndex)).append(", ").append(position);
 		sb.append(", {");
 		for(Integer filteredRule : filteredRules) {
-			sb.append(nonterminal.getAlternateAt(filteredRule)).append(", ");
+			sb.append(head.getAlternateAt(filteredRule)).append(", ");
 		}
 		sb.delete(sb.length() - 2, sb.length());
 		sb.append("}");

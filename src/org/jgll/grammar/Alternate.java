@@ -68,25 +68,6 @@ class Alternate {
 		((NonterminalGrammarSlot)bodyGrammarSlot).setNonterminal(head);
 	}
 	
-	public boolean match(Filter filter) {
-		
-		if(index == filter.getAlternateIndex()) {
-			BodyGrammarSlot bodyGrammarSlot = symbols.get(filter.getPosition());
-			
-			assert bodyGrammarSlot instanceof NonterminalGrammarSlot;
-			
-			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) bodyGrammarSlot;
-			
-			if(! ntSlot.getNonterminal().contains(filter.getFilteredRules())) {
-				return false;
-			}
-			
-			return true;
-		}
-		
-		return false;
-	}
-	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
