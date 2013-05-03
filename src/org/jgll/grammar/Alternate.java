@@ -55,7 +55,7 @@ class Alternate {
 			throw new RuntimeException("The symbol at " + index + " should be a nonterminal.");
 		}
 		
-		return ((NonterminalGrammarSlot)bodyGrammarSlot).getHead();
+		return ((NonterminalGrammarSlot)bodyGrammarSlot).getNonterminal();
 	}
 	
 	public void setNonterminalAt(int index, HeadGrammarSlot head) {
@@ -136,6 +136,14 @@ class Alternate {
 		NonterminalGrammarSlot lastNonterminal = (NonterminalGrammarSlot) symbols.get(symbols.size() - 1);
 		
 		return head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
+	}
+	
+	/**
+	 * Returns the index of this alternate, i.e., which alternate is this relative 
+	 * to others. 
+	 */
+	public int getIndex() {
+		return index;
 	}
 	
 }

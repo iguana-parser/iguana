@@ -39,8 +39,8 @@ public class ToDot implements SPPFVisitor {
 	public void visit(TerminalSymbolNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
-			String label = node.toString();
-			// Replace the Java-style unicode char for epsilon with the graphviz one
+			String label = node.getLabel();
+			// Replaces the Java-style unicode char for epsilon with the graphviz one
 			label.replace("\u03B5", "&epsilon;");
 			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 		}
@@ -51,7 +51,7 @@ public class ToDot implements SPPFVisitor {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.getLabel())) + "\n");
 			addEdgesToChildren(node);
 			
 			SPPFVisitorUtil.visitChildren(node, this);

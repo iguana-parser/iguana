@@ -77,10 +77,10 @@ class Filter {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<").append(nonterminal).append(", ")
-		  .append(alternateIndex).append(", ").append(position);
+		  .append(nonterminal.getAlternateAt(alternateIndex)).append(", ").append(position);
 		sb.append(", {");
 		for(Integer filteredRule : filteredRules) {
-			sb.append(filteredRule).append(", ");
+			sb.append(nonterminal.getAlternateAt(filteredRule)).append(", ");
 		}
 		sb.delete(sb.length() - 2, sb.length());
 		sb.append("}");

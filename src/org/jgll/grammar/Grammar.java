@@ -104,27 +104,6 @@ public class Grammar implements Serializable {
 		writer.append("}");
 	}
 	
-	private static String grammarSlotToString(Rule rule, int index) {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append(rule.getHead().getName()).append(" ::= ");
-		
-		for(int i = 0; i < rule.size(); i++) {
-			if(i == index) {
-				sb.append(". ");
-			}
-			sb.append(rule.getSymbolAt(i)).append(" ");
-		}
-		
-		sb.delete(sb.length() - 1, sb.length());
-		
-		if(index == rule.size()) {
-			sb.append(" .");
-		}
-		
-		return sb.toString();
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -214,7 +193,7 @@ public class Grammar implements Serializable {
 			if(alternate.isBinary()) {
 				for(int i : filter.getFilteredRules()) {
 					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
-						secondLevel.put((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(filter.getAlternateIndex()), i);
+						secondLevel.put((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(filter.getPosition()), i);
 					}					
 				}
 			}
@@ -241,19 +220,18 @@ public class Grammar implements Serializable {
 		
 		HeadGrammarSlot copyHead = new HeadGrammarSlot(nonterminals.size() + filterNonterminalMap.size(), new Nonterminal(head.getNonterminal().getName()));
 		
-		int index = 0;
 		for(Alternate alternate : head.getAlternatesIncludingNull()) {
 			if(alternate == null) {
 				copyHead.addAlternate(null);
 			} else {
-				copyHead.addAlternate(copy(alternate, index++, copyHead));				
+				copyHead.addAlternate(copy(alternate, copyHead));				
 			}
 		}
 		
 		return copyHead;
 	}
 	
-	private Alternate copy(Alternate alternate, int alternateIndex, HeadGrammarSlot head) {
+	private Alternate copy(Alternate alternate, HeadGrammarSlot head) {
 		BodyGrammarSlot copyFirstSlot = copy(alternate.getFirstSlot(), null, head);
 		
 		BodyGrammarSlot current = alternate.getFirstSlot().next;
@@ -264,7 +242,7 @@ public class Grammar implements Serializable {
 			current = current.next;
 		}
 		 
-		return new Alternate(head, copyFirstSlot, alternateIndex);
+		return new Alternate(head, copyFirstSlot, alternate.getIndex());
 	}
 	
 	private BodyGrammarSlot copy(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {
