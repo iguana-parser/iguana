@@ -160,58 +160,16 @@ public class Grammar implements Serializable {
 		}
 
 		
-//		for(HeadGrammarSlot head : nonterminals) {
-//			for(Alternate alternate : head.getAlternates()) {
-//				for(Filter filter : filters.values()) {
-//					filter(alternate, filter);
-//				}
-//			}
-//		}
-//		
-//		for(HeadGrammarSlot head : newNonterminals) {
-//			for(Alternate alternate : head.getAlternates()) {
-//				for(Filter filter : filters.values()) {
-//					filter(alternate, filter);
-//				}
-//			}			
-//		}
-		
 		nonterminals.addAll(newNonterminals);
 		
-		Set<NonterminalGrammarSlot> lastSlots = new HashSet<>();
+		applySecondLevelFilters();
 		
-		// Process the second level filters
-		for(Entry<NonterminalGrammarSlot, Integer> entry : secondLevel.entrySet()) {
-			for(NonterminalGrammarSlot lastSlot : getLastSlots(entry.getKey().getNonterminal(), "E")) {
-				
-				if(lastSlots.contains(lastSlot)) {
-					continue;
-				} else {
-					lastSlots.add(lastSlot);
-				}
-				
-				HeadGrammarSlot headToBeFiltered = lastSlot.getNonterminal();
-				HeadGrammarSlot newNonterminal = copy(headToBeFiltered);
-				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
-				newNonterminals.add(newNonterminal);
-				newNonterminal.removeAlternate(entry.getValue());
-				lastSlot.setNonterminal(newNonterminal);
-			}
-		}
 	}
 	
 	private void filter(Filter filter) {
 		
 		if(filter.match()) {
-			
-//			if(alternate.isBinary()) {
-//				for(int i : filter.getFilteredRules()) {
-//					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
-//						secondLevel.put((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(filter.getPosition()), i);
-//					}					
-//				}
-//			}
-			
+						
 			log.trace("Filter {} matches.", filter);
 			Tuple<String, Set<Integer>> tuple = get(filter);
 			HeadGrammarSlot newNonterminal = filterNonterminalMap2.get(tuple);
@@ -224,6 +182,7 @@ public class Grammar implements Serializable {
 				newNonterminal.removeAlternates(filter.getFilteredRules());
 				filterNonterminalMap2.put(tuple, newNonterminal);
 				
+				// Generate filters to be applied on newly created rules.
 				for(Filter f : filters.values()) {
 					for(int alternateIndex : newNonterminal.getAlternatesSet()) {
 						if(f.getAlternateIndex() == alternateIndex) {
@@ -236,6 +195,38 @@ public class Grammar implements Serializable {
 			
 			filter.setNewNonterminal(newNonterminal);
 		}
+	}
+	
+	private void applySecondLevelFilters() {
+		
+		for(Filter filter : filters.values()) {
+			if(filter.getAlternate().isBinary()) {
+				for(int i : filter.getFilteredRules()) {
+					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
+						processSecondLevelPrefixUnary(filter.getNonterminalSlot(), i);
+					}					
+				}
+			}
+		}
+	}
+	
+	private void processSecondLevelPrefixUnary(NonterminalGrammarSlot slot, int alternateIndex) {
+		
+		for(NonterminalGrammarSlot headToBeFiltered : getLastSlots(slot.getNonterminal())) {
+			HeadGrammarSlot newNonterminal = copy(headToBeFiltered.getNonterminal());
+			newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
+			newNonterminals.add(newNonterminal);
+			newNonterminal.removeAlternate(alternateIndex);
+			headToBeFiltered.setNonterminal(newNonterminal);
+			
+			for(int i : newNonterminal.getAlternatesSet()) {
+				if(newNonterminal.getAlternateAt(i).isBinary() ||
+				   newNonterminal.getAlternateAt(i).isUnaryPrefix()) {
+					processSecondLevelPrefixUnary((NonterminalGrammarSlot) newNonterminal.getAlternateAt(i).getLastSlot(), alternateIndex);
+				}
+			}			
+		}
+		
 	}
 	
 	private Tuple<String, Set<Integer>> get(Filter filter) {
@@ -293,20 +284,16 @@ public class Grammar implements Serializable {
 		return copy;
 	}
 	
-	private Iterable<NonterminalGrammarSlot> getLastSlots(HeadGrammarSlot head, String name) {
+	private Iterable<NonterminalGrammarSlot> getLastSlots(HeadGrammarSlot head) {
 
 		List<NonterminalGrammarSlot> slots = new ArrayList<>();
 		
 		for(Alternate alternate : head.getAlternates()) {
-			
-			if(!alternate.getLastSlot().isNonterminalSlot()) {
+			if(! (alternate.isBinary() || alternate.isUnaryPrefix())) {
 				continue;
 			}
-			
 			NonterminalGrammarSlot lastSlot = (NonterminalGrammarSlot) alternate.getLastSlot();
-			if(lastSlot.getNonterminal().getNonterminal().getName().equals(name)) {
-				slots.add(lastSlot);
-			}
+			slots.add(lastSlot);
 		}
 		return slots;
 	}

@@ -42,11 +42,16 @@ class Filter {
 	 * The name of the nonterminal at the given position which should be filtered 
 	 */
 	public String getNonterminalName() {
-		return nonterminalSlot.getNonterminal().getNonterminal().getName();
+		Nonterminal nonterminal = nonterminalSlot.getNonterminal().getNonterminal();
+		return nonterminal.getName() + nonterminal.getIndex();
 	}
 	
 	public HeadGrammarSlot getNonterminal() {
 		return nonterminalSlot.getNonterminal();
+	}
+	
+	public NonterminalGrammarSlot getNonterminalSlot() {
+		return nonterminalSlot;
 	}
 	
 	public void setNewNonterminal(HeadGrammarSlot slot) {
@@ -60,7 +65,11 @@ class Filter {
 	public void addFilterRule(int index) {
 		filteredRules.add(index);
 	}
-
+	
+	public Alternate getAlternate() {
+		return head.getAlternateAt(alternateIndex);
+	}
+	
 	public Alternate getFilterAlternate(int index) {
 
 		if(!filteredRules.contains(index)) {
@@ -73,7 +82,7 @@ class Filter {
 	public int getPosition() {
 		return position;
 	}
-	
+		
 	@Override
 	public int hashCode() {
 		int result = 17;
