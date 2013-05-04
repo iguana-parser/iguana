@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Input;
@@ -171,7 +170,7 @@ public class Grammar implements Serializable {
 		if(filter.match()) {
 						
 			log.trace("Filter {} matches.", filter);
-			Tuple<String, Set<Integer>> tuple = get(filter);
+			Tuple<String, Set<Integer>> tuple = get(filter.getNonterminal(), filter.getFilteredRules());
 			HeadGrammarSlot newNonterminal = filterNonterminalMap2.get(tuple);
 			
 			if(newNonterminal == null) {
@@ -213,11 +212,20 @@ public class Grammar implements Serializable {
 	private void processSecondLevelPrefixUnary(NonterminalGrammarSlot slot, int alternateIndex) {
 		
 		for(NonterminalGrammarSlot headToBeFiltered : getLastSlots(slot.getNonterminal())) {
+			
+			Tuple<String, Set<Integer>> key = get(headToBeFiltered.getNonterminal(), set(alternateIndex));
+			if(filterNonterminalMap2.containsKey(key)) {
+				headToBeFiltered.setNonterminal(filterNonterminalMap2.get(key));
+				return;
+			}
+			
 			HeadGrammarSlot newNonterminal = copy(headToBeFiltered.getNonterminal());
 			newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
 			newNonterminals.add(newNonterminal);
 			newNonterminal.removeAlternate(alternateIndex);
 			headToBeFiltered.setNonterminal(newNonterminal);
+			
+			filterNonterminalMap2.put(key, newNonterminal);
 			
 			for(int i : newNonterminal.getAlternatesSet()) {
 				if(newNonterminal.getAlternateAt(i).isBinary() ||
@@ -229,11 +237,10 @@ public class Grammar implements Serializable {
 		
 	}
 	
-	private Tuple<String, Set<Integer>> get(Filter filter) {
-		String name = filter.getNonterminalName();
-		Set<Integer> alternates = new HashSet<>(filter.getNonterminal().getAlternatesSet());
-		alternates.removeAll(filter.getFilteredRules());
-		return new Tuple<String, Set<Integer>>(name, alternates);
+	private Tuple<String, Set<Integer>> get(HeadGrammarSlot nonterminal, Set<Integer> filteredRules) {
+		Set<Integer> alternates = new HashSet<>(nonterminal.getAlternatesSet());
+		alternates.removeAll(filteredRules);
+		return new Tuple<String, Set<Integer>>(nonterminal.getSymbolName(), alternates);
 	}
 	
 	private HeadGrammarSlot copy(HeadGrammarSlot head) {
@@ -297,6 +304,16 @@ public class Grammar implements Serializable {
 		}
 		return slots;
 	}
+	
+	@SafeVarargs
+	protected static <T> Set<T> set(T...objects) {
+		Set<T>  set = new HashSet<>();
+		for(T t : objects) {
+			set.add(t);
+		}
+		return set;
+	}
+
 
 	/**
 	 * 
