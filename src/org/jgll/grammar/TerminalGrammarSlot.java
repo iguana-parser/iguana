@@ -185,9 +185,10 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		return false;
 	}
 
+
 	@Override
-	public String getSymbolName() {
-		return terminal.toString();
+	public Symbol getSymbol() {
+		return terminal;
 	}
 
 }

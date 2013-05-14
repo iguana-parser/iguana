@@ -176,11 +176,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return getAlternates().size();
 	}
 
-	@Override
-	public String getSymbolName() {
-		return nonterminal.getName();
-	}
-	
 	public boolean contains(Set<Integer> set) {
 		return alternatesSet.containsAll(set);
 	}

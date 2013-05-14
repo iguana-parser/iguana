@@ -48,6 +48,10 @@ class Alternate {
 		return symbols.get(symbols.size() - 1);
 	}
 	
+	public int size() {
+		return symbols.size();
+	}
+	
 	public HeadGrammarSlot getNonterminalAt(int index) {
 		BodyGrammarSlot bodyGrammarSlot = symbols.get(index);
 		
@@ -73,7 +77,7 @@ class Alternate {
 		StringBuilder sb = new StringBuilder();
 		sb.append(head).append(" ::= ");
 		for(BodyGrammarSlot s : symbols) {
-			sb.append(s.getSymbolName()).append(" ");
+			sb.append(s.getSymbol()).append(" ");
 		}
 		return sb.toString();
 	}
@@ -117,6 +121,34 @@ class Alternate {
 		NonterminalGrammarSlot lastNonterminal = (NonterminalGrammarSlot) symbols.get(symbols.size() - 1);
 		
 		return head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof Alternate)) {
+			return false;
+		}
+		
+		Alternate other = (Alternate) obj;
+		
+		if(this.size() != other.size()) {
+			return false;
+		}
+		
+		for(int i = 0; i < this.size(); i++) {
+			BodyGrammarSlot thisSlot = symbols.get(i);
+			BodyGrammarSlot otherSlot = other.symbols.get(i);
+			
+			if(thisSlot.getSymbol() != otherSlot.getSymbol()) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	/**

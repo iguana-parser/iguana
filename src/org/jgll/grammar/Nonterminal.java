@@ -44,14 +44,13 @@ public class Nonterminal implements Symbol {
 		
 		Nonterminal other = (Nonterminal) obj;
 		
-		return name.equals(other.name) && index == other.index;
+		return name.equals(other.name);
 	}
 	
 	@Override
 	public int hashCode() {
 		int result = 17;
 		result = 31 * result + name.hashCode();
-		result = 31 * result + index;
 		return result;
 	}
 

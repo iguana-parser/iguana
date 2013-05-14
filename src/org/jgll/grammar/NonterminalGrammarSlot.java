@@ -163,9 +163,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public String getSymbolName() {
-		int index = nonterminal.getNonterminal().getIndex();
-		return nonterminal.getNonterminal().getName() + "" + (index > 0 ? index : "");
+	public Symbol getSymbol() {
+		return nonterminal.getNonterminal();
 	}
 	
 }

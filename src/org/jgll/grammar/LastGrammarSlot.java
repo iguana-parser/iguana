@@ -93,8 +93,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public String getSymbolName() {
-		return "";
+	public Symbol getSymbol() {
+		throw new UnsupportedOperationException();
 	}
 
 }

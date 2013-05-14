@@ -100,8 +100,8 @@ public class WrapperSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public String getSymbolName() {
-		return slot.getSymbolName();
+	public Symbol getSymbol() {
+		return slot.getSymbol();
 	}
-
+	
 }

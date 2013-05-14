@@ -14,8 +14,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 
- * 
  * @author Ali Afroozeh
+ * 
+ * TODO: L0 is not really a grammar slot. Change it!
  *
  */
 public class L0 extends GrammarSlot {
@@ -107,11 +108,6 @@ public class L0 extends GrammarSlot {
 		writer.append("}\n");
 		writer.append("return root;\n");
 		writer.append("}\n");
-	}
-
-	@Override
-	public String getSymbolName() {
-		return "L0";
 	}
 
 }

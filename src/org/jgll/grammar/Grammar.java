@@ -240,7 +240,7 @@ public class Grammar implements Serializable {
 	private Tuple<String, Set<Integer>> get(HeadGrammarSlot nonterminal, Set<Integer> filteredRules) {
 		Set<Integer> alternates = new HashSet<>(nonterminal.getAlternatesSet());
 		alternates.removeAll(filteredRules);
-		return new Tuple<String, Set<Integer>>(nonterminal.getSymbolName(), alternates);
+		return new Tuple<String, Set<Integer>>(nonterminal.getNonterminal().getName(), alternates);
 	}
 	
 	private HeadGrammarSlot copy(HeadGrammarSlot head) {
@@ -371,7 +371,7 @@ public class Grammar implements Serializable {
 							visitedHeads.add(nonterminal.getNonterminal());
 						}
 					}
-					sb.append(" ").append(currentSlot.getSymbolName());
+					sb.append(" ").append(currentSlot.getSymbol());
 					if(currentSlot.isLastSlot()) {
 						sb.append("\n");
 					}

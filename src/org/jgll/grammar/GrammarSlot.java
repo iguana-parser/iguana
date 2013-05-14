@@ -46,11 +46,7 @@ public abstract class GrammarSlot implements Serializable {
 	
 	public abstract GrammarSlot recognize(GLLRecognizer recognizer, Input input);
 	
-	/**
-	 * The name of the grammar symbol immediately after this grammar slot
-	 */
-	public abstract String getSymbolName();
-	
+
 	public int getId() {
 		return id;
 	}
