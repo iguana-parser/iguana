@@ -360,10 +360,9 @@ public class Grammar implements Serializable {
 			HeadGrammarSlot head = todoQueue.poll();
 			
 			for(Alternate alternate : head.getAlternates()) {
-				BodyGrammarSlot slot = alternate.getFirstSlot();
 				sb.append(head + " ::= ");
-				BodyGrammarSlot currentSlot = slot;
-				do {
+				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+				while(!currentSlot.next.isLastSlot()){
 					if(currentSlot.isNonterminalSlot()) {
 						HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
 						if(!visitedHeads.contains(nonterminal.getNonterminal())) {
@@ -375,8 +374,8 @@ public class Grammar implements Serializable {
 					if(currentSlot.isLastSlot()) {
 						sb.append("\n");
 					}
-				} 
-				while((currentSlot = currentSlot.next) != null);
+					currentSlot = currentSlot.next;
+				}
 			}
 
 		}
