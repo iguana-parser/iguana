@@ -389,7 +389,7 @@ public class Grammar implements Serializable {
 	 * If the nonterminal is introduced while rewriting, adds its index to it. 
 	 */
 	private String getName(HeadGrammarSlot head) {
-		return newNonterminals.contains(head) ? head.getNonterminal().getName() + newNonterminals.indexOf(head) : head.getNonterminal().getName();			
+		return newNonterminals.contains(head) ? head.getNonterminal().getName() + (newNonterminals.indexOf(head) + 1) : head.getNonterminal().getName();			
 	}
 		
 }
