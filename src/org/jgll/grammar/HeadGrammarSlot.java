@@ -57,6 +57,16 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 	}
 	
+	public void removeAlternate(Alternate alternate) {
+		alternates.remove(alternate);
+	}
+	
+	public Set<Alternate> exclude(Alternate alternate) {
+		Set<Alternate> set = new HashSet<>(alternates);
+		set.remove(alternate);
+		return set;
+	}
+	
 	public void removeAlternates(Set<Integer> set) {
 		alternatesSet.removeAll(set);
 		for(int i : set) {
@@ -174,6 +184,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public int getCountAlternates() {
 		return getAlternates().size();
+	}
+	
+	public boolean contains(Alternate alternate) {
+		return alternates.contains(alternate);
 	}
 
 	public boolean contains(Set<Integer> set) {

@@ -151,6 +151,10 @@ class Alternate {
 		return true;
 	}
 	
+	public HeadGrammarSlot getHead() {
+		return head;
+	}
+	
 	/**
 	 * Returns the index of this alternate, i.e., which alternate is this relative 
 	 * to others. 

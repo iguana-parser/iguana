@@ -40,20 +40,20 @@ public class FilterTest2 extends AbstractGrammarTest {
 	@Test
 	public void testAssociativityAndPriority() {
 		// left associative E + E
-		grammar.addFilter("E", 1, 2, set(1));
+		grammar.addFilter("E", 1, 2, 1);
 		
 		// + has higher priority than -
-		grammar.addFilter("E", 1, 0, set(2));
+		grammar.addFilter("E", 1, 0, 2);
 		
 		// right associative E ^ E
-		grammar.addFilter("E", 0, 0, set(0));
+		grammar.addFilter("E", 0, 0, 0);
 		
 		// ^ has higher priority than -
-		grammar.addFilter("E", 0, 0, set(2));
+		grammar.addFilter("E", 0, 0, 2);
 		
 		// ^ has higher priority than +
-		grammar.addFilter("E", 0, 0, set(1));
-		grammar.addFilter("E", 0, 2, set(1));
+		grammar.addFilter("E", 0, 0, 1);
+		grammar.addFilter("E", 0, 2, 1);
 		
 		grammar.filter();
 		System.out.println(grammar);

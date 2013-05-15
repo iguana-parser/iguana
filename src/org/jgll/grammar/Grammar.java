@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Input;
@@ -45,7 +46,7 @@ public class Grammar implements Serializable {
 
 	private int longestTerminalChain;
 	
-	private Map<Filter, Filter> filters;
+	private Map<String, Set<Filter>> filters;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -148,66 +149,49 @@ public class Grammar implements Serializable {
 	
 	Set<Filter> newFilters = new HashSet<>();
 	
-	public void filter() {
-		
-		for(Filter filter : filters.values()) {
-			filter(filter);
-		}
-		
-		for(Filter filter : newFilters) {
-			filter(filter);
-		}
 
-		
-		nonterminals.addAll(newNonterminals);
-		
-		applySecondLevelFilters();
-		
-	}
-	
-	private void filter(Filter filter) {
-		
-		if(filter.match()) {
-						
-			log.trace("Filter {} matches.", filter);
-			Tuple<String, Set<Integer>> tuple = get(filter.getNonterminal(), filter.getFilteredRules());
-			HeadGrammarSlot newNonterminal = filterNonterminalMap2.get(tuple);
-			
-			if(newNonterminal == null) {
-				HeadGrammarSlot headToBeFiltered = filter.getNonterminal();
-				newNonterminal = copy(headToBeFiltered);
-				newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
-				newNonterminals.add(newNonterminal);
-				newNonterminal.removeAlternates(filter.getFilteredRules());
-				filterNonterminalMap2.put(tuple, newNonterminal);
-				
-				// Generate filters to be applied on newly created rules.
-				for(Filter f : filters.values()) {
-					for(int alternateIndex : newNonterminal.getAlternatesSet()) {
-						if(f.getAlternateIndex() == alternateIndex) {
-							newFilters.add(new Filter(newNonterminal, alternateIndex, f.getPosition(), f.getFilteredRules()));
-						}
-					}					
-				}
-				
-			} 
-			
-			filter.setNewNonterminal(newNonterminal);
+	public void filter() {
+		for(Entry<String, Set<Filter>> entry : filters.entrySet()) {
+			filter(nameToNonterminals.get(entry.getKey()), entry.getValue());
 		}
 	}
 	
-	private void applySecondLevelFilters() {
-		
-		for(Filter filter : filters.values()) {
-			if(filter.getAlternate().isBinary()) {
-				for(int i : filter.getFilteredRules()) {
-					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
-						processSecondLevelPrefixUnary(filter.getNonterminalSlot(), i);
-					}					
+	private void filter(HeadGrammarSlot head, Iterable<Filter> filters) {
+		for(Filter f : filters) {
+			for(Alternate alt : head.getAlternates()) {
+				if(match(f, alt)) {
+					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(f.getPosition());
+					HeadGrammarSlot newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
+					newNonterminals.add(newNonterminal);
+					newNonterminal.removeAlternate(f.getChild());
+					filter(newNonterminal, filters);
 				}
 			}
 		}
 	}
+	
+	private boolean match(Filter f, Alternate alt) {
+		if(f.getParent().equals(alt)) {
+			if(alt.getNonterminalAt(f.getPosition()).contains(f.getChild())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+//	private void applySecondLevelFilters() {
+//		
+//		for(Filter filter : filters.values()) {
+//			if(filter.getAlternate().isBinary()) {
+//				for(int i : filter.getFilteredRules()) {
+//					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
+//						processSecondLevelPrefixUnary(filter.getNonterminalSlot(), i);
+//					}					
+//				}
+//			}
+//		}
+//	}
 	
 	private void processSecondLevelPrefixUnary(NonterminalGrammarSlot slot, int alternateIndex) {
 		
@@ -327,18 +311,17 @@ public class Grammar implements Serializable {
 	 * @param filterdAlternates
 	 * 
 	 */
-	public void addFilter(String nonterminal, int alternateIndex, int position, Set<Integer> filterdAlternates) {
+	public void addFilter(String nonterminal, int alternateIndex, int position, int filteredAlternate) {
 		HeadGrammarSlot head = nameToNonterminals.get(nonterminal);
-		Filter key = new Filter(head, alternateIndex, position, filterdAlternates);
-		Filter filter = filters.get(key);
-		
-		if(filter == null) {
-			filters.put(key, key);
-			return;
-		}
-		
-		for(int i : filterdAlternates) {
-			filter.addFilterRule(i);
+		Filter filter = new Filter(head.getAlternateAt(alternateIndex), position, head.getAlternateAt(filteredAlternate));
+
+		if(filters.containsKey(nonterminal)) {
+			filters.get(nonterminal).add(filter);
+		} 
+		else {
+			Set<Filter> set = new HashSet<>();
+			set.add(filter);
+			filters.put(nonterminal, set);
 		}
 	}
 	
