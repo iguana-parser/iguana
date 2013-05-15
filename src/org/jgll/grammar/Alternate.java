@@ -143,7 +143,7 @@ class Alternate {
 			BodyGrammarSlot thisSlot = symbols.get(i);
 			BodyGrammarSlot otherSlot = other.symbols.get(i);
 			
-			if(thisSlot.getSymbol() != otherSlot.getSymbol()) {
+			if(thisSlot.getSymbol().equals(otherSlot.getSymbol())) {
 				return false;
 			}
 		}

@@ -38,7 +38,6 @@ public class FilterTest1 extends AbstractGrammarTest {
 		builder.addRule(rule3);
 		return builder.build();
 	}
-	
 
 	@Test
 	public void testAssociativityAndPriority() {
@@ -49,6 +48,5 @@ public class FilterTest1 extends AbstractGrammarTest {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}
-	
 
 }

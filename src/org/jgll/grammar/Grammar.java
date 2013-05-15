@@ -147,9 +147,8 @@ public class Grammar implements Serializable {
 	
 	Map<NonterminalGrammarSlot, Integer> secondLevel = new HashMap<>();
 	
-	Set<Filter> newFilters = new HashSet<>();
+	Map<Set<Alternate>, HeadGrammarSlot> map = new HashMap<>();
 	
-
 	public void filter() {
 		for(Entry<String, Set<Filter>> entry : filters.entrySet()) {
 			filter(nameToNonterminals.get(entry.getKey()), entry.getValue());
@@ -161,16 +160,24 @@ public class Grammar implements Serializable {
 			for(Alternate alt : head.getAlternates()) {
 				if(match(f, alt)) {
 					log.debug("{} matched {}", f, alt);
+					
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(f.getPosition());
-					HeadGrammarSlot newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
-					newNonterminals.add(newNonterminal);
+					
+					HeadGrammarSlot newNonterminal = map.get(filteredNonterminal.exclude(f.getChild()));
+					if(newNonterminal == null) {
+						newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
+						alt.setNonterminalAt(f.getPosition(), newNonterminal);
+						newNonterminals.add(newNonterminal);
+						
+						List<Alternate> copy = copy(newNonterminal, filteredNonterminal.getAlternates());
+						copy.remove(f.getChild());
+						newNonterminal.setAlternates(copy);
+						
+						map.put(new HashSet<>(copy(newNonterminal, copy)), newNonterminal);
+						
+						filter(newNonterminal, filters);
+					}
 					alt.setNonterminalAt(f.getPosition(), newNonterminal);
-					
-					List<Alternate> copy = copy(newNonterminal, filteredNonterminal.getAlternates());
-					copy.remove(f.getChild());
-					newNonterminal.setAlternates(copy);
-					
-					filter(newNonterminal, filters);
 				}
 			}
 		}
