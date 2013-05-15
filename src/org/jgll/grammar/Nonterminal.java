@@ -8,8 +8,6 @@ public class Nonterminal implements Symbol {
 	
 	private final boolean ebnfList;
 	
-	private int index;
-	
 	public Nonterminal(String name) {
 		this(name, false);
 	}
@@ -29,7 +27,7 @@ public class Nonterminal implements Symbol {
 	
 	@Override
 	public String toString() {
-		return name + (index > 0 ? index : "");
+		return name;
 	}
 	
 	@Override
@@ -62,13 +60,5 @@ public class Nonterminal implements Symbol {
 	@Override
 	public boolean isNonterminal() {
 		return true;
-	}
-	
-	public int getIndex() {
-		return index;
-	}
-	
-	public void setIndex(int index) {
-		this.index = index;
 	}
 }

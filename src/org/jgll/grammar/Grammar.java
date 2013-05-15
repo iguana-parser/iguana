@@ -160,6 +160,7 @@ public class Grammar implements Serializable {
 		for(Filter f : filters) {
 			for(Alternate alt : head.getAlternates()) {
 				if(match(f, alt)) {
+					log.debug("{} matched {}", f, alt);
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(f.getPosition());
 					HeadGrammarSlot newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
 					newNonterminals.add(newNonterminal);
@@ -206,33 +207,32 @@ public class Grammar implements Serializable {
 //		}
 //	}
 	
-	private void processSecondLevelPrefixUnary(NonterminalGrammarSlot slot, int alternateIndex) {
-		
-		for(NonterminalGrammarSlot headToBeFiltered : getLastSlots(slot.getNonterminal())) {
-			
-			Tuple<String, Set<Integer>> key = get(headToBeFiltered.getNonterminal(), set(alternateIndex));
-			if(filterNonterminalMap2.containsKey(key)) {
-				headToBeFiltered.setNonterminal(filterNonterminalMap2.get(key));
-				return;
-			}
-			
-			HeadGrammarSlot newNonterminal = copy(headToBeFiltered.getNonterminal());
-			newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
-			newNonterminals.add(newNonterminal);
-			newNonterminal.removeAlternate(alternateIndex);
-			headToBeFiltered.setNonterminal(newNonterminal);
-			
-			filterNonterminalMap2.put(key, newNonterminal);
-			
-			for(int i : newNonterminal.getAlternatesSet()) {
-				if(newNonterminal.getAlternateAt(i).isBinary() ||
-				   newNonterminal.getAlternateAt(i).isUnaryPrefix()) {
-					processSecondLevelPrefixUnary((NonterminalGrammarSlot) newNonterminal.getAlternateAt(i).getLastSlot(), alternateIndex);
-				}
-			}			
-		}
-		
-	}
+//	private void processSecondLevelPrefixUnary(NonterminalGrammarSlot slot, int alternateIndex) {
+//		
+//		for(NonterminalGrammarSlot headToBeFiltered : getLastSlots(slot.getNonterminal())) {
+//			
+//			Tuple<String, Set<Integer>> key = get(headToBeFiltered.getNonterminal(), set(alternateIndex));
+//			if(filterNonterminalMap2.containsKey(key)) {
+//				headToBeFiltered.setNonterminal(filterNonterminalMap2.get(key));
+//				return;
+//			}
+//			
+//			HeadGrammarSlot newNonterminal = copy(headToBeFiltered.getNonterminal());
+//			newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
+//			newNonterminals.add(newNonterminal);
+//			newNonterminal.removeAlternate(alternateIndex);
+//			headToBeFiltered.setNonterminal(newNonterminal);
+//			
+//			filterNonterminalMap2.put(key, newNonterminal);
+//			
+//			for(int i : newNonterminal.getAlternatesSet()) {
+//				if(newNonterminal.getAlternateAt(i).isBinary() ||
+//				   newNonterminal.getAlternateAt(i).isUnaryPrefix()) {
+//					processSecondLevelPrefixUnary((NonterminalGrammarSlot) newNonterminal.getAlternateAt(i).getLastSlot(), alternateIndex);
+//				}
+//			}			
+//		}		
+//	}
 	
 	private Tuple<String, Set<Integer>> get(HeadGrammarSlot nonterminal, Set<Integer> filteredRules) {
 		Set<Integer> alternates = new HashSet<>(nonterminal.getAlternatesSet());
@@ -341,7 +341,7 @@ public class Grammar implements Serializable {
 	@Override
 	public String toString() {
 		
-		Set<Nonterminal> visitedHeads = new HashSet<>();
+		Set<HeadGrammarSlot> visitedHeads = new HashSet<>();
 		
 		Deque<HeadGrammarSlot> todoQueue = new ArrayDeque<>();
 		
@@ -349,24 +349,24 @@ public class Grammar implements Serializable {
 		
 		for(HeadGrammarSlot head : nonterminals) {
 			todoQueue.add(head);
-			visitedHeads.add(head.getNonterminal());
+			visitedHeads.add(head);
 		}
 		
 		while(!todoQueue.isEmpty()) {
 			HeadGrammarSlot head = todoQueue.poll();
 			
 			for(Alternate alternate : head.getAlternates()) {
-				sb.append(head + " ::= ");
+				sb.append(getName(head)).append(" ::= ");
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 				while(!currentSlot.isLastSlot()){
 					if(currentSlot.isNonterminalSlot()) {
 						HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
-						if(!visitedHeads.contains(nonterminal.getNonterminal())) {
+						if(!visitedHeads.contains(nonterminal)) {
 							todoQueue.add(nonterminal);
-							visitedHeads.add(nonterminal.getNonterminal());
+							visitedHeads.add(nonterminal);
 						}
 					}
-					sb.append(" ").append(currentSlot.getSymbol());
+					sb.append(" ").append(getName(currentSlot));
 					currentSlot = currentSlot.next;
 				}
 				sb.append("\n");
@@ -375,6 +375,21 @@ public class Grammar implements Serializable {
 		}
 				
 		return sb.toString();
+	}
+	
+	private String getName(BodyGrammarSlot slot) {
+		if(slot.isNonterminalSlot()) {
+			return getName(((NonterminalGrammarSlot) slot).getNonterminal());
+		}
+		
+		return slot.getSymbol().toString();
+	}
+	
+	/**
+	 * If the nonterminal is introduced while rewriting, adds its index to it. 
+	 */
+	private String getName(HeadGrammarSlot head) {
+		return newNonterminals.contains(head) ? head.getNonterminal().getName() + newNonterminals.indexOf(head) : head.getNonterminal().getName();			
 	}
 		
 }
