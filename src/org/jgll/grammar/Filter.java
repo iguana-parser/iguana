@@ -33,8 +33,8 @@ class Filter {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("(").append(parent.getHead()).append(", ")
-		  .append(parent).append("\\ ").append(position)
-		  .append(", ").append(child)
+		  .append(parent).append(", ").append(position)
+		  .append("\\ ").append(child)
 		  .append(")");
 		return sb.toString();
 	}

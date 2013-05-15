@@ -163,7 +163,12 @@ public class Grammar implements Serializable {
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(f.getPosition());
 					HeadGrammarSlot newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
 					newNonterminals.add(newNonterminal);
-					newNonterminal.removeAlternate(f.getChild());
+					alt.setNonterminalAt(f.getPosition(), newNonterminal);
+					
+					List<Alternate> copy = copy(newNonterminal, filteredNonterminal.getAlternates());
+					copy.remove(f.getChild());
+					newNonterminal.setAlternates(copy);
+					
 					filter(newNonterminal, filters);
 				}
 			}
@@ -177,6 +182,14 @@ public class Grammar implements Serializable {
 			}
 		}
 		return false;
+	}
+	
+	private List<Alternate> copy(HeadGrammarSlot head, List<Alternate> list) {
+		List<Alternate> copyList = new ArrayList<>();
+		for(Alternate alt : list) {
+			copyList.add(copy(alt, head));
+		}
+		return copyList;
 	}
 	
 	
@@ -345,7 +358,7 @@ public class Grammar implements Serializable {
 			for(Alternate alternate : head.getAlternates()) {
 				sb.append(head + " ::= ");
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
-				while(!currentSlot.next.isLastSlot()){
+				while(!currentSlot.isLastSlot()){
 					if(currentSlot.isNonterminalSlot()) {
 						HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
 						if(!visitedHeads.contains(nonterminal.getNonterminal())) {
@@ -354,11 +367,9 @@ public class Grammar implements Serializable {
 						}
 					}
 					sb.append(" ").append(currentSlot.getSymbol());
-					if(currentSlot.isLastSlot()) {
-						sb.append("\n");
-					}
 					currentSlot = currentSlot.next;
 				}
+				sb.append("\n");
 			}
 
 		}

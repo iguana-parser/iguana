@@ -42,6 +42,7 @@ public class FilterTest1 extends AbstractGrammarTest {
 
 	@Test
 	public void testAssociativityAndPriority() {
+		System.out.println(grammar);
 		grammar.addFilter("E", 0, 2, 0);
 		grammar.addFilter("E", 0, 0, 1);
 		grammar.filter();

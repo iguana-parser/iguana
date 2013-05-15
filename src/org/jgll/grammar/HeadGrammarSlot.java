@@ -57,6 +57,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 	}
 	
+	public void setAlternates(List<Alternate> alternates) {
+		this.alternates = alternates;
+	}
+	
 	public void removeAlternate(Alternate alternate) {
 		alternates.remove(alternate);
 	}
