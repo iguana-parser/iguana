@@ -29,6 +29,14 @@ class Filter {
 		return position;
 	}
 	
+	public boolean isLeftMost() {
+		return position == 0;
+	}
+	
+	public boolean isRightMost() {
+		return position == child.size() - 1;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

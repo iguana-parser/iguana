@@ -167,7 +167,9 @@ public class Grammar implements Serializable {
 					if(newNonterminal == null) {
 						newNonterminal = rewrite(alt, filter.getPosition(), filter.getChild());						
 						filter(newNonterminal, filters);
-//						rewriteEnds(newNonterminal, filter.getChild());
+						if(filter.isLeftMost()) {
+							rewriteRightEnds(newNonterminal, filter.getChild());
+						}
 					}
 					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 				}
@@ -197,8 +199,7 @@ public class Grammar implements Serializable {
 		return false;
 	}
 	
-	private void rewriteEnds(HeadGrammarSlot head, Alternate filteredAlternate) {
-
+	private void rewriteRightEnds(HeadGrammarSlot head, Alternate filteredAlternate) {
 		for(Alternate alternate : head.getAlternates()) {
 			if(! (alternate.isBinary() || alternate.isUnaryPrefix())) {
 				continue;
@@ -207,7 +208,7 @@ public class Grammar implements Serializable {
 			
 			if(nonterminal.contains(filteredAlternate)) {
 				HeadGrammarSlot newNonterminal = rewrite(alternate, alternate.size() - 1, filteredAlternate);
-				rewriteEnds(newNonterminal, filteredAlternate);
+				rewriteRightEnds(newNonterminal, filteredAlternate);
 			}
 		}
 	}
