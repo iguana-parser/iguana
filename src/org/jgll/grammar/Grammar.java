@@ -156,31 +156,36 @@ public class Grammar implements Serializable {
 	}
 	
 	private void filter(HeadGrammarSlot head, Iterable<Filter> filters) {
-		for(Filter f : filters) {
+		for(Filter filter : filters) {
 			for(Alternate alt : head.getAlternates()) {
-				if(match(f, alt)) {
-					log.debug("{} matched {}", f, alt);
+				if(match(filter, alt)) {
+					log.debug("{} matched {}", filter, alt);
+										
+					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 					
-					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(f.getPosition());
-					
-					HeadGrammarSlot newNonterminal = map.get(filteredNonterminal.exclude(f.getChild()));
+					HeadGrammarSlot newNonterminal = map.get(filteredNonterminal.exclude(filter.getChild()));
 					if(newNonterminal == null) {
-						newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
-						alt.setNonterminalAt(f.getPosition(), newNonterminal);
-						newNonterminals.add(newNonterminal);
-						
-						List<Alternate> copy = copy(newNonterminal, filteredNonterminal.getAlternates());
-						copy.remove(f.getChild());
-						newNonterminal.setAlternates(copy);
-						
-						map.put(new HashSet<>(copy(newNonterminal, copy)), newNonterminal);
-						
+						newNonterminal = rewrite(alt, filter.getPosition(), filter.getChild());						
 						filter(newNonterminal, filters);
+//						rewriteEnds(newNonterminal, filter.getChild());
 					}
-					alt.setNonterminalAt(f.getPosition(), newNonterminal);
+					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 				}
 			}
 		}
+	}
+	
+	private HeadGrammarSlot rewrite(Alternate alt, int position, Alternate filteredAlternate) {
+		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
+		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
+		alt.setNonterminalAt(position, newNonterminal);
+		newNonterminals.add(newNonterminal);
+		
+		List<Alternate> copy = copy(newNonterminal, filteredNonterminal.getAlternates());
+		copy.remove(filteredAlternate);
+		newNonterminal.setAlternates(copy);
+		map.put(new HashSet<>(copy(newNonterminal, copy)), newNonterminal);
+		return newNonterminal;
 	}
 	
 	private boolean match(Filter f, Alternate alt) {
@@ -191,6 +196,22 @@ public class Grammar implements Serializable {
 		}
 		return false;
 	}
+	
+	private void rewriteEnds(HeadGrammarSlot head, Alternate filteredAlternate) {
+
+		for(Alternate alternate : head.getAlternates()) {
+			if(! (alternate.isBinary() || alternate.isUnaryPrefix())) {
+				continue;
+			}
+			HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
+			
+			if(nonterminal.contains(filteredAlternate)) {
+				HeadGrammarSlot newNonterminal = rewrite(alternate, alternate.size() - 1, filteredAlternate);
+				rewriteEnds(newNonterminal, filteredAlternate);
+			}
+		}
+	}
+
 	
 	private List<Alternate> copy(HeadGrammarSlot head, List<Alternate> list) {
 		List<Alternate> copyList = new ArrayList<>();
@@ -241,26 +262,6 @@ public class Grammar implements Serializable {
 //		}		
 //	}
 	
-	private Tuple<String, Set<Integer>> get(HeadGrammarSlot nonterminal, Set<Integer> filteredRules) {
-		Set<Integer> alternates = new HashSet<>(nonterminal.getAlternatesSet());
-		alternates.removeAll(filteredRules);
-		return new Tuple<String, Set<Integer>>(nonterminal.getNonterminal().getName(), alternates);
-	}
-	
-	private HeadGrammarSlot copy(HeadGrammarSlot head) {
-		
-		HeadGrammarSlot copyHead = new HeadGrammarSlot(nonterminals.size() + filterNonterminalMap.size(), new Nonterminal(head.getNonterminal().getName()));
-		
-		for(Alternate alternate : head.getAlternatesIncludingNull()) {
-			if(alternate == null) {
-				copyHead.addAlternate(null);
-			} else {
-				copyHead.addAlternate(copy(alternate, copyHead));				
-			}
-		}
-		
-		return copyHead;
-	}
 	
 	private Alternate copy(Alternate alternate, HeadGrammarSlot head) {
 		BodyGrammarSlot copyFirstSlot = copy(alternate.getFirstSlot(), null, head);
@@ -294,21 +295,7 @@ public class Grammar implements Serializable {
 		slots.add(copy);
 		return copy;
 	}
-	
-	private Iterable<NonterminalGrammarSlot> getLastSlots(HeadGrammarSlot head) {
-
-		List<NonterminalGrammarSlot> slots = new ArrayList<>();
 		
-		for(Alternate alternate : head.getAlternates()) {
-			if(! (alternate.isBinary() || alternate.isUnaryPrefix())) {
-				continue;
-			}
-			NonterminalGrammarSlot lastSlot = (NonterminalGrammarSlot) alternate.getLastSlot();
-			slots.add(lastSlot);
-		}
-		return slots;
-	}
-	
 	@SafeVarargs
 	protected static <T> Set<T> set(T...objects) {
 		Set<T>  set = new HashSet<>();
