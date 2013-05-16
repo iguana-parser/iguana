@@ -208,8 +208,15 @@ public class Grammar implements Serializable {
 			HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
 			
 			if(nonterminal.contains(filteredAlternate)) {
-				HeadGrammarSlot newNonterminal = rewrite(alternate, alternate.size() - 1, filteredAlternate);
-				rewriteRightEnds(newNonterminal, filteredAlternate);
+				HeadGrammarSlot filteredNonterminal = alternate.getNonterminalAt(alternate.size() - 1);
+				
+				HeadGrammarSlot newNonterminal = map.get(filteredNonterminal.without(filteredAlternate));
+				if(newNonterminal == null) {
+					newNonterminal = rewrite(alternate, alternate.size() - 1, filteredAlternate);
+					rewriteRightEnds(newNonterminal, filteredAlternate);
+				} else {
+					alternate.setNonterminalAt(alternate.size() - 1, newNonterminal);
+				}
 			}
 		}
 	}
