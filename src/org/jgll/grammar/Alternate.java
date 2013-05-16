@@ -36,6 +36,10 @@ class Alternate {
 		}
 	}
 	
+	public Symbol get(int index) {
+		return symbols.get(index).getSymbol();
+	}
+	
 	public BodyGrammarSlot getFirstSlot() {
 		return firstSlot;
 	}
@@ -123,6 +127,21 @@ class Alternate {
 		return head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
 	}
 	
+	public boolean match(List<Symbol> list) {
+		
+		if(list.size() != symbols.size()) {
+			return false;
+		}
+		
+		for(int i = 0; i < symbols.size(); i++) {
+			if(!symbols.get(i).getSymbol().equals(list.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) {
@@ -143,7 +162,19 @@ class Alternate {
 			BodyGrammarSlot thisSlot = symbols.get(i);
 			BodyGrammarSlot otherSlot = other.symbols.get(i);
 			
-			if(!thisSlot.getSymbol().equals(otherSlot.getSymbol())) {
+			if(thisSlot.isTerminalSlot() && otherSlot.isTerminalSlot()) {
+				if(!thisSlot.getSymbol().equals(otherSlot.getSymbol())) {
+					return false;
+				}				
+			}
+			else if(thisSlot.isNonterminalSlot() && otherSlot.isNonterminalSlot()) {				
+				NonterminalGrammarSlot thisNt = (NonterminalGrammarSlot) thisSlot;
+				NonterminalGrammarSlot otherNt = (NonterminalGrammarSlot) otherSlot;
+				if(thisNt.getNonterminal() != otherNt.getNonterminal()) {
+					return false;
+				}
+			}
+			else {
 				return false;
 			}
 		}

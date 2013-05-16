@@ -41,8 +41,8 @@ public class FilterTest1 extends AbstractGrammarTest {
 
 	@Test
 	public void testAssociativityAndPriority() {
-		grammar.addFilter("E", 0, 2, 0);
-		grammar.addFilter("E", 0, 0, 1);
+		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
+		grammar.addFilter("E", rule1.getBody(), 0, rule2.getBody());
 		grammar.filter();
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");

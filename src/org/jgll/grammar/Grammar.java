@@ -163,35 +163,36 @@ public class Grammar implements Serializable {
 										
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 					
-					HeadGrammarSlot newNonterminal = map.get(filteredNonterminal.exclude(filter.getChild()));
+					HeadGrammarSlot newNonterminal = map.get(filteredNonterminal.without(filter.getChild()));
 					if(newNonterminal == null) {
 						newNonterminal = rewrite(alt, filter.getPosition(), filter.getChild());						
 						filter(newNonterminal, filters);
 						if(filter.isLeftMost()) {
 							rewriteRightEnds(newNonterminal, filter.getChild());
 						}
+					} else {
+						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 					}
-					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 				}
 			}
 		}
 	}
 	
-	private HeadGrammarSlot rewrite(Alternate alt, int position, Alternate filteredAlternate) {
+	private HeadGrammarSlot rewrite(Alternate alt, int position, List<Symbol> filteredAlternate) {
 		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
 		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
 		alt.setNonterminalAt(position, newNonterminal);
 		newNonterminals.add(newNonterminal);
 		
 		List<Alternate> copy = copy(newNonterminal, filteredNonterminal.getAlternates());
-		copy.remove(filteredAlternate);
 		newNonterminal.setAlternates(copy);
+		newNonterminal.remove(filteredAlternate);
 		map.put(new HashSet<>(copy(newNonterminal, copy)), newNonterminal);
 		return newNonterminal;
 	}
 	
 	private boolean match(Filter f, Alternate alt) {
-		if(f.getParent().equals(alt)) {
+		if(alt.match(f.getParent())) {
 			if(alt.getNonterminalAt(f.getPosition()).contains(f.getChild())) {
 				return true;
 			}
@@ -199,7 +200,7 @@ public class Grammar implements Serializable {
 		return false;
 	}
 	
-	private void rewriteRightEnds(HeadGrammarSlot head, Alternate filteredAlternate) {
+	private void rewriteRightEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for(Alternate alternate : head.getAlternates()) {
 			if(! (alternate.isBinary() || alternate.isUnaryPrefix())) {
 				continue;
@@ -319,9 +320,8 @@ public class Grammar implements Serializable {
 	 * @param filterdAlternates
 	 * 
 	 */
-	public void addFilter(String nonterminal, int alternateIndex, int position, int filteredAlternate) {
-		HeadGrammarSlot head = nameToNonterminals.get(nonterminal);
-		Filter filter = new Filter(head.getAlternateAt(alternateIndex), position, head.getAlternateAt(filteredAlternate));
+	public void addFilter(String nonterminal, List<Symbol> parent, int position, List<Symbol> filteredAlternate) {
+		Filter filter = new Filter(parent, position, filteredAlternate);
 
 		if(filters.containsKey(nonterminal)) {
 			filters.get(nonterminal).add(filter);

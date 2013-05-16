@@ -65,28 +65,28 @@ public class HeadGrammarSlot extends GrammarSlot {
 		alternates.remove(alternate);
 	}
 	
-	public Set<Alternate> exclude(Alternate alternate) {
+	public Set<Alternate> without(List<Symbol> list) {
 		Set<Alternate> set = new HashSet<>(alternates);
-		set.remove(alternate);
+		for(Alternate alternate : alternates) {
+			if(alternate.match(list)) {
+				set.remove(alternate);
+				return set;
+			}
+		}
 		return set;
 	}
 	
-	public void removeAlternates(Set<Integer> set) {
-		alternatesSet.removeAll(set);
-		for(int i : set) {
-			alternates.set(i, null);			
+	public void remove(List<Symbol> list) {
+		Iterator<Alternate> it = alternates.iterator();
+		while(it.hasNext()) {
+			Alternate alternate = it.next();
+			if(alternate.match(list)) {
+				it.remove();
+			}
 		}
 	}
-	
-	public Set<Integer> getAlternatesSet() {
-		return alternatesSet;
-	}
-	
-	public void removeAlternate(int i) {
-		alternatesSet.remove(i);
-		alternates.set(i, null);
-	}
 
+	
 	public boolean isNullable() {
 		return firstSet.contains(Epsilon.getInstance());
 	}
@@ -190,8 +190,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return getAlternates().size();
 	}
 	
-	public boolean contains(Alternate alternate) {
-		return alternates.contains(alternate);
+	public boolean contains(List<Symbol> list) {
+		for(Alternate alternate : alternates) {
+			if(alternate.match(list)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean contains(Set<Integer> set) {

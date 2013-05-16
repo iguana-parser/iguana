@@ -1,13 +1,15 @@
 package org.jgll.grammar;
 
+import java.util.List;
+
 
 class Filter {
 	
-	private Alternate parent;
-	private Alternate child;
+	private List<Symbol> parent;
+	private List<Symbol> child;
 	private final int position;
 	
-	public Filter(Alternate parent, int position, Alternate child) {
+	public Filter(List<Symbol> parent, int position, List<Symbol> child) {
 		if(parent == null || child == null) {
 			throw new IllegalArgumentException("parent or child alternates cannot be null.");
 		}
@@ -17,16 +19,16 @@ class Filter {
 		this.child = child;
 	}
 		
-	public Alternate getParent() {
+	public int getPosition() {
+		return position;
+	}
+	
+	public List<Symbol> getParent() {
 		return parent;
 	}
 	
-	public Alternate getChild() {
+	public List<Symbol> getChild() {
 		return child;
-	}
-	
-	public int getPosition() {
-		return position;
 	}
 	
 	public boolean isLeftMost() {
@@ -40,7 +42,7 @@ class Filter {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("(").append(parent.getHead()).append(", ")
+		sb.append("(")
 		  .append(parent).append(", ").append(position)
 		  .append("\\ ").append(child)
 		  .append(")");
