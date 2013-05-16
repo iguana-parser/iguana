@@ -42,11 +42,26 @@ class Filter {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("(")
-		  .append(parent).append(", ").append(position)
-		  .append("\\ ").append(child)
-		  .append(")");
+		sb.append("(");
+
+		int i = 0;
+		for (Symbol symbol : parent) {
+			if (i == position) {
+				sb.append(".");
+			}
+			sb.append(symbol);
+			i++;
+		}
+
+		sb.append(" \\ ");
+
+		i = 0;
+		for (Symbol symbol : child) {
+			sb.append(symbol);
+		}
+
+		sb.append(")");
 		return sb.toString();
 	}
-	
+
 }
