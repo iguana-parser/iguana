@@ -140,7 +140,11 @@ class Alternate {
 		}
 		return true;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return 31;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
