@@ -42,7 +42,7 @@ public class GrammarBuilder {
 		
 		if(body.size() == 0) {
 			currentSlot = new EpsilonGrammarSlot(slots.size(), grammarSlotToString(head, body, 0), 0, new HashSet<Terminal>(), headGrammarSlot, rule.getObject());
-			headGrammarSlot.addAlternate(new Alternate(headGrammarSlot, currentSlot, headGrammarSlot.getCountAlternates()));
+			headGrammarSlot.addAlternate(new Alternate(currentSlot));
 			slots.add(currentSlot);
 		} 
 		
@@ -65,7 +65,7 @@ public class GrammarBuilder {
 			
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(slots.size(), grammarSlotToString(head, body, index), index, currentSlot, headGrammarSlot, rule.getObject());
 			slots.add(lastGrammarSlot);
-			headGrammarSlot.addAlternate(new Alternate(headGrammarSlot, firstSlot, headGrammarSlot.getCountAlternates()));
+			headGrammarSlot.addAlternate(new Alternate(firstSlot));
 
 		}
 		

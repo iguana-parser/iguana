@@ -5,28 +5,18 @@ import java.util.List;
 
 class Alternate {
 	
-	private final HeadGrammarSlot head;
-	
 	private final List<BodyGrammarSlot> symbols;
 	
 	private final BodyGrammarSlot firstSlot;
 	
-	private final int index;
-
-	public Alternate(HeadGrammarSlot head, BodyGrammarSlot firstSlot, int index) {
-		
-		if(head == null) {
-			throw new IllegalArgumentException("head cannot be null.");
-		}
+	public Alternate(BodyGrammarSlot firstSlot) {
 		
 		if(firstSlot == null) {
 			throw new IllegalArgumentException("firstSlot cannot be null.");
 		}
 		
-		this.head = head;
 		this.firstSlot = firstSlot;
-		this.index = index;
-		
+
 		symbols = new ArrayList<>();
 		
 		BodyGrammarSlot current = firstSlot;
@@ -79,14 +69,13 @@ class Alternate {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(head).append(" ::= ");
 		for(BodyGrammarSlot s : symbols) {
 			sb.append(s.getSymbol()).append(" ");
 		}
 		return sb.toString();
 	}
 	
-	public boolean isBinary() {
+	public boolean isBinary(HeadGrammarSlot head) {
 		if(! (symbols.get(0).isNonterminalSlot() && symbols.get(symbols.size() - 1).isNonterminalSlot())) {
 			return false;
 		}
@@ -98,9 +87,9 @@ class Alternate {
 			   head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
 	}
 	
-	public boolean isUnaryPrefix() {
+	public boolean isUnaryPrefix(HeadGrammarSlot head) {
 		
-		if(isBinary()) {
+		if(isBinary(head)) {
 			return false;
 		}
 		
@@ -113,8 +102,8 @@ class Alternate {
 		return head.getNonterminal().getName().equals(firstNonterminal.getNonterminal().getNonterminal().getName());
 	}
 	
-	public boolean isUnaryPostfix() {
-		if(isBinary()) {
+	public boolean isUnaryPostfix(HeadGrammarSlot head) {
+		if(isBinary(head)) {
 			return false;
 		}
 		
@@ -143,6 +132,7 @@ class Alternate {
 	
 	@Override
 	public int hashCode() {
+		// TODO: change it
 		return 31;
 	}
 	
@@ -184,18 +174,6 @@ class Alternate {
 		}
 		
 		return true;
-	}
-	
-	public HeadGrammarSlot getHead() {
-		return head;
-	}
-	
-	/**
-	 * Returns the index of this alternate, i.e., which alternate is this relative 
-	 * to others. 
-	 */
-	public int getIndex() {
-		return index;
 	}
 	
 }

@@ -184,10 +184,10 @@ public class Grammar implements Serializable {
 		alt.setNonterminalAt(position, newNonterminal);
 		newNonterminals.add(newNonterminal);
 		
-		List<Alternate> copy = copy(newNonterminal, filteredNonterminal.getAlternates());
+		List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
 		newNonterminal.setAlternates(copy);
 		newNonterminal.remove(filteredAlternate);
-		map.put(new HashSet<>(copy(newNonterminal, copy)), newNonterminal);
+		map.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
 		return newNonterminal;
 	}
 	
@@ -202,7 +202,7 @@ public class Grammar implements Serializable {
 	
 	private void rewriteRightEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for(Alternate alternate : head.getAlternates()) {
-			if(! (alternate.isBinary() || alternate.isUnaryPrefix())) {
+			if(! (alternate.isBinary(head) || alternate.isUnaryPrefix(head))) {
 				continue;
 			}
 			HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
@@ -222,71 +222,29 @@ public class Grammar implements Serializable {
 	}
 
 	
-	private List<Alternate> copy(HeadGrammarSlot head, List<Alternate> list) {
+	private List<Alternate> copyAlternates(HeadGrammarSlot head, List<Alternate> list) {
 		List<Alternate> copyList = new ArrayList<>();
 		for(Alternate alt : list) {
-			copyList.add(copy(alt, head));
+			copyList.add(copyAlternate(alt, head));
 		}
 		return copyList;
 	}
 	
-	
-//	private void applySecondLevelFilters() {
-//		
-//		for(Filter filter : filters.values()) {
-//			if(filter.getAlternate().isBinary()) {
-//				for(int i : filter.getFilteredRules()) {
-//					if(filter.getFilterAlternate(i).isUnaryPostfix()) {
-//						processSecondLevelPrefixUnary(filter.getNonterminalSlot(), i);
-//					}					
-//				}
-//			}
-//		}
-//	}
-	
-//	private void processSecondLevelPrefixUnary(NonterminalGrammarSlot slot, int alternateIndex) {
-//		
-//		for(NonterminalGrammarSlot headToBeFiltered : getLastSlots(slot.getNonterminal())) {
-//			
-//			Tuple<String, Set<Integer>> key = get(headToBeFiltered.getNonterminal(), set(alternateIndex));
-//			if(filterNonterminalMap2.containsKey(key)) {
-//				headToBeFiltered.setNonterminal(filterNonterminalMap2.get(key));
-//				return;
-//			}
-//			
-//			HeadGrammarSlot newNonterminal = copy(headToBeFiltered.getNonterminal());
-//			newNonterminal.getNonterminal().setIndex(filteredNonterminals++);
-//			newNonterminals.add(newNonterminal);
-//			newNonterminal.removeAlternate(alternateIndex);
-//			headToBeFiltered.setNonterminal(newNonterminal);
-//			
-//			filterNonterminalMap2.put(key, newNonterminal);
-//			
-//			for(int i : newNonterminal.getAlternatesSet()) {
-//				if(newNonterminal.getAlternateAt(i).isBinary() ||
-//				   newNonterminal.getAlternateAt(i).isUnaryPrefix()) {
-//					processSecondLevelPrefixUnary((NonterminalGrammarSlot) newNonterminal.getAlternateAt(i).getLastSlot(), alternateIndex);
-//				}
-//			}			
-//		}		
-//	}
-	
-	
-	private Alternate copy(Alternate alternate, HeadGrammarSlot head) {
-		BodyGrammarSlot copyFirstSlot = copy(alternate.getFirstSlot(), null, head);
+	private Alternate copyAlternate(Alternate alternate, HeadGrammarSlot head) {
+		BodyGrammarSlot copyFirstSlot = copySlot(alternate.getFirstSlot(), null, head);
 		
 		BodyGrammarSlot current = alternate.getFirstSlot().next;
 		BodyGrammarSlot copy = copyFirstSlot;
 		
 		while(current != null) {
-			copy = copy(current, copy, head);
+			copy = copySlot(current, copy, head);
 			current = current.next;
 		}
 		 
-		return new Alternate(head, copyFirstSlot, alternate.getIndex());
+		return new Alternate(copyFirstSlot);
 	}
 	
-	private BodyGrammarSlot copy(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {
+	private BodyGrammarSlot copySlot(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {
 
 		BodyGrammarSlot copy;
 		
