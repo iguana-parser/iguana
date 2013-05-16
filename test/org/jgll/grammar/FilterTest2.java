@@ -17,22 +17,28 @@ import org.junit.Test;
  */
 public class FilterTest2 extends AbstractGrammarTest {
 
+	private Rule rule0;
+	private Rule rule1;
+	private Rule rule2;
+	private Rule rule3;
+
+
 	@Override
 	protected Grammar initGrammar() {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
-		// E ::= E ^ E
-		builder.addRule(new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('^'), new Nonterminal("E"))));
+		rule0 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('^'), new Nonterminal("E")));
+		builder.addRule(rule0);
 		
-		// E ::= E + E
-		builder.addRule(new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E"))));
+		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E")));
+		builder.addRule(rule1);
 		
-		// E ::= - E
-		builder.addRule(new Rule(new Nonterminal("E"), list(new Character('-'), new Nonterminal("E"))));
+		rule2 = new Rule(new Nonterminal("E"), list(new Character('-'), new Nonterminal("E")));
+		builder.addRule(rule2);
 		
-		// E ::= a
-		builder.addRule(new Rule(new Nonterminal("E"), list(new Character('a'))));
+		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
+		builder.addRule(rule3);
 		return builder.build();
 	}
 	
@@ -40,20 +46,20 @@ public class FilterTest2 extends AbstractGrammarTest {
 	@Test
 	public void testAssociativityAndPriority() {
 		// left associative E + E
-		grammar.addFilter("E", 1, 2, 1);
+		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
 		
 		// + has higher priority than -
-		grammar.addFilter("E", 1, 0, 2);
+		grammar.addFilter("E", rule1.getBody(), 0, rule2.getBody());
 		
 		// right associative E ^ E
-		grammar.addFilter("E", 0, 0, 0);
+		grammar.addFilter("E", rule0.getBody(), 0, rule0.getBody());
 		
 		// ^ has higher priority than -
-		grammar.addFilter("E", 0, 0, 2);
+		grammar.addFilter("E", rule0.getBody(), 0, rule2.getBody());
 		
 		// ^ has higher priority than +
-		grammar.addFilter("E", 0, 0, 1);
-		grammar.addFilter("E", 0, 2, 1);
+		grammar.addFilter("E", rule0.getBody(), 0, rule1.getBody());
+		grammar.addFilter("E", rule0.getBody(), 2, rule1.getBody());
 		
 		grammar.filter();
 		System.out.println(grammar);

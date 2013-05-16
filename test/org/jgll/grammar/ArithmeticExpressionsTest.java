@@ -8,9 +8,9 @@ import org.junit.Test;
 
 public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 
+	private Rule rule0;
 	private Rule rule1;
 	private Rule rule2;
-	private Rule rule3;
 
 	@Override
 	protected Grammar initGrammar() {
@@ -18,16 +18,16 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 		GrammarBuilder builder = new GrammarBuilder("gamma2");
 		
 		// E ::= E + E
-		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E")));
-		builder.addRule(rule1);
+		rule0 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E")));
+		builder.addRule(rule0);
 		
 		// E ::= E * E
-		rule2 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('*'), new Nonterminal("E")));
-		builder.addRule(rule2);
+		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('*'), new Nonterminal("E")));
+		builder.addRule(rule1);
 		
 		// E ::= a
-		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
-		builder.addRule(rule3);
+		rule2 = new Rule(new Nonterminal("E"), list(new Character('a')));
+		builder.addRule(rule2);
 		
 		return builder.build();
 	}
@@ -46,26 +46,26 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 	
 	@Test
 	public void testLefAssociativeFilter() {
-		grammar.addFilter("E", 0, 2, 0);
-		grammar.addFilter("E", 1, 2, 1);
+		grammar.addFilter("E", rule0.getBody(), 2, rule0.getBody());
+		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
 		grammar.filter();
 		System.out.println(grammar);
 	}
 	
 	@Test
 	public void testPriority() {
-		grammar.addFilter("E", 1, 0, 0);
-		grammar.addFilter("E", 1, 2, 0);
+		grammar.addFilter("E", rule1.getBody(), 0, rule0.getBody());
+		grammar.addFilter("E", rule1.getBody(), 2, rule0.getBody());
 		grammar.filter();
 		System.out.println(grammar);
 	}
 	
 	@Test
 	public void testAssociativityAndPriority() {
-		grammar.addFilter("E", 0, 2, 0);
-		grammar.addFilter("E", 1, 0, 0);
-		grammar.addFilter("E", 1, 2, 0);
-		grammar.addFilter("E", 1, 2, 1);
+		grammar.addFilter("E", rule0.getBody(), 2, rule0.getBody());
+		grammar.addFilter("E", rule1.getBody(), 0, rule0.getBody());
+		grammar.addFilter("E", rule1.getBody(), 2, rule0.getBody());
+		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
 		grammar.filter();
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
