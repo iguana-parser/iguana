@@ -155,10 +155,6 @@ public class Grammar implements Serializable {
 		}
 	}
 	
-	public String getId(HeadGrammarSlot head) {
-		return "n" + nonterminals.indexOf(head);
-	}
-	
 	private void filter(HeadGrammarSlot head, Iterable<Filter> filters) {
 		for(Filter filter : filters) {
 			for(Alternate alt : head.getAlternates()) {
@@ -184,7 +180,7 @@ public class Grammar implements Serializable {
 	
 	private HeadGrammarSlot rewrite(Alternate alt, int position, List<Symbol> filteredAlternate) {
 		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
-		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(newNonterminals.size(), filteredNonterminal.getNonterminal());
+		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(getNewId(), filteredNonterminal.getNonterminal());
 		alt.setNonterminalAt(position, newNonterminal);
 		newNonterminals.add(newNonterminal);
 		
@@ -193,6 +189,10 @@ public class Grammar implements Serializable {
 		newNonterminal.remove(filteredAlternate);
 		map.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
 		return newNonterminal;
+	}
+	
+	private int getNewId() {
+		return nonterminals.size() + slots.size() + newNonterminals.size();
 	}
 	
 	private boolean match(Filter f, Alternate alt) {
@@ -253,14 +253,14 @@ public class Grammar implements Serializable {
 		BodyGrammarSlot copy;
 		
 		if(slot.isLastSlot()) {
-			copy = new LastGrammarSlot(slots.size(), slot.label, slot.position, previous, head, ((LastGrammarSlot) slot).getObject());
+			copy = new LastGrammarSlot(getNewId(), slot.label, slot.position, previous, head, ((LastGrammarSlot) slot).getObject());
 		} 
 		else if(slot.isNonterminalSlot()) {
 			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) slot;
-			copy = new NonterminalGrammarSlot(slots.size(), slot.label, slot.position, previous, ntSlot.getNonterminal(), head);
+			copy = new NonterminalGrammarSlot(getNewId(), slot.label, slot.position, previous, ntSlot.getNonterminal(), head);
 		} 
 		else {
-			copy = new TerminalGrammarSlot(slots.size(), slot.label, slot.position, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
+			copy = new TerminalGrammarSlot(getNewId(), slot.label, slot.position, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
 		}
 
 		slots.add(copy);

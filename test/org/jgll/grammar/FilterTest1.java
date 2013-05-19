@@ -1,8 +1,6 @@
 package org.jgll.grammar;
 
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.util.GrammarToDot;
-import org.jgll.util.GraphVizUtil;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -43,13 +41,11 @@ public class FilterTest1 extends AbstractGrammarTest {
 
 	@Test
 	public void testAssociativityAndPriority() {
-		GraphVizUtil.generateGraph(GrammarToDot.toDot(grammar), "/Users/ali/output", "grammar", GraphVizUtil.L2R);
 
 		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
 		grammar.addFilter("E", rule1.getBody(), 0, rule2.getBody());
 		grammar.filter();
 		System.out.println(grammar);
-		
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}

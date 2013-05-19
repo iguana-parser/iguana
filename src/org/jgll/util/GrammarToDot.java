@@ -15,7 +15,8 @@ import org.jgll.grammar.NonterminalGrammarSlot;
 import static org.jgll.util.GraphVizUtil.EDGE;
 import static org.jgll.util.GraphVizUtil.NONTERMINAL_EDGE;
 import static org.jgll.util.GraphVizUtil.SLOT_NODE;
-import static org.jgll.util.GraphVizUtil.NONTERMINAL_NODE;;
+import static org.jgll.util.GraphVizUtil.NONTERMINAL_NODE;
+import static org.jgll.util.GraphVizUtil.END_EDGE;
 
 public class GrammarToDot {
 	
@@ -46,13 +47,15 @@ public class GrammarToDot {
 							todoQueue.add(nonterminal);
 							visitedHeads.add(nonterminal);
 						}
-						sb.append(NONTERMINAL_EDGE + "\"" + currentSlot.getId() + "\"" + "->" + "{\"" + nonterminal.getId() + "\"}" + "\n");
+//						sb.append(NONTERMINAL_EDGE + "\"" + currentSlot.getId() + "\"" + "->" + "{\"" + nonterminal.getId() + "\"}" + "\n");
 					}
 					sb.append(EDGE + "\"" + previousSlot.getId() + "\"" + "->" + "{\"" + currentSlot.getId() + "\"}" + "\n");
 					sb.append("\"" + currentSlot.getId() + "\"" + String.format(SLOT_NODE, currentSlot.getLabel()));
 					previousSlot = currentSlot;
 					currentSlot = currentSlot.next();
+					
 				}
+//				sb.append(END_EDGE + "\"" + previousSlot.getId() + "\"" + "->" + "{\"" + ((BodyGrammarSlot) previousSlot).getHead().getId() + "\"}" + "\n");
 				sb.append("\n");
 			}
 

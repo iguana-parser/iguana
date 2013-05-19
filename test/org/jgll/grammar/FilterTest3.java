@@ -1,6 +1,8 @@
 package org.jgll.grammar;
 
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.util.GrammarToDot;
+import org.jgll.util.GraphVizUtil;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -64,6 +66,9 @@ public class FilterTest3 extends AbstractGrammarTest {
 		grammar.addFilter("E", rule4.getBody(), 1, rule1.getBody());
 		// E non-assoc (inherited from rule1)
 		grammar.addFilter("E", rule5.getBody(), 0, rule1.getBody());
+		
+		GraphVizUtil.generateGraph(GrammarToDot.toDot(grammar), "/Users/ali/output", "grammar", GraphVizUtil.L2R);
+
 		
 //		grammar.filter();
 		System.out.println(grammar);
