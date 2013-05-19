@@ -3,7 +3,7 @@ package org.jgll.grammar;
 import java.util.ArrayList;
 import java.util.List;
 
-class Alternate {
+public class Alternate {
 	
 	private final List<BodyGrammarSlot> symbols;
 	

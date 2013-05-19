@@ -40,6 +40,7 @@ public class FilterTest2 extends AbstractGrammarTest {
 		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
 		builder.addRule(rule3);
 		return builder.build();
+		
 	}
 	
 

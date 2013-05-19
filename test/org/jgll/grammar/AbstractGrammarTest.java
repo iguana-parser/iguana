@@ -56,19 +56,21 @@ public abstract class AbstractGrammarTest {
 	}
 	 
 	protected void generateGraphWithoutIntermeiateNodes(SPPFNode sppf) {
-		GraphVizUtil.generateGraph(sppf, new ToDotWithoutIntermediateNodes(), outputDir, "graph");
+		ToDot toDot = new ToDotWithoutIntermediateNodes();
+		sppf.accept(toDot);
+		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
 	protected void generateGraph(SPPFNode sppf) {
-		GraphVizUtil.generateGraph(sppf, new ToDot(), outputDir, "graph");
-	}
-	
-	protected void generateGraphWithPackedNodeNames(SPPFNode sppf) {
-		GraphVizUtil.generateGraph(sppf, new ToDot(true), outputDir, "graph");
+		ToDot toDot = new ToDot();
+		sppf.accept(toDot);
+		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
 	protected void generateGraphWithIntermeiateAndListNodes(SPPFNode sppf) {
-		GraphVizUtil.generateGraph(sppf, new ToDotWithoutIntermeidateAndLists(), outputDir, "graph");
+		ToDot toDot = new ToDotWithoutIntermeidateAndLists();
+		sppf.accept(toDot);
+		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
 }

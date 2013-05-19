@@ -155,6 +155,10 @@ public class Grammar implements Serializable {
 		}
 	}
 	
+	public String getId(HeadGrammarSlot head) {
+		return "n" + nonterminals.indexOf(head);
+	}
+	
 	private void filter(HeadGrammarSlot head, Iterable<Filter> filters) {
 		for(Filter filter : filters) {
 			for(Alternate alt : head.getAlternates()) {

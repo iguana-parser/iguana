@@ -41,7 +41,7 @@ public class GrammarBuilder {
 		BodyGrammarSlot currentSlot = null;
 		
 		if(body.size() == 0) {
-			currentSlot = new EpsilonGrammarSlot(slots.size(), grammarSlotToString(head, body, 0), 0, new HashSet<Terminal>(), headGrammarSlot, rule.getObject());
+			currentSlot = new EpsilonGrammarSlot(nextSlotId(), grammarSlotToString(head, body, 0), 0, new HashSet<Terminal>(), headGrammarSlot, rule.getObject());
 			headGrammarSlot.addAlternate(new Alternate(currentSlot));
 			slots.add(currentSlot);
 		} 
@@ -51,9 +51,9 @@ public class GrammarBuilder {
 			BodyGrammarSlot firstSlot = null;
 			for (Symbol symbol : body) {
 				if (symbol instanceof Terminal) {
-					currentSlot = new TerminalGrammarSlot(slots.size(), grammarSlotToString(head, body, index), index, currentSlot, (Terminal) symbol, headGrammarSlot);
+					currentSlot = new TerminalGrammarSlot(nextSlotId(), grammarSlotToString(head, body, index), index, currentSlot, (Terminal) symbol, headGrammarSlot);
 				} else {
-					currentSlot = new NonterminalGrammarSlot(slots.size(), grammarSlotToString(head, body, index), index, currentSlot, getHeadGrammarSlot((Nonterminal) symbol), headGrammarSlot);
+					currentSlot = new NonterminalGrammarSlot(nextSlotId(), grammarSlotToString(head, body, index), index, currentSlot, getHeadGrammarSlot((Nonterminal) symbol), headGrammarSlot);
 				}
 				slots.add(currentSlot);
 
@@ -63,7 +63,7 @@ public class GrammarBuilder {
 				index++;
 			}
 			
-			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(slots.size(), grammarSlotToString(head, body, index), index, currentSlot, headGrammarSlot, rule.getObject());
+			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(nextSlotId(), grammarSlotToString(head, body, index), index, currentSlot, headGrammarSlot, rule.getObject());
 			slots.add(lastGrammarSlot);
 			headGrammarSlot.addAlternate(new Alternate(firstSlot));
 
@@ -72,11 +72,15 @@ public class GrammarBuilder {
 		return this;
 	}
 	
+	private int nextSlotId() {
+		return nonterminals.size() + slots.size();
+	}
+	
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
 		
 		if(headGrammarSlot == null) {
-			headGrammarSlot = new HeadGrammarSlot(0, nonterminal);
+			headGrammarSlot = new HeadGrammarSlot(nonterminals.size(), nonterminal);
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
 			nonterminals.add(headGrammarSlot);
 		}
