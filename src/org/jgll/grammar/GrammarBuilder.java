@@ -309,6 +309,7 @@ public class GrammarBuilder {
 		
 	public void filter() {
 		for(Entry<String, Set<Filter>> entry : filters.entrySet()) {
+			log.debug("Filtering {}.", entry.getKey());
 			filter(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 		nonterminals.addAll(newNonterminals);
