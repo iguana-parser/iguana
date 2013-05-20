@@ -30,7 +30,7 @@ public class WrapperSlot extends BodyGrammarSlot {
 	}
 
 	public WrapperSlot(BodyGrammarSlot slot, SlotAction before, SlotAction after) {
-		super(slot.id, slot.getLabel(), slot.position, slot.previous, slot.getHead());
+		super(slot.getLabel(), slot.position, slot.previous, slot.getHead());
 		this.slot = slot;
 		this.beforeAction = before;
 		this.afterAction = after;

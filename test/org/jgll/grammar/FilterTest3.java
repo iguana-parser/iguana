@@ -51,21 +51,22 @@ public class FilterTest3 extends AbstractGrammarTest {
 		rule5 = new Rule(new Nonterminal("E+"), list(new Nonterminal("E")));
 		builder.addRule(rule5);
 		
+		// E E+ non-assoc
+		builder.addFilter("E", rule1.getBody(), 0, rule1.getBody());
+		// E E+ > E + E
+		builder.addFilter("E", rule1.getBody(), 0, rule2.getBody());
+		// E + E left
+		builder.addFilter("E", rule2.getBody(), 2, rule2.getBody());
+		// E+ E  non-assoc (inherited from rule1)
+		builder.addFilter("E", rule4.getBody(), 1, rule1.getBody());
+		// E non-assoc (inherited from rule1)
+		builder.addFilter("E", rule5.getBody(), 0, rule1.getBody());
+		
 		return builder.build();
 	}
 
 	@Test
 	public void testAssociativityAndPriority() {
-		// E E+ non-assoc
-		grammar.addFilter("E", rule1.getBody(), 0, rule1.getBody());
-		// E E+ > E + E
-		grammar.addFilter("E", rule1.getBody(), 0, rule2.getBody());
-		// E + E left
-		grammar.addFilter("E", rule2.getBody(), 2, rule2.getBody());
-		// E+ E  non-assoc (inherited from rule1)
-		grammar.addFilter("E", rule4.getBody(), 1, rule1.getBody());
-		// E non-assoc (inherited from rule1)
-		grammar.addFilter("E", rule5.getBody(), 0, rule1.getBody());
 		
 		GraphVizUtil.generateGraph(GrammarToDot.toDot(grammar), "/Users/ali/output", "grammar", GraphVizUtil.L2R);
 

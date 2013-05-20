@@ -29,6 +29,13 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 		rule2 = new Rule(new Nonterminal("E"), list(new Character('a')));
 		builder.addRule(rule2);
 		
+		builder.addFilter("E", rule0.getBody(), 2, rule0.getBody());
+		builder.addFilter("E", rule1.getBody(), 0, rule0.getBody());
+		builder.addFilter("E", rule1.getBody(), 2, rule0.getBody());
+		builder.addFilter("E", rule1.getBody(), 2, rule1.getBody());
+		builder.filter();
+		System.out.println(grammar);
+		
 		return builder.build();
 	}
 	
@@ -43,31 +50,9 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
 		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
-	
-	@Test
-	public void testLefAssociativeFilter() {
-		grammar.addFilter("E", rule0.getBody(), 2, rule0.getBody());
-		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
-		grammar.filter();
-		System.out.println(grammar);
-	}
-	
-	@Test
-	public void testPriority() {
-		grammar.addFilter("E", rule1.getBody(), 0, rule0.getBody());
-		grammar.addFilter("E", rule1.getBody(), 2, rule0.getBody());
-		grammar.filter();
-		System.out.println(grammar);
-	}
-	
+		
 	@Test
 	public void testAssociativityAndPriority() {
-		grammar.addFilter("E", rule0.getBody(), 2, rule0.getBody());
-		grammar.addFilter("E", rule1.getBody(), 0, rule0.getBody());
-		grammar.addFilter("E", rule1.getBody(), 2, rule0.getBody());
-		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
-		grammar.filter();
-		System.out.println(grammar);
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}

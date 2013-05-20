@@ -4,19 +4,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Input;
-import org.jgll.util.Tuple;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -24,8 +19,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class Grammar implements Serializable {
-	
-	private static final Logger log = LoggerFactory.getLogger(Grammar.class);
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -42,11 +35,11 @@ public class Grammar implements Serializable {
 	
 	private Map<String, BodyGrammarSlot> nameToSlots;
 	
+	private List<HeadGrammarSlot> newNonterminals;
+	
 	private String name;
 
 	private int longestTerminalChain;
-	
-	private Map<String, Set<Filter>> filters;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -54,18 +47,14 @@ public class Grammar implements Serializable {
 		this.slots = builder.slots;
 		this.nameToNonterminals = new HashMap<>();
 		this.nameToSlots = new HashMap<>();
-		
-		for(HeadGrammarSlot nontermianl : nonterminals) {
-			nameToNonterminals.put(nontermianl.toString(), nontermianl);
-		}
+		this.nameToNonterminals = builder.nonterminalsMap;
 		
 		for(BodyGrammarSlot slot : slots) {
 			nameToSlots.put(slot.toString(), slot);
 		}
 		
+		this.newNonterminals = builder.newNonterminals;
 		this.longestTerminalChain = builder.longestTerminalChain;
-		
-		this.filters = new HashMap<>();
 	}
 	
 	
@@ -114,7 +103,7 @@ public class Grammar implements Serializable {
 	}
 		
 	public BodyGrammarSlot getGrammarSlot(int id) {
-		return slots.get(id - nonterminals.size());
+		return slots.get(id);
 	}
 		
 	public List<HeadGrammarSlot> getNonterminals() {
@@ -135,171 +124,6 @@ public class Grammar implements Serializable {
 	
 	public int getLongestTerminalChain() {
 		return longestTerminalChain;
-	}
-	
-	int filteredNonterminals = 1;
-	
-	Map<Filter, HeadGrammarSlot> filterNonterminalMap = new HashMap<>();
-	
-	Map<Tuple<String, Set<Integer>>, HeadGrammarSlot> filterNonterminalMap2 = new HashMap<>();
-	
-	List<HeadGrammarSlot> newNonterminals = new ArrayList<>();
-	
-	Map<NonterminalGrammarSlot, Integer> secondLevel = new HashMap<>();
-	
-	Map<Set<Alternate>, HeadGrammarSlot> map = new HashMap<>();
-	
-	public void filter() {
-		for(Entry<String, Set<Filter>> entry : filters.entrySet()) {
-			filter(nameToNonterminals.get(entry.getKey()), entry.getValue());
-		}
-	}
-	
-	private void filter(HeadGrammarSlot head, Iterable<Filter> filters) {
-		for(Filter filter : filters) {
-			for(Alternate alt : head.getAlternates()) {
-				if(match(filter, alt)) {
-					log.debug("{} matched {}", filter, alt);
-										
-					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-					
-					HeadGrammarSlot newNonterminal = map.get(filteredNonterminal.without(filter.getChild()));
-					if(newNonterminal == null) {
-						newNonterminal = rewrite(alt, filter.getPosition(), filter.getChild());						
-						filter(newNonterminal, filters);
-						if(filter.isLeftMost()) {
-							rewriteRightEnds(newNonterminal, filter.getChild());
-						}
-					} else {
-						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-					}
-				}
-			}
-		}
-	}
-	
-	private HeadGrammarSlot rewrite(Alternate alt, int position, List<Symbol> filteredAlternate) {
-		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
-		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(getNewId(), filteredNonterminal.getNonterminal());
-		alt.setNonterminalAt(position, newNonterminal);
-		newNonterminals.add(newNonterminal);
-		
-		List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
-		newNonterminal.setAlternates(copy);
-		newNonterminal.remove(filteredAlternate);
-		map.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
-		return newNonterminal;
-	}
-	
-	private int getNewId() {
-		return nonterminals.size() + slots.size() + newNonterminals.size();
-	}
-	
-	private boolean match(Filter f, Alternate alt) {
-		if(alt.match(f.getParent())) {
-			if(alt.getNonterminalAt(f.getPosition()).contains(f.getChild())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private void rewriteRightEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
-		for(Alternate alternate : head.getAlternates()) {
-			if(! (alternate.isBinary(head) || alternate.isUnaryPrefix(head))) {
-				continue;
-			}
-			HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
-			
-			if(nonterminal.contains(filteredAlternate)) {
-				HeadGrammarSlot filteredNonterminal = alternate.getNonterminalAt(alternate.size() - 1);
-				
-				HeadGrammarSlot newNonterminal = map.get(filteredNonterminal.without(filteredAlternate));
-				if(newNonterminal == null) {
-					newNonterminal = rewrite(alternate, alternate.size() - 1, filteredAlternate);
-					rewriteRightEnds(newNonterminal, filteredAlternate);
-				} else {
-					alternate.setNonterminalAt(alternate.size() - 1, newNonterminal);
-				}
-			}
-		}
-	}
-
-	
-	private List<Alternate> copyAlternates(HeadGrammarSlot head, List<Alternate> list) {
-		List<Alternate> copyList = new ArrayList<>();
-		for(Alternate alt : list) {
-			copyList.add(copyAlternate(alt, head));
-		}
-		return copyList;
-	}
-	
-	private Alternate copyAlternate(Alternate alternate, HeadGrammarSlot head) {
-		BodyGrammarSlot copyFirstSlot = copySlot(alternate.getFirstSlot(), null, head);
-		
-		BodyGrammarSlot current = alternate.getFirstSlot().next;
-		BodyGrammarSlot copy = copyFirstSlot;
-		
-		while(current != null) {
-			copy = copySlot(current, copy, head);
-			current = current.next;
-		}
-		 
-		return new Alternate(copyFirstSlot);
-	}
-	
-	private BodyGrammarSlot copySlot(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {
-
-		BodyGrammarSlot copy;
-		
-		if(slot.isLastSlot()) {
-			copy = new LastGrammarSlot(getNewId(), slot.label, slot.position, previous, head, ((LastGrammarSlot) slot).getObject());
-		} 
-		else if(slot.isNonterminalSlot()) {
-			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) slot;
-			copy = new NonterminalGrammarSlot(getNewId(), slot.label, slot.position, previous, ntSlot.getNonterminal(), head);
-		} 
-		else {
-			copy = new TerminalGrammarSlot(getNewId(), slot.label, slot.position, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
-		}
-
-		slots.add(copy);
-		return copy;
-	}
-		
-	@SafeVarargs
-	protected static <T> Set<T> set(T...objects) {
-		Set<T>  set = new HashSet<>();
-		for(T t : objects) {
-			set.add(t);
-		}
-		return set;
-	}
-
-
-	/**
-	 * 
-	 * Adds the given filter to the set of filters. If a filter with the same nonterminal, alternate index, and
-	 * alternate index already exists, only the given filter alternates are added to the existing filter,
-	 * effectively updating the filter.
-	 * 
-	 * @param nonterminal
-	 * @param alternateIndex
-	 * @param position
-	 * @param filterdAlternates
-	 * 
-	 */
-	public void addFilter(String nonterminal, List<Symbol> parent, int position, List<Symbol> filteredAlternate) {
-		Filter filter = new Filter(parent, position, filteredAlternate);
-
-		if(filters.containsKey(nonterminal)) {
-			filters.get(nonterminal).add(filter);
-		} 
-		else {
-			Set<Filter> set = new HashSet<>();
-			set.add(filter);
-			filters.put(nonterminal, set);
-		}
 	}
 	
 	@Override

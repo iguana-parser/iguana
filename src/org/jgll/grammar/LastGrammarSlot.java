@@ -26,8 +26,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private Object object;
 	
-	public LastGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
-		super(id, label, position, previous, head);
+	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
+		super(label, position, previous, head);
 		this.object = object;
 	}
 		

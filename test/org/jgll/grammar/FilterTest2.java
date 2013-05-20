@@ -39,6 +39,25 @@ public class FilterTest2 extends AbstractGrammarTest {
 		
 		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
 		builder.addRule(rule3);
+		
+		// left associative E + E
+		builder.addFilter("E", rule1.getBody(), 2, rule1.getBody());
+		
+		// + has higher priority than -
+		builder.addFilter("E", rule1.getBody(), 0, rule2.getBody());
+		
+		// right associative E ^ E
+		builder.addFilter("E", rule0.getBody(), 0, rule0.getBody());
+		
+		// ^ has higher priority than -
+		builder.addFilter("E", rule0.getBody(), 0, rule2.getBody());
+		
+		// ^ has higher priority than +
+		builder.addFilter("E", rule0.getBody(), 0, rule1.getBody());
+		builder.addFilter("E", rule0.getBody(), 2, rule1.getBody());
+		
+		builder.filter();
+		
 		return builder.build();
 		
 	}
@@ -46,23 +65,6 @@ public class FilterTest2 extends AbstractGrammarTest {
 
 	@Test
 	public void testAssociativityAndPriority() {
-		// left associative E + E
-		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
-		
-		// + has higher priority than -
-		grammar.addFilter("E", rule1.getBody(), 0, rule2.getBody());
-		
-		// right associative E ^ E
-		grammar.addFilter("E", rule0.getBody(), 0, rule0.getBody());
-		
-		// ^ has higher priority than -
-		grammar.addFilter("E", rule0.getBody(), 0, rule2.getBody());
-		
-		// ^ has higher priority than +
-		grammar.addFilter("E", rule0.getBody(), 0, rule1.getBody());
-		grammar.addFilter("E", rule0.getBody(), 2, rule1.getBody());
-		
-		grammar.filter();
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a^a^-a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);

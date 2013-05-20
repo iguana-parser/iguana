@@ -36,16 +36,18 @@ public class FilterTest1 extends AbstractGrammarTest {
 		// E ::= a
 		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
 		builder.addRule(rule3);
+		
+		builder.addFilter("E", rule1.getBody(), 2, rule1.getBody());
+		builder.addFilter("E", rule1.getBody(), 0, rule2.getBody());
+		builder.filter();
+		
+		System.out.println(grammar);
+
 		return builder.build();
 	}
 
 	@Test
 	public void testAssociativityAndPriority() {
-
-		grammar.addFilter("E", rule1.getBody(), 2, rule1.getBody());
-		grammar.addFilter("E", rule1.getBody(), 0, rule2.getBody());
-		grammar.filter();
-		System.out.println(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}

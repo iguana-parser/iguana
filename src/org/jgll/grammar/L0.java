@@ -35,7 +35,8 @@ public class L0 extends GrammarSlot {
 	}
 	
 	private L0() {
-		super(-1, "L0");
+		super("L0");
+		id = -1;
 	}
 	
 	public GrammarSlot parse(GLLParser parser, Input input, GrammarSlot start) {

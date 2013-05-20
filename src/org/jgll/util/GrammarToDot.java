@@ -1,5 +1,9 @@
 package org.jgll.util;
 
+import static org.jgll.util.GraphVizUtil.EDGE;
+import static org.jgll.util.GraphVizUtil.NONTERMINAL_NODE;
+import static org.jgll.util.GraphVizUtil.SLOT_NODE;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
@@ -8,15 +12,8 @@ import java.util.Set;
 import org.jgll.grammar.Alternate;
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.NonterminalGrammarSlot;
-
-import static org.jgll.util.GraphVizUtil.EDGE;
-import static org.jgll.util.GraphVizUtil.NONTERMINAL_EDGE;
-import static org.jgll.util.GraphVizUtil.SLOT_NODE;
-import static org.jgll.util.GraphVizUtil.NONTERMINAL_NODE;
-import static org.jgll.util.GraphVizUtil.END_EDGE;
 
 public class GrammarToDot {
 	
@@ -36,9 +33,11 @@ public class GrammarToDot {
 			HeadGrammarSlot head = todoQueue.poll();
 			
 			for(Alternate alternate : head.getAlternates()) {
-				sb.append("\"" + head.getId() + "\"" + String.format(NONTERMINAL_NODE, head.getLabel()));
+				sb.append("\"" + getId(head) + "\"" + String.format(NONTERMINAL_NODE, head.getLabel()));
 				
-				GrammarSlot previousSlot = head;
+				sb.append(EDGE + "\"" + getId(head) + "\"" + "->" + "{\"" + getId(alternate.getFirstSlot()) + "\"}" + "\n");
+				
+				BodyGrammarSlot previousSlot = null;
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 				while(currentSlot != null){
 					if(currentSlot.isNonterminalSlot()) {
@@ -49,8 +48,12 @@ public class GrammarToDot {
 						}
 //						sb.append(NONTERMINAL_EDGE + "\"" + currentSlot.getId() + "\"" + "->" + "{\"" + nonterminal.getId() + "\"}" + "\n");
 					}
-					sb.append(EDGE + "\"" + previousSlot.getId() + "\"" + "->" + "{\"" + currentSlot.getId() + "\"}" + "\n");
-					sb.append("\"" + currentSlot.getId() + "\"" + String.format(SLOT_NODE, currentSlot.getLabel()));
+					
+					if(previousSlot != null) {
+						sb.append(EDGE + "\"" + getId(previousSlot) + "\"" + "->" + "{\"" + getId(currentSlot) + "\"}" + "\n");						
+					}
+					
+					sb.append("\"" + getId(currentSlot) + "\"" + String.format(SLOT_NODE, currentSlot.getLabel()));
 					previousSlot = currentSlot;
 					currentSlot = currentSlot.next();
 					
@@ -62,6 +65,14 @@ public class GrammarToDot {
 		}
 				
 		return sb.toString();
+	}
+	
+	private static String getId(HeadGrammarSlot head) {
+		return "n" + head.getId();
+	}
+	
+	private static String getId(BodyGrammarSlot slot) {
+		return "s" + slot.getId();
 	}
 	
 }

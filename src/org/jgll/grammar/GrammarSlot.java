@@ -35,8 +35,7 @@ public abstract class GrammarSlot implements Serializable {
 	 */
 	protected String label;
 	
-	public GrammarSlot(int id, String label) {
-		this.id = id;
+	public GrammarSlot(String label) {
 		this.label = label;
 	}
 	
@@ -49,6 +48,10 @@ public abstract class GrammarSlot implements Serializable {
 
 	public int getId() {
 		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getLabel() {

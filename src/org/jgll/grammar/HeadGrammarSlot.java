@@ -37,8 +37,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private final Set<Integer> alternatesSet;
 	
-	public HeadGrammarSlot(int id, Nonterminal nonterminal) {
-		super(id, nonterminal.getName());
+	public HeadGrammarSlot(Nonterminal nonterminal) {
+		super(nonterminal.getName());
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();

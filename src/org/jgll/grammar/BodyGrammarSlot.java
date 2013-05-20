@@ -26,12 +26,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected HeadGrammarSlot head;
 	
-	public BodyGrammarSlot(BodyGrammarSlot slot, BodyGrammarSlot previous) {
-		this(slot.id, slot.label, slot.position, previous, slot.head);
-	}
-	
-	public BodyGrammarSlot(int id, String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		super(id, label);
+	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		super(label);
 		this.position = position;
 		this.head = head;
 		if(previous != null) {
