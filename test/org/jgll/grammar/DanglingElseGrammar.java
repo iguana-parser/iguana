@@ -31,12 +31,17 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		rule3 = new Rule(new Nonterminal("S"), list(new Character('s')));
 		builder.addRule(rule3);
 		
+		// (S ::= a .S b S \ a S)
+		builder.addFilter("S", rule1.getBody(), 1, rule2.getBody());
+		builder.filter();
+		
 		return builder.build();
 	}
 	
 	@Test
 	public void test() {
-	
+		System.out.println(grammar);
+		
 	}
 
 }

@@ -8,7 +8,7 @@ import org.junit.Test;
 
 /**
  * 
- * E ::= E E+
+ * E ::= E E+    (non-assoc)
  *     > E + E
  *     | a
  * 
@@ -37,7 +37,7 @@ public class FilterTest3 extends AbstractGrammarTest {
 		
 		// E ::=  E + E
 		rule2 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E")));
-		builder.addRule(rule2);
+//		builder.addRule(rule2);
 		
 		// E ::= a
 		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
@@ -51,26 +51,11 @@ public class FilterTest3 extends AbstractGrammarTest {
 		rule5 = new Rule(new Nonterminal("E+"), list(new Nonterminal("E")));
 		builder.addRule(rule5);
 		
-		// E E+ non-assoc
+		// (E ::= .E E+, E E+) 
 		builder.addFilter("E", rule1.getBody(), 0, rule1.getBody());
 		
-		// E E+ > E + E
-		builder.addFilter("E", rule1.getBody(), 0, rule2.getBody());
-		
-		// E + E left
-		builder.addFilter("E", rule2.getBody(), 2, rule2.getBody());
-		
-		// E+ ::= E+ E  non-assoc (inherited from rule1)
-		builder.addFilter("E+", rule4.getBody(), 1, rule1.getBody());
-		
-		// E+ ::= E non-assoc (inherited from rule1)
-		builder.addFilter("E+", rule5.getBody(), 0, rule1.getBody());
-		
-		// E+ ::= E+ E > E ::= E + E
-		builder.addFilter("E+", rule4.getBody(), 1, rule2.getBody());
-		
-		// E+ ::= E > E ::= E + E
-		builder.addFilter("E+", rule5.getBody(), 0, rule2.getBody());
+		// (E ::= E .E+, E E+)
+		builder.addFilter("E", rule1.getBody(), 1, rule1.getBody());
 		
 		builder.filter();
 		return builder.build();
@@ -82,7 +67,7 @@ public class FilterTest3 extends AbstractGrammarTest {
 		GraphVizUtil.generateGraph(GrammarToDot.toDot(grammar), "/Users/ali/output", "grammar", GraphVizUtil.L2R);
 
 		System.out.println(grammar);
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa+aaaa+aaaa"), grammar, "E");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);
 	}
 

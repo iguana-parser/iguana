@@ -319,19 +319,39 @@ public class GrammarBuilder {
 		for(Filter filter : filters) {
 			for(Alternate alt : head.getAlternates()) {
 				if(match(filter, alt)) {
+					
 					log.debug("{} matched {}", filter, alt);
 										
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 					
-					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
-					if(newNonterminal == null) {
-						newNonterminal = rewrite(alt, filter.getPosition(), filter.getChild());						
-						filter(newNonterminal, filters);
-						if(filter.isLeftMost()) {
-							rewriteRightEnds(newNonterminal, filter.getChild());
+					// Indirect filtering
+					if(!filter.getNonterminal().equals(filteredNonterminal.getNonterminal().getName())) {
+						List<Integer> nontemrinalIndices = new ArrayList<>();
+						List<Alternate> alternates = new ArrayList<>();
+						getRightEnds(filteredNonterminal, filter.getNonterminal(), nontemrinalIndices, alternates);
+							for(int i = 0; i < nontemrinalIndices.size(); i++) {
+								HeadGrammarSlot rightEndNonterminal = alternates.get(i).getNonterminalAt(nontemrinalIndices.get(i));
+								HeadGrammarSlot newNonterminal = existingAlternates.get(rightEndNonterminal.without(filter.getChild()));
+								
+								if(newNonterminal == null) {
+									rewrite(alternates.get(i), nontemrinalIndices.get(i), filter.getChild());
+								} else {
+									alternates.get(i).setNonterminalAt(nontemrinalIndices.get(i), newNonterminal);							
+								}
+							}							
+					}
+					else {
+						HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
+
+						if(newNonterminal == null) {
+							newNonterminal = rewrite(alt, filter.getPosition(), filter.getChild());						
+							filter(newNonterminal, filters);
+							if(filter.isLeftMost()) {
+								rewriteRightEnds(newNonterminal, filter.getChild());
+							}
+						} else {
+							alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 						}
-					} else {
-						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 					}
 				}
 			}
@@ -351,10 +371,26 @@ public class GrammarBuilder {
 		return newNonterminal;
 	}
 	
-	private boolean match(Filter f, Alternate alt) {
-		if(alt.match(f.getParent())) {
-			if(alt.getNonterminalAt(f.getPosition()).contains(f.getChild())) {
-				return true;
+	private boolean match(Filter filter, Alternate alt) {
+		if(alt.match(filter.getParent())) {
+			
+			HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
+			
+			// If it the filtered nonterminal is an indirect one
+			if(!filter.getNonterminal().equals(filteredNonterminal.getNonterminal().getName())) {
+				List<Integer> nonterminals = new ArrayList<>();
+				List<Alternate> alternates = new ArrayList<>();
+				getRightEnds(filteredNonterminal, filter.getNonterminal(), nonterminals, alternates);
+				for(int i = 0; i < alternates.size(); i++) {
+					if(alternates.get(i).getNonterminalAt(nonterminals.get(i)).contains(filter.getChild())) {
+						return true;
+					}
+				}
+			} 
+			else {
+				if(filteredNonterminal.contains(filter.getChild())) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -376,6 +412,29 @@ public class GrammarBuilder {
 					rewriteRightEnds(newNonterminal, filteredAlternate);
 				} else {
 					alternate.setNonterminalAt(alternate.size() - 1, newNonterminal);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * Returns a list of all nonterminals with the given name which are reachable
+	 * from head and are on the right-most end.
+	 * 
+	 * @param head
+	 * @param name
+	 * @param nonterminals
+	 */
+	private void getRightEnds(HeadGrammarSlot head, String name, List<Integer> nonterminals, List<Alternate> alternates) {
+		for(Alternate alt : head.getAlternates()) {
+			if(alt.getLastSlot().isNonterminalSlot()) {
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot)alt.getLastSlot()).getNonterminal();
+				if(nonterminal.getNonterminal().getName().equals(name)) {
+					nonterminals.add(alt.size() - 1);
+					alternates.add(alt);
+				} else {
+					getRightEnds(nonterminal, name, nonterminals, alternates);
 				}
 			}
 		}
@@ -446,8 +505,9 @@ public class GrammarBuilder {
 	 * 
 	 */
 	public void addFilter(String nonterminal, List<Symbol> parent, int position, List<Symbol> filteredAlternate) {
-		Filter filter = new Filter(parent, position, filteredAlternate);
-
+		Filter filter = new Filter(nonterminal, parent, position, filteredAlternate);
+		log.debug("Filter added {}", filter);
+		
 		if(filters.containsKey(nonterminal)) {
 			filters.get(nonterminal).add(filter);
 		} 
