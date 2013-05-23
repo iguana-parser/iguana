@@ -54,7 +54,7 @@ public class L0 extends GrammarSlot {
 			SPPFNode cn = descriptor.getSPPFNode();
 			int ci = descriptor.getInputIndex();
 			parser.update(cu, cn, ci);
-			log.trace("Processing ({}, {}, {}, {})", slot, ci, cu, cn);
+			log.trace("Processing ({}, {}, {}, {})", new Object[] {slot, ci, cu, cn});
 			slot = slot.parse(parser, input);
 		
 			while(slot != null) {
@@ -73,7 +73,7 @@ public class L0 extends GrammarSlot {
 			SPPFNode cn = descriptor.getSPPFNode();
 			int ci = descriptor.getInputIndex();
 			parser.update(cu, cn, ci);
-			log.trace("Processing ({}, {}, {}, {})", slot, ci, cu, cn);
+			log.trace("Processing ({}, {}, {}, {})", new Object[] {slot, ci, cu, cn});
 			slot = slot.parse(parser, input);
 			while(slot != null) {
 				slot = slot.parse(parser, input);

@@ -177,7 +177,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 */
 	public final void pop(GSSNode u, int i, SPPFNode z) {
 		
-		log.trace("Pop {}, {}, {}", u.getLabel(), i, z);
+		log.trace("Pop {}, {}, {}", new Object[] {u.getLabel(), i, z});
 		
 		if (u != u0) {
 			
