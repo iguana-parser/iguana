@@ -50,6 +50,10 @@ public class GrammarBuilder {
 	
 	public GrammarBuilder addRule(Rule rule) {
 		
+		if(rule == null) {
+			throw new IllegalArgumentException("Rule cannot be null.");
+		}
+		
 		Nonterminal head = rule.getHead();
 		List<Symbol> body = rule.getBody();
 		
@@ -329,16 +333,16 @@ public class GrammarBuilder {
 						List<Integer> nontemrinalIndices = new ArrayList<>();
 						List<Alternate> alternates = new ArrayList<>();
 						getRightEnds(filteredNonterminal, filter.getNonterminal(), nontemrinalIndices, alternates);
-							for(int i = 0; i < nontemrinalIndices.size(); i++) {
-								HeadGrammarSlot rightEndNonterminal = alternates.get(i).getNonterminalAt(nontemrinalIndices.get(i));
-								HeadGrammarSlot newNonterminal = existingAlternates.get(rightEndNonterminal.without(filter.getChild()));
-								
-								if(newNonterminal == null) {
-									rewrite(alternates.get(i), nontemrinalIndices.get(i), filter.getChild());
-								} else {
-									alternates.get(i).setNonterminalAt(nontemrinalIndices.get(i), newNonterminal);							
-								}
-							}							
+						for(int i = 0; i < nontemrinalIndices.size(); i++) {
+							HeadGrammarSlot rightEndNonterminal = alternates.get(i).getNonterminalAt(nontemrinalIndices.get(i));
+							HeadGrammarSlot newNonterminal = existingAlternates.get(rightEndNonterminal.without(filter.getChild()));
+							
+							if(newNonterminal == null) {
+								rewrite(alternates.get(i), nontemrinalIndices.get(i), filter.getChild());
+							} else {
+								alternates.get(i).setNonterminalAt(nontemrinalIndices.get(i), newNonterminal);							
+							}
+						}							
 					}
 					else {
 						HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));

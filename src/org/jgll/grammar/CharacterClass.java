@@ -89,11 +89,24 @@ public class CharacterClass implements Terminal {
 		
 		sb.append("[");
 		for(Range range : ranges) {
-			sb.append((char) range.getStart()).append("-").append((char) range.getEnd());
+			sb.append(getChar(range.getStart())).append("-").append(getChar(range.getEnd()));
 		}
 		sb.append("]");
 		return sb.toString();
 	}
-
+	
+	private String getChar(int val) {
+		char c = (char) val;
+		if(c == '-' || c == ' ') {
+			return "\\" + c;
+		}
+		if(c == '\r') {
+			return "\\r";
+		}
+		if(c == '\n') {
+			return "\\n";
+		}
+		return c + "";
+	}
 
 }

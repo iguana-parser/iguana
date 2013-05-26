@@ -30,6 +30,11 @@ public class Rule implements Serializable {
 		if(body == null) {
 			throw new IllegalArgumentException("Object cannot be null.");
 		}
+		for(Symbol s : body) {
+			if(s == null) {
+				throw new IllegalArgumentException("Body of a rule cannot have null symbols.");
+			}
+		}
 		this.head = head;
 		
 		this.body = new ArrayList<>(body);

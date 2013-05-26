@@ -56,18 +56,20 @@ class Filter {
 		int i = 0;
 		for (Symbol symbol : parent) {
 			if (i == position) {
-				sb.append(".");
+				sb.append(". ");
 			}
-			sb.append(symbol);
+			sb.append(symbol).append(" ");
 			i++;
 		}
 
-		sb.append(" \\ ");
+		sb.delete(sb.length() - 1, sb.length());
+		sb.append(", ");
 
 		i = 0;
 		for (Symbol symbol : child) {
-			sb.append(symbol);
+			sb.append(symbol).append(" ");
 		}
+		sb.delete(sb.length() - 1, sb.length());
 
 		sb.append(")");
 		return sb.toString();

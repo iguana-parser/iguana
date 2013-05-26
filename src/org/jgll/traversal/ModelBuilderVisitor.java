@@ -17,7 +17,7 @@ import static org.jgll.traversal.SPPFVisitorUtil.*;
  * calling appropriate models to the provided {@link NodeListener} 
  * interface.
  * 
- * The meta-data uneeded for building models, stored in grammar slots,
+ * The meta-data needed for building models, stored in grammar slots,
  * is automatically retrieved and passed to the given node listener.
  * 
  * @author Ali Afroozeh
@@ -149,7 +149,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 									return false;
 								}
 								next = iterator.next();
-								
 							} 
 							
 							else if(next.getObject() == Result.skip()) {
