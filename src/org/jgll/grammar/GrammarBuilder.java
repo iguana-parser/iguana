@@ -313,18 +313,18 @@ public class GrammarBuilder {
 		
 	public void filter() {
 		for(Entry<String, Set<Filter>> entry : filters.entrySet()) {
-			log.debug("Filtering {}.", entry.getKey());
+			log.debug("Filtering {} with {} filters.", entry.getKey(), entry.getValue().size());
 			filter(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 		nonterminals.addAll(newNonterminals);
 	}
 	
-	private void filter(HeadGrammarSlot head, Iterable<Filter> filters) {
+	private void filter(HeadGrammarSlot head, Set<Filter> filters) {
 		for(Filter filter : filters) {
 			for(Alternate alt : head.getAlternates()) {
 				if(match(filter, alt)) {
 					
-					log.debug("{} matched {}", filter, alt);
+					log.trace("{} matched {}", filter, alt);
 										
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 					
@@ -350,7 +350,7 @@ public class GrammarBuilder {
 						if(newNonterminal == null) {
 							newNonterminal = rewrite(alt, filter.getPosition(), filter.getChild());						
 							filter(newNonterminal, filters);
-							if(filter.isLeftMost()) {
+							if(filter.isLeftMost() && !filter.isChildBinary()) {
 								rewriteRightEnds(newNonterminal, filter.getChild());
 							}
 						} else {

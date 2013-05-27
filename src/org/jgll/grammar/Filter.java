@@ -38,6 +38,14 @@ class Filter {
 		return nonterminal;
 	}
 	
+	public boolean isParentBinary() {
+		return nonterminal.equals(parent.get(0)) && nonterminal.equals(parent.get(parent.size() - 1));
+	}
+	
+	public boolean isChildBinary() {
+		return nonterminal.equals(child.get(0)) && nonterminal.equals(child.get(child.size() - 1));
+	}
+	
 	public boolean isLeftMost() {
 		return position == 0;
 	}
