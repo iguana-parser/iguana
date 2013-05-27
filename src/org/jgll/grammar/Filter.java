@@ -38,6 +38,15 @@ class Filter {
 		return nonterminal;
 	}
 	
+	/**
+	 * A direct filter is of the form (E, alpha .E beta, gamma).
+	 * In other words, the filtered nonterminal is the same
+	 * as the filter's nonterminal.
+	 */
+	public boolean isDirect() {
+		return nonterminal.equals(parent.get(position).getName());
+	}
+	
 	public boolean isParentBinary() {
 		return nonterminal.equals(parent.get(0)) && nonterminal.equals(parent.get(parent.size() - 1));
 	}

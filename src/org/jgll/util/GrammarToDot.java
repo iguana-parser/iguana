@@ -3,6 +3,7 @@ package org.jgll.util;
 import static org.jgll.util.GraphVizUtil.EDGE;
 import static org.jgll.util.GraphVizUtil.NONTERMINAL_NODE;
 import static org.jgll.util.GraphVizUtil.SLOT_NODE;
+import static org.jgll.util.GraphVizUtil.NONTERMINAL_EDGE;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -46,7 +47,7 @@ public class GrammarToDot {
 							todoQueue.add(nonterminal);
 							visitedHeads.add(nonterminal);
 						}
-//						sb.append(NONTERMINAL_EDGE + "\"" + currentSlot.getId() + "\"" + "->" + "{\"" + nonterminal.getId() + "\"}" + "\n");
+						sb.append(NONTERMINAL_EDGE + "\"" + getId(currentSlot) + "\"" + "->" + "{\"" + getId(nonterminal) + "\"}" + "\n");
 					}
 					
 					if(previousSlot != null) {

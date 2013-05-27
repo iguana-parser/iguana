@@ -63,7 +63,7 @@ public class GrammarBuilder {
 		
 		if(body.size() == 0) {
 			currentSlot = new EpsilonGrammarSlot(grammarSlotToString(head, body, 0), 0, new HashSet<Terminal>(), headGrammarSlot, rule.getObject());
-			headGrammarSlot.addAlternate(new Alternate(currentSlot));
+			headGrammarSlot.addAlternate(new Alternate(currentSlot, 0));
 			slots.add(currentSlot);
 		} 
 		
@@ -87,7 +87,7 @@ public class GrammarBuilder {
 			
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, index), index, currentSlot, headGrammarSlot, rule.getObject());
 			slots.add(lastGrammarSlot);
-			headGrammarSlot.addAlternate(new Alternate(firstSlot));
+			headGrammarSlot.addAlternate(new Alternate(firstSlot, index));
 		}
 		
 		return this;
@@ -314,9 +314,54 @@ public class GrammarBuilder {
 	public void filter() {
 		for(Entry<String, Set<Filter>> entry : filters.entrySet()) {
 			log.debug("Filtering {} with {} filters.", entry.getKey(), entry.getValue().size());
-			filter(nonterminalsMap.get(entry.getKey()), entry.getValue());
+			
+			filterFirstLevel(nonterminalsMap.get(entry.getKey()), entry.getValue());
+			
+//			filter(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 		nonterminals.addAll(newNonterminals);
+	}
+	
+	private Map<Set<Integer>, HeadGrammarSlot> firstLevels = new HashMap<>();
+	
+	private void filterFirstLevel(HeadGrammarSlot head, Set<Filter> filters) {
+		for(Alternate alt : head.getAlternates()) {
+			for(Filter filter : filters) {
+				if(!filter.isDirect()) {
+					continue;
+				}
+				if(match(filter, alt)) {
+					
+					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
+					
+					Set<Alternate> without = filteredNonterminal.without(filter.getChild());
+					Set<Integer> intSet = new HashSet<>();
+					for(Alternate a : without) {
+						intSet.add(a.getIndex());
+					}
+					HeadGrammarSlot newNonterminal = firstLevels.get(intSet);
+					
+					if(newNonterminal == null) {
+						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+						newNonterminals.add(newNonterminal);
+						
+						newNonterminal.setAlternates(filteredNonterminal.getAlternates());
+						newNonterminal.remove(filter.getChild());
+						firstLevels.put(newNonterminal.getAlternateIndices(), newNonterminal);						
+					} 
+					else {
+						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+					}
+					
+				}
+			}
+		}
+		
+		for(HeadGrammarSlot newNonterminal : newNonterminals) {
+			List<Alternate> copy = copyAlternates(head, newNonterminal.getAlternates());
+			newNonterminal.setAlternates(copy);
+		}
 	}
 	
 	private void filter(HeadGrammarSlot head, Set<Filter> filters) {
@@ -329,7 +374,7 @@ public class GrammarBuilder {
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 					
 					// Indirect filtering
-					if(!filter.getNonterminal().equals(filteredNonterminal.getNonterminal().getName())) {
+					if(!filter.isDirect()) {
 						List<Integer> nontemrinalIndices = new ArrayList<>();
 						List<Alternate> alternates = new ArrayList<>();
 						getRightEnds(filteredNonterminal, filter.getNonterminal(), nontemrinalIndices, alternates);
@@ -464,7 +509,7 @@ public class GrammarBuilder {
 			current = current.next;
 		}
 		 
-		return new Alternate(copyFirstSlot);
+		return new Alternate(copyFirstSlot, alternate.getIndex());
 	}
 	
 	private BodyGrammarSlot copySlot(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {

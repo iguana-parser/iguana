@@ -65,6 +65,14 @@ public class HeadGrammarSlot extends GrammarSlot {
 		alternates.remove(alternate);
 	}
 	
+	public Set<Integer> getAlternateIndices() {
+		Set<Integer> set = new HashSet<>();
+		for(Alternate alternate : alternates) {
+			set.add(alternate.getIndex());
+		}
+		return set;
+	}
+	
 	public Set<Alternate> without(List<Symbol> list) {
 		Set<Alternate> set = new HashSet<>(alternates);
 		for(Alternate alternate : alternates) {
@@ -85,7 +93,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 			}
 		}
 	}
-
 	
 	public boolean isNullable() {
 		return firstSet.contains(Epsilon.getInstance());

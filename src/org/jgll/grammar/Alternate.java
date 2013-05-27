@@ -9,7 +9,9 @@ public class Alternate {
 	
 	private final BodyGrammarSlot firstSlot;
 	
-	public Alternate(BodyGrammarSlot firstSlot) {
+	private final int index;
+	
+	public Alternate(BodyGrammarSlot firstSlot, int index) {
 		
 		if(firstSlot == null) {
 			throw new IllegalArgumentException("firstSlot cannot be null.");
@@ -18,6 +20,8 @@ public class Alternate {
 		this.firstSlot = firstSlot;
 
 		symbols = new ArrayList<>();
+		
+		this.index = index;
 		
 		BodyGrammarSlot current = firstSlot;
 		while(!current.isLastSlot()) {
@@ -44,6 +48,10 @@ public class Alternate {
 	
 	public int size() {
 		return symbols.size();
+	}
+	
+	public int getIndex() {
+		return index;
 	}
 	
 	public HeadGrammarSlot getNonterminalAt(int index) {
