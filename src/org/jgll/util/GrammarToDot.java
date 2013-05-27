@@ -4,6 +4,7 @@ import static org.jgll.util.GraphVizUtil.EDGE;
 import static org.jgll.util.GraphVizUtil.NONTERMINAL_NODE;
 import static org.jgll.util.GraphVizUtil.SLOT_NODE;
 import static org.jgll.util.GraphVizUtil.NONTERMINAL_EDGE;
+import static org.jgll.util.GraphVizUtil.END_EDGE;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -59,7 +60,7 @@ public class GrammarToDot {
 					currentSlot = currentSlot.next();
 					
 				}
-//				sb.append(END_EDGE + "\"" + previousSlot.getId() + "\"" + "->" + "{\"" + ((BodyGrammarSlot) previousSlot).getHead().getId() + "\"}" + "\n");
+				sb.append(END_EDGE + "\"" + getId(previousSlot) + "\"" + "->" + "{\"" + getId(((BodyGrammarSlot) previousSlot).getHead()) + "\"}" + "\n");
 				sb.append("\n");
 			}
 

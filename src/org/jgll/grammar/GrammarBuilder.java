@@ -316,8 +316,7 @@ public class GrammarBuilder {
 			log.debug("Filtering {} with {} filters.", entry.getKey(), entry.getValue().size());
 			
 			filterFirstLevel(nonterminalsMap.get(entry.getKey()), entry.getValue());
-			
-//			filter(nonterminalsMap.get(entry.getKey()), entry.getValue());
+			filterDeep(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 		nonterminals.addAll(newNonterminals);
 	}
@@ -359,18 +358,17 @@ public class GrammarBuilder {
 		}
 		
 		for(HeadGrammarSlot newNonterminal : newNonterminals) {
-			List<Alternate> copy = copyAlternates(head, newNonterminal.getAlternates());
+			List<Alternate> copy = copyAlternates(newNonterminal, newNonterminal.getAlternates());
 			newNonterminal.setAlternates(copy);
 		}
 	}
 	
-	private void filter(HeadGrammarSlot head, Set<Filter> filters) {
-		for(Filter filter : filters) {
-			for(Alternate alt : head.getAlternates()) {
-				if(match(filter, alt)) {
-					
-					log.trace("{} matched {}", filter, alt);
-										
+	private void filterDeep(HeadGrammarSlot head, Set<Filter> filters) {
+		for(Alternate alt : head.getAlternates()) {
+			for(Filter filter : filters) {
+
+				if(alt.match(filter.getParent())) {
+				
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 					
 					// Indirect filtering
@@ -389,18 +387,9 @@ public class GrammarBuilder {
 							}
 						}							
 					}
-					else {
-						HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
-
-						if(newNonterminal == null) {
-							newNonterminal = rewrite(alt, filter.getPosition(), filter.getChild());						
-							filter(newNonterminal, filters);
-							if(filter.isLeftMost() && !filter.isChildBinary()) {
-								rewriteRightEnds(newNonterminal, filter.getChild());
-							}
-						} else {
-							alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-						}
+					
+					if(filter.isLeftMost() && !filter.isChildBinary()) {
+						rewriteRightEnds(filteredNonterminal, filter.getChild());
 					}
 				}
 			}

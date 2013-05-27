@@ -59,7 +59,6 @@ public class FilterTest2 extends AbstractGrammarTest {
 		builder.filter();
 		
 		return builder.build();
-		
 	}
 	
 
