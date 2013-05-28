@@ -471,7 +471,7 @@ public class GrammarBuilder {
 					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
 					if(newNonterminal == null) {
 						newNonterminal = rewrite(alternate, 0, filteredAlternate);
-						rewriteRightEnds(newNonterminal, filteredAlternate);
+						rewriteLeftEnds(newNonterminal, filteredAlternate);
 					} else {
 						alternate.setNonterminalAt(0, newNonterminal);
 					}
