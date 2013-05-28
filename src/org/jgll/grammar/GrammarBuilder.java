@@ -436,7 +436,7 @@ public class GrammarBuilder {
 	
 	private void rewriteRightEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for(Alternate alternate : head.getAlternates()) {
-			if(! (alternate.isBinary(head) || alternate.isUnaryPrefix(head))) {
+			if(!alternate.isBinary(head) || !alternate.isUnaryPrefix(head)) {
 				continue;
 			}
 			HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
