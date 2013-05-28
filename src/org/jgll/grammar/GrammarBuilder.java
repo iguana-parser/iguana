@@ -391,6 +391,10 @@ public class GrammarBuilder {
 					if(filter.isLeftMost() && !filter.isChildBinary()) {
 						rewriteRightEnds(filteredNonterminal, filter.getChild());
 					}
+					
+					if(filter.isRightMost() && !filter.isChildBinary()) {
+						rewriteLeftEnds(filteredNonterminal, filter.getChild());
+					}
 				}
 			}
 		}
@@ -434,26 +438,48 @@ public class GrammarBuilder {
 		return false;
 	}
 	
+	
+	
 	private void rewriteRightEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for(Alternate alternate : head.getAlternates()) {
-			if(!alternate.isBinary(head) || !alternate.isUnaryPrefix(head)) {
-				continue;
-			}
-			HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
-			
-			if(nonterminal.contains(filteredAlternate)) {
-				HeadGrammarSlot filteredNonterminal = alternate.getNonterminalAt(alternate.size() - 1);
+			if(alternate.isBinary(head) || alternate.isUnaryPrefix(head)) {
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
 				
-				HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
-				if(newNonterminal == null) {
-					newNonterminal = rewrite(alternate, alternate.size() - 1, filteredAlternate);
-					rewriteRightEnds(newNonterminal, filteredAlternate);
-				} else {
-					alternate.setNonterminalAt(alternate.size() - 1, newNonterminal);
+				if(nonterminal.contains(filteredAlternate)) {
+					HeadGrammarSlot filteredNonterminal = alternate.getNonterminalAt(alternate.size() - 1);
+					
+					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
+					if(newNonterminal == null) {
+						newNonterminal = rewrite(alternate, alternate.size() - 1, filteredAlternate);
+						rewriteRightEnds(newNonterminal, filteredAlternate);
+					} else {
+						alternate.setNonterminalAt(alternate.size() - 1, newNonterminal);
+					}
 				}
 			}
 		}
 	}
+	
+	private void rewriteLeftEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
+		for(Alternate alternate : head.getAlternates()) {
+			if(alternate.isBinary(head) || alternate.isUnaryPostfix(head)) {
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getFirstSlot()).getNonterminal();
+				
+				if(nonterminal.contains(filteredAlternate)) {
+					HeadGrammarSlot filteredNonterminal = alternate.getNonterminalAt(0);
+					
+					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
+					if(newNonterminal == null) {
+						newNonterminal = rewrite(alternate, 0, filteredAlternate);
+						rewriteRightEnds(newNonterminal, filteredAlternate);
+					} else {
+						alternate.setNonterminalAt(0, newNonterminal);
+					}
+				}
+			}
+		}
+	}
+
 	
 	/**
 	 * 

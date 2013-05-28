@@ -95,17 +95,24 @@ public class Alternate {
 			   head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
 	}
 	
+	/**
+	 * 
+	 * Returns true if the alternate is of the form op E.
+	 * In other words, head = symbols[symobls.size - 1]
+	 * 
+	 */
 	public boolean isUnaryPrefix(HeadGrammarSlot head) {
 		
 		if(isBinary(head)) {
 			return false;
 		}
 		
-		if(! symbols.get(0).isNonterminalSlot()) {
+		int index = symbols.size() - 1;
+		if(! symbols.get(index).isNonterminalSlot()) {
 			return false;
 		}
 		
-		NonterminalGrammarSlot firstNonterminal = (NonterminalGrammarSlot) symbols.get(0);
+		NonterminalGrammarSlot firstNonterminal = (NonterminalGrammarSlot) symbols.get(index);
 		
 		return head.getNonterminal().getName().equals(firstNonterminal.getNonterminal().getNonterminal().getName());
 	}
@@ -115,11 +122,12 @@ public class Alternate {
 			return false;
 		}
 		
-		if(! symbols.get(symbols.size() - 1).isNonterminalSlot()) {
+		int index = 0;
+		if(! symbols.get(index).isNonterminalSlot()) {
 			return false;
 		}
 		
-		NonterminalGrammarSlot lastNonterminal = (NonterminalGrammarSlot) symbols.get(symbols.size() - 1);
+		NonterminalGrammarSlot lastNonterminal = (NonterminalGrammarSlot) symbols.get(index);
 		
 		return head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
 	}
