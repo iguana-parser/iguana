@@ -31,16 +31,26 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(label, position, previous, head);
 		this.object = object;
+		this.popAction = new SlotAction<Boolean>() {
+			
+			@Override
+			public Boolean execute(GLLParser parser, Input input) {
+				return true;
+			}
+		};
 	}
 	
-	public void addPopAction(SlotAction<Boolean> popAction) {
+	public void setPopAction(SlotAction<Boolean> popAction) {
 		this.popAction = popAction;
 	}
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		if(popAction.execute(parser, input)) {
+			System.out.println(this.toString() + ", true");
 			parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
+		} else {
+			System.out.println(this.toString() + ", false");
 		}
 		return null;
 	}

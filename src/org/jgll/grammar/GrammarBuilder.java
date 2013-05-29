@@ -89,12 +89,15 @@ public class GrammarBuilder {
 			
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 			if(notFollow != null) {
-				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
+				lastGrammarSlot.setPopAction(new SlotAction<Boolean>() {
 					
 					@Override
 					public Boolean execute(GLLParser parser, Input input) {
 						int inputIndex = parser.getCi();
-						if(notFollow.match(inputIndex + 1)) {
+						if(inputIndex + 1 >= input.size()) {
+							return true;
+						}
+						if(notFollow.match(input.charAt(inputIndex + 1))) {
 							return false;
 						}
 						return true;
