@@ -43,10 +43,6 @@ public class Input {
 		return input[index];
 	}
 
-	public int get(int index) {
-		return input[index];
-	}
-	
 	public int size() {
 		return input.length;
 	}

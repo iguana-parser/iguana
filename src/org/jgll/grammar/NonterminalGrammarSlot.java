@@ -49,7 +49,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		int ci = parser.getCi();
 		GSSNode cu = parser.getCu();
 		SPPFNode cn = parser.getCn();
-		if(checkAgainstTestSet(input.get(ci))) {
+		if(checkAgainstTestSet(input.charAt(ci))) {
 			parser.update(parser.create(next, cu, ci, cn), cn, ci);
 			return nonterminal;
 		} else {

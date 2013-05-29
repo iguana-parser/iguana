@@ -36,7 +36,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		int ci = parser.getCi();
 		SPPFNode cn = parser.getCn();
 		GSSNode cu = parser.getCu();
-		int charAtCi = input.get(ci);
+		int charAtCi = input.charAt(ci);
 		
 		// A::= x1
 		if(previous == null && next.next == null) {

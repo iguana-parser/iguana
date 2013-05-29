@@ -19,6 +19,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private SlotAction<Boolean> popAction;
+	
 	/**
 	 * An arbitrary data object that can be put in this grammar slot and
 	 * retrieved later when traversing the parse tree.
@@ -30,10 +32,16 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		super(label, position, previous, head);
 		this.object = object;
 	}
-		
+	
+	public void addPopAction(SlotAction<Boolean> popAction) {
+		this.popAction = popAction;
+	}
+	
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
-		parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
+		if(popAction.execute(parser, input)) {
+			parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
+		}
 		return null;
 	}
 	

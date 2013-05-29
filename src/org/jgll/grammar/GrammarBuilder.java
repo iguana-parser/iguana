@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.jgll.parser.GLLParser;
+import org.jgll.util.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +50,7 @@ public class GrammarBuilder {
 		return new Grammar(this);
 	}
 	
-	public GrammarBuilder addRule(Rule rule) {
+	public GrammarBuilder addRule(Rule rule, final CharacterClass notFollow) {
 		
 		if(rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
@@ -86,11 +88,28 @@ public class GrammarBuilder {
 			}
 			
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
+			if(notFollow != null) {
+				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
+					
+					@Override
+					public Boolean execute(GLLParser parser, Input input) {
+						int inputIndex = parser.getCi();
+						if(notFollow.match(inputIndex + 1)) {
+							return false;
+						}
+						return true;
+					}
+				});
+			}
 			slots.add(lastGrammarSlot);
 			headGrammarSlot.addAlternate(new Alternate(firstSlot, headGrammarSlot.getAlternates().size()));
 		}
 		
 		return this;
+	}
+	
+	public GrammarBuilder addRule(Rule rule) {
+		return addRule(rule, null);
 	}
 	
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {

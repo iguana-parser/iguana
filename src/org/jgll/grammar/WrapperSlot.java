@@ -44,11 +44,11 @@ public class WrapperSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		if(beforeAction != null) {
-			beforeAction.execute(slot, parser, input);
+			beforeAction.execute(parser, input);
 		}
 		GrammarSlot s = slot.parse(parser, input);
 		if(afterAction != null) {
-			afterAction.execute(slot, parser, input);
+			afterAction.execute(parser, input);
 		}
 		return s;
 	}
