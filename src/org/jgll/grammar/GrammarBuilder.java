@@ -94,10 +94,10 @@ public class GrammarBuilder {
 					@Override
 					public Boolean execute(GLLParser parser, Input input) {
 						int inputIndex = parser.getCi();
-						if(inputIndex + 1 >= input.size()) {
+						if(inputIndex >= input.size()) {
 							return true;
 						}
-						if(notFollow.match(input.charAt(inputIndex + 1))) {
+						if(notFollow.match(input.charAt(inputIndex))) {
 							return false;
 						}
 						return true;
