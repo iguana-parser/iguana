@@ -47,10 +47,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		if(popAction.execute(parser, input)) {
-			System.out.println(this.toString() + ", true");
 			parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
-		} else {
-			System.out.println(this.toString() + ", false");
 		}
 		return null;
 	}
