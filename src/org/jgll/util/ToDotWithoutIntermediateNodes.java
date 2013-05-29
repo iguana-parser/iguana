@@ -12,7 +12,7 @@ import org.jgll.traversal.SPPFVisitorUtil;
  * 
  * @see SPPFVisitor
  */
-public class ToDotWithoutIntermediateNodes extends ToDot {
+public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	
 	@Override
 	public void visit(PackedNode node) {

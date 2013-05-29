@@ -85,11 +85,6 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	@Override
-	public String getId() {
-		return slot.getId() + "," + leftExtent + "," + rightExtent;
-	}
-	
-	@Override
 	public String getLabel() {
 		return slot.toString();
 	}

@@ -8,7 +8,7 @@ import java.util.Collection;
 import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 
-public class GSSToDot {
+public class GSSToDot extends ToDot {
 	
 	private StringBuilder sb = new StringBuilder();
 	
@@ -18,7 +18,7 @@ public class GSSToDot {
 			sb.append("\"" + getId(node) + "\"" + String.format(GSS_NODE, node.toString()) + "\n");
 			
 			for(GSSEdge edge : node.getEdges()) {
-				sb.append(String.format(GSS_EDGE, edge.getSppfNode().getId()) + "\"" + getId(node) + "\"" + "->" + "{\"" + getId(edge.getDestination()) + "\"}" + "\n");
+				sb.append(String.format(GSS_EDGE, getId(edge.getSppfNode())) + "\"" + getId(node) + "\"" + "->" + "{\"" + getId(edge.getDestination()) + "\"}" + "\n");
 			}
 		}
 	}

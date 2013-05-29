@@ -111,11 +111,6 @@ public class PackedNode extends SPPFNode {
 	}
 	
 	@Override
-	public String getId() {
-		return parent.getId() + "," + slot.getId() + "," + pivot;
-	}
-
-	@Override
 	public int getLeftExtent() {
 		return parent.getLeftExtent();
 	}

@@ -58,11 +58,6 @@ public class TerminalSymbolNode extends SPPFNode {
 		return String.format("(%s, %d, %d)", getLabel(), inputIndex, getRightExtent());
 	}
 	
-	@Override
-	public String getId() {
-		return "t" + matchedChar + "," + inputIndex + "," + getRightExtent();
-	}
-	
 	public int getMatchedChar() {
 		return matchedChar;
 	}

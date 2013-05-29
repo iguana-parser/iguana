@@ -12,10 +12,11 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 	
 	@Override
 	public void visit(NonterminalSymbolNode node) {
+		super.visit(node);
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			sb.append("\"" + node.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
 			
 			for (SPPFNode child : node.getChildren()) {
 				if(!(child instanceof TerminalSymbolNode && ((TerminalSymbolNode) child).getMatchedChar() == -2)) {
@@ -33,17 +34,4 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 		visit((NonterminalSymbolNode)node);
 	}
 	
-	@Override
-	public void visit(TerminalSymbolNode terminal) {
-		if(!terminal.isVisited()) {
-			terminal.setVisited(true);
-			if(terminal.getMatchedChar() != TerminalSymbolNode.EPSILON) {
-				String label = terminal.toString();
-				// Replace the Java-style unicode char for epsilon with the graphviz one
-				label.replace("\u03B5", "&epsilon;");
-				sb.append("\"" + terminal.getId() + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
-			}
-		}
-	}
-
 }

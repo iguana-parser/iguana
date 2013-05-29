@@ -11,7 +11,7 @@ import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.RecursiveDescentParser;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.GraphVizUtil;
-import org.jgll.util.ToDot;
+import org.jgll.util.SPPFToDot;
 import org.jgll.util.ToDotWithoutIntermediateNodes;
 import org.jgll.util.ToDotWithoutIntermeidateAndLists;
 import org.junit.Before;
@@ -56,19 +56,19 @@ public abstract class AbstractGrammarTest {
 	}
 	 
 	protected void generateGraphWithoutIntermeiateNodes(SPPFNode sppf) {
-		ToDot toDot = new ToDotWithoutIntermediateNodes();
+		SPPFToDot toDot = new ToDotWithoutIntermediateNodes();
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
 	protected void generateGraph(SPPFNode sppf) {
-		ToDot toDot = new ToDot();
+		SPPFToDot toDot = new SPPFToDot();
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
 	protected void generateGraphWithIntermeiateAndListNodes(SPPFNode sppf) {
-		ToDot toDot = new ToDotWithoutIntermeidateAndLists();
+		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists();
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}

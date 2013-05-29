@@ -4,6 +4,8 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.GrammarToDot;
 import org.jgll.util.GraphVizUtil;
 import org.jgll.util.Input;
+import org.jgll.util.SPPFToDot;
+import org.jgll.util.ToDotWithoutIntermeidateAndLists;
 import org.junit.Test;
 
 /**
@@ -32,7 +34,7 @@ public class FilterTest3 extends AbstractGrammarTest {
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
 		// E ::= E E+
-		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Nonterminal("E+")));
+		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Nonterminal("E+", true)));
 		builder.addRule(rule1);
 		
 		// E ::=  E + E
@@ -44,11 +46,11 @@ public class FilterTest3 extends AbstractGrammarTest {
 		builder.addRule(rule3);
 		
 		// E+ ::= E+ E
-		rule4 = new Rule(new Nonterminal("E+"), list(new Nonterminal("E+"), new Nonterminal("E")));
+		rule4 = new Rule(new Nonterminal("E+", true), list(new Nonterminal("E+", true), new Nonterminal("E")));
 		builder.addRule(rule4);
 		
 		// E+ ::= E
-		rule5 = new Rule(new Nonterminal("E+"), list(new Nonterminal("E")));
+		rule5 = new Rule(new Nonterminal("E+", true), list(new Nonterminal("E")));
 		builder.addRule(rule5);
 		
 		// (E ::= .E E+, E E+) 
@@ -77,7 +79,9 @@ public class FilterTest3 extends AbstractGrammarTest {
 
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa+aaaa+aaaa"), grammar, "E");
-		generateGraphWithoutIntermeiateNodes(sppf);
+		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists();
+		sppf.accept(toDot);
+		GraphVizUtil.generateGraph(toDot.getString(), "/Users/ali/output", "graph");
 	}
 
 }

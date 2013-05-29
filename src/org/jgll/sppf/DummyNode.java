@@ -28,11 +28,6 @@ public class DummyNode extends SPPFNode {
 	private DummyNode() {}
 
 	@Override
-	public String getId() {
-		return "-1";
-	}
-
-	@Override
 	public String getLabel() {
 		return "$";
 	}

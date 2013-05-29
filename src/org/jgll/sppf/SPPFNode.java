@@ -20,8 +20,6 @@ public abstract class SPPFNode {
 	
 	private Object object;
 
-	public abstract String getId();
-
 	public abstract String getLabel();
 
 	public abstract SPPFNode getChildAt(int index);
