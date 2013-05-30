@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.util.Input;
@@ -31,23 +32,20 @@ public class GrammarBuilder {
 	
 	private Map<Set<Alternate>, HeadGrammarSlot> existingAlternates;
 	
-	private Map<String, Set<Filter>> filters;
+	private Map<String, Set<Filter>> filtersMap;
 	
 	private Set<Filter> oneLevelOnlyFilters;
-	
-	private Set<Filter> deepFilters;
-
 	
 	public GrammarBuilder(String name) {
 		this.name = name;
 		nonterminals = new ArrayList<>();
 		slots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
-		filters = new HashMap<>();
-		oneLevelOnlyFilters = new HashSet<>();
-		deepFilters = new HashSet<>();
+		filtersMap = new HashMap<>();
 		existingAlternates = new HashMap<>();
 		newNonterminals = new ArrayList<>();
+		
+		oneLevelOnlyFilters = new HashSet<>();
 	}
 	
 	public Grammar build() {
@@ -339,49 +337,45 @@ public class GrammarBuilder {
 	}
 		
 	public void filter() {
-				
-		for(Filter filter : deepFilters) {
-			HeadGrammarSlot head = nonterminalsMap.get(filter.getNonterminal());
-			filterFirstLevel(head, filters.get(head.getNonterminal().getName()));
-			filterDeep(head, filters.get(head.getNonterminal().getName()));
+		for(Entry<String, Set<Filter>> entry : filtersMap.entrySet()) {
+			log.debug("Filtering {} with {} filters.", entry.getKey(), entry.getValue().size());
+			
+			filterFirstLevel(nonterminalsMap.get(entry.getKey()), entry.getValue());
+			filterDeep(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 		
 		for(Filter filter : oneLevelOnlyFilters) {
-			HeadGrammarSlot head = nonterminalsMap.get(filter.getNonterminal());
-			onlyFirstLevelFilter(head, filters.get(head.getNonterminal().getName()));
+			onlyFirstLevelFilter(nonterminalsMap.get(filter.getNonterminal()), filter);
 		}
-				
+			
 		nonterminals.addAll(newNonterminals);
 	}
 	
-	private Map<Set<Integer>, HeadGrammarSlot> firstLevels = new HashMap<>();
-	
-	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<Filter> filters) {
+	private void onlyFirstLevelFilter(HeadGrammarSlot head, Filter filter) {
 		for(Alternate alt : head.getAlternates()) {
-			for(Filter filter : filters) {
-
-				if(match(filter, alt)) {
+			if(match(filter, alt)) {
+				
+				HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
+				HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
+				
+				if(newNonterminal == null) {
+					newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+					newNonterminals.add(newNonterminal);
 					
-					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
-					
-					if(newNonterminal == null) {
-						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
-						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-						newNonterminals.add(newNonterminal);
-						
-						List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
-						newNonterminal.setAlternates(copy);
-						newNonterminal.remove(filter.getChild());
-						existingAlternates.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
-					} 
-					else {
-						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-					}
+					List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
+					newNonterminal.setAlternates(copy);
+					newNonterminal.remove(filter.getChild());
+					existingAlternates.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
+				} 
+				else {
+					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 				}
 			}
 		}
 	}
+	
+	private Map<Set<Integer>, HeadGrammarSlot> firstLevels = new HashMap<>();
 	
 	private void filterFirstLevel(HeadGrammarSlot head, Set<Filter> filters) {
 		for(Alternate alt : head.getAlternates()) {
@@ -634,19 +628,18 @@ public class GrammarBuilder {
 		log.debug("Filter added {}", filter);
 
 		if(name.equals(child.getHead().getName())) {
-			deepFilters.add(filter);
+			if(filtersMap.containsKey(name)) {
+				filtersMap.get(name).add(filter);
+			} 
+			else {
+				Set<Filter> set = new HashSet<>();
+				set.add(filter);
+				filtersMap.put(name, set);
+			}
 		} else {
 			oneLevelOnlyFilters.add(filter);
 		}
 		
-		if(filters.containsKey(name)) {
-			filters.get(name).add(filter);
-		} 
-		else {
-			Set<Filter> set = new HashSet<>();
-			set.add(filter);
-			filters.put(name, set);
-		}
 	}
-	
+		
 }
