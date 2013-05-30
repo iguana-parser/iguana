@@ -34,39 +34,40 @@ public class FilterTest3 extends AbstractGrammarTest {
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
 		// E ::= E E+
-		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Nonterminal("E+", true)));
+		Nonterminal E = new Nonterminal("E");
+		rule1 = new Rule(E, list(E, new Nonterminal("E+", true)));
 		builder.addRule(rule1);
 		
 		// E ::=  E + E
-		rule2 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E")));
+		rule2 = new Rule(E, list(E, new Character('+'), E));
 		builder.addRule(rule2);
 		
 		// E ::= a
-		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
+		rule3 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule3);
 		
 		// E+ ::= E+ E
-		rule4 = new Rule(new Nonterminal("E+", true), list(new Nonterminal("E+", true), new Nonterminal("E")));
+		rule4 = new Rule(new Nonterminal("E+", true), list(new Nonterminal("E+", true), E));
 		builder.addRule(rule4);
 		
 		// E+ ::= E
-		rule5 = new Rule(new Nonterminal("E+", true), list(new Nonterminal("E")));
+		rule5 = new Rule(new Nonterminal("E+", true), list(E));
 		builder.addRule(rule5);
 		
 		// (E ::= .E E+, E E+) 
-		builder.addFilter("E", rule1.getBody(), 0, rule1.getBody());
+		builder.addFilter(E, rule1, 0, rule1);
 		
 		// (E ::= E .E+, E E+)
-		builder.addFilter("E", rule1.getBody(), 1, rule1.getBody());
+		builder.addFilter(E, rule1, 1, rule1);
 		
 		// (E ::= .E E+, E + E) 
-		builder.addFilter("E", rule1.getBody(), 0, rule2.getBody());
+		builder.addFilter(E, rule1, 0, rule2);
 		
 		// (E ::= E .E+, E + E)
-		builder.addFilter("E", rule1.getBody(), 1, rule2.getBody());
+		builder.addFilter(E, rule1, 1, rule2);
 		
 		// (E ::= E .E, E + E)
-		builder.addFilter("E", rule2.getBody(), 2, rule2.getBody());
+		builder.addFilter(E, rule2, 2, rule2);
 		
 		builder.filter();
 		return builder.build();

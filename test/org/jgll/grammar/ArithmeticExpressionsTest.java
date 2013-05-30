@@ -18,21 +18,22 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 		GrammarBuilder builder = new GrammarBuilder("gamma2");
 		
 		// E ::= E + E
-		rule0 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E")));
+		Nonterminal E = new Nonterminal("E");
+		rule0 = new Rule(E, list(E, new Character('+'), E));
 		builder.addRule(rule0);
 		
 		// E ::= E * E
-		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('*'), new Nonterminal("E")));
+		rule1 = new Rule(E, list(E, new Character('*'), E));
 		builder.addRule(rule1);
 		
 		// E ::= a
-		rule2 = new Rule(new Nonterminal("E"), list(new Character('a')));
+		rule2 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule2);
 		
-		builder.addFilter("E", rule0.getBody(), 2, rule0.getBody());
-		builder.addFilter("E", rule1.getBody(), 0, rule0.getBody());
-		builder.addFilter("E", rule1.getBody(), 2, rule0.getBody());
-		builder.addFilter("E", rule1.getBody(), 2, rule1.getBody());
+		builder.addFilter(E, rule0, 2, rule0);
+		builder.addFilter(E, rule1, 0, rule0);
+		builder.addFilter(E, rule1, 2, rule0);
+		builder.addFilter(E, rule1, 2, rule1);
 		builder.filter();
 		
 		return builder.build();

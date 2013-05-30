@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.util.Input;
@@ -33,6 +32,10 @@ public class GrammarBuilder {
 	private Map<Set<Alternate>, HeadGrammarSlot> existingAlternates;
 	
 	private Map<String, Set<Filter>> filters;
+	
+	private Set<Filter> oneLevelOnlyFilters;
+	
+	private Set<Filter> deepFilters;
 
 	
 	public GrammarBuilder(String name) {
@@ -41,6 +44,8 @@ public class GrammarBuilder {
 		slots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
 		filters = new HashMap<>();
+		oneLevelOnlyFilters = new HashSet<>();
+		deepFilters = new HashSet<>();
 		existingAlternates = new HashMap<>();
 		newNonterminals = new ArrayList<>();
 	}
@@ -334,12 +339,22 @@ public class GrammarBuilder {
 	}
 		
 	public void filter() {
-		for(Entry<String, Set<Filter>> entry : filters.entrySet()) {
-			log.debug("Filtering {} with {} filters.", entry.getKey(), entry.getValue().size());
-			
-			filterFirstLevel(nonterminalsMap.get(entry.getKey()), entry.getValue());
-			filterDeep(nonterminalsMap.get(entry.getKey()), entry.getValue());
+
+		for(Filter filter : deepFilters) {
+			HeadGrammarSlot head = nonterminalsMap.get(filter.getNonterminal());
+			filterFirstLevel(head, filters.get(head.getNonterminal().getName()));
 		}
+		
+		for(Filter filter : oneLevelOnlyFilters) {
+			HeadGrammarSlot head = nonterminalsMap.get(filter.getNonterminal());
+			filterFirstLevel(head, filters.get(head.getNonterminal().getName()));
+		}
+		
+		for(Filter filter : deepFilters) {
+			HeadGrammarSlot head = nonterminalsMap.get(filter.getNonterminal());
+			filterDeep(head, filters.get(head.getNonterminal().getName()));
+		}
+		
 		nonterminals.addAll(newNonterminals);
 	}
 	
@@ -590,17 +605,24 @@ public class GrammarBuilder {
 	 * @param filterdAlternates
 	 * 
 	 */
-	public void addFilter(String nonterminal, List<Symbol> parent, int position, List<Symbol> filteredAlternate) {
-		Filter filter = new Filter(nonterminal, parent, position, filteredAlternate);
+	public void addFilter(Nonterminal nonterminal, Rule parent, int position, Rule child) {
+		String name = nonterminal.getName();
+		Filter filter = new Filter(name, parent.getBody(), position, child.getBody());
 		log.debug("Filter added {}", filter);
+
+		if(name.equals(child.getHead())) {
+			deepFilters.add(filter);
+		} else {
+			oneLevelOnlyFilters.add(filter);
+		}
 		
-		if(filters.containsKey(nonterminal)) {
-			filters.get(nonterminal).add(filter);
+		if(filters.containsKey(name)) {
+			filters.get(name).add(filter);
 		} 
 		else {
 			Set<Filter> set = new HashSet<>();
 			set.add(filter);
-			filters.put(nonterminal, set);
+			filters.put(name, set);
 		}
 	}
 	

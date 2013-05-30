@@ -29,27 +29,29 @@ public class FilterTest4 extends AbstractGrammarTest {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
+		Nonterminal E = new Nonterminal("E");
+
 		// E ::= E z
-		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('z')));
+		rule1 = new Rule(E, list(E, new Character('z')));
 		builder.addRule(rule1);
 		
 		// E ::=  x E
-		rule2 = new Rule(new Nonterminal("E"), list(new Character('x'), new Nonterminal("E")));
+		rule2 = new Rule(E, list(new Character('x'), E));
 		builder.addRule(rule2);
 		
 		// E ::= E w
-		rule3 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('w')));
+		rule3 = new Rule(E, list(E, new Character('w')));
 		builder.addRule(rule3);
 		
 		// E ::= a
-		rule4 = new Rule(new Nonterminal("E"), list(new Character('a')));
+		rule4 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule4);
 		
 		// (E, .E z, x E) 
-		builder.addFilter("E", rule1.getBody(), 0, rule2.getBody());
+		builder.addFilter(E, rule1, 0, rule2);
 		
 		// (E, x .E, E w)
-		builder.addFilter("E", rule2.getBody(), 1, rule3.getBody());
+		builder.addFilter(E, rule2, 1, rule3);
 		
 		builder.filter();
 		return builder.build();

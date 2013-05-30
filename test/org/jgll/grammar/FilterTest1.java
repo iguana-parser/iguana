@@ -28,19 +28,20 @@ public class FilterTest1 extends AbstractGrammarTest {
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
 		// E ::= E + E
-		rule1 = new Rule(new Nonterminal("E"), list(new Nonterminal("E"), new Character('+'), new Nonterminal("E")));
+		Nonterminal E = new Nonterminal("E");
+		rule1 = new Rule(E, list(E, new Character('+'), E));
 		builder.addRule(rule1);
 		
 		// E ::= - E
-		rule2 = new Rule(new Nonterminal("E"), list(new Character('-'), new Nonterminal("E")));
+		rule2 = new Rule(E, list(new Character('-'), E));
 		builder.addRule(rule2);
 		
 		// E ::= a
-		rule3 = new Rule(new Nonterminal("E"), list(new Character('a')));
+		rule3 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule3);
 		
-		builder.addFilter("E", rule1.getBody(), 2, rule1.getBody());
-		builder.addFilter("E", rule1.getBody(), 0, rule2.getBody());
+		builder.addFilter(E, rule1, 2, rule1);
+		builder.addFilter(E, rule1, 0, rule2);
 		builder.filter();
 
 		return builder.build();

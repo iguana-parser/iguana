@@ -22,17 +22,18 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse");
 		
-		rule1 = new Rule(new Nonterminal("S"), list(new Character('a'), new Nonterminal("S"), new Character('b'), new Nonterminal("S")));
+		Nonterminal S = new Nonterminal("S");
+		rule1 = new Rule(S, list(new Character('a'), S, new Character('b'), S));
 		builder.addRule(rule1);
 		
-		rule2 = new Rule(new Nonterminal("S"), list(new Character('a'), new Nonterminal("S")));
+		rule2 = new Rule(S, list(new Character('a'), S));
 		builder.addRule(rule2);
 		
-		rule3 = new Rule(new Nonterminal("S"), list(new Character('s')));
+		rule3 = new Rule(S, list(new Character('s')));
 		builder.addRule(rule3);
 		
 		// (S ::= a .S b S \ a S)
-		builder.addFilter("S", rule1.getBody(), 1, rule2.getBody());
+		builder.addFilter(S, rule1, 1, rule2);
 		builder.filter();
 		
 		return builder.build();
