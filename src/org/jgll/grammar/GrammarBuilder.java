@@ -633,7 +633,7 @@ public class GrammarBuilder {
 		Filter filter = new Filter(name, parent.getBody(), position, child.getBody());
 		log.debug("Filter added {}", filter);
 
-		if(name.equals(child.getHead())) {
+		if(name.equals(child.getHead().getName())) {
 			deepFilters.add(filter);
 		} else {
 			oneLevelOnlyFilters.add(filter);
