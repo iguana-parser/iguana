@@ -117,18 +117,9 @@ public class GrammarBuilder {
 						int lastIndex = parser.getCu().getIndex();
 												
 						for(String s : deleteSet) {
-							int[] subString = input.subString(lastIndex, currentIndex);
-							if(s.length() != subString.length) {
-								return true;
+							if(match(s, input.subString(lastIndex, currentIndex))) {
+								return false;
 							}
-							for(int i = 0; i < subString.length; i++) {
-								if(s.charAt(i) != subString[i]) {
-									return true;
-								}
-							}
-							
-							// matches
-							return false;
 						}
 						
 						return true;
@@ -141,6 +132,22 @@ public class GrammarBuilder {
 		}
 		
 		return this;
+	}
+	
+	/**
+	 * 
+	 * @return true if the given string matches the given substring (as an integer array)
+	 */
+	private boolean match(String s, int[] subString) {
+		if(s.length() != subString.length) {
+			return false;
+		}
+		for(int i = 0; i < subString.length; i++) {
+			if(s.charAt(i) != subString[i]) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public GrammarBuilder addRule(Rule rule) {
