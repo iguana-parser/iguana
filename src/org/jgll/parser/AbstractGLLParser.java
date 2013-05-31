@@ -7,6 +7,8 @@ import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.LastGrammarSlot;
+import org.jgll.grammar.SlotAction;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -176,6 +178,16 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * }
 	 */
 	public final void pop(GSSNode u, int i, SPPFNode z) {
+		
+		// Don't pop if a pop action associated with the slot returns fasle.
+		GrammarSlot slot = u.getLabel();
+		if(slot instanceof LastGrammarSlot) {
+			for(SlotAction<Boolean> popAction : ((LastGrammarSlot) u.getLabel()).getPopActions()) {
+				if(!popAction.execute(this, input)) {
+					return;
+				}
+			}
+		}
 		
 		log.trace("Pop {}, {}, {}", new Object[] {u.getLabel(), i, z});
 		

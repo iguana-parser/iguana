@@ -40,14 +40,12 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		popActions.add(popAction);
 	}
 	
+	public List<SlotAction<Boolean>> getPopActions() {
+		return popActions;
+	}
+	
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
-		for(SlotAction<Boolean> popAction : popActions) {
-			if(!popAction.execute(parser, input)) {
-				return null;
-			}
-		}
-		
 		parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
 		return null;
 	}
@@ -68,7 +66,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public boolean checkAgainstTestSet(int i) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		throw new UnsupportedOperationException();
