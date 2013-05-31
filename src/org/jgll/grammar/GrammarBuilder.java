@@ -53,7 +53,7 @@ public class GrammarBuilder {
 		return new Grammar(this);
 	}
 	
-	public GrammarBuilder addRule(Rule rule, final CharacterClass notFollow) {
+	public GrammarBuilder addRule(Rule rule, final CharacterClass notFollow, final List<String> deleteSet) {
 		
 		if(rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
@@ -92,7 +92,7 @@ public class GrammarBuilder {
 			
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 			if(notFollow != null) {
-				lastGrammarSlot.setPopAction(new SlotAction<Boolean>() {
+				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
 					
 					@Override
 					public Boolean execute(GLLParser parser, Input input) {
@@ -107,6 +107,35 @@ public class GrammarBuilder {
 					}
 				});
 			}
+			
+			if(deleteSet != null) {
+				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
+					
+					@Override
+					public Boolean execute(GLLParser parser, Input input) {
+						int currentIndex = parser.getCi();
+						int lastIndex = parser.getCu().getIndex();
+												
+						for(String s : deleteSet) {
+							int[] subString = input.subString(lastIndex, currentIndex);
+							if(s.length() != subString.length) {
+								return true;
+							}
+							for(int i = 0; i < subString.length; i++) {
+								if(s.charAt(i) != subString[i]) {
+									return true;
+								}
+							}
+							
+							// matches
+							return false;
+						}
+						
+						return true;
+					}
+				});
+			}
+			
 			slots.add(lastGrammarSlot);
 			headGrammarSlot.addAlternate(new Alternate(firstSlot, headGrammarSlot.getAlternates().size()));
 		}
@@ -115,7 +144,7 @@ public class GrammarBuilder {
 	}
 	
 	public GrammarBuilder addRule(Rule rule) {
-		return addRule(rule, null);
+		return addRule(rule, null, null);
 	}
 	
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {

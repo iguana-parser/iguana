@@ -2,6 +2,8 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -19,7 +21,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private SlotAction<Boolean> popAction;
+	private List<SlotAction<Boolean>> popActions;
 	
 	/**
 	 * An arbitrary data object that can be put in this grammar slot and
@@ -31,24 +33,22 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(label, position, previous, head);
 		this.object = object;
-		this.popAction = new SlotAction<Boolean>() {
-			
-			@Override
-			public Boolean execute(GLLParser parser, Input input) {
-				return true;
-			}
-		};
+		this.popActions = new ArrayList<>();
 	}
 	
-	public void setPopAction(SlotAction<Boolean> popAction) {
-		this.popAction = popAction;
+	public void addPopAction(SlotAction<Boolean> popAction) {
+		popActions.add(popAction);
 	}
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
-		if(popAction.execute(parser, input)) {
-			parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
+		for(SlotAction<Boolean> popAction : popActions) {
+			if(!popAction.execute(parser, input)) {
+				return null;
+			}
 		}
+		
+		parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
 		return null;
 	}
 	

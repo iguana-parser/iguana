@@ -131,6 +131,14 @@ public class Input {
 		lineColumns[input.length - 1] = new LineColumn(lineColumns[input.length - 2]);
 	}
 	
+	public int[] subString(int start, int end) {
+		int[] substring = new int[end - start];
+		for(int i = 0; i < substring.length; i++) {
+			substring[i] = input[start + i];
+		}
+		return substring;
+	}
+	
 	private static class LineColumn {
 
 		private int lineNumber;
