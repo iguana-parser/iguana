@@ -31,7 +31,7 @@ public class Grammar implements Serializable {
 	 * This map is used to locate head grammar slots by name for parsing
 	 * from any arbitrary nonterminal.
 	 */
-	private Map<String, HeadGrammarSlot> nameToNonterminals;
+	Map<String, HeadGrammarSlot> nameToNonterminals;
 	
 	private Map<String, BodyGrammarSlot> nameToSlots;
 	
@@ -129,39 +129,31 @@ public class Grammar implements Serializable {
 	@Override
 	public String toString() {
 		
-		Set<HeadGrammarSlot> visitedHeads = new HashSet<>();
+		final StringBuilder sb = new StringBuilder();
 		
-		Deque<HeadGrammarSlot> todoQueue = new ArrayDeque<>();
-		
-		StringBuilder sb = new StringBuilder();
-		
-		for(HeadGrammarSlot head : nonterminals) {
-			todoQueue.add(head);
-			visitedHeads.add(head);
-		}
-		
-		while(!todoQueue.isEmpty()) {
-			HeadGrammarSlot head = todoQueue.poll();
+		GrammarVisitor.visit(this, nonterminals.get(0).getNonterminal().getName(), new GrammarVisitAction() {
 			
-			for(Alternate alternate : head.getAlternates()) {
-				sb.append(getName(head)).append(" ::= ");
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
-				while(!currentSlot.isLastSlot()){
-					if(currentSlot.isNonterminalSlot()) {
-						HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
-						if(!visitedHeads.contains(nonterminal)) {
-							todoQueue.add(nonterminal);
-							visitedHeads.add(nonterminal);
-						}
-					}
-					sb.append(" ").append(getName(currentSlot));
-					currentSlot = currentSlot.next;
-				}
+			@Override
+			public void visit(LastGrammarSlot slot) {
 				sb.append("\n");
 			}
+			
+			@Override
+			public void visit(TerminalGrammarSlot slot) {
+				sb.append(" ").append(getName(slot));
+			}
+			
+			@Override
+			public void visit(NonterminalGrammarSlot slot) {
+				sb.append(" ").append(getName(slot));
+			}
+			
+			@Override
+			public void visit(HeadGrammarSlot head) {
+				sb.append(getName(head)).append(" ::= ");
+			}
+		});
 
-		}
-				
 		return sb.toString();
 	}
 	
@@ -178,6 +170,10 @@ public class Grammar implements Serializable {
 	 */
 	private String getName(HeadGrammarSlot head) {
 		return newNonterminals.contains(head) ? head.getNonterminal().getName() + (newNonterminals.indexOf(head) + 1) : head.getNonterminal().getName();			
+	}
+	
+	public void validate() {
+		
 	}
 		
 }
