@@ -33,7 +33,7 @@ public class FilterTest1 extends AbstractGrammarTest {
 		builder.addRule(rule1);
 		
 		// E ::= - E
-		rule2 = new Rule(E, list(new Character('-'), E));
+		rule2 = new Rule(E, list(new Character('-'), new Nonterminal("X")));
 		builder.addRule(rule2);
 		
 		// E ::= a
@@ -42,6 +42,9 @@ public class FilterTest1 extends AbstractGrammarTest {
 		
 		builder.addFilter(E, rule1, 2, rule1);
 		builder.addFilter(E, rule1, 0, rule2);
+		
+		builder.validate();
+		
 		builder.filter();
 
 		return builder.build();

@@ -53,6 +53,34 @@ public class GrammarBuilder {
 		return new Grammar(this);
 	}
 	
+	public void validate() {
+		Grammar g = new Grammar(this);
+		GrammarVisitor.visit(g, nonterminals.get(0).getNonterminal().getName(), new GrammarVisitAction() {
+			
+			@Override
+			public void visit(LastGrammarSlot slot) {
+			}
+			
+			@Override
+			public void visit(TerminalGrammarSlot slot) {
+			}
+			
+			@Override
+			public void visit(NonterminalGrammarSlot slot) {
+				if(slot.getNonterminal() == null) {
+					throw new GrammarValidationException("No nonterminal defined for " + slot.getLabel());
+				}
+			}
+			
+			@Override
+			public void visit(HeadGrammarSlot head) {
+				if(head.getAlternates().size() == 0) {
+					throw new GrammarValidationException("No alternates defined for " + head.getLabel());
+				}
+			}
+		});
+	}
+	
 	public GrammarBuilder addRule(Rule rule, final CharacterClass notFollow, final List<String> deleteSet) {
 		
 		if(rule == null) {
