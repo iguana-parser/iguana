@@ -29,6 +29,8 @@ public class Grammar implements Serializable {
 	 */
 	Map<String, HeadGrammarSlot> nameToNonterminals;
 	
+	private HeadGrammarSlot root;
+	
 	private Map<String, BodyGrammarSlot> nameToSlots;
 	
 	private List<HeadGrammarSlot> newNonterminals;
@@ -51,6 +53,7 @@ public class Grammar implements Serializable {
 		
 		this.newNonterminals = builder.newNonterminals;
 		this.longestTerminalChain = builder.longestTerminalChain;
+		this.root = builder.root;
 	}
 	
 	
@@ -127,7 +130,7 @@ public class Grammar implements Serializable {
 		
 		final StringBuilder sb = new StringBuilder();
 		
-		GrammarVisitor.visit(this, nonterminals.get(0).getNonterminal().getName(), new GrammarVisitAction() {
+		GrammarVisitor.visit(root, new GrammarVisitAction() {
 			
 			@Override
 			public void visit(LastGrammarSlot slot) {

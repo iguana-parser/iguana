@@ -7,15 +7,14 @@ import java.util.Set;
 
 public class GrammarVisitor {
 	
-	public static void visit(Grammar grammar, String nonterminalName, GrammarVisitAction action) {
-		HeadGrammarSlot head = grammar.nameToNonterminals.get(nonterminalName);
-		
+	public static void visit(HeadGrammarSlot root, GrammarVisitAction action) {
+
 		Set<HeadGrammarSlot> visitedHeads = new HashSet<>();
 		
 		Deque<HeadGrammarSlot> todoQueue = new ArrayDeque<>();
 		
-		todoQueue.add(head);
-		visitedHeads.add(head);
+		todoQueue.add(root);
+		visitedHeads.add(root);
 		
 		while(!todoQueue.isEmpty()) {
 			HeadGrammarSlot next = todoQueue.poll();

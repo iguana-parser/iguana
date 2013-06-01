@@ -36,6 +36,8 @@ public class GrammarBuilder {
 	
 	private Set<Filter> oneLevelOnlyFilters;
 	
+	HeadGrammarSlot root;
+	
 	public GrammarBuilder(String name) {
 		this.name = name;
 		nonterminals = new ArrayList<>();
@@ -50,12 +52,15 @@ public class GrammarBuilder {
 	
 	public Grammar build() {
 		initializeGrammarProrperties();
+		if(root == null) {
+			root = nonterminals.get(0);
+		}
+		validate(root);
 		return new Grammar(this);
 	}
 	
-	public void validate() {
-		Grammar g = new Grammar(this);
-		GrammarVisitor.visit(g, nonterminals.get(0).getNonterminal().getName(), new GrammarVisitAction() {
+	public void validate(HeadGrammarSlot root) {
+		GrammarVisitor.visit(root, new GrammarVisitAction() {
 			
 			@Override
 			public void visit(LastGrammarSlot slot) {
@@ -79,6 +84,10 @@ public class GrammarBuilder {
 				}
 			}
 		});
+	}
+	
+	public void setRoot(String root) {
+		this.root = nonterminalsMap.get(root);
 	}
 	
 	public GrammarBuilder addRule(Rule rule, final CharacterClass notFollow, final List<String> deleteSet) {
