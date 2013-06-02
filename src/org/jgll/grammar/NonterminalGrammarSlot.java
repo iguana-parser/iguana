@@ -137,7 +137,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	public void setTestSet(Set<Terminal> testSet) {
 		if(testSet == null || testSet.isEmpty()) {
-			throw new IllegalArgumentException("Test set cannot be null or empty");
+			throw new IllegalArgumentException("Test set for the nontermianl " + nonterminal.getNonterminal().getName() + " is empty");
 		}
 		this.testSet = testSet;
 	}

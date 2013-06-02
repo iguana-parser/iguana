@@ -7,12 +7,17 @@ import java.util.Set;
 
 public class GrammarVisitor {
 	
-	public static void visit(HeadGrammarSlot root, GrammarVisitAction action) {
+	private Set<HeadGrammarSlot> visitedHeads;
+	private Deque<HeadGrammarSlot> todoQueue;
+	private GrammarVisitAction action;
+	
+	public GrammarVisitor(GrammarVisitAction action) {
+		this.action = action;
+		visitedHeads = new HashSet<>();
+		todoQueue = new ArrayDeque<>();		
+	}
 
-		Set<HeadGrammarSlot> visitedHeads = new HashSet<>();
-		
-		Deque<HeadGrammarSlot> todoQueue = new ArrayDeque<>();
-		
+	public void visit(HeadGrammarSlot root) {
 		todoQueue.add(root);
 		visitedHeads.add(root);
 		

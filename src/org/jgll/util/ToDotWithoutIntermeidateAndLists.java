@@ -11,41 +11,41 @@ import org.jgll.traversal.SPPFVisitorUtil;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
-	@Override
-	public void visit(NonterminalSymbolNode node) {
-		SPPFVisitorUtil.removeIntermediateNode(node);
-		
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
-			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
-		
-			for(SPPFNode child : node.getChildren()) {
-				if(!child.getLabel().startsWith("layout(")) {
-				  addEdgeToChild(node, child);
-				  child.accept(this);
-				}
-			}
-		}
-	}
-	
-	@Override
-	public void visit(PackedNode node) {
-		SPPFVisitorUtil.removeIntermediateNode(node);
-		
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
-			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
-		
-			for(SPPFNode child : node.getChildren()) {
-				if(!child.getLabel().startsWith("layout(")) {
-				  addEdgeToChild(node, child);
-				  child.accept(this);
-				}
-			}
-		}
-	}
+//	@Override
+//	public void visit(NonterminalSymbolNode node) {
+//		SPPFVisitorUtil.removeIntermediateNode(node);
+//		
+//		if(!node.isVisited()) {
+//			node.setVisited(true);
+//	
+//			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
+//		
+//			for(SPPFNode child : node.getChildren()) {
+//				if(!child.getLabel().startsWith("layout(")) {
+//				  addEdgeToChild(node, child);
+//				  child.accept(this);
+//				}
+//			}
+//		}
+//	}
+//	
+//	@Override
+//	public void visit(PackedNode node) {
+//		SPPFVisitorUtil.removeIntermediateNode(node);
+//		
+//		if(!node.isVisited()) {
+//			node.setVisited(true);
+//	
+//			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
+//		
+//			for(SPPFNode child : node.getChildren()) {
+//				if(!child.getLabel().startsWith("layout(")) {
+//				  addEdgeToChild(node, child);
+//				  child.accept(this);
+//				}
+//			}
+//		}
+//	}
 	
 	@Override
 	public void visit(ListSymbolNode node) {
