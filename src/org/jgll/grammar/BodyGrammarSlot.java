@@ -3,6 +3,8 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -26,6 +28,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected HeadGrammarSlot head;
 	
+	private List<SlotAction<Boolean>> popActions;
+	
 	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(label);
 		this.position = position;
@@ -34,7 +38,18 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			previous.next = this;
 		}
 		this.previous = previous;
+		this.popActions = new ArrayList<>();
 	}
+	
+	
+	public void addPopAction(SlotAction<Boolean> popAction) {
+		popActions.add(popAction);
+	}
+	
+	public List<SlotAction<Boolean>> getPopActions() {
+		return popActions;
+	}
+
 	
 	/**
 	 * Checks whether the provide input belongs to the first set, and follow set

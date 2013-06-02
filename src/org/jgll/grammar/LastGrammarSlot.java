@@ -2,8 +2,6 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -21,7 +19,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private List<SlotAction<Boolean>> popActions;
 	
 	/**
 	 * An arbitrary data object that can be put in this grammar slot and
@@ -33,15 +30,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(label, position, previous, head);
 		this.object = object;
-		this.popActions = new ArrayList<>();
-	}
-	
-	public void addPopAction(SlotAction<Boolean> popAction) {
-		popActions.add(popAction);
-	}
-	
-	public List<SlotAction<Boolean>> getPopActions() {
-		return popActions;
 	}
 	
 	@Override

@@ -88,7 +88,9 @@ public class GrammarBuilder {
 		}
 	}
 	
-	public GrammarBuilder addRule(Rule rule, final CharacterClass notFollow, final List<String> deleteSet) {
+	private Map<BodyGrammarSlot, CharacterClass> followRestrionMap = new HashMap<>();
+	
+	public GrammarBuilder addRule(Rule rule, final List<CharacterClass> notFollow, final List<String> deleteSet) {
 		
 		if(rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
@@ -118,6 +120,7 @@ public class GrammarBuilder {
 					currentSlot = new NonterminalGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, nonterminal, headGrammarSlot);
 				}
 				slots.add(currentSlot);
+				followRestrionMap.put(currentSlot, notFollow.get(symbolIndex));
 
 				if (symbolIndex == 0) {
 					firstSlot = currentSlot;
@@ -126,22 +129,6 @@ public class GrammarBuilder {
 			}
 			
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
-			if(notFollow != null) {
-				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
-					
-					@Override
-					public Boolean execute(GLLParser parser, Input input) {
-						int inputIndex = parser.getCi();
-						if(inputIndex >= input.size()) {
-							return true;
-						}
-						if(notFollow.match(input.charAt(inputIndex))) {
-							return false;
-						}
-						return true;
-					}
-				});
-			}
 			
 			if(deleteSet != null) {
 				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
@@ -166,7 +153,31 @@ public class GrammarBuilder {
 			headGrammarSlot.addAlternate(new Alternate(firstSlot, headGrammarSlot.getAlternates().size()));
 		}
 		
+		for(Entry<BodyGrammarSlot, CharacterClass> e : followRestrionMap.entrySet()) {
+			addFollowRestriction(e.getKey().next(), e.getValue());
+		}
+		
 		return this;
+	}
+	
+	private void addFollowRestriction(BodyGrammarSlot slot, final CharacterClass characterClass) {
+		if(characterClass == null) {
+			return;
+		}
+		slot.addPopAction(new SlotAction<Boolean>() {
+			
+			@Override
+			public Boolean execute(GLLParser parser, Input input) {
+				int inputIndex = parser.getCi();
+				if(inputIndex >= input.size()) {
+					return true;
+				}
+				if(characterClass.match(input.charAt(inputIndex))) {
+					return false;
+				}
+				return true;
+			}
+		});
 	}
 	
 	/**
