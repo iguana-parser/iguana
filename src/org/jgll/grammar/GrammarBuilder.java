@@ -197,7 +197,11 @@ public class GrammarBuilder {
 	}
 	
 	public GrammarBuilder addRule(Rule rule) {
-		return addRule(rule, null, null);
+		List<CharacterClass> list = new ArrayList<>();
+		for(int i = 0; i < rule.size(); i++) {
+			list.add(null);
+		}
+		return addRule(rule, list, null);
 	}
 	
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
@@ -427,31 +431,34 @@ public class GrammarBuilder {
 		}
 		
 		for(Filter filter : oneLevelOnlyFilters) {
-			onlyFirstLevelFilter(nonterminalsMap.get(filter.getNonterminal()), filter);
+			onlyFirstLevelFilter(nonterminalsMap.get(filter.getNonterminal()), oneLevelOnlyFilters);
 		}
 			
 		nonterminals.addAll(newNonterminals);
 	}
 	
-	private void onlyFirstLevelFilter(HeadGrammarSlot head, Filter filter) {
+	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<Filter> filters) {
 		for(Alternate alt : head.getAlternates()) {
-			if(match(filter, alt)) {
-				
-				HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-				HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
-				
-				if(newNonterminal == null) {
-					newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
-					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-					newNonterminals.add(newNonterminal);
+			for(Filter filter : filters) {
+				if(match(filter, alt)) {
 					
-					List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
-					newNonterminal.setAlternates(copy);
-					newNonterminal.remove(filter.getChild());
-					existingAlternates.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
-				} 
-				else {
-					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
+					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
+					
+					if(newNonterminal == null) {
+						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+						newNonterminals.add(newNonterminal);
+						
+						List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
+						newNonterminal.setAlternates(copy);
+						newNonterminal.remove(filter.getChild());
+						existingAlternates.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
+						onlyFirstLevelFilter(newNonterminal, filters);
+					} 
+					else {
+						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+					}
 				}
 			}
 		}

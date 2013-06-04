@@ -22,7 +22,15 @@ public class Nonterminal implements Symbol {
 	}
 	
 	public boolean isEbnfList() {
-		return ebnfList;
+		if(ebnfList == true){
+			return true;
+		} else{
+			if(name.startsWith("List")) {
+				return true;
+			}
+		} 
+
+		return false;
 	}
 	
 	@Override

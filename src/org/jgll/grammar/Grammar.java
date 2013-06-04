@@ -152,7 +152,9 @@ public class Grammar implements Serializable {
 		
 		// The first nonterminal is the starting point
 		// TODO: allow the user to specify the root of a grammar
-		visitor.visit(nonterminals.get(0));
+		for(HeadGrammarSlot head : nonterminals) {
+			visitor.visit(head);
+		}
 
 		return sb.toString();
 	}

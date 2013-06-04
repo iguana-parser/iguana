@@ -21,7 +21,7 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 //			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
 //		
 //			for(SPPFNode child : node.getChildren()) {
-//				if(!child.getLabel().startsWith("layout(")) {
+//				if(!child.getLabel().startsWith("layout")) {
 //				  addEdgeToChild(node, child);
 //				  child.accept(this);
 //				}
@@ -39,14 +39,14 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 //			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 //		
 //			for(SPPFNode child : node.getChildren()) {
-//				if(!child.getLabel().startsWith("layout(")) {
+//				if(!child.getLabel().startsWith("layout")) {
 //				  addEdgeToChild(node, child);
 //				  child.accept(this);
 //				}
 //			}
 //		}
 //	}
-	
+//	
 	@Override
 	public void visit(ListSymbolNode node) {
 		SPPFVisitorUtil.removeListSymbolNode(node);
