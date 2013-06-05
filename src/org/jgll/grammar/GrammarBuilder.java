@@ -88,9 +88,10 @@ public class GrammarBuilder {
 		}
 	}
 	
-	private Map<BodyGrammarSlot, CharacterClass> followRestrionMap = new HashMap<>();
 	
-	public GrammarBuilder addRule(Rule rule, final List<CharacterClass> notFollow, final List<String> deleteSet) {
+	public GrammarBuilder addRule(Rule rule, final List<List<List<CharacterClass>>> notFollow, final List<String> deleteSet) {
+
+		Map<BodyGrammarSlot, List<List<CharacterClass>>> followRestrionMap = new HashMap<>();
 		
 		if(rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
@@ -153,29 +154,22 @@ public class GrammarBuilder {
 			headGrammarSlot.addAlternate(new Alternate(firstSlot, headGrammarSlot.getAlternates().size()));
 		}
 		
-		for(Entry<BodyGrammarSlot, CharacterClass> e : followRestrionMap.entrySet()) {
+		for(Entry<BodyGrammarSlot, List<List<CharacterClass>>> e : followRestrionMap.entrySet()) {
 			addFollowRestriction(e.getKey().next(), e.getValue());
 		}
 		
 		return this;
 	}
 	
-	private void addFollowRestriction(BodyGrammarSlot slot, final CharacterClass characterClass) {
-		if(characterClass == null) {
+	private void addFollowRestriction(BodyGrammarSlot slot, final List<List<CharacterClass>> followRestriction) {
+		if(followRestriction == null || followRestriction.isEmpty()) {
 			return;
 		}
 		slot.addPopAction(new SlotAction<Boolean>() {
 			
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
-				int inputIndex = parser.getCi();
-				if(inputIndex >= input.size()) {
-					return true;
-				}
-				if(characterClass.match(input.charAt(inputIndex))) {
-					return false;
-				}
-				return true;
+				return match(followRestriction, input, parser.getCi());
 			}
 		});
 	}
@@ -196,8 +190,39 @@ public class GrammarBuilder {
 		return true;
 	}
 	
+	private boolean match(List<List<CharacterClass>> followRestrictions, Input input, int i) {
+		if(i >= input.size()) {
+			return true;
+		}
+
+		
+		for(List<CharacterClass> followRestriction : followRestrictions) {
+			int index = i;
+			
+			boolean match = true;
+			for(CharacterClass characterClass : followRestriction) {
+				if(!characterClass.match(input.charAt(index))) {
+					match = false;
+					break;
+				}
+				
+				if(index >= input.size()) {
+					break;
+				}
+				index++;
+			}
+			
+			// If one of the follow restrictions matches from the next character, don't pop!
+			if(match == true) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public GrammarBuilder addRule(Rule rule) {
-		List<CharacterClass> list = new ArrayList<>();
+		List<List<List<CharacterClass>>> list = new ArrayList<>();
 		for(int i = 0; i < rule.size(); i++) {
 			list.add(null);
 		}
