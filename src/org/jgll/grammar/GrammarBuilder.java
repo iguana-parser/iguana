@@ -165,6 +165,8 @@ public class GrammarBuilder {
 		if(followRestriction == null || followRestriction.isEmpty()) {
 			return;
 		}
+		
+		log.debug("Follow restriction added {} !>> {}", slot, followRestriction);
 		slot.addPopAction(new SlotAction<Boolean>() {
 			
 			@Override
@@ -470,7 +472,7 @@ public class GrammarBuilder {
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
 					
-					if(newNonterminal == null) {
+					if(newNonterminal == null || newNonterminal.getNonterminal().getName() != filteredNonterminal.getNonterminal().getName()) {
 						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 						newNonterminals.add(newNonterminal);
@@ -711,6 +713,7 @@ public class GrammarBuilder {
 		}
 
 		slots.add(copy);
+		copy.popActions = slot.popActions;
 		return copy;
 	}
 		
@@ -739,7 +742,6 @@ public class GrammarBuilder {
 	public void addFilter(Nonterminal nonterminal, Rule parent, int position, Rule child) {
 		String name = nonterminal.getName();
 		Filter filter = new Filter(name, parent.getBody(), position, child.getBody());
-		log.debug("Filter added {}", filter);
 
 		if(name.equals(child.getHead().getName())) {
 			if(filtersMap.containsKey(name)) {
@@ -750,10 +752,11 @@ public class GrammarBuilder {
 				set.add(filter);
 				filtersMap.put(name, set);
 			}
+			log.debug("Filter added {} (deep)", filter);
 		} else {
 			oneLevelOnlyFilters.add(filter);
+			log.debug("Filter added {} (one level only)", filter);
 		}
-		
 	}
 		
 }
