@@ -510,7 +510,7 @@ public class GrammarBuilder {
 					}
 					HeadGrammarSlot newNonterminal = firstLevels.get(intSet);
 					
-					if(newNonterminal == null) {
+					if(newNonterminal == null || newNonterminal.getNonterminal().getName() != filteredNonterminal.getNonterminal().getName()) {
 						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 						newNonterminals.add(newNonterminal);
