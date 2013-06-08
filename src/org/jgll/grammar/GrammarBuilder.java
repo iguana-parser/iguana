@@ -741,6 +741,7 @@ public class GrammarBuilder {
 		}
 
 		copy.popActions = slot.popActions;
+		copy.preConditions = slot.preConditions;
 		slots.add(copy);
 		return copy;
 	}

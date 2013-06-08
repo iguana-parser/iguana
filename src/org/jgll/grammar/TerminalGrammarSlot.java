@@ -32,6 +32,12 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
+		
+		for(SlotAction<Boolean> preCondition : preConditions) {
+			if(!preCondition.execute(parser, input)) {
+				return null;
+			}
+		}
 				
 		int ci = parser.getCi();
 		SPPFNode cn = parser.getCn();
