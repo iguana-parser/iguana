@@ -24,6 +24,11 @@ public class Alternate {
 		this.index = index;
 		
 		BodyGrammarSlot current = firstSlot;
+		
+		if(firstSlot.isLastSlot()) {
+			symbols.add(firstSlot);
+		}
+		
 		while(!current.isLastSlot()) {
 			symbols.add(current);
 			current = current.next();

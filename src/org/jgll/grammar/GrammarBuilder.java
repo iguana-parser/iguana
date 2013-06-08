@@ -131,7 +131,7 @@ public class GrammarBuilder {
 			
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 			
-			if(deleteSet != null) {
+			if(deleteSet != null && !deleteSet.isEmpty()) {
 				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
 					
 					@Override
@@ -712,8 +712,8 @@ public class GrammarBuilder {
 			copy = new TerminalGrammarSlot(slot.label, slot.position, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
 		}
 
-		slots.add(copy);
 		copy.popActions = slot.popActions;
+		slots.add(copy);
 		return copy;
 	}
 		
