@@ -30,6 +30,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	List<SlotAction<Boolean>> popActions;
 	
+	List<SlotAction<Boolean>> preConditions;
+	
 	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(label);
 		this.position = position;
@@ -39,6 +41,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		}
 		this.previous = previous;
 		this.popActions = new ArrayList<>();
+		this.preConditions = new ArrayList<>();
 	}
 	
 	
@@ -49,8 +52,11 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public List<SlotAction<Boolean>> getPopActions() {
 		return popActions;
 	}
-
 	
+	public void addPreCondition(SlotAction<Boolean> preCondition) {
+		preConditions.add(preCondition);
+	}
+
 	/**
 	 * Checks whether the provide input belongs to the first set, and follow set
 	 * in case the first set contains epsilon.  

@@ -89,9 +89,11 @@ public class GrammarBuilder {
 	}
 	
 	
-	public GrammarBuilder addRule(Rule rule, final List<List<List<CharacterClass>>> notFollow, final List<String> deleteSet) {
+	public GrammarBuilder addRule(Rule rule, final List<List<List<CharacterClass>>> notFollow, 
+								 final List<String> deleteSet, final List<CharacterClass> precedeRestrictions) {
 
 		Map<BodyGrammarSlot, List<List<CharacterClass>>> followRestrionMap = new HashMap<>();
+		Map<BodyGrammarSlot, CharacterClass> preConditionMap = new HashMap<>();
 		
 		if(rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
@@ -122,6 +124,7 @@ public class GrammarBuilder {
 				}
 				slots.add(currentSlot);
 				followRestrionMap.put(currentSlot, notFollow.get(symbolIndex));
+				preConditionMap.put(currentSlot, precedeRestrictions.get(symbolIndex));
 
 				if (symbolIndex == 0) {
 					firstSlot = currentSlot;
@@ -158,9 +161,32 @@ public class GrammarBuilder {
 			addFollowRestriction(e.getKey().next(), e.getValue());
 		}
 		
+		for(Entry<BodyGrammarSlot, CharacterClass> e : preConditionMap.entrySet()) {
+			addPrecedeRestriction(e.getKey(), e.getValue());
+		}
+		
 		return this;
 	}
 	
+	private void addPrecedeRestriction(BodyGrammarSlot slot, final CharacterClass characterClass) {
+		if(characterClass != null) {
+			
+			log.debug("Precede restriction added {} <<! {}", characterClass, slot);
+			slot.addPreCondition(new SlotAction<Boolean>() {
+				
+				@Override
+				public Boolean execute(GLLParser parser, Input input) {
+					int ci = parser.getCi();
+					if(ci == 0) {
+						return true;
+					}
+					
+					return !characterClass.match(input.charAt(ci - 1));
+				}
+			});
+		}
+	}
+
 	private void addFollowRestriction(BodyGrammarSlot slot, final List<List<CharacterClass>> followRestriction) {
 		if(followRestriction == null || followRestriction.isEmpty()) {
 			return;
@@ -225,10 +251,12 @@ public class GrammarBuilder {
 	
 	public GrammarBuilder addRule(Rule rule) {
 		List<List<List<CharacterClass>>> list = new ArrayList<>();
+		List<CharacterClass> precedeRestrictions = new ArrayList<>();
 		for(int i = 0; i < rule.size(); i++) {
 			list.add(null);
+			precedeRestrictions.add(null);
 		}
-		return addRule(rule, list, null);
+		return addRule(rule, list, null, precedeRestrictions);
 	}
 	
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
