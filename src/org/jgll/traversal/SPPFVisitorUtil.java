@@ -166,4 +166,13 @@ public class SPPFVisitorUtil {
 		}
 	}
 	
+	public static void removeListSymbolNode(PackedNode node) {
+		removeIntermediateNode(node);
+		if(node.getChildAt(0) instanceof ListSymbolNode) {
+			ListSymbolNode child = (ListSymbolNode) node.getChildAt(0);
+			node.replaceWithChildren(child);
+			removeListSymbolNode(node);
+		}
+	}
+	
 }

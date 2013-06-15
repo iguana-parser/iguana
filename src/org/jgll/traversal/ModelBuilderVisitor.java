@@ -102,6 +102,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	@Override
 	public void visit(PackedNode packedNode) {
 		removeIntermediateNode(packedNode);
+		removeListSymbolNode(packedNode);
 		if(!packedNode.isVisited()) {
 			packedNode.setVisited(true);
 			visitChildren(packedNode, this);
