@@ -54,7 +54,7 @@ public class GSSNode {
 	public Iterable<GSSEdge> getEdges() {
 		return edges;
 	}
-	
+		
 	public int getCountEdges() {
 		return edges.size();
 	}

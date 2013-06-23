@@ -1,6 +1,8 @@
 package org.jgll.parser;
 
 import java.io.PrintStream;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,6 +47,10 @@ public class ParseError extends Exception {
 		return "Parse error at at line:" + lineNumber + " column:" + columnNumber;
 	}
 	
+	public void printGrammarTrace() {
+		printGrammarTrace(System.err);
+	}
+	
 	public void printGrammarTrace(PrintStream out) {
 		out.println(toString());
 		out.println(slot);
@@ -55,26 +61,65 @@ public class ParseError extends Exception {
 		
 		Set<GSSNode> visitedNodes = new HashSet<>();
 		
-		while(gssNode != GSSNode.U0) {
-			
+		visitedNodes.add(gssNode);
+		
+		indent(out, i, gssNode);
+		
+		while(gssNode != GSSNode.U0 && !visitedNodes.contains(gssNode)) {
 			visitedNodes.add(gssNode);
 			
-			BodyGrammarSlot grammarSlot = (BodyGrammarSlot) gssNode.getGrammarSlot();
-			indent(out, i, grammarSlot.previous().toString());
-
-			if(gssNode.getEdges().size() > 1) {
-				
-				gssNode = gssNode.getEdges().get(0).getDestination();
-			}
+			gssNode = findMergePoint(gssNode, out, i);
 			
-			for(GSSEdge edge : gssNode.getEdges()) {
-				indent(out, i + 1, )
-			}
+			indent(out, i, gssNode);
 		}
 	}
+
+	private void indent(PrintStream out, int i, GSSNode node) {
+		out.println(String.format("%" + i * 2 + "s", ((BodyGrammarSlot) node.getGrammarSlot()).previous()));
+	}
 	
-	private void indent(PrintStream out, int i, String s) {
-		out.println(String.format("%" + i * 2 + "s", s));
+	private GSSNode findMergePoint(GSSNode node, PrintStream out, int i) {
+		
+		if(node.getCountEdges() == 1) {
+			return node.getEdges().iterator().next().getDestination();
+		}
+		
+		return reachableFrom(node, out, i);
+	}
+	
+	/**
+	 * Adds all the GSS nodes reachable from the given node to the
+	 * provided set and removes the node from the set.
+	 * 
+	 * @throws IllegalArgumentException if the given set is null.
+	 *  
+	 */
+	private GSSNode reachableFrom(GSSNode node, PrintStream out, int i) {
+		
+		Set<GSSNode> set = new HashSet<>();
+		Deque<GSSNode> frontier = new ArrayDeque<>();
+		
+		for(GSSEdge edge : node.getEdges()) {
+			GSSNode destination = edge.getDestination();
+			set.add(destination);
+			frontier.add(destination);
+			indent(out, i+1, destination);
+		}
+		
+		i++;
+		while(frontier.size() > 1) {
+			GSSNode f = (GSSNode) frontier.poll();
+			for(GSSEdge edge : f.getEdges()) {
+				GSSNode destination = edge.getDestination();
+				if(!set.contains(destination)) {
+					set.add(destination);
+					frontier.add(destination);
+					indent(out, i+1, destination);
+				}
+			}
+		}
+		
+		return frontier.poll();
 	}
  	
 }

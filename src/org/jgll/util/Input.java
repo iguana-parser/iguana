@@ -84,10 +84,16 @@ public class Input {
 	}
 
 	public int getLineNumber(int index) {
+		if(index < 0) {
+			return 0;
+		}
 		return lineColumns[index].getLineNumber();
 	}
 	
 	public int getColumnNumber(int index) {
+		if(index < 0) {
+			return 0;
+		}
 		return lineColumns[index].getColumnNumber();
 	}
 	
