@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.GrammarToDot;
 import org.jgll.util.GraphVizUtil;
@@ -68,7 +69,7 @@ public class FilterTest5 extends AbstractGrammarTest {
 	}
 
 	@Test
-	public void testAssociativityAndPriority() {
+	public void testAssociativityAndPriority() throws ParseError {
 		GraphVizUtil.generateGraph(GrammarToDot.toDot(grammar), "/Users/ali/output", "grammar", GraphVizUtil.L2R);
 
 		System.out.println(grammar);

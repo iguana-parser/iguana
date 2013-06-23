@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class EBNFTest extends AbstractGrammarTest {
 	}
 	
 	@Test
-	public void test() {
+	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa"), grammar, "A*");
 		generateGraphWithIntermeiateAndListNodes(sppf);
 	}

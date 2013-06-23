@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
@@ -64,7 +65,7 @@ public class FilterTest2 extends AbstractGrammarTest {
 	
 
 	@Test
-	public void testAssociativityAndPriority() {
+	public void testAssociativityAndPriority() throws ParseError {
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a^a^-a+a"), grammar, "E");
 		generateGraphWithoutIntermeiateNodes(sppf);

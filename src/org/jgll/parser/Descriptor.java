@@ -106,7 +106,7 @@ public class Descriptor {
 	
 	@Override
 	public String toString() {
-		return "(" + slot + ", " + inputIndex + ", " + gssNode.getLabel() + ", " + sppfNode + ")";
+		return "(" + slot + ", " + inputIndex + ", " + gssNode.getGrammarSlot() + ", " + sppfNode + ")";
 	}
 	
 }

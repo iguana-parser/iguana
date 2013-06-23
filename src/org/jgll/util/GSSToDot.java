@@ -24,7 +24,7 @@ public class GSSToDot extends ToDot {
 	}
 
 	private String getId(GSSNode node) {
-		return node.getLabel() + "" + node.getIndex();
+		return node.getGrammarSlot() + "" + node.getInputIndex();
 	}
 	
 	public String getString() {

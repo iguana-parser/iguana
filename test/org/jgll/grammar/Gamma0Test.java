@@ -3,6 +3,7 @@ package org.jgll.grammar;
 
 import static junit.framework.Assert.assertEquals;
 
+import org.jgll.parser.ParseError;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -65,7 +66,7 @@ public class Gamma0Test extends AbstractGrammarTest {
 	}
 	
 	@Test
-	public void testParsers() {
+	public void testParsers() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aad"), grammar, "S");
 		ToJavaCode visitAction = new ToJavaCode();
 		sppf1.accept(visitAction);
@@ -76,7 +77,7 @@ public class Gamma0Test extends AbstractGrammarTest {
 	}
 
 	@Test
-	public void testSPPF() {
+	public void testSPPF() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aad"), grammar, "S");
 		assertEquals(true, sppf.deepEquals(getSPPF()));
 	}

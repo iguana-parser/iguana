@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import static junit.framework.Assert.assertEquals;
 
+import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class Gamma2Test extends AbstractGrammarTest {
 	}
 		
 	@Test
-	public void parse() {
+	public void parse() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbb"), grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbb"), grammar, "S");
 		assertEquals(true, sppf1.deepEquals(sppf2));

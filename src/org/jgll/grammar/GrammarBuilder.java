@@ -140,7 +140,7 @@ public class GrammarBuilder {
 					@Override
 					public Boolean execute(GLLParser parser, Input input) {
 						int currentIndex = parser.getCi();
-						int lastIndex = parser.getCu().getIndex();
+						int lastIndex = parser.getCu().getInputIndex();
 												
 						for(String s : deleteSet) {
 							if(match(s, input.subString(lastIndex, currentIndex))) {

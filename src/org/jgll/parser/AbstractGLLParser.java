@@ -32,7 +32,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	
 	private static final Logger log = LoggerFactory.getLogger(AbstractGLLParser.class);
 	
-	protected static final GSSNode u0 = GSSNode.DUMMY;
+	protected static final GSSNode u0 = GSSNode.U0;
 
 	protected LookupTable lookupTable;
 	
@@ -95,7 +95,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 		
 		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);
 		if (root == null) {
-			throw new ParseError(errorSlot, this.input, errorIndex);
+			throw new ParseError(errorSlot, this.input, errorIndex, cu);
 		}
 		
 		logParseStatistics(end - start);
@@ -178,12 +178,12 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 */
 	public final void pop(GSSNode u, int i, SPPFNode z) {
 				
-		log.trace("Pop {}, {}, {}", new Object[] {u.getLabel(), i, z});
+		log.trace("Pop {}, {}, {}", new Object[] {u.getGrammarSlot(), i, z});
 		
 		if (u != u0) {
 			
 			// Don't pop if a pop action associated with the slot returns fasle.
-			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) u.getLabel()).getPopActions()) {
+			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) u.getGrammarSlot()).getPopActions()) {
 				if(!popAction.execute(this, input)) {
 					return;
 				}
@@ -193,9 +193,9 @@ public abstract class AbstractGLLParser implements GLLParser {
 			lookupTable.addToPoppedElements(u, z);
 			
 			for(GSSEdge edge : u.getEdges()) {
-				assert u.getLabel() instanceof BodyGrammarSlot;
-				SPPFNode x = getNodeP((BodyGrammarSlot) u.getLabel(), edge.getSppfNode(), z);
-				add(u.getLabel(), edge.getDestination(), i, x);
+				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
+				SPPFNode x = getNodeP((BodyGrammarSlot) u.getGrammarSlot(), edge.getSppfNode(), z);
+				add(u.getGrammarSlot(), edge.getDestination(), i, x);
 			}			
 		}
 	}

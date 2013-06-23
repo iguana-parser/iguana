@@ -1,7 +1,6 @@
 package org.jgll.parser;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
@@ -24,7 +23,10 @@ import org.jgll.grammar.L0;
  */
 public class GSSNode {
 
-	public static final GSSNode DUMMY = new GSSNode(L0.getInstance(), 0);
+	/**
+	 * The initial GSS node
+	 */
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 
 	private final GrammarSlot slot;
 
@@ -37,7 +39,6 @@ public class GSSNode {
 	 * {@code position} and {@code index}
 	 * 
 	 * @param slot
-	 * @param position
 	 * @param inputIndex
 	 */
 	public GSSNode(GrammarSlot slot, int inputIndex) {
@@ -50,15 +51,19 @@ public class GSSNode {
 		edges.add(edge);
 	}
 	
-	public Collection<GSSEdge> getEdges() {
+	public Iterable<GSSEdge> getEdges() {
 		return edges;
 	}
+	
+	public int getCountEdges() {
+		return edges.size();
+	}
 
-	public final GrammarSlot getLabel() {
+	public final GrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
-	public final int getIndex() {
+	public final int getInputIndex() {
 		return inputIndex;
 	}
 

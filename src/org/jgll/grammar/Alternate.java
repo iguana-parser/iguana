@@ -1,10 +1,13 @@
 package org.jgll.grammar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Alternate {
+public class Alternate implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private final List<BodyGrammarSlot> symbols;
 	
 	private final BodyGrammarSlot firstSlot;
