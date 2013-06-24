@@ -52,7 +52,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				cn = parser.getNodeP(next, cn, cr);
 				parser.update(cu, cn, ci);
 			} else {
-				parser.newParseError(this, ci);
+				parser.newParseError(this, ci, parser.getCu());
 				return null;
 			}
 		}
@@ -64,7 +64,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				ci++;
 				parser.update(cu, cn, ci);
 			} else {
-				parser.newParseError(this, ci);
+				parser.newParseError(this, ci, parser.getCu());
 				return null;
 			}
 		}
@@ -77,7 +77,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 				cn = parser.getNodeP(next, cn, cr);
 				parser.update(cu, cn, ci);
 			} else {
-				parser.newParseError(this, ci);
+				parser.newParseError(this, ci, parser.getCu());
 				return null;
 			}
 		}

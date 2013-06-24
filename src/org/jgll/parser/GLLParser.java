@@ -36,6 +36,6 @@ public interface GLLParser {
 	
 	public SPPFNode getCn();
 	
-	public void newParseError(GrammarSlot slot, int inputIndex);
+	public void newParseError(GrammarSlot slot, int inputIndex, GSSNode node);
 	
 }

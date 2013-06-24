@@ -60,7 +60,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			parser.update(parser.create(next, cu, ci, cn), cn, ci);
 			return nonterminal;
 		} else {
-			parser.newParseError(this, ci);
+			parser.newParseError(this, ci, parser.getCu());
 			return null;
 		}		
 	}

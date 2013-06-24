@@ -63,6 +63,8 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 */
 	protected int errorIndex = -1;
 	
+	protected GSSNode errorGSSNode;
+	
 
 	/**
 	 * Parses the given input string. If the parsing of the input was successful,
@@ -95,7 +97,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 		
 		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);
 		if (root == null) {
-			throw new ParseError(errorSlot, this.input, errorIndex, cu);
+			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 		}
 		
 		logParseStatistics(end - start);
@@ -130,10 +132,11 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * 
 	 */
 	@Override
-	public void newParseError(GrammarSlot slot, int errorIndex) {
+	public void newParseError(GrammarSlot slot, int errorIndex, GSSNode node) {
 		if (errorIndex >= this.errorIndex) {
 			this.errorIndex = errorIndex;
 			this.errorSlot = slot;
+			this.errorGSSNode = node;
 		}
 	}
 

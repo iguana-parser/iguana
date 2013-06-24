@@ -2,8 +2,10 @@ package org.jgll.parser;
 
 import java.io.PrintStream;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.BodyGrammarSlot;
@@ -48,43 +50,43 @@ public class ParseError extends Exception {
 	}
 	
 	public void printGrammarTrace() {
-		printGrammarTrace(System.err);
+		printGrammarTrace(System.out);
 	}
 	
 	public void printGrammarTrace(PrintStream out) {
-		out.println(toString());
-		out.println(slot);
+		
+		List<String> trace = new ArrayList<>();
+
+		trace.add(toString());
+		indent(trace, 1, new GSSNode(((BodyGrammarSlot) slot).next(), inputIndex));
 		
 		GSSNode gssNode = currentNode;
 		
-		int i = 0;
+		while(gssNode != GSSNode.U0) {
+			indent(trace, 1, gssNode);			
+			gssNode = findMergePoint(gssNode, trace, 1);
+		}
 		
-		Set<GSSNode> visitedNodes = new HashSet<>();
-		
-		visitedNodes.add(gssNode);
-		
-		indent(out, i, gssNode);
-		
-		while(gssNode != GSSNode.U0 && !visitedNodes.contains(gssNode)) {
-			visitedNodes.add(gssNode);
-			
-			gssNode = findMergePoint(gssNode, out, i);
-			
-			indent(out, i, gssNode);
+		out.println(toString());
+		for(int i = trace.size() - 1; i > 0; i--) {
+			out.println(trace.get(i));
 		}
 	}
 
-	private void indent(PrintStream out, int i, GSSNode node) {
-		out.println(String.format("%" + i * 2 + "s", ((BodyGrammarSlot) node.getGrammarSlot()).previous()));
+	private void indent(List<String> trace, int i, GSSNode node) {
+		if(node == GSSNode.U0) {
+			return;
+		}
+		trace.add(String.format("%" + i * 2 + "s, %d", ((BodyGrammarSlot) node.getGrammarSlot()).previous().toString(), node.getInputIndex()));
 	}
 	
-	private GSSNode findMergePoint(GSSNode node, PrintStream out, int i) {
+	private GSSNode findMergePoint(GSSNode node, List<String> trace, int i) {
 		
 		if(node.getCountEdges() == 1) {
 			return node.getEdges().iterator().next().getDestination();
 		}
 		
-		return reachableFrom(node, out, i);
+		return reachableFrom(node, trace, i);
 	}
 	
 	/**
@@ -94,7 +96,7 @@ public class ParseError extends Exception {
 	 * @throws IllegalArgumentException if the given set is null.
 	 *  
 	 */
-	private GSSNode reachableFrom(GSSNode node, PrintStream out, int i) {
+	private GSSNode reachableFrom(GSSNode node, List<String> trace, int i) {
 		
 		Set<GSSNode> set = new HashSet<>();
 		Deque<GSSNode> frontier = new ArrayDeque<>();
@@ -103,7 +105,7 @@ public class ParseError extends Exception {
 			GSSNode destination = edge.getDestination();
 			set.add(destination);
 			frontier.add(destination);
-			indent(out, i+1, destination);
+			indent(trace, i+1, destination);
 		}
 		
 		i++;
@@ -114,7 +116,7 @@ public class ParseError extends Exception {
 				if(!set.contains(destination)) {
 					set.add(destination);
 					frontier.add(destination);
-					indent(out, i+1, destination);
+					indent(trace, i+1, destination);
 				}
 			}
 		}
