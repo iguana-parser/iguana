@@ -17,7 +17,7 @@ public class Rule implements Serializable {
 	
 	private final Nonterminal head;
 	
-	private final Object object;
+	private final transient Object object;
 	
 	public Rule(Nonterminal head, List<? extends Symbol> body) {
 		this(head, body, null);

@@ -50,16 +50,11 @@ public class FilterTest1 extends AbstractGrammarTest {
 	}
 
 	@Test
-	public void testAssociativityAndPriority() {
+	public void testAssociativityAndPriority() throws ParseError {
 		System.out.println(grammar);
 		GraphVizUtil.generateGraph(GrammarToDot.toDot(grammar), "/Users/ali/output", "grammar", GraphVizUtil.L2R);
-		NonterminalSymbolNode sppf;
-		try {
-			sppf = rdParser.parse(Input.fromString("a+-a+add+a"), grammar, "E");
-		} catch (ParseError e) {
-			e.printGrammarTrace();
-		}
-//		generateGraphWithoutIntermeiateNodes(sppf);
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
+		generateGraphWithoutIntermeiateNodes(sppf);
 	}
 
 }
