@@ -25,7 +25,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 * retrieved later when traversing the parse tree.
 	 * This object can be accessed via the getObject() method of a nonterminal symbol node.
 	 */
-	private Object object;
+	private transient Object object;
 	
 	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(label, position, previous, head);
