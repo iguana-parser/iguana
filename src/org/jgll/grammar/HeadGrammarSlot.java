@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 
 import org.jgll.parser.GLLParser;
@@ -100,7 +99,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
-		for(Alternate alternate : getReverseAlternates()) {
+		for(Alternate alternate : alternates) {
 			GSSNode cu = parser.getCu();
 			int ci = parser.getCi();
 			if(alternate.getFirstSlot().checkAgainstTestSet(input.charAt(ci))) {
@@ -119,7 +118,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void codeParser(Writer writer) throws IOException {
 		writer.append("// " + nonterminal.getName() + "\n");
 		writer.append("private void parse_" + id + "() {\n");
-		for (Alternate alternate : getReverseAlternates()) {
+		for (Alternate alternate : alternates) {
 			writer.append("   //" + alternate.getFirstSlot() + "\n");
 			alternate.getFirstSlot().codeIfTestSetCheck(writer);			
 			writer.append("   add(grammar.getGrammarSlot(" + alternate.getFirstSlot().id + "), cu, ci, DummyNode.getInstance());\n");
@@ -128,7 +127,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		writer.append("   label = L0;\n");
 		writer.append("}\n");
 
-		for (Alternate alternate : getReverseAlternates()) {
+		for (Alternate alternate : alternates) {
 			writer.append("// " + alternate + "\n");
 			writer.append("private void parse_" + alternate.getFirstSlot().getId() + "() {\n");
 			alternate.getFirstSlot().codeParser(writer);
@@ -148,6 +147,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 		for(Alternate alternate : alternates) {
 			if(alternate != null) {
 				newList.add(alternate);
+			}else {
+				System.out.println("WTF?");
 			}
 		}
 		return newList;
@@ -155,34 +156,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public Nonterminal getNonterminal() {
 		return nonterminal;
-	}
-		
-	public Iterable<Alternate> getReverseAlternates() {
-		return new Iterable<Alternate>() {
-			
-			@Override
-			public Iterator<Alternate> iterator() {
-				return new Iterator<Alternate>() {
-
-					ListIterator<Alternate> listIterator = getAlternates().listIterator(getAlternates().size());
-					
-					@Override
-					public boolean hasNext() {
-						return listIterator.hasPrevious();
-					}
-
-					@Override
-					public Alternate next() {
-						return listIterator.previous();
-					}
-
-					@Override
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-		};
 	}
 		
 	public Set<Terminal> getFirstSet() {
@@ -194,7 +167,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public int getCountAlternates() {
-		return getAlternates().size();
+		return alternates.size();
 	}
 	
 	public boolean contains(List<Symbol> list) {
