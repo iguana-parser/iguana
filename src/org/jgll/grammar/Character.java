@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import java.util.BitSet;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -65,6 +67,13 @@ public class Character implements Terminal {
 	@Override
 	public String getName() {
 		return "[" + (char)c + "]";
+	}
+
+	@Override
+	public BitSet getTestSet() {
+		BitSet set = new BitSet();
+		set.set(c);
+		return set;
 	}
 
 }

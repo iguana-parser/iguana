@@ -69,11 +69,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public Iterable<Terminal> getTestSet() {
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
 	public boolean isTerminalSlot() {
 		return false;
 	}

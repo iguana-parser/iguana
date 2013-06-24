@@ -1,10 +1,13 @@
 package org.jgll.grammar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-class Filter {
+class Filter implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private final List<Symbol> parent;
 	private final List<Symbol> child;

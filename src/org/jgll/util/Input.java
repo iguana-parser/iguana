@@ -20,7 +20,9 @@ public class Input {
 		for (int i = 0; i < s.length(); i++) {
 			input[i] = s.charAt(i);
 		}
-		input[s.length()] = -1;
+		// The EOF character is assumed to have value 0 instead of the more common -1.  
+		// as Bitsets cannot work with negative values. 
+		input[s.length()] = 0;
 
 		return new Input(input);
 	}

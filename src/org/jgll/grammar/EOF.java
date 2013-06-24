@@ -14,7 +14,9 @@ public class EOF extends Character {
 	}
 	
 	private EOF() {
-		super(-1);
+		// It is assumed that the value 0 is not used as any other visible
+		// unicode character value.
+		super(0);
 	}
 	
 	

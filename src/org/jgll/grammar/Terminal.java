@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import java.util.BitSet;
+
 
 /**
  * 
@@ -20,5 +22,8 @@ public interface Terminal extends Symbol {
 	 * Generates the code for matching against the current input 
 	 */
 	public String getMatchCode();
+	
+	
+	public BitSet getTestSet();
 	
 }

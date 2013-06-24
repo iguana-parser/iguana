@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,8 +14,10 @@ import org.jgll.util.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GrammarBuilder {
+public class GrammarBuilder implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger log = LoggerFactory.getLogger(GrammarBuilder.class);
 
 	Map<String, HeadGrammarSlot> nonterminalsMap;
@@ -88,7 +91,6 @@ public class GrammarBuilder {
 		}
 	}
 	
-	
 	public GrammarBuilder addRule(Rule rule, final List<List<List<CharacterClass>>> notFollow, 
 								 final List<String> deleteSet, final List<CharacterClass> precedeRestrictions) {
 
@@ -107,7 +109,7 @@ public class GrammarBuilder {
 		BodyGrammarSlot currentSlot = null;
 		
 		if(body.size() == 0) {
-			currentSlot = new EpsilonGrammarSlot(grammarSlotToString(head, body, 0), 0, new HashSet<Terminal>(), headGrammarSlot, rule.getObject());
+			currentSlot = new EpsilonGrammarSlot(grammarSlotToString(head, body, 0), 0, headGrammarSlot, rule.getObject());
 			headGrammarSlot.addAlternate(new Alternate(currentSlot, 0));
 			slots.add(currentSlot);
 		} 
@@ -137,6 +139,8 @@ public class GrammarBuilder {
 			if(deleteSet != null && !deleteSet.isEmpty()) {
 				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
 					
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public Boolean execute(GLLParser parser, Input input) {
 						int currentIndex = parser.getCi();
@@ -174,6 +178,8 @@ public class GrammarBuilder {
 			log.debug("Precede restriction added {} <<! {}", characterClass, slot);
 			slot.addPreCondition(new SlotAction<Boolean>() {
 				
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public Boolean execute(GLLParser parser, Input input) {
 					int ci = parser.getCi();
@@ -195,6 +201,8 @@ public class GrammarBuilder {
 		log.debug("Follow restriction added {} !>> {}", slot, followRestriction);
 		slot.addPopAction(new SlotAction<Boolean>() {
 			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
 				return match(followRestriction, input, parser.getCi());
@@ -222,7 +230,6 @@ public class GrammarBuilder {
 		if(i >= input.size()) {
 			return true;
 		}
-
 		
 		for(List<CharacterClass> followRestriction : followRestrictions) {
 			int index = i;
@@ -452,15 +459,18 @@ public class GrammarBuilder {
 				
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 				
-				if(currentSlot instanceof NonterminalGrammarSlot) {
-					Set<Terminal> testSet = new HashSet<>();
-					addFirstSet(testSet, currentSlot, false);
-					if(testSet.contains(Epsilon.getInstance())) {
-						testSet.addAll(head.getFollowSet());
+				while(!currentSlot.isLastSlot()) {
+					if(currentSlot instanceof NonterminalGrammarSlot) {
+						Set<Terminal> testSet = new HashSet<>();
+						addFirstSet(testSet, currentSlot, false);
+						if(testSet.contains(Epsilon.getInstance())) {
+							testSet.addAll(head.getFollowSet());
+						}
+						testSet.remove(Epsilon.getInstance());
+						((NonterminalGrammarSlot) currentSlot).setTestSet(testSet);
 					}
-					testSet.remove(Epsilon.getInstance());
-					((NonterminalGrammarSlot) currentSlot).setTestSet(testSet);
-				}
+					currentSlot = currentSlot.next();
+				}				
 			}
 		}
 	}
@@ -470,7 +480,6 @@ public class GrammarBuilder {
 		for(HeadGrammarSlot head : nonterminals) {
 			head.setId(i++);
 		}
-		
 		i = 0;
 		for(BodyGrammarSlot slot : slots) {
 			slot.setId(i++);

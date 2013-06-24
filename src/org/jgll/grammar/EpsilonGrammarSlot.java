@@ -2,7 +2,6 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Set;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
@@ -19,11 +18,9 @@ import org.jgll.util.Input;
 public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
-	private final Set<Terminal> testSet;
 	
-	public EpsilonGrammarSlot(String label, int position, Set<Terminal> testSet, HeadGrammarSlot head, Object object) {
+	public EpsilonGrammarSlot(String label, int position, HeadGrammarSlot head, Object object) {
 		super(label, position, null, head, object);
-		this.testSet = testSet;
 	}
 	
 	@Override
@@ -53,28 +50,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public void codeIfTestSetCheck(Writer writer) throws IOException {
-		writer.append("if (");
-		int i = 0;
-		for(Terminal terminal : testSet) {
-			writer.append(terminal.getMatchCode());
-			if(++i < testSet.size()) {
-				writer.append(" || ");
-			}
-		}
-		writer.append(") {\n");
-	}
-
-	@Override
 	public boolean checkAgainstTestSet(int i) {
-		if(testSet.isEmpty()) {
-			return true;
-		}
- 		for(Terminal t : testSet) {
-			if(t.match(i)) {
-				return true;
-			}
-		}
-		return false;
+		// TODO: add the check against the follow set here.
+		return true;
 	}
 }

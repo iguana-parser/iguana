@@ -1,13 +1,13 @@
 package org.jgll.grammar;
 
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * Character class represents a set of {@link Range} instances.
  * For example, [A-Za-z0-9] represents a character which is
- * either [A-Z], [a-z] or [0-9]
- * 
+ * either [A-Z], [a-z] or [0-9].
  * 
  * @author Ali Afroozeh
  *
@@ -17,11 +17,20 @@ public class CharacterClass implements Terminal {
 	private static final long serialVersionUID = 1L;
 
 	private final List<Range> ranges;
+	
+	private BitSet testSet;
 
 	public CharacterClass(List<Range> ranges) {
 		if(ranges == null || ranges.size() == 0) {
 			throw new IllegalArgumentException("Ranges cannot be null or empty.");
 		}
+		
+		testSet = new BitSet();
+		
+		for(Range range : ranges) {
+			testSet.or(range.getTestSet());
+		}
+		
 		this.ranges = Collections.unmodifiableList(ranges);
 	}
 	
@@ -31,12 +40,7 @@ public class CharacterClass implements Terminal {
 	
 	@Override
 	public boolean match(int i) {
-		for(Range range : ranges) {
-			if(range.match(i)) {
-				return true;
-			}
-		}
-		return false;
+		return testSet.get(i);
 	}
 	
 	@Override
@@ -70,7 +74,7 @@ public class CharacterClass implements Terminal {
 		
 		CharacterClass other = (CharacterClass) obj;
 
-		return ranges.equals(other.ranges);
+		return testSet.equals(other.testSet);
 	}
 
 	@Override
@@ -107,6 +111,11 @@ public class CharacterClass implements Terminal {
 			return "\\n";
 		}
 		return c + "";
+	}
+	
+	@Override
+	public BitSet getTestSet() {
+		return testSet;
 	}
 
 }

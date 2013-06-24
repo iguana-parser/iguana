@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import java.util.BitSet;
+
 
 /**
  * 
@@ -11,11 +13,16 @@ public class Range implements Terminal {
 	private static final long serialVersionUID = 1L;
 
 	private final int start;
+	
 	private final int end;
+	
+	private BitSet testSet;
 
 	public Range(int start, int end) {
 		this.start = start;
 		this.end = end;
+		testSet = new BitSet();
+		testSet.set(start, end + 1);
 	}
 	
 	public int getStart() {
@@ -28,7 +35,7 @@ public class Range implements Terminal {
 	
 	@Override
 	public boolean match(int i) {
-		return start <= i  && i <= end;
+		return testSet.get(i);
 	}
 	
 	@Override
@@ -76,6 +83,11 @@ public class Range implements Terminal {
 	@Override
 	public String getName() {
 		return  "[" + (char) start + "-" + (char) end + "]";
+	}
+
+	@Override
+	public BitSet getTestSet() {
+		return testSet;
 	}
 	
 }
