@@ -48,7 +48,6 @@ public class Descriptor {
 	
 	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
-		
 		assert slot != null;
 		assert gssNode != null;
 		assert inputIndex >= 0;
@@ -97,11 +96,18 @@ public class Descriptor {
 		}
 		
 		Descriptor other = (Descriptor) obj;
-
-		return inputIndex == other.getInputIndex() &&
-			   slot.equals(other.slot) &&
-			   sppfNode.equals(other.getSPPFNode()) &&
-			   gssNode.equals(other.getGSSNode());
+		
+		/**
+		 *	Descriptors are of the form (L,u,i,w) where u is a GGS node and w is an
+		 *	SPPF node. As w has the form
+		 *	(L1,j,i) and u has the form (L2,j), in fact a descriptor could be
+		 *	presented as (L, i, j, L2, L1).
+		 */
+		return slot == other.slot &&
+			   inputIndex == other.getInputIndex() &&
+			   sppfNode.getGrammarSlot() == other.sppfNode.getGrammarSlot() &&
+			   sppfNode.getLeftExtent() == other.sppfNode.getLeftExtent() &&	
+			   gssNode.getGrammarSlot() == other.gssNode.getGrammarSlot();
 	}
 	
 	@Override

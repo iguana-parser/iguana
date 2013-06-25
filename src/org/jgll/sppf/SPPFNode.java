@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.Iterator;
 
+import org.jgll.grammar.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -35,6 +36,8 @@ public abstract class SPPFNode {
 	public abstract int getRightExtent();
 
 	public abstract void accept(SPPFVisitor visitAction);
+	
+	public abstract GrammarSlot getGrammarSlot();
 	
 	public Object getObject() {
 		return object;

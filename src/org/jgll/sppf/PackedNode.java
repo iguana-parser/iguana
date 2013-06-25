@@ -56,7 +56,7 @@ public class PackedNode extends SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  slot.equals(other.slot) &&
+		return  slot == other.slot &&
 		        pivot == other.pivot &&
 		        parent.equals(other.parent);
 	}
@@ -65,6 +65,7 @@ public class PackedNode extends SPPFNode {
 		return pivot;
 	}
 	
+	@Override
 	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}

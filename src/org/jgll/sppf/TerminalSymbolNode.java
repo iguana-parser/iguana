@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.Collections;
 
+import org.jgll.grammar.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -95,6 +96,11 @@ public class TerminalSymbolNode extends SPPFNode {
 	@Override
 	public boolean isAmbiguous() {
 		return false;
+	}
+
+	@Override
+	public GrammarSlot getGrammarSlot() {
+		throw new UnsupportedOperationException();
 	}
 
 }

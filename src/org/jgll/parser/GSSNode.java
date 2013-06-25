@@ -79,8 +79,8 @@ public class GSSNode {
 		
 		GSSNode other = (GSSNode) obj;
 
-		return  other.slot.equals(slot) &&
-				other.inputIndex == inputIndex;
+		return  slot == other.slot &&
+				inputIndex == other.inputIndex;
 	}
 
 	@Override

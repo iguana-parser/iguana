@@ -141,15 +141,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 
 	public List<Alternate> getAlternates() {
-		List<Alternate> newList = new ArrayList<>();
-		for(Alternate alternate : alternates) {
-			if(alternate != null) {
-				newList.add(alternate);
-			}else {
-				System.out.println("WTF?");
-			}
-		}
-		return newList;
+		return new ArrayList<>(alternates);
 	}
 	
 	public Nonterminal getNonterminal() {

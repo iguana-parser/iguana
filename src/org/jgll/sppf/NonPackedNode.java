@@ -63,23 +63,27 @@ public abstract class NonPackedNode extends SPPFNode {
 		
 		NonPackedNode other = (NonPackedNode) obj;
 
-		return  slot.equals(other.slot) &&
+		return  slot == other.slot &&
 				leftExtent == other.leftExtent &&
 				rightExtent == other.rightExtent;
 	}
 	
+	@Override
 	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
 	
+	@Override
 	public int getLeftExtent() {
 		return leftExtent;
 	}
 
+	@Override
 	public int getRightExtent() {
 		return rightExtent;
 	}
 	
+	@Override
 	public String toString() {
 		return String.format("(%s, %d, %d)", getLabel(), leftExtent, rightExtent);
 	}
