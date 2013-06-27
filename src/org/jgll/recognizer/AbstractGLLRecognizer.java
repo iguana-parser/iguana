@@ -8,12 +8,11 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.util.Input;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jgll.util.LoggerWrapper;
 
 public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
-	private static final Logger log = LoggerFactory.getLogger(AbstractGLLRecognizer.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLRecognizer.class);
 	
 	protected Input input;
 	

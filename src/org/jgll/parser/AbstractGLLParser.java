@@ -15,8 +15,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jgll.util.LoggerWrapper;
 
 /**
  * GLLParser is the abstract base class for all the generated GLL parsers.
@@ -30,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractGLLParser implements GLLParser {
 	
-	private static final Logger log = LoggerFactory.getLogger(AbstractGLLParser.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParser.class);
 	
 	protected static final GSSNode u0 = GSSNode.U0;
 
@@ -111,16 +110,16 @@ public abstract class AbstractGLLParser implements GLLParser {
 	protected abstract void parse(HeadGrammarSlot startSymbol);
 	
 	private void logParseStatistics(long duration) {
-		log.info("Parsing Time: {} ms", duration/1000000);
+		log.info("Parsing Time: " + duration/1000000 + " ms");
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.debug("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.debug("Descriptors: {}", lookupTable.getDescriptorsCount());
-		log.debug("GSSNodes: {}", lookupTable.getGSSNodes().size());
-		log.debug("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
-		log.debug("GSS Nodes: {}", lookupTable.getGSSNodesCount());
-		log.debug("GSS Edges: {}", lookupTable.getGSSEdgesCount());
+		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.info("Descriptors: %d", lookupTable.getDescriptorsCount());
+		log.info("GSSNodes: %d", lookupTable.getGSSNodes().size());
+		log.info("Non-packed nodes: %d", lookupTable.getDescriptorsCount());
+		log.info("GSS Nodes: %d", lookupTable.getGSSNodesCount());
+		log.info("GSS Edges: %d", lookupTable.getGSSEdgesCount());
 	}
 
 	

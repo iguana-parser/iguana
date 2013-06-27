@@ -6,19 +6,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.util.Input;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jgll.util.LoggerWrapper;
 
 public class GrammarBuilder implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = LoggerFactory.getLogger(GrammarBuilder.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(GrammarBuilder.class);
 
 	Map<String, HeadGrammarSlot> nonterminalsMap;
 	

@@ -15,12 +15,11 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jgll.util.LoggerWrapper;
 
 public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
-	private static final Logger log = LoggerFactory.getLogger(RecursiveDescentLookupTable.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable.class);
 
 	private Deque<Descriptor> descriptorsStack;
 	

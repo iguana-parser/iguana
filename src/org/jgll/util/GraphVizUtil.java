@@ -3,9 +3,6 @@ package org.jgll.util;
 import java.io.FileWriter;
 import java.io.Writer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * 
  * @author Ali Afroozeh
@@ -13,7 +10,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GraphVizUtil {
 	
-	private static final Logger log = LoggerFactory.getLogger(GraphVizUtil.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(GraphVizUtil.class);
 	
 	public static final String SYMBOL_NODE = "[shape=box, style=rounded, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	public static final String INTERMEDIATE_NODE = "[shape=box, height=0.2, width=0.4, color=black, fontcolor=black, label=\"%s\", fontsize=10];";

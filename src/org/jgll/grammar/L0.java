@@ -9,8 +9,7 @@ import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jgll.util.LoggerWrapper;
 
 /**
  * 
@@ -21,7 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class L0 extends GrammarSlot {
 	
-	private static final Logger log = LoggerFactory.getLogger(L0.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(L0.class);
 	
 	private static final long serialVersionUID = 1L;
 
