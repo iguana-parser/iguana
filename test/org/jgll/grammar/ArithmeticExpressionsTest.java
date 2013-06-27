@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;

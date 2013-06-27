@@ -2,10 +2,8 @@ package org.jgll.lookup;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
@@ -14,6 +12,7 @@ import org.jgll.parser.Descriptor;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.SparseBitSet;
 
 /**
  * 
@@ -33,7 +32,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private Set<Descriptor>[] u;
+	private SparseBitSet[] u;
 	
 	private Queue<Descriptor>[] r;
 	
@@ -58,11 +57,11 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new Set[longestTerminalChain + 1];
+		u = new SparseBitSet[longestTerminalChain + 1];
 		r = new Queue[longestTerminalChain + 1];
 		
 		for(int i = 0; i < longestTerminalChain + 1; i++) {
-			u[i] = new HashSet<>();
+			u[i] = new SparseBitSet();
 			r[i] = new ArrayDeque<>();
 		}
 	}
@@ -144,7 +143,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			size--;
 			return r[index].remove();
 		} else {
-			u[index] = new HashSet<>();
+			u[index] = new SparseBitSet();
 			nextLevel();
 			currentLevel++;
 			return nextDescriptor();
@@ -155,9 +154,10 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	public boolean addDescriptor(Descriptor descriptor) {
 		int index = indexFor(descriptor.getInputIndex());
 		
-		if(! u[index].contains(descriptor)) {
+		long i = indexForDescriptor(descriptor);
+		if(! u[index].get(i)) {
 			 r[index].add(descriptor);
-			 u[index].add(descriptor);
+			 u[index].set(i);
 			 size++;
 			 all++;
 			 return true;
@@ -169,6 +169,20 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	@Override
 	public int getDescriptorsCount() {
 		return all;
+	}
+	
+	private long indexForDescriptor(Descriptor desc) {
+		
+		int countSlots = grammar.getGrammarSlots().size();
+		
+		long firstDim = inputSize;
+		long secondDim = countSlots * firstDim;
+		long thirdDim = countSlots * secondDim;
+		
+		return desc.getSPPFNode().getLeftExtent() +
+			   desc.getLabel().getId() * firstDim +
+			   desc.getSPPFNode().getGrammarSlot().getId() * secondDim + 
+			   desc.getGSSNode().getGrammarSlot().getId() * thirdDim;
 	}
 
 	@Override

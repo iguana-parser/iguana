@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -30,7 +30,7 @@ public class Test3 extends AbstractGrammarTest {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("bc"), grammar, "A");
-		Assert.assertEquals(true, sppf.deepEquals(expectedSPPF()));
+		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	
 	private SPPFNode expectedSPPF() {

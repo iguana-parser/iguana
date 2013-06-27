@@ -16,6 +16,5 @@ Export-Package:
  org.jgll.util;uses:="org.jgll.sppf"
 Require-Bundle: 
  ch.qos.logback.classic,
- ch.qos.logback.core,
- org.slf4j.log4j
+ ch.qos.logback.core
 Import-Package: org.slf4j
