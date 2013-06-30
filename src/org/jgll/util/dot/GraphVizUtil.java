@@ -1,7 +1,9 @@
-package org.jgll.util;
+package org.jgll.util.dot;
 
 import java.io.FileWriter;
 import java.io.Writer;
+
+import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 

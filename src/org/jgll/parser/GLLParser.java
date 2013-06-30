@@ -26,8 +26,6 @@ public interface GLLParser {
 	
 	public Descriptor nextDescriptor();
 	
-	public void removeDescriptor(Descriptor descriptor);
-	
 	public void update(GSSNode cu, SPPFNode cn, int ci);
 	
 	public GSSNode getCu();

@@ -1,4 +1,4 @@
-package org.jgll.util;
+package org.jgll.util.hashing;
 
 import java.util.Collection;
 import java.util.Iterator;

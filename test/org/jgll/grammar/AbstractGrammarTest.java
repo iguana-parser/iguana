@@ -10,10 +10,10 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.RecursiveDescentParser;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.GraphVizUtil;
-import org.jgll.util.SPPFToDot;
-import org.jgll.util.ToDotWithoutIntermediateNodes;
-import org.jgll.util.ToDotWithoutIntermeidateAndLists;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.SPPFToDot;
+import org.jgll.util.dot.ToDotWithoutIntermediateNodes;
+import org.jgll.util.dot.ToDotWithoutIntermeidateAndLists;
 import org.junit.Before;
 
 public abstract class AbstractGrammarTest {

@@ -1,7 +1,7 @@
-package org.jgll.util;
+package org.jgll.util.dot;
 
-import static org.jgll.util.GraphVizUtil.GSS_EDGE;
-import static org.jgll.util.GraphVizUtil.GSS_NODE;
+import static org.jgll.util.dot.GraphVizUtil.GSS_EDGE;
+import static org.jgll.util.dot.GraphVizUtil.GSS_NODE;
 
 import java.util.Collection;
 

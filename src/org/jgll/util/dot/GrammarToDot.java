@@ -1,10 +1,10 @@
-package org.jgll.util;
+package org.jgll.util.dot;
 
-import static org.jgll.util.GraphVizUtil.EDGE;
-import static org.jgll.util.GraphVizUtil.NONTERMINAL_NODE;
-import static org.jgll.util.GraphVizUtil.SLOT_NODE;
-import static org.jgll.util.GraphVizUtil.NONTERMINAL_EDGE;
-import static org.jgll.util.GraphVizUtil.END_EDGE;
+import static org.jgll.util.dot.GraphVizUtil.EDGE;
+import static org.jgll.util.dot.GraphVizUtil.END_EDGE;
+import static org.jgll.util.dot.GraphVizUtil.NONTERMINAL_EDGE;
+import static org.jgll.util.dot.GraphVizUtil.NONTERMINAL_NODE;
+import static org.jgll.util.dot.GraphVizUtil.SLOT_NODE;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

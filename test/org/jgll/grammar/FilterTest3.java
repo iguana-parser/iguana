@@ -2,11 +2,11 @@ package org.jgll.grammar;
 
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.util.GrammarToDot;
-import org.jgll.util.GraphVizUtil;
 import org.jgll.util.Input;
-import org.jgll.util.SPPFToDot;
-import org.jgll.util.ToDotWithoutIntermeidateAndLists;
+import org.jgll.util.dot.GrammarToDot;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.SPPFToDot;
+import org.jgll.util.dot.ToDotWithoutIntermeidateAndLists;
 import org.junit.Test;
 
 /**

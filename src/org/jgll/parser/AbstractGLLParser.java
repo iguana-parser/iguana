@@ -15,7 +15,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.LoggerWrapper;
+import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * GLLParser is the abstract base class for all the generated GLL parsers.
@@ -156,9 +156,8 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * }
 	 */
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
-		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
-		boolean result = lookupTable.addDescriptor(descriptor);
-		log.trace("Descriptor added: {} : {}", descriptor, result);
+		boolean result = lookupTable.addDescriptor(label, inputIndex, u, w);
+		log.trace("Descriptor added: (%s, %s, %s, %s) : %b", label, u, inputIndex, w, result);
 	}
 	
 	
@@ -327,11 +326,6 @@ public abstract class AbstractGLLParser implements GLLParser {
 	@Override
 	public Descriptor nextDescriptor() {
 		return lookupTable.nextDescriptor();
-	}
-	
-	@Override
-	public void removeDescriptor(Descriptor descriptor) {
-		lookupTable.removeDescriptor(descriptor);
 	}
 	
 	@Override

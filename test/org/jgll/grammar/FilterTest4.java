@@ -2,9 +2,9 @@ package org.jgll.grammar;
 
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.util.GrammarToDot;
-import org.jgll.util.GraphVizUtil;
 import org.jgll.util.Input;
+import org.jgll.util.dot.GrammarToDot;
+import org.jgll.util.dot.GraphVizUtil;
 import org.junit.Test;
 
 /**

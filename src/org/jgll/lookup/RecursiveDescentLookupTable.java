@@ -11,11 +11,12 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
+import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.util.LoggerWrapper;
+import org.jgll.util.logging.LoggerWrapper;
 
 public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
@@ -50,7 +51,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	}
 
 	@Override
-	public boolean addDescriptor(Descriptor descriptor) {
+	public boolean addDescriptor(GrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {
+		Descriptor descriptor = new Descriptor(slot, gssNode, inputIndex, sppfNode);
 		if(descriptorsSet.contains(descriptor)) {
 			return false;
 		}
@@ -107,11 +109,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public int getDescriptorsCount() {
 		return descriptorsSet.size();
-	}
-
-	@Override
-	public boolean removeDescriptor(Descriptor descriptor) {
-		return descriptorsStack.remove(descriptor);
 	}
 
 }

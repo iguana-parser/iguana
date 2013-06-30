@@ -1,4 +1,4 @@
-package org.jgll.util;
+package org.jgll.util.dot;
 
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;

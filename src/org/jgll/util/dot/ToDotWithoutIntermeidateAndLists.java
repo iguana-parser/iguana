@@ -1,7 +1,7 @@
-package org.jgll.util;
+package org.jgll.util.dot;
 
-import static org.jgll.util.GraphVizUtil.PACKED_NODE;
-import static org.jgll.util.GraphVizUtil.SYMBOL_NODE;
+import static org.jgll.util.dot.GraphVizUtil.PACKED_NODE;
+import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
 
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;

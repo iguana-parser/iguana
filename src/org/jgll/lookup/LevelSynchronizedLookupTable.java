@@ -9,10 +9,10 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
+import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.util.SparseBitSet;
 
 /**
  * 
@@ -32,7 +32,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private SparseBitSet[] u;
+	private Map<Integer, Map<Integer, Map<Integer, Integer>>>[] u;
 	
 	private Queue<Descriptor>[] r;
 	
@@ -57,13 +57,14 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new SparseBitSet[longestTerminalChain + 1];
+		u = new HashMap[longestTerminalChain + 1];
 		r = new Queue[longestTerminalChain + 1];
 		
 		for(int i = 0; i < longestTerminalChain + 1; i++) {
-			u[i] = new SparseBitSet();
+			u[i] = new HashMap<>();
 			r[i] = new ArrayDeque<>();
 		}
+
 	}
 	
 	private void nextLevel() {
@@ -143,7 +144,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			size--;
 			return r[index].remove();
 		} else {
-			u[index] = new SparseBitSet();
+			u[index] = new HashMap<>();
 			nextLevel();
 			currentLevel++;
 			return nextDescriptor();
@@ -151,19 +152,61 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 
 	@Override
-	public boolean addDescriptor(Descriptor descriptor) {
-		int index = indexFor(descriptor.getInputIndex());
-		
-		long i = indexForDescriptor(descriptor);
-		if(! u[index].get(i)) {
-			 r[index].add(descriptor);
-			 u[index].set(i);
+	public boolean addDescriptor(GrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {
+		int index = indexFor(inputIndex);
+
+		if(!get(u[index], slot, gssNode, sppfNode)) {
+			 r[index].add(new Descriptor(slot, gssNode, inputIndex, sppfNode));
+			 put(u[index], slot, gssNode, sppfNode);
 			 size++;
 			 all++;
-			 return true;
+			 return true;			
+		}
+		return false;
+	}
+	
+	
+	private boolean get(Map<Integer, Map<Integer, Map<Integer, Integer>>> map, GrammarSlot slot, 
+	 					GSSNode gssNode, SPPFNode sppfNode) {
+		
+		Map<Integer, Map<Integer, Integer>> map2 = map.get(gssNode.getInputIndex());
+		
+		if(map2 == null) {
+			return false;
 		}
 		
-		return false;
+		Map<Integer, Integer> map3 = map2.get(slot.getId());
+		if(map3 == null) {
+			return false;
+		}
+		
+		Integer i = map3.get(gssNode.getGrammarSlot().getId());
+		if(i == null) {
+			return false;
+		}
+		
+		return i.equals(sppfNode.getGrammarSlot().getId());
+	 }
+	
+	
+	private void put(Map<Integer, Map<Integer, Map<Integer, Integer>>> map, GrammarSlot slot, 
+					 GSSNode gssNode, SPPFNode sppfNode) {
+		Map<Integer, Map<Integer, Integer>> map2 = map.get(gssNode.getInputIndex());
+		if(map2 == null) {
+			map2 = new HashMap<>();
+			Map<Integer, Integer> map3 = new HashMap<>();
+			map3.put(gssNode.getGrammarSlot().getId(), sppfNode.getGrammarSlot().getId());
+			map2.put(slot.getId(), map3);
+		}
+		
+		Map<Integer, Integer> map3 = map2.get(slot.getId());
+		if(map3 == null) {
+			map3 = new HashMap<>();
+		}
+		
+		map3.put(gssNode.getGrammarSlot().getId(), sppfNode.getGrammarSlot().getId());
+		map2.put(slot.getId(), map3);
+		map.put(gssNode.getInputIndex(), map2);
 	}
 
 	@Override
@@ -171,24 +214,4 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		return all;
 	}
 	
-	private long indexForDescriptor(Descriptor desc) {
-		
-		int countSlots = grammar.getGrammarSlots().size();
-		
-		long firstDim = inputSize;
-		long secondDim = countSlots * firstDim;
-		long thirdDim = countSlots * secondDim;
-		
-		return desc.getSPPFNode().getLeftExtent() +
-			   desc.getLabel().getId() * firstDim +
-			   desc.getSPPFNode().getGrammarSlot().getId() * secondDim + 
-			   desc.getGSSNode().getGrammarSlot().getId() * thirdDim;
-	}
-
-	@Override
-	public boolean removeDescriptor(Descriptor descriptor) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

@@ -22,9 +22,7 @@ public interface LookupTable {
 	
 	public Descriptor nextDescriptor();
 	
-	public boolean removeDescriptor(Descriptor descriptor);
-	
-	public boolean addDescriptor(Descriptor descriptor);
+	public boolean addDescriptor(GrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode);
 	
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent);
 	

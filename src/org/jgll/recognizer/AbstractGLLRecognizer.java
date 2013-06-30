@@ -8,7 +8,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.util.Input;
-import org.jgll.util.LoggerWrapper;
+import org.jgll.util.logging.LoggerWrapper;
 
 public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	

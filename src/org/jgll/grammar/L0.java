@@ -9,7 +9,7 @@ import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
-import org.jgll.util.LoggerWrapper;
+import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 

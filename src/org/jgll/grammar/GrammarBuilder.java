@@ -11,7 +11,7 @@ import java.util.Set;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.util.Input;
-import org.jgll.util.LoggerWrapper;
+import org.jgll.util.logging.LoggerWrapper;
 
 public class GrammarBuilder implements Serializable {
 	
