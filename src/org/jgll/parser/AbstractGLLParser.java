@@ -180,7 +180,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 */
 	public final void pop(GSSNode u, int i, SPPFNode z) {
 				
-		log.trace("Pop {}, {}, {}", new Object[] {u.getGrammarSlot(), i, z});
+		log.trace("Pop %s, %d, %s", new Object[] {u.getGrammarSlot(), i, z});
 		
 		if (u != u0) {
 			
@@ -232,7 +232,7 @@ public abstract class AbstractGLLParser implements GLLParser {
      *
 	 */
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
-		log.trace("GSSNode created: ({}, {})",  L, i);
+		log.trace("GSSNode created: (%s, %d)",  L, i);
 		
 		GSSNode v = lookupTable.getGSSNode(L, i);
 		

@@ -23,7 +23,7 @@ public class Test2 extends AbstractGrammarTest {
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a"), grammar, "A");
+		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a"), grammar, "A");
 		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	

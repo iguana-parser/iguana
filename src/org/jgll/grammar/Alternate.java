@@ -38,7 +38,7 @@ public class Alternate implements Serializable {
 		}
 	}
 	
-	public Symbol get(int index) {
+	public Symbol getSymbolAt(int index) {
 		return symbols.get(index).getSymbol();
 	}
 	

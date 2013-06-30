@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jgll.util.Input;
+import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 
@@ -15,6 +16,8 @@ import org.jgll.util.Input;
  *
  */
 public class Grammar implements Serializable {
+	
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(Grammar.class);
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -37,6 +40,10 @@ public class Grammar implements Serializable {
 
 	private int longestTerminalChain;
 	
+	private int maximumNumAlternates;
+	
+	private int maxDescriptorsAtInput;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
@@ -51,8 +58,29 @@ public class Grammar implements Serializable {
 		
 		this.newNonterminals = builder.newNonterminals;
 		this.longestTerminalChain = builder.longestTerminalChain;
+		this.maximumNumAlternates = builder.maximumNumAlternates;
+		this.maxDescriptorsAtInput = builder.maxDescriptors;
+		
+		printGrammarStatistics();
+	}
+
+	public void printGrammarStatistics() {
+		log.info("Grammar Information:");
+		log.info("Nonterminals: %d", nonterminals.size());
+		log.info("Production rules: %d", numProductions());
+		log.info("Grammar slots: %d", slots.size());
+		log.info("Longest Terminal Chain: %d", longestTerminalChain);
+		log.info("Maximum number of alternates: %d", maximumNumAlternates);
+		log.info("Maximum descriptors created at each input position: ", maxDescriptorsAtInput);
 	}
 	
+	private int numProductions() {
+		int num = 0;
+		for(HeadGrammarSlot head : nonterminals) {
+			num += head.getCountAlternates();
+		}
+		return num;
+	}
 	
 	public void code(Writer writer, String packageName) throws IOException {
 	
@@ -120,6 +148,14 @@ public class Grammar implements Serializable {
 	
 	public int getLongestTerminalChain() {
 		return longestTerminalChain;
+	}
+	
+	public int getMaximumNumAlternates() {
+		return maximumNumAlternates;
+	}
+	
+	public int getMaxDescriptorsAtInput() {
+		return maxDescriptorsAtInput;
 	}
 	
 	@Override

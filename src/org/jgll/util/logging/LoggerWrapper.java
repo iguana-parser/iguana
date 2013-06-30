@@ -30,25 +30,26 @@ public class LoggerWrapper {
 	
 	public void warning(String s, Object...args) {
 		if(logger.isLoggable(Level.WARNING)) {
-			logger.info(String.format(s, args));
+			logger.warning(String.format(s, args));
 		}
 	}
 	
 	public void error(String s, Object...args) {
 		if(logger.isLoggable(Level.SEVERE)) {
-			logger.info(String.format(s, args));
+			logger.severe(String.format(s, args));
 		}
 	}
 
 	public void debug(String s, Object...args) {
 		if(logger.isLoggable(Level.FINE)) {
-			logger.info(String.format(s, args));
+			logger.fine(String.format(s, args));
 		}
 	}
 	
 	public void trace(String s, Object...args) {
+//		logger.info(String.format(s, args));
 		if(logger.isLoggable(Level.FINEST)) {
-			logger.info(String.format(s, args));
+			logger.finest(String.format(s, args));
 		}
 	}
 	

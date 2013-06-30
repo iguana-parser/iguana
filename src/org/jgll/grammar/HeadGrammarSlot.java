@@ -34,26 +34,16 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private final Set<Terminal> followSet;
 	
-	private final Set<Integer> alternatesSet;
-	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		super(nonterminal.getName());
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();
 		this.followSet = new HashSet<>();
-		this.alternatesSet = new HashSet<>(alternates.size());
-		
-		for(int i = 0; i < alternates.size(); i++) {
-			alternatesSet.add(i);
-		}
 	}
 	
 	public void addAlternate(Alternate alternate) {		
 		alternates.add(alternate);
-		if(alternate != null) {
-			alternatesSet.add(alternates.size() - 1);
-		}
 	}
 	
 	public void setAlternates(List<Alternate> alternates) {
@@ -169,8 +159,23 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return false;
 	}
 
-	public boolean contains(Set<Integer> set) {
-		return alternatesSet.containsAll(set);
+	/**
+	 * Calculates the number of descriptors created from any input index.
+	 * For left-recursive alternates (1 + the number of alternates 
+	 * in this head) descriptors are created.
+	 */
+	public int getNumberOfDescriptors() {
+		int num = 0;
+		for(Alternate alt : alternates) {
+			// Left-recursive case
+			if(alt.getSymbolAt(0).equals(this.getNonterminal())) {
+				num += alternates.size() + 1;
+			} 
+			else {
+				num++;
+			}
+		}
+		return num;
 	}
 	
 	@Override

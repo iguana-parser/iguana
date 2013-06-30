@@ -34,7 +34,6 @@ import org.jgll.sppf.SPPFNode;
  */
 public abstract class AbstractLookupTable implements LookupTable {
 	
-	
 	protected final Grammar grammar;
 	
 	private GSSNode[][] gssNodes;
@@ -49,12 +48,15 @@ public abstract class AbstractLookupTable implements LookupTable {
 
 	protected final int inputSize;
 	
+	protected final int slotsSize;
+	
 	public AbstractLookupTable(Grammar grammar, int inputSize) {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
 		gssNodes = new GSSNode[grammar.getGrammarSlots().size()][];
 		gssEdges = new HashSet<>(inputSize);
 		poppedElements = new HashMap<GSSNode, List<SPPFNode>>(inputSize);
+		slotsSize = grammar.getGrammarSlots().size();
 	}
 
 	@Override

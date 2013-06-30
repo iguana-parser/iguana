@@ -13,4 +13,5 @@ Export-Package:
    org.jgll.grammar",
  org.jgll.sppf,
  org.jgll.traversal,
- org.jgll.util;uses:="org.jgll.sppf"
+ org.jgll.util;uses:="org.jgll.sppf",
+ org.jgll.util.dot

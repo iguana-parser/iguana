@@ -7,19 +7,14 @@ import java.util.Set;
 
 public class OpenAddressingHashSet<E> implements Set<E> {
 	
-	/**
-	 * The constant suggested by Knuth for multiplicative hashing
-	 */
-	private static final long a = 2654435769L;
-
 	private static final int DEFAULT_INITIAL_CAPACITY = 32;
-	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.5f;
 	
 	private int capacity;
 	
 	private int size;
 	
-	private int threshold;
+//	private int threshold;
 	
 	private float loadFactor;
 	
@@ -50,100 +45,96 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 	public OpenAddressingHashSet(int initialCapacity, float loadFactor) {
 		this.loadFactor = loadFactor;
 
+		initialCapacity = Math.max(4, initialCapacity);
+		initialCapacity /= loadFactor;
+		
 		capacity = 1;
         while (capacity < initialCapacity) {
             capacity <<= 1;
             p++;
         }
-		
+        
 		bitMask = capacity - 1;
 		
-		threshold = (int) (loadFactor * capacity);
+//		threshold = (int) (loadFactor * capacity);
 		table = new Object[capacity];
 	}
 	
 	@Override
 	public boolean contains(Object key) {
 		
-		int j = indexFor(key.hashCode());
+		int i = indexFor(key.hashCode());
 		
-		do {
-			if(table[j] == null) {
-				return false;
-			}
-			
-			if(table[j].equals(key)) {
-				return true;
-			}
-			
-			j = next(j);
-			
-		} while(true);
+		while(table[i] != null && !table[i].equals(key)) {			
+			i = (i + 1) & bitMask; // mod capacity
+		}
+		
+		return table[i] != null;
 	}
 	
 	@Override
 	public boolean add(Object key) {
 				
-		int j = indexFor(key.hashCode());
+		int i = indexFor(key.hashCode());
 		do {
-			if(table[j] == null) {
-				table[j] = key;
+			if(table[i] == null) {
+				table[i] = key;
 				size++;
-				if (size >= threshold) {
-					rehash();
-				}
+//				if (size >= threshold) {
+//					rehash();
+//				}
 				return true;
 			}
 			
-			else if(table[j].equals(key )) {
+			else if(table[i].equals(key)) {
 				return false;
 			}
 			
-			j = next(j);
+			i = (i + 1) & bitMask; // mod capacity
 		} while(true);
 		
 	}
 	
 	
 	private void rehash() {
-		capacity <<= 1;
-		p += 1;
-		bitMask = capacity - 1;
-		
-		Object[] newTable = new Object[capacity];
-		
-		label:
-		for(Object key : table) {
-			if(key != null) {
-				
-				int j = indexFor(key.hashCode());
-
-				do {
-					if(newTable[j] == null) {
-						newTable[j] = key;
-						continue label;
-					}
-					
-					j = next(j);
-				} while(true);
-			}
-		}
-		table = newTable;
-		
-		threshold = (int) (loadFactor * capacity);
-		rehashCount++;
+		throw new IllegalStateException();
+//		capacity <<= 1;
+//		p += 1;
+//		bitMask = capacity - 1;
+//		
+//		Object[] newTable = new Object[capacity];
+//		
+//		label:
+//		for(Object key : table) {
+//			if(key != null) {
+//				
+//				int j = indexFor(key.hashCode());
+//
+//				do {
+//					if(newTable[j] == null) {
+//						newTable[j] = key;
+//						continue label;
+//					}
+//					
+//					j = next(j);
+//				} while(true);
+//			}
+//		}
+//		table = newTable;
+//		
+//		threshold = (int) (loadFactor * capacity);
+//		rehashCount++;
 	}
 	
 	private int indexFor(int hash) {
-		return  ((int)(a * hash) >> (32 - p)) & bitMask;		
+		return  hash & bitMask;		
 	}
 		
 	private int next(int j) {
-		j = j - 1;
-		if(j < 0) {
-			j += capacity;
+		if(j == 0) {
+			return capacity - 1;
 		}
-		return j;
+		return j - 1;
 	}
 
 	public int getRehashCount() {

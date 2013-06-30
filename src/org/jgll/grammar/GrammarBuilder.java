@@ -27,6 +27,10 @@ public class GrammarBuilder implements Serializable {
 	
 	int longestTerminalChain;
 	
+	int maximumNumAlternates;
+	
+	int maxDescriptors;
+	
 	String name;
 
 	// Fields related to filtering	
@@ -279,6 +283,8 @@ public class GrammarBuilder implements Serializable {
 	
 	private void initializeGrammarProrperties() {
 		calculateLongestTerminalChain();
+		calculateMaximumNumAlternates();
+		calculateMaxDescriptors();
 		calculateFirstSets();
 		calculateFollowSets();
 		setTestSets();
@@ -337,6 +343,26 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		this.longestTerminalChain = longestTerminalChain;
+	}
+	
+	private void calculateMaximumNumAlternates() {
+		int max = 0;
+		for(HeadGrammarSlot head : nonterminals) {
+			if(head.getCountAlternates() > max) {
+				max = head.getCountAlternates();
+			}
+		}
+		this.maximumNumAlternates = max;
+	}
+	
+	private void calculateMaxDescriptors() {
+		int max = 0;
+		for(HeadGrammarSlot head : nonterminals) {
+			if(head.getNumberOfDescriptors() > max) {
+				max = head.getNumberOfDescriptors();
+			}
+		}
+		this.maxDescriptors = max;
 	}
 	
 	private void calculateFirstSets() {
@@ -762,7 +788,6 @@ public class GrammarBuilder implements Serializable {
 		}
 		return set;
 	}
-
 
 	/**
 	 * 

@@ -2,7 +2,6 @@ package org.jgll.lookup;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -14,6 +13,7 @@ import org.jgll.parser.Descriptor;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.hashing.OpenAddressingHashSet;
 
 /**
  * 
@@ -58,13 +58,25 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new Set[longestTerminalChain + 1];
+		u = new OpenAddressingHashSet[longestTerminalChain + 1];
 		r = new Queue[longestTerminalChain + 1];
 		
 		for(int i = 0; i < longestTerminalChain + 1; i++) {
-			u[i] = new HashSet<>();
 			r[i] = new ArrayDeque<>();
 		}
+		
+		u[0] = new OpenAddressingHashSet<>(grammar.getMaxDescriptorsAtInput());
+	}
+	
+	private int sum(int index) {
+		int sum = 0;
+		for(int i = 0; i < u.length; i++) {
+			if(i == index || u[i] == null) {
+				continue;
+			}
+			sum += u[i].size();
+		}
+		return sum;
 	}
 	
 	private void nextLevel() {
@@ -75,6 +87,14 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private int indexFor(int inputIndex) {
 		return inputIndex % (longestTerminalChain + 1);
+	}
+	
+	private int previousIndex(int inputIndex) {
+		int index = indexFor(inputIndex);
+		if(index == -1) {
+			index = longestTerminalChain;
+		}
+		return index;
 	}
 	
 	@Override
@@ -144,16 +164,26 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			size--;
 			return r[index].remove();
 		} else {
-			u[index] = new HashSet<>();
+			u[index] = new OpenAddressingHashSet<>(getSize(index));
 			nextLevel();
 			currentLevel++;
 			return nextDescriptor();
 		}
 	}
+	
+	private int getSize(int index) {
+		int size = sum(index) + (u[previousIndex(currentLevel)] == null ? 1 : u[previousIndex(currentLevel)].size()) * grammar.getMaxDescriptorsAtInput();
+		System.out.println(currentLevel + ", " + size);
+		return size;
+	}
 
 	@Override
 	public boolean addDescriptor(Descriptor descriptor) {
 		int index = indexFor(descriptor.getInputIndex());
+		
+		if(u[index] == null) {
+			u[index] = new OpenAddressingHashSet<>(getSize(0));
+		}
 		
 		if(! u[index].contains(descriptor)) {
 			 r[index].add(descriptor);

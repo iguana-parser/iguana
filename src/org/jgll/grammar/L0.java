@@ -48,12 +48,12 @@ public class L0 extends GrammarSlot {
 		
 		while(parser.hasNextDescriptor()) {
 			Descriptor descriptor = parser.nextDescriptor();
-			slot = descriptor.getLabel();
+			slot = descriptor.getGrammarSlot();
 			GSSNode cu = descriptor.getGSSNode();
 			SPPFNode cn = descriptor.getSPPFNode();
 			int ci = descriptor.getInputIndex();
 			parser.update(cu, cn, ci);
-			log.trace("Processing ({}, {}, {}, {})", new Object[] {slot, ci, cu, cn});
+			log.trace("Processing (%s, %s, %s, %s)", new Object[] {slot, ci, cu, cn});
 			slot = slot.parse(parser, input);
 		
 			while(slot != null) {
@@ -67,12 +67,12 @@ public class L0 extends GrammarSlot {
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		while(parser.hasNextDescriptor()) {
 			Descriptor descriptor = parser.nextDescriptor();
-			GrammarSlot slot = descriptor.getLabel();
+			GrammarSlot slot = descriptor.getGrammarSlot();
 			GSSNode cu = descriptor.getGSSNode();
 			SPPFNode cn = descriptor.getSPPFNode();
 			int ci = descriptor.getInputIndex();
 			parser.update(cu, cn, ci);
-			log.trace("Processing ({}, {}, {}, {})", new Object[] {slot, ci, cu, cn});
+			log.trace("Processing (%s, %s, %s, %s)", new Object[] {slot, ci, cu, cn});
 			slot = slot.parse(parser, input);
 			while(slot != null) {
 				slot = slot.parse(parser, input);

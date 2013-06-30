@@ -3,6 +3,10 @@ package org.jgll.parser;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+
 /**
  * A {@code Descriptor} is used by the GLL parser to keep track of the 
  * nonterminals that have been encountered during the parsing process but that
@@ -46,6 +50,7 @@ public class Descriptor {
 	 */
 	private final SPPFNode sppfNode;
 	
+	private final int hash;
 	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		assert slot != null;
@@ -57,9 +62,19 @@ public class Descriptor {
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
+		
+		HashFunction hf = Hashing.murmur3_32();
+		HashCode code = hf.newHasher()
+						  .putInt(slot.getId())
+						  .putInt(inputIndex)
+						  .putInt(sppfNode.getGrammarSlot().getId())
+						  .putInt(sppfNode.getLeftExtent())
+						  .putInt(gssNode.getGrammarSlot().getId()).hash();
+		
+		hash = code.asInt();
 	}
 	
-	public GrammarSlot getLabel() {
+	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
@@ -77,12 +92,7 @@ public class Descriptor {
 	
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + sppfNode.hashCode();
-		result += 31 * result + inputIndex;
-		result += 31 * result + gssNode.hashCode();
-		return result;
+		return hash;
 	}
 	
 	@Override
@@ -103,7 +113,8 @@ public class Descriptor {
 		 *	(L1,j,i) and u has the form (L2,j), in fact a descriptor could be
 		 *	presented as (L, i, j, L2, L1).
 		 */
-		return slot == other.slot &&
+		return hash == other.hash &&
+			   slot == other.slot &&
 			   inputIndex == other.getInputIndex() &&
 			   sppfNode.getGrammarSlot() == other.sppfNode.getGrammarSlot() &&
 			   sppfNode.getLeftExtent() == other.sppfNode.getLeftExtent() &&	
