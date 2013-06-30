@@ -10,7 +10,6 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
 import org.junit.Test;
 
 public class Gamma0Test extends AbstractGrammarTest {
@@ -68,10 +67,6 @@ public class Gamma0Test extends AbstractGrammarTest {
 	@Test
 	public void testParsers() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aad"), grammar, "S");
-		ToJavaCode visitAction = new ToJavaCode();
-		sppf1.accept(visitAction);
-		System.out.println(visitAction.getString());
-		generateGraph(sppf1);
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aad"), grammar, "S");
 		assertEquals(true, sppf1.deepEquals(sppf2));
 	}

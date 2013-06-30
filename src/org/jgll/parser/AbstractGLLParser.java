@@ -312,7 +312,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 			}
 			
 			NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(t, leftExtent, rightExtent);
-			
+
 			newNode.addPackedNode(slot, rightChild.getLeftExtent(), leftChild, rightChild, grammar);
 			
 			return newNode;

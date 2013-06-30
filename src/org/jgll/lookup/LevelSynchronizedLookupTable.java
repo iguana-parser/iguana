@@ -1,7 +1,9 @@
 package org.jgll.lookup;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -17,15 +19,16 @@ import org.jgll.util.hashing.OpenAddressingHashSet;
 
 /**
  * 
+ * Provides lookup functionality for the level-based processing of the input
+ * in a GLL parser. 
+ * 
+ * 
  * @author Ali Afroozeh
  *
  */
-@SuppressWarnings("unchecked")
 public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 
 	private int currentLevel;
-	
-	private Map<SPPFNode, SPPFNode>[] levels;
 	
 	private int countNonPackedNodes;
 
@@ -33,9 +36,15 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private Set<Descriptor>[] u;
+	private Set<Descriptor> u;
 	
-	private Queue<Descriptor>[] r;
+	private Map<SPPFNode, SPPFNode> currentLevelNonPackedNodes;
+	
+	private Map<SPPFNode, SPPFNode>[] forwardNonPackedNodes;
+	
+	private List<Descriptor>[] forwardDescriptors;
+	
+	private Queue<Descriptor> r;
 	
 	/**
 	 * The number of descriptors waiting to be processed.
@@ -47,70 +56,80 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	 */
 	private int all;
 	
+	@SuppressWarnings("unchecked")
 	public LevelSynchronizedLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		this.longestTerminalChain = grammar.getLongestTerminalChain();
-		levels = new Map[longestTerminalChain + 1];
-		
-		for(int i = 0; i < longestTerminalChain + 1; i++) {
-			levels[i] = new HashMap<>();
-		}
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new OpenAddressingHashSet[longestTerminalChain + 1];
-		r = new Queue[longestTerminalChain + 1];
+		u = new OpenAddressingHashSet<>();
+		r = new ArrayDeque<>();
 		
-		for(int i = 0; i < longestTerminalChain + 1; i++) {
-			r[i] = new ArrayDeque<>();
-		}
+		forwardDescriptors = new List[longestTerminalChain];
 		
-		u[0] = new OpenAddressingHashSet<>(grammar.getMaxDescriptorsAtInput());
+		currentLevelNonPackedNodes = new HashMap<>();
+		forwardNonPackedNodes = new HashMap[longestTerminalChain];
 	}
 	
-	private int sum(int index) {
-		int sum = 0;
-		for(int i = 0; i < u.length; i++) {
-			if(i == index || u[i] == null) {
-				continue;
-			}
-			sum += u[i].size();
+	private void gotoNextLevel() {
+		u = new OpenAddressingHashSet<>(getSize(currentLevel, u));
+		List<Descriptor> list = forwardDescriptors[indexFor(currentLevel + 1)];
+		for(Descriptor d : list) {
+			u.add(d);
+			r.add(d);
 		}
-		return sum;
-	}
-	
-	private void nextLevel() {
-		levels[indexFor(currentLevel)] = new HashMap<>();
+		list.clear();
+
+		currentLevelNonPackedNodes = forwardNonPackedNodes[indexFor(currentLevel + 1)];
+		if(currentLevelNonPackedNodes == null) {
+			currentLevelNonPackedNodes = new HashMap<>();
+		}
+		forwardNonPackedNodes[indexFor(currentLevel + 1)] = new HashMap<>();
+		
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
+
+		currentLevel++;
 	}
 	
 	private int indexFor(int inputIndex) {
-		return inputIndex % (longestTerminalChain + 1);
-	}
-	
-	private int previousIndex(int inputIndex) {
-		int index = indexFor(inputIndex);
-		if(index == -1) {
-			index = longestTerminalChain;
-		}
-		return index;
+		return inputIndex % longestTerminalChain;
 	}
 	
 	@Override
 	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-
-		SPPFNode key = createNonPackedNode(slot, leftExtent, rightExtent);		
-		int index = indexFor(rightExtent);
-			SPPFNode value = levels[index].get(key);
+		
+		SPPFNode key = createNonPackedNode(slot, leftExtent, rightExtent);
+		
+		if(rightExtent == currentLevel) {
+			SPPFNode value = currentLevelNonPackedNodes.get(key);
 			if(value == null) {
 				value = key;
-				levels[index].put(key, value);
+				currentLevelNonPackedNodes.put(key, value);
 				countNonPackedNodes++;
-			}			
+			}
 			return value;
+		} else {
+			int index = indexFor(rightExtent);
+			
+			if(forwardNonPackedNodes[index] == null) {
+				forwardNonPackedNodes[index] = new HashMap<>();
+				forwardNonPackedNodes[index].put(key, key);
+				countNonPackedNodes++;
+				return key;
+			} 
+			
+			SPPFNode value = forwardNonPackedNodes[index].get(key);
+			if(value == null) {
+				value = key;
+				forwardNonPackedNodes[index].put(key, value);
+				countNonPackedNodes++;
+			}
+			return value;
+		}
 	}
-	
+		
 	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
@@ -140,11 +159,17 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
-		int index = indexFor(inputSize - 1); 
-		if(levels[index] == null) {
-			return null;
+		Map<SPPFNode, SPPFNode> map;
+		if(currentLevel == inputSize - 1) {
+			map = currentLevelNonPackedNodes;
+		} else {
+			int index = indexFor(inputSize - 1); 
+			if(forwardNonPackedNodes[index] == null) {
+				return null;
+			}
+			map = forwardNonPackedNodes[index];
 		}
-		return (NonterminalSymbolNode) levels[index].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
+		return (NonterminalSymbolNode) map.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 
 	@Override
@@ -159,41 +184,46 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 
 	@Override
 	public Descriptor nextDescriptor() {
-		int index = indexFor(currentLevel); 
-		if(!r[index].isEmpty()) {
+		if(!r.isEmpty()) {
 			size--;
-			return r[index].remove();
+			return r.remove();
 		} else {
-			u[index] = new OpenAddressingHashSet<>(getSize(index));
-			nextLevel();
-			currentLevel++;
+			gotoNextLevel();
 			return nextDescriptor();
 		}
 	}
 	
-	private int getSize(int index) {
-		int size = sum(index) + (u[previousIndex(currentLevel)] == null ? 1 : u[previousIndex(currentLevel)].size()) * grammar.getMaxDescriptorsAtInput();
-		System.out.println(currentLevel + ", " + size);
+	private int getSize(int inputIndex, Set<Descriptor> previous) {
+		int index = indexFor(inputIndex);
+		int size = forwardDescriptors[index].size() + previous.size() * grammar.getMaxDescriptorsAtInput();
 		return size;
 	}
 
 	@Override
 	public boolean addDescriptor(Descriptor descriptor) {
-		int index = indexFor(descriptor.getInputIndex());
-		
-		if(u[index] == null) {
-			u[index] = new OpenAddressingHashSet<>(getSize(0));
+		int inputIndex = descriptor.getInputIndex();
+		if(inputIndex == currentLevel) {
+			if(!u.contains(descriptor)) {
+				 r.add(descriptor);
+				 u.add(descriptor);
+				 size++;
+				 all++;
+			} else {
+				return false;
+			}
 		}
 		
-		if(! u[index].contains(descriptor)) {
-			 r[index].add(descriptor);
-			 u[index].add(descriptor);
-			 size++;
-			 all++;
-			 return true;
+		else {
+			int index = indexFor(descriptor.getInputIndex());
+			if(forwardDescriptors[index] == null) {
+				forwardDescriptors[index] = new ArrayList<>();
+			}
+			forwardDescriptors[index].add(descriptor);
+			size++;
+			all++;
 		}
 		
-		return false;
+		return true;
 	}
 
 	@Override
