@@ -156,8 +156,9 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * }
 	 */
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
-		boolean result = lookupTable.addDescriptor(label, inputIndex, u, w);
-		log.trace("Descriptor added: (%s, %s, %s, %s) : %b", label, u, inputIndex, w, result);
+		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
+		boolean result = lookupTable.addDescriptor(descriptor);
+		log.trace("Descriptor created: %s : %b", descriptor, result);
 	}
 	
 	

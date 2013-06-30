@@ -2,14 +2,15 @@ package org.jgll.lookup;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -32,7 +33,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private Map<Integer, Map<Integer, Map<Integer, Integer>>>[] u;
+	private Set<Descriptor>[] u;
 	
 	private Queue<Descriptor>[] r;
 	
@@ -57,14 +58,13 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new HashMap[longestTerminalChain + 1];
+		u = new Set[longestTerminalChain + 1];
 		r = new Queue[longestTerminalChain + 1];
 		
 		for(int i = 0; i < longestTerminalChain + 1; i++) {
-			u[i] = new HashMap<>();
+			u[i] = new HashSet<>();
 			r[i] = new ArrayDeque<>();
 		}
-
 	}
 	
 	private void nextLevel() {
@@ -144,7 +144,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			size--;
 			return r[index].remove();
 		} else {
-			u[index] = new HashMap<>();
+			u[index] = new HashSet<>();
 			nextLevel();
 			currentLevel++;
 			return nextDescriptor();
@@ -152,66 +152,23 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 
 	@Override
-	public boolean addDescriptor(GrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {
-		int index = indexFor(inputIndex);
-
-		if(!get(u[index], slot, gssNode, sppfNode)) {
-			 r[index].add(new Descriptor(slot, gssNode, inputIndex, sppfNode));
-			 put(u[index], slot, gssNode, sppfNode);
+	public boolean addDescriptor(Descriptor descriptor) {
+		int index = indexFor(descriptor.getInputIndex());
+		
+		if(! u[index].contains(descriptor)) {
+			 r[index].add(descriptor);
+			 u[index].add(descriptor);
 			 size++;
 			 all++;
-			 return true;			
+			 return true;
 		}
+		
 		return false;
-	}
-	
-	
-	private boolean get(Map<Integer, Map<Integer, Map<Integer, Integer>>> map, GrammarSlot slot, 
-	 					GSSNode gssNode, SPPFNode sppfNode) {
-		
-		Map<Integer, Map<Integer, Integer>> map2 = map.get(gssNode.getInputIndex());
-		
-		if(map2 == null) {
-			return false;
-		}
-		
-		Map<Integer, Integer> map3 = map2.get(slot.getId());
-		if(map3 == null) {
-			return false;
-		}
-		
-		Integer i = map3.get(gssNode.getGrammarSlot().getId());
-		if(i == null) {
-			return false;
-		}
-		
-		return i.equals(sppfNode.getGrammarSlot().getId());
-	 }
-	
-	
-	private void put(Map<Integer, Map<Integer, Map<Integer, Integer>>> map, GrammarSlot slot, 
-					 GSSNode gssNode, SPPFNode sppfNode) {
-		Map<Integer, Map<Integer, Integer>> map2 = map.get(gssNode.getInputIndex());
-		if(map2 == null) {
-			map2 = new HashMap<>();
-			Map<Integer, Integer> map3 = new HashMap<>();
-			map3.put(gssNode.getGrammarSlot().getId(), sppfNode.getGrammarSlot().getId());
-			map2.put(slot.getId(), map3);
-		}
-		
-		Map<Integer, Integer> map3 = map2.get(slot.getId());
-		if(map3 == null) {
-			map3 = new HashMap<>();
-		}
-		
-		map3.put(gssNode.getGrammarSlot().getId(), sppfNode.getGrammarSlot().getId());
-		map2.put(slot.getId(), map3);
-		map.put(gssNode.getInputIndex(), map2);
 	}
 
 	@Override
 	public int getDescriptorsCount() {
 		return all;
 	}
-	
+
 }
