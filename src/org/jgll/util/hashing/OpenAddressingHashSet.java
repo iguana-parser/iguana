@@ -14,7 +14,7 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 	
 	private int size;
 	
-//	private int threshold;
+	private int threshold;
 	
 	private float loadFactor;
 	
@@ -45,9 +45,6 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 	public OpenAddressingHashSet(int initialCapacity, float loadFactor) {
 		this.loadFactor = loadFactor;
 
-		initialCapacity = Math.max(4, initialCapacity);
-		initialCapacity /= loadFactor;
-		
 		capacity = 1;
         while (capacity < initialCapacity) {
             capacity <<= 1;
@@ -56,7 +53,7 @@ public class OpenAddressingHashSet<E> implements Set<E> {
         
 		bitMask = capacity - 1;
 		
-//		threshold = (int) (loadFactor * capacity);
+		threshold = (int) (loadFactor * capacity);
 		table = new Object[capacity];
 	}
 	
@@ -80,9 +77,9 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 			if(table[i] == null) {
 				table[i] = key;
 				size++;
-//				if (size >= threshold) {
-//					rehash();
-//				}
+				if (size >= threshold) {
+					rehash();
+				}
 				return true;
 			}
 			
@@ -97,46 +94,38 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 	
 	
 	private void rehash() {
-		throw new IllegalStateException();
-//		capacity <<= 1;
-//		p += 1;
-//		bitMask = capacity - 1;
-//		
-//		Object[] newTable = new Object[capacity];
-//		
-//		label:
-//		for(Object key : table) {
-//			if(key != null) {
-//				
-//				int j = indexFor(key.hashCode());
-//
-//				do {
-//					if(newTable[j] == null) {
-//						newTable[j] = key;
-//						continue label;
-//					}
-//					
-//					j = next(j);
-//				} while(true);
-//			}
-//		}
-//		table = newTable;
-//		
-//		threshold = (int) (loadFactor * capacity);
-//		rehashCount++;
+		capacity <<= 1;
+		p += 1;
+		bitMask = capacity - 1;
+		
+		Object[] newTable = new Object[capacity];
+		
+		label:
+		for(Object key : table) {
+			if(key != null) {
+				
+				int i = indexFor(key.hashCode());
+
+				do {
+					if(newTable[i] == null) {
+						newTable[i] = key;
+						continue label;
+					}
+					
+					i = (i + 1) & bitMask;
+				} while(true);
+			}
+		}
+		table = newTable;
+		
+		threshold = (int) (loadFactor * capacity);
+		rehashCount++;
 	}
 	
 	private int indexFor(int hash) {
 		return  hash & bitMask;		
 	}
 		
-	private int next(int j) {
-		if(j == 0) {
-			return capacity - 1;
-		}
-		return j - 1;
-	}
-
 	public int getRehashCount() {
 		return rehashCount;
 	}

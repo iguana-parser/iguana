@@ -166,29 +166,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return false;
 	}
 
-	/**
-	 * Calculates the number of descriptors created from any input index.
-	 * For left-recursive alternates (1 + the number of alternates 
-	 * in this head) descriptors are created.
-	 */
-	public int getNumberOfDescriptors() {
-		int num = 0;
-		for(Alternate alt : alternates) {
-			// Left-recursive case
-			if(alt.getSymbolAt(0).equals(this.getNonterminal())) {
-				num += alternates.size() + 1;
-			}
-//			else if(alt.getSymbolAt(0).isNonterminal()) {
-//				NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) alt.getBodyGrammarSlotAt(0);
-//				num += ntSlot.getNonterminal().getNumberOfDescriptors() + 1;
-//			} 
-			else {	
-				num++;
-			}
-		}
-		return num;
-	}
-	
 	@Override
 	public String toString() {
 		return nonterminal.toString();

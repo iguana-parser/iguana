@@ -5,6 +5,16 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
 
+/**
+ * 
+ * A* ::= A* A
+ *      | A
+ *      
+ * A ::= a
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class EBNFTest extends AbstractGrammarTest {
 
 	@Override

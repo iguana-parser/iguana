@@ -35,12 +35,12 @@ public class Gamma2Test extends AbstractGrammarTest {
 		return builder.build();
 	}
 	
-//	@Test
+	@Test
 	public void testLongestTerminalChain() {
 		assertEquals(1, grammar.getLongestTerminalChain());
 	}
 		
-//	@Test
+	@Test
 	public void parse() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbb"), grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbb"), grammar, "S");
