@@ -71,7 +71,7 @@ public class Grammar implements Serializable {
 		log.info("Grammar slots: %d", slots.size());
 		log.info("Longest Terminal Chain: %d", longestTerminalChain);
 		log.info("Maximum number of alternates: %d", maximumNumAlternates);
-		log.info("Maximum descriptors created at each input position: ", maxDescriptorsAtInput);
+		log.info("Maximum descriptors created at each input position: %d", maxDescriptorsAtInput);
 	}
 	
 	private int numProductions() {

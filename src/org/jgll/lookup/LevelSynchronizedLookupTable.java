@@ -73,7 +73,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	private void gotoNextLevel() {
-		u = new OpenAddressingHashSet<>(getSize(currentLevel, u));
+		u = new OpenAddressingHashSet<>(getSize(u));
 		List<Descriptor> list = forwardDescriptors[indexFor(currentLevel + 1)];
 		for(Descriptor d : list) {
 			u.add(d);
@@ -193,9 +193,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		}
 	}
 	
-	private int getSize(int inputIndex, Set<Descriptor> previous) {
-		int index = indexFor(inputIndex);
-		int size = forwardDescriptors[index].size() + previous.size() * grammar.getMaxDescriptorsAtInput();
+	private int getSize(Set<Descriptor> previous) {
+		int size = previous.size() + previous.size() * grammar.getMaxDescriptorsAtInput();
 		return size;
 	}
 

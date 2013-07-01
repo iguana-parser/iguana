@@ -34,12 +34,15 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private final Set<Terminal> followSet;
 	
+	private final Set<HeadGrammarSlot> reachableNonterminals;
+	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		super(nonterminal.getName());
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();
 		this.followSet = new HashSet<>();
+		this.reachableNonterminals = new HashSet<>();
 	}
 	
 	public void addAlternate(Alternate alternate) {		
@@ -150,6 +153,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return alternates.size();
 	}
 	
+	public Set<HeadGrammarSlot> getReachableNonterminals() {
+		return reachableNonterminals;
+	}
+	
 	public boolean contains(List<Symbol> list) {
 		for(Alternate alternate : alternates) {
 			if(alternate.match(list)) {
@@ -170,8 +177,12 @@ public class HeadGrammarSlot extends GrammarSlot {
 			// Left-recursive case
 			if(alt.getSymbolAt(0).equals(this.getNonterminal())) {
 				num += alternates.size() + 1;
-			} 
-			else {
+			}
+//			else if(alt.getSymbolAt(0).isNonterminal()) {
+//				NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) alt.getBodyGrammarSlotAt(0);
+//				num += ntSlot.getNonterminal().getNumberOfDescriptors() + 1;
+//			} 
+			else {	
 				num++;
 			}
 		}

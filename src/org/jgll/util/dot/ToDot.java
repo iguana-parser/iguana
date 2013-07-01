@@ -1,5 +1,6 @@
 package org.jgll.util.dot;
 
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -8,6 +9,7 @@ import org.jgll.sppf.TerminalSymbolNode;
 public abstract class ToDot {
 	
 	protected String getId(SPPFNode node) {
+		
 		if(node instanceof TerminalSymbolNode) {
 			return getId((TerminalSymbolNode)node);
 		} 
@@ -17,8 +19,10 @@ public abstract class ToDot {
 		else if(node instanceof PackedNode) {
 			return getId((PackedNode)node);
 		}
-		
-		throw new RuntimeException("node not matched.");
+		else if(node instanceof DummyNode) {
+			return "-1";
+		}
+		throw new RuntimeException("Node of type " +  node.getClass() + " could not be matched.");
 	}
 	
 	protected String getId(TerminalSymbolNode t) {

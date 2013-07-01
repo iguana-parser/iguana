@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.AbstractGLLParser;
 import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.RecursiveDescentParser;
 import org.jgll.sppf.SPPFNode;
@@ -19,8 +19,8 @@ import org.junit.Before;
 public abstract class AbstractGrammarTest {
 
 	protected Grammar grammar;
-	protected GLLParser rdParser;
-	protected GLLParser levelParser;
+	protected AbstractGLLParser rdParser;
+	protected AbstractGLLParser levelParser;
 	protected String outputDir;
 	
 	@Before
