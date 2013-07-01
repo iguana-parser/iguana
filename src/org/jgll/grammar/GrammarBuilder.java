@@ -373,14 +373,54 @@ public class GrammarBuilder implements Serializable {
 		this.maximumNumAlternates = max;
 	}
 
+	/**
+	 * 
+	 * Calculates an under approximation of the maximum number of descriptors
+	 * that can be created by a nonterminal head. To calculate the actual value
+	 * we need to know how many reachable nonterminals are there. Now, because
+	 * we use a hash set, only one of them is counted.
+	 * This under approximation won't matter as we use the maximum value for
+	 * all created hash maps and in some case a lower value may be closer
+	 * to the reality for nonterminals having fewer alternates.
+	 * 
+	 * Note:
+	 * To have an exact value for hash sets, we need to run an LR-like table along to 
+	 * keep the aggregate of all the states, otherwise it is very expensive to
+	 * dynamically calculate the exact number of expected descriptors at each point.
+	 * 
+	 */
 	private void calculateMaxDescriptors() {
 		int max = 0;
 		for (HeadGrammarSlot head : nonterminals) {
-			if (head.getReachableNonterminals().size() > max) {
-				max = head.getReachableNonterminals().size();
+			
+			int num = head.getCountAlternates();
+			Set<HeadGrammarSlot> directReachableNonterminals = getDirectReachableNonterminals(head);
+			for(HeadGrammarSlot nt : directReachableNonterminals) {
+				num += nt.getCountAlternates();
+			}
+			
+			Set<HeadGrammarSlot> indirectReachableNonterminals = new HashSet<>(head.getReachableNonterminals());
+			indirectReachableNonterminals.remove(directReachableNonterminals);
+			
+			for(HeadGrammarSlot nt : indirectReachableNonterminals) {
+				num+= nt.getCountAlternates();
+			}
+			
+			if (num > max) {
+				max = num;
 			}
 		}
 		this.maxDescriptors = max;
+	}
+	
+	private Set<HeadGrammarSlot> getDirectReachableNonterminals(HeadGrammarSlot head) {
+		Set<HeadGrammarSlot> set = new HashSet<>();
+		for(Alternate alt : head.getAlternates()) {
+			if(alt.getBodyGrammarSlotAt(0).isNonterminalSlot()) {
+				set.add(((NonterminalGrammarSlot)alt.getBodyGrammarSlotAt(0)).getNonterminal());
+			}
+		}
+		return set;
 	}
 
 	private void calculateFirstSets() {
@@ -882,7 +922,7 @@ public class GrammarBuilder implements Serializable {
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
-			set.add(nonterminalGrammarSlot.getNonterminal());
+			changed = set.add(nonterminalGrammarSlot.getNonterminal()) || changed;
 			changed = set.addAll(nonterminalGrammarSlot.getNonterminal().getReachableNonterminals()) || changed;
 			if (nonterminalGrammarSlot.getNonterminal().isNullable()) {
 				return calculateReachabilityGraph(set, currentSlot.next, changed) || changed;
