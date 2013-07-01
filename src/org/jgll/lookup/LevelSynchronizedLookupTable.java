@@ -16,6 +16,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.OpenAddressingHashSet;
+import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 
@@ -27,6 +28,8 @@ import org.jgll.util.hashing.OpenAddressingHashSet;
  *
  */
 public class LevelSynchronizedLookupTable extends AbstractLookupTable {
+	
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelSynchronizedLookupTable.class);
 
 	private int currentLevel;
 	
@@ -73,6 +76,10 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	private void gotoNextLevel() {
+		log.info("Size: %-10d Initial Capacity: %-10d Rehash Count: %-5d",
+				((OpenAddressingHashSet<Descriptor>) u).size(), 
+				((OpenAddressingHashSet<Descriptor>) u).getInitialCapacity(),
+				((OpenAddressingHashSet<Descriptor>) u).getRehashCount());		
 		u = new OpenAddressingHashSet<>(getSize(u));
 		List<Descriptor> list = forwardDescriptors[indexFor(currentLevel + 1)];
 		for(Descriptor d : list) {

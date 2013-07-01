@@ -28,7 +28,7 @@ import org.jgll.util.logging.LoggerWrapper;
  * 
  */
 public abstract class AbstractGLLParser implements GLLParser {
-	
+		
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParser.class);
 	
 	protected static final GSSNode u0 = GSSNode.U0;
@@ -64,7 +64,6 @@ public abstract class AbstractGLLParser implements GLLParser {
 	
 	protected GSSNode errorGSSNode;
 	
-
 	/**
 	 * Parses the given input string. If the parsing of the input was successful,
 	 * the root of SPPF is returned.

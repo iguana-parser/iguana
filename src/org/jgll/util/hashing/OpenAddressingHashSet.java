@@ -8,7 +8,9 @@ import java.util.Set;
 public class OpenAddressingHashSet<E> implements Set<E> {
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 32;
-	private static final float DEFAULT_LOAD_FACTOR = 0.5f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+	
+	private int initialCapacity;
 	
 	private int capacity;
 	
@@ -43,6 +45,7 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 	}
 	
 	public OpenAddressingHashSet(int initialCapacity, float loadFactor) {
+		this.initialCapacity = initialCapacity;
 		this.loadFactor = loadFactor;
 
 		capacity = 1;
@@ -130,6 +133,10 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 		return rehashCount;
 	}
 	
+	public int getInitialCapacity() {
+		return initialCapacity;
+	}
+	
 	@Override
 	public int size() {
 		return size;
@@ -182,6 +189,7 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 
 	@Override
 	public void clear() {
+		throw new UnsupportedOperationException();
 	}
 
 }

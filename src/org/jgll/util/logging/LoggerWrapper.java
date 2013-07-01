@@ -1,5 +1,6 @@
 package org.jgll.util.logging;
 
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +17,11 @@ public class LoggerWrapper {
 	
 	private LoggerWrapper(Logger logger) {
 		this.logger = logger;
+		logger.setUseParentHandlers(false);
+		logger.setLevel(Level.INFO);
+		ConsoleHandler handler = new ConsoleHandler();
+		handler.setFormatter(new ParserLogFormatter());
+		logger.addHandler(handler);
 	}
 
 	public static <T> LoggerWrapper getLogger(Class<T> clazz) {
@@ -47,7 +53,6 @@ public class LoggerWrapper {
 	}
 	
 	public void trace(String s, Object...args) {
-//		logger.info(String.format(s, args));
 		if(logger.isLoggable(Level.FINEST)) {
 			logger.finest(String.format(s, args));
 		}
