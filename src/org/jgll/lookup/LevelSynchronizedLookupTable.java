@@ -15,7 +15,7 @@ import org.jgll.parser.Descriptor;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.util.hashing.OpenAddressingHashSet;
+import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -39,7 +39,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private Set<Descriptor> u;
+	private CuckooHashSet u;
 	
 	private Map<SPPFNode, SPPFNode> currentLevelNonPackedNodes;
 	
@@ -66,7 +66,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new OpenAddressingHashSet<>();
+		u = new CuckooHashSet();
 		r = new ArrayDeque<>();
 		
 		forwardDescriptors = new List[longestTerminalChain];
@@ -76,11 +76,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	private void gotoNextLevel() {
-		log.info("Size: %-10d Initial Capacity: %-10d Rehash Count: %-5d",
-				((OpenAddressingHashSet<Descriptor>) u).size(), 
-				((OpenAddressingHashSet<Descriptor>) u).getInitialCapacity(),
-				((OpenAddressingHashSet<Descriptor>) u).getRehashCount());		
-		u = new OpenAddressingHashSet<>(getSize(u));
+		u = new CuckooHashSet();
 		List<Descriptor> list = forwardDescriptors[indexFor(currentLevel + 1)];
 		for(Descriptor d : list) {
 			u.add(d);

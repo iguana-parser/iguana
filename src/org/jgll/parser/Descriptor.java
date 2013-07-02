@@ -2,10 +2,8 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
-
-import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hashing;
+import org.jgll.util.hashing.HashFunction;
+import org.jgll.util.hashing.HashKey;
 
 /**
  * A {@code Descriptor} is used by the GLL parser to keep track of the 
@@ -26,7 +24,7 @@ import com.google.common.hash.Hashing;
  * 
  */
 
-public class Descriptor {
+public class Descriptor implements HashKey {
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -50,8 +48,6 @@ public class Descriptor {
 	 */
 	private final SPPFNode sppfNode;
 	
-	private final int hash;
-	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
@@ -61,17 +57,7 @@ public class Descriptor {
 		this.slot = slot;
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
-		this.sppfNode = sppfNode;
-		
-		HashFunction hf = Hashing.murmur3_32();
-		HashCode code = hf.newHasher()
-						  .putInt(slot.getId())
-						  .putInt(inputIndex)
-						  .putInt(sppfNode.getGrammarSlot().getId())
-						  .putInt(sppfNode.getLeftExtent())
-						  .putInt(gssNode.getGrammarSlot().getId()).hash();
-		
-		hash = code.asInt();
+		this.sppfNode = sppfNode;		
 	}
 	
 	public GrammarSlot getGrammarSlot() {
@@ -92,7 +78,13 @@ public class Descriptor {
 	
 	@Override
 	public int hashCode() {
-		return hash;
+		int result = 17;
+		result += 31 * result + slot.getId();
+		result += 31 * result + sppfNode.getGrammarSlot().getId();
+		result += 31 * result + gssNode.getInputIndex();
+		result += 31 * result + gssNode.getGrammarSlot().getId();
+		result += 31 * result + inputIndex;
+		return result;
 	}
 	
 	@Override
@@ -113,17 +105,21 @@ public class Descriptor {
 		 *	(L1,j,i) and u has the form (L2,j), in fact a descriptor could be
 		 *	presented as (L, i, j, L2, L1).
 		 */
-		return hash == other.hash &&
-			   slot == other.slot &&
-			   inputIndex == other.getInputIndex() &&
+		return slot == other.slot &&
 			   sppfNode.getGrammarSlot() == other.sppfNode.getGrammarSlot() &&
-			   sppfNode.getLeftExtent() == other.sppfNode.getLeftExtent() &&	
-			   gssNode.getGrammarSlot() == other.gssNode.getGrammarSlot();
+			   gssNode.getInputIndex() == other.gssNode.getInputIndex() &&	
+			   gssNode.getGrammarSlot() == other.gssNode.getGrammarSlot() &&
+			   inputIndex == other.getInputIndex();
 	}
 	
 	@Override
 	public String toString() {
 		return "(" + slot + ", " + inputIndex + ", " + gssNode.getGrammarSlot() + ", " + sppfNode + ")";
+	}
+
+	@Override
+	public int hash(HashFunction function) {
+		return function.hash(slot.getId(), sppfNode.getGrammarSlot().getId(), gssNode.getInputIndex(), gssNode.getGrammarSlot().getId());
 	}
 	
 }

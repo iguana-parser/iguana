@@ -115,7 +115,6 @@ public class CuckooHashSet {
 			table2[index] = key;
 			key = tmp;
 		}
-		System.out.println("WTF?");
 		return false;
 	}
 	

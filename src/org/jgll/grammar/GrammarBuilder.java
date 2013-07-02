@@ -13,8 +13,6 @@ import org.jgll.parser.GLLParser;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
-import com.google.common.collect.Multiset;
-
 public class GrammarBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -44,7 +42,7 @@ public class GrammarBuilder implements Serializable {
 
 	private Set<Filter> oneLevelOnlyFilters;
 
-	Map<HeadGrammarSlot, Multiset<HeadGrammarSlot>> reachabilityGraph;
+	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 
 	public GrammarBuilder(String name) {
 		this.name = name;
