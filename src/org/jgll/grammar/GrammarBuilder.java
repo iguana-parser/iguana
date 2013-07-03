@@ -30,6 +30,10 @@ public class GrammarBuilder implements Serializable {
 	int maximumNumAlternates;
 
 	int maxDescriptors;
+	
+	int averageDescriptors;
+	
+	double stDevDescriptors;
 
 	String name;
 
@@ -303,7 +307,7 @@ public class GrammarBuilder implements Serializable {
 		setTestSets();
 		setIds();
 		calculateReachabilityGraph();
-		calculateMaxDescriptors();
+		calculateExpectedDescriptors();
 	}
 
 	private static String grammarSlotToString(Nonterminal head, List<Symbol> body, int index) {
@@ -387,8 +391,10 @@ public class GrammarBuilder implements Serializable {
 	 * dynamically calculate the exact number of expected descriptors at each point.
 	 * 
 	 */
-	private void calculateMaxDescriptors() {
-		int max = 0;
+	private void calculateExpectedDescriptors() {
+		
+		List<Integer> expectedDescriptors = new ArrayList<>();
+		
 		for (HeadGrammarSlot head : nonterminals) {
 			
 			int num = head.getCountAlternates();
@@ -403,12 +409,26 @@ public class GrammarBuilder implements Serializable {
 			for(HeadGrammarSlot nt : indirectReachableNonterminals) {
 				num+= nt.getCountAlternates();
 			}
-			
-			if (num > max) {
-				max = num;
+			expectedDescriptors.add(num);
+		}
+		
+		averageDescriptors = 0;
+		maxDescriptors = 0;
+		for(int i : expectedDescriptors) {
+			averageDescriptors += i;
+			if(i > maxDescriptors) {
+				maxDescriptors = i;
 			}
 		}
-		this.maxDescriptors = max;
+		
+		averageDescriptors /= expectedDescriptors.size();
+		
+		stDevDescriptors = 0;
+		for(int i : expectedDescriptors) {
+			stDevDescriptors += Math.sqrt(Math.abs(i - averageDescriptors));
+		}
+		
+		stDevDescriptors /= expectedDescriptors.size();
 	}
 	
 	private Set<HeadGrammarSlot> getDirectReachableNonterminals(HeadGrammarSlot head) {
@@ -451,8 +471,7 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		else if (currentSlot instanceof TerminalGrammarSlot) {
-			return set.add(((TerminalGrammarSlot) currentSlot).getTerminal())
-					|| changed;
+			return set.add(((TerminalGrammarSlot) currentSlot).getTerminal()) || changed;
 		}
 
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
@@ -478,8 +497,7 @@ public class GrammarBuilder implements Serializable {
 			}
 
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-			return ntGrammarSlot.getNonterminal().isNullable()
-					&& isChainNullable(ntGrammarSlot.next);
+			return ntGrammarSlot.getNonterminal().isNullable() && isChainNullable(ntGrammarSlot.next);
 		}
 
 		return true;
@@ -671,8 +689,7 @@ public class GrammarBuilder implements Serializable {
 
 				if (alt.match(filter.getParent())) {
 
-					HeadGrammarSlot filteredNonterminal = alt
-							.getNonterminalAt(filter.getPosition());
+					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 
 					// Indirect filtering
 					if (!filter.isDirect()) {
@@ -703,8 +720,8 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	private HeadGrammarSlot rewrite(Alternate alt, int position,
-			List<Symbol> filteredAlternate) {
+	private HeadGrammarSlot rewrite(Alternate alt, int position, List<Symbol> filteredAlternate) {
+		
 		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
 		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 		alt.setNonterminalAt(position, newNonterminal);
@@ -906,7 +923,6 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 	}
-
 
 	private boolean calculateReachabilityGraph(Set<HeadGrammarSlot> set, BodyGrammarSlot currentSlot, boolean changed) {
 		if (currentSlot instanceof EpsilonGrammarSlot) {

@@ -44,6 +44,10 @@ public class Grammar implements Serializable {
 	
 	private int maxDescriptorsAtInput;
 	
+	private int averageDescriptorsAtInput;
+	
+	private int stDevDescriptors;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
@@ -60,18 +64,22 @@ public class Grammar implements Serializable {
 		this.longestTerminalChain = builder.longestTerminalChain;
 		this.maximumNumAlternates = builder.maximumNumAlternates;
 		this.maxDescriptorsAtInput = builder.maxDescriptors;
+		this.averageDescriptorsAtInput = builder.averageDescriptors;
+		this.stDevDescriptors = (int) builder.stDevDescriptors;
 		
 		printGrammarStatistics();
 	}
 
 	public void printGrammarStatistics() {
-		log.info("Grammar Information:");
+		log.info("Grammar information:");
 		log.info("Nonterminals: %d", nonterminals.size());
 		log.info("Production rules: %d", numProductions());
 		log.info("Grammar slots: %d", slots.size());
-		log.info("Longest Terminal Chain: %d", longestTerminalChain);
-		log.info("Maximum number of alternates: %d", maximumNumAlternates);
-		log.info("Maximum descriptors created at each input position: %d", maxDescriptorsAtInput);
+		log.info("Longest terminal Chain: %d", longestTerminalChain);
+		log.info("Maximum number: %d", maximumNumAlternates);
+		log.info("Maximum descriptors: %d", maxDescriptorsAtInput);
+		log.info("Average descriptors: %d", averageDescriptorsAtInput);
+		log.info("Standard Deviation descriptors: %d", stDevDescriptors);
 	}
 	
 	private int numProductions() {
@@ -85,8 +93,7 @@ public class Grammar implements Serializable {
 	public void code(Writer writer, String packageName) throws IOException {
 	
 		String header = Input.read(this.getClass().getResourceAsStream("ParserTemplate"));
-		header = header.replace("${className}", name)
-					   .replace("${packageName}", packageName);
+		header = header.replace("${className}", name).replace("${packageName}", packageName);
 		writer.append(header);
 		
 		// case L0:
@@ -156,6 +163,14 @@ public class Grammar implements Serializable {
 	
 	public int getMaxDescriptorsAtInput() {
 		return maxDescriptorsAtInput;
+	}
+	
+	public int getAverageDescriptorsAtInput() {
+		return averageDescriptorsAtInput;
+	}
+	
+	public int getStDevDescriptors() {
+		return stDevDescriptors;
 	}
 	
 	@Override

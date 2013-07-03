@@ -74,10 +74,7 @@ public class CuckooHashSet {
 		
 		hashFunction = new MurmurHash3();
 		
-		maxB = 1;
-		for(int i = 0; i < (32 - p); i++) {
-			maxB <<= 1;
-		}
+		maxB = 1 << (32 - p);
 		
 		maxA = Integer.MAX_VALUE >> 1;
 		

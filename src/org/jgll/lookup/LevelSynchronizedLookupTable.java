@@ -66,7 +66,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new CuckooHashSet();
+		u = new CuckooHashSet(2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors()));
 		r = new ArrayDeque<>();
 		
 		forwardDescriptors = new List[longestTerminalChain];
@@ -76,7 +76,12 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	private void gotoNextLevel() {
-		u = new CuckooHashSet();
+		log.trace("Initial Size: %d", u.getInitialCapacity());
+		log.trace("Size: %d", u.size());
+		log.trace("Rehash count: %d", u.getRehashCount());
+		log.trace("Enlarge count: %d", u.getGrowCount());
+		
+		u = new CuckooHashSet(getSize(u));
 		List<Descriptor> list = forwardDescriptors[indexFor(currentLevel + 1)];
 		
 		if(list == null) {
@@ -201,8 +206,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		}
 	}
 	
-	private int getSize(Set<Descriptor> previous) {
-		int size = previous.size() + previous.size() * grammar.getMaxDescriptorsAtInput();
+	private int getSize(CuckooHashSet previous) {
+		int size = previous.size() + previous.size() * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors());
 		return size;
 	}
 
