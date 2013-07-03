@@ -38,6 +38,115 @@ public class MurmurHash3 implements HashFunction {
 		
 		return h;
 	}
+	
+	@Override
+	public int hash(int a) {
+		int h = seed;
+
+		int k = a;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		// finalizing
+		h ^= 4;
+
+		h ^= h >>> 16;
+		h *= 0x85ebca6b;
+		h ^= h >>> 13;
+		h *= 0xc2b2ae35;
+		h ^= h >>> 16;
+
+		return h;
+	}
+
+	@Override
+	public int hash(int a, int b) {
+		int h = seed;
+
+		int k = a;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		k = b;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		// finalizing
+		h ^= 4;
+
+		h ^= h >>> 16;
+		h *= 0x85ebca6b;
+		h ^= h >>> 13;
+		h *= 0xc2b2ae35;
+		h ^= h >>> 16;
+		
+		return h;
+	}
+
+	@Override
+	public int hash(int a, int b, int c) {
+		int h = seed;
+
+		int k = a;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		k = b;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		k = c;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		// finalizing
+		h ^= 4;
+
+		h ^= h >>> 16;
+		h *= 0x85ebca6b;
+		h ^= h >>> 13;
+		h *= 0xc2b2ae35;
+		h ^= h >>> 16;
+
+		return h;
+	}
+	
+	public int hash(int a, int b, int c, int d, int e) {
+
+		int h = seed;
+
+		int k = a;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		k = b;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		k = c;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		k = d;
+		k = mixK(k);
+		h = mixH(h, k);
+		
+		k = e;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		// finalizing
+		h ^= 4;
+
+		h ^= h >>> 16;
+		h *= 0x85ebca6b;
+		h ^= h >>> 13;
+		h *= 0xc2b2ae35;
+		h ^= h >>> 16;
+
+		return h;
+	}
+
 
 	public int hash(int a, int b, int c, int d) {
 
@@ -71,33 +180,17 @@ public class MurmurHash3 implements HashFunction {
 		return h;
 	}
 
-	private int mixK(int k) {
+	private final static int mixK(int k) {
 		k *= C1;
 		k = Integer.rotateLeft(k, 15);
 		k = k * C2;
 		return k;
 	}
 
-	private int mixH(int h, int k) {
+	private final static int mixH(int h, int k) {
 		h ^= k;
 		h = Integer.rotateLeft(h, 13);
 		h = h * M + N;
 		return h;
 	}
-
-	@Override
-	public int hash(int k) {
-		return hash(k, 0, 0, 0);
-	}
-
-	@Override
-	public int hash(int k1, int k2) {
-		return hash(k1, k2, 0, 0);
-	}
-
-	@Override
-	public int hash(int k1, int k2, int k3) {
-		return hash(k1, k2, k3, 0);
-	}
-
 }

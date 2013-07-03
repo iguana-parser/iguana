@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Random;
 import java.util.Set;
 
-import org.jgll.parser.HashFunctionFactory;
+import org.jgll.parser.HashFunctions;
 import org.junit.Test;
 
 public class CuckoosHashTableTest {
@@ -59,6 +59,17 @@ public class CuckoosHashTableTest {
 		assertEquals(1000000, set.size());
 	}
 	
+	@Test
+	public void testAddAll() {
+		Set<Integer> set1 = CuckooHashSet.from(1, 2, 3);
+		Set<Integer> set2 = CuckooHashSet.from(4, 5, 6, 7);
+		assertEquals(3, set1.size());
+		assertEquals(4, set2.size());
+		
+		set1.addAll(set2);
+		assertEquals(7, set1.size());
+	}
+	
 	private class IntegerHashKey {
 
 		private int k1;
@@ -90,7 +101,7 @@ public class CuckoosHashTableTest {
 		
 		@Override
 		public int hashCode() {
-			return HashFunctionFactory.murmur3().hash(k1, k2, k3, k4);
+			return HashFunctions.defaulFunction().hash(k1, k2, k3, k4);
 		}
 		
 		@Override

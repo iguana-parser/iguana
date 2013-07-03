@@ -82,4 +82,10 @@ public class MurmurHash2 implements HashFunction {
 		return 0;
 	}
 
+	@Override
+	public int hash(int k1, int k2, int k3, int k4, int k5) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

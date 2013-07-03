@@ -1,5 +1,6 @@
 package org.jgll.util.hashing;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
@@ -12,9 +13,11 @@ import java.util.Set;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashSet<E> implements Set<E>{
+public class CuckooHashSet<E> implements Set<E>, Serializable {
 	
-	private static final int DEFAULT_INITIAL_CAPACITY = 16;
+	private static final long serialVersionUID = 1L;
+	
+	private static final int DEFAULT_INITIAL_CAPACITY = 32;
 	private static final float DEFAULT_LOAD_FACTOR = 0.49f;
 	
 	private int initialCapacity;
@@ -43,6 +46,14 @@ public class CuckooHashSet<E> implements Set<E>{
 
 	private int maxB;
 	
+	@SafeVarargs
+	public static <T> CuckooHashSet<T> from(T...elements) {
+		CuckooHashSet<T> set = new CuckooHashSet<>();
+		for(T e : elements) {
+			set.add(e);
+		}
+		return set;
+	}
 	
 	public CuckooHashSet() {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -279,7 +290,45 @@ public class CuckooHashSet<E> implements Set<E>{
 
 	@Override
 	public Iterator<E> iterator() {
-		throw new UnsupportedOperationException();
+
+		return new Iterator<E>() {
+
+			int it = 0;
+			int index1 = 0;
+			int index2 = 0;
+			
+			@Override
+			public boolean hasNext() {
+				return it < size;
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public E next() {
+				while(index1 < table1.length) {
+					if(table1[index1] != null) {
+						it++;
+						return (E) table1[index1++];
+					}
+					index1++;
+				}
+				
+				while(index2 < table2.length) {
+					if(table2[index2] != null) {
+						it++;
+						return (E) table2[index2++];
+					}
+					index2++;
+				}
+				
+				throw new RuntimeException("There is no next.");
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
 	@Override
@@ -304,7 +353,12 @@ public class CuckooHashSet<E> implements Set<E>{
 
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
-		throw new UnsupportedOperationException();
+		boolean changed = false;
+		for(E e : c) {
+			changed |= add(e);
+		}
+		
+		return changed;
 	}
 
 	@Override
