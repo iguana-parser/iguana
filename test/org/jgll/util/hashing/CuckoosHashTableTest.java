@@ -54,8 +54,6 @@ public class CuckoosHashTableTest {
 			set.add(key);
 		}
 		
-		System.out.println(set.getRehashCount());
-		System.out.println(set.getGrowCount());
 		assertEquals(1000000, set.size());
 	}
 	

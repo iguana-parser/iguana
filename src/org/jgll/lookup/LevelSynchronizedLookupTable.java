@@ -78,6 +78,11 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private void gotoNextLevel() {
 		u = new CuckooHashSet();
 		List<Descriptor> list = forwardDescriptors[indexFor(currentLevel + 1)];
+		
+		if(list == null) {
+			list = new ArrayList<>();
+		}
+		
 		for(Descriptor d : list) {
 			u.add(d);
 			r.add(d);

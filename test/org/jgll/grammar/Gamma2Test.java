@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import static org.junit.Assert.*;
 
+import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
@@ -35,12 +36,12 @@ public class Gamma2Test extends AbstractGrammarTest {
 		return builder.build();
 	}
 	
-	@Test
+//	@Test
 	public void testLongestTerminalChain() {
 		assertEquals(1, grammar.getLongestTerminalChain());
 	}
 		
-	@Test
+//	@Test
 	public void parse() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbb"), grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbb"), grammar, "S");
@@ -50,12 +51,15 @@ public class Gamma2Test extends AbstractGrammarTest {
 	@Test
 	public void performanceTest() throws ParseError {
 		Input input = Input.fromString(get100b());
-		levelParser.parse(input, grammar, "S");
+		for(int i = 0; i < 10; i++) {
+			levelParser = new LevelSynchronizedGrammarInterpretter();
+			levelParser.parse(input, grammar, "S");
+		}
 	}
 	
 	private String get100b() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 200; i++) {
 			sb.append("b");
 		}
 		return sb.toString();

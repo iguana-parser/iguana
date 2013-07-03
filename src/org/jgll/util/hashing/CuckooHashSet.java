@@ -18,6 +18,8 @@ public class CuckooHashSet {
 	
 	private int capacity;
 	
+	private int p;
+	
 	private int size;
 	
 	private int threshold;
@@ -28,20 +30,20 @@ public class CuckooHashSet {
 	
 	private int growCount;
 	
-	private HashFunction hashFunction1;
+	private HashFunction hashFunction;
 	
-	private HashFunction hashFunction2;
-	
-	/**
-	 * capacity - 1
-	 * The bitMask is used to get the p most-significant bytes of
-	 * the multiplicaiton.
-	 */
+	private int a1, a2, b1, b2;
+		
 	private int bitMask;
 	
 	private HashKey[] table1;
-	
+
 	private HashKey[] table2;
+	
+	private int maxA;
+
+	private int maxB;
+	
 	
 	public CuckooHashSet() {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -58,18 +60,37 @@ public class CuckooHashSet {
 		capacity = 1;
         while (capacity < initialCapacity) {
             capacity <<= 1;
+            p++;
         }
         
         // For each table
 		bitMask = (capacity >> 1) - 1;
+		p--;
 		
 		threshold = (int) (loadFactor * capacity);
 		
 		table1 = new HashKey[capacity >> 1];
 		table2 = new HashKey[capacity >> 1];
 		
-		hashFunction1 = new MurmurHash3(31);
-		hashFunction2 = new MurmurHash3(17);
+		hashFunction = new MurmurHash3();
+		
+		maxB = 1;
+		for(int i = 0; i < (32 - p); i++) {
+			maxB <<= 1;
+		}
+		
+		maxA = Integer.MAX_VALUE >> 1;
+		
+		generateNewHashFunctions();
+	}
+
+	private void generateNewHashFunctions() {
+		Random rand = new Random();
+		
+		a1 = 2 * rand.nextInt(maxA) + 1;
+		b1 = rand.nextInt(maxB);
+		a2 = 2 * rand.nextInt(maxA) + 1;
+		b2 = rand.nextInt(maxB);
 	}
 	
 	public boolean contains(HashKey key) {
@@ -133,7 +154,7 @@ public class CuckooHashSet {
 				table1[index] = key;
 				size++;
 				if(size >= threshold) {
-					grow();
+					enlargeTables();
 				}
 				return;
 			}
@@ -147,7 +168,7 @@ public class CuckooHashSet {
 				table2[index] = key;
 				size++;
 				if(size >= threshold) {
-					grow();
+					enlargeTables();
 				}
 				return;
 			}
@@ -164,11 +185,7 @@ public class CuckooHashSet {
 		HashKey[] newTable1 = new HashKey[table1.length];
 		HashKey[] newTable2 = new HashKey[table2.length];
 
-		int newSeed1 = new Random().nextInt(Integer.MAX_VALUE) + 1;
-		int newSeed2 = new Random().nextInt(Integer.MAX_VALUE) + 1;
-		
-		hashFunction1 = new MurmurHash3(newSeed1);
-		hashFunction2 = new MurmurHash3(newSeed2);
+		generateNewHashFunctions();
 		
 		for(HashKey key : table1) {
 			if(key != null) {
@@ -198,8 +215,9 @@ public class CuckooHashSet {
 		rehashCount++;
 	}
 	
-	private void grow() {
+	private void enlargeTables() {
 		capacity <<= 1;
+		p++;
 		threshold = (int) (loadFactor * capacity);
 		
 		bitMask = (capacity >> 1) - 1;
@@ -245,11 +263,11 @@ public class CuckooHashSet {
 	}
 	
 	private int hash1(HashKey key) {
-		return key.hash(hashFunction1) & bitMask;
+		return (a1 * key.hash(hashFunction) + b1) >>> (32 - p);
 	}
 	
 	private int hash2(HashKey key) {
-		return key.hash(hashFunction2) & bitMask;
+		return (a2 * key.hash(hashFunction) + b2) >>> (32 - p);
 	}
 
 
