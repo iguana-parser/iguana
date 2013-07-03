@@ -206,7 +206,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	private int getSize(CuckooHashSet previous) {
-		int size = previous.size() + previous.size() * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors());
+		int size = previous.size() + 2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors());
 		return size;
 	}
 

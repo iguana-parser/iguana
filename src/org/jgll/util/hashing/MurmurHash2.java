@@ -2,14 +2,34 @@ package org.jgll.util.hashing;
 
 public class MurmurHash2 implements HashFunction{
 
+	private int seed;
+	
+	public MurmurHash2() {
+		this(0);
+	}
+	
+	public MurmurHash2(int seed) {
+		this.seed = seed;
+	}
+	
 	@Override
 	public int hash(int a, int b, int c, int d) {
 		final int m = 0x5bd1e995;
 		final int r = 24;
-		int h = a ^ 4;
+		
+		int h = seed ^ 4;
 
+		// a
+		int k = a;
+		k *= m;
+		k ^= k >>> r;
+		k *= m;
+
+		h *= m;
+		h ^= k;
+		
 		// b
-		int k = b;
+		k = b;
 		k *= m;
 		k ^= k >>> r;
 		k *= m;
@@ -35,11 +55,13 @@ public class MurmurHash2 implements HashFunction{
 		h *= m;
 		h ^= k;
 
+
 		// last mix
 		h *= m;
 		h ^= h >>> 13;
 		h *= m;
 		h ^= h >>> 15;
+		
 		return h;
 	}
 

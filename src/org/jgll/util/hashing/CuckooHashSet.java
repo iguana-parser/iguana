@@ -30,7 +30,7 @@ public class CuckooHashSet {
 	
 	private int growCount;
 	
-	private HashFunction hashFunction;
+	private static HashFunction hashFunction = new MurmurHash2();
 	
 	private int a1, a2, b1, b2;
 		
@@ -38,7 +38,7 @@ public class CuckooHashSet {
 
 	private HashKey[] table2;
 	
-	private int maxA;
+	private static int maxA = Integer.MAX_VALUE >> 1;
 
 	private int maxB;
 	
@@ -71,14 +71,11 @@ public class CuckooHashSet {
         // For each table
 		p--;
 		
-		table1 = new HashKey[capacity >> 1];
-		table2 = new HashKey[capacity >> 1];
-		
-		hashFunction = new MurmurHash3();
+		int tableSize = capacity >> 1;
+		table1 = new HashKey[tableSize];
+		table2 = new HashKey[tableSize];
 		
 		maxB = 1 << (32 - p);
-		
-		maxA = Integer.MAX_VALUE >> 1;
 		
 		generateNewHashFunctions();
 	}
