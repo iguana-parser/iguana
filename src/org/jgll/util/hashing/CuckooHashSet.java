@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class CuckooHashSet {
 	
-	private static final int DEFAULT_INITIAL_CAPACITY = 32;
+	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_LOAD_FACTOR = 0.49f;
 	
 	private int initialCapacity;
@@ -34,8 +34,6 @@ public class CuckooHashSet {
 	
 	private int a1, a2, b1, b2;
 		
-	private int bitMask;
-	
 	private HashKey[] table1;
 
 	private HashKey[] table2;
@@ -55,6 +53,11 @@ public class CuckooHashSet {
 	
 	public CuckooHashSet(int initialCapacity, float loadFactor) {
 		this.initialCapacity = initialCapacity;
+		
+		if(initialCapacity < 8) {
+			initialCapacity = 8;
+		}
+		
 		this.loadFactor = loadFactor;
 
 		capacity = 1;
@@ -63,11 +66,10 @@ public class CuckooHashSet {
             p++;
         }
         
-        // For each table
-		bitMask = (capacity >> 1) - 1;
-		p--;
-		
 		threshold = (int) (loadFactor * capacity);
+
+        // For each table
+		p--;
 		
 		table1 = new HashKey[capacity >> 1];
 		table2 = new HashKey[capacity >> 1];
@@ -83,7 +85,6 @@ public class CuckooHashSet {
 
 	private void generateNewHashFunctions() {
 		Random rand = new Random();
-		
 		a1 = 2 * rand.nextInt(maxA) + 1;
 		b1 = rand.nextInt(maxB);
 		a2 = 2 * rand.nextInt(maxA) + 1;
@@ -96,6 +97,9 @@ public class CuckooHashSet {
 	
 	public boolean contains(HashKey key, HashKey[] table1, HashKey[] table2) {
 		int index = hash1(key);
+		if(index > table1.length) {
+			System.out.println("WTF?");
+		}
 		if(key.equals(table1[index])) {
 			return true;
 		}
@@ -213,15 +217,15 @@ public class CuckooHashSet {
 	}
 	
 	private void enlargeTables() {
+		
+		HashKey[] newTable1 = new HashKey[capacity];
+		HashKey[] newTable2 = new HashKey[capacity];
+		
 		capacity <<= 1;
 		p++;
+		
 		threshold = (int) (loadFactor * capacity);
 		
-		bitMask = (capacity >> 1) - 1;
-		
-		HashKey[] newTable1 = new HashKey[capacity >> 1];
-		HashKey[] newTable2 = new HashKey[capacity >> 1];
-
 		int i = 0;
 		for(HashKey key : table1) {
 			if(key != null) {
@@ -238,7 +242,6 @@ public class CuckooHashSet {
 		table1 = newTable1;
 		table2 = newTable2;
 		
-		threshold = (int) (loadFactor * capacity);
 		growCount++;
 		rehash();
 	}
