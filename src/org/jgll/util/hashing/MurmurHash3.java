@@ -16,6 +16,28 @@ public class MurmurHash3 implements HashFunction {
 	public MurmurHash3() {
 		this(0);
 	}
+	
+	@Override
+	public int hash(int...keys) {
+		int h = seed;
+		
+		int k = 0;
+		for(int i = 0; i < keys.length; i++) {
+			k = keys[0];
+			k = mixK(k);
+			h = mixH(h, k);
+		}
+		
+		h ^= keys.length;
+
+		h ^= h >>> 16;
+		h *= 0x85ebca6b;
+		h ^= h >>> 13;
+		h *= 0xc2b2ae35;
+		h ^= h >>> 16;
+		
+		return h;
+	}
 
 	public int hash(int a, int b, int c, int d) {
 

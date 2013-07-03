@@ -3,14 +3,16 @@ package org.jgll.util.hashing;
 import static org.junit.Assert.*;
 
 import java.util.Random;
+import java.util.Set;
 
+import org.jgll.parser.HashFunctionFactory;
 import org.junit.Test;
 
 public class CuckoosHashTableTest {
 	
 	@Test
 	public void test1() {
-		CuckooHashSet set = new CuckooHashSet(16);
+		Set<IntegerHashKey> set = new CuckooHashSet<>(16);
 		IntegerHashKey key1 = new IntegerHashKey(100, 12, 27, 23);
 		IntegerHashKey key2 = new IntegerHashKey(52, 10, 20, 21);
 
@@ -23,7 +25,7 @@ public class CuckoosHashTableTest {
 	
 	@Test
 	public void testRehashing() {
-		CuckooHashSet set = new CuckooHashSet(8);
+		Set<IntegerHashKey> set = new CuckooHashSet<>(8);
 		IntegerHashKey key1 = new IntegerHashKey(100, 12, 27, 23);
 		IntegerHashKey key2 = new IntegerHashKey(52, 10, 20, 21);
 		IntegerHashKey key3 = new IntegerHashKey(10, 10, 98, 13);
@@ -39,12 +41,12 @@ public class CuckoosHashTableTest {
 		assertEquals(true, set.contains(key3));
 		assertEquals(true, set.contains(key4));
 		
-		assertEquals(1, set.getGrowCount());
+		assertEquals(1, ((CuckooHashSet<IntegerHashKey>) set).getGrowCount());
 	}
 	
 	@Test
 	public void testInsertOneMillionEntries() {
-		CuckooHashSet set = new CuckooHashSet();
+		Set<IntegerHashKey> set = new CuckooHashSet<>();
 		Random rand = new Random();
 		for(int i = 0; i < 1000000; i++) {
 			IntegerHashKey key = new IntegerHashKey(rand.nextInt(Integer.MAX_VALUE), 
@@ -57,7 +59,7 @@ public class CuckoosHashTableTest {
 		assertEquals(1000000, set.size());
 	}
 	
-	private class IntegerHashKey implements HashKey {
+	private class IntegerHashKey {
 
 		private int k1;
 		private int k2;
@@ -87,15 +89,15 @@ public class CuckoosHashTableTest {
 		}
 		
 		@Override
+		public int hashCode() {
+			return HashFunctionFactory.murmur3().hash(k1, k2, k3, k4);
+		}
+		
+		@Override
 		public String toString() {
 			return "(" + k1 + ", " + k2 + ", " + k3 + ", " + k4 + ")";
 		}
 
-		@Override
-		public int hash(HashFunction function) {
-			return function.hash(k1, k2, k3, k4);
-		}
-		
 	}
 
 }

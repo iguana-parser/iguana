@@ -1,6 +1,9 @@
 package org.jgll.util.hashing;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * 
@@ -9,7 +12,7 @@ import java.util.Random;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashSet {
+public class CuckooHashSet<E> implements Set<E>{
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_LOAD_FACTOR = 0.49f;
@@ -30,13 +33,11 @@ public class CuckooHashSet {
 	
 	private int growCount;
 	
-	private static HashFunction hashFunction = new MurmurHash2();
-	
 	private int a1, a2, b1, b2;
 		
-	private HashKey[] table1;
+	private Object[] table1;
 
-	private HashKey[] table2;
+	private Object[] table2;
 	
 	private static int maxA = Integer.MAX_VALUE >> 1;
 
@@ -72,8 +73,8 @@ public class CuckooHashSet {
 		p--;
 		
 		int tableSize = capacity >> 1;
-		table1 = new HashKey[tableSize];
-		table2 = new HashKey[tableSize];
+		table1 = new Object[tableSize];
+		table2 = new Object[tableSize];
 		
 		maxB = 1 << (32 - p);
 		
@@ -88,11 +89,12 @@ public class CuckooHashSet {
 		b2 = rand.nextInt(maxB);
 	}
 	
-	public boolean contains(HashKey key) {
+	@Override
+	public boolean contains(Object key) {
 		return contains(key, table1, table2);
 	}
 	
-	public boolean contains(HashKey key, HashKey[] table1, HashKey[] table2) {
+	public boolean contains(Object key, Object[] table1, Object[] table2) {
 		int index = hash1(key);
 		if(index > table1.length) {
 			System.out.println("WTF?");
@@ -109,7 +111,7 @@ public class CuckooHashSet {
 		return false;
 	}
 	
-	private boolean insertAgain(HashKey key, HashKey[] table1, HashKey[] table2) {
+	private boolean insertAgain(Object key, Object[] table1, Object[] table2) {
 		int i = 0;
 		while(i < size + 1) {
 			i++;
@@ -120,7 +122,7 @@ public class CuckooHashSet {
 				return true;
 			}
 			
-			HashKey tmp = table1[index];
+			Object tmp = table1[index];
 			table1[index] = key;
 			key = tmp;
 			
@@ -137,10 +139,12 @@ public class CuckooHashSet {
 		return false;
 	}
 	
-	public void add(HashKey key) {
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean add(E key) {
 		
 		if(contains(key)) {
-			return;
+			return false;
 		}
 		
 		int i = 0;
@@ -154,10 +158,10 @@ public class CuckooHashSet {
 				if(size >= threshold) {
 					enlargeTables();
 				}
-				return;
+				return true;
 			}
 			
-			HashKey tmp = table1[index];
+			E tmp = (E) table1[index];
 			table1[index] = key;
 			key = tmp;
 			
@@ -168,24 +172,25 @@ public class CuckooHashSet {
 				if(size >= threshold) {
 					enlargeTables();
 				}
-				return;
+				return true;
 			}
 			
-			tmp = table2[index];
+			tmp = (E) table2[index];
 			table2[index] = key;
 			key = tmp;
 		}
+		
 		rehash();
-		add(key);
+		return add(key);
 	}
 	
 	private void rehash() {
-		HashKey[] newTable1 = new HashKey[table1.length];
-		HashKey[] newTable2 = new HashKey[table2.length];
+		Object[] newTable1 = new Object[table1.length];
+		Object[] newTable2 = new Object[table2.length];
 
 		generateNewHashFunctions();
 		
-		for(HashKey key : table1) {
+		for(Object key : table1) {
 			if(key != null) {
 				// if one element cannot be inserted, restart the whole process with two new
 				// hash function.
@@ -196,7 +201,7 @@ public class CuckooHashSet {
 			}
 		}
 		
-		for(HashKey key : table2) {
+		for(Object key : table2) {
 			if(key != null) {
 				// if one element cannot be inserted, restart the whole process with two new
 				// hash function.
@@ -215,8 +220,8 @@ public class CuckooHashSet {
 	
 	private void enlargeTables() {
 		
-		HashKey[] newTable1 = new HashKey[capacity];
-		HashKey[] newTable2 = new HashKey[capacity];
+		Object[] newTable1 = new Object[capacity];
+		Object[] newTable2 = new Object[capacity];
 		
 		capacity <<= 1;
 		p++;
@@ -224,13 +229,13 @@ public class CuckooHashSet {
 		threshold = (int) (loadFactor * capacity);
 		
 		int i = 0;
-		for(HashKey key : table1) {
+		for(Object key : table1) {
 			if(key != null) {
 				newTable1[i++] = key;
 			}
 		}
 		
-		for(HashKey key : table2) {
+		for(Object key : table2) {
 			if(key != null) {
 				newTable1[i++] = key;
 			}
@@ -259,12 +264,62 @@ public class CuckooHashSet {
 		return growCount;
 	}
 	
-	private int hash1(HashKey key) {
-		return (a1 * key.hash(hashFunction) + b1) >>> (32 - p);
+	private int hash1(Object key) {
+		return (a1 * key.hashCode() + b1) >>> (32 - p);
 	}
 	
-	private int hash2(HashKey key) {
-		return (a2 * key.hash(hashFunction) + b2) >>> (32 - p);
+	private int hash2(Object key) {
+		return (a2 * key.hashCode() + b2) >>> (32 - p);
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return size == 0;
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Object[] toArray() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T> T[] toArray(T[] a) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean remove(Object o) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends E> c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void clear() {
+		throw new UnsupportedOperationException();
 	}
 
 

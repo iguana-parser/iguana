@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
@@ -38,7 +39,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private CuckooHashSet u;
+	private Set<Descriptor> u;
 	
 	private Map<SPPFNode, SPPFNode> currentLevelNonPackedNodes;
 	
@@ -65,7 +66,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new CuckooHashSet(2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors()));
+		u = new CuckooHashSet<>(2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors()));
 		r = new ArrayDeque<>();
 		
 		forwardDescriptors = new List[longestTerminalChain];
@@ -75,12 +76,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	private void gotoNextLevel() {
-		log.trace("Initial Size: %d", u.getInitialCapacity());
-		log.trace("Size: %d", u.size());
-		log.trace("Rehash count: %d", u.getRehashCount());
-		log.trace("Enlarge count: %d", u.getGrowCount());
-		
-		u = new CuckooHashSet(getSize(u));
+		u = new CuckooHashSet<>(getSize(u));
 		List<Descriptor> list = forwardDescriptors[indexFor(currentLevel + 1)];
 		
 		if(list == null) {
@@ -205,7 +201,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		}
 	}
 	
-	private int getSize(CuckooHashSet previous) {
+	private int getSize(Set<Descriptor> previous) {
 		int size = previous.size() + 2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors());
 		return size;
 	}

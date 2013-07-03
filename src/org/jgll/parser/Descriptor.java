@@ -2,8 +2,6 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.HashKey;
 
 /**
  * A {@code Descriptor} is used by the GLL parser to keep track of the 
@@ -24,7 +22,7 @@ import org.jgll.util.hashing.HashKey;
  * 
  */
 
-public class Descriptor implements HashKey {
+public class Descriptor {
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -48,6 +46,8 @@ public class Descriptor implements HashKey {
 	 */
 	private final SPPFNode sppfNode;
 	
+	private final int hash;
+	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
@@ -57,7 +57,12 @@ public class Descriptor implements HashKey {
 		this.slot = slot;
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
-		this.sppfNode = sppfNode;		
+		this.sppfNode = sppfNode;
+		
+		hash = HashFunctionFactory.murmur3().hash(slot.getId(), 
+												  sppfNode.getGrammarSlot().getId(), 
+												  gssNode.getInputIndex(), 
+												  gssNode.getGrammarSlot().getId());
 	}
 	
 	public GrammarSlot getGrammarSlot() {
@@ -78,13 +83,7 @@ public class Descriptor implements HashKey {
 	
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + sppfNode.getGrammarSlot().getId();
-		result += 31 * result + gssNode.getInputIndex();
-		result += 31 * result + gssNode.getGrammarSlot().getId();
-		result += 31 * result + inputIndex;
-		return result;
+		return hash;
 	}
 	
 	@Override
@@ -105,7 +104,8 @@ public class Descriptor implements HashKey {
 		 *	(L1,j,i) and u has the form (L2,j), in fact a descriptor could be
 		 *	presented as (L, i, j, L2, L1).
 		 */
-		return slot == other.slot &&
+		return hash == other.hash &&
+			   slot == other.slot &&
 			   sppfNode.getGrammarSlot() == other.sppfNode.getGrammarSlot() &&
 			   gssNode.getInputIndex() == other.gssNode.getInputIndex() &&	
 			   gssNode.getGrammarSlot() == other.gssNode.getGrammarSlot() &&
@@ -117,9 +117,4 @@ public class Descriptor implements HashKey {
 		return "(" + slot + ", " + inputIndex + ", " + gssNode.getGrammarSlot() + ", " + sppfNode + ")";
 	}
 
-	@Override
-	public int hash(HashFunction function) {
-		return function.hash(slot.getId(), sppfNode.getGrammarSlot().getId(), gssNode.getInputIndex(), gssNode.getGrammarSlot().getId());
-	}
-	
 }

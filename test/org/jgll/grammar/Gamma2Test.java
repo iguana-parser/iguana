@@ -55,7 +55,7 @@ public class Gamma2Test extends AbstractGrammarTest {
 	
 	private String get100b() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 200; i++) {
 			sb.append("b");
 		}
 		return sb.toString();
