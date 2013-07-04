@@ -30,9 +30,9 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		SPPFNode cn = parser.getCn();
 		GSSNode cu = parser.getCu();
 		TerminalSymbolNode cr = parser.getNodeT(TerminalSymbolNode.EPSILON, ci);
-		SPPFNode newNode = parser.getNodeP(this, cn, cr);
+		cn = parser.getNodeP(this, cn, cr);
 		parser.update(cu, cn, ci);
-		parser.pop(cu, ci, newNode);
+		parser.pop();
 		return null;
 	}
 	

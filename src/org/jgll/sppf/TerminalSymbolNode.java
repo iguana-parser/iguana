@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.Collections;
 
 import org.jgll.grammar.GrammarSlot;
+import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -43,10 +44,7 @@ public class TerminalSymbolNode extends SPPFNode {
 	
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result += 31 * result + matchedChar;
-		result += 31 * result + inputIndex;
-		return result;
+		return HashFunctions.defaulFunction().hash(matchedChar, inputIndex);
 	}
 	
 	@Override

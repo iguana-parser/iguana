@@ -153,6 +153,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 *   } 
 	 * }
 	 */
+	@Override
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
 		boolean result = lookupTable.addDescriptor(descriptor);
@@ -161,7 +162,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	
 	
 	/**
-	 * Pops the current element from GSS. When the top element, cu, is poped, there
+	 * Pops the current element from GSS. When the top element, cu, is popped, there
 	 * may be possibly n children. For each child u, reachable via an edge labelled
 	 * by an SPPF node w, a new descriptor is added to the set of descriptors
 	 * to be processed.
@@ -176,26 +177,27 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 *      } 
 	 * }
 	 */
-	public final void pop(GSSNode u, int i, SPPFNode z) {
+	@Override
+	public final void pop() {
 				
-		log.trace("Pop %s, %d, %s", u.getGrammarSlot(), i, z);
+		log.trace("Pop %s, %d, %s", cu.getGrammarSlot(), ci, cn);
 		
-		if (u != u0) {
+		if (cu != u0) {
 			
 			// Don't pop if a pop action associated with the slot returns false.
-			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) u.getGrammarSlot()).getPopActions()) {
+			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) cu.getGrammarSlot()).getPopActions()) {
 				if(!popAction.execute(this, input)) {
 					return;
 				}
 			}
 			
 			// Add (cu, cn) to P
-			lookupTable.addToPoppedElements(u, z);
+			lookupTable.addToPoppedElements(cu, cn);
 			
-			for(GSSEdge edge : u.getEdges()) {
-				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
-				SPPFNode x = getNodeP((BodyGrammarSlot) u.getGrammarSlot(), edge.getSppfNode(), z);
-				add(u.getGrammarSlot(), edge.getDestination(), i, x);
+			for(GSSEdge edge : cu.getEdges()) {
+				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
+				SPPFNode x = getNodeP((BodyGrammarSlot) cu.getGrammarSlot(), edge.getSppfNode(), cn);
+				add(cu.getGrammarSlot(), edge.getDestination(), ci, x);
 			}			
 		}
 	}
@@ -229,6 +231,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * 
      *
 	 */
+	@Override
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
 		log.trace("GSSNode created: (%s, %d)",  L, i);
 		
@@ -250,6 +253,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * 		return the SPPF node labelled (a, i, i + 1) 
 	 *  }
 	 */
+	@Override
 	public final TerminalSymbolNode getNodeT(int x, int i) {
 		return lookupTable.getTerminalNode(x, i);
 	}
@@ -346,8 +350,8 @@ public abstract class AbstractGLLParser implements GLLParser {
 	}
 	
 	/**
-	 * Retuns the list of created GSSNodes. This list may be useful for analysis
-	 * or visulaization of GSS nodes after the parsing. 
+	 * Returns the list of created GSSNodes. This list may be useful for analysis
+	 * or visualization of GSS nodes after the parsing. 
 	 */
 	public Collection<GSSNode> getGSSNodes() {
 		return lookupTable.getGSSNodes();
