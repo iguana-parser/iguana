@@ -1,7 +1,6 @@
 package org.jgll.lookup;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
@@ -30,13 +29,13 @@ public interface LookupTable {
 	
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol);
 	
-	public boolean getGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
+	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
 
 	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
 	
 	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode);
 	
-	public List<SPPFNode> getEdgeLabels(GSSNode gssNode);
+	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode);
 	
 	public int getNonPackedNodesCount();
 	

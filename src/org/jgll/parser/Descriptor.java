@@ -60,10 +60,9 @@ public class Descriptor {
 		this.sppfNode = sppfNode;
 		
 		hash = HashFunctions.defaulFunction().hash(slot.getId(), 
-												  sppfNode.getGrammarSlot().getId(), 
-												  gssNode.getInputIndex(), 
-												  gssNode.getGrammarSlot().getId(),
-												  inputIndex);
+												   sppfNode.hashCode(), 
+												   gssNode.hashCode(), 
+												   inputIndex);
 	}
 	
 	public GrammarSlot getGrammarSlot() {

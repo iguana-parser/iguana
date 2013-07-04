@@ -1,7 +1,5 @@
 package org.jgll.parser;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlot;
@@ -35,11 +33,11 @@ public class GSSNode {
 
 	private final int inputIndex;
 
-	private final List<GSSEdge> edges;
-	
 	private final Set<GSSEdge> gssEdges;
 	
 	private final int hash;
+	
+	private final Set<SPPFNode> poppedElements;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -51,41 +49,38 @@ public class GSSNode {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.edges = new ArrayList<>();	
 		this.gssEdges = new CuckooHashSet<>();
+		this.poppedElements = new CuckooHashSet<>();
 		
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 	
-	public void addEdge(GSSEdge edge) {
-		edges.add(edge);
+	public boolean hasGSSEdge(SPPFNode label, GSSNode destination) {
+		return !gssEdges.add(new GSSEdge(label, destination));
 	}
 	
-	public boolean getGSSEdge(SPPFNode label, GSSNode destination) {
-		GSSEdge key = new GSSEdge(label, destination);
-		
-		if(gssEdges.add(key)) {
-			edges.add(key);
-			return false;
-		}
-		
-		return true;
+	public void addToPopElements(SPPFNode sppfNode) {
+		poppedElements.add(sppfNode);
 	}
 	
 	public Iterable<GSSEdge> getEdges() {
-		return edges;
+		return gssEdges;
 	}
 		
 	public int getCountEdges() {
-		return edges.size();
+		return gssEdges.size();
 	}
 
-	public final GrammarSlot getGrammarSlot() {
+	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
-	public final int getInputIndex() {
+	public int getInputIndex() {
 		return inputIndex;
+	}
+	
+	public Iterable<SPPFNode> getPoppedElements() {
+		return poppedElements;
 	}
 
 	@Override

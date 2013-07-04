@@ -2,9 +2,6 @@ package org.jgll.lookup;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
@@ -34,12 +31,6 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	private GSSNode[][] gssNodes;
 	
-	/**
-	 * The popElements corresponds to P in the algorithm which keeps the links
-	 * between a GSSNode and the SPPFNodes which are links to other GSSNodes.
-	 */
-	protected Map<GSSNode, List<SPPFNode>> poppedElements;
-
 	protected final int inputSize;
 	
 	protected final int slotsSize;
@@ -50,13 +41,12 @@ public abstract class AbstractLookupTable implements LookupTable {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
 		gssNodes = new GSSNode[grammar.getGrammarSlots().size()][];
-		poppedElements = new HashMap<GSSNode, List<SPPFNode>>(inputSize);
 		slotsSize = grammar.getGrammarSlots().size();
 	}
 
 	@Override
-	public boolean getGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
-		 boolean added = source.getGSSEdge(label, destination);
+	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
+		 boolean added = source.hasGSSEdge(label, destination);
 		 if(added) {
 			 gssEdgesCount++;
 		 }
@@ -78,19 +68,12 @@ public abstract class AbstractLookupTable implements LookupTable {
 
 	@Override
 	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
-		
-		// Add (cu, cn) to P
-		List<SPPFNode> nodeList = poppedElements.get(gssNode);
-		if (nodeList == null) {
-			nodeList = new ArrayList<SPPFNode>();
-			poppedElements.put(gssNode, nodeList);
-		}
-		nodeList.add(sppfNode);
+		gssNode.addToPopElements(sppfNode);
 	}
 	
 	@Override
-	public List<SPPFNode> getEdgeLabels(GSSNode gssNode) {
-		return poppedElements.get(gssNode);
+	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
+		return gssNode.getPoppedElements();
 	}
 
 	@Override

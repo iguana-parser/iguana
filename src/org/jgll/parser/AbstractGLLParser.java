@@ -1,7 +1,6 @@
 package org.jgll.parser;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
@@ -179,11 +178,11 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 */
 	public final void pop(GSSNode u, int i, SPPFNode z) {
 				
-		log.trace("Pop %s, %d, %s", new Object[] {u.getGrammarSlot(), i, z});
+		log.trace("Pop %s, %d, %s", u.getGrammarSlot(), i, z);
 		
 		if (u != u0) {
 			
-			// Don't pop if a pop action associated with the slot returns fasle.
+			// Don't pop if a pop action associated with the slot returns false.
 			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) u.getGrammarSlot()).getPopActions()) {
 				if(!popAction.execute(this, input)) {
 					return;
@@ -203,7 +202,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	
 	/**
 	 * 
-	 * create(L,A ::= alpha . beta) {
+	 * create(L, u, w) {
      *	 let w be the value of cn
 	 *	 if there is not already a GSS node labelled (L,A ::= alpha . beta, ci) create one
 	 * 	 let v be the GSS node labelled (L,A ::= alpha . beta, ci)
@@ -224,7 +223,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * 
 	 * @param alternateIndex the index of the alternate of the rule where this position refers to.
 	 * 
-	 * @param position the position in the body of the rule where this position referes to
+	 * @param position the position in the body of the rule where this position refers to
 	 *
 	 * @return 
 	 * 
@@ -235,13 +234,10 @@ public abstract class AbstractGLLParser implements GLLParser {
 		
 		GSSNode v = lookupTable.getGSSNode(L, i);
 		
-		if(!lookupTable.getGSSEdge(v, w, u)) {
-			List<SPPFNode> edgeLabels = lookupTable.getEdgeLabels(v);
-			if(edgeLabels != null) {
-				for (SPPFNode z : edgeLabels) {
-					SPPFNode x = getNodeP((BodyGrammarSlot) L, w, z);
-					add(L, u, z.getRightExtent(), x);
-				}			
+		if(!lookupTable.hasGSSEdge(v, w, u)) {
+			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
+				SPPFNode x = getNodeP((BodyGrammarSlot) L, w, z);
+				add(L, u, z.getRightExtent(), x);
 			}
 		}
 		
@@ -253,7 +249,6 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * 		if there is no SPPF node labelled (a, i, i + 1) create one
 	 * 		return the SPPF node labelled (a, i, i + 1) 
 	 *  }
-	 * @return 
 	 */
 	public final TerminalSymbolNode getNodeT(int x, int i) {
 		return lookupTable.getTerminalNode(x, i);
