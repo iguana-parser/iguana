@@ -48,7 +48,7 @@ public class MurmurHash3 implements HashFunction {
 		h = mixH(h, k);
 
 		// finalizing
-		h ^= 4;
+		h ^= 1;
 
 		h ^= h >>> 16;
 		h *= 0x85ebca6b;
@@ -72,7 +72,7 @@ public class MurmurHash3 implements HashFunction {
 		h = mixH(h, k);
 
 		// finalizing
-		h ^= 4;
+		h ^= 2;
 
 		h ^= h >>> 16;
 		h *= 0x85ebca6b;
@@ -100,7 +100,7 @@ public class MurmurHash3 implements HashFunction {
 		h = mixH(h, k);
 
 		// finalizing
-		h ^= 4;
+		h ^= 3;
 
 		h ^= h >>> 16;
 		h *= 0x85ebca6b;
@@ -136,7 +136,7 @@ public class MurmurHash3 implements HashFunction {
 		h = mixH(h, k);
 
 		// finalizing
-		h ^= 4;
+		h ^= 5;
 
 		h ^= h >>> 16;
 		h *= 0x85ebca6b;

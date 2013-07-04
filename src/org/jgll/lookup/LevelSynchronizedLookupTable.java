@@ -2,9 +2,7 @@ package org.jgll.lookup;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -41,9 +39,9 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private Set<Descriptor> u;
 	
-	private Map<SPPFNode, SPPFNode> currentLevelNonPackedNodes;
+	private CuckooHashSet<SPPFNode> currentLevelNonPackedNodes;
 	
-	private Map<SPPFNode, SPPFNode>[] forwardNonPackedNodes;
+	private CuckooHashSet<SPPFNode>[] forwardNonPackedNodes;
 	
 	private List<Descriptor>[] forwardDescriptors;
 	
@@ -71,8 +69,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		forwardDescriptors = new List[longestTerminalChain];
 		
-		currentLevelNonPackedNodes = new HashMap<>();
-		forwardNonPackedNodes = new HashMap[longestTerminalChain];
+		currentLevelNonPackedNodes = new CuckooHashSet<>();
+		forwardNonPackedNodes = new CuckooHashSet[longestTerminalChain];
 	}
 	
 	private void gotoNextLevel() {
@@ -91,9 +89,9 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 
 		currentLevelNonPackedNodes = forwardNonPackedNodes[indexFor(currentLevel + 1)];
 		if(currentLevelNonPackedNodes == null) {
-			currentLevelNonPackedNodes = new HashMap<>();
+			currentLevelNonPackedNodes = new CuckooHashSet<>();
 		}
-		forwardNonPackedNodes[indexFor(currentLevel + 1)] = new HashMap<>();
+		forwardNonPackedNodes[indexFor(currentLevel + 1)] = new CuckooHashSet<>();
 		
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
@@ -114,7 +112,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			SPPFNode value = currentLevelNonPackedNodes.get(key);
 			if(value == null) {
 				value = key;
-				currentLevelNonPackedNodes.put(key, value);
+				currentLevelNonPackedNodes.add(value);
 				countNonPackedNodes++;
 			}
 			return value;
@@ -122,8 +120,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			int index = indexFor(rightExtent);
 			
 			if(forwardNonPackedNodes[index] == null) {
-				forwardNonPackedNodes[index] = new HashMap<>();
-				forwardNonPackedNodes[index].put(key, key);
+				forwardNonPackedNodes[index] = new CuckooHashSet<>();
+				forwardNonPackedNodes[index].add(key);
 				countNonPackedNodes++;
 				return key;
 			} 
@@ -131,7 +129,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			SPPFNode value = forwardNonPackedNodes[index].get(key);
 			if(value == null) {
 				value = key;
-				forwardNonPackedNodes[index].put(key, value);
+				forwardNonPackedNodes[index].add(value);
 				countNonPackedNodes++;
 			}
 			return value;
@@ -167,7 +165,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
-		Map<SPPFNode, SPPFNode> map;
+		CuckooHashSet<SPPFNode> map;
 		if(currentLevel == inputSize - 1) {
 			map = currentLevelNonPackedNodes;
 		} else {

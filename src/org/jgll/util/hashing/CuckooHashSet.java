@@ -97,11 +97,34 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		return contains(key, table1, table2);
 	}
 	
+	/**
+	 * 
+	 * Returns the reference to the element stored in the set which is 
+	 * the same as the passed key.
+	 * 
+	 * @param key
+	 * 
+	 * @return null if no element matching the given key is found.
+	 */
+	@SuppressWarnings("unchecked")
+	public E get(Object key) {
+		int index = hash1(key);
+
+		if(key.equals(table1[index])) {
+			return (E) table1[index];
+		}
+		
+		index = hash2(key);
+		if(key.equals(table2[index])) {
+			return (E) table2[index];
+		}
+
+		return null;
+	}
+	
 	public boolean contains(Object key, Object[] table1, Object[] table2) {
 		int index = hash1(key);
-		if(index > table1.length) {
-			System.out.println("WTF?");
-		}
+
 		if(key.equals(table1[index])) {
 			return true;
 		}

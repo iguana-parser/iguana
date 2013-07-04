@@ -98,17 +98,10 @@ public class Descriptor {
 		
 		Descriptor other = (Descriptor) obj;
 		
-		/**
-		 *	Descriptors are of the form (L,u,i,w) where u is a GGS node and w is an
-		 *	SPPF node. As w has the form
-		 *	(L1,j,i) and u has the form (L2,j), in fact a descriptor could be
-		 *	presented as (L, i, j, L2, L1).
-		 */
 		return hash == other.hash &&
 			   slot == other.slot &&
-			   sppfNode.getGrammarSlot() == other.sppfNode.getGrammarSlot() &&
-			   gssNode.getInputIndex() == other.gssNode.getInputIndex() &&	
-			   gssNode.getGrammarSlot() == other.gssNode.getGrammarSlot() &&
+			   gssNode.equals(other.gssNode) &&	
+			   sppfNode.equals(other.sppfNode) &&
 			   inputIndex == other.getInputIndex();
 	}
 	
