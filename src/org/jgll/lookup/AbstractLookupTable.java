@@ -3,22 +3,18 @@ package org.jgll.lookup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-//import org.jgll.util.OpenAddressingHashSet;
 
 /**
  * 
@@ -38,8 +34,6 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	private GSSNode[][] gssNodes;
 	
-	private Set<GSSEdge> gssEdges;
-	
 	/**
 	 * The popElements corresponds to P in the algorithm which keeps the links
 	 * between a GSSNode and the SPPFNodes which are links to other GSSNodes.
@@ -50,25 +44,23 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	protected final int slotsSize;
 	
+	protected int gssEdgesCount;
+	
 	public AbstractLookupTable(Grammar grammar, int inputSize) {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
 		gssNodes = new GSSNode[grammar.getGrammarSlots().size()][];
-		gssEdges = new HashSet<>(inputSize);
 		poppedElements = new HashMap<GSSNode, List<SPPFNode>>(inputSize);
 		slotsSize = grammar.getGrammarSlots().size();
 	}
 
 	@Override
 	public boolean getGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
-		GSSEdge key = new GSSEdge(source, label, destination);
-		
-		if(gssEdges.add(key)) {
-			source.addEdge(key);
-			return false;
-		}
-		
-		return true;
+		 boolean added = source.getGSSEdge(label, destination);
+		 if(added) {
+			 gssEdgesCount++;
+		 }
+		 return added;
 	}
 
 	@Override
@@ -108,7 +100,7 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	@Override
 	public int getGSSEdgesCount() {
-		return gssEdges.size();
+		return gssEdgesCount;
 	}
 	
 	@Override

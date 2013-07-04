@@ -23,19 +23,16 @@ import org.jgll.sppf.SPPFNode;
  */
 public class GSSEdge {
 
-	private final GSSNode src;
 	private final SPPFNode sppfNode;
 	private final GSSNode dst;
 	
 	private final int hash;
 	
-	public GSSEdge(GSSNode source, SPPFNode sppfNode, GSSNode dst) {
-		this.src = source;
+	public GSSEdge(SPPFNode sppfNode, GSSNode dst) {
 		this.sppfNode = sppfNode;
 		this.dst = dst;	
 		
-		hash = HashFunctions.defaulFunction().hash(src.hashCode(),
-												   dst.hashCode(),
+		hash = HashFunctions.defaulFunction().hash(dst.hashCode(),
 												   sppfNode.hashCode());
 	}
 	
@@ -66,9 +63,8 @@ public class GSSEdge {
 		GSSEdge other = (GSSEdge) o;
 		
 		return hash == other.hash &&
-			   src.equals(other.src) &&
-			   sppfNode.equals(other.sppfNode) &&
-			   dst.equals(other.dst);
+				dst.equals(other.dst) &&
+			   sppfNode.equals(other.sppfNode);
 	}
 	
 }
