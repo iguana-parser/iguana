@@ -14,7 +14,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 
@@ -27,8 +26,6 @@ import org.jgll.util.logging.LoggerWrapper;
  */
 public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelSynchronizedLookupTable.class);
-
 	private int currentLevel;
 	
 	private int countNonPackedNodes;
@@ -199,6 +196,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private int getSize(Set<Descriptor> previous) {
 		int size = previous.size() + 2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors());
 		return size;

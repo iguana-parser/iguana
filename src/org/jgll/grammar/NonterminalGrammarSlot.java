@@ -114,7 +114,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		writer.append("if (");
-		int i = 0;
+//		int i = 0;
 //		for(Terminal terminal : testSet) {
 //			writer.append(terminal.getMatchCode());
 //			if(++i < testSet.size()) {

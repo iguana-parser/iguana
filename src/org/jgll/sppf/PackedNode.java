@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
+import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -17,8 +18,15 @@ public class PackedNode extends SPPFNode {
 	private final GrammarSlot slot;
 
 	private final int pivot;
-	
-	// TODO: check to see how to remove this
+
+	/**
+	 * 
+	 * As we search for packed nodes under its parent, rather than directly,
+	 * there is no need to take the parent into account when considering
+	 * equals and hashcode calculations.
+	 * However, a reference to the parent is kept for other purposes.
+	 * 
+	 */
 	private final SPPFNode parent;
 	
 	private final List<SPPFNode> children;
@@ -57,8 +65,7 @@ public class PackedNode extends SPPFNode {
 		PackedNode other = (PackedNode) obj;
 		
 		return  slot == other.slot &&
-		        pivot == other.pivot &&
-		        parent.equals(other.parent);
+		        pivot == other.pivot;
 	}
 	
 	public int getPivot() {
@@ -94,11 +101,7 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + pivot;
-		result += 31 * result + parent.hashCode();
-		return result;
+		return HashFunctions.defaulFunction().hash(slot.getId(), pivot);
 	}
 
 	@Override

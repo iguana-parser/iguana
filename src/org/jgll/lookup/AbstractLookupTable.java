@@ -47,7 +47,7 @@ public abstract class AbstractLookupTable implements LookupTable {
 	@Override
 	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
 		 boolean added = source.hasGSSEdge(label, destination);
-		 if(added) {
+		 if(!added) {
 			 gssEdgesCount++;
 		 }
 		 return added;
