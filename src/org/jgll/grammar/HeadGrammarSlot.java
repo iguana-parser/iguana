@@ -93,9 +93,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		for(Alternate alternate : alternates) {
-			GSSNode cu = parser.getCu();
 			int ci = parser.getCi();
-			parser.add(alternate.getFirstSlot(), cu, ci, DummyNode.getInstance());
+			if(alternate.getFirstSlot().checkAgainstTestSet(input.charAt(ci))) {
+				GSSNode cu = parser.getCu();
+				parser.add(alternate.getFirstSlot(), cu, ci, DummyNode.getInstance());
+			}
 		}
 		return null;
 	}

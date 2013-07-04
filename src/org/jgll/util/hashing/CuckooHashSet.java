@@ -3,12 +3,11 @@ package org.jgll.util.hashing;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.Set;
 
 /**
  * 
- * A hash set based on the chuckoo's hashing algorithm.
+ * A hash set based on the Cuckoo hashing algorithm.
  * 
  * @author Ali Afroozeh
  *
@@ -18,7 +17,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 32;
-	private static final float DEFAULT_LOAD_FACTOR = 0.49f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
 	
 	private int initialCapacity;
 	
@@ -36,16 +35,14 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	
 	private int growCount;
 	
-	private int a1, a2, b1, b2;
-		
+	private UniversalHashFunction function1;
+	
+	private UniversalHashFunction function2;
+	
 	private Object[] table1;
 
 	private Object[] table2;
-	
-	private static int maxA = Integer.MAX_VALUE >> 1;
-
-	private int maxB;
-	
+		
 	@SafeVarargs
 	public static <T> CuckooHashSet<T> from(T...elements) {
 		CuckooHashSet<T> set = new CuckooHashSet<>();
@@ -87,17 +84,12 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		table1 = new Object[tableSize];
 		table2 = new Object[tableSize];
 		
-		maxB = 1 << (32 - p);
-		
 		generateNewHashFunctions();
 	}
 
 	private void generateNewHashFunctions() {
-		Random rand = new Random();
-		a1 = 2 * rand.nextInt(maxA) + 1;
-		b1 = rand.nextInt(maxB);
-		a2 = 2 * rand.nextInt(maxA) + 1;
-		b2 = rand.nextInt(maxB);
+		function1 = new MultiplicationShiftPlainUniversalHashFunction(p);
+		function2 = new MultiplicationShiftPlainUniversalHashFunction(p);
 	}
 	
 	@Override
@@ -276,11 +268,11 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	}
 	
 	private int hash1(Object key) {
-		return (a1 * key.hashCode() + b1) >>> (32 - p);
+		return function1.hash(key.hashCode());
 	}
 	
 	private int hash2(Object key) {
-		return (a2 * key.hashCode() + b2) >>> (32 - p);
+		return function2.hash(key.hashCode());
 	}
 
 	@Override

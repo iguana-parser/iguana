@@ -27,10 +27,16 @@ public class GSSEdge {
 	private final SPPFNode sppfNode;
 	private final GSSNode dst;
 	
+	private final int hash;
+	
 	public GSSEdge(GSSNode source, SPPFNode sppfNode, GSSNode dst) {
 		this.src = source;
 		this.sppfNode = sppfNode;
-		this.dst = dst;		
+		this.dst = dst;	
+		
+		hash = HashFunctions.defaulFunction().hash(src.hashCode(),
+												   dst.hashCode(),
+												   sppfNode.hashCode());
 	}
 	
 	public SPPFNode getSppfNode() {
@@ -43,11 +49,7 @@ public class GSSEdge {
 	
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result += 31 * result + src.hashCode();
-		result += 31 * result + sppfNode.hashCode();
-		result += 31 * result + dst.hashCode();
-		return result;
+		return hash;
 	}
 	
 	@Override
@@ -63,7 +65,8 @@ public class GSSEdge {
 		
 		GSSEdge other = (GSSEdge) o;
 		
-		return src.equals(other.src) &&
+		return hash == other.hash &&
+			   src.equals(other.src) &&
 			   sppfNode.equals(other.sppfNode) &&
 			   dst.equals(other.dst);
 	}
