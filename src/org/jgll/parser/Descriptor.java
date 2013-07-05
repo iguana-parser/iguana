@@ -46,9 +46,11 @@ public class Descriptor {
 	 */
 	private final SPPFNode sppfNode;
 	
+	private final int alternateInputIndex;
+	
 	private final int hash;
 	
-	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
+	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode, int alternateInputIndex) {
 		assert slot != null;
 		assert gssNode != null;
 		assert inputIndex >= 0;
@@ -58,6 +60,7 @@ public class Descriptor {
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
+		this.alternateInputIndex = alternateInputIndex;
 		
 		hash = HashFunctions.defaulFunction().hash(slot.getId(), 
 												   sppfNode.hashCode(), 
@@ -79,6 +82,10 @@ public class Descriptor {
 
 	public SPPFNode getSPPFNode() {
 		return sppfNode;
+	}
+	
+	public int getAlternateInputIndex() {
+		return alternateInputIndex;
 	}
 	
 	@Override

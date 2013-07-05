@@ -21,6 +21,8 @@ public class Rule implements Serializable {
 	
 	private final transient Object object;
 	
+	private Condition condition;
+	
 	public Rule(Nonterminal head, List<? extends Symbol> body) {
 		this(head, body, null);
 	}
@@ -58,6 +60,16 @@ public class Rule implements Serializable {
 	
 	public Object getObject() {
 		return object;
+	}
+	
+	public Rule popCondition(Condition condition) {
+		Rule newRule = new Rule(head, body);
+		newRule.condition = condition;
+		return newRule;
+	}
+	
+	public Condition getCondition() {
+		return condition;
 	}
 	
 	/**

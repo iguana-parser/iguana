@@ -31,7 +31,7 @@ public interface LookupTable {
 	
 	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
 
-	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
+	public GSSNode getGSSNode(GrammarSlot label, int inputIndex, int alternateInputIndex);
 	
 	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode);
 	

@@ -23,13 +23,14 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse");
 		
 		Nonterminal S = new Nonterminal("S");
-		Terminal a = new Character('a');
 		Terminal s = new Character('s');
+		Terminal a = new Character('a');
+		Terminal b = new Character('b');
 
-		rule1 = new Rule(S, list(a, S, new Character('b'), S.post(new Condition(list(a, S)))));
+		rule1 = new Rule(S, list(a, S, b, S));
 		builder.addRule(rule1);
 		
-		rule2 = new Rule(S, list(a, S));
+		rule2 = new Rule(S, list(a, S)).popCondition(new Condition(list(a, S, b, S)));
 		builder.addRule(rule2);
 		
 		rule3 = new Rule(S, list(s));

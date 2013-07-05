@@ -30,6 +30,9 @@ public abstract class AbstractGLLParser implements GLLParser {
 		
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParser.class);
 	
+	/**
+	 * u0 is the bottom of the GSS.
+	 */
 	protected static final GSSNode u0 = GSSNode.U0;
 
 	protected LookupTable lookupTable;
@@ -41,10 +44,11 @@ public abstract class AbstractGLLParser implements GLLParser {
 	protected int ci = 0;
 	
 	protected Input input;
-
+	
 	/**
-	 * u0 is the bottom of the GSS.
+	 * Alternate index: the input index at the start of processing the current alternate
 	 */
+	protected int ai;
 	
 	/**
 	 * 
@@ -94,7 +98,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 		
 		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);
 		if (root == null) {
-			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
+			throw new ParseError(errorSlot, this.input, errorIndex, ai, errorGSSNode);
 		}
 		
 		logParseStatistics(end - start);
@@ -155,7 +159,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 */
 	@Override
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
-		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
+		Descriptor descriptor = new Descriptor(label, u, inputIndex, w, ai);
 		boolean result = lookupTable.addDescriptor(descriptor);
 		log.trace("Descriptor created: %s : %b", descriptor, result);
 	}
@@ -228,14 +232,13 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * @param position the position in the body of the rule where this position refers to
 	 *
 	 * @return 
-	 * 
      *
 	 */
 	@Override
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
 		log.trace("GSSNode created: (%s, %d)",  L, i);
 		
-		GSSNode v = lookupTable.getGSSNode(L, i);
+		GSSNode v = lookupTable.getGSSNode(L, i, ai);
 		
 		if(!lookupTable.hasGSSEdge(v, w, u)) {
 			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
@@ -332,6 +335,16 @@ public abstract class AbstractGLLParser implements GLLParser {
 		this.cu = cu;
 		this.cn = cn;
 		this.ci = ci;
+	}
+
+	@Override
+	public int getAi() {
+		return ai;
+	}
+	
+	@Override
+	public void setAi(int ai) {
+		this.ai = ai;
 	}
 	
 	@Override

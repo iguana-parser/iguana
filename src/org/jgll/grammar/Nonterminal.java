@@ -85,4 +85,12 @@ public class Nonterminal implements Symbol {
 	public boolean isNonterminal() {
 		return true;
 	}
+	
+	public Condition getPreCondition() {
+		return pre;
+	}
+	
+	public Condition getPostCondition() {
+		return post;
+	}
 }

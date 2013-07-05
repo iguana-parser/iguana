@@ -158,8 +158,7 @@ public class GrammarBuilder implements Serializable {
 						int lastIndex = parser.getCu().getInputIndex();
 
 						for (String s : deleteSet) {
-							if (match(s,
-									input.subString(lastIndex, currentIndex))) {
+							if (match(s, input.subString(lastIndex, currentIndex))) {
 								return false;
 							}
 						}
@@ -170,29 +169,24 @@ public class GrammarBuilder implements Serializable {
 			}
 
 			slots.add(lastGrammarSlot);
-			headGrammarSlot.addAlternate(new Alternate(firstSlot,
-					headGrammarSlot.getAlternates().size()));
+			headGrammarSlot.addAlternate(new Alternate(firstSlot, headGrammarSlot.getAlternates().size()));
 		}
 
-		for (Entry<BodyGrammarSlot, List<List<CharacterClass>>> e : followRestrionMap
-				.entrySet()) {
+		for (Entry<BodyGrammarSlot, List<List<CharacterClass>>> e : followRestrionMap.entrySet()) {
 			addFollowRestriction(e.getKey().next(), e.getValue());
 		}
 
-		for (Entry<BodyGrammarSlot, CharacterClass> e : preConditionMap
-				.entrySet()) {
+		for (Entry<BodyGrammarSlot, CharacterClass> e : preConditionMap.entrySet()) {
 			addPrecedeRestriction(e.getKey(), e.getValue());
 		}
 
 		return this;
 	}
 
-	private void addPrecedeRestriction(BodyGrammarSlot slot,
-			final CharacterClass characterClass) {
+	private void addPrecedeRestriction(BodyGrammarSlot slot, final CharacterClass characterClass) {
 		if (characterClass != null) {
 
-			log.debug("Precede restriction added {} <<! {}", characterClass,
-					slot);
+			log.debug("Precede restriction added {} <<! {}", characterClass, slot);
 			slot.addPreCondition(new SlotAction<Boolean>() {
 
 				private static final long serialVersionUID = 1L;
@@ -210,8 +204,7 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	private void addFollowRestriction(BodyGrammarSlot slot,
-			final List<List<CharacterClass>> followRestriction) {
+	private void addFollowRestriction(BodyGrammarSlot slot, final List<List<CharacterClass>> followRestriction) {
 		if (followRestriction == null || followRestriction.isEmpty()) {
 			return;
 		}
