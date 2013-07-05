@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import org.jgll.parser.HashFunctions;
+
 public class Nonterminal implements Symbol {
 
 	private static final long serialVersionUID = 1L;
@@ -7,6 +9,10 @@ public class Nonterminal implements Symbol {
 	private final String name;
 	
 	private final boolean ebnfList;
+	
+	private Condition pre;
+	
+	private Condition post;
 	
 	public Nonterminal(String name) {
 		this(name, false);
@@ -33,6 +39,18 @@ public class Nonterminal implements Symbol {
 		return false;
 	}
 	
+	public Nonterminal pre(Condition pre) {
+		Nonterminal newNonterminal = new Nonterminal(name, ebnfList);
+		newNonterminal.pre = pre;
+		return newNonterminal;
+	}
+	
+	public Nonterminal post(Condition post) {
+		Nonterminal newNonterminal = new Nonterminal(name, ebnfList);
+		newNonterminal.post = post;
+		return newNonterminal;
+	}
+	
 	@Override
 	public String toString() {
 		return name;
@@ -55,9 +73,7 @@ public class Nonterminal implements Symbol {
 	
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result = 31 * result + name.hashCode();
-		return result;
+		return HashFunctions.defaulFunction().hash(name.hashCode());
 	}
 
 	@Override

@@ -4,17 +4,10 @@ import java.util.List;
 
 public class Condition {
 	
-	private ConditionType type;
-	private List<Symbol> symbols;
+	private List<? extends Symbol> symbols;
 
-	public Condition(ConditionType type, List<Symbol> symbols) {
-		this.type = type;
+	public Condition(List<? extends Symbol> symbols) {
 		this.symbols = symbols;
-	}
-	
-	public static enum ConditionType {
-		AND,
-		OR;
 	}
 	
 }
