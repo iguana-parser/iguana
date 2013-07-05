@@ -26,6 +26,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private BitSet testSet;
 	
+	private int minInputVal = Integer.MAX_VALUE;
+	
+	private int maxInputVal;
+	
 	public NonterminalGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
 		super(label, position, previous, head);
 		if(nonterminal == null) {
@@ -42,7 +46,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public void setNonterminal(HeadGrammarSlot nonterminal) {
 		this.nonterminal = nonterminal;
 	}
-	
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
@@ -126,6 +129,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean checkAgainstTestSet(int i) {
+		if(i < minInputVal || i > maxInputVal) {
+			return false;
+		}
 		return testSet.get(i);
 	}
 
@@ -135,6 +141,12 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		}
 		
 		for(Terminal t : testSet) {
+			if(minInputVal > t.getMinimumValue()) {
+				minInputVal = t.getMinimumValue();
+			}
+			if(maxInputVal < t.getMaximumValue()) {
+				maxInputVal = t.getMaximumValue();
+			}
 			this.testSet.or(t.getTestSet());
 		}
 	}

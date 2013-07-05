@@ -19,6 +19,10 @@ public class CharacterClass implements Terminal {
 	private final List<Range> ranges;
 	
 	private BitSet testSet;
+	
+	private int minValue = Integer.MAX_VALUE;
+	
+	private int end;
 
 	public CharacterClass(List<Range> ranges) {
 		if(ranges == null || ranges.size() == 0) {
@@ -28,6 +32,12 @@ public class CharacterClass implements Terminal {
 		testSet = new BitSet();
 		
 		for(Range range : ranges) {
+			if(minValue > range.getMinimumValue()) {
+				minValue = range.getMinimumValue();
+			}
+			if(end < range.getMaximumValue()) {
+				end = range.getMaximumValue();
+			}
 			testSet.or(range.getTestSet());
 		}
 		
@@ -40,6 +50,9 @@ public class CharacterClass implements Terminal {
 	
 	@Override
 	public boolean match(int i) {
+		if(i < minValue || i > end) {
+			return false;
+		}
 		return testSet.get(i);
 	}
 	
@@ -59,7 +72,7 @@ public class CharacterClass implements Terminal {
 	
 	@Override
 	public int hashCode() {
-		return 31 * 17 + ranges.hashCode();
+		return ranges.hashCode();
 	}
 
 	@Override
@@ -116,6 +129,16 @@ public class CharacterClass implements Terminal {
 	@Override
 	public BitSet getTestSet() {
 		return testSet;
+	}
+
+	@Override
+	public int getMinimumValue() {
+		return minValue;
+	}
+
+	@Override
+	public int getMaximumValue() {
+		return end;
 	}
 
 }

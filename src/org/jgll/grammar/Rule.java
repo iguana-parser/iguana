@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.parser.HashFunctions;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -99,9 +101,6 @@ public class Rule implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result += 31 * result + head.hashCode();
-		result += 31 * result + body.hashCode();
-		return result;
+		return HashFunctions.defaulFunction().hash(head.hashCode(), body.hashCode());
 	}
 }

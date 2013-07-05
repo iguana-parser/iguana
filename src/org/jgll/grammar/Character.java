@@ -38,7 +38,7 @@ public class Character implements Terminal {
 
 	@Override
 	public int hashCode() {
-		return 31 * 17 + c;
+		return c;
 	}
 
 	@Override
@@ -74,6 +74,16 @@ public class Character implements Terminal {
 		BitSet set = new BitSet();
 		set.set(c);
 		return set;
+	}
+
+	@Override
+	public int getMinimumValue() {
+		return c;
+	}
+
+	@Override
+	public int getMaximumValue() {
+		return c;
 	}
 
 }

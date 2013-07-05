@@ -2,6 +2,8 @@ package org.jgll.grammar;
 
 import java.util.BitSet;
 
+import org.jgll.parser.HashFunctions;
+
 
 /**
  * 
@@ -50,10 +52,7 @@ public class Range implements Terminal {
 
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result = 31 * result + end;
-		result = 31 * result + start;
-		return result;
+		return HashFunctions.defaulFunction().hash(start, end);
 	}
 
 	@Override
@@ -88,6 +87,16 @@ public class Range implements Terminal {
 	@Override
 	public BitSet getTestSet() {
 		return testSet;
+	}
+
+	@Override
+	public int getMinimumValue() {
+		return start;
+	}
+
+	@Override
+	public int getMaximumValue() {
+		return end;
 	}
 	
 }

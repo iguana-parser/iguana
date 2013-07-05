@@ -53,5 +53,15 @@ public class Epsilon implements Terminal {
 	public BitSet getTestSet() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public int getMinimumValue() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int getMaximumValue() {
+		throw new UnsupportedOperationException();
+	}
 	
 }
