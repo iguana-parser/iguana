@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -44,6 +45,19 @@ public interface LookupTable {
 	public int getGSSEdgesCount();
 	
 	public int getDescriptorsCount();
+	
+	/**
+	 *  
+	 * 
+	 * @param slot
+	 * 
+	 * @return returns true if the given slot has been popped.
+	 */
+	public boolean isPopped(LastGrammarSlot slot);
+	
+	public void setPopped(LastGrammarSlot slot);
+	
+	public void clearPopped(LastGrammarSlot slot);
 	
 	public Collection<GSSNode> getGSSNodes();
 	

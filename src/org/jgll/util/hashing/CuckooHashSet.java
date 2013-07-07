@@ -21,19 +21,39 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	
 	private int initialCapacity;
 	
+	/**
+	 * The size of this hash table. Since in Cuckoo hashing we use two tables,
+	 * capacity is double the size of each tables.
+	 */
 	private int capacity;
 	
+	/**
+	 * p = log2 capacity
+	 */
 	private int p;
 	
+	/**
+	 * How many elements are currently in the hash tables
+	 */
 	private int size;
 	
+	/**
+	 * The maximum number of elements in tables before an enlarge operation is
+	 * carried out.
+	 */
 	private int threshold;
 	
 	private float loadFactor;
 	
+	/**
+	 * How many times the rehash method is called. 
+	 */
 	private int rehashCount;
 	
-	private int growCount;
+	/**
+	 * How many times the tables are enlarged.
+	 */
+	private int enlargeCount;
 	
 	private UniversalHashFunction function1;
 	
@@ -270,7 +290,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		table1 = newTable1;
 		table2 = newTable2;
 		
-		growCount++;
+		enlargeCount++;
 		rehash();
 	}
 	
@@ -286,8 +306,8 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		return rehashCount;
 	}
 	
-	public int getGrowCount() {
-		return growCount;
+	public int getEnlargeCount() {
+		return enlargeCount;
 	}
 	
 	private int hash1(Object key) {
@@ -357,8 +377,23 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	}
 
 	@Override
-	public boolean remove(Object o) {
-		throw new UnsupportedOperationException();
+	public boolean remove(Object key) {
+		
+		int index = hash1(key);
+		if(key.equals(table1[index])) {
+			table1[index] = null;
+			size--;
+			return true;
+		}
+		
+		index = hash2(key);
+		if(key.equals(table2[index])) {
+			table2[index] = null;
+			size--;
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -388,7 +423,13 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 
 	@Override
 	public void clear() {
-		throw new UnsupportedOperationException();
+		for(int i = 0; i < table1.length; i++) {
+			table1[i] = null;
+			table2[i] = null;
+		}
+		size = 0;
+		rehashCount = 0;
+		enlargeCount = 0;
 	}
 
 

@@ -45,7 +45,6 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 	@Test
 	public void test() {
 		System.out.println(grammar);
-		
 	}
 
 }

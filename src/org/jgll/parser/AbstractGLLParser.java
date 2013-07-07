@@ -1,11 +1,13 @@
 package org.jgll.parser;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.SlotAction;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
@@ -33,7 +35,10 @@ public abstract class AbstractGLLParser implements GLLParser {
 	protected static final GSSNode u0 = GSSNode.U0;
 
 	protected LookupTable lookupTable;
-	
+
+	/**
+	 * u0 is the bottom of the GSS.
+	 */
 	protected GSSNode cu = u0;
 	
 	protected SPPFNode cn = DummyNode.getInstance();
@@ -41,10 +46,6 @@ public abstract class AbstractGLLParser implements GLLParser {
 	protected int ci = 0;
 	
 	protected Input input;
-
-	/**
-	 * u0 is the bottom of the GSS.
-	 */
 	
 	/**
 	 * 
@@ -52,16 +53,22 @@ public abstract class AbstractGLLParser implements GLLParser {
 	protected Grammar grammar;
 	
 	/**
-	 * The grammar slot at which a parse error has occured. 
+	 * The grammar slot at which a parse error is occurred. 
 	 */
 	protected GrammarSlot errorSlot;
 	
 	/**
-	 * The last input index at which an error has occured. 
+	 * The last input index at which an error is occurred. 
 	 */
 	protected int errorIndex = -1;
 	
+	/**
+	 * The current GSS node at which an error is occurred.
+	 */
 	protected GSSNode errorGSSNode;
+	
+
+	private Map<LastGrammarSlot, Integer> popMap;
 	
 	/**
 	 * Parses the given input string. If the parsing of the input was successful,
@@ -347,6 +354,10 @@ public abstract class AbstractGLLParser implements GLLParser {
 	@Override
 	public GSSNode getCu() {
 		return cu;
+	}
+	
+	public Map<LastGrammarSlot, Integer> getPopMap() {
+		return popMap;
 	}
 	
 	/**
