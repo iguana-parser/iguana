@@ -10,4 +10,8 @@ public class Condition {
 		this.symbols = symbols;
 	}
 	
+	public List<? extends Symbol> getSymbols() {
+		return symbols;
+	}
+	
 }

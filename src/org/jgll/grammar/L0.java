@@ -53,7 +53,6 @@ public class L0 extends GrammarSlot {
 			SPPFNode cn = descriptor.getSPPFNode();
 			int ci = descriptor.getInputIndex();
 			parser.update(cu, cn, ci);
-			parser.setAi(ci);
 			log.trace("Processing (%s, %s, %s, %s)", new Object[] {slot, ci, cu, cn});
 			slot = slot.parse(parser, input);
 		

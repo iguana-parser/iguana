@@ -19,8 +19,7 @@ import org.jgll.sppf.SPPFNode;
  * Based on how descriptors are removed from the set of
  * descriptors, e.g., using a stack or a queue, the implementation of
  * LookupTables may vary. This class only provides an implementation for 
- * lookup functionalities which are the same for different remove
- * strategies.
+ * lookup functionalities which are the same for different strategies.
  * 
  * @author Ali Afroozeh
  *
@@ -29,7 +28,7 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	protected final Grammar grammar;
 	
-	private GSSNode[][] gssNodes;
+	private final GSSNode[][] gssNodes;
 	
 	protected final int inputSize;
 	
@@ -40,8 +39,8 @@ public abstract class AbstractLookupTable implements LookupTable {
 	public AbstractLookupTable(Grammar grammar, int inputSize) {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
-		gssNodes = new GSSNode[grammar.getGrammarSlots().size()][];
-		slotsSize = grammar.getGrammarSlots().size();
+		this.slotsSize = grammar.getGrammarSlots().size();
+		this.gssNodes = new GSSNode[slotsSize][];
 	}
 
 	@Override
@@ -54,13 +53,13 @@ public abstract class AbstractLookupTable implements LookupTable {
 	}
 
 	@Override
-	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex, int alternateInputIndex) {
+	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {
 		int slotId = grammarSlot.getId();
 		if(gssNodes[slotId] == null) {
 			gssNodes[slotId] = new GSSNode[inputSize];
 		}
 		if(gssNodes[slotId][inputIndex] == null) {
-			gssNodes[slotId][inputIndex] = new GSSNode(grammarSlot, inputIndex, alternateInputIndex);
+			gssNodes[slotId][inputIndex] = new GSSNode(grammarSlot, inputIndex);
 		} 
 		
 		return gssNodes[slotId][inputIndex];

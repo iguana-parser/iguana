@@ -23,13 +23,11 @@ public class ParseError extends Exception {
 	private final GrammarSlot slot;
 	private final int inputIndex;
 	private final Input input;
-	private int alternateInputIndex;
 	
-	public ParseError(GrammarSlot slot, Input input, int inputIndex, int alternateInputIndex, GSSNode curerntNode) {
+	public ParseError(GrammarSlot slot, Input input, int inputIndex, GSSNode curerntNode) {
 		this.slot = slot;
 		this.input = input;
 		this.inputIndex = inputIndex;
-		this.alternateInputIndex = alternateInputIndex;
 		this.currentNode = curerntNode;
 	}
 	
@@ -56,7 +54,7 @@ public class ParseError extends Exception {
 	public void printGrammarTrace(PrintStream out) {
 		out.println(toString());
 		
-		indent(out, 1, new GSSNode(((BodyGrammarSlot) slot).next(), inputIndex, alternateInputIndex));
+		indent(out, 1, new GSSNode(((BodyGrammarSlot) slot).next(), inputIndex));
 		
 		GSSNode gssNode = currentNode;
 		

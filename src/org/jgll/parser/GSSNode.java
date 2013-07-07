@@ -27,7 +27,7 @@ public class GSSNode {
 	/**
 	 * The initial GSS node
 	 */
-	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0, 0);
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 
 	private final GrammarSlot slot;
 
@@ -39,8 +39,6 @@ public class GSSNode {
 	
 	private final Set<SPPFNode> poppedElements;
 	
-	private final int ai;
-	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
 	 * {@code position} and {@code index}
@@ -48,10 +46,9 @@ public class GSSNode {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	public GSSNode(GrammarSlot slot, int inputIndex, int ai) {
+	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.ai = ai;
 		this.gssEdges = new CuckooHashSet<>();
 		this.poppedElements = new CuckooHashSet<>();
 		
@@ -101,10 +98,6 @@ public class GSSNode {
 		return  hash == other.hash &&
 				slot == other.slot &&
 				inputIndex == other.inputIndex;
-	}
-	
-	public int getAi() {
-		return ai;
 	}
 
 	@Override

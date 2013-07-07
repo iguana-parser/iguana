@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.parser.AbstractGLLParser;
 import org.jgll.parser.GLLParser;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
@@ -22,7 +23,7 @@ public class GrammarBuilder implements Serializable {
 	Map<String, HeadGrammarSlot> nonterminalsMap;
 
 	List<BodyGrammarSlot> slots;
-
+	
 	List<HeadGrammarSlot> nonterminals;
 
 	int longestTerminalChain;
@@ -45,6 +46,8 @@ public class GrammarBuilder implements Serializable {
 	private Map<String, Set<Filter>> filtersMap;
 
 	private Set<Filter> oneLevelOnlyFilters;
+	
+	private Map<Rule, LastGrammarSlot> ruleToLastSlotMap;
 
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 
@@ -56,8 +59,9 @@ public class GrammarBuilder implements Serializable {
 		filtersMap = new HashMap<>();
 		existingAlternates = new HashMap<>();
 		newNonterminals = new ArrayList<>();
-
+		
 		oneLevelOnlyFilters = new HashSet<>();
+		ruleToLastSlotMap = new HashMap<>();
 	}
 
 	public Grammar build() {
@@ -100,10 +104,8 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	public GrammarBuilder addRule(Rule rule,
-			final List<List<List<CharacterClass>>> notFollow,
-			final List<String> deleteSet,
-			final List<CharacterClass> precedeRestrictions) {
+	public GrammarBuilder addRule(Rule rule, final List<List<List<CharacterClass>>> notFollow, final List<String> deleteSet,
+											 final List<CharacterClass> precedeRestrictions) {
 
 		Map<BodyGrammarSlot, List<List<CharacterClass>>> followRestrionMap = new HashMap<>();
 		Map<BodyGrammarSlot, CharacterClass> preConditionMap = new HashMap<>();
@@ -169,6 +171,7 @@ public class GrammarBuilder implements Serializable {
 			}
 
 			slots.add(lastGrammarSlot);
+			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			headGrammarSlot.addAlternate(new Alternate(firstSlot, headGrammarSlot.getAlternates().size()));
 		}
 
@@ -181,6 +184,27 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		return this;
+	}
+	
+	private BodyGrammarSlot convertCondition(Condition condition) {
+		
+		if(condition.getSymbols().size() == 0) {
+			throw new IllegalArgumentException("The list of symbols cannot be empty.");
+		}
+		
+		BodyGrammarSlot currentSlot = null;
+
+		int index = 0;
+		for(Symbol symbol : condition.getSymbols()) {
+			if(symbol.isNonterminal()) {
+				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
+				currentSlot = new NonterminalGrammarSlot("", index, currentSlot, nonterminal, null);
+			} 
+			else if(symbol.isTerminal()) {
+				
+			}
+		}
+		return null;
 	}
 
 	private void addPrecedeRestriction(BodyGrammarSlot slot, final CharacterClass characterClass) {
@@ -202,6 +226,20 @@ public class GrammarBuilder implements Serializable {
 				}
 			});
 		}
+	}
+	
+	private void addOrder(LastGrammarSlot slot, final Rule rule) {
+		slot.addPopAction(new SlotAction<Boolean>() {
+			
+			@Override
+			public Boolean execute(GLLParser parser, Input input) {
+				Map<LastGrammarSlot, Integer> popMap = ((AbstractGLLParser) parser).getPopMap();
+				if(popMap.get(ruleToLastSlotMap.get(rule)) == parser.getCi()) {
+					return false;
+				}
+				return true;
+			}
+		});
 	}
 
 	private void addFollowRestriction(BodyGrammarSlot slot, final List<List<CharacterClass>> followRestriction) {

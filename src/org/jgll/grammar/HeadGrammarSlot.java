@@ -96,7 +96,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 			int ci = parser.getCi();
 			if(alternate.getFirstSlot().checkAgainstTestSet(input.charAt(ci))) {
 				GSSNode cu = parser.getCu();
-				parser.setAi(ci);
 				parser.add(alternate.getFirstSlot(), cu, ci, DummyNode.getInstance());
 			}
 		}

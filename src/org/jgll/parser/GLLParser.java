@@ -36,8 +36,4 @@ public interface GLLParser {
 	
 	public void newParseError(GrammarSlot slot, int inputIndex, GSSNode node);
 
-	public int getAi();
-
-	public void setAi(int ai);
-	
 }

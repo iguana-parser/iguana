@@ -9,6 +9,7 @@ import java.util.Set;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -44,6 +45,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private Queue<Descriptor> r;
 	
+	private Set<LastGrammarSlot> poppedSlots;
+	
 	/**
 	 * The number of descriptors waiting to be processed.
 	 */
@@ -66,13 +69,16 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		forwardDescriptors = new List[longestTerminalChain];
 		
+		poppedSlots = new CuckooHashSet<>();
+		
 		currentLevelNonPackedNodes = new CuckooHashSet<>();
 		forwardNonPackedNodes = new CuckooHashSet[longestTerminalChain];
 	}
 	
 	private void gotoNextLevel() {
 		u = new CuckooHashSet<>();
-		List<Descriptor> list = forwardDescriptors[indexFor(currentLevel + 1)];
+		int nextIndex = indexFor(currentLevel + 1);
+		List<Descriptor> list = forwardDescriptors[nextIndex];
 		
 		if(list == null) {
 			list = new ArrayList<>();
@@ -84,14 +90,20 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		}
 		list.clear();
 
-		currentLevelNonPackedNodes = forwardNonPackedNodes[indexFor(currentLevel + 1)];
-		if(currentLevelNonPackedNodes == null) {
-			currentLevelNonPackedNodes = new CuckooHashSet<>();
-		}
-		forwardNonPackedNodes[indexFor(currentLevel + 1)] = new CuckooHashSet<>();
 		
+		CuckooHashSet<SPPFNode> tmp = currentLevelNonPackedNodes;
+		currentLevelNonPackedNodes.clear();
+		if(forwardNonPackedNodes[nextIndex] == null) {
+			forwardNonPackedNodes[nextIndex] = new CuckooHashSet<>();
+		}
+		currentLevelNonPackedNodes = forwardNonPackedNodes[nextIndex];
+		forwardNonPackedNodes[nextIndex] = tmp;
+		
+				
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
+		
+		poppedSlots.clear();
 
 		currentLevel++;
 	}
@@ -162,17 +174,17 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
-		CuckooHashSet<SPPFNode> map;
+		CuckooHashSet<SPPFNode> set;
 		if(currentLevel == inputSize - 1) {
-			map = currentLevelNonPackedNodes;
+			set = currentLevelNonPackedNodes;
 		} else {
 			int index = indexFor(inputSize - 1); 
 			if(forwardNonPackedNodes[index] == null) {
 				return null;
 			}
-			map = forwardNonPackedNodes[index];
+			set = forwardNonPackedNodes[index];
 		}
-		return (NonterminalSymbolNode) map.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
+		return (NonterminalSymbolNode) set.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 
 	@Override
@@ -232,6 +244,21 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	@Override
 	public int getDescriptorsCount() {
 		return all;
+	}
+
+	@Override
+	public boolean isPopped(LastGrammarSlot slot) {
+		return poppedSlots.contains(slot);
+	}
+
+	@Override
+	public void setPopped(LastGrammarSlot slot) {
+		poppedSlots.add(slot);
+	}
+
+	@Override
+	public void clearPopped(LastGrammarSlot slot) {
+		poppedSlots.remove(slot);
 	}
 
 }

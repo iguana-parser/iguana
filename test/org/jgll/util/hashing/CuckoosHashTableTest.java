@@ -41,7 +41,7 @@ public class CuckoosHashTableTest {
 		assertEquals(true, set.contains(key3));
 		assertEquals(true, set.contains(key4));
 		
-		assertEquals(1, ((CuckooHashSet<IntegerHashKey>) set).getGrowCount());
+		assertEquals(1, ((CuckooHashSet<IntegerHashKey>) set).getEnlargeCount());
 	}
 	
 	@Test
@@ -69,6 +69,35 @@ public class CuckoosHashTableTest {
 		set1.addAll(set2);
 		assertEquals(7, set1.size());
 	}
+	
+	@Test
+	public void testClear() {
+		Set<Integer> set = CuckooHashSet.from(1, 2, 3, 4, 5);
+		set.clear();
+		
+		assertEquals(false, set.contains(1));
+		assertEquals(false, set.contains(2));
+		assertEquals(false, set.contains(3));
+		assertEquals(false, set.contains(4));
+		assertEquals(false, set.contains(5));
+		assertEquals(0, set.size());
+	}
+	
+	@Test
+	public void testRemove() {
+		Set<Integer> set = CuckooHashSet.from(1, 2, 3, 4, 5);
+		set.remove(3);
+		set.remove(5);
+		
+		assertEquals(true, set.contains(1));
+		assertEquals(true, set.contains(2));
+		assertEquals(false, set.contains(3));
+		assertEquals(true, set.contains(4));
+		assertEquals(false, set.contains(5));
+		assertEquals(3, set.size());
+	}
+	
+	
 	
 	private class IntegerHashKey {
 
