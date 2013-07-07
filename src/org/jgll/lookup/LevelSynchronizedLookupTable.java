@@ -1,8 +1,6 @@
 package org.jgll.lookup;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
@@ -41,7 +39,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private CuckooHashSet<SPPFNode>[] forwardNonPackedNodes;
 	
-	private List<Descriptor>[] forwardDescriptors;
+	private Set<Descriptor>[] forwardDescriptors;
 	
 	private Queue<Descriptor> r;
 	
@@ -67,7 +65,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		u = new CuckooHashSet<>(2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors()));
 		r = new ArrayDeque<>();
 		
-		forwardDescriptors = new List[longestTerminalChain];
+		forwardDescriptors = new CuckooHashSet[longestTerminalChain];
 		
 		poppedSlots = new CuckooHashSet<>();
 		
@@ -76,20 +74,20 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	private void gotoNextLevel() {
-		u = new CuckooHashSet<>();
 		int nextIndex = indexFor(currentLevel + 1);
-		List<Descriptor> list = forwardDescriptors[nextIndex];
 		
-		if(list == null) {
-			list = new ArrayList<>();
+		Set<Descriptor> tmpDesc = u;
+		u.clear();
+		
+		if(forwardDescriptors[nextIndex] == null) {
+			forwardDescriptors[nextIndex] = new CuckooHashSet<>();
 		}
+		u = forwardDescriptors[nextIndex];
+		forwardDescriptors[nextIndex] = tmpDesc;
 		
-		for(Descriptor d : list) {
-			u.add(d);
+		for(Descriptor d : u) {
 			r.add(d);
 		}
-		list.clear();
-
 		
 		CuckooHashSet<SPPFNode> tmp = currentLevelNonPackedNodes;
 		currentLevelNonPackedNodes.clear();
@@ -231,11 +229,12 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		else {
 			int index = indexFor(descriptor.getInputIndex());
 			if(forwardDescriptors[index] == null) {
-				forwardDescriptors[index] = new ArrayList<>();
+				forwardDescriptors[index] = new CuckooHashSet<>();
 			}
-			forwardDescriptors[index].add(descriptor);
-			size++;
-			all++;
+			if(forwardDescriptors[index].add(descriptor)) {
+				size++;
+				all++;
+			}
 		}
 		
 		return true;
