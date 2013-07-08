@@ -228,14 +228,26 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private void addOrder(LastGrammarSlot slot, final Rule rule) {
-		slot.addPopAction(new SlotAction<Boolean>() {
+	private void addNotCondition(final LastGrammarSlot slot1, final LastGrammarSlot slot2) {
+		
+		slot1.addPopAction(new SlotAction<Boolean>() {
 			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
-				Map<LastGrammarSlot, Integer> popMap = ((AbstractGLLParser) parser).getPopMap();
-				if(popMap.get(ruleToLastSlotMap.get(rule)) == parser.getCi()) {
-					return false;
+				return false;
+			}
+		});
+		
+		slot2.addPopAction(new SlotAction<Boolean>() {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Boolean execute(GLLParser parser, Input input) {
+				if(parser.getLookupTable().isPopped(slot2)) {
+					parser.getLookupTable().clearPopped(slot2);
 				}
 				return true;
 			}
