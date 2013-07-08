@@ -45,6 +45,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private Queue<Descriptor> r;
 	
+	private Queue<Descriptor>[] forwardRs;
+	
 	private Set<LastGrammarSlot> poppedSlots;
 	
 	/**
@@ -57,21 +59,30 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	 */
 	private int all;
 	
+	@SuppressWarnings("unchecked")
 	public LevelSynchronizedLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		this.longestTerminalChain = grammar.getLongestTerminalChain();
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new DescriptorSet();
+		u = new DescriptorSet(getSize());
 		r = new ArrayDeque<>();
 		
 		forwardDescriptors = new DescriptorSet[longestTerminalChain];
+		forwardRs = new Queue[longestTerminalChain];
 		
 		poppedSlots = new CuckooHashSet<>();
 		
 		currentLevelNonPackedNodes = new SPPFNodeSet();
 		forwardNonPackedNodes = new SPPFNodeSet[longestTerminalChain];
+
+		
+		for(int i = 0; i < longestTerminalChain; i++) {
+			forwardDescriptors[i] = new DescriptorSet(getSize());
+			forwardRs[i] = new ArrayDeque<>();
+			forwardNonPackedNodes[i] = new SPPFNodeSet();
+		}
 	}
 	
 	private void gotoNextLevel() {
@@ -79,22 +90,16 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		DescriptorSet tmpDesc = u;
 		u.clear();
-		
-		if(forwardDescriptors[nextIndex] == null) {
-			forwardDescriptors[nextIndex] = new DescriptorSet();
-		}
 		u = forwardDescriptors[nextIndex];
 		forwardDescriptors[nextIndex] = tmpDesc;
 		
-		for(Descriptor d : u) {
-			r.add(d);
-		}
+		Queue<Descriptor> tmpR = r;
+		assert r.isEmpty();
+		r = forwardRs[nextIndex];
+		forwardRs[nextIndex] = tmpR;
 		
 		SPPFNodeSet tmp = currentLevelNonPackedNodes;
 		currentLevelNonPackedNodes.clear();
-		if(forwardNonPackedNodes[nextIndex] == null) {
-			forwardNonPackedNodes[nextIndex] = new SPPFNodeSet();
-		}
 		currentLevelNonPackedNodes = forwardNonPackedNodes[nextIndex];
 		forwardNonPackedNodes[nextIndex] = tmp;
 		
@@ -125,13 +130,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			return value;
 		} else {
 			int index = indexFor(rightExtent);
-			
-			if(forwardNonPackedNodes[index] == null) {
-				forwardNonPackedNodes[index] = new SPPFNodeSet();
-				forwardNonPackedNodes[index].add(key);
-				countNonPackedNodes++;
-				return key;
-			} 
 			
 			SPPFNode value = forwardNonPackedNodes[index].get(key);
 			if(value == null) {
@@ -177,9 +175,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			set = currentLevelNonPackedNodes;
 		} else {
 			int index = indexFor(inputSize - 1); 
-			if(forwardNonPackedNodes[index] == null) {
-				return null;
-			}
 			set = forwardNonPackedNodes[index];
 		}
 		return (NonterminalSymbolNode) set.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
@@ -206,10 +201,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		}
 	}
 	
-	@SuppressWarnings("unused")
-	private int getSize(Set<Descriptor> previous) {
-		int size = previous.size() + 2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors());
-		return size;
+	private int getSize() {
+		return grammar.getMaxDescriptorsAtInput();
 	}
 
 	@Override
@@ -227,10 +220,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		else {
 			int index = indexFor(descriptor.getInputIndex());
-			if(forwardDescriptors[index] == null) {
-				forwardDescriptors[index] = new DescriptorSet();
-			}
 			if(forwardDescriptors[index].add(descriptor)) {
+				forwardRs[index].add(descriptor);
 				size++;
 				all++;
 			}  else {

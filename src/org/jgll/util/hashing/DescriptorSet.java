@@ -8,6 +8,12 @@ public class DescriptorSet extends CuckooHashSet<Descriptor> {
 	
 	private int level;
 	
+	public DescriptorSet() {}
+	
+	public DescriptorSet(int initialCapacity) {
+		super(initialCapacity);
+	}
+	
 	@Override
 	protected boolean contains(Object key, Object[] table1, Object[] table2) {
 		int index = hash1(key);
