@@ -1,10 +1,10 @@
 package org.jgll.grammar;
 
+import static org.junit.Assert.assertEquals;
+
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.dot.GrammarToDot;
-import org.jgll.util.dot.GraphVizUtil;
 import org.junit.Test;
 
 /**
@@ -51,10 +51,9 @@ public class FilterTest1 extends AbstractGrammarTest {
 
 	@Test
 	public void testAssociativityAndPriority() throws ParseError {
-		System.out.println(grammar);
-		GraphVizUtil.generateGraph(GrammarToDot.toDot(grammar), "/Users/ali/output", "grammar", GraphVizUtil.L2R);
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
-		generateGraphWithoutIntermeiateNodes(sppf);
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
+		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
 
 }

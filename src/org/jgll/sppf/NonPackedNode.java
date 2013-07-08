@@ -1,12 +1,13 @@
 package org.jgll.sppf;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.parser.HashFunctions;
+import org.jgll.util.hashing.CuckooHashSet;
 
 /**
  * A NonPackedNode corresponds to nonterminal symbol nodes or
@@ -33,7 +34,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	private GrammarSlot firstPackedNodeGrammarSlot = null;
 	
-	private BitSet packedNodesIndex;
+	private Set<PackedNode> packedNodesSet;
 
 	private final int hash;
 	
@@ -98,9 +99,6 @@ public abstract class NonPackedNode extends SPPFNode {
 		
 		int packedNodeCount = countPackedNode();
 		
-		// pivot range
-		int range = rightExtent - leftExtent;
-		
 		// Don't store the first packed node as the node may not be ambiguous
 		if(packedNodeCount == 0) {
 			firstPackedNodeGrammarSlot = packedNodeSlot;
@@ -132,22 +130,20 @@ public abstract class NonPackedNode extends SPPFNode {
 			children.add(secondPackedNode);
 			
 //			packedNodesIndex = new BitSet(range * slots);
-			packedNodesIndex = new BitSet();
-			
-			packedNodesIndex.set(firstPackedNode.getPivot() * range + firstPackedNode.getGrammarSlot().getId());
-			packedNodesIndex.set(secondPackedNode.getPivot() * range + secondPackedNode.getGrammarSlot().getId());
+			packedNodesSet = new CuckooHashSet<>();
+			packedNodesSet.add(firstPackedNode);
+			packedNodesSet.add(secondPackedNode);
 		} 
 		
 		else {
 			
-			if(packedNodesIndex.get(pivot * range + packedNodeSlot.getId())) {
-				return;
+			PackedNode packedNode = new PackedNode(packedNodeSlot, pivot, this);
+
+			if(packedNodesSet.add(packedNode)) {
+				addChildren(packedNode, leftChild, rightChild);
+				children.add(packedNode);
 			}
 			
-			PackedNode packedNode = new PackedNode(packedNodeSlot, pivot, this);
-			addChildren(packedNode, leftChild, rightChild);
-			children.add(packedNode);
-			packedNodesIndex.set(packedNode.getPivot() * range + packedNode.getGrammarSlot().getId());
 		}
 		
 	}

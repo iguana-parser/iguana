@@ -72,7 +72,7 @@ public class FilterTest5 extends AbstractGrammarTest {
 	public void testParsers() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("xawz"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("xawz"), grammar, "E");
-		assertEquals(sppf1, sppf2);
+		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
 
 }
