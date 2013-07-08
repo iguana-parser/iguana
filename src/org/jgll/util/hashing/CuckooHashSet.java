@@ -7,7 +7,7 @@ import java.util.Set;
 
 /**
  * 
- * A hash set based on the Cuckoo hashing algorithm.
+ * A hash set based on Cuckoo hashing.
  * 
  * @author Ali Afroozeh
  *
@@ -114,7 +114,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	
 	@Override
 	public boolean contains(Object key) {
-		return contains(key, table1, table2);
+		return get(key) != null;
 	}
 	
 	/**
@@ -128,33 +128,22 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public E get(Object key) {
+	
 		int index = hash1(key);
-
-		if(key.equals(table1[index])) {
-			return (E) table1[index];
+		if(!isEntryEmpty(table1[index])) {
+			if(key.equals(table1[index])) {
+				return (E) table1[index];
+			}			
 		}
 		
 		index = hash2(key);
-		if(key.equals(table2[index])) {
-			return (E) table2[index];
+		if(!isEntryEmpty(table2[index])) {
+			if(key.equals(table2[index])) {
+				return (E) table2[index];
+			}
 		}
 
 		return null;
-	}
-	
-	protected boolean contains(Object key, Object[] table1, Object[] table2) {
-		int index = hash1(key);
-
-		if(key.equals(table1[index])) {
-			return true;
-		}
-		
-		index = hash2(key);
-		if(key.equals(table2[index])) {
-			return true;
-		}
-		
-		return false;
 	}
 	
 	private boolean insertAgain(Object key, Object[] table1, Object[] table2) {
@@ -185,12 +174,25 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		return false;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean add(E key) {
+		return addAndGet(key) == null;
+	}
+	
+	/**
+	 * 
+	 * Adds the given key to the set if it does not already exist in the set.
+	 * 
+	 * @param key 
+	 * @return A reference to the old key stored in the set if the key was in 
+	 *         the set, otherwise returns null. 
+	 */
+	@SuppressWarnings("unchecked")
+	public E addAndGet(E key) {
+		E e = get(key);
 		
-		if(contains(key)) {
-			return false;
+		if(e != null) {
+			return e;
 		}
 		
 		int i = 0;
@@ -204,7 +206,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 				if(size >= threshold) {
 					enlargeTables();
 				}
-				return true;
+				return null;
 			}
 			
 			E tmp = (E) table1[index];
@@ -218,7 +220,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 				if(size >= threshold) {
 					enlargeTables();
 				}
-				return true;
+				return null;
 			}
 			
 			tmp = (E) table2[index];
@@ -227,7 +229,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		}
 		
 		rehash();
-		return add(key);
+		return addAndGet(key);
 	}
 	
 	protected boolean isEntryEmpty(Object e) {

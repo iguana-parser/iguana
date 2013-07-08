@@ -15,31 +15,6 @@ public class DescriptorSet extends CuckooHashSet<Descriptor> {
 	}
 	
 	@Override
-	protected boolean contains(Object key, Object[] table1, Object[] table2) {
-		int index = hash1(key);
-
-		if(isEntryEmpty(table1[index])) {
-			return false;
-		}
-		
-		if(key.equals(table1[index])) {
-			return true;
-		}
-		
-		index = hash2(key);
-		
-		if(isEntryEmpty(table2[index])) {
-			return false;
-		}
-		
-		if(key.equals(table2[index])) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	@Override
 	public boolean isEntryEmpty(Object o) {
 		Descriptor desc = (Descriptor) o;
 		return o == null || desc.getInputIndex() != level;

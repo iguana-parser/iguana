@@ -46,7 +46,7 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 	}
 	
 	@Test
-	public void testParsers() throws ParseError {
+	public void testParsers1() throws ParseError {
 		System.out.println(grammar);
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
@@ -54,9 +54,10 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 	}
 		
 	@Test
-	public void testAssociativityAndPriority() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
-		generateGraphWithoutIntermeiateNodes(sppf);
+	public void testParsers2() throws ParseError {
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a+a"), grammar, "E");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
+		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
 	
 }

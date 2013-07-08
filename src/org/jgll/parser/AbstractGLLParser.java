@@ -1,6 +1,5 @@
 package org.jgll.parser;
 
-import java.util.Collection;
 
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
@@ -120,7 +119,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 		Runtime runtime = Runtime.getRuntime();
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.info("Descriptors: %d", lookupTable.getDescriptorsCount());
-		log.info("GSSNodes: %d", lookupTable.getGSSNodes().size());
+		log.info("GSSNodes: %d", lookupTable.getGSSNodesCount());
 		log.info("Non-packed nodes: %d", lookupTable.getDescriptorsCount());
 		log.info("GSS Nodes: %d", lookupTable.getGSSNodesCount());
 		log.info("GSS Edges: %d", lookupTable.getGSSEdgesCount());
@@ -353,13 +352,5 @@ public abstract class AbstractGLLParser implements GLLParser {
 	public GSSNode getCu() {
 		return cu;
 	}
-	
-	/**
-	 * Returns the list of created GSSNodes. This list may be useful for analysis
-	 * or visualization of GSS nodes after the parsing. 
-	 */
-	public Collection<GSSNode> getGSSNodes() {
-		return lookupTable.getGSSNodes();
-	}
-		
+			
 }

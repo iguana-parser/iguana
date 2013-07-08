@@ -1,7 +1,5 @@
 package org.jgll.lookup;
 
-import java.util.Collection;
-
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
@@ -59,6 +57,6 @@ public interface LookupTable {
 	
 	public void clearPopped(LastGrammarSlot slot);
 	
-	public Collection<GSSNode> getGSSNodes();
+	public Iterable<GSSNode> getGSSNodes();
 	
 }

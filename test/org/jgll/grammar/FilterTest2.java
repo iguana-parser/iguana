@@ -5,6 +5,8 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * 
  * E ::= 0 E ^ E	(right)
@@ -66,9 +68,9 @@ public class FilterTest2 extends AbstractGrammarTest {
 
 	@Test
 	public void testAssociativityAndPriority() throws ParseError {
-		System.out.println(grammar);
-		NonterminalSymbolNode sppf= rdParser.parse(Input.fromString("a+a^a^-a+a"), grammar, "E");
-		generateGraphWithoutIntermeiateNodes(sppf);
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a^a^-a+a"), grammar, "E");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a^a^-a+a"), grammar, "E");
+		assertEquals(true, sppf1.deepEquals(sppf2));
 	}
 	
 

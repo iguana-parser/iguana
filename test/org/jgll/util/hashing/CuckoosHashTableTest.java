@@ -16,8 +16,11 @@ public class CuckoosHashTableTest {
 		IntegerHashKey key1 = new IntegerHashKey(100, 12, 27, 23);
 		IntegerHashKey key2 = new IntegerHashKey(52, 10, 20, 21);
 
-		set.add(key1);
-		set.add(key2);
+		boolean add1 = set.add(key1);
+		boolean add2 = set.add(key2);
+		assertEquals(true, add1);
+		assertEquals(true, add2);
+		
 		
 		assertEquals(true, set.contains(key1));
 		assertEquals(true, set.contains(key2));
@@ -97,6 +100,17 @@ public class CuckoosHashTableTest {
 		assertEquals(3, set.size());
 	}
 	
+	@Test
+	public void testAddAndGet() {
+		CuckooHashSet<Integer> set = CuckooHashSet.from(1, 2, 3);
+		Integer ret1 = set.addAndGet(4);
+		assertEquals(null, ret1);
+		
+		assertEquals(true, set.contains(4));
+		
+		int ret2 = set.addAndGet(3);
+		assertEquals(3, ret2);
+	}
 	
 	
 	private class IntegerHashKey {

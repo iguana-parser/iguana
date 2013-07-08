@@ -1,12 +1,10 @@
 package org.jgll.grammar;
 
+import static org.junit.Assert.assertEquals;
+
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.dot.GrammarToDot;
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.SPPFToDot;
-import org.jgll.util.dot.ToDotWithoutIntermeidateAndLists;
 import org.junit.Test;
 
 /**
@@ -75,15 +73,10 @@ public class FilterTest3 extends AbstractGrammarTest {
 	}
 
 	@Test
-	public void testAssociativityAndPriority() throws ParseError {
-		
-		GraphVizUtil.generateGraph(GrammarToDot.toDot(grammar), "/Users/ali/output", "grammar", GraphVizUtil.L2R);
-
-		System.out.println(grammar);
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa+aaaa+aaaa"), grammar, "E");
-		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists();
-		sppf.accept(toDot);
-		GraphVizUtil.generateGraph(toDot.getString(), "/Users/ali/output", "graph");
+	public void testParsers() throws ParseError {
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aaa+aaaa+aaaa"), grammar, "E");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aaa+aaaa+aaaa"), grammar, "E");
+		assertEquals(true, sppf1.equals(sppf2));
 	}
 
 }

@@ -9,7 +9,13 @@ import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
 
-// A ::= epsilon
+/**
+ * 
+ * A ::= epsilon
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class Test1 extends AbstractGrammarTest {
 
 	@Override

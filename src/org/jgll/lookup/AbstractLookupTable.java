@@ -1,8 +1,5 @@
 package org.jgll.lookup;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
@@ -12,6 +9,7 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.hashing.CuckooHashSet;
 
 /**
  * 
@@ -28,7 +26,7 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	protected final Grammar grammar;
 	
-	private final GSSNode[][] gssNodes;
+	private final CuckooHashSet<GSSNode> gssNodes;
 	
 	protected final int inputSize;
 	
@@ -40,7 +38,7 @@ public abstract class AbstractLookupTable implements LookupTable {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
 		this.slotsSize = grammar.getGrammarSlots().size();
-		this.gssNodes = new GSSNode[slotsSize][];
+		this.gssNodes = new CuckooHashSet<>();
 	}
 
 	@Override
@@ -53,16 +51,16 @@ public abstract class AbstractLookupTable implements LookupTable {
 	}
 
 	@Override
-	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {
-		int slotId = grammarSlot.getId();
-		if(gssNodes[slotId] == null) {
-			gssNodes[slotId] = new GSSNode[inputSize];
+	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {	
+		GSSNode gssNode = new GSSNode(grammarSlot, inputIndex);
+		if(gssNodes.contains(gssNode)) {
+			return gssNodes.get(gssNode);
 		}
-		if(gssNodes[slotId][inputIndex] == null) {
-			gssNodes[slotId][inputIndex] = new GSSNode(grammarSlot, inputIndex);
-		} 
-		
-		return gssNodes[slotId][inputIndex];
+		else {
+			gssNodes.add(gssNode);
+			return gssNode;
+		}
+//		return gssNodes.addAndGet(new GSSNode(grammarSlot, inputIndex));
 	}
 
 	@Override
@@ -77,7 +75,7 @@ public abstract class AbstractLookupTable implements LookupTable {
 
 	@Override
 	public int getGSSNodesCount() {
-		return getGSSNodes().size();
+		return gssNodes.size();
 	}
 	
 	@Override
@@ -86,18 +84,8 @@ public abstract class AbstractLookupTable implements LookupTable {
 	}
 	
 	@Override
-	public Collection<GSSNode> getGSSNodes() {
-		Collection<GSSNode> list = new ArrayList<>();
-		for(int i = 0; i < gssNodes.length; i++) {
-			if(gssNodes[i] != null) {
-			for(int j = 0; j < gssNodes[i].length; j++) {
-				if(gssNodes[i][j] != null) {
-					list.add(gssNodes[i][j]);
-				}
-			}
-			}
-		}
-		return list;
+	public Iterable<GSSNode> getGSSNodes() {
+		return gssNodes;
 	}
 	
 	protected NonPackedNode createNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
