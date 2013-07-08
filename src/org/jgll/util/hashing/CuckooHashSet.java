@@ -142,7 +142,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		return null;
 	}
 	
-	public boolean contains(Object key, Object[] table1, Object[] table2) {
+	protected boolean contains(Object key, Object[] table1, Object[] table2) {
 		int index = hash1(key);
 
 		if(key.equals(table1[index])) {
