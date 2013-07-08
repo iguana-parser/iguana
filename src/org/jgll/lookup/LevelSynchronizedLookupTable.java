@@ -13,6 +13,8 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.util.hashing.DescriptorSet;
+import org.jgll.util.hashing.SPPFNodeSet;
 
 /**
  * 
@@ -33,13 +35,13 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private Set<Descriptor> u;
+	private DescriptorSet u;
 	
-	private CuckooHashSet<SPPFNode> currentLevelNonPackedNodes;
+	private SPPFNodeSet currentLevelNonPackedNodes;
 	
-	private CuckooHashSet<SPPFNode>[] forwardNonPackedNodes;
+	private SPPFNodeSet[] forwardNonPackedNodes;
 	
-	private Set<Descriptor>[] forwardDescriptors;
+	private DescriptorSet[] forwardDescriptors;
 	
 	private Queue<Descriptor> r;
 	
@@ -55,32 +57,31 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	 */
 	private int all;
 	
-	@SuppressWarnings("unchecked")
 	public LevelSynchronizedLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		this.longestTerminalChain = grammar.getLongestTerminalChain();
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new CuckooHashSet<>(2 * (grammar.getAverageDescriptorsAtInput() + grammar.getStDevDescriptors()));
+		u = new DescriptorSet();
 		r = new ArrayDeque<>();
 		
-		forwardDescriptors = new CuckooHashSet[longestTerminalChain];
+		forwardDescriptors = new DescriptorSet[longestTerminalChain];
 		
 		poppedSlots = new CuckooHashSet<>();
 		
-		currentLevelNonPackedNodes = new CuckooHashSet<>();
-		forwardNonPackedNodes = new CuckooHashSet[longestTerminalChain];
+		currentLevelNonPackedNodes = new SPPFNodeSet();
+		forwardNonPackedNodes = new SPPFNodeSet[longestTerminalChain];
 	}
 	
 	private void gotoNextLevel() {
 		int nextIndex = indexFor(currentLevel + 1);
 		
-		Set<Descriptor> tmpDesc = u;
+		DescriptorSet tmpDesc = u;
 		u.clear();
 		
 		if(forwardDescriptors[nextIndex] == null) {
-			forwardDescriptors[nextIndex] = new CuckooHashSet<>();
+			forwardDescriptors[nextIndex] = new DescriptorSet();
 		}
 		u = forwardDescriptors[nextIndex];
 		forwardDescriptors[nextIndex] = tmpDesc;
@@ -89,15 +90,14 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			r.add(d);
 		}
 		
-		CuckooHashSet<SPPFNode> tmp = currentLevelNonPackedNodes;
+		SPPFNodeSet tmp = currentLevelNonPackedNodes;
 		currentLevelNonPackedNodes.clear();
 		if(forwardNonPackedNodes[nextIndex] == null) {
-			forwardNonPackedNodes[nextIndex] = new CuckooHashSet<>();
+			forwardNonPackedNodes[nextIndex] = new SPPFNodeSet();
 		}
 		currentLevelNonPackedNodes = forwardNonPackedNodes[nextIndex];
 		forwardNonPackedNodes[nextIndex] = tmp;
 		
-				
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
 		
@@ -127,7 +127,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			int index = indexFor(rightExtent);
 			
 			if(forwardNonPackedNodes[index] == null) {
-				forwardNonPackedNodes[index] = new CuckooHashSet<>();
+				forwardNonPackedNodes[index] = new SPPFNodeSet();
 				forwardNonPackedNodes[index].add(key);
 				countNonPackedNodes++;
 				return key;
@@ -216,9 +216,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	public boolean addDescriptor(Descriptor descriptor) {
 		int inputIndex = descriptor.getInputIndex();
 		if(inputIndex == currentLevel) {
-			if(!u.contains(descriptor)) {
+			if(u.add(descriptor)) {
 				 r.add(descriptor);
-				 u.add(descriptor);
 				 size++;
 				 all++;
 			} else {
@@ -229,11 +228,13 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		else {
 			int index = indexFor(descriptor.getInputIndex());
 			if(forwardDescriptors[index] == null) {
-				forwardDescriptors[index] = new CuckooHashSet<>();
+				forwardDescriptors[index] = new DescriptorSet();
 			}
 			if(forwardDescriptors[index].add(descriptor)) {
 				size++;
 				all++;
+			}  else {
+				return false;
 			}
 		}
 		

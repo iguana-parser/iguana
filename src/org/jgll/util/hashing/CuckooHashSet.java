@@ -35,7 +35,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	/**
 	 * How many elements are currently in the hash tables
 	 */
-	private int size;
+	protected int size;
 	
 	/**
 	 * The maximum number of elements in tables before an enlarge operation is
@@ -48,20 +48,20 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	/**
 	 * How many times the rehash method is called. 
 	 */
-	private int rehashCount;
+	protected int rehashCount;
 	
 	/**
 	 * How many times the tables are enlarged.
 	 */
-	private int enlargeCount;
+	protected int enlargeCount;
 	
 	private UniversalHashFunction function1;
 	
 	private UniversalHashFunction function2;
 	
-	private Object[] table1;
+	protected Object[] table1;
 
-	private Object[] table2;
+	protected Object[] table2;
 		
 	@SafeVarargs
 	public static <T> CuckooHashSet<T> from(T...elements) {
@@ -163,7 +163,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 			i++;
 
 			int index = hash1(key);
-			if(table1[index] == null) {
+			if(isEntryEmpty(table1[index])) {
 				table1[index] = key;
 				return true;
 			}
@@ -173,7 +173,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 			key = tmp;
 			
 			index = hash2(key);
-			if(table2[index] == null) {
+			if(isEntryEmpty(table2[index])) {
 				table2[index] = key;
 				return true;
 			}
@@ -198,7 +198,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 			i++;
 			
 			int index = hash1(key);
-			if(table1[index] == null) {
+			if(isEntryEmpty(table1[index])) {
 				table1[index] = key;
 				size++;
 				if(size >= threshold) {
@@ -212,7 +212,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 			key = tmp;
 			
 			index = hash2(key);
-			if(table2[index] == null) {
+			if(isEntryEmpty(table2[index])) {
 				table2[index] = key;
 				size++;
 				if(size >= threshold) {
@@ -230,6 +230,10 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		return add(key);
 	}
 	
+	protected boolean isEntryEmpty(Object e) {
+		return e == null;
+	}
+	
 	private void rehash() {
 		Object[] newTable1 = new Object[table1.length];
 		Object[] newTable2 = new Object[table2.length];
@@ -237,7 +241,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		generateNewHashFunctions();
 		
 		for(Object key : table1) {
-			if(key != null) {
+			if(!isEntryEmpty(key)) {
 				// if one element cannot be inserted, restart the whole process with two new
 				// hash function.
 				if(!insertAgain(key, newTable1, newTable2)) {
@@ -248,7 +252,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		}
 		
 		for(Object key : table2) {
-			if(key != null) {
+			if(!isEntryEmpty(key)) {
 				// if one element cannot be inserted, restart the whole process with two new
 				// hash function.
 				if(!insertAgain(key, newTable1, newTable2)) {
@@ -276,13 +280,13 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		
 		int i = 0;
 		for(Object key : table1) {
-			if(key != null) {
+			if(!isEntryEmpty(key)) {
 				newTable1[i++] = key;
 			}
 		}
 		
 		for(Object key : table2) {
-			if(key != null) {
+			if(!isEntryEmpty(key)) {
 				newTable1[i++] = key;
 			}
 		}
@@ -310,11 +314,11 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		return enlargeCount;
 	}
 	
-	private int hash1(Object key) {
+	protected int hash1(Object key) {
 		return function1.hash(key.hashCode());
 	}
 	
-	private int hash2(Object key) {
+	protected int hash2(Object key) {
 		return function2.hash(key.hashCode());
 	}
 
@@ -341,7 +345,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 			@Override
 			public E next() {
 				while(index1 < table1.length) {
-					if(table1[index1] != null) {
+					if(!isEntryEmpty(table1[index1])) {
 						it++;
 						return (E) table1[index1++];
 					}
@@ -349,7 +353,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 				}
 				
 				while(index2 < table2.length) {
-					if(table2[index2] != null) {
+					if(!isEntryEmpty(table2[index2])) {
 						it++;
 						return (E) table2[index2++];
 					}
