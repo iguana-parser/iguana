@@ -1,5 +1,6 @@
 package org.jgll.parser;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlot;
@@ -33,11 +34,11 @@ public class GSSNode {
 
 	private final int inputIndex;
 
-	private final Set<GSSEdge> gssEdges;
+	private Set<GSSEdge> gssEdges;
 	
 	private final int hash;
 	
-	private final Set<SPPFNode> poppedElements;
+	private Set<SPPFNode> poppedElements;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -49,17 +50,21 @@ public class GSSNode {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.gssEdges = new CuckooHashSet<>();
-		this.poppedElements = new CuckooHashSet<>();
 		
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 	
 	public boolean hasGSSEdge(SPPFNode label, GSSNode destination) {
+		if(gssEdges == null) {
+			gssEdges = new CuckooHashSet<>();
+		}
 		return !gssEdges.add(new GSSEdge(label, destination));
 	}
 	
 	public void addToPopElements(SPPFNode sppfNode) {
+		if(poppedElements == null) {
+			poppedElements = new CuckooHashSet<>();
+		}
 		poppedElements.add(sppfNode);
 	}
 	
@@ -80,6 +85,9 @@ public class GSSNode {
 	}
 	
 	public Iterable<SPPFNode> getPoppedElements() {
+		if(poppedElements == null) {
+			return Collections.emptyList();
+		}
 		return poppedElements;
 	}
 
