@@ -15,7 +15,7 @@ public interface GLLParser {
 	
 	public void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w);
 
-	public void pop();
+	public void pop(GSSNode u, int i, SPPFNode z);
 	
 	public GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w);
 	

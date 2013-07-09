@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.jgll.parser.AbstractGLLParser;
 import org.jgll.parser.GLLParser;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
@@ -228,7 +227,7 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private void addNotCondition(final LastGrammarSlot slot1, final LastGrammarSlot slot2) {
+	private void addNot(final LastGrammarSlot slot1, final LastGrammarSlot slot2) {
 		
 		slot1.addPopAction(new SlotAction<Boolean>() {
 			
@@ -236,6 +235,7 @@ public class GrammarBuilder implements Serializable {
 
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
+				parser.getLookupTable().setPopped(slot1);
 				return false;
 			}
 		});
@@ -246,8 +246,8 @@ public class GrammarBuilder implements Serializable {
 
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
-				if(parser.getLookupTable().isPopped(slot2)) {
-					parser.getLookupTable().clearPopped(slot2);
+				if(parser.getLookupTable().isPopped(slot1)) {
+					parser.getLookupTable().clearPopped(slot1);
 				}
 				return true;
 			}

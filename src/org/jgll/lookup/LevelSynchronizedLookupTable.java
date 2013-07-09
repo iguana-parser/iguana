@@ -106,6 +106,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
 		
+		
+		
 		poppedSlots.clear();
 
 		currentLevel++;
@@ -140,7 +142,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			return value;
 		}
 	}
-		
 	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {

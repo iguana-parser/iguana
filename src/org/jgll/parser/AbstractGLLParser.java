@@ -183,26 +183,26 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * }
 	 */
 	@Override
-	public final void pop() {
+	public final void pop(GSSNode u, int i, SPPFNode z) {
 				
-		log.trace("Pop %s, %d, %s", cu.getGrammarSlot(), ci, cn);
+		log.trace("Pop %s, %d, %s", cu.getGrammarSlot(), i, z);
 		
 		if (cu != u0) {
 			
-			// Don't pop if a pop action associated with the slot returns false.
+			// Don't pop if a pop action assoiated with the slot returns false.
 			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) cu.getGrammarSlot()).getPopActions()) {
 				if(!popAction.execute(this, input)) {
 					return;
 				}
 			}
 			
-			// Add (cu, cn) to P
-			lookupTable.addToPoppedElements(cu, cn);
+			// Add (cu, z) to P
+			lookupTable.addToPoppedElements(cu, z);
 			
 			for(GSSEdge edge : cu.getEdges()) {
 				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
-				SPPFNode x = getNodeP((BodyGrammarSlot) cu.getGrammarSlot(), edge.getSppfNode(), cn);
-				add(cu.getGrammarSlot(), edge.getDestination(), ci, x);
+				SPPFNode x = getNodeP((BodyGrammarSlot) cu.getGrammarSlot(), edge.getSppfNode(), z);
+				add(cu.getGrammarSlot(), edge.getDestination(), i, x);
 			}			
 		}
 	}

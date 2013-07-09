@@ -12,6 +12,7 @@ import org.jgll.util.Input;
 /**
  * The grammar slot repersing an empty body.
  * 
+ * 
  * @author Ali Afroozeh
  *
  */
@@ -32,17 +33,19 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		TerminalSymbolNode cr = parser.getNodeT(TerminalSymbolNode.EPSILON, ci);
 		cn = parser.getNodeP(this, cn, cr);
 		parser.update(cu, cn, ci);
-		parser.pop();
+		parser.pop(cu, ci, cn);
 		return null;
 	}
 	
 	@Override
 	public void codeParser(Writer writer) throws IOException {
-		// code(A ::= ε) = 
-		// 					cR := getNodeT(ε,cI); 
-		// 					cN := getNodeP(A ::= ·,cN,cR)
-		// 					pop(cU , cI , cN ); 
-		// 					goto L0
+		/**
+		 * code(A ::= ε) =
+		 * 				  cR ::= getNodeT(ε,cI);
+		 * 				  cN ::= getNodeP(A ::= ·,cN,cR)
+		 * 				  pop(cU , cI , cN );
+		 * 				  goto L0;
+		 */
 		writer.append("   cr = getNodeT(-2, ci);\n");
 		writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + id + "), cn, cr);\n");
 		writer.append("   pop(cu, ci, cn);\n");
