@@ -107,7 +107,7 @@ public class MurmurHash3 implements HashFunction {
 		h ^= h >>> 13;
 		h *= 0xc2b2ae35;
 		h ^= h >>> 16;
-
+		
 		return h;
 	}
 	

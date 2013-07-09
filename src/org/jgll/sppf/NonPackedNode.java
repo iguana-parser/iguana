@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.CuckooHashSet;
@@ -65,9 +64,9 @@ public abstract class NonPackedNode extends SPPFNode {
 		NonPackedNode other = (NonPackedNode) obj;
 
 		return  hash == other.hash &&
+				rightExtent == other.rightExtent &&
 				slot == other.slot &&
-				leftExtent == other.leftExtent &&
-				rightExtent == other.rightExtent;
+				leftExtent == other.leftExtent;
 	}
 	
 	@Override
@@ -95,7 +94,7 @@ public abstract class NonPackedNode extends SPPFNode {
 		return slot.toString();
 	}
 	
-	public void addPackedNode(GrammarSlot packedNodeSlot, int pivot, SPPFNode leftChild, SPPFNode rightChild, Grammar grammar) {
+	public void addPackedNode(GrammarSlot packedNodeSlot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		int packedNodeCount = countPackedNode();
 		

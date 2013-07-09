@@ -4,8 +4,8 @@ import java.util.Random;
 
 /**
  * 
- * Multiplication-shift plain universal hash function based on the paper
- * See "Tabulation Based 5-Universal Hashing and Linear Probing" for more info.
+ * Multiplication-shift plain universal hash function as described in the paper
+ * "Tabulation Based 5-Universal Hashing and Linear Probing".
  * 
  * 
  * @author Ali Afroozeh
@@ -14,6 +14,7 @@ import java.util.Random;
 public class MultiplicationShiftPlainUniversalHashFunction implements UniversalHashFunction {
 
 	private final static int maxA = Integer.MAX_VALUE >> 1;
+	private final static Random rand = new Random();
 	
 	private final int a;
 	private final int p;
@@ -21,7 +22,6 @@ public class MultiplicationShiftPlainUniversalHashFunction implements UniversalH
 	public MultiplicationShiftPlainUniversalHashFunction(int p) {
 		this.p = p;
 
-		Random rand = new Random();
 		a = 2 * rand.nextInt(maxA) + 1;   // random odd number
 	}
 	

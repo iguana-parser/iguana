@@ -130,17 +130,15 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	public E get(Object key) {
 	
 		int index = hash1(key);
-		if(!isEntryEmpty(table1[index])) {
-			if(key.equals(table1[index])) {
-				return (E) table1[index];
-			}			
-		}
+		Object value1 = table1[index];
+		if(key.equals(value1)) {
+			return (E) value1;
+		}			
 		
 		index = hash2(key);
-		if(!isEntryEmpty(table2[index])) {
-			if(key.equals(table2[index])) {
-				return (E) table2[index];
-			}
+		Object value2 = table2[index];
+		if(key.equals(value2)) {
+			return (E) value2;
 		}
 
 		return null;
