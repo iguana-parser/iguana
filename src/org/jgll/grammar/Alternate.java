@@ -12,6 +12,8 @@ public class Alternate implements Serializable {
 	
 	private final BodyGrammarSlot firstSlot;
 	
+	private BodyGrammarSlot condition;
+	
 	private final int index;
 	
 	public Alternate(BodyGrammarSlot firstSlot, int index) {
@@ -36,6 +38,14 @@ public class Alternate implements Serializable {
 			symbols.add(current);
 			current = current.next();
 		}
+	}
+	
+	public void setCondition(BodyGrammarSlot condition) {
+		this.condition = condition;
+	}
+	
+	public BodyGrammarSlot getCondition() {
+		return condition;
 	}
 	
 	public Symbol getSymbolAt(int index) {

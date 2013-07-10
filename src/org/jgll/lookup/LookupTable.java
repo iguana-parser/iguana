@@ -3,6 +3,7 @@ package org.jgll.lookup;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
+import org.jgll.grammar.PopUnit;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -53,7 +54,7 @@ public interface LookupTable {
 	 */
 	public boolean isPopped(LastGrammarSlot slot);
 	
-	public void setPopped(LastGrammarSlot slot);
+	public void addPopped(LastGrammarSlot slot, PopUnit popUnit);
 	
 	public void clearPopped(LastGrammarSlot slot);
 	

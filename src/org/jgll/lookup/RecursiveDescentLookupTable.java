@@ -11,6 +11,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
+import org.jgll.grammar.PopUnit;
 import org.jgll.parser.Descriptor;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -116,15 +117,13 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	}
 
 	@Override
-	public void setPopped(LastGrammarSlot slot) {
+	public void clearPopped(LastGrammarSlot slot) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void clearPopped(LastGrammarSlot slot) {
+	public void addPopped(LastGrammarSlot slot, PopUnit popUnit) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

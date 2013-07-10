@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import org.jgll.parser.ParseError;
+import org.jgll.util.Input;
 import org.junit.Test;
 
 /**
@@ -27,16 +29,15 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		Terminal a = new Character('a');
 		Terminal b = new Character('b');
 
-		rule1 = new Rule(S, list(a, S, b, S)).popCondition(new Condition(list(a, S, b, S)));
+		rule1 = new Rule(S, list(a, S)).popCondition(new Condition(list(a, S, b, S)));
 		builder.addRule(rule1);
 		
-		rule2 = new Rule(S, list(a, S));
+		rule2 = new Rule(S, list(a, S, b, S));
 		builder.addRule(rule2);
 		
 		rule3 = new Rule(S, list(s));
 		builder.addRule(rule3);
 		
-		// (S ::= a .S b S \ a S)
 		builder.addFilter(S, rule1, 1, rule2);
 		builder.filter();
 		
@@ -44,8 +45,8 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 	}
 	
 	@Test
-	public void test() {
-		System.out.println(grammar);
+	public void test() throws ParseError {
+		levelParser.parse(Input.fromString("aasbs"), grammar, "S");
 	}
 
 }

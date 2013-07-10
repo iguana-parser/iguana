@@ -29,11 +29,11 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	protected final int rightExtent;
 	
-	protected final List<SPPFNode> children;
-	
 	private GrammarSlot firstPackedNodeGrammarSlot = null;
 	
 	private Set<PackedNode> packedNodesSet;
+
+	protected List<SPPFNode> children;
 
 	private final int hash;
 	
@@ -41,7 +41,6 @@ public abstract class NonPackedNode extends SPPFNode {
 		this.slot = slot;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
-		this.children = new ArrayList<>();
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), leftExtent, rightExtent);
 	}
 	
@@ -96,6 +95,10 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	public void addPackedNode(GrammarSlot packedNodeSlot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		
+		if(children == null) {
+			children = new ArrayList<>(2);
+		}
+		
 		int packedNodeCount = countPackedNode();
 		
 		// Don't store the first packed node as the node may not be ambiguous
@@ -128,7 +131,6 @@ public abstract class NonPackedNode extends SPPFNode {
 			addChildren(secondPackedNode, leftChild, rightChild);
 			children.add(secondPackedNode);
 			
-//			packedNodesIndex = new BitSet(range * slots);
 			packedNodesSet = new CuckooHashSet<>();
 			packedNodesSet.add(firstPackedNode);
 			packedNodesSet.add(secondPackedNode);
@@ -142,9 +144,7 @@ public abstract class NonPackedNode extends SPPFNode {
 				addChildren(packedNode, leftChild, rightChild);
 				children.add(packedNode);
 			}
-			
 		}
-		
 	}
 		
 	private static void addChildren(PackedNode parent, SPPFNode leftChild, SPPFNode rightChild) {
@@ -160,6 +160,11 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public void addChild(SPPFNode node) {
+		
+		if(children == null) {
+			children = new ArrayList<>();
+		}
+		
 		if(node instanceof PackedNode) {
 			firstPackedNodeGrammarSlot = ((PackedNode) node).getGrammarSlot();
 		}
