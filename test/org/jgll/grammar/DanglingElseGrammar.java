@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import org.jgll.parser.ParseError;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -43,7 +44,8 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 	
 	@Test
 	public void test() throws ParseError {
-		levelParser.parse(Input.fromString("asbs"), grammar, "S");
+		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
+		generateGraphWithIntermeiateAndListNodes(sppf);
 	}
 
 }

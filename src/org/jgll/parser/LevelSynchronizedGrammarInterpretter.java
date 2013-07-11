@@ -9,7 +9,7 @@ public class LevelSynchronizedGrammarInterpretter extends AbstractGLLParser {
 	
 	@Override
 	protected void init() {
-		lookupTable = new LevelSynchronizedLookupTable(this, grammar, input.size());
+		lookupTable = new LevelSynchronizedLookupTable(this, grammar, input);
 	}
 
 	@Override

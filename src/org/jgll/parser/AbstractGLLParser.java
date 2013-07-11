@@ -172,40 +172,63 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * by an SPPF node w, a new descriptor is added to the set of descriptors
 	 * to be processed.
 	 * 
-	 * pop() { 
-	 * 	if (cu != u0) { 
-	 * 		let (L, t, k) be the label of cu 
-	 * 		add (cu, cn) to P 
-	 * 		for each edge (cu, w, u) { 
-	 * 			let x be the node returned by getNodeP(t, w, cn)
-	 * 			add(L, u, ci , x)) 
+	 * pop(u, i, z) { 
+	 * 	if (u != u0) { 
+	 * 		let (L, k) be the label of u 
+	 * 		add (u, z) to P 
+	 * 		for each edge (u, w, v) { 
+	 * 			let y be the node returned by getNodeP(L, w, u)
+	 * 			add(L, v, i , y)) 
 	 *      } 
 	 * }
 	 */
 	@Override
 	public final void pop(GSSNode u, int i, SPPFNode z) {
 				
-		log.trace("Pop %s, %d, %s", cu.getGrammarSlot(), i, z);
-		
-		if (cu != u0) {
+		if (u != u0) {
 			
 			// Don't pop if a pop action assoiated with the slot returns false.
-			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) cu.getGrammarSlot()).getPopActions()) {
+			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) u.getGrammarSlot()).getPopActions()) {
 				if(!popAction.execute(this, input)) {
 					return;
 				}
 			}
 			
-			// Add (cu, z) to P
-			lookupTable.addToPoppedElements(cu, z);
+			log.trace("Pop %s, %d, %s", u.getGrammarSlot(), i, z);
 			
-			for(GSSEdge edge : cu.getEdges()) {
-				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
-				SPPFNode x = getNodeP((BodyGrammarSlot) cu.getGrammarSlot(), edge.getSppfNode(), z);
-				add(cu.getGrammarSlot(), edge.getDestination(), i, x);
+			// Add (cu, z) to P
+			lookupTable.addToPoppedElements(u, z);
+			
+			for(GSSEdge edge : u.getEdges()) {
+				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
+				SPPFNode y = getNodeP((BodyGrammarSlot) u.getGrammarSlot(), edge.getSppfNode(), z);
+				add(u.getGrammarSlot(), edge.getDestination(), i, y);
 			}			
 		}
 	}
+	
+
+	/**
+	 * A version of pop that does not check the pop actions
+	 */
+	public final void forcedPop(GSSNode u, int i, SPPFNode z) {
+		
+		if (u != u0) {
+			
+			log.trace("Pop %s, %d, %s", u.getGrammarSlot(), i, z);
+			
+			// Add (cu, z) to P
+			lookupTable.addToPoppedElements(u, z);
+			
+			for(GSSEdge edge : u.getEdges()) {
+				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
+				SPPFNode y = getNodeP((BodyGrammarSlot) u.getGrammarSlot(), edge.getSppfNode(), z);
+				add(u.getGrammarSlot(), edge.getDestination(), i, y);
+			}			
+		}
+	}
+	
+	
 	
 	/**
 	 * 

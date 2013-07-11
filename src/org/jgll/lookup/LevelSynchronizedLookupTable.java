@@ -8,13 +8,16 @@ import java.util.Queue;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.L0;
 import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.PopUnit;
+import org.jgll.parser.AbstractGLLParser;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.DescriptorSet;
 import org.jgll.util.hashing.SPPFNodeSet;
@@ -66,11 +69,14 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private int all;
 
 	private GLLParser parser;
+
+	private Input input;
 	
 	@SuppressWarnings("unchecked")
-	public LevelSynchronizedLookupTable(GLLParser parser, Grammar grammar, int inputSize) {
-		super(grammar, inputSize);
+	public LevelSynchronizedLookupTable(GLLParser parser, Grammar grammar, Input input) {
+		super(grammar, input.size());
 		this.parser = parser;
+		this.input = input;
 		this.longestTerminalChain = grammar.getLongestTerminalChain();
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
@@ -184,6 +190,15 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
+		
+		while(!poppedSlots.isEmpty()) {
+			for(PopUnit popUnit : poppedSlots.values()) {
+				((AbstractGLLParser) parser).forcedPop(popUnit.getGssNode(), popUnit.getInputIndex(), popUnit.getSppfNode());
+			}
+			poppedSlots.clear();
+			L0.getInstance().parse(parser, input);
+		}
+		
 		CuckooHashSet<SPPFNode> set;
 		if(currentLevel == inputSize - 1) {
 			set = currentLevelNonPackedNodes;
@@ -211,7 +226,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			return r.remove();
 		} else if(!poppedSlots.isEmpty()) {
 			for(PopUnit popUnit : poppedSlots.values()) {
-				parser.pop(popUnit.getGssNode(), popUnit.getInputIndex(), popUnit.getSppfNode());
+				((AbstractGLLParser) parser).forcedPop(popUnit.getGssNode(), popUnit.getInputIndex(), popUnit.getSppfNode());
 			}
 			poppedSlots.clear();
 			return nextDescriptor();
@@ -271,5 +286,5 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	public void clearPopped(LastGrammarSlot slot) {
 		poppedSlots.remove(slot);
 	}
-
+	
 }

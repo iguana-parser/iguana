@@ -26,4 +26,9 @@ public class PopUnit {
 	public SPPFNode getSppfNode() {
 		return sppfNode;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("(%s, %s, %s)", gssNode, inputIndex, sppfNode);
+	}
 }

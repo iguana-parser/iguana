@@ -115,7 +115,7 @@ public class GSSNode {
 
 	@Override
 	public String toString() {
-		return slot + "," + inputIndex;
+		return "(" + slot + "," + inputIndex + ")";
 	}
 
 }
