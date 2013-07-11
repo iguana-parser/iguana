@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * 
- * S ::= a S b S  ! a S
+ * S ::= a S b S
  *     | a S
  *     | s
  * 
@@ -38,15 +38,12 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		rule3 = new Rule(S, list(s));
 		builder.addRule(rule3);
 		
-		builder.addFilter(S, rule1, 1, rule2);
-		builder.filter();
-		
 		return builder.build();
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		levelParser.parse(Input.fromString("aasbs"), grammar, "S");
+		levelParser.parse(Input.fromString("asbs"), grammar, "S");
 	}
 
 }

@@ -189,4 +189,9 @@ public class Input {
 			return lineNumber == other.lineNumber && columnNumber == other.columnNumber;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return input.toString();
+	}
 }

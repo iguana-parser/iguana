@@ -18,6 +18,7 @@ import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.DescriptorSet;
 import org.jgll.util.hashing.SPPFNodeSet;
+import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 
@@ -29,6 +30,8 @@ import org.jgll.util.hashing.SPPFNodeSet;
  *
  */
 public class LevelSynchronizedLookupTable extends AbstractLookupTable {
+	
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelSynchronizedLookupTable.class);
 	
 	private int currentLevel;
 	
@@ -112,12 +115,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
 		
-		for(PopUnit popUnit : poppedSlots.values()) {
-			parser.pop(popUnit.getGssNode(), popUnit.getInputIndex(), popUnit.getSppfNode());
-		}
-		
-		poppedSlots.clear();
-
 		currentLevel++;
 	}
 	
@@ -128,31 +125,37 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	@Override
 	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
+		boolean newNodeCreated = false;
 		SPPFNode key = createNonPackedNode(slot, leftExtent, rightExtent);
+		SPPFNode value;
 		
 		if(rightExtent == currentLevel) {
-			SPPFNode value = currentLevelNonPackedNodes.get(key);
+			value = currentLevelNonPackedNodes.get(key);
 			if(value == null) {
 				value = key;
 				currentLevelNonPackedNodes.add(value);
 				countNonPackedNodes++;
+				newNodeCreated = true;
 			}
-			return value;
 		} else {
 			int index = indexFor(rightExtent);
-			
-			SPPFNode value = forwardNonPackedNodes[index].get(key);
+			value = forwardNonPackedNodes[index].get(key);
 			if(value == null) {
 				value = key;
 				forwardNonPackedNodes[index].add(value);
 				countNonPackedNodes++;
+				newNodeCreated = true;
 			}
-			return value;
 		}
+		
+		log.trace("SPPF node created: %s : %b", value, newNodeCreated);
+		return value;
 	}
 	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
+		
+		boolean newNodeCreated = false;
 		
 		int index2;
 		int rightExtent;
@@ -171,8 +174,10 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
 			countNonPackedNodes++;
 			terminals[index][index2] = terminal;
+			newNodeCreated = true;
 		}
 		
+		log.trace("SPPF Terminal node created: %s : %b", terminal, newNodeCreated);
 		return terminal;
 	}
 
@@ -204,6 +209,12 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		if(!r.isEmpty()) {
 			size--;
 			return r.remove();
+		} else if(!poppedSlots.isEmpty()) {
+			for(PopUnit popUnit : poppedSlots.values()) {
+				parser.pop(popUnit.getGssNode(), popUnit.getInputIndex(), popUnit.getSppfNode());
+			}
+			poppedSlots.clear();
+			return nextDescriptor();
 		} else {
 			gotoNextLevel();
 			return nextDescriptor();
