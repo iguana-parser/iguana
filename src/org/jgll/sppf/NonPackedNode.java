@@ -93,6 +93,23 @@ public abstract class NonPackedNode extends SPPFNode {
 		return slot.toString();
 	}
 	
+	public boolean hasPackedNode(GrammarSlot packedNodeSlot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		
+		int packedNodeCount = countPackedNode();
+		
+		if(packedNodeCount == 0) {
+			return false;
+		}
+		
+		else if(packedNodeCount == 1) {
+			return firstPackedNodeGrammarSlot.equals(packedNodeSlot) && getPivot() == pivot;
+		}
+		
+		else {
+			return packedNodesSet.contains(new PackedNode(packedNodeSlot, pivot, this));
+		}
+	}
+	
 	public void addPackedNode(GrammarSlot packedNodeSlot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		if(children == null) {

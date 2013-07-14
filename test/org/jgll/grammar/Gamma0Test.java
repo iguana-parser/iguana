@@ -16,8 +16,8 @@ public class Gamma0Test extends AbstractGrammarTest {
 
 	/**
 	 *	S ::= a S 
-	 *       | A S d 
-	 *       | epsilon
+	 *      | A S d 
+	 *      | epsilon
 	 *       
 	 * 	A ::= a
 	 */

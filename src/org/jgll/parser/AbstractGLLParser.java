@@ -187,7 +187,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 				
 		if (u != u0) {
 			
-			// Don't pop if a pop action assoiated with the slot returns false.
+			// Don't pop if a pop action associated with the slot returns false.
 			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) u.getGrammarSlot()).getPopActions()) {
 				if(!popAction.execute(this, input)) {
 					return;
@@ -196,12 +196,14 @@ public abstract class AbstractGLLParser implements GLLParser {
 			
 			log.trace("Pop %s, %d, %s", u.getGrammarSlot(), i, z);
 			
-			// Add (cu, z) to P
+			// Add (u, z) to P
 			lookupTable.addToPoppedElements(u, z);
 			
 			for(GSSEdge edge : u.getEdges()) {
 				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
-				SPPFNode y = getNodeP((BodyGrammarSlot) u.getGrammarSlot(), edge.getSppfNode(), z);
+				BodyGrammarSlot slot = (BodyGrammarSlot) u.getGrammarSlot();
+
+				SPPFNode y = getNodeP(slot, edge.getSppfNode(), z);
 				add(u.getGrammarSlot(), edge.getDestination(), i, y);
 			}			
 		}
@@ -222,9 +224,11 @@ public abstract class AbstractGLLParser implements GLLParser {
 			
 			for(GSSEdge edge : u.getEdges()) {
 				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
-				SPPFNode y = getNodeP((BodyGrammarSlot) u.getGrammarSlot(), edge.getSppfNode(), z);
+				BodyGrammarSlot slot = (BodyGrammarSlot) u.getGrammarSlot();
+
+				SPPFNode y = getNodeP(slot, edge.getSppfNode(), z);
 				add(u.getGrammarSlot(), edge.getDestination(), i, y);
-			}			
+			}
 		}
 	}
 	
@@ -337,7 +341,10 @@ public abstract class AbstractGLLParser implements GLLParser {
 			}
 			
 			NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(t, leftExtent, rightExtent);
-
+			
+			if(newNode.hasPackedNode(slot, rightChild.getLeftExtent(), leftChild, rightChild)) {
+				
+			}
 			newNode.addPackedNode(slot, rightChild.getLeftExtent(), leftChild, rightChild);
 			
 			return newNode;

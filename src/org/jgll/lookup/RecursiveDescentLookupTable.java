@@ -10,8 +10,6 @@ import java.util.Set;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.LastGrammarSlot;
-import org.jgll.grammar.PopUnit;
 import org.jgll.parser.Descriptor;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -108,22 +106,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public int getDescriptorsCount() {
 		return descriptorsSet.size();
-	}
-
-	@Override
-	public boolean isPopped(LastGrammarSlot slot) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void clearPopped(LastGrammarSlot slot) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void addPopped(LastGrammarSlot slot, PopUnit popUnit) {
-		// TODO Auto-generated method stub
 	}
 
 }

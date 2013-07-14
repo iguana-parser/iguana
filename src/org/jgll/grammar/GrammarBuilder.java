@@ -49,6 +49,8 @@ public class GrammarBuilder implements Serializable {
 	private Map<Rule, LastGrammarSlot> ruleToLastSlotMap;
 
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
+	
+	private Map<Condition, BodyGrammarSlot> conditionsMap;
 
 	public GrammarBuilder(String name) {
 		this.name = name;
@@ -61,6 +63,7 @@ public class GrammarBuilder implements Serializable {
 		
 		oneLevelOnlyFilters = new HashSet<>();
 		ruleToLastSlotMap = new HashMap<>();
+		conditionsMap =  new HashMap<>();
 	}
 
 	public Grammar build() {
@@ -172,11 +175,11 @@ public class GrammarBuilder implements Serializable {
 			slots.add(lastGrammarSlot);
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot, headGrammarSlot.getAlternates().size());
-			BodyGrammarSlot convertedCondition = convertCondition(rule.getCondition());
-			if(convertedCondition != null) {
-				alternate.setCondition(convertedCondition);
-				addNot(lastGrammarSlot, convertedCondition);
-			}
+//			BodyGrammarSlot convertedCondition = convertCondition(rule.getCondition());
+//			if(convertedCondition != null) {
+//				alternate.setCondition(convertedCondition);
+//				addNot(lastGrammarSlot, convertedCondition);
+//			}
 			headGrammarSlot.addAlternate(alternate);
 		}
 
@@ -220,7 +223,8 @@ public class GrammarBuilder implements Serializable {
 			index++;
 		}
 		
-		new FakeLastGrammarSlot("", index, currentSlot, null, null);
+		new LastGrammarSlot("", index, currentSlot, null, null);
+		conditionsMap.put(condition, firstSlot);
 		return firstSlot;
 	}
 
@@ -245,37 +249,60 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private void addNot(final LastGrammarSlot slot1, BodyGrammarSlot converted) {
-		
-		while(!converted.isLastSlot()) {
-			converted = converted.next;
-		}
-		LastGrammarSlot slot2 = (LastGrammarSlot) converted;
-		
-		slot1.addPopAction(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Boolean execute(GLLParser parser, Input input) {
-				parser.getLookupTable().addPopped(slot1, new PopUnit(parser.getCu(), parser.getCn(), parser.getCi()));
-				return false;
-			}
-		});
-		
+	private void addOrder(final LastGrammarSlot slot1, final LastGrammarSlot slot2) {
 		slot2.addPopAction(new SlotAction<Boolean>() {
 			
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
-				if(parser.getLookupTable().isPopped(slot1)) {
-					parser.getLookupTable().clearPopped(slot1);
-				}
-				return true;
+				return null;
 			}
 		});
 	}
+	
+//	private void addNot(final LastGrammarSlot slot1, BodyGrammarSlot converted) {
+//		
+//		while(!converted.isLastSlot()) {
+//			converted = converted.next;
+//		}
+//		final LastGrammarSlot slot2 = (LastGrammarSlot) converted;
+//		
+//		slot1.addPopAction(new SlotAction<Boolean>() {
+//			
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public Boolean execute(GLLParser parser, Input input) {
+//				parser.getLookupTable().addPopped(slot1, new PopUnit(parser.getCu(), parser.getCn(), parser.getCi()));
+//				return false;
+//			}
+//		});
+//		
+//		slot2.addPopAction(new SlotAction<Boolean>() {
+//			
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public Boolean execute(GLLParser parser, Input input) {
+//				parser.getLookupTable().addPopped(slot2, new PopUnit(parser.getCu(), parser.getCn(), parser.getCi()));
+//				return false;
+//			}
+//		});
+//		
+//		slot2.addOnHoldAction(new SlotAction<Void>() {
+//			
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public Void execute(GLLParser parser, Input input) {
+//				if(parser.getLookupTable().isPopped(slot1, parser.getCi())) {
+//					parser.getLookupTable().clearPopped(slot1, parser.getCi());
+//				}
+//				parser.getLookupTable().clearPopped(slot2, parser.getCi());
+//				return null;
+//			}
+//		});
+//		
+//	}
 
 	private void addFollowRestriction(BodyGrammarSlot slot, final List<List<CharacterClass>> followRestriction) {
 		if (followRestriction == null || followRestriction.isEmpty()) {
@@ -590,9 +617,7 @@ public class GrammarBuilder implements Serializable {
 							// follow set of X to the
 							// follow set of B.
 							if (next instanceof LastGrammarSlot) {
-								changed |= nonterminalGrammarSlot
-										.getNonterminal().getFollowSet()
-										.addAll(head.getFollowSet());
+								changed |= nonterminalGrammarSlot.getNonterminal().getFollowSet().addAll(head.getFollowSet());
 								break;
 							}
 
@@ -818,8 +843,7 @@ public class GrammarBuilder implements Serializable {
 		return false;
 	}
 
-	private void rewriteRightEnds(HeadGrammarSlot head,
-			List<Symbol> filteredAlternate) {
+	private void rewriteRightEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for (Alternate alternate : head.getAlternates()) {
 			if (alternate.isBinary(head) || alternate.isUnaryPrefix(head)) {
 				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
@@ -839,8 +863,7 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	private void rewriteLeftEnds(HeadGrammarSlot head,
-			List<Symbol> filteredAlternate) {
+	private void rewriteLeftEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for (Alternate alternate : head.getAlternates()) {
 			if (alternate.isBinary(head) || alternate.isUnaryPostfix(head)) {
 				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getFirstSlot()).getNonterminal();
@@ -884,8 +907,7 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	private List<Alternate> copyAlternates(HeadGrammarSlot head,
-			List<Alternate> list) {
+	private List<Alternate> copyAlternates(HeadGrammarSlot head, List<Alternate> list) {
 		List<Alternate> copyList = new ArrayList<>();
 		for (Alternate alt : list) {
 			copyList.add(copyAlternate(alt, head));
