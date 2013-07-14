@@ -9,7 +9,6 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.CuckooHashSet;
 
 /**
  * 
@@ -26,8 +25,6 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	protected final Grammar grammar;
 	
-	private final CuckooHashSet<GSSNode> gssNodes;
-	
 	protected final int inputSize;
 	
 	protected final int slotsSize;
@@ -38,7 +35,6 @@ public abstract class AbstractLookupTable implements LookupTable {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
 		this.slotsSize = grammar.getGrammarSlots().size();
-		this.gssNodes = new CuckooHashSet<>();
 	}
 
 	@Override
@@ -51,19 +47,6 @@ public abstract class AbstractLookupTable implements LookupTable {
 	}
 
 	@Override
-	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {	
-		GSSNode gssNode = new GSSNode(grammarSlot, inputIndex);
-		if(gssNodes.contains(gssNode)) {
-			return gssNodes.get(gssNode);
-		}
-		else {
-			gssNodes.add(gssNode);
-			return gssNode;
-		}
-//		return gssNodes.addAndGet(new GSSNode(grammarSlot, inputIndex));
-	}
-
-	@Override
 	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
 		gssNode.addToPopElements(sppfNode);
 	}
@@ -72,22 +55,12 @@ public abstract class AbstractLookupTable implements LookupTable {
 	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
 		return gssNode.getPoppedElements();
 	}
-
-	@Override
-	public int getGSSNodesCount() {
-		return gssNodes.size();
-	}
 	
 	@Override
 	public int getGSSEdgesCount() {
 		return gssEdgesCount;
 	}
-	
-	@Override
-	public Iterable<GSSNode> getGSSNodes() {
-		return gssNodes;
-	}
-	
+		
 	protected NonPackedNode createNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		NonPackedNode key;
 		if(slot instanceof HeadGrammarSlot) {

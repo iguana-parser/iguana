@@ -47,10 +47,6 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
-		generateGraphWithIntermeiateAndListNodes(sppf);
-		GSSToDot toDot = new GSSToDot();
-		toDot.execute(levelParser.getLookupTable().getGSSNodes());
-		GraphVizUtil.generateGraph(toDot.getString(), "/Users/ali/output", "gss");
 	}
 
 }

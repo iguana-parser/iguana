@@ -11,10 +11,12 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
+import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class RecursiveDescentLookupTable extends AbstractLookupTable {
@@ -29,6 +31,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private Map<NonPackedNode, NonPackedNode> nonPackedNodes;
 	
+	private final CuckooHashSet<GSSNode> gssNodes;
+	
 	private int nonPackedNodesCount;
 	
 	public RecursiveDescentLookupTable(Grammar grammar, int inputSize) {
@@ -37,6 +41,27 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		descriptorsSet = new HashSet<>();
 		terminals = new TerminalSymbolNode[2 * inputSize];
 		nonPackedNodes = new HashMap<NonPackedNode, NonPackedNode>(inputSize);
+		gssNodes = new CuckooHashSet<>();
+	}
+	
+	@Override
+	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {	
+		GSSNode key = new GSSNode(grammarSlot, inputIndex);
+		GSSNode value = gssNodes.addAndGet(key);
+		if(value == null) {
+			return key;
+		}
+		return value;
+	}
+	
+	@Override
+	public int getGSSNodesCount() {
+		return gssNodes.size();
+	}
+
+	@Override
+	public Iterable<GSSNode> getGSSNodes() {
+		return gssNodes;
 	}
 	
 	@Override

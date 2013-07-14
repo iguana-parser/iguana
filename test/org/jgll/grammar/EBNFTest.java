@@ -37,7 +37,7 @@ public class EBNFTest extends AbstractGrammarTest {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa"), grammar, "A*");
-		generateGraphWithIntermeiateAndListNodes(sppf);
+		generateSPPFGraphWithIntermeiateAndListNodes(sppf);
 	}
 
 }

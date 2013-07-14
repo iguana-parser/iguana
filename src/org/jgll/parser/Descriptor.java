@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.hashing.Level;
 
 /**
  * A {@code Descriptor} is used by the GLL parser to keep track of the 
@@ -22,7 +23,7 @@ import org.jgll.sppf.SPPFNode;
  * 
  */
 
-public class Descriptor {
+public class Descriptor implements Level {
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -108,6 +109,11 @@ public class Descriptor {
 	@Override
 	public String toString() {
 		return "(" + slot + ", " + inputIndex + ", " + gssNode.getGrammarSlot() + ", " + sppfNode + ")";
+	}
+
+	@Override
+	public int getLevel() {
+		return inputIndex;
 	}
 
 }

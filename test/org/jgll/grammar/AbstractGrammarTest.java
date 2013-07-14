@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.parser.AbstractGLLParser;
+import org.jgll.parser.GSSNode;
 import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.RecursiveDescentParser;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.dot.GSSToDot;
 import org.jgll.util.dot.GraphVizUtil;
 import org.jgll.util.dot.SPPFToDot;
 import org.jgll.util.dot.ToDotWithoutIntermediateNodes;
@@ -55,22 +57,29 @@ public abstract class AbstractGrammarTest {
 		return Collections.emptyList();
 	}
 	 
-	protected void generateGraphWithoutIntermeiateNodes(SPPFNode sppf) {
+	protected void generateSPPFGraphWithoutIntermeiateNodes(SPPFNode sppf) {
 		SPPFToDot toDot = new ToDotWithoutIntermediateNodes();
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	protected void generateGraph(SPPFNode sppf) {
+	protected void generateSPPFGraph(SPPFNode sppf) {
 		SPPFToDot toDot = new SPPFToDot();
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	protected void generateGraphWithIntermeiateAndListNodes(SPPFNode sppf) {
+	protected void generateSPPFGraphWithIntermeiateAndListNodes(SPPFNode sppf) {
 		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists();
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
+	}
+	
+	protected void generateGSSGraph(Iterable<GSSNode> nodes) {
+		GSSToDot toDot = new GSSToDot();
+		toDot.execute(nodes);
+		toDot.execute(levelParser.getLookupTable().getGSSNodes());
+		GraphVizUtil.generateGraph(toDot.getString(), "/Users/ali/output", "gss");
 	}
 	
 }

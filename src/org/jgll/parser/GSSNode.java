@@ -7,6 +7,7 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.L0;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.util.hashing.Level;
 
 /**
  * A {@code GSSNode} is a representation of a node in an Graph Structured Stack.
@@ -23,7 +24,7 @@ import org.jgll.util.hashing.CuckooHashSet;
  * @author Ali Afroozeh
  * 
  */
-public class GSSNode {
+public class GSSNode implements Level {
 
 	/**
 	 * The initial GSS node
@@ -116,6 +117,11 @@ public class GSSNode {
 	@Override
 	public String toString() {
 		return "(" + slot + "," + inputIndex + ")";
+	}
+
+	@Override
+	public int getLevel() {
+		return inputIndex;
 	}
 
 }

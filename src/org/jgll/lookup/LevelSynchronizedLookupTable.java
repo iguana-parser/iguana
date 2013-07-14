@@ -7,14 +7,13 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.hashing.DescriptorSet;
-import org.jgll.util.hashing.SPPFNodeSet;
+import org.jgll.util.hashing.LevelSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -38,17 +37,26 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private DescriptorSet u;
+	private LevelSet<Descriptor> u;
 	
-	private SPPFNodeSet currentLevelNonPackedNodes;
+	private LevelSet<SPPFNode> currentLevelNonPackedNodes;
 	
-	private SPPFNodeSet[] forwardNonPackedNodes;
+	private LevelSet<SPPFNode>[] forwardNonPackedNodes;
 	
-	private DescriptorSet[] forwardDescriptors;
+	private LevelSet<Descriptor>[] forwardDescriptors;
 	
 	private Queue<Descriptor> r;
 	
 	private Queue<Descriptor>[] forwardRs;
+	
+	private LevelSet<GSSNode> currentGssNodes;
+	
+	private LevelSet<GSSNode>[] forwardGssNodes;
+	
+	private int countGSSNodes;
+	
+	private CuckooHashSet<GSSNode> gssNodes = new CuckooHashSet<>();
+
 	
 	/**
 	 * The number of descriptors waiting to be processed.
@@ -61,34 +69,36 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private int all;
 	
 	@SuppressWarnings("unchecked")
-	public LevelSynchronizedLookupTable(GLLParser parser, Grammar grammar, Input input) {
+	public LevelSynchronizedLookupTable(Grammar grammar, Input input) {
 		super(grammar, input.size());
 		this.longestTerminalChain = grammar.getLongestTerminalChain();
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new DescriptorSet(getSize());
+		u = new LevelSet<>(getSize());
 		r = new ArrayDeque<>();
 		
-		forwardDescriptors = new DescriptorSet[longestTerminalChain];
+		forwardDescriptors = new LevelSet[longestTerminalChain];
 		forwardRs = new Queue[longestTerminalChain];
 		
+		currentLevelNonPackedNodes = new LevelSet<>();
+		forwardNonPackedNodes = new LevelSet[longestTerminalChain];
 		
-		currentLevelNonPackedNodes = new SPPFNodeSet();
-		forwardNonPackedNodes = new SPPFNodeSet[longestTerminalChain];
-	
+		currentGssNodes = new LevelSet<>();
+		forwardGssNodes = new LevelSet[longestTerminalChain];
 		
 		for(int i = 0; i < longestTerminalChain; i++) {
-			forwardDescriptors[i] = new DescriptorSet(getSize());
+			forwardDescriptors[i] = new LevelSet<>(getSize());
 			forwardRs[i] = new ArrayDeque<>();
-			forwardNonPackedNodes[i] = new SPPFNodeSet();
+			forwardNonPackedNodes[i] = new LevelSet<>();
+			forwardGssNodes[i] = new LevelSet<>();
 		}
 	}
 	
 	private void gotoNextLevel() {
 		int nextIndex = indexFor(currentLevel + 1);
 		
-		DescriptorSet tmpDesc = u;
+		LevelSet<Descriptor> tmpDesc = u;
 		u.clear();
 		u = forwardDescriptors[nextIndex];
 		forwardDescriptors[nextIndex] = tmpDesc;
@@ -98,10 +108,15 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		r = forwardRs[nextIndex];
 		forwardRs[nextIndex] = tmpR;
 		
-		SPPFNodeSet tmp = currentLevelNonPackedNodes;
+		LevelSet<SPPFNode> tmp = currentLevelNonPackedNodes;
 		currentLevelNonPackedNodes.clear();
 		currentLevelNonPackedNodes = forwardNonPackedNodes[nextIndex];
 		forwardNonPackedNodes[nextIndex] = tmp;
+		
+		LevelSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
+		currentGssNodes.clear();
+		currentGssNodes = forwardGssNodes[nextIndex];
+		forwardGssNodes[nextIndex] = tmpGSSNodeSet;
 		
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
@@ -121,21 +136,19 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		SPPFNode value;
 		
 		if(rightExtent == currentLevel) {
-			value = currentLevelNonPackedNodes.get(key);
-			if(value == null) {
-				value = key;
-				currentLevelNonPackedNodes.add(value);
+			value = currentLevelNonPackedNodes.addAndGet(key);
+			if(value == null){
 				countNonPackedNodes++;
 				newNodeCreated = true;
+				value = key;
 			}
 		} else {
 			int index = indexFor(rightExtent);
-			value = forwardNonPackedNodes[index].get(key);
-			if(value == null) {
-				value = key;
-				forwardNonPackedNodes[index].add(value);
+			value = forwardNonPackedNodes[index].addAndGet(key);
+			if(value == null){
 				countNonPackedNodes++;
 				newNodeCreated = true;
+				value = key;
 			}
 		}
 		
@@ -244,6 +257,37 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	@Override
 	public int getDescriptorsCount() {
 		return all;
+	}
+	
+	@Override
+	public GSSNode getGSSNode(GrammarSlot label, int inputIndex) {
+		GSSNode key = new GSSNode(label, inputIndex);
+		GSSNode value;
+		if(inputIndex == currentLevel) {
+			value = currentGssNodes.addAndGet(key);
+			if(value == null) {
+				countGSSNodes++;
+				value = key;
+			}
+		} else {
+			int index = indexFor(inputIndex);
+			value = forwardGssNodes[index].addAndGet(key);
+			if(value == null) {
+				countGSSNodes++;
+				value = key;
+			}
+		}
+		return value;
+	}
+
+	@Override
+	public int getGSSNodesCount() {
+		return countGSSNodes;
+	}
+
+	@Override
+	public Iterable<GSSNode> getGSSNodes() {
+		throw new UnsupportedOperationException();
 	}
 }
 	
