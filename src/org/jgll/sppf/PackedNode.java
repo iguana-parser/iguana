@@ -19,17 +19,11 @@ public class PackedNode extends SPPFNode {
 
 	private final int pivot;
 
-	/**
-	 * 
-	 * As we search for packed nodes under its parent, rather than directly,
-	 * there is no need to take the parent into account when considering
-	 * equals and hashcode calculations.
-	 * However, a reference to the parent is kept for other purposes.
-	 * 
-	 */
 	private final SPPFNode parent;
 	
 	private final List<SPPFNode> children;
+	
+	private final int hash;
 	
 	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
 		
@@ -49,7 +43,10 @@ public class PackedNode extends SPPFNode {
 		this.pivot = pivot;
 		this.parent = parent;
 		
-		children = new ArrayList<>(2);
+		this.children = new ArrayList<>(2);
+		
+		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), pivot, parent.hashCode());
+		
 	}
 			
 	@Override
@@ -65,7 +62,8 @@ public class PackedNode extends SPPFNode {
 		PackedNode other = (PackedNode) obj;
 		
 		return  slot == other.slot &&
-		        pivot == other.pivot;
+		        pivot == other.pivot &&
+		        parent.equals(other.parent);
 	}
 	
 	public int getPivot() {
@@ -101,7 +99,7 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(slot.getId(), pivot);
+		return hash;
 	}
 
 	@Override

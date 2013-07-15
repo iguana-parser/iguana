@@ -47,7 +47,6 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 	
 	@Test
 	public void testParsers1() throws ParseError {
-		System.out.println(grammar);
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
 		assertEquals(true, sppf1.deepEquals(sppf2));

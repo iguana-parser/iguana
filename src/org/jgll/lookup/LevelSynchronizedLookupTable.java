@@ -8,7 +8,10 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
+import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
@@ -39,9 +42,9 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private LevelSet<Descriptor> u;
 	
-	private LevelSet<SPPFNode> currentLevelNonPackedNodes;
+	private LevelSet<SPPFNode> currentLevelNodes;
 	
-	private LevelSet<SPPFNode>[] forwardNonPackedNodes;
+	private LevelSet<SPPFNode>[] forwardNodes;
 	
 	private LevelSet<Descriptor>[] forwardDescriptors;
 	
@@ -54,9 +57,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private LevelSet<GSSNode>[] forwardGssNodes;
 	
 	private int countGSSNodes;
-	
-	private CuckooHashSet<GSSNode> gssNodes = new CuckooHashSet<>();
-
 	
 	/**
 	 * The number of descriptors waiting to be processed.
@@ -81,8 +81,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		forwardDescriptors = new LevelSet[longestTerminalChain];
 		forwardRs = new Queue[longestTerminalChain];
 		
-		currentLevelNonPackedNodes = new LevelSet<>();
-		forwardNonPackedNodes = new LevelSet[longestTerminalChain];
+		currentLevelNodes = new LevelSet<>();
+		forwardNodes = new LevelSet[longestTerminalChain];
 		
 		currentGssNodes = new LevelSet<>();
 		forwardGssNodes = new LevelSet[longestTerminalChain];
@@ -90,7 +90,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		for(int i = 0; i < longestTerminalChain; i++) {
 			forwardDescriptors[i] = new LevelSet<>(getSize());
 			forwardRs[i] = new ArrayDeque<>();
-			forwardNonPackedNodes[i] = new LevelSet<>();
+			forwardNodes[i] = new LevelSet<>();
 			forwardGssNodes[i] = new LevelSet<>();
 		}
 	}
@@ -108,10 +108,10 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		r = forwardRs[nextIndex];
 		forwardRs[nextIndex] = tmpR;
 		
-		LevelSet<SPPFNode> tmp = currentLevelNonPackedNodes;
-		currentLevelNonPackedNodes.clear();
-		currentLevelNonPackedNodes = forwardNonPackedNodes[nextIndex];
-		forwardNonPackedNodes[nextIndex] = tmp;
+		LevelSet<SPPFNode> tmp = currentLevelNodes;
+		currentLevelNodes.clear();
+		currentLevelNodes = forwardNodes[nextIndex];
+		forwardNodes[nextIndex] = tmp;
 		
 		LevelSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
 		currentGssNodes.clear();
@@ -136,7 +136,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		SPPFNode value;
 		
 		if(rightExtent == currentLevel) {
-			value = currentLevelNonPackedNodes.addAndGet(key);
+			value = currentLevelNodes.addAndGet(key);
 			if(value == null){
 				countNonPackedNodes++;
 				newNodeCreated = true;
@@ -144,7 +144,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			}
 		} else {
 			int index = indexFor(rightExtent);
-			value = forwardNonPackedNodes[index].addAndGet(key);
+			value = forwardNodes[index].addAndGet(key);
 			if(value == null){
 				countNonPackedNodes++;
 				newNodeCreated = true;
@@ -193,10 +193,10 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		CuckooHashSet<SPPFNode> currentNodes;
 		
 		if(currentLevel == inputSize - 1) {
-			currentNodes = currentLevelNonPackedNodes;
+			currentNodes = currentLevelNodes;
 		} else {
 			int index = indexFor(inputSize - 1); 
-			currentNodes = forwardNonPackedNodes[index];
+			currentNodes = forwardNodes[index];
 		}
 		
 		return (NonterminalSymbolNode) currentNodes.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
@@ -289,5 +289,46 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	public Iterable<GSSNode> getGSSNodes() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		if(parent.getCountPackedNode() == 0) {
+			if(!leftChild.equals(DummyNode.getInstance())) {
+				parent.addChild(leftChild);
+			}
+			parent.addChild(rightChild);
+			parent.addFirstPackedNode(slot, pivot);
+		}
+		else if(parent.getCountPackedNode() == 1) {
+			if(parent.getFirstPackedNodeGrammarSlot() == slot && parent.getFirstPackedNodePivot() == pivot) {
+				return;
+			} else {
+				PackedNode packedNode = new PackedNode(slot, pivot, parent);
+				PackedNode firstPackedNode = parent.addSecondPackedNode(packedNode, leftChild, rightChild);
+				if(parent.getRightExtent() == currentLevel) {
+					currentLevelNodes.add(packedNode);
+					currentLevelNodes.add(firstPackedNode);
+				} else {
+					int index = indexFor(parent.getRightExtent());
+					forwardNodes[index].add(packedNode);
+					forwardNodes[index].add(firstPackedNode);
+				}
+			}
+		}
+		else {
+			PackedNode key = new PackedNode(slot, pivot, parent);
+			if(parent.getRightExtent() == currentLevel) {
+				if(currentLevelNodes.add(key)) {
+					parent.addPackedNode(key, leftChild, rightChild);					
+				}
+			} else {
+				int index = indexFor(parent.getRightExtent());
+				if(forwardNodes[index].add(key)) {
+					parent.addPackedNode(key, leftChild, rightChild);
+				}
+			}
+		}
+	}
+
 }
 	

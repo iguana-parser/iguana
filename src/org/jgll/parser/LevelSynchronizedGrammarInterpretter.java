@@ -9,11 +9,7 @@ public class LevelSynchronizedGrammarInterpretter extends AbstractGLLParser {
 	
 	@Override
 	protected void init() {
-		if(lookupTable == null) {
-			lookupTable = new LevelSynchronizedLookupTable(grammar, input);
-		} else {
-			
-		}
+		lookupTable = new LevelSynchronizedLookupTable(grammar, input);
 	}
 
 	@Override

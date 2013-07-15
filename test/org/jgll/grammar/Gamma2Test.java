@@ -41,7 +41,7 @@ public class Gamma2Test extends AbstractGrammarTest {
 	}
 		
 	@Test
-	public void parse() throws ParseError {
+	public void testParsers() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbb"), grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbb"), grammar, "S");
 		assertEquals(true, sppf1.deepEquals(sppf2));

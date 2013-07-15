@@ -12,8 +12,10 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.CuckooHashSet;
@@ -33,6 +35,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private final CuckooHashSet<GSSNode> gssNodes;
 	
+	private final CuckooHashSet<PackedNode> packedNodes;
+	
 	private int nonPackedNodesCount;
 	
 	public RecursiveDescentLookupTable(Grammar grammar, int inputSize) {
@@ -42,6 +46,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		terminals = new TerminalSymbolNode[2 * inputSize];
 		nonPackedNodes = new HashMap<NonPackedNode, NonPackedNode>(inputSize);
 		gssNodes = new CuckooHashSet<>();
+		packedNodes = new CuckooHashSet<>();
 	}
 	
 	@Override
@@ -131,6 +136,33 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public int getDescriptorsCount() {
 		return descriptorsSet.size();
+	}
+
+	@Override
+	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		if(parent.getCountPackedNode() == 0) {
+			if(!leftChild.equals(DummyNode.getInstance())) {
+				parent.addChild(leftChild);
+			}
+			parent.addChild(rightChild);
+			parent.addFirstPackedNode(slot, pivot);
+		}
+		else if(parent.getCountPackedNode() == 1) {
+			if(parent.getFirstPackedNodeGrammarSlot() == slot && parent.getFirstPackedNodePivot() == pivot) {
+				return;
+			} else {
+				PackedNode packedNode = new PackedNode(slot, pivot, parent);
+				PackedNode firstPackedNode = parent.addSecondPackedNode(packedNode, leftChild, rightChild);
+				packedNodes.add(packedNode);
+				packedNodes.add(firstPackedNode);
+			}
+		}
+		else {
+			PackedNode key = new PackedNode(slot, pivot, parent);
+			if(packedNodes.add(key)) {
+				parent.addPackedNode(key, leftChild, rightChild);
+			}
+		}
 	}
 
 }

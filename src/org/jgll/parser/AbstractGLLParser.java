@@ -201,33 +201,9 @@ public abstract class AbstractGLLParser implements GLLParser {
 			for(GSSEdge edge : u.getEdges()) {
 				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
 				BodyGrammarSlot slot = (BodyGrammarSlot) u.getGrammarSlot();
-
 				SPPFNode y = getNodeP(slot, edge.getSppfNode(), z);
 				add(u.getGrammarSlot(), edge.getDestination(), i, y);
 			}			
-		}
-	}
-	
-
-	/**
-	 * A version of pop that does not check the pop actions
-	 */
-	public final void forcedPop(GSSNode u, int i, SPPFNode z) {
-		
-		if (u != u0) {
-			
-			log.trace("Pop %s, %d, %s", u.getGrammarSlot(), i, z);
-			
-			// Add (cu, z) to P
-			lookupTable.addToPoppedElements(u, z);
-			
-			for(GSSEdge edge : u.getEdges()) {
-				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
-				BodyGrammarSlot slot = (BodyGrammarSlot) u.getGrammarSlot();
-
-				SPPFNode y = getNodeP(slot, edge.getSppfNode(), z);
-				add(u.getGrammarSlot(), edge.getDestination(), i, y);
-			}
 		}
 	}
 	
@@ -341,10 +317,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 			
 			NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(t, leftExtent, rightExtent);
 			
-			if(newNode.hasPackedNode(slot, rightChild.getLeftExtent(), leftChild, rightChild)) {
-				
-			}
-			newNode.addPackedNode(slot, rightChild.getLeftExtent(), leftChild, rightChild);
+			lookupTable.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 			
 			return newNode;
 		}
