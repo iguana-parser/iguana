@@ -3,12 +3,10 @@ package org.jgll.lookup;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.parser.GSSNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.SPPFNode;
 
 /**
  * 
@@ -34,16 +32,6 @@ public abstract class AbstractLookupTable implements LookupTable {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
 		this.slotsSize = grammar.getGrammarSlots().size();
-	}
-
-	@Override
-	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
-		gssNode.addToPopElements(sppfNode);
-	}
-	
-	@Override
-	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
-		return gssNode.getPoppedElements();
 	}
 		
 	protected NonPackedNode createNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {

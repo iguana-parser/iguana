@@ -200,7 +200,7 @@ public class CuckooHashMap<K, V> implements Map<K, V>, Serializable {
 		return put(entry.getKey(), entry.getValue());
 	}
 	
-	protected boolean isEntryEmpty(Object e) {
+	protected boolean isEntryEmpty(Entry<K, V> e) {
 		return e == null;
 	}
 	

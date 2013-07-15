@@ -1,6 +1,7 @@
 package org.jgll.lookup;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -42,6 +44,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private int nonPackedNodesCount;
 	
+	private Map<GSSNode, Set<SPPFNode>> poppedElements;
+	
 	public RecursiveDescentLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		descriptorsStack = new ArrayDeque<>();
@@ -51,6 +55,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		gssNodes = new CuckooHashSet<>();
 		packedNodes = new CuckooHashSet<>();
 		gssEdges = new CuckooHashSet<>();
+		poppedElements = new CuckooHashMap<>();
 	}
 	
 	@Override
@@ -187,6 +192,25 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public int getGSSEdgesCount() {
 		return gssEdges.size();
+	}
+
+	@Override
+	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
+		Set<SPPFNode> set = poppedElements.get(gssNode);
+		if(set == null) {
+			set = new HashSet<>();
+			poppedElements.put(gssNode, set);
+		}
+		set.add(sppfNode);
+	}
+
+	@Override
+	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
+		Set<SPPFNode> set = poppedElements.get(gssNode);
+		if(set == null) {
+			 set = Collections.emptySet();
+		}
+		return set;
 	}
 
 }

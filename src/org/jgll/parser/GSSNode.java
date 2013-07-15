@@ -1,14 +1,10 @@
 package org.jgll.parser;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.L0;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.Level;
 
 /**
@@ -41,8 +37,6 @@ public class GSSNode implements Level {
 	
 	private final int hash;
 	
-	private Set<SPPFNode> poppedElements;
-	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
 	 * {@code position} and {@code index}
@@ -55,14 +49,7 @@ public class GSSNode implements Level {
 		this.inputIndex = inputIndex;
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
-	
-	public void addToPopElements(SPPFNode sppfNode) {
-		if(poppedElements == null) {
-			poppedElements = new CuckooHashSet<>();
-		}
-		poppedElements.add(sppfNode);
-	}
-	
+		
 	public void addGSSEdge(GSSEdge edge) {
 		if(gssEdges == null) {
 			gssEdges = new ArrayList<>();
@@ -86,13 +73,6 @@ public class GSSNode implements Level {
 		return inputIndex;
 	}
 	
-	public Iterable<SPPFNode> getPoppedElements() {
-		if(poppedElements == null) {
-			return Collections.emptyList();
-		}
-		return poppedElements;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) {

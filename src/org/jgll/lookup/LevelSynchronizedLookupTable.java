@@ -1,7 +1,10 @@
 package org.jgll.lookup;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
@@ -17,6 +20,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.util.hashing.LevelMap;
 import org.jgll.util.hashing.LevelSet;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -56,6 +60,9 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private LevelSet<GSSEdge> currendEdges;
 	private LevelSet<GSSEdge>[] forwardEdges;
 	
+	private LevelMap<GSSNode, Set<SPPFNode>> currentPoppedElements;
+	private LevelMap<GSSNode, Set<SPPFNode>>[] forwardPoppedElements;
+	
 	private int countGSSNodes;
 	
 	/**
@@ -94,12 +101,16 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		currendEdges = new LevelSet<>();
 		forwardEdges = new LevelSet[longestTerminalChain];
 		
+		currentPoppedElements = new LevelMap<>();
+		forwardPoppedElements = new LevelMap[longestTerminalChain];
+		
 		for(int i = 0; i < longestTerminalChain; i++) {
 			forwardDescriptors[i] = new LevelSet<>(getSize());
 			forwardRs[i] = new ArrayDeque<>();
 			forwardNodes[i] = new LevelSet<>();
 			forwardGssNodes[i] = new LevelSet<>();
 			forwardEdges[i] = new LevelSet<>();
+			forwardPoppedElements[i] = new LevelMap<>();
 		}
 	}
 	
@@ -130,6 +141,12 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		currendEdges.clear();
 		currendEdges = forwardEdges[nextIndex];
 		forwardEdges[nextIndex] = tmpGSSEdgeSet;
+		
+		LevelMap<GSSNode, Set<SPPFNode>> tmpPoppedElements = currentPoppedElements;
+		currentPoppedElements.clear();
+		currentPoppedElements = forwardPoppedElements[nextIndex];
+		forwardPoppedElements[nextIndex] = tmpPoppedElements;
+
 		
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
@@ -376,6 +393,43 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	@Override
 	public int getGSSEdgesCount() {
 		return gssEdgesCount;
+	}
+
+	@Override
+	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
+		if(gssNode.getInputIndex() == currentLevel) {
+			Set<SPPFNode> set = currentPoppedElements.get(gssNode);
+			if(set == null) {
+				set = new HashSet<>();
+				currentPoppedElements.put(gssNode, set);
+			}
+			set.add(sppfNode);
+		} else {
+			int index = indexFor(gssNode.getInputIndex());
+			Set<SPPFNode> set = forwardPoppedElements[index].get(gssNode);
+			if(set == null) {
+				set = new HashSet<>();
+			}
+			set.add(sppfNode);
+		}
+	}
+
+	@Override
+	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
+		if(gssNode.getInputIndex() == currentLevel) {
+			Set<SPPFNode> set = currentPoppedElements.get(gssNode);
+			if(set == null) {
+				set = Collections.emptySet();
+			}
+			return set;
+		} else {
+			int index = indexFor(gssNode.getInputIndex());
+			Set<SPPFNode> set = forwardPoppedElements[index].get(gssNode);
+			if(set == null) {
+				set = Collections.emptySet();
+			}
+			return set;
+		}
 	}
 
 }
