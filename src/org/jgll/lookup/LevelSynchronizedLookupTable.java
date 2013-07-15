@@ -348,7 +348,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 					forwardNodes[index].add(packedNode);
 					forwardNodes[index].add(firstPackedNode);
 				}
-				packedNodesCount++;
+				packedNodesCount += 2;
 			}
 		}
 		else {
