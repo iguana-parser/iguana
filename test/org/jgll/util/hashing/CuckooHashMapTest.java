@@ -5,6 +5,7 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
+import org.jgll.util.RandomUtil;
 import org.junit.Test;
 
 public class CuckooHashMapTest {
@@ -22,7 +23,7 @@ public class CuckooHashMapTest {
 	@Test
 	public void testInsertOneMillionEntries() {
 		Map<Integer, Integer> map = new CuckooHashMap<>();
-		Random rand = new Random();
+		Random rand = RandomUtil.random;
 		for(int i = 0; i < 1000000; i++) {
 			int key = rand.nextInt(Integer.MAX_VALUE);
 			int value = rand.nextInt(Integer.MAX_VALUE);

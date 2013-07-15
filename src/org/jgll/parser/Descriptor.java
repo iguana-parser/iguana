@@ -64,6 +64,7 @@ public class Descriptor implements Level {
 												   sppfNode.hashCode(), 
 												   gssNode.hashCode(), 
 												   inputIndex);
+		
 	}
 	
 	public GrammarSlot getGrammarSlot() {

@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.jgll.parser.HashFunctions;
+import org.jgll.util.RandomUtil;
 import org.junit.Test;
 
 public class CuckoosHashSetTest {
@@ -50,7 +51,7 @@ public class CuckoosHashSetTest {
 	@Test
 	public void testInsertOneMillionEntries() {
 		Set<IntegerHashKey> set = new CuckooHashSet<>();
-		Random rand = new Random();
+		Random rand = RandomUtil.random;
 		for(int i = 0; i < 1000000; i++) {
 			IntegerHashKey key = new IntegerHashKey(rand.nextInt(Integer.MAX_VALUE), 
 													rand.nextInt(Integer.MAX_VALUE), 

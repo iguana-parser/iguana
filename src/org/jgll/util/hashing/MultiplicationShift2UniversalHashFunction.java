@@ -1,6 +1,6 @@
 package org.jgll.util.hashing;
 
-import java.util.Random;
+import org.jgll.util.RandomUtil;
 
 /**
  * 
@@ -23,9 +23,8 @@ public class MultiplicationShift2UniversalHashFunction implements UniversalHashF
 
 		final int maxB = 1 << (32 - p);
 		
-		Random rand = new Random();
-		a = 2 * rand.nextInt(maxA) + 1;   // random odd number
-		b = rand.nextInt(maxB);
+		a = 2 * RandomUtil.random.nextInt(maxA) + 1;   // random odd number
+		b = RandomUtil.random.nextInt(maxB);
 	}
 	
 	@Override
