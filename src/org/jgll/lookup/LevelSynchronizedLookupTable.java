@@ -68,6 +68,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	 */
 	private int all;
 	
+	private int packedNodesCount;
+	
 	@SuppressWarnings("unchecked")
 	public LevelSynchronizedLookupTable(Grammar grammar, Input input) {
 		super(grammar, input.size());
@@ -313,21 +315,29 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 					forwardNodes[index].add(packedNode);
 					forwardNodes[index].add(firstPackedNode);
 				}
+				packedNodesCount++;
 			}
 		}
 		else {
 			PackedNode key = new PackedNode(slot, pivot, parent);
 			if(parent.getRightExtent() == currentLevel) {
 				if(currentLevelNodes.add(key)) {
-					parent.addPackedNode(key, leftChild, rightChild);					
+					parent.addPackedNode(key, leftChild, rightChild);
+					packedNodesCount++;
 				}
 			} else {
 				int index = indexFor(parent.getRightExtent());
 				if(forwardNodes[index].add(key)) {
 					parent.addPackedNode(key, leftChild, rightChild);
+					packedNodesCount++;
 				}
 			}
 		}
+	}
+
+	@Override
+	public int getPackedNodesCount() {
+		return packedNodesCount;
 	}
 
 }

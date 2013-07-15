@@ -165,4 +165,9 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		}
 	}
 
+	@Override
+	public int getPackedNodesCount() {
+		return packedNodes.size();
+	}
+
 }

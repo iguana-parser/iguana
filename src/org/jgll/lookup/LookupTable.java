@@ -40,12 +40,14 @@ public interface LookupTable {
 	
 	public int getNonPackedNodesCount();
 	
+	public int getPackedNodesCount();
+	
 	public int getGSSNodesCount();
 	
 	public int getGSSEdgesCount();
 	
 	public int getDescriptorsCount();
-		
+	
 	public Iterable<GSSNode> getGSSNodes();
 	
 }	

@@ -75,11 +75,11 @@ public class Grammar implements Serializable {
 		log.info("Nonterminals: %d", nonterminals.size());
 		log.info("Production rules: %d", numProductions());
 		log.info("Grammar slots: %d", slots.size());
-		log.info("Longest terminal Chain: %d", longestTerminalChain);
-		log.info("Maximum number: %d", maximumNumAlternates);
-		log.info("Maximum descriptors: %d", maxDescriptorsAtInput);
-		log.info("Average descriptors: %d", averageDescriptorsAtInput);
-		log.info("Standard Deviation descriptors: %d", stDevDescriptors);
+		log.debug("Longest terminal Chain: %d", longestTerminalChain);
+		log.debug("Maximum number: %d", maximumNumAlternates);
+		log.debug("Maximum descriptors: %d", maxDescriptorsAtInput);
+		log.debug("Average descriptors: %d", averageDescriptorsAtInput);
+		log.debug("Standard Deviation descriptors: %d", stDevDescriptors);
 	}
 	
 	private int numProductions() {
