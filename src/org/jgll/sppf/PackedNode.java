@@ -150,4 +150,9 @@ public class PackedNode extends SPPFNode {
 		return false;
 	}
 
+	@Override
+	public int getLevel() {
+		return parent.getRightExtent();
+	}
+
 }

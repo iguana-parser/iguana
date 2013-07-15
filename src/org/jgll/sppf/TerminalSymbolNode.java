@@ -101,4 +101,9 @@ public class TerminalSymbolNode extends SPPFNode {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public int getLevel() {
+		return inputIndex;
+	}
+
 }

@@ -40,11 +40,6 @@ public abstract class SPPFNode implements Level {
 	
 	public abstract GrammarSlot getGrammarSlot();
 	
-	@Override
-	public int getLevel() {
-		return getRightExtent();
-	}
-	
 	public Object getObject() {
 		return object;
 	}

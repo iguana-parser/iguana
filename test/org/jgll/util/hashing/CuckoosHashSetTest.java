@@ -8,10 +8,10 @@ import java.util.Set;
 import org.jgll.parser.HashFunctions;
 import org.junit.Test;
 
-public class CuckoosHashTableTest {
+public class CuckoosHashSetTest {
 	
 	@Test
-	public void test1() {
+	public void testIn() {
 		Set<IntegerHashKey> set = new CuckooHashSet<>(16);
 		IntegerHashKey key1 = new IntegerHashKey(100, 12, 27, 23);
 		IntegerHashKey key2 = new IntegerHashKey(52, 10, 20, 21);

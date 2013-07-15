@@ -199,4 +199,9 @@ public abstract class NonPackedNode extends SPPFNode {
 		return countPackedNode;
 	}
 	
+	@Override
+	public int getLevel() {
+		return rightExtent;
+	}
+	
 }

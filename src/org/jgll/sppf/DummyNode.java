@@ -79,4 +79,9 @@ public class DummyNode extends SPPFNode {
 		return L0.getInstance();
 	}
 
+	@Override
+	public int getLevel() {
+		return 0;
+	}
+
 }
