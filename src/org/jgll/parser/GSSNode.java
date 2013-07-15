@@ -1,6 +1,8 @@
 package org.jgll.parser;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlot;
@@ -35,7 +37,7 @@ public class GSSNode implements Level {
 
 	private final int inputIndex;
 
-	private Set<GSSEdge> gssEdges;
+	private List<GSSEdge> gssEdges;
 	
 	private final int hash;
 	
@@ -51,15 +53,7 @@ public class GSSNode implements Level {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
-	}
-	
-	public boolean hasGSSEdge(SPPFNode label, GSSNode destination) {
-		if(gssEdges == null) {
-			gssEdges = new CuckooHashSet<>();
-		}
-		return !gssEdges.add(new GSSEdge(label, destination));
 	}
 	
 	public void addToPopElements(SPPFNode sppfNode) {
@@ -67,6 +61,13 @@ public class GSSNode implements Level {
 			poppedElements = new CuckooHashSet<>();
 		}
 		poppedElements.add(sppfNode);
+	}
+	
+	public void addGSSEdge(GSSEdge edge) {
+		if(gssEdges == null) {
+			gssEdges = new ArrayList<>();
+		}
+		gssEdges.add(edge);
 	}
 	
 	public Iterable<GSSEdge> getEdges() {

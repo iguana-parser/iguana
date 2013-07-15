@@ -29,21 +29,11 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	protected final int slotsSize;
 	
-	protected int gssEdgesCount;
 	
 	public AbstractLookupTable(Grammar grammar, int inputSize) {
 		this.inputSize = inputSize;
 		this.grammar = grammar;
 		this.slotsSize = grammar.getGrammarSlots().size();
-	}
-
-	@Override
-	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
-		 boolean added = source.hasGSSEdge(label, destination);
-		 if(!added) {
-			 gssEdgesCount++;
-		 }
-		 return added;
 	}
 
 	@Override
@@ -54,11 +44,6 @@ public abstract class AbstractLookupTable implements LookupTable {
 	@Override
 	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
 		return gssNode.getPoppedElements();
-	}
-	
-	@Override
-	public int getGSSEdgesCount() {
-		return gssEdgesCount;
 	}
 		
 	protected NonPackedNode createNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {

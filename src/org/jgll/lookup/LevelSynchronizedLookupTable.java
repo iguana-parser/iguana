@@ -7,6 +7,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
+import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -41,20 +42,19 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private TerminalSymbolNode[][] terminals;
 	
 	private LevelSet<Descriptor> u;
-	
 	private LevelSet<SPPFNode> currentLevelNodes;
 	
 	private LevelSet<SPPFNode>[] forwardNodes;
-	
 	private LevelSet<Descriptor>[] forwardDescriptors;
 	
 	private Queue<Descriptor> r;
-	
 	private Queue<Descriptor>[] forwardRs;
 	
 	private LevelSet<GSSNode> currentGssNodes;
-	
 	private LevelSet<GSSNode>[] forwardGssNodes;
+	
+	private LevelSet<GSSEdge> currendEdges;
+	private LevelSet<GSSEdge>[] forwardEdges;
 	
 	private int countGSSNodes;
 	
@@ -69,6 +69,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private int all;
 	
 	private int packedNodesCount;
+	
+	protected int gssEdgesCount;
 	
 	@SuppressWarnings("unchecked")
 	public LevelSynchronizedLookupTable(Grammar grammar, Input input) {
@@ -89,11 +91,15 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		currentGssNodes = new LevelSet<>();
 		forwardGssNodes = new LevelSet[longestTerminalChain];
 		
+		currendEdges = new LevelSet<>();
+		forwardEdges = new LevelSet[longestTerminalChain];
+		
 		for(int i = 0; i < longestTerminalChain; i++) {
 			forwardDescriptors[i] = new LevelSet<>(getSize());
 			forwardRs[i] = new ArrayDeque<>();
 			forwardNodes[i] = new LevelSet<>();
 			forwardGssNodes[i] = new LevelSet<>();
+			forwardEdges[i] = new LevelSet<>();
 		}
 	}
 	
@@ -119,6 +125,11 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		currentGssNodes.clear();
 		currentGssNodes = forwardGssNodes[nextIndex];
 		forwardGssNodes[nextIndex] = tmpGSSNodeSet;
+		
+		LevelSet<GSSEdge> tmpGSSEdgeSet = currendEdges;
+		currendEdges.clear();
+		currendEdges = forwardEdges[nextIndex];
+		forwardEdges[nextIndex] = tmpGSSEdgeSet;
 		
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
@@ -281,6 +292,28 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		}
 		return value;
 	}
+	
+	@Override
+	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
+		GSSEdge edge = new GSSEdge(source, label, destination);
+		if(source.getInputIndex() == currentLevel) {
+			boolean added = currendEdges.add(edge);
+			if(added) {
+				gssEdgesCount++;
+				source.addGSSEdge(edge);
+			}
+			return !added;
+		} 
+		else {
+			int index = indexFor(source.getInputIndex());
+			boolean added = forwardEdges[index].add(edge);
+			if(added) {
+				gssEdgesCount++;
+				source.addGSSEdge(edge);
+			}
+			return !added;
+		}
+	}
 
 	@Override
 	public int getGSSNodesCount() {
@@ -338,6 +371,11 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	@Override
 	public int getPackedNodesCount() {
 		return packedNodesCount;
+	}
+
+	@Override
+	public int getGSSEdgesCount() {
+		return gssEdgesCount;
 	}
 
 }

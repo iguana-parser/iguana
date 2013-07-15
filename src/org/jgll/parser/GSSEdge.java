@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.hashing.Level;
 
 /**
  * 
@@ -21,19 +22,20 @@ import org.jgll.sppf.SPPFNode;
  * 
  * @author Ali Afroozeh
  */
-public class GSSEdge {
+public class GSSEdge implements Level {
 
+	private final GSSNode src;
 	private final SPPFNode sppfNode;
 	private final GSSNode dst;
 	
 	private final int hash;
 	
-	public GSSEdge(SPPFNode sppfNode, GSSNode dst) {
+	public GSSEdge(GSSNode src, SPPFNode sppfNode, GSSNode dst) {
+		this.src = src;
 		this.sppfNode = sppfNode;
 		this.dst = dst;	
 		
-		hash = HashFunctions.defaulFunction().hash(dst.hashCode(),
-												   sppfNode.hashCode());
+		hash = HashFunctions.defaulFunction().hash(src.hashCode(), sppfNode.hashCode(), dst.hashCode());
 	}
 	
 	public SPPFNode getSppfNode() {
@@ -63,8 +65,14 @@ public class GSSEdge {
 		GSSEdge other = (GSSEdge) o;
 		
 		return hash == other.hash &&
-				dst.equals(other.dst) &&
+			   src.equals(other.src) &&
+			   dst.equals(other.dst) &&
 			   sppfNode.equals(other.sppfNode);
+	}
+
+	@Override
+	public int getLevel() {
+		return src.getInputIndex();
 	}
 	
 }
