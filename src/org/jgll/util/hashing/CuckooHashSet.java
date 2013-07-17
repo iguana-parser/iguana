@@ -62,6 +62,8 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	protected Object[] table1;
 
 	protected Object[] table2;
+
+	private int tableSize;
 		
 	@SafeVarargs
 	public static <T> CuckooHashSet<T> from(T...elements) {
@@ -100,7 +102,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
         // For each table
 		p--;
 		
-		int tableSize = capacity >> 1;
+		tableSize = capacity >> 1;
 		table1 = new Object[tableSize];
 		table2 = new Object[tableSize];
 		
@@ -108,8 +110,8 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	}
 
 	private void generateNewHashFunctions() {
-		function1 = new MultiplicationShiftPlainUniversalHashFunction(p);
-		function2 = new MultiplicationShiftPlainUniversalHashFunction(p);
+		function1 = new MultiplicationShift2UniversalHashFunction(p);
+		function2 = new MultiplicationShift2UniversalHashFunction(p);
 	}
 	
 	@Override
@@ -274,6 +276,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		Object[] newTable2 = new Object[capacity];
 		
 		capacity <<= 1;
+		tableSize = capacity / 2;
 		p++;
 		
 		threshold = (int) (loadFactor * capacity);

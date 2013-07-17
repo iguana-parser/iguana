@@ -21,7 +21,7 @@ public class Rule implements Serializable {
 	
 	private final transient Object object;
 	
-	private Condition condition;
+	private Rule ifNot;
 	
 	public Rule(Nonterminal head, List<? extends Symbol> body) {
 		this(head, body, null);
@@ -62,14 +62,14 @@ public class Rule implements Serializable {
 		return object;
 	}
 	
-	public Rule popCondition(Condition condition) {
+	public Rule ifNot(Rule rule) {
 		Rule newRule = new Rule(head, body);
-		newRule.condition = condition;
+		newRule.ifNot = rule;
 		return newRule;
 	}
 	
-	public Condition getCondition() {
-		return condition;
+	public Rule getIfNot() {
+		return ifNot;
 	}
 	
 	/**

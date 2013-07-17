@@ -47,13 +47,11 @@ public class GSSNode implements Level {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
+		this.gssEdges = new ArrayList<>();
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 		
 	public void addGSSEdge(GSSEdge edge) {
-		if(gssEdges == null) {
-			gssEdges = new ArrayList<>();
-		}
 		gssEdges.add(edge);
 	}
 	

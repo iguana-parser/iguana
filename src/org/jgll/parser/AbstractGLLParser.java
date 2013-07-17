@@ -184,7 +184,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 */
 	@Override
 	public final void pop(GSSNode u, int i, SPPFNode z) {
-				
+		
 		if (u != u0) {
 			
 			// Don't pop if a pop action associated with the slot returns false.

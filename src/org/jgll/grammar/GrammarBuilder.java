@@ -10,6 +10,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSEdge;
+import org.jgll.parser.GSSNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -50,7 +53,6 @@ public class GrammarBuilder implements Serializable {
 
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
-	private Map<Condition, BodyGrammarSlot> conditionsMap;
 
 	public GrammarBuilder(String name) {
 		this.name = name;
@@ -63,7 +65,6 @@ public class GrammarBuilder implements Serializable {
 		
 		oneLevelOnlyFilters = new HashSet<>();
 		ruleToLastSlotMap = new HashMap<>();
-		conditionsMap =  new HashMap<>();
 	}
 
 	public Grammar build() {
@@ -175,11 +176,11 @@ public class GrammarBuilder implements Serializable {
 			slots.add(lastGrammarSlot);
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot, headGrammarSlot.getAlternates().size());
-//			BodyGrammarSlot convertedCondition = convertCondition(rule.getCondition());
-//			if(convertedCondition != null) {
-//				alternate.setCondition(convertedCondition);
-//				addNot(lastGrammarSlot, convertedCondition);
-//			}
+			
+			if(rule.getIfNot() != null) {
+				addOrder(lastGrammarSlot, ruleToLastSlotMap.get(rule.getIfNot()));
+			}
+
 			headGrammarSlot.addAlternate(alternate);
 		}
 
@@ -194,40 +195,6 @@ public class GrammarBuilder implements Serializable {
 		return this;
 	}
 	
-	private BodyGrammarSlot convertCondition(Condition condition) {
-		
-		if(condition == null) {
-			return null;
-		}
-		
-		if(condition.getSymbols().size() == 0) {
-			throw new IllegalArgumentException("The list of symbols cannot be empty.");
-		}
-		
-		BodyGrammarSlot currentSlot = null;
-		BodyGrammarSlot firstSlot = null;
-
-		int index = 0;
-		for(Symbol symbol : condition.getSymbols()) {
-			if(symbol.isNonterminal()) {
-				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-				currentSlot = new NonterminalGrammarSlot("", index, currentSlot, nonterminal, null);
-			} 
-			else if(symbol.isTerminal()) {
-				currentSlot = new TerminalGrammarSlot("", index, currentSlot, (Terminal) symbol, null);
-			}
-			
-			if(index == 0) {
-				firstSlot = currentSlot;
-			}
-			index++;
-		}
-		
-		new LastGrammarSlot("", index, currentSlot, null, null);
-		conditionsMap.put(condition, firstSlot);
-		return firstSlot;
-	}
-
 	private void addPrecedeRestriction(BodyGrammarSlot slot, final CharacterClass characterClass) {
 		if (characterClass != null) {
 
@@ -250,13 +217,23 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private void addOrder(final LastGrammarSlot slot1, final LastGrammarSlot slot2) {
-		slot2.addPopAction(new SlotAction<Boolean>() {
+		slot1.addPopAction(new SlotAction<Boolean>() {
 			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
-				return null;
+				GSSNode cu = parser.getCu();
+				for(GSSEdge edge : cu.getEdges()) {
+					if(!parser.getLookupTable().searchSPPFNode(slot2.getHead(), edge.getSppfNode().getLeftExtent(), parser.getCi())) {
+						SPPFNode y = parser.getNodeP(slot1, edge.getSppfNode(), parser.getCn());
+						parser.add(cu.getGrammarSlot(), edge.getDestination(), parser.getCi(), y);
+					}
+				}
+				return true;
 			}
 		});
+		
 	}
 	
 //	private void addNot(final LastGrammarSlot slot1, BodyGrammarSlot converted) {

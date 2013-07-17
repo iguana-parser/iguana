@@ -3,8 +3,6 @@ package org.jgll.grammar;
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.dot.GSSToDot;
-import org.jgll.util.dot.GraphVizUtil;
 import org.junit.Test;
 
 /**
@@ -32,10 +30,10 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 		Terminal a = new Character('a');
 		Terminal b = new Character('b');
 
-		rule1 = new Rule(S, list(a, S, b, S));
+		rule1 = new Rule(S, list(a, S));
 		builder.addRule(rule1);
 		
-		rule2 = new Rule(S, list(a, S));
+		rule2 = new Rule(S, list(a, S, b, S)).ifNot(rule1);
 		builder.addRule(rule2);
 		
 		rule3 = new Rule(S, list(s));
@@ -47,6 +45,7 @@ public class DanglingElseGrammar extends AbstractGrammarTest {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
+		generateSPPFGraph(sppf);
 	}
 
 }

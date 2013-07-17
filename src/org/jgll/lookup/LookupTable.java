@@ -24,6 +24,16 @@ public interface LookupTable {
 	
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent);
 	
+	/**
+	 * 
+	 * Returns an existing SPPF node with the given parameters. If such a node
+	 * does not exists, creates one.
+	 * 
+	 * @param grammarSlot
+	 * @param leftExtent
+	 * @param rightExtent
+	 * @return
+	 */
 	public SPPFNode getNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
@@ -49,5 +59,17 @@ public interface LookupTable {
 	public int getDescriptorsCount();
 	
 	public Iterable<GSSNode> getGSSNodes();
+	
+	/**
+	 * 
+	 * Searches for an SPPF node with the given parameters. 
+	 * 
+	 * @param grammarSlot
+	 * @param leftExtent
+	 * @param rightExtent
+	 * 
+	 * @return true if such a node exists, otherwise false.
+	 */
+	public boolean searchSPPFNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
 }	
