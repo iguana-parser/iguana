@@ -1,17 +1,23 @@
 package org.jgll.recognizer;
 
+import java.util.ArrayDeque;
+
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.L0;
+import org.jgll.util.hashing.CuckooHashSet;
 
 public class GrammarInterpreterRecognizer extends AbstractGLLRecognizer {
 
 	@Override
 	protected void init() {
-		
+		descriptorSet = new CuckooHashSet<>();
+		descriptorStack = new ArrayDeque<>();
+		gssNodes = new CuckooHashSet<>();
 	}
 
 	@Override
 	protected void recognize(HeadGrammarSlot startSymbol) {
-		startSymbol.recognize(this, input);
+		L0.getInstance().recognize(this, input, startSymbol);
 	}
 
 	@Override
@@ -23,5 +29,4 @@ public class GrammarInterpreterRecognizer extends AbstractGLLRecognizer {
 	public GSSNode getCu() {
 		return cu;
 	}
-
 }

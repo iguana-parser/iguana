@@ -104,6 +104,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+		for(Alternate alternate : alternates) {
+			int ci = recognizer.getCi();
+			if(alternate.getFirstSlot().checkAgainstTestSet(input.charAt(ci))) {
+				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
+				recognizer.add(alternate.getFirstSlot(), cu, ci);
+			}
+		}
 		return null;
 	}
 	

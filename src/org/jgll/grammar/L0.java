@@ -46,21 +46,7 @@ public class L0 extends GrammarSlot {
 			slot = slot.parse(parser, input);
 		}
 		
-		while(parser.hasNextDescriptor()) {
-			Descriptor descriptor = parser.nextDescriptor();
-			slot = descriptor.getGrammarSlot();
-			GSSNode cu = descriptor.getGSSNode();
-			SPPFNode cn = descriptor.getSPPFNode();
-			int ci = descriptor.getInputIndex();
-			parser.update(cu, cn, ci);
-			log.trace("Processing (%s, %s, %s, %s)", new Object[] {slot, ci, cu, cn});
-			slot = slot.parse(parser, input);
-		
-			while(slot != null) {
-				slot = slot.parse(parser, input);
-			}
-		}
-		return null;
+		return parse(parser, input);
 	}
 	
 	@Override
@@ -72,7 +58,7 @@ public class L0 extends GrammarSlot {
 			SPPFNode cn = descriptor.getSPPFNode();
 			int ci = descriptor.getInputIndex();
 			parser.update(cu, cn, ci);
-			log.trace("Processing (%s, %s, %s, %s)", new Object[] {slot, ci, cu, cn});
+			log.trace("Processing (%s, %s, %s, %s)", slot, ci, cu, cn);
 			slot = slot.parse(parser, input);
 			while(slot != null) {
 				slot = slot.parse(parser, input);
@@ -81,8 +67,30 @@ public class L0 extends GrammarSlot {
 		return null;
 	}
 	
+	public GrammarSlot recognize(GLLRecognizer recognizer, Input input, GrammarSlot start) {
+		GrammarSlot slot = start.recognize(recognizer, input);
+		
+		while(slot != null) {
+			slot = slot.recognize(recognizer, input);
+		}
+		
+		return recognize(recognizer, input);
+	}
+	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+		while(recognizer.hasNextDescriptor()) {
+			org.jgll.recognizer.Descriptor descriptor = recognizer.nextDescriptor();
+			GrammarSlot slot = descriptor.getGrammarSlot();
+			org.jgll.recognizer.GSSNode cu = descriptor.getGSSNode();
+			int ci = descriptor.getInputIndex();
+			recognizer.update(ci, cu);
+			log.trace("Processing (%s, %s, %s)", slot, ci, cu);
+			slot = slot.recognize(recognizer, input);
+			while(slot != null) {
+				slot = slot.recognize(recognizer, input);
+			}
+		}
 		return null;
 	}
 

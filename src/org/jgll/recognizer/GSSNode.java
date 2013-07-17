@@ -5,10 +5,11 @@ import java.util.Set;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.L0;
+import org.jgll.parser.HashFunctions;
 
 public class GSSNode {
 
-	public static final GSSNode DUMMY = new GSSNode(L0.getInstance(), 0);
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 
 	private final GrammarSlot slot;
 
@@ -79,10 +80,7 @@ public class GSSNode {
 
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + inputIndex;
-		return result;
+		return HashFunctions.defaulFunction().hash(inputIndex, slot.getId());
 	}
 
 	@Override

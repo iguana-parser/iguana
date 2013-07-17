@@ -1,18 +1,24 @@
 package org.jgll.recognizer;
 
 import java.util.Deque;
-import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLRecognizer.class);
+	
+	/**
+	 * u0 is the bottom of the GSS.
+	 */
+	protected final GSSNode u0 = GSSNode.U0;
+
 	
 	protected Input input;
 	
@@ -24,12 +30,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	/**
 	 * The current GSS node.
 	 */
-	protected GSSNode cu;
-
-	/**
-	 * u0 is the bottom of the GSS.
-	 */
-	protected GSSNode u0;
+	protected GSSNode cu = u0;
 	
 	/**
 	 * 
@@ -41,11 +42,11 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	 */
 	protected HeadGrammarSlot startSymbol;
 	
-	private Set<Descriptor> descriptorSet;
+	protected Set<Descriptor> descriptorSet;
 	
-	private Deque<Descriptor> descriptorStack;
+	protected Deque<Descriptor> descriptorStack;
 	
-	private Map<GSSNode, GSSNode> gssNodes;
+	protected CuckooHashSet<GSSNode> gssNodes;
 	
 	@Override
 	public final boolean recognize(Input input, Grammar grammar, String nonterminalName) {		
@@ -68,20 +69,19 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 
 		logStatistics(end - start);
 
-		if(descriptorSet.contains(new Descriptor(startSymbol, u0, input.size()))) {
+		if(ci == input.size() - 1) {
 			return true;
 		} else {
 			return false;
 		}
-
 	}
 	
 	private void logStatistics(long duration) {
-		log.info("Parsing Time: {} ms", duration/1000000);
+		log.info("Parsing Time: %d ms", duration/1000000);
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.debug("Memory used: {} mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 //		log.debug("Descriptors: {}", lookupTable.getDescriptorsCount());
 //		log.debug("GSSNodes: {}", lookupTable.getGSSNodes().size());
 //		log.debug("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
@@ -129,12 +129,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		log.trace("GSSNode created: " +  L + ", " + i);
 		GSSNode key = new GSSNode(L, i);
 
-		GSSNode v = gssNodes.get(key);
-		if(v == null) {
-			v = key;
-			gssNodes.put(key, v);
-			return key;
-		}
+		GSSNode v = gssNodes.addAndGet(key);
 		
 		for(int index : v.getPoppedIndices()) {
 			add(L, u, index);
@@ -151,6 +146,12 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	@Override
 	public Descriptor nextDescriptor() {
 		return descriptorStack.pop();
+	}
+	
+	@Override
+	public void update(int inputIndex, GSSNode gssNode) {
+		this.ci = inputIndex;
+		this.cu = gssNode;
 	}
 
 }

@@ -39,7 +39,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
-//		return recognizer.pop(recognizer.getCu(), recognizer.getCi());
+		recognizer.pop(recognizer.getCu(), recognizer.getCi());
 		return null;
 	}
 

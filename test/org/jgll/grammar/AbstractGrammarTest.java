@@ -10,6 +10,8 @@ import org.jgll.parser.AbstractGLLParser;
 import org.jgll.parser.GSSNode;
 import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.RecursiveDescentParser;
+import org.jgll.recognizer.AbstractGLLRecognizer;
+import org.jgll.recognizer.GrammarInterpreterRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.dot.GSSToDot;
 import org.jgll.util.dot.GraphVizUtil;
@@ -23,6 +25,7 @@ public abstract class AbstractGrammarTest {
 	protected Grammar grammar;
 	protected AbstractGLLParser rdParser;
 	protected AbstractGLLParser levelParser;
+	protected AbstractGLLRecognizer recognizer;
 	protected String outputDir;
 	
 	@Before
@@ -30,6 +33,7 @@ public abstract class AbstractGrammarTest {
 		grammar = initGrammar();
 		rdParser = new RecursiveDescentParser();
 		levelParser = new LevelSynchronizedGrammarInterpretter();
+		recognizer = new GrammarInterpreterRecognizer();
 		outputDir = System.getProperty("user.home") + "/output";
 	}
 	

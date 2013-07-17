@@ -1,6 +1,7 @@
 package org.jgll.recognizer;
 
 import org.jgll.grammar.GrammarSlot;
+import org.jgll.parser.HashFunctions;
 
 /**
  * 
@@ -28,12 +29,17 @@ public class Descriptor {
 	
 	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex) {
+		
+		assert slot != null;
+		assert gssNode != null;
+		assert inputIndex >= 0;
+		
 		this.slot = slot;
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
 	}
 	
-	public GrammarSlot getLabel() {
+	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
@@ -47,11 +53,7 @@ public class Descriptor {
 	
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result += 31 * result + slot.getId();
-		result += 31 * result + inputIndex;
-		result += 31 * result + gssNode.hashCode();
-		return result;
+		return HashFunctions.defaulFunction().hash(slot.getId(), inputIndex, gssNode.hashCode());
 	}
 	
 	@Override
