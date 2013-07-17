@@ -53,7 +53,7 @@ public class Test3 extends AbstractGrammarTest {
 	
 	@Test
 	public void testRecognizerFail2() {
-		boolean result = recognizer.recognize(Input.fromString("bc"), grammar, "A");
+		boolean result = recognizer.recognize(Input.fromString("b"), grammar, "A");
 		assertEquals(false, result);
 	}
 	

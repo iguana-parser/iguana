@@ -31,11 +31,13 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	 * The current GSS node.
 	 */
 	protected GSSNode cu = u0;
-	
+
 	/**
 	 * 
 	 */
 	protected Grammar grammar;
+	
+	protected final GrammarSlot startSlot = new StartSlot("Start");
 	
 	/**
 	 * The nonterminal from which the parsing will be started.
@@ -60,6 +62,8 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		this.startSymbol = startSymbol;
 		
 		init();
+		
+		cu = create(startSlot, cu, 0);
 	
 		long start = System.nanoTime();
 	
@@ -69,7 +73,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 
 		logStatistics(end - start);
 
-		if(ci == input.size() - 1) {
+		if(descriptorSet.contains(new Descriptor(startSlot, u0, input.size() - 1))) {
 			return true;
 		} else {
 			return false;
