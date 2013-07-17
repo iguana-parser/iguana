@@ -2,8 +2,6 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -28,22 +26,11 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private transient Object object;
 	
-	private List<SlotAction<Void>> onHoldActions;
-	
 	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(label, position, previous, head);
 		this.object = object;
-		this.onHoldActions = new ArrayList<>();
 	}
-	
-	public void addOnHoldAction(SlotAction<Void> action) {
-		onHoldActions.add(action);
-	}
-	
-	public List<SlotAction<Void>> getOnHoldActions() {
-		return onHoldActions;
-	}
-	
+
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {		
 		parser.pop(parser.getCu(), parser.getCi(), parser.getCn());

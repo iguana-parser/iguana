@@ -12,7 +12,6 @@ import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
-import org.jgll.parser.PopUnit;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -64,9 +63,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private LevelMap<GSSNode, Set<SPPFNode>> currentPoppedElements;
 	private LevelMap<GSSNode, Set<SPPFNode>>[] forwardPoppedElements;
 	
-	private Set<PopUnit> currentDelayedPops;
-	private Set<PopUnit>[] forwardDelayedPops;
-	
 	private int countGSSNodes;
 	
 	/**
@@ -107,8 +103,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		currentPoppedElements = new LevelMap<>();
 		forwardPoppedElements = new LevelMap[longestTerminalChain];
-		
-		currentDelayedPops = new CuckooHashSet<>();		
 		
 		for(int i = 0; i < longestTerminalChain; i++) {
 			forwardDescriptors[i] = new LevelSet<>(getSize());
@@ -254,12 +248,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		if(!r.isEmpty()) {
 			size--;
 			return r.remove();
-		} else if(!currentDelayedPops.isEmpty()) {
-			for(PopUnit popUnit : currentDelayedPops) {
-//				((AbstractGLLParser) parser).forcedPop(popUnit.getGssNode(), popUnit.getInputIndex(), popUnit.getSppfNode());
-			}
-			currentDelayedPops.clear();
-			return nextDescriptor();
 		}
 		else {
 			gotoNextLevel();
@@ -446,18 +434,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		}
 	}
 
-	@Override
-	public boolean searchSPPFNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		
-		SPPFNode key = createNonPackedNode(slot, leftExtent, rightExtent);
-		
-		if(rightExtent == currentLevel) {
-			return currentLevelNodes.contains(key);
-		} else {
-			int index = indexFor(rightExtent);
-			return forwardNodes[index].contains(key);
-		}
-	}
 
 }
 	

@@ -10,9 +10,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GSSEdge;
-import org.jgll.parser.GSSNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -178,7 +175,6 @@ public class GrammarBuilder implements Serializable {
 			Alternate alternate = new Alternate(firstSlot, headGrammarSlot.getAlternates().size());
 			
 			if(rule.getIfNot() != null) {
-				addOrder(lastGrammarSlot, ruleToLastSlotMap.get(rule.getIfNot()));
 			}
 
 			headGrammarSlot.addAlternate(alternate);
@@ -214,26 +210,6 @@ public class GrammarBuilder implements Serializable {
 				}
 			});
 		}
-	}
-	
-	private void addOrder(final LastGrammarSlot slot1, final LastGrammarSlot slot2) {
-		slot1.addPopAction(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Boolean execute(GLLParser parser, Input input) {
-				GSSNode cu = parser.getCu();
-				for(GSSEdge edge : cu.getEdges()) {
-					if(!parser.getLookupTable().searchSPPFNode(slot2.getHead(), edge.getSppfNode().getLeftExtent(), parser.getCi())) {
-						SPPFNode y = parser.getNodeP(slot1, edge.getSppfNode(), parser.getCn());
-						parser.add(cu.getGrammarSlot(), edge.getDestination(), parser.getCi(), y);
-					}
-				}
-				return true;
-			}
-		});
-		
 	}
 	
 //	private void addNot(final LastGrammarSlot slot1, BodyGrammarSlot converted) {

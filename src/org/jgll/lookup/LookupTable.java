@@ -60,16 +60,4 @@ public interface LookupTable {
 	
 	public Iterable<GSSNode> getGSSNodes();
 	
-	/**
-	 * 
-	 * Searches for an SPPF node with the given parameters. 
-	 * 
-	 * @param grammarSlot
-	 * @param leftExtent
-	 * @param rightExtent
-	 * 
-	 * @return true if such a node exists, otherwise false.
-	 */
-	public boolean searchSPPFNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
-	
 }	

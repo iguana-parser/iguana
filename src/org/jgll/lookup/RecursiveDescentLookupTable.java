@@ -213,9 +213,4 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		return set;
 	}
 
-	@Override
-	public boolean searchSPPFNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		return nonPackedNodes.containsKey(createNonPackedNode(slot, leftExtent, rightExtent));
-	}
-
 }
