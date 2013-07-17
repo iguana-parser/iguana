@@ -33,6 +33,22 @@ public class Test2 extends AbstractGrammarTest {
 		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	
+	@Test
+	public void testRecognizerSuccess() {
+		boolean result = recognizer.recognize(Input.fromString("a"), grammar, "A");
+		assertEquals(true, result);
+	}
+	
+	public void testRecognizerFail1() {
+		boolean result = recognizer.recognize(Input.fromString("b"), grammar, "A");
+		assertEquals(false, result);
+	}
+	
+	public void testRecognizerFail2() {
+		boolean result = recognizer.recognize(Input.fromString("aa"), grammar, "A");
+		assertEquals(false, result);
+	}
+	
 	private SPPFNode expectedSPPF() {
 		TerminalSymbolNode node0 = new TerminalSymbolNode('a', 0);
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminal(0), 0, 1);

@@ -22,6 +22,8 @@ public interface GLLRecognizer {
 	
 	public GSSNode getCu();
 	
-	public void update(int inputIndex, GSSNode gssNode);
+	public void update(GSSNode gssNode, int inputIndex);
+	
+	public void recognitionError(GSSNode gssNode, int inputIndex);
 	
 }

@@ -84,7 +84,7 @@ public class L0 extends GrammarSlot {
 			GrammarSlot slot = descriptor.getGrammarSlot();
 			org.jgll.recognizer.GSSNode cu = descriptor.getGSSNode();
 			int ci = descriptor.getInputIndex();
-			recognizer.update(ci, cu);
+			recognizer.update(cu, ci);
 			log.trace("Processing (%s, %s, %s)", slot, ci, cu);
 			slot = slot.recognize(recognizer, input);
 			while(slot != null) {

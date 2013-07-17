@@ -85,7 +85,44 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
-		return null;
+		int ci = recognizer.getCi();
+		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
+		int charAtCi = input.charAt(ci);
+		
+		// A::= x1
+		if(previous == null && next.next == null) {
+			if(terminal.match(charAtCi)) {
+				ci++;
+				recognizer.update(cu, ci);
+			} else {
+				recognizer.recognitionError(cu, ci);
+				return null;
+			}
+		}
+		
+		// A ::= x1...xf, f ≥ 2
+		else if(previous == null && !(next.next == null)) {
+			if(terminal.match(charAtCi)) {
+				ci++;
+				recognizer.update(cu, ci);
+			} else {
+				recognizer.recognitionError(cu, ci);
+				return null;
+			}
+		}
+		
+		// A ::= α · a β
+		else {
+			if(terminal.match(charAtCi)) {
+				ci++;
+				recognizer.update(cu, ci);
+			} else {
+				recognizer.recognitionError(cu, ci);
+				return null;
+			}
+		}
+		
+		return next;
 	}
 	
 	@Override

@@ -149,9 +149,14 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	}
 	
 	@Override
-	public void update(int inputIndex, GSSNode gssNode) {
+	public void update(GSSNode gssNode, int inputIndex) {
 		this.ci = inputIndex;
 		this.cu = gssNode;
+	}
+	
+	@Override
+	public void recognitionError(GSSNode gssNode, int inputIndex) {
+		
 	}
 
 }
