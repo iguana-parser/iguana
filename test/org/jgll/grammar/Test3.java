@@ -14,7 +14,7 @@ import org.junit.Test;
  * B ::= 'b'
  * C ::= 'c'
  * 
- * @author Afroozeh
+ * @author Ali Afroozeh
  *
  */
 public class Test3 extends AbstractGrammarTest {
@@ -38,6 +38,31 @@ public class Test3 extends AbstractGrammarTest {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("bc"), grammar, "A");
 		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
+	
+	@Test
+	public void testRecognizerSuccess() {
+		boolean result = recognizer.recognize(Input.fromString("bc"), grammar, "A");
+		assertEquals(true, result);
+	}
+	
+	@Test
+	public void testRecognizerFail1() {
+		boolean result = recognizer.recognize(Input.fromString("abc"), grammar, "A");
+		assertEquals(false, result);
+	}
+	
+	@Test
+	public void testRecognizerFail2() {
+		boolean result = recognizer.recognize(Input.fromString("bc"), grammar, "A");
+		assertEquals(false, result);
+	}
+	
+	@Test
+	public void testRecognizerFail3() {
+		boolean result = recognizer.recognize(Input.fromString("bca"), grammar, "A");
+		assertEquals(false, result);
+	}
+
 	
 	private SPPFNode expectedSPPF() {
 		TerminalSymbolNode node0 = new TerminalSymbolNode('b', 0);

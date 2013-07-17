@@ -1,11 +1,11 @@
 package org.jgll.recognizer;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.L0;
 import org.jgll.parser.HashFunctions;
+import org.jgll.util.hashing.CuckooHashSet;
 
 public class GSSNode {
 
@@ -30,8 +30,8 @@ public class GSSNode {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.children = new HashSet<>();
-		this.poppedIndices = new HashSet<>();
+		this.children = new CuckooHashSet<>();
+		this.poppedIndices = new CuckooHashSet<>();
 	}
 	
 	public boolean hasChild(GSSNode child) {

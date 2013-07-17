@@ -130,9 +130,15 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		GSSNode key = new GSSNode(L, i);
 
 		GSSNode v = gssNodes.addAndGet(key);
+		if(v == null) {
+			v = key;
+		}
 		
-		for(int index : v.getPoppedIndices()) {
-			add(L, u, index);
+		if(!v.hasChild(u)) {
+			v.addChild(u);
+			for(int index : v.getPoppedIndices()) {
+				add(L, u, index);
+			}
 		}
 		
 		return v;
