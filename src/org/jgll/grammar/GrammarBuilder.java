@@ -10,6 +10,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.GSSEdge;
+import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -50,6 +53,7 @@ public class GrammarBuilder implements Serializable {
 
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
+	private List<BodyGrammarSlot> conditionSlots;
 
 	public GrammarBuilder(String name) {
 		this.name = name;
@@ -62,6 +66,7 @@ public class GrammarBuilder implements Serializable {
 		
 		oneLevelOnlyFilters = new HashSet<>();
 		ruleToLastSlotMap = new HashMap<>();
+		conditionSlots = new ArrayList<>();
 	}
 
 	public Grammar build() {
@@ -149,34 +154,35 @@ public class GrammarBuilder implements Serializable {
 
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 
-			if (deleteSet != null && !deleteSet.isEmpty()) {
-				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
-
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public Boolean execute(GLLParser parser, Input input) {
-						int currentIndex = parser.getCi();
-						int lastIndex = parser.getCu().getInputIndex();
-
-						for (String s : deleteSet) {
-							if (match(s, input.subString(lastIndex, currentIndex))) {
-								return false;
-							}
-						}
-
-						return true;
-					}
-				});
-			}
+//			if (deleteSet != null && !deleteSet.isEmpty()) {
+//				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
+//
+//					private static final long serialVersionUID = 1L;
+//
+//					@Override
+//					public Boolean execute(GLLParser parser, Input input) {
+//						int currentIndex = parser.getCi();
+//						int lastIndex = parser.getCu().getInputIndex();
+//
+//						for (String s : deleteSet) {
+//							if (match(s, input.subString(lastIndex, currentIndex))) {
+//								return false;
+//							}
+//						}
+//
+//						return true;
+//					}
+//				});
+//			}
 
 			slots.add(lastGrammarSlot);
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot, headGrammarSlot.getAlternates().size());
 			
 			if(rule.getIfNot() != null) {
+				BodyGrammarSlot ifNot = convertCondition(rule.getIfNot());
+				addIfNot(lastGrammarSlot, ifNot);
 			}
-
 			headGrammarSlot.addAlternate(alternate);
 		}
 
@@ -210,6 +216,20 @@ public class GrammarBuilder implements Serializable {
 				}
 			});
 		}
+	}
+	
+	private void addIfNot(LastGrammarSlot slot, final BodyGrammarSlot ifNot) {
+
+		slot.addPopAction(new PopAction() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean execute(GSSEdge edge, int inputIndex, Input input) {
+				GLLRecognizer recognizer = RecognizerFactory.contextFreeRecognizer();
+				return !recognizer.recognize(input.subInput(edge.getDestination().getInputIndex(), inputIndex), ifNot);
+			}
+		});
 	}
 	
 //	private void addNot(final LastGrammarSlot slot1, BodyGrammarSlot converted) {
@@ -258,21 +278,73 @@ public class GrammarBuilder implements Serializable {
 //	}
 
 	private void addFollowRestriction(BodyGrammarSlot slot, final List<List<CharacterClass>> followRestriction) {
-		if (followRestriction == null || followRestriction.isEmpty()) {
-			return;
-		}
-
-		log.debug("Follow restriction added {} !>> {}", slot, followRestriction);
-		slot.addPopAction(new SlotAction<Boolean>() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Boolean execute(GLLParser parser, Input input) {
-				return match(followRestriction, input, parser.getCi());
-			}
-		});
+//		if (followRestriction == null || followRestriction.isEmpty()) {
+//			return;
+//		}
+//
+//		log.debug("Follow restriction added {} !>> {}", slot, followRestriction);
+//		slot.addPopAction(new SlotAction<Boolean>() {
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public Boolean execute(GLLParser parser, Input input) {
+//				return match(followRestriction, input, parser.getCi());
+//			}
+//		});
 	}
+	
+	private BodyGrammarSlot convertCondition(Condition condition) {
+		
+		if(condition == null) {
+			return null;
+		}
+		
+		if(condition.getSymbols().size() == 0) {
+			throw new IllegalArgumentException("The list of symbols cannot be empty.");
+		}
+		
+		BodyGrammarSlot currentSlot = null;
+		BodyGrammarSlot firstSlot = null;
+
+		int index = 0;
+		for(Symbol symbol : condition.getSymbols()) {
+			if(symbol.isNonterminal()) {
+				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
+				currentSlot = new NonterminalGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, nonterminal, null);
+			} 
+			else if(symbol.isTerminal()) {
+				currentSlot = new TerminalGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, (Terminal) symbol, null);
+			}
+			
+			if(index == 0) {
+				firstSlot = currentSlot;
+			}
+			index++;
+		}
+		
+		new LastGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, null, null);
+		conditionSlots.add(firstSlot);
+		return firstSlot;
+	}
+	
+	
+	private void setTestSets(List<BodyGrammarSlot> slots) {
+
+		for(BodyGrammarSlot slot : slots) {
+			BodyGrammarSlot currentSlot = slot;
+			
+			while (!currentSlot.isLastSlot()) {
+				if (currentSlot instanceof NonterminalGrammarSlot) {
+					Set<Terminal> testSet = new HashSet<>();
+					addFirstSet(testSet, currentSlot, false);
+					((NonterminalGrammarSlot) currentSlot).setTestSet(testSet);
+				}
+				currentSlot = currentSlot.next();
+			}			
+		}
+	}
+
 
 	/**
 	 * 
@@ -351,15 +423,16 @@ public class GrammarBuilder implements Serializable {
 		calculateFirstSets();
 		calculateFollowSets();
 		setTestSets();
+		setTestSets(conditionSlots);
 		setIds();
 		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
 	}
 
-	private static String grammarSlotToString(Nonterminal head, List<Symbol> body, int index) {
+	private static String grammarSlotToString(Nonterminal head, List<? extends Symbol> body, int index) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(head.getName()).append(" ::= ");
+		sb.append(head == null ? "" : head.getName()).append(" ::= ");
 
 		for (int i = 0; i < body.size(); i++) {
 			if (i == index) {
@@ -895,7 +968,7 @@ public class GrammarBuilder implements Serializable {
 			copy = new TerminalGrammarSlot(slot.label, slot.position, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
 		}
 
-		copy.popActions = slot.popActions;
+//		copy.popActions = slot.popActions;
 		copy.preConditions = slot.preConditions;
 		slots.add(copy);
 		return copy;

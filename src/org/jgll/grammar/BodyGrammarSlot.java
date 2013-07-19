@@ -28,8 +28,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected HeadGrammarSlot head;
 	
-	List<SlotAction<Boolean>> popActions;
-	
 	List<SlotAction<Boolean>> preConditions;
 	
 	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
@@ -40,19 +38,10 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			previous.next = this;
 		}
 		this.previous = previous;
-		this.popActions = new ArrayList<>();
 		this.preConditions = new ArrayList<>();
 	}
 	
-	
-	public void addPopAction(SlotAction<Boolean> popAction) {
-		popActions.add(popAction);
-	}
-	
-	public List<SlotAction<Boolean>> getPopActions() {
-		return popActions;
-	}
-	
+		
 	public void addPreCondition(SlotAction<Boolean> preCondition) {
 		preConditions.add(preCondition);
 	}

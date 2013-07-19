@@ -32,4 +32,9 @@ public class MultiplicationShift2UniversalHashFunction implements UniversalHashF
 		return (a * key + b) >>> (32 - p);
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("h(k) = %d * k + %d", a, b);
+	}
+	
 }

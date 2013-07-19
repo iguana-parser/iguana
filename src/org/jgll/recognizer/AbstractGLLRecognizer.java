@@ -3,9 +3,11 @@ package org.jgll.recognizer;
 import java.util.Deque;
 import java.util.Set;
 
+import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.L0;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
@@ -17,7 +19,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	/**
 	 * u0 is the bottom of the GSS.
 	 */
-	protected final GSSNode u0 = GSSNode.U0;
+	protected static final GSSNode u0 = GSSNode.U0;
 
 	
 	protected Input input;
@@ -37,7 +39,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	 */
 	protected Grammar grammar;
 	
-	protected final GrammarSlot startSlot = new StartSlot("Start");
+	protected static final GrammarSlot startSlot = new StartSlot("Start");
 	
 	/**
 	 * The nonterminal from which the parsing will be started.
@@ -80,6 +82,32 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		}
 	}
 	
+	@Override
+	public boolean recognize(Input input, BodyGrammarSlot slot) {
+		grammar = null;
+		this.input = input;
+		init();
+		
+		cu = create(startSlot, cu, 0);
+		
+		long start = System.nanoTime();
+		
+		add(slot, cu, 0);
+		L0.getInstance().recognize(this, input);
+		
+		long end = System.nanoTime();
+
+		logStatistics(end - start);
+
+		if(descriptorSet.contains(new Descriptor(startSlot, u0, input.size() - 1))) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+
+	
 	private void logStatistics(long duration) {
 		log.info("Parsing Time: %d ms", duration/1000000);
 		
@@ -105,17 +133,17 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex) {
 		Descriptor descriptor = new Descriptor(label, u, inputIndex);
 		if(descriptorSet.add(descriptor)) {
-			log.trace("Descriptor added: {}", descriptor);
+			log.trace("Descriptor added: %s : true", descriptor);
 			descriptorStack.push(descriptor);
 		} else {
-			log.trace("Descriptor {} already exists.", descriptor);
+			log.trace("Descriptor %s : false", descriptor);
 		}
 	}
 	
 	@Override
 	public final void pop(GSSNode u, int i) {
 		
-		log.trace("Pop {}, {}, {}", u.getLabel(), i);
+		log.trace("Pop %s, %d", u.getLabel(), i);
 		
 		if (u != u0) {
 			
@@ -130,7 +158,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 
 	@Override
 	public final GSSNode create(GrammarSlot L, GSSNode u, int i) {
-		log.trace("GSSNode created: " +  L + ", " + i);
+		log.trace("GSSNode created: (%s, %d)",  L, i);
 		GSSNode key = new GSSNode(L, i);
 
 		GSSNode v = gssNodes.addAndGet(key);

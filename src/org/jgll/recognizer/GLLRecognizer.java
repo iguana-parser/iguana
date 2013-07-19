@@ -1,5 +1,6 @@
 package org.jgll.recognizer;
 
+import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.util.Input;
@@ -7,6 +8,10 @@ import org.jgll.util.Input;
 public interface GLLRecognizer {
 
 	public boolean recognize(Input input, Grammar grammar, String nonterminalName);
+	
+	public boolean recognize(Input input, BodyGrammarSlot slot);
+	
+	public boolean recognizePrefix(Input input, BodyGrammarSlot slot);
 		
 	public void add(GrammarSlot label, GSSNode u, int inputIndex);
 

@@ -2,6 +2,8 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -26,13 +28,16 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private transient Object object;
 	
+	private List<PopAction> popActions;
+	
 	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(label, position, previous, head);
 		this.object = object;
+		popActions = new ArrayList<>();
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input input) {		
+	public GrammarSlot parse(GLLParser parser, Input input) {	
 		parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
 		return null;
 	}
@@ -47,6 +52,14 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public void codeParser(Writer writer) throws IOException {
 		writer.append("   pop(cu, ci, cn);\n");
 		writer.append("   label = L0;\n}\n");
+	}
+	
+	public void addPopAction(PopAction popAction) {
+		popActions.add(popAction);
+	}
+	
+	public Iterable<PopAction> getPopActions() {
+		return popActions;
 	}
 
 	@Override

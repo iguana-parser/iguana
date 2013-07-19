@@ -13,6 +13,7 @@ public class StartSlot extends GrammarSlot {
 
 	public StartSlot(String label) {
 		super(label);
+		id = -2;
 	}
 
 	@Override

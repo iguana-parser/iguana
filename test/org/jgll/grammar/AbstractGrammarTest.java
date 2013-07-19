@@ -12,7 +12,9 @@ import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.RecursiveDescentParser;
 import org.jgll.recognizer.AbstractGLLRecognizer;
 import org.jgll.recognizer.GrammarInterpreterRecognizer;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.ToJavaCode;
 import org.jgll.util.dot.GSSToDot;
 import org.jgll.util.dot.GraphVizUtil;
 import org.jgll.util.dot.SPPFToDot;
@@ -59,6 +61,12 @@ public abstract class AbstractGrammarTest {
 	
 	protected static List<Symbol> emptyList() {
 		return Collections.emptyList();
+	}
+	
+	protected static String getJavaCode(NonterminalSymbolNode node) {
+		ToJavaCode toJavaCode = new ToJavaCode();
+		toJavaCode.visit(node);
+		return toJavaCode.getString();
 	}
 	 
 	protected void generateSPPFGraphWithoutIntermeiateNodes(SPPFNode sppf) {

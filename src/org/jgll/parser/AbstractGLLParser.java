@@ -5,7 +5,8 @@ import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.SlotAction;
+import org.jgll.grammar.LastGrammarSlot;
+import org.jgll.grammar.PopAction;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -186,20 +187,24 @@ public abstract class AbstractGLLParser implements GLLParser {
 	public final void pop(GSSNode u, int i, SPPFNode z) {
 		
 		if (u != u0) {
-			
-			// Don't pop if a pop action associated with the slot returns false.
-			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) u.getGrammarSlot()).getPopActions()) {
-				if(!popAction.execute(this, input)) {
-					return;
-				}
-			}
-			
+
 			log.trace("Pop %s, %d, %s", u.getGrammarSlot(), i, z);
 			
 			// Add (u, z) to P
 			lookupTable.addToPoppedElements(u, z);
 			
+			label:
 			for(GSSEdge edge : u.getEdges()) {
+				
+				// Don't pop if a pop action associated with the slot returns false.
+				if(u.getGrammarSlot() instanceof LastGrammarSlot) {
+					for(PopAction popAction : ((LastGrammarSlot) u.getGrammarSlot()).getPopActions()) {
+						if(!popAction.execute(edge, ci, input)) {
+							continue label;
+						}
+					}					
+				}
+				
 				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
 				BodyGrammarSlot slot = (BodyGrammarSlot) u.getGrammarSlot();
 				SPPFNode y = getNodeP(slot, edge.getSppfNode(), z);

@@ -84,6 +84,14 @@ public class Input {
 		in.close();
 		return sb.toString();
 	}
+	
+	public Input subInput(int start, int end) {
+		int[] subInput = new int[end - start + 1];
+		for(int i = start; i < end; i++) {
+			subInput[i - start] = input[i];
+		}
+		return new Input(subInput);
+	}
 
 	public int getLineNumber(int index) {
 		if(index < 0) {
@@ -138,15 +146,7 @@ public class Input {
 		// The end of the line char column as the last character
 		lineColumns[input.length - 1] = new LineColumn(lineColumns[input.length - 2]);
 	}
-	
-	public int[] subString(int start, int end) {
-		int[] substring = new int[end - start];
-		for(int i = 0; i < substring.length; i++) {
-			substring[i] = input[start + i];
-		}
-		return substring;
-	}
-	
+		
 	private static class LineColumn {
 
 		private int lineNumber;
