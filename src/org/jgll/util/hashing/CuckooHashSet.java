@@ -18,7 +18,7 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 	private static final long serialVersionUID = 1L;
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
-	private static final float DEFAULT_LOAD_FACTOR = 0.49f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
 	
 	private int initialCapacity;
 	

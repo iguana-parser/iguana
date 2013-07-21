@@ -51,15 +51,12 @@ public class Gamma2Test extends AbstractGrammarTest {
 	@Test
 	public void performanceTest() throws ParseError {
 		Input input = Input.fromString(get100b());
-		for(int i = 0; i < 10; i++) {
-			levelParser = new LevelSynchronizedGrammarInterpretter();
-			levelParser.parse(input, grammar, "S");
-		}
+		levelParser.parse(input, grammar, "S");
 	}
 	
 	private String get100b() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 200; i++) {
+		for(int i = 0; i < 100; i++) {
 			sb.append("b");
 		}
 		return sb.toString();

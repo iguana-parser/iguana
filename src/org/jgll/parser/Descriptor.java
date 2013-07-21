@@ -80,9 +80,10 @@ public class Descriptor implements Level, HashKey {
 	@Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction().hash(slot.getId(), 
-				   sppfNode.hashCode(), 
-				   gssNode.hashCode(), 
-				   inputIndex);
+												   sppfNode.getGrammarSlot().getId(), 
+												   gssNode.getGrammarSlot().getId(),
+												   gssNode.getInputIndex(),
+												   inputIndex);
 	}
 	
 	@Override
@@ -98,8 +99,9 @@ public class Descriptor implements Level, HashKey {
 		Descriptor other = (Descriptor) obj;
 		
 		return slot == other.slot &&
-			   gssNode.equals(other.gssNode) &&	
-			   sppfNode.equals(other.sppfNode) &&
+			   sppfNode.getGrammarSlot() == other.sppfNode.getGrammarSlot() &&
+			   gssNode.getGrammarSlot() == other.gssNode.getGrammarSlot() &&
+			   gssNode.getInputIndex() == other.gssNode.getInputIndex() &&
 			   inputIndex == other.getInputIndex();
 	}
 	
@@ -116,8 +118,9 @@ public class Descriptor implements Level, HashKey {
 	@Override
 	public int hash(HashFunction f) {
 		return f.hash(slot.getId(), 
-				      sppfNode.hashCode(), 
-				      gssNode.hashCode(), 
-				      inputIndex);
+					  sppfNode.getGrammarSlot().getId(), 
+					  gssNode.getGrammarSlot().getId(),
+					  gssNode.getInputIndex(),
+					  inputIndex);
 	}
 }

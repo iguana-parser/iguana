@@ -23,6 +23,7 @@ import org.jgll.util.hashing.Level;
  * node (L, i, j)
  * 
  * @author Ali Afroozeh
+ * 
  */
 public class GSSEdge implements Level, HashKey {
 
@@ -46,12 +47,20 @@ public class GSSEdge implements Level, HashKey {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(src.hashCode(), sppfNode.hashCode(), dst.hashCode());
+		return HashFunctions.defaulFunction().hash(src.getGrammarSlot().getId(),
+											       src.getInputIndex(),
+												   dst.getGrammarSlot().getId(),
+												   dst.getInputIndex(),
+												   sppfNode.hashCode());
 	}
 	
 	@Override
 	public int hash(HashFunction f) {
-		return f.hash(src.hashCode(), sppfNode.hashCode(), dst.hashCode());
+		return f.hash(src.getGrammarSlot().getId(),
+				      src.getInputIndex(),
+					  dst.getGrammarSlot().getId(),
+					  dst.getInputIndex(),
+					  sppfNode.hash(f));
 	}
 	
 	@Override
@@ -67,8 +76,10 @@ public class GSSEdge implements Level, HashKey {
 		
 		GSSEdge other = (GSSEdge) o;
 		
-		return src.equals(other.src) &&
-			   dst.equals(other.dst) &&
+		return src.getGrammarSlot() == other.src.getGrammarSlot() &&
+			   src.getInputIndex() == other.src.getInputIndex() &&
+			   dst.getGrammarSlot() == other.dst.getGrammarSlot() &&
+			   dst.getInputIndex() == other.dst.getInputIndex() &&
 			   sppfNode.equals(other.sppfNode);
 	}
 

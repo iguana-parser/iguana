@@ -79,6 +79,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	protected int gssEdgesCount;
 	
+	private final int initialSize = 2048;
+	
 	@SuppressWarnings("unchecked")
 	public LevelSynchronizedLookupTable(Grammar grammar, Input input) {
 		super(grammar, input.size());
@@ -92,25 +94,25 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		forwardDescriptors = new LevelSet[longestTerminalChain];
 		forwardRs = new Queue[longestTerminalChain];
 		
-		currentLevelNodes = new LevelSet<>();
+		currentLevelNodes = new LevelSet<>(initialSize);
 		forwardNodes = new LevelSet[longestTerminalChain];
 		
-		currentGssNodes = new LevelSet<>();
+		currentGssNodes = new LevelSet<>(initialSize);
 		forwardGssNodes = new LevelSet[longestTerminalChain];
 		
-		currendEdges = new LevelSet<>();
+		currendEdges = new LevelSet<>(initialSize);
 		forwardEdges = new LevelSet[longestTerminalChain];
 		
-		currentPoppedElements = new LevelMap<>();
+		currentPoppedElements = new LevelMap<>(initialSize);
 		forwardPoppedElements = new LevelMap[longestTerminalChain];
 		
 		for(int i = 0; i < longestTerminalChain; i++) {
 			forwardDescriptors[i] = new LevelSet<>(getSize());
-			forwardRs[i] = new ArrayDeque<>();
-			forwardNodes[i] = new LevelSet<>();
-			forwardGssNodes[i] = new LevelSet<>();
-			forwardEdges[i] = new LevelSet<>();
-			forwardPoppedElements[i] = new LevelMap<>();
+			forwardRs[i] = new ArrayDeque<>(initialSize);
+			forwardNodes[i] = new LevelSet<>(initialSize);
+			forwardGssNodes[i] = new LevelSet<>(initialSize);
+			forwardEdges[i] = new LevelSet<>(initialSize);
+			forwardPoppedElements[i] = new LevelMap<>(initialSize);
 		}
 		
 	}
