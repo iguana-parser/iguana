@@ -1,9 +1,9 @@
 package org.jgll.util.hashing;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
+
+import org.jgll.util.RandomUtil;
 
 /**
  * 
@@ -13,12 +13,12 @@ import java.util.Set;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashSet<E> implements Set<E>, Serializable {
+public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int DEFAULT_INITIAL_CAPACITY = 32;
-	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
+	private static final int DEFAULT_INITIAL_CAPACITY = 16;
+	private static final float DEFAULT_LOAD_FACTOR = 0.49f;
 	
 	private int initialCapacity;
 	
@@ -27,11 +27,6 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	 * capacity is double the size of each tables.
 	 */
 	private int capacity;
-	
-	/**
-	 * p = log2 capacity
-	 */
-	private int p;
 	
 	/**
 	 * How many elements are currently in the hash tables
@@ -56,18 +51,18 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	 */
 	protected int enlargeCount;
 	
-	private UniversalHashFunction function1;
+	private HashFunction function1;
 	
-	private UniversalHashFunction function2;
+	private HashFunction function2;
 	
-	protected Object[] table1;
+	protected T[] table1;
 
-	protected Object[] table2;
+	protected T[] table2;
 
-	private int tableSize;
-		
+	protected int tableSize;
+	
 	@SafeVarargs
-	public static <T> CuckooHashSet<T> from(T...elements) {
+	public static <T extends HashKey> CuckooHashSet<T> from(T...elements) {
 		CuckooHashSet<T> set = new CuckooHashSet<>();
 		for(T e : elements) {
 			set.add(e);
@@ -83,6 +78,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		this(initalCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public CuckooHashSet(int initialCapacity, float loadFactor) {
 		this.initialCapacity = initialCapacity;
 		
@@ -95,28 +91,23 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		capacity = 1;
         while (capacity < initialCapacity) {
             capacity <<= 1;
-            p++;
         }
         
 		threshold = (int) (loadFactor * capacity);
 
-        // For each table
-		p--;
-		
 		tableSize = capacity >> 1;
-		table1 = new Object[tableSize];
-		table2 = new Object[tableSize];
+		table1 = (T[]) new HashKey[tableSize];
+		table2 = (T[]) new HashKey[tableSize];
 		
 		generateNewHashFunctions();
 	}
 
 	private void generateNewHashFunctions() {
-		function1 = new MultiplicationShift2UniversalHashFunction(p);
-		function2 = new MultiplicationShift2UniversalHashFunction(p);
+		function1 = new MurmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
+		function2 = new MurmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
 	}
 	
-	@Override
-	public boolean contains(Object key) {
+	public boolean contains(T key) {
 		return get(key) != null;
 	}
 	
@@ -129,55 +120,21 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	 * 
 	 * @return null if no element matching the given key is found.
 	 */
-	@SuppressWarnings("unchecked")
-	public E get(Object key) {
+	public T get(T key) {
 	
-		int index = hash1(key);
-		Object value1 = table1[index];
+		int index = indexFor(key.hash(function1));
+		T value1 = table1[index];
 		if(key.equals(value1)) {
-			return (E) value1;
+			return value1;
 		}			
 		
-		index = hash2(key);
-		Object value2 = table2[index];
+		index = indexFor(key.hash(function2));
+		T value2 = table2[index];
 		if(key.equals(value2)) {
-			return (E) value2;
+			return value2;
 		}
 
 		return null;
-	}
-	
-	private boolean insertAgain(Object key, Object[] table1, Object[] table2) {
-		int i = 0;
-		while(i < size + 1) {
-			i++;
-
-			int index = hash1(key);
-			if(isEntryEmpty(table1[index])) {
-				table1[index] = key;
-				return true;
-			}
-			
-			Object tmp = table1[index];
-			table1[index] = key;
-			key = tmp;
-			
-			index = hash2(key);
-			if(isEntryEmpty(table2[index])) {
-				table2[index] = key;
-				return true;
-			}
-			
-			tmp = table2[index];
-			table2[index] = key;
-			key = tmp;
-		}
-		return false;
-	}
-	
-	@Override
-	public boolean add(E key) {
-		return addAndGet(key) == null;
 	}
 	
 	/**
@@ -188,112 +145,139 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 	 * @return A reference to the old key stored in the set if the key was in 
 	 *         the set, otherwise returns null. 
 	 */
-	@SuppressWarnings("unchecked")
-	public E addAndGet(E key) {
-		E e = get(key);
+	public T add(T key) {
+		T e = get(key);
 		
 		if(e != null) {
 			return e;
 		}
 		
-		int i = 0;
-		while(i < size + 1) {
-			i++;
-			
-			int index = hash1(key);
-			if(isEntryEmpty(table1[index])) {
-				table1[index] = key;
-				size++;
-				if(size >= threshold) {
-					enlargeTables();
-				}
-				return null;
+		key = tryInsert(key);
+		if(key == null) {
+			size++;
+			if(size >= threshold) {
+				enlargeTables();
 			}
-			
-			E tmp = (E) table1[index];
-			table1[index] = key;
-			key = tmp;
-			
-			index = hash2(key);
-			if(isEntryEmpty(table2[index])) {
-				table2[index] = key;
-				size++;
-				if(size >= threshold) {
-					enlargeTables();
-				}
-				return null;
-			}
-			
-			tmp = (E) table2[index];
-			table2[index] = key;
-			key = tmp;
+			return null;
 		}
-		
+
+		// Insertion was unsuccessful
+		generateNewHashFunctions();
 		rehash();
-		return addAndGet(key);
+		return add(key);
 	}
 	
 	protected boolean isEntryEmpty(Object e) {
 		return e == null;
 	}
 	
-	private void rehash() {
-		Object[] newTable1 = new Object[table1.length];
-		Object[] newTable2 = new Object[table2.length];
+	private T tryInsert(T key) {
+		int i = 0;
+		while(i < size + 1) {
+			i++;
+			
+			key = insert(key);
+			if(key == null) {
+				return null;
+			}
+		}
+		
+		return key;
+	}
+	
+	/**
+	 * 
+	 * Inserts the key into the first table. If the intended cell is full,
+	 * the current entry is replaced by the new entry and and old one is 
+	 * tried to be placed in the second table.   
+	 * 
+	 * @param key
+	 * 
+	 * @return null if an empty spot could be found in the first or the second table.
+	 *              Otherwise, the existing key in the second table is returned.
+	 */
+	private T insert(T key) {
+		int index = indexFor(key.hash(function1));
+		if(isEntryEmpty(table1[index])) {
+			table1[index] = key;
+			return null;
+		}
+		T tmp = table1[index];
+		table1[index] = key;
+		key = tmp;
+		
+		index = indexFor(key.hash(function2));
+		if(isEntryEmpty(table2[index])) {
+			table2[index] = key;
+			return null;
+		}
+		
+		tmp = table2[index];
+		table2[index] = key;
+		key = tmp;
 
-		generateNewHashFunctions();
 		
-		for(Object key : table1) {
+		return key;
+	}
+	
+	private void rehash() {
+
+		mainloop:
+		for(int i = 0; i < table1.length; i++) {
+			HashKey key = table1[i];
 			if(!isEntryEmpty(key)) {
-				// if one element cannot be inserted, restart the whole process with two new
-				// hash function.
-				if(!insertAgain(key, newTable1, newTable2)) {
+				if(indexFor(key.hash(function1)) != i) {
+					T tmp = table1[i];
+					table1[i] = null;
+
+					tmp = tryInsert(tmp);
+					if(tmp == null) {
+						continue mainloop;
+					}
+					
+					generateNewHashFunctions();
 					rehash();
-					return;
+					break mainloop;
 				}
 			}
 		}
-		
-		for(Object key : table2) {
+	
+		mainloop:
+		for(int i = 0; i < table2.length; i++) {
+			HashKey key = table2[i];
 			if(!isEntryEmpty(key)) {
-				// if one element cannot be inserted, restart the whole process with two new
-				// hash function.
-				if(!insertAgain(key, newTable1, newTable2)) {
+				if(indexFor(key.hash(function2)) != i) {
+					T tmp = table2[i];
+					table2[i] = null;
+	
+					tmp = tryInsert(tmp);
+					if(tmp == null) {
+						continue mainloop;
+					}
+					
+					generateNewHashFunctions();
 					rehash();
-					return;
+					break mainloop;
 				}
 			}
 		}
-		
-		table1 = newTable1;
-		table2 = newTable2;
 		
 		rehashCount++;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void enlargeTables() {
 		
-		Object[] newTable1 = new Object[capacity];
-		Object[] newTable2 = new Object[capacity];
+		T[] newTable1 = (T[]) new HashKey[capacity];
+		T[] newTable2 = (T[]) new HashKey[capacity];
 		
+		tableSize = capacity;
 		capacity <<= 1;
-		tableSize = capacity / 2;
-		p++;
 		
 		threshold = (int) (loadFactor * capacity);
 		
-		int i = 0;
-		for(Object key : table1) {
-			if(!isEntryEmpty(key)) {
-				newTable1[i++] = key;
-			}
-		}
-		
-		for(Object key : table2) {
-			if(!isEntryEmpty(key)) {
-				newTable1[i++] = key;
-			}
-		}
+		System.arraycopy(table1, 0, newTable1, 0, table1.length);
+		System.arraycopy(table2, 0, newTable2, 0, table2.length);
 		
 		table1 = newTable1;
 		table2 = newTable2;
@@ -318,23 +302,18 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		return enlargeCount;
 	}
 	
-	protected int hash1(Object key) {
-		return function1.hash(key.hashCode());
+	protected int indexFor(int hash) {
+		return hash & (tableSize - 1);
 	}
 	
-	protected int hash2(Object key) {
-		return function2.hash(key.hashCode());
-	}
-
-	@Override
 	public boolean isEmpty() {
 		return size == 0;
 	}
 
 	@Override
-	public Iterator<E> iterator() {
+	public Iterator<T> iterator() {
 
-		return new Iterator<E>() {
+		return new Iterator<T>() {
 
 			int it = 0;
 			int index1 = 0;
@@ -345,13 +324,12 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 				return it < size;
 			}
 
-			@SuppressWarnings("unchecked")
 			@Override
-			public E next() {
+			public T next() {
 				while(index1 < table1.length) {
 					if(!isEntryEmpty(table1[index1])) {
 						it++;
-						return (E) table1[index1++];
+						return  table1[index1++];
 					}
 					index1++;
 				}
@@ -359,7 +337,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 				while(index2 < table2.length) {
 					if(!isEntryEmpty(table2[index2])) {
 						it++;
-						return (E) table2[index2++];
+						return table2[index2++];
 					}
 					index2++;
 				}
@@ -374,27 +352,16 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		};
 	}
 
-	@Override
-	public Object[] toArray() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean remove(Object key) {
+	public boolean remove(HashKey key) {
 		
-		int index = hash1(key);
+		int index = indexFor(key.hash(function1));
 		if(key.equals(table1[index])) {
 			table1[index] = null;
 			size--;
 			return true;
 		}
 		
-		index = hash2(key);
+		index = indexFor(key.hash(function2));
 		if(key.equals(table2[index])) {
 			table2[index] = null;
 			size--;
@@ -404,32 +371,7 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		return false;
 	}
 
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		throw new UnsupportedOperationException();
-	}
 
-	@Override
-	public boolean addAll(Collection<? extends E> c) {
-		boolean changed = false;
-		for(E e : c) {
-			changed |= add(e);
-		}
-		
-		return changed;
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void clear() {
 		for(int i = 0; i < table1.length; i++) {
 			table1[i] = null;
@@ -439,6 +381,14 @@ public class CuckooHashSet<E> implements Set<E>, Serializable {
 		rehashCount = 0;
 		enlargeCount = 0;
 	}
-
+	
+	public boolean addAll(Iterable<T> c) {
+		boolean changed = false;
+		for(T e : c) {
+			changed |= (add(e) == null);
+		}
+		
+		return changed;
+	}
 
 }

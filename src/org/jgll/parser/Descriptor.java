@@ -2,6 +2,8 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.hashing.HashFunction;
+import org.jgll.util.hashing.HashKey;
 import org.jgll.util.hashing.Level;
 
 /**
@@ -23,7 +25,7 @@ import org.jgll.util.hashing.Level;
  * 
  */
 
-public class Descriptor implements Level {
+public class Descriptor implements Level, HashKey {
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -47,8 +49,6 @@ public class Descriptor implements Level {
 	 */
 	private final SPPFNode sppfNode;
 	
-	private final int hash;
-	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
@@ -59,12 +59,6 @@ public class Descriptor implements Level {
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
-		
-		hash = HashFunctions.defaulFunction().hash(slot.getId(), 
-												   sppfNode.hashCode(), 
-												   gssNode.hashCode(), 
-												   inputIndex);
-		
 	}
 	
 	public GrammarSlot getGrammarSlot() {
@@ -85,7 +79,10 @@ public class Descriptor implements Level {
 	
 	@Override
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(slot.getId(), 
+				   sppfNode.hashCode(), 
+				   gssNode.hashCode(), 
+				   inputIndex);
 	}
 	
 	@Override
@@ -100,8 +97,7 @@ public class Descriptor implements Level {
 		
 		Descriptor other = (Descriptor) obj;
 		
-		return hash == other.hash &&
-			   slot == other.slot &&
+		return slot == other.slot &&
 			   gssNode.equals(other.gssNode) &&	
 			   sppfNode.equals(other.sppfNode) &&
 			   inputIndex == other.getInputIndex();
@@ -117,4 +113,11 @@ public class Descriptor implements Level {
 		return inputIndex;
 	}
 
+	@Override
+	public int hash(HashFunction f) {
+		return f.hash(slot.getId(), 
+				      sppfNode.hashCode(), 
+				      gssNode.hashCode(), 
+				      inputIndex);
+	}
 }

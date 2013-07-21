@@ -167,7 +167,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		SPPFNode value;
 		
 		if(rightExtent == currentLevel) {
-			value = currentLevelNodes.addAndGet(key);
+			value = currentLevelNodes.add(key);
 			if(value == null){
 				countNonPackedNodes++;
 				newNodeCreated = true;
@@ -175,7 +175,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			}
 		} else {
 			int index = indexFor(rightExtent);
-			value = forwardNodes[index].addAndGet(key);
+			value = forwardNodes[index].add(key);
 			if(value == null){
 				countNonPackedNodes++;
 				newNodeCreated = true;
@@ -263,7 +263,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	public boolean addDescriptor(Descriptor descriptor) {
 		int inputIndex = descriptor.getInputIndex();
 		if(inputIndex == currentLevel) {
-			if(u.add(descriptor)) {
+			if(u.add(descriptor) == null) {
 				 r.add(descriptor);
 				 size++;
 				 all++;
@@ -274,7 +274,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		else {
 			int index = indexFor(descriptor.getInputIndex());
-			if(forwardDescriptors[index].add(descriptor)) {
+			if(forwardDescriptors[index].add(descriptor) == null) {
 				forwardRs[index].add(descriptor);
 				size++;
 				all++;
@@ -296,14 +296,14 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		GSSNode key = new GSSNode(label, inputIndex);
 		GSSNode value;
 		if(inputIndex == currentLevel) {
-			value = currentGssNodes.addAndGet(key);
+			value = currentGssNodes.add(key);
 			if(value == null) {
 				countGSSNodes++;
 				value = key;
 			}
 		} else {
 			int index = indexFor(inputIndex);
-			value = forwardGssNodes[index].addAndGet(key);
+			value = forwardGssNodes[index].add(key);
 			if(value == null) {
 				countGSSNodes++;
 				value = key;
@@ -316,7 +316,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
 		GSSEdge edge = new GSSEdge(source, label, destination);
 		if(source.getInputIndex() == currentLevel) {
-			boolean added = currendEdges.add(edge);
+			boolean added = currendEdges.add(edge) == null;
 			if(added) {
 				gssEdgesCount++;
 				source.addGSSEdge(edge);
@@ -325,7 +325,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		} 
 		else {
 			int index = indexFor(source.getInputIndex());
-			boolean added = forwardEdges[index].add(edge);
+			boolean added = forwardEdges[index].add(edge) == null;
 			if(added) {
 				gssEdgesCount++;
 				source.addGSSEdge(edge);
@@ -373,13 +373,13 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		else {
 			PackedNode key = new PackedNode(slot, pivot, parent);
 			if(parent.getRightExtent() == currentLevel) {
-				if(currentLevelNodes.add(key)) {
+				if(currentLevelNodes.add(key) == null) {
 					parent.addPackedNode(key, leftChild, rightChild);
 					packedNodesCount++;
 				}
 			} else {
 				int index = indexFor(parent.getRightExtent());
-				if(forwardNodes[index].add(key)) {
+				if(forwardNodes[index].add(key) == null) {
 					parent.addPackedNode(key, leftChild, rightChild);
 					packedNodesCount++;
 				}

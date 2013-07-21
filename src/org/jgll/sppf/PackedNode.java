@@ -6,6 +6,7 @@ import java.util.List;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
+import org.jgll.util.hashing.HashFunction;
 
 /**
  * 
@@ -22,8 +23,6 @@ public class PackedNode extends SPPFNode {
 	private final SPPFNode parent;
 	
 	private final List<SPPFNode> children;
-	
-	private final int hash;
 	
 	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
 		
@@ -44,9 +43,6 @@ public class PackedNode extends SPPFNode {
 		this.parent = parent;
 		
 		this.children = new ArrayList<>(2);
-		
-		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), pivot, parent.hashCode());
-		
 	}
 			
 	@Override
@@ -99,9 +95,15 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(slot.getId(), pivot, parent.hashCode());
 	}
 
+	@Override
+	public int hash(HashFunction f) {
+		return f.hash(slot.getId(), pivot, parent.hashCode());
+	}
+
+	
 	@Override
 	public String toString() {
 		return String.format("(%s, %d)", getLabel(), getPivot());
@@ -154,5 +156,6 @@ public class PackedNode extends SPPFNode {
 	public int getLevel() {
 		return parent.getRightExtent();
 	}
+
 
 }

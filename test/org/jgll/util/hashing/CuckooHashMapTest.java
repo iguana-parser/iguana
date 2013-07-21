@@ -1,6 +1,5 @@
 package org.jgll.util.hashing;
 
-import java.util.Map;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -12,30 +11,71 @@ public class CuckooHashMapTest {
 	
 	@Test
 	public void test() {
-		Map<Integer, Integer> map = new CuckooHashMap<>();
-		map.put(1, 2);
-		map.put(2, 3);
+		CuckooHashMap<IntegerKey, Integer> map = new CuckooHashMap<>();
+		map.put(IntegerKey.from(1), 2);
+		map.put(IntegerKey.from(2), 3);
 		
-		assertEquals(2, (int)map.get(1));
-		assertEquals(3, (int)map.get(2));
+		assertEquals(new Integer(2), map.get(IntegerKey.from(1)));
+		assertEquals(new Integer(3), map.get(IntegerKey.from(2)));
 	}
 	
 	@Test
 	public void testInsertOneMillionEntries() {
-		Map<Integer, Integer> map = new CuckooHashMap<>();
+		CuckooHashMap<IntegerKey, Integer> map = new CuckooHashMap<>();
 		Random rand = RandomUtil.random;
 		for(int i = 0; i < 1000000; i++) {
 			int key = rand.nextInt(Integer.MAX_VALUE);
 			int value = rand.nextInt(Integer.MAX_VALUE);
-			while(map.get(key) != null) {
+			while(map.get(IntegerKey.from(key)) != null) {
 				key = rand.nextInt(Integer.MAX_VALUE);
 				value = rand.nextInt(Integer.MAX_VALUE);
 			}
-			map.put(key, value);
+			map.put(IntegerKey.from(key), value);
 		}
 		
 		assertEquals(1000000, map.size());
 	}
+	
+	
+	private static class IntegerKey implements HashKey {
+		
+		private int k;
+		
+		public IntegerKey(int k) {
+			this.k = k;
+		}
+		
+		public static IntegerKey from(int k) {
+			return new IntegerKey(k);
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(this == obj) {
+				return true;
+			}
+			
+			if(!(obj instanceof IntegerKey)) {
+				return false;
+			}
+			
+			IntegerKey other = (IntegerKey) obj;
+			
+			return k == other.k;
+		}
+
+		@Override
+		public int hash(HashFunction f) {
+			return f.hash(k);
+		}
+		
+		@Override
+		public String toString() {
+			return k + "";
+		}
+
+	}
+
 
 
 }

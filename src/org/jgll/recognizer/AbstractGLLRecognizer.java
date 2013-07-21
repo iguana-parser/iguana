@@ -1,7 +1,6 @@
 package org.jgll.recognizer;
 
 import java.util.Deque;
-import java.util.Set;
 
 import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
@@ -46,7 +45,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	 */
 	protected HeadGrammarSlot startSymbol;
 	
-	protected Set<Descriptor> descriptorSet;
+	protected CuckooHashSet<Descriptor> descriptorSet;
 	
 	protected Deque<Descriptor> descriptorStack;
 	
@@ -132,7 +131,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	@Override
 	public final void add(GrammarSlot label, GSSNode u, int inputIndex) {
 		Descriptor descriptor = new Descriptor(label, u, inputIndex);
-		if(descriptorSet.add(descriptor)) {
+		if(descriptorSet.add(descriptor) == null) {
 			log.trace("Descriptor added: %s : true", descriptor);
 			descriptorStack.push(descriptor);
 		} else {
@@ -161,7 +160,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		log.trace("GSSNode created: (%s, %d)",  L, i);
 		GSSNode key = new GSSNode(L, i);
 
-		GSSNode v = gssNodes.addAndGet(key);
+		GSSNode v = gssNodes.add(key);
 		if(v == null) {
 			v = key;
 		}

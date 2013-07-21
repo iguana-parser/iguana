@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.L0;
+import org.jgll.util.hashing.HashFunction;
+import org.jgll.util.hashing.HashKey;
 import org.jgll.util.hashing.Level;
 
 /**
@@ -22,7 +24,7 @@ import org.jgll.util.hashing.Level;
  * @author Ali Afroozeh
  * 
  */
-public class GSSNode implements Level {
+public class GSSNode implements Level, HashKey {
 
 	/**
 	 * The initial GSS node
@@ -35,8 +37,6 @@ public class GSSNode implements Level {
 
 	private List<GSSEdge> gssEdges;
 	
-	private final int hash;
-	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
 	 * {@code position} and {@code index}
@@ -48,7 +48,6 @@ public class GSSNode implements Level {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.gssEdges = new ArrayList<>();
-		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 		
 	public void addGSSEdge(GSSEdge edge) {
@@ -83,14 +82,18 @@ public class GSSNode implements Level {
 		
 		GSSNode other = (GSSNode) obj;
 
-		return  hash == other.hash &&
-				slot == other.slot &&
+		return  slot == other.slot &&
 				inputIndex == other.inputIndex;
 	}
 
 	@Override
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
+	}
+	
+	@Override
+	public int hash(HashFunction f) {
+		return f.hash(slot.getId(), inputIndex);
 	}
 
 	@Override

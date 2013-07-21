@@ -44,7 +44,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private int nonPackedNodesCount;
 	
-	private Map<GSSNode, Set<SPPFNode>> poppedElements;
+	private CuckooHashMap<GSSNode, Set<SPPFNode>> poppedElements;
 	
 	public RecursiveDescentLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
@@ -61,7 +61,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {	
 		GSSNode key = new GSSNode(grammarSlot, inputIndex);
-		GSSNode value = gssNodes.addAndGet(key);
+		GSSNode value = gssNodes.add(key);
 		if(value == null) {
 			return key;
 		}
@@ -168,7 +168,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		}
 		else {
 			PackedNode key = new PackedNode(slot, pivot, parent);
-			if(packedNodes.add(key)) {
+			if(packedNodes.add(key) == null) {
 				parent.addPackedNode(key, leftChild, rightChild);
 			}
 		}
@@ -182,7 +182,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
 		GSSEdge edge = new GSSEdge(source, label, destination);
-		boolean added = gssEdges.add(edge);
+		boolean added = gssEdges.add(edge) == null;
 		if(added) {
 			source.addGSSEdge(edge);
 		}

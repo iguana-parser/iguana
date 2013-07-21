@@ -1,35 +1,34 @@
 package org.jgll.util.hashing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
-import java.util.Set;
 
-import org.jgll.parser.HashFunctions;
 import org.jgll.util.RandomUtil;
 import org.junit.Test;
 
 public class CuckoosHashSetTest {
 	
 	@Test
-	public void testIn() {
-		Set<IntegerHashKey4> set = new CuckooHashSet<>(16);
+	public void testAdd() {
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>();
 		IntegerHashKey4 key1 = new IntegerHashKey4(100, 12, 27, 23);
 		IntegerHashKey4 key2 = new IntegerHashKey4(52, 10, 20, 21);
 
-		boolean add1 = set.add(key1);
-		boolean add2 = set.add(key2);
-		assertEquals(true, add1);
-		assertEquals(true, add2);
-		
+		HashKey add1 = set.add(key1);
+		HashKey add2 = set.add(key2);
+		assertEquals(null, add1);
+		assertEquals(null, add2);
 		
 		assertEquals(true, set.contains(key1));
 		assertEquals(true, set.contains(key2));
+		
+		assertEquals(2, set.size());
 	}
 	
 	@Test
 	public void testRehashing() {
-		Set<IntegerHashKey4> set = new CuckooHashSet<>(8);
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(8);
 		IntegerHashKey4 key1 = new IntegerHashKey4(100, 12, 27, 23);
 		IntegerHashKey4 key2 = new IntegerHashKey4(52, 10, 20, 21);
 		IntegerHashKey4 key3 = new IntegerHashKey4(10, 10, 98, 13);
@@ -45,18 +44,19 @@ public class CuckoosHashSetTest {
 		assertEquals(true, set.contains(key3));
 		assertEquals(true, set.contains(key4));
 		
-		assertEquals(1, ((CuckooHashSet<IntegerHashKey4>) set).getEnlargeCount());
+		assertEquals(1, set.getEnlargeCount());
+		assertEquals(4, set.size());
 	}
 	
 	@Test
 	public void testInsertOneMillionEntries() {
-		Set<IntegerHashKey4> set = new CuckooHashSet<>();
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>();
 		Random rand = RandomUtil.random;
 		for(int i = 0; i < 1000000; i++) {
 			IntegerHashKey4 key = new IntegerHashKey4(rand.nextInt(Integer.MAX_VALUE), 
-													rand.nextInt(Integer.MAX_VALUE), 
-													rand.nextInt(Integer.MAX_VALUE), 
-													rand.nextInt(Integer.MAX_VALUE));
+													  rand.nextInt(Integer.MAX_VALUE), 
+													  rand.nextInt(Integer.MAX_VALUE), 
+													  rand.nextInt(Integer.MAX_VALUE));
 			set.add(key);
 		}
 		
@@ -65,8 +65,8 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testAddAll() {
-		Set<Integer> set1 = CuckooHashSet.from(1, 2, 3);
-		Set<Integer> set2 = CuckooHashSet.from(4, 5, 6, 7);
+		CuckooHashSet<IntegerKey> set1 = CuckooHashSet.from(IntegerKey.from(1), IntegerKey.from(2), IntegerKey.from(3));
+		CuckooHashSet<IntegerKey> set2 = CuckooHashSet.from(IntegerKey.from(4), IntegerKey.from(5), IntegerKey.from(6), IntegerKey.from(7));
 		assertEquals(3, set1.size());
 		assertEquals(4, set2.size());
 		
@@ -76,57 +76,44 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testClear() {
-		Set<Integer> set = CuckooHashSet.from(1, 2, 3, 4, 5);
+		CuckooHashSet<IntegerKey> set = CuckooHashSet.from(IntegerKey.from(1), IntegerKey.from(2), IntegerKey.from(3), IntegerKey.from(4), IntegerKey.from(5));
 		set.clear();
 		
-		assertEquals(false, set.contains(1));
-		assertEquals(false, set.contains(2));
-		assertEquals(false, set.contains(3));
-		assertEquals(false, set.contains(4));
-		assertEquals(false, set.contains(5));
+		assertEquals(false, set.contains(IntegerKey.from(1)));
+		assertEquals(false, set.contains(IntegerKey.from(2)));
+		assertEquals(false, set.contains(IntegerKey.from(3)));
+		assertEquals(false, set.contains(IntegerKey.from(4)));
+		assertEquals(false, set.contains(IntegerKey.from(5)));
 		assertEquals(0, set.size());
 	}
 	
 	@Test
 	public void testRemove() {
-		Set<Integer> set = CuckooHashSet.from(1, 2, 3, 4, 5);
-		set.remove(3);
-		set.remove(5);
+		CuckooHashSet<IntegerKey> set = CuckooHashSet.from(IntegerKey.from(1), IntegerKey.from(2), IntegerKey.from(3), IntegerKey.from(4), IntegerKey.from(5));
+		set.remove(IntegerKey.from(3));
+		set.remove(IntegerKey.from(5));
 		
-		assertEquals(true, set.contains(1));
-		assertEquals(true, set.contains(2));
-		assertEquals(false, set.contains(3));
-		assertEquals(true, set.contains(4));
-		assertEquals(false, set.contains(5));
+		assertEquals(true, set.contains(IntegerKey.from(1)));
+		assertEquals(true, set.contains(IntegerKey.from(2)));
+		assertEquals(false, set.contains(IntegerKey.from(3)));
+		assertEquals(true, set.contains(IntegerKey.from(4)));
+		assertEquals(false, set.contains(IntegerKey.from(5)));
 		assertEquals(3, set.size());
 	}
 	
 	@Test
 	public void testAddAndGet() {
-		CuckooHashSet<Integer> set = CuckooHashSet.from(1, 2, 3);
-		Integer ret1 = set.addAndGet(4);
+		CuckooHashSet<IntegerKey> set = CuckooHashSet.from(IntegerKey.from(1), IntegerKey.from(2), IntegerKey.from(3));
+		HashKey ret1 = set.add(IntegerKey.from(4));
 		assertEquals(null, ret1);
 		
-		assertEquals(true, set.contains(4));
+		assertEquals(true, set.contains(IntegerKey.from(4)));
 		
-		int ret2 = set.addAndGet(3);
-		assertEquals(3, ret2);
+		HashKey ret2 = set.add(IntegerKey.from(3));
+		assertEquals(IntegerKey.from(3), ret2);
 	}
 	
-	@Test
-	public void test() {
-		IntegerKey key1 = new IntegerKey(1);
-		IntegerKey key2 = new IntegerKey(2);
-		IntegerKey key3 = new IntegerKey(3);
-		
-		CuckooHashSet<IntegerKey> set = new CuckooHashSet<>();
-		set.add(key1);
-		set.add(key2);
-		set.add(key3);
-	}
-	
-	
-	private class IntegerHashKey4 {
+	private class IntegerHashKey4 implements HashKey {
 
 		private int k1;
 		private int k2;
@@ -156,42 +143,15 @@ public class CuckoosHashSetTest {
 		}
 		
 		@Override
-		public int hashCode() {
-			return HashFunctions.defaulFunction().hash(k1, k2, k3, k4);
-		}
-		
-		@Override
 		public String toString() {
 			return "(" + k1 + ", " + k2 + ", " + k3 + ", " + k4 + ")";
 		}
-	}
+
+		@Override
+		public int hash(HashFunction f) {
+			return f.hash(k1, k2, k3, k4);
+		}
+
+	}	
 	
-	private class IntegerKey {
-		
-		private int k;
-		
-		public IntegerKey(int k) {
-			this.k = k;
-		}
-		
-		@Override
-		public int hashCode() {
-			return 10;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if(this == obj) {
-				return true;
-			}
-			
-			if(!(obj instanceof IntegerKey)) {
-				return false;
-			}
-			
-			IntegerKey other = (IntegerKey) obj;
-			
-			return k == other.k;
-		}
-	}
 }

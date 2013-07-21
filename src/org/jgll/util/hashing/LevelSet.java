@@ -1,7 +1,7 @@
 package org.jgll.util.hashing;
 
 
-public class LevelSet<T extends Level> extends CuckooHashSet<T> {
+public class LevelSet<T extends Level & HashKey> extends CuckooHashSet<T> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -20,15 +20,15 @@ public class LevelSet<T extends Level> extends CuckooHashSet<T> {
 	}
 	
 	@Override
-	public boolean add(T key) {
+	public T add(T key) {
 		level = key.getLevel();
 		return super.add(key);
 	}
 	
 	@Override
-	public T addAndGet(T key) {
+	public T get(T key) {
 		level = key.getLevel();
-		return super.addAndGet(key);
+		return super.get(key);
 	}
 
 	@Override
