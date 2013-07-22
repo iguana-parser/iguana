@@ -3,6 +3,7 @@ package org.jgll.grammar;
 import static org.junit.Assert.*;
 
 import org.jgll.parser.ParseError;
+import org.jgll.recognizer.PrefixGLLRecognizer;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -65,7 +66,8 @@ public class Test3 extends AbstractGrammarTest {
 	
 	@Test
 	public void testPrefixRecognizer() {
-		boolean result = recognizer.recognizePrefix(Input.fromString("bca"), grammar, "A");
+		recognizer = new PrefixGLLRecognizer();
+		boolean result = recognizer.recognize(Input.fromString("bca"), grammar, "A");
 		assertEquals(true, result);
 	}
 	

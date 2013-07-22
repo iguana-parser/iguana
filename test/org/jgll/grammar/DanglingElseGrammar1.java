@@ -39,7 +39,7 @@ public class DanglingElseGrammar1 extends AbstractGrammarTest {
 		rule1 = new Rule(S, list(a, S));
 		builder.addRule(rule1);
 		
-		rule2 = new Rule(S, list(a, S, b, S)).ifNot(ConditionFactory.notMatch(list(a, S)));
+		rule2 = new Rule(S, list(a, S, b, S)).addCondition(ConditionFactory.notMatch(list(a, S)));
 		builder.addRule(rule2);
 		
 		rule3 = new Rule(S, list(s));

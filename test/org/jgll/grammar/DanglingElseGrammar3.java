@@ -14,13 +14,13 @@ import org.junit.Test;
 /**
  * 
  * S ::= a S b S
- *     | a S \ a S b S
+ *     | a S !>> b
  *     | s
  * 
  * @author Ali Afroozeh
  *
  */
-public class DanglingElseGrammar2 extends AbstractGrammarTest {
+public class DanglingElseGrammar3 extends AbstractGrammarTest {
 
 	private Rule rule1;
 	private Rule rule2;
@@ -36,7 +36,7 @@ public class DanglingElseGrammar2 extends AbstractGrammarTest {
 		Terminal a = new Character('a');
 		Terminal b = new Character('b');
 
-		rule1 = new Rule(S, list(a, S)).addCondition(ConditionFactory.notMatch(list(a, S, b, S)));
+		rule1 = new Rule(S, list(a, S)).addCondition(ConditionFactory.notFollow(list(b, S)));
 		builder.addRule(rule1);
 		
 		rule2 = new Rule(S, list(a, S, b, S));
@@ -57,26 +57,26 @@ public class DanglingElseGrammar2 extends AbstractGrammarTest {
 	
 	private SPPFNode getExpectedSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 5);
-		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S [b] . S"), 0, 4);
-		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 0, 3);
-		TerminalSymbolNode node4 = new TerminalSymbolNode(97, 0);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 3);
+		TerminalSymbolNode node2 = new TerminalSymbolNode(97, 0);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 5);
+		IntermediateNode node4 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S [b] . S"), 1, 4);
+		IntermediateNode node5 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 1, 3);
 		TerminalSymbolNode node6 = new TerminalSymbolNode(97, 1);
 		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
 		TerminalSymbolNode node8 = new TerminalSymbolNode(115, 2);
 		node7.addChild(node8);
 		node5.addChild(node6);
 		node5.addChild(node7);
-		node3.addChild(node4);
-		node3.addChild(node5);
 		TerminalSymbolNode node9 = new TerminalSymbolNode(98, 3);
-		node2.addChild(node3);
-		node2.addChild(node9);
+		node4.addChild(node5);
+		node4.addChild(node9);
 		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 4, 5);
 		TerminalSymbolNode node11 = new TerminalSymbolNode(115, 4);
 		node10.addChild(node11);
+		node3.addChild(node4);
+		node3.addChild(node10);
 		node1.addChild(node2);
-		node1.addChild(node10);
+		node1.addChild(node3);
 		return node1;
 	}
 

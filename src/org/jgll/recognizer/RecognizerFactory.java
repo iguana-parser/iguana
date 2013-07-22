@@ -2,16 +2,23 @@ package org.jgll.recognizer;
 
 public class RecognizerFactory {
 
-	private static GLLRecognizer recognizer;
-	
+	private static GLLRecognizer contextFreeRecognizer;
+	private static GLLRecognizer prefixRecognizer;
 	
 	public static GLLRecognizer contextFreeRecognizer() {
-		if(recognizer == null) {
-			recognizer = new GrammarInterpreterRecognizer();
-			return recognizer;
+		if(contextFreeRecognizer == null) {
+			contextFreeRecognizer = new InterpretedGLLRecognizer();
+			return contextFreeRecognizer;
 		}
-		return recognizer;
+		return contextFreeRecognizer;
 	}
 	
+	public static GLLRecognizer prefixContextFreeRecognizer() {
+		if(prefixRecognizer == null) {
+			prefixRecognizer = new PrefixGLLRecognizer();
+			return prefixRecognizer;
+		}
+		return prefixRecognizer;
+	}
 	
 }

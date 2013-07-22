@@ -14,11 +14,9 @@ import org.jgll.util.logging.LoggerWrapper;
 
 public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
-	private static final int FULL = 0;
-	
-	private static final int PREFIX = 1;
-	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLRecognizer.class);
+	
+	protected static final GrammarSlot startSlot = new StartSlot("Start");
 	
 	/**
 	 * u0 is the bottom of the GSS.
@@ -43,8 +41,6 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	 */
 	protected Grammar grammar;
 	
-	protected static final GrammarSlot startSlot = new StartSlot("Start");
-	
 	/**
 	 * The nonterminal from which the parsing will be started.
 	 */
@@ -56,11 +52,9 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
 	protected CuckooHashSet<GSSNode> gssNodes;
 	
-	private boolean recognized;
+	protected boolean recognized;
 	
-	private int mode = FULL;
-	
-	private int endIndex = 0;
+	protected int endIndex;
 	
 	@Override
 	public final boolean recognize(Input input, Grammar grammar, String nonterminalName) {		
@@ -75,7 +69,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
 		long start = System.nanoTime();
 	
-		recognize(startSymbol);
+		L0.getInstance().recognize(this, input, startSymbol);
 		
 		long end = System.nanoTime();
 
@@ -85,20 +79,14 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	}
 	
 	@Override
-	public boolean recognizePrefix(Input input, Grammar grammar, String nonterminalName) {
-		mode = PREFIX;
-		return recognize(input, grammar, nonterminalName);
-	}
-	
-	@Override
-	public boolean recognize(Input input, int startIndex, int endIndex, BodyGrammarSlot slot) {
+	public boolean recognize(Input input, int startIndex, int endIndex, BodyGrammarSlot fromSlot) {
 		init(grammar, input, startIndex, endIndex, null);
 		
 		cu = create(startSlot, cu, ci);
 		
 		long start = System.nanoTime();
 		
-		add(slot, cu, ci);
+		add(fromSlot, cu, ci);
 		
 		L0.getInstance().recognize(this, input);
 		
@@ -109,14 +97,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		return recognized;
 	}
 	
-	@Override
-	public boolean recognizePrefix(Input input, int inputIndex, BodyGrammarSlot slot) {
-		mode = PREFIX;
-		return recognize(input, inputIndex, input.size() - 1, slot);
-	}
-
-	
-	private void logStatistics(long duration) {
+	protected void logStatistics(long duration) {
 		log.info("Parsing Time: %d ms", duration/1000000);
 		
 		int mb = 1024 * 1024;
@@ -128,9 +109,6 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 //		log.debug("GSS Nodes: {}", lookupTable.getGSSNodesCount());
 //		log.debug("GSS Edges: {}", lookupTable.getGSSEdgesCount());
 	}
-
-	
-	protected abstract void recognize(HeadGrammarSlot startSymbol);
 	
 	/**
 	 * initialized the parser's state before a new parse.
@@ -140,10 +118,10 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		this.grammar = grammar;
 		this.startSymbol = startSymbol;
 		this.input = input;
-		ci = startIndex;
+		this.ci = startIndex;
 		this.endIndex = endIndex;
-		recognized = false;
-		cu = GSSNode.U0;
+		this.recognized = false;
+		this.cu = u0;
 		
 		if(descriptorSet == null) {
 			descriptorSet = new CuckooHashSet<>();
@@ -165,22 +143,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	}
 
 	@Override
-	public final void add(GrammarSlot slot, GSSNode u, int inputIndex) {
-		
-		if(mode == FULL) {
-			if(slot == startSlot && inputIndex == endIndex && u == u0) {
-				recognized = true;
-				descriptorStack.clear();
-				return;
-			}
-		} else {
-			if(slot == startSlot && u == u0) {
-				recognized = true;
-				descriptorStack.clear();
-				return;
-			}
-		}
-		
+	public void add(GrammarSlot slot, GSSNode u, int inputIndex) {		
 		Descriptor descriptor = new Descriptor(slot, u, inputIndex);
 		if(descriptorSet.add(descriptor) == null) {
 			log.trace("Descriptor added: %s : true", descriptor);
@@ -245,6 +208,16 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	@Override
 	public void recognitionError(GSSNode gssNode, int inputIndex) {
 		
+	}
+	
+	@Override
+	public int getCi() {
+		return ci;
+	}
+	
+	@Override
+	public GSSNode getCu() {
+		return cu;
 	}
 
 }

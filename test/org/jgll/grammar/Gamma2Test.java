@@ -2,7 +2,6 @@ package org.jgll.grammar;
 
 import static org.junit.Assert.*;
 
-import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;

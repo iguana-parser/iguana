@@ -11,7 +11,7 @@ import org.jgll.parser.GSSNode;
 import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
 import org.jgll.parser.RecursiveDescentParser;
 import org.jgll.recognizer.AbstractGLLRecognizer;
-import org.jgll.recognizer.GrammarInterpreterRecognizer;
+import org.jgll.recognizer.InterpretedGLLRecognizer;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.ToJavaCode;
@@ -35,7 +35,7 @@ public abstract class AbstractGrammarTest {
 		grammar = initGrammar();
 		rdParser = new RecursiveDescentParser();
 		levelParser = new LevelSynchronizedGrammarInterpretter();
-		recognizer = new GrammarInterpreterRecognizer();
+		recognizer = new InterpretedGLLRecognizer();
 		outputDir = System.getProperty("user.home") + "/output";
 	}
 	

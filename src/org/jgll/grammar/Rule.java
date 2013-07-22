@@ -64,15 +64,10 @@ public class Rule implements Serializable {
 	public Object getObject() {
 		return object;
 	}
-	
-	public Rule ifNot(Condition rule) {
-		Rule newRule = new Rule(head, body);
-		newRule.conditions.add(rule);
-		return newRule;
-	}
-	
-	public void addCondition(Condition condition) {
+		
+	public Rule addCondition(Condition condition) {
 		conditions.add(condition);
+		return this;
 	}
 	
 	public Iterable<Condition> getConditions() {

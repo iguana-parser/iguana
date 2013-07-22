@@ -231,8 +231,8 @@ public class GrammarBuilder implements Serializable {
 
 			@Override
 			public boolean execute(GSSEdge edge, int inputIndex, Input input) {
-				GLLRecognizer recognizer = RecognizerFactory.contextFreeRecognizer();
-				return !recognizer.recognizePrefix(input, inputIndex, firstSlot);
+				GLLRecognizer recognizer = RecognizerFactory.prefixContextFreeRecognizer();
+				return !recognizer.recognize(input, inputIndex, input.size(), firstSlot);
 			}
 		});		
 	}
