@@ -1,5 +1,8 @@
 package org.jgll.grammar;
 
+import static org.junit.Assert.assertEquals;
+
+import org.jgll.grammar.condition.ConditionFactory;
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -7,8 +10,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * 
@@ -35,7 +36,7 @@ public class DanglingElseGrammar2 extends AbstractGrammarTest {
 		Terminal a = new Character('a');
 		Terminal b = new Character('b');
 
-		rule1 = new Rule(S, list(a, S)).ifNot(new Condition(list(a, S, b, S)));
+		rule1 = new Rule(S, list(a, S)).ifNot(ConditionFactory.notMatch(list(a, S, b, S)));
 		builder.addRule(rule1);
 		
 		rule2 = new Rule(S, list(a, S, b, S));
@@ -50,7 +51,7 @@ public class DanglingElseGrammar2 extends AbstractGrammarTest {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
-		assertEquals(getExpectedSPPF(), sppf);
+		assertEquals(true, sppf.deepEquals(getExpectedSPPF()));
 	}
 	
 	

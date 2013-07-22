@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
 public class Nonterminal implements Symbol {

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSEdge;
 import org.jgll.recognizer.GLLRecognizer;
@@ -109,11 +110,7 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	public GrammarBuilder addRule(Rule rule, final List<List<List<CharacterClass>>> notFollow, final List<String> deleteSet,
-											 final List<CharacterClass> precedeRestrictions) {
-
-		Map<BodyGrammarSlot, List<List<CharacterClass>>> followRestrionMap = new HashMap<>();
-		Map<BodyGrammarSlot, CharacterClass> preConditionMap = new HashMap<>();
+	public GrammarBuilder addRule(Rule rule) {
 
 		if (rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
@@ -143,8 +140,6 @@ public class GrammarBuilder implements Serializable {
 					currentSlot = new NonterminalGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, nonterminal, headGrammarSlot);
 				}
 				slots.add(currentSlot);
-				followRestrionMap.put(currentSlot, notFollow.get(symbolIndex));
-				preConditionMap.put(currentSlot, precedeRestrictions.get(symbolIndex));
 
 				if (symbolIndex == 0) {
 					firstSlot = currentSlot;
@@ -154,46 +149,16 @@ public class GrammarBuilder implements Serializable {
 
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 
-//			if (deleteSet != null && !deleteSet.isEmpty()) {
-//				lastGrammarSlot.addPopAction(new SlotAction<Boolean>() {
-//
-//					private static final long serialVersionUID = 1L;
-//
-//					@Override
-//					public Boolean execute(GLLParser parser, Input input) {
-//						int currentIndex = parser.getCi();
-//						int lastIndex = parser.getCu().getInputIndex();
-//
-//						for (String s : deleteSet) {
-//							if (match(s, input.subString(lastIndex, currentIndex))) {
-//								return false;
-//							}
-//						}
-//
-//						return true;
-//					}
-//				});
-//			}
-
 			slots.add(lastGrammarSlot);
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot, headGrammarSlot.getAlternates().size());
-			
-			if(rule.getIfNot() != null) {
-				BodyGrammarSlot ifNot = convertCondition(rule.getIfNot());
-				addIfNot(lastGrammarSlot, ifNot);
-			}
 			headGrammarSlot.addAlternate(alternate);
+			
+			for(Condition condition : rule.getConditions()) {
+				addCondition(lastGrammarSlot, condition);
+			}
 		}
-
-		for (Entry<BodyGrammarSlot, List<List<CharacterClass>>> e : followRestrionMap.entrySet()) {
-			addFollowRestriction(e.getKey().next(), e.getValue());
-		}
-
-		for (Entry<BodyGrammarSlot, CharacterClass> e : preConditionMap.entrySet()) {
-			addPrecedeRestriction(e.getKey(), e.getValue());
-		}
-
+		
 		return this;
 	}
 	
@@ -218,7 +183,33 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private void addIfNot(LastGrammarSlot slot, final BodyGrammarSlot ifNot) {
+	private void addCondition(LastGrammarSlot slot, final Condition condition) {
+		switch (condition.getType()) {
+			case FOLLOW:
+				break;
+				
+			case NOT_FOLLOW:
+				addNotFollowRestriction(slot, convertCondition(condition));
+				break;
+				
+			case PRECEDE:
+				assert condition.getSymbols().get(0) instanceof CharacterClass;
+				addPrecedeRestriction(slot, (CharacterClass) condition.getSymbols().get(0));
+				break;
+				
+			case NOT_PRECEDE:
+				break;
+				
+			case MATCH:
+				break;
+					
+			case NOT_MATCH:
+				addNotMatch(slot, convertCondition(condition));
+				break;
+		}
+	}
+	
+	private void addNotMatch(LastGrammarSlot slot, final BodyGrammarSlot ifNot) {
 
 		slot.addPopAction(new PopAction() {
 
@@ -227,71 +218,23 @@ public class GrammarBuilder implements Serializable {
 			@Override
 			public boolean execute(GSSEdge edge, int inputIndex, Input input) {
 				GLLRecognizer recognizer = RecognizerFactory.contextFreeRecognizer();
-				return !recognizer.recognize(input.subInput(edge.getDestination().getInputIndex(), inputIndex), ifNot);
+				return !recognizer.recognize(input, edge.getDestination().getInputIndex(), inputIndex, ifNot);
 			}
 		});
 	}
-	
-//	private void addNot(final LastGrammarSlot slot1, BodyGrammarSlot converted) {
-//		
-//		while(!converted.isLastSlot()) {
-//			converted = converted.next;
-//		}
-//		final LastGrammarSlot slot2 = (LastGrammarSlot) converted;
-//		
-//		slot1.addPopAction(new SlotAction<Boolean>() {
-//			
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public Boolean execute(GLLParser parser, Input input) {
-//				parser.getLookupTable().addPopped(slot1, new PopUnit(parser.getCu(), parser.getCn(), parser.getCi()));
-//				return false;
-//			}
-//		});
-//		
-//		slot2.addPopAction(new SlotAction<Boolean>() {
-//			
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public Boolean execute(GLLParser parser, Input input) {
-//				parser.getLookupTable().addPopped(slot2, new PopUnit(parser.getCu(), parser.getCn(), parser.getCi()));
-//				return false;
-//			}
-//		});
-//		
-//		slot2.addOnHoldAction(new SlotAction<Void>() {
-//			
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public Void execute(GLLParser parser, Input input) {
-//				if(parser.getLookupTable().isPopped(slot1, parser.getCi())) {
-//					parser.getLookupTable().clearPopped(slot1, parser.getCi());
-//				}
-//				parser.getLookupTable().clearPopped(slot2, parser.getCi());
-//				return null;
-//			}
-//		});
-//		
-//	}
 
-	private void addFollowRestriction(BodyGrammarSlot slot, final List<List<CharacterClass>> followRestriction) {
-//		if (followRestriction == null || followRestriction.isEmpty()) {
-//			return;
-//		}
-//
-//		log.debug("Follow restriction added {} !>> {}", slot, followRestriction);
-//		slot.addPopAction(new SlotAction<Boolean>() {
-//
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public Boolean execute(GLLParser parser, Input input) {
-//				return match(followRestriction, input, parser.getCi());
-//			}
-//		});
+	private void addNotFollowRestriction(LastGrammarSlot slot, final BodyGrammarSlot firstSlot) {
+		
+		slot.addPopAction(new PopAction() {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean execute(GSSEdge edge, int inputIndex, Input input) {
+				GLLRecognizer recognizer = RecognizerFactory.contextFreeRecognizer();
+				return !recognizer.recognizePrefix(input, inputIndex, firstSlot);
+			}
+		});		
 	}
 	
 	private BodyGrammarSlot convertCondition(Condition condition) {
@@ -343,66 +286,6 @@ public class GrammarBuilder implements Serializable {
 				currentSlot = currentSlot.next();
 			}			
 		}
-	}
-
-
-	/**
-	 * 
-	 * @return true if the given string matches the given substring (as an
-	 *         integer array)
-	 */
-	private boolean match(String s, int[] subString) {
-		if (s.length() != subString.length) {
-			return false;
-		}
-		for (int i = 0; i < subString.length; i++) {
-			if (s.charAt(i) != subString[i]) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private boolean match(List<List<CharacterClass>> followRestrictions,
-			Input input, int i) {
-		if (i >= input.size()) {
-			return true;
-		}
-
-		for (List<CharacterClass> followRestriction : followRestrictions) {
-			int index = i;
-
-			boolean match = true;
-			for (CharacterClass characterClass : followRestriction) {
-				if (!characterClass.match(input.charAt(index))) {
-					match = false;
-					break;
-				}
-
-				if (index >= input.size()) {
-					break;
-				}
-				index++;
-			}
-
-			// If one of the follow restrictions matches from the next
-			// character, don't pop!
-			if (match == true) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	public GrammarBuilder addRule(Rule rule) {
-		List<List<List<CharacterClass>>> list = new ArrayList<>();
-		List<CharacterClass> precedeRestrictions = new ArrayList<>();
-		for (int i = 0; i < rule.size(); i++) {
-			list.add(null);
-			precedeRestrictions.add(null);
-		}
-		return addRule(rule, list, null, precedeRestrictions);
 	}
 
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
@@ -1055,5 +938,4 @@ public class GrammarBuilder implements Serializable {
 			return changed;
 		}	
 	}
-
 }

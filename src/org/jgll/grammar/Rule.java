@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
 /**
@@ -21,7 +22,7 @@ public class Rule implements Serializable {
 	
 	private final transient Object object;
 	
-	private Condition ifNot;
+	private List<Condition> conditions;
 	
 	public Rule(Nonterminal head, List<? extends Symbol> body) {
 		this(head, body, null);
@@ -44,6 +45,8 @@ public class Rule implements Serializable {
 		this.body = new ArrayList<>(body);
 		
 		this.object = object;
+		
+		this.conditions = new ArrayList<>();
 	}
 		
 	public Nonterminal getHead() {
@@ -64,12 +67,16 @@ public class Rule implements Serializable {
 	
 	public Rule ifNot(Condition rule) {
 		Rule newRule = new Rule(head, body);
-		newRule.ifNot = rule;
+		newRule.conditions.add(rule);
 		return newRule;
 	}
 	
-	public Condition getIfNot() {
-		return ifNot;
+	public void addCondition(Condition condition) {
+		conditions.add(condition);
+	}
+	
+	public Iterable<Condition> getConditions() {
+		return conditions;
 	}
 	
 	/**

@@ -62,6 +62,13 @@ public class Test3 extends AbstractGrammarTest {
 		boolean result = recognizer.recognize(Input.fromString("bca"), grammar, "A");
 		assertEquals(false, result);
 	}
+	
+	@Test
+	public void testPrefixRecognizer() {
+		boolean result = recognizer.recognizePrefix(Input.fromString("bca"), grammar, "A");
+		assertEquals(true, result);
+	}
+	
 
 	
 	private SPPFNode expectedSPPF() {

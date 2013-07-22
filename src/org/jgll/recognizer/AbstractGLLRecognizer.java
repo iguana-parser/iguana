@@ -1,5 +1,6 @@
 package org.jgll.recognizer;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 
 import org.jgll.grammar.BodyGrammarSlot;
@@ -12,6 +13,10 @@ import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 public abstract class AbstractGLLRecognizer implements GLLRecognizer {
+	
+	private static final int FULL = 0;
+	
+	private static final int PREFIX = 1;
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLRecognizer.class);
 	
@@ -51,6 +56,12 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
 	protected CuckooHashSet<GSSNode> gssNodes;
 	
+	private boolean recognized;
+	
+	private int mode = FULL;
+	
+	private int endIndex = 0;
+	
 	@Override
 	public final boolean recognize(Input input, Grammar grammar, String nonterminalName) {		
 		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(nonterminalName);
@@ -58,13 +69,9 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 			throw new RuntimeException("No nonterminal named " + nonterminalName + " found");
 		}
 		
-		this.input = input;
-		this.grammar = grammar;
-		this.startSymbol = startSymbol;
+		init(grammar, input, 0, input.size() - 1, startSymbol);
 		
-		init();
-		
-		cu = create(startSlot, cu, 0);
+		cu = create(startSlot, cu, ci);
 	
 		long start = System.nanoTime();
 	
@@ -74,36 +81,38 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 
 		logStatistics(end - start);
 
-		if(descriptorSet.contains(new Descriptor(startSlot, u0, input.size() - 1))) {
-			return true;
-		} else {
-			return false;
-		}
+		return recognized;
 	}
 	
 	@Override
-	public boolean recognize(Input input, BodyGrammarSlot slot) {
-		grammar = null;
-		this.input = input;
-		init();
+	public boolean recognizePrefix(Input input, Grammar grammar, String nonterminalName) {
+		mode = PREFIX;
+		return recognize(input, grammar, nonterminalName);
+	}
+	
+	@Override
+	public boolean recognize(Input input, int startIndex, int endIndex, BodyGrammarSlot slot) {
+		init(grammar, input, startIndex, endIndex, null);
 		
-		cu = create(startSlot, cu, 0);
+		cu = create(startSlot, cu, ci);
 		
 		long start = System.nanoTime();
 		
-		add(slot, cu, 0);
+		add(slot, cu, ci);
+		
 		L0.getInstance().recognize(this, input);
 		
 		long end = System.nanoTime();
 
 		logStatistics(end - start);
 
-		if(descriptorSet.contains(new Descriptor(startSlot, u0, input.size() - 1))) {
-			return true;
-		} else {
-			return false;
-		}
-		
+		return recognized;
+	}
+	
+	@Override
+	public boolean recognizePrefix(Input input, int inputIndex, BodyGrammarSlot slot) {
+		mode = PREFIX;
+		return recognize(input, inputIndex, input.size() - 1, slot);
 	}
 
 	
@@ -126,11 +135,53 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	/**
 	 * initialized the parser's state before a new parse.
 	 */
-	protected abstract void init();
+	protected void init(Grammar grammar, Input input, int startIndex, int endIndex, HeadGrammarSlot startSymbol){
+		
+		this.grammar = grammar;
+		this.startSymbol = startSymbol;
+		this.input = input;
+		ci = startIndex;
+		this.endIndex = endIndex;
+		recognized = false;
+		cu = GSSNode.U0;
+		
+		if(descriptorSet == null) {
+			descriptorSet = new CuckooHashSet<>();
+		} else {
+			descriptorSet.clear();
+		}
+		
+		if(descriptorStack == null) {
+			descriptorStack = new ArrayDeque<>();
+		} else {
+			descriptorStack.clear();
+		}
+		
+		if(gssNodes == null) {
+			gssNodes = new CuckooHashSet<>();
+		} else {
+			gssNodes.clear();
+		}
+	}
 
 	@Override
-	public final void add(GrammarSlot label, GSSNode u, int inputIndex) {
-		Descriptor descriptor = new Descriptor(label, u, inputIndex);
+	public final void add(GrammarSlot slot, GSSNode u, int inputIndex) {
+		
+		if(mode == FULL) {
+			if(slot == startSlot && inputIndex == endIndex && u == u0) {
+				recognized = true;
+				descriptorStack.clear();
+				return;
+			}
+		} else {
+			if(slot == startSlot && u == u0) {
+				recognized = true;
+				descriptorStack.clear();
+				return;
+			}
+		}
+		
+		Descriptor descriptor = new Descriptor(slot, u, inputIndex);
 		if(descriptorSet.add(descriptor) == null) {
 			log.trace("Descriptor added: %s : true", descriptor);
 			descriptorStack.push(descriptor);

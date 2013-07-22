@@ -9,9 +9,11 @@ public interface GLLRecognizer {
 
 	public boolean recognize(Input input, Grammar grammar, String nonterminalName);
 	
-	public boolean recognize(Input input, BodyGrammarSlot slot);
+	public boolean recognizePrefix(Input input, Grammar grammar, String nonterminalName);
 	
-	public boolean recognizePrefix(Input input, BodyGrammarSlot slot);
+	public boolean recognize(Input input, int start, int end, BodyGrammarSlot slot);
+	
+	public boolean recognizePrefix(Input input, int inputIndex, BodyGrammarSlot slot);
 		
 	public void add(GrammarSlot label, GSSNode u, int inputIndex);
 
