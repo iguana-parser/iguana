@@ -13,7 +13,7 @@ import org.jgll.util.RandomUtil;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<T> {
+public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -61,26 +61,29 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 
 	protected int tableSize;
 	
-	@SafeVarargs
-	public static <T extends HashKey> CuckooHashSet<T> from(T...elements) {
-		CuckooHashSet<T> set = new CuckooHashSet<>();
+	private Decomposer<T> decomposer;
+	
+ 	@SafeVarargs
+	public static <T> CuckooHashSet<T> from(Decomposer<T> decomposer, T...elements) {
+		CuckooHashSet<T> set = new CuckooHashSet<>(decomposer);
 		for(T e : elements) {
 			set.add(e);
 		}
 		return set;
 	}
 	
-	public CuckooHashSet() {
-		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
+	public CuckooHashSet(Decomposer<T> decomposer) {
+		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, decomposer);
 	}
 	
-	public CuckooHashSet(int initalCapacity) {
-		this(initalCapacity, DEFAULT_LOAD_FACTOR);
+	public CuckooHashSet(int initalCapacity, Decomposer<T> decomposer) {
+		this(initalCapacity, DEFAULT_LOAD_FACTOR, decomposer);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public CuckooHashSet(int initialCapacity, float loadFactor) {
+	public CuckooHashSet(int initialCapacity, float loadFactor, Decomposer<T> decomposer) {
 		this.initialCapacity = initialCapacity;
+		this.decomposer = decomposer;
 		
 		if(initialCapacity < 8) {
 			initialCapacity = 8;
@@ -96,8 +99,8 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 		threshold = (int) (loadFactor * capacity);
 
 		tableSize = capacity >> 1;
-		table1 = (T[]) new HashKey[tableSize];
-		table2 = (T[]) new HashKey[tableSize];
+		table1 = (T[]) new Object[tableSize];
+		table2 = (T[]) new Object[tableSize];
 		
 		generateNewHashFunctions();
 	}
@@ -122,13 +125,13 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 	 */
 	public T get(T key) {
 	
-		int index = indexFor(key.hash(function1));
+		int index = indexFor(function1.hash(decomposer.toIntArray(key)));
 		T value1 = table1[index];
 		if(key.equals(value1)) {
 			return value1;
 		}			
 		
-		index = indexFor(key.hash(function2));
+		index = indexFor(function2.hash(decomposer.toIntArray(key)));
 		T value2 = table2[index];
 		if(key.equals(value2)) {
 			return value2;
@@ -197,7 +200,7 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 	 *              Otherwise, the existing key in the second table is returned.
 	 */
 	private T insert(T key) {
-		int index = indexFor(key.hash(function1));
+		int index = indexFor(function1.hash(decomposer.toIntArray(key)));
 		if(isEntryEmpty(table1[index])) {
 			table1[index] = key;
 			return null;
@@ -206,7 +209,7 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 		table1[index] = key;
 		key = tmp;
 		
-		index = indexFor(key.hash(function2));
+		index = indexFor(function2.hash(decomposer.toIntArray(key)));
 		if(isEntryEmpty(table2[index])) {
 			table2[index] = key;
 			return null;
@@ -224,9 +227,9 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 
 		mainloop:
 		for(int i = 0; i < table1.length; i++) {
-			HashKey key = table1[i];
+			T key = table1[i];
 			if(!isEntryEmpty(key)) {
-				if(indexFor(key.hash(function1)) != i) {
+				if(indexFor(function1.hash(decomposer.toIntArray(key))) != i) {
 					T tmp = table1[i];
 					table1[i] = null;
 
@@ -244,9 +247,9 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 	
 		mainloop:
 		for(int i = 0; i < table2.length; i++) {
-			HashKey key = table2[i];
+			T key = table2[i];
 			if(!isEntryEmpty(key)) {
-				if(indexFor(key.hash(function2)) != i) {
+				if(indexFor(function2.hash(decomposer.toIntArray(key))) != i) {
 					T tmp = table2[i];
 					table2[i] = null;
 	
@@ -268,8 +271,8 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 	@SuppressWarnings("unchecked")
 	private void enlargeTables() {
 		
-		T[] newTable1 = (T[]) new HashKey[capacity];
-		T[] newTable2 = (T[]) new HashKey[capacity];
+		T[] newTable1 = (T[]) new Object[capacity];
+		T[] newTable2 = (T[]) new Object[capacity];
 		
 		tableSize = capacity;
 		capacity <<= 1;
@@ -352,16 +355,16 @@ public class CuckooHashSet<T extends HashKey> implements Serializable, Iterable<
 		};
 	}
 
-	public boolean remove(HashKey key) {
+	public boolean remove(T key) {
 		
-		int index = indexFor(key.hash(function1));
+		int index = indexFor(function1.hash(decomposer.toIntArray(key)));
 		if(key.equals(table1[index])) {
 			table1[index] = null;
 			size--;
 			return true;
 		}
 		
-		index = indexFor(key.hash(function2));
+		index = indexFor(function2.hash(decomposer.toIntArray(key)));
 		if(key.equals(table2[index])) {
 			table2[index] = null;
 			size--;

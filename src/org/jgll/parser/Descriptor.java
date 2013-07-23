@@ -2,8 +2,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.HashKey;
+import org.jgll.util.hashing.Decomposer;
 import org.jgll.util.hashing.Level;
 
 /**
@@ -25,7 +24,7 @@ import org.jgll.util.hashing.Level;
  * 
  */
 
-public class Descriptor implements Level, HashKey {
+public class Descriptor implements Level {
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -114,13 +113,20 @@ public class Descriptor implements Level, HashKey {
 	public int getLevel() {
 		return inputIndex;
 	}
+	
+	public static class DescriptorDecomposer implements Decomposer<Descriptor> {
 
-	@Override
-	public int hash(HashFunction f) {
-		return f.hash(slot.getId(), 
-					  sppfNode.getGrammarSlot().getId(), 
-					  gssNode.getGrammarSlot().getId(),
-					  gssNode.getInputIndex(),
-					  inputIndex);
+		private int[] components = new int[5];
+		
+		@Override
+		public int[] toIntArray(Descriptor descriptor) {
+			components[0] = descriptor.slot.getId();
+			components[1] = descriptor.sppfNode.getGrammarSlot().getId();
+			components[2] = descriptor.gssNode.getGrammarSlot().getId();
+			components[3] = descriptor.gssNode.getInputIndex();
+			components[4] = descriptor.inputIndex;
+			return components;
+		}
+		
 	}
 }

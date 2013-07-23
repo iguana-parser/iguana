@@ -1,16 +1,13 @@
 package org.jgll.recognizer;
 
-import java.util.Iterator;
-
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.L0;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.HashKey;
-import org.jgll.util.hashing.IntegerKey;
+import org.jgll.util.hashing.Decomposer;
+import org.jgll.util.hashing.IntegerDecomposer;
 
-public class GSSNode  implements HashKey {
+public class GSSNode {
 
 	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 
@@ -20,7 +17,7 @@ public class GSSNode  implements HashKey {
 
 	private final CuckooHashSet<GSSNode> children;
 	
-	private final CuckooHashSet<IntegerKey> poppedIndices;
+	private final CuckooHashSet<Integer> poppedIndices;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -33,8 +30,8 @@ public class GSSNode  implements HashKey {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.children = new CuckooHashSet<>();
-		this.poppedIndices = new CuckooHashSet<>();
+		this.children = new CuckooHashSet<>(new GSSDecomposer());
+		this.poppedIndices = new CuckooHashSet<>(IntegerDecomposer.getInstance());
 	}
 	
 	public boolean hasChild(GSSNode child) {
@@ -50,44 +47,18 @@ public class GSSNode  implements HashKey {
 	}
 	
 	public void addPoppedIndex(int i) {
-		poppedIndices.add(IntegerKey.from(i));
+		poppedIndices.add(i);
 	}
 	
 	public Iterable<Integer> getPoppedIndices() {
-		return new Iterable<Integer>() {
-			
-			@Override
-			public Iterator<Integer> iterator() {
-				
-				final Iterator<IntegerKey> it = poppedIndices.iterator();
-				
-				return new Iterator<Integer>() {
-
-					@Override
-					public boolean hasNext() {
-						return it.hasNext();
-					}
-
-					@Override
-					public Integer next() {
-						return it.next().getInt();
-					}
-
-					@Override
-					public void remove() {
-						// TODO Auto-generated method stub
-						
-					}
-				};
-			}
-		};
+		return poppedIndices;
 	}
 
-	public final GrammarSlot getLabel() {
+	public final GrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
-	public final int getIndex() {
+	public final int getInputIndex() {
 		return inputIndex;
 	}
 
@@ -112,15 +83,22 @@ public class GSSNode  implements HashKey {
 		return HashFunctions.defaulFunction().hash(inputIndex, slot.getId());
 	}
 	
-	@Override
-	public int hash(HashFunction f) {
-		return f.hash(inputIndex, slot.getId());
-	}
-
 
 	@Override
 	public String toString() {
 		return slot + "," + inputIndex;
+	}
+	
+	public static class GSSDecomposer implements Decomposer<GSSNode> {
+
+		private int[] components = new int[2];
+		
+		@Override
+		public int[] toIntArray(GSSNode t) {
+			components[0] = t.getGrammarSlot().getId();
+			components[1] = t.getInputIndex();
+			return components;
+		}
 	}
 
 }

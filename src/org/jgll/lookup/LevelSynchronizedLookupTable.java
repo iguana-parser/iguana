@@ -10,6 +10,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
+import org.jgll.parser.Descriptor.DescriptorDecomposer;
 import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.DummyNode;
@@ -20,6 +21,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.util.hashing.Decomposer;
 import org.jgll.util.hashing.LevelMap;
 import org.jgll.util.hashing.LevelSet;
 import org.jgll.util.logging.LoggerWrapper;
@@ -37,6 +39,12 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelSynchronizedLookupTable.class);
 	
+	private static final Decomposer<Descriptor> descriptorDecomposer = new DescriptorDecomposer();
+	private static final Decomposer<GSSNode> gssNodeDecomposer = new GSSNode.GSSNodeDecomposer();
+	private static final Decomposer<GSSEdge> gssEdgeDecomposer = new GSSEdge.GSSEdgeDecomposer();
+	private static final Decomposer<NonPackedNode> nonPackedNodesDecomposer = new NonPackedNode.NonPackedNodeDecomposer();
+	private static final Decomposer<PackedNode> packedNodeDecomposer = new PackedNode.PackedNodeDecomposer();
+	
 	private int currentLevel;
 	
 	private int countNonPackedNodes;
@@ -46,10 +54,13 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	private TerminalSymbolNode[][] terminals;
 	
 	private LevelSet<Descriptor> u;
-	private LevelSet<SPPFNode> currentLevelNodes;
-	
-	private LevelSet<SPPFNode>[] forwardNodes;
 	private LevelSet<Descriptor>[] forwardDescriptors;
+
+	private LevelSet<NonPackedNode> currentNodes;
+	private LevelSet<NonPackedNode>[] forwardNodes;
+	
+	private LevelSet<PackedNode> currentPackedNodes;
+	private LevelSet<PackedNode>[] forwardPackedNodes;
 	
 	private Queue<Descriptor> r;
 	private Queue<Descriptor>[] forwardRs;
@@ -88,31 +99,35 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new LevelSet<>(getSize());
+		u = new LevelSet<>(getSize(), descriptorDecomposer);
 		r = new ArrayDeque<>();
 		
 		forwardDescriptors = new LevelSet[longestTerminalChain];
 		forwardRs = new Queue[longestTerminalChain];
 		
-		currentLevelNodes = new LevelSet<>(initialSize);
+		currentNodes = new LevelSet<>(initialSize, nonPackedNodesDecomposer);
 		forwardNodes = new LevelSet[longestTerminalChain];
 		
-		currentGssNodes = new LevelSet<>(initialSize);
+		currentPackedNodes = new LevelSet<>(initialSize, packedNodeDecomposer);
+		forwardPackedNodes = new LevelSet[longestTerminalChain];
+		
+		currentGssNodes = new LevelSet<>(initialSize, gssNodeDecomposer);
 		forwardGssNodes = new LevelSet[longestTerminalChain];
 		
-		currendEdges = new LevelSet<>(initialSize);
+		currendEdges = new LevelSet<>(initialSize, gssEdgeDecomposer);
 		forwardEdges = new LevelSet[longestTerminalChain];
 		
-		currentPoppedElements = new LevelMap<>(initialSize);
+		currentPoppedElements = new LevelMap<>(initialSize, gssNodeDecomposer);
 		forwardPoppedElements = new LevelMap[longestTerminalChain];
 		
 		for(int i = 0; i < longestTerminalChain; i++) {
-			forwardDescriptors[i] = new LevelSet<>(getSize());
+			forwardDescriptors[i] = new LevelSet<>(getSize(), descriptorDecomposer);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
-			forwardNodes[i] = new LevelSet<>(initialSize);
-			forwardGssNodes[i] = new LevelSet<>(initialSize);
-			forwardEdges[i] = new LevelSet<>(initialSize);
-			forwardPoppedElements[i] = new LevelMap<>(initialSize);
+			forwardNodes[i] = new LevelSet<>(initialSize, nonPackedNodesDecomposer);
+			forwardGssNodes[i] = new LevelSet<>(initialSize, gssNodeDecomposer);
+			forwardEdges[i] = new LevelSet<>(initialSize, gssEdgeDecomposer);
+			forwardPoppedElements[i] = new LevelMap<>(initialSize, gssNodeDecomposer);
+			forwardPackedNodes[i] = new LevelSet<>(packedNodeDecomposer);
 		}
 		
 	}
@@ -130,10 +145,15 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		r = forwardRs[nextIndex];
 		forwardRs[nextIndex] = tmpR;
 		
-		LevelSet<SPPFNode> tmp = currentLevelNodes;
-		currentLevelNodes.clear();
-		currentLevelNodes = forwardNodes[nextIndex];
-		forwardNodes[nextIndex] = tmp;
+		LevelSet<NonPackedNode> tmpNonPackedNode = currentNodes;
+		currentNodes.clear();
+		currentNodes = forwardNodes[nextIndex];
+		forwardNodes[nextIndex] = tmpNonPackedNode;
+		
+		LevelSet<PackedNode> tmpPackedNode = currentPackedNodes;
+		currentPackedNodes.clear();
+		currentPackedNodes = forwardPackedNodes[nextIndex];
+		forwardPackedNodes[nextIndex] = tmpPackedNode;
 		
 		LevelSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
 		currentGssNodes.clear();
@@ -165,11 +185,11 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
 		boolean newNodeCreated = false;
-		SPPFNode key = createNonPackedNode(slot, leftExtent, rightExtent);
+		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
 		SPPFNode value;
 		
 		if(rightExtent == currentLevel) {
-			value = currentLevelNodes.add(key);
+			value = currentNodes.add(key);
 			if(value == null){
 				countNonPackedNodes++;
 				newNodeCreated = true;
@@ -223,11 +243,9 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
 		
-		CuckooHashSet<SPPFNode> currentNodes;
+		CuckooHashSet<NonPackedNode> currentNodes = this.currentNodes;
 		
-		if(currentLevel == inputSize - 1) {
-			currentNodes = currentLevelNodes;
-		} else {
+		if(currentLevel != inputSize - 1) {
 			int index = indexFor(inputSize - 1); 
 			currentNodes = forwardNodes[index];
 		}
@@ -362,12 +380,12 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 				PackedNode packedNode = new PackedNode(slot, pivot, parent);
 				PackedNode firstPackedNode = parent.addSecondPackedNode(packedNode, leftChild, rightChild);
 				if(parent.getRightExtent() == currentLevel) {
-					currentLevelNodes.add(packedNode);
-					currentLevelNodes.add(firstPackedNode);
+					currentPackedNodes.add(packedNode);
+					currentPackedNodes.add(firstPackedNode);
 				} else {
 					int index = indexFor(parent.getRightExtent());
-					forwardNodes[index].add(packedNode);
-					forwardNodes[index].add(firstPackedNode);
+					forwardPackedNodes[index].add(packedNode);
+					forwardPackedNodes[index].add(firstPackedNode);
 				}
 				packedNodesCount += 2;
 			}
@@ -375,13 +393,13 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		else {
 			PackedNode key = new PackedNode(slot, pivot, parent);
 			if(parent.getRightExtent() == currentLevel) {
-				if(currentLevelNodes.add(key) == null) {
+				if(currentPackedNodes.add(key) == null) {
 					parent.addPackedNode(key, leftChild, rightChild);
 					packedNodesCount++;
 				}
 			} else {
 				int index = indexFor(parent.getRightExtent());
-				if(forwardNodes[index].add(key) == null) {
+				if(forwardPackedNodes[index].add(key) == null) {
 					parent.addPackedNode(key, leftChild, rightChild);
 					packedNodesCount++;
 				}
@@ -435,7 +453,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			return set;
 		}
 	}
-
 
 }
 	

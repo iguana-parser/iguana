@@ -9,18 +9,18 @@ import java.io.Serializable;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashMap<K extends HashKey, V> implements Serializable {
+public class CuckooHashMap<K, V> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private CuckooHashSet<MapEntry<K, V>> set;
-	
-	public CuckooHashMap(int initialCapacity) {
-		set = new CuckooHashSet<>(initialCapacity);
+
+	public CuckooHashMap(Decomposer<K> decomposer) {
+		set = new CuckooHashSet<>(new MapEntryDecomposer(decomposer));
 	}
 	
-	public CuckooHashMap() {
-		set = new CuckooHashSet<>();
+	public CuckooHashMap(int initialCapacity, Decomposer<K> decomposer) {
+		set = new CuckooHashSet<>(initialCapacity, new MapEntryDecomposer(decomposer));
 	}
 	
 	public V get(K key) {
@@ -49,7 +49,7 @@ public class CuckooHashMap<K extends HashKey, V> implements Serializable {
 		set.clear();
 	}
 	
-	public static class MapEntry<K extends HashKey, V> implements HashKey {
+	public static class MapEntry<K, V> {
 		
 		private K k;
 		private V v;
@@ -87,12 +87,19 @@ public class CuckooHashMap<K extends HashKey, V> implements Serializable {
 			
 			return k.equals(other.k);
 		}
+	}
+	
+	public class MapEntryDecomposer implements Decomposer<MapEntry<K, V>> {
 
+		private Decomposer<K> decomposer;
+
+		public MapEntryDecomposer(Decomposer<K> decomposer) {
+			this.decomposer = decomposer;
+		}
+		
 		@Override
-		public int hash(HashFunction f) {
-			return k.hash(f);
+		public int[] toIntArray(MapEntry<K, V> entry) {
+			return decomposer.toIntArray(entry.k);
 		}
 	}
-
-
 }

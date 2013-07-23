@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.parser.HashFunctions;
-import org.jgll.util.hashing.HashFunction;
+import org.jgll.util.hashing.Decomposer;
 
 /**
  * A NonPackedNode corresponds to nonterminal symbol nodes or
@@ -46,11 +46,6 @@ public abstract class NonPackedNode extends SPPFNode {
 	@Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction().hash(slot.getId(), leftExtent, rightExtent);
-	}
-	
-	@Override
-	public int hash(HashFunction f) {
-		return f.hash(slot.getId(), leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -204,6 +199,19 @@ public abstract class NonPackedNode extends SPPFNode {
 	@Override
 	public int getLevel() {
 		return rightExtent;
+	}
+	
+	public static class NonPackedNodeDecomposer implements Decomposer<NonPackedNode> {
+
+		int[] components = new int[3];
+		
+		@Override
+		public int[] toIntArray(NonPackedNode nonPackedNode) {
+			components[0] = nonPackedNode.slot.getId();
+			components[1] = nonPackedNode.leftExtent;
+			components[2] = nonPackedNode.rightExtent;
+			return components;
+		}
 	}
 	
 }

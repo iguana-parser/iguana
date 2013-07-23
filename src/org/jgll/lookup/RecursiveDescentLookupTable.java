@@ -3,15 +3,14 @@ package org.jgll.lookup;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
+import org.jgll.parser.Descriptor.DescriptorDecomposer;
 import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.DummyNode;
@@ -22,19 +21,26 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.util.hashing.Decomposer;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable.class);
+	
+	private static final Decomposer<Descriptor> descriptorDecomposer = new DescriptorDecomposer();
+	private static final Decomposer<GSSNode> gssNodeDecomposer = new GSSNode.GSSNodeDecomposer();
+	private static final Decomposer<GSSEdge> gssEdgeDecomposer = new GSSEdge.GSSEdgeDecomposer();
+	private static final Decomposer<NonPackedNode> nonPackedNodesDecomposer = new NonPackedNode.NonPackedNodeDecomposer();
+	private static final Decomposer<PackedNode> packedNodeDecomposer = new PackedNode.PackedNodeDecomposer();
 
 	private Deque<Descriptor> descriptorsStack;
 	
-	private Set<Descriptor> descriptorsSet;
+	private CuckooHashSet<Descriptor> descriptorsSet;
 	
 	private TerminalSymbolNode[] terminals;
 	
-	private Map<NonPackedNode, NonPackedNode> nonPackedNodes;
+	private CuckooHashMap<NonPackedNode, NonPackedNode> nonPackedNodes;
 	
 	private final CuckooHashSet<GSSNode> gssNodes;
 	
@@ -49,13 +55,13 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	public RecursiveDescentLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new HashSet<>();
+		descriptorsSet = new CuckooHashSet<>(descriptorDecomposer);
 		terminals = new TerminalSymbolNode[2 * inputSize];
-		nonPackedNodes = new HashMap<NonPackedNode, NonPackedNode>(inputSize);
-		gssNodes = new CuckooHashSet<>();
-		packedNodes = new CuckooHashSet<>();
-		gssEdges = new CuckooHashSet<>();
-		poppedElements = new CuckooHashMap<>();
+		nonPackedNodes = new CuckooHashMap<>(inputSize, nonPackedNodesDecomposer);
+		gssNodes = new CuckooHashSet<>(gssNodeDecomposer);
+		packedNodes = new CuckooHashSet<>(packedNodeDecomposer);
+		gssEdges = new CuckooHashSet<>(gssEdgeDecomposer);
+		poppedElements = new CuckooHashMap<>(gssNodeDecomposer);
 	}
 	
 	@Override

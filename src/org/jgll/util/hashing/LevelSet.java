@@ -1,16 +1,18 @@
 package org.jgll.util.hashing;
 
 
-public class LevelSet<T extends Level & HashKey> extends CuckooHashSet<T> {
+public class LevelSet<T extends Level> extends CuckooHashSet<T> {
 
 	private static final long serialVersionUID = 1L;
 	
 	private int level;
 	
-	public LevelSet() {	}
+	public LevelSet(Decomposer<T> decomposer) {
+		super(decomposer);
+	}
 	
-	public LevelSet(int initalCapacity) {
-		super(initalCapacity);
+	public LevelSet(int initalCapacity, Decomposer<T> decomposer) {
+		super(initalCapacity, decomposer);
 	}
 	
 	@Override
@@ -36,6 +38,7 @@ public class LevelSet<T extends Level & HashKey> extends CuckooHashSet<T> {
 		size = 0;
 		rehashCount = 0;
 		enlargeCount = 0;
+		level = 0;
 	}
 	
 }

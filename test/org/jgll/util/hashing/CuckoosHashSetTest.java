@@ -9,14 +9,16 @@ import org.junit.Test;
 
 public class CuckoosHashSetTest {
 	
+	private final IntegerHashKeyDecomposer decomposer = new IntegerHashKeyDecomposer();
+	
 	@Test
 	public void testAdd() {
-		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>();
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(decomposer);
 		IntegerHashKey4 key1 = new IntegerHashKey4(100, 12, 27, 23);
 		IntegerHashKey4 key2 = new IntegerHashKey4(52, 10, 20, 21);
 
-		HashKey add1 = set.add(key1);
-		HashKey add2 = set.add(key2);
+		IntegerHashKey4 add1 = set.add(key1);
+		IntegerHashKey4 add2 = set.add(key2);
 		assertEquals(null, add1);
 		assertEquals(null, add2);
 		
@@ -28,7 +30,7 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testRehashing() {
-		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(8);
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(8, decomposer);
 		IntegerHashKey4 key1 = new IntegerHashKey4(100, 12, 27, 23);
 		IntegerHashKey4 key2 = new IntegerHashKey4(52, 10, 20, 21);
 		IntegerHashKey4 key3 = new IntegerHashKey4(10, 10, 98, 13);
@@ -50,7 +52,7 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testInsertOneMillionEntries() {
-		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>();
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(decomposer);
 		Random rand = RandomUtil.random;
 		for(int i = 0; i < 1000000; i++) {
 			IntegerHashKey4 key = new IntegerHashKey4(rand.nextInt(Integer.MAX_VALUE), 
@@ -65,8 +67,8 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testAddAll() {
-		CuckooHashSet<IntegerKey> set1 = CuckooHashSet.from(IntegerKey.from(1), IntegerKey.from(2), IntegerKey.from(3));
-		CuckooHashSet<IntegerKey> set2 = CuckooHashSet.from(IntegerKey.from(4), IntegerKey.from(5), IntegerKey.from(6), IntegerKey.from(7));
+		CuckooHashSet<Integer> set1 = CuckooHashSet.from(IntegerDecomposer.getInstance(), 1, 2, 3);
+		CuckooHashSet<Integer> set2 = CuckooHashSet.from(IntegerDecomposer.getInstance(), 4, 5, 6, 7);
 		assertEquals(3, set1.size());
 		assertEquals(4, set2.size());
 		
@@ -76,44 +78,44 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testClear() {
-		CuckooHashSet<IntegerKey> set = CuckooHashSet.from(IntegerKey.from(1), IntegerKey.from(2), IntegerKey.from(3), IntegerKey.from(4), IntegerKey.from(5));
+		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerDecomposer.getInstance(), 1, 2, 3, 4, 5);
 		set.clear();
 		
-		assertEquals(false, set.contains(IntegerKey.from(1)));
-		assertEquals(false, set.contains(IntegerKey.from(2)));
-		assertEquals(false, set.contains(IntegerKey.from(3)));
-		assertEquals(false, set.contains(IntegerKey.from(4)));
-		assertEquals(false, set.contains(IntegerKey.from(5)));
+		assertEquals(false, set.contains(1));
+		assertEquals(false, set.contains(2));
+		assertEquals(false, set.contains(3));
+		assertEquals(false, set.contains(4));
+		assertEquals(false, set.contains(5));
 		assertEquals(0, set.size());
 	}
 	
 	@Test
 	public void testRemove() {
-		CuckooHashSet<IntegerKey> set = CuckooHashSet.from(IntegerKey.from(1), IntegerKey.from(2), IntegerKey.from(3), IntegerKey.from(4), IntegerKey.from(5));
-		set.remove(IntegerKey.from(3));
-		set.remove(IntegerKey.from(5));
+		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerDecomposer.getInstance(), 1, 2, 3, 4, 5);
+		set.remove(3);
+		set.remove(5);
 		
-		assertEquals(true, set.contains(IntegerKey.from(1)));
-		assertEquals(true, set.contains(IntegerKey.from(2)));
-		assertEquals(false, set.contains(IntegerKey.from(3)));
-		assertEquals(true, set.contains(IntegerKey.from(4)));
-		assertEquals(false, set.contains(IntegerKey.from(5)));
+		assertEquals(true, set.contains(1));
+		assertEquals(true, set.contains(2));
+		assertEquals(false, set.contains(3));
+		assertEquals(true, set.contains(4));
+		assertEquals(false, set.contains(5));
 		assertEquals(3, set.size());
 	}
 	
 	@Test
 	public void testAddAndGet() {
-		CuckooHashSet<IntegerKey> set = CuckooHashSet.from(IntegerKey.from(1), IntegerKey.from(2), IntegerKey.from(3));
-		HashKey ret1 = set.add(IntegerKey.from(4));
+		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerDecomposer.getInstance(), 1, 2, 3);
+		Integer ret1 = set.add(4);
 		assertEquals(null, ret1);
 		
-		assertEquals(true, set.contains(IntegerKey.from(4)));
+		assertEquals(true, set.contains(4));
 		
-		HashKey ret2 = set.add(IntegerKey.from(3));
-		assertEquals(IntegerKey.from(3), ret2);
+		Integer ret2 = set.add(3);
+		assertEquals(new Integer(3), ret2);
 	}
 	
-	private class IntegerHashKey4 implements HashKey {
+	private class IntegerHashKey4 {
 
 		private int k1;
 		private int k2;
@@ -146,12 +148,21 @@ public class CuckoosHashSetTest {
 		public String toString() {
 			return "(" + k1 + ", " + k2 + ", " + k3 + ", " + k4 + ")";
 		}
+	}
+	
+	private static class IntegerHashKeyDecomposer implements Decomposer<IntegerHashKey4> {
 
+		private int[] components = new int[4];
+		
 		@Override
-		public int hash(HashFunction f) {
-			return f.hash(k1, k2, k3, k4);
+		public int[] toIntArray(IntegerHashKey4 key) {
+			components[0] = key.k1;
+			components[1] = key.k2;
+			components[2] = key.k3;
+			components[3] = key.k4;
+			return components;
 		}
-
-	}	
+		
+	}
 	
 }

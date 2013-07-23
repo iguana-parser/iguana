@@ -2,8 +2,7 @@ package org.jgll.recognizer;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.parser.HashFunctions;
-import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.HashKey;
+import org.jgll.util.hashing.Decomposer;
 
 /**
  * 
@@ -11,7 +10,7 @@ import org.jgll.util.hashing.HashKey;
  * @author Ali Afroozeh
  *
  */
-public class Descriptor implements HashKey {
+public class Descriptor {
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -80,9 +79,18 @@ public class Descriptor implements HashKey {
 		return "(" + slot + ", " + inputIndex + ", " + gssNode + ")";
 	}
 
-	@Override
-	public int hash(HashFunction f) {
-		return f.hash(slot.getId(), inputIndex, gssNode.hashCode());
+	public static class DescriptorDecomposer implements Decomposer<Descriptor> {
+
+		private int[] components = new int[4];
+		
+		@Override
+		public int[] toIntArray(Descriptor descriptor) {
+			components[0] = descriptor.slot.getId();
+			components[1] = descriptor.inputIndex;
+			components[2] = descriptor.gssNode.getGrammarSlot().getId();
+			components[3] = descriptor.gssNode.getInputIndex();
+			return components;
+		}
 	}
 	
 }

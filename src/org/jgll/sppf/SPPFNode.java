@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.HashKey;
 import org.jgll.util.hashing.Level;
 
 /**
@@ -17,7 +16,7 @@ import org.jgll.util.hashing.Level;
  * 
  */
 
-public abstract class SPPFNode implements Level, HashKey {
+public abstract class SPPFNode implements Level {
 
 	private boolean visited;
 	

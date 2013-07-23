@@ -4,18 +4,18 @@ import java.io.Serializable;
 
 
 
-public class LevelMap<K extends Level & HashKey, V> implements Serializable {
+public class LevelMap<K extends Level, V> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private LevelSet<MapEntry<K, V>> set;
 	
-	public LevelMap() {	
-		set = new LevelSet<>();
+	public LevelMap(Decomposer<K> decomposer) {	
+		set = new LevelSet<>(new MapEntryDecomposer(decomposer));
 	}
 	
-	public LevelMap(int initalCapacity) {
-		set = new LevelSet<>(initalCapacity);
+	public LevelMap(int initalCapacity, Decomposer<K> decomposer) {
+		set = new LevelSet<>(initalCapacity, new MapEntryDecomposer(decomposer));
 	}
 		
 	public V put(K key, V value) {
@@ -39,7 +39,7 @@ public class LevelMap<K extends Level & HashKey, V> implements Serializable {
 		set.clear();
 	}
 	
-	public static class MapEntry<K extends HashKey & Level, V> implements HashKey, Level {
+	public static class MapEntry<K extends Level, V> implements Level {
 		
 		private K k;
 		private V v;
@@ -79,15 +79,23 @@ public class LevelMap<K extends Level & HashKey, V> implements Serializable {
 		}
 
 		@Override
-		public int hash(HashFunction f) {
-			return k.hash(f);
-		}
-
-		@Override
 		public int getLevel() {
 			return k.getLevel();
 		}
 	}
+	
+	public class MapEntryDecomposer implements Decomposer<MapEntry<K, V>> {
 
+		private Decomposer<K> decomposer;
+
+		public MapEntryDecomposer(Decomposer<K> decomposer) {
+			this.decomposer = decomposer;
+		}
+		
+		@Override
+		public int[] toIntArray(MapEntry<K, V> entry) {
+			return decomposer.toIntArray(entry.getKey());
+		}
+	}
 	
 }

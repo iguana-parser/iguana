@@ -5,7 +5,6 @@ import java.util.Collections;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.L0;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.HashFunction;
 
 /**
  * 
@@ -84,10 +83,4 @@ public class DummyNode extends SPPFNode {
 	public int getLevel() {
 		return 0;
 	}
-
-	@Override
-	public int hash(HashFunction f) {
-		return 0;
-	}
-
 }

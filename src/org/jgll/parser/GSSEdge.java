@@ -1,8 +1,7 @@
 package org.jgll.parser;
 
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.HashKey;
+import org.jgll.util.hashing.Decomposer;
 import org.jgll.util.hashing.Level;
 
 /**
@@ -25,7 +24,7 @@ import org.jgll.util.hashing.Level;
  * @author Ali Afroozeh
  * 
  */
-public class GSSEdge implements Level, HashKey {
+public class GSSEdge implements Level {
 
 	private final GSSNode src;
 	private final SPPFNode sppfNode;
@@ -55,15 +54,6 @@ public class GSSEdge implements Level, HashKey {
 	}
 	
 	@Override
-	public int hash(HashFunction f) {
-		return f.hash(src.getGrammarSlot().getId(),
-				      src.getInputIndex(),
-					  dst.getGrammarSlot().getId(),
-					  dst.getInputIndex(),
-					  sppfNode.hash(f));
-	}
-	
-	@Override
 	public boolean equals(Object o) {
 		
 		if(this == o) {
@@ -86,6 +76,22 @@ public class GSSEdge implements Level, HashKey {
 	@Override
 	public int getLevel() {
 		return src.getInputIndex();
+	}
+	
+	public static class GSSEdgeDecomposer implements Decomposer<GSSEdge> {
+
+		private int[] components = new int[5];
+		
+		@Override
+		public int[] toIntArray(GSSEdge gssEdge) {
+			components[0] = gssEdge.src.getGrammarSlot().getId();
+			components[1] = gssEdge.src.getInputIndex();
+			components[2] = gssEdge.dst.getGrammarSlot().getId();
+			components[3] = gssEdge.dst.getInputIndex();
+			components[4] = gssEdge.sppfNode.hashCode();
+			return components;
+		}
+		
 	}
 	
 }

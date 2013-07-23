@@ -5,7 +5,7 @@ import java.util.Collections;
 import org.jgll.grammar.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.HashFunction;
+import org.jgll.util.hashing.Decomposer;
 
 /**
  * 
@@ -46,11 +46,6 @@ public class TerminalSymbolNode extends SPPFNode {
 	@Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction().hash(matchedChar, inputIndex);
-	}
-	
-	@Override
-	public int hash(HashFunction f) {
-		return f.hash(matchedChar, inputIndex);
 	}
 	
 	@Override
@@ -110,6 +105,18 @@ public class TerminalSymbolNode extends SPPFNode {
 	@Override
 	public int getLevel() {
 		return inputIndex;
+	}
+	
+	public static class TerminalSymbolNodeDecomposer implements Decomposer<TerminalSymbolNode> {
+
+		private int[] components = new int[2];
+		
+		@Override
+		public int[] toIntArray(TerminalSymbolNode terminalSymbolNode) {
+			components[0] = terminalSymbolNode.inputIndex;
+			components[1] = terminalSymbolNode.matchedChar;
+			return components;
+		}
 	}
 
 }
