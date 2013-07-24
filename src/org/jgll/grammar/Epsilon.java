@@ -34,16 +34,6 @@ public class Epsilon implements Terminal {
 	}
 
 	@Override
-	public boolean isTerminal() {
-		return true;
-	}
-
-	@Override
-	public boolean isNonterminal() {
-		return false;
-	}
-
-	@Override
 	public String getName() {
 		return EPSILON;
 	}

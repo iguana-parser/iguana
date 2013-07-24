@@ -62,6 +62,10 @@ public class GrammarBuilder implements Serializable {
 	
 	private List<BodyGrammarSlot> conditionSlots;
 
+	public GrammarBuilder() {
+		this("no-name");
+	}
+	
 	public GrammarBuilder(String name) {
 		this.name = name;
 		nonterminals = new ArrayList<>();
@@ -138,12 +142,18 @@ public class GrammarBuilder implements Serializable {
 		else {
 			int symbolIndex = 0;
 			BodyGrammarSlot firstSlot = null;
+			String label = grammarSlotToString(head, body, symbolIndex);
 			for (Symbol symbol : body) {
-				if (symbol.isTerminal()) {
-					currentSlot = new TerminalGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
-				} else {
+				if (symbol instanceof Terminal) {
+					currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
+				}
+				else if (symbol instanceof Nonterminal){
 					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-					currentSlot = new NonterminalGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, nonterminal, headGrammarSlot);
+					currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);
+				} 
+				// Keyword
+				else {
+					currentSlot = new KeywordGrammarSlot(label, symbolIndex, null, (Keyword) symbol, currentSlot, headGrammarSlot);
 				}
 				slots.add(currentSlot);
 
@@ -153,7 +163,7 @@ public class GrammarBuilder implements Serializable {
 				symbolIndex++;
 			}
 
-			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(grammarSlotToString(head, body, symbolIndex), symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
+			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(label, symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 
 			slots.add(lastGrammarSlot);
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
@@ -396,11 +406,11 @@ public class GrammarBuilder implements Serializable {
 
 		int index = 0;
 		for(Symbol symbol : condition.getSymbols()) {
-			if(symbol.isNonterminal()) {
+			if(symbol instanceof Nonterminal) {
 				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 				currentSlot = new NonterminalGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, nonterminal, null);
 			} 
-			else if(symbol.isTerminal()) {
+			else if(symbol instanceof Terminal) {
 				currentSlot = new TerminalGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, (Terminal) symbol, null);
 			}
 			
@@ -478,7 +488,7 @@ public class GrammarBuilder implements Serializable {
 	}
 
 	/**
-	 * Calculates the longest chain of terminals in a body of a production rule.
+	 * Calculates the length of the longest chain of terminals in a body of production rules.
 	 */
 	private void calculateLongestTerminalChain() {
 

@@ -70,16 +70,6 @@ public class Range implements Terminal {
 	}
 
 	@Override
-	public boolean isTerminal() {
-		return true;
-	}
-
-	@Override
-	public boolean isNonterminal() {
-		return false;
-	}
-
-	@Override
 	public String getName() {
 		return  "[" + (char) start + "-" + (char) end + "]";
 	}

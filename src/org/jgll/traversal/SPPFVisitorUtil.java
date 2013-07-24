@@ -33,10 +33,10 @@ public class SPPFVisitorUtil {
 	 * If the intermediate node is ambiguous, children of each of its packed nodes
 	 * and its other children are merged to create new packed nodes for the parent.
 	 * 
-	 * 			     N                                           N
+	 *               N                                          N
 	 *             /   \                                    /        \
 	 *            I     Other   =>                        P            P
-	 *          /   \							        / | \        / | \
+	 *          /   \                                   / | \        / | \
 	 *         P     P                               c1 c2 Other  c3 c4 Other
 	 *        / \   / \
 	 *       c1 c2 c3 c4
@@ -101,11 +101,11 @@ public class SPPFVisitorUtil {
 	 * 
 	 *                  N                   
 	 *                /   \
-	 * 			     P     P...                                        N         
+	 *               P     P...                                        N         
 	 *             /   \                                    /          |          \
 	 *            I     Other   =>                        P            P          Other
-	 *          /   \							        / | \        / | \
-	 *         P     P                               c1 c2 Other  c3 c4 Other
+	 *          /   \                                   / | \        / | \        
+	 *         P     P                               c1 c2 Other  c3 c4 Other     
 	 *        / \   / \
 	 *       c1 c2 c3 c4
 	 *       

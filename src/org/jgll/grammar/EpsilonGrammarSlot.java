@@ -10,7 +10,7 @@ import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
 /**
- * The grammar slot repersing an empty body.
+ * The grammar slot representing an empty body.
  * 
  * 
  * @author Ali Afroozeh

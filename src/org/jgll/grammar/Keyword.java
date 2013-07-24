@@ -23,16 +23,6 @@ public class Keyword implements Symbol {
 		return chars;
 	}
 
-	@Override
-	public boolean isTerminal() {
-		return true;
-	}
-
-	@Override
-	public boolean isNonterminal() {
-		return false;
-	}
-	
 	public int size() {
 		return chars.length;
 	}

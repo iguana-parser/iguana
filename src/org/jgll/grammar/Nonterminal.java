@@ -77,16 +77,6 @@ public class Nonterminal implements Symbol {
 		return HashFunctions.defaulFunction().hash(name.hashCode());
 	}
 
-	@Override
-	public boolean isTerminal() {
-		return false;
-	}
-
-	@Override
-	public boolean isNonterminal() {
-		return true;
-	}
-	
 	public Condition getPreCondition() {
 		return pre;
 	}

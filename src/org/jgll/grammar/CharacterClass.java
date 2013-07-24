@@ -91,16 +91,6 @@ public class CharacterClass implements Terminal {
 	}
 
 	@Override
-	public boolean isTerminal() {
-		return true;
-	}
-
-	@Override
-	public boolean isNonterminal() {
-		return false;
-	}
-
-	@Override
 	public String getName() {
 		StringBuilder sb = new StringBuilder();
 		

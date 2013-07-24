@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
@@ -23,6 +24,14 @@ public class Rule implements Serializable {
 	private final transient Object object;
 	
 	private List<Condition> conditions;
+	
+	public Rule(Nonterminal head) {
+		this(head, new ArrayList<Symbol>(), null);
+	}
+	
+	public Rule(Nonterminal head, Symbol...body) {
+		this(head, Arrays.asList(body), null);
+	}
 	
 	public Rule(Nonterminal head, List<? extends Symbol> body) {
 		this(head, body, null);
