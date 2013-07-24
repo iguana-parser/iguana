@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class InputUtilTest {
+public class InputTest {
 	
 	private Input input;
 
 	@Test
-	public void test1() {
+	public void testLineColumnNumber1() {
 		input = Input.fromString("big\n brother");
 		assertEquals(1, input.getLineNumber(0));
 		assertEquals(1, input.getColumnNumber(0));
@@ -25,7 +25,7 @@ public class InputUtilTest {
 	}
 	
 	@Test
-	public void test2() {
+	public void testLineColumnNumber2() {
 		input = Input.fromString("big\r\n brother");
 
 		assertEquals(1, input.getLineNumber(0));
@@ -40,6 +40,32 @@ public class InputUtilTest {
 		assertEquals(2, input.getLineNumber(6));
 		assertEquals(2, input.getColumnNumber(6));
 	}
-
-
+	
+	@Test
+	public void testMatch1() {
+		input = Input.fromString("We are just another brick in the wall");
+		
+		assertTrue(input.match(0, "We"));
+		assertTrue(input.match(33, "wall"));
+		assertFalse(input.match(35, "wall"));
+	}
+	
+	@Test
+	public void testMatch2() {
+		input = Input.fromString("We are just another brick in the wall");
+		
+		assertTrue(input.match(0, 2, "We"));
+		assertTrue(input.match(3, 11, "are just"));
+	}
+	
+	@Test
+	public void testMatch3() {
+		input = Input.fromString("We are just another brick in the wall");
+		
+		assertTrue(input.matchBackward(2, "We"));
+		assertTrue(input.matchBackward(37, "wall"));
+		assertTrue(input.matchBackward(37, "all"));
+		assertTrue(input.matchBackward(32, "the"));
+	
+	}
 }

@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,12 +10,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.grammar.condition.CharacterClassCondition;
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.ContextFreeCondition;
+import org.jgll.grammar.condition.LiteralCondition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSEdge;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.util.hashing.IntArrayDecomposer;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class GrammarBuilder implements Serializable {
@@ -162,25 +168,54 @@ public class GrammarBuilder implements Serializable {
 		return this;
 	}
 	
-	private void addPrecedeRestriction(BodyGrammarSlot slot, final CharacterClass characterClass) {
-		if (characterClass != null) {
+	private void addPrecedeRestriction(BodyGrammarSlot slot, final List<CharacterClass> characterClasses) {
+		log.debug("Precede restriction added %s <<! %s", characterClasses, slot);
+		slot.addPreCondition(new SlotAction<Boolean>() {
 
-			log.debug("Precede restriction added {} <<! {}", characterClass, slot);
-			slot.addPreCondition(new SlotAction<Boolean>() {
+			private static final long serialVersionUID = 1L;
 
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public Boolean execute(GLLParser parser, Input input) {
-					int ci = parser.getCi();
-					if (ci == 0) {
-						return true;
-					}
-
-					return !characterClass.match(input.charAt(ci - 1));
+			@Override
+			public Boolean execute(GLLParser parser, Input input) {
+				int ci = parser.getCi();
+				if (ci == 0) {
+					return true;
 				}
-			});
-		}
+				
+				for(CharacterClass characterClass : characterClasses) {
+					if(characterClass.match(input.charAt(ci - 1))) {
+						return false;
+					}
+				}
+
+				return true;
+			}
+		});
+	}
+	
+	private void addPrecedeRestriction2(BodyGrammarSlot slot, final List<int[]> list) {
+		log.debug("Precede restriction added %s <<! %s", list, slot);
+		
+		slot.addPreCondition(new SlotAction<Boolean>() {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Boolean execute(GLLParser parser, Input input) {
+				int ci = parser.getCi();
+				if (ci == 0) {
+					return true;
+				}
+				
+				for(int[] array : list) {
+					if(input.matchBackward(ci, array)) {
+						return false;
+					}
+				}
+				
+				return true;
+			}
+		});
+
 	}
 	
 	private void addCondition(LastGrammarSlot slot, final Condition condition) {
@@ -189,12 +224,24 @@ public class GrammarBuilder implements Serializable {
 				break;
 				
 			case NOT_FOLLOW:
-				addNotFollowRestriction(slot, convertCondition(condition));
+				if(condition instanceof ContextFreeCondition) {
+					addNotFollowRestriction(slot, convertCondition((ContextFreeCondition) condition));
+				} else {
+					
+				}
 				break;
 				
 			case PRECEDE:
-				assert condition.getSymbols().get(0) instanceof CharacterClass;
-				addPrecedeRestriction(slot, (CharacterClass) condition.getSymbols().get(0));
+				assert !(condition instanceof ContextFreeCondition);
+				
+				if(condition instanceof LiteralCondition) {
+					LiteralCondition literalCondition = (LiteralCondition) condition;
+					addPrecedeRestriction2(slot, literalCondition.getStrings());
+				} else {
+					CharacterClassCondition characterClassCondition = (CharacterClassCondition) condition;
+					addPrecedeRestriction(slot, characterClassCondition.getCharacterClasses());
+				}
+				
 				break;
 				
 			case NOT_PRECEDE:
@@ -204,7 +251,12 @@ public class GrammarBuilder implements Serializable {
 				break;
 					
 			case NOT_MATCH:
-				addNotMatch(slot, convertCondition(condition));
+				if(condition instanceof ContextFreeCondition) {
+					addNotMatch(slot, convertCondition((ContextFreeCondition) condition));
+				} else {
+					LiteralCondition simpleCondition = (LiteralCondition) condition;
+					addNotMatch(slot, simpleCondition.getStrings());
+				}
 				break;
 		}
 	}
@@ -222,6 +274,58 @@ public class GrammarBuilder implements Serializable {
 			}
 		});
 	}
+	
+	private void addNotMatch(LastGrammarSlot slot, final List<int[]> list) {
+		
+		if(list.size() == 1) {
+			final int[] s = list.get(0);
+			
+			slot.addPopAction(new PopAction() {
+
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public boolean execute(GSSEdge edge, int inputIndex, Input input) {
+					return input.match(edge.getDestination().getInputIndex(), inputIndex, s);
+				}
+			});			
+		} 
+		
+		else if(list.size() == 2) {
+			final int[] s1 = list.get(0);
+			final int[] s2 = list.get(1);
+			
+			slot.addPopAction(new PopAction() {
+
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public boolean execute(GSSEdge edge, int inputIndex, Input input) {
+					return input.match(edge.getDestination().getInputIndex(), inputIndex, s1) ||
+						   input.match(edge.getDestination().getInputIndex(), inputIndex, s2)	;
+				}
+			});			
+		} 
+		
+		else {
+			final CuckooHashSet<int[]> set = new CuckooHashSet<>(IntArrayDecomposer.getInstance());
+			for(int[] s : list) {
+				set.add(s);
+			}
+			
+			slot.addPopAction(new PopAction() {
+
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public boolean execute(GSSEdge edge, int inputIndex, Input input) {
+					int[] subInput = input.subInput(edge.getDestination().getInputIndex(), inputIndex);
+					return !set.contains(subInput);
+				}
+			});			
+		}
+		
+	}
 
 	private void addNotFollowRestriction(LastGrammarSlot slot, final BodyGrammarSlot firstSlot) {
 		
@@ -234,10 +338,50 @@ public class GrammarBuilder implements Serializable {
 				GLLRecognizer recognizer = RecognizerFactory.prefixContextFreeRecognizer();
 				return !recognizer.recognize(input, inputIndex, input.size(), firstSlot);
 			}
-		});		
+		});
 	}
 	
-	private BodyGrammarSlot convertCondition(Condition condition) {
+	private void addNotFollowRestriction(LastGrammarSlot slot, final List<int[]> list) {
+		
+		slot.addPopAction(new PopAction() {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean execute(GSSEdge edge, int inputIndex, Input input) {
+				for(int[] s : list) {
+					if(input.match(inputIndex, s)) {
+						return false;
+					}
+				}
+				 
+				return true;
+			}
+		});
+	}
+	
+	private void addNotFollowRestriction2(LastGrammarSlot slot, List<CharacterClass> list) {
+		
+		BitSet testSet = new BitSet();
+		
+		for(CharacterClass c : list) {
+			testSet.or(c.getTestSet());
+		}
+		
+		final BitSet set = testSet;
+		
+		slot.addPopAction(new PopAction() {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean execute(GSSEdge edge, int inputIndex, Input input) {
+				return !set.get(input.charAt(inputIndex));
+			}
+		});
+	}
+	
+	private BodyGrammarSlot convertCondition(ContextFreeCondition condition) {
 		
 		if(condition == null) {
 			return null;

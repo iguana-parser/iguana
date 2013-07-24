@@ -5,10 +5,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jgll.sppf.SPPFNode;
 import org.jgll.traversal.PositionInfo;
 
+/**
+ * 
+ * Is backed by an integer array.
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class Input {
 
 	private int[] input;
@@ -18,7 +27,7 @@ public class Input {
 	public static Input fromString(String s) {
 		int[] input = new int[s.length() + 1];
 		for (int i = 0; i < s.length(); i++) {
-			input[i] = s.charAt(i);
+			input[i] = s.codePointAt(i);
 		}
 		// The EOF character is assumed to have value 0 instead of the more common -1.  
 		// as Bitsets cannot work with negative values. 
@@ -85,14 +94,85 @@ public class Input {
 		return sb.toString();
 	}
 	
-	public Input subInput(int start, int end) {
+	public int[] subInput(int start, int end) {
 		int[] subInput = new int[end - start + 1];
-		for(int i = start; i < end; i++) {
-			subInput[i - start] = input[i];
+		
+		System.arraycopy(input, start, subInput, start, end - start + 1);
+		
+		return subInput;
+	}
+	
+	public boolean match(int start, int end, String target) {
+		return match(start, end, toIntArray(target));
+	}
+	
+	public boolean match(int start, int end, int[] target) {
+		if(target.length != end - start) {
+			return false;
 		}
-		return new Input(subInput);
+	 	
+		int i = 0;
+		while(i < target.length) {
+			if(target[i] != input[start + i]) {
+				return false;
+			}
+			i++;
+		}
+		
+		return true;
 	}
 
+	public boolean match(int from, String target) {
+		return match(from, toIntArray(target));
+	}
+	
+	public boolean matchBackward(int start, String target) {
+		return matchBackward(start, toIntArray(target));
+	}
+	
+	public boolean matchBackward(int start, int[] target) {
+		if(start - target.length < 0) {
+			return false;
+		}
+		
+		int i = target.length - 1;
+		int j = start - 1;
+		while(i >= 0) {
+			if(target[i] != input[j]) {
+				return false;
+			}
+			i--;
+			j--;
+		}
+		
+		return true;
+	}
+	
+	public boolean match(int from, int[] target) {
+		
+		if(target.length > size() - from) {
+			return false;
+		}
+		
+		int i = 0;
+		while(i < target.length) {
+			if(target[i] != input[from + i]) {
+				return false;
+			}
+			i++;
+		}
+		
+		return true;
+	}
+	
+	public static int[] toIntArray(String s) {
+		int[] array = new int[s.codePointCount(0, s.length())];
+		for(int i = 0; i < array.length; i++) {
+			array[i] = s.codePointAt(i);
+		}
+		return array;
+	}
+ 
 	public int getLineNumber(int index) {
 		if(index < 0) {
 			return 0;
@@ -192,6 +272,22 @@ public class Input {
 	
 	@Override
 	public String toString() {
-		return input.toString();
+		
+		List<Character> charList = new ArrayList<>();
+		for(int i : input) {
+			char[] chars = Character.toChars(i);
+			for(char c : chars) {
+				charList.add(c);
+			}
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		for(char c : charList) {
+			sb.append(c).append(", ");
+		}
+		sb.append("]");
+		
+		return sb.toString();
 	}
 }
