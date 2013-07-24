@@ -59,7 +59,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		int ci = parser.getCi();
 		GSSNode cu = parser.getCu();
 		SPPFNode cn = parser.getCn();
-		if(checkAgainstTestSet(input.charAt(ci))) {
+		if(checkAgainstTestSet(ci, input)) {
 			parser.update(parser.create(next, cu, ci, cn), cn, ci);
 			return nonterminal;
 		} else {
@@ -72,7 +72,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 		int ci = recognizer.getCi();
 		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-		if(checkAgainstTestSet(input.charAt(ci))) {
+		if(checkAgainstTestSet(ci, input)) {
 			recognizer.update(recognizer.create(next, cu, ci), ci);
 			return nonterminal;
 		} else {
@@ -137,7 +137,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public boolean checkAgainstTestSet(int i) {
+	public boolean checkAgainstTestSet(int index, Input input) {
+		int i = input.charAt(index);
 		if(i < minInputVal || i > maxInputVal) {
 			return false;
 		}

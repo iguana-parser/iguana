@@ -32,7 +32,15 @@ public class Keyword implements Symbol {
 	public boolean isNonterminal() {
 		return false;
 	}
-
+	
+	public int size() {
+		return chars.length;
+	}
+	
+	public boolean match(int c) {
+		return chars[0] == c;
+	}
+ 
 	@Override
 	public String getName() {
 		List<java.lang.Character> charList = new ArrayList<>();

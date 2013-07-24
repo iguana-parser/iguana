@@ -186,8 +186,8 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public boolean checkAgainstTestSet(int i) {
-		return terminal.match(i);
+	public boolean checkAgainstTestSet(int index, Input input) {
+		return terminal.match(input.charAt(index));
 	}
 
 	@Override

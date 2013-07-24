@@ -6,6 +6,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.util.Input;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -50,7 +52,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 * Checks whether the provide input belongs to the first set, and follow set
 	 * in case the first set contains epsilon.  
 	 */
-	public abstract boolean checkAgainstTestSet(int i);
+	public abstract boolean checkAgainstTestSet(int index, Input input);
 	
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	

@@ -2,7 +2,6 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -14,20 +13,17 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	private Nonterminal nonterminal;
-	private List<Terminal> terminals;
+	private Keyword keyword;
 	
-	public KeywordGrammarSlot(String label, int position, Nonterminal nt, List<Terminal> terminals, BodyGrammarSlot previous, HeadGrammarSlot head) {
+	public KeywordGrammarSlot(String label, int position, Nonterminal nt, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(label, position, previous, head);
-		if(terminals.size() == 0) {
-			throw new IllegalArgumentException("There should be at least one terminal.");
-		}
 		this.nonterminal = nt;
-		this.terminals = terminals;
+		this.keyword = keyword;
 	}
 
 	@Override
-	public boolean checkAgainstTestSet(int i) {
-		return terminals.get(0).match(i);
+	public boolean checkAgainstTestSet(int index, Input input) {
+		return input.match(index, keyword.getChars());
 	}
 
 	@Override
@@ -73,19 +69,12 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		int ci = parser.getCi();
-		NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(null, ci, ci + terminals.size());
+		NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(null, ci, ci + keyword.size());
 		
-		int i = 0;
-		for(Terminal t : terminals) {
+		for(int i = 0; i < keyword.size(); i++) {
 			int charAt = input.charAt(ci + i);
-			if(t.match(charAt)) {
-				TerminalSymbolNode node = parser.getNodeT(charAt, ci + i);
-				i++;
-				sppfNode.addChild(node);
-			} else {
-				parser.newParseError(this, ci, parser.getCu());
-				return null;
-			}
+			TerminalSymbolNode node = parser.getNodeT(charAt, ci + i);
+			sppfNode.addChild(node);
 		}
 		return next;
 	}

@@ -63,7 +63,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public boolean checkAgainstTestSet(int i) {
+	public boolean checkAgainstTestSet(int index, Input input) {
 		throw new UnsupportedOperationException();
 	}
 	

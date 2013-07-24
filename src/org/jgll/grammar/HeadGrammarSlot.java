@@ -94,7 +94,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		for(Alternate alternate : alternates) {
 			int ci = parser.getCi();
-			if(alternate.getFirstSlot().checkAgainstTestSet(input.charAt(ci))) {
+			if(alternate.getFirstSlot().checkAgainstTestSet(ci, input)) {
 				GSSNode cu = parser.getCu();
 				parser.add(alternate.getFirstSlot(), cu, ci, DummyNode.getInstance());
 			}
@@ -106,7 +106,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 		for(Alternate alternate : alternates) {
 			int ci = recognizer.getCi();
-			if(alternate.getFirstSlot().checkAgainstTestSet(input.charAt(ci))) {
+			if(alternate.getFirstSlot().checkAgainstTestSet(ci, input)) {
 				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 				recognizer.add(alternate.getFirstSlot(), cu, ci);
 			}
