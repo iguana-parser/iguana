@@ -9,4 +9,6 @@ public interface GrammarVisitAction {
 	public void visit(TerminalGrammarSlot slot);
 	
 	public void visit(LastGrammarSlot slot);
+	
+	public void visit(KeywordGrammarSlot slot);
 }

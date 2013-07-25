@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.grammar.action.LongestTerminalChainAction;
 import org.jgll.grammar.condition.CharacterClassCondition;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ContextFreeCondition;
@@ -87,7 +88,7 @@ public class GrammarBuilder implements Serializable {
 	}
 
 	public void validate() {
-		GrammarVisitor visitor = new GrammarVisitor(new GrammarVisitAction() {
+		GrammarVisitAction action = new GrammarVisitAction() {
 
 			@Override
 			public void visit(LastGrammarSlot slot) {
@@ -113,10 +114,15 @@ public class GrammarBuilder implements Serializable {
 					throw new GrammarValidationException("No alternates defined for " + head.getLabel());
 				}
 			}
-		});
+
+			@Override
+			public void visit(KeywordGrammarSlot slot) {
+				
+			}
+		};
 
 		for (HeadGrammarSlot head : nonterminals) {
-			visitor.visit(head);
+			GrammarVisitor.visit(head, action);
 		}
 	}
 
@@ -492,34 +498,9 @@ public class GrammarBuilder implements Serializable {
 	 * Calculates the length of the longest chain of terminals in a body of production rules.
 	 */
 	private void calculateLongestTerminalChain() {
-
-		int longestTerminalChain = 0;
-
-		for (HeadGrammarSlot head : nonterminals) {
-			for (Alternate alternate : head.getAlternates()) {
-				BodyGrammarSlot slot = alternate.getFirstSlot();
-				int length = 0; // The length of the longest terminal chain for
-								// this rule
-				while (!(slot instanceof LastGrammarSlot)) {
-					if (slot instanceof TerminalGrammarSlot) {
-						length++;
-					} else {
-						// If a terminal is seen reset the length of the longest
-						// chain
-						if (length > longestTerminalChain) {
-							longestTerminalChain = length;
-						}
-						length = 0;
-					}
-					slot = slot.next;
-				}
-				if (length > longestTerminalChain) {
-					longestTerminalChain = length;
-				}
-			}
-		}
-
-		this.longestTerminalChain = longestTerminalChain;
+		LongestTerminalChainAction action = new LongestTerminalChainAction();
+		GrammarVisitor.visit(nonterminals, action);
+		longestTerminalChain = action.getLongestTerminalChain();
 	}
 
 	private void calculateMaximumNumAlternates() {
@@ -1034,8 +1015,7 @@ public class GrammarBuilder implements Serializable {
 	 * @param filterdAlternates
 	 * 
 	 */
-	public void addFilter(Nonterminal nonterminal, Rule parent, int position,
-			Rule child) {
+	public void addFilter(Nonterminal nonterminal, Rule parent, int position, Rule child) {
 		String name = nonterminal.getName();
 		Filter filter = new Filter(name, parent.getBody(), position, child.getBody());
 

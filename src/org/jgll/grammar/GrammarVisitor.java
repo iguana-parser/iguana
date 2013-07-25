@@ -1,49 +1,42 @@
 package org.jgll.grammar;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class GrammarVisitor {
 	
-	private Set<HeadGrammarSlot> visitedHeads;
-	private Deque<HeadGrammarSlot> todoQueue;
-	private GrammarVisitAction action;
+	public static void visit(Grammar grammar, GrammarVisitAction action) {
+		for(HeadGrammarSlot head : grammar.getNonterminals()) {
+			visit(head, action);
+		}
+	}
 	
-	public GrammarVisitor(GrammarVisitAction action) {
-		this.action = action;
-		visitedHeads = new HashSet<>();
-		todoQueue = new ArrayDeque<>();		
+	public static void visit(Iterable<HeadGrammarSlot> heads, GrammarVisitAction action) {
+		for(HeadGrammarSlot head : heads) {
+			visit(head, action);
+		}		
 	}
 
-	public void visit(HeadGrammarSlot root) {
-		todoQueue.add(root);
-		visitedHeads.add(root);
-		
-		while(!todoQueue.isEmpty()) {
-			HeadGrammarSlot next = todoQueue.poll();
-			
-			action.visit(next);
-			
-			for(Alternate alternate : next.getAlternates()) {
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
-				while(!(currentSlot instanceof LastGrammarSlot)) {
-					if(currentSlot instanceof NonterminalGrammarSlot) {
-						action.visit((NonterminalGrammarSlot)currentSlot);
-						
-						HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
-						if(nonterminal != null && !visitedHeads.contains(nonterminal)) {
-							todoQueue.add(nonterminal);
-							visitedHeads.add(nonterminal);
-						}
-					} else {
-						action.visit((TerminalGrammarSlot)currentSlot);
-					}
-					currentSlot = currentSlot.next;
+	public static void visit(HeadGrammarSlot root, GrammarVisitAction action) {
+		action.visit(root);
+		for(Alternate alternate : root.getAlternates()) {
+			BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+			while(!(currentSlot instanceof LastGrammarSlot)) {
+				if(currentSlot instanceof NonterminalGrammarSlot) {
+					action.visit((NonterminalGrammarSlot)currentSlot);						
+				} 
+				else if (currentSlot instanceof TerminalGrammarSlot) {
+					action.visit((TerminalGrammarSlot) currentSlot);
+				} 
+				else if (currentSlot instanceof KeywordGrammarSlot) {
+					action.visit((KeywordGrammarSlot)currentSlot);
 				}
-				action.visit((LastGrammarSlot)currentSlot);
+				currentSlot = currentSlot.next;
 			}
+			action.visit((LastGrammarSlot)currentSlot);
 		}
 	}
 

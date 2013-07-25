@@ -178,7 +178,7 @@ public class Grammar implements Serializable {
 		
 		final StringBuilder sb = new StringBuilder();
 		
-		GrammarVisitor visitor = new GrammarVisitor( new GrammarVisitAction() {
+		GrammarVisitAction action = new GrammarVisitAction() {
 			
 			@Override
 			public void visit(LastGrammarSlot slot) {
@@ -199,14 +199,16 @@ public class Grammar implements Serializable {
 			public void visit(HeadGrammarSlot head) {
 				sb.append(getName(head)).append(" ::= ");
 			}
-		});
+
+			@Override
+			public void visit(KeywordGrammarSlot slot) {
+				sb.append(" ").append(getName(slot));
+			}
+		};
 		
 		// The first nonterminal is the starting point
 		// TODO: allow the user to specify the root of a grammar
-		for(HeadGrammarSlot head : nonterminals) {
-			visitor.visit(head);
-		}
-
+		GrammarVisitor.visit(this, action);
 		return sb.toString();
 	}
 	

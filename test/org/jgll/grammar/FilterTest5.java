@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -70,9 +70,10 @@ public class FilterTest5 extends AbstractGrammarTest {
 
 	@Test
 	public void testParsers() throws ParseError {
+		System.out.println(grammar);
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("xawz"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("xawz"), grammar, "E");
-		assertEquals(true, sppf1.deepEquals(sppf2));
+		assertTrue(sppf1.deepEquals(sppf2));
 	}
 
 }

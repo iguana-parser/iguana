@@ -37,6 +37,10 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public Keyword getKeyword() {
+		return keyword;
+	}
 
 	@Override
 	public boolean isNullable() {
