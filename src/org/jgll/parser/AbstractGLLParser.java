@@ -1,13 +1,13 @@
 package org.jgll.parser;
 
 
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.PopAction;
 import org.jgll.grammar.TerminalGrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;

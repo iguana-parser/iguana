@@ -1,7 +1,7 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.L0;
+import org.jgll.grammar.slot.L0;
 import org.jgll.lookup.LookupTable;
 import org.jgll.lookup.RecursiveDescentLookupTable;
 

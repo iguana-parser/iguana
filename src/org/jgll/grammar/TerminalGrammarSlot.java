@@ -3,6 +3,8 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
@@ -43,7 +45,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		int charAtCi = input.charAt(ci);
 		
 		// A::= x1
-		if(previous == null && next.next == null) {
+		if(previous == null && next.next() == null) {
 			if(terminal.match(charAtCi)) {
 				TerminalSymbolNode cr = parser.getNodeT(charAtCi, ci);
 				ci++;
@@ -56,7 +58,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		}
 		
 		// A ::= x1...xf, f ≥ 2
-		else if(previous == null && !(next.next == null)) {
+		else if(previous == null && !(next.next() == null)) {
 			if(terminal.match(charAtCi)) {
 				cn = parser.getNodeT(charAtCi, ci);
 				ci++;
@@ -90,7 +92,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		int charAtCi = input.charAt(ci);
 		
 		// A::= x1
-		if(previous == null && next.next == null) {
+		if(previous == null && next.next() == null) {
 			if(terminal.match(charAtCi)) {
 				ci++;
 				recognizer.update(cu, ci);
@@ -101,7 +103,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		}
 		
 		// A ::= x1...xf, f ≥ 2
-		else if(previous == null && !(next.next == null)) {
+		else if(previous == null && !(next.next() == null)) {
 			if(terminal.match(charAtCi)) {
 				ci++;
 				recognizer.update(cu, ci);
@@ -134,18 +136,18 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		// 				  cN := getNodeP(X ::= x1., cN , cR)
 		//		 		  pop(cU,cI,cN); 
 		//				  gotoL0
-		if(previous == null && next.next == null) {
+		if(previous == null && next.next() == null) {
 			writer.append(checkInput(terminal));
 			writer.append("   cr = getNodeT(I[ci], ci);\n");
 			codeElseTestSetCheck(writer);
 			writer.append("   ci = ci + 1;\n");
-			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + next.id + "), cn, cr);\n");
+			writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + next.getId() + "), cn, cr);\n");
 			writer.append("   pop(cu, ci, cn);\n");
 			writer.append("   label = L0;\n}\n");
 		}
 		
 		// A ::= x1...xf, f ≥ 2
-		else if(previous == null && !(next.next == null)) {
+		else if(previous == null && !(next.next() == null)) {
 			writer.append(checkInput(terminal));
 			writer.append("   cn = getNodeT(I[ci], ci);\n");
 			codeElseTestSetCheck(writer);
@@ -155,7 +157,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 			// while slot is one before the end, i.e, α . x
 			while(slot != null) {
 				slot.codeParser(writer);
-				slot = slot.next;
+				slot = slot.next();
 			}
 		}
 		

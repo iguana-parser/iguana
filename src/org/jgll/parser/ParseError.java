@@ -6,8 +6,8 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.BodyGrammarSlot;
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.util.Input;
 
 

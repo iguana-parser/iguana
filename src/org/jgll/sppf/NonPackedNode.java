@@ -3,7 +3,7 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.Decomposer;
 

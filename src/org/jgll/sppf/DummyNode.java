@@ -2,8 +2,8 @@ package org.jgll.sppf;
 
 import java.util.Collections;
 
-import org.jgll.grammar.GrammarSlot;
-import org.jgll.grammar.L0;
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.L0;
 import org.jgll.traversal.SPPFVisitor;
 
 /**

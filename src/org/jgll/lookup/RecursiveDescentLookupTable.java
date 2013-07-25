@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.Descriptor.DescriptorDecomposer;
 import org.jgll.parser.GSSEdge;

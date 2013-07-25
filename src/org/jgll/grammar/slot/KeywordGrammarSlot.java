@@ -1,8 +1,13 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.Character;
+import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.Keyword;
+import org.jgll.grammar.Symbol;
+import org.jgll.grammar.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
@@ -12,12 +17,12 @@ import org.jgll.util.Input;
 public class KeywordGrammarSlot extends BodyGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
-	private Nonterminal nonterminal;
+	private HeadGrammarSlot keywordHead;
 	private Keyword keyword;
 	
-	public KeywordGrammarSlot(String label, int position, Nonterminal nt, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
+	public KeywordGrammarSlot(String label, int position, HeadGrammarSlot keywordHead, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(label, position, previous, head);
-		this.nonterminal = nt;
+		this.keywordHead = keywordHead;
 		this.keyword = keyword;
 	}
 
@@ -58,7 +63,7 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		int ci = parser.getCi();
-		NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(null, ci, ci + keyword.size());
+		NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(keywordHead, ci, ci + keyword.size());
 		
 		for(int i = 0; i < keyword.size(); i++) {
 			int charAt = input.charAt(ci + i);

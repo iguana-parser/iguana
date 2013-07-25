@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.KeywordGrammarSlot;
+import org.jgll.grammar.slot.L0;
+import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -108,7 +113,7 @@ public class Grammar implements Serializable {
 		}
 				
 		for(BodyGrammarSlot slot : slots) {
-			if(!(slot.previous instanceof TerminalGrammarSlot)) {
+			if(!(slot.previous() instanceof TerminalGrammarSlot)) {
 				writer.append("// " + slot + "\n");
 				writer.append("case " + slot.getId() + ":\n");
 				writer.append("parse_" + slot.getId() + "();\n");

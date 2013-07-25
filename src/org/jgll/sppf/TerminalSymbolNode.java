@@ -2,7 +2,7 @@ package org.jgll.sppf;
 
 import java.util.Collections;
 
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.util.hashing.Decomposer;

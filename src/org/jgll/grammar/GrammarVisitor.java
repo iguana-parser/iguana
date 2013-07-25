@@ -1,5 +1,10 @@
 package org.jgll.grammar;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.KeywordGrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
+
 
 /**
  * 
@@ -34,7 +39,7 @@ public class GrammarVisitor {
 				else if (currentSlot instanceof KeywordGrammarSlot) {
 					action.visit((KeywordGrammarSlot)currentSlot);
 				}
-				currentSlot = currentSlot.next;
+				currentSlot = currentSlot.next();
 			}
 			action.visit((LastGrammarSlot)currentSlot);
 		}

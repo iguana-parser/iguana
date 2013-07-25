@@ -1,8 +1,8 @@
 package org.jgll.lookup;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;

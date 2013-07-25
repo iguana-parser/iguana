@@ -1,10 +1,14 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
 import java.util.Set;
 
+import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.SlotAction;
+import org.jgll.grammar.Symbol;
+import org.jgll.grammar.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;

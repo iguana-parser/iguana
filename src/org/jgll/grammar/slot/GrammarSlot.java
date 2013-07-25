@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Serializable;

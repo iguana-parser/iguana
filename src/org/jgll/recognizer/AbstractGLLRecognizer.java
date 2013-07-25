@@ -3,11 +3,11 @@ package org.jgll.recognizer;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.L0;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.L0;
 import org.jgll.recognizer.Descriptor.DescriptorDecomposer;
 import org.jgll.recognizer.GSSNode.GSSDecomposer;
 import org.jgll.util.Input;

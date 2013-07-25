@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
@@ -121,7 +122,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		for (Alternate alternate : alternates) {
 			writer.append("   //" + alternate.getFirstSlot() + "\n");
 			alternate.getFirstSlot().codeIfTestSetCheck(writer);			
-			writer.append("   add(grammar.getGrammarSlot(" + alternate.getFirstSlot().id + "), cu, ci, DummyNode.getInstance());\n");
+			writer.append("   add(grammar.getGrammarSlot(" + alternate.getFirstSlot().getId() + "), cu, ci, DummyNode.getInstance());\n");
 			writer.append("}\n");
 		}
 		writer.append("   label = L0;\n");

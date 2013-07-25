@@ -1,6 +1,6 @@
 package org.jgll.recognizer;
 
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 
 public class InterpretedGLLRecognizer extends AbstractGLLRecognizer {
 

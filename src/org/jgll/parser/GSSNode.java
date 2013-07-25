@@ -3,8 +3,8 @@ package org.jgll.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.GrammarSlot;
-import org.jgll.grammar.L0;
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.L0;
 import org.jgll.util.hashing.Decomposer;
 import org.jgll.util.hashing.Level;
 

@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
+
 public class Alternate implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

@@ -1,6 +1,6 @@
 package org.jgll.parser;
 
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.Decomposer;
 import org.jgll.util.hashing.Level;

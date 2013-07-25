@@ -12,10 +12,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.Alternate;
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
 public class GrammarToDot {
 	

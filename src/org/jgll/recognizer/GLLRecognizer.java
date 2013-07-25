@@ -1,8 +1,8 @@
 package org.jgll.recognizer;
 
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.util.Input;
 
 public interface GLLRecognizer {

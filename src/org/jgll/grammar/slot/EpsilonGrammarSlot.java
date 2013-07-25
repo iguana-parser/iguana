@@ -1,8 +1,9 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.SPPFNode;

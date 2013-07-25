@@ -42,11 +42,9 @@ public class Keyword implements Symbol {
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("[");
 		for(char c : charList) {
 			sb.append(c);
 		}
-		sb.append("]");
 		
 		return sb.toString();
 	}

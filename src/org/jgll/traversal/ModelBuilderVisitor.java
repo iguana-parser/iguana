@@ -2,7 +2,7 @@ package org.jgll.traversal;
 
 import java.util.Iterator;
 
-import org.jgll.grammar.LastGrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -10,6 +10,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+
 import static org.jgll.traversal.SPPFVisitorUtil.*;
 
 /**

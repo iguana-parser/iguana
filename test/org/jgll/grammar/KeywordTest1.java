@@ -32,6 +32,7 @@ public class KeywordTest1 extends AbstractGrammarTest {
 		assertEquals(2, grammar.getLongestTerminalChain());
 	}
 
+	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("if"), grammar, "A");
 		generateSPPFGraph(sppf);

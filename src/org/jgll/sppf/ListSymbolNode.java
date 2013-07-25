@@ -1,6 +1,6 @@
 package org.jgll.sppf;
 
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**

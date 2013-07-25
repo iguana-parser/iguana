@@ -3,7 +3,7 @@ package org.jgll.recognizer;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.util.Input;
 

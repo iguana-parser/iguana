@@ -1,8 +1,8 @@
 package org.jgll.parser;
 
-import org.jgll.grammar.BodyGrammarSlot;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;

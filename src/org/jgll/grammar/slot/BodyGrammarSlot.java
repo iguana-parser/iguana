@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -6,6 +6,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.SlotAction;
+import org.jgll.grammar.Symbol;
 import org.jgll.util.Input;
 
 /**
@@ -30,7 +33,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected HeadGrammarSlot head;
 	
-	List<SlotAction<Boolean>> preConditions;
+	protected List<SlotAction<Boolean>> preConditions;
 	
 	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(label);
@@ -46,6 +49,14 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		
 	public void addPreCondition(SlotAction<Boolean> preCondition) {
 		preConditions.add(preCondition);
+	}
+	
+	public List<SlotAction<Boolean>> getPreConditions() {
+		return preConditions;
+	}
+	
+	public void setPreConditions(List<SlotAction<Boolean>> preConditions) {
+		this.preConditions = preConditions;
 	}
 
 	/**

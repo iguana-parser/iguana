@@ -2,7 +2,7 @@ package org.jgll.sppf;
 
 import java.util.Iterator;
 
-import org.jgll.grammar.GrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.util.hashing.Level;
 

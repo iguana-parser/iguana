@@ -1,11 +1,11 @@
-package org.jgll.grammar.action;
+package org.jgll.grammar.grammaraction;
 
 import org.jgll.grammar.GrammarVisitAction;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.KeywordGrammarSlot;
-import org.jgll.grammar.LastGrammarSlot;
-import org.jgll.grammar.NonterminalGrammarSlot;
 import org.jgll.grammar.TerminalGrammarSlot;
+import org.jgll.grammar.slot.KeywordGrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
 public class LongestTerminalChainAction implements GrammarVisitAction {
 	
