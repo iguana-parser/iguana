@@ -29,13 +29,16 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		// TODO Auto-generated method stub
-		
 	}
-
+	
 	@Override
 	public Symbol getSymbol() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public Terminal getFirstTerminal() {
+		return new Character(keyword.getChars()[0]);
 	}
 	
 	public Keyword getKeyword() {

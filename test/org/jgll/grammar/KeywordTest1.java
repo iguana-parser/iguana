@@ -8,7 +8,7 @@ import org.jgll.util.Input;
 import org.junit.Test;
 
 /**
- * S ::= "if"
+ * A ::= "if"
  * 
  * @author Ali Afroozeh
  *
@@ -19,6 +19,12 @@ public class KeywordTest1 extends AbstractGrammarTest {
 	protected Grammar initGrammar() {
 		Rule r1 = new Rule(new Nonterminal("A"), new Keyword("if"));
 		return new GrammarBuilder().addRule(r1).build();
+	}
+	
+	
+	@Test
+	public void testFirstSet() {
+		assertEquals(set(TerminalFactory.from('i')), grammar.getNonterminalByName("A").getFirstSet());
 	}
 	
 	@Test

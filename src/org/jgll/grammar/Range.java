@@ -21,6 +21,11 @@ public class Range implements Terminal {
 	private BitSet testSet;
 
 	public Range(int start, int end) {
+		
+		if(end < start) {
+			throw new IllegalArgumentException("Start cannot be less than end.");
+		}
+		
 		this.start = start;
 		this.end = end;
 		testSet = new BitSet();

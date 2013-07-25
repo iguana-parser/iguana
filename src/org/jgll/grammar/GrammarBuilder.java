@@ -622,6 +622,10 @@ public class GrammarBuilder implements Serializable {
 			return changed;
 		}
 
+		else if(currentSlot instanceof KeywordGrammarSlot) {
+			return set.add(((KeywordGrammarSlot) currentSlot).getFirstTerminal()) || changed;
+		}
+		
 		// ignore LastGrammarSlot
 		else {
 			return changed;
