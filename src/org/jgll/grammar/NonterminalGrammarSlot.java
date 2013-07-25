@@ -162,21 +162,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public boolean isTerminalSlot() {
-		return false;
-	}
-
-	@Override
-	public boolean isNonterminalSlot() {
-		return true;
-	}
-
-	@Override
-	public boolean isLastSlot() {
-		return false;
-	}
-
-	@Override
 	public boolean isNullable() {
 		return nonterminal.isNullable();
 	}

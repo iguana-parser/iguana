@@ -7,6 +7,7 @@ import org.jgll.grammar.GrammarSlot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.LastGrammarSlot;
 import org.jgll.grammar.PopAction;
+import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -300,14 +301,14 @@ public abstract class AbstractGLLParser implements GLLParser {
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
 		if (slot.getPosition() == 1 && 
-			!(slot.isLastSlot()) &&
-			(slot.previous().isTerminalSlot() || !slot.previous().isNullable())) {
+			!(slot instanceof LastGrammarSlot) &&
+			(slot.previous() instanceof TerminalGrammarSlot || !slot.previous().isNullable())) {
 				return rightChild;
 		} else {
 			
 			GrammarSlot t = slot;
 			// if (beta = empty)
-			if (slot.isLastSlot()) {
+			if (slot instanceof LastGrammarSlot) {
 				t = slot.getHead();
 			}
 

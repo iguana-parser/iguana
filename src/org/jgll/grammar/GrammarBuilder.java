@@ -142,8 +142,8 @@ public class GrammarBuilder implements Serializable {
 		else {
 			int symbolIndex = 0;
 			BodyGrammarSlot firstSlot = null;
-			String label = grammarSlotToString(head, body, symbolIndex);
 			for (Symbol symbol : body) {
+				String label = grammarSlotToString(head, body, symbolIndex);
 				if (symbol instanceof Terminal) {
 					currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
 				}
@@ -163,6 +163,7 @@ public class GrammarBuilder implements Serializable {
 				symbolIndex++;
 			}
 
+			String label = grammarSlotToString(head, body, symbolIndex);
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(label, symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 
 			slots.add(lastGrammarSlot);
@@ -431,7 +432,7 @@ public class GrammarBuilder implements Serializable {
 		for(BodyGrammarSlot slot : slots) {
 			BodyGrammarSlot currentSlot = slot;
 			
-			while (!currentSlot.isLastSlot()) {
+			while (!(currentSlot instanceof LastGrammarSlot)) {
 				if (currentSlot instanceof NonterminalGrammarSlot) {
 					Set<Terminal> testSet = new HashSet<>();
 					addFirstSet(testSet, currentSlot, false);
@@ -499,8 +500,8 @@ public class GrammarBuilder implements Serializable {
 				BodyGrammarSlot slot = alternate.getFirstSlot();
 				int length = 0; // The length of the longest terminal chain for
 								// this rule
-				while (!(slot.isLastSlot())) {
-					if (slot.isTerminalSlot()) {
+				while (!(slot instanceof LastGrammarSlot)) {
+					if (slot instanceof TerminalGrammarSlot) {
 						length++;
 					} else {
 						// If a terminal is seen reset the length of the longest
@@ -590,7 +591,7 @@ public class GrammarBuilder implements Serializable {
 	private Set<HeadGrammarSlot> getDirectReachableNonterminals(HeadGrammarSlot head) {
 		Set<HeadGrammarSlot> set = new HashSet<>();
 		for(Alternate alt : head.getAlternates()) {
-			if(alt.getBodyGrammarSlotAt(0).isNonterminalSlot()) {
+			if(alt.getBodyGrammarSlotAt(0) instanceof NonterminalGrammarSlot) {
 				set.add(((NonterminalGrammarSlot)alt.getBodyGrammarSlotAt(0)).getNonterminal());
 			}
 		}
@@ -720,7 +721,7 @@ public class GrammarBuilder implements Serializable {
 
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 
-				while (!currentSlot.isLastSlot()) {
+				while (!(currentSlot instanceof LastGrammarSlot)) {
 					if (currentSlot instanceof NonterminalGrammarSlot) {
 						Set<Terminal> testSet = new HashSet<>();
 						addFirstSet(testSet, currentSlot, false);
@@ -958,7 +959,7 @@ public class GrammarBuilder implements Serializable {
 	private void getRightEnds(HeadGrammarSlot head, String name,
 			List<Integer> nonterminals, List<Alternate> alternates) {
 		for (Alternate alt : head.getAlternates()) {
-			if (alt.getLastSlot().isNonterminalSlot()) {
+			if (alt.getLastSlot() instanceof NonterminalGrammarSlot) {
 				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alt.getLastSlot()).getNonterminal();
 				if (nonterminal.getNonterminal().getName().equals(name)) {
 					nonterminals.add(alt.size() - 1);
@@ -996,9 +997,9 @@ public class GrammarBuilder implements Serializable {
 
 		BodyGrammarSlot copy;
 
-		if (slot.isLastSlot()) {
+		if (slot instanceof LastGrammarSlot) {
 			copy = new LastGrammarSlot(slot.label, slot.position, previous, head, ((LastGrammarSlot) slot).getObject());
-		} else if (slot.isNonterminalSlot()) {
+		} else if (slot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) slot;
 			copy = new NonterminalGrammarSlot(slot.label, slot.position, previous, ntSlot.getNonterminal(), head);
 		} else {

@@ -42,7 +42,7 @@ public class GrammarToDot {
 				BodyGrammarSlot previousSlot = null;
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 				while(currentSlot != null){
-					if(currentSlot.isNonterminalSlot()) {
+					if(currentSlot instanceof NonterminalGrammarSlot) {
 						HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
 						if(!visitedHeads.contains(nonterminal)) {
 							todoQueue.add(nonterminal);

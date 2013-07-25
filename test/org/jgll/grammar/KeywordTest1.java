@@ -19,7 +19,6 @@ public class KeywordTest1 extends AbstractGrammarTest {
 		return new GrammarBuilder().addRule(r1).build();
 	}
 
-	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("if"), grammar, "A");
 		generateSPPFGraph(sppf);

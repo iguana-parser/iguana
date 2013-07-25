@@ -81,21 +81,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public boolean isTerminalSlot() {
-		return false;
-	}
-
-	@Override
-	public boolean isNonterminalSlot() {
-		return false;
-	}
-
-	@Override
-	public boolean isLastSlot() {
-		return true;
-	}
-
-	@Override
 	public boolean isNullable() {
 		return false;
 	}

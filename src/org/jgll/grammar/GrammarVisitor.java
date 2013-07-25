@@ -28,8 +28,8 @@ public class GrammarVisitor {
 			
 			for(Alternate alternate : next.getAlternates()) {
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
-				while(!currentSlot.isLastSlot()){
-					if(currentSlot.isNonterminalSlot()) {
+				while(!(currentSlot instanceof LastGrammarSlot)) {
+					if(currentSlot instanceof NonterminalGrammarSlot) {
 						action.visit((NonterminalGrammarSlot)currentSlot);
 						
 						HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();

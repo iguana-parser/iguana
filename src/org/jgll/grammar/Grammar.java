@@ -211,7 +211,7 @@ public class Grammar implements Serializable {
 	}
 	
 	private String getName(BodyGrammarSlot slot) {
-		if(slot.isNonterminalSlot()) {
+		if(slot instanceof NonterminalGrammarSlot) {
 			return getName(((NonterminalGrammarSlot) slot).getNonterminal());
 		}
 		

@@ -39,24 +39,6 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public boolean isTerminalSlot() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isNonterminalSlot() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isLastSlot() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean isNullable() {
 		return false;
 	}

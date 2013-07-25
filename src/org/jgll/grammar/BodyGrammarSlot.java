@@ -81,12 +81,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 */
 	public abstract Symbol getSymbol();
 	
-	public abstract boolean isTerminalSlot();
-	
-	public abstract boolean isNonterminalSlot();
-	
-	public abstract boolean isLastSlot();
-	
 	public abstract boolean isNullable();
 	
 }

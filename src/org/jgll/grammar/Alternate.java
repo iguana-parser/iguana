@@ -30,11 +30,11 @@ public class Alternate implements Serializable {
 		
 		BodyGrammarSlot current = firstSlot;
 		
-		if(firstSlot.isLastSlot()) {
+		if(firstSlot instanceof LastGrammarSlot) {
 			symbols.add(firstSlot);
 		}
 		
-		while(!current.isLastSlot()) {
+		while(!(current instanceof LastGrammarSlot)) {
 			symbols.add(current);
 			current = current.next();
 		}
@@ -75,7 +75,7 @@ public class Alternate implements Serializable {
 	public HeadGrammarSlot getNonterminalAt(int index) {
 		BodyGrammarSlot bodyGrammarSlot = symbols.get(index);
 		
-		if(!bodyGrammarSlot.isNonterminalSlot()) {
+		if(!(bodyGrammarSlot instanceof NonterminalGrammarSlot)) {
 			throw new RuntimeException("The symbol at " + index + " should be a nonterminal.");
 		}
 		
@@ -85,7 +85,7 @@ public class Alternate implements Serializable {
 	public void setNonterminalAt(int index, HeadGrammarSlot head) {
 		BodyGrammarSlot bodyGrammarSlot = symbols.get(index);
 		
-		if(!bodyGrammarSlot.isNonterminalSlot()) {
+		if(!(bodyGrammarSlot instanceof NonterminalGrammarSlot)) {
 			throw new RuntimeException("The symbol at " + index + " should be a nonterminal.");
 		}
 		
@@ -102,7 +102,7 @@ public class Alternate implements Serializable {
 	}
 	
 	public boolean isBinary(HeadGrammarSlot head) {
-		if(! (symbols.get(0).isNonterminalSlot() && symbols.get(symbols.size() - 1).isNonterminalSlot())) {
+		if(! (symbols.get(0) instanceof NonterminalGrammarSlot && symbols.get(symbols.size() - 1) instanceof NonterminalGrammarSlot)) {
 			return false;
 		}
 		
@@ -126,7 +126,7 @@ public class Alternate implements Serializable {
 		}
 		
 		int index = symbols.size() - 1;
-		if(! symbols.get(index).isNonterminalSlot()) {
+		if(! (symbols.get(index) instanceof NonterminalGrammarSlot)) {
 			return false;
 		}
 		
@@ -141,7 +141,7 @@ public class Alternate implements Serializable {
 		}
 		
 		int index = 0;
-		if(! symbols.get(index).isNonterminalSlot()) {
+		if(! (symbols.get(index) instanceof NonterminalGrammarSlot)) {
 			return false;
 		}
 		
@@ -190,12 +190,12 @@ public class Alternate implements Serializable {
 			BodyGrammarSlot thisSlot = symbols.get(i);
 			BodyGrammarSlot otherSlot = other.symbols.get(i);
 			
-			if(thisSlot.isTerminalSlot() && otherSlot.isTerminalSlot()) {
+			if(thisSlot instanceof TerminalGrammarSlot && otherSlot instanceof TerminalGrammarSlot) {
 				if(!thisSlot.getSymbol().equals(otherSlot.getSymbol())) {
 					return false;
 				}				
 			}
-			else if(thisSlot.isNonterminalSlot() && otherSlot.isNonterminalSlot()) {				
+			else if(thisSlot instanceof NonterminalGrammarSlot && otherSlot instanceof NonterminalGrammarSlot) {				
 				NonterminalGrammarSlot thisNt = (NonterminalGrammarSlot) thisSlot;
 				NonterminalGrammarSlot otherNt = (NonterminalGrammarSlot) otherSlot;
 				if(thisNt.getNonterminal() != otherNt.getNonterminal()) {
