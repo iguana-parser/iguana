@@ -9,9 +9,9 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
 public class LongestTerminalChainAction implements GrammarVisitAction {
 	
-	int longestTerminalChain = 0;
+	private int longestTerminalChain;
 	
-	int length = 0; // The length of the longest terminal chain for each rule
+	private int length; // The length of the longest terminal chain for each rule
 	
 	@Override
 	public void visit(KeywordGrammarSlot slot) {
@@ -43,7 +43,7 @@ public class LongestTerminalChainAction implements GrammarVisitAction {
 	public void visit(HeadGrammarSlot head) {}
 	
 	public int getLongestTerminalChain() {
-		return longestTerminalChain;
+		return longestTerminalChain == 0 ? 1 : longestTerminalChain;
 	}
 
 }

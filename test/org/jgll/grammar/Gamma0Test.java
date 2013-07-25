@@ -43,8 +43,8 @@ public class Gamma0Test extends AbstractGrammarTest {
 	
 	@Test
 	public void testNullables() {
-		assertEquals(true, grammar.getNonterminalByName("S").isNullable());
-		assertEquals(false, grammar.getNonterminalByName("A").isNullable());
+		assertTrue(grammar.getNonterminalByName("S").isNullable());
+		assertFalse(grammar.getNonterminalByName("A").isNullable());
 	}
 	
 	@Test
@@ -68,13 +68,13 @@ public class Gamma0Test extends AbstractGrammarTest {
 	public void testParsers() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aad"), grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aad"), grammar, "S");
-		assertEquals(true, sppf1.deepEquals(sppf2));
+		assertTrue(sppf1.deepEquals(sppf2));
 	}
 
 	@Test
 	public void testSPPF() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aad"), grammar, "S");
-		assertEquals(true, sppf.deepEquals(getSPPF()));
+		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	
 	public SPPFNode getSPPF() {

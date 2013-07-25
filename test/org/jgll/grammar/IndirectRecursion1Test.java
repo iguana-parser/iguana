@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Set;
 
@@ -46,17 +46,17 @@ public class IndirectRecursion1Test extends AbstractGrammarTest {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("bc"), grammar, "A");
-		assertEquals(true, sppf.deepEquals(expectedSPPF()));
+		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
 	
 	@Test
 	public void testReachabilityGraph() {
 		Set<HeadGrammarSlot> set = grammar.getNonterminalByName("A").getReachableNonterminals();
-		assertEquals(true, set.contains(grammar.getNonterminalByName("A")));
-		assertEquals(true, set.contains(grammar.getNonterminalByName("B")));
+		assertTrue(set.contains(grammar.getNonterminalByName("A")));
+		assertTrue(set.contains(grammar.getNonterminalByName("B")));
 		
 		set = grammar.getNonterminalByName("B").getReachableNonterminals();
-		assertEquals(true, set.contains(grammar.getNonterminalByName("A")));
+		assertTrue(set.contains(grammar.getNonterminalByName("A")));
 	}
 	
 	private SPPFNode expectedSPPF() {

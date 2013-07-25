@@ -16,6 +16,7 @@ import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.condition.LiteralCondition;
 import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
@@ -67,6 +68,8 @@ public class GrammarBuilder implements Serializable {
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
 	private List<BodyGrammarSlot> conditionSlots;
+	
+	private final DummySlot dummySlot = new DummySlot();
 
 	public GrammarBuilder() {
 		this("no-name");
@@ -165,7 +168,7 @@ public class GrammarBuilder implements Serializable {
 				// Keyword
 				else {
 					Keyword keyword = (Keyword) symbol;
-					HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
+					HeadGrammarSlot keywordHead = getKeywordHeadGrammarSlot(keyword);
 					currentSlot = new KeywordGrammarSlot(label, symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
 				}
 				slots.add(currentSlot);
@@ -200,7 +203,7 @@ public class GrammarBuilder implements Serializable {
 
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
-				int ci = parser.getCi();
+				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
 					return true;
 				}
@@ -225,7 +228,7 @@ public class GrammarBuilder implements Serializable {
 
 			@Override
 			public Boolean execute(GLLParser parser, Input input) {
-				int ci = parser.getCi();
+				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
 					return true;
 				}
@@ -466,6 +469,20 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		return headGrammarSlot;
+	}
+	
+	private HeadGrammarSlot getKeywordHeadGrammarSlot(Keyword keyword) {
+		Nonterminal nonterminal = new Nonterminal(keyword.getName());
+		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal.getName());
+
+		if (headGrammarSlot == null) {
+			headGrammarSlot = new HeadGrammarSlot(nonterminal);
+			headGrammarSlot.addAlternate(new Alternate(dummySlot, 0));
+			nonterminalsMap.put(nonterminal.getName(), headGrammarSlot);
+			nonterminals.add(headGrammarSlot);
+		}
+
+		return headGrammarSlot;		
 	}
 
 	private void initializeGrammarProrperties() {

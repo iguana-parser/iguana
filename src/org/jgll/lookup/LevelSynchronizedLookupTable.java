@@ -387,6 +387,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 					forwardPackedNodes[index].add(packedNode);
 					forwardPackedNodes[index].add(firstPackedNode);
 				}
+				log.trace("Packed node created : %s", firstPackedNode);
+				log.trace("Packed node created : %s", packedNode);
 				packedNodesCount += 2;
 			}
 		}
@@ -404,6 +406,8 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 					packedNodesCount++;
 				}
 			}
+			
+			log.trace("Packed node created : %s", key);
 		}
 	}
 

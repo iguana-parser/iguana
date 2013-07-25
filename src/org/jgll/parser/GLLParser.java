@@ -9,33 +9,47 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
+/**
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public interface GLLParser {
 	
 	public NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError;
 	
-	public void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w);
-
-	public void pop(GSSNode u, int i, SPPFNode z);
+	public void pop();
 	
-	public GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w);
+	/**
+	 * Creates a new GSSNode with the given grammar slot.
+	 * 
+	 * @param slot
+	 */
+	public void createGSSNode(GrammarSlot slot);
 	
-	public TerminalSymbolNode getNodeT(int label, int i);
+	public TerminalSymbolNode getTerminalNode(int c);
 	
-	public SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
+	public TerminalSymbolNode getEpsilonNode();
 	
+	public SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode rightChild);
+	
+	public void addDescriptor(GrammarSlot label);
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean hasNextDescriptor();
 	
+	/**
+	 * Reads the next descriptor and sets the state of the parser to it.
+	 */
 	public Descriptor nextDescriptor();
 	
-	public void update(GSSNode cu, SPPFNode cn, int ci);
+	public int getCurrentInputIndex();
 	
-	public GSSNode getCu();
-	
-	public int getCi();
-	
-	public SPPFNode getCn();
-	
-	public void newParseError(GrammarSlot slot, int inputIndex, GSSNode node);
+	public void recordParseError(GrammarSlot slot);
 	
 	public LookupTable getLookupTable();
 

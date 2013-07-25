@@ -5,8 +5,6 @@ import java.io.Writer;
 
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GSSNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
@@ -28,13 +26,9 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input intput) {
 		// A ::= ε
-		int ci = parser.getCi();
-		SPPFNode cn = parser.getCn();
-		GSSNode cu = parser.getCu();
-		TerminalSymbolNode cr = parser.getNodeT(TerminalSymbolNode.EPSILON, ci);
-		cn = parser.getNodeP(this, cn, cr);
-		parser.update(cu, cn, ci);
-		parser.pop(cu, ci, cn);
+		TerminalSymbolNode cr = parser.getEpsilonNode();
+		parser.getNodeP(this, cr);
+		parser.pop();
 		return null;
 	}
 	

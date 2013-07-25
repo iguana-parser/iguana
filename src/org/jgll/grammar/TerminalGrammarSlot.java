@@ -6,9 +6,7 @@ import java.io.Writer;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
@@ -39,47 +37,17 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 			}
 		}
 				
-		int ci = parser.getCi();
-		SPPFNode cn = parser.getCn();
-		GSSNode cu = parser.getCu();
+		int ci = parser.getCurrentInputIndex();
 		int charAtCi = input.charAt(ci);
+
+		if(terminal.match(charAtCi)) {
+			TerminalSymbolNode cr = parser.getTerminalNode(charAtCi);
+			parser.getNodeP(next, cr);
+		} 
 		
-		// A::= x1
-		if(previous == null && next.next() == null) {
-			if(terminal.match(charAtCi)) {
-				TerminalSymbolNode cr = parser.getNodeT(charAtCi, ci);
-				ci++;
-				cn = parser.getNodeP(next, cn, cr);
-				parser.update(cu, cn, ci);
-			} else {
-				parser.newParseError(this, ci, parser.getCu());
-				return null;
-			}
-		}
-		
-		// A ::= x1...xf, f ≥ 2
-		else if(previous == null && !(next.next() == null)) {
-			if(terminal.match(charAtCi)) {
-				cn = parser.getNodeT(charAtCi, ci);
-				ci++;
-				parser.update(cu, cn, ci);
-			} else {
-				parser.newParseError(this, ci, parser.getCu());
-				return null;
-			}
-		}
-		
-		// A ::= α · a β
 		else {
-			if(terminal.match(charAtCi)) {
-				TerminalSymbolNode cr = parser.getNodeT(charAtCi, ci);
-				ci++;
-				cn = parser.getNodeP(next, cn, cr);
-				parser.update(cu, cn, ci);
-			} else {
-				parser.newParseError(this, ci, parser.getCu());
-				return null;
-			}
+			parser.recordParseError(this);
+			return null;
 		}
 		
 		return next;

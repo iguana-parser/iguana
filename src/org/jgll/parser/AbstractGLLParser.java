@@ -136,11 +136,11 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * 
 	 */
 	@Override
-	public void newParseError(GrammarSlot slot, int errorIndex, GSSNode node) {
+	public void recordParseError(GrammarSlot slot) {
 		if (errorIndex >= this.errorIndex) {
-			this.errorIndex = errorIndex;
+			this.errorIndex = ci;
 			this.errorSlot = slot;
-			this.errorGSSNode = node;
+			this.errorGSSNode = cu;
 		}
 	}
 
@@ -160,11 +160,15 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 *   } 
 	 * }
 	 */
-	@Override
-	public final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
+	private final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
 		boolean result = lookupTable.addDescriptor(descriptor);
 		log.trace("Descriptor created: %s : %b", descriptor, result);
+	}
+	
+	@Override
+	public void addDescriptor(GrammarSlot label) {
+		add(label, cu, ci, DummyNode.getInstance());
 	}
 	
 	
@@ -185,31 +189,31 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * }
 	 */
 	@Override
-	public final void pop(GSSNode u, int i, SPPFNode z) {
+	public final void pop() {
 		
-		if (u != u0) {
+		if (cu != u0) {
 
-			log.trace("Pop %s, %d, %s", u.getGrammarSlot(), i, z);
+			log.trace("Pop %s, %d, %s", cu.getGrammarSlot(), ci, cn);
 			
 			// Add (u, z) to P
-			lookupTable.addToPoppedElements(u, z);
+			lookupTable.addToPoppedElements(cu, cn);
 			
 			label:
-			for(GSSEdge edge : u.getEdges()) {
+			for(GSSEdge edge : cu.getEdges()) {
 				
 				// Don't pop if a pop action associated with the slot returns false.
-				if(u.getGrammarSlot() instanceof LastGrammarSlot) {
-					for(PopAction popAction : ((LastGrammarSlot) u.getGrammarSlot()).getPopActions()) {
+				if(cu.getGrammarSlot() instanceof LastGrammarSlot) {
+					for(PopAction popAction : ((LastGrammarSlot) cu.getGrammarSlot()).getPopActions()) {
 						if(!popAction.execute(edge, ci, input)) {
 							continue label;
 						}
 					}					
 				}
 				
-				assert u.getGrammarSlot() instanceof BodyGrammarSlot;
-				BodyGrammarSlot slot = (BodyGrammarSlot) u.getGrammarSlot();
-				SPPFNode y = getNodeP(slot, edge.getSppfNode(), z);
-				add(u.getGrammarSlot(), edge.getDestination(), i, y);
+				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
+				BodyGrammarSlot slot = (BodyGrammarSlot) cu.getGrammarSlot();
+				SPPFNode y = getNodeP(slot, edge.getSppfNode(), cn);
+				add(cu.getGrammarSlot(), edge.getDestination(), ci, y);
 			}			
 		}
 	}
@@ -232,7 +236,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 * 	 return v
 	 * }
 	 * 
-	 * @param L the grammar label
+	 * @param slot the grammar label
 	 * 
 	 * @param nonterminalIndex the index of the nonterminal appearing as the head of the rule
 	 *                         where this position refers to. 
@@ -245,20 +249,25 @@ public abstract class AbstractGLLParser implements GLLParser {
      *
 	 */
 	@Override
-	public final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
+	public final void createGSSNode(GrammarSlot slot) {
+		cu = create(slot, cu, ci, cn);
+	}
+	
+	private final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
 		log.trace("GSSNode created: (%s, %d)",  L, i);
-		
+
 		GSSNode v = lookupTable.getGSSNode(L, i);
-		
+
 		if(!lookupTable.hasGSSEdge(v, w, u)) {
 			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
 				SPPFNode x = getNodeP((BodyGrammarSlot) L, w, z);
 				add(L, u, z.getRightExtent(), x);
 			}
 		}
-		
+
 		return v;
 	}
+
 
 	/** 
 	 *  getNodeT(a, i) {
@@ -267,8 +276,19 @@ public abstract class AbstractGLLParser implements GLLParser {
 	 *  }
 	 */
 	@Override
-	public final TerminalSymbolNode getNodeT(int x, int i) {
-		return lookupTable.getTerminalNode(x, i);
+	public final TerminalSymbolNode getTerminalNode(int c) {
+		return lookupTable.getTerminalNode(c, ci++);
+	}
+	
+	@Override
+	public TerminalSymbolNode getEpsilonNode() {
+		return lookupTable.getTerminalNode(TerminalSymbolNode.EPSILON, ci);
+	}
+	
+	@Override
+	public SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode rightChild) {
+		cn = getNodeP(slot, cn, rightChild);
+		return cn;
 	}
 	
 	 /**
@@ -296,13 +316,13 @@ public abstract class AbstractGLLParser implements GLLParser {
 	  * 	}
 	  * }
 	  */
-	@Override
 	public final SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
 		if (slot.getPosition() == 1 && 
 			!(slot instanceof LastGrammarSlot) &&
 			(slot.previous() instanceof TerminalGrammarSlot || !slot.previous().isNullable())) {
+				cn = rightChild;
 				return rightChild;
 		} else {
 			
@@ -337,29 +357,17 @@ public abstract class AbstractGLLParser implements GLLParser {
 	
 	@Override
 	public Descriptor nextDescriptor() {
-		return lookupTable.nextDescriptor();
+		Descriptor descriptor = lookupTable.nextDescriptor();
+		ci = descriptor.getInputIndex();
+		cu = descriptor.getGSSNode();
+		cn = descriptor.getSPPFNode();
+		log.trace("Processing (%s, %s, %s, %s)", descriptor.getGrammarSlot(), ci, cu, cn);
+		return descriptor;
 	}
 	
 	@Override
-	public void update(GSSNode cu, SPPFNode cn, int ci) {
-		this.cu = cu;
-		this.cn = cn;
-		this.ci = ci;
-	}
-
-	@Override
-	public int getCi() {
+	public int getCurrentInputIndex() {
 		return ci;
 	}
 	
-	@Override
-	public SPPFNode getCn() {
-		return cn;
-	}
-	
-	@Override
-	public GSSNode getCu() {
-		return cu;
-	}
-			
 }

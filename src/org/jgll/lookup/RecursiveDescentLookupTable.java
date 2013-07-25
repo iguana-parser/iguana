@@ -40,7 +40,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[] terminals;
 	
-	private CuckooHashMap<NonPackedNode, NonPackedNode> nonPackedNodes;
+	private CuckooHashSet<NonPackedNode> nonPackedNodes;
 	
 	private final CuckooHashSet<GSSNode> gssNodes;
 	
@@ -57,7 +57,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new CuckooHashSet<>(descriptorDecomposer);
 		terminals = new TerminalSymbolNode[2 * inputSize];
-		nonPackedNodes = new CuckooHashMap<>(inputSize, nonPackedNodesDecomposer);
+		nonPackedNodes = new CuckooHashSet<>(inputSize, nonPackedNodesDecomposer);
 		gssNodes = new CuckooHashSet<>(gssNodeDecomposer);
 		packedNodes = new CuckooHashSet<>(packedNodeDecomposer);
 		gssEdges = new CuckooHashSet<>(gssEdgeDecomposer);
@@ -115,7 +115,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		TerminalSymbolNode terminal = terminals[index];
 		if(terminal == null) {
 			terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
-			log.trace("Terminal node created: {}", terminal);
+			log.trace("Terminal node created: %s", terminal);
 			terminals[index] = terminal;
 			nonPackedNodesCount++;
 		}
@@ -128,11 +128,9 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		
 		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
 		
-		NonPackedNode value = nonPackedNodes.get(key);
+		NonPackedNode value = nonPackedNodes.add(key);
 		if(value == null) {
 			value = key;
-			nonPackedNodes.put(key, value);
-			nonPackedNodesCount++;
 		}
 		
 		return value;

@@ -25,21 +25,26 @@ public class Test1 extends AbstractGrammarTest {
 	}
 	
 	@Test
-	public void testParser() throws ParseError {
+	public void testSPPF() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString(""), grammar, "A");
-		assertEquals(true, sppf.deepEquals(expectedSPPF()));
+		assertTrue(sppf.deepEquals(expectedSPPF()));
+	}
+	
+	@Test
+	public void testParsers() throws ParseError {
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString(""), grammar, "A");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString(""), grammar, "A");
+		assertEquals(sppf1, sppf2);
 	}
 	
 	@Test
 	public void testRecognizerSuccess() {
-		boolean result = recognizer.recognize(Input.fromString(""), grammar, "A");
-		assertEquals(true, result);
+		assertTrue(recognizer.recognize(Input.fromString(""), grammar, "A"));
 	}
 	
 	@Test
 	public void testRecognizerFail() {
-		boolean result = recognizer.recognize(Input.fromString("a"), grammar, "A");
-		assertEquals(false, result);
+		assertFalse(recognizer.recognize(Input.fromString("a"), grammar, "A"));
 	}
 	
 	private SPPFNode expectedSPPF() {

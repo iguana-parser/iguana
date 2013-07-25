@@ -42,7 +42,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {	
-		parser.pop(parser.getCu(), parser.getCi(), parser.getCn());
+		parser.pop();
 		return null;
 	}
 	

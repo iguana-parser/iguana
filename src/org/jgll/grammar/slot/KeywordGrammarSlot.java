@@ -62,14 +62,22 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
-		int ci = parser.getCi();
-		NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(keywordHead, ci, ci + keyword.size());
+		int ci = parser.getCurrentInputIndex();
 		
-		for(int i = 0; i < keyword.size(); i++) {
-			int charAt = input.charAt(ci + i);
-			TerminalSymbolNode node = parser.getNodeT(charAt, ci + i);
-			sppfNode.addChild(node);
+		if(input.match(ci, keyword.getChars())) {
+				// A::= x1
+				if(previous == null && next.next() == null) {
+					NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(keywordHead, ci, ci + keyword.size());
+					
+					for(int i = 0; i < keyword.size(); i++) {
+						TerminalSymbolNode node = parser.getTerminalNode(input.charAt(ci + i));
+						sppfNode.addChild(node);
+					}
+					
+					parser.getNodeP(next, sppfNode);
+				}
 		}
+		
 		return next;
 	}
 

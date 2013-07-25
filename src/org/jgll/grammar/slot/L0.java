@@ -3,11 +3,8 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.parser.Descriptor;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -52,13 +49,7 @@ public class L0 extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		while(parser.hasNextDescriptor()) {
-			Descriptor descriptor = parser.nextDescriptor();
-			GrammarSlot slot = descriptor.getGrammarSlot();
-			GSSNode cu = descriptor.getGSSNode();
-			SPPFNode cn = descriptor.getSPPFNode();
-			int ci = descriptor.getInputIndex();
-			parser.update(cu, cn, ci);
-			log.trace("Processing (%s, %s, %s, %s)", slot, ci, cu, cn);
+			GrammarSlot slot = parser.nextDescriptor().getGrammarSlot();
 			slot = slot.parse(parser, input);
 			while(slot != null) {
 				slot = slot.parse(parser, input);

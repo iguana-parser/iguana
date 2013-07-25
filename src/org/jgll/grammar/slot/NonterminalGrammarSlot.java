@@ -10,9 +10,7 @@ import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Symbol;
 import org.jgll.grammar.Terminal;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GSSNode;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 
@@ -60,14 +58,12 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			}
 		}
 		
-		int ci = parser.getCi();
-		GSSNode cu = parser.getCu();
-		SPPFNode cn = parser.getCn();
+		int ci = parser.getCurrentInputIndex();
 		if(checkAgainstTestSet(ci, input)) {
-			parser.update(parser.create(next, cu, ci, cn), cn, ci);
+			parser.createGSSNode(next);
 			return nonterminal;
 		} else {
-			parser.newParseError(this, ci, cu);
+			parser.recordParseError(this);
 			return null;
 		}		
 	}

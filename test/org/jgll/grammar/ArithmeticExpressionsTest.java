@@ -49,14 +49,14 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 	public void testParsers1() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
-		assertEquals(true, sppf1.deepEquals(sppf2));
+		assertTrue(sppf1.deepEquals(sppf2));
 	}
 		
 	@Test
 	public void testParsers2() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a+a"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
-		assertEquals(true, sppf1.deepEquals(sppf2));
+		assertTrue(sppf1.deepEquals(sppf2));
 	}
 	
 }
