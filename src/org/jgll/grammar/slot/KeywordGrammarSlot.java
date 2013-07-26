@@ -27,8 +27,13 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public boolean checkAgainstTestSet(int index, Input input) {
+	public boolean testFirstSet(int index, Input input) {
 		return input.match(index, keyword.getChars());
+	}
+	
+	@Override
+	public boolean testFollowSet(int index, Input input) {
+		return false;
 	}
 
 	@Override

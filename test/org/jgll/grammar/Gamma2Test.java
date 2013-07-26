@@ -48,7 +48,7 @@ public class Gamma2Test extends AbstractGrammarTest {
 	}
 	
 	@Test
-	public void performanceTest() throws ParseError {
+	public void test100bs() throws ParseError {
 		Input input = Input.fromString(get100b());
 		levelParser.parse(input, grammar, "S");
 	}

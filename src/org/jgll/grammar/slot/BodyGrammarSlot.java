@@ -60,10 +60,15 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	}
 
 	/**
-	 * Checks whether the provide input belongs to the first set, and follow set
-	 * in case the first set contains epsilon.  
+	 * Checks whether the character at the provided input index belongs to the first set  
 	 */
-	public abstract boolean checkAgainstTestSet(int index, Input input);
+	public abstract boolean testFirstSet(int index, Input input);
+	
+	/**
+	 * Checks whether the character at the provided input index belongs to the follow set.
+	 * This method should be called if the nonterminal is nullable.
+	 */
+	public abstract boolean testFollowSet(int index, Input input);
 	
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	

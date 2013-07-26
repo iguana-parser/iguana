@@ -211,6 +211,7 @@ public abstract class AbstractGLLParser implements GLLParser {
 				}
 				
 				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
+				
 				BodyGrammarSlot slot = (BodyGrammarSlot) cu.getGrammarSlot();
 				SPPFNode y = getNodeP(slot, edge.getSppfNode(), cn);
 				add(cu.getGrammarSlot(), edge.getDestination(), ci, y);
@@ -322,7 +323,6 @@ public abstract class AbstractGLLParser implements GLLParser {
 		if (slot.getPosition() == 1 && 
 			!(slot instanceof LastGrammarSlot) &&
 			(slot.previous() instanceof TerminalGrammarSlot || !slot.previous().isNullable())) {
-				cn = rightChild;
 				return rightChild;
 		} else {
 			

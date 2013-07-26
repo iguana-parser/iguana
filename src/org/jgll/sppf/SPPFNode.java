@@ -22,6 +22,9 @@ public abstract class SPPFNode implements Level {
 	
 	private Object object;
 
+	/**
+	 * Returns the label of the node as it appears on the produced SPPF.
+	 */
 	public abstract String getLabel();
 
 	public abstract SPPFNode getChildAt(int index);
@@ -68,7 +71,8 @@ public abstract class SPPFNode implements Level {
 	 * 		 nodes based on their labels, ignoring their children. 
 	 * 		 While parsing, the standard equals method is sufficient, 
 	 * 		 but for comparing parse trees, the client should use deepEquals.
-	 * 		 The deepEquals method is provided for testing purposes.
+	 * 		 The deepEquals method is mainly meant for testing of the parser output
+	 *       and should not be used while parsing.
 	 * 
 	 */
 	public boolean deepEquals(SPPFNode node) {

@@ -8,11 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
-
 
 /**
  * 
@@ -93,8 +93,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		for(Alternate alternate : alternates) {
 			int ci = parser.getCurrentInputIndex();
-			if(alternate.getFirstSlot().checkAgainstTestSet(ci, input)) {
-				parser.addDescriptor(alternate.getFirstSlot());
+			BodyGrammarSlot slot = alternate.getFirstSlot();
+			if(slot.testFirstSet(ci, input) || (slot.isNullable() && slot.testFollowSet(ci, input))) {
+				parser.addDescriptor(slot);
 			}
 		}
 		return null;
@@ -104,7 +105,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 		for(Alternate alternate : alternates) {
 			int ci = recognizer.getCi();
-			if(alternate.getFirstSlot().checkAgainstTestSet(ci, input)) {
+			BodyGrammarSlot slot = alternate.getFirstSlot();
+			if(slot.testFirstSet(ci, input) || (slot.isNullable() && slot.testFollowSet(ci, input))) {
 				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 				recognizer.add(alternate.getFirstSlot(), cu, ci);
 			}

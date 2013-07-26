@@ -33,7 +33,7 @@ public interface GLLParser {
 	public TerminalSymbolNode getEpsilonNode();
 	
 	public SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode rightChild);
-	
+		
 	public void addDescriptor(GrammarSlot label);
 	
 	/**

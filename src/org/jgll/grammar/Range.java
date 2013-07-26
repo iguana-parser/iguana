@@ -80,7 +80,7 @@ public class Range implements Terminal {
 	}
 
 	@Override
-	public BitSet getTestSet() {
+	public BitSet asBitSet() {
 		return testSet;
 	}
 

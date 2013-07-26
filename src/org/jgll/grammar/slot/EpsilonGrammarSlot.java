@@ -48,7 +48,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public boolean checkAgainstTestSet(int index, Input input) {
+	public boolean testFirstSet(int index, Input input) {
 		// TODO: add the check against the follow set here.
 		return true;
 	}

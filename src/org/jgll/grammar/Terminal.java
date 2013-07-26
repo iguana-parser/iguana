@@ -23,8 +23,7 @@ public interface Terminal extends Symbol {
 	 */
 	public String getMatchCode();
 	
-	
-	public BitSet getTestSet();
+	public BitSet asBitSet();
 	
 	public int getMinimumValue();
 	

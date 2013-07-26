@@ -392,7 +392,7 @@ public class GrammarBuilder implements Serializable {
 		BitSet testSet = new BitSet();
 		
 		for(CharacterClass c : list) {
-			testSet.or(c.getTestSet());
+			testSet.or(c.asBitSet());
 		}
 		
 		final BitSet set = testSet;
@@ -450,9 +450,7 @@ public class GrammarBuilder implements Serializable {
 			
 			while (!(currentSlot instanceof LastGrammarSlot)) {
 				if (currentSlot instanceof NonterminalGrammarSlot) {
-					Set<Terminal> testSet = new HashSet<>();
-					addFirstSet(testSet, currentSlot, false);
-					((NonterminalGrammarSlot) currentSlot).setTestSet(testSet);
+					((NonterminalGrammarSlot) currentSlot).setTestSet();
 				}
 				currentSlot = currentSlot.next();
 			}			
@@ -732,13 +730,7 @@ public class GrammarBuilder implements Serializable {
 
 				while (!(currentSlot instanceof LastGrammarSlot)) {
 					if (currentSlot instanceof NonterminalGrammarSlot) {
-						Set<Terminal> testSet = new HashSet<>();
-						addFirstSet(testSet, currentSlot, false);
-						if (testSet.contains(Epsilon.getInstance())) {
-							testSet.addAll(head.getFollowSet());
-						}
-						testSet.remove(Epsilon.getInstance());
-						((NonterminalGrammarSlot) currentSlot).setTestSet(testSet);
+						((NonterminalGrammarSlot) currentSlot).setTestSet();
 					}
 					currentSlot = currentSlot.next();
 				}

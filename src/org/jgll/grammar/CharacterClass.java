@@ -38,7 +38,7 @@ public class CharacterClass implements Terminal {
 			if(end < range.getMaximumValue()) {
 				end = range.getMaximumValue();
 			}
-			testSet.or(range.getTestSet());
+			testSet.or(range.asBitSet());
 		}
 		
 		this.ranges = Collections.unmodifiableList(ranges);
@@ -117,7 +117,7 @@ public class CharacterClass implements Terminal {
 	}
 	
 	@Override
-	public BitSet getTestSet() {
+	public BitSet asBitSet() {
 		return testSet;
 	}
 

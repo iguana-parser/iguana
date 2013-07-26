@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
-import java.util.Set;
 
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.SlotAction;
@@ -26,19 +25,17 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	private HeadGrammarSlot nonterminal;
 	
-	private BitSet testSet;
-	
-	private int minInputVal = Integer.MAX_VALUE;
-	
-	private int maxInputVal;
-	
+	private BitSet firstSet;
+	private BitSet followSet;
+		
 	public NonterminalGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
 		super(label, position, previous, head);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
 		this.nonterminal = nonterminal;
-		testSet = new BitSet();
+		this.firstSet = new BitSet();
+		this.followSet = new BitSet();
 	}
 	
 	public HeadGrammarSlot getNonterminal() {
@@ -52,29 +49,38 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Input input) {
 		
+		int ci = parser.getCurrentInputIndex();
+		
+		if(!testFirstSet(ci, input) && !(isNullable() && testFollowSet(ci, input))) {
+			parser.recordParseError(this);
+			return null;			
+		}
+		
 		for(SlotAction<Boolean> preCondition : preConditions) {
 			if(!preCondition.execute(parser, input)) {
 				return null;
 			}
 		}
 		
-		int ci = parser.getCurrentInputIndex();
-		if(checkAgainstTestSet(ci, input)) {
-			parser.createGSSNode(next);
-			return nonterminal;
-		} else {
-			parser.recordParseError(this);
-			return null;
-		}		
+		parser.createGSSNode(next);
+		return nonterminal;
 	}
 	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 		int ci = recognizer.getCi();
 		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-		if(checkAgainstTestSet(ci, input)) {
+		
+		if(testFirstSet(ci, input)) {
 			recognizer.update(recognizer.create(next, cu, ci), ci);
 			return nonterminal;
+		} 
+		else if (isNullable() && testFollowSet(ci, input)) {
+			// We can always recognize an epsilon, so move on to the next step.
+			// This is much more tricky to implement for a parser, as we need to explore
+			// nullable paths.
+			return next;
+		
 		} else {
 			recognizer.recognitionError(cu, ci);
 			return null;
@@ -135,32 +141,27 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 //		}
 		writer.append(") {\n");
 	}
-
-	@Override
-	public boolean checkAgainstTestSet(int index, Input input) {
-		int i = input.charAt(index);
-		if(i < minInputVal || i > maxInputVal) {
-			return false;
-		}
-		return testSet.get(i);
-	}
-
-	public void setTestSet(Set<Terminal> testSet) {
-		if(testSet == null || testSet.isEmpty()) {
-			throw new IllegalArgumentException("Test set for the nontermianl " + nonterminal.getNonterminal().getName() + " is empty");
+	
+	public void setTestSet() {
+		for(Terminal t : nonterminal.getFirstSet()) {
+			firstSet.or(t.asBitSet());
 		}
 		
-		for(Terminal t : testSet) {
-			if(minInputVal > t.getMinimumValue()) {
-				minInputVal = t.getMinimumValue();
-			}
-			if(maxInputVal < t.getMaximumValue()) {
-				maxInputVal = t.getMaximumValue();
-			}
-			this.testSet.or(t.getTestSet());
+		for(Terminal t : nonterminal.getFollowSet()) {
+			followSet.or(t.asBitSet());
 		}
 	}
-	
+
+	@Override
+	public boolean testFirstSet(int index, Input input) {
+		return firstSet.get(input.charAt(index));
+	}
+
+	@Override
+	public boolean testFollowSet(int index, Input input) {
+		return followSet.get(input.charAt(index));
+	}
+		
 	@Override
 	public boolean isNullable() {
 		return nonterminal.isNullable();

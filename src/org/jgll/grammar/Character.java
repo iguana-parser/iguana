@@ -60,7 +60,7 @@ public class Character implements Terminal {
 	}
 
 	@Override
-	public BitSet getTestSet() {
+	public BitSet asBitSet() {
 		BitSet set = new BitSet();
 		set.set(c);
 		return set;

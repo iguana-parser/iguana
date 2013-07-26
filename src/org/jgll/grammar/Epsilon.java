@@ -40,8 +40,8 @@ public class Epsilon implements Terminal {
 
 	
 	@Override
-	public BitSet getTestSet() {
-		throw new UnsupportedOperationException();
+	public BitSet asBitSet() {
+		return new BitSet();
 	}
 
 	@Override
