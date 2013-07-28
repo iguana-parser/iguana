@@ -370,4 +370,11 @@ public abstract class AbstractGLLParser implements GLLParser {
 		return ci;
 	}
 	
+	@Override
+	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child) {
+		SPPFNode key = lookupTable.getNonPackedNode(slot, child.getLeftExtent(), child.getRightExtent());
+		return null;
+	}
+	
+	
 }

@@ -656,9 +656,9 @@ public class GrammarBuilder implements Serializable {
 
 	private boolean isChainNullable(BodyGrammarSlot slot) {
 		if (!(slot instanceof LastGrammarSlot)) {
-			if (slot instanceof TerminalGrammarSlot) {
+			if (slot instanceof TerminalGrammarSlot || slot instanceof KeywordGrammarSlot) {
 				return false;
-			}
+			} 
 
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
 			return ntGrammarSlot.getNonterminal().isNullable() && isChainNullable(ntGrammarSlot.next());

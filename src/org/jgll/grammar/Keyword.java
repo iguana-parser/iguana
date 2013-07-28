@@ -49,4 +49,9 @@ public class Keyword implements Symbol {
 		return sb.toString();
 	}
 	
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
 }

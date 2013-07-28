@@ -3,6 +3,7 @@ package org.jgll.parser;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -33,6 +34,8 @@ public interface GLLParser {
 	public TerminalSymbolNode getEpsilonNode();
 	
 	public SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode rightChild);
+	
+	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child);
 		
 	public void addDescriptor(GrammarSlot label);
 	

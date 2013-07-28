@@ -70,17 +70,17 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		int ci = parser.getCurrentInputIndex();
 		
 		if(input.match(ci, keyword.getChars())) {
-				// A::= x1
-				if(previous == null && next.next() == null) {
-					NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(keywordHead, ci, ci + keyword.size());
-					
-					for(int i = 0; i < keyword.size(); i++) {
-						TerminalSymbolNode node = parser.getTerminalNode(input.charAt(ci + i));
-						sppfNode.addChild(node);
-					}
-					
-					parser.getNodeP(next, sppfNode);
-				}
+			NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(keywordHead, ci, ci + keyword.size());
+			
+			for(int i = 0; i < keyword.size(); i++) {
+				TerminalSymbolNode node = parser.getTerminalNode(input.charAt(ci + i));
+				sppfNode.addChild(node);
+			}
+			
+			parser.getNodeP(next, sppfNode);
+		} else {
+			parser.recordParseError(this);
+			return null;
 		}
 		
 		return next;
