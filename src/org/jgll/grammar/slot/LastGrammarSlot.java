@@ -2,18 +2,13 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jgll.grammar.Epsilon;
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.PopAction;
 import org.jgll.grammar.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
-
-
 
 /**
  * Corresponds to the last grammar slot in an alternate, e.g., X ::= alpha .
@@ -32,12 +27,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private transient Object object;
 	
-	private List<PopAction> popActions;
-	
 	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(label, position, previous, head);
 		this.object = object;
-		popActions = new ArrayList<>();
 	}
 
 	@Override
@@ -58,14 +50,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		writer.append("   label = L0;\n}\n");
 	}
 	
-	public void addPopAction(PopAction popAction) {
-		popActions.add(popAction);
-	}
-	
-	public Iterable<PopAction> getPopActions() {
-		return popActions;
-	}
-
 	@Override
 	public boolean testFirstSet(int index, Input input) {
 		throw new UnsupportedOperationException();

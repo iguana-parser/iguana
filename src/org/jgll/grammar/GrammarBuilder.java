@@ -170,6 +170,7 @@ public class GrammarBuilder implements Serializable {
 						currentSlot = new KeywordGrammarSlot(label, symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
 					}
 				}
+				
 				else if (symbol instanceof Terminal) {
 					if(symbolIndex == 0) {
 						currentSlot = new FirstTerminalGrammarSlot(label, (Terminal) symbol, headGrammarSlot);
@@ -177,6 +178,7 @@ public class GrammarBuilder implements Serializable {
 						currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
 					}
 				}
+				
 				else {
 					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 					if(symbolIndex == 0) {
@@ -191,6 +193,10 @@ public class GrammarBuilder implements Serializable {
 					firstSlot = currentSlot;
 				}
 				symbolIndex++;
+				
+				for(Condition condition : rule.getConditions()) {
+					addCondition(currentSlot, condition);
+				}
 			}
 
 			String label = grammarSlotToString(head, body, symbolIndex);
@@ -208,7 +214,7 @@ public class GrammarBuilder implements Serializable {
 		
 		return this;
 	}
-	
+
 	private void addPrecedeRestriction(BodyGrammarSlot slot, final List<CharacterClass> characterClasses) {
 		log.debug("Precede restriction added %s <<! %s", characterClasses, slot);
 		slot.addPreCondition(new SlotAction<Boolean>() {
@@ -259,14 +265,15 @@ public class GrammarBuilder implements Serializable {
 
 	}
 	
-	private void addCondition(LastGrammarSlot slot, final Condition condition) {
+	private void addCondition(BodyGrammarSlot slot, final Condition condition) {
 		switch (condition.getType()) {
+		
 			case FOLLOW:
 				break;
 				
 			case NOT_FOLLOW:
 				if(condition instanceof ContextFreeCondition) {
-					addNotFollowRestriction(slot, convertCondition((ContextFreeCondition) condition));
+					addNotFollowRestriction(slot.next(), convertCondition((ContextFreeCondition) condition));
 				} else {
 					
 				}
@@ -302,7 +309,26 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private void addNotMatch(LastGrammarSlot slot, final BodyGrammarSlot ifNot) {
+	private void addCondition(LastGrammarSlot slot, final Condition condition) {
+		switch(condition.getType()) {
+			case MATCH:
+				break;
+					
+			case NOT_MATCH:
+				if(condition instanceof ContextFreeCondition) {
+					addNotMatch(slot, convertCondition((ContextFreeCondition) condition));
+				} else {
+					KeywordCondition simpleCondition = (KeywordCondition) condition;
+					addNotMatch(slot, simpleCondition.getKeywords());
+				}
+				break;
+				
+			default:
+				throw new RuntimeException(condition.getType() + " cannot be used for the whole alternate");
+			}
+	}
+	
+	private void addNotMatch(BodyGrammarSlot slot, final BodyGrammarSlot ifNot) {
 
 		slot.addPopAction(new PopAction() {
 
@@ -316,7 +342,7 @@ public class GrammarBuilder implements Serializable {
 		});
 	}
 	
-	private void addNotMatch(LastGrammarSlot slot, final List<Keyword> list) {
+	private void addNotMatch(BodyGrammarSlot slot, final List<Keyword> list) {
 		
 		if(list.size() == 1) {
 			final Keyword s = list.get(0);
@@ -368,7 +394,7 @@ public class GrammarBuilder implements Serializable {
 		
 	}
 
-	private void addNotFollowRestriction(LastGrammarSlot slot, final BodyGrammarSlot firstSlot) {
+	private void addNotFollowRestriction(BodyGrammarSlot slot, final BodyGrammarSlot firstSlot) {
 		
 		slot.addPopAction(new PopAction() {
 			

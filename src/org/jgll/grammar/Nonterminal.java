@@ -13,9 +13,7 @@ public class Nonterminal implements Symbol {
 	
 	private final boolean ebnfList;
 	
-	private List<Condition> preConditions;
-	
-	private List<Condition> postConditions;
+	private List<Condition> conditions;
 	
 	public Nonterminal(String name) {
 		this(name, false);
@@ -42,13 +40,9 @@ public class Nonterminal implements Symbol {
 		return false;
 	}
 	
-	public Nonterminal AddPreCondition(Condition condition) {
-		preConditions.add(condition);
-		return this;
-	}
-	
-	public Nonterminal addPostCondition(Condition condition) {
-		postConditions.add(condition);
+	@Override
+	public Nonterminal addCondition(Condition condition) {
+		conditions.add(condition);
 		return this;
 	}
 	
@@ -78,13 +72,8 @@ public class Nonterminal implements Symbol {
 	}
 
 	@Override
-	public Iterable<Condition> getPreConditions() {
-		return preConditions;
-	}
-
-	@Override
-	public Iterable<Condition> getPostConditions() {
-		return postConditions;
+	public Iterable<Condition> getConditions() {
+		return conditions;
 	}
 
 }

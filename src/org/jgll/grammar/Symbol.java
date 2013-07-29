@@ -14,8 +14,8 @@ public interface Symbol extends Serializable {
 	
 	public String getName();
 	
-	public Iterable<Condition> getPreConditions();
+	public Symbol addCondition(Condition condition);
 	
-	public Iterable<Condition> getPostConditions();
+	public Iterable<Condition> getConditions();
 	
 }

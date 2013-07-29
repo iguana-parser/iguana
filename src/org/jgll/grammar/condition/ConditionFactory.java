@@ -1,6 +1,7 @@
 package org.jgll.grammar.condition;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.jgll.grammar.CharacterClass;
 import org.jgll.grammar.Keyword;
@@ -52,6 +53,14 @@ public class ConditionFactory {
 	@SafeVarargs
 	public static <T extends Symbol> Condition notMatch(T...symbols) {
 		return new ContextFreeCondition(ConditionType.NOT_MATCH, Arrays.asList(symbols));
+	}
+	
+	public static Condition notMatch(List<Keyword> keywords) {
+		return new ContextFreeCondition(ConditionType.NOT_MATCH, keywords);
+	}
+	
+	public static Condition notMatch(Keyword...keywords) {
+		return new KeywordCondition(ConditionType.NOT_MATCH, Arrays.asList(keywords));
 	}
 	
 }
