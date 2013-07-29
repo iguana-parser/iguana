@@ -21,10 +21,9 @@ public class KeywordTest1 extends AbstractGrammarTest {
 		return new GrammarBuilder().addRule(r1).build();
 	}
 	
-	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(TerminalFactory.from('i')), grammar.getNonterminalByName("A").getFirstSet());
+		assertEquals(set(TerminalFactory.from("if")), grammar.getNonterminalByName("A").getFirstSet());
 	}
 	
 	@Test

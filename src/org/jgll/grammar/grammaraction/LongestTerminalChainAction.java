@@ -13,9 +13,8 @@ public class LongestTerminalChainAction implements GrammarVisitAction {
 	
 	private int length; // The length of the longest terminal chain for each rule
 	
-	@Override
 	public void visit(KeywordGrammarSlot slot) {
-		length = slot.getKeyword().size();
+		length += slot.getKeyword().size();
 	}
 	
 	@Override

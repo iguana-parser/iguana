@@ -2,7 +2,7 @@ package org.jgll.grammar;
 
 import java.util.BitSet;
 
-public class Epsilon implements Terminal {
+public class Epsilon extends AbstractTerminal {
 
 	private static final String EPSILON = "epsilon";
 
@@ -43,15 +43,4 @@ public class Epsilon implements Terminal {
 	public BitSet asBitSet() {
 		return new BitSet();
 	}
-
-	@Override
-	public int getMinimumValue() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int getMaximumValue() {
-		throw new UnsupportedOperationException();
-	}
-	
 }

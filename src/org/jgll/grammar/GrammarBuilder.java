@@ -124,11 +124,11 @@ public class GrammarBuilder implements Serializable {
 					throw new GrammarValidationException("No alternates defined for " + head.getLabel());
 				}
 			}
-
+			
 			@Override
 			public void visit(KeywordGrammarSlot slot) {
-				
 			}
+
 		};
 
 		for (HeadGrammarSlot head : nonterminals) {
@@ -160,22 +160,8 @@ public class GrammarBuilder implements Serializable {
 			BodyGrammarSlot firstSlot = null;
 			for (Symbol symbol : body) {
 				String label = grammarSlotToString(head, body, symbolIndex);
-				if (symbol instanceof Terminal) {
-					if(symbolIndex == 0) {
-						currentSlot = new FirstTerminalGrammarSlot(label, (Terminal) symbol, headGrammarSlot);
-					} else {
-						currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
-					}
-				}
-				else if (symbol instanceof Nonterminal){
-					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-					if(symbolIndex == 0) {
-						currentSlot = new FirstNonterminalGrammarSlot(label, nonterminal, headGrammarSlot);
-					} else {
-						currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);
-					}
-				} 
-				else {
+				
+				if(symbol instanceof Keyword) {
 					Keyword keyword = (Keyword) symbol;
 					HeadGrammarSlot keywordHead = getKeywordHeadGrammarSlot(keyword);
 					if(symbolIndex == 0) {
@@ -184,6 +170,21 @@ public class GrammarBuilder implements Serializable {
 						currentSlot = new KeywordGrammarSlot(label, symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
 					}
 				}
+				else if (symbol instanceof Terminal) {
+					if(symbolIndex == 0) {
+						currentSlot = new FirstTerminalGrammarSlot(label, (Terminal) symbol, headGrammarSlot);
+					} else {
+						currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
+					}
+				}
+				else {
+					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
+					if(symbolIndex == 0) {
+						currentSlot = new FirstNonterminalGrammarSlot(label, nonterminal, headGrammarSlot);
+					} else {
+						currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);
+					}
+				} 
 				slots.add(currentSlot);
 
 				if (symbolIndex == 0) {
@@ -646,6 +647,10 @@ public class GrammarBuilder implements Serializable {
 		else if (currentSlot instanceof TerminalGrammarSlot) {
 			return set.add(((TerminalGrammarSlot) currentSlot).getTerminal()) || changed;
 		}
+		
+		else if (currentSlot instanceof KeywordGrammarSlot) {
+			return set.add(((KeywordGrammarSlot) currentSlot).getKeyword()) || changed;
+		}
 
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
@@ -657,10 +662,6 @@ public class GrammarBuilder implements Serializable {
 			return changed;
 		}
 
-		else if(currentSlot instanceof KeywordGrammarSlot) {
-			return set.add(((KeywordGrammarSlot) currentSlot).getFirstTerminal()) || changed;
-		}
-		
 		// ignore LastGrammarSlot
 		else {
 			return changed;

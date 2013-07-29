@@ -5,6 +5,7 @@ Bundle-SymbolicName: jigll
 Bundle-Version: 1.0.0.qualifier
 Export-Package: 
  org.jgll.grammar;uses:="org.jgll.parser",
+ org.jgll.grammar.condition,
  org.jgll.lookup;uses:="org.jgll.parser,org.jgll.sppf,org.jgll.grammar",
  org.jgll.parser;
   uses:="org.jgll.sppf,

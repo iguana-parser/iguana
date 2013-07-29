@@ -7,7 +7,7 @@ import java.util.BitSet;
  * @author Ali Afroozeh
  *
  */
-public class Character implements Terminal {
+public class Character extends AbstractTerminal {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -64,16 +64,6 @@ public class Character implements Terminal {
 		BitSet set = new BitSet();
 		set.set(c);
 		return set;
-	}
-
-	@Override
-	public int getMinimumValue() {
-		return c;
-	}
-
-	@Override
-	public int getMaximumValue() {
-		return c;
 	}
 
 }

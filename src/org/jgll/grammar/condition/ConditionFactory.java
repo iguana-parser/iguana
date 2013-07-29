@@ -16,6 +16,10 @@ public class ConditionFactory {
 	public static Condition follow(Keyword...keywords) {
 		return new KeywordCondition(ConditionType.FOLLOW, Arrays.asList(keywords));
 	}
+	
+	public static Condition follow(Keyword keyword) {
+		return new KeywordCondition(ConditionType.FOLLOW, keyword);
+	}
 
 	@SafeVarargs
 	public static <T extends Symbol> Condition notFollow(T...symbols) {

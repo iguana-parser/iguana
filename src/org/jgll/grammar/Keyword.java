@@ -1,13 +1,16 @@
 package org.jgll.grammar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 
+import org.jgll.parser.HashFunctions;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashFunction;
 
-public class Keyword implements Symbol {
+public class Keyword extends AbstractTerminal {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -31,6 +34,7 @@ public class Keyword implements Symbol {
 		return chars.length;
 	}
 	
+	@Override
 	public boolean match(int c) {
 		return chars[0] == c;
 	}
@@ -58,6 +62,26 @@ public class Keyword implements Symbol {
 		return getName();
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof Keyword)) {
+			return false;
+		}
+		
+		Keyword other = (Keyword) obj;
+		
+		return Arrays.equals(chars, other.chars);
+	}
+	
+	@Override
+	public int hashCode() {
+		return externalHasher.hash(this, HashFunctions.defaulFunction());
+	}
+	
 	public static class KeywordExternalHasher implements ExternalHasher<Keyword> {
 
 		@Override
@@ -65,6 +89,18 @@ public class Keyword implements Symbol {
 			return f.hash(k.getChars());
 		}
 		
+	}
+
+	@Override
+	public String getMatchCode() {
+		return null;
+	}
+
+	@Override
+	public BitSet asBitSet() {
+		BitSet set = new BitSet();
+		set.set(chars[0]);
+		return set;
 	}
 	
 }

@@ -12,7 +12,7 @@ import java.util.List;
  * @author Ali Afroozeh
  *
  */
-public class CharacterClass implements Terminal {
+public class CharacterClass extends AbstractTerminal {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -20,10 +20,6 @@ public class CharacterClass implements Terminal {
 	
 	private BitSet testSet;
 	
-	private int minValue = Integer.MAX_VALUE;
-	
-	private int end;
-
 	public CharacterClass(List<Range> ranges) {
 		if(ranges == null || ranges.size() == 0) {
 			throw new IllegalArgumentException("Ranges cannot be null or empty.");
@@ -32,12 +28,6 @@ public class CharacterClass implements Terminal {
 		testSet = new BitSet();
 		
 		for(Range range : ranges) {
-			if(minValue > range.getMinimumValue()) {
-				minValue = range.getMinimumValue();
-			}
-			if(end < range.getMaximumValue()) {
-				end = range.getMaximumValue();
-			}
 			testSet.or(range.asBitSet());
 		}
 		
@@ -50,9 +40,6 @@ public class CharacterClass implements Terminal {
 	
 	@Override
 	public boolean match(int i) {
-		if(i < minValue || i > end) {
-			return false;
-		}
 		return testSet.get(i);
 	}
 	
@@ -119,16 +106,6 @@ public class CharacterClass implements Terminal {
 	@Override
 	public BitSet asBitSet() {
 		return testSet;
-	}
-
-	@Override
-	public int getMinimumValue() {
-		return minValue;
-	}
-
-	@Override
-	public int getMaximumValue() {
-		return end;
 	}
 
 }

@@ -15,4 +15,5 @@ public interface GrammarVisitAction {
 	public void visit(LastGrammarSlot slot);
 	
 	public void visit(KeywordGrammarSlot slot);
+	
 }

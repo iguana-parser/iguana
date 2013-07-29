@@ -10,7 +10,7 @@ import org.jgll.parser.HashFunctions;
  * @author Ali Afroozeh
  *
  */
-public class Range implements Terminal {
+public class Range extends AbstractTerminal {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -83,15 +83,4 @@ public class Range implements Terminal {
 	public BitSet asBitSet() {
 		return testSet;
 	}
-
-	@Override
-	public int getMinimumValue() {
-		return start;
-	}
-
-	@Override
-	public int getMaximumValue() {
-		return end;
-	}
-	
 }

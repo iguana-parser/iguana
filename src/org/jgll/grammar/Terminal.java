@@ -25,8 +25,4 @@ public interface Terminal extends Symbol {
 	
 	public BitSet asBitSet();
 	
-	public int getMinimumValue();
-	
-	public int getMaximumValue();
-	
 }

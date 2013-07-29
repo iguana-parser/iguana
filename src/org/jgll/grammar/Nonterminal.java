@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import java.util.List;
+
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
@@ -11,9 +13,9 @@ public class Nonterminal implements Symbol {
 	
 	private final boolean ebnfList;
 	
-	private Condition pre;
+	private List<Condition> preConditions;
 	
-	private Condition post;
+	private List<Condition> postConditions;
 	
 	public Nonterminal(String name) {
 		this(name, false);
@@ -40,16 +42,14 @@ public class Nonterminal implements Symbol {
 		return false;
 	}
 	
-	public Nonterminal pre(Condition pre) {
-		Nonterminal newNonterminal = new Nonterminal(name, ebnfList);
-		newNonterminal.pre = pre;
-		return newNonterminal;
+	public Nonterminal AddPreCondition(Condition condition) {
+		preConditions.add(condition);
+		return this;
 	}
 	
-	public Nonterminal post(Condition post) {
-		Nonterminal newNonterminal = new Nonterminal(name, ebnfList);
-		newNonterminal.post = post;
-		return newNonterminal;
+	public Nonterminal addPostCondition(Condition condition) {
+		postConditions.add(condition);
+		return this;
 	}
 	
 	@Override
@@ -77,11 +77,14 @@ public class Nonterminal implements Symbol {
 		return HashFunctions.defaulFunction().hash(name.hashCode());
 	}
 
-	public Condition getPreCondition() {
-		return pre;
+	@Override
+	public Iterable<Condition> getPreConditions() {
+		return preConditions;
 	}
-	
-	public Condition getPostCondition() {
-		return post;
+
+	@Override
+	public Iterable<Condition> getPostConditions() {
+		return postConditions;
 	}
+
 }
