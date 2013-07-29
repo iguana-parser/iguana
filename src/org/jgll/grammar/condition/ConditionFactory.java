@@ -3,6 +3,7 @@ package org.jgll.grammar.condition;
 import java.util.Arrays;
 
 import org.jgll.grammar.CharacterClass;
+import org.jgll.grammar.Keyword;
 import org.jgll.grammar.Symbol;
 
 public class ConditionFactory {
@@ -12,8 +13,8 @@ public class ConditionFactory {
 		return new ContextFreeCondition(ConditionType.FOLLOW, Arrays.asList(symbols));
 	}
 	
-	public static Condition follow(int[]...strings) {
-		return new LiteralCondition(ConditionType.FOLLOW, Arrays.asList(strings));
+	public static Condition follow(Keyword...keywords) {
+		return new KeywordCondition(ConditionType.FOLLOW, Arrays.asList(keywords));
 	}
 
 	@SafeVarargs
@@ -21,8 +22,8 @@ public class ConditionFactory {
 		return new ContextFreeCondition(ConditionType.NOT_FOLLOW, Arrays.asList(symbols));
 	}
 	
-	public static Condition notFollow(int[]...strings) {
-		return new LiteralCondition(ConditionType.NOT_FOLLOW, Arrays.asList(strings));
+	public static Condition notFollow(Keyword...keywords) {
+		return new KeywordCondition(ConditionType.NOT_FOLLOW, Arrays.asList(keywords));
 	}
 	
 	public static Condition notFollow(CharacterClass...characterClasses) {

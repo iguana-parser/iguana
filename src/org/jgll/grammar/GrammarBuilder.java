@@ -13,7 +13,7 @@ import java.util.Set;
 import org.jgll.grammar.condition.CharacterClassCondition;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ContextFreeCondition;
-import org.jgll.grammar.condition.LiteralCondition;
+import org.jgll.grammar.condition.KeywordCondition;
 import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.DummySlot;
@@ -30,7 +30,6 @@ import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.hashing.IntArrayExternalHasher;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class GrammarBuilder implements Serializable {
@@ -233,7 +232,7 @@ public class GrammarBuilder implements Serializable {
 		});
 	}
 	
-	private void addPrecedeRestriction2(BodyGrammarSlot slot, final List<int[]> list) {
+	private void addPrecedeRestriction2(BodyGrammarSlot slot, final List<Keyword> list) {
 		log.debug("Precede restriction added %s <<! %s", list, slot);
 		
 		slot.addPreCondition(new SlotAction<Boolean>() {
@@ -247,8 +246,8 @@ public class GrammarBuilder implements Serializable {
 					return true;
 				}
 				
-				for(int[] array : list) {
-					if(input.matchBackward(ci, array)) {
+				for(Keyword keyword : list) {
+					if(input.matchBackward(ci, keyword.getChars())) {
 						return false;
 					}
 				}
@@ -275,9 +274,9 @@ public class GrammarBuilder implements Serializable {
 			case PRECEDE:
 				assert !(condition instanceof ContextFreeCondition);
 				
-				if(condition instanceof LiteralCondition) {
-					LiteralCondition literalCondition = (LiteralCondition) condition;
-					addPrecedeRestriction2(slot, literalCondition.getStrings());
+				if(condition instanceof KeywordCondition) {
+					KeywordCondition literalCondition = (KeywordCondition) condition;
+					addPrecedeRestriction2(slot, literalCondition.getKeywords());
 				} else {
 					CharacterClassCondition characterClassCondition = (CharacterClassCondition) condition;
 					addPrecedeRestriction(slot, characterClassCondition.getCharacterClasses());
@@ -295,8 +294,8 @@ public class GrammarBuilder implements Serializable {
 				if(condition instanceof ContextFreeCondition) {
 					addNotMatch(slot, convertCondition((ContextFreeCondition) condition));
 				} else {
-					LiteralCondition simpleCondition = (LiteralCondition) condition;
-					addNotMatch(slot, simpleCondition.getStrings());
+					KeywordCondition simpleCondition = (KeywordCondition) condition;
+					addNotMatch(slot, simpleCondition.getKeywords());
 				}
 				break;
 		}
@@ -316,10 +315,10 @@ public class GrammarBuilder implements Serializable {
 		});
 	}
 	
-	private void addNotMatch(LastGrammarSlot slot, final List<int[]> list) {
+	private void addNotMatch(LastGrammarSlot slot, final List<Keyword> list) {
 		
 		if(list.size() == 1) {
-			final int[] s = list.get(0);
+			final Keyword s = list.get(0);
 			
 			slot.addPopAction(new PopAction() {
 
@@ -327,14 +326,14 @@ public class GrammarBuilder implements Serializable {
 				
 				@Override
 				public boolean execute(GSSEdge edge, int inputIndex, Input input) {
-					return input.match(edge.getDestination().getInputIndex(), inputIndex, s);
+					return input.match(edge.getDestination().getInputIndex(), inputIndex, s.getChars());
 				}
 			});			
 		} 
 		
 		else if(list.size() == 2) {
-			final int[] s1 = list.get(0);
-			final int[] s2 = list.get(1);
+			final Keyword s1 = list.get(0);
+			final Keyword s2 = list.get(1);
 			
 			slot.addPopAction(new PopAction() {
 
@@ -342,15 +341,15 @@ public class GrammarBuilder implements Serializable {
 				
 				@Override
 				public boolean execute(GSSEdge edge, int inputIndex, Input input) {
-					return input.match(edge.getDestination().getInputIndex(), inputIndex, s1) ||
-						   input.match(edge.getDestination().getInputIndex(), inputIndex, s2)	;
+					return input.match(edge.getDestination().getInputIndex(), inputIndex, s1.getChars()) ||
+						   input.match(edge.getDestination().getInputIndex(), inputIndex, s2.getChars())	;
 				}
 			});			
 		} 
 		
 		else {
-			final CuckooHashSet<int[]> set = new CuckooHashSet<>(IntArrayExternalHasher.getInstance());
-			for(int[] s : list) {
+			final CuckooHashSet<Keyword> set = new CuckooHashSet<>(Keyword.externalHasher);
+			for(Keyword s : list) {
 				set.add(s);
 			}
 			
@@ -360,7 +359,7 @@ public class GrammarBuilder implements Serializable {
 				
 				@Override
 				public boolean execute(GSSEdge edge, int inputIndex, Input input) {
-					int[] subInput = input.subInput(edge.getDestination().getInputIndex(), inputIndex);
+					Keyword subInput = new Keyword(input.subInput(edge.getDestination().getInputIndex(), inputIndex));
 					return !set.contains(subInput);
 				}
 			});			
