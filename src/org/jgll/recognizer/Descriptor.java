@@ -2,7 +2,8 @@ package org.jgll.recognizer;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
-import org.jgll.util.hashing.Decomposer;
+import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashFunction;
 
 /**
  * 
@@ -11,6 +12,8 @@ import org.jgll.util.hashing.Decomposer;
  *
  */
 public class Descriptor {
+	
+	public static final ExternalHasher<Descriptor> externalHasher = new DescriptorExternalHasher();
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -54,7 +57,7 @@ public class Descriptor {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(slot.getId(), inputIndex, gssNode.hashCode());
+		return externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	@Override
@@ -79,18 +82,15 @@ public class Descriptor {
 		return "(" + slot + ", " + inputIndex + ", " + gssNode + ")";
 	}
 
-	public static class DescriptorDecomposer implements Decomposer<Descriptor> {
+	public static class DescriptorExternalHasher implements ExternalHasher<Descriptor> {
 
-		private int[] components = new int[4];
-		
 		@Override
-		public int[] toIntArray(Descriptor descriptor) {
-			components[0] = descriptor.slot.getId();
-			components[1] = descriptor.inputIndex;
-			components[2] = descriptor.gssNode.getGrammarSlot().getId();
-			components[3] = descriptor.gssNode.getInputIndex();
-			return components;
-		}
+		public int hash(Descriptor descriptor, HashFunction f) {
+			return f.hash(descriptor.slot.getId(),
+						  descriptor.inputIndex,
+						  descriptor.gssNode.getGrammarSlot().getId(),
+						  descriptor.gssNode.getInputIndex());
+			}
 	}
 	
 }

@@ -6,7 +6,8 @@ import java.util.List;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.Decomposer;
+import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashFunction;
 
 /**
  * 
@@ -15,6 +16,8 @@ import org.jgll.util.hashing.Decomposer;
  *
  */
 public class PackedNode extends SPPFNode {
+	
+	public static final ExternalHasher<PackedNode> externalHasher = new PackedNodeExternalHasher();
 	
 	private final GrammarSlot slot;
 
@@ -97,7 +100,7 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(slot.getId(), pivot, parent.hashCode());
+		return externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	@Override
@@ -153,21 +156,16 @@ public class PackedNode extends SPPFNode {
 		return parent.getRightExtent();
 	}
 	
-	public static class PackedNodeDecomposer implements Decomposer<PackedNode> {
+	public static class PackedNodeExternalHasher implements ExternalHasher<PackedNode> {
 
-		private int[] components = new int[5];
-		
 		@Override
-		public int[] toIntArray(PackedNode packedNode) {
-			components[0] = packedNode.slot.getId();
-			components[1] = packedNode.pivot;
-			components[2] = packedNode.parent.getGrammarSlot().getId();
-			components[3] = packedNode.parent.getLeftExtent();
-			components[4] = packedNode.parent.getRightExtent();
-			return components;
+		public int hash(PackedNode packedNode, HashFunction f) {
+			return f.hash(packedNode.slot.getId(),
+					packedNode.pivot,
+					packedNode.parent.getGrammarSlot().getId(),
+					packedNode.parent.getLeftExtent(),
+					packedNode.parent.getRightExtent());
 		}
-		
 	}
-
 
 }

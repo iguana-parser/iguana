@@ -5,7 +5,8 @@ import java.util.Collections;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.Decomposer;
+import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashFunction;
 
 /**
  * 
@@ -14,6 +15,8 @@ import org.jgll.util.hashing.Decomposer;
  *
  */
 public class TerminalSymbolNode extends SPPFNode {
+	
+	public static final ExternalHasher<TerminalSymbolNode> externalHasher = new TerminalSymbolNodeExternalHasher();
 	
 	public static final int EPSILON = -2;
 	
@@ -45,7 +48,7 @@ public class TerminalSymbolNode extends SPPFNode {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(matchedChar, inputIndex);
+		return externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	@Override
@@ -107,16 +110,13 @@ public class TerminalSymbolNode extends SPPFNode {
 		return inputIndex;
 	}
 	
-	public static class TerminalSymbolNodeDecomposer implements Decomposer<TerminalSymbolNode> {
+	public static class TerminalSymbolNodeExternalHasher implements ExternalHasher<TerminalSymbolNode> {
 
-		private int[] components = new int[2];
-		
 		@Override
-		public int[] toIntArray(TerminalSymbolNode terminalSymbolNode) {
-			components[0] = terminalSymbolNode.inputIndex;
-			components[1] = terminalSymbolNode.matchedChar;
-			return components;
+		public int hash(TerminalSymbolNode t, HashFunction f) {
+			return f.hash(t.inputIndex, t.matchedChar);
 		}
+		
 	}
 
 }

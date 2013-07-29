@@ -1,6 +1,6 @@
 package org.jgll.util.hashing;
 
-public class IntegerDecomposer implements Decomposer<Integer> {
+public class IntegerDecomposer implements ExternalHasher<Integer> {
 
 	private static IntegerDecomposer instance;
 	
@@ -12,13 +12,10 @@ public class IntegerDecomposer implements Decomposer<Integer> {
 	}
 	
 	private IntegerDecomposer() {}
-	
-	private int[] components = new int[1];
-	
+
 	@Override
-	public int[] toIntArray(Integer t) {
-		components[0] = t;
-		return components;
+	public int hash(Integer t, HashFunction f) {
+		return f.hash(t);
 	}
 
 }

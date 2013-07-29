@@ -7,11 +7,11 @@ public class LevelSet<T extends Level> extends CuckooHashSet<T> {
 	
 	private int level;
 	
-	public LevelSet(Decomposer<T> decomposer) {
+	public LevelSet(ExternalHasher<T> decomposer) {
 		super(decomposer);
 	}
 	
-	public LevelSet(int initalCapacity, Decomposer<T> decomposer) {
+	public LevelSet(int initalCapacity, ExternalHasher<T> decomposer) {
 		super(initalCapacity, decomposer);
 	}
 	

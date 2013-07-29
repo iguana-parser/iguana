@@ -10,7 +10,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.Descriptor.DescriptorDecomposer;
 import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.DummyNode;
@@ -21,7 +20,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.hashing.Decomposer;
 import org.jgll.util.hashing.LevelMap;
 import org.jgll.util.hashing.LevelSet;
 import org.jgll.util.logging.LoggerWrapper;
@@ -38,12 +36,6 @@ import org.jgll.util.logging.LoggerWrapper;
 public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelSynchronizedLookupTable.class);
-	
-	private static final Decomposer<Descriptor> descriptorDecomposer = new DescriptorDecomposer();
-	private static final Decomposer<GSSNode> gssNodeDecomposer = new GSSNode.GSSNodeDecomposer();
-	private static final Decomposer<GSSEdge> gssEdgeDecomposer = new GSSEdge.GSSEdgeDecomposer();
-	private static final Decomposer<NonPackedNode> nonPackedNodesDecomposer = new NonPackedNode.NonPackedNodeDecomposer();
-	private static final Decomposer<PackedNode> packedNodeDecomposer = new PackedNode.PackedNodeDecomposer();
 	
 	private int currentLevel;
 	
@@ -99,35 +91,35 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		
 		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
 		
-		u = new LevelSet<>(getSize(), descriptorDecomposer);
+		u = new LevelSet<>(getSize(), Descriptor.externalHasher);
 		r = new ArrayDeque<>();
 		
 		forwardDescriptors = new LevelSet[longestTerminalChain];
 		forwardRs = new Queue[longestTerminalChain];
 		
-		currentNodes = new LevelSet<>(initialSize, nonPackedNodesDecomposer);
+		currentNodes = new LevelSet<>(initialSize, NonPackedNode.externalHasher);
 		forwardNodes = new LevelSet[longestTerminalChain];
 		
-		currentPackedNodes = new LevelSet<>(initialSize, packedNodeDecomposer);
+		currentPackedNodes = new LevelSet<>(initialSize, PackedNode.externalHasher);
 		forwardPackedNodes = new LevelSet[longestTerminalChain];
 		
-		currentGssNodes = new LevelSet<>(initialSize, gssNodeDecomposer);
+		currentGssNodes = new LevelSet<>(initialSize, GSSNode.externalHasher);
 		forwardGssNodes = new LevelSet[longestTerminalChain];
 		
-		currendEdges = new LevelSet<>(initialSize, gssEdgeDecomposer);
+		currendEdges = new LevelSet<>(initialSize, GSSEdge.externalHasher);
 		forwardEdges = new LevelSet[longestTerminalChain];
 		
-		currentPoppedElements = new LevelMap<>(initialSize, gssNodeDecomposer);
+		currentPoppedElements = new LevelMap<>(initialSize, GSSNode.externalHasher);
 		forwardPoppedElements = new LevelMap[longestTerminalChain];
 		
 		for(int i = 0; i < longestTerminalChain; i++) {
-			forwardDescriptors[i] = new LevelSet<>(getSize(), descriptorDecomposer);
+			forwardDescriptors[i] = new LevelSet<>(getSize(), Descriptor.externalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
-			forwardNodes[i] = new LevelSet<>(initialSize, nonPackedNodesDecomposer);
-			forwardGssNodes[i] = new LevelSet<>(initialSize, gssNodeDecomposer);
-			forwardEdges[i] = new LevelSet<>(initialSize, gssEdgeDecomposer);
-			forwardPoppedElements[i] = new LevelMap<>(initialSize, gssNodeDecomposer);
-			forwardPackedNodes[i] = new LevelSet<>(packedNodeDecomposer);
+			forwardNodes[i] = new LevelSet<>(initialSize, NonPackedNode.externalHasher);
+			forwardGssNodes[i] = new LevelSet<>(initialSize, GSSNode.externalHasher);
+			forwardEdges[i] = new LevelSet<>(initialSize, GSSEdge.externalHasher);
+			forwardPoppedElements[i] = new LevelMap<>(initialSize, GSSNode.externalHasher);
+			forwardPackedNodes[i] = new LevelSet<>(PackedNode.externalHasher);
 		}
 		
 	}

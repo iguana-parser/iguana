@@ -9,8 +9,6 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.StartSlot;
-import org.jgll.recognizer.Descriptor.DescriptorDecomposer;
-import org.jgll.recognizer.GSSNode.GSSDecomposer;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
@@ -20,9 +18,6 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLRecognizer.class);
 	
 	protected static final GrammarSlot startSlot = new StartSlot("Start");
-	
-	private static final DescriptorDecomposer descriptorDecomposer = new DescriptorDecomposer();
-	private static final GSSDecomposer gssDecomposer = new GSSDecomposer();
 	
 	/**
 	 * u0 is the bottom of the GSS.
@@ -130,7 +125,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		this.cu = u0;
 		
 		if(descriptorSet == null) {
-			descriptorSet = new CuckooHashSet<>(descriptorDecomposer);
+			descriptorSet = new CuckooHashSet<>(Descriptor.externalHasher);
 		} else {
 			descriptorSet.clear();
 		}
@@ -142,7 +137,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		}
 		
 		if(gssNodes == null) {
-			gssNodes = new CuckooHashSet<>(gssDecomposer);
+			gssNodes = new CuckooHashSet<>(GSSNode.externalHasher);
 		} else {
 			gssNodes.clear();
 		}

@@ -9,11 +9,11 @@ import org.junit.Test;
 
 public class CuckoosHashSetTest {
 	
-	private final IntegerHashKeyDecomposer decomposer = new IntegerHashKeyDecomposer();
+	private final IntegerHashKey4ExternalHasher externalHasher = new IntegerHashKey4ExternalHasher();
 	
 	@Test
 	public void testAdd() {
-		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(decomposer);
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(externalHasher);
 		IntegerHashKey4 key1 = new IntegerHashKey4(100, 12, 27, 23);
 		IntegerHashKey4 key2 = new IntegerHashKey4(52, 10, 20, 21);
 
@@ -30,7 +30,7 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testRehashing() {
-		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(8, decomposer);
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(8, externalHasher);
 		IntegerHashKey4 key1 = new IntegerHashKey4(100, 12, 27, 23);
 		IntegerHashKey4 key2 = new IntegerHashKey4(52, 10, 20, 21);
 		IntegerHashKey4 key3 = new IntegerHashKey4(10, 10, 98, 13);
@@ -52,7 +52,7 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testInsertOneMillionEntries() {
-		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(decomposer);
+		CuckooHashSet<IntegerHashKey4> set = new CuckooHashSet<>(externalHasher);
 		Random rand = RandomUtil.random;
 		for(int i = 0; i < 1000000; i++) {
 			IntegerHashKey4 key = new IntegerHashKey4(rand.nextInt(Integer.MAX_VALUE), 
@@ -150,19 +150,12 @@ public class CuckoosHashSetTest {
 		}
 	}
 	
-	private static class IntegerHashKeyDecomposer implements Decomposer<IntegerHashKey4> {
+	private static class IntegerHashKey4ExternalHasher implements ExternalHasher<IntegerHashKey4> {
 
-		private int[] components = new int[4];
-		
 		@Override
-		public int[] toIntArray(IntegerHashKey4 key) {
-			components[0] = key.k1;
-			components[1] = key.k2;
-			components[2] = key.k3;
-			components[3] = key.k4;
-			return components;
+		public int hash(IntegerHashKey4 key, HashFunction f) {
+			return f.hash(key.k1, key.k2, key.k3, key.k4);
 		}
-		
 	}
 	
 }

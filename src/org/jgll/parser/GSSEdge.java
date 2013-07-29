@@ -1,7 +1,8 @@
 package org.jgll.parser;
 
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.Decomposer;
+import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.Level;
 
 /**
@@ -25,6 +26,8 @@ import org.jgll.util.hashing.Level;
  * 
  */
 public class GSSEdge implements Level {
+	
+	public static final ExternalHasher<GSSEdge> externalHasher = new GSSEdgeExternalHasher();
 
 	private final GSSNode src;
 	private final SPPFNode sppfNode;
@@ -46,11 +49,7 @@ public class GSSEdge implements Level {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(src.getGrammarSlot().getId(),
-											       src.getInputIndex(),
-												   dst.getGrammarSlot().getId(),
-												   dst.getInputIndex(),
-												   sppfNode.hashCode());
+		return externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	@Override
@@ -78,18 +77,15 @@ public class GSSEdge implements Level {
 		return src.getInputIndex();
 	}
 	
-	public static class GSSEdgeDecomposer implements Decomposer<GSSEdge> {
+	public static class GSSEdgeExternalHasher implements ExternalHasher<GSSEdge> {
 
-		private int[] components = new int[5];
-		
 		@Override
-		public int[] toIntArray(GSSEdge gssEdge) {
-			components[0] = gssEdge.src.getGrammarSlot().getId();
-			components[1] = gssEdge.src.getInputIndex();
-			components[2] = gssEdge.dst.getGrammarSlot().getId();
-			components[3] = gssEdge.dst.getInputIndex();
-			components[4] = gssEdge.sppfNode.hashCode();
-			return components;
+		public int hash(GSSEdge edge, HashFunction f) {
+			return f.hash(edge.src.getGrammarSlot().getId(),
+						   edge.src.getInputIndex(),
+						   edge.dst.getGrammarSlot().getId(),
+						   edge.dst.getInputIndex(),
+						   edge.sppfNode.hashCode());
 		}
 		
 	}

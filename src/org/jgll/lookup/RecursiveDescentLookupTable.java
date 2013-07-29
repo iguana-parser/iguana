@@ -10,7 +10,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.Descriptor.DescriptorDecomposer;
 import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.DummyNode;
@@ -21,19 +20,12 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.hashing.Decomposer;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable.class);
 	
-	private static final Decomposer<Descriptor> descriptorDecomposer = new DescriptorDecomposer();
-	private static final Decomposer<GSSNode> gssNodeDecomposer = new GSSNode.GSSNodeDecomposer();
-	private static final Decomposer<GSSEdge> gssEdgeDecomposer = new GSSEdge.GSSEdgeDecomposer();
-	private static final Decomposer<NonPackedNode> nonPackedNodesDecomposer = new NonPackedNode.NonPackedNodeDecomposer();
-	private static final Decomposer<PackedNode> packedNodeDecomposer = new PackedNode.PackedNodeDecomposer();
-
 	private Deque<Descriptor> descriptorsStack;
 	
 	private CuckooHashSet<Descriptor> descriptorsSet;
@@ -55,13 +47,13 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	public RecursiveDescentLookupTable(Grammar grammar, int inputSize) {
 		super(grammar, inputSize);
 		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new CuckooHashSet<>(descriptorDecomposer);
+		descriptorsSet = new CuckooHashSet<>(Descriptor.externalHasher);
 		terminals = new TerminalSymbolNode[2 * inputSize];
-		nonPackedNodes = new CuckooHashSet<>(inputSize, nonPackedNodesDecomposer);
-		gssNodes = new CuckooHashSet<>(gssNodeDecomposer);
-		packedNodes = new CuckooHashSet<>(packedNodeDecomposer);
-		gssEdges = new CuckooHashSet<>(gssEdgeDecomposer);
-		poppedElements = new CuckooHashMap<>(gssNodeDecomposer);
+		nonPackedNodes = new CuckooHashSet<>(inputSize, NonPackedNode.externalHasher);
+		gssNodes = new CuckooHashSet<>(GSSNode.externalHasher);
+		packedNodes = new CuckooHashSet<>(PackedNode.externalHasher);
+		gssEdges = new CuckooHashSet<>(GSSEdge.externalHasher);
+		poppedElements = new CuckooHashMap<>(GSSNode.externalHasher);
 	}
 	
 	@Override

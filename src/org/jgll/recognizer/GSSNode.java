@@ -4,10 +4,13 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.hashing.Decomposer;
+import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.IntegerDecomposer;
 
 public class GSSNode {
+	
+	public static final ExternalHasher<GSSNode> externalHasher = new GSSNodeExternalHasher();
 
 	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 
@@ -30,7 +33,7 @@ public class GSSNode {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.children = new CuckooHashSet<>(new GSSDecomposer());
+		this.children = new CuckooHashSet<>(new GSSNodeExternalHasher());
 		this.poppedIndices = new CuckooHashSet<>(IntegerDecomposer.getInstance());
 	}
 	
@@ -80,7 +83,7 @@ public class GSSNode {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(inputIndex, slot.getId());
+		return externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 
@@ -89,15 +92,11 @@ public class GSSNode {
 		return slot + "," + inputIndex;
 	}
 	
-	public static class GSSDecomposer implements Decomposer<GSSNode> {
+	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {
 
-		private int[] components = new int[2];
-		
 		@Override
-		public int[] toIntArray(GSSNode t) {
-			components[0] = t.getGrammarSlot().getId();
-			components[1] = t.getInputIndex();
-			return components;
+		public int hash(GSSNode node, HashFunction f) {
+			return f.hash(node.getGrammarSlot().getId(), node.getInputIndex());
 		}
 	}
 

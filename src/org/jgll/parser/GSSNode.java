@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
-import org.jgll.util.hashing.Decomposer;
+import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.Level;
 
 /**
@@ -24,6 +25,8 @@ import org.jgll.util.hashing.Level;
  * 
  */
 public class GSSNode implements Level {
+	
+	public static final ExternalHasher<GSSNode> externalHasher = new GSSNodeExternalHasher();
 
 	/**
 	 * The initial GSS node
@@ -87,7 +90,7 @@ public class GSSNode implements Level {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
+		return externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	@Override
@@ -100,15 +103,11 @@ public class GSSNode implements Level {
 		return inputIndex;
 	}
 	
-	public static class GSSNodeDecomposer implements Decomposer<GSSNode> {
-
-		private int[] components = new int[2];
+	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {
 		
 		@Override
-		public int[] toIntArray(GSSNode gssNode) {
-			components[0] = gssNode.slot.getId();
-			components[1] = gssNode.inputIndex;
-			return components;
+		public int hash(GSSNode node, HashFunction f) {
+			return f.hash(node.slot.getId(), node.inputIndex);
 		}
 	}
 

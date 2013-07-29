@@ -10,11 +10,11 @@ public class LevelMap<K extends Level, V> implements Serializable {
 
 	private LevelSet<MapEntry<K, V>> set;
 	
-	public LevelMap(Decomposer<K> decomposer) {	
+	public LevelMap(ExternalHasher<K> decomposer) {	
 		set = new LevelSet<>(new MapEntryDecomposer(decomposer));
 	}
 	
-	public LevelMap(int initalCapacity, Decomposer<K> decomposer) {
+	public LevelMap(int initalCapacity, ExternalHasher<K> decomposer) {
 		set = new LevelSet<>(initalCapacity, new MapEntryDecomposer(decomposer));
 	}
 		
@@ -84,17 +84,17 @@ public class LevelMap<K extends Level, V> implements Serializable {
 		}
 	}
 	
-	public class MapEntryDecomposer implements Decomposer<MapEntry<K, V>> {
+	public class MapEntryDecomposer implements ExternalHasher<MapEntry<K, V>> {
 
-		private Decomposer<K> decomposer;
+		private ExternalHasher<K> externalHasher;
 
-		public MapEntryDecomposer(Decomposer<K> decomposer) {
-			this.decomposer = decomposer;
+		public MapEntryDecomposer(ExternalHasher<K> externalHasher) {
+			this.externalHasher = externalHasher;
 		}
 		
 		@Override
-		public int[] toIntArray(MapEntry<K, V> entry) {
-			return decomposer.toIntArray(entry.getKey());
+		public int hash(MapEntry<K, V> e, HashFunction f) {
+			return externalHasher.hash(e.k, f);
 		}
 	}
 	

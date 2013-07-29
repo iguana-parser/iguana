@@ -61,10 +61,10 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 
 	protected int tableSize;
 	
-	private Decomposer<T> decomposer;
+	private ExternalHasher<T> externalHasher;
 	
  	@SafeVarargs
-	public static <T> CuckooHashSet<T> from(Decomposer<T> decomposer, T...elements) {
+	public static <T> CuckooHashSet<T> from(ExternalHasher<T> decomposer, T...elements) {
 		CuckooHashSet<T> set = new CuckooHashSet<>(decomposer);
 		for(T e : elements) {
 			set.add(e);
@@ -72,18 +72,18 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		return set;
 	}
 	
-	public CuckooHashSet(Decomposer<T> decomposer) {
+	public CuckooHashSet(ExternalHasher<T> decomposer) {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, decomposer);
 	}
 	
-	public CuckooHashSet(int initalCapacity, Decomposer<T> decomposer) {
+	public CuckooHashSet(int initalCapacity, ExternalHasher<T> decomposer) {
 		this(initalCapacity, DEFAULT_LOAD_FACTOR, decomposer);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public CuckooHashSet(int initialCapacity, float loadFactor, Decomposer<T> decomposer) {
+	public CuckooHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> decomposer) {
 		this.initialCapacity = initialCapacity;
-		this.decomposer = decomposer;
+		this.externalHasher = decomposer;
 		
 		if(initialCapacity < 8) {
 			initialCapacity = 8;
@@ -125,13 +125,13 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 */
 	public T get(T key) {
 	
-		int index = indexFor(function1.hash(decomposer.toIntArray(key)));
+		int index = indexFor(externalHasher.hash(key, function1));
 		T value1 = table1[index];
 		if(key.equals(value1)) {
 			return value1;
 		}			
 		
-		index = indexFor(function2.hash(decomposer.toIntArray(key)));
+		index = indexFor(externalHasher.hash(key, function2));
 		T value2 = table2[index];
 		if(key.equals(value2)) {
 			return value2;
@@ -200,7 +200,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 *              Otherwise, the existing key in the second table is returned.
 	 */
 	private T insert(T key) {
-		int index = indexFor(function1.hash(decomposer.toIntArray(key)));
+		int index = indexFor(externalHasher.hash(key, function1));
 		if(isEntryEmpty(table1[index])) {
 			table1[index] = key;
 			return null;
@@ -209,7 +209,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		table1[index] = key;
 		key = tmp;
 		
-		index = indexFor(function2.hash(decomposer.toIntArray(key)));
+		index = indexFor(externalHasher.hash(key, function2));
 		if(isEntryEmpty(table2[index])) {
 			table2[index] = key;
 			return null;
@@ -229,7 +229,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		for(int i = 0; i < table1.length; i++) {
 			T key = table1[i];
 			if(!isEntryEmpty(key)) {
-				if(indexFor(function1.hash(decomposer.toIntArray(key))) != i) {
+				if(indexFor(externalHasher.hash(key, function1)) != i) {
 					T tmp = table1[i];
 					table1[i] = null;
 
@@ -249,7 +249,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		for(int i = 0; i < table2.length; i++) {
 			T key = table2[i];
 			if(!isEntryEmpty(key)) {
-				if(indexFor(function2.hash(decomposer.toIntArray(key))) != i) {
+				if(indexFor(externalHasher.hash(key, function2)) != i) {
 					T tmp = table2[i];
 					table2[i] = null;
 	
@@ -357,14 +357,14 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 
 	public boolean remove(T key) {
 		
-		int index = indexFor(function1.hash(decomposer.toIntArray(key)));
+		int index = indexFor(externalHasher.hash(key, function1));
 		if(key.equals(table1[index])) {
 			table1[index] = null;
 			size--;
 			return true;
 		}
 		
-		index = indexFor(function2.hash(decomposer.toIntArray(key)));
+		index = indexFor(externalHasher.hash(key, function2));
 		if(key.equals(table2[index])) {
 			table2[index] = null;
 			size--;

@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
-import org.jgll.util.hashing.Decomposer;
+import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashFunction;
 
 /**
  * A NonPackedNode corresponds to nonterminal symbol nodes or
@@ -21,6 +22,8 @@ import org.jgll.util.hashing.Decomposer;
  */
 
 public abstract class NonPackedNode extends SPPFNode {
+	
+	public static final ExternalHasher<NonPackedNode> externalHasher = new NonPackedNodeExternalHasher();
 	
 	protected final GrammarSlot slot;
 	
@@ -45,7 +48,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(slot.getId(), leftExtent, rightExtent);
+		return externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	@Override
@@ -201,16 +204,12 @@ public abstract class NonPackedNode extends SPPFNode {
 		return rightExtent;
 	}
 	
-	public static class NonPackedNodeDecomposer implements Decomposer<NonPackedNode> {
+	public static class NonPackedNodeExternalHasher implements ExternalHasher<NonPackedNode> {
 
-		int[] components = new int[3];
 		
 		@Override
-		public int[] toIntArray(NonPackedNode nonPackedNode) {
-			components[0] = nonPackedNode.slot.getId();
-			components[1] = nonPackedNode.leftExtent;
-			components[2] = nonPackedNode.rightExtent;
-			return components;
+		public int hash(NonPackedNode nonPackedNode, HashFunction f) {
+			return f.hash(nonPackedNode.slot.getId(), nonPackedNode.leftExtent, nonPackedNode.rightExtent);
 		}
 	}
 	

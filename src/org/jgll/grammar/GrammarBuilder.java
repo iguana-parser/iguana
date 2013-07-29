@@ -30,7 +30,7 @@ import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.hashing.IntArrayDecomposer;
+import org.jgll.util.hashing.IntArrayExternalHasher;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class GrammarBuilder implements Serializable {
@@ -349,7 +349,7 @@ public class GrammarBuilder implements Serializable {
 		} 
 		
 		else {
-			final CuckooHashSet<int[]> set = new CuckooHashSet<>(IntArrayDecomposer.getInstance());
+			final CuckooHashSet<int[]> set = new CuckooHashSet<>(IntArrayExternalHasher.getInstance());
 			for(int[] s : list) {
 				set.add(s);
 			}

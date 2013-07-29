@@ -15,11 +15,11 @@ public class CuckooHashMap<K, V> implements Serializable {
 	
 	private CuckooHashSet<MapEntry<K, V>> set;
 
-	public CuckooHashMap(Decomposer<K> decomposer) {
+	public CuckooHashMap(ExternalHasher<K> decomposer) {
 		set = new CuckooHashSet<>(new MapEntryDecomposer(decomposer));
 	}
 	
-	public CuckooHashMap(int initialCapacity, Decomposer<K> decomposer) {
+	public CuckooHashMap(int initialCapacity, ExternalHasher<K> decomposer) {
 		set = new CuckooHashSet<>(initialCapacity, new MapEntryDecomposer(decomposer));
 	}
 	
@@ -89,17 +89,17 @@ public class CuckooHashMap<K, V> implements Serializable {
 		}
 	}
 	
-	public class MapEntryDecomposer implements Decomposer<MapEntry<K, V>> {
+	public class MapEntryDecomposer implements ExternalHasher<MapEntry<K, V>> {
 
-		private Decomposer<K> decomposer;
+		private ExternalHasher<K> decomposer;
 
-		public MapEntryDecomposer(Decomposer<K> decomposer) {
+		public MapEntryDecomposer(ExternalHasher<K> decomposer) {
 			this.decomposer = decomposer;
 		}
 		
 		@Override
-		public int[] toIntArray(MapEntry<K, V> entry) {
-			return decomposer.toIntArray(entry.k);
+		public int hash(MapEntry<K, V> t, HashFunction f) {
+			return decomposer.hash(t.k, f);
 		}
 	}
 }
