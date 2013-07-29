@@ -8,7 +8,7 @@ import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.Keyword;
 import org.jgll.grammar.Symbol;
 import org.jgll.grammar.Terminal;
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -17,8 +17,8 @@ import org.jgll.util.Input;
 public class KeywordGrammarSlot extends BodyGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
-	private HeadGrammarSlot keywordHead;
-	private Keyword keyword;
+	protected HeadGrammarSlot keywordHead;
+	protected Keyword keyword;
 	
 	public KeywordGrammarSlot(String label, int position, HeadGrammarSlot keywordHead, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(label, position, previous, head);
@@ -43,8 +43,7 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public Symbol getSymbol() {
-		// TODO Auto-generated method stub
-		return null;
+		return keyword;
 	}
 	
 	public Terminal getFirstTerminal() {
@@ -66,7 +65,12 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+		
+		if(executePreConditions(parser, input)) {
+			return null;
+		}
+		
 		int ci = parser.getCurrentInputIndex();
 		
 		if(input.match(ci, keyword.getChars())) {
@@ -77,7 +81,13 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 				sppfNode.addChild(node);
 			}
 			
-			parser.getNodeP(next, sppfNode);
+			if(next instanceof LastGrammarSlot) {
+				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
+				parser.pop();
+				return null;
+			} else {
+				parser.getIntermediateNode(next, sppfNode);
+			}
 		} else {
 			parser.recordParseError(this);
 			return null;

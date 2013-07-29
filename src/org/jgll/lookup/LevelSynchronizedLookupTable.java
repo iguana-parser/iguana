@@ -209,7 +209,6 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		return value;
 	}
 	
-	
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
 		

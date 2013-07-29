@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
 
@@ -90,7 +90,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		for(Alternate alternate : alternates) {
 			int ci = parser.getCurrentInputIndex();
 			BodyGrammarSlot slot = alternate.getFirstSlot();

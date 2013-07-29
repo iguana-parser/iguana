@@ -5,7 +5,8 @@ import java.io.Writer;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.GLLParser;
+import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
@@ -21,7 +22,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final Terminal terminal;
+	protected final Terminal terminal;
 
 	public TerminalGrammarSlot(String label, int position, BodyGrammarSlot previous, Terminal terminal, HeadGrammarSlot head) {
 		super(label, position, previous, head);
@@ -29,22 +30,21 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 		
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		
-		for(SlotAction<Boolean> preCondition : preConditions) {
-			if(!preCondition.execute(parser, input)) {
-				return null;
-			}
-		}
-				
 		int ci = parser.getCurrentInputIndex();
 		int charAtCi = input.charAt(ci);
 
 		if(terminal.match(charAtCi)) {
 			TerminalSymbolNode cr = parser.getTerminalNode(charAtCi);
-			parser.getNodeP(next, cr);
+			if(next instanceof LastGrammarSlot) {
+				parser.getNonterminalNode((LastGrammarSlot) next, cr);
+				parser.pop();
+				return null;
+			} else {
+				parser.getIntermediateNode(next, cr);
+			}
 		} 
-		
 		else {
 			parser.recordParseError(this);
 			return null;

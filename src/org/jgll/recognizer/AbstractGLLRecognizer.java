@@ -8,6 +8,7 @@ import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
+import org.jgll.grammar.slot.StartSlot;
 import org.jgll.recognizer.Descriptor.DescriptorDecomposer;
 import org.jgll.recognizer.GSSNode.GSSDecomposer;
 import org.jgll.util.Input;

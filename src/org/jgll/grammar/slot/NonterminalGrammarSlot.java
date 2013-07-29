@@ -5,10 +5,9 @@ import java.io.Writer;
 import java.util.BitSet;
 
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Symbol;
 import org.jgll.grammar.Terminal;
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
 
@@ -47,7 +46,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		
 		int ci = parser.getCurrentInputIndex();
 		
@@ -55,11 +54,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			parser.recordParseError(this);
 			return null;			
 		}
-		
-		for(SlotAction<Boolean> preCondition : preConditions) {
-			if(!preCondition.execute(parser, input)) {
-				return null;
-			}
+
+		if(executePreConditions(parser, input)) {
+			return null;
 		}
 		
 		parser.createGSSNode(next);

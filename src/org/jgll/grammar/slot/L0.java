@@ -3,7 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
@@ -35,7 +35,7 @@ public class L0 extends GrammarSlot {
 		id = -1;
 	}
 	
-	public GrammarSlot parse(GLLParser parser, Input input, GrammarSlot start) {
+	public GrammarSlot parse(GLLParserInternals parser, Input input, GrammarSlot start) {
 		
 		GrammarSlot slot = start.parse(parser, input);
 		
@@ -47,7 +47,7 @@ public class L0 extends GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		while(parser.hasNextDescriptor()) {
 			GrammarSlot slot = parser.nextDescriptor().getGrammarSlot();
 			slot = slot.parse(parser, input);

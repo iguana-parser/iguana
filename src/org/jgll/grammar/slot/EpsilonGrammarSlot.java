@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
@@ -24,10 +24,10 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input intput) {
+	public GrammarSlot parse(GLLParserInternals parser, Input intput) {
 		// A ::= ε
 		TerminalSymbolNode cr = parser.getEpsilonNode();
-		parser.getNodeP(this, cr);
+		parser.getNonterminalNode(this, cr);
 		parser.pop();
 		return null;
 	}

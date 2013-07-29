@@ -4,8 +4,10 @@ package org.jgll.parser;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.PopAction;
-import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.FirstKeywordGrammarSlot;
+import org.jgll.grammar.slot.FirstNonterminalGrammarSlot;
+import org.jgll.grammar.slot.FirstTerminalGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lookup.LookupTable;
@@ -27,7 +29,7 @@ import org.jgll.util.logging.LoggerWrapper;
  * @author Ali Afroozeh
  * 
  */
-public abstract class AbstractGLLParser implements GLLParser {
+public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals {
 		
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParser.class);
 	
@@ -211,9 +213,14 @@ public abstract class AbstractGLLParser implements GLLParser {
 				}
 				
 				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
-				
-				BodyGrammarSlot slot = (BodyGrammarSlot) cu.getGrammarSlot();
-				SPPFNode y = getNodeP(slot, edge.getSppfNode(), cn);
+
+				GrammarSlot slot = cu.getGrammarSlot();
+				SPPFNode y;
+				if(slot instanceof LastGrammarSlot) {
+					y = getNonterminalNode((LastGrammarSlot) slot, edge.getSppfNode(), cn);
+				} else {
+					y = getIntermediateNode((BodyGrammarSlot) slot, edge.getSppfNode(), cn);
+				}
 				add(cu.getGrammarSlot(), edge.getDestination(), ci, y);
 			}			
 		}
@@ -261,7 +268,12 @@ public abstract class AbstractGLLParser implements GLLParser {
 
 		if(!lookupTable.hasGSSEdge(v, w, u)) {
 			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
-				SPPFNode x = getNodeP((BodyGrammarSlot) L, w, z);
+				SPPFNode x;
+				if(L instanceof LastGrammarSlot) {
+					x = getNonterminalNode((LastGrammarSlot) L, w, z);
+				} else {
+					x = getIntermediateNode((BodyGrammarSlot) L, w, z);
+				}
 				add(L, u, z.getRightExtent(), x);
 			}
 		}
@@ -287,67 +299,63 @@ public abstract class AbstractGLLParser implements GLLParser {
 	}
 	
 	@Override
-	public SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode rightChild) {
-		cn = getNodeP(slot, cn, rightChild);
+	public SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild) {
+		cn = getNonterminalNode(slot, cn, rightChild);
 		return cn;
 	}
 	
-	 /**
-	  * getNodeP(X ::= alpha . beta, z, w) {
-	  * 	if (|alpha| = 1 and beta != empty) {
-	  * 		return w
-	  *		} else {
-	  *			if (beta = empty) { 
-	  *				t := X 
-	  * 		} else {
-	  * 			else t := (X ::= alpha . beta)
-	  * 		}
-	  * 		suppose that w has label (x, k, i)
-	  * 		if (z != $) {
-	  *				suppose that z has label (s, j, k)
-	  *				if there does not exist an SPPF node y labelled (t, j, i) create one
-	  * 			if y does not have a child labelled (X ::= alpha . beta, k)
-	  *				create one with left child z and right child w
-	  *			} else {
-	  *		 		if there does not exist an SPPF node y labelled (t, k, i) create one
-	  *				if y does not have a child labelled (X ::= alpha . beta, k)
-	  *				create one with child w
-	  * 		}
-	  * 	return y
-	  * 	}
-	  * }
-	  */
-	public final SPPFNode getNodeP(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+	@Override
+	public SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild) {
+		cn = getIntermediateNode(slot, cn, rightChild);
+		return cn;
+	}
+	
+	public final SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
-		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
-		if (slot.getPosition() == 1 && 
-			!(slot instanceof LastGrammarSlot) &&
-			(slot.previous() instanceof TerminalGrammarSlot || !slot.previous().isNullable())) {
-				return rightChild;
-		} else {
-			
-			GrammarSlot t = slot;
-			// if (beta = empty)
-			if (slot instanceof LastGrammarSlot) {
-				t = slot.getHead();
-			}
+		GrammarSlot t = slot.getHead();
 
-			// if (z != $)
-			int leftExtent;
-			int rightExtent = rightChild.getRightExtent();
-			
-			if (!leftChild.equals(DummyNode.getInstance())) {
-				leftExtent = leftChild.getLeftExtent();
-			} else {
-				leftExtent = rightChild.getLeftExtent();
-			}
-			
-			NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(t, leftExtent, rightExtent);
-			
-			lookupTable.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
-			
-			return newNode;
+		int leftExtent;
+		int rightExtent = rightChild.getRightExtent();
+		
+		if (leftChild != DummyNode.getInstance()) {
+			leftExtent = leftChild.getLeftExtent();
+		} else {
+			leftExtent = rightChild.getLeftExtent();
 		}
+		
+		NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(t, leftExtent, rightExtent);
+		
+		lookupTable.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+		
+		return newNode;
+	}
+	
+	public final SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+		
+		BodyGrammarSlot previous = slot.previous();
+		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
+		if(previous instanceof FirstTerminalGrammarSlot || previous instanceof FirstKeywordGrammarSlot) {
+			return rightChild;
+		}
+		
+		if (previous instanceof FirstNonterminalGrammarSlot && ! previous.isNullable()) {
+			return rightChild;
+		} 
+		
+		int leftExtent;
+		int rightExtent = rightChild.getRightExtent();
+		
+		if (leftChild != DummyNode.getInstance()) {
+			leftExtent = leftChild.getLeftExtent();
+		} else {
+			leftExtent = rightChild.getLeftExtent();
+		}
+		
+		NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(slot, leftExtent, rightExtent);
+		
+		lookupTable.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+		
+		return newNode;
 	}
 	
 	@Override
@@ -369,12 +377,5 @@ public abstract class AbstractGLLParser implements GLLParser {
 	public int getCurrentInputIndex() {
 		return ci;
 	}
-	
-	@Override
-	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child) {
-		SPPFNode key = lookupTable.getNonPackedNode(slot, child.getLeftExtent(), child.getRightExtent());
-		return null;
-	}
-	
 	
 }

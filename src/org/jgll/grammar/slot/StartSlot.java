@@ -1,10 +1,10 @@
-package org.jgll.recognizer;
+package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserInternals;
+import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
 
 public class StartSlot extends GrammarSlot {
@@ -22,7 +22,7 @@ public class StartSlot extends GrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		return null;
 	}
 

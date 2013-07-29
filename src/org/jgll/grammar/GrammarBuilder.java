@@ -18,10 +18,13 @@ import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
+import org.jgll.grammar.slot.FirstKeywordGrammarSlot;
+import org.jgll.grammar.slot.FirstNonterminalGrammarSlot;
+import org.jgll.grammar.slot.FirstTerminalGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.parser.GSSEdge;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
@@ -159,17 +162,28 @@ public class GrammarBuilder implements Serializable {
 			for (Symbol symbol : body) {
 				String label = grammarSlotToString(head, body, symbolIndex);
 				if (symbol instanceof Terminal) {
-					currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
+					if(symbolIndex == 0) {
+						currentSlot = new FirstTerminalGrammarSlot(label, (Terminal) symbol, headGrammarSlot);
+					} else {
+						currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
+					}
 				}
 				else if (symbol instanceof Nonterminal){
 					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-					currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);
+					if(symbolIndex == 0) {
+						currentSlot = new FirstNonterminalGrammarSlot(label, nonterminal, headGrammarSlot);
+					} else {
+						currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);
+					}
 				} 
-				// Keyword
 				else {
 					Keyword keyword = (Keyword) symbol;
 					HeadGrammarSlot keywordHead = getKeywordHeadGrammarSlot(keyword);
-					currentSlot = new KeywordGrammarSlot(label, symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
+					if(symbolIndex == 0) {
+						currentSlot = new FirstKeywordGrammarSlot(label, keywordHead, (Keyword) symbol, headGrammarSlot);
+					} else {
+						currentSlot = new KeywordGrammarSlot(label, symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
+					}
 				}
 				slots.add(currentSlot);
 
@@ -202,7 +216,7 @@ public class GrammarBuilder implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParser parser, Input input) {
+			public Boolean execute(GLLParserInternals parser, Input input) {
 				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
 					return true;
@@ -227,7 +241,7 @@ public class GrammarBuilder implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParser parser, Input input) {
+			public Boolean execute(GLLParserInternals parser, Input input) {
 				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
 					return true;

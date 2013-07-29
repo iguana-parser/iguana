@@ -9,7 +9,7 @@ import org.jgll.grammar.Epsilon;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.PopAction;
 import org.jgll.grammar.Symbol;
-import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
 
@@ -41,7 +41,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParser parser, Input input) {	
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {	
 		parser.pop();
 		return null;
 	}

@@ -9,6 +9,7 @@ import java.util.List;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Symbol;
+import org.jgll.parser.GLLParserInternals;
 import org.jgll.util.Input;
 
 /**
@@ -57,6 +58,16 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	public void setPreConditions(List<SlotAction<Boolean>> preConditions) {
 		this.preConditions = preConditions;
+	}
+	
+	protected boolean executePreConditions(GLLParserInternals parser, Input input) {
+		for(SlotAction<Boolean> preCondition : preConditions) {
+			if(preCondition.execute(parser, input)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

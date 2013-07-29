@@ -47,5 +47,5 @@ public abstract class AbstractLookupTable implements LookupTable {
 			key = new IntermediateNode(slot, leftExtent, rightExtent);
 		}
 		return key;
-	}
+	}	
 }
