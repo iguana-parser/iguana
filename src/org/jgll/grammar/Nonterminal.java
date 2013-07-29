@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
@@ -22,6 +23,7 @@ public class Nonterminal implements Symbol {
 	public Nonterminal(String name, boolean ebnfList) {
 		this.name = name;
 		this.ebnfList = ebnfList;
+		this.conditions = new ArrayList<>();
 	}
 	
 	public String getName() {

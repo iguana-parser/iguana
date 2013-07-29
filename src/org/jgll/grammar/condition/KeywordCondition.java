@@ -31,5 +31,10 @@ public class KeywordCondition extends Condition {
 	public List<Keyword> getKeywords() {
 		return keywords;
 	}
+	
+	@Override
+	public String toString() {
+		return type.toString() + " " +  listToString(keywords);
+	}
 
 }

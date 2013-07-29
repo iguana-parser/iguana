@@ -21,6 +21,7 @@ import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.FirstKeywordGrammarSlot;
 import org.jgll.grammar.slot.FirstNonterminalGrammarSlot;
 import org.jgll.grammar.slot.FirstTerminalGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -141,6 +142,8 @@ public class GrammarBuilder implements Serializable {
 		if (rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
 		}
+		
+		Map<BodyGrammarSlot, Iterable<Condition>> conditions = new HashMap<>();
 
 		Nonterminal head = rule.getHead();
 		List<Symbol> body = rule.getBody();
@@ -194,9 +197,7 @@ public class GrammarBuilder implements Serializable {
 				}
 				symbolIndex++;
 				
-				for(Condition condition : rule.getConditions()) {
-					addCondition(currentSlot, condition);
-				}
+				conditions.put(currentSlot, symbol.getConditions());
 			}
 
 			String label = grammarSlotToString(head, body, symbolIndex);
@@ -206,6 +207,12 @@ public class GrammarBuilder implements Serializable {
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot, headGrammarSlot.getAlternates().size());
 			headGrammarSlot.addAlternate(alternate);
+
+			for(Entry<BodyGrammarSlot, Iterable<Condition>> e : conditions.entrySet()) {
+				for(Condition condition : e.getValue()) {
+					addCondition(e.getKey(), condition);
+				}
+			}
 			
 			for(Condition condition : rule.getConditions()) {
 				addCondition(lastGrammarSlot, condition);

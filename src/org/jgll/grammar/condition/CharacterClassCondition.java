@@ -27,5 +27,10 @@ public class CharacterClassCondition extends Condition {
 	public List<CharacterClass> getCharacterClasses() {
 		return characterClasses;
 	}
+	
+	@Override
+	public String toString() {
+		return type.toString() + " " + listToString(characterClasses);
+	}
 
 }

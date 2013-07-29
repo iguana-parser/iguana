@@ -36,7 +36,7 @@ public class DanglingElseGrammar3 extends AbstractGrammarTest {
 		Terminal a = new Character('a');
 		Terminal b = new Character('b');
 
-		rule1 = new Rule(S, list(a, S)).addCondition(ConditionFactory.notFollow(b, S));
+		rule1 = new Rule(S, list(a, S.addCondition(ConditionFactory.notFollow(b, S))));
 		builder.addRule(rule1);
 		
 		rule2 = new Rule(S, list(a, S, b, S));

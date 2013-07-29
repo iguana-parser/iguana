@@ -16,4 +16,9 @@ public class ContextFreeCondition extends Condition {
 	public List<? extends Symbol> getSymbols() {
 		return symbols;
 	}
+	
+	@Override
+	public String toString() {
+		return type.toString() + " " + listToString(symbols);
+	}
 }
