@@ -136,7 +136,14 @@ public class GrammarBuilder implements Serializable {
 			GrammarVisitor.visit(head, action);
 		}
 	}
-
+	
+	public GrammarBuilder addRules(Iterable<Rule> rules) {
+		for(Rule rule : rules) {
+			addRule(rule);
+		}
+		return this;
+	}
+ 
 	public GrammarBuilder addRule(Rule rule) {
 
 		if (rule == null) {

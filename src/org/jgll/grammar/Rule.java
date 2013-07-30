@@ -29,6 +29,10 @@ public class Rule implements Serializable {
 		this(head, new ArrayList<Symbol>(), null);
 	}
 	
+	private Rule(Builder builder) {
+		this(builder.head, builder.body);
+	}
+	
 	public Rule(Nonterminal head, Symbol...body) {
 		this(head, Arrays.asList(body), null);
 	}
@@ -125,5 +129,25 @@ public class Rule implements Serializable {
 	@Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction().hash(head.hashCode(), body.hashCode());
+	}
+	
+	
+	public static class Builder {
+		private Nonterminal head;
+		private List<Symbol> body;
+
+		public Builder(Nonterminal head) {
+			this.head = head;
+			this.body = new ArrayList<>();
+		}
+		
+		public Builder addSymbol(Symbol symbol) {
+			body.add(symbol);
+			return this;
+		}
+		
+		public Rule build() {
+			return new Rule(this);
+		}
 	}
 }
