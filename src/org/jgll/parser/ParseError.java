@@ -22,11 +22,10 @@ public class ParseError extends Exception {
 	private final GSSNode currentNode;
 	private final GrammarSlot slot;
 	private final int inputIndex;
-	private final Input input;
 	
 	public ParseError(GrammarSlot slot, Input input, int inputIndex, GSSNode curerntNode) {
+		super(getMessage(input, inputIndex));
 		this.slot = slot;
-		this.input = input;
 		this.inputIndex = inputIndex;
 		this.currentNode = curerntNode;
 	}
@@ -39,12 +38,11 @@ public class ParseError extends Exception {
 		return slot;
 	}
 	
-	@Override
-	public String toString() {		
+	public static String getMessage(Input input, int inputIndex) {		
 		int lineNumber = input.getLineNumber(inputIndex);
 		int columnNumber = input.getColumnNumber(inputIndex);
 		
-		return "Parse error at at line:" + lineNumber + " column:" + columnNumber;
+		return "Parse error at line:" + lineNumber + " column:" + columnNumber;
 	}
 	
 	public void printGrammarTrace() {
