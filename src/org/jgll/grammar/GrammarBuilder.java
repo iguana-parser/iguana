@@ -172,7 +172,7 @@ public class GrammarBuilder implements Serializable {
 				
 				if(symbol instanceof Keyword) {
 					Keyword keyword = (Keyword) symbol;
-					HeadGrammarSlot keywordHead = getKeywordHeadGrammarSlot(keyword);
+					HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
 					if(symbolIndex == 0) {
 						currentSlot = new FirstKeywordGrammarSlot(label, keywordHead, (Keyword) symbol, headGrammarSlot);
 					} else {
@@ -400,7 +400,7 @@ public class GrammarBuilder implements Serializable {
 				
 				@Override
 				public boolean execute(GSSEdge edge, int inputIndex, Input input) {
-					Keyword subInput = new Keyword(input.subInput(edge.getDestination().getInputIndex(), inputIndex));
+					Keyword subInput = new Keyword("", input.subInput(edge.getDestination().getInputIndex(), inputIndex));
 					return set.contains(subInput);
 				}
 			});			
@@ -496,7 +496,6 @@ public class GrammarBuilder implements Serializable {
 		return firstSlot;
 	}
 	
-	
 	private void setTestSets(List<BodyGrammarSlot> slots) {
 
 		for(BodyGrammarSlot slot : slots) {
@@ -523,20 +522,6 @@ public class GrammarBuilder implements Serializable {
 		return headGrammarSlot;
 	}
 	
-	private HeadGrammarSlot getKeywordHeadGrammarSlot(Keyword keyword) {
-		Nonterminal nonterminal = new Nonterminal(keyword.getName());
-		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal.getName());
-
-		if (headGrammarSlot == null) {
-			headGrammarSlot = new HeadGrammarSlot(nonterminal);
-			headGrammarSlot.addAlternate(new Alternate(dummySlot, 0));
-			nonterminalsMap.put(nonterminal.getName(), headGrammarSlot);
-			nonterminals.add(headGrammarSlot);
-		}
-
-		return headGrammarSlot;		
-	}
-
 	private void initializeGrammarProrperties() {
 		calculateLongestTerminalChain();
 		calculateMaximumNumAlternates();
@@ -547,6 +532,14 @@ public class GrammarBuilder implements Serializable {
 		setIds();
 		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
+	}
+	
+	public static Rule fromKeyword(Keyword keyword) {
+		Rule.Builder builder = new Rule.Builder(new Nonterminal(keyword.getName()));
+		for(int i : keyword.getChars()) {
+			builder.addSymbol(new Character(i));
+		}
+		return builder.build();
 	}
 
 	private static String grammarSlotToString(Nonterminal head, List<? extends Symbol> body, int index) {

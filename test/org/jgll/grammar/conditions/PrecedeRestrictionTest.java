@@ -39,8 +39,8 @@ public class PrecedeRestrictionTest extends AbstractGrammarTest {
 	@Override
 	protected Grammar initGrammar() {
 		Nonterminal S = new Nonterminal("S");
-		Keyword forr = new Keyword("for");
-		Keyword forall = new Keyword("forall");
+		Keyword forr = new Keyword("for", new int[] {'f', 'o', 'r'});
+		Keyword forall = new Keyword("forall", new int[] {'f', 'o', 'r', 'a', 'l', 'l'});
 		Nonterminal L = new Nonterminal("L");
 		Nonterminal Id = new Nonterminal("Id");
 		Terminal ws = new Character(' ');
@@ -58,6 +58,9 @@ public class PrecedeRestrictionTest extends AbstractGrammarTest {
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1, r2, r3, r4));
 		builder.addRules(rules);
+		
+		builder.addRule(GrammarBuilder.fromKeyword(forr));
+		builder.addRule(GrammarBuilder.fromKeyword(forall));
 		
 		return builder.build();
 	}	

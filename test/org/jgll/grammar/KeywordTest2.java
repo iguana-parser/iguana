@@ -21,8 +21,8 @@ public class KeywordTest2 extends AbstractGrammarTest {
 	@Override
 	protected Grammar initGrammar() {
 		Nonterminal S = new Nonterminal("S");
-		Keyword iff = new Keyword("if");
-		Keyword then = new Keyword("then");
+		Keyword iff = new Keyword("if", new int[] {'i', 'f'});
+		Keyword then = new Keyword("then", new int[] {'t', 'h', 'e', 'n'});
 		Nonterminal L = new Nonterminal("L");
 		Terminal s = new Character('s');
 		Terminal ws = new Character(' ');
@@ -30,7 +30,12 @@ public class KeywordTest2 extends AbstractGrammarTest {
 		Rule r1 = new Rule(S, iff, L, S, L, then, L, S);
 		Rule r2 = new Rule(S, s);
 		Rule r3 = new Rule(L, ws);
-		return new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).build();
+		
+		return new GrammarBuilder().addRule(r1)
+								   .addRule(r2)
+								   .addRule(r3)
+								   .addRule(GrammarBuilder.fromKeyword(iff))
+								   .addRule(GrammarBuilder.fromKeyword(then)).build();
 	}
 	
 	

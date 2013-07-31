@@ -17,8 +17,12 @@ public class KeywordTest1 extends AbstractGrammarTest {
 
 	@Override
 	protected Grammar initGrammar() {
-		Rule r1 = new Rule(new Nonterminal("A"), new Keyword("if"));
-		return new GrammarBuilder().addRule(r1).build();
+		Keyword iff = new Keyword("if", new int[] {'i', 'f'});
+		Rule r1 = new Rule(new Nonterminal("A"), iff);
+		GrammarBuilder builder = new GrammarBuilder();
+		builder.addRule(r1);
+		builder.addRule(GrammarBuilder.fromKeyword(iff));
+		return builder.build();
 	}
 	
 	@Test

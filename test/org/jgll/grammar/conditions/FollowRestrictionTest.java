@@ -37,7 +37,7 @@ public class FollowRestrictionTest extends AbstractGrammarTest {
 		
 		GrammarBuilder builder = new GrammarBuilder();
 		
-		Rule r1 = new Rule(S, Label.addCondition(notFollow(new Keyword(":"))));
+		Rule r1 = new Rule(S, Label.addCondition(notFollow(new Keyword(":", new int[] {':'}))));
 		
 		Rule r2 = new Rule(Label, new Plus(az).addCondition(notFollow(az)));
 		

@@ -1,8 +1,6 @@
 package org.jgll.grammar;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.Input;
@@ -15,14 +13,18 @@ public class Keyword extends AbstractSymbol {
 	
 	public static final ExternalHasher<Keyword> externalHasher = new KeywordExternalHasher();
 	
-	private int[] chars;
+	private final int[] chars;
 	
-	public Keyword(String s) {
+	private final String name;
+	
+	public Keyword(String name, String s) {
 		this.chars = Input.toIntArray(s);
+		this.name = name;
 	}
 	
-	public Keyword(int[] chars) {
+	public Keyword(String name, int[] chars) {
 		this.chars = chars;
+		this.name = name;
 	}
 	
 	public int[] getChars() {
@@ -35,20 +37,7 @@ public class Keyword extends AbstractSymbol {
 	
 	@Override
 	public String getName() {
-		List<java.lang.Character> charList = new ArrayList<>();
-		for(int i : chars) {
-			char[] chars = java.lang.Character.toChars(i);
-			for(char c : chars) {
-				charList.add(c);
-			}
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		for(char c : charList) {
-			sb.append(c);
-		}
-		
-		return sb.toString();
+		return name;
 	}
 	
 	public Terminal getFirstTerminal() {
