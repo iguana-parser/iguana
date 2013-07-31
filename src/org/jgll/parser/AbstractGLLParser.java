@@ -3,6 +3,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.Keyword;
 import org.jgll.grammar.PopAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.FirstKeywordGrammarSlot;
@@ -377,5 +378,15 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 	public int getCurrentInputIndex() {
 		return ci;
 	}
+	
+	@Override
+	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int inputIndex) {
+		int nextIndex = inputIndex + keyword.size();
+		NonPackedNode node = lookupTable.getNonPackedNode(slot, inputIndex, nextIndex);
+		node.addFirstPackedNode(slot.getAlternateAt(0).getLastBodySlot().next(), nextIndex);
+		ci = nextIndex;
+		return node;
+	}
+
 	
 }

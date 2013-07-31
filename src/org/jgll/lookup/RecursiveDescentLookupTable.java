@@ -116,7 +116,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	}
 
 	@Override
-	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+	public NonPackedNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
 		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
 		

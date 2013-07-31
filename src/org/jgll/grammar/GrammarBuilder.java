@@ -965,7 +965,7 @@ public class GrammarBuilder implements Serializable {
 	private void rewriteRightEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for (Alternate alternate : head.getAlternates()) {
 			if (alternate.isBinary(head) || alternate.isUnaryPrefix(head)) {
-				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastBodySlot()).getNonterminal();
 
 				if (nonterminal.contains(filteredAlternate)) {
 					HeadGrammarSlot filteredNonterminal = alternate.getNonterminalAt(alternate.size() - 1);
@@ -1014,8 +1014,8 @@ public class GrammarBuilder implements Serializable {
 	private void getRightEnds(HeadGrammarSlot head, String name,
 			List<Integer> nonterminals, List<Alternate> alternates) {
 		for (Alternate alt : head.getAlternates()) {
-			if (alt.getLastSlot() instanceof NonterminalGrammarSlot) {
-				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alt.getLastSlot()).getNonterminal();
+			if (alt.getLastBodySlot() instanceof NonterminalGrammarSlot) {
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alt.getLastBodySlot()).getNonterminal();
 				if (nonterminal.getNonterminal().getName().equals(name)) {
 					nonterminals.add(alt.size() - 1);
 					alternates.add(alt);

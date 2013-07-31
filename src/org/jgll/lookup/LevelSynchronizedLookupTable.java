@@ -174,11 +174,11 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	@Override
-	public SPPFNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+	public NonPackedNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
 		boolean newNodeCreated = false;
 		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
-		SPPFNode value;
+		NonPackedNode value;
 		
 		if(rightExtent == currentLevel) {
 			value = currentNodes.add(key);

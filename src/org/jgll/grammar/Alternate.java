@@ -64,7 +64,12 @@ public class Alternate implements Serializable {
 		return symbols.get(index);
 	}
 	
-	public BodyGrammarSlot getLastSlot() {
+	/**
+	 * ::= alpha . x
+	 * 
+	 * @return
+	 */
+	public BodyGrammarSlot getLastBodySlot() {
 		return symbols.get(symbols.size() - 1);
 	}
 	

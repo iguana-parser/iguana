@@ -11,7 +11,6 @@ import org.jgll.grammar.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
 public class KeywordGrammarSlot extends BodyGrammarSlot {
@@ -74,12 +73,8 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		int ci = parser.getCurrentInputIndex();
 		
 		if(input.match(ci, keyword.getChars())) {
-			NonPackedNode sppfNode = (NonPackedNode) parser.getLookupTable().getNonPackedNode(keywordHead, ci, ci + keyword.size());
 			
-			for(int i = 0; i < keyword.size(); i++) {
-				TerminalSymbolNode node = parser.getTerminalNode(input.charAt(ci + i));
-				sppfNode.addChild(node);
-			}
+			NonPackedNode sppfNode = parser.getKeywordStub(keyword, keywordHead, ci);
 			
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);

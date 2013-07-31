@@ -1,5 +1,9 @@
 package org.jgll.grammar.conditions;
 
+import static org.jgll.grammar.condition.ConditionFactory.notFollow;
+import static org.jgll.grammar.condition.ConditionFactory.notPrecede;
+import static org.junit.Assert.assertTrue;
+
 import org.jgll.grammar.AbstractGrammarTest;
 import org.jgll.grammar.Character;
 import org.jgll.grammar.Grammar;
@@ -15,12 +19,8 @@ import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
-
-import static org.jgll.grammar.condition.ConditionFactory.*;
-import static org.junit.Assert.*;
 
 /**
  * 
@@ -71,18 +71,6 @@ public class PrecedeRestrictionTest extends AbstractGrammarTest {
 	private SPPFNode getExpectedSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 6);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("forall"), 0, 6);
-		TerminalSymbolNode node3 = new TerminalSymbolNode(102, 0);
-		TerminalSymbolNode node4 = new TerminalSymbolNode(111, 1);
-		TerminalSymbolNode node5 = new TerminalSymbolNode(114, 2);
-		TerminalSymbolNode node6 = new TerminalSymbolNode(97, 3);
-		TerminalSymbolNode node7 = new TerminalSymbolNode(108, 4);
-		TerminalSymbolNode node8 = new TerminalSymbolNode(108, 5);
-		node2.addChild(node3);
-		node2.addChild(node4);
-		node2.addChild(node5);
-		node2.addChild(node6);
-		node2.addChild(node7);
-		node2.addChild(node8);
 		node1.addChild(node2);
 		return node1;
 	}
