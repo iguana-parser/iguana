@@ -206,7 +206,7 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 				// Don't pop if a pop action associated with the slot returns false.
 				if(cu.getGrammarSlot() instanceof LastGrammarSlot) {
 					for(PopAction popAction : ((LastGrammarSlot) cu.getGrammarSlot()).getPopActions()) {
-						if(!popAction.execute(edge, ci, input)) {
+						if(popAction.execute(edge, ci, input)) {
 							continue label;
 						}
 					}					

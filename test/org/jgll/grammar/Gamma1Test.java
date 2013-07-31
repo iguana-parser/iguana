@@ -40,7 +40,7 @@ public class Gamma1Test extends AbstractGrammarTest {
 		Rule r2 = new Rule(S, list(B, S));
 		builder.addRule(r2);
 		
-		Rule r3 = new Rule(S, emptyList());
+		Rule r3 = new Rule(S, epsilon());
 		builder.addRule(r3);
 		
 		Rule r4 = new Rule(A, list(a));

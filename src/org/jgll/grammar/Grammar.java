@@ -42,7 +42,7 @@ public class Grammar implements Serializable {
 	private List<HeadGrammarSlot> newNonterminals;
 	
 	private String name;
-
+	
 	private int longestTerminalChain;
 	
 	private int maximumNumAlternates;

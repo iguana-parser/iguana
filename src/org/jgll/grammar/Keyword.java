@@ -2,7 +2,6 @@ package org.jgll.grammar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.List;
 
 import org.jgll.parser.HashFunctions;
@@ -10,7 +9,7 @@ import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashFunction;
 
-public class Keyword extends AbstractTerminal {
+public class Keyword extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -35,11 +34,6 @@ public class Keyword extends AbstractTerminal {
 	}
 	
 	@Override
-	public boolean match(int c) {
-		return chars[0] == c;
-	}
- 
-	@Override
 	public String getName() {
 		List<java.lang.Character> charList = new ArrayList<>();
 		for(int i : chars) {
@@ -55,6 +49,10 @@ public class Keyword extends AbstractTerminal {
 		}
 		
 		return sb.toString();
+	}
+	
+	public Terminal getFirstTerminal() {
+		return new Character(chars[0]);
 	}
 	
 	@Override
@@ -88,19 +86,6 @@ public class Keyword extends AbstractTerminal {
 		public int hash(Keyword k, HashFunction f) {
 			return f.hash(k.getChars());
 		}
-		
-	}
-
-	@Override
-	public String getMatchCode() {
-		return null;
-	}
-
-	@Override
-	public BitSet asBitSet() {
-		BitSet set = new BitSet();
-		set.set(chars[0]);
-		return set;
 	}
 	
 }

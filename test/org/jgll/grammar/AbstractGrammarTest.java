@@ -59,7 +59,7 @@ public abstract class AbstractGrammarTest {
 		return list;
 	}
 	
-	protected static List<Symbol> emptyList() {
+	protected static List<Symbol> epsilon() {
 		return Collections.emptyList();
 	}
 	

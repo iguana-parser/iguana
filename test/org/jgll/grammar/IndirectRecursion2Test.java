@@ -30,7 +30,7 @@ public class IndirectRecursion2Test extends AbstractGrammarTest {
 		Nonterminal B = new Nonterminal("B");
 		Rule r1 = new Rule(A, list(B, A, new Character('d')));
 		Rule r2 = new Rule(A, list(new Character('a')));
-		Rule r3 = new Rule(B, emptyList());
+		Rule r3 = new Rule(B, epsilon());
 		Rule r4 = new Rule(B, list(new Character('b')));
 		return new GrammarBuilder("IndirectRecursion").addRule(r1)
 													  .addRule(r2)

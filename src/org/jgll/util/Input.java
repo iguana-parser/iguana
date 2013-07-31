@@ -282,11 +282,9 @@ public class Input {
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("[");
 		for(char c : charList) {
-			sb.append(c).append(", ");
+			sb.append(c);
 		}
-		sb.append("]");
 		
 		return sb.toString();
 	}

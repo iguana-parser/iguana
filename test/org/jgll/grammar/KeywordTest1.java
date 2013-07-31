@@ -23,7 +23,7 @@ public class KeywordTest1 extends AbstractGrammarTest {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(TerminalFactory.from("if")), grammar.getNonterminalByName("A").getFirstSet());
+		assertEquals(set(new Character('i')), grammar.getNonterminalByName("A").getFirstSet());
 	}
 	
 	@Test

@@ -32,7 +32,7 @@ public class Gamma0Test extends AbstractGrammarTest {
 		Rule r2 = new Rule(new Nonterminal("S"), list(new Nonterminal("A"), new Nonterminal("S"), new Character('d')));
 		builder.addRule(r2);
 		
-		Rule r3 = new Rule(new Nonterminal("S"), emptyList());
+		Rule r3 = new Rule(new Nonterminal("S"), epsilon());
 		builder.addRule(r3);
 		
 		Rule r4 = new Rule(new Nonterminal("A"), list(new Character('a')));

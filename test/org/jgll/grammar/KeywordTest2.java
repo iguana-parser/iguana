@@ -36,7 +36,7 @@ public class KeywordTest2 extends AbstractGrammarTest {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(TerminalFactory.from("if"), TerminalFactory.from('s')), grammar.getNonterminalByName("S").getFirstSet());
+		assertEquals(set(new Character('i'), TerminalFactory.from('s')), grammar.getNonterminalByName("S").getFirstSet());
 	}
 	
 	@Test

@@ -2,7 +2,7 @@ package org.jgll.grammar.condition;
 
 import java.util.List;
 
-import org.jgll.grammar.CharacterClass;
+import org.jgll.grammar.Terminal;
 
 /**
  * 
@@ -15,16 +15,16 @@ import org.jgll.grammar.CharacterClass;
  * @author Ali Afroozeh
  *
  */
-public class CharacterClassCondition extends Condition {
+public class TerminalCondition extends Condition {
 	
-	private List<CharacterClass> characterClasses;
+	private List<Terminal> characterClasses;
 	
-	public CharacterClassCondition(ConditionType type, List<CharacterClass> list) {
+	public TerminalCondition(ConditionType type, List<Terminal> list) {
 		super(type);
 		this.characterClasses = list;
 	}
 	
-	public List<CharacterClass> getCharacterClasses() {
+	public List<Terminal> getTerminals() {
 		return characterClasses;
 	}
 	

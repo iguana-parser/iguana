@@ -3,64 +3,71 @@ package org.jgll.grammar.condition;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.CharacterClass;
 import org.jgll.grammar.Keyword;
 import org.jgll.grammar.Symbol;
+import org.jgll.grammar.Terminal;
 
 public class ConditionFactory {
 
 	@SafeVarargs
 	public static <T extends Symbol> Condition follow(T...symbols) {
-		return new ContextFreeCondition(ConditionType.FOLLOW, Arrays.asList(symbols));
+		return createCondition(ConditionType.FOLLOW, symbols);
 	}
 	
-	public static Condition follow(Keyword...keywords) {
-		return new KeywordCondition(ConditionType.FOLLOW, Arrays.asList(keywords));
-	}
-	
-	public static Condition follow(Keyword keyword) {
-		return new KeywordCondition(ConditionType.FOLLOW, keyword);
-	}
-
 	@SafeVarargs
 	public static <T extends Symbol> Condition notFollow(T...symbols) {
-		return new ContextFreeCondition(ConditionType.NOT_FOLLOW, Arrays.asList(symbols));
-	}
-	
-	public static Condition notFollow(Keyword...keywords) {
-		return new KeywordCondition(ConditionType.NOT_FOLLOW, Arrays.asList(keywords));
-	}
-	
-	public static Condition notFollow(CharacterClass...characterClasses) {
-		return new CharacterClassCondition(ConditionType.NOT_FOLLOW, Arrays.asList(characterClasses));
+		return createCondition(ConditionType.NOT_FOLLOW, symbols);
 	}
 	
 	@SafeVarargs
 	public static <T extends Symbol> Condition precede(T...symbols) {
-		return new ContextFreeCondition(ConditionType.PRECEDE, Arrays.asList(symbols));
+		return createCondition(ConditionType.PRECEDE, symbols);
 	}
 	
 	@SafeVarargs
 	public static <T extends Symbol> Condition notPrecede(T...symbols) {
-		return new ContextFreeCondition(ConditionType.NOT_PRECEDE, Arrays.asList(symbols));
+		return createCondition(ConditionType.NOT_PRECEDE, symbols);
 	}
-
+	
 	@SafeVarargs
 	public static <T extends Symbol> Condition match(T...symbols) {
-		return new ContextFreeCondition(ConditionType.MATCH, Arrays.asList(symbols));
+		return createCondition(ConditionType.MATCH, symbols);
 	}
 
 	@SafeVarargs
 	public static <T extends Symbol> Condition notMatch(T...symbols) {
-		return new ContextFreeCondition(ConditionType.NOT_MATCH, Arrays.asList(symbols));
+		return createCondition(ConditionType.NOT_MATCH, symbols);
 	}
 	
-	public static Condition notMatch(List<Keyword> keywords) {
-		return new ContextFreeCondition(ConditionType.NOT_MATCH, keywords);
+	@SafeVarargs
+	private static <T extends Symbol> boolean allCharacterClass(T...symbols) {
+		for(T t : symbols) {
+			if(! (t instanceof Terminal)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
-	public static Condition notMatch(Keyword...keywords) {
-		return new KeywordCondition(ConditionType.NOT_MATCH, Arrays.asList(keywords));
+	@SuppressWarnings("unchecked")
+	private static <T extends Symbol> Condition createCondition(ConditionType type, T...symbols) {
+		if(allKeywords(symbols)) {
+			return new KeywordCondition(type, (List<Keyword>) Arrays.asList(symbols));
+		} else if (allCharacterClass(symbols)) {
+			return new TerminalCondition(type, (List<Terminal>) Arrays.asList(symbols));
+		} else {
+			return new ContextFreeCondition(type, Arrays.asList(symbols));
+		}
+	}
+	
+	@SafeVarargs
+	private static <T extends Symbol> boolean allKeywords(T...symbols) {
+		for(T t : symbols) {
+			if(! (t instanceof Keyword)) {
+				return false;
+			}
+		}
+		return true;		
 	}
 	
 }

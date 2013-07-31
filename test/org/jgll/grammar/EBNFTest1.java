@@ -1,8 +1,5 @@
 package org.jgll.grammar;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.parser.ParseError;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -30,13 +27,12 @@ public class EBNFTest1 extends AbstractGrammarTest {
 		Terminal a = new Character('a');
 		
 		Rule rule1 = new Rule(S, list(new Plus(A)));
-		List<Rule> rules = new ArrayList<>();
-		rule1 = EBNFUtil.rewrite(rule1, rules);
-		builder.addRule(rule1);
-		builder.addRules(rules);
 		
 		Rule rule2 = new Rule(A, list(a));
-		builder.addRule(rule2);
+		
+		Iterable<Rule> newRules = EBNFUtil.rewrite(list(rule1, rule2));
+		
+		builder.addRules(newRules);
 		
 		return builder.build();
 	}
