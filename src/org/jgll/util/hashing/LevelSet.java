@@ -16,9 +16,8 @@ public class LevelSet<T extends Level> extends CuckooHashSet<T> {
 	}
 	
 	@Override
-	public boolean isEntryEmpty(Object o) {
-		Level node = (Level) o;
-		return o == null || node.getLevel() != level;
+	public boolean isEntryEmpty(T t) {
+		return t == null || t.getLevel() != level;
 	}
 	
 	@Override

@@ -46,6 +46,8 @@ public interface GLLParserInternals {
 	
 	public int getCurrentInputIndex();
 	
+	public GSSNode getCurrentGSSNode();
+	
 	public void recordParseError(GrammarSlot slot);
 	
 	public LookupTable getLookupTable();

@@ -9,16 +9,17 @@ public abstract class AbstractSymbol implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	private List<Condition> conditions;
+	protected final List<Condition> conditions;
+	
+	public AbstractSymbol(Iterable<Condition> conditions) {
+		this.conditions = new ArrayList<>();
+		for(Condition condition : conditions) {
+			this.conditions.add(condition);
+		}
+	}
 	
 	public AbstractSymbol() {
-		conditions = new ArrayList<>();
-	}
-
-	@Override
-	public Symbol addCondition(Condition condition) {
-		conditions.add(condition);
-		return this;
+		this.conditions = new ArrayList<>();
 	}
 	
 	@Override

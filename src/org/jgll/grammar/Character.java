@@ -2,12 +2,14 @@ package org.jgll.grammar;
 
 import java.util.BitSet;
 
+import org.jgll.grammar.condition.Condition;
+
 /**
  * 
  * @author Ali Afroozeh
  *
  */
-public class Character extends AbstractTerminal {
+public class Character extends AbstractSymbol implements Terminal {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -64,6 +66,14 @@ public class Character extends AbstractTerminal {
 		BitSet set = new BitSet();
 		set.set(c);
 		return set;
+	}
+
+	@Override
+	public Terminal addCondition(Condition condition) {
+		Character terminal = new Character(this.c);
+		terminal.conditions.addAll(conditions);
+		terminal.conditions.add(condition);
+		return terminal;
 	}
 
 }

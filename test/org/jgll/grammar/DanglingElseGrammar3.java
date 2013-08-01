@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import static org.jgll.util.collections.CollectionsUtil.*;
 
 import org.jgll.grammar.condition.ConditionFactory;
 import org.jgll.parser.ParseError;

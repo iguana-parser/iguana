@@ -4,7 +4,7 @@ package org.jgll.parser;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.Keyword;
-import org.jgll.grammar.PopAction;
+import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.FirstKeywordGrammarSlot;
 import org.jgll.grammar.slot.FirstNonterminalGrammarSlot;
@@ -198,21 +198,17 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 
 			log.trace("Pop %s, %d, %s", cu.getGrammarSlot(), ci, cn);
 			
+			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) cu.getGrammarSlot()).getPopActions()) {
+				if(popAction.execute(this, input)) {
+					return;
+				}
+			}
+			
 			// Add (u, z) to P
 			lookupTable.addToPoppedElements(cu, cn);
 			
-			label:
 			for(GSSEdge edge : cu.getEdges()) {
-				
-				// Don't pop if a pop action associated with the slot returns false.
-				if(cu.getGrammarSlot() instanceof LastGrammarSlot) {
-					for(PopAction popAction : ((LastGrammarSlot) cu.getGrammarSlot()).getPopActions()) {
-						if(popAction.execute(edge, ci, input)) {
-							continue label;
-						}
-					}					
-				}
-				
+								
 				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
 
 				GrammarSlot slot = cu.getGrammarSlot();
@@ -377,6 +373,11 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 	@Override
 	public int getCurrentInputIndex() {
 		return ci;
+	}
+	
+	@Override
+	public GSSNode getCurrentGSSNode() {
+		return cu;
 	}
 	
 	@Override

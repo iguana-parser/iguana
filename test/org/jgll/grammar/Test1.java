@@ -20,7 +20,7 @@ public class Test1 extends AbstractGrammarTest {
 
 	@Override
 	protected Grammar initGrammar() {
-		Rule r1 = new Rule(new Nonterminal("A"), epsilon());
+		Rule r1 = new Rule(new Nonterminal("A"));
 		return new GrammarBuilder("epsilon").addRule(r1).build();
 	}
 	

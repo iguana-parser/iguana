@@ -6,6 +6,8 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
 
+import static org.jgll.util.collections.CollectionsUtil.*;
+
 /**
  * 
  * S ::= A+

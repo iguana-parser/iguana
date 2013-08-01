@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import org.jgll.grammar.condition.Condition;
+
 public class Plus extends Nonterminal {
 
 	private static final long serialVersionUID = 1L;
@@ -14,6 +16,13 @@ public class Plus extends Nonterminal {
 	public Symbol getSymbol() {
 		return s;
 	}
-
+	
+	@Override
+	public Plus addCondition(Condition condition) {
+		Plus plus = new Plus(this.s);
+		plus.conditions.addAll(this.conditions);
+		plus.conditions.add(condition);
+		return plus;
+	}
 
 }

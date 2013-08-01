@@ -6,8 +6,8 @@ public enum ConditionType {
 	NOT_FOLLOW(" !>> "),
 	PRECEDE(" << "),
 	NOT_PRECEDE(" !<< "),
-	MATCH(" \\ "),
-	NOT_MATCH(" & ");
+	MATCH(" & "),
+	NOT_MATCH(" \\ ");
 	
 	private String symbol;
 	

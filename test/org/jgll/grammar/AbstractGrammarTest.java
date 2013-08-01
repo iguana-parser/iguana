@@ -1,11 +1,5 @@
 package org.jgll.grammar;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.jgll.parser.AbstractGLLParser;
 import org.jgll.parser.GSSNode;
 import org.jgll.parser.LevelSynchronizedGrammarInterpretter;
@@ -41,28 +35,6 @@ public abstract class AbstractGrammarTest {
 	
 	protected abstract Grammar initGrammar();
 
-	@SafeVarargs
-	protected static <T> Set<T> set(T...objects) {
-		Set<T>  set = new HashSet<>();
-		for(T t : objects) {
-			set.add(t);
-		}
-		return set;
-	}
-	
-	@SafeVarargs
-	protected static <T> List<T> list(T...objects){
-		List<T> list = new ArrayList<>();
-		for(T t : objects) {
-			list.add(t);
-		}
-		return list;
-	}
-	
-	protected static List<Symbol> epsilon() {
-		return Collections.emptyList();
-	}
-	
 	protected static String getJavaCode(NonterminalSymbolNode node) {
 		ToJavaCode toJavaCode = new ToJavaCode();
 		toJavaCode.visit(node);

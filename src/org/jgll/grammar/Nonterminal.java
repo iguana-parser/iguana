@@ -1,20 +1,15 @@
 package org.jgll.grammar;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
-public class Nonterminal implements Symbol {
+public class Nonterminal extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final String name;
 	
 	private final boolean ebnfList;
-	
-	private List<Condition> conditions;
 	
 	public Nonterminal(String name) {
 		this(name, false);
@@ -23,7 +18,12 @@ public class Nonterminal implements Symbol {
 	public Nonterminal(String name, boolean ebnfList) {
 		this.name = name;
 		this.ebnfList = ebnfList;
-		this.conditions = new ArrayList<>();
+	}
+	
+	public Nonterminal(String name, boolean ebnfList, Iterable<Condition> conditions) {
+		super(conditions);
+		this.name = name;
+		this.ebnfList = ebnfList;
 	}
 	
 	public String getName() {
@@ -44,8 +44,10 @@ public class Nonterminal implements Symbol {
 	
 	@Override
 	public Nonterminal addCondition(Condition condition) {
-		conditions.add(condition);
-		return this;
+		Nonterminal nonterminal = new Nonterminal(this.name);
+		nonterminal.conditions.addAll(this.conditions);
+		nonterminal.conditions.add(condition);
+		return nonterminal;
 	}
 	
 	@Override
@@ -71,11 +73,6 @@ public class Nonterminal implements Symbol {
 	@Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction().hash(name.hashCode());
-	}
-
-	@Override
-	public Iterable<Condition> getConditions() {
-		return conditions;
 	}
 
 }

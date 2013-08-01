@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import static org.junit.Assert.*;
+import static org.jgll.util.collections.CollectionsUtil.*;
 
 import org.junit.Test;
 
@@ -21,10 +22,10 @@ public class LeftFactorizedArithmeticGrammarTest extends AbstractGrammarTest {
 		
 		Rule r1 = new Rule(new Nonterminal("E"), list(new Nonterminal("T"), new Nonterminal("E1")));
 		Rule r2 = new Rule(new Nonterminal("E1"), list(new Character('+'), new Nonterminal("T"), new Nonterminal("E1")));
-		Rule r3 = new Rule(new Nonterminal("E1"), epsilon());
+		Rule r3 = new Rule(new Nonterminal("E1"));
 		Rule r4 = new Rule(new Nonterminal("T"), list(new Nonterminal("F"), new Nonterminal("T1")));
 		Rule r5 = new Rule(new Nonterminal("T1"), list(new Character('*'), new Nonterminal("F"), new Nonterminal("T1")));
-		Rule r6 = new Rule(new Nonterminal("T1"), epsilon());
+		Rule r6 = new Rule(new Nonterminal("T1"));
 		Rule r7 = new Rule(new Nonterminal("F"), list(new Character('('), new Nonterminal("E"), new Character(')')));
 		Rule r8 = new Rule(new Nonterminal("F"), list(new Character('a')));
 		

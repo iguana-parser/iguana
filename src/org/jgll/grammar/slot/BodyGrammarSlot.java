@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.PopAction;
 import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Symbol;
 import org.jgll.parser.GLLParserInternals;
@@ -37,7 +36,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected List<SlotAction<Boolean>> preConditions;
 	
-	private List<PopAction> popActions;
+	private List<SlotAction<Boolean>> popActions;
 	
 	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(label);
@@ -51,11 +50,11 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		this.popActions = new ArrayList<>();
 	}
 	
-	public void addPopAction(PopAction popAction) {
+	public void addPopAction(SlotAction<Boolean> popAction) {
 		popActions.add(popAction);
 	}
 	
-	public Iterable<PopAction> getPopActions() {
+	public Iterable<SlotAction<Boolean>> getPopActions() {
 		return popActions;
 	}
 		

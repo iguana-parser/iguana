@@ -4,6 +4,8 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
+import org.jgll.grammar.condition.Condition;
+
 /**
  * Character class represents a set of {@link Range} instances.
  * For example, [A-Za-z0-9] represents a character which is
@@ -12,7 +14,7 @@ import java.util.List;
  * @author Ali Afroozeh
  *
  */
-public class CharacterClass extends AbstractTerminal {
+public class CharacterClass extends AbstractSymbol implements Terminal {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -107,5 +109,12 @@ public class CharacterClass extends AbstractTerminal {
 	public BitSet asBitSet() {
 		return testSet;
 	}
-
+	
+	@Override
+	public Terminal addCondition(Condition condition) {
+		CharacterClass characterClass = new CharacterClass(this.ranges);
+		characterClass.conditions.addAll(conditions);
+		characterClass.conditions.add(condition);
+		return characterClass;
+	}
 }

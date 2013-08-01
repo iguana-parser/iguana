@@ -146,21 +146,43 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 * 
 	 * @param key 
 	 * @return A reference to the old key stored in the set if the key was in 
-	 *         the set, otherwise returns null. 
+	 *         the set, otherwise returns null, when the entry was empty. 
 	 */
 	public T add(T key) {
-		T e = get(key);
 		
-		if(e != null) {
-			return e;
+		if(size >= threshold) {
+			enlargeTables();
+		}
+		
+		int index = indexFor(externalHasher.hash(key, function1));
+		T value1 = table1[index];
+		if(isEntryEmpty(value1)) {
+			table1[index] = key;
+			size++;
+			return null;
+		} else {
+	 		if(key.equals(value1)) {
+				return value1;
+			}
+		}
+		
+		index = indexFor(externalHasher.hash(key, function2));
+		T value2 = table2[index];
+		if(isEntryEmpty(value2)) {
+			table2[index] = key;
+			size++;
+			return null;
+		} else {
+			if(key.equals(value2)) {
+				return value2;
+			}			
 		}
 		
 		key = tryInsert(key);
+		
+		// If the key is inserted
 		if(key == null) {
 			size++;
-			if(size >= threshold) {
-				enlargeTables();
-			}
 			return null;
 		}
 
@@ -170,7 +192,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		return add(key);
 	}
 	
-	protected boolean isEntryEmpty(Object e) {
+	protected boolean isEntryEmpty(T e) {
 		return e == null;
 	}
 	

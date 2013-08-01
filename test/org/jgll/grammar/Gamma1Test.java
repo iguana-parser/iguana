@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 
+import static org.jgll.util.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.parser.ParseError;
@@ -40,7 +41,7 @@ public class Gamma1Test extends AbstractGrammarTest {
 		Rule r2 = new Rule(S, list(B, S));
 		builder.addRule(r2);
 		
-		Rule r3 = new Rule(S, epsilon());
+		Rule r3 = new Rule(S);
 		builder.addRule(r3);
 		
 		Rule r4 = new Rule(A, list(a));

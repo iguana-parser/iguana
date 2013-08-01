@@ -2,7 +2,9 @@ package org.jgll.grammar;
 
 import java.util.BitSet;
 
-public class Epsilon extends AbstractTerminal {
+import org.jgll.grammar.condition.Condition;
+
+public class Epsilon implements Terminal {
 
 	private static final String EPSILON = "epsilon";
 
@@ -43,4 +45,15 @@ public class Epsilon extends AbstractTerminal {
 	public BitSet asBitSet() {
 		return new BitSet();
 	}
+
+	@Override
+	public Symbol addCondition(Condition condition) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Iterable<Condition> getConditions() {
+		throw new UnsupportedOperationException();
+	}
+
 }

@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.util.Arrays;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
@@ -75,6 +76,14 @@ public class Keyword extends AbstractSymbol {
 		public int hash(Keyword k, HashFunction f) {
 			return f.hash(k.getChars());
 		}
+	}
+
+	@Override
+	public Keyword addCondition(Condition condition) {
+		Keyword keyword = new Keyword(this.name, this.chars);
+		keyword.conditions.addAll(conditions);
+		keyword.conditions.add(condition);
+		return keyword;
 	}
 	
 }

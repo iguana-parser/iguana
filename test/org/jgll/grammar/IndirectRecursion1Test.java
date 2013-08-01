@@ -1,6 +1,8 @@
 package org.jgll.grammar;
 
 import static org.junit.Assert.*;
+import static org.jgll.util.collections.CollectionsUtil.*;
+
 
 import java.util.Set;
 

@@ -1,20 +1,27 @@
 package org.jgll.grammar.ebnf;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.Group;
 import org.jgll.grammar.Nonterminal;
 import org.jgll.grammar.Opt;
 import org.jgll.grammar.Plus;
 import org.jgll.grammar.Rule;
 import org.jgll.grammar.Symbol;
-import org.jgll.grammar.condition.Condition;
 
 public class EBNFUtil {
 	
 	public static boolean isEBNF(Symbol s) {
 		return s instanceof Plus ||
-			   s instanceof Opt;
+			   s instanceof Opt ||
+			   s instanceof Group;
+	}
+	
+	public static Iterable<Rule> rewrite(Rule...rules) {
+		return rewrite(Arrays.asList(rules));
 	}
 	
 	public static Iterable<Rule> rewrite(Iterable<Rule> rules) {
@@ -49,8 +56,7 @@ public class EBNFUtil {
 		 */
 		if(s instanceof Plus) {
 			Symbol in = ((Plus) s).getSymbol();
-			Nonterminal newNt = new Nonterminal(in.getName() + "+", true);
-			copyConditions(s, newNt);
+			Nonterminal newNt = new Nonterminal(s.getName(), true, s.getConditions());
 			rules.add(new Rule(newNt, newNt, in));
 			rules.add(new Rule(newNt, in));
 			return newNt;
@@ -58,20 +64,21 @@ public class EBNFUtil {
 		
 		else if (s instanceof Opt) {
 			Symbol in = ((Opt) s).getSymbol();
-			Nonterminal newNt = new Nonterminal(in.getName() + "?", true);
-			copyConditions(s, newNt);
+			Nonterminal newNt = new Nonterminal(s.getName(), true, s.getConditions());
 			rules.add(new Rule(newNt, in));
 			rules.add(new Rule(newNt));
+			return newNt;
+		} 
+		
+		else if (s instanceof Group) {
+			List<? extends Symbol> symbols = ((Group) s).getSymbols();
+			Nonterminal newNt = new Nonterminal(s.getName(), false, s.getConditions());
+			rules.add(new Rule(newNt, symbols));
 			return newNt;
 		}
 		
 		throw new IllegalStateException("Should not be here!");
 	}
 	
-	private static void copyConditions(Symbol source, Symbol destination) {
-		for(Condition condition : source.getConditions()) {
-			destination.addCondition(condition);
-		}
-	}
 
 }

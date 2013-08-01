@@ -1,9 +1,10 @@
 package org.jgll.util.hashing;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Random;
 
+import org.jgll.parser.HashFunctions;
 import org.jgll.util.RandomUtil;
 import org.junit.Test;
 
@@ -147,6 +148,11 @@ public class CuckoosHashSetTest {
 		@Override
 		public String toString() {
 			return "(" + k1 + ", " + k2 + ", " + k3 + ", " + k4 + ")";
+		}
+		
+		@Override
+		public int hashCode() {
+			return HashFunctions.defaulFunction().hash(k1, k2, k3, k4);
 		}
 	}
 	

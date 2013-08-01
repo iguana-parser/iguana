@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.util.BitSet;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
 
@@ -10,7 +11,7 @@ import org.jgll.parser.HashFunctions;
  * @author Ali Afroozeh
  *
  */
-public class Range extends AbstractTerminal {
+public class Range extends AbstractSymbol implements Terminal {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -83,4 +84,13 @@ public class Range extends AbstractTerminal {
 	public BitSet asBitSet() {
 		return testSet;
 	}
+	
+	@Override
+	public Terminal addCondition(Condition condition) {
+		Range range = new Range(this.start, this.end);
+		range.conditions.addAll(conditions);
+		range.conditions.add(condition);
+		return range;
+	}
+
 }
