@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
@@ -203,6 +204,10 @@ public class Alternate implements Serializable {
 				if(!thisSlot.getSymbol().equals(otherSlot.getSymbol())) {
 					return false;
 				}				
+			} else if(thisSlot instanceof KeywordGrammarSlot && otherSlot instanceof KeywordGrammarSlot){
+				if(!((KeywordGrammarSlot) thisSlot).getKeyword().equals(((KeywordGrammarSlot) otherSlot).getKeyword())) {
+					return false;
+				}
 			}
 			else if(thisSlot instanceof NonterminalGrammarSlot && otherSlot instanceof NonterminalGrammarSlot) {				
 				NonterminalGrammarSlot thisNt = (NonterminalGrammarSlot) thisSlot;
