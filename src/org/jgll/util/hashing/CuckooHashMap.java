@@ -16,11 +16,11 @@ public class CuckooHashMap<K, V> implements Serializable {
 	private CuckooHashSet<MapEntry<K, V>> set;
 
 	public CuckooHashMap(ExternalHasher<K> decomposer) {
-		set = new CuckooHashSet<>(new MapEntryDecomposer(decomposer));
+		set = new CuckooHashSet<>(new MapEntryExternalHasher(decomposer));
 	}
 	
 	public CuckooHashMap(int initialCapacity, ExternalHasher<K> decomposer) {
-		set = new CuckooHashSet<>(initialCapacity, new MapEntryDecomposer(decomposer));
+		set = new CuckooHashSet<>(initialCapacity, new MapEntryExternalHasher(decomposer));
 	}
 	
 	public V get(K key) {
@@ -87,19 +87,24 @@ public class CuckooHashMap<K, V> implements Serializable {
 			
 			return k.equals(other.k);
 		}
+		
+		@Override
+		public String toString() {
+			return "(" + k.toString() + ", " + (v == null ? "" : v.toString()) + ")";
+		}
 	}
 	
-	public class MapEntryDecomposer implements ExternalHasher<MapEntry<K, V>> {
+	public class MapEntryExternalHasher implements ExternalHasher<MapEntry<K, V>> {
 
-		private ExternalHasher<K> decomposer;
+		private ExternalHasher<K> hasher;
 
-		public MapEntryDecomposer(ExternalHasher<K> decomposer) {
-			this.decomposer = decomposer;
+		public MapEntryExternalHasher(ExternalHasher<K> hasher) {
+			this.hasher = hasher;
 		}
 		
 		@Override
 		public int hash(MapEntry<K, V> t, HashFunction f) {
-			return decomposer.hash(t.k, f);
+			return hasher.hash(t.k, f);
 		}
 	}
 }

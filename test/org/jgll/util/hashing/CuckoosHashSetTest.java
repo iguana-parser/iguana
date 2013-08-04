@@ -116,6 +116,14 @@ public class CuckoosHashSetTest {
 		assertEquals(new Integer(3), ret2);
 	}
 	
+
+	@Test
+	public void testEnlarge() {
+		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerDecomposer.getInstance(), 101, 21, 398, 432, 15, 986, 737);
+		set.add(891);
+	}
+	
+	
 	private class IntegerHashKey4 {
 
 		private int k1;

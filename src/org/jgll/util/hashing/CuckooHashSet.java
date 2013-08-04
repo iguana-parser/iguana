@@ -18,7 +18,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
-	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.49f;
 	
 	private int initialCapacity;
 	
@@ -93,18 +93,18 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 
 		capacity = 1;
         while (capacity < initialCapacity) {
-            capacity <<= 1;
+            capacity *= 2;
         }
         
 		threshold = (int) (loadFactor * capacity);
 
-		tableSize = capacity >> 1;
+		tableSize = capacity / 2;
 		table1 = (T[]) new Object[tableSize];
 		table2 = (T[]) new Object[tableSize];
 		
 		generateNewHashFunctions();
 	}
-
+	
 	private void generateNewHashFunctions() {
 		function1 = new MurmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
 		function2 = new MurmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
@@ -146,43 +146,21 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 * 
 	 * @param key 
 	 * @return A reference to the old key stored in the set if the key was in 
-	 *         the set, otherwise returns null, when the entry was empty. 
+	 *         the set, otherwise returns null. 
 	 */
 	public T add(T key) {
+		T e = get(key);
 		
-		if(size >= threshold) {
-			enlargeTables();
-		}
-		
-		int index = indexFor(externalHasher.hash(key, function1));
-		T value1 = table1[index];
-		if(isEntryEmpty(value1)) {
-			table1[index] = key;
-			size++;
-			return null;
-		} else {
-	 		if(key.equals(value1)) {
-				return value1;
-			}
-		}
-		
-		index = indexFor(externalHasher.hash(key, function2));
-		T value2 = table2[index];
-		if(isEntryEmpty(value2)) {
-			table2[index] = key;
-			size++;
-			return null;
-		} else {
-			if(key.equals(value2)) {
-				return value2;
-			}			
+		if(e != null) {
+			return e;
 		}
 		
 		key = tryInsert(key);
-		
-		// If the key is inserted
 		if(key == null) {
 			size++;
+			if(size >= threshold) {
+				enlargeTables();
+			}
 			return null;
 		}
 
@@ -246,8 +224,10 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	}
 	
 	private void rehash() {
+		
+		rehashCount++;
 
-		mainloop:
+		table1Loop:
 		for(int i = 0; i < table1.length; i++) {
 			T key = table1[i];
 			if(!isEntryEmpty(key)) {
@@ -257,17 +237,22 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 
 					tmp = tryInsert(tmp);
 					if(tmp == null) {
-						continue mainloop;
+						continue table1Loop;
 					}
+					
+					// If the control flow reaches here, it means that the insertion in 
+					// the rehash has failed, and we need a new set of hash functions.
+					// We put the tmp back into an empty spot in the table and start again.
+					putInEmptySlot(tmp);
 					
 					generateNewHashFunctions();
 					rehash();
-					break mainloop;
+					return;
 				}
 			}
 		}
 	
-		mainloop:
+		table2Loop:
 		for(int i = 0; i < table2.length; i++) {
 			T key = table2[i];
 			if(!isEntryEmpty(key)) {
@@ -277,17 +262,34 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	
 					tmp = tryInsert(tmp);
 					if(tmp == null) {
-						continue mainloop;
+						continue table2Loop;
 					}
 					
+					putInEmptySlot(tmp);
+
 					generateNewHashFunctions();
 					rehash();
-					break mainloop;
+					return;
 				}
 			}
 		}
+	}
+	
+	private void putInEmptySlot(T key) {
+		for(int i = 0; i < table1.length; i++) {
+			if(table1[i] == null) {
+				table1[i] = key;
+				return;
+			}
+		}
+		for(int i = 0; i < table2.length; i++) {
+			if(table2[i] == null) {
+				table2[i] = key;
+				return;
+			}
+		}
 		
-		rehashCount++;
+		throw new IllegalStateException("Shouldn't reach here");
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -297,7 +299,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		T[] newTable2 = (T[]) new Object[capacity];
 		
 		tableSize = capacity;
-		capacity <<= 1;
+		capacity *= 2;
 		
 		threshold = (int) (loadFactor * capacity);
 		

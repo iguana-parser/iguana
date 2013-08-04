@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.Level;
@@ -65,13 +66,23 @@ public class GSSEdge implements Level {
 		
 		GSSEdge other = (GSSEdge) o;
 		
+		
 		return src.getGrammarSlot() == other.src.getGrammarSlot() &&
 			   src.getInputIndex() == other.src.getInputIndex() &&
 			   dst.getGrammarSlot() == other.dst.getGrammarSlot() &&
 			   dst.getInputIndex() == other.dst.getInputIndex() &&
-			   sppfNode.equals(other.sppfNode);
+			   compare(sppfNode, other.sppfNode);
 	}
-
+	
+	private boolean compare(SPPFNode first, SPPFNode second) {
+		if(first instanceof TerminalSymbolNode && second instanceof TerminalSymbolNode) {
+			return ((TerminalSymbolNode) first).getMatchedChar() == ((TerminalSymbolNode) second).getMatchedChar(); 
+		} 
+		else {
+			return first.getGrammarSlot() == second.getGrammarSlot();
+		}
+	}
+	
 	@Override
 	public int getLevel() {
 		return src.getInputIndex();
@@ -79,13 +90,35 @@ public class GSSEdge implements Level {
 	
 	public static class GSSEdgeExternalHasher implements ExternalHasher<GSSEdge> {
 
+		/**
+		 * Currently terminal nodes do not have a grammar slot. As a result,
+		 * we cannot use their grammar slot to calculate their hashcode or equality.
+		 * We use the matched character of terminal nodes for hashcode and equality.
+		 * The problem is that matched characters may clash with the id of grammar slots.
+		 * To avoid such clashes, we use to arbitrary numbers (31, 17) to distinguish the
+		 * type of nodes.
+		 * 
+		 * May change in the future.
+		 */
+		
 		@Override
 		public int hash(GSSEdge edge, HashFunction f) {
-			return f.hash(edge.src.getGrammarSlot().getId(),
+			if(edge.sppfNode instanceof TerminalSymbolNode) {
+				return f.hash(edge.src.getGrammarSlot().getId(),
 						   edge.src.getInputIndex(),
 						   edge.dst.getGrammarSlot().getId(),
 						   edge.dst.getInputIndex(),
-						   edge.sppfNode.hashCode());
+						   31,
+						   ((TerminalSymbolNode) edge.sppfNode).getMatchedChar());
+			} 
+			else {
+				return f.hash(edge.src.getGrammarSlot().getId(),
+						   edge.src.getInputIndex(),
+						   edge.dst.getGrammarSlot().getId(),
+						   edge.dst.getInputIndex(),
+						   17,
+						   edge.sppfNode.getGrammarSlot().getId());
+			}
 		}
 		
 	}

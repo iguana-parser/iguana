@@ -197,6 +197,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 			set = new HashSet<>();
 			poppedElements.put(gssNode, set);
 		}
+		log.trace("Added to P: %s -> %s", gssNode, sppfNode);
 		set.add(sppfNode);
 	}
 
@@ -204,7 +205,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
 		Set<SPPFNode> set = poppedElements.get(gssNode);
 		if(set == null) {
-			 set = Collections.emptySet();
+			 return Collections.emptySet();
 		}
 		return set;
 	}

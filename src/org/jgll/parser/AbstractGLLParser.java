@@ -222,8 +222,7 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 			}			
 		}
 	}
-	
-	
+
 	
 	/**
 	 * 

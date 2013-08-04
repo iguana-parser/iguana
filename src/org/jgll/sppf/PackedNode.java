@@ -160,11 +160,11 @@ public class PackedNode extends SPPFNode {
 
 		@Override
 		public int hash(PackedNode packedNode, HashFunction f) {
-			return f.hash(packedNode.slot.getId(),
-					packedNode.pivot,
-					packedNode.parent.getGrammarSlot().getId(),
-					packedNode.parent.getLeftExtent(),
-					packedNode.parent.getRightExtent());
+ 			return f.hash(packedNode.slot.getId(),
+   						  packedNode.pivot,
+						  packedNode.parent.getGrammarSlot().getId(),
+						  packedNode.parent.getLeftExtent(),
+						  packedNode.parent.getRightExtent());
 		}
 	}
 
