@@ -149,6 +149,11 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 *         the set, otherwise returns null. 
 	 */
 	public T add(T key) {
+		
+		if(size >= threshold) {
+			enlargeTables();
+		}
+		
 		T e = get(key);
 		
 		if(e != null) {
@@ -156,18 +161,15 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		}
 		
 		key = tryInsert(key);
-		if(key == null) {
-			size++;
-			if(size >= threshold) {
-				enlargeTables();
-			}
-			return null;
+
+		while(key != null) {
+			generateNewHashFunctions();
+			rehash();
+			key = tryInsert(key);
 		}
 
-		// Insertion was unsuccessful
-		generateNewHashFunctions();
-		rehash();
-		return add(key);
+		size++;
+		return null;
 	}
 	
 	protected boolean isEntryEmpty(T e) {
