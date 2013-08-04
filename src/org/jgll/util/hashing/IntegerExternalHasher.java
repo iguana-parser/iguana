@@ -2,6 +2,8 @@ package org.jgll.util.hashing;
 
 public class IntegerExternalHasher implements ExternalHasher<Integer> {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static IntegerExternalHasher instance;
 	
 	public static IntegerExternalHasher getInstance() {

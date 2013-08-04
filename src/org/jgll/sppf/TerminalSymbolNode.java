@@ -112,6 +112,8 @@ public class TerminalSymbolNode extends SPPFNode {
 	
 	public static class TerminalSymbolNodeExternalHasher implements ExternalHasher<TerminalSymbolNode> {
 
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public int hash(TerminalSymbolNode t, HashFunction f) {
 			return f.hash(t.inputIndex, t.matchedChar);

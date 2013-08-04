@@ -158,6 +158,8 @@ public class PackedNode extends SPPFNode {
 	
 	public static class PackedNodeExternalHasher implements ExternalHasher<PackedNode> {
 
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public int hash(PackedNode packedNode, HashFunction f) {
  			return f.hash(packedNode.slot.getId(),

@@ -96,6 +96,8 @@ public class CuckooHashMap<K, V> implements Serializable {
 	
 	public class MapEntryExternalHasher implements ExternalHasher<MapEntry<K, V>> {
 
+		private static final long serialVersionUID = 1L;
+		
 		private ExternalHasher<K> hasher;
 
 		public MapEntryExternalHasher(ExternalHasher<K> hasher) {

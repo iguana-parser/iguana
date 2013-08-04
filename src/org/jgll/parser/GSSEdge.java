@@ -90,6 +90,8 @@ public class GSSEdge implements Level {
 	
 	public static class GSSEdgeExternalHasher implements ExternalHasher<GSSEdge> {
 
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Currently terminal nodes do not have a grammar slot. As a result,
 		 * we cannot use their grammar slot to calculate their hashcode or equality.

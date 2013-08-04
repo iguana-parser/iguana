@@ -94,6 +94,8 @@ public class GSSNode {
 	
 	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {
 
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public int hash(GSSNode node, HashFunction f) {
 			return f.hash(node.getGrammarSlot().getId(), node.getInputIndex());

@@ -115,6 +115,8 @@ public class Descriptor implements Level {
 	
 	public static class DescriptorExternalHasher implements ExternalHasher<Descriptor> {
 
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public int hash(Descriptor d, HashFunction f) {
 			return f.hash(d.slot.getId(), 

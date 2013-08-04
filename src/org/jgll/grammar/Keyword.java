@@ -73,6 +73,8 @@ public class Keyword extends AbstractSymbol {
 	
 	public static class KeywordExternalHasher implements ExternalHasher<Keyword> {
 
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public int hash(Keyword k, HashFunction f) {
 			return f.hash(k.getChars());

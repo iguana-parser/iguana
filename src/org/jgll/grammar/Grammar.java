@@ -31,7 +31,7 @@ public class Grammar implements Serializable {
 	private List<BodyGrammarSlot> slots;
 	
 	/**
-	 * A map from nonterminal names to their corresponding head slots.
+	 * A map from nonterminal names to their corresponding head ‚slots.
 	 * This map is used to locate head grammar slots by name for parsing
 	 * from any arbitrary nonterminal.
 	 */

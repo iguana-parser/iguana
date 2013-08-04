@@ -166,6 +166,8 @@ public class CuckoosHashSetTest {
 	
 	private static class IntegerHashKey4ExternalHasher implements ExternalHasher<IntegerHashKey4> {
 
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public int hash(IntegerHashKey4 key, HashFunction f) {
 			return f.hash(key.k1, key.k2, key.k3, key.k4);

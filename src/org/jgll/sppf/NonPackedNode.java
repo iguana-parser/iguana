@@ -206,7 +206,8 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	public static class NonPackedNodeExternalHasher implements ExternalHasher<NonPackedNode> {
 
-		
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public int hash(NonPackedNode nonPackedNode, HashFunction f) {
 			return f.hash(nonPackedNode.slot.getId(), nonPackedNode.leftExtent, nonPackedNode.rightExtent);

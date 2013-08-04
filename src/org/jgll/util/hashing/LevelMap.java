@@ -3,7 +3,6 @@ package org.jgll.util.hashing;
 import java.io.Serializable;
 
 
-
 public class LevelMap<K extends Level, V> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -86,6 +85,8 @@ public class LevelMap<K extends Level, V> implements Serializable {
 	
 	public class MapEntryDecomposer implements ExternalHasher<MapEntry<K, V>> {
 
+		private static final long serialVersionUID = 1L;
+		
 		private ExternalHasher<K> externalHasher;
 
 		public MapEntryDecomposer(ExternalHasher<K> externalHasher) {
