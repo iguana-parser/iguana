@@ -56,25 +56,25 @@ public class EBNFUtil {
 		 */
 		if(s instanceof Plus) {
 			Symbol in = ((Plus) s).getSymbol();
-			Nonterminal newNt = new Nonterminal(s.getName(), true, s.getConditions());
+			Nonterminal newNt = new Nonterminal(s.getName(), true);
 			rules.add(new Rule(newNt, newNt, in));
 			rules.add(new Rule(newNt, in));
-			return newNt;
+			return newNt.addConditions(s.getConditions());
 		} 
 		
 		else if (s instanceof Opt) {
 			Symbol in = ((Opt) s).getSymbol();
-			Nonterminal newNt = new Nonterminal(s.getName(), true, s.getConditions());
+			Nonterminal newNt = new Nonterminal(s.getName(), true);
 			rules.add(new Rule(newNt, in));
 			rules.add(new Rule(newNt));
-			return newNt;
+			return newNt.addConditions(s.getConditions());
 		} 
 		
 		else if (s instanceof Group) {
 			List<? extends Symbol> symbols = ((Group) s).getSymbols();
-			Nonterminal newNt = new Nonterminal(s.getName(), false, s.getConditions());
+			Nonterminal newNt = new Nonterminal(s.getName(), false);
 			rules.add(new Rule(newNt, symbols));
-			return newNt;
+			return newNt.addConditions(s.getConditions());
 		}
 		
 		throw new IllegalStateException("Should not be here!");

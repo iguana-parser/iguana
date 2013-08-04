@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.util.BitSet;
+import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 
@@ -47,12 +48,17 @@ public class Epsilon implements Terminal {
 	}
 
 	@Override
-	public Symbol addCondition(Condition condition) {
+	public Symbol addConditions(Collection<Condition> condition) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Iterable<Condition> getConditions() {
+	public Collection<Condition> getConditions() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Symbol addCondition(Condition condition) {
 		throw new UnsupportedOperationException();
 	}
 

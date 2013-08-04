@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
@@ -79,11 +80,11 @@ public class Keyword extends AbstractSymbol {
 	}
 
 	@Override
-	public Keyword addCondition(Condition condition) {
+	public Keyword addConditions(Collection<Condition> conditions) {
 		Keyword keyword = new Keyword(this.name, this.chars);
+		keyword.conditions.addAll(this.conditions);
 		keyword.conditions.addAll(conditions);
-		keyword.conditions.add(condition);
 		return keyword;
 	}
-	
+		
 }

@@ -126,15 +126,16 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	public T get(T key) {
 	
 		int index = indexFor(externalHasher.hash(key, function1));
-		T value1 = table1[index];
-		if(key.equals(value1)) {
-			return value1;
+		
+		T value = table1[index];
+		if(!isEntryEmpty(value) && key.equals(value)) {
+			return value;
 		}			
 		
 		index = indexFor(externalHasher.hash(key, function2));
-		T value2 = table2[index];
-		if(key.equals(value2)) {
-			return value2;
+		value = table2[index];
+		if(!isEntryEmpty(value) && key.equals(value)) {
+			return value;
 		}
 
 		return null;

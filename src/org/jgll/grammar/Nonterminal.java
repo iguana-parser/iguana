@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import java.util.Collection;
+
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
@@ -43,10 +45,10 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	@Override
-	public Nonterminal addCondition(Condition condition) {
+	public Symbol addConditions(Collection<Condition> conditions) {
 		Nonterminal nonterminal = new Nonterminal(this.name);
 		nonterminal.conditions.addAll(this.conditions);
-		nonterminal.conditions.add(condition);
+		nonterminal.conditions.addAll(conditions);
 		return nonterminal;
 	}
 	

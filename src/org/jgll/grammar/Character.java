@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.util.BitSet;
+import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 
@@ -69,10 +70,10 @@ public class Character extends AbstractSymbol implements Terminal {
 	}
 
 	@Override
-	public Terminal addCondition(Condition condition) {
+	public Terminal addConditions(Collection<Condition> conditions) {
 		Character terminal = new Character(this.c);
+		terminal.conditions.addAll(this.conditions);
 		terminal.conditions.addAll(conditions);
-		terminal.conditions.add(condition);
 		return terminal;
 	}
 

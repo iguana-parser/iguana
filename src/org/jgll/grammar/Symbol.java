@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 
@@ -16,6 +17,8 @@ public interface Symbol extends Serializable {
 	
 	public Symbol addCondition(Condition condition);
 	
-	public Iterable<Condition> getConditions();
+	public Symbol addConditions(Collection<Condition> conditions);
+	
+	public Collection<Condition> getConditions();
 	
 }

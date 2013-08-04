@@ -14,7 +14,6 @@ import org.jgll.grammar.Rule;
 import org.jgll.grammar.Terminal;
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.parser.ParseError;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -55,8 +54,7 @@ public class FollowRestrictionTest extends AbstractGrammarTest {
 	public void test() throws Exception {
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:4");
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("abc:"), grammar, "S");
-		generateSPPFGraphWithoutIntermeiateNodes(sppf);
+		levelParser.parse(Input.fromString("abc:"), grammar, "S");
 	}
 
 }

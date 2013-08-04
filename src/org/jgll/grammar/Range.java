@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.util.BitSet;
+import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
@@ -86,10 +87,10 @@ public class Range extends AbstractSymbol implements Terminal {
 	}
 	
 	@Override
-	public Terminal addCondition(Condition condition) {
+	public Terminal addConditions(Collection<Condition> conditions) {
 		Range range = new Range(this.start, this.end);
+		range.conditions.addAll(this.conditions);
 		range.conditions.addAll(conditions);
-		range.conditions.add(condition);
 		return range;
 	}
 

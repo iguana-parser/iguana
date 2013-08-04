@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -111,10 +112,10 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	}
 	
 	@Override
-	public Terminal addCondition(Condition condition) {
+	public Terminal addConditions(Collection<Condition> conditions) {
 		CharacterClass characterClass = new CharacterClass(this.ranges);
+		characterClass.conditions.addAll(this.conditions);
 		characterClass.conditions.addAll(conditions);
-		characterClass.conditions.add(condition);
 		return characterClass;
 	}
 }
