@@ -342,7 +342,7 @@ public class GrammarBuilder implements Serializable {
 
 				@Override
 				public Boolean execute(GLLParserInternals parser, Input input) {
-					return input.match(parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), s.getChars());
+					return input.match(parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex() - 1, s.getChars());
 				}
 			});
 			
@@ -359,7 +359,7 @@ public class GrammarBuilder implements Serializable {
 				@Override
 				public Boolean execute(GLLParserInternals parser, Input input) {
 					int begin = parser.getCurrentGSSNode().getInputIndex();
-					int end = parser.getCurrentGSSNode().getInputIndex();
+					int end = parser.getCurrentInputIndex() - 1;
 					return input.match(begin, end, s1.getChars()) ||
 						   input.match(begin, end, s2.getChars())	;
 				}
@@ -378,7 +378,9 @@ public class GrammarBuilder implements Serializable {
 				
 				@Override
 				public Boolean execute(GLLParserInternals parser, Input input) {
-					Keyword subInput = new Keyword("", input.subInput(parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentGSSNode().getInputIndex()));
+					int begin = parser.getCurrentGSSNode().getInputIndex();
+					int end = parser.getCurrentInputIndex() - 1;
+					Keyword subInput = new Keyword("", input.subInput(begin, end));
 					return set.contains(subInput);
 				}
 			});

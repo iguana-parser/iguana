@@ -420,5 +420,25 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		
 		return changed;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		for(T t : table1) {
+			if(!isEntryEmpty(t)) 
+				sb.append(t).append(", ");
+		}
+		for(T t : table2) {
+			if(!isEntryEmpty(t))
+				sb.append(t).append(", ");
+		}
+		
+		if(sb.length() > 2)
+			sb.delete(sb.length() - 2, sb.length());
+		
+		sb.append("}");
+		return sb.toString();
+	}
 
 }
