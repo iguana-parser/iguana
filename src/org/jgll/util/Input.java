@@ -95,9 +95,10 @@ public class Input {
 	}
 	
 	public int[] subInput(int start, int end) {
-		int[] subInput = new int[end - start + 1];
+		int length = end - start + 1;
+		int[] subInput = new int[length];
 		
-		System.arraycopy(input, start, subInput, start, end - start + 1);
+		System.arraycopy(input, start, subInput, 0, length);
 		
 		return subInput;
 	}
