@@ -31,6 +31,13 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		super(label, position, previous, head);
 		this.object = object;
 	}
+	
+	public LastGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
+		LastGrammarSlot slot = new LastGrammarSlot(this.label, this.position, previous, head, object);
+		slot.preConditions = preConditions;
+		slot.popActions = popActions;
+		return slot;
+	}
 
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {	

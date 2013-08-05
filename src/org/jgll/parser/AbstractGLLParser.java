@@ -141,6 +141,7 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 	@Override
 	public void recordParseError(GrammarSlot slot) {
 		if (errorIndex >= this.errorIndex) {
+			log.trace("Error recorded at %s %d", this, ci);
 			this.errorIndex = ci;
 			this.errorSlot = slot;
 			this.errorGSSNode = cu;

@@ -29,11 +29,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private final Nonterminal nonterminal;
 	
-	private final Set<Terminal> firstSet;
+	private boolean nullable;
 	
-	private final Set<Terminal> followSet;
+	private transient final Set<Terminal> firstSet;
 	
-	private final Set<HeadGrammarSlot> reachableNonterminals;
+	private transient final Set<Terminal> followSet;
+	
+	private transient final Set<HeadGrammarSlot> reachableNonterminals;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		super(nonterminal.getName());
@@ -86,7 +88,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public boolean isNullable() {
-		return firstSet.contains(Epsilon.getInstance());
+		return nullable;
+	}
+	
+	public void setNullable(boolean nullable) {
+		this.nullable = nullable;
 	}
 	
 	@Override

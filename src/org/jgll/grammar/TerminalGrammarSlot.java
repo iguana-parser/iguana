@@ -28,6 +28,13 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		super(label, position, previous, head);
 		this.terminal = terminal;
 	}
+	
+	public TerminalGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
+		TerminalGrammarSlot slot = new TerminalGrammarSlot(this.label, this.position, previous, this.terminal, head);
+		slot.preConditions = preConditions;
+		slot.popActions = popActions;
+		return slot;
+	}
 		
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {

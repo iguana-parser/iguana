@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jgll.sppf.SPPFNode;
@@ -186,6 +187,22 @@ public class Input {
 			return 0;
 		}
 		return lineColumns[index].getColumnNumber();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(! (obj instanceof Input)) {
+			return false;
+		}
+		
+		Input other = (Input) obj;
+		
+		return Arrays.equals(input, other.input);
 	}
 	
 	public PositionInfo getPositionInfo(SPPFNode node) {

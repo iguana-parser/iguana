@@ -26,14 +26,14 @@ import org.junit.Test;
  * 
  * S ::= "for" L? Id | "forall"
  * 
- * Id ::= !<< [a-z]+ !>> [a-z]
+ * Id ::= "for" !<< [a-z]+ !>> [a-z]
  * 
  * L ::= " "
  * 
  * @author Ali Afroozeh
  * 
  */
-public class PrecedeRestrictionTest extends AbstractGrammarTest {
+public class PrecedeRestrictionTest2 extends AbstractGrammarTest {
 
 	@Override
 	protected Grammar initGrammar() {
@@ -51,7 +51,7 @@ public class PrecedeRestrictionTest extends AbstractGrammarTest {
 
 		Rule r2 = new Rule(S, forall);
 
-		Rule r3 = new Rule(Id, new Plus(az).addCondition(notFollow(az)).addCondition(notPrecede(az)));
+		Rule r3 = new Rule(Id, new Plus(az).addCondition(notFollow(az)).addCondition(notPrecede(forr)));
 
 		Rule r4 = new Rule(L, ws);
 

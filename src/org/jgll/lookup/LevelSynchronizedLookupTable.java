@@ -78,9 +78,9 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	 */
 	private int all;
 	
-	private int packedNodesCount;
+	private int countPackedNodes;
 	
-	protected int gssEdgesCount;
+	protected int countGSSEdges;
 	
 	private final int initialSize = 2048;
 	
@@ -329,7 +329,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		if(source.getInputIndex() == currentLevel) {
 			boolean added = currendEdges.add(edge) == null;
 			if(added) {
-				gssEdgesCount++;
+				countGSSEdges++;
 				source.addGSSEdge(edge);
 			}
 			return !added;
@@ -338,7 +338,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			int index = indexFor(source.getInputIndex());
 			boolean added = forwardEdges[index].add(edge) == null;
 			if(added) {
-				gssEdgesCount++;
+				countGSSEdges++;
 				source.addGSSEdge(edge);
 			}
 			return !added;
@@ -380,7 +380,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 				}
 				log.trace("Packed node created : %s", firstPackedNode);
 				log.trace("Packed node created : %s", packedNode);
-				packedNodesCount += 2;
+				countPackedNodes += 2;
 			}
 		}
 		else {
@@ -388,13 +388,13 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 			if(parent.getRightExtent() == currentLevel) {
 				if(currentPackedNodes.add(key) == null) {
 					parent.addPackedNode(key, leftChild, rightChild);
-					packedNodesCount++;
+					countPackedNodes++;
 				}
 			} else {
 				int index = indexFor(parent.getRightExtent());
 				if(forwardPackedNodes[index].add(key) == null) {
 					parent.addPackedNode(key, leftChild, rightChild);
-					packedNodesCount++;
+					countPackedNodes++;
 				}
 			}
 			
@@ -404,12 +404,12 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 
 	@Override
 	public int getPackedNodesCount() {
-		return packedNodesCount;
+		return countPackedNodes;
 	}
 
 	@Override
 	public int getGSSEdgesCount() {
-		return gssEdgesCount;
+		return countGSSEdges;
 	}
 
 	@Override

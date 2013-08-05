@@ -24,6 +24,13 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		this.keywordHead = keywordHead;
 		this.keyword = keyword;
 	}
+	
+	public KeywordGrammarSlot copy(HeadGrammarSlot keywordHead, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		KeywordGrammarSlot slot = new KeywordGrammarSlot(this.label, this.position, keywordHead, this.keyword, previous, head);
+		slot.preConditions = preConditions;
+		slot.popActions = popActions;
+		return slot;
+	}
 
 	@Override
 	public boolean testFirstSet(int index, Input input) {

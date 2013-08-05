@@ -37,6 +37,15 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		this.followSet = new BitSet();
 	}
 	
+	public NonterminalGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(this.label, this.position, previous, nonterminal, head);
+		slot.preConditions = preConditions;
+		slot.popActions = popActions;
+		slot.firstSet = firstSet;
+		slot.followSet = followSet;
+		return slot;
+	}
+	
 	public HeadGrammarSlot getNonterminal() {
 		return nonterminal;
 	}

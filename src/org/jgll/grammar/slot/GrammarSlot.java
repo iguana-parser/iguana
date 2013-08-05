@@ -44,8 +44,8 @@ public abstract class GrammarSlot implements Serializable {
 	public abstract GrammarSlot parse(GLLParserInternals parser, Input input);
 	
 	public abstract GrammarSlot recognize(GLLRecognizer recognizer, Input input);
-	
 
+	
 	public int getId() {
 		return id;
 	}

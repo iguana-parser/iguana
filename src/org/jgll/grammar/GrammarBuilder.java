@@ -670,7 +670,7 @@ public class GrammarBuilder implements Serializable {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
 			changed = set.addAll(nonterminalGrammarSlot.getNonterminal().getFirstSet()) || changed;
-			if (nonterminalGrammarSlot.getNonterminal().isNullable()) {
+			if (isNullable(nonterminalGrammarSlot.getNonterminal())) {
 				return addFirstSet(set, currentSlot.next(), changed) || changed;
 			}
 			return changed;
@@ -681,6 +681,10 @@ public class GrammarBuilder implements Serializable {
 			return changed;
 		}
 	}
+	
+	private boolean isNullable(HeadGrammarSlot nt) {
+		return nt.getFirstSet().contains(Epsilon.getInstance());
+	}
 
 	private boolean isChainNullable(BodyGrammarSlot slot) {
 		if (!(slot instanceof LastGrammarSlot)) {
@@ -689,7 +693,7 @@ public class GrammarBuilder implements Serializable {
 			} 
 
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-			return ntGrammarSlot.getNonterminal().isNullable() && isChainNullable(ntGrammarSlot.next());
+			return isNullable(ntGrammarSlot.getNonterminal()) && isChainNullable(ntGrammarSlot.next());
 		}
 
 		return true;
@@ -752,6 +756,9 @@ public class GrammarBuilder implements Serializable {
 
 	private void setTestSets() {
 		for (HeadGrammarSlot head : nonterminals) {
+			
+			head.setNullable(head.getFirstSet().contains(Epsilon.getInstance()));
+			
 			for (Alternate alternate : head.getAlternates()) {
 
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
@@ -765,7 +772,7 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 	}
-
+	
 	private void setIds() {
 		int i = 0;
 		for (HeadGrammarSlot head : nonterminals) {
@@ -1021,42 +1028,27 @@ public class GrammarBuilder implements Serializable {
 		return new Alternate(copyFirstSlot, alternate.getIndex());
 	}
 
-	// TODO: check how the linked nonterminals are copied.
 	private BodyGrammarSlot copySlot(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {
 
 		BodyGrammarSlot copy;
 
 		if (slot instanceof LastGrammarSlot) {
-			copy = new LastGrammarSlot(slot.getLabel(), slot.getPosition(), previous, head, ((LastGrammarSlot) slot).getObject());
-			copyConditions(slot, copy);
+			copy = ((LastGrammarSlot) slot).copy(previous, head);
 		} else if (slot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) slot;
-			copy = new NonterminalGrammarSlot(slot.getLabel(), slot.getPosition(), previous, ntSlot.getNonterminal(), head);
-			copyConditions(slot, copy);
+			copy = ntSlot.copy(previous, ntSlot.getNonterminal(), head);
 		} else if(slot instanceof TerminalGrammarSlot) {
-			copy = new TerminalGrammarSlot(slot.getLabel(), slot.getPosition(), previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
-			copyConditions(slot, copy);
+			copy = ((TerminalGrammarSlot) slot).copy(previous, head);
 		// Keyword
 		} else  {
 			Keyword keyword = ((KeywordGrammarSlot) slot).getKeyword();
-			copy = new KeywordGrammarSlot(slot.getLabel(), slot.getPosition(), nonterminalsMap.get(keyword.getName()), keyword, previous, head);
-			copyConditions(slot, copy);
+			copy = ((KeywordGrammarSlot) slot).copy(nonterminalsMap.get(keyword.getName()), previous, head);
 		}
 
 		slots.add(copy);
 		return copy;
 	}
 	
-	private static void copyConditions(BodyGrammarSlot source, BodyGrammarSlot destination) {
-		for(SlotAction<Boolean> condition : source.getPreConditions()) {
-			destination.addPreCondition(condition);
-		}
-		for(SlotAction<Boolean> condition : source.getPopActions()) {
-			destination.addPreCondition(condition);
-		}
-
-	}
-
 	@SafeVarargs
 	protected static <T> Set<T> set(T... objects) {
 		Set<T> set = new HashSet<>();
@@ -1126,7 +1118,7 @@ public class GrammarBuilder implements Serializable {
 			
 			changed = set.add(nonterminalGrammarSlot.getNonterminal()) || changed;
 			changed = set.addAll(nonterminalGrammarSlot.getNonterminal().getReachableNonterminals()) || changed;
-			if (nonterminalGrammarSlot.getNonterminal().isNullable()) {
+			if (isNullable(nonterminalGrammarSlot.getNonterminal())) {
 				return calculateReachabilityGraph(set, currentSlot.next(), changed) || changed;
 			}
 			return changed;

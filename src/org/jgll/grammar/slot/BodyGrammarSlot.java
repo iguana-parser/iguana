@@ -36,7 +36,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected List<SlotAction<Boolean>> preConditions;
 	
-	private List<SlotAction<Boolean>> popActions;
+	protected List<SlotAction<Boolean>> popActions;
 	
 	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(label);
