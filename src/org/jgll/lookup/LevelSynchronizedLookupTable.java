@@ -19,9 +19,8 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.util.hashing.LevelMap;
-import org.jgll.util.hashing.LevelSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -41,30 +40,30 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private int countNonPackedNodes;
 
-	private int longestTerminalChain;
+	private int chainLength;
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private LevelSet<Descriptor> u;
-	private LevelSet<Descriptor>[] forwardDescriptors;
+	private CuckooHashSet<Descriptor> u;
+	private CuckooHashSet<Descriptor>[] forwardDescriptors;
 
-	private LevelSet<NonPackedNode> currentNodes;
-	private LevelSet<NonPackedNode>[] forwardNodes;
+	private CuckooHashSet<NonPackedNode> currentNodes;
+	private CuckooHashSet<NonPackedNode>[] forwardNodes;
 	
-	private LevelSet<PackedNode> currentPackedNodes;
-	private LevelSet<PackedNode>[] forwardPackedNodes;
+	private CuckooHashSet<PackedNode> currentPackedNodes;
+	private CuckooHashSet<PackedNode>[] forwardPackedNodes;
 	
 	private Queue<Descriptor> r;
 	private Queue<Descriptor>[] forwardRs;
 	
-	private LevelSet<GSSNode> currentGssNodes;
-	private LevelSet<GSSNode>[] forwardGssNodes;
+	private CuckooHashSet<GSSNode> currentGssNodes;
+	private CuckooHashSet<GSSNode>[] forwardGssNodes;
 	
-	private LevelSet<GSSEdge> currendEdges;
-	private LevelSet<GSSEdge>[] forwardEdges;
+	private CuckooHashSet<GSSEdge> currendEdges;
+	private CuckooHashSet<GSSEdge>[] forwardEdges;
 	
-	private LevelMap<GSSNode, Set<SPPFNode>> currentPoppedElements;
-	private LevelMap<GSSNode, Set<SPPFNode>>[] forwardPoppedElements;
+	private CuckooHashMap<GSSNode, Set<SPPFNode>> currentPoppedElements;
+	private CuckooHashMap<GSSNode, Set<SPPFNode>>[] forwardPoppedElements;
 	
 	private int countGSSNodes;
 	
@@ -84,50 +83,53 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private final int initialSize = 2048;
 	
-	@SuppressWarnings("unchecked")
 	public LevelSynchronizedLookupTable(Grammar grammar, Input input) {
+		this(grammar, input, grammar.getLongestTerminalChain());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public LevelSynchronizedLookupTable(Grammar grammar, Input input, int chainLength) {
 		super(grammar, input.size());
-		this.longestTerminalChain = grammar.getLongestTerminalChain();
 		
-		terminals = new TerminalSymbolNode[longestTerminalChain + 1][2];
+		this.chainLength = chainLength;
+		terminals = new TerminalSymbolNode[chainLength + 1][2];
 		
-		u = new LevelSet<>(getSize(), Descriptor.externalHasher);
+		u = new CuckooHashSet<>(getSize(), Descriptor.externalHasher);
 		r = new ArrayDeque<>();
 		
-		forwardDescriptors = new LevelSet[longestTerminalChain];
-		forwardRs = new Queue[longestTerminalChain];
+		forwardDescriptors = new CuckooHashSet[chainLength];
+		forwardRs = new Queue[chainLength];
 		
-		currentNodes = new LevelSet<>(initialSize, NonPackedNode.externalHasher);
-		forwardNodes = new LevelSet[longestTerminalChain];
+		currentNodes = new CuckooHashSet<>(initialSize, NonPackedNode.externalHasher);
+		forwardNodes = new CuckooHashSet[chainLength];
 		
-		currentPackedNodes = new LevelSet<>(initialSize, PackedNode.externalHasher);
-		forwardPackedNodes = new LevelSet[longestTerminalChain];
+		currentPackedNodes = new CuckooHashSet<>(initialSize, PackedNode.externalHasher);
+		forwardPackedNodes = new CuckooHashSet[chainLength];
 		
-		currentGssNodes = new LevelSet<>(initialSize, GSSNode.externalHasher);
-		forwardGssNodes = new LevelSet[longestTerminalChain];
+		currentGssNodes = new CuckooHashSet<>(initialSize, GSSNode.externalHasher);
+		forwardGssNodes = new CuckooHashSet[chainLength];
 		
-		currendEdges = new LevelSet<>(initialSize, GSSEdge.externalHasher);
-		forwardEdges = new LevelSet[longestTerminalChain];
+		currendEdges = new CuckooHashSet<>(initialSize, GSSEdge.externalHasher);
+		forwardEdges = new CuckooHashSet[chainLength];
 		
-		currentPoppedElements = new LevelMap<>(initialSize, GSSNode.externalHasher);
-		forwardPoppedElements = new LevelMap[longestTerminalChain];
+		currentPoppedElements = new CuckooHashMap<>(initialSize, GSSNode.externalHasher);
+		forwardPoppedElements = new CuckooHashMap[chainLength];
 		
-		for(int i = 0; i < longestTerminalChain; i++) {
-			forwardDescriptors[i] = new LevelSet<>(getSize(), Descriptor.externalHasher);
+		for(int i = 0; i < chainLength; i++) {
+			forwardDescriptors[i] = new CuckooHashSet<>(getSize(), Descriptor.externalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
-			forwardNodes[i] = new LevelSet<>(initialSize, NonPackedNode.externalHasher);
-			forwardGssNodes[i] = new LevelSet<>(initialSize, GSSNode.externalHasher);
-			forwardEdges[i] = new LevelSet<>(initialSize, GSSEdge.externalHasher);
-			forwardPoppedElements[i] = new LevelMap<>(initialSize, GSSNode.externalHasher);
-			forwardPackedNodes[i] = new LevelSet<>(PackedNode.externalHasher);
+			forwardNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.externalHasher);
+			forwardGssNodes[i] = new CuckooHashSet<>(initialSize, GSSNode.externalHasher);
+			forwardEdges[i] = new CuckooHashSet<>(initialSize, GSSEdge.externalHasher);
+			forwardPoppedElements[i] = new CuckooHashMap<>(initialSize, GSSNode.externalHasher);
+			forwardPackedNodes[i] = new CuckooHashSet<>(PackedNode.externalHasher);
 		}
-		
 	}
 	
 	private void gotoNextLevel() {
 		int nextIndex = indexFor(currentLevel + 1);
 		
-		LevelSet<Descriptor> tmpDesc = u;
+		CuckooHashSet<Descriptor> tmpDesc = u;
 		u.clear();
 		u = forwardDescriptors[nextIndex];
 		forwardDescriptors[nextIndex] = tmpDesc;
@@ -137,32 +139,31 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		r = forwardRs[nextIndex];
 		forwardRs[nextIndex] = tmpR;
 		
-		LevelSet<NonPackedNode> tmpNonPackedNode = currentNodes;
+		CuckooHashSet<NonPackedNode> tmpNonPackedNode = currentNodes;
 		currentNodes.clear();
 		currentNodes = forwardNodes[nextIndex];
 		forwardNodes[nextIndex] = tmpNonPackedNode;
 		
-		LevelSet<PackedNode> tmpPackedNode = currentPackedNodes;
+		CuckooHashSet<PackedNode> tmpPackedNode = currentPackedNodes;
 		currentPackedNodes.clear();
 		currentPackedNodes = forwardPackedNodes[nextIndex];
 		forwardPackedNodes[nextIndex] = tmpPackedNode;
 		
-		LevelSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
+		CuckooHashSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
 		currentGssNodes.clear();
 		currentGssNodes = forwardGssNodes[nextIndex];
 		forwardGssNodes[nextIndex] = tmpGSSNodeSet;
 		
-		LevelSet<GSSEdge> tmpGSSEdgeSet = currendEdges;
+		CuckooHashSet<GSSEdge> tmpGSSEdgeSet = currendEdges;
 		currendEdges.clear();
 		currendEdges = forwardEdges[nextIndex];
 		forwardEdges[nextIndex] = tmpGSSEdgeSet;
 		
-		LevelMap<GSSNode, Set<SPPFNode>> tmpPoppedElements = currentPoppedElements;
+		CuckooHashMap<GSSNode, Set<SPPFNode>> tmpPoppedElements = currentPoppedElements;
 		currentPoppedElements.clear();
 		currentPoppedElements = forwardPoppedElements[nextIndex];
 		forwardPoppedElements[nextIndex] = tmpPoppedElements;
 
-		
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
 		
@@ -170,7 +171,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	}
 	
 	private int indexFor(int inputIndex) {
-		return inputIndex % longestTerminalChain;
+		return inputIndex % chainLength;
 	}
 	
 	@Override

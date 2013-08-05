@@ -27,17 +27,10 @@ public class LevelSet<T extends Level> extends CuckooHashSet<T> {
 	}
 	
 	@Override
-	public T get(T key) {
-		level = key.getLevel();
-		return super.get(key);
-	}
-
-	@Override
 	public void clear() {
 		size = 0;
 		rehashCount = 0;
 		enlargeCount = 0;
-		level = 0;
 	}
 	
 }
