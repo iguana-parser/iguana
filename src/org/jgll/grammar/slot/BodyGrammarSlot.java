@@ -66,10 +66,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return preConditions;
 	}
 	
-	public void setPreConditions(List<SlotAction<Boolean>> preConditions) {
-		this.preConditions = preConditions;
-	}
-	
 	protected boolean executePreConditions(GLLParserInternals parser, Input input) {
 		for(SlotAction<Boolean> preCondition : preConditions) {
 			if(preCondition.execute(parser, input)) {

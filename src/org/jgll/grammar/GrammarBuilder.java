@@ -779,7 +779,7 @@ public class GrammarBuilder implements Serializable {
 
 	public void filter() {
 		for (Entry<String, Set<Filter>> entry : filtersMap.entrySet()) {
-			log.debug("Filtering {} with {} filters.", entry.getKey(), entry.getValue().size());
+			log.debug("Filtering %s with %d.", entry.getKey(), entry.getValue().size());
 
 			filterFirstLevel(nonterminalsMap.get(entry.getKey()), entry.getValue());
 			filterDeep(nonterminalsMap.get(entry.getKey()), entry.getValue());
@@ -1043,7 +1043,6 @@ public class GrammarBuilder implements Serializable {
 			copyConditions(slot, copy);
 		}
 
-		copy.setPreConditions(slot.getPreConditions());
 		slots.add(copy);
 		return copy;
 	}
@@ -1092,10 +1091,10 @@ public class GrammarBuilder implements Serializable {
 				set.add(filter);
 				filtersMap.put(name, set);
 			}
-			log.debug("Filter added {} (deep)", filter);
+			log.debug("Filter added %s (deep)", filter);
 		} else {
 			oneLevelOnlyFilters.add(filter);
-			log.debug("Filter added {} (one level only)", filter);
+			log.debug("Filter added %s (one level only)", filter);
 		}
 	}
 

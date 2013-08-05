@@ -2,6 +2,8 @@ package org.jgll.util.hashing;
 
 public class MurmurHash2 implements HashFunction {
 
+	private static final long serialVersionUID = 1L;
+	
 	private final int m = 0x5bd1e995;
 	private final int r = 24;
 

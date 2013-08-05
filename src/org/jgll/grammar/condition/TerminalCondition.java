@@ -18,6 +18,8 @@ import static org.jgll.util.collections.CollectionsUtil.*;
  */
 public class TerminalCondition extends Condition {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private List<Terminal> characterClasses;
 	
 	public TerminalCondition(ConditionType type, List<Terminal> list) {

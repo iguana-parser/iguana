@@ -17,6 +17,8 @@ import static org.jgll.util.collections.CollectionsUtil.*;
  */
 public class KeywordCondition extends Condition {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private List<Keyword> keywords;
 	
 	public KeywordCondition(ConditionType type, Keyword keyword) {

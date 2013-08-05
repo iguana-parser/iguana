@@ -7,6 +7,8 @@ import static org.jgll.util.collections.CollectionsUtil.*;
 
 public class ContextFreeCondition extends Condition {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private List<? extends Symbol> symbols;
 
 	public ContextFreeCondition(ConditionType type, List<? extends Symbol> symbols) {
