@@ -65,7 +65,7 @@ public class GrammarBuilder implements Serializable {
 	
 	private Map<Rule, LastGrammarSlot> ruleToLastSlotMap;
 
-	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
+	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
 	private List<BodyGrammarSlot> conditionSlots;
 	
@@ -85,6 +85,7 @@ public class GrammarBuilder implements Serializable {
 		oneLevelOnlyFilters = new HashSet<>();
 		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
+		reachabilityGraph = new HashMap<>();
 	}
 
 	public Grammar build() {
@@ -513,6 +514,7 @@ public class GrammarBuilder implements Serializable {
 		setIds();
 		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
+		removeUnusedNonterminals();
 	}
 	
 	public static Rule fromKeyword(Keyword keyword) {
@@ -591,7 +593,7 @@ public class GrammarBuilder implements Serializable {
 				num += nt.getCountAlternates();
 			}
 			
-			Set<HeadGrammarSlot> indirectReachableNonterminals = new HashSet<>(head.getReachableNonterminals());
+			Set<HeadGrammarSlot> indirectReachableNonterminals = new HashSet<>(reachabilityGraph.get(head));
 			indirectReachableNonterminals.remove(directReachableNonterminals);
 			
 			for(HeadGrammarSlot nt : indirectReachableNonterminals) {
@@ -1089,6 +1091,10 @@ public class GrammarBuilder implements Serializable {
 			log.debug("Filter added %s (one level only)", filter);
 		}
 	}
+	
+	public Set<HeadGrammarSlot> getReachableNonterminals(String name) {
+		return reachabilityGraph.get(nonterminalsMap.get(name));
+	}
 
 	private void calculateReachabilityGraph() {
 		boolean changed = true;
@@ -1098,7 +1104,12 @@ public class GrammarBuilder implements Serializable {
 			for (HeadGrammarSlot head : nonterminals) {
 
 				for (Alternate alternate : head.getAlternates()) {
-					changed |= calculateReachabilityGraph(head.getReachableNonterminals(), alternate.getFirstSlot(), changed);
+					Set<HeadGrammarSlot> set = reachabilityGraph.get(head);
+					if(set == null) {
+						set = new HashSet<>();
+					}
+					reachabilityGraph.put(head, set);
+					changed |= calculateReachabilityGraph(set, alternate.getFirstSlot(), changed);
 				}
 			}
 		}
@@ -1117,7 +1128,15 @@ public class GrammarBuilder implements Serializable {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
 			changed = set.add(nonterminalGrammarSlot.getNonterminal()) || changed;
-			changed = set.addAll(nonterminalGrammarSlot.getNonterminal().getReachableNonterminals()) || changed;
+			
+			Set<HeadGrammarSlot> set2 = reachabilityGraph.get(nonterminalGrammarSlot.getNonterminal());
+			if(set2 == null) {
+				set2 = new HashSet<>();
+			}
+			reachabilityGraph.put(nonterminalGrammarSlot.getNonterminal(), set2);
+			
+			changed = set.addAll(set2) || changed;
+			
 			if (isNullable(nonterminalGrammarSlot.getNonterminal())) {
 				return calculateReachabilityGraph(set, currentSlot.next(), changed) || changed;
 			}
@@ -1129,4 +1148,16 @@ public class GrammarBuilder implements Serializable {
 			return changed;
 		}	
 	}
+	
+	private void removeUnusedNonterminals() {
+		
+		Set<HeadGrammarSlot> referedNonterminals = new HashSet<>();
+		
+		for(Set<HeadGrammarSlot> s : reachabilityGraph.values()) {
+			referedNonterminals.addAll(s);
+		}
+		
+		newNonterminals.retainAll(referedNonterminals);
+	}
+	
 }

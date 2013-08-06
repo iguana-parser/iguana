@@ -210,9 +210,14 @@ public class Alternate implements Serializable {
 				}
 			}
 			else if(thisSlot instanceof NonterminalGrammarSlot && otherSlot instanceof NonterminalGrammarSlot) {				
-				NonterminalGrammarSlot thisNt = (NonterminalGrammarSlot) thisSlot;
-				NonterminalGrammarSlot otherNt = (NonterminalGrammarSlot) otherSlot;
-				if(thisNt.getNonterminal() != otherNt.getNonterminal()) {
+				Nonterminal thisNt = ((NonterminalGrammarSlot) thisSlot).getNonterminal().getNonterminal();
+				Nonterminal otherNt = ((NonterminalGrammarSlot) otherSlot).getNonterminal().getNonterminal();
+				
+				if(thisNt == null && otherNt == null) {
+					continue;
+				}
+				
+				if(!thisNt.equals(otherNt)) {
 					return false;
 				}
 			}

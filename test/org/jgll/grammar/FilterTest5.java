@@ -71,7 +71,6 @@ public class FilterTest5 extends AbstractGrammarTest {
 
 	@Test
 	public void testParsers() throws ParseError {
-		System.out.println(grammar);
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("xawz"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("xawz"), grammar, "E");
 		assertTrue(sppf1.deepEquals(sppf2));

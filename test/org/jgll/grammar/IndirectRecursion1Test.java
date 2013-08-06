@@ -27,6 +27,8 @@ import org.junit.Test;
  */
 public class IndirectRecursion1Test extends AbstractGrammarTest {
 
+	private GrammarBuilder builder;
+
 	@Override
 	protected Grammar initGrammar() {
 		Nonterminal A = new Nonterminal("A");
@@ -37,12 +39,12 @@ public class IndirectRecursion1Test extends AbstractGrammarTest {
 		Rule r3 = new Rule(B, list(A));
 		Rule r4 = new Rule(B, list(new Character('b')));
 		Rule r5 = new Rule(C, list(new Character('c')));
-		return new GrammarBuilder("IndirectRecursion").addRule(r1)
+		builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
 													  .addRule(r2)
 													  .addRule(r3)
 													  .addRule(r4)
-													  .addRule(r5)
-													  .build();
+													  .addRule(r5);
+		return builder.build();
 	}
 	
 	@Test
@@ -53,11 +55,11 @@ public class IndirectRecursion1Test extends AbstractGrammarTest {
 	
 	@Test
 	public void testReachabilityGraph() {
-		Set<HeadGrammarSlot> set = grammar.getNonterminalByName("A").getReachableNonterminals();
+		Set<HeadGrammarSlot> set = builder.getReachableNonterminals("A");
 		assertTrue(set.contains(grammar.getNonterminalByName("A")));
 		assertTrue(set.contains(grammar.getNonterminalByName("B")));
 		
-		set = grammar.getNonterminalByName("B").getReachableNonterminals();
+		set = builder.getReachableNonterminals("B");
 		assertTrue(set.contains(grammar.getNonterminalByName("A")));
 	}
 	
