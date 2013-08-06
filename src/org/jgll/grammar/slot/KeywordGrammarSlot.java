@@ -100,8 +100,13 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
-		// TODO Auto-generated method stub
-		return null;
+		int ci = recognizer.getCi();
+		if(!input.match(ci, keyword.getChars())) {
+			return null;			
+		}
+		
+		recognizer.update(recognizer.getCu(), ci + keyword.size());
+		return next;
 	}
 
 }

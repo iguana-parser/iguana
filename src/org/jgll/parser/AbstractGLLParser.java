@@ -124,7 +124,7 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 		Runtime runtime = Runtime.getRuntime();
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.debug("Descriptors: %d", lookupTable.getDescriptorsCount());
-		log.debug("Non-packed nodes: %d", lookupTable.getDescriptorsCount());
+		log.debug("Non-packed nodes: %d", lookupTable.getNonPackedNodesCount());
 		log.debug("Packed nodes: %d", lookupTable.getPackedNodesCount());
 		log.debug("GSS Nodes: %d", lookupTable.getGSSNodesCount());
 		log.debug("GSS Edges: %d", lookupTable.getGSSEdgesCount());

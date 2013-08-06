@@ -19,6 +19,11 @@ public class ConditionFactory {
 		return createCondition(ConditionType.NOT_FOLLOW, symbols);
 	}
 	
+	public static <T extends Symbol> Condition notFollow(List<T> symbols) {
+		return createCondition(ConditionType.NOT_FOLLOW, symbols);
+	}
+	
+	
 	@SafeVarargs
 	public static <T extends Symbol> Condition precede(T...symbols) {
 		return createCondition(ConditionType.PRECEDE, symbols);
@@ -39,8 +44,7 @@ public class ConditionFactory {
 		return createCondition(ConditionType.NOT_MATCH, symbols);
 	}
 	
-	@SafeVarargs
-	private static <T extends Symbol> boolean allCharacterClass(T...symbols) {
+	private static <T extends Symbol> boolean allCharacterClass(List<T> symbols) {
 		for(T t : symbols) {
 			if(! (t instanceof Terminal)) {
 				return false;
@@ -50,18 +54,22 @@ public class ConditionFactory {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static <T extends Symbol> Condition createCondition(ConditionType type, T...symbols) {
+	private static <T extends Symbol> Condition createCondition(ConditionType type, List<T> symbols) {
 		if(allKeywords(symbols)) {
-			return new KeywordCondition(type, (List<Keyword>) Arrays.asList(symbols));
+			return new KeywordCondition(type, (List<Keyword>) symbols);
 		} else if (allCharacterClass(symbols)) {
-			return new TerminalCondition(type, (List<Terminal>) Arrays.asList(symbols));
+			return new TerminalCondition(type, (List<Terminal>) symbols);
 		} else {
-			return new ContextFreeCondition(type, Arrays.asList(symbols));
-		}
+			return new ContextFreeCondition(type, symbols);
+		}		
 	}
 	
-	@SafeVarargs
-	private static <T extends Symbol> boolean allKeywords(T...symbols) {
+	@SuppressWarnings("unchecked")
+	private static <T extends Symbol> Condition createCondition(ConditionType type, T...symbols) {
+		return createCondition(type, Arrays.asList(symbols));
+	}
+	
+	private static <T extends Symbol> boolean allKeywords(List<T> symbols) {
 		for(T t : symbols) {
 			if(! (t instanceof Keyword)) {
 				return false;

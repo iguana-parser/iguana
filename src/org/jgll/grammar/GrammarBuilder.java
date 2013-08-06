@@ -466,6 +466,10 @@ public class GrammarBuilder implements Serializable {
 			else if(symbol instanceof Terminal) {
 				currentSlot = new TerminalGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, (Terminal) symbol, null);
 			}
+			else if(symbol instanceof Keyword) {
+				currentSlot = new KeywordGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, 
+						nonterminalsMap.get(new Nonterminal(symbol.getName())), (Keyword) symbol, currentSlot, null);
+			}
 			
 			if(index == 0) {
 				firstSlot = currentSlot;
