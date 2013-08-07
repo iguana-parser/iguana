@@ -476,6 +476,21 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 			forwardPoppedElements[i].clear();
 			forwardPackedNodes[i].clear();
 		}
+		
+		currentLevel = 0;
+		
+		countNonPackedNodes = 0;
+
+		countGSSNodes = 0;
+		
+		size = 0;
+		
+		all = 0;
+		
+		countPackedNodes = 0;
+		
+		countGSSEdges = 0;
+
 	}
 
 }

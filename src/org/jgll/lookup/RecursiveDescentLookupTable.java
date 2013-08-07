@@ -66,6 +66,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		packedNodes.clear();
 		gssEdges.clear();
 		poppedElements.clear();
+		
+		nonPackedNodesCount = 0;
 	}
 	
 	@Override
