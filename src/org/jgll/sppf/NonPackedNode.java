@@ -213,6 +213,13 @@ public abstract class NonPackedNode extends SPPFNode {
 		public int hash(NonPackedNode nonPackedNode, HashFunction f) {
 			return f.hash(nonPackedNode.slot.getId(), nonPackedNode.leftExtent, nonPackedNode.rightExtent);
 		}
+
+		@Override
+		public boolean equals(NonPackedNode node1, NonPackedNode node2) {
+			return  node1.rightExtent == node2.rightExtent &&
+					node1.slot == node2.slot &&
+					node1.leftExtent == node2.leftExtent;
+		}
 	}
 	
 	public static class LevelBasedNonPackedNodeExternalHasher implements ExternalHasher<NonPackedNode> {
@@ -223,6 +230,13 @@ public abstract class NonPackedNode extends SPPFNode {
 		public int hash(NonPackedNode nonPackedNode, HashFunction f) {
 			return f.hash(nonPackedNode.slot.getId(), nonPackedNode.leftExtent);
 		}
+		
+		@Override
+		public boolean equals(NonPackedNode node1, NonPackedNode node2) {
+			return  node1.slot == node2.slot &&
+					node1.leftExtent == node2.leftExtent;
+		}
+
 	}
 
 	

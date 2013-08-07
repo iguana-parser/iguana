@@ -10,11 +10,11 @@ public class LevelMap<K extends Level, V> implements Serializable {
 	private LevelSet<MapEntry<K, V>> set;
 	
 	public LevelMap(ExternalHasher<K> decomposer) {	
-		set = new LevelSet<>(new MapEntryDecomposer(decomposer));
+		set = new LevelSet<>(new MapEntryExternalHasher(decomposer));
 	}
 	
 	public LevelMap(int initalCapacity, ExternalHasher<K> decomposer) {
-		set = new LevelSet<>(initalCapacity, new MapEntryDecomposer(decomposer));
+		set = new LevelSet<>(initalCapacity, new MapEntryExternalHasher(decomposer));
 	}
 		
 	public V put(K key, V value) {
@@ -83,19 +83,24 @@ public class LevelMap<K extends Level, V> implements Serializable {
 		}
 	}
 	
-	public class MapEntryDecomposer implements ExternalHasher<MapEntry<K, V>> {
+	public class MapEntryExternalHasher implements ExternalHasher<MapEntry<K, V>> {
 
 		private static final long serialVersionUID = 1L;
 		
 		private ExternalHasher<K> externalHasher;
 
-		public MapEntryDecomposer(ExternalHasher<K> externalHasher) {
+		public MapEntryExternalHasher(ExternalHasher<K> externalHasher) {
 			this.externalHasher = externalHasher;
 		}
 		
 		@Override
 		public int hash(MapEntry<K, V> e, HashFunction f) {
 			return externalHasher.hash(e.k, f);
+		}
+
+		@Override
+		public boolean equals(MapEntry<K, V> e1, MapEntry<K, V> e2) {
+			return externalHasher.equals(e1.k, e2.k);
 		}
 	}
 	

@@ -11,7 +11,7 @@ public class CuckooHashMapTest {
 	
 	@Test
 	public void test() {
-		CuckooHashMap<Integer, Integer> map = new CuckooHashMap<>(IntegerDecomposer.getInstance());
+		CuckooHashMap<Integer, Integer> map = new CuckooHashMap<>(IntegerExternalHasher.getInstance());
 		map.put(1, 2);
 		map.put(2, 3);
 		
@@ -21,7 +21,7 @@ public class CuckooHashMapTest {
 	
 	@Test
 	public void testInsertOneMillionEntries() {
-		CuckooHashMap<Integer, Integer> map = new CuckooHashMap<>(IntegerDecomposer.getInstance());
+		CuckooHashMap<Integer, Integer> map = new CuckooHashMap<>(IntegerExternalHasher.getInstance());
 		Random rand = RandomUtil.random;
 		for(int i = 0; i < 1000000; i++) {
 			int key = rand.nextInt(Integer.MAX_VALUE);

@@ -23,5 +23,10 @@ public class StringExternalHasher implements ExternalHasher<String> {
 
 		return f.hash(array);
 	}
+
+	@Override
+	public boolean equals(String s1, String s2) {
+		return s1.equals(s2);
+	}
  
 }

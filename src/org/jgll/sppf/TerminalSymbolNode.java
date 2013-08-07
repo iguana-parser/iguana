@@ -118,6 +118,13 @@ public class TerminalSymbolNode extends SPPFNode {
 		public int hash(TerminalSymbolNode t, HashFunction f) {
 			return f.hash(t.inputIndex, t.matchedChar);
 		}
+
+		@Override
+		public boolean equals(TerminalSymbolNode t1, TerminalSymbolNode t2) {
+			return t1.matchedChar == t2.matchedChar &&
+				   t1.inputIndex == t2.inputIndex;
+
+		}
 		
 	}
 

@@ -75,7 +75,7 @@ public class GSSEdge implements Level {
 			   compare(sppfNode, other.sppfNode);
 	}
 	
-	private boolean compare(SPPFNode first, SPPFNode second) {
+	private static boolean compare(SPPFNode first, SPPFNode second) {
 		if(first instanceof TerminalSymbolNode && second instanceof TerminalSymbolNode) {
 			return ((TerminalSymbolNode) first).getMatchedChar() == ((TerminalSymbolNode) second).getMatchedChar(); 
 		} 
@@ -123,6 +123,15 @@ public class GSSEdge implements Level {
 						   edge.sppfNode.getGrammarSlot().getId());
 			}
 		}
+
+		@Override
+		public boolean equals(GSSEdge e1, GSSEdge e2) {
+			return 	e1.src.getGrammarSlot() == e2.src.getGrammarSlot() &&
+					e1.src.getInputIndex() == e2.src.getInputIndex() &&
+					e1.dst.getGrammarSlot() == e2.dst.getGrammarSlot() &&
+					e1.dst.getInputIndex() == e2.dst.getInputIndex() &&
+					compare(e1.sppfNode, e2.sppfNode);
+		}
 		
 	}
 	
@@ -134,19 +143,27 @@ public class GSSEdge implements Level {
 		public int hash(GSSEdge edge, HashFunction f) {
 			if(edge.sppfNode instanceof TerminalSymbolNode) {
 				return f.hash(edge.src.getGrammarSlot().getId(),
-						   edge.dst.getGrammarSlot().getId(),
-						   edge.dst.getInputIndex(),
-						   31,
-						   ((TerminalSymbolNode) edge.sppfNode).getMatchedChar());
+	  					      edge.dst.getGrammarSlot().getId(),
+							  edge.dst.getInputIndex(),
+							  31,
+							  ((TerminalSymbolNode) edge.sppfNode).getMatchedChar());
 			} 
 			else {
 				return f.hash(edge.src.getGrammarSlot().getId(),
-						   edge.dst.getGrammarSlot().getId(),
-						   edge.dst.getInputIndex(),
-						   17,
-						   edge.sppfNode.getGrammarSlot().getId());
+						      edge.dst.getGrammarSlot().getId(),
+						      edge.dst.getInputIndex(),
+						      17,
+						      edge.sppfNode.getGrammarSlot().getId());
 			}
 		}
+		
+		public boolean equals(GSSEdge e1, GSSEdge e2) {
+			return 	e1.src.getGrammarSlot() == e2.src.getGrammarSlot() &&
+					e1.dst.getGrammarSlot() == e2.dst.getGrammarSlot() &&
+					e1.dst.getInputIndex() == e2.dst.getInputIndex() &&
+					compare(e1.sppfNode, e2.sppfNode);
+		}
+
 		
 	}
 

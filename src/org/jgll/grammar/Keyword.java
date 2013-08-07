@@ -79,6 +79,11 @@ public class Keyword extends AbstractSymbol {
 		public int hash(Keyword k, HashFunction f) {
 			return f.hash(k.getChars());
 		}
+
+		@Override
+		public boolean equals(Keyword k1, Keyword k2) {
+			return Arrays.equals(k1.chars, k2.chars);
+		}
 	}
 
 	@Override

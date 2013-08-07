@@ -126,6 +126,15 @@ public class Descriptor implements Level {
 						  d.gssNode.getInputIndex(),
 						  d.inputIndex);
 		}
+
+		@Override
+		public boolean equals(Descriptor d1, Descriptor d2) {
+			return 	d1.inputIndex == d2.inputIndex &&
+					d1.slot.getId() == d2.slot.getId() && 
+ 					d1.sppfNode.getGrammarSlot() == d2.sppfNode.getGrammarSlot() && 
+					d1.gssNode.getGrammarSlot() == d2.gssNode.getGrammarSlot() &&
+					d1.gssNode.getInputIndex() == d2.gssNode.getInputIndex();
+		}
 	}
 	
 	public static class LevelBasedExternalHasher implements ExternalHasher<Descriptor> {
@@ -139,6 +148,15 @@ public class Descriptor implements Level {
 						  d.gssNode.getGrammarSlot().getId(),
 						  d.gssNode.getInputIndex());
 		}
+		
+		@Override
+		public boolean equals(Descriptor d1, Descriptor d2) {
+			return 	d1.slot.getId() == d2.slot.getId() && 
+ 					d1.sppfNode.getGrammarSlot() == d2.sppfNode.getGrammarSlot() && 
+					d1.gssNode.getGrammarSlot() == d2.gssNode.getGrammarSlot() &&
+					d1.gssNode.getInputIndex() == d2.gssNode.getInputIndex();
+		}
+
 	}
 	
 	

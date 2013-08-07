@@ -108,5 +108,10 @@ public class CuckooHashMap<K, V> implements Serializable {
 		public int hash(MapEntry<K, V> t, HashFunction f) {
 			return hasher.hash(t.k, f);
 		}
+
+		@Override
+		public boolean equals(MapEntry<K, V> e1, MapEntry<K, V> e2) {
+			return hasher.equals(e1.k, e2.k);
+		}
 	}
 }

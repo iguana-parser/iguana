@@ -61,11 +61,7 @@ public class PackedNode extends SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  slot == other.slot &&
-		        pivot == other.pivot &&
-		        parent.getGrammarSlot() == other.parent.getGrammarSlot() &&
-		        parent.getLeftExtent() == other.parent.getLeftExtent() &&
-		        parent.getRightExtent() == other.parent.getRightExtent();
+		return  externalHasher.equals(this, other);
 	}
 	
 	public int getPivot() {
@@ -169,6 +165,15 @@ public class PackedNode extends SPPFNode {
 						  packedNode.parent.getLeftExtent(),
 						  packedNode.parent.getRightExtent());
 		}
+
+		@Override
+		public boolean equals(PackedNode node1, PackedNode node2) {
+			return  node1.slot == node2.slot &&
+			        node1.pivot == node2.pivot &&
+			        node1.parent.getGrammarSlot() == node2.parent.getGrammarSlot() &&
+			        node1.parent.getLeftExtent() == node2.parent.getLeftExtent() &&
+			        node1.parent.getRightExtent() == node2.parent.getRightExtent();
+		}
 	}
 	
 	public static class PackedNodeLevelBasedExternalHasher implements ExternalHasher<PackedNode> {
@@ -181,6 +186,14 @@ public class PackedNode extends SPPFNode {
    						  packedNode.pivot,
 						  packedNode.parent.getGrammarSlot().getId(),
 						  packedNode.parent.getLeftExtent());
+		}
+
+		@Override
+		public boolean equals(PackedNode node1, PackedNode node2) {
+			return  node1.slot == node2.slot &&
+			        node1.pivot == node2.pivot &&
+			        node1.parent.getGrammarSlot() == node2.parent.getGrammarSlot() &&
+			        node1.parent.getLeftExtent() == node2.parent.getLeftExtent();
 		}
 	}
 

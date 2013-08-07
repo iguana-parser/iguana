@@ -20,4 +20,9 @@ public class IntegerExternalHasher implements ExternalHasher<Integer> {
 		return f.hash(t);
 	}
 
+	@Override
+	public boolean equals(Integer t1, Integer t2) {
+		return t1.intValue() == t2.intValue();
+	}
+
 }

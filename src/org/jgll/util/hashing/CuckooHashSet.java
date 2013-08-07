@@ -128,13 +128,13 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		int index = indexFor(externalHasher.hash(key, function1));
 		
 		T value = table1[index];
-		if(!isEntryEmpty(value) && key.equals(value)) {
+		if(!isEntryEmpty(value) && externalHasher.equals(key, value)) {
 			return value;
 		}			
 		
 		index = indexFor(externalHasher.hash(key, function2));
 		value = table2[index];
-		if(!isEntryEmpty(value) && key.equals(value)) {
+		if(!isEntryEmpty(value) && externalHasher.equals(key, value)) {
 			return value;
 		}
 
@@ -385,14 +385,14 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	public boolean remove(T key) {
 		
 		int index = indexFor(externalHasher.hash(key, function1));
-		if(key.equals(table1[index])) {
+		if(externalHasher.equals(key, table1[index])) {
 			table1[index] = null;
 			size--;
 			return true;
 		}
 		
 		index = indexFor(externalHasher.hash(key, function2));
-		if(key.equals(table2[index])) {
+		if(externalHasher.equals(key, table2[index])) {
 			table2[index] = null;
 			size--;
 			return true;

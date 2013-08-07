@@ -94,6 +94,14 @@ public class Descriptor {
 						  descriptor.gssNode.getGrammarSlot().getId(),
 						  descriptor.gssNode.getInputIndex());
 			}
+
+		@Override
+		public boolean equals(Descriptor d1, Descriptor d2) {
+			return 	d1.inputIndex == d2.getInputIndex() &&
+					d1.slot == d2.slot &&
+					d1.gssNode.getGrammarSlot().getId() == d2.gssNode.getGrammarSlot().getId() &&
+					d1.gssNode.getInputIndex() == d2.gssNode.getInputIndex();
+		}
 	}
 	
 }

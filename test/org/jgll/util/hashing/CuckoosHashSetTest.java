@@ -68,8 +68,8 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testAddAll() {
-		CuckooHashSet<Integer> set1 = CuckooHashSet.from(IntegerDecomposer.getInstance(), 1, 2, 3);
-		CuckooHashSet<Integer> set2 = CuckooHashSet.from(IntegerDecomposer.getInstance(), 4, 5, 6, 7);
+		CuckooHashSet<Integer> set1 = CuckooHashSet.from(IntegerExternalHasher.getInstance(), 1, 2, 3);
+		CuckooHashSet<Integer> set2 = CuckooHashSet.from(IntegerExternalHasher.getInstance(), 4, 5, 6, 7);
 		assertEquals(3, set1.size());
 		assertEquals(4, set2.size());
 		
@@ -79,7 +79,7 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testClear() {
-		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerDecomposer.getInstance(), 1, 2, 3, 4, 5);
+		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerExternalHasher.getInstance(), 1, 2, 3, 4, 5);
 		set.clear();
 		
 		assertEquals(false, set.contains(1));
@@ -92,7 +92,7 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testRemove() {
-		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerDecomposer.getInstance(), 1, 2, 3, 4, 5);
+		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerExternalHasher.getInstance(), 1, 2, 3, 4, 5);
 		set.remove(3);
 		set.remove(5);
 		
@@ -106,7 +106,7 @@ public class CuckoosHashSetTest {
 	
 	@Test
 	public void testAddAndGet() {
-		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerDecomposer.getInstance(), 1, 2, 3);
+		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerExternalHasher.getInstance(), 1, 2, 3);
 		Integer ret1 = set.add(4);
 		assertEquals(null, ret1);
 		
@@ -119,7 +119,7 @@ public class CuckoosHashSetTest {
 
 	@Test
 	public void testEnlarge() {
-		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerDecomposer.getInstance(), 101, 21, 398, 432, 15, 986, 737);
+		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerExternalHasher.getInstance(), 101, 21, 398, 432, 15, 986, 737);
 		set.add(891);
 	}
 	
@@ -171,6 +171,14 @@ public class CuckoosHashSetTest {
 		@Override
 		public int hash(IntegerHashKey4 key, HashFunction f) {
 			return f.hash(key.k1, key.k2, key.k3, key.k4);
+		}
+
+		@Override
+		public boolean equals(IntegerHashKey4 key1, IntegerHashKey4 key2) {
+			return key1.k1 == key2.k1 &&
+				   key1.k2 == key2.k2 &&
+				   key1.k3 == key2.k3 &&
+				   key1.k4 == key1.k4;
 		}
 	}
 	

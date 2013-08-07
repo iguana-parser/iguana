@@ -6,7 +6,7 @@ import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.IntegerDecomposer;
+import org.jgll.util.hashing.IntegerExternalHasher;
 
 public class GSSNode {
 	
@@ -34,7 +34,7 @@ public class GSSNode {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.children = new CuckooHashSet<>(new GSSNodeExternalHasher());
-		this.poppedIndices = new CuckooHashSet<>(IntegerDecomposer.getInstance());
+		this.poppedIndices = new CuckooHashSet<>(IntegerExternalHasher.getInstance());
 	}
 	
 	public boolean hasChild(GSSNode child) {
@@ -77,7 +77,7 @@ public class GSSNode {
 		
 		GSSNode other = (GSSNode) obj;
 
-		return  other.slot.equals(slot) &&
+		return  other.slot == slot &&
 				other.inputIndex == inputIndex;
 	}
 
@@ -99,6 +99,11 @@ public class GSSNode {
 		@Override
 		public int hash(GSSNode node, HashFunction f) {
 			return f.hash(node.getGrammarSlot().getId(), node.getInputIndex());
+		}
+
+		@Override
+		public boolean equals(GSSNode g1, GSSNode g2) {
+			return g1.slot == g2.slot && g1.inputIndex == g2.inputIndex;
 		}
 	}
 

@@ -112,6 +112,12 @@ public class GSSNode implements Level {
 		public int hash(GSSNode node, HashFunction f) {
 			return f.hash(node.slot.getId(), node.inputIndex);
 		}
+
+		@Override
+		public boolean equals(GSSNode g1, GSSNode g2) {
+			return g1.slot.getId() == g2.slot.getId() &&
+				   g1.inputIndex == g2.inputIndex;
+		}
 	}
 	
 	public static class LevelBasedGSSNodeExternalHasher implements ExternalHasher<GSSNode> {
@@ -121,6 +127,11 @@ public class GSSNode implements Level {
 		@Override
 		public int hash(GSSNode node, HashFunction f) {
 			return f.hash(node.slot.getId());
+		}
+
+		@Override
+		public boolean equals(GSSNode g1, GSSNode g2) {
+			return g1.slot == g2.slot;
 		}
 	}
 
