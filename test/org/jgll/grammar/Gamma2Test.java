@@ -3,9 +3,12 @@ package org.jgll.grammar;
 import static org.junit.Assert.*;
 import static org.jgll.util.collections.CollectionsUtil.*;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -17,10 +20,15 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class Gamma2Test extends AbstractGrammarTest {
+public class Gamma2Test {
+	
+	private Grammar grammar;
+	private GLLParser levelParser;
+	private GLLParser rdParser;
 
-	@Override
-	protected Grammar initGrammar() {
+
+	@Before
+	public void init() {
 		
 		GrammarBuilder builder = new GrammarBuilder("gamma2");
 		
@@ -33,7 +41,9 @@ public class Gamma2Test extends AbstractGrammarTest {
 		Rule rule3 = new Rule(new Nonterminal("S"), list(new Character('b')));
 		builder.addRule(rule3);
 		
-		return builder.build();
+		grammar = builder.build();
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		levelParser = ParserFactory.levelParser(grammar);
 	}
 	
 	@Test

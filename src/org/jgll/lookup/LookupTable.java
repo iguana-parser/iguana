@@ -8,6 +8,7 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.Input;
 
 /**
  * 
@@ -38,7 +39,7 @@ public interface LookupTable {
 	
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 	
-	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol);
+	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize);
 	
 	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
 
@@ -59,5 +60,7 @@ public interface LookupTable {
 	public int getDescriptorsCount();
 	
 	public Iterable<GSSNode> getGSSNodes();
+	
+	public void init(Input input);
 	
 }	

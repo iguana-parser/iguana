@@ -23,13 +23,10 @@ public abstract class AbstractLookupTable implements LookupTable {
 	
 	protected final Grammar grammar;
 	
-	protected final int inputSize;
-	
 	protected final int slotsSize;
 	
 	
-	public AbstractLookupTable(Grammar grammar, int inputSize) {
-		this.inputSize = inputSize;
+	public AbstractLookupTable(Grammar grammar) {
 		this.grammar = grammar;
 		this.slotsSize = grammar.getGrammarSlots().size();
 	}

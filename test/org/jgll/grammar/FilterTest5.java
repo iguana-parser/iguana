@@ -3,9 +3,12 @@ package org.jgll.grammar;
 import static org.junit.Assert.*;
 import static org.jgll.util.collections.CollectionsUtil.*;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -19,38 +22,36 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class FilterTest5 extends AbstractGrammarTest {
+public class FilterTest5 {
 
-	private Rule rule1;
-	private Rule rule2;
-	private Rule rule3;
-	private Rule rule4;
-	private Rule rule5;
+	private Grammar grammar;
+	private GLLParser levelParser;
+	private GLLParser rdParser;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
 		// E ::= E z
 		Nonterminal E = new Nonterminal("E");
-		rule1 = new Rule(E, list(E, new Character('z')));
+		Rule rule1 = new Rule(E, list(E, new Character('z')));
 		builder.addRule(rule1);
 		
 		// E ::=  x E
-		rule2 = new Rule(E, list(new Character('x'), E));
+		Rule rule2 = new Rule(E, list(new Character('x'), E));
 		builder.addRule(rule2);
 		
 		// E ::= E w
-		rule3 = new Rule(E, list(E, new Character('w')));
+		Rule rule3 = new Rule(E, list(E, new Character('w')));
 		builder.addRule(rule3);
 		
 		// E ::= y E
-		rule4 = new Rule(E, list(new Character('y'), E));
+		Rule rule4 = new Rule(E, list(new Character('y'), E));
 		builder.addRule(rule4);
 		
 		// E ::= a
-		rule5 = new Rule(E, list(new Character('a')));
+		Rule rule5 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule5);
 		
 		// (E, .E z, x E) 
@@ -66,7 +67,9 @@ public class FilterTest5 extends AbstractGrammarTest {
 		builder.addFilter(E, rule3, 0, rule4);
 		
 		builder.filter();
-		return builder.build();
+		grammar =  builder.build();
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		levelParser = ParserFactory.levelParser(grammar);
 	}
 
 	@Test

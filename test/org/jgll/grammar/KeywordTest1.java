@@ -1,11 +1,13 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.*;
 import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.parser.ParserFactory;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -14,16 +16,20 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class KeywordTest1 extends AbstractGrammarTest {
+public class KeywordTest1 {
+	
+	private Grammar grammar;
+	private GLLParser rdParser;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 		Keyword iff = new Keyword("if", new int[] {'i', 'f'});
 		Rule r1 = new Rule(new Nonterminal("A"), iff);
 		GrammarBuilder builder = new GrammarBuilder();
 		builder.addRule(r1);
 		builder.addRule(GrammarBuilder.fromKeyword(iff));
-		return builder.build();
+		grammar = builder.build();
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -38,8 +44,7 @@ public class KeywordTest1 extends AbstractGrammarTest {
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("if"), grammar, "A");
-		generateSPPFGraph(sppf);
+		rdParser.parse(Input.fromString("if"), grammar, "A");
 	}
 	
 }

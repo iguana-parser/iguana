@@ -32,9 +32,9 @@ import org.jgll.util.logging.LoggerWrapper;
  * @author Ali Afroozeh
  *
  */
-public class LevelSynchronizedLookupTable extends AbstractLookupTable {
+public class LevelBasedLookupTable extends AbstractLookupTable {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelSynchronizedLookupTable.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelBasedLookupTable.class);
 	
 	private int currentLevel;
 	
@@ -83,13 +83,13 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 	
 	private final int initialSize = 2048;
 	
-	public LevelSynchronizedLookupTable(Grammar grammar, Input input) {
-		this(grammar, input, grammar.getLongestTerminalChain());
+	public LevelBasedLookupTable(Grammar grammar) {
+		this(grammar, grammar.getLongestTerminalChain());
 	}
 	
 	@SuppressWarnings("unchecked")
-	public LevelSynchronizedLookupTable(Grammar grammar, Input input, int chainLength) {
-		super(grammar, input.size());
+	public LevelBasedLookupTable(Grammar grammar, int chainLength) {
+		super(grammar);
 		
 		this.chainLength = chainLength;
 		terminals = new TerminalSymbolNode[chainLength + 1][2];
@@ -233,7 +233,7 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 
 	
 	@Override
-	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
+	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
 		
 		CuckooHashSet<NonPackedNode> currentNodes = this.currentNodes;
 		
@@ -447,6 +447,34 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 				set = Collections.emptySet();
 			}
 			return set;
+		}
+	}
+
+	@Override
+	public void init(Input input) {
+		terminals = new TerminalSymbolNode[chainLength + 1][2];
+		
+		u.clear();
+		r.clear();
+		
+		currentNodes.clear();
+		
+		currentPackedNodes.clear();
+		
+		currentGssNodes.clear();
+		
+		currendEdges.clear();
+		
+		currentPoppedElements.clear();
+		
+		for(int i = 0; i < chainLength; i++) {
+			forwardDescriptors[i].clear();
+			forwardRs[i].clear();
+			forwardNodes[i].clear();
+			forwardGssNodes[i].clear();
+			forwardEdges[i].clear();
+			forwardPoppedElements[i].clear();
+			forwardPackedNodes[i].clear();
 		}
 	}
 

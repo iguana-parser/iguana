@@ -1,8 +1,9 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.*;
 import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -13,10 +14,12 @@ import org.junit.Test;
  *  F  ::= (E) | a
  *  
  */
-public class LeftFactorizedArithmeticGrammarTest extends AbstractGrammarTest {
+public class LeftFactorizedArithmeticGrammarTest {
 	
-	@Override
-	protected Grammar initGrammar() {
+	private Grammar grammar;
+
+	@Before
+	public void init() {
 
 		GrammarBuilder builder = new GrammarBuilder("LeftFactorizedArithmeticExpressions");
 		
@@ -31,7 +34,7 @@ public class LeftFactorizedArithmeticGrammarTest extends AbstractGrammarTest {
 		
 		
 		builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8);
-		return builder.build();
+		grammar = builder.build();
 	}
 	
 	@Test

@@ -3,23 +3,37 @@ package org.jgll.grammar;
 import static org.junit.Assert.*;
 import static org.jgll.util.collections.CollectionsUtil.*;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
+import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * 
  * A ::= 'a'
  */
-public class Test2 extends AbstractGrammarTest {
+public class Test2 {
 
-	@Override
-	protected Grammar initGrammar() {
+	private Grammar grammar;
+	private GLLParser levelParser;
+	private GLLParser rdParser;
+	private GLLRecognizer recognizer;
+	
+	@Before
+	public void init() {
 		Rule r1 = new Rule(new Nonterminal("A"), list(new Character('a')));
-		return new GrammarBuilder("a").addRule(r1).build();
+		grammar = new GrammarBuilder("a").addRule(r1).build();
+		
+		rdParser = ParserFactory.levelParser(grammar);
+		levelParser = ParserFactory.recursiveDescentParser(grammar);
+		recognizer = RecognizerFactory.contextFreeRecognizer();
 	}
 	
 	@Test

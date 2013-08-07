@@ -2,11 +2,16 @@ package org.jgll.grammar;
 
 import static org.junit.Assert.*;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
+import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -16,12 +21,20 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class Test1 extends AbstractGrammarTest {
+public class Test1 {
+	
+	private Grammar grammar;
+	private GLLParser levelParser;
+	private GLLParser rdParser;
+	private GLLRecognizer recognizer;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 		Rule r1 = new Rule(new Nonterminal("A"));
-		return new GrammarBuilder("epsilon").addRule(r1).build();
+		grammar = new GrammarBuilder("epsilon").addRule(r1).build();
+		recognizer = RecognizerFactory.contextFreeRecognizer();
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		levelParser = ParserFactory.levelParser(grammar);
 	}
 	
 	@Test

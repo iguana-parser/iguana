@@ -5,12 +5,15 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.condition.ConditionFactory;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -22,14 +25,14 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class DanglingElseGrammar2 extends AbstractGrammarTest {
+public class DanglingElseGrammar2 {
 
-	private Rule rule1;
-	private Rule rule2;
-	private Rule rule3;
+	private Grammar grammar;
+	
+	private GLLParser levelParser;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 		
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse");
 		
@@ -38,16 +41,17 @@ public class DanglingElseGrammar2 extends AbstractGrammarTest {
 		Terminal a = new Character('a');
 		Terminal b = new Character('b');
 
-		rule1 = new Rule(S, list(Group.of(a, S).addCondition(ConditionFactory.notMatch(a, S, b, S))));
+		Rule rule1 = new Rule(S, list(Group.of(a, S).addCondition(ConditionFactory.notMatch(a, S, b, S))));
 		builder.addRules(EBNFUtil.rewrite(rule1));
 		
-		rule2 = new Rule(S, list(a, S, b, S));
+		Rule rule2 = new Rule(S, list(a, S, b, S));
 		builder.addRule(rule2);
 		
-		rule3 = new Rule(S, list(s));
+		Rule rule3 = new Rule(S, list(s));
 		builder.addRule(rule3);
 		
-		return builder.build();
+		grammar = builder.build();
+		levelParser = ParserFactory.levelParser(grammar);
 	}
 	
 	@Test

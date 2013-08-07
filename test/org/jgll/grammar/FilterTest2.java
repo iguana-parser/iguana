@@ -1,8 +1,11 @@
 package org.jgll.grammar;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -19,30 +22,29 @@ import static org.jgll.util.collections.CollectionsUtil.*;
  * @author Ali Afroozeh
  *
  */
-public class FilterTest2 extends AbstractGrammarTest {
+public class FilterTest2 {
 
-	private Rule rule0;
-	private Rule rule1;
-	private Rule rule2;
-	private Rule rule3;
+	private Grammar grammar;
+	private GLLParser levelParser;
+	private GLLParser rdParser;
 
-
-	@Override
-	protected Grammar initGrammar() {
+	
+	@Before
+	public void init() {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
 		Nonterminal E = new Nonterminal("E");
-		rule0 = new Rule(E, list(E, new Character('^'), E));
+		Rule rule0 = new Rule(E, list(E, new Character('^'), E));
 		builder.addRule(rule0);
 		
-		rule1 = new Rule(E, list(E, new Character('+'), E));
+		Rule rule1 = new Rule(E, list(E, new Character('+'), E));
 		builder.addRule(rule1);
 		
-		rule2 = new Rule(E, list(new Character('-'), E));
+		Rule rule2 = new Rule(E, list(new Character('-'), E));
 		builder.addRule(rule2);
 		
-		rule3 = new Rule(E, list(new Character('a')));
+		Rule rule3 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule3);
 		
 		// left associative E + E
@@ -63,7 +65,9 @@ public class FilterTest2 extends AbstractGrammarTest {
 		
 		builder.filter();
 		
-		return builder.build();
+		grammar = builder.build();
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		levelParser = ParserFactory.levelParser(grammar);
 	}
 	
 

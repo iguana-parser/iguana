@@ -4,16 +4,27 @@ package org.jgll.grammar;
 import static org.jgll.util.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
-public class Gamma1Test extends AbstractGrammarTest {
+
+/**
+ * 
+ * S ::= A S d | B S | epsilon
+ * A ::= a | c
+ * B ::= a | b
+ * 
+ */
+public class Gamma1Test {
 	
 	private Character a = new Character('a');
 	private Character b = new Character('b');
@@ -22,16 +33,14 @@ public class Gamma1Test extends AbstractGrammarTest {
 	private Nonterminal S = new Nonterminal("S");
 	private Nonterminal A = new Nonterminal("A");
 	private Nonterminal B = new Nonterminal("B");
+	
+	private Grammar grammar;
+	private GLLParser levelParser;
+	private GLLParser rdParser;
 
-	/**
-	 * 
-     * S ::= A S d | B S | epsilon
-     * A ::= a | c
-     * B ::= a | b
-	 * 
-	 */
-	@Override
-	protected Grammar initGrammar() {
+
+	@Before
+	public void init() {
 		
 		GrammarBuilder builder = new GrammarBuilder("gamma1");
 		
@@ -56,7 +65,9 @@ public class Gamma1Test extends AbstractGrammarTest {
 		Rule r7 = new Rule(B, list(b));
 		builder.addRule(r7);
 		
-		return builder.build();
+		grammar = builder.build();
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		levelParser = ParserFactory.levelParser(grammar);
 	}
 	
 	@Test

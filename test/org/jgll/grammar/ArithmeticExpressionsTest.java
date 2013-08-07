@@ -3,35 +3,45 @@ package org.jgll.grammar;
 import static org.jgll.util.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
-public class ArithmeticExpressionsTest extends AbstractGrammarTest {
+/**
+ * 
+ * E ::= E + E
+ *     | E * E
+ *     | a
+ * 
+ * @author Ali Afroozeh
+ *
+ */
+public class ArithmeticExpressionsTest {
 
-	private Rule rule0;
-	
-	private Rule rule1;
-	
-	private Rule rule2;
+	private Grammar grammar;
+	private GLLParser levelParser;
+	private GLLParser rdParser;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 
 		GrammarBuilder builder = new GrammarBuilder("gamma2");
 
 		// E ::= E + E
 		Nonterminal E = new Nonterminal("E");
-		rule0 = new Rule(E, list(E, new Character('+'), E));
+		Rule rule0 = new Rule(E, list(E, new Character('+'), E));
 		builder.addRule(rule0);
 
 		// E ::= E * E
-		rule1 = new Rule(E, list(E, new Character('*'), E));
+		Rule rule1 = new Rule(E, list(E, new Character('*'), E));
 		builder.addRule(rule1);
 
 		// E ::= a
-		rule2 = new Rule(E, list(new Character('a')));
+		Rule rule2 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule2);
 
 		builder.addFilter(E, rule0, 2, rule0);
@@ -40,7 +50,9 @@ public class ArithmeticExpressionsTest extends AbstractGrammarTest {
 		builder.addFilter(E, rule1, 2, rule1);
 		builder.filter();
 
-		return builder.build();
+		grammar = builder.build();
+		levelParser = ParserFactory.levelParser(grammar);
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
 	}
 
 	@Test

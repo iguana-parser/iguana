@@ -4,7 +4,6 @@ import static org.jgll.grammar.condition.ConditionFactory.*;
 import static org.jgll.util.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.AbstractGrammarTest;
 import org.jgll.grammar.Character;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
@@ -16,10 +15,13 @@ import org.jgll.grammar.Range;
 import org.jgll.grammar.Rule;
 import org.jgll.grammar.Terminal;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -33,10 +35,13 @@ import org.junit.Test;
  * @author Ali Afroozeh
  * 
  */
-public class PrecedeRestrictionTest2 extends AbstractGrammarTest {
+public class PrecedeRestrictionTest2 {
+	
+	private Grammar grammar;
+	private GLLParser levelParser;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 		Nonterminal S = new Nonterminal("S");
 		Keyword forr = new Keyword("for", new int[] { 'f', 'o', 'r' });
 		Keyword forall = new Keyword("forall", new int[] { 'f', 'o', 'r', 'a', 'l', 'l' });
@@ -61,7 +66,8 @@ public class PrecedeRestrictionTest2 extends AbstractGrammarTest {
 		builder.addRule(GrammarBuilder.fromKeyword(forr));
 		builder.addRule(GrammarBuilder.fromKeyword(forall));
 
-		return builder.build();
+		grammar = builder.build();
+		levelParser = ParserFactory.levelParser(grammar);
 	}
 
 	@Test

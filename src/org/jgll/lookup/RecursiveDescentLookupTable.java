@@ -18,6 +18,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
@@ -44,16 +45,27 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private CuckooHashMap<GSSNode, Set<SPPFNode>> poppedElements;
 	
-	public RecursiveDescentLookupTable(Grammar grammar, int inputSize) {
-		super(grammar, inputSize);
+	public RecursiveDescentLookupTable(Grammar grammar) {
+		super(grammar);
 		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new CuckooHashSet<>(Descriptor.externalHasher);
-		terminals = new TerminalSymbolNode[2 * inputSize];
-		nonPackedNodes = new CuckooHashSet<>(inputSize, NonPackedNode.externalHasher);
+		nonPackedNodes = new CuckooHashSet<>(NonPackedNode.externalHasher);
 		gssNodes = new CuckooHashSet<>(GSSNode.externalHasher);
 		packedNodes = new CuckooHashSet<>(PackedNode.externalHasher);
 		gssEdges = new CuckooHashSet<>(GSSEdge.externalHasher);
 		poppedElements = new CuckooHashMap<>(GSSNode.externalHasher);
+	}
+	
+	@Override
+	public void init(Input input) {
+		terminals = new TerminalSymbolNode[2 * input.size()];
+		descriptorsStack.clear();
+		descriptorsSet.clear();
+		nonPackedNodes.clear();
+		gssNodes.clear();
+		packedNodes.clear();
+		gssEdges.clear();
+		poppedElements.clear();
 	}
 	
 	@Override
@@ -129,7 +141,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	}
 
 	@Override
-	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol) {
+	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
 		return (NonterminalSymbolNode) nonPackedNodes.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 

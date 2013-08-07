@@ -10,6 +10,7 @@ import org.jgll.grammar.slot.FirstKeywordGrammarSlot;
 import org.jgll.grammar.slot.FirstNonterminalGrammarSlot;
 import org.jgll.grammar.slot.FirstTerminalGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
@@ -30,9 +31,9 @@ import org.jgll.util.logging.LoggerWrapper;
  * @author Ali Afroozeh
  * 
  */
-public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals {
+public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParser.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
 	
 	/**
 	 * u0 is the bottom of the GSS.
@@ -72,6 +73,11 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 	 */
 	protected GSSNode errorGSSNode;
 	
+	
+	public GLLParserImpl(LookupTable lookupTable) {
+		this.lookupTable = lookupTable;
+	}
+	
 
 	/**
 	 * Parses the given input string. If the parsing of the input was successful,
@@ -95,14 +101,15 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 		this.grammar = grammar;
 		
 		init();
+		lookupTable.init(input);
 	
 		long start = System.nanoTime();
 
-		parse(startSymbol);
+		L0.getInstance().parse(this, input, startSymbol);
 		
 		long end = System.nanoTime();
 		
-		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);
+		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol, input.size());
 		if (root == null) {
 			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 		}
@@ -110,13 +117,7 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 		logParseStatistics(end - start);
 		return root;
 	}
-	
-	/**
-	 * Subclasses should provide implementations for this method. 
-	 * 
-	 */
-	protected abstract void parse(HeadGrammarSlot startSymbol);
-	
+		
 	private void logParseStatistics(long duration) {
 		log.info("Parsing Time: " + duration/1000000 + " ms");
 		
@@ -148,10 +149,14 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 		}
 	}
 
-	/**
-	 * initialized the parser's state before a new parse.
-	 */
-	protected abstract void init();
+	private void init() {
+		cu = u0;
+		cn = DummyNode.getInstance();
+		ci = 0;
+		errorSlot = null;
+		errorIndex = -1;
+		errorGSSNode = null;
+	}
 	
 
 	/**
@@ -387,6 +392,12 @@ public abstract class AbstractGLLParser implements GLLParser, GLLParserInternals
 		node.addFirstPackedNode(slot.getAlternateAt(0).getLastBodySlot().next(), nextIndex);
 		ci = nextIndex;
 		return node;
+	}
+
+
+	@Override
+	public LookupTable getLookupTable() {
+		return lookupTable;
 	}
 
 	

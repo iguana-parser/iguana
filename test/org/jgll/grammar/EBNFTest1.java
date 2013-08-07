@@ -1,12 +1,14 @@
 package org.jgll.grammar;
 
-import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.parser.ParseError;
-import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.util.Input;
-import org.junit.Test;
-
 import static org.jgll.util.collections.CollectionsUtil.*;
+
+import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
+import org.jgll.util.Input;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 
@@ -17,10 +19,13 @@ import static org.jgll.util.collections.CollectionsUtil.*;
  * @author Ali Afroozeh
  *
  */
-public class EBNFTest1 extends AbstractGrammarTest {
+public class EBNFTest1 {
+	
+	private Grammar grammar;
+	private GLLParser rdParser;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 		
 		GrammarBuilder builder = new GrammarBuilder("EBNF");
 		
@@ -36,14 +41,13 @@ public class EBNFTest1 extends AbstractGrammarTest {
 		
 		builder.addRules(newRules);
 		
-		return builder.build();
+		grammar = builder.build();
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		System.out.println(grammar);
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa"), grammar, "S");
-		generateSPPFGraphWithIntermeiateAndListNodes(sppf);
+		rdParser.parse(Input.fromString("aaa"), grammar, "S");
 	}
 
 }

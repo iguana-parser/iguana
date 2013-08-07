@@ -3,14 +3,16 @@ package org.jgll.grammar;
 import static org.junit.Assert.*;
 import static org.jgll.util.collections.CollectionsUtil.*;
 
-
 import java.util.Set;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -25,12 +27,14 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class IndirectRecursion1Test extends AbstractGrammarTest {
+public class IndirectRecursion1Test {
 
 	private GrammarBuilder builder;
+	private Grammar grammar;
+	private GLLParser levelParser;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 		Nonterminal A = new Nonterminal("A");
 		Nonterminal B = new Nonterminal("B");
 		Nonterminal C = new Nonterminal("C");
@@ -44,7 +48,8 @@ public class IndirectRecursion1Test extends AbstractGrammarTest {
 													  .addRule(r3)
 													  .addRule(r4)
 													  .addRule(r5);
-		return builder.build();
+		grammar = builder.build();
+		levelParser = ParserFactory.levelParser(grammar);
 	}
 	
 	@Test

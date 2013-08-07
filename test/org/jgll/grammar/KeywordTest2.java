@@ -1,11 +1,13 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.*;
 import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.parser.ParserFactory;
 import org.jgll.util.Input;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -17,10 +19,13 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class KeywordTest2 extends AbstractGrammarTest {
+public class KeywordTest2 {
+	
+	private Grammar grammar;
+	private GLLParser rdParser;
 
-	@Override
-	protected Grammar initGrammar() {
+	@Before
+	public void init() {
 		Nonterminal S = new Nonterminal("S");
 		Keyword iff = new Keyword("if", new int[] {'i', 'f'});
 		Keyword then = new Keyword("then", new int[] {'t', 'h', 'e', 'n'});
@@ -32,11 +37,13 @@ public class KeywordTest2 extends AbstractGrammarTest {
 		Rule r2 = new Rule(S, s);
 		Rule r3 = new Rule(L, ws);
 		
-		return new GrammarBuilder().addRule(r1)
+		grammar = new GrammarBuilder().addRule(r1)
 								   .addRule(r2)
 								   .addRule(r3)
 								   .addRule(GrammarBuilder.fromKeyword(iff))
 								   .addRule(GrammarBuilder.fromKeyword(then)).build();
+		
+		rdParser = ParserFactory.recursiveDescentParser(grammar);
 	}
 	
 	
@@ -52,8 +59,7 @@ public class KeywordTest2 extends AbstractGrammarTest {
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("if s then s"), grammar, "S");
-		generateSPPFGraph(sppf);
+		rdParser.parse(Input.fromString("if s then s"), grammar, "S");
 	}
 	
 }
