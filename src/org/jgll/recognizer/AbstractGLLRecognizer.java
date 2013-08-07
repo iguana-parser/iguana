@@ -58,7 +58,8 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	protected int endIndex;
 	
 	@Override
-	public final boolean recognize(Input input, Grammar grammar, String nonterminalName) {		
+	public final boolean recognize(Input input, Grammar grammar, String nonterminalName) {
+		
 		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(nonterminalName);
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + nonterminalName + " found");
@@ -81,6 +82,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
 	@Override
 	public boolean recognize(Input input, int startIndex, int endIndex, BodyGrammarSlot fromSlot) {
+				
 		init(grammar, input, startIndex, endIndex, null);
 		
 		cu = create(startSlot, cu, ci);
@@ -99,11 +101,11 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	}
 	
 	protected void logStatistics(long duration) {
-		log.info("Parsing Time: %d ms", duration/1000000);
+		log.debug("Recognition Time: %d ms", duration/1000000);
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.debug("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 //		log.debug("Descriptors: {}", lookupTable.getDescriptorsCount());
 //		log.debug("GSSNodes: {}", lookupTable.getGSSNodes().size());
 //		log.debug("Non-packed nodes: {}", lookupTable.getDescriptorsCount());

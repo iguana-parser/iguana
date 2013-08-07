@@ -73,8 +73,9 @@ public class Descriptor {
 		Descriptor other = (Descriptor) obj;
 
 		return inputIndex == other.getInputIndex() &&
-			   slot.equals(other.slot) &&
-			   gssNode.equals(other.getGSSNode());
+			   slot == other.slot &&
+			   gssNode.getGrammarSlot().getId() == other.gssNode.getGrammarSlot().getId() &&
+			   gssNode.getInputIndex() == other.gssNode.getInputIndex();
 	}
 	
 	@Override

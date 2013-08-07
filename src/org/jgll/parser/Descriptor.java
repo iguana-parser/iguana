@@ -28,6 +28,7 @@ import org.jgll.util.hashing.Level;
 public class Descriptor implements Level {
 	
 	public static final ExternalHasher<Descriptor> externalHasher = new DescriptorExternalHasher();
+	public static final ExternalHasher<Descriptor> levelBasedExternalHasher = new LevelBasedExternalHasher();
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -125,6 +126,21 @@ public class Descriptor implements Level {
 						  d.gssNode.getInputIndex(),
 						  d.inputIndex);
 		}
-		
 	}
+	
+	public static class LevelBasedExternalHasher implements ExternalHasher<Descriptor> {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int hash(Descriptor d, HashFunction f) {
+			return f.hash(d.slot.getId(), 
+       					  d.sppfNode.getGrammarSlot().getId(), 
+						  d.gssNode.getGrammarSlot().getId(),
+						  d.gssNode.getInputIndex());
+		}
+	}
+	
+	
+	
 }

@@ -29,6 +29,7 @@ import org.jgll.util.hashing.Level;
 public class GSSEdge implements Level {
 	
 	public static final ExternalHasher<GSSEdge> externalHasher = new GSSEdgeExternalHasher();
+	public static final ExternalHasher<GSSEdge> levelBasedExternalHasher = new GSSEdgeExternalHasher();
 
 	private final GSSNode src;
 	private final SPPFNode sppfNode;
@@ -124,5 +125,30 @@ public class GSSEdge implements Level {
 		}
 		
 	}
+	
+	public static class GSSEdgeLevelBasedExternalHasher implements ExternalHasher<GSSEdge> {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int hash(GSSEdge edge, HashFunction f) {
+			if(edge.sppfNode instanceof TerminalSymbolNode) {
+				return f.hash(edge.src.getGrammarSlot().getId(),
+						   edge.dst.getGrammarSlot().getId(),
+						   edge.dst.getInputIndex(),
+						   31,
+						   ((TerminalSymbolNode) edge.sppfNode).getMatchedChar());
+			} 
+			else {
+				return f.hash(edge.src.getGrammarSlot().getId(),
+						   edge.dst.getGrammarSlot().getId(),
+						   edge.dst.getInputIndex(),
+						   17,
+						   edge.sppfNode.getGrammarSlot().getId());
+			}
+		}
+		
+	}
+
 	
 }

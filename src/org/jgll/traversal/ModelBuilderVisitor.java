@@ -159,7 +159,14 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 									return false;
 								}
 								next = iterator.next();
-							} 
+							}
+							
+							else if(next.getObject() == null) {
+								if(!iterator.hasNext()) {
+									return false;
+								}
+								next = iterator.next();
+							}
 							
 							else {
 								return true;								

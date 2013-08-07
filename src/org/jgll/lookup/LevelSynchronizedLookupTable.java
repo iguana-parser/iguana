@@ -94,35 +94,35 @@ public class LevelSynchronizedLookupTable extends AbstractLookupTable {
 		this.chainLength = chainLength;
 		terminals = new TerminalSymbolNode[chainLength + 1][2];
 		
-		u = new CuckooHashSet<>(getSize(), Descriptor.externalHasher);
+		u = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 		r = new ArrayDeque<>();
 		
 		forwardDescriptors = new CuckooHashSet[chainLength];
 		forwardRs = new Queue[chainLength];
 		
-		currentNodes = new CuckooHashSet<>(initialSize, NonPackedNode.externalHasher);
+		currentNodes = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 		forwardNodes = new CuckooHashSet[chainLength];
 		
-		currentPackedNodes = new CuckooHashSet<>(initialSize, PackedNode.externalHasher);
+		currentPackedNodes = new CuckooHashSet<>(initialSize, PackedNode.levelBasedExternalHasher);
 		forwardPackedNodes = new CuckooHashSet[chainLength];
 		
-		currentGssNodes = new CuckooHashSet<>(initialSize, GSSNode.externalHasher);
+		currentGssNodes = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
 		forwardGssNodes = new CuckooHashSet[chainLength];
 		
-		currendEdges = new CuckooHashSet<>(initialSize, GSSEdge.externalHasher);
+		currendEdges = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
 		forwardEdges = new CuckooHashSet[chainLength];
 		
-		currentPoppedElements = new CuckooHashMap<>(initialSize, GSSNode.externalHasher);
+		currentPoppedElements = new CuckooHashMap<>(initialSize, GSSNode.levelBasedExternalHasher);
 		forwardPoppedElements = new CuckooHashMap[chainLength];
 		
 		for(int i = 0; i < chainLength; i++) {
-			forwardDescriptors[i] = new CuckooHashSet<>(getSize(), Descriptor.externalHasher);
+			forwardDescriptors[i] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
-			forwardNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.externalHasher);
-			forwardGssNodes[i] = new CuckooHashSet<>(initialSize, GSSNode.externalHasher);
-			forwardEdges[i] = new CuckooHashSet<>(initialSize, GSSEdge.externalHasher);
-			forwardPoppedElements[i] = new CuckooHashMap<>(initialSize, GSSNode.externalHasher);
-			forwardPackedNodes[i] = new CuckooHashSet<>(PackedNode.externalHasher);
+			forwardNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
+			forwardGssNodes[i] = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
+			forwardEdges[i] = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
+			forwardPoppedElements[i] = new CuckooHashMap<>(initialSize, GSSNode.levelBasedExternalHasher);
+			forwardPackedNodes[i] = new CuckooHashSet<>(PackedNode.levelBasedExternalHasher);
 		}
 	}
 	

@@ -27,6 +27,7 @@ import org.jgll.util.hashing.Level;
 public class GSSNode implements Level {
 	
 	public static final ExternalHasher<GSSNode> externalHasher = new GSSNodeExternalHasher();
+	public static final ExternalHasher<GSSNode> levelBasedExternalHasher = new LevelBasedGSSNodeExternalHasher();
 
 	/**
 	 * The initial GSS node
@@ -112,5 +113,16 @@ public class GSSNode implements Level {
 			return f.hash(node.slot.getId(), node.inputIndex);
 		}
 	}
+	
+	public static class LevelBasedGSSNodeExternalHasher implements ExternalHasher<GSSNode> {
+		
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int hash(GSSNode node, HashFunction f) {
+			return f.hash(node.slot.getId());
+		}
+	}
+
 
 }

@@ -18,6 +18,7 @@ import org.jgll.util.hashing.HashFunction;
 public class PackedNode extends SPPFNode {
 	
 	public static final ExternalHasher<PackedNode> externalHasher = new PackedNodeExternalHasher();
+	public static final ExternalHasher<PackedNode> levelBasedExternalHasher = new PackedNodeExternalHasher();
 	
 	private final GrammarSlot slot;
 
@@ -169,5 +170,19 @@ public class PackedNode extends SPPFNode {
 						  packedNode.parent.getRightExtent());
 		}
 	}
+	
+	public static class PackedNodeLevelBasedExternalHasher implements ExternalHasher<PackedNode> {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int hash(PackedNode packedNode, HashFunction f) {
+ 			return f.hash(packedNode.slot.getId(),
+   						  packedNode.pivot,
+						  packedNode.parent.getGrammarSlot().getId(),
+						  packedNode.parent.getLeftExtent());
+		}
+	}
+
 
 }

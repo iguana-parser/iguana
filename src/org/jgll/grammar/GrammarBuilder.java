@@ -784,8 +784,10 @@ public class GrammarBuilder implements Serializable {
 		for (HeadGrammarSlot head : nonterminals) {
 			head.setId(i++);
 		}
-		i = 0;
 		for (BodyGrammarSlot slot : slots) {
+			slot.setId(i++);
+		}
+		for(BodyGrammarSlot slot : conditionSlots) {
 			slot.setId(i++);
 		}
 	}
@@ -867,8 +869,7 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		for (HeadGrammarSlot newNonterminal : newNonterminals) {
-			List<Alternate> copy = copyAlternates(newNonterminal,
-					newNonterminal.getAlternates());
+			List<Alternate> copy = copyAlternates(newNonterminal, newNonterminal.getAlternates());
 			newNonterminal.setAlternates(copy);
 		}
 	}
