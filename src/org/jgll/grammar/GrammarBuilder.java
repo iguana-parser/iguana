@@ -209,24 +209,29 @@ public class GrammarBuilder implements Serializable {
 
 	private void addNotPrecede(BodyGrammarSlot slot, final List<Terminal> terminals) {
 		log.debug("Precede restriction added %s <<! %s", terminals, slot);
+		
+		BitSet testSet = new BitSet();
+		
+		for(Terminal t : terminals) {
+			testSet.or(t.asBitSet());
+		}
+		
+		final BitSet set = testSet;
+		
+		
 		slot.addPreCondition(new SlotAction<Boolean>() {
-
+			
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Boolean execute(GLLParserInternals parser, Input input) {
+				
 				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
 					return false;
 				}
-				
-				for(Terminal t : terminals) {
-					if(t.match(input.charAt(ci - 1))) {
-						return true;
-					}
-				}
-
-				return false;
+			
+				return set.get(input.charAt(ci - 1));
 			}
 		});
 	}
@@ -284,8 +289,8 @@ public class GrammarBuilder implements Serializable {
 					KeywordCondition literalCondition = (KeywordCondition) condition;
 					addNotPrecede2(slot, literalCondition.getKeywords());
 				} else {
-					TerminalCondition characterClassCondition = (TerminalCondition) condition;
-					addNotPrecede(slot, characterClassCondition.getTerminals());
+					TerminalCondition terminalCondition = (TerminalCondition) condition;
+					addNotPrecede(slot, terminalCondition.getTerminals());
 				}
 				break;
 				

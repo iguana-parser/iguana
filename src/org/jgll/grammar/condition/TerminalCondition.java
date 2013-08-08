@@ -20,20 +20,20 @@ public class TerminalCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private List<Terminal> characterClasses;
+	private List<Terminal> terminals;
 	
-	public TerminalCondition(ConditionType type, List<Terminal> list) {
+	public TerminalCondition(ConditionType type, List<Terminal> terminals) {
 		super(type);
-		this.characterClasses = list;
+		this.terminals = terminals;
 	}
 	
 	public List<Terminal> getTerminals() {
-		return characterClasses;
+		return terminals;
 	}
 	
 	@Override
 	public String toString() {
-		return type.toString() + " " + listToString(characterClasses);
+		return type.toString() + " " + listToString(terminals);
 	}
 
 }

@@ -73,13 +73,13 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		
-		if(executePreConditions(parser, input)) {
-			return null;
-		}
-		
 		int ci = parser.getCurrentInputIndex();
 		
 		if(input.match(ci, keyword.getChars())) {
+			
+			if(executePreConditions(parser, input)) {
+				return null;
+			}
 			
 			NonPackedNode sppfNode = parser.getKeywordStub(keyword, keywordHead, ci);
 			

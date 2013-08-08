@@ -44,7 +44,7 @@ public class ConditionFactory {
 		return createCondition(ConditionType.NOT_MATCH, symbols);
 	}
 	
-	private static <T extends Symbol> boolean allCharacterClass(List<T> symbols) {
+	private static <T extends Symbol> boolean allTerminal(List<T> symbols) {
 		for(T t : symbols) {
 			if(! (t instanceof Terminal)) {
 				return false;
@@ -57,7 +57,7 @@ public class ConditionFactory {
 	private static <T extends Symbol> Condition createCondition(ConditionType type, List<T> symbols) {
 		if(allKeywords(symbols)) {
 			return new KeywordCondition(type, (List<Keyword>) symbols);
-		} else if (allCharacterClass(symbols)) {
+		} else if (allTerminal(symbols)) {
 			return new TerminalCondition(type, (List<Terminal>) symbols);
 		} else {
 			return new ContextFreeCondition(type, symbols);

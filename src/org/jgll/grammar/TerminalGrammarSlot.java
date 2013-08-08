@@ -43,6 +43,11 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		int charAtCi = input.charAt(ci);
 
 		if(terminal.match(charAtCi)) {
+			
+			if(executePreConditions(parser, input)) {
+				return null;
+			}
+			
 			TerminalSymbolNode cr = parser.getTerminalNode(charAtCi);
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, cr);
