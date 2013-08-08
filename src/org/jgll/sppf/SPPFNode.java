@@ -103,7 +103,7 @@ public abstract class SPPFNode implements Level {
 				Iterator<SPPFNode> otherIt = node.getChildren().iterator();
 				while(otherIt.hasNext()) {
 					SPPFNode otherChild = otherIt.next();
-					if(!thisChild.deepEquals(otherChild)) {
+					if(thisChild.deepEquals(otherChild)) {
 						continue outer;
 					}
 				} 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -59,6 +60,31 @@ public class Alternate implements Serializable {
 	
 	public BodyGrammarSlot getFirstSlot() {
 		return firstSlot;
+	}
+	
+	/**
+	 * @return true if the alternate is of the form A ::= epsilon
+	 */
+	public boolean isEmpty() {
+		return firstSlot instanceof EpsilonGrammarSlot;
+	}
+	
+	public boolean isNullable() {
+		if (isEmpty()) return true;
+		
+		BodyGrammarSlot slot = firstSlot;
+		while(!(slot instanceof LastGrammarSlot)) {
+			
+			if(slot instanceof TerminalGrammarSlot || slot instanceof KeywordGrammarSlot)
+				return false;
+			
+			if(slot instanceof NonterminalGrammarSlot && !slot.isNullable())
+				return false;
+			
+			slot = slot.next();
+		}
+		
+		return true;
 	}
 	
 	public BodyGrammarSlot getBodyGrammarSlotAt(int index) {

@@ -16,6 +16,7 @@ import org.jgll.grammar.condition.KeywordCondition;
 import org.jgll.grammar.condition.TerminalCondition;
 import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.DirectNullableNonterminalGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
@@ -173,10 +174,10 @@ public class GrammarBuilder implements Serializable {
 				else if (symbol instanceof Terminal) {
 					currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
 				}
-				
+				// Nonterminal
 				else {
 					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-					currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);
+					currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
 				} 
 				slots.add(currentSlot);
 
@@ -501,6 +502,8 @@ public class GrammarBuilder implements Serializable {
 		setTestSets();
 		setTestSets(conditionSlots);
 		setIds();
+		setDirectNullables();
+		
 		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
 		removeUnusedNonterminals();
@@ -747,15 +750,17 @@ public class GrammarBuilder implements Serializable {
 
 	private void setTestSets() {
 		for (HeadGrammarSlot head : nonterminals) {
-			
-			
 			boolean nullable = head.getFirstSet().contains(Epsilon.getInstance());
 			boolean directNullable = false;
 			if(nullable) {
+				int count = 0;
 				for(Alternate alt : head.getAlternates()) {
-					if(alt.size() == 0) {
-						directNullable = true;
+					if(alt.isNullable()) {
+						count++;
 					}
+				}
+				if(count == 1) {
+					directNullable = true;
 				}
 			}
 			head.setNullable(nullable, directNullable);
@@ -785,6 +790,35 @@ public class GrammarBuilder implements Serializable {
 		for(BodyGrammarSlot slot : conditionSlots) {
 			slot.setId(i++);
 		}
+	}
+	
+	private void setDirectNullables() {
+		for (HeadGrammarSlot head : nonterminals) {
+						
+			for (Alternate alternate : head.getAlternates()) {
+
+				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+
+				while (!(currentSlot instanceof LastGrammarSlot)) {
+					if (currentSlot instanceof NonterminalGrammarSlot) {
+						// Replaces a nonterminal with an instance of direct nullable nonterminal.
+						NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) currentSlot;
+						if(ntSlot.getNonterminal().isDirectNullable()) {
+							NonterminalGrammarSlot directNullableSlot = 
+									new DirectNullableNonterminalGrammarSlot(ntSlot.getLabel(), ntSlot.getPosition(), ntSlot.previous(), ntSlot.getNonterminal(), ntSlot.getHead());
+							ntSlot.next().setPrevious(directNullableSlot);
+							directNullableSlot.setNext(ntSlot.next());
+							directNullableSlot.setTestSet();
+							directNullableSlot.setId(ntSlot.getId());
+							slots.remove(ntSlot);
+							slots.add(directNullableSlot);
+						}
+					}
+					currentSlot = currentSlot.next();
+				}
+			}
+		}
+
 	}
 
 	public void filter() {
