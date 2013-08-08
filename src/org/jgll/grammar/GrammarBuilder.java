@@ -753,14 +753,12 @@ public class GrammarBuilder implements Serializable {
 			boolean nullable = head.getFirstSet().contains(Epsilon.getInstance());
 			boolean directNullable = false;
 			if(nullable) {
-				int count = 0;
 				for(Alternate alt : head.getAlternates()) {
-					if(alt.isNullable()) {
-						count++;
+					if(alt.isEmpty()) {
+						directNullable = true;
+						head.setEpsilonAlternate(alt);
+						break;
 					}
-				}
-				if(count == 1) {
-					directNullable = true;
 				}
 			}
 			head.setNullable(nullable, directNullable);

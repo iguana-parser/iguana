@@ -37,6 +37,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private transient final Set<Terminal> followSet;
 	
+	private Alternate epsilonAlternate;
+	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		super(nonterminal.getName());
 		this.nonterminal = nonterminal;
@@ -97,6 +99,14 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void setNullable(boolean nullable, boolean directNullable) {
 		this.nullable = nullable;
 		this.directNullable = directNullable;
+	}
+	
+	public void setEpsilonAlternate(Alternate epsilonAlternate) {
+		this.epsilonAlternate = epsilonAlternate;
+	}
+	
+	public Alternate getEpsilonAlternate() {
+		return epsilonAlternate;
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 
@@ -33,7 +34,17 @@ public class DirectNullableNonterminalGrammarSlot extends NonterminalGrammarSlot
 			return nonterminal;
 			
 		} else if (testFollowSet(ci, input)) {
-			parser.getLookupTable().getNonPackedNode(nonterminal.getAlternateAt(0).getLastBodySlot().next, ci, ci);
+			NonPackedNode node = parser.getLookupTable().getNonPackedNode(nonterminal, ci, ci);
+			node.addFirstPackedNode(nonterminal.getEpsilonAlternate().getFirstSlot(), ci);
+			
+			if(next instanceof LastGrammarSlot) {
+				parser.getNonterminalNode((LastGrammarSlot) next, node);
+				parser.pop();
+				return null;
+			} else {
+				parser.getIntermediateNode(next, node);
+			}
+			
 			return next;
 		} else {
 			parser.recordParseError(this);
