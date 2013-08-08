@@ -97,8 +97,6 @@ public class Gamma0Test {
 		TerminalSymbolNode node7 = new TerminalSymbolNode(97, 1);
 		node6.addChild(node7);
 		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 2);
-		TerminalSymbolNode node9 = new TerminalSymbolNode(-2, 2);
-		node8.addChild(node9);
 		node5.addChild(node6);
 		node5.addChild(node8);
 		TerminalSymbolNode node10 = new TerminalSymbolNode(100, 2);
