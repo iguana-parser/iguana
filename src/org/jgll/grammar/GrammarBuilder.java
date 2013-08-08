@@ -17,9 +17,6 @@ import org.jgll.grammar.condition.TerminalCondition;
 import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
-import org.jgll.grammar.slot.FirstKeywordGrammarSlot;
-import org.jgll.grammar.slot.FirstNonterminalGrammarSlot;
-import org.jgll.grammar.slot.FirstTerminalGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -170,28 +167,16 @@ public class GrammarBuilder implements Serializable {
 				if(symbol instanceof Keyword) {
 					Keyword keyword = (Keyword) symbol;
 					HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
-					if(symbolIndex == 0) {
-						currentSlot = new FirstKeywordGrammarSlot(label, keywordHead, (Keyword) symbol, headGrammarSlot);
-					} else {
-						currentSlot = new KeywordGrammarSlot(label, symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
-					}
+					currentSlot = new KeywordGrammarSlot(label, symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
 				}
 				
 				else if (symbol instanceof Terminal) {
-					if(symbolIndex == 0) {
-						currentSlot = new FirstTerminalGrammarSlot(label, (Terminal) symbol, headGrammarSlot);
-					} else {
-						currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
-					}
+					currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
 				}
 				
 				else {
 					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-					if(symbolIndex == 0) {
-						currentSlot = new FirstNonterminalGrammarSlot(label, nonterminal, headGrammarSlot);
-					} else {
-						currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);
-					}
+					currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);
 				} 
 				slots.add(currentSlot);
 
@@ -763,7 +748,17 @@ public class GrammarBuilder implements Serializable {
 	private void setTestSets() {
 		for (HeadGrammarSlot head : nonterminals) {
 			
-			head.setNullable(head.getFirstSet().contains(Epsilon.getInstance()));
+			
+			boolean nullable = head.getFirstSet().contains(Epsilon.getInstance());
+			boolean directNullable = false;
+			if(nullable) {
+				for(Alternate alt : head.getAlternates()) {
+					if(alt.size() == 0) {
+						directNullable = true;
+					}
+				}
+			}
+			head.setNullable(nullable, directNullable);
 			
 			for (Alternate alternate : head.getAlternates()) {
 

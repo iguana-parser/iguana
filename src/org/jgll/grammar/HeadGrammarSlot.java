@@ -31,6 +31,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private boolean nullable;
 	
+	private boolean directNullable;
+	
 	private transient final Set<Terminal> firstSet;
 	
 	private transient final Set<Terminal> followSet;
@@ -88,8 +90,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return nullable;
 	}
 	
-	public void setNullable(boolean nullable) {
+	public boolean isDirectNullable() {
+		return directNullable;
+	}
+	
+	public void setNullable(boolean nullable, boolean directNullable) {
 		this.nullable = nullable;
+		this.directNullable = directNullable;
 	}
 	
 	@Override

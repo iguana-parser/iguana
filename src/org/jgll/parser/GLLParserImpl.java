@@ -5,13 +5,13 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.Keyword;
 import org.jgll.grammar.SlotAction;
+import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.FirstKeywordGrammarSlot;
-import org.jgll.grammar.slot.FirstNonterminalGrammarSlot;
-import org.jgll.grammar.slot.FirstTerminalGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -335,14 +335,17 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	public final SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		BodyGrammarSlot previous = slot.previous();
-		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
-		if(previous instanceof FirstTerminalGrammarSlot || previous instanceof FirstKeywordGrammarSlot) {
-			return rightChild;
-		}
 		
-		if (previous instanceof FirstNonterminalGrammarSlot && ! previous.isNullable()) {
-			return rightChild;
-		} 
+		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
+		
+		if(previous.isFirst()) {
+			if(previous instanceof TerminalGrammarSlot || previous instanceof KeywordGrammarSlot) {
+				return rightChild;
+			}
+			else if (previous instanceof NonterminalGrammarSlot && !previous.isNullable()) {
+				return rightChild;
+			} 		
+		}
 		
 		int leftExtent;
 		int rightExtent = rightChild.getRightExtent();

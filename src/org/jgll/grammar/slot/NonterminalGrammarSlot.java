@@ -22,11 +22,12 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	private HeadGrammarSlot nonterminal;
+	protected HeadGrammarSlot nonterminal;
 	
 	private BitSet firstSet;
+	
 	private BitSet followSet;
-		
+	
 	public NonterminalGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
 		super(label, position, previous, head);
 		if(nonterminal == null) {
@@ -177,6 +178,5 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public Symbol getSymbol() {
 		return nonterminal.getNonterminal();
 	}
-
 	
 }
