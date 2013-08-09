@@ -85,9 +85,41 @@ public class MurmurHash2 implements HashFunction {
 	}
 
 	@Override
-	public int hash(int k1, int k2, int k3, int k4, int k5) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int hash(int a, int b, int c, int d, int e) {
+		int h = seed ^ 4;
+
+		// a
+		int k = a;
+		k = mixK(k);
+		h = mixH(h, k);
+		
+		// b
+		k = b;
+		k = mixK(k);
+		h = mixH(h, k);
+		
+		// c
+		k = c;
+		k = mixK(k);
+		h = mixH(h, k);
+		
+		// d
+		k = d;
+		k = mixK(k);
+		h = mixH(h, k);
+		
+		// e
+		k = e;
+		k = mixK(k);
+		h = mixH(h, k);
+
+		// last mix
+		h *= m;
+		h ^= h >>> 13;
+		h *= m;
+		h ^= h >>> 15;
+		
+		return h;
 	}
 
 }

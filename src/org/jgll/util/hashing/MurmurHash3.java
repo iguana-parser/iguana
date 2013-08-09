@@ -1,5 +1,7 @@
 package org.jgll.util.hashing;
 
+import org.junit.Ignore;
+
 public class MurmurHash3 implements HashFunction {
 
 	private static final long serialVersionUID = 1L;
@@ -114,7 +116,6 @@ public class MurmurHash3 implements HashFunction {
 	}
 	
 	public int hash(int a, int b, int c, int d, int e) {
-
 		int h = seed;
 
 		int k = a;
