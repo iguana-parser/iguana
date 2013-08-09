@@ -9,79 +9,53 @@ public class BenchmarkHashFunctions {
 	public BenchmarkHashFunctions(HashFunction... functions) {
 		targets = functions;
 	}
-	class FiveNumbers {
-		public int a,b,c,d,e;
-		
-		public FiveNumbers(Random r) {
-			fillA(r);
-			fillB(r);
-			fillC(r);
-			fillD(r);
-			fillE(r);
-		}
-		
-		private void fillA(Random r) {
-			a = r.nextBoolean() ? r.nextInt(0xFF) : r.nextInt(0xFFFF);
-		}
-		private void fillB(Random r) {
-			b = r.nextInt(5) <= 3 ? r.nextInt(0xFFF) : r.nextInt(0xFFFF);
-		}
-		private void fillC(Random r) {
-			c = r.nextBoolean() ? r.nextInt(0xFFFF) : r.nextInt(0x1FFFF);
-		}
-		private void fillD(Random r) {
-			d = r.nextBoolean() ? r.nextInt(0xFFF) : r.nextInt(0x3FFFF);
-		}
-		private void fillE(Random r) {
-			e = r.nextInt(Integer.MAX_VALUE);
-		}
-	}
+
 	public void bench(int size, int iterations) {
-		final List<FiveNumbers> data = generateData(size);
+		final int[][] data = generateData(size);
 		// warmup
 		int r = run5(data);
 		r += run4(data);
 		r += run3(data);
 		System.out.println("Warmed up: " + r);
 		
-		for (final HashFunction f : this.targets) {
+		for (HashFunction f : this.targets) {
 			System.out.println(f.getClass().getName());
 			List<Long> measurements = new ArrayList<>();
-			for (int i = 0; i < iterations; i++) {
-				measurements.add(measure(new Runnable() {
-					@Override
-					public void run() {
-						for (FiveNumbers fn: data) {
-							f.hash(fn.a, fn.b, fn.c);
-						}
-					}
-				}));
+			for (int it = 0; it < iterations; it++) {
+				long start = System.nanoTime();
+				r = 0;
+				for (int i = 0; i < data.length; i++) {
+					int[] d = data[i];
+					r += f.hash(d[0], d[1], d[2]);
+				}
+				long stop = System.nanoTime();
+				measurements.add((stop - start)/(1000*1000));
 			}
 			printAvgStdDev("\t 3 numbers", measurements);
 			
 			measurements = new ArrayList<>();
-			for (int i = 0; i < iterations; i++) {
-				measurements.add(measure(new Runnable() {
-					@Override
-					public void run() {
-						for (FiveNumbers fn: data) {
-							f.hash(fn.a, fn.b, fn.c, fn.d);
-						}
-					}
-				}));
+			for (int it = 0; it < iterations; it++) {
+				long start = System.nanoTime();
+				r = 0;
+				for (int i = 0; i < data.length; i++) {
+					int[] d = data[i];
+					r += f.hash(d[0], d[1], d[2], d[3]);
+				}
+				long stop = System.nanoTime();
+				measurements.add((stop - start)/(1000*1000));
 			}
 			printAvgStdDev("\t 4 numbers", measurements);
 			
 			measurements = new ArrayList<>();
-			for (int i = 0; i < iterations; i++) {
-				measurements.add(measure(new Runnable() {
-					@Override
-					public void run() {
-						for (FiveNumbers fn: data) {
-							f.hash(fn.a, fn.b, fn.c, fn.d, fn.e);
-						}
-					}
-				}));
+			for (int it = 0; it < iterations; it++) {
+				long start = System.nanoTime();
+				r = 0;
+				for (int i = 0; i < data.length; i++) {
+					int[] d = data[i];
+					r += f.hash(d[0], d[1], d[2], d[3],d[4]);
+				}
+				long stop = System.nanoTime();
+				measurements.add((stop - start)/(1000*1000));
 			}
 			printAvgStdDev("\t 5 numbers", measurements);
 		}
@@ -111,48 +85,54 @@ public class BenchmarkHashFunctions {
 	}
 	
 
-	private int run3(List<FiveNumbers> data) {
+	private int run3(int[][] data) {
 		int result = 0;
 		for (HashFunction f : this.targets) {
-			for (FiveNumbers fn: data) {
-				result += f.hash(fn.a, fn.b, fn.c);
+			for (int i = 0; i < data.length; i++) {
+				int[] d = data[i];
+				result += f.hash(d[0], d[1], d[2]);
 			}
 		}
 		return result;
 	}
 
 
-	private int run4(List<FiveNumbers> data) {
+	private int run4(int[][] data) {
 		int result = 0;
 		for (HashFunction f : this.targets) {
-			for (FiveNumbers fn: data) {
-				result += f.hash(fn.a, fn.b, fn.c, fn.d);
+			for (int i = 0; i < data.length; i++) {
+				int[] d = data[i];
+				result += f.hash(d[0], d[1], d[2]);
 			}
 		}
 		return result;
 	}
 
 
-	private int run5(List<FiveNumbers> data) {
+	private int run5(int[][] data) {
 		int result = 0;
 		for (HashFunction f : this.targets) {
-			for (FiveNumbers fn: data) {
-				result += f.hash(fn.a, fn.b, fn.c, fn.d, fn.e);
+			for (int i = 0; i < data.length; i++) {
+				int[] d = data[i];
+				result += f.hash(d[0], d[1], d[2], d[3], d[4]);
 			}
 		}
 		return result;
 	}
 
 
-	private List<FiveNumbers> generateData(int size) {
+	private int[][] generateData(int size) {
 		Random r = new Random(size);
-		List<FiveNumbers> result = new ArrayList<>(size);
+		int[][] result = new int[size][5];
 		for (int i=0; i < size; i++) {
-			result.add(new FiveNumbers(r));
+			result[i][0] = r.nextBoolean() ? r.nextInt(0xFF) : r.nextInt(0xFFFF);
+			result[i][1] = r.nextInt(5) <= 3 ? r.nextInt(0xFFF) : r.nextInt(0xFFFF);
+			result[i][2] = r.nextBoolean() ? r.nextInt(0xFFFF) : r.nextInt(0x1FFFF);
+			result[i][3] = r.nextBoolean() ? r.nextInt(0xFFF) : r.nextInt(0x3FFFF);
+			result[i][4] = r.nextInt(Integer.MAX_VALUE);
 		}
 		return result;
 	}
-	
-	
+
 	
 }
