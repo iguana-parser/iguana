@@ -8,6 +8,8 @@ public class RunBenchmark {
 		BenchmarkHashFunctions bencher = new BenchmarkHashFunctions(
 				new MurmurHash2(r.nextInt())
 				, new MurmurHash3(r.nextInt())
+				, new DavyHash(r.nextInt())
+				, new XXHash(r.nextInt())
 				, new SuperFastHash(r.nextInt())
 				, new SuperFastHash16BitOnly(r.nextInt())
 				, new Jenkins(r.nextInt())

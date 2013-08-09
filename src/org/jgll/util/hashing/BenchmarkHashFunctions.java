@@ -13,9 +13,12 @@ public class BenchmarkHashFunctions {
 	public void bench(int size, int iterations) {
 		final int[][] data = generateData(size);
 		// warmup
-		int r = run5(data);
-		r += run4(data);
-		r += run3(data);
+		int r = 0;
+		for (int i = 0; i < 5; i++) {
+			r += run5(data);
+			r += run4(data);
+			r += run3(data);
+		}
 		System.out.println("Warmed up: " + r);
 		
 		for (HashFunction f : this.targets) {
