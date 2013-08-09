@@ -6,6 +6,7 @@ import java.io.Writer;
 import org.jgll.grammar.Character;
 import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.Keyword;
+import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Symbol;
 import org.jgll.grammar.Terminal;
 import org.jgll.parser.GLLParserInternals;
@@ -85,10 +86,19 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 			
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
+				
+				if(checkPopActions(parser, input)) {
+					return null;
+				}
+				
 				parser.pop();
 				return null;
 			} else {
 				parser.getIntermediateNode(next, sppfNode);
+				
+				if(checkPopActions(parser, input)) {
+					return null;
+				}				
 			}
 		} else {
 			parser.recordParseError(this);
@@ -97,7 +107,23 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		
 		return next;
 	}
-
+	
+	/**
+	 * Because keywords are directly created without 
+	 * a pop action, at this point the popActions for the next slots
+     * should be checked.
+	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
+	 *								   | NegativeNumber
+	 */
+	private boolean checkPopActions(GLLParserInternals parser, Input input) {
+		for(SlotAction<Boolean> slotAction : next.popActions) {
+			if(slotAction.execute(parser, input)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 		int ci = recognizer.getCi();
