@@ -393,6 +393,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		int nextIndex = inputIndex + keyword.size();
 		NonPackedNode node = lookupTable.getNonPackedNode(slot, inputIndex, nextIndex);
 		node.addFirstPackedNode(slot.getAlternateAt(0).getLastBodySlot().next(), nextIndex);
+		((NonterminalSymbolNode) node).setKeywordNode(true);
 		ci = nextIndex;
 		return node;
 	}

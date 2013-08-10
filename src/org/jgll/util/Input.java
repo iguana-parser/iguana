@@ -176,14 +176,14 @@ public class Input {
 	}
  
 	public int getLineNumber(int index) {
-		if(index < 0) {
+		if(index < 0 || index >= lineColumns.length) {
 			return 0;
 		}
 		return lineColumns[index].getLineNumber();
 	}
 	
 	public int getColumnNumber(int index) {
-		if(index < 0) {
+		if(index < 0 || index >= lineColumns.length) {
 			return 0;
 		}
 		return lineColumns[index].getColumnNumber();
@@ -205,14 +205,16 @@ public class Input {
 		return Arrays.equals(input, other.input);
 	}
 	
-	public PositionInfo getPositionInfo(SPPFNode node) {
-		return new PositionInfo(node.getLeftExtent(), 
-				node.getRightExtent() - node.getLeftExtent(), 
-				getLineNumber(node.getLeftExtent()), 
-				getColumnNumber(node.getLeftExtent()), 
-				getLineNumber(node.getRightExtent()), 
-				getColumnNumber(node.getRightExtent()));
+	public PositionInfo getPositionInfo(int leftExtent, int rightExtent) {
+		return new PositionInfo(leftExtent, 
+								rightExtent - leftExtent, 
+								getLineNumber(leftExtent), 
+								getColumnNumber(leftExtent), 
+								getLineNumber(rightExtent), 
+								getColumnNumber(rightExtent));
 	}
+	
+	
 
 	private void calculateLineLengths() {
 		int lineNumber = 1;

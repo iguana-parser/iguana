@@ -10,6 +10,8 @@ import org.jgll.traversal.SPPFVisitor;
  *
  */
 public class NonterminalSymbolNode extends NonPackedNode {
+	
+	private boolean keywordNode;
 
 	public NonterminalSymbolNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
@@ -26,6 +28,15 @@ public class NonterminalSymbolNode extends NonPackedNode {
 			return false;
 		}
 		return super.equals(obj);
+	}
+	
+	
+	public boolean isKeywordNode() {
+		return keywordNode;
+	}
+	
+	public void setKeywordNode(boolean keywordNode) {
+		this.keywordNode = keywordNode;
 	}
 	
 	@Override
