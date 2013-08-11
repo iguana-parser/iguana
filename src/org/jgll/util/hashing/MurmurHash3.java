@@ -1,7 +1,5 @@
 package org.jgll.util.hashing;
 
-import org.junit.Ignore;
-
 public class MurmurHash3 implements HashFunction {
 
 	private static final long serialVersionUID = 1L;

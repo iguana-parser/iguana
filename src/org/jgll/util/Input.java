@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.sppf.SPPFNode;
 import org.jgll.traversal.PositionInfo;
 
 /**
@@ -109,7 +108,7 @@ public class Input {
 	}
 	
 	public boolean match(int start, int end, int[] target) {
-		if(target.length != end - start) {
+		if(target.length != end - start + 1) {
 			return false;
 		}
 	 	

@@ -1140,12 +1140,13 @@ public class GrammarBuilder implements Serializable {
 			changed = false;
 			for (HeadGrammarSlot head : nonterminals) {
 
+				Set<HeadGrammarSlot> set = reachabilityGraph.get(head);
+				if(set == null) {
+					set = new HashSet<>();
+				}
+				reachabilityGraph.put(head, set);
+				
 				for (Alternate alternate : head.getAlternates()) {
-					Set<HeadGrammarSlot> set = reachabilityGraph.get(head);
-					if(set == null) {
-						set = new HashSet<>();
-					}
-					reachabilityGraph.put(head, set);
 					changed |= calculateReachabilityGraph(set, alternate.getFirstSlot(), changed);
 				}
 			}
