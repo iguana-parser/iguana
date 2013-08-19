@@ -3,8 +3,10 @@ package org.jgll.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.Nonterminal;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.L0;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.Level;
@@ -32,13 +34,15 @@ public class GSSNode implements Level {
 	/**
 	 * The initial GSS node
 	 */
-	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
+	public static final GSSNode U0 = new GSSNode(new HeadGrammarSlot(new Nonterminal("dummy")), 0);
 
-	private final GrammarSlot slot;
+	private final HeadGrammarSlot slot;
 
 	private final int inputIndex;
-
+	
 	private List<GSSEdge> gssEdges;
+	
+	private List<BodyGrammarSlot> returnPositions;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -47,7 +51,7 @@ public class GSSNode implements Level {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	public GSSNode(GrammarSlot slot, int inputIndex) {
+	public GSSNode(HeadGrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.gssEdges = new ArrayList<>();
@@ -71,6 +75,14 @@ public class GSSNode implements Level {
 
 	public int getInputIndex() {
 		return inputIndex;
+	}
+	
+	public void addReturnSlot(BodyGrammarSlot slot) {
+		returnPositions.add(slot);
+	}
+	
+	public List<BodyGrammarSlot> getReturnPositions() {
+		return returnPositions;
 	}
 	
 	@Override

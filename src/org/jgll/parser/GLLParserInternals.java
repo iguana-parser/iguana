@@ -19,7 +19,7 @@ public interface GLLParserInternals {
 	 * 
 	 * @param slot
 	 */
-	public void createGSSNode(GrammarSlot slot);
+	public void createGSSNode(HeadGrammarSlot slot);
 	
 	public TerminalSymbolNode getTerminalNode(int c);
 	

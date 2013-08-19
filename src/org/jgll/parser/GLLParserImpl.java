@@ -259,11 +259,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
      *
 	 */
 	@Override
-	public final void createGSSNode(GrammarSlot slot) {
+	public final void createGSSNode(HeadGrammarSlot slot) {
 		cu = create(slot, cu, ci, cn);
 	}
 	
-	private final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
+	private final GSSNode create(HeadGrammarSlot L, GSSNode u, int i, SPPFNode w) {
 		log.trace("GSSNode created: (%s, %d)",  L, i);
 
 		GSSNode v = lookupTable.getGSSNode(L, i);
