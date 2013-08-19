@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: jigll
-Bundle-SymbolicName: jigll
+Bundle-Name: iguana
+Bundle-SymbolicName: iguana
 Bundle-Version: 1.0.0.qualifier
 Export-Package: 
  org.jgll.grammar;uses:="org.jgll.parser",
