@@ -511,8 +511,8 @@ public class GrammarBuilder implements Serializable {
 		
 		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
-		removeUnusedNonterminals();
 	}
+	
 	
 	public static Rule fromKeyword(Keyword keyword) {
 		Rule.Builder builder = new Rule.Builder(new Nonterminal(keyword.getName()));
@@ -1136,9 +1136,12 @@ public class GrammarBuilder implements Serializable {
 	private void calculateReachabilityGraph() {
 		boolean changed = true;
 
+		List<HeadGrammarSlot> allNonterminals = new ArrayList<>(nonterminals);
+		allNonterminals.addAll(newNonterminals);
+		
 		while (changed) {
 			changed = false;
-			for (HeadGrammarSlot head : nonterminals) {
+			for (HeadGrammarSlot head : allNonterminals) {
 
 				Set<HeadGrammarSlot> set = reachabilityGraph.get(head);
 				if(set == null) {
@@ -1187,15 +1190,36 @@ public class GrammarBuilder implements Serializable {
 		}	
 	}
 	
-	private void removeUnusedNonterminals() {
-		
+	/**
+	 * Removes non-reachable nonterminals from the given nonterminal
+	 * 
+	 * @param head
+	 * @return
+	 */
+	public GrammarBuilder removeUnusedNonterminals(Nonterminal nonterminal) {
+
 		Set<HeadGrammarSlot> referedNonterminals = new HashSet<>();
+		referedNonterminals.add(nonterminalsMap.get(nonterminal.getName()));
 		
-		for(Set<HeadGrammarSlot> s : reachabilityGraph.values()) {
-			referedNonterminals.addAll(s);
+		List<HeadGrammarSlot> allNonterminals = new ArrayList<>(nonterminals);
+		allNonterminals.addAll(newNonterminals);
+		
+		for (HeadGrammarSlot head : allNonterminals) {
+			for(Alternate alternate : head.getAlternates()) {
+				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+			
+				while(currentSlot.next() != null) {
+					if(currentSlot instanceof NonterminalGrammarSlot) {
+						referedNonterminals.add(((NonterminalGrammarSlot) currentSlot).getNonterminal());
+					}
+					currentSlot = currentSlot.next();
+				}
+			}
 		}
-		
+
+		nonterminals.retainAll(referedNonterminals);
 		newNonterminals.retainAll(referedNonterminals);
+		return this;
 	}
 	
 }
