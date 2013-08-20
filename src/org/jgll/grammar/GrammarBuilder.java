@@ -305,10 +305,41 @@ public class GrammarBuilder implements Serializable {
 					addNotMatch(slot.next(), simpleCondition.getKeywords());
 				}
 				break;
+				
+			case START_OF_LINE:
+			  addStartOfLine(slot);
+			  break;
+			  
+			case END_OF_LINE:
+			  addEndOfLine(slot.next());
+			  break;
 		}
 	}
 	
-	private void addNotMatch(BodyGrammarSlot slot, final BodyGrammarSlot ifNot) {
+	private void addEndOfLine(BodyGrammarSlot slot) {
+    slot.addPopAction(new SlotAction<Boolean>() {
+      private static final long serialVersionUID = 1L;
+      
+      @Override
+      public Boolean execute(GLLParserInternals parser, Input input) {
+        return input.isEndOfLine(parser.getCurrentInputIndex());
+      }
+    });
+  }
+
+  private void addStartOfLine(BodyGrammarSlot slot) {
+    slot.addPopAction(new SlotAction<Boolean>() {
+      private static final long serialVersionUID = 1L;
+      
+      @Override
+      public Boolean execute(GLLParserInternals parser, Input input) {
+        return input.isStartOfLine(parser.getCurrentInputIndex());
+      }
+    });
+    
+  }
+
+  private void addNotMatch(BodyGrammarSlot slot, final BodyGrammarSlot ifNot) {
 
 		slot.addPopAction(new SlotAction<Boolean>() {
 			

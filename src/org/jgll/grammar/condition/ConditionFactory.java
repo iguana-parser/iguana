@@ -77,5 +77,13 @@ public class ConditionFactory {
 		}
 		return true;		
 	}
+
+  public static Condition endOfLine() {
+    return new PositionalCondition(ConditionType.END_OF_LINE);
+  }
+  
+  public static Condition startOfLine() {
+    return new PositionalCondition(ConditionType.START_OF_LINE);
+  }
 	
 }
