@@ -76,7 +76,6 @@ public class GrammarBuilder implements Serializable {
 	public GrammarBuilder(String name) {
 		this.name = name;
 		nonterminals = new ArrayList<>();
-		slots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
 		filtersMap = new HashMap<>();
 		existingAlternates = new HashMap<>();
@@ -158,7 +157,6 @@ public class GrammarBuilder implements Serializable {
 		if (body.size() == 0) {
 			currentSlot = new EpsilonGrammarSlot(grammarSlotToString(head, body, 0), 0, headGrammarSlot, rule.getObject());
 			headGrammarSlot.addAlternate(new Alternate(currentSlot, 0));
-			slots.add(currentSlot);
 		}
 
 		else {
@@ -181,7 +179,6 @@ public class GrammarBuilder implements Serializable {
 					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 					currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
 				} 
-				slots.add(currentSlot);
 
 				if (symbolIndex == 0) {
 					firstSlot = currentSlot;
@@ -194,7 +191,6 @@ public class GrammarBuilder implements Serializable {
 			String label = grammarSlotToString(head, body, symbolIndex);
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(label, symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 
-			slots.add(lastGrammarSlot);
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot, headGrammarSlot.getAlternates().size());
 			headGrammarSlot.addAlternate(alternate);
@@ -539,7 +535,7 @@ public class GrammarBuilder implements Serializable {
 		calculateFollowSets();
 		setTestSets();
 		setTestSets(conditionSlots);
-		setIds();
+		setSlotIds();
 		setDirectNullables();
 		
 		calculateReachabilityGraph();
@@ -815,7 +811,21 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private void setIds() {
+	private void setSlotIds() {
+		
+		slots = new ArrayList<>();
+		
+		for(HeadGrammarSlot nonterminal : nonterminals) {
+			for (Alternate alternate : nonterminal.getAlternates()) {
+				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+				
+				while(currentSlot != null) {
+					slots.add(currentSlot);
+					currentSlot = currentSlot.next();
+				}
+			}
+		}
+		
 		int i = 0;
 		for (HeadGrammarSlot head : nonterminals) {
 			head.setId(i++);
@@ -1144,7 +1154,6 @@ public class GrammarBuilder implements Serializable {
 			copy = ((KeywordGrammarSlot) slot).copy(nonterminalsMap.get(keyword.getName()), previous, head);
 		}
 
-		slots.add(copy);
 		return copy;
 	}
 	
