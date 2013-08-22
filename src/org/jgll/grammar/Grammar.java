@@ -3,9 +3,11 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
@@ -65,7 +67,10 @@ public class Grammar implements Serializable {
 			nameToSlots.put(slot.toString(), slot);
 		}
 		
-		this.newNonterminals = builder.newNonterminals;
+		this.newNonterminals = new ArrayList<>();
+		for(Set<HeadGrammarSlot> newNonterminals : builder.newNonterminalsMap.values()) {
+			this.newNonterminals.addAll(newNonterminals);
+		}
 		this.longestTerminalChain = builder.longestTerminalChain;
 		this.maximumNumAlternates = builder.maximumNumAlternates;
 		this.maxDescriptorsAtInput = builder.maxDescriptors;

@@ -1,8 +1,10 @@
 package org.jgll.grammar;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +55,7 @@ public class GrammarBuilder implements Serializable {
 	String name;
 
 	// Fields related to filtering
-	List<HeadGrammarSlot> newNonterminals;
+	Map<String, Set<HeadGrammarSlot>> newNonterminalsMap;
 
 	private Map<Set<Alternate>, HeadGrammarSlot> existingAlternates;
 
@@ -78,12 +80,12 @@ public class GrammarBuilder implements Serializable {
 		nonterminalsMap = new HashMap<>();
 		filtersMap = new HashMap<>();
 		existingAlternates = new HashMap<>();
-		newNonterminals = new ArrayList<>();
 		
 		oneLevelOnlyFilters = new HashSet<>();
 		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
 		reachabilityGraph = new HashMap<>();
+		newNonterminalsMap = new HashMap<>();
 	}
 
 	public Grammar build() {
@@ -866,8 +868,14 @@ public class GrammarBuilder implements Serializable {
 		for (Filter filter : oneLevelOnlyFilters) {
 			onlyFirstLevelFilter(nonterminalsMap.get(filter.getNonterminal()), oneLevelOnlyFilters);
 		}
+		
+		for(String s : filtersMap.keySet()) {
+			removeUnusedFilteredNonterminals(s);
+		}
 
-		nonterminals.addAll(newNonterminals);
+		for(Set<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
+			nonterminals.addAll(newNonterminals);			
+		}
 	}
 
 	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<Filter> filters) {
@@ -881,6 +889,12 @@ public class GrammarBuilder implements Serializable {
 					if (newNonterminal == null || newNonterminal.getNonterminal().getName() != filteredNonterminal.getNonterminal().getName()) {
 						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+						
+						Set<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
+						if(newNonterminals == null) {
+							newNonterminals = new HashSet<>();
+							newNonterminalsMap.put(newNonterminal.getNonterminal().getName(), newNonterminals);
+						}
 						newNonterminals.add(newNonterminal);
 
 						List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
@@ -918,6 +932,12 @@ public class GrammarBuilder implements Serializable {
 					if (newNonterminal == null || newNonterminal.getNonterminal().getName() != filteredNonterminal.getNonterminal().getName()) {
 						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+						
+						Set<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
+						if(newNonterminals == null) {
+							newNonterminals = new HashSet<>();
+							newNonterminalsMap.put(newNonterminal.getNonterminal().getName(), newNonterminals);
+						}
 						newNonterminals.add(newNonterminal);
 
 						newNonterminal.setAlternates(filteredNonterminal.getAlternates());
@@ -931,10 +951,13 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 
-		for (HeadGrammarSlot newNonterminal : newNonterminals) {
-			List<Alternate> copy = copyAlternates(newNonterminal, newNonterminal.getAlternates());
-			newNonterminal.setAlternates(copy);
+		for(Set<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
+			for (HeadGrammarSlot newNonterminal : newNonterminals) {
+				List<Alternate> copy = copyAlternates(newNonterminal, newNonterminal.getAlternates());
+				newNonterminal.setAlternates(copy);
+			}			
 		}
+		
 	}
 
 	private void filterDeep(HeadGrammarSlot head, Set<Filter> filters) {
@@ -979,6 +1002,12 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
 		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 		alt.setNonterminalAt(position, newNonterminal);
+		
+		Set<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
+		if(newNonterminals == null) {
+			newNonterminals = new HashSet<>();
+			newNonterminalsMap.put(newNonterminal.getNonterminal().getName(), newNonterminals);
+		}
 		newNonterminals.add(newNonterminal);
 
 		List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
@@ -1168,7 +1197,9 @@ public class GrammarBuilder implements Serializable {
 		boolean changed = true;
 
 		List<HeadGrammarSlot> allNonterminals = new ArrayList<>(nonterminals);
-		allNonterminals.addAll(newNonterminals);
+		for(Set<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
+			allNonterminals.addAll(newNonterminals);
+		}
 		
 		while (changed) {
 			changed = false;
@@ -1230,18 +1261,22 @@ public class GrammarBuilder implements Serializable {
 	public GrammarBuilder removeUnusedNonterminals(Nonterminal nonterminal) {
 
 		Set<HeadGrammarSlot> referedNonterminals = new HashSet<>();
-		referedNonterminals.add(nonterminalsMap.get(nonterminal.getName()));
+		Deque<HeadGrammarSlot> queue = new ArrayDeque<>();
+		queue.add(nonterminalsMap.get(nonterminal.getName()));
 		
-		List<HeadGrammarSlot> allNonterminals = new ArrayList<>(nonterminals);
-		allNonterminals.addAll(newNonterminals);
-		
-		for (HeadGrammarSlot head : allNonterminals) {
-			for(Alternate alternate : head.getAlternates()) {
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+		while(!queue.isEmpty()) {
+			HeadGrammarSlot head = queue.poll();
+			referedNonterminals.add(head);
 			
+			for(Alternate alternate : head.getAlternates()) {
+				
+				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+				
 				while(currentSlot.next() != null) {
 					if(currentSlot instanceof NonterminalGrammarSlot) {
-						referedNonterminals.add(((NonterminalGrammarSlot) currentSlot).getNonterminal());
+						if(!referedNonterminals.contains(((NonterminalGrammarSlot) currentSlot).getNonterminal())) {
+							queue.add(((NonterminalGrammarSlot) currentSlot).getNonterminal());
+						}
 					}
 					currentSlot = currentSlot.next();
 				}
@@ -1249,8 +1284,37 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		nonterminals.retainAll(referedNonterminals);
-		newNonterminals.retainAll(referedNonterminals);
 		return this;
 	}
+	
+	private void removeUnusedFilteredNonterminals(String nonterminalName) {
+
+		Set<HeadGrammarSlot> referedNonterminals = new HashSet<>();
+		Deque<HeadGrammarSlot> queue = new ArrayDeque<>();
+		queue.add(nonterminalsMap.get(nonterminalName));
+		
+		while(!queue.isEmpty()) {
+			HeadGrammarSlot head = queue.poll();
+			referedNonterminals.add(head);
+			
+			for(Alternate alternate : head.getAlternates()) {
+				
+				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+				
+				while(currentSlot.next() != null) {
+					if(currentSlot instanceof NonterminalGrammarSlot) {
+						HeadGrammarSlot reachableHead = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
+						if(!referedNonterminals.contains(reachableHead)) {
+							queue.add(reachableHead);
+						}
+					}
+					currentSlot = currentSlot.next();
+				}
+			}
+		}
+
+		newNonterminalsMap.get(nonterminalName).retainAll(referedNonterminals);
+	}
+
 	
 }
