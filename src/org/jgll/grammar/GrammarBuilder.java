@@ -894,11 +894,13 @@ public class GrammarBuilder implements Serializable {
 				if (match(filter, alt)) {
 
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filter.getChild()));
+					HeadGrammarSlot newNonterminal = createNewNonterminal(filteredNonterminal, filter.getChild());
+					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 
 					if (newNonterminal == null || newNonterminal.getNonterminal().getName() != filteredNonterminal.getNonterminal().getName()) {
+						
+						
 						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
-						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 						
 						Set<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
 						if(newNonterminals == null) {
@@ -930,29 +932,15 @@ public class GrammarBuilder implements Serializable {
 				if (match(filter, alt)) {
 
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-
-					Set<Alternate> without = filteredNonterminal.without(filter.getChild());
-
-					HeadGrammarSlot newNonterminal = existingAlternates.get(without);
-
-					if (newNonterminal == null || newNonterminal.getNonterminal().getName() != filteredNonterminal.getNonterminal().getName()) {
-						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+					List<Symbol> filteredAlternate = filter.getChild();
+					
+					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
+					if(newNonterminal == null) {
+						newNonterminal = createNewNonterminal(filteredNonterminal, filteredAlternate);
 						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-						
-						Set<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
-						if(newNonterminals == null) {
-							newNonterminals = new HashSet<>();
-							newNonterminalsMap.put(newNonterminal.getNonterminal().getName(), newNonterminals);
-						}
-						newNonterminals.add(newNonterminal);
-
-						List<Alternate> copy = copyAlternates(newNonterminal, without);
-						copy.remove(filter.getChild());
-						newNonterminal.setAlternates(copy);
-						
-						existingAlternates.put(newNonterminal.getAlternatesAsSet(), newNonterminal);
+						filterFirstLevel(newNonterminal, filters);
 					} else {
-						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
+						alt.setNonterminalAt(filter.getPosition(), newNonterminal);						
 					}
 				}
 			}
@@ -999,20 +987,24 @@ public class GrammarBuilder implements Serializable {
 	private HeadGrammarSlot rewrite(Alternate alt, int position, List<Symbol> filteredAlternate) {
 		
 		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
-		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+		
+		HeadGrammarSlot newNonterminal = createNewNonterminal(filteredNonterminal, filteredAlternate);
+		
 		alt.setNonterminalAt(position, newNonterminal);
 		
-		Set<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
-		if(newNonterminals == null) {
-			newNonterminals = new HashSet<>();
-			newNonterminalsMap.put(newNonterminal.getNonterminal().getName(), newNonterminals);
-		}
-		newNonterminals.add(newNonterminal);
-
-		List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.without(filteredAlternate));
-		newNonterminal.setAlternates(copy);
-		existingAlternates.put(newNonterminal.getAlternatesAsSet(), newNonterminal);
 		return newNonterminal;
+	}
+	
+	private HeadGrammarSlot createNewNonterminal(HeadGrammarSlot filteredNonterminal, List<Symbol> filteredAlternate) {
+		
+		HeadGrammarSlot newNontemrinal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+		
+		Set<Alternate> without = filteredNonterminal.without(filteredAlternate);
+		List<Alternate> copy = copyAlternates(newNontemrinal, without);
+		newNontemrinal.setAlternates(copy);
+		existingAlternates.put(newNontemrinal.getAlternatesAsSet(), newNontemrinal);
+		
+		return newNontemrinal;
 	}
 
 	private boolean match(Filter filter, Alternate alt) {
