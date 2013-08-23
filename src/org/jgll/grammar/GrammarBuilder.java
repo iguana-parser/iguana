@@ -156,7 +156,7 @@ public class GrammarBuilder implements Serializable {
 
 		if (body.size() == 0) {
 			currentSlot = new EpsilonGrammarSlot(grammarSlotToString(head, body, 0), 0, headGrammarSlot, rule.getObject());
-			headGrammarSlot.addAlternate(new Alternate(currentSlot, 0));
+			headGrammarSlot.addAlternate(new Alternate(currentSlot));
 		}
 
 		else {
@@ -192,7 +192,7 @@ public class GrammarBuilder implements Serializable {
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(label, symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
-			Alternate alternate = new Alternate(firstSlot, headGrammarSlot.getAlternates().size());
+			Alternate alternate = new Alternate(firstSlot);
 			headGrammarSlot.addAlternate(alternate);
 
 			for(Entry<BodyGrammarSlot, Iterable<Condition>> e : conditions.entrySet()) {
@@ -920,7 +920,6 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	private Map<Set<Integer>, HeadGrammarSlot> firstLevels = new HashMap<>();
 
 	private void filterFirstLevel(HeadGrammarSlot head, Set<Filter> filters) {
 		for (Alternate alt : head.getAlternates()) {
@@ -933,11 +932,8 @@ public class GrammarBuilder implements Serializable {
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 
 					Set<Alternate> without = filteredNonterminal.without(filter.getChild());
-					Set<Integer> intSet = new HashSet<>();
-					for (Alternate a : without) {
-						intSet.add(a.getIndex());
-					}
-					HeadGrammarSlot newNonterminal = firstLevels.get(intSet);
+
+					HeadGrammarSlot newNonterminal = existingAlternates.get(without);
 
 					if (newNonterminal == null || newNonterminal.getNonterminal().getName() != filteredNonterminal.getNonterminal().getName()) {
 						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
@@ -950,24 +946,17 @@ public class GrammarBuilder implements Serializable {
 						}
 						newNonterminals.add(newNonterminal);
 
-						newNonterminal.setAlternates(filteredNonterminal.getAlternates());
-						newNonterminal.remove(filter.getChild());
-						firstLevels.put(newNonterminal.getAlternateIndices(), newNonterminal);
+						List<Alternate> copy = copyAlternates(newNonterminal, without);
+						copy.remove(filter.getChild());
+						newNonterminal.setAlternates(copy);
+						
+						existingAlternates.put(newNonterminal.getAlternatesAsSet(), newNonterminal);
 					} else {
 						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
 					}
-
 				}
 			}
 		}
-
-		for(Set<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
-			for (HeadGrammarSlot newNonterminal : newNonterminals) {
-				List<Alternate> copy = copyAlternates(newNonterminal, newNonterminal.getAlternates());
-				newNonterminal.setAlternates(copy);
-			}			
-		}
-		
 	}
 
 	private void filterDeep(HeadGrammarSlot head, Set<Filter> filters) {
@@ -1020,10 +1009,9 @@ public class GrammarBuilder implements Serializable {
 		}
 		newNonterminals.add(newNonterminal);
 
-		List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
+		List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.without(filteredAlternate));
 		newNonterminal.setAlternates(copy);
-		newNonterminal.remove(filteredAlternate);
-		existingAlternates.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
+		existingAlternates.put(newNonterminal.getAlternatesAsSet(), newNonterminal);
 		return newNonterminal;
 	}
 
@@ -1115,7 +1103,7 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	private List<Alternate> copyAlternates(HeadGrammarSlot head, List<Alternate> list) {
+	private List<Alternate> copyAlternates(HeadGrammarSlot head, Iterable<Alternate> list) {
 		List<Alternate> copyList = new ArrayList<>();
 		for (Alternate alt : list) {
 			copyList.add(copyAlternate(alt, head));
@@ -1134,7 +1122,7 @@ public class GrammarBuilder implements Serializable {
 			current = current.next();
 		}
 
-		return new Alternate(copyFirstSlot, alternate.getIndex());
+		return new Alternate(copyFirstSlot);
 	}
 
 	private BodyGrammarSlot copySlot(BodyGrammarSlot slot, BodyGrammarSlot previous, HeadGrammarSlot head) {

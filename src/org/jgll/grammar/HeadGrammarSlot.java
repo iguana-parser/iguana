@@ -59,14 +59,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		alternates.remove(alternate);
 	}
 	
-	public Set<Integer> getAlternateIndices() {
-		Set<Integer> set = new HashSet<>();
-		for(Alternate alternate : alternates) {
-			set.add(alternate.getIndex());
-		}
-		return set;
-	}
-	
 	public Set<Alternate> without(List<Symbol> list) {
 		Set<Alternate> set = new HashSet<>(alternates);
 		for(Alternate alternate : alternates) {
@@ -158,12 +150,12 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return alternates.get(index);
 	}
 	
-	public List<Alternate> getAlternatesIncludingNull() {
-		return alternates;
-	}
-
 	public List<Alternate> getAlternates() {
 		return new ArrayList<>(alternates);
+	}
+	
+	public Set<Alternate> getAlternatesAsSet() {
+		return new HashSet<>(alternates);
 	}
 	
 	public Nonterminal getNonterminal() {

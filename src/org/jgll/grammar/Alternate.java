@@ -20,9 +20,7 @@ public class Alternate implements Serializable {
 	
 	private BodyGrammarSlot condition;
 	
-	private final int index;
-	
-	public Alternate(BodyGrammarSlot firstSlot, int index) {
+	public Alternate(BodyGrammarSlot firstSlot) {
 		
 		if(firstSlot == null) {
 			throw new IllegalArgumentException("firstSlot cannot be null.");
@@ -31,8 +29,6 @@ public class Alternate implements Serializable {
 		this.firstSlot = firstSlot;
 
 		symbols = new ArrayList<>();
-		
-		this.index = index;
 		
 		BodyGrammarSlot current = firstSlot;
 		
@@ -102,10 +98,6 @@ public class Alternate implements Serializable {
 	
 	public int size() {
 		return symbols.size();
-	}
-	
-	public int getIndex() {
-		return index;
 	}
 	
 	public HeadGrammarSlot getNonterminalAt(int index) {
@@ -202,8 +194,7 @@ public class Alternate implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		// TODO: change it
-		return 31;
+		return 31;//symbols.hashCode();
 	}
 	
 	@Override
