@@ -135,4 +135,21 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		return next;
 	}
 
+	@Override
+	public boolean isNameEqual(BodyGrammarSlot slot) {
+		
+		if(this == slot) {
+			return true;
+		}
+		
+		if(!(slot instanceof KeywordGrammarSlot)) {
+			return false;
+		}
+		
+		KeywordGrammarSlot other = (KeywordGrammarSlot) slot;
+		
+		return keyword.equals(other.keyword);
+	}
+
+	
 }

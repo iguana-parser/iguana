@@ -51,11 +51,11 @@ class Filter implements Serializable {
 	}
 	
 	public boolean isParentBinary() {
-		return nonterminal.equals(parent.get(0)) && nonterminal.equals(parent.get(parent.size() - 1));
+		return nonterminal.equals(parent.get(0).getName()) && nonterminal.equals(parent.get(parent.size() - 1).getName());
 	}
 	
 	public boolean isChildBinary() {
-		return nonterminal.equals(child.get(0)) && nonterminal.equals(child.get(child.size() - 1));
+		return nonterminal.equals(child.get(0).getClass()) && nonterminal.equals(child.get(child.size() - 1).getName());
 	}
 	
 	public boolean isLeftMost() {
@@ -64,6 +64,32 @@ class Filter implements Serializable {
 	
 	public boolean isRightMost() {
 		return position == child.size() - 1;
+	}
+
+	/**
+	 * Two filters are equal if they can be applied to the same alternate.
+	 * Let F1 be (nonterminal1, parent1, position1, child1) and
+	 * F2 be (nonterminal2, parent2, position2, child2). Then F1 equals F2
+	 * if nontermainl1 == nontermianl1, parent1 == parent2 and
+	 * position1 == position2.
+	 * 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof Filter)) {
+			return false;
+		}
+		
+		Filter other = (Filter) obj;
+		
+		return other.nonterminal.equals(this.nonterminal) &&
+			   other.position == this.position && 
+			   other.parent.equals(this.parent);
 	}
 	
 	@Override

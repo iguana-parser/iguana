@@ -178,5 +178,20 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public Symbol getSymbol() {
 		return nonterminal.getNonterminal();
 	}
+
+	@Override
+	public boolean isNameEqual(BodyGrammarSlot slot) {
+		if(this == slot) {
+			return true;
+		}
+		
+		if(!(slot instanceof NonterminalGrammarSlot)) {
+			return false;
+		}
+		
+		NonterminalGrammarSlot other = (NonterminalGrammarSlot) slot;
+		
+		return nonterminal.equals(other.nonterminal);
+	}
 	
 }

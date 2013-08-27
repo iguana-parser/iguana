@@ -129,4 +129,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	public abstract boolean isNullable();
 	
+	public abstract boolean isNameEqual(BodyGrammarSlot slot);
+
+	
 }

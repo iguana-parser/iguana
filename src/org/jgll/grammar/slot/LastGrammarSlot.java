@@ -90,4 +90,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		return Epsilon.getInstance();
 	}
 
+	@Override
+	public boolean isNameEqual(BodyGrammarSlot slot) {
+		throw new UnsupportedOperationException();
+	}
+
 }

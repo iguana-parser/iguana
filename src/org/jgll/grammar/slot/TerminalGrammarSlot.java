@@ -1,11 +1,13 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.Character;
+import org.jgll.grammar.HeadGrammarSlot;
+import org.jgll.grammar.Range;
+import org.jgll.grammar.Symbol;
+import org.jgll.grammar.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -195,6 +197,21 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public Symbol getSymbol() {
 		return terminal;
+	}
+
+	@Override
+	public boolean isNameEqual(BodyGrammarSlot slot) {
+		if(this == slot) {
+			return true;
+		}
+		
+		if(!(slot instanceof TerminalGrammarSlot)) {
+			return false;
+		}
+		
+		TerminalGrammarSlot other = (TerminalGrammarSlot) slot;
+		
+		return terminal.equals(other.terminal);
 	}
 
 }

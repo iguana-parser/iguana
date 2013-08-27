@@ -64,7 +64,18 @@ public class HeadGrammarSlot extends GrammarSlot {
 		for(Alternate alternate : alternates) {
 			if(alternate.match(list)) {
 				set.remove(alternate);
-				return set;
+			}
+		}
+		return set;
+	}
+	
+	public Set<Alternate> without(Set<List<Symbol>> withoutSet) {
+		Set<Alternate> set = new HashSet<>(alternates);
+		for(Alternate alternate : alternates) {
+			for(List<Symbol> list : withoutSet) {
+				if(alternate.match(list)) {
+					set.remove(alternate);
+				}
 			}
 		}
 		return set;

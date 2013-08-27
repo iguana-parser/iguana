@@ -9,6 +9,7 @@ import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 
 public class Alternate implements Serializable {
 	
@@ -213,34 +214,16 @@ public class Alternate implements Serializable {
 			return false;
 		}
 		
-		for(int i = 0; i < this.size(); i++) {
-			BodyGrammarSlot thisSlot = symbols.get(i);
-			BodyGrammarSlot otherSlot = other.symbols.get(i);
-			
-			if(thisSlot instanceof TerminalGrammarSlot && otherSlot instanceof TerminalGrammarSlot) {
-				if(!thisSlot.getSymbol().equals(otherSlot.getSymbol())) {
-					return false;
-				}				
-			} else if(thisSlot instanceof KeywordGrammarSlot && otherSlot instanceof KeywordGrammarSlot){
-				if(!((KeywordGrammarSlot) thisSlot).getKeyword().equals(((KeywordGrammarSlot) otherSlot).getKeyword())) {
-					return false;
-				}
-			}
-			else if(thisSlot instanceof NonterminalGrammarSlot && otherSlot instanceof NonterminalGrammarSlot) {				
-				Nonterminal thisNt = ((NonterminalGrammarSlot) thisSlot).getNonterminal().getNonterminal();
-				Nonterminal otherNt = ((NonterminalGrammarSlot) otherSlot).getNonterminal().getNonterminal();
-				
-				if(thisNt == null && otherNt == null) {
-					continue;
-				}
-				
-				if(!thisNt.equals(otherNt)) {
-					return false;
-				}
-			}
-			else {
+		BodyGrammarSlot thisSlot = firstSlot;
+		BodyGrammarSlot otherSlot = other.firstSlot;
+		
+		while(!(thisSlot instanceof LastGrammarSlot)) {
+			if(!thisSlot.isNameEqual(otherSlot)) {
 				return false;
 			}
+			
+			thisSlot = thisSlot.next();
+			otherSlot = otherSlot.next();
 		}
 		
 		return true;
