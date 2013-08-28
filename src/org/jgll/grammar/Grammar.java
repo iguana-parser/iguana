@@ -67,15 +67,19 @@ public class Grammar implements Serializable {
 		this.nameToSlots = new HashMap<>();
 		this.nameToNonterminals = builder.nonterminalsMap;
 		
-		for(BodyGrammarSlot slot : slots) {
-			nameToSlots.put(slot.toString(), slot);
-		}
-		
 		this.newNonterminalsMap = builder.newNonterminalsMap;
 		
 		this.newNonterminals = new HashSet<>();
 		for(List<HeadGrammarSlot> newNonterminals : builder.newNonterminalsMap.values()) {
 			this.newNonterminals.addAll(newNonterminals);
+		}
+		
+		for(BodyGrammarSlot slot : slots) {
+			nameToSlots.put(grammarSlotToString(slot), slot);
+		}
+		
+		for(BodyGrammarSlot slot : slots) {
+			slot.setLabel(grammarSlotToString(slot));
 		}
 		
 		this.longestTerminalChain = builder.longestTerminalChain;
@@ -167,7 +171,7 @@ public class Grammar implements Serializable {
 	}
 	
 	public HeadGrammarSlot getNonterminalByNameAndIndex(String name, int index) {
-		return newNonterminalsMap.get(name).get(index);
+		return newNonterminalsMap.get(name).get(index - 1);
 	}
 	
 	public boolean isNewNonterminal(HeadGrammarSlot slot) {
@@ -182,26 +186,31 @@ public class Grammar implements Serializable {
 		return newNonterminalsMap.get(head.getNonterminal().getName()).indexOf(head) + 1;
 	}
 	
-	public String grammarSlotToString(BodyGrammarSlot slot) {
+	private String grammarSlotToString(BodyGrammarSlot slot) {
 		
 		StringBuilder sb = new StringBuilder();
 		
 		BodyGrammarSlot current = slot;
+		sb.append(" . ");
+		sb.append(getSlotName(current)).append(" ");
 		
+		current = slot.previous();
+
 		while(current != null) {
-			sb.insert(0, getSlotName(current));
+			sb.insert(0, " " + getSlotName(current));
 			current = current.previous();
 		}
 		
 		current = slot.next();
 
-		sb.append(".");
 		while(current != null) {
 			sb.append(getSlotName(current)).append(" ");
 			current = current.next();
 		}
+		
+		sb.delete(sb.length() - 2, sb.length());
 
-		sb.insert(0, " ::= ");
+		sb.insert(0, " ::=");
 		sb.insert(0, getNonterminalName(slot.getHead()));
 		return sb.toString();
 	}

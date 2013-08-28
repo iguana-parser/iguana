@@ -55,7 +55,7 @@ public class GrammarToDot {
 						sb.append(EDGE + "\"" + getId(previousSlot) + "\"" + "->" + "{\"" + getId(currentSlot) + "\"}" + "\n");						
 					}
 					
-					sb.append("\"" + getId(currentSlot) + "\"" + String.format(SLOT_NODE, grammar.grammarSlotToString(currentSlot)));
+					sb.append("\"" + getId(currentSlot) + "\"" + String.format(SLOT_NODE, currentSlot));
 					previousSlot = currentSlot;
 					currentSlot = currentSlot.next();
 					

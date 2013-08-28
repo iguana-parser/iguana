@@ -37,6 +37,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected List<SlotAction<Boolean>> popActions;
 	
+	private String label;
+	
 	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		this.position = position;
 		this.head = head;
@@ -128,6 +130,14 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public abstract boolean isNullable();
 	
 	public abstract boolean isNameEqual(BodyGrammarSlot slot);
-
+	
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
+	@Override
+	public String toString() {
+		return label;
+	}
 	
 }

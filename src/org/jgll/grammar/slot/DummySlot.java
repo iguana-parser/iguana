@@ -3,10 +3,15 @@ package org.jgll.grammar.slot;
 
 public class DummySlot extends LastGrammarSlot {
 
+	private static final long serialVersionUID = 1L;
+
 	public DummySlot() {
 		super(0, null, null, null);
 	}
 
-	private static final long serialVersionUID = 1L;
-
+	@Override
+	public String toString() {
+		return "Dummy";
+	}
+	
 }

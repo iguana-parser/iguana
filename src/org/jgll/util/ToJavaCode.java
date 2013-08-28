@@ -1,7 +1,6 @@
 package org.jgll.util;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -72,7 +71,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("IntermediateNode node" + count + " = new IntermediateNode(" +
-						"grammar.getGrammarSlotByName(\"" + grammar.grammarSlotToString((BodyGrammarSlot) node.getGrammarSlot())  + "\"), " + 
+						"grammar.getGrammarSlotByName(\"" + node.getGrammarSlot()  + "\"), " + 
 						node.getLeftExtent() + ", " + 
 						node.getRightExtent() + ");\n");
 			
@@ -91,7 +90,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			sb.append("PackedNode node" + count + " = new PackedNode(" +
-					  "grammar.getGrammarSlotByName(\"" + grammar.grammarSlotToString((BodyGrammarSlot) node.getGrammarSlot())  + "\"), " + 
+					  "grammar.getGrammarSlotByName(\"" + node.getGrammarSlot() + "\"), " + 
 					  node.getPivot() + ", " + node.getParent().getObject() + ");\n");
 			
 			count++;

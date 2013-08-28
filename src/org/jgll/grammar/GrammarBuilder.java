@@ -7,6 +7,8 @@ import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -86,7 +88,7 @@ public class GrammarBuilder implements Serializable {
 		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
 		reachabilityGraph = new HashMap<>();
-		newNonterminalsMap = new HashMap<>();
+		newNonterminalsMap = new LinkedHashMap<>();
 	}
 
 	public Grammar build() {
@@ -108,18 +110,15 @@ public class GrammarBuilder implements Serializable {
 
 			@Override
 			public void visit(NonterminalGrammarSlot slot) {
-				if (slot.getNonterminal() == null) {
-					throw new GrammarValidationException("No nonterminal defined for " + getSlotName(slot));
-				}
 				if (slot.getNonterminal().getAlternates().size() == 0) {
-					throw new GrammarValidationException("No alternates defined for " + getName(slot.getNonterminal()));
+					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal());
 				}
 			}
 
 			@Override
 			public void visit(HeadGrammarSlot head) {
 				if (head.getAlternates().size() == 0) {
-					throw new GrammarValidationException("No alternates defined for " + getName(head));
+					throw new GrammarValidationException("No alternates defined for " + head);
 				}
 			}
 			
@@ -132,52 +131,6 @@ public class GrammarBuilder implements Serializable {
 		for (HeadGrammarSlot head : nonterminals) {
 			GrammarVisitor.visit(head, action);
 		}
-	}
-	
-	public String grammarSlotToString(BodyGrammarSlot slot) {
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append(getName(slot.getHead()));
-		sb.append(" ::= ");
-		
-		BodyGrammarSlot current = slot;
-		
-		while(current != null) {
-			sb.insert(0, getSlotName(current));
-			current = current.previous();
-		}
-		
-		current = slot;
-		
-		while(current != null) {
-			sb.append(getSlotName(current));
-			current = current.next();
-		}
-		
-		return sb.toString();
-	}
-	
-	private String getSlotName(BodyGrammarSlot slot) {
-		if(slot instanceof TerminalGrammarSlot) {
-			return ((TerminalGrammarSlot) slot).getTerminal().getName();
-		} 
-		else if (slot instanceof NonterminalGrammarSlot) {
-			return getName(((NonterminalGrammarSlot) slot).getNonterminal());
-		} 
-		else if (slot instanceof KeywordGrammarSlot) {
-			return ((KeywordGrammarSlot) slot).getKeyword().getName();
-		} 
-		else if (slot instanceof LastGrammarSlot) {
-			return " .";
-		}
-		else {
-			return "";
-		}
-	}
-
-	private String getName(HeadGrammarSlot head) {
-		String name = head.getNonterminal().getName();
-		return newNonterminalsMap.containsValue(head) ? name + (newNonterminalsMap.get(name).indexOf(head) + 1) : name;			
 	}
 	
 	public GrammarBuilder addRules(Iterable<Rule> rules) {
@@ -235,7 +188,6 @@ public class GrammarBuilder implements Serializable {
 				conditions.put(currentSlot, symbol.getConditions());
 			}
 
-			String label = grammarSlotToString(head, body, symbolIndex);
 			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
@@ -598,27 +550,6 @@ public class GrammarBuilder implements Serializable {
 		return builder.build();
 	}
 
-	private static String grammarSlotToString(Nonterminal head, List<? extends Symbol> body, int index) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(head == null ? "" : head.getName()).append(" ::= ");
-
-		for (int i = 0; i < body.size(); i++) {
-			if (i == index) {
-				sb.append(". ");
-			}
-			sb.append(body.get(i)).append(" ");
-		}
-
-		sb.delete(sb.length() - 1, sb.length());
-
-		if (index == body.size()) {
-			sb.append(" .");
-		}
-
-		return sb.toString();
-	}
-
 	/**
 	 * Calculates the length of the longest chain of terminals in a body of production rules.
 	 */
@@ -970,12 +901,12 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private Map<Filter, Set<List<Symbol>>> processFilters(Set<Filter> filters) {
-		Map<Filter, Set<List<Symbol>>> group = new HashMap<>();
+		Map<Filter, Set<List<Symbol>>> group = new LinkedHashMap<>();
 		
 		for(Filter filter : filters) {
 			Set<List<Symbol>> set = group.get(filter);
 			if(set == null) {
-				set = new HashSet<>();
+				set = new LinkedHashSet<>();
 				group.put(filter, set);
 			}
 			set.add(filter.getChild());
@@ -991,35 +922,13 @@ public class GrammarBuilder implements Serializable {
 			for(Alternate alt : head.getAlternates()) {
 				Filter filter = e.getKey();
 				if(match(filter, alt)) {
+					log.trace("Filtering %s with %s.", alt, filter);
 					HeadGrammarSlot newNonterminal = createNewNonterminal(alt, filter.getPosition(), e.getValue());
 					filterFirstLevel(newNonterminal, processFilters);
 				}
 			}
 		}
-		
-		
-		
-//		for (Alternate alt : head.getAlternates()) {
-//			for (Filter filter : filters) {
-//				if (!filter.isDirect()) {
-//					continue;
-//				}
-//				if (match(filter, alt)) {
-//
-//					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-//					List<Symbol> filteredAlternate = filter.getChild();
-//					
-//					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
-//					if(newNonterminal == null) {
-//						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-//						newNonterminal = createNewNonterminal(alt, filter.getPosition(), filteredAlternate);
-//						filterFirstLevel(newNonterminal, filters);
-//					} else {
-//						alt.setNonterminalAt(filter.getPosition(), newNonterminal);						
-//					}
-//				}
-//			}
-//		}
+
 	}
 
 	private void filterDeep(HeadGrammarSlot head, Set<Filter> filters) {
@@ -1252,7 +1161,7 @@ public class GrammarBuilder implements Serializable {
 			if (filtersMap.containsKey(name)) {
 				filtersMap.get(name).add(filter);
 			} else {
-				Set<Filter> set = new HashSet<>();
+				Set<Filter> set = new LinkedHashSet<>();
 				set.add(filter);
 				filtersMap.put(name, set);
 			}
