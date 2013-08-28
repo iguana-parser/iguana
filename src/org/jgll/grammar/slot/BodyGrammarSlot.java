@@ -6,7 +6,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Symbol;
 import org.jgll.parser.GLLParserInternals;
@@ -38,8 +37,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected List<SlotAction<Boolean>> popActions;
 	
-	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		super(label);
+	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		this.position = position;
 		this.head = head;
 		if(previous != null) {

@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;

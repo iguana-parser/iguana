@@ -1,6 +1,5 @@
 package org.jgll.grammar.slot;
 
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
@@ -17,8 +16,8 @@ public class DirectNullableNonterminalGrammarSlot extends NonterminalGrammarSlot
 
 	private static final long serialVersionUID = 1L;
 
-	public DirectNullableNonterminalGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(label, position, previous, nonterminal, head);
+	public DirectNullableNonterminalGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(position, previous, nonterminal, head);
 	}
 
 	@Override

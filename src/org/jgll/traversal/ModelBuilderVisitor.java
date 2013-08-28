@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.jgll.grammar.Character;
 import org.jgll.grammar.CharacterClass;
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;

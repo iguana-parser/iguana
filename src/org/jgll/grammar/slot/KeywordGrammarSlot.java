@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.grammar.Character;
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.Keyword;
 import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Symbol;
@@ -20,14 +19,14 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	protected HeadGrammarSlot keywordHead;
 	protected Keyword keyword;
 	
-	public KeywordGrammarSlot(String label, int position, HeadGrammarSlot keywordHead, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		super(label, position, previous, head);
+	public KeywordGrammarSlot(int position, HeadGrammarSlot keywordHead, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		super(position, previous, head);
 		this.keywordHead = keywordHead;
 		this.keyword = keyword;
 	}
 	
 	public KeywordGrammarSlot copy(HeadGrammarSlot keywordHead, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		KeywordGrammarSlot slot = new KeywordGrammarSlot(this.label, this.position, keywordHead, this.keyword, previous, head);
+		KeywordGrammarSlot slot = new KeywordGrammarSlot(this.position, keywordHead, this.keyword, previous, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

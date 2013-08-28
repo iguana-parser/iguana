@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.grammar.Epsilon;
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
@@ -27,13 +26,13 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private transient Object object;
 	
-	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
-		super(label, position, previous, head);
+	public LastGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
+		super(position, previous, head);
 		this.object = object;
 	}
 	
 	public LastGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		LastGrammarSlot slot = new LastGrammarSlot(this.label, this.position, previous, head, object);
+		LastGrammarSlot slot = new LastGrammarSlot(this.position, previous, head, object);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.grammar.Character;
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.Range;
 import org.jgll.grammar.Symbol;
 import org.jgll.grammar.Terminal;
@@ -26,13 +25,13 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	
 	protected final Terminal terminal;
 
-	public TerminalGrammarSlot(String label, int position, BodyGrammarSlot previous, Terminal terminal, HeadGrammarSlot head) {
-		super(label, position, previous, head);
+	public TerminalGrammarSlot(int position, BodyGrammarSlot previous, Terminal terminal, HeadGrammarSlot head) {
+		super(position, previous, head);
 		this.terminal = terminal;
 	}
 	
 	public TerminalGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		TerminalGrammarSlot slot = new TerminalGrammarSlot(this.label, this.position, previous, this.terminal, head);
+		TerminalGrammarSlot slot = new TerminalGrammarSlot(this.position, previous, this.terminal, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

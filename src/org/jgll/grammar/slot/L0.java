@@ -31,7 +31,6 @@ public class L0 extends GrammarSlot {
 	}
 	
 	private L0() {
-		super("L0");
 		id = -1;
 	}
 	
@@ -107,6 +106,11 @@ public class L0 extends GrammarSlot {
 		writer.append("}\n");
 		writer.append("return root;\n");
 		writer.append("}\n");
+	}
+	
+	@Override
+	public String toString() {
+		return "L0";
 	}
 
 }

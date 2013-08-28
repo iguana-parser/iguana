@@ -1,7 +1,7 @@
 package org.jgll.lookup;
 
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;

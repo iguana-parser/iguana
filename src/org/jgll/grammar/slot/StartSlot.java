@@ -12,7 +12,6 @@ public class StartSlot extends GrammarSlot {
 	private static final long serialVersionUID = 1L;
 
 	public StartSlot(String label) {
-		super(label);
 		id = -2;
 	}
 

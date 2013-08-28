@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -8,8 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.Alternate;
+import org.jgll.grammar.Nonterminal;
+import org.jgll.grammar.Symbol;
+import org.jgll.grammar.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
@@ -40,7 +42,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	private Alternate epsilonAlternate;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
-		super(nonterminal.getName());
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();

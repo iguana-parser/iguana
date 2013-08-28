@@ -30,15 +30,6 @@ public abstract class GrammarSlot implements Serializable {
 	 */
 	protected int id;
 	
-	/**
-	 * A string representation of this grammar slot
-	 */
-	protected String label;
-	
-	public GrammarSlot(String label) {
-		this.label = label;
-	}
-	
 	public abstract void codeParser(Writer writer) throws IOException;
 	
 	public abstract GrammarSlot parse(GLLParserInternals parser, Input input);
@@ -52,14 +43,4 @@ public abstract class GrammarSlot implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	public String getLabel() {
-		return label;
-	}
-	
-	@Override
-	public String toString() {
-		return label;
-	}
-	
 }

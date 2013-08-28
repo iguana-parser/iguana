@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
@@ -19,8 +18,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
-	public EpsilonGrammarSlot(String label, int position, HeadGrammarSlot head, Object object) {
-		super(label, position, null, head, object);
+	public EpsilonGrammarSlot(int position, HeadGrammarSlot head, Object object) {
+		super(position, null, head, object);
 	}
 	
 	@Override

@@ -4,9 +4,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.StartSlot;
 import org.jgll.util.Input;

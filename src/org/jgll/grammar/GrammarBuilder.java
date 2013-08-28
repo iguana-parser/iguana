@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.text.html.parser.Entity;
-
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.condition.KeywordCondition;
@@ -22,6 +20,7 @@ import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.DirectNullableNonterminalGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -58,7 +57,7 @@ public class GrammarBuilder implements Serializable {
 	String name;
 
 	// Fields related to filtering
-	Map<String, Set<HeadGrammarSlot>> newNonterminalsMap;
+	Map<String, List<HeadGrammarSlot>> newNonterminalsMap;
 
 	private Map<Set<Alternate>, HeadGrammarSlot> existingAlternates;
 
@@ -110,17 +109,17 @@ public class GrammarBuilder implements Serializable {
 			@Override
 			public void visit(NonterminalGrammarSlot slot) {
 				if (slot.getNonterminal() == null) {
-					throw new GrammarValidationException("No nonterminal defined for " + slot.getLabel());
+					throw new GrammarValidationException("No nonterminal defined for " + getSlotName(slot));
 				}
 				if (slot.getNonterminal().getAlternates().size() == 0) {
-					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal().getLabel());
+					throw new GrammarValidationException("No alternates defined for " + getName(slot.getNonterminal()));
 				}
 			}
 
 			@Override
 			public void visit(HeadGrammarSlot head) {
 				if (head.getAlternates().size() == 0) {
-					throw new GrammarValidationException("No alternates defined for " + head.getLabel());
+					throw new GrammarValidationException("No alternates defined for " + getName(head));
 				}
 			}
 			
@@ -133,6 +132,52 @@ public class GrammarBuilder implements Serializable {
 		for (HeadGrammarSlot head : nonterminals) {
 			GrammarVisitor.visit(head, action);
 		}
+	}
+	
+	public String grammarSlotToString(BodyGrammarSlot slot) {
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(getName(slot.getHead()));
+		sb.append(" ::= ");
+		
+		BodyGrammarSlot current = slot;
+		
+		while(current != null) {
+			sb.insert(0, getSlotName(current));
+			current = current.previous();
+		}
+		
+		current = slot;
+		
+		while(current != null) {
+			sb.append(getSlotName(current));
+			current = current.next();
+		}
+		
+		return sb.toString();
+	}
+	
+	private String getSlotName(BodyGrammarSlot slot) {
+		if(slot instanceof TerminalGrammarSlot) {
+			return ((TerminalGrammarSlot) slot).getTerminal().getName();
+		} 
+		else if (slot instanceof NonterminalGrammarSlot) {
+			return getName(((NonterminalGrammarSlot) slot).getNonterminal());
+		} 
+		else if (slot instanceof KeywordGrammarSlot) {
+			return ((KeywordGrammarSlot) slot).getKeyword().getName();
+		} 
+		else if (slot instanceof LastGrammarSlot) {
+			return " .";
+		}
+		else {
+			return "";
+		}
+	}
+
+	private String getName(HeadGrammarSlot head) {
+		String name = head.getNonterminal().getName();
+		return newNonterminalsMap.containsValue(head) ? name + (newNonterminalsMap.get(name).indexOf(head) + 1) : name;			
 	}
 	
 	public GrammarBuilder addRules(Iterable<Rule> rules) {
@@ -158,7 +203,7 @@ public class GrammarBuilder implements Serializable {
 		BodyGrammarSlot currentSlot = null;
 
 		if (body.size() == 0) {
-			currentSlot = new EpsilonGrammarSlot(grammarSlotToString(head, body, 0), 0, headGrammarSlot, rule.getObject());
+			currentSlot = new EpsilonGrammarSlot(0, headGrammarSlot, rule.getObject());
 			headGrammarSlot.addAlternate(new Alternate(currentSlot));
 		}
 
@@ -166,21 +211,20 @@ public class GrammarBuilder implements Serializable {
 			int symbolIndex = 0;
 			BodyGrammarSlot firstSlot = null;
 			for (Symbol symbol : body) {
-				String label = grammarSlotToString(head, body, symbolIndex);
 				
 				if(symbol instanceof Keyword) {
 					Keyword keyword = (Keyword) symbol;
 					HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
-					currentSlot = new KeywordGrammarSlot(label, symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
+					currentSlot = new KeywordGrammarSlot(symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
 				}
 				
 				else if (symbol instanceof Terminal) {
-					currentSlot = new TerminalGrammarSlot(label, symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
+					currentSlot = new TerminalGrammarSlot(symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
 				}
 				// Nonterminal
 				else {
 					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-					currentSlot = new NonterminalGrammarSlot(label, symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
+					currentSlot = new NonterminalGrammarSlot(symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
 				} 
 
 				if (symbolIndex == 0) {
@@ -192,7 +236,7 @@ public class GrammarBuilder implements Serializable {
 			}
 
 			String label = grammarSlotToString(head, body, symbolIndex);
-			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(label, symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
+			LastGrammarSlot lastGrammarSlot = new LastGrammarSlot(symbolIndex, currentSlot, headGrammarSlot, rule.getObject());
 
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot);
@@ -484,13 +528,13 @@ public class GrammarBuilder implements Serializable {
 		for(Symbol symbol : condition.getSymbols()) {
 			if(symbol instanceof Nonterminal) {
 				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-				currentSlot = new NonterminalGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, nonterminal, null);
+				currentSlot = new NonterminalGrammarSlot(index, currentSlot, nonterminal, null);
 			} 
 			else if(symbol instanceof Terminal) {
-				currentSlot = new TerminalGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, (Terminal) symbol, null);
+				currentSlot = new TerminalGrammarSlot(index, currentSlot, (Terminal) symbol, null);
 			}
 			else if(symbol instanceof Keyword) {
-				currentSlot = new KeywordGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, 
+				currentSlot = new KeywordGrammarSlot(index, 
 						nonterminalsMap.get(new Nonterminal(symbol.getName())), (Keyword) symbol, currentSlot, null);
 			}
 			
@@ -500,7 +544,7 @@ public class GrammarBuilder implements Serializable {
 			index++;
 		}
 		
-		new LastGrammarSlot(grammarSlotToString(null, condition.getSymbols(), index), index, currentSlot, null, null);
+		new LastGrammarSlot(index, currentSlot, null, null);
 		conditionSlots.add(firstSlot);
 		return firstSlot;
 	}
@@ -854,7 +898,7 @@ public class GrammarBuilder implements Serializable {
 						NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) currentSlot;
 						if(ntSlot.getNonterminal().isDirectNullable()) {
 							NonterminalGrammarSlot directNullableSlot = 
-									new DirectNullableNonterminalGrammarSlot(ntSlot.getLabel(), ntSlot.getPosition(), ntSlot.previous(), ntSlot.getNonterminal(), ntSlot.getHead());
+									new DirectNullableNonterminalGrammarSlot(ntSlot.getPosition(), ntSlot.previous(), ntSlot.getNonterminal(), ntSlot.getHead());
 							ntSlot.next().setPrevious(directNullableSlot);
 							directNullableSlot.setNext(ntSlot.next());
 							directNullableSlot.setTestSet();
@@ -874,7 +918,7 @@ public class GrammarBuilder implements Serializable {
 		for (Entry<String, Set<Filter>> entry : filtersMap.entrySet()) {
 			log.debug("Filtering %s with %d.", entry.getKey(), entry.getValue().size());
 
-			filterFirstLevel(nonterminalsMap.get(entry.getKey()), entry.getValue());
+			filterFirstLevel(nonterminalsMap.get(entry.getKey()), processFilters(entry.getValue()));
 			filterDeep(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 
@@ -886,7 +930,7 @@ public class GrammarBuilder implements Serializable {
 			removeUnusedFilteredNonterminals(s);
 		}
 
-		for(Set<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
+		for(List<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
 			nonterminals.addAll(newNonterminals);			
 		}
 	}
@@ -905,9 +949,9 @@ public class GrammarBuilder implements Serializable {
 						
 						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 						
-						Set<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
+						List<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
 						if(newNonterminals == null) {
-							newNonterminals = new HashSet<>();
+							newNonterminals = new ArrayList<>();
 							newNonterminalsMap.put(newNonterminal.getNonterminal().getName(), newNonterminals);
 						}
 						newNonterminals.add(newNonterminal);
@@ -941,18 +985,18 @@ public class GrammarBuilder implements Serializable {
 	}
 
 
-	private void filterFirstLevel(HeadGrammarSlot head, Set<Filter> filters) {
-		
-		Map<Filter, Set<List<Symbol>>> processFilters = processFilters(filters);
+	private void filterFirstLevel(HeadGrammarSlot head, Map<Filter, Set<List<Symbol>>> processFilters) {
 		
 		for(Entry<Filter, Set<List<Symbol>>> e : processFilters.entrySet()) {
 			for(Alternate alt : head.getAlternates()) {
 				Filter filter = e.getKey();
 				if(match(filter, alt)) {
-					createNewNonterminal(alt, filter.getPosition(), e.getValue());
+					HeadGrammarSlot newNonterminal = createNewNonterminal(alt, filter.getPosition(), e.getValue());
+					filterFirstLevel(newNonterminal, processFilters);
 				}
 			}
 		}
+		
 		
 		
 //		for (Alternate alt : head.getAlternates()) {
@@ -1022,8 +1066,18 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
 		if(newNonterminal == null) {
 			newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+			
+			List<HeadGrammarSlot> set = newNonterminalsMap.get(filteredNonterminal.getNonterminal().getName());
+			if(set == null) {
+				set = new ArrayList<>();
+				newNonterminalsMap.put(filteredNonterminal.getNonterminal().getName(), set);
+			}
+			set.add(newNonterminal);
+			
 			alt.setNonterminalAt(position, newNonterminal);
+			
 			List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.without(filteredAlternate));
+			existingAlternates.put(new HashSet<>(copy), newNonterminal);
 			newNonterminal.setAlternates(copy);
 		} else {
 			alt.setNonterminalAt(position, newNonterminal);						
@@ -1040,16 +1094,18 @@ public class GrammarBuilder implements Serializable {
 		if(newNonterminal == null) {
 			newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 			
-			Set<HeadGrammarSlot> set = newNonterminalsMap.get(filteredNonterminal.getNonterminal().getName());
+			List<HeadGrammarSlot> set = newNonterminalsMap.get(filteredNonterminal.getNonterminal().getName());
 			if(set == null) {
-				set = new HashSet<>();
+				set = new ArrayList<>();
 				newNonterminalsMap.put(filteredNonterminal.getNonterminal().getName(), set);
 			}
 			set.add(newNonterminal);
 
 			
 			alt.setNonterminalAt(position, newNonterminal);
+			
 			List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.without(filteredAlternates));
+			existingAlternates.put(new HashSet<>(copy), newNonterminal);
 			newNonterminal.setAlternates(copy);
 		} else {
 			alt.setNonterminalAt(position, newNonterminal);						
@@ -1068,8 +1124,7 @@ public class GrammarBuilder implements Serializable {
 			if (!oneLevelOnlyFilters.contains(filter) && !filter.getNonterminal().equals(filteredNonterminal.getNonterminal().getName())) {
 				List<Integer> nonterminals = new ArrayList<>();
 				List<Alternate> alternates = new ArrayList<>();
-				getRightEnds(filteredNonterminal, filter.getNonterminal(),
-						nonterminals, alternates);
+				getRightEnds(filteredNonterminal, filter.getNonterminal(), nonterminals, alternates);
 				for (int i = 0; i < alternates.size(); i++) {
 					if (alternates.get(i).getNonterminalAt(nonterminals.get(i)).contains(filter.getChild())) {
 						return true;
@@ -1087,19 +1142,8 @@ public class GrammarBuilder implements Serializable {
 	private void rewriteRightEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for (Alternate alternate : head.getAlternates()) {
 			if (alternate.isBinary(head) || alternate.isUnaryPrefix(head)) {
-				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getLastBodySlot()).getNonterminal();
-
-				if (nonterminal.contains(filteredAlternate)) {
-					HeadGrammarSlot filteredNonterminal = alternate.getNonterminalAt(alternate.size() - 1);
-
-					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
-					if (newNonterminal == null) {
-						newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, filteredAlternate);
-						rewriteRightEnds(newNonterminal, filteredAlternate);
-					} else {
-						alternate.setNonterminalAt(alternate.size() - 1, newNonterminal);
-					}
-				}
+				HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, filteredAlternate);
+				rewriteRightEnds(newNonterminal, filteredAlternate);
 			}
 		}
 	}
@@ -1107,19 +1151,8 @@ public class GrammarBuilder implements Serializable {
 	private void rewriteLeftEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for (Alternate alternate : head.getAlternates()) {
 			if (alternate.isBinary(head) || alternate.isUnaryPostfix(head)) {
-				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alternate.getFirstSlot()).getNonterminal();
-
-				if (nonterminal.contains(filteredAlternate)) {
-					HeadGrammarSlot filteredNonterminal = alternate.getNonterminalAt(0);
-
-					HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
-					if (newNonterminal == null) {
-						newNonterminal = createNewNonterminal(alternate, 0, filteredAlternate);
-						rewriteLeftEnds(newNonterminal, filteredAlternate);
-					} else {
-						alternate.setNonterminalAt(0, newNonterminal);
-					}
-				}
+				HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, filteredAlternate);
+				rewriteLeftEnds(newNonterminal, filteredAlternate);
 			}
 		}
 	}
@@ -1238,7 +1271,7 @@ public class GrammarBuilder implements Serializable {
 		boolean changed = true;
 
 		List<HeadGrammarSlot> allNonterminals = new ArrayList<>(nonterminals);
-		for(Set<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
+		for(List<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
 			allNonterminals.addAll(newNonterminals);
 		}
 		
@@ -1354,7 +1387,7 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 
-		Set<HeadGrammarSlot> set = newNonterminalsMap.get(nonterminalName);
+		List<HeadGrammarSlot> set = newNonterminalsMap.get(nonterminalName);
 		if(set != null) {
 			newNonterminalsMap.get(nonterminalName).retainAll(referedNonterminals);
 		}

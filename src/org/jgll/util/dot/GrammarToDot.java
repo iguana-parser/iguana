@@ -13,8 +13,8 @@ import java.util.Set;
 
 import org.jgll.grammar.Alternate;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
 public class GrammarToDot {
@@ -35,7 +35,7 @@ public class GrammarToDot {
 			HeadGrammarSlot head = todoQueue.poll();
 			
 			for(Alternate alternate : head.getAlternates()) {
-				sb.append("\"" + getId(head) + "\"" + String.format(NONTERMINAL_NODE, head.getLabel()));
+				sb.append("\"" + getId(head) + "\"" + String.format(NONTERMINAL_NODE, grammar.getNonterminalName(head)));
 				
 				sb.append(EDGE + "\"" + getId(head) + "\"" + "->" + "{\"" + getId(alternate.getFirstSlot()) + "\"}" + "\n");
 				
@@ -55,7 +55,7 @@ public class GrammarToDot {
 						sb.append(EDGE + "\"" + getId(previousSlot) + "\"" + "->" + "{\"" + getId(currentSlot) + "\"}" + "\n");						
 					}
 					
-					sb.append("\"" + getId(currentSlot) + "\"" + String.format(SLOT_NODE, currentSlot.getLabel()));
+					sb.append("\"" + getId(currentSlot) + "\"" + String.format(SLOT_NODE, grammar.grammarSlotToString(currentSlot)));
 					previousSlot = currentSlot;
 					currentSlot = currentSlot.next();
 					

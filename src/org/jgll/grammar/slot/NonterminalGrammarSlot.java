@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
 
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.Symbol;
 import org.jgll.grammar.Terminal;
 import org.jgll.parser.GLLParserInternals;
@@ -28,8 +27,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private BitSet followSet;
 	
-	public NonterminalGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(label, position, previous, head);
+	public NonterminalGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(position, previous, head);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -39,7 +38,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	public NonterminalGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(this.label, this.position, previous, nonterminal, head);
+		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(this.position, previous, nonterminal, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		slot.firstSet = firstSet;

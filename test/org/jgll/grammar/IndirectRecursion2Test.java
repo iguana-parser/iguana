@@ -5,6 +5,7 @@ import static org.jgll.util.collections.CollectionsUtil.*;
 
 import java.util.Set;
 
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;

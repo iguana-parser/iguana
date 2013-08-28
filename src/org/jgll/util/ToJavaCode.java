@@ -1,5 +1,8 @@
 package org.jgll.util;
 
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -10,9 +13,21 @@ import org.jgll.traversal.SPPFVisitor;
 
 public class ToJavaCode implements SPPFVisitor {
 	
+	
 	private int count = 1;
 	private StringBuilder sb = new StringBuilder();
+	private Grammar grammar;
 
+	public ToJavaCode(Grammar grammar) {
+		this.grammar = grammar;
+	}
+	
+	public static String toJavaCode(NonterminalSymbolNode node, Grammar grammar) {
+		ToJavaCode toJavaCode = new ToJavaCode(grammar);
+		toJavaCode.visit(node);
+		return toJavaCode.toString();
+	}
+	
 	@Override
 	public void visit(TerminalSymbolNode node) {
 		if(!node.isVisited()) {
@@ -28,10 +43,19 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setVisited(true);
 			node.setObject("node" + count);
 			
-			sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-					"grammar.getNonterminalByName(\"" + node.getGrammarSlot()  + "\"), " + 
-					node.getLeftExtent() + ", " + 
-					node.getRightExtent() + ");\n");
+			if(grammar.isNewNonterminal((HeadGrammarSlot) node.getGrammarSlot())) {
+				int index = grammar.getIndex((HeadGrammarSlot) node.getGrammarSlot());
+				sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
+						"grammar.getNonterminalByNameAndIndex(\"" + node.getGrammarSlot()  + "\", " + index + "), " + 
+						node.getLeftExtent() + ", " + 
+						node.getRightExtent() + ");\n");
+			} else {
+				sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
+						"grammar.getNonterminalByName(\"" + node.getGrammarSlot()  + "\"), " + 
+						node.getLeftExtent() + ", " + 
+						node.getRightExtent() + ");\n");
+				
+			}
 			
 			count++;
 			
@@ -48,7 +72,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("IntermediateNode node" + count + " = new IntermediateNode(" +
-						"grammar.getGrammarSlotByName(\"" + node.getGrammarSlot()  + "\"), " + 
+						"grammar.getGrammarSlotByName(\"" + grammar.grammarSlotToString((BodyGrammarSlot) node.getGrammarSlot())  + "\"), " + 
 						node.getLeftExtent() + ", " + 
 						node.getRightExtent() + ");\n");
 			
@@ -67,7 +91,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			sb.append("PackedNode node" + count + " = new PackedNode(" +
-					  "grammar.getGrammarSlotByName(\"" + node.getGrammarSlot()  + "\"), " + 
+					  "grammar.getGrammarSlotByName(\"" + grammar.grammarSlotToString((BodyGrammarSlot) node.getGrammarSlot())  + "\"), " + 
 					  node.getPivot() + ", " + node.getParent().getObject() + ");\n");
 			
 			count++;
@@ -110,8 +134,9 @@ public class ToJavaCode implements SPPFVisitor {
 			sb.append(node.getObject() + ".addChild(" + childName + ");\n");
 		}
 	}
-	
-	public String getString() {
+
+	@Override
+	public String toString() {
 		return sb.toString();
 	}
 

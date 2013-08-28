@@ -3,13 +3,14 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
@@ -42,7 +43,9 @@ public class Grammar implements Serializable {
 	
 	private Map<String, BodyGrammarSlot> nameToSlots;
 	
-	private List<HeadGrammarSlot> newNonterminals;
+	private Map<String, List<HeadGrammarSlot>> newNonterminalsMap;
+	
+	private Set<HeadGrammarSlot> newNonterminals;
 	
 	private String name;
 	
@@ -68,10 +71,13 @@ public class Grammar implements Serializable {
 			nameToSlots.put(slot.toString(), slot);
 		}
 		
-		this.newNonterminals = new ArrayList<>();
-		for(Set<HeadGrammarSlot> newNonterminals : builder.newNonterminalsMap.values()) {
+		this.newNonterminalsMap = builder.newNonterminalsMap;
+		
+		this.newNonterminals = new HashSet<>();
+		for(List<HeadGrammarSlot> newNonterminals : builder.newNonterminalsMap.values()) {
 			this.newNonterminals.addAll(newNonterminals);
 		}
+		
 		this.longestTerminalChain = builder.longestTerminalChain;
 		this.maximumNumAlternates = builder.maximumNumAlternates;
 		this.maxDescriptorsAtInput = builder.maxDescriptors;
@@ -160,6 +166,61 @@ public class Grammar implements Serializable {
 		return nameToNonterminals.get(name);
 	}
 	
+	public HeadGrammarSlot getNonterminalByNameAndIndex(String name, int index) {
+		return newNonterminalsMap.get(name).get(index);
+	}
+	
+	public boolean isNewNonterminal(HeadGrammarSlot slot) {
+		return newNonterminals.contains(slot);
+	}
+	
+	public int getIndex(HeadGrammarSlot head) {
+		List<HeadGrammarSlot> list = newNonterminalsMap.get(head.getNonterminal().getName());
+		if(list == null) {
+			return -1;
+		}
+		return newNonterminalsMap.get(head.getNonterminal().getName()).indexOf(head) + 1;
+	}
+	
+	public String grammarSlotToString(BodyGrammarSlot slot) {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		BodyGrammarSlot current = slot;
+		
+		while(current != null) {
+			sb.insert(0, getSlotName(current));
+			current = current.previous();
+		}
+		
+		current = slot.next();
+
+		sb.append(".");
+		while(current != null) {
+			sb.append(getSlotName(current)).append(" ");
+			current = current.next();
+		}
+
+		sb.insert(0, " ::= ");
+		sb.insert(0, getNonterminalName(slot.getHead()));
+		return sb.toString();
+	}
+	
+	private String getSlotName(BodyGrammarSlot slot) {
+		if(slot instanceof TerminalGrammarSlot) {
+			return ((TerminalGrammarSlot) slot).getTerminal().getName();
+		} 
+		else if (slot instanceof NonterminalGrammarSlot) {
+			return getNonterminalName(((NonterminalGrammarSlot) slot).getNonterminal());
+		} 
+		else if (slot instanceof KeywordGrammarSlot) {
+			return ((KeywordGrammarSlot) slot).getKeyword().getName();
+		} 
+		else {
+			return "";
+		}
+	}
+	
 	public BodyGrammarSlot getGrammarSlotByName(String name) {
 		return nameToSlots.get(name);
 	}
@@ -198,22 +259,22 @@ public class Grammar implements Serializable {
 			
 			@Override
 			public void visit(TerminalGrammarSlot slot) {
-				sb.append(" ").append(getName(slot));
+				sb.append(" ").append(getSlotName(slot));
 			}
 			
 			@Override
 			public void visit(NonterminalGrammarSlot slot) {
-				sb.append(" ").append(getName(slot));
+				sb.append(" ").append(getSlotName(slot));
 			}
 			
 			@Override
 			public void visit(HeadGrammarSlot head) {
-				sb.append(getName(head)).append(" ::= ");
+				sb.append(getNonterminalName(head)).append(" ::= ");
 			}
 
 			@Override
 			public void visit(KeywordGrammarSlot slot) {
-				sb.append(" ").append(getName(slot));
+				sb.append(" ").append(getSlotName(slot));
 			}
 		};
 		
@@ -223,19 +284,12 @@ public class Grammar implements Serializable {
 		return sb.toString();
 	}
 	
-	private String getName(BodyGrammarSlot slot) {
-		if(slot instanceof NonterminalGrammarSlot) {
-			return getName(((NonterminalGrammarSlot) slot).getNonterminal());
-		}
-		
-		return slot.getSymbol().toString();
-	}
-	
 	/**
 	 * If the nonterminal is introduced while rewriting, adds its index to it. 
 	 */
-	private String getName(HeadGrammarSlot head) {
-		return newNonterminals.contains(head) ? head.getNonterminal().getName() + (newNonterminals.indexOf(head) + 1) : head.getNonterminal().getName();			
+	public String getNonterminalName(HeadGrammarSlot head) {
+		String name = head.getNonterminal().getName();
+		return newNonterminals.contains(head) ? name + (newNonterminalsMap.get(name).indexOf(head) + 1) : name;			
 	}
 	
 }
