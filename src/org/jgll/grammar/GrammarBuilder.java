@@ -924,7 +924,9 @@ public class GrammarBuilder implements Serializable {
 				if(match(filter, alt)) {
 					log.trace("Filtering %s with %s.", alt, filter);
 					HeadGrammarSlot newNonterminal = createNewNonterminal(alt, filter.getPosition(), e.getValue());
-					filterFirstLevel(newNonterminal, processFilters);
+					if(newNonterminal != ((NonterminalGrammarSlot) alt.getBodyGrammarSlotAt(filter.getPosition())).getNonterminal()) {
+						filterFirstLevel(newNonterminal, processFilters);
+					}
 				}
 			}
 		}
@@ -1052,7 +1054,9 @@ public class GrammarBuilder implements Serializable {
 		for (Alternate alternate : head.getAlternates()) {
 			if (alternate.isBinary(head) || alternate.isUnaryPrefix(head)) {
 				HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, filteredAlternate);
-				rewriteRightEnds(newNonterminal, filteredAlternate);
+				if(newNonterminal != ((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(alternate.size() - 1)).getNonterminal()) {
+					rewriteRightEnds(newNonterminal, filteredAlternate);
+				}
 			}
 		}
 	}
@@ -1060,8 +1064,10 @@ public class GrammarBuilder implements Serializable {
 	private void rewriteLeftEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for (Alternate alternate : head.getAlternates()) {
 			if (alternate.isBinary(head) || alternate.isUnaryPostfix(head)) {
-				HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, filteredAlternate);
-				rewriteLeftEnds(newNonterminal, filteredAlternate);
+				HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, 0, filteredAlternate);
+				if(newNonterminal != ((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(0)).getNonterminal()) {
+					rewriteLeftEnds(newNonterminal, filteredAlternate);
+				}
 			}
 		}
 	}
