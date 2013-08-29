@@ -2,6 +2,15 @@ package org.jgll.util.hashing;
 
 import java.util.Random;
 
+import org.jgll.util.hashing.hashfunction.DavyHash;
+import org.jgll.util.hashing.hashfunction.Jenkins;
+import org.jgll.util.hashing.hashfunction.JenkinsCWI;
+import org.jgll.util.hashing.hashfunction.MurmurHash2;
+import org.jgll.util.hashing.hashfunction.MurmurHash3;
+import org.jgll.util.hashing.hashfunction.SuperFastHash;
+import org.jgll.util.hashing.hashfunction.SuperFastHash16BitOnly;
+import org.jgll.util.hashing.hashfunction.XXHash;
+
 public class RunBenchmark {
 	public static void main(String[] args) {
 		Random r = new Random();

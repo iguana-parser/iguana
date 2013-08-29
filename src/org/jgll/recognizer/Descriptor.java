@@ -3,7 +3,7 @@ package org.jgll.recognizer;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 

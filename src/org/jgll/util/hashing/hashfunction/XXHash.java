@@ -1,4 +1,4 @@
-package org.jgll.util.hashing;
+package org.jgll.util.hashing.hashfunction;
 
 public class XXHash implements HashFunction {
 	//private static final int PRIME1 = (int) 2654435761L;

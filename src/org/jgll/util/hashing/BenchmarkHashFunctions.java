@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.jgll.util.hashing.hashfunction.HashFunction;
+
 public class BenchmarkHashFunctions {
 	private final HashFunction[] targets;
 	public BenchmarkHashFunctions(HashFunction... functions) {

@@ -3,8 +3,8 @@ package org.jgll.parser;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.Level;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 

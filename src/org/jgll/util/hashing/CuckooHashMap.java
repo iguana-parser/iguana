@@ -2,6 +2,8 @@ package org.jgll.util.hashing;
 
 import java.io.Serializable;
 
+import org.jgll.util.hashing.hashfunction.HashFunction;
+
 /**
  * 
  * A hash set based on Cuckoo hashing.

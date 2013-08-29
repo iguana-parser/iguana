@@ -1,7 +1,7 @@
 package org.jgll.parser;
 
-import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.MurmurHash3;
+import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.MurmurHash3;
 
 public class HashFunctions {
 

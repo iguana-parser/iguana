@@ -1,4 +1,4 @@
-package org.jgll.util.hashing;
+package org.jgll.util.hashing.hashfunction;
 
 public class SuperFastHash16BitOnly implements HashFunction {
 

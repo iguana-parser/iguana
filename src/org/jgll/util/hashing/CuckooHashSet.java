@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import org.jgll.util.RandomUtil;
+import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.MurmurHash3;
 
 /**
  * 

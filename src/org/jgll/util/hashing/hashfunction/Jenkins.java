@@ -1,4 +1,5 @@
-package org.jgll.util.hashing;
+package org.jgll.util.hashing.hashfunction;
+
 
 public class Jenkins implements HashFunction {
 

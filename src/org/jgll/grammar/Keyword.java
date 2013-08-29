@@ -7,7 +7,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 public class Keyword extends AbstractSymbol {
 

@@ -3,8 +3,8 @@ package org.jgll.parser;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.Level;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * A {@code Descriptor} is used by the GLL parser to keep track of the 

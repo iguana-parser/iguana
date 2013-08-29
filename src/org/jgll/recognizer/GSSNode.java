@@ -5,8 +5,8 @@ import org.jgll.grammar.slot.L0;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.IntegerExternalHasher;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 public class GSSNode {
 	

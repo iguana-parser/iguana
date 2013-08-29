@@ -1,4 +1,4 @@
-package org.jgll.util.hashing;
+package org.jgll.util.hashing.hashfunction;
 
 public class MurmurHash3 implements HashFunction {
 

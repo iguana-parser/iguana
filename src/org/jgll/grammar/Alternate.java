@@ -11,6 +11,8 @@ import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.util.hashing.HashFunctionBuilder;
+import org.jgll.util.hashing.hashfunction.MurmurHash3;
 
 public class Alternate implements Serializable {
 	
@@ -196,7 +198,16 @@ public class Alternate implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return 31;//symbols.hashCode();
+		HashFunctionBuilder hashBuilder = new HashFunctionBuilder(new MurmurHash3());
+		
+		BodyGrammarSlot current = firstSlot;
+
+		while(current != null) {
+			hashBuilder.addInt(current.getId());
+			current = current.next();
+		}
+		
+		return hashBuilder.hash();
 	}
 	
 	@Override

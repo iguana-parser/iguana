@@ -6,8 +6,8 @@ import java.util.List;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
 import org.jgll.util.hashing.Level;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * A {@code GSSNode} is a representation of a node in an Graph Structured Stack.
