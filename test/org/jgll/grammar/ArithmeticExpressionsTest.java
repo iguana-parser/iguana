@@ -44,11 +44,11 @@ public class ArithmeticExpressionsTest {
 		Rule rule2 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule2);
 
-		builder.addFilter(E, rule0, 2, rule0);
-		builder.addFilter(E, rule1, 0, rule0);
-		builder.addFilter(E, rule1, 2, rule0);
-		builder.addFilter(E, rule1, 2, rule1);
-		builder.filter();
+		builder.addPrecedencePattern(E, rule0, 2, rule0);
+		builder.addPrecedencePattern(E, rule1, 0, rule0);
+		builder.addPrecedencePattern(E, rule1, 2, rule0);
+		builder.addPrecedencePattern(E, rule1, 2, rule1);
+		builder.rewritePrecedenceRules();
 
 		grammar = builder.build();
 		levelParser = ParserFactory.levelParser(grammar);

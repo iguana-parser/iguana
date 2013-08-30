@@ -56,21 +56,21 @@ public class FilterTest3 {
 		builder.addRule(rule5);
 		
 		// (E ::= .E E+, E E+) 
-		builder.addFilter(E, rule1, 0, rule1);
+		builder.addPrecedencePattern(E, rule1, 0, rule1);
 		
 		// (E ::= E .E+, E E+)
-		builder.addFilter(E, rule1, 1, rule1);
+		builder.addPrecedencePattern(E, rule1, 1, rule1);
 		
 		// (E ::= .E E+, E + E) 
-		builder.addFilter(E, rule1, 0, rule2);
+		builder.addPrecedencePattern(E, rule1, 0, rule2);
 		
 		// (E ::= E .E+, E + E)
-		builder.addFilter(E, rule1, 1, rule2);
+		builder.addPrecedencePattern(E, rule1, 1, rule2);
 		
 		// (E ::= E .E, E + E)
-		builder.addFilter(E, rule2, 2, rule2);
+		builder.addPrecedencePattern(E, rule2, 2, rule2);
 		
-		builder.filter();
+		builder.rewritePrecedenceRules();
 		
 		grammar = builder.build();
 		System.out.println(grammar);

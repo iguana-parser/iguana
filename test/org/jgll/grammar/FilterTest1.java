@@ -48,10 +48,10 @@ public class FilterTest1 {
 		Rule rule3 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule3);
 		
-		builder.addFilter(E, rule1, 2, rule1);
-		builder.addFilter(E, rule1, 0, rule2);
+		builder.addPrecedencePattern(E, rule1, 2, rule1);
+		builder.addPrecedencePattern(E, rule1, 0, rule2);
 		
-		builder.filter();
+		builder.rewritePrecedenceRules();
 
 		grammar = builder.build();
 		rdParser = ParserFactory.recursiveDescentParser(grammar);

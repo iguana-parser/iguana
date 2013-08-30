@@ -52,12 +52,12 @@ public class FilterTest4 {
 		builder.addRule(rule4);
 		
 		// (E, .E z, x E) 
-		builder.addFilter(E, rule1, 0, rule2);
+		builder.addPrecedencePattern(E, rule1, 0, rule2);
 		
 		// (E, x .E, E w)
-		builder.addFilter(E, rule2, 1, rule3);
+		builder.addPrecedencePattern(E, rule2, 1, rule3);
 		
-		builder.filter();
+		builder.rewritePrecedenceRules();
 		
 		grammar = builder.build();
 		rdParser = ParserFactory.recursiveDescentParser(grammar);

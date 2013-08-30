@@ -48,22 +48,22 @@ public class FilterTest2 {
 		builder.addRule(rule3);
 		
 		// left associative E + E
-		builder.addFilter(E, rule1, 2, rule1);
+		builder.addPrecedencePattern(E, rule1, 2, rule1);
 		
 		// + has higher priority than -
-		builder.addFilter(E, rule1, 0, rule2);
+		builder.addPrecedencePattern(E, rule1, 0, rule2);
 		
 		// right associative E ^ E
-		builder.addFilter(E, rule0, 0, rule0);
+		builder.addPrecedencePattern(E, rule0, 0, rule0);
 		
 		// ^ has higher priority than -
-		builder.addFilter(E, rule0, 0, rule2);
+		builder.addPrecedencePattern(E, rule0, 0, rule2);
 		
 		// ^ has higher priority than +
-		builder.addFilter(E, rule0, 0, rule1);
-		builder.addFilter(E, rule0, 2, rule1);
+		builder.addPrecedencePattern(E, rule0, 0, rule1);
+		builder.addPrecedencePattern(E, rule0, 2, rule1);
 		
-		builder.filter();
+		builder.rewritePrecedenceRules();
 		
 		grammar = builder.build();
 		

@@ -57,14 +57,14 @@ public class FilterTest6 {
 		// . E * E, E + E
 		// E + . E, E + E
 		// . E + E, - E
-		builder.addFilter(E, rule1, 2, rule1);
-		builder.addFilter(E, rule1, 2, rule2);
-		builder.addFilter(E, rule1, 0, rule3);
-		builder.addFilter(E, rule1, 0, rule2);
-		builder.addFilter(E, rule2, 2, rule2);
-		builder.addFilter(E, rule2, 0, rule3);
+		builder.addPrecedencePattern(E, rule1, 2, rule1);
+		builder.addPrecedencePattern(E, rule1, 2, rule2);
+		builder.addPrecedencePattern(E, rule1, 0, rule3);
+		builder.addPrecedencePattern(E, rule1, 0, rule2);
+		builder.addPrecedencePattern(E, rule2, 2, rule2);
+		builder.addPrecedencePattern(E, rule2, 0, rule3);
 		
-		builder.filter();
+		builder.rewritePrecedenceRules();
 
 		grammar = builder.build();
 		

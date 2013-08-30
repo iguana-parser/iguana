@@ -55,18 +55,18 @@ public class FilterTest5 {
 		builder.addRule(rule5);
 		
 		// (E, .E z, x E) 
-		builder.addFilter(E, rule1, 0, rule2);
+		builder.addPrecedencePattern(E, rule1, 0, rule2);
 		
 		// (E, .E z, y E) 
-		builder.addFilter(E, rule1, 0, rule4);
+		builder.addPrecedencePattern(E, rule1, 0, rule4);
 		
 		// (E, x .E, E w)
-		builder.addFilter(E, rule2, 1, rule3);
+		builder.addPrecedencePattern(E, rule2, 1, rule3);
 		
 		// (E, .E w, y E)
-		builder.addFilter(E, rule3, 0, rule4);
+		builder.addPrecedencePattern(E, rule3, 0, rule4);
 		
-		builder.filter();
+		builder.rewritePrecedenceRules();
 		grammar =  builder.build();
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class Filter implements Serializable {
+class PrecedencePattern implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -14,7 +14,7 @@ class Filter implements Serializable {
 	private final int position;
 	private final String nonterminal;
 	
-	public Filter(String nonteriminal, List<Symbol> parent, int position, List<Symbol> child) {
+	public PrecedencePattern(String nonteriminal, List<Symbol> parent, int position, List<Symbol> child) {
 		if(parent == null || child == null) {
 			throw new IllegalArgumentException("parent or child alternates cannot be null.");
 		}
@@ -39,6 +39,10 @@ class Filter implements Serializable {
 	
 	public String getNonterminal() {
 		return nonterminal;
+	}
+	
+	public String getFilteredNontemrinalName() {
+		return parent.get(position).getName();
 	}
 	
 	/**
@@ -81,11 +85,11 @@ class Filter implements Serializable {
 			return true;
 		}
 		
-		if(!(obj instanceof Filter)) {
+		if(!(obj instanceof PrecedencePattern)) {
 			return false;
 		}
 		
-		Filter other = (Filter) obj;
+		PrecedencePattern other = (PrecedencePattern) obj;
 		
 		return other.nonterminal.equals(this.nonterminal) &&
 			   other.position == this.position && 

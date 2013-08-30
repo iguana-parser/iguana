@@ -63,9 +63,9 @@ public class GrammarBuilder implements Serializable {
 
 	private Map<Set<Alternate>, HeadGrammarSlot> existingAlternates;
 
-	private Map<String, Set<Filter>> filtersMap;
+	private Map<String, Set<PrecedencePattern>> filtersMap;
 
-	private Set<Filter> oneLevelOnlyFilters;
+	private Set<PrecedencePattern> oneLevelOnlyFilters;
 	
 	private Map<Rule, LastGrammarSlot> ruleToLastSlotMap;
 
@@ -845,19 +845,19 @@ public class GrammarBuilder implements Serializable {
 
 	}
 
-	public void filter() {
-		for (Entry<String, Set<Filter>> entry : filtersMap.entrySet()) {
+	public void rewritePrecedenceRules() {
+		for (Entry<String, Set<PrecedencePattern>> entry : filtersMap.entrySet()) {
 			log.debug("Filtering %s with %d.", entry.getKey(), entry.getValue().size());
 
 			filterFirstLevel(nonterminalsMap.get(entry.getKey()), processFilters(entry.getValue()));
 			filterDeep(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 
-		for (Filter filter : oneLevelOnlyFilters) {
+		for (PrecedencePattern filter : oneLevelOnlyFilters) {
 			onlyFirstLevelFilter(nonterminalsMap.get(filter.getNonterminal()), oneLevelOnlyFilters);
 		}
 		
-		for(String s : filtersMap.keySet()) {
+		for(String s : getFilteredNonterminals()) {
 			removeUnusedFilteredNonterminals(s);
 		}
 
@@ -865,10 +865,20 @@ public class GrammarBuilder implements Serializable {
 			nonterminals.addAll(newNonterminals);			
 		}
 	}
+	
+	private Set<String> getFilteredNonterminals() {
+		Set<String> names = new HashSet<>();
+		for (Set<PrecedencePattern> filters : filtersMap.values()) {
+			for(PrecedencePattern filter : filters) {
+				names.add(filter.getFilteredNontemrinalName());
+			}
+		}
+		return names;
+	}
 
-	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<Filter> filters) {
+	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<PrecedencePattern> filters) {
 		for (Alternate alt : head.getAlternates()) {
-			for (Filter filter : filters) {
+			for (PrecedencePattern filter : filters) {
 				if (match(filter, alt)) {
 
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
@@ -900,10 +910,10 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private Map<Filter, Set<List<Symbol>>> processFilters(Set<Filter> filters) {
-		Map<Filter, Set<List<Symbol>>> group = new LinkedHashMap<>();
+	private Map<PrecedencePattern, Set<List<Symbol>>> processFilters(Set<PrecedencePattern> filters) {
+		Map<PrecedencePattern, Set<List<Symbol>>> group = new LinkedHashMap<>();
 		
-		for(Filter filter : filters) {
+		for(PrecedencePattern filter : filters) {
 			Set<List<Symbol>> set = group.get(filter);
 			if(set == null) {
 				set = new LinkedHashSet<>();
@@ -916,13 +926,18 @@ public class GrammarBuilder implements Serializable {
 	}
 
 
-	private void filterFirstLevel(HeadGrammarSlot head, Map<Filter, Set<List<Symbol>>> processFilters) {
+	private void filterFirstLevel(HeadGrammarSlot head, Map<PrecedencePattern, Set<List<Symbol>>> processFilters) {
 		
-		for(Entry<Filter, Set<List<Symbol>>> e : processFilters.entrySet()) {
+		for(Entry<PrecedencePattern, Set<List<Symbol>>> e : processFilters.entrySet()) {
 			for(Alternate alt : head.getAlternates()) {
-				Filter filter = e.getKey();
+				PrecedencePattern filter = e.getKey();
 				if(match(filter, alt)) {
 					log.trace("Filtering %s with %s.", alt, filter);
+					
+					if (!filter.isDirect()) {
+						createNewIndirectNonterminal(alt, filter.getPosition(), e.getValue(), filter);
+					}
+
 					HeadGrammarSlot newNonterminal = createNewNonterminal(alt, filter.getPosition(), e.getValue());
 					if(newNonterminal != ((NonterminalGrammarSlot) alt.getBodyGrammarSlotAt(filter.getPosition())).getNonterminal()) {
 						filterFirstLevel(newNonterminal, processFilters);
@@ -933,22 +948,13 @@ public class GrammarBuilder implements Serializable {
 
 	}
 
-	private void filterDeep(HeadGrammarSlot head, Set<Filter> filters) {
+	private void filterDeep(HeadGrammarSlot head, Set<PrecedencePattern> filters) {
 		for (Alternate alt : head.getAlternates()) {
-			for (Filter filter : filters) {
+			for (PrecedencePattern filter : filters) {
 
 				if (alt.match(filter.getParent())) {
 
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-
-					// Indirect filtering
-					if (!filter.isDirect()) {
-						if(filter.isLeftMost()) {
-							createNewIndirectNonterminal(alt, filter.getPosition(), filter.getChild());
-						} else {
-							createNewIndirectNonterminal(alt, filter.getPosition(), filter.getChild());
-						}
-					}
 
 					if (filter.isLeftMost() && !filter.isChildBinary()) {
 						rewriteRightEnds(filteredNonterminal, filter.getChild());
@@ -962,7 +968,41 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private HeadGrammarSlot createNewIndirectNonterminal(Alternate alt, int position, List<Symbol> filteredAlternate) {
+	private HeadGrammarSlot createNewIndirectNonterminal(Alternate alt, int position, Set<List<Symbol>> filteredAlternate, PrecedencePattern filter) {
+		
+		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
+		
+		HeadGrammarSlot newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+		alt.setNonterminalAt(position, newNonterminal);
+		
+		List<HeadGrammarSlot> list = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
+		if(list == null) {
+			list = new ArrayList<>();
+		}
+		list.add(newNonterminal);
+		
+		List<Alternate> copyAlternates = copyAlternates(filteredNonterminal, filteredNonterminal.getAlternates());
+		newNonterminal.setAlternates(copyAlternates);
+		
+		for(Alternate copyAlt : copyAlternates) {
+			if(copyAlt.getLastBodySlot() instanceof NonterminalGrammarSlot) {
+				NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) copyAlt.getLastBodySlot();
+				if(ntSlot.getNonterminal().getNonterminal().getName().equals(filter.getNonterminal())) {
+					if(filter.isLeftMost()) {
+						createNewNonterminal(copyAlt, 0, filteredAlternate);						
+					} else {
+						createNewNonterminal(copyAlt, copyAlt.size() - 1, filteredAlternate);
+					}
+				} else {
+					if(filter.isLeftMost()) {
+						createNewNonterminal(copyAlt, 0, filteredAlternate);
+					} else {
+						createNewNonterminal(copyAlt, copyAlt.size() - 1, filteredAlternate);
+					}
+				}
+			}
+		}
+		
 		return null;
 	}
 
@@ -1022,12 +1062,12 @@ public class GrammarBuilder implements Serializable {
 	}
 
 
-	private boolean match(Filter filter, Alternate alt) {
+	private boolean match(PrecedencePattern filter, Alternate alt) {
 		if (alt.match(filter.getParent())) {
 
 			HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 
-			// If it the filtered nonterminal is an indirect one
+			// Indirect filter
 			if (!oneLevelOnlyFilters.contains(filter) && !filter.getNonterminal().equals(filteredNonterminal.getNonterminal().getName())) {
 				List<HeadGrammarSlot> nonterminals = new ArrayList<>();
 				getRightEnds(filteredNonterminal, filter.getNonterminal(), nonterminals);
@@ -1054,7 +1094,7 @@ public class GrammarBuilder implements Serializable {
 				}
 			}
 		}
-	}
+	}	
 
 	private void rewriteLeftEnds(HeadGrammarSlot head, List<Symbol> filteredAlternate) {
 		for (Alternate alternate : head.getAlternates()) {
@@ -1154,15 +1194,15 @@ public class GrammarBuilder implements Serializable {
 	 * @param filterdAlternates
 	 * 
 	 */
-	public void addFilter(Nonterminal nonterminal, Rule parent, int position, Rule child) {
+	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
 		String name = nonterminal.getName();
-		Filter filter = new Filter(name, parent.getBody(), position, child.getBody());
+		PrecedencePattern filter = new PrecedencePattern(name, parent.getBody(), position, child.getBody());
 
 		if (name.equals(child.getHead().getName())) {
 			if (filtersMap.containsKey(name)) {
 				filtersMap.get(name).add(filter);
 			} else {
-				Set<Filter> set = new LinkedHashSet<>();
+				Set<PrecedencePattern> set = new LinkedHashSet<>();
 				set.add(filter);
 				filtersMap.put(name, set);
 			}
