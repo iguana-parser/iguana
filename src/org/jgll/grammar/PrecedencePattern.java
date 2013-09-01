@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.parser.HashFunctions;
+
 
 class PrecedencePattern implements Serializable {
 	
@@ -70,6 +72,11 @@ class PrecedencePattern implements Serializable {
 		return position == child.size() - 1;
 	}
 
+	@Override
+	public int hashCode() {
+		return HashFunctions.defaulFunction().hash(nonterminal.hashCode(), position, parent.hashCode());
+	}
+	
 	/**
 	 * Two filters are equal if they can be applied to the same alternate.
 	 * Let F1 be (nonterminal1, parent1, position1, child1) and
