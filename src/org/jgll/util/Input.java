@@ -227,16 +227,10 @@ public class Input {
 		
 		for (int i = 0; i < input.length - 1; i++) {
 			lineColumns[i] = new LineColumn(lineNumber, columnNumber);
-			if (input[i] == '\n') { // unix
+			if (input[i] == '\n') {
 				lineNumber++;
 				columnNumber = 1;
-			} else if(input[i] == '\r' && i < input.length - 2 && input[i + 1] == '\n') { // windows
-				columnNumber = 1;
-//				lineColumns[++i] = new LineColumn(lineNumber, 1);
-				lineNumber++;
-				i++;
-			} else if (input[i] == '\r') { // mac
-				lineNumber++;
+			} else if (input[i] == '\r') {
 				columnNumber = 1;
 			} else {
 				columnNumber++;

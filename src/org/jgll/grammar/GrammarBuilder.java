@@ -3,7 +3,6 @@ package org.jgll.grammar;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,11 +26,10 @@ import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.parser.GLLParserInternals;
-import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.recognizer.RecognizerFactory;
-import org.jgll.util.Input;
-import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.grammar.slotaction.LineActions;
+import org.jgll.grammar.slotaction.NotFollowActions;
+import org.jgll.grammar.slotaction.NotMatchActions;
+import org.jgll.grammar.slotaction.NotPrecedeActions;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class GrammarBuilder implements Serializable {
@@ -204,61 +202,6 @@ public class GrammarBuilder implements Serializable {
 		return this;
 	}
 
-	private void addNotPrecede(BodyGrammarSlot slot, final List<Terminal> terminals) {
-		log.debug("Precede restriction added %s <<! %s", terminals, slot);
-		
-		BitSet testSet = new BitSet();
-		
-		for(Terminal t : terminals) {
-			testSet.or(t.asBitSet());
-		}
-		
-		final BitSet set = testSet;
-		
-		
-		slot.addPreCondition(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
-				
-				int ci = parser.getCurrentInputIndex();
-				if (ci == 0) {
-					return false;
-				}
-			
-				return set.get(input.charAt(ci - 1));
-			}
-		});
-	}
-	
-	private void addNotPrecede2(BodyGrammarSlot slot, final List<Keyword> list) {
-		log.debug("Precede restriction added %s <<! %s", list, slot);
-		
-		slot.addPreCondition(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
-				int ci = parser.getCurrentInputIndex();
-				if (ci == 0) {
-					return false;
-				}
-				
-				for(Keyword keyword : list) {
-					if(input.matchBackward(ci, keyword.getChars())) {
-						return true;
-					}
-				}
-				
-				return false;
-			}
-		});
-
-	}
-	
 	private void addCondition(BodyGrammarSlot slot, final Condition condition) {
 
 		switch (condition.getType()) {
@@ -268,11 +211,11 @@ public class GrammarBuilder implements Serializable {
 				
 			case NOT_FOLLOW:
 				if (condition instanceof TerminalCondition) {
-					addNotFollow1(slot.next(), ((TerminalCondition) condition).getTerminals());
+					NotFollowActions.fromTerminalList(slot.next(), ((TerminalCondition) condition).getTerminals());
 				} else if (condition instanceof KeywordCondition) {
-					addNotFollow2(slot.next(), ((KeywordCondition) condition).getKeywords());
+					NotFollowActions.fromKeywordList(slot.next(), ((KeywordCondition) condition).getKeywords());
 				} else {
-					addNotFollow(slot.next(), convertCondition((ContextFreeCondition) condition));
+					NotFollowActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition));
 				}
 				break;
 				
@@ -284,10 +227,10 @@ public class GrammarBuilder implements Serializable {
 				
 				if(condition instanceof KeywordCondition) {
 					KeywordCondition literalCondition = (KeywordCondition) condition;
-					addNotPrecede2(slot, literalCondition.getKeywords());
+					NotPrecedeActions.fromKeywordList(slot, literalCondition.getKeywords());
 				} else {
 					TerminalCondition terminalCondition = (TerminalCondition) condition;
-					addNotPrecede(slot, terminalCondition.getTerminals());
+					NotPrecedeActions.fromTerminalList(slot, terminalCondition.getTerminals());
 				}
 				break;
 				
@@ -296,173 +239,23 @@ public class GrammarBuilder implements Serializable {
 					
 			case NOT_MATCH:
 				if(condition instanceof ContextFreeCondition) {
-					addNotMatch(slot.next(), convertCondition((ContextFreeCondition) condition));
+					NotMatchActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition));
 				} else {
 					KeywordCondition simpleCondition = (KeywordCondition) condition;
-					addNotMatch(slot.next(), simpleCondition.getKeywords());
+					NotMatchActions.fromKeywordList(slot.next(), simpleCondition.getKeywords());
 				}
 				break;
 				
 			case START_OF_LINE:
-			  addStartOfLine(slot);
+			  LineActions.addStartOfLine(slot);
 			  break;
 			  
 			case END_OF_LINE:
-			  addEndOfLine(slot.next());
+			  LineActions.addEndOfLine(slot.next());
 			  break;
 		}
 	}
-	
-	private void addEndOfLine(BodyGrammarSlot slot) {
-    slot.addPopAction(new SlotAction<Boolean>() {
-      private static final long serialVersionUID = 1L;
-      
-      @Override
-      public Boolean execute(GLLParserInternals parser, Input input) {
-        return input.isEndOfLine(parser.getCurrentInputIndex());
-      }
-    });
-  }
-
-  private void addStartOfLine(BodyGrammarSlot slot) {
-    slot.addPopAction(new SlotAction<Boolean>() {
-      private static final long serialVersionUID = 1L;
-      
-      @Override
-      public Boolean execute(GLLParserInternals parser, Input input) {
-        return input.isStartOfLine(parser.getCurrentInputIndex());
-      }
-    });
-    
-  }
-
-  private void addNotMatch(BodyGrammarSlot slot, final BodyGrammarSlot ifNot) {
-
-		slot.addPopAction(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
-				GLLRecognizer recognizer = RecognizerFactory.contextFreeRecognizer();
-				return recognizer.recognize(input, parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), ifNot);
-			}
-		});
 		
-	}
-	
-	private void addNotMatch(BodyGrammarSlot slot, final List<Keyword> list) {
-		
-		if(list.size() == 1) {
-			final Keyword s = list.get(0);
-			
-			slot.addPopAction(new SlotAction<Boolean>() {
-				
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public Boolean execute(GLLParserInternals parser, Input input) {
-					return input.match(parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), s.getChars());
-				}
-			});
-			
-		} 
-		
-		else if(list.size() == 2) {
-			final Keyword s1 = list.get(0);
-			final Keyword s2 = list.get(1);
-			
-			slot.addPopAction(new SlotAction<Boolean>() {
-				
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public Boolean execute(GLLParserInternals parser, Input input) {
-					int begin = parser.getCurrentGSSNode().getInputIndex();
-					int end = parser.getCurrentInputIndex();
-					return input.match(begin, end, s1.getChars()) ||
-						   input.match(begin, end, s2.getChars())	;
-				}
-			});
-		} 
-		
-		else {
-			final CuckooHashSet<Keyword> set = new CuckooHashSet<>(Keyword.externalHasher);
-			for(Keyword s : list) {
-				set.add(s);
-			}
-			
-			slot.addPopAction(new SlotAction<Boolean>() {
-
-				private static final long serialVersionUID = 1L;
-				
-				@Override
-				public Boolean execute(GLLParserInternals parser, Input input) {
-					int begin = parser.getCurrentGSSNode().getInputIndex();
-					int end = parser.getCurrentInputIndex() - 1;
-					Keyword subInput = new Keyword("", input.subInput(begin, end));
-					return set.contains(subInput);
-				}
-			});
-			
-		}
-		
-	}
-
-	private void addNotFollow(BodyGrammarSlot slot, final BodyGrammarSlot firstSlot) {
-		
-		slot.addPopAction(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
-				GLLRecognizer recognizer = RecognizerFactory.prefixContextFreeRecognizer();
-				return recognizer.recognize(input, parser.getCurrentInputIndex(), input.size(), firstSlot);
-			}
-		});
-	}
-	
-	private void addNotFollow2(BodyGrammarSlot slot, final List<Keyword> list) {
-		
-		slot.addPopAction(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
-				for(Keyword s : list) {
-					if(input.match(parser.getCurrentInputIndex(), s.getChars())) {
-						return true;
-					}
-				}
-				return false;
-			}
-		});
-	}
-	
-	private void addNotFollow1(BodyGrammarSlot slot, List<Terminal> list) {
-		
-		BitSet testSet = new BitSet();
-		
-		for(Terminal t : list) {
-			testSet.or(t.asBitSet());
-		}
-		
-		final BitSet set = testSet;
-		
-		slot.addPopAction(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
-				return set.get(input.charAt(parser.getCurrentInputIndex()));
-			}
-		});
-		
-	}
-	
 	private BodyGrammarSlot convertCondition(ContextFreeCondition condition) {
 		
 		if(condition == null) {
@@ -1439,6 +1232,4 @@ public class GrammarBuilder implements Serializable {
 			newNonterminalsMap.get(nonterminalName).retainAll(referedNonterminals);
 		}
 	}
-
-	
 }

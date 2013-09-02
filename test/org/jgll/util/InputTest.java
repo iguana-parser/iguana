@@ -54,8 +54,8 @@ public class InputTest {
 	public void testMatch2() {
 		input = Input.fromString("We are just another brick in the wall");
 		
-		assertTrue(input.match(3, 11, "are just"));
 		assertTrue(input.match(0, 2, "We"));
+		assertTrue(input.match(3, 11, "are just"));
 	}
 	
 	@Test
