@@ -87,7 +87,7 @@ public class Alternate implements Serializable {
 		return true;
 	}
 	
-	public BodyGrammarSlot getBodyGrammarSlotAt(int index) {
+	public BodyGrammarSlot getSlotAt(int index) {
 		return symbols.get(index);
 	}
 	
@@ -96,7 +96,7 @@ public class Alternate implements Serializable {
 	 * 
 	 * @return
 	 */
-	public BodyGrammarSlot getLastBodySlot() {
+	public BodyGrammarSlot getLastSlot() {
 		return symbols.get(symbols.size() - 1);
 	}
 	

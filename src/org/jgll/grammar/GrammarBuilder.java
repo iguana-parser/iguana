@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ContextFreeCondition;
@@ -629,8 +628,8 @@ public class GrammarBuilder implements Serializable {
 	private Set<HeadGrammarSlot> getDirectReachableNonterminals(HeadGrammarSlot head) {
 		Set<HeadGrammarSlot> set = new HashSet<>();
 		for(Alternate alt : head.getAlternates()) {
-			if(alt.getBodyGrammarSlotAt(0) instanceof NonterminalGrammarSlot) {
-				set.add(((NonterminalGrammarSlot)alt.getBodyGrammarSlotAt(0)).getNonterminal());
+			if(alt.getSlotAt(0) instanceof NonterminalGrammarSlot) {
+				set.add(((NonterminalGrammarSlot)alt.getSlotAt(0)).getNonterminal());
 			}
 		}
 		return set;
@@ -850,7 +849,7 @@ public class GrammarBuilder implements Serializable {
 		for (Entry<String, List<PrecedencePattern>> entry : patternsMap.entrySet()) {
 			log.debug("Filtering %s with %d.", entry.getKey(), entry.getValue().size());
 
-			rewriteFirstLevel(nonterminalsMap.get(entry.getKey()), processFilters(entry.getValue()));
+			rewriteFirstLevel(nonterminalsMap.get(entry.getKey()), groupFilters(entry.getValue()));
 			filterDeep(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 
@@ -880,7 +879,7 @@ public class GrammarBuilder implements Serializable {
 	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<PrecedencePattern> filters) {
 		for (Alternate alt : head.getAlternates()) {
 			for (PrecedencePattern filter : filters) {
-				if (match(filter, alt)) {
+				if (alt.match(filter.getParent())) {
 
 					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
 					HeadGrammarSlot newNonterminal = createNewNonterminal(alt, filter.getPosition(), filter.getChild());
@@ -911,7 +910,16 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private Map<PrecedencePattern, Set<List<Symbol>>> processFilters(List<PrecedencePattern> patterns) {
+	/**
+	 * Groups filters based on their parent and position.
+	 * For example, two filters (E, E * .E, E + E) and
+	 * (E, E * .E, E * E) will be grouped as:
+	 * (E, E * .E, {E * E, E + E}) 
+	 * 
+	 * @param patterns
+	 * @return
+	 */
+	private Map<PrecedencePattern, Set<List<Symbol>>> groupFilters(List<PrecedencePattern> patterns) {
 		Map<PrecedencePattern, Set<List<Symbol>>> group = new LinkedHashMap<>();
 		
 		for(PrecedencePattern pattern : patterns) {
@@ -1013,8 +1021,8 @@ public class GrammarBuilder implements Serializable {
 	
 	private void createIndirectPaths(HeadGrammarSlot freshIndirectNonterminal, HeadGrammarSlot freshNontemrinal) {
 		for(Alternate alt : freshIndirectNonterminal.getAlternates()) {
-			if(alt.getLastBodySlot() instanceof NonterminalGrammarSlot) {
-				NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) alt.getLastBodySlot();
+			if(alt.getLastSlot() instanceof NonterminalGrammarSlot) {
+				NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) alt.getLastSlot();
 				if(ntSlot.getNonterminal().getNonterminal().equals(freshNontemrinal.getNonterminal())) {
 					alt.setNonterminalAt(alt.size() - 1, freshNontemrinal);
 				} else {
@@ -1045,50 +1053,6 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 	}
-	
-	private boolean isBinary(Nonterminal head, List<Symbol> body) {
-		
-		if(body.size() < 2) {
-			return false;
-		}
-		
-		Symbol first = body.get(0);
-		Symbol last = body.get(body.size() - 1);
-		
-		if(!(first instanceof Nonterminal) || !(last instanceof Nonterminal)) {
-			return false;
-		}
-		
-		if(head.equals(first) && head.equals(last)) {
-			return true;
-		}
-
-		if(head.equals(first)) {
-			List<HeadGrammarSlot> list = new ArrayList<>();
-			getRightEnds(nonterminalsMap.get(last.getName()), head.getName(), list);
-			
-			Set<Nonterminal> reachableNonterminals = new HashSet<>();
-			for(HeadGrammarSlot nt : list) {
-				reachableNonterminals.add(nt.getNonterminal());
-			}
-			
-			return reachableNonterminals.contains(head);
-		}
-		
-		if(head.equals(last)) {
-			List<HeadGrammarSlot> list = new ArrayList<>();
-			getLeftEnds(nonterminalsMap.get(last.getName()), head.getName(), list);
-			
-			Set<Nonterminal> reachableNonterminals = new HashSet<>();
-			for(HeadGrammarSlot nt : list) {
-				reachableNonterminals.add(nt.getNonterminal());
-			}
-			
-			return reachableNonterminals.contains(head);
-		}
-		
-		return false;
-	}
 
 	private HeadGrammarSlot createNewNonterminal(Alternate alt, int position, List<Symbol> filteredAlternate) {
 		
@@ -1117,35 +1081,44 @@ public class GrammarBuilder implements Serializable {
 		return newNonterminal;
 	}
 
-	private boolean match(PrecedencePattern filter, Alternate alt) {
-		if (alt.match(filter.getParent())) {
-
-			HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-
-			// Indirect filter
-			if (!oneLevelOnlyFilters.contains(filter) && !filter.getNonterminal().equals(filteredNonterminal.getNonterminal().getName())) {
-				List<HeadGrammarSlot> nonterminals = new ArrayList<>();
-				getRightEnds(filteredNonterminal, filter.getNonterminal(), nonterminals);
-				for(HeadGrammarSlot nonterminal : nonterminals) {
-					if(nonterminal.contains(filter.getChild())) {
-						return true;
-					}
-				}
-			} else {
-				if (filteredNonterminal.contains(filter.getChild())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	private void rewriteRightEnds(HeadGrammarSlot head, PrecedencePattern pattern) {
 		for (Alternate alternate : head.getAlternates()) {
-			if (alternate.isBinary(head) || alternate.isUnaryPrefix(head)) {
-				HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, pattern.getChild());
-				if(newNonterminal != ((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(alternate.size() - 1)).getNonterminal()) {
-					rewriteRightEnds(newNonterminal, pattern);
+			
+			if(!(alternate.getLastSlot() instanceof NonterminalGrammarSlot)) {
+				continue;
+			}
+			
+			HeadGrammarSlot last = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
+			
+			if(pattern.isDirect()) {
+				if (last.getNonterminal().equals(head.getNonterminal())) {
+					HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, pattern.getChild());
+					if(newNonterminal != ((NonterminalGrammarSlot) alternate.getSlotAt(alternate.size() - 1)).getNonterminal()) {
+						rewriteLeftEnds(newNonterminal, pattern);
+					}
+				}				
+			} else {
+				if(isRightRecursive(last, new Nonterminal(pattern.getNonterminal()))) {
+					
+					HeadGrammarSlot newHead = existingIndirectNonterminals.get(pattern);
+					
+					if(newHead == null) {
+						newHead = new HeadGrammarSlot(last.getNonterminal());
+						List<Alternate> copyAlternates = copyAlternates(newHead, last.getAlternates());
+						
+						alternate.setNonterminalAt(0, newHead);
+						newHead.setAlternates(copyAlternates);
+						
+						for(Alternate a : copyAlternates) {
+							if (a.match(pattern.getParent())) {
+								HeadGrammarSlot f = a.getNonterminalAt(pattern.getPosition());
+								rewriteLeftEnds(f, pattern);
+							}
+						}
+					}
+					else {
+						alternate.setNonterminalAt(0, newHead);
+					}
 				}
 			}
 		}
@@ -1163,7 +1136,7 @@ public class GrammarBuilder implements Serializable {
 			if(pattern.isDirect()) {
 				if (first.getNonterminal().equals(head.getNonterminal())) {
 					HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, 0, pattern.getChild());
-					if(newNonterminal != ((NonterminalGrammarSlot) alternate.getBodyGrammarSlotAt(0)).getNonterminal()) {
+					if(newNonterminal != ((NonterminalGrammarSlot) alternate.getSlotAt(0)).getNonterminal()) {
 						rewriteLeftEnds(newNonterminal, pattern);
 					}
 				}				
@@ -1203,7 +1176,19 @@ public class GrammarBuilder implements Serializable {
 		}
 		return reachableNonterminals.contains(head);
 	}
+	
+	
+	private boolean isRightRecursive(HeadGrammarSlot nonterminal, Nonterminal head) {
+		List<HeadGrammarSlot> list = new ArrayList<>();
+		getRightEnds(nonterminal, head.getName(), list);
+		Set<Nonterminal> reachableNonterminals = new HashSet<>();
+		for(HeadGrammarSlot nt : list) {
+			reachableNonterminals.add(nt.getNonterminal());
+		}
+		return reachableNonterminals.contains(head);
+	}
 
+	
 	/**
 	 * 
 	 * Returns a list of all nonterminals with the given name which are
@@ -1215,8 +1200,8 @@ public class GrammarBuilder implements Serializable {
 	 */
 	private void getRightEnds(HeadGrammarSlot head, String name, List<HeadGrammarSlot> nonterminals) {
 		for (Alternate alt : head.getAlternates()) {
-			if (alt.getLastBodySlot() instanceof NonterminalGrammarSlot) {
-				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alt.getLastBodySlot()).getNonterminal();
+			if (alt.getLastSlot() instanceof NonterminalGrammarSlot) {
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) alt.getLastSlot()).getNonterminal();
 				if (nonterminal.getNonterminal().getName().equals(name)) {
 					nonterminals.add(nonterminal);
 				} else {
@@ -1241,7 +1226,6 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 	}
-	
 
 	private List<Alternate> copyAlternates(HeadGrammarSlot head, Iterable<Alternate> list) {
 		List<Alternate> copyList = new ArrayList<>();

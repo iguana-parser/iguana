@@ -88,7 +88,7 @@ public class FilterTest3 {
 	@Test
 	public void testInput() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaaaaaaaa"), grammar, "E");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", sppf);
+		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/output", sppf);
 	}
 
 
