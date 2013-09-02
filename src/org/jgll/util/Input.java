@@ -108,7 +108,7 @@ public class Input {
 	}
 	
 	public boolean match(int start, int end, int[] target) {
-		if(target.length != end - start + 1) {
+		if(target.length != end - start) {
 			return false;
 		}
 	 	
