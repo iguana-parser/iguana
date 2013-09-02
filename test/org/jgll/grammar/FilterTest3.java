@@ -8,6 +8,7 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -78,11 +79,17 @@ public class FilterTest3 {
 		levelParser = ParserFactory.levelParser(grammar);
 	}
 
-	@Test
 	public void testParsers() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aaa+aaaa+aaaa"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aaa+aaaa+aaaa"), grammar, "E");
 		assertEquals(true, sppf1.equals(sppf2));
 	}
+	
+	@Test
+	public void testInput() throws ParseError {
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaaa"), grammar, "E");
+		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/output", sppf);
+	}
+
 
 }
