@@ -643,7 +643,7 @@ public class GrammarBuilder implements Serializable {
 			log.debug("Filtering %s with %d.", entry.getKey(), entry.getValue().size());
 
 			rewriteFirstLevel(nonterminalsMap.get(entry.getKey()), groupFilters(entry.getValue()));
-			filterDeep(nonterminalsMap.get(entry.getKey()), entry.getValue());
+			rewriteDeeperLevels(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 
 		for (PrecedencePattern filter : oneLevelOnlyFilters) {
@@ -669,35 +669,12 @@ public class GrammarBuilder implements Serializable {
 		return names;
 	}
 
-	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<PrecedencePattern> filters) {
+	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<PrecedencePattern> patterns) {
 		for (Alternate alt : head.getAlternates()) {
-			for (PrecedencePattern filter : filters) {
-				if (alt.match(filter.getParent())) {
-
-					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(filter.getPosition());
-					HeadGrammarSlot newNonterminal = createNewNonterminal(alt, filter.getPosition(), filter.getChild());
-					alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-
-					if (newNonterminal == null || newNonterminal.getNonterminal().getName() != filteredNonterminal.getNonterminal().getName()) {
-						
-						
-						newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
-						
-						List<HeadGrammarSlot> newNonterminals = newNonterminalsMap.get(newNonterminal.getNonterminal().getName());
-						if(newNonterminals == null) {
-							newNonterminals = new ArrayList<>();
-							newNonterminalsMap.put(newNonterminal.getNonterminal().getName(), newNonterminals);
-						}
-						newNonterminals.add(newNonterminal);
-
-						List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.getAlternates());
-						newNonterminal.setAlternates(copy);
-						newNonterminal.remove(filter.getChild());
-						existingAlternates.put(new HashSet<>(copyAlternates(newNonterminal, copy)), newNonterminal);
-						onlyFirstLevelFilter(newNonterminal, filters);
-					} else {
-						alt.setNonterminalAt(filter.getPosition(), newNonterminal);
-					}
+			for (PrecedencePattern pattern : patterns) {
+				if (alt.match(pattern.getParent())) {
+					HeadGrammarSlot newNonterminal = createNewNonterminal(alt, pattern.getPosition(), pattern.getChild());
+					alt.setNonterminalAt(pattern.getPosition(), newNonterminal);
 				}
 			}
 		}
@@ -826,7 +803,7 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
-	private void filterDeep(HeadGrammarSlot head, List<PrecedencePattern> patterns) {
+	private void rewriteDeeperLevels(HeadGrammarSlot head, List<PrecedencePattern> patterns) {
 		for (Alternate alt : head.getAlternates()) {
 			
 			for (PrecedencePattern pattern : patterns) {
@@ -1098,6 +1075,12 @@ public class GrammarBuilder implements Serializable {
 			}
 			log.debug("Filter added %s (deep)", filter);
 		} else {
+			/**
+			 * To support the ! operator in Rascal. A pattern such as (E, alpha . beta, gamma) 
+			 * where gamma is not an alternate of E is only applied at one level. 
+			 * 
+			 * TODO: create separate patterns from the ! operator.
+			 */
 			oneLevelOnlyFilters.add(filter);
 			log.debug("Filter added %s (one level only)", filter);
 		}
