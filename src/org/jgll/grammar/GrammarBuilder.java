@@ -849,7 +849,7 @@ public class GrammarBuilder implements Serializable {
 
 	private void rewriteRightEnds(HeadGrammarSlot head, PrecedencePattern pattern) {
 		
-		log.debug("Rewrite right end %s with %s", head, pattern);
+		log.trace("Rewrite right end %s with %s", head, pattern);
 		
 		for (Alternate alternate : head.getAlternates()) {
 			
@@ -871,9 +871,10 @@ public class GrammarBuilder implements Serializable {
 					
 					if(newHead == null) {
 						newHead = new HeadGrammarSlot(last.getNonterminal());
+						alternate.setNonterminalAt(alternate.size() - 1, newHead);
+						
 						List<Alternate> copyAlternates = copyAlternates(newHead, last.getAlternates());
 						
-						alternate.setNonterminalAt(0, newHead);
 						newHead.setAlternates(copyAlternates);
 						
 						existingIndirectNonterminals.put(pattern, newHead);
@@ -886,7 +887,7 @@ public class GrammarBuilder implements Serializable {
 						}
 					}
 					else {
-						alternate.setNonterminalAt(0, newHead);
+						alternate.setNonterminalAt(alternate.size() - 1, newHead);
 					}
 				}
 			}
