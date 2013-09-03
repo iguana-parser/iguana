@@ -190,7 +190,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		
 		NonterminalGrammarSlot other = (NonterminalGrammarSlot) slot;
 		
-		return nonterminal.equals(other.nonterminal);
+		return nonterminal.getNonterminal().equals(other.nonterminal.getNonterminal());
 	}
 	
 }

@@ -35,9 +35,9 @@ public class FilterTest3 {
 	public void init() {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
+		Nonterminal E = new Nonterminal("E");
 		
 		// E ::= E E+
-		Nonterminal E = new Nonterminal("E");
 		Rule rule1 = new Rule(E, list(E, new Nonterminal("E+", true)));
 		builder.addRule(rule1);
 		

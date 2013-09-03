@@ -3,7 +3,6 @@ package org.jgll.grammar;
 import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.parser.HashFunctions;
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -74,7 +73,7 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(name.hashCode());
+		return name.hashCode();
 	}
 
 }

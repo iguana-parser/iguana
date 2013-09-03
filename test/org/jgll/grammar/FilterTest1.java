@@ -11,7 +11,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,7 +54,6 @@ public class FilterTest1 {
 		builder.rewritePrecedenceRules();
 
 		grammar = builder.build();
-		System.out.println(grammar);
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);
 	}
@@ -70,7 +68,6 @@ public class FilterTest1 {
 	@Test
 	public void testInput() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+-a+a"), grammar, "E");
-		Visualization.generateSPPFGraph("/Users/ali/output", sppf);
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
 

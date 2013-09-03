@@ -203,7 +203,21 @@ public class Alternate implements Serializable {
 		BodyGrammarSlot current = firstSlot;
 
 		while(current != null) {
-			hashBuilder.addInt(current.getId());
+			
+			if(current instanceof NonterminalGrammarSlot) {
+				hashBuilder.addInt(((NonterminalGrammarSlot) current).getNonterminal().getNonterminal().hashCode());				
+			} 
+			else if(current instanceof TerminalGrammarSlot) {
+				hashBuilder.addInt(((TerminalGrammarSlot) current).getTerminal().hashCode());
+			} 
+			else if(current instanceof KeywordGrammarSlot) {
+				hashBuilder.addInt(((KeywordGrammarSlot) current).getKeyword().hashCode());
+			} 
+			else {
+				// Last grammar slot
+				hashBuilder.addInt(0);
+			}
+			
 			current = current.next();
 		}
 		
