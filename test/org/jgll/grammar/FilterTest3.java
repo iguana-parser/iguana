@@ -57,7 +57,7 @@ public class FilterTest3 {
 		Rule rule5 = new Rule(new Nonterminal("E+", true), list(E));
 		builder.addRule(rule5);
 		
-		// (E ::= .E E+, E E+) 
+		// (E ::= .E E+, E E+)
 		builder.addPrecedencePattern(E, rule1, 0, rule1);
 		
 		// (E ::= E .E+, E E+)
@@ -75,6 +75,7 @@ public class FilterTest3 {
 		builder.rewritePrecedenceRules();
 		
 		grammar = builder.build();
+		System.out.println(grammar);
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);
 	}
