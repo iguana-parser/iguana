@@ -798,23 +798,31 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 
+	
 	private void rewriteDeeperLevels(HeadGrammarSlot head, List<PrecedencePattern> patterns) {
-		for (Alternate alt : head.getAlternates()) {
+
+		boolean changed = true;
+		
+		while(changed) {
 			
-			for (PrecedencePattern pattern : patterns) {
+			changed = false;
+			
+			List<HeadGrammarSlot> nonterminals = new ArrayList<>(newNonterminalsMap.get(head.getNonterminal().getName()));
+			nonterminals.add(0, head);
+			
+			for(HeadGrammarSlot nt : nonterminals) {
+				for (Alternate alt : nt.getAlternates()) {
+					
+					for (PrecedencePattern pattern : patterns) {
+						if (pattern.isLeftMost() && alt.match(pattern.getParent())) {
+							changed |= rewriteRightEnds(alt.getNonterminalAt(0), pattern);
+						}
 
-				if (alt.match(pattern.getParent())) {
-
-					HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(pattern.getPosition());
-
-					if (pattern.isLeftMost()) {
-						rewriteRightEnds(filteredNonterminal, pattern);
+						if (pattern.isRightMost() && alt.match(pattern.getParent()) ){
+							changed |= rewriteLeftEnds(alt.getNonterminalAt(alt.size() - 1), pattern);
+						}
 					}
-
-					if (pattern.isRightMost()) {
-						rewriteLeftEnds(filteredNonterminal, pattern);
-					}
-				}
+				}				
 			}
 		}
 	}
@@ -822,9 +830,13 @@ public class GrammarBuilder implements Serializable {
 	private boolean createNewNonterminal(Alternate alt, int position, List<Symbol> filteredAlternate) {
 		
 		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
-				
+		
+		
 		HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternate));
+		
+		
 		if(newNonterminal == null) {
+			
 			newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 			
 			List<HeadGrammarSlot> set = newNonterminalsMap.get(filteredNonterminal.getNonterminal().getName());
@@ -847,9 +859,13 @@ public class GrammarBuilder implements Serializable {
 			
 	}
 
-	private void rewriteRightEnds(HeadGrammarSlot head, PrecedencePattern pattern) {
-		
-		log.trace("Rewrite right end %s with %s", head, pattern);
+	/**
+	 * Rewrites the right ends of the first nonterminal in the given alternate.
+	 * 
+	 * @param alt
+	 * @param pattern
+	 */
+	private boolean rewriteRightEnds(HeadGrammarSlot head, PrecedencePattern pattern) {
 		
 		for (Alternate alternate : head.getAlternates()) {
 			
@@ -861,12 +877,14 @@ public class GrammarBuilder implements Serializable {
 			
 			// If the nonterminal is the same as the head of the pattern
 			if (last.getNonterminal().getName().equals(pattern.getNonterminal())) {
-				if(createNewNonterminal(alternate, alternate.size() - 1, pattern.getChild())) {
-					rewriteRightEnds(alternate.getNonterminalAt(alternate.size() - 1), pattern);
-				}					
+				if(last.contains(pattern.getChild())) {
+					if (createNewNonterminal(alternate, alternate.size() - 1, pattern.getChild())) {
+						rewriteRightEnds(alternate.getNonterminalAt(alternate.size() - 1), pattern);
+					}
+					return true;
+				}
 			} else {
-				if(isRightRecursive(last, new Nonterminal(pattern.getNonterminal()))) {
-					
+				if(containsRight(last, pattern)) {
 					HeadGrammarSlot newHead = existingIndirectNonterminals.get(pattern);
 					
 					if(newHead == null) {
@@ -881,20 +899,23 @@ public class GrammarBuilder implements Serializable {
 						
 						for(Alternate a : copyAlternates) {
 							if (a.match(pattern.getParent())) {
-								HeadGrammarSlot f = a.getNonterminalAt(a.size() - 1);
-								rewriteRightEnds(f, pattern);
+								rewriteRightEnds(a.getNonterminalAt(a.size() - 1), pattern);
 							}
 						}
 					}
 					else {
 						alternate.setNonterminalAt(alternate.size() - 1, newHead);
+						return true;
 					}
 				}
 			}
 		}
+		
+		return false;
 	}	
 
-	private void rewriteLeftEnds(HeadGrammarSlot head, PrecedencePattern pattern) {
+	private boolean rewriteLeftEnds(HeadGrammarSlot head, PrecedencePattern pattern) {
+
 		for (Alternate alternate : head.getAlternates()) {
 			
 			if(!(alternate.getFirstSlot() instanceof NonterminalGrammarSlot)) {
@@ -905,12 +926,14 @@ public class GrammarBuilder implements Serializable {
 			
 			if (first.getNonterminal().getName().equals(pattern.getNonterminal())) {
 				if(first.contains(pattern.getChild())) {
-					if(createNewNonterminal(alternate, 0, pattern.getChild())) { 
+					if(createNewNonterminal(alternate, 0, pattern.getChild())) {
 						rewriteLeftEnds(alternate.getNonterminalAt(0), pattern);
+						return true;
 					}
 				}
 			} else {
-				if(isLeftRecursive(first, new Nonterminal(pattern.getNonterminal()))) {
+				
+				if(containsLeft(first, pattern)) {
 					
 					HeadGrammarSlot newHead = existingIndirectNonterminals.get(pattern);
 					
@@ -925,40 +948,48 @@ public class GrammarBuilder implements Serializable {
 						
 						for(Alternate a : copyAlternates) {
 							if (a.match(pattern.getParent())) {
-								HeadGrammarSlot f = a.getNonterminalAt(0);
-								rewriteLeftEnds(f, pattern);
+								rewriteLeftEnds(a.getNonterminalAt(0), pattern);
 							}
 						}
 					}
 					else {
 						alternate.setNonterminalAt(0, newHead);
+						return true;
 					}
 				}
 			}
 		}
-	}
-	
-	private boolean isLeftRecursive(HeadGrammarSlot nonterminal, Nonterminal head) {
-		List<HeadGrammarSlot> list = new ArrayList<>();
-		getLeftEnds(nonterminal, head.getName(), list, new HashSet<HeadGrammarSlot>());
-		Set<Nonterminal> reachableNonterminals = new HashSet<>();
-		for(HeadGrammarSlot nt : list) {
-			reachableNonterminals.add(nt.getNonterminal());
-		}
-		return reachableNonterminals.contains(head);
-	}
-	
-	
-	private boolean isRightRecursive(HeadGrammarSlot nonterminal, Nonterminal head) {
-		List<HeadGrammarSlot> list = new ArrayList<>();
-		getRightEnds(nonterminal, head.getName(), list, new HashSet<HeadGrammarSlot>());
-		Set<Nonterminal> reachableNonterminals = new HashSet<>();
-		for(HeadGrammarSlot nt : list) {
-			reachableNonterminals.add(nt.getNonterminal());
-		}
-		return reachableNonterminals.contains(head);
+		
+		return false;
 	}
 
+	private boolean containsLeft(HeadGrammarSlot nonterminal, PrecedencePattern pattern) {
+		List<HeadGrammarSlot> list = new ArrayList<>();
+		getLeftEnds(nonterminal, new Nonterminal(pattern.getNonterminal()).getName(), list, new HashSet<HeadGrammarSlot>());
+		
+		if(list.size() != 0) {
+			for(HeadGrammarSlot reachableNt : list) {
+				if(reachableNt.contains(pattern.getChild())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean containsRight(HeadGrammarSlot nonterminal, PrecedencePattern pattern) {
+		List<HeadGrammarSlot> list = new ArrayList<>();
+		getRightEnds(nonterminal, new Nonterminal(pattern.getNonterminal()).getName(), list, new HashSet<HeadGrammarSlot>());
+	
+		if(list.size() != 0) {
+			for(HeadGrammarSlot reachableNt : list) {
+				if(reachableNt.contains(pattern.getChild())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	/**
 	 * 

@@ -69,7 +69,7 @@ public class FilterTest3 {
 		// (E ::= E .E+, E + E)
 		builder.addPrecedencePattern(E, rule1, 1, rule2);
 		
-		// (E ::= E .E, E + E)
+		// (E ::= E + .E, E + E)
 		builder.addPrecedencePattern(E, rule2, 2, rule2);
 		
 		builder.rewritePrecedenceRules();
