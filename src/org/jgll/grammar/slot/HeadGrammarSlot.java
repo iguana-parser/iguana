@@ -194,6 +194,15 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 		return false;
 	}
+	
+	public boolean contains(Set<List<Symbol>> set) {
+		for(List<Symbol> list : set) {
+			if(contains(list)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {

@@ -10,7 +10,6 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -76,7 +75,6 @@ public class FilterTest7 {
 		builder.rewritePrecedenceRules();
 		
 		grammar = builder.build();
-		System.out.println(grammar);
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);
 	}
@@ -89,14 +87,84 @@ public class FilterTest7 {
 	
 	@Test
 	public void testInput() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaaa"), grammar, "E");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", sppf);
-//		assertTrue(sppf.deepEquals(getSPPF()));
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaa+aaaaa+aa"), grammar, "E");
+		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 
 	
 	private NonterminalSymbolNode getSPPF() {
-		return null;
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 12);
+		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E [+] . E2"), 0, 10);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 9);
+		IntermediateNode node4 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E [+] . E2"), 0, 4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 0, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 0, 1);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 0, 1);
+		TerminalSymbolNode node9 = new TerminalSymbolNode(97, 0);
+		node8.addChild(node9);
+		node7.addChild(node8);
+		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 1, 2);
+		TerminalSymbolNode node11 = new TerminalSymbolNode(97, 1);
+		node10.addChild(node11);
+		node6.addChild(node7);
+		node6.addChild(node10);
+		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 2, 3);
+		TerminalSymbolNode node13 = new TerminalSymbolNode(97, 2);
+		node12.addChild(node13);
+		node5.addChild(node6);
+		node5.addChild(node12);
+		TerminalSymbolNode node14 = new TerminalSymbolNode(43, 3);
+		node4.addChild(node5);
+		node4.addChild(node14);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 4, 9);
+		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 4, 8);
+		NonterminalSymbolNode node17 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 4, 7);
+		NonterminalSymbolNode node18 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 4, 6);
+		NonterminalSymbolNode node19 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 4, 5);
+		NonterminalSymbolNode node20 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 4, 5);
+		TerminalSymbolNode node21 = new TerminalSymbolNode(97, 4);
+		node20.addChild(node21);
+		node19.addChild(node20);
+		NonterminalSymbolNode node22 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 5, 6);
+		TerminalSymbolNode node23 = new TerminalSymbolNode(97, 5);
+		node22.addChild(node23);
+		node18.addChild(node19);
+		node18.addChild(node22);
+		NonterminalSymbolNode node24 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 6, 7);
+		TerminalSymbolNode node25 = new TerminalSymbolNode(97, 6);
+		node24.addChild(node25);
+		node17.addChild(node18);
+		node17.addChild(node24);
+		NonterminalSymbolNode node26 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 7, 8);
+		TerminalSymbolNode node27 = new TerminalSymbolNode(97, 7);
+		node26.addChild(node27);
+		node16.addChild(node17);
+		node16.addChild(node26);
+		NonterminalSymbolNode node28 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 8, 9);
+		TerminalSymbolNode node29 = new TerminalSymbolNode(97, 8);
+		node28.addChild(node29);
+		node15.addChild(node16);
+		node15.addChild(node28);
+		node3.addChild(node4);
+		node3.addChild(node15);
+		TerminalSymbolNode node30 = new TerminalSymbolNode(43, 9);
+		node2.addChild(node3);
+		node2.addChild(node30);
+		NonterminalSymbolNode node31 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 10, 12);
+		NonterminalSymbolNode node32 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 10, 11);
+		NonterminalSymbolNode node33 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 10, 11);
+		TerminalSymbolNode node34 = new TerminalSymbolNode(97, 10);
+		node33.addChild(node34);
+		node32.addChild(node33);
+		NonterminalSymbolNode node35 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 11, 12);
+		TerminalSymbolNode node36 = new TerminalSymbolNode(97, 11);
+		node35.addChild(node36);
+		node31.addChild(node32);
+		node31.addChild(node35);
+		node1.addChild(node2);
+		node1.addChild(node31);
+		return node1;
 	}
 
 }

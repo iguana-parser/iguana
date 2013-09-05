@@ -3,7 +3,6 @@ package org.jgll.grammar;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -709,14 +708,20 @@ public class GrammarBuilder implements Serializable {
 	
 	private Map<String, Map<HeadGrammarSlot, HeadGrammarSlot>> d2imap = new HashMap<>();
 	
+	private Map<PrecedencePattern, HeadGrammarSlot> indirectNontermianls = new HashMap<>();
+	
 	private void addToMap(HeadGrammarSlot directNonterminal, HeadGrammarSlot indirectNonterminal) {
-		Map<HeadGrammarSlot, HeadGrammarSlot> map = d2imap.get(indirectNonterminal.getNonterminal().getName());
-		d2imap = new HashMap<>();
+		String indirectNonterminalName = indirectNonterminal.getNonterminal().getName();
+		Map<HeadGrammarSlot, HeadGrammarSlot> map = d2imap.get(indirectNonterminalName);
+		if(map == null) {
+			map = new HashMap<>();
+			d2imap.put(indirectNonterminalName, map);
+		}
 		map.put(directNonterminal, indirectNonterminal);
 	}
 	
-	private HeadGrammarSlot getFromMap(HeadGrammarSlot directNonGrammarSlot, String indirectName) {
-		Map<HeadGrammarSlot, HeadGrammarSlot> map = d2imap.get(indirectName);
+	private HeadGrammarSlot getFromMap(HeadGrammarSlot directNonGrammarSlot, String indirectNonterminalName) {
+		Map<HeadGrammarSlot, HeadGrammarSlot> map = d2imap.get(indirectNonterminalName);
 		if(map == null) 
 			return null;
 		
@@ -754,6 +759,7 @@ public class GrammarBuilder implements Serializable {
 				
 				addNewNonterminal(indirectFreshNonterminal);
 				addToMap(freshNonterminal, indirectFreshNonterminal);
+				indirectNontermianls.put(pattern, indirectFreshNonterminal);
 			}
 		}
 		
@@ -773,17 +779,15 @@ public class GrammarBuilder implements Serializable {
 				if (!pattern.isDirect()) {
 					HeadGrammarSlot freshIndirectNonterminal = getFromMap(freshNonterminals.get(pattern), 
 														alt.getNonterminalAt(pattern.getPosition()).getNonterminal().getName());
+					if(pattern.isLeftMost()) {
+						rewriteIndirectNonterminalAtLeft(freshIndirectNonterminal, freshNonterminals.get(pattern));
+					} else {
+						rewriteIndirectNonterminalAtRight(freshIndirectNonterminal, freshNonterminals.get(pattern));
+					}
 					alt.setNonterminalAt(pattern.getPosition(), freshIndirectNonterminal);
 				} else {
 					alt.setNonterminalAt(pattern.getPosition(), freshNonterminals.get(pattern));
 				}
-			}
-		}
-		
-		// create the body of indirect nonterminals
-		for(Map<HeadGrammarSlot, HeadGrammarSlot> m : d2imap.values()) {
-			for(Entry<HeadGrammarSlot, HeadGrammarSlot> e : m.entrySet()) {
-				HeadGrammarSlot indirectNonterminal = e.getValue();
 			}
 		}
 		
@@ -807,11 +811,43 @@ public class GrammarBuilder implements Serializable {
 				if(first.getNonterminal().equals(directNonterminal.getNonterminal())) {
 					alt.setNonterminalAt(0, directNonterminal);
 				} else {
+					HeadGrammarSlot newIndirectNonterminal = d2imap.get(first.getNonterminal().getName()).get(directNonterminal);
+					if(newIndirectNonterminal == null) {
+						newIndirectNonterminal = new HeadGrammarSlot(first.getNonterminal());
+						List<Alternate> copyAlternates = copyAlternates(newIndirectNonterminal, first.getAlternates());
+						newIndirectNonterminal.setAlternates(copyAlternates);
+						addToMap(directNonterminal, newIndirectNonterminal);
+						rewriteIndirectNonterminalAtLeft(newIndirectNonterminal, directNonterminal);
+					} 
 					
+					alt.setNonterminalAt(0, newIndirectNonterminal);
 				}
 			}
 		}
 	}
+	
+	private void rewriteIndirectNonterminalAtRight(HeadGrammarSlot indirectNonterminal, HeadGrammarSlot directNonterminal) {
+		for(Alternate alt : indirectNonterminal.getAlternates()) {
+			if(alt.getLastSlot() instanceof NonterminalGrammarSlot) {
+				HeadGrammarSlot last = alt.getNonterminalAt(alt.size() - 1);
+				if(last.getNonterminal().equals(directNonterminal.getNonterminal())) {
+					alt.setNonterminalAt(alt.size() - 1, directNonterminal);
+				} else {
+					HeadGrammarSlot newIndirectNonterminal = d2imap.get(last.getNonterminal().getName()).get(directNonterminal);
+					if(newIndirectNonterminal == null) {
+						newIndirectNonterminal = new HeadGrammarSlot(last.getNonterminal());
+						List<Alternate> copyAlternates = copyAlternates(newIndirectNonterminal, last.getAlternates());
+						newIndirectNonterminal.setAlternates(copyAlternates);
+						addToMap(directNonterminal, newIndirectNonterminal);
+						rewriteIndirectNonterminalAtRight(newIndirectNonterminal, directNonterminal);
+					} 
+					
+					alt.setNonterminalAt(alt.size() - 1, newIndirectNonterminal);
+				}
+			}
+		}
+	}
+
 	
 	
 	private void addNewNonterminal(HeadGrammarSlot nonterminal) {
@@ -914,6 +950,7 @@ public class GrammarBuilder implements Serializable {
 		return indirectNonterminal;
 	}
 	
+	
 	private void replaceLeft(HeadGrammarSlot nonterminal, HeadGrammarSlot newHead) {
 		for(Alternate alternate : nonterminal.getAlternates()) {
 			if(alternate.getSlotAt(0) instanceof NonterminalGrammarSlot) {
@@ -969,11 +1006,12 @@ public class GrammarBuilder implements Serializable {
 			} else {
 				if(containsRight(last, pattern)) {
 					
-					HeadGrammarSlot newNonterminal = createNewIndirectNonterminal(alternate, alternate.size() - 1, pattern);
+					HeadGrammarSlot newNonterminal = indirectNontermianls.get(pattern);
 					
-					if(newNonterminal != null) {
-						rewriteRightEnds(newNonterminal, pattern);
-						return true;
+					if(newNonterminal == null) {
+						newNonterminal = createNewIndirectNonterminal(alternate, alternate.size() - 1, pattern);	
+					} else {
+						alternate.setNonterminalAt(alternate.size() - 1, newNonterminal);
 					}
 				}
 			}
@@ -1002,12 +1040,12 @@ public class GrammarBuilder implements Serializable {
 				}
 			} else {
 				if(containsLeft(first, pattern)) {
+					HeadGrammarSlot newNonterminal = indirectNontermianls.get(pattern);
 					
-					HeadGrammarSlot newNonterminal = createNewIndirectNonterminal(alternate, 0, pattern);
-					
-					if(newNonterminal != null) {
-						rewriteLeftEnds(newNonterminal, pattern);
-						return true;
+					if(newNonterminal == null) {
+						newNonterminal = createNewIndirectNonterminal(alternate, 0, pattern);	
+					} else {
+						alternate.setNonterminalAt(0, newNonterminal);
 					}
 				}
 			}
