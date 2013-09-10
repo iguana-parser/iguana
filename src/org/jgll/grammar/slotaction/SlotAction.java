@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slotaction;
 
 import java.io.Serializable;
 

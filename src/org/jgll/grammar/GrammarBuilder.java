@@ -18,6 +18,7 @@ import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.condition.KeywordCondition;
 import org.jgll.grammar.condition.TerminalCondition;
 import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
+import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.DirectNullableNonterminalGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;

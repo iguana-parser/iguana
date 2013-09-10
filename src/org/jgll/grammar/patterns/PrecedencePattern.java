@@ -1,13 +1,14 @@
-package org.jgll.grammar;
+package org.jgll.grammar.patterns;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.Symbol;
 import org.jgll.parser.HashFunctions;
 
 
-class PrecedencePattern implements Serializable {
+public class PrecedencePattern implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

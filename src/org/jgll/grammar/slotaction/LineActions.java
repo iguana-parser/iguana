@@ -1,6 +1,5 @@
 package org.jgll.grammar.slotaction;
 
-import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.util.Input;

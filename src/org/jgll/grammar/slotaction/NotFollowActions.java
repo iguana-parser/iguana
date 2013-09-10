@@ -4,7 +4,6 @@ import java.util.BitSet;
 import java.util.List;
 
 import org.jgll.grammar.Keyword;
-import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Terminal;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParserInternals;

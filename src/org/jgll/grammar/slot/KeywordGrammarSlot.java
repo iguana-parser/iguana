@@ -5,9 +5,9 @@ import java.io.Writer;
 
 import org.jgll.grammar.Character;
 import org.jgll.grammar.Keyword;
-import org.jgll.grammar.SlotAction;
 import org.jgll.grammar.Symbol;
 import org.jgll.grammar.Terminal;
+import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
