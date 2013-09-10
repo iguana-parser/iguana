@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ContextFreeCondition;
@@ -702,27 +701,7 @@ public class GrammarBuilder implements Serializable {
 		
 		return group;
 	}
-	
-	private Map<String, Map<Set<Alternate>, HeadGrammarSlot>> d2imap = new HashMap<>();
-	
-	private void addToMap(HeadGrammarSlot directNonterminal, HeadGrammarSlot indirectNonterminal) {
-		String indirectNonterminalName = indirectNonterminal.getNonterminal().getName();
-		Map<Set<Alternate>, HeadGrammarSlot> map = d2imap.get(indirectNonterminalName);
-		if(map == null) {
-			map = new HashMap<>();
-			d2imap.put(indirectNonterminalName, map);
-		}
-		map.put(directNonterminal.getAlternatesAsSet(), indirectNonterminal);
-	}
-	
-	private HeadGrammarSlot getFromMap(Set<Alternate> alternates, String indirectNonterminalName) {
-		Map<Set<Alternate>, HeadGrammarSlot> map = d2imap.get(indirectNonterminalName);
-		if(map == null) 
-			return null;
-		
-		return map.get(alternates);
-	}
-	
+
 	private void rewriteFirstLevel(HeadGrammarSlot head, Map<PrecedencePattern, Set<List<Symbol>>> patterns) {
 		
 		// This is complicated shit! Document it for the future reference.
@@ -744,13 +723,6 @@ public class GrammarBuilder implements Serializable {
 			}
 
 			freshNonterminals.put(pattern, freshNonterminal);
-			
-			// In case of an indirect pattern, make a copy of the nonterminal.
-			if(!pattern.isDirect()) {
-				HeadGrammarSlot indirectFreshNonterminal = new HeadGrammarSlot(new Nonterminal(pattern.getFilteredNontemrinalName()));				
-				addNewNonterminal(indirectFreshNonterminal);
-				addToMap(freshNonterminal, indirectFreshNonterminal);
-			}
 		}
 		
 		// Replacing nonterminals with their fresh ones
@@ -767,19 +739,27 @@ public class GrammarBuilder implements Serializable {
 				log.trace("Applying the pattern %s on %s.", pattern, alt);
 				
 				if (!pattern.isDirect()) {
-					HeadGrammarSlot freshIndirectNonterminal = getFromMap(freshNonterminals.get(pattern).getAlternatesAsSet(), 
-														alt.getNonterminalAt(pattern.getPosition()).getNonterminal().getName());
 					
-					HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(freshIndirectNonterminal.getNonterminal().getName());
-					List<Alternate> copyAlternates = copyAlternates(freshIndirectNonterminal, headGrammarSlot.getAlternates());
-					freshIndirectNonterminal.setAlternates(copyAlternates);
+					HeadGrammarSlot copy;
 					
+					List<Alternate> alternates = new ArrayList<>();
 					if(pattern.isLeftMost()) {
-						rewriteIndirectNonterminalAtLeft(freshIndirectNonterminal, freshNonterminals.get(pattern));
+						copy = copyIndirectAtLeft(alt.getNonterminalAt(pattern.getPosition()), pattern.getNonterminal());
+						getLeftEnds(copy, pattern.getNonterminal(), alternates);
+						for(Alternate a : alternates) {
+							a.setNonterminalAt(0, freshNonterminals.get(pattern));
+						}
 					} else {
-						rewriteIndirectNonterminalAtRight(freshIndirectNonterminal, freshNonterminals.get(pattern));
+						copy = copyIndirectAtRight(alt.getNonterminalAt(pattern.getPosition()), pattern.getNonterminal());
+						getRightEnds(copy, pattern.getNonterminal(), alternates);
+						for(Alternate a : alternates) {
+							a.setNonterminalAt(a.size() - 1, freshNonterminals.get(pattern));
+						}
 					}
-					alt.setNonterminalAt(pattern.getPosition(), freshIndirectNonterminal);
+					
+					addNewNonterminal(copy);
+					alt.setNonterminalAt(pattern.getPosition(), copy);
+					
 				} else {
 					alt.setNonterminalAt(pattern.getPosition(), freshNonterminals.get(pattern));
 				}
@@ -798,53 +778,6 @@ public class GrammarBuilder implements Serializable {
 			existingAlternates.put(new HashSet<>(copyAlternates), freshNontermianl);
 		}
 	}
-
-	private void rewriteIndirectNonterminalAtLeft(HeadGrammarSlot indirectNonterminal, HeadGrammarSlot directNonterminal) {
-		for(Alternate alt : indirectNonterminal.getAlternates()) {
-			if(alt.getFirstSlot() instanceof NonterminalGrammarSlot) {
-				HeadGrammarSlot first = alt.getNonterminalAt(0);
-				if(first.getNonterminal().equals(directNonterminal.getNonterminal())) {
-					alt.setNonterminalAt(0, directNonterminal);
-				} else {
-					HeadGrammarSlot newIndirectNonterminal = getFromMap(directNonterminal.getAlternatesAsSet(), first.getNonterminal().getName());
-					if(newIndirectNonterminal == null) {
-						newIndirectNonterminal = new HeadGrammarSlot(first.getNonterminal());
-						List<Alternate> copyAlternates = copyAlternates(newIndirectNonterminal, first.getAlternates());
-						newIndirectNonterminal.setAlternates(copyAlternates);
-						addToMap(directNonterminal, newIndirectNonterminal);
-						addNewNonterminal(newIndirectNonterminal);
-						rewriteIndirectNonterminalAtLeft(newIndirectNonterminal, directNonterminal);
-					} 
-					
-					alt.setNonterminalAt(0, newIndirectNonterminal);
-				}
-			}
-		}
-	}
-	
-	private void rewriteIndirectNonterminalAtRight(HeadGrammarSlot indirectNonterminal, HeadGrammarSlot directNonterminal) {
-		for(Alternate alt : indirectNonterminal.getAlternates()) {
-			if(alt.getLastSlot() instanceof NonterminalGrammarSlot) {
-				HeadGrammarSlot last = alt.getNonterminalAt(alt.size() - 1);
-				if(last.getNonterminal().equals(directNonterminal.getNonterminal())) {
-					alt.setNonterminalAt(alt.size() - 1, directNonterminal);
-				} else {
-					HeadGrammarSlot newIndirectNonterminal = d2imap.get(last.getNonterminal().getName()).get(directNonterminal);
-					if(newIndirectNonterminal == null) {
-						newIndirectNonterminal = new HeadGrammarSlot(last.getNonterminal());
-						List<Alternate> copyAlternates = copyAlternates(newIndirectNonterminal, last.getAlternates());
-						newIndirectNonterminal.setAlternates(copyAlternates);
-						addToMap(directNonterminal, newIndirectNonterminal);
-						rewriteIndirectNonterminalAtRight(newIndirectNonterminal, directNonterminal);
-					} 
-					
-					alt.setNonterminalAt(alt.size() - 1, newIndirectNonterminal);
-				}
-			}
-		}
-	}
-
-	
 	
 	private void addNewNonterminal(HeadGrammarSlot nonterminal) {
 		List<HeadGrammarSlot> list = newNonterminalsMap.get(nonterminal.getNonterminal().getName());
@@ -857,23 +790,17 @@ public class GrammarBuilder implements Serializable {
 	
 	private void rewriteDeeperLevels(HeadGrammarSlot head, List<PrecedencePattern> patterns) {
 
-		for(HeadGrammarSlot nt : nonterminals) {
-			for (Alternate alt : nt.getAlternates()) {
-				
-				for (PrecedencePattern pattern : patterns) {
-					if (pattern.isLeftMost() && alt.match(pattern.getParent())) {
-						for(Alternate alternate : alt.getNonterminalAt(0).getAlternates()) {
-							rewriteRightEnds(alternate, pattern);
-						}
-					}
-
-					if (pattern.isRightMost() && alt.match(pattern.getParent()) ){
-						for(Alternate alternate : alt.getNonterminalAt(0).getAlternates()) {
-							rewriteLeftEnds(alternate, pattern);
-						}
-					}
+		for (Alternate alt : head.getAlternates()) {
+			
+			for (PrecedencePattern pattern : patterns) {
+				if (pattern.isLeftMost() && alt.match(pattern.getParent())) {
+					rewriteRightEnds(alt.getNonterminalAt(0), pattern);
 				}
-			}				
+
+				if (pattern.isRightMost() && alt.match(pattern.getParent()) ){
+					rewriteLeftEnds(alt.getNonterminalAt(alt.size() - 1), pattern);
+				}
+			}
 		}
 	}
 
@@ -899,11 +826,12 @@ public class GrammarBuilder implements Serializable {
 			List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.without(filteredAlternate));
 			existingAlternates.put(new HashSet<>(copy), newNonterminal);
 			newNonterminal.setAlternates(copy);
-			return newNonterminal;
+
 		} else {
 			alt.setNonterminalAt(position, newNonterminal);
-			return null;
 		}
+		
+		return newNonterminal;
 	}
 	
 	/**
@@ -912,158 +840,190 @@ public class GrammarBuilder implements Serializable {
 	 * @param alt
 	 * @param pattern
 	 */
-	private void rewriteRightEnds(Alternate alternate, PrecedencePattern pattern) {
+	private void rewriteRightEnds(HeadGrammarSlot nonterminal, PrecedencePattern pattern) {
 		
-			if(!(alternate.getLastSlot() instanceof NonterminalGrammarSlot)) {
-				return;
-			}
+		// Direct filtering
+		if(nonterminal.getNonterminal().getName().equals(pattern.getNonterminal())) {
 			
-			HeadGrammarSlot last = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
-			
-			// If the nonterminal is the same as the head of the pattern
-			if (last.getNonterminal().getName().equals(pattern.getNonterminal())) {
+			for(Alternate alternate : nonterminal.getAlternates()) {
+				if(!(alternate.getLastSlot() instanceof NonterminalGrammarSlot)) {
+					continue;
+				}
+
+				HeadGrammarSlot last = ((NonterminalGrammarSlot) alternate.getLastSlot()).getNonterminal();
+				
 				if(last.contains(pattern.getChild())) {
 					HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, pattern.getChild());
-					if (newNonterminal != null) {
-						for(Alternate alt : newNonterminal.getAlternates()) {
-							rewriteRightEnds(alt, pattern);
-						}
-					}
-				}
-			} else {
-				if(containsRight(last, pattern)) {
-
-					HeadGrammarSlot copy = copy(last);
-					List<Alternate> alternates = new ArrayList<>();
-					getRightEnds(copy, pattern.getNonterminal(), alternates, new HashSet<HeadGrammarSlot>());					
-					
-					for(Alternate alt : alternates) {
-						rewriteRightEnds(alt, pattern);
-					}
-				}
+					rewriteRightEnds(newNonterminal, pattern);
+				}				
 			}
+			
+		} else {
+			assert pattern.isLeftMost();
+
+			List<Alternate> alternates = new ArrayList<>(); 
+			getLeftEnds(nonterminal, pattern.getNonterminal(), alternates);
+
+			for(Alternate alt : alternates) {
+				rewriteRightEnds(alt.getNonterminalAt(0), pattern);
+			}
+		}
 	}
 	
-	private void rewriteLeftEnds(Alternate alternate, PrecedencePattern pattern) {
+	private void rewriteLeftEnds(HeadGrammarSlot nonterminal, PrecedencePattern pattern) {
+		
+		// Direct filtering
+		if(nonterminal.getNonterminal().getName().equals(pattern.getNonterminal())) {
+			
+			for(Alternate alternate : nonterminal.getAlternates()) {
+				if(!(alternate.getFirstSlot() instanceof NonterminalGrammarSlot)) {
+					continue;
+				}
 
-		if(!(alternate.getFirstSlot() instanceof NonterminalGrammarSlot)) {
+				HeadGrammarSlot first = ((NonterminalGrammarSlot) alternate.getFirstSlot()).getNonterminal();
+				
+				if(first.contains(pattern.getChild())) {
+					HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, 0, pattern.getChild());
+					rewriteLeftEnds(newNonterminal, pattern);
+				}				
+			}
+			
+		} else {
+			assert pattern.isRightMost();
+
+			List<Alternate> alternates = new ArrayList<>(); 
+			getRightEnds(nonterminal, pattern.getNonterminal(), alternates);
+
+			for(Alternate alt : alternates) {
+				rewriteLeftEnds(alt.getNonterminalAt(alt.size() - 1), pattern);
+			}
+		}
+	}
+		
+	/**
+	 * 
+	 * Returns a list of all nonterminals with the given name which are
+	 * reachable from the given head and are on the right-most end.
+	 * 
+	 * @param head
+	 * @param directName
+	 * @param alternates
+	 */
+	private void getRightEnds(HeadGrammarSlot head, String directName, List<Alternate> alternates) {
+		getRightEnds(head, directName, alternates, new HashSet<HeadGrammarSlot>());
+	}
+	
+	private void getRightEnds(HeadGrammarSlot head, String directName, List<Alternate> alternates, Set<HeadGrammarSlot> visited) {
+		
+		if(visited.contains(head)) {
 			return;
 		}
 		
-		HeadGrammarSlot first = ((NonterminalGrammarSlot) alternate.getFirstSlot()).getNonterminal();
-		
-		if (first.getNonterminal().getName().equals(pattern.getNonterminal())) {
-			if(first.contains(pattern.getChild())) {
-				HeadGrammarSlot newNonterminal = createNewNonterminal(alternate, 0, pattern.getChild());
-				if(newNonterminal != null) {
-					rewriteLeftEnds(alternate, pattern);
-				}
-			}
-		} else {
-			if(containsLeft(first, pattern)) {
-				HeadGrammarSlot copy = copy(first);
-				List<Alternate> alternates = new ArrayList<>();
-				getLeftEnds(copy, pattern.getNonterminal(), alternates, new HashSet<HeadGrammarSlot>());					
-				
-				for(Alternate alt : alternates) {
-					rewriteLeftEnds(alt, pattern);
+		for (Alternate alt : head.getAlternates()) {
+			if (alt.getLastSlot() instanceof NonterminalGrammarSlot) {
+				HeadGrammarSlot last = ((NonterminalGrammarSlot) alt.getLastSlot()).getNonterminal();
+				if (last.getNonterminal().getName().equals(directName)) {
+					alternates.add(alt);
+				} else {
+					visited.add(last);
+					getRightEnds(last, directName, alternates, visited);
 				}
 			}
 		}
-	}
-
-
-	private boolean containsLeft(HeadGrammarSlot nonterminal, PrecedencePattern pattern) {
-		List<Alternate> list = new ArrayList<>();
-		getLeftEnds(nonterminal, new Nonterminal(pattern.getNonterminal()).getName(), list, new HashSet<HeadGrammarSlot>());
-		
-		if(list.size() != 0) {
-			for(Alternate alt : list) {
-				if(alt.getNonterminalAt(0).contains(pattern.getChild())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	private boolean containsRight(HeadGrammarSlot nonterminal, PrecedencePattern pattern) {
-		List<Alternate> list = new ArrayList<>();
-		getRightEnds(nonterminal, new Nonterminal(pattern.getNonterminal()).getName(), list, new HashSet<HeadGrammarSlot>());
-	
-		if(list.size() != 0) {
-			for(Alternate alt : list) {
-				if(alt.getNonterminalAt(alt.size() - 1).contains(pattern.getChild())) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 	
 	/**
 	 * 
 	 * Returns a list of all nonterminals with the given name which are
-	 * reachable from head and are on the right-most end.
+	 * reachable from the given head and are on the left-most end.
 	 * 
 	 * @param head
-	 * @param name
-	 * @param nonterminals
+	 * @param directName
+	 * @param alternates
 	 */
-	private void getRightEnds(HeadGrammarSlot head, String name, List<Alternate> nonterminals, Set<HeadGrammarSlot> visited) {
-		for (Alternate alt : head.getAlternates()) {
-			if (alt.getLastSlot() instanceof NonterminalGrammarSlot) {
-				HeadGrammarSlot last = ((NonterminalGrammarSlot) alt.getLastSlot()).getNonterminal();
-				if(visited.contains(last)) {
-					return;
-				} else {
-					visited.add(last);
-				}
-				if (last.getNonterminal().getName().equals(name)) {
-					nonterminals.add(alt);
-				} else {
-					getRightEnds(last, name, nonterminals, visited);
-				}
-			}
-		}
+	private void getLeftEnds(HeadGrammarSlot head, String name, List<Alternate> nonterminals) {
+		getLeftEnds(head, name, nonterminals, new HashSet<HeadGrammarSlot>());
 	}
-
+	
 	private void getLeftEnds(HeadGrammarSlot head, String name, List<Alternate> nonterminals, Set<HeadGrammarSlot> visited) {
+		
+		if(visited.contains(head)) {
+			return;
+		}
+		
 		for (Alternate alt : head.getAlternates()) {
 			if (alt.getFirstSlot() instanceof NonterminalGrammarSlot) {
 				HeadGrammarSlot first = ((NonterminalGrammarSlot) alt.getFirstSlot()).getNonterminal();
-				if(visited.contains(first)) {
-					return;
-				} else {
-					visited.add(first);
-				}
 				if (first.getNonterminal().getName().equals(name)) {
 					nonterminals.add(alt);
 				} else {
+					visited.add(first);
 					getLeftEnds(first, name, nonterminals, visited);
 				}
 			}
 		}
 	}
 	
-	private HeadGrammarSlot copy(HeadGrammarSlot head) {
+	private HeadGrammarSlot copyIndirectAtLeft(HeadGrammarSlot head, String directName) {
+		return copyIndirectAtLeft(head, directName, new HashMap<HeadGrammarSlot, HeadGrammarSlot>());
+	}
+
+	private HeadGrammarSlot copyIndirectAtRight(HeadGrammarSlot head, String directName) {
+		return copyIndirectAtRight(head, directName, new HashMap<HeadGrammarSlot, HeadGrammarSlot>());
+	}
+	
+	private HeadGrammarSlot copyIndirectAtLeft(HeadGrammarSlot head, String directName, HashMap<HeadGrammarSlot, HeadGrammarSlot> map) {
 		
-		HeadGrammarSlot copy = new HeadGrammarSlot(head.getNonterminal());
+		HeadGrammarSlot copy = map.get(head);
+		if(copy != null) {
+			return copy;
+		}
+		
+		copy = new HeadGrammarSlot(head.getNonterminal());
+		map.put(head, copy);
 		
 		List<Alternate> copyAlternates = copyAlternates(copy, head.getAlternates());
 		copy.setAlternates(copyAlternates);
 		
 		for(Alternate alt : copyAlternates) {
-			for(int i = 0; i < alt.size(); i++) {
-				if(alt.getSlotAt(i) instanceof NonterminalGrammarSlot) {
-					HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot)alt.getSlotAt(i)).getNonterminal();
-					alt.setNonterminalAt(i, copy(nonterminal));
+			if(alt.getSlotAt(0) instanceof NonterminalGrammarSlot) {
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot)alt.getSlotAt(0)).getNonterminal();
+				// Leave the direct nonterminal, copy indirect ones
+				if(nonterminal.getNonterminal().getName().equals(directName)) {
+					alt.setNonterminalAt(0, copyIndirectAtLeft(nonterminal, directName, map));
 				}
 			}
 		}
 		
 		return copy;
 	}
+	
+	private HeadGrammarSlot copyIndirectAtRight(HeadGrammarSlot head, String directName, HashMap<HeadGrammarSlot, HeadGrammarSlot> map) {
+		
+		HeadGrammarSlot copy = map.get(head);
+		if(copy != null) {
+			return copy;
+		}
+		
+		copy = new HeadGrammarSlot(head.getNonterminal());
+		map.put(head, copy);
+		
+		List<Alternate> copyAlternates = copyAlternates(copy, head.getAlternates());
+		copy.setAlternates(copyAlternates);
+		
+		for(Alternate alt : copyAlternates) {
+			if(alt.getSlotAt(alt.size() - 1) instanceof NonterminalGrammarSlot) {
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot)alt.getSlotAt(alt.size() - 1)).getNonterminal();
+				// Leave the direct nonterminal, copy indirect ones
+				if(nonterminal.getNonterminal().getName().equals(directName)) {
+					alt.setNonterminalAt(alt.size() - 1, copyIndirectAtLeft(nonterminal, directName, map));
+				}
+			}
+		}
+		
+		return copy;
+	}
+
 	
 	private List<Alternate> copyAlternates(HeadGrammarSlot head, Iterable<Alternate> list) {
 		List<Alternate> copyList = new ArrayList<>();
