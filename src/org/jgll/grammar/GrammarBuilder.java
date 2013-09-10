@@ -18,6 +18,8 @@ import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.condition.KeywordCondition;
 import org.jgll.grammar.condition.TerminalCondition;
 import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
+import org.jgll.grammar.patterns.AbstractPattern;
+import org.jgll.grammar.patterns.ExceptPattern;
 import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.DirectNullableNonterminalGrammarSlot;
@@ -62,9 +64,9 @@ public class GrammarBuilder implements Serializable {
 
 	private Map<Set<Alternate>, HeadGrammarSlot> existingAlternates;
 	
-	private Map<String, List<PrecedencePattern>> patternsMap;
+	private Map<String, List<PrecedencePattern>> precednecePatternsMap;
 
-	private Set<PrecedencePattern> oneLevelOnlyFilters;
+	private List<ExceptPattern> exceptPatterns;
 	
 	private Map<Rule, LastGrammarSlot> ruleToLastSlotMap;
 
@@ -80,9 +82,9 @@ public class GrammarBuilder implements Serializable {
 		this.name = name;
 		nonterminals = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
-		patternsMap = new HashMap<>();
+		precednecePatternsMap = new HashMap<>();
 		existingAlternates = new HashMap<>();
-		oneLevelOnlyFilters = new HashSet<>();
+		exceptPatterns = new ArrayList<>();
 		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
 		reachabilityGraph = new HashMap<>();
@@ -639,16 +641,14 @@ public class GrammarBuilder implements Serializable {
 	}
 
 	public void rewritePrecedenceRules() {
-		for (Entry<String, List<PrecedencePattern>> entry : patternsMap.entrySet()) {
+		for (Entry<String, List<PrecedencePattern>> entry : precednecePatternsMap.entrySet()) {
 			log.debug("Filtering %s with %d.", entry.getKey(), entry.getValue().size());
 
-			rewriteFirstLevel(nonterminalsMap.get(entry.getKey()), groupFilters(entry.getValue()));
+			rewriteFirstLevel(nonterminalsMap.get(entry.getKey()), groupPatterns(entry.getValue()));
 			rewriteDeeperLevels(nonterminalsMap.get(entry.getKey()), entry.getValue());
 		}
 
-		for (PrecedencePattern filter : oneLevelOnlyFilters) {
-			onlyFirstLevelFilter(nonterminalsMap.get(filter.getNonterminal()), oneLevelOnlyFilters);
-		}
+		rewriteExceptPatterns(groupPatterns(exceptPatterns));
 		
 		for(String s : getFilteredNonterminals()) {
 			removeUnusedFilteredNonterminals(s);
@@ -661,7 +661,7 @@ public class GrammarBuilder implements Serializable {
 	
 	private Set<String> getFilteredNonterminals() {
 		Set<String> names = new HashSet<>();
-		for (List<PrecedencePattern> filters : patternsMap.values()) {
+		for (List<PrecedencePattern> filters : precednecePatternsMap.values()) {
 			for(PrecedencePattern filter : filters) {
 				names.add(filter.getFilteredNontemrinalName());
 			}
@@ -669,11 +669,12 @@ public class GrammarBuilder implements Serializable {
 		return names;
 	}
 
-	private void onlyFirstLevelFilter(HeadGrammarSlot head, Set<PrecedencePattern> patterns) {
-		for (Alternate alt : head.getAlternates()) {
-			for (PrecedencePattern pattern : patterns) {
+	private void rewriteExceptPatterns(Map<ExceptPattern, Set<List<Symbol>>> patterns) {
+		for(Entry<ExceptPattern, Set<List<Symbol>>> e : patterns.entrySet()) {
+			ExceptPattern pattern = e.getKey();
+			for(Alternate alt : nonterminalsMap.get(pattern.getNonterminal()).getAlternates()) {
 				if (alt.match(pattern.getParent())) {
-					createNewNonterminal(alt, pattern.getPosition(), pattern.getChild());
+					createNewNonterminal(alt, pattern.getPosition(), e.getValue());
 				}
 			}
 		}
@@ -688,10 +689,10 @@ public class GrammarBuilder implements Serializable {
 	 * @param patterns
 	 * @return
 	 */
-	private Map<PrecedencePattern, Set<List<Symbol>>> groupFilters(List<PrecedencePattern> patterns) {
-		Map<PrecedencePattern, Set<List<Symbol>>> group = new LinkedHashMap<>();
+	private <T extends AbstractPattern> Map<T, Set<List<Symbol>>> groupPatterns(Iterable<T> patterns) {
+		Map<T, Set<List<Symbol>>> group = new LinkedHashMap<>();
 		
-		for(PrecedencePattern pattern : patterns) {
+		for(T pattern : patterns) {
 			Set<List<Symbol>> set = group.get(pattern);
 			if(set == null) {
 				set = new LinkedHashSet<>();
@@ -828,6 +829,32 @@ public class GrammarBuilder implements Serializable {
 		
 		return newNonterminal;
 	}
+	
+	private HeadGrammarSlot createNewNonterminal(Alternate alt, int position, Set<List<Symbol>> filteredAlternates) {
+		
+		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
+		
+		HeadGrammarSlot newNonterminal = existingAlternates.get(filteredNonterminal.without(filteredAlternates));
+		
+		if(newNonterminal == null) {
+			
+			newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+			
+			addNewNonterminal(newNonterminal);
+			
+			alt.setNonterminalAt(position, newNonterminal);
+			
+			List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.without(filteredAlternates));
+			existingAlternates.put(new HashSet<>(copy), newNonterminal);
+			newNonterminal.setAlternates(copy);
+
+		} else {
+			alt.setNonterminalAt(position, newNonterminal);
+		}
+		
+		return newNonterminal;
+	}
+
 	
 	/**
 	 * Rewrites the right ends of the first nonterminal in the given alternate.
@@ -1090,27 +1117,23 @@ public class GrammarBuilder implements Serializable {
 	 */
 	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
 		String name = nonterminal.getName();
-		PrecedencePattern filter = new PrecedencePattern(name, parent.getBody(), position, child.getBody());
+		PrecedencePattern pattern = new PrecedencePattern(name, parent.getBody(), position, child.getBody());
 
-		if (name.equals(child.getHead().getName())) {
-			if (patternsMap.containsKey(name)) {
-				patternsMap.get(name).add(filter);
-			} else {
-				List<PrecedencePattern> set = new ArrayList<>();
-				set.add(filter);
-				patternsMap.put(name, set);
-			}
-			log.debug("Filter added %s (deep)", filter);
+		if (precednecePatternsMap.containsKey(name)) {
+			precednecePatternsMap.get(name).add(pattern);
 		} else {
-			/**
-			 * To support the ! operator in Rascal. A pattern such as (E, alpha . beta, gamma) 
-			 * where gamma is not an alternate of E is only applied at one level. 
-			 * 
-			 * TODO: create separate patterns from the ! operator.
-			 */
-			oneLevelOnlyFilters.add(filter);
-			log.debug("Filter added %s (one level only)", filter);
+			List<PrecedencePattern> set = new ArrayList<>();
+			set.add(pattern);
+			precednecePatternsMap.put(name, set);
 		}
+		log.debug("Precedence pattern added %s", pattern);
+	}
+	
+	public void addExceptPattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
+		String name = nonterminal.getName();
+		ExceptPattern pattern = new ExceptPattern(name, parent.getBody(), position, child.getBody());
+		exceptPatterns.add(pattern);
+		log.debug("Except pattern added %s", pattern);
 	}
 	
 	public Set<HeadGrammarSlot> getReachableNonterminals(String name) {
