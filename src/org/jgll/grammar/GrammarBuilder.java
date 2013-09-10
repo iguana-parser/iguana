@@ -757,7 +757,6 @@ public class GrammarBuilder implements Serializable {
 						}
 					}
 					
-					addNewNonterminal(copy);
 					alt.setNonterminalAt(pattern.getPosition(), copy);
 					
 				} else {
@@ -803,7 +802,7 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 	}
-
+	
 	private HeadGrammarSlot createNewNonterminal(Alternate alt, int position, List<Symbol> filteredAlternate) {
 		
 		HeadGrammarSlot filteredNonterminal = alt.getNonterminalAt(position);
@@ -814,12 +813,7 @@ public class GrammarBuilder implements Serializable {
 			
 			newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
 			
-			List<HeadGrammarSlot> set = newNonterminalsMap.get(filteredNonterminal.getNonterminal().getName());
-			if(set == null) {
-				set = new ArrayList<>();
-				newNonterminalsMap.put(filteredNonterminal.getNonterminal().getName(), set);
-			}
-			set.add(newNonterminal);
+			addNewNonterminal(newNonterminal);
 			
 			alt.setNonterminalAt(position, newNonterminal);
 			
@@ -964,6 +958,8 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
+	
+	
 	private HeadGrammarSlot copyIndirectAtLeft(HeadGrammarSlot head, String directName) {
 		return copyIndirectAtLeft(head, directName, new HashMap<HeadGrammarSlot, HeadGrammarSlot>());
 	}
@@ -980,6 +976,7 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		copy = new HeadGrammarSlot(head.getNonterminal());
+		addNewNonterminal(copy);
 		map.put(head, copy);
 		
 		List<Alternate> copyAlternates = copyAlternates(copy, head.getAlternates());
@@ -989,7 +986,7 @@ public class GrammarBuilder implements Serializable {
 			if(alt.getSlotAt(0) instanceof NonterminalGrammarSlot) {
 				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot)alt.getSlotAt(0)).getNonterminal();
 				// Leave the direct nonterminal, copy indirect ones
-				if(nonterminal.getNonterminal().getName().equals(directName)) {
+				if(!nonterminal.getNonterminal().getName().equals(directName)) {
 					alt.setNonterminalAt(0, copyIndirectAtLeft(nonterminal, directName, map));
 				}
 			}
@@ -1006,6 +1003,7 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		copy = new HeadGrammarSlot(head.getNonterminal());
+		addNewNonterminal(copy);
 		map.put(head, copy);
 		
 		List<Alternate> copyAlternates = copyAlternates(copy, head.getAlternates());
@@ -1015,7 +1013,7 @@ public class GrammarBuilder implements Serializable {
 			if(alt.getSlotAt(alt.size() - 1) instanceof NonterminalGrammarSlot) {
 				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot)alt.getSlotAt(alt.size() - 1)).getNonterminal();
 				// Leave the direct nonterminal, copy indirect ones
-				if(nonterminal.getNonterminal().getName().equals(directName)) {
+				if(!nonterminal.getNonterminal().getName().equals(directName)) {
 					alt.setNonterminalAt(alt.size() - 1, copyIndirectAtLeft(nonterminal, directName, map));
 				}
 			}
