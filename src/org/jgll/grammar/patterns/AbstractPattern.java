@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.Nonterminal;
 import org.jgll.grammar.Symbol;
 import org.jgll.parser.HashFunctions;
 
@@ -14,9 +15,9 @@ public class AbstractPattern implements Serializable {
 	protected final List<Symbol> parent;
 	protected final List<Symbol> child;
 	protected final int position;
-	protected final String nonterminal;
+	protected final Nonterminal nonterminal;
 	
-	public AbstractPattern(String nonteriminal, List<Symbol> parent, int position, List<Symbol> child) {
+	public AbstractPattern(Nonterminal nonteriminal, List<Symbol> parent, int position, List<Symbol> child) {
 		
 		if(parent == null || child == null) {
 			throw new IllegalArgumentException("parent or child alternates cannot be null.");
@@ -40,7 +41,7 @@ public class AbstractPattern implements Serializable {
 		return child;
 	}
 	
-	public String getNonterminal() {
+	public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
 	

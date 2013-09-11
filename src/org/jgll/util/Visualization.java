@@ -23,13 +23,13 @@ public class Visualization {
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	protected void generateSPPFGraphWithIntermeiateAndListNodes(String outputDir, SPPFNode sppf) {
+	public static void generateSPPFGraphWithIntermeiateAndListNodes(String outputDir, SPPFNode sppf) {
 		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists();
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	protected void generateGSSGraph(String outputDir, Iterable<GSSNode> nodes) {
+	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> nodes) {
 		GSSToDot toDot = new GSSToDot();
 		toDot.execute(nodes);
 		toDot.execute(nodes);

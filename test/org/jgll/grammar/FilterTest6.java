@@ -95,7 +95,7 @@ public class FilterTest6 {
 		// E - E > - E			. E - E, - E
 		builder.addPrecedencePattern(E, rule3, 0, rule4);
 		
-		builder.rewritePrecedenceRules();
+		builder.rewritePrecedencePatterns();
 
 		grammar = builder.build();
 		

@@ -66,7 +66,7 @@ public class FilterTest5 {
 		// (E, .E w, y E)
 		builder.addPrecedencePattern(E, rule3, 0, rule4);
 		
-		builder.rewritePrecedenceRules();
+		builder.rewritePrecedencePatterns();
 		grammar =  builder.build();
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);

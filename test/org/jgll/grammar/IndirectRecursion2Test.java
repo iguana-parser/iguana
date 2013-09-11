@@ -34,7 +34,6 @@ public class IndirectRecursion2Test {
 	private Grammar grammar;
 	private GLLParser levelParser;
 
-
 	@Before
 	public void init() {
 		Nonterminal A = new Nonterminal("A");
@@ -44,9 +43,9 @@ public class IndirectRecursion2Test {
 		Rule r3 = new Rule(B);
 		Rule r4 = new Rule(B, list(new Character('b')));
 		builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
-													  .addRule(r2)
-													  .addRule(r3)
-													  .addRule(r4);
+													     .addRule(r2)
+													     .addRule(r3)
+													     .addRule(r4);
 		grammar = builder.build();
 		levelParser = ParserFactory.levelParser(grammar);
 	}
@@ -54,14 +53,14 @@ public class IndirectRecursion2Test {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("ad"), grammar, "A");
-		assertEquals(true, sppf.deepEquals(expectedSPPF()));
+		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
 	
 	@Test
 	public void testReachabilityGraph() {
 		Set<HeadGrammarSlot> set = builder.getReachableNonterminals("A");
-		assertEquals(true, set.contains(grammar.getNonterminalByName("A")));
-		assertEquals(true, set.contains(grammar.getNonterminalByName("B")));
+		assertTrue(set.contains(grammar.getNonterminalByName("A")));
+		assertTrue(set.contains(grammar.getNonterminalByName("B")));
 	}
 	
 	private SPPFNode expectedSPPF() {

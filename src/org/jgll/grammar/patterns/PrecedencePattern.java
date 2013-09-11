@@ -3,6 +3,7 @@ package org.jgll.grammar.patterns;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jgll.grammar.Nonterminal;
 import org.jgll.grammar.Symbol;
 
 
@@ -10,7 +11,7 @@ public class PrecedencePattern extends AbstractPattern implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	public PrecedencePattern(String nonteriminal, List<Symbol> parent, int position, List<Symbol> child) {
+	public PrecedencePattern(Nonterminal nonteriminal, List<Symbol> parent, int position, List<Symbol> child) {
 		super(nonteriminal, parent, position, child);
 	}
 
@@ -20,15 +21,15 @@ public class PrecedencePattern extends AbstractPattern implements Serializable {
 	 * as the filter's nonterminal.
 	 */
 	public boolean isDirect() {
-		return nonterminal.equals(parent.get(position).getName());
+		return nonterminal.equals(parent.get(position));
 	}
 	
 	public boolean isParentBinary() {
-		return nonterminal.equals(parent.get(0).getName()) && nonterminal.equals(parent.get(parent.size() - 1).getName());
+		return nonterminal.equals(parent.get(0)) && nonterminal.equals(parent.get(parent.size() - 1));
 	}
 	
 	public boolean isChildBinary() {
-		return nonterminal.equals(child.get(0).getClass()) && nonterminal.equals(child.get(child.size() - 1).getName());
+		return nonterminal.equals(child.get(0)) && nonterminal.equals(child.get(child.size() - 1));
 	}
 	
 	public boolean isLeftMost() {

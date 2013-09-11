@@ -93,7 +93,6 @@ public abstract class SPPFNode implements Level {
 		// through the packed nodes of the given node to match
 		// a packed node. This implementation may not be efficient for
 		// ambiguous nodes having many packed nodes.
-		
 		if(this.isAmbiguous() && node.isAmbiguous()) {
 			Iterator<SPPFNode> thisIt = getChildren().iterator();
 

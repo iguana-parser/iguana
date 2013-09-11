@@ -51,7 +51,7 @@ public class FilterTest1 {
 		builder.addPrecedencePattern(E, rule1, 2, rule1);
 		builder.addPrecedencePattern(E, rule1, 0, rule2);
 		
-		builder.rewritePrecedenceRules();
+		builder.rewritePrecedencePatterns();
 
 		grammar = builder.build();
 		rdParser = ParserFactory.recursiveDescentParser(grammar);

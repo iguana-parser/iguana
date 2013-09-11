@@ -141,8 +141,8 @@ public class Alternate implements Serializable {
 		NonterminalGrammarSlot firstNonterminal = (NonterminalGrammarSlot) symbols.get(0);
 		NonterminalGrammarSlot lastNonterminal = (NonterminalGrammarSlot) symbols.get(symbols.size() - 1);
 		
-		return head.getNonterminal().getName().equals(firstNonterminal.getNonterminal().getNonterminal().getName()) &&
-			   head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
+		return head.getNonterminal().equals(firstNonterminal.getNonterminal().getNonterminal()) &&
+			   head.getNonterminal().equals(lastNonterminal.getNonterminal().getNonterminal());
 	}
 	
 	/**
@@ -164,7 +164,7 @@ public class Alternate implements Serializable {
 		
 		NonterminalGrammarSlot firstNonterminal = (NonterminalGrammarSlot) symbols.get(index);
 		
-		return head.getNonterminal().getName().equals(firstNonterminal.getNonterminal().getNonterminal().getName());
+		return head.getNonterminal().equals(firstNonterminal.getNonterminal().getNonterminal());
 	}
 	
 	public boolean isUnaryPostfix(HeadGrammarSlot head) {
@@ -179,7 +179,7 @@ public class Alternate implements Serializable {
 		
 		NonterminalGrammarSlot lastNonterminal = (NonterminalGrammarSlot) symbols.get(index);
 		
-		return head.getNonterminal().getName().equals(lastNonterminal.getNonterminal().getNonterminal().getName());
+		return head.getNonterminal().equals(lastNonterminal.getNonterminal().getNonterminal());
 	}
 	
 	public boolean match(List<Symbol> list) {

@@ -39,11 +39,11 @@ public class Grammar implements Serializable {
 	 * This map is used to locate head grammar slots by name for parsing
 	 * from any arbitrary nonterminal.
 	 */
-	Map<String, HeadGrammarSlot> nameToNonterminals;
+	Map<Nonterminal, HeadGrammarSlot> nameToNonterminals;
 	
 	private Map<String, BodyGrammarSlot> nameToSlots;
 	
-	private Map<String, List<HeadGrammarSlot>> newNonterminalsMap;
+	private Map<Nonterminal, List<HeadGrammarSlot>> newNonterminalsMap;
 	
 	private Set<HeadGrammarSlot> newNonterminals;
 	
@@ -167,23 +167,23 @@ public class Grammar implements Serializable {
 	}
 	
 	public HeadGrammarSlot getNonterminalByName(String name) {
-		return nameToNonterminals.get(name);
+		return nameToNonterminals.get(new Nonterminal(name));
 	}
 	
 	public HeadGrammarSlot getNonterminalByNameAndIndex(String name, int index) {
-		return newNonterminalsMap.get(name).get(index - 1);
+		return newNonterminalsMap.get(new Nonterminal(name)).get(index - 1);
 	}
 	
-	public boolean isNewNonterminal(HeadGrammarSlot slot) {
-		return newNonterminals.contains(slot);
+	public boolean isNewNonterminal(HeadGrammarSlot head) {
+		return newNonterminals.contains(head);
 	}
 	
 	public int getIndex(HeadGrammarSlot head) {
-		List<HeadGrammarSlot> list = newNonterminalsMap.get(head.getNonterminal().getName());
+		List<HeadGrammarSlot> list = newNonterminalsMap.get(head.getNonterminal());
 		if(list == null) {
 			return -1;
 		}
-		return newNonterminalsMap.get(head.getNonterminal().getName()).indexOf(head) + 1;
+		return newNonterminalsMap.get(head.getNonterminal()).indexOf(head) + 1;
 	}
 	
 	private String grammarSlotToString(BodyGrammarSlot slot) {
@@ -298,7 +298,7 @@ public class Grammar implements Serializable {
 	 */
 	public String getNonterminalName(HeadGrammarSlot head) {
 		String name = head.getNonterminal().getName();
-		return newNonterminals.contains(head) ? name + (newNonterminalsMap.get(name).indexOf(head) + 1) : name;			
+		return newNonterminals.contains(head) ? name + (newNonterminalsMap.get(head.getNonterminal()).indexOf(head) + 1) : name;			
 	}
 	
 }
