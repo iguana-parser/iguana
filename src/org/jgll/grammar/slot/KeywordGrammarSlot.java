@@ -21,6 +21,9 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	
 	public KeywordGrammarSlot(int position, HeadGrammarSlot keywordHead, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(position, previous, head);
+		if(keywordHead == null) {
+			throw new IllegalArgumentException("Keyword head cannot be null.");
+		}
 		this.keywordHead = keywordHead;
 		this.keyword = keyword;
 	}

@@ -288,8 +288,7 @@ public class GrammarBuilder implements Serializable {
 				currentSlot = new TerminalGrammarSlot(index, currentSlot, (Terminal) symbol, null);
 			}
 			else if(symbol instanceof Keyword) {
-				currentSlot = new KeywordGrammarSlot(index, 
-						nonterminalsMap.get(new Nonterminal(symbol.getName())), (Keyword) symbol, currentSlot, null);
+				currentSlot = new KeywordGrammarSlot(index, getHeadGrammarSlot(new Nonterminal(symbol.getName())), (Keyword) symbol, currentSlot, null);
 			}
 			
 			if(index == 0) {
@@ -1063,7 +1062,7 @@ public class GrammarBuilder implements Serializable {
 		// Keyword
 		} else  {
 			Keyword keyword = ((KeywordGrammarSlot) slot).getKeyword();
-			copy = ((KeywordGrammarSlot) slot).copy(nonterminalsMap.get(keyword.getName()), previous, head);
+			copy = ((KeywordGrammarSlot) slot).copy(getHeadGrammarSlot(new Nonterminal(keyword.getName())), previous, head);
 		}
 
 		return copy;
