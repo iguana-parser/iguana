@@ -3,6 +3,7 @@ package org.jgll.grammar;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
@@ -194,6 +195,15 @@ public class Alternate implements Serializable {
 			}
 		}
 		return true;
+	}
+	
+	public boolean match(Set<List<Symbol>> set) {
+		for(List<Symbol> list : set) {
+			if(match(list)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override
