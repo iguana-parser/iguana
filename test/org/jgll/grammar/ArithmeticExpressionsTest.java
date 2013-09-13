@@ -48,6 +48,7 @@ public class ArithmeticExpressionsTest {
 		builder.addPrecedencePattern(E, rule1, 0, rule0);
 		builder.addPrecedencePattern(E, rule1, 2, rule0);
 		builder.addPrecedencePattern(E, rule1, 2, rule1);
+		
 		builder.rewritePrecedencePatterns();
 
 		grammar = builder.build();

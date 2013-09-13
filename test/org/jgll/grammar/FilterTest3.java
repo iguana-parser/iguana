@@ -79,8 +79,7 @@ public class FilterTest3 {
 		builder.addExceptPattern(Eplus, rule5, 0, rule1);
 		builder.addExceptPattern(Eplus, rule5, 0, rule2);
 		
-		builder.rewriteExceptPatterns();
-		builder.rewritePrecedencePatterns();
+		builder.rewritePatterns();
 		
 		grammar = builder.build();
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
@@ -101,11 +100,11 @@ public class FilterTest3 {
 	
 	private NonterminalSymbolNode getSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 14);
-		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E [+] . E3"), 0, 10);
+		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E [+] . E2"), 0, 10);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 9);
-		IntermediateNode node4 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E [+] . E3"), 0, 4);
+		IntermediateNode node4 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E [+] . E2"), 0, 4);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 0, 1);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 0, 1);
 		TerminalSymbolNode node7 = new TerminalSymbolNode(97, 0);
 		node6.addChild(node7);
 		ListSymbolNode node8 = new ListSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 1, 3);
@@ -114,7 +113,7 @@ public class FilterTest3 {
 		TerminalSymbolNode node11 = new TerminalSymbolNode(97, 1);
 		node10.addChild(node11);
 		node9.addChild(node10);
-		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 2, 3);
+		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 2, 3);
 		TerminalSymbolNode node13 = new TerminalSymbolNode(97, 2);
 		node12.addChild(node13);
 		node8.addChild(node9);
@@ -124,8 +123,8 @@ public class FilterTest3 {
 		TerminalSymbolNode node14 = new TerminalSymbolNode(43, 3);
 		node4.addChild(node5);
 		node4.addChild(node14);
-		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 3), 4, 9);
-		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 4, 5);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 4, 9);
+		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 4, 5);
 		TerminalSymbolNode node17 = new TerminalSymbolNode(97, 4);
 		node16.addChild(node17);
 		ListSymbolNode node18 = new ListSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 5, 9);
@@ -146,7 +145,7 @@ public class FilterTest3 {
 		node26.addChild(node27);
 		node19.addChild(node20);
 		node19.addChild(node26);
-		NonterminalSymbolNode node28 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 8, 9);
+		NonterminalSymbolNode node28 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 8, 9);
 		TerminalSymbolNode node29 = new TerminalSymbolNode(97, 8);
 		node28.addChild(node29);
 		node18.addChild(node19);
@@ -158,8 +157,8 @@ public class FilterTest3 {
 		TerminalSymbolNode node30 = new TerminalSymbolNode(43, 9);
 		node2.addChild(node3);
 		node2.addChild(node30);
-		NonterminalSymbolNode node31 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 3), 10, 14);
-		NonterminalSymbolNode node32 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 10, 11);
+		NonterminalSymbolNode node31 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 10, 14);
+		NonterminalSymbolNode node32 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 10, 11);
 		TerminalSymbolNode node33 = new TerminalSymbolNode(97, 10);
 		node32.addChild(node33);
 		ListSymbolNode node34 = new ListSymbolNode(grammar.getNonterminalByNameAndIndex("E+", 1), 11, 14);
@@ -174,7 +173,7 @@ public class FilterTest3 {
 		node39.addChild(node40);
 		node35.addChild(node36);
 		node35.addChild(node39);
-		NonterminalSymbolNode node41 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 13, 14);
+		NonterminalSymbolNode node41 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 13, 14);
 		TerminalSymbolNode node42 = new TerminalSymbolNode(97, 13);
 		node41.addChild(node42);
 		node34.addChild(node35);

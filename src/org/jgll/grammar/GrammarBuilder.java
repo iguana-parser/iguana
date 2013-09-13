@@ -646,10 +646,11 @@ public class GrammarBuilder implements Serializable {
 
 	}
 	
-	// TODO: rewriting except patterns before precedence patterns is 
-	// necessary for the correctness of some examples, however, it may
-	// introduce some extra nonterminals because we in rewriteFirstLevel
-	// we do not check for existing new nonterminals.
+	public void rewritePatterns() {
+		rewritePrecedencePatterns();
+		rewriteExceptPatterns();
+	}
+	
 	public void rewriteExceptPatterns() {
 		rewriteExceptPatterns(groupPatterns(exceptPatterns));
 	}
@@ -669,9 +670,18 @@ public class GrammarBuilder implements Serializable {
 	private void rewriteExceptPatterns(Map<ExceptPattern, Set<List<Symbol>>> patterns) {
 		for(Entry<ExceptPattern, Set<List<Symbol>>> e : patterns.entrySet()) {
 			ExceptPattern pattern = e.getKey();
+			
 			for(Alternate alt : nonterminalsMap.get(pattern.getNonterminal()).getAlternates()) {
 				if (alt.match(pattern.getParent())) {
 					createNewNonterminal(alt, pattern.getPosition(), e.getValue());
+				}
+			}
+
+			for(HeadGrammarSlot head : newNonterminalsMap.get(pattern.getNonterminal())) {
+				for(Alternate alt : head.getAlternates()) {
+					if (alt.match(pattern.getParent())) {
+						createNewNonterminal(alt, pattern.getPosition(), e.getValue());
+					}
 				}
 			}
 		}
