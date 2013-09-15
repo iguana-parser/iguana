@@ -6,7 +6,10 @@ import static org.junit.Assert.*;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,25 +32,33 @@ public class ArithmeticExpressionsTest {
 	@Before
 	public void init() {
 
-		GrammarBuilder builder = new GrammarBuilder("gamma2");
+		GrammarBuilder builder = new GrammarBuilder("Arithmetic Expressions");
 
-		// E ::= E + E
 		Nonterminal E = new Nonterminal("E");
-		Rule rule0 = new Rule(E, list(E, new Character('+'), E));
-		builder.addRule(rule0);
 
 		// E ::= E * E
 		Rule rule1 = new Rule(E, list(E, new Character('*'), E));
 		builder.addRule(rule1);
-
-		// E ::= a
-		Rule rule2 = new Rule(E, list(new Character('a')));
+		
+		// E ::= E + E
+		Rule rule2 = new Rule(E, list(E, new Character('+'), E));
 		builder.addRule(rule2);
+		
+		// E ::= a
+		Rule rule3 = new Rule(E, list(new Character('a')));
+		builder.addRule(rule3);
 
-		builder.addPrecedencePattern(E, rule0, 2, rule0);
-		builder.addPrecedencePattern(E, rule1, 0, rule0);
-		builder.addPrecedencePattern(E, rule1, 2, rule0);
+		// (E * .E, E * E)
 		builder.addPrecedencePattern(E, rule1, 2, rule1);
+		
+		// (E * .E, E + E)
+		builder.addPrecedencePattern(E, rule1, 0, rule2);
+		
+		// (.E * E, E + E)
+		builder.addPrecedencePattern(E, rule1, 2, rule2);
+		
+		// (E + .E, E + E)
+		builder.addPrecedencePattern(E, rule2, 2, rule2);
 		
 		builder.rewritePrecedencePatterns();
 
@@ -61,18 +72,44 @@ public class ArithmeticExpressionsTest {
 		assertEquals(1, grammar.getLongestTerminalChain());
 	}
 
-//	@Test
-	public void testParsers1() throws ParseError {
+	@Test
+	public void testParsers() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
 		assertTrue(sppf1.deepEquals(sppf2));
 	}
 
 	@Test
-	public void testParsers2() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a*a"), grammar, "E");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a*a"), grammar, "E");
-		assertTrue(sppf1.deepEquals(sppf2));
+	public void testInput() throws ParseError {
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a*a"), grammar, "E");
+		assertTrue(sppf.deepEquals(getSPPFNode()));
+	}
+	
+	private SPPFNode getSPPFNode() {
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 5);
+		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E [+] . E2"), 0, 2);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 1);
+		TerminalSymbolNode node4 = new TerminalSymbolNode(97, 0);
+		node3.addChild(node4);
+		TerminalSymbolNode node5 = new TerminalSymbolNode(43, 1);
+		node2.addChild(node3);
+		node2.addChild(node5);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 2, 5);
+		IntermediateNode node7 = new IntermediateNode(grammar.getGrammarSlotByName("E2 ::= E2 [*] . E1"), 2, 4);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 2, 3);
+		TerminalSymbolNode node9 = new TerminalSymbolNode(97, 2);
+		node8.addChild(node9);
+		TerminalSymbolNode node10 = new TerminalSymbolNode(42, 3);
+		node7.addChild(node8);
+		node7.addChild(node10);
+		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 4, 5);
+		TerminalSymbolNode node12 = new TerminalSymbolNode(97, 4);
+		node11.addChild(node12);
+		node6.addChild(node7);
+		node6.addChild(node11);
+		node1.addChild(node2);
+		node1.addChild(node6);
+		return node1;
 	}
 
 }
