@@ -36,7 +36,6 @@ public class Trie<T> {
 		if(dest == null) {
 			return insert(node, label);
 		} else {
-			node.addInfo(object);
 			return dest;
 		}
 	}
