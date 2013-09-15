@@ -1,7 +1,7 @@
 package org.jgll.grammar.conditions;
 
 import static org.jgll.grammar.condition.ConditionFactory.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Character;

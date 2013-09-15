@@ -86,7 +86,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public Symbol getSymbol() {
-		return Epsilon.getInstance();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

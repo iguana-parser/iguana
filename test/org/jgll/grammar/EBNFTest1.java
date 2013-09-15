@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.parser.GLLParser;

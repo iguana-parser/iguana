@@ -3,7 +3,8 @@ package org.jgll.grammar.condition;
 import java.util.List;
 
 import org.jgll.grammar.Symbol;
-import static org.jgll.util.collections.CollectionsUtil.*;
+
+import static org.jgll.util.CollectionsUtil.*;
 
 public class ContextFreeCondition extends Condition {
 	

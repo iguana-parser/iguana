@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -263,6 +264,36 @@ public class Alternate implements Serializable {
 		}
 		
 		return true;
+	}
+	
+	public Iterable<String> getSymbols() {
+		
+		return new Iterable<String>() {
+			
+			@Override
+			public Iterator<String> iterator() {
+				
+				final BodyGrammarSlot current = firstSlot;
+				
+				return new Iterator<String>() {
+
+					@Override
+					public boolean hasNext() {
+						return !(current.next() instanceof LastGrammarSlot);
+					}
+
+					@Override
+					public String next() {
+						return current.next().getSymbol().getName();
+					}
+
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+		};
 	}
 	
 }

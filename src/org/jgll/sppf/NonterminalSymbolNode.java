@@ -14,9 +14,6 @@ public class NonterminalSymbolNode extends NonPackedNode {
 	private boolean keywordNode;
 
 	public NonterminalSymbolNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		
-		
-		
 		super(slot, leftExtent, rightExtent);
 	}
 	

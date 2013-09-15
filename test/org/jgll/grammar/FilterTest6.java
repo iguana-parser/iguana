@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.collections.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.assertTrue;
 
 import org.jgll.parser.GLLParser;
@@ -98,7 +98,6 @@ public class FilterTest6 {
 		builder.rewritePrecedencePatterns();
 
 		grammar = builder.build();
-		
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);
 	}

@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.parser.GLLParser;
@@ -13,8 +13,8 @@ import org.junit.Test;
 
 /**
  * 
- * E ::= E + E
- *     | E * E
+ * E ::= E * E
+ * 	   > E + E
  *     | a
  * 
  * @author Ali Afroozeh
@@ -61,7 +61,7 @@ public class ArithmeticExpressionsTest {
 		assertEquals(1, grammar.getLongestTerminalChain());
 	}
 
-	@Test
+//	@Test
 	public void testParsers1() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
@@ -70,8 +70,8 @@ public class ArithmeticExpressionsTest {
 
 	@Test
 	public void testParsers2() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a+a"), grammar, "E");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a+a"), grammar, "E");
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a*a"), grammar, "E");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a*a"), grammar, "E");
 		assertTrue(sppf1.deepEquals(sppf2));
 	}
 

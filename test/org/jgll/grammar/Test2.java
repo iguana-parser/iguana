@@ -1,7 +1,7 @@
 package org.jgll.grammar;
 
 import static org.junit.Assert.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;

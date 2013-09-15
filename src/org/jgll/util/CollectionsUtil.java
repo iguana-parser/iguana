@@ -1,4 +1,4 @@
-package org.jgll.util.collections;
+package org.jgll.util;
 
 import java.util.Arrays;
 import java.util.HashSet;

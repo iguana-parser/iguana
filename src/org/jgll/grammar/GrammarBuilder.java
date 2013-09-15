@@ -1248,6 +1248,44 @@ public class GrammarBuilder implements Serializable {
 		for(List<HeadGrammarSlot> list : newNonterminalsMap.values()) {
 			list.retainAll(reachableNonterminals);
 		}
-	}	
+	}
+	
+	public void leftFactorize(HeadGrammarSlot head) {
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

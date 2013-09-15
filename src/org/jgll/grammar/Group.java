@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.util.collections.CollectionsUtil;
+import org.jgll.util.CollectionsUtil;
 
 public class Group extends Nonterminal {
 
