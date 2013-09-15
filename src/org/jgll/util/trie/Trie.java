@@ -2,22 +2,22 @@ package org.jgll.util.trie;
 
 import java.util.Iterator;
 
-public class Trie {
+public class Trie<T> {
 
-	private Node root;
+	private Node<T> root;
 	
 	public Trie() {
-		root = new Node();
+		root = new Node<>();
 	}
 	
-	public void add(String label) {
+	public void add(T label) {
 		add(root, label, null);
 	}
 	
-	public Node get(Iterable<String> prefix) {
-		Node node = root;
+	public Node<T> get(Iterable<T> prefix) {
+		Node<T> node = root;
 		
-		for(String label : prefix) {
+		for(T label : prefix) {
 			node = getNodeWithEdgeLabel(node, label);
 			if(node == null) {
 				return null;
@@ -27,12 +27,12 @@ public class Trie {
 		return node;
 	}
 	
-	private Node add(Node node, String label, Object object) {
+	private Node<T> add(Node<T> node, T label, Object object) {
 		if(node.size() == 0) {
 			return insert(node, label);
 		}
 		
-		Node dest = getNodeWithEdgeLabel(node, label);
+		Node<T> dest = getNodeWithEdgeLabel(node, label);
 		if(dest == null) {
 			return insert(node, label);
 		} else {
@@ -41,8 +41,8 @@ public class Trie {
 		}
 	}
 	
-	private Node getNodeWithEdgeLabel(Node node, String label) {
-		for(Edge edge : node.getEdges()) {
+	private Node<T> getNodeWithEdgeLabel(Node<T> node, T label) {
+		for(Edge<T> edge : node.getEdges()) {
 			if(edge.getLabel().equals(label)) {
 				return edge.getDestination();
 			}
@@ -50,26 +50,31 @@ public class Trie {
 		return null;
 	}
 	
-	public void add(Iterable<String> labels) {
+	public void add(Iterable<T> labels) {
 		add(labels, null);
 	}
 	
-	public void add(Iterable<String> labels, Object object) {
+	public void add(Iterable<T> labels, Object object) {
 	
-		Node node = root;
+		Node<T> node = root;
 		
-		Iterator<String> it = labels.iterator();
+		Iterator<T> it = labels.iterator();
 		
 		while(it.hasNext()) {
-			String label = it.next();
-			node = add(node, label, node);
+			T label = it.next();
+			node = add(node, label, object);
 		}
 	}
 	
-	private Node insert(Node node, String label) {
-		Node newNode = new Node();
-		node.addChild(new Edge(label, newNode));
+	private Node<T> insert(Node<T> node, T label) {
+		Node<T> newNode = new Node<>();
+		node.addChild(new Edge<T>(label, newNode));
 		return newNode;
+	}
+	
+	
+	public Node<T> getRoot() {
+		return root;
 	}
 	
 	

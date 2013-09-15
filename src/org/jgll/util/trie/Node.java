@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Node {
+public class Node<T> {
 
 	private List<Object> info;
-	private List<Edge> edges;
+	private List<Edge<T>> edges;
 	
 	public Node() {
 		edges = new ArrayList<>();
@@ -19,7 +19,7 @@ public class Node {
 	}
 	
 	
-	public List<Edge> getEdges() {
+	public List<Edge<T>> getEdges() {
 		return edges;
 	}
 	
@@ -28,7 +28,7 @@ public class Node {
 		return info;
 	}
 	
-	public void addChild(Edge edge) {
+	public void addChild(Edge<T> edge) {
 		edges.add(edge);
 	}
 

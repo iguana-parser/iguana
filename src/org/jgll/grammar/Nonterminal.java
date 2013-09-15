@@ -12,6 +12,8 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final boolean ebnfList;
 	
+	private boolean collapsible;
+	
 	public Nonterminal(String name) {
 		this(name, false);
 	}
@@ -41,6 +43,15 @@ public class Nonterminal extends AbstractSymbol {
 		} 
 
 		return false;
+	}
+	
+	
+	public void setCollapsible(boolean collapsible) {
+		this.collapsible = collapsible;
+	}
+	
+	public boolean isCollapsible() {
+		return collapsible;
 	}
 	
 	@Override

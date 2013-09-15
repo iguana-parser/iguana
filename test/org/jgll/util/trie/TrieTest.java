@@ -8,7 +8,7 @@ public class TrieTest {
 	
 	@Test
 	public void test1() {
-		Trie trie = new Trie();
+		Trie<String> trie = new Trie<>();
 		trie.add("du");
 		trie.add(list("du", "hast"));
 		trie.add(list("du", "hast", "mich", "gefragt"));
@@ -18,7 +18,7 @@ public class TrieTest {
 	
 	@Test
 	public void test2() {
-		Trie trie = new Trie();
+		Trie<String> trie = new Trie<>();
 		trie.add(list("E", "*", "E"));
 		trie.add(list("E", "+", "E"));
 		trie.add(list("E", "-", "E"));

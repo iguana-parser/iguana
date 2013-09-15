@@ -2,28 +2,28 @@ package org.jgll.util.trie;
 
 
 
-public class Edge {
+public class Edge<T> {
 	
-	private String label;
+	private T label;
 	
-	private Node destination;
+	private Node<T> destination;
 	
-	public Edge(String label, Node getDestination) {
+	public Edge(T label, Node<T> destination) {
 		this.label = label;
-		this.destination = getDestination;
+		this.destination = destination;
 	}
 		
-	public String getLabel() {
+	public T getLabel() {
 		return label;
 	}
 	
-	public Node getDestination() {
+	public Node<T> getDestination() {
 		return destination;
 	}
 	
 	@Override
 	public String toString() {
-		return label;
+		return label.toString();
 	}
 	
 }

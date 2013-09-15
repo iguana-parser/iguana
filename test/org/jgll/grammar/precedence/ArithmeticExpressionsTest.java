@@ -1,8 +1,13 @@
-package org.jgll.grammar;
+package org.jgll.grammar.precedence;
 
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.Character;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.Nonterminal;
+import org.jgll.grammar.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -32,7 +37,7 @@ public class ArithmeticExpressionsTest {
 	@Before
 	public void init() {
 
-		GrammarBuilder builder = new GrammarBuilder("Arithmetic Expressions");
+		GrammarBuilder builder = new GrammarBuilder("ArithmeticExpressions");
 
 		Nonterminal E = new Nonterminal("E");
 

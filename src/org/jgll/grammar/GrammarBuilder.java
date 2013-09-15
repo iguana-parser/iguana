@@ -34,6 +34,9 @@ import org.jgll.grammar.slotaction.NotFollowActions;
 import org.jgll.grammar.slotaction.NotMatchActions;
 import org.jgll.grammar.slotaction.NotPrecedeActions;
 import org.jgll.util.logging.LoggerWrapper;
+import org.jgll.util.trie.Edge;
+import org.jgll.util.trie.Node;
+import org.jgll.util.trie.Trie;
 
 public class GrammarBuilder implements Serializable {
 
@@ -172,20 +175,7 @@ public class GrammarBuilder implements Serializable {
 			BodyGrammarSlot firstSlot = null;
 			for (Symbol symbol : body) {
 				
-				if(symbol instanceof Keyword) {
-					Keyword keyword = (Keyword) symbol;
-					HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
-					currentSlot = new KeywordGrammarSlot(symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
-				}
-				
-				else if (symbol instanceof Terminal) {
-					currentSlot = new TerminalGrammarSlot(symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
-				}
-				// Nonterminal
-				else {
-					HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-					currentSlot = new NonterminalGrammarSlot(symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
-				} 
+				currentSlot = getBodyGrammarSlot(symbol, symbolIndex, currentSlot, headGrammarSlot);
 
 				if (symbolIndex == 0) {
 					firstSlot = currentSlot;
@@ -209,6 +199,23 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		return this;
+	}
+	
+	private BodyGrammarSlot getBodyGrammarSlot(Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
+		if(symbol instanceof Keyword) {
+			Keyword keyword = (Keyword) symbol;
+			HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
+			return new KeywordGrammarSlot(symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
+		}
+		
+		else if (symbol instanceof Terminal) {
+			return new TerminalGrammarSlot(symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
+		}
+		// Nonterminal
+		else {
+			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
+			return new NonterminalGrammarSlot(symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
+		} 
 	}
 
 	private void addCondition(BodyGrammarSlot slot, final Condition condition) {
@@ -1250,42 +1257,75 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	public void leftFactorize(HeadGrammarSlot head) {
+	public void leftFactorize(String nonterminalName) {
+		HeadGrammarSlot head = nonterminalsMap.get(new Nonterminal(nonterminalName));
 		
+		Trie<Symbol> trie = new Trie<>();
+		
+		for(Alternate alt : head.getAlternates()) {
+			trie.add(alt.getSymbols(), alt);
+		}
+		
+		Node<Symbol> node = trie.getRoot();
+		
+		head.removeAllAlternates();
+		
+		
+		for(Edge<Symbol> edge : node.getEdges()) {
+			
+			int symbolIndex = 0;
+			BodyGrammarSlot firstSlot = null;
+			
+			BodyGrammarSlot currentSlot = getBodyGrammarSlot(edge.getLabel(), symbolIndex, null, head);
+			
+			if(symbolIndex == 0) {
+				firstSlot = currentSlot;
+			}
+			test(currentSlot, edge.getDestination(), symbolIndex, head);
+			Alternate alternate = new Alternate(firstSlot);
+			head.addAlternate(alternate);
+		}
 	}
 	
+	private int count;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	private void test(BodyGrammarSlot slot, Node<Symbol> node, int symbolIndex, HeadGrammarSlot headGrammarSlot) {
+		
+		if(node.size() == 0) {
+			new LastGrammarSlot(symbolIndex, slot, headGrammarSlot, null);
+			return;
+		}
+		
+		if(node.size() == 1) {
+			BodyGrammarSlot currentSlot = getBodyGrammarSlot(node.getEdges().get(0).getLabel(), symbolIndex, slot, headGrammarSlot);
+			test(currentSlot, node.getEdges().get(0).getDestination(), symbolIndex + 1, headGrammarSlot);
+			return;
+		}
+		
+		Nonterminal nonterminal = new Nonterminal("C_" + ++count);
+		nonterminal.setCollapsible(true);
+		HeadGrammarSlot newHead = new HeadGrammarSlot(nonterminal);
+		
+		nonterminalsMap.put(nonterminal, newHead);
+		nonterminals.add(newHead);
+		
+		NonterminalGrammarSlot ntSlot = new NonterminalGrammarSlot(symbolIndex + 1, slot, newHead, headGrammarSlot);
+		new LastGrammarSlot(symbolIndex + 2, ntSlot, headGrammarSlot, null);
+		
+		// Create the body of the collapsible node.
+		symbolIndex = 0;
+		BodyGrammarSlot firstSlot = null;
+		
+		for(Edge<Symbol> edge : node.getEdges()) {
+			BodyGrammarSlot currentSlot = getBodyGrammarSlot(edge.getLabel(), symbolIndex, null, newHead);
+			if(symbolIndex == 0) {
+				firstSlot = currentSlot;
+			}
+			test(currentSlot, edge.getDestination(), symbolIndex, newHead);
+			
+			Alternate alternate = new Alternate(firstSlot);
+			newHead.addAlternate(alternate);
+		}
+	}
 	
 }
