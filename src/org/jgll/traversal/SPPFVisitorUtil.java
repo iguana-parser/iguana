@@ -3,6 +3,8 @@ package org.jgll.traversal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -176,16 +178,25 @@ public class SPPFVisitorUtil {
 		
 		if(!node.isAmbiguous()) {
 			if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
-				SPPFNode child = node.getChildAt(node.childrenCount() - 1);
-				node.replaceWithChildren(child);				
+				CollapsibleNode child = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
+				removeIntermediateNode(child);
+				node.replaceWithChildren(child);
+				
+				// Push the saved object to the parent.
+				LastGrammarSlot slot = (LastGrammarSlot) node.getFirstPackedNodeGrammarSlot();
+				slot.setObject(((LastGrammarSlot)child.getFirstPackedNodeGrammarSlot()).getObject());
 			}
 		}
 	}
 	
 	public static void removeCollapsibleNode(PackedNode node) {
 		if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
-			SPPFNode child = node.getChildAt(node.childrenCount() - 1);
-			node.replaceWithChildren(child);				
+			CollapsibleNode child = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
+			removeIntermediateNode(child);
+			node.replaceWithChildren(child);		
+			
+			LastGrammarSlot slot = (LastGrammarSlot) child.getFirstPackedNodeGrammarSlot();
+			((LastGrammarSlot)node.getGrammarSlot()).setObject(slot.getObject());
 		}
 	}
 	
