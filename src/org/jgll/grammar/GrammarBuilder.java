@@ -687,10 +687,13 @@ public class GrammarBuilder implements Serializable {
 				}
 			}
 
-			for(HeadGrammarSlot head : newNonterminalsMap.get(pattern.getNonterminal())) {
-				for(Alternate alt : head.getAlternates()) {
-					if (alt.match(pattern.getParent())) {
-						createNewNonterminal(alt, pattern.getPosition(), e.getValue());
+			List<HeadGrammarSlot> list = newNonterminalsMap.get(pattern.getNonterminal());
+			if(list != null) {
+				for(HeadGrammarSlot head : list) {
+					for(Alternate alt : head.getAlternates()) {
+						if (alt.match(pattern.getParent())) {
+							createNewNonterminal(alt, pattern.getPosition(), e.getValue());
+						}
 					}
 				}
 			}
