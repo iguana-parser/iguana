@@ -36,6 +36,7 @@ import org.jgll.grammar.slotaction.NotPrecedeActions;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
+import org.jgll.util.trie.Stringizer;
 import org.jgll.util.trie.Trie;
 
 public class GrammarBuilder implements Serializable {
@@ -101,6 +102,8 @@ public class GrammarBuilder implements Serializable {
 		for(List<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
 			nonterminals.addAll(newNonterminals);			
 		}
+		
+		nonterminals.addAll(collapsibleNonterminals);
 		
 		initializeGrammarProrperties();
 		validate();
@@ -1257,21 +1260,47 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	public void leftFactorize(String nonterminalName) {
-		HeadGrammarSlot head = nonterminalsMap.get(new Nonterminal(nonterminalName));
-		
-		Trie<Symbol> trie = new Trie<>();
-		
-		for(Alternate alt : head.getAlternates()) {
-			trie.add(alt.getSymbols(), alt);
+	
+	public void leftFactorize() {
+		for(HeadGrammarSlot head : nonterminals) {
+			leftFactorize(head);
 		}
 		
-		Node<Symbol> node = trie.getRoot();
+		for(List<HeadGrammarSlot> list : newNonterminalsMap.values()) {
+			for(HeadGrammarSlot head : list) {
+				leftFactorize(head);
+			}
+		}
+	}
+	
+	public void leftFactorize(String nonterminalName) {
+		HeadGrammarSlot head = nonterminalsMap.get(new Nonterminal(nonterminalName));
+		leftFactorize(head);
+	}
+	
+	public void leftFactorize(HeadGrammarSlot head) {
+
+		Trie<BodyGrammarSlot> trie = new Trie<>(new Stringizer<BodyGrammarSlot>() {
+
+			@Override
+			public String convert(BodyGrammarSlot slot) {
+				if(slot instanceof NonterminalGrammarSlot) {
+					return getNonterminalName(((NonterminalGrammarSlot) slot).getNonterminal());
+				} 
+				
+				return slot.getSymbol().getName();
+			}
+		});
+		
+		for(Alternate alt : head.getAlternates()) {
+			trie.add(alt.getSymbols());
+		}
+		
+		Node<BodyGrammarSlot> node = trie.getRoot();
 		
 		head.removeAllAlternates();
 		
-		
-		for(Edge<Symbol> edge : node.getEdges()) {
+		for(Edge<BodyGrammarSlot> edge : node.getEdges()) {
 			
 			int symbolIndex = 0;
 			BodyGrammarSlot firstSlot = null;
@@ -1287,9 +1316,33 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
+	private BodyGrammarSlot getBodyGrammarSlot(BodyGrammarSlot slot, int symbolIndex, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		
+		if(slot instanceof KeywordGrammarSlot) {
+			Keyword keyword = ((KeywordGrammarSlot) slot).getKeyword();
+			HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
+			return new KeywordGrammarSlot(symbolIndex, keywordHead, keyword, previous, head);
+		}
+		
+		else if (slot instanceof TerminalGrammarSlot) {
+			return new TerminalGrammarSlot(symbolIndex, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
+		}
+
+		// Nonterminal
+		else if (slot instanceof NonterminalGrammarSlot){
+			return new NonterminalGrammarSlot(symbolIndex, previous, ((NonterminalGrammarSlot) slot).getNonterminal(), head);						
+		} 
+		
+		else {
+			throw new RuntimeException("Should not reach here!");
+		}
+	}
+	
 	private int count;
 	
-	private void test(BodyGrammarSlot slot, Node<Symbol> node, int symbolIndex, HeadGrammarSlot headGrammarSlot) {
+	private List<HeadGrammarSlot> collapsibleNonterminals = new ArrayList<>();
+	
+	private void test(BodyGrammarSlot slot, Node<BodyGrammarSlot> node, int symbolIndex, HeadGrammarSlot headGrammarSlot) {
 		
 		if(node.size() == 0) {
 			new LastGrammarSlot(symbolIndex, slot, headGrammarSlot, null);
@@ -1307,7 +1360,7 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot newHead = new HeadGrammarSlot(nonterminal);
 		
 		nonterminalsMap.put(nonterminal, newHead);
-		nonterminals.add(newHead);
+		collapsibleNonterminals.add(newHead);
 		
 		NonterminalGrammarSlot ntSlot = new NonterminalGrammarSlot(symbolIndex + 1, slot, newHead, headGrammarSlot);
 		new LastGrammarSlot(symbolIndex + 2, ntSlot, headGrammarSlot, null);
@@ -1316,7 +1369,7 @@ public class GrammarBuilder implements Serializable {
 		symbolIndex = 0;
 		BodyGrammarSlot firstSlot = null;
 		
-		for(Edge<Symbol> edge : node.getEdges()) {
+		for(Edge<BodyGrammarSlot> edge : node.getEdges()) {
 			BodyGrammarSlot currentSlot = getBodyGrammarSlot(edge.getLabel(), symbolIndex, null, newHead);
 			if(symbolIndex == 0) {
 				firstSlot = currentSlot;
@@ -1326,6 +1379,22 @@ public class GrammarBuilder implements Serializable {
 			Alternate alternate = new Alternate(firstSlot);
 			newHead.addAlternate(alternate);
 		}
+	}
+	
+	public String getNonterminalName(HeadGrammarSlot head) {
+		String name = head.getNonterminal().getName();
+		
+		List<HeadGrammarSlot> list = newNonterminalsMap.get(head.getNonterminal());
+		
+		int index;
+		
+		if(list == null) {
+			return name;
+		} else {
+			index = list.indexOf(head) + 1;			
+		}
+		
+		return index > 0 ? name + index : name;			
 	}
 	
 }

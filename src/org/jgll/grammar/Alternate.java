@@ -266,14 +266,14 @@ public class Alternate implements Serializable {
 		return true;
 	}
 	
-	public Iterable<Symbol> getSymbols() {
+	public Iterable<BodyGrammarSlot> getSymbols() {
 		
-		return new Iterable<Symbol>() {
+		return new Iterable<BodyGrammarSlot>() {
 			
 			@Override
-			public Iterator<Symbol> iterator() {
+			public Iterator<BodyGrammarSlot> iterator() {
 				
-				return new Iterator<Symbol>() {
+				return new Iterator<BodyGrammarSlot>() {
 					
 					private BodyGrammarSlot current = firstSlot;
 
@@ -283,8 +283,8 @@ public class Alternate implements Serializable {
 					}
 
 					@Override
-					public Symbol next() {
-						Symbol s = current.getSymbol();
+					public BodyGrammarSlot next() {
+						BodyGrammarSlot s = current;
 						current = current.next();
 						return s;
 					}

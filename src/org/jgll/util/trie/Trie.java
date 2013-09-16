@@ -5,13 +5,15 @@ import java.util.Iterator;
 public class Trie<T> {
 
 	private Node<T> root;
+	private Stringizer<T> stringizer;
 	
-	public Trie() {
-		root = new Node<>();
+	public Trie(Stringizer<T> stringizer) {
+		this.stringizer = stringizer;
+		this.root = new Node<>();
 	}
 	
 	public void add(T label) {
-		add(root, label, null);
+		add(root, label);
 	}
 	
 	public Node<T> get(Iterable<T> prefix) {
@@ -27,7 +29,7 @@ public class Trie<T> {
 		return node;
 	}
 	
-	private Node<T> add(Node<T> node, T label, Object object) {
+	private Node<T> add(Node<T> node, T label) {
 		if(node.size() == 0) {
 			return insert(node, label);
 		}
@@ -42,7 +44,7 @@ public class Trie<T> {
 	
 	private Node<T> getNodeWithEdgeLabel(Node<T> node, T label) {
 		for(Edge<T> edge : node.getEdges()) {
-			if(edge.getLabel().equals(label)) {
+			if(stringizer.convert(edge.getLabel()).equals(stringizer.convert(label))) {
 				return edge.getDestination();
 			}
 		}
@@ -50,10 +52,6 @@ public class Trie<T> {
 	}
 	
 	public void add(Iterable<T> labels) {
-		add(labels, null);
-	}
-	
-	public void add(Iterable<T> labels, Object object) {
 	
 		Node<T> node = root;
 		
@@ -61,7 +59,7 @@ public class Trie<T> {
 		
 		while(it.hasNext()) {
 			T label = it.next();
-			node = add(node, label, object);
+			node = add(node, label);
 		}
 	}
 	
@@ -71,10 +69,8 @@ public class Trie<T> {
 		return newNode;
 	}
 	
-	
 	public Node<T> getRoot() {
 		return root;
 	}
-	
 	
 }

@@ -16,6 +16,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -102,12 +103,15 @@ public class FilterTest6 {
 		
 		builder.rewritePrecedencePatterns();
 
+		builder.leftFactorize();
+		
 		grammar = builder.build();
+		System.out.println(grammar);
+
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);
 	}
 
-	@Test
 	public void testParsersy() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+-a+a-a-a+a"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+-a+a-a-a+a"), grammar, "E");
@@ -117,6 +121,7 @@ public class FilterTest6 {
 	@Test
 	public void testInput() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a--a+-a+a-a-a+a"), grammar, "E");
+		Visualization.generateSPPFGraphWithIntermeiateAndListNodes("/Users/aliafroozeh/output", sppf);
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 

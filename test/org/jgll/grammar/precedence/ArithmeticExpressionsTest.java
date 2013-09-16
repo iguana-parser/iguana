@@ -66,7 +66,7 @@ public class ArithmeticExpressionsTest {
 		builder.addPrecedencePattern(E, rule2, 2, rule2);
 		
 		builder.rewritePrecedencePatterns();
-
+		
 		grammar = builder.build();
 		levelParser = ParserFactory.levelParser(grammar);
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
