@@ -168,6 +168,11 @@ public class SPPFVisitorUtil {
 	}
 	
 	public static void removeCollapsibleNode(NonterminalSymbolNode node) {
+		
+		if(node.childrenCount() == 0) {
+			return;
+		}
+		
 		if(!node.isAmbiguous()) {
 			if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
 				SPPFNode child = node.getChildAt(node.childrenCount() - 1);
