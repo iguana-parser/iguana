@@ -3,6 +3,7 @@ package org.jgll.traversal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
@@ -165,6 +166,27 @@ public class SPPFVisitorUtil {
 			}
 		}
 	}
+	
+	public static void removeCollapsibleNode(NonterminalSymbolNode node) {
+		if(!node.isAmbiguous()) {
+			for(SPPFNode child : node.getChildren()) {
+				if(child instanceof CollapsibleNode) {
+					node.replaceWithChildren(child);					
+				}
+			}
+		}
+	}
+	
+	public static void removeCollapsibleNode(PackedNode node) {
+		if(!node.isAmbiguous()) {
+			for(SPPFNode child : node.getChildren()) {
+				if(child instanceof CollapsibleNode) {
+					node.replaceWithChildren(child);					
+				}
+			}
+		}
+	}
+
 	
 	public static void removeListSymbolNode(PackedNode node) {
 		removeIntermediateNode(node);

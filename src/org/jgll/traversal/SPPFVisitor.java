@@ -26,5 +26,5 @@ public interface SPPFVisitor {
 	public void visit(PackedNode node);
 	
 	public void visit(ListSymbolNode node);
-
+	
 }

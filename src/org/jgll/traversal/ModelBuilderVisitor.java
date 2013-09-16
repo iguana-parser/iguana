@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jgll.grammar.Character;
 import org.jgll.grammar.CharacterClass;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -61,6 +60,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	@Override
 	public void visit(NonterminalSymbolNode nonterminalSymbolNode) {
 		removeIntermediateNode(nonterminalSymbolNode);
+		removeCollapsibleNode(nonterminalSymbolNode);
 		
 		if(!nonterminalSymbolNode.isVisited()) {
 		
@@ -134,6 +134,8 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	public void visit(PackedNode packedNode) {
 		removeIntermediateNode(packedNode);
 		removeListSymbolNode(packedNode);
+		removeCollapsibleNode(packedNode);
+		
 		if(!packedNode.isVisited()) {
 			packedNode.setVisited(true);
 			visitChildren(packedNode, this);
