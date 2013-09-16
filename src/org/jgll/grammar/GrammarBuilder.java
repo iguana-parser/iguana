@@ -1300,7 +1300,7 @@ public class GrammarBuilder implements Serializable {
 		
 		Node<BodyGrammarSlot> node = trie.getRoot();
 		
-		head.removeNonEpsilonAlternates();
+		head.removeAllAlternates();
 		
 		for(Edge<BodyGrammarSlot> edge : node.getEdges()) {
 			
@@ -1312,6 +1312,7 @@ public class GrammarBuilder implements Serializable {
 			if(symbolIndex == 0) {
 				firstSlot = currentSlot;
 			}
+			
 			test(currentSlot, edge.getDestination(), symbolIndex, head);
 			Alternate alternate = new Alternate(firstSlot);
 			head.addAlternate(alternate);
@@ -1335,8 +1336,16 @@ public class GrammarBuilder implements Serializable {
 			return new NonterminalGrammarSlot(symbolIndex, previous, ((NonterminalGrammarSlot) slot).getNonterminal(), head);						
 		} 
 		
+		else if(slot instanceof EpsilonGrammarSlot) {
+			return new EpsilonGrammarSlot(symbolIndex, head, ((EpsilonGrammarSlot) slot).getObject());
+		}
+		
+		else if(slot instanceof LastGrammarSlot) {
+			return new LastGrammarSlot(symbolIndex, previous, head, ((LastGrammarSlot) slot).getObject());
+		}
+		
 		else {
-			throw new RuntimeException("Should not reach here!");
+			throw new RuntimeException("Should not be here!");
 		}
 	}
 	
@@ -1347,8 +1356,6 @@ public class GrammarBuilder implements Serializable {
 	private void test(BodyGrammarSlot slot, Node<BodyGrammarSlot> node, int symbolIndex, HeadGrammarSlot headGrammarSlot) {
 		
 		if(node.size() == 0) {
-			assert slot.next() instanceof LastGrammarSlot;
-			new LastGrammarSlot(symbolIndex, slot, headGrammarSlot, ((LastGrammarSlot) slot.next()).getObject());
 			return;
 		}
 		
