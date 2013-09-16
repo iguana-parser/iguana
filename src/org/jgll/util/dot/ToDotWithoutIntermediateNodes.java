@@ -17,12 +17,14 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	@Override
 	public void visit(PackedNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);
+		SPPFVisitorUtil.removeCollapsibleNode(node);
 		super.visit(node);
 	}
 	
 	@Override
 	public void visit(NonterminalSymbolNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);
+		SPPFVisitorUtil.removeCollapsibleNode(node);
 		super.visit(node);
 	}
 }

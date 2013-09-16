@@ -169,24 +169,19 @@ public class SPPFVisitorUtil {
 	
 	public static void removeCollapsibleNode(NonterminalSymbolNode node) {
 		if(!node.isAmbiguous()) {
-			for(SPPFNode child : node.getChildren()) {
-				if(child instanceof CollapsibleNode) {
-					node.replaceWithChildren(child);					
-				}
+			if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
+				SPPFNode child = node.getChildAt(node.childrenCount() - 1);
+				node.replaceWithChildren(child);				
 			}
 		}
 	}
 	
 	public static void removeCollapsibleNode(PackedNode node) {
-		if(!node.isAmbiguous()) {
-			for(SPPFNode child : node.getChildren()) {
-				if(child instanceof CollapsibleNode) {
-					node.replaceWithChildren(child);					
-				}
-			}
+		if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
+			SPPFNode child = node.getChildAt(node.childrenCount() - 1);
+			node.replaceWithChildren(child);				
 		}
 	}
-
 	
 	public static void removeListSymbolNode(PackedNode node) {
 		removeIntermediateNode(node);

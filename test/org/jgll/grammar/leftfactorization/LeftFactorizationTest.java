@@ -8,6 +8,7 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Test;
 
 
@@ -24,6 +25,7 @@ public class LeftFactorizationTest {
 		System.out.println(grammar);
 
 		GLLParser rdParser = ParserFactory.recursiveDescentParser(grammar);
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a*a+a/a--a"), grammar, "E");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a*a"), grammar, "E");
+		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/output", sppf);
 	}
 }
