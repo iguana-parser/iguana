@@ -1261,7 +1261,7 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	
-	public void leftFactorize() {
+	public GrammarBuilder leftFactorize() {
 		for(HeadGrammarSlot head : nonterminals) {
 			leftFactorize(head);
 		}
@@ -1271,6 +1271,8 @@ public class GrammarBuilder implements Serializable {
 				leftFactorize(head);
 			}
 		}
+		
+		return this;
 	}
 	
 	public void leftFactorize(String nonterminalName) {
@@ -1286,7 +1288,7 @@ public class GrammarBuilder implements Serializable {
 			public String convert(BodyGrammarSlot slot) {
 				if(slot instanceof NonterminalGrammarSlot) {
 					return getNonterminalName(((NonterminalGrammarSlot) slot).getNonterminal());
-				} 
+				}
 				
 				return slot.getSymbol().getName();
 			}
@@ -1298,7 +1300,7 @@ public class GrammarBuilder implements Serializable {
 		
 		Node<BodyGrammarSlot> node = trie.getRoot();
 		
-		head.removeAllAlternates();
+		head.removeNonEpsilonAlternates();
 		
 		for(Edge<BodyGrammarSlot> edge : node.getEdges()) {
 			

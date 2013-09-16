@@ -96,6 +96,16 @@ public class HeadGrammarSlot extends GrammarSlot {
 		alternates.clear();
 	}
 	
+	public void removeNonEpsilonAlternates() {
+		List<Alternate> l = new ArrayList<>();
+		for(Alternate alt : alternates) {
+			if(!(alt.getFirstSlot() instanceof LastGrammarSlot)) {
+				l.add(alt);
+			}
+		}
+		alternates.removeAll(l);
+	}
+	
 	public boolean isNullable() {
 		return nullable;
 	}
