@@ -1347,7 +1347,8 @@ public class GrammarBuilder implements Serializable {
 	private void test(BodyGrammarSlot slot, Node<BodyGrammarSlot> node, int symbolIndex, HeadGrammarSlot headGrammarSlot) {
 		
 		if(node.size() == 0) {
-			new LastGrammarSlot(symbolIndex, slot, headGrammarSlot, null);
+			assert slot.next() instanceof LastGrammarSlot;
+			new LastGrammarSlot(symbolIndex, slot, headGrammarSlot, ((LastGrammarSlot) slot.next()).getObject());
 			return;
 		}
 		

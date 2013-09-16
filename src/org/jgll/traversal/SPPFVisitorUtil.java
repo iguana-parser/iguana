@@ -169,6 +169,7 @@ public class SPPFVisitorUtil {
 	
 	public static void removeCollapsibleNode(NonterminalSymbolNode node) {
 		
+		// Check for keyword nodes that their children are not yet created.
 		if(node.childrenCount() == 0) {
 			return;
 		}
