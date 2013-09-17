@@ -1293,6 +1293,10 @@ public class GrammarBuilder implements Serializable {
 					return getNonterminalName(((NonterminalGrammarSlot) slot).getNonterminal());
 				}
 				
+				if(slot instanceof LastGrammarSlot) {
+					return "last";
+				}
+				
 				return slot.getSymbol().getName();
 			}
 		});

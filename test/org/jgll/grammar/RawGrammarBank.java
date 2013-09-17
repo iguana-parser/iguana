@@ -45,6 +45,9 @@ public class RawGrammarBank {
 		Rule rule6 = new Rule(E, list(E, new Character('-'), E));
 		builder.addRule(rule6);
 		
+		Rule rule8 = new Rule(E, list(E, new Character('-'), E, new Character(';')));
+		builder.addRule(rule8);
+		
 		Rule rule7 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule7);
 		

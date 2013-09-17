@@ -28,6 +28,7 @@ public class KeywordTest1 {
 		GrammarBuilder builder = new GrammarBuilder();
 		builder.addRule(r1);
 		builder.addRule(GrammarBuilder.fromKeyword(iff));
+		
 		grammar = builder.build();
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 	}

@@ -26,6 +26,6 @@ public class LeftFactorizationTest {
 
 		GLLParser rdParser = ParserFactory.recursiveDescentParser(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a*a"), grammar, "E");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/output", sppf);
+		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", sppf);
 	}
 }

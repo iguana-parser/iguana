@@ -3,6 +3,8 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.Epsilon;
+import org.jgll.grammar.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
@@ -29,6 +31,11 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		parser.getNonterminalNode(this, cr);
 		parser.pop();
 		return null;
+	}
+	
+	@Override
+	public Symbol getSymbol() {
+		return Epsilon.getInstance();
 	}
 	
 	@Override

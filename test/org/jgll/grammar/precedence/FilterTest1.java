@@ -75,7 +75,6 @@ public class FilterTest1 {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+-a+a"), grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
-
 	
 	private SPPFNode getSPPFNode() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 6);
