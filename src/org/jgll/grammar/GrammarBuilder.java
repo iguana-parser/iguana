@@ -33,6 +33,7 @@ import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
 import org.jgll.grammar.slotaction.NotMatchActions;
 import org.jgll.grammar.slotaction.NotPrecedeActions;
+import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
@@ -1331,28 +1332,48 @@ public class GrammarBuilder implements Serializable {
 		if(slot instanceof KeywordGrammarSlot) {
 			Keyword keyword = ((KeywordGrammarSlot) slot).getKeyword();
 			HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
-			return new KeywordGrammarSlot(symbolIndex, keywordHead, keyword, previous, head);
+			KeywordGrammarSlot newSlot = new KeywordGrammarSlot(symbolIndex, keywordHead, keyword, previous, head);
+			copyActions(slot, newSlot);
+			return newSlot;
 		}
 		
 		else if (slot instanceof TerminalGrammarSlot) {
-			return new TerminalGrammarSlot(symbolIndex, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
+			TerminalGrammarSlot newSlot = new TerminalGrammarSlot(symbolIndex, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
+			copyActions(slot, newSlot);
+			return newSlot;
 		}
 
 		// Nonterminal
 		else if (slot instanceof NonterminalGrammarSlot){
-			return new NonterminalGrammarSlot(symbolIndex, previous, ((NonterminalGrammarSlot) slot).getNonterminal(), head);						
+			NonterminalGrammarSlot newSlot = new NonterminalGrammarSlot(symbolIndex, previous, ((NonterminalGrammarSlot) slot).getNonterminal(), head);
+			copyActions(slot, newSlot);
+			return newSlot;
 		} 
 		
 		else if(slot instanceof EpsilonGrammarSlot) {
-			return new EpsilonGrammarSlot(symbolIndex, head, ((EpsilonGrammarSlot) slot).getObject());
+			EpsilonGrammarSlot newSlot = new EpsilonGrammarSlot(symbolIndex, head, ((EpsilonGrammarSlot) slot).getObject());
+			copyActions(slot, newSlot);
+			return newSlot;
 		}
 		
 		else if(slot instanceof LastGrammarSlot) {
-			return new LastGrammarSlot(symbolIndex, previous, head, ((LastGrammarSlot) slot).getObject());
+			LastGrammarSlot newSlot = new LastGrammarSlot(symbolIndex, previous, head, ((LastGrammarSlot) slot).getObject());
+			copyActions(slot, newSlot);
+			return newSlot;
 		}
 		
 		else {
 			throw new RuntimeException("Should not be here!");
+		}
+	}
+	
+	private void copyActions(BodyGrammarSlot original, BodyGrammarSlot copy) {
+		for(SlotAction<Boolean> popAction : original.getPopActions()) {
+			copy.addPopAction(popAction);
+		}
+		
+		for(SlotAction<Boolean> preCondition : original.getPreConditions()) {
+			copy.addPreCondition(preCondition);
 		}
 	}
 	
