@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.L0;
@@ -263,7 +264,11 @@ public class Grammar implements Serializable {
 			
 			@Override
 			public void visit(LastGrammarSlot slot) {
-				sb.append("\n");
+				if(slot instanceof EpsilonGrammarSlot) {
+					sb.append(" epsilon\n");
+				} else {
+					sb.append("\n");
+				}
 			}
 			
 			@Override

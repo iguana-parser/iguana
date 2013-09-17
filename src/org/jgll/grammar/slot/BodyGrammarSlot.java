@@ -110,7 +110,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return previous;
 	}
 	
-	
 	public void setPrevious(BodyGrammarSlot previous) {
 		this.previous = previous;
 	}

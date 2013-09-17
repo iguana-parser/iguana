@@ -1408,14 +1408,22 @@ public class GrammarBuilder implements Serializable {
 		BodyGrammarSlot firstSlot = null;
 		
 		for(Edge<BodyGrammarSlot> edge : node.getEdges()) {
-			BodyGrammarSlot currentSlot = getBodyGrammarSlot(edge.getLabel(), symbolIndex, null, newHead);
-			if(symbolIndex == 0) {
-				firstSlot = currentSlot;
+			BodyGrammarSlot s = edge.getLabel();
+			BodyGrammarSlot currentSlot;
+			if(s instanceof LastGrammarSlot) {
+				currentSlot = new EpsilonGrammarSlot(symbolIndex, newHead, ((LastGrammarSlot) s).getObject());
+				copyActions(s, currentSlot);
+				newHead.addAlternate(new Alternate(currentSlot));
+			} else {
+				currentSlot = getBodyGrammarSlot(edge.getLabel(), symbolIndex, null, newHead);
+				if(symbolIndex == 0) {
+					firstSlot = currentSlot;
+				}
+				test(currentSlot, edge.getDestination(), symbolIndex, newHead);
+				
+				Alternate alternate = new Alternate(firstSlot);
+				newHead.addAlternate(alternate);
 			}
-			test(currentSlot, edge.getDestination(), symbolIndex, newHead);
-			
-			Alternate alternate = new Alternate(firstSlot);
-			newHead.addAlternate(alternate);
 		}
 	}
 	
