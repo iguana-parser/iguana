@@ -103,10 +103,7 @@ public class FilterTest6 {
 		
 		builder.rewritePrecedencePatterns();
 
-		builder.leftFactorize();
-		
 		grammar = builder.build();
-		System.out.println(grammar);
 
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);
@@ -121,7 +118,6 @@ public class FilterTest6 {
 	@Test
 	public void testInput() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a--a+-a+a-a-a+a"), grammar, "E");
-		Visualization.generateSPPFGraphWithIntermeiateAndListNodes("/Users/aliafroozeh/output", sppf);
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 

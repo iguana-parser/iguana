@@ -33,7 +33,7 @@ public class Test2 {
 		
 		rdParser = ParserFactory.levelParser(grammar);
 		levelParser = ParserFactory.recursiveDescentParser(grammar);
-		recognizer = RecognizerFactory.contextFreeRecognizer();
+		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}
 	
 	@Test

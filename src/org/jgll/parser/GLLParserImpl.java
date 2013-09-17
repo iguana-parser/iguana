@@ -405,5 +405,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		return lookupTable;
 	}
 
-	
+	@Override
+	public Grammar getGrammar() {
+		return grammar;
+	}
 }

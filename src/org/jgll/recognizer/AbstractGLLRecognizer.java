@@ -1,16 +1,13 @@
 package org.jgll.recognizer;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.StartSlot;
+import org.jgll.recognizer.lookup.Lookup;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 public abstract class AbstractGLLRecognizer implements GLLRecognizer {
@@ -42,20 +39,21 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	 */
 	protected Grammar grammar;
 	
+	private Lookup lookup;
+	
 	/**
 	 * The nonterminal from which the parsing will be started.
 	 */
 	protected HeadGrammarSlot startSymbol;
 	
-	protected CuckooHashSet<Descriptor> descriptorSet;
-	
-	protected Deque<Descriptor> descriptorStack;
-	
-	protected CuckooHashSet<GSSNode> gssNodes;
-	
 	protected boolean recognized;
 	
 	protected int endIndex;
+	
+	
+	public AbstractGLLRecognizer(Lookup lookup) {
+		this.lookup = lookup;
+	}
 	
 	@Override
 	public final boolean recognize(Input input, Grammar grammar, String nonterminalName) {
@@ -105,19 +103,16 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.debug("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-//		log.debug("Descriptors: {}", lookupTable.getDescriptorsCount());
-//		log.debug("GSSNodes: {}", lookupTable.getGSSNodes().size());
-//		log.debug("Non-packed nodes: {}", lookupTable.getDescriptorsCount());
-//		log.debug("GSS Nodes: {}", lookupTable.getGSSNodesCount());
-//		log.debug("GSS Edges: {}", lookupTable.getGSSEdgesCount());
+		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.debug("Descriptors: {}", lookup.getDescriptorsCount());
+		log.debug("GSS Nodes: {}", lookup.getGSSNodesCount());
+		log.debug("GSS Edges: {}", lookup.getGSSEdgesCount());
 	}
 	
 	/**
 	 * initialized the parser's state before a new parse.
 	 */
 	protected void init(Grammar grammar, Input input, int startIndex, int endIndex, HeadGrammarSlot startSymbol){
-		
 		this.grammar = grammar;
 		this.startSymbol = startSymbol;
 		this.input = input;
@@ -125,35 +120,13 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		this.endIndex = endIndex;
 		this.recognized = false;
 		this.cu = u0;
-		
-		if(descriptorSet == null) {
-			descriptorSet = new CuckooHashSet<>(Descriptor.externalHasher);
-		} else {
-			descriptorSet.clear();
-		}
-		
-		if(descriptorStack == null) {
-			descriptorStack = new ArrayDeque<>();
-		} else {
-			descriptorStack.clear();
-		}
-		
-		if(gssNodes == null) {
-			gssNodes = new CuckooHashSet<>(GSSNode.externalHasher);
-		} else {
-			gssNodes.clear();
-		}
+		lookup.init(input);
 	}
 
 	@Override
 	public void add(GrammarSlot slot, GSSNode u, int inputIndex) {		
 		Descriptor descriptor = new Descriptor(slot, u, inputIndex);
-		if(descriptorSet.add(descriptor) == null) {
-			log.trace("Descriptor added: %s : true", descriptor);
-			descriptorStack.push(descriptor);
-		} else {
-			log.trace("Descriptor %s : false", descriptor);
-		}
+		lookup.addDescriptor(descriptor);
 	}
 	
 	@Override
@@ -173,19 +146,14 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	}
 
 	@Override
-	public final GSSNode create(GrammarSlot L, GSSNode u, int i) {
-		log.trace("GSSNode created: (%s, %d)",  L, i);
-		GSSNode key = new GSSNode(L, i);
-
-		GSSNode v = gssNodes.add(key);
-		if(v == null) {
-			v = key;
-		}
+	public final GSSNode create(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex) {
 		
-		if(!v.hasChild(u)) {
-			v.addChild(u);
+		GSSNode v = lookup.getGSSNode(slot, inputIndex);
+		
+		if(!v.hasChild(currentGSSNode)) {
+			v.addChild(currentGSSNode);
 			for(int index : v.getPoppedIndices()) {
-				add(L, u, index);
+				add(slot, currentGSSNode, index);
 			}
 		}
 		
@@ -194,12 +162,12 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
 	@Override
 	public boolean hasNextDescriptor() {
-		return !descriptorStack.isEmpty();
+		return lookup.hasDescriptor();
 	}
 	
 	@Override
 	public Descriptor nextDescriptor() {
-		return descriptorStack.pop();
+		return lookup.nextDescriptor();
 	}
 	
 	@Override

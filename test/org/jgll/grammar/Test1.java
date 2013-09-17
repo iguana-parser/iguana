@@ -32,7 +32,7 @@ public class Test1 {
 	public void init() {
 		Rule r1 = new Rule(new Nonterminal("A"));
 		grammar = new GrammarBuilder("epsilon").addRule(r1).build();
-		recognizer = RecognizerFactory.contextFreeRecognizer();
+		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 		rdParser = ParserFactory.recursiveDescentParser(grammar);
 		levelParser = ParserFactory.levelParser(grammar);
 	}

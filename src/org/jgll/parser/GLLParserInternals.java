@@ -1,5 +1,6 @@
 package org.jgll.parser;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.Keyword;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -51,5 +52,7 @@ public interface GLLParserInternals {
 	public void recordParseError(GrammarSlot slot);
 	
 	public LookupTable getLookupTable();
+	
+	public Grammar getGrammar();
 	
 }

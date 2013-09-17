@@ -18,10 +18,15 @@ public class NotMatchActions {
 			slot.addPopAction(new SlotAction<Boolean>() {
 				
 				private static final long serialVersionUID = 1L;
+				private GLLRecognizer recognizer;
 
 				@Override
 				public Boolean execute(GLLParserInternals parser, Input input) {
-					GLLRecognizer recognizer = RecognizerFactory.contextFreeRecognizer();
+					
+					if(recognizer == null) {
+						recognizer = RecognizerFactory.contextFreeRecognizer(parser.getGrammar());						
+					}
+					
 					return recognizer.recognize(input, parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), ifNot);
 				}
 			});
