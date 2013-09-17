@@ -123,8 +123,9 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
+		log.info("Input size: %d, loc: %d", input.size(), input.getLineCount());
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.debug("Descriptors: %d", lookupTable.getDescriptorsCount());
+		log.info("Descriptors: %d", lookupTable.getDescriptorsCount());
 		log.debug("Non-packed nodes: %d", lookupTable.getNonPackedNodesCount());
 		log.debug("Packed nodes: %d", lookupTable.getPackedNodesCount());
 		log.debug("GSS Nodes: %d", lookupTable.getGSSNodesCount());

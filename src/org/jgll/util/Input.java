@@ -22,7 +22,15 @@ public class Input {
 
 	private int[] input;
 
+	/**
+	 * This array keeps the line and column information associated with each input index.
+	 */
 	private LineColumn[] lineColumns;
+	
+	/**
+	 * Number of lines in the input.
+	 */
+	private int lineCount;
 	
 	public static Input fromString(String s) {
 		int[] input = new int[s.length() + 1];
@@ -228,6 +236,7 @@ public class Input {
 		for (int i = 0; i < input.length - 1; i++) {
 			lineColumns[i] = new LineColumn(lineNumber, columnNumber);
 			if (input[i] == '\n') {
+				lineCount++;
 				lineNumber++;
 				columnNumber = 1;
 			} else if (input[i] == '\r') {
@@ -302,16 +311,20 @@ public class Input {
 		
 		return sb.toString();
 	}
+	
+	public int getLineCount() {
+		return lineCount;
+	}
 
-  public boolean isEndOfLine(int currentInputIndex) {
-    // TODO: unfinished
-    return input[currentInputIndex] == 0
-        || lineColumns[currentInputIndex + 1].columnNumber == 0;
-  }
+	public boolean isEndOfLine(int currentInputIndex) {
+		// TODO: unfinished
+		return input[currentInputIndex] == 0
+				|| lineColumns[currentInputIndex + 1].columnNumber == 0;
+	}
 
-  public boolean isStartOfLine(int currentInputIndex) {
-    // TODO: check this?!
-    return currentInputIndex == 0
-        || lineColumns[currentInputIndex].columnNumber == 0;
-  }
+	public boolean isStartOfLine(int currentInputIndex) {
+		// TODO: check this?!
+		return currentInputIndex == 0
+				|| lineColumns[currentInputIndex].columnNumber == 0;
+	}
 }

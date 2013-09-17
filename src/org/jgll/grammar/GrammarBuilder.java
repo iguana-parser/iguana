@@ -1388,7 +1388,9 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		if(node.size() == 1) {
-			BodyGrammarSlot currentSlot = getBodyGrammarSlot(node.getEdges().get(0).getLabel(), symbolIndex, slot, headGrammarSlot);
+			BodyGrammarSlot s = node.getEdges().get(0).getLabel();
+			BodyGrammarSlot currentSlot = getBodyGrammarSlot(s, symbolIndex, slot, headGrammarSlot);
+			copyActions(s, currentSlot);
 			test(currentSlot, node.getEdges().get(0).getDestination(), symbolIndex + 1, headGrammarSlot);
 			return;
 		}
