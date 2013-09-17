@@ -1,4 +1,4 @@
-package org.jgll.lookup;
+package org.jgll.parser.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;

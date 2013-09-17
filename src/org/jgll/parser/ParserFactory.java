@@ -1,8 +1,8 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.lookup.LevelBasedLookupTable;
-import org.jgll.lookup.RecursiveDescentLookupTable;
+import org.jgll.parser.lookup.LevelBasedLookupTable;
+import org.jgll.parser.lookup.RecursiveDescentLookupTable;
 
 
 public class ParserFactory {
