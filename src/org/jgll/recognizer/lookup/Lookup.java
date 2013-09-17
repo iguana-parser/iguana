@@ -20,7 +20,7 @@ public interface Lookup {
 	
 	public boolean hasGSSEdge(GSSNode source, GSSNode destination);
 
-	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
+	public GSSNode getGSSNode(GrammarSlot slot, int inputIndex);
 	
 	public int getGSSNodesCount();
 	
