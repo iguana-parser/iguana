@@ -1,24 +1,16 @@
 package org.jgll.recognizer;
 
+import org.jgll.grammar.Grammar;
+import org.jgll.recognizer.lookup.HashTableLookup;
+
 public class RecognizerFactory {
 
-	private static GLLRecognizer contextFreeRecognizer;
-	private static GLLRecognizer prefixRecognizer;
-	
-	public static GLLRecognizer contextFreeRecognizer() {
-		if(contextFreeRecognizer == null) {
-			contextFreeRecognizer = new InterpretedGLLRecognizer();
-			return contextFreeRecognizer;
-		}
-		return contextFreeRecognizer;
+	public static GLLRecognizer contextFreeRecognizer(Grammar grammar) {
+		return new InterpretedGLLRecognizer(new HashTableLookup());
 	}
 	
-	public static GLLRecognizer prefixContextFreeRecognizer() {
-		if(prefixRecognizer == null) {
-			prefixRecognizer = new PrefixGLLRecognizer();
-			return prefixRecognizer;
-		}
-		return prefixRecognizer;
+	public static GLLRecognizer prefixContextFreeRecognizer(Grammar grammar) {
+		return new PrefixGLLRecognizer(new HashTableLookup());
 	}
 	
 }

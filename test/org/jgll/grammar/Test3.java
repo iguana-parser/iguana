@@ -7,7 +7,6 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.recognizer.PrefixGLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -40,8 +39,7 @@ public class Test3 {
 		
 		rdParser = ParserFactory.levelParser(grammar);
 		levelParser = ParserFactory.recursiveDescentParser(grammar);
-		recognizer = RecognizerFactory.contextFreeRecognizer();
-
+		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}
 	
 	@Test
@@ -82,12 +80,10 @@ public class Test3 {
 	
 	@Test
 	public void testPrefixRecognizer() {
-		recognizer = new PrefixGLLRecognizer();
+		recognizer = RecognizerFactory.prefixContextFreeRecognizer(grammar);
 		boolean result = recognizer.recognize(Input.fromString("bca"), grammar, "A");
 		assertEquals(true, result);
 	}
-	
-
 	
 	private SPPFNode expectedSPPF() {
 		TerminalSymbolNode node0 = new TerminalSymbolNode('b', 0);
@@ -99,7 +95,6 @@ public class Test3 {
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
 		node4.addChild(node1);
 		node4.addChild(node3);
-		
 		return node4;
 	}
 	

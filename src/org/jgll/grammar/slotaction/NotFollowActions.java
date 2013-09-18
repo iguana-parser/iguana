@@ -19,10 +19,13 @@ public class NotFollowActions {
 		slot.addPopAction(new SlotAction<Boolean>() {
 			
 			private static final long serialVersionUID = 1L;
+			private GLLRecognizer recognizer;
 			
 			@Override
 			public Boolean execute(GLLParserInternals parser, Input input) {
-				GLLRecognizer recognizer = RecognizerFactory.prefixContextFreeRecognizer();
+				if(recognizer == null) {
+					recognizer = RecognizerFactory.prefixContextFreeRecognizer(parser.getGrammar());
+				}
 				return recognizer.recognize(input, parser.getCurrentInputIndex(), input.size(), firstSlot);
 			}
 		});

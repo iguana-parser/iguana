@@ -1,4 +1,4 @@
-package org.jgll.lookup;
+package org.jgll.parser.lookup;
 
 import java.util.ArrayDeque;
 import java.util.Collections;
