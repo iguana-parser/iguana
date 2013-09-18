@@ -100,6 +100,7 @@ public class GrammarBuilder implements Serializable {
 		
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
+		
 		for(List<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
 			nonterminals.addAll(newNonterminals);			
 		}
@@ -629,6 +630,7 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private void setDirectNullables() {
+		
 		for (HeadGrammarSlot head : nonterminals) {
 						
 			for (Alternate alternate : head.getAlternates()) {
@@ -648,13 +650,13 @@ public class GrammarBuilder implements Serializable {
 							directNullableSlot.setId(ntSlot.getId());
 							slots.remove(ntSlot);
 							slots.add(directNullableSlot);
+							copyActions(ntSlot, directNullableSlot);
 						}
 					}
 					currentSlot = currentSlot.next();
 				}
 			}
 		}
-
 	}
 	
 	public void rewritePatterns() {
