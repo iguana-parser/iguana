@@ -1428,6 +1428,13 @@ public class GrammarBuilder implements Serializable {
 				Alternate alternate = new Alternate(firstSlot);
 				newHead.addAlternate(alternate);
 			}
+			
+			// Execute the pop actions of the last nonterminal before a collapsible 
+			// nonterminal as preconditions of the first symbol in the alternates of
+			// the collapsible nonterminal.
+			for(SlotAction<Boolean> action : s.getPopActions()) {
+				currentSlot.addPreCondition(action);
+			}
 		}
 	}
 	

@@ -103,7 +103,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		log.debug("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.debug("Descriptors: {}", lookup.getDescriptorsCount());
 		log.debug("GSS Nodes: {}", lookup.getGSSNodesCount());
 		log.debug("GSS Edges: {}", lookup.getGSSEdgesCount());
