@@ -25,7 +25,12 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input intput) {
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+		
+		if(executePreConditions(parser, input)) {
+			return null;
+		}
+		
 		// A ::= ε
 		TerminalSymbolNode cr = parser.getEpsilonNode();
 		parser.getNonterminalNode(this, cr);

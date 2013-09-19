@@ -7,7 +7,6 @@ import org.jgll.grammar.Character;
 import org.jgll.grammar.Keyword;
 import org.jgll.grammar.Symbol;
 import org.jgll.grammar.Terminal;
-import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
@@ -108,22 +107,6 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		}
 		
 		return next;
-	}
-	
-	/**
-	 * Because keywords are directly created without 
-	 * a pop action, at this point the popActions for the next slots
-     * should be checked.
-	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
-	 *								   | NegativeNumber
-	 */
-	private boolean checkPopActions(GLLParserInternals parser, Input input) {
-		for(SlotAction<Boolean> slotAction : next.popActions) {
-			if(slotAction.execute(parser, input)) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	@Override

@@ -80,6 +80,23 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 
 		return false;
 	}
+	
+	/**
+	 * Because some grammar slots e.g., keywords are directly created without 
+	 * a pop action, at this point the popActions for the next slots
+     * should be checked.
+	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
+	 *								   | NegativeNumber
+	 */
+	protected boolean checkPopActions(GLLParserInternals parser, Input input) {
+		for(SlotAction<Boolean> slotAction : next.popActions) {
+			if(slotAction.execute(parser, input)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	/**
 	 * Checks whether the character at the provided input index belongs to the first set  

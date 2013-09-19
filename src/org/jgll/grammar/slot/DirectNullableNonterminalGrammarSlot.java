@@ -33,6 +33,13 @@ public class DirectNullableNonterminalGrammarSlot extends NonterminalGrammarSlot
 			return nonterminal;
 			
 		} else if (testFollowSet(ci, input)) {
+			/**
+			 * Also check the pre-conditions of the epsilon alternate! 
+			 */
+			if(nonterminal.getEpsilonAlternate().getFirstSlot().executePreConditions(parser, input)) {
+				return null;
+			}
+
 			NonPackedNode node = parser.getLookupTable().getNonPackedNode(nonterminal, ci, ci);
 			node.addFirstPackedNode(nonterminal.getEpsilonAlternate().getFirstSlot(), ci);
 			
@@ -42,6 +49,10 @@ public class DirectNullableNonterminalGrammarSlot extends NonterminalGrammarSlot
 				return null;
 			} else {
 				parser.getIntermediateNode(next, node);
+				
+				if(checkPopActions(parser, input)) {
+					return null;
+				}
 			}
 			
 			return next;
