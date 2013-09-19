@@ -102,6 +102,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 					Object object = getObject(lastChild);
 					listener.startNode((T) object);
 					visitChildren(nonterminalSymbolNode, this);
+					removeCollapsibleNode(nonterminalSymbolNode);
 					result = listener.endNode((T) object, getChildrenValues(nonterminalSymbolNode), 
 								input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
 				} else {
@@ -121,9 +122,13 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	private Object getObject(CollapsibleNode node) {
 		
 		CollapsibleNode collapsibleNode = node;
-		
-		while(collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1) instanceof CollapsibleNode) {
-			collapsibleNode = (CollapsibleNode) collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1);
+		if(collapsibleNode.childrenCount() > 0) {
+			while(collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1) instanceof CollapsibleNode) {
+				collapsibleNode = (CollapsibleNode) collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1);
+				if(collapsibleNode.childrenCount() == 0) {
+					break;
+				}
+			}			
 		}
 		
 		LastGrammarSlot slot = (LastGrammarSlot) collapsibleNode.getFirstPackedNodeGrammarSlot();
@@ -131,16 +136,34 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	}
 
 	private void buildAmbiguityNode(NonterminalSymbolNode nonterminalSymbolNode) {
+		
 		int nPackedNodes = 0;
 		
 		for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
 			PackedNode packedNode = (PackedNode) child;
-			LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
-			listener.startNode((T) slot.getObject());
-			packedNode.accept(this);
-			Result<U> result = listener.endNode((T) slot.getObject(), getChildrenValues(packedNode), 
-					input.getPositionInfo(packedNode.getLeftExtent(), packedNode.getRightExtent()));
-			packedNode.setObject(result);
+			
+			Result<U> result;
+			
+			if(packedNode.getLastChild() instanceof CollapsibleNode) {
+				CollapsibleNode lastChild = (CollapsibleNode) packedNode.getLastChild();
+				Object object = getObject(lastChild);
+				listener.startNode((T) object);
+				
+				removeCollapsibleNode(lastChild);
+				
+				packedNode.accept(this);
+				result = listener.endNode((T) object, getChildrenValues(packedNode), 
+						input.getPositionInfo(packedNode.getLeftExtent(), packedNode.getRightExtent()));
+				packedNode.setObject(result);				
+			} else {
+				LastGrammarSlot slot = (LastGrammarSlot) packedNode.getGrammarSlot();
+				listener.startNode((T) slot.getObject());
+				packedNode.accept(this);
+				result = listener.endNode((T) slot.getObject(), getChildrenValues(packedNode), 
+						input.getPositionInfo(packedNode.getLeftExtent(), packedNode.getRightExtent()));
+				packedNode.setObject(result);				
+			}
+			
 			if(result != Result.filter()) {
 				nPackedNodes++;
 			}

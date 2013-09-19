@@ -200,6 +200,9 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	@Override
 	public SPPFNode getLastChild() {
+		if(children.size() == 0) {
+			return null;
+		}
 		return children.get(children.size() - 1);
 	}
 	
