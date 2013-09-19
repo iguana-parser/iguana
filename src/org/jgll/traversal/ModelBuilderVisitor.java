@@ -149,7 +149,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				Object object = getObject(lastChild);
 				listener.startNode((T) object);
 				
-				removeCollapsibleNode(lastChild);
+				removeCollapsibleNode(packedNode);
 				
 				packedNode.accept(this);
 				result = listener.endNode((T) object, getChildrenValues(packedNode), 

@@ -23,7 +23,7 @@ public class Visualization {
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	public static void generateSPPFGraphWithIntermeiateAndListNodes(String outputDir, SPPFNode sppf) {
+	public static void generateSPPFWithNonterminalNodesOnly(String outputDir, SPPFNode sppf) {
 		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists();
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
