@@ -193,6 +193,16 @@ public abstract class NonPackedNode extends SPPFNode {
 		return null;
 	}
 	
+	@Override
+	public SPPFNode getFirstChild() {
+		return children.get(0);
+	}
+	
+	@Override
+	public SPPFNode getLastChild() {
+		return children.get(children.size() - 1);
+	}
+	
 	public void addFirstPackedNode(GrammarSlot slot, int pivot) {
 		this.firstPackedNodeGrammarSlot = slot;
 		this.firstPackedNodePivot = pivot;

@@ -125,7 +125,16 @@ public class TerminalSymbolNode extends SPPFNode {
 				   t1.inputIndex == t2.inputIndex;
 
 		}
-		
+	}
+
+	@Override
+	public SPPFNode getLastChild() {
+		return null;
+	}
+
+	@Override
+	public SPPFNode getFirstChild() {
+		return null;
 	}
 
 }

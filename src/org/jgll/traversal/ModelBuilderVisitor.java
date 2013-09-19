@@ -9,6 +9,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -60,7 +61,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	@Override
 	public void visit(NonterminalSymbolNode nonterminalSymbolNode) {
 		removeIntermediateNode(nonterminalSymbolNode);
-		removeCollapsibleNode(nonterminalSymbolNode);
 		
 		if(!nonterminalSymbolNode.isVisited()) {
 		
@@ -84,21 +84,50 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 					list.add(result.getObject());
 					currentSlot = currentSlot.next();
 				}
-				
+
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
 				Result<U> result = listener.endNode((T) slot.getObject(), list, 
 						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
 				nonterminalSymbolNode.setObject(result);
+				
 			} else {
+				
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
-				listener.startNode((T) slot.getObject());
-				visitChildren(nonterminalSymbolNode, this);
-				Result<U> result = listener.endNode((T) slot.getObject(), getChildrenValues(nonterminalSymbolNode), 
-						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
+				
+				Result<U> result;
+				
+				if(nonterminalSymbolNode.getLastChild() instanceof CollapsibleNode) {
+					CollapsibleNode lastChild = (CollapsibleNode) nonterminalSymbolNode.getLastChild();
+					Object object = getObject(lastChild);
+					listener.startNode((T) object);
+					visitChildren(nonterminalSymbolNode, this);
+					result = listener.endNode((T) object, getChildrenValues(nonterminalSymbolNode), 
+								input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
+				} else {
+					listener.startNode((T) slot.getObject());
+					visitChildren(nonterminalSymbolNode, this);
+					result = listener.endNode((T) slot.getObject(), getChildrenValues(nonterminalSymbolNode), 
+								input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
+				}
+
 				nonterminalSymbolNode.setObject(result);
 			}
 		}
+	}
+	
+	// TODO: does not work for collapsible nodes which are ambiguous.
+	// They should be lifted, similar to intermediate nodes.
+	private Object getObject(CollapsibleNode node) {
+		
+		CollapsibleNode collapsibleNode = node;
+		
+		while(collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1) instanceof CollapsibleNode) {
+			collapsibleNode = (CollapsibleNode) collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1);
+		}
+		
+		LastGrammarSlot slot = (LastGrammarSlot) collapsibleNode.getFirstPackedNodeGrammarSlot();
+		return slot.getObject();
 	}
 
 	private void buildAmbiguityNode(NonterminalSymbolNode nonterminalSymbolNode) {
@@ -134,7 +163,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	public void visit(PackedNode packedNode) {
 		removeIntermediateNode(packedNode);
 		removeListSymbolNode(packedNode);
-		removeCollapsibleNode(packedNode);
 		
 		if(!packedNode.isVisited()) {
 			packedNode.setVisited(true);

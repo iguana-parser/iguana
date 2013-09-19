@@ -197,5 +197,15 @@ public class PackedNode extends SPPFNode {
 		}
 	}
 
+	@Override
+	public SPPFNode getLastChild() {
+		return children.get(children.size() - 1);
+	}
+
+	@Override
+	public SPPFNode getFirstChild() {
+		return children.get(0);
+	}
+
 
 }

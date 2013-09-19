@@ -31,6 +31,10 @@ public abstract class SPPFNode implements Level {
 	
 	public abstract Iterable<SPPFNode> getChildren();
 	
+	public abstract SPPFNode getLastChild();
+	
+	public abstract SPPFNode getFirstChild();
+	
 	public abstract boolean isAmbiguous();
 
 	public abstract int childrenCount();

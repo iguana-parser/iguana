@@ -83,4 +83,14 @@ public class DummyNode extends SPPFNode {
 	public int getLevel() {
 		return 0;
 	}
+
+	@Override
+	public SPPFNode getLastChild() {
+		return null;
+	}
+
+	@Override
+	public SPPFNode getFirstChild() {
+		return null;
+	}
 }

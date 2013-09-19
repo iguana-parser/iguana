@@ -3,7 +3,6 @@ package org.jgll.traversal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -182,8 +181,8 @@ public class SPPFVisitorUtil {
 				node.replaceWithChildren(child);
 				
 				// Push the saved object to the parent.
-				LastGrammarSlot slot = (LastGrammarSlot) node.getFirstPackedNodeGrammarSlot();
-				slot.setObject(((LastGrammarSlot)child.getFirstPackedNodeGrammarSlot()).getObject());
+//				LastGrammarSlot slot = (LastGrammarSlot) node.getFirstPackedNodeGrammarSlot();
+//				slot.setObject(((LastGrammarSlot)child.getFirstPackedNodeGrammarSlot()).getObject());
 				
 				removeCollapsibleNode(node);
 			}
@@ -196,8 +195,8 @@ public class SPPFVisitorUtil {
 			removeIntermediateNode(child);
 			node.replaceWithChildren(child);		
 			
-			LastGrammarSlot slot = (LastGrammarSlot) child.getFirstPackedNodeGrammarSlot();
-			((LastGrammarSlot)node.getGrammarSlot()).setObject(slot.getObject());
+//			LastGrammarSlot slot = (LastGrammarSlot) child.getFirstPackedNodeGrammarSlot();
+//			((LastGrammarSlot)node.getGrammarSlot()).setObject(slot.getObject());
 			
 			removeCollapsibleNode(node);
 		}
