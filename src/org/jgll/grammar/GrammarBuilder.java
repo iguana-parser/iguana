@@ -37,7 +37,7 @@ import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
-import org.jgll.util.trie.Stringizer;
+import org.jgll.util.trie.ExternalEqual;
 import org.jgll.util.trie.Trie;
 
 public class GrammarBuilder implements Serializable {
@@ -232,11 +232,11 @@ public class GrammarBuilder implements Serializable {
 				
 			case NOT_FOLLOW:
 				if (condition instanceof TerminalCondition) {
-					NotFollowActions.fromTerminalList(slot.next(), ((TerminalCondition) condition).getTerminals());
+					NotFollowActions.fromTerminalList(slot.next(), ((TerminalCondition) condition).getTerminals(), condition);
 				} else if (condition instanceof KeywordCondition) {
-					NotFollowActions.fromKeywordList(slot.next(), ((KeywordCondition) condition).getKeywords());
+					NotFollowActions.fromKeywordList(slot.next(), ((KeywordCondition) condition).getKeywords(), condition);
 				} else {
-					NotFollowActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition));
+					NotFollowActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
 				}
 				break;
 				
@@ -248,10 +248,10 @@ public class GrammarBuilder implements Serializable {
 				
 				if(condition instanceof KeywordCondition) {
 					KeywordCondition literalCondition = (KeywordCondition) condition;
-					NotPrecedeActions.fromKeywordList(slot, literalCondition.getKeywords());
+					NotPrecedeActions.fromKeywordList(slot, literalCondition.getKeywords(), condition);
 				} else {
 					TerminalCondition terminalCondition = (TerminalCondition) condition;
-					NotPrecedeActions.fromTerminalList(slot, terminalCondition.getTerminals());
+					NotPrecedeActions.fromTerminalList(slot, terminalCondition.getTerminals(), condition);
 				}
 				break;
 				
@@ -260,19 +260,19 @@ public class GrammarBuilder implements Serializable {
 					
 			case NOT_MATCH:
 				if(condition instanceof ContextFreeCondition) {
-					NotMatchActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition));
+					NotMatchActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
 				} else {
 					KeywordCondition simpleCondition = (KeywordCondition) condition;
-					NotMatchActions.fromKeywordList(slot.next(), simpleCondition.getKeywords());
+					NotMatchActions.fromKeywordList(slot.next(), simpleCondition.getKeywords(), condition);
 				}
 				break;
 				
 			case START_OF_LINE:
-			  LineActions.addStartOfLine(slot);
+			  LineActions.addStartOfLine(slot, condition);
 			  break;
 			  
 			case END_OF_LINE:
-			  LineActions.addEndOfLine(slot.next());
+			  LineActions.addEndOfLine(slot.next(), condition);
 			  break;
 		}
 	}
@@ -1288,19 +1288,24 @@ public class GrammarBuilder implements Serializable {
 	
 	public void leftFactorize(HeadGrammarSlot head) {
 
-		Trie<BodyGrammarSlot> trie = new Trie<>(new Stringizer<BodyGrammarSlot>() {
+		Trie<BodyGrammarSlot> trie = new Trie<>(new ExternalEqual<BodyGrammarSlot>() {
 
 			@Override
-			public String convert(BodyGrammarSlot slot) {
-				if(slot instanceof NonterminalGrammarSlot) {
-					return getNonterminalName(((NonterminalGrammarSlot) slot).getNonterminal());
+			public boolean isEqual(BodyGrammarSlot s1, BodyGrammarSlot s2) {
+				
+				if(s1.getClass() != s2.getClass()) {
+					return false;
 				}
 				
-				if(slot instanceof LastGrammarSlot) {
-					return "last";
+				if(s1 instanceof NonterminalGrammarSlot) {
+					return ((NonterminalGrammarSlot) s1).getNonterminal() == ((NonterminalGrammarSlot) s2).getNonterminal(); 
 				}
-				
-				return slot.getSymbol().getName();
+
+				if(s1 instanceof LastGrammarSlot) {
+					return s1 == s2;
+				}
+
+				return s1.getSymbol().equals(s2.getSymbol());
 			}
 		});
 		
@@ -1437,21 +1442,4 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 	}
-	
-	public String getNonterminalName(HeadGrammarSlot head) {
-		String name = head.getNonterminal().getName();
-		
-		List<HeadGrammarSlot> list = newNonterminalsMap.get(head.getNonterminal());
-		
-		int index;
-		
-		if(list == null) {
-			return name;
-		} else {
-			index = list.indexOf(head) + 1;			
-		}
-		
-		return index > 0 ? name + index : name;			
-	}
-	
 }

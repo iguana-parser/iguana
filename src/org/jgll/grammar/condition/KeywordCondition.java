@@ -41,5 +41,21 @@ public class KeywordCondition extends Condition {
 	public String toString() {
 		return type.toString() + " " +  listToString(keywords);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof KeywordCondition)) {
+			return false;
+		}
+		
+		KeywordCondition other = (KeywordCondition) obj;
+		
+		return type == other.type && keywords.equals(other.keywords);
+	}
 
 }

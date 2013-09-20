@@ -25,4 +25,20 @@ public class ContextFreeCondition extends Condition {
 	public String toString() {
 		return type.toString() + " " + listToString(symbols);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof ContextFreeCondition)) {
+			return false;
+		}
+		
+		ContextFreeCondition other = (ContextFreeCondition) obj;
+		
+		return type == other.type && symbols.equals(other.symbols);
+	}
 }

@@ -36,5 +36,21 @@ public class TerminalCondition extends Condition {
 	public String toString() {
 		return type.toString() + " " + listToString(terminals);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof TerminalCondition)) {
+			return false;
+		}
+		
+		TerminalCondition other = (TerminalCondition) obj;
+		
+		return type == other.type && terminals.equals(other.terminals);
+	}
 
 }

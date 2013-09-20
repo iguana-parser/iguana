@@ -23,7 +23,6 @@ public class ConditionFactory {
 		return createCondition(ConditionType.NOT_FOLLOW, symbols);
 	}
 	
-	
 	@SafeVarargs
 	public static <T extends Symbol> Condition precede(T...symbols) {
 		return createCondition(ConditionType.PRECEDE, symbols);
@@ -78,12 +77,12 @@ public class ConditionFactory {
 		return true;		
 	}
 
-  public static Condition endOfLine() {
-    return new PositionalCondition(ConditionType.END_OF_LINE);
-  }
-  
-  public static Condition startOfLine() {
-    return new PositionalCondition(ConditionType.START_OF_LINE);
-  }
+	public static Condition endOfLine() {
+		return new PositionalCondition(ConditionType.END_OF_LINE);
+	}
+
+	public static Condition startOfLine() {
+		return new PositionalCondition(ConditionType.START_OF_LINE);
+	}
 	
 }

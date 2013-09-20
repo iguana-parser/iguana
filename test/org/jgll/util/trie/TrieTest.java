@@ -8,15 +8,15 @@ import static org.junit.Assert.*;
 
 public class TrieTest {
 	
-	private Stringizer<String> stringizer;
+	private ExternalEqual<String> stringizer;
 
 	@Before
 	public void init() {
-		stringizer = new Stringizer<String>() {
+		stringizer = new ExternalEqual<String>() {
 
 			@Override
-			public String convert(String t) {
-				return t;
+			public boolean isEqual(String s1, String s2) {
+				return s1.equals(s2);
 			}
 		};
 	}

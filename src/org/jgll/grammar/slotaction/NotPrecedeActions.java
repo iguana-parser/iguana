@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jgll.grammar.Keyword;
 import org.jgll.grammar.Terminal;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.util.Input;
@@ -15,7 +16,7 @@ public class NotPrecedeActions {
 
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(NotPrecedeActions.class);
 	
-	public static void fromTerminalList(BodyGrammarSlot slot, final List<Terminal> terminals) {
+	public static void fromTerminalList(BodyGrammarSlot slot, final List<Terminal> terminals, final Condition condition) {
 		log.debug("Precede restriction added %s <<! %s", terminals, slot);
 		
 		BitSet testSet = new BitSet();
@@ -41,10 +42,32 @@ public class NotPrecedeActions {
 			
 				return set.get(input.charAt(ci - 1));
 			}
+
+			@Override
+			public Condition getCondition() {
+				return condition;
+			}
+			
+			@Override
+			public boolean equals(Object obj) {
+				if(this == obj) {
+					return true;
+				}
+				
+				if(!(obj instanceof SlotAction)) {
+					return false;
+				}
+				
+				@SuppressWarnings("unchecked")
+				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
+				return getCondition().equals(other.getCondition());
+			}
+			
 		});
 	}
 	
-	public static void fromKeywordList(BodyGrammarSlot slot, final List<Keyword> list) {
+	public static void fromKeywordList(BodyGrammarSlot slot, final List<Keyword> list, final Condition condition) {
+		
 		log.debug("Precede restriction added %s <<! %s", list, slot);
 		
 		slot.addPreCondition(new SlotAction<Boolean>() {
@@ -66,6 +89,27 @@ public class NotPrecedeActions {
 				
 				return false;
 			}
+
+			@Override
+			public Condition getCondition() {
+				return condition;
+			}
+			
+			@Override
+			public boolean equals(Object obj) {
+				if(this == obj) {
+					return true;
+				}
+				
+				if(!(obj instanceof SlotAction)) {
+					return false;
+				}
+				
+				@SuppressWarnings("unchecked")
+				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
+				return getCondition().equals(other.getCondition());
+			}
+			
 		});
 	}
 	
