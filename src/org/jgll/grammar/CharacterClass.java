@@ -24,6 +24,7 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	private BitSet testSet;
 	
 	public CharacterClass(List<Range> ranges) {
+		
 		if(ranges == null || ranges.size() == 0) {
 			throw new IllegalArgumentException("Ranges cannot be null or empty.");
 		}
