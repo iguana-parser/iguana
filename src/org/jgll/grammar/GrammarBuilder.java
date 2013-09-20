@@ -1298,7 +1298,19 @@ public class GrammarBuilder implements Serializable {
 				}
 				
 				if(s1 instanceof NonterminalGrammarSlot) {
-					return ((NonterminalGrammarSlot) s1).getNonterminal() == ((NonterminalGrammarSlot) s2).getNonterminal(); 
+					NonterminalGrammarSlot ntSlot1 = (NonterminalGrammarSlot) s1;
+					NonterminalGrammarSlot ntSlot2 = (NonterminalGrammarSlot) s2;
+					return ntSlot1.getNonterminal() == ntSlot2.getNonterminal() && 
+						   ntSlot1.getPreConditions().equals(ntSlot2.getPreConditions()) &&
+						   ntSlot1.next().getPopActions().equals(ntSlot2.next().getPopActions()); 
+				}
+				
+				if(s1 instanceof KeywordGrammarSlot) {
+					KeywordGrammarSlot keywordSlot1 = (KeywordGrammarSlot) s1;
+					KeywordGrammarSlot keywordSlot2 = (KeywordGrammarSlot) s2;
+					return keywordSlot1.getKeyword().equals(keywordSlot2.getKeyword()) && 
+						   keywordSlot1.getPreConditions().equals(keywordSlot2.getPreConditions()) &&
+						   keywordSlot1.next().getPopActions().equals(keywordSlot2.next().getPopActions()); 
 				}
 
 				if(s1 instanceof LastGrammarSlot) {
