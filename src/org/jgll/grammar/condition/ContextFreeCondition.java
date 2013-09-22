@@ -2,7 +2,7 @@ package org.jgll.grammar.condition;
 
 import java.util.List;
 
-import org.jgll.grammar.Symbol;
+import org.jgll.grammar.symbols.Symbol;
 
 import static org.jgll.util.CollectionsUtil.*;
 

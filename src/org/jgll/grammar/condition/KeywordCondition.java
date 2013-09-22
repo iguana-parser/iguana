@@ -3,7 +3,7 @@ package org.jgll.grammar.condition;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.Keyword;
+import org.jgll.grammar.symbols.Keyword;
 
 import static org.jgll.util.CollectionsUtil.*;
 

@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.Group;
-import org.jgll.grammar.Nonterminal;
-import org.jgll.grammar.Opt;
-import org.jgll.grammar.Plus;
-import org.jgll.grammar.Rule;
-import org.jgll.grammar.Symbol;
+import org.jgll.grammar.symbols.Group;
+import org.jgll.grammar.symbols.Nonterminal;
+import org.jgll.grammar.symbols.Opt;
+import org.jgll.grammar.symbols.Plus;
+import org.jgll.grammar.symbols.Rule;
+import org.jgll.grammar.symbols.Symbol;
 
 public class EBNFUtil {
 	

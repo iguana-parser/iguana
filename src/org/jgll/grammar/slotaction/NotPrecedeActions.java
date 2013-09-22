@@ -3,10 +3,10 @@ package org.jgll.grammar.slotaction;
 import java.util.BitSet;
 import java.util.List;
 
-import org.jgll.grammar.Keyword;
-import org.jgll.grammar.Terminal;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.symbols.Keyword;
+import org.jgll.grammar.symbols.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;

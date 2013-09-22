@@ -6,6 +6,9 @@ import static org.jgll.util.CollectionsUtil.*;
 import java.util.Set;
 
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.symbols.Character;
+import org.jgll.grammar.symbols.Nonterminal;
+import org.jgll.grammar.symbols.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;

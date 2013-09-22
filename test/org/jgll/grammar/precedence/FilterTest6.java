@@ -3,11 +3,11 @@ package org.jgll.grammar.precedence;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.assertTrue;
 
-import org.jgll.grammar.Character;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.Nonterminal;
-import org.jgll.grammar.Rule;
+import org.jgll.grammar.symbols.Character;
+import org.jgll.grammar.symbols.Nonterminal;
+import org.jgll.grammar.symbols.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;

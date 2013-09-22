@@ -1,11 +1,11 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.Keyword;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.symbols.Keyword;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -33,6 +33,8 @@ public interface GLLParserInternals {
 	public void addDescriptor(GrammarSlot label);
 	
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int ci);
+	
+	public NonPackedNode getRegularNode(int start, int end);
 	
 	/**
 	 * 

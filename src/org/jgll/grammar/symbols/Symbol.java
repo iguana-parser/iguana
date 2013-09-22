@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.symbols;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -17,6 +17,11 @@ public interface Symbol extends Serializable {
 	
 	public Symbol addCondition(Condition condition);
 	
+	
+	/**
+	 * Creates a copy of the current symbol and adds the given conditions
+	 * to it. 
+	 */
 	public Symbol addConditions(Collection<Condition> conditions);
 	
 	public Collection<Condition> getConditions();

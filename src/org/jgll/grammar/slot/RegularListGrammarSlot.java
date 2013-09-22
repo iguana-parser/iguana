@@ -3,19 +3,17 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.Character;
-import org.jgll.grammar.CharacterClass;
-import org.jgll.grammar.Range;
-import org.jgll.grammar.Symbol;
-import org.jgll.grammar.Terminal;
+import org.jgll.grammar.symbols.CharacterClass;
+import org.jgll.grammar.symbols.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 
 /**
  * A grammar slot whose next immediate symbol is regular expression list 
- * of the form [a-z]+
+ * of the form [a-z]+.
  * 
  * @author Ali Afroozeh
  *
@@ -45,12 +43,32 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		
 		int longestTerminalChain = parser.getGrammar().getLongestTerminalChain();
 
-		for(int i = 0; i < longestTerminalChain; i++) {
+		int i;
+		for(i = 0; i < longestTerminalChain; i++) {
 			int charAtCi = input.charAt(ci + i);
-			if(characterClass.match(charAtCi)) {
-				
+			if(!characterClass.match(charAtCi)) {
+				break;
 			}
 		}
+		
+		NonPackedNode sppfNode = null;
+
+		// The whole list is matched
+		if(i < longestTerminalChain) {
+			if(next instanceof LastGrammarSlot) {
+				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
+				parser.pop();
+				return null;
+			} else {
+				parser.getIntermediateNode(next, sppfNode);
+				return next;
+			}
+		} 
+		else {
+			// sppfNode = create new node 
+			parser.addDescriptor(this);
+		}
+		
 		
 		return null;
 	}
@@ -65,16 +83,6 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		
 	}
 	
-	private String checkInput(Terminal terminal) {
-		String s = "";
-		if(terminal instanceof Range) {
-			s += "   if(I[ci] >= " +  ((Range) terminal).getStart() + " + && I[ci] <= " + ((Range) terminal).getEnd() + ") {\n";	
-		} else {
-			s += "   if(I[ci] == " + ((Character) terminal).get() + ") {\n";
-		}
-		return s;
-	}
-
 	@Override
 	public boolean testFirstSet(int index, Input input) {
 		return characterClass.match(input.charAt(index));

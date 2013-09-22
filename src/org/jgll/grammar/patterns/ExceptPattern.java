@@ -2,8 +2,8 @@ package org.jgll.grammar.patterns;
 
 import java.util.List;
 
-import org.jgll.grammar.Nonterminal;
-import org.jgll.grammar.Symbol;
+import org.jgll.grammar.symbols.Nonterminal;
+import org.jgll.grammar.symbols.Symbol;
 
 public class ExceptPattern extends AbstractPattern {
 

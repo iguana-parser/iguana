@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.symbols;
 
 import java.util.Collection;
 
@@ -55,7 +55,7 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	@Override
-	public Symbol addConditions(Collection<Condition> conditions) {
+	public Nonterminal addConditions(Collection<Condition> conditions) {
 		Nonterminal nonterminal = new Nonterminal(this.name);
 		nonterminal.conditions.addAll(this.conditions);
 		nonterminal.conditions.addAll(conditions);

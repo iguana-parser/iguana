@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.symbols;
 
 import java.io.Serializable;
 import java.util.ArrayList;

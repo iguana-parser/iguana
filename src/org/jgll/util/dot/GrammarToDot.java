@@ -11,11 +11,11 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.Alternate;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.symbols.Alternate;
 
 public class GrammarToDot {
 	

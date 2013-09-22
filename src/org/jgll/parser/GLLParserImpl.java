@@ -2,7 +2,6 @@ package org.jgll.parser;
 
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.Keyword;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -12,6 +11,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
+import org.jgll.grammar.symbols.Keyword;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -408,5 +408,12 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	@Override
 	public Grammar getGrammar() {
 		return grammar;
+	}
+
+
+	@Override
+	public NonPackedNode getRegularNode(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

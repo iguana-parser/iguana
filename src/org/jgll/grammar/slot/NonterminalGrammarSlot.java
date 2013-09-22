@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
 
-import org.jgll.grammar.Symbol;
-import org.jgll.grammar.Terminal;
+import org.jgll.grammar.symbols.Symbol;
+import org.jgll.grammar.symbols.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;

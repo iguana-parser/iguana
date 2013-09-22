@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.symbols;
 
 import org.jgll.grammar.condition.Condition;
 

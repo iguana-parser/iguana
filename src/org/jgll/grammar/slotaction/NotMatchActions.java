@@ -2,9 +2,9 @@ package org.jgll.grammar.slotaction;
 
 import java.util.List;
 
-import org.jgll.grammar.Keyword;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.symbols.Keyword;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;

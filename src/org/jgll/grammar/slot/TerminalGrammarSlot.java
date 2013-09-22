@@ -3,10 +3,10 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.Character;
-import org.jgll.grammar.Range;
-import org.jgll.grammar.Symbol;
-import org.jgll.grammar.Terminal;
+import org.jgll.grammar.symbols.Character;
+import org.jgll.grammar.symbols.Range;
+import org.jgll.grammar.symbols.Symbol;
+import org.jgll.grammar.symbols.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.TerminalSymbolNode;
