@@ -9,6 +9,7 @@ import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbols.Keyword;
@@ -16,6 +17,7 @@ import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
@@ -399,7 +401,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		return node;
 	}
 
-
 	@Override
 	public LookupTable getLookupTable() {
 		return lookupTable;
@@ -410,10 +411,12 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		return grammar;
 	}
 
-
 	@Override
-	public NonPackedNode getRegularNode(int start, int end) {
-		// TODO Auto-generated method stub
-		return null;
+	public NonPackedNode getRegularNode(RegularListGrammarSlot slot, int leftExtent, int rightExtent) {
+		RegularListNode node = new RegularListNode(slot, leftExtent, rightExtent);
+		NonPackedNode nonPackedNode = lookupTable.getNonPackedNode(node);
+		return nonPackedNode;
 	}
+	
+	
 }

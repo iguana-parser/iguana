@@ -176,14 +176,20 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 	
 	@Override
 	public NonPackedNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		
-		boolean newNodeCreated = false;
 		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
+		return getNonPackedNode(key);
+	}
+	
+	@Override
+	public NonPackedNode getNonPackedNode(NonPackedNode key) {
+		boolean newNodeCreated = false;
 		NonPackedNode value;
+
+		int rightExtent = key.getRightExtent();
 		
-		if(rightExtent == currentLevel) {
+		if(rightExtent  == currentLevel) {
 			value = currentNodes.add(key);
-			if(value == null){
+			if(value == null) {
 				countNonPackedNodes++;
 				newNodeCreated = true;
 				value = key;

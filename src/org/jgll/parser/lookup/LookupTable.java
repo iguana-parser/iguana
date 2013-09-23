@@ -37,6 +37,15 @@ public interface LookupTable {
 	 */
 	public NonPackedNode getNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
+	/**
+	 * 
+	 * Returns an existing non-packed node that is equal to the provided key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public NonPackedNode getNonPackedNode(NonPackedNode key);
+	
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 	
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize);

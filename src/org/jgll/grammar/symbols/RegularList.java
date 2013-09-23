@@ -3,6 +3,7 @@ package org.jgll.grammar.symbols;
 import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.parser.HashFunctions;
 
 /**
  * 
@@ -78,5 +79,26 @@ public class RegularList extends AbstractSymbol {
 			regularList.conditions.addAll(conditions);
 			return regularList;			
 		}
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof RegularList)) {
+			return false;
+		}
+		
+		RegularList other = (RegularList) obj;
+		
+		return characterClass.equals(other.characterClass) && minimum == other.minimum;
+	}
+	
+	@Override
+	public int hashCode() {
+		return HashFunctions.defaulFunction().hash(characterClass.hashCode(), minimum);
 	}
 }

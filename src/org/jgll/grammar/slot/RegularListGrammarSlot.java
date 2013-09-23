@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.grammar.symbols.CharacterClass;
-import org.jgll.grammar.symbols.Symbol;
+import org.jgll.grammar.symbols.RegularList;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
@@ -14,7 +14,8 @@ import org.jgll.util.Input;
 /**
  * A grammar slot whose next immediate symbol is regular expression list 
  * of the form [a-z]+.
- * 
+ *
+ *
  * @author Ali Afroozeh
  *
  */
@@ -22,15 +23,15 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final CharacterClass characterClass;
-
-	public RegularListGrammarSlot(int position, BodyGrammarSlot previous, CharacterClass characterClass, HeadGrammarSlot head) {
-		super(position, previous, head);
-		this.characterClass = characterClass;
+	private final RegularList regularList;
+	
+	public RegularListGrammarSlot(int position, BodyGrammarSlot previous, RegularList regularList, HeadGrammarSlot regularHead) {
+		super(position, previous, regularHead);
+		this.regularList = regularList;
 	}
 	
-	public RegularListGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		RegularListGrammarSlot slot = new RegularListGrammarSlot(this.position, previous, this.characterClass, head);
+	public RegularListGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot regularHead) {
+		RegularListGrammarSlot slot = new RegularListGrammarSlot(this.position, previous, this.regularList, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
@@ -42,6 +43,10 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		int ci = parser.getCurrentInputIndex();
 		
 		int longestTerminalChain = parser.getGrammar().getLongestTerminalChain();
+		
+		CharacterClass characterClass = regularList.getCharacterClass();
+		
+		int minimum = regularList.getMinimum();
 
 		int i;
 		for(i = 0; i < longestTerminalChain; i++) {
@@ -55,6 +60,9 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 
 		// The whole list is matched
 		if(i < longestTerminalChain) {
+			
+			sppfNode = parser.getRegularNode(this, ci, ci + i);
+			
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
 				parser.pop();
@@ -68,7 +76,6 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 			// sppfNode = create new node 
 			parser.addDescriptor(this);
 		}
-		
 		
 		return null;
 	}
@@ -85,7 +92,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public boolean testFirstSet(int index, Input input) {
-		return characterClass.match(input.charAt(index));
+		return regularList.getCharacterClass().match(input.charAt(index));
 	}
 	
 	@Override
@@ -95,7 +102,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
-		writer.append("if (").append(characterClass.getMatchCode()).append(") {\n");
+		writer.append("if (").append(regularList.getCharacterClass().getMatchCode()).append(") {\n");
 	}
 
 	@Override
@@ -105,8 +112,8 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 
 
 	@Override
-	public Symbol getSymbol() {
-		return characterClass;
+	public RegularList getSymbol() {
+		return regularList;
 	}
 
 	@Override
@@ -121,7 +128,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		
 		RegularListGrammarSlot other = (RegularListGrammarSlot) slot;
 		
-		return characterClass.equals(other.characterClass);
+		return regularList.equals(other.regularList);
 	}
 
 }
