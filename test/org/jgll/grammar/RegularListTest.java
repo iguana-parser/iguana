@@ -48,7 +48,14 @@ public class RegularListTest {
 	@Test
 	public void test1() throws ParseError {
 		levelParser.parse(Input.fromString("abcdef"), grammar1, "Id");
-		levelParser.parse(Input.fromString("abcdef"), grammar2, "Id");
+//		levelParser.parse(Input.fromString("abcdef"), grammar2, "Id");
 	}
+	
+//	@Test
+	public void test2() throws ParseError {
+		levelParser.parse(Input.fromString("abcdefghijklm"), grammar1, "Id");
+//		levelParser.parse(Input.fromString("abcdef"), grammar2, "Id");
+	}
+	
 
 }

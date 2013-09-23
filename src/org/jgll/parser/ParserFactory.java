@@ -16,7 +16,7 @@ public class ParserFactory {
 	}
 	
 	public static GLLParser levelParser(Grammar grammar, int ringSize) {
-		return new GLLParserImpl(new LevelBasedLookupTable(grammar), ringSize);
+		return new GLLParserImpl(new LevelBasedLookupTable(grammar, ringSize), ringSize);
 	}
 	
 }

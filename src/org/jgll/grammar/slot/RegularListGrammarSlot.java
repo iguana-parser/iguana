@@ -70,7 +70,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		// The whole list is matched
 		if(i < longestTerminalChain) {
 			
-			sppfNode = parser.getRegularNode(this, ci, ci + i + 1);
+			sppfNode = parser.getRegularNode(this, ci, ci + i);
 			
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
