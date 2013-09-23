@@ -46,7 +46,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		int longestTerminalChain = parser.getGrammar().getLongestTerminalChain();
+		int longestTerminalChain = parser.getRingSize();
 		
 		CharacterClass characterClass = regularList.getCharacterClass();
 		
@@ -60,12 +60,17 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 			}
 		}
 		
+		// Could not match as needed
+		if(i < minimum) {
+			return null;
+		}
+		
 		NonPackedNode sppfNode = null;
 
 		// The whole list is matched
 		if(i < longestTerminalChain) {
 			
-			sppfNode = parser.getRegularNode(this, ci, ci + i);
+			sppfNode = parser.getRegularNode(this, ci, ci + i + 1);
 			
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);

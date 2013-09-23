@@ -112,6 +112,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		lookupTable.init(input);
 	
 		long start = System.nanoTime();
+		
+		log.info("Iguana started...");
 
 		L0.getInstance().parse(this, input, startSymbol);
 		
@@ -122,6 +124,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 		}
 		
+		log.info("Parsing finished successfully:");
 		logParseStatistics(end - start);
 		return root;
 	}
