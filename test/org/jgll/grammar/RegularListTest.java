@@ -57,7 +57,7 @@ public class RegularListTest {
 	@Test
 	public void test2() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("abcdefghijklm"), grammar1, "Id");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf);
+		Visualization.generateSPPFGraph("/Users/ali/output", sppf);
 //		levelParser.parse(Input.fromString("abcdef"), grammar2, "Id");
 	}
 	

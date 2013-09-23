@@ -9,7 +9,6 @@ import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbols.Keyword;
@@ -313,17 +312,16 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	}
 	
 	@Override
-	public SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild) {
+	public void getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild) {
 		cn = getNonterminalNode(slot, cn, rightChild);
-		return cn;
 	}
 	
 	@Override
-	public SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild) {
+	public void getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild) {
 		cn = getIntermediateNode(slot, cn, rightChild);
-		return cn;
 	}
 	
+	@Override
 	public final SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		GrammarSlot t = slot.getHead();
@@ -344,12 +342,12 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		return newNode;
 	}
 	
+	@Override
 	public final SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		BodyGrammarSlot previous = slot.previous();
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
-		
 		if(previous.isFirst()) {
 			if(previous instanceof TerminalGrammarSlot || previous instanceof KeywordGrammarSlot) {
 				return rightChild;

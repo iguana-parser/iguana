@@ -7,6 +7,7 @@ import org.jgll.grammar.symbols.CharacterClass;
 import org.jgll.grammar.symbols.RegularList;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
@@ -82,11 +83,11 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 			}
 			
 			if(next instanceof LastGrammarSlot) {
-				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
+				parser.getNonterminalNode((LastGrammarSlot) next, DummyNode.getInstance(), sppfNode);
 				parser.pop();
 				return null;
 			} else {
-				parser.getIntermediateNode(next, sppfNode);
+				parser.getIntermediateNode(next, DummyNode.getInstance(), sppfNode);
 				return next;
 			}
 		}

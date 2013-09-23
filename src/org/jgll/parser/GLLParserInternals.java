@@ -5,7 +5,6 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.symbols.Keyword;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.NonPackedNode;
@@ -28,9 +27,13 @@ public interface GLLParserInternals {
 	
 	public TerminalSymbolNode getEpsilonNode();
 	
-	public SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild);
+	public void getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild);
 	
-	public SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild);
+	public void getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild);
+	
+	public SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
+
+	public SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
 	
 	/**
 	 * Adds a descriptor with the current input index, current GSS node and a 
