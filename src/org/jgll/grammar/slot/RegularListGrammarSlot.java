@@ -150,5 +150,9 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		
 		return regularList.equals(other.regularList);
 	}
+	
+	public HeadGrammarSlot getRegularHead() {
+		return regularHead;
+	}
 
 }

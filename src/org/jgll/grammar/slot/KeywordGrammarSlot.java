@@ -135,6 +135,8 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		
 		return keyword.equals(other.keyword);
 	}
-
 	
+	public HeadGrammarSlot getKeywordHead() {
+		return keywordHead;
+	}
 }

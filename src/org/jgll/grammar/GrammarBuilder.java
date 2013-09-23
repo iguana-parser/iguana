@@ -1006,8 +1006,6 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	
-	
 	private HeadGrammarSlot copyIndirectAtLeft(HeadGrammarSlot head, Nonterminal directNonterminal) {
 		return copyIndirectAtLeft(head, directNonterminal, new HashMap<HeadGrammarSlot, HeadGrammarSlot>());
 	}
@@ -1369,7 +1367,7 @@ public class GrammarBuilder implements Serializable {
 		
 		if(slot instanceof KeywordGrammarSlot) {
 			Keyword keyword = ((KeywordGrammarSlot) slot).getKeyword();
-			HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
+			HeadGrammarSlot keywordHead = ((KeywordGrammarSlot) slot).getKeywordHead();
 			KeywordGrammarSlot newSlot = new KeywordGrammarSlot(symbolIndex, keywordHead, keyword, previous, head);
 			copyActions(slot, newSlot);
 			return newSlot;
@@ -1386,7 +1384,7 @@ public class GrammarBuilder implements Serializable {
 			NonterminalGrammarSlot newSlot = new NonterminalGrammarSlot(symbolIndex, previous, ((NonterminalGrammarSlot) slot).getNonterminal(), head);
 			copyActions(slot, newSlot);
 			return newSlot;
-		} 
+		}
 		
 		else if(slot instanceof EpsilonGrammarSlot) {
 			EpsilonGrammarSlot newSlot = new EpsilonGrammarSlot(symbolIndex, head, ((EpsilonGrammarSlot) slot).getObject());
@@ -1396,6 +1394,13 @@ public class GrammarBuilder implements Serializable {
 		
 		else if(slot instanceof LastGrammarSlot) {
 			LastGrammarSlot newSlot = new LastGrammarSlot(symbolIndex, previous, head, ((LastGrammarSlot) slot).getObject());
+			copyActions(slot, newSlot);
+			return newSlot;
+		}
+		
+		else if(slot instanceof RegularListGrammarSlot) {
+			HeadGrammarSlot regularHead = ((RegularListGrammarSlot) slot).getRegularHead();
+			RegularListGrammarSlot newSlot = new RegularListGrammarSlot(symbolIndex, previous, (RegularList) slot.getSymbol(), regularHead, head);
 			copyActions(slot, newSlot);
 			return newSlot;
 		}
