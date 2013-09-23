@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.symbols.CharacterClass;
 import org.jgll.grammar.symbols.Nonterminal;
@@ -11,10 +11,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,18 +45,27 @@ public class RegularListTest {
 		grammar2 = new GrammarBuilder().addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 	}
 
-//	@Test
+	@Test
 	public void test1() throws ParseError {
 		levelParser.parse(Input.fromString("abcdef"), grammar1, "Id");
 		levelParser.parse(Input.fromString("abcdef"), grammar2, "Id");
 	}
-	
+
 	@Test
 	public void test2() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("abcdefghijklm"), grammar1, "Id");
-		Visualization.generateSPPFGraph("/Users/ali/output", sppf);
-//		levelParser.parse(Input.fromString("abcdef"), grammar2, "Id");
+		levelParser.parse(Input.fromString("abcdefghij"), grammar1, "Id");
+		levelParser.parse(Input.fromString("abcdefghij"), grammar2, "Id");
 	}
 	
-
+	@Test
+	public void test3() throws ParseError {
+		levelParser.parse(Input.fromString("abcdefghijklm"), grammar1, "Id");
+		levelParser.parse(Input.fromString("abcdefghijklm"), grammar2, "Id");
+	}
+	
+	@Test
+	public void test4() throws ParseError {
+		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz"), grammar1, "Id");
+		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz"), grammar2, "Id");
+	}
 }
