@@ -9,6 +9,7 @@ import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.symbols.Keyword;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 
@@ -31,11 +32,17 @@ public interface GLLParserInternals {
 	
 	public SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild);
 	
-	public void addDescriptor(GrammarSlot label);
+	/**
+	 * Adds a descriptor with the current input index, current GSS node and a 
+	 * dummy node. 
+	 */
+	public void addDescriptor(GrammarSlot slot);
+	
+	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode);
 	
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int ci);
 	
-	public NonPackedNode getRegularNode(RegularListGrammarSlot slot, int leftExtent, int rightExtent);
+	public RegularListNode getRegularNode(HeadGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	/**
 	 * 
@@ -51,6 +58,8 @@ public interface GLLParserInternals {
 	public int getCurrentInputIndex();
 	
 	public GSSNode getCurrentGSSNode();
+	
+	public SPPFNode getCurrentSPPFNode();
 	
 	public void recordParseError(GrammarSlot slot);
 	

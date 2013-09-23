@@ -181,7 +181,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 *   } 
 	 * }
 	 */
-	private final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
+	@Override
+	public final void addDescriptor(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
 		boolean result = lookupTable.addDescriptor(descriptor);
 		log.trace("Descriptor created: %s : %b", descriptor, result);
@@ -189,9 +190,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	
 	@Override
 	public void addDescriptor(GrammarSlot label) {
-		add(label, cu, ci, DummyNode.getInstance());
-	}
-	
+		addDescriptor(label, cu, ci, DummyNode.getInstance());
+	}	
 	
 	/**
 	 * Pops the current element from GSS. When the top element, cu, is popped, there
@@ -236,7 +236,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 				} else {
 					y = getIntermediateNode((BodyGrammarSlot) slot, edge.getSppfNode(), cn);
 				}
-				add(cu.getGrammarSlot(), edge.getDestination(), ci, y);
+				addDescriptor(cu.getGrammarSlot(), edge.getDestination(), ci, y);
 			}			
 		}
 	}
@@ -288,7 +288,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 				} else {
 					x = getIntermediateNode((BodyGrammarSlot) L, w, z);
 				}
-				add(L, u, z.getRightExtent(), x);
+				addDescriptor(L, u, z.getRightExtent(), x);
 			}
 		}
 
@@ -421,10 +421,10 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	}
 
 	@Override
-	public NonPackedNode getRegularNode(RegularListGrammarSlot slot, int leftExtent, int rightExtent) {
+	public RegularListNode getRegularNode(HeadGrammarSlot slot, int leftExtent, int rightExtent) {
 		RegularListNode node = new RegularListNode(slot, leftExtent, rightExtent);
 		NonPackedNode nonPackedNode = lookupTable.getNonPackedNode(node);
-		return nonPackedNode;
+		return (RegularListNode) nonPackedNode;
 	}
 
 	@Override
@@ -433,6 +433,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			return grammar.getLongestTerminalChain();
 		}
 		return ringSize;
+	}
+
+	@Override
+	public SPPFNode getCurrentSPPFNode() {
+		return cn;
 	}
 	
 }

@@ -7,7 +7,8 @@ import org.jgll.grammar.symbols.CharacterClass;
 import org.jgll.grammar.symbols.RegularList;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.RegularListNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 
@@ -65,12 +66,20 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		NonPackedNode sppfNode = null;
+		RegularListNode sppfNode = parser.getRegularNode(regularHead, ci, ci + i);
 
 		// The whole list is matched
 		if(i < longestTerminalChain) {
 			
-			sppfNode = parser.getRegularNode(this, ci, ci + i);
+			SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
+			
+			// If the current SPPF node is a partially matched list node
+			// merge the nodes
+			if(currentSPPFNode instanceof RegularListNode) {
+				if(((RegularListNode) currentSPPFNode).isPartial()) {
+					sppfNode = parser.getRegularNode(regularHead, currentSPPFNode.getLeftExtent(), ci + i);
+				}
+			}
 			
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
@@ -80,10 +89,11 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 				parser.getIntermediateNode(next, sppfNode);
 				return next;
 			}
-		} 
+		}
+		
 		else {
-			// sppfNode = create new node 
-			parser.addDescriptor(this);
+			sppfNode.setPartial(true);
+			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, sppfNode);
 		}
 		
 		return null;
