@@ -75,12 +75,18 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 */
 	protected GSSNode errorGSSNode;
 	
+	protected int ringSize = -1;
+	
 	
 	public GLLParserImpl(LookupTable lookupTable) {
 		this.lookupTable = lookupTable;
 	}
 	
-
+	public GLLParserImpl(LookupTable lookupTable, int ringSize) {
+		this.lookupTable = lookupTable;
+		this.ringSize = ringSize;
+	}
+	
 	/**
 	 * Parses the given input string. If the parsing of the input was successful,
 	 * the root of SPPF is returned.
@@ -417,6 +423,13 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		NonPackedNode nonPackedNode = lookupTable.getNonPackedNode(node);
 		return nonPackedNode;
 	}
-	
+
+	@Override
+	public int getRingSize() {
+		if(ringSize == -1) {
+			return grammar.getLongestTerminalChain();
+		}
+		return ringSize;
+	}
 	
 }

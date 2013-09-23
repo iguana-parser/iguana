@@ -8,11 +8,15 @@ import org.jgll.parser.lookup.RecursiveDescentLookupTable;
 public class ParserFactory {
 	
 	public static GLLParser recursiveDescentParser(Grammar grammar) {
-		return new GLLParserImpl(new RecursiveDescentLookupTable(grammar));
+		return new GLLParserImpl(new RecursiveDescentLookupTable(grammar), Integer.MAX_VALUE);
 	}
 	
 	public static GLLParser levelParser(Grammar grammar) {
 		return new GLLParserImpl(new LevelBasedLookupTable(grammar));
+	}
+	
+	public static GLLParser levelParser(Grammar grammar, int ringSize) {
+		return new GLLParserImpl(new LevelBasedLookupTable(grammar), ringSize);
 	}
 	
 }

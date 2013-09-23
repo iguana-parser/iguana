@@ -24,14 +24,18 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 	private static final long serialVersionUID = 1L;
 	
 	private final RegularList regularList;
+
+	private final HeadGrammarSlot regularHead;
 	
-	public RegularListGrammarSlot(int position, BodyGrammarSlot previous, RegularList regularList, HeadGrammarSlot regularHead) {
-		super(position, previous, regularHead);
+	public RegularListGrammarSlot(int position, BodyGrammarSlot previous, RegularList regularList, 
+								  HeadGrammarSlot regularHead, HeadGrammarSlot head) {
+		super(position, previous, head);
 		this.regularList = regularList;
+		this.regularHead = regularHead;
 	}
 	
-	public RegularListGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot regularHead) {
-		RegularListGrammarSlot slot = new RegularListGrammarSlot(this.position, previous, this.regularList, head);
+	public RegularListGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
+		RegularListGrammarSlot slot = new RegularListGrammarSlot(this.position, previous, this.regularList, this.regularHead, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
