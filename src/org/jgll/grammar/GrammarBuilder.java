@@ -152,6 +152,10 @@ public class GrammarBuilder implements Serializable {
 			public void visit(KeywordGrammarSlot slot) {
 			}
 
+			@Override
+			public void visit(RegularListGrammarSlot slot) {
+			}
+
 		};
 
 		for (HeadGrammarSlot head : nonterminals) {
@@ -218,6 +222,7 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
+		
 		if(symbol instanceof Keyword) {
 			Keyword keyword = (Keyword) symbol;
 			HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
