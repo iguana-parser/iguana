@@ -88,6 +88,8 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 				parser.pop();
 				return null;
 			} else {
+				// TODO: see what happens when we are dealing with rules such as A ::= [a-z]+ [0-9].
+				// Do we still need intermediate nodes?
 				parser.getIntermediateNode(next, DummyNode.getInstance(), sppfNode);
 				return next;
 			}

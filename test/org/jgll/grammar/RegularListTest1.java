@@ -22,7 +22,7 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class RegularListTest {
+public class RegularListTest1 {
 	
 	private Grammar grammar1;
 	private Grammar grammar2;
@@ -44,7 +44,7 @@ public class RegularListTest {
 
 		
 		grammar1 = new GrammarBuilder().addRule(r0).addRule(r1).addRule(r3).addRule(r4).addRule(r5).build();
-		levelParser = ParserFactory.levelParser(grammar1, 1);
+		levelParser = ParserFactory.levelParser(grammar1, 10);
 		
 		grammar2 = new GrammarBuilder().addRule(r0).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 	}
