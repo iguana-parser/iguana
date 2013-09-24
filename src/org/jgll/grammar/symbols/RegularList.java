@@ -18,35 +18,38 @@ public class RegularList extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 
-	private int minimum;
+	private final int minimum;
 	
-	private CharacterClass characterClass;
+	private final CharacterClass characterClass;
 	
 	private Object object;
+	
+	private final String name;
 
-	public static RegularList plus(CharacterClass characterClass) {
-		return new RegularList(1, characterClass);
+	public static RegularList plus(String name, CharacterClass characterClass) {
+		return new RegularList(1, characterClass, name);
 	}
 	
-	public static RegularList plus(CharacterClass characterClass, Object object) {
-		RegularList regularList = new RegularList(1, characterClass);
+	public static RegularList plus(String name, CharacterClass characterClass, Object object) {
+		RegularList regularList = new RegularList(1, characterClass, name);
 		regularList.object = object;
 		return regularList;
 	}
 	
-	public static RegularList star(CharacterClass characterClass) {
-		return new RegularList(0, characterClass);
+	public static RegularList star(String name, CharacterClass characterClass) {
+		return new RegularList(0, characterClass, name);
 	}
 	
-	public static RegularList star(CharacterClass characterClass, Object object) {
-		RegularList regularList = new RegularList(0, characterClass);
+	public static RegularList star(String name, CharacterClass characterClass, Object object) {
+		RegularList regularList = new RegularList(0, characterClass, name);
 		regularList.object = object;
 		return regularList;
 	}	
 	
-	private RegularList(int minimum, CharacterClass characterClass) {
+	private RegularList(int minimum, CharacterClass characterClass, String name) {
 		this.minimum = minimum;
 		this.characterClass = characterClass;
+		this.name = name;
 	}
 	
 	public CharacterClass getCharacterClass() {
@@ -59,7 +62,7 @@ public class RegularList extends AbstractSymbol {
 	
 	@Override
 	public String getName() {
-		return characterClass + (minimum == 0 ? "*" : "+");
+		return name;
 	}
 	
 	public Object getObject() {
@@ -69,12 +72,12 @@ public class RegularList extends AbstractSymbol {
 	@Override
 	public RegularList addConditions(Collection<Condition> conditions) {
 		if(minimum == 0) {
-			RegularList regularList = RegularList.star(characterClass);
+			RegularList regularList = RegularList.star(name, characterClass);
 			regularList.conditions.addAll(this.conditions);
 			regularList.conditions.addAll(conditions);
 			return regularList;
 		} else {
-			RegularList regularList = RegularList.plus(characterClass);
+			RegularList regularList = RegularList.plus(name, characterClass);
 			regularList.conditions.addAll(this.conditions);
 			regularList.conditions.addAll(conditions);
 			return regularList;			

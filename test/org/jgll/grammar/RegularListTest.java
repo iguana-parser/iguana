@@ -33,7 +33,7 @@ public class RegularListTest {
 
 	@Before
 	public void init() {
-		Rule r1 = new Rule(new Nonterminal("Id"), list(RegularList.plus(new CharacterClass(list(new Range('a', 'z'))))));
+		Rule r1 = new Rule(new Nonterminal("Id"), list(RegularList.plus("[a-z]+", new CharacterClass(list(new Range('a', 'z'))))));
 		grammar1 = new GrammarBuilder("RegularList").addRule(r1).build();
 		levelParser = ParserFactory.levelParser(grammar1, 1);
 		
