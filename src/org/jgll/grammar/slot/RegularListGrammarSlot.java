@@ -83,7 +83,8 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		if(i <= longestTerminalChain && !characterClass.match(input.charAt(ci + i))) {
 			
 			if(next instanceof LastGrammarSlot) {
-				parser.getNonterminalNode((LastGrammarSlot) next, DummyNode.getInstance(), sppfNode);
+				SPPFNode cn = parser.getNonterminalNode((LastGrammarSlot) next, DummyNode.getInstance(), sppfNode);
+				parser.setCurrentSPPFNode(cn);
 				parser.pop();
 				return null;
 			} else {
@@ -132,6 +133,10 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public RegularList getSymbol() {
+		return regularList;
+	}
+	
+	public RegularList getRegularList() {
 		return regularList;
 	}
 

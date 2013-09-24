@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 
+ * S ::= Id;
  * Id ::= [a-z]+ !>> [a-z]
  * 
  * @author Ali Afroozeh
@@ -33,6 +33,8 @@ public class RegularListTest {
 
 	@Before
 	public void init() {
+		Rule r0 = new Rule(new Nonterminal("S"), list(new Nonterminal("Id")));
+		
 		Rule r1 = new Rule(new Nonterminal("Id"), list(RegularList.plus("[a-z]+", new CharacterClass(list(new Range('a', 'z'))))));
 		Rule r2 = new Rule(new Nonterminal("Id"), list(new Nonterminal("[a-z]+")));
 		
@@ -41,34 +43,34 @@ public class RegularListTest {
 		Rule r5 = new Rule(new Nonterminal("[a-z]"), list(new CharacterClass(list(new Range('a', 'z')))));
 
 		
-		grammar1 = new GrammarBuilder("RegularList").addRule(r1).addRule(r3).addRule(r4).addRule(r5).build();
+		grammar1 = new GrammarBuilder().addRule(r0).addRule(r1).addRule(r3).addRule(r4).addRule(r5).build();
 		System.out.println(grammar1);
-		levelParser = ParserFactory.levelParser(grammar1, 1);
+		levelParser = ParserFactory.levelParser(grammar1, 10);
 		
-		grammar2 = new GrammarBuilder().addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
+		grammar2 = new GrammarBuilder().addRule(r0).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 	}
 
 	@Test
 	public void test1() throws ParseError {
-		levelParser.parse(Input.fromString("abcdef"), grammar1, "Id");
-		levelParser.parse(Input.fromString("abcdef"), grammar2, "Id");
+		levelParser.parse(Input.fromString("abcdef"), grammar1, "S");
+		levelParser.parse(Input.fromString("abcdef"), grammar2, "S");
 	}
 
 	@Test
 	public void test2() throws ParseError {
-		levelParser.parse(Input.fromString("abcdefghij"), grammar1, "Id");
-		levelParser.parse(Input.fromString("abcdefghij"), grammar2, "Id");
+		levelParser.parse(Input.fromString("abcdefghij"), grammar1, "S");
+		levelParser.parse(Input.fromString("abcdefghij"), grammar2, "S");
 	}
 	
 	@Test
 	public void test3() throws ParseError {
-		levelParser.parse(Input.fromString("abcdefghijklm"), grammar1, "Id");
-		levelParser.parse(Input.fromString("abcdefghijklm"), grammar2, "Id");
+		levelParser.parse(Input.fromString("abcdefghijklm"), grammar1, "S");
+		levelParser.parse(Input.fromString("abcdefghijklm"), grammar2, "S");
 	}
 	
 	@Test
 	public void test4() throws ParseError {
-		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz"), grammar1, "Id");
-		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz"), grammar2, "Id");
+		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz"), grammar1, "S");
+		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz"), grammar2, "S");
 	}
 }

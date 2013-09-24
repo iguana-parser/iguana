@@ -141,7 +141,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		log.debug("GSS Nodes: %d", lookupTable.getGSSNodesCount());
 		log.debug("GSS Edges: %d", lookupTable.getGSSEdgesCount());
 	}
-
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -436,6 +435,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	@Override
 	public SPPFNode getCurrentSPPFNode() {
 		return cn;
+	}
+
+	@Override
+	public void setCurrentSPPFNode(SPPFNode node) {
+		this.cn = node;
 	}
 	
 }

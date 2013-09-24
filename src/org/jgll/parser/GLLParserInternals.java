@@ -64,6 +64,8 @@ public interface GLLParserInternals {
 	
 	public SPPFNode getCurrentSPPFNode();
 	
+	public void setCurrentSPPFNode(SPPFNode node);
+	
 	public void recordParseError(GrammarSlot slot);
 	
 	public LookupTable getLookupTable();

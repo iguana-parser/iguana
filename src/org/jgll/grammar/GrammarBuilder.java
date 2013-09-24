@@ -516,6 +516,10 @@ public class GrammarBuilder implements Serializable {
 			}
 			return changed;
 		}
+		
+		else if(currentSlot instanceof RegularListGrammarSlot) {
+			return set.add(((RegularListGrammarSlot) currentSlot).getRegularList().getCharacterClass()) || changed;
+		}
 
 		// ignore LastGrammarSlot
 		else {
