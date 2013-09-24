@@ -22,29 +22,15 @@ public class RegularList extends AbstractSymbol {
 	
 	private final CharacterClass characterClass;
 	
-	private Object object;
-	
 	private final String name;
 
 	public static RegularList plus(String name, CharacterClass characterClass) {
 		return new RegularList(1, characterClass, name);
 	}
-	
-	public static RegularList plus(String name, CharacterClass characterClass, Object object) {
-		RegularList regularList = new RegularList(1, characterClass, name);
-		regularList.object = object;
-		return regularList;
-	}
-	
+		
 	public static RegularList star(String name, CharacterClass characterClass) {
 		return new RegularList(0, characterClass, name);
 	}
-	
-	public static RegularList star(String name, CharacterClass characterClass, Object object) {
-		RegularList regularList = new RegularList(0, characterClass, name);
-		regularList.object = object;
-		return regularList;
-	}	
 	
 	private RegularList(int minimum, CharacterClass characterClass, String name) {
 		this.minimum = minimum;
@@ -65,10 +51,6 @@ public class RegularList extends AbstractSymbol {
 		return name;
 	}
 	
-	public Object getObject() {
-		return object;
-	}
-
 	@Override
 	public RegularList addConditions(Collection<Condition> conditions) {
 		if(minimum == 0) {
