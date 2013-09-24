@@ -231,7 +231,6 @@ public class GrammarBuilder implements Serializable {
 		else if (symbol instanceof RegularList) {
 			RegularList regularList = (RegularList) symbol;
 			HeadGrammarSlot regularHead = getHeadGrammarSlot(new Nonterminal(regularList.getName()));
-			regularHead.addAlternate(new Alternate(new EpsilonGrammarSlot(0, regularHead, null)));
 			return new RegularListGrammarSlot(symbolIndex, currentSlot, regularList, regularHead, headGrammarSlot);
 		}
 		
@@ -372,7 +371,6 @@ public class GrammarBuilder implements Serializable {
 		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
 	}
-	
 	
 	public static Rule fromKeyword(Keyword keyword) {
 		Rule.Builder builder = new Rule.Builder(new Nonterminal(keyword.getName()));

@@ -34,14 +34,16 @@ public class RegularListTest {
 	@Before
 	public void init() {
 		Rule r1 = new Rule(new Nonterminal("Id"), list(RegularList.plus("[a-z]+", new CharacterClass(list(new Range('a', 'z'))))));
-		grammar1 = new GrammarBuilder("RegularList").addRule(r1).build();
-		levelParser = ParserFactory.levelParser(grammar1, 1);
-		
-		// The expanded version
 		Rule r2 = new Rule(new Nonterminal("Id"), list(new Nonterminal("[a-z]+")));
+		
 		Rule r3 = new Rule(new Nonterminal("[a-z]+"), list(new Nonterminal("[a-z]+"), new Nonterminal("[a-z]")));
 		Rule r4 = new Rule(new Nonterminal("[a-z]+"), list(new Nonterminal("[a-z]")));
 		Rule r5 = new Rule(new Nonterminal("[a-z]"), list(new CharacterClass(list(new Range('a', 'z')))));
+
+		
+		grammar1 = new GrammarBuilder("RegularList").addRule(r1).addRule(r3).addRule(r4).addRule(r5).build();
+		levelParser = ParserFactory.levelParser(grammar1, 1);
+		
 		grammar2 = new GrammarBuilder().addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 	}
 
