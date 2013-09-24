@@ -130,7 +130,6 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		return false;
 	}
 
-
 	@Override
 	public RegularList getSymbol() {
 		return regularList;
