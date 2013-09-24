@@ -97,7 +97,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				RegularListNode regularListNode = (RegularListNode) nonterminalSymbolNode;
 				List<U> list = new ArrayList<>();
 				for(int i = regularListNode.getLeftExtent(); i < regularListNode.getRightExtent(); i++) {
-					Result<U> result = listener.terminal(input.charAt(i), input.getPositionInfo(i, ++i));
+					Result<U> result = listener.terminal(input.charAt(i), input.getPositionInfo(i, i + 1));
 					list.add(result.getObject());
 				}
 								

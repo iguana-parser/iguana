@@ -421,6 +421,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	public RegularListNode getRegularNode(HeadGrammarSlot slot, int leftExtent, int rightExtent) {
 		RegularListNode node = new RegularListNode(slot, leftExtent, rightExtent);
 		NonPackedNode nonPackedNode = lookupTable.getNonPackedNode(node);
+		nonPackedNode.addFirstPackedNode(slot.getAlternateAt(0).getLastSlot().next(), rightExtent);
+		ci = rightExtent;
 		return (RegularListNode) nonPackedNode;
 	}
 
