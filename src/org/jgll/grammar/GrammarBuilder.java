@@ -377,6 +377,14 @@ public class GrammarBuilder implements Serializable {
 		calculateExpectedDescriptors();
 	}
 	
+	/**
+	 * Creates the corresponding grammar rule for the given keyword.
+	 * For example, for the keyword "if", a rule If ::= [i][f]
+	 * is returned.
+	 * 
+	 * @param keyword
+	 * @return
+	 */
 	public static Rule fromKeyword(Keyword keyword) {
 		Rule.Builder builder = new Rule.Builder(new Nonterminal(keyword.getName()));
 		for(int i : keyword.getChars()) {
