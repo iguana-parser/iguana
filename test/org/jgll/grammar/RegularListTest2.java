@@ -45,7 +45,6 @@ public class RegularListTest2 {
 		
 		grammar = new GrammarBuilder().addRule(r0).addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
 		levelParser = ParserFactory.levelParser(grammar, 10);
-		
 	}
 
 	@Test

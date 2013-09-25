@@ -88,10 +88,10 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public LevelBasedLookupTable(Grammar grammar, int chainLength) {
+	public LevelBasedLookupTable(Grammar grammar, int regularListLength) {
 		super(grammar);
 		
-		this.chainLength = chainLength;
+		chainLength = grammar.getLongestTerminalChain() + regularListLength;
 		terminals = new TerminalSymbolNode[chainLength + 1][2];
 		
 		u = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
@@ -241,11 +241,13 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
 		
-		CuckooHashSet<NonPackedNode> currentNodes = this.currentNodes;
+		CuckooHashSet<NonPackedNode> currentNodes;
 		
 		if(currentLevel != inputSize - 1) {
 			int index = indexFor(inputSize - 1); 
 			currentNodes = forwardNodes[index];
+		} else {
+			currentNodes = this.currentNodes;
 		}
 		
 		return (NonterminalSymbolNode) currentNodes.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
@@ -496,8 +498,5 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 		countPackedNodes = 0;
 		
 		countGSSEdges = 0;
-
 	}
-
 }
-	

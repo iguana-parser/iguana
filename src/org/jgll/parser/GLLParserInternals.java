@@ -80,6 +80,6 @@ public interface GLLParserInternals {
 	 * 
 	 * @return {@link Integer#MAX_VALUE} when the parser is in the recursive descent mode.
 	 */
-	public int getRingSize();
+	public int getRegularListLength();
 	
 }

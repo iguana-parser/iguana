@@ -48,14 +48,14 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		int longestTerminalChain = parser.getRingSize();
+		int regularListLength = parser.getRegularListLength();
 		
 		CharacterClass characterClass = regularList.getCharacterClass();
 		
 		int minimum = regularList.getMinimum();
 
 		int i;
-		for(i = 0; i < longestTerminalChain; i++) {
+		for(i = 0; i < regularListLength; i++) {
 			int charAtCi = input.charAt(ci + i);
 			if(!characterClass.match(charAtCi)) {
 				break;
@@ -80,7 +80,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		}
 
 		// If the whole list is matched
-		if(i <= longestTerminalChain && !characterClass.match(input.charAt(ci + i))) {
+		if(i <= regularListLength && !characterClass.match(input.charAt(ci + i))) {
 			
 			if(next instanceof LastGrammarSlot) {
 				SPPFNode cn = parser.getNonterminalNode((LastGrammarSlot) next, DummyNode.getInstance(), sppfNode);
@@ -88,9 +88,8 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 				parser.pop();
 				return null;
 			} else {
-				// TODO: see what happens when we are dealing with rules such as A ::= [a-z]+ [0-9].
-				// Do we still need intermediate nodes?
-				parser.getIntermediateNode(next, DummyNode.getInstance(), sppfNode);
+				SPPFNode cn = parser.getIntermediateNode(next, DummyNode.getInstance(), sppfNode);
+				parser.setCurrentSPPFNode(cn);
 				return next;
 			}
 		}

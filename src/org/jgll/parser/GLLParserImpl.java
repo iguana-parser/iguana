@@ -74,16 +74,15 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 */
 	protected GSSNode errorGSSNode;
 	
-	protected int ringSize = -1;
-	
-	
+	protected int regularListLength = 10;
+
 	public GLLParserImpl(LookupTable lookupTable) {
 		this.lookupTable = lookupTable;
 	}
 	
-	public GLLParserImpl(LookupTable lookupTable, int ringSize) {
+	public GLLParserImpl(LookupTable lookupTable, int regularListLength) {
 		this.lookupTable = lookupTable;
-		this.ringSize = ringSize;
+		this.regularListLength = regularListLength;
 	}
 	
 	/**
@@ -427,11 +426,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	}
 
 	@Override
-	public int getRingSize() {
-		if(ringSize == -1) {
-			return grammar.getLongestTerminalChain();
-		}
-		return ringSize;
+	public int getRegularListLength() {
+		return regularListLength;
 	}
 
 	@Override
