@@ -31,10 +31,6 @@ public interface GLLParserInternals {
 	
 	public void getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild);
 	
-	public SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
-
-	public SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
-	
 	/**
 	 * Adds a descriptor with the current input index, current GSS node and a 
 	 * dummy node. 

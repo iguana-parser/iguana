@@ -319,8 +319,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		cn = getIntermediateNode(slot, cn, rightChild);
 	}
 	
-	@Override
-	public final SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+	private final SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		GrammarSlot t = slot.getHead();
 
@@ -340,8 +339,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		return newNode;
 	}
 	
-	@Override
-	public final SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+	private final SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		BodyGrammarSlot previous = slot.previous();
 		
