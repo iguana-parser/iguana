@@ -92,6 +92,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 	}
 	
+	public void remove(int index) {
+		alternates.remove(index);
+	}
+	
 	public void removeAllAlternates() {
 		alternates.clear();
 	}

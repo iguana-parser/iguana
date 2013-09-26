@@ -12,6 +12,7 @@ import org.jgll.grammar.condition.Condition;
  * For example, [A-Za-z0-9] represents a character which is
  * either [A-Z], [a-z] or [0-9].
  * 
+ * 
  * @author Ali Afroozeh
  *
  */

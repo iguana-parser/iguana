@@ -19,7 +19,6 @@ public class RangeTest {
 		Range range2 = new Range('a', 'z');
 		assertTrue(range1.contains(range2));
 	}
-
 	
 	@Test
 	public void testContains3() {
@@ -27,7 +26,6 @@ public class RangeTest {
 		Range range2 = new Range('a', 'y');
 		assertTrue(range1.contains(range2));
 	}
-
 
 	@Test
 	public void testContains4() {

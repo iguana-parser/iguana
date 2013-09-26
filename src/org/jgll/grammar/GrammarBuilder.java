@@ -45,6 +45,7 @@ import org.jgll.grammar.symbols.RegularList;
 import org.jgll.grammar.symbols.Rule;
 import org.jgll.grammar.symbols.Symbol;
 import org.jgll.grammar.symbols.Terminal;
+import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
@@ -363,6 +364,7 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private void initializeGrammarProrperties() {
+		fixRegularLists();
 		calculateLongestTerminalChain();
 		calculateMaximumNumAlternates();
 		calculateFirstSets();
@@ -375,6 +377,32 @@ public class GrammarBuilder implements Serializable {
 		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
 	}
+	
+	public void fixRegularLists() {
+		
+		Set<Tuple<HeadGrammarSlot, Integer>> set = new HashSet<>();
+		
+		for(HeadGrammarSlot head : nonterminals) {
+			int n = 0;
+			for(Alternate alt : head.getAlternates()) {
+				if(alt.getFirstSlot() instanceof RegularListGrammarSlot) {
+					set.add(new Tuple<>(head, n));
+				}
+				n++;
+			}
+		}
+		
+		for(Tuple<HeadGrammarSlot, Integer> t : set) {
+			HeadGrammarSlot head = t.getFirst();
+			Integer regularIndex = t.getSecond();
+
+			for(int i = 0; i < head.getAlternates().size(); i++) {
+				if(regularIndex != i) {
+					head.remove(i);
+				}
+			}
+		}
+ 	}
 	
 	/**
 	 * Creates the corresponding grammar rule for the given keyword.
