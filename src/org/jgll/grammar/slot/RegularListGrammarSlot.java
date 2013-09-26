@@ -76,21 +76,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		// If the current SPPF node is a partially matched list node
 		// merge the nodes
 		if(currentSPPFNode instanceof RegularListNode && ((RegularListNode) currentSPPFNode).isPartial()) {
-			currentSPPFNode = parser.getRegularNode(regularHead, currentSPPFNode.getLeftExtent(), ci + i);
-			regularNode = (RegularListNode) currentSPPFNode;
-		}
-		// This case happens when the regular node is not the first symbol in an alternate.
-		else if (currentSPPFNode instanceof IntermediateNode && 
-				 currentSPPFNode.getChildAt(1) instanceof RegularListNode && 
-				 ((RegularListNode) currentSPPFNode.getChildAt(1)).isPartial()) {
-			RegularListNode node = (RegularListNode) currentSPPFNode.getChildAt(1);
-			RegularListNode newNode = parser.getRegularNode(regularHead, node.getLeftExtent(), ci + i);
-			((IntermediateNode) currentSPPFNode).removeChild(node);
-			((IntermediateNode) currentSPPFNode).addChild(newNode);
-			regularNode = node;
-		} else {
-			regularNode = parser.getRegularNode(regularHead, ci, ci + i);
-			currentSPPFNode = regularNode;
+			regularNode = parser.getRegularNode(regularHead, currentSPPFNode.getLeftExtent(), ci + i);
 		}
 
 		// If the whole list is matched
