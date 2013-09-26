@@ -7,7 +7,7 @@ import org.jgll.grammar.symbols.CharacterClass;
 import org.jgll.grammar.symbols.RegularList;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
@@ -27,17 +27,13 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 	
 	private final RegularList regularList;
 
-	private final HeadGrammarSlot regularHead;
-	
-	public RegularListGrammarSlot(int position, BodyGrammarSlot previous, RegularList regularList, 
-								  HeadGrammarSlot regularHead, HeadGrammarSlot head) {
+	public RegularListGrammarSlot(int position, BodyGrammarSlot previous, RegularList regularList, HeadGrammarSlot head) {
 		super(position, previous, head);
 		this.regularList = regularList;
-		this.regularHead = regularHead;
 	}
 	
 	public RegularListGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		RegularListGrammarSlot slot = new RegularListGrammarSlot(this.position, previous, this.regularList, this.regularHead, head);
+		RegularListGrammarSlot slot = new RegularListGrammarSlot(this.position, previous, this.regularList, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
@@ -69,31 +65,28 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		
 		// The regular node that is going to be created as the result of this
 		// slot action.
-		RegularListNode regularNode = null;
+		RegularListNode regularNode = parser.getRegularNode(this, ci, ci + i);
+
 		
 		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
 		
 		// If the current SPPF node is a partially matched list node
 		// merge the nodes
 		if(currentSPPFNode instanceof RegularListNode && ((RegularListNode) currentSPPFNode).isPartial()) {
-			regularNode = parser.getRegularNode(regularHead, currentSPPFNode.getLeftExtent(), ci + i);
+			regularNode = parser.getRegularNode(this, currentSPPFNode.getLeftExtent(), ci + i);
 		}
 
 		// If the whole list is matched
 		if(i <= regularListLength && !characterClass.match(input.charAt(ci + i))) {
-			if(next instanceof LastGrammarSlot) {
-				parser.getNonterminalNode((LastGrammarSlot) next, currentSPPFNode);
-				parser.pop();
-				return null;
-			} else {
-				parser.getIntermediateNode(next, currentSPPFNode);
-				return next;
-			}
+			parser.setCurrentSPPFNode(DummyNode.getInstance());
+			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
+			parser.pop();
+			return null;
 		}
 		
 		else {
 			regularNode.setPartial(true);
-			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, currentSPPFNode);
+			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, regularNode);
 		}
 		
 		return null;
@@ -153,8 +146,4 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		return regularList.equals(other.regularList);
 	}
 	
-	public HeadGrammarSlot getRegularHead() {
-		return regularHead;
-	}
-
 }

@@ -9,6 +9,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
+import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.traversal.SPPFVisitorUtil;
@@ -102,10 +103,15 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(ListSymbolNode node) {
-		visit((NonterminalSymbolNode)node);
+		visit((NonterminalSymbolNode) node);
 	}
 	
 	public String getString() {
 		return sb.toString();
+	}
+
+	@Override
+	public void visit(RegularListNode node) {
+		visit((RegularListNode) node);
 	}
 }

@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.list;
 
 import org.jgll.grammar.symbols.CharacterClass;
 import org.jgll.grammar.symbols.Nonterminal;
@@ -11,6 +11,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,18 +33,17 @@ public class RegularListTest2 {
 
 	@Before
 	public void init() {
-		Rule r0 = new Rule(new Nonterminal("S"), list(new Nonterminal("Id")));
+		Rule r1 = new Rule(new Nonterminal("S"), list(new Nonterminal("Id")));
 		
 		CharacterClass a_z = new CharacterClass(list(new Range('a', 'z')));
 		CharacterClass zero_nine = new CharacterClass(list(new Range('0', '9')));
-		Rule r1 = new Rule(new Nonterminal("Id"), list(RegularList.plus("[a-z]+", a_z), zero_nine));
 		
-		Rule r2 = new Rule(new Nonterminal("[a-z]+"), list(new Nonterminal("[a-z]+"), new Nonterminal("[a-z]")));
-		Rule r3 = new Rule(new Nonterminal("[a-z]+"), list(new Nonterminal("[a-z]")));
-		Rule r4 = new Rule(new Nonterminal("[a-z]"), list(new CharacterClass(list(new Range('a', 'z')))));
-
 		
-		grammar = new GrammarBuilder().addRule(r0).addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
+		Rule r2 = new Rule(new Nonterminal("Id"), list(new Nonterminal("[a-z]+"), zero_nine));
+		
+		Rule r3 = new Rule(new Nonterminal("[a-z]+"), list(RegularList.plus("[a-z]+", a_z)));
+		
+		grammar = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).build();
 		levelParser = ParserFactory.levelParser(grammar, 10);
 	}
 
@@ -64,6 +64,6 @@ public class RegularListTest2 {
 	
 	@Test
 	public void test4() throws ParseError {
-		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz9"), grammar, "S");
+		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz9"), grammar, "S");
 	}
 }

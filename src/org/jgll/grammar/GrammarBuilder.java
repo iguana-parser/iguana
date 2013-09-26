@@ -235,8 +235,7 @@ public class GrammarBuilder implements Serializable {
 		
 		else if (symbol instanceof RegularList) {
 			RegularList regularList = (RegularList) symbol;
-			HeadGrammarSlot regularHead = getHeadGrammarSlot(new Nonterminal(regularList.getName()));
-			return new RegularListGrammarSlot(symbolIndex, currentSlot, regularList, regularHead, headGrammarSlot);
+			return new RegularListGrammarSlot(symbolIndex, currentSlot, regularList, headGrammarSlot);
 		}
 		
 		// Nonterminal
@@ -1414,8 +1413,7 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		else if(slot instanceof RegularListGrammarSlot) {
-			HeadGrammarSlot regularHead = ((RegularListGrammarSlot) slot).getRegularHead();
-			RegularListGrammarSlot newSlot = new RegularListGrammarSlot(symbolIndex, previous, (RegularList) slot.getSymbol(), regularHead, head);
+			RegularListGrammarSlot newSlot = new RegularListGrammarSlot(symbolIndex, previous, (RegularList) slot.getSymbol(), head);
 			copyActions(slot, newSlot);
 			return newSlot;
 		}

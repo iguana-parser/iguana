@@ -12,7 +12,9 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,21 +35,17 @@ public class RegularListTest3 {
 
 	@Before
 	public void init() {
-		Nonterminal Float = new Nonterminal("Float");
 		Nonterminal S = new Nonterminal("S");
-		CharacterClass zero_nine = new CharacterClass(list(new Range('0', '9')));
-		
+		Nonterminal Float = new Nonterminal("Float");
+		CharacterClass zero_nine = new CharacterClass(list(new Range('0', '9')));		
 		RegularList regularList = RegularList.plus("[0-9]+", zero_nine);
 		
-		Rule r0 = new Rule(S, list(Float));
-		Rule r1 = new Rule(Float, list(regularList, new Character('.'), regularList));
+		Rule r1 = new Rule(S, list(Float));
+		Rule r2 = new Rule(Float, list(new Nonterminal("[0-9]+"), new Character('.'), new Nonterminal("[0-9]+")));
 		
-		Rule r2 = new Rule(new Nonterminal("[0-9]+"), list(new Nonterminal("[0-9]+"), new Nonterminal("[0-9]")));
-		Rule r3 = new Rule(new Nonterminal("[0-9]+"), list(new Nonterminal("[0-9]")));
-		Rule r4 = new Rule(new Nonterminal("[0-9]"), list(zero_nine));
-
+		Rule r3 = new Rule(new Nonterminal("[0-9]+"), list(regularList));
 		
-		grammar = new GrammarBuilder().addRule(r0).addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
+		grammar = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).build();
 		levelParser = ParserFactory.levelParser(grammar, 10);
 	}
 
@@ -63,6 +61,7 @@ public class RegularListTest3 {
 	
 	@Test
 	public void test3() throws ParseError {
-		levelParser.parse(Input.fromString("1234567890123456789012345623434343.1234567890123456789012345678799898989889898"), grammar, "S");
+		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("1234567890123456789012345623434343.1234567890123456789012345678799898989889898"), grammar, "S");
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf);
 	}
 }

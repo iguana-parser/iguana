@@ -92,20 +92,20 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
 				nonterminalSymbolNode.setObject(result);
 				
-			// Lazy creation of the children of regular nodes	
-			} else if(nonterminalSymbolNode instanceof RegularListNode) {
-				RegularListNode regularListNode = (RegularListNode) nonterminalSymbolNode;
-				List<U> list = new ArrayList<>();
-				for(int i = regularListNode.getLeftExtent(); i < regularListNode.getRightExtent(); i++) {
-					Result<U> result = listener.terminal(input.charAt(i), input.getPositionInfo(i, i + 1));
-					list.add(result.getObject());
-				}
-								
-				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
-				listener.startNode((T) slot.getObject());
-				Result<U> result = listener.endNode((T) slot.getObject(), list, 
-						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
-				nonterminalSymbolNode.setObject(result);				
+//			// Lazy creation of the children of regular nodes	
+//			} else if(nonterminalSymbolNode instanceof RegularListNode) {
+//				RegularListNode regularListNode = (RegularListNode) nonterminalSymbolNode;
+//				List<U> list = new ArrayList<>();
+//				for(int i = regularListNode.getLeftExtent(); i < regularListNode.getRightExtent(); i++) {
+//					Result<U> result = listener.terminal(input.charAt(i), input.getPositionInfo(i, i + 1));
+//					list.add(result.getObject());
+//				}
+//								
+//				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
+//				listener.startNode((T) slot.getObject());
+//				Result<U> result = listener.endNode((T) slot.getObject(), list, 
+//						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
+//				nonterminalSymbolNode.setObject(result);				
 
 			} else {
 				
@@ -290,5 +290,9 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		};
 	}
 
+	@Override
+	public void visit(RegularListNode node) {
+		throw new IllegalStateException("Should not be here.");
+	}
 	
 }

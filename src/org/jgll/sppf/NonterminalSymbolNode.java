@@ -28,8 +28,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 			return false;
 		}
 		return super.equals(obj);
-	}
-	
+	}	
 	
 	public boolean isKeywordNode() {
 		return keywordNode;

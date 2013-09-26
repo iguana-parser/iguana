@@ -41,7 +41,7 @@ public interface GLLParserInternals {
 	
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int ci);
 	
-	public RegularListNode getRegularNode(HeadGrammarSlot slot, int leftExtent, int rightExtent);
+	public RegularListNode getRegularNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	/**
 	 * 

@@ -1,8 +1,9 @@
 package org.jgll.sppf;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.traversal.SPPFVisitor;
 
-public class RegularListNode extends NonterminalSymbolNode {
+public class RegularListNode extends NonPackedNode {
 
 	private boolean partial;
 	
@@ -17,4 +18,10 @@ public class RegularListNode extends NonterminalSymbolNode {
 	public void setPartial(boolean partial) {
 		this.partial = partial;
 	}
+
+	@Override
+	public void accept(SPPFVisitor visitAction) {
+		
+	}
+
 }
