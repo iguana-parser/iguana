@@ -56,6 +56,10 @@ public class Range extends AbstractSymbol implements Terminal {
 	public String getMatchCode() {
 		return "(I[ci] >= " + start + " && I[ci] <= " + end + ")";
 	}
+	
+	public boolean contains(Range range) {
+		return start <= range.start && end >= range.end;
+	}
 
 	@Override
 	public int hashCode() {

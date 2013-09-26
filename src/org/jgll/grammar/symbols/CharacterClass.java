@@ -61,6 +61,27 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		return sb.toString();
 	}
 	
+	/**
+	 * Returns true the provided character class is a subset of
+	 * this character class.
+	 */
+	public boolean contains(CharacterClass other) {
+		// For each range of the other character class, find a 
+		// range that contains it
+		for(Range otherRange : other.ranges) {
+			boolean contains = false;
+			for(Range range : ranges) {
+				if(range.contains(otherRange)) {
+					contains = true;
+				}
+			}
+			if(!contains) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public int hashCode() {
 		return ranges.hashCode();
