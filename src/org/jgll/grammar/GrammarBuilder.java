@@ -396,11 +396,17 @@ public class GrammarBuilder implements Serializable {
 			HeadGrammarSlot head = t.getFirst();
 			Integer regularIndex = t.getSecond();
 
+			Object object = null;
 			for(int i = 0; i < head.getAlternates().size(); i++) {
 				if(regularIndex != i) {
+					if(object != null) {
+						object = ((LastGrammarSlot) head.getAlternateAt(i).getLastSlot().next()).getObject();
+					}
 					head.remove(i);
 				}
 			}
+			
+			((LastGrammarSlot) head.getAlternateAt(regularIndex).getLastSlot().next()).setObject(object);
 		}
  	}
 	
