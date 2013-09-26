@@ -75,7 +75,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		// merge the nodes
 		if(currentSPPFNode instanceof RegularListNode) {
 			if(((RegularListNode) currentSPPFNode).isPartial()) {
-				sppfNode = parser.getRegularNode(regularHead, currentSPPFNode.getLeftExtent(), ci + i);
+				currentSPPFNode = parser.getRegularNode(regularHead, currentSPPFNode.getLeftExtent(), ci + i);
 			}
 		}
 		else if (currentSPPFNode instanceof IntermediateNode) {
@@ -87,24 +87,25 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 					((IntermediateNode) currentSPPFNode).addChild(newNode);
 				}
 			}
+		} else {
+			currentSPPFNode = sppfNode;
 		}
 
 		// If the whole list is matched
 		if(i <= regularListLength && !characterClass.match(input.charAt(ci + i))) {
-			
 			if(next instanceof LastGrammarSlot) {
-				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
+				parser.getNonterminalNode((LastGrammarSlot) next, currentSPPFNode);
 				parser.pop();
 				return null;
 			} else {
-				parser.getIntermediateNode(next, sppfNode);
+				parser.getIntermediateNode(next, currentSPPFNode);
 				return next;
 			}
 		}
 		
 		else {
 			sppfNode.setPartial(true);
-			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, sppfNode);
+			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, currentSPPFNode);
 		}
 		
 		return null;
