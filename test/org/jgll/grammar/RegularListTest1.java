@@ -11,6 +11,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +52,7 @@ public class RegularListTest1 {
 
 	@Test
 	public void test1() throws ParseError {
-		levelParser.parse(Input.fromString("abcdef"), grammar1, "S");
+		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("abcdef"), grammar1, "S");
 		levelParser.parse(Input.fromString("abcdef"), grammar2, "S");
 	}
 

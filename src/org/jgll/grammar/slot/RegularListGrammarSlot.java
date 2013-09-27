@@ -67,11 +67,9 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		// slot action.
 		RegularListNode regularNode = parser.getRegularNode(this, ci, ci + i);
 
-		
 		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
 		
-		// If the current SPPF node is a partially matched list node
-		// merge the nodes
+		// If the current SPPF node is a partially matched list node, merge the nodes
 		if(currentSPPFNode instanceof RegularListNode && ((RegularListNode) currentSPPFNode).isPartial()) {
 			regularNode = parser.getRegularNode(this, currentSPPFNode.getLeftExtent(), ci + i);
 		}
@@ -82,8 +80,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
 			parser.pop();
 			return null;
-		}
-		
+		} 
 		else {
 			regularNode.setPartial(true);
 			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, regularNode);

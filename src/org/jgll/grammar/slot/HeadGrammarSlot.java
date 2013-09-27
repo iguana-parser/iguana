@@ -60,6 +60,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 		alternates.remove(alternate);
 	}
 	
+	public void removeAlternate(int index) {
+		alternates.remove(index);
+	}
+	
 	public Set<Alternate> without(List<Symbol> list) {
 		Set<Alternate> set = new HashSet<>(alternates);
 		for(Alternate alternate : alternates) {
@@ -91,11 +95,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 			}
 		}
 	}
-	
-	public void remove(int index) {
-		alternates.remove(index);
-	}
-	
+		
 	public void removeAllAlternates() {
 		alternates.clear();
 	}

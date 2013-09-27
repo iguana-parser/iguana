@@ -91,22 +91,24 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				Result<U> result = listener.endNode((T) slot.getObject(), list, 
 						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
 				nonterminalSymbolNode.setObject(result);
+			
+			}  else if(nonterminalSymbolNode.childrenCount() == 1 && nonterminalSymbolNode.getChildAt(0) instanceof RegularListNode) {
+				// Lazy creation of the children of regular nodes	
+				RegularListNode regularListNode = (RegularListNode) nonterminalSymbolNode.getChildAt(0);
+				nonterminalSymbolNode.removeChild(regularListNode);
 				
-//			// Lazy creation of the children of regular nodes	
-//			} else if(nonterminalSymbolNode instanceof RegularListNode) {
-//				RegularListNode regularListNode = (RegularListNode) nonterminalSymbolNode;
-//				List<U> list = new ArrayList<>();
-//				for(int i = regularListNode.getLeftExtent(); i < regularListNode.getRightExtent(); i++) {
-//					Result<U> result = listener.terminal(input.charAt(i), input.getPositionInfo(i, i + 1));
-//					list.add(result.getObject());
-//				}
-//								
-//				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
-//				listener.startNode((T) slot.getObject());
-//				Result<U> result = listener.endNode((T) slot.getObject(), list, 
-//						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
-//				nonterminalSymbolNode.setObject(result);				
-
+				List<U> list = new ArrayList<>();
+				for(int i = regularListNode.getLeftExtent(); i < regularListNode.getRightExtent(); i++) {
+					Result<U> result = listener.terminal(input.charAt(i), input.getPositionInfo(i, i + 1));
+					list.add(result.getObject());
+				}
+								
+				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
+				listener.startNode((T) slot.getObject());
+				Result<U> result = listener.endNode((T) slot.getObject(), list, 
+						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
+				nonterminalSymbolNode.setObject(result);
+				
 			} else {
 				
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
@@ -216,7 +218,8 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			listNode.setVisited(true);
 			if(listNode.isAmbiguous()) {
 				buildAmbiguityNode(listNode);
-			} else {
+			}	
+			else {
 				LastGrammarSlot slot = (LastGrammarSlot) listNode.getFirstPackedNodeGrammarSlot();
 				listener.startNode((T) slot.getObject());
 				visitChildren(listNode, this);
