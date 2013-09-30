@@ -45,11 +45,10 @@ import org.jgll.grammar.symbols.RegularList;
 import org.jgll.grammar.symbols.Rule;
 import org.jgll.grammar.symbols.Symbol;
 import org.jgll.grammar.symbols.Terminal;
-import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
-import org.jgll.util.trie.Node;
 import org.jgll.util.trie.ExternalEqual;
+import org.jgll.util.trie.Node;
 import org.jgll.util.trie.Trie;
 
 public class GrammarBuilder implements Serializable {
@@ -380,38 +379,14 @@ public class GrammarBuilder implements Serializable {
 	
 	public void fixRegularLists() {
 		
-		Set<Tuple<HeadGrammarSlot, Integer>> set = new HashSet<>();
-		
 		for(HeadGrammarSlot head : nonterminals) {
-			int n = 0;
-			for(Alternate alt : head.getAlternates()) {
-				if(alt.getFirstSlot() instanceof RegularListGrammarSlot) {
-					set.add(new Tuple<>(head, n));
-				}
-				n++;
-			}
-		}
-		
-		for(Tuple<HeadGrammarSlot, Integer> t : set) {
-			HeadGrammarSlot head = t.getFirst();
-			Integer regularIndex = t.getSecond();
-
-			List<Alternate> alternatesToBeRemoved = new ArrayList<>();
-			
-			Object object = null;
-			for(int i = 0; i < head.getAlternates().size(); i++) {
-				if(regularIndex != i) {
-					if(object == null) {
-						object = ((LastGrammarSlot) head.getAlternateAt(i).getLastSlot().next()).getObject();
-					}
-					alternatesToBeRemoved.add(head.getAlternateAt(i));
-				}
-			}
-			
-			((LastGrammarSlot) head.getAlternateAt(regularIndex).getLastSlot().next()).setObject(object);
-			
-			for(Alternate alt : alternatesToBeRemoved) {
-				head.removeAlternate(alt);
+			String name = head.getNonterminal().getName();
+			if(name.startsWith("Regular_")) {
+				String s = name.substring(7, name.length());
+				HeadGrammarSlot ebnfListHead = nonterminalsMap.get(s);
+				LastGrammarSlot lastSlot = (LastGrammarSlot) ebnfListHead.getAlternateAt(0).getLastSlot().next();
+				Object object = lastSlot.getObject();
+				((LastGrammarSlot)head.getAlternateAt(0).getLastSlot().next()).setObject(object);
 			}
 		}
  	}
