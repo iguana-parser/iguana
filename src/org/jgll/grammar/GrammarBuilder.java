@@ -382,8 +382,8 @@ public class GrammarBuilder implements Serializable {
 		for(HeadGrammarSlot head : nonterminals) {
 			String name = head.getNonterminal().getName();
 			if(name.startsWith("Regular_")) {
-				String s = name.substring(7, name.length());
-				HeadGrammarSlot ebnfListHead = nonterminalsMap.get(s);
+				String s = name.substring(8, name.length());
+				HeadGrammarSlot ebnfListHead = nonterminalsMap.get(new Nonterminal(s));
 				LastGrammarSlot lastSlot = (LastGrammarSlot) ebnfListHead.getAlternateAt(0).getLastSlot().next();
 				Object object = lastSlot.getObject();
 				((LastGrammarSlot)head.getAlternateAt(0).getLastSlot().next()).setObject(object);
