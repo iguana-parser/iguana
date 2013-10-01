@@ -106,7 +106,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public boolean testFollowSet(int index, Input input) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean isNullable() {
-		return false;
+		return regularList.getMinimum() == 0;
 	}
 
 	@Override

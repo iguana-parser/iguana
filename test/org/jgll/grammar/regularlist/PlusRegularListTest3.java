@@ -1,7 +1,9 @@
-package org.jgll.grammar;
+package org.jgll.grammar.regularlist;
 
 import static org.jgll.util.CollectionsUtil.*;
 
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarBuilder;
 import org.jgll.grammar.symbols.Character;
 import org.jgll.grammar.symbols.CharacterClass;
 import org.jgll.grammar.symbols.Nonterminal;
@@ -25,7 +27,7 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class RegularListTest3 {
+public class PlusRegularListTest3 {
 	
 	private Grammar grammar;
 	

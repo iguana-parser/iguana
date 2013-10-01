@@ -384,12 +384,21 @@ public class GrammarBuilder implements Serializable {
 			if(name.startsWith("Regular_")) {
 				String s = name.substring(8, name.length());
 				HeadGrammarSlot ebnfListHead = nonterminalsMap.get(new Nonterminal(s));
-				LastGrammarSlot lastSlot = (LastGrammarSlot) ebnfListHead.getAlternateAt(0).getLastSlot().next();
-				Object object = lastSlot.getObject();
+				Object object = getObject(ebnfListHead);
 				((LastGrammarSlot)head.getAlternateAt(0).getLastSlot().next()).setObject(object);
 			}
 		}
  	}
+	
+	private Object getObject(HeadGrammarSlot head) {
+		for(Alternate alt : head.getAlternates()) {
+			if(! (alt.getLastSlot() instanceof LastGrammarSlot)) {
+				LastGrammarSlot lastSlot = (LastGrammarSlot) alt.getLastSlot().next();
+				return lastSlot.getObject();
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * Creates the corresponding grammar rule for the given keyword.
@@ -540,7 +549,12 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		else if(currentSlot instanceof RegularListGrammarSlot) {
-			return set.add(((RegularListGrammarSlot) currentSlot).getRegularList().getCharacterClass()) || changed;
+			RegularList regularList = ((RegularListGrammarSlot) currentSlot).getRegularList();
+			// Star regular lists are always nullable.
+			if(regularList.getMinimum() == 0) {
+				changed = set.add(Epsilon.getInstance()) || changed;
+			}
+			return set.add(regularList.getCharacterClass()) || changed;
 		}
 
 		// ignore LastGrammarSlot
