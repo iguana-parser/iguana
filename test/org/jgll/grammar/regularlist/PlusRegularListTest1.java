@@ -44,12 +44,11 @@ public class PlusRegularListTest1 {
 		Rule r4 = new Rule(new Nonterminal("[a-z]+"), list(new Nonterminal("[a-z]+"), new Nonterminal("[a-z]")));
 		Rule r5 = new Rule(new Nonterminal("[a-z]+"), list(new Nonterminal("[a-z]")));
 		Rule r6 = new Rule(new Nonterminal("[a-z]"), list(new CharacterClass(list(new Range('a', 'z')))));
-
 		
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).build();
-		levelParser = ParserFactory.levelParser(grammar1, 10);
-		
 		grammar2 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r4).addRule(r5).addRule(r6).build();
+		
+		levelParser = ParserFactory.levelParser(grammar1, 10);
 	}
 
 	@Test

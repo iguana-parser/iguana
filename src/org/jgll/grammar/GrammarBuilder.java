@@ -28,6 +28,7 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.RegularExpressionGrammarSlot;
 import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.LineActions;
@@ -41,6 +42,7 @@ import org.jgll.grammar.symbols.EOF;
 import org.jgll.grammar.symbols.Epsilon;
 import org.jgll.grammar.symbols.Keyword;
 import org.jgll.grammar.symbols.Nonterminal;
+import org.jgll.grammar.symbols.RegularExpression;
 import org.jgll.grammar.symbols.RegularList;
 import org.jgll.grammar.symbols.Rule;
 import org.jgll.grammar.symbols.Symbol;
@@ -236,6 +238,10 @@ public class GrammarBuilder implements Serializable {
 		else if (symbol instanceof RegularList) {
 			RegularList regularList = (RegularList) symbol;
 			return new RegularListGrammarSlot(symbolIndex, currentSlot, regularList, headGrammarSlot);
+		}
+		
+		else if(symbol instanceof RegularExpression) {
+			return new RegularExpressionGrammarSlot(symbolIndex, (RegularExpression) symbol, currentSlot, headGrammarSlot);
 		}
 		
 		// Nonterminal
