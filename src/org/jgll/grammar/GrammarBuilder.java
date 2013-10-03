@@ -254,7 +254,7 @@ public class GrammarBuilder implements Serializable {
 				
 			case NOT_FOLLOW:
 				if (condition instanceof TerminalCondition) {
-					NotFollowActions.fromTerminalList(slot.next(), ((TerminalCondition) condition).getTerminals(), condition);
+					NotFollowActions.fromTerminal(slot.next(), ((TerminalCondition) condition).getTerminal(), condition);
 				} else if (condition instanceof KeywordCondition) {
 					NotFollowActions.fromKeywordList(slot.next(), ((KeywordCondition) condition).getKeywords(), condition);
 				} else {
@@ -273,7 +273,7 @@ public class GrammarBuilder implements Serializable {
 					NotPrecedeActions.fromKeywordList(slot, literalCondition.getKeywords(), condition);
 				} else {
 					TerminalCondition terminalCondition = (TerminalCondition) condition;
-					NotPrecedeActions.fromTerminalList(slot, terminalCondition.getTerminals(), condition);
+					NotPrecedeActions.fromTerminal(slot, terminalCondition.getTerminal(), condition);
 				}
 				break;
 				

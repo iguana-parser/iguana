@@ -16,14 +16,11 @@ public class NotPrecedeActions {
 
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(NotPrecedeActions.class);
 	
-	public static void fromTerminalList(BodyGrammarSlot slot, final List<Terminal> terminals, final Condition condition) {
-		log.debug("Precede restriction added %s <<! %s", terminals, slot);
+	public static void fromTerminal(BodyGrammarSlot slot, final Terminal terminal, final Condition condition) {
+		log.debug("Precede restriction added %s <<! %s", terminal, slot);
 		
 		BitSet testSet = new BitSet();
-		
-		for(Terminal t : terminals) {
-			testSet.or(t.asBitSet());
-		}
+		testSet.or(terminal.asBitSet());
 		
 		final BitSet set = testSet;
 		
@@ -112,6 +109,4 @@ public class NotPrecedeActions {
 			
 		});
 	}
-	
-	
 }

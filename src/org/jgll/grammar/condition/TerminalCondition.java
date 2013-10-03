@@ -1,10 +1,6 @@
 package org.jgll.grammar.condition;
 
-import java.util.List;
-
 import org.jgll.grammar.symbols.Terminal;
-
-import static org.jgll.util.CollectionsUtil.*;
 
 /**
  * 
@@ -21,20 +17,20 @@ public class TerminalCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private List<Terminal> terminals;
+	private Terminal terminal;
 	
-	public TerminalCondition(ConditionType type, List<Terminal> terminals) {
+	public TerminalCondition(ConditionType type, Terminal terminal) {
 		super(type);
-		this.terminals = terminals;
+		this.terminal = terminal;
 	}
 	
-	public List<Terminal> getTerminals() {
-		return terminals;
+	public Terminal getTerminal() {
+		return terminal;
 	}
 	
 	@Override
 	public String toString() {
-		return type.toString() + " " + listToString(terminals);
+		return type.toString() + " " + terminal;
 	}
 	
 	@Override
@@ -50,7 +46,7 @@ public class TerminalCondition extends Condition {
 		
 		TerminalCondition other = (TerminalCondition) obj;
 		
-		return type == other.type && terminals.equals(other.terminals);
+		return type == other.type && terminal.equals(other.terminal);
 	}
 
 }

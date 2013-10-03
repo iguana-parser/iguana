@@ -57,7 +57,7 @@ public class ConditionFactory {
 		if(allKeywords(symbols)) {
 			return new KeywordCondition(type, (List<Keyword>) symbols);
 		} else if (allTerminal(symbols)) {
-			return new TerminalCondition(type, (List<Terminal>) symbols);
+			return new TerminalCondition(type, (Terminal) symbols.get(0));
 		} else {
 			return new ContextFreeCondition(type, symbols);
 		}		

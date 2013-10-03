@@ -93,14 +93,10 @@ public class NotFollowActions {
 		});
 	}
 	
-	
-	public static void fromTerminalList(BodyGrammarSlot slot, List<Terminal> list, final Condition condition) {
+	public static void fromTerminal(BodyGrammarSlot slot, Terminal terminal, final Condition condition) {
 		
 		BitSet testSet = new BitSet();
-		
-		for(Terminal t : list) {
-			testSet.or(t.asBitSet());
-		}
+		testSet.or(terminal.asBitSet());
 		
 		final BitSet set = testSet;
 		
