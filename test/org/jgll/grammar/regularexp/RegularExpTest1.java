@@ -51,11 +51,10 @@ public class RegularExpTest1 {
 		Rule r4 = new Rule(new Nonterminal("[0-9]+"), list(new Nonterminal("[0-9]+"), new CharacterClass(list(new Range('0', '9')))));
 		Rule r5 = new Rule(new Nonterminal("[0-9]+"), list(new CharacterClass(list(new Range('0', '9')))));
 		
-		Rule r6 = new Rule(Float, list(new RegularExpression("[0-9]+[.][0-9]+")));
-		
 		CharacterClass zero_nine = new CharacterClass(list(new Range('0', '9')));
 		Sequence seq = new Sequence(new Plus(zero_nine), new Character('.'), new Plus(zero_nine));
-
+		Rule r6 = new Rule(Float, list(new RegularExpression(seq)));
+		
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 		grammar2 = new GrammarBuilder().addRule(r1).addRule(r6).build();
 	}

@@ -14,9 +14,9 @@ public class RegularExpression extends AbstractSymbol {
 	
 	private RunAutomaton automaton;
 
-	private Symbol symbol;
+	private Sequence symbol;
 	
-	public RegularExpression(Symbol symbol) {
+	public RegularExpression(Sequence symbol) {
 		this.symbol = symbol;
 		this.automaton = new RunAutomaton(new RegExp(symbol.toString()).toAutomaton());
 	}
@@ -25,7 +25,7 @@ public class RegularExpression extends AbstractSymbol {
 		return automaton;
 	}
 	
-	public Symbol getSymbol() {
+	public Sequence getSymbol() {
 		return symbol;
 	}
 	
@@ -38,5 +38,27 @@ public class RegularExpression extends AbstractSymbol {
 	public Symbol addConditions(Collection<Condition> conditions) {
 		return null;
 	}
+	
+	public Terminal getFirstTerminal() {
+		Symbol firstSymbol = symbol.getSymbols().get(0);
+		
+		if(firstSymbol instanceof Terminal) {
+			return (Terminal) firstSymbol;
+		}
+		
+		else if(firstSymbol instanceof Plus) {
+			return (Terminal) (((Plus) firstSymbol).getSymbol());
+		}
+		
+		else if(firstSymbol instanceof Star) {
+			return (Terminal) (((Star) firstSymbol).getSymbol());
+		}
 
+		else if(firstSymbol instanceof Opt) {
+			return (Terminal) (((Opt) firstSymbol).getSymbol());
+		}
+
+		throw new IllegalStateException();
+	}
+	
 }

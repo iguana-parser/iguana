@@ -32,5 +32,9 @@ public class Sequence extends Nonterminal {
 		seq.conditions.add(condition);
 		return seq;
 	}
+	
+	public Symbol symbolAt(int index) {
+		return symbols.get(index);
+	}
 
 }

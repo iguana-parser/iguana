@@ -4,9 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.BitSet;
 
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Opt;
+import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.RegularExpression;
+import org.jgll.grammar.symbol.Star;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
@@ -20,11 +26,50 @@ import dk.brics.automaton.RunAutomaton;
 public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
+	
 	private RegularExpression regexp;
-
+	
+	private BitSet firstSet;
+	
 	public RegularExpressionGrammarSlot(int position, RegularExpression regexp, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(position, previous, head);
 		this.regexp = regexp;
+		setFirstSet();
+		
+	}
+
+	private void setFirstSet() {
+		
+		firstSet = new BitSet();
+		
+		for(Symbol symbol : regexp.getSymbol().getSymbols()) {
+			if(symbol instanceof Character) {
+				firstSet.or(((Character) symbol).asBitSet());
+				break;
+			} 
+			
+			if(symbol instanceof Plus) {
+				if(! (((Plus) symbol).getSymbol() instanceof Terminal)) {
+					throw new IllegalArgumentException("Can only be a terminal");
+				}
+				firstSet.or(((Terminal)((Plus) symbol).getSymbol()).asBitSet());
+				break;
+			}
+			
+			if(symbol instanceof Star) {
+				if(! (((Star) symbol).getSymbol() instanceof Terminal)) {
+					throw new IllegalArgumentException("Can only be a terminal");
+				}
+				firstSet.or(((Terminal)((Star) symbol).getSymbol()).asBitSet());				
+			}
+			
+			if(symbol instanceof Opt) {
+				if(! (((Opt) symbol).getSymbol() instanceof Terminal)) {
+					throw new IllegalArgumentException("Can only be a terminal");
+				}
+				firstSet.or(((Terminal)((Opt) symbol).getSymbol()).asBitSet());
+			}
+		}
 	}
 	
 	public RegularExpressionGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
@@ -100,7 +145,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean testFirstSet(int index, Input input) {
-		return true;
+		return firstSet.get(input.charAt(index));
 	}
 
 	@Override
@@ -115,12 +160,21 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public Symbol getSymbol() {
+	public RegularExpression getSymbol() {
 		return regexp;
 	}
 
 	@Override
 	public boolean isNullable() {
+		for(Symbol symbol : regexp.getSymbol().getSymbols()) {
+			if(symbol instanceof Terminal) {
+				return false;
+			}
+			
+			if(symbol instanceof Plus) {
+				return false;
+			}
+		}
 		return true;
 	}
 
