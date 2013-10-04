@@ -86,11 +86,14 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		RunAutomaton automaton = regexp.getAutomaton();
 
 		Object object = parser.getCurrentDescriptor().getObject();
+		
 		int state;
+		
 		if(object != null) {
 			state = (Integer) object;
+		} else {
+			state = automaton.getInitialState();
 		}
-		state = 0;
 		
 		int i = 0;
 		for(i = 0; i < regularListLength; i++) {
@@ -123,32 +126,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			parser.pop();
 			return null;
 		}
-		
-//		ByteArrayOutputStream output = new ByteArrayOutputStream();
-//		try {
-//			automaton.store(output);
-//		}
-//		catch (IOException e) {
-//			e.printStackTrace();
-//		}
-
-		// If the whole list is matched
-//		if(l <= regularListLength && automaton.step(state, (char) input.charAt(ci + l)) != -1) {
-//			parser.setCurrentSPPFNode(DummyNode.getInstance());
-//			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
-//			parser.pop();
-//			return null;
-//		} 
-//		else {
-//			try {
-//				automaton =  RunAutomaton.load(new ByteArrayInputStream(output.toByteArray()));
-//			}
-//			catch (ClassCastException | ClassNotFoundException | IOException e) {
-//				e.printStackTrace();
-//			}
-//			regularNode.setPartial(true);
-//			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + l, regularNode);
-//		}
 		
 		return null;
 	}
