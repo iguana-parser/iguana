@@ -1,5 +1,7 @@
 package org.jgll.grammar.symbols;
 
+import org.jgll.grammar.symbol.CharacterClass;
+import org.jgll.grammar.symbol.Range;
 import org.junit.Test;
 
 import static org.jgll.util.CollectionsUtil.*;

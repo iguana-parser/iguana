@@ -3,9 +3,9 @@ package org.jgll.grammar.condition;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.symbols.Keyword;
-import org.jgll.grammar.symbols.Symbol;
-import org.jgll.grammar.symbols.Terminal;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Terminal;
 
 public class ConditionFactory {
 

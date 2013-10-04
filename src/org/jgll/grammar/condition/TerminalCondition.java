@@ -1,6 +1,6 @@
 package org.jgll.grammar.condition;
 
-import org.jgll.grammar.symbols.Terminal;
+import org.jgll.grammar.symbol.Terminal;
 
 /**
  * 

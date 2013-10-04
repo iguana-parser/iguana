@@ -4,11 +4,11 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbols.Character;
-import org.jgll.grammar.symbols.EOF;
-import org.jgll.grammar.symbols.Epsilon;
-import org.jgll.grammar.symbols.Nonterminal;
-import org.jgll.grammar.symbols.Rule;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;

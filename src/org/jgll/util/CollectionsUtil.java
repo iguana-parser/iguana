@@ -14,7 +14,7 @@ public class CollectionsUtil {
 		}
 		return sb.toString();
 	}
-	
+		
 	@SafeVarargs
 	public static <T> Set<T> set(T...objects) {
 		Set<T>  set = new HashSet<>();

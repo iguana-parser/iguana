@@ -18,7 +18,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.symbols.Nonterminal;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 

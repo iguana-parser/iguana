@@ -15,7 +15,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.symbols.Alternate;
+import org.jgll.grammar.symbol.Alternate;
 
 public class GrammarToDot {
 	

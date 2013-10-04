@@ -3,11 +3,11 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.grammar.symbols.Character;
-import org.jgll.grammar.symbols.Nonterminal;
-import org.jgll.grammar.symbols.Plus;
-import org.jgll.grammar.symbols.Rule;
-import org.jgll.grammar.symbols.Terminal;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Plus;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;

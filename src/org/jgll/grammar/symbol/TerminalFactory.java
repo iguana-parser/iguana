@@ -1,4 +1,4 @@
-package org.jgll.grammar.symbols;
+package org.jgll.grammar.symbol;
 
 
 public class TerminalFactory {

@@ -11,7 +11,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
-import org.jgll.grammar.symbols.Keyword;
+import org.jgll.grammar.symbol.Keyword;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;

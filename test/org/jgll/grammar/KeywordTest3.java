@@ -3,12 +3,12 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbols.Character;
-import org.jgll.grammar.symbols.Keyword;
-import org.jgll.grammar.symbols.Nonterminal;
-import org.jgll.grammar.symbols.Rule;
-import org.jgll.grammar.symbols.Terminal;
-import org.jgll.grammar.symbols.TerminalFactory;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
+import org.jgll.grammar.symbol.TerminalFactory;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;

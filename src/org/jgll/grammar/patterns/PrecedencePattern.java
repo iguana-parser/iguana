@@ -3,8 +3,8 @@ package org.jgll.grammar.patterns;
 import java.io.Serializable;
 import java.util.List;
 
-import org.jgll.grammar.symbols.Nonterminal;
-import org.jgll.grammar.symbols.Symbol;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Symbol;
 
 
 public class PrecedencePattern extends AbstractPattern implements Serializable {

@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.symbols.Alternate;
-import org.jgll.grammar.symbols.Nonterminal;
-import org.jgll.grammar.symbols.Symbol;
-import org.jgll.grammar.symbols.Terminal;
+import org.jgll.grammar.symbol.Alternate;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;

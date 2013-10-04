@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.slotaction.SlotAction;
-import org.jgll.grammar.symbols.Symbol;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.util.Input;
 

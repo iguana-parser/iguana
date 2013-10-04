@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.symbols.Keyword;
-import org.jgll.grammar.symbols.Terminal;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;

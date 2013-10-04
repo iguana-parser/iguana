@@ -3,7 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.symbols.Symbol;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;

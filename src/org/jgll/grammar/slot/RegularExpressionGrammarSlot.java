@@ -5,8 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.symbols.RegularExpression;
-import org.jgll.grammar.symbols.Symbol;
+import org.jgll.grammar.symbol.RegularExpression;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
@@ -100,14 +100,12 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean testFirstSet(int index, Input input) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean testFollowSet(int index, Input input) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -118,19 +116,16 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public Symbol getSymbol() {
-		// TODO Auto-generated method stub
-		return null;
+		return regexp;
 	}
 
 	@Override
 	public boolean isNullable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isNameEqual(BodyGrammarSlot slot) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

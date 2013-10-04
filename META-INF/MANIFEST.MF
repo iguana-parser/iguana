@@ -6,7 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Export-Package: 
  org.jgll.grammar;uses:="org.jgll.parser",
  org.jgll.grammar.condition,
- org.jgll.grammar.symbols,
+ org.jgll.grammar.symbol,
  org.jgll.parser;
   uses:="org.jgll.sppf,
    org.jgll.util,
