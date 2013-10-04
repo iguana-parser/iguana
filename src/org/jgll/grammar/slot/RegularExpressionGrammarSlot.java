@@ -35,7 +35,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		super(position, previous, head);
 		this.regexp = regexp;
 		setFirstSet();
-		
 	}
 
 	private void setFirstSet() {
@@ -120,7 +119,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			e.printStackTrace();
 		}
 
-		
 		// If the whole list is matched
 		if(l <= regularListLength && automaton.step(state, (char) input.charAt(ci + l)) != -1) {
 			parser.setCurrentSPPFNode(DummyNode.getInstance());
