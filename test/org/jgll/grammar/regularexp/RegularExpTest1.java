@@ -62,6 +62,6 @@ public class RegularExpTest1 {
 	@Test
 	public void test1() throws ParseError {
 		levelParser = ParserFactory.levelParser(grammar2, 10);
-		levelParser.parse(Input.fromString("12345.12345"), grammar2, "S");
+		levelParser.parse(Input.fromString("12.12"), grammar2, "S");
 	}
 }

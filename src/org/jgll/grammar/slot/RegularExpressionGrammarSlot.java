@@ -87,55 +87,66 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		
 		RunAutomaton automaton = regexp.getAutomaton();
 
+		// TODO: restore the state
 		int state = 0;
 		
-		int l = 0;
-		for(int i = 0; i < regularListLength; i++) {
+		int i = 0;
+		for(i = 0; i < regularListLength; i++) {
 			int charAtCi = input.charAt(ci + i);
 			
 			state = automaton.step(state, (char) charAtCi);
-			l++;
 			if(state == -1) {
 				break;
 			}
 		}
-		
+
 		// The regular node that is going to be created as the result of this
 		// slot action.
-		RegularListNode regularNode = parser.getRegularNode(this, ci, ci + l);
-
+		RegularListNode regularNode = parser.getRegularNode(this, ci, ci + i);
+		
 		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
 		
 		// If the current SPPF node is a partially matched list node, merge the nodes
 		if(currentSPPFNode instanceof RegularListNode && ((RegularListNode) currentSPPFNode).isPartial()) {
-			regularNode = parser.getRegularNode(this, currentSPPFNode.getLeftExtent(), ci + l);
+			regularNode = parser.getRegularNode(this, currentSPPFNode.getLeftExtent(), ci + i);
 		}
 
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		try {
-			automaton.store(output);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// If the whole list is matched
-		if(l <= regularListLength && automaton.step(state, (char) input.charAt(ci + l)) != -1) {
+		// partial match, needs to be rescheduled
+		if(i == regularListLength) {
+			regularNode.setPartial(true);
+			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, regularNode);
+		} else {
 			parser.setCurrentSPPFNode(DummyNode.getInstance());
 			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
 			parser.pop();
 			return null;
-		} 
-		else {
-			try {
-				automaton =  RunAutomaton.load(new ByteArrayInputStream(output.toByteArray()));
-			}
-			catch (ClassCastException | ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-			regularNode.setPartial(true);
-			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + l, regularNode);
 		}
+		
+//		ByteArrayOutputStream output = new ByteArrayOutputStream();
+//		try {
+//			automaton.store(output);
+//		}
+//		catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
+		// If the whole list is matched
+//		if(l <= regularListLength && automaton.step(state, (char) input.charAt(ci + l)) != -1) {
+//			parser.setCurrentSPPFNode(DummyNode.getInstance());
+//			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
+//			parser.pop();
+//			return null;
+//		} 
+//		else {
+//			try {
+//				automaton =  RunAutomaton.load(new ByteArrayInputStream(output.toByteArray()));
+//			}
+//			catch (ClassCastException | ClassNotFoundException | IOException e) {
+//				e.printStackTrace();
+//			}
+//			regularNode.setPartial(true);
+//			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + l, regularNode);
+//		}
 		
 		return null;
 	}
@@ -192,5 +203,5 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 }

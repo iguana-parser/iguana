@@ -14,11 +14,11 @@ public class RegularExpression extends AbstractSymbol {
 	
 	private RunAutomaton automaton;
 
-	private Sequence symbol;
+	private Sequence seq;
 	
-	public RegularExpression(Sequence symbol) {
-		this.symbol = symbol;
-		this.automaton = new RunAutomaton(new RegExp(symbol.toString()).toAutomaton());
+	public RegularExpression(Sequence seq) {
+		this.seq = seq;
+		this.automaton = new RunAutomaton(new RegExp(sequenceToBricsDFA()).toAutomaton());
 	}
 	
 	public RunAutomaton getAutomaton() {
@@ -26,12 +26,12 @@ public class RegularExpression extends AbstractSymbol {
 	}
 	
 	public Sequence getSymbol() {
-		return symbol;
+		return seq;
 	}
 	
 	@Override
 	public String getName() {
-		return symbol.toString();
+		return seq.toString();
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class RegularExpression extends AbstractSymbol {
 	}
 	
 	public Terminal getFirstTerminal() {
-		Symbol firstSymbol = symbol.getSymbols().get(0);
+		Symbol firstSymbol = seq.getSymbols().get(0);
 		
 		if(firstSymbol instanceof Terminal) {
 			return (Terminal) firstSymbol;
@@ -60,5 +60,40 @@ public class RegularExpression extends AbstractSymbol {
 
 		throw new IllegalStateException();
 	}
+	
+	private String sequenceToBricsDFA() {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for(Symbol symbol : seq.getSymbols()) {
+			if(symbol instanceof Terminal) {
+				terminalToString((Terminal) symbol, sb);
+			} 
+			else if(symbol instanceof Plus) {
+				terminalToString((Terminal) ((Plus) symbol).getSymbol(), sb);
+				sb.append("+");
+			} 
+			else if(symbol instanceof Star) {
+				terminalToString((Terminal) ((Star) symbol).getSymbol(), sb);
+				sb.append("*");
+			}
+			else if(symbol instanceof Opt) {
+				terminalToString((Terminal) ((Opt) symbol).getSymbol(), sb);
+				sb.append("?");
+			}
+		}
+		
+		return sb.toString();
+	}
+
+	private void terminalToString(Terminal symbol, StringBuilder sb) {
+		if(symbol instanceof Character) {
+			sb.append((char)((Character) symbol).get());
+		}
+		else if (symbol instanceof CharacterClass) {
+			sb.append(symbol.toString());
+		}
+	}
+
 	
 }
