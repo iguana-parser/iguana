@@ -52,6 +52,11 @@ public class Descriptor implements Level {
 	 */
 	private final SPPFNode sppfNode;
 	
+	/**
+	 * Arbitrary date to store in a descriptor.
+	 */
+	private Object object;
+	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
@@ -112,6 +117,14 @@ public class Descriptor implements Level {
 	@Override
 	public int getLevel() {
 		return inputIndex;
+	}
+	
+	public void setObject(Object object) {
+		this.object = object;
+	}
+	
+	public Object getObject() {
+		return object;
 	}
 	
 	public static class DescriptorExternalHasher implements ExternalHasher<Descriptor> {

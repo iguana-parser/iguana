@@ -1,7 +1,5 @@
 package org.jgll.grammar.slot;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
@@ -87,8 +85,12 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		
 		RunAutomaton automaton = regexp.getAutomaton();
 
-		// TODO: restore the state
-		int state = 0;
+		Object object = parser.getCurrentDescriptor().getObject();
+		int state;
+		if(object != null) {
+			state = (Integer) object;
+		}
+		state = 0;
 		
 		int i = 0;
 		for(i = 0; i < regularListLength; i++) {
@@ -114,7 +116,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		// partial match, needs to be rescheduled
 		if(i == regularListLength) {
 			regularNode.setPartial(true);
-			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, regularNode);
+			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, regularNode, state);
 		} else {
 			parser.setCurrentSPPFNode(DummyNode.getInstance());
 			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);

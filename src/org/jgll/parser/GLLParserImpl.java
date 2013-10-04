@@ -59,6 +59,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 */
 	protected Grammar grammar;
 	
+	protected Descriptor currentDescriptor;
+	
 	/**
 	 * The grammar slot at which a parse error is occurred. 
 	 */
@@ -179,10 +181,18 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 * }
 	 */
 	@Override
-	public final void addDescriptor(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
-		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
+	public final void addDescriptor(GrammarSlot slot, GSSNode u, int inputIndex, SPPFNode w) {
+		Descriptor descriptor = new Descriptor(slot, u, inputIndex, w);
 		boolean result = lookupTable.addDescriptor(descriptor);
 		log.trace("Descriptor created: %s : %b", descriptor, result);
+	}
+	
+	@Override
+	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object) {
+		Descriptor descriptor = new Descriptor(slot, currentGSSNode, inputIndex, currentNode);
+		descriptor.setObject(object);
+		boolean result = lookupTable.addDescriptor(descriptor);
+		log.trace("Descriptor created: %s : %b", descriptor, result);		
 	}
 	
 	@Override
@@ -380,6 +390,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		ci = descriptor.getInputIndex();
 		cu = descriptor.getGSSNode();
 		cn = descriptor.getSPPFNode();
+		currentDescriptor = descriptor;
 		log.trace("Processing (%s, %s, %s, %s)", descriptor.getGrammarSlot(), ci, cu, cn);
 		return descriptor;
 	}
@@ -435,6 +446,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	@Override
 	public void setCurrentSPPFNode(SPPFNode node) {
 		this.cn = node;
+	}
+
+	@Override
+	public Descriptor getCurrentDescriptor() {
+		return currentDescriptor;
 	}
 	
 }

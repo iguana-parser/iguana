@@ -39,6 +39,8 @@ public interface GLLParserInternals {
 	
 	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode);
 	
+	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object);
+	
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int ci);
 	
 	public RegularListNode getRegularNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
@@ -67,6 +69,11 @@ public interface GLLParserInternals {
 	public LookupTable getLookupTable();
 	
 	public Grammar getGrammar();
+	
+	/**
+	 * Current descriptor being processed.
+	 */
+	public Descriptor getCurrentDescriptor();
 	
 	/**
 	 * Ring size is the length of largest chain of terminals in the body of production
