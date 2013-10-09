@@ -1462,8 +1462,14 @@ public class GrammarBuilder implements Serializable {
 			return newSlot;
 		}
 		
+		else if(slot instanceof RegularExpressionGrammarSlot) {
+			RegularExpressionGrammarSlot newSlot = new RegularExpressionGrammarSlot(symbolIndex, (RegularExpression) slot.getSymbol(), previous, head);
+			copyActions(slot, newSlot);
+			return newSlot;
+		}
+
 		else {
-			throw new RuntimeException("Should not be here!");
+			throw new RuntimeException("Should not be here! " + slot.getClass());
 		}
 	}
 	

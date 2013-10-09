@@ -39,7 +39,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		
 		firstSet = new BitSet();
 		
-		for(Symbol symbol : regexp.getSymbol().getSymbols()) {
+		for(Symbol symbol : regexp.getSymbols()) {
 			if(symbol instanceof Character) {
 				firstSet.or(((Character) symbol).asBitSet());
 				break;
@@ -144,7 +144,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -154,7 +153,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean isNullable() {
-		for(Symbol symbol : regexp.getSymbol().getSymbols()) {
+		for(Symbol symbol : regexp.getSymbols()) {
 			if(symbol instanceof Terminal) {
 				return false;
 			}
@@ -174,7 +173,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void codeParser(Writer writer) throws IOException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

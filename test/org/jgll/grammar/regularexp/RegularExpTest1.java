@@ -2,8 +2,11 @@ package org.jgll.grammar.regularexp;
 
 import static org.jgll.util.CollectionsUtil.list;
 
+import java.util.List;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.symbol.AbstractSymbol;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -11,7 +14,6 @@ import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Sequence;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -52,8 +54,8 @@ public class RegularExpTest1 {
 		Rule r5 = new Rule(new Nonterminal("[0-9]+"), list(new CharacterClass(list(new Range('0', '9')))));
 		
 		CharacterClass zero_nine = new CharacterClass(list(new Range('0', '9')));
-		Sequence seq = new Sequence(new Plus(zero_nine), new Character('.'), new Plus(zero_nine));
-		Rule r6 = new Rule(Float, list(new RegularExpression(seq)));
+		List<AbstractSymbol> symbols = list(new Plus(zero_nine), new Character('.'), new Plus(zero_nine));
+		Rule r6 = new Rule(Float, list(new RegularExpression(symbols)));
 		
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 		grammar2 = new GrammarBuilder().addRule(r1).addRule(r6).build();
@@ -66,6 +68,5 @@ public class RegularExpTest1 {
 		
 		levelParser = ParserFactory.levelParser(grammar1, 10);
 		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar1, "S");
-
 	}
 }

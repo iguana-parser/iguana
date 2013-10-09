@@ -1,8 +1,10 @@
 package org.jgll.grammar.symbol;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.CollectionsUtil;
 
 import dk.brics.automaton.RegExp;
 import dk.brics.automaton.RunAutomaton;
@@ -14,10 +16,10 @@ public class RegularExpression extends AbstractSymbol {
 	
 	private RunAutomaton automaton;
 
-	private Sequence seq;
+	private List<? extends Symbol> symbols;
 	
-	public RegularExpression(Sequence seq) {
-		this.seq = seq;
+	public RegularExpression(List<? extends Symbol> symbols) {
+		this.symbols = symbols;
 		this.automaton = new RunAutomaton(new RegExp(sequenceToBricsDFA()).toAutomaton());
 	}
 	
@@ -25,13 +27,13 @@ public class RegularExpression extends AbstractSymbol {
 		return automaton;
 	}
 	
-	public Sequence getSymbol() {
-		return seq;
+	public List<? extends Symbol> getSymbols() {
+		return symbols;
 	}
 	
 	@Override
 	public String getName() {
-		return seq.toString();
+		return CollectionsUtil.listToString(symbols);
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class RegularExpression extends AbstractSymbol {
 	}
 	
 	public Terminal getFirstTerminal() {
-		Symbol firstSymbol = seq.getSymbols().get(0);
+		Symbol firstSymbol = symbols.get(0);
 		
 		if(firstSymbol instanceof Terminal) {
 			return (Terminal) firstSymbol;
@@ -65,7 +67,7 @@ public class RegularExpression extends AbstractSymbol {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for(Symbol symbol : seq.getSymbols()) {
+		for(Symbol symbol : symbols) {
 			if(symbol instanceof Terminal) {
 				terminalToString((Terminal) symbol, sb);
 			} 
