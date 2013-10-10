@@ -8,6 +8,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -44,6 +45,8 @@ public interface GLLParserInternals {
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int ci);
 	
 	public RegularListNode getRegularNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
+	
+	public RegularExpressionNode getRegularExpressionNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	/**
 	 * 
