@@ -14,6 +14,7 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
@@ -107,13 +108,13 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 		// The regular node that is going to be created as the result of this
 		// slot action.
-		RegularListNode regularNode = parser.getRegularNode(this, ci, ci + i);
+		RegularExpressionNode regularNode = parser.getRegularExpressionNode(this, ci, ci + i);
 		
 		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
 		
 		// If the current SPPF node is a partially matched list node, merge the nodes
 		if(currentSPPFNode instanceof RegularListNode && ((RegularListNode) currentSPPFNode).isPartial()) {
-			regularNode = parser.getRegularNode(this, currentSPPFNode.getLeftExtent(), ci + i);
+			regularNode = parser.RegularExpressionNode(this, currentSPPFNode.getLeftExtent(), ci + i);
 		}
 
 		// partial match, needs to be rescheduled

@@ -14,6 +14,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
+import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
@@ -109,7 +110,18 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
 				nonterminalSymbolNode.setObject(result);
 				
-			} else {
+			} else if(nonterminalSymbolNode.childrenCount() == 1 && nonterminalSymbolNode.getChildAt(0) instanceof RegularExpressionNode) {
+				// Lazy creation of the children of regular nodes	
+				RegularExpressionNode regularExpressionNode = (RegularExpressionNode) nonterminalSymbolNode.getChildAt(0);
+				nonterminalSymbolNode.removeChild(regularExpressionNode);
+				
+				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
+				listener.startNode((T) slot.getObject());
+				Result<U> result = listener.endNode((T) slot.getObject(), new ArrayList<U>(), 
+						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
+				nonterminalSymbolNode.setObject(result);
+			}
+			else {
 				
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
 				
