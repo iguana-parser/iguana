@@ -8,12 +8,18 @@ import java.util.Set;
 public class CollectionsUtil {
 
 	public static <T> String listToString(List<T> elements) {
+		return listToString(elements, " ");
+	}
+	
+	public static <T> String listToString(List<T> elements, String sep) {
 		StringBuilder sb = new StringBuilder();
 		for(T t : elements) {
-			sb.append(t.toString()).append(" ");
+			sb.append(t.toString()).append(sep);
 		}
+		sb.delete(sb.length() - sep.length(), sb.length());
 		return sb.toString();
 	}
+
 		
 	@SafeVarargs
 	public static <T> Set<T> set(T...objects) {
