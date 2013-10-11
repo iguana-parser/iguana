@@ -261,9 +261,11 @@ public class GrammarBuilder implements Serializable {
 			case NOT_FOLLOW:
 				if (condition instanceof TerminalCondition) {
 					NotFollowActions.fromTerminal(slot.next(), ((TerminalCondition) condition).getTerminal(), condition);
-				} else if (condition instanceof KeywordCondition) {
+				} 
+				else if (condition instanceof KeywordCondition) {
 					NotFollowActions.fromKeywordList(slot.next(), ((KeywordCondition) condition).getKeywords(), condition);
-				} else {
+				} 
+				else {
 					NotFollowActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
 				}
 				break;
@@ -277,7 +279,8 @@ public class GrammarBuilder implements Serializable {
 				if(condition instanceof KeywordCondition) {
 					KeywordCondition literalCondition = (KeywordCondition) condition;
 					NotPrecedeActions.fromKeywordList(slot, literalCondition.getKeywords(), condition);
-				} else {
+				} 
+				else {
 					TerminalCondition terminalCondition = (TerminalCondition) condition;
 					NotPrecedeActions.fromTerminal(slot, terminalCondition.getTerminal(), condition);
 				}
@@ -289,7 +292,8 @@ public class GrammarBuilder implements Serializable {
 			case NOT_MATCH:
 				if(condition instanceof ContextFreeCondition) {
 					NotMatchActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
-				} else {
+				} 
+				else {
 					KeywordCondition simpleCondition = (KeywordCondition) condition;
 					NotMatchActions.fromKeywordList(slot.next(), simpleCondition.getKeywords(), condition);
 				}
