@@ -3,9 +3,12 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
+import java.util.List;
 
 import org.jgll.grammar.symbol.Alt;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.CharacterClass;
+import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Opt;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.RegularExpression;
@@ -41,31 +44,41 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		firstSet = new BitSet();
 		
 		for(Symbol symbol : regexp.getSymbols()) {
-			if(symbol instanceof Character) {
-				firstSet.or(((Character) symbol).asBitSet());
-				break;
-			} 
-			
-			if(symbol instanceof Plus) {
-				if(! (((Plus) symbol).getSymbol() instanceof Terminal)) {
-					throw new IllegalArgumentException("Can only be a terminal");
-				}
-				firstSet.or(((Terminal)((Plus) symbol).getSymbol()).asBitSet());
-				break;
-			}
-			
-			if(symbol instanceof Star) {
-				if(! (((Star) symbol).getSymbol() instanceof Terminal)) {
-					throw new IllegalArgumentException("Can only be a terminal");
-				}
-				firstSet.or(((Terminal)((Star) symbol).getSymbol()).asBitSet());				
-			}
-			
-			if(symbol instanceof Opt) {
-				if(! (((Opt) symbol).getSymbol() instanceof Terminal)) {
-					throw new IllegalArgumentException("Can only be a terminal");
-				}
-				firstSet.or(((Terminal)((Opt) symbol).getSymbol()).asBitSet());
+			setFirstSet(firstSet, symbol);
+		}
+	}
+	
+	private void setFirstSet(BitSet set, Symbol symbol) {
+		
+		if(symbol instanceof Character) {
+			firstSet.or(((Character) symbol).asBitSet());
+		} 
+		
+		else if(symbol instanceof CharacterClass) {
+			firstSet.or(((CharacterClass) symbol).asBitSet());
+		} 
+		
+		else if(symbol instanceof Plus) {
+			setFirstSet(set, ((Plus) symbol).getSymbol());
+		}
+		
+		else if(symbol instanceof Star) {
+			setFirstSet(set, ((Star) symbol).getSymbol());
+		}
+		
+		else if(symbol instanceof Opt) {
+			setFirstSet(set, ((Opt) symbol).getSymbol());
+		} 
+		
+		else if(symbol instanceof Group) {
+			List<? extends Symbol> list = ((Group) symbol).getSymbols();
+			setFirstSet(set, list.get(0));
+		}
+		
+		else if(symbol instanceof Alt) {
+			List<? extends Symbol> list = ((Alt) symbol).getSymbols();
+			for(Symbol s : list) {
+				setFirstSet(set, s);
 			}
 		}
 	}

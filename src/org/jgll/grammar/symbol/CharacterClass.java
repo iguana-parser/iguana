@@ -126,7 +126,8 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		if(c == '\n') {
 			return "\\n";
 		}
-		return c + "";
+		
+		return "\\u" + Integer.toHexString(c) + "";
 	}
 	
 	@Override
