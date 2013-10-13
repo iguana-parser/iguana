@@ -1,6 +1,9 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collection;
+
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.CollectionsUtil;
 
 public class Opt extends Nonterminal {
 
@@ -18,11 +21,16 @@ public class Opt extends Nonterminal {
 	}
 	
 	@Override
-	public Opt addCondition(Condition condition) {
+	public Opt addConditions(Collection<Condition> conditions) {
 		Opt opt = new Opt(this.s);
 		opt.conditions.addAll(this.conditions);
-		opt.conditions.add(condition);
+		opt.conditions.addAll(conditions);
 		return opt;
+	}
+	
+	@Override
+	public Opt addCondition(Condition condition) {
+		return addConditions(CollectionsUtil.list(condition));
 	}
 
 }

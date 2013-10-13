@@ -40,8 +40,11 @@ public class RegularExpression extends AbstractSymbol {
 	}
 
 	@Override
-	public Symbol addConditions(Collection<Condition> conditions) {
-		return null;
+	public RegularExpression addConditions(Collection<Condition> conditions) {
+		RegularExpression regex = new RegularExpression(this.symbols);
+		regex.conditions.addAll(this.conditions);
+		regex.conditions.addAll(conditions);
+		return regex;
 	}
 	
 	public Set<Terminal> getFirstTerminal() {

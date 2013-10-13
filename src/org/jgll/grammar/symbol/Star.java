@@ -1,6 +1,9 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collection;
+
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.CollectionsUtil;
 
 public class Star extends Nonterminal {
 
@@ -9,7 +12,7 @@ public class Star extends Nonterminal {
 	private Symbol s;
 	
 	public Star(Symbol s) {
-		super(s.getName() + "+");
+		super(s.getName() + "*");
 		this.s = s;
 	}
 	
@@ -18,11 +21,16 @@ public class Star extends Nonterminal {
 	}
 	
 	@Override
-	public Star addCondition(Condition condition) {
+	public Star addConditions(Collection<Condition> conditions) {
 		Star star = new Star(this.s);
 		star.conditions.addAll(this.conditions);
-		star.conditions.add(condition);
+		star.conditions.addAll(conditions);
 		return star;
+	}
+	
+	@Override
+	public Star addCondition(Condition condition) {
+		return addConditions(CollectionsUtil.list(condition));
 	}
 
 }

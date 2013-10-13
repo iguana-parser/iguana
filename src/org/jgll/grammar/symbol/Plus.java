@@ -1,6 +1,9 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collection;
+
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.CollectionsUtil;
 
 public class Plus extends Nonterminal {
 
@@ -18,11 +21,16 @@ public class Plus extends Nonterminal {
 	}
 	
 	@Override
-	public Plus addCondition(Condition condition) {
+	public Plus addConditions(Collection<Condition> conditions) {
 		Plus plus = new Plus(this.s);
 		plus.conditions.addAll(this.conditions);
-		plus.conditions.add(condition);
+		plus.conditions.addAll(conditions);
 		return plus;
+	}
+	
+	@Override
+	public Plus addCondition(Condition condition) {
+		return addConditions(CollectionsUtil.list(condition));
 	}
 
 }

@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.CollectionsUtil;
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -60,6 +61,11 @@ public class Nonterminal extends AbstractSymbol {
 		nonterminal.conditions.addAll(this.conditions);
 		nonterminal.conditions.addAll(conditions);
 		return nonterminal;
+	}
+	
+	@Override
+	public Nonterminal addCondition(Condition condition) {
+		return addConditions(CollectionsUtil.list(condition));
 	}
 	
 	@Override
