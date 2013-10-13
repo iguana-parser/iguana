@@ -1,7 +1,9 @@
 package org.jgll.grammar.symbol;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.util.CollectionsUtil;
@@ -20,7 +22,8 @@ public class RegularExpression extends AbstractSymbol {
 	
 	public RegularExpression(List<? extends Symbol> symbols) {
 		this.symbols = symbols;
-		this.automaton = new RunAutomaton(new RegExp(sequenceToBricsDFA()).toAutomaton());
+		System.out.println(toBricsDFA());
+		this.automaton = new RunAutomaton(new RegExp(toBricsDFA()).toAutomaton());
 	}
 	
 	public RunAutomaton getAutomaton() {
@@ -41,51 +44,96 @@ public class RegularExpression extends AbstractSymbol {
 		return null;
 	}
 	
-	public Terminal getFirstTerminal() {
+	public Set<Terminal> getFirstTerminal() {
 		Symbol firstSymbol = symbols.get(0);
 		
-		if(firstSymbol instanceof Terminal) {
-			return (Terminal) firstSymbol;
-		}
+		Set<Terminal> set = new HashSet<>();
 		
-		else if(firstSymbol instanceof Plus) {
-			return (Terminal) (((Plus) firstSymbol).getSymbol());
-		}
-		
-		else if(firstSymbol instanceof Star) {
-			return (Terminal) (((Star) firstSymbol).getSymbol());
-		}
+		getFirstTerminal(set, firstSymbol);
 
-		else if(firstSymbol instanceof Opt) {
-			return (Terminal) (((Opt) firstSymbol).getSymbol());
-		}
-
-		throw new IllegalStateException();
+		return set;
 	}
 	
-	private String sequenceToBricsDFA() {
+	private void getFirstTerminal(Set<Terminal> set, Symbol symbol) {
+		
+		if(symbol instanceof Terminal) {
+			set.add((Terminal) symbol);
+		}
+		
+		else if(symbol instanceof Plus) {
+			getFirstTerminal(set, (((Plus) symbol).getSymbol()));
+		}
+		
+		else if(symbol instanceof Star) {
+			getFirstTerminal(set, (((Star) symbol).getSymbol()));
+		}
+
+		else if(symbol instanceof Opt) {
+			getFirstTerminal(set, (((Opt) symbol).getSymbol()));
+		}
+		
+		else if(symbol instanceof Group) {
+			List<? extends Symbol> list = ((Group) symbol).getSymbols();
+			if(list.size() > 0) {
+				getFirstTerminal(set, list.get(0));
+			}
+		}
+		
+		else if(symbol instanceof Alt) {
+			for(Symbol s : ((Alt) symbol).getSymbols()) {
+				getFirstTerminal(set, s);
+			}
+		} 
+
+		else {
+			throw new IllegalStateException("Unsupported regular symbol: " + symbol);			
+		}
+
+	}
+	
+	private String toBricsDFA() {
 		
 		StringBuilder sb = new StringBuilder();
 		
 		for(Symbol symbol : symbols) {
-			if(symbol instanceof Terminal) {
-				terminalToString((Terminal) symbol, sb);
-			} 
-			else if(symbol instanceof Plus) {
-				terminalToString((Terminal) ((Plus) symbol).getSymbol(), sb);
-				sb.append("+");
-			} 
-			else if(symbol instanceof Star) {
-				terminalToString((Terminal) ((Star) symbol).getSymbol(), sb);
-				sb.append("*");
-			}
-			else if(symbol instanceof Opt) {
-				terminalToString((Terminal) ((Opt) symbol).getSymbol(), sb);
-				sb.append("?");
-			}
+			symbolToString(symbol, sb);
 		}
 		
 		return sb.toString();
+	}
+	
+	private void symbolToString(Symbol symbol, StringBuilder sb) {
+		if(symbol instanceof Terminal) {
+			terminalToString((Terminal) symbol, sb);
+		} 
+		else if(symbol instanceof Plus) {
+			symbolToString(((Plus) symbol).getSymbol(), sb);
+			sb.append("+");
+		} 
+		else if(symbol instanceof Star) {
+			symbolToString(((Star) symbol).getSymbol(), sb);
+			sb.append("*");
+		}
+		else if(symbol instanceof Opt) {
+			symbolToString(((Opt) symbol).getSymbol(), sb);
+			sb.append("?");
+		}
+		else if(symbol instanceof Group) {
+			sb.append("(");
+			for(Symbol s : ((Group)symbol).getSymbols()) {
+				symbolToString(s, sb);
+				sb.append(" ");
+			}
+			sb.delete(sb.length() - 1, sb.length());
+			sb.append(")");
+		}
+		else if(symbol instanceof Alt) {
+			for(Symbol s : ((Alt)symbol).getSymbols()) {
+				symbolToString(s, sb);
+				sb.append("|");
+			}
+			sb.delete(sb.length() - 1, sb.length());
+		}
 	}
 
 	private void terminalToString(Terminal symbol, StringBuilder sb) {

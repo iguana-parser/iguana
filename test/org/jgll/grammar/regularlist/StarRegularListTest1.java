@@ -55,8 +55,7 @@ public class StarRegularListTest1 {
 
 	@Test
 	public void test0() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString(""), grammar1, "S");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf);
+		levelParser.parse(Input.fromString(""), grammar1, "S");
 		levelParser.parse(Input.fromString(""), grammar2, "S");
 	}
 	

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
 
+import org.jgll.grammar.symbol.Alt;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Opt;
 import org.jgll.grammar.symbol.Plus;
@@ -160,6 +161,10 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			
 			if(symbol instanceof Plus) {
 				return false;
+			}
+			
+			if(symbol instanceof Alt) {
+				
 			}
 		}
 		return true;

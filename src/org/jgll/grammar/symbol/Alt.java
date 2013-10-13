@@ -22,6 +22,9 @@ public class Alt extends Nonterminal {
 		this.list = list;
 	}
 	
+	public List<Symbol> getSymbols() {
+		return list;
+	}
 	
 	@Override
 	public Alt addCondition(Condition condition) {
@@ -30,5 +33,5 @@ public class Alt extends Nonterminal {
 		star.conditions.add(condition);
 		return star;
 	}
-
+	
 }

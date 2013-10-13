@@ -573,7 +573,7 @@ public class GrammarBuilder implements Serializable {
 				changed = set.add(Epsilon.getInstance()) || changed;
 			}
 			
-			return set.add(regexp.getFirstTerminal()) || changed;
+			return set.addAll(regexp.getFirstTerminal()) || changed;
 		}
 
 		// ignore LastGrammarSlot

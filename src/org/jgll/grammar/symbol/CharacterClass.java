@@ -141,4 +141,5 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		characterClass.conditions.addAll(conditions);
 		return characterClass;
 	}
+
 }

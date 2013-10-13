@@ -59,8 +59,7 @@ public class KeywordTest2 {
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("ifb"), grammar, "A");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf);
+		rdParser.parse(Input.fromString("ifb"), grammar, "A");
 	}
 	
 }

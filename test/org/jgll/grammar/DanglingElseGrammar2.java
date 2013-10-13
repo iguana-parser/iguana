@@ -72,7 +72,7 @@ public class DanglingElseGrammar2 {
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 0, 3);
 		TerminalSymbolNode node4 = new TerminalSymbolNode(97, 0);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S )"), 1, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S)"), 1, 3);
 		TerminalSymbolNode node7 = new TerminalSymbolNode(97, 1);
 		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
 		TerminalSymbolNode node9 = new TerminalSymbolNode(115, 2);

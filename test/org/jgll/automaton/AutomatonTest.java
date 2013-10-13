@@ -1,7 +1,5 @@
 package org.jgll.automaton;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import dk.brics.automaton.Automaton;
