@@ -127,7 +127,18 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 			return "\\n";
 		}
 		
-		return String.format("\\u%04x", val);
+		// Escaping specific character class symbols
+		if(c == '-') {
+			return "\\-";
+		}
+		if(c == '[') {
+			return "\\[";
+		}
+		if(c == ']') {
+			return "\\]";
+		}
+		
+		return new String(java.lang.Character.toChars(val));
 	}
 	
 	@Override
