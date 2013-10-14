@@ -125,9 +125,7 @@ public class RegularExpression extends AbstractSymbol {
 			sb.append("(");
 			for(Symbol s : ((Group)symbol).getSymbols()) {
 				symbolToString(s, sb);
-				sb.append(" ");
 			}
-			sb.delete(sb.length() - 1, sb.length());
 			sb.append(")");
 		}
 		else if(symbol instanceof Alt) {

@@ -127,7 +127,7 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 			return "\\n";
 		}
 		
-		return "\\u" + Integer.toHexString(c) + "";
+		return String.format("\\u%04x", val);
 	}
 	
 	@Override
