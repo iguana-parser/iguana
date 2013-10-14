@@ -1,9 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -27,14 +23,6 @@ public class RegularExpression extends AbstractSymbol {
 	public RegularExpression(List<? extends Symbol> symbols) {
 		this.symbols = symbols;
 		System.out.println(toBricsDFA());
-//		BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(toBricsDFA().getBytes())));
-//		String s = null;
-//		try {
-//			s = in.readLine();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException();
-//		}
 		this.automaton = new RunAutomaton(new RegExp(toBricsDFA()).toAutomaton());
 	}
 	
@@ -141,11 +129,13 @@ public class RegularExpression extends AbstractSymbol {
 			sb.append(")");
 		}
 		else if(symbol instanceof Alt) {
+			sb.append("(");
 			for(Symbol s : ((Alt)symbol).getSymbols()) {
 				symbolToString(s, sb);
 				sb.append("|");
 			}
 			sb.delete(sb.length() - 1, sb.length());
+			sb.append(")");
 		}
 	}
 

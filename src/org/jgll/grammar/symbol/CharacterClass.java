@@ -137,7 +137,16 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		if(c == ']') {
 			return "\\]";
 		}
-		
+		if(c == '#') {
+			return "\\#";
+		}
+		if(c == '.') {
+			return "\\.";
+		}
+		if(c == '\\') {
+			return "\\\\";
+		}
+			
 		return new String(java.lang.Character.toChars(val));
 	}
 	
