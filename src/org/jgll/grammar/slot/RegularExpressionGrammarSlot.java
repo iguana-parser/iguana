@@ -14,7 +14,6 @@ import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Star;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
@@ -127,10 +126,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		if(!automaton.isAccept(lastState)) {
-			return null;
-		}
-
 		// The regular node that is going to be created as the result of this
 		// slot action.
 		RegularExpressionNode regularNode = parser.getRegularExpressionNode(this, ci, ci + i);
@@ -146,7 +141,13 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		if(i == regularListLength) {
 			regularNode.setPartial(true);
 			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, regularNode, state);
+			
+		// Complete match
 		} else {
+			
+			if(!automaton.isAccept(lastState)) {
+				return null;
+			}
 			parser.setCurrentSPPFNode(DummyNode.getInstance());
 			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
 			parser.pop();
