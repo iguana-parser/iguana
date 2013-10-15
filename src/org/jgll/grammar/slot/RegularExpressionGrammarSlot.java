@@ -109,14 +109,26 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			state = automaton.getInitialState();
 		}
 		
+		int lastState = state;
+		
 		int i = 0;
 		for(i = 0; i < regularListLength; i++) {
 			int charAtCi = input.charAt(ci + i);
 			
+			lastState = state;
 			state = automaton.step(state, (char) charAtCi);
 			if(state == -1) {
 				break;
 			}
+		}
+		
+		// If does not match anything and is not nullable
+		if(i == 0 && !isNullable()) {
+			return null;
+		}
+		
+		if(!automaton.isAccept(lastState)) {
+			return null;
 		}
 
 		// The regular node that is going to be created as the result of this
@@ -167,20 +179,8 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean isNullable() {
-		for(Symbol symbol : regexp.getSymbols()) {
-			if(symbol instanceof Terminal) {
-				return false;
-			}
-			
-			if(symbol instanceof Plus) {
-				return false;
-			}
-			
-			if(symbol instanceof Alt) {
-				
-			}
-		}
-		return true;
+		RunAutomaton automaton = regexp.getAutomaton();
+		return automaton.run("");
 	}
 
 	@Override
