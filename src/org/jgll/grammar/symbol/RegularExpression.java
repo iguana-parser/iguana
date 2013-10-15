@@ -22,6 +22,10 @@ public class RegularExpression extends AbstractSymbol {
 	
 	public RegularExpression(List<? extends Symbol> symbols) {
 		this.symbols = symbols;
+		conditions.addAll(symbols.get(0).getConditions());
+		if(symbols.size() > 0) {
+			conditions.addAll(symbols.get(symbols.size() - 1).getConditions());
+		}
 		System.out.println(toBricsDFA());
 		this.automaton = new RunAutomaton(new RegExp(toBricsDFA()).toAutomaton());
 	}

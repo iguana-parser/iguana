@@ -91,6 +91,10 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+
+		if(executePreConditions(parser, input)) {
+			return null;
+		}
 		
 		int ci = parser.getCurrentInputIndex();
 		
@@ -148,8 +152,15 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			if(!automaton.isAccept(lastState)) {
 				return null;
 			}
+			
+			if(checkPopActions(parser, input)) {
+				return null;
+			}
+
+			
 			parser.setCurrentSPPFNode(DummyNode.getInstance());
 			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
+			
 			parser.pop();
 			return null;
 		}

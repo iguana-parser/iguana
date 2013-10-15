@@ -1,6 +1,7 @@
 package org.jgll.grammar.symbol;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
@@ -27,11 +28,16 @@ public class Alt extends Nonterminal {
 	}
 	
 	@Override
+	public Alt addConditions(Collection<Condition> conditions) {
+		Alt alt = new Alt(this.list);
+		alt.conditions.addAll(this.conditions);
+		alt.conditions.addAll(conditions);
+		return alt;
+	}
+	
+	@Override
 	public Alt addCondition(Condition condition) {
-		Alt star = new Alt(this.list);
-		star.conditions.addAll(this.conditions);
-		star.conditions.add(condition);
-		return star;
+		return addConditions(CollectionsUtil.list(condition));
 	}
 	
 }
