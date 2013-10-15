@@ -1159,15 +1159,23 @@ public class GrammarBuilder implements Serializable {
 
 		if (slot instanceof LastGrammarSlot) {
 			copy = ((LastGrammarSlot) slot).copy(previous, head);
-		} else if (slot instanceof NonterminalGrammarSlot) {
+		} 
+		else if (slot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) slot;
 			copy = ntSlot.copy(previous, ntSlot.getNonterminal(), head);
-		} else if(slot instanceof TerminalGrammarSlot) {
+		} 
+		else if(slot instanceof TerminalGrammarSlot) {
 			copy = ((TerminalGrammarSlot) slot).copy(previous, head);
-		// Keyword
-		} else  {
+		} 
+		else if(slot instanceof KeywordGrammarSlot)  {
 			Keyword keyword = ((KeywordGrammarSlot) slot).getKeyword();
 			copy = ((KeywordGrammarSlot) slot).copy(getHeadGrammarSlot(new Nonterminal(keyword.getName())), previous, head);
+		}
+		else if(slot instanceof RegularExpressionGrammarSlot) {
+			copy = ((RegularExpressionGrammarSlot) slot).copy(previous, head);
+		}
+		else {
+			throw new IllegalStateException("Unexpected grammar slot type encountered.");
 		}
 
 		return copy;
