@@ -120,12 +120,6 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		if(c == '-' || c == ' ') {
 			return "\\" + c;
 		}
-		if(c == '\r') {
-			return "\\r";
-		}
-		if(c == '\n') {
-			return "\\n";
-		}
 		
 		// Escaping specific character class symbols
 		if(c == '-') {
