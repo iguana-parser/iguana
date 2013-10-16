@@ -125,7 +125,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, "\"" + input.subString(node.getLeftExtent(), node.getRightExtent()) + "\"" + "\n"));
+			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, "\\\"" + input.subString(node.getLeftExtent(), node.getRightExtent()) + "\\\"" + "\n"));
 		}
 	}
 }
