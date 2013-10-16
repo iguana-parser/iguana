@@ -125,8 +125,11 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			}
 		}
 		
-		// If does not match anything and is not nullable
-		if(i == 0 && !isNullable()) {
+		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
+		boolean partial = (currentSPPFNode instanceof RegularExpressionNode) && ((RegularExpressionNode) currentSPPFNode).isPartial();
+		
+		// If does not match anything and is not nullable and is not partial
+		if(i == 0 && !isNullable() && !partial) {
 			return null;
 		}
 		
@@ -134,10 +137,8 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		// slot action.
 		RegularExpressionNode regularNode = parser.getRegularExpressionNode(this, ci, ci + i);
 		
-		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
-		
 		// If the current SPPF node is a partially matched list node, merge the nodes
-		if(currentSPPFNode instanceof RegularExpressionNode && ((RegularExpressionNode) currentSPPFNode).isPartial()) {
+		if(partial) {
 			regularNode = parser.getRegularExpressionNode(this, currentSPPFNode.getLeftExtent(), ci + i);
 		}
 
