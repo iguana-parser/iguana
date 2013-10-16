@@ -105,8 +105,11 @@ public class RegularExpression extends AbstractSymbol {
 		
 		else if(symbol instanceof Group) {
 			List<? extends Symbol> list = ((Group) symbol).getSymbols();
-			if(list.size() > 0) {
-				getFirstTerminal(set, list.get(0));
+			for(Symbol s : list) {
+				getFirstTerminal(set, s);
+				if(!isRegexpNullable(s)) {
+					break;
+				}
 			}
 		}
 		
@@ -120,6 +123,40 @@ public class RegularExpression extends AbstractSymbol {
 			throw new IllegalStateException("Unsupported regular symbol: " + symbol);			
 		}
 
+	}
+	
+	public static boolean isRegexpNullable(Symbol symbol) {
+		
+		if(symbol instanceof Terminal) {
+			return false;
+		}
+		else if(symbol instanceof Plus) {
+			return false;
+		}
+		else if(symbol instanceof Star) {
+			return true;
+		}
+		else if(symbol instanceof Opt) {
+			return true;
+		}
+		else if(symbol instanceof Alt) {
+			for(Symbol s : ((Alt) symbol).getSymbols()) {
+				if(isRegexpNullable(s)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		else if(symbol instanceof Group) {
+			boolean nullable = false;
+			for(Symbol s : ((Group) symbol).getSymbols()) {
+				nullable |= isRegexpNullable(s);
+			}
+			return nullable;
+		}
+		else {
+			throw new IllegalStateException("Unsupported regular symbol: " + symbol);			
+		}
 	}
 	
 	private String toBricsDFA() {

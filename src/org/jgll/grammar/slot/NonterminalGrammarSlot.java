@@ -59,9 +59,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if(!testFirstSet(ci, input) && !(isNullable() && testFollowSet(ci, input))) {
+		if(!test(ci, input)) {
 			parser.recordParseError(this);
-			return null;			
+			return null;						
 		}
 
 		if(executePreConditions(parser, input)) {

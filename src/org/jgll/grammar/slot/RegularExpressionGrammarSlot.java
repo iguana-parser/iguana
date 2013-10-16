@@ -44,6 +44,9 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		
 		for(Symbol symbol : regexp.getSymbols()) {
 			setFirstSet(firstSet, symbol);
+			if(!RegularExpression.isRegexpNullable(symbol)) {
+				break;
+			}
 		}
 	}
 	
@@ -71,7 +74,12 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		
 		else if(symbol instanceof Group) {
 			List<? extends Symbol> list = ((Group) symbol).getSymbols();
-			setFirstSet(set, list.get(0));
+			for(Symbol s : list) {
+				setFirstSet(set, s);
+				if(!RegularExpression.isRegexpNullable(s)) {
+					break;
+				}
+			}
 		}
 		
 		else if(symbol instanceof Alt) {
@@ -177,13 +185,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean testFollowSet(int index, Input input) {
-		return true;
-	}
-	
-	@Override
-	public boolean test(int index, Input input) {
-		// TODO: Fix it later, once we figured it out how to directly calculate
-		// first and follow sets for regular symbols.
 		return true;
 	}
 
