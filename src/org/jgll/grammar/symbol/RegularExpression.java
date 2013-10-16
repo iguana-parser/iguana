@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.ConditionType;
 import org.jgll.util.CollectionsUtil;
 
 import dk.brics.automaton.RegExp;
@@ -21,13 +22,34 @@ public class RegularExpression extends AbstractSymbol {
 	private List<? extends Symbol> symbols;
 	
 	public RegularExpression(List<? extends Symbol> symbols) {
+		// This is probably not the best design. We need a separate interface for
+		// regular expressions and their compositions.
+		// For now, if the regular expression is a simple sequence, the regular
+		// expression gets the conditions from the first and the last one.
+		// If it is a group, we still need to get the precede restrictions of the 
+		// first one. Follow restrictions are ignored, as we have the longest match
+		// anyway.
 		this.symbols = symbols;
-		conditions.addAll(symbols.get(0).getConditions());
-		if(symbols.size() > 0) {
-			conditions.addAll(symbols.get(symbols.size() - 1).getConditions());
+	
+		if(symbols.size() == 1 && symbols.get(0) instanceof Group) {
+			Group group = (Group) symbols.get(0);
+			addConditions(group.getSymbols());
+		} else {
+			addConditions(symbols);
 		}
-		System.out.println(toBricsDFA());
+		
 		this.automaton = new RunAutomaton(new RegExp(toBricsDFA()).toAutomaton());
+	}
+	
+	private void addConditions(List<? extends Symbol> symbols) {
+		conditions.addAll(symbols.get(0).getConditions());
+		if(symbols.size() > 1) {
+			for(Condition condition : symbols.get(symbols.size() - 1).getConditions()) {
+				if(condition.getType() != ConditionType.NOT_FOLLOW) {
+					conditions.add(condition);
+				}
+			}
+		}		
 	}
 	
 	public RunAutomaton getAutomaton() {
