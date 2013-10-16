@@ -33,6 +33,7 @@ public class RegularExpression extends AbstractSymbol {
 	
 		if(symbols.size() == 1 && symbols.get(0) instanceof Group) {
 			Group group = (Group) symbols.get(0);
+			conditions.addAll(group.getConditions());
 			addConditions(group.getSymbols());
 		} else {
 			addConditions(symbols);
