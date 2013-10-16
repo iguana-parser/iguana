@@ -293,15 +293,19 @@ public class Input {
 		}
 	}
 	
-	@Override
-	public String toString() {
-		
+	/**
+	 * Returns a string representation of this input instance from the
+	 * given start (including) and end (excluding) indices.
+	 *  
+	 */
+	public String subString(int start, int end) {
 		List<Character> charList = new ArrayList<>();
-		for(int i : input) {
-			char[] chars = Character.toChars(i);
+		
+		for(int i = start; i < end; i++) {
+			char[] chars = Character.toChars(input[i]);
 			for(char c : chars) {
 				charList.add(c);
-			}
+			}			
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -310,6 +314,11 @@ public class Input {
 		}
 		
 		return sb.toString();
+	}
+	
+	@Override
+	public String toString() {
+		return subString(0, input.length);
 	}
 	
 	public int getLineCount() {

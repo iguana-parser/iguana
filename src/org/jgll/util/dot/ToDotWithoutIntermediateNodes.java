@@ -4,6 +4,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
+import org.jgll.util.Input;
 
 /**
  * Creates a Graphviz's dot format representation of an SPPF node.
@@ -14,6 +15,10 @@ import org.jgll.traversal.SPPFVisitorUtil;
  */
 public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	
+	public ToDotWithoutIntermediateNodes(Input input) {
+		super(input);
+	}
+
 	@Override
 	public void visit(PackedNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);

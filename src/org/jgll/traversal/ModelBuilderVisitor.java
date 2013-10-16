@@ -309,5 +309,10 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	public void visit(RegularListNode node) {
 		throw new IllegalStateException("Should not be here.");
 	}
+
+	@Override
+	public void visit(RegularExpressionNode node) {
+		throw new IllegalStateException("Should not be here.");
+	}
 	
 }

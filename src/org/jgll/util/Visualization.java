@@ -11,20 +11,20 @@ import org.jgll.util.dot.ToDotWithoutIntermeidateAndLists;
 
 public class Visualization {
 	
-	public static void generateSPPFGraphWithoutIntermeiateNodes(String outputDir, SPPFNode sppf) {
-		SPPFToDot toDot = new ToDotWithoutIntermediateNodes();
+	public static void generateSPPFGraphWithoutIntermeiateNodes(String outputDir, SPPFNode sppf, Input input) {
+		SPPFToDot toDot = new ToDotWithoutIntermediateNodes(input);
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	public static void generateSPPFGraph(String outputDir, SPPFNode sppf) {
-		SPPFToDot toDot = new SPPFToDot();
+	public static void generateSPPFGraph(String outputDir, SPPFNode sppf, Input input) {
+		SPPFToDot toDot = new SPPFToDot(input);
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	public static void generateSPPFWithNonterminalNodesOnly(String outputDir, SPPFNode sppf) {
-		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists();
+	public static void generateSPPFWithNonterminalNodesOnly(String outputDir, SPPFNode sppf, Input input) {
+		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists(input);
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}

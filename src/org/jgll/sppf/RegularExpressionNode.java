@@ -21,7 +21,7 @@ public class RegularExpressionNode extends NonPackedNode {
 
 	@Override
 	public void accept(SPPFVisitor visitAction) {
-		
+		visitAction.visit(this);
 	}
 
 }
