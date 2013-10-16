@@ -179,6 +179,13 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	public boolean testFollowSet(int index, Input input) {
 		return true;
 	}
+	
+	@Override
+	public boolean test(int index, Input input) {
+		// TODO: Fix it later, once we figured it out how to directly calculate
+		// first and follow sets for regular symbols.
+		return true;
+	}
 
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {

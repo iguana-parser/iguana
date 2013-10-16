@@ -126,7 +126,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		for(Alternate alternate : alternates) {
 			int ci = parser.getCurrentInputIndex();
 			BodyGrammarSlot slot = alternate.getFirstSlot();
-			if(slot.testFirstSet(ci, input) || (slot.isNullable() && slot.testFollowSet(ci, input))) {
+			if(slot.test(ci, input)) {
 				parser.addDescriptor(slot);
 			}
 		}

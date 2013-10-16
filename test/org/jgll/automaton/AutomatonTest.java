@@ -11,13 +11,13 @@ public class AutomatonTest {
 	@Test
 	public void test() {
 
-		String pattern = "[\"-\"](([\\-\\][\\ -\\ ])|[-!\\#-\\[\\]-?]|([\\-\\][\\n-\\n]))*[\"-\"]";
+		String pattern = "(([\\--\\-]?[0-9][0-9_-_]*[\\.-\\.][0-9_-_]*)|([\\--\\-]?[0-9][0-9_-_]*[\\.-\\.][0-9_-_]*[E-Ee-e][+-+\\--\\-]?[0-9][0-9_-_]*))";
 		System.out.println(pattern);
 		RegExp r = new RegExp(pattern);
 		Automaton a = r.toAutomaton();
  		RunAutomaton ra = new RunAutomaton(a);
 		
-		String s = "\"\"";
+		String s = "1.2";
 			
 		 
 		boolean run = ra.run(s);

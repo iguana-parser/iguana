@@ -109,6 +109,10 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 */
 	public abstract boolean testFollowSet(int index, Input input);
 	
+	public boolean test(int index, Input input) {
+		return testFirstSet(index, input) || (isNullable() && testFollowSet(index, input));
+	}
+	
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	
 	public boolean isFirst() {

@@ -39,6 +39,7 @@ public class RegularExpression extends AbstractSymbol {
 			addConditions(symbols);
 		}
 		
+		System.out.println(toBricsDFA());
 		this.automaton = new RunAutomaton(new RegExp(toBricsDFA()).toAutomaton());
 	}
 	
