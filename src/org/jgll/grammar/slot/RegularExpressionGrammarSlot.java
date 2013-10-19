@@ -100,7 +100,10 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 
-		if(executePreConditions(parser, input)) {
+		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
+		boolean partial = (currentSPPFNode instanceof RegularExpressionNode) && ((RegularExpressionNode) currentSPPFNode).isPartial();
+		
+		if(!partial && executePreConditions(parser, input)) {
 			return null;
 		}
 		
@@ -132,9 +135,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 				break;
 			}
 		}
-		
-		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
-		boolean partial = (currentSPPFNode instanceof RegularExpressionNode) && ((RegularExpressionNode) currentSPPFNode).isPartial();
 		
 		// If does not match anything and is not nullable and is not partial
 		if(i == 0 && !isNullable() && !partial) {
