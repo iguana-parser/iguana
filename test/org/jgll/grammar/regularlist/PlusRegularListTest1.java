@@ -47,31 +47,41 @@ public class PlusRegularListTest1 {
 		
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).build();
 		grammar2 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r4).addRule(r5).addRule(r6).build();
-		
-		levelParser = ParserFactory.createLevelParser(grammar1, 10);
 	}
 
 	@Test
 	public void test1() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("abcdef"), grammar1, "S");
+		levelParser = ParserFactory.createLevelParser(grammar1, 10);
+		levelParser.parse(Input.fromString("abcdef"), grammar1, "S");
+		
+		levelParser = ParserFactory.createLevelParser(grammar2, 10);
 		levelParser.parse(Input.fromString("abcdef"), grammar2, "S");
 	}
 
 	@Test
 	public void test2() throws ParseError {
+		levelParser = ParserFactory.createLevelParser(grammar1, 10);
 		levelParser.parse(Input.fromString("abcdefghij"), grammar1, "S");
+		
+		levelParser = ParserFactory.createLevelParser(grammar2, 10);
 		levelParser.parse(Input.fromString("abcdefghij"), grammar2, "S");
 	}
 	
 	@Test
 	public void test3() throws ParseError {
+		levelParser = ParserFactory.createLevelParser(grammar1, 10);
 		levelParser.parse(Input.fromString("abcdefghijklm"), grammar1, "S");
+		
+		levelParser = ParserFactory.createLevelParser(grammar2, 10);
 		levelParser.parse(Input.fromString("abcdefghijklm"), grammar2, "S");
 	}
 	
 	@Test
 	public void test4() throws ParseError {
+		levelParser = ParserFactory.createLevelParser(grammar1, 10);
 		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz"), grammar1, "S");
+		
+		levelParser = ParserFactory.createLevelParser(grammar2, 10);
 		levelParser.parse(Input.fromString("abcdefghijklmnopqrstuvwxyz"), grammar2, "S");
 	}
 }

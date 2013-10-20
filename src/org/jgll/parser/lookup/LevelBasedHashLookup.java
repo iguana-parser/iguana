@@ -312,8 +312,8 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 	}
 	
 	@Override
-	public GSSNode getGSSNode(GrammarSlot label, int inputIndex) {
-		GSSNode key = new GSSNode(label, inputIndex);
+	public GSSNode getGSSNode(GrammarSlot slot, int inputIndex) {
+		GSSNode key = new GSSNode(slot, inputIndex);
 		GSSNode value;
 		if(inputIndex == currentLevel) {
 			value = currentGssNodes.add(key);

@@ -16,17 +16,17 @@ public class ParserFactory {
 	
 	public static GLLParser createLevelParser(Grammar grammar) {
 		if(grammar.getGrammarSlots().size() < MAX_SLOTS) {
-			return new GLLParserImpl(new LevelBasedHashLookup(grammar));			
-		} else {
 			return new GLLParserImpl(new LevelBasedMixLookup(grammar));
+		} else {
+			return new GLLParserImpl(new LevelBasedHashLookup(grammar));			
 		}
 	}
 	
 	public static GLLParser createLevelParser(Grammar grammar, int ringSize) {
-		if(grammar.getGrammarSlots().size() < 100_000) {
-			return new GLLParserImpl(new LevelBasedHashLookup(grammar, ringSize), ringSize);			
-		} else {
+		if(grammar.getGrammarSlots().size() < MAX_SLOTS) {
 			return new GLLParserImpl(new LevelBasedMixLookup(grammar, ringSize), ringSize);
+		} else {
+			return new GLLParserImpl(new LevelBasedHashLookup(grammar, ringSize), ringSize);
 		}
 	}
 	

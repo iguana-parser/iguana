@@ -148,8 +148,8 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		forwardPackedNodes[nextIndex] = tmpPackedNode;
 		
 		GSSNode[] tmpGSSNodeSet = currentGssNodes;
-		for(int i = 0; i < currentGssNodes.length; i++) {
-			currentGssNodes[i] = null;			
+		for(int i = 0; i < grammar.getGrammarSlots().size(); i++) {
+			currentGssNodes[i] = null;	
 		}
 		currentGssNodes = forwardGssNodes[nextIndex];
 		forwardGssNodes[nextIndex] = tmpGSSNodeSet;
@@ -314,20 +314,21 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	@Override
 	public GSSNode getGSSNode(GrammarSlot slot, int inputIndex) {
 		GSSNode value;
+		int slotIndex = slot.getId() - grammar.getNonterminals().size();
 		if(inputIndex == currentLevel) {
-			value = currentGssNodes[slot.getId()];
+			value = currentGssNodes[slotIndex];
 			if(value == null) {
 				countGSSNodes++;
 				value = new GSSNode(slot, inputIndex);
-				currentGssNodes[slot.getId()] = value;
+				currentGssNodes[slotIndex] = value;
 			}
 		} else {
 			int index = indexFor(inputIndex);
-			value = forwardGssNodes[index][slot.getId()];
+			value = forwardGssNodes[index][slotIndex];
 			if(value == null) {
 				countGSSNodes++;
 				value = new GSSNode(slot, inputIndex);
-				currentGssNodes[slot.getId()] = value;
+				forwardGssNodes[index][slotIndex] = value;
 			}
 		}
 		return value;
