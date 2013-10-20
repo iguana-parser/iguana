@@ -19,7 +19,6 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -60,8 +59,8 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	private CuckooHashSet<GSSEdge> currendEdges;
 	private CuckooHashSet<GSSEdge>[] forwardEdges;
 	
-	private CuckooHashMap<GSSNode, Set<SPPFNode>> currentPoppedElements;
-	private CuckooHashMap<GSSNode, Set<SPPFNode>>[] forwardPoppedElements;
+	private Set<SPPFNode>[] currentPoppedElements;
+	private Set<SPPFNode>[][] forwardPoppedElements;
 	
 	private int countGSSNodes;
 	
@@ -92,6 +91,8 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		chainLength = grammar.getLongestTerminalChain() + regularListLength;
 		terminals = new TerminalSymbolNode[chainLength + 1][2];
 		
+		int slotsSize = grammar.getGrammarSlots().size();		
+		
 		u = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 		r = new ArrayDeque<>();
 		
@@ -104,22 +105,22 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		currentPackedNodes = new CuckooHashSet<>(initialSize, PackedNode.levelBasedExternalHasher);
 		forwardPackedNodes = new CuckooHashSet[chainLength];
 		
-		currentGssNodes = new GSSNode[grammar.getGrammarSlots().size()];
-		forwardGssNodes = new GSSNode[chainLength][grammar.getGrammarSlots().size()];
+		currentGssNodes = new GSSNode[slotsSize];
+		forwardGssNodes = new GSSNode[chainLength][slotsSize];
 		
 		currendEdges = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
 		forwardEdges = new CuckooHashSet[chainLength];
 		
-		currentPoppedElements = new CuckooHashMap<>(initialSize, GSSNode.levelBasedExternalHasher);
-		forwardPoppedElements = new CuckooHashMap[chainLength];
+		currentPoppedElements = new Set[slotsSize];
+		forwardPoppedElements = new Set[chainLength][slotsSize];
 		
 		for(int i = 0; i < chainLength; i++) {
 			forwardDescriptors[i] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
 			forwardNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
-			forwardGssNodes[i] = new GSSNode[grammar.getGrammarSlots().size()];
+			forwardGssNodes[i] = new GSSNode[slotsSize];
 			forwardEdges[i] = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
-			forwardPoppedElements[i] = new CuckooHashMap<>(initialSize, GSSNode.levelBasedExternalHasher);
+			forwardPoppedElements[i] = new Set[slotsSize];
 			forwardPackedNodes[i] = new CuckooHashSet<>(PackedNode.levelBasedExternalHasher);
 		}
 	}
@@ -159,8 +160,10 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		currendEdges = forwardEdges[nextIndex];
 		forwardEdges[nextIndex] = tmpGSSEdgeSet;
 		
-		CuckooHashMap<GSSNode, Set<SPPFNode>> tmpPoppedElements = currentPoppedElements;
-		currentPoppedElements.clear();
+		Set<SPPFNode>[] tmpPoppedElements = currentPoppedElements;
+		for(int i = 0; i < grammar.getGrammarSlots().size(); i++) {
+			currentPoppedElements[i] = null;
+		}
 		currentPoppedElements = forwardPoppedElements[nextIndex];
 		forwardPoppedElements[nextIndex] = tmpPoppedElements;
 
@@ -425,18 +428,20 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 
 	@Override
 	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
+		int slotIndex = gssNode.getGrammarSlot().getId() - grammar.getNonterminals().size();
 		if(gssNode.getInputIndex() == currentLevel) {
-			Set<SPPFNode> set = currentPoppedElements.get(gssNode);
+			Set<SPPFNode> set = currentPoppedElements[slotIndex];
 			if(set == null) {
 				set = new HashSet<>();
-				currentPoppedElements.put(gssNode, set);
+				currentPoppedElements[slotIndex] = set;
 			}
 			set.add(sppfNode);
 		} else {
 			int index = indexFor(gssNode.getInputIndex());
-			Set<SPPFNode> set = forwardPoppedElements[index].get(gssNode);
+			Set<SPPFNode> set = forwardPoppedElements[index][slotIndex];
 			if(set == null) {
 				set = new HashSet<>();
+				forwardPoppedElements[index][slotIndex] = set;
 			}
 			set.add(sppfNode);
 		}
@@ -444,20 +449,18 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 
 	@Override
 	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
+		int slotIndex = gssNode.getGrammarSlot().getId() - grammar.getNonterminals().size();
+		Set<SPPFNode> set;
 		if(gssNode.getInputIndex() == currentLevel) {
-			Set<SPPFNode> set = currentPoppedElements.get(gssNode);
-			if(set == null) {
-				set = Collections.emptySet();
-			}
-			return set;
+			set = currentPoppedElements[slotIndex];
 		} else {
 			int index = indexFor(gssNode.getInputIndex());
-			Set<SPPFNode> set = forwardPoppedElements[index].get(gssNode);
-			if(set == null) {
-				set = Collections.emptySet();
-			}
-			return set;
+			set = forwardPoppedElements[index][slotIndex];
 		}
+		if(set == null) {
+			set = Collections.emptySet();
+		}
+		return set;
 	}
 
 	@Override
@@ -473,11 +476,11 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		
 		for(int i = 0; i < grammar.getGrammarSlots().size(); i++) {
 			currentGssNodes[i] = null;
+			currentPoppedElements[i] = null;
 		}
 		
 		currendEdges.clear();
 		
-		currentPoppedElements.clear();
 		
 		for(int i = 0; i < chainLength; i++) {
 			forwardDescriptors[i].clear();
@@ -486,10 +489,10 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 			
 			for(int j = 0; j < grammar.getGrammarSlots().size(); j++) {
 				forwardGssNodes[i][j] = null;
+				forwardPoppedElements[i][j] = null;
 			}
 			
 			forwardEdges[i].clear();
-			forwardPoppedElements[i].clear();
 			forwardPackedNodes[i].clear();
 		}
 		
