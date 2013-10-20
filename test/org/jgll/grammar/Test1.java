@@ -35,8 +35,8 @@ public class Test1 {
 		Rule r1 = new Rule(new Nonterminal("A"));
 		grammar = new GrammarBuilder("epsilon").addRule(r1).build();
 		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
-		levelParser = ParserFactory.levelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 	
 	@Test

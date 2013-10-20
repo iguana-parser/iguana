@@ -53,7 +53,7 @@ public class IndirectRecursion1Test {
 													  .addRule(r4)
 													  .addRule(r5);
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 	
 	@Test

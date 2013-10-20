@@ -68,8 +68,8 @@ public class ArithmeticExpressionsTest {
 		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test

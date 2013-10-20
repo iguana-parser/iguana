@@ -46,7 +46,7 @@ public class PlusRegularListTest2 {
 		Rule r3 = new Rule(new Nonterminal("[a-z]+"), list(RegularList.plus("[a-z]+", a_z)));
 		
 		grammar = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).build();
-		levelParser = ParserFactory.levelParser(grammar, 10);
+		levelParser = ParserFactory.createLevelParser(grammar, 10);
 	}
 
 	@Test

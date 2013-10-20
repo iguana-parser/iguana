@@ -51,7 +51,7 @@ public class KeywordExclusionTest {
 		builder.addRules(rules);
 
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 	
 	@org.junit.Rule

@@ -1,22 +1,33 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.parser.lookup.LevelBasedLookupTable;
+import org.jgll.parser.lookup.LevelBasedHashLookup;
+import org.jgll.parser.lookup.LevelBasedMixLookup;
 import org.jgll.parser.lookup.RecursiveDescentLookupTable;
 
 
 public class ParserFactory {
 	
-	public static GLLParser recursiveDescentParser(Grammar grammar) {
+	private static final int MAX_SLOTS = 100_000;
+
+	public static GLLParser createRecursiveDescentParser(Grammar grammar) {
 		return new GLLParserImpl(new RecursiveDescentLookupTable(grammar), Integer.MAX_VALUE);
 	}
 	
-	public static GLLParser levelParser(Grammar grammar) {
-		return new GLLParserImpl(new LevelBasedLookupTable(grammar));
+	public static GLLParser createLevelParser(Grammar grammar) {
+		if(grammar.getGrammarSlots().size() < MAX_SLOTS) {
+			return new GLLParserImpl(new LevelBasedHashLookup(grammar));			
+		} else {
+			return new GLLParserImpl(new LevelBasedMixLookup(grammar));
+		}
 	}
 	
-	public static GLLParser levelParser(Grammar grammar, int ringSize) {
-		return new GLLParserImpl(new LevelBasedLookupTable(grammar, ringSize), ringSize);
+	public static GLLParser createLevelParser(Grammar grammar, int ringSize) {
+		if(grammar.getGrammarSlots().size() < 100_000) {
+			return new GLLParserImpl(new LevelBasedHashLookup(grammar, ringSize), ringSize);			
+		} else {
+			return new GLLParserImpl(new LevelBasedMixLookup(grammar, ringSize), ringSize);
+		}
 	}
 	
 }

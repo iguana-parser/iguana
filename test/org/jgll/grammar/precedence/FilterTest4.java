@@ -65,8 +65,8 @@ public class FilterTest4 {
 		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
-		levelParser = ParserFactory.levelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 
 	@Test

@@ -49,7 +49,7 @@ public class KeywordTest3 {
 								   .addRule(GrammarBuilder.fromKeyword(iff))
 								   .addRule(GrammarBuilder.fromKeyword(then)).build();
 		
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	

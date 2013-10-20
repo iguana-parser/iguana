@@ -23,7 +23,7 @@ public class LeftFactorizationTest {
 		
 		System.out.println(grammar);
 
-		GLLParser rdParser = ParserFactory.recursiveDescentParser(grammar);
+		GLLParser rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a*a"), grammar, "E");
 	}
 }

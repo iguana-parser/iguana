@@ -79,6 +79,10 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	
 	protected int regularListLength = 10;
 
+	private long start;
+
+	private long end;
+
 	public GLLParserImpl(LookupTable lookupTable) {
 		this.lookupTable = lookupTable;
 	}
@@ -112,20 +116,20 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		init();
 		lookupTable.init(input);
 	
-		long start = System.nanoTime();
+		start = System.nanoTime();
 		
 		log.info("Iguana started...");
 
 		L0.getInstance().parse(this, input, startSymbol);
 		
-		long end = System.nanoTime();
+		end = System.nanoTime();
 		
 		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol, input.size());
 		if (root == null) {
 			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 		}
 		
-		log.info("Parsing finished successfully:");
+		log.info("Parsing finished successfully.");
 		logParseStatistics(end - start);
 		return root;
 	}
@@ -460,6 +464,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	@Override
 	public Descriptor getCurrentDescriptor() {
 		return currentDescriptor;
+	}
+	
+	@Override
+	public long getParsingTime() {
+		return end - start;
 	}
 	
 }

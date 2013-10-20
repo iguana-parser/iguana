@@ -25,16 +25,14 @@ import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 
- * Provides lookup functionality for the level-based processing of the input
- * in a GLL parser. 
- * 
+ * Lookup functionality implemented by a mixture of arrays and hash tables. 
  * 
  * @author Ali Afroozeh
  *
  */
-public class LevelBasedLookupTable extends AbstractLookupTable {
+public class LevelBasedMixLookup extends AbstractLookupTable {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelBasedLookupTable.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelBasedMixLookup.class);
 	
 	private int currentLevel;
 	
@@ -56,8 +54,8 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 	private Queue<Descriptor> r;
 	private Queue<Descriptor>[] forwardRs;
 	
-	private CuckooHashSet<GSSNode> currentGssNodes;
-	private CuckooHashSet<GSSNode>[] forwardGssNodes;
+	private GSSNode[] currentGssNodes;
+	private GSSNode[][] forwardGssNodes;
 	
 	private CuckooHashSet<GSSEdge> currendEdges;
 	private CuckooHashSet<GSSEdge>[] forwardEdges;
@@ -83,12 +81,12 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 	
 	private final int initialSize = 2048;
 	
-	public LevelBasedLookupTable(Grammar grammar) {
+	public LevelBasedMixLookup(Grammar grammar) {
 		this(grammar, grammar.getLongestTerminalChain());
 	}
 	
 	@SuppressWarnings("unchecked")
-	public LevelBasedLookupTable(Grammar grammar, int regularListLength) {
+	public LevelBasedMixLookup(Grammar grammar, int regularListLength) {
 		super(grammar);
 		
 		chainLength = grammar.getLongestTerminalChain() + regularListLength;
@@ -106,8 +104,8 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 		currentPackedNodes = new CuckooHashSet<>(initialSize, PackedNode.levelBasedExternalHasher);
 		forwardPackedNodes = new CuckooHashSet[chainLength];
 		
-		currentGssNodes = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
-		forwardGssNodes = new CuckooHashSet[chainLength];
+		currentGssNodes = new GSSNode[grammar.getGrammarSlots().size()];
+		forwardGssNodes = new GSSNode[chainLength][grammar.getGrammarSlots().size()];
 		
 		currendEdges = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
 		forwardEdges = new CuckooHashSet[chainLength];
@@ -119,7 +117,7 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 			forwardDescriptors[i] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
 			forwardNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
-			forwardGssNodes[i] = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
+			forwardGssNodes[i] = new GSSNode[grammar.getGrammarSlots().size()];
 			forwardEdges[i] = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
 			forwardPoppedElements[i] = new CuckooHashMap<>(initialSize, GSSNode.levelBasedExternalHasher);
 			forwardPackedNodes[i] = new CuckooHashSet<>(PackedNode.levelBasedExternalHasher);
@@ -149,8 +147,10 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 		currentPackedNodes = forwardPackedNodes[nextIndex];
 		forwardPackedNodes[nextIndex] = tmpPackedNode;
 		
-		CuckooHashSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
-		currentGssNodes.clear();
+		GSSNode[] tmpGSSNodeSet = currentGssNodes;
+		for(int i = 0; i < currentGssNodes.length; i++) {
+			currentGssNodes[i] = null;			
+		}
 		currentGssNodes = forwardGssNodes[nextIndex];
 		forwardGssNodes[nextIndex] = tmpGSSNodeSet;
 		
@@ -312,21 +312,22 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 	}
 	
 	@Override
-	public GSSNode getGSSNode(GrammarSlot label, int inputIndex) {
-		GSSNode key = new GSSNode(label, inputIndex);
+	public GSSNode getGSSNode(GrammarSlot slot, int inputIndex) {
 		GSSNode value;
 		if(inputIndex == currentLevel) {
-			value = currentGssNodes.add(key);
+			value = currentGssNodes[slot.getId()];
 			if(value == null) {
 				countGSSNodes++;
-				value = key;
+				value = new GSSNode(slot, inputIndex);
+				currentGssNodes[slot.getId()] = value;
 			}
 		} else {
 			int index = indexFor(inputIndex);
-			value = forwardGssNodes[index].add(key);
+			value = forwardGssNodes[index][slot.getId()];
 			if(value == null) {
 				countGSSNodes++;
-				value = key;
+				value = new GSSNode(slot, inputIndex);
+				currentGssNodes[slot.getId()] = value;
 			}
 		}
 		return value;
@@ -469,7 +470,9 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 		
 		currentPackedNodes.clear();
 		
-		currentGssNodes.clear();
+		for(int i = 0; i < grammar.getGrammarSlots().size(); i++) {
+			currentGssNodes[i] = null;
+		}
 		
 		currendEdges.clear();
 		
@@ -479,7 +482,11 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 			forwardDescriptors[i].clear();
 			forwardRs[i].clear();
 			forwardNodes[i].clear();
-			forwardGssNodes[i].clear();
+			
+			for(int j = 0; j < grammar.getGrammarSlots().size(); j++) {
+				forwardGssNodes[i][j] = null;
+			}
+			
 			forwardEdges[i].clear();
 			forwardPoppedElements[i].clear();
 			forwardPackedNodes[i].clear();
@@ -499,4 +506,5 @@ public class LevelBasedLookupTable extends AbstractLookupTable {
 		
 		countGSSEdges = 0;
 	}
+	
 }

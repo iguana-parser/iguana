@@ -47,7 +47,7 @@ public class EBNFTest1 {
 		builder.addRules(newRules);
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test

@@ -53,7 +53,7 @@ public class DanglingElseGrammar3 {
 		builder.addRule(rule3);
 		
 		grammar =  builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 	
 	@Test

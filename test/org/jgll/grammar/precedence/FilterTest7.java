@@ -88,8 +88,8 @@ public class FilterTest7 {
 		builder.rewritePatterns();
 
 		grammar = builder.build();
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
-		levelParser = ParserFactory.levelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 
 	public void testParsers() throws ParseError {

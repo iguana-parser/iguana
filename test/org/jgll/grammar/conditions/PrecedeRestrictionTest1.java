@@ -67,7 +67,7 @@ public class PrecedeRestrictionTest1 {
 		builder.addRule(GrammarBuilder.fromKeyword(forall));
 
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 
 	@Test

@@ -64,10 +64,10 @@ public class RegularExpTest1 {
 
 	@Test
 	public void test1() throws ParseError {
-		levelParser = ParserFactory.levelParser(grammar2, 10);
+		levelParser = ParserFactory.createLevelParser(grammar2, 10);
 		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar2, "S");
 		
-		levelParser = ParserFactory.levelParser(grammar1, 10);
+		levelParser = ParserFactory.createLevelParser(grammar1, 10);
 		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar1, "S");
 	}
 }

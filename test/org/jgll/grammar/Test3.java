@@ -40,8 +40,8 @@ public class Test3 {
 		Rule r3 = new Rule(new Nonterminal("C"), list(new Character('c')));
 		grammar = new GrammarBuilder("test3").addRule(r1).addRule(r2).addRule(r3).build();
 		
-		rdParser = ParserFactory.levelParser(grammar);
-		levelParser = ParserFactory.recursiveDescentParser(grammar);
+		rdParser = ParserFactory.createLevelParser(grammar);
+		levelParser = ParserFactory.createRecursiveDescentParser(grammar);
 		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}
 	

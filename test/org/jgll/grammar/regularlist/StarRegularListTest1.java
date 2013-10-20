@@ -48,7 +48,7 @@ public class StarRegularListTest1 {
 		Rule r5 = new Rule(new Nonterminal("[a-z]*"));
 		
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).build();
-		levelParser = ParserFactory.levelParser(grammar1, 10);
+		levelParser = ParserFactory.createLevelParser(grammar1, 10);
 		
 		grammar2 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r4).addRule(r5).build();
 	}

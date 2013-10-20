@@ -48,7 +48,7 @@ public class PlusRegularListTest1 {
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).build();
 		grammar2 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r4).addRule(r5).addRule(r6).build();
 		
-		levelParser = ParserFactory.levelParser(grammar1, 10);
+		levelParser = ParserFactory.createLevelParser(grammar1, 10);
 	}
 
 	@Test

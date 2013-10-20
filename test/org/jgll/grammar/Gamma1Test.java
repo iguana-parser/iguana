@@ -71,8 +71,8 @@ public class Gamma1Test {
 		builder.addRule(r7);
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
-		levelParser = ParserFactory.levelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 	
 	@Test
