@@ -1,10 +1,7 @@
 package org.jgll.parser.lookup;
 
 import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Queue;
-import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -19,7 +16,6 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -61,9 +57,6 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 	
 	private CuckooHashSet<GSSEdge> currendEdges;
 	private CuckooHashSet<GSSEdge>[] forwardEdges;
-	
-	private CuckooHashMap<GSSNode, Set<SPPFNode>> currentPoppedElements;
-	private CuckooHashMap<GSSNode, Set<SPPFNode>>[] forwardPoppedElements;
 	
 	private int countGSSNodes;
 	
@@ -112,16 +105,12 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 		currendEdges = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
 		forwardEdges = new CuckooHashSet[chainLength];
 		
-		currentPoppedElements = new CuckooHashMap<>(initialSize, GSSNode.levelBasedExternalHasher);
-		forwardPoppedElements = new CuckooHashMap[chainLength];
-		
 		for(int i = 0; i < chainLength; i++) {
 			forwardDescriptors[i] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
 			forwardNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 			forwardGssNodes[i] = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
 			forwardEdges[i] = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
-			forwardPoppedElements[i] = new CuckooHashMap<>(initialSize, GSSNode.levelBasedExternalHasher);
 			forwardPackedNodes[i] = new CuckooHashSet<>(PackedNode.levelBasedExternalHasher);
 		}
 	}
@@ -159,11 +148,6 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 		currendEdges = forwardEdges[nextIndex];
 		forwardEdges[nextIndex] = tmpGSSEdgeSet;
 		
-		CuckooHashMap<GSSNode, Set<SPPFNode>> tmpPoppedElements = currentPoppedElements;
-		currentPoppedElements.clear();
-		currentPoppedElements = forwardPoppedElements[nextIndex];
-		forwardPoppedElements[nextIndex] = tmpPoppedElements;
-
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
 		
@@ -313,7 +297,7 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 	
 	@Override
 	public GSSNode getGSSNode(GrammarSlot slot, int inputIndex) {
-		GSSNode key = new GSSNode(slot, inputIndex);
+		GSSNode key = GSSNode.levelBasedGSSNode(slot, inputIndex);
 		GSSNode value;
 		if(inputIndex == currentLevel) {
 			value = currentGssNodes.add(key);
@@ -422,40 +406,13 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 	}
 
 	@Override
-	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
-		if(gssNode.getInputIndex() == currentLevel) {
-			Set<SPPFNode> set = currentPoppedElements.get(gssNode);
-			if(set == null) {
-				set = new HashSet<>();
-				currentPoppedElements.put(gssNode, set);
-			}
-			set.add(sppfNode);
-		} else {
-			int index = indexFor(gssNode.getInputIndex());
-			Set<SPPFNode> set = forwardPoppedElements[index].get(gssNode);
-			if(set == null) {
-				set = new HashSet<>();
-			}
-			set.add(sppfNode);
-		}
+	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
+		gssNode.addToPoppedElements((NonPackedNode) sppfNode);
 	}
 
 	@Override
-	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
-		if(gssNode.getInputIndex() == currentLevel) {
-			Set<SPPFNode> set = currentPoppedElements.get(gssNode);
-			if(set == null) {
-				set = Collections.emptySet();
-			}
-			return set;
-		} else {
-			int index = indexFor(gssNode.getInputIndex());
-			Set<SPPFNode> set = forwardPoppedElements[index].get(gssNode);
-			if(set == null) {
-				set = Collections.emptySet();
-			}
-			return set;
-		}
+	public Iterable<NonPackedNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
+		return gssNode.getPoppedElements();
 	}
 
 	@Override
@@ -473,15 +430,12 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 		
 		currendEdges.clear();
 		
-		currentPoppedElements.clear();
-		
 		for(int i = 0; i < chainLength; i++) {
 			forwardDescriptors[i].clear();
 			forwardRs[i].clear();
 			forwardNodes[i].clear();
 			forwardGssNodes[i].clear();
 			forwardEdges[i].clear();
-			forwardPoppedElements[i].clear();
 			forwardPackedNodes[i].clear();
 		}
 		

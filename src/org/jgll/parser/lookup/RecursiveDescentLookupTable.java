@@ -1,10 +1,7 @@
 package org.jgll.parser.lookup;
 
 import java.util.ArrayDeque;
-import java.util.Collections;
 import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -19,7 +16,6 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -43,8 +39,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private int nonPackedNodesCount;
 	
-	private CuckooHashMap<GSSNode, Set<SPPFNode>> poppedElements;
-	
 	public RecursiveDescentLookupTable(Grammar grammar) {
 		super(grammar);
 		descriptorsStack = new ArrayDeque<>();
@@ -53,7 +47,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		gssNodes = new CuckooHashSet<>(GSSNode.externalHasher);
 		packedNodes = new CuckooHashSet<>(PackedNode.externalHasher);
 		gssEdges = new CuckooHashSet<>(GSSEdge.externalHasher);
-		poppedElements = new CuckooHashMap<>(GSSNode.externalHasher);
 	}
 	
 	@Override
@@ -65,14 +58,13 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		gssNodes.clear();
 		packedNodes.clear();
 		gssEdges.clear();
-		poppedElements.clear();
 		
 		nonPackedNodesCount = 0;
 	}
 	
 	@Override
 	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {	
-		GSSNode key = new GSSNode(grammarSlot, inputIndex);
+		GSSNode key = GSSNode.recursiveDescentGSSNode(grammarSlot, inputIndex);
 		GSSNode value = gssNodes.add(key);
 		if(value == null) {
 			return key;
@@ -208,23 +200,13 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	}
 
 	@Override
-	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode) {
-		Set<SPPFNode> set = poppedElements.get(gssNode);
-		if(set == null) {
-			set = new HashSet<>();
-			poppedElements.put(gssNode, set);
-		}
-		log.trace("Added to P: %s -> %s", gssNode, sppfNode);
-		set.add(sppfNode);
+	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
+		gssNode.addToPoppedElements(sppfNode);
 	}
 
 	@Override
-	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
-		Set<SPPFNode> set = poppedElements.get(gssNode);
-		if(set == null) {
-			 return Collections.emptySet();
-		}
-		return set;
+	public Iterable<NonPackedNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
+		return gssNode.getPoppedElements();
 	}
 
 }

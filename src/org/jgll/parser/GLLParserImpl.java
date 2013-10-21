@@ -235,7 +235,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			}
 			
 			// Add (u, z) to P
-			lookupTable.addToPoppedElements(cu, cn);
+			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
 			for(GSSEdge edge : cu.getEdges()) {
 								

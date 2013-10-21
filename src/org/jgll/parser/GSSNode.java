@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
+import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.Level;
 import org.jgll.util.hashing.hashfunction.HashFunction;
@@ -32,13 +34,24 @@ public class GSSNode implements Level {
 	/**
 	 * The initial GSS node
 	 */
-	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0, NonPackedNode.externalHasher);
 
 	private final GrammarSlot slot;
 
 	private final int inputIndex;
 
 	private List<GSSEdge> gssEdges;
+	
+	private CuckooHashSet<NonPackedNode> poppedElements;
+	
+	
+	public static GSSNode levelBasedGSSNode(GrammarSlot slot, int inputIndex) {
+		return new GSSNode(slot, inputIndex, NonPackedNode.levelBasedExternalHasher);
+	}
+	
+	public static GSSNode recursiveDescentGSSNode(GrammarSlot slot, int inputIndex) {
+		return new GSSNode(slot, inputIndex, NonPackedNode.externalHasher);
+	}
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -47,10 +60,11 @@ public class GSSNode implements Level {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	public GSSNode(GrammarSlot slot, int inputIndex) {
+	private GSSNode(GrammarSlot slot, int inputIndex, ExternalHasher<NonPackedNode> hasher) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.gssEdges = new ArrayList<>();
+		this.poppedElements = new CuckooHashSet<>(hasher);
 	}
 		
 	public void addGSSEdge(GSSEdge edge) {
@@ -102,6 +116,14 @@ public class GSSNode implements Level {
 	@Override
 	public int getLevel() {
 		return inputIndex;
+	}
+	
+	public void addToPoppedElements(NonPackedNode node) {
+		poppedElements.add(node);
+	}
+	
+	public Iterable<NonPackedNode> getPoppedElements() {
+		return poppedElements;
 	}
 	
 	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {

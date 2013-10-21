@@ -54,9 +54,9 @@ public interface LookupTable {
 
 	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
 	
-	public void addToPoppedElements(GSSNode gssNode, SPPFNode sppfNode);
+	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	
-	public Iterable<SPPFNode> getSPPFNodesOfPoppedElements(GSSNode gssNode);
+	public Iterable<NonPackedNode> getSPPFNodesOfPoppedElements(GSSNode gssNode);
 	
 	public int getNonPackedNodesCount();
 	
