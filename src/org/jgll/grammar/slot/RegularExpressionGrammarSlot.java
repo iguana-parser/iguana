@@ -127,11 +127,16 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		
 		int i = 0;
 		for(i = 0; i < regularListLength; i++) {
+			lastState = state;
+
 			int charAtCi = input.charAt(ci + i);
 			
-			lastState = state;
 			state = automaton.step(state, (char) charAtCi);
 			if(state == -1) {
+				break;
+			}
+			
+			if(ci + i + 1 >= input.size()) {
 				break;
 			}
 		}
