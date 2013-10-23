@@ -23,11 +23,11 @@ public class ParserFactory {
 	}
 	
 	public static GLLParser createLevelParser(Grammar grammar, int ringSize) {
-		if(grammar.getGrammarSlots().size() < MAX_SLOTS) {
-			return new GLLParserImpl(new LevelBasedMixLookup(grammar, ringSize), ringSize);
-		} else {
+//		if(grammar.getGrammarSlots().size() < MAX_SLOTS) {
+//			return new GLLParserImpl(new LevelBasedMixLookup(grammar, ringSize), ringSize);
+//		} else {
 			return new GLLParserImpl(new LevelBasedHashLookup(grammar, ringSize), ringSize);
-		}
+//		}
 	}
 	
 }

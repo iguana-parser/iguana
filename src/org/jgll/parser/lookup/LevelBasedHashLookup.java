@@ -74,7 +74,7 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 	
 	protected int countGSSEdges;
 	
-	private final int initialSize = 2048;
+	private final int initialSize = 32;
 	
 	public LevelBasedHashLookup(Grammar grammar) {
 		this(grammar, grammar.getLongestTerminalChain());
@@ -118,35 +118,35 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 	private void gotoNextLevel() {
 		int nextIndex = indexFor(currentLevel + 1);
 		
-		CuckooHashSet<Descriptor> tmpDesc = u;
-		u.clear();
+//		CuckooHashSet<Descriptor> tmpDesc = u;
+//		u.clear();
 		u = forwardDescriptors[nextIndex];
-		forwardDescriptors[nextIndex] = tmpDesc;
+		forwardDescriptors[nextIndex] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 		
 		Queue<Descriptor> tmpR = r;
 		assert r.isEmpty();
 		r = forwardRs[nextIndex];
 		forwardRs[nextIndex] = tmpR;
 		
-		CuckooHashSet<NonPackedNode> tmpNonPackedNode = currentNodes;
-		currentNodes.clear();
+//		CuckooHashSet<NonPackedNode> tmpNonPackedNode = currentNodes;
+//		currentNodes.clear();
 		currentNodes = forwardNodes[nextIndex];
-		forwardNodes[nextIndex] = tmpNonPackedNode;
+		forwardNodes[nextIndex] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 		
-		CuckooHashSet<PackedNode> tmpPackedNode = currentPackedNodes;
-		currentPackedNodes.clear();
+//		CuckooHashSet<PackedNode> tmpPackedNode = currentPackedNodes;
+//		currentPackedNodes.clear();
 		currentPackedNodes = forwardPackedNodes[nextIndex];
-		forwardPackedNodes[nextIndex] = tmpPackedNode;
+		forwardPackedNodes[nextIndex] = new CuckooHashSet<>(PackedNode.levelBasedExternalHasher);
 		
-		CuckooHashSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
-		currentGssNodes.clear();
+//		CuckooHashSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
+//		currentGssNodes.clear();
 		currentGssNodes = forwardGssNodes[nextIndex];
-		forwardGssNodes[nextIndex] = tmpGSSNodeSet;
+		forwardGssNodes[nextIndex] = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
 		
-		CuckooHashSet<GSSEdge> tmpGSSEdgeSet = currendEdges;
-		currendEdges.clear();
+//		CuckooHashSet<GSSEdge> tmpGSSEdgeSet = currendEdges;
+//		currendEdges.clear();
 		currendEdges = forwardEdges[nextIndex];
-		forwardEdges[nextIndex] = tmpGSSEdgeSet;
+		forwardEdges[nextIndex] = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
 		
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
