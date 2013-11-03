@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.BitSet;
 
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
@@ -62,6 +63,16 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public boolean testFollowSet(int index, Input input) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public BitSet getFirstSet() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public BitSet getFollowSet() {
 		throw new UnsupportedOperationException();
 	}
 	

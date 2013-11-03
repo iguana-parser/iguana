@@ -133,6 +133,14 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return null;
 	}
 	
+	private boolean isLL1() {
+		for(Alternate alt : alternates) {
+		}
+		
+		
+		return false;
+	}
+	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 		for(Alternate alternate : alternates) {

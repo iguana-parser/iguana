@@ -187,10 +187,20 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	public boolean testFirstSet(int index, Input input) {
 		return firstSet.get(input.charAt(index));
 	}
+	
+	@Override
+	public BitSet getFirstSet() {
+		return firstSet;
+	}
 
 	@Override
 	public boolean testFollowSet(int index, Input input) {
 		return true;
+	}
+	
+	@Override
+	public BitSet getFollowSet() {
+		return null;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 import org.jgll.grammar.slotaction.SlotAction;
@@ -38,6 +39,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	protected List<SlotAction<Boolean>> popActions;
 	
 	private String label;
+	
+	protected static BitSet emptyBitSet = new BitSet();
 	
 	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
@@ -97,7 +100,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return false;
 	}
 
-
 	/**
 	 * Checks whether the character at the provided input index belongs to the first set  
 	 */
@@ -108,6 +110,21 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 * This method should be called if the nonterminal is nullable.
 	 */
 	public abstract boolean testFollowSet(int index, Input input);
+	
+	public abstract BitSet getFirstSet();
+	
+	public abstract BitSet getFollowSet();
+	
+	public BitSet getTestSet() {
+		if(!isNullable()) {
+			return getFirstSet();
+		} else {
+			BitSet testSet = new BitSet();
+			testSet.or(getFirstSet());
+			testSet.or(getFollowSet());
+			return testSet;
+		}
+	}
 	
 	public boolean test(int index, Input input) {
 		return testFirstSet(index, input) || (isNullable() && testFollowSet(index, input));

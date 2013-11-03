@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.BitSet;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Range;
@@ -24,7 +25,7 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	private static final long serialVersionUID = 1L;
 	
 	protected final Terminal terminal;
-
+	
 	public TerminalGrammarSlot(int position, BodyGrammarSlot previous, Terminal terminal, HeadGrammarSlot head) {
 		super(position, previous, head);
 		this.terminal = terminal;
@@ -174,8 +175,18 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
+	public BitSet getFirstSet() {
+		return terminal.asBitSet();
+	}
+	
+	@Override
 	public boolean testFollowSet(int index, Input input) {
 		return false;
+	}
+	
+	@Override
+	public BitSet getFollowSet() {
+		return emptyBitSet;
 	}
 
 	@Override
@@ -191,7 +202,6 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	public boolean isNullable() {
 		return false;
 	}
-
 
 	@Override
 	public Symbol getSymbol() {

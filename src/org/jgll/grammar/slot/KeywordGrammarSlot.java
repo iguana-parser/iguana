@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.BitSet;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
@@ -18,6 +19,8 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	protected HeadGrammarSlot keywordHead;
 	protected Keyword keyword;
 	
+	private BitSet firstSet;
+	
 	public KeywordGrammarSlot(int position, HeadGrammarSlot keywordHead, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(position, previous, head);
 		if(keywordHead == null) {
@@ -25,6 +28,9 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		}
 		this.keywordHead = keywordHead;
 		this.keyword = keyword;
+		
+		firstSet = new BitSet();
+		firstSet.set(keyword.getChars()[0]);
 	}
 	
 	public KeywordGrammarSlot copy(HeadGrammarSlot keywordHead, BodyGrammarSlot previous, HeadGrammarSlot head) {
@@ -36,12 +42,24 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean testFirstSet(int index, Input input) {
+		//TODO: check if this test is necessary here.
 		return input.match(index, keyword.getChars());
 	}
 	
 	@Override
 	public boolean testFollowSet(int index, Input input) {
+		// A keyword is never nullable
 		return false;
+	}
+	
+	@Override
+	public BitSet getFirstSet() {
+		return firstSet;
+	}
+
+	@Override
+	public BitSet getFollowSet() {
+		return emptyBitSet;
 	}
 
 	@Override
