@@ -3,9 +3,12 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.Alternate;
@@ -123,22 +126,46 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
-		for(Alternate alternate : alternates) {
-			int ci = parser.getCurrentInputIndex();
-			BodyGrammarSlot slot = alternate.getFirstSlot();
-			if(slot.test(ci, input)) {
-				parser.addDescriptor(slot);
-			}
+		if(isLL1()) {
+			Map<Integer, Alternate> ll1Map = getLL1Map();
+			Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
+			alternate.getFirstSlot().parse(parser, input);
+		} else {
+			for(Alternate alternate : alternates) {
+				int ci = parser.getCurrentInputIndex();
+				BodyGrammarSlot slot = alternate.getFirstSlot();
+				if(slot.test(ci, input)) {
+					parser.addDescriptor(slot);
+				}
+			}			
 		}
 		return null;
 	}
 	
 	private boolean isLL1() {
-		for(Alternate alt : alternates) {
+		for(Alternate alt1 : alternates) {
+			for(Alternate alt2 : alternates) {
+				if(alt1.getFirstSlot().getTestSet().intersects(alt2.getFirstSlot().getTestSet())) {
+					return false;
+				}
+			}
 		}
 		
+		return true;
+	}
+	
+	private Map<Integer, Alternate> getLL1Map() {
 		
-		return false;
+		Map<Integer, Alternate> ll1Map = new HashMap<>();
+		
+		for(Alternate alt : alternates) {
+			BitSet bs = alt.getFirstSlot().getTestSet();
+			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+				ll1Map.put(i, alt);
+			}
+		}
+		
+		return null;
 	}
 	
 	@Override
