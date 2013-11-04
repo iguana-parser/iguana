@@ -733,10 +733,15 @@ public class GrammarBuilder implements Serializable {
 							set.addAll(head.getFollowSet());
 						}
 						currentSlot.setPredictionSet(getBitSet(set));
+					} 
+					else if(currentSlot instanceof LastGrammarSlot) {
+						currentSlot.setPredictionSet(currentSlot.getHead().getFollowSetAsBitSet());
 					}
 					else {
+						System.out.println(currentSlot.getClass());
 						throw new RuntimeException("Unexpected grammar slot.");
-					}					
+					}
+					currentSlot = currentSlot.next();
 				}
 			}
 		}
