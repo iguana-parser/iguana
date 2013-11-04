@@ -189,20 +189,16 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public BitSet getFirstSet() {
-		return firstSet;
-	}
-
-	@Override
 	public boolean testFollowSet(int index, Input input) {
 		return true;
 	}
-	
-	@Override
-	public BitSet getFollowSet() {
-		return null;
-	}
 
+	@Override
+	public BitSet getPredictionSet() {
+		// TODO: include the prediction set as well.
+		return firstSet;
+	}
+	
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		// TODO Auto-generated method stub

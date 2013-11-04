@@ -67,13 +67,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public BitSet getFirstSet() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public BitSet getFollowSet() {
-		throw new UnsupportedOperationException();
+	public BitSet getPredictionSet() {
+		return head.getFollowSet();
 	}
 	
 	@Override

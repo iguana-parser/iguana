@@ -40,8 +40,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	private String label;
 	
-	protected static BitSet emptyBitSet = new BitSet();
-	
 	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
 		if(position < 0) {
@@ -72,6 +70,10 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	public List<SlotAction<Boolean>> getPreConditions() {
 		return preConditions;
+	}
+	
+	public void setPredictionSet(BitSet set) {
+		// TODO: create the body
 	}
 	
 	protected boolean executePreConditions(GLLParserInternals parser, Input input) {
@@ -110,21 +112,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 * This method should be called if the nonterminal is nullable.
 	 */
 	public abstract boolean testFollowSet(int index, Input input);
-	
-	public abstract BitSet getFirstSet();
-	
-	public abstract BitSet getFollowSet();
-	
-	public BitSet getTestSet() {
-		if(!isNullable()) {
-			return getFirstSet();
-		} else {
-			BitSet testSet = new BitSet();
-			testSet.or(getFirstSet());
-			testSet.or(getFollowSet());
-			return testSet;
-		}
-	}
+		
+	public abstract BitSet getPredictionSet();
 	
 	public boolean test(int index, Input input) {
 		return testFirstSet(index, input) || (isNullable() && testFollowSet(index, input));

@@ -11,6 +11,7 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 
 public class KeywordGrammarSlot extends BodyGrammarSlot {
@@ -59,7 +60,7 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public BitSet getFollowSet() {
-		return emptyBitSet;
+		return BitSetUtil.EMPTY_BITSET;
 	}
 
 	@Override

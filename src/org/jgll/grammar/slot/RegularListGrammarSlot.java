@@ -143,15 +143,9 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		
 		return regularList.equals(other.regularList);
 	}
-
+	
 	@Override
-	public BitSet getFirstSet() {
+	public BitSet getPredictionSet() {
 		return regularList.getCharacterClass().asBitSet();
 	}
-
-	@Override
-	public BitSet getFollowSet() {
-		return null;
-	}
-	
 }

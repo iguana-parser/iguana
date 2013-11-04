@@ -164,15 +164,17 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public BitSet getFirstSet() {
-		return firstSet;
+	public BitSet getPredictionSet() {
+		if(!isNullable()) {
+			return firstSet;
+		} else {
+			BitSet testSet = new BitSet();
+			testSet.or(firstSet);
+			testSet.or(followSet);
+			return testSet;
+		}
 	}
 	
-	@Override
-	public BitSet getFollowSet() {
-		return followSet;
-	}
-
 	@Override
 	public boolean testFollowSet(int index, Input input) {
 		return followSet.get(input.charAt(index));

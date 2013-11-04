@@ -11,6 +11,7 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 
 
@@ -175,18 +176,13 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public BitSet getFirstSet() {
-		return terminal.asBitSet();
-	}
-	
-	@Override
 	public boolean testFollowSet(int index, Input input) {
 		return false;
 	}
 	
 	@Override
-	public BitSet getFollowSet() {
-		return emptyBitSet;
+	public BitSet getPredictionSet() {
+		return terminal.asBitSet();
 	}
 
 	@Override

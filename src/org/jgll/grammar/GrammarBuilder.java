@@ -3,6 +3,7 @@ package org.jgll.grammar;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -586,6 +587,13 @@ public class GrammarBuilder implements Serializable {
 		return nt.getFirstSet().contains(Epsilon.getInstance());
 	}
 
+	/**
+	 * 
+	 * Checks if a grammar slot is nullable. This check is performed until
+	 * the end of the alternate: isChainNullable(X ::= alpha . beta) says if the
+	 * part beta is nullable.
+	 *   
+	 */
 	private boolean isChainNullable(BodyGrammarSlot slot) {
 		if (!(slot instanceof LastGrammarSlot)) {
 			if (slot instanceof TerminalGrammarSlot || slot instanceof KeywordGrammarSlot) {
@@ -597,6 +605,27 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		return true;
+	}
+	
+	private void getChainFirstSet(BodyGrammarSlot slot, Set<Terminal> set) {
+		
+		if (!(slot instanceof LastGrammarSlot)) {
+			
+			if (slot instanceof TerminalGrammarSlot) {
+				set.add(((TerminalGrammarSlot) slot).getTerminal());
+			}
+			
+			if(slot instanceof KeywordGrammarSlot) {
+				set.add(((KeywordGrammarSlot) slot).getFirstTerminal());
+			}
+
+			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
+			set.addAll(ntGrammarSlot.getNonterminal().getFirstSet());
+			if(isChainNullable(ntGrammarSlot.next())) {
+				getChainFirstSet(ntGrammarSlot.next(), set);
+			}
+		}
+
 	}
 
 	private void calculateFollowSets() {
@@ -656,6 +685,7 @@ public class GrammarBuilder implements Serializable {
 
 	private void setTestSets() {
 		for (HeadGrammarSlot head : nonterminals) {
+			
 			boolean nullable = head.getFirstSet().contains(Epsilon.getInstance());
 			boolean directNullable = false;
 			if(nullable) {
@@ -683,6 +713,37 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
+	private void setPredictionSets() {
+		for (HeadGrammarSlot head : nonterminals) {
+			for (Alternate alternate : head.getAlternates()) {
+				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+				
+				if(currentSlot instanceof TerminalGrammarSlot) {
+					currentSlot.setPredictionSet(((TerminalGrammarSlot) currentSlot).getTerminal().asBitSet());					
+				} 
+				else if(currentSlot instanceof KeywordGrammarSlot) {
+					currentSlot.setPredictionSet(((KeywordGrammarSlot) currentSlot).getKeyword().getFirstTerminal().asBitSet());
+				} 
+				else if(currentSlot instanceof NonterminalGrammarSlot) {
+					Set<Terminal> set = new HashSet<>();
+					getChainFirstSet(currentSlot, set);
+					if(isChainNullable(currentSlot)) {
+						set.addAll(head.getFollowSet());
+					}
+					currentSlot.setPredictionSet(getBitSet(set));
+				}
+			}
+		}
+	}
+	
+	private BitSet getBitSet(Set<Terminal> set) {
+		BitSet bitSet = new BitSet();
+		for(Terminal t : set) {
+			bitSet.or(t.asBitSet());
+		}
+		return bitSet;
+	}
+		
 	private void setSlotIds() {
 		
 		slots = new ArrayList<>();
