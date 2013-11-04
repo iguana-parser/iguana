@@ -40,6 +40,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	private String label;
 	
+	private BitSet predictionSet;
+	
 	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
 		if(position < 0) {
@@ -72,8 +74,12 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return preConditions;
 	}
 	
-	public void setPredictionSet(BitSet set) {
-		// TODO: create the body
+	public void setPredictionSet(BitSet predictionSet) {
+		this.predictionSet = predictionSet;
+	}
+	
+	public BitSet getPredictionSet() {
+		return predictionSet;
 	}
 	
 	protected boolean executePreConditions(GLLParserInternals parser, Input input) {
@@ -100,23 +106,10 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Checks whether the character at the provided input index belongs to the first set  
-	 */
-	public abstract boolean testFirstSet(int index, Input input);
-	
-	/**
-	 * Checks whether the character at the provided input index belongs to the follow set.
-	 * This method should be called if the nonterminal is nullable.
-	 */
-	public abstract boolean testFollowSet(int index, Input input);
-		
-	public abstract BitSet getPredictionSet();
+	}		
 	
 	public boolean test(int index, Input input) {
-		return testFirstSet(index, input) || (isNullable() && testFollowSet(index, input));
+		return predictionSet.get(input.charAt(index));
 	}
 	
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;

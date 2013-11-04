@@ -28,11 +28,11 @@ public class DirectNullableNonterminalGrammarSlot extends NonterminalGrammarSlot
 			return null;
 		}
 		
-		if(testFirstSet(ci, input)) {
+		if(nonterminal.getFirstSetBitSet().get(input.charAt(ci))) {
 			parser.createGSSNode(next);
 			return nonterminal;
 			
-		} else if (testFollowSet(ci, input)) {
+		} else if (nonterminal.getFollowSetAsBitSet().get(input.charAt(ci))) {
 			/**
 			 * Also check the pre-conditions of the epsilon alternate! 
 			 */

@@ -99,16 +99,6 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 	public void codeParser(Writer writer) throws IOException {
 		
 	}
-	
-	@Override
-	public boolean testFirstSet(int index, Input input) {
-		return regularList.getCharacterClass().match(input.charAt(index));
-	}
-	
-	@Override
-	public boolean testFollowSet(int index, Input input) {
-		return true;
-	}
 
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {

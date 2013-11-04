@@ -2,7 +2,6 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.BitSet;
 
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
@@ -55,22 +54,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		writer.append("   pop(cu, ci, cn);\n");
 		writer.append("   label = L0;\n}\n");
 	}
-	
-	@Override
-	public boolean testFirstSet(int index, Input input) {
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
-	public boolean testFollowSet(int index, Input input) {
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
-	public BitSet getPredictionSet() {
-		return head.getFollowSet();
-	}
-	
+		
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		throw new UnsupportedOperationException();

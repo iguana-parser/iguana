@@ -11,7 +11,6 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 
 public class KeywordGrammarSlot extends BodyGrammarSlot {
@@ -39,28 +38,6 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
-	}
-
-	@Override
-	public boolean testFirstSet(int index, Input input) {
-		//TODO: check if this test is necessary here.
-		return input.match(index, keyword.getChars());
-	}
-	
-	@Override
-	public boolean testFollowSet(int index, Input input) {
-		// A keyword is never nullable
-		return false;
-	}
-	
-	@Override
-	public BitSet getFirstSet() {
-		return firstSet;
-	}
-
-	@Override
-	public BitSet getFollowSet() {
-		return BitSetUtil.EMPTY_BITSET;
 	}
 
 	@Override

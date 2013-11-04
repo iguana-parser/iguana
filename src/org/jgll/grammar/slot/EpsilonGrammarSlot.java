@@ -56,11 +56,5 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + id + "), cn, cr);\n");
 		writer.append("   pop(cu, ci, cn);\n");
 		writer.append("   label = L0;\n}\n");
-	}
-	
-	@Override
-	public boolean testFirstSet(int index, Input input) {
-		// TODO: add the check against the follow set here.
-		return true;
-	}
+	}	
 }

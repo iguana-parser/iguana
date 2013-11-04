@@ -75,18 +75,16 @@ public class LL1Test {
 	@Test
 	public void testPredictSets() {
 		BodyGrammarSlot slot1 = grammar.getGrammarSlotByName("S ::= . A [a]");
-		assertEquals(BitSetUtil.from('d', 'b', 'a', 0), slot1.getTestSet());
+		assertEquals(BitSetUtil.from('d', 'b', 'a', 0), slot1.getPredictionSet());
 		
 		BodyGrammarSlot slot2 = grammar.getGrammarSlotByName("A ::= . B D");
-		assertEquals(BitSetUtil.from('d', 'b', 'a', 0), slot2.getTestSet());
+		assertEquals(BitSetUtil.from('d', 'b', 'a', 0), slot2.getPredictionSet());
 		
 		BodyGrammarSlot slot3 = grammar.getGrammarSlotByName("B ::= . [b]");
-		assertEquals(BitSetUtil.from('b'), slot3.getTestSet());
+		assertEquals(BitSetUtil.from('b'), slot3.getPredictionSet());
 
 		BodyGrammarSlot slot4 = grammar.getGrammarSlotByName("B ::= .");
-		assertEquals(BitSetUtil.from('d', 'a'), slot4.getTestSet());
-
-	
+		assertEquals(BitSetUtil.from('d', 'a'), slot4.getPredictionSet());
 	}
 
 	@Test

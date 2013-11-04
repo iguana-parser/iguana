@@ -42,6 +42,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private transient final Set<Terminal> followSet;
 	
+	private BitSet firstSetBitSet;
+	
+	private BitSet followSetBitSet;
+	
 	private Alternate epsilonAlternate;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
@@ -49,6 +53,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();
 		this.followSet = new HashSet<>();
+		this.firstSetBitSet = new BitSet();
+		this.followSetBitSet = new BitSet();
 	}
 	
 	public void addAlternate(Alternate alternate) {		
@@ -145,7 +151,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	private boolean isLL1() {
 		for(Alternate alt1 : alternates) {
 			for(Alternate alt2 : alternates) {
-				if(alt1.getFirstSlot().getTestSet().intersects(alt2.getFirstSlot().getTestSet())) {
+				if(alt1.getFirstSlot().getPredictionSet().intersects(alt2.getFirstSlot().getPredictionSet())) {
 					return false;
 				}
 			}
@@ -159,7 +165,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		Map<Integer, Alternate> ll1Map = new HashMap<>();
 		
 		for(Alternate alt : alternates) {
-			BitSet bs = alt.getFirstSlot().getTestSet();
+			BitSet bs = alt.getFirstSlot().getPredictionSet();
 			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
 				ll1Map.put(i, alt);
 			}
@@ -173,7 +179,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		for(Alternate alternate : alternates) {
 			int ci = recognizer.getCi();
 			BodyGrammarSlot slot = alternate.getFirstSlot();
-			if(slot.testFirstSet(ci, input) || (slot.isNullable() && slot.testFollowSet(ci, input))) {
+			if(slot.test(ci, input)) {
 				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 				recognizer.add(alternate.getFirstSlot(), cu, ci);
 			}
@@ -223,6 +229,22 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public Set<Terminal> getFollowSet() {
 		return followSet;
+	}
+	
+	public BitSet getFollowSetAsBitSet() {
+		return followSetBitSet;
+	}
+	
+	public BitSet getFirstSetBitSet() {
+		return firstSetBitSet;
+	}
+	
+	public BitSet getPredictionSet() {
+		BitSet set = firstSetBitSet;
+		if(isNullable()) {
+			set.or(followSetBitSet);
+		}
+		return set;
 	}
 	
 	public int getCountAlternates() {
