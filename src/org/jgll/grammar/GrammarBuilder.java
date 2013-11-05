@@ -513,6 +513,9 @@ public class GrammarBuilder implements Serializable {
 
 				for (Alternate alternate : head.getAlternates()) {
 					changed |= addFirstSet(head.getFirstSet(), alternate.getFirstSlot(), changed);
+					if(isChainNullable(alternate.getFirstSlot())) {
+						changed |= head.getFirstSet().add(Epsilon.getInstance());
+					}
 				}
 			}
 		}
@@ -544,7 +547,7 @@ public class GrammarBuilder implements Serializable {
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
-			changed = set.addAll(nonterminalGrammarSlot.getNonterminal().getFirstSet()) || changed;
+			changed = set.addAll(nonterminalGrammarSlot.getNonterminal().getFirstSetWithoutEpsilon()) || changed;
 			if (isNullable(nonterminalGrammarSlot.getNonterminal())) {
 				return addFirstSet(set, currentSlot.next(), changed) || changed;
 			}

@@ -40,6 +40,11 @@ public class Test1 {
 	}
 	
 	@Test
+	public void testNullable() {
+		assertTrue(grammar.getNonterminalByName("A").isNullable());
+	}
+	
+	@Test
 	public void testSPPF() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString(""), grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));

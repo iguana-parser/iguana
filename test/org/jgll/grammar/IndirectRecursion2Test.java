@@ -56,6 +56,12 @@ public class IndirectRecursion2Test {
 	}
 	
 	@Test
+	public void testNullable() {
+		assertFalse(grammar.getNonterminalByName("A").isNullable());
+		assertTrue(grammar.getNonterminalByName("B").isNullable());
+	}
+	
+	@Test
 	public void test1() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("ad"), grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
@@ -66,7 +72,6 @@ public class IndirectRecursion2Test {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("ad"), grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
-
 	
 	@Test
 	public void testReachabilityGraph() {

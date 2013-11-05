@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.Alternate;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
@@ -229,6 +230,12 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 	public Set<Terminal> getFirstSet() {
 		return firstSet;
+	}
+	
+	public Set<Terminal> getFirstSetWithoutEpsilon() {
+		Set<Terminal> set = new HashSet<>(firstSet);
+		set.remove(Epsilon.getInstance());
+		return set;
 	}
 	
 	public Set<Terminal> getFollowSet() {

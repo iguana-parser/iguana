@@ -46,6 +46,13 @@ public class Test3 {
 	}
 	
 	@Test
+	public void testNullable() {
+		assertFalse(grammar.getNonterminalByName("A").isNullable());
+		assertFalse(grammar.getNonterminalByName("B").isNullable());
+		assertFalse(grammar.getNonterminalByName("C").isNullable());
+	}
+	
+	@Test
 	public void testRDParser() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("bc"), grammar, "A");
 		assertEquals(true, sppf.deepEquals(expectedSPPF()));
