@@ -46,6 +46,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private BitSet followSetBitSet;
 	
+	private BitSet predictionSet;
+	
 	private Alternate epsilonAlternate;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
@@ -53,8 +55,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();
 		this.followSet = new HashSet<>();
+		
 		this.firstSetBitSet = new BitSet();
 		this.followSetBitSet = new BitSet();
+		this.predictionSet = new BitSet();
 	}
 	
 	public void addAlternate(Alternate alternate) {		
@@ -239,16 +243,17 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return firstSetBitSet;
 	}
 	
-	public BitSet getPredictionSet() {
-		BitSet set = firstSetBitSet;
-		if(isNullable()) {
-			set.or(followSetBitSet);
-		}
-		return set;
-	}
-	
 	public int getCountAlternates() {
 		return alternates.size();
+	}
+	
+	public void setPredictionSet() {
+		predictionSet.or(firstSetBitSet);
+		predictionSet.or(followSetBitSet);
+	}
+	
+	public BitSet getPredictionSet() {
+		return predictionSet;
 	}
 	
 	public boolean contains(List<Symbol> list) {

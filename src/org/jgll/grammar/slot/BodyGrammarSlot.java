@@ -40,7 +40,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	private String label;
 	
-	private BitSet predictionSet;
+	protected BitSet predictionSet;
 	
 	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		

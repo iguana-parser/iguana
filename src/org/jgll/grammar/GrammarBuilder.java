@@ -310,6 +310,8 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 		
+	// TODO: context-free conditions should have a head, to calculate first 
+	// and follow sets.
 	private BodyGrammarSlot convertCondition(ContextFreeCondition condition) {
 		
 		if(condition == null) {
@@ -347,19 +349,6 @@ public class GrammarBuilder implements Serializable {
 		return firstSlot;
 	}
 	
-	private void setTestSets(List<BodyGrammarSlot> slots) {
-
-		for(BodyGrammarSlot slot : slots) {
-			BodyGrammarSlot currentSlot = slot;
-			
-			while (!(currentSlot instanceof LastGrammarSlot)) {
-				if (currentSlot instanceof NonterminalGrammarSlot) {
-					((NonterminalGrammarSlot) currentSlot).setTestSet();
-				}
-				currentSlot = currentSlot.next();
-			}			
-		}
-	}
 
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
@@ -379,9 +368,11 @@ public class GrammarBuilder implements Serializable {
 		calculateMaximumNumAlternates();
 		calculateFirstSets();
 		calculateFollowSets();
-		setTestSets();
-		setTestSets(conditionSlots);
+
+		setHeadPredictionSets();
 		setPredictionSets();
+		setPredictionSetsForConditionals();
+		
 		setSlotIds();
 		setDirectNullables();
 		
@@ -616,14 +607,17 @@ public class GrammarBuilder implements Serializable {
 				set.add(((TerminalGrammarSlot) slot).getTerminal());
 			}
 			
-			if(slot instanceof KeywordGrammarSlot) {
+			else if(slot instanceof KeywordGrammarSlot) {
 				set.add(((KeywordGrammarSlot) slot).getFirstTerminal());
 			}
-
-			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-			set.addAll(ntGrammarSlot.getNonterminal().getFirstSet());
-			if(isChainNullable(ntGrammarSlot.next())) {
-				getChainFirstSet(ntGrammarSlot.next(), set);
+			
+			else {
+				NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
+				set.addAll(ntGrammarSlot.getNonterminal().getFirstSet());
+				
+				if(ntGrammarSlot.isNullable()) {
+					getChainFirstSet(ntGrammarSlot.next(), set);
+				}
 			}
 		}
 
@@ -683,9 +677,11 @@ public class GrammarBuilder implements Serializable {
 			head.getFollowSet().add(EOF.getInstance());
 		}
 	}
+	
 
-	private void setTestSets() {
+	private void setHeadPredictionSets() {
 		for (HeadGrammarSlot head : nonterminals) {
+			head.setPredictionSet();
 			
 			boolean nullable = head.getFirstSet().contains(Epsilon.getInstance());
 			boolean directNullable = false;
@@ -699,18 +695,6 @@ public class GrammarBuilder implements Serializable {
 				}
 			}
 			head.setNullable(nullable, directNullable);
-			
-			for (Alternate alternate : head.getAlternates()) {
-
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
-
-				while (!(currentSlot instanceof LastGrammarSlot)) {
-					if (currentSlot instanceof NonterminalGrammarSlot) {
-						((NonterminalGrammarSlot) currentSlot).setTestSet();
-					}
-					currentSlot = currentSlot.next();
-				}
-			}
 		}
 	}
 	
@@ -743,6 +727,37 @@ public class GrammarBuilder implements Serializable {
 					}
 					currentSlot = currentSlot.next();
 				}
+			}
+		}
+	}
+	
+	private void setPredictionSetsForConditionals() {
+		for(BodyGrammarSlot slot : conditionSlots) {
+			while(slot != null) {
+				if(slot instanceof TerminalGrammarSlot) {
+					slot.setPredictionSet(((TerminalGrammarSlot) slot).getTerminal().asBitSet());					
+				} 
+				else if(slot instanceof KeywordGrammarSlot) {
+					slot.setPredictionSet(((KeywordGrammarSlot) slot).getKeyword().getFirstTerminal().asBitSet());
+				} 
+				else if(slot instanceof NonterminalGrammarSlot) {
+					Set<Terminal> set = new HashSet<>();
+					getChainFirstSet(slot, set);
+					// TODO: fix and uncomment it later
+//					if(isChainNullable(slot)) {
+//						set.addAll(head.getFollowSet());
+//					}
+					slot.setPredictionSet(getBitSet(set));
+				} 
+				else if(slot instanceof LastGrammarSlot) {
+					// TODO: fix and uncomment it later
+					//slot.setPredictionSet(slot.getHead().getFollowSetAsBitSet());
+				}
+				else {
+					System.out.println(slot.getClass());
+					throw new RuntimeException("Unexpected grammar slot.");
+				}
+				slot = slot.next();
 			}
 		}
 	}
@@ -799,7 +814,6 @@ public class GrammarBuilder implements Serializable {
 									new DirectNullableNonterminalGrammarSlot(ntSlot.getPosition(), ntSlot.previous(), ntSlot.getNonterminal(), ntSlot.getHead());
 							ntSlot.next().setPrevious(directNullableSlot);
 							directNullableSlot.setNext(ntSlot.next());
-							directNullableSlot.setTestSet();
 							directNullableSlot.setId(ntSlot.getId());
 							slots.remove(ntSlot);
 							slots.add(directNullableSlot);

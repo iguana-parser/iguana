@@ -5,7 +5,6 @@ import java.io.Writer;
 import java.util.BitSet;
 
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
@@ -77,7 +76,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		int ci = recognizer.getCi();
 		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 		
-		if(nonterminal.getPredictionSet().get(input.charAt(ci))) {
+		if(predictionSet.get(input.charAt(ci))) {
 			recognizer.update(recognizer.create(next, cu, ci), ci);
 			return nonterminal;
 		} else { 
@@ -140,17 +139,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 //		}
 		writer.append(") {\n");
 	}
-	
-	public void setTestSet() {
-		for(Terminal t : nonterminal.getFirstSet()) {
-			firstSet.or(t.asBitSet());
-		}
-		
-		for(Terminal t : nonterminal.getFollowSet()) {
-			followSet.or(t.asBitSet());
-		}
-	}
-		
+			
 	@Override
 	public boolean isNullable() {
 		return nonterminal.isNullable();

@@ -36,6 +36,7 @@ public class IndirectRecursion2Test {
 	
 	private Grammar grammar;
 	private GLLParser levelParser;
+	private GLLParser rdParser;
 
 	@Before
 	public void init() {
@@ -51,13 +52,21 @@ public class IndirectRecursion2Test {
 													     .addRule(r4);
 		grammar = builder.build();
 		levelParser = ParserFactory.createLevelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
-	public void test() throws ParseError {
+	public void test1() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("ad"), grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
+	
+	@Test
+	public void test2() throws ParseError {
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("ad"), grammar, "A");
+		assertTrue(sppf.deepEquals(expectedSPPF()));
+	}
+
 	
 	@Test
 	public void testReachabilityGraph() {
