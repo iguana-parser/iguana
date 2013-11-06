@@ -2,8 +2,9 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.BitSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.symbol.Alt;
 import org.jgll.grammar.symbol.Character;
@@ -14,6 +15,7 @@ import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Star;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
@@ -30,7 +32,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	
 	private RegularExpression regexp;
 	
-	private BitSet firstSet;
+	private Set<Terminal> firstSet;
 	
 	public RegularExpressionGrammarSlot(int position, RegularExpression regexp, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(position, previous, head);
@@ -40,7 +42,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 
 	private void setFirstSet() {
 		
-		firstSet = new BitSet();
+		firstSet = new HashSet<>();
 		
 		for(Symbol symbol : regexp.getSymbols()) {
 			setFirstSet(firstSet, symbol);
@@ -50,14 +52,14 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		}
 	}
 	
-	private void setFirstSet(BitSet set, Symbol symbol) {
+	private void setFirstSet(Set<Terminal> set, Symbol symbol) {
 		
 		if(symbol instanceof Character) {
-			firstSet.or(((Character) symbol).asBitSet());
+			set.add((Terminal) symbol);
 		} 
 		
 		else if(symbol instanceof CharacterClass) {
-			firstSet.or(((CharacterClass) symbol).asBitSet());
+			set.add((Terminal) symbol);
 		} 
 		
 		else if(symbol instanceof Plus) {
@@ -182,9 +184,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		return null;
 	}
 
-	@Override
-	public BitSet getPredictionSet() {
-		// TODO: include the prediction set as well.
+	public Set<Terminal> getFirstSet() {
 		return firstSet;
 	}
 	

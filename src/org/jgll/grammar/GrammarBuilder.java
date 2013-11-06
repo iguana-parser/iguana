@@ -593,7 +593,12 @@ public class GrammarBuilder implements Serializable {
 		if (!(slot instanceof LastGrammarSlot)) {
 			if (slot instanceof TerminalGrammarSlot || slot instanceof KeywordGrammarSlot) {
 				return false;
-			} 
+			}
+			
+			else if(slot instanceof RegularListGrammarSlot ||
+					slot instanceof RegularExpressionGrammarSlot) {
+				return slot.isNullable() && isChainNullable(slot.next());
+			}
 
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
 			return isNullable(ntGrammarSlot.getNonterminal()) && isChainNullable(ntGrammarSlot.next());
@@ -612,6 +617,20 @@ public class GrammarBuilder implements Serializable {
 			
 			else if(slot instanceof KeywordGrammarSlot) {
 				set.add(((KeywordGrammarSlot) slot).getFirstTerminal());
+			}
+			
+			else if(slot instanceof RegularListGrammarSlot) {
+				set.add(((RegularListGrammarSlot) slot).getRegularList().getCharacterClass());
+				if(slot.isNullable()) {
+					getChainFirstSet(slot.next(), set);
+				}
+			}
+			
+			else if(slot instanceof RegularExpressionGrammarSlot) {
+				set.addAll(((RegularExpressionGrammarSlot) slot).getFirstSet());
+				if(slot.isNullable()) {
+					getChainFirstSet(slot.next(), set);
+				}				
 			}
 			
 			else {
@@ -714,7 +733,9 @@ public class GrammarBuilder implements Serializable {
 					else if(currentSlot instanceof KeywordGrammarSlot) {
 						currentSlot.setPredictionSet(((KeywordGrammarSlot) currentSlot).getKeyword().getFirstTerminal().asBitSet());
 					} 
-					else if(currentSlot instanceof NonterminalGrammarSlot) {
+					else if(currentSlot instanceof NonterminalGrammarSlot ||
+							currentSlot instanceof RegularListGrammarSlot ||
+							currentSlot instanceof RegularExpressionGrammarSlot) {
 						Set<Terminal> set = new HashSet<>();
 						getChainFirstSet(currentSlot, set);
 						if(isChainNullable(currentSlot)) {
@@ -724,7 +745,7 @@ public class GrammarBuilder implements Serializable {
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {
 						currentSlot.setPredictionSet(currentSlot.getHead().getFollowSetAsBitSet());
-					}
+					} 
 					else {
 						System.out.println(currentSlot.getClass());
 						throw new RuntimeException("Unexpected grammar slot.");
