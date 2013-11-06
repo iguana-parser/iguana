@@ -52,6 +52,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private Alternate epsilonAlternate;
 	
+	private boolean ll1;
+	
+	private Map<Integer, Alternate> ll1Map = new HashMap<>();
+	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
@@ -149,22 +153,34 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 		return null;
 	}
+
+	public void setLL1Properties() {
+		calculateLL1();
+		calculateLL1Map();
+		ll1 = isLL1();
+		ll1Map = getLL1Map();
+	}
 	
-	private boolean isLL1() {
+	private void calculateLL1() {
 		for(Alternate alt1 : alternates) {
 			for(Alternate alt2 : alternates) {
-				if(alt1.getFirstSlot().getPredictionSet().intersects(alt2.getFirstSlot().getPredictionSet())) {
-					return false;
+				if(!alt1.equals(alt2)) {
+					if(alt1.getFirstSlot().getPredictionSet().intersects(alt2.getFirstSlot().getPredictionSet())) {
+						ll1 = false;
+						return;
+					}
 				}
 			}
 		}
-		
-		return true;
+		ll1 = true;
 	}
 	
-	private Map<Integer, Alternate> getLL1Map() {
+	private void calculateLL1Map() {
+		ll1Map = new HashMap<>();
 		
-		Map<Integer, Alternate> ll1Map = new HashMap<>();
+		if(!ll1) {
+			return;
+		}
 		
 		for(Alternate alt : alternates) {
 			BitSet bs = alt.getFirstSlot().getPredictionSet();
@@ -172,8 +188,22 @@ public class HeadGrammarSlot extends GrammarSlot {
 				ll1Map.put(i, alt);
 			}
 		}
-		
-		return null;
+	}
+	
+	public boolean isLL1() {
+		return ll1;
+	}
+	
+	public boolean isLL(int k) {
+		if(k == 1) {
+			return isLL1();
+		} else {
+			throw new UnsupportedOperationException();
+		}
+	}
+	
+	public Map<Integer, Alternate> getLL1Map() {
+		return ll1Map;
 	}
 	
 	@Override

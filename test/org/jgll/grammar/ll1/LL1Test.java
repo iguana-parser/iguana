@@ -16,6 +16,7 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -86,6 +87,13 @@ public class LL1Test {
 		assertTrue(grammar.getNonterminalByName("B").isDirectNullable());
 		assertTrue(grammar.getNonterminalByName("D").isDirectNullable());
 	}
+	
+	@Test
+	public void ll1Test() {
+		assertTrue(grammar.getNonterminalByName("A").isLL1());
+		assertTrue(grammar.getNonterminalByName("B").isLL1());
+		assertTrue(grammar.getNonterminalByName("D").isLL1());
+	}
 
 	@Test
 	public void testPredictSets() {
@@ -105,6 +113,7 @@ public class LL1Test {
 	@Test
 	public void test1() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("bda"), grammar, "S");
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, Input.fromString("bda"));
 	}
 
 }

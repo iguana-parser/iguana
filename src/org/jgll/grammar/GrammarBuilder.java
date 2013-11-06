@@ -372,6 +372,7 @@ public class GrammarBuilder implements Serializable {
 		setHeadPredictionSets();
 		setPredictionSets();
 		setPredictionSetsForConditionals();
+		setLL1Properties();
 		
 		setSlotIds();
 		setDirectNullables();
@@ -819,6 +820,12 @@ public class GrammarBuilder implements Serializable {
 		}
 		for(BodyGrammarSlot slot : conditionSlots) {
 			slot.setId(i++);
+		}
+	}
+	
+	private void setLL1Properties() {
+		for (HeadGrammarSlot head : nonterminals) {
+			head.setLL1Properties();
 		}
 	}
 	
