@@ -78,11 +78,9 @@ public class Grammar implements Serializable {
 		}
 		
 		for(BodyGrammarSlot slot : slots) {
-			nameToSlots.put(grammarSlotToString(slot), slot);
-		}
-		
-		for(BodyGrammarSlot slot : slots) {
-			slot.setLabel(grammarSlotToString(slot));
+			String label = grammarSlotToString(slot);
+			slot.setLabel(label);
+			nameToSlots.put(label, slot);
 		}
 		
 		this.longestTerminalChain = builder.longestTerminalChain;

@@ -138,10 +138,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
-		if(isLL1()) {
-			Map<Integer, Alternate> ll1Map = getLL1Map();
+		if(false) {
 			Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
-			alternate.getFirstSlot().parse(parser, input);
+			return alternate.getFirstSlot().parse(parser, input);
 		} else {
 			for(Alternate alternate : alternates) {
 				int ci = parser.getCurrentInputIndex();

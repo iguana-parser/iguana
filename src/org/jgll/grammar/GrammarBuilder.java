@@ -375,7 +375,7 @@ public class GrammarBuilder implements Serializable {
 		setLL1Properties();
 		
 		setSlotIds();
-		setDirectNullables();
+//		setDirectNullables();
 		
 		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
@@ -848,6 +848,7 @@ public class GrammarBuilder implements Serializable {
 							directNullableSlot.setNext(ntSlot.next());
 							directNullableSlot.setId(ntSlot.getId());
 							directNullableSlot.setPredictionSet(ntSlot.getPredictionSet());
+							directNullableSlot.setLabel(ntSlot.toString());
 							slots.remove(ntSlot);
 							slots.add(directNullableSlot);
 							copyActions(ntSlot, directNullableSlot);
