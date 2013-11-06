@@ -18,6 +18,7 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.DummyNode;
 import org.jgll.util.Input;
 
 /**
@@ -138,8 +139,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
-		if(false) {
+		if(ll1) {
 			Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
+			parser.setCurrentSPPFNode(DummyNode.getInstance());
 			return alternate.getFirstSlot().parse(parser, input);
 		} else {
 			for(Alternate alternate : alternates) {
