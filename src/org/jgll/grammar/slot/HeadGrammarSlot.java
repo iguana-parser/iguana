@@ -23,6 +23,7 @@ import org.jgll.util.Input;
 /**
  * 
  * The grammar slot corresponding to the head of a rule.
+ *
  * 
  * @author Ali Afroozeh
  * 
@@ -56,10 +57,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.alternates = new ArrayList<>();
 		this.firstSet = new HashSet<>();
 		this.followSet = new HashSet<>();
-		
-		this.firstSetBitSet = new BitSet();
-		this.followSetBitSet = new BitSet();
-		this.predictionSet = new BitSet();
 	}
 	
 	public void addAlternate(Alternate alternate) {		
@@ -255,6 +252,18 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public void setPredictionSet() {
+		
+		firstSetBitSet = new BitSet();
+		for(Terminal t : firstSet) {
+			firstSetBitSet.or(t.asBitSet());
+		}
+		
+		followSetBitSet = new BitSet();
+		for(Terminal t : followSet) {
+			followSetBitSet.or(t.asBitSet());
+		}
+		
+		predictionSet = new BitSet();
 		predictionSet.or(firstSetBitSet);
 		predictionSet.or(followSetBitSet);
 	}

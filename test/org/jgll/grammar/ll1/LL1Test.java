@@ -71,11 +71,26 @@ public class LL1Test {
 		grammar = builder.build();
 		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
+	
+	@Test
+	public void testNullable() {
+		assertFalse(grammar.getNonterminalByName("S").isNullable());
+		assertTrue(grammar.getNonterminalByName("A").isNullable());
+		assertTrue(grammar.getNonterminalByName("B").isNullable());
+		assertTrue(grammar.getNonterminalByName("D").isNullable());
+	}
+	
+	@Test
+	public void testDirectNullable() {
+		assertFalse(grammar.getNonterminalByName("A").isDirectNullable());
+		assertTrue(grammar.getNonterminalByName("B").isDirectNullable());
+		assertTrue(grammar.getNonterminalByName("D").isDirectNullable());
+	}
 
 	@Test
 	public void testPredictSets() {
 		BodyGrammarSlot slot1 = grammar.getGrammarSlotByName("S ::= . A [a]");
-		assertEquals(BitSetUtil.from('d', 'b', 'a', 0), slot1.getPredictionSet());
+		assertEquals(BitSetUtil.from('d', 'b', 'a'), slot1.getPredictionSet());
 		
 		BodyGrammarSlot slot2 = grammar.getGrammarSlotByName("A ::= . B D");
 		assertEquals(BitSetUtil.from('d', 'b', 'a', 0), slot2.getPredictionSet());
@@ -84,7 +99,7 @@ public class LL1Test {
 		assertEquals(BitSetUtil.from('b'), slot3.getPredictionSet());
 
 		BodyGrammarSlot slot4 = grammar.getGrammarSlotByName("B ::= .");
-		assertEquals(BitSetUtil.from('d', 'a'), slot4.getPredictionSet());
+		assertEquals(BitSetUtil.from('d', 'a', 0), slot4.getPredictionSet());
 	}
 
 	@Test

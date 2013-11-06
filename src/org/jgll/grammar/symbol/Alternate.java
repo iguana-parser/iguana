@@ -67,12 +67,12 @@ public class Alternate implements Serializable {
 	/**
 	 * @return true if the alternate is of the form A ::= epsilon
 	 */
-	public boolean isEmpty() {
+	public boolean isEpsilon() {
 		return firstSlot instanceof EpsilonGrammarSlot;
 	}
 	
 	public boolean isNullable() {
-		if (isEmpty()) return true;
+		if (isEpsilon()) return true;
 		
 		BodyGrammarSlot slot = firstSlot;
 		while(!(slot instanceof LastGrammarSlot)) {

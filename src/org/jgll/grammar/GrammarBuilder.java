@@ -688,9 +688,10 @@ public class GrammarBuilder implements Serializable {
 			
 			boolean nullable = head.getFirstSet().contains(Epsilon.getInstance());
 			boolean directNullable = false;
+			
 			if(nullable) {
 				for(Alternate alt : head.getAlternates()) {
-					if(alt.isEmpty()) {
+					if(alt.isEpsilon()) {
 						directNullable = true;
 						head.setEpsilonAlternate(alt);
 						break;
@@ -818,6 +819,7 @@ public class GrammarBuilder implements Serializable {
 							ntSlot.next().setPrevious(directNullableSlot);
 							directNullableSlot.setNext(ntSlot.next());
 							directNullableSlot.setId(ntSlot.getId());
+							directNullableSlot.setPredictionSet(ntSlot.getPredictionSet());
 							slots.remove(ntSlot);
 							slots.add(directNullableSlot);
 							copyActions(ntSlot, directNullableSlot);
