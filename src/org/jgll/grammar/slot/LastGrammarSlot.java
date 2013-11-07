@@ -38,7 +38,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {	
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+		if(head.isLL1()) {
+			return null;
+		}
 		parser.pop();
 		return null;
 	}
