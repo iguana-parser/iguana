@@ -58,6 +58,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	private boolean ll1;
 	
 	private Map<Integer, Alternate> ll1Map = new HashMap<>();
+
+	private boolean ll1SubGrammar;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
@@ -141,24 +143,32 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
-		if(ll1) {
-			parseLL1(parser, input);
-		} else {
-			for(Alternate alternate : alternates) {
-				int ci = parser.getCurrentInputIndex();
-				BodyGrammarSlot slot = alternate.getFirstSlot();
-				if(slot.test(ci, input)) {
-					parser.addDescriptor(slot);
-				}
+		if(parser.isRecursiveDescent()) {
+			if(ll1SubGrammar) {
+				parseLL1(parser, input);
+				return null;
+			}
+			else if(ll1) {
+				Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
+				parser.setCurrentSPPFNode(DummyNode.getInstance());
+				return alternate.getFirstSlot().parse(parser, input);
 			}			
 		}
+
+		
+		for(Alternate alternate : alternates) {
+			int ci = parser.getCurrentInputIndex();
+			BodyGrammarSlot slot = alternate.getFirstSlot();
+			if(slot.test(ci, input)) {
+				parser.addDescriptor(slot);
+			}
+		}			
 		return null;
 	}
 	
 	@Override
 	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
 		Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
-		parser.setCurrentSPPFNode(DummyNode.getInstance());
 		
 		List<SPPFNode> children = new ArrayList<>();
 		
@@ -189,7 +199,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 		
 		NonPackedNode ntNode = parser.getLookupTable().getNonPackedNode(this, leftExtent, rightExtent); 
-																			  
 		
 		for(SPPFNode node : children) {
 			ntNode.addChild(node);
@@ -198,14 +207,23 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return ntNode;
 	}
 
-	public void setLL1Properties() {
+	public void setLL1() {
 		calculateLL1();
 		calculateLL1Map();
 		ll1 = isLL1();
 		ll1Map = getLL1Map();
 	}
 	
+	public void setSubGrammarLL1(boolean ll1SubGrammar) {
+		this.ll1SubGrammar = ll1SubGrammar;
+	}
+	
 	private void calculateLL1() {
+		
+		if(alternates.size() == 1) {
+			ll1 = true;
+		}
+		
 		for(Alternate alt1 : alternates) {
 			for(Alternate alt2 : alternates) {
 				if(!alt1.equals(alt2)) {

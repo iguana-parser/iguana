@@ -88,4 +88,6 @@ public interface GLLParserInternals {
 	 */
 	public int getRegularListLength();
 	
+	public boolean isRecursiveDescent();
+	
 }

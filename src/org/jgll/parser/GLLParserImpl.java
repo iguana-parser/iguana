@@ -13,6 +13,7 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.parser.lookup.LookupTable;
+import org.jgll.parser.lookup.RecursiveDescentLookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -469,6 +470,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	@Override
 	public long getParsingTime() {
 		return end - start;
+	}
+
+	@Override
+	public boolean isRecursiveDescent() {
+		return lookupTable instanceof RecursiveDescentLookupTable;
 	}
 	
 }

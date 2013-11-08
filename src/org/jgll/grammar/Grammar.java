@@ -62,6 +62,8 @@ public class Grammar implements Serializable {
 	
 	private int stDevDescriptors;
 	
+	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
@@ -88,6 +90,7 @@ public class Grammar implements Serializable {
 		this.maxDescriptorsAtInput = builder.maxDescriptors;
 		this.averageDescriptorsAtInput = builder.averageDescriptors;
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
+		this.reachabilityGraph = builder.reachabilityGraph;
 		
 		printGrammarStatistics();
 	}
@@ -102,6 +105,10 @@ public class Grammar implements Serializable {
 		log.debug("Maximum descriptors: %d", maxDescriptorsAtInput);
 		log.trace("Average descriptors: %d", averageDescriptorsAtInput);
 		log.trace("Standard Deviation descriptors: %d", stDevDescriptors);
+	}
+	
+	public Set<HeadGrammarSlot> getReachableNonterminals(HeadGrammarSlot nonterminal) {
+		return reachabilityGraph.get(nonterminal);
 	}
 	
 	private int numProductions() {

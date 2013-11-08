@@ -6,7 +6,7 @@ import java.io.Writer;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 /**
@@ -32,8 +32,11 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		}
 		
 		// A ::= ε
-		TerminalSymbolNode cr = parser.getEpsilonNode();
-		parser.getNonterminalNode(this, cr);
+		// Do not create epsilon nodes
+		int ci = parser.getCurrentInputIndex();
+		NonPackedNode node = parser.getLookupTable().getNonPackedNode(this.getHead(), ci, ci);
+		node.addFirstPackedNode(this, ci);
+		parser.setCurrentSPPFNode(node);
 		parser.pop();
 		return null;
 	}

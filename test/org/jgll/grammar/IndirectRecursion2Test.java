@@ -62,13 +62,13 @@ public class IndirectRecursion2Test {
 	}
 	
 	@Test
-	public void test1() throws ParseError {
+	public void testLevelParser() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("ad"), grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
 	
 	@Test
-	public void test2() throws ParseError {
+	public void testRDParser() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("ad"), grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
@@ -80,22 +80,20 @@ public class IndirectRecursion2Test {
 		assertTrue(set.contains(grammar.getNonterminalByName("B")));
 	}
 	
-	private SPPFNode expectedSPPF() {
+	private SPPFNode expectedSPPF() {		
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [d]"), 0, 1);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B . A [d]"), 0, 0);
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
-		TerminalSymbolNode node5 = new TerminalSymbolNode(-2, 0);
-		node4.addChild(node5);
 		node3.addChild(node4);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
-		TerminalSymbolNode node7 = new TerminalSymbolNode(97, 0);
-		node6.addChild(node7);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		TerminalSymbolNode node6 = new TerminalSymbolNode(97, 0);
+		node5.addChild(node6);
 		node2.addChild(node3);
-		node2.addChild(node6);
-		TerminalSymbolNode node8 = new TerminalSymbolNode(100, 1);
+		node2.addChild(node5);
+		TerminalSymbolNode node7 = new TerminalSymbolNode(100, 1);
 		node1.addChild(node2);
-		node1.addChild(node8);
+		node1.addChild(node7);
 		return node1;
 	}
 

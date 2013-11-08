@@ -2,7 +2,6 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.BitSet;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Range;
@@ -188,11 +187,6 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 			s += "   if(I[ci] == " + ((Character) terminal).get() + ") {\n";
 		}
 		return s;
-	}
-
-	@Override
-	public BitSet getPredictionSet() {
-		return terminal.asBitSet();
 	}
 
 	@Override

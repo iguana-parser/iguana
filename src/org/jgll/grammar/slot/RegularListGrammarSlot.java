@@ -2,7 +2,6 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.BitSet;
 
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.RegularList;
@@ -137,10 +136,5 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 		RegularListGrammarSlot other = (RegularListGrammarSlot) slot;
 		
 		return regularList.equals(other.regularList);
-	}
-	
-	@Override
-	public BitSet getPredictionSet() {
-		return regularList.getCharacterClass().asBitSet();
 	}
 }

@@ -89,7 +89,7 @@ public class GrammarBuilder implements Serializable {
 	
 	private Map<Rule, LastGrammarSlot> ruleToLastSlotMap;
 
-	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
+	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
 	private List<BodyGrammarSlot> conditionSlots;
 	
@@ -825,7 +825,7 @@ public class GrammarBuilder implements Serializable {
 	
 	private void setLL1Properties() {
 		for (HeadGrammarSlot head : nonterminals) {
-			head.setLL1Properties();
+			head.setLL1();
 		}
 	}
 	

@@ -68,9 +68,7 @@ public class Test1 {
 	}
 	
 	private SPPFNode expectedSPPF() {
-		TerminalSymbolNode node0 = new TerminalSymbolNode(-2, 0);
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminal(0), 0, 0);
-		node1.addChild(node0);
 		return node1;
 	}
 
