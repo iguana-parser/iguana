@@ -19,6 +19,8 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 /**
@@ -140,9 +142,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		if(ll1) {
-			Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
-			parser.setCurrentSPPFNode(DummyNode.getInstance());
-			return alternate.getFirstSlot().parse(parser, input);
+			parseLL1(parser, input);
 		} else {
 			for(Alternate alternate : alternates) {
 				int ci = parser.getCurrentInputIndex();
@@ -153,6 +153,34 @@ public class HeadGrammarSlot extends GrammarSlot {
 			}			
 		}
 		return null;
+	}
+	
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
+		parser.setCurrentSPPFNode(DummyNode.getInstance());
+		
+		List<SPPFNode> children = new ArrayList<>();
+		
+		BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+		
+		while(!(currentSlot instanceof LastGrammarSlot)) {
+			SPPFNode node = currentSlot.parseLL1(parser, input);
+			if(node == null) {
+				return null;
+			}
+			children.add(node);
+			currentSlot = currentSlot.next();
+		}
+
+		NonPackedNode ntNode = parser.getLookupTable().getNonPackedNode(this, children.get(0).getLeftExtent(), 
+																			  children.get(children.size() - 1).getRightExtent());
+		
+		for(SPPFNode node : children) {
+			ntNode.addChild(node);
+		}
+		
+		return ntNode;
 	}
 
 	public void setLL1Properties() {

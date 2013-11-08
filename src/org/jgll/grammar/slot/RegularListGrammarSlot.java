@@ -91,6 +91,11 @@ public class RegularListGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		return null;
+	}
+	
+	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 		return next;
 	}

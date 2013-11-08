@@ -6,6 +6,7 @@ import java.io.Writer;
 
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 /**
@@ -33,6 +34,8 @@ public abstract class GrammarSlot implements Serializable {
 	public abstract void codeParser(Writer writer) throws IOException;
 	
 	public abstract GrammarSlot parse(GLLParserInternals parser, Input input);
+	
+	public abstract SPPFNode parseLL1(GLLParserInternals parser, Input input);
 	
 	public abstract GrammarSlot recognize(GLLRecognizer recognizer, Input input);
 	

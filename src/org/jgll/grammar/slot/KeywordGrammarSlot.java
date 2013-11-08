@@ -11,6 +11,7 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 public class KeywordGrammarSlot extends BodyGrammarSlot {
@@ -103,6 +104,24 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		}
 		
 		return next;
+	}
+	
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		int ci = parser.getCurrentInputIndex();
+		
+		if(input.match(ci, keyword.getChars())) {
+			
+			if(executePreConditions(parser, input)) {
+				return null;
+			}
+			
+			return parser.getKeywordStub(keyword, keywordHead, ci);
+			
+		} else {
+			parser.recordParseError(this);
+			return null;
+		}
 	}
 	
 	@Override

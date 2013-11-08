@@ -10,6 +10,7 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
@@ -53,11 +54,6 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 			TerminalSymbolNode cr = parser.getTerminalNode(charAtCi);
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, cr);
-				
-				if(head.isLL1()) {
-					return null;
-				}
-				
 				parser.pop();
 				return null;
 			} else {
@@ -70,6 +66,26 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 		}
 		
 		return next;
+	}
+	
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		
+		int ci = parser.getCurrentInputIndex();
+		int charAtCi = input.charAt(ci);
+
+		if(terminal.match(charAtCi)) {
+			
+			if(executePreConditions(parser, input)) {
+				return null;
+			}
+			
+			return parser.getTerminalNode(charAtCi);
+		} 
+		else {
+			parser.recordParseError(this);
+			return null;
+		}
 	}
 	
 	@Override

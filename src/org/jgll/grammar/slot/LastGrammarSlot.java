@@ -6,6 +6,7 @@ import java.io.Writer;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 /**
@@ -83,6 +84,11 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean isNameEqual(BodyGrammarSlot slot) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
 		throw new UnsupportedOperationException();
 	}
 

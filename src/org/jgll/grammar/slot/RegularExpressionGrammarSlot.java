@@ -19,6 +19,7 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
@@ -101,7 +102,120 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+		
+		// Recursive Descent mode
+		if(parser.getRegularListLength() == Integer.MAX_VALUE) {
+			
+			if(executePreConditions(parser, input)) {
+				return null;
+			}
+			
+			int ci = parser.getCurrentInputIndex();
+			
+			RunAutomaton automaton = regexp.getAutomaton();
 
+			int state = automaton.getInitialState();
+			
+			int lastState = state;
+			
+			int i = 0;
+			while(state != -1) {
+				lastState = state;
+
+				int charAtCi = input.charAt(ci + i);
+				
+				state = automaton.step(state, (char) charAtCi);
+				if(state == -1) {
+					break;
+				}
+				
+				if(ci + i + 1 >= input.size()) {
+					break;
+				}
+			}
+			
+			// If does not match anything and is not nullable
+			if(i == 0 && !isNullable()) {
+				return null;
+			}
+			
+			// The regular node that is going to be created as the result of this slot action.
+			RegularExpressionNode regularNode = parser.getRegularExpressionNode(this, ci, ci + i);
+			
+			if(!automaton.isAccept(lastState)) {
+				return null;
+			}
+			
+			if(checkPopActions(parser, input)) {
+				return null;
+			}
+			
+			parser.setCurrentSPPFNode(DummyNode.getInstance());
+			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
+			
+			parser.pop();
+			
+			return null;
+			
+		} else {
+			return processLevelMode(parser, input);
+		}
+	}
+	
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		
+		if(executePreConditions(parser, input)) {
+			return null;
+		}
+		
+		int ci = parser.getCurrentInputIndex();
+		
+		RunAutomaton automaton = regexp.getAutomaton();
+
+		int state = automaton.getInitialState();
+		
+		int lastState = state;
+		
+		int i = 0;
+		while(state != -1) {
+			lastState = state;
+
+			int charAtCi = input.charAt(ci + i);
+			
+			state = automaton.step(state, (char) charAtCi);
+			if(state == -1) {
+				break;
+			}
+			
+			if(ci + i + 1 >= input.size()) {
+				break;
+			}
+		}
+		
+		// If does not match anything and is not nullable
+		if(i == 0 && !isNullable()) {
+			return null;
+		}
+		
+		// The regular node that is going to be created as the result of this slot action.
+		RegularExpressionNode regularNode = parser.getRegularExpressionNode(this, ci, ci + i);
+		
+		if(!automaton.isAccept(lastState)) {
+			return null;
+		}
+		
+		if(checkPopActions(parser, input)) {
+			return null;
+		}
+		
+		NonterminalSymbolNode ntNode = new NonterminalSymbolNode(head, regularNode.getLeftExtent(), regularNode.getRightExtent());
+		ntNode.addChild(regularNode);
+		
+		return null;
+	}
+	
+	private GrammarSlot processLevelMode(GLLParserInternals parser, Input input) {
 		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
 		boolean partial = (currentSPPFNode instanceof RegularExpressionNode) && ((RegularExpressionNode) currentSPPFNode).isPartial();
 		

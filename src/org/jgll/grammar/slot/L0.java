@@ -5,6 +5,7 @@ import java.io.Writer;
 
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -55,6 +56,11 @@ public class L0 extends GrammarSlot {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		throw new UnsupportedOperationException();
 	}
 	
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input, GrammarSlot start) {

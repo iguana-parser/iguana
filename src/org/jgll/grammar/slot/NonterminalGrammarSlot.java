@@ -7,6 +7,7 @@ import java.util.BitSet;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 
@@ -66,14 +67,25 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(executePreConditions(parser, input)) {
 			return null;
 		}
-		
-		if(nonterminal.isLL1()) {
-			nonterminal.parse(parser, input);
-			return next;
-		}
-		
+				
 		parser.createGSSNode(next);
 		return nonterminal;
+	}
+	
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		int ci = parser.getCurrentInputIndex();
+		
+		if(!test(ci, input)) {
+			parser.recordParseError(this);
+			return null;						
+		}
+
+		if(executePreConditions(parser, input)) {
+			return null;
+		}
+
+		return nonterminal.parseLL1(parser, input);
 	}
 	
 	@Override
