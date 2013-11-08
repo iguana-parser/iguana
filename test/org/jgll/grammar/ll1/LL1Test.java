@@ -113,7 +113,25 @@ public class LL1Test {
 	@Test
 	public void test1() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("bda"), grammar, "S");
-		Visualization.generateSPPFGraph("/Users/ali/output", sppf, Input.fromString("bda"));
+	}
+	
+	@Test
+	public void test2() throws ParseError {
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a"), grammar, "S");
+		Visualization.generateSPPFGraph("/Users/ali/output", sppf, Input.fromString("a"));
+	}
+	
+	@Test
+	public void test3() throws ParseError {
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("ba"), grammar, "S");
+		Visualization.generateSPPFGraph("/Users/ali/output", sppf, Input.fromString("ba"));
 	}
 
+	@Test
+	public void test4() throws ParseError {
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("da"), grammar, "S");
+		Visualization.generateSPPFGraph("/Users/ali/output", sppf, Input.fromString("da"));
+	}
+
+	
 }

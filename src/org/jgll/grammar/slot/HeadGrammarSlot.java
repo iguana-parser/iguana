@@ -173,8 +173,23 @@ public class HeadGrammarSlot extends GrammarSlot {
 			currentSlot = currentSlot.next();
 		}
 
-		NonPackedNode ntNode = parser.getLookupTable().getNonPackedNode(this, children.get(0).getLeftExtent(), 
-																			  children.get(children.size() - 1).getRightExtent());
+		int leftExtent;
+		int rightExtent;
+		
+		if(children.size() == 0) {
+			leftExtent = parser.getCurrentInputIndex();
+			rightExtent = leftExtent;
+		}
+		else if(children.size() == 1) {
+			leftExtent = children.get(0).getLeftExtent();
+			rightExtent = leftExtent;
+		} else {
+			leftExtent = children.get(0).getLeftExtent();
+			rightExtent = children.get(children.size() - 1).getRightExtent();
+		}
+		
+		NonPackedNode ntNode = parser.getLookupTable().getNonPackedNode(this, leftExtent, rightExtent); 
+																			  
 		
 		for(SPPFNode node : children) {
 			ntNode.addChild(node);
