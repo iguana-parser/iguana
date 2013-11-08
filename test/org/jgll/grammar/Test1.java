@@ -11,7 +11,6 @@ import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;

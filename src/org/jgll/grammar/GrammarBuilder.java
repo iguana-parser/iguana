@@ -372,12 +372,14 @@ public class GrammarBuilder implements Serializable {
 		setHeadPredictionSets();
 		setPredictionSets();
 		setPredictionSetsForConditionals();
-		setLL1Properties();
+		
+		calculateReachabilityGraph();
+		
+		setLLProperties();
 		
 		setSlotIds();
 //		setDirectNullables();
 		
-		calculateReachabilityGraph();
 		calculateExpectedDescriptors();
 	}
 	
@@ -823,9 +825,24 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private void setLL1Properties() {
+	private void setLLProperties() {
 		for (HeadGrammarSlot head : nonterminals) {
 			head.setLL1();
+		}
+		
+		for (HeadGrammarSlot head : nonterminals) {
+			boolean ll1subGrammar = true;
+			if(head.isLL1()) {
+				for(HeadGrammarSlot reachableHead : reachabilityGraph.get(head)) {
+					if(!reachableHead.isLL1()) {
+						ll1subGrammar = false;
+					}
+				}
+			} else {
+				ll1subGrammar = false;
+			}
+			
+			head.setSubGrammarLL1(ll1subGrammar);
 		}
 	}
 	
