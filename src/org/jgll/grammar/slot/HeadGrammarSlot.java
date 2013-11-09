@@ -192,7 +192,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 		else if(children.size() == 1) {
 			leftExtent = children.get(0).getLeftExtent();
-			rightExtent = leftExtent;
+			rightExtent = children.get(0).getRightExtent();
 		} else {
 			leftExtent = children.get(0).getLeftExtent();
 			rightExtent = children.get(children.size() - 1).getRightExtent();

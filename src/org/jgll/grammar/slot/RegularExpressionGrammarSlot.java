@@ -19,7 +19,6 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
@@ -33,7 +32,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	
 	private RegularExpression regexp;
 	
-	private Set<Terminal> firstSet;
+	private transient Set<Terminal> firstSet;
 	
 	public RegularExpressionGrammarSlot(int position, RegularExpression regexp, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		super(position, previous, head);
@@ -103,8 +102,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		
-		// Recursive Descent mode
-		if(parser.getRegularListLength() == Integer.MAX_VALUE) {
+		if(parser.isRecursiveDescent()) {
 			
 			if(executePreConditions(parser, input)) {
 				return null;
@@ -119,7 +117,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			int lastState = state;
 			
 			int i = 0;
-			while(state != -1) {
+			while(true) {
 				lastState = state;
 
 				int charAtCi = input.charAt(ci + i);
@@ -132,6 +130,8 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 				if(ci + i + 1 >= input.size()) {
 					break;
 				}
+				
+				i++;
 			}
 			
 			// If does not match anything and is not nullable
@@ -178,12 +178,13 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		int lastState = state;
 		
 		int i = 0;
-		while(state != -1) {
+		while(true) {
 			lastState = state;
 
 			int charAtCi = input.charAt(ci + i);
 			
 			state = automaton.step(state, (char) charAtCi);
+			
 			if(state == -1) {
 				break;
 			}
@@ -191,6 +192,8 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			if(ci + i + 1 >= input.size()) {
 				break;
 			}
+			
+			i++;
 		}
 		
 		// If does not match anything and is not nullable
@@ -208,11 +211,8 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		if(checkPopActions(parser, input)) {
 			return null;
 		}
-		
-		NonterminalSymbolNode ntNode = new NonterminalSymbolNode(head, regularNode.getLeftExtent(), regularNode.getRightExtent());
-		ntNode.addChild(regularNode);
-		
-		return null;
+				
+		return regularNode;
 	}
 	
 	private GrammarSlot processLevelMode(GLLParserInternals parser, Input input) {
