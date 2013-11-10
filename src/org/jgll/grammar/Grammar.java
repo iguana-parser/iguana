@@ -90,7 +90,7 @@ public class Grammar implements Serializable {
 		this.maxDescriptorsAtInput = builder.maxDescriptors;
 		this.averageDescriptorsAtInput = builder.averageDescriptors;
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
-		this.reachabilityGraph = builder.reachabilityGraph;
+		this.reachabilityGraph = builder.directReachabilityGraph;
 		
 		printGrammarStatistics();
 	}

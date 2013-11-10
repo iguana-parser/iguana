@@ -39,7 +39,6 @@ public class RegularExpTest1 {
 	
 	private GLLParser levelParser;
 	private GLLParser rdParser;
-	private GLLRecognizer recognizer;
 
 	@Before
 	public void init() {

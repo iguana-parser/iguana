@@ -75,7 +75,7 @@ public class IndirectRecursion2Test {
 	
 	@Test
 	public void testReachabilityGraph() {
-		Set<HeadGrammarSlot> set = builder.getReachableNonterminals("A");
+		Set<HeadGrammarSlot> set = builder.getDirectReachableNonterminals("A");
 		assertTrue(set.contains(grammar.getNonterminalByName("A")));
 		assertTrue(set.contains(grammar.getNonterminalByName("B")));
 	}

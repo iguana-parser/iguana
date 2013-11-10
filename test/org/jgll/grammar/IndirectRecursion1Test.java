@@ -64,11 +64,11 @@ public class IndirectRecursion1Test {
 	
 	@Test
 	public void testReachabilityGraph() {
-		Set<HeadGrammarSlot> set = builder.getReachableNonterminals("A");
+		Set<HeadGrammarSlot> set = builder.getDirectReachableNonterminals("A");
 		assertTrue(set.contains(grammar.getNonterminalByName("A")));
 		assertTrue(set.contains(grammar.getNonterminalByName("B")));
 		
-		set = builder.getReachableNonterminals("B");
+		set = builder.getDirectReachableNonterminals("B");
 		assertTrue(set.contains(grammar.getNonterminalByName("A")));
 	}
 	

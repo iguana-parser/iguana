@@ -62,9 +62,9 @@ public class DanglingElseGrammar1 {
 	
 	@Test
 	public void test1() throws ParseError {
-//		NonterminalSymbolNode sppf1 = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
+		NonterminalSymbolNode sppf1 = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
 		NonterminalSymbolNode sppf2 = rdParser.parse(Input.fromString("aasbs"), grammar, "S");
-//		assertTrue(sppf1.deepEquals(getExpectedSPPF1()));
+		assertTrue(sppf1.deepEquals(getExpectedSPPF1()));
 		assertTrue(sppf2.deepEquals(getExpectedSPPF1()));
 	}
 	

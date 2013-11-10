@@ -170,6 +170,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
 		Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
 		
+		assert alternate != null;
+		
 		List<SPPFNode> children = new ArrayList<>();
 		
 		BodyGrammarSlot currentSlot = alternate.getFirstSlot();
