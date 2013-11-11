@@ -16,7 +16,6 @@ import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.util.Input;
@@ -233,9 +232,6 @@ public class Grammar implements Serializable {
 		else if (slot instanceof KeywordGrammarSlot) {
 			return ((KeywordGrammarSlot) slot).getKeyword().getName();
 		} 
-		else if (slot instanceof RegularListGrammarSlot) {
-			return slot.getSymbol().getName();
-		}
 		else {
 			return "";
 		}
@@ -301,10 +297,6 @@ public class Grammar implements Serializable {
 				sb.append(" ").append(getSlotName(slot));
 			}
 
-			@Override
-			public void visit(RegularListGrammarSlot slot) {
-				sb.append(" ").append(getSlotName(slot));
-			}
 		};
 		
 		// The first nonterminal is the starting point

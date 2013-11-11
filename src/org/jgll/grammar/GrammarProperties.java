@@ -16,7 +16,6 @@ import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.RegularExpressionGrammarSlot;
-import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.EOF;
@@ -78,16 +77,7 @@ public class GrammarProperties {
 			}
 			return changed;
 		}
-		
-		else if(currentSlot instanceof RegularListGrammarSlot) {
-			RegularList regularList = ((RegularListGrammarSlot) currentSlot).getRegularList();
-			// Star regular lists are always nullable.
-			if(regularList.getMinimum() == 0) {
-				changed = set.add(Epsilon.getInstance()) || changed;
-			}
-			return set.add(regularList.getCharacterClass()) || changed;
-		}
-		
+				
 		else if(currentSlot instanceof RegularExpressionGrammarSlot) {
 			RegularExpression regexp = ((RegularExpressionGrammarSlot) currentSlot).getSymbol();
 			if(currentSlot.isNullable()) {
@@ -120,11 +110,6 @@ public class GrammarProperties {
 				return false;
 			}
 			
-			else if(slot instanceof RegularListGrammarSlot ||
-					slot instanceof RegularExpressionGrammarSlot) {
-				return slot.isNullable() && isChainNullable(slot.next());
-			}
-
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
 			return isNullable(ntGrammarSlot.getNonterminal()) && isChainNullable(ntGrammarSlot.next());
 		}
@@ -142,13 +127,6 @@ public class GrammarProperties {
 			
 			else if(slot instanceof KeywordGrammarSlot) {
 				set.add(((KeywordGrammarSlot) slot).getFirstTerminal());
-			}
-			
-			else if(slot instanceof RegularListGrammarSlot) {
-				set.add(((RegularListGrammarSlot) slot).getRegularList().getCharacterClass());
-				if(slot.isNullable()) {
-					getChainFirstSet(slot.next(), set);
-				}
 			}
 			
 			else if(slot instanceof RegularExpressionGrammarSlot) {
@@ -257,7 +235,6 @@ public class GrammarProperties {
 						currentSlot.setPredictionSet(((KeywordGrammarSlot) currentSlot).getKeyword().getFirstTerminal().asBitSet());
 					} 
 					else if(currentSlot instanceof NonterminalGrammarSlot ||
-							currentSlot instanceof RegularListGrammarSlot ||
 							currentSlot instanceof RegularExpressionGrammarSlot) {
 						Set<Terminal> set = new HashSet<>();
 						getChainFirstSet(currentSlot, set);

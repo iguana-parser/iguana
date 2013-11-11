@@ -5,7 +5,6 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 
@@ -48,10 +47,6 @@ public class GrammarVisitor {
 				
 				else if (currentSlot instanceof KeywordGrammarSlot) {
 					action.visit((KeywordGrammarSlot) currentSlot);
-				}
-				
-				else if(currentSlot instanceof RegularListGrammarSlot) {
-					action.visit((RegularListGrammarSlot) currentSlot);
 				}
 				
 				currentSlot = currentSlot.next();

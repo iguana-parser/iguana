@@ -27,7 +27,6 @@ import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.RegularExpressionGrammarSlot;
-import org.jgll.grammar.slot.RegularListGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
@@ -149,10 +148,6 @@ public class GrammarBuilder implements Serializable {
 			public void visit(KeywordGrammarSlot slot) {
 			}
 
-			@Override
-			public void visit(RegularListGrammarSlot slot) {
-			}
-
 		};
 
 		for (HeadGrammarSlot head : nonterminals) {
@@ -228,11 +223,6 @@ public class GrammarBuilder implements Serializable {
 		
 		else if (symbol instanceof Terminal) {
 			return new TerminalGrammarSlot(symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
-		}
-		
-		else if (symbol instanceof RegularList) {
-			RegularList regularList = (RegularList) symbol;
-			return new RegularListGrammarSlot(symbolIndex, currentSlot, regularList, headGrammarSlot);
 		}
 		
 		else if(symbol instanceof RegularExpression) {
@@ -1075,12 +1065,6 @@ public class GrammarBuilder implements Serializable {
 		
 		else if(slot instanceof LastGrammarSlot) {
 			LastGrammarSlot newSlot = new LastGrammarSlot(symbolIndex, previous, head, ((LastGrammarSlot) slot).getObject());
-			copyActions(slot, newSlot);
-			return newSlot;
-		}
-		
-		else if(slot instanceof RegularListGrammarSlot) {
-			RegularListGrammarSlot newSlot = new RegularListGrammarSlot(symbolIndex, previous, (RegularList) slot.getSymbol(), head);
 			copyActions(slot, newSlot);
 			return newSlot;
 		}
