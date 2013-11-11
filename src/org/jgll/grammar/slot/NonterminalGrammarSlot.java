@@ -67,6 +67,25 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(executePreConditions(parser, input)) {
 			return null;
 		}
+		
+		if(nonterminal.isLl1SubGrammar()) {
+			SPPFNode node = nonterminal.parseLL1(parser, input);
+			
+			if(next instanceof LastGrammarSlot) {
+				parser.getNonterminalNode((LastGrammarSlot) next, node);
+				
+				if(checkPopActions(parser, input)) {
+					return null;
+				}
+				
+				parser.pop();
+			} else {
+				parser.getIntermediateNode(next, node);
+				return next;
+			}
+			
+			return null;
+		}
 				
 		parser.createGSSNode(next);
 		return nonterminal;

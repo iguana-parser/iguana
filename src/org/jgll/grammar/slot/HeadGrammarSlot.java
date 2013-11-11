@@ -1,3 +1,4 @@
+
 package org.jgll.grammar.slot;
 
 import java.io.IOException;
@@ -144,26 +145,19 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		
-		if(parser.isRecursiveDescent()) {
-			if(ll1SubGrammar) {
-				SPPFNode node = parseLL1(parser, input);
-				parser.setCurrentSPPFNode(node);
-				return null;
-			}
-			else if(ll1) {
+		if(parser.isRecursiveDescent() && ll1) {
 				Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
 				parser.setCurrentSPPFNode(DummyNode.getInstance());
 				return alternate.getFirstSlot().parse(parser, input);
-			}			
-		}
-		
-		for(Alternate alternate : alternates) {
-			int ci = parser.getCurrentInputIndex();
-			BodyGrammarSlot slot = alternate.getFirstSlot();
-			if(slot.test(ci, input)) {
-				parser.addDescriptor(slot);
+		} else {
+			for(Alternate alternate : alternates) {
+				int ci = parser.getCurrentInputIndex();
+				BodyGrammarSlot slot = alternate.getFirstSlot();
+				if(slot.test(ci, input)) {
+					parser.addDescriptor(slot);
+				}
 			}
-		}			
+		}
 		return null;
 	}
 	
@@ -257,6 +251,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public boolean isLL1() {
 		return ll1;
+	}
+	
+	public boolean isLl1SubGrammar() {
+		return ll1SubGrammar;
 	}
 	
 	public boolean isLL(int k) {

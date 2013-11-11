@@ -120,6 +120,10 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		start = System.nanoTime();
 		
 		log.info("Iguana started...");
+		
+		if(startSymbol.isLl1SubGrammar()) {
+			return (NonterminalSymbolNode) startSymbol.parseLL1(this, input);
+		}
 
 		L0.getInstance().parse(this, input, startSymbol);
 		

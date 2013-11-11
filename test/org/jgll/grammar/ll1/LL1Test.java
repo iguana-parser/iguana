@@ -113,7 +113,7 @@ public class LL1Test {
 	@Test
 	public void test1() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("bda"), grammar, "S");
-		
+
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 3);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);

@@ -94,6 +94,7 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 			} else {
 				parser.getIntermediateNode(next, sppfNode);
 				
+				// TODO: check if this condition is necessary here!
 				if(checkPopActions(parser, input)) {
 					return null;
 				}				
