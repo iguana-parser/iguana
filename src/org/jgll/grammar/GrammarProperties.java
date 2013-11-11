@@ -21,7 +21,6 @@ import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.RegularExpression;
-import org.jgll.grammar.symbol.RegularList;
 import org.jgll.grammar.symbol.Terminal;
 
 
@@ -434,38 +433,6 @@ public class GrammarProperties {
 			return changed;
 		}	
 	}
-
-	
-//	private void setDirectNullables() {
-//		
-//		for (HeadGrammarSlot head : nonterminals) {
-//						
-//			for (Alternate alternate : head.getAlternates()) {
-//
-//				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
-//
-//				while (!(currentSlot instanceof LastGrammarSlot)) {
-//					if (currentSlot instanceof NonterminalGrammarSlot) {
-//						// Replaces a nonterminal with an instance of direct nullable nonterminal.
-//						NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) currentSlot;
-//						if(ntSlot.getNonterminal().isDirectNullable()) {
-//							NonterminalGrammarSlot directNullableSlot = 
-//									new DirectNullableNonterminalGrammarSlot(ntSlot.getPosition(), ntSlot.previous(), ntSlot.getNonterminal(), ntSlot.getHead());
-//							ntSlot.next().setPrevious(directNullableSlot);
-//							directNullableSlot.setNext(ntSlot.next());
-//							directNullableSlot.setId(ntSlot.getId());
-//							directNullableSlot.setPredictionSet(ntSlot.getPredictionSet());
-//							directNullableSlot.setLabel(ntSlot.toString());
-//							slots.remove(ntSlot);
-//							slots.add(directNullableSlot);
-//							copyActions(ntSlot, directNullableSlot);
-//						}
-//					}
-//					currentSlot = currentSlot.next();
-//				}
-//			}
-//		}
-//	}
 	
 	/**
 	 * Calculates the length of the longest chain of terminals in a body of production rules.
