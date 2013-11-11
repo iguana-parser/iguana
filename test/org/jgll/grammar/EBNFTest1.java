@@ -52,7 +52,7 @@ public class EBNFTest1 {
 	
 	@Test
 	public void test() throws ParseError {
-		rdParser.parse(Input.fromString("aaa"), grammar, "S");
+		rdParser.parse(Input.fromString("a"), grammar, "S");
 	}
 
 }

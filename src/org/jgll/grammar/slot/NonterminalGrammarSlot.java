@@ -85,7 +85,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 
-		return nonterminal.parseLL1(parser, input);
+		SPPFNode node = nonterminal.parseLL1(parser, input);
+		return node;
 	}
 	
 	@Override

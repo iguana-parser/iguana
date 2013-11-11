@@ -17,7 +17,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -114,13 +113,13 @@ public class LL1Test {
 	@Test
 	public void test1() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("bda"), grammar, "S");
-
+		
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 3);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
 		TerminalSymbolNode node4 = new TerminalSymbolNode(98, 0);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 1, 1);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 1, 2);
 		TerminalSymbolNode node6 = new TerminalSymbolNode(100, 1);
 		node5.addChild(node6);
 		node2.addChild(node3);
@@ -152,10 +151,10 @@ public class LL1Test {
 	@Test
 	public void test3() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("ba"), grammar, "S");
-		
+
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
 		TerminalSymbolNode node4 = new TerminalSymbolNode(98, 0);
 		node3.addChild(node4);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 1, 1);
@@ -173,9 +172,9 @@ public class LL1Test {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("da"), grammar, "S");
 		
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 0);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 0, 0);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 0, 1);
 		TerminalSymbolNode node5 = new TerminalSymbolNode(100, 0);
 		node4.addChild(node5);
 		node2.addChild(node3);
