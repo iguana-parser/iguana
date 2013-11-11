@@ -159,6 +159,16 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 	}
 	
 	@Override
+	public NonPackedNode hasNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public NonPackedNode hasNonPackedNode(NonPackedNode key) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
 	public NonPackedNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
 		return getNonPackedNode(key);
@@ -453,4 +463,5 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 		
 		countGSSEdges = 0;
 	}
+
 }

@@ -121,7 +121,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
 		log.info("Iguana started...");
 		
-		if(startSymbol.isLl1SubGrammar()) {
+		if(isRecursiveDescent() && startSymbol.isLl1SubGrammar()) {
 			return (NonterminalSymbolNode) startSymbol.parseLL1(this, input);
 		}
 

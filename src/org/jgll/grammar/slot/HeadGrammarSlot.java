@@ -146,9 +146,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		
 		if(parser.isRecursiveDescent() && ll1) {
-				Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
-				parser.setCurrentSPPFNode(DummyNode.getInstance());
-				return alternate.getFirstSlot().parse(parser, input);
+			Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
+			parser.setCurrentSPPFNode(DummyNode.getInstance());
+			return alternate.getFirstSlot().parse(parser, input);
 		} else {
 			for(Alternate alternate : alternates) {
 				int ci = parser.getCurrentInputIndex();
@@ -164,6 +164,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
 		Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
+		
+		if(alternate == null) {
+			System.out.println("Hi");
+		}
 		
 		assert alternate != null;
 		
@@ -194,11 +198,15 @@ public class HeadGrammarSlot extends GrammarSlot {
 			leftExtent = children.get(0).getLeftExtent();
 			rightExtent = children.get(children.size() - 1).getRightExtent();
 		}
+
+		NonPackedNode ntNode = parser.getLookupTable().hasNonPackedNode(this, leftExtent, rightExtent);
 		
-		NonPackedNode ntNode = parser.getLookupTable().getNonPackedNode(this, leftExtent, rightExtent); 
-		
-		for(SPPFNode node : children) {
-			ntNode.addChild(node);
+		if(ntNode == null) {
+			ntNode = parser.getLookupTable().getNonPackedNode(this, leftExtent, rightExtent); 
+			
+			for(SPPFNode node : children) {
+				ntNode.addChild(node);
+			}			
 		}
 		
 		return ntNode;

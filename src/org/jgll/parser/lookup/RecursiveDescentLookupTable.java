@@ -120,11 +120,17 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		
 		return terminal;
 	}
-
+	
 	@Override
 	public NonPackedNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
 		return getNonPackedNode(key);
+	}
+	
+	@Override
+	public NonPackedNode hasNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
+		return hasNonPackedNode(key);
 	}
 	
 	@Override
@@ -135,6 +141,11 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		}
 		
 		return value;
+	}
+	
+	@Override
+	public NonPackedNode hasNonPackedNode(NonPackedNode key) {
+		return nonPackedNodes.get(key);
 	}
 
 	@Override

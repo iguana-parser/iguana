@@ -39,12 +39,33 @@ public interface LookupTable {
 	
 	/**
 	 * 
+	 * Returns the existing SPPF node with the given parameters if it exists, otherwise
+	 * return null.
+	 * 
+	 * @param grammarSlot
+	 * @param leftExtent
+	 * @param rightExtent
+	 * 
+	 */
+	public NonPackedNode hasNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	
+	/**
+	 * 
 	 * Returns an existing non-packed node that is equal to the provided key.
 	 * 
 	 * @param key
 	 * @return
 	 */
 	public NonPackedNode getNonPackedNode(NonPackedNode key);
+	
+	/**
+	 * 
+	 * Returns the existing SPPF node equal to the given key, otherwise return null.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public NonPackedNode hasNonPackedNode(NonPackedNode key);
 	
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 	

@@ -17,7 +17,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,21 +57,21 @@ public class RegularExpTest1 {
 		Rule r6 = new Rule(Float, list(new RegularExpression(symbols)));
 		
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
-		grammar2 = new GrammarBuilder().addRule(r1).addRule(r6).build();
+//		grammar2 = new GrammarBuilder().addRule(r1).addRule(r6).build();
 	}
 
 	@Test
 	public void test1() throws ParseError {
-		levelParser = ParserFactory.createLevelParser(grammar2, 10);
-		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar2, "S");
+//		levelParser = ParserFactory.createLevelParser(grammar2, 10);
+//		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar2, "S");
+//		
+//		levelParser = ParserFactory.createLevelParser(grammar1, 10);
+//		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar1, "S");
 		
-		levelParser = ParserFactory.createLevelParser(grammar1, 10);
-		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar1, "S");
-		
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar2);
-		rdParser.parse(Input.fromString("12.122343535341223435353412234353534"), grammar2, "S");
-		
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar2);
+//		rdParser = ParserFactory.createRecursiveDescentParser(grammar2);
+//		rdParser.parse(Input.fromString("12.122343535341223435353412234353534"), grammar2, "S");
+//		
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar1);
 		rdParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar1, "S");
 	}
 }

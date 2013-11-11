@@ -77,9 +77,9 @@ public class Gamma1Test {
 	
 	@Test
 	public void testNullables() {
-		assertEquals(true, grammar.getNonterminalByName("S").isNullable());
-		assertEquals(false, grammar.getNonterminalByName("A").isNullable());
-		assertEquals(false, grammar.getNonterminalByName("B").isNullable());
+		assertTrue(grammar.getNonterminalByName("S").isNullable());
+		assertFalse(grammar.getNonterminalByName("A").isNullable());
+		assertFalse(grammar.getNonterminalByName("B").isNullable());
 	}
 	
 	@Test
@@ -110,7 +110,7 @@ public class Gamma1Test {
 	@Test
 	public void testSPPF() throws ParseError {
 		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aad"), grammar, "S");
-		assertEquals(true, sppf.deepEquals(getSPPF()));
+		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	
 	public SPPFNode getSPPF() {

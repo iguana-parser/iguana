@@ -166,6 +166,11 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	}
 	
 	@Override
+	public NonPackedNode hasNonPackedNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
 	public NonPackedNode getNonPackedNode(NonPackedNode key) {
 		boolean newNodeCreated = false;
 		NonPackedNode value;
@@ -191,6 +196,11 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		
 		log.trace("SPPF node created: %s : %b", value, newNodeCreated);
 		return value;
+	}
+	
+	@Override
+	public NonPackedNode hasNonPackedNode(NonPackedNode key) {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
