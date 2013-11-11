@@ -332,6 +332,9 @@ public class GrammarProperties {
 		
 		boolean changed = true;
 		while (changed) {
+			
+			changed = false;
+			
 			for (HeadGrammarSlot head : nonterminals) {
 				Set<HeadGrammarSlot> set = reachabilityGraph.get(head);
 				if(set == null) {
@@ -339,38 +342,42 @@ public class GrammarProperties {
 					reachabilityGraph.put(head, set);
 				}
 				
-				changed = calculateReachabilityGraph(head, set, reachabilityGraph);
+				for (Alternate alternate : head.getAlternates()) {
+					changed |= calculateReachabilityGraph(alternate.getFirstSlot(), set, reachabilityGraph);
+				}
 			}
 		}
 		
 		return reachabilityGraph;
 	}
 	
-	private static boolean calculateReachabilityGraph(HeadGrammarSlot head, 
-												  Set<HeadGrammarSlot> set, 
-												  Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph) {
+	private static boolean calculateReachabilityGraph(BodyGrammarSlot slot, 
+												  	  Set<HeadGrammarSlot> set, 
+												  	  Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph) {
 		
-		if(reachabilityGraph.containsKey(head)) {
-			return set.addAll(reachabilityGraph.get(head));
-		}
-		
-		boolean changed = false;
-		
-		for (Alternate alternate : head.getAlternates()) {
-			BodyGrammarSlot currentSlot = alternate.getFirstSlot();
-			while(!(currentSlot instanceof LastGrammarSlot)) {
+			if(slot instanceof NonterminalGrammarSlot) {
+				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) slot).getNonterminal();
+				boolean changed = false;
+				changed |= set.add(nonterminal);
 				
-				if(currentSlot instanceof NonterminalGrammarSlot) {
-					HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
-					changed |= set.add(nonterminal);
-					changed |= calculateReachabilityGraph(nonterminal, set, reachabilityGraph);
+				Set<HeadGrammarSlot> set2 = reachabilityGraph.get(nonterminal);
+				if(set2 == null) {
+					set2 = new HashSet<>();
 				}
 				
-				currentSlot = currentSlot.next();
+				changed |= set.addAll(set2);
+				changed |= calculateReachabilityGraph(slot.next(), set, reachabilityGraph);
+				
+				return changed;
+			} 
+			
+			else if(slot instanceof LastGrammarSlot) {
+				return false;
 			}
-		}
-		
-		return changed;
+			
+			else {
+				return calculateReachabilityGraph(slot.next(), set, reachabilityGraph);
+			}
 	}
 	
 	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateDirectReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals) {
