@@ -117,19 +117,22 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		init();
 		lookupTable.init(input);
 	
-		start = System.nanoTime();
 		
 		log.info("Iguana started...");
+
+		start = System.nanoTime();
+		
+		NonterminalSymbolNode root;
 		
 		if(isRecursiveDescent() && startSymbol.isLl1SubGrammar()) {
-			return (NonterminalSymbolNode) startSymbol.parseLL1(this, input);
+			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, input);
+		} else {
+			L0.getInstance().parse(this, input, startSymbol);			
+			root = lookupTable.getStartSymbol(startSymbol, input.size());
 		}
 
-		L0.getInstance().parse(this, input, startSymbol);
-		
 		end = System.nanoTime();
 		
-		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol, input.size());
 		if (root == null) {
 			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 		}

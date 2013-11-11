@@ -33,8 +33,9 @@ public class FollowRestrictionTest {
 	
 	private Grammar grammar;
 	private GLLParser levelParser;
+	private GLLParser rdParser;
 
-
+	
 	@Before
 	public void init() {
 		Nonterminal S = new Nonterminal("S");
@@ -52,16 +53,24 @@ public class FollowRestrictionTest {
 
 		grammar = builder.build();
 		levelParser = ParserFactory.createLevelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@org.junit.Rule
 	public ExpectedException thrown = ExpectedException.none();
 	
 	@Test
-	public void test() throws Exception {
+	public void testLevelParser() throws Exception {
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:4");
 		levelParser.parse(Input.fromString("abc:"), grammar, "S");
+	}
+	
+	@Test
+	public void testRDParser() throws Exception {
+		thrown.expect(ParseError.class);
+		thrown.expectMessage("Parse error at line:1 column:4");
+		rdParser.parse(Input.fromString("abc:"), grammar, "S");
 	}
 
 }

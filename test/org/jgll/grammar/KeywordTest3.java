@@ -12,7 +12,9 @@ import org.jgll.grammar.symbol.TerminalFactory;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +31,7 @@ public class KeywordTest3 {
 	
 	private Grammar grammar;
 	private GLLParser rdParser;
+	private GLLParser levelParser;
 
 	@Before
 	public void init() {
@@ -50,6 +53,7 @@ public class KeywordTest3 {
 								   .addRule(GrammarBuilder.fromKeyword(then)).build();
 		
 		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 	
 	
@@ -65,7 +69,11 @@ public class KeywordTest3 {
 
 	@Test
 	public void test() throws ParseError {
-		rdParser.parse(Input.fromString("if s then s"), grammar, "S");
+		Input input = Input.fromString("if s then s");
+		NonterminalSymbolNode sppf1 = rdParser.parse(input, grammar, "S");
+		NonterminalSymbolNode sppf2 = levelParser.parse(input, grammar, "S");
+//		Visualization.generateSPPFGraph("/Users/ali/output", sppf1, input);
+		assertTrue(sppf1.deepEquals(sppf2));
 	}
 	
 }
