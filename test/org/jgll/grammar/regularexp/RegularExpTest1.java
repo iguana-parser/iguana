@@ -1,6 +1,6 @@
 package org.jgll.grammar.regularexp;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 
 import java.util.List;
 

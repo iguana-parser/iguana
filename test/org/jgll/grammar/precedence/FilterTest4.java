@@ -1,7 +1,7 @@
 package org.jgll.grammar.precedence;
 
-import static org.junit.Assert.*;
 import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;

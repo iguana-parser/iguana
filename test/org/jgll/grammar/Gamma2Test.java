@@ -1,7 +1,7 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.*;
 import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -55,16 +55,24 @@ public class Gamma2Test {
 	}
 		
 	@Test
-	public void testParsers() throws ParseError {
+	public void testParsers1() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbb"), grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbb"), grammar, "S");
-		assertEquals(true, sppf1.deepEquals(sppf2));
+		assertTrue(sppf1.deepEquals(sppf2));
+	}
+	
+	@Test
+	public void testParsers2() throws ParseError {
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbbbbbbbbb"), grammar, "S");
+		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbbbbbbbbb"), grammar, "S");
+		assertTrue(sppf1.deepEquals(sppf2));
 	}
 	
 	@Test
 	public void test100bs() throws ParseError {
 		Input input = Input.fromString(get100b());
 		levelParser.parse(input, grammar, "S");
+		rdParser.parse(input, grammar, "S");
 	}
 	
 	private String get100b() {

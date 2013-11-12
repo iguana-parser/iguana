@@ -1,7 +1,7 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.*;
 import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;

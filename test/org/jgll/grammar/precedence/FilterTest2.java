@@ -1,5 +1,8 @@
 package org.jgll.grammar.precedence;
 
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
 import org.jgll.grammar.symbol.Character;
@@ -15,9 +18,6 @@ import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-import static org.jgll.util.CollectionsUtil.*;
 
 /**
  * 

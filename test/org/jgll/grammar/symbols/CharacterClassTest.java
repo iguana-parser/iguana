@@ -1,11 +1,11 @@
 package org.jgll.grammar.symbols;
 
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
+
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Range;
 import org.junit.Test;
-
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
 
 
 public class CharacterClassTest {
