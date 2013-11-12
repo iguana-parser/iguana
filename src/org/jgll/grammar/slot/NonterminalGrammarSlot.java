@@ -72,7 +72,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			SPPFNode node = nonterminal.parseLL1(parser, input);
 			
 			if(node == null) {
-				System.out.println("WTF?");
+				return null;
 			}
 			
 			if(next instanceof LastGrammarSlot) {

@@ -41,12 +41,15 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	public RecursiveDescentLookupTable(Grammar grammar) {
 		super(grammar);
+		
+		int tableSize = (int) Math.pow(2, 22);
+		
 		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new CuckooHashSet<>(Descriptor.externalHasher);
-		nonPackedNodes = new CuckooHashSet<>(NonPackedNode.externalHasher);
-		gssNodes = new CuckooHashSet<>(GSSNode.externalHasher);
-		packedNodes = new CuckooHashSet<>(PackedNode.externalHasher);
-		gssEdges = new CuckooHashSet<>(GSSEdge.externalHasher);
+		descriptorsSet = new CuckooHashSet<>(tableSize, Descriptor.externalHasher);
+		nonPackedNodes = new CuckooHashSet<>(tableSize, NonPackedNode.externalHasher);
+		gssNodes = new CuckooHashSet<>(tableSize, GSSNode.externalHasher);
+		packedNodes = new CuckooHashSet<>(tableSize, PackedNode.externalHasher);
+		gssEdges = new CuckooHashSet<>(tableSize, GSSEdge.externalHasher);
 	}
 	
 	@Override
@@ -54,6 +57,9 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		terminals = new TerminalSymbolNode[2 * input.size()];
 		descriptorsStack.clear();
 		descriptorsSet.clear();
+		
+		System.out.println(descriptorsSet.getRehashCount() + ", " + descriptorsSet.getEnlargeCount());
+		
 		nonPackedNodes.clear();
 		gssNodes.clear();
 		packedNodes.clear();
@@ -94,18 +100,19 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 
 	@Override
 	public boolean addDescriptor(Descriptor descriptor) {
-		if(descriptorsSet.contains(descriptor)) {
-			return false;
+		Descriptor add = descriptorsSet.add(descriptor);
+		if(add == null) {
+			descriptorsStack.add(descriptor);
+			return true;
 		}
-
-		descriptorsStack.push(descriptor);
-		descriptorsSet.add(descriptor);
-		return true;
+		
+		return false;
 	}
 
 	@Override
 	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
 		int index = 2 * leftExtent;
+		
 		if(terminalIndex != TerminalSymbolNode.EPSILON) {
 			index = index + 1;
 		}
