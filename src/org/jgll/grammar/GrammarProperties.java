@@ -249,8 +249,7 @@ public class GrammarProperties {
 						currentSlot.setPredictionSet(currentSlot.getHead().getFollowSetAsBitSet());
 					} 
 					else {
-						System.out.println(currentSlot.getClass());
-						throw new RuntimeException("Unexpected grammar slot.");
+						throw new RuntimeException("Unexpected grammar slot of type " + currentSlot.getClass());
 					}
 					currentSlot = currentSlot.next();
 				}
@@ -355,29 +354,29 @@ public class GrammarProperties {
 												  	  Set<HeadGrammarSlot> set, 
 												  	  Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph) {
 		
-			if(slot instanceof NonterminalGrammarSlot) {
-				HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) slot).getNonterminal();
-				boolean changed = false;
-				changed |= set.add(nonterminal);
-				
-				Set<HeadGrammarSlot> set2 = reachabilityGraph.get(nonterminal);
-				if(set2 == null) {
-					set2 = new HashSet<>();
-				}
-				
-				changed |= set.addAll(set2);
-				changed |= calculateReachabilityGraph(slot.next(), set, reachabilityGraph);
-				
-				return changed;
-			} 
+		if(slot instanceof NonterminalGrammarSlot) {
+			HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) slot).getNonterminal();
+			boolean changed = false;
+			changed |= set.add(nonterminal);
 			
-			else if(slot instanceof LastGrammarSlot) {
-				return false;
+			Set<HeadGrammarSlot> set2 = reachabilityGraph.get(nonterminal);
+			if(set2 == null) {
+				set2 = new HashSet<>();
 			}
 			
-			else {
-				return calculateReachabilityGraph(slot.next(), set, reachabilityGraph);
-			}
+			changed |= set.addAll(set2);
+			changed |= calculateReachabilityGraph(slot.next(), set, reachabilityGraph);
+			
+			return changed;
+		} 
+		
+		else if(slot instanceof LastGrammarSlot) {
+			return false;
+		}
+		
+		else {
+			return calculateReachabilityGraph(slot.next(), set, reachabilityGraph);
+		}
 	}
 	
 	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateDirectReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals) {

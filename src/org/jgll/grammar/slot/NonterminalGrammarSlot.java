@@ -71,6 +71,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(parser.isRecursiveDescent() && nonterminal.isLl1SubGrammar()) {
 			SPPFNode node = nonterminal.parseLL1(parser, input);
 			
+			if(node == null) {
+				System.out.println("WTF?");
+			}
+			
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, node);
 				
