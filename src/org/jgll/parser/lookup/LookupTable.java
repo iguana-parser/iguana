@@ -75,6 +75,24 @@ public interface LookupTable {
 
 	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
 	
+	/**
+	 * Returns the GSS nodes reachable from the given gss node.
+	 * 
+	 */
+	public Iterable<GSSNode> getChildren(GSSNode node);
+	
+	
+	/**
+	 * 
+	 * Returns the GSS node located on the edge from the given source node
+	 * to the destination node.
+	 * 
+	 * @throws RuntimeException if no edge from the given source to dest exits.
+	 * 
+	 */ 
+	public SPPFNode getSPPFNodeOnEdgeFrom(GSSNode source, GSSNode dest);
+	
+
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	
 	public Iterable<NonPackedNode> getSPPFNodesOfPoppedElements(GSSNode gssNode);

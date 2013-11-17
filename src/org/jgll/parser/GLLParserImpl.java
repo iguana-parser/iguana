@@ -245,19 +245,19 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			// Add (u, z) to P
 			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
-			for(GSSEdge edge : cu.getEdges()) {
-								
-				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
-
+			
+			for(GSSNode dest : lookupTable.getChildren(cu)) {
+				
 				GrammarSlot slot = cu.getGrammarSlot();
 				SPPFNode y;
 				if(slot instanceof LastGrammarSlot) {
-					y = getNonterminalNode((LastGrammarSlot) slot, edge.getSppfNode(), cn);
+					y = getNonterminalNode((LastGrammarSlot) slot, lookupTable.getSPPFNodeOnEdgeFrom(cu, dest), cn);
 				} else {
-					y = getIntermediateNode((BodyGrammarSlot) slot, edge.getSppfNode(), cn);
+					y = getIntermediateNode((BodyGrammarSlot) slot, lookupTable.getSPPFNodeOnEdgeFrom(cu, dest), cn);
 				}
-				addDescriptor(cu.getGrammarSlot(), edge.getDestination(), ci, y);
-			}			
+				addDescriptor(cu.getGrammarSlot(), dest, ci, y);
+			}
+			
 		}
 	}
 
