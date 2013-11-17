@@ -1,6 +1,7 @@
 package org.jgll.util.hashing;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
@@ -49,6 +50,52 @@ public class CuckooHashMap<K, V> implements Serializable {
 	
 	public void clear() {
 		set.clear();
+	}
+	
+	public Iterator<K> keyIterator() {
+		
+		final Iterator<MapEntry<K, V>> it = set.iterator();
+		
+		return new Iterator<K>() {
+
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+
+			@Override
+			public K next() {
+				return it.next().k;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+
+	public Iterator<V> valueIterator() {
+		
+		final Iterator<MapEntry<K, V>> it = set.iterator();
+		
+		return new Iterator<V>() {
+
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+
+			@Override
+			public V next() {
+				return it.next().v;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 	
 	public static class MapEntry<K, V> {
