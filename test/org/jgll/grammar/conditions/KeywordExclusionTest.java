@@ -32,6 +32,7 @@ public class KeywordExclusionTest {
 	
 	private Grammar grammar;
 	private GLLParser levelParser;
+	private GLLParser rdParser;
 
 	@Before
 	public void init() {
@@ -51,7 +52,9 @@ public class KeywordExclusionTest {
 		builder.addRules(rules);
 
 		grammar = builder.build();
+		
 		levelParser = ParserFactory.createLevelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@org.junit.Rule
@@ -85,7 +88,7 @@ public class KeywordExclusionTest {
 	public void testWhile() throws ParseError {
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:5");
-		levelParser.parse(Input.fromString("while"), grammar, "Id");
+		rdParser.parse(Input.fromString("while"), grammar, "Id");
 	}
 
 
