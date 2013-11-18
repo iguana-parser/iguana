@@ -52,7 +52,7 @@ public class ParseError extends Exception {
 	public void printGrammarTrace(PrintStream out) {
 		out.println(toString());
 		
-		indent(out, 1, GSSNode.recursiveDescentGSSNode(((BodyGrammarSlot) slot).next(), inputIndex));
+		indent(out, 1, new GSSNode(((BodyGrammarSlot) slot).next(), inputIndex));
 		
 		GSSNode gssNode = currentNode;
 		

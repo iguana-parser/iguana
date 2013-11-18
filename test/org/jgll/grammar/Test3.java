@@ -40,8 +40,8 @@ public class Test3 {
 		Rule r3 = new Rule(new Nonterminal("C"), list(new Character('c')));
 		grammar = new GrammarBuilder("test3").addRule(r1).addRule(r2).addRule(r3).build();
 		
-		rdParser = ParserFactory.createLevelParser(grammar);
-		levelParser = ParserFactory.createRecursiveDescentParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		levelParser = ParserFactory.createLevelParser(grammar);
 		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}
 	
@@ -50,6 +50,14 @@ public class Test3 {
 		assertFalse(grammar.getNonterminalByName("A").isNullable());
 		assertFalse(grammar.getNonterminalByName("B").isNullable());
 		assertFalse(grammar.getNonterminalByName("C").isNullable());
+	}
+	
+	@Test
+	public void testLL1() {
+		assertTrue(grammar.getNonterminalByName("A").isLL1());
+		assertTrue(grammar.getNonterminalByName("B").isLL1());
+		assertTrue(grammar.getNonterminalByName("C").isLL1());
+		assertTrue(grammar.getNonterminalByName("A").isLl1SubGrammar());
 	}
 	
 	@Test

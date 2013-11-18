@@ -1,12 +1,16 @@
 package org.jgll.parser;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.ExternalHasher;
@@ -36,7 +40,7 @@ public class GSSNode implements Level {
 	/**
 	 * The initial GSS node
 	 */
-	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0, NonPackedNode.externalHasher);
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 
 	private final GrammarSlot slot;
 
@@ -46,15 +50,7 @@ public class GSSNode implements Level {
 	
 	private CuckooHashSet<NonPackedNode> poppedElements;
 	
-	private CuckooHashMap<GSSNode, CuckooHashSet<NonPackedNode>> edges;
-	
-	public static GSSNode levelBasedGSSNode(GrammarSlot slot, int inputIndex) {
-		return new GSSNode(slot, inputIndex, NonPackedNode.levelBasedExternalHasher);
-	}
-	
-	public static GSSNode recursiveDescentGSSNode(GrammarSlot slot, int inputIndex) {
-		return new GSSNode(slot, inputIndex, NonPackedNode.externalHasher);
-	}
+	private CuckooHashMap<GSSNode, Set<SPPFNode>> edges;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -63,24 +59,34 @@ public class GSSNode implements Level {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	private GSSNode(GrammarSlot slot, int inputIndex, ExternalHasher<NonPackedNode> hasher) {
+	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.gssEdges = new ArrayList<>();
-		this.poppedElements = new CuckooHashSet<>(hasher);
-		this.edges = new CuckooHashMap<>(externalHasher);
+		
+		this.poppedElements = new CuckooHashSet<>(NonPackedNode.externalHasher);
+		this.edges = new CuckooHashMap<>(externalHasher);			
 	}
 		
 	public void addGSSEdge(GSSEdge edge) {
 		gssEdges.add(edge);
 	}
-	
-	public void addGSSEdge(GSSNode destination, NonPackedNode node) {
-		CuckooHashSet<NonPackedNode> set = edges.get(destination);
+		
+	public boolean createEdge(GSSNode dest, SPPFNode node) {
+		Set<SPPFNode> set = edges.get(dest);
 		if(set == null) {
-			set = new CuckooHashSet<>(NonPackedNode.externalHasher);
+			set = new HashSet<>();
+			set.add(node);
+			edges.put(dest, set);
+			return true;
 		}
+		
+		if(set.contains(node)) {
+			return false;
+		}
+		
 		set.add(node);
+		return true;
 	}
 	
 	public Iterable<GSSNode> getChildren() {
@@ -93,14 +99,12 @@ public class GSSNode implements Level {
 		};
 	}
 	
-	public Iterable<NonPackedNode> getNodesForChild(final GSSNode gssNode) {
-		return new Iterable<NonPackedNode>() {
-			
-			@Override
-			public Iterator<NonPackedNode> iterator() {
-				return edges.get(gssNode).iterator();
-			}
-		};
+	public Iterable<SPPFNode> getNodesForChild(final GSSNode gssNode) {
+		Set<SPPFNode> set = edges.get(gssNode);
+		if(set == null) {
+			return Collections.emptySet();
+		}
+		return edges.get(gssNode);
 	}
 	
 	public Iterable<GSSEdge> getEdges() {

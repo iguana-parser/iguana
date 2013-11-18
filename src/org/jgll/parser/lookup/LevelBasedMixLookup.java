@@ -7,7 +7,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -52,9 +51,6 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	
 	private GSSNode[] currentGssNodes;
 	private GSSNode[][] forwardGssNodes;
-	
-	private CuckooHashSet<GSSEdge> currendEdges;
-	private CuckooHashSet<GSSEdge>[] forwardEdges;
 	
 	private int countGSSNodes;
 	
@@ -102,15 +98,11 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		currentGssNodes = new GSSNode[slotsSize];
 		forwardGssNodes = new GSSNode[chainLength][slotsSize];
 		
-		currendEdges = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
-		forwardEdges = new CuckooHashSet[chainLength];
-		
 		for(int i = 0; i < chainLength; i++) {
 			forwardDescriptors[i] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
 			forwardNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 			forwardGssNodes[i] = new GSSNode[slotsSize];
-			forwardEdges[i] = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
 			forwardPackedNodes[i] = new CuckooHashSet<>(PackedNode.levelBasedExternalHasher);
 		}
 	}
@@ -145,9 +137,6 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		
 //		CuckooHashSet<GSSEdge> tmpGSSEdgeSet = currendEdges;
 //		currendEdges.clear();
-		currendEdges = forwardEdges[nextIndex];
-		forwardEdges[nextIndex] = new CuckooHashSet<>(initialSize, GSSEdge.levelBasedExternalHasher);
-
 				
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
@@ -314,7 +303,7 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 			value = currentGssNodes[slotIndex];
 			if(value == null) {
 				countGSSNodes++;
-				value = GSSNode.levelBasedGSSNode(slot, inputIndex);
+				value = new GSSNode(slot, inputIndex);
 				currentGssNodes[slotIndex] = value;
 			}
 		} else {
@@ -322,7 +311,7 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 			value = forwardGssNodes[index][slotIndex];
 			if(value == null) {
 				countGSSNodes++;
-				value = GSSNode.levelBasedGSSNode(slot, inputIndex);
+				value = new GSSNode(slot, inputIndex);
 				forwardGssNodes[index][slotIndex] = value;
 			}
 		}
@@ -330,25 +319,12 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	}
 	
 	@Override
-	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
-		GSSEdge edge = new GSSEdge(source, label, destination);
-		if(source.getInputIndex() == currentLevel) {
-			boolean added = currendEdges.add(edge) == null;
-			if(added) {
-				countGSSEdges++;
-				source.addGSSEdge(edge);
-			}
-			return !added;
-		} 
-		else {
-			int index = indexFor(source.getInputIndex());
-			boolean added = forwardEdges[index].add(edge) == null;
-			if(added) {
-				countGSSEdges++;
-				source.addGSSEdge(edge);
-			}
-			return !added;
+	public boolean getGSSEdge(GSSNode source, SPPFNode node, GSSNode destination) {
+		boolean added = source.createEdge(destination, node);
+		if(added) {
+			countGSSEdges++;
 		}
+		return added;
 	}
 
 	@Override
@@ -429,6 +405,16 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	}
 
 	@Override
+	public Iterable<GSSNode> getChildren(GSSNode node) {
+		return node.getChildren();
+	}
+
+	@Override
+	public Iterable<SPPFNode> getSPPFNodeOnEdgeFrom(GSSNode source, GSSNode dest) {
+		return source.getNodesForChild(dest);
+	}
+	
+	@Override
 	public void init(Input input) {
 		terminals = new TerminalSymbolNode[chainLength + 1][2];
 		
@@ -443,9 +429,6 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 			currentGssNodes[i] = null;
 		}
 		
-		currendEdges.clear();
-		
-		
 		for(int i = 0; i < chainLength; i++) {
 			forwardDescriptors[i].clear();
 			forwardRs[i].clear();
@@ -455,7 +438,6 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 				forwardGssNodes[i][j] = null;
 			}
 			
-			forwardEdges[i].clear();
 			forwardPackedNodes[i].clear();
 		}
 		

@@ -27,8 +27,11 @@ public class DummyNode extends SPPFNode {
 		return obj instanceof DummyNode;
 	}
 	
-	private DummyNode() {}
-
+	@Override
+	public int hashCode() {
+		return 16769023;
+	}
+	
 	@Override
 	public String getLabel() {
 		return "$";

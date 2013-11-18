@@ -58,8 +58,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		descriptorsStack.clear();
 		descriptorsSet.clear();
 		
-		System.out.println(descriptorsSet.getRehashCount() + ", " + descriptorsSet.getEnlargeCount());
-		
 		nonPackedNodes.clear();
 		gssNodes.clear();
 		packedNodes.clear();
@@ -70,7 +68,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	@Override
 	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {	
-		GSSNode key = GSSNode.recursiveDescentGSSNode(grammarSlot, inputIndex);
+		GSSNode key = new GSSNode(grammarSlot, inputIndex);
 		GSSNode value = gssNodes.add(key);
 		if(value == null) {
 			return key;
@@ -203,13 +201,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	}
 
 	@Override
-	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination) {
-		GSSEdge edge = new GSSEdge(source, label, destination);
-		boolean added = gssEdges.add(edge) == null;
-		if(added) {
-			source.addGSSEdge(edge);
-		}
-		return !added;
+	public boolean getGSSEdge(GSSNode source, SPPFNode node, GSSNode destination) {
+		return source.createEdge(destination, node);
 	}
 
 	@Override
@@ -225,6 +218,16 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public Iterable<NonPackedNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
 		return gssNode.getPoppedElements();
+	}
+
+	@Override
+	public Iterable<GSSNode> getChildren(GSSNode node) {
+		return node.getChildren();
+	}
+
+	@Override
+	public Iterable<SPPFNode> getSPPFNodeOnEdgeFrom(GSSNode source, GSSNode dest) {
+		return source.getNodesForChild(dest);
 	}
 
 }

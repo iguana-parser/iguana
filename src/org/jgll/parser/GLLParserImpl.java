@@ -117,7 +117,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		init();
 		lookupTable.init(input);
 	
-		
 		log.info("Iguana started...");
 
 		start = System.nanoTime();
@@ -249,13 +248,16 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			for(GSSNode dest : lookupTable.getChildren(cu)) {
 				
 				GrammarSlot slot = cu.getGrammarSlot();
-				SPPFNode y;
-				if(slot instanceof LastGrammarSlot) {
-					y = getNonterminalNode((LastGrammarSlot) slot, lookupTable.getSPPFNodeOnEdgeFrom(cu, dest), cn);
-				} else {
-					y = getIntermediateNode((BodyGrammarSlot) slot, lookupTable.getSPPFNodeOnEdgeFrom(cu, dest), cn);
-				}
-				addDescriptor(cu.getGrammarSlot(), dest, ci, y);
+				
+				for(SPPFNode node : lookupTable.getSPPFNodeOnEdgeFrom(cu, dest)) {
+					SPPFNode y;
+					if(slot instanceof LastGrammarSlot) {
+						y = getNonterminalNode((LastGrammarSlot) slot, node, cn);
+					} else {
+						y = getIntermediateNode((BodyGrammarSlot) slot, node, cn);
+					}
+					addDescriptor(cu.getGrammarSlot(), dest, ci, y);
+				}				
 			}
 			
 		}
@@ -300,7 +302,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 
 		GSSNode v = lookupTable.getGSSNode(L, i);
 
-		if(!lookupTable.hasGSSEdge(v, w, u)) {
+		if(!lookupTable.getGSSEdge(v, w, u)) {
 			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
 				SPPFNode x;
 				if(L instanceof LastGrammarSlot) {

@@ -42,17 +42,7 @@ public abstract class NonPackedNode extends SPPFNode {
 
 	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
-		if(slot == null)
-			throw new IllegalArgumentException("Slot cannot be null.");
-		
-		if(leftExtent < 0)
-			throw new IllegalArgumentException("leftExtent cannot be negative.");
-		
-		if(rightExtent < 0)
-			throw new IllegalArgumentException("rightExtent cannot be negative.");
-
-		if(rightExtent < leftExtent) 
-			throw new IllegalArgumentException("rightExtent cannot be less than leftExtent.");
+		assert slot != null;
 		
 		this.slot = slot;
 		this.leftExtent = leftExtent;

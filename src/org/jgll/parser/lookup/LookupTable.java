@@ -71,7 +71,7 @@ public interface LookupTable {
 	
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize);
 	
-	public boolean hasGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
+	public boolean getGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
 
 	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
 	
@@ -90,8 +90,7 @@ public interface LookupTable {
 	 * @throws RuntimeException if no edge from the given source to dest exits.
 	 * 
 	 */ 
-	public SPPFNode getSPPFNodeOnEdgeFrom(GSSNode source, GSSNode dest);
-	
+	public Iterable<SPPFNode> getSPPFNodeOnEdgeFrom(GSSNode source, GSSNode dest);
 
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	
