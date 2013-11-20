@@ -145,7 +145,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		
-		if(parser.isRecursiveDescent() && ll1) {
+		if(parser.isLLOptimizationEnabled() && parser.isRecursiveDescent() && ll1) {
 			Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
 			parser.setCurrentSPPFNode(DummyNode.getInstance());
 			return alternate.getFirstSlot().parse(parser, input);

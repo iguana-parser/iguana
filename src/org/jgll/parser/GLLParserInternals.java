@@ -90,4 +90,6 @@ public interface GLLParserInternals {
 	
 	public boolean isRecursiveDescent();
 	
+	public boolean isLLOptimizationEnabled();
+	
 }

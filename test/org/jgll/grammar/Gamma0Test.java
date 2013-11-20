@@ -10,6 +10,7 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.GLLParserImpl;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
@@ -18,6 +19,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -88,7 +90,9 @@ public class Gamma0Test {
 
 	@Test
 	public void testSPPF() throws ParseError {
+		((GLLParserImpl)rdParser).setLlOptimization(false);
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aad"), grammar, "S");
+		Visualization.generateGSSGraph("/Users/aliafroozeh/output", ((GLLParserImpl)rdParser).getLookupTable().getGSSNodes());
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

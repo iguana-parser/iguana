@@ -3,20 +3,22 @@ package org.jgll.util.dot;
 import static org.jgll.util.dot.GraphVizUtil.GSS_EDGE;
 import static org.jgll.util.dot.GraphVizUtil.GSS_NODE;
 
-import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
+import org.jgll.sppf.SPPFNode;
 
 public class GSSToDot extends ToDot {
 	
 	private StringBuilder sb = new StringBuilder();
 	
 	public void execute(Iterable<GSSNode> set) {
-		for(GSSNode node : set) {
+		for(GSSNode gssNode : set) {
 			
-			sb.append("\"" + getId(node) + "\"" + String.format(GSS_NODE, node.toString()) + "\n");
+			sb.append("\"" + getId(gssNode) + "\"" + String.format(GSS_NODE, gssNode.toString()) + "\n");
 			
-			for(GSSEdge edge : node.getEdges()) {
-				sb.append(String.format(GSS_EDGE, getId(edge.getSppfNode())) + "\"" + getId(node) + "\"" + "->" + "{\"" + getId(edge.getDestination()) + "\"}" + "\n");
+			for(GSSNode dest : gssNode.getChildren()) {
+				for(SPPFNode sppfNode : gssNode.getNodesForChild(dest)) {
+					sb.append(String.format(GSS_EDGE, getId(sppfNode)) + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(dest) + "\"}" + "\n");					
+				}
 			}
 		}
 	}

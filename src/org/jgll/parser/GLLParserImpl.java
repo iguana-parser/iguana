@@ -83,6 +83,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	private long start;
 
 	private long end;
+	
+	private boolean llOptimization = true;
 
 	public GLLParserImpl(LookupTable lookupTable) {
 		this.lookupTable = lookupTable;
@@ -106,7 +108,9 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 */
 	@Override
 	public final NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError {
+		
 		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(startSymbolName);
+		
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
 		}
@@ -123,7 +127,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
 		NonterminalSymbolNode root;
 		
-		if(isRecursiveDescent() && startSymbol.isLl1SubGrammar()) {
+		if(llOptimization && isRecursiveDescent() && startSymbol.isLl1SubGrammar()) {
 			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, input);
 		} else {
 			L0.getInstance().parse(this, input, startSymbol);			
@@ -484,6 +488,15 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	@Override
 	public boolean isRecursiveDescent() {
 		return lookupTable instanceof RecursiveDescentLookupTable;
+	}
+	
+	public void setLlOptimization(boolean llOptimization) {
+		this.llOptimization = llOptimization;
+	}
+	
+	@Override
+	public boolean isLLOptimizationEnabled() {
+		return llOptimization;
 	}
 	
 }
