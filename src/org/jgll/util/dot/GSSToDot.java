@@ -11,6 +11,7 @@ public class GSSToDot extends ToDot {
 	private StringBuilder sb = new StringBuilder();
 	
 	public void execute(Iterable<GSSNode> set) {
+		
 		for(GSSNode gssNode : set) {
 			
 			sb.append("\"" + getId(gssNode) + "\"" + String.format(GSS_NODE, gssNode.toString()) + "\n");

@@ -64,7 +64,7 @@ public class GSSNode implements Level {
 	}
 		
 	public boolean createEdge(GSSNode dest, SPPFNode node) {
-		
+
 		Set<SPPFNode> set = edges.get(dest);
 		
 		if(set == null) {
@@ -109,6 +109,7 @@ public class GSSNode implements Level {
 	
 	@Override
 	public boolean equals(Object obj) {
+		
 		if(this == obj) {
 			return true;
 		}

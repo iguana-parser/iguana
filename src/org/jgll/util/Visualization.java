@@ -32,7 +32,6 @@ public class Visualization {
 	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> nodes) {
 		GSSToDot toDot = new GSSToDot();
 		toDot.execute(nodes);
-		toDot.execute(nodes);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "gss");
 	}
 
