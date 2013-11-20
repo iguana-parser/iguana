@@ -71,8 +71,8 @@ public class ParseError extends Exception {
 	
 	private GSSNode findMergePoint(GSSNode node, PrintStream out, int i) {
 		
-		if(node.getCountEdges() == 1) {
-			return node.getEdges().iterator().next().getDestination();
+		if(node.sizeChildren() == 1) {
+			return node.getChildren().iterator().next();
 		}
 		
 		return reachableFrom(node, out, i);
@@ -90,8 +90,7 @@ public class ParseError extends Exception {
 		Set<GSSNode> set = new HashSet<>();
 		Deque<GSSNode> frontier = new ArrayDeque<>();
 		
-		for(GSSEdge edge : node.getEdges()) {
-			GSSNode destination = edge.getDestination();
+		for(GSSNode destination : node.getChildren()) {
 			set.add(destination);
 			frontier.add(destination);
 			indent(out, i+1, destination);
@@ -100,8 +99,7 @@ public class ParseError extends Exception {
 		i++;
 		while(frontier.size() > 1) {
 			GSSNode f = (GSSNode) frontier.poll();
-			for(GSSEdge edge : f.getEdges()) {
-				GSSNode destination = edge.getDestination();
+			for(GSSNode destination : f.getChildren()) {
 				if(!set.contains(destination)) {
 					set.add(destination);
 					frontier.add(destination);

@@ -1,10 +1,8 @@
 package org.jgll.parser;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.slot.GrammarSlot;
@@ -46,8 +44,6 @@ public class GSSNode implements Level {
 
 	private final int inputIndex;
 
-	private List<GSSEdge> gssEdges;
-	
 	private CuckooHashSet<NonPackedNode> poppedElements;
 	
 	private CuckooHashMap<GSSNode, Set<SPPFNode>> edges;
@@ -62,18 +58,15 @@ public class GSSNode implements Level {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.gssEdges = new ArrayList<>();
 		
 		this.poppedElements = new CuckooHashSet<>(NonPackedNode.externalHasher);
 		this.edges = new CuckooHashMap<>(externalHasher);			
 	}
 		
-	public void addGSSEdge(GSSEdge edge) {
-		gssEdges.add(edge);
-	}
-		
 	public boolean createEdge(GSSNode dest, SPPFNode node) {
+		
 		Set<SPPFNode> set = edges.get(dest);
+		
 		if(set == null) {
 			set = new HashSet<>();
 			set.add(node);
@@ -81,12 +74,7 @@ public class GSSNode implements Level {
 			return true;
 		}
 		
-		if(set.contains(node)) {
-			return false;
-		}
-		
-		set.add(node);
-		return true;
+		return set.add(node);
 	}
 	
 	public Iterable<GSSNode> getChildren() {
@@ -99,22 +87,18 @@ public class GSSNode implements Level {
 		};
 	}
 	
+	public int sizeChildren() {
+		return edges.size();
+	}
+	
 	public Iterable<SPPFNode> getNodesForChild(final GSSNode gssNode) {
 		Set<SPPFNode> set = edges.get(gssNode);
 		if(set == null) {
 			return Collections.emptySet();
 		}
-		return edges.get(gssNode);
+		return set;
 	}
 	
-	public Iterable<GSSEdge> getEdges() {
-		return gssEdges;
-	}
-		
-	public int getCountEdges() {
-		return gssEdges.size();
-	}
-
 	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
