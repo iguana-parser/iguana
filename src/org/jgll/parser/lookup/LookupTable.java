@@ -71,12 +71,22 @@ public interface LookupTable {
 	
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize);
 	
-	public boolean getGSSEdge(GSSNode source, SPPFNode label, GSSNode destination);
+	/**
+	 * Returns true if there is a GSS edge from source to destination
+	 * with the given node as label. If no such edge exists, a new
+	 * edge with the given properties will be created.
+	 * 
+	 */
+	public boolean getGSSEdge(GSSNode source, SPPFNode node, GSSNode destination);
 
+	/**
+	 * Returns an already existing GSS node with the given grammar slot and input 
+	 * index, or creates a new GSS node with given parameters.  
+	 */
 	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
 	
 	/**
-	 * Returns the GSS nodes reachable from the given gss node.
+	 * Returns the GSS nodes reachable from the given GSS node.
 	 * 
 	 */
 	public Iterable<GSSNode> getChildren(GSSNode node);

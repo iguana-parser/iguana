@@ -15,6 +15,7 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +48,8 @@ public class KeywordExclusionTest {
 		GrammarBuilder builder = new GrammarBuilder();
 		
 		Rule r1 = new Rule(Id, new Plus(az).addCondition(notFollow(az)).addCondition(notMatch(iff, when, doo, whilee)));
+//		Rule r1 = new Rule(Id, new Plus(az).addCondition(notFollow(az)));
+
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1));
 		builder.addRules(rules);
@@ -72,7 +75,8 @@ public class KeywordExclusionTest {
 	public void testIf() throws ParseError {
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:2");
-		levelParser.parse(Input.fromString("if"), grammar, "Id");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("if"), grammar, "Id");
+		System.out.println(sppf);
 	}
 
 	
@@ -82,7 +86,6 @@ public class KeywordExclusionTest {
 		thrown.expectMessage("Parse error at line:1 column:2");
 		levelParser.parse(Input.fromString("do"), grammar, "Id");
 	}
-
 	
 	@Test
 	public void testWhile() throws ParseError {
@@ -90,6 +93,5 @@ public class KeywordExclusionTest {
 		thrown.expectMessage("Parse error at line:1 column:5");
 		rdParser.parse(Input.fromString("while"), grammar, "Id");
 	}
-
 
 }

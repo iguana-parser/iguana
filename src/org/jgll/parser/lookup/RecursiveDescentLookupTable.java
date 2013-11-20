@@ -7,7 +7,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -35,8 +34,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private final CuckooHashSet<PackedNode> packedNodes;
 	
-	private final CuckooHashSet<GSSEdge> gssEdges;
-	
 	private int nonPackedNodesCount;
 	
 	public RecursiveDescentLookupTable(Grammar grammar) {
@@ -49,7 +46,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		nonPackedNodes = new CuckooHashSet<>(tableSize, NonPackedNode.externalHasher);
 		gssNodes = new CuckooHashSet<>(tableSize, GSSNode.externalHasher);
 		packedNodes = new CuckooHashSet<>(tableSize, PackedNode.externalHasher);
-		gssEdges = new CuckooHashSet<>(tableSize, GSSEdge.externalHasher);
 	}
 	
 	@Override
@@ -61,7 +57,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		nonPackedNodes.clear();
 		gssNodes.clear();
 		packedNodes.clear();
-		gssEdges.clear();
 		
 		nonPackedNodesCount = 0;
 	}
@@ -207,7 +202,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 
 	@Override
 	public int getGSSEdgesCount() {
-		return gssEdges.size();
+		return 0;
 	}
 
 	@Override

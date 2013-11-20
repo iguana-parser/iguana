@@ -111,7 +111,9 @@ public class Descriptor implements Level {
 	
 	@Override
 	public String toString() {
-		return "(" + slot + ", " + inputIndex + ", " + gssNode.getGrammarSlot() + ", " + sppfNode + ")";
+		return "(" + slot + ", " + inputIndex + ", " +
+			   "(" + gssNode.getGrammarSlot() + ", " + gssNode.getInputIndex() + ")" +
+			   ", " + sppfNode + ")";
 	}
 
 	@Override
