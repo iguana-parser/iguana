@@ -3,6 +3,7 @@ package org.jgll.util.hashing;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import org.jgll.parser.HashFunctions;
 import org.jgll.util.RandomUtil;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.hashing.hashfunction.MurmurHash3;
@@ -108,8 +109,8 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	}
 	
 	private void generateNewHashFunctions() {
-		function1 = new MurmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
-		function2 = new MurmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
+		function1 = HashFunctions.murmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
+		function2 = HashFunctions.murmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
 	}
 	
 	public boolean contains(T key) {
