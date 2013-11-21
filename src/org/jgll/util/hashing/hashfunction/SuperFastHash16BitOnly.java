@@ -2,7 +2,10 @@ package org.jgll.util.hashing.hashfunction;
 
 public class SuperFastHash16BitOnly implements HashFunction {
 
+	private static final long serialVersionUID = 1L;
+	
 	private final int seed;
+	
 	public SuperFastHash16BitOnly() {
 		seed = 5;
 	}

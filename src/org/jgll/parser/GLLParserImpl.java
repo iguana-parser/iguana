@@ -14,6 +14,7 @@ import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.parser.lookup.RecursiveDescentLookupTable;
+import org.jgll.parser.lookup.RecursiveDescentLookupTable2;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -487,7 +488,9 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 
 	@Override
 	public boolean isRecursiveDescent() {
-		return lookupTable instanceof RecursiveDescentLookupTable;
+		// TODO: ugly design
+		return lookupTable instanceof RecursiveDescentLookupTable ||
+			   lookupTable instanceof RecursiveDescentLookupTable2;
 	}
 	
 	public void setLlOptimization(boolean llOptimization) {

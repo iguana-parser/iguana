@@ -18,42 +18,41 @@ import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class RecursiveDescentLookupTable extends AbstractLookupTable {
+public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable2.class);
 	
 	private Deque<Descriptor> descriptorsStack;
 	
-	private CuckooHashSet<Descriptor> descriptorsSet;
+	private CuckooHashSet<Descriptor>[] descriptorsSet;
 	
 	private TerminalSymbolNode[] terminals;
 	
 	private CuckooHashSet<NonPackedNode> nonPackedNodes;
 	
-	private final CuckooHashSet<GSSNode> gssNodes;
+	private CuckooHashSet<GSSNode> gssNodes;
 	
-	private final CuckooHashSet<PackedNode> packedNodes;
+	private CuckooHashSet<PackedNode> packedNodes;
 	
 	private int nonPackedNodesCount;
 	
-	public RecursiveDescentLookupTable(Grammar grammar) {
+	public RecursiveDescentLookupTable2(Grammar grammar) {
 		super(grammar);
-		
-		int tableSize = (int) Math.pow(2, 10);
-		
-		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new CuckooHashSet<>(tableSize, Descriptor.externalHasher);
-		nonPackedNodes = new CuckooHashSet<>(tableSize, NonPackedNode.externalHasher);
-		gssNodes = new CuckooHashSet<>(tableSize, GSSNode.externalHasher);
-		packedNodes = new CuckooHashSet<>(tableSize, PackedNode.externalHasher);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(Input input) {
 		terminals = new TerminalSymbolNode[2 * input.size()];
-		descriptorsStack.clear();
-		descriptorsSet.clear();
+
+		int tableSize = (int) Math.pow(2, 10);
 		
+		descriptorsStack = new ArrayDeque<>();
+		descriptorsSet = new CuckooHashSet[input.size()];
+		nonPackedNodes = new CuckooHashSet<>(tableSize, NonPackedNode.externalHasher);
+		gssNodes = new CuckooHashSet<>(tableSize, GSSNode.externalHasher);
+		packedNodes = new CuckooHashSet<>(tableSize, PackedNode.externalHasher);
+
 		nonPackedNodes.clear();
 		gssNodes.clear();
 		packedNodes.clear();
@@ -91,9 +90,21 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		return descriptorsStack.pop();
 	}
 	
+	int tableSize = (int) Math.pow(2, 12);
+	
 	@Override
 	public boolean addDescriptor(Descriptor descriptor) {
-		Descriptor add = descriptorsSet.add(descriptor);
+		
+		CuckooHashSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
+		if(set == null) {
+			set = new CuckooHashSet<>(tableSize, Descriptor.levelBasedExternalHasher);
+			descriptorsSet[descriptor.getInputIndex()] = set;
+			set.add(descriptor);
+			descriptorsStack.add(descriptor);
+			return true;
+		}
+		
+		Descriptor add = set.add(descriptor);
 
 		if(add == null) {
 			descriptorsStack.add(descriptor);
@@ -161,7 +172,13 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 
 	@Override
 	public int getDescriptorsCount() {
-		return descriptorsSet.size();
+		int count = 0;
+		for(int i = 0; i < descriptorsSet.length; i++) {
+			if(descriptorsSet[i] != null) {
+				count += descriptorsSet[i].size();
+			}
+		}
+		return count;
 	}
 
 	@Override
