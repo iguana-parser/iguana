@@ -11,7 +11,7 @@ public class ParserFactory {
 	private static final int MAX_SLOTS = 100_000;
 
 	public static GLLParser createRecursiveDescentParser(Grammar grammar) {
-		return new GLLParserImpl(new RecursiveDescentLookupTable(grammar));
+		return new GLLParserImpl(new RecursiveDescentLookupTable2(grammar));
 	}
 	
 	public static GLLParser createLevelParser(Grammar grammar) {

@@ -1,7 +1,9 @@
 package org.jgll.parser.lookup;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -28,9 +30,9 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[] terminals;
 	
-	private CuckooHashSet<NonPackedNode> nonPackedNodes;
-	
-	private CuckooHashSet<GSSNode> gssNodes;
+	private CuckooHashSet<NonPackedNode>[] nonPackedNodes;
+
+	private CuckooHashSet<GSSNode>[] gssNodes;
 	
 	private CuckooHashSet<PackedNode> packedNodes;
 	
@@ -43,41 +45,68 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init(Input input) {
+		
 		terminals = new TerminalSymbolNode[2 * input.size()];
 
 		int tableSize = (int) Math.pow(2, 10);
 		
 		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new CuckooHashSet[input.size()];
-		nonPackedNodes = new CuckooHashSet<>(tableSize, NonPackedNode.externalHasher);
-		gssNodes = new CuckooHashSet<>(tableSize, GSSNode.externalHasher);
+		nonPackedNodes = new CuckooHashSet[input.size()];
+		gssNodes = new CuckooHashSet[input.size()];
+		
 		packedNodes = new CuckooHashSet<>(tableSize, PackedNode.externalHasher);
 
-		nonPackedNodes.clear();
-		gssNodes.clear();
 		packedNodes.clear();
 		
 		nonPackedNodesCount = 0;
 	}
 	
 	@Override
-	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {	
-		GSSNode key = new GSSNode(grammarSlot, inputIndex);
-		GSSNode value = gssNodes.add(key);
-		if(value == null) {
+	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {
+		
+		CuckooHashSet<GSSNode> set = gssNodes[inputIndex];
+		if(set == null) {
+			set = new CuckooHashSet<>(GSSNode.levelBasedExternalHasher);
+			gssNodes[inputIndex] = set;
+			GSSNode key = new GSSNode(grammarSlot, inputIndex);
+			set.add(key);
 			return key;
 		}
-		return value;
+		
+		GSSNode key = new GSSNode(grammarSlot, inputIndex);
+		
+		GSSNode oldValue = set.add(key);
+		
+		if(oldValue == null) {
+			return key;
+		}
+		
+		return oldValue;
 	}
 	
 	@Override
 	public int getGSSNodesCount() {
-		return gssNodes.size();
+		int count = 0;
+		for(int i = 0; i < gssNodes.length; i++) {
+			if(gssNodes[i] != null) {
+				count += gssNodes[i].size();
+			}
+		}
+		return count;
 	}
 
 	@Override
 	public Iterable<GSSNode> getGSSNodes() {
-		return gssNodes;
+		List<GSSNode> nodes = new ArrayList<>();
+		for(int i = 0; i < gssNodes.length; i++) {
+			if(gssNodes[i] != null) {
+				for(GSSNode node : gssNodes[i]) {
+					nodes.add(node);
+				}
+			}
+		}
+		return nodes;
 	}
 	
 	@Override
@@ -147,6 +176,13 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	
 	@Override
 	public NonPackedNode getNonPackedNode(NonPackedNode key) {
+		CuckooHashSet<NonPackedNode> set = nonPackedNodes[key.getLeftExtent()];
+		
+		if(set == null) {
+			set = new CuckooHashSet<>(tableSize, NonPackedNode.levelBasedExternalHasher);
+			nonPackedNodes[key.getLeftExtent()] = set;
+		}
+		
 		NonPackedNode value = nonPackedNodes.add(key);
 		if(value == null) {
 			value = key;
