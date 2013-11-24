@@ -72,7 +72,7 @@ public class Gamma2Test {
 	public void test100bs() throws ParseError {
 		Input input = Input.fromString(get100b());
 		levelParser.parse(input, grammar, "S");
-		rdParser.parse(input, grammar, "S");
+//		rdParser.parse(input, grammar, "S");
 	}
 	
 	private String get100b() {

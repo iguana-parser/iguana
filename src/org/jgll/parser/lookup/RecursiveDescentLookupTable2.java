@@ -176,29 +176,39 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	
 	@Override
 	public NonPackedNode getNonPackedNode(NonPackedNode key) {
-		CuckooHashSet<NonPackedNode> set = nonPackedNodes[key.getLeftExtent()];
+		int index = key.getRightExtent();
+		CuckooHashSet<NonPackedNode> set = nonPackedNodes[index];
 		
 		if(set == null) {
 			set = new CuckooHashSet<>(tableSize, NonPackedNode.levelBasedExternalHasher);
-			nonPackedNodes[key.getLeftExtent()] = set;
+			nonPackedNodes[index] = set;
+			set.add(key);
+			return key;
 		}
 		
-		NonPackedNode value = nonPackedNodes.add(key);
-		if(value == null) {
-			value = key;
+		NonPackedNode oldValue = nonPackedNodes[index].add(key);
+		if(oldValue == null) {
+			oldValue = key;
 		}
 		
-		return value;
+		return oldValue;
 	}
 	
 	@Override
 	public NonPackedNode hasNonPackedNode(NonPackedNode key) {
-		return nonPackedNodes.get(key);
+		int index = key.getRightExtent();
+		if(nonPackedNodes[index] == null) {
+			return null;
+		}
+		return nonPackedNodes[index].get(key);
 	}
 
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
-		return (NonterminalSymbolNode) nonPackedNodes.get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
+		if(nonPackedNodes[inputSize - 1] == null) {
+			return null;
+		}
+		return (NonterminalSymbolNode) nonPackedNodes[inputSize - 1].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 
 	@Override
