@@ -30,7 +30,7 @@ public class OpenAddressingHashMap<K, V> implements Map<K, V> {
 	/**
 	 * capacity - 1
 	 * The bitMask is used to get the p most-significant bytes of
-	 * the multiplicaiton.
+	 * the multiplication.
 	 */
 	private int bitMask;
 	

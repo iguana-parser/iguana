@@ -1,11 +1,11 @@
 package org.jgll.util.hashing;
 
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 
 
-public class OpenAddressingHashSet<E> implements Set<E> {
+public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 32;
 	private static final float DEFAULT_LOAD_FACTOR = 0.5f;
@@ -14,7 +14,7 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 	
 	private int size;
 	
-//	private int threshold;
+	private int threshold;
 	
 	private float loadFactor;
 	
@@ -56,12 +56,11 @@ public class OpenAddressingHashSet<E> implements Set<E> {
         
 		bitMask = capacity - 1;
 		
-//		threshold = (int) (loadFactor * capacity);
+		threshold = (int) (loadFactor * capacity);
 		table = new Object[capacity];
 	}
 	
-	@Override
-	public boolean contains(Object key) {
+	public boolean contains(T key) {
 		
 		int i = indexFor(key.hashCode());
 		
@@ -72,22 +71,21 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 		return table[i] != null;
 	}
 	
-	@Override
-	public boolean add(Object key) {
+	public T add(T key) {
 				
 		int i = indexFor(key.hashCode());
 		do {
 			if(table[i] == null) {
 				table[i] = key;
 				size++;
-//				if (size >= threshold) {
-//					rehash();
-//				}
-				return true;
+				if (size >= threshold) {
+					rehash();
+				}
+				return null;
 			}
 			
 			else if(table[i].equals(key)) {
-				return false;
+				return key;
 			}
 			
 			i = (i + 1) & bitMask; // mod capacity
@@ -137,62 +135,56 @@ public class OpenAddressingHashSet<E> implements Set<E> {
 		return j - 1;
 	}
 
-	public int getRehashCount() {
-		return rehashCount;
+	@Override
+	public Iterator<T> iterator() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+	@Override
+	public T get(T key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
 	public int size() {
 		return size;
 	}
 
 	@Override
+	public int getInitialCapacity() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getEnlargeCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
 	public boolean isEmpty() {
-		return false;
+		return size == 0;
 	}
 
 	@Override
-	public Iterator<E> iterator() {
-		return null;
-	}
-
-	@Override
-	public Object[] toArray() {
-		return null;
-	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		return null;
-	}
-
-	@Override
-	public boolean remove(Object o) {
-		return false;
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		return false;
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends E> c) {
-		return false;
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		return false;
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
+	public boolean remove(T key) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean addAll(Iterable<T> c) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

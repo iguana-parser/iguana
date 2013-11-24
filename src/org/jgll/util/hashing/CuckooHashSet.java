@@ -1,6 +1,5 @@
 package org.jgll.util.hashing;
 
-import java.io.Serializable;
 import java.util.Iterator;
 
 import org.jgll.parser.HashFunctions;
@@ -15,7 +14,7 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashSet<T> implements Serializable, Iterable<T> {
+public class CuckooHashSet<T> implements MultiHashSet<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -112,6 +111,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		function2 = HashFunctions.murmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
 	}
 	
+	@Override
 	public boolean contains(T key) {
 		return get(key) != null;
 	}
@@ -125,6 +125,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 * 
 	 * @return null if no element matching the given key is found.
 	 */
+	@Override
 	public T get(T key) {
 	
 		int index = indexFor(externalHasher.hash(key, function1));
@@ -151,6 +152,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 * @return A reference to the old key stored in the set if the key was in 
 	 *         the set, otherwise returns null. 
 	 */
+	@Override
 	public T add(T key) {
 		
 		if(size >= threshold) {
@@ -318,10 +320,12 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		rehash();
 	}
 	
+	@Override
 	public int size() {
 		return size;
 	}
 	
+	@Override
 	public int getInitialCapacity() {
 		return initialCapacity;
 	}
@@ -329,7 +333,8 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	public int getRehashCount() {
 		return rehashCount;
 	}
-	
+
+	@Override
 	public int getEnlargeCount() {
 		return enlargeCount;
 	}
@@ -338,6 +343,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		return hash & (tableSize - 1);
 	}
 	
+	@Override
 	public boolean isEmpty() {
 		return size == 0;
 	}
@@ -383,7 +389,8 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 			}
 		};
 	}
-
+	
+	@Override
 	public boolean remove(T key) {
 		
 		int index = indexFor(externalHasher.hash(key, function1));
@@ -403,7 +410,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		return false;
 	}
 
-
+	@Override
 	public void clear() {
 		for(int i = 0; i < table1.length; i++) {
 			table1[i] = null;
@@ -414,6 +421,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		enlargeCount = 0;
 	}
 	
+	@Override
 	public boolean addAll(Iterable<T> c) {
 		boolean changed = false;
 		for(T e : c) {
