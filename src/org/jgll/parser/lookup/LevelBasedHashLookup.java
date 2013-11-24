@@ -8,7 +8,6 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
-import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -44,9 +43,6 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 
 	private CuckooHashSet<NonPackedNode> currentSPPFNodes;
 	private CuckooHashSet<NonPackedNode>[] forwardSPPFNodes;
-	
-	private CuckooHashSet<PackedNode> currentPackedNodes;
-	private CuckooHashSet<PackedNode>[] forwardPackedNodes;
 	
 	private Queue<Descriptor> r;
 	private Queue<Descriptor>[] forwardRs;
@@ -92,9 +88,6 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 		currentSPPFNodes = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 		forwardSPPFNodes = new CuckooHashSet[chainLength];
 		
-		currentPackedNodes = new CuckooHashSet<>(initialSize, PackedNode.levelBasedExternalHasher);
-		forwardPackedNodes = new CuckooHashSet[chainLength];
-		
 		currentGssNodes = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
 		forwardGssNodes = new CuckooHashSet[chainLength];
 		
@@ -103,15 +96,12 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 			forwardRs[i] = new ArrayDeque<>(initialSize);
 			forwardSPPFNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 			forwardGssNodes[i] = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
-			forwardPackedNodes[i] = new CuckooHashSet<>(PackedNode.levelBasedExternalHasher);
 		}
 	}
 	
 	private void gotoNextLevel() {
 		int nextIndex = indexFor(currentLevel + 1);
 		
-//		CuckooHashSet<Descriptor> tmpDesc = u;
-//		u.clear();
 		u = forwardDescriptors[nextIndex];
 		forwardDescriptors[nextIndex] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 		
@@ -120,23 +110,11 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 		r = forwardRs[nextIndex];
 		forwardRs[nextIndex] = tmpR;
 		
-//		CuckooHashSet<NonPackedNode> tmpNonPackedNode = currentNodes;
-//		currentNodes.clear();
 		currentSPPFNodes = forwardSPPFNodes[nextIndex];
 		forwardSPPFNodes[nextIndex] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 		
-//		CuckooHashSet<PackedNode> tmpPackedNode = currentPackedNodes;
-//		currentPackedNodes.clear();
-		currentPackedNodes = forwardPackedNodes[nextIndex];
-		forwardPackedNodes[nextIndex] = new CuckooHashSet<>(PackedNode.levelBasedExternalHasher);
-		
-//		CuckooHashSet<GSSNode> tmpGSSNodeSet = currentGssNodes;
-//		currentGssNodes.clear();
 		currentGssNodes = forwardGssNodes[nextIndex];
 		forwardGssNodes[nextIndex] = new CuckooHashSet<>(initialSize, GSSNode.levelBasedExternalHasher);
-		
-//		CuckooHashSet<GSSEdge> tmpGSSEdgeSet = currendEdges;
-//		currendEdges.clear();
 		
 		terminals[indexFor(currentLevel)][0] = null;
 		terminals[indexFor(currentLevel)][1] = null;
@@ -337,49 +315,8 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 
 	@Override
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		if(parent.getCountPackedNode() == 0) {
-			if(!leftChild.equals(DummyNode.getInstance())) {
-				parent.addChild(leftChild);
-			}
-			parent.addChild(rightChild);
-			parent.addFirstPackedNode(slot, pivot);
-		}
-		else if(parent.getCountPackedNode() == 1) {
-			if(parent.getFirstPackedNodeGrammarSlot() == slot && parent.getFirstPackedNodePivot() == pivot) {
-				return;
-			} else {
-				PackedNode packedNode = new PackedNode(slot, pivot, parent);
-				PackedNode firstPackedNode = parent.addSecondPackedNode(packedNode, leftChild, rightChild);
-				if(parent.getRightExtent() == currentLevel) {
-					currentPackedNodes.add(packedNode);
-					currentPackedNodes.add(firstPackedNode);
-				} else {
-					int index = indexFor(parent.getRightExtent());
-					forwardPackedNodes[index].add(packedNode);
-					forwardPackedNodes[index].add(firstPackedNode);
-				}
-				log.trace("Packed node created : %s", firstPackedNode);
-				log.trace("Packed node created : %s", packedNode);
-				countPackedNodes += 2;
-			}
-		}
-		else {
-			PackedNode key = new PackedNode(slot, pivot, parent);
-			if(parent.getRightExtent() == currentLevel) {
-				if(currentPackedNodes.add(key) == null) {
-					parent.addPackedNode(key, leftChild, rightChild);
-					countPackedNodes++;
-				}
-			} else {
-				int index = indexFor(parent.getRightExtent());
-				if(forwardPackedNodes[index].add(key) == null) {
-					parent.addPackedNode(key, leftChild, rightChild);
-					countPackedNodes++;
-				}
-			}
-			
-			log.trace("Packed node created : %s", key);
-		}
+		PackedNode packedNode = new PackedNode(slot, pivot, parent);
+		parent.addPackedNode(packedNode, leftChild, rightChild);
 	}
 
 	@Override
@@ -411,8 +348,6 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 		
 		currentSPPFNodes.clear();
 		
-		currentPackedNodes.clear();
-		
 		currentGssNodes.clear();
 		
 		for(int i = 0; i < chainLength; i++) {
@@ -420,7 +355,6 @@ public class LevelBasedHashLookup extends AbstractLookupTable {
 			forwardRs[i].clear();
 			forwardSPPFNodes[i].clear();
 			forwardGssNodes[i].clear();
-			forwardPackedNodes[i].clear();
 		}
 		
 		currentLevel = 0;

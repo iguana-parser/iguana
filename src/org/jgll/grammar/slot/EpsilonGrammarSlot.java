@@ -7,6 +7,7 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.util.Input;
 
 /**
@@ -35,7 +36,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		// Do not create epsilon nodes
 		int ci = parser.getCurrentInputIndex();
 		NonPackedNode node = parser.getLookupTable().getNonPackedNode(this.getHead(), ci, ci);
-		node.addFirstPackedNode(this, ci);
+		node.addPackedNode(new PackedNode(this, ci, node));
 		parser.setCurrentSPPFNode(node);
 		parser.pop();
 		return null;

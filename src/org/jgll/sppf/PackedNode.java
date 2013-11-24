@@ -18,7 +18,8 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
 public class PackedNode extends SPPFNode {
 	
 	public static final ExternalHasher<PackedNode> externalHasher = new PackedNodeExternalHasher();
-	public static final ExternalHasher<PackedNode> levelBasedExternalHasher = new PackedNodeExternalHasher();
+	public static final ExternalHasher<PackedNode> levelBasedExternalHasher = new PackedNodeLevelBasedExternalHasher();
+	public static final ExternalHasher<PackedNode> InsideParentHasher = new InsideParentExternalHasher();
 	
 	private final GrammarSlot slot;
 
@@ -194,6 +195,26 @@ public class PackedNode extends SPPFNode {
 			        node1.pivot == node2.pivot &&
 			        node1.parent.getGrammarSlot() == node2.parent.getGrammarSlot() &&
 			        node1.parent.getLeftExtent() == node2.parent.getLeftExtent();
+		}
+	}
+	
+	/**
+	 * Hash code for packed nodes when they are considered in the context of their parents.
+	 *
+	 */
+	public static class InsideParentExternalHasher implements ExternalHasher<PackedNode> {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int hash(PackedNode packedNode, HashFunction f) {
+ 			return f.hash(packedNode.slot.getId(), packedNode.pivot);
+		}
+
+		@Override
+		public boolean equals(PackedNode node1, PackedNode node2) {
+			return node1.slot == node2.slot &&
+			       node1.pivot == node2.pivot;
 		}
 	}
 

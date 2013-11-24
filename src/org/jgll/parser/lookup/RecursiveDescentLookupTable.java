@@ -8,7 +8,6 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.GSSNode;
-import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -32,8 +31,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private final CuckooHashSet<GSSNode> gssNodes;
 	
-	private final CuckooHashSet<PackedNode> packedNodes;
-	
 	private int nonPackedNodesCount;
 	
 	public RecursiveDescentLookupTable(Grammar grammar) {
@@ -45,7 +42,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		descriptorsSet = new CuckooHashSet<>(tableSize, Descriptor.externalHasher);
 		nonPackedNodes = new CuckooHashSet<>(tableSize, NonPackedNode.externalHasher);
 		gssNodes = new CuckooHashSet<>(tableSize, GSSNode.externalHasher);
-		packedNodes = new CuckooHashSet<>(tableSize, PackedNode.externalHasher);
 	}
 	
 	@Override
@@ -56,7 +52,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		
 		nonPackedNodes.clear();
 		gssNodes.clear();
-		packedNodes.clear();
 		
 		nonPackedNodesCount = 0;
 	}
@@ -166,34 +161,17 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 
 	@Override
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		if(parent.getCountPackedNode() == 0) {
-			if(!leftChild.equals(DummyNode.getInstance())) {
-				parent.addChild(leftChild);
-			}
-			parent.addChild(rightChild);
-			parent.addFirstPackedNode(slot, pivot);
-		}
-		else if(parent.getCountPackedNode() == 1) {
-			if(parent.getFirstPackedNodeGrammarSlot() == slot && parent.getFirstPackedNodePivot() == pivot) {
-				return;
-			} else {
-				PackedNode packedNode = new PackedNode(slot, pivot, parent);
-				PackedNode firstPackedNode = parent.addSecondPackedNode(packedNode, leftChild, rightChild);
-				packedNodes.add(packedNode);
-				packedNodes.add(firstPackedNode);
-			}
-		}
-		else {
-			PackedNode key = new PackedNode(slot, pivot, parent);
-			if(packedNodes.add(key) == null) {
-				parent.addPackedNode(key, leftChild, rightChild);
-			}
-		}
+		PackedNode packedNode = new PackedNode(slot, pivot, parent);
+		parent.addPackedNode(packedNode, leftChild, rightChild);
 	}
 
 	@Override
 	public int getPackedNodesCount() {
-		return packedNodes.size();
+		int countPackedNode = 0;
+		for(NonPackedNode node : nonPackedNodes) {
+			countPackedNode += node.getCountPackedNode();
+		}
+		return countPackedNode;
 	}
 
 	@Override

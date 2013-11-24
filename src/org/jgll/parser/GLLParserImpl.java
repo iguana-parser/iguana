@@ -18,6 +18,7 @@ import org.jgll.parser.lookup.RecursiveDescentLookupTable2;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
@@ -429,7 +430,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int inputIndex) {
 		int nextIndex = inputIndex + keyword.size();
 		NonPackedNode node = lookupTable.getNonPackedNode(slot, inputIndex, nextIndex);
-		node.addFirstPackedNode(slot.getAlternateAt(0).getLastSlot().next(), nextIndex);
+		node.addPackedNode(new PackedNode(slot.getAlternateAt(0).getLastSlot().next(), nextIndex, node));
 		((NonterminalSymbolNode) node).setKeywordNode(true);
 		ci = nextIndex;
 		return node;
