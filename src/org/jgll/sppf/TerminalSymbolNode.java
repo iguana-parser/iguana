@@ -105,11 +105,6 @@ public class TerminalSymbolNode extends SPPFNode {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public int getLevel() {
-		return inputIndex;
-	}
-	
 	public static class TerminalSymbolNodeExternalHasher implements ExternalHasher<TerminalSymbolNode> {
 
 		private static final long serialVersionUID = 1L;

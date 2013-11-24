@@ -3,7 +3,6 @@ package org.jgll.parser;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.Level;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -25,7 +24,7 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  * 
  */
 
-public class Descriptor implements Level {
+public class Descriptor {
 	
 	public static final ExternalHasher<Descriptor> externalHasher = new DescriptorExternalHasher();
 	public static final ExternalHasher<Descriptor> levelBasedExternalHasher = new LevelBasedExternalHasher();
@@ -116,11 +115,6 @@ public class Descriptor implements Level {
 			   ", " + sppfNode + ")";
 	}
 
-	@Override
-	public int getLevel() {
-		return inputIndex;
-	}
-	
 	public void setObject(Object object) {
 		this.object = object;
 	}

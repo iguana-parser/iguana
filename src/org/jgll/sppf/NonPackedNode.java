@@ -224,11 +224,6 @@ public abstract class NonPackedNode extends SPPFNode {
 		return countPackedNode;
 	}
 	
-	@Override
-	public int getLevel() {
-		return rightExtent;
-	}
-	
 	public static class NonPackedNodeExternalHasher implements ExternalHasher<NonPackedNode> {
 
 		private static final long serialVersionUID = 1L;

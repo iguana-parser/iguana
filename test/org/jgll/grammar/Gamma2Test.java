@@ -29,7 +29,6 @@ public class Gamma2Test {
 	private GLLParser levelParser;
 	private GLLParser rdParser;
 
-
 	@Before
 	public void init() {
 		
@@ -71,10 +70,8 @@ public class Gamma2Test {
 	@Test
 	public void test100bs() throws ParseError {
 		Input input = Input.fromString(get100b());
-//		levelParser.parse(input, grammar, "S");
-		for(int i = 0; i < 10; i++) {
-			rdParser.parse(input, grammar, "S");
-		}
+		levelParser.parse(input, grammar, "S");
+		rdParser.parse(input, grammar, "S");
 	}
 	
 	private String get100b() {

@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.Level;
 
 /**
  * An SPPF node is a node in an Shared Packed Parse Forest. This data structure
@@ -16,7 +15,7 @@ import org.jgll.util.hashing.Level;
  * 
  */
 
-public abstract class SPPFNode implements Level {
+public abstract class SPPFNode {
 
 	private boolean visited;
 	

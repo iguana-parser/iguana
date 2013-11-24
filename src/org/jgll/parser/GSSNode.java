@@ -12,7 +12,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.Level;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -30,7 +29,7 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  * @author Ali Afroozeh
  * 
  */
-public class GSSNode implements Level {
+public class GSSNode {
 	
 	public static final ExternalHasher<GSSNode> externalHasher = new GSSNodeExternalHasher();
 	public static final ExternalHasher<GSSNode> levelBasedExternalHasher = new LevelBasedGSSNodeExternalHasher();
@@ -134,11 +133,6 @@ public class GSSNode implements Level {
 		return "(" + slot + "," + inputIndex + ")";
 	}
 
-	@Override
-	public int getLevel() {
-		return inputIndex;
-	}
-	
 	public void addToPoppedElements(NonPackedNode node) {
 		poppedElements.add(node);
 	}

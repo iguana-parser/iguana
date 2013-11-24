@@ -83,11 +83,6 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
-	public int getLevel() {
-		return 0;
-	}
-
-	@Override
 	public SPPFNode getLastChild() {
 		return null;
 	}

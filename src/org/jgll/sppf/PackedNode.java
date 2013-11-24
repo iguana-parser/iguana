@@ -149,11 +149,6 @@ public class PackedNode extends SPPFNode {
 		return false;
 	}
 
-	@Override
-	public int getLevel() {
-		return parent.getRightExtent();
-	}
-	
 	public static class PackedNodeExternalHasher implements ExternalHasher<PackedNode> {
 
 		private static final long serialVersionUID = 1L;
