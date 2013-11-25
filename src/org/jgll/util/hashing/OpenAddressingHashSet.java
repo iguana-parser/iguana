@@ -91,11 +91,13 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	@Override
 	public T add(T key) {
 		
-		int i = indexFor(key);
-		
+		int hash = hash(key);
+		int index = indexFor(hash);
+
+		int j = 0;
 		do {
-			if(table[i] == null) {
-				table[i] = key;
+			if(table[index] == null) {
+				table[index] = key;
 				size++;
 				if (size >= threshold) {
 					rehash();
@@ -103,13 +105,13 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 				return null;
 			}
 			
-			else if(hasher.equals(table[i], key)) {
-				return table[i];
+			else if(hasher.equals(table[index], key)) {
+				return table[index];
 			}
 			
 			collisionsCount++;
 			
-			i = next(i);
+			index = next(hash, ++j);
 			
 		} while(true);
 	}
@@ -123,19 +125,20 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		T[] newTable = (T[]) new Object[capacity];
 		
 		label:
-		for(T entry : table) {
-			
-			if(entry != null) {
-				
-				int j = indexFor(entry);
+		for(T key : table) {
+			if(key != null) {
+				int hash = hash(key);
+				int index = indexFor(hash);
+
+				int j = 0;
 				
 				do {
-					if(newTable[j] == null) {
-						newTable[j] = entry;
+					if(newTable[index] == null) {
+						newTable[index] = key;
 						continue label;
 					}
 					
-					j = next(j);
+					index = next(hash, ++j);
 					
 				} while(true);
 			}
@@ -147,12 +150,16 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		rehashCount++;
 	}
 	
-	private int indexFor(T key) {
-		return hasher.hash(key, hashFunction) & bitMask;
+	private int hash(T key) {
+		return hasher.hash(key, hashFunction);
+	}
+	
+	private int indexFor(int hash) {
+		return hash & bitMask;
 	}
 	 
-	private int next(int j) {
-		return (j + 1) & bitMask;
+	private int next(int hash, int i) {
+		return (hash + i) & bitMask;
 	}
 
 	@Override
@@ -192,13 +199,15 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	@Override
 	public T get(T key) {
 		
-		int i = indexFor(key);
+		int hash = hash(key);
+		int index = indexFor(hash);
 		
-		while(table[i] != null && !hasher.equals(table[i], key)) {			
-			i = next(i);
+		int j = 0;
+		while(table[index] != null && !hasher.equals(table[index], key)) {			
+			index = next(hash, ++j);
 		}
 		
-		return table[i];
+		return table[index];
 	}
 
 	@Override
@@ -228,13 +237,15 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 			return false;
 		}
 		
-		int i = indexFor(key);
+		int hash = hash(key);
+		int index = indexFor(hash);
 		
-		while(table[i] != null && !hasher.equals(table[i], key)) {			
-			i = next(i);
+		int j = 0;
+		while(table[index] != null && !hasher.equals(table[index], key)) {			
+			index = next(hash, ++j);
 		}
 		
-		table[i] = null;
+		table[index] = null;
 		size--;
 		return true;
 	}
