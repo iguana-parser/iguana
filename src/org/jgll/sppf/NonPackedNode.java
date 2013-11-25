@@ -8,6 +8,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.MultiHashSet;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -38,7 +39,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	private int countPackedNode;
 	
-	private CuckooHashSet<PackedNode> packedNodes;
+	private MultiHashSet<PackedNode> packedNodes;
 
 	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		

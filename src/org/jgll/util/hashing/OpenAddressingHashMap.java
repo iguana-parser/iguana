@@ -1,6 +1,5 @@
 package org.jgll.util.hashing;
 
-import java.io.Serializable;
 import java.util.Iterator;
 
 import org.jgll.util.hashing.hashfunction.HashFunction;
@@ -12,7 +11,7 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  * @author Ali Afroozeh
  *
  */
-public class OpenAddressingHashMap<K, V> implements Serializable {
+public class OpenAddressingHashMap<K, V> implements MultiHashMap<K, V> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -162,5 +161,20 @@ public class OpenAddressingHashMap<K, V> implements Serializable {
 		public boolean equals(MapEntry<K, V> e1, MapEntry<K, V> e2) {
 			return hasher.equals(e1.k, e2.k);
 		}
+	}
+
+	@Override
+	public int getInitialCapacity() {
+		return set.getInitialCapacity();
+	}
+
+	@Override
+	public int getEnlargeCount() {
+		return set.getEnlargeCount();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return set.isEmpty();
 	}
 }

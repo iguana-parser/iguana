@@ -12,6 +12,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.CuckooHashMap;
 import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.MultiHashSet;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -43,7 +44,7 @@ public class GSSNode {
 
 	private final int inputIndex;
 
-	private CuckooHashSet<NonPackedNode> poppedElements;
+	private MultiHashSet<NonPackedNode> poppedElements;
 	
 	private CuckooHashMap<GSSNode, Set<SPPFNode>> edges;
 	
