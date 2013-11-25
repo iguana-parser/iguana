@@ -50,7 +50,6 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		return set;
 	}
 
-	
 	public OpenAddressingHashSet(ExternalHasher<T> hasher) {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
 	}
@@ -91,6 +90,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	public T add(T key) {
 				
 		int i = indexFor(key);
+		
 		do {
 			if(table[i] == null) {
 				table[i] = key;
@@ -105,7 +105,8 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 				return key;
 			}
 			
-			i = next(i); // mod capacity
+			i = next(i);
+			
 		} while(true);
 	}
 	
@@ -184,10 +185,11 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 
 	@Override
 	public T get(T key) {
+		
 		int i = indexFor(key);
 		
 		while(table[i] != null && !hasher.equals(table[i], key)) {			
-			i = next(i); // mod capacity
+			i = next(i);
 		}
 		
 		return table[i];
@@ -223,7 +225,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		int i = indexFor(key);
 		
 		while(table[i] != null && !hasher.equals(table[i], key)) {			
-			i = next(i); // mod capacity
+			i = next(i);
 		}
 		
 		table[i] = null;
@@ -267,6 +269,5 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		sb.append("}");
 		return sb.toString();
 	}
-
-
+	
 }

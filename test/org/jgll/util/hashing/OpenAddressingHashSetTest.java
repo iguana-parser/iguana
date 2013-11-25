@@ -59,7 +59,7 @@ public class OpenAddressingHashSetTest {
 	public void testInsertOneMillionEntries() {
 		OpenAddressingHashSet<IntegerHashKey4> set = new OpenAddressingHashSet<>(externalHasher);
 		Random rand = RandomUtil.random;
-		for(int i = 0; i < 1000000; i++) {
+		for(int i = 0; i < 10000000; i++) {
 			IntegerHashKey4 key = new IntegerHashKey4(rand.nextInt(Integer.MAX_VALUE), 
 													  rand.nextInt(Integer.MAX_VALUE), 
 													  rand.nextInt(Integer.MAX_VALUE), 
@@ -67,7 +67,7 @@ public class OpenAddressingHashSetTest {
 			set.add(key);
 		}
 		
-		assertEquals(1000000, set.size());
+		assertEquals(10000000, set.size());
 	}
 	
 	@Test

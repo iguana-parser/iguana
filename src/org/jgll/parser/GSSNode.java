@@ -9,10 +9,11 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.CuckooHashMap;
-import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.MultiHashMap;
 import org.jgll.util.hashing.MultiHashSet;
+import org.jgll.util.hashing.OpenAddressingHashMap;
+import org.jgll.util.hashing.OpenAddressingHashSet;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -46,7 +47,7 @@ public class GSSNode {
 
 	private MultiHashSet<NonPackedNode> poppedElements;
 	
-	private CuckooHashMap<GSSNode, Set<SPPFNode>> edges;
+	private MultiHashMap<GSSNode, Set<SPPFNode>> edges;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -59,8 +60,8 @@ public class GSSNode {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		
-		this.poppedElements = new CuckooHashSet<>(NonPackedNode.externalHasher);
-		this.edges = new CuckooHashMap<>(externalHasher);			
+		this.poppedElements = new OpenAddressingHashSet<>(NonPackedNode.externalHasher);
+		this.edges = new OpenAddressingHashMap<>(externalHasher);			
 	}
 		
 	public boolean createEdge(GSSNode dest, SPPFNode node) {

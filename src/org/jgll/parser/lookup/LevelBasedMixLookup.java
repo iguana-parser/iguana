@@ -14,7 +14,8 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.util.hashing.MultiHashSet;
+import org.jgll.util.hashing.OpenAddressingHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -36,11 +37,11 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[][] terminals;
 	
-	private CuckooHashSet<Descriptor> u;
-	private CuckooHashSet<Descriptor>[] forwardDescriptors;
+	private MultiHashSet<Descriptor> u;
+	private MultiHashSet<Descriptor>[] forwardDescriptors;
 
-	private CuckooHashSet<NonPackedNode> currentNodes;
-	private CuckooHashSet<NonPackedNode>[] forwardNodes;
+	private MultiHashSet<NonPackedNode> currentNodes;
+	private MultiHashSet<NonPackedNode>[] forwardNodes;
 	
 	private Queue<Descriptor> r;
 	private Queue<Descriptor>[] forwardRs;
@@ -79,22 +80,22 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		
 		int slotsSize = grammar.getGrammarSlots().size();		
 		
-		u = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
+		u = new OpenAddressingHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 		r = new ArrayDeque<>();
 		
-		forwardDescriptors = new CuckooHashSet[chainLength];
+		forwardDescriptors = new OpenAddressingHashSet[chainLength];
 		forwardRs = new Queue[chainLength];
 		
-		currentNodes = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
-		forwardNodes = new CuckooHashSet[chainLength];
+		currentNodes = new OpenAddressingHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
+		forwardNodes = new OpenAddressingHashSet[chainLength];
 		
 		currentGssNodes = new GSSNode[slotsSize];
 		forwardGssNodes = new GSSNode[chainLength][slotsSize];
 		
 		for(int i = 0; i < chainLength; i++) {
-			forwardDescriptors[i] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
+			forwardDescriptors[i] = new OpenAddressingHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
-			forwardNodes[i] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
+			forwardNodes[i] = new OpenAddressingHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 			forwardGssNodes[i] = new GSSNode[slotsSize];
 		}
 	}
@@ -103,7 +104,7 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		int nextIndex = indexFor(currentLevel + 1);
 		
 		u = forwardDescriptors[nextIndex];
-		forwardDescriptors[nextIndex] = new CuckooHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
+		forwardDescriptors[nextIndex] = new OpenAddressingHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
 		
 		Queue<Descriptor> tmpR = r;
 		assert r.isEmpty();
@@ -111,7 +112,7 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		forwardRs[nextIndex] = tmpR;
 		
 		currentNodes = forwardNodes[nextIndex];
-		forwardNodes[nextIndex] = new CuckooHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
+		forwardNodes[nextIndex] = new OpenAddressingHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
 		
 		currentGssNodes = forwardGssNodes[nextIndex];
 		forwardGssNodes[nextIndex] = new GSSNode[slotsSize];
@@ -203,7 +204,7 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
 		
-		CuckooHashSet<NonPackedNode> currentNodes;
+		MultiHashSet<NonPackedNode> currentNodes;
 		
 		if(currentLevel != inputSize - 1) {
 			int index = indexFor(inputSize - 1); 

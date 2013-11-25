@@ -16,13 +16,15 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable2.class);
+	
+	private HashTableFactory factory; 
 	
 	private int tableSize = (int) Math.pow(2, 10);
 	
@@ -49,11 +51,13 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 		terminals = new TerminalSymbolNode[2 * input.size()];
 
 		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new CuckooHashSet[input.size()];
-		nonPackedNodes = new CuckooHashSet[input.size()];
-		gssNodes = new CuckooHashSet[input.size()];
+		descriptorsSet = new MultiHashSet[input.size()];
+		nonPackedNodes = new MultiHashSet[input.size()];
+		gssNodes = new MultiHashSet[input.size()];
 		
 		nonPackedNodesCount = 0;
+		
+		factory = HashTableFactory.getFactory();
 	}
 	
 	@Override
@@ -61,7 +65,7 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 		
 		MultiHashSet<GSSNode> set = gssNodes[inputIndex];
 		if(set == null) {
-			set = new CuckooHashSet<>(GSSNode.levelBasedExternalHasher);
+			set = factory.newHashSet(tableSize, GSSNode.levelBasedExternalHasher);
 			gssNodes[inputIndex] = set;
 			GSSNode key = new GSSNode(grammarSlot, inputIndex);
 			set.add(key);
@@ -118,7 +122,7 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 		
 		MultiHashSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
 		if(set == null) {
-			set = new CuckooHashSet<>(tableSize, Descriptor.levelBasedExternalHasher);
+			set = factory.newHashSet(tableSize, Descriptor.levelBasedExternalHasher);
 			descriptorsSet[descriptor.getInputIndex()] = set;
 			set.add(descriptor);
 			descriptorsStack.add(descriptor);
@@ -172,7 +176,7 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 		MultiHashSet<NonPackedNode> set = nonPackedNodes[index];
 		
 		if(set == null) {
-			set = new CuckooHashSet<>(tableSize, NonPackedNode.levelBasedExternalHasher);
+			set = factory.newHashSet(tableSize, NonPackedNode.levelBasedExternalHasher);
 			nonPackedNodes[index] = set;
 			set.add(key);
 			return key;

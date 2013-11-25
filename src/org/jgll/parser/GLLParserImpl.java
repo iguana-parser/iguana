@@ -24,6 +24,7 @@ import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -179,6 +180,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	}
 
 	private void init() {
+		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
 		cu = u0;
 		cn = DummyNode.getInstance();
 		ci = 0;
@@ -265,7 +267,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 					addDescriptor(cu.getGrammarSlot(), dest, ci, y);
 				}				
 			}
-			
 		}
 	}
 
