@@ -1,5 +1,7 @@
 package org.jgll.traversal;
 
+import static org.jgll.traversal.SPPFVisitorUtil.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,8 +21,6 @@ import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-
-import static org.jgll.traversal.SPPFVisitorUtil.*;
 
 /**
  * ModelBuilderVisitor builds a data model by visiting an SPPF and 

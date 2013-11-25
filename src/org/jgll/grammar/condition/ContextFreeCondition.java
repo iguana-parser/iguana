@@ -1,10 +1,10 @@
 package org.jgll.grammar.condition;
 
+import static org.jgll.util.CollectionsUtil.*;
+
 import java.util.List;
 
 import org.jgll.grammar.symbol.Symbol;
-
-import static org.jgll.util.CollectionsUtil.*;
 
 public class ContextFreeCondition extends Condition {
 	

@@ -2,7 +2,6 @@ package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.parser.lookup.LevelBasedHashLookup;
-import org.jgll.parser.lookup.RecursiveDescentLookupTable;
 import org.jgll.parser.lookup.RecursiveDescentLookupTable2;
 
 

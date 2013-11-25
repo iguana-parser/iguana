@@ -1,11 +1,11 @@
 package org.jgll.grammar.condition;
 
+import static org.jgll.util.CollectionsUtil.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.symbol.Keyword;
-
-import static org.jgll.util.CollectionsUtil.*;
 
 
 /**

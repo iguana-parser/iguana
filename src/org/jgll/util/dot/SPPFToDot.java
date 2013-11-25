@@ -1,9 +1,6 @@
 package org.jgll.util.dot;
 
-import static org.jgll.util.dot.GraphVizUtil.EDGE;
-import static org.jgll.util.dot.GraphVizUtil.INTERMEDIATE_NODE;
-import static org.jgll.util.dot.GraphVizUtil.PACKED_NODE;
-import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
+import static org.jgll.util.dot.GraphVizUtil.*;
 
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -13,8 +10,8 @@ import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.traversal.SPPFVisitorUtil;
 import org.jgll.traversal.SPPFVisitor;
+import org.jgll.traversal.SPPFVisitorUtil;
 import org.jgll.util.Input;
 
 /**
