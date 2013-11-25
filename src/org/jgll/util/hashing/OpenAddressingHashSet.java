@@ -41,6 +41,16 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	
 	private T[] table;
 	
+ 	@SafeVarargs
+	public static <T> OpenAddressingHashSet<T> from(ExternalHasher<T> hasher, T...elements) {
+ 		OpenAddressingHashSet<T> set = new OpenAddressingHashSet<>(hasher);
+		for(T e : elements) {
+			set.add(e);
+		}
+		return set;
+	}
+
+	
 	public OpenAddressingHashSet(ExternalHasher<T> hasher) {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
 	}
@@ -59,7 +69,6 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		this.loadFactor = loadFactor;
 
 		initialCapacity = Math.max(4, initialCapacity);
-		initialCapacity /= loadFactor;
 		
 		capacity = 1;
         while (capacity < initialCapacity) {
@@ -157,11 +166,13 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 				while(index < table.length) {
 					if(table[index] != null) {
 						counter++;
+						return table[index++];
 					} else {
-						counter++;
+						index++;
 					}
 				}
-				return table[index];
+				
+				throw new RuntimeException("Should not reach here.");
 			}
 
 			@Override
@@ -216,6 +227,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		}
 		
 		table[i] = null;
+		size--;
 		return true;
 	}
 
@@ -224,6 +236,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		for(int i = 0; i < table.length; i++) {
 			table[i] = null;
 		}
+		size = 0;
 	}
 
 	@Override
@@ -234,5 +247,29 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		}
 		return added;
 	}
+	
+	protected boolean isEntryEmpty(T e) {
+		return e == null;
+	}
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		
+		for(T t : table) {
+			if(!isEntryEmpty(t)) { 
+				sb.append(t).append(", ");
+			}
+		}
+		
+		if(sb.length() > 2)
+			sb.delete(sb.length() - 2, sb.length());
+		
+		sb.append("}");
+		return sb.toString();
+	}
+
 
 }
