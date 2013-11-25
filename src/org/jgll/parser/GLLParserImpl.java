@@ -42,7 +42,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
 	
 	static {		
-		HashTableFactory.init(HashTableFactory.CUCKOO);
+		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
 	}
 	
 	/**
