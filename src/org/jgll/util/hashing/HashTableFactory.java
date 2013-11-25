@@ -27,7 +27,6 @@ public class HashTableFactory {
 	}
 
 	public <T> MultiHashSet<T> newHashSet(int initialSize, ExternalHasher<T> hasher) {
-		
 		if(type == CUCKOO) {
 			return new CuckooHashSet<>(initialSize, hasher);
 		} 
@@ -38,5 +37,17 @@ public class HashTableFactory {
 			throw new RuntimeException("Not implemented yet.");
 		}
 	}
+	
+	public <T> MultiHashSet<T> newHashSet(ExternalHasher<T> hasher) {
+		if(type == CUCKOO) {
+			return new CuckooHashSet<>(hasher);
+		} 
+		else if (type == OPEN_ADDRESSING) {
+			return new OpenAddressingHashSet<>(hasher);
+		} 
+		else {
+			throw new RuntimeException("Not implemented yet.");
+		}
+	}	
 
 }

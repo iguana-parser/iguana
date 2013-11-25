@@ -41,6 +41,10 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
 	
+	static {		
+		HashTableFactory.init(HashTableFactory.CUCKOO);
+	}
+	
 	/**
 	 * u0 is the bottom of the GSS.
 	 */
@@ -180,7 +184,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	}
 
 	private void init() {
-		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
 		cu = u0;
 		cn = DummyNode.getInstance();
 		ci = 0;

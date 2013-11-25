@@ -14,8 +14,8 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashSet;
-import org.jgll.util.hashing.OpenAddressingHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -28,6 +28,8 @@ import org.jgll.util.logging.LoggerWrapper;
 public class LevelBasedMixLookup extends AbstractLookupTable {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(LevelBasedMixLookup.class);
+	
+	private HashTableFactory factory; 
 	
 	private int currentLevel;
 	
@@ -69,6 +71,7 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 	
 	public LevelBasedMixLookup(Grammar grammar) {
 		this(grammar, grammar.getLongestTerminalChain());
+		factory = HashTableFactory.getFactory();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -80,22 +83,22 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		
 		int slotsSize = grammar.getGrammarSlots().size();		
 		
-		u = new OpenAddressingHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
+		u = factory.newHashSet(getSize(), Descriptor.levelBasedExternalHasher);
 		r = new ArrayDeque<>();
 		
-		forwardDescriptors = new OpenAddressingHashSet[chainLength];
+		forwardDescriptors = new MultiHashSet[chainLength];
 		forwardRs = new Queue[chainLength];
 		
-		currentNodes = new OpenAddressingHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
-		forwardNodes = new OpenAddressingHashSet[chainLength];
+		currentNodes = factory.newHashSet(initialSize, NonPackedNode.levelBasedExternalHasher);
+		forwardNodes = new MultiHashSet[chainLength];
 		
 		currentGssNodes = new GSSNode[slotsSize];
 		forwardGssNodes = new GSSNode[chainLength][slotsSize];
 		
 		for(int i = 0; i < chainLength; i++) {
-			forwardDescriptors[i] = new OpenAddressingHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
+			forwardDescriptors[i] = factory.newHashSet(getSize(), Descriptor.levelBasedExternalHasher);
 			forwardRs[i] = new ArrayDeque<>(initialSize);
-			forwardNodes[i] = new OpenAddressingHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
+			forwardNodes[i] = factory.newHashSet(initialSize, NonPackedNode.levelBasedExternalHasher);
 			forwardGssNodes[i] = new GSSNode[slotsSize];
 		}
 	}
@@ -104,7 +107,7 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		int nextIndex = indexFor(currentLevel + 1);
 		
 		u = forwardDescriptors[nextIndex];
-		forwardDescriptors[nextIndex] = new OpenAddressingHashSet<>(getSize(), Descriptor.levelBasedExternalHasher);
+		forwardDescriptors[nextIndex] = factory.newHashSet(getSize(), Descriptor.levelBasedExternalHasher);
 		
 		Queue<Descriptor> tmpR = r;
 		assert r.isEmpty();
@@ -112,7 +115,7 @@ public class LevelBasedMixLookup extends AbstractLookupTable {
 		forwardRs[nextIndex] = tmpR;
 		
 		currentNodes = forwardNodes[nextIndex];
-		forwardNodes[nextIndex] = new OpenAddressingHashSet<>(initialSize, NonPackedNode.levelBasedExternalHasher);
+		forwardNodes[nextIndex] = factory.newHashSet(initialSize, NonPackedNode.levelBasedExternalHasher);
 		
 		currentGssNodes = forwardGssNodes[nextIndex];
 		forwardGssNodes[nextIndex] = new GSSNode[slotsSize];

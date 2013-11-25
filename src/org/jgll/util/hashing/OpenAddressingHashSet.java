@@ -120,6 +120,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		
 		label:
 		for(T entry : table) {
+			
 			if(entry != null) {
 				
 				int j = indexFor(entry);
@@ -131,6 +132,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 					}
 					
 					j = next(j);
+					
 				} while(true);
 			}
 		}

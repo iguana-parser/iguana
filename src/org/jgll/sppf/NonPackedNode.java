@@ -7,8 +7,8 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashSet;
-import org.jgll.util.hashing.OpenAddressingHashSet;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -50,7 +50,7 @@ public abstract class NonPackedNode extends SPPFNode {
 		this.rightExtent = rightExtent;
 		this.children = new ArrayList<>(2);
 		
-		this.packedNodes = new OpenAddressingHashSet<>(PackedNode.InsideParentHasher);
+		this.packedNodes = HashTableFactory.getFactory().newHashSet(PackedNode.InsideParentHasher);
 	}
 	
 	@Override

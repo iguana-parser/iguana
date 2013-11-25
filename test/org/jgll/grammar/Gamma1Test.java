@@ -18,7 +18,6 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -110,8 +109,7 @@ public class Gamma1Test {
 
 	@Test
 	public void testSPPF() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aad"), grammar, "S");
-		Visualization.generateSPPFGraph("/Users/ali/output", sppf, Input.fromString("aad"));
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aad"), grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

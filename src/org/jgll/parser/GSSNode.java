@@ -10,6 +10,7 @@ import org.jgll.grammar.slot.L0;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
+import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashMap;
 import org.jgll.util.hashing.MultiHashSet;
 import org.jgll.util.hashing.OpenAddressingHashMap;
@@ -60,7 +61,7 @@ public class GSSNode {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		
-		this.poppedElements = new OpenAddressingHashSet<>(NonPackedNode.externalHasher);
+		this.poppedElements = HashTableFactory.getFactory().newHashSet(NonPackedNode.externalHasher);
 		this.edges = new OpenAddressingHashMap<>(externalHasher);			
 	}
 		
