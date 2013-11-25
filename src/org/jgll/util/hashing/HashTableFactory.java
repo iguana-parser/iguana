@@ -20,7 +20,6 @@ public class HashTableFactory {
 		}
 		return instance;
 	}
-
 	
 	private HashTableFactory(int type) {
 		this.type = type;

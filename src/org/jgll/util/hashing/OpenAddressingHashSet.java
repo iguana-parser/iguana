@@ -102,7 +102,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 			}
 			
 			else if(hasher.equals(table[i], key)) {
-				return key;
+				return table[i];
 			}
 			
 			i = next(i);

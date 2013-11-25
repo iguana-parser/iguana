@@ -14,7 +14,6 @@ import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashMap;
 import org.jgll.util.hashing.MultiHashSet;
 import org.jgll.util.hashing.OpenAddressingHashMap;
-import org.jgll.util.hashing.OpenAddressingHashSet;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**

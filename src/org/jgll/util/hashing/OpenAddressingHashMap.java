@@ -6,7 +6,8 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 
- * A hash map based on open addressing..
+ * A hash map based on open addressing.
+ * 
  * 
  * @author Ali Afroozeh
  *
@@ -17,12 +18,12 @@ public class OpenAddressingHashMap<K, V> implements MultiHashMap<K, V> {
 	
 	private OpenAddressingHashSet<MapEntry<K, V>> set;
 
-	public OpenAddressingHashMap(ExternalHasher<K> decomposer) {
-		set = new OpenAddressingHashSet<>(new MapEntryExternalHasher(decomposer));
+	public OpenAddressingHashMap(ExternalHasher<K> hasher) {
+		set = new OpenAddressingHashSet<>(new MapEntryExternalHasher(hasher));
 	}
 	
-	public OpenAddressingHashMap(int initialCapacity, ExternalHasher<K> decomposer) {
-		set = new OpenAddressingHashSet<>(initialCapacity, new MapEntryExternalHasher(decomposer));
+	public OpenAddressingHashMap(int initialCapacity, ExternalHasher<K> hasher) {
+		set = new OpenAddressingHashSet<>(initialCapacity, new MapEntryExternalHasher(hasher));
 	}
 	
 	public V get(K key) {
