@@ -64,6 +64,8 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 	
 	private ExternalHasher<T> externalHasher;
 	
+	private int collisionsCount;
+	
  	@SafeVarargs
 	public static <T> CuckooHashSet<T> from(ExternalHasher<T> hasher, T...elements) {
 		CuckooHashSet<T> set = new CuckooHashSet<>(hasher);
@@ -208,6 +210,9 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 			table1[index] = key;
 			return null;
 		}
+		
+		collisionsCount++;
+		
 		T tmp = table1[index];
 		table1[index] = key;
 		key = tmp;
@@ -218,10 +223,11 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 			return null;
 		}
 		
+		collisionsCount++;
+		
 		tmp = table2[index];
 		table2[index] = key;
 		key = tmp;
-
 		
 		return key;
 	}
@@ -445,6 +451,11 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		
 		sb.append("}");
 		return sb.toString();
+	}
+
+	@Override
+	public int getCollisionCount() {
+		return collisionsCount;
 	}
 
 }

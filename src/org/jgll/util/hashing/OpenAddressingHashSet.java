@@ -24,6 +24,8 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	
 	private int rehashCount;
 	
+	private int collisionsCount;
+	
 	private ExternalHasher<T> hasher;
 	
 	private HashFunction hashFunction = HashFunctions.defaulFunction();
@@ -88,7 +90,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	
 	@Override
 	public T add(T key) {
-				
+		
 		int i = indexFor(key);
 		
 		do {
@@ -104,6 +106,8 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 			else if(hasher.equals(table[i], key)) {
 				return table[i];
 			}
+			
+			collisionsCount++;
 			
 			i = next(i);
 			
@@ -250,6 +254,11 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 			added = add(t) == null;
 		}
 		return added;
+	}
+	
+	@Override
+	public int getCollisionCount() {
+		return collisionsCount++;
 	}
 	
 	@Override

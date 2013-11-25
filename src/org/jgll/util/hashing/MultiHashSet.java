@@ -21,6 +21,8 @@ public interface MultiHashSet<T> extends Serializable, Iterable<T> {
 	public int getInitialCapacity();
 
 	public int getEnlargeCount();
+	
+	public int getCollisionCount();
 
 	public boolean isEmpty();
 

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import javax.swing.plaf.multi.MultiLabelUI;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -16,7 +18,6 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.CuckooHashSet;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashSet;
 import org.jgll.util.logging.LoggerWrapper;
@@ -199,9 +200,36 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 		}
 		return nonPackedNodes[index].get(key);
 	}
+	
+	private int getTotalCollisions() {
+		int total = 0;
+		
+		for(int i = 0; i < descriptorsSet.length; i++) {
+			if(descriptorsSet[i] != null) {
+				total += descriptorsSet[i].getCollisionCount();
+			}
+		}
+		
+		for(int i = 0; i < nonPackedNodes.length; i++) {
+			if(nonPackedNodes[i] != null) {
+				total += nonPackedNodes[i].getCollisionCount();
+			}
+		}
+		
+		for(int i = 0; i < gssNodes.length; i++) {
+			if(gssNodes[i] != null) {
+				total += gssNodes[i].getCollisionCount();
+			}
+		}
+		
+		return total;
+	}
 
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
+		
+		System.out.println(getTotalCollisions());
+		
 		if(nonPackedNodes[inputSize - 1] == null) {
 			return null;
 		}
