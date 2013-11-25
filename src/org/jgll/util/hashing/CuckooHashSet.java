@@ -65,26 +65,26 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 	private ExternalHasher<T> externalHasher;
 	
  	@SafeVarargs
-	public static <T> CuckooHashSet<T> from(ExternalHasher<T> decomposer, T...elements) {
-		CuckooHashSet<T> set = new CuckooHashSet<>(decomposer);
+	public static <T> CuckooHashSet<T> from(ExternalHasher<T> hasher, T...elements) {
+		CuckooHashSet<T> set = new CuckooHashSet<>(hasher);
 		for(T e : elements) {
 			set.add(e);
 		}
 		return set;
 	}
 	
-	public CuckooHashSet(ExternalHasher<T> decomposer) {
-		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, decomposer);
+	public CuckooHashSet(ExternalHasher<T> hasher) {
+		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
-	public CuckooHashSet(int initalCapacity, ExternalHasher<T> decomposer) {
-		this(initalCapacity, DEFAULT_LOAD_FACTOR, decomposer);
+	public CuckooHashSet(int initalCapacity, ExternalHasher<T> hasher) {
+		this(initalCapacity, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public CuckooHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> decomposer) {
+	public CuckooHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> hasher) {
 		this.initialCapacity = initialCapacity;
-		this.externalHasher = decomposer;
+		this.externalHasher = hasher;
 		
 		if(initialCapacity < 8) {
 			initialCapacity = 8;

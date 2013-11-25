@@ -2,13 +2,17 @@ package org.jgll.util.hashing;
 
 import java.util.Iterator;
 
+import org.jgll.parser.HashFunctions;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 32;
-	private static final float DEFAULT_LOAD_FACTOR = 0.5f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
+	
+	private int initialCapacity;
 	
 	private int capacity;
 	
@@ -19,11 +23,14 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	private float loadFactor;
 	
 	private int rehashCount;
+	
+	private ExternalHasher<T> hasher;
+	
+	private HashFunction hashFunction = HashFunctions.defaulFunction();
 
 	/**
 	 * capacity - 1
-	 * The bitMask is used to get the p most-significant bytes of
-	 * the multiplicaiton.
+	 * The bitMask is used to get the p most-significant bytes of the multiplicaiton.
 	 */
 	private int bitMask;
 	
@@ -32,17 +39,23 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	 */
 	private int p;
 	
-	private Object[] table;
+	private T[] table;
 	
-	public OpenAddressingHashSet() {
-		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
+	public OpenAddressingHashSet(ExternalHasher<T> hasher) {
+		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
-	public OpenAddressingHashSet(int initalCapacity) {
-		this(initalCapacity, DEFAULT_LOAD_FACTOR);
+	public OpenAddressingHashSet(int initalCapacity, ExternalHasher<T> hasher) {
+		this(initalCapacity, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
-	public OpenAddressingHashSet(int initialCapacity, float loadFactor) {
+	@SuppressWarnings("unchecked")
+	public OpenAddressingHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> hasher) {
+		
+		this.initialCapacity = initialCapacity;
+		
+		this.hasher = hasher;
+		
 		this.loadFactor = loadFactor;
 
 		initialCapacity = Math.max(4, initialCapacity);
@@ -57,23 +70,18 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		bitMask = capacity - 1;
 		
 		threshold = (int) (loadFactor * capacity);
-		table = new Object[capacity];
+		table = (T[]) new Object[capacity];
 	}
 	
+	@Override
 	public boolean contains(T key) {
-		
-		int i = indexFor(key.hashCode());
-		
-		while(table[i] != null && !table[i].equals(key)) {			
-			i = (i + 1) & bitMask; // mod capacity
-		}
-		
-		return table[i] != null;
+		return get(key) != null;
 	}
 	
+	@Override
 	public T add(T key) {
 				
-		int i = indexFor(key.hashCode());
+		int i = indexFor(key);
 		do {
 			if(table[i] == null) {
 				table[i] = key;
@@ -84,67 +92,94 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 				return null;
 			}
 			
-			else if(table[i].equals(key)) {
+			else if(hasher.equals(table[i], key)) {
 				return key;
 			}
 			
-			i = (i + 1) & bitMask; // mod capacity
+			i = next(i); // mod capacity
 		} while(true);
-		
 	}
-	
 	
 	private void rehash() {
-		throw new IllegalStateException();
-//		capacity <<= 1;
-//		p += 1;
-//		bitMask = capacity - 1;
-//		
-//		Object[] newTable = new Object[capacity];
-//		
-//		label:
-//		for(Object key : table) {
-//			if(key != null) {
-//				
-//				int j = indexFor(key.hashCode());
-//
-//				do {
-//					if(newTable[j] == null) {
-//						newTable[j] = key;
-//						continue label;
-//					}
-//					
-//					j = next(j);
-//				} while(true);
-//			}
-//		}
-//		table = newTable;
-//		
-//		threshold = (int) (loadFactor * capacity);
-//		rehashCount++;
+		capacity <<= 1;
+		p += 1;
+		bitMask = capacity - 1;
+		
+		@SuppressWarnings("unchecked")
+		T[] newTable = (T[]) new Object[capacity];
+		
+		label:
+		for(T entry : table) {
+			if(entry != null) {
+				
+				int j = indexFor(entry);
+				
+				do {
+					if(newTable[j] == null) {
+						newTable[j] = entry;
+						continue label;
+					}
+					
+					j = next(j);
+				} while(true);
+			}
+		}
+		
+		table = newTable;
+		
+		threshold = (int) (loadFactor * capacity);
+		rehashCount++;
 	}
 	
-	private int indexFor(int hash) {
-		return  hash & bitMask;		
+	private int indexFor(T key) {
+		return hasher.hash(key, hashFunction) & bitMask;
 	}
-		
+	 
 	private int next(int j) {
-		if(j == 0) {
-			return capacity - 1;
-		}
-		return j - 1;
+		return (j + 1) & bitMask;
 	}
 
 	@Override
 	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new Iterator<T>() {
+			
+			int index = 0;
+			int counter = 0;
+
+			@Override
+			public boolean hasNext() {
+				return counter < size;
+			}
+
+			@Override
+			public T next() {
+				while(index < table.length) {
+					if(table[index] != null) {
+						counter++;
+					} else {
+						counter++;
+					}
+				}
+				return table[index];
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
 	@Override
 	public T get(T key) {
-		// TODO Auto-generated method stub
-		return null;
+		int i = indexFor(key);
+		
+		while(table[i] != null && !hasher.equals(table[i], key)) {			
+			i = next(i); // mod capacity
+		}
+		
+		return table[i];
 	}
 
 	@Override
@@ -154,14 +189,12 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 
 	@Override
 	public int getInitialCapacity() {
-		// TODO Auto-generated method stub
-		return 0;
+		return initialCapacity;
 	}
 
 	@Override
 	public int getEnlargeCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return rehashCount;
 	}
 
 	@Override
@@ -171,20 +204,35 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 
 	@Override
 	public boolean remove(T key) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		if(!contains(key)) {
+			return false;
+		}
+		
+		int i = indexFor(key);
+		
+		while(table[i] != null && !hasher.equals(table[i], key)) {			
+			i = next(i); // mod capacity
+		}
+		
+		table[i] = null;
+		return true;
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < table.length; i++) {
+			table[i] = null;
+		}
 	}
 
 	@Override
 	public boolean addAll(Iterable<T> c) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean added = false;
+		for(T t : c) {
+			added = add(t) == null;
+		}
+		return added;
 	}
 
 }
