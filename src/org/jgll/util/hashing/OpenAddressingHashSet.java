@@ -248,10 +248,6 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		return added;
 	}
 	
-	protected boolean isEntryEmpty(T e) {
-		return e == null;
-	}
-	
 	@Override
 	public String toString() {
 		
@@ -259,13 +255,14 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		sb.append("{");
 		
 		for(T t : table) {
-			if(!isEntryEmpty(t)) { 
+			if(t != null) { 
 				sb.append(t).append(", ");
 			}
 		}
 		
-		if(sb.length() > 2)
+		if(sb.length() > 2) {
 			sb.delete(sb.length() - 2, sb.length());
+		}
 		
 		sb.append("}");
 		return sb.toString();

@@ -131,13 +131,13 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		int index = indexFor(externalHasher.hash(key, function1));
 		
 		T value = table1[index];
-		if(!isEntryEmpty(value) && externalHasher.equals(key, value)) {
+		if(value != null && externalHasher.equals(key, value)) {
 			return value;
 		}			
 		
 		index = indexFor(externalHasher.hash(key, function2));
 		value = table2[index];
-		if(!isEntryEmpty(value) && externalHasher.equals(key, value)) {
+		if(value != null && externalHasher.equals(key, value)) {
 			return value;
 		}
 
@@ -176,11 +176,7 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		size++;
 		return null;
 	}
-	
-	protected boolean isEntryEmpty(T e) {
-		return e == null;
-	}
-	
+		
 	private T tryInsert(T key) {
 		int i = 0;
 		while(i < size + 1) {
@@ -208,7 +204,7 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 	 */
 	private T insert(T key) {
 		int index = indexFor(externalHasher.hash(key, function1));
-		if(isEntryEmpty(table1[index])) {
+		if(table1[index] == null) {
 			table1[index] = key;
 			return null;
 		}
@@ -217,7 +213,7 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		key = tmp;
 		
 		index = indexFor(externalHasher.hash(key, function2));
-		if(isEntryEmpty(table2[index])) {
+		if(table2[index] == null) {
 			table2[index] = key;
 			return null;
 		}
@@ -237,7 +233,7 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		table1Loop:
 		for(int i = 0; i < table1.length; i++) {
 			T key = table1[i];
-			if(!isEntryEmpty(key)) {
+			if(key != null) {
 				if(indexFor(externalHasher.hash(key, function1)) != i) {
 					T tmp = table1[i];
 					table1[i] = null;
@@ -262,7 +258,7 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		table2Loop:
 		for(int i = 0; i < table2.length; i++) {
 			T key = table2[i];
-			if(!isEntryEmpty(key)) {
+			if(key != null) {
 				if(indexFor(externalHasher.hash(key, function2)) != i) {
 					T tmp = table2[i];
 					table2[i] = null;
@@ -365,7 +361,7 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 			@Override
 			public T next() {
 				while(index1 < table1.length) {
-					if(!isEntryEmpty(table1[index1])) {
+					if(table1[index1] != null) {
 						it++;
 						return  table1[index1++];
 					}
@@ -373,7 +369,7 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 				}
 				
 				while(index2 < table2.length) {
-					if(!isEntryEmpty(table2[index2])) {
+					if(table2[index2] != null) {
 						it++;
 						return table2[index2++];
 					}
@@ -436,11 +432,11 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		for(T t : table1) {
-			if(!isEntryEmpty(t)) 
+			if(t != null) 
 				sb.append(t).append(", ");
 		}
 		for(T t : table2) {
-			if(!isEntryEmpty(t))
+			if(t != null)
 				sb.append(t).append(", ");
 		}
 		
