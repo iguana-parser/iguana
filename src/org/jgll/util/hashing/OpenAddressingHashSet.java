@@ -4,12 +4,13 @@ import java.util.Iterator;
 
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.SimpleTabulation;
 
 public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int DEFAULT_INITIAL_CAPACITY = 32;
+	private static final int DEFAULT_INITIAL_CAPACITY = 64;
 	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
 	
 	private int initialCapacity;
@@ -27,6 +28,8 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	private int collisionsCount;
 	
 	private ExternalHasher<T> hasher;
+	
+//	private HashFunction hashFunction = new SimpleTabulation(6);
 	
 	private HashFunction hashFunction = HashFunctions.defaulFunction();
 
@@ -91,11 +94,8 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	@Override
 	public T add(T key) {
 		
-		int hash = hash(key);
-		int index = indexFor(hash);
+		int index = hash(key);
 
-		int j = 0;
-		
 		do {
 			if(table[index] == null) {
 				table[index] = key;
@@ -112,7 +112,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 			
 			collisionsCount++;
 			
-			index = next(hash, ++j);
+			index = (index + 1) & bitMask;
 			
 		} while(true);
 	}
@@ -120,6 +120,9 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	private void rehash() {
 		capacity <<= 1;
 		p += 1;
+		
+//		hashFunction = new SimpleTabulation(p);
+		
 		bitMask = capacity - 1;
 		
 		@SuppressWarnings("unchecked")
@@ -128,18 +131,16 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		label:
 		for(T key : table) {
 			if(key != null) {
-				int hash = hash(key);
-				int index = indexFor(hash);
-
-				int j = 0;
 				
+				int index = hash(key);
+
 				do {
 					if(newTable[index] == null) {
 						newTable[index] = key;
 						continue label;
 					}
 					
-					index = next(hash, ++j);
+					index = (index + 1) & bitMask;
 					
 				} while(true);
 			}
@@ -152,17 +153,9 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	}
 	
 	private int hash(T key) {
-		return hasher.hash(key, hashFunction);
+		return hasher.hash(key, hashFunction) & bitMask;
 	}
 	
-	private int indexFor(int hash) {
-		return hash & bitMask;
-	}
-	 
-	private int next(int hash, int i) {
-		return (hash + i) & bitMask;
-	}
-
 	@Override
 	public Iterator<T> iterator() {
 		
@@ -200,12 +193,10 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	@Override
 	public T get(T key) {
 		
-		int hash = hash(key);
-		int index = indexFor(hash);
+		int index = hash(key);
 		
-		int j = 0;
 		while(table[index] != null && !hasher.equals(table[index], key)) {			
-			index = next(hash, ++j);
+			index = (index + 1) & bitMask;
 		}
 		
 		return table[index];
@@ -238,12 +229,10 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 			return false;
 		}
 		
-		int hash = hash(key);
-		int index = indexFor(hash);
+		int index = hash(key);
 		
-		int j = 0;
 		while(table[index] != null && !hasher.equals(table[index], key)) {			
-			index = next(hash, ++j);
+			index = (index + 1) & bitMask;
 		}
 		
 		table[index] = null;
