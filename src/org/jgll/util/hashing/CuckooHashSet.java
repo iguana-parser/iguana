@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.RandomUtil;
 import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.SimpleTabulation;
 
 /**
  * 
@@ -332,6 +333,11 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		return initialCapacity;
 	}
 	
+	@Override
+	public int getCapacity() {
+		return capacity;
+	}
+	
 	public int getRehashCount() {
 		return rehashCount;
 	}
@@ -392,26 +398,6 @@ public class CuckooHashSet<T> implements MultiHashSet<T> {
 		};
 	}
 	
-	@Override
-	public boolean remove(T key) {
-		
-		int index = indexFor(externalHasher.hash(key, function1));
-		if(externalHasher.equals(key, table1[index])) {
-			table1[index] = null;
-			size--;
-			return true;
-		}
-		
-		index = indexFor(externalHasher.hash(key, function2));
-		if(externalHasher.equals(key, table2[index])) {
-			table2[index] = null;
-			size--;
-			return true;
-		}
-
-		return false;
-	}
-
 	@Override
 	public void clear() {
 		for(int i = 0; i < table1.length; i++) {

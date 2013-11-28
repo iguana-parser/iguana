@@ -57,9 +57,12 @@ public class OpenAddressingHashSetTest {
 	
 	@Test
 	public void testInsertOneMillionEntries() {
+		
 		OpenAddressingHashSet<IntegerHashKey4> set = new OpenAddressingHashSet<>(externalHasher);
+		
 		Random rand = RandomUtil.random;
-		for(int i = 0; i < 1000000; i++) {
+		
+		for(int i = 0; i < 10000000; i++) {
 			IntegerHashKey4 key = new IntegerHashKey4(rand.nextInt(Integer.MAX_VALUE), 
 													  rand.nextInt(Integer.MAX_VALUE), 
 													  rand.nextInt(Integer.MAX_VALUE), 
@@ -67,8 +70,8 @@ public class OpenAddressingHashSetTest {
 			set.add(key);
 		}
 		
-		assertEquals(1000000, set.size());
 		System.out.println(set.getCollisionCount());
+		assertEquals(10000000, set.size());
 	}
 	
 	@Test
@@ -94,22 +97,7 @@ public class OpenAddressingHashSetTest {
 		assertEquals(false, set.contains(5));
 		assertEquals(0, set.size());
 	}
-	
-	@Test
-	public void testRemove() {
-		OpenAddressingHashSet<Integer> set = OpenAddressingHashSet.from(IntegerExternalHasher.getInstance(), 1, 2, 3, 4, 5);
-		set.remove(3);
-		set.remove(5);
-		
-		assertTrue(set.contains(1));
-		assertTrue(set.contains(2));
-		assertFalse(set.contains(3));
-		assertTrue(set.contains(4));
-		assertFalse(set.contains(5));
-		
-		assertEquals(3, set.size());
-	}
-	
+
 	@Test
 	public void testAddAndGet() {
 		OpenAddressingHashSet<Integer> set = OpenAddressingHashSet.from(IntegerExternalHasher.getInstance(), 1, 2, 3);

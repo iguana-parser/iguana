@@ -4,9 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Random;
 
-import org.jgll.parser.HashFunctions;
 import org.jgll.util.RandomUtil;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.junit.Test;
 
 public class CuckoosHashSetTest {
@@ -89,20 +87,6 @@ public class CuckoosHashSetTest {
 		assertEquals(false, set.contains(4));
 		assertEquals(false, set.contains(5));
 		assertEquals(0, set.size());
-	}
-	
-	@Test
-	public void testRemove() {
-		CuckooHashSet<Integer> set = CuckooHashSet.from(IntegerExternalHasher.getInstance(), 1, 2, 3, 4, 5);
-		set.remove(3);
-		set.remove(5);
-		
-		assertEquals(true, set.contains(1));
-		assertEquals(true, set.contains(2));
-		assertEquals(false, set.contains(3));
-		assertEquals(true, set.contains(4));
-		assertEquals(false, set.contains(5));
-		assertEquals(3, set.size());
 	}
 	
 	@Test

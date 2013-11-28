@@ -19,14 +19,14 @@ public interface MultiHashSet<T> extends Serializable, Iterable<T> {
 	public int size();
 
 	public int getInitialCapacity();
+	
+	public int getCapacity();
 
 	public int getEnlargeCount();
 	
 	public int getCollisionCount();
 
 	public boolean isEmpty();
-
-	public boolean remove(T key);
 
 	public void clear();
 

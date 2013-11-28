@@ -2,7 +2,6 @@ package org.jgll.util.hashing;
 
 import java.util.Iterator;
 
-import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.hashing.hashfunction.SimpleTabulation;
 
@@ -11,7 +10,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 64;
-	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.5f;
 	
 	private int initialCapacity;
 	
@@ -29,10 +28,8 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	
 	private ExternalHasher<T> hasher;
 	
-//	private HashFunction hashFunction = new SimpleTabulation(6);
+	private HashFunction hashFunction = SimpleTabulation.getInstance();
 	
-	private HashFunction hashFunction = HashFunctions.defaulFunction();
-
 	/**
 	 * capacity - 1
 	 * The bitMask is used to get the p most-significant bytes of the multiplicaiton.
@@ -96,6 +93,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		
 		int index = hash(key);
 
+		int j = 0;
 		do {
 			if(table[index] == null) {
 				table[index] = key;
@@ -112,7 +110,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 			
 			collisionsCount++;
 			
-			index = (index + 1) & bitMask;
+			index = (index + ++j) & bitMask;
 			
 		} while(true);
 	}
@@ -211,6 +209,11 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	public int getInitialCapacity() {
 		return initialCapacity;
 	}
+	
+	@Override
+	public int getCapacity() {
+		return capacity;
+	}
 
 	@Override
 	public int getEnlargeCount() {
@@ -220,24 +223,6 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	@Override
 	public boolean isEmpty() {
 		return size == 0;
-	}
-
-	@Override
-	public boolean remove(T key) {
-		
-		if(!contains(key)) {
-			return false;
-		}
-		
-		int index = hash(key);
-		
-		while(table[index] != null && !hasher.equals(table[index], key)) {			
-			index = (index + 1) & bitMask;
-		}
-		
-		table[index] = null;
-		size--;
-		return true;
 	}
 
 	@Override

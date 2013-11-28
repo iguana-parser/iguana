@@ -7,7 +7,6 @@ public class SimpleTabulation implements HashFunction {
 	
 	private static final long serialVersionUID = 1L;
 
-	
 	private int[][] table;
 	
 	/**
@@ -15,12 +14,25 @@ public class SimpleTabulation implements HashFunction {
 	 */
 	private int bitMask;
 	
-	public SimpleTabulation(int d) {
+	private static SimpleTabulation instance;
+	
+	public static SimpleTabulation getInstance() {
+		if(instance == null) {
+			instance = new SimpleTabulation();
+		}
+		return instance;
+	}
+	
+	private SimpleTabulation(int d) {
 		this.bitMask = (int) Math.pow(2, d) - 1;
 		
 		table = new int[20][256];
 		
 		fillInTable(table);
+	}
+	
+	private SimpleTabulation() {
+		this(25);
 	}
 	
 	private void fillInTable(int[][] table) {
@@ -46,7 +58,7 @@ public class SimpleTabulation implements HashFunction {
 		      ^ table[4][k2 & 0xff]
 		      ^ table[5][(k2 >>> 8)  & 0xff]
 		      ^ table[6][(k2 >>> 16) & 0xff]
-		      ^ table[7][(k2 >>> 24) & 0xff]) & bitMask;	
+		      ^ table[7][(k2 >>> 24) & 0xff]);	
 	}
 
 	@Override
@@ -62,7 +74,7 @@ public class SimpleTabulation implements HashFunction {
 		      ^ table[8][k3 & 0xff]
 		      ^ table[9][(k3 >>> 8)  & 0xff]
 		      ^ table[10][(k3 >>> 16) & 0xff]
-		      ^ table[11][(k3 >>> 24) & 0xff]) & bitMask;	
+		      ^ table[11][(k3 >>> 24) & 0xff]);	
 	}
 
 	@Override
@@ -82,7 +94,7 @@ public class SimpleTabulation implements HashFunction {
 		      ^ table[12][k4 & 0xff]
 		      ^ table[13][(k4 >>> 8)  & 0xff]
 		      ^ table[14][(k4 >>> 16) & 0xff]
-		      ^ table[15][(k4 >>> 24) & 0xff]) & bitMask;
+		      ^ table[15][(k4 >>> 24) & 0xff]);
 	}
 
 	@Override
@@ -106,7 +118,7 @@ public class SimpleTabulation implements HashFunction {
 		      ^ table[16][k5 & 0xff]
 		      ^ table[17][(k5 >>> 8) & 0xff]
 		      ^ table[18][(k5 >>> 16) & 0xff]
-		      ^ table[19][(k5 >>> 24) & 0xff]) & bitMask;
+		      ^ table[19][(k5 >>> 24) & 0xff]);
 	}
 
 	@Override
