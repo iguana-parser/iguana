@@ -95,6 +95,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		int index = indexFor(hash);
 
 		int j = 0;
+		
 		do {
 			if(table[index] == null) {
 				table[index] = key;

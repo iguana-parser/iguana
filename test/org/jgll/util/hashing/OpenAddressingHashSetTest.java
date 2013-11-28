@@ -68,6 +68,7 @@ public class OpenAddressingHashSetTest {
 		}
 		
 		assertEquals(1000000, set.size());
+		System.out.println(set.getCollisionCount());
 	}
 	
 	@Test
