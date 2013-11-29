@@ -3,7 +3,7 @@ package org.jgll.util.hashing.hashfunction;
 import org.jgll.util.RandomUtil;
 
 
-public class SimpleTabulation implements HashFunction {
+public class SimpleTabulation8 implements HashFunction {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -14,16 +14,16 @@ public class SimpleTabulation implements HashFunction {
 	 */
 	private int bitMask;
 	
-	private static SimpleTabulation instance;
+	private static SimpleTabulation8 instance;
 	
-	public static SimpleTabulation getInstance() {
+	public static SimpleTabulation8 getInstance() {
 		if(instance == null) {
-			instance = new SimpleTabulation();
+			instance = new SimpleTabulation8();
 		}
 		return instance;
 	}
 	
-	private SimpleTabulation(int d) {
+	private SimpleTabulation8(int d) {
 		this.bitMask = (int) Math.pow(2, d) - 1;
 		
 		table = new int[20][256];
@@ -31,7 +31,7 @@ public class SimpleTabulation implements HashFunction {
 		fillInTable(table);
 	}
 	
-	private SimpleTabulation() {
+	private SimpleTabulation8() {
 		this(25);
 	}
 	

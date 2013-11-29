@@ -12,7 +12,7 @@ public class SimpleTabulationTest {
 	@Test
 	public void test() {
 		
-		SimpleTabulation f = SimpleTabulation.getInstance();
+		SimpleTabulation8 f = SimpleTabulation8.getInstance();
 		
 		int[] result = new int[262144];
 		
