@@ -27,7 +27,6 @@ public class SimpleTabulationTest {
 													  rand.nextInt(Integer.MAX_VALUE));
 			
 			int hash = f.hash(key.getK1(), key.getK2(), key.getK3(), key.getK4()) & mask;
-//			System.out.println(hash);
 			result[hash] = result[hash] + 1;
 		}
 

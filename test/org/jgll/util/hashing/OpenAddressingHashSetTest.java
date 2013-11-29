@@ -2,6 +2,8 @@ package org.jgll.util.hashing;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.jgll.parser.HashFunctions;
@@ -10,6 +12,21 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.junit.Test;
 
 public class OpenAddressingHashSetTest {
+	
+	private static List<IntegerHashKey4> list = new ArrayList<>();
+	
+	static {
+		Random rand = RandomUtil.random;
+		
+		for(int i = 0; i < 10000000; i++) {
+			IntegerHashKey4 key = new IntegerHashKey4(rand.nextInt(Integer.MAX_VALUE), 
+													  rand.nextInt(Integer.MAX_VALUE), 
+													  rand.nextInt(Integer.MAX_VALUE), 
+													  rand.nextInt(Integer.MAX_VALUE));
+			list.add(key);
+		}
+
+	}
 	
 	private final IntegerHashKey4ExternalHasher externalHasher = new IntegerHashKey4ExternalHasher();
 	
@@ -60,13 +77,7 @@ public class OpenAddressingHashSetTest {
 		
 		OpenAddressingHashSet<IntegerHashKey4> set = new OpenAddressingHashSet<>(externalHasher);
 		
-		Random rand = RandomUtil.random;
-		
-		for(int i = 0; i < 10000000; i++) {
-			IntegerHashKey4 key = new IntegerHashKey4(rand.nextInt(Integer.MAX_VALUE), 
-													  rand.nextInt(Integer.MAX_VALUE), 
-													  rand.nextInt(Integer.MAX_VALUE), 
-													  rand.nextInt(Integer.MAX_VALUE));
+		for(IntegerHashKey4 key : list) {
 			set.add(key);
 		}
 		
@@ -115,65 +126,5 @@ public class OpenAddressingHashSetTest {
 	public void testEnlarge() {
 		OpenAddressingHashSet<Integer> set = OpenAddressingHashSet.from(IntegerExternalHasher.getInstance(), 101, 21, 398, 432, 15, 986, 737);
 		set.add(891);
-	}
-	
-	
-	private class IntegerHashKey4 {
-
-		private int k1;
-		private int k2;
-		private int k3;
-		private int k4;
-
-		public IntegerHashKey4(int k1, int k2, int k3, int k4) {
-			this.k1 = k1;
-			this.k2 = k2;
-			this.k3 = k3;
-			this.k4 = k4;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if(this == obj) {
-				return true;
-			}
-			
-			if(!(obj instanceof IntegerHashKey4)) {
-				return false;
-			}
-			
-			IntegerHashKey4 other = (IntegerHashKey4) obj;
-			
-			return k1 == other.k1 && k2 == other.k2 && k3 == other.k3 && k4 == other.k4;
-		}
-		
-		@Override
-		public String toString() {
-			return "(" + k1 + ", " + k2 + ", " + k3 + ", " + k4 + ")";
-		}
-		
-		@Override
-		public int hashCode() {
-			return HashFunctions.defaulFunction().hash(k1, k2, k3, k4);
-		}
-	}
-	
-	private static class IntegerHashKey4ExternalHasher implements ExternalHasher<IntegerHashKey4> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(IntegerHashKey4 key, HashFunction f) {
-			return f.hash(key.k1, key.k2, key.k3, key.k4);
-		}
-
-		@Override
-		public boolean equals(IntegerHashKey4 key1, IntegerHashKey4 key2) {
-			return key1.k1 == key2.k1 &&
-				   key1.k2 == key2.k2 &&
-				   key1.k3 == key2.k3 &&
-				   key1.k4 == key1.k4;
-		}
-	}
-	
+	}	
 }

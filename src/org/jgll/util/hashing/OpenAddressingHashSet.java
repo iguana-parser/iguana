@@ -93,7 +93,6 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		
 		int index = hash(key);
 
-		int j = 0;
 		do {
 			if(table[index] == null) {
 				table[index] = key;
@@ -110,16 +109,15 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 			
 			collisionsCount++;
 			
-			index = (index + ++j) & bitMask;
+			index = (index + 1) & bitMask;
 			
 		} while(true);
 	}
 	
 	private void rehash() {
+		
 		capacity <<= 1;
 		p += 1;
-		
-//		hashFunction = new SimpleTabulation(p);
 		
 		bitMask = capacity - 1;
 		

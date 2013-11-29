@@ -120,23 +120,7 @@ public class OpenAddressingHashMap<K, V> implements MultiHashMap<K, V> {
 			this.v = value;
 			return v;
 		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if(this == obj) {
-				return true;
-			}
-			
-			if(! (obj instanceof MapEntry)) {
-				return false;
-			}
-			
-			@SuppressWarnings("unchecked")
-			MapEntry<K, V> other = (MapEntry<K, V>) obj;
-			
-			return k.equals(other.k);
-		}
-		
+				
 		@Override
 		public String toString() {
 			return "(" + k.toString() + ", " + (v == null ? "" : v.toString()) + ")";
