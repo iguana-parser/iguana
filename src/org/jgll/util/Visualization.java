@@ -5,7 +5,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.util.dot.GSSToDot;
 import org.jgll.util.dot.GraphVizUtil;
 import org.jgll.util.dot.SPPFToDot;
-import org.jgll.util.dot.SPPFToDot2;
+import org.jgll.util.dot.SPPFToDotUnpacked;
 import org.jgll.util.dot.ToDotWithoutIntermediateNodes;
 import org.jgll.util.dot.ToDotWithoutIntermeidateAndLists;
 
@@ -37,7 +37,7 @@ public class Visualization {
 	}
 	
 	public static void generateSPPFNodesUnPacked(String outputDir, SPPFNode node, Input input) {
-		SPPFToDot2 toDot = new SPPFToDot2(input);
+		SPPFToDotUnpacked toDot = new SPPFToDotUnpacked(input);
 		toDot.visit(node);
 		int i = 0;
 		for(String s : toDot.getResult()) {

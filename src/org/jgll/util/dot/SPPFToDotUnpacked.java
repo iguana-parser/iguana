@@ -20,13 +20,18 @@ import org.jgll.traversal.SPPFVisitorUtil;
 import org.jgll.util.Input;
 
 /**
- * Creates a Graphviz's dot format representation of an SPPF node.
+ * Creates a Graphviz's dot format representation of an SPPF node in form of
+ * its parse trees separately.
+ * 
+ * The unpacking of an SPPF is in general exponential, so this class should not
+ * be used for large inputs.
+ * 
  * 
  * @author Ali Afroozeh
  * 
  * @see SPPFVisitor
  */
-public class SPPFToDot2 extends ToDot {
+public class SPPFToDotUnpacked extends ToDot {
 	
 	private final boolean showPackedNodeLabel;
 	
@@ -38,11 +43,11 @@ public class SPPFToDot2 extends ToDot {
 
 	private Input input;
 	
-	public SPPFToDot2(Input input) {
+	public SPPFToDotUnpacked(Input input) {
 		this(input, false);
 	}
 	
-	public SPPFToDot2(Input input, boolean showPackedNodeLabel) {
+	public SPPFToDotUnpacked(Input input, boolean showPackedNodeLabel) {
 		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;
 		this.parseTrees = new HashSet<>();

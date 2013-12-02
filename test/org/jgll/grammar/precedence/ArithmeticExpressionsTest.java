@@ -16,7 +16,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,7 +65,7 @@ public class ArithmeticExpressionsTest {
 		// (E + .E, E + E)
 		builder.addPrecedencePattern(E, rule2, 2, rule2);
 		
-//		builder.rewritePrecedencePatterns();
+		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
 		levelParser = ParserFactory.createLevelParser(grammar);
@@ -80,8 +79,7 @@ public class ArithmeticExpressionsTest {
 
 	@Test
 	public void testParsers() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a*a+a"), grammar, "E");
-		Visualization.generateSPPFNodesUnPacked("/Users/ali/newoutput", sppf1, Input.fromString("a+a*a+a"));
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a"), grammar, "E");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
 		assertTrue(sppf1.deepEquals(sppf2));
 	}
