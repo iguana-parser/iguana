@@ -3,13 +3,16 @@ package org.jgll.util.dot;
 import static org.jgll.util.dot.GraphVizUtil.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
+import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
@@ -28,6 +31,10 @@ public class SPPFToDot2 extends ToDot {
 	private final boolean showPackedNodeLabel;
 	
 	protected List<StringBuilder> list;
+	
+	private Map<SPPFNode, Integer> map;
+	
+	SPPFNode[] permutation;
 
 	private Input input;
 	
@@ -42,13 +49,34 @@ public class SPPFToDot2 extends ToDot {
 	}
 	
 	public void visit(SPPFNode node) {
+
+		createPermutationMaps(node);
+		
+		int j = 0;
+		for(SPPFNode sppfNode : map.keySet()) {
+			permutation[j++] = sppfNode;
+		}
+		
 		StringBuilder sb = new StringBuilder();
-		list.add(sb);
 		visit(node, sb);
+		list.add(sb);
+		
+		int i = 0;
+		while(i < permutation.length) {
+			if(map.get(permutation[i]) < permutation[i].childrenCount()) {
+				map.put(permutation[i], map.get(permutation[i]) + 1);
+				sb = new StringBuilder();
+				visit(node, sb);
+				list.add(sb);
+			}  
+			else {
+				i++;
+			}
+		}
 	}
 	
 	private void visit(SPPFNode node, StringBuilder sb) {
-		
+
 		if(node instanceof TerminalSymbolNode) {
 			visit((TerminalSymbolNode) node, sb);
 		} 
@@ -77,22 +105,21 @@ public class SPPFToDot2 extends ToDot {
 		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.getLabel())) + "\n");
 		
 		if(node.isAmbiguous()) {
-			for(SPPFNode child : node.getChildren()) {
-				
-				SPPFVisitorUtil.removeIntermediateNode((PackedNode) child);
-				SPPFVisitorUtil.removeCollapsibleNode((PackedNode) child);
-				
-				StringBuilder copy = new StringBuilder(sb);
-				list.add(copy);
-				
-				addEdgesToChildren(node, child.getChildren(), copy);
-				
-				for(SPPFNode childOfPackedNode : child.getChildren()) {
-					visit(childOfPackedNode, copy);					
-				}
-				
+			Integer index = map.get(node);
+			SPPFNode child = node.getChildAt(index);
+			
+			if(child == null) {
+				System.out.println("WTF?");
 			}
-			list.remove(sb);
+			
+			SPPFVisitorUtil.removeIntermediateNode((PackedNode) child);
+			SPPFVisitorUtil.removeCollapsibleNode((PackedNode) child);
+			
+			addEdgesToChildren(node, child.getChildren(), sb);
+			
+			for(SPPFNode childOfPackedNode : child.getChildren()) {
+				visit(childOfPackedNode, sb);					
+			}
 		}
 		else {
 			addEdgesToChildren(node, node.getChildren(), sb);
@@ -101,7 +128,6 @@ public class SPPFToDot2 extends ToDot {
 				visit(child, sb);
 			}
 		}
-		
 	}
 
 	public void visit(IntermediateNode node, StringBuilder sb) {
@@ -137,6 +163,13 @@ public class SPPFToDot2 extends ToDot {
 		}
 	}
 	
+	protected void addEdgesToChildrenWithNode(SPPFNode node, Iterable<SPPFNode> children, StringBuilder sb) {
+		for (SPPFNode child : children) {
+			addEdgeToChild(node, child, sb);
+			
+		}
+	}
+	
 	protected void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode, StringBuilder sb) {
 		sb.append(EDGE + "\"" + getId(parentNode) + "\"" + "->" + "{\"" + getId(childNode) + "\"}" + "\n");
 	}
@@ -154,4 +187,51 @@ public class SPPFToDot2 extends ToDot {
 
 		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, "\\\"" + input.subString(node.getLeftExtent(), node.getRightExtent()) + "\\\"" + "\n"));
 	}
+	
+	private void createPermutationMaps(SPPFNode node) {
+		map = new HashMap<>();
+		SPPFVisitor sppfVisitor = new SPPFVisitor() {
+			
+			@Override
+			public void visit(RegularExpressionNode node) {
+				SPPFVisitorUtil.visitChildren(node, this);
+			}
+			
+			@Override
+			public void visit(RegularListNode node) {
+				SPPFVisitorUtil.visitChildren(node, this);
+			}
+			
+			@Override
+			public void visit(ListSymbolNode node) {
+				SPPFVisitorUtil.visitChildren(node, this);
+			}
+			
+			@Override
+			public void visit(PackedNode node) {
+				SPPFVisitorUtil.visitChildren(node, this);
+			}
+			
+			@Override
+			public void visit(IntermediateNode node) {
+				SPPFVisitorUtil.visitChildren(node, this);
+			}
+			
+			@Override
+			public void visit(NonterminalSymbolNode node) {
+				if(node.isAmbiguous()) {
+					map.put(node, 0);
+				}
+				SPPFVisitorUtil.visitChildren(node, this);
+			}
+			
+			@Override
+			public void visit(TerminalSymbolNode node) {}
+		};
+		
+		node.accept(sppfVisitor);
+		
+		permutation = new SPPFNode[map.size()];		
+	}
+	
 }
