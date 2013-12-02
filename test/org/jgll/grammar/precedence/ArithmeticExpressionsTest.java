@@ -81,7 +81,7 @@ public class ArithmeticExpressionsTest {
 	@Test
 	public void testParsers() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a*a+a"), grammar, "E");
-		Visualization.generateSPPFNodesUnPacked("/Users/aliafroozeh/output", sppf1, Input.fromString("a+a*a+a"));
+		Visualization.generateSPPFNodesUnPacked("/Users/ali/newoutput", sppf1, Input.fromString("a+a*a+a"));
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
 		assertTrue(sppf1.deepEquals(sppf2));
 	}

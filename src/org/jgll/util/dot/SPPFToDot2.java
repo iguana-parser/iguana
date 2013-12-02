@@ -2,10 +2,10 @@ package org.jgll.util.dot;
 
 import static org.jgll.util.dot.GraphVizUtil.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -30,7 +30,7 @@ public class SPPFToDot2 extends ToDot {
 	
 	private final boolean showPackedNodeLabel;
 	
-	protected List<StringBuilder> list;
+	protected Set<String> parseTrees;
 	
 	private Map<SPPFNode, Integer> map;
 	
@@ -45,7 +45,7 @@ public class SPPFToDot2 extends ToDot {
 	public SPPFToDot2(Input input, boolean showPackedNodeLabel) {
 		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;
-		this.list = new ArrayList<>();
+		this.parseTrees = new HashSet<>();
 	}
 	
 	public void visit(SPPFNode node) {
@@ -59,7 +59,7 @@ public class SPPFToDot2 extends ToDot {
 		
 		StringBuilder sb = new StringBuilder();
 		visit(node, sb);
-		list.add(sb);
+		parseTrees.add(sb.toString());
 		
 		int i = 0;
 		
@@ -96,7 +96,8 @@ public class SPPFToDot2 extends ToDot {
 			System.out.println(map);
 			StringBuilder sb = new StringBuilder();
 			visit(node, sb);
-			list.add(sb);
+			 			
+			parseTrees.add(sb.toString());
 			return true;
 		}
 		
@@ -182,8 +183,8 @@ public class SPPFToDot2 extends ToDot {
 		}
 	}
 	
-	public List<StringBuilder> getResult() {
-		return list;
+	public Iterable<String> getResult() {
+		return parseTrees;
 	}
 	
 	protected void addEdgesToChildren(SPPFNode node, Iterable<SPPFNode> children, StringBuilder sb) {

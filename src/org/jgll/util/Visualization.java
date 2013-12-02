@@ -40,8 +40,8 @@ public class Visualization {
 		SPPFToDot2 toDot = new SPPFToDot2(input);
 		toDot.visit(node);
 		int i = 0;
-		for(StringBuilder sb : toDot.getResult()) {
-			GraphVizUtil.generateGraph(sb.toString(), outputDir, "sppf-" + ++i);
+		for(String s : toDot.getResult()) {
+			GraphVizUtil.generateGraph(s, outputDir, "sppf-" + ++i);
 		}
 	}
 
