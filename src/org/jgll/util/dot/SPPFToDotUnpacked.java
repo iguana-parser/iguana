@@ -134,21 +134,18 @@ public class SPPFToDotUnpacked extends ToDot {
 	}
 
 	public void visit(NonterminalSymbolNode node, StringBuilder sb) {
-		SPPFVisitorUtil.removeIntermediateNode(node);
-		SPPFVisitorUtil.removeCollapsibleNode(node);
-		
 		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.getLabel())) + "\n");
 		
 		if(node.isAmbiguous()) {
-			Integer index = map.get(node);
-			SPPFNode child = node.getChildAt(index);
 			
-			if(child == null) {
-				System.out.println("WTF?");
+			int i = 0;
+			while(i < node.childrenCount()) {
+				SPPFVisitorUtil.removeIntermediateNode((PackedNode) node.getChildAt(i));
+				i++;
 			}
 			
-			SPPFVisitorUtil.removeIntermediateNode((PackedNode) child);
-			SPPFVisitorUtil.removeCollapsibleNode((PackedNode) child);
+			Integer index = map.get(node);
+			SPPFNode child = node.getChildAt(index);
 			
 			addEdgesToChildren(node, child.getChildren(), sb);
 			

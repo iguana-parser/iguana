@@ -56,7 +56,7 @@ public class Gamma2Test {
 		
 	@Test
 	public void testParsers1() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbbb"), grammar, "S");
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bb"), grammar, "S");
 		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/newoutput", sppf1, Input.fromString("b"));
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbb"), grammar, "S");
 		assertTrue(sppf1.deepEquals(sppf2));
