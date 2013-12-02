@@ -1,5 +1,7 @@
 package org.jgll.util.dot;
 
+import static org.jgll.util.dot.GraphVizUtil.*;
+
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.traversal.SPPFVisitor;
@@ -18,18 +20,25 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	public ToDotWithoutIntermediateNodes(Input input) {
 		super(input);
 	}
-
-	@Override
-	public void visit(PackedNode node) {
-		SPPFVisitorUtil.removeIntermediateNode(node);
-		SPPFVisitorUtil.removeCollapsibleNode(node);
-		super.visit(node);
-	}
 	
 	@Override
 	public void visit(NonterminalSymbolNode node) {
-		SPPFVisitorUtil.removeIntermediateNode(node);
-		SPPFVisitorUtil.removeCollapsibleNode(node);
-		super.visit(node);
+		if(!node.isVisited()) {
+			node.setVisited(true);
+			
+			if(node.isAmbiguous()) {
+				
+				int i = 0;
+				while(i < node.childrenCount()) {
+					SPPFVisitorUtil.removeIntermediateNode((PackedNode) node.getChildAt(i));
+					i++;
+				}
+			}
+	
+			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.getLabel())) + "\n");
+			addEdgesToChildren(node);
+			
+			SPPFVisitorUtil.visitChildren(node, this);
+		}		
 	}
 }
