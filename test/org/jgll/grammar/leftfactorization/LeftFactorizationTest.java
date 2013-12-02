@@ -2,7 +2,7 @@ package org.jgll.grammar.leftfactorization;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.RawGrammarBank;
+import org.jgll.grammar.GrammarBank;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -15,7 +15,7 @@ public class LeftFactorizationTest {
 
 	@Test
 	public void test() throws ParseError {
-		GrammarBuilder builder = RawGrammarBank.arithmeticExpressions();
+		GrammarBuilder builder = GrammarBank.arithmeticExpressions();
 		
 		builder.leftFactorize("E");
 		

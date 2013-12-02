@@ -16,16 +16,18 @@ import org.jgll.grammar.symbol.Terminal;
  * @author Ali Afroozeh
  *
  */
-public class RawGrammarBank {
+public class GrammarBank {
 
 	
 	/**
 	 *  E ::= E ^ E
      * 	    | - E
+     *      | E +
      *      | E * E
      *      | E / E
      *      | E + E
      *      | E - E
+     *      | ( E )
      *    	| a
 	 */
 	public static GrammarBuilder arithmeticExpressions() {
@@ -52,11 +54,17 @@ public class RawGrammarBank {
 		Rule rule6 = new Rule(E, list(E, new Character('-'), E));
 		builder.addRule(rule6);
 		
-		Rule rule8 = new Rule(E, list(E, new Character('-'), E, new Character(';')));
-		builder.addRule(rule8);
-		
 		Rule rule7 = new Rule(E, list(new Character('a')));
 		builder.addRule(rule7);
+		
+		Rule rule8 = new Rule(E, list(E, new Character('-'), E, new Character(';')));
+		builder.addRule(rule8);
+				
+		Rule rule9 = new Rule(E, list(E, new Character('+')));
+		builder.addRule(rule9);
+
+		Rule rule10 = new Rule(E, list(new Character('('), E, new Character(')')));
+		builder.addRule(rule10);
 		
 		return builder;
 	}
