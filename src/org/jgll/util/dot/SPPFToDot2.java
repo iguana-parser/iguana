@@ -62,17 +62,46 @@ public class SPPFToDot2 extends ToDot {
 		list.add(sb);
 		
 		int i = 0;
-		while(i < permutation.length) {
-			if(map.get(permutation[i]) < permutation[i].childrenCount()) {
-				map.put(permutation[i], map.get(permutation[i]) + 1);
-				sb = new StringBuilder();
-				visit(node, sb);
-				list.add(sb);
-			}  
-			else {
-				i++;
-			}
+		
+		while(true) {
+			
+			boolean newPermutation = add(i, node);
+			
+			if(!newPermutation) {
+				break;
+			}			
 		}
+	}
+	
+	private boolean add(int i, SPPFNode node) {
+		
+		if(i == permutation.length) {
+			return false;
+		}
+		
+		if(i == permutation.length - 1 && map.get(permutation[i]) == permutation[i].childrenCount()) {
+			return false;
+		}
+		
+		if(map.get(permutation[i]) < permutation[i].childrenCount()) {
+			map.put(permutation[i], map.get(permutation[i]) + 1);
+			
+			if(map.get(permutation[i]) == permutation[i].childrenCount()) {
+				for(int k = 0; k <= i; k++) {
+					map.put(permutation[k], 0);
+				}
+				return add(i + 1, node);
+			}
+			
+			System.out.println(map);
+			StringBuilder sb = new StringBuilder();
+			visit(node, sb);
+			list.add(sb);
+			return true;
+		}
+		
+		
+		return false;
 	}
 	
 	private void visit(SPPFNode node, StringBuilder sb) {
