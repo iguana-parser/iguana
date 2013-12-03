@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -17,17 +19,7 @@ import org.jgll.util.hashing.OpenAddressingHashMap;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
- * A {@code GSSNode} is a representation of a node in an Graph Structured Stack.
- * A {@code GSSNode} is defined by a three tuple ({@code label},
- * {@code position}, {@code index}). <br/> 
- * 
- * {@code label} is a label of a GLL Parser
- * state, {@code position} is an integer array of length three indication a
- * position in a grammar and {@code index} is an index in the input string. <br />
- * A {@code GSSNode} has children which are labeled by an {@code SPPFNode}.
- * These children define the structure of a Graph Structured Stack.
- * 
- * @author Maarten Manders
+ *
  * @author Ali Afroozeh
  * 
  */
@@ -41,13 +33,13 @@ public class GSSNode {
 	 */
 	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 
-	private final GrammarSlot slot;
+	private final HeadGrammarSlot slot;
 
 	private final int inputIndex;
 
 	private MultiHashSet<NonPackedNode> poppedElements;
 	
-	private MultiHashMap<GSSNode, Set<SPPFNode>> edges;
+	private MultiHashMap<GSSNode, Set<GSSEdge>> edges;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -56,7 +48,7 @@ public class GSSNode {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	public GSSNode(GrammarSlot slot, int inputIndex) {
+	public GSSNode(HeadGrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		
@@ -64,18 +56,20 @@ public class GSSNode {
 		this.edges = new OpenAddressingHashMap<>(externalHasher);			
 	}
 		
-	public boolean createEdge(GSSNode dest, SPPFNode node) {
+	public boolean createEdge(GSSNode dest, SPPFNode node, BodyGrammarSlot slot) {
 
-		Set<SPPFNode> set = edges.get(dest);
+		GSSEdge edge = new GSSEdge(slot, node);
+		
+		Set<GSSEdge> set = edges.get(dest);
 		
 		if(set == null) {
 			set = new HashSet<>();
-			set.add(node);
+			set.add(edge);
 			edges.put(dest, set);
 			return true;
 		}
 		
-		return set.add(node);
+		return set.add(edge);
 	}
 	
 	public Iterable<GSSNode> getChildren() {
@@ -93,11 +87,17 @@ public class GSSNode {
 	}
 	
 	public Iterable<SPPFNode> getNodesForChild(final GSSNode gssNode) {
-		Set<SPPFNode> set = edges.get(gssNode);
+		Set<GSSEdge> set = edges.get(gssNode);
 		if(set == null) {
 			return Collections.emptySet();
 		}
-		return set;
+		
+		Set<SPPFNode> nodes = new HashSet<>();
+		for(GSSEdge edge : set) {
+			nodes.add(edge.getNode());
+		}
+		
+		return nodes;
 	}
 	
 	public GrammarSlot getGrammarSlot() {
