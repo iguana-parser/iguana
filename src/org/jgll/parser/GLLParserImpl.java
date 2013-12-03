@@ -255,7 +255,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			// Add (u, z) to P
 			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
-			
 			for(GSSNode dest : lookupTable.getChildren(cu)) {
 				
 				GrammarSlot slot = cu.getGrammarSlot();
@@ -303,24 +302,24 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
      *
 	 */
 	@Override
-	public final void createGSSNode(GrammarSlot slot) {
-		cu = create(slot, cu, ci, cn);
+	public final void createGSSNode(GrammarSlot slot, HeadGrammarSlot head) {
+		cu = create(slot, head, cu, ci, cn);
 	}
 	
-	private final GSSNode create(GrammarSlot L, GSSNode u, int i, SPPFNode w) {
-		log.trace("GSSNode created: (%s, %d)",  L, i);
+	private final GSSNode create(GrammarSlot slot, HeadGrammarSlot head, GSSNode u, int i, SPPFNode w) {
+		log.trace("GSSNode created: (%s, %d)",  slot, i);
 
-		GSSNode v = lookupTable.getGSSNode(L, i);
+		GSSNode v = lookupTable.getGSSNode(head, i);
 
 		if(lookupTable.getGSSEdge(v, w, u)) {
 			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
 				SPPFNode x;
-				if(L instanceof LastGrammarSlot) {
-					x = getNonterminalNode((LastGrammarSlot) L, w, z);
+				if(slot instanceof LastGrammarSlot) {
+					x = getNonterminalNode((LastGrammarSlot) slot, w, z);
 				} else {
-					x = getIntermediateNode((BodyGrammarSlot) L, w, z);
+					x = getIntermediateNode((BodyGrammarSlot) slot, w, z);
 				}
-				addDescriptor(L, u, z.getRightExtent(), x);
+				addDescriptor(slot, u, z.getRightExtent(), x);
 			}
 		}
 

@@ -91,7 +91,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 				
-		parser.createGSSNode(next);
+		parser.createGSSNode(next, nonterminal);
 		return nonterminal;
 	}
 	
