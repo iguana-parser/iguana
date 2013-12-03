@@ -154,6 +154,7 @@ public class SPPFToDotUnpacked extends ToDot {
 			}
 		}
 		else {
+			SPPFVisitorUtil.removeIntermediateNode(node);
 			addEdgesToChildren(node, node.getChildren(), sb);
 			
 			for(SPPFNode child : node.getChildren()) {

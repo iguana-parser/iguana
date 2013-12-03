@@ -33,6 +33,8 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 					SPPFVisitorUtil.removeIntermediateNode((PackedNode) node.getChildAt(i));
 					i++;
 				}
+			} else {
+				SPPFVisitorUtil.removeIntermediateNode(node);
 			}
 	
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.getLabel())) + "\n");

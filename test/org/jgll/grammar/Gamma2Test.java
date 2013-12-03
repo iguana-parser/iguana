@@ -11,7 +11,6 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,8 +55,7 @@ public class Gamma2Test {
 		
 	@Test
 	public void testParsers1() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bb"), grammar, "S");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/newoutput", sppf1, Input.fromString("b"));
+		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbb"), grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbb"), grammar, "S");
 		assertTrue(sppf1.deepEquals(sppf2));
 	}
