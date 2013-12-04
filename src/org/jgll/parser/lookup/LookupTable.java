@@ -4,6 +4,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
+import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -92,16 +93,7 @@ public interface LookupTable {
 	 */
 	public Iterable<GSSNode> getChildren(GSSNode node);
 	
-	
-	/**
-	 * 
-	 * Returns the GSS node located on the edge from the given source node
-	 * to the destination node.
-	 * 
-	 * @throws RuntimeException if no edge from the given source to dest exits.
-	 * 
-	 */ 
-	public Iterable<SPPFNode> getSPPFNodeOnEdgeFrom(GSSNode source, GSSNode dest);
+	public Iterable<GSSEdge> getEdges(GSSNode src, GSSNode dst);
 
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	

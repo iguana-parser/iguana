@@ -25,7 +25,7 @@ import org.junit.Test;
 public class Test2 {
 
 	private Grammar grammar;
-	private GLLParser rdParser;
+	private GLLParser parser;
 	private GLLRecognizer recognizer;
 	
 	@Before
@@ -33,7 +33,7 @@ public class Test2 {
 		Rule r1 = new Rule(new Nonterminal("A"), list(new Character('a')));
 		grammar = new GrammarBuilder("a").addRule(r1).build();
 		
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}
 	
@@ -44,7 +44,7 @@ public class Test2 {
 	
 	@Test
 	public void testRDParser() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a"), grammar, "A");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a"), grammar, "A");
 		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	

@@ -86,6 +86,14 @@ public class GSSNode {
 		return edges.size();
 	}
 	
+	public Iterable<GSSEdge> getEdges(GSSNode node) {
+		Set<GSSEdge> set = edges.get(node);
+		if(set == null) {
+			return Collections.emptySet();
+		}
+		return set;
+	}
+	
 	public Iterable<SPPFNode> getNodesForChild(final GSSNode gssNode) {
 		Set<GSSEdge> set = edges.get(gssNode);
 		if(set == null) {

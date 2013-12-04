@@ -10,6 +10,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
+import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -270,10 +271,10 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	public Iterable<GSSNode> getChildren(GSSNode node) {
 		return node.getChildren();
 	}
-
+	
 	@Override
-	public Iterable<SPPFNode> getSPPFNodeOnEdgeFrom(GSSNode source, GSSNode dest) {
-		return source.getNodesForChild(dest);
+	public Iterable<GSSEdge> getEdges(GSSNode src, GSSNode dst) {
+		return src.getEdges(dst);
 	}
 
 }
