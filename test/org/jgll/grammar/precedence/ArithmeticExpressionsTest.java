@@ -31,8 +31,7 @@ import org.junit.Test;
 public class ArithmeticExpressionsTest {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -68,8 +67,7 @@ public class ArithmeticExpressionsTest {
 		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
-		levelParser = ParserFactory.createLevelParser(grammar);
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
@@ -78,15 +76,8 @@ public class ArithmeticExpressionsTest {
 	}
 
 	@Test
-	public void testParsers() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+a"), grammar, "E");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+a"), grammar, "E");
-		assertTrue(sppf1.deepEquals(sppf2));
-	}
-
-	@Test
 	public void testInput() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a*a"), grammar, "E");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a*a"), grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
 	

@@ -56,7 +56,6 @@ public class KeywordExclusionTest {
 
 		grammar = builder.build();
 		
-		levelParser = ParserFactory.createLevelParser(grammar);
 		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	

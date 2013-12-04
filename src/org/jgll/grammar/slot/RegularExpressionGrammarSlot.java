@@ -102,8 +102,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		
-		if(parser.isRecursiveDescent()) {
-			
 			if(executePreConditions(parser, input)) {
 				return null;
 			}
@@ -157,9 +155,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			
 			return null;
 			
-		} else {
-			return processLevelMode(parser, input);
-		}
 	}
 	
 	@Override
@@ -215,89 +210,6 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		return regularNode;
 	}
 	
-	private GrammarSlot processLevelMode(GLLParserInternals parser, Input input) {
-		SPPFNode currentSPPFNode = parser.getCurrentSPPFNode();
-		boolean partial = (currentSPPFNode instanceof RegularExpressionNode) && ((RegularExpressionNode) currentSPPFNode).isPartial();
-		
-		if(!partial && executePreConditions(parser, input)) {
-			return null;
-		}
-		
-		int ci = parser.getCurrentInputIndex();
-		
-		int regularListLength = parser.getRegularListLength();
-		
-		RunAutomaton automaton = regexp.getAutomaton();
-
-		Object object = parser.getCurrentDescriptor().getObject();
-		
-		int state;
-		
-		if(object != null) {
-			state = (Integer) object;
-		} else {
-			state = automaton.getInitialState();
-		}
-		
-		int lastState = state;
-		
-		int i = 0;
-		for(i = 0; i < regularListLength; i++) {
-			lastState = state;
-
-			int charAtCi = input.charAt(ci + i);
-			
-			state = automaton.step(state, (char) charAtCi);
-			if(state == -1) {
-				break;
-			}
-			
-			if(ci + i + 1 >= input.size()) {
-				break;
-			}
-		}
-		
-		// If does not match anything and is not nullable and is not partial
-		if(i == 0 && !isNullable() && !partial) {
-			return null;
-		}
-		
-		// The regular node that is going to be created as the result of this
-		// slot action.
-		RegularExpressionNode regularNode = parser.getRegularExpressionNode(this, ci, ci + i);
-		
-		// If the current SPPF node is a partially matched list node, merge the nodes
-		if(partial) {
-			regularNode = parser.getRegularExpressionNode(this, currentSPPFNode.getLeftExtent(), ci + i);
-		}
-
-		// partial match, needs to be rescheduled
-		if(i == regularListLength) {
-			regularNode.setPartial(true);
-			parser.addDescriptor(this, parser.getCurrentGSSNode(), ci + i, regularNode, state);
-			
-		// Complete match
-		} else {
-			
-			if(!automaton.isAccept(lastState)) {
-				return null;
-			}
-			
-			if(checkPopActions(parser, input)) {
-				return null;
-			}
-
-			
-			parser.setCurrentSPPFNode(DummyNode.getInstance());
-			parser.getNonterminalNode((LastGrammarSlot) next, regularNode);
-			
-			parser.pop();
-			return null;
-		}
-		
-		return null;
-	}
-
 	public Set<Terminal> getFirstSet() {
 		return firstSet;
 	}

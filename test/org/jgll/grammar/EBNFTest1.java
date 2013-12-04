@@ -1,7 +1,6 @@
 package org.jgll.grammar;
 
 import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Character;
@@ -12,7 +11,6 @@ import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,8 +27,7 @@ import org.junit.Test;
 public class EBNFTest1 {
 	
 	private Grammar grammar;
-	private GLLParser rdParser;
-	private GLLParser levelParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -51,15 +48,12 @@ public class EBNFTest1 {
 		
 		grammar = builder.build();
 		
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
-		levelParser = ParserFactory.createLevelParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aaaaaa"), grammar, "S");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aaaaaa"), grammar, "S");
-		assertTrue(sppf1.deepEquals(sppf2));
+		parser.parse(Input.fromString("aaaaaa"), grammar, "S");
 	}
 
 }

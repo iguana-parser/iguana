@@ -1,7 +1,6 @@
 package org.jgll.grammar.precedence;
 
 import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
@@ -11,7 +10,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,8 +28,7 @@ import org.junit.Test;
 public class FilterTest4 {
 	
 	private Grammar grammar;
-	private GLLParser levelParser;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -65,15 +62,12 @@ public class FilterTest4 {
 		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
-		levelParser = ParserFactory.createLevelParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void testAssociativityAndPriority() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("xawz"), grammar, "E");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("xawz"), grammar, "E");
-		assertEquals(true, sppf1.equals(sppf2));
+		parser.parse(Input.fromString("xawz"), grammar, "E");
 	}
 
 }

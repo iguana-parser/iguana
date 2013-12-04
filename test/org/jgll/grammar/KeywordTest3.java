@@ -31,8 +31,7 @@ import org.junit.Test;
 public class KeywordTest3 {
 	
 	private Grammar grammar;
-	private GLLParser rdParser;
-	private GLLParser levelParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -53,8 +52,7 @@ public class KeywordTest3 {
 								   .addRule(GrammarBuilder.fromKeyword(iff))
 								   .addRule(GrammarBuilder.fromKeyword(then)).build();
 		
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
-		levelParser = ParserFactory.createLevelParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	
@@ -71,14 +69,14 @@ public class KeywordTest3 {
 	@Test
 	public void testRDParser() throws ParseError {
 		Input input = Input.fromString("if s then s");
-		NonterminalSymbolNode sppf = rdParser.parse(input, grammar, "S");
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF1()));
 	}
 	
 	@Test
 	public void testLevelParser() throws ParseError {
 		Input input = Input.fromString("if s then s");
-		NonterminalSymbolNode sppf = levelParser.parse(input, grammar, "S");
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF2()));
 	}
 	

@@ -1,8 +1,8 @@
 package org.jgll.grammar.leftfactorization;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarBuilder;
 import org.jgll.grammar.GrammarBank;
+import org.jgll.grammar.GrammarBuilder;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;

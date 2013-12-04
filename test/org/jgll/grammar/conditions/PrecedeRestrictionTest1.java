@@ -38,7 +38,7 @@ import org.junit.Test;
 public class PrecedeRestrictionTest1 {
 	
 	private Grammar grammar;
-	private GLLParser levelParser;
+	private GLLParser rdParser;
 
 	@Before
 	public void init() {
@@ -67,12 +67,12 @@ public class PrecedeRestrictionTest1 {
 		builder.addRule(GrammarBuilder.fromKeyword(forall));
 
 		grammar = builder.build();
-		levelParser = ParserFactory.createLevelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("forall"), grammar, "S");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("forall"), grammar, "S");
 		assertTrue(sppf.deepEquals(getExpectedSPPF()));
 	}
 

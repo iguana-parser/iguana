@@ -13,8 +13,6 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.parser.lookup.LookupTable;
-import org.jgll.parser.lookup.RecursiveDescentLookupTable;
-import org.jgll.parser.lookup.RecursiveDescentLookupTable2;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -134,7 +132,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
 		NonterminalSymbolNode root;
 		
-		if(llOptimization && isRecursiveDescent() && startSymbol.isLl1SubGrammar()) {
+		if(llOptimization && startSymbol.isLl1SubGrammar()) {
 			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, input);
 		} else {
 			L0.getInstance().parse(this, input, startSymbol);			
@@ -489,13 +487,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		return end - start;
 	}
 
-	@Override
-	public boolean isRecursiveDescent() {
-		// TODO: ugly design
-		return lookupTable instanceof RecursiveDescentLookupTable ||
-			   lookupTable instanceof RecursiveDescentLookupTable2;
-	}
-	
 	public void setLlOptimization(boolean llOptimization) {
 		this.llOptimization = llOptimization;
 	}

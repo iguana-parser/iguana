@@ -33,7 +33,6 @@ import org.junit.Test;
 public class DanglingElseGrammar1 {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
 	private GLLParser rdParser;
 
 	@Before
@@ -56,24 +55,19 @@ public class DanglingElseGrammar1 {
 		builder.addRule(rule3);
 		
 		grammar = builder.build();
-		levelParser = ParserFactory.createLevelParser(grammar);
 		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test1() throws ParseError {
-		NonterminalSymbolNode sppf1 = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
-		NonterminalSymbolNode sppf2 = rdParser.parse(Input.fromString("aasbs"), grammar, "S");
-		assertTrue(sppf1.deepEquals(getExpectedSPPF1()));
-		assertTrue(sppf2.deepEquals(getExpectedSPPF1()));
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aasbs"), grammar, "S");
+		assertTrue(sppf.deepEquals(getExpectedSPPF1()));
 	}
 	
 	@Test
 	public void test2() throws ParseError {
-		NonterminalSymbolNode sppf1 = levelParser.parse(Input.fromString("aaaaasbsbsbs"), grammar, "S");
-		NonterminalSymbolNode sppf2 = rdParser.parse(Input.fromString("aaaaasbsbsbs"), grammar, "S");
-		assertTrue(sppf1.deepEquals(getExpectedSPPF2()));
-		assertTrue(sppf2.deepEquals(getExpectedSPPF2()));
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaaaasbsbsbs"), grammar, "S");
+		assertTrue(sppf.deepEquals(getExpectedSPPF2()));
 	}
 	
 	

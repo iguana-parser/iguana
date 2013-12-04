@@ -52,8 +52,7 @@ public class FollowRestrictionTest {
 		builder.addRules(rules);
 
 		grammar = builder.build();
-		levelParser = ParserFactory.createLevelParser(grammar);
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		rdParser =  ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@org.junit.Rule

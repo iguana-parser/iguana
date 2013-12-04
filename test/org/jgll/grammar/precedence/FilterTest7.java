@@ -89,7 +89,6 @@ public class FilterTest7 {
 
 		grammar = builder.build();
 		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
-		levelParser = ParserFactory.createLevelParser(grammar);
 	}
 
 	public void testParsers() throws ParseError {

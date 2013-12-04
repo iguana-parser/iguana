@@ -33,8 +33,7 @@ import org.junit.Test;
 public class FilterTest6 {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -103,19 +102,12 @@ public class FilterTest6 {
 		builder.rewritePrecedencePatterns();
 
 		grammar = builder.build();
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
-		levelParser = ParserFactory.createLevelParser(grammar);
-	}
-
-	public void testParsersy() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("a+-a+a-a-a+a"), grammar, "E");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+-a+a-a-a+a"), grammar, "E");
-		assertTrue(sppf1.deepEquals(sppf2));
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void testInput() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a+a--a+-a+a-a-a+a"), grammar, "E");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a--a+-a+a-a-a+a"), grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 

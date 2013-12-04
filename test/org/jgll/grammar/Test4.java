@@ -9,8 +9,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,9 +28,7 @@ import org.junit.Test;
 public class Test4 {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
-	private GLLParser rdParser;
-	private GLLRecognizer recognizer;
+	private GLLParser parser;
 	
 	@Before
 	public void init() {
@@ -51,9 +47,7 @@ public class Test4 {
 		
 		grammar = new GrammarBuilder("test4").addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 		
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
-		levelParser = ParserFactory.createLevelParser(grammar);
-		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -72,13 +66,8 @@ public class Test4 {
 	
 	@Test
 	public void testRDParser() throws ParseError {
-		rdParser.parse(Input.fromString("abc"), grammar, "A");
-		rdParser.parse(Input.fromString("aaaac"), grammar, "A");
-	}
-	
-	@Test
-	public void testLevelParser() throws ParseError {
-		levelParser.parse(Input.fromString("abc"), grammar, "A");
+		parser.parse(Input.fromString("abc"), grammar, "A");
+		parser.parse(Input.fromString("aaaac"), grammar, "A");
 	}
 	
 }

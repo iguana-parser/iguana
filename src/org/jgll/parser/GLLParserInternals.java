@@ -88,8 +88,6 @@ public interface GLLParserInternals {
 	 */
 	public int getRegularListLength();
 	
-	public boolean isRecursiveDescent();
-	
 	public boolean isLLOptimizationEnabled();
 	
 }

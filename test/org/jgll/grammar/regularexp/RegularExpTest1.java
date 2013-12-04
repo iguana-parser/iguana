@@ -36,7 +36,6 @@ public class RegularExpTest1 {
 	private Grammar grammar1;
 	private Grammar grammar2;
 	
-	private GLLParser levelParser;
 	private GLLParser rdParser;
 
 	@Before
@@ -62,12 +61,6 @@ public class RegularExpTest1 {
 
 	@Test
 	public void test1() throws ParseError {
-		levelParser = ParserFactory.createLevelParser(grammar2, 10);
-		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar2, "S");
-		
-		levelParser = ParserFactory.createLevelParser(grammar1, 10);
-		levelParser.parse(Input.fromString("123451234512345.122343535341223435353412234353534"), grammar1, "S");
-		
 		rdParser = ParserFactory.createRecursiveDescentParser(grammar2);
 		rdParser.parse(Input.fromString("12.122343535341223435353412234353534"), grammar2, "S");
 		
