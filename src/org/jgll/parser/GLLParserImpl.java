@@ -302,31 +302,30 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
      *
 	 */
 	@Override
-	public final void createGSSNode(GrammarSlot slot, HeadGrammarSlot head) {
+	public final void createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
 		cu = create(slot, head, cu, ci, cn);
 	}
 	
-	private final GSSNode create(GrammarSlot slot, HeadGrammarSlot head, GSSNode u, int i, SPPFNode w) {
-		log.trace("GSSNode created: (%s, %d)",  slot, i);
+	private final GSSNode create(BodyGrammarSlot returnSlot, HeadGrammarSlot head, GSSNode u, int i, SPPFNode w) {
+		log.trace("GSSNode created: (%s, %d)",  returnSlot, i);
 
 		GSSNode v = lookupTable.getGSSNode(head, i);
 
-		if(lookupTable.getGSSEdge(v, w, u)) {
+		if(lookupTable.getGSSEdge(v, u, w, returnSlot)) {
 			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
 				SPPFNode x;
-				if(slot instanceof LastGrammarSlot) {
-					x = getNonterminalNode((LastGrammarSlot) slot, w, z);
+				if(returnSlot instanceof LastGrammarSlot) {
+					x = getNonterminalNode((LastGrammarSlot) returnSlot, w, z);
 				} else {
-					x = getIntermediateNode((BodyGrammarSlot) slot, w, z);
+					x = getIntermediateNode((BodyGrammarSlot) returnSlot, w, z);
 				}
-				addDescriptor(slot, u, z.getRightExtent(), x);
+				addDescriptor(returnSlot, u, z.getRightExtent(), x);
 			}
 		}
 
 		return v;
 	}
-
-
+	
 	/** 
 	 *  getNodeT(a, i) {
 	 * 		if there is no SPPF node labelled (a, i, i + 1) create one

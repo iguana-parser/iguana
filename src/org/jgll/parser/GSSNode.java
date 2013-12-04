@@ -56,9 +56,9 @@ public class GSSNode {
 		this.edges = new OpenAddressingHashMap<>(externalHasher);			
 	}
 		
-	public boolean createEdge(GSSNode dest, SPPFNode node, BodyGrammarSlot slot) {
+	public boolean createEdge(GSSNode dest, SPPFNode node, BodyGrammarSlot returnSlot) {
 
-		GSSEdge edge = new GSSEdge(slot, node);
+		GSSEdge edge = new GSSEdge(returnSlot, node);
 		
 		Set<GSSEdge> set = edges.get(dest);
 		

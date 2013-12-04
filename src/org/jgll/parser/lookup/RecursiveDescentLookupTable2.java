@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.List;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
@@ -36,7 +37,7 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	
 	private MultiHashSet<NonPackedNode>[] nonPackedNodes;
 
-	private MultiHashSet<GSSNode>[] gssNodes;
+	private GSSNode[][] gssNodes;
 	
 	private int nonPackedNodesCount;
 	
@@ -53,7 +54,7 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new MultiHashSet[input.size()];
 		nonPackedNodes = new MultiHashSet[input.size()];
-		gssNodes = new MultiHashSet[input.size()];
+		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.size()];
 		
 		nonPackedNodesCount = 0;
 		
@@ -61,26 +62,16 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	}
 	
 	@Override
-	public GSSNode getGSSNode(GrammarSlot grammarSlot, int inputIndex) {
+	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex) {
 		
-		MultiHashSet<GSSNode> set = gssNodes[inputIndex];
-		if(set == null) {
-			set = factory.newHashSet(tableSize, GSSNode.levelBasedExternalHasher);
-			gssNodes[inputIndex] = set;
-			GSSNode key = new GSSNode(grammarSlot, inputIndex);
-			set.add(key);
-			return key;
+		GSSNode gssNode = gssNodes[head.getId()][inputIndex];
+		
+		if(gssNode == null) {
+			gssNode = new GSSNode(head, inputIndex);
+			gssNodes[head.getId()][inputIndex] = gssNode;
 		}
 		
-		GSSNode key = new GSSNode(grammarSlot, inputIndex);
-		
-		GSSNode oldValue = set.add(key);
-		
-		if(oldValue == null) {
-			return key;
-		}
-		
-		return oldValue;
+		return gssNode;
 	}
 	
 	@Override
@@ -88,7 +79,7 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 		int count = 0;
 		for(int i = 0; i < gssNodes.length; i++) {
 			if(gssNodes[i] != null) {
-				count += gssNodes[i].size();
+				count ++;
 			}
 		}
 		return count;
@@ -214,12 +205,6 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 			}
 		}
 		
-		for(int i = 0; i < gssNodes.length; i++) {
-			if(gssNodes[i] != null) {
-				total += gssNodes[i].getCollisionCount();
-			}
-		}
-		
 		return total;
 	}
 
@@ -262,8 +247,8 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	}
 
 	@Override
-	public boolean getGSSEdge(GSSNode source, SPPFNode node, GSSNode destination) {
-		return source.createEdge(destination, node);
+	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
+		return source.createEdge(destination, node, returnSlot);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package org.jgll.parser.lookup;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
@@ -77,13 +78,13 @@ public interface LookupTable {
 	 * edge with the given properties will be created.
 	 * 
 	 */
-	public boolean getGSSEdge(GSSNode source, SPPFNode node, GSSNode destination);
+	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot);
 
 	/**
 	 * Returns an already existing GSS node with the given grammar slot and input 
 	 * index, or creates a new GSS node with given parameters.  
 	 */
-	public GSSNode getGSSNode(GrammarSlot label, int inputIndex);
+	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex);
 	
 	/**
 	 * Returns the GSS nodes reachable from the given GSS node.
