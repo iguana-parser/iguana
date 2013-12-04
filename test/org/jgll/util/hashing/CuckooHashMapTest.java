@@ -1,8 +1,8 @@
 package org.jgll.util.hashing;
 
-import java.util.Random;
-
 import static org.junit.Assert.*;
+
+import java.util.Random;
 
 import org.jgll.util.RandomUtil;
 import org.junit.Test;

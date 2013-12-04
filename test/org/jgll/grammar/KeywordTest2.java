@@ -1,8 +1,12 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -11,10 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * S ::= "if" L S L "then" L S 
- *     | s
- *     
- * L ::= " "    
+ * A ::= "if" B
+ * 
+ * B ::= [b]
  * 
  * @author Ali Afroozeh
  *
@@ -26,40 +29,35 @@ public class KeywordTest2 {
 
 	@Before
 	public void init() {
-		Nonterminal S = new Nonterminal("S");
+		Nonterminal A = new Nonterminal("A");
+		Nonterminal B = new Nonterminal("B");
 		Keyword iff = new Keyword("if", new int[] {'i', 'f'});
-		Keyword then = new Keyword("then", new int[] {'t', 'h', 'e', 'n'});
-		Nonterminal L = new Nonterminal("L");
-		Terminal s = new Character('s');
-		Terminal ws = new Character(' ');
 		
-		Rule r1 = new Rule(S, iff, L, S, L, then, L, S);
-		Rule r2 = new Rule(S, s);
-		Rule r3 = new Rule(L, ws);
+		Rule r1 = new Rule(A, list(iff, B));
+		Rule r2 = new Rule(B, new Character('b'));
 		
-		grammar = new GrammarBuilder().addRule(r1)
-								   .addRule(r2)
-								   .addRule(r3)
-								   .addRule(GrammarBuilder.fromKeyword(iff))
-								   .addRule(GrammarBuilder.fromKeyword(then)).build();
+		GrammarBuilder builder = new GrammarBuilder();
+		builder.addRule(r1);
+		builder.addRule(r2);
+		builder.addRule(GrammarBuilder.fromKeyword(iff));
 		
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		grammar = builder.build();
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
-	
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(new Character('i'), TerminalFactory.from('s')), grammar.getNonterminalByName("S").getFirstSet());
+		assertEquals(set(new Character('i')), grammar.getNonterminalByName("A").getFirstSet());
 	}
 	
 	@Test
 	public void testKeywordLength() {
-		assertEquals(4, grammar.getLongestTerminalChain());
+		assertEquals(2, grammar.getLongestTerminalChain());
 	}
 
 	@Test
 	public void test() throws ParseError {
-		rdParser.parse(Input.fromString("if s then s"), grammar, "S");
+		rdParser.parse(Input.fromString("ifb"), grammar, "A");
 	}
 	
 }

@@ -1,5 +1,7 @@
 package org.jgll.util.hashing;
 
+import org.jgll.util.hashing.hashfunction.HashFunction;
+
 public class StringExternalHasher implements ExternalHasher<String> {
 	
 	private static final long serialVersionUID = 1L;

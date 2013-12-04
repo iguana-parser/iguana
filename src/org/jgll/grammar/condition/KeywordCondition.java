@@ -1,10 +1,11 @@
 package org.jgll.grammar.condition;
 
+import static org.jgll.util.CollectionsUtil.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.Keyword;
-import static org.jgll.util.collections.CollectionsUtil.*;
+import org.jgll.grammar.symbol.Keyword;
 
 
 /**
@@ -39,6 +40,22 @@ public class KeywordCondition extends Condition {
 	@Override
 	public String toString() {
 		return type.toString() + " " +  listToString(keywords);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof KeywordCondition)) {
+			return false;
+		}
+		
+		KeywordCondition other = (KeywordCondition) obj;
+		
+		return type == other.type && keywords.equals(other.keywords);
 	}
 
 }

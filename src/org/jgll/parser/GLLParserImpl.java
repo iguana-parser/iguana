@@ -2,23 +2,27 @@ package org.jgll.parser;
 
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.Keyword;
-import org.jgll.grammar.SlotAction;
-import org.jgll.grammar.TerminalGrammarSlot;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.lookup.LookupTable;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.slotaction.SlotAction;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.PackedNode;
+import org.jgll.sppf.RegularExpressionNode;
+import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -34,6 +38,10 @@ import org.jgll.util.logging.LoggerWrapper;
 public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
+	
+	static {		
+		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
+	}
 	
 	/**
 	 * u0 is the bottom of the GSS.
@@ -58,6 +66,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 */
 	protected Grammar grammar;
 	
+	protected Descriptor currentDescriptor;
+	
 	/**
 	 * The grammar slot at which a parse error is occurred. 
 	 */
@@ -73,12 +83,23 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 */
 	protected GSSNode errorGSSNode;
 	
+	protected int regularListLength = 10;
+
+	private long start;
+
+	private long end;
 	
+	private boolean llOptimization = true;
+
 	public GLLParserImpl(LookupTable lookupTable) {
 		this.lookupTable = lookupTable;
 	}
 	
-
+	public GLLParserImpl(LookupTable lookupTable, int regularListLength) {
+		this.lookupTable = lookupTable;
+		this.regularListLength = regularListLength;
+	}
+	
 	/**
 	 * Parses the given input string. If the parsing of the input was successful,
 	 * the root of SPPF is returned.
@@ -92,7 +113,9 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 */
 	@Override
 	public final NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError {
+		
 		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(startSymbolName);
+		
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
 		}
@@ -103,17 +126,26 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		init();
 		lookupTable.init(input);
 	
-		long start = System.nanoTime();
+		log.info("Iguana started...");
 
-		L0.getInstance().parse(this, input, startSymbol);
+		start = System.nanoTime();
 		
-		long end = System.nanoTime();
+		NonterminalSymbolNode root;
 		
-		NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol, input.size());
+		if(llOptimization && startSymbol.isLl1SubGrammar()) {
+			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, input);
+		} else {
+			L0.getInstance().parse(this, input, startSymbol);			
+			root = lookupTable.getStartSymbol(startSymbol, input.size());
+		}
+
+		end = System.nanoTime();
+		
 		if (root == null) {
 			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 		}
 		
+		log.info("Parsing finished successfully.");
 		logParseStatistics(end - start);
 		return root;
 	}
@@ -123,14 +155,14 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
+		log.info("Input size: %d, loc: %d", input.size(), input.getLineCount());
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.debug("Descriptors: %d", lookupTable.getDescriptorsCount());
+		log.info("Descriptors: %d", lookupTable.getDescriptorsCount());
 		log.debug("Non-packed nodes: %d", lookupTable.getNonPackedNodesCount());
 		log.debug("Packed nodes: %d", lookupTable.getPackedNodesCount());
 		log.debug("GSS Nodes: %d", lookupTable.getGSSNodesCount());
 		log.debug("GSS Edges: %d", lookupTable.getGSSEdgesCount());
 	}
-
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -169,17 +201,25 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 *   } 
 	 * }
 	 */
-	private final void add(GrammarSlot label, GSSNode u, int inputIndex, SPPFNode w) {
-		Descriptor descriptor = new Descriptor(label, u, inputIndex, w);
+	@Override
+	public final void addDescriptor(GrammarSlot slot, GSSNode u, int inputIndex, SPPFNode w) {
+		Descriptor descriptor = new Descriptor(slot, u, inputIndex, w);
 		boolean result = lookupTable.addDescriptor(descriptor);
 		log.trace("Descriptor created: %s : %b", descriptor, result);
 	}
 	
 	@Override
-	public void addDescriptor(GrammarSlot label) {
-		add(label, cu, ci, DummyNode.getInstance());
+	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object) {
+		Descriptor descriptor = new Descriptor(slot, currentGSSNode, inputIndex, currentNode);
+		descriptor.setObject(object);
+		boolean result = lookupTable.addDescriptor(descriptor);
+		log.trace("Descriptor created: %s : %b", descriptor, result);		
 	}
 	
+	@Override
+	public void addDescriptor(GrammarSlot label) {
+		addDescriptor(label, cu, ci, DummyNode.getInstance());
+	}	
 	
 	/**
 	 * Pops the current element from GSS. When the top element, cu, is popped, there
@@ -211,21 +251,22 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			}
 			
 			// Add (u, z) to P
-			lookupTable.addToPoppedElements(cu, cn);
+			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
-			for(GSSEdge edge : cu.getEdges()) {
-								
-				assert cu.getGrammarSlot() instanceof BodyGrammarSlot;
-
+			for(GSSNode dest : lookupTable.getChildren(cu)) {
+				
 				GrammarSlot slot = cu.getGrammarSlot();
-				SPPFNode y;
-				if(slot instanceof LastGrammarSlot) {
-					y = getNonterminalNode((LastGrammarSlot) slot, edge.getSppfNode(), cn);
-				} else {
-					y = getIntermediateNode((BodyGrammarSlot) slot, edge.getSppfNode(), cn);
-				}
-				add(cu.getGrammarSlot(), edge.getDestination(), ci, y);
-			}			
+				
+				for(SPPFNode node : lookupTable.getSPPFNodeOnEdgeFrom(cu, dest)) {
+					SPPFNode y;
+					if(slot instanceof LastGrammarSlot) {
+						y = getNonterminalNode((LastGrammarSlot) slot, node, cn);
+					} else {
+						y = getIntermediateNode((BodyGrammarSlot) slot, node, cn);
+					}
+					addDescriptor(cu.getGrammarSlot(), dest, ci, y);
+				}				
+			}
 		}
 	}
 
@@ -259,31 +300,30 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
      *
 	 */
 	@Override
-	public final void createGSSNode(HeadGrammarSlot slot) {
-		cu = create(slot, cu, ci, cn);
+	public final void createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
+		cu = create(slot, head, cu, ci, cn);
 	}
 	
-	private final GSSNode create(HeadGrammarSlot L, GSSNode u, int i, SPPFNode w) {
-		log.trace("GSSNode created: (%s, %d)",  L, i);
+	private final GSSNode create(BodyGrammarSlot returnSlot, HeadGrammarSlot head, GSSNode u, int i, SPPFNode w) {
+		log.trace("GSSNode created: (%s, %d)",  returnSlot, i);
 
-		GSSNode v = lookupTable.getGSSNode(L, i);
+		GSSNode v = lookupTable.getGSSNode(head, i);
 
-		if(!lookupTable.hasGSSEdge(v, w, u)) {
+		if(lookupTable.getGSSEdge(v, u, w, returnSlot)) {
 			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
 				SPPFNode x;
-				if(L instanceof LastGrammarSlot) {
-					x = getNonterminalNode((LastGrammarSlot) L, w, z);
+				if(returnSlot instanceof LastGrammarSlot) {
+					x = getNonterminalNode((LastGrammarSlot) returnSlot, w, z);
 				} else {
-					x = getIntermediateNode((BodyGrammarSlot) L, w, z);
+					x = getIntermediateNode((BodyGrammarSlot) returnSlot, w, z);
 				}
-				add(L, u, z.getRightExtent(), x);
+				addDescriptor(returnSlot, u, z.getRightExtent(), x);
 			}
 		}
 
 		return v;
 	}
-
-
+	
 	/** 
 	 *  getNodeT(a, i) {
 	 * 		if there is no SPPF node labelled (a, i, i + 1) create one
@@ -301,18 +341,16 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	}
 	
 	@Override
-	public SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild) {
+	public void getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild) {
 		cn = getNonterminalNode(slot, cn, rightChild);
-		return cn;
 	}
 	
 	@Override
-	public SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild) {
+	public void getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild) {
 		cn = getIntermediateNode(slot, cn, rightChild);
-		return cn;
 	}
 	
-	public final SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+	private final SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		GrammarSlot t = slot.getHead();
 
@@ -332,12 +370,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		return newNode;
 	}
 	
-	public final SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+	private final SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		BodyGrammarSlot previous = slot.previous();
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
-		
 		if(previous.isFirst()) {
 			if(previous instanceof TerminalGrammarSlot || previous instanceof KeywordGrammarSlot) {
 				return rightChild;
@@ -374,6 +411,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		ci = descriptor.getInputIndex();
 		cu = descriptor.getGSSNode();
 		cn = descriptor.getSPPFNode();
+		currentDescriptor = descriptor;
 		log.trace("Processing (%s, %s, %s, %s)", descriptor.getGrammarSlot(), ci, cu, cn);
 		return descriptor;
 	}
@@ -392,17 +430,70 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int inputIndex) {
 		int nextIndex = inputIndex + keyword.size();
 		NonPackedNode node = lookupTable.getNonPackedNode(slot, inputIndex, nextIndex);
-		node.addFirstPackedNode(slot.getAlternateAt(0).getLastBodySlot().next(), nextIndex);
+		node.addPackedNode(new PackedNode(slot.getAlternateAt(0).getLastSlot().next(), nextIndex, node));
 		((NonterminalSymbolNode) node).setKeywordNode(true);
 		ci = nextIndex;
 		return node;
 	}
-
 
 	@Override
 	public LookupTable getLookupTable() {
 		return lookupTable;
 	}
 
+	@Override
+	public Grammar getGrammar() {
+		return grammar;
+	}
+
+	@Override
+	public RegularListNode getRegularNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
+		RegularListNode node = new RegularListNode(slot, leftExtent, rightExtent);
+		NonPackedNode nonPackedNode = lookupTable.getNonPackedNode(node);
+		ci = rightExtent;
+		return (RegularListNode) nonPackedNode;
+	}
+	
+	@Override
+	public RegularExpressionNode getRegularExpressionNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
+		RegularExpressionNode node = new RegularExpressionNode(slot, leftExtent, rightExtent);
+		NonPackedNode nonPackedNode = lookupTable.getNonPackedNode(node);
+		ci = rightExtent;
+		return (RegularExpressionNode) nonPackedNode;
+	}
+
+	@Override
+	public int getRegularListLength() {
+		return regularListLength;
+	}
+
+	@Override
+	public SPPFNode getCurrentSPPFNode() {
+		return cn;
+	}
+
+	@Override
+	public void setCurrentSPPFNode(SPPFNode node) {
+		this.cn = node;
+	}
+
+	@Override
+	public Descriptor getCurrentDescriptor() {
+		return currentDescriptor;
+	}
+	
+	@Override
+	public long getParsingTime() {
+		return end - start;
+	}
+
+	public void setLlOptimization(boolean llOptimization) {
+		this.llOptimization = llOptimization;
+	}
+	
+	@Override
+	public boolean isLLOptimizationEnabled() {
+		return llOptimization;
+	}
 	
 }

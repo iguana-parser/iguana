@@ -27,8 +27,11 @@ public class DummyNode extends SPPFNode {
 		return obj instanceof DummyNode;
 	}
 	
-	private DummyNode() {}
-
+	@Override
+	public int hashCode() {
+		return 16769023;
+	}
+	
 	@Override
 	public String getLabel() {
 		return "$";
@@ -80,7 +83,12 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
-	public int getLevel() {
-		return 0;
+	public SPPFNode getLastChild() {
+		return null;
+	}
+
+	@Override
+	public SPPFNode getFirstChild() {
+		return null;
 	}
 }

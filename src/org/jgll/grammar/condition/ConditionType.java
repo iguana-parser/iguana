@@ -7,7 +7,10 @@ public enum ConditionType {
 	PRECEDE(" << "),
 	NOT_PRECEDE(" !<< "),
 	MATCH(" & "),
-	NOT_MATCH(" \\ ");
+	NOT_MATCH(" \\ "),
+	END_OF_LINE("$"),
+	START_OF_LINE("^")
+	;
 	
 	private String symbol;
 	

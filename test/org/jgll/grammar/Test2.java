@@ -1,8 +1,11 @@
 package org.jgll.grammar;
 
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
 
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -22,7 +25,6 @@ import org.junit.Test;
 public class Test2 {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
 	private GLLParser rdParser;
 	private GLLRecognizer recognizer;
 	
@@ -31,15 +33,13 @@ public class Test2 {
 		Rule r1 = new Rule(new Nonterminal("A"), list(new Character('a')));
 		grammar = new GrammarBuilder("a").addRule(r1).build();
 		
-		rdParser = ParserFactory.levelParser(grammar);
-		levelParser = ParserFactory.recursiveDescentParser(grammar);
-		recognizer = RecognizerFactory.contextFreeRecognizer();
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}
 	
 	@Test
-	public void testLevelParser() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a"), grammar, "A");
-		assertEquals(true, sppf.deepEquals(expectedSPPF()));
+	public void testNullable() {
+		assertFalse(grammar.getNonterminalByName("A").isNullable());
 	}
 	
 	@Test

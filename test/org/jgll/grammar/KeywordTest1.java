@@ -1,8 +1,12 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -28,8 +32,9 @@ public class KeywordTest1 {
 		GrammarBuilder builder = new GrammarBuilder();
 		builder.addRule(r1);
 		builder.addRule(GrammarBuilder.fromKeyword(iff));
+		
 		grammar = builder.build();
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test

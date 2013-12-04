@@ -3,11 +3,10 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.Epsilon;
-import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.Symbol;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 /**
@@ -27,20 +26,20 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private transient Object object;
 	
-	public LastGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
-		super(label, position, previous, head);
+	public LastGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
+		super(position, previous, head);
 		this.object = object;
 	}
 	
 	public LastGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		LastGrammarSlot slot = new LastGrammarSlot(this.label, this.position, previous, head, object);
+		LastGrammarSlot slot = new LastGrammarSlot(this.position, previous, head, object);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {	
+	public GrammarSlot parse(GLLParserInternals parser, Input input) {
 		parser.pop();
 		return null;
 	}
@@ -56,17 +55,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		writer.append("   pop(cu, ci, cn);\n");
 		writer.append("   label = L0;\n}\n");
 	}
-	
-	@Override
-	public boolean testFirstSet(int index, Input input) {
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
-	public boolean testFollowSet(int index, Input input) {
-		throw new UnsupportedOperationException();
-	}
-	
+		
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		throw new UnsupportedOperationException();
@@ -87,7 +76,17 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public Symbol getSymbol() {
-		return Epsilon.getInstance();
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isNameEqual(BodyGrammarSlot slot) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		throw new UnsupportedOperationException();
 	}
 
 }

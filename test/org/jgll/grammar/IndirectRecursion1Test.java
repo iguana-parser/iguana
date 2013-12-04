@@ -1,10 +1,14 @@
 package org.jgll.grammar;
 
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
 
 import java.util.Set;
 
+import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -31,7 +35,7 @@ public class IndirectRecursion1Test {
 
 	private GrammarBuilder builder;
 	private Grammar grammar;
-	private GLLParser levelParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -49,22 +53,22 @@ public class IndirectRecursion1Test {
 													  .addRule(r4)
 													  .addRule(r5);
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("bc"), grammar, "A");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bc"), grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
 	
 	@Test
 	public void testReachabilityGraph() {
-		Set<HeadGrammarSlot> set = builder.getReachableNonterminals("A");
+		Set<HeadGrammarSlot> set = builder.getDirectReachableNonterminals("A");
 		assertTrue(set.contains(grammar.getNonterminalByName("A")));
 		assertTrue(set.contains(grammar.getNonterminalByName("B")));
 		
-		set = builder.getReachableNonterminals("B");
+		set = builder.getDirectReachableNonterminals("B");
 		assertTrue(set.contains(grammar.getNonterminalByName("A")));
 	}
 	

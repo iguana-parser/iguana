@@ -1,20 +1,20 @@
 package org.jgll.grammar.conditions;
 
 import static org.jgll.grammar.condition.ConditionFactory.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.Character;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.Keyword;
-import org.jgll.grammar.Nonterminal;
-import org.jgll.grammar.Opt;
-import org.jgll.grammar.Plus;
-import org.jgll.grammar.Range;
-import org.jgll.grammar.Rule;
-import org.jgll.grammar.Terminal;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Opt;
+import org.jgll.grammar.symbol.Plus;
+import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -38,7 +38,7 @@ import org.junit.Test;
 public class PrecedeRestrictionTest1 {
 	
 	private Grammar grammar;
-	private GLLParser levelParser;
+	private GLLParser rdParser;
 
 	@Before
 	public void init() {
@@ -67,12 +67,12 @@ public class PrecedeRestrictionTest1 {
 		builder.addRule(GrammarBuilder.fromKeyword(forall));
 
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("forall"), grammar, "S");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("forall"), grammar, "S");
 		assertTrue(sppf.deepEquals(getExpectedSPPF()));
 	}
 

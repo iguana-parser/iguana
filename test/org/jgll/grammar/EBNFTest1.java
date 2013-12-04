@@ -1,8 +1,13 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Plus;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -22,7 +27,7 @@ import org.junit.Test;
 public class EBNFTest1 {
 	
 	private Grammar grammar;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -42,12 +47,13 @@ public class EBNFTest1 {
 		builder.addRules(newRules);
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		rdParser.parse(Input.fromString("aaa"), grammar, "S");
+		parser.parse(Input.fromString("aaaaaa"), grammar, "S");
 	}
 
 }

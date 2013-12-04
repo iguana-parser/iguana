@@ -1,10 +1,15 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.condition.ConditionFactory;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Group;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -29,7 +34,7 @@ public class DanglingElseGrammar2 {
 
 	private Grammar grammar;
 	
-	private GLLParser levelParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -51,12 +56,12 @@ public class DanglingElseGrammar2 {
 		builder.addRule(rule3);
 		
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aasbs"), grammar, "S");
 		assertEquals(true, sppf.deepEquals(getExpectedSPPF()));
 	}
 	
@@ -67,7 +72,7 @@ public class DanglingElseGrammar2 {
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 0, 3);
 		TerminalSymbolNode node4 = new TerminalSymbolNode(97, 0);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S )"), 1, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S)"), 1, 3);
 		TerminalSymbolNode node7 = new TerminalSymbolNode(97, 1);
 		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
 		TerminalSymbolNode node9 = new TerminalSymbolNode(115, 2);

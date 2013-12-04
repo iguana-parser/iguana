@@ -19,8 +19,8 @@ public class LoggerWrapper {
 		this.logger = logger;
 		logger.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
-		logger.setLevel(Level.FINE);
-		handler.setLevel(Level.FINE);
+		logger.setLevel(Level.INFO);
+		handler.setLevel(Level.INFO);
 		handler.setFormatter(new ParserLogFormatter());
 		logger.addHandler(handler);
 	}

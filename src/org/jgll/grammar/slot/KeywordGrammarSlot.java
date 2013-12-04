@@ -2,16 +2,16 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.BitSet;
 
-import org.jgll.grammar.Character;
-import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.Keyword;
-import org.jgll.grammar.SlotAction;
-import org.jgll.grammar.Symbol;
-import org.jgll.grammar.Terminal;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 public class KeywordGrammarSlot extends BodyGrammarSlot {
@@ -20,27 +20,25 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	protected HeadGrammarSlot keywordHead;
 	protected Keyword keyword;
 	
-	public KeywordGrammarSlot(String label, int position, HeadGrammarSlot keywordHead, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		super(label, position, previous, head);
+	private BitSet firstSet;
+	
+	public KeywordGrammarSlot(int position, HeadGrammarSlot keywordHead, Keyword keyword, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		super(position, previous, head);
+		if(keywordHead == null) {
+			throw new IllegalArgumentException("Keyword head cannot be null.");
+		}
 		this.keywordHead = keywordHead;
 		this.keyword = keyword;
+		
+		firstSet = new BitSet();
+		firstSet.set(keyword.getChars()[0]);
 	}
 	
 	public KeywordGrammarSlot copy(HeadGrammarSlot keywordHead, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		KeywordGrammarSlot slot = new KeywordGrammarSlot(this.label, this.position, keywordHead, this.keyword, previous, head);
+		KeywordGrammarSlot slot = new KeywordGrammarSlot(this.position, keywordHead, this.keyword, previous, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
-	}
-
-	@Override
-	public boolean testFirstSet(int index, Input input) {
-		return input.match(index, keyword.getChars());
-	}
-	
-	@Override
-	public boolean testFollowSet(int index, Input input) {
-		return false;
 	}
 
 	@Override
@@ -96,6 +94,7 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 			} else {
 				parser.getIntermediateNode(next, sppfNode);
 				
+				// TODO: check if this condition is necessary here!
 				if(checkPopActions(parser, input)) {
 					return null;
 				}				
@@ -108,20 +107,22 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		return next;
 	}
 	
-	/**
-	 * Because keywords are directly created without 
-	 * a pop action, at this point the popActions for the next slots
-     * should be checked.
-	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
-	 *								   | NegativeNumber
-	 */
-	private boolean checkPopActions(GLLParserInternals parser, Input input) {
-		for(SlotAction<Boolean> slotAction : next.popActions) {
-			if(slotAction.execute(parser, input)) {
-				return true;
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		int ci = parser.getCurrentInputIndex();
+		
+		if(input.match(ci, keyword.getChars())) {
+			
+			if(executePreConditions(parser, input)) {
+				return null;
 			}
+			
+			return parser.getKeywordStub(keyword, keywordHead, ci);
+			
+		} else {
+			parser.recordParseError(this);
+			return null;
 		}
-		return false;
 	}
 	
 	@Override
@@ -135,4 +136,23 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 		return next;
 	}
 
+	@Override
+	public boolean isNameEqual(BodyGrammarSlot slot) {
+		
+		if(this == slot) {
+			return true;
+		}
+		
+		if(!(slot instanceof KeywordGrammarSlot)) {
+			return false;
+		}
+		
+		KeywordGrammarSlot other = (KeywordGrammarSlot) slot;
+		
+		return keyword.equals(other.keyword);
+	}
+	
+	public HeadGrammarSlot getKeywordHead() {
+		return keywordHead;
+	}
 }

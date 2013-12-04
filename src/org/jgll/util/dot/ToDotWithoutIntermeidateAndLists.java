@@ -1,16 +1,20 @@
 package org.jgll.util.dot;
 
-import static org.jgll.util.dot.GraphVizUtil.PACKED_NODE;
-import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
+import static org.jgll.util.dot.GraphVizUtil.*;
 
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.traversal.SPPFVisitorUtil;
+import org.jgll.util.Input;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
+	public ToDotWithoutIntermeidateAndLists(Input input) {
+		super(input);
+	}
+
 	@Override
 	public void visit(NonterminalSymbolNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);

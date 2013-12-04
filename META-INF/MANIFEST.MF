@@ -6,13 +6,15 @@ Bundle-Version: 1.0.0.qualifier
 Export-Package: 
  org.jgll.grammar;uses:="org.jgll.parser",
  org.jgll.grammar.condition,
- org.jgll.lookup;uses:="org.jgll.parser,org.jgll.sppf,org.jgll.grammar",
+ org.jgll.grammar.symbol,
  org.jgll.parser;
   uses:="org.jgll.sppf,
    org.jgll.util,
    org.jgll.lookup,
    org.jgll.grammar",
+ org.jgll.parser.lookup,
  org.jgll.sppf,
  org.jgll.traversal,
  org.jgll.util;uses:="org.jgll.sppf",
- org.jgll.util.dot
+ org.jgll.util.dot,
+ org.jgll.util.logging

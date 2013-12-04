@@ -1,10 +1,15 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.condition.ConditionFactory;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Group;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -28,7 +33,7 @@ import org.junit.Test;
 public class DanglingElseGrammar1 {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
+	private GLLParser rdParser;
 
 	@Before
 	public void init() {
@@ -50,19 +55,19 @@ public class DanglingElseGrammar1 {
 		builder.addRule(rule3);
 		
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test1() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aasbs"), grammar, "S");
-		assertEquals(true, sppf.deepEquals(getExpectedSPPF1()));
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aasbs"), grammar, "S");
+		assertTrue(sppf.deepEquals(getExpectedSPPF1()));
 	}
 	
 	@Test
 	public void test2() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aaaaasbsbsbs"), grammar, "S");
-		assertEquals(true, sppf.deepEquals(getExpectedSPPF2()));
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaaaasbsbsbs"), grammar, "S");
+		assertTrue(sppf.deepEquals(getExpectedSPPF2()));
 	}
 	
 	
@@ -70,9 +75,9 @@ public class DanglingElseGrammar1 {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 5);
 		TerminalSymbolNode node2 = new TerminalSymbolNode(97, 0);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 5);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S [b] S )"), 1, 5);
-		IntermediateNode node5 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S ) ::= [a] S [b] . S"), 1, 4);
-		IntermediateNode node6 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S ) ::= [a] S . [b] S"), 1, 3);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S [b] S)"), 1, 5);
+		IntermediateNode node5 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S) ::= [a] S [b] . S"), 1, 4);
+		IntermediateNode node6 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S) ::= [a] S . [b] S"), 1, 3);
 		TerminalSymbolNode node7 = new TerminalSymbolNode(97, 1);
 		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
 		TerminalSymbolNode node9 = new TerminalSymbolNode(115, 2);
@@ -99,19 +104,19 @@ public class DanglingElseGrammar1 {
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 12);
 		TerminalSymbolNode node4 = new TerminalSymbolNode(97, 1);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 12);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S [b] S )"), 2, 12);
-		IntermediateNode node7 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S ) ::= [a] S [b] . S"), 2, 11);
-		IntermediateNode node8 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S ) ::= [a] S . [b] S"), 2, 10);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S [b] S)"), 2, 12);
+		IntermediateNode node7 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S) ::= [a] S [b] . S"), 2, 11);
+		IntermediateNode node8 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S) ::= [a] S . [b] S"), 2, 10);
 		TerminalSymbolNode node9 = new TerminalSymbolNode(97, 2);
 		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 3, 10);
-		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S [b] S )"), 3, 10);
-		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S ) ::= [a] S [b] . S"), 3, 9);
-		IntermediateNode node13 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S ) ::= [a] S . [b] S"), 3, 8);
+		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S [b] S)"), 3, 10);
+		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S) ::= [a] S [b] . S"), 3, 9);
+		IntermediateNode node13 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S) ::= [a] S . [b] S"), 3, 8);
 		TerminalSymbolNode node14 = new TerminalSymbolNode(97, 3);
 		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 4, 8);
-		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S [b] S )"), 4, 8);
-		IntermediateNode node17 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S ) ::= [a] S [b] . S"), 4, 7);
-		IntermediateNode node18 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S ) ::= [a] S . [b] S"), 4, 6);
+		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S [b] S)"), 4, 8);
+		IntermediateNode node17 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S) ::= [a] S [b] . S"), 4, 7);
+		IntermediateNode node18 = new IntermediateNode(grammar.getGrammarSlotByName("([a] S [b] S) ::= [a] S . [b] S"), 4, 6);
 		TerminalSymbolNode node19 = new TerminalSymbolNode(97, 4);
 		NonterminalSymbolNode node20 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 5, 6);
 		TerminalSymbolNode node21 = new TerminalSymbolNode(115, 5);

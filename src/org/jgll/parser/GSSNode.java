@@ -1,32 +1,29 @@
 package org.jgll.parser;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
-import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.Nonterminal;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.L0;
+import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.Level;
+import org.jgll.util.hashing.HashTableFactory;
+import org.jgll.util.hashing.MultiHashMap;
+import org.jgll.util.hashing.MultiHashSet;
+import org.jgll.util.hashing.OpenAddressingHashMap;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
- * A {@code GSSNode} is a representation of a node in an Graph Structured Stack.
- * A {@code GSSNode} is defined by a three tuple ({@code label},
- * {@code position}, {@code index}). <br/> 
- * 
- * {@code label} is a label of a GLL Parser
- * state, {@code position} is an integer array of length three indication a
- * position in a grammar and {@code index} is an index in the input string. <br />
- * A {@code GSSNode} has children which are labeled by an {@code SPPFNode}.
- * These children define the structure of a Graph Structured Stack.
- * 
- * @author Maarten Manders
+ *
  * @author Ali Afroozeh
  * 
  */
-public class GSSNode implements Level {
+public class GSSNode {
 	
 	public static final ExternalHasher<GSSNode> externalHasher = new GSSNodeExternalHasher();
 	public static final ExternalHasher<GSSNode> levelBasedExternalHasher = new LevelBasedGSSNodeExternalHasher();
@@ -34,15 +31,15 @@ public class GSSNode implements Level {
 	/**
 	 * The initial GSS node
 	 */
-	public static final GSSNode U0 = new GSSNode(new HeadGrammarSlot(new Nonterminal("dummy")), 0);
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 
 	private final HeadGrammarSlot slot;
 
 	private final int inputIndex;
+
+	private MultiHashSet<NonPackedNode> poppedElements;
 	
-	private List<GSSEdge> gssEdges;
-	
-	private List<BodyGrammarSlot> returnPositions;
+	private MultiHashMap<GSSNode, Set<GSSEdge>> edges;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -54,21 +51,55 @@ public class GSSNode implements Level {
 	public GSSNode(HeadGrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.gssEdges = new ArrayList<>();
+		
+		this.poppedElements = HashTableFactory.getFactory().newHashSet(NonPackedNode.externalHasher);
+		this.edges = new OpenAddressingHashMap<>(externalHasher);			
 	}
 		
-	public void addGSSEdge(GSSEdge edge) {
-		gssEdges.add(edge);
+	public boolean createEdge(GSSNode dest, SPPFNode node, BodyGrammarSlot returnSlot) {
+
+		GSSEdge edge = new GSSEdge(returnSlot, node);
+		
+		Set<GSSEdge> set = edges.get(dest);
+		
+		if(set == null) {
+			set = new HashSet<>();
+			set.add(edge);
+			edges.put(dest, set);
+			return true;
+		}
+		
+		return set.add(edge);
 	}
 	
-	public Iterable<GSSEdge> getEdges() {
-		return gssEdges;
+	public Iterable<GSSNode> getChildren() {
+		return new Iterable<GSSNode>() {
+			
+			@Override
+			public Iterator<GSSNode> iterator() {
+				return edges.keyIterator();
+			}
+		};
 	}
+	
+	public int sizeChildren() {
+		return edges.size();
+	}
+	
+	public Iterable<SPPFNode> getNodesForChild(final GSSNode gssNode) {
+		Set<GSSEdge> set = edges.get(gssNode);
+		if(set == null) {
+			return Collections.emptySet();
+		}
 		
-	public int getCountEdges() {
-		return gssEdges.size();
+		Set<SPPFNode> nodes = new HashSet<>();
+		for(GSSEdge edge : set) {
+			nodes.add(edge.getNode());
+		}
+		
+		return nodes;
 	}
-
+	
 	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
@@ -77,16 +108,9 @@ public class GSSNode implements Level {
 		return inputIndex;
 	}
 	
-	public void addReturnSlot(BodyGrammarSlot slot) {
-		returnPositions.add(slot);
-	}
-	
-	public List<BodyGrammarSlot> getReturnPositions() {
-		return returnPositions;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
+		
 		if(this == obj) {
 			return true;
 		}
@@ -111,9 +135,12 @@ public class GSSNode implements Level {
 		return "(" + slot + "," + inputIndex + ")";
 	}
 
-	@Override
-	public int getLevel() {
-		return inputIndex;
+	public void addToPoppedElements(NonPackedNode node) {
+		poppedElements.add(node);
+	}
+	
+	public Iterable<NonPackedNode> getPoppedElements() {
+		return poppedElements;
 	}
 	
 	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {

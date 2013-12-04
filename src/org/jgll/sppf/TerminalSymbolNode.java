@@ -6,7 +6,7 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 
@@ -105,11 +105,6 @@ public class TerminalSymbolNode extends SPPFNode {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public int getLevel() {
-		return inputIndex;
-	}
-	
 	public static class TerminalSymbolNodeExternalHasher implements ExternalHasher<TerminalSymbolNode> {
 
 		private static final long serialVersionUID = 1L;
@@ -125,7 +120,16 @@ public class TerminalSymbolNode extends SPPFNode {
 				   t1.inputIndex == t2.inputIndex;
 
 		}
-		
+	}
+
+	@Override
+	public SPPFNode getLastChild() {
+		return null;
+	}
+
+	@Override
+	public SPPFNode getFirstChild() {
+		return null;
 	}
 
 }

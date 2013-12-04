@@ -1,6 +1,8 @@
 package org.jgll.util.hashing;
 
-import java.io.Serializable;
+import java.util.Iterator;
+
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 
@@ -9,7 +11,7 @@ import java.io.Serializable;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashMap<K, V> implements Serializable {
+public class CuckooHashMap<K, V> implements MultiHashMap<K, V> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -23,6 +25,7 @@ public class CuckooHashMap<K, V> implements Serializable {
 		set = new CuckooHashSet<>(initialCapacity, new MapEntryExternalHasher(decomposer));
 	}
 	
+	@Override
 	public V get(K key) {
 		MapEntry<K, V> entry = set.get(new MapEntry<K, V>(key, null));
 		if(entry != null) {
@@ -32,6 +35,7 @@ public class CuckooHashMap<K, V> implements Serializable {
 		return null;
 	}
 	
+	@Override
 	public V put(K key, V value) {
 		MapEntry<K, V> add = set.add(new MapEntry<K, V>(key, value));
 		if(add == null) {
@@ -41,12 +45,62 @@ public class CuckooHashMap<K, V> implements Serializable {
 		return add.v;
 	}
 	
+	@Override
 	public int size() {
 		return set.size();
 	}
 	
+	@Override
 	public void clear() {
 		set.clear();
+	}
+	
+	@Override
+	public Iterator<K> keyIterator() {
+		
+		final Iterator<MapEntry<K, V>> it = set.iterator();
+		
+		return new Iterator<K>() {
+
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+
+			@Override
+			public K next() {
+				return it.next().k;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+
+	@Override
+	public Iterator<V> valueIterator() {
+		
+		final Iterator<MapEntry<K, V>> it = set.iterator();
+		
+		return new Iterator<V>() {
+
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+
+			@Override
+			public V next() {
+				return it.next().v;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 	
 	public static class MapEntry<K, V> {
@@ -113,5 +167,20 @@ public class CuckooHashMap<K, V> implements Serializable {
 		public boolean equals(MapEntry<K, V> e1, MapEntry<K, V> e2) {
 			return hasher.equals(e1.k, e2.k);
 		}
+	}
+
+	@Override
+	public int getInitialCapacity() {
+		return set.getInitialCapacity();
+	}
+
+	@Override
+	public int getEnlargeCount() {
+		return set.getEnlargeCount();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return set.isEmpty();
 	}
 }

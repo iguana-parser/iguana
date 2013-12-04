@@ -14,4 +14,6 @@ public interface GLLParser {
 	
 	public NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError;
 	
+	public long getParsingTime();
+	
 }

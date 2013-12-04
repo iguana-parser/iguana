@@ -3,8 +3,7 @@ package org.jgll.parser;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashFunction;
-import org.jgll.util.hashing.Level;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * A {@code Descriptor} is used by the GLL parser to keep track of the 
@@ -25,7 +24,7 @@ import org.jgll.util.hashing.Level;
  * 
  */
 
-public class Descriptor implements Level {
+public class Descriptor {
 	
 	public static final ExternalHasher<Descriptor> externalHasher = new DescriptorExternalHasher();
 	public static final ExternalHasher<Descriptor> levelBasedExternalHasher = new LevelBasedExternalHasher();
@@ -51,6 +50,11 @@ public class Descriptor implements Level {
 	 * nonterminal.
 	 */
 	private final SPPFNode sppfNode;
+	
+	/**
+	 * Arbitrary date to store in a descriptor.
+	 */
+	private Object object;
 	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		assert slot != null;
@@ -106,12 +110,17 @@ public class Descriptor implements Level {
 	
 	@Override
 	public String toString() {
-		return "(" + slot + ", " + inputIndex + ", " + gssNode.getGrammarSlot() + ", " + sppfNode + ")";
+		return "(" + slot + ", " + inputIndex + ", " +
+			   "(" + gssNode.getGrammarSlot() + ", " + gssNode.getInputIndex() + ")" +
+			   ", " + sppfNode + ")";
 	}
 
-	@Override
-	public int getLevel() {
-		return inputIndex;
+	public void setObject(Object object) {
+		this.object = object;
+	}
+	
+	public Object getObject() {
+		return object;
 	}
 	
 	public static class DescriptorExternalHasher implements ExternalHasher<Descriptor> {

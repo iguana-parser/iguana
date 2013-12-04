@@ -3,9 +3,9 @@ package org.jgll.grammar.condition;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.Keyword;
-import org.jgll.grammar.Symbol;
-import org.jgll.grammar.Terminal;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Terminal;
 
 public class ConditionFactory {
 
@@ -22,7 +22,6 @@ public class ConditionFactory {
 	public static <T extends Symbol> Condition notFollow(List<T> symbols) {
 		return createCondition(ConditionType.NOT_FOLLOW, symbols);
 	}
-	
 	
 	@SafeVarargs
 	public static <T extends Symbol> Condition precede(T...symbols) {
@@ -58,7 +57,7 @@ public class ConditionFactory {
 		if(allKeywords(symbols)) {
 			return new KeywordCondition(type, (List<Keyword>) symbols);
 		} else if (allTerminal(symbols)) {
-			return new TerminalCondition(type, (List<Terminal>) symbols);
+			return new TerminalCondition(type, (Terminal) symbols.get(0));
 		} else {
 			return new ContextFreeCondition(type, symbols);
 		}		
@@ -76,6 +75,14 @@ public class ConditionFactory {
 			}
 		}
 		return true;		
+	}
+
+	public static Condition endOfLine() {
+		return new PositionalCondition(ConditionType.END_OF_LINE);
+	}
+
+	public static Condition startOfLine() {
+		return new PositionalCondition(ConditionType.START_OF_LINE);
 	}
 	
 }

@@ -1,9 +1,14 @@
 package org.jgll.grammar;
 
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -26,8 +31,7 @@ import org.junit.Test;
 public class Gamma0Test {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -47,8 +51,7 @@ public class Gamma0Test {
 		builder.addRule(r4);
 		
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -75,15 +78,8 @@ public class Gamma0Test {
 	}
 	
 	@Test
-	public void testParsers() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aad"), grammar, "S");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aad"), grammar, "S");
-		assertTrue(sppf1.deepEquals(sppf2));
-	}
-
-	@Test
 	public void testSPPF() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aad"), grammar, "S");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aad"), grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

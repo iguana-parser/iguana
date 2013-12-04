@@ -1,20 +1,21 @@
 package org.jgll.grammar.conditions;
 
 import static org.jgll.grammar.condition.ConditionFactory.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.Keyword;
-import org.jgll.grammar.Nonterminal;
-import org.jgll.grammar.Plus;
-import org.jgll.grammar.Range;
-import org.jgll.grammar.Rule;
-import org.jgll.grammar.Terminal;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Plus;
+import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,7 @@ public class KeywordExclusionTest {
 	
 	private Grammar grammar;
 	private GLLParser levelParser;
+	private GLLParser rdParser;
 
 	@Before
 	public void init() {
@@ -46,12 +48,15 @@ public class KeywordExclusionTest {
 		GrammarBuilder builder = new GrammarBuilder();
 		
 		Rule r1 = new Rule(Id, new Plus(az).addCondition(notFollow(az)).addCondition(notMatch(iff, when, doo, whilee)));
+//		Rule r1 = new Rule(Id, new Plus(az).addCondition(notFollow(az)));
+
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1));
 		builder.addRules(rules);
 
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		
+		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@org.junit.Rule
@@ -69,7 +74,8 @@ public class KeywordExclusionTest {
 	public void testIf() throws ParseError {
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:2");
-		levelParser.parse(Input.fromString("if"), grammar, "Id");
+		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("if"), grammar, "Id");
+		System.out.println(sppf);
 	}
 
 	
@@ -79,14 +85,12 @@ public class KeywordExclusionTest {
 		thrown.expectMessage("Parse error at line:1 column:2");
 		levelParser.parse(Input.fromString("do"), grammar, "Id");
 	}
-
 	
 	@Test
 	public void testWhile() throws ParseError {
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:5");
-		levelParser.parse(Input.fromString("while"), grammar, "Id");
+		rdParser.parse(Input.fromString("while"), grammar, "Id");
 	}
-
 
 }

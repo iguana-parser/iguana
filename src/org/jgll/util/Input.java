@@ -22,7 +22,15 @@ public class Input {
 
 	private int[] input;
 
+	/**
+	 * This array keeps the line and column information associated with each input index.
+	 */
 	private LineColumn[] lineColumns;
+	
+	/**
+	 * Number of lines in the input.
+	 */
+	private int lineCount;
 	
 	public static Input fromString(String s) {
 		int[] input = new int[s.length() + 1];
@@ -31,7 +39,7 @@ public class Input {
 		}
 		// The EOF character is assumed to have value 0 instead of the more common -1.  
 		// as Bitsets cannot work with negative values. 
-		input[s.length()] = 0;
+		input[s.length()] = 0; // TODO: we will run into some problems because Jurgen used 0 for escaping.
 
 		return new Input(input);
 	}
@@ -108,7 +116,7 @@ public class Input {
 	}
 	
 	public boolean match(int start, int end, int[] target) {
-		if(target.length != end - start + 1) {
+		if(target.length != end - start) {
 			return false;
 		}
 	 	
@@ -228,14 +236,10 @@ public class Input {
 		for (int i = 0; i < input.length - 1; i++) {
 			lineColumns[i] = new LineColumn(lineNumber, columnNumber);
 			if (input[i] == '\n') {
+				lineCount++;
 				lineNumber++;
 				columnNumber = 1;
-			} else if(input[i] == '\r' && i < input.length - 2 && input[i + 1] == '\n') {
-				columnNumber = 1;
-				lineNumber++;
-				i++;
 			} else if (input[i] == '\r') {
-				lineNumber++;
 				columnNumber = 1;
 			} else {
 				columnNumber++;
@@ -289,15 +293,19 @@ public class Input {
 		}
 	}
 	
-	@Override
-	public String toString() {
-		
+	/**
+	 * Returns a string representation of this input instance from the
+	 * given start (including) and end (excluding) indices.
+	 *  
+	 */
+	public String subString(int start, int end) {
 		List<Character> charList = new ArrayList<>();
-		for(int i : input) {
-			char[] chars = Character.toChars(i);
+		
+		for(int i = start; i < end; i++) {
+			char[] chars = Character.toChars(input[i]);
 			for(char c : chars) {
 				charList.add(c);
-			}
+			}			
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -306,5 +314,26 @@ public class Input {
 		}
 		
 		return sb.toString();
+	}
+	
+	@Override
+	public String toString() {
+		return subString(0, input.length);
+	}
+	
+	public int getLineCount() {
+		return lineCount;
+	}
+
+	public boolean isEndOfLine(int currentInputIndex) {
+		// TODO: unfinished
+		return input[currentInputIndex] == 0
+				|| lineColumns[currentInputIndex + 1].columnNumber == 0;
+	}
+
+	public boolean isStartOfLine(int currentInputIndex) {
+		// TODO: check this?!
+		return currentInputIndex == 0
+				|| lineColumns[currentInputIndex].columnNumber == 0;
 	}
 }

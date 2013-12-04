@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
 
-import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.Symbol;
-import org.jgll.grammar.Terminal;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 
@@ -28,8 +27,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private BitSet followSet;
 	
-	public NonterminalGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(label, position, previous, head);
+	public NonterminalGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(position, previous, head);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -39,7 +38,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	public NonterminalGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(this.label, this.position, previous, nonterminal, head);
+		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(this.position, previous, nonterminal, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		slot.firstSet = firstSet;
@@ -60,17 +59,57 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if(!testFirstSet(ci, input) && !(isNullable() && testFollowSet(ci, input))) {
+		if(!test(ci, input)) {
 			parser.recordParseError(this);
-			return null;			
+			return null;						
 		}
 
 		if(executePreConditions(parser, input)) {
 			return null;
 		}
 		
-		parser.createGSSNode(next);
+		if(parser.isLLOptimizationEnabled() && nonterminal.isLl1SubGrammar()) {
+			SPPFNode node = nonterminal.parseLL1(parser, input);
+			
+			if(node == null) {
+				return null;
+			}
+			
+			if(next instanceof LastGrammarSlot) {
+				parser.getNonterminalNode((LastGrammarSlot) next, node);
+				
+				if(checkPopActions(parser, input)) {
+					return null;
+				}
+				parser.pop();
+				
+			} else {
+				parser.getIntermediateNode(next, node);
+				return next;
+			}
+			
+			return null;
+		}
+				
+		parser.createGSSNode(next, nonterminal);
 		return nonterminal;
+	}
+	
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		int ci = parser.getCurrentInputIndex();
+		
+		if(!test(ci, input)) {
+			parser.recordParseError(this);
+			return null;						
+		}
+
+		if(executePreConditions(parser, input)) {
+			return null;
+		}
+
+		SPPFNode node = nonterminal.parseLL1(parser, input);
+		return node;
 	}
 	
 	@Override
@@ -78,22 +117,15 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		int ci = recognizer.getCi();
 		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 		
-		if(testFirstSet(ci, input)) {
+		if(predictionSet.get(input.charAt(ci))) {
 			recognizer.update(recognizer.create(next, cu, ci), ci);
 			return nonterminal;
-		} 
-		else if (isNullable() && testFollowSet(ci, input)) {
-			// We can always recognize an epsilon, so move on to the next step.
-			// This is much more tricky to implement for a parser, as we need to explore
-			// nullable paths.
-			return next;
-		
-		} else {
+		} else { 
 			recognizer.recognitionError(cu, ci);
 			return null;
-		}		
-
+		}
 	}
+
 	
 	@Override
 	public void codeParser(Writer writer) throws IOException {
@@ -148,27 +180,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 //		}
 		writer.append(") {\n");
 	}
-	
-	public void setTestSet() {
-		for(Terminal t : nonterminal.getFirstSet()) {
-			firstSet.or(t.asBitSet());
-		}
-		
-		for(Terminal t : nonterminal.getFollowSet()) {
-			followSet.or(t.asBitSet());
-		}
-	}
-
-	@Override
-	public boolean testFirstSet(int index, Input input) {
-		return firstSet.get(input.charAt(index));
-	}
-
-	@Override
-	public boolean testFollowSet(int index, Input input) {
-		return followSet.get(input.charAt(index));
-	}
-		
+			
 	@Override
 	public boolean isNullable() {
 		return nonterminal.isNullable();
@@ -177,6 +189,21 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public Symbol getSymbol() {
 		return nonterminal.getNonterminal();
+	}
+
+	@Override
+	public boolean isNameEqual(BodyGrammarSlot slot) {
+		if(this == slot) {
+			return true;
+		}
+		
+		if(!(slot instanceof NonterminalGrammarSlot)) {
+			return false;
+		}
+		
+		NonterminalGrammarSlot other = (NonterminalGrammarSlot) slot;
+		
+		return nonterminal.getNonterminal().equals(other.nonterminal.getNonterminal());
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.io.Writer;
 
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 
 public class StartSlot extends GrammarSlot {
@@ -12,7 +13,6 @@ public class StartSlot extends GrammarSlot {
 	private static final long serialVersionUID = 1L;
 
 	public StartSlot(String label) {
-		super(label);
 		id = -2;
 	}
 
@@ -29,6 +29,11 @@ public class StartSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
 		return null;
+	}
+
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		throw new UnsupportedOperationException();
 	}
 
 }

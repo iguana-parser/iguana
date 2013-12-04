@@ -1,17 +1,17 @@
 package org.jgll.grammar.conditions;
 
 import static org.jgll.grammar.condition.ConditionFactory.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.Keyword;
-import org.jgll.grammar.Nonterminal;
-import org.jgll.grammar.Plus;
-import org.jgll.grammar.Range;
-import org.jgll.grammar.Rule;
-import org.jgll.grammar.Terminal;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Plus;
+import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -33,8 +33,9 @@ public class FollowRestrictionTest {
 	
 	private Grammar grammar;
 	private GLLParser levelParser;
+	private GLLParser rdParser;
 
-
+	
 	@Before
 	public void init() {
 		Nonterminal S = new Nonterminal("S");
@@ -51,17 +52,24 @@ public class FollowRestrictionTest {
 		builder.addRules(rules);
 
 		grammar = builder.build();
-		levelParser = ParserFactory.levelParser(grammar);
+		rdParser =  ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@org.junit.Rule
 	public ExpectedException thrown = ExpectedException.none();
 	
 	@Test
-	public void test() throws Exception {
+	public void testLevelParser() throws Exception {
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:4");
 		levelParser.parse(Input.fromString("abc:"), grammar, "S");
+	}
+	
+	@Test
+	public void testRDParser() throws Exception {
+		thrown.expect(ParseError.class);
+		thrown.expectMessage("Parse error at line:1 column:4");
+		rdParser.parse(Input.fromString("abc:"), grammar, "S");
 	}
 
 }

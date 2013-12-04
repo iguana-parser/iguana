@@ -1,9 +1,14 @@
 package org.jgll.grammar;
 
 
-import static org.jgll.util.collections.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -36,7 +41,7 @@ public class Gamma1Test {
 	
 	private Grammar grammar;
 	private GLLParser levelParser;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 
 	@Before
@@ -66,15 +71,14 @@ public class Gamma1Test {
 		builder.addRule(r7);
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
-		levelParser = ParserFactory.levelParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void testNullables() {
-		assertEquals(true, grammar.getNonterminalByName("S").isNullable());
-		assertEquals(false, grammar.getNonterminalByName("A").isNullable());
-		assertEquals(false, grammar.getNonterminalByName("B").isNullable());
+		assertTrue(grammar.getNonterminalByName("S").isNullable());
+		assertFalse(grammar.getNonterminalByName("A").isNullable());
+		assertFalse(grammar.getNonterminalByName("B").isNullable());
 	}
 	
 	@Test
@@ -97,15 +101,15 @@ public class Gamma1Test {
 	
 	@Test
 	public void testParsers() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("aad"), grammar, "S");
+		NonterminalSymbolNode sppf1 = parser.parse(Input.fromString("aad"), grammar, "S");
 		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aad"), grammar, "S");
 		assertTrue(sppf1.deepEquals(sppf2));
 	}
 
 	@Test
 	public void testSPPF() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("aad"), grammar, "S");
-		assertEquals(true, sppf.deepEquals(getSPPF()));
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aad"), grammar, "S");
+		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	
 	public SPPFNode getSPPF() {

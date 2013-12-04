@@ -1,12 +1,14 @@
 package org.jgll.grammar;
 
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
 
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +25,7 @@ import org.junit.Test;
 public class Gamma2Test {
 	
 	private Grammar grammar;
-	private GLLParser levelParser;
-	private GLLParser rdParser;
-
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -42,8 +42,7 @@ public class Gamma2Test {
 		builder.addRule(rule3);
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.recursiveDescentParser(grammar);
-		levelParser = ParserFactory.levelParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -52,16 +51,21 @@ public class Gamma2Test {
 	}
 		
 	@Test
-	public void testParsers() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("bbb"), grammar, "S");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("bbb"), grammar, "S");
-		assertEquals(true, sppf1.deepEquals(sppf2));
+	public void testParsers1() throws ParseError {
+		//TODO: check against SPPF
+		parser.parse(Input.fromString("bbb"), grammar, "S");
+	}
+	
+	@Test
+	public void testParsers2() throws ParseError {
+		//TODO: check against SPPF
+		parser.parse(Input.fromString("bbbbbbbbbb"), grammar, "S");
 	}
 	
 	@Test
 	public void test100bs() throws ParseError {
 		Input input = Input.fromString(get100b());
-		levelParser.parse(input, grammar, "S");
+		parser.parse(input, grammar, "S");
 	}
 	
 	private String get100b() {

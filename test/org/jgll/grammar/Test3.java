@@ -1,13 +1,15 @@
 package org.jgll.grammar;
 
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
-import static org.jgll.util.collections.CollectionsUtil.*;
 
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.recognizer.PrefixGLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -27,8 +29,7 @@ import org.junit.Test;
 public class Test3 {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
-	private GLLParser rdParser;
+	private GLLParser parser;
 	private GLLRecognizer recognizer;
 	
 	@Before
@@ -38,21 +39,28 @@ public class Test3 {
 		Rule r3 = new Rule(new Nonterminal("C"), list(new Character('c')));
 		grammar = new GrammarBuilder("test3").addRule(r1).addRule(r2).addRule(r3).build();
 		
-		rdParser = ParserFactory.levelParser(grammar);
-		levelParser = ParserFactory.recursiveDescentParser(grammar);
-		recognizer = RecognizerFactory.contextFreeRecognizer();
-
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
+		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
+	}
+	
+	@Test
+	public void testNullable() {
+		assertFalse(grammar.getNonterminalByName("A").isNullable());
+		assertFalse(grammar.getNonterminalByName("B").isNullable());
+		assertFalse(grammar.getNonterminalByName("C").isNullable());
+	}
+	
+	@Test
+	public void testLL1() {
+		assertTrue(grammar.getNonterminalByName("A").isLL1());
+		assertTrue(grammar.getNonterminalByName("B").isLL1());
+		assertTrue(grammar.getNonterminalByName("C").isLL1());
+		assertTrue(grammar.getNonterminalByName("A").isLl1SubGrammar());
 	}
 	
 	@Test
 	public void testRDParser() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("bc"), grammar, "A");
-		assertEquals(true, sppf.deepEquals(expectedSPPF()));
-	}
-	
-	@Test
-	public void testLevelParser() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("bc"), grammar, "A");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bc"), grammar, "A");
 		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	
@@ -82,12 +90,10 @@ public class Test3 {
 	
 	@Test
 	public void testPrefixRecognizer() {
-		recognizer = new PrefixGLLRecognizer();
+		recognizer = RecognizerFactory.prefixContextFreeRecognizer(grammar);
 		boolean result = recognizer.recognize(Input.fromString("bca"), grammar, "A");
 		assertEquals(true, result);
 	}
-	
-
 	
 	private SPPFNode expectedSPPF() {
 		TerminalSymbolNode node0 = new TerminalSymbolNode('b', 0);
@@ -99,7 +105,6 @@ public class Test3 {
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
 		node4.addChild(node1);
 		node4.addChild(node3);
-		
 		return node4;
 	}
 	

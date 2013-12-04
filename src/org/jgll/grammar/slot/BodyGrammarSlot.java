@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
-import org.jgll.grammar.HeadGrammarSlot;
-import org.jgll.grammar.SlotAction;
-import org.jgll.grammar.Symbol;
+import org.jgll.grammar.slotaction.SlotAction;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.util.Input;
 
@@ -38,8 +38,16 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected List<SlotAction<Boolean>> popActions;
 	
-	public BodyGrammarSlot(String label, int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		super(label);
+	private String label;
+	
+	protected BitSet predictionSet;
+	
+	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		
+		if(position < 0) {
+			throw new IllegalArgumentException("Position cannot be negative.");
+		}
+		
 		this.position = position;
 		this.head = head;
 		if(previous != null) {
@@ -66,6 +74,14 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return preConditions;
 	}
 	
+	public void setPredictionSet(BitSet predictionSet) {
+		this.predictionSet = predictionSet;
+	}
+	
+	public BitSet getPredictionSet() {
+		return predictionSet;
+	}
+	
 	protected boolean executePreConditions(GLLParserInternals parser, Input input) {
 		for(SlotAction<Boolean> preCondition : preConditions) {
 			if(preCondition.execute(parser, input)) {
@@ -75,17 +91,26 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 
 		return false;
 	}
-
-	/**
-	 * Checks whether the character at the provided input index belongs to the first set  
-	 */
-	public abstract boolean testFirstSet(int index, Input input);
 	
 	/**
-	 * Checks whether the character at the provided input index belongs to the follow set.
-	 * This method should be called if the nonterminal is nullable.
+	 * Because some grammar slots e.g., keywords are directly created without 
+	 * a pop action, at this point the popActions for the next slots
+     * should be checked.
+	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
+	 *								   | NegativeNumber
 	 */
-	public abstract boolean testFollowSet(int index, Input input);
+	protected boolean checkPopActions(GLLParserInternals parser, Input input) {
+		for(SlotAction<Boolean> slotAction : next.popActions) {
+			if(slotAction.execute(parser, input)) {
+				return true;
+			}
+		}
+		return false;
+	}		
+	
+	public boolean test(int index, Input input) {
+		return predictionSet.get(input.charAt(index));
+	}
 	
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	
@@ -104,7 +129,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public BodyGrammarSlot previous() {
 		return previous;
 	}
-	
 	
 	public void setPrevious(BodyGrammarSlot previous) {
 		this.previous = previous;
@@ -128,5 +152,16 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public abstract Symbol getSymbol();
 	
 	public abstract boolean isNullable();
+	
+	public abstract boolean isNameEqual(BodyGrammarSlot slot);
+	
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
+	@Override
+	public String toString() {
+		return label;
+	}
 	
 }

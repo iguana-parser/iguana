@@ -1,18 +1,18 @@
 package org.jgll.util.dot;
 
-import static org.jgll.util.dot.GraphVizUtil.EDGE;
-import static org.jgll.util.dot.GraphVizUtil.INTERMEDIATE_NODE;
-import static org.jgll.util.dot.GraphVizUtil.PACKED_NODE;
-import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
+import static org.jgll.util.dot.GraphVizUtil.*;
 
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
+import org.jgll.sppf.RegularExpressionNode;
+import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.traversal.SPPFVisitorUtil;
 import org.jgll.traversal.SPPFVisitor;
+import org.jgll.traversal.SPPFVisitorUtil;
+import org.jgll.util.Input;
 
 /**
  * Creates a Graphviz's dot format representation of an SPPF node.
@@ -24,13 +24,17 @@ import org.jgll.traversal.SPPFVisitor;
 public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	
 	private final boolean showPackedNodeLabel;
-	protected StringBuilder sb;
 	
-	public SPPFToDot() {
-		this(false);
+	protected StringBuilder sb;
+
+	private Input input;
+	
+	public SPPFToDot(Input input) {
+		this(input, false);
 	}
 	
-	public SPPFToDot(boolean showPackedNodeLabel) {
+	public SPPFToDot(Input input, boolean showPackedNodeLabel) {
+		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;
 		this.sb = new StringBuilder();
 	}
@@ -102,10 +106,23 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(ListSymbolNode node) {
-		visit((NonterminalSymbolNode)node);
+		visit((NonterminalSymbolNode) node);
 	}
 	
 	public String getString() {
 		return sb.toString();
+	}
+
+	@Override
+	public void visit(RegularListNode node) {
+	}
+
+	@Override
+	public void visit(RegularExpressionNode node) {
+		if(!node.isVisited()) {
+			node.setVisited(true);
+	
+			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, "\\\"" + input.subString(node.getLeftExtent(), node.getRightExtent()) + "\\\"" + "\n"));
+		}
 	}
 }

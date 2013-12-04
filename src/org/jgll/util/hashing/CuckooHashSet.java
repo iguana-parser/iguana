@@ -1,9 +1,11 @@
 package org.jgll.util.hashing;
 
-import java.io.Serializable;
 import java.util.Iterator;
 
+import org.jgll.parser.HashFunctions;
 import org.jgll.util.RandomUtil;
+import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.SimpleTabulation8;
 
 /**
  * 
@@ -13,7 +15,7 @@ import org.jgll.util.RandomUtil;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashSet<T> implements Serializable, Iterable<T> {
+public class CuckooHashSet<T> implements MultiHashSet<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -63,27 +65,29 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	
 	private ExternalHasher<T> externalHasher;
 	
+	private int collisionsCount;
+	
  	@SafeVarargs
-	public static <T> CuckooHashSet<T> from(ExternalHasher<T> decomposer, T...elements) {
-		CuckooHashSet<T> set = new CuckooHashSet<>(decomposer);
+	public static <T> CuckooHashSet<T> from(ExternalHasher<T> hasher, T...elements) {
+		CuckooHashSet<T> set = new CuckooHashSet<>(hasher);
 		for(T e : elements) {
 			set.add(e);
 		}
 		return set;
 	}
 	
-	public CuckooHashSet(ExternalHasher<T> decomposer) {
-		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, decomposer);
+	public CuckooHashSet(ExternalHasher<T> hasher) {
+		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
-	public CuckooHashSet(int initalCapacity, ExternalHasher<T> decomposer) {
-		this(initalCapacity, DEFAULT_LOAD_FACTOR, decomposer);
+	public CuckooHashSet(int initalCapacity, ExternalHasher<T> hasher) {
+		this(initalCapacity, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public CuckooHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> decomposer) {
+	public CuckooHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> hasher) {
 		this.initialCapacity = initialCapacity;
-		this.externalHasher = decomposer;
+		this.externalHasher = hasher;
 		
 		if(initialCapacity < 8) {
 			initialCapacity = 8;
@@ -106,10 +110,11 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	}
 	
 	private void generateNewHashFunctions() {
-		function1 = new MurmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
-		function2 = new MurmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
+		function1 = HashFunctions.murmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
+		function2 = HashFunctions.murmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
 	}
 	
+	@Override
 	public boolean contains(T key) {
 		return get(key) != null;
 	}
@@ -123,18 +128,19 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 * 
 	 * @return null if no element matching the given key is found.
 	 */
+	@Override
 	public T get(T key) {
 	
 		int index = indexFor(externalHasher.hash(key, function1));
 		
 		T value = table1[index];
-		if(!isEntryEmpty(value) && externalHasher.equals(key, value)) {
+		if(value != null && externalHasher.equals(key, value)) {
 			return value;
 		}			
 		
 		index = indexFor(externalHasher.hash(key, function2));
 		value = table2[index];
-		if(!isEntryEmpty(value) && externalHasher.equals(key, value)) {
+		if(value != null && externalHasher.equals(key, value)) {
 			return value;
 		}
 
@@ -149,6 +155,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 * @return A reference to the old key stored in the set if the key was in 
 	 *         the set, otherwise returns null. 
 	 */
+	@Override
 	public T add(T key) {
 		
 		if(size >= threshold) {
@@ -172,11 +179,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		size++;
 		return null;
 	}
-	
-	protected boolean isEntryEmpty(T e) {
-		return e == null;
-	}
-	
+		
 	private T tryInsert(T key) {
 		int i = 0;
 		while(i < size + 1) {
@@ -204,24 +207,28 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 	 */
 	private T insert(T key) {
 		int index = indexFor(externalHasher.hash(key, function1));
-		if(isEntryEmpty(table1[index])) {
+		if(table1[index] == null) {
 			table1[index] = key;
 			return null;
 		}
+		
+		collisionsCount++;
+		
 		T tmp = table1[index];
 		table1[index] = key;
 		key = tmp;
 		
 		index = indexFor(externalHasher.hash(key, function2));
-		if(isEntryEmpty(table2[index])) {
+		if(table2[index] == null) {
 			table2[index] = key;
 			return null;
 		}
 		
+		collisionsCount++;
+		
 		tmp = table2[index];
 		table2[index] = key;
 		key = tmp;
-
 		
 		return key;
 	}
@@ -233,7 +240,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		table1Loop:
 		for(int i = 0; i < table1.length; i++) {
 			T key = table1[i];
-			if(!isEntryEmpty(key)) {
+			if(key != null) {
 				if(indexFor(externalHasher.hash(key, function1)) != i) {
 					T tmp = table1[i];
 					table1[i] = null;
@@ -258,7 +265,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		table2Loop:
 		for(int i = 0; i < table2.length; i++) {
 			T key = table2[i];
-			if(!isEntryEmpty(key)) {
+			if(key != null) {
 				if(indexFor(externalHasher.hash(key, function2)) != i) {
 					T tmp = table2[i];
 					table2[i] = null;
@@ -316,18 +323,26 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		rehash();
 	}
 	
+	@Override
 	public int size() {
 		return size;
 	}
 	
+	@Override
 	public int getInitialCapacity() {
 		return initialCapacity;
+	}
+	
+	@Override
+	public int getCapacity() {
+		return capacity;
 	}
 	
 	public int getRehashCount() {
 		return rehashCount;
 	}
-	
+
+	@Override
 	public int getEnlargeCount() {
 		return enlargeCount;
 	}
@@ -336,6 +351,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		return hash & (tableSize - 1);
 	}
 	
+	@Override
 	public boolean isEmpty() {
 		return size == 0;
 	}
@@ -357,7 +373,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 			@Override
 			public T next() {
 				while(index1 < table1.length) {
-					if(!isEntryEmpty(table1[index1])) {
+					if(table1[index1] != null) {
 						it++;
 						return  table1[index1++];
 					}
@@ -365,7 +381,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 				}
 				
 				while(index2 < table2.length) {
-					if(!isEntryEmpty(table2[index2])) {
+					if(table2[index2] != null) {
 						it++;
 						return table2[index2++];
 					}
@@ -381,27 +397,8 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 			}
 		};
 	}
-
-	public boolean remove(T key) {
-		
-		int index = indexFor(externalHasher.hash(key, function1));
-		if(externalHasher.equals(key, table1[index])) {
-			table1[index] = null;
-			size--;
-			return true;
-		}
-		
-		index = indexFor(externalHasher.hash(key, function2));
-		if(externalHasher.equals(key, table2[index])) {
-			table2[index] = null;
-			size--;
-			return true;
-		}
-
-		return false;
-	}
-
-
+	
+	@Override
 	public void clear() {
 		for(int i = 0; i < table1.length; i++) {
 			table1[i] = null;
@@ -412,6 +409,7 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		enlargeCount = 0;
 	}
 	
+	@Override
 	public boolean addAll(Iterable<T> c) {
 		boolean changed = false;
 		for(T e : c) {
@@ -426,11 +424,11 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		for(T t : table1) {
-			if(!isEntryEmpty(t)) 
+			if(t != null) 
 				sb.append(t).append(", ");
 		}
 		for(T t : table2) {
-			if(!isEntryEmpty(t))
+			if(t != null)
 				sb.append(t).append(", ");
 		}
 		
@@ -439,6 +437,11 @@ public class CuckooHashSet<T> implements Serializable, Iterable<T> {
 		
 		sb.append("}");
 		return sb.toString();
+	}
+
+	@Override
+	public int getCollisionCount() {
+		return collisionsCount;
 	}
 
 }

@@ -1,7 +1,7 @@
 package org.jgll.sppf;
 
-import org.jgll.grammar.HeadGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -28,8 +28,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 			return false;
 		}
 		return super.equals(obj);
-	}
-	
+	}	
 	
 	public boolean isKeywordNode() {
 		return keywordNode;

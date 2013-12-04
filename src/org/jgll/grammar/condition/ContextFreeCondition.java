@@ -1,9 +1,10 @@
 package org.jgll.grammar.condition;
 
+import static org.jgll.util.CollectionsUtil.*;
+
 import java.util.List;
 
-import org.jgll.grammar.Symbol;
-import static org.jgll.util.collections.CollectionsUtil.*;
+import org.jgll.grammar.symbol.Symbol;
 
 public class ContextFreeCondition extends Condition {
 	
@@ -23,5 +24,21 @@ public class ContextFreeCondition extends Condition {
 	@Override
 	public String toString() {
 		return type.toString() + " " + listToString(symbols);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof ContextFreeCondition)) {
+			return false;
+		}
+		
+		ContextFreeCondition other = (ContextFreeCondition) obj;
+		
+		return type == other.type && symbols.equals(other.symbols);
 	}
 }

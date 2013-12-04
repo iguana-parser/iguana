@@ -3,8 +3,10 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -15,7 +17,7 @@ import org.jgll.util.logging.LoggerWrapper;
  * TODO: L0 is not really a grammar slot. Change it!
  *
  */
-public class L0 extends GrammarSlot {
+public class L0 extends HeadGrammarSlot {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(L0.class);
 	
@@ -31,7 +33,7 @@ public class L0 extends GrammarSlot {
 	}
 	
 	private L0() {
-		super("L0");
+		super(new Nonterminal("L0"));
 		id = -1;
 	}
 	
@@ -56,6 +58,11 @@ public class L0 extends GrammarSlot {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+		throw new UnsupportedOperationException();
 	}
 	
 	public GrammarSlot recognize(GLLRecognizer recognizer, Input input, GrammarSlot start) {
@@ -107,6 +114,11 @@ public class L0 extends GrammarSlot {
 		writer.append("}\n");
 		writer.append("return root;\n");
 		writer.append("}\n");
+	}
+	
+	@Override
+	public String toString() {
+		return "L0";
 	}
 
 }
