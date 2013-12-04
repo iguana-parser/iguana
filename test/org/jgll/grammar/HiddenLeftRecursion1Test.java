@@ -31,7 +31,7 @@ public class HiddenLeftRecursion1Test {
 
 	private GrammarBuilder builder;
 	private Grammar grammar;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -63,16 +63,17 @@ public class HiddenLeftRecursion1Test {
 														 .addRule(r7);
 			
 		grammar = builder.build();
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("xca"), grammar, "A");
-		NonterminalSymbolNode sppf2 = rdParser.parse(Input.fromString("ycb"), grammar, "A");
-		NonterminalSymbolNode sppf3 = rdParser.parse(Input.fromString("cababaab"), grammar, "A");
-		NonterminalSymbolNode sppf4 = rdParser.parse(Input.fromString("xcabbbbb"), grammar, "A");
-		NonterminalSymbolNode sppf5 = rdParser.parse(Input.fromString("ycaaaabaaaa"), grammar, "A");
+		// TODO: compare with the produced SPPFs.
+		parser.parse(Input.fromString("xca"), grammar, "A");
+		parser.parse(Input.fromString("ycb"), grammar, "A");
+		parser.parse(Input.fromString("cababaab"), grammar, "A");
+		parser.parse(Input.fromString("xcabbbbb"), grammar, "A");
+		parser.parse(Input.fromString("ycaaaabaaaa"), grammar, "A");
 	}
 	
 }
