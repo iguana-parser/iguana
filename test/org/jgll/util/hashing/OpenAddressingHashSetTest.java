@@ -16,7 +16,7 @@ public class OpenAddressingHashSetTest {
 	static {
 		Random rand = RandomUtil.random;
 		
-		for(int i = 0; i < 10000000; i++) {
+		for(int i = 0; i < 1000000; i++) {
 			IntegerHashKey4 key = new IntegerHashKey4(rand.nextInt(Integer.MAX_VALUE), 
 													  rand.nextInt(Integer.MAX_VALUE), 
 													  rand.nextInt(Integer.MAX_VALUE), 
@@ -80,7 +80,7 @@ public class OpenAddressingHashSetTest {
 		}
 		
 		System.out.println(set.getCollisionCount());
-		assertEquals(10000000, set.size());
+		assertEquals(1000000, set.size());
 	}
 	
 	@Test

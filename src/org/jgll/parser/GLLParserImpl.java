@@ -244,27 +244,29 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 
 			log.trace("Pop %s, %d, %s", cu.getGrammarSlot(), ci, cn);
 			
-			for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) cu.getGrammarSlot()).getPopActions()) {
-				if(popAction.execute(this, input)) {
-					return;
-				}
-			}
-			
 			// Add (u, z) to P
 			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
 			for(GSSNode dest : lookupTable.getChildren(cu)) {
 				
-				GrammarSlot slot = cu.getGrammarSlot();
-				
+				label:
 				for(GSSEdge edge : lookupTable.getEdges(cu, dest)) {
+					
+					GrammarSlot slot = edge.getGrammarSlot();
+					
+					for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) edge.getGrammarSlot()).getPopActions()) {
+						if(popAction.execute(this, input)) {
+							continue label;
+						}
+					}
+					
 					SPPFNode y;
 					if(slot instanceof LastGrammarSlot) {
 						y = getNonterminalNode((LastGrammarSlot) slot, edge.getNode(), cn);
 					} else {
 						y = getIntermediateNode((BodyGrammarSlot) slot, edge.getNode(), cn);
 					}
-					addDescriptor(edge.getSlot(), dest, ci, y);
+					addDescriptor(edge.getGrammarSlot(), dest, ci, y);
 				}				
 			}
 		}

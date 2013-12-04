@@ -32,7 +32,6 @@ import org.junit.Test;
 public class FilterTest1 {
 
 	private Grammar grammar;
-	private GLLParser levelParser;
 	private GLLParser parser;
 
 	@Before
@@ -61,17 +60,10 @@ public class FilterTest1 {
 		grammar = builder.build();
 		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
-
-	@Test
-	public void testAssociativityAndPriority() throws ParseError {
-		NonterminalSymbolNode sppf1 = parser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("a+-a+a+a"), grammar, "E");
-		assertTrue(sppf1.deepEquals(sppf2));
-	}
 	
 	@Test
 	public void testInput() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("a+-a+a"), grammar, "E");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+-a+a"), grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
 	

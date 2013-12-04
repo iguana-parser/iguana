@@ -40,7 +40,6 @@ public class Gamma1Test {
 	private Nonterminal B = new Nonterminal("B");
 	
 	private Grammar grammar;
-	private GLLParser levelParser;
 	private GLLParser parser;
 
 
@@ -99,13 +98,6 @@ public class Gamma1Test {
 		assertEquals(set(d, EOF.getInstance()), grammar.getNonterminalByName("S").getFollowSet());
 	}
 	
-	@Test
-	public void testParsers() throws ParseError {
-		NonterminalSymbolNode sppf1 = parser.parse(Input.fromString("aad"), grammar, "S");
-		NonterminalSymbolNode sppf2 = levelParser.parse(Input.fromString("aad"), grammar, "S");
-		assertTrue(sppf1.deepEquals(sppf2));
-	}
-
 	@Test
 	public void testSPPF() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aad"), grammar, "S");

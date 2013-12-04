@@ -2,6 +2,7 @@ package org.jgll.util.hashing;
 
 import java.util.Iterator;
 
+import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.hashing.hashfunction.SimpleTabulation8;
 
@@ -28,7 +29,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	
 	private ExternalHasher<T> hasher;
 	
-	private HashFunction hashFunction = SimpleTabulation8.getInstance();
+	private HashFunction hashFunction = HashFunctions.murmurHash3();
 	
 	/**
 	 * capacity - 1

@@ -32,7 +32,6 @@ import org.junit.rules.ExpectedException;
 public class FollowRestrictionTest {
 	
 	private Grammar grammar;
-	private GLLParser levelParser;
 	private GLLParser rdParser;
 
 	
@@ -57,13 +56,6 @@ public class FollowRestrictionTest {
 	
 	@org.junit.Rule
 	public ExpectedException thrown = ExpectedException.none();
-	
-	@Test
-	public void testLevelParser() throws Exception {
-		thrown.expect(ParseError.class);
-		thrown.expectMessage("Parse error at line:1 column:4");
-		levelParser.parse(Input.fromString("abc:"), grammar, "S");
-	}
 	
 	@Test
 	public void testRDParser() throws Exception {

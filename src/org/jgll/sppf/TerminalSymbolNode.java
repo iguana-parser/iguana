@@ -29,6 +29,10 @@ public class TerminalSymbolNode extends SPPFNode {
 		this.inputIndex = inputIndex;
 	}
 	
+	public int getInputIndex() {
+		return inputIndex;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		

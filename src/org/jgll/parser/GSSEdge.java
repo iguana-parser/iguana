@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
@@ -22,7 +23,7 @@ public class GSSEdge {
 		return node;
 	}
 	
-	public BodyGrammarSlot getSlot() {
+	public BodyGrammarSlot getGrammarSlot() {
 		return slot;
 	}
 	
@@ -38,9 +39,23 @@ public class GSSEdge {
 		}
 		
 		GSSEdge other = (GSSEdge) obj;
+		
+		int slotId1 = 0;
+		if(node instanceof TerminalSymbolNode) {
+			slotId1 = ((TerminalSymbolNode) node).getInputIndex();
+		} else {
+			slotId1 = node.getGrammarSlot().getId();
+		}
+
+		int slotId2 = 0;
+		if(other.node instanceof TerminalSymbolNode) {
+			slotId2 = ((TerminalSymbolNode) other.node).getInputIndex();
+		} else {
+			slotId2 = other.node.getGrammarSlot().getId();
+		}
 
 		return  slot == other.slot &&
-				node.getGrammarSlot() == other.node.getGrammarSlot() &&
+				slotId1 == slotId2 &&
 				node.getLeftExtent() == other.node.getLeftExtent() &&
 				node.getRightExtent() == other.node.getRightExtent();
 	}
@@ -56,18 +71,41 @@ public class GSSEdge {
 
 		@Override
 		public int hash(GSSEdge edge, HashFunction f) {
+			
+			int slotId = 0;
+			if(edge.node instanceof TerminalSymbolNode) {
+				slotId = ((TerminalSymbolNode) edge.node).getInputIndex();
+			} else {
+				slotId = edge.node.getGrammarSlot().getId();
+			}
+			
 			return f.hash(edge.slot.getId(), 
-						  edge.node.getGrammarSlot().getId(),
+						  slotId,
 						  edge.node.getLeftExtent(),
 						  edge.node.getRightExtent());
 		}
 
 		@Override
 		public boolean equals(GSSEdge e1, GSSEdge e2) {
-			return e1.slot.getId() == e2.slot.getId() &&
-				   e1.node.getGrammarSlot().getId() == e2.node.getGrammarSlot().getId() &&
-				   e1.node.getLeftExtent() == e2.node.getLeftExtent() &&
-				   e1.node.getRightExtent() == e2.node.getRightExtent();
+			
+			int slotId1 = 0;
+			if(e1.node instanceof TerminalSymbolNode) {
+				slotId1 = ((TerminalSymbolNode) e1.node).getInputIndex();
+			} else {
+				slotId1 = e1.node.getGrammarSlot().getId();
+			}
+
+			int slotId2 = 0;
+			if(e2.node instanceof TerminalSymbolNode) {
+				slotId2 = ((TerminalSymbolNode) e2.node).getInputIndex();
+			} else {
+				slotId2 = e2.node.getGrammarSlot().getId();
+			}
+			
+			return e2.slot.getId() == e2.slot.getId() &&
+				   slotId1 == slotId2 &&
+				   e2.node.getLeftExtent() == e2.node.getLeftExtent() &&
+				   e2.node.getRightExtent() == e2.node.getRightExtent();
 		}
 	}
 }
