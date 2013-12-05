@@ -7,8 +7,6 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashTableFactory;
-import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -39,9 +37,9 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	private int countPackedNode;
 	
-	private IguanaSet<PackedNode> packedNodes;
-	
 	private final int hash;
+	
+	private PackedNode firstPackedNode;
 
 	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
@@ -50,9 +48,7 @@ public abstract class NonPackedNode extends SPPFNode {
 		this.slot = slot;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
-		this.children = new ArrayList<>(2);
-		
-		this.packedNodes = HashTableFactory.getFactory().newHashSet(PackedNode.InsideParentHasher);
+		this.children = new ArrayList<>();
 		
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction()); 
 	}
@@ -106,24 +102,17 @@ public abstract class NonPackedNode extends SPPFNode {
 		return slot.toString();
 	}
 	
-	public void addPackedNode(PackedNode packedNode) {
-		if(packedNodes.contains(packedNode)) {
-			return;
-		}
-
+	public void addFirstPackedNode(PackedNode packedNode) {
+		firstPackedNode = packedNode;
 		countPackedNode++;
-		packedNodes.add(packedNode);
 	}
 
 	public void addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
 		
-		if(packedNodes.contains(packedNode)) {
-			return;
-		}
-		
 		createPackedNode(packedNode, leftChild, rightChild);
 		
 		if(countPackedNode == 0) {
+			firstPackedNode = packedNode;
 			if(leftChild != DummyNode.getInstance()) {
 				children.add(leftChild);
 			}
@@ -131,7 +120,7 @@ public abstract class NonPackedNode extends SPPFNode {
 		}
 		else if(countPackedNode == 1) {
 			children.clear();
-			children.add(packedNodes.iterator().next());
+			children.add(firstPackedNode);
 			children.add(packedNode);
 		}
 		else {
@@ -139,7 +128,6 @@ public abstract class NonPackedNode extends SPPFNode {
 		}
 		
 		countPackedNode++;
-		packedNodes.add(packedNode);
 	}
 	
 	/**
@@ -219,11 +207,10 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public LastGrammarSlot getFirstPackedNodeGrammarSlot() {
-		if(packedNodes.size() == 0) {
+		if(firstPackedNode == null) {
 			throw new RuntimeException("The set PackedNodes cannot be empty.");
 		}
-		PackedNode node = packedNodes.iterator().next();
-		return (LastGrammarSlot) node.getGrammarSlot();
+		return (LastGrammarSlot) firstPackedNode.getGrammarSlot();
 	}
 	
 	public int getCountPackedNode() {

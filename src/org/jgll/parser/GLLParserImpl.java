@@ -431,7 +431,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int inputIndex) {
 		int nextIndex = inputIndex + keyword.size();
 		NonPackedNode node = lookupTable.getNonPackedNode(slot, inputIndex, nextIndex);
-		node.addPackedNode(new PackedNode(slot.getAlternateAt(0).getLastSlot().next(), nextIndex, node));
+		node.addFirstPackedNode(new PackedNode(slot.getAlternateAt(0).getLastSlot().next(), nextIndex, node));
 		((NonterminalSymbolNode) node).setKeywordNode(true);
 		ci = nextIndex;
 		return node;

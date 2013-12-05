@@ -17,6 +17,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,8 +36,7 @@ public class IndirectRecursion2Test {
 	private GrammarBuilder builder;
 	
 	private Grammar grammar;
-	private GLLParser levelParser;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -51,8 +51,7 @@ public class IndirectRecursion2Test {
 													     .addRule(r3)
 													     .addRule(r4);
 		grammar = builder.build();
-		levelParser = ParserFactory.createRecursiveDescentParser(grammar);
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -62,14 +61,9 @@ public class IndirectRecursion2Test {
 	}
 	
 	@Test
-	public void testLevelParser() throws ParseError {
-		NonterminalSymbolNode sppf = levelParser.parse(Input.fromString("ad"), grammar, "A");
-		assertTrue(sppf.deepEquals(expectedSPPF()));
-	}
-	
-	@Test
 	public void testRDParser() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("ad"), grammar, "A");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("ad"), grammar, "A");
+		Visualization.generateSPPFGraph("/Users/ali/output", sppf, Input.fromString("ad"));
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
 	

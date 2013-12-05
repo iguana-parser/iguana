@@ -36,7 +36,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		// Do not create epsilon nodes
 		int ci = parser.getCurrentInputIndex();
 		NonPackedNode node = parser.getLookupTable().getNonPackedNode(this.getHead(), ci, ci);
-		node.addPackedNode(new PackedNode(this, ci, node));
+		node.addFirstPackedNode(new PackedNode(this, ci, node));
 		parser.setCurrentSPPFNode(node);
 		parser.pop();
 		return null;

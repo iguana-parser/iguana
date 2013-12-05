@@ -37,6 +37,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	private IguanaSet<Descriptor>[] descriptorsSet;
 	
 	private IguanaSet<NonPackedNode>[] nonPackedNodes;
+	
+	private IguanaSet<PackedNode>[] packedNodes;
 
 	private GSSNode[][] gssNodes;
 	
@@ -55,6 +57,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new IguanaSet[input.size()];
 		nonPackedNodes = new IguanaSet[input.size()];
+		packedNodes = new IguanaSet[input.size()];
+		
 		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.size()];
 		
 		nonPackedNodesCount = 0;
@@ -238,8 +242,24 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 
 	@Override
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		
+		int index = parent.getRightExtent();
+		IguanaSet<PackedNode> set = packedNodes[index];
+		
 		PackedNode packedNode = new PackedNode(slot, pivot, parent);
-		parent.addPackedNode(packedNode, leftChild, rightChild);
+		
+		if(set == null) {
+			set = factory.newHashSet(tableSize, PackedNode.levelBasedExternalHasher);
+			packedNodes[index] = set;
+			parent.addPackedNode(packedNode, leftChild, rightChild);
+			set.add(packedNode);
+			return;
+		}
+		
+		PackedNode add = set.add(packedNode);
+		if(add == null) {
+			parent.addPackedNode(packedNode, leftChild, rightChild);
+		}
 	}
 
 	@Override
