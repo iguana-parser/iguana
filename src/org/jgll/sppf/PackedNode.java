@@ -43,7 +43,7 @@ public class PackedNode extends SPPFNode {
 		
 		this.children = new ArrayList<>(2);
 		
-		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
+		this.hash = levelBasedExternalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 			
 	@Override
@@ -58,7 +58,7 @@ public class PackedNode extends SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  externalHasher.equals(this, other);
+		return  levelBasedExternalHasher.equals(this, other);
 	}
 	
 	public int getPivot() {
