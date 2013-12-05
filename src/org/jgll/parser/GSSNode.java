@@ -41,6 +41,8 @@ public class GSSNode {
 	
 	private MultiHashMap<GSSNode, Set<GSSEdge>> edges;
 	
+	private final int hash;
+	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
 	 * {@code position} and {@code index}
@@ -53,7 +55,9 @@ public class GSSNode {
 		this.inputIndex = inputIndex;
 		
 		this.poppedElements = HashTableFactory.getFactory().newHashSet(NonPackedNode.externalHasher);
-		this.edges = new OpenAddressingHashMap<>(externalHasher);			
+		this.edges = new OpenAddressingHashMap<>(externalHasher);
+		
+		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 		
 	public boolean createEdge(GSSNode dest, SPPFNode node, BodyGrammarSlot returnSlot) {
@@ -135,7 +139,7 @@ public class GSSNode {
 
 	@Override
 	public int hashCode() {
-		return externalHasher.hash(this, HashFunctions.defaulFunction());
+		return hash;
 	}
 	
 	@Override

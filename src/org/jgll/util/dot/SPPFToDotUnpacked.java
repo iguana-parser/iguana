@@ -1,6 +1,9 @@
 package org.jgll.util.dot;
 
-import static org.jgll.util.dot.GraphVizUtil.*;
+import static org.jgll.util.dot.GraphVizUtil.EDGE;
+import static org.jgll.util.dot.GraphVizUtil.INTERMEDIATE_NODE;
+import static org.jgll.util.dot.GraphVizUtil.PACKED_NODE;
+import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +15,6 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
-import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
@@ -227,11 +229,6 @@ public class SPPFToDotUnpacked extends ToDot {
 			
 			@Override
 			public void visit(RegularExpressionNode node) {
-				SPPFVisitorUtil.visitChildren(node, this);
-			}
-			
-			@Override
-			public void visit(RegularListNode node) {
 				SPPFVisitorUtil.visitChildren(node, this);
 			}
 			

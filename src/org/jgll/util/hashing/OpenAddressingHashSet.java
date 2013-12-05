@@ -69,8 +69,6 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		
 		this.loadFactor = loadFactor;
 
-		initialCapacity = Math.max(DEFAULT_INITIAL_CAPACITY, initialCapacity);
-		
 		capacity = 1;
         while (capacity < initialCapacity) {
             capacity <<= 1;

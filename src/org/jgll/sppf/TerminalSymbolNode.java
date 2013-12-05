@@ -24,9 +24,12 @@ public class TerminalSymbolNode extends SPPFNode {
 	
 	private final int inputIndex;
 	
+	private final int hash;
+	
 	public TerminalSymbolNode(int matchedChar, int inputIndex) {
 		this.matchedChar = matchedChar;
 		this.inputIndex = inputIndex;
+		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	public int getInputIndex() {
@@ -52,7 +55,7 @@ public class TerminalSymbolNode extends SPPFNode {
 	
 	@Override
 	public int hashCode() {
-		return externalHasher.hash(this, HashFunctions.defaulFunction());
+		return hash;
 	}
 	
 	@Override

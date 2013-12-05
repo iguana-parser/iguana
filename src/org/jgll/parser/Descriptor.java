@@ -51,6 +51,8 @@ public class Descriptor {
 	 */
 	private final SPPFNode sppfNode;
 	
+	private final int hash;
+	
 	/**
 	 * Arbitrary date to store in a descriptor.
 	 */
@@ -66,6 +68,8 @@ public class Descriptor {
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
+		
+		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	public GrammarSlot getGrammarSlot() {
@@ -86,7 +90,7 @@ public class Descriptor {
 	
 	@Override
 	public int hashCode() {
-		return externalHasher.hash(this, HashFunctions.defaulFunction());
+		return hash;
 	}
 	
 	@Override
@@ -165,9 +169,6 @@ public class Descriptor {
 					d1.gssNode.getGrammarSlot() == d2.gssNode.getGrammarSlot() &&
 					d1.gssNode.getInputIndex() == d2.gssNode.getInputIndex();
 		}
-
 	}
-	
-	
 	
 }

@@ -1,6 +1,9 @@
 package org.jgll.traversal;
 
-import static org.jgll.traversal.SPPFVisitorUtil.*;
+import static org.jgll.traversal.SPPFVisitorUtil.removeCollapsibleNode;
+import static org.jgll.traversal.SPPFVisitorUtil.removeIntermediateNode;
+import static org.jgll.traversal.SPPFVisitorUtil.removeListSymbolNode;
+import static org.jgll.traversal.SPPFVisitorUtil.visitChildren;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,7 +20,6 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
-import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
@@ -93,23 +95,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
 				nonterminalSymbolNode.setObject(result);
 			
-			}  else if(nonterminalSymbolNode.childrenCount() == 1 && nonterminalSymbolNode.getChildAt(0) instanceof RegularListNode) {
-				// Lazy creation of the children of regular nodes	
-				RegularListNode regularListNode = (RegularListNode) nonterminalSymbolNode.getChildAt(0);
-				nonterminalSymbolNode.removeChild(regularListNode);
-				
-				List<U> list = new ArrayList<>();
-				for(int i = regularListNode.getLeftExtent(); i < regularListNode.getRightExtent(); i++) {
-					Result<U> result = listener.terminal(input.charAt(i), input.getPositionInfo(i, i + 1));
-					list.add(result.getObject());
-				}
-								
-				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
-				listener.startNode((T) slot.getObject());
-				Result<U> result = listener.endNode((T) slot.getObject(), list, 
-						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
-				nonterminalSymbolNode.setObject(result);
-				
 			} else if(nonterminalSymbolNode.childrenCount() == 1 && nonterminalSymbolNode.getChildAt(0) instanceof RegularExpressionNode) {
 				// Lazy creation of the children of regular nodes	
 				RegularExpressionNode regularExpressionNode = (RegularExpressionNode) nonterminalSymbolNode.getChildAt(0);
@@ -303,11 +288,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				
 			}
 		};
-	}
-
-	@Override
-	public void visit(RegularListNode node) {
-		throw new IllegalStateException("Should not be here.");
 	}
 
 	@Override

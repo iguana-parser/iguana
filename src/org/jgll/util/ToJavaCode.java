@@ -7,7 +7,6 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
-import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
@@ -148,11 +147,6 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public String toString() {
 		return sb.toString();
-	}
-
-	@Override
-	public void visit(RegularListNode node) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

@@ -18,7 +18,6 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
-import org.jgll.sppf.RegularListNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
@@ -448,14 +447,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		return grammar;
 	}
 
-	@Override
-	public RegularListNode getRegularNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		RegularListNode node = new RegularListNode(slot, leftExtent, rightExtent);
-		NonPackedNode nonPackedNode = lookupTable.getNonPackedNode(node);
-		ci = rightExtent;
-		return (RegularListNode) nonPackedNode;
-	}
-	
 	@Override
 	public RegularExpressionNode getRegularExpressionNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
 		RegularExpressionNode node = new RegularExpressionNode(slot, leftExtent, rightExtent);
