@@ -22,9 +22,9 @@ import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashSet;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
+public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable2.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable.class);
 	
 	private HashTableFactory factory; 
 	
@@ -42,7 +42,7 @@ public class RecursiveDescentLookupTable2 extends AbstractLookupTable {
 	
 	private int nonPackedNodesCount;
 	
-	public RecursiveDescentLookupTable2(Grammar grammar) {
+	public RecursiveDescentLookupTable(Grammar grammar) {
 		super(grammar);
 	}
 	

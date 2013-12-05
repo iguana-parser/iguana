@@ -43,7 +43,7 @@ public class TerminalSymbolNode extends SPPFNode {
 			return true;
 		}
 
-		if (!(obj instanceof TerminalSymbolNode)) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
 		

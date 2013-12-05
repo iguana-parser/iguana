@@ -22,14 +22,6 @@ public class NonterminalSymbolNode extends NonPackedNode {
 		visitAction.visit(this);
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if(!(obj instanceof NonterminalSymbolNode)) {
-			return false;
-		}
-		return super.equals(obj);
-	}	
-	
 	public boolean isKeywordNode() {
 		return keywordNode;
 	}

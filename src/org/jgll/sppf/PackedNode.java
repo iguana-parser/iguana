@@ -29,25 +29,21 @@ public class PackedNode extends SPPFNode {
 	
 	private final List<SPPFNode> children;
 	
+	private final int hash;
+	
 	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
 		
-		if(slot == null) {
-			throw new IllegalArgumentException("Gramar slot cannot be null.");
-		}
-		
-		if(pivot < 0) {
-			throw new IllegalArgumentException("Pivot should be a positive integer number.");
-		}
-		
-		if(parent == null) {
-			throw new IllegalArgumentException("The parent node cannot be null.");
-		}
+		assert slot != null;
+		assert pivot < 0;
+		assert parent != null;
 		
 		this.slot = slot;
 		this.pivot = pivot;
 		this.parent = parent;
 		
 		this.children = new ArrayList<>(2);
+		
+		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 			
 	@Override
@@ -98,7 +94,7 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return externalHasher.hash(this, HashFunctions.defaulFunction());
+		return hash;
 	}
 	
 	@Override

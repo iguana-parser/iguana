@@ -13,10 +13,13 @@ public class GSSEdge {
 	
 	private BodyGrammarSlot slot;
 	private SPPFNode node;
+	
+	private final int hash;
 
 	public GSSEdge(BodyGrammarSlot slot, SPPFNode node) {
 		this.slot = slot;
 		this.node = node;
+		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	public SPPFNode getNode() {
@@ -62,7 +65,7 @@ public class GSSEdge {
 
 	@Override
 	public int hashCode() {
-		return externalHasher.hash(this, HashFunctions.defaulFunction());
+		return hash;
 	}
 	
 	public static class GSSEdgeExternalHasher implements ExternalHasher<GSSEdge> {

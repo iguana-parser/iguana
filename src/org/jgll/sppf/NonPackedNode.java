@@ -40,6 +40,8 @@ public abstract class NonPackedNode extends SPPFNode {
 	private int countPackedNode;
 	
 	private MultiHashSet<PackedNode> packedNodes;
+	
+	private final int hash;
 
 	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
@@ -51,11 +53,13 @@ public abstract class NonPackedNode extends SPPFNode {
 		this.children = new ArrayList<>(2);
 		
 		this.packedNodes = HashTableFactory.getFactory().newHashSet(PackedNode.InsideParentHasher);
+		
+		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction()); 
 	}
 	
 	@Override
 	public int hashCode() {
-		return externalHasher.hash(this, HashFunctions.defaulFunction());
+		return hash;
 	}
 	
 	@Override
@@ -64,8 +68,9 @@ public abstract class NonPackedNode extends SPPFNode {
 		if(this == obj) {
 			return true;
 		}
-		
-		if(!(obj instanceof NonPackedNode)) {
+
+		// Only nodes with the same concrete class can be equal.
+		if(this.getClass() != obj.getClass()) {
 			return false;
 		}
 		
