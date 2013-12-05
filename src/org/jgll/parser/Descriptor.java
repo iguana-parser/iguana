@@ -69,7 +69,7 @@ public class Descriptor {
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
 		
-		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
+		this.hash = levelBasedExternalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	public GrammarSlot getGrammarSlot() {

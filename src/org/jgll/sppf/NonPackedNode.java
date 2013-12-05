@@ -76,9 +76,9 @@ public abstract class NonPackedNode extends SPPFNode {
 		
 		NonPackedNode other = (NonPackedNode) obj;
 
-		return  rightExtent == other.rightExtent &&
-				slot == other.slot &&
-				leftExtent == other.leftExtent;
+		return  slot == other.slot &&
+				leftExtent == other.leftExtent &&
+				rightExtent == other.rightExtent;
 	}
 	
 	@Override
