@@ -93,7 +93,7 @@ public interface LookupTable {
 	 */
 	public Iterable<GSSNode> getChildren(GSSNode node);
 	
-	public Iterable<GSSEdge> getEdges(GSSNode src, GSSNode dst);
+	public Iterable<GSSEdge> getEdges(GSSNode node);
 
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	

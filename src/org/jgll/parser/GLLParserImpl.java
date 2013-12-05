@@ -39,7 +39,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
 	
 	static {		
-		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING_2);
+		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
 	}
 	
 	/**
@@ -246,27 +246,23 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			// Add (u, z) to P
 			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
-			for(GSSNode dest : lookupTable.getChildren(cu)) {
+			label:
+			for(GSSEdge edge : lookupTable.getEdges(cu)) {
+				GrammarSlot slot = edge.getReturnSlot();
 				
-				label:
-				for(GSSEdge edge : lookupTable.getEdges(cu, dest)) {
-					
-					GrammarSlot slot = edge.getGrammarSlot();
-					
-					for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) edge.getGrammarSlot()).getPopActions()) {
-						if(popAction.execute(this, input)) {
-							continue label;
-						}
+				for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) edge.getReturnSlot()).getPopActions()) {
+					if(popAction.execute(this, input)) {
+						continue label;
 					}
-					
-					SPPFNode y;
-					if(slot instanceof LastGrammarSlot) {
-						y = getNonterminalNode((LastGrammarSlot) slot, edge.getNode(), cn);
-					} else {
-						y = getIntermediateNode((BodyGrammarSlot) slot, edge.getNode(), cn);
-					}
-					addDescriptor(edge.getGrammarSlot(), dest, ci, y);
-				}				
+				}
+				
+				SPPFNode y;
+				if(slot instanceof LastGrammarSlot) {
+					y = getNonterminalNode((LastGrammarSlot) slot, edge.getNode(), cn);
+				} else {
+					y = getIntermediateNode((BodyGrammarSlot) slot, edge.getNode(), cn);
+				}
+				addDescriptor(edge.getReturnSlot(), edge.getDestination(), ci, y);
 			}
 		}
 	}

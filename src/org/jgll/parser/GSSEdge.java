@@ -11,14 +11,16 @@ public class GSSEdge {
 	
 	public static final ExternalHasher<GSSEdge> externalHasher = new GSSEdgeExternalHasher();
 	
-	private BodyGrammarSlot slot;
+	private BodyGrammarSlot returnSlot;
 	private SPPFNode node;
+	private GSSNode destination;
 	
 	private final int hash;
 
-	public GSSEdge(BodyGrammarSlot slot, SPPFNode node) {
-		this.slot = slot;
+	public GSSEdge(BodyGrammarSlot slot, SPPFNode node, GSSNode destination) {
+		this.returnSlot = slot;
 		this.node = node;
+		this.destination = destination;
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
@@ -26,8 +28,12 @@ public class GSSEdge {
 		return node;
 	}
 	
-	public BodyGrammarSlot getGrammarSlot() {
-		return slot;
+	public BodyGrammarSlot getReturnSlot() {
+		return returnSlot;
+	}
+	
+	public GSSNode getDestination() {
+		return destination;
 	}
 	
 	@Override
@@ -57,10 +63,13 @@ public class GSSEdge {
 			slotId2 = other.node.getGrammarSlot().getId();
 		}
 
-		return  slot == other.slot &&
+		
+		//	Because destination.getInputIndex() == node.getLeftExtent, we don't use it here.
+		return  returnSlot == other.returnSlot &&
 				slotId1 == slotId2 &&
 				node.getLeftExtent() == other.node.getLeftExtent() &&
-				node.getRightExtent() == other.node.getRightExtent();
+				node.getRightExtent() == other.node.getRightExtent() &&
+				destination.getGrammarSlot() == other.destination.getGrammarSlot();
 	}
 
 	@Override
@@ -82,10 +91,11 @@ public class GSSEdge {
 				slotId = edge.node.getGrammarSlot().getId();
 			}
 			
-			return f.hash(edge.slot.getId(), 
+			return f.hash(edge.returnSlot.getId(), 
 						  slotId,
 						  edge.node.getLeftExtent(),
-						  edge.node.getRightExtent());
+						  edge.node.getRightExtent(),
+						  edge.getDestination().getGrammarSlot().getId());
 		}
 
 		@Override
@@ -105,7 +115,7 @@ public class GSSEdge {
 				slotId2 = e2.node.getGrammarSlot().getId();
 			}
 			
-			return e2.slot.getId() == e2.slot.getId() &&
+			return e2.returnSlot.getId() == e2.returnSlot.getId() &&
 				   slotId1 == slotId2 &&
 				   e2.node.getLeftExtent() == e2.node.getLeftExtent() &&
 				   e2.node.getRightExtent() == e2.node.getRightExtent();

@@ -1,18 +1,12 @@
 package org.jgll.parser;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.MultiHashMap;
-import org.jgll.util.hashing.OpenAddressingHashMap;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -33,9 +27,9 @@ public class GSSNode {
 	private final HeadGrammarSlot slot;
 
 	private final int inputIndex;
-
-	private MultiHashMap<GSSNode, Set<GSSEdge>> edges;
 	
+	private List<GSSNode> children;
+
 	private final int hash;
 	
 	/**
@@ -49,63 +43,20 @@ public class GSSNode {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		
-		this.edges = new OpenAddressingHashMap<>(externalHasher);
+		children = new ArrayList<>();
 		
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 		
-	public boolean createEdge(GSSNode dest, SPPFNode node, BodyGrammarSlot returnSlot) {
-
-		GSSEdge edge = new GSSEdge(returnSlot, node);
-		
-		Set<GSSEdge> set = edges.get(dest);
-		
-		if(set == null) {
-			set = new HashSet<>();
-			set.add(edge);
-			edges.put(dest, set);
-			return true;
-		}
-		
-		return set.add(edge);
-	}
 	
 	public Iterable<GSSNode> getChildren() {
-		return new Iterable<GSSNode>() {
-			
-			@Override
-			public Iterator<GSSNode> iterator() {
-				return edges.keyIterator();
-			}
-		};
+		return children;
 	}
 	
 	public int sizeChildren() {
-		return edges.size();
+		return children.size();
 	}
-	
-	public Iterable<GSSEdge> getEdges(GSSNode node) {
-		Set<GSSEdge> set = edges.get(node);
-		if(set == null) {
-			return Collections.emptySet();
-		}
-		return set;
-	}
-	
-	public Iterable<SPPFNode> getNodesForChild(final GSSNode gssNode) {
-		Set<GSSEdge> set = edges.get(gssNode);
-		if(set == null) {
-			return Collections.emptySet();
-		}
 		
-		Set<SPPFNode> nodes = new HashSet<>();
-		for(GSSEdge edge : set) {
-			nodes.add(edge.getNode());
-		}
-		
-		return nodes;
-	}
-	
 	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}

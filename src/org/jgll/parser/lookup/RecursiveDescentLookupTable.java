@@ -44,6 +44,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	private GSSNode[][] gssNodes;
 	
 	private List<NonPackedNode>[][] poppedElements;
+		
+	private IguanaSet<GSSEdge>[][] gssEdges;
 	
 	private int nonPackedNodesCount;
 	
@@ -64,6 +66,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		
 		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.size()];
 		poppedElements = new List[grammar.getNonterminals().size()][input.size()];
+		gssEdges = new IguanaSet[grammar.getNonterminals().size()][input.size()];
 		
 		nonPackedNodesCount = 0;
 		
@@ -273,7 +276,19 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 
 	@Override
 	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
-		return source.createEdge(destination, node, returnSlot);
+		
+		GSSEdge edge = new GSSEdge(returnSlot, node, destination);
+		
+		IguanaSet<GSSEdge> set = gssEdges[source.getGrammarSlot().getId()][source.getInputIndex()];
+		
+		if(set == null) {
+			set = factory.newHashSet(GSSEdge.externalHasher);
+			gssEdges[source.getGrammarSlot().getId()][source.getInputIndex()] = set;
+			set.add(edge);
+			return true;
+		}
+		
+		return set.add(edge) == null;
 	}
 
 	@Override
@@ -308,8 +323,12 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	}
 	
 	@Override
-	public Iterable<GSSEdge> getEdges(GSSNode src, GSSNode dst) {
-		return src.getEdges(dst);
+	public Iterable<GSSEdge> getEdges(GSSNode node) {
+		IguanaSet<GSSEdge> set = gssEdges[node.getGrammarSlot().getId()][node.getInputIndex()];
+		if(set == null) {
+			return Collections.emptySet();
+		}
+		return set;
 	}
 
 }

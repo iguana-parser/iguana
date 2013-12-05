@@ -3,7 +3,6 @@ package org.jgll.util.dot;
 import static org.jgll.util.dot.GraphVizUtil.*;
 
 import org.jgll.parser.GSSNode;
-import org.jgll.sppf.SPPFNode;
 
 public class GSSToDot extends ToDot {
 	
@@ -16,9 +15,7 @@ public class GSSToDot extends ToDot {
 			sb.append("\"" + getId(gssNode) + "\"" + String.format(GSS_NODE, gssNode.toString()) + "\n");
 			
 			for(GSSNode dest : gssNode.getChildren()) {
-				for(SPPFNode sppfNode : gssNode.getNodesForChild(dest)) {
-					sb.append(String.format(GSS_EDGE, getId(sppfNode)) + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(dest) + "\"}" + "\n");					
-				}
+					sb.append(GSS_EDGE + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(dest) + "\"}" + "\n");					
 			}
 		}
 	}
