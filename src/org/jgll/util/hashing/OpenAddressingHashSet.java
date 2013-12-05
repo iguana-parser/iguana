@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.hashfunction.HashFunction;
-import org.jgll.util.hashing.hashfunction.SimpleTabulation8;
 
 public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 	
@@ -70,7 +69,7 @@ public class OpenAddressingHashSet<T> implements MultiHashSet<T> {
 		
 		this.loadFactor = loadFactor;
 
-		initialCapacity = Math.max(4, initialCapacity);
+		initialCapacity = Math.max(DEFAULT_INITIAL_CAPACITY, initialCapacity);
 		
 		capacity = 1;
         while (capacity < initialCapacity) {
