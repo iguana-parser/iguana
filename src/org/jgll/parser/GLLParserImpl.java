@@ -39,7 +39,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
 	
 	static {		
-		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING_WITH_BUCKETS);
+		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
 	}
 	
 	/**

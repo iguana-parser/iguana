@@ -2,7 +2,7 @@ package org.jgll.util.hashing;
 
 import java.util.Iterator;
 
-public class OpenAddressingHashSetWithBuckets<T> implements IguanaSet<T> {
+public class OpenAddressingHashSet2<T> implements IguanaSet<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -37,24 +37,24 @@ public class OpenAddressingHashSetWithBuckets<T> implements IguanaSet<T> {
 	private T[] table;
 	
  	@SafeVarargs
-	public static <T> OpenAddressingHashSetWithBuckets<T> from(T...elements) {
- 		OpenAddressingHashSetWithBuckets<T> set = new OpenAddressingHashSetWithBuckets<>();
+	public static <T> OpenAddressingHashSet2<T> from(T...elements) {
+ 		OpenAddressingHashSet2<T> set = new OpenAddressingHashSet2<>();
 		for(T e : elements) {
 			set.add(e);
 		}
 		return set;
 	}
 
-	public OpenAddressingHashSetWithBuckets() {
+	public OpenAddressingHashSet2() {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
 	}
 	
-	public OpenAddressingHashSetWithBuckets(int initalCapacity) {
+	public OpenAddressingHashSet2(int initalCapacity) {
 		this(initalCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public OpenAddressingHashSetWithBuckets(int initialCapacity, float loadFactor) {
+	public OpenAddressingHashSet2(int initialCapacity, float loadFactor) {
 		
 		this.initialCapacity = initialCapacity;
 		

@@ -5,7 +5,7 @@ public class HashTableFactory {
 	public static final int CUCKOO = 0;
 	public static final int OPEN_ADDRESSING = 1;
 	public static final int CHAINING = 2;
-	public static final int OPEN_ADDRESSING_WITH_BUCKETS = 3;
+	public static final int OPEN_ADDRESSING_2 = 3;
 	
 	private int type;
 	
@@ -33,8 +33,8 @@ public class HashTableFactory {
 		else if (type == OPEN_ADDRESSING) {
 			return new OpenAddressingHashSet<>(initialSize, hasher);
 		} 
-		else if(type == OPEN_ADDRESSING_WITH_BUCKETS) {
-			return new OpenAddressingHashSetWithBuckets<>(initialSize);
+		else if(type == OPEN_ADDRESSING_2) {
+			return new OpenAddressingHashSet2<>(initialSize);
 		}
 		else {
 			throw new RuntimeException("Not implemented yet.");
@@ -48,8 +48,8 @@ public class HashTableFactory {
 		else if (type == OPEN_ADDRESSING) {
 			return new OpenAddressingHashSet<>(hasher);
 		} 
-		else if(type == OPEN_ADDRESSING_WITH_BUCKETS) {
-			return new OpenAddressingHashSetWithBuckets<>();
+		else if(type == OPEN_ADDRESSING_2) {
+			return new OpenAddressingHashSet2<>();
 		}
 		else {
 			throw new RuntimeException("Not implemented yet.");

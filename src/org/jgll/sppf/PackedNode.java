@@ -34,7 +34,7 @@ public class PackedNode extends SPPFNode {
 	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
 		
 		assert slot != null;
-		assert pivot < 0;
+		assert pivot >= 0;
 		assert parent != null;
 		
 		this.slot = slot;
