@@ -8,7 +8,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashTableFactory;
-import org.jgll.util.hashing.MultiHashSet;
+import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -39,7 +39,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	private int countPackedNode;
 	
-	private MultiHashSet<PackedNode> packedNodes;
+	private IguanaSet<PackedNode> packedNodes;
 	
 	private final int hash;
 

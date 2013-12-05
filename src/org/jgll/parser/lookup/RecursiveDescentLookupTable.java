@@ -19,7 +19,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.HashTableFactory;
-import org.jgll.util.hashing.MultiHashSet;
+import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class RecursiveDescentLookupTable extends AbstractLookupTable {
@@ -34,9 +34,9 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private TerminalSymbolNode[] terminals;
 	
-	private MultiHashSet<Descriptor>[] descriptorsSet;
+	private IguanaSet<Descriptor>[] descriptorsSet;
 	
-	private MultiHashSet<NonPackedNode>[] nonPackedNodes;
+	private IguanaSet<NonPackedNode>[] nonPackedNodes;
 
 	private GSSNode[][] gssNodes;
 	
@@ -53,8 +53,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		terminals = new TerminalSymbolNode[2 * input.size()];
 
 		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new MultiHashSet[input.size()];
-		nonPackedNodes = new MultiHashSet[input.size()];
+		descriptorsSet = new IguanaSet[input.size()];
+		nonPackedNodes = new IguanaSet[input.size()];
 		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.size()];
 		
 		nonPackedNodesCount = 0;
@@ -112,7 +112,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public boolean addDescriptor(Descriptor descriptor) {
 		
-		MultiHashSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
+		IguanaSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
 		if(set == null) {
 			set = factory.newHashSet(tableSize, Descriptor.levelBasedExternalHasher);
 			descriptorsSet[descriptor.getInputIndex()] = set;
@@ -165,7 +165,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public NonPackedNode getNonPackedNode(NonPackedNode key) {
 		int index = key.getRightExtent();
-		MultiHashSet<NonPackedNode> set = nonPackedNodes[index];
+		IguanaSet<NonPackedNode> set = nonPackedNodes[index];
 		
 		if(set == null) {
 			set = factory.newHashSet(tableSize, NonPackedNode.levelBasedExternalHasher);

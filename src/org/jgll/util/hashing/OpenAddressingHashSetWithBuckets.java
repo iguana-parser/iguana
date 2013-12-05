@@ -2,10 +2,7 @@ package org.jgll.util.hashing;
 
 import java.util.Iterator;
 
-import org.jgll.parser.HashFunctions;
-import org.jgll.util.hashing.hashfunction.HashFunction;
-
-public class OpenAddressingHashSet<T> implements IguanaSet<T> {
+public class OpenAddressingHashSetWithBuckets<T> implements IguanaSet<T> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -26,10 +23,6 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 	
 	private int collisionsCount;
 	
-	private ExternalHasher<T> hasher;
-	
-	private HashFunction hashFunction = HashFunctions.murmurHash3();
-	
 	/**
 	 * capacity - 1
 	 * The bitMask is used to get the p most-significant bytes of the multiplicaiton.
@@ -44,28 +37,26 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 	private T[] table;
 	
  	@SafeVarargs
-	public static <T> OpenAddressingHashSet<T> from(ExternalHasher<T> hasher, T...elements) {
- 		OpenAddressingHashSet<T> set = new OpenAddressingHashSet<>(hasher);
+	public static <T> OpenAddressingHashSetWithBuckets<T> from(T...elements) {
+ 		OpenAddressingHashSetWithBuckets<T> set = new OpenAddressingHashSetWithBuckets<>();
 		for(T e : elements) {
 			set.add(e);
 		}
 		return set;
 	}
 
-	public OpenAddressingHashSet(ExternalHasher<T> hasher) {
-		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
+	public OpenAddressingHashSetWithBuckets() {
+		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
 	}
 	
-	public OpenAddressingHashSet(int initalCapacity, ExternalHasher<T> hasher) {
-		this(initalCapacity, DEFAULT_LOAD_FACTOR, hasher);
+	public OpenAddressingHashSetWithBuckets(int initalCapacity) {
+		this(initalCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public OpenAddressingHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> hasher) {
+	public OpenAddressingHashSetWithBuckets(int initialCapacity, float loadFactor) {
 		
 		this.initialCapacity = initialCapacity;
-		
-		this.hasher = hasher;
 		
 		this.loadFactor = loadFactor;
 
@@ -101,7 +92,7 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 				return null;
 			}
 			
-			else if(hasher.equals(table[index], key)) {
+			else if(table[index].equals(key)) {
 				return table[index];
 			}
 			
@@ -147,7 +138,7 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 	}
 	
 	private int hash(T key) {
-		return hasher.hash(key, hashFunction) & bitMask;
+		return key.hashCode() & bitMask;
 	}
 	
 	@Override
@@ -189,7 +180,7 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 		
 		int index = hash(key);
 		
-		while(table[index] != null && !hasher.equals(table[index], key)) {			
+		while(table[index] != null && !table[index].equals(key)) {			
 			index = (index + 1) & bitMask;
 		}
 		

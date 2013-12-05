@@ -15,7 +15,7 @@ import org.jgll.util.hashing.hashfunction.SimpleTabulation8;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashSet<T> implements MultiHashSet<T> {
+public class CuckooHashSet<T> implements IguanaSet<T> {
 	
 	private static final long serialVersionUID = 1L;
 	

@@ -14,7 +14,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashMap;
-import org.jgll.util.hashing.MultiHashSet;
+import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.hashing.OpenAddressingHashMap;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
@@ -37,7 +37,7 @@ public class GSSNode {
 
 	private final int inputIndex;
 
-	private MultiHashSet<NonPackedNode> poppedElements;
+	private IguanaSet<NonPackedNode> poppedElements;
 	
 	private MultiHashMap<GSSNode, Set<GSSEdge>> edges;
 	

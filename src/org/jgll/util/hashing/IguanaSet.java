@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Interface for hash sets that use multiple hash functions.
  * 
  */
-public interface MultiHashSet<T> extends Serializable, Iterable<T> {
+public interface IguanaSet<T> extends Serializable, Iterable<T> {
 
 	public boolean contains(T key);
 

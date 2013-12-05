@@ -25,7 +25,7 @@ public class HashTableFactory {
 		this.type = type;
 	}
 
-	public <T> MultiHashSet<T> newHashSet(int initialSize, ExternalHasher<T> hasher) {
+	public <T> IguanaSet<T> newHashSet(int initialSize, ExternalHasher<T> hasher) {
 		if(type == CUCKOO) {
 			return new CuckooHashSet<>(initialSize, hasher);
 		} 
@@ -37,7 +37,7 @@ public class HashTableFactory {
 		}
 	}
 	
-	public <T> MultiHashSet<T> newHashSet(ExternalHasher<T> hasher) {
+	public <T> IguanaSet<T> newHashSet(ExternalHasher<T> hasher) {
 		if(type == CUCKOO) {
 			return new CuckooHashSet<>(hasher);
 		} 
