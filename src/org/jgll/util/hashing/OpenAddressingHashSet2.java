@@ -7,7 +7,7 @@ public class OpenAddressingHashSet2<T> implements IguanaSet<T> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 64;
-	private static final float DEFAULT_LOAD_FACTOR = 0.5f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
 	
 	private int initialCapacity;
 	

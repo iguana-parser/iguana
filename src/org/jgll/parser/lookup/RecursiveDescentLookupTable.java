@@ -2,6 +2,7 @@ package org.jgll.parser.lookup;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 
 	private GSSNode[][] gssNodes;
 	
+	private List<NonPackedNode>[][] poppedElements;
+	
 	private int nonPackedNodesCount;
 	
 	public RecursiveDescentLookupTable(Grammar grammar) {
@@ -60,6 +63,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		packedNodes = new IguanaSet[input.size()];
 		
 		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.size()];
+		poppedElements = new List[grammar.getNonterminals().size()][input.size()];
 		
 		nonPackedNodesCount = 0;
 		
@@ -279,12 +283,23 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 
 	@Override
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
-		gssNode.addToPoppedElements(sppfNode);
+		List<NonPackedNode> list = poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
+		if(list == null) {
+			list = new ArrayList<>();
+			poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()] = list;
+		}
+		
+		list.add(sppfNode);
 	}
 
 	@Override
-	public Iterable<NonPackedNode> getSPPFNodesOfPoppedElements(GSSNode gssNode) {
-		return gssNode.getPoppedElements();
+	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode) {
+		List<NonPackedNode> list = poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
+		if(list == null) {
+			return Collections.emptyList();
+		}
+		
+		return list;
 	}
 
 	@Override

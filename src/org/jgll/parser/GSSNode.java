@@ -9,12 +9,9 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.MultiHashMap;
-import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.hashing.OpenAddressingHashMap;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
@@ -37,8 +34,6 @@ public class GSSNode {
 
 	private final int inputIndex;
 
-	private IguanaSet<NonPackedNode> poppedElements;
-	
 	private MultiHashMap<GSSNode, Set<GSSEdge>> edges;
 	
 	private final int hash;
@@ -54,7 +49,6 @@ public class GSSNode {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		
-		this.poppedElements = HashTableFactory.getFactory().newHashSet(NonPackedNode.externalHasher);
 		this.edges = new OpenAddressingHashMap<>(externalHasher);
 		
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
@@ -147,14 +141,6 @@ public class GSSNode {
 		return "(" + slot + "," + inputIndex + ")";
 	}
 
-	public void addToPoppedElements(NonPackedNode node) {
-		poppedElements.add(node);
-	}
-	
-	public Iterable<NonPackedNode> getPoppedElements() {
-		return poppedElements;
-	}
-	
 	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {
 		
 		private static final long serialVersionUID = 1L;

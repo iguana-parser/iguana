@@ -97,7 +97,7 @@ public interface LookupTable {
 
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	
-	public Iterable<NonPackedNode> getSPPFNodesOfPoppedElements(GSSNode gssNode);
+	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode);
 	
 	public int getNonPackedNodesCount();
 	

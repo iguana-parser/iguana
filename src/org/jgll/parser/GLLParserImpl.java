@@ -311,7 +311,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		GSSNode v = lookupTable.getGSSNode(head, i);
 
 		if(lookupTable.getGSSEdge(v, u, w, returnSlot)) {
-			for (SPPFNode z : lookupTable.getSPPFNodesOfPoppedElements(v)) {
+			for (SPPFNode z : lookupTable.getPoppedElementsOf(v)) {
 				SPPFNode x;
 				if(returnSlot instanceof LastGrammarSlot) {
 					x = getNonterminalNode((LastGrammarSlot) returnSlot, w, z);
