@@ -10,6 +10,8 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,9 +72,98 @@ public class IndirectRecursion3Test {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("efcfc"), grammar, "A");
+		assertTrue(sppf1.deepEquals(getSPPFNode1()));
+		
 		NonterminalSymbolNode sppf2 = rdParser.parse(Input.fromString("egdgdgd"), grammar, "A");
+		assertTrue(sppf2.deepEquals(getSPPFNode2()));
+		
 		NonterminalSymbolNode sppf3 = rdParser.parse(Input.fromString("egdfcgd"), grammar, "A");
+		assertTrue(sppf3.deepEquals(getSPPFNode3()));
 	}
-
+	
+	private SPPFNode getSPPFNode1() {
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 4);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 2);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		TerminalSymbolNode node6 = new TerminalSymbolNode(101, 0);
+		node5.addChild(node6);
+		TerminalSymbolNode node7 = new TerminalSymbolNode(102, 1);
+		node4.addChild(node5);
+		node4.addChild(node7);
+		TerminalSymbolNode node8 = new TerminalSymbolNode(99, 2);
+		node3.addChild(node4);
+		node3.addChild(node8);
+		TerminalSymbolNode node9 = new TerminalSymbolNode(102, 3);
+		node2.addChild(node3);
+		node2.addChild(node9);
+		TerminalSymbolNode node10 = new TerminalSymbolNode(99, 4);
+		node1.addChild(node2);
+		node1.addChild(node10);
+		return node1;
+	}
+	
+	private SPPFNode getSPPFNode2() {
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 7);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 6);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		TerminalSymbolNode node8 = new TerminalSymbolNode(101, 0);
+		node7.addChild(node8);
+		TerminalSymbolNode node9 = new TerminalSymbolNode(103, 1);
+		node6.addChild(node7);
+		node6.addChild(node9);
+		TerminalSymbolNode node10 = new TerminalSymbolNode(100, 2);
+		node5.addChild(node6);
+		node5.addChild(node10);
+		TerminalSymbolNode node11 = new TerminalSymbolNode(103, 3);
+		node4.addChild(node5);
+		node4.addChild(node11);
+		TerminalSymbolNode node12 = new TerminalSymbolNode(100, 4);
+		node3.addChild(node4);
+		node3.addChild(node12);
+		TerminalSymbolNode node13 = new TerminalSymbolNode(103, 5);
+		node2.addChild(node3);
+		node2.addChild(node13);
+		TerminalSymbolNode node14 = new TerminalSymbolNode(100, 6);
+		node1.addChild(node2);
+		node1.addChild(node14);
+		return node1;
+	}
+	
+	private SPPFNode getSPPFNode3() {
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 7);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 6);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		TerminalSymbolNode node8 = new TerminalSymbolNode(101, 0);
+		node7.addChild(node8);
+		TerminalSymbolNode node9 = new TerminalSymbolNode(103, 1);
+		node6.addChild(node7);
+		node6.addChild(node9);
+		TerminalSymbolNode node10 = new TerminalSymbolNode(100, 2);
+		node5.addChild(node6);
+		node5.addChild(node10);
+		TerminalSymbolNode node11 = new TerminalSymbolNode(102, 3);
+		node4.addChild(node5);
+		node4.addChild(node11);
+		TerminalSymbolNode node12 = new TerminalSymbolNode(99, 4);
+		node3.addChild(node4);
+		node3.addChild(node12);
+		TerminalSymbolNode node13 = new TerminalSymbolNode(103, 5);
+		node2.addChild(node3);
+		node2.addChild(node13);
+		TerminalSymbolNode node14 = new TerminalSymbolNode(100, 6);
+		node1.addChild(node2);
+		node1.addChild(node14);
+		return node1;
+	}
 	
 }

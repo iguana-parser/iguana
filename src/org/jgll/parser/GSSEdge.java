@@ -115,10 +115,11 @@ public class GSSEdge {
 				slotId2 = e2.node.getGrammarSlot().getId();
 			}
 			
-			return e2.returnSlot.getId() == e2.returnSlot.getId() &&
+			return e1.returnSlot.getId() == e2.returnSlot.getId() &&
 				   slotId1 == slotId2 &&
-				   e2.node.getLeftExtent() == e2.node.getLeftExtent() &&
-				   e2.node.getRightExtent() == e2.node.getRightExtent();
+				   e1.node.getLeftExtent() == e2.node.getLeftExtent() &&
+				   e1.node.getRightExtent() == e2.node.getRightExtent() &&
+				   e1.destination.getGrammarSlot() == e2.destination.getGrammarSlot();
 		}
 	}
 }
