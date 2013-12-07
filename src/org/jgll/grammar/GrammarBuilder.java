@@ -86,6 +86,8 @@ public class GrammarBuilder implements Serializable {
 	
 	private List<BodyGrammarSlot> conditionSlots;
 	
+	Set<RegularExpression> regularExpressions;
+	
 	public GrammarBuilder() {
 		this("no-name");
 	}
@@ -100,6 +102,7 @@ public class GrammarBuilder implements Serializable {
 		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
 		newNonterminalsMap = new LinkedHashMap<>();
+		regularExpressions = new HashSet<>();
 	}
 
 	public Grammar build() {
@@ -235,7 +238,9 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		else if(symbol instanceof RegularExpression) {
-			return new RegularExpressionGrammarSlot(symbolIndex, (RegularExpression) symbol, currentSlot, headGrammarSlot);
+			RegularExpression regularExpression = (RegularExpression) symbol;
+			regularExpressions.add(regularExpression);
+			return new RegularExpressionGrammarSlot(symbolIndex, regularExpression, currentSlot, headGrammarSlot);
 		}
 		
 		// Nonterminal

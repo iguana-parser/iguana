@@ -18,6 +18,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -63,6 +64,8 @@ public class Grammar implements Serializable {
 	
 	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
+	private Set<RegularExpression> regularExpressions;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
@@ -90,6 +93,7 @@ public class Grammar implements Serializable {
 		this.averageDescriptorsAtInput = builder.averageDescriptors;
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
 		this.reachabilityGraph = builder.directReachabilityGraph;
+		this.regularExpressions = builder.regularExpressions;
 		
 		printGrammarStatistics();
 	}
@@ -259,6 +263,10 @@ public class Grammar implements Serializable {
 	
 	public int getStDevDescriptors() {
 		return stDevDescriptors;
+	}
+	
+	public Set<RegularExpression> getRegularExpressions() {
+		return regularExpressions;
 	}
 	
 	@Override
