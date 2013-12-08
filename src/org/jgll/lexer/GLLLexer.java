@@ -1,6 +1,7 @@
 package org.jgll.lexer;
 
 import java.util.BitSet;
+import java.util.Set;
 
 
 public interface GLLLexer {
@@ -11,6 +12,14 @@ public interface GLLLexer {
 	 * 
 	 * @param index the given input index
 	 */
-	public BitSet tokensAt(int index);
+	public BitSet tokenIDsAt(int index);
+	
+	/**
+	 * 
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public Set<Token> tokensAt(int index);
 
 }

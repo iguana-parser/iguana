@@ -35,8 +35,13 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	@Override
-	public BitSet tokensAt(int index) {
-		return null;
+	public BitSet tokenIDsAt(int index) {
+		return tokenIDs[index];
+	}
+	
+	@Override
+	public Set<Token> tokensAt(int index) {
+		return tokens[index];
 	}
 	
 	private void tokenize(String input, Grammar grammar) {
