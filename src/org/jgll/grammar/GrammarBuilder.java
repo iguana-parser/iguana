@@ -88,6 +88,8 @@ public class GrammarBuilder implements Serializable {
 	
 	Set<RegularExpression> regularExpressions;
 	
+	Set<Keyword> keywords;
+	
 	public GrammarBuilder() {
 		this("no-name");
 	}
@@ -103,6 +105,7 @@ public class GrammarBuilder implements Serializable {
 		conditionSlots = new ArrayList<>();
 		newNonterminalsMap = new LinkedHashMap<>();
 		regularExpressions = new HashSet<>();
+		keywords = new HashSet<>();
 	}
 
 	public Grammar build() {
@@ -229,6 +232,7 @@ public class GrammarBuilder implements Serializable {
 		
 		if(symbol instanceof Keyword) {
 			Keyword keyword = (Keyword) symbol;
+			keywords.add(keyword);
 			HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
 			return new KeywordGrammarSlot(symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
 		}

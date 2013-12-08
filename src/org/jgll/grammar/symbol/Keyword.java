@@ -51,6 +51,25 @@ public class Keyword extends AbstractSymbol {
 		return getName();
 	}
 	
+
+	/**
+	 * 
+	 * Checks if this keyword matches a prefix of the given string from the provided index.
+	 * 
+	 * @param s
+	 * @param index
+	 * @return
+	 */
+	public boolean match(String s, int index) {
+		for(int i = 0; i < chars.length; i++) {
+			if(chars[i] != s.charAt(i + index)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) {
