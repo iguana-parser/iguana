@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
-import org.jgll.util.Input;
 
 /**
  * 
@@ -82,9 +82,9 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return predictionSet;
 	}
 	
-	protected boolean executePreConditions(GLLParserInternals parser, Input input) {
+	protected boolean executePreConditions(GLLParserInternals parser, GLLLexer lexer) {
 		for(SlotAction<Boolean> preCondition : preConditions) {
-			if(preCondition.execute(parser, input)) {
+			if(preCondition.execute(parser, lexer)) {
 				return true;
 			}
 		}
@@ -99,17 +99,17 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
 	 *								   | NegativeNumber
 	 */
-	protected boolean checkPopActions(GLLParserInternals parser, Input input) {
+	protected boolean checkPopActions(GLLParserInternals parser, GLLLexer lexer) {
 		for(SlotAction<Boolean> slotAction : next.popActions) {
-			if(slotAction.execute(parser, input)) {
+			if(slotAction.execute(parser, lexer)) {
 				return true;
 			}
 		}
 		return false;
 	}		
 	
-	public boolean test(int index, Input input) {
-		return predictionSet.get(input.charAt(index));
+	public boolean test(int index, GLLLexer lexer) {
+		return predictionSet.get(lexer.getInput().charAt(index));
 	}
 	
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;

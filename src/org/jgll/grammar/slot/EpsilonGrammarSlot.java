@@ -5,10 +5,10 @@ import java.io.Writer;
 
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.util.Input;
 
 /**
  * The grammar slot representing an empty body.
@@ -26,7 +26,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer input) {
 		
 		if(executePreConditions(parser, input)) {
 			return null;

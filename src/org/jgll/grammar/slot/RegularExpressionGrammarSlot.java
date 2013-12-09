@@ -16,12 +16,12 @@ import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Star;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 import dk.brics.automaton.RunAutomaton;
 
@@ -100,9 +100,9 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	}
 		
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
 		
-			if(executePreConditions(parser, input)) {
+			if(executePreConditions(parser, lexer)) {
 				return null;
 			}
 			
@@ -118,14 +118,14 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			while(true) {
 				lastState = state;
 
-				int charAtCi = input.charAt(ci + i);
+				int charAtCi = lexer.getInput().charAt(ci + i);
 				
 				state = automaton.step(state, (char) charAtCi);
 				if(state == -1) {
 					break;
 				}
 				
-				if(ci + i + 1 >= input.size()) {
+				if(ci + i + 1 >= lexer.getInput().size()) {
 					break;
 				}
 				
@@ -144,7 +144,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 				return null;
 			}
 			
-			if(checkPopActions(parser, input)) {
+			if(checkPopActions(parser, lexer)) {
 				return null;
 			}
 			
@@ -158,9 +158,9 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
 		
-		if(executePreConditions(parser, input)) {
+		if(executePreConditions(parser, lexer)) {
 			return null;
 		}
 		
@@ -176,7 +176,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 		while(true) {
 			lastState = state;
 
-			int charAtCi = input.charAt(ci + i);
+			int charAtCi = lexer.getInput().charAt(ci + i);
 			
 			state = automaton.step(state, (char) charAtCi);
 			
@@ -184,7 +184,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 				break;
 			}
 			
-			if(ci + i + 1 >= input.size()) {
+			if(ci + i + 1 >= lexer.getInput().size()) {
 				break;
 			}
 			
@@ -203,7 +203,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		if(checkPopActions(parser, input)) {
+		if(checkPopActions(parser, lexer)) {
 			return null;
 		}
 				
@@ -241,7 +241,7 @@ public class RegularExpressionGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		// TODO Auto-generated method stub
 		return null;
 	}

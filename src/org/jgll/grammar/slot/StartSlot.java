@@ -3,10 +3,10 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 public class StartSlot extends GrammarSlot {
 
@@ -22,17 +22,17 @@ public class StartSlot extends GrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer input) {
 		return null;
 	}
 
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer input) {
 		return null;
 	}
 
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer input) {
 		throw new UnsupportedOperationException();
 	}
 

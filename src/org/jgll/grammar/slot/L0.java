@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -37,7 +37,7 @@ public class L0 extends HeadGrammarSlot {
 		id = -1;
 	}
 	
-	public GrammarSlot parse(GLLParserInternals parser, Input input, GrammarSlot start) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer input, GrammarSlot start) {
 		
 		GrammarSlot slot = start.parse(parser, input);
 		
@@ -49,34 +49,34 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
 		while(parser.hasNextDescriptor()) {
 			GrammarSlot slot = parser.nextDescriptor().getGrammarSlot();
-			slot = slot.parse(parser, input);
+			slot = slot.parse(parser, lexer);
 			while(slot != null) {
-				slot = slot.parse(parser, input);
+				slot = slot.parse(parser, lexer);
 			}
 		}
 		return null;
 	}
 	
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
 		throw new UnsupportedOperationException();
 	}
 	
-	public GrammarSlot recognize(GLLRecognizer recognizer, Input input, GrammarSlot start) {
-		GrammarSlot slot = start.recognize(recognizer, input);
+	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer, GrammarSlot start) {
+		GrammarSlot slot = start.recognize(recognizer, lexer);
 		
 		while(slot != null) {
-			slot = slot.recognize(recognizer, input);
+			slot = slot.recognize(recognizer, lexer);
 		}
 		
-		return recognize(recognizer, input);
+		return recognize(recognizer, lexer);
 	}
 	
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		while(recognizer.hasNextDescriptor()) {
 			org.jgll.recognizer.Descriptor descriptor = recognizer.nextDescriptor();
 			GrammarSlot slot = descriptor.getGrammarSlot();
@@ -84,9 +84,9 @@ public class L0 extends HeadGrammarSlot {
 			int ci = descriptor.getInputIndex();
 			recognizer.update(cu, ci);
 			log.trace("Processing (%s, %s, %s)", slot, ci, cu);
-			slot = slot.recognize(recognizer, input);
+			slot = slot.recognize(recognizer, lexer);
 			while(slot != null) {
-				slot = slot.recognize(recognizer, input);
+				slot = slot.recognize(recognizer, lexer);
 			}
 		}
 		return null;

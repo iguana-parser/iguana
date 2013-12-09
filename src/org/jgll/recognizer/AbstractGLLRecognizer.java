@@ -6,6 +6,7 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.StartSlot;
+import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.recognizer.lookup.Lookup;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
@@ -69,7 +70,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	
 		long start = System.nanoTime();
 	
-		L0.getInstance().recognize(this, input, startSymbol);
+		L0.getInstance().recognize(this, new GLLLexerImpl(input, grammar), startSymbol);
 		
 		long end = System.nanoTime();
 
@@ -89,7 +90,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 		
 		add(fromSlot, cu, ci);
 		
-		L0.getInstance().recognize(this, input);
+		L0.getInstance().recognize(this, new GLLLexerImpl(input, grammar));
 		
 		long end = System.nanoTime();
 

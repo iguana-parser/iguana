@@ -2,8 +2,8 @@ package org.jgll.grammar.slotaction;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
-import org.jgll.util.Input;
 
 public class LineActions {
 
@@ -14,8 +14,8 @@ public class LineActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
-				return input.isEndOfLine(parser.getCurrentInputIndex());
+			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+				return lexer.getInput().isEndOfLine(parser.getCurrentInputIndex());
 			}
 
 			@Override
@@ -48,8 +48,8 @@ public class LineActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
-				return input.isStartOfLine(parser.getCurrentInputIndex());
+			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+				return lexer.getInput().isStartOfLine(parser.getCurrentInputIndex());
 			}
 
 			@Override

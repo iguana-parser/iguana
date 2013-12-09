@@ -2,9 +2,7 @@ package org.jgll.lexer;
 
 import java.util.BitSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Keyword;
@@ -16,11 +14,17 @@ public class GLLLexerImpl implements GLLLexer {
 
 	private BitSet[] tokenIDs;
 	
-	private Set<Token>[] tokens;
+	/**
+	 * tokens[inputIndex][tokenID] = length
+ 	 */
+	private Token[][] tokens;
 	
 	private Map<Symbol, Integer> idMap;
+
+	private Input input;
 	
 	public GLLLexerImpl(Input input, Grammar grammar) {
+		this.input = input;
 		tokenIDs = new BitSet[input.size()];
 		tokenize(input.toString(), grammar);
 		
@@ -32,16 +36,13 @@ public class GLLLexerImpl implements GLLLexer {
 		for(Keyword keyword : grammar.getKeywords()) {
 			idMap.put(keyword, i++);
 		}
+		
+		tokens = new Token[input.size()][idMap.size()];
 	}
 	
 	@Override
 	public BitSet tokenIDsAt(int index) {
 		return tokenIDs[index];
-	}
-	
-	@Override
-	public Set<Token> tokensAt(int index) {
-		return tokens[index];
 	}
 	
 	@Override
@@ -75,12 +76,14 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 
 	private void createToken(int inputIndex, Symbol symbol, int length) {
-		tokenIDs[inputIndex].set(idMap.get(symbol));
-		Set<Token> set = tokens[inputIndex];
-		if(set == null) {
-			set = new HashSet<>();
-		}
-		set.add(new Token(idMap.get(symbol), length));
+		Integer tokenID = idMap.get(symbol);
+		tokenIDs[inputIndex].set(tokenID);
+		tokens[inputIndex][tokenID] = new Token(tokenID, length);
 	}
 	
+	@Override
+	public Input getInput() {
+		return input;
+	}
+
 }

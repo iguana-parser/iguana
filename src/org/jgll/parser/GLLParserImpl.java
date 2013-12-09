@@ -12,6 +12,8 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Keyword;
+import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -59,6 +61,8 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	protected int ci = 0;
 	
 	protected Input input;
+	
+	protected GLLLexer lexer;
 	
 	/**
 	 * 
@@ -118,9 +122,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
 		}
-
+		
 		this.input = input;
 		this.grammar = grammar;
+		
+		this.lexer = new GLLLexerImpl(input, grammar);
 		
 		init();
 		lookupTable.init(input);
@@ -132,9 +138,9 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		NonterminalSymbolNode root;
 		
 		if(llOptimization && startSymbol.isLl1SubGrammar()) {
-			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, input);
+			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, lexer);
 		} else {
-			L0.getInstance().parse(this, input, startSymbol);			
+			L0.getInstance().parse(this, lexer, startSymbol);			
 			root = lookupTable.getStartSymbol(startSymbol, input.size());
 		}
 
@@ -251,7 +257,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 				GrammarSlot slot = edge.getReturnSlot();
 				
 				for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) edge.getReturnSlot()).getPopActions()) {
-					if(popAction.execute(this, input)) {
+					if(popAction.execute(this, lexer)) {
 						continue label;
 					}
 				}

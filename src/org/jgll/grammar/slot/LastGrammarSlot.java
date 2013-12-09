@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 /**
  * Corresponds to the last grammar slot in an alternate, e.g., X ::= alpha .
@@ -39,13 +39,13 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
 		parser.pop();
 		return null;
 	}
 	
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		recognizer.pop(recognizer.getCu(), recognizer.getCi());
 		return null;
 	}
@@ -85,7 +85,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
 		throw new UnsupportedOperationException();
 	}
 

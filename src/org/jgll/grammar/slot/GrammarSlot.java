@@ -8,7 +8,6 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 /**
  * A GrammarSlot is a position immediately before or after

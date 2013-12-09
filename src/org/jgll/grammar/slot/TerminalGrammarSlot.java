@@ -7,12 +7,11 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-import org.jgll.util.Input;
-
 
 /**
  * A grammar slot whose next immediate symbol is a terminal.
@@ -39,14 +38,14 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 		
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
-		int charAtCi = input.charAt(ci);
+		int charAtCi = lexer.getInput().charAt(ci);
 
 		if(terminal.match(charAtCi)) {
 			
-			if(executePreConditions(parser, input)) {
+			if(executePreConditions(parser, lexer)) {
 				return null;
 			}
 			
@@ -68,14 +67,14 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
-		int charAtCi = input.charAt(ci);
+		int charAtCi = lexer.getInput().charAt(ci);
 
 		if(terminal.match(charAtCi)) {
 			
-			if(executePreConditions(parser, input)) {
+			if(executePreConditions(parser, lexer)) {
 				return null;
 			}
 			
@@ -88,10 +87,10 @@ public class TerminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		int ci = recognizer.getCi();
 		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-		int charAtCi = input.charAt(ci);
+		int charAtCi = lexer.getInput().charAt(ci);
 		
 		// A::= x1
 		if(previous == null && next.next() == null) {

@@ -8,8 +8,8 @@ import org.jgll.grammar.symbol.Keyword;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
-import org.jgll.util.Input;
 import org.jgll.util.hashing.CuckooHashSet;
+import org.jgll.lexer.GLLLexer;
 
 
 public class NotMatchActions {
@@ -22,13 +22,13 @@ public class NotMatchActions {
 				private GLLRecognizer recognizer;
 
 				@Override
-				public Boolean execute(GLLParserInternals parser, Input input) {
+				public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
 					
 					if(recognizer == null) {
 						recognizer = RecognizerFactory.contextFreeRecognizer(parser.getGrammar());						
 					}
 					
-					return recognizer.recognize(input, parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), ifNot);
+					return recognizer.recognize(lexer.getInput(), parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), ifNot);
 				}
 
 				@Override
@@ -64,8 +64,8 @@ public class NotMatchActions {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean execute(GLLParserInternals parser, Input input) {
-						return input.match(parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), s.getChars());
+					public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+						return lexer.getInput().match(parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), s.getChars());
 					}
 
 					@Override
@@ -101,11 +101,11 @@ public class NotMatchActions {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean execute(GLLParserInternals parser, Input input) {
+					public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
 						int begin = parser.getCurrentGSSNode().getInputIndex();
 						int end = parser.getCurrentInputIndex();
-						return input.match(begin, end, s1.getChars()) ||
-							   input.match(begin, end, s2.getChars())	;
+						return lexer.getInput().match(begin, end, s1.getChars()) ||
+							   lexer.getInput().match(begin, end, s2.getChars())	;
 					}
 
 					@Override
@@ -141,10 +141,10 @@ public class NotMatchActions {
 					private static final long serialVersionUID = 1L;
 					
 					@Override
-					public Boolean execute(GLLParserInternals parser, Input input) {
+					public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
 						int begin = parser.getCurrentGSSNode().getInputIndex();
 						int end = parser.getCurrentInputIndex() - 1;
-						Keyword subInput = new Keyword("", input.subInput(begin, end));
+						Keyword subInput = new Keyword("", lexer.getInput().subInput(begin, end));
 						return set.contains(subInput);
 					}
 

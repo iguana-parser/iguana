@@ -23,7 +23,6 @@ import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 /**
  * 
@@ -147,14 +146,14 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
 		
 		if(parser.isLLOptimizationEnabled() && ll1) {
-			Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
+			Alternate alternate = ll1Map.get(lexer.getInput().charAt(parser.getCurrentInputIndex()));
 			parser.setCurrentSPPFNode(DummyNode.getInstance());
-			return alternate.getFirstSlot().parse(parser, input);
+			return alternate.getFirstSlot().parse(parser, lexer);
 		} else {
 			for(Alternate alternate : alternates) {
 				int ci = parser.getCurrentInputIndex();
 				BodyGrammarSlot slot = alternate.getFirstSlot();
-				if(slot.test(ci, input)) {
+				if(slot.test(ci, lexer)) {
 					parser.addDescriptor(slot);
 				}
 			}
@@ -164,11 +163,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
-		Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
-		
-		if(alternate == null) {
-			System.out.println("Hi");
-		}
+		Alternate alternate = ll1Map.get(lexer.getInput().charAt(parser.getCurrentInputIndex()));
 		
 		assert alternate != null;
 		
@@ -177,7 +172,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 		
 		while(!(currentSlot instanceof LastGrammarSlot)) {
-			SPPFNode node = currentSlot.parseLL1(parser, input);
+			SPPFNode node = currentSlot.parseLL1(parser, lexer);
 			if(node == null) {
 				return null;
 			}
@@ -283,7 +278,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		for(Alternate alternate : alternates) {
 			int ci = recognizer.getCi();
 			BodyGrammarSlot slot = alternate.getFirstSlot();
-			if(slot.test(ci, input)) {
+			if(slot.test(ci, lexer)) {
 				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 				recognizer.add(alternate.getFirstSlot(), cu, ci);
 			}

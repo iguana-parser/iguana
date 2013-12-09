@@ -8,11 +8,11 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 public class KeywordGrammarSlot extends BodyGrammarSlot {
 
@@ -70,13 +70,13 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if(input.match(ci, keyword.getChars())) {
+		if(lexer.getInput().match(ci, keyword.getChars())) {
 			
-			if(executePreConditions(parser, input)) {
+			if(executePreConditions(parser, lexer)) {
 				return null;
 			}
 			
@@ -85,7 +85,7 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, sppfNode);
 				
-				if(checkPopActions(parser, input)) {
+				if(checkPopActions(parser, lexer)) {
 					return null;
 				}
 				
@@ -95,7 +95,7 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 				parser.getIntermediateNode(next, sppfNode);
 				
 				// TODO: check if this condition is necessary here!
-				if(checkPopActions(parser, input)) {
+				if(checkPopActions(parser, lexer)) {
 					return null;
 				}				
 			}
@@ -108,12 +108,12 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		if(input.match(ci, keyword.getChars())) {
+		if(lexer.getInput().match(ci, keyword.getChars())) {
 			
-			if(executePreConditions(parser, input)) {
+			if(executePreConditions(parser, lexer)) {
 				return null;
 			}
 			
@@ -126,9 +126,9 @@ public class KeywordGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		int ci = recognizer.getCi();
-		if(!input.match(ci, keyword.getChars())) {
+		if(!lexer.getInput().match(ci, keyword.getChars())) {
 			return null;			
 		}
 		

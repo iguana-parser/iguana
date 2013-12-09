@@ -7,8 +7,8 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
-import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
 
@@ -30,14 +30,14 @@ public class NotPrecedeActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
+			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
 				
 				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
 					return false;
 				}
 			
-				return set.get(input.charAt(ci - 1));
+				return set.get(lexer.getInput().charAt(ci - 1));
 			}
 
 			@Override
@@ -72,14 +72,14 @@ public class NotPrecedeActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParserInternals parser, Input input) {
+			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
 				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
 					return false;
 				}
 				
 				for(Keyword keyword : list) {
-					if(input.matchBackward(ci, keyword.getChars())) {
+					if(lexer.getInput().matchBackward(ci, keyword.getChars())) {
 						return true;
 					}
 				}
