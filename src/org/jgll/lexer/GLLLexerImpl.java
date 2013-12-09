@@ -44,6 +44,12 @@ public class GLLLexerImpl implements GLLLexer {
 		return tokens[index];
 	}
 	
+	@Override
+	public Token tokenAt(int inputIndex, BitSet expectedTokens) {
+		
+		return null;
+	}
+	
 	private void tokenize(String input, Grammar grammar) {
 		for(int i = 0; i < input.length(); i++) {
 			for(RegularExpression regex : grammar.getRegularExpressions()) {

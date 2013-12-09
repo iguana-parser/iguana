@@ -21,5 +21,8 @@ public interface GLLLexer {
 	 * @return
 	 */
 	public Set<Token> tokensAt(int index);
+	
+	
+	public Token tokenAt(int inputIndex, BitSet expectedTokens);
 
 }

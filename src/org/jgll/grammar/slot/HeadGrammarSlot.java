@@ -17,6 +17,7 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
@@ -143,7 +144,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, Input input) {
+	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
 		
 		if(parser.isLLOptimizationEnabled() && ll1) {
 			Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
@@ -162,7 +163,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, Input input) {
+	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
 		Alternate alternate = ll1Map.get(input.charAt(parser.getCurrentInputIndex()));
 		
 		if(alternate == null) {
@@ -278,7 +279,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, Input input) {
+	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		for(Alternate alternate : alternates) {
 			int ci = recognizer.getCi();
 			BodyGrammarSlot slot = alternate.getFirstSlot();
