@@ -17,6 +17,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.RegularExpressionGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -111,7 +112,9 @@ public class GrammarProperties {
 			else if(slot instanceof RegularExpressionGrammarSlot) {
 				return slot.isNullable() && isChainNullable(slot.next());
 			}
-			
+			else if(slot instanceof TokenGrammarSlot) {
+				return slot.isNullable() && isChainNullable(slot.next());
+			}
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
 			return isNullable(ntGrammarSlot.getNonterminal()) && isChainNullable(ntGrammarSlot.next());
 		}

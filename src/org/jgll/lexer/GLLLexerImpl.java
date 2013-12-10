@@ -25,7 +25,7 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	public GLLLexerImpl(Input input, Grammar grammar) {
 		this.input = input;
-		tokenIDs = new BitSet[input.size()];
+		this.tokenIDs = new BitSet[input.size()];
 		int i = 0;
 		idMap = new HashMap<Symbol, Integer>();
 		for(RegularExpression regex : grammar.getRegularExpressions()) {

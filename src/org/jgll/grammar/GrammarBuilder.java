@@ -28,6 +28,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.RegularExpressionGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
 import org.jgll.grammar.slotaction.NotMatchActions;
@@ -230,28 +231,17 @@ public class GrammarBuilder implements Serializable {
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
 		
-		if(symbol instanceof Keyword) {
-			Keyword keyword = (Keyword) symbol;
-			keywords.add(keyword);
-			HeadGrammarSlot keywordHead = getHeadGrammarSlot(new Nonterminal(keyword.getName()));
-			return new KeywordGrammarSlot(symbolIndex, keywordHead, (Keyword) symbol, currentSlot, headGrammarSlot);
-		}
-		
-		else if (symbol instanceof Terminal) {
-			return new TerminalGrammarSlot(symbolIndex, currentSlot, (Terminal) symbol, headGrammarSlot);
-		}
-		
-		else if(symbol instanceof RegularExpression) {
-			RegularExpression regularExpression = (RegularExpression) symbol;
-			regularExpressions.add(regularExpression);
-			return new RegularExpressionGrammarSlot(symbolIndex, regularExpression, currentSlot, headGrammarSlot);
+		if(symbol instanceof RegularExpression ||
+		   symbol instanceof Terminal ||
+		   symbol instanceof Keyword) {
+			return new TokenGrammarSlot(symbolIndex, currentSlot, getTokenID(), symbol, headGrammarSlot);
 		}
 		
 		// Nonterminal
 		else {
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 			return new NonterminalGrammarSlot(symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
-		} 
+		}		
 	}
 
 	private void addCondition(BodyGrammarSlot slot, final Condition condition) {
@@ -402,6 +392,10 @@ public class GrammarBuilder implements Serializable {
 		return null;
 	}
 	
+	private int getTokenID() {
+		return regularExpressions.size() + keywords.size();
+	}
+	 
 	/**
 	 * Creates the corresponding grammar rule for the given keyword.
 	 * For example, for the keyword "if", a rule If ::= [i][f]
