@@ -26,8 +26,6 @@ public class GLLLexerImpl implements GLLLexer {
 	public GLLLexerImpl(Input input, Grammar grammar) {
 		this.input = input;
 		tokenIDs = new BitSet[input.size()];
-		tokenize(input.toString(), grammar);
-		
 		int i = 0;
 		idMap = new HashMap<Symbol, Integer>();
 		for(RegularExpression regex : grammar.getRegularExpressions()) {
@@ -38,6 +36,7 @@ public class GLLLexerImpl implements GLLLexer {
 		}
 		
 		tokens = new Token[input.size()][idMap.size()];
+		tokenize(input.toString(), grammar);
 	}
 	
 	@Override
@@ -77,6 +76,11 @@ public class GLLLexerImpl implements GLLLexer {
 
 	private void createToken(int inputIndex, Symbol symbol, int length) {
 		Integer tokenID = idMap.get(symbol);
+		
+		if(tokenIDs[inputIndex] == null) {
+			tokenIDs[inputIndex]= new BitSet();
+		}
+		
 		tokenIDs[inputIndex].set(tokenID);
 		tokens[inputIndex][tokenID] = new Token(tokenID, length);
 	}

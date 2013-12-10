@@ -52,14 +52,24 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	protected int endIndex;
 	
 	
-	public AbstractGLLRecognizer(Lookup lookup) {
+	public AbstractGLLRecognizer(Lookup lookup, Grammar grammar) {
 		this.lookup = lookup;
+		this.grammar = grammar;
 	}
 	
 	@Override
 	public final boolean recognize(Input input, Grammar grammar, String nonterminalName) {
 		
+		if(grammar == null) {
+			throw new RuntimeException("Grammar cannot be null.");
+		}
+
+		if(input == null) {
+			throw new RuntimeException("Input cannot be null.");
+		}
+		
 		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(nonterminalName);
+		
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + nonterminalName + " found");
 		}
@@ -114,7 +124,6 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 	 * initialized the parser's state before a new parse.
 	 */
 	protected void init(Grammar grammar, Input input, int startIndex, int endIndex, HeadGrammarSlot startSymbol){
-		this.grammar = grammar;
 		this.startSymbol = startSymbol;
 		this.input = input;
 		this.ci = startIndex;

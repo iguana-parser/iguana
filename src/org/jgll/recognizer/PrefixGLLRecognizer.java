@@ -1,12 +1,13 @@
 package org.jgll.recognizer;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.recognizer.lookup.Lookup;
 
 public class PrefixGLLRecognizer extends AbstractGLLRecognizer {
 	
-	public PrefixGLLRecognizer(Lookup lookup) {
-		super(lookup);
+	public PrefixGLLRecognizer(Lookup lookup, Grammar grammar) {
+		super(lookup, grammar);
 	}
 
 	@Override
