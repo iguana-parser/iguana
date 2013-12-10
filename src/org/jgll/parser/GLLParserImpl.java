@@ -22,6 +22,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.logging.LoggerWrapper;
@@ -489,6 +490,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	@Override
 	public boolean isLLOptimizationEnabled() {
 		return llOptimization;
+	}
+
+	@Override
+	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length) {
+		return lookupTable.getTokenSymbolNode(tokenID, inputIndex, length);
 	}
 	
 }

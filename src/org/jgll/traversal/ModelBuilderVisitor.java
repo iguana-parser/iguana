@@ -22,6 +22,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 
 /**
@@ -293,6 +294,12 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	@Override
 	public void visit(RegularExpressionNode node) {
 		throw new IllegalStateException("Should not be here.");
+	}
+
+	@Override
+	public void visit(TokenSymbolNode node) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

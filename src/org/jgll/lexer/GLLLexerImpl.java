@@ -46,8 +46,17 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	@Override
 	public Token tokenAt(int inputIndex, BitSet expectedTokens) {
-		
 		return null;
+	}
+	
+	@Override
+	public int tokenAt(int inputIndex, int tokenID) {
+		Token token = tokens[inputIndex][tokenID];
+		if(token == null) {
+			return -1;
+		} else {
+			return token.getLength();			
+		}
 	}
 	
 	private void tokenize(String input, Grammar grammar) {

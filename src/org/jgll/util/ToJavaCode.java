@@ -9,6 +9,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
 
 public class ToJavaCode implements SPPFVisitor {
@@ -33,6 +34,15 @@ public class ToJavaCode implements SPPFVisitor {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			sb.append("TerminalSymbolNode node" + count + " = new TerminalSymbolNode(" + node.getMatchedChar() + ", " + node.getLeftExtent() + ");\n");
+			node.setObject("node" + count++);
+		}
+	}
+	
+	@Override
+	public void visit(TokenSymbolNode node) {
+		if(!node.isVisited()) {
+			node.setVisited(true);
+			sb.append("TokenSymbolNode node" + count + " = new TokenSymbolNode(" + node.getMatchedChar() + ", " + node.getLeftExtent() + ", " + node.getLength() + ");\n");
 			node.setObject("node" + count++);
 		}
 	}

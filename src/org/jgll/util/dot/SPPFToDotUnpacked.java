@@ -17,6 +17,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
 import org.jgll.util.Input;
@@ -257,6 +258,9 @@ public class SPPFToDotUnpacked extends ToDot {
 			
 			@Override
 			public void visit(TerminalSymbolNode node) {}
+
+			@Override
+			public void visit(TokenSymbolNode node) {}
 		};
 		
 		node.accept(sppfVisitor);

@@ -18,6 +18,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;
@@ -47,6 +48,8 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		
 	private IguanaSet<GSSEdge>[][] gssEdges;
 	
+	private TokenSymbolNode[][] tokenSymbolNodes;
+	
 	private int nonPackedNodesCount;
 	
 	public RecursiveDescentLookupTable(Grammar grammar) {
@@ -67,6 +70,9 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.size()];
 		poppedElements = new List[grammar.getNonterminals().size()][input.size()];
 		gssEdges = new IguanaSet[grammar.getNonterminals().size()][input.size()];
+		
+		int tokensSize = grammar.getRegularExpressions().size() + grammar.getKeywords().size();
+		tokenSymbolNodes = new TokenSymbolNode[tokensSize][input.size()];
 		
 		nonPackedNodesCount = 0;
 		
@@ -329,6 +335,16 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 			return Collections.emptySet();
 		}
 		return set;
+	}
+	
+	@Override
+	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length) {
+		TokenSymbolNode node = tokenSymbolNodes[tokenID][inputIndex];
+		if(node == null) {
+			node = new TokenSymbolNode(tokenID, inputIndex, length);
+			tokenSymbolNodes[tokenID][inputIndex] = node;
+		}
+		return node;
 	}
 
 }

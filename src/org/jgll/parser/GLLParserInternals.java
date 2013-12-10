@@ -11,6 +11,7 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 
 public interface GLLParserInternals {
 	
@@ -24,6 +25,8 @@ public interface GLLParserInternals {
 	public void createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
 	public TerminalSymbolNode getTerminalNode(int c);
+	
+	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
 	
 	public TerminalSymbolNode getEpsilonNode();
 	
