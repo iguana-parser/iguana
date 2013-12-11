@@ -1,14 +1,16 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.list;
-import static org.jgll.util.CollectionsUtil.set;
-import static org.junit.Assert.assertEquals;
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
+import static org.jgll.util.BitSetUtil.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.junit.Before;
 import org.junit.Test;
+
+
 
 /**
  * 	E  ::= T E1
@@ -62,19 +64,19 @@ public class LeftFactorizedArithmeticGrammarTest {
 	
 	@Test
 	public void testFirstSets() {
-		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getNonterminalByName("E").getFirstSet());
-		assertEquals(set(grammar.getTokenID(plus), EPSILON), grammar.getNonterminalByName("E1").getFirstSet());
-		assertEquals(set(grammar.getTokenID(star), EPSILON), grammar.getNonterminalByName("T1").getFirstSet());
-		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getNonterminalByName("T").getFirstSet());
-		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getNonterminalByName("F").getFirstSet());
+		assertEquals(from(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getNonterminalByName("E").getFirstSet());
+		assertEquals(from(grammar.getTokenID(plus), EPSILON), grammar.getNonterminalByName("E1").getFirstSet());
+		assertEquals(from(grammar.getTokenID(star), EPSILON), grammar.getNonterminalByName("T1").getFirstSet());
+		assertEquals(from(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getNonterminalByName("T").getFirstSet());
+		assertEquals(from(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getNonterminalByName("F").getFirstSet());
 	}
 	
 	public void testFollowSets() {
-		assertEquals(set(grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("E").getFollowSet());
-		assertEquals(set(grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("E1").getFollowSet());
-		assertEquals(set(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("T1").getFollowSet());
-		assertEquals(set(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("T").getFollowSet());
-		assertEquals(set(grammar.getTokenID(plus), grammar.getTokenID(star), grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("F").getFollowSet());
+		assertEquals(from(grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("E").getFollowSet());
+		assertEquals(from(grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("E1").getFollowSet());
+		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("T1").getFollowSet());
+		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("T").getFollowSet());
+		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(star), grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("F").getFollowSet());
 	}
 
 }

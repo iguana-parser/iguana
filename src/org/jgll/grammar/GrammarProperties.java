@@ -33,10 +33,9 @@ public class GrammarProperties {
 
 				for (Alternate alternate : head.getAlternates()) {
 					BitSet firstSet = head.getFirstSet();
-					BitSet copy = new BitSet();
-					copy.or(firstSet);
+					BitSet copy = copy(firstSet);
 					addFirstSet(firstSet, alternate.getFirstSlot());
-					changed = !copy.equals(firstSet);
+					changed |= !copy.equals(firstSet);
 				}
 			}
 		}
@@ -147,7 +146,7 @@ public class GrammarProperties {
 								BitSet followSet = nonterminalGrammarSlot.getNonterminal().getFollowSet();
 								BitSet copy = copy(followSet);
 								followSet.or(head.getFollowSet());
-								changed = !followSet.equals(copy);
+								changed |= !followSet.equals(copy);
 								break;
 							}
 
@@ -157,14 +156,14 @@ public class GrammarProperties {
 							BitSet followSet = nonterminalGrammarSlot.getNonterminal().getFollowSet();
 							BitSet copy = copy(followSet);
 							addFirstSet(followSet, currentSlot.next());
-							changed = !followSet.equals(copy);
+							changed |= !followSet.equals(copy);
 
 							// If beta is nullable, then add the follow set of X
 							// to the follow set of B.
 							if (isChainNullable(next)) {
 								copy = copy(followSet);
 								followSet.or(head.getFollowSet());
-								changed = !followSet.equals(copy);
+								changed |= !followSet.equals(copy);
 							}
 						}
 
