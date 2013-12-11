@@ -358,7 +358,7 @@ public class GrammarBuilder implements Serializable {
 		GrammarProperties.calculateFirstSets(nonterminals);
 		GrammarProperties.calculateFollowSets(nonterminals);
 
-		GrammarProperties.setHeadPredictionSets(nonterminals);
+		GrammarProperties.setNullableHeads(nonterminals);
 		GrammarProperties.setPredictionSets(nonterminals);
 		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 		

@@ -157,6 +157,10 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	public Symbol getSymbol() {
 		return symbol;
 	}
+	
+	public int getTokenID() {
+		return tokenID;
+	}
 
 	@Override
 	public boolean isNameEqual(BodyGrammarSlot slot) {

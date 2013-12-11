@@ -13,10 +13,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.Alternate;
-import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
@@ -341,18 +339,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public int getCountAlternates() {
 		return alternates.size();
-	}
-	
-	/**
-	 * Prediction is the first set, and if the first set contains epsilon,
-	 * it also contains the follow set.
-	 */
-	public void setPredictionSet() {
-		predictionSet = new BitSet();
-		predictionSet.or(firstSet);
-		if(firstSet.get(0)) {
-			predictionSet.or(followSet);
-		}
 	}
 	
 	public BitSet getPredictionSet() {
