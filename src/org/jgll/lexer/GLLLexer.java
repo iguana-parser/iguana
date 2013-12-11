@@ -15,7 +15,13 @@ public interface GLLLexer {
 	 */
 	public BitSet tokenIDsAt(int index);
 	
-	public Token tokenAt(int inputIndex, BitSet expectedTokens);
+	/**
+	 * @param inputIndex
+	 * @param expectedTokens
+	 * 
+	 * @return true if at least one of the expected tokens matches at the given input index.
+	 */
+	public boolean match(int inputIndex, BitSet expectedTokens);
 	
 	/**
 	 * 
@@ -29,6 +35,9 @@ public interface GLLLexer {
 	 */
 	public int tokenAt(int inputIndex, int tokenID);
 	
+	/**
+	 * Returns the underlying input object. 
+	 */
 	public Input getInput();
 
 }

@@ -45,8 +45,8 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	@Override
-	public Token tokenAt(int inputIndex, BitSet expectedTokens) {
-		return null;
+	public boolean match(int inputIndex, BitSet expectedTokens) {
+		return tokenIDs[inputIndex].intersects(expectedTokens);
 	}
 	
 	@Override

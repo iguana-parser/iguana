@@ -12,7 +12,6 @@ import org.jgll.parser.GLLParserInternals;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 
-
 public class NotFollowActions {
 	
 	public static void fromGrammarSlot(BodyGrammarSlot slot, final BodyGrammarSlot firstSlot, final Condition condition) {
@@ -49,10 +48,9 @@ public class NotFollowActions {
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
 			}
-
 		});
 	 }
-	
+
 	
 	public static void fromKeywordList(BodyGrammarSlot slot, final List<Keyword> list, final Condition condition) {
 		
@@ -131,19 +129,45 @@ public class NotFollowActions {
 		});
 	}
 	
-	public static void fromToken(BodyGrammarSlot slot, int tokenID, final Condition condition) {
+	public static void fromToken(BodyGrammarSlot slot, final int tokenID, final Condition condition) {
 		slot.addPopAction(new SlotAction<Boolean>() {
 			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Condition getCondition() {
-				return null;
+				return condition;
 			}
 			
 			@Override
 			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
-				return null;
+				return lexer.tokenAt(parser.getCurrentInputIndex(), tokenID) > 0;
 			}
 		});
 	}
+	
+	public static void fromTokenList(BodyGrammarSlot slot, final List<Integer> tokenIDs, final Condition condition) {
+		
+		final BitSet set = new BitSet();
+		for(int i : tokenIDs) {
+			set.set(i);
+		}
+		
+		slot.addPopAction(new SlotAction<Boolean>() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Condition getCondition() {
+				return condition;
+			}
+			
+			@Override
+			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+				return lexer.match(parser.getCurrentInputIndex(), set);
+			}
+		});
+	}
+
 
 }
