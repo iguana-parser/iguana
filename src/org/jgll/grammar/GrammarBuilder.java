@@ -393,7 +393,9 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private int getTokenID() {
-		return regularExpressions.size() + keywords.size();
+		// The first token is epsilon and the second one is the EOF, therefore, token
+		// indices start from 2.
+		return 2 + regularExpressions.size() + keywords.size();
 	}
 	 
 	/**

@@ -44,13 +44,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private boolean directNullable;
 	
-	private transient final Set<Terminal> firstSet;
+	private BitSet firstSet;
 	
-	private transient final Set<Terminal> followSet;
-	
-	private BitSet firstSetBitSet;
-	
-	private BitSet followSetBitSet;
+	private BitSet followSet;
 	
 	private BitSet predictionSet;
 	
@@ -65,8 +61,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
-		this.firstSet = new HashSet<>();
-		this.followSet = new HashSet<>();
 	}
 	
 	public void addAlternate(Alternate alternate) {		
@@ -322,47 +316,43 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return nonterminal;
 	}
 		
-	public Set<Terminal> getFirstSet() {
+	public BitSet getFirstSet() {
 		return firstSet;
 	}
 	
-	public Set<Terminal> getFirstSetWithoutEpsilon() {
-		Set<Terminal> set = new HashSet<>(firstSet);
-		set.remove(Epsilon.getInstance());
+	public BitSet getFirstSetWithoutEpsilon() {
+		BitSet set = new BitSet();
+		set.or(firstSet);
+		set.clear(0);
 		return set;
 	}
 	
-	public Set<Terminal> getFollowSet() {
+	public BitSet getFollowSet() {
 		return followSet;
 	}
 	
 	public BitSet getFollowSetAsBitSet() {
-		return followSetBitSet;
+		return followSet;
 	}
 	
 	public BitSet getFirstSetBitSet() {
-		return firstSetBitSet;
+		return firstSet;
 	}
 	
 	public int getCountAlternates() {
 		return alternates.size();
 	}
 	
+	/**
+	 * Prediction is the first set, and if the first set contains epsilon,
+	 * it also contains the follow set.
+	 */
 	public void setPredictionSet() {
-		
-		firstSetBitSet = new BitSet();
-		for(Terminal t : firstSet) {
-			firstSetBitSet.or(t.asBitSet());
-		}
-		
-		followSetBitSet = new BitSet();
-		for(Terminal t : followSet) {
-			followSetBitSet.or(t.asBitSet());
-		}
-		
 		predictionSet = new BitSet();
-		predictionSet.or(firstSetBitSet);
-		predictionSet.or(followSetBitSet);
+		predictionSet.or(firstSet);
+		if(firstSet.get(0)) {
+			predictionSet.or(followSet);
+		}
 	}
 	
 	public BitSet getPredictionSet() {
