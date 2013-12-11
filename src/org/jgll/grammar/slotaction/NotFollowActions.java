@@ -130,5 +130,20 @@ public class NotFollowActions {
 			}
 		});
 	}
+	
+	public static void fromToken(BodyGrammarSlot slot, int tokenID, final Condition condition) {
+		slot.addPopAction(new SlotAction<Boolean>() {
+			
+			@Override
+			public Condition getCondition() {
+				return null;
+			}
+			
+			@Override
+			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+				return null;
+			}
+		});
+	}
 
 }
