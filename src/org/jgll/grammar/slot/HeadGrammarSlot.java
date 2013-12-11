@@ -59,6 +59,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
+		this.firstSet = new BitSet();
+		this.followSet = new BitSet();
 	}
 	
 	public void addAlternate(Alternate alternate) {		

@@ -64,7 +64,7 @@ public class GrammarProperties {
 			}
 		}
 		// Nonterminal
-		else {
+		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
 			firstSet.or(nonterminalGrammarSlot.getNonterminal().getFirstSetWithoutEpsilon());
