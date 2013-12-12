@@ -209,7 +209,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 			
 			for(SPPFNode node : children) {
 				ntNode.addChild(node);
-			}			
+			}
 		}
 		
 		return ntNode;

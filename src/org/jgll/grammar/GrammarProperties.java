@@ -210,12 +210,14 @@ public class GrammarProperties {
 				
 				while(currentSlot != null) {
 					if(currentSlot instanceof NonterminalGrammarSlot ||
-							currentSlot instanceof TokenGrammarSlot) {
+					   currentSlot instanceof TokenGrammarSlot) {
 						BitSet set = new BitSet();
 						getChainFirstSet(currentSlot, set);
 						if(isChainNullable(currentSlot)) {
 							set.or(head.getFollowSet());
 						}
+						// Prediction sets should not contain epsilon
+						set.clear(EPSILON);
 						currentSlot.setPredictionSet(set);
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {

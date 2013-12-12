@@ -27,6 +27,7 @@ public class GLLLexerImpl implements GLLLexer {
 	public GLLLexerImpl(Input input, Grammar grammar) {
 		this.input = input;
 		this.grammar = grammar;
+		
 		this.tokenIDs = new BitSet[input.size()];
 		tokens = new int[input.size()][grammar.getCountTokens()];
 		
@@ -34,6 +35,10 @@ public class GLLLexerImpl implements GLLLexer {
 			for(int j = 0; j < tokens[k].length; j++) {
 				tokens[k][j] = -1;
 			}
+		}
+		
+		for(int i = 0; i < tokenIDs.length; i++) {
+			tokenIDs[i] = new BitSet();
 		}
 		
 		tokenize(input.toString());
@@ -58,7 +63,7 @@ public class GLLLexerImpl implements GLLLexer {
 	public List<Integer> tokensAt(int inputIndex, BitSet expectedTokens) {
 		List<Integer> list = new ArrayList<>();
 		 for (int i = expectedTokens.nextSetBit(0); i >= 0; i = expectedTokens.nextSetBit(i+1)) {
-			 if(tokens[inputIndex][i] > 0) {
+			 if(tokens[inputIndex][i] >= 0) {
 				 list.add(i);
 			 }
 		 }
@@ -80,6 +85,9 @@ public class GLLLexerImpl implements GLLLexer {
 				}
 			}
 		}
+		
+		tokens[input.length()][1] = 0;
+		tokenIDs[input.length()].set(0);
 	}
 	
 	private void tokenize(int inputIndex, String input, Keyword keyword) {
@@ -104,11 +112,6 @@ public class GLLLexerImpl implements GLLLexer {
 
 	private void createToken(int inputIndex, Symbol symbol, int length) {
 		Integer tokenID = grammar.getTokenID(symbol);
-		
-		if(tokenIDs[inputIndex] == null) {
-			tokenIDs[inputIndex]= new BitSet();
-		}
-		
 		tokenIDs[inputIndex].set(tokenID);
 		tokens[inputIndex][tokenID] = length;
 	}
