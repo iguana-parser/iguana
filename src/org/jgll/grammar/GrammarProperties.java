@@ -14,7 +14,6 @@ import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 
@@ -399,11 +398,7 @@ public class GrammarProperties {
 		if (currentSlot instanceof EpsilonGrammarSlot) {
 			return false;
 		}
-
-		else if (currentSlot instanceof TerminalGrammarSlot) {
-			return false;
-		}
-
+		
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
@@ -422,7 +417,8 @@ public class GrammarProperties {
 			}
 			return changed;
 		}
-
+		
+		// TODO: check the effect of adding TokenGrammarSlot
 		// ignore LastGrammarSlot
 		else {
 			return changed;
@@ -455,8 +451,7 @@ public class GrammarProperties {
 					//slot.setPredictionSet(slot.getHead().getFollowSetAsBitSet());
 				}
 				else {
-					System.out.println(slot.getClass());
-					throw new RuntimeException("Unexpected grammar slot.");
+					throw new RuntimeException("Unexpected grammar slot: " + slot.getClass());
 				}
 				slot = slot.next();
 			}

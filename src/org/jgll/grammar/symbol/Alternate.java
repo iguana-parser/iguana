@@ -9,10 +9,9 @@ import java.util.Set;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.util.hashing.HashFunctionBuilder;
 import org.jgll.util.hashing.hashfunction.MurmurHash3;
 
@@ -77,11 +76,9 @@ public class Alternate implements Serializable {
 		BodyGrammarSlot slot = firstSlot;
 		while(!(slot instanceof LastGrammarSlot)) {
 			
-			if(slot instanceof TerminalGrammarSlot || slot instanceof KeywordGrammarSlot)
+			if(!slot.isNullable()) {
 				return false;
-			
-			if(slot instanceof NonterminalGrammarSlot && !slot.isNullable())
-				return false;
+			}
 			
 			slot = slot.next();
 		}
@@ -218,11 +215,8 @@ public class Alternate implements Serializable {
 			if(current instanceof NonterminalGrammarSlot) {
 				hashBuilder.addInt(((NonterminalGrammarSlot) current).getNonterminal().getNonterminal().hashCode());				
 			} 
-			else if(current instanceof TerminalGrammarSlot) {
-				hashBuilder.addInt(((TerminalGrammarSlot) current).getTerminal().hashCode());
-			} 
-			else if(current instanceof KeywordGrammarSlot) {
-				hashBuilder.addInt(((KeywordGrammarSlot) current).getKeyword().hashCode());
+			else if(current instanceof TokenGrammarSlot) {
+				hashBuilder.addInt(((TokenGrammarSlot) current).getSymbol().hashCode());
 			} 
 			else {
 				// Last grammar slot

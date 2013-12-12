@@ -5,11 +5,10 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.lexer.GLLLexer;
@@ -380,10 +379,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
 		if(previous.isFirst()) {
-			if(previous instanceof TerminalGrammarSlot || previous instanceof KeywordGrammarSlot) {
-				return rightChild;
-			}
-			else if (previous instanceof NonterminalGrammarSlot && !previous.isNullable()) {
+			if ((previous instanceof NonterminalGrammarSlot || previous instanceof TokenGrammarSlot) && !previous.isNullable()) {
 				return rightChild;
 			} 		
 		}

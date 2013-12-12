@@ -23,11 +23,8 @@ import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.KeywordGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.RegularExpressionGrammarSlot;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
@@ -138,10 +135,6 @@ public class GrammarBuilder implements Serializable {
 			}
 
 			@Override
-			public void visit(TerminalGrammarSlot slot) {
-			}
-
-			@Override
 			public void visit(NonterminalGrammarSlot slot) {
 				if (slot.getNonterminal().getAlternates().size() == 0) {
 					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal());
@@ -162,11 +155,13 @@ public class GrammarBuilder implements Serializable {
 					throw new GrammarValidationException("No alternates defined for " + head);
 				}
 			}
-			
-			@Override
-			public void visit(KeywordGrammarSlot slot) {
-			}
 
+			@Override
+			public void visit(TokenGrammarSlot slot) {
+				// TODO Auto-generated method stub
+				
+			}
+			
 		};
 
 		for (HeadGrammarSlot head : nonterminals) {
@@ -326,11 +321,10 @@ public class GrammarBuilder implements Serializable {
 				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 				currentSlot = new NonterminalGrammarSlot(index, currentSlot, nonterminal, null);
 			} 
-			else if(symbol instanceof Terminal) {
-				currentSlot = new TerminalGrammarSlot(index, currentSlot, (Terminal) symbol, null);
-			}
-			else if(symbol instanceof Keyword) {
-				currentSlot = new KeywordGrammarSlot(index, getHeadGrammarSlot(new Nonterminal(symbol.getName())), (Keyword) symbol, currentSlot, null);
+			else if(symbol instanceof Terminal ||
+					symbol instanceof RegularExpression ||
+					symbol instanceof Keyword) {
+				currentSlot = new TokenGrammarSlot(index, currentSlot, tokenIDMap.get(symbol) , symbol, null);
 			}
 			
 			if(index == 0) {
@@ -846,16 +840,9 @@ public class GrammarBuilder implements Serializable {
 		else if (slot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot ntSlot = (NonterminalGrammarSlot) slot;
 			copy = ntSlot.copy(previous, ntSlot.getNonterminal(), head);
-		} 
-		else if(slot instanceof TerminalGrammarSlot) {
-			copy = ((TerminalGrammarSlot) slot).copy(previous, head);
-		} 
-		else if(slot instanceof KeywordGrammarSlot)  {
-			Keyword keyword = ((KeywordGrammarSlot) slot).getKeyword();
-			copy = ((KeywordGrammarSlot) slot).copy(getHeadGrammarSlot(new Nonterminal(keyword.getName())), previous, head);
 		}
-		else if(slot instanceof RegularExpressionGrammarSlot) {
-			copy = ((RegularExpressionGrammarSlot) slot).copy(previous, head);
+		else if(slot instanceof TokenGrammarSlot) {
+			copy = ((TokenGrammarSlot) slot).copy(previous, head);
 		}
 		else {
 			throw new IllegalStateException("Unexpected grammar slot type encountered.");
@@ -1016,14 +1003,6 @@ public class GrammarBuilder implements Serializable {
 						   ntSlot1.next().getPopActions().equals(ntSlot2.next().getPopActions()); 
 				}
 				
-				if(s1 instanceof KeywordGrammarSlot) {
-					KeywordGrammarSlot keywordSlot1 = (KeywordGrammarSlot) s1;
-					KeywordGrammarSlot keywordSlot2 = (KeywordGrammarSlot) s2;
-					return keywordSlot1.getKeyword().equals(keywordSlot2.getKeyword()) && 
-						   keywordSlot1.getPreConditions().equals(keywordSlot2.getPreConditions()) &&
-						   keywordSlot1.next().getPopActions().equals(keywordSlot2.next().getPopActions()); 
-				}
-
 				if(s1 instanceof LastGrammarSlot) {
 					return s1 == s2;
 				}
@@ -1057,24 +1036,11 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
+	
 	private BodyGrammarSlot getBodyGrammarSlot(BodyGrammarSlot slot, int symbolIndex, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
-		if(slot instanceof KeywordGrammarSlot) {
-			Keyword keyword = ((KeywordGrammarSlot) slot).getKeyword();
-			HeadGrammarSlot keywordHead = ((KeywordGrammarSlot) slot).getKeywordHead();
-			KeywordGrammarSlot newSlot = new KeywordGrammarSlot(symbolIndex, keywordHead, keyword, previous, head);
-			copyActions(slot, newSlot);
-			return newSlot;
-		}
-		
-		else if (slot instanceof TerminalGrammarSlot) {
-			TerminalGrammarSlot newSlot = new TerminalGrammarSlot(symbolIndex, previous, ((TerminalGrammarSlot) slot).getTerminal(), head);
-			copyActions(slot, newSlot);
-			return newSlot;
-		}
-
 		// Nonterminal
-		else if (slot instanceof NonterminalGrammarSlot){
+		if (slot instanceof NonterminalGrammarSlot){
 			NonterminalGrammarSlot newSlot = new NonterminalGrammarSlot(symbolIndex, previous, ((NonterminalGrammarSlot) slot).getNonterminal(), head);
 			copyActions(slot, newSlot);
 			return newSlot;
@@ -1092,8 +1058,8 @@ public class GrammarBuilder implements Serializable {
 			return newSlot;
 		}
 		
-		else if(slot instanceof RegularExpressionGrammarSlot) {
-			RegularExpressionGrammarSlot newSlot = new RegularExpressionGrammarSlot(symbolIndex, (RegularExpression) slot.getSymbol(), previous, head);
+		else if(slot instanceof TokenGrammarSlot) {
+			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous,((TokenGrammarSlot) slot).getTokenID(), slot.getSymbol(), head);
 			copyActions(slot, newSlot);
 			return newSlot;
 		}

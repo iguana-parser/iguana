@@ -12,16 +12,13 @@ import java.util.Set;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.KeywordGrammarSlot;
-import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -131,38 +128,6 @@ public class Grammar implements Serializable {
 	}
 	
 	public void code(Writer writer, String packageName) throws IOException {
-	
-		String header = Input.read(this.getClass().getResourceAsStream("ParserTemplate"));
-		header = header.replace("${className}", name).replace("${packageName}", packageName);
-		writer.append(header);
-		
-		// case L0:
-		writer.append("case " + L0.getInstance().getId() + ":\n");
-		L0.getInstance().codeParser(writer);
-		
-		for(HeadGrammarSlot nonterminal : nonterminals) {
-			writer.append("// " + nonterminal + "\n");
-			writer.append("case " + nonterminal.getId() + ":\n");
-			writer.append("parse_" + nonterminal.getId() + "();\n");
-			writer.append("break;\n");
-		}
-				
-		for(BodyGrammarSlot slot : slots) {
-			if(!(slot.previous() instanceof TerminalGrammarSlot)) {
-				writer.append("// " + slot + "\n");
-				writer.append("case " + slot.getId() + ":\n");
-				writer.append("parse_" + slot.getId() + "();\n");
-				writer.append("break;\n");
-			}
-		}
-		
-		writer.append("} } }\n");
-		
-		for(HeadGrammarSlot nonterminal : nonterminals) {
-			nonterminal.codeParser(writer);
-		}
-		
-		writer.append("}");
 	}
 	
 	public String getName() {
@@ -235,14 +200,11 @@ public class Grammar implements Serializable {
 	}
 	
 	private String getSlotName(BodyGrammarSlot slot) {
-		if(slot instanceof TerminalGrammarSlot) {
-			return ((TerminalGrammarSlot) slot).getTerminal().getName();
-		} 
+		if(slot instanceof TokenGrammarSlot) {
+			return slot.getSymbol().getName();
+		}
 		else if (slot instanceof NonterminalGrammarSlot) {
 			return getNonterminalName(((NonterminalGrammarSlot) slot).getNonterminal());
-		} 
-		else if (slot instanceof KeywordGrammarSlot) {
-			return ((KeywordGrammarSlot) slot).getKeyword().getName();
 		} 
 		else {
 			return "";
@@ -298,11 +260,6 @@ public class Grammar implements Serializable {
 			}
 			
 			@Override
-			public void visit(TerminalGrammarSlot slot) {
-				sb.append(" ").append(getSlotName(slot));
-			}
-			
-			@Override
 			public void visit(NonterminalGrammarSlot slot) {
 				sb.append(" ").append(getSlotName(slot));
 			}
@@ -313,7 +270,7 @@ public class Grammar implements Serializable {
 			}
 
 			@Override
-			public void visit(KeywordGrammarSlot slot) {
+			public void visit(TokenGrammarSlot slot) {
 				sb.append(" ").append(getSlotName(slot));
 			}
 
