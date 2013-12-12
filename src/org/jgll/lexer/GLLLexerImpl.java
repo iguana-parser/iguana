@@ -1,8 +1,8 @@
 package org.jgll.lexer;
 
+import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Keyword;
@@ -17,26 +17,25 @@ public class GLLLexerImpl implements GLLLexer {
 	/**
 	 * tokens[inputIndex][tokenID] = length
  	 */
-	private Token[][] tokens;
-	
-	private Map<Symbol, Integer> idMap;
+	private int[][] tokens;
 
 	private Input input;
+
+	private Grammar grammar;
 	
 	public GLLLexerImpl(Input input, Grammar grammar) {
 		this.input = input;
+		this.grammar = grammar;
 		this.tokenIDs = new BitSet[input.size()];
-		int i = 0;
-		idMap = new HashMap<Symbol, Integer>();
-		for(RegularExpression regex : grammar.getRegularExpressions()) {
-			idMap.put(regex, i++);
-		}
-		for(Keyword keyword : grammar.getKeywords()) {
-			idMap.put(keyword, i++);
+		tokens = new int[input.size()][grammar.getCountTokens()];
+		
+		for(int k = 0; k < tokens.length; k++) {
+			for(int j = 0; j < tokens[k].length; j++) {
+				tokens[k][j] = -1;
+			}
 		}
 		
-		tokens = new Token[input.size()][idMap.size()];
-		tokenize(input.toString(), grammar);
+		tokenize(input.toString());
 	}
 	
 	@Override
@@ -51,21 +50,29 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	@Override
 	public int tokenAt(int inputIndex, int tokenID) {
-		Token token = tokens[inputIndex][tokenID];
-		if(token == null) {
-			return -1;
-		} else {
-			return token.getLength();			
-		}
+		return tokens[inputIndex][tokenID];
 	}
 	
-	private void tokenize(String input, Grammar grammar) {
+	@Override
+	public List<Integer> tokensAt(int inputIndex, BitSet expectedTokens) {
+		List<Integer> list = new ArrayList<>();
+		 for (int i = expectedTokens.nextSetBit(0); i >= 0; i = expectedTokens.nextSetBit(i+1)) {
+			 if(tokens[inputIndex][i] > 0) {
+				 list.add(i);
+			 }
+		 }
+
+		return list;
+	}
+	
+	private void tokenize(String input) {
 		for(int i = 0; i < input.length(); i++) {
-			for(RegularExpression regex : grammar.getRegularExpressions()) {
-				tokenize(i, input, regex);
-			}
-			for(Keyword keyword : grammar.getKeywords()) {
-				tokenize(i, input, keyword);
+			for(Symbol symbol : grammar.getTokens()) {
+				if(symbol instanceof Keyword) {
+					tokenize(i, input, (Keyword) symbol);
+				} else if (symbol instanceof RegularExpression) {
+					tokenize(i, input, (RegularExpression) symbol);
+				}
 			}
 		}
 	}
@@ -84,14 +91,14 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 
 	private void createToken(int inputIndex, Symbol symbol, int length) {
-		Integer tokenID = idMap.get(symbol);
+		Integer tokenID = grammar.getTokenID(symbol);
 		
 		if(tokenIDs[inputIndex] == null) {
 			tokenIDs[inputIndex]= new BitSet();
 		}
 		
 		tokenIDs[inputIndex].set(tokenID);
-		tokens[inputIndex][tokenID] = new Token(tokenID, length);
+		tokens[inputIndex][tokenID] = length;
 	}
 	
 	@Override

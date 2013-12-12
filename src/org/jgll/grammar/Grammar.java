@@ -343,4 +343,12 @@ public class Grammar implements Serializable {
 		return tokenIDMap.get(s);
 	}
 	
+	public int getCountTokens() {
+		return tokenIDMap.size() + 2;
+	}
+	
+	public Iterable<Symbol> getTokens() {
+		return tokenIDMap.keySet();
+	}
+	
 }

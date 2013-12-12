@@ -126,6 +126,12 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void setNullable(boolean nullable, boolean directNullable) {
 		this.nullable = nullable;
 		this.directNullable = directNullable;
+		
+		predictionSet = new BitSet();
+		predictionSet.or(firstSet);
+		if(isNullable()) {
+			predictionSet.or(followSet);
+		}
 	}
 	
 	public void setEpsilonAlternate(Alternate epsilonAlternate) {
@@ -139,17 +145,21 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
 		
+		int ci = parser.getCurrentInputIndex();
+		
 		if(parser.isLLOptimizationEnabled() && ll1) {
-			Alternate alternate = ll1Map.get(lexer.getInput().charAt(parser.getCurrentInputIndex()));
-			parser.setCurrentSPPFNode(DummyNode.getInstance());
-			return alternate.getFirstSlot().parse(parser, lexer);
-		} else {
-			for(Alternate alternate : alternates) {
-				int ci = parser.getCurrentInputIndex();
-				BodyGrammarSlot slot = alternate.getFirstSlot();
-				if(slot.test(ci, lexer)) {
-					parser.addDescriptor(slot);
-				}
+			List<Integer> tokensAt = lexer.tokensAt(ci, this.predictionSet);
+			if(tokensAt.size() == 1) {
+				Alternate alternate = ll1Map.get(lexer.tokenAt(ci, tokensAt.get(0)));
+				parser.setCurrentSPPFNode(DummyNode.getInstance());
+				return alternate.getFirstSlot().parse(parser, lexer);				
+			}
+		} 
+		
+		for(Alternate alternate : alternates) {
+			BodyGrammarSlot slot = alternate.getFirstSlot();
+			if(slot.test(ci, lexer)) {
+				parser.addDescriptor(slot);
 			}
 		}
 		return null;
