@@ -494,6 +494,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 
 	@Override
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length) {
+		ci += length;
 		return lookupTable.getTokenSymbolNode(tokenID, inputIndex, length);
 	}
 	

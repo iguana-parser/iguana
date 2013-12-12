@@ -13,7 +13,7 @@ import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +59,7 @@ public class Test3 {
 	}
 	
 	@Test
-	public void testRDParser() throws ParseError {
+	public void testParser() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bc"), grammar, "A");
 		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
@@ -96,10 +96,10 @@ public class Test3 {
 	}
 	
 	private SPPFNode expectedSPPF() {
-		TerminalSymbolNode node0 = new TerminalSymbolNode('b', 0);
+		TokenSymbolNode node0 = new TokenSymbolNode(2, 0, 1);
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
 		node1.addChild(node0);
-		TerminalSymbolNode node2 = new TerminalSymbolNode('c', 1);
+		TokenSymbolNode node2 = new TokenSymbolNode(3, 1, 2);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 1, 2);
 		node3.addChild(node2);
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
