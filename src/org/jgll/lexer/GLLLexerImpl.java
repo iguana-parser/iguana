@@ -86,8 +86,8 @@ public class GLLLexerImpl implements GLLLexer {
 			}
 		}
 		
-		tokens[input.length()][1] = 0;
-		tokenIDs[input.length()].set(0);
+		tokens[input.length() - 1][1] = 0;
+		tokenIDs[input.length() - 1].set(0);
 	}
 	
 	private void tokenize(int inputIndex, String input, Keyword keyword) {
