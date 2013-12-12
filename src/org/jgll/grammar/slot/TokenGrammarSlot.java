@@ -45,7 +45,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 
-		int length = lexer.tokenAt(ci, tokenID);
+		int length = lexer.tokenLengthAt(ci, tokenID);
 		
 		if(length > 0) {
 				if(executePreConditions(parser, lexer)) {
@@ -74,7 +74,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 
-		int length = lexer.tokenAt(ci, tokenID);
+		int length = lexer.tokenLengthAt(ci, tokenID);
 		
 		if(length > 0) {
 			if(executePreConditions(parser, lexer)) {
@@ -94,7 +94,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		int ci = recognizer.getCi();
 		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 		
-		int length = lexer.tokenAt(ci, tokenID);
+		int length = lexer.tokenLengthAt(ci, tokenID);
 		
 		// A::= x1
 		if(previous == null && next.next() == null) {

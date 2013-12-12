@@ -71,8 +71,7 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		poppedElements = new List[grammar.getNonterminals().size()][input.size()];
 		gssEdges = new IguanaSet[grammar.getNonterminals().size()][input.size()];
 		
-		int tokensSize = grammar.getRegularExpressions().size() + grammar.getKeywords().size();
-		tokenSymbolNodes = new TokenSymbolNode[tokensSize][input.size()];
+		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.size()];
 		
 		nonPackedNodesCount = 0;
 		

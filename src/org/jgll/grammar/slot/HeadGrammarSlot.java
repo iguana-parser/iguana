@@ -150,7 +150,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		if(parser.isLLOptimizationEnabled() && ll1) {
 			List<Integer> tokensAt = lexer.tokensAt(ci, this.predictionSet);
 			if(tokensAt.size() == 1) {
-				Alternate alternate = ll1Map.get(lexer.tokenAt(ci, tokensAt.get(0)));
+				Alternate alternate = ll1Map.get(tokensAt.get(0));
 				parser.setCurrentSPPFNode(DummyNode.getInstance());
 				return alternate.getFirstSlot().parse(parser, lexer);				
 			}
@@ -167,7 +167,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
-		Alternate alternate = ll1Map.get(lexer.getInput().charAt(parser.getCurrentInputIndex()));
+		
+		int ci = parser.getCurrentInputIndex();
+		List<Integer> tokensAt = lexer.tokensAt(ci, this.predictionSet);
+		Alternate alternate = ll1Map.get(tokensAt.get(0));
 		
 		assert alternate != null;
 		

@@ -141,7 +141,7 @@ public class NotFollowActions {
 			
 			@Override
 			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
-				return lexer.tokenAt(parser.getCurrentInputIndex(), tokenID) > 0;
+				return lexer.tokenLengthAt(parser.getCurrentInputIndex(), tokenID) > 0;
 			}
 		});
 	}

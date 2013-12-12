@@ -36,7 +36,7 @@ public interface GLLLexer {
 	 * 
 	 * @return -1 if no such tokens exists at the given input index.
 	 */
-	public int tokenAt(int inputIndex, int tokenID);
+	public int tokenLengthAt(int inputIndex, int tokenID);
 	
 	/**
 	 * Returns the underlying input object. 

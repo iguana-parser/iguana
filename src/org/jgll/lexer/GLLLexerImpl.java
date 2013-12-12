@@ -8,6 +8,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
@@ -49,7 +50,7 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	@Override
-	public int tokenAt(int inputIndex, int tokenID) {
+	public int tokenLengthAt(int inputIndex, int tokenID) {
 		return tokens[inputIndex][tokenID];
 	}
 	
@@ -70,8 +71,12 @@ public class GLLLexerImpl implements GLLLexer {
 			for(Symbol symbol : grammar.getTokens()) {
 				if(symbol instanceof Keyword) {
 					tokenize(i, input, (Keyword) symbol);
-				} else if (symbol instanceof RegularExpression) {
+				} 
+				else if (symbol instanceof RegularExpression) {
 					tokenize(i, input, (RegularExpression) symbol);
+				}
+				else if(symbol instanceof Terminal) {
+					tokenize(i, input, (Terminal) symbol);
 				}
 			}
 		}
@@ -89,6 +94,13 @@ public class GLLLexerImpl implements GLLLexer {
 			createToken(inputIndex, regex, length);
 		}
 	}
+	
+	private void tokenize(int inputIndex, String input, Terminal terminal) {
+		if(terminal.match(input.charAt(inputIndex))) {
+			createToken(inputIndex, terminal, 1);
+		}
+	}
+	
 
 	private void createToken(int inputIndex, Symbol symbol, int length) {
 		Integer tokenID = grammar.getTokenID(symbol);
