@@ -126,12 +126,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void setNullable(boolean nullable, boolean directNullable) {
 		this.nullable = nullable;
 		this.directNullable = directNullable;
-		
-		predictionSet = new BitSet();
-		predictionSet.or(firstSet);
-		if(isNullable()) {
-			predictionSet.or(followSet);
-		}
+	}
+
+	public void setPredictionSet(BitSet predictionSet) {
+		this.predictionSet = predictionSet;
 	}
 	
 	public void setEpsilonAlternate(Alternate epsilonAlternate) {

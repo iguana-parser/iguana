@@ -117,7 +117,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		int ci = recognizer.getCi();
 		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 		
-		if(predictionSet.get(lexer.getInput().charAt(ci))) {
+		if(test(ci, lexer)) {
 			recognizer.update(recognizer.create(next, cu, ci), ci);
 			return nonterminal;
 		} else { 

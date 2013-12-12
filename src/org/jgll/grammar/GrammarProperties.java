@@ -205,6 +205,16 @@ public class GrammarProperties {
 	
 	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals) {
 		for (HeadGrammarSlot head : nonterminals) {
+			
+			// Setting the prediction set for the head grammar slot
+			BitSet predictionSet = new BitSet();
+			predictionSet.or(head.getFirstSet());
+			if(head.isNullable()) {
+				predictionSet.or(head.getFollowSet());
+			}
+			predictionSet.clear(EPSILON);
+			head.setPredictionSet(predictionSet);
+			
 			for (Alternate alternate : head.getAlternates()) {
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 				
