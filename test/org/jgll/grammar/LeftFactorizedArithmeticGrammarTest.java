@@ -32,8 +32,8 @@ public class LeftFactorizedArithmeticGrammarTest {
 	Nonterminal E1 = new Nonterminal("E1");
 	Nonterminal F = new Nonterminal("F");
 	Nonterminal T1 = new Nonterminal("T1");
-	Character star = new Character('+');
-	Character plus = new Character('*');
+	Character plus = new Character('+');
+	Character star = new Character('*');
 	Character a = new Character('a');
 	Character openPar = new Character('(');
 	Character closePar = new Character(')');
@@ -44,10 +44,10 @@ public class LeftFactorizedArithmeticGrammarTest {
 		GrammarBuilder builder = new GrammarBuilder("LeftFactorizedArithmeticExpressions");
 		
 		Rule r1 = new Rule(E, list(T, E1));
-		Rule r2 = new Rule(E1, list(star, T, E1));
+		Rule r2 = new Rule(E1, list(plus, T, E1));
 		Rule r3 = new Rule(E1);
 		Rule r4 = new Rule(T, list(F, T1));
-		Rule r5 = new Rule(T1, list(plus, F, T1));
+		Rule r5 = new Rule(T1, list(star, F, T1));
 		Rule r6 = new Rule(T1);
 		Rule r7 = new Rule(F, list(openPar, E, closePar));
 		Rule r8 = new Rule(F, list(a));

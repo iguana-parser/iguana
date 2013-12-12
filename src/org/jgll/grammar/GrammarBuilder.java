@@ -91,7 +91,7 @@ public class GrammarBuilder implements Serializable {
 	
 	Set<Keyword> keywords;
 	
-	private Map<Symbol, Integer> tokenIDMap;
+	Map<Symbol, Integer> tokenIDMap;
 	
 	public GrammarBuilder() {
 		this("no-name");

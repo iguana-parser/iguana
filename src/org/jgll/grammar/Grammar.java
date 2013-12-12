@@ -17,7 +17,6 @@ import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.RegularExpression;
@@ -88,15 +87,10 @@ public class Grammar implements Serializable {
 			this.newNonterminals.addAll(newNonterminals);
 		}
 
-		tokenIDMap = new HashMap<>();
-		
 		for(BodyGrammarSlot slot : slots) {
 			String label = grammarSlotToString(slot);
 			slot.setLabel(label);
 			nameToSlots.put(label, slot);
-			if(slot instanceof TokenGrammarSlot) {
-				tokenIDMap.put(slot.getSymbol(), ((TokenGrammarSlot) slot).getTokenID());
-			}
 		}
 		
 		this.longestTerminalChain = builder.longestTerminalChain;
@@ -107,7 +101,7 @@ public class Grammar implements Serializable {
 		this.reachabilityGraph = builder.directReachabilityGraph;
 		this.regularExpressions = builder.regularExpressions;
 		this.keywords = builder.keywords;
-		
+		this.tokenIDMap = builder.tokenIDMap;
 		
 		printGrammarStatistics();
 	}
