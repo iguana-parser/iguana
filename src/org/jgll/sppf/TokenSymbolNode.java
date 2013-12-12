@@ -28,8 +28,8 @@ public class TokenSymbolNode extends SPPFNode {
 	
 	private final int hash;
 	
-	public TokenSymbolNode(int matchedChar, int inputIndex, int length) {
-		this.tokenID = matchedChar;
+	public TokenSymbolNode(int tokenID, int inputIndex, int length) {
+		this.tokenID = tokenID;
 		this.inputIndex = inputIndex;
 		this.length = length;
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
@@ -63,15 +63,15 @@ public class TokenSymbolNode extends SPPFNode {
 	
 	@Override
 	public String getLabel() {
-		return "(" + tokenID + ", " + inputIndex + ", " + inputIndex + length + ")";
+		return String.format("(%s, %d, %d)", tokenID, inputIndex, getRightExtent());
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", getLabel(), inputIndex, getRightExtent());
+		return getLabel();
 	}
 	
-	public int getMatchedChar() {
+	public int getTokenID() {
 		return tokenID;
 	}
 	

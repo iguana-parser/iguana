@@ -42,7 +42,7 @@ public class ToJavaCode implements SPPFVisitor {
 	public void visit(TokenSymbolNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
-			sb.append("TokenSymbolNode node" + count + " = new TokenSymbolNode(" + node.getMatchedChar() + ", " + node.getLeftExtent() + ", " + node.getLength() + ");\n");
+			sb.append("TokenSymbolNode node" + count + " = new TokenSymbolNode(" + node.getTokenID() + ", " + node.getLeftExtent() + ", " + node.getLength() + ");\n");
 			node.setObject("node" + count++);
 		}
 	}

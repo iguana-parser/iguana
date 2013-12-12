@@ -91,6 +91,8 @@ public class GrammarBuilder implements Serializable {
 	
 	Set<Keyword> keywords;
 	
+	private Set<Symbol> tokens;
+	
 	public GrammarBuilder() {
 		this("no-name");
 	}
@@ -107,6 +109,7 @@ public class GrammarBuilder implements Serializable {
 		newNonterminalsMap = new LinkedHashMap<>();
 		regularExpressions = new HashSet<>();
 		keywords = new HashSet<>();
+		tokens = new HashSet<>();
 	}
 
 	public Grammar build() {
@@ -234,7 +237,7 @@ public class GrammarBuilder implements Serializable {
 		if(symbol instanceof RegularExpression ||
 		   symbol instanceof Terminal ||
 		   symbol instanceof Keyword) {
-			return new TokenGrammarSlot(symbolIndex, currentSlot, getTokenID(), symbol, headGrammarSlot);
+			return new TokenGrammarSlot(symbolIndex, currentSlot, getTokenID(symbol), symbol, headGrammarSlot);
 		}
 		
 		// Nonterminal
@@ -392,10 +395,11 @@ public class GrammarBuilder implements Serializable {
 		return null;
 	}
 	
-	private int getTokenID() {
+	private int getTokenID(Symbol symbol) {
 		// The first token is epsilon and the second one is the EOF, therefore, token
 		// indices start from 2.
-		return 2 + regularExpressions.size() + keywords.size();
+		tokens.add(symbol);
+		return tokens.size() + 1;
 	}
 	 
 	/**

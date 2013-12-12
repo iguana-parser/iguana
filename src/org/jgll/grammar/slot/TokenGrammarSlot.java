@@ -81,7 +81,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 				return null;
 			}
 			
-			return parser.getTokenNode(length, ci, length);
+			return parser.getTokenNode(tokenID, ci, length);
 		} 			
 		else {
 			parser.recordParseError(this);
