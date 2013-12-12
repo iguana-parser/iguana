@@ -123,9 +123,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return directNullable;
 	}
 	
-	public void setNullable(boolean nullable, boolean directNullable) {
+	public void setNullable(boolean nullable) {
 		this.nullable = nullable;
-		this.directNullable = directNullable;
 	}
 
 	public void setPredictionSet(BitSet predictionSet) {

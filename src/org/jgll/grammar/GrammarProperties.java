@@ -185,20 +185,7 @@ public class GrammarProperties {
 	
 	public static void setNullableHeads(Iterable<HeadGrammarSlot> nonterminals) {
 		for (HeadGrammarSlot head : nonterminals) {
-			
-			boolean nullable = head.getFirstSet().get(EPSILON);
-			boolean directNullable = false;
-			
-			if(nullable) {
-				for(Alternate alt : head.getAlternates()) {
-					if(alt.isEpsilon()) {
-						directNullable = true;
-						head.setEpsilonAlternate(alt);
-						break;
-					}
-				}
-			}
-			head.setNullable(nullable, directNullable);
+			head.setNullable(head.getFirstSet().get(EPSILON));
 		}
 	}
 	
