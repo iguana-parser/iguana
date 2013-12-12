@@ -91,7 +91,7 @@ public class GrammarBuilder implements Serializable {
 	
 	Set<Keyword> keywords;
 	
-	private Set<Symbol> tokens;
+	private Map<Symbol, Integer> tokenIDMap;
 	
 	public GrammarBuilder() {
 		this("no-name");
@@ -109,7 +109,7 @@ public class GrammarBuilder implements Serializable {
 		newNonterminalsMap = new LinkedHashMap<>();
 		regularExpressions = new HashSet<>();
 		keywords = new HashSet<>();
-		tokens = new HashSet<>();
+		tokenIDMap = new HashMap<>();
 	}
 
 	public Grammar build() {
@@ -398,8 +398,13 @@ public class GrammarBuilder implements Serializable {
 	private int getTokenID(Symbol symbol) {
 		// The first token is epsilon and the second one is the EOF, therefore, token
 		// indices start from 2.
-		tokens.add(symbol);
-		return tokens.size() + 1;
+		
+		if(tokenIDMap.containsKey(symbol)) {
+			return tokenIDMap.get(symbol);
+		}
+		int id = tokenIDMap.size() + 2;
+		tokenIDMap.put(symbol, id);
+		return id;
 	}
 	 
 	/**
