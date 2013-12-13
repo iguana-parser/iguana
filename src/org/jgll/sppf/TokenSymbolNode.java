@@ -34,11 +34,7 @@ public class TokenSymbolNode extends SPPFNode {
 		this.length = length;
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
-	
-	public int getInputIndex() {
-		return inputIndex;
-	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		

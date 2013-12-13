@@ -32,10 +32,6 @@ public class TerminalSymbolNode extends SPPFNode {
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
-	public int getInputIndex() {
-		return inputIndex;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		

@@ -51,14 +51,14 @@ public class GSSEdge {
 		
 		int slotId1 = 0;
 		if(node instanceof TerminalSymbolNode) {
-			slotId1 = ((TerminalSymbolNode) node).getInputIndex();
+			slotId1 = node.getLeftExtent();
 		} else {
-			slotId1 = node.getGrammarSlot().getId();
+			slotId1 = node.getLeftExtent();
 		}
 
 		int slotId2 = 0;
 		if(other.node instanceof TerminalSymbolNode) {
-			slotId2 = ((TerminalSymbolNode) other.node).getInputIndex();
+			slotId2 = other.node.getLeftExtent();
 		} else {
 			slotId2 = other.node.getGrammarSlot().getId();
 		}
@@ -86,7 +86,7 @@ public class GSSEdge {
 			
 			int slotId = 0;
 			if(edge.node instanceof TerminalSymbolNode) {
-				slotId = ((TerminalSymbolNode) edge.node).getInputIndex();
+				slotId = edge.node.getLeftExtent();
 			} else {
 				slotId = edge.node.getGrammarSlot().getId();
 			}
@@ -103,14 +103,14 @@ public class GSSEdge {
 			
 			int slotId1 = 0;
 			if(e1.node instanceof TerminalSymbolNode) {
-				slotId1 = ((TerminalSymbolNode) e1.node).getInputIndex();
+				slotId1 = e1.node.getLeftExtent();
 			} else {
 				slotId1 = e1.node.getGrammarSlot().getId();
 			}
 
 			int slotId2 = 0;
 			if(e2.node instanceof TerminalSymbolNode) {
-				slotId2 = ((TerminalSymbolNode) e2.node).getInputIndex();
+				slotId2 = e2.node.getLeftExtent();
 			} else {
 				slotId2 = e2.node.getGrammarSlot().getId();
 			}

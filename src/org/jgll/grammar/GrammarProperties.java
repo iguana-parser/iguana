@@ -16,6 +16,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
+import org.jgll.lexer.Token;
 
 
 public class GrammarProperties {
@@ -424,7 +425,7 @@ public class GrammarProperties {
 	public static void setPredictionSetsForConditionals(Iterable<BodyGrammarSlot> conditionSlots) {
 		for(BodyGrammarSlot slot : conditionSlots) {
 			while(slot != null) {
-				if(slot instanceof NonterminalGrammarSlot) {
+				if(slot instanceof NonterminalGrammarSlot || slot instanceof TokenGrammarSlot) {
 					BitSet set = new BitSet();
 					getChainFirstSet(slot, set);
 					// TODO: fix and uncomment it later
