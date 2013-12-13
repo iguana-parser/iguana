@@ -96,7 +96,6 @@ public class GLLLexerImpl implements GLLLexer {
 			
 			if(length > 0 && index + length < input.length()) {
 				tokenize(input, index + length);					
-				return;
 			}
 		}
 	}
