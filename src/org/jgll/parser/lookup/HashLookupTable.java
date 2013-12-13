@@ -23,9 +23,9 @@ import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class RecursiveDescentLookupTable extends AbstractLookupTable {
+public class HashLookupTable extends AbstractLookupTable {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentLookupTable.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(HashLookupTable.class);
 	
 	private HashTableFactory factory; 
 	
@@ -49,13 +49,15 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	
 	private int nonPackedNodesCount;
 	
-	public RecursiveDescentLookupTable(Grammar grammar) {
+	public HashLookupTable(Grammar grammar) {
 		super(grammar);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init(Input input) {
+		
+		long start = System.nanoTime();
 		
 		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new IguanaSet[input.size()];
@@ -67,6 +69,9 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		gssEdges = new IguanaSet[grammar.getNonterminals().size()][input.size()];
 		
 		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.size()];
+		
+		long end = System.nanoTime();
+		log.info("Lookup table initialization: %d ms", (end - start) / 1000_000);
 		
 		nonPackedNodesCount = 0;
 		
