@@ -8,7 +8,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Terminal;
 import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 
@@ -22,7 +22,7 @@ public class NotFollowActions {
 			private GLLRecognizer recognizer;
 			
 			@Override
-			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer) {
 				if(recognizer == null) {
 					recognizer = RecognizerFactory.prefixContextFreeRecognizer(parser.getGrammar());
 				}
@@ -59,7 +59,7 @@ public class NotFollowActions {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer) {
 				for(Keyword s : list) {
 					if(lexer.getInput().match(parser.getCurrentInputIndex(), s.getChars())) {
 						return true;
@@ -103,7 +103,7 @@ public class NotFollowActions {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer) {
 				return set.get(lexer.getInput().charAt(parser.getCurrentInputIndex()));
 			}
 			
@@ -140,7 +140,7 @@ public class NotFollowActions {
 			}
 			
 			@Override
-			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer) {
 				return lexer.tokenLengthAt(parser.getCurrentInputIndex(), tokenID) > 0;
 			}
 		});
@@ -163,7 +163,7 @@ public class NotFollowActions {
 			}
 			
 			@Override
-			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer) {
 				return lexer.match(parser.getCurrentInputIndex(), set);
 			}
 		});

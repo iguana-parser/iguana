@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.parser.GLLParser;
 
 public interface SlotAction<T> extends Serializable {
 	
-	public T execute(GLLParserInternals parser, GLLLexer lexer);
+	public T execute(GLLParser parser, GLLLexer lexer);
 	
 	/**
 	 * The condition from which this grammar slot is created. 

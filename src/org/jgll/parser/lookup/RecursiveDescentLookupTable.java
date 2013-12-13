@@ -17,7 +17,6 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.HashTableFactory;
@@ -33,8 +32,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	private int tableSize = (int) Math.pow(2, 10);
 	
 	private Deque<Descriptor> descriptorsStack;
-	
-	private TerminalSymbolNode[] terminals;
 	
 	private IguanaSet<Descriptor>[] descriptorsSet;
 	
@@ -60,8 +57,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 	@Override
 	public void init(Input input) {
 		
-		terminals = new TerminalSymbolNode[2 * input.size()];
-
 		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new IguanaSet[input.size()];
 		nonPackedNodes = new IguanaSet[input.size()];
@@ -145,25 +140,6 @@ public class RecursiveDescentLookupTable extends AbstractLookupTable {
 		}
 		
 		return false;
-	}
-
-	@Override
-	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent) {
-		int index = 2 * leftExtent;
-		
-		if(terminalIndex != TerminalSymbolNode.EPSILON) {
-			index = index + 1;
-		}
-
-		TerminalSymbolNode terminal = terminals[index];
-		if(terminal == null) {
-			terminal = new TerminalSymbolNode(terminalIndex, leftExtent);
-			log.trace("Terminal node created: %s", terminal);
-			terminals[index] = terminal;
-			nonPackedNodesCount++;
-		}
-		
-		return terminal;
 	}
 	
 	@Override

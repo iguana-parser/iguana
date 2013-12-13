@@ -1,8 +1,10 @@
 package org.jgll.grammar;
 
 
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;

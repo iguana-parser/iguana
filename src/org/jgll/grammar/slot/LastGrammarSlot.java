@@ -5,7 +5,7 @@ import java.io.Writer;
 
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 
@@ -39,7 +39,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		parser.pop();
 		return null;
 	}
@@ -85,7 +85,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
+	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
 		throw new UnsupportedOperationException();
 	}
 

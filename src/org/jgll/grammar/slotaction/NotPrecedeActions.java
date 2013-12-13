@@ -8,7 +8,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Terminal;
 import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.parser.GLLParser;
 import org.jgll.util.logging.LoggerWrapper;
 
 
@@ -30,7 +30,7 @@ public class NotPrecedeActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer) {
 				
 				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
@@ -72,7 +72,7 @@ public class NotPrecedeActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer) {
 				int ci = parser.getCurrentInputIndex();
 				if (ci == 0) {
 					return false;

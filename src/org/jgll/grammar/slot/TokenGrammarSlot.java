@@ -8,7 +8,7 @@ import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
 import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -41,7 +41,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 		
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
 
@@ -70,7 +70,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
+	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
 

@@ -5,11 +5,11 @@ import java.util.List;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.symbol.Keyword;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.lexer.GLLLexer;
+import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.util.hashing.CuckooHashSet;
-import org.jgll.lexer.GLLLexer;
 
 
 public class NotMatchActions {
@@ -22,7 +22,7 @@ public class NotMatchActions {
 				private GLLRecognizer recognizer;
 
 				@Override
-				public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+				public Boolean execute(GLLParser parser, GLLLexer lexer) {
 					
 					if(recognizer == null) {
 						recognizer = RecognizerFactory.contextFreeRecognizer(parser.getGrammar());						
@@ -64,7 +64,7 @@ public class NotMatchActions {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+					public Boolean execute(GLLParser parser, GLLLexer lexer) {
 						return lexer.getInput().match(parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), s.getChars());
 					}
 
@@ -101,7 +101,7 @@ public class NotMatchActions {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+					public Boolean execute(GLLParser parser, GLLLexer lexer) {
 						int begin = parser.getCurrentGSSNode().getInputIndex();
 						int end = parser.getCurrentInputIndex();
 						return lexer.getInput().match(begin, end, s1.getChars()) ||
@@ -141,7 +141,7 @@ public class NotMatchActions {
 					private static final long serialVersionUID = 1L;
 					
 					@Override
-					public Boolean execute(GLLParserInternals parser, GLLLexer lexer) {
+					public Boolean execute(GLLParser parser, GLLLexer lexer) {
 						int begin = parser.getCurrentGSSNode().getInputIndex();
 						int end = parser.getCurrentInputIndex() - 1;
 						Keyword subInput = new Keyword("", lexer.getInput().subInput(begin, end));

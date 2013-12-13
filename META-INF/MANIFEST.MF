@@ -7,6 +7,7 @@ Export-Package:
  org.jgll.grammar;uses:="org.jgll.parser",
  org.jgll.grammar.condition,
  org.jgll.grammar.symbol,
+ org.jgll.lexer,
  org.jgll.parser;
   uses:="org.jgll.sppf,
    org.jgll.util,

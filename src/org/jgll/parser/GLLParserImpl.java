@@ -20,7 +20,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.HashTableFactory;
@@ -36,7 +35,7 @@ import org.jgll.util.logging.LoggerWrapper;
  * @author Ali Afroozeh
  * 
  */
-public class GLLParserImpl implements GLLParser, GLLParserInternals {
+public class GLLParserImpl implements GLLParser {
 		
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
 	
@@ -103,6 +102,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		this.regularListLength = regularListLength;
 	}
 	
+	@Override
+	public NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError {
+		return parse(new GLLLexerImpl(input, grammar), grammar, startSymbolName);
+	}
+	
 	/**
 	 * Parses the given input string. If the parsing of the input was successful,
 	 * the root of SPPF is returned.
@@ -115,7 +119,7 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 	 * @throws RuntimeException if no nonterminal with the given start symbol name is found.
 	 */
 	@Override
-	public final NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError {
+	public final NonterminalSymbolNode parse(GLLLexer lexer, Grammar grammar, String startSymbolName) throws ParseError {
 		
 		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(startSymbolName);
 		
@@ -123,10 +127,11 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
 		}
 		
-		this.input = input;
 		this.grammar = grammar;
 		
-		this.lexer = new GLLLexerImpl(input, grammar);
+		this.lexer = lexer;
+		
+		this.input = lexer.getInput();
 		
 		init();
 		lookupTable.init(input);
@@ -325,22 +330,6 @@ public class GLLParserImpl implements GLLParser, GLLParserInternals {
 		}
 
 		return v;
-	}
-	
-	/** 
-	 *  getNodeT(a, i) {
-	 * 		if there is no SPPF node labelled (a, i, i + 1) create one
-	 * 		return the SPPF node labelled (a, i, i + 1) 
-	 *  }
-	 */
-	@Override
-	public final TerminalSymbolNode getTerminalNode(int c) {
-		return lookupTable.getTerminalNode(c, ci++);
-	}
-	
-	@Override
-	public TerminalSymbolNode getEpsilonNode() {
-		return lookupTable.getTerminalNode(TerminalSymbolNode.EPSILON, ci);
 	}
 	
 	@Override

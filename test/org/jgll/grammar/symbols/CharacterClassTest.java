@@ -1,7 +1,7 @@
 package org.jgll.grammar.symbols;
 
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Range;

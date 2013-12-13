@@ -1,7 +1,7 @@
 package org.jgll.util.trie;
 
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;

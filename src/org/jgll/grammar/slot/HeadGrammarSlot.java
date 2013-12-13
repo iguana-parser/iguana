@@ -16,7 +16,7 @@ import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -134,7 +134,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
 		
@@ -157,7 +157,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
+	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
 		List<Integer> tokensAt = lexer.tokensAt(ci, this.predictionSet);

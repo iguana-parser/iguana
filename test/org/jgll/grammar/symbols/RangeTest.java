@@ -1,6 +1,7 @@
 package org.jgll.grammar.symbols;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.symbol.Range;
 import org.junit.Test;

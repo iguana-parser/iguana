@@ -1,7 +1,7 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.condition.ConditionFactory;
 import org.jgll.grammar.ebnf.EBNFUtil;

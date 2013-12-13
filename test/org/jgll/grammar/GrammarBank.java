@@ -1,6 +1,6 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.list;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Character;

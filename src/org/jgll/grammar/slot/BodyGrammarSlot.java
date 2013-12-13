@@ -10,7 +10,7 @@ import java.util.List;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.parser.GLLParser;
 
 /**
  * 
@@ -82,7 +82,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return predictionSet;
 	}
 	
-	protected boolean executePreConditions(GLLParserInternals parser, GLLLexer lexer) {
+	protected boolean executePreConditions(GLLParser parser, GLLLexer lexer) {
 		for(SlotAction<Boolean> preCondition : preConditions) {
 			if(preCondition.execute(parser, lexer)) {
 				return true;
@@ -99,7 +99,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
 	 *								   | NegativeNumber
 	 */
-	protected boolean checkPopActions(GLLParserInternals parser, GLLLexer lexer) {
+	protected boolean checkPopActions(GLLParser parser, GLLLexer lexer) {
 		for(SlotAction<Boolean> slotAction : next.popActions) {
 			if(slotAction.execute(parser, lexer)) {
 				return true;

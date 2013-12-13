@@ -1,7 +1,8 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -14,8 +15,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 

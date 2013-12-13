@@ -6,7 +6,7 @@ import java.util.BitSet;
 
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParserInternals;
+import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.SPPFNode;
 
@@ -55,7 +55,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParserInternals parser, GLLLexer input) {
+	public GrammarSlot parse(GLLParser parser, GLLLexer input) {
 		
 		int ci = parser.getCurrentInputIndex();
 		
@@ -96,7 +96,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode parseLL1(GLLParserInternals parser, GLLLexer lexer) {
+	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
 		if(!test(ci, lexer)) {

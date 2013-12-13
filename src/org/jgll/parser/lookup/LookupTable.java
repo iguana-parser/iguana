@@ -9,7 +9,6 @@ import org.jgll.parser.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 
@@ -25,8 +24,6 @@ public interface LookupTable {
 	public Descriptor nextDescriptor();
 	
 	public boolean addDescriptor(Descriptor descriptor);
-	
-	public TerminalSymbolNode getTerminalNode(int terminalIndex, int leftExtent);
 	
 	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length);
 	

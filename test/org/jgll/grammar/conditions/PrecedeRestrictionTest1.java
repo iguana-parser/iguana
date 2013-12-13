@@ -1,8 +1,9 @@
 package org.jgll.grammar.conditions;
 
-import static org.jgll.grammar.condition.ConditionFactory.*;
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.jgll.grammar.condition.ConditionFactory.notFollow;
+import static org.jgll.grammar.condition.ConditionFactory.notPrecede;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
