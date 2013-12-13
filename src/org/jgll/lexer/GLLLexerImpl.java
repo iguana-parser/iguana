@@ -88,14 +88,14 @@ public class GLLLexerImpl implements GLLLexer {
 			else if (symbol instanceof RegularExpression) {
 				length = tokenize(index, input, (RegularExpression) symbol);
 			}
-			else if(symbol instanceof Terminal) {
+			// terminal
+			else {
 				length = tokenize(index, input, (Terminal) symbol);
-			} else {
-				length = -1;
-			}
+			} 
 			
-			if(length > 0 && index + length < input.length()) {
-				tokenize(input, index + length);					
+			int nextIndex = index + length;
+			if(length > 0 && nextIndex < input.length()) {
+				tokenize(input, nextIndex);					
 			}
 		}
 	}
