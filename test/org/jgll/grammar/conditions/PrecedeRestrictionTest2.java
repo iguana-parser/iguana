@@ -20,6 +20,7 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,7 +79,7 @@ public class PrecedeRestrictionTest2 {
 
 	private SPPFNode getExpectedSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 6);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("forall"), 0, 6);
+		TokenSymbolNode node2 = new TokenSymbolNode(5, 0, 6);
 		node1.addChild(node2);
 		return node1;
 	}

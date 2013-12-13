@@ -5,6 +5,8 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Terminal;
 
 public class LongestTerminalChainAction implements GrammarVisitAction {
 	
@@ -37,7 +39,11 @@ public class LongestTerminalChainAction implements GrammarVisitAction {
 
 	@Override
 	public void visit(TokenGrammarSlot slot) {
-		// TODO Auto-generated method stub
+		if(slot.getSymbol() instanceof Terminal) {
+			length++;
+		} else if (slot.getSymbol() instanceof Keyword) {
+			length += ((Keyword) slot.getSymbol()).size();
+		}
 	}
 
 }
