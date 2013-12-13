@@ -14,7 +14,7 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,27 +59,27 @@ public class DanglingElseGrammar3 {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aasbs"), grammar, "S");
-		assertEquals(true, sppf.deepEquals(getExpectedSPPF()));
+		assertTrue(sppf.deepEquals(getExpectedSPPF()));
 	}
 	
 	
 	private SPPFNode getExpectedSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 5);
-		TerminalSymbolNode node2 = new TerminalSymbolNode(97, 0);
+		TokenSymbolNode node2 = new TokenSymbolNode(2, 0, 1);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 5);
 		IntermediateNode node4 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S [b] . S"), 1, 4);
 		IntermediateNode node5 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 1, 3);
-		TerminalSymbolNode node6 = new TerminalSymbolNode(97, 1);
+		TokenSymbolNode node6 = new TokenSymbolNode(2, 1, 1);
 		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
-		TerminalSymbolNode node8 = new TerminalSymbolNode(115, 2);
+		TokenSymbolNode node8 = new TokenSymbolNode(4, 2, 1);
 		node7.addChild(node8);
 		node5.addChild(node6);
 		node5.addChild(node7);
-		TerminalSymbolNode node9 = new TerminalSymbolNode(98, 3);
+		TokenSymbolNode node9 = new TokenSymbolNode(3, 3, 1);
 		node4.addChild(node5);
 		node4.addChild(node9);
 		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 4, 5);
-		TerminalSymbolNode node11 = new TerminalSymbolNode(115, 4);
+		TokenSymbolNode node11 = new TokenSymbolNode(4, 4, 1);
 		node10.addChild(node11);
 		node3.addChild(node4);
 		node3.addChild(node10);

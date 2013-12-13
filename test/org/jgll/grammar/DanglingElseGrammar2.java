@@ -16,7 +16,7 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,7 +62,7 @@ public class DanglingElseGrammar2 {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aasbs"), grammar, "S");
-		assertEquals(true, sppf.deepEquals(getExpectedSPPF()));
+		assertTrue(sppf.deepEquals(getExpectedSPPF()));
 	}
 	
 	
@@ -70,23 +70,23 @@ public class DanglingElseGrammar2 {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 5);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S [b] . S"), 0, 4);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 0, 3);
-		TerminalSymbolNode node4 = new TerminalSymbolNode(97, 0);
+		TokenSymbolNode node4 = new TokenSymbolNode(2, 0, 1);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 3);
 		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S)"), 1, 3);
-		TerminalSymbolNode node7 = new TerminalSymbolNode(97, 1);
+		TokenSymbolNode node7 = new TokenSymbolNode(2, 1, 1);
 		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
-		TerminalSymbolNode node9 = new TerminalSymbolNode(115, 2);
+		TokenSymbolNode node9 = new TokenSymbolNode(4, 2, 1);
 		node8.addChild(node9);
 		node6.addChild(node7);
 		node6.addChild(node8);
 		node5.addChild(node6);
 		node3.addChild(node4);
 		node3.addChild(node5);
-		TerminalSymbolNode node10 = new TerminalSymbolNode(98, 3);
+		TokenSymbolNode node10 = new TokenSymbolNode(3, 3, 1);
 		node2.addChild(node3);
 		node2.addChild(node10);
 		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 4, 5);
-		TerminalSymbolNode node12 = new TerminalSymbolNode(115, 4);
+		TokenSymbolNode node12 = new TokenSymbolNode(4, 4, 1);
 		node11.addChild(node12);
 		node1.addChild(node2);
 		node1.addChild(node11);

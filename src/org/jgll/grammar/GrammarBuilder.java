@@ -324,7 +324,7 @@ public class GrammarBuilder implements Serializable {
 			else if(symbol instanceof Terminal ||
 					symbol instanceof RegularExpression ||
 					symbol instanceof Keyword) {
-				currentSlot = new TokenGrammarSlot(index, currentSlot, tokenIDMap.get(symbol) , symbol, null);
+				currentSlot = new TokenGrammarSlot(index, currentSlot, getTokenID(symbol) , symbol, null);
 			}
 			
 			if(index == 0) {
