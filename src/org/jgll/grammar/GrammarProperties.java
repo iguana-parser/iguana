@@ -16,8 +16,6 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
-import org.jgll.lexer.Token;
-
 
 public class GrammarProperties {
 	

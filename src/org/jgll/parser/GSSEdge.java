@@ -3,6 +3,7 @@ package org.jgll.parser;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
@@ -50,19 +51,18 @@ public class GSSEdge {
 		GSSEdge other = (GSSEdge) obj;
 		
 		int slotId1 = 0;
-		if(node instanceof TerminalSymbolNode) {
+		if(node instanceof TerminalSymbolNode || node instanceof TokenSymbolNode) {
 			slotId1 = node.getLeftExtent();
 		} else {
 			slotId1 = node.getLeftExtent();
 		}
 
 		int slotId2 = 0;
-		if(other.node instanceof TerminalSymbolNode) {
+		if(other.node instanceof TerminalSymbolNode || node instanceof TokenSymbolNode) {
 			slotId2 = other.node.getLeftExtent();
 		} else {
 			slotId2 = other.node.getGrammarSlot().getId();
 		}
-
 		
 		//	Because destination.getInputIndex() == node.getLeftExtent, we don't use it here.
 		return  returnSlot == other.returnSlot &&
@@ -85,7 +85,7 @@ public class GSSEdge {
 		public int hash(GSSEdge edge, HashFunction f) {
 			
 			int slotId = 0;
-			if(edge.node instanceof TerminalSymbolNode) {
+			if(edge.node instanceof TerminalSymbolNode || edge.node instanceof TokenSymbolNode) {
 				slotId = edge.node.getLeftExtent();
 			} else {
 				slotId = edge.node.getGrammarSlot().getId();
@@ -102,14 +102,14 @@ public class GSSEdge {
 		public boolean equals(GSSEdge e1, GSSEdge e2) {
 			
 			int slotId1 = 0;
-			if(e1.node instanceof TerminalSymbolNode) {
+			if(e1.node instanceof TerminalSymbolNode || e1.node instanceof TokenSymbolNode) {
 				slotId1 = e1.node.getLeftExtent();
 			} else {
 				slotId1 = e1.node.getGrammarSlot().getId();
 			}
 
 			int slotId2 = 0;
-			if(e2.node instanceof TerminalSymbolNode) {
+			if(e2.node instanceof TerminalSymbolNode || e2.node instanceof TokenSymbolNode) {
 				slotId2 = e2.node.getLeftExtent();
 			} else {
 				slotId2 = e2.node.getGrammarSlot().getId();
