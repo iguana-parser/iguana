@@ -13,7 +13,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,8 +63,8 @@ public class Gamma2Test {
 	
 	@Test
 	public void testParsers2() throws ParseError {
-		NonterminalSymbolNode sppf2 = parser.parse(Input.fromString("bbbbb"), grammar, "S");
-		assertTrue(sppf2.deepEquals(getSPPF2()));
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bbbbb"), grammar, "S");
+		assertTrue(sppf.deepEquals(getSPPF2()));
 	}
 	
 	@Test
@@ -86,15 +86,15 @@ public class Gamma2Test {
 		PackedNode node2 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 2, node1);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= S S . S"), 0, 2);
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 1);
-		TerminalSymbolNode node5 = new TerminalSymbolNode(98, 0);
+		TokenSymbolNode node5 = new TokenSymbolNode(2, 0, 1);
 		node4.addChild(node5);
 		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 2);
-		TerminalSymbolNode node7 = new TerminalSymbolNode(98, 1);
+		TokenSymbolNode node7 = new TokenSymbolNode(2, 1, 1);
 		node6.addChild(node7);
 		node3.addChild(node4);
 		node3.addChild(node6);
 		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
-		TerminalSymbolNode node9 = new TerminalSymbolNode(98, 2);
+		TokenSymbolNode node9 = new TokenSymbolNode(2, 2, 1);
 		node8.addChild(node9);
 		node2.addChild(node3);
 		node2.addChild(node8);
@@ -125,15 +125,15 @@ public class Gamma2Test {
 		PackedNode node6 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 2, node5);
 		IntermediateNode node7 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= S S . S"), 0, 2);
 		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 1);
-		TerminalSymbolNode node9 = new TerminalSymbolNode(98, 0);
+		TokenSymbolNode node9 = new TokenSymbolNode(2, 0, 1);
 		node8.addChild(node9);
 		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 2);
-		TerminalSymbolNode node11 = new TerminalSymbolNode(98, 1);
+		TokenSymbolNode node11 = new TokenSymbolNode(2, 1, 1);
 		node10.addChild(node11);
 		node7.addChild(node8);
 		node7.addChild(node10);
 		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
-		TerminalSymbolNode node13 = new TerminalSymbolNode(98, 2);
+		TokenSymbolNode node13 = new TokenSymbolNode(2, 2, 1);
 		node12.addChild(node13);
 		node6.addChild(node7);
 		node6.addChild(node12);
@@ -153,7 +153,7 @@ public class Gamma2Test {
 		node5.addChild(node14);
 		node5.addChild(node16);
 		NonterminalSymbolNode node18 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 3, 4);
-		TerminalSymbolNode node19 = new TerminalSymbolNode(98, 3);
+		TokenSymbolNode node19 = new TokenSymbolNode(2, 3, 1);
 		node18.addChild(node19);
 		node4.addChild(node5);
 		node4.addChild(node18);
@@ -186,27 +186,27 @@ public class Gamma2Test {
 		node3.addChild(node20);
 		node3.addChild(node27);
 		NonterminalSymbolNode node28 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 4, 5);
-		TerminalSymbolNode node29 = new TerminalSymbolNode(98, 4);
+		TokenSymbolNode node29 = new TokenSymbolNode(2, 4, 1);
 		node28.addChild(node29);
 		node2.addChild(node3);
 		node2.addChild(node28);
 		PackedNode node30 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 4, node1);
 		NonterminalSymbolNode node31 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 4);
-		PackedNode node32 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 3, node31);
-		IntermediateNode node33 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= S S . S"), 0, 3);
-		PackedNode node34 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S . S"), 2, node33);
-		node34.addChild(node15);
-		node34.addChild(node12);
-		PackedNode node35 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S . S"), 1, node33);
-		node35.addChild(node8);
-		node35.addChild(node17);
-		node33.addChild(node34);
-		node33.addChild(node35);
-		node32.addChild(node33);
+		PackedNode node32 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 3, node31);
+		node32.addChild(node5);
 		node32.addChild(node18);
-		PackedNode node36 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 3, node31);
-		node36.addChild(node5);
-		node36.addChild(node18);
+		PackedNode node33 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 3, node31);
+		IntermediateNode node34 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= S S . S"), 0, 3);
+		PackedNode node35 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S . S"), 2, node34);
+		node35.addChild(node15);
+		node35.addChild(node12);
+		PackedNode node36 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S . S"), 1, node34);
+		node36.addChild(node8);
+		node36.addChild(node17);
+		node34.addChild(node35);
+		node34.addChild(node36);
+		node33.addChild(node34);
+		node33.addChild(node18);
 		PackedNode node37 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 1, node31);
 		node37.addChild(node8);
 		node37.addChild(node21);
@@ -217,7 +217,7 @@ public class Gamma2Test {
 		node39.addChild(node15);
 		node39.addChild(node26);
 		node31.addChild(node32);
-		node31.addChild(node36);
+		node31.addChild(node33);
 		node31.addChild(node37);
 		node31.addChild(node38);
 		node31.addChild(node39);
@@ -281,11 +281,11 @@ public class Gamma2Test {
 		PackedNode node57 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 2, node1);
 		node57.addChild(node15);
 		node57.addChild(node48);
-		PackedNode node58 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 3, node1);
-		node58.addChild(node33);
+		PackedNode node58 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 3, node1);
+		node58.addChild(node5);
 		node58.addChild(node53);
-		PackedNode node59 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 3, node1);
-		node59.addChild(node5);
+		PackedNode node59 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 3, node1);
+		node59.addChild(node34);
 		node59.addChild(node53);
 		node1.addChild(node2);
 		node1.addChild(node30);

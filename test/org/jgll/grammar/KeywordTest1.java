@@ -1,15 +1,14 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,9 +24,10 @@ public class KeywordTest1 {
 	private Grammar grammar;
 	private GLLParser rdParser;
 
+	Keyword iff = new Keyword("if", new int[] {'i', 'f'});
+
 	@Before
 	public void init() {
-		Keyword iff = new Keyword("if", new int[] {'i', 'f'});
 		Rule r1 = new Rule(new Nonterminal("A"), iff);
 		GrammarBuilder builder = new GrammarBuilder();
 		builder.addRule(r1);
@@ -39,7 +39,7 @@ public class KeywordTest1 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(new Character('i')), grammar.getNonterminalByName("A").getFirstSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(iff)), grammar.getNonterminalByName("A").getFirstSet());
 	}
 	
 	@Test

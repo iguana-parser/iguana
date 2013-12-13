@@ -122,10 +122,18 @@ public class RegularExpression extends AbstractSymbol {
 		else {
 			throw new IllegalStateException("Unsupported regular symbol: " + symbol);			
 		}
-
 	}
 	
-	public static boolean isRegexpNullable(Symbol symbol) {
+	public boolean isNullable() {
+		for(Symbol s : symbols) {
+			if(!isRegexpNullable(s)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private static boolean isRegexpNullable(Symbol symbol) {
 		
 		if(symbol instanceof Terminal) {
 			return false;

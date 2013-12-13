@@ -14,7 +14,7 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,10 +75,10 @@ public class IndirectRecursion1Test {
 	private SPPFNode expectedSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
-		TerminalSymbolNode node3 = new TerminalSymbolNode(98, 0);
+		TokenSymbolNode node3 = new TokenSymbolNode(3, 0, 1);
 		node2.addChild(node3);
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 1, 2);
-		TerminalSymbolNode node5 = new TerminalSymbolNode(99, 1);
+		TokenSymbolNode node5 = new TokenSymbolNode(4, 1, 1);
 		node4.addChild(node5);
 		node1.addChild(node2);
 		node1.addChild(node4);

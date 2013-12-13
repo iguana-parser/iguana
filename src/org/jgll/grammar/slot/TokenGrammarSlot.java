@@ -148,7 +148,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 			return false;
 		}
 		if(symbol instanceof RegularExpression) {
-			RegularExpression.isRegexpNullable(symbol);
+			return ((RegularExpression) symbol).isNullable();
 		}
 		return false;
 	}
