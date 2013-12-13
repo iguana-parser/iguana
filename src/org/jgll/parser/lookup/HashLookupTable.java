@@ -39,11 +39,7 @@ public class HashLookupTable extends AbstractLookupTable {
 	
 	private IguanaSet<PackedNode>[] packedNodes;
 
-	private GSSNode[][] gssNodes;
-	
-	private List<NonPackedNode>[][] poppedElements;
-		
-	private IguanaSet<GSSEdge>[][] gssEdges;
+	private GSSTuple[][] gssTuples;
 	
 	private TokenSymbolNode[][] tokenSymbolNodes;
 	
@@ -64,9 +60,7 @@ public class HashLookupTable extends AbstractLookupTable {
 		nonPackedNodes = new IguanaSet[input.size()];
 		packedNodes = new IguanaSet[input.size()];
 		
-		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.size()];
-		poppedElements = new List[grammar.getNonterminals().size()][input.size()];
-		gssEdges = new IguanaSet[grammar.getNonterminals().size()][input.size()];
+		gssTuples = new GSSTuple[grammar.getNonterminals().size()][input.size()];
 		
 		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.size()];
 		
@@ -81,37 +75,42 @@ public class HashLookupTable extends AbstractLookupTable {
 	@Override
 	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex) {
 		
-		GSSNode gssNode = gssNodes[head.getId()][inputIndex];
+		GSSTuple gssTuple = gssTuples[head.getId()][inputIndex];
 		
-		if(gssNode == null) {
-			gssNode = new GSSNode(head, inputIndex);
-			gssNodes[head.getId()][inputIndex] = gssNode;
+		if(gssTuple == null) {
+			gssTuple = new GSSTuple();
+			gssTuples[head.getId()][inputIndex] = gssTuple;
 		}
 		
+		GSSNode gssNode = gssTuple.getGssNode();
+		if(gssNode == null) {
+			gssNode = new GSSNode(head, inputIndex);
+		}
+		 
 		return gssNode;
 	}
 	
 	@Override
 	public int getGSSNodesCount() {
 		int count = 0;
-		for(int i = 0; i < gssNodes.length; i++) {
-			if(gssNodes[i] != null) {
-				count ++;
-			}
-		}
+//		for(int i = 0; i < gssNodes.length; i++) {
+//			if(gssNodes[i] != null) {
+//				count ++;
+//			}
+//		}
 		return count;
 	}
 
 	@Override
 	public Iterable<GSSNode> getGSSNodes() {
 		List<GSSNode> nodes = new ArrayList<>();
-		for(int i = 0; i < gssNodes.length; i++) {
-			if(gssNodes[i] != null) {
-				for(GSSNode node : gssNodes[i]) {
-					nodes.add(node);
-				}
-			}
-		}
+//		for(int i = 0; i < gssNodes.length; i++) {
+//			if(gssNodes[i] != null) {
+//				for(GSSNode node : gssNodes[i]) {
+//					nodes.add(node);
+//				}
+//			}
+//		}
 		return nodes;
 	}
 	

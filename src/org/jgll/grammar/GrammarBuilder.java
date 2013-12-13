@@ -86,8 +86,6 @@ public class GrammarBuilder implements Serializable {
 	
 	Set<RegularExpression> regularExpressions;
 	
-	Set<Keyword> keywords;
-	
 	Map<Symbol, Integer> tokenIDMap;
 	
 	public GrammarBuilder() {
@@ -105,7 +103,6 @@ public class GrammarBuilder implements Serializable {
 		conditionSlots = new ArrayList<>();
 		newNonterminalsMap = new LinkedHashMap<>();
 		regularExpressions = new HashSet<>();
-		keywords = new HashSet<>();
 		tokenIDMap = new HashMap<>();
 	}
 
@@ -119,6 +116,8 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		nonterminals.addAll(collapsibleNonterminals);
+		
+		removeKeywordDefinitions();
 		
 		initializeGrammarProrperties();
 		
@@ -159,7 +158,6 @@ public class GrammarBuilder implements Serializable {
 			@Override
 			public void visit(TokenGrammarSlot slot) {
 				// TODO Auto-generated method stub
-				
 			}
 			
 		};
@@ -928,7 +926,21 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		nonterminals.retainAll(referedNonterminals);
+
 		return this;
+	}
+	
+	public void removeKeywordDefinitions() {
+		Set<HeadGrammarSlot> keywordHeads = new HashSet<>();
+		
+		for(HeadGrammarSlot head : nonterminals) {
+			if(head.getNonterminal().getName().startsWith("\"") &&
+			   head.getNonterminal().getName().endsWith("\"")) {
+				keywordHeads.add(head);
+			}
+		}
+		
+		nonterminals.removeAll(keywordHeads);
 	}
 	
 	private void removeUnusedNewNonterminals() {

@@ -15,7 +15,6 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Symbol;
@@ -65,8 +64,6 @@ public class Grammar implements Serializable {
 	
 	private Set<RegularExpression> regularExpressions;
 	
-	private Set<Keyword> keywords;
-	
 	private Map<Symbol, Integer> tokenIDMap;
 	
 	public Grammar(GrammarBuilder builder) {
@@ -97,7 +94,6 @@ public class Grammar implements Serializable {
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
 		this.reachabilityGraph = builder.directReachabilityGraph;
 		this.regularExpressions = builder.regularExpressions;
-		this.keywords = builder.keywords;
 		this.tokenIDMap = builder.tokenIDMap;
 		
 		printGrammarStatistics();
@@ -237,10 +233,6 @@ public class Grammar implements Serializable {
 	
 	public Set<RegularExpression> getRegularExpressions() {
 		return regularExpressions;
-	}
-	
-	public Set<Keyword> getKeywords() {
-		return keywords;
 	}
 	
 	@Override
