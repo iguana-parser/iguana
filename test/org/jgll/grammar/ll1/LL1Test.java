@@ -14,7 +14,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -33,23 +33,25 @@ import org.junit.Test;
  * 
  */
 public class LL1Test {
+	
+	private static final int EOF = 1;
 
 	private Grammar grammar;
 	private GLLParser rdParser;
+	
+	Nonterminal S = new Nonterminal("S");
+	Nonterminal A = new Nonterminal("A");
+	Nonterminal B = new Nonterminal("B");
+	Nonterminal D = new Nonterminal("D");
+
+	Terminal a = new Character('a');
+	Terminal b = new Character('b');
+	Terminal d = new Character('d');
 
 	@Before
 	public void init() {
 
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse");
-
-		Nonterminal S = new Nonterminal("S");
-		Nonterminal A = new Nonterminal("A");
-		Nonterminal B = new Nonterminal("B");
-		Nonterminal D = new Nonterminal("D");
-
-		Terminal a = new Character('a');
-		Terminal b = new Character('b');
-		Terminal d = new Character('d');
 
 		Rule rule1 = new Rule(S, list(A, a));
 		builder.addRule(rule1);
@@ -82,13 +84,6 @@ public class LL1Test {
 	}
 	
 	@Test
-	public void testDirectNullable() {
-		assertFalse(grammar.getNonterminalByName("A").isDirectNullable());
-		assertTrue(grammar.getNonterminalByName("B").isDirectNullable());
-		assertTrue(grammar.getNonterminalByName("D").isDirectNullable());
-	}
-	
-	@Test
 	public void ll1Test() {
 		assertTrue(grammar.getNonterminalByName("A").isLL1());
 		assertTrue(grammar.getNonterminalByName("B").isLL1());
@@ -98,16 +93,16 @@ public class LL1Test {
 	@Test
 	public void testPredictSets() {
 		BodyGrammarSlot slot1 = grammar.getGrammarSlotByName("S ::= . A [a]");
-		assertEquals(BitSetUtil.from('d', 'b', 'a'), slot1.getPredictionSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a)), slot1.getPredictionSet());
 		
 		BodyGrammarSlot slot2 = grammar.getGrammarSlotByName("A ::= . B D");
-		assertEquals(BitSetUtil.from('d', 'b', 'a', 0), slot2.getPredictionSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a), EOF), slot2.getPredictionSet());
 		
 		BodyGrammarSlot slot3 = grammar.getGrammarSlotByName("B ::= . [b]");
-		assertEquals(BitSetUtil.from('b'), slot3.getPredictionSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(b)), slot3.getPredictionSet());
 
 		BodyGrammarSlot slot4 = grammar.getGrammarSlotByName("B ::= .");
-		assertEquals(BitSetUtil.from('d', 'a', 0), slot4.getPredictionSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(a), EOF), slot4.getPredictionSet());
 	}
 
 	@Test
@@ -117,14 +112,14 @@ public class LL1Test {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 3);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
-		TerminalSymbolNode node4 = new TerminalSymbolNode(98, 0);
+		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
 		node3.addChild(node4);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 1, 2);
-		TerminalSymbolNode node6 = new TerminalSymbolNode(100, 1);
+		TokenSymbolNode node6 = new TokenSymbolNode(4, 1, 1);
 		node5.addChild(node6);
 		node2.addChild(node3);
 		node2.addChild(node5);
-		TerminalSymbolNode node7 = new TerminalSymbolNode(97, 2);
+		TokenSymbolNode node7 = new TokenSymbolNode(2, 2, 1);
 		node1.addChild(node2);
 		node1.addChild(node7);
 		
@@ -134,14 +129,14 @@ public class LL1Test {
 	@Test
 	public void test2() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a"), grammar, "S");
-		
+
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 1);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 0);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 0, 0);
 		node2.addChild(node3);
 		node2.addChild(node4);
-		TerminalSymbolNode node5 = new TerminalSymbolNode(97, 0);
+		TokenSymbolNode node5 = new TokenSymbolNode(2, 0, 1);
 		node1.addChild(node2);
 		node1.addChild(node5);
 		
@@ -155,12 +150,12 @@ public class LL1Test {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
-		TerminalSymbolNode node4 = new TerminalSymbolNode(98, 0);
+		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
 		node3.addChild(node4);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 1, 1);
 		node2.addChild(node3);
 		node2.addChild(node5);
-		TerminalSymbolNode node6 = new TerminalSymbolNode(97, 1);
+		TokenSymbolNode node6 = new TokenSymbolNode(2, 1, 1);
 		node1.addChild(node2);
 		node1.addChild(node6);
 		
@@ -175,11 +170,11 @@ public class LL1Test {
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
 		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 0, 1);
-		TerminalSymbolNode node5 = new TerminalSymbolNode(100, 0);
+		TokenSymbolNode node5 = new TokenSymbolNode(4, 0, 1);
 		node4.addChild(node5);
 		node2.addChild(node3);
 		node2.addChild(node4);
-		TerminalSymbolNode node6 = new TerminalSymbolNode(97, 1);
+		TokenSymbolNode node6 = new TokenSymbolNode(2, 1, 1);
 		node1.addChild(node2);
 		node1.addChild(node6);
 		

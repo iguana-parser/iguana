@@ -8,6 +8,8 @@ import org.jgll.grammar.condition.Condition;
 public class Epsilon implements Terminal {
 
 	private static final String EPSILON = "epsilon";
+	
+	public static final int TOKEN_ID = 0;
 
 	private static final long serialVersionUID = 1L;
 	

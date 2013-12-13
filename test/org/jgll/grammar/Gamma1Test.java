@@ -16,7 +16,8 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,15 +88,15 @@ public class Gamma1Test {
 	
 	@Test
 	public void testFirstSets() {
-		assertEquals(set(a, b, c, Epsilon.getInstance()), grammar.getNonterminalByName("S").getFirstSet());
-		assertEquals(set(a, c), grammar.getNonterminalByName("A").getFirstSet());
-		assertEquals(set(a, b), grammar.getNonterminalByName("B").getFirstSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(a), grammar.getTokenID(b), grammar.getTokenID(c), Epsilon.TOKEN_ID), grammar.getNonterminalByName("S").getFirstSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(a), grammar.getTokenID(c)), grammar.getNonterminalByName("A").getFirstSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(a), grammar.getTokenID(b)), grammar.getNonterminalByName("B").getFirstSet());
 	}
 
 	@Test
 	public void testFollowSets() {
-		assertEquals(set(a, b, c, d, EOF.getInstance()), grammar.getNonterminalByName("A").getFollowSet());
-		assertEquals(set(d, EOF.getInstance()), grammar.getNonterminalByName("S").getFollowSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(a), grammar.getTokenID(b), grammar.getTokenID(c), grammar.getTokenID(d), EOF.TOKEN_ID), grammar.getNonterminalByName("A").getFollowSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), EOF.TOKEN_ID), grammar.getNonterminalByName("S").getFollowSet());
 	}
 	
 	@Test
@@ -108,36 +109,36 @@ public class Gamma1Test {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 3);
 		PackedNode node2 = new PackedNode(grammar.getGrammarSlotByName("S ::= B S ."), 1, node1);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
-		TerminalSymbolNode node4 = new TerminalSymbolNode(97, 0);
+		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
 		node3.addChild(node4);
 		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 3);
 		IntermediateNode node6 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= A S . [d]"), 1, 2);
 		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 2);
-		TerminalSymbolNode node8 = new TerminalSymbolNode(97, 1);
+		TokenSymbolNode node8 = new TokenSymbolNode(3, 1, 1);
 		node7.addChild(node8);
 		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 2);
 		node6.addChild(node7);
 		node6.addChild(node9);
-		TerminalSymbolNode node11 = new TerminalSymbolNode(100, 2);
+		TokenSymbolNode node10 = new TokenSymbolNode(2, 2, 1);
 		node5.addChild(node6);
-		node5.addChild(node11);
+		node5.addChild(node10);
 		node2.addChild(node3);
 		node2.addChild(node5);
-		PackedNode node12 = new PackedNode(grammar.getGrammarSlotByName("S ::= A S [d] ."), 2, node1);
-		IntermediateNode node13 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= A S . [d]"), 0, 2);
-		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
-		node14.addChild(node4);
-		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 2);
-		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 1, 2);
-		node16.addChild(node8);
-		node15.addChild(node16);
-		node15.addChild(node9);
-		node13.addChild(node14);
-		node13.addChild(node15);
+		PackedNode node11 = new PackedNode(grammar.getGrammarSlotByName("S ::= A S [d] ."), 2, node1);
+		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= A S . [d]"), 0, 2);
+		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		node13.addChild(node4);
+		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 2);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 1, 2);
+		node15.addChild(node8);
+		node14.addChild(node15);
+		node14.addChild(node9);
 		node12.addChild(node13);
-		node12.addChild(node11);
+		node12.addChild(node14);
+		node11.addChild(node12);
+		node11.addChild(node10);
 		node1.addChild(node2);
-		node1.addChild(node12);
+		node1.addChild(node11);		
 		return node1;
 	}
 	

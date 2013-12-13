@@ -3,6 +3,8 @@ package org.jgll.grammar.symbol;
 public class EOF extends Character {
 	
 	private static final long serialVersionUID = 1L;
+	
+	public static final int TOKEN_ID = 1;
 
 	private static EOF instance;
 	

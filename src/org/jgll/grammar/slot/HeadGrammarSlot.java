@@ -40,8 +40,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private boolean nullable;
 	
-	private boolean directNullable;
-	
 	private BitSet firstSet;
 	
 	private BitSet followSet;
@@ -117,10 +115,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 	public boolean isNullable() {
 		return nullable;
-	}
-	
-	public boolean isDirectNullable() {
-		return directNullable;
 	}
 	
 	public void setNullable(boolean nullable) {
