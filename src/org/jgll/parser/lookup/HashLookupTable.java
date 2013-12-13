@@ -2,7 +2,6 @@ package org.jgll.parser.lookup;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
@@ -262,16 +261,11 @@ public class HashLookupTable extends AbstractLookupTable {
 	@Override
 	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
 		
+		GSSTuple gssTuple = gssTuples[source.getGrammarSlot().getId()][source.getInputIndex()];
+		
+		IguanaSet<GSSEdge> set = gssTuple.getGssEdges();
+		
 		GSSEdge edge = new GSSEdge(returnSlot, node, destination);
-		
-		IguanaSet<GSSEdge> set = gssEdges[source.getGrammarSlot().getId()][source.getInputIndex()];
-		
-		if(set == null) {
-			set = factory.newHashSet(GSSEdge.externalHasher);
-			gssEdges[source.getGrammarSlot().getId()][source.getInputIndex()] = set;
-			set.add(edge);
-			return true;
-		}
 		
 		return set.add(edge) == null;
 	}
@@ -283,23 +277,14 @@ public class HashLookupTable extends AbstractLookupTable {
 
 	@Override
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
-		List<NonPackedNode> list = poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
-		if(list == null) {
-			list = new ArrayList<>();
-			poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()] = list;
-		}
-		
-		list.add(sppfNode);
+		GSSTuple gssTuple = gssTuples[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
+		gssTuple.getNonPackedNodes().add(sppfNode);
 	}
 
 	@Override
 	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode) {
-		List<NonPackedNode> list = poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
-		if(list == null) {
-			return Collections.emptyList();
-		}
-		
-		return list;
+		GSSTuple gssTuple = gssTuples[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
+		return gssTuple.getNonPackedNodes();
 	}
 
 	@Override
@@ -309,11 +294,8 @@ public class HashLookupTable extends AbstractLookupTable {
 	
 	@Override
 	public Iterable<GSSEdge> getEdges(GSSNode node) {
-		IguanaSet<GSSEdge> set = gssEdges[node.getGrammarSlot().getId()][node.getInputIndex()];
-		if(set == null) {
-			return Collections.emptySet();
-		}
-		return set;
+		GSSTuple gssTuple = gssTuples[node.getGrammarSlot().getId()][node.getInputIndex()];
+		return gssTuple.getGssEdges();
 	}
 	
 	@Override
