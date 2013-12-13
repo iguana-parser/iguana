@@ -14,8 +14,10 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -77,7 +79,7 @@ public class FilterTest2 {
 	}
 
 	@Test
-	public void testInput() throws ParseError {
+	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a^a^-a+a"), grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
@@ -86,39 +88,39 @@ public class FilterTest2 {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 10);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E2 [+] . E1"), 0, 2);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 0, 1);
-		TerminalSymbolNode node4 = new TerminalSymbolNode(97, 0);
+		TokenSymbolNode node4 = new TokenSymbolNode(5, 0, 1);
 		node3.addChild(node4);
-		TerminalSymbolNode node5 = new TerminalSymbolNode(43, 1);
+		TokenSymbolNode node5 = new TokenSymbolNode(3, 1, 1);
 		node2.addChild(node3);
 		node2.addChild(node5);
 		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 2, 10);
 		IntermediateNode node7 = new IntermediateNode(grammar.getGrammarSlotByName("E1 ::= E3 [^] . E1"), 2, 4);
 		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 3), 2, 3);
-		TerminalSymbolNode node9 = new TerminalSymbolNode(97, 2);
+		TokenSymbolNode node9 = new TokenSymbolNode(5, 2, 1);
 		node8.addChild(node9);
-		TerminalSymbolNode node10 = new TerminalSymbolNode(94, 3);
+		TokenSymbolNode node10 = new TokenSymbolNode(2, 3, 1);
 		node7.addChild(node8);
 		node7.addChild(node10);
 		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 4, 10);
 		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("E1 ::= E3 [^] . E1"), 4, 6);
 		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 3), 4, 5);
-		TerminalSymbolNode node14 = new TerminalSymbolNode(97, 4);
+		TokenSymbolNode node14 = new TokenSymbolNode(5, 4, 1);
 		node13.addChild(node14);
-		TerminalSymbolNode node15 = new TerminalSymbolNode(94, 5);
+		TokenSymbolNode node15 = new TokenSymbolNode(2, 5, 1);
 		node12.addChild(node13);
 		node12.addChild(node15);
 		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 6, 10);
-		TerminalSymbolNode node17 = new TerminalSymbolNode(45, 6);
+		TokenSymbolNode node17 = new TokenSymbolNode(4, 6, 1);
 		NonterminalSymbolNode node18 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 7, 10);
 		IntermediateNode node19 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E2 [+] . E1"), 7, 9);
 		NonterminalSymbolNode node20 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 7, 8);
-		TerminalSymbolNode node21 = new TerminalSymbolNode(97, 7);
+		TokenSymbolNode node21 = new TokenSymbolNode(5, 7, 1);
 		node20.addChild(node21);
-		TerminalSymbolNode node22 = new TerminalSymbolNode(43, 8);
+		TokenSymbolNode node22 = new TokenSymbolNode(3, 8, 1);
 		node19.addChild(node20);
 		node19.addChild(node22);
 		NonterminalSymbolNode node23 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 9, 10);
-		TerminalSymbolNode node24 = new TerminalSymbolNode(97, 9);
+		TokenSymbolNode node24 = new TokenSymbolNode(5, 9, 1);
 		node23.addChild(node24);
 		node18.addChild(node19);
 		node18.addChild(node23);

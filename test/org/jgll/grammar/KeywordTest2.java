@@ -10,6 +10,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,13 +26,14 @@ import org.junit.Test;
 public class KeywordTest2 {
 	
 	private Grammar grammar;
-	private GLLParser rdParser;
+	private GLLParser parser;
+	
+	Nonterminal A = new Nonterminal("A");
+	Nonterminal B = new Nonterminal("B");
+	Keyword iff = new Keyword("if", new int[] {'i', 'f'});
 
 	@Before
 	public void init() {
-		Nonterminal A = new Nonterminal("A");
-		Nonterminal B = new Nonterminal("B");
-		Keyword iff = new Keyword("if", new int[] {'i', 'f'});
 		
 		Rule r1 = new Rule(A, list(iff, B));
 		Rule r2 = new Rule(B, new Character('b'));
@@ -42,12 +44,12 @@ public class KeywordTest2 {
 		builder.addRule(GrammarBuilder.fromKeyword(iff));
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(new Character('i')), grammar.getNonterminalByName("A").getFirstSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(iff)), grammar.getNonterminalByName("A").getFirstSet());
 	}
 	
 	@Test
@@ -57,7 +59,7 @@ public class KeywordTest2 {
 
 	@Test
 	public void test() throws ParseError {
-		rdParser.parse(Input.fromString("ifb"), grammar, "A");
+		parser.parse(Input.fromString("ifb"), grammar, "A");
 	}
 	
 }
