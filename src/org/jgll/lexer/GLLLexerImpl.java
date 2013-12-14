@@ -74,55 +74,41 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	private void tokenize(String input) {
+		for(int i = 0; i < input.length(); i++) {
+			for(Symbol symbol : grammar.getTokens()) {
+				if(symbol instanceof Keyword) {
+					tokenize(i, input, (Keyword) symbol);
+				} 
+				else if (symbol instanceof RegularExpression) {
+					tokenize(i, input, (RegularExpression) symbol);
+				}
+				else if(symbol instanceof Terminal) {
+					tokenize(i, input, (Terminal) symbol);
+				}
+			}
+		}
+		
 		tokens[input.length() - 1][EOF] = 0;
 		tokenIDs[input.length() - 1].set(EOF);
-		tokenize(input, 0);
 	}
 	
-	private void tokenize(String input, int index) {
-		for(Symbol symbol : grammar.getTokens()) {
-			int length;
-			if(symbol instanceof Keyword) {
-				length = tokenize(index, input, (Keyword) symbol);
-			} 
-			else if (symbol instanceof RegularExpression) {
-				length = tokenize(index, input, (RegularExpression) symbol);
-			}
-			// terminal
-			else {
-				length = tokenize(index, input, (Terminal) symbol);
-			} 
-			
-			int nextIndex = index + length;
-			if(length > 0 && nextIndex < input.length()) {
-				tokenize(input, nextIndex);					
-			}
-		}
-	}
-	
-	private int tokenize(int inputIndex, String input, Keyword keyword) {
+	private void tokenize(int inputIndex, String input, Keyword keyword) {
 		if(keyword.match(input, inputIndex)) {
 			createToken(inputIndex, keyword, keyword.size());
-			return keyword.size();
 		}
-		return -1;
 	}
 	
-	private int tokenize(int inputIndex, String input, RegularExpression regex) {
+	private void tokenize(int inputIndex, String input, RegularExpression regex) {
 		int length = regex.getAutomaton().run(input, inputIndex);
 		if(length != -1) {
 			createToken(inputIndex, regex, length);
-			return length;
 		}
-		return -1;
 	}
 	
-	private int tokenize(int inputIndex, String input, Terminal terminal) {
+	private void tokenize(int inputIndex, String input, Terminal terminal) {
 		if(terminal.match(input.charAt(inputIndex))) {
 			createToken(inputIndex, terminal, 1);
-			return 1;
 		}
-		return -1;
 	}
 	
 
