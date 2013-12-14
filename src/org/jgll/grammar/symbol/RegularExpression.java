@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
-import org.jgll.util.CollectionsUtil;
 
 import dk.brics.automaton.RegExp;
 import dk.brics.automaton.RunAutomaton;
@@ -21,7 +20,9 @@ public class RegularExpression extends AbstractSymbol {
 
 	private List<? extends Symbol> symbols;
 	
-	public RegularExpression(List<? extends Symbol> symbols) {
+	private String name;
+	
+	public RegularExpression(String name, List<? extends Symbol> symbols) {
 		// This is probably not the best design. We need a separate interface for
 		// regular expressions and their compositions.
 		// For now, if the regular expression is a simple sequence, the regular
@@ -39,7 +40,7 @@ public class RegularExpression extends AbstractSymbol {
 			addConditions(symbols);
 		}
 		
-		System.out.println(toBricsDFA());
+		this.name = name;
 		this.automaton = new RunAutomaton(new RegExp(toBricsDFA()).toAutomaton());
 	}
 	
@@ -64,12 +65,12 @@ public class RegularExpression extends AbstractSymbol {
 	
 	@Override
 	public String getName() {
-		return CollectionsUtil.listToString(symbols);
+		return name;
 	}
 
 	@Override
 	public RegularExpression addConditions(Collection<Condition> conditions) {
-		RegularExpression regex = new RegularExpression(this.symbols);
+		RegularExpression regex = new RegularExpression(this.name, this.symbols);
 		regex.conditions.addAll(this.conditions);
 		regex.conditions.addAll(conditions);
 		return regex;

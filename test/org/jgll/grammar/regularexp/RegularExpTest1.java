@@ -53,7 +53,7 @@ public class RegularExpTest1 {
 		
 		CharacterClass zero_nine = new CharacterClass(list(new Range('0', '9')));
 		List<AbstractSymbol> symbols = list(new Plus(zero_nine), new Character('.'), new Plus(zero_nine));
-		Rule r6 = new Rule(Float, list(new RegularExpression(symbols)));
+		Rule r6 = new Rule(Float, list(new RegularExpression("test", symbols)));
 		
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 		grammar2 = new GrammarBuilder().addRule(r1).addRule(r6).build();
