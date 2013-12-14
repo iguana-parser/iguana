@@ -66,6 +66,8 @@ public class Grammar implements Serializable {
 	
 	private Map<Symbol, Integer> tokenIDMap;
 	
+	private List<Symbol> tokens;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
@@ -95,6 +97,7 @@ public class Grammar implements Serializable {
 		this.reachabilityGraph = builder.directReachabilityGraph;
 		this.regularExpressions = builder.regularExpressions;
 		this.tokenIDMap = builder.tokenIDMap;
+		this.tokens = builder.tokens;
 		
 		printGrammarStatistics();
 	}
@@ -284,6 +287,10 @@ public class Grammar implements Serializable {
 	
 	public int getTokenID(Symbol s) {
 		return tokenIDMap.get(s);
+	}
+	
+	public Symbol getToken(int tokenID) {
+		return tokens.get(tokenID);
 	}
 	
 	public int getCountTokens() {

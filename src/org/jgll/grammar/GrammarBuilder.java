@@ -33,6 +33,8 @@ import org.jgll.grammar.slotaction.NotPrecedeActions;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.RegularExpression;
@@ -88,6 +90,8 @@ public class GrammarBuilder implements Serializable {
 	
 	Map<Symbol, Integer> tokenIDMap;
 	
+	List<Symbol> tokens;
+	
 	public GrammarBuilder() {
 		this("no-name");
 	}
@@ -104,6 +108,9 @@ public class GrammarBuilder implements Serializable {
 		newNonterminalsMap = new LinkedHashMap<>();
 		regularExpressions = new HashSet<>();
 		tokenIDMap = new HashMap<>();
+		tokens = new ArrayList<>();
+		tokens.add(Epsilon.getInstance());
+		tokens.add(EOF.getInstance());
 	}
 
 	public Grammar build() {
@@ -396,6 +403,7 @@ public class GrammarBuilder implements Serializable {
 		}
 		int id = tokenIDMap.size() + 2;
 		tokenIDMap.put(symbol, id);
+		tokens.add(symbol);
 		return id;
 	}
 	 
