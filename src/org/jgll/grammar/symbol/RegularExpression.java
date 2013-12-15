@@ -221,6 +221,11 @@ public class RegularExpression extends AbstractSymbol {
 			sb.append(symbol.toString());
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return name + " : " + symbols.toString();
+	}
 
 	
 }

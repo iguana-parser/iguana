@@ -182,7 +182,7 @@ public class GrammarBuilder implements Serializable {
 	}
  
 	public GrammarBuilder addRule(Rule rule) {
-
+		
 		if (rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
 		}
@@ -237,7 +237,7 @@ public class GrammarBuilder implements Serializable {
 		if(symbol instanceof RegularExpression ||
 		   symbol instanceof Terminal ||
 		   symbol instanceof Keyword) {
-			return new TokenGrammarSlot(symbolIndex, currentSlot, getTokenID(symbol), symbol, headGrammarSlot);
+			return new TokenGrammarSlot(symbolIndex, currentSlot, symbol, headGrammarSlot);
 		}
 		
 		// Nonterminal
@@ -329,7 +329,7 @@ public class GrammarBuilder implements Serializable {
 			else if(symbol instanceof Terminal ||
 					symbol instanceof RegularExpression ||
 					symbol instanceof Keyword) {
-				currentSlot = new TokenGrammarSlot(index, currentSlot, getTokenID(symbol) , symbol, null);
+				currentSlot = new TokenGrammarSlot(index, currentSlot, symbol, null);
 			}
 			
 			if(index == 0) {
@@ -369,6 +369,7 @@ public class GrammarBuilder implements Serializable {
 		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals));
 		
 		slots = GrammarProperties.setSlotIds(nonterminals, conditionSlots);
+		
 	}
 	
 	public void fixRegularLists() {
@@ -405,6 +406,24 @@ public class GrammarBuilder implements Serializable {
 		tokenIDMap.put(symbol, id);
 		tokens.add(symbol);
 		return id;
+	}
+	
+	/**
+	 * This method should be called after unreachable nonterminals are removed from the grammar.
+	 * 
+	 */
+	private void setTokenIDs() {
+		for(HeadGrammarSlot head : nonterminals) {
+			for(Alternate alt : head.getAlternates()) {
+				BodyGrammarSlot currentSlot = alt.getFirstSlot();
+				
+				while(!(currentSlot instanceof LastGrammarSlot)) {
+					if(currentSlot instanceof TokenGrammarSlot) {
+						
+					}
+				}
+			}
+		}
 	}
 	 
 	/**
@@ -1079,7 +1098,7 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		else if(slot instanceof TokenGrammarSlot) {
-			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous,((TokenGrammarSlot) slot).getTokenID(), slot.getSymbol(), head);
+			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous, slot.getSymbol(), head);
 			copyActions(slot, newSlot);
 			return newSlot;
 		}

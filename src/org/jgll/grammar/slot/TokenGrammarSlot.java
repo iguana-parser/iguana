@@ -27,14 +27,13 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private Symbol symbol;
 	
-	public TokenGrammarSlot(int position, BodyGrammarSlot previous, int tokenID, Symbol symbol, HeadGrammarSlot head) {
+	public TokenGrammarSlot(int position, BodyGrammarSlot previous, Symbol symbol, HeadGrammarSlot head) {
 		super(position, previous, head);
-		this.tokenID = tokenID;
 		this.symbol = symbol;
 	}
 	
 	public TokenGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.tokenID, this.symbol, head);
+		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.symbol, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
@@ -156,6 +155,10 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public Symbol getSymbol() {
 		return symbol;
+	}
+	
+	public void setTokenID(int tokenID) {
+		this.tokenID = tokenID;
 	}
 	
 	public int getTokenID() {
