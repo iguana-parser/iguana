@@ -237,7 +237,7 @@ public class GrammarBuilder implements Serializable {
 		if(symbol instanceof RegularExpression ||
 		   symbol instanceof Terminal ||
 		   symbol instanceof Keyword) {
-			return new TokenGrammarSlot(symbolIndex, currentSlot, symbol, headGrammarSlot);
+			return new TokenGrammarSlot(symbolIndex, currentSlot, symbol, headGrammarSlot, getTokenID(symbol));
 		}
 		
 		// Nonterminal
@@ -329,7 +329,7 @@ public class GrammarBuilder implements Serializable {
 			else if(symbol instanceof Terminal ||
 					symbol instanceof RegularExpression ||
 					symbol instanceof Keyword) {
-				currentSlot = new TokenGrammarSlot(index, currentSlot, symbol, null);
+				currentSlot = new TokenGrammarSlot(index, currentSlot, symbol, null, getTokenID(symbol));
 			}
 			
 			if(index == 0) {
@@ -408,24 +408,6 @@ public class GrammarBuilder implements Serializable {
 		return id;
 	}
 	
-	/**
-	 * This method should be called after unreachable nonterminals are removed from the grammar.
-	 * 
-	 */
-	private void setTokenIDs() {
-		for(HeadGrammarSlot head : nonterminals) {
-			for(Alternate alt : head.getAlternates()) {
-				BodyGrammarSlot currentSlot = alt.getFirstSlot();
-				
-				while(!(currentSlot instanceof LastGrammarSlot)) {
-					if(currentSlot instanceof TokenGrammarSlot) {
-						
-					}
-				}
-			}
-		}
-	}
-	 
 	/**
 	 * Creates the corresponding grammar rule for the given keyword.
 	 * For example, for the keyword "if", a rule If ::= [i][f]
@@ -1098,7 +1080,7 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		else if(slot instanceof TokenGrammarSlot) {
-			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous, slot.getSymbol(), head);
+			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous, slot.getSymbol(), head, getTokenID(slot.getSymbol()));
 			copyActions(slot, newSlot);
 			return newSlot;
 		}
