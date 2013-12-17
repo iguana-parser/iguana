@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +13,7 @@ import dk.brics.automaton.RegExp;
 import dk.brics.automaton.RunAutomaton;
 
 
-public class RegularExpression extends AbstractSymbol {
+public class RegularExpression extends AbstractSymbol implements Token {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -226,6 +227,43 @@ public class RegularExpression extends AbstractSymbol {
 	public String toString() {
 		return name + " : " + symbols.toString();
 	}
-
 	
+	@Override
+	public BitSet asBitSet() {
+		
+		Symbol symbol = symbols.get(0);
+		
+		if(symbol instanceof Plus) {
+			return ((Token) ((Plus) symbol).getSymbol()).asBitSet();
+		} 
+		else if (symbol instanceof Star) {
+			return ((Token) ((Star) symbol).getSymbol()).asBitSet();
+		}
+		else if(symbol instanceof Group) {
+			BitSet set = new BitSet();
+			for(Symbol s : ((Group) symbol).getSymbols()) {
+				set.or(((Token) s).asBitSet());
+				if(!((Token) s).isNullable()) {
+					break;
+				}
+			} 
+			return set;
+		}
+		else if(symbol instanceof Opt) {
+			return ((Token) symbol).asBitSet();
+		}
+		else if(symbol instanceof Alt) {
+			BitSet set = new BitSet();
+			for(Symbol s : ((Alt) symbol).getSymbols()) {
+				set.or(((Token) s).asBitSet());
+			}
+			return set;
+		}
+		else if(symbol instanceof Terminal) {
+			return ((Token) symbol).asBitSet();
+		}
+		else {
+			throw new RuntimeException("Unexpected regular expression type: " + symbol);
+		}
+	}
 }

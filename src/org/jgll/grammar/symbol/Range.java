@@ -98,4 +98,9 @@ public class Range extends AbstractSymbol implements Terminal {
 		return range;
 	}
 
+	@Override
+	public boolean isNullable() {
+		return false;
+	}
+
 }

@@ -1,6 +1,7 @@
 package org.jgll.grammar.symbol;
 
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
@@ -9,7 +10,7 @@ import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
-public class Keyword extends AbstractSymbol {
+public class Keyword extends AbstractSymbol implements Token {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -111,6 +112,18 @@ public class Keyword extends AbstractSymbol {
 		keyword.conditions.addAll(this.conditions);
 		keyword.conditions.addAll(conditions);
 		return keyword;
+	}
+
+	@Override
+	public BitSet asBitSet() {
+		BitSet set = new BitSet();
+		set.set(chars[0]);
+		return set;
+	}
+
+	@Override
+	public boolean isNullable() {
+		return false;
 	}
 		
 }

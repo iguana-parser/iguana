@@ -8,7 +8,7 @@ import java.util.BitSet;
  * @author Ali Afroozeh
  *
  */
-public interface Terminal extends Symbol {
+public interface Terminal extends Symbol, Token {
 	
 	/**
 	 * Checks whether this terminal matches the given character from input
@@ -23,6 +23,7 @@ public interface Terminal extends Symbol {
 	 */
 	public String getMatchCode();
 	
+	@Override
 	public BitSet asBitSet();
 	
 }
