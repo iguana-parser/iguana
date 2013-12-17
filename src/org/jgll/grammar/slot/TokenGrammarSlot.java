@@ -5,8 +5,8 @@ import java.io.Writer;
 
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.RegularExpression;
-import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.grammar.symbol.Token;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -25,16 +25,16 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private int tokenID;
 	
-	private Symbol symbol;
+	private Token token;
 	
-	public TokenGrammarSlot(int position, BodyGrammarSlot previous, Symbol symbol, HeadGrammarSlot head, int tokenID) {
+	public TokenGrammarSlot(int position, BodyGrammarSlot previous, Token symbol, HeadGrammarSlot head, int tokenID) {
 		super(position, previous, head);
-		this.symbol = symbol;
+		this.token = symbol;
 		this.tokenID = tokenID;
 	}
 	
 	public TokenGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.symbol, head, this.tokenID);
+		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.token, head, this.tokenID);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
@@ -144,22 +144,22 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean isNullable() {
-		if(symbol instanceof Terminal || symbol instanceof Keyword) {
+		if(token instanceof Terminal || token instanceof Keyword) {
 			return false;
 		}
-		if(symbol instanceof RegularExpression) {
-			return ((RegularExpression) symbol).isNullable();
+		if(token instanceof RegularExpression) {
+			return ((RegularExpression) token).isNullable();
 		}
 		return false;
 	}
 
-	@Override
-	public Symbol getSymbol() {
-		return symbol;
-	}
 	
 	public int getTokenID() {
 		return tokenID;
+	}
+	
+	public Token getToken() {
+		return token;
 	}
 
 	@Override

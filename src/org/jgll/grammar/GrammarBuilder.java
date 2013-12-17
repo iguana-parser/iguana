@@ -41,6 +41,7 @@ import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.grammar.symbol.Token;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.ExternalEqual;
@@ -88,9 +89,9 @@ public class GrammarBuilder implements Serializable {
 	
 	Set<RegularExpression> regularExpressions;
 	
-	Map<Symbol, Integer> tokenIDMap;
+	Map<Token, Integer> tokenIDMap;
 	
-	List<Symbol> tokens;
+	List<Token> tokens;
 	
 	public GrammarBuilder() {
 		this("no-name");
@@ -395,16 +396,16 @@ public class GrammarBuilder implements Serializable {
 		return null;
 	}
 	
-	private int getTokenID(Symbol symbol) {
+	private int getTokenID(Token token) {
 		// The first token is epsilon and the second one is the EOF, therefore, token
 		// indices start from 2.
 		
-		if(tokenIDMap.containsKey(symbol)) {
-			return tokenIDMap.get(symbol);
+		if(tokenIDMap.containsKey(token)) {
+			return tokenIDMap.get(token);
 		}
 		int id = tokenIDMap.size() + 2;
-		tokenIDMap.put(symbol, id);
-		tokens.add(symbol);
+		tokenIDMap.put(token, id);
+		tokens.add(token);
 		return id;
 	}
 	

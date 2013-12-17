@@ -18,6 +18,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Token;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -64,9 +65,9 @@ public class Grammar implements Serializable {
 	
 	private Set<RegularExpression> regularExpressions;
 	
-	private Map<Symbol, Integer> tokenIDMap;
+	private Map<Token, Integer> tokenIDMap;
 	
-	private List<Symbol> tokens;
+	private List<Token> tokens;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -200,7 +201,7 @@ public class Grammar implements Serializable {
 	
 	private String getSlotName(BodyGrammarSlot slot) {
 		if(slot instanceof TokenGrammarSlot) {
-			return slot.getSymbol().getName();
+			return ((TokenGrammarSlot) slot).getToken().getName();
 		}
 		else if (slot instanceof NonterminalGrammarSlot) {
 			return getNonterminalName(((NonterminalGrammarSlot) slot).getNonterminal());
@@ -289,7 +290,7 @@ public class Grammar implements Serializable {
 		return tokenIDMap.get(s);
 	}
 	
-	public Symbol getToken(int tokenID) {
+	public Token getToken(int tokenID) {
 		return tokens.get(tokenID);
 	}
 	
@@ -297,7 +298,7 @@ public class Grammar implements Serializable {
 		return tokenIDMap.size() + 2;
 	}
 	
-	public Iterable<Symbol> getTokens() {
+	public Iterable<Token> getTokens() {
 		return tokenIDMap.keySet();
 	}
 	

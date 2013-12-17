@@ -146,11 +146,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return head;
 	}
 	
-	/**
-	 * Returns the grammar symbol after this slot 
-	 */
-	public abstract Symbol getSymbol();
-	
 	public abstract boolean isNullable();
 	
 	public abstract boolean isNameEqual(BodyGrammarSlot slot);

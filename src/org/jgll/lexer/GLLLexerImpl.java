@@ -49,9 +49,9 @@ public class GLLLexerImpl implements GLLLexer {
 			tokensMap.put(input.charAt(i), new HashSet<Symbol>());
 		}
 		
-		for(int k = 0; k < tokens.length; k++) {
-			for(int j = 0; j < tokens[k].length; j++) {
-				tokens[k][j] = -1;
+		for(int i = 0; i < tokens.length; i++) {
+			for(int j = 0; j < tokens[i].length; j++) {
+				tokens[i][j] = -1;
 			}
 		}
 		
@@ -59,22 +59,20 @@ public class GLLLexerImpl implements GLLLexer {
 			tokenIDs[i] = new BitSet();
 		}
 		
-		for(int t = 0; t < input.size(); t++) {
-			for(Symbol symbol : grammar.getTokens()) {
-				if(symbol instanceof Keyword) {
-					if(input.charAt(t) == ((Keyword) symbol).getChars()[0]) {
-						addInputIndexTokenEntry(input.charAt(t), symbol);
-					}
-				} 
-				else if (symbol instanceof RegularExpression) {
-					if(((RegularExpression) symbol).asBitSet().get(input.charAt(t))) {
-						addInputIndexTokenEntry(input.charAt(t), symbol);
-					}
+		for(Symbol symbol : grammar.getTokens()) {
+			if(symbol instanceof Keyword) {
+				if(input.charAt(i) == ((Keyword) symbol).getChars()[0]) {
+					addInputIndexTokenEntry(input.charAt(i), symbol);
 				}
-				else if(symbol instanceof Terminal) {
-					if(((Terminal) symbol).asBitSet().get(input.charAt(t))) {
-						addInputIndexTokenEntry(input.charAt(t), symbol);
-					}
+			} 
+			else if (symbol instanceof RegularExpression) {
+				if(((RegularExpression) symbol).asBitSet().get(input.charAt(i))) {
+					addInputIndexTokenEntry(input.charAt(i), symbol);
+				}
+			}
+			else if(symbol instanceof Terminal) {
+				if(((Terminal) symbol).asBitSet().get(input.charAt(i))) {
+					addInputIndexTokenEntry(input.charAt(i), symbol);
 				}
 			}
 		}
