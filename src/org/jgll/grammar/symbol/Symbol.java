@@ -17,7 +17,6 @@ public interface Symbol extends Serializable {
 	
 	public Symbol addCondition(Condition condition);
 	
-	
 	/**
 	 * Creates a copy of the current symbol and adds the given conditions
 	 * to it. 

@@ -121,9 +121,4 @@ public class Keyword extends AbstractSymbol implements Token {
 		return set;
 	}
 
-	@Override
-	public boolean isNullable() {
-		return false;
-	}
-		
 }

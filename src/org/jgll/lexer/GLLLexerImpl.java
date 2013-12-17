@@ -45,6 +45,10 @@ public class GLLLexerImpl implements GLLLexer {
 		this.tokens = new int[input.size()][grammar.getCountTokens()];
 		this.tokensMap = new HashMap<>();
 		
+		for(int i = 0; i < input.size(); i++) {
+			tokensMap.put(input.charAt(i), new HashSet<Symbol>());
+		}
+		
 		for(int k = 0; k < tokens.length; k++) {
 			for(int j = 0; j < tokens[k].length; j++) {
 				tokens[k][j] = -1;
@@ -80,14 +84,8 @@ public class GLLLexerImpl implements GLLLexer {
 
 	private void addInputIndexTokenEntry(int c, Symbol symbol) {
 		Set<Symbol> set = tokensMap.get(c);
-		if(set == null) {
-			set = new HashSet<>();
-			tokensMap.put(c, set);
-		}
 		set.add(symbol);
 	}
-	
-	
 	
 	@Override
 	public BitSet tokenIDsAt(int index) {
@@ -118,7 +116,13 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	private void tokenize(String input) {
 		for(int i = 0; i < input.length(); i++) {
-			for(Symbol symbol : grammar.getTokens()) {
+			Set<Symbol> set = tokensMap.get((int)input.charAt(i));
+			
+			if(set == null) {
+				continue;
+			}
+			
+			for(Symbol symbol : set) {
 				if(symbol instanceof Keyword) {
 					tokenize(i, input, (Keyword) symbol);
 				} 
@@ -153,7 +157,6 @@ public class GLLLexerImpl implements GLLLexer {
 			createToken(inputIndex, terminal, 1);
 		}
 	}
-	
 
 	private void createToken(int inputIndex, Symbol symbol, int length) {
 		Integer tokenID = grammar.getTokenID(symbol);

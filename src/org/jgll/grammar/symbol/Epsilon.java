@@ -64,9 +64,4 @@ public class Epsilon implements Terminal {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public boolean isNullable() {
-		return true;
-	}
-
 }

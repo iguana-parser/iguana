@@ -140,6 +140,9 @@ public class RegularExpression extends AbstractSymbol implements Token {
 		if(symbol instanceof Terminal) {
 			return false;
 		}
+		if(symbol instanceof Keyword) {
+			return false;
+		}
 		else if(symbol instanceof Plus) {
 			return false;
 		}
@@ -230,40 +233,63 @@ public class RegularExpression extends AbstractSymbol implements Token {
 	
 	@Override
 	public BitSet asBitSet() {
-		
-		Symbol symbol = symbols.get(0);
-		
+		return get(symbols.get(0));
+	}
+	
+	private BitSet get(Symbol symbol) {
 		if(symbol instanceof Plus) {
-			return ((Token) ((Plus) symbol).getSymbol()).asBitSet();
+			return get((Plus) symbol);
 		} 
 		else if (symbol instanceof Star) {
-			return ((Token) ((Star) symbol).getSymbol()).asBitSet();
+			return get((Star) symbol);
 		}
 		else if(symbol instanceof Group) {
-			BitSet set = new BitSet();
-			for(Symbol s : ((Group) symbol).getSymbols()) {
-				set.or(((Token) s).asBitSet());
-				if(!((Token) s).isNullable()) {
-					break;
-				}
-			} 
-			return set;
+			return get((Group) symbol);
 		}
 		else if(symbol instanceof Opt) {
-			return ((Token) symbol).asBitSet();
+			return get((Opt) symbol);
 		}
 		else if(symbol instanceof Alt) {
-			BitSet set = new BitSet();
-			for(Symbol s : ((Alt) symbol).getSymbols()) {
-				set.or(((Token) s).asBitSet());
-			}
-			return set;
+			return get((Alt) symbol);
 		}
-		else if(symbol instanceof Terminal) {
+		else if(symbol instanceof Token) {
 			return ((Token) symbol).asBitSet();
 		}
 		else {
 			throw new RuntimeException("Unexpected regular expression type: " + symbol);
 		}
 	}
+	
+	private BitSet get(Plus plus) {
+		return get(plus.getSymbol());
+	}
+	
+	private BitSet get(Star star) {
+		return get(star.getSymbol());
+	}
+
+	private BitSet get(Opt opt) {
+		return get(opt.getSymbol());
+	}
+	
+	private BitSet get(Alt alt) {
+		BitSet set = new BitSet();
+		for(Symbol s : alt.getSymbols()) {
+			set.or(get(s));
+		}
+		return set;
+	}
+	
+	private BitSet get(Group group) {
+		BitSet set = new BitSet();
+		for(Symbol s : group.getSymbols()) {
+			set.or(get(s));
+			
+			if(!isRegexpNullable(s)) {
+				break;
+			}
+		}
+		return set;
+	}
+
 }

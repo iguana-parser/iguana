@@ -77,9 +77,4 @@ public class Character extends AbstractSymbol implements Terminal {
 		return terminal;
 	}
 
-	@Override
-	public boolean isNullable() {
-		return false;
-	}
-
 }
