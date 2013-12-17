@@ -2,7 +2,6 @@ package org.jgll.parser.lookup;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
@@ -39,11 +38,7 @@ public class MixArrayHashLookupTable extends AbstractLookupTable {
 	
 	private IguanaSet<PackedNode>[] packedNodes;
 
-	private GSSNode[][] gssNodes;
-	
-	private List<NonPackedNode>[][] poppedElements;
-		
-	private IguanaSet<GSSEdge>[][] gssEdges;
+	private GSSTuple[][] gssTuples;
 	
 	private TokenSymbolNode[][] tokenSymbolNodes;
 	
@@ -64,9 +59,7 @@ public class MixArrayHashLookupTable extends AbstractLookupTable {
 		nonPackedNodes = new IguanaSet[input.size()];
 		packedNodes = new IguanaSet[input.size()];
 		
-		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.size()];
-		poppedElements = new List[grammar.getNonterminals().size()][input.size()];
-		gssEdges = new IguanaSet[grammar.getNonterminals().size()][input.size()];
+		gssTuples = new GSSTuple[grammar.getNonterminals().size()][input.size()];
 		
 		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.size()];
 		
@@ -81,37 +74,42 @@ public class MixArrayHashLookupTable extends AbstractLookupTable {
 	@Override
 	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex) {
 		
-		GSSNode gssNode = gssNodes[head.getId()][inputIndex];
+		GSSTuple gssTuple = gssTuples[head.getId()][inputIndex];
 		
-		if(gssNode == null) {
-			gssNode = new GSSNode(head, inputIndex);
-			gssNodes[head.getId()][inputIndex] = gssNode;
+		if(gssTuple == null) {
+			gssTuple = new GSSTuple();
+			gssTuples[head.getId()][inputIndex] = gssTuple;
 		}
 		
+		GSSNode gssNode = gssTuple.getGssNode();
+		if(gssNode == null) {
+			gssNode = new GSSNode(head, inputIndex);
+		}
+		 
 		return gssNode;
 	}
 	
 	@Override
 	public int getGSSNodesCount() {
 		int count = 0;
-		for(int i = 0; i < gssNodes.length; i++) {
-			if(gssNodes[i] != null) {
-				count ++;
-			}
-		}
+//		for(int i = 0; i < gssNodes.length; i++) {
+//			if(gssNodes[i] != null) {
+//				count ++;
+//			}
+//		}
 		return count;
 	}
 
 	@Override
 	public Iterable<GSSNode> getGSSNodes() {
 		List<GSSNode> nodes = new ArrayList<>();
-		for(int i = 0; i < gssNodes.length; i++) {
-			if(gssNodes[i] != null) {
-				for(GSSNode node : gssNodes[i]) {
-					nodes.add(node);
-				}
-			}
-		}
+//		for(int i = 0; i < gssNodes.length; i++) {
+//			if(gssNodes[i] != null) {
+//				for(GSSNode node : gssNodes[i]) {
+//					nodes.add(node);
+//				}
+//			}
+//		}
 		return nodes;
 	}
 	
@@ -263,16 +261,11 @@ public class MixArrayHashLookupTable extends AbstractLookupTable {
 	@Override
 	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
 		
+		GSSTuple gssTuple = gssTuples[source.getGrammarSlot().getId()][source.getInputIndex()];
+		
+		IguanaSet<GSSEdge> set = gssTuple.getGssEdges();
+		
 		GSSEdge edge = new GSSEdge(returnSlot, node, destination);
-		
-		IguanaSet<GSSEdge> set = gssEdges[source.getGrammarSlot().getId()][source.getInputIndex()];
-		
-		if(set == null) {
-			set = factory.newHashSet(GSSEdge.externalHasher);
-			gssEdges[source.getGrammarSlot().getId()][source.getInputIndex()] = set;
-			set.add(edge);
-			return true;
-		}
 		
 		return set.add(edge) == null;
 	}
@@ -284,23 +277,14 @@ public class MixArrayHashLookupTable extends AbstractLookupTable {
 
 	@Override
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
-		List<NonPackedNode> list = poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
-		if(list == null) {
-			list = new ArrayList<>();
-			poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()] = list;
-		}
-		
-		list.add(sppfNode);
+		GSSTuple gssTuple = gssTuples[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
+		gssTuple.getNonPackedNodes().add(sppfNode);
 	}
 
 	@Override
 	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode) {
-		List<NonPackedNode> list = poppedElements[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
-		if(list == null) {
-			return Collections.emptyList();
-		}
-		
-		return list;
+		GSSTuple gssTuple = gssTuples[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
+		return gssTuple.getNonPackedNodes();
 	}
 
 	@Override
@@ -310,11 +294,8 @@ public class MixArrayHashLookupTable extends AbstractLookupTable {
 	
 	@Override
 	public Iterable<GSSEdge> getEdges(GSSNode node) {
-		IguanaSet<GSSEdge> set = gssEdges[node.getGrammarSlot().getId()][node.getInputIndex()];
-		if(set == null) {
-			return Collections.emptySet();
-		}
-		return set;
+		GSSTuple gssTuple = gssTuples[node.getGrammarSlot().getId()][node.getInputIndex()];
+		return gssTuple.getGssEdges();
 	}
 	
 	@Override
