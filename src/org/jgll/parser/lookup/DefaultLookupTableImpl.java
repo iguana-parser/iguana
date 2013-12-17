@@ -22,9 +22,19 @@ import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class MixArrayHashLookupTable extends AbstractLookupTable {
+/**
+ * 
+ * This implementation is optimized for input files with an average number
+ * of line of codes (less than 3000).
+ * 
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
+public class DefaultLookupTableImpl extends AbstractLookupTable {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(MixArrayHashLookupTable.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(DefaultLookupTableImpl.class);
 	
 	private HashTableFactory factory; 
 	
@@ -38,13 +48,16 @@ public class MixArrayHashLookupTable extends AbstractLookupTable {
 	
 	private IguanaSet<PackedNode>[] packedNodes;
 
+	/**
+	 *  Elements indexed by GSS nodes (Nonterminal index and input index)
+	 */
 	private GSSTuple[][] gssTuples;
 	
 	private TokenSymbolNode[][] tokenSymbolNodes;
 	
 	private int nonPackedNodesCount;
 	
-	public MixArrayHashLookupTable(Grammar grammar) {
+	public DefaultLookupTableImpl(Grammar grammar) {
 		super(grammar);
 	}
 	
