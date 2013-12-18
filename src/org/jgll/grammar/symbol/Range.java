@@ -20,7 +20,7 @@ public class Range extends AbstractSymbol implements Terminal {
 	
 	private final int end;
 	
-	private BitSet testSet;
+	private final BitSet testSet;
 
 	public Range(int start, int end) {
 		

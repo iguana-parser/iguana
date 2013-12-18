@@ -15,9 +15,13 @@ public class Character extends AbstractSymbol implements Terminal {
 	private static final long serialVersionUID = 1L;
 
 	private final int c;
+	
+	private final BitSet bitSet;
 
 	public Character(int c) {
 		this.c = c;
+		this.bitSet = new BitSet();
+		bitSet.set(c);
 	}
 	
 	public int get() {
@@ -64,9 +68,7 @@ public class Character extends AbstractSymbol implements Terminal {
 
 	@Override
 	public BitSet asBitSet() {
-		BitSet set = new BitSet();
-		set.set(c);
-		return set;
+		return bitSet;
 	}
 
 	@Override

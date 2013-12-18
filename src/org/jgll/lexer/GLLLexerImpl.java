@@ -4,10 +4,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.Grammar;
@@ -31,22 +29,13 @@ public class GLLLexerImpl implements GLLLexer {
 	private Input input;
 
 	private Grammar grammar;
-	
-	/**
-	 * 
-	 * A map from the current input value to the set of tokens that 
-	 * start with the input value.
-	 * 
-	 */
-	private Map<Integer, Set<Token>> tokensMap;
-	
+		
 	public GLLLexerImpl(Input input, Grammar grammar) {
 		this.input = input;
 		this.grammar = grammar;
 		
 		this.tokenIDs = new BitSet[input.size()];
 		this.tokens = new int[input.size()][grammar.getCountTokens()];
-		this.tokensMap = new HashMap<>();
 				
 		for(int i = 0; i < tokens.length; i++) {
 			for(int j = 0; j < tokens[i].length; j++) {
@@ -57,19 +46,7 @@ public class GLLLexerImpl implements GLLLexer {
 		for(int i = 0; i < tokenIDs.length; i++) {
 			tokenIDs[i] = new BitSet();
 		}
-		
-		for(Token token : grammar.getTokens()) {
-			BitSet bitSet = token.asBitSet();
-			 for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-				Set<Token> set = tokensMap.get(i);
-				if(set == null) {
-					set = new HashSet<>();
-					tokensMap.put(i, set);
-				}
-				set.add(token);
-			 }
-		}
-		
+				
 		tokenize(input.toString());
 	}
 
@@ -112,20 +89,20 @@ public class GLLLexerImpl implements GLLLexer {
 			
 			int i = jobs.poll();
 			
-			Set<Token> set = null;
-			if(i < input.length()) {
-				set = tokensMap.get((int)input.charAt(i));
-			}
-			
-			if(set == null) {
+			if(i >= input.length()) {
 				continue;
 			}
 			
 			// TODO: add a createToken method on the Token interface
-			for(Symbol symbol : set) {
+			for(Token token : grammar.getTokens()) {
 				int length;
-				if(symbol instanceof Keyword) {
-					length = tokenize(i, input, (Keyword) symbol);
+				
+				if(!token.asBitSet().get(input.charAt(i))) {
+					continue;
+				}
+				
+				if(token instanceof Keyword) {
+					length = tokenize(i, input, (Keyword) token);
 					if(length > 0) {
 						int next = i + length;
 						if(!jobsSet.contains(next)) {
@@ -134,8 +111,8 @@ public class GLLLexerImpl implements GLLLexer {
 						}
 					}
 				} 
-				else if (symbol instanceof RegularExpression) {
-					length = tokenize(i, input, (RegularExpression) symbol);
+				else if (token instanceof RegularExpression) {
+					length = tokenize(i, input, (RegularExpression) token);
 					if(length > 0) {
 						int next = i + length;
 						if(!jobsSet.contains(next)) {
@@ -144,8 +121,8 @@ public class GLLLexerImpl implements GLLLexer {
 						}
 					}
 				}
-				else if(symbol instanceof Terminal) {
-					length = tokenize(i, input, (Terminal) symbol);
+				else if(token instanceof Terminal) {
+					length = tokenize(i, input, (Terminal) token);
 					if(length > 0) {
 						int next = i + length;
 						if(!jobsSet.contains(next)) {

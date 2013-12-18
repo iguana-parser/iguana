@@ -17,11 +17,13 @@ public class RegularExpression extends AbstractSymbol implements Token {
 
 	private static final long serialVersionUID = 1L;
 	
-	private RunAutomaton automaton;
+	private final RunAutomaton automaton;
 
-	private List<? extends Symbol> symbols;
+	private final List<? extends Symbol> symbols;
 	
-	private String name;
+	private final String name;
+	
+	private final BitSet bitSet;
 	
 	public RegularExpression(String name, List<? extends Symbol> symbols) {
 		// This is probably not the best design. We need a separate interface for
@@ -43,6 +45,7 @@ public class RegularExpression extends AbstractSymbol implements Token {
 		
 		this.name = name;
 		this.automaton = new RunAutomaton(new RegExp(toBricsDFA()).toAutomaton());
+		this.bitSet = get(symbols.get(0));
 	}
 	
 	private void addConditions(List<? extends Symbol> symbols) {
@@ -233,7 +236,7 @@ public class RegularExpression extends AbstractSymbol implements Token {
 	
 	@Override
 	public BitSet asBitSet() {
-		return get(symbols.get(0));
+		return bitSet;
 	}
 	
 	private BitSet get(Symbol symbol) {

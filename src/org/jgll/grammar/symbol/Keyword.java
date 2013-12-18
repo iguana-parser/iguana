@@ -20,14 +20,17 @@ public class Keyword extends AbstractSymbol implements Token {
 	
 	private final String name;
 	
+	private final BitSet bitSet;
+	
 	public Keyword(String name, String s) {
-		this.chars = Input.toIntArray(s);
-		this.name = name;
+		this(name, Input.toIntArray(s));
 	}
 	
 	public Keyword(String name, int[] chars) {
 		this.chars = chars;
 		this.name = name;
+		this.bitSet = new BitSet();
+		bitSet.set(chars[0]);
 	}
 	
 	public int[] getChars() {
@@ -51,7 +54,6 @@ public class Keyword extends AbstractSymbol implements Token {
 	public String toString() {
 		return getName();
 	}
-	
 
 	/**
 	 * 
@@ -120,5 +122,5 @@ public class Keyword extends AbstractSymbol implements Token {
 		set.set(chars[0]);
 		return set;
 	}
-
+	
 }
