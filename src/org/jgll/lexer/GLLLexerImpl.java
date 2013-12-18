@@ -1,7 +1,9 @@
 package org.jgll.lexer;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -98,8 +100,15 @@ public class GLLLexerImpl implements GLLLexer {
 		return list;
 	}
 	
+	private Deque<Integer> jobs = new ArrayDeque<>();
+	
 	private void tokenize(String input) {
-		for(int i = 0; i < input.length(); i++) {
+		
+		jobs.add(0);
+		
+		while(!jobs.isEmpty()) {
+			
+			int i = jobs.poll();
 			Set<Token> set = tokensMap.get((int)input.charAt(i));
 			
 			if(set == null) {
@@ -108,39 +117,55 @@ public class GLLLexerImpl implements GLLLexer {
 			
 			// TODO: add a createToken method on the Token interface
 			for(Symbol symbol : set) {
+				int length;
 				if(symbol instanceof Keyword) {
-					tokenize(i, input, (Keyword) symbol);
+					length = tokenize(i, input, (Keyword) symbol);
+					if(length > 0) {
+						jobs.add(i + length);
+					}
 				} 
 				else if (symbol instanceof RegularExpression) {
-					tokenize(i, input, (RegularExpression) symbol);
+					length = tokenize(i, input, (RegularExpression) symbol);
+					if(length > 0) {
+						jobs.add(i + length);
+					}
 				}
 				else if(symbol instanceof Terminal) {
-					tokenize(i, input, (Terminal) symbol);
+					length = tokenize(i, input, (Terminal) symbol);
+					if(length > 0) {
+						jobs.add(i + length);
+					}
 				}
 			}
 		}
+		
 		
 		tokens[input.length() - 1][EOF.TOKEN_ID] = 0;
 		tokenIDs[input.length() - 1].set(EOF.TOKEN_ID);
 	}
 	
-	private void tokenize(int inputIndex, String input, Keyword keyword) {
+	private int tokenize(int inputIndex, String input, Keyword keyword) {
 		if(keyword.match(input, inputIndex)) {
 			createToken(inputIndex, keyword, keyword.size());
+			return keyword.size();
 		}
+		return -1;
 	}
 	
-	private void tokenize(int inputIndex, String input, RegularExpression regex) {
+	private int tokenize(int inputIndex, String input, RegularExpression regex) {
 		int length = regex.getAutomaton().run(input, inputIndex);
 		if(length != -1) {
 			createToken(inputIndex, regex, length);
 		}
+		return length;
 	}
 	
-	private void tokenize(int inputIndex, String input, Terminal terminal) {
+	private int tokenize(int inputIndex, String input, Terminal terminal) {
 		if(terminal.match(input.charAt(inputIndex))) {
 			createToken(inputIndex, terminal, 1);
+			return 1;
 		}
+		return -1;
 	}
 
 	private void createToken(int inputIndex, Symbol symbol, int length) {
