@@ -14,6 +14,7 @@ import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.grammar.symbol.Token;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
@@ -35,7 +36,7 @@ public class GLLLexerImpl implements GLLLexer {
 	 * start with the input value.
 	 * 
 	 */
-	private Map<Integer, Set<Symbol>> tokensMap;
+	private Map<Integer, Set<Token>> tokensMap;
 	
 	public GLLLexerImpl(Input input, Grammar grammar) {
 		this.input = input;
@@ -44,11 +45,7 @@ public class GLLLexerImpl implements GLLLexer {
 		this.tokenIDs = new BitSet[input.size()];
 		this.tokens = new int[input.size()][grammar.getCountTokens()];
 		this.tokensMap = new HashMap<>();
-		
-		for(int i = 0; i < input.size(); i++) {
-			tokensMap.put(input.charAt(i), new HashSet<Symbol>());
-		}
-		
+				
 		for(int i = 0; i < tokens.length; i++) {
 			for(int j = 0; j < tokens[i].length; j++) {
 				tokens[i][j] = -1;
@@ -59,32 +56,21 @@ public class GLLLexerImpl implements GLLLexer {
 			tokenIDs[i] = new BitSet();
 		}
 		
-		for(Symbol symbol : grammar.getTokens()) {
-			if(symbol instanceof Keyword) {
-				if(input.charAt(i) == ((Keyword) symbol).getChars()[0]) {
-					addInputIndexTokenEntry(input.charAt(i), symbol);
+		for(Token token : grammar.getTokens()) {
+			BitSet bitSet = token.asBitSet();
+			 for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
+				Set<Token> set = tokensMap.get(i);
+				if(set == null) {
+					set = new HashSet<>();
+					tokensMap.put(i, set);
 				}
-			} 
-			else if (symbol instanceof RegularExpression) {
-				if(((RegularExpression) symbol).asBitSet().get(input.charAt(i))) {
-					addInputIndexTokenEntry(input.charAt(i), symbol);
-				}
-			}
-			else if(symbol instanceof Terminal) {
-				if(((Terminal) symbol).asBitSet().get(input.charAt(i))) {
-					addInputIndexTokenEntry(input.charAt(i), symbol);
-				}
-			}
+				set.add(token);
+			 }
 		}
 		
 		tokenize(input.toString());
 	}
 
-	private void addInputIndexTokenEntry(int c, Symbol symbol) {
-		Set<Symbol> set = tokensMap.get(c);
-		set.add(symbol);
-	}
-	
 	@Override
 	public BitSet tokenIDsAt(int index) {
 		return tokenIDs[index];
@@ -114,12 +100,13 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	private void tokenize(String input) {
 		for(int i = 0; i < input.length(); i++) {
-			Set<Symbol> set = tokensMap.get((int)input.charAt(i));
+			Set<Token> set = tokensMap.get((int)input.charAt(i));
 			
 			if(set == null) {
 				continue;
 			}
 			
+			// TODO: add a createToken method on the Token interface
 			for(Symbol symbol : set) {
 				if(symbol instanceof Keyword) {
 					tokenize(i, input, (Keyword) symbol);

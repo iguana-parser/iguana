@@ -58,6 +58,8 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		this.popActions = new ArrayList<>();
 	}
 	
+	public abstract Symbol getSymbol();
+	
 	public void addPopAction(SlotAction<Boolean> popAction) {
 		popActions.add(popAction);
 	}

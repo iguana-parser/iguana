@@ -40,7 +40,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.grammar.symbol.Token;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
@@ -235,10 +234,9 @@ public class GrammarBuilder implements Serializable {
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
 		
-		if(symbol instanceof RegularExpression ||
-		   symbol instanceof Terminal ||
-		   symbol instanceof Keyword) {
-			return new TokenGrammarSlot(symbolIndex, currentSlot, symbol, headGrammarSlot, getTokenID(symbol));
+		if(symbol instanceof Token) {
+			Token token = (Token) symbol;
+			return new TokenGrammarSlot(symbolIndex, currentSlot, token, headGrammarSlot, getTokenID(token));
 		}
 		
 		// Nonterminal
@@ -327,10 +325,9 @@ public class GrammarBuilder implements Serializable {
 				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 				currentSlot = new NonterminalGrammarSlot(index, currentSlot, nonterminal, null);
 			} 
-			else if(symbol instanceof Terminal ||
-					symbol instanceof RegularExpression ||
-					symbol instanceof Keyword) {
-				currentSlot = new TokenGrammarSlot(index, currentSlot, symbol, null, getTokenID(symbol));
+			else if(symbol instanceof Token) {
+				Token token = (Token) symbol;
+				currentSlot = new TokenGrammarSlot(index, currentSlot, token, null, getTokenID(token));
 			}
 			
 			if(index == 0) {
@@ -1081,7 +1078,8 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		else if(slot instanceof TokenGrammarSlot) {
-			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous, slot.getSymbol(), head, getTokenID(slot.getSymbol()));
+			Token token = ((TokenGrammarSlot)slot).getSymbol();
+			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous, token, head, getTokenID(token));
 			copyActions(slot, newSlot);
 			return newSlot;
 		}
