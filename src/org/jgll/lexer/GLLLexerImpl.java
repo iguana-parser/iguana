@@ -100,16 +100,22 @@ public class GLLLexerImpl implements GLLLexer {
 		return list;
 	}
 	
-	private Deque<Integer> jobs = new ArrayDeque<>();
 	
 	private void tokenize(String input) {
 		
+		Set<Integer> jobsSet = new HashSet<>();
+		Deque<Integer> jobs = new ArrayDeque<>();
 		jobs.add(0);
+		jobsSet.add(0);
 		
 		while(!jobs.isEmpty()) {
 			
 			int i = jobs.poll();
-			Set<Token> set = tokensMap.get((int)input.charAt(i));
+			
+			Set<Token> set = null;
+			if(i < input.length()) {
+				set = tokensMap.get((int)input.charAt(i));
+			}
 			
 			if(set == null) {
 				continue;
@@ -121,19 +127,31 @@ public class GLLLexerImpl implements GLLLexer {
 				if(symbol instanceof Keyword) {
 					length = tokenize(i, input, (Keyword) symbol);
 					if(length > 0) {
-						jobs.add(i + length);
+						int next = i + length;
+						if(!jobsSet.contains(next)) {
+							jobs.add(next);
+							jobsSet.add(next);
+						}
 					}
 				} 
 				else if (symbol instanceof RegularExpression) {
 					length = tokenize(i, input, (RegularExpression) symbol);
 					if(length > 0) {
-						jobs.add(i + length);
+						int next = i + length;
+						if(!jobsSet.contains(next)) {
+							jobs.add(next);
+							jobsSet.add(next);
+						}
 					}
 				}
 				else if(symbol instanceof Terminal) {
 					length = tokenize(i, input, (Terminal) symbol);
 					if(length > 0) {
-						jobs.add(i + length);
+						int next = i + length;
+						if(!jobsSet.contains(next)) {
+							jobs.add(next);
+							jobsSet.add(next);
+						}
 					}
 				}
 			}
