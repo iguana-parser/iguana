@@ -3,6 +3,7 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,8 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.RegularExpression;
 import org.jgll.grammar.symbol.Symbol;
@@ -69,6 +72,8 @@ public class Grammar implements Serializable {
 	
 	private List<Token> tokens;
 	
+	private Map<Integer, Set<Token>> tokensMap;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
@@ -99,6 +104,25 @@ public class Grammar implements Serializable {
 		this.regularExpressions = builder.regularExpressions;
 		this.tokenIDMap = builder.tokenIDMap;
 		this.tokens = builder.tokens;
+		
+		this.tokensMap = new HashMap<>();
+
+		for(Token token : tokens) {
+			
+			if(token == Epsilon.getInstance() || token == EOF.getInstance()) {
+				continue;
+			}
+			
+			BitSet bitSet = token.asBitSet();
+			 for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
+				Set<Token> set = tokensMap.get(i);
+				if(set == null) {
+					set = new HashSet<>();
+					tokensMap.put(i, set);
+				}
+				set.add(token);
+			 }
+		}
 		
 		printGrammarStatistics();
 	}
@@ -300,6 +324,10 @@ public class Grammar implements Serializable {
 	
 	public Iterable<Token> getTokens() {
 		return tokenIDMap.keySet();
+	}
+	
+	public Set<Token> getTokensForChar(int c) {
+		return tokensMap.get(c);
 	}
 	
 }
