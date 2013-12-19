@@ -77,7 +77,8 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	private void tokenize(String input) {
 		
-		for(int i = 0; i < input.length(); i++) {
+		// Skip EOF
+		for(int i = 0; i < input.length() - 1; i++) {
 			
 			Set<Token> set = grammar.getTokensForChar(input.charAt(i));
 			
