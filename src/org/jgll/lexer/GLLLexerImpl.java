@@ -75,7 +75,6 @@ public class GLLLexerImpl implements GLLLexer {
 		return list;
 	}
 	
-	
 	private void tokenize(String input) {
 		
 		for(int i = 0; i < input.length(); i++) {

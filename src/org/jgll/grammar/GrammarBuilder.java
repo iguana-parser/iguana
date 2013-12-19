@@ -130,7 +130,7 @@ public class GrammarBuilder implements Serializable {
 		
 		validateGrammar();
 		
-		return new Grammar(this);
+		return new Grammar(this).init();
 	}
 
 	public void validateGrammar() {

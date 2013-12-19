@@ -27,9 +27,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private Token token;
 	
-	public TokenGrammarSlot(int position, BodyGrammarSlot previous, Token symbol, HeadGrammarSlot head, int tokenID) {
+	public TokenGrammarSlot(int position, BodyGrammarSlot previous, Token token, HeadGrammarSlot head, int tokenID) {
 		super(position, previous, head);
-		this.token = symbol;
+		this.token = token;
 		this.tokenID = tokenID;
 	}
 	

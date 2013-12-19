@@ -46,7 +46,7 @@ public class Grammar implements Serializable {
 	 */
 	Map<Nonterminal, HeadGrammarSlot> nameToNonterminals;
 	
-	private Map<String, BodyGrammarSlot> nameToSlots;
+	private transient Map<String, BodyGrammarSlot> nameToSlots;
 	
 	private Map<Nonterminal, List<HeadGrammarSlot>> newNonterminalsMap;
 	
@@ -72,14 +72,13 @@ public class Grammar implements Serializable {
 	
 	private List<Token> tokens;
 	
-	private Map<Integer, Set<Token>> tokensMap;
+	private transient Map<Integer, Set<Token>> tokensMap;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
 		this.slots = builder.slots;
 		this.nameToNonterminals = new HashMap<>();
-		this.nameToSlots = new HashMap<>();
 		this.nameToNonterminals = builder.nonterminalsMap;
 		
 		this.newNonterminalsMap = builder.newNonterminalsMap;
@@ -89,12 +88,6 @@ public class Grammar implements Serializable {
 			this.newNonterminals.addAll(newNonterminals);
 		}
 
-		for(BodyGrammarSlot slot : slots) {
-			String label = grammarSlotToString(slot);
-			slot.setLabel(label);
-			nameToSlots.put(label, slot);
-		}
-		
 		this.longestTerminalChain = builder.longestTerminalChain;
 		this.maximumNumAlternates = builder.maximumNumAlternates;
 		this.maxDescriptorsAtInput = builder.maxDescriptors;
@@ -104,6 +97,18 @@ public class Grammar implements Serializable {
 		this.regularExpressions = builder.regularExpressions;
 		this.tokenIDMap = builder.tokenIDMap;
 		this.tokens = builder.tokens;
+		
+		printGrammarStatistics();
+	}
+	
+	public Grammar init() {
+		this.nameToSlots = new HashMap<>();
+
+		for(BodyGrammarSlot slot : slots) {
+			String label = grammarSlotToString(slot);
+			slot.setLabel(label);
+			nameToSlots.put(label, slot);
+		}		
 		
 		this.tokensMap = new HashMap<>();
 
@@ -123,8 +128,7 @@ public class Grammar implements Serializable {
 				set.add(token);
 			 }
 		}
-		
-		printGrammarStatistics();
+		return this;
 	}
 
 	public void printGrammarStatistics() {
