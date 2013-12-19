@@ -1,6 +1,6 @@
 package org.jgll.grammar.condition;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.listToString;
 
 import java.util.List;
 

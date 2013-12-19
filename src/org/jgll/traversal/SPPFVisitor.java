@@ -4,8 +4,6 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.RegularExpressionNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 
 /**
@@ -19,8 +17,6 @@ import org.jgll.sppf.TokenSymbolNode;
  */
 public interface SPPFVisitor {
 
-	public void visit(TerminalSymbolNode node);
-	
 	public void visit(TokenSymbolNode node);
 
 	public void visit(NonterminalSymbolNode node);
@@ -30,7 +26,5 @@ public interface SPPFVisitor {
 	public void visit(PackedNode node);
 	
 	public void visit(ListSymbolNode node);
-	
-	public void visit(RegularExpressionNode node);
 	
 }

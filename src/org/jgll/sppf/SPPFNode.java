@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.Iterator;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.traversal.AmbiguousNodeCounter;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -60,6 +61,12 @@ public abstract class SPPFNode {
 
 	public void setVisited(boolean visited) {
 		this.visited = visited;
+	}
+	
+	public int getCountAmbiguousNodes() {
+		AmbiguousNodeCounter visitor = new AmbiguousNodeCounter();
+		accept(visitor);
+		return visitor.getCount();
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 package org.jgll.util.dot;
 
-import static org.jgll.util.dot.GraphVizUtil.*;
+import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
 
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;

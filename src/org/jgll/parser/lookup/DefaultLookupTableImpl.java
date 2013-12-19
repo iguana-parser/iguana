@@ -199,6 +199,7 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		return nonPackedNodes[index].get(key);
 	}
 	
+	@SuppressWarnings("unused")
 	private int getTotalCollisions() {
 		int total = 0;
 		
@@ -219,9 +220,6 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
-		
-		System.out.println(getTotalCollisions());
-		
 		if(nonPackedNodes[inputSize - 1] == null) {
 			return null;
 		}
@@ -278,24 +276,6 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		return count;
 	}
 	
-	@Override
-	public int getCountAmbigousNodes() {
-		int count = 0;
-		for(int i = 0; i < nonPackedNodes.length; i++) {
-			
-			if(nonPackedNodes[i] == null) {
-				continue;
-			}
-			
-			for (NonPackedNode node : nonPackedNodes[i]) {
-				if(node.isAmbiguous()) {
-					count++;
-				}
-			}
-		}
-		return count;
-	}
-
 	@Override
 	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
 		

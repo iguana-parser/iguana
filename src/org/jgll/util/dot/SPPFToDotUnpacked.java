@@ -14,9 +14,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
@@ -115,10 +113,7 @@ public class SPPFToDotUnpacked extends ToDot {
 	
 	private void visit(SPPFNode node, StringBuilder sb) {
 
-		if(node instanceof TerminalSymbolNode) {
-			visit((TerminalSymbolNode) node, sb);
-		} 
-		else if(node instanceof NonterminalSymbolNode) {
+		if(node instanceof NonterminalSymbolNode) {
 			visit((NonterminalSymbolNode) node, sb);
 		} 
 		else if(node instanceof PackedNode) {
@@ -127,13 +122,6 @@ public class SPPFToDotUnpacked extends ToDot {
 		else if(node instanceof IntermediateNode) {
 			visit((IntermediateNode)node, sb); 
 		}
-	}
-
-	public void visit(TerminalSymbolNode node, StringBuilder sb) {
-		String label = node.getLabel();
-		// Replaces the Java-style unicode char for epsilon with the graphviz one
-		label.replace("\u03B5", "&epsilon;");
-		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 	}
 
 	public void visit(NonterminalSymbolNode node, StringBuilder sb) {
@@ -218,20 +206,9 @@ public class SPPFToDotUnpacked extends ToDot {
 		visit((NonterminalSymbolNode) node);
 	}
 	
-	public void visit(RegularExpressionNode node, StringBuilder sb) {
-		node.setVisited(true);
-
-		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, "\\\"" + input.subString(node.getLeftExtent(), node.getRightExtent()) + "\\\"" + "\n"));
-	}
-	
 	private void createPermutationMaps(SPPFNode node) {
 		map = new HashMap<>();
 		SPPFVisitor sppfVisitor = new SPPFVisitor() {
-			
-			@Override
-			public void visit(RegularExpressionNode node) {
-				SPPFVisitorUtil.visitChildren(node, this);
-			}
 			
 			@Override
 			public void visit(ListSymbolNode node) {
@@ -256,9 +233,6 @@ public class SPPFToDotUnpacked extends ToDot {
 				SPPFVisitorUtil.visitChildren(node, this);
 			}
 			
-			@Override
-			public void visit(TerminalSymbolNode node) {}
-
 			@Override
 			public void visit(TokenSymbolNode node) {}
 		};

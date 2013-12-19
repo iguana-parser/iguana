@@ -18,9 +18,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 
@@ -47,19 +45,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	public ModelBuilderVisitor(Input input, NodeListener<T, U> listener) {
 		this.input = input;
 		this.listener = listener;
-	}
-
-	@Override
-	public void visit(TerminalSymbolNode terminal) {
-		if(!terminal.isVisited()) {
-			terminal.setVisited(true);
-			if(terminal.getMatchedChar() == TerminalSymbolNode.EPSILON) {
-				terminal.setObject(Result.skip());
-			} else {
-				Result<U> result = listener.terminal(terminal.getMatchedChar(), input.getPositionInfo(terminal.getLeftExtent(), terminal.getRightExtent()));
-				terminal.setObject(result);
-			}
-		}		
 	}
 
 	@Override
@@ -96,16 +81,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
 				nonterminalSymbolNode.setObject(result);
 			
-			} else if(nonterminalSymbolNode.childrenCount() == 1 && nonterminalSymbolNode.getChildAt(0) instanceof RegularExpressionNode) {
-				// Lazy creation of the children of regular nodes	
-				RegularExpressionNode regularExpressionNode = (RegularExpressionNode) nonterminalSymbolNode.getChildAt(0);
-				nonterminalSymbolNode.removeChild(regularExpressionNode);
-				
-				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
-				listener.startNode((T) slot.getObject());
-				Result<U> result = listener.endNode((T) slot.getObject(), new ArrayList<U>(), 
-						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
-				nonterminalSymbolNode.setObject(result);
 			}
 			else {
 				
@@ -289,11 +264,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				
 			}
 		};
-	}
-
-	@Override
-	public void visit(RegularExpressionNode node) {
-		throw new IllegalStateException("Should not be here.");
 	}
 
 	@Override

@@ -158,7 +158,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
-		
 		int ci = parser.getCurrentInputIndex();
 		List<Integer> tokensAt = lexer.tokensAt(ci, this.predictionSet);
 		Alternate alternate = ll1Map.get(tokensAt.get(0));

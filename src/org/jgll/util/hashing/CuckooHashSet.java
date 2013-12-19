@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.RandomUtil;
 import org.jgll.util.hashing.hashfunction.HashFunction;
-import org.jgll.util.hashing.hashfunction.SimpleTabulation8;
 
 /**
  * 

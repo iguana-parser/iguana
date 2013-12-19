@@ -18,7 +18,6 @@ import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
@@ -214,16 +213,20 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public final void addDescriptor(GrammarSlot slot, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor descriptor = new Descriptor(slot, u, inputIndex, w);
-		boolean result = lookupTable.addDescriptor(descriptor);
-		log.trace("Descriptor created: %s : %b", descriptor, result);
+		boolean added = lookupTable.addDescriptor(descriptor);
+		if(added) {
+			log.info("Descriptor created: %s : %b", descriptor, added);
+		}
 	}
 	
 	@Override
 	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object) {
 		Descriptor descriptor = new Descriptor(slot, currentGSSNode, inputIndex, currentNode);
 		descriptor.setObject(object);
-		boolean result = lookupTable.addDescriptor(descriptor);
-		log.trace("Descriptor created: %s : %b", descriptor, result);		
+		boolean added = lookupTable.addDescriptor(descriptor);
+		if(added) {
+			log.trace("Descriptor created: %s : %b", descriptor, added);
+		}
 	}
 	
 	@Override
@@ -433,14 +436,6 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public Grammar getGrammar() {
 		return grammar;
-	}
-
-	@Override
-	public RegularExpressionNode getRegularExpressionNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		RegularExpressionNode node = new RegularExpressionNode(slot, leftExtent, rightExtent);
-		NonPackedNode nonPackedNode = lookupTable.getNonPackedNode(node);
-		ci = rightExtent;
-		return (RegularExpressionNode) nonPackedNode;
 	}
 
 	@Override

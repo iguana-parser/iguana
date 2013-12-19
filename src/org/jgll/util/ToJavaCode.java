@@ -6,9 +6,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -27,15 +25,6 @@ public class ToJavaCode implements SPPFVisitor {
 		ToJavaCode toJavaCode = new ToJavaCode(grammar);
 		toJavaCode.visit(node);
 		return toJavaCode.toString();
-	}
-	
-	@Override
-	public void visit(TerminalSymbolNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-			sb.append("TerminalSymbolNode node" + count + " = new TerminalSymbolNode(" + node.getMatchedChar() + ", " + node.getLeftExtent() + ");\n");
-			node.setObject("node" + count++);
-		}
 	}
 	
 	@Override
@@ -157,11 +146,6 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public String toString() {
 		return sb.toString();
-	}
-
-	@Override
-	public void visit(RegularExpressionNode node) {
-		throw new UnsupportedOperationException();
 	}
 
 }

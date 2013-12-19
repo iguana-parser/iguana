@@ -91,4 +91,9 @@ public class DummyNode extends SPPFNode {
 	public SPPFNode getFirstChild() {
 		return null;
 	}
+
+	@Override
+	public int getCountAmbiguousNodes() {
+		return 0;
+	}
 }

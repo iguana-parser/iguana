@@ -10,7 +10,6 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
@@ -53,8 +52,6 @@ public interface GLLParser {
 	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object);
 	
 	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int ci);
-	
-	public RegularExpressionNode getRegularExpressionNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	/**
 	 * 

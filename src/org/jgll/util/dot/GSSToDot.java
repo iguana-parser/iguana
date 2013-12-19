@@ -1,6 +1,7 @@
 package org.jgll.util.dot;
 
-import static org.jgll.util.dot.GraphVizUtil.*;
+import static org.jgll.util.dot.GraphVizUtil.GSS_EDGE;
+import static org.jgll.util.dot.GraphVizUtil.GSS_NODE;
 
 import org.jgll.parser.GSSNode;
 

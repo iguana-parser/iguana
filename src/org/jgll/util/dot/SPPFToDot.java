@@ -9,9 +9,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.RegularExpressionNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
@@ -42,17 +40,6 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		this.sb = new StringBuilder();
 	}
 
-	@Override
-	public void visit(TerminalSymbolNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-			String label = node.getLabel();
-			// Replaces the Java-style unicode char for epsilon with the graphviz one
-			label.replace("\u03B5", "&epsilon;");
-			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
-		}
-	}
-	
 	@Override
 	public void visit(TokenSymbolNode node) {
 		if(!node.isVisited()) {
@@ -125,12 +112,4 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		return sb.toString();
 	}
 
-	@Override
-	public void visit(RegularExpressionNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
-			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, "\\\"" + input.subString(node.getLeftExtent(), node.getRightExtent()) + "\\\"" + "\n"));
-		}
-	}
 }
