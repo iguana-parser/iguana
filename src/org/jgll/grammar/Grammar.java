@@ -334,4 +334,14 @@ public class Grammar implements Serializable {
 		return tokensMap.get(c);
 	}
 	
+	public int getCountLL1Nonterminals() {
+		int count = 0;
+		for(HeadGrammarSlot head : nonterminals) {
+			if(head.isLL1()) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
 }

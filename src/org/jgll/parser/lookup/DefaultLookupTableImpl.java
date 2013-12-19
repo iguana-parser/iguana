@@ -268,7 +268,32 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 
 	@Override
 	public int getPackedNodesCount() {
-		return 0;
+		int count = 0;
+		for (int i = 0; i < packedNodes.length; i++) {
+			if(packedNodes[i] == null) {
+				continue;
+			}
+			count += packedNodes[i].size();
+		}
+		return count;
+	}
+	
+	@Override
+	public int getCountAmbigousNodes() {
+		int count = 0;
+		for(int i = 0; i < nonPackedNodes.length; i++) {
+			
+			if(nonPackedNodes[i] == null) {
+				continue;
+			}
+			
+			for (NonPackedNode node : nonPackedNodes[i]) {
+				if(node.isAmbiguous()) {
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	@Override

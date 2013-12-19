@@ -109,6 +109,8 @@ public interface LookupTable {
 	
 	public int getDescriptorsCount();
 	
+	public int getCountAmbigousNodes();
+	
 	public Iterable<GSSNode> getGSSNodes();
 	
 	public void init(Input input);
