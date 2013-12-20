@@ -46,8 +46,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private BitSet predictionSet;
 	
-	private Alternate epsilonAlternate;
-	
 	private boolean ll1;
 	
 	private Map<Integer, Alternate> ll1Map = new HashMap<>();
@@ -123,14 +121,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 
 	public void setPredictionSet(BitSet predictionSet) {
 		this.predictionSet = predictionSet;
-	}
-	
-	public void setEpsilonAlternate(Alternate epsilonAlternate) {
-		this.epsilonAlternate = epsilonAlternate;
-	}
-	
-	public Alternate getEpsilonAlternate() {
-		return epsilonAlternate;
 	}
 	
 	@Override
