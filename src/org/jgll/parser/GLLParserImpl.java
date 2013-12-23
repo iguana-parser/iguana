@@ -215,7 +215,7 @@ public class GLLParserImpl implements GLLParser {
 		Descriptor descriptor = new Descriptor(slot, u, inputIndex, w);
 		boolean added = lookupTable.addDescriptor(descriptor);
 		if(added) {
-			log.info("Descriptor created: %s : %b", descriptor, added);
+			log.trace("Descriptor created: %s : %b", descriptor, added);
 		}
 	}
 	
