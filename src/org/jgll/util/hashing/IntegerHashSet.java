@@ -1,11 +1,8 @@
 package org.jgll.util.hashing;
 
-import java.util.Iterator;
+import java.io.Serializable;
 
-import org.jgll.parser.HashFunctions;
-import org.jgll.util.hashing.hashfunction.HashFunction;
-
-public class OpenAddressingHashSet<T> implements IguanaSet<T> {
+public class IntegerHashSet implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -25,42 +22,35 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 	private int rehashCount;
 	
 	private int collisionsCount;
-	
-	private ExternalHasher<T> hasher;
-	
-	private HashFunction hashFunction = HashFunctions.murmurHash3();
-	
+		
 	/**
 	 * capacity - 1
 	 * The bitMask is used to get the p most-significant bytes of the multiplicaiton.
 	 */
 	private int bitMask;
 	
-	private T[] table;
+	private int[] table;
 	
  	@SafeVarargs
-	public static <T> OpenAddressingHashSet<T> from(ExternalHasher<T> hasher, T...elements) {
- 		OpenAddressingHashSet<T> set = new OpenAddressingHashSet<>(hasher);
-		for(T e : elements) {
+	public static IntegerHashSet from(int...elements) {
+ 		IntegerHashSet set = new IntegerHashSet();
+		for(int e : elements) {
 			set.add(e);
 		}
 		return set;
 	}
 
-	public OpenAddressingHashSet(ExternalHasher<T> hasher) {
-		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
+	public IntegerHashSet() {
+		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
 	}
 	
-	public OpenAddressingHashSet(int initalCapacity, ExternalHasher<T> hasher) {
-		this(initalCapacity, DEFAULT_LOAD_FACTOR, hasher);
+	public IntegerHashSet(int initalCapacity) {
+		this(initalCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public OpenAddressingHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> hasher) {
+	public IntegerHashSet(int initialCapacity, float loadFactor) {
 		
 		this.initialCapacity = initialCapacity;
-		
-		this.hasher = hasher;
 		
 		this.loadFactor = loadFactor;
 
@@ -72,30 +62,32 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 		bitMask = capacity - 1;
 		
 		threshold = (int) (loadFactor * capacity);
-		table = (T[]) new Object[capacity];
+		table = new int[capacity];
+		
+		for(int i = 0; i < table.length; i++) {
+			table[i] = -1;
+		}
 	}
 	
-	@Override
-	public boolean contains(T key) {
-		return get(key) != null;
+	public boolean contains(int key) {
+		return get(key) != -1;
 	}
 	
-	@Override
-	public T add(T key) {
+	public int add(int key) {
 		
 		int index = hash(key);
 
 		do {
-			if(table[index] == null) {
+			if(table[index] == -1) {
 				table[index] = key;
 				size++;
 				if (size >= threshold) {
 					rehash();
 				}
-				return null;
+				return -1;
 			}
 			
-			else if(hasher.equals(table[index], key)) {
+			else if(table[index] == key) {
 				return table[index];
 			}
 			
@@ -112,17 +104,16 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 		
 		bitMask = capacity - 1;
 		
-		@SuppressWarnings("unchecked")
-		T[] newTable = (T[]) new Object[capacity];
+		int[] newTable = new int[capacity];
 		
 		label:
-		for(T key : table) {
-			if(key != null) {
+		for(int key : table) {
+			if(key != -1) {
 				
 				int index = hash(key);
 
 				do {
-					if(newTable[index] == null) {
+					if(newTable[index] == -1) {
 						newTable[index] = key;
 						continue label;
 					}
@@ -139,14 +130,13 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 		rehashCount++;
 	}
 	
-	private int hash(T key) {
-		return hasher.hash(key, hashFunction) & bitMask;
+	private int hash(int key) {
+		return key * 31 & bitMask;
 	}
 	
-	@Override
-	public Iterator<T> iterator() {
+	public IntIterator iterator() {
 		
-		return new Iterator<T>() {
+		return new IntIterator() {
 			
 			int index = 0;
 			int counter = 0;
@@ -157,9 +147,9 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 			}
 
 			@Override
-			public T next() {
+			public int next() {
 				while(index < table.length) {
-					if(table[index] != null) {
+					if(table[index] != -1) {
 						counter++;
 						return table[index++];
 					} else {
@@ -169,81 +159,67 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 				
 				throw new RuntimeException("Should not reach here.");
 			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 
-	@Override
-	public T get(T key) {
+	public int get(int key) {
 		
 		int index = hash(key);
 		
-		while(table[index] != null && !hasher.equals(table[index], key)) {			
+		while(table[index] != key) {			
 			index = (index + 1) & bitMask;
 		}
 		
 		return table[index];
 	}
 
-	@Override
 	public int size() {
 		return size;
 	}
 
-	@Override
 	public int getInitialCapacity() {
 		return initialCapacity;
 	}
 	
-	@Override
 	public int getCapacity() {
 		return capacity;
 	}
 
-	@Override
 	public int getEnlargeCount() {
 		return rehashCount;
 	}
 
-	@Override
 	public boolean isEmpty() {
 		return size == 0;
 	}
 
-	@Override
 	public void clear() {
 		for(int i = 0; i < table.length; i++) {
-			table[i] = null;
+			table[i] = -1;
 		}
 		size = 0;
 	}
 
-	@Override
-	public boolean addAll(Iterable<T> c) {
+	public boolean addAll(IntegerHashSet set) {
 		boolean added = false;
-		for(T t : c) {
-			added = add(t) == null;
+		IntIterator it = set.iterator();
+		while(it.hasNext()) {
+			added = add(it.next()) == -1;
 		}
 		return added;
 	}
 	
-	@Override
 	public int getCollisionCount() {
 		return collisionsCount++;
 	}
 	
-	@Override
 	public String toString() {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		
-		for(T t : table) {
-			if(t != null) { 
+		for(int t : table) {
+			if(t != -1) { 
 				sb.append(t).append(", ");
 			}
 		}
