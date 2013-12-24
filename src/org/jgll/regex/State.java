@@ -5,14 +5,29 @@ import java.util.Set;
 
 public class State {
 	
-	private Set<Transition> transitions;
+	private final Set<Transition> transitions;
+	
+	private final boolean finalState;
 	
 	public State() {
-		transitions = new HashSet<>();
+		this(false);
+	}
+	
+	public State(boolean finalState) {
+		this.transitions = new HashSet<>();
+		this.finalState = finalState;
 	}
 	
 	public Set<Transition> getTransitions() {
 		return transitions;
+	}
+	
+	public boolean isFinalState() {
+		return finalState;
+	}
+	
+	public void addTransition(Transition transition) {
+		transitions.add(transition);
 	}
 
 }
