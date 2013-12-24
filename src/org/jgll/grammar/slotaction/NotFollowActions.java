@@ -26,7 +26,7 @@ public class NotFollowActions {
 				if(recognizer == null) {
 					recognizer = RecognizerFactory.prefixContextFreeRecognizer(parser.getGrammar());
 				}
-				return recognizer.recognize(lexer.getInput(), parser.getCurrentInputIndex(), lexer.getInput().size(), firstSlot);
+				return recognizer.recognize(lexer.getInput(), parser.getCurrentInputIndex(), lexer.getInput().length(), firstSlot);
 			}
 
 			@Override

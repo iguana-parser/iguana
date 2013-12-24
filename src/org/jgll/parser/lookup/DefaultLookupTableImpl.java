@@ -68,13 +68,13 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		long start = System.nanoTime();
 		
 		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new IguanaSet[input.size()];
-		nonPackedNodes = new IguanaSet[input.size()];
-		packedNodes = new IguanaSet[input.size()];
+		descriptorsSet = new IguanaSet[input.length()];
+		nonPackedNodes = new IguanaSet[input.length()];
+		packedNodes = new IguanaSet[input.length()];
 		
-		gssTuples = new GSSTuple[grammar.getNonterminals().size()][input.size()];
+		gssTuples = new GSSTuple[grammar.getNonterminals().size()][input.length()];
 		
-		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.size()];
+		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.length()];
 		
 		long end = System.nanoTime();
 		log.info("Lookup table initialization: %d ms", (end - start) / 1000_000);

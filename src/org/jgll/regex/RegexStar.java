@@ -1,9 +1,14 @@
 package org.jgll.regex;
 
 import java.util.BitSet;
+import java.util.Collection;
+
+import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.Symbol;
 
 
-public class RegexStar implements RegularExpression {
+public class RegexStar extends AbstractSymbol implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -46,4 +51,15 @@ public class RegexStar implements RegularExpression {
 	public BitSet asBitSet() {
 		return regexp.asBitSet();
 	}
+
+	@Override
+	public String getName() {
+		return regexp + "*";
+	}
+
+	@Override
+	public Symbol addConditions(Collection<Condition> conditions) {
+		return null;
+	}
+	
 }

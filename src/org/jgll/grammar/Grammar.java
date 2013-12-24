@@ -19,9 +19,8 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.RegularExpressionUtil;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Token;
+import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -66,13 +65,13 @@ public class Grammar implements Serializable {
 	
 	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
-	private Set<RegularExpressionUtil> regularExpressions;
+	private Set<RegularExpression> regularExpressions;
 	
-	private Map<Token, Integer> tokenIDMap;
+	private Map<RegularExpression, Integer> tokenIDMap;
 	
-	private List<Token> tokens;
+	private List<RegularExpression> tokens;
 	
-	private transient Map<Integer, Set<Token>> tokensMap;
+	private transient Map<Integer, Set<RegularExpression>> tokensMap;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -112,7 +111,7 @@ public class Grammar implements Serializable {
 		
 		this.tokensMap = new HashMap<>();
 
-		for(Token token : tokens) {
+		for(RegularExpression token : tokens) {
 			
 			if(token == Epsilon.getInstance() || token == EOF.getInstance()) {
 				continue;
@@ -120,7 +119,7 @@ public class Grammar implements Serializable {
 			
 			BitSet bitSet = token.asBitSet();
 			 for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-				Set<Token> set = tokensMap.get(i);
+				Set<RegularExpression> set = tokensMap.get(i);
 				if(set == null) {
 					set = new HashSet<>();
 					tokensMap.put(i, set);
@@ -263,7 +262,7 @@ public class Grammar implements Serializable {
 		return stDevDescriptors;
 	}
 	
-	public Set<RegularExpressionUtil> getRegularExpressions() {
+	public Set<RegularExpression> getRegularExpressions() {
 		return regularExpressions;
 	}
 	
@@ -318,7 +317,7 @@ public class Grammar implements Serializable {
 		return tokenIDMap.get(s);
 	}
 	
-	public Token getToken(int tokenID) {
+	public RegularExpression getToken(int tokenID) {
 		return tokens.get(tokenID);
 	}
 	
@@ -326,11 +325,11 @@ public class Grammar implements Serializable {
 		return tokenIDMap.size() + 2;
 	}
 	
-	public Iterable<Token> getTokens() {
+	public Iterable<RegularExpression> getTokens() {
 		return tokenIDMap.keySet();
 	}
 	
-	public Set<Token> getTokensForChar(int c) {
+	public Set<RegularExpression> getTokensForChar(int c) {
 		return tokensMap.get(c);
 	}
 	

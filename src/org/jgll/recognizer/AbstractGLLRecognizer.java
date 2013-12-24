@@ -74,7 +74,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 			throw new RuntimeException("No nonterminal named " + nonterminalName + " found");
 		}
 		
-		init(grammar, input, 0, input.size() - 1, startSymbol);
+		init(grammar, input, 0, input.length() - 1, startSymbol);
 		
 		cu = create(startSlot, cu, ci);
 	

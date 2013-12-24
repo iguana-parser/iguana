@@ -3,7 +3,9 @@ package org.jgll.regex;
 import java.io.Serializable;
 import java.util.BitSet;
 
-public interface RegularExpression extends Serializable {
+import org.jgll.grammar.symbol.Symbol;
+
+public interface RegularExpression extends Serializable, Symbol {
 
 	public NFA toNFA();
 	

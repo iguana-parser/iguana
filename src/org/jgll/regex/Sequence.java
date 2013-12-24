@@ -2,9 +2,15 @@ package org.jgll.regex;
 
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 
-public class Sequence implements RegularExpression {
+import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.Symbol;
+import org.jgll.util.CollectionsUtil;
+
+public class Sequence extends AbstractSymbol implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
 
@@ -76,4 +82,14 @@ public class Sequence implements RegularExpression {
 		return bitSet;
 	}
 
+	@Override
+	public String getName() {
+		return CollectionsUtil.listToString(Arrays.asList(regularExpressions), " ");
+	}
+
+	@Override
+	public Symbol addConditions(Collection<Condition> conditions) {
+		return null;
+	}
+	
 }

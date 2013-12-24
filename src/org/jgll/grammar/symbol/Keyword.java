@@ -14,7 +14,7 @@ import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
-public class Keyword extends AbstractSymbol implements Token, RegularExpression {
+public class Keyword extends AbstractSymbol implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	

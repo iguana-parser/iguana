@@ -62,7 +62,7 @@ public class Input {
 		return input[index];
 	}
 
-	public int size() {
+	public int length() {
 		return input.length;
 	}
 	
@@ -159,7 +159,7 @@ public class Input {
 	
 	public boolean match(int from, int[] target) {
 		
-		if(target.length > size() - from) {
+		if(target.length > length() - from) {
 			return false;
 		}
 		

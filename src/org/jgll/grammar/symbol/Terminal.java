@@ -10,7 +10,7 @@ import org.jgll.regex.RegularExpression;
  * @author Ali Afroozeh
  *
  */
-public interface Terminal extends Symbol, Token, RegularExpression {
+public interface Terminal extends Symbol, RegularExpression {
 	
 	/**
 	 * Checks whether this terminal matches the given character from input

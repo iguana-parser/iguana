@@ -86,5 +86,4 @@ public class Epsilon implements Terminal {
 	public boolean isNullable() {
 		return true;
 	}
-
 }

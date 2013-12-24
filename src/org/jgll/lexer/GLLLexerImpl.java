@@ -7,11 +7,8 @@ import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.RegularExpressionUtil;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
-import org.jgll.grammar.symbol.Token;
+import org.jgll.regex.RegularExpression;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
@@ -32,8 +29,8 @@ public class GLLLexerImpl implements GLLLexer {
 		this.input = input;
 		this.grammar = grammar;
 		
-		this.tokenIDs = new BitSet[input.size()];
-		this.tokens = new int[input.size()][grammar.getCountTokens()];
+		this.tokenIDs = new BitSet[input.length()];
+		this.tokens = new int[input.length()][grammar.getCountTokens()];
 		
 		for(int i = 0; i < tokens.length; i++) {
 			for(int j = 0; j < tokens[i].length; j++) {
@@ -45,7 +42,7 @@ public class GLLLexerImpl implements GLLLexer {
 			tokenIDs[i] = new BitSet();
 		}
 		
-		tokenize(input.toString());
+		tokenize(input);
 	}
 
 	@Override
@@ -75,58 +72,36 @@ public class GLLLexerImpl implements GLLLexer {
 		return list;
 	}
 	
-	private void tokenize(String input) {
+	private void tokenize(Input input) {
 		
 		// Skip EOF
 		for(int i = 0; i < input.length() - 1; i++) {
 			
-			Set<Token> set = grammar.getTokensForChar(input.charAt(i));
+			Set<RegularExpression> set = grammar.getTokensForChar(input.charAt(i));
 			
 			if(set == null) {
 				continue;
 			}
 			
-			for(Token token : set) {
-				
-				if(token instanceof Keyword) {
-					tokenize(i, input, (Keyword) token);
-				} 
-				else if (token instanceof RegularExpressionUtil) {
-					tokenize(i, input, (RegularExpressionUtil) token);
-				}
-				else if(token instanceof Terminal) {
-					tokenize(i, input, (Terminal) token);
-				}
+			for(RegularExpression token : set) {
+				tokenize(i, input, token);
 			}
 		}
 		
 		tokens[input.length() - 1][EOF.TOKEN_ID] = 0;
 		tokenIDs[input.length() - 1].set(EOF.TOKEN_ID);
 	}
+
 	
-	private int tokenize(int inputIndex, String input, Keyword keyword) {
-		if(keyword.match(input, inputIndex)) {
-			createToken(inputIndex, keyword, keyword.size());
-			return keyword.size();
-		}
-		return -1;
-	}
-	
-	private int tokenize(int inputIndex, String input, RegularExpressionUtil regex) {
-		int length = regex.getAutomaton().run(input, inputIndex);
+	private int tokenize(int inputIndex, Input input, RegularExpression regex) {
+		int length = regex.toNFA().toDFA().run(input, inputIndex);
 		if(length != -1) {
 			createToken(inputIndex, regex, length);
 		}
 		return length;
 	}
 	
-	private int tokenize(int inputIndex, String input, Terminal terminal) {
-		if(terminal.match(input.charAt(inputIndex))) {
-			createToken(inputIndex, terminal, 1);
-			return 1;
-		}
-		return -1;
-	}
+
 
 	private void createToken(int inputIndex, Symbol symbol, int length) {
 		Integer tokenID = grammar.getTokenID(symbol);

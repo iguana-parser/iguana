@@ -37,10 +37,9 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.RegularExpressionUtil;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Token;
+import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.ExternalEqual;
@@ -86,11 +85,11 @@ public class GrammarBuilder implements Serializable {
 	
 	private List<BodyGrammarSlot> conditionSlots;
 	
-	Set<RegularExpressionUtil> regularExpressions;
+	Set<RegularExpression> regularExpressions;
 	
-	Map<Token, Integer> tokenIDMap;
+	Map<RegularExpression, Integer> tokenIDMap;
 	
-	List<Token> tokens;
+	List<RegularExpression> tokens;
 	
 	public GrammarBuilder() {
 		this("no-name");
@@ -234,8 +233,8 @@ public class GrammarBuilder implements Serializable {
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
 		
-		if(symbol instanceof Token) {
-			Token token = (Token) symbol;
+		if(symbol instanceof RegularExpression) {
+			RegularExpression token = (RegularExpression) symbol;
 			return new TokenGrammarSlot(symbolIndex, currentSlot, token, headGrammarSlot, getTokenID(token));
 		}
 		
@@ -325,8 +324,8 @@ public class GrammarBuilder implements Serializable {
 				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 				currentSlot = new NonterminalGrammarSlot(index, currentSlot, nonterminal, null);
 			} 
-			else if(symbol instanceof Token) {
-				Token token = (Token) symbol;
+			else if(symbol instanceof RegularExpression) {
+				RegularExpression token = (RegularExpression) symbol;
 				currentSlot = new TokenGrammarSlot(index, currentSlot, token, null, getTokenID(token));
 			}
 			
@@ -393,7 +392,7 @@ public class GrammarBuilder implements Serializable {
 		return null;
 	}
 	
-	private int getTokenID(Token token) {
+	private int getTokenID(RegularExpression token) {
 		// The first token is epsilon and the second one is the EOF, therefore, token
 		// indices start from 2.
 		
@@ -1078,7 +1077,7 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		else if(slot instanceof TokenGrammarSlot) {
-			Token token = ((TokenGrammarSlot)slot).getSymbol();
+			RegularExpression token = ((TokenGrammarSlot)slot).getSymbol();
 			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous, token, head, getTokenID(token));
 			copyActions(slot, newSlot);
 			return newSlot;

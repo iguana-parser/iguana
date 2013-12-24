@@ -145,7 +145,7 @@ public class GLLParserImpl implements GLLParser {
 			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, lexer);
 		} else {
 			L0.getInstance().parse(this, lexer, startSymbol);			
-			root = lookupTable.getStartSymbol(startSymbol, input.size());
+			root = lookupTable.getStartSymbol(startSymbol, input.length());
 		}
 
 		end = System.nanoTime();
@@ -164,7 +164,7 @@ public class GLLParserImpl implements GLLParser {
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.info("Input size: %d, loc: %d", input.size(), input.getLineCount());
+		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.info("Descriptors: %d", lookupTable.getDescriptorsCount());
 		log.debug("Non-packed nodes: %d", lookupTable.getNonPackedNodesCount());

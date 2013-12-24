@@ -18,5 +18,8 @@ public class NFA {
 	public State getEndState() {
 		return endState;
 	}
-
+	
+	public DFA toDFA() {
+		throw new UnsupportedOperationException();
+	}
 }

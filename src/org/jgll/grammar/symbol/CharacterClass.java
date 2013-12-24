@@ -185,5 +185,5 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	public boolean isNullable() {
 		return false;
 	}
-
+	
 }

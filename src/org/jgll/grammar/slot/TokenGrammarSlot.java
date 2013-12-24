@@ -3,10 +3,6 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.RegularExpressionUtil;
-import org.jgll.grammar.symbol.Terminal;
-import org.jgll.grammar.symbol.Token;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -154,7 +150,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public R getSymbol() {
+	public RegularExpression getSymbol() {
 		return RegularExpression;
 	}
 	

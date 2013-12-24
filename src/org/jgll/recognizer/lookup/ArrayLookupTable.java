@@ -24,7 +24,7 @@ public class ArrayLookupTable implements Lookup {
 
 	public ArrayLookupTable(Grammar grammar, Input input) {
 		descriptorStack = new ArrayDeque<>();
-		gssNodes = new GSSNode[grammar.getGrammarSlots().size()][input.size()];
+		gssNodes = new GSSNode[grammar.getGrammarSlots().size()][input.length()];
 	}
 	
 	@Override

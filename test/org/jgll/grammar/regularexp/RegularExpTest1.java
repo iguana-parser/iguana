@@ -12,7 +12,6 @@ import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
-import org.jgll.grammar.symbol.RegularExpressionUtil;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
