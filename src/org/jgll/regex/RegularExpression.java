@@ -1,6 +1,8 @@
 package org.jgll.regex;
 
-public interface RegularExpression {
+import java.io.Serializable;
+
+public interface RegularExpression extends Serializable {
 
 	public NFA toNFA();
 	

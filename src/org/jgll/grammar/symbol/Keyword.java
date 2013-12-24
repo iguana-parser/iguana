@@ -142,6 +142,8 @@ public class Keyword extends AbstractSymbol implements Token, RegularExpression 
 			currenState.addTransition(new Transition(c, nextState));
 			currenState = nextState;
 		}
+
+		currenState.addTransition(Transition.emptyTransition(finalState));
 		
 		return new NFA(startState, finalState);
 	}

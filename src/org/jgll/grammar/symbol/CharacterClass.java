@@ -170,9 +170,7 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		
 		for(Range range : ranges) {
 			startState.addTransition(Transition.emptyTransition(range.toNFA().getStartState()));
-			for(State s : range.toNFA().getEndStates()) {
-				s.addTransition(Transition.emptyTransition(finalState));
-			}
+			range.toNFA().getEndState().addTransition(Transition.emptyTransition(finalState));
 		}
 		
 		return new NFA(startState, finalState);
