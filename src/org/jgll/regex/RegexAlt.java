@@ -1,6 +1,7 @@
 package org.jgll.regex;
 
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 
 public class RegexAlt implements RegularExpression {
@@ -11,9 +12,12 @@ public class RegexAlt implements RegularExpression {
 	
 	private final NFA nfa;
 	
+	private final BitSet bitSet;
+	
 	public RegexAlt(List<RegularExpression> regularExpressions) {
 		this.nfa = createNFA();
 		this.regularExpressions = regularExpressions;
+		this.bitSet = calculateBitSet();
 	}
 	
 	public RegexAlt(RegularExpression...regularExpressions) {
@@ -49,6 +53,19 @@ public class RegexAlt implements RegularExpression {
 			}
 		}
 		return false;
+	}
+	
+	private BitSet calculateBitSet() {
+		BitSet set = new BitSet();
+		for(RegularExpression s : regularExpressions) {
+			set.or(s.asBitSet());
+		}
+		return set;
+	}
+
+	@Override
+	public BitSet asBitSet() {
+		return bitSet;
 	}
 
 }

@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import java.util.BitSet;
+
 
 public class RegexPlus implements RegularExpression {
 
@@ -19,6 +21,11 @@ public class RegexPlus implements RegularExpression {
 	@Override
 	public boolean isNullable() {
 		return regexp.isNullable();
+	}
+	
+	@Override
+	public BitSet asBitSet() {
+		return regexp.asBitSet();
 	}
 
 }

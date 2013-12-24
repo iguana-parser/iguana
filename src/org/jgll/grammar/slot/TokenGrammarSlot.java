@@ -10,6 +10,7 @@ import org.jgll.grammar.symbol.Token;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 
@@ -25,16 +26,16 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private int tokenID;
 	
-	private Token token;
+	private RegularExpression RegularExpression;
 	
-	public TokenGrammarSlot(int position, BodyGrammarSlot previous, Token token, HeadGrammarSlot head, int tokenID) {
+	public TokenGrammarSlot(int position, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
 		super(position, previous, head);
-		this.token = token;
+		this.RegularExpression = regularExpression;
 		this.tokenID = tokenID;
 	}
 	
 	public TokenGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.token, head, this.tokenID);
+		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.RegularExpression, head, this.tokenID);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
@@ -144,13 +145,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean isNullable() {
-		if(token instanceof Terminal || token instanceof Keyword) {
-			return false;
-		}
-		if(token instanceof RegularExpressionUtil) {
-			return ((RegularExpressionUtil) token).isNullable();
-		}
-		return false;
+		return RegularExpression.isNullable();
 	}
 
 	
@@ -159,8 +154,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public Token getSymbol() {
-		return token;
+	public R getSymbol() {
+		return RegularExpression;
 	}
 	
 	@Override

@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import java.util.BitSet;
+
 
 public class RegexOpt implements RegularExpression {
 
@@ -33,6 +35,16 @@ public class RegexOpt implements RegularExpression {
 		startState.addTransition(Transition.emptyTransition(finalState));
 		
 		return new NFA(startState, finalState);
+	}
+
+	@Override
+	public boolean isNullable() {
+		return true;
+	}
+
+	@Override
+	public BitSet asBitSet() {
+		return null;
 	}
 	
 }

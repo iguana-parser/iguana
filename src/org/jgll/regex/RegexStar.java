@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import java.util.BitSet;
+
 
 public class RegexStar implements RegularExpression {
 
@@ -38,5 +40,10 @@ public class RegexStar implements RegularExpression {
 	@Override
 	public boolean isNullable() {
 		return true;
+	}
+
+	@Override
+	public BitSet asBitSet() {
+		return regexp.asBitSet();
 	}
 }
