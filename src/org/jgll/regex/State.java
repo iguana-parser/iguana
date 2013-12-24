@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class State {
-	
+
 	private final Set<Transition> transitions;
 	
 	private final boolean finalState;
