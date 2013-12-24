@@ -82,4 +82,9 @@ public class Epsilon implements Terminal {
 		return new NFA(state, state);
 	}
 
+	@Override
+	public boolean isNullable() {
+		return true;
+	}
+
 }

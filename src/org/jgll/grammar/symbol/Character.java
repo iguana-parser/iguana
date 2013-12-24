@@ -97,4 +97,9 @@ public class Character extends AbstractSymbol implements Terminal {
 		return new NFA(startState, finalState);
 	}
 
+	@Override
+	public boolean isNullable() {
+		return false;
+	}
+
 }

@@ -6,4 +6,6 @@ public interface RegularExpression extends Serializable {
 
 	public NFA toNFA();
 	
+	public boolean isNullable();
+	
 }

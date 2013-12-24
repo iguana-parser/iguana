@@ -116,4 +116,9 @@ public class Range extends AbstractSymbol implements Terminal {
 	public NFA toNFA() {
 		return nfa;
 	}
+
+	@Override
+	public boolean isNullable() {
+		return false;
+	}
 }

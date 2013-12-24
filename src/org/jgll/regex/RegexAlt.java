@@ -3,7 +3,7 @@ package org.jgll.regex;
 import java.util.Arrays;
 import java.util.List;
 
-public class Sequence implements RegularExpression {
+public class RegexAlt implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
 
@@ -11,12 +11,12 @@ public class Sequence implements RegularExpression {
 	
 	private final NFA nfa;
 	
-	public Sequence(List<RegularExpression> regularExpressions) {
+	public RegexAlt(List<RegularExpression> regularExpressions) {
 		this.nfa = createNFA();
 		this.regularExpressions = regularExpressions;
 	}
 	
-	public Sequence(RegularExpression...regularExpressions) {
+	public RegexAlt(RegularExpression...regularExpressions) {
 		this(Arrays.asList(regularExpressions));
 	}
 	
@@ -33,27 +33,22 @@ public class Sequence implements RegularExpression {
 		State startState = new State();
 		State finalState = new State(true);
 		
-		State currentState = startState;
-		
 		for(RegularExpression regexp : regularExpressions) {
-			currentState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
-			currentState = regexp.toNFA().getEndState();
+			startState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
+			regexp.toNFA().getEndState().addTransition(Transition.emptyTransition(finalState));
 		}
-		
-		currentState.addTransition(Transition.emptyTransition(finalState));
 		
 		return new NFA(startState, finalState);
 	}
-	
+
 	@Override
 	public boolean isNullable() {
 		for(RegularExpression regex : regularExpressions) {
-			if(!regex.isNullable()) {
-				return false;
+			if(regex.isNullable()) {
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
-
 
 }

@@ -181,4 +181,9 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		return nfa;
 	}
 
+	@Override
+	public boolean isNullable() {
+		return false;
+	}
+
 }

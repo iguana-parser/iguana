@@ -153,5 +153,9 @@ public class Keyword extends AbstractSymbol implements Token, RegularExpression 
 		return nfa;
 	}
 
+	@Override
+	public boolean isNullable() {
+		return false;
+	}
 	
 }
