@@ -5,6 +5,9 @@ import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
+import org.jgll.regex.NFA;
+import org.jgll.regex.State;
+import org.jgll.regex.Transition;
 
 
 /**
@@ -21,6 +24,8 @@ public class Range extends AbstractSymbol implements Terminal {
 	private final int end;
 	
 	private final BitSet testSet;
+	
+	private final NFA nfa;
 
 	public Range(int start, int end) {
 		
@@ -30,6 +35,8 @@ public class Range extends AbstractSymbol implements Terminal {
 		
 		this.start = start;
 		this.end = end;
+		this.nfa = createNFA();
+		
 		testSet = new BitSet();
 		testSet.set(start, end + 1);
 	}
@@ -97,5 +104,16 @@ public class Range extends AbstractSymbol implements Terminal {
 		range.conditions.addAll(conditions);
 		return range;
 	}
+	
+	private NFA createNFA() {
+		State startState = new State();
+		State finalState = new State(true);
+		startState.addTransition(new Transition(start, end, finalState));
+		return new NFA(startState, finalState);
+	}
 
+	@Override
+	public NFA toNFA() {
+		return nfa;
+	}
 }

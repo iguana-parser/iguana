@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.regex.NFA;
+import org.jgll.regex.State;
+import org.jgll.regex.Transition;
 
 /**
  * Character class represents a set of {@link Range} instances.
@@ -24,6 +27,8 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	
 	private BitSet testSet;
 	
+	private final NFA nfa;
+	
 	public CharacterClass(List<Range> ranges) {
 		
 		if(ranges == null || ranges.size() == 0) {
@@ -37,6 +42,8 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		}
 		
 		this.ranges = Collections.unmodifiableList(ranges);
+		
+		this.nfa = createNFA();
 	}
 	
 	public List<Range> getRanges() {
@@ -155,6 +162,25 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		characterClass.conditions.addAll(this.conditions);
 		characterClass.conditions.addAll(conditions);
 		return characterClass;
+	}
+	
+	private NFA createNFA() {
+		State startState = new State();
+		State finalState = new State(true);
+		
+		for(Range range : ranges) {
+			startState.addTransition(Transition.emptyTransition(range.toNFA().getStartState()));
+			for(State s : range.toNFA().getEndStates()) {
+				s.addTransition(Transition.emptyTransition(finalState));
+			}
+		}
+		
+		return new NFA(startState, finalState);
+	}
+	
+	@Override
+	public NFA toNFA() {
+		return nfa;
 	}
 
 }

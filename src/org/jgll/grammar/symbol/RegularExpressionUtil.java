@@ -1,96 +1,13 @@
 package org.jgll.grammar.symbol;
 
 import java.util.BitSet;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.ConditionType;
 
-import dk.brics.automaton.RegExp;
-import dk.brics.automaton.RunAutomaton;
+public class RegularExpressionUtil  {
 
-
-public class RegularExpression extends AbstractSymbol implements Token {
-
-	private static final long serialVersionUID = 1L;
-	
-	private final RunAutomaton automaton;
-
-	private final List<? extends Symbol> symbols;
-	
-	private final String name;
-	
-	private final BitSet bitSet;
-	
-	public RegularExpression(String name, List<? extends Symbol> symbols) {
-		// This is probably not the best design. We need a separate interface for
-		// regular expressions and their compositions.
-		// For now, if the regular expression is a simple sequence, the regular
-		// expression gets the conditions from the first and the last one.
-		// If it is a group, we still need to get the precede restrictions of the 
-		// first one. Follow restrictions are ignored, as we have the longest match
-		// anyway.
-		this.symbols = symbols;
-	
-		if(symbols.size() == 1 && symbols.get(0) instanceof Group) {
-			Group group = (Group) symbols.get(0);
-			conditions.addAll(group.getConditions());
-			addConditions(group.getSymbols());
-		} else {
-			addConditions(symbols);
-		}
-		
-		this.name = name;
-		this.automaton = new RunAutomaton(new RegExp(toBricsDFA()).toAutomaton());
-		this.bitSet = get(symbols.get(0));
-	}
-	
-	private void addConditions(List<? extends Symbol> symbols) {
-		conditions.addAll(symbols.get(0).getConditions());
-		if(symbols.size() > 1) {
-			for(Condition condition : symbols.get(symbols.size() - 1).getConditions()) {
-				if(condition.getType() != ConditionType.NOT_FOLLOW) {
-					conditions.add(condition);
-				}
-			}
-		}		
-	}
-	
-	public RunAutomaton getAutomaton() {
-		return automaton;
-	}
-	
-	public List<? extends Symbol> getSymbols() {
-		return symbols;
-	}
-	
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public RegularExpression addConditions(Collection<Condition> conditions) {
-		RegularExpression regex = new RegularExpression(this.name, this.symbols);
-		regex.conditions.addAll(this.conditions);
-		regex.conditions.addAll(conditions);
-		return regex;
-	}
-	
-	public Set<Terminal> getFirstTerminal() {
-		Symbol firstSymbol = symbols.get(0);
-		
-		Set<Terminal> set = new HashSet<>();
-		
-		getFirstTerminal(set, firstSymbol);
-
-		return set;
-	}
-	
-	private void getFirstTerminal(Set<Terminal> set, Symbol symbol) {
+	public static void getFirstTerminal(Set<Terminal> set, Symbol symbol) {
 		
 		if(symbol instanceof Terminal) {
 			set.add((Terminal) symbol);
@@ -129,16 +46,7 @@ public class RegularExpression extends AbstractSymbol implements Token {
 		}
 	}
 	
-	public boolean isNullable() {
-		for(Symbol s : symbols) {
-			if(!isRegexpNullable(s)) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	private static boolean isRegexpNullable(Symbol symbol) {
+	public static boolean isRegexpNullable(Symbol symbol) {
 		
 		if(symbol instanceof Terminal) {
 			return false;
@@ -175,18 +83,7 @@ public class RegularExpression extends AbstractSymbol implements Token {
 		}
 	}
 	
-	private String toBricsDFA() {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		for(Symbol symbol : symbols) {
-			symbolToString(symbol, sb);
-		}
-		
-		return sb.toString();
-	}
-	
-	private void symbolToString(Symbol symbol, StringBuilder sb) {
+	public static void symbolToString(Symbol symbol, StringBuilder sb) {
 		if(symbol instanceof Terminal) {
 			terminalToString((Terminal) symbol, sb);
 		} 
@@ -220,7 +117,7 @@ public class RegularExpression extends AbstractSymbol implements Token {
 		}
 	}
 
-	private void terminalToString(Terminal symbol, StringBuilder sb) {
+	public static void terminalToString(Terminal symbol, StringBuilder sb) {
 		if(symbol instanceof Character) {
 			sb.append((char)((Character) symbol).get());
 		}
@@ -228,18 +125,8 @@ public class RegularExpression extends AbstractSymbol implements Token {
 			sb.append(symbol.toString());
 		}
 	}
-	
-	@Override
-	public String toString() {
-		return name + " : " + symbols.toString();
-	}
-	
-	@Override
-	public BitSet asBitSet() {
-		return bitSet;
-	}
-	
-	private BitSet get(Symbol symbol) {
+
+	public static BitSet get(Symbol symbol) {
 		if(symbol instanceof Plus) {
 			return get((Plus) symbol);
 		} 
@@ -263,19 +150,19 @@ public class RegularExpression extends AbstractSymbol implements Token {
 		}
 	}
 	
-	private BitSet get(Plus plus) {
+	public static BitSet get(Plus plus) {
 		return get(plus.getSymbol());
 	}
 	
-	private BitSet get(Star star) {
+	public static BitSet get(Star star) {
 		return get(star.getSymbol());
 	}
 
-	private BitSet get(Opt opt) {
+	public static BitSet get(Opt opt) {
 		return get(opt.getSymbol());
 	}
 	
-	private BitSet get(Alt alt) {
+	public static BitSet get(Alt alt) {
 		BitSet set = new BitSet();
 		for(Symbol s : alt.getSymbols()) {
 			set.or(get(s));
@@ -283,7 +170,7 @@ public class RegularExpression extends AbstractSymbol implements Token {
 		return set;
 	}
 	
-	private BitSet get(Group group) {
+	public static BitSet get(Group group) {
 		BitSet set = new BitSet();
 		for(Symbol s : group.getSymbols()) {
 			set.or(get(s));

@@ -6,11 +6,15 @@ import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
+import org.jgll.regex.NFA;
+import org.jgll.regex.RegularExpression;
+import org.jgll.regex.State;
+import org.jgll.regex.Transition;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
-public class Keyword extends AbstractSymbol implements Token {
+public class Keyword extends AbstractSymbol implements Token, RegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,6 +26,8 @@ public class Keyword extends AbstractSymbol implements Token {
 	
 	private final BitSet bitSet;
 	
+	private final NFA nfa;
+	
 	public Keyword(String name, String s) {
 		this(name, Input.toIntArray(s));
 	}
@@ -30,6 +36,8 @@ public class Keyword extends AbstractSymbol implements Token {
 		this.chars = chars;
 		this.name = name;
 		this.bitSet = new BitSet();
+		this.nfa = createNFA();
+		
 		bitSet.set(chars[0]);
 	}
 	
@@ -122,5 +130,26 @@ public class Keyword extends AbstractSymbol implements Token {
 		set.set(chars[0]);
 		return set;
 	}
+	
+	private NFA createNFA() {
+		State startState = new State();
+		State finalState = new State(true);
+		
+		State currenState = startState;
+		
+		for(int c : chars) {
+			State nextState = new State();
+			currenState.addTransition(new Transition(c, nextState));
+			currenState = nextState;
+		}
+		
+		return new NFA(startState, finalState);
+	}
+	
+	@Override
+	public NFA toNFA() {
+		return nfa;
+	}
+
 	
 }

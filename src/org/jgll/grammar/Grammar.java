@@ -19,7 +19,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.RegularExpression;
+import org.jgll.grammar.symbol.RegularExpressionUtil;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Token;
 import org.jgll.util.logging.LoggerWrapper;
@@ -66,7 +66,7 @@ public class Grammar implements Serializable {
 	
 	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
-	private Set<RegularExpression> regularExpressions;
+	private Set<RegularExpressionUtil> regularExpressions;
 	
 	private Map<Token, Integer> tokenIDMap;
 	
@@ -263,7 +263,7 @@ public class Grammar implements Serializable {
 		return stDevDescriptors;
 	}
 	
-	public Set<RegularExpression> getRegularExpressions() {
+	public Set<RegularExpressionUtil> getRegularExpressions() {
 		return regularExpressions;
 	}
 	

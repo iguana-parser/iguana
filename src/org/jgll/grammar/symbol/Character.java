@@ -4,6 +4,9 @@ import java.util.BitSet;
 import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.regex.NFA;
+import org.jgll.regex.State;
+import org.jgll.regex.Transition;
 
 /**
  * 
@@ -17,9 +20,12 @@ public class Character extends AbstractSymbol implements Terminal {
 	private final int c;
 	
 	private final BitSet bitSet;
+	
+	private final NFA nfa;
 
 	public Character(int c) {
 		this.c = c;
+		this.nfa = createNFA();
 		this.bitSet = new BitSet();
 		bitSet.set(c);
 	}
@@ -77,6 +83,18 @@ public class Character extends AbstractSymbol implements Terminal {
 		terminal.conditions.addAll(this.conditions);
 		terminal.conditions.addAll(conditions);
 		return terminal;
+	}
+	
+	@Override
+	public NFA toNFA() {
+		return nfa;
+	}
+	
+	private NFA createNFA() {
+		State startState = new State();
+		State finalState = new State(true);
+		startState.addTransition(new Transition(c, finalState));
+		return new NFA(startState, finalState);
 	}
 
 }

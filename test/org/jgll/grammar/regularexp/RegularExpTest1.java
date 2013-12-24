@@ -12,7 +12,7 @@ import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
-import org.jgll.grammar.symbol.RegularExpression;
+import org.jgll.grammar.symbol.RegularExpressionUtil;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
@@ -53,7 +53,7 @@ public class RegularExpTest1 {
 		
 		CharacterClass zero_nine = new CharacterClass(list(new Range('0', '9')));
 		List<AbstractSymbol> symbols = list(new Plus(zero_nine), new Character('.'), new Plus(zero_nine));
-		Rule r6 = new Rule(Float, list(new RegularExpression("test", symbols)));
+		Rule r6 = new Rule(Float, list(new RegularExpressionUtil("test", symbols)));
 		
 		grammar1 = new GrammarBuilder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 		grammar2 = new GrammarBuilder().addRule(r1).addRule(r6).build();

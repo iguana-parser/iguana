@@ -8,7 +8,7 @@ import java.util.Set;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.RegularExpression;
+import org.jgll.grammar.symbol.RegularExpressionUtil;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
 import org.jgll.grammar.symbol.Token;
@@ -91,8 +91,8 @@ public class GLLLexerImpl implements GLLLexer {
 				if(token instanceof Keyword) {
 					tokenize(i, input, (Keyword) token);
 				} 
-				else if (token instanceof RegularExpression) {
-					tokenize(i, input, (RegularExpression) token);
+				else if (token instanceof RegularExpressionUtil) {
+					tokenize(i, input, (RegularExpressionUtil) token);
 				}
 				else if(token instanceof Terminal) {
 					tokenize(i, input, (Terminal) token);
@@ -112,7 +112,7 @@ public class GLLLexerImpl implements GLLLexer {
 		return -1;
 	}
 	
-	private int tokenize(int inputIndex, String input, RegularExpression regex) {
+	private int tokenize(int inputIndex, String input, RegularExpressionUtil regex) {
 		int length = regex.getAutomaton().run(input, inputIndex);
 		if(length != -1) {
 			createToken(inputIndex, regex, length);

@@ -4,6 +4,8 @@ import java.util.BitSet;
 import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.regex.NFA;
+import org.jgll.regex.State;
 
 public class Epsilon implements Terminal {
 
@@ -15,12 +17,18 @@ public class Epsilon implements Terminal {
 	
 	private static Epsilon instance;
 	
+	private final NFA nfa;
+	
 	public static Epsilon getInstance() {
 		if(instance == null) {
 			instance = new Epsilon();
 		}
 		
 		return instance;
+	}
+	
+	public Epsilon() {
+		nfa = createNFA();
 	}
 	
 	@Override
@@ -62,6 +70,16 @@ public class Epsilon implements Terminal {
 	@Override
 	public Symbol addCondition(Condition condition) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public NFA toNFA() {
+		return nfa;
+	}
+	
+	private NFA createNFA() {
+		State state = new State(true);
+		return new NFA(state, state);
 	}
 
 }

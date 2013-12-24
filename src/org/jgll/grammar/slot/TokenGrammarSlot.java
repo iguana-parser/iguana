@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.RegularExpression;
+import org.jgll.grammar.symbol.RegularExpressionUtil;
 import org.jgll.grammar.symbol.Terminal;
 import org.jgll.grammar.symbol.Token;
 import org.jgll.lexer.GLLLexer;
@@ -147,8 +147,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		if(token instanceof Terminal || token instanceof Keyword) {
 			return false;
 		}
-		if(token instanceof RegularExpression) {
-			return ((RegularExpression) token).isNullable();
+		if(token instanceof RegularExpressionUtil) {
+			return ((RegularExpressionUtil) token).isNullable();
 		}
 		return false;
 	}
