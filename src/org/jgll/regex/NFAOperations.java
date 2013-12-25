@@ -42,7 +42,7 @@ public class NFAOperations {
 			}
 		}
 		
-		return null;
+		return new DFA(null);
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {

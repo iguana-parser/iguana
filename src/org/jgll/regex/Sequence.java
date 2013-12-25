@@ -47,6 +47,8 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 		
 		for(RegularExpression regexp : regularExpressions) {
 			currentState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
+			State e = regexp.toNFA().getEndState();
+			e.setFinalState(false);
 			currentState = regexp.toNFA().getEndState();
 		}
 		

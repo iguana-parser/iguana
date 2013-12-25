@@ -35,7 +35,9 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 		State finalState = new State(true);
 		
 		startState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
-		regexp.toNFA().getEndState().addTransition(Transition.emptyTransition(finalState));
+		State e = regexp.toNFA().getEndState();
+		e.setFinalState(false);
+		e.addTransition(Transition.emptyTransition(finalState));
 		
 		startState.addTransition(Transition.emptyTransition(finalState));
 		

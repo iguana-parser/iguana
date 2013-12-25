@@ -7,7 +7,7 @@ public class State {
 
 	private final Set<Transition> transitions;
 	
-	private final boolean finalState;
+	private boolean finalState;
 	
 	public State() {
 		this(false);
@@ -24,6 +24,10 @@ public class State {
 	
 	public boolean isFinalState() {
 		return finalState;
+	}
+	
+	public void setFinalState(boolean finalState) {
+		this.finalState = finalState;
 	}
 	
 	public void addTransition(Transition transition) {

@@ -45,7 +45,9 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 		
 		for(RegularExpression regexp : regularExpressions) {
 			startState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
-			regexp.toNFA().getEndState().addTransition(Transition.emptyTransition(finalState));
+			State e = regexp.toNFA().getEndState();
+			e.setFinalState(false);
+			e.addTransition(Transition.emptyTransition(finalState));
 		}
 		
 		return new NFA(startState, finalState);
