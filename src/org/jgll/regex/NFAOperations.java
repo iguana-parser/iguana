@@ -24,17 +24,26 @@ public class NFAOperations {
 		
 		BitSet characters = nfa.getCharacters();
 		
+		State startState = null;
+		
 		while(!processList.isEmpty()) {
 			Set<State> stateSet = processList.poll();
 			State source = new State();
 			
+			if(startState == null) {
+				startState = source;
+			}
+			
 			Map<Set<State>, Integer> map = move(stateSet, characters);
 
 			for(Set<State> s : map.keySet()) {
+				if(s.isEmpty()) {
+					continue;
+				}
 				newState = epsilonClosure(s);
 				
 				State destination = new State();
-				source.addTransition(new Transition(map.get(destination), destination));
+				source.addTransition(new Transition(map.get(s), destination));
 				
 				if(!visitedStates.contains(newState)) {
 					processList.add(newState);
@@ -42,7 +51,7 @@ public class NFAOperations {
 			}
 		}
 		
-		return new DFA(null);
+		return new DFA(startState);
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
@@ -128,7 +137,7 @@ public class NFAOperations {
 			State state = stack.pop();
 			
 			for(Transition transition : state.getTransitions()) {
-				bitSet.set(transition.getStart(), transition.getEnd());
+				bitSet.set(transition.getStart(), transition.getEnd() + 1);
 				State destination = transition.getDestination();
 				if(!visitedStates.contains(destination)) {
 					visitedStates.add(destination);

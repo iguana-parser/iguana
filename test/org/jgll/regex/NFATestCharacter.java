@@ -11,6 +11,7 @@ public class NFATestCharacter {
 	public void testCountStates() {
 		RegularExpression regexp = new Character('a');
 		NFA nfa = regexp.toNFA();
+		DFA dfa = nfa.toDFA();
 		assertEquals(2, nfa.getCountStates());
 		System.out.println(nfa.toJavaCode());
 	}

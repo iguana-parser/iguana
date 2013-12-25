@@ -73,7 +73,7 @@ public class NFA {
 	}
 	
 	public DFA toDFA() {
-		throw new UnsupportedOperationException();
+		return NFAOperations.convert(this);
 	}
 	
 	public String toJavaCode() {
