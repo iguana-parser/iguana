@@ -49,10 +49,20 @@ public class NFA {
 		return count;
 	}
 	
+	/**
+	 * All characters accepted by this NFA.
+	 */
 	public BitSet getCharacters() {
 		return NFAOperations.getCharacters(this);
 	}
 	
+	/**
+	 * Returns the start of intervals for transitions 
+	 */
+	public int[] getStartIntervals() {
+		return NFAOperations.getStarts(this);
+	}
+ 	
 	@Override
 	public boolean equals(Object obj) {
 		
@@ -64,7 +74,7 @@ public class NFA {
 			return false;
 		}
 		
-		NFA other = (NFA) obj;
+//		NFA other = (NFA) obj;
 		
 		return super.equals(obj);
 	}

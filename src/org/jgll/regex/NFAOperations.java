@@ -1,10 +1,12 @@
 package org.jgll.regex;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -59,16 +61,19 @@ public class NFAOperations {
 		return newStates;
 	}
 	
-	private static Set<State> move(Set<State> states, BitSet bitSet) {
+	private static Set<State> move(Set<State> states, int[] starts) {
 		
-		Set<State> newStates = new HashSet<>();
-		
-		for(State state : states) {
-			for(Transition transition : state.getTransitions()) {
-				for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-					if(transition.getStart() <= i && transition.getEnd() >= i) {
+		Map<Set<State>, Transition> map = new HashMap<>();
+
+		for(int i = 0; i < starts.length; i++) {
+			
+			Set<State> newStates = new HashSet<>();
+			
+			for(State state : states) {
+				for(Transition transition : state.getTransitions()) {
+					if(transition.getStart() == i) {
 						newStates.add(transition.getDestination());
-					}
+					}		
 				}
 			}
 		}
@@ -126,6 +131,39 @@ public class NFAOperations {
 		}
 		
 		return bitSet;
+	}
+	
+	public static int[] getStarts(NFA nfa) {
+		
+		List<Integer> list = new ArrayList<>();
+		
+		State startState = nfa.getStartState();
+		
+		Set<State> visitedStates = new HashSet<>();
+		Stack<State> stack = new Stack<>();
+		
+		stack.push(startState);
+		visitedStates.add(startState);
+		
+		while(!stack.isEmpty()) {
+			State state = stack.pop();
+			
+			for(Transition transition : state.getTransitions()) {
+				list.add(transition.getStart());
+				State destination = transition.getDestination();
+				if(!visitedStates.contains(destination)) {
+					visitedStates.add(destination);
+					stack.push(destination);
+				}
+			}
+		}
+		
+		int[] startsArray = new int[list.size()];
+		int i = 0;
+		for(int v : list) {
+			startsArray[i++] = v;
+		}
+		return startsArray;
 	}
 	
 }

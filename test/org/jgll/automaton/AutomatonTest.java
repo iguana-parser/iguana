@@ -11,7 +11,7 @@ public class AutomatonTest {
 	@Test
 	public void test() {
 
-		String pattern = "(([\\--\\-]?[0-9][0-9_-_]*[\\.-\\.][0-9_-_]*)|([\\--\\-]?[0-9][0-9_-_]*[\\.-\\.][0-9_-_]*[E-Ee-e][+-+\\--\\-]?[0-9][0-9_-_]*))";
+		String pattern = "[0-8 0-3 0-5]";
 		System.out.println(pattern);
 		RegExp r = new RegExp(pattern);
 		Automaton a = r.toAutomaton();
