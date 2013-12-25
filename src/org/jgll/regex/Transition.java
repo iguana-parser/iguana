@@ -31,4 +31,8 @@ public class Transition {
 	public State getDestination() {
 		return destination;
 	}
+	
+	public boolean isEpsilonTransition() {
+		return start == -1;
+	}
 }
