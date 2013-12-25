@@ -1,12 +1,10 @@
 package org.jgll.regex;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -28,11 +26,19 @@ public class NFAOperations {
 		
 		while(!processList.isEmpty()) {
 			Set<State> stateSet = processList.poll();
+			State source = new State();
 			
-			newState = epsilonClosure(move(stateSet, characters));
-			
-			if(!visitedStates.contains(newState)) {
-				processList.add(newState);
+			Map<Set<State>, Integer> map = move(stateSet, characters);
+
+			for(Set<State> s : map.keySet()) {
+				newState = epsilonClosure(s);
+				
+				State destination = new State();
+				source.addTransition(new Transition(map.get(destination), destination));
+				
+				if(!visitedStates.contains(newState)) {
+					processList.add(newState);
+				}
 			}
 		}
 		
@@ -61,24 +67,25 @@ public class NFAOperations {
 		return newStates;
 	}
 	
-	private static Set<State> move(Set<State> states, int[] starts) {
+	private static Map<Set<State>, Integer> move(Set<State> states, BitSet bitSet) {
 		
-		Map<Set<State>, Transition> map = new HashMap<>();
-
-		for(int i = 0; i < starts.length; i++) {
+		Map<Set<State>, Integer> map = new HashMap<>();
+		
+		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
 			
 			Set<State> newStates = new HashSet<>();
-			
+
 			for(State state : states) {
 				for(Transition transition : state.getTransitions()) {
-					if(transition.getStart() == i) {
+					if(transition.getStart() <= i && transition.getEnd() >= i) {
 						newStates.add(transition.getDestination());
-					}		
+					}
 				}
 			}
+			map.put(newStates, i);
 		}
 		
-		return newStates;
+		return map;
 	}
 	
 	public static String toJavaCode(NFA nfa) {
@@ -131,39 +138,6 @@ public class NFAOperations {
 		}
 		
 		return bitSet;
-	}
-	
-	public static int[] getStarts(NFA nfa) {
-		
-		List<Integer> list = new ArrayList<>();
-		
-		State startState = nfa.getStartState();
-		
-		Set<State> visitedStates = new HashSet<>();
-		Stack<State> stack = new Stack<>();
-		
-		stack.push(startState);
-		visitedStates.add(startState);
-		
-		while(!stack.isEmpty()) {
-			State state = stack.pop();
-			
-			for(Transition transition : state.getTransitions()) {
-				list.add(transition.getStart());
-				State destination = transition.getDestination();
-				if(!visitedStates.contains(destination)) {
-					visitedStates.add(destination);
-					stack.push(destination);
-				}
-			}
-		}
-		
-		int[] startsArray = new int[list.size()];
-		int i = 0;
-		for(int v : list) {
-			startsArray[i++] = v;
-		}
-		return startsArray;
 	}
 	
 }

@@ -56,13 +56,6 @@ public class NFA {
 		return NFAOperations.getCharacters(this);
 	}
 	
-	/**
-	 * Returns the start of intervals for transitions 
-	 */
-	public int[] getStartIntervals() {
-		return NFAOperations.getStarts(this);
-	}
- 	
 	@Override
 	public boolean equals(Object obj) {
 		
