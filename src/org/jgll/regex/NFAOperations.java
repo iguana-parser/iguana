@@ -38,13 +38,17 @@ public class NFAOperations {
 			Map<Integer, Set<State>> map = move(stateSet, characters);
 
 			for(Entry<Integer, Set<State>> e : map.entrySet()) {
-				int i = e.getKey();
-				Set<State> s = e.getValue();
-				
-				newState = epsilonClosure(s);
+				newState = epsilonClosure(e.getValue());
 				
 				State destination = new State();
-				source.addTransition(new Transition(i, destination));
+				for(State s : newState) {
+					if(s.isFinalState()){
+						s.setFinalState(true);
+						break;
+					}
+				}
+				
+				source.addTransition(new Transition(e.getKey(), destination));
 				
 				if(!visitedStates.contains(newState)) {
 					processList.add(newState);
