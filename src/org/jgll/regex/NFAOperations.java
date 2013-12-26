@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 
@@ -34,16 +35,16 @@ public class NFAOperations {
 				startState = source;
 			}
 			
-			Map<Set<State>, Integer> map = move(stateSet, characters);
+			Map<Integer, Set<State>> map = move(stateSet, characters);
 
-			for(Set<State> s : map.keySet()) {
-				if(s.isEmpty()) {
-					continue;
-				}
+			for(Entry<Integer, Set<State>> e : map.entrySet()) {
+				int i = e.getKey();
+				Set<State> s = e.getValue();
+				
 				newState = epsilonClosure(s);
 				
 				State destination = new State();
-				source.addTransition(new Transition(map.get(s), destination));
+				source.addTransition(new Transition(i, destination));
 				
 				if(!visitedStates.contains(newState)) {
 					processList.add(newState);
@@ -76,9 +77,9 @@ public class NFAOperations {
 		return newStates;
 	}
 	
-	private static Map<Set<State>, Integer> move(Set<State> states, BitSet bitSet) {
+	private static Map<Integer, Set<State>> move(Set<State> states, BitSet bitSet) {
 		
-		Map<Set<State>, Integer> map = new HashMap<>();
+		Map<Integer, Set<State>> map = new HashMap<>();
 		
 		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
 			
@@ -91,7 +92,9 @@ public class NFAOperations {
 					}
 				}
 			}
-			map.put(newStates, i);
+			if(!newStates.isEmpty()) {
+				map.put(i, newStates);
+			}
 		}
 		
 		return map;
