@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class AutomatonOperations {
 	
-	public static DFA convert(NFA nfa) {
+	public static DFA convertNFAtoDFA(NFA nfa) {
 		
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
@@ -23,6 +23,9 @@ public class AutomatonOperations {
 		processList.add(newState);
 		
 		BitSet characters = nfa.getCharacters();
+
+		// For sharing states.
+		Map<Set<State>, State> newStatesMap = new HashMap<>();
 		
 		State startState = null;
 		
@@ -39,11 +42,16 @@ public class AutomatonOperations {
 			for(Entry<Integer, Set<State>> e : map.entrySet()) {
 				newState = epsilonClosure(e.getValue());
 				
-				State destination = new State();
-				for(State s : newState) {
-					if(s.isFinalState()){
-						s.setFinalState(true);
-						break;
+				State destination = newStatesMap.get(newState);
+				if(destination == null) {
+					destination = new State();
+					newStatesMap.put(e.getValue(), destination);
+					
+					for(State s : newState) {
+						if(s.isFinalState()){
+							destination.setFinalState(true);
+							break;
+						}
 					}
 				}
 				

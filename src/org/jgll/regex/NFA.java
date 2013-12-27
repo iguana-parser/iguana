@@ -52,7 +52,7 @@ public class NFA implements Automaton {
 	}
 	
 	public DFA toDFA() {
-		return AutomatonOperations.convert(this);
+		return AutomatonOperations.convertNFAtoDFA(this);
 	}
 	
 	public String toJavaCode() {
