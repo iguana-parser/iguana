@@ -1,5 +1,6 @@
 package org.jgll.regex;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +35,14 @@ public class State {
 	
 	public void addTransition(Transition transition) {
 		transitions.add(transition);
+	}
+	
+	public void removeTransition(Transition transition) {
+		transitions.remove(transition);
+	}
+	
+	public void removeTransitions(Collection<Transition> c) {
+		transitions.removeAll(c);
 	}
 	
 	public void setId(int id) {

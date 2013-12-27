@@ -36,6 +36,10 @@ public class Transition {
 		return start == -1;
 	}
 	
+	public boolean isLoop(State source) {
+		return source == destination;
+	}
+	
 	@Override
 	public String toString() {
 		return "(" + start + ", " + end + ") " + destination;

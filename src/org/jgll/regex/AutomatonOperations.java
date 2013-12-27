@@ -178,6 +178,35 @@ public class AutomatonOperations {
 			}
 		});
 	}
+	
+	public static void removeDeadStates(DFA dfa) {
+		AutomatonVisitor.visit(dfa, new VisitAction() {
 
+			@Override
+			public void visit(State state) {
+
+				Set<Transition> transitionsToBeRemoved = new HashSet<>();
+				
+				main:
+				for(Transition transition : state.getTransitions()) {
+					State destination = transition.getDestination();
+					
+					if(destination.getTransitions().size() == 0) {
+						transitionsToBeRemoved.add(transition);
+					} else {
+						for(Transition t : destination.getTransitions()) {
+							if(t.isLoop(destination)) {
+								continue main;
+							}
+						}
+						transitionsToBeRemoved.add(transition);
+					}
+				}
+				
+				state.removeTransitions(transitionsToBeRemoved);
+			}
+
+		});
+	}
 	
 }
