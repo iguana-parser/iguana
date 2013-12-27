@@ -8,9 +8,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.Stack;
 
-public class NFAOperations {
+public class AutomatonOperations {
 	
 	public static DFA convert(NFA nfa) {
 		
@@ -104,8 +103,8 @@ public class NFAOperations {
 		return map;
 	}
 	
-	public static String toJavaCode(NFA nfa) {
-		State startState = nfa.getStartState();
+	public static String toJavaCode(Automaton automaton) {
+		State startState = automaton.getStartState();
 		StringBuilder sb = new StringBuilder();
 		Map<State, Integer> visitedStates = new HashMap<>();
 		visitedStates.put(startState, 1);
@@ -128,32 +127,49 @@ public class NFAOperations {
 		}
 	}
 	
-	public static BitSet getCharacters(NFA nfa) {
+	public static BitSet getCharacters(Automaton automaton) {
+		final BitSet bitSet = new BitSet();
 		
-		BitSet bitSet = new BitSet();
-		
-		State startState = nfa.getStartState();
-		
-		Set<State> visitedStates = new HashSet<>();
-		Stack<State> stack = new Stack<>();
-		
-		stack.push(startState);
-		visitedStates.add(startState);
-		
-		while(!stack.isEmpty()) {
-			State state = stack.pop();
+		AutomatonVisitor.visit(automaton, new VisitAction() {
 			
-			for(Transition transition : state.getTransitions()) {
-				bitSet.set(transition.getStart(), transition.getEnd() + 1);
-				State destination = transition.getDestination();
-				if(!visitedStates.contains(destination)) {
-					visitedStates.add(destination);
-					stack.push(destination);
+			@Override
+			public void visit(State state) {
+				for(Transition transition : state.getTransitions()) {
+					bitSet.set(transition.getStart(), transition.getEnd() + 1);
 				}
 			}
-		}
+		});
 		
 		return bitSet;
 	}
+	
+	public static int getCountStates(Automaton automaton) {
+		
+		final int[] count = new int[0];
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				count[0]++;
+			}
+		});
+
+		return count[0];
+	}
+	
+	public static void setStateIDs(Automaton automaton) {
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+
+			int id = 0;
+			
+			@Override
+			public void visit(State state) {
+				state.setId(++id);
+			}
+		});
+	}
+
 	
 }

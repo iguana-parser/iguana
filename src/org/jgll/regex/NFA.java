@@ -1,12 +1,9 @@
 package org.jgll.regex;
 
 import java.util.BitSet;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
 
 
-public class NFA {
+public class NFA implements Automaton {
 	
 	private State startState;
 	private State endState;
@@ -14,8 +11,10 @@ public class NFA {
 	public NFA(State startState, State endState) {
 		this.startState = startState;
 		this.endState = endState;
+		AutomatonOperations.setStateIDs(this);
 	}
 	
+	@Override
 	public State getStartState() {
 		return startState;
 	}
@@ -24,36 +23,16 @@ public class NFA {
 		return endState;
 	}
 	
+	@Override
 	public int getCountStates() {
-		Set<State> visitedStates = new HashSet<>();
-		Stack<State> stack = new Stack<>();
-		
-		stack.push(startState);
-		visitedStates.add(startState);
-		
-		int count = 0;
-		
-		while(!stack.isEmpty()) {
-			State state = stack.pop();
-			count++;
-			
-			for(Transition transition : state.getTransitions()) {
-				State destination = transition.getDestination();
-				if(!visitedStates.contains(destination)) {
-					visitedStates.add(destination);
-					stack.push(destination);
-				}
-			}
-		}
-		
-		return count;
+		return AutomatonOperations.getCountStates(this);
 	}
 	
 	/**
 	 * All characters accepted by this NFA.
 	 */
 	public BitSet getCharacters() {
-		return NFAOperations.getCharacters(this);
+		return AutomatonOperations.getCharacters(this);
 	}
 	
 	@Override
@@ -73,11 +52,11 @@ public class NFA {
 	}
 	
 	public DFA toDFA() {
-		return NFAOperations.convert(this);
+		return AutomatonOperations.convert(this);
 	}
 	
 	public String toJavaCode() {
-		return NFAOperations.toJavaCode(this);
+		return AutomatonOperations.toJavaCode(this);
 	}
 	
 }

@@ -9,6 +9,8 @@ public class State {
 	
 	private boolean finalState;
 	
+	private int id;
+	
 	public State() {
 		this(false);
 	}
@@ -32,6 +34,19 @@ public class State {
 	
 	public void addTransition(Transition transition) {
 		transitions.add(transition);
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	@Override
+	public String toString() {
+		return "State" + id;
 	}
 
 }

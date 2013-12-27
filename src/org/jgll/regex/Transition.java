@@ -35,4 +35,9 @@ public class Transition {
 	public boolean isEpsilonTransition() {
 		return start == -1;
 	}
+	
+	@Override
+	public String toString() {
+		return "(" + start + ", " + end + ") " + destination;
+	}
 }
