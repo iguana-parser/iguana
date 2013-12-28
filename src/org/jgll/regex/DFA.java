@@ -25,9 +25,11 @@ public class DFA {
 	}
 
 	public int run(Input input, int index) {
-		int length = -1;
+		int length = 0;
 
 		int stateId = startStateId;
+		
+		int maximumMatched = -1;
 		
 		while(true) {
 			int transitionId = getTransitionId(input.charAt(index));
@@ -37,16 +39,20 @@ public class DFA {
 			}
 			
 			stateId = transitionTable[stateId][transitionId];
+			length++;
+			
 			if(stateId == -1) {
 				break;
 			}
-
+			
 			if(endStates[stateId]) {
-				length++;
+				maximumMatched = length;
 			}
+
+			length++;
 		}
 		
-		return length;
+		return maximumMatched;
 	}
 	
 	private int getTransitionId(int c) {

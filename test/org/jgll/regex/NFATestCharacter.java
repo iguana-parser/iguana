@@ -14,7 +14,8 @@ public class NFATestCharacter {
 		NFA nfa = regexp.toNFA();
 		DFA dfa = nfa.toDFA();
 		assertEquals(2, nfa.getCountStates());
-		System.out.println(	dfa.match(Input.fromString("a")));
+		assertTrue(dfa.match(Input.fromString("a")));
+		assertEquals(1, dfa.run(Input.fromString("a"), 0));
 	}
 
 }
