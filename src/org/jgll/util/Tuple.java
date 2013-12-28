@@ -42,5 +42,10 @@ public class Tuple<T, K> {
 	public int hashCode() {
 		return HashFunctions.defaulFunction().hash(t.hashCode(), k.hashCode());
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("(%s, %s)", t, k);
+	}
 
 }

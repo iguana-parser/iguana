@@ -35,6 +35,10 @@ public class NFA implements Automaton {
 		return AutomatonOperations.getCharacters(this);
 	}
 	
+	public Integer[] getIntervals() {
+		return AutomatonOperations.getIntervalPoints(this);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		

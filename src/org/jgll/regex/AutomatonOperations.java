@@ -1,6 +1,7 @@
 package org.jgll.regex;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
@@ -8,6 +9,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
 	
@@ -22,7 +25,7 @@ public class AutomatonOperations {
 		visitedStates.add(newState);
 		processList.add(newState);
 		
-		BitSet characters = nfa.getCharacters();
+		Integer[] intervals = nfa.getIntervals();
 
 		// For sharing states.
 		Map<Set<State>, State> newStatesMap = new HashMap<>();
@@ -37,9 +40,9 @@ public class AutomatonOperations {
 				startState = source;
 			}
 			
-			Map<Integer, Set<State>> map = move(stateSet, characters);
+			Map<Tuple<Integer, Integer>, Set<State>> map = move(stateSet, intervals);
 
-			for(Entry<Integer, Set<State>> e : map.entrySet()) {
+			for(Entry<Tuple<Integer, Integer>, Set<State>> e : map.entrySet()) {
 				newState = epsilonClosure(e.getValue());
 				
 				State destination = newStatesMap.get(newState);
@@ -55,7 +58,7 @@ public class AutomatonOperations {
 					}
 				}
 				
-				source.addTransition(new Transition(e.getKey(), destination));
+				source.addTransition(new Transition(e.getKey().getFirst(), e.getKey().getSecond(), destination));
 				
 				if(!visitedStates.contains(newState)) {
 					processList.add(newState);
@@ -88,24 +91,25 @@ public class AutomatonOperations {
 		return newStates;
 	}
 	
-	private static Map<Integer, Set<State>> move(Set<State> states, BitSet bitSet) {
+	private static Map<Tuple<Integer, Integer>, Set<State>> move(Set<State> states, Integer[] intervals) {
 		
-		Map<Integer, Set<State>> map = new HashMap<>();
+		Map<Tuple<Integer, Integer>, Set<State>> map = new HashMap<>();
 		
-		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-			
+		for(int i = 0; i < intervals.length; i++) {
 			Set<State> newStates = new HashSet<>();
 
 			for(State state : states) {
 				for(Transition transition : state.getTransitions()) {
-					if(transition.getStart() <= i && transition.getEnd() >= i) {
+					if(intervals[i] >= transition.getStart() && intervals[i] <= transition.getEnd()) {
 						newStates.add(transition.getDestination());
 					}
 				}
 			}
 			if(!newStates.isEmpty()) {
-				map.put(i, newStates);
-			}
+				if(i + 1 < intervals.length) {
+					map.put(new Tuple<>(intervals[i], intervals[i+1]), newStates);
+				}
+			}			
 		}
 		
 		return map;
@@ -151,9 +155,30 @@ public class AutomatonOperations {
 		return bitSet;
 	}
 	
+	public static Integer[] getIntervalPoints(Automaton automaton) {
+		
+		final Set<Integer> set = new HashSet<>();
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				for(Transition transition : state.getTransitions()) {
+					set.add(transition.getStart());
+					set.add(transition.getEnd());
+				}
+			}
+		});
+		
+		Integer[] array = set.toArray(new Integer[] {});
+		Arrays.sort(array);
+		
+		return array;
+	}
+ 	
 	public static int getCountStates(Automaton automaton) {
 		
-		final int[] count = new int[0];
+		final int[] count = new int[1];
 		
 		AutomatonVisitor.visit(automaton, new VisitAction() {
 			
