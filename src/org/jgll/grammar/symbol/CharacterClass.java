@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,6 +29,10 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	private BitSet testSet;
 	
 	private final NFA nfa;
+	
+	public CharacterClass(Range...ranges) {
+		this(Arrays.asList(ranges));
+	}
 	
 	public CharacterClass(List<Range> ranges) {
 		

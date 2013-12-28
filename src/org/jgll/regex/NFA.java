@@ -36,7 +36,7 @@ public class NFA implements Automaton {
 	}
 	
 	public int[] getIntervals() {
-		return AutomatonOperations.getIntervalPoints(this);
+		return AutomatonOperations.getIntervals(this);
 	}
 	
 	@Override

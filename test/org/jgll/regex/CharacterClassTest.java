@@ -6,10 +6,10 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.util.Input;
 import org.junit.Test;
 
-public class NFATestCharacter {
+public class CharacterClassTest {
 	
 	@Test
-	public void testCountStates() {
+	public void test() {
 		RegularExpression regexp = new Character('a');
 		NFA nfa = regexp.toNFA();
 		DFA dfa = nfa.toDFA();

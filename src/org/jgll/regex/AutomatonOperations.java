@@ -188,7 +188,7 @@ public class AutomatonOperations {
 		return bitSet;
 	}
 	
-	public static int[] getIntervalPoints(Automaton automaton) {
+	public static int[] getIntervals(Automaton automaton) {
 		
 		final Set<Integer> set = new HashSet<>();
 		
@@ -197,8 +197,10 @@ public class AutomatonOperations {
 			@Override
 			public void visit(State state) {
 				for(Transition transition : state.getTransitions()) {
-					set.add(transition.getStart());
-					set.add(transition.getEnd());
+					if(!transition.isEpsilonTransition()) {
+						set.add(transition.getStart());
+						set.add(transition.getEnd());						
+					}
 				}
 			}
 		});
