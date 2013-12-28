@@ -25,12 +25,18 @@ public class DFA {
 	}
 
 	public int run(Input input, int index) {
-		int length = 0;
+		int length = -1;
 
 		int stateId = startStateId;
 		
 		while(true) {
-			stateId = transitionTable[stateId][getTransitionId(input.charAt(index))];
+			int transitionId = getTransitionId(input.charAt(index));
+			
+			if(transitionId == -1) {
+				return -1;
+			}
+			
+			stateId = transitionTable[stateId][transitionId];
 			if(stateId == -1) {
 				break;
 			}
@@ -43,26 +49,39 @@ public class DFA {
 		return length;
 	}
 	
-	private int getTransitionId(int inputIndex) {
-		return getTransitionId(inputIndex, 0, intervals.length);
+	private int getTransitionId(int c) {
+		
+		if(c < intervals[0] || c > intervals[intervals.length -1]) {
+			return -1;
+		}
+		
+		return getTransitionId(c, 0, intervals.length);
 	}
 	
-	private int getTransitionId(int inputIndex, int start, int end) {
+	private int getTransitionId(int c, int start, int end) {
+		
+		if(end - start == 0) {
+			if(c == intervals[start]) {
+				return start;
+			} else {
+				return -1;
+			}
+		}
 		
 		int n = (end - start) / 2;
 		
-		if(inputIndex == intervals[n]) {
+		if(c == intervals[n]) {
 			return n;
 		} 
-		else if(inputIndex >= intervals[n] && inputIndex <= intervals[n + 1]) {
+		else if(c >= intervals[n] && c <= intervals[n + 1]) {
 			return n;
 		} 
-		else if(inputIndex <= intervals[n]) {
-			return getTransitionId(inputIndex, start, n);
+		else if(c <= intervals[n]) {
+			return getTransitionId(c, start, n);
 		}
-		else if(inputIndex >= intervals[n]) {
-			return getTransitionId(inputIndex, n, end);
+		else if(c >= intervals[n]) {
+			return getTransitionId(c, n, end);
 		}
-		return 0;
+		return -1;
 	}
 }
