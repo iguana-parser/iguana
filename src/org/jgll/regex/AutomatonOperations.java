@@ -25,7 +25,7 @@ public class AutomatonOperations {
 		visitedStates.add(newState);
 		processList.add(newState);
 		
-		Integer[] intervals = nfa.getIntervals();
+		int[] intervals = nfa.getIntervals();
 		
 		Map<Integer, Integer> intervalIds = new HashMap<>();
 		
@@ -96,7 +96,7 @@ public class AutomatonOperations {
 			endStates[state.getId()] = true;
 		}
 		
-		return new DFA(transitionTable, endStates, startState.getId());
+		return new DFA(transitionTable, endStates, startState.getId(), intervals);
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
@@ -121,7 +121,7 @@ public class AutomatonOperations {
 		return newStates;
 	}
 	
-	private static Map<Tuple<Integer, Integer>, Set<State>> move(Set<State> states, Integer[] intervals) {
+	private static Map<Tuple<Integer, Integer>, Set<State>> move(Set<State> states, int[] intervals) {
 		
 		Map<Tuple<Integer, Integer>, Set<State>> map = new HashMap<>();
 		
@@ -185,7 +185,7 @@ public class AutomatonOperations {
 		return bitSet;
 	}
 	
-	public static Integer[] getIntervalPoints(Automaton automaton) {
+	public static int[] getIntervalPoints(Automaton automaton) {
 		
 		final Set<Integer> set = new HashSet<>();
 		
@@ -203,7 +203,12 @@ public class AutomatonOperations {
 		Integer[] array = set.toArray(new Integer[] {});
 		Arrays.sort(array);
 		
-		return array;
+		int[] result = new int[array.length];
+		for(int i = 0; i < array.length; i++) {
+			result[i] = array[i];
+		}
+		
+		return result;
 	}
  	
 	public static int getCountStates(Automaton automaton) {
