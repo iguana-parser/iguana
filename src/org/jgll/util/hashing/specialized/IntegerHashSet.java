@@ -1,4 +1,4 @@
-package org.jgll.util.hashing;
+package org.jgll.util.hashing.specialized;
 
 import java.io.Serializable;
 
