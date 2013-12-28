@@ -26,6 +26,12 @@ public class AutomatonOperations {
 		processList.add(newState);
 		
 		Integer[] intervals = nfa.getIntervals();
+		
+		Map<Integer, Integer> intervalIds = new HashMap<>();
+		
+		for(int i = 0; i < intervals.length; i++) {
+			intervalIds.put(intervals[i], i);
+		}
 
 		// For sharing states.
 		Map<Set<State>, State> newStatesMap = new HashMap<>();
@@ -40,9 +46,9 @@ public class AutomatonOperations {
 				startState = source;
 			}
 			
-			Map<Tuple<Integer, Integer>, Set<State>> map = move(stateSet, intervals);
+			Map<Tuple<Integer, Integer>, Set<State>> transitionsMap = move(stateSet, intervals);
 
-			for(Entry<Tuple<Integer, Integer>, Set<State>> e : map.entrySet()) {
+			for(Entry<Tuple<Integer, Integer>, Set<State>> e : transitionsMap.entrySet()) {
 				newState = epsilonClosure(e.getValue());
 				
 				State destination = newStatesMap.get(newState);
@@ -58,7 +64,9 @@ public class AutomatonOperations {
 					}
 				}
 				
-				source.addTransition(new Transition(e.getKey().getFirst(), e.getKey().getSecond(), destination));
+				Transition transition = new Transition(e.getKey().getFirst(), e.getKey().getSecond(), destination);
+				transition.setId(intervalIds.get(e.getKey().getFirst()));
+				source.addTransition(transition);
 				
 				if(!visitedStates.contains(newState)) {
 					processList.add(newState);
@@ -66,7 +74,29 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new DFA(startState);
+		setStateIDs(startState);
+		
+		int[][] transitionTable = new int[newStatesMap.size() + 1][intervals.length - 1];
+		boolean[] endStates = new boolean[newStatesMap.size() + 1];
+		
+		for(int i = 0; i < transitionTable.length; i++) {
+			for(int j = 0; j < transitionTable[i].length; j++) {
+				transitionTable[i][j] = -1;
+			}
+		}
+
+		for(Transition transition : startState.getTransitions()) {
+			transitionTable[startState.getId()][transition.getId()] = transition.getDestination().getId();
+		}
+		
+		for(State state : newStatesMap.values()) {
+			for(Transition transition : state.getTransitions()) {
+				transitionTable[state.getId()][transition.getId()] = transition.getDestination().getId();
+			}
+			endStates[state.getId()] = true;
+		}
+		
+		return new DFA(transitionTable, endStates, startState.getId());
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
@@ -191,6 +221,20 @@ public class AutomatonOperations {
 		return count[0];
 	}
 	
+	
+	public static void setStateIDs(State startState) {
+				
+		AutomatonVisitor.visit(startState, new VisitAction() {
+			
+			int id = 0;
+
+			@Override
+			public void visit(State state) {
+				state.setId(id++);
+			}
+		});
+	}
+	
 	public static void setStateIDs(Automaton automaton) {
 		
 		AutomatonVisitor.visit(automaton, new VisitAction() {
@@ -199,13 +243,13 @@ public class AutomatonOperations {
 			
 			@Override
 			public void visit(State state) {
-				state.setId(++id);
+				state.setId(id++);
 			}
 		});
 	}
 	
-	public static void removeDeadStates(DFA dfa) {
-		AutomatonVisitor.visit(dfa, new VisitAction() {
+	public static void removeDeadStates(Automaton nfa) {
+		AutomatonVisitor.visit(nfa, new VisitAction() {
 
 			@Override
 			public void visit(State state) {
@@ -230,7 +274,6 @@ public class AutomatonOperations {
 				
 				state.removeTransitions(transitionsToBeRemoved);
 			}
-
 		});
 	}
 	

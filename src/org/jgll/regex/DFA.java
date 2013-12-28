@@ -3,27 +3,37 @@ package org.jgll.regex;
 import org.jgll.util.Input;
 
 
-public class DFA implements Automaton {
+public class DFA {
 	
-	private State startState;
+	private final int[][] transitionTable;
+	
+	private final boolean[] endStates;
 
-	public DFA(State startState) {
-		this.startState = startState;
-		AutomatonOperations.setStateIDs(this);
+	private int startStateId;
+
+	public DFA(int[][] transitionTable, boolean[] endStates, int startStateId) {
+		this.transitionTable = transitionTable;
+		this.endStates = endStates;
+		this.startStateId = startStateId;
 	}
 
 	public int run(Input input, int index) {
-		return 0;
-	}
+		int length = 0;
 
-	@Override
-	public State getStartState() {
-		return startState;
-	}
+		int stateId = startStateId;
+		
+		while(true) {
+			stateId = transitionTable[stateId][index];
+			if(stateId == -1) {
+				break;
+			}
 
-	@Override
-	public int getCountStates() {
-		return AutomatonOperations.getCountStates(this);
+			if(endStates[stateId]) {
+				length++;
+			}
+		}
+		
+		return length;
 	}
 
 }

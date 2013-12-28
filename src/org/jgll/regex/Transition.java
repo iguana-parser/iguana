@@ -6,6 +6,8 @@ public class Transition {
 	private int end;
 	private State destination;
 	
+	private int id;
+	
 	public Transition(int start, int end, State destination) {
 		this.start = start;
 		this.end = end;
@@ -26,6 +28,14 @@ public class Transition {
 	
 	public int getEnd() {
 		return end;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public State getDestination() {

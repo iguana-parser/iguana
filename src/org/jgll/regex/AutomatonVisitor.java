@@ -4,12 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-
 public class AutomatonVisitor {
 
 	public static void visit(Automaton nfa, VisitAction action) {
-		State startState = nfa.getStartState();
-		
+		visit(nfa.getStartState(), action);
+	}
+	
+	public static void visit(State startState, VisitAction action) {
 		Set<State> visitedStates = new HashSet<>();
 		Stack<State> stack = new Stack<>();
 		
@@ -28,7 +29,6 @@ public class AutomatonVisitor {
 				}
 			}
 		}
-
 	}
 	
 }
