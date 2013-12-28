@@ -19,6 +19,10 @@ public class DFA {
 		this.startStateId = startStateId;
 		this.intervals = intervals;
 	}
+	
+	public boolean match(Input input) {
+		return run(input, 0) != -1;
+	}
 
 	public int run(Input input, int index) {
 		int length = 0;
@@ -26,7 +30,7 @@ public class DFA {
 		int stateId = startStateId;
 		
 		while(true) {
-			stateId = transitionTable[stateId][getTransitionId(index)];
+			stateId = transitionTable[stateId][getTransitionId(input.charAt(index))];
 			if(stateId == -1) {
 				break;
 			}
@@ -45,7 +49,7 @@ public class DFA {
 	
 	private int getTransitionId(int inputIndex, int start, int end) {
 		
-		int n = (start - end) / 2;
+		int n = (end - start) / 2;
 		
 		if(inputIndex == intervals[n]) {
 			return n;
