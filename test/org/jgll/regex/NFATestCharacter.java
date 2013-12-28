@@ -3,6 +3,7 @@ package org.jgll.regex;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
+import org.jgll.util.Input;
 import org.junit.Test;
 
 public class NFATestCharacter {
@@ -13,7 +14,7 @@ public class NFATestCharacter {
 		NFA nfa = regexp.toNFA();
 		DFA dfa = nfa.toDFA();
 		assertEquals(2, nfa.getCountStates());
-		System.out.println(nfa.toJavaCode());
+		System.out.println(	dfa.match(Input.fromString("a")));
 	}
 
 }

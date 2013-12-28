@@ -76,7 +76,7 @@ public class AutomatonOperations {
 		
 		setStateIDs(startState);
 		
-		int[][] transitionTable = new int[newStatesMap.size() + 1][intervals.length - 1];
+		int[][] transitionTable = new int[newStatesMap.size() + 1][intervals.length];
 		boolean[] endStates = new boolean[newStatesMap.size() + 1];
 		
 		for(int i = 0; i < transitionTable.length; i++) {
@@ -138,6 +138,9 @@ public class AutomatonOperations {
 			if(!newStates.isEmpty()) {
 				if(i + 1 < intervals.length) {
 					map.put(new Tuple<>(intervals[i], intervals[i+1]), newStates);
+				} 
+				if(i + 1 == intervals.length) {
+					map.put(new Tuple<>(intervals[i], intervals[i]), newStates);
 				}
 			}			
 		}
