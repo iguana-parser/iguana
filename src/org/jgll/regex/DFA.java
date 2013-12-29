@@ -21,7 +21,7 @@ public class DFA {
 	}
 	
 	public boolean match(Input input) {
-		return run(input, 0) != -1;
+		return run(input, 0) == input.length() - 1;
 	}
 
 	public int run(Input input, int index) {
@@ -48,8 +48,6 @@ public class DFA {
 			if(endStates[stateId]) {
 				maximumMatched = length;
 			}
-
-			length++;
 		}
 		
 		return maximumMatched;

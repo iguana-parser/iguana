@@ -8,8 +8,9 @@ import org.jgll.regex.VisitAction;
 
 public class NFAToDot {
 	
-	public static final String NFA_NODE = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
-	public static final String NFA_TRANSITION = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
+	private static final String NFA_NODE = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
+	private static final String FINAL_NFA_NODE = "[shape=doublecircle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
+	private static final String NFA_TRANSITION = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
 
 	
 	public static String toDot(State startState) {
@@ -21,7 +22,11 @@ public class NFAToDot {
 			@Override
 			public void visit(State state) {
 				
-				sb.append("\"state" + state.getId() + "\"" + String.format(NFA_NODE, state.getId()) + "\n");
+				if(state.isFinalState()) {
+					sb.append("\"state" + state.getId() + "\"" + String.format(FINAL_NFA_NODE, state.getId()) + "\n");
+				} else {
+					sb.append("\"state" + state.getId() + "\"" + String.format(NFA_NODE, state.getId()) + "\n");					
+				}
 				
 				for(Transition transition : state.getTransitions()) {
 					sb.append(String.format(NFA_TRANSITION, transition) + "\"state" + state.getId() + "\"" + "->" + "{\"state" + transition.getDestination().getId() + "\"}" + "\n");										

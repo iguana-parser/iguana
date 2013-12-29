@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Tuple;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 
 public class AutomatonOperations {
 	

@@ -44,6 +44,13 @@ public class Input {
 		return new Input(input);
 	}
 	
+	public static Input fromChar(char c) {
+		int[] input = new int[2];
+		input[0] = c;
+		input[1] = 0;
+		return new Input(input);
+	}
+	
 	public static Input fromIntArray(int[] input) {
 		return new Input(input);
 	}
