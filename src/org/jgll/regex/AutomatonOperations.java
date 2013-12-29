@@ -137,10 +137,10 @@ public class AutomatonOperations {
 			}
 			if(!newStates.isEmpty()) {
 				if(i + 1 < intervals.length) {
-					map.put(new Tuple<>(intervals[i], intervals[i+1]), newStates);
+					map.put(new Tuple<>(intervals[i], intervals[i+1] - 1), newStates);
 				} 
 				if(i + 1 == intervals.length) {
-					map.put(new Tuple<>(intervals[i], intervals[i]), newStates);
+					map.put(new Tuple<>(intervals[i] - 1, intervals[i] - 1), newStates);
 				}
 			}			
 		}
@@ -199,7 +199,7 @@ public class AutomatonOperations {
 				for(Transition transition : state.getTransitions()) {
 					if(!transition.isEpsilonTransition()) {
 						set.add(transition.getStart());
-						set.add(transition.getEnd());						
+						set.add(transition.getEnd() + 1);						
 					}
 				}
 			}

@@ -16,7 +16,7 @@ public class GSSToDot extends ToDot {
 			sb.append("\"" + getId(gssNode) + "\"" + String.format(GSS_NODE, gssNode.toString()) + "\n");
 			
 			for(GSSNode dest : gssNode.getChildren()) {
-					sb.append(GSS_EDGE + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(dest) + "\"}" + "\n");					
+				sb.append(GSS_EDGE + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(dest) + "\"}" + "\n");					
 			}
 		}
 	}

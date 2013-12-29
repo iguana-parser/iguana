@@ -28,7 +28,7 @@ public class GraphVizUtil {
 	public static final String END_EDGE = "edge [color=black, style=dotted, penwidth=0.5, arrowsize=0.7];";
 	
 	public static final int TOP_DOWN = 0;
-	public static final int L2R = 1;
+	public static final int LEFT_TO_RIGHT = 1;
 	
 	public static void generateGraph(String dot, String directory, String fileName) {
 		generateGraph(dot, directory, fileName, TOP_DOWN);
@@ -50,7 +50,7 @@ public class GraphVizUtil {
 		sb.append("nodesep=.6").append(lineSeparator);
 		sb.append("ranksep=.4").append(lineSeparator);		
 		sb.append("ordering=out").append(lineSeparator);
-		if(layout == L2R) {
+		if(layout == LEFT_TO_RIGHT) {
 			sb.append("rankdir=LR").append(lineSeparator);
 		}
 		

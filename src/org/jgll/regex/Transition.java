@@ -52,6 +52,6 @@ public class Transition {
 	
 	@Override
 	public String toString() {
-		return "(" + start + ", " + end + ") " + destination;
+		return (start == end) ? start + "" : "[" + start + "-" + end + "]";
 	}
 }
