@@ -52,6 +52,15 @@ public class Transition {
 	
 	@Override
 	public String toString() {
+		
+		if(isEpsilonTransition()) {
+			return "-1";
+		}
+		
+		if(end < Character.MAX_VALUE) {
+			return (start == end) ? (char) start + "" : "[" + (char) start + "-" + (char) end + "]";
+		}
+		
 		return (start == end) ? start + "" : "[" + start + "-" + end + "]";
 	}
 }
