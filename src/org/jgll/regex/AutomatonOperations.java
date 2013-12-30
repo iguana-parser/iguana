@@ -82,7 +82,7 @@ public class AutomatonOperations {
 		
 		setStateIDs(startState);
 		
-		GraphVizUtil.generateGraph(NFAToDot.toDot(startState), "/Users/ali/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
+//		GraphVizUtil.generateGraph(NFAToDot.toDot(startState), "/Users/ali/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
 		
 		int[][] transitionTable = new int[newStatesMap.size()][intervals.length];
 		boolean[] endStates = new boolean[newStatesMap.size()];
