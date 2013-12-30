@@ -21,8 +21,8 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 	private final BitSet bitSet;
 	
 	public Sequence(List<RegularExpression> regularExpressions) {
-		this.nfa = createNFA();
 		this.regularExpressions = regularExpressions;
+		this.nfa = createNFA();
 		this.bitSet = calculateFirstChars();
 	}
 	

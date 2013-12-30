@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class CharacterClassTest {
 	
-//	@Test
+	@Test
 	public void test1() {
 		RegularExpression regexp = new CharacterClass(new Range('a', 'z'), new Range('1', '8'));
 		NFA nfa = regexp.toNFA();

@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Tuple;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 
 public class AutomatonOperations {
 	
@@ -21,9 +23,9 @@ public class AutomatonOperations {
 		
 		Set<State> initialState = new HashSet<>();
 		initialState.add(nfa.getStartState());
-		Set<State> newState = epsilonClosure(initialState);
-		visitedStates.add(newState);
-		processList.add(newState);
+		initialState = epsilonClosure(initialState);
+		visitedStates.add(initialState);
+		processList.add(initialState);
 		
 		int[] intervals = nfa.getIntervals();
 		
@@ -32,29 +34,33 @@ public class AutomatonOperations {
 		for(int i = 0; i < intervals.length; i++) {
 			intervalIds.put(intervals[i], i);
 		}
-
-		// For sharing states.
+		
+		/**
+		 * A map from the set of NFA states to the new state in the produced DFA.
+		 * This map is used for sharing DFA states.
+		 */
 		Map<Set<State>, State> newStatesMap = new HashMap<>();
 		
-		State startState = null;
+		State startState = new State();
+		
+		newStatesMap.put(initialState, startState);
 		
 		while(!processList.isEmpty()) {
 			Set<State> stateSet = processList.poll();
-			State source = new State();
+			State source = newStatesMap.get(stateSet);
 			
-			if(startState == null) {
-				startState = source;
-			}
+			// The state should have been created before.
+			assert source != null;
 			
 			Map<Tuple<Integer, Integer>, Set<State>> transitionsMap = move(stateSet, intervals);
 
 			for(Entry<Tuple<Integer, Integer>, Set<State>> e : transitionsMap.entrySet()) {
-				newState = epsilonClosure(e.getValue());
+				Set<State> newState = epsilonClosure(e.getValue());
 				
 				State destination = newStatesMap.get(newState);
 				if(destination == null) {
 					destination = new State();
-					newStatesMap.put(e.getValue(), destination);
+					newStatesMap.put(newState, destination);
 					
 					for(State s : newState) {
 						if(s.isFinalState()){
@@ -75,6 +81,8 @@ public class AutomatonOperations {
 		}
 		
 		setStateIDs(startState);
+		
+		GraphVizUtil.generateGraph(NFAToDot.toDot(startState), "/Users/ali/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
 		
 		int[][] transitionTable = new int[newStatesMap.size() + 1][intervals.length];
 		boolean[] endStates = new boolean[newStatesMap.size() + 1];
