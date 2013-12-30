@@ -35,6 +35,7 @@ public class SequenceTest {
 		
 		assertTrue(dfa.match(Input.fromString("a0")));
 		assertTrue(dfa.match(Input.fromString("a5")));
+		assertTrue(dfa.match(Input.fromString("a9")));
 		assertTrue(dfa.match(Input.fromString("c7")));
 		assertTrue(dfa.match(Input.fromString("z0")));
 		assertTrue(dfa.match(Input.fromString("z9")));

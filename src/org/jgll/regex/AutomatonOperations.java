@@ -61,13 +61,6 @@ public class AutomatonOperations {
 				if(destination == null) {
 					destination = new State();
 					newStatesMap.put(newState, destination);
-					
-					for(State s : newState) {
-						if(s.isFinalState()){
-							destination.setFinalState(true);
-							break;
-						}
-					}
 				}
 				
 				Transition transition = new Transition(e.getKey().getFirst(), e.getKey().getSecond(), destination);
@@ -75,12 +68,24 @@ public class AutomatonOperations {
 				source.addTransition(transition);
 				
 				if(!visitedStates.contains(newState)) {
+					visitedStates.add(newState);
 					processList.add(newState);
 				}
 			}
 		}
 		
 		setStateIDs(startState);
+		
+		// Setting the final states.
+		outer:
+		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+			for(State s : e.getKey()) {
+				if(s.isFinalState()){
+					e.getValue().setFinalState(true);
+					continue outer;
+				}
+			}			
+		}
 		
 //		GraphVizUtil.generateGraph(NFAToDot.toDot(startState), "/Users/ali/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
 		

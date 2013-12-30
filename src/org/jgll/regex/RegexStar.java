@@ -34,12 +34,14 @@ public class RegexStar extends AbstractSymbol implements RegularExpression {
 		State startState = new State();
 		State finalState = new State(true);
 		
-		startState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
+		State s = regexp.toNFA().getStartState();
+		startState.addTransition(Transition.emptyTransition(s));
 		State e = regexp.toNFA().getEndState();
 		e.setFinalState(false);
 		e.addTransition(Transition.emptyTransition(finalState));
+		e.addTransition(Transition.emptyTransition(s));
 		
-		finalState.addTransition(Transition.emptyTransition(startState));
+		startState.addTransition(Transition.emptyTransition(finalState));
 		
 		return new NFA(startState, finalState);
 	}
