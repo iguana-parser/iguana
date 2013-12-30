@@ -17,6 +17,7 @@ public class StarTest {
 		
 		assertEquals(4, nfa.getCountStates());
 		
+		assertEquals(0, dfa.run(Input.fromString(""), 0));
 		assertEquals(1, dfa.run(Input.fromString("a"), 0));
 		assertEquals(2, dfa.run(Input.fromString("aa"), 0));
 		assertEquals(3, dfa.run(Input.fromString("aaa"), 0));

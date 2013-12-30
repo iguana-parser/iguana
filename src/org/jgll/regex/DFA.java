@@ -31,6 +31,10 @@ public class DFA {
 		
 		int maximumMatched = -1;
 		
+		if(input.length() == 1 && endStates[stateId]) {
+			return 0;
+		}
+		
 		for(int i = inputIndex; i < input.length() - 1; i++) {
 			int transitionId = getTransitionId(input.charAt(i));
 			
