@@ -24,15 +24,15 @@ public class DFA {
 		return run(input, 0) == input.length() - 1;
 	}
 
-	public int run(Input input, int index) {
+	public int run(Input input, int inputIndex) {
 		int length = 0;
 
 		int stateId = startStateId;
 		
 		int maximumMatched = -1;
 		
-		while(true) {
-			int transitionId = getTransitionId(input.charAt(index));
+		for(int i = inputIndex; i < input.length() - 1; i++) {
+			int transitionId = getTransitionId(input.charAt(i));
 			
 			if(transitionId == -1) {
 				return -1;

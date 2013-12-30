@@ -84,8 +84,8 @@ public class AutomatonOperations {
 		
 		GraphVizUtil.generateGraph(NFAToDot.toDot(startState), "/Users/ali/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
 		
-		int[][] transitionTable = new int[newStatesMap.size() + 1][intervals.length];
-		boolean[] endStates = new boolean[newStatesMap.size() + 1];
+		int[][] transitionTable = new int[newStatesMap.size()][intervals.length];
+		boolean[] endStates = new boolean[newStatesMap.size()];
 		
 		for(int i = 0; i < transitionTable.length; i++) {
 			for(int j = 0; j < transitionTable[i].length; j++) {
@@ -93,15 +93,14 @@ public class AutomatonOperations {
 			}
 		}
 
-		for(Transition transition : startState.getTransitions()) {
-			transitionTable[startState.getId()][transition.getId()] = transition.getDestination().getId();
-		}
-		
 		for(State state : newStatesMap.values()) {
 			for(Transition transition : state.getTransitions()) {
 				transitionTable[state.getId()][transition.getId()] = transition.getDestination().getId();
 			}
-			endStates[state.getId()] = true;
+			
+			if(state.isFinalState()) {
+				endStates[state.getId()] = true;
+			}
 		}
 		
 		return new DFA(transitionTable, endStates, startState.getId(), intervals);
