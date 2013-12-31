@@ -22,9 +22,9 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 	private final BitSet bitSet;
 	
 	public RegexAlt(List<RegularExpression> regularExpressions) {
-		this.nfa = createNFA();
 		this.regularExpressions = regularExpressions;
 		this.bitSet = calculateBitSet();
+		this.nfa = createNFA();
 	}
 	
 	public RegexAlt(RegularExpression...regularExpressions) {
