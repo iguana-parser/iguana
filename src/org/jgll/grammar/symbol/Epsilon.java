@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.NFA;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 
 public class Epsilon implements Terminal {
@@ -85,5 +86,10 @@ public class Epsilon implements Terminal {
 	@Override
 	public boolean isNullable() {
 		return true;
+	}
+
+	@Override
+	public RegularExpression copy() {
+		return this;
 	}
 }

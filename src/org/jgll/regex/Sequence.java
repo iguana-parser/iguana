@@ -1,5 +1,6 @@
 package org.jgll.regex;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
@@ -47,8 +48,7 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 		
 		for(RegularExpression regexp : regularExpressions) {
 			currentState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
-			State e = regexp.toNFA().getEndState();
-			e.setFinalState(false);
+			regexp.toNFA().getEndState().setFinalState(false);
 			currentState = regexp.toNFA().getEndState();
 		}
 		
@@ -92,6 +92,15 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 	@Override
 	public Symbol addConditions(Collection<Condition> conditions) {
 		return null;
+	}
+
+	@Override
+	public RegularExpression copy() {
+		List<RegularExpression> copy = new ArrayList<>();
+		for(RegularExpression regex : regularExpressions) {
+			copy.add(regex.copy());
+		}
+		return new Sequence(copy);
 	}
 	
 }

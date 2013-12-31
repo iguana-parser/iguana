@@ -121,4 +121,9 @@ public class Range extends AbstractSymbol implements Terminal {
 	public boolean isNullable() {
 		return false;
 	}
+
+	@Override
+	public Range copy() {
+		return new Range(start, end);
+	}
 }

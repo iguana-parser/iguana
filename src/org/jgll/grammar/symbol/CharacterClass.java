@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.NFA;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
 
@@ -191,6 +193,15 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	@Override
 	public boolean isNullable() {
 		return false;
+	}
+
+	@Override
+	public RegularExpression copy() {
+		List<Range> copyRanges = new ArrayList<>();
+		for(Range range : ranges) {
+			copyRanges.add(range.copy());
+		}
+		return new CharacterClass(copyRanges);
 	}
 	
 }

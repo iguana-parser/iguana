@@ -1,5 +1,6 @@
 package org.jgll.regex;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
@@ -84,5 +85,14 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 	@Override
 	public Symbol addConditions(Collection<Condition> conditions) {
 		return null;
+	}
+
+	@Override
+	public RegexAlt copy() {
+		List<RegularExpression> copy = new ArrayList<>();
+		for(RegularExpression regex : regularExpressions) {
+			copy.add(regex.copy());
+		}
+		return new RegexAlt(copy);
 	}
 }

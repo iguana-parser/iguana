@@ -157,5 +157,10 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 	public boolean isNullable() {
 		return false;
 	}
+
+	@Override
+	public RegularExpression copy() {
+		return new Keyword(name, chars);
+	}
 	
 }

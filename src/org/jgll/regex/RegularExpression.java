@@ -16,4 +16,6 @@ public interface RegularExpression extends Serializable, Symbol {
 	 */
 	public BitSet asBitSet();
 	
+	public RegularExpression copy();
+	
 }

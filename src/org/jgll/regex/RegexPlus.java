@@ -15,7 +15,7 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 	private final RegularExpression regexp;
 	
 	public RegexPlus(RegularExpression regexp) {
-		this.regexp = new Sequence(regexp, new RegexStar(regexp));
+		this.regexp = new Sequence(regexp, new RegexStar(regexp.copy()));
 	}
 	
 	@Override
@@ -41,5 +41,10 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 	@Override
 	public Symbol addConditions(Collection<Condition> conditions) {
 		return null;
+	}
+
+	@Override
+	public RegexPlus copy() {
+		return new RegexPlus(regexp.copy());
 	}
 }

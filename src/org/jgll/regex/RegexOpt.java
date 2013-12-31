@@ -63,5 +63,10 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 	public Symbol addConditions(Collection<Condition> conditions) {
 		return null;
 	}
+
+	@Override
+	public RegexOpt copy() {
+		return new RegexOpt(regexp.copy());
+	}
 	
 }

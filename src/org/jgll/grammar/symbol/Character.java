@@ -101,5 +101,10 @@ public class Character extends AbstractSymbol implements Terminal {
 	public boolean isNullable() {
 		return false;
 	}
+
+	@Override
+	public Character copy() {
+		return new Character(c);
+	}
 	
 }

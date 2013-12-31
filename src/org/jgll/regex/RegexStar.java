@@ -65,5 +65,10 @@ public class RegexStar extends AbstractSymbol implements RegularExpression {
 	public Symbol addConditions(Collection<Condition> conditions) {
 		return null;
 	}
+
+	@Override
+	public RegexStar copy() {
+		return new RegexStar(regexp.copy());
+	}
 	
 }
