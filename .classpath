@@ -19,6 +19,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/automaton.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
