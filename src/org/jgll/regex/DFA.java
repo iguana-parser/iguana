@@ -12,6 +12,8 @@ public class DFA {
 	private final int startStateId;
 	
 	private final int[] intervals;
+	
+	private int id;
 
 	public DFA(int[][] transitionTable, boolean[] endStates, int startStateId, int[] intervals) {
 		this.transitionTable = transitionTable;
@@ -22,6 +24,14 @@ public class DFA {
 	
 	public boolean match(Input input) {
 		return run(input, 0) == input.length() - 1;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int run(Input input, int inputIndex) {

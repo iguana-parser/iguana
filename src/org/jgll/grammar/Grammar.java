@@ -20,6 +20,7 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.DFA;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -65,13 +66,13 @@ public class Grammar implements Serializable {
 	
 	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
 	
-	private Set<RegularExpression> regularExpressions;
-	
 	private Map<RegularExpression, Integer> tokenIDMap;
 	
 	private List<RegularExpression> tokens;
 	
-	private transient Map<Integer, Set<RegularExpression>> tokensMap;
+	private transient Map<Integer, Set<DFA>> tokensMap;
+	
+	private DFA[] dfas;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -93,9 +94,9 @@ public class Grammar implements Serializable {
 		this.averageDescriptorsAtInput = builder.averageDescriptors;
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
 		this.reachabilityGraph = builder.directReachabilityGraph;
-		this.regularExpressions = builder.regularExpressions;
 		this.tokenIDMap = builder.tokenIDMap;
 		this.tokens = builder.tokens;
+		this.dfas = builder.dfas;
 		
 		printGrammarStatistics();
 	}
@@ -111,6 +112,7 @@ public class Grammar implements Serializable {
 		
 		this.tokensMap = new HashMap<>();
 
+		// TODO: this code should be removed later.
 		for(RegularExpression token : tokens) {
 			
 			if(token == Epsilon.getInstance() || token == EOF.getInstance()) {
@@ -119,14 +121,15 @@ public class Grammar implements Serializable {
 			
 			BitSet bitSet = token.asBitSet();
 			 for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-				Set<RegularExpression> set = tokensMap.get(i);
+				Set<DFA> set = tokensMap.get(i);
 				if(set == null) {
-					set = new HashSet<>();
+					set  = new HashSet<>();
 					tokensMap.put(i, set);
 				}
-				set.add(token);
+				set.add(dfas[getTokenID(token)]);
 			 }
 		}
+		
 		return this;
 	}
 
@@ -262,10 +265,6 @@ public class Grammar implements Serializable {
 		return stDevDescriptors;
 	}
 	
-	public Set<RegularExpression> getRegularExpressions() {
-		return regularExpressions;
-	}
-	
 	@Override
 	public String toString() {
 		
@@ -317,10 +316,6 @@ public class Grammar implements Serializable {
 		return tokenIDMap.get(s);
 	}
 	
-	public RegularExpression getToken(int tokenID) {
-		return tokens.get(tokenID);
-	}
-	
 	public int getCountTokens() {
 		return tokenIDMap.size() + 2;
 	}
@@ -329,7 +324,7 @@ public class Grammar implements Serializable {
 		return tokenIDMap.keySet();
 	}
 	
-	public Set<RegularExpression> getTokensForChar(int c) {
+	public Set<DFA> getTokensForChar(int c) {
 		return tokensMap.get(c);
 	}
 	
@@ -341,6 +336,10 @@ public class Grammar implements Serializable {
 			}
 		}
 		return count;
+	}
+	
+	public DFA getDFA(int id) {
+		return dfas[id];
 	}
 	
 }

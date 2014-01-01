@@ -7,8 +7,7 @@ import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.RegularExpression;
+import org.jgll.regex.DFA;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
@@ -23,8 +22,8 @@ public class GLLLexerImpl implements GLLLexer {
 	private Input input;
 
 	private Grammar grammar;
+
 	
-		
 	public GLLLexerImpl(Input input, Grammar grammar) {
 		this.input = input;
 		this.grammar = grammar;
@@ -77,14 +76,14 @@ public class GLLLexerImpl implements GLLLexer {
 		// Skip EOF
 		for(int i = 0; i < input.length() - 1; i++) {
 			
-			Set<RegularExpression> set = grammar.getTokensForChar(input.charAt(i));
+			Set<DFA> set = grammar.getTokensForChar(input.charAt(i));
 			
 			if(set == null) {
 				continue;
 			}
 			
-			for(RegularExpression token : set) {
-				tokenize(i, input, token);
+			for(DFA dfa : set) {
+				tokenize(i, input, dfa);
 			}
 		}
 		
@@ -93,20 +92,18 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 
 	
-	private int tokenize(int inputIndex, Input input, RegularExpression regex) {
-		int length = regex.toNFA().toDFA().run(input, inputIndex);
+	private int tokenize(int inputIndex, Input input, DFA dfa) {
+		int length = dfa.run(input, inputIndex);
 		if(length != -1) {
-			createToken(inputIndex, regex, length);
+			createToken(inputIndex, dfa, length);
 		}
 		return length;
 	}
 	
 
-
-	private void createToken(int inputIndex, Symbol symbol, int length) {
-		Integer tokenID = grammar.getTokenID(symbol);
-		tokenIDs[inputIndex].set(tokenID);
-		tokens[inputIndex][tokenID] = length;
+	private void createToken(int inputIndex, DFA dfa, int length) {
+		tokenIDs[inputIndex].set(dfa.getId());
+		tokens[inputIndex][dfa.getId()] = length;
 	}
 	
 	@Override

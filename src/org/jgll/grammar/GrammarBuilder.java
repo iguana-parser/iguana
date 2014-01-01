@@ -39,6 +39,7 @@ import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.DFA;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
@@ -85,11 +86,13 @@ public class GrammarBuilder implements Serializable {
 	
 	private List<BodyGrammarSlot> conditionSlots;
 	
-	Set<RegularExpression> regularExpressions;
+//	Set<RegularExpression> regularExpressions;
 	
 	Map<RegularExpression, Integer> tokenIDMap;
 	
 	List<RegularExpression> tokens;
+	
+	DFA[] dfas;
 	
 	public GrammarBuilder() {
 		this("no-name");
@@ -105,7 +108,6 @@ public class GrammarBuilder implements Serializable {
 		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
 		newNonterminalsMap = new LinkedHashMap<>();
-		regularExpressions = new HashSet<>();
 		tokenIDMap = new HashMap<>();
 		tokens = new ArrayList<>();
 		tokens.add(Epsilon.getInstance());
@@ -128,6 +130,22 @@ public class GrammarBuilder implements Serializable {
 		initializeGrammarProrperties();
 		
 		validateGrammar();
+		
+		dfas = new DFA[tokens.size()];
+		dfas[0] = Epsilon.getInstance().toNFA().toDFA();
+		dfas[1] = Epsilon.getInstance().toNFA().toDFA();
+		
+		for(RegularExpression regex : tokens) {
+			
+			if(regex == Epsilon.getInstance() || regex == EOF.getInstance()) {
+				continue;
+			}
+			
+			DFA dfa = regex.toNFA().toDFA();
+			Integer id = tokenIDMap.get(regex);
+			dfa.setId(id);
+			dfas[id] = dfa;
+		}
 		
 		return new Grammar(this).init();
 	}

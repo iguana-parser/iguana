@@ -18,5 +18,4 @@ public class AltTest {
 		assertTrue(dfa.match(Input.fromString("a")));
 		assertTrue(dfa.match(Input.fromString("b")));
 	}
-
 }
