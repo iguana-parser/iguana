@@ -15,11 +15,8 @@ public class Examples {
 	 */
 	@Test
 	public void test() {
-		Range az = new Range('a', 'z');
-		Range AZ = new Range('A', 'Z');
-		Range zero_9 = new Range('0', '9');
-		CharacterClass c1 = new CharacterClass(az, AZ);
-		CharacterClass c2 = new CharacterClass(az, AZ, zero_9);
+		CharacterClass c1 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'));
+		CharacterClass c2 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'), new Range('0', '9'));
 		
 		RegularExpression regexp = new Sequence(c1, new RegexStar(c2));
 		NFA nfa = regexp.toNFA();
@@ -27,7 +24,11 @@ public class Examples {
 		DFA dfa = nfa.toDFA();
 
 		assertTrue(dfa.match(Input.fromString("a")));
-		
+		assertFalse(dfa.match(Input.fromString("9")));
+		assertTrue(dfa.match(Input.fromString("abc")));
+		assertTrue(dfa.match(Input.fromString("Identifier")));
+		assertTrue(dfa.match(Input.fromString("Identifier12")));
+		assertTrue(dfa.match(Input.fromString("Identifier12Assdfd")));
 	}
 
 }

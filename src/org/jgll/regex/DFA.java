@@ -31,7 +31,7 @@ public class DFA {
 		
 		int maximumMatched = -1;
 		
-		if(input.length() == 1 && endStates[stateId]) {
+		if(input.isEmpty() && endStates[stateId]) {
 			return 0;
 		}
 		
@@ -59,36 +59,54 @@ public class DFA {
 	
 	private int getTransitionId(int c) {
 		
-		if(c < intervals[0] || c > intervals[intervals.length -1] - 1) {
+		if(c < intervals[0] || c > intervals[intervals.length -1]) {
 			return -1;
 		}
 		
-		return getTransitionId(c, 0, intervals.length);
+		return getTransitionId(c, 0, intervals.length - 1);
 	}
 	
 	private int getTransitionId(int c, int start, int end) {
 		
-		if(end - start == 0) {
-			if(c == intervals[start]) {
+		if(end == start ) {
+			return c == intervals[end] ? end : -1;
+		}		
+		
+		// Two elements left
+		if(end - start == 1) {
+			if(intervals[start] <= c && c < intervals[end]) {
 				return start;
 			} else {
 				return -1;
 			}
 		}
 		
-		int n = (end - start) / 2;
-		
-		if(c == intervals[n]) {
-			return n;
-		} 
-		else if(c >= intervals[n] && c <= intervals[n + 1]) {
-			return n;
-		} 
-		else if(c <= intervals[n]) {
-			return getTransitionId(c, start, n);
+		// Three elements left
+		if(end - start == 2) {
+			if(intervals[start] <= c && c < intervals[end - 1]) {
+				return start;
+			} 
+			else if(intervals[end - 1] <= c && c < intervals[end]) {
+				return end - 1;
+			} 
+			else {
+				return -1;
+			}
 		}
-		else if(c >= intervals[n]) {
-			return getTransitionId(c, n, end);
+		
+		int n = start + (end - start) / 2;
+		
+		if(intervals[n] <= c && c < intervals[n + 1]) {
+			return n;
+		} 
+		else if (intervals[n - 1] <= c && c < intervals[n]) {
+			return n - 1;
+		}
+		else if(c < intervals[n - 1]) {
+			return getTransitionId(c, start, n - 1);
+		}
+		else if(c >= intervals[n + 1]) {
+			return getTransitionId(c, n + 1, end);
 		}
 		return -1;
 	}

@@ -331,6 +331,10 @@ public class Input {
 	public int getLineCount() {
 		return lineCount;
 	}
+	
+	public boolean isEmpty() {
+		return length() == 1;
+	}
 
 	public boolean isEndOfLine(int currentInputIndex) {
 		// TODO: unfinished
