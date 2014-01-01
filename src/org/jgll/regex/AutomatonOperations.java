@@ -72,6 +72,8 @@ public class AutomatonOperations {
 			}
 		}
 		
+		minimize(startState);
+		
 		setStateIDs(startState);
 		
 		// Setting the final states.
@@ -156,6 +158,40 @@ public class AutomatonOperations {
 		}
 		
 		return map;
+	}
+	
+	private static void removeUnreachableStates(State startState) {
+		
+		// 1. Calculate the set of reachable states.
+		final Set<State> reachableStates = new HashSet<>();
+		reachableStates.add(startState);
+		
+		AutomatonVisitor.visit(startState, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				reachableStates.add(state);
+			}
+		});
+		
+		// 2. Remove the states that are not in the set
+		AutomatonVisitor.visit(startState, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				Set<Transition> transitionsToBeRemoved = new HashSet<>();
+				for(Transition t : state.getTransitions()) {
+					if(!reachableStates.contains(t.getDestination())) {
+						transitionsToBeRemoved.add(t);
+					}
+				}
+				state.removeTransitions(transitionsToBeRemoved);
+			}
+		});
+	}
+	
+	private static void minimize(State startState) {
+		removeUnreachableStates(startState);
 	}
 	
 	public static String toJavaCode(Automaton automaton) {
