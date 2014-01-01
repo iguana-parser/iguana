@@ -13,7 +13,7 @@ public class CharacterClassTest {
 	public void test1() {
 		RegularExpression regexp = new CharacterClass(new Range('a', 'z'), new Range('1', '8'));
 		NFA nfa = regexp.toNFA();
-
+		
 		assertEquals(6, nfa.getCountStates());
 
 		DFA dfa = nfa.toDFA();

@@ -26,8 +26,6 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 	
 	private final BitSet bitSet;
 	
-	private final NFA nfa;
-	
 	public Keyword(String name, String s) {
 		this(name, Input.toIntArray(s));
 	}
@@ -36,8 +34,7 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		this.chars = chars;
 		this.name = name;
 		this.bitSet = new BitSet();
-		this.nfa = createNFA();
-		
+
 		bitSet.set(chars[0]);
 	}
 	
@@ -150,7 +147,7 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public NFA toNFA() {
-		return nfa;
+		return createNFA();
 	}
 
 	@Override

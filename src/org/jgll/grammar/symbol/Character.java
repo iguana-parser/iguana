@@ -21,11 +21,8 @@ public class Character extends AbstractSymbol implements Terminal {
 	
 	private final BitSet bitSet;
 	
-	private final NFA nfa;
-
 	public Character(int c) {
 		this.c = c;
-		this.nfa = createNFA();
 		this.bitSet = new BitSet();
 		bitSet.set(c);
 	}
@@ -87,7 +84,7 @@ public class Character extends AbstractSymbol implements Terminal {
 	
 	@Override
 	public NFA toNFA() {
-		return nfa;
+		return createNFA();
 	}
 	
 	private NFA createNFA() {

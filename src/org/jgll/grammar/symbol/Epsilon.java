@@ -18,18 +18,12 @@ public class Epsilon implements Terminal {
 	
 	private static Epsilon instance;
 	
-	private final NFA nfa;
-	
 	public static Epsilon getInstance() {
 		if(instance == null) {
 			instance = new Epsilon();
 		}
 		
 		return instance;
-	}
-	
-	public Epsilon() {
-		nfa = createNFA();
 	}
 	
 	@Override
@@ -75,7 +69,7 @@ public class Epsilon implements Terminal {
 
 	@Override
 	public NFA toNFA() {
-		return nfa;
+		return createNFA();
 	}
 	
 	private NFA createNFA() {

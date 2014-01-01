@@ -25,8 +25,6 @@ public class Range extends AbstractSymbol implements Terminal {
 	
 	private final BitSet testSet;
 	
-	private final NFA nfa;
-
 	public Range(int start, int end) {
 		
 		if(end < start) {
@@ -35,7 +33,6 @@ public class Range extends AbstractSymbol implements Terminal {
 		
 		this.start = start;
 		this.end = end;
-		this.nfa = createNFA();
 		
 		testSet = new BitSet();
 		testSet.set(start, end + 1);
@@ -114,7 +111,7 @@ public class Range extends AbstractSymbol implements Terminal {
 
 	@Override
 	public NFA toNFA() {
-		return nfa;
+		return createNFA();
 	}
 
 	@Override

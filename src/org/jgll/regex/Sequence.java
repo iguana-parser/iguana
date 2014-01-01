@@ -17,13 +17,10 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 
 	private final List<RegularExpression> regularExpressions;
 	
-	private final NFA nfa;
-	
 	private final BitSet bitSet;
 	
 	public Sequence(List<RegularExpression> regularExpressions) {
 		this.regularExpressions = regularExpressions;
-		this.nfa = createNFA();
 		this.bitSet = calculateFirstChars();
 	}
 	
@@ -37,7 +34,7 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public NFA toNFA() {
-		return nfa;
+		return createNFA();
 	}
 	
 	private NFA createNFA() {
@@ -47,9 +44,10 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 		State currentState = startState;
 		
 		for(RegularExpression regexp : regularExpressions) {
-			currentState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
-			regexp.toNFA().getEndState().setFinalState(false);
-			currentState = regexp.toNFA().getEndState();
+			NFA nfa = regexp.toNFA();
+			currentState.addTransition(Transition.emptyTransition(nfa.getStartState()));
+			nfa.getEndState().setFinalState(false);
+			currentState = nfa.getEndState();
 		}
 		
 		currentState.addTransition(Transition.emptyTransition(finalState));

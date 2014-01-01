@@ -14,7 +14,7 @@ public class Examples {
 	 * Id ::= [a-zA-Z][a-zA-Z0-9]*
 	 */
 	@Test
-	public void test() {
+	public void test1() {
 		CharacterClass c1 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'));
 		CharacterClass c2 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'), new Range('0', '9'));
 		
@@ -30,5 +30,15 @@ public class Examples {
 		assertTrue(dfa.match(Input.fromString("Identifier12")));
 		assertTrue(dfa.match(Input.fromString("Identifier12Assdfd")));
 	}
+	
+	/**
+	 * Float ::= [0-9]+[.][0-9]+
+	 */
+	@Test
+	public void test2() {
+		CharacterClass c1 = new CharacterClass(new Range('0', '9'));
+		CharacterClass c2 = new CharacterClass(new Range('0', '9'));
+	}
+	
 
 }

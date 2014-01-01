@@ -17,14 +17,11 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 
 	private final List<RegularExpression> regularExpressions;
 	
-	private final NFA nfa;
-	
 	private final BitSet bitSet;
 	
 	public RegexAlt(List<RegularExpression> regularExpressions) {
 		this.regularExpressions = regularExpressions;
 		this.bitSet = calculateBitSet();
-		this.nfa = createNFA();
 	}
 	
 	public RegexAlt(RegularExpression...regularExpressions) {
@@ -37,7 +34,7 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public NFA toNFA() {
-		return nfa;
+		return createNFA();
 	}
 	
 	private NFA createNFA() {
@@ -45,10 +42,10 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 		State finalState = new State(true);
 		
 		for(RegularExpression regexp : regularExpressions) {
-			startState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
-			State e = regexp.toNFA().getEndState();
-			e.setFinalState(false);
-			e.addTransition(Transition.emptyTransition(finalState));
+			NFA nfa = regexp.toNFA();
+			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
+			nfa.getEndState().setFinalState(false);
+			nfa.getEndState().addTransition(Transition.emptyTransition(finalState));
 		}
 		
 		return new NFA(startState, finalState);

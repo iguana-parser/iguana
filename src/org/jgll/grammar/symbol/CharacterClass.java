@@ -30,8 +30,6 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	
 	private BitSet testSet;
 	
-	private final NFA nfa;
-	
 	public CharacterClass(Range...ranges) {
 		this(Arrays.asList(ranges));
 	}
@@ -49,8 +47,6 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		}
 		
 		this.ranges = Collections.unmodifiableList(ranges);
-		
-		this.nfa = createNFA();
 	}
 	
 	public List<Range> getRanges() {
@@ -176,10 +172,10 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		State finalState = new State(true);
 		
 		for(Range range : ranges) {
-			startState.addTransition(Transition.emptyTransition(range.toNFA().getStartState()));
-			State e = range.toNFA().getEndState();
-			e.setFinalState(false);
-			e.addTransition(Transition.emptyTransition(finalState));
+			NFA nfa = range.toNFA();
+			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
+			nfa.getEndState().setFinalState(false);
+			nfa.getEndState().addTransition(Transition.emptyTransition(finalState));
 		}
 		
 		return new NFA(startState, finalState);
@@ -187,7 +183,7 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	
 	@Override
 	public NFA toNFA() {
-		return nfa;
+		return createNFA();
 	}
 
 	@Override

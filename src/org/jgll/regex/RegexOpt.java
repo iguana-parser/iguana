@@ -14,16 +14,13 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 
 	private final RegularExpression regexp;
 	
-	private final NFA nfa;
-	
 	public RegexOpt(RegularExpression regexp) {
 		this.regexp = regexp;
-		this.nfa = createNFA();
 	}
 	
 	@Override
 	public NFA toNFA() {
-		return nfa;
+		return createNFA();
 	}
 	
 	/**
@@ -34,10 +31,10 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 		State startState = new State();
 		State finalState = new State(true);
 		
-		startState.addTransition(Transition.emptyTransition(regexp.toNFA().getStartState()));
-		State e = regexp.toNFA().getEndState();
-		e.setFinalState(false);
-		e.addTransition(Transition.emptyTransition(finalState));
+		NFA nfa = regexp.toNFA();
+		startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
+		nfa.getEndState().setFinalState(false);
+		nfa.getEndState().addTransition(Transition.emptyTransition(finalState));
 		
 		startState.addTransition(Transition.emptyTransition(finalState));
 		
