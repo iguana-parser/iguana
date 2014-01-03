@@ -74,7 +74,7 @@ public class Epsilon implements Terminal {
 	
 	private NFA createNFA() {
 		State state = new State(true);
-		return new NFA(state, state);
+		return new NFA(state);
 	}
 
 	@Override

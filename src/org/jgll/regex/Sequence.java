@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractSymbol;
@@ -20,6 +21,9 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 	private final BitSet bitSet;
 	
 	public Sequence(List<RegularExpression> regularExpressions) {
+		if(regularExpressions.size() == 0) {
+			throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
+		}
 		this.regularExpressions = regularExpressions;
 		this.bitSet = calculateFirstChars();
 	}
@@ -40,19 +44,33 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 	private NFA createNFA() {
 		State startState = new State();
 		State finalState = new State(true);
-		
-		State currentState = startState;
-		
-		for(RegularExpression regexp : regularExpressions) {
-			NFA nfa = regexp.toNFA();
-			currentState.addTransition(Transition.emptyTransition(nfa.getStartState()));
-			nfa.getEndState().setFinalState(false);
-			currentState = nfa.getEndState();
+
+		NFA[] nfas = new NFA[regularExpressions.size()];
+		for(int i = 0; i < regularExpressions.size(); i++) {
+			nfas[i] = regularExpressions.get(i).toNFA();
 		}
 		
-		currentState.addTransition(Transition.emptyTransition(finalState));
+		startState.addTransition(Transition.emptyTransition(nfas[0].getStartState()));
 		
-		return new NFA(startState, finalState);
+		// Middle regular expressions
+		int i = 0;
+		for(; i < regularExpressions.size() - 1; i++) {
+			NFA nfa = nfas[i];
+			NFA nextNFA = nfas[i+1];
+			
+			Set<State> finalStates = nfa.getFinalStates();
+			for(State s : finalStates) {
+				s.setFinalState(false);
+				s.addTransition(Transition.emptyTransition(nextNFA.getStartState()));
+			}
+		}
+		
+		for(State s : nfas[i].getFinalStates()) {
+			s.setFinalState(false);
+			s.addTransition(Transition.emptyTransition(finalState));
+		}
+				
+		return new NFA(startState);
 	}
 	
 	@Override

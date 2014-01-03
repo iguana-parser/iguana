@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractSymbol;
@@ -44,11 +45,15 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 		for(RegularExpression regexp : regularExpressions) {
 			NFA nfa = regexp.toNFA();
 			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
-			nfa.getEndState().setFinalState(false);
-			nfa.getEndState().addTransition(Transition.emptyTransition(finalState));
+			
+			Set<State> finalStates = nfa.getFinalStates();
+			for(State s : finalStates) {
+				s.setFinalState(false);
+				s.addTransition(Transition.emptyTransition(finalState));				
+			}
 		}
 		
-		return new NFA(startState, finalState);
+		return new NFA(startState);
 	}
 
 	@Override

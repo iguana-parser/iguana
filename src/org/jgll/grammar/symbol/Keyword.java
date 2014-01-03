@@ -14,6 +14,7 @@ import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
+// TODO: Keyword is a sequence of characters, rewrite it.
 public class Keyword extends AbstractSymbol implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
@@ -142,7 +143,7 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 
 		currenState.addTransition(Transition.emptyTransition(finalState));
 		
-		return new NFA(startState, finalState);
+		return new NFA(startState);
 	}
 	
 	@Override

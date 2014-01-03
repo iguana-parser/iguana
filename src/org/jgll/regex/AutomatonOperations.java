@@ -14,7 +14,7 @@ import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
 	
-	public static DFA convertNFAtoDFA(NFA nfa) {
+	public static NFA makeDeterministic(NFA nfa) {
 		
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
@@ -72,25 +72,32 @@ public class AutomatonOperations {
 			}
 		}
 		
-		minimize(startState);
-		
 		setStateIDs(startState);
+		
 		
 		// Setting the final states.
 		outer:
 		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
 			for(State s : e.getKey()) {
-				if(s.isFinalState()){
+				if(s.isFinalState()) {
 					e.getValue().setFinalState(true);
 					continue outer;
 				}
 			}			
 		}
 		
-//		GraphVizUtil.generateGraph(NFAToDot.toDot(startState), "/Users/ali/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
-		
-		int[][] transitionTable = new int[newStatesMap.size()][intervals.length];
-		boolean[] endStates = new boolean[newStatesMap.size()];
+		return new NFA(startState);
+	}
+	
+	public static NFA minimize(NFA nfa) {
+		return nfa;
+	}
+	
+	public static DFA createDFA(NFA nfa) {
+		int statesCount = nfa.getCountStates();
+		int inputLength = nfa.getIntervals().length;
+		int[][] transitionTable = new int[statesCount][inputLength];
+		boolean[] endStates = new boolean[statesCount];
 		
 		for(int i = 0; i < transitionTable.length; i++) {
 			for(int j = 0; j < transitionTable[i].length; j++) {
@@ -98,7 +105,7 @@ public class AutomatonOperations {
 			}
 		}
 
-		for(State state : newStatesMap.values()) {
+		for(State state : nfa.getAllStates()) {
 			for(Transition transition : state.getTransitions()) {
 				transitionTable[state.getId()][transition.getId()] = transition.getDestination().getId();
 			}
@@ -108,7 +115,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new DFA(transitionTable, endStates, startState.getId(), intervals);
+		return new DFA(transitionTable, endStates, nfa.getStartState().getId(), nfa.getIntervals());		
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
@@ -190,8 +197,76 @@ public class AutomatonOperations {
 		});
 	}
 	
-	private static void minimize(State startState) {
+	private static void minimize(State startState, int[] intervals) {
 		removeUnreachableStates(startState);
+		
+		final Set<State> finalStates = new HashSet<>();
+		final Set<State> nonFinalStates = new HashSet<>();
+		
+		AutomatonVisitor.visit(startState, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				if(state.isFinalState()) {
+					finalStates.add(state);
+				} else {
+					nonFinalStates.add(state);
+				}
+			}
+		});
+
+		Set<Set<State>> partitions = new HashSet<>();
+		partitions.add(finalStates);
+		partitions.add(nonFinalStates);
+		
+		
+		// A map from each state to its partition
+		Map<State, Set<State>> partitionsMap = new HashMap<>();
+		for(State state : finalStates) {
+			partitionsMap.put(state, finalStates);
+		}
+		for(State state : nonFinalStates) {
+			partitionsMap.put(state, nonFinalStates);
+		}
+		
+		boolean changed = true;
+		
+		while(changed) {
+			changed = false;
+			
+			l:
+			for(Set<State> partition : partitions) {
+				for(int i = 0; i < intervals.length; i++) {
+
+					Set<State> p = null;
+
+					for(State state : partition) {
+						
+						// Only one transition moves based on the input (the input is a DFA)
+						for(Transition transition : state.getTransitions()) {
+							if(intervals[i] >= transition.getStart() && intervals[i] <= transition.getEnd()) {
+								Set<State> pp = partitionsMap.get(transition.getDestination());
+								if(p == null) {
+									p = pp;
+								}
+								else if(p != pp) {
+									partition.remove(partition);
+									partitionsMap.remove(state);
+									
+									Set<State> newPartition = new HashSet<>();
+									newPartition.add(state);
+									partitions.add(newPartition);
+									partitionsMap.put(state, newPartition);
+									
+									break l;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 	public static String toJavaCode(Automaton automaton) {
@@ -277,6 +352,19 @@ public class AutomatonOperations {
 		return count[0];
 	}
 	
+	public static Set<State> getAllStates(Automaton automaton) {
+		final Set<State> states = new HashSet<>();
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				states.add(state);
+			}
+		});
+		
+		return states;
+	}
 	
 	public static void setStateIDs(State startState) {
 				
@@ -331,6 +419,23 @@ public class AutomatonOperations {
 				state.removeTransitions(transitionsToBeRemoved);
 			}
 		});
+	}
+
+	public static Set<State> getFinalStates(NFA nfa) {
+		
+		final Set<State> finalStates = new HashSet<>();
+		
+		AutomatonVisitor.visit(nfa, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				if(state.isFinalState()) {
+					finalStates.add(state);
+				}
+			} 
+		});
+		
+		return finalStates;
 	}
 	
 }

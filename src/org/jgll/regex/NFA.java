@@ -1,16 +1,24 @@
 package org.jgll.regex;
 
 import java.util.BitSet;
+import java.util.Set;
+
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 
 
 public class NFA implements Automaton {
 	
-	private State startState;
-	private State endState;
+	private final State startState;
+	
+	private final int[] intervals;
+	
+	private final Set<State> states;
 
-	public NFA(State startState, State endState) {
+	public NFA(State startState) {
 		this.startState = startState;
-		this.endState = endState;
+		this.intervals = AutomatonOperations.getIntervals(this);
+		this.states = AutomatonOperations.getAllStates(this);
 		AutomatonOperations.setStateIDs(this);
 	}
 	
@@ -19,13 +27,17 @@ public class NFA implements Automaton {
 		return startState;
 	}
 	
-	public State getEndState() {
-		return endState;
+	public Set<State> getFinalStates() {
+		return AutomatonOperations.getFinalStates(this);
 	}
 	
 	@Override
 	public int getCountStates() {
-		return AutomatonOperations.getCountStates(this);
+		return states.size();
+	}
+	
+	public Set<State> getAllStates() {
+		return states;
 	}
 	
 	/**
@@ -36,7 +48,7 @@ public class NFA implements Automaton {
 	}
 	
 	public int[] getIntervals() {
-		return AutomatonOperations.getIntervals(this);
+		return intervals;
 	}
 	
 	@Override
@@ -50,13 +62,13 @@ public class NFA implements Automaton {
 			return false;
 		}
 		
-//		NFA other = (NFA) obj;
-		
 		return super.equals(obj);
 	}
 	
 	public DFA toDFA() {
-		return AutomatonOperations.convertNFAtoDFA(this);
+		NFA deterministicFA = AutomatonOperations.makeDeterministic(this);
+		AutomatonOperations.minimize(deterministicFA);
+		return AutomatonOperations.createDFA(deterministicFA);
 	}
 	
 	public String toJavaCode() {

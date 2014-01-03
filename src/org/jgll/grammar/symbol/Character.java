@@ -91,7 +91,7 @@ public class Character extends AbstractSymbol implements Terminal {
 		State startState = new State();
 		State finalState = new State(true);
 		startState.addTransition(new Transition(c, finalState));
-		return new NFA(startState, finalState);
+		return new NFA(startState);
 	}
 
 	@Override

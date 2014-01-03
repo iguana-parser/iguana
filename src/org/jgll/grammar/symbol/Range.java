@@ -106,7 +106,7 @@ public class Range extends AbstractSymbol implements Terminal {
 		State startState = new State();
 		State finalState = new State(true);
 		startState.addTransition(new Transition(start, end, finalState));
-		return new NFA(startState, finalState);
+		return new NFA(startState);
 	}
 
 	@Override

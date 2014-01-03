@@ -2,6 +2,7 @@ package org.jgll.regex;
 
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractSymbol;
@@ -33,12 +34,16 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 		
 		NFA nfa = regexp.toNFA();
 		startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
-		nfa.getEndState().setFinalState(false);
-		nfa.getEndState().addTransition(Transition.emptyTransition(finalState));
+		
+		Set<State> finalStates = nfa.getFinalStates();
+		for(State s : finalStates) {
+			s.setFinalState(false);
+			s.addTransition(Transition.emptyTransition(finalState));			
+		}
 		
 		startState.addTransition(Transition.emptyTransition(finalState));
 		
-		return new NFA(startState, finalState);
+		return new NFA(startState);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.NFA;
@@ -18,6 +19,7 @@ import org.jgll.regex.Transition;
  * For example, [A-Za-z0-9] represents a character which is
  * either [A-Z], [a-z] or [0-9].
  * 
+ * TODO: CharacterClass is an RegexAlt of character classes. Rewrite it.
  * 
  * @author Ali Afroozeh
  *
@@ -174,11 +176,15 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		for(Range range : ranges) {
 			NFA nfa = range.toNFA();
 			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
-			nfa.getEndState().setFinalState(false);
-			nfa.getEndState().addTransition(Transition.emptyTransition(finalState));
+			
+			Set<State> finalStates = nfa.getFinalStates();
+			for(State s : finalStates) {
+				s.setFinalState(false);
+				s.addTransition(Transition.emptyTransition(finalState));
+			}
 		}
 		
-		return new NFA(startState, finalState);
+		return new NFA(startState);
 	}
 	
 	@Override
