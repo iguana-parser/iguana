@@ -89,10 +89,6 @@ public class AutomatonOperations {
 		return new NFA(startState);
 	}
 	
-	public static NFA minimize(NFA nfa) {
-		return nfa;
-	}
-	
 	public static DFA createDFA(NFA nfa) {
 		int statesCount = nfa.getCountStates();
 		int inputLength = nfa.getIntervals().length;
@@ -197,76 +193,112 @@ public class AutomatonOperations {
 		});
 	}
 	
-	private static void minimize(State startState, int[] intervals) {
-		removeUnreachableStates(startState);
+	public static NFA minimize(NFA nfa) {
 		
-		final Set<State> finalStates = new HashSet<>();
-		final Set<State> nonFinalStates = new HashSet<>();
+		removeUnreachableStates(nfa.getStartState());
+
+		int[][] table = new int[nfa.getCountStates()][nfa.getCountStates()];
 		
-		AutomatonVisitor.visit(startState, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				if(state.isFinalState()) {
-					finalStates.add(state);
-				} else {
-					nonFinalStates.add(state);
+		final int EMPTY = -2;
+		final int EPSILON = -1;
+		
+		for (int i = 0; i < table.length; i++) {
+			for (int j = 0; j < i; j++) {
+				table[i][j] = EMPTY;
+			}
+ 		}
+		
+		for (int i = 0; i < table.length; i++) {
+			for (int j = 0; j < i; j++) {
+				if(nfa.getState(i).isFinalState() && !nfa.getState(j).isFinalState()) {
+					table[i][j] = EPSILON;
+				}
+				if(nfa.getState(j).isFinalState() && !nfa.getState(i).isFinalState()) {
+					table[i][j] = EPSILON;
 				}
 			}
-		});
-
-		Set<Set<State>> partitions = new HashSet<>();
-		partitions.add(finalStates);
-		partitions.add(nonFinalStates);
-		
-		
-		// A map from each state to its partition
-		Map<State, Set<State>> partitionsMap = new HashMap<>();
-		for(State state : finalStates) {
-			partitionsMap.put(state, finalStates);
 		}
-		for(State state : nonFinalStates) {
-			partitionsMap.put(state, nonFinalStates);
-		}
+		
+		int[] intervals = nfa.getIntervals();
 		
 		boolean changed = true;
 		
 		while(changed) {
 			changed = false;
-			
-			l:
-			for(Set<State> partition : partitions) {
-				for(int i = 0; i < intervals.length; i++) {
 
-					Set<State> p = null;
-
-					for(State state : partition) {
+				for (int i = 0; i < table.length; i++) {
+					for (int j = 0; j < i; j++) {
 						
-						// Only one transition moves based on the input (the input is a DFA)
-						for(Transition transition : state.getTransitions()) {
-							if(intervals[i] >= transition.getStart() && intervals[i] <= transition.getEnd()) {
-								Set<State> pp = partitionsMap.get(transition.getDestination());
-								if(p == null) {
-									p = pp;
-								}
-								else if(p != pp) {
-									partition.remove(partition);
-									partitionsMap.remove(state);
-									
-									Set<State> newPartition = new HashSet<>();
-									newPartition.add(state);
-									partitions.add(newPartition);
-									partitionsMap.put(state, newPartition);
-									
-									break l;
+						// If two states i and j are distinct
+						if(table[i][j] == EMPTY) {
+							for(int t = 0; t < intervals.length - 1; t++) {
+								State q1 = moveTransition(nfa.getState(i), intervals[t], intervals[t+1]);
+								State q2 = moveTransition(nfa.getState(j), intervals[t], intervals[t+1]);
+								if(q1 != q2) {
+									table[i][j] = t;
+									changed = true;
+									break;
 								}
 							}
 						}
 					}
 				}
+		}
+		
+		Set<State> partitined = new HashSet<>();
+		
+		Set<Set<State>> partitions = new HashSet<>();
+		
+		for (int i = 0; i < table.length; i++) {
+			
+			if(partitined.contains(nfa.getState(i))) {
+				continue;
+			}
+			
+			partitined.add(nfa.getState(i));
+			
+			Set<State> set = new HashSet<>();
+			set.add(nfa.getState(i));
+			for (int j = 0; j < i; j++) {
+				if(table[i][j] == EMPTY) {
+					set.add(nfa.getState(j));
+					partitined.add(nfa.getState(j));
+				}
+			}
+			partitions.add(set);
+		}
+		
+		Map<State, State> newStates = new HashMap<>();
+
+		State startState = null;
+		
+		for(Set<State> set : partitions) {
+			State newState = new State();
+			for(State state : set) {
+				if(nfa.getStartState() == state) {
+					startState = newState;
+				}
+				newStates.put(state, newState);
 			}
 		}
 		
+		for(State state : nfa.getAllStates()) {
+			for(Transition t : state.getTransitions()) {
+				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));;				
+			}
+		}
+		
+		return new NFA(startState);
+	}
+
+
+	private static State moveTransition(State state, int start, int end) {
+		for(Transition transition : state.getTransitions()) {
+			if(start >= transition.getStart() && end <= transition.getEnd()) {
+				return transition.getDestination();
+			}
+		}
+		return null;
 	}
 	
 	public static String toJavaCode(Automaton automaton) {

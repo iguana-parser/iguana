@@ -13,13 +13,20 @@ public class NFA implements Automaton {
 	
 	private final int[] intervals;
 	
-	private final Set<State> states;
+	private final State[] states;
 
 	public NFA(State startState) {
 		this.startState = startState;
 		this.intervals = AutomatonOperations.getIntervals(this);
-		this.states = AutomatonOperations.getAllStates(this);
 		AutomatonOperations.setStateIDs(this);
+		
+		Set<State> set = AutomatonOperations.getAllStates(this);
+		this.states = new State[set.size()];
+		
+		for(State s : set) {
+			states[s.getId()]  = s;
+		}
+		
 	}
 	
 	@Override
@@ -33,11 +40,15 @@ public class NFA implements Automaton {
 	
 	@Override
 	public int getCountStates() {
-		return states.size();
+		return states.length;
 	}
 	
-	public Set<State> getAllStates() {
+	public State[] getAllStates() {
 		return states;
+	}
+	
+	public State getState(int id) {
+		return states[id];
 	}
 	
 	/**
@@ -67,8 +78,8 @@ public class NFA implements Automaton {
 	
 	public DFA toDFA() {
 		NFA deterministicFA = AutomatonOperations.makeDeterministic(this);
-		AutomatonOperations.minimize(deterministicFA);
-		return AutomatonOperations.createDFA(deterministicFA);
+		NFA minimizedDFA = AutomatonOperations.minimize(deterministicFA);
+		return AutomatonOperations.createDFA(minimizedDFA);
 	}
 	
 	public String toJavaCode() {
