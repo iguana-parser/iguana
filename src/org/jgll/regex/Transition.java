@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import org.jgll.parser.HashFunctions;
+
 public class Transition {
 	
 	private int start;
@@ -48,6 +50,29 @@ public class Transition {
 	
 	public boolean isLoop(State source) {
 		return source == destination;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if(!(obj instanceof Transition)) {
+			return false;
+		}
+		
+		Transition other = (Transition) obj;
+		
+		return destination == other.destination &&
+			   start == other.start &&
+			   end == other.end;
+	}
+	
+	@Override
+	public int hashCode() {
+		return HashFunctions.defaulFunction().hash(start, end, destination.hashCode());
 	}
 	
 	@Override

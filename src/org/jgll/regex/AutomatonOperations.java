@@ -162,41 +162,17 @@ public class AutomatonOperations {
 		
 		return map;
 	}
-	
-	private static void removeUnreachableStates(State startState) {
 		
-		// 1. Calculate the set of reachable states.
-		final Set<State> reachableStates = new HashSet<>();
-		reachableStates.add(startState);
-		
-		AutomatonVisitor.visit(startState, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				reachableStates.add(state);
-			}
-		});
-		
-		// 2. Remove the states that are not in the set
-		AutomatonVisitor.visit(startState, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				Set<Transition> transitionsToBeRemoved = new HashSet<>();
-				for(Transition t : state.getTransitions()) {
-					if(!reachableStates.contains(t.getDestination())) {
-						transitionsToBeRemoved.add(t);
-					}
-				}
-				state.removeTransitions(transitionsToBeRemoved);
-			}
-		});
-	}
-	
+	/**
+	 * 
+	 * Note: unreachable states are already removed as we gather the states
+	 * reachable from the start state of the given NFA.
+	 * 
+	 * @param nfa
+	 * @return
+	 */
 	public static NFA minimize(NFA nfa) {
 		
-		removeUnreachableStates(nfa.getStartState());
-
 		int[][] table = new int[nfa.getCountStates()][nfa.getCountStates()];
 		
 		final int EMPTY = -2;
@@ -424,34 +400,6 @@ public class AutomatonOperations {
 		});
 	}
 	
-	public static void removeDeadStates(Automaton nfa) {
-		AutomatonVisitor.visit(nfa, new VisitAction() {
-
-			@Override
-			public void visit(State state) {
-
-				Set<Transition> transitionsToBeRemoved = new HashSet<>();
-				
-				main:
-				for(Transition transition : state.getTransitions()) {
-					State destination = transition.getDestination();
-					
-					if(destination.getTransitions().size() == 0) {
-						transitionsToBeRemoved.add(transition);
-					} else {
-						for(Transition t : destination.getTransitions()) {
-							if(t.isLoop(destination)) {
-								continue main;
-							}
-						}
-						transitionsToBeRemoved.add(transition);
-					}
-				}
-				
-				state.removeTransitions(transitionsToBeRemoved);
-			}
-		});
-	}
 
 	public static Set<State> getFinalStates(NFA nfa) {
 		
