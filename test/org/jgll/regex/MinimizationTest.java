@@ -1,7 +1,5 @@
 package org.jgll.regex;
 
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
 import org.junit.Test;
 
 public class MinimizationTest {
@@ -43,8 +41,6 @@ public class MinimizationTest {
 		NFA nfa = new NFA(q0);
 		
 		NFA minimize = AutomatonOperations.minimize(nfa);
-		
-		GraphVizUtil.generateGraph(NFAToDot.toDot(minimize.getStartState()), "/Users/aliafroozeh/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
 	}
 
 }

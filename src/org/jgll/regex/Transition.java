@@ -52,6 +52,10 @@ public class Transition {
 		return source == destination;
 	}
 	
+	public boolean canMove(int c) {
+		return start <= c && c <= end;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		

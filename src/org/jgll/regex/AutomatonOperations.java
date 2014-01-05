@@ -11,8 +11,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Tuple;
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
 
 public class AutomatonOperations {
 	
@@ -199,16 +197,6 @@ public class AutomatonOperations {
 			}
 		}
 		
-		for (int i = 0; i < table.length; i++) {
-			for (int j = 0; j < i; j++) {
-				System.out.print(table[i][j] + " ");
-			}
-			System.out.println("\n");
-		}
-
-		
-		GraphVizUtil.generateGraph(NFAToDot.toDot(nfa.getStartState()), "/Users/aliafroozeh/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
-		
 		int[] intervals = nfa.getIntervals();
 		
 		boolean changed = true;
@@ -224,9 +212,19 @@ public class AutomatonOperations {
 							for(int t = 0; t < intervals.length; t++) {
 								State q1 = moveTransition(nfa.getState(i), intervals[t]);
 								State q2 = moveTransition(nfa.getState(j), intervals[t]);
-								
-								if(q1 == null || q2 == null) {
+
+								// If both states i and j have no outgoing transitions on the interval t, continue with the
+								// next transition.
+								if(q1 == null && q2 == null) {
 									continue;
+								}
+
+								// If the transition t can be applied on state i but not on state j, two states are
+								// disjoint. Continue with the next pair of states.
+								if((q1 == null && q2 != null) || (q2 == null && q1 != null)) {
+									table[i][j] = t;
+									changed = true;
+									break;
 								}
 								
 								if(q1.getId() == q2.getId()) {
@@ -252,37 +250,33 @@ public class AutomatonOperations {
 						}
 					}
 				}
-				
-				for (int i = 0; i < table.length; i++) {
-					for (int j = 0; j < i; j++) {
-						System.out.print(table[i][j] + " ");
-					}
-					System.out.println("\n");
-				}
 		}
 		
 		
+		// The set of states already in partitions, used for duplication elimination
 		Set<State> partitined = new HashSet<>();
 		
 		Set<Set<State>> partitions = new HashSet<>();
 		
 		for (int i = 0; i < table.length; i++) {
-			
-			if(partitined.contains(nfa.getState(i))) {
-				continue;
-			}
-			
-			partitined.add(nfa.getState(i));
-			
 			Set<State> set = new HashSet<>();
-			set.add(nfa.getState(i));
 			for (int j = 0; j < i; j++) {
 				if(table[i][j] == EMPTY) {
+					set.add(nfa.getState(i));
 					set.add(nfa.getState(j));
+					partitions.add(set);
+					partitined.add(nfa.getState(i));
 					partitined.add(nfa.getState(j));
 				}
 			}
-			partitions.add(set);
+		}
+		
+		for(State state : nfa.getAllStates()) {
+			if(!partitined.contains(state)) {
+				Set<State> set = new HashSet<>();
+				set.add(state);
+				partitions.add(set);
+			}
 		}
 		
 		Map<State, State> newStates = new HashMap<>();
@@ -294,6 +288,9 @@ public class AutomatonOperations {
 			for(State state : set) {
 				if(nfa.getStartState() == state) {
 					startState = newState;
+				}
+				if(state.isFinalState()) {
+					newState.setFinalState(true);
 				}
 				newStates.put(state, newState);
 			}
@@ -308,11 +305,24 @@ public class AutomatonOperations {
 		return new NFA(startState);
 	}
 
+	/**
+	 * For debugging purposes 
+	 */
+	@SuppressWarnings("unused")
+	private static void printMinimizationTable(int[][] table) {
+		for (int i = 0; i < table.length; i++) {
+			for (int j = 0; j < i; j++) {
+				System.out.print(table[i][j] + " ");
+			}
+			System.out.println("\n");
+		}
+	}
+
 
 	private static State moveTransition(State state, int i) {
 		for(Transition transition : state.getTransitions()) {
-			if(transition.getStart() >= i && i < transition.getEnd()) {
-				return transition.getDestination();
+			if(transition.canMove(i)) {
+				return transition.getDestination();				
 			}
 		}
 		return null;
