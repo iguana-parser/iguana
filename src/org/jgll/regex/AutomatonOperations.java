@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Tuple;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 
 public class AutomatonOperations {
 	
@@ -197,6 +199,16 @@ public class AutomatonOperations {
 			}
 		}
 		
+		for (int i = 0; i < table.length; i++) {
+			for (int j = 0; j < i; j++) {
+				System.out.print(table[i][j] + " ");
+			}
+			System.out.println("\n");
+		}
+
+		
+		GraphVizUtil.generateGraph(NFAToDot.toDot(nfa.getStartState()), "/Users/aliafroozeh/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
+		
 		int[] intervals = nfa.getIntervals();
 		
 		boolean changed = true;
@@ -212,7 +224,26 @@ public class AutomatonOperations {
 							for(int t = 0; t < intervals.length; t++) {
 								State q1 = moveTransition(nfa.getState(i), intervals[t]);
 								State q2 = moveTransition(nfa.getState(j), intervals[t]);
-								if(q1 != q2) {
+								
+								if(q1 == null || q2 == null) {
+									continue;
+								}
+								
+								if(q1.getId() == q2.getId()) {
+									continue;
+								}
+								
+								int a;
+								int b;
+								if(q1.getId() > q2.getId()) {
+									a = q1.getId();
+									b = q2.getId();
+								} else {
+									a = q2.getId();
+									b = q1.getId();
+								}
+								
+								if(table[a][b] != EMPTY) {
 									table[i][j] = t;
 									changed = true;
 									break;
@@ -221,13 +252,13 @@ public class AutomatonOperations {
 						}
 					}
 				}
-		}
-		
-		for (int i = 0; i < table.length; i++) {
-			for (int j = 0; j < i; j++) {
-				System.out.print(table[i][j] + " ");
-			}
-			System.out.println("\n");
+				
+				for (int i = 0; i < table.length; i++) {
+					for (int j = 0; j < i; j++) {
+						System.out.print(table[i][j] + " ");
+					}
+					System.out.println("\n");
+				}
 		}
 		
 		
@@ -280,7 +311,7 @@ public class AutomatonOperations {
 
 	private static State moveTransition(State state, int i) {
 		for(Transition transition : state.getTransitions()) {
-			if(transition.getStart() >= i && i <= transition.getEnd()) {
+			if(transition.getStart() >= i && i < transition.getEnd()) {
 				return transition.getDestination();
 			}
 		}

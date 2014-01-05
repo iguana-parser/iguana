@@ -44,7 +44,7 @@ public class MinimizationTest {
 		
 		NFA minimize = AutomatonOperations.minimize(nfa);
 		
-		GraphVizUtil.generateGraph(NFAToDot.toDot(minimize.getStartState()), "/Users/ali/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
+		GraphVizUtil.generateGraph(NFAToDot.toDot(minimize.getStartState()), "/Users/aliafroozeh/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
 	}
 
 }
