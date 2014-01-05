@@ -3,9 +3,6 @@ package org.jgll.regex;
 import java.util.BitSet;
 import java.util.Set;
 
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
-
 
 public class NFA implements Automaton {
 	

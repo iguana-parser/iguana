@@ -141,21 +141,23 @@ public class AutomatonOperations {
 		Map<Tuple<Integer, Integer>, Set<State>> map = new HashMap<>();
 		
 		for(int i = 0; i < intervals.length; i++) {
-			Set<State> newStates = new HashSet<>();
+			Set<State> reachableStates = new HashSet<>();
 
 			for(State state : states) {
 				for(Transition transition : state.getTransitions()) {
 					if(intervals[i] >= transition.getStart() && intervals[i] <= transition.getEnd()) {
-						newStates.add(transition.getDestination());
+						reachableStates.add(transition.getDestination());
 					}
 				}
 			}
-			if(!newStates.isEmpty()) {
+			
+			// Creating the transitions for the reachable states based on the transition intervals.
+			if(!reachableStates.isEmpty()) {
 				if(i + 1 < intervals.length) {
-					map.put(new Tuple<>(intervals[i], intervals[i+1] - 1), newStates);
+					map.put(new Tuple<>(intervals[i], intervals[i+1] - 1), reachableStates);
 				} 
 				if(i + 1 == intervals.length) {
-					map.put(new Tuple<>(intervals[i] - 1, intervals[i] - 1), newStates);
+					map.put(new Tuple<>(intervals[i] - 1, intervals[i] - 1), reachableStates);
 				}
 			}			
 		}
@@ -207,9 +209,9 @@ public class AutomatonOperations {
 						
 						// If two states i and j are distinct
 						if(table[i][j] == EMPTY) {
-							for(int t = 0; t < intervals.length - 1; t++) {
-								State q1 = moveTransition(nfa.getState(i), intervals[t], intervals[t+1]);
-								State q2 = moveTransition(nfa.getState(j), intervals[t], intervals[t+1]);
+							for(int t = 0; t < intervals.length; t++) {
+								State q1 = moveTransition(nfa.getState(i), intervals[t]);
+								State q2 = moveTransition(nfa.getState(j), intervals[t]);
 								if(q1 != q2) {
 									table[i][j] = t;
 									changed = true;
@@ -220,6 +222,14 @@ public class AutomatonOperations {
 					}
 				}
 		}
+		
+		for (int i = 0; i < table.length; i++) {
+			for (int j = 0; j < i; j++) {
+				System.out.print(table[i][j] + " ");
+			}
+			System.out.println("\n");
+		}
+		
 		
 		Set<State> partitined = new HashSet<>();
 		
@@ -268,9 +278,9 @@ public class AutomatonOperations {
 	}
 
 
-	private static State moveTransition(State state, int start, int end) {
+	private static State moveTransition(State state, int i) {
 		for(Transition transition : state.getTransitions()) {
-			if(start >= transition.getStart() && end <= transition.getEnd()) {
+			if(transition.getStart() >= i && i <= transition.getEnd()) {
 				return transition.getDestination();
 			}
 		}
