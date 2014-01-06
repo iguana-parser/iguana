@@ -2,12 +2,14 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 import org.junit.Test;
 
 public class MinimizationTest {
 	
 	@Test
-	public void test() {
+	public void test1() {
 		State q0 = new State();
 		State q1 = new State();
 		State q2 = new State();
@@ -44,10 +46,10 @@ public class MinimizationTest {
 		
 		NFA minimized = AutomatonOperations.minimize(nfa);
 	
-		assertEquals(minimized, getAutomaton());
+		assertEquals(getAutomaton1(), minimized);
 	}
 	
-	private NFA getAutomaton() {
+	private NFA getAutomaton1() {
 		State state1 = new State();
 		state1.addTransition(new Transition(49, 49, state1));
 		State state2 = new State();
@@ -65,5 +67,40 @@ public class MinimizationTest {
 		
 		return new NFA(state1);
 	}
+	
+	
+	@Test
+	public void test2() {
+		State a = new State();
+		State b = new State();
+		State c = new State();
+		State d = new State();
+		State e = new State(true);
+		
+		a.addTransition(new Transition('0', b));
+		a.addTransition(new Transition('1', c));
+		b.addTransition(new Transition('0', '1', d));
+		c.addTransition(new Transition('0', '1', d));
+		d.addTransition(new Transition('0', '1', e));
+		
+		NFA nfa = new NFA(a);
+		
+		NFA minimized = AutomatonOperations.minimize(nfa);
+		
+		assertEquals(getAutomaton2(), minimized);
+	}
+	
+	private NFA getAutomaton2() {
+		State state1 = new State();
+		State state2 = new State();
+		State state3 = new State();
+		State state4 = new State(true);
+		state3.addTransition(new Transition(48, 49, state4));
+		state2.addTransition(new Transition(48, 49, state3));
+		state1.addTransition(new Transition(49, 49, state2));
+		state1.addTransition(new Transition(48, 48, state2));
+		return new NFA(state1);
+	}
+	
 
 }
