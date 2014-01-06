@@ -102,5 +102,44 @@ public class MinimizationTest {
 		return new NFA(state1);
 	}
 	
+	
+	@Test
+	public void test3() {
+		State a = new State(true);
+		State b = new State();
+		State c = new State(true);
+		State d = new State();
+		State e = new State(true);
+		
+		a.addTransition(new Transition('0', a));
+		a.addTransition(new Transition('1', b));
+		b.addTransition(new Transition('0', c));
+		b.addTransition(new Transition('1', d));
+		c.addTransition(new Transition('0', c));
+		c.addTransition(new Transition('1', e));
+		d.addTransition(new Transition('0', c));
+		d.addTransition(new Transition('1', d));
+		e.addTransition(new Transition('0', e));
+		e.addTransition(new Transition('1', e));
+		
+		NFA nfa = new NFA(a);
+		
+		NFA minimized = AutomatonOperations.minimize(nfa);
+		
+		assertEquals(getAutomaton3(), minimized);
+	}
+	
+	private NFA getAutomaton3() {
+		State state1 = new State(true);
+		state1.addTransition(new Transition(48, 48, state1));
+		State state2 = new State();
+		State state3 = new State(true);
+		state3.addTransition(new Transition(48, 48, state3));
+		state3.addTransition(new Transition(49, 49, state3));
+		state2.addTransition(new Transition(48, 48, state3));
+		state2.addTransition(new Transition(49, 49, state2));
+		state1.addTransition(new Transition(49, 49, state2));
+		return new NFA(state1);
+	}
 
 }
