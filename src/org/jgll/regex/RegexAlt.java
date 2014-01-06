@@ -34,16 +34,16 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 	}
 
 	@Override
-	public NFA toNFA() {
+	public Automaton toNFA() {
 		return createNFA();
 	}
 	
-	private NFA createNFA() {
+	private Automaton createNFA() {
 		State startState = new State();
 		State finalState = new State(true);
 		
 		for(RegularExpression regexp : regularExpressions) {
-			NFA nfa = regexp.toNFA();
+			Automaton nfa = regexp.toNFA();
 			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 			
 			Set<State> finalStates = nfa.getFinalStates();
@@ -53,7 +53,7 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 			}
 		}
 		
-		return new NFA(startState);
+		return new Automaton(startState);
 	}
 
 	@Override

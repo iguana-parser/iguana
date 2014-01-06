@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
-import org.jgll.regex.NFA;
+import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
@@ -129,7 +129,7 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		return set;
 	}
 	
-	private NFA createNFA() {
+	private Automaton createNFA() {
 		State startState = new State();
 		State finalState = new State(true);
 		
@@ -143,11 +143,11 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 
 		currenState.addTransition(Transition.emptyTransition(finalState));
 		
-		return new NFA(startState);
+		return new Automaton(startState);
 	}
 	
 	@Override
-	public NFA toNFA() {
+	public Automaton toNFA() {
 		return createNFA();
 	}
 

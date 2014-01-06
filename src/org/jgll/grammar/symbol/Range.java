@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
-import org.jgll.regex.NFA;
+import org.jgll.regex.Automaton;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
 
@@ -102,15 +102,15 @@ public class Range extends AbstractSymbol implements Terminal {
 		return range;
 	}
 	
-	private NFA createNFA() {
+	private Automaton createNFA() {
 		State startState = new State();
 		State finalState = new State(true);
 		startState.addTransition(new Transition(start, end, finalState));
-		return new NFA(startState);
+		return new Automaton(startState);
 	}
 
 	@Override
-	public NFA toNFA() {
+	public Automaton toNFA() {
 		return createNFA();
 	}
 

@@ -4,7 +4,7 @@ import java.util.BitSet;
 import java.util.Collection;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.regex.NFA;
+import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 
@@ -68,13 +68,13 @@ public class Epsilon implements Terminal {
 	}
 
 	@Override
-	public NFA toNFA() {
+	public Automaton toNFA() {
 		return createNFA();
 	}
 	
-	private NFA createNFA() {
+	private Automaton createNFA() {
 		State state = new State(true);
-		return new NFA(state);
+		return new Automaton(state);
 	}
 
 	@Override

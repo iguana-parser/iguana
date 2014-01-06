@@ -12,7 +12,7 @@ public class CharacterClassTest {
 	@Test
 	public void test1() {
 		RegularExpression regexp = new CharacterClass(new Range('a', 'z'), new Range('1', '8'));
-		NFA nfa = regexp.toNFA();
+		Automaton nfa = regexp.toNFA();
 		
 		assertEquals(6, nfa.getCountStates());
 
@@ -33,7 +33,7 @@ public class CharacterClassTest {
 	@Test
 	public void test2() {
 		RegularExpression regexp = new CharacterClass(new Range('1', '5'), new Range('1', '7'), new Range('3', '8'));
-		NFA nfa = regexp.toNFA();
+		Automaton nfa = regexp.toNFA();
 
 		assertEquals(8, nfa.getCountStates());
 

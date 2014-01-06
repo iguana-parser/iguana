@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.regex.NFA;
+import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
@@ -169,12 +169,12 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		return characterClass;
 	}
 	
-	private NFA createNFA() {
+	private Automaton createNFA() {
 		State startState = new State();
 		State finalState = new State(true);
 		
 		for(Range range : ranges) {
-			NFA nfa = range.toNFA();
+			Automaton nfa = range.toNFA();
 			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 			
 			Set<State> finalStates = nfa.getFinalStates();
@@ -184,11 +184,11 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 			}
 		}
 		
-		return new NFA(startState);
+		return new Automaton(startState);
 	}
 	
 	@Override
-	public NFA toNFA() {
+	public Automaton toNFA() {
 		return createNFA();
 	}
 

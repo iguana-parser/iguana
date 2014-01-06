@@ -11,7 +11,7 @@ public class PlusTest {
 	@Test
 	public void test() {
 		RegularExpression regexp = new RegexPlus(new Character('a'));
-		NFA nfa = regexp.toNFA();
+		Automaton nfa = regexp.toNFA();
 		DFA dfa = nfa.toDFA();
 
 		assertEquals(8, nfa.getCountStates());

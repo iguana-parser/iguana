@@ -20,7 +20,7 @@ public class RegexStar extends AbstractSymbol implements RegularExpression {
 	}
 	
 	@Override
-	public NFA toNFA() {
+	public Automaton toNFA() {
 		return createNFA();
 	}
 	
@@ -28,11 +28,11 @@ public class RegexStar extends AbstractSymbol implements RegularExpression {
 	 * 
 	 * @return
 	 */
-	private NFA createNFA() {
+	private Automaton createNFA() {
 		State startState = new State();
 		State finalState = new State(true);
 		
-		NFA nfa = regexp.toNFA();
+		Automaton nfa = regexp.toNFA();
 		
 		startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 		
@@ -45,7 +45,7 @@ public class RegexStar extends AbstractSymbol implements RegularExpression {
 		
 		startState.addTransition(Transition.emptyTransition(finalState));
 		
-		return new NFA(startState);
+		return new Automaton(startState);
 	}
 	
 	@Override

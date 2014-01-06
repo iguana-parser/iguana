@@ -37,15 +37,15 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 	}
 
 	@Override
-	public NFA toNFA() {
+	public Automaton toNFA() {
 		return createNFA();
 	}
 	
-	private NFA createNFA() {
+	private Automaton createNFA() {
 		State startState = new State();
 		State finalState = new State(true);
 
-		NFA[] nfas = new NFA[regularExpressions.size()];
+		Automaton[] nfas = new Automaton[regularExpressions.size()];
 		for(int i = 0; i < regularExpressions.size(); i++) {
 			nfas[i] = regularExpressions.get(i).toNFA();
 		}
@@ -55,8 +55,8 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 		// Middle regular expressions
 		int i = 0;
 		for(; i < regularExpressions.size() - 1; i++) {
-			NFA nfa = nfas[i];
-			NFA nextNFA = nfas[i+1];
+			Automaton nfa = nfas[i];
+			Automaton nextNFA = nfas[i+1];
 			
 			Set<State> finalStates = nfa.getFinalStates();
 			for(State s : finalStates) {
@@ -70,7 +70,7 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 			s.addTransition(Transition.emptyTransition(finalState));
 		}
 				
-		return new NFA(startState);
+		return new Automaton(startState);
 	}
 	
 	@Override

@@ -14,7 +14,7 @@ import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
 	
-	public static NFA makeDeterministic(NFA nfa) {
+	public static Automaton makeDeterministic(Automaton nfa) {
 		
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
@@ -26,13 +26,7 @@ public class AutomatonOperations {
 		processList.add(initialState);
 		
 		int[] intervals = nfa.getIntervals();
-		
-		Map<Integer, Integer> intervalIds = new HashMap<>();
-		
-		for(int i = 0; i < intervals.length; i++) {
-			intervalIds.put(intervals[i], i);
-		}
-		
+				
 		/**
 		 * A map from the set of NFA states to the new state in the produced DFA.
 		 * This map is used for sharing DFA states.
@@ -62,7 +56,6 @@ public class AutomatonOperations {
 				}
 				
 				Transition transition = new Transition(e.getKey().getFirst(), e.getKey().getSecond(), destination);
-				transition.setId(intervalIds.get(e.getKey().getFirst()));
 				source.addTransition(transition);
 				
 				if(!visitedStates.contains(newState)) {
@@ -86,10 +79,10 @@ public class AutomatonOperations {
 			}			
 		}
 		
-		return new NFA(startState);
+		return new Automaton(startState);
 	}
 	
-	public static DFA createDFA(NFA nfa) {
+	public static DFA createDFA(Automaton nfa) {
 		int statesCount = nfa.getCountStates();
 		int inputLength = nfa.getIntervals().length;
 		int[][] transitionTable = new int[statesCount][inputLength];
@@ -173,7 +166,7 @@ public class AutomatonOperations {
 	 * @param nfa
 	 * @return
 	 */
-	public static NFA minimize(NFA nfa) {
+	public static Automaton minimize(Automaton nfa) {
 		
 		int[][] table = new int[nfa.getCountStates()][nfa.getCountStates()];
 		
@@ -302,7 +295,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new NFA(startState);
+		return new Automaton(startState);
 	}
 
 	/**
@@ -444,21 +437,38 @@ public class AutomatonOperations {
 		});
 	}
 	
-	public static void setStateIDs(Automaton automaton) {
+	public static void setTransitionIDs(Automaton automaton) {
+		int[] intervals = automaton.getIntervals();
+		
+		/*
+		 * A map from each interval's start to the interval id.
+		 */
+		final Map<Integer, Integer> intervalIds = new HashMap<>();
+		
+		for(int i = 0; i < intervals.length; i++) {
+			intervalIds.put(intervals[i], i);
+		}
 		
 		AutomatonVisitor.visit(automaton, new VisitAction() {
-
-			int id = 0;
 			
 			@Override
 			public void visit(State state) {
-				state.setId(id++);
+				for(Transition transition : state.getTransitions()) {
+					if(transition.isEpsilonTransition()) {
+						transition.setId(-1);
+					} else {
+						transition.setId(intervalIds.get(transition.getStart()));
+					}
+				}
 			}
 		});
 	}
 	
+	public static void setStateIDs(Automaton automaton) {
+		setStateIDs(automaton.getStartState());
+	}
 
-	public static Set<State> getFinalStates(NFA nfa) {
+	public static Set<State> getFinalStates(Automaton nfa) {
 		
 		final Set<State> finalStates = new HashSet<>();
 		

@@ -20,7 +20,7 @@ public class Examples {
 		CharacterClass c2 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'), new Range('0', '9'));
 		
 		RegularExpression regexp = new Sequence(c1, new RegexStar(c2));
-		NFA nfa = regexp.toNFA();
+		Automaton nfa = regexp.toNFA();
 		
 		DFA dfa = nfa.toDFA();
 
@@ -40,7 +40,7 @@ public class Examples {
 		CharacterClass c = new CharacterClass(new Range('0', '9'));
 		RegularExpression regexp = new Sequence(new RegexPlus(c), new Character('.'), new RegexPlus(c));
 		
-		NFA nfa = regexp.toNFA();
+		Automaton nfa = regexp.toNFA();
 		
 		DFA dfa = nfa.toDFA();
 

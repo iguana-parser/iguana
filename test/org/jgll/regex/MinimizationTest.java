@@ -40,14 +40,14 @@ public class MinimizationTest {
 		q7.addTransition(new Transition('0', q2));
 		q7.addTransition(new Transition('1', q2));
 		
-		NFA nfa = new NFA(q0);
+		Automaton nfa = new Automaton(q0);
 		
-		NFA minimized = AutomatonOperations.minimize(nfa);
+		Automaton minimized = AutomatonOperations.minimize(nfa);
 	
 		assertEquals(getAutomaton1(), minimized);
 	}
 	
-	private NFA getAutomaton1() {
+	private Automaton getAutomaton1() {
 		State state1 = new State();
 		state1.addTransition(new Transition(49, 49, state1));
 		State state2 = new State();
@@ -63,7 +63,7 @@ public class MinimizationTest {
 		state2.addTransition(new Transition(49, 49, state3));
 		state1.addTransition(new Transition(48, 48, state2));
 		
-		return new NFA(state1);
+		return new Automaton(state1);
 	}
 	
 	
@@ -81,14 +81,14 @@ public class MinimizationTest {
 		c.addTransition(new Transition('0', '1', d));
 		d.addTransition(new Transition('0', '1', e));
 		
-		NFA nfa = new NFA(a);
+		Automaton nfa = new Automaton(a);
 		
-		NFA minimized = AutomatonOperations.minimize(nfa);
+		Automaton minimized = AutomatonOperations.minimize(nfa);
 		
 		assertEquals(getAutomaton2(), minimized);
 	}
 	
-	private NFA getAutomaton2() {
+	private Automaton getAutomaton2() {
 		State state1 = new State();
 		State state2 = new State();
 		State state3 = new State();
@@ -97,7 +97,7 @@ public class MinimizationTest {
 		state2.addTransition(new Transition(48, 49, state3));
 		state1.addTransition(new Transition(49, 49, state2));
 		state1.addTransition(new Transition(48, 48, state2));
-		return new NFA(state1);
+		return new Automaton(state1);
 	}
 	
 	
@@ -120,14 +120,14 @@ public class MinimizationTest {
 		e.addTransition(new Transition('0', e));
 		e.addTransition(new Transition('1', e));
 		
-		NFA nfa = new NFA(a);
+		Automaton nfa = new Automaton(a);
 		
-		NFA minimized = AutomatonOperations.minimize(nfa);
+		Automaton minimized = AutomatonOperations.minimize(nfa);
 		
 		assertEquals(getAutomaton3(), minimized);
 	}
 	
-	private NFA getAutomaton3() {
+	private Automaton getAutomaton3() {
 		State state1 = new State(true);
 		state1.addTransition(new Transition(48, 48, state1));
 		State state2 = new State();
@@ -137,7 +137,7 @@ public class MinimizationTest {
 		state2.addTransition(new Transition(48, 48, state3));
 		state2.addTransition(new Transition(49, 49, state2));
 		state1.addTransition(new Transition(49, 49, state2));
-		return new NFA(state1);
+		return new Automaton(state1);
 	}
 	
 	@Test
@@ -165,14 +165,14 @@ public class MinimizationTest {
 		g.addTransition(new Transition('1', '3', i));
 		h.addTransition(new Transition('1', i));
 		
-		NFA nfa = new NFA(a);
+		Automaton nfa = new Automaton(a);
 		
-		NFA minimized = AutomatonOperations.minimize(nfa);
+		Automaton minimized = AutomatonOperations.minimize(nfa);
 		
 		assertEquals(getAutomaton4(), minimized);
 	}
 	
-	private NFA getAutomaton4() {
+	private Automaton getAutomaton4() {
 		State state1 = new State();
 		State state2 = new State();
 		State state3 = new State();
@@ -188,6 +188,6 @@ public class MinimizationTest {
 		state1.addTransition(new Transition(50, 50, state2));
 		state1.addTransition(new Transition(49, 49, state2));
 		state1.addTransition(new Transition(51, 51, state2));
-		return new NFA(state1);
+		return new Automaton(state1);
 	}
 }

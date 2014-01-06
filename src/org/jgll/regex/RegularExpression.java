@@ -7,7 +7,7 @@ import org.jgll.grammar.symbol.Symbol;
 
 public interface RegularExpression extends Serializable, Symbol {
 
-	public NFA toNFA();
+	public Automaton toNFA();
 	
 	public boolean isNullable();
 	

@@ -19,7 +19,7 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 	}
 	
 	@Override
-	public NFA toNFA() {
+	public Automaton toNFA() {
 		return regexp.toNFA();
 	}
 	
