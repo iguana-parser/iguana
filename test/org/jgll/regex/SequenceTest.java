@@ -16,7 +16,7 @@ public class SequenceTest {
 
 		assertEquals(6, nfa.getCountStates());
 
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 		
 		assertTrue(dfa.match(Input.fromString("ab")));
 		assertFalse(dfa.match(Input.fromString("ac")));
@@ -31,7 +31,7 @@ public class SequenceTest {
 
 		assertEquals(6, nfa.getCountStates());
 
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 		
 		assertTrue(dfa.match(Input.fromString("a0")));
 		assertTrue(dfa.match(Input.fromString("a5")));

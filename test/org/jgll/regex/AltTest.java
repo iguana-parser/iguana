@@ -14,7 +14,7 @@ public class AltTest {
 		Automaton nfa = regexp.toNFA();
 		assertEquals(6, nfa.getCountStates());
 		
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 		assertTrue(dfa.match(Input.fromString("a")));
 		assertTrue(dfa.match(Input.fromString("b")));
 	}

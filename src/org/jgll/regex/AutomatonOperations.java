@@ -82,7 +82,7 @@ public class AutomatonOperations {
 		return new Automaton(startState);
 	}
 	
-	public static DFA createDFA(Automaton nfa) {
+	public static Matcher createDFA(Automaton nfa) {
 		int statesCount = nfa.getCountStates();
 		int inputLength = nfa.getIntervals().length;
 		int[][] transitionTable = new int[statesCount][inputLength];
@@ -104,7 +104,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new DFA(transitionTable, endStates, nfa.getStartState().getId(), nfa.getIntervals());		
+		return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), nfa.getIntervals());		
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {

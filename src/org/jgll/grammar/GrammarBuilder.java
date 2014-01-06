@@ -39,7 +39,7 @@ import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.DFA;
+import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 import org.jgll.util.trie.Edge;
@@ -92,7 +92,7 @@ public class GrammarBuilder implements Serializable {
 	
 	List<RegularExpression> tokens;
 	
-	DFA[] dfas;
+	Matcher[] dfas;
 	
 	public GrammarBuilder() {
 		this("no-name");
@@ -131,9 +131,9 @@ public class GrammarBuilder implements Serializable {
 		
 		validateGrammar();
 		
-		dfas = new DFA[tokens.size()];
-		dfas[0] = Epsilon.getInstance().toNFA().toDFA();
-		dfas[1] = Epsilon.getInstance().toNFA().toDFA();
+		dfas = new Matcher[tokens.size()];
+		dfas[0] = Epsilon.getInstance().toNFA().getMatcher();
+		dfas[1] = Epsilon.getInstance().toNFA().getMatcher();
 		
 		for(RegularExpression regex : tokens) {
 			
@@ -141,7 +141,7 @@ public class GrammarBuilder implements Serializable {
 				continue;
 			}
 			
-			DFA dfa = regex.toNFA().toDFA();
+			Matcher dfa = regex.toNFA().getMatcher();
 			Integer id = tokenIDMap.get(regex);
 			dfa.setId(id);
 			dfas[id] = dfa;

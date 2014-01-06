@@ -16,7 +16,7 @@ public class CharacterClassTest {
 		
 		assertEquals(6, nfa.getCountStates());
 
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 		
 		assertTrue(dfa.match(Input.fromChar('a')));
 		assertTrue(dfa.match(Input.fromChar('f')));
@@ -37,7 +37,7 @@ public class CharacterClassTest {
 
 		assertEquals(8, nfa.getCountStates());
 
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 		
 		assertTrue(dfa.match(Input.fromChar('1')));
 		assertTrue(dfa.match(Input.fromChar('2')));

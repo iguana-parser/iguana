@@ -12,10 +12,10 @@ public class CharacterTest {
 	public void test() {
 		RegularExpression regexp = new Character('a');
 		Automaton nfa = regexp.toNFA();
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 		assertEquals(2, nfa.getCountStates());
 		assertTrue(dfa.match(Input.fromString("a")));
-		assertEquals(1, dfa.run(Input.fromString("a"), 0));
+		assertEquals(1, dfa.match(Input.fromString("a"), 0));
 	}
 
 }

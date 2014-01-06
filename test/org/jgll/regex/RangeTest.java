@@ -13,9 +13,9 @@ public class RangeTest {
 		RegularExpression regexp = new Range('0', '9');
 		Automaton nfa = regexp.toNFA();
 		assertEquals(2, nfa.getCountStates());
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 		assertTrue(dfa.match(Input.fromString("0")));
-		assertEquals(1, dfa.run(Input.fromString("0"), 0));
+		assertEquals(1, dfa.match(Input.fromString("0"), 0));
 	}
 
 }

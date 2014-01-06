@@ -20,7 +20,7 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.DFA;
+import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -70,9 +70,9 @@ public class Grammar implements Serializable {
 	
 	private List<RegularExpression> tokens;
 	
-	private transient Map<Integer, Set<DFA>> tokensMap;
+	private transient Map<Integer, Set<Matcher>> tokensMap;
 	
-	private DFA[] dfas;
+	private Matcher[] dfas;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -121,7 +121,7 @@ public class Grammar implements Serializable {
 			
 			BitSet bitSet = token.asBitSet();
 			 for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-				Set<DFA> set = tokensMap.get(i);
+				Set<Matcher> set = tokensMap.get(i);
 				if(set == null) {
 					set  = new HashSet<>();
 					tokensMap.put(i, set);
@@ -324,7 +324,7 @@ public class Grammar implements Serializable {
 		return tokenIDMap.keySet();
 	}
 	
-	public Set<DFA> getTokensForChar(int c) {
+	public Set<Matcher> getTokensForChar(int c) {
 		return tokensMap.get(c);
 	}
 	
@@ -338,7 +338,7 @@ public class Grammar implements Serializable {
 		return count;
 	}
 	
-	public DFA getDFA(int id) {
+	public Matcher getDFA(int id) {
 		return dfas[id];
 	}
 	

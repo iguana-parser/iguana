@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.EOF;
-import org.jgll.regex.DFA;
+import org.jgll.regex.Matcher;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
@@ -76,13 +76,13 @@ public class GLLLexerImpl implements GLLLexer {
 		// Skip EOF
 		for(int i = 0; i < input.length() - 1; i++) {
 			
-			Set<DFA> set = grammar.getTokensForChar(input.charAt(i));
+			Set<Matcher> set = grammar.getTokensForChar(input.charAt(i));
 			
 			if(set == null) {
 				continue;
 			}
 			
-			for(DFA dfa : set) {
+			for(Matcher dfa : set) {
 				tokenize(i, input, dfa);
 			}
 		}
@@ -92,8 +92,8 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 
 	
-	private int tokenize(int inputIndex, Input input, DFA dfa) {
-		int length = dfa.run(input, inputIndex);
+	private int tokenize(int inputIndex, Input input, Matcher dfa) {
+		int length = dfa.match(input, inputIndex);
 		if(length != -1) {
 			createToken(inputIndex, dfa, length);
 		}
@@ -101,7 +101,7 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 
-	private void createToken(int inputIndex, DFA dfa, int length) {
+	private void createToken(int inputIndex, Matcher dfa, int length) {
 		tokenIDs[inputIndex].set(dfa.getId());
 		tokens[inputIndex][dfa.getId()] = length;
 	}

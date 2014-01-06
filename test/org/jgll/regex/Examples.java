@@ -22,7 +22,7 @@ public class Examples {
 		RegularExpression regexp = new Sequence(c1, new RegexStar(c2));
 		Automaton nfa = regexp.toNFA();
 		
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 
 		assertTrue(dfa.match(Input.fromString("a")));
 		assertFalse(dfa.match(Input.fromString("9")));
@@ -42,7 +42,7 @@ public class Examples {
 		
 		Automaton nfa = regexp.toNFA();
 		
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 
 		assertTrue(dfa.match(Input.fromString("1.2")));
 		assertFalse(dfa.match(Input.fromString("9")));

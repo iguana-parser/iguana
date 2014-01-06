@@ -12,17 +12,17 @@ public class PlusTest {
 	public void test() {
 		RegularExpression regexp = new RegexPlus(new Character('a'));
 		Automaton nfa = regexp.toNFA();
-		DFA dfa = nfa.toDFA();
+		Matcher dfa = nfa.getMatcher();
 
 		assertEquals(8, nfa.getCountStates());
 		
 		
-		assertEquals(1, dfa.run(Input.fromString("a"), 0));
-		assertEquals(2, dfa.run(Input.fromString("aa"), 0));
-		assertEquals(3, dfa.run(Input.fromString("aaa"), 0));
-		assertEquals(6, dfa.run(Input.fromString("aaaaaa"), 0));
-		assertEquals(17, dfa.run(Input.fromString("aaaaaaaaaaaaaaaaa"), 0));
-		assertEquals(33, dfa.run(Input.fromString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 0));
+		assertEquals(1, dfa.match(Input.fromString("a"), 0));
+		assertEquals(2, dfa.match(Input.fromString("aa"), 0));
+		assertEquals(3, dfa.match(Input.fromString("aaa"), 0));
+		assertEquals(6, dfa.match(Input.fromString("aaaaaa"), 0));
+		assertEquals(17, dfa.match(Input.fromString("aaaaaaaaaaaaaaaaa"), 0));
+		assertEquals(33, dfa.match(Input.fromString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 0));
 
 		
 		assertFalse(dfa.match(Input.fromString("")));

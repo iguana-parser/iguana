@@ -127,7 +127,7 @@ public class Automaton {
 		return true;
 	}
 	
-	public DFA toDFA() {
+	public Matcher getMatcher() {
 		Automaton deterministicFA = AutomatonOperations.makeDeterministic(this);
 		Automaton minimizedDFA = AutomatonOperations.minimize(deterministicFA);
 		return AutomatonOperations.createDFA(minimizedDFA);
