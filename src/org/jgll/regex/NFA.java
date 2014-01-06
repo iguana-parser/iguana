@@ -1,6 +1,8 @@
 package org.jgll.regex;
 
+import java.util.Arrays;
 import java.util.BitSet;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -23,7 +25,6 @@ public class NFA implements Automaton {
 		for(State s : set) {
 			states[s.getId()]  = s;
 		}
-		
 	}
 	
 	@Override
@@ -59,6 +60,10 @@ public class NFA implements Automaton {
 		return intervals;
 	}
 	
+	/**
+	 * Determines whether two NFAs are isomorphic. 
+	 * The NFAs are first made deterministic before performing the equality check.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		
@@ -70,7 +75,52 @@ public class NFA implements Automaton {
 			return false;
 		}
 		
-		return super.equals(obj);
+		NFA other = (NFA) obj;
+		
+		// Checks whether two NFAs accept the same language 
+		if(!Arrays.equals(intervals, other.intervals)) {
+			return false;
+		}
+		
+		// TODO: Maybe we should change the start symbol of the automaton after it's made 
+		// deterministic
+		
+		NFA thisNFA = AutomatonOperations.makeDeterministic(this);
+		NFA otherNFA = AutomatonOperations.makeDeterministic(other);
+		
+		Set<State> visitedStates = new HashSet<>();
+		
+		return isEqual(thisNFA.getStartState(), otherNFA.getStartState(), visitedStates);
+	}
+	
+	private boolean isEqual(State thisState, State otherState, Set<State> visitedStates) {
+		
+		if(thisState.getCountTransitions() != otherState.getCountTransitions()) {
+			return false;
+		}
+		
+		int i = 0;
+		Transition[] t1 = thisState.getSortedTransitions();
+		Transition[] t2 = otherState.getSortedTransitions();
+		while(i < thisState.getCountTransitions()) {
+			if(t1[i].getStart() == t2[i].getStart() && t1[i].getEnd() == t2[i].getEnd()) {
+				
+				State d1 = t1[i].getDestination();
+				State d2 = t2[i].getDestination();
+
+				// Avoid infinite loop
+				if(!(visitedStates.contains(d1) && visitedStates.contains(d2))) {
+					visitedStates.add(d1);
+					visitedStates.add(d2);
+					if(!isEqual(d1, d2, visitedStates)) {
+						return false;
+					}
+				}
+			}
+			i++;
+		}
+		
+		return true;
 	}
 	
 	public DFA toDFA() {

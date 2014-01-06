@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public class MinimizationTest {
@@ -40,7 +42,28 @@ public class MinimizationTest {
 		
 		NFA nfa = new NFA(q0);
 		
-		NFA minimize = AutomatonOperations.minimize(nfa);
+		NFA minimized = AutomatonOperations.minimize(nfa);
+	
+		assertEquals(minimized, getAutomaton());
+	}
+	
+	private NFA getAutomaton() {
+		State state1 = new State();
+		state1.addTransition(new Transition(49, 49, state1));
+		State state2 = new State();
+		State state3 = new State();
+		State state4 = new State();
+		State state5 = new State(true);
+		state5.addTransition(new Transition(49, 49, state5));
+		state5.addTransition(new Transition(48, 48, state5));
+		state4.addTransition(new Transition(49, 49, state5));
+		state3.addTransition(new Transition(48, 48, state4));
+		state3.addTransition(new Transition(49, 49, state5));
+		state2.addTransition(new Transition(48, 48, state3));
+		state2.addTransition(new Transition(49, 49, state3));
+		state1.addTransition(new Transition(48, 48, state2));
+		
+		return new NFA(state1);
 	}
 
 }

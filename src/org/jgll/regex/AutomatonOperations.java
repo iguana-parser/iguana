@@ -338,7 +338,13 @@ public class AutomatonOperations {
 	}
 	
 	private static void toJavaCode(State state, StringBuilder sb, Map<State, Integer> visitedStates) {
-		sb.append("State state" + visitedStates.get(state) + " = new State();\n");
+		
+		if(state.isFinalState()) {
+			sb.append("State state" + visitedStates.get(state) + " = new State(true);\n");			
+		} else {
+			sb.append("State state" + visitedStates.get(state) + " = new State();\n");
+		}
+		
 		for(Transition transition : state.getTransitions()) {
 			State destination = transition.getDestination();
 			
@@ -348,7 +354,7 @@ public class AutomatonOperations {
 			}
 			
 			sb.append("state" + visitedStates.get(state) + ".addTransition(new Transition(" + transition.getStart() + 
-					                                               ", " + transition.getEnd() + ", state" + visitedStates.get(destination) + ");\n");
+					                                               ", " + transition.getEnd() + ", state" + visitedStates.get(destination) + "));\n");
 		}
 	}
 	

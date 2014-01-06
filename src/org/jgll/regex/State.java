@@ -1,5 +1,6 @@
 package org.jgll.regex;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +24,15 @@ public class State {
 	
 	public Set<Transition> getTransitions() {
 		return transitions;
+	}
+	
+	/**
+	 * Transitions sorted based on their start index.
+	 */
+	public Transition[] getSortedTransitions() {
+		Transition[] array = transitions.toArray(new Transition[] {});
+		Arrays.sort(array);
+		return array;
 	}
 	
 	public boolean isFinalState() {
@@ -51,6 +61,10 @@ public class State {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public int getCountTransitions() {
+		return transitions.size();
 	}
 	
 	@Override

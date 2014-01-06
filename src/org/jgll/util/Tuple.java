@@ -21,6 +21,10 @@ public class Tuple<T, K> {
 		return k;
 	}
 	
+	public static <T, K> Tuple<T, K> from(T t, K k) {
+		return new Tuple<>(t, k);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		

@@ -2,7 +2,7 @@ package org.jgll.regex;
 
 import org.jgll.parser.HashFunctions;
 
-public class Transition {
+public class Transition implements Comparable<Transition> {
 	
 	private int start;
 	private int end;
@@ -91,5 +91,10 @@ public class Transition {
 		}
 		
 		return (start == end) ? start + "" : "[" + start + "-" + end + "]";
+	}
+
+	@Override
+	public int compareTo(Transition t) {
+		return this.start - t.getStart();
 	}
 }
