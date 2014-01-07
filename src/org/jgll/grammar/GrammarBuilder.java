@@ -132,8 +132,10 @@ public class GrammarBuilder implements Serializable {
 		validateGrammar();
 		
 		dfas = new Matcher[tokens.size()];
-		dfas[0] = Epsilon.getInstance().toNFA().getMatcher();
-		dfas[1] = Epsilon.getInstance().toNFA().getMatcher();
+		
+		// There are no matchers for epsilon or EOF, they will be handled at a higher level from the parser.
+		dfas[0] = null;
+		dfas[1] = null;
 		
 		for(RegularExpression regex : tokens) {
 			

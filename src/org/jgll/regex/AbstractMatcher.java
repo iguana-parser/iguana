@@ -52,7 +52,7 @@ public abstract class AbstractMatcher implements Matcher {
 			int transitionId = getTransitionId(input.charAt(i));
 			
 			if(transitionId == -1) {
-				return -1;
+				break;
 			}
 			
 			stateId = transitionTable[stateId][transitionId];

@@ -23,7 +23,6 @@ public class GLLLexerImpl implements GLLLexer {
 
 	private Grammar grammar;
 
-	
 	public GLLLexerImpl(Input input, Grammar grammar) {
 		this.input = input;
 		this.grammar = grammar;
@@ -74,15 +73,15 @@ public class GLLLexerImpl implements GLLLexer {
 	private void tokenize(Input input) {
 		
 		// Skip EOF
-		for(int i = 0; i < input.length() - 1; i++) {
+		for (int i = 0; i < input.length() - 1; i++) {
 			
 			Set<Matcher> set = grammar.getTokensForChar(input.charAt(i));
 			
-			if(set == null) {
+			if (set == null) {
 				continue;
 			}
 			
-			for(Matcher dfa : set) {
+			for (Matcher dfa : set) {
 				tokenize(i, input, dfa);
 			}
 		}
@@ -94,7 +93,7 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	private int tokenize(int inputIndex, Input input, Matcher dfa) {
 		int length = dfa.match(input, inputIndex);
-		if(length != -1) {
+		if (length != -1) {
 			createToken(inputIndex, dfa, length);
 		}
 		return length;
