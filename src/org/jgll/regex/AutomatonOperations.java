@@ -251,38 +251,54 @@ public class AutomatonOperations {
 		}
 		
 		
-		// The set of states already in partitions, used for duplication elimination
-		Set<State> partitined = new HashSet<>();
-		
-		Set<Set<State>> partitions = new HashSet<>();
+		Map<State, Set<State>> partitionsMap = new HashMap<>();
 		
 		for (int i = 0; i < table.length; i++) {
-			Set<State> set = new HashSet<>();
 			for (int j = 0; j < i; j++) {
 				if(table[i][j] == EMPTY) {
-					set.add(nfa.getState(i));
-					set.add(nfa.getState(j));
-					partitions.add(set);
-					partitined.add(nfa.getState(i));
-					partitined.add(nfa.getState(j));
+					State stateI = nfa.getState(i);
+					State stateJ = nfa.getState(j);
+					
+					Set<State> partitionI = partitionsMap.get(stateI);
+					Set<State> partitionJ = partitionsMap.get(stateJ);
+					
+					if(partitionI == null && partitionJ == null) {
+						Set<State> set = new HashSet<>();
+						set.add(stateI);
+						set.add(stateJ);
+						partitionsMap.put(stateI, set);
+						partitionsMap.put(stateJ, set);
+					}
+					else if(partitionI == null && partitionJ != null) {
+						partitionJ.add(stateI);
+						partitionsMap.put(stateI, partitionJ);
+					} 
+					else if(partitionJ == null && partitionI != null) {
+						partitionI.add(stateJ);
+						partitionsMap.put(stateJ, partitionI);
+					}
+					else { 
+						partitionJ.addAll(partitionI);
+						partitionI.addAll(partitionJ);
+					}
 				}
 			}
 		}
 		
+		HashSet<Set<State>> partitions = new HashSet<Set<State>>(partitionsMap.values());
+		
+		State startState = null;
+		
 		for(State state : nfa.getAllStates()) {
-			if(!partitined.contains(state)) {
+			if(partitionsMap.get(state) == null) {
 				Set<State> set = new HashSet<>();
 				set.add(state);
 				partitions.add(set);
 			}
-		}
-		
-		System.out.println(partitions);
+		} 
 		
 		Map<State, State> newStates = new HashMap<>();
 
-		State startState = null;
-		
 		for(Set<State> set : partitions) {
 			State newState = new State();
 			for(State state : set) {

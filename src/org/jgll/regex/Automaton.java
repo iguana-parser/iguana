@@ -133,11 +133,12 @@ public class Automaton {
 		return true;
 	}
 	
-	public void determinize() {
+	public Automaton determinize() {
 		Automaton newAutomaton = AutomatonOperations.makeDeterministic(this);
 		startState = newAutomaton.getStartState();
 		deterministic = true;
 		init();
+		return this;
 	}
 	
 	public Matcher getMatcher() {

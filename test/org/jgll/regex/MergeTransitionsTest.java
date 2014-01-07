@@ -11,13 +11,9 @@ public class MergeTransitionsTest {
 	@Test
 	public void test() {
 		RegularExpression regexp = new CharacterClass(Range.in('0', '4'), Range.in('5', '7'), Range.in('8', '9'));
-		Automaton a = regexp.toNFA();
-//		GraphVizUtil.generateGraph(NFAToDot.toDot(a.getStartState()), "/Users/aliafroozeh/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);		
-		a = AutomatonOperations.makeDeterministic(a);
-		GraphVizUtil.generateGraph(NFAToDot.toDot(a.getStartState()), "/Users/aliafroozeh/output", "dfa", GraphVizUtil.LEFT_TO_RIGHT);		
-//		a.determinize();
-		Automaton minimize = AutomatonOperations.minimize(a);
-		GraphVizUtil.generateGraph(NFAToDot.toDot(minimize.getStartState()), "/Users/aliafroozeh/output", "m", GraphVizUtil.LEFT_TO_RIGHT);		
+		Automaton a = AutomatonOperations.minimize(regexp.toNFA().determinize());
+		AutomatonOperations.mergeTransitions(a);
+		GraphVizUtil.generateGraph(NFAToDot.toDot(a.getStartState()), "/Users/ali/output", "m", GraphVizUtil.LEFT_TO_RIGHT);		
 	}
 
 }
