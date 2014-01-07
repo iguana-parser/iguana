@@ -513,7 +513,9 @@ public class AutomatonOperations {
 	 * Merges consecutive transitions of the form [a - b] and [b+1 - c] to [a - c]. 
 	 * 
 	 */
-	public static void mergeTransitions(Automaton automaton) {
+	public static Automaton mergeTransitions(final Automaton automaton) {
+		
+		final State[] startStates = new State[1];
 		
 		final Map<State, State> newStates = new HashMap<>();
 		
@@ -521,12 +523,18 @@ public class AutomatonOperations {
 
 			@Override
 			public void visit(State state) {
+				State newState;
 				if(state.isFinalState()) {
-					newStates.put(state, new State(true));
+					newState = new State(true);
 				} else {
-					newStates.put(state, new State());					
+					newState = new State();					
 				}
-			}
+				newStates.put(state, newState);
+				
+				if(automaton.getStartState() == state) {
+					startStates[0] = newState;
+				}
+ 			}
 		});
 		
 		AutomatonVisitor.visit(automaton, new VisitAction() {
@@ -535,9 +543,9 @@ public class AutomatonOperations {
 			public void visit(State state) {
 				Transition[] t = state.getSortedTransitions();
 				int i = 0;
-				while(i < t.length - 1) {
+				while(i < t.length) {
 					int j = i;
-					while(i < t.length - 2 && 
+					while(i < t.length - 1 && 
 						  t[i + 1].getStart() == t[i].getEnd() + 1 &&
 						  t[i].getDestination() == t[i + 1].getDestination()) {
 						i++;
@@ -548,6 +556,8 @@ public class AutomatonOperations {
 				}
 			}
 		});
+		
+		return new Automaton(startStates[0]);
 	}
 	
 }
