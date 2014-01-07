@@ -16,7 +16,7 @@ public class LargeIntervalMatcher extends AbstractMatcher {
 	@Override
 	protected int getTransitionId(int c) {
 		
-		if(c < intervals[0] || c > intervals[intervals.length -1]) {
+		if(c < intervals[0] || c > intervals[intervals.length - 1]) {
 			return -1;
 		}
 		

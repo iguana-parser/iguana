@@ -103,8 +103,13 @@ public class AutomatonOperations {
 				endStates[state.getId()] = true;
 			}
 		}
-		
-		return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), nfa.getIntervals());		
+
+		int[] intervals = nfa.getIntervals();
+		if(intervals[intervals.length - 1] - intervals[0] > Character.MAX_VALUE) {
+			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), nfa.getIntervals());					
+		} else {
+			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), nfa.getIntervals());
+		}
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
