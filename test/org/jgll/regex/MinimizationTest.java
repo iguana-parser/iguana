@@ -190,4 +190,10 @@ public class MinimizationTest {
 		state1.addTransition(new Transition(51, 51, state2));
 		return new Automaton(state1);
 	}
+	
+	@Test
+	public void test5() {
+		
+	}
+	
 }

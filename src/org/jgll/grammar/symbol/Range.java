@@ -25,6 +25,10 @@ public class Range extends AbstractSymbol implements Terminal {
 	
 	private final BitSet testSet;
 	
+	public static Range in(int start, int end) {
+		return new Range(start, end);
+	}
+	
 	public Range(int start, int end) {
 		
 		if(end < start) {

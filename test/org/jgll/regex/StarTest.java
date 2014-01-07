@@ -12,10 +12,10 @@ public class StarTest {
 	public void test() {
 		RegularExpression regexp = new RegexStar(new Character('a'));
 		Automaton nfa = regexp.toNFA();
+				
+		assertEquals(4, nfa.getCountStates());
 		
 		Matcher dfa = nfa.getMatcher();
-		
-		assertEquals(4, nfa.getCountStates());
 		
 		assertEquals(0, dfa.match(Input.fromString(""), 0));
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));

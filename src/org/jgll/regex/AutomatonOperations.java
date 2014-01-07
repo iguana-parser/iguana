@@ -277,6 +277,8 @@ public class AutomatonOperations {
 			}
 		}
 		
+		System.out.println(partitions);
+		
 		Map<State, State> newStates = new HashMap<>();
 
 		State startState = null;
@@ -488,6 +490,48 @@ public class AutomatonOperations {
 		});
 		
 		return finalStates;
+	}
+	
+	/**
+	 * 
+	 * Merges consecutive transitions of the form [a - b] and [b+1 - c] to [a - c]. 
+	 * 
+	 */
+	public static void mergeTransitions(Automaton automaton) {
+		
+		final Map<State, State> newStates = new HashMap<>();
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+
+			@Override
+			public void visit(State state) {
+				if(state.isFinalState()) {
+					newStates.put(state, new State(true));
+				} else {
+					newStates.put(state, new State());					
+				}
+			}
+		});
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+
+			@Override
+			public void visit(State state) {
+				Transition[] t = state.getSortedTransitions();
+				int i = 0;
+				while(i < t.length - 1) {
+					int j = i;
+					while(i < t.length - 2 && 
+						  t[i + 1].getStart() == t[i].getEnd() + 1 &&
+						  t[i].getDestination() == t[i + 1].getDestination()) {
+						i++;
+					}
+					State newState = newStates.get(state);
+					newState.addTransition(new Transition(t[j].getStart(), t[i].getEnd(), newStates.get(t[j].getDestination())));
+					i++;
+				}
+			}
+		});
 	}
 	
 }

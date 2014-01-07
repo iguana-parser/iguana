@@ -5,7 +5,6 @@ import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /**
  * 
  * @author Ali Afroozeh
@@ -13,15 +12,22 @@ import java.util.Set;
  */
 public class Automaton {
 	
-	private final State startState;
+	private State startState;
 	
-	private final int[] intervals;
+	private int[] intervals;
 	
-	private final State[] states;
+	private State[] states;
+	
+	private boolean deterministic;
 
 	public Automaton(State startState) {
 		this.startState = startState;
-		this.intervals = AutomatonOperations.getIntervals(this);
+		init();
+	}
+
+	private void init() {
+		intervals = AutomatonOperations.getIntervals(this);
+		
 		AutomatonOperations.setStateIDs(this);
 		AutomatonOperations.setTransitionIDs(this);
 		
@@ -127,9 +133,19 @@ public class Automaton {
 		return true;
 	}
 	
+	public void determinize() {
+		Automaton newAutomaton = AutomatonOperations.makeDeterministic(this);
+		startState = newAutomaton.getStartState();
+		deterministic = true;
+		init();
+	}
+	
 	public Matcher getMatcher() {
-		Automaton deterministicFA = AutomatonOperations.makeDeterministic(this);
-		Automaton minimizedDFA = AutomatonOperations.minimize(deterministicFA);
+		if(!deterministic) {
+			determinize();
+		}
+		Automaton minimizedDFA = AutomatonOperations.minimize(this);
+		AutomatonOperations.mergeTransitions(minimizedDFA);
 		return AutomatonOperations.createDFA(minimizedDFA);
 	}
 	
