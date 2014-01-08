@@ -9,6 +9,8 @@ import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Terminal;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.regex.Matcher;
+import org.jgll.regex.RegexAlt;
 import org.jgll.util.logging.LoggerWrapper;
 
 
@@ -65,50 +67,41 @@ public class NotPrecedeActions {
 	
 	public static void fromKeywordList(BodyGrammarSlot slot, final List<Keyword> list, final Condition condition) {
 		
-		// TODO: First implement DFA inverse and use it for this kind of matching. 
+		log.debug("Precede restriction added %s <<! %s", list, slot);
 		
-//		log.debug("Precede restriction added %s <<! %s", list, slot);
-//		
-//		slot.addPreCondition(new SlotAction<Boolean>() {
-//			
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public Boolean execute(GLLParser parser, GLLLexer lexer) {
-//				int ci = parser.getCurrentInputIndex();
-//				if (ci == 0) {
-//					return false;
-//				}
-//				
-//				for(Keyword keyword : list) {
-//					if(lexer.getInput().matchBackward(ci, keyword.getChars())) {
-//						return true;
-//					}
-//				}
-//				
-//				return false;
-//			}
-//
-//			@Override
-//			public Condition getCondition() {
-//				return condition;
-//			}
-//			
-//			@Override
-//			public boolean equals(Object obj) {
-//				if(this == obj) {
-//					return true;
-//				}
-//				
-//				if(!(obj instanceof SlotAction)) {
-//					return false;
-//				}
-//				
-//				@SuppressWarnings("unchecked")
-//				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
-//				return getCondition().equals(other.getCondition());
-//			}
-//			
-//		});
+		RegexAlt<Keyword> alt = new RegexAlt<>(list);
+		final Matcher matcher = alt.toNFA().reverse().getMatcher();
+
+
+		slot.addPreCondition(new SlotAction<Boolean>() {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Boolean execute(GLLParser parser, GLLLexer lexer) {
+				return matcher.matchBackwards(lexer.getInput(), parser.getCurrentInputIndex() - 1) >= 0;
+			}
+
+			@Override
+			public Condition getCondition() {
+				return condition;
+			}
+			
+			@Override
+			public boolean equals(Object obj) {
+				if(this == obj) {
+					return true;
+				}
+				
+				if(!(obj instanceof SlotAction)) {
+					return false;
+				}
+				
+				@SuppressWarnings("unchecked")
+				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
+				return getCondition().equals(other.getCondition());
+			}
+			
+		});
 	}
 }

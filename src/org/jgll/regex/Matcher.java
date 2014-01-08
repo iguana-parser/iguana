@@ -15,6 +15,8 @@ public interface Matcher {
 	 */
 	public boolean match(Input input, int start, int end);
 	
+	public int matchBackwards(Input input, int inputIndex);
+	
 	public int getId();
 	
 	public void setId(int id);

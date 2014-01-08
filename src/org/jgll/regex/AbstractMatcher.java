@@ -75,6 +75,40 @@ public abstract class AbstractMatcher implements Matcher {
 		return maximumMatched;
 	}
 	
+	@Override
+	public int matchBackwards(Input input, int inputIndex) {
+		int length = 0;
+
+		int stateId = startStateId;
+		
+		int maximumMatched = -1;
+		
+		if(input.isEmpty() && endStates[stateId]) {
+			return 0;
+		}
+		
+		for(int i = inputIndex; i >= 0; i--) {
+			int transitionId = getTransitionId(input.charAt(i));
+			
+			if(transitionId == -1) {
+				break;
+			}
+			
+			stateId = transitionTable[stateId][transitionId];
+			length++;
+			
+			if(stateId == -1) {
+				break;
+			}
+			
+			if(endStates[stateId]) {
+				maximumMatched = length;
+			}
+		}
+		
+		return maximumMatched;
+	}
+	
 	protected abstract int getTransitionId(int c);
 
 }

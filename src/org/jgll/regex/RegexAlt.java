@@ -105,4 +105,14 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 	public Iterator<T> iterator() {
 		return regularExpressions.iterator();
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(T t : regularExpressions) {
+			sb.append(t).append(" | ");
+		}
+		sb.delete(sb.length() - 2, sb.length());
+		return sb.toString();
+	}
 }
