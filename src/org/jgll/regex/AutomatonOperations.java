@@ -672,14 +672,14 @@ public class AutomatonOperations {
 				
 				for(int t = 0; t < intervals.length - 1; t++) {
 					Set<State> reachableStates1 = state1.move(intervals[t]);
-					Set<State> reachableStates2 = state1.move(intervals[t]);
+					Set<State> reachableStates2 = state2.move(intervals[t]);
 					
 					assert reachableStates2.size() <= 1; // Automatons are already determinized.
 					assert reachableStates1.size() <= 1;
 					
 					if(reachableStates1.size() == 1 && reachableStates2.size() == 1) {
 						State s1 = reachableStates1.iterator().next();
-						State s2 = reachableStates1.iterator().next();
+						State s2 = reachableStates2.iterator().next();
 						state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.from(s1.getId(), s2.getId()))));
 					}
 				}
