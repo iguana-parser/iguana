@@ -35,6 +35,19 @@ public class State {
 		return array;
 	}
 	
+	/**
+	 * Returns all the reachable states by consuming the given input character. 
+	 */
+	public Set<State> move(int c) {
+		Set<State> set = new HashSet<>();
+		for(Transition t : transitions) {
+			if(t.canMove(c)) {
+				set.add(t.getDestination());
+			}
+		}
+		return set;
+	}
+	
 	public boolean isFinalState() {
 		return finalState;
 	}

@@ -11,6 +11,11 @@ public class Transition implements Comparable<Transition> {
 	private int id;
 	
 	public Transition(int start, int end, State destination) {
+
+		if(destination == null) {
+			throw new IllegalArgumentException("Destination cannot be null.");
+		}
+		
 		this.start = start;
 		this.end = end;
 		this.destination = destination;

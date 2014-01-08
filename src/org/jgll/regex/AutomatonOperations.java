@@ -142,8 +142,8 @@ public class AutomatonOperations {
 
 			for(State state : states) {
 				for(Transition transition : state.getTransitions()) {
-					if(intervals[i] >= transition.getStart() && intervals[i] <= transition.getEnd()) {
-						reachableStates.add(transition.getDestination());
+					if(transition.canMove(intervals[i])) {
+						reachableStates.add(transition.getDestination());						
 					}
 				}
 			}
@@ -389,22 +389,15 @@ public class AutomatonOperations {
 		return bitSet;
 	}
 	
-	public static int[] getIntervals(Automaton automaton) {
+	public static int[] getIntervals(Set<Transition> transitions) {
+		Set<Integer> set = new HashSet<>();
 		
-		final Set<Integer> set = new HashSet<>();
-		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				for(Transition transition : state.getTransitions()) {
-					if(!transition.isEpsilonTransition()) {
-						set.add(transition.getStart());
-						set.add(transition.getEnd() + 1);						
-					}
-				}
+		for(Transition transition : transitions) {
+			if(!transition.isEpsilonTransition()) {
+				set.add(transition.getStart());
+				set.add(transition.getEnd() + 1);						
 			}
-		});
+		}
 		
 		Integer[] array = set.toArray(new Integer[] {});
 		Arrays.sort(array);
@@ -414,7 +407,32 @@ public class AutomatonOperations {
 			result[i] = array[i];
 		}
 		
-		return result;
+		return result;		
+	}
+	
+	public static int[] getIntervals(Automaton automaton) {		
+		return getIntervals(getAllTransitions(automaton));
+	}
+	
+	public static Set<Transition> getAllTransitions(Automaton automaton) {
+		final Set<Transition> transitions = new HashSet<>();
+
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				if(state == null) {
+					System.out.println("WTF");
+				}
+				for(Transition transition : state.getTransitions()) {
+					if(!transition.isEpsilonTransition()) {
+						transitions.add(transition);
+					}
+				}
+			}
+		});
+		
+		return transitions;
 	}
  	
 	public static int getCountStates(Automaton automaton) {
@@ -604,6 +622,71 @@ public class AutomatonOperations {
 		// 2. making the start state final
 		newStates.get(automaton.getStartState()).setFinalState(true);
 		 
+		return new Automaton(startState);
+	}
+	
+	public static Automaton product(Automaton a1, Automaton a2) {
+		
+		if(!a1.isDeterministic()) {
+			a1.determinize();
+		}
+		
+		if(!a2.isDeterministic()) {
+			a2.determinize();
+		}
+		
+		State[] states1 = a1.getAllStates();
+		State[] states2 = a2.getAllStates();
+		
+		State startState = null;
+		
+		Map<Tuple<Integer, Integer>, State> newStates = new HashMap<>();
+		
+		for(int i = 0; i < states1.length; i++) {
+			for(int j = 0; j < states2.length; j++) {
+				newStates.put(Tuple.from(i, j), new State());
+			}
+		}
+		
+		Set<Transition> transitions = getAllTransitions(a1);
+		transitions.addAll(getAllTransitions(a2));
+		int[] intervals = getIntervals(transitions);
+		
+		Set<State> finalStates1 = a1.getFinalStates();
+		Set<State> finalStates2 = a2.getFinalStates();
+		
+		for(int i = 0; i < states1.length; i++) {
+			for(int j = 0; j < states2.length; j++) {
+				
+				State state = newStates.get(Tuple.from(i, j));
+				State state1 = states1[i];
+				State state2 = states2[j];
+				
+				if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
+					startState = state;
+				}
+				
+				if(finalStates1.contains(state1) && finalStates2.contains(state2)) {
+					state.setFinalState(true);
+				}
+				
+				for(int t = 0; t < intervals.length - 1; t++) {
+					Set<State> reachableStates1 = state1.move(intervals[t]);
+					Set<State> reachableStates2 = state1.move(intervals[t]);
+					
+					assert reachableStates2.size() <= 1; // Automatons are already determinized.
+					assert reachableStates1.size() <= 1;
+					
+					if(reachableStates1.size() == 1 && reachableStates2.size() == 1) {
+						State s1 = reachableStates1.iterator().next();
+						State s2 = reachableStates1.iterator().next();
+						state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.from(s1.getId(), s2.getId()))));
+					}
+				}
+				
+			}
+		}
+		
 		return new Automaton(startState);
 	}
 	

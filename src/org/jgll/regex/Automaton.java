@@ -21,6 +21,11 @@ public class Automaton {
 	private boolean deterministic;
 
 	public Automaton(State startState) {
+
+		if(startState == null) {
+			throw new IllegalArgumentException("Start symbol cannot be null.");
+		}
+		
 		this.startState = startState;
 		init();
 	}
@@ -131,6 +136,10 @@ public class Automaton {
 		}
 		
 		return true;
+	}
+	
+	public boolean isDeterministic() {
+		return deterministic;
 	}
 	
 	public Automaton determinize() {
