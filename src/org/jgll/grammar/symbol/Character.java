@@ -27,6 +27,10 @@ public class Character extends AbstractSymbol implements Terminal {
 		bitSet.set(c);
 	}
 	
+	public static Character from(int c) {
+		return new Character(c);
+	}
+	
 	public int getValue() {
 		return c;
 	}

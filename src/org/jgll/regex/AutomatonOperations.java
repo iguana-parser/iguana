@@ -67,7 +67,6 @@ public class AutomatonOperations {
 		
 		setStateIDs(startState);
 		
-		
 		// Setting the final states.
 		outer:
 		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
@@ -559,5 +558,54 @@ public class AutomatonOperations {
 		
 		return new Automaton(startStates[0]);
 	}
+	
+	/**
+	 * Creates the reverse of the given automaton. A reverse automaton 
+	 * accept the reverse language accepted by the original automaton. To construct
+	 * a reverse automaton, all final states of the original automaton are becoming 
+	 * start states, transitions are reversed and the start state becomes the
+	 * only final state.
+	 * 
+	 */
+	public static Automaton reverse(Automaton automaton) {
+
+		// 0. creating new states for each state of the original automaton
+		final Map<State, State> newStates = new HashMap<>();
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				newStates.put(state, new State());
+			}
+		});
+		
+		
+		// 1. creating a new start state and adding epsilon transitions to the final
+		// states of the original automata
+		State startState = new State();
+		
+		for(State finalState : automaton.getFinalStates()) {
+			startState.addTransition(Transition.emptyTransition(newStates.get(finalState)));
+		}
+		
+		
+		// 2. Reversing the transitions
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				for(Transition t : state.getTransitions()) {
+					newStates.get(t.getDestination()).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(state)));
+				}
+			}
+		});
+		
+		// 2. making the start state final
+		newStates.get(automaton.getStartState()).setFinalState(true);
+		 
+		return new Automaton(startState);
+	}
+	
 	
 }

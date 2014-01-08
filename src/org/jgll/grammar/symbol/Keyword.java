@@ -21,6 +21,10 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 	
 	private final Sequence<Character> seq;
 	
+	public Keyword(String s) {
+		this("no-name", s);
+	}
+	
 	public Keyword(String name, String s) {
 		this(name, Input.toIntArray(s));
 	}

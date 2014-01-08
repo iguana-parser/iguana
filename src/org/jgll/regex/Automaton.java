@@ -141,6 +141,16 @@ public class Automaton {
 		return this;
 	}
 	
+	/**
+	 * Reverses this automaton 
+	 */
+	public Automaton reverse() {
+		Automaton reverse = AutomatonOperations.reverse(this);
+		startState = reverse.getStartState();
+		init();
+		return this;
+	}
+	
 	public Matcher getMatcher() {
 		if(!deterministic) {
 			determinize();

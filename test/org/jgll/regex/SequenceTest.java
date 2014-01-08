@@ -11,7 +11,7 @@ public class SequenceTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regexp = new Sequence(new Character('a'), new Character('b'));
+		RegularExpression regexp = new Sequence<>(new Character('a'), new Character('b'));
 		Automaton nfa = regexp.toNFA();
 
 		assertEquals(6, nfa.getCountStates());
@@ -26,7 +26,7 @@ public class SequenceTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regexp = new Sequence(new Range('a', 'z'), new Range('0', '9'));
+		RegularExpression regexp = new Sequence<>(new Range('a', 'z'), new Range('0', '9'));
 		Automaton nfa = regexp.toNFA();
 
 		assertEquals(6, nfa.getCountStates());
