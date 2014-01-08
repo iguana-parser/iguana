@@ -1,26 +1,20 @@
 package org.jgll.regex;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterClass;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Keyword;
 import org.jgll.util.Input;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 import org.junit.Test;
 
 
-public class Examples {
+public class ExamplesTest {
 	
-	/**
-	 * Id ::= [a-zA-Z][a-zA-Z0-9]*
-	 */
 	@Test
-	public void test1() {
-		CharacterClass c1 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'));
-		CharacterClass c2 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'), new Range('0', '9'));
-		
-		RegularExpression regexp = new Sequence<>(c1, new RegexStar(c2));
-		Automaton nfa = regexp.toNFA();
+	public void testId() {
+		Automaton nfa = RegularExpressionExamples.getId().toNFA();
 		
 		Matcher dfa = nfa.getMatcher();
 
@@ -32,15 +26,19 @@ public class Examples {
 		assertTrue(dfa.match(Input.fromString("Identifier12Assdfd")));
 	}
 	
-	/**
-	 * Float ::= [0-9]+[.][0-9]+
-	 */
 	@Test
-	public void test2() {
-		CharacterClass c = new CharacterClass(new Range('0', '9'));
-		RegularExpression regexp = new Sequence<>(new RegexPlus(c), new Character('.'), new RegexPlus(c));
+	public void testIntersectionKeywordId() {
+		Automaton idAutomaton = RegularExpressionExamples.getId().toNFA().determinize();
+		Automaton forAutomaton = new Keyword("for").toNFA().determinize();
 		
-		Automaton nfa = regexp.toNFA();
+		GraphVizUtil.generateGraph(NFAToDot.toDot(idAutomaton.union(forAutomaton).minimize().getStartState()), "/Users/aliafroozeh/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
+		
+		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
+	}
+	
+	@Test
+	public void testFloat() {
+		Automaton nfa = RegularExpressionExamples.getFloat().toNFA();
 		
 		Matcher dfa = nfa.getMatcher();
 
@@ -54,5 +52,4 @@ public class Examples {
 		assertTrue(dfa.match(Input.fromString("908397439483.278902433")));
 	}
 	
-
 }

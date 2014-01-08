@@ -19,6 +19,8 @@ public class Automaton {
 	private State[] states;
 	
 	private boolean deterministic;
+	
+	private boolean minimized;
 
 	public Automaton(State startState) {
 
@@ -142,7 +144,29 @@ public class Automaton {
 		return deterministic;
 	}
 	
+	public boolean isMinimized() {
+		return minimized;
+	}
+	
+	/**
+	 * Returns true if the language accepted by this automaton is empty. 
+	 */
+	public boolean isLanguageEmpty() {
+		/*
+		 * The final sates are calculated from the start state. This means that
+		 * all final states returned by calling getFinalStates() are reachable.
+		 * The language accepted by this automata is empty, if there are no reachable
+		 * final states.
+		 */
+		return getFinalStates().size() == 0;
+	}
+	
 	public Automaton determinize() {
+		
+		if(deterministic) {
+			return this;
+		}
+		
 		Automaton newAutomaton = AutomatonOperations.makeDeterministic(this);
 		startState = newAutomaton.getStartState();
 		deterministic = true;
@@ -170,13 +194,27 @@ public class Automaton {
 		return this;
 	}
 	
+	public Automaton minimize() {
+		
+		if(minimized) {
+			return this;
+		}
+		
+		Automaton minimized = AutomatonOperations.minimize(this);
+		Automaton merged = AutomatonOperations.mergeTransitions(minimized);
+		startState = merged.getStartState();
+		init();
+		return this;
+	}
+	
 	public Matcher getMatcher() {
 		if(!deterministic) {
 			determinize();
 		}
-		Automaton minimizedDFA = AutomatonOperations.minimize(this);
-		AutomatonOperations.mergeTransitions(minimizedDFA);
-		return AutomatonOperations.createDFA(minimizedDFA);
+		if(!minimized) {
+			minimize();
+		}
+		return AutomatonOperations.createDFA(this);
 	}
 	
 	public String toJavaCode() {

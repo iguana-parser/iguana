@@ -1,6 +1,6 @@
 package org.jgll.regex;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.jgll.util.Input;
 import org.junit.Test;
@@ -34,6 +34,7 @@ public class IntersectionTest {
 		
 		a1.intersection(a2);
 
+		assertFalse(a1.isLanguageEmpty());
 		assertTrue(a1.getMatcher().match(Input.fromString("111001110001")));
 	}
 }
