@@ -68,11 +68,11 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				int i = nonterminalSymbolNode.getLeftExtent();
 				while(!(currentSlot instanceof LastGrammarSlot)) {
 					// TODO: fix it!
-					CharacterClass terminal = null; //(CharacterClass) ((TerminalGrammarSlot)currentSlot).getTerminal();
-					assert terminal.getRanges().size() == 1;
-					Result<U> result = listener.terminal(terminal.getRanges().get(0).getStart(), input.getPositionInfo(i, ++i));
-					list.add(result.getObject());
-					currentSlot = currentSlot.next();
+//					CharacterClass terminal = null; //(CharacterClass) ((TerminalGrammarSlot)currentSlot).getTerminal();
+//					assert terminal.getRanges().size() == 1;
+//					Result<U> result = listener.terminal(terminal.getRanges().get(0).getStart(), input.getPositionInfo(i, ++i));
+//					list.add(result.getObject());
+//					currentSlot = currentSlot.next();
 				}
 
 				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();

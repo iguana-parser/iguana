@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Automaton;
+import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
@@ -24,56 +24,30 @@ import org.jgll.regex.Transition;
  * @author Ali Afroozeh
  *
  */
-public class CharacterClass extends AbstractSymbol implements Terminal {
+public class CharacterClass extends AbstractSymbol implements RegularExpression {
 	
 	private static final long serialVersionUID = 1L;
-
-	private final List<Range> ranges;
 	
-	private BitSet testSet;
+	private RegexAlt<Range> ranges;
 	
 	public CharacterClass(Range...ranges) {
 		this(Arrays.asList(ranges));
 	}
 	
 	public CharacterClass(List<Range> ranges) {
-		
-		if(ranges == null || ranges.size() == 0) {
-			throw new IllegalArgumentException("Ranges cannot be null or empty.");
-		}
-		
-		testSet = new BitSet();
-		
-		for(Range range : ranges) {
-			testSet.or(range.asBitSet());
-		}
-		
-		this.ranges = Collections.unmodifiableList(ranges);
+		this(new RegexAlt<>(ranges));
 	}
 	
-	public List<Range> getRanges() {
-		return ranges;
+	public CharacterClass(RegexAlt<Range> ranges) {
+		this.ranges = ranges;
 	}
 	
-	@Override
-	public boolean match(int i) {
-		return testSet.get(i);
-	}
 	
 	@Override
 	public String toString() {
 		return getName();
 	}
 
-	@Override
-	public String getMatchCode() {
-		StringBuilder sb = new StringBuilder();
-		for(Range range : ranges) {
-			sb.append(range.getMatchCode()).append(" || ");
-		}
-		return sb.toString();
-	}
-	
 	/**
 	 * Returns true the provided character class is a subset of
 	 * this character class.
@@ -112,7 +86,7 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 		
 		CharacterClass other = (CharacterClass) obj;
 
-		return testSet.equals(other.testSet);
+		return ranges.equals(other.ranges);
 	}
 
 	@Override
@@ -158,11 +132,11 @@ public class CharacterClass extends AbstractSymbol implements Terminal {
 	
 	@Override
 	public BitSet asBitSet() {
-		return testSet;
+		return ranges.asBitSet();
 	}
 	
 	@Override
-	public Terminal addConditions(Collection<Condition> conditions) {
+	public RegularExpression addConditions(Collection<Condition> conditions) {
 		CharacterClass characterClass = new CharacterClass(this.ranges);
 		characterClass.conditions.addAll(this.conditions);
 		characterClass.conditions.addAll(conditions);

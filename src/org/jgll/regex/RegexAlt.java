@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import org.jgll.grammar.symbol.AbstractSymbol;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.util.CollectionsUtil;
 
-public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implements RegularExpression {
+public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implements RegularExpression, Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -98,5 +99,10 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 			copy.add((T) regex.copy());
 		}
 		return new RegexAlt<>(copy);
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return regularExpressions.iterator();
 	}
 }
