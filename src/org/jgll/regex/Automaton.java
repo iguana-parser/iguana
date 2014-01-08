@@ -149,13 +149,23 @@ public class Automaton {
 		init();
 		return this;
 	}
-	
-	/**
-	 * Reverses this automaton 
-	 */
 	public Automaton reverse() {
 		Automaton reverse = AutomatonOperations.reverse(this);
 		startState = reverse.getStartState();
+		init();
+		return this;
+	}
+	
+	public Automaton intersection(Automaton a) {
+		Automaton intersection = AutomatonOperations.intersection(this, a);
+		startState = intersection.getStartState();
+		init();
+		return this;
+	}
+	
+	public Automaton union(Automaton a) {
+		Automaton union = AutomatonOperations.union(this, a);
+		startState = union.getStartState();
 		init();
 		return this;
 	}

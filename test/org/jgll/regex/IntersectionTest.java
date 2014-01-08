@@ -1,7 +1,8 @@
 package org.jgll.regex;
 
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
+import static org.junit.Assert.assertTrue;
+
+import org.jgll.util.Input;
 import org.junit.Test;
 
 public class IntersectionTest {
@@ -17,8 +18,8 @@ public class IntersectionTest {
 		x1.addTransition(new Transition('0', x1));
 		x1.addTransition(new Transition('1', x0));
 		
+		// Matches an odd number of 1's.
 		Automaton a1 = new Automaton(x0);
-		
 		
 		State y0 = new State(true);
 		State y1 = new State();
@@ -28,10 +29,11 @@ public class IntersectionTest {
 		y1.addTransition(new Transition('0', y0));
 		y1.addTransition(new Transition('1', y0));
 		
+		// Matches an string of even length.
 		Automaton a2 = new Automaton(y0);
 		
-		Automaton a = AutomatonOperations.product(a1, a2);
-		
-		GraphVizUtil.generateGraph(NFAToDot.toDot(a.getStartState()), "/Users/aliafroozeh/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
+		a1.intersection(a2);
+
+		assertTrue(a1.getMatcher().match(Input.fromString("111001110001")));
 	}
 }

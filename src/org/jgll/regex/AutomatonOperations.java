@@ -625,7 +625,22 @@ public class AutomatonOperations {
 		return new Automaton(startState);
 	}
 	
-	public static Automaton product(Automaton a1, Automaton a2) {
+	public static Automaton intersection(Automaton a1, Automaton a2) {
+		return product(a1, a2, true);
+	}
+	
+	public static Automaton union(Automaton a1, Automaton a2) {
+		return product(a1, a2, false);
+	}
+	
+	/**
+	 * Produces the Cartesian product of the states of an automata. The final states
+	 * are determined by the given intersection property. If true, a state in the
+	 * resulting automata is final, if all its composing states are final. Otherwise,
+	 * it is final, if at least one of its composing states are final.
+	 * 
+	 */
+	private static Automaton product(Automaton a1, Automaton a2, boolean intersection) {
 		
 		if(!a1.isDeterministic()) {
 			a1.determinize();
@@ -677,10 +692,18 @@ public class AutomatonOperations {
 					assert reachableStates2.size() <= 1; // Automatons are already determinized.
 					assert reachableStates1.size() <= 1;
 					
-					if(reachableStates1.size() == 1 && reachableStates2.size() == 1) {
-						State s1 = reachableStates1.iterator().next();
-						State s2 = reachableStates2.iterator().next();
-						state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.from(s1.getId(), s2.getId()))));
+					if(intersection) {
+						if(reachableStates1.size() == 1 && reachableStates2.size() == 1) {
+							State s1 = reachableStates1.iterator().next();
+							State s2 = reachableStates2.iterator().next();
+							state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.from(s1.getId(), s2.getId()))));
+						}						
+					} else {
+						if(reachableStates1.size() == 1 || reachableStates2.size() == 1) {
+							State s1 = reachableStates1.iterator().next();
+							State s2 = reachableStates2.iterator().next();
+							state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.from(s1.getId(), s2.getId()))));
+						}
 					}
 				}
 				
