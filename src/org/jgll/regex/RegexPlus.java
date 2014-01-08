@@ -15,7 +15,7 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 	private final RegularExpression regexp;
 	
 	public RegexPlus(RegularExpression regexp) {
-		this.regexp = new Sequence(regexp, new RegexStar(regexp));
+		this.regexp = new Sequence<>(regexp, new RegexStar(regexp));
 	}
 	
 	@Override

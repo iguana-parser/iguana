@@ -1,50 +1,53 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.State;
-import org.jgll.regex.Transition;
+import org.jgll.regex.Sequence;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
-// TODO: Keyword is a sequence of characters, rewrite it.
 public class Keyword extends AbstractSymbol implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final ExternalHasher<Keyword> externalHasher = new KeywordExternalHasher();
-	
-	private final int[] chars;
-	
 	private final String name;
 	
 	private final BitSet bitSet;
+	
+	private final Sequence<Character> seq;
 	
 	public Keyword(String name, String s) {
 		this(name, Input.toIntArray(s));
 	}
 	
 	public Keyword(String name, int[] chars) {
-		this.chars = chars;
-		this.name = name;
-		this.bitSet = new BitSet();
-
-		bitSet.set(chars[0]);
+		this(name, toCharSequence(chars));
 	}
 	
-	public int[] getChars() {
-		return chars;
+	private static Sequence<Character> toCharSequence(int[] chars) {
+		List<Character> list = new ArrayList<>();
+		for(int c : chars) {
+			list.add(new Character(c));
+		}
+		
+		return new Sequence<>(list);		
 	}
-
+	
+	public Keyword(String name, Sequence<Character> seq) {
+		this.name = name;
+		this.seq = seq;
+		
+		this.bitSet = new BitSet();
+		bitSet.set(seq.get(0).getValue());		
+	}
+	
 	public int size() {
-		return chars.length;
+		return seq.size();
 	}
 	
 	@Override
@@ -53,7 +56,11 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 	}
 	
 	public Terminal getFirstTerminal() {
-		return new Character(chars[0]);
+		return (Character) seq.get(0);
+	}
+	
+	public Sequence<Character> getSequence() {
+		return seq;
 	}
 	
 	@Override
@@ -61,24 +68,6 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		return getName();
 	}
 
-	/**
-	 * 
-	 * Checks if this keyword matches a prefix of the given string from the provided index.
-	 * 
-	 * @param s
-	 * @param index
-	 * @return
-	 */
-	public boolean match(String s, int index) {
-		for(int i = 0; i < chars.length; i++) {
-			if(chars[i] != s.charAt(i + index)) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) {
@@ -91,32 +80,17 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		
 		Keyword other = (Keyword) obj;
 		
-		return Arrays.equals(chars, other.chars);
+		return seq.equals(other.seq);
 	}
 	
 	@Override
 	public int hashCode() {
-		return externalHasher.hash(this, HashFunctions.defaulFunction());
+		return seq.hashCode();
 	}
 	
-	public static class KeywordExternalHasher implements ExternalHasher<Keyword> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(Keyword k, HashFunction f) {
-			return f.hash(k.getChars());
-		}
-
-		@Override
-		public boolean equals(Keyword k1, Keyword k2) {
-			return Arrays.equals(k1.chars, k2.chars);
-		}
-	}
-
 	@Override
 	public Keyword addConditions(Collection<Condition> conditions) {
-		Keyword keyword = new Keyword(this.name, this.chars);
+		Keyword keyword = new Keyword(this.name, this.seq);
 		keyword.conditions.addAll(this.conditions);
 		keyword.conditions.addAll(conditions);
 		return keyword;
@@ -125,25 +99,12 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 	@Override
 	public BitSet asBitSet() {
 		BitSet set = new BitSet();
-		set.set(chars[0]);
+		set.set(seq.get(0).getValue());
 		return set;
 	}
 	
 	private Automaton createNFA() {
-		State startState = new State();
-		State finalState = new State(true);
-		
-		State currenState = startState;
-		
-		for(int c : chars) {
-			State nextState = new State();
-			currenState.addTransition(new Transition(c, nextState));
-			currenState = nextState;
-		}
-
-		currenState.addTransition(Transition.emptyTransition(finalState));
-		
-		return new Automaton(startState);
+		return seq.toNFA();
 	}
 	
 	@Override
@@ -158,7 +119,7 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public RegularExpression copy() {
-		return new Keyword(name, chars);
+		return new Keyword(name, seq);
 	}
 	
 }

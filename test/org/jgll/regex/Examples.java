@@ -19,7 +19,7 @@ public class Examples {
 		CharacterClass c1 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'));
 		CharacterClass c2 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'), new Range('0', '9'));
 		
-		RegularExpression regexp = new Sequence(c1, new RegexStar(c2));
+		RegularExpression regexp = new Sequence<>(c1, new RegexStar(c2));
 		Automaton nfa = regexp.toNFA();
 		
 		Matcher dfa = nfa.getMatcher();
@@ -38,13 +38,14 @@ public class Examples {
 	@Test
 	public void test2() {
 		CharacterClass c = new CharacterClass(new Range('0', '9'));
-		RegularExpression regexp = new Sequence(new RegexPlus(c), new Character('.'), new RegexPlus(c));
+		RegularExpression regexp = new Sequence<>(new RegexPlus(c), new Character('.'), new RegexPlus(c));
 		
 		Automaton nfa = regexp.toNFA();
 		
 		Matcher dfa = nfa.getMatcher();
 
 		assertTrue(dfa.match(Input.fromString("1.2")));
+		assertTrue(dfa.match(Input.fromString("1.2"), 0, 3));
 		assertFalse(dfa.match(Input.fromString("9")));
 		assertFalse(dfa.match(Input.fromString(".9")));
 		assertFalse(dfa.match(Input.fromString("123.")));

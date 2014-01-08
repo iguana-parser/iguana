@@ -435,8 +435,8 @@ public class GrammarBuilder implements Serializable {
 	 */
 	public static Rule fromKeyword(Keyword keyword) {
 		Rule.Builder builder = new Rule.Builder(new Nonterminal(keyword.getName()));
-		for(int i : keyword.getChars()) {
-			builder.addSymbol(new Character(i));
+		for(Character c : keyword.getSequence()) {
+			builder.addSymbol(c);
 		}
 		return builder.build();
 	}

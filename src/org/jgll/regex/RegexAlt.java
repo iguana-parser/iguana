@@ -12,24 +12,25 @@ import org.jgll.grammar.symbol.AbstractSymbol;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.util.CollectionsUtil;
 
-public class RegexAlt extends AbstractSymbol implements RegularExpression {
+public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<RegularExpression> regularExpressions;
+	private final List<T> regularExpressions;
 	
 	private final BitSet bitSet;
 	
-	public RegexAlt(List<RegularExpression> regularExpressions) {
+	public RegexAlt(List<T> regularExpressions) {
 		this.regularExpressions = regularExpressions;
 		this.bitSet = calculateBitSet();
 	}
 	
-	public RegexAlt(RegularExpression...regularExpressions) {
+	@SafeVarargs
+	public RegexAlt(T...regularExpressions) {
 		this(Arrays.asList(regularExpressions));
 	}
 	
-	public List<RegularExpression> getRegularExpressions() {
+	public List<T> getRegularExpressions() {
 		return regularExpressions;
 	}
 
@@ -89,12 +90,13 @@ public class RegexAlt extends AbstractSymbol implements RegularExpression {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public RegexAlt copy() {
-		List<RegularExpression> copy = new ArrayList<>();
+	public RegexAlt<T> copy() {
+		List<T> copy = new ArrayList<>();
 		for(RegularExpression regex : regularExpressions) {
-			copy.add(regex.copy());
+			copy.add((T) regex.copy());
 		}
-		return new RegexAlt(copy);
+		return new RegexAlt<>(copy);
 	}
 }

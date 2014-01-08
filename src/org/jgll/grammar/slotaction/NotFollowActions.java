@@ -11,6 +11,8 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
+import org.jgll.regex.Matcher;
+import org.jgll.regex.RegexAlt;
 
 public class NotFollowActions {
 	
@@ -54,18 +56,16 @@ public class NotFollowActions {
 	
 	public static void fromKeywordList(BodyGrammarSlot slot, final List<Keyword> list, final Condition condition) {
 		
+		RegexAlt<Keyword> alt = new RegexAlt<>(list);
+		final Matcher matcher = alt.toNFA().getMatcher();
+		
 		slot.addPopAction(new SlotAction<Boolean>() {
 			
 			private static final long serialVersionUID = 1L;
 			
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer) {
-				for(Keyword s : list) {
-					if(lexer.getInput().match(parser.getCurrentInputIndex(), s.getChars())) {
-						return true;
-					}
-				}
-				return false;
+				return matcher.match(lexer.getInput(), parser.getCurrentInputIndex()) >= 0;
 			}
 
 			@Override

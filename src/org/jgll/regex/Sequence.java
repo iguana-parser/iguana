@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -12,15 +13,15 @@ import org.jgll.grammar.symbol.AbstractSymbol;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.util.CollectionsUtil;
 
-public class Sequence extends AbstractSymbol implements RegularExpression {
+public class Sequence<T extends RegularExpression> extends AbstractSymbol implements RegularExpression, Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<RegularExpression> regularExpressions;
+	private final List<T> regularExpressions;
 	
 	private final BitSet bitSet;
 	
-	public Sequence(List<RegularExpression> regularExpressions) {
+	public Sequence(List<T> regularExpressions) {
 		if(regularExpressions.size() == 0) {
 			throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		}
@@ -28,11 +29,12 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 		this.bitSet = calculateFirstChars();
 	}
 	
-	public Sequence(RegularExpression...regularExpressions) {
+	@SafeVarargs
+	public Sequence(T...regularExpressions) {
 		this(Arrays.asList(regularExpressions));
 	}
 	
-	public List<RegularExpression> getRegularExpressions() {
+	public List<T> getRegularExpressions() {
 		return regularExpressions;
 	}
 
@@ -83,6 +85,14 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 		return true;
 	}
 	
+	public int size() {
+		return regularExpressions.size();
+	}
+	
+	public T get(int index) {
+		return regularExpressions.get(index);
+	}
+	
 	private BitSet calculateFirstChars() {
 		BitSet set = new BitSet();
 		for(RegularExpression s : regularExpressions) {
@@ -109,14 +119,40 @@ public class Sequence extends AbstractSymbol implements RegularExpression {
 	public Symbol addConditions(Collection<Condition> conditions) {
 		return null;
 	}
-
+	
 	@Override
 	public RegularExpression copy() {
 		List<RegularExpression> copy = new ArrayList<>();
 		for(RegularExpression regex : regularExpressions) {
 			copy.add(regex.copy());
 		}
-		return new Sequence(copy);
+		return new Sequence<>(copy);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		}
+		
+		if(!(obj instanceof Sequence)) {
+			return false;
+		}
+		
+		@SuppressWarnings("unchecked")
+		Sequence<T> other = (Sequence<T>) obj;
+		
+		return regularExpressions.equals(other.regularExpressions);
+	}
+	
+	@Override
+	public int hashCode() {
+		return regularExpressions.hashCode();
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return regularExpressions.iterator();
 	}
 	
 }

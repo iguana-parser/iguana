@@ -65,48 +65,50 @@ public class NotPrecedeActions {
 	
 	public static void fromKeywordList(BodyGrammarSlot slot, final List<Keyword> list, final Condition condition) {
 		
-		log.debug("Precede restriction added %s <<! %s", list, slot);
+		// TODO: First implement DFA inverse and use it for this kind of matching. 
 		
-		slot.addPreCondition(new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer) {
-				int ci = parser.getCurrentInputIndex();
-				if (ci == 0) {
-					return false;
-				}
-				
-				for(Keyword keyword : list) {
-					if(lexer.getInput().matchBackward(ci, keyword.getChars())) {
-						return true;
-					}
-				}
-				
-				return false;
-			}
-
-			@Override
-			public Condition getCondition() {
-				return condition;
-			}
-			
-			@Override
-			public boolean equals(Object obj) {
-				if(this == obj) {
-					return true;
-				}
-				
-				if(!(obj instanceof SlotAction)) {
-					return false;
-				}
-				
-				@SuppressWarnings("unchecked")
-				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
-				return getCondition().equals(other.getCondition());
-			}
-			
-		});
+//		log.debug("Precede restriction added %s <<! %s", list, slot);
+//		
+//		slot.addPreCondition(new SlotAction<Boolean>() {
+//			
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public Boolean execute(GLLParser parser, GLLLexer lexer) {
+//				int ci = parser.getCurrentInputIndex();
+//				if (ci == 0) {
+//					return false;
+//				}
+//				
+//				for(Keyword keyword : list) {
+//					if(lexer.getInput().matchBackward(ci, keyword.getChars())) {
+//						return true;
+//					}
+//				}
+//				
+//				return false;
+//			}
+//
+//			@Override
+//			public Condition getCondition() {
+//				return condition;
+//			}
+//			
+//			@Override
+//			public boolean equals(Object obj) {
+//				if(this == obj) {
+//					return true;
+//				}
+//				
+//				if(!(obj instanceof SlotAction)) {
+//					return false;
+//				}
+//				
+//				@SuppressWarnings("unchecked")
+//				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
+//				return getCondition().equals(other.getCondition());
+//			}
+//			
+//		});
 	}
 }

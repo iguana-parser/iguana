@@ -27,6 +27,11 @@ public abstract class AbstractMatcher implements Matcher {
 	}
 	
 	@Override
+	public boolean match(Input input, int start, int end) {
+		return match(input, 0) == end - start;
+	}
+	
+	@Override
 	public int getId() {
 		return id;
 	}

@@ -10,7 +10,7 @@ public class AltTest {
 	
 	@Test
 	public void test() {
-		RegularExpression regexp = new RegexAlt(new Character('a'), new Character('b'));
+		RegularExpression regexp = new RegexAlt<>(new Character('a'), new Character('b'));
 		Automaton nfa = regexp.toNFA();
 		assertEquals(6, nfa.getCountStates());
 		
