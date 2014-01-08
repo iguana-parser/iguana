@@ -607,7 +607,6 @@ public class AutomatonOperations {
 			startState.addTransition(Transition.emptyTransition(newStates.get(finalState)));
 		}
 		
-		
 		// 2. Reversing the transitions
 		AutomatonVisitor.visit(automaton, new VisitAction() {
 			
@@ -630,13 +629,8 @@ public class AutomatonOperations {
 	 */
 	public static Automaton union(Automaton a1, Automaton a2) {
 		
-		if(!a1.isDeterministic()) {
-			a1.determinize();
-		}
-		
-		if(!a2.isDeterministic()) {
-			a2.determinize();
-		}
+		a1.determinize();
+		a2.determinize();
 		
 		State startState = new State();
 		State finalState = new State(true);
@@ -669,6 +663,8 @@ public class AutomatonOperations {
 		if(!a1.isDeterministic()) {
 			a1.determinize();
 		}
+		
+		a2 = a2.copy();
 		
 		if(!a2.isDeterministic()) {
 			a2.determinize();
@@ -727,6 +723,41 @@ public class AutomatonOperations {
 		}
 		
 		return new Automaton(startState);
+	}
+	
+	public static Automaton copy(final Automaton automaton) {
+		
+		final Map<State, State> newStates = new HashMap<>();
+		
+		final State[] startState = new State[1];
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				State newState = new State();
+				newStates.put(state, newState);
+				if(state.isFinalState()) {
+					newState.setFinalState(true);
+				}
+				if(state == automaton.getStartState()) {
+					startState[0] = newState;
+				}
+			}
+		});
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				for(Transition transition : state.getTransitions()) {
+					State newState = newStates.get(state);
+					newState.addTransition(new Transition(transition.getStart(), transition.getEnd(), newStates.get(transition.getDestination())));
+				}
+			}
+		});
+		
+		return new Automaton(startState[0]);
 	}
 	
 	

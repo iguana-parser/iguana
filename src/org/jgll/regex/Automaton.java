@@ -203,6 +203,7 @@ public class Automaton {
 		Automaton minimized = AutomatonOperations.minimize(this);
 		Automaton merged = AutomatonOperations.mergeTransitions(minimized);
 		startState = merged.getStartState();
+		this.minimized = true;
 		init();
 		return this;
 	}
@@ -219,6 +220,10 @@ public class Automaton {
 	
 	public String toJavaCode() {
 		return AutomatonOperations.toJavaCode(this);
+	}
+	
+	public Automaton copy() {
+		return AutomatonOperations.copy(this);
 	}
 	
 }

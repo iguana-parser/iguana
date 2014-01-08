@@ -31,8 +31,6 @@ public class ExamplesTest {
 		Automaton idAutomaton = RegularExpressionExamples.getId().toNFA().determinize();
 		Automaton forAutomaton = new Keyword("for").toNFA().determinize();
 		
-		GraphVizUtil.generateGraph(NFAToDot.toDot(idAutomaton.union(forAutomaton).minimize().getStartState()), "/Users/aliafroozeh/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
-		
 		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
 	}
 	
