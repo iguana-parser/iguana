@@ -629,51 +629,91 @@ public class AutomatonOperations {
 	 */
 	public static Automaton union(Automaton a1, Automaton a2) {
 		
-		a1.determinize();
-		a2.determinize();
-		
-		State startState = new State();
-		State finalState = new State(true);
-
-		startState.addTransition(Transition.emptyTransition(a1.getStartState()));
-		startState.addTransition(Transition.emptyTransition(a2.getStartState()));
-
-		for(State f : a1.getFinalStates()) {
-			f.setFinalState(false);
-			f.addTransition(Transition.emptyTransition(finalState));				
-		}
-		
-		for(State f : a2.getFinalStates()) {
-			f.setFinalState(false);
-			f.addTransition(Transition.emptyTransition(finalState));				
-		}
-		
-		Automaton union = new Automaton(startState);
-		
-		return union.determinize();
-	}
-	
-	/**
-	 * Produces the Cartesian product of the states of an automata. A state in the
-	 * resulting automata is final, if all its composing states are final. 
-	 * 
-	 */
-	public static Automaton intersection(Automaton a1, Automaton a2) {
+		a1 = a1.copy();
+		a2 = a2.copy();
 		
 		if(!a1.isDeterministic()) {
 			a1.determinize();
 		}
 		
+		if(!a2.isDeterministic()) {
+			a2.determinize();
+		}
+		
+		State startState = null;
+		
+		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
+		
+		for(Entry<Tuple<Integer, Integer>, State> e : map.entrySet()) {
+			int i = e.getKey().getFirst();
+			int j = e.getKey().getSecond();
+			State state = e.getValue();
+			
+			State state1 = a1.getState(i);
+			State state2 = a2.getState(j);
+			
+			if(state1.isFinalState() || state2.isFinalState()) {
+				state.setFinalState(true);
+			}
+			
+			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
+				startState = state;
+			}
+		}
+		
+		return new Automaton(startState);
+	}
+	
+	/**
+	 *  A state in the resulting intersection automata is final
+	 *  if all its composing states are final. 
+	 * 
+	 */
+	public static Automaton intersection(Automaton a1, Automaton a2) {
+		
+		a1 = a1.copy();
 		a2 = a2.copy();
+		
+		if(!a1.isDeterministic()) {
+			a1.determinize();
+		}
 		
 		if(!a2.isDeterministic()) {
 			a2.determinize();
 		}
 		
+		State startState = null;
+		
+		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
+		
+		for(Entry<Tuple<Integer, Integer>, State> e : map.entrySet()) {
+			int i = e.getKey().getFirst();
+			int j = e.getKey().getSecond();
+			State state = e.getValue();
+			
+			State state1 = a1.getState(i);
+			State state2 = a2.getState(j);
+			
+			if(state1.isFinalState() && state2.isFinalState()) {
+				state.setFinalState(true);
+			}
+			
+			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
+				startState = state;
+			}
+		}
+		
+		return new Automaton(startState);
+	}
+	
+	/**
+	 * Produces the Cartesian product of the states of an automata.
+	 */
+	private static Map<Tuple<Integer, Integer>, State> product(Automaton a1, Automaton a2) {
+		
 		State[] states1 = a1.getAllStates();
 		State[] states2 = a2.getAllStates();
 		
-		State startState = null;
 		
 		Map<Tuple<Integer, Integer>, State> newStates = new HashMap<>();
 		
@@ -687,23 +727,12 @@ public class AutomatonOperations {
 		transitions.addAll(getAllTransitions(a2));
 		int[] intervals = getIntervals(transitions);
 		
-		Set<State> finalStates1 = a1.getFinalStates();
-		Set<State> finalStates2 = a2.getFinalStates();
-		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
 				
 				State state = newStates.get(Tuple.from(i, j));
 				State state1 = states1[i];
 				State state2 = states2[j];
-				
-				if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
-					startState = state;
-				}
-				
-				if(finalStates1.contains(state1) && finalStates2.contains(state2)) {
-					state.setFinalState(true);
-				}
 				
 				for(int t = 0; t < intervals.length - 1; t++) {
 					Set<State> reachableStates1 = state1.move(intervals[t]);
@@ -722,7 +751,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState);
+		return newStates;
 	}
 	
 	public static Automaton copy(final Automaton automaton) {
