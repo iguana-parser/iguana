@@ -14,6 +14,7 @@ Export-Package:
    org.jgll.lookup,
    org.jgll.grammar",
  org.jgll.parser.lookup,
+ org.jgll.regex,
  org.jgll.sppf,
  org.jgll.traversal,
  org.jgll.util;uses:="org.jgll.sppf",

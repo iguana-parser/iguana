@@ -73,4 +73,9 @@ public class RegexStar extends AbstractSymbol implements RegularExpression {
 		return new RegexStar(regexp.copy());
 	}
 	
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
 }

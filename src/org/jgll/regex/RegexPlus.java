@@ -47,4 +47,9 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 	public RegexPlus copy() {
 		return new RegexPlus(regexp.copy());
 	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

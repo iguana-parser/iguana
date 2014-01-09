@@ -155,4 +155,9 @@ public class Sequence<T extends RegularExpression> extends AbstractSymbol implem
 		return regularExpressions.iterator();
 	}
 	
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
 }

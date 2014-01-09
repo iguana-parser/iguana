@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.util.Input;
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
 import org.junit.Test;
 
 
