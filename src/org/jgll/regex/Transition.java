@@ -5,7 +5,9 @@ import org.jgll.parser.HashFunctions;
 public class Transition implements Comparable<Transition> {
 	
 	private int start;
+	
 	private int end;
+	
 	private State destination;
 	
 	private int id;

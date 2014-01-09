@@ -158,6 +158,15 @@ public class Automaton {
 		 * The language accepted by this automata is empty, if there are no reachable
 		 * final states.
 		 */
+		
+		// Covers the case of the automaton for the empty regular expression
+		if(startState.isFinalState()) {
+			if(startState.getCountTransitions() == 1 && 
+			   startState.getTransitions().iterator().next().isEpsilonTransition()) {
+				return true;
+			}
+		}
+		
 		return getFinalStates().size() == 0;
 	}
 	
