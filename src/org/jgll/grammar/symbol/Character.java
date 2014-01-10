@@ -1,7 +1,9 @@
 package org.jgll.grammar.symbol;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Automaton;
@@ -108,4 +110,16 @@ public class Character extends AbstractSymbol implements Terminal {
 		return new Character(c);
 	}
 	
+	public CharacterClass not() {
+		List<Range> ranges = new ArrayList<>();
+		if(c > 0) {
+			ranges.add(Range.in(0, c - 1));
+		}
+		if(c < Integer.MAX_VALUE) {
+			ranges.add(Range.in(c + 1, Integer.MAX_VALUE));
+		}
+		CharacterClass c = new CharacterClass(ranges);
+		return c;
+	}
+
 }

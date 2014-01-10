@@ -48,4 +48,17 @@ public class ExamplesTest {
 		assertTrue(dfa.match(Input.fromString("908397439483.278902433")));
 	}
 	
+	@Test
+	public void testJavaUnicodeEscape() {
+		Automaton nfa = RegularExpressionExamples.getJavaUnicodeEscape().toNFA();
+		Matcher dfa = nfa.getMatcher();
+		assertTrue(dfa.match(Input.fromString("\\u0123")));		
+	}
+	
+	@Test
+	public void test() {
+		
+	}
+	
+	
 }

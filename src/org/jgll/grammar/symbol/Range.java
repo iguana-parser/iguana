@@ -1,7 +1,9 @@
 package org.jgll.grammar.symbol;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
@@ -126,5 +128,17 @@ public class Range extends AbstractSymbol implements Terminal {
 	@Override
 	public Range copy() {
 		return new Range(start, end);
+	}
+
+	public CharacterClass not() {
+		List<Range> ranges = new ArrayList<>();
+		if(start > 0) {
+			ranges.add(Range.in(0, start - 1));
+		}
+		if(end < Integer.MAX_VALUE) {
+			ranges.add(Range.in(end + 1, Integer.MAX_VALUE));
+		}
+		CharacterClass c = new CharacterClass(ranges);
+		return c;
 	}
 }
