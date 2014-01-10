@@ -83,7 +83,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 
 	@Override
 	public String getName() {
-		return CollectionsUtil.listToString(Arrays.asList(regularExpressions), "|");
+		return CollectionsUtil.listToString(regularExpressions, "|");
 	}
 
 	@Override
