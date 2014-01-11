@@ -73,5 +73,4 @@ public class ExamplesTest {
 		assertFalse(matcher.match(Input.fromString("\"aaa")));
 	}
 	
-	
 }

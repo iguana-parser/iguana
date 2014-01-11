@@ -94,7 +94,7 @@ public class Range extends AbstractSymbol implements Terminal, Comparable<Range>
 
 	@Override
 	public String getName() {
-		return  "[" + Character.getString(start) + "-" + Character.getString(end) + "]";
+		return  Character.getString(start) + "-" + Character.getString(end);
 	}
 
 	@Override

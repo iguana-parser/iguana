@@ -13,6 +13,7 @@ import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
+import org.jgll.util.CollectionsUtil;
 
 /**
  * Character class represents a set of {@link Range} instances.
@@ -75,7 +76,7 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 
 	@Override
 	public String getName() {
-		return alt.getName();
+		return "[" + CollectionsUtil.listToString(alt.getRegularExpressions(), " ") + "]";
 	}
 		
 	@Override
