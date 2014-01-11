@@ -22,6 +22,15 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 	private final BitSet bitSet;
 	
 	public RegexAlt(List<T> regularExpressions) {
+		
+		if(regularExpressions == null) {
+			throw new IllegalArgumentException("The list of regular expressions cannot be null.");
+		}
+		
+		if(regularExpressions.size() == 0) {
+			throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
+		}
+		
 		this.regularExpressions = regularExpressions;
 		this.bitSet = calculateBitSet();
 	}

@@ -19,8 +19,6 @@ public class Character extends AbstractSymbol implements Terminal {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int MAX_UTF32_VAL = 0x10FFFF;
-
 	private final int c;
 	
 	private final BitSet bitSet;
@@ -74,7 +72,15 @@ public class Character extends AbstractSymbol implements Terminal {
 
 	@Override
 	public String getName() {
-		return "[" + (char)c + "]";
+		return getString(c);
+	}
+	
+	public static String getString(int c) {
+		if(c >= Constants.FIRST_PRINTABLE_CHAR && c <= java.lang.Character.MAX_VALUE) {
+			return (char)c + "";			
+		} else {
+			return "\\u" + Integer.toHexString(c);
+		}
 	}
 
 	@Override
@@ -117,8 +123,8 @@ public class Character extends AbstractSymbol implements Terminal {
 		if(c > 0) {
 			ranges.add(Range.in(0, c - 1));
 		}
-		if(c < MAX_UTF32_VAL) {
-			ranges.add(Range.in(c + 1, MAX_UTF32_VAL));
+		if(c < Constants.MAX_UTF32_VAL) {
+			ranges.add(Range.in(c + 1, Constants.MAX_UTF32_VAL));
 		}
 		CharacterClass c = new CharacterClass(ranges);
 		return c;

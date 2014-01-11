@@ -52,4 +52,10 @@ public class CharacterClassTest {
 		assertFalse(dfa.match(Input.fromChar('9')));
 	}
 	
+	@Test
+	public void notTest() {
+		CharacterClass c = new CharacterClass(Range.in('0', '9'), Range.in('a', 'z'));
+		System.out.println(c.not());
+	}
+	
 }

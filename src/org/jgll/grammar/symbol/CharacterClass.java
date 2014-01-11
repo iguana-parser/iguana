@@ -28,7 +28,7 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 	
 	private static final long serialVersionUID = 1L;
 	
-	private RegexAlt<Range> ranges;
+	private RegexAlt<Range> alt;
 	
 	public CharacterClass(Range...ranges) {
 		this(Arrays.asList(ranges));
@@ -39,39 +39,25 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 	}
 	
 	public CharacterClass(RegexAlt<Range> ranges) {
-		this.ranges = ranges;
+		this.alt = ranges;
 	}
 	
+	public static CharacterClass fromChars(Character...chars) {
+		List<Range> list = new ArrayList<>();
+		for(Character c : chars) {
+			list.add(Range.in(c.getValue(), c.getValue()));
+		}
+		return new CharacterClass(list);
+	}
 	
 	@Override
 	public String toString() {
 		return getName();
 	}
-
-	/**
-	 * Returns true the provided character class is a subset of
-	 * this character class.
-	 */
-	public boolean contains(CharacterClass other) {
-		// For each range of the other character class, find a 
-		// range that contains it
-		for(Range otherRange : other.ranges) {
-			boolean contains = false;
-			for(Range range : ranges) {
-				if(range.contains(otherRange)) {
-					contains = true;
-				}
-			}
-			if(!contains) {
-				return false;
-			}
-		}
-		return true;
-	}
 	
 	@Override
 	public int hashCode() {
-		return ranges.hashCode();
+		return alt.hashCode();
 	}
 
 	@Override
@@ -86,19 +72,12 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 		
 		CharacterClass other = (CharacterClass) obj;
 
-		return ranges.equals(other.ranges);
+		return alt.equals(other.alt);
 	}
 
 	@Override
 	public String getName() {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("[");
-		for(Range range : ranges) {
-			sb.append(getChar(range.getStart())).append("-").append(getChar(range.getEnd()));
-		}
-		sb.append("]");
-		return sb.toString();
+		return alt.getName();
 	}
 	
 	private String getChar(int val) {
@@ -132,12 +111,12 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 	
 	@Override
 	public BitSet asBitSet() {
-		return ranges.asBitSet();
+		return alt.asBitSet();
 	}
 	
 	@Override
 	public RegularExpression addConditions(Collection<Condition> conditions) {
-		CharacterClass characterClass = new CharacterClass(this.ranges);
+		CharacterClass characterClass = new CharacterClass(this.alt);
 		characterClass.conditions.addAll(this.conditions);
 		characterClass.conditions.addAll(conditions);
 		return characterClass;
@@ -147,7 +126,7 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 		State startState = new State();
 		State finalState = new State(true);
 		
-		for(Range range : ranges) {
+		for(Range range : alt) {
 			Automaton nfa = range.toNFA();
 			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 			
@@ -173,11 +152,33 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 
 	@Override
 	public RegularExpression copy() {
-		List<Range> copyRanges = new ArrayList<>();
-		for(Range range : ranges) {
-			copyRanges.add(range.copy());
-		}
-		return new CharacterClass(copyRanges);
+		return alt.copy();
 	}
 	
+	public CharacterClass not() {
+		List<Range> newRanges = new ArrayList<>();
+		
+		int i = 0;
+		
+		List<Range> ranges = alt.getRegularExpressions();
+		
+		if(ranges.get(i).getStart() > 0) {
+			newRanges.add(Range.in(0, ranges.get(i).getStart() - 1));
+		}
+		
+		for(; i < ranges.size() - 1; i++) {
+			Range r1 = ranges.get(i);
+			Range r2 = ranges.get(i + 1);
+			
+			if(r2.getStart() > r1.getEnd() + 1) {
+				newRanges.add(Range.in(r1.getEnd(), r2.getStart() + 1));
+			}
+		}
+		
+		if(ranges.get(i).getEnd() < Constants.MAX_UTF32_VAL) {
+			newRanges.add(Range.in(ranges.get(i).getEnd() + 1, Constants.MAX_UTF32_VAL));
+		}
+		
+		return new CharacterClass(newRanges);
+	}
 }
