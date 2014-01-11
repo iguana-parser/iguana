@@ -14,14 +14,14 @@ public class ExamplesTest {
 	public void testId() {
 		Automaton nfa = RegularExpressionExamples.getId().toNFA();
 		
-		Matcher dfa = nfa.getMatcher();
+		Matcher matcher = nfa.getMatcher();
 
-		assertTrue(dfa.match(Input.fromString("a")));
-		assertFalse(dfa.match(Input.fromString("9")));
-		assertTrue(dfa.match(Input.fromString("abc")));
-		assertTrue(dfa.match(Input.fromString("Identifier")));
-		assertTrue(dfa.match(Input.fromString("Identifier12")));
-		assertTrue(dfa.match(Input.fromString("Identifier12Assdfd")));
+		assertTrue(matcher.match(Input.fromString("a")));
+		assertFalse(matcher.match(Input.fromString("9")));
+		assertTrue(matcher.match(Input.fromString("abc")));
+		assertTrue(matcher.match(Input.fromString("Identifier")));
+		assertTrue(matcher.match(Input.fromString("Identifier12")));
+		assertTrue(matcher.match(Input.fromString("Identifier12Assdfd")));
 	}
 	
 	@Test
@@ -36,16 +36,16 @@ public class ExamplesTest {
 	public void testFloat() {
 		Automaton nfa = RegularExpressionExamples.getFloat().toNFA();
 		
-		Matcher dfa = nfa.getMatcher();
+		Matcher matcher = nfa.getMatcher();
 
-		assertTrue(dfa.match(Input.fromString("1.2")));
-		assertTrue(dfa.match(Input.fromString("1.2"), 0, 3));
-		assertFalse(dfa.match(Input.fromString("9")));
-		assertFalse(dfa.match(Input.fromString(".9")));
-		assertFalse(dfa.match(Input.fromString("123.")));
-		assertTrue(dfa.match(Input.fromString("12.2")));
-		assertTrue(dfa.match(Input.fromString("1342343.27890")));
-		assertTrue(dfa.match(Input.fromString("908397439483.278902433")));
+		assertTrue(matcher.match(Input.fromString("1.2")));
+		assertTrue(matcher.match(Input.fromString("1.2"), 0, 3));
+		assertFalse(matcher.match(Input.fromString("9")));
+		assertFalse(matcher.match(Input.fromString(".9")));
+		assertFalse(matcher.match(Input.fromString("123.")));
+		assertTrue(matcher.match(Input.fromString("12.2")));
+		assertTrue(matcher.match(Input.fromString("1342343.27890")));
+		assertTrue(matcher.match(Input.fromString("908397439483.278902433")));
 	}
 	
 	@Test
@@ -56,8 +56,11 @@ public class ExamplesTest {
 	}
 	
 	@Test
-	public void test() {
+	public void testCharacter() {
+		Automaton nfa = RegularExpressionExamples.getCharacter().toNFA();
+		Matcher matcher = nfa.getMatcher();
 		
+		assertTrue(matcher.match(Input.fromString("'ab'")));
 	}
 	
 	

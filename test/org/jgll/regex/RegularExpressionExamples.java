@@ -47,14 +47,14 @@ public class RegularExpressionExamples {
 	}
 	
 	/**
-	 * Character ::= ['] !['] ['] 
+	 * Character ::= ['] ![']+ ['] 
 	 * 
 	 * @return
 	 */
 	public static RegularExpression getCharacter() {
 		List<RegularExpression> regularExpressions = new ArrayList<>();
 		regularExpressions.add(Character.from('\''));
-		regularExpressions.add(Character.from('\'').not());
+		regularExpressions.add(new RegexPlus(Character.from('\'').not()));
 		regularExpressions.add(Character.from('\''));
 		return new Sequence<>(regularExpressions);
 	}

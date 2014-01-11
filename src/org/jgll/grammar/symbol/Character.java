@@ -18,6 +18,8 @@ import org.jgll.regex.Transition;
 public class Character extends AbstractSymbol implements Terminal {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private static final int MAX_UTF32_VAL = 0x10FFFF;
 
 	private final int c;
 	
@@ -115,8 +117,8 @@ public class Character extends AbstractSymbol implements Terminal {
 		if(c > 0) {
 			ranges.add(Range.in(0, c - 1));
 		}
-		if(c < Integer.MAX_VALUE) {
-			ranges.add(Range.in(c + 1, Integer.MAX_VALUE));
+		if(c < MAX_UTF32_VAL) {
+			ranges.add(Range.in(c + 1, MAX_UTF32_VAL));
 		}
 		CharacterClass c = new CharacterClass(ranges);
 		return c;
