@@ -62,13 +62,12 @@ public class RegularExpressionExamples {
 	/**
 	 * StringPart ::= !["\\]+ | "\n"
 	 */
-	public static RegularExpression getString() {
-		
+	public static RegularExpression getStringPart() {
 		Character c1 = Character.from('"');
 		Character c2 = Character.from('\\');
 		CharacterClass c = CharacterClass.fromChars(c1, c2);
 		Keyword newline = new Keyword("\\n");
-		
+
 		return new RegexAlt<>(new RegexPlus(c.not()), newline);
 	}
 	 

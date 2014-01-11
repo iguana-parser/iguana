@@ -72,7 +72,7 @@ public class Character extends AbstractSymbol implements Terminal {
 
 	@Override
 	public String getName() {
-		return getString(c);
+		return "[" + getString(c) + "]";
 	}
 	
 	public static String getString(int c) {

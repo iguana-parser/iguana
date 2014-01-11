@@ -68,10 +68,8 @@ public class DanglingElseGrammar1 {
 	@Test
 	public void test2() throws ParseError {
 		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("aaaaasbsbsbs"), grammar, "S");
-		System.out.println(ToJavaCode.toJavaCode(sppf, grammar));
 		assertTrue(sppf.deepEquals(getExpectedSPPF2()));
 	}
-	
 	
 	private SPPFNode getExpectedSPPF1() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 5);

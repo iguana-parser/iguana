@@ -129,23 +129,24 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 		
 		int i = 0;
 		
-		List<Range> ranges = alt.getRegularExpressions();
+		Range[] ranges = alt.getRegularExpressions().toArray(new Range[] {});
+		Arrays.sort(ranges);
 		
-		if(ranges.get(i).getStart() > 0) {
-			newRanges.add(Range.in(0, ranges.get(i).getStart() - 1));
+		if(ranges[i].getStart() > 0) {
+			newRanges.add(Range.in(0, ranges[i].getStart() - 1));
 		}
 		
-		for(; i < ranges.size() - 1; i++) {
-			Range r1 = ranges.get(i);
-			Range r2 = ranges.get(i + 1);
+		for(; i < ranges.length - 1; i++) {
+			Range r1 = ranges[i];
+			Range r2 = ranges[i + 1];
 			
 			if(r2.getStart() > r1.getEnd() + 1) {
 				newRanges.add(Range.in(r1.getEnd() + 1, r2.getStart() - 1));
 			}
 		}
 		
-		if(ranges.get(i).getEnd() < Constants.MAX_UTF32_VAL) {
-			newRanges.add(Range.in(ranges.get(i).getEnd() + 1, Constants.MAX_UTF32_VAL));
+		if(ranges[i].getEnd() < Constants.MAX_UTF32_VAL) {
+			newRanges.add(Range.in(ranges[i].getEnd() + 1, Constants.MAX_UTF32_VAL));
 		}
 		
 		return new CharacterClass(newRanges);

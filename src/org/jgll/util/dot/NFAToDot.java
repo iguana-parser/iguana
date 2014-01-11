@@ -29,7 +29,7 @@ public class NFAToDot {
 				}
 				
 				for(Transition transition : state.getTransitions()) {
-					sb.append(String.format(NFA_TRANSITION, transition) + "\"state" + state.getId() + "\"" + "->" + "{\"state" + transition.getDestination().getId() + "\"}" + "\n");										
+					sb.append(String.format(NFA_TRANSITION, transition.toString().replace("\\", "\\\\")) + "\"state" + state.getId() + "\"" + "->" + "{\"state" + transition.getDestination().getId() + "\"}" + "\n");										
 				}
 				
 			}

@@ -1,5 +1,6 @@
 package org.jgll.regex;
 
+import org.jgll.grammar.symbol.Range;
 import org.jgll.parser.HashFunctions;
 
 public class Transition implements Comparable<Transition> {
@@ -93,11 +94,7 @@ public class Transition implements Comparable<Transition> {
 			return "-1";
 		}
 		
-		if(end < Character.MAX_VALUE) {
-			return (start == end) ? (char) start + "" : "[" + (char) start + "-" + (char) end + "]";
-		}
-		
-		return (start == end) ? start + "" : "[" + start + "-" + end + "]";
+		return Range.in(start, end).toString();
 	}
 
 	@Override

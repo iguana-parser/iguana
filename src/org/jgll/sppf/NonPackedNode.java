@@ -223,6 +223,13 @@ public abstract class NonPackedNode extends SPPFNode {
 
 		@Override
 		public int hash(NonPackedNode nonPackedNode, HashFunction f) {
+			if(nonPackedNode == null) {
+				System.out.println("WTF");
+			}
+			
+			if(nonPackedNode.slot == null) {
+				System.out.println("WTF");
+			}
 			return f.hash(nonPackedNode.slot.getId(), nonPackedNode.leftExtent, nonPackedNode.rightExtent);
 		}
 

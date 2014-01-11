@@ -17,7 +17,7 @@ import org.jgll.regex.Transition;
  * @author Ali Afroozeh
  *
  */
-public class Range extends AbstractSymbol implements Terminal {
+public class Range extends AbstractSymbol implements Terminal, Comparable<Range> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -142,5 +142,10 @@ public class Range extends AbstractSymbol implements Terminal {
 		}
 		CharacterClass c = new CharacterClass(ranges);
 		return c;
+	}
+
+	@Override
+	public int compareTo(Range o) {
+		return start - o.start;
 	}
 }

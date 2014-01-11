@@ -63,5 +63,15 @@ public class ExamplesTest {
 		assertTrue(matcher.match(Input.fromString("'ab'")));
 	}
 	
+	@Test
+	public void testStringPart() {
+		Automaton nfa = RegularExpressionExamples.getStringPart().toNFA();
+		Matcher matcher = nfa.getMatcher();
+		
+		assertTrue(matcher.match(Input.fromString("abcd")));
+		assertFalse(matcher.match(Input.fromString("\\aa")));
+		assertFalse(matcher.match(Input.fromString("\"aaa")));
+	}
+	
 	
 }
