@@ -116,6 +116,28 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+	
+		if(obj == this) {
+			return true;
+		}
+		
+		if(!(obj instanceof RegexAlt)) {
+			return false;
+		}
+		
+		@SuppressWarnings("rawtypes")
+		RegexAlt other = (RegexAlt) obj;
+		
+		return other.regularExpressions.equals(regularExpressions);
+	}
+	
+	@Override
+	public int hashCode() {
+		return regularExpressions.hashCode();
+	}
+	
+	@Override
 	public String toString() {
 		return getName();
 	}

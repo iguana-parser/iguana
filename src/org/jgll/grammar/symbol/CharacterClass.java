@@ -19,8 +19,6 @@ import org.jgll.regex.Transition;
  * For example, [A-Za-z0-9] represents a character which is
  * either [A-Z], [a-z] or [0-9].
  * 
- * TODO: CharacterClass is an RegexAlt of character classes. Rewrite it.
- * 
  * @author Ali Afroozeh
  *
  */
@@ -79,36 +77,7 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 	public String getName() {
 		return alt.getName();
 	}
-	
-	private String getChar(int val) {
-		char c = (char) val;
-		if(c == '-' || c == ' ') {
-			return "\\" + c;
-		}
 		
-		// Escaping specific character class symbols
-		if(c == '-') {
-			return "\\-";
-		}
-		if(c == '[') {
-			return "\\[";
-		}
-		if(c == ']') {
-			return "\\]";
-		}
-		if(c == '#') {
-			return "\\#";
-		}
-		if(c == '.') {
-			return "\\.";
-		}
-		if(c == '\\') {
-			return "\\\\";
-		}
-			
-		return new String(java.lang.Character.toChars(val));
-	}
-	
 	@Override
 	public BitSet asBitSet() {
 		return alt.asBitSet();
@@ -171,7 +140,7 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 			Range r2 = ranges.get(i + 1);
 			
 			if(r2.getStart() > r1.getEnd() + 1) {
-				newRanges.add(Range.in(r1.getEnd(), r2.getStart() + 1));
+				newRanges.add(Range.in(r1.getEnd() + 1, r2.getStart() - 1));
 			}
 		}
 		

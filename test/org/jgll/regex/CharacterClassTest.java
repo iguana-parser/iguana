@@ -3,6 +3,7 @@ package org.jgll.regex;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.CharacterClass;
+import org.jgll.grammar.symbol.Constants;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.util.Input;
 import org.junit.Test;
@@ -55,7 +56,11 @@ public class CharacterClassTest {
 	@Test
 	public void notTest() {
 		CharacterClass c = new CharacterClass(Range.in('0', '9'), Range.in('a', 'z'));
-		System.out.println(c.not());
+		CharacterClass expected = new CharacterClass(Range.in(0, '0' - 1), 
+													 Range.in('9' + 1, 'a' - 1), 
+													 Range.in('z' + 1, Constants.MAX_UTF32_VAL));
+		
+		assertEquals(expected, c.not());
 	}
 	
 }
