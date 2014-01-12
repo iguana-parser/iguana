@@ -210,8 +210,7 @@ public class Automaton {
 		}
 		
 		Automaton minimized = AutomatonOperations.minimize(this);
-		Automaton merged = AutomatonOperations.mergeTransitions(minimized);
-		startState = merged.getStartState();
+		startState = minimized.getStartState();
 		this.minimized = true;
 		init();
 		return this;

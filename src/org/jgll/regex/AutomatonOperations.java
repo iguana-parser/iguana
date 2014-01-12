@@ -421,9 +421,6 @@ public class AutomatonOperations {
 			
 			@Override
 			public void visit(State state) {
-				if(state == null) {
-					System.out.println("WTF");
-				}
 				for(Transition transition : state.getTransitions()) {
 					if(!transition.isEpsilonTransition()) {
 						transitions.add(transition);
@@ -526,8 +523,14 @@ public class AutomatonOperations {
 	}
 	
 	/**
+	 * Merges consecutive outgoing transitions of a state that are of the form\
+	 * [a - b] and [b+1 - c] to [a - c]. 
 	 * 
-	 * Merges consecutive transitions of the form [a - b] and [b+1 - c] to [a - c]. 
+	 * Note: This method should be used with caution because it may break the 
+	 * working of Matchers in case of overlapping transitions in different states.
+	 * Transitions are indexed globally, not per state. Therefore, during the working
+	 * of the matcher, because of overlapping, a wrong transition that does not exist
+	 * at a state may be chosen.  
 	 * 
 	 */
 	public static Automaton mergeTransitions(final Automaton automaton) {

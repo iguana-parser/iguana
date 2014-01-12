@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.util.Input;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 import org.junit.Test;
 
 public class SequenceTest {
@@ -42,6 +44,18 @@ public class SequenceTest {
 		
 		assertFalse(dfa.match(Input.fromString("ac")));
 		assertFalse(dfa.match(Input.fromString("da")));
+	}
+	
+	/**
+	 * Two character classes with overlapping ranges
+	 */
+	@Test
+	public void test3() {
+		RegularExpression regexp = new Sequence<>(new Range('a', 'z'), new Range('b', 'm'));
+		Automaton nfa = regexp.toNFA();
+		
+		Matcher matcher = nfa.getMatcher();
+		assertTrue(matcher.match(Input.fromString("dm")));
 	}
 	
 }
