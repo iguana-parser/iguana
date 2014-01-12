@@ -53,7 +53,7 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public BitSet asBitSet() {
-		return null;
+		return regexp.asBitSet();
 	}
 
 	@Override

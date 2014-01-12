@@ -102,9 +102,7 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public BitSet asBitSet() {
-		BitSet set = new BitSet();
-		set.set(seq.get(0).getValue());
-		return set;
+		return seq.asBitSet();
 	}
 	
 	private Automaton createNFA() {
