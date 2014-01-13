@@ -32,6 +32,7 @@ public class Range extends AbstractSymbol implements Terminal, Comparable<Range>
 	}
 	
 	public Range(int start, int end) {
+		super(Character.getString(start) + "-" + Character.getString(end));
 		
 		if(end < start) {
 			throw new IllegalArgumentException("Start cannot be less than end.");
@@ -58,11 +59,6 @@ public class Range extends AbstractSymbol implements Terminal, Comparable<Range>
 	}
 	
 	@Override
-	public String toString() {
-		return getName();
-	}
-
-	@Override
 	public String getMatchCode() {
 		return "(I[ci] >= " + start + " && I[ci] <= " + end + ")";
 	}
@@ -88,11 +84,6 @@ public class Range extends AbstractSymbol implements Terminal, Comparable<Range>
 		Range other = (Range) obj;
 		
 		return start == other.start && end == other.end;
-	}
-
-	@Override
-	public String getName() {
-		return  Character.getString(start) + "-" + Character.getString(end);
 	}
 
 	@Override

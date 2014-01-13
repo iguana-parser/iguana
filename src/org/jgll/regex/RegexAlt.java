@@ -3,14 +3,11 @@ package org.jgll.regex;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractSymbol;
-import org.jgll.grammar.symbol.Symbol;
 import org.jgll.util.CollectionsUtil;
 
 public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implements RegularExpression, Iterable<T> {
@@ -22,6 +19,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 	private final BitSet bitSet;
 	
 	public RegexAlt(List<T> regularExpressions) {
+		super("(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")");
 		
 		if(regularExpressions == null) {
 			throw new IllegalArgumentException("The list of regular expressions cannot be null.");
@@ -90,16 +88,6 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 		return bitSet;
 	}
 
-	@Override
-	public String getName() {
-		return "(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")";
-	}
-
-	@Override
-	public Symbol addConditions(Collection<Condition> conditions) {
-		return null;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public RegexAlt<T> copy() {
@@ -137,8 +125,4 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 		return regularExpressions.hashCode();
 	}
 	
-	@Override
-	public String toString() {
-		return getName();
-	}
 }

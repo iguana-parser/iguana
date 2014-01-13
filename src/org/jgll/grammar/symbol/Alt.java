@@ -12,12 +12,11 @@ public class Alt extends AbstractSymbol {
 	private List<Symbol> list;
 	
 	public Alt(Symbol...list) {
-		super(CollectionsUtil.listToString(Arrays.asList(list), "|"));
-		this.list = Arrays.asList(list);
+		this(Arrays.asList(list));
 	}
 	
 	public Alt(List<Symbol> list) {
-		super(CollectionsUtil.listToString(Arrays.asList(list)));
+		super(CollectionsUtil.listToString(Arrays.asList(list), "|"));
 		this.list = list;
 	}
 	

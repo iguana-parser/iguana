@@ -1,12 +1,9 @@
 package org.jgll.regex;
 
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.Set;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractSymbol;
-import org.jgll.grammar.symbol.Symbol;
 
 
 public class RegexOpt extends AbstractSymbol implements RegularExpression {
@@ -16,6 +13,7 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 	private final RegularExpression regexp;
 	
 	public RegexOpt(RegularExpression regexp) {
+		super(regexp.getName() + "?");
 		this.regexp = regexp;
 	}
 	
@@ -54,16 +52,6 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 	@Override
 	public BitSet asBitSet() {
 		return regexp.asBitSet();
-	}
-
-	@Override
-	public String getName() {
-		return regexp.getName() + "?";
-	}
-
-	@Override
-	public Symbol addConditions(Collection<Condition> conditions) {
-		return null;
 	}
 
 	@Override

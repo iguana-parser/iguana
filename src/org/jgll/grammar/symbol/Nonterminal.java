@@ -1,6 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import org.jgll.grammar.condition.Condition;
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -15,17 +14,8 @@ public class Nonterminal extends AbstractSymbol {
 	}
 
 	public Nonterminal(String name, boolean ebnfList) {
-		this.name = name;
+		super(name);
 		this.ebnfList = ebnfList;
-	}
-	
-	public Nonterminal(String name, boolean ebnfList, Iterable<Condition> conditions) {
-		super(name, conditions);
-		this.ebnfList = ebnfList;
-	}
-	
-	public String getName() {
-		return name;
 	}
 	
 	public boolean isEbnfList() {
@@ -40,18 +30,12 @@ public class Nonterminal extends AbstractSymbol {
 		return false;
 	}
 	
-	
 	public void setCollapsible(boolean collapsible) {
 		this.collapsible = collapsible;
 	}
 	
 	public boolean isCollapsible() {
 		return collapsible;
-	}
-	
-	@Override
-	public String toString() {
-		return name;
 	}
 	
 	@Override

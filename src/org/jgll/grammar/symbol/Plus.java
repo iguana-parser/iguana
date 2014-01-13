@@ -1,7 +1,7 @@
 package org.jgll.grammar.symbol;
 
 
-public class Plus extends Nonterminal {
+public class Plus extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -14,6 +14,11 @@ public class Plus extends Nonterminal {
 	
 	public Symbol getSymbol() {
 		return s;
+	}
+
+	@Override
+	public Symbol copy() {
+		return null;
 	}
 	
 }

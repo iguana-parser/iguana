@@ -1,11 +1,8 @@
 package org.jgll.regex;
 
 import java.util.BitSet;
-import java.util.Collection;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractSymbol;
-import org.jgll.grammar.symbol.Symbol;
 
 
 public class RegexPlus extends AbstractSymbol implements RegularExpression {
@@ -15,6 +12,7 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 	private final RegularExpression regexp;
 	
 	public RegexPlus(RegularExpression regexp) {
+		super(regexp.getName() + "+");
 		this.regexp = new Sequence<>(regexp, new RegexStar(regexp));
 	}
 	
@@ -34,22 +32,8 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 	}
 
 	@Override
-	public String getName() {
-		return regexp.getName() + "+";
-	}
-
-	@Override
-	public Symbol addConditions(Collection<Condition> conditions) {
-		return null;
-	}
-
-	@Override
 	public RegexPlus copy() {
 		return new RegexPlus(regexp.copy());
 	}
-	
-	@Override
-	public String toString() {
-		return getName();
-	}
+
 }

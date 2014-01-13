@@ -8,8 +8,6 @@ import org.jgll.regex.State;
 
 public class Epsilon extends AbstractSymbol implements Terminal {
 
-	private static final String EPSILON = "epsilon";
-	
 	public static final int TOKEN_ID = 0;
 
 	private static final long serialVersionUID = 1L;
@@ -24,6 +22,10 @@ public class Epsilon extends AbstractSymbol implements Terminal {
 		return instance;
 	}
 	
+	private Epsilon() {
+		super("epsilon");
+	}
+	
 	@Override
 	public boolean match(int i) {
 		return true;
@@ -33,17 +35,6 @@ public class Epsilon extends AbstractSymbol implements Terminal {
 	public String getMatchCode() {
 		return "";
 	}
-	
-	@Override
-	public String toString() {
-		return getName();
-	}
-
-	@Override
-	public String getName() {
-		return EPSILON;
-	}
-
 	
 	@Override
 	public BitSet asBitSet() {

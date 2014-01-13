@@ -22,6 +22,7 @@ public class Character extends AbstractSymbol implements Terminal {
 	private final BitSet bitSet;
 	
 	public Character(int c) {
+		super("[" + getString(c) + "]");
 		this.c = c;
 		this.bitSet = new BitSet();
 		bitSet.set(c);
@@ -40,11 +41,6 @@ public class Character extends AbstractSymbol implements Terminal {
 		return c == i;
 	}
 	
-	@Override
-	public String toString() {
-		return getName();
-	}
-
 	@Override
 	public String getMatchCode() {
 		return "I[ci] == " + c;
@@ -68,11 +64,6 @@ public class Character extends AbstractSymbol implements Terminal {
 		return c == other.c;
 	}
 
-	@Override
-	public String getName() {
-		return "[" + getString(c) + "]";
-	}
-	
 	public static String getString(int c) {
 		if(c >= Constants.FIRST_PRINTABLE_CHAR && c <= java.lang.Character.MAX_VALUE) {
 			return (char)c + "";			

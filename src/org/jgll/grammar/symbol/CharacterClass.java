@@ -35,8 +35,9 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 		this(new RegexAlt<>(ranges));
 	}
 	
-	public CharacterClass(RegexAlt<Range> ranges) {
-		this.alt = ranges;
+	public CharacterClass(RegexAlt<Range> alt) {
+		super("[" + CollectionsUtil.listToString(alt.getRegularExpressions(), " ") + "]");
+		this.alt = alt;
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {
@@ -45,11 +46,6 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 			list.add(Range.in(c.getValue(), c.getValue()));
 		}
 		return new CharacterClass(list);
-	}
-	
-	@Override
-	public String toString() {
-		return getName();
 	}
 	
 	@Override
@@ -72,11 +68,6 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 		return alt.equals(other.alt);
 	}
 
-	@Override
-	public String getName() {
-		return "[" + CollectionsUtil.listToString(alt.getRegularExpressions(), " ") + "]";
-	}
-		
 	@Override
 	public BitSet asBitSet() {
 		return alt.asBitSet();

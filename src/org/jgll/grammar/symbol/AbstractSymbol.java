@@ -13,21 +13,18 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	protected final List<Condition> conditions;
 	
-	protected String name;
+	protected final String name;
 	
 	public AbstractSymbol(String name) {
 		this(name, new ArrayList<Condition>());
 	}
 	
 	public AbstractSymbol(String name, Iterable<Condition> conditions) {
+		this.name = name;
 		this.conditions = new ArrayList<>();
 		for(Condition condition : conditions) {
 			this.conditions.add(condition);
 		}
-	}
-	
-	public AbstractSymbol() {
-		this.conditions = new ArrayList<>();
 	}
 	
 	@Override
@@ -53,4 +50,8 @@ public abstract class AbstractSymbol implements Symbol {
 		return s;
 	}
 	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

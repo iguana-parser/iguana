@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.jgll.util.CollectionsUtil;
 
-public class Group extends Nonterminal {
+public class Group extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 
 	private List<? extends Symbol> symbols;
 
 	public Group(List<? extends Symbol> symbols) {
-		super("(" + CollectionsUtil.listToString(symbols) + ")", false);
+		super("(" + CollectionsUtil.listToString(symbols) + ")");
 		this.symbols = symbols;
 	}
 	
@@ -23,6 +23,11 @@ public class Group extends Nonterminal {
 
 	public List<? extends Symbol> getSymbols() {
 		return symbols;
+	}
+
+	@Override
+	public Symbol copy() {
+		return null;
 	}
 	
 }

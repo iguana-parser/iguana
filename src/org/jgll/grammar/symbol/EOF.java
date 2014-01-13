@@ -21,7 +21,6 @@ public class EOF extends Character {
 		super(0);
 	}
 	
-	
 	@Override
 	public String toString() {
 		return "$";

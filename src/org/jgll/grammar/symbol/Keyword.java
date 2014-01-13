@@ -31,6 +31,15 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		this(name, toCharSequence(chars));
 	}
 	
+	public Keyword(String name, Sequence<Character> seq) {
+		super(name);
+		this.name = name;
+		this.seq = seq;
+		
+		this.bitSet = new BitSet();
+		bitSet.set(seq.get(0).getValue());		
+	}
+	
 	private static Sequence<Character> toCharSequence(int[] chars) {
 		List<Character> list = new ArrayList<>();
 		for(int c : chars) {
@@ -39,22 +48,9 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		
 		return new Sequence<>(list);		
 	}
-	
-	public Keyword(String name, Sequence<Character> seq) {
-		this.name = name;
-		this.seq = seq;
 		
-		this.bitSet = new BitSet();
-		bitSet.set(seq.get(0).getValue());		
-	}
-	
 	public int size() {
 		return seq.size();
-	}
-	
-	@Override
-	public String getName() {
-		return name;
 	}
 	
 	public Terminal getFirstTerminal() {
@@ -65,11 +61,6 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		return seq;
 	}
 	
-	@Override
-	public String toString() {
-		return getName();
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) {
