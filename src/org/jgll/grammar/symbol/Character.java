@@ -5,6 +5,7 @@ import java.util.BitSet;
 import java.util.List;
 
 import org.jgll.regex.Automaton;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
 
@@ -13,7 +14,7 @@ import org.jgll.regex.Transition;
  * @author Ali Afroozeh
  *
  */
-public class Character extends AbstractSymbol implements Terminal {
+public class Character extends AbstractSymbol implements RegularExpression {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -34,16 +35,6 @@ public class Character extends AbstractSymbol implements Terminal {
 	
 	public int getValue() {
 		return c;
-	}
-	
-	@Override
-	public boolean match(int i) {
-		return c == i;
-	}
-	
-	@Override
-	public String getMatchCode() {
-		return "I[ci] == " + c;
 	}
 
 	@Override

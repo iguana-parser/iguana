@@ -43,11 +43,6 @@ public class KeywordTest1 {
 	}
 	
 	@Test
-	public void testKeywordLength() {
-		assertEquals(2, grammar.getLongestTerminalChain());
-	}
-
-	@Test
 	public void test() throws ParseError {
 		rdParser.parse(Input.fromString("if"), grammar, "A");
 	}

@@ -51,11 +51,6 @@ public class Gamma2Test {
 	}
 	
 	@Test
-	public void testLongestTerminalChain() {
-		assertEquals(1, grammar.getLongestTerminalChain());
-	}
-		
-	@Test
 	public void testParsers1() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bbb"), grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF1()));

@@ -1,12 +1,11 @@
 package org.jgll.grammar.conditions;
 
-import static org.jgll.grammar.condition.ConditionFactory.notFollow;
-import static org.jgll.grammar.condition.ConditionFactory.notPrecede;
 import static org.jgll.util.CollectionsUtil.list;
 import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
@@ -15,7 +14,6 @@ import org.jgll.grammar.symbol.Opt;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -49,8 +47,8 @@ public class PrecedeRestrictionTest1 {
 		Keyword forall = new Keyword("forall", new int[] { 'f', 'o', 'r', 'a', 'l', 'l' });
 		Nonterminal L = new Nonterminal("L");
 		Nonterminal Id = new Nonterminal("Id");
-		Terminal ws = new Character(' ');
-		Terminal az = new Range('a', 'z');
+		Character ws = new Character(' ');
+		Range az = new Range('a', 'z');
 
 		GrammarBuilder builder = new GrammarBuilder();
 
@@ -58,7 +56,7 @@ public class PrecedeRestrictionTest1 {
 
 		Rule r2 = new Rule(S, forall);
 
-		Rule r3 = new Rule(Id, new Plus(az).addCondition(notFollow(az)).addCondition(notPrecede(az)));
+		Rule r3 = new Rule(Id, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notPrecede(az)));
 
 		Rule r4 = new Rule(L, ws);
 

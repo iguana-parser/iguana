@@ -1,18 +1,16 @@
 package org.jgll.grammar.conditions;
 
-import static org.jgll.grammar.condition.ConditionFactory.notFollow;
-import static org.jgll.grammar.condition.ConditionFactory.notMatch;
 import static org.jgll.util.CollectionsUtil.list;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -37,7 +35,7 @@ public class KeywordExclusionTest {
 	@Before
 	public void init() {
 		Nonterminal Id = new Nonterminal("Id");
-		Terminal az = new Range('a', 'z');
+		Range az = new Range('a', 'z');
 		
 		Keyword iff = new Keyword("if", "if");
 		Keyword when = new Keyword("when", "when");
@@ -46,7 +44,7 @@ public class KeywordExclusionTest {
 		
 		GrammarBuilder builder = new GrammarBuilder();
 		
-		Rule r1 = new Rule(Id, new Plus(az).addCondition(notFollow(az)).addCondition(notMatch(iff, when, doo, whilee)));
+		Rule r1 = new Rule(Id, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(iff, when, doo, whilee)));
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1));
 		builder.addRules(rules);

@@ -88,7 +88,6 @@ public class Grammar implements Serializable {
 			this.newNonterminals.addAll(newNonterminals);
 		}
 
-		this.longestTerminalChain = builder.longestTerminalChain;
 		this.maximumNumAlternates = builder.maximumNumAlternates;
 		this.maxDescriptorsAtInput = builder.maxDescriptors;
 		this.averageDescriptorsAtInput = builder.averageDescriptors;

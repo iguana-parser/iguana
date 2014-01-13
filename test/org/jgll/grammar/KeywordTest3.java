@@ -1,12 +1,12 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -36,8 +36,8 @@ public class KeywordTest3 {
 	Keyword iff = new Keyword("if", new int[] {'i', 'f'});
 	Keyword then = new Keyword("then", new int[] {'t', 'h', 'e', 'n'});
 	Nonterminal L = new Nonterminal("L");
-	Terminal s = new Character('s');
-	Terminal ws = new Character(' ');
+	Character s = new Character('s');
+	Character ws = new Character(' ');
 
 
 	@Before
@@ -62,11 +62,6 @@ public class KeywordTest3 {
 		assertEquals(BitSetUtil.from(grammar.getTokenID(iff), grammar.getTokenID(s)), grammar.getNonterminalByName("S").getFirstSet());
 	}
 	
-	@Test
-	public void testKeywordLength() {
-		assertEquals(4, grammar.getLongestTerminalChain());
-	}
-
 	@Test
 	public void testParser() throws ParseError {
 		Input input = Input.fromString("if s then s");

@@ -53,11 +53,6 @@ public class KeywordTest2 {
 	}
 	
 	@Test
-	public void testKeywordLength() {
-		assertEquals(2, grammar.getLongestTerminalChain());
-	}
-
-	@Test
 	public void test() throws ParseError {
 		parser.parse(Input.fromString("ifb"), grammar, "A");
 	}

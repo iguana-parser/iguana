@@ -1,13 +1,12 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.list;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Terminal;
 
 
 /**
@@ -81,9 +80,9 @@ public class GrammarBank {
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse");
 		
 		Nonterminal S = new Nonterminal("S");
-		Terminal s = new Character('s');
-		Terminal a = new Character('a');
-		Terminal b = new Character('b');
+		Character s = new Character('s');
+		Character a = new Character('a');
+		Character b = new Character('b');
 
 		Rule rule1 = new Rule(S, list(a, S));
 		builder.addRule(rule1);

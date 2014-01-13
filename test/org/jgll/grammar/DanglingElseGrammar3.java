@@ -1,13 +1,12 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertTrue;
 
-import org.jgll.grammar.condition.ConditionFactory;
+import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -39,11 +38,11 @@ public class DanglingElseGrammar3 {
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse");
 		
 		Nonterminal S = new Nonterminal("S");
-		Terminal s = new Character('s');
-		Terminal a = new Character('a');
-		Terminal b = new Character('b');
+		Character s = new Character('s');
+		Character a = new Character('a');
+		Character b = new Character('b');
 
-		Rule rule1 = new Rule(S, list(a, S.addCondition(ConditionFactory.notFollow(b, S))));
+		Rule rule1 = new Rule(S, list(a, S.addCondition(ContextFreeCondition.notFollow(b, S))));
 		builder.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));

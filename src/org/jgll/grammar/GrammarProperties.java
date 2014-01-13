@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.grammaraction.LongestTerminalChainAction;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -409,15 +408,6 @@ public class GrammarProperties {
 		else {
 			return changed;
 		}	
-	}
-	
-	/**
-	 * Calculates the length of the longest chain of terminals in a body of production rules.
-	 */
-	public static int calculateLongestTerminalChain(Iterable<HeadGrammarSlot> nonterminals) {
-		LongestTerminalChainAction action = new LongestTerminalChainAction();
-		GrammarVisitor.visit(nonterminals, action);
-		return action.getLongestTerminalChain();
 	}
 	
 	public static void setPredictionSetsForConditionals(Iterable<BodyGrammarSlot> conditionSlots) {

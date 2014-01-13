@@ -1,17 +1,13 @@
 package org.jgll.grammar.slotaction;
 
-import java.util.List;
-
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.regex.Matcher;
-import org.jgll.regex.RegexAlt;
-
+import org.jgll.regex.RegularExpression;
 
 public class NotMatchActions {
 
@@ -55,12 +51,9 @@ public class NotMatchActions {
 			});
 		}
 	  
-		public static void fromKeywordList(BodyGrammarSlot slot, final List<Keyword> list, final Condition condition) {
+		public static void fromRegularExpression(BodyGrammarSlot slot, final RegularExpression regex, final Condition condition) {
 			
-			RegexAlt<Keyword> alt = new RegexAlt<>(list);
-			final Matcher matcher = alt.toNFA().getMatcher();
-
-			
+			final Matcher matcher = regex.toNFA().getMatcher();
 			
 				slot.addPopAction(new SlotAction<Boolean>() {
 					
@@ -93,6 +86,4 @@ public class NotMatchActions {
 
 				});
 		}
-
-	
 }

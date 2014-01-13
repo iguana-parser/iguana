@@ -72,11 +72,6 @@ public class ArithmeticExpressionsTest {
 	}
 
 	@Test
-	public void testLongestTerminalChain() {
-		assertEquals(1, grammar.getLongestTerminalChain());
-	}
-
-	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a*a"), grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPFNode()));

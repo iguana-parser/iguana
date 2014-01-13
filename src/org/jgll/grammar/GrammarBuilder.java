@@ -15,8 +15,7 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ContextFreeCondition;
-import org.jgll.grammar.condition.KeywordCondition;
-import org.jgll.grammar.condition.TerminalCondition;
+import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.patterns.AbstractPattern;
 import org.jgll.grammar.patterns.ExceptPattern;
 import org.jgll.grammar.patterns.PrecedencePattern;
@@ -58,8 +57,6 @@ public class GrammarBuilder implements Serializable {
 	List<BodyGrammarSlot> slots;
 	
 	List<HeadGrammarSlot> nonterminals;
-
-	int longestTerminalChain;
 
 	int maximumNumAlternates;
 
@@ -273,11 +270,8 @@ public class GrammarBuilder implements Serializable {
 				break;
 				
 			case NOT_FOLLOW:
-				if (condition instanceof TerminalCondition) {
-					NotFollowActions.fromTerminal(slot.next(), ((TerminalCondition) condition).getTerminal(), condition);
-				} 
-				else if (condition instanceof KeywordCondition) {
-					NotFollowActions.fromKeywordList(slot.next(), ((KeywordCondition) condition).getKeywords(), condition);
+				if (condition instanceof RegularExpressionCondition) {
+					NotFollowActions.fromRegularExpression(slot.next(), ((RegularExpressionCondition) condition).getRegularExpression(), condition);
 				} 
 				else {
 					NotFollowActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
@@ -290,14 +284,9 @@ public class GrammarBuilder implements Serializable {
 			case NOT_PRECEDE:
 				assert !(condition instanceof ContextFreeCondition);
 				
-				if(condition instanceof KeywordCondition) {
-					KeywordCondition literalCondition = (KeywordCondition) condition;
-					NotPrecedeActions.fromKeywordList(slot, literalCondition.getKeywords(), condition);
+				if(condition instanceof RegularExpressionCondition) {
+					NotPrecedeActions.fromKeywordList(slot, ((RegularExpressionCondition) condition).getRegularExpression(), condition);
 				} 
-				else {
-					TerminalCondition terminalCondition = (TerminalCondition) condition;
-					NotPrecedeActions.fromTerminal(slot, terminalCondition.getTerminal(), condition);
-				}
 				break;
 				
 			case MATCH:
@@ -308,8 +297,7 @@ public class GrammarBuilder implements Serializable {
 					NotMatchActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
 				} 
 				else {
-					KeywordCondition simpleCondition = (KeywordCondition) condition;
-					NotMatchActions.fromKeywordList(slot.next(), simpleCondition.getKeywords(), condition);
+					NotMatchActions.fromRegularExpression(slot.next(), ((RegularExpressionCondition) condition).getRegularExpression(), condition);
 				}
 				break;
 				
@@ -373,7 +361,6 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private void initializeGrammarProrperties() {
-		longestTerminalChain = GrammarProperties.calculateLongestTerminalChain(nonterminals);
 		GrammarProperties.calculateFirstSets(nonterminals);
 		GrammarProperties.calculateFollowSets(nonterminals);
 

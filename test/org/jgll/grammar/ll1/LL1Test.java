@@ -11,7 +11,6 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -46,9 +45,9 @@ public class LL1Test {
 	Nonterminal B = new Nonterminal("B");
 	Nonterminal D = new Nonterminal("D");
 
-	Terminal a = new Character('a');
-	Terminal b = new Character('b');
-	Terminal d = new Character('d');
+	Character a = new Character('a');
+	Character b = new Character('b');
+	Character d = new Character('d');
 
 	@Before
 	public void init() {

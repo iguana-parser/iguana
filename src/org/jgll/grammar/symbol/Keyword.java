@@ -53,10 +53,6 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		return seq.size();
 	}
 	
-	public Terminal getFirstTerminal() {
-		return (Character) seq.get(0);
-	}
-	
 	public Sequence<Character> getSequence() {
 		return seq;
 	}

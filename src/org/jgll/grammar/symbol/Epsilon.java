@@ -6,7 +6,8 @@ import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 
-public class Epsilon extends AbstractSymbol implements Terminal {
+
+public class Epsilon extends AbstractSymbol implements RegularExpression {
 
 	public static final int TOKEN_ID = 0;
 
@@ -25,39 +26,30 @@ public class Epsilon extends AbstractSymbol implements Terminal {
 	private Epsilon() {
 		super("epsilon");
 	}
-	
-	@Override
-	public boolean match(int i) {
-		return true;
-	}
 
 	@Override
-	public String getMatchCode() {
-		return "";
-	}
-	
-	@Override
-	public BitSet asBitSet() {
-		return new BitSet();
+	public Epsilon copy() {
+		return this;
 	}
 
-	@Override
-	public Automaton toNFA() {
-		return createNFA();
-	}
-	
-	private Automaton createNFA() {
-		State state = new State(true);
-		return new Automaton(state);
-	}
+    @Override
+    public BitSet asBitSet() {
+    	return new BitSet();
+    }
+
+    @Override
+    public Automaton toNFA() {
+        return createNFA();
+    }
+    
+    private Automaton createNFA() {
+    	State state = new State(true);
+        return new Automaton(state);
+    }
 
 	@Override
 	public boolean isNullable() {
 		return true;
 	}
-
-	@Override
-	public RegularExpression copy() {
-		return this;
-	}
+	
 }

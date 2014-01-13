@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Automaton;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
 
@@ -15,7 +16,7 @@ import org.jgll.regex.Transition;
  * @author Ali Afroozeh
  *
  */
-public class Range extends AbstractSymbol implements Terminal, Comparable<Range> {
+public class Range extends AbstractSymbol implements RegularExpression, Comparable<Range> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -51,16 +52,6 @@ public class Range extends AbstractSymbol implements Terminal, Comparable<Range>
 	
 	public int getEnd() {
 		return end;
-	}
-	
-	@Override
-	public boolean match(int i) {
-		return testSet.get(i);
-	}
-	
-	@Override
-	public String getMatchCode() {
-		return "(I[ci] >= " + start + " && I[ci] <= " + end + ")";
 	}
 	
 	public boolean contains(Range range) {

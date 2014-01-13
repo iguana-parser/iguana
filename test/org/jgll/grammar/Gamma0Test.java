@@ -68,11 +68,6 @@ public class Gamma0Test {
 	}
 	
 	@Test
-	public void testLongestGrammarChain() {
-		assertEquals(1, grammar.getLongestTerminalChain());
-	}
-	
-	@Test
 	public void testFirstSets() {
 		assertEquals(BitSetUtil.from(grammar.getTokenID(a), Epsilon.TOKEN_ID), grammar.getNonterminalByName("S").getFirstSet());
 		assertEquals(BitSetUtil.from(grammar.getTokenID(a)), grammar.getNonterminalByName("A").getFirstSet());

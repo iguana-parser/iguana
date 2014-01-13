@@ -72,7 +72,7 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	private void tokenize(Input input) {
 		
-		// Skip EOF
+		// Skip EOF 
 		for (int i = 0; i < input.length() - 1; i++) {
 			
 			Set<Matcher> set = grammar.getTokensForChar(input.charAt(i));

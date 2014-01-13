@@ -58,11 +58,6 @@ public class LeftFactorizedArithmeticGrammarTest {
 	}
 	
 	@Test
-	public void testLongestTerminalChain() {
-		assertEquals(1, grammar.getLongestTerminalChain());
-	}
-	
-	@Test
 	public void testFirstSets() {
 		assertEquals(from(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getNonterminalByName("E").getFirstSet());
 		assertEquals(from(grammar.getTokenID(plus), EPSILON), grammar.getNonterminalByName("E1").getFirstSet());
