@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +28,11 @@ public class Group extends AbstractSymbol {
 
 	@Override
 	public Symbol copy() {
-		return null;
+		List<Symbol> list = new ArrayList<>();
+		for(Symbol s : symbols) {
+			list.add(s.copy());
+		}
+		return new Group(list);
 	}
 	
 }

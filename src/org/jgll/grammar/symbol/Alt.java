@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,24 +10,28 @@ public class Alt extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	private List<Symbol> list;
+	private List<Symbol> symbols;
 	
 	public Alt(Symbol...list) {
 		this(Arrays.asList(list));
 	}
 	
-	public Alt(List<Symbol> list) {
-		super(CollectionsUtil.listToString(Arrays.asList(list), "|"));
-		this.list = list;
+	public Alt(List<Symbol> symbols) {
+		super(CollectionsUtil.listToString(Arrays.asList(symbols), "|"));
+		this.symbols = symbols;
 	}
 	
 	public List<Symbol> getSymbols() {
-		return list;
+		return symbols;
 	}
 
 	@Override
 	public Alt copy() {
-		return null;
+		List<Symbol> list = new ArrayList<>();
+		for(Symbol s : symbols) {
+			list.add(s.copy());
+		}
+		return new Alt(list);
 	}
 	
 }

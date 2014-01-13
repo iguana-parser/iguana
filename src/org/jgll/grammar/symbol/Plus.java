@@ -17,8 +17,8 @@ public class Plus extends AbstractSymbol {
 	}
 
 	@Override
-	public Symbol copy() {
-		return null;
+	public Plus copy() {
+		return new Plus(s.copy());
 	}
 	
 }

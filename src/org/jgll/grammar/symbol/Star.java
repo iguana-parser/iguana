@@ -17,8 +17,8 @@ public class Star extends AbstractSymbol {
 	}
 
 	@Override
-	public Symbol copy() {
-		return null;
+	public Star copy() {
+		return new Star(s.copy());
 	}
 	
 }

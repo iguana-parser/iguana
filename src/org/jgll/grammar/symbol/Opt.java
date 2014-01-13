@@ -16,8 +16,8 @@ public class Opt extends AbstractSymbol {
 	}
 
 	@Override
-	public Symbol copy() {
-		return null;
+	public Opt copy() {
+		return new Opt(s.copy());
 	}
 	
 }
