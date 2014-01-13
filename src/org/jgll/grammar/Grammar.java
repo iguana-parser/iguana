@@ -3,7 +3,7 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.BitSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +16,6 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Matcher;
@@ -70,6 +68,8 @@ public class Grammar implements Serializable {
 	
 	private List<RegularExpression> tokens;
 	
+	private List<Matcher> matchers;
+	
 	private transient Map<Integer, Set<Matcher>> tokensMap;
 	
 	private Matcher[] dfas;
@@ -97,6 +97,11 @@ public class Grammar implements Serializable {
 		this.tokens = builder.tokens;
 		this.dfas = builder.dfas;
 		
+		this.matchers = new ArrayList<>();
+		for(RegularExpression regex : tokens) {
+			matchers.add(regex.toNFA().getMatcher());
+		}
+		
 		printGrammarStatistics();
 	}
 	
@@ -110,24 +115,6 @@ public class Grammar implements Serializable {
 		}		
 		
 		this.tokensMap = new HashMap<>();
-
-		// TODO: this code should be removed later.
-		for(RegularExpression token : tokens) {
-			
-			if(token == Epsilon.getInstance() || token == EOF.getInstance()) {
-				continue;
-			}
-			
-			BitSet bitSet = token.asBitSet();
-			 for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-				Set<Matcher> set = tokensMap.get(i);
-				if(set == null) {
-					set  = new HashSet<>();
-					tokensMap.put(i, set);
-				}
-				set.add(dfas[getTokenID(token)]);
-			 }
-		}
 		
 		return this;
 	}
@@ -315,6 +302,10 @@ public class Grammar implements Serializable {
 		return tokenIDMap.get(s);
 	}
 	
+	public Matcher getMatcher(int index) {
+		return matchers.get(index);
+	}
+	
 	public int getCountTokens() {
 		return tokenIDMap.size() + 2;
 	}
@@ -325,6 +316,10 @@ public class Grammar implements Serializable {
 	
 	public Set<Matcher> getTokensForChar(int c) {
 		return tokensMap.get(c);
+	}
+	
+	public RegularExpression getRegularExpressionById(int index) {
+		return tokens.get(index);
 	}
 	
 	public int getCountLL1Nonterminals() {

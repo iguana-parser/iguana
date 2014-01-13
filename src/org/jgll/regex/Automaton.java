@@ -205,6 +205,10 @@ public class Automaton {
 	
 	public Automaton minimize() {
 		
+		if(!deterministic) {
+			determinize();
+		}
+		
 		if(minimized) {
 			return this;
 		}

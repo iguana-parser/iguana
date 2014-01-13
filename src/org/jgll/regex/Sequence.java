@@ -2,7 +2,6 @@ package org.jgll.regex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +15,6 @@ public class Sequence<T extends RegularExpression> extends AbstractSymbol implem
 
 	private final List<T> regularExpressions;
 	
-	private final BitSet bitSet;
-	
 	public Sequence(List<T> regularExpressions) {
 		super(CollectionsUtil.listToString(regularExpressions, " "));
 		
@@ -25,7 +22,6 @@ public class Sequence<T extends RegularExpression> extends AbstractSymbol implem
 			throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		}
 		this.regularExpressions = regularExpressions;
-		this.bitSet = calculateFirstChars();
 	}
 	
 	@SafeVarargs
@@ -90,23 +86,6 @@ public class Sequence<T extends RegularExpression> extends AbstractSymbol implem
 	
 	public T get(int index) {
 		return regularExpressions.get(index);
-	}
-	
-	private BitSet calculateFirstChars() {
-		BitSet set = new BitSet();
-		for(RegularExpression s : regularExpressions) {
-			set.or(s.asBitSet());
-			
-			if(!s.isNullable()) {
-				break;
-			}
-		}
-		return set;
-	}
-
-	@Override
-	public BitSet asBitSet() {
-		return bitSet;
 	}
 
 	@Override

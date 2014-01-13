@@ -2,7 +2,6 @@ package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.List;
 import java.util.Set;
 
@@ -68,11 +67,6 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 		return alt.equals(other.alt);
 	}
 
-	@Override
-	public BitSet asBitSet() {
-		return alt.asBitSet();
-	}
-	
 	private Automaton createNFA() {
 		State startState = new State();
 		State finalState = new State(true);

@@ -1,7 +1,5 @@
 package org.jgll.regex;
 
-import java.util.BitSet;
-
 import org.jgll.grammar.symbol.AbstractSymbol;
 
 
@@ -26,11 +24,6 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 		return regexp.isNullable();
 	}
 	
-	@Override
-	public BitSet asBitSet() {
-		return regexp.asBitSet();
-	}
-
 	@Override
 	public RegexPlus copy() {
 		return new RegexPlus(regexp.copy());

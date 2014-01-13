@@ -1,7 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.BitSet;
-
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
@@ -31,11 +29,6 @@ public class Epsilon extends AbstractSymbol implements RegularExpression {
 	public Epsilon copy() {
 		return this;
 	}
-
-    @Override
-    public BitSet asBitSet() {
-    	return new BitSet();
-    }
 
     @Override
     public Automaton toNFA() {

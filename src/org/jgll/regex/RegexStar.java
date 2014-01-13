@@ -1,6 +1,5 @@
 package org.jgll.regex;
 
-import java.util.BitSet;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractSymbol;
@@ -49,11 +48,6 @@ public class RegexStar extends AbstractSymbol implements RegularExpression {
 	@Override
 	public boolean isNullable() {
 		return true;
-	}
-
-	@Override
-	public BitSet asBitSet() {
-		return regexp.asBitSet();
 	}
 
 	public RegexStar copy() {

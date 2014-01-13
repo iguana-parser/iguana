@@ -2,7 +2,6 @@ package org.jgll.regex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +15,6 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 
 	private final List<T> regularExpressions;
 	
-	private final BitSet bitSet;
-	
 	public RegexAlt(List<T> regularExpressions) {
 		super("(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")");
 		
@@ -30,7 +27,6 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 		}
 		
 		this.regularExpressions = regularExpressions;
-		this.bitSet = calculateBitSet();
 	}
 	
 	@SafeVarargs
@@ -75,19 +71,6 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 		return false;
 	}
 	
-	private BitSet calculateBitSet() {
-		BitSet set = new BitSet();
-		for(RegularExpression s : regularExpressions) {
-			set.or(s.asBitSet());
-		}
-		return set;
-	}
-
-	@Override
-	public BitSet asBitSet() {
-		return bitSet;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public RegexAlt<T> copy() {

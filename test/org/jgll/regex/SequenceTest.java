@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.util.Input;
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
 import org.junit.Test;
 
 public class SequenceTest {

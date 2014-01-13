@@ -77,11 +77,6 @@ public class Range extends AbstractSymbol implements RegularExpression, Comparab
 		return start == other.start && end == other.end;
 	}
 
-	@Override
-	public BitSet asBitSet() {
-		return testSet;
-	}
-	
 	private Automaton createNFA() {
 		State startState = new State();
 		State finalState = new State(true);

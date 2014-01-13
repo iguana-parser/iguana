@@ -7,14 +7,6 @@ import org.jgll.util.Input;
 
 
 public interface GLLLexer {
-	
-	/**
-	 * Returns the list of available token indices at the 
-	 * given input index, encoded as a BitSet. 
-	 * 
-	 * @param inputIndex the given input index
-	 */
-	public BitSet tokenIDsAt(int inputIndex);
 
 	public List<Integer> tokensAt(int inputIndex, BitSet expectedTokens);
 	

@@ -64,11 +64,6 @@ public class Character extends AbstractSymbol implements RegularExpression {
 	}
 
 	@Override
-	public BitSet asBitSet() {
-		return bitSet;
-	}
-	
-	@Override
 	public Automaton toNFA() {
 		return createNFA();
 	}

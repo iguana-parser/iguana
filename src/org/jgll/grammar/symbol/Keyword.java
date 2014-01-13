@@ -77,11 +77,6 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		return seq.hashCode();
 	}
 	
-	@Override
-	public BitSet asBitSet() {
-		return seq.asBitSet();
-	}
-	
 	private Automaton createNFA() {
 		return seq.toNFA();
 	}
