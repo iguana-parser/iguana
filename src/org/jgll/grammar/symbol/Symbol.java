@@ -25,4 +25,5 @@ public interface Symbol extends Serializable {
 	
 	public Collection<Condition> getConditions();
 	
+	public Symbol copy();
 }

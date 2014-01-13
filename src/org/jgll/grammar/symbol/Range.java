@@ -2,10 +2,8 @@ package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.List;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.State;
@@ -100,14 +98,6 @@ public class Range extends AbstractSymbol implements Terminal, Comparable<Range>
 	@Override
 	public BitSet asBitSet() {
 		return testSet;
-	}
-	
-	@Override
-	public Terminal addConditions(Collection<Condition> conditions) {
-		Range range = new Range(this.start, this.end);
-		range.conditions.addAll(this.conditions);
-		range.conditions.addAll(conditions);
-		return range;
 	}
 	
 	private Automaton createNFA() {

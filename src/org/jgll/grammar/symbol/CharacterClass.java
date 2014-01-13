@@ -3,11 +3,9 @@ package org.jgll.grammar.symbol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
@@ -82,14 +80,6 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 	@Override
 	public BitSet asBitSet() {
 		return alt.asBitSet();
-	}
-	
-	@Override
-	public RegularExpression addConditions(Collection<Condition> conditions) {
-		CharacterClass characterClass = new CharacterClass(this.alt);
-		characterClass.conditions.addAll(this.conditions);
-		characterClass.conditions.addAll(conditions);
-		return characterClass;
 	}
 	
 	private Automaton createNFA() {

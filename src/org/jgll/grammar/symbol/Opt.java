@@ -1,10 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Collection;
-
-import org.jgll.grammar.condition.Condition;
-import org.jgll.util.CollectionsUtil;
-
 public class Opt extends Nonterminal {
 
 	private static final long serialVersionUID = 1L;
@@ -20,17 +15,4 @@ public class Opt extends Nonterminal {
 		return s;
 	}
 	
-	@Override
-	public Opt addConditions(Collection<Condition> conditions) {
-		Opt opt = new Opt(this.s);
-		opt.conditions.addAll(this.conditions);
-		opt.conditions.addAll(conditions);
-		return opt;
-	}
-	
-	@Override
-	public Opt addCondition(Condition condition) {
-		return addConditions(CollectionsUtil.list(condition));
-	}
-
 }

@@ -1,15 +1,10 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Collection;
-
 import org.jgll.grammar.condition.Condition;
-import org.jgll.util.CollectionsUtil;
 
 public class Nonterminal extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
-	
-	private final String name;
 	
 	private final boolean ebnfList;
 	
@@ -25,8 +20,7 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	public Nonterminal(String name, boolean ebnfList, Iterable<Condition> conditions) {
-		super(conditions);
-		this.name = name;
+		super(name, conditions);
 		this.ebnfList = ebnfList;
 	}
 	
@@ -56,19 +50,6 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	@Override
-	public Nonterminal addConditions(Collection<Condition> conditions) {
-		Nonterminal nonterminal = new Nonterminal(this.name);
-		nonterminal.conditions.addAll(this.conditions);
-		nonterminal.conditions.addAll(conditions);
-		return nonterminal;
-	}
-	
-	@Override
-	public Nonterminal addCondition(Condition condition) {
-		return addConditions(CollectionsUtil.list(condition));
-	}
-	
-	@Override
 	public String toString() {
 		return name;
 	}
@@ -91,6 +72,13 @@ public class Nonterminal extends AbstractSymbol {
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+
+	@Override
+	public Symbol copy() {
+		Nonterminal copy = new Nonterminal(name, ebnfList);
+		copy.collapsible = collapsible;
+		return copy;
 	}
 
 }

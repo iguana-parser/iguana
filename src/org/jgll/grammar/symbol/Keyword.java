@@ -2,10 +2,8 @@ package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.List;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;
@@ -92,14 +90,6 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		return seq.hashCode();
 	}
 	
-	@Override
-	public Keyword addConditions(Collection<Condition> conditions) {
-		Keyword keyword = new Keyword(this.name, this.seq);
-		keyword.conditions.addAll(this.conditions);
-		keyword.conditions.addAll(conditions);
-		return keyword;
-	}
-
 	@Override
 	public BitSet asBitSet() {
 		return seq.asBitSet();

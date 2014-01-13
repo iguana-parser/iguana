@@ -1,14 +1,12 @@
 package org.jgll.grammar.symbol;
 
 import java.util.BitSet;
-import java.util.Collection;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 
-public class Epsilon implements Terminal {
+public class Epsilon extends AbstractSymbol implements Terminal {
 
 	private static final String EPSILON = "epsilon";
 	
@@ -50,21 +48,6 @@ public class Epsilon implements Terminal {
 	@Override
 	public BitSet asBitSet() {
 		return new BitSet();
-	}
-
-	@Override
-	public Symbol addConditions(Collection<Condition> condition) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Collection<Condition> getConditions() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Symbol addCondition(Condition condition) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

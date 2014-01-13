@@ -2,10 +2,8 @@ package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.List;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
@@ -86,14 +84,6 @@ public class Character extends AbstractSymbol implements Terminal {
 	@Override
 	public BitSet asBitSet() {
 		return bitSet;
-	}
-
-	@Override
-	public Terminal addConditions(Collection<Condition> conditions) {
-		Character terminal = new Character(this.c);
-		terminal.conditions.addAll(this.conditions);
-		terminal.conditions.addAll(conditions);
-		return terminal;
 	}
 	
 	@Override

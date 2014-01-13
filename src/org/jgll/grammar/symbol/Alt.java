@@ -1,13 +1,11 @@
 package org.jgll.grammar.symbol;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.util.CollectionsUtil;
 
-public class Alt extends Nonterminal {
+public class Alt extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -26,18 +24,10 @@ public class Alt extends Nonterminal {
 	public List<Symbol> getSymbols() {
 		return list;
 	}
-	
+
 	@Override
-	public Alt addConditions(Collection<Condition> conditions) {
-		Alt alt = new Alt(this.list);
-		alt.conditions.addAll(this.conditions);
-		alt.conditions.addAll(conditions);
-		return alt;
-	}
-	
-	@Override
-	public Alt addCondition(Condition condition) {
-		return addConditions(CollectionsUtil.list(condition));
+	public Alt copy() {
+		return null;
 	}
 	
 }
