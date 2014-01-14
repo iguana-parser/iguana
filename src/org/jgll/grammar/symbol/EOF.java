@@ -1,6 +1,10 @@
 package org.jgll.grammar.symbol;
 
-public class EOF extends Character {
+import org.jgll.regex.Automaton;
+import org.jgll.regex.RegularExpression;
+import org.jgll.regex.State;
+
+public class EOF extends AbstractSymbol implements RegularExpression {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -16,14 +20,23 @@ public class EOF extends Character {
 	}
 	
 	private EOF() {
-		// It is assumed that the value 0 is not used as any other visible
-		// unicode character value.
-		super(0);
+		super("$");
 	}
 	
 	@Override
-	public String toString() {
-		return "$";
+	public Automaton toNFA() {
+    	State state = new State(true);
+        return new Automaton(state);
+	}
+
+	@Override
+	public boolean isNullable() {
+		return false;
+	}
+
+	@Override
+	public RegularExpression copy() {
+		return this;
 	}
 	
 

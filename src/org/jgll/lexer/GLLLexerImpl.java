@@ -5,6 +5,7 @@ import java.util.BitSet;
 import java.util.List;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.symbol.EOF;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
@@ -12,8 +13,6 @@ public class GLLLexerImpl implements GLLLexer {
 	private static final int UNMATCHED = -1;
 	private static final int ERROR = -2;
 
-	private BitSet[] tokenIDs;
-	
 	/**
 	 * tokens[inputIndex][tokenID] = length
  	 */
@@ -27,7 +26,6 @@ public class GLLLexerImpl implements GLLLexer {
 		this.input = input;
 		this.grammar = grammar;
 		
-		this.tokenIDs = new BitSet[input.length()];
 		this.tokens = new int[input.length()][grammar.getCountTokens()];
 		
 		for(int i = 0; i < tokens.length; i++) {
@@ -35,20 +33,20 @@ public class GLLLexerImpl implements GLLLexer {
 				tokens[i][j] = UNMATCHED;
 			}
 		}
-		
-		for(int i = 0; i < tokenIDs.length; i++) {
-			tokenIDs[i] = new BitSet();
-		}
-		
 	}
 	
 	@Override
 	public boolean match(int inputIndex, BitSet expectedTokens) {
-		return tokenIDs[inputIndex].intersects(expectedTokens);
+		return !tokensAt(inputIndex, expectedTokens).isEmpty();
 	}
 	
 	@Override
 	public int tokenLengthAt(int inputIndex, int tokenID) {
+		if(tokens[inputIndex][tokenID] == UNMATCHED) {
+			int length = grammar.getMatcher(tokenID).match(input, inputIndex);
+			tokens[inputIndex][tokenID] = length;
+			return length;
+		}
 		return tokens[inputIndex][tokenID];
 	}
 	
@@ -57,7 +55,13 @@ public class GLLLexerImpl implements GLLLexer {
 		
 		List<Integer> list = new ArrayList<>();
 		
-		for (int tokenID = expectedTokens.nextSetBit(0); tokenID >= 0; tokenID = expectedTokens.nextSetBit(tokenID+1)) {
+		for(int tokenID = expectedTokens.nextSetBit(0); tokenID >= 0; tokenID = expectedTokens.nextSetBit(tokenID+1)) {
+			
+			if(tokenID == EOF.TOKEN_ID && inputIndex == input.length()) {
+				list.add(1);
+				continue;
+			}
+			
 			if(tokens[inputIndex][tokenID] == ERROR) {
 				continue;
 			}

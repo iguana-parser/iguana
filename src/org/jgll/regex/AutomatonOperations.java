@@ -82,6 +82,13 @@ public class AutomatonOperations {
 	}
 	
 	public static Matcher createDFA(Automaton nfa) {
+		
+		int[] intervals = nfa.getIntervals();
+		
+		if(intervals.length == 0) {
+			return new TrueMatcher();
+		}
+		
 		int statesCount = nfa.getCountStates();
 		int inputLength = nfa.getIntervals().length;
 		int[][] transitionTable = new int[statesCount][inputLength];
@@ -103,11 +110,10 @@ public class AutomatonOperations {
 			}
 		}
 
-		int[] intervals = nfa.getIntervals();
 		if(intervals[intervals.length - 1] - intervals[0] > Character.MAX_VALUE) {
-			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), nfa.getIntervals());					
+			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals);					
 		} else {
-			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), nfa.getIntervals());
+			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals);
 		}
 	}
 	
