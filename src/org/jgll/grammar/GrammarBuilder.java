@@ -160,15 +160,7 @@ public class GrammarBuilder implements Serializable {
 			public void visit(NonterminalGrammarSlot slot) {
 				if (slot.getNonterminal().getAlternates().size() == 0) {
 					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal());
-				}
-				
-				if(slot.getNonterminal().isLL1()) {
-					for(Entry<Integer, Alternate> e : slot.getNonterminal().getLL1Map().entrySet()) {
-						if(e.getValue() == null) {
-							throw new GrammarValidationException("LL1 map is empty: " + slot.getNonterminal());
-						}
-					}
-				}
+				}				
 			}
 
 			@Override
@@ -367,6 +359,8 @@ public class GrammarBuilder implements Serializable {
 		GrammarProperties.setNullableHeads(nonterminals);
 		GrammarProperties.setPredictionSets(nonterminals);
 		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
+
+		GrammarProperties.setAlternateMaps(nonterminals, tokens.size());
 		
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals);
 		

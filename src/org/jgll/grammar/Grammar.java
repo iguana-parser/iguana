@@ -325,7 +325,7 @@ public class Grammar implements Serializable {
 	public int getCountLL1Nonterminals() {
 		int count = 0;
 		for(HeadGrammarSlot head : nonterminals) {
-			if(head.isLL1()) {
+			if(head.isLl1SubGrammar()) {
 				count++;
 			}
 		}

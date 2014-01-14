@@ -1,4 +1,3 @@
-
 package org.jgll.grammar.slot;
 
 import java.io.IOException;
@@ -46,10 +45,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private BitSet predictionSet;
 	
-	private boolean ll1;
+	/**
+	 * A map from each token to the set of alternates that can start with that token
+	 */
+	private BodyGrammarSlot[][] alternatesMap;
 	
-	private Map<Integer, Alternate> ll1Map = new HashMap<>();
-
 	private boolean ll1SubGrammar;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
@@ -123,26 +123,64 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.predictionSet = predictionSet;
 	}
 	
+	public void createAlternateMaps(int tokensCount) {
+		Map<Integer, Set<BodyGrammarSlot>> map = new HashMap<>();
+		for(Alternate alternate : alternates) {
+			BitSet bs = alternate.getFirstSlot().getPredictionSet();
+			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+				Set<BodyGrammarSlot> set = map.get(i);
+				if(set == null) {
+					set = new HashSet<>();
+					map.put(i, set);
+				}
+				set.add(alternate.getFirstSlot());
+				map.put(i, set);
+			}
+		}
+		
+		alternatesMap = new BodyGrammarSlot[tokensCount][];
+		for(int i = 0; i < alternatesMap.length; i++) {
+			Set<BodyGrammarSlot> set = map.get(i);
+
+			if(set == null) {
+				alternatesMap[i] = new BodyGrammarSlot[0];
+			} else {
+				int j = 0;
+				alternatesMap[i] = new BodyGrammarSlot[set.size()];
+				for(BodyGrammarSlot slot : set) {
+					alternatesMap[i][j++] = slot;
+				}
+			}
+			
+		}
+	}
+	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
+				
+		List<Integer> tokens = lexer.tokensAt(ci, this.predictionSet);
 		
-		if(parser.isLLOptimizationEnabled() && ll1) {
-			List<Integer> tokensAt = lexer.tokensAt(ci, this.predictionSet);
-			if(tokensAt.size() == 1) {
-				Alternate alternate = ll1Map.get(tokensAt.get(0));
+		if(tokens.size() == 0) {
+			return null;
+		} 
+		else if(tokens.size() == 1) {
+			BodyGrammarSlot[] slots = alternatesMap[tokens.get(0)];
+			if(slots.length == 1) {
+				BodyGrammarSlot slot = slots[0];
 				parser.setCurrentSPPFNode(DummyNode.getInstance());
-				return alternate.getFirstSlot().parse(parser, lexer);				
+				return slot.parse(parser, lexer);				
+			}
+		}
+		else {
+			for(Integer i : tokens) {
+				for(BodyGrammarSlot slot : alternatesMap[i]) {
+					parser.addDescriptor(slot);
+				}
 			}
 		}
 		
-		for(Alternate alternate : alternates) {
-			BodyGrammarSlot slot = alternate.getFirstSlot();
-			if(slot.test(ci, lexer)) {
-				parser.addDescriptor(slot);
-			}
-		}
 		return null;
 	}
 	
@@ -150,7 +188,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		List<Integer> tokensAt = lexer.tokensAt(ci, this.predictionSet);
-		Alternate alternate = ll1Map.get(tokensAt.get(0));
+		Alternate alternate = null;
 		
 		assert alternate != null;
 		
@@ -194,70 +232,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		return ntNode;
 	}
-
-	public void setLL1() {
-		calculateLL1();
-		calculateLL1Map();
-		ll1 = isLL1();
-		ll1Map = getLL1Map();
-	}
-	
-	public void setSubGrammarLL1(boolean ll1SubGrammar) {
-		this.ll1SubGrammar = ll1SubGrammar;
-	}
-	
-	private void calculateLL1() {
-		
-		if(alternates.size() == 1) {
-			ll1 = true;
-		}
-		
-		for(Alternate alt1 : alternates) {
-			for(Alternate alt2 : alternates) {
-				if(!alt1.equals(alt2)) {
-					if(alt1.getFirstSlot().getPredictionSet().intersects(alt2.getFirstSlot().getPredictionSet())) {
-						ll1 = false;
-						return;
-					}
-				}
-			}
-		}
-		ll1 = true;
-	}
-	
-	private void calculateLL1Map() {
-		ll1Map = new HashMap<>();
-		
-		if(!ll1) {
-			return;
-		}
-		
-		for(Alternate alt : alternates) {
-			BitSet bs = alt.getFirstSlot().getPredictionSet();
-			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-				ll1Map.put(i, alt);
-			}
-		}
-	}
-	
-	public boolean isLL1() {
-		return ll1;
-	}
 	
 	public boolean isLl1SubGrammar() {
 		return ll1SubGrammar;
 	}
 	
-	public boolean isLL(int k) {
-		if(k == 1) {
-			return isLL1();
-		} else {
-			throw new UnsupportedOperationException();
-		}
-	}
-	
-	public Map<Integer, Alternate> getLL1Map() {
-		return ll1Map;
+	public void setLl1SubGrammar(boolean ll1SubGrammar) {
+		this.ll1SubGrammar = ll1SubGrammar;
 	}
 	
 	@Override

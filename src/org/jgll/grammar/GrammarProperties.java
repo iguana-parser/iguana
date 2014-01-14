@@ -187,7 +187,14 @@ public class GrammarProperties {
 		}
 	}
 	
+	public static void setAlternateMaps(Iterable<HeadGrammarSlot> nonterminals, int tokensCount) {
+		for (HeadGrammarSlot head : nonterminals) {
+			head.createAlternateMaps(tokensCount);
+		}
+	}
+	
 	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals) {
+		
 		for (HeadGrammarSlot head : nonterminals) {
 			
 			// Setting the prediction set for the head grammar slot
@@ -257,25 +264,7 @@ public class GrammarProperties {
 	
 	public static void setLLProperties(Iterable<HeadGrammarSlot> nonterminals, 
 									   Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph) {
-		
-		for (HeadGrammarSlot head : nonterminals) {
-			head.setLL1();
-		}
-		
-		for (HeadGrammarSlot head : nonterminals) {
-			boolean ll1subGrammar = true;
-			if(head.isLL1()) {
-				for(HeadGrammarSlot reachableHead : reachabilityGraph.get(head)) {
-					if(!reachableHead.isLL1()) {
-						ll1subGrammar = false;
-					}
-				}
-			} else {
-				ll1subGrammar = false;
-			}
-			
-			head.setSubGrammarLL1(ll1subGrammar);
-		}
+		//TODO : implement this method
 	}
 	
 	/**

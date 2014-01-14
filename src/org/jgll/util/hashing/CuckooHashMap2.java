@@ -15,7 +15,7 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  * @author Ali Afroozeh
  *
  */
-public class CuckooHashMap2<K, V> implements Serializable {
+public class CuckooHashMap2<K, V> implements IguanaMap<K, V>, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -111,6 +111,7 @@ public class CuckooHashMap2<K, V> implements Serializable {
 		function2 = HashFunctions.murmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
 	}
 	
+	@Override
 	public boolean containsKey(K key) {
 		return get(key) != null;
 	}
@@ -123,7 +124,7 @@ public class CuckooHashMap2<K, V> implements Serializable {
 	 * 
 	 * @return null if no element matching the given key is found.
 	 */
-
+	@Override
 	public V get(K k) {
 	
 		int index = indexFor(externalHasher.hash(k, function1));
@@ -181,6 +182,7 @@ public class CuckooHashMap2<K, V> implements Serializable {
 	 * @return A reference to the old key stored in the set if the key was in 
 	 *         the set, otherwise returns null. 
 	 */
+	@Override
 	public V put(K k, V v) {
 		
 		if(size >= threshold) {
@@ -365,18 +367,22 @@ public class CuckooHashMap2<K, V> implements Serializable {
 		rehash();
 	}
 	
+	@Override
 	public int size() {
 		return size;
 	}
-	
+
+	@Override
 	public int getInitialCapacity() {
 		return initialCapacity;
 	}
 	
+	@Override
 	public int getCapacity() {
 		return capacity;
 	}
 	
+	@Override
 	public int getRehashCount() {
 		return rehashCount;
 	}
@@ -389,6 +395,7 @@ public class CuckooHashMap2<K, V> implements Serializable {
 		return hash & (tableSize - 1);
 	}
 	
+	@Override
 	public boolean isEmpty() {
 		return size == 0;
 	}
@@ -434,6 +441,7 @@ public class CuckooHashMap2<K, V> implements Serializable {
 		};
 	}
 	
+	@Override
 	public void clear() {
 		for(int i = 0; i < table1.length; i++) {
 			table1[i] = null;
