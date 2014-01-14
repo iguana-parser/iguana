@@ -799,4 +799,30 @@ public class AutomatonOperations {
 	}
 	
 	
+	/**
+	 * Returns true if there is a sentence accepted by the automaton a1 which is is a prefix of
+	 * a sentence accepted by the automaton a2. 
+	 */
+	public static boolean prefix(final Automaton a1, final Automaton a2) {
+		Automaton copy = makeAllStatesFinal(a2);
+		return !copy.intersection(a1).isLanguageEmpty();
+	}
+	
+	/**
+	 * Returns a copy of the given automaton where all its states are set to final. 
+	 */
+	private static Automaton makeAllStatesFinal(final Automaton a) {
+		
+		Automaton copy = a.copy();
+		
+		AutomatonVisitor.visit(copy, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				state.setFinalState(true);
+			}
+		});
+		
+		return copy;
+	}
 }

@@ -2,13 +2,14 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.symbol.Keyword;
 import org.jgll.util.Input;
 import org.junit.Test;
 
 public class IntersectionTest {
 
 	@Test
-	public void test() {
+	public void test1() {
 		
 		State x0 = new State();
 		State x1 = new State(true);
@@ -37,4 +38,22 @@ public class IntersectionTest {
 		assertFalse(a1.isLanguageEmpty());
 		assertTrue(a1.getMatcher().match(Input.fromString("111001110001")));
 	}
+	
+	@Test
+	public void test2() {
+		RegularExpression f = RegularExpressionExamples.getFloat();
+		RegularExpression id = RegularExpressionExamples.getId();
+		
+		// Should not overlap, therefore the intersection should be empty.
+		assertTrue(f.toNFA().intersection(id.toNFA()).isLanguageEmpty());
+	}
+	
+	@Test
+	public void test3() {
+		Keyword k1 = new Keyword("for");
+		Keyword k2 = new Keyword("forall");
+
+		assertTrue(AutomatonOperations.prefix(k1.toNFA(), k2.toNFA()));
+	}
+	
 }
