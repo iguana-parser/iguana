@@ -165,23 +165,31 @@ public class HeadGrammarSlot extends GrammarSlot {
 		if(tokens.size() == 0) {
 			return null;
 		} 
-		else if(tokens.size() == 1) {
-			BodyGrammarSlot[] slots = alternatesMap[tokens.get(0)];
-			if(slots.length == 1) {
-				BodyGrammarSlot slot = slots[0];
-				parser.setCurrentSPPFNode(DummyNode.getInstance());
-				return slot.parse(parser, lexer);				
-			}
+
+		// Don't create the descriptor and jump to the beginning of the slot
+		if(isOnlyOneTokenMatches(tokens)) {
+			BodyGrammarSlot slot = alternatesMap[tokens.get(0)][0];
+			parser.setCurrentSPPFNode(DummyNode.getInstance());
+			return slot.parse(parser, lexer);				
 		}
-		else {
-			for(Integer i : tokens) {
-				for(BodyGrammarSlot slot : alternatesMap[i]) {
-					parser.addDescriptor(slot);
-				}
+		
+		for(Integer i : tokens) {
+			for(BodyGrammarSlot slot : alternatesMap[i]) {
+				parser.addDescriptor(slot);
 			}
 		}
 		
 		return null;
+	}
+	
+	private boolean isOnlyOneTokenMatches(List<Integer> tokens) {
+		if(tokens.size() == 1) {
+			BodyGrammarSlot[] slots = alternatesMap[tokens.get(0)];
+			if(slots.length == 1) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override
