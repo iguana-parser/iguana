@@ -85,7 +85,7 @@ public class Range extends AbstractSymbol implements RegularExpression, Comparab
 	}
 
 	@Override
-	public Automaton toNFA() {
+	public Automaton toAutomaton() {
 		return createNFA();
 	}
 

@@ -11,7 +11,7 @@ public class OptTest {
 	@Test
 	public void test() {
 		RegularExpression regexp = new RegexOpt(new Character('a'));
-		Automaton nfa = regexp.toNFA();
+		Automaton nfa = regexp.toAutomaton();
 		assertEquals(4, nfa.getCountStates());
 
 		Matcher dfa = nfa.getMatcher();

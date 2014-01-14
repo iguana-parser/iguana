@@ -140,7 +140,7 @@ public class GrammarBuilder implements Serializable {
 				continue;
 			}
 			
-			Matcher dfa = regex.toNFA().getMatcher();
+			Matcher dfa = regex.toAutomaton().getMatcher();
 			Integer id = tokenIDMap.get(regex);
 			dfa.setId(id);
 			dfas[id] = dfa;

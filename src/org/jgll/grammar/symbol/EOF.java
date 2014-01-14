@@ -24,7 +24,7 @@ public class EOF extends AbstractSymbol implements RegularExpression {
 	}
 	
 	@Override
-	public Automaton toNFA() {
+	public Automaton toAutomaton() {
     	State state = new State(true);
         return new Automaton(state);
 	}

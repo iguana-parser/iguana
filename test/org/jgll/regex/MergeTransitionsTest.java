@@ -12,7 +12,7 @@ public class MergeTransitionsTest {
 	@Test
 	public void test() {
 		RegularExpression regexp = new CharacterClass(Range.in('0', '4'), Range.in('5', '7'), Range.in('8', '9'));
-		Automaton a = mergeTransitions(minimize(regexp.toNFA().determinize()));
+		Automaton a = mergeTransitions(minimize(regexp.toAutomaton().determinize()));
 		assertEquals(a, getAutomaton());
 	}
 	

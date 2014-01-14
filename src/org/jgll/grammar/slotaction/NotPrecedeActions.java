@@ -17,7 +17,7 @@ public class NotPrecedeActions {
 		
 		log.debug("Precede restriction added %s <<! %s", regex, slot);
 		
-		final Matcher matcher = regex.toNFA().reverse().getMatcher();
+		final Matcher matcher = regex.toAutomaton().reverse().getMatcher();
 
 		slot.addPreCondition(new SlotAction<Boolean>() {
 			

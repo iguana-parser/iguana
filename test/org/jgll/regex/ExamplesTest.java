@@ -12,7 +12,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testId() {
-		Automaton nfa = RegularExpressionExamples.getId().toNFA();
+		Automaton nfa = RegularExpressionExamples.getId().toAutomaton();
 		
 		Matcher matcher = nfa.getMatcher();
 
@@ -26,15 +26,15 @@ public class ExamplesTest {
 	
 	@Test
 	public void testIntersectionKeywordId() {
-		Automaton idAutomaton = RegularExpressionExamples.getId().toNFA().determinize();
-		Automaton forAutomaton = new Keyword("for").toNFA().determinize();
+		Automaton idAutomaton = RegularExpressionExamples.getId().toAutomaton().determinize();
+		Automaton forAutomaton = new Keyword("for").toAutomaton().determinize();
 		
 		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
 	}
 	
 	@Test
 	public void testFloat() {
-		Automaton nfa = RegularExpressionExamples.getFloat().toNFA();
+		Automaton nfa = RegularExpressionExamples.getFloat().toAutomaton();
 		
 		Matcher matcher = nfa.getMatcher();
 
@@ -50,14 +50,14 @@ public class ExamplesTest {
 	
 	@Test
 	public void testJavaUnicodeEscape() {
-		Automaton nfa = RegularExpressionExamples.getJavaUnicodeEscape().toNFA();
+		Automaton nfa = RegularExpressionExamples.getJavaUnicodeEscape().toAutomaton();
 		Matcher dfa = nfa.getMatcher();
 		assertTrue(dfa.match(Input.fromString("\\u0123")));		
 	}
 	
 	@Test
 	public void testCharacter() {
-		Automaton nfa = RegularExpressionExamples.getCharacter().toNFA();
+		Automaton nfa = RegularExpressionExamples.getCharacter().toAutomaton();
 		Matcher matcher = nfa.getMatcher();
 		
 		assertTrue(matcher.match(Input.fromString("'ab'")));
@@ -65,7 +65,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testStringPart() {
-		Automaton nfa = RegularExpressionExamples.getStringPart().toNFA();
+		Automaton nfa = RegularExpressionExamples.getStringPart().toAutomaton();
 		Matcher matcher = nfa.getMatcher();
 		
 		assertTrue(matcher.match(Input.fromString("abcd")));

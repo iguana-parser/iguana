@@ -64,7 +64,7 @@ public class Character extends AbstractSymbol implements RegularExpression {
 	}
 
 	@Override
-	public Automaton toNFA() {
+	public Automaton toAutomaton() {
 		return createNFA();
 	}
 	

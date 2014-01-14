@@ -72,7 +72,7 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 		State finalState = new State(true);
 		
 		for(Range range : alt) {
-			Automaton nfa = range.toNFA();
+			Automaton nfa = range.toAutomaton();
 			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 			
 			Set<State> finalStates = nfa.getFinalStates();
@@ -86,7 +86,7 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 	}
 	
 	@Override
-	public Automaton toNFA() {
+	public Automaton toAutomaton() {
 		return createNFA();
 	}
 

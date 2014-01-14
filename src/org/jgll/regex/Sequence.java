@@ -34,7 +34,7 @@ public class Sequence<T extends RegularExpression> extends AbstractSymbol implem
 	}
 
 	@Override
-	public Automaton toNFA() {
+	public Automaton toAutomaton() {
 		return createNFA();
 	}
 	
@@ -44,7 +44,7 @@ public class Sequence<T extends RegularExpression> extends AbstractSymbol implem
 
 		Automaton[] nfas = new Automaton[regularExpressions.size()];
 		for(int i = 0; i < regularExpressions.size(); i++) {
-			nfas[i] = regularExpressions.get(i).toNFA();
+			nfas[i] = regularExpressions.get(i).toAutomaton();
 		}
 		
 		startState.addTransition(Transition.emptyTransition(nfas[0].getStartState()));

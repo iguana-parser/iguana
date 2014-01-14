@@ -13,7 +13,7 @@ public class StarTest {
 	@Test
 	public void test1() {
 		RegularExpression regexp = new RegexStar(new Character('a'));
-		Automaton nfa = regexp.toNFA();
+		Automaton nfa = regexp.toAutomaton();
 				
 		assertEquals(4, nfa.getCountStates());
 		
@@ -34,7 +34,7 @@ public class StarTest {
 	@Test
 	public void test2() {
 		RegularExpression regexp = new RegexStar(new Sequence<>(new RegexPlus(new CharacterClass(new Range('a', 'a')))));
-		Automaton nfa = regexp.toNFA();
+		Automaton nfa = regexp.toAutomaton();
 		
 		Matcher matcher = nfa.getMatcher();
 		

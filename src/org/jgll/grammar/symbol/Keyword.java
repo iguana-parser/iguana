@@ -78,11 +78,11 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 	}
 	
 	private Automaton createNFA() {
-		return seq.toNFA();
+		return seq.toAutomaton();
 	}
 	
 	@Override
-	public Automaton toNFA() {
+	public Automaton toAutomaton() {
 		return createNFA();
 	}
 

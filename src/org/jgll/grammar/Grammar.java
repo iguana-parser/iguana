@@ -99,7 +99,7 @@ public class Grammar implements Serializable {
 		
 		this.matchers = new ArrayList<>();
 		for(RegularExpression regex : tokens) {
-			matchers.add(regex.toNFA().getMatcher());
+			matchers.add(regex.toAutomaton().getMatcher());
 		}
 		
 		printGrammarStatistics();

@@ -50,7 +50,7 @@ public class NotFollowActions {
 	
 	public static void fromRegularExpression(BodyGrammarSlot slot, final RegularExpression regex, final Condition condition) {
 		
-		final Matcher matcher = regex.toNFA().getMatcher();
+		final Matcher matcher = regex.toAutomaton().getMatcher();
 		
 		slot.addPopAction(new SlotAction<Boolean>() {
 			

@@ -15,8 +15,8 @@ public class RegexPlus extends AbstractSymbol implements RegularExpression {
 	}
 	
 	@Override
-	public Automaton toNFA() {
-		return regexp.toNFA();
+	public Automaton toAutomaton() {
+		return regexp.toAutomaton();
 	}
 	
 	@Override

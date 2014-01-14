@@ -39,7 +39,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 	}
 
 	@Override
-	public Automaton toNFA() {
+	public Automaton toAutomaton() {
 		return createNFA();
 	}
 	
@@ -48,7 +48,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 		State finalState = new State(true);
 		
 		for(RegularExpression regexp : regularExpressions) {
-			Automaton nfa = regexp.toNFA();
+			Automaton nfa = regexp.toAutomaton();
 			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 			
 			Set<State> finalStates = nfa.getFinalStates();

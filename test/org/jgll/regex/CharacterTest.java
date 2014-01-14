@@ -11,7 +11,7 @@ public class CharacterTest {
 	@Test
 	public void test() {
 		RegularExpression regexp = new Character('a');
-		Automaton nfa = regexp.toNFA();
+		Automaton nfa = regexp.toAutomaton();
 		Matcher dfa = nfa.getMatcher();
 		assertEquals(2, nfa.getCountStates());
 		assertTrue(dfa.match(Input.fromString("a")));

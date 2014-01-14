@@ -12,7 +12,7 @@ public class SequenceTest {
 	@Test
 	public void test1() {
 		RegularExpression regexp = new Sequence<>(new Character('a'), new Character('b'));
-		Automaton nfa = regexp.toNFA();
+		Automaton nfa = regexp.toAutomaton();
 
 		assertEquals(6, nfa.getCountStates());
 
@@ -27,7 +27,7 @@ public class SequenceTest {
 	@Test
 	public void test2() {
 		RegularExpression regexp = new Sequence<>(new Range('a', 'z'), new Range('0', '9'));
-		Automaton nfa = regexp.toNFA();
+		Automaton nfa = regexp.toAutomaton();
 
 		assertEquals(6, nfa.getCountStates());
 
@@ -50,7 +50,7 @@ public class SequenceTest {
 	@Test
 	public void test3() {
 		RegularExpression regexp = new Sequence<>(new Range('a', 'z'), new Range('b', 'm'));
-		Automaton nfa = regexp.toNFA();
+		Automaton nfa = regexp.toAutomaton();
 		
 		Matcher matcher = nfa.getMatcher();
 		assertTrue(matcher.match(Input.fromString("dm")));

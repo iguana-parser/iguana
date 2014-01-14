@@ -31,7 +31,7 @@ public class Epsilon extends AbstractSymbol implements RegularExpression {
 	}
 
     @Override
-    public Automaton toNFA() {
+    public Automaton toAutomaton() {
         return createNFA();
     }
     

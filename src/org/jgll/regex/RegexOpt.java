@@ -17,7 +17,7 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 	}
 	
 	@Override
-	public Automaton toNFA() {
+	public Automaton toAutomaton() {
 		return createNFA();
 	}
 	
@@ -29,7 +29,7 @@ public class RegexOpt extends AbstractSymbol implements RegularExpression {
 		State startState = new State();
 		State finalState = new State(true);
 		
-		Automaton nfa = regexp.toNFA();
+		Automaton nfa = regexp.toAutomaton();
 		startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 		
 		Set<State> finalStates = nfa.getFinalStates();
