@@ -4,8 +4,18 @@ import org.jgll.util.Input;
 
 public interface Matcher {
 	
+	/**
+	 * Indicates whether the complete given input can be matched. 
+	 */
 	public boolean match(Input input);
 	
+	/**
+	 * Returns the length of the longest match from the given input index.
+	 * 
+	 * @param input
+	 * @param inputIndex
+	 * @return
+	 */
 	public int match(Input input, int inputIndex);
 	
 	/**
@@ -20,5 +30,4 @@ public interface Matcher {
 	public int getId();
 	
 	public void setId(int id);
-
 }

@@ -11,6 +11,8 @@ public interface GLLLexer {
 	public List<Integer> tokensAt(int inputIndex, BitSet expectedTokens);
 	
 	/**
+	 * Matches the input from the given input index using the set of expected tokens.
+	 * 
 	 * @param inputIndex
 	 * @param expectedTokens
 	 * 

@@ -21,9 +21,9 @@ public class CuckooHashMapTest {
 	
 	@Test
 	public void testInsertOneMillionEntries() {
-		CuckooHashMap<Integer, Integer> map = new CuckooHashMap<>(IntegerExternalHasher.getInstance());
+		CuckooHashMap2<Integer, Integer> map = new CuckooHashMap2<>(IntegerExternalHasher.getInstance());
 		Random rand = RandomUtil.random;
-		for(int i = 0; i < 1000000; i++) {
+		for(int i = 0; i < 10000000; i++) {
 			int key = rand.nextInt(Integer.MAX_VALUE);
 			int value = rand.nextInt(Integer.MAX_VALUE);
 			while(map.get(key) != null) {
