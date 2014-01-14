@@ -14,7 +14,7 @@ public interface GLLLexer {
 	 * @param inputIndex
 	 * @param expectedTokens
 	 * 
-	 * @return true if at least one of the expected tokens matches at the given input index.
+	 * @return true if at least one of the expected tokens matches the input at the given index.
 	 */
 	public boolean match(int inputIndex, BitSet expectedTokens);
 	

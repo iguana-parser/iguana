@@ -135,7 +135,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 				parser.setCurrentSPPFNode(DummyNode.getInstance());
 				return alternate.getFirstSlot().parse(parser, lexer);				
 			}
-		} 
+		}
 		
 		for(Alternate alternate : alternates) {
 			BodyGrammarSlot slot = alternate.getFirstSlot();

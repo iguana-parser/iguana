@@ -111,7 +111,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	}
 	
 	public boolean test(int inputIndex, GLLLexer lexer) {
-		return !lexer.tokensAt(inputIndex, predictionSet).isEmpty();
+		return lexer.match(inputIndex, predictionSet);
 	}
 	
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;

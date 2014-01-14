@@ -37,7 +37,28 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	@Override
 	public boolean match(int inputIndex, BitSet expectedTokens) {
-		return !tokensAt(inputIndex, expectedTokens).isEmpty();
+		
+		for(int tokenID = expectedTokens.nextSetBit(0); tokenID >= 0; tokenID = expectedTokens.nextSetBit(tokenID+1)) {
+			
+			if(tokenID == EOF.TOKEN_ID && inputIndex == input.length()) {
+				return true;
+			}
+			
+			if(tokens[inputIndex][tokenID] == ERROR) {
+				continue;
+			}
+			else if(tokens[inputIndex][tokenID] == UNMATCHED) {
+				int length = grammar.getMatcher(tokenID).match(input, inputIndex);
+				if(length >= 0) {
+					tokens[inputIndex][tokenID] = length;
+					return true;
+				}
+			} else {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	@Override
