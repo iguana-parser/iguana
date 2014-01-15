@@ -76,12 +76,13 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	@Override
-	public List<Integer> tokensAt(int inputIndex, BitSet expectedTokens) {
+	public List<Integer> tokensAt(int inputIndex, int[] expectedTokens) {
 		
 		List<Integer> list = new ArrayList<>();
 		
-		for(int tokenID = expectedTokens.nextSetBit(0); tokenID >= 0; tokenID = expectedTokens.nextSetBit(tokenID+1)) {
-			
+		for(int i = 0; i < expectedTokens.length; i++) {
+			int tokenID = expectedTokens[i];
+
 			// EOF only matches at the end of the file
 			if(tokenID == EOF.TOKEN_ID) {
 				if(input.charAt(inputIndex) == 0) {

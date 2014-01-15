@@ -17,7 +17,6 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -46,7 +45,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private BitSet followSet;
 	
-	private BitSet predictionSet;
+	private int[] predictionSet;
 	
 	/**
 	 * A map from each token to the set of alternates that can start with that token
@@ -122,8 +121,12 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.nullable = nullable;
 	}
 
-	public void setPredictionSet(BitSet predictionSet) {
-		this.predictionSet = predictionSet;
+	public void setPredictionSet(BitSet set) {
+		predictionSet = new int[set.cardinality()];
+		int j = 0;
+		 for (int i = set.nextSetBit(0); i >= 0; i = set.nextSetBit(i+1)) {
+			predictionSet[j++] = i;
+		}
 	}
 	
 	public void createAlternateMaps(int tokensCount) {
@@ -172,11 +175,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 		} 
 
 		// Don't create the descriptor and jump to the beginning of the slot
-		if(isLL1()) {
-			BodyGrammarSlot slot = alternatesMap[tokens.get(0)][0];
-			parser.setCurrentSPPFNode(DummyNode.getInstance());
-			return slot.parse(parser, lexer);				
-		}
+//		if(isLL1()) {
+//			BodyGrammarSlot slot = alternatesMap[tokens.get(0)][0];
+//			parser.setCurrentSPPFNode(DummyNode.getInstance());
+//			return slot.parse(parser, lexer);				
+//		}
 		
 		for(Integer i : tokens) {
 			for(BodyGrammarSlot slot : alternatesMap[i]) {
@@ -344,7 +347,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return alternates.size();
 	}
 	
-	public BitSet getPredictionSet() {
+	public int[] getPredictionSet() {
 		return predictionSet;
 	}
 	

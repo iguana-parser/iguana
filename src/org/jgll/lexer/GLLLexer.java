@@ -8,7 +8,7 @@ import org.jgll.util.Input;
 
 public interface GLLLexer {
 
-	public List<Integer> tokensAt(int inputIndex, BitSet expectedTokens);
+	public List<Integer> tokensAt(int inputIndex, int[] expectedTokens);
 	
 	/**
 	 * Matches the input from the given input index using the set of expected tokens.

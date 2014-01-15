@@ -57,8 +57,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer input) {
 		
-		int ci = parser.getCurrentInputIndex();
-		
 //		if(!test(ci, input)) {
 //			parser.recordParseError(this);
 //			return null;						
