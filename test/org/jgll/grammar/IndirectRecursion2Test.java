@@ -60,7 +60,7 @@ public class IndirectRecursion2Test {
 	}
 	
 	@Test
-	public void testRDParser() throws ParseError {
+	public void testParser() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("ad"), grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}

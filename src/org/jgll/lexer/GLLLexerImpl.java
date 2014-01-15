@@ -40,8 +40,11 @@ public class GLLLexerImpl implements GLLLexer {
 		
 		for(int tokenID = expectedTokens.nextSetBit(0); tokenID >= 0; tokenID = expectedTokens.nextSetBit(tokenID+1)) {
 			
-			if(tokenID == EOF.TOKEN_ID && inputIndex == input.length()) {
-				return true;
+			if(tokenID == EOF.TOKEN_ID) {
+				if(input.charAt(inputIndex) == 0) {
+					return true;
+				}
+				continue;
 			}
 			
 			if(tokens[inputIndex][tokenID] == ERROR) {
@@ -78,8 +81,11 @@ public class GLLLexerImpl implements GLLLexer {
 		
 		for(int tokenID = expectedTokens.nextSetBit(0); tokenID >= 0; tokenID = expectedTokens.nextSetBit(tokenID+1)) {
 			
-			if(tokenID == EOF.TOKEN_ID && inputIndex == input.length()) {
-				list.add(1);
+			// EOF only matches at the end of the file
+			if(tokenID == EOF.TOKEN_ID) {
+				if(input.charAt(inputIndex) == 0) {
+					list.add(EOF.TOKEN_ID);
+				}
 				continue;
 			}
 			

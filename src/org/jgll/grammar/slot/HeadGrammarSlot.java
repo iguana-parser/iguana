@@ -169,7 +169,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		} 
 
 		// Don't create the descriptor and jump to the beginning of the slot
-		if(isOnlyOneTokenMatches(tokens)) {
+		if(isLL1()) {
 			BodyGrammarSlot slot = alternatesMap[tokens.get(0)][0];
 			parser.setCurrentSPPFNode(DummyNode.getInstance());
 			return slot.parse(parser, lexer);				
@@ -184,27 +184,14 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return null;
 	}
 	
-	private boolean isOnlyOneTokenMatches(List<Integer> tokens) {
-		if(tokens.size() == 1) {
-			BodyGrammarSlot[] slots = alternatesMap[tokens.get(0)];
-			if(slots.length == 1) {
-				return true;
-			}
-		}
-		return false;
-	}
 	
 	@Override
 	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
-		List<Integer> tokensAt = lexer.tokensAt(ci, this.predictionSet);
-		Alternate alternate = null;
-		
-		assert alternate != null;
 		
 		List<SPPFNode> children = new ArrayList<>();
 		
-		BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+		BodyGrammarSlot currentSlot = alternatesMap[lexer.tokensAt(ci, this.predictionSet).get(0)][0];
 		
 		while(!(currentSlot instanceof LastGrammarSlot)) {
 			SPPFNode node = currentSlot.parseLL1(parser, lexer);

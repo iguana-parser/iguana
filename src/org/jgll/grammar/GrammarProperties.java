@@ -305,6 +305,12 @@ public class GrammarProperties {
 					
 					 for (int i = set1.nextSetBit(0); i >= 0; i = set1.nextSetBit(i+1)) {
 						 for (int j = set2.nextSetBit(0); j >= 0; j = set2.nextSetBit(j+1)) {
+							 
+							 // the automaton for EOF is a subset of any dfa, so skip it.
+							 if(i == EOF || j == EOF) {
+								 continue;
+							 }
+							 
 							 if(i != j) {
 								 if(AutomatonOperations.prefix(automatonMap[i], automatonMap[j]) ||
 									AutomatonOperations.prefix(automatonMap[j], automatonMap[i])) {
