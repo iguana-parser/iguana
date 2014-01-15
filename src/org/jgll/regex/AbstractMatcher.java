@@ -49,8 +49,9 @@ public abstract class AbstractMatcher implements Matcher {
 		
 		int maximumMatched = -1;
 		
-		if(input.isEmpty() && endStates[stateId]) {
-			return 0;
+		// If the start state is an accepting state, we can always match a string with length 0.
+		if(endStates[stateId]) {
+			maximumMatched = 0;
 		}
 		
 		for(int i = inputIndex; i < input.length() - 1; i++) {

@@ -103,11 +103,19 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public void addFirstPackedNode(PackedNode packedNode) {
+		if(packedNode == null) {
+			throw new RuntimeException("The given packed node cannot be empty.");
+		}
+		
 		firstPackedNode = packedNode;
 		countPackedNode++;
 	}
 
 	public void addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
+		
+		if(packedNode == null) {
+			throw new RuntimeException("The given packed node cannot be empty.");
+		}
 		
 		createPackedNode(packedNode, leftChild, rightChild);
 		
@@ -207,9 +215,6 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public LastGrammarSlot getFirstPackedNodeGrammarSlot() {
-		if(firstPackedNode == null) {
-			throw new RuntimeException("The set PackedNodes cannot be empty.");
-		}
 		return (LastGrammarSlot) firstPackedNode.getGrammarSlot();
 	}
 	
@@ -223,13 +228,6 @@ public abstract class NonPackedNode extends SPPFNode {
 
 		@Override
 		public int hash(NonPackedNode nonPackedNode, HashFunction f) {
-			if(nonPackedNode == null) {
-				System.out.println("WTF");
-			}
-			
-			if(nonPackedNode.slot == null) {
-				System.out.println("WTF");
-			}
 			return f.hash(nonPackedNode.slot.getId(), nonPackedNode.leftExtent, nonPackedNode.rightExtent);
 		}
 

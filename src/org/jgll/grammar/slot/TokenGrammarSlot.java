@@ -44,24 +44,23 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 		int length = lexer.tokenLengthAt(ci, tokenID);
 		
-		if(length > 0) {
-				if(executePreConditions(parser, lexer)) {
-					return null;
-				}
+		if(length < 0) {
+			parser.recordParseError(this);
+			return null;
+		}
+		
+		if(executePreConditions(parser, lexer)) {
+			return null;
+		}
 				
-				TokenSymbolNode cr = parser.getTokenNode(tokenID, ci, length);
-				if(next instanceof LastGrammarSlot) {
-					parser.getNonterminalNode((LastGrammarSlot) next, cr);
-					parser.pop();
-					return null;
-				} else {
-					parser.getIntermediateNode(next, cr);
-				}
-			} 
-			else {
-				parser.recordParseError(this);
-				return null;
-		}	
+		TokenSymbolNode cr = parser.getTokenNode(tokenID, ci, length);
+		if(next instanceof LastGrammarSlot) {
+			parser.getNonterminalNode((LastGrammarSlot) next, cr);
+			parser.pop();
+			return null;
+		} else {
+			parser.getIntermediateNode(next, cr);
+		}
 		
 		return next;
 	}
@@ -73,17 +72,16 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 		int length = lexer.tokenLengthAt(ci, tokenID);
 		
-		if(length > 0) {
-			if(executePreConditions(parser, lexer)) {
-				return null;
-			}
-			
-			return parser.getTokenNode(tokenID, ci, length);
-		} 			
-		else {
+		if(length < 0) {
 			parser.recordParseError(this);
+			return null;			
+		}
+		
+		if(executePreConditions(parser, lexer)) {
 			return null;
 		}
+		
+		return parser.getTokenNode(tokenID, ci, length);
 	}
 	
 	@Override

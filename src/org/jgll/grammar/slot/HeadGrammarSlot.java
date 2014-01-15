@@ -19,6 +19,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 
 /**
@@ -193,6 +194,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		BodyGrammarSlot currentSlot = alternatesMap[lexer.tokensAt(ci, this.predictionSet).get(0)][0];
 		
+		LastGrammarSlot lastSlot = null;
+		
 		while(!(currentSlot instanceof LastGrammarSlot)) {
 			SPPFNode node = currentSlot.parseLL1(parser, lexer);
 			if(node == null) {
@@ -201,6 +204,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 			children.add(node);
 			currentSlot = currentSlot.next();
 		}
+		
+		lastSlot = (LastGrammarSlot) currentSlot;
 
 		int leftExtent;
 		int rightExtent;
@@ -225,6 +230,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 			for(SPPFNode node : children) {
 				ntNode.addChild(node);
 			}
+			
+			ntNode.addFirstPackedNode(new PackedNode(lastSlot, ci, ntNode));
 		}
 		
 		return ntNode;
