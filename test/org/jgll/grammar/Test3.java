@@ -52,10 +52,10 @@ public class Test3 {
 	
 	@Test
 	public void testLL1() {
-		assertTrue(grammar.getNonterminalByName("A").isLl1SubGrammar());
-		assertTrue(grammar.getNonterminalByName("B").isLl1SubGrammar());
-		assertTrue(grammar.getNonterminalByName("C").isLl1SubGrammar());
-		assertTrue(grammar.getNonterminalByName("A").isLl1SubGrammar());
+		assertTrue(grammar.getNonterminalByName("A").isLL1SubGrammar());
+		assertTrue(grammar.getNonterminalByName("B").isLL1SubGrammar());
+		assertTrue(grammar.getNonterminalByName("C").isLL1SubGrammar());
+		assertTrue(grammar.getNonterminalByName("A").isLL1SubGrammar());
 	}
 	
 	@Test

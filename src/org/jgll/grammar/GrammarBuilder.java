@@ -364,7 +364,7 @@ public class GrammarBuilder implements Serializable {
 		
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals);
 		
-		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals));
+		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);
 		
 		slots = GrammarProperties.setSlotIds(nonterminals, conditionSlots);
 		

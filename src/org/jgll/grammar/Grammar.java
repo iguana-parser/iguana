@@ -70,8 +70,6 @@ public class Grammar implements Serializable {
 	
 	private List<Matcher> matchers;
 	
-	private transient Map<Integer, Set<Matcher>> tokensMap;
-	
 	private Matcher[] dfas;
 	
 	public Grammar(GrammarBuilder builder) {
@@ -113,8 +111,6 @@ public class Grammar implements Serializable {
 			slot.setLabel(label);
 			nameToSlots.put(label, slot);
 		}		
-		
-		this.tokensMap = new HashMap<>();
 		
 		return this;
 	}
@@ -314,10 +310,6 @@ public class Grammar implements Serializable {
 		return tokenIDMap.keySet();
 	}
 	
-	public Set<Matcher> getTokensForChar(int c) {
-		return tokensMap.get(c);
-	}
-	
 	public RegularExpression getRegularExpressionById(int index) {
 		return tokens.get(index);
 	}
@@ -325,7 +317,7 @@ public class Grammar implements Serializable {
 	public int getCountLL1Nonterminals() {
 		int count = 0;
 		for(HeadGrammarSlot head : nonterminals) {
-			if(head.isLl1SubGrammar()) {
+			if(head.isLL1SubGrammar()) {
 				count++;
 			}
 		}

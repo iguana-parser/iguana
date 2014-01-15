@@ -141,7 +141,7 @@ public class GLLParserImpl implements GLLParser {
 		
 		NonterminalSymbolNode root;
 		
-		if(llOptimization && startSymbol.isLl1SubGrammar()) {
+		if(llOptimization && startSymbol.isLL1SubGrammar()) {
 			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, lexer);
 		} else {
 			L0.getInstance().parse(this, lexer, startSymbol);			

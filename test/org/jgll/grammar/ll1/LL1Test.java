@@ -86,9 +86,9 @@ public class LL1Test {
 	
 	@Test
 	public void ll1Test() {
-		assertTrue(grammar.getNonterminalByName("A").isLl1SubGrammar());
-		assertTrue(grammar.getNonterminalByName("B").isLl1SubGrammar());
-		assertTrue(grammar.getNonterminalByName("D").isLl1SubGrammar());
+		assertTrue(grammar.getNonterminalByName("A").isLL1SubGrammar());
+		assertTrue(grammar.getNonterminalByName("B").isLL1SubGrammar());
+		assertTrue(grammar.getNonterminalByName("D").isLL1SubGrammar());
 	}
 
 	@Test

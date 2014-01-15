@@ -39,6 +39,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private boolean nullable;
 	
+	private boolean ll1;
+	
 	private BitSet firstSet;
 	
 	private BitSet followSet;
@@ -241,12 +243,20 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return ntNode;
 	}
 	
-	public boolean isLl1SubGrammar() {
+	public boolean isLL1SubGrammar() {
 		return ll1SubGrammar;
 	}
 	
-	public void setLl1SubGrammar(boolean ll1SubGrammar) {
+	public void setLL1SubGrammar(boolean ll1SubGrammar) {
 		this.ll1SubGrammar = ll1SubGrammar;
+	}
+	
+	public boolean isLL1() {
+		return ll1;
+	}
+	
+	public void setLL1(boolean ll1) {
+		this.ll1 = ll1;
 	}
 	
 	@Override

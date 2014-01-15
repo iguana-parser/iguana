@@ -15,6 +15,9 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
+import org.jgll.regex.Automaton;
+import org.jgll.regex.AutomatonOperations;
+import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
 	
@@ -263,8 +266,77 @@ public class GrammarProperties {
 	}
 	
 	public static void setLLProperties(Iterable<HeadGrammarSlot> nonterminals, 
-									   Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph) {
-		//TODO : implement this method
+									   Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph, 
+									   List<RegularExpression> tokens) {
+		
+		for (HeadGrammarSlot head : nonterminals) {
+			head.setLL1(isLL1(head, tokens));				
+		}
+		
+		for (HeadGrammarSlot head : nonterminals) {
+			if(head.isLL1()) {
+				boolean condition = true;
+				for(HeadGrammarSlot reachableHead : reachabilityGraph.get(head)) {
+					if(!reachableHead.isLL1()) {
+						condition = false;
+					}
+				}
+				head.setLL1SubGrammar(condition);
+			}
+		}
+		
+	}
+	
+	private static boolean isLL1(HeadGrammarSlot nonterminal, List<RegularExpression> tokens) {
+		if(!arePredictionSetsDistinct(nonterminal)) {
+			return false;
+		}
+		
+		Automaton[] automatonMap = new Automaton[tokens.size()];
+		for(int i = 0; i < tokens.size(); i++) {
+			automatonMap[i] = tokens.get(i).toAutomaton().minimize();
+		}
+		
+		for(Alternate alt1 : nonterminal.getAlternates()) {
+			for(Alternate alt2 : nonterminal.getAlternates()) {
+				if(!alt1.equals(alt2)) {
+					BitSet set1 = alt1.getFirstSlot().getPredictionSet();
+					BitSet set2 = alt2.getFirstSlot().getPredictionSet();
+					
+					 for (int i = set1.nextSetBit(0); i >= 0; i = set1.nextSetBit(i+1)) {
+						 for (int j = set2.nextSetBit(0); j >= 0; j = set2.nextSetBit(j+1)) {
+							 if(i != j) {
+								 if(AutomatonOperations.prefix(automatonMap[i], automatonMap[j]) ||
+									AutomatonOperations.prefix(automatonMap[j], automatonMap[i])) {
+									 return false;
+								 }
+							 }
+						 }
+					 }
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	private static boolean arePredictionSetsDistinct(HeadGrammarSlot nonterminal) {
+			
+		if(nonterminal.getAlternates().size() == 1) {
+			return true;
+		}
+		
+		for(Alternate alt1 : nonterminal.getAlternates()) {
+			for(Alternate alt2 : nonterminal.getAlternates()) {
+				if(!alt1.equals(alt2)) {
+					if(alt1.getFirstSlot().getPredictionSet().intersects(alt2.getFirstSlot().getPredictionSet())) {
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
 	}
 	
 	/**
