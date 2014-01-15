@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 
 import org.jgll.grammar.slotaction.SlotAction;
@@ -40,8 +39,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	private String label;
 	
-	protected BitSet predictionSet;
-	
 	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
 		if(position < 0) {
@@ -76,14 +73,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return preConditions;
 	}
 	
-	public void setPredictionSet(BitSet predictionSet) {
-		this.predictionSet = predictionSet;
-	}
-	
-	public BitSet getPredictionSet() {
-		return predictionSet;
-	}
-	
 	protected boolean executePreConditions(GLLParser parser, GLLLexer lexer) {
 		for(SlotAction<Boolean> preCondition : preConditions) {
 			if(preCondition.execute(parser, lexer)) {
@@ -109,11 +98,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		}
 		return false;
 	}
-	
-	public boolean test(int inputIndex, GLLLexer lexer) {
-		return lexer.match(inputIndex, predictionSet);
-	}
-	
+		
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	
 	public boolean isFirst() {

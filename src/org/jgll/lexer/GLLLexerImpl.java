@@ -36,9 +36,10 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	@Override
-	public boolean match(int inputIndex, BitSet expectedTokens) {
+	public boolean match(int inputIndex, int[] expectedTokens) {
 		
-		for(int tokenID = expectedTokens.nextSetBit(0); tokenID >= 0; tokenID = expectedTokens.nextSetBit(tokenID+1)) {
+		for(int i = 0; i < expectedTokens.length; i++) {
+			int tokenID = expectedTokens[i];
 			
 			if(tokenID == EOF.TOKEN_ID) {
 				if(input.charAt(inputIndex) == 0) {

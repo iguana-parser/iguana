@@ -210,9 +210,9 @@ public class GrammarProperties {
 			head.setPredictionSet(predictionSet);
 			
 			for (Alternate alternate : head.getAlternates()) {
+				
 				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 				
-				while(currentSlot != null) {
 					if(currentSlot instanceof NonterminalGrammarSlot ||
 					   currentSlot instanceof TokenGrammarSlot) {
 						BitSet set = new BitSet();
@@ -222,16 +222,16 @@ public class GrammarProperties {
 						}
 						// Prediction sets should not contain epsilon
 						set.clear(EPSILON);
-						currentSlot.setPredictionSet(set);
+						alternate.setPredictionSet(set);
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {
-						currentSlot.setPredictionSet(currentSlot.getHead().getFollowSetAsBitSet());
+						BitSet set = currentSlot.getHead().getFollowSetAsBitSet();
+						set.clear(EPSILON);
+						alternate.setPredictionSet(set);
 					} 
 					else {
 						throw new RuntimeException("Unexpected grammar slot of type " + currentSlot.getClass());
 					}
-					currentSlot = currentSlot.next();
-				}
 			}
 		}
 	}
@@ -300,20 +300,23 @@ public class GrammarProperties {
 		for(Alternate alt1 : nonterminal.getAlternates()) {
 			for(Alternate alt2 : nonterminal.getAlternates()) {
 				if(!alt1.equals(alt2)) {
-					BitSet set1 = alt1.getFirstSlot().getPredictionSet();
-					BitSet set2 = alt2.getFirstSlot().getPredictionSet();
+					int[] set1 = alt1.getPredictionSet();
+					int[] set2 = alt2.getPredictionSet();
 					
-					 for (int i = set1.nextSetBit(0); i >= 0; i = set1.nextSetBit(i+1)) {
-						 for (int j = set2.nextSetBit(0); j >= 0; j = set2.nextSetBit(j+1)) {
+					 for (int i = 0; i < set1.length; i++) {
+						 for (int j = 0; j < set2.length; j++) {
+							 
+							 int ti = set1[i];
+							 int tj = set2[j];
 							 
 							 // the automaton for EOF is a subset of any dfa, so skip it.
-							 if(i == EOF || j == EOF) {
+							 if(ti == EOF || tj == EOF) {
 								 continue;
 							 }
 							 
-							 if(i != j) {
-								 if(AutomatonOperations.prefix(automatonMap[i], automatonMap[j]) ||
-									AutomatonOperations.prefix(automatonMap[j], automatonMap[i])) {
+							 if(ti != tj) {
+								 if(AutomatonOperations.prefix(automatonMap[ti], automatonMap[tj]) ||
+									AutomatonOperations.prefix(automatonMap[tj], automatonMap[ti])) {
 									 return false;
 								 }
 							 }
@@ -335,7 +338,7 @@ public class GrammarProperties {
 		for(Alternate alt1 : nonterminal.getAlternates()) {
 			for(Alternate alt2 : nonterminal.getAlternates()) {
 				if(!alt1.equals(alt2)) {
-					if(alt1.getFirstSlot().getPredictionSet().intersects(alt2.getFirstSlot().getPredictionSet())) {
+					if(alt1.getPredictionSetAsBitSet().intersects(alt2.getPredictionSetAsBitSet())) {
 						return false;
 					}
 				}
@@ -478,27 +481,28 @@ public class GrammarProperties {
 	}
 	
 	public static void setPredictionSetsForConditionals(Iterable<BodyGrammarSlot> conditionSlots) {
-		for(BodyGrammarSlot slot : conditionSlots) {
-			while(slot != null) {
-				if(slot instanceof NonterminalGrammarSlot || slot instanceof TokenGrammarSlot) {
-					BitSet set = new BitSet();
-					getChainFirstSet(slot, set);
-					// TODO: fix and uncomment it later
-//					if(isChainNullable(slot)) {
-//						set.addAll(head.getFollowSet());
-//					}
-					slot.setPredictionSet(set);
-				} 
-				else if(slot instanceof LastGrammarSlot) {
-					// TODO: fix and uncomment it later
-					//slot.setPredictionSet(slot.getHead().getFollowSetAsBitSet());
-				}
-				else {
-					throw new RuntimeException("Unexpected grammar slot: " + slot.getClass());
-				}
-				slot = slot.next();
-			}
-		}
+		// TODO: rewrite this.
+//		for(BodyGrammarSlot slot : conditionSlots) {
+//			while(slot != null) {
+//				if(slot instanceof NonterminalGrammarSlot || slot instanceof TokenGrammarSlot) {
+//					BitSet set = new BitSet();
+//					getChainFirstSet(slot, set);
+//					// TODO: fix and uncomment it later
+////					if(isChainNullable(slot)) {
+////						set.addAll(head.getFollowSet());
+////					}
+//					slot.setPredictionSet(set);
+//				} 
+//				else if(slot instanceof LastGrammarSlot) {
+//					// TODO: fix and uncomment it later
+//					//slot.setPredictionSet(slot.getHead().getFollowSetAsBitSet());
+//				}
+//				else {
+//					throw new RuntimeException("Unexpected grammar slot: " + slot.getClass());
+//				}
+//				slot = slot.next();
+//			}
+//		}
 	}
 	
 	private static BitSet copy(BitSet bitSet) {

@@ -129,15 +129,17 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void createAlternateMaps(int tokensCount) {
 		Map<Integer, Set<BodyGrammarSlot>> map = new HashMap<>();
 		for(Alternate alternate : alternates) {
-			BitSet bs = alternate.getFirstSlot().getPredictionSet();
-			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-				Set<BodyGrammarSlot> set = map.get(i);
+			int[] bs = alternate.getPredictionSet();
+			
+			for(int i = 0; i < bs.length; i++) {
+				int tokenID = bs[i];
+				Set<BodyGrammarSlot> set = map.get(tokenID);
 				if(set == null) {
 					set = new HashSet<>();
-					map.put(i, set);
+					map.put(tokenID, set);
 				}
 				set.add(alternate.getFirstSlot());
-				map.put(i, set);
+				map.put(tokenID, set);				
 			}
 		}
 		
@@ -192,7 +194,14 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		List<SPPFNode> children = new ArrayList<>();
 		
-		BodyGrammarSlot currentSlot = alternatesMap[lexer.tokensAt(ci, this.predictionSet).get(0)][0];
+		List<Integer> tokens = lexer.tokensAt(ci, this.predictionSet);
+		
+		if(tokens.size() == 0) {
+			parser.recordParseError(this);
+			return null;
+		}
+		
+		BodyGrammarSlot currentSlot = alternatesMap[tokens.get(0)][0];
 		
 		LastGrammarSlot lastSlot = null;
 		
@@ -255,12 +264,18 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
-		for(Alternate alternate : alternates) {
-			int ci = recognizer.getCi();
-			BodyGrammarSlot slot = alternate.getFirstSlot();
-			if(slot.test(ci, lexer)) {
+		int ci = recognizer.getCi();
+		
+		List<Integer> tokens = lexer.tokensAt(ci, this.predictionSet);
+		
+		if(tokens.size() == 0) {
+			return null;
+		} 
+		
+		for(Integer i : tokens) {
+			for(BodyGrammarSlot slot : alternatesMap[i]) {
 				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-				recognizer.add(alternate.getFirstSlot(), cu, ci);
+				recognizer.add(slot, cu, ci);
 			}
 		}
 		return null;

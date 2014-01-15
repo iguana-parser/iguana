@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -94,17 +94,20 @@ public class LL1Test {
 
 	@Test
 	public void testPredictSets() {
-		BodyGrammarSlot slot1 = grammar.getGrammarSlotByName("S ::= . A [a]");
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a)), slot1.getPredictionSet());
+		// S ::= . A [a]
+		Alternate alt1 = grammar.getNonterminalByName("S").getAlternateAt(0);
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a)), alt1.getPredictionSetAsBitSet());
 		
-		BodyGrammarSlot slot2 = grammar.getGrammarSlotByName("A ::= . B D");
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a), EOF), slot2.getPredictionSet());
+		// A ::= . B D
+		Alternate alt2 = grammar.getNonterminalByName("A").getAlternateAt(0);
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a), EOF), alt2.getPredictionSetAsBitSet());
 		
-		BodyGrammarSlot slot3 = grammar.getGrammarSlotByName("B ::= . [b]");
-		assertEquals(BitSetUtil.from(grammar.getTokenID(b)), slot3.getPredictionSet());
+		// B ::= . [b]
+		Alternate alt3 = grammar.getNonterminalByName("B").getAlternateAt(0);
+		assertEquals(BitSetUtil.from(grammar.getTokenID(b)), alt3.getPredictionSetAsBitSet());
 
-		BodyGrammarSlot slot4 = grammar.getGrammarSlotByName("B ::= .");
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(a), EOF), slot4.getPredictionSet());
+		Alternate alt4 = grammar.getNonterminalByName("B").getAlternateAt(1);
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(a), EOF), alt4.getPredictionSetAsBitSet());
 	}
 
 	@Test

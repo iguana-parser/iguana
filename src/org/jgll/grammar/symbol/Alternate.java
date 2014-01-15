@@ -2,6 +2,7 @@ package org.jgll.grammar.symbol;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,8 @@ public class Alternate implements Serializable {
 	private final BodyGrammarSlot firstSlot;
 	
 	private BodyGrammarSlot condition;
+	
+	private int[] predictionSet;
 	
 	public Alternate(BodyGrammarSlot firstSlot) {
 		
@@ -202,6 +205,26 @@ public class Alternate implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public void setPredictionSet(BitSet set) {
+		predictionSet = new int[set.cardinality()];
+		int j = 0;
+		 for (int i = set.nextSetBit(0); i >= 0; i = set.nextSetBit(i+1)) {
+			predictionSet[j++] = i;
+		}
+	}
+	
+	public int[] getPredictionSet() {
+		return predictionSet;
+	}
+	
+	public BitSet getPredictionSetAsBitSet() {
+		BitSet set = new BitSet();
+		for(int i = 0; i < predictionSet.length; i++) {
+			set.set(predictionSet[i]);
+		}
+		return set;
 	}
 	
 	@Override

@@ -59,10 +59,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if(!test(ci, input)) {
-			parser.recordParseError(this);
-			return null;						
-		}
+//		if(!test(ci, input)) {
+//			parser.recordParseError(this);
+//			return null;						
+//		}
 
 		if(executePreConditions(parser, input)) {
 			return null;
@@ -99,10 +99,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		if(!test(ci, lexer)) {
-			parser.recordParseError(this);
-			return null;						
-		}
+//		if(!test(ci, lexer)) {
+//			parser.recordParseError(this);
+//			return null;						
+//		}
 
 		if(executePreConditions(parser, lexer)) {
 			return null;
@@ -117,13 +117,13 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		int ci = recognizer.getCi();
 		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 		
-		if(test(ci, lexer)) {
+//		if(test(ci, lexer)) {
 			recognizer.update(recognizer.create(next, cu, ci), ci);
 			return nonterminal;
-		} else { 
-			recognizer.recognitionError(cu, ci);
-			return null;
-		}
+//		} else { 
+//			recognizer.recognitionError(cu, ci);
+//			return null;
+//		}
 	}
 
 	
