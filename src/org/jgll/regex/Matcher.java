@@ -12,11 +12,18 @@ public interface Matcher {
 	/**
 	 * Returns the length of the longest match from the given input index.
 	 * 
-	 * @param input
-	 * @param inputIndex
-	 * @return
+	 * @return -1 if no match is found
 	 */
 	public int match(Input input, int inputIndex);
+	
+	/**
+	 * 
+	 * Returns the length of the shortest match from the given input index.
+	 * 
+	 * @return -1 if no match is found
+	 * 
+	 */
+	public int shortestMatch(Input input, int inputIndex);
 	
 	/**
 	 * Returns true if can match the given input from the provided start position (inclusive)

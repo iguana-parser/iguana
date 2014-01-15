@@ -44,6 +44,39 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	@Override
+	public int shortestMatch(Input input, int inputIndex) {
+		int length = 0;
+
+		int stateId = startStateId;
+		
+		// If the start state is an accepting state, we can always match a string with length 0.
+		if(endStates[stateId]) {
+			return 0;
+		}
+		
+		for(int i = inputIndex; i < input.length() - 1; i++) {
+			int transitionId = getTransitionId(input.charAt(i));
+			
+			if(transitionId == -1) {
+				break;
+			}
+			
+			stateId = transitionTable[stateId][transitionId];
+			length++;
+			
+			if(stateId == -1) {
+				break;
+			}
+			
+			if(endStates[stateId]) {
+				return length;
+			}
+		}
+		
+		return -1;
+	}
 
 	@Override
 	public int match(Input input, int inputIndex) {

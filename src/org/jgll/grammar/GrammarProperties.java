@@ -17,6 +17,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
+import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
@@ -235,7 +236,8 @@ public class GrammarProperties {
 			}
 		}
 	}
-
+	
+	
 	public static List<BodyGrammarSlot> setSlotIds(Iterable<HeadGrammarSlot> nonterminals, Iterable<BodyGrammarSlot> conditionSlots) {
 		
 		List<BodyGrammarSlot> slots = new ArrayList<>();

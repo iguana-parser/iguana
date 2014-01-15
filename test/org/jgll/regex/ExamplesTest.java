@@ -1,7 +1,6 @@
 package org.jgll.regex;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.util.Input;
@@ -65,12 +64,21 @@ public class ExamplesTest {
 	
 	@Test
 	public void testStringPart() {
-		Automaton nfa = RegularExpressionExamples.getStringPart().toAutomaton();
-		Matcher matcher = nfa.getMatcher();
+		Automaton a = RegularExpressionExamples.getStringPart().toAutomaton();
+		Matcher matcher = a.getMatcher();
 		
 		assertTrue(matcher.match(Input.fromString("abcd")));
 		assertFalse(matcher.match(Input.fromString("\\aa")));
 		assertFalse(matcher.match(Input.fromString("\"aaa")));
+	}
+	
+	@Test
+	public void shortestVsLongestMatch() {
+		Automaton  a = RegularExpressionExamples.getId().toAutomaton();
+		Matcher matcher = a.getMatcher();
+		
+		assertEquals(8, matcher.match(Input.fromString("Variable"), 0));
+		assertEquals(1, matcher.shortestMatch(Input.fromString("Variable"), 0));
 	}
 	
 }

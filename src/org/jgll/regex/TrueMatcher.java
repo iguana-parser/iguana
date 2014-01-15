@@ -41,4 +41,9 @@ public class TrueMatcher implements Matcher, Serializable {
 		this.id = id;
 	}
 
+	@Override
+	public int shortestMatch(Input input, int inputIndex) {
+		return 0;
+	}
+
 }
