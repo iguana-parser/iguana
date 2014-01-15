@@ -1,9 +1,13 @@
 package org.jgll.regex;
 
+import java.io.Serializable;
+
 import org.jgll.util.Input;
 
-public abstract class AbstractMatcher implements Matcher {
+public abstract class AbstractMatcher implements Matcher, Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private final int[][] transitionTable;
 	
 	private final boolean[] endStates;

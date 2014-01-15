@@ -1,9 +1,13 @@
 package org.jgll.regex;
 
+import java.io.Serializable;
+
 import org.jgll.util.Input;
 
 
-public class TrueMatcher implements Matcher {
+public class TrueMatcher implements Matcher, Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private int id;
 
