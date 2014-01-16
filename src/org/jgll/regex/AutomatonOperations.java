@@ -808,17 +808,17 @@ public class AutomatonOperations {
 		State finalState = new State(true);
 		
 		for(Automaton a : automatons) {
-			startState.addTransition(Transition.emptyTransition(a.getStartState()));
 			
-			for(State f : a.getFinalStates()) {
+			Automaton c = a.copy();
+			startState.addTransition(Transition.emptyTransition(c.getStartState()));
+			
+			for(State f : c.getFinalStates()) {
 				f.setFinalState(false);
 				f.addTransition(Transition.emptyTransition(finalState));
 			}
 		}
 		
-		Automaton a = new Automaton(startState).minimize();
-		
-		return a;
+		return new Automaton(startState).minimize();
 	}
 	
 	
