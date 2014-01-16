@@ -1,15 +1,24 @@
 package org.jgll.regex;
 
+import java.util.List;
+
 public class ShortIntervalMatcher extends AbstractMatcher {
 	
+	private static final long serialVersionUID = 1L;
+
 	private final int[] transitionIds;
 	
 	private final int minimum;
 	
 	private final int maximum;
 
-	public ShortIntervalMatcher(int[][] transitionTable, boolean[] endStates, int startStateId, int[] intervals) {
-		super(transitionTable, endStates, startStateId, intervals);
+	public ShortIntervalMatcher(int[][] transitionTable, 
+								boolean[] endStates, 
+								int startStateId, 
+								int[] intervals,
+								List<MatchAction>[] matchActions) {
+		
+		super(transitionTable, endStates, startStateId, intervals, matchActions);
 		
 		minimum = intervals[0];
 		maximum = intervals[intervals.length - 1];

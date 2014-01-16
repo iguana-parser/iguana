@@ -1,6 +1,7 @@
 package org.jgll.regex;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Deque;
@@ -82,7 +83,7 @@ public class AutomatonOperations {
 		return new Automaton(startState);
 	}
 	
-	public static Matcher createDFA(Automaton nfa) {
+	public static Matcher createMatcher(Automaton nfa) {
 		
 		int[] intervals = nfa.getIntervals();
 		
@@ -95,6 +96,9 @@ public class AutomatonOperations {
 		int[][] transitionTable = new int[statesCount][inputLength];
 		boolean[] endStates = new boolean[statesCount];
 		
+		@SuppressWarnings("unchecked")
+		List<MatchAction>[] matchActions = new List[statesCount];
+		
 		for(int i = 0; i < transitionTable.length; i++) {
 			for(int j = 0; j < transitionTable[i].length; j++) {
 				transitionTable[i][j] = -1;
@@ -102,19 +106,23 @@ public class AutomatonOperations {
 		}
 
 		for(State state : nfa.getAllStates()) {
+			matchActions[state.getId()] = new ArrayList<>();
+			
 			for(Transition transition : state.getTransitions()) {
 				transitionTable[state.getId()][transition.getId()] = transition.getDestination().getId();
 			}
 			
 			if(state.isFinalState()) {
 				endStates[state.getId()] = true;
+				matchActions[state.getId()] = nfa.getMatchActions();
 			}
 		}
-
+		
+		
 		if(intervals[intervals.length - 1] - intervals[0] > Character.MAX_VALUE) {
-			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals);					
+			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, matchActions);					
 		} else {
-			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals);
+			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, matchActions);
 		}
 	}
 	

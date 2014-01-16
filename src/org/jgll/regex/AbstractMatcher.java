@@ -1,6 +1,7 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.jgll.util.Input;
 
@@ -11,6 +12,8 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	private final int[][] transitionTable;
 	
 	private final boolean[] endStates;
+	
+	private final List<MatchAction>[] matchActions;
 
 	private final int startStateId;
 	
@@ -20,11 +23,17 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	
 	private int mode = LONGEST_MATCH;
 
-	public AbstractMatcher(int[][] transitionTable, boolean[] endStates, int startStateId, int[] intervals) {
+	public AbstractMatcher(int[][] transitionTable, 
+						   boolean[] endStates, 
+						   int startStateId, 
+						   int[] intervals,
+						   List<MatchAction>[] matchActions) {
+		
 		this.transitionTable = transitionTable;
 		this.endStates = endStates;
 		this.startStateId = startStateId;
 		this.intervals = intervals;
+		this.matchActions = matchActions;
 	}
 
 	@Override
@@ -82,16 +91,18 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	@Override
 	public int match(Input input, int inputIndex) {
 		if(mode == LONGEST_MATCH) {
-			return longestMatchmatch(input, inputIndex);
+			return longestMatch(input, inputIndex);
 		} else {
 			return shortestMatch(input, inputIndex);
 		}
 	}
 
-	public int longestMatchmatch(Input input, int inputIndex) {
+	public int longestMatch(Input input, int inputIndex) {
 		int length = 0;
 
 		int stateId = startStateId;
+		
+		int previousId = stateId;
 		
 		int maximumMatched = -1;
 		
@@ -107,6 +118,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 				break;
 			}
 			
+			previousId = stateId;
 			stateId = transitionTable[stateId][transitionId];
 			length++;
 			
@@ -116,6 +128,13 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			
 			if(endStates[stateId]) {
 				maximumMatched = length;
+			}
+		}
+		
+		// Match found
+		if(maximumMatched > 0) {
+			for(MatchAction action : matchActions[previousId]) {
+				action.execute();
 			}
 		}
 		

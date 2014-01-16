@@ -1,8 +1,10 @@
 package org.jgll.regex;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,6 +23,10 @@ public class Automaton {
 	private boolean deterministic;
 	
 	private boolean minimized;
+	
+	private Set<State> finalStates;
+	
+	private List<MatchAction> matchActions;
 
 	public Automaton(State startState) {
 
@@ -35,6 +41,8 @@ public class Automaton {
 	private void init() {
 		intervals = AutomatonOperations.getIntervals(this);
 		
+		matchActions = new ArrayList<>();
+		
 		AutomatonOperations.setStateIDs(this);
 		AutomatonOperations.setTransitionIDs(this);
 		
@@ -44,6 +52,9 @@ public class Automaton {
 		for(State s : set) {
 			states[s.getId()]  = s;
 		}
+		
+		finalStates = AutomatonOperations.getFinalStates(this);
+		matchActions = new ArrayList<>();
 	}
 	
 	public State getStartState() {
@@ -51,7 +62,7 @@ public class Automaton {
 	}
 	
 	public Set<State> getFinalStates() {
-		return AutomatonOperations.getFinalStates(this);
+		return finalStates;
 	}
 	
 	public int getCountStates() {
@@ -64,6 +75,14 @@ public class Automaton {
 	
 	public State getState(int id) {
 		return states[id];
+	}
+	
+	public void addMatchAction(MatchAction matchAction) {
+		matchActions.add(matchAction);
+	}
+	
+	public List<MatchAction> getMatchActions() {
+		return matchActions;
 	}
 	
 	/**
@@ -227,7 +246,7 @@ public class Automaton {
 		if(!minimized) {
 			minimize();
 		}
-		return AutomatonOperations.createDFA(this);
+		return AutomatonOperations.createMatcher(this);
 	}
 	
 	public String toJavaCode() {

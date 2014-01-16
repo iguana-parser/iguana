@@ -1,11 +1,19 @@
 package org.jgll.regex;
 
+import java.util.List;
+
 import org.jgll.util.Input;
 
 public class LargeIntervalMatcher extends AbstractMatcher {
 	
-	public LargeIntervalMatcher(int[][] transitionTable, boolean[] endStates, int startStateId, int[] intervals) {
-		super(transitionTable, endStates, startStateId, intervals);
+	private static final long serialVersionUID = 1L;
+
+	public LargeIntervalMatcher(int[][] transitionTable, 
+								boolean[] endStates, 
+								int startStateId, 
+								int[] intervals, 
+								List<MatchAction>[] matchActions) {
+		super(transitionTable, endStates, startStateId, intervals, matchActions);
 	}
 
 	@Override
