@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
+import org.jgll.regex.Transition;
 
 public class EOF extends AbstractSymbol implements RegularExpression {
 	
@@ -25,8 +26,10 @@ public class EOF extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public Automaton toAutomaton() {
-    	State state = new State(true);
-        return new Automaton(state);
+    	State startState = new State();
+    	State endState = new State(true);
+    	startState.addTransition(new Transition(0, endState));
+        return new Automaton(startState);
 	}
 
 	@Override

@@ -321,7 +321,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void setPredictionSet(BitSet set) {
 		List<Automaton> automatons = new ArrayList<>();
 		for(Alternate alternate : alternates) {
-			automatons.add(alternate.getPredictionSetAutomaton());
+			if(!alternate.isEpsilon()) {
+				automatons.add(alternate.getPredictionSetAutomaton());
+			}
 		}
 		
 		predictionSetAutomaton = AutomatonOperations.or(automatons).getMatcher();

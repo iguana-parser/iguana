@@ -101,8 +101,8 @@ public class Range extends AbstractSymbol implements RegularExpression, Comparab
 
 	public CharacterClass not() {
 		List<Range> ranges = new ArrayList<>();
-		if(start > 0) {
-			ranges.add(Range.in(0, start - 1));
+		if(start >= 1) {
+			ranges.add(Range.in(1, start - 1));
 		}
 		if(end < MAX_UTF32_VAL) {
 			ranges.add(Range.in(end + 1, MAX_UTF32_VAL));

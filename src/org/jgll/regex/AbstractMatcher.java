@@ -57,7 +57,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			return 0;
 		}
 		
-		for(int i = inputIndex; i < input.length() - 1; i++) {
+		for(int i = inputIndex; i < input.length(); i++) {
 			int transitionId = getTransitionId(input.charAt(i));
 			
 			if(transitionId == -1) {
@@ -100,7 +100,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			maximumMatched = 0;
 		}
 		
-		for(int i = inputIndex; i < input.length() - 1; i++) {
+		for(int i = inputIndex; i < input.length(); i++) {
 			int transitionId = getTransitionId(input.charAt(i));
 			
 			if(transitionId == -1) {

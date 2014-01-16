@@ -87,8 +87,8 @@ public class Character extends AbstractSymbol implements RegularExpression {
 	
 	public CharacterClass not() {
 		List<Range> ranges = new ArrayList<>();
-		if(c > 0) {
-			ranges.add(Range.in(0, c - 1));
+		if(c >= 1) {
+			ranges.add(Range.in(1, c - 1));
 		}
 		if(c < Constants.MAX_UTF32_VAL) {
 			ranges.add(Range.in(c + 1, Constants.MAX_UTF32_VAL));

@@ -108,8 +108,8 @@ public class CharacterClass extends AbstractSymbol implements RegularExpression 
 		Range[] ranges = alt.getRegularExpressions().toArray(new Range[] {});
 		Arrays.sort(ranges);
 		
-		if(ranges[i].getStart() > 0) {
-			newRanges.add(Range.in(0, ranges[i].getStart() - 1));
+		if(ranges[i].getStart() >= 1) {
+			newRanges.add(Range.in(1, ranges[i].getStart() - 1));
 		}
 		
 		for(; i < ranges.length - 1; i++) {

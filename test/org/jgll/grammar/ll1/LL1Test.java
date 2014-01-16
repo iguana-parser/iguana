@@ -38,7 +38,7 @@ public class LL1Test {
 	private static final int EOF = 1;
 
 	private Grammar grammar;
-	private GLLParser rdParser;
+	private GLLParser parser;
 	
 	Nonterminal S = new Nonterminal("S");
 	Nonterminal A = new Nonterminal("A");
@@ -73,7 +73,7 @@ public class LL1Test {
 		builder.addRule(rule6);
 
 		grammar = builder.build();
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -112,7 +112,7 @@ public class LL1Test {
 
 	@Test
 	public void test1() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("bda"), grammar, "S");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bda"), grammar, "S");
 
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 3);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
@@ -133,7 +133,7 @@ public class LL1Test {
 	
 	@Test
 	public void test2() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("a"), grammar, "S");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a"), grammar, "S");
 
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 1);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 0);
@@ -150,7 +150,7 @@ public class LL1Test {
 	
 	@Test
 	public void test3() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("ba"), grammar, "S");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("ba"), grammar, "S");
 
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
@@ -169,7 +169,7 @@ public class LL1Test {
 
 	@Test
 	public void test4() throws ParseError {
-		NonterminalSymbolNode sppf = rdParser.parse(Input.fromString("da"), grammar, "S");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("da"), grammar, "S");
 		
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);

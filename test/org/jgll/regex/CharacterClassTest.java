@@ -56,7 +56,7 @@ public class CharacterClassTest {
 	@Test
 	public void notTest() {
 		CharacterClass c = new CharacterClass(Range.in('0', '9'), Range.in('a', 'z'));
-		CharacterClass expected = new CharacterClass(Range.in(0, '0' - 1), 
+		CharacterClass expected = new CharacterClass(Range.in(1, '0' - 1), 
 													 Range.in('9' + 1, 'a' - 1), 
 													 Range.in('z' + 1, Constants.MAX_UTF32_VAL));
 		

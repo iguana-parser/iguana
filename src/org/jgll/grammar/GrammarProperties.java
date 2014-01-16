@@ -336,7 +336,7 @@ public class GrammarProperties {
 		for(Alternate alt1 : nonterminal.getAlternates()) {
 			for(Alternate alt2 : nonterminal.getAlternates()) {
 				if(!alt1.equals(alt2)) {
-					if(alt1.getPredictionSetAutomaton().intersection(alt2.getPredictionSetAutomaton()).isLanguageEmpty()) {
+					if(!alt1.getPredictionSetAutomaton().intersection(alt2.getPredictionSetAutomaton()).isLanguageEmpty()) {
 						return false;
 					}
 				}
