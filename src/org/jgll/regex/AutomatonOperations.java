@@ -135,7 +135,7 @@ public class AutomatonOperations {
 				newStates.add(destination);
 				newStates.addAll(epsilonClosure(destination));
 			}
-		}	
+		}
 		
 		return newStates;
 	}
@@ -816,7 +816,9 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState).minimize();
+		Automaton a = new Automaton(startState).minimize();
+		
+		return a;
 	}
 	
 	

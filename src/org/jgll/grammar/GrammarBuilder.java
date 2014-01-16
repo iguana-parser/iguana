@@ -38,6 +38,7 @@ import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.Automaton;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
@@ -89,6 +90,8 @@ public class GrammarBuilder implements Serializable {
 	
 	List<RegularExpression> tokens;
 	
+	Automaton[] automatons;
+	
 	Matcher[] dfas;
 	
 	public GrammarBuilder() {
@@ -112,6 +115,8 @@ public class GrammarBuilder implements Serializable {
 	}
 
 	public Grammar build() {
+		
+		createAutomatonsMap();
 		
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
@@ -357,7 +362,7 @@ public class GrammarBuilder implements Serializable {
 		GrammarProperties.calculateFollowSets(nonterminals);
 
 		GrammarProperties.setNullableHeads(nonterminals);
-		GrammarProperties.setPredictionSets(nonterminals, tokens);
+		GrammarProperties.setPredictionSets(nonterminals, automatons);
 		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals);
@@ -368,27 +373,12 @@ public class GrammarBuilder implements Serializable {
 		
 	}
 	
-	public void fixRegularLists() {
+	private void createAutomatonsMap() {
+		automatons = new Automaton[tokens.size()];
 		
-		for(HeadGrammarSlot head : nonterminals) {
-			String name = head.getNonterminal().getName();
-			if(name.startsWith("Regular_")) {
-				String s = name.substring(8, name.length());
-				HeadGrammarSlot ebnfListHead = nonterminalsMap.get(new Nonterminal(s));
-				Object object = getObject(ebnfListHead);
-				((LastGrammarSlot)head.getAlternateAt(0).getLastSlot().next()).setObject(object);
-			}
+		for(int i = 0; i < tokens.size(); i++) {
+			automatons[i] = tokens.get(i).toAutomaton().minimize();
 		}
- 	}
-	
-	private Object getObject(HeadGrammarSlot head) {
-		for(Alternate alt : head.getAlternates()) {
-			if(! (alt.getLastSlot() instanceof LastGrammarSlot)) {
-				LastGrammarSlot lastSlot = (LastGrammarSlot) alt.getLastSlot().next();
-				return lastSlot.getObject();
-			}
-		}
-		return null;
 	}
 	
 	private int getTokenID(RegularExpression token) {

@@ -19,6 +19,8 @@ import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 
 public class GrammarProperties {
 	
@@ -190,7 +192,7 @@ public class GrammarProperties {
 		}
 	}
 		
-	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, List<RegularExpression> regularExpressions) {
+	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, Automaton[] automatons) {
 		
 		for (HeadGrammarSlot head : nonterminals) {
 			
@@ -207,12 +209,13 @@ public class GrammarProperties {
 						}
 						// Prediction sets should not contain epsilon
 						set.clear(EPSILON);
-						alternate.setPredictionSet(predictionSetToAutomaton(set, regularExpressions), set);
+						Automaton a = predictionSetToAutomaton(set, automatons);
+						alternate.setPredictionSet(a, set);
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {
 						BitSet set = currentSlot.getHead().getFollowSetAsBitSet();
 						set.clear(EPSILON);
-						alternate.setPredictionSet(predictionSetToAutomaton(set, regularExpressions), set);
+						alternate.setPredictionSet(predictionSetToAutomaton(set, automatons), set);
 					} 
 					else {
 						throw new RuntimeException("Unexpected grammar slot of type " + currentSlot.getClass());
@@ -240,15 +243,17 @@ public class GrammarProperties {
 		return array;
 	}
 	
-	private static Automaton predictionSetToAutomaton(BitSet bitSet, List<RegularExpression> regularExpressions) {
-		
-		List<RegularExpression> list = new ArrayList<>();
+	private static Automaton predictionSetToAutomaton(BitSet bitSet, Automaton[] automatons) {
+		List<Automaton> list = new ArrayList<>();
 		
 		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-			list.add(regularExpressions.get(i));
+			list.add(automatons[i]);
 		}
 		
-		return new RegexAlt<>(list).toAutomaton();
+//		return automatons[0];
+		Automaton a = AutomatonOperations.or(list);
+		
+		return a;
 	}
 	
 	

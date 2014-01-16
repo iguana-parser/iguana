@@ -41,6 +41,4 @@ public class EOF extends AbstractSymbol implements RegularExpression {
 	public RegularExpression copy() {
 		return this;
 	}
-	
-
 }
