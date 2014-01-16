@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.Alternate;
@@ -17,6 +15,9 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
+import org.jgll.regex.Automaton;
+import org.jgll.regex.AutomatonOperations;
+import org.jgll.regex.Matcher;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -45,14 +46,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private BitSet followSet;
 	
-	private int[] predictionSet;
+	private Matcher predictionSetAutomaton;
 	
-	/**
-	 * A map from each token to the set of alternates that can start with that token
-	 */
-	private BodyGrammarSlot[][] alternatesMap;
-	
+	private BitSet predictionSet;
+		
 	private boolean ll1SubGrammar;
+	
+	private Alternate[] ll1Map;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
@@ -121,69 +121,21 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.nullable = nullable;
 	}
 
-	public void setPredictionSet(BitSet set) {
-		predictionSet = new int[set.cardinality()];
-		int j = 0;
-		 for (int i = set.nextSetBit(0); i >= 0; i = set.nextSetBit(i+1)) {
-			predictionSet[j++] = i;
-		}
-	}
-	
-	public void createAlternateMaps(int tokensCount) {
-		Map<Integer, Set<BodyGrammarSlot>> map = new HashMap<>();
-		for(Alternate alternate : alternates) {
-			int[] bs = alternate.getPredictionSet();
-			
-			for(int i = 0; i < bs.length; i++) {
-				int tokenID = bs[i];
-				Set<BodyGrammarSlot> set = map.get(tokenID);
-				if(set == null) {
-					set = new HashSet<>();
-					map.put(tokenID, set);
-				}
-				set.add(alternate.getFirstSlot());
-				map.put(tokenID, set);				
-			}
-		}
-		
-		alternatesMap = new BodyGrammarSlot[tokensCount][];
-		for(int i = 0; i < alternatesMap.length; i++) {
-			Set<BodyGrammarSlot> set = map.get(i);
-
-			if(set == null) {
-				alternatesMap[i] = new BodyGrammarSlot[0];
-			} else {
-				int j = 0;
-				alternatesMap[i] = new BodyGrammarSlot[set.size()];
-				for(BodyGrammarSlot slot : set) {
-					alternatesMap[i][j++] = slot;
-				}
-			}
-			
-		}
-	}
-	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
-				
-		List<Integer> tokens = lexer.tokensAt(ci, this.predictionSet);
 		
-		if(tokens.size() == 0) {
-			return null;
-		} 
-
 		// Don't create the descriptor and jump to the beginning of the slot
 //		if(isLL1()) {
 //			BodyGrammarSlot slot = alternatesMap[tokens.get(0)][0];
 //			parser.setCurrentSPPFNode(DummyNode.getInstance());
 //			return slot.parse(parser, lexer);				
 //		}
-		
-		for(Integer i : tokens) {
-			for(BodyGrammarSlot slot : alternatesMap[i]) {
-				parser.addDescriptor(slot);
+
+		for (Alternate alt : alternates) {
+			if(lexer.match(ci, alt.getMatcher())) {
+				parser.addDescriptor(alt.getFirstSlot());
 			}
 		}
 		
@@ -197,14 +149,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		List<SPPFNode> children = new ArrayList<>();
 		
-		List<Integer> tokens = lexer.tokensAt(ci, this.predictionSet);
+		int t = lexer.tokenAt(ci, this.predictionSet);
 		
-		if(tokens.size() == 0) {
-			parser.recordParseError(this);
+		if(t == -1) {
 			return null;
 		}
 		
-		BodyGrammarSlot currentSlot = alternatesMap[tokens.get(0)][0];
+		BodyGrammarSlot currentSlot = ll1Map[t].getFirstSlot();
 		
 		LastGrammarSlot lastSlot = null;
 		
@@ -265,20 +216,32 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.ll1 = ll1;
 	}
 	
+	public void setLL1Map(int countTokens) {
+		ll1Map = new Alternate[countTokens];
+		
+		outer:
+		for(int i = 0; i < countTokens; i++) {
+			for(Alternate alternate : alternates) {
+				if(alternate.getPredictionSet().get(i)) {
+					if(ll1Map[i] != null) {
+						throw new RuntimeException("Something is not right here!");
+					} else {
+						ll1Map[i] = alternate;
+						continue outer;
+					}
+				}
+			}			
+		}
+	}
+	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		int ci = recognizer.getCi();
 		
-		List<Integer> tokens = lexer.tokensAt(ci, this.predictionSet);
-		
-		if(tokens.size() == 0) {
-			return null;
-		} 
-		
-		for(Integer i : tokens) {
-			for(BodyGrammarSlot slot : alternatesMap[i]) {
+		for(Alternate alternate : alternates) {
+			if(lexer.match(ci, alternate.getMatcher())) {
 				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-				recognizer.add(slot, cu, ci);
+				recognizer.add(alternate.getFirstSlot(), cu, ci);
 			}
 		}
 		return null;
@@ -347,8 +310,23 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return alternates.size();
 	}
 	
-	public int[] getPredictionSet() {
+	public Matcher getPredictionSetAutomaton() {
+		return predictionSetAutomaton;
+	}
+	
+	public BitSet getPredictionSet() {
 		return predictionSet;
+	}
+	
+	public void setPredictionSet(BitSet set) {
+		List<Automaton> automatons = new ArrayList<>();
+		for(Alternate alternate : alternates) {
+			automatons.add(alternate.getPredictionSetAutomaton());
+		}
+		
+		predictionSetAutomaton = AutomatonOperations.or(automatons).getMatcher();
+		
+		this.predictionSet = set;
 	}
 	
 	public boolean contains(List<Symbol> list) {

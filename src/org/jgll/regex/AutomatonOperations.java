@@ -6,6 +6,7 @@ import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -796,6 +797,26 @@ public class AutomatonOperations {
 		});
 		
 		return new Automaton(startState[0]);
+	}
+	
+	/**
+	 * Creates an automaton which is the result of applying the or operator to the list
+	 * of automatons. 
+	 */
+	public static Automaton or(List<Automaton> automatons) {
+		State startState = new State();
+		State finalState = new State(true);
+		
+		for(Automaton a : automatons) {
+			startState.addTransition(Transition.emptyTransition(a.getStartState()));
+			
+			for(State f : a.getFinalStates()) {
+				f.setFinalState(false);
+				f.addTransition(Transition.emptyTransition(finalState));
+			}
+		}
+		
+		return new Automaton(startState).minimize();
 	}
 	
 	

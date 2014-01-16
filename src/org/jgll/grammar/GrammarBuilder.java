@@ -357,11 +357,9 @@ public class GrammarBuilder implements Serializable {
 		GrammarProperties.calculateFollowSets(nonterminals);
 
 		GrammarProperties.setNullableHeads(nonterminals);
-		GrammarProperties.setPredictionSets(nonterminals);
+		GrammarProperties.setPredictionSets(nonterminals, tokens);
 		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
-		GrammarProperties.setAlternateMaps(nonterminals, tokens.size());
-		
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals);
 		
 		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);

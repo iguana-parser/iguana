@@ -78,7 +78,9 @@ public class ExamplesTest {
 		Matcher matcher = a.getMatcher();
 		
 		assertEquals(8, matcher.match(Input.fromString("Variable"), 0));
-		assertEquals(1, matcher.shortestMatch(Input.fromString("Variable"), 0));
+		
+		matcher = matcher.setMode(Matcher.SHORTEST_MATCH);
+		assertEquals(1, matcher.match(Input.fromString("Variable"), 0));
 	}
 	
 }

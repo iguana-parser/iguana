@@ -96,18 +96,18 @@ public class LL1Test {
 	public void testPredictSets() {
 		// S ::= . A [a]
 		Alternate alt1 = grammar.getNonterminalByName("S").getAlternateAt(0);
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a)), alt1.getPredictionSetAsBitSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a)), alt1.getPredictionSet());
 		
 		// A ::= . B D
 		Alternate alt2 = grammar.getNonterminalByName("A").getAlternateAt(0);
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a), EOF), alt2.getPredictionSetAsBitSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a), EOF), alt2.getPredictionSet());
 		
 		// B ::= . [b]
 		Alternate alt3 = grammar.getNonterminalByName("B").getAlternateAt(0);
-		assertEquals(BitSetUtil.from(grammar.getTokenID(b)), alt3.getPredictionSetAsBitSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(b)), alt3.getPredictionSet());
 
 		Alternate alt4 = grammar.getNonterminalByName("B").getAlternateAt(1);
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(a), EOF), alt4.getPredictionSetAsBitSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(a), EOF), alt4.getPredictionSet());
 	}
 
 	@Test

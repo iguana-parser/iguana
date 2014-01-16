@@ -1,15 +1,13 @@
 package org.jgll.lexer;
 
 import java.util.BitSet;
-import java.util.List;
 
+import org.jgll.regex.Matcher;
 import org.jgll.util.Input;
 
 
 public interface GLLLexer {
 
-	public List<Integer> tokensAt(int inputIndex, int[] expectedTokens);
-	
 	/**
 	 * Matches the input from the given input index using the set of expected tokens.
 	 * 
@@ -18,7 +16,9 @@ public interface GLLLexer {
 	 * 
 	 * @return true if at least one of the expected tokens matches the input at the given index.
 	 */
-	public boolean match(int inputIndex, int[] expectedTokens);
+	public boolean match(int inputIndex, Matcher m);
+	
+	public int tokenAt(int inputIndex, BitSet set);
 	
 	/**
 	 * 

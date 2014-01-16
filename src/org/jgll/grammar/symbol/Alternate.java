@@ -13,6 +13,8 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.regex.Automaton;
+import org.jgll.regex.Matcher;
 import org.jgll.util.hashing.HashFunctionBuilder;
 import org.jgll.util.hashing.hashfunction.MurmurHash3;
 
@@ -26,7 +28,11 @@ public class Alternate implements Serializable {
 	
 	private BodyGrammarSlot condition;
 	
-	private int[] predictionSet;
+	private Automaton predictionSetAutomaton;
+	
+	private BitSet predictionSet;
+	
+	private Matcher matcher;
 	
 	public Alternate(BodyGrammarSlot firstSlot) {
 		
@@ -207,24 +213,22 @@ public class Alternate implements Serializable {
 		return false;
 	}
 
-	public void setPredictionSet(BitSet set) {
-		predictionSet = new int[set.cardinality()];
-		int j = 0;
-		 for (int i = set.nextSetBit(0); i >= 0; i = set.nextSetBit(i+1)) {
-			predictionSet[j++] = i;
-		}
+	public void setPredictionSet(Automaton predictionSet, BitSet array) {
+		this.predictionSetAutomaton = predictionSet;
+		this.predictionSet = array;
+		this.matcher = predictionSet.getMatcher();
 	}
 	
-	public int[] getPredictionSet() {
+	public Automaton getPredictionSetAutomaton() {
+		return predictionSetAutomaton;
+	}
+	
+	public BitSet getPredictionSet() {
 		return predictionSet;
 	}
 	
-	public BitSet getPredictionSetAsBitSet() {
-		BitSet set = new BitSet();
-		for(int i = 0; i < predictionSet.length; i++) {
-			set.set(predictionSet[i]);
-		}
-		return set;
+	public Matcher getMatcher() {
+		return matcher;
 	}
 	
 	@Override

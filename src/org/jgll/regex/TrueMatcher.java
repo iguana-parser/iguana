@@ -42,8 +42,8 @@ public class TrueMatcher implements Matcher, Serializable {
 	}
 
 	@Override
-	public int shortestMatch(Input input, int inputIndex) {
-		return 0;
+	public Matcher setMode(int mode) {
+		return this;
 	}
 
 }

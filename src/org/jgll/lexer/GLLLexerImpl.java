@@ -1,17 +1,14 @@
 package org.jgll.lexer;
 
-import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.List;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.EOF;
+import org.jgll.regex.Matcher;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
 	
 	private static final int UNMATCHED = -1;
-	private static final int ERROR = -2;
 
 	/**
 	 * tokens[inputIndex][tokenID] = length
@@ -36,33 +33,25 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	@Override
-	public boolean match(int inputIndex, int[] expectedTokens) {
-		
-		for(int i = 0; i < expectedTokens.length; i++) {
-			int tokenID = expectedTokens[i];
-			
-			if(tokenID == EOF.TOKEN_ID) {
-				if(input.charAt(inputIndex) == 0) {
-					return true;
-				}
-				continue;
-			}
-			
-			if(tokens[inputIndex][tokenID] == ERROR) {
-				continue;
-			}
-			else if(tokens[inputIndex][tokenID] == UNMATCHED) {
-				int length = grammar.getMatcher(tokenID).match(input, inputIndex);
-				if(length >= 0) {
-					tokens[inputIndex][tokenID] = length;
-					return true;
-				}
+	public boolean match(int inputIndex, Matcher m) {
+		return m.match(input, inputIndex) > 0;
+	}
+	
+	@Override
+	public int tokenAt(int inputIndex, BitSet set) {
+		for (int i = set.nextSetBit(0); i >= 0; i = set.nextSetBit(i+1)) {
+			if(tokens[inputIndex][i] >= 0) {
+				return i;
 			} else {
-				return true;
+				int length = grammar.getMatcher(i).match(input, inputIndex);
+				tokens[inputIndex][i] = length;
+				
+				if(length >= 0) {
+					return i;
+				}
 			}
 		}
-		
-		return false;
+		return -1;
 	}
 	
 	@Override
@@ -73,39 +62,6 @@ public class GLLLexerImpl implements GLLLexer {
 			return length;
 		}
 		return tokens[inputIndex][tokenID];
-	}
-	
-	@Override
-	public List<Integer> tokensAt(int inputIndex, int[] expectedTokens) {
-		
-		List<Integer> list = new ArrayList<>();
-		
-		for(int i = 0; i < expectedTokens.length; i++) {
-			int tokenID = expectedTokens[i];
-
-			// EOF only matches at the end of the file
-			if(tokenID == EOF.TOKEN_ID) {
-				if(input.charAt(inputIndex) == 0) {
-					list.add(EOF.TOKEN_ID);
-				}
-				continue;
-			}
-			
-			if(tokens[inputIndex][tokenID] == ERROR) {
-				continue;
-			}
-			else if(tokens[inputIndex][tokenID] == UNMATCHED) {
-				int length = grammar.getMatcher(tokenID).match(input, inputIndex);
-				if(length >= 0) {
-					list.add(tokenID);
-				}
-				tokens[inputIndex][tokenID] = length;
-			} else {
-				list.add(tokenID);
-			}
-		}
-		
-		return list;
 	}
 	
 	@Override

@@ -17,7 +17,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
-import org.jgll.regex.Matcher;
+import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
@@ -73,10 +73,9 @@ public class GrammarProperties {
 			}
 		}
 		
-		if(isChainNullable(currentSlot)) {
+		if (isChainNullable(currentSlot)) {
 			firstSet.set(0);
 		}
-
 	}
 	
 	private static boolean isNullable(HeadGrammarSlot nt) {
@@ -190,25 +189,10 @@ public class GrammarProperties {
 			head.setNullable(head.getFirstSet().get(EPSILON));
 		}
 	}
-	
-	public static void setAlternateMaps(Iterable<HeadGrammarSlot> nonterminals, int tokensCount) {
-		for (HeadGrammarSlot head : nonterminals) {
-			head.createAlternateMaps(tokensCount);
-		}
-	}
-	
-	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals) {
+		
+	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, List<RegularExpression> regularExpressions) {
 		
 		for (HeadGrammarSlot head : nonterminals) {
-			
-			// Setting the prediction set for the head grammar slot
-			BitSet predictionSet = new BitSet();
-			predictionSet.or(head.getFirstSet());
-			if(head.isNullable()) {
-				predictionSet.or(head.getFollowSet());
-			}
-			predictionSet.clear(EPSILON);
-			head.setPredictionSet(predictionSet);
 			
 			for (Alternate alternate : head.getAlternates()) {
 				
@@ -223,18 +207,48 @@ public class GrammarProperties {
 						}
 						// Prediction sets should not contain epsilon
 						set.clear(EPSILON);
-						alternate.setPredictionSet(set);
+						alternate.setPredictionSet(predictionSetToAutomaton(set, regularExpressions), set);
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {
 						BitSet set = currentSlot.getHead().getFollowSetAsBitSet();
 						set.clear(EPSILON);
-						alternate.setPredictionSet(set);
+						alternate.setPredictionSet(predictionSetToAutomaton(set, regularExpressions), set);
 					} 
 					else {
 						throw new RuntimeException("Unexpected grammar slot of type " + currentSlot.getClass());
 					}
 			}
+			
+			BitSet predictionSet = new BitSet();
+			predictionSet.or(head.getFirstSet());
+			if(head.isNullable()) {
+				predictionSet.or(head.getFollowSet());
+			}
+			predictionSet.clear(EPSILON);
+			head.setPredictionSet(predictionSet);
 		}
+	}
+	
+	private static int[] predictionSetToIntArray(BitSet bitSet) {
+		int[] array = new int[bitSet.cardinality()];
+
+		int j = 0;
+		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
+			array[j++] = i;
+		}
+		
+		return array;
+	}
+	
+	private static Automaton predictionSetToAutomaton(BitSet bitSet, List<RegularExpression> regularExpressions) {
+		
+		List<RegularExpression> list = new ArrayList<>();
+		
+		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
+			list.add(regularExpressions.get(i));
+		}
+		
+		return new RegexAlt<>(list).toAutomaton();
 	}
 	
 	
@@ -272,7 +286,11 @@ public class GrammarProperties {
 									   List<RegularExpression> tokens) {
 		
 		for (HeadGrammarSlot head : nonterminals) {
-			head.setLL1(isLL1(head, tokens));				
+			boolean ll1 = isLL1(head, tokens);
+			if(ll1) {
+				head.setLL1(ll1);
+				head.setLL1Map(tokens.size());
+			}
 		}
 		
 		for (HeadGrammarSlot head : nonterminals) {
@@ -294,35 +312,13 @@ public class GrammarProperties {
 			return false;
 		}
 		
-		Automaton[] automatonMap = new Automaton[tokens.size()];
-		for(int i = 0; i < tokens.size(); i++) {
-			automatonMap[i] = tokens.get(i).toAutomaton().minimize();
-		}
-		
 		for(Alternate alt1 : nonterminal.getAlternates()) {
 			for(Alternate alt2 : nonterminal.getAlternates()) {
 				if(!alt1.equals(alt2)) {
-					int[] set1 = alt1.getPredictionSet();
-					int[] set2 = alt2.getPredictionSet();
 					
-					 for (int i = 0; i < set1.length; i++) {
-						 for (int j = 0; j < set2.length; j++) {
-							 
-							 int ti = set1[i];
-							 int tj = set2[j];
-							 
-							 // the automaton for EOF is a subset of any dfa, so skip it.
-							 if(ti == EOF || tj == EOF) {
-								 continue;
-							 }
-							 
-							 if(ti != tj) {
-								 if(AutomatonOperations.prefix(automatonMap[ti], automatonMap[tj]) ||
-									AutomatonOperations.prefix(automatonMap[tj], automatonMap[ti])) {
-									 return false;
-								 }
-							 }
-						 }
+					 if(AutomatonOperations.prefix(alt1.getPredictionSetAutomaton(), alt2.getPredictionSetAutomaton()) ||
+						AutomatonOperations.prefix(alt2.getPredictionSetAutomaton(), alt1.getPredictionSetAutomaton())) {
+						 return false;
 					 }
 				}
 			}
@@ -340,7 +336,7 @@ public class GrammarProperties {
 		for(Alternate alt1 : nonterminal.getAlternates()) {
 			for(Alternate alt2 : nonterminal.getAlternates()) {
 				if(!alt1.equals(alt2)) {
-					if(alt1.getPredictionSetAsBitSet().intersects(alt2.getPredictionSetAsBitSet())) {
+					if(alt1.getPredictionSetAutomaton().intersection(alt2.getPredictionSetAutomaton()).isLanguageEmpty()) {
 						return false;
 					}
 				}

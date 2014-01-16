@@ -7,7 +7,7 @@ import org.jgll.util.Input;
 public abstract class AbstractMatcher implements Matcher, Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
+	
 	private final int[][] transitionTable;
 	
 	private final boolean[] endStates;
@@ -17,6 +17,8 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	protected final int[] intervals;
 	
 	private int id;
+	
+	private int mode = LONGEST_MATCH;
 
 	public AbstractMatcher(int[][] transitionTable, boolean[] endStates, int startStateId, int[] intervals) {
 		this.transitionTable = transitionTable;
@@ -45,7 +47,6 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		this.id = id;
 	}
 	
-	@Override
 	public int shortestMatch(Input input, int inputIndex) {
 		int length = 0;
 
@@ -80,6 +81,14 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 
 	@Override
 	public int match(Input input, int inputIndex) {
+		if(mode == LONGEST_MATCH) {
+			return longestMatchmatch(input, inputIndex);
+		} else {
+			return shortestMatch(input, inputIndex);
+		}
+	}
+
+	public int longestMatchmatch(Input input, int inputIndex) {
 		int length = 0;
 
 		int stateId = startStateId;
@@ -145,6 +154,12 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		}
 		
 		return maximumMatched;
+	}
+	
+	@Override
+	public Matcher setMode(int mode) {
+		this.mode = mode; 
+		return this;
 	}
 	
 	protected abstract int getTransitionId(int c);
