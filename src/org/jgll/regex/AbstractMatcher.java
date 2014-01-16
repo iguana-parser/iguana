@@ -115,6 +115,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			int transitionId = getTransitionId(input.charAt(i));
 			
 			if(transitionId == -1) {
+				previousId = stateId;
 				break;
 			}
 			
@@ -132,9 +133,9 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		}
 		
 		// Match found
-		if(maximumMatched > 0) {
+		if(maximumMatched >= 0) {
 			for(MatchAction action : matchActions[previousId]) {
-				action.execute();
+				action.execute(maximumMatched, previousId);
 			}
 		}
 		

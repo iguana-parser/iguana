@@ -35,13 +35,16 @@ public class Automaton {
 		}
 		
 		this.startState = startState;
-		init();
+		matchActions = new ArrayList<>();
+		init(this);
 	}
 
-	private void init() {
-		intervals = AutomatonOperations.getIntervals(this);
+	private void init(Automaton newAutomaton) {
+		startState = newAutomaton.getStartState();
 		
-		matchActions = new ArrayList<>();
+		matchActions = newAutomaton.getMatchActions();
+
+		intervals = AutomatonOperations.getIntervals(this);
 		
 		AutomatonOperations.setStateIDs(this);
 		AutomatonOperations.setTransitionIDs(this);
@@ -54,7 +57,6 @@ public class Automaton {
 		}
 		
 		finalStates = AutomatonOperations.getFinalStates(this);
-		matchActions = new ArrayList<>();
 	}
 	
 	public State getStartState() {
@@ -77,8 +79,14 @@ public class Automaton {
 		return states[id];
 	}
 	
-	public void addMatchAction(MatchAction matchAction) {
+	public Automaton addMatchAction(MatchAction matchAction) {
 		matchActions.add(matchAction);
+		return this;
+	}
+	
+	public Automaton addMatchActions(List<MatchAction> list) {
+		matchActions.addAll(list);
+		return this;
 	}
 	
 	public List<MatchAction> getMatchActions() {
@@ -195,30 +203,22 @@ public class Automaton {
 			return this;
 		}
 		
-		Automaton newAutomaton = AutomatonOperations.makeDeterministic(this);
-		startState = newAutomaton.getStartState();
 		deterministic = true;
-		init();
+		init(AutomatonOperations.makeDeterministic(this));
 		return this;
 	}
 	public Automaton reverse() {
-		Automaton reverse = AutomatonOperations.reverse(this);
-		startState = reverse.getStartState();
-		init();
+		init(AutomatonOperations.reverse(this));
 		return this;
 	}
 	
 	public Automaton intersection(Automaton a) {
-		Automaton intersection = AutomatonOperations.intersection(this, a);
-		startState = intersection.getStartState();
-		init();
+		init(AutomatonOperations.intersection(this, a));
 		return this;
 	}
 	
 	public Automaton union(Automaton a) {
-		Automaton union = AutomatonOperations.union(this, a);
-		startState = union.getStartState();
-		init();
+		init(AutomatonOperations.union(this, a));
 		return this;
 	}
 	
@@ -232,10 +232,8 @@ public class Automaton {
 			return this;
 		}
 		
-		Automaton minimized = AutomatonOperations.minimize(this);
-		startState = minimized.getStartState();
 		this.minimized = true;
-		init();
+		init(AutomatonOperations.minimize(this));
 		return this;
 	}
 	

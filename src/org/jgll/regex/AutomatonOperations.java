@@ -80,7 +80,7 @@ public class AutomatonOperations {
 			}			
 		}
 		
-		return new Automaton(startState);
+		return new Automaton(startState).addMatchActions(nfa.getMatchActions());
 	}
 	
 	public static Matcher createMatcher(Automaton nfa) {
@@ -117,7 +117,6 @@ public class AutomatonOperations {
 				matchActions[state.getId()] = nfa.getMatchActions();
 			}
 		}
-		
 		
 		if(intervals[intervals.length - 1] - intervals[0] > Character.MAX_VALUE) {
 			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, matchActions);					
@@ -332,7 +331,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState);
+		return new Automaton(startState).addMatchActions(nfa.getMatchActions());
 	}
 
 	/**
