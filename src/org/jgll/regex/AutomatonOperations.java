@@ -23,7 +23,7 @@ public class AutomatonOperations {
 		
 		Set<State> initialState = new HashSet<>();
 		initialState.add(nfa.getStartState());
-		initialState = epsilonClosure(initialState);
+		initialState = epsilonClosure2(initialState);
 		visitedStates.add(initialState);
 		processList.add(initialState);
 		
@@ -49,7 +49,7 @@ public class AutomatonOperations {
 			Map<Tuple<Integer, Integer>, Set<State>> transitionsMap = move(stateSet, intervals);
 
 			for(Entry<Tuple<Integer, Integer>, Set<State>> e : transitionsMap.entrySet()) {
-				Set<State> newState = epsilonClosure(e.getValue());
+				Set<State> newState = epsilonClosure2(e.getValue());
 				
 				State destination = newStatesMap.get(newState);
 				if(destination == null) {
@@ -123,6 +123,20 @@ public class AutomatonOperations {
 		} else {
 			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, matchActions);
 		}
+	}
+	
+	private static Set<State> epsilonClosure2(Set<State> states) {
+		Set<State> newStates = new HashSet<>(states);
+		
+		for(State state : states) {
+			Set<State> s = state.getEpsilonClosure();
+			if(!s.isEmpty()) {
+				newStates.addAll(s);
+				newStates.addAll(epsilonClosure2(s));
+			}
+		}
+		
+		return newStates;
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {

@@ -12,6 +12,8 @@ public class State implements Serializable {
 
 	private final Set<Transition> transitions;
 	
+	private Set<State> epsilonClosure;
+	
 	private boolean finalState;
 	
 	private int id;
@@ -23,6 +25,7 @@ public class State implements Serializable {
 	public State(boolean finalState) {
 		this.transitions = new HashSet<>();
 		this.finalState = finalState;
+		this.epsilonClosure = new HashSet<>();
 	}
 	
 	public Set<Transition> getTransitions() {
@@ -61,6 +64,10 @@ public class State implements Serializable {
 	
 	public void addTransition(Transition transition) {
 		transitions.add(transition);
+		
+		if(transition.isEpsilonTransition()) {
+			epsilonClosure.add(transition.getDestination());
+		}
 	}
 	
 	public void removeTransition(Transition transition) {
@@ -81,6 +88,10 @@ public class State implements Serializable {
 	
 	public int getCountTransitions() {
 		return transitions.size();
+	}
+	
+	public Set<State> getEpsilonClosure() {
+		return epsilonClosure;
 	}
 	
 	@Override
