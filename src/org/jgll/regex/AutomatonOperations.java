@@ -825,7 +825,12 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState).minimize();
+		List<MatchAction> matchActions = new ArrayList<>();
+		for(Automaton a : automatons) {
+			matchActions.addAll(a.getMatchActions());
+		}
+		
+		return new Automaton(startState).minimize().addMatchActions(matchActions);
 	}
 	
 	
