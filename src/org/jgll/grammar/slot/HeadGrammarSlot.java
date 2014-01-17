@@ -17,6 +17,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
+import org.jgll.regex.MatchAction;
 import org.jgll.regex.Matcher;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
@@ -53,6 +54,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	private boolean ll1SubGrammar;
 	
 	private Alternate[] ll1Map;
+	
+	private GLLParser parser;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
@@ -124,6 +127,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
+		this.parser = parser;
+		
 		int ci = parser.getCurrentInputIndex();
 		
 		// Don't create the descriptor and jump to the beginning of the slot
@@ -132,12 +137,15 @@ public class HeadGrammarSlot extends GrammarSlot {
 //			parser.setCurrentSPPFNode(DummyNode.getInstance());
 //			return slot.parse(parser, lexer);				
 //		}
-
+		
 		for (Alternate alt : alternates) {
 			if(lexer.match(ci, alt.getMatcher())) {
 				parser.addDescriptor(alt.getFirstSlot());
 			}
 		}
+
+
+//		predictionSetAutomaton.match(lexer.getInput(), ci);
 		
 		return null;
 	}
@@ -320,9 +328,17 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public void setPredictionSet(BitSet set) {
 		List<Automaton> automatons = new ArrayList<>();
-		for(Alternate alternate : alternates) {
+		for(final Alternate alternate : alternates) {
 			if(!alternate.isEpsilon()) {
-				automatons.add(alternate.getPredictionSetAutomaton());
+				Automaton a = alternate.getPredictionSetAutomaton();
+				a.addMatchAction(new MatchAction() {
+					
+					@Override
+					public void execute(int length, int state) {
+						parser.addDescriptor(alternate.getFirstSlot());
+					}
+				});
+				automatons.add(a);
 			}
 		}
 		
