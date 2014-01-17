@@ -28,7 +28,7 @@ public class Alternate implements Serializable {
 	
 	private BodyGrammarSlot condition;
 	
-	private Automaton predictionSetAutomaton;
+	private transient Automaton predictionSetAutomaton;
 	
 	private BitSet predictionSet;
 	

@@ -1,11 +1,14 @@
 package org.jgll.regex;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class State {
+public class State implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private final Set<Transition> transitions;
 	

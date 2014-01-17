@@ -175,7 +175,7 @@ public class AutomatonOperations {
 		
 		return map;
 	}
-		
+	
 	/**
 	 * 
 	 * Note: unreachable states are already removed as we gather the states

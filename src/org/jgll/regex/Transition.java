@@ -1,10 +1,14 @@
 package org.jgll.regex;
 
+import java.io.Serializable;
+
 import org.jgll.grammar.symbol.Range;
 import org.jgll.parser.HashFunctions;
 
-public class Transition implements Comparable<Transition> {
+public class Transition implements Comparable<Transition>, Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private int start;
 	
 	private int end;

@@ -1,5 +1,6 @@
 package org.jgll.regex;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -12,8 +13,10 @@ import java.util.Set;
  * @author Ali Afroozeh
  *
  */
-public class Automaton {
+public class Automaton  implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private State startState;
 	
 	private int[] intervals;
@@ -233,7 +236,7 @@ public class Automaton {
 		}
 		
 		this.minimized = true;
-		init(AutomatonOperations.minimize(this));
+//		init(AutomatonOperations.minimize(this));
 		return this;
 	}
 	

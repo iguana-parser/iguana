@@ -333,6 +333,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 				Automaton a = alternate.getPredictionSetAutomaton();
 				a.addMatchAction(new MatchAction() {
 					
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void execute(int length, int state) {
 						parser.addDescriptor(alternate.getFirstSlot());
