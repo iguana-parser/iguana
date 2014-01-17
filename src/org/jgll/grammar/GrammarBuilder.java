@@ -84,8 +84,6 @@ public class GrammarBuilder implements Serializable {
 	
 	private List<BodyGrammarSlot> conditionSlots;
 	
-//	Set<RegularExpression> regularExpressions;
-	
 	Map<RegularExpression, Integer> tokenIDMap;
 	
 	List<RegularExpression> tokens;
@@ -108,15 +106,24 @@ public class GrammarBuilder implements Serializable {
 		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
 		newNonterminalsMap = new LinkedHashMap<>();
+		
 		tokenIDMap = new HashMap<>();
+		tokenIDMap.put(Epsilon.getInstance(), 0);
+		tokenIDMap.put(EOF.getInstance(), 1);
+		
 		tokens = new ArrayList<>();
 		tokens.add(Epsilon.getInstance());
 		tokens.add(EOF.getInstance());
 	}
 
 	public Grammar build() {
+		long start = System.nanoTime();
 		
 		createAutomatonsMap();
+		
+		long end = System.nanoTime();
+		
+		log.info("Automatons created in %d ms", (start - end) / 1000_000);
 		
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
@@ -132,24 +139,6 @@ public class GrammarBuilder implements Serializable {
 		initializeGrammarProrperties();
 		
 		validateGrammar();
-		
-		dfas = new Matcher[tokens.size()];
-		
-		// There are no matchers for epsilon or EOF, they will be handled at a higher level from the parser.
-		dfas[0] = null;
-		dfas[1] = null;
-		
-		for(RegularExpression regex : tokens) {
-			
-			if(regex == Epsilon.getInstance() || regex == EOF.getInstance()) {
-				continue;
-			}
-			
-			Matcher dfa = regex.toAutomaton().getMatcher();
-			Integer id = tokenIDMap.get(regex);
-			dfa.setId(id);
-			dfas[id] = dfa;
-		}
 		
 		return new Grammar(this).init();
 	}
@@ -374,21 +363,28 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private void createAutomatonsMap() {
+		dfas = new Matcher[tokens.size()];
 		automatons = new Automaton[tokens.size()];
 		
-		for(int i = 0; i < tokens.size(); i++) {
-			automatons[i] = tokens.get(i).toAutomaton().minimize();
+		
+		for(RegularExpression regex : tokens) {
+			
+			Integer id = tokenIDMap.get(regex);
+			Automaton a = regex.toAutomaton().minimize();
+			
+			automatons[id] = a;
+
+			Matcher dfa = a.getMatcher();
+			dfa.setId(id);
+			dfas[id] = dfa;
 		}
 	}
 	
 	private int getTokenID(RegularExpression token) {
-		// The first token is epsilon and the second one is the EOF, therefore, token
-		// indices start from 2.
-		
 		if(tokenIDMap.containsKey(token)) {
 			return tokenIDMap.get(token);
 		}
-		int id = tokenIDMap.size() + 2;
+		int id = tokenIDMap.size();
 		tokenIDMap.put(token, id);
 		tokens.add(token);
 		return id;
