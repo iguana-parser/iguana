@@ -39,6 +39,8 @@ public class AutomatonOperations {
 		
 		newStatesMap.put(initialState, startState);
 		
+		Map<Tuple<State, Integer>, Set<State>> cache = new HashMap<>();
+		
 		while(!processList.isEmpty()) {
 			Set<State> stateSet = processList.poll();
 			State source = newStatesMap.get(stateSet);
@@ -46,7 +48,7 @@ public class AutomatonOperations {
 			// The state should have been created before.
 			assert source != null;
 			
-			Map<Tuple<Integer, Integer>, Set<State>> transitionsMap = move(stateSet, intervals);
+			Map<Tuple<Integer, Integer>, Set<State>> transitionsMap = move(stateSet, intervals, cache);
 
 			for(Entry<Tuple<Integer, Integer>, Set<State>> e : transitionsMap.entrySet()) {
 				Set<State> newState = epsilonClosure2(e.getValue());
@@ -161,19 +163,32 @@ public class AutomatonOperations {
 		return newStates;
 	}
 	
-	private static Map<Tuple<Integer, Integer>, Set<State>> move(Set<State> states, int[] intervals) {
+	private static Map<Tuple<Integer, Integer>, Set<State>> move(Set<State> states, 
+																 int[] intervals, 
+																 Map<Tuple<State, Integer>, Set<State>> cache) {
 		
 		Map<Tuple<Integer, Integer>, Set<State>> map = new HashMap<>();
 		
 		for(int i = 0; i < intervals.length; i++) {
+			
 			Set<State> reachableStates = new HashSet<>();
 
 			for(State state : states) {
-				for(Transition transition : state.getTransitions()) {
-					if(transition.canMove(intervals[i])) {
-						reachableStates.add(transition.getDestination());						
+				
+				Tuple<State, Integer> key = new Tuple<>(state, i);
+				Set<State> set = cache.get(key);
+				
+				if(set == null) {
+					set = new HashSet<>();
+					for(Transition transition : state.getTransitions()) {
+						if(transition.canMove(intervals[i])) {
+							set.add(transition.getDestination());						
+						}
 					}
+					cache.put(key, set);
 				}
+				
+				reachableStates.addAll(set);
 			}
 			
 			// Creating the transitions for the reachable states based on the transition intervals.
