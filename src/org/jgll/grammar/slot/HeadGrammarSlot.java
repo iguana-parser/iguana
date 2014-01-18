@@ -327,9 +327,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public void setPredictionSet(BitSet set) {
+		
 		List<Automaton> automatons = new ArrayList<>();
+		
 		for(final Alternate alternate : alternates) {
+			
 			if(!alternate.isEpsilon()) {
+				
 				Automaton a = alternate.getPredictionSetAutomaton();
 				a.addMatchAction(new MatchAction() {
 					

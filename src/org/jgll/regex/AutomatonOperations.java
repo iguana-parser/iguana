@@ -835,6 +835,10 @@ public class AutomatonOperations {
 		return new Automaton(startState[0]);
 	}
 	
+	public static Automaton or(Automaton...automatons) {
+		return or(Arrays.asList(automatons));
+	}
+	
 	/**
 	 * Creates an automaton which is the result of applying the or operator to the list
 	 * of automatons. 
@@ -859,7 +863,7 @@ public class AutomatonOperations {
 			matchActions.addAll(a.getMatchActions());
 		}
 		
-		return new Automaton(startState).minimize().addMatchActions(matchActions);
+		return new Automaton(startState).addMatchActions(matchActions);
 	}
 	
 	

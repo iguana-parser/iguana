@@ -123,7 +123,7 @@ public class GrammarBuilder implements Serializable {
 		
 		long end = System.nanoTime();
 		
-		log.info("Automatons created in %d ms", (start - end) / 1000_000);
+		log.info("Automatons created in %d ms", (end - start) / 1000_000);
 		
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
@@ -347,16 +347,29 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private void initializeGrammarProrperties() {
+		
+		long start = System.nanoTime();
 		GrammarProperties.calculateFirstSets(nonterminals);
 		GrammarProperties.calculateFollowSets(nonterminals);
+		long end = System.nanoTime();
+		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 
 		GrammarProperties.setNullableHeads(nonterminals);
+		
+		
+		start = System.nanoTime();
 		GrammarProperties.setPredictionSets(nonterminals, automatons);
+		end = System.nanoTime();
+		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
+		
 		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals);
 		
-		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);
+		start = System.nanoTime();
+//		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);
+		end = System.nanoTime();
+		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
 		
 		slots = GrammarProperties.setSlotIds(nonterminals, conditionSlots);
 		

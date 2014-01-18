@@ -244,7 +244,7 @@ public class Alternate implements Serializable {
 			} 
 			else if(current instanceof TokenGrammarSlot) {
 				hashBuilder.addInt(((TokenGrammarSlot) current).getSymbol().hashCode());
-			} 
+			}
 			else {
 				// Last grammar slot
 				hashBuilder.addInt(0);

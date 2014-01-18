@@ -231,18 +231,7 @@ public class GrammarProperties {
 			head.setPredictionSet(predictionSet);
 		}
 	}
-	
-	private static int[] predictionSetToIntArray(BitSet bitSet) {
-		int[] array = new int[bitSet.cardinality()];
-
-		int j = 0;
-		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-			array[j++] = i;
-		}
 		
-		return array;
-	}
-	
 	private static Automaton predictionSetToAutomaton(BitSet bitSet, Automaton[] automatons) {
 		List<Automaton> list = new ArrayList<>();
 		
@@ -251,9 +240,9 @@ public class GrammarProperties {
 		}
 		
 //		return automatons[0];
-		Automaton a = AutomatonOperations.or(list);
+//		Automaton a = AutomatonOperations.or(list);
 		
-		return a;
+		return automatons[0];
 	}
 	
 	
