@@ -35,7 +35,7 @@ public class Epsilon extends AbstractRegularExpression {
     }
     
     private Automaton createNFA() {
-    	State state = new State(true).addActions(actions);
+    	State state = new State(true).addActions(actions).addRegularExpression(this);
         return new Automaton(state);
     }
 

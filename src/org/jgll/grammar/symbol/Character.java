@@ -69,7 +69,7 @@ public class Character extends AbstractRegularExpression {
 	
 	private Automaton createNFA() {
 		State startState = new State();
-		State finalState = new State(true).addActions(actions);
+		State finalState = new State(true).addActions(actions).addRegularExpression(this);
 		startState.addTransition(new Transition(c, finalState));
 		return new Automaton(startState);
 	}

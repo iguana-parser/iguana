@@ -3,13 +3,10 @@ package org.jgll.grammar.symbol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.State;
-import org.jgll.regex.Transition;
 import org.jgll.util.CollectionsUtil;
 
 /**
@@ -67,27 +64,13 @@ public class CharacterClass extends AbstractRegularExpression {
 		return alt.equals(other.alt);
 	}
 
-	private Automaton createNFA() {
-		State startState = new State();
-		State finalState = new State(true);
-		
-		for(Range range : alt) {
-			Automaton nfa = range.toAutomaton();
-			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
-			
-			Set<State> finalStates = nfa.getFinalStates();
-			for(State s : finalStates) {
-				s.setFinalState(false);
-				s.addTransition(Transition.emptyTransition(finalState));
-			}
-		}
-		
-		return new Automaton(startState);
+	private Automaton createAutomaton() {
+		return alt.toAutomaton().addFinalStateActions(actions).addRegularExpression(this);
 	}
 	
 	@Override
 	public Automaton toAutomaton() {
-		return createNFA();
+		return createAutomaton();
 	}
 
 	@Override

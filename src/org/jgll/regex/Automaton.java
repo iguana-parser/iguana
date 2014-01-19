@@ -12,7 +12,7 @@ import java.util.Set;
  * @author Ali Afroozeh
  *
  */
-public class Automaton  implements Serializable {
+public class Automaton implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -77,6 +77,13 @@ public class Automaton  implements Serializable {
 		return this;
 	}
 	
+	public Automaton addRegularExpression(RegularExpression regularExpression) {
+		for(State state : finalStates) {
+			state.addRegularExpression(regularExpression);
+		}
+		return this;
+	}
+	
 	public int getCountStates() {
 		return states.length;
 	}
@@ -117,13 +124,10 @@ public class Automaton  implements Serializable {
 		
 		Automaton other = (Automaton) obj;
 		
-		// Checks whether two NFAs accept the same language 
+		// Checks whether two NFAs accept the same alphabet (ranges of intervals here) 
 		if(!Arrays.equals(intervals, other.intervals)) {
 			return false;
 		}
-		
-		// TODO: Maybe we should change the start symbol of the automaton after it's made 
-		// deterministic
 		
 		Automaton thisNFA = AutomatonOperations.makeDeterministic(this);
 		Automaton otherNFA = AutomatonOperations.makeDeterministic(other);

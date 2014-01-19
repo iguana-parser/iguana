@@ -35,7 +35,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public Automaton toAutomaton() {
-		return createNFA();
+		return createNFA().addFinalStateActions(actions).addRegularExpression(this);
 	}
 	
 	private Automaton createNFA() {

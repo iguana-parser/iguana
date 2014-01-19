@@ -18,7 +18,10 @@ public class State implements Serializable {
 	
 	private List<StateAction> actions;
 	
-	private Object object;
+	/**
+	 * The set of regular expressions whose final state is this state.
+	 */
+	private Set<RegularExpression> regularExpressions;
 	
 	private boolean finalState;
 	
@@ -33,6 +36,7 @@ public class State implements Serializable {
 		this.finalState = finalState;
 		this.epsilonClosure = new HashSet<>();
 		this.actions = new ArrayList<>();
+		this.regularExpressions = new HashSet<>();
 	}
 	
 	public Set<Transition> getTransitions() {
@@ -107,12 +111,18 @@ public class State implements Serializable {
 		return this;
 	}
 	
-	public Object getObject() {
-		return object;
+	public Set<RegularExpression> getRegularExpressions() {
+		return regularExpressions;
 	}
 	
-	public void setObject(Object object) {
-		this.object = object;
+	public State addRegularExpression(RegularExpression regex) {
+		regularExpressions.add(regex);
+		return this;
+	}
+	
+	public State addRegularExpressions(Collection<RegularExpression> regularExpressions) {
+		regularExpressions.addAll(regularExpressions);
+		return this;
 	}
 	
 	public int getCountTransitions() {

@@ -18,16 +18,12 @@ public class RegexStar extends AbstractRegularExpression {
 	
 	@Override
 	public Automaton toAutomaton() {
-		return createNFA();
+		return createNFA().addFinalStateActions(actions).addRegularExpression(this);
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
 	private Automaton createNFA() {
 		State startState = new State();
-		State finalState = new State(true).addActions(actions);
+		State finalState = new State(true);
 		
 		Automaton nfa = regexp.toAutomaton();
 		

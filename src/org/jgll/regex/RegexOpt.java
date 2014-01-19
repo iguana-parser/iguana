@@ -18,7 +18,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	@Override
 	public Automaton toAutomaton() {
-		return createNFA();
+		return createNFA().addFinalStateActions(actions).addRegularExpression(this);
 	}
 	
 	/**

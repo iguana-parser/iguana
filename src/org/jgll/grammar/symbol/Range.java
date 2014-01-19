@@ -78,7 +78,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 
 	private Automaton createNFA() {
 		State startState = new State();
-		State finalState = new State(true).addActions(actions);
+		State finalState = new State(true).addActions(actions).addRegularExpression(this);
 		startState.addTransition(new Transition(start, end, finalState));
 		return new Automaton(startState);
 	}
