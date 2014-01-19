@@ -6,10 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.util.CollectionsUtil;
 
-public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implements RegularExpression, Iterable<T> {
+public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractSymbol implem
 	
 	private Automaton createNFA() {
 		State startState = new State();
-		State finalState = new State(true);
+		State finalState = new State(true).addActions(actions);
 		
 		for(RegularExpression regexp : regularExpressions) {
 			Automaton nfa = regexp.toAutomaton();

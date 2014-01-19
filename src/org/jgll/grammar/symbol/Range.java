@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Automaton;
-import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
 
@@ -16,7 +15,7 @@ import org.jgll.regex.Transition;
  * @author Ali Afroozeh
  *
  */
-public class Range extends AbstractSymbol implements RegularExpression, Comparable<Range> {
+public class Range extends AbstractRegularExpression implements Comparable<Range> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -79,7 +78,7 @@ public class Range extends AbstractSymbol implements RegularExpression, Comparab
 
 	private Automaton createNFA() {
 		State startState = new State();
-		State finalState = new State(true);
+		State finalState = new State(true).addActions(actions);
 		startState.addTransition(new Transition(start, end, finalState));
 		return new Automaton(startState);
 	}

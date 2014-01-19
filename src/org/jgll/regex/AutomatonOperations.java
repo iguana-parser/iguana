@@ -39,26 +39,33 @@ public class AutomatonOperations {
 		
 		newStatesMap.put(initialState, startState);
 		
+		for(State state : initialState) {
+			startState.addActions(state.getActions());
+		}
+		
 		Map<Tuple<State, Integer>, Set<State>> cache = new HashMap<>();
 		
 		while(!processList.isEmpty()) {
 			Set<State> stateSet = processList.poll();
-			State source = newStatesMap.get(stateSet);
-			
-			// The state should have been created before.
-			assert source != null;
 			
 			Map<Tuple<Integer, Integer>, Set<State>> transitionsMap = move(stateSet, intervals, cache);
 
 			for(Entry<Tuple<Integer, Integer>, Set<State>> e : transitionsMap.entrySet()) {
-				Set<State> newState = epsilonClosure2(e.getValue());
+				Set<State> states = e.getValue();
+				Set<State> newState = epsilonClosure2(states);
 				
 				State destination = newStatesMap.get(newState);
 				if(destination == null) {
 					destination = new State();
 					newStatesMap.put(newState, destination);
+					for(State state : newState) {
+						destination.addActions(state.getActions());
+					}
 				}
 				
+				State source = newStatesMap.get(stateSet);
+				// The state should have been created before.
+				assert source != null;
 				Transition transition = new Transition(e.getKey().getFirst(), e.getKey().getSecond(), destination);
 				source.addTransition(transition);
 				
@@ -82,7 +89,7 @@ public class AutomatonOperations {
 			}			
 		}
 		
-		return new Automaton(startState).addMatchActions(nfa.getMatchActions());
+		return new Automaton(startState);
 	}
 	
 	public static Matcher createMatcher(Automaton nfa) {
@@ -99,7 +106,7 @@ public class AutomatonOperations {
 		boolean[] endStates = new boolean[statesCount];
 		
 		@SuppressWarnings("unchecked")
-		List<MatchAction>[] matchActions = new List[statesCount];
+		List<StateAction>[] actions = new List[statesCount];
 		
 		for(int i = 0; i < transitionTable.length; i++) {
 			for(int j = 0; j < transitionTable[i].length; j++) {
@@ -108,7 +115,7 @@ public class AutomatonOperations {
 		}
 
 		for(State state : nfa.getAllStates()) {
-			matchActions[state.getId()] = new ArrayList<>();
+			actions[state.getId()] = new ArrayList<>();
 			
 			for(Transition transition : state.getTransitions()) {
 				transitionTable[state.getId()][transition.getId()] = transition.getDestination().getId();
@@ -116,14 +123,14 @@ public class AutomatonOperations {
 			
 			if(state.isFinalState()) {
 				endStates[state.getId()] = true;
-				matchActions[state.getId()] = nfa.getMatchActions();
+				actions[state.getId()] = state.getActions();
 			}
 		}
 		
 		if(intervals[intervals.length - 1] - intervals[0] > Character.MAX_VALUE) {
-			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, matchActions);					
+			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, actions);					
 		} else {
-			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, matchActions);
+			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, actions);
 		}
 	}
 	
@@ -344,6 +351,7 @@ public class AutomatonOperations {
 		for(Set<State> set : partitions) {
 			State newState = new State();
 			for(State state : set) {
+				newState.addActions(state.getActions());
 				if(nfa.getStartState() == state) {
 					startState = newState;
 				}
@@ -360,7 +368,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState).addMatchActions(nfa.getMatchActions());
+		return new Automaton(startState);
 	}
 
 	/**
@@ -858,12 +866,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		List<MatchAction> matchActions = new ArrayList<>();
-		for(Automaton a : automatons) {
-			matchActions.addAll(a.getMatchActions());
-		}
-		
-		return new Automaton(startState).addMatchActions(matchActions);
+		return new Automaton(startState);
 	}
 	
 	

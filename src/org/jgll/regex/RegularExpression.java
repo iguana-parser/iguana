@@ -12,4 +12,10 @@ public interface RegularExpression extends Serializable, Symbol {
 	
 	public RegularExpression copy();
 	
+	/**
+	 * An action that should be executed on the final states of
+	 * regular expressions created from this automata.  
+	 */
+	public void addFinalStateAction(StateAction action);
+	
 }

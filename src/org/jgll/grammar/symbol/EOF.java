@@ -5,7 +5,7 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
 
-public class EOF extends AbstractSymbol implements RegularExpression {
+public class EOF extends AbstractRegularExpression {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -27,7 +27,7 @@ public class EOF extends AbstractSymbol implements RegularExpression {
 	@Override
 	public Automaton toAutomaton() {
     	State startState = new State();
-    	State endState = new State(true);
+    	State endState = new State(true).addActions(actions);
     	startState.addTransition(new Transition(0, endState));
         return new Automaton(startState);
 	}

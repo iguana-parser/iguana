@@ -16,7 +16,7 @@ public class ShortIntervalMatcher extends AbstractMatcher {
 								boolean[] endStates, 
 								int startStateId, 
 								int[] intervals,
-								List<MatchAction>[] matchActions) {
+								List<StateAction>[] matchActions) {
 		
 		super(transitionTable, endStates, startStateId, intervals, matchActions);
 		

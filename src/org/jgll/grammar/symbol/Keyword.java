@@ -9,7 +9,7 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;
 import org.jgll.util.Input;
 
-public class Keyword extends AbstractSymbol implements RegularExpression {
+public class Keyword extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -77,13 +77,13 @@ public class Keyword extends AbstractSymbol implements RegularExpression {
 		return seq.hashCode();
 	}
 	
-	private Automaton createNFA() {
-		return seq.toAutomaton();
+	private Automaton createAutomaton() {
+		return seq.toAutomaton().addFinalStateActions(actions);
 	}
 	
 	@Override
 	public Automaton toAutomaton() {
-		return createNFA();
+		return createAutomaton();
 	}
 
 	@Override

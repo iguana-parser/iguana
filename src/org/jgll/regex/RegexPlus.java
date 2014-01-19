@@ -1,9 +1,9 @@
 package org.jgll.regex;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 
 
-public class RegexPlus extends AbstractSymbol implements RegularExpression {
+public class RegexPlus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	

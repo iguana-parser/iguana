@@ -6,10 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.util.CollectionsUtil;
 
-public class Sequence<T extends RegularExpression> extends AbstractSymbol implements RegularExpression, Iterable<T> {
+public class Sequence<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 

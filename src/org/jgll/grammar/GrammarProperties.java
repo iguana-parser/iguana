@@ -240,9 +240,7 @@ public class GrammarProperties {
 		}
 		
 //		return automatons[0];
-//		Automaton a = AutomatonOperations.or(list);
-		
-		return automatons[0];
+		return AutomatonOperations.or(list);
 	}
 	
 	

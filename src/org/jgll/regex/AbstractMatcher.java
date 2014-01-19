@@ -13,7 +13,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	
 	private final boolean[] endStates;
 	
-	private final List<MatchAction>[] matchActions;
+	private final List<StateAction>[] matchActions;
 
 	private final int startStateId;
 	
@@ -27,7 +27,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 						   boolean[] endStates, 
 						   int startStateId, 
 						   int[] intervals,
-						   List<MatchAction>[] matchActions) {
+						   List<StateAction>[] matchActions) {
 		
 		this.transitionTable = transitionTable;
 		this.endStates = endStates;
@@ -134,7 +134,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		
 		// Match found
 		if(maximumMatched >= 0) {
-			for(MatchAction action : matchActions[previousId]) {
+			for(StateAction action : matchActions[previousId]) {
 				action.execute(maximumMatched, previousId);
 			}
 		}

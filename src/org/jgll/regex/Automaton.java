@@ -1,11 +1,10 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,8 +28,6 @@ public class Automaton  implements Serializable {
 	
 	private Set<State> finalStates;
 	
-	private List<MatchAction> matchActions;
-
 	public Automaton(State startState) {
 
 		if(startState == null) {
@@ -38,15 +35,12 @@ public class Automaton  implements Serializable {
 		}
 		
 		this.startState = startState;
-		matchActions = new ArrayList<>();
 		init(this);
 	}
 
 	private void init(Automaton newAutomaton) {
 		startState = newAutomaton.getStartState();
 		
-		matchActions = newAutomaton.getMatchActions();
-
 		intervals = AutomatonOperations.getIntervals(this);
 		
 		AutomatonOperations.setStateIDs(this);
@@ -70,6 +64,19 @@ public class Automaton  implements Serializable {
 		return finalStates;
 	}
 	
+	public void addFinalStateAction(StateAction action) {
+		for(State state : finalStates) {
+			state.addAction(action);
+		}
+	}
+	
+	public Automaton addFinalStateActions(Collection<StateAction> actions) {
+		for(State state : finalStates) {
+			state.addActions(actions);
+		}
+		return this;
+	}
+	
 	public int getCountStates() {
 		return states.length;
 	}
@@ -80,20 +87,6 @@ public class Automaton  implements Serializable {
 	
 	public State getState(int id) {
 		return states[id];
-	}
-	
-	public Automaton addMatchAction(MatchAction matchAction) {
-		matchActions.add(matchAction);
-		return this;
-	}
-	
-	public Automaton addMatchActions(List<MatchAction> list) {
-		matchActions.addAll(list);
-		return this;
-	}
-	
-	public List<MatchAction> getMatchActions() {
-		return matchActions;
 	}
 	
 	/**
@@ -236,7 +229,7 @@ public class Automaton  implements Serializable {
 		}
 		
 		this.minimized = true;
-//		init(AutomatonOperations.minimize(this));
+		init(AutomatonOperations.minimize(this));
 		return this;
 	}
 	

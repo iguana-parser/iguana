@@ -20,7 +20,7 @@ import org.jgll.util.CollectionsUtil;
  * @author Ali Afroozeh
  *
  */
-public class CharacterClass extends AbstractSymbol implements RegularExpression {
+public class CharacterClass extends AbstractRegularExpression {
 	
 	private static final long serialVersionUID = 1L;
 	

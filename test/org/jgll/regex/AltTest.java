@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.util.Input;
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
 import org.junit.Test;
 
 public class AltTest {
@@ -28,6 +26,16 @@ public class AltTest {
 		Keyword k1 = new Keyword("for");
 		Keyword k2 = new Keyword("forall");
 		
+		k1.addFinalStateAction(new StateAction() {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void execute(int length, int state) {
+				System.out.println(length);
+			}
+		});
+		
 		Automaton result = AutomatonOperations.or(k1.toAutomaton(), k2.toAutomaton());
 		
 		Matcher dfa = result.getMatcher();
@@ -39,11 +47,10 @@ public class AltTest {
 	@Test
 	public void testMatchAction() {
 		RegularExpression regexp = new RegexAlt<>(new Keyword("when"), new Keyword("if"));
-		Automaton nfa = regexp.toAutomaton();
 
 		final int[] l = new int[1];
 		
-		nfa.addMatchAction(new MatchAction() {
+		regexp.addFinalStateAction(new StateAction() {
 			
 			private static final long serialVersionUID = 1L;
 
@@ -53,6 +60,8 @@ public class AltTest {
 			}
 		});
 		
+		Automaton nfa = regexp.toAutomaton();
+		
 		Matcher dfa = nfa.getMatcher();
 		
 		assertTrue(dfa.match(Input.fromString("when")));
@@ -60,6 +69,5 @@ public class AltTest {
 		
 		assertTrue(dfa.match(Input.fromString("if")));
 		assertEquals(2, l[0]);
-	}	
-
+	}
 }

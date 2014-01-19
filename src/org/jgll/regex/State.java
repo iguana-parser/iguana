@@ -1,9 +1,11 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class State implements Serializable {
@@ -13,6 +15,10 @@ public class State implements Serializable {
 	private final Set<Transition> transitions;
 	
 	private Set<State> epsilonClosure;
+	
+	private List<StateAction> actions;
+	
+	private Object object;
 	
 	private boolean finalState;
 	
@@ -26,6 +32,7 @@ public class State implements Serializable {
 		this.transitions = new HashSet<>();
 		this.finalState = finalState;
 		this.epsilonClosure = new HashSet<>();
+		this.actions = new ArrayList<>();
 	}
 	
 	public Set<Transition> getTransitions() {
@@ -84,6 +91,28 @@ public class State implements Serializable {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public List<StateAction> getActions() {
+		return actions;
+	}
+	
+	public State addAction(StateAction action) {
+		actions.add(action);
+		return this;
+	}
+	
+	public State addActions(Collection<StateAction> actions) {
+		this.actions.addAll(actions);
+		return this;
+	}
+	
+	public Object getObject() {
+		return object;
+	}
+	
+	public void setObject(Object object) {
+		this.object = object;
 	}
 	
 	public int getCountTransitions() {

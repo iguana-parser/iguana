@@ -21,18 +21,21 @@ public class CharacterTest {
 	@Test
 	public void testMatchAction() {
 		RegularExpression regexp = new Character('a');
-		Automaton nfa = regexp.toAutomaton();
 		
 		final int[] l = new int[1];
 		
-		nfa.addMatchAction(new MatchAction() {
+		regexp.addFinalStateAction(new StateAction() {
 			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void execute(int length, int state) {
 				l[0] = length;
 			}
 		});
-
+		
+		Automaton nfa = regexp.toAutomaton();
+		
 		Matcher dfa = nfa.getMatcher();
 		assertTrue(dfa.match(Input.fromString("a")));
 		

@@ -1,11 +1,10 @@
 package org.jgll.grammar.symbol;
 
 import org.jgll.regex.Automaton;
-import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 
 
-public class Epsilon extends AbstractSymbol implements RegularExpression {
+public class Epsilon extends AbstractRegularExpression {
 
 	public static final int TOKEN_ID = 0;
 
@@ -36,7 +35,7 @@ public class Epsilon extends AbstractSymbol implements RegularExpression {
     }
     
     private Automaton createNFA() {
-    	State state = new State(true);
+    	State state = new State(true).addActions(actions);
         return new Automaton(state);
     }
 

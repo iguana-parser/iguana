@@ -2,10 +2,10 @@ package org.jgll.regex;
 
 import java.util.Set;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 
 
-public class RegexStar extends AbstractSymbol implements RegularExpression {
+public class RegexStar extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,7 +27,7 @@ public class RegexStar extends AbstractSymbol implements RegularExpression {
 	 */
 	private Automaton createNFA() {
 		State startState = new State();
-		State finalState = new State(true);
+		State finalState = new State(true).addActions(actions);
 		
 		Automaton nfa = regexp.toAutomaton();
 		

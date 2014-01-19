@@ -17,7 +17,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
-import org.jgll.regex.MatchAction;
+import org.jgll.regex.StateAction;
 import org.jgll.regex.Matcher;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
@@ -143,7 +143,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 				parser.addDescriptor(alt.getFirstSlot());
 			}
 		}
-
 
 //		predictionSetAutomaton.match(lexer.getInput(), ci);
 		
@@ -330,23 +329,23 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		List<Automaton> automatons = new ArrayList<>();
 		
-		for(final Alternate alternate : alternates) {
-			
-			if(!alternate.isEpsilon()) {
-				
-				Automaton a = alternate.getPredictionSetAutomaton();
-				a.addMatchAction(new MatchAction() {
-					
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void execute(int length, int state) {
-						parser.addDescriptor(alternate.getFirstSlot());
-					}
-				});
-				automatons.add(a);
-			}
-		}
+//		for(final Alternate alternate : alternates) {
+//			
+//			if(!alternate.isEpsilon()) {
+//				
+//				Automaton a = alternate.getPredictionSetAutomaton();
+//				a.addMatchAction(new StateAction() {
+//					
+//					private static final long serialVersionUID = 1L;
+//
+//					@Override
+//					public void execute(int length, int state) {
+//						parser.addDescriptor(alternate.getFirstSlot());
+//					}
+//				});
+//				automatons.add(a);
+//			}
+//		}
 		
 		predictionSetAutomaton = AutomatonOperations.or(automatons).getMatcher();
 		
