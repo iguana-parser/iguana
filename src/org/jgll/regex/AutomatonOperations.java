@@ -41,6 +41,7 @@ public class AutomatonOperations {
 		
 		for(State state : initialState) {
 			startState.addActions(state.getActions());
+			startState.addRegularExpressions(state.getRegularExpressions());
 		}
 		
 		Map<Tuple<State, Integer>, Set<State>> cache = new HashMap<>();
@@ -60,6 +61,7 @@ public class AutomatonOperations {
 					newStatesMap.put(newState, destination);
 					for(State state : newState) {
 						destination.addActions(state.getActions());
+						destination.addRegularExpressions(state.getRegularExpressions());
 					}
 				}
 				
@@ -351,7 +353,10 @@ public class AutomatonOperations {
 		for(Set<State> set : partitions) {
 			State newState = new State();
 			for(State state : set) {
+				
 				newState.addActions(state.getActions());
+				newState.addRegularExpressions(state.getRegularExpressions());
+				
 				if(nfa.getStartState() == state) {
 					startState = newState;
 				}

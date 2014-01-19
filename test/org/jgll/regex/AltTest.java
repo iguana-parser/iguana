@@ -11,7 +11,10 @@ public class AltTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regexp = new RegexAlt<>(new Character('a'), new Character('b'));
+		Character a = new Character('a');
+		Character b = new Character('b');
+		
+		RegularExpression regexp = new RegexAlt<>(a, b);
 		Automaton nfa = regexp.toAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
@@ -37,7 +40,7 @@ public class AltTest {
 		});
 		
 		Automaton result = AutomatonOperations.or(k1.toAutomaton(), k2.toAutomaton());
-		
+
 		Matcher dfa = result.getMatcher();
 		assertEquals(3, dfa.match(Input.fromString("for"), 0));
 		assertEquals(6, dfa.match(Input.fromString("forall"), 0));

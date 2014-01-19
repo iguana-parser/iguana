@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -27,6 +29,8 @@ public class Automaton implements Serializable {
 	private boolean minimized;
 	
 	private Set<State> finalStates;
+	
+	private Map<RegularExpression, State> map;
 	
 	public Automaton(State startState) {
 
@@ -54,6 +58,14 @@ public class Automaton implements Serializable {
 		}
 		
 		finalStates = AutomatonOperations.getFinalStates(this);
+		
+		map = new HashMap<>();
+		
+		for(State s : finalStates) {
+			for(RegularExpression regex : s.getRegularExpressions()) {
+				map.put(regex, s);
+			}
+		}
 	}
 	
 	public State getStartState() {
@@ -80,6 +92,7 @@ public class Automaton implements Serializable {
 	public Automaton addRegularExpression(RegularExpression regularExpression) {
 		for(State state : finalStates) {
 			state.addRegularExpression(regularExpression);
+			map.put(regularExpression, state);
 		}
 		return this;
 	}
@@ -165,6 +178,14 @@ public class Automaton implements Serializable {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Returns the state that corresponds to the final state of 
+	 * the given automaton.
+	 */
+	public State getState(RegularExpression regularExpression) {
+		return map.get(regularExpression);
 	}
 	
 	public boolean isDeterministic() {
