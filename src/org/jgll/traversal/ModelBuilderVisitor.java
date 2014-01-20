@@ -130,7 +130,11 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		
 		int nPackedNodes = 0;
 		
-		for(SPPFNode child : nonterminalSymbolNode.getChildren()) {
+		List<SPPFNode> list = new ArrayList<>();			
+		for(SPPFNode node : nonterminalSymbolNode.getChildren()) {
+			list.add(node);
+		}
+		for(SPPFNode child : list) {
 			PackedNode packedNode = (PackedNode) child;
 			
 			Result<U> result;
