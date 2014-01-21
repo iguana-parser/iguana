@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -191,8 +192,12 @@ public class GrammarProperties {
 			head.setNullable(head.getFirstSet().get(EPSILON));
 		}
 	}
+	
+	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, 
+										 Automaton[] automatons, 
+										 List<RegularExpression> regularExpressions) {
 		
-	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, Automaton[] automatons) {
+		Automaton a = AutomatonOperations.or(Arrays.asList(automatons));
 		
 		for (HeadGrammarSlot head : nonterminals) {
 			
@@ -209,13 +214,12 @@ public class GrammarProperties {
 						}
 						// Prediction sets should not contain epsilon
 						set.clear(EPSILON);
-						Automaton a = predictionSetToAutomaton(set, automatons);
-						alternate.setPredictionSet(a, set);
+						alternate.setPredictionSet(set);
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {
 						BitSet set = currentSlot.getHead().getFollowSetAsBitSet();
 						set.clear(EPSILON);
-						alternate.setPredictionSet(predictionSetToAutomaton(set, automatons), set);
+						alternate.setPredictionSet(set);
 					} 
 					else {
 						throw new RuntimeException("Unexpected grammar slot of type " + currentSlot.getClass());
@@ -228,21 +232,9 @@ public class GrammarProperties {
 				predictionSet.or(head.getFollowSet());
 			}
 			predictionSet.clear(EPSILON);
-			head.setPredictionSet(predictionSet);
+			head.setPredictionSet(a.copy(), regularExpressions);
 		}
 	}
-		
-	private static Automaton predictionSetToAutomaton(BitSet bitSet, Automaton[] automatons) {
-		List<Automaton> list = new ArrayList<>();
-		
-		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i+1)) {
-			list.add(automatons[i]);
-		}
-		
-//		return automatons[0];
-		return AutomatonOperations.or(list);
-	}
-	
 	
 	public static List<BodyGrammarSlot> setSlotIds(Iterable<HeadGrammarSlot> nonterminals, Iterable<BodyGrammarSlot> conditionSlots) {
 		
@@ -299,44 +291,63 @@ public class GrammarProperties {
 		
 	}
 	
-	private static boolean isLL1(HeadGrammarSlot nonterminal, List<RegularExpression> tokens) {
-		if(!arePredictionSetsDistinct(nonterminal)) {
-			return false;
-		}
-		
-		for(Alternate alt1 : nonterminal.getAlternates()) {
-			for(Alternate alt2 : nonterminal.getAlternates()) {
-				if(!alt1.equals(alt2)) {
-					
-					 if(AutomatonOperations.prefix(alt1.getPredictionSetAutomaton(), alt2.getPredictionSetAutomaton()) ||
-						AutomatonOperations.prefix(alt2.getPredictionSetAutomaton(), alt1.getPredictionSetAutomaton())) {
-						 return false;
-					 }
-				}
-			}
-		}
-		
-		return true;
-	}
+    private static boolean isLL1(HeadGrammarSlot nonterminal, List<RegularExpression> tokens) {
+        if(!arePredictionSetsDistinct(nonterminal)) {
+                return false;
+        }
+        
+        Automaton[] automatonMap = new Automaton[tokens.size()];
+        for(int i = 0; i < tokens.size(); i++) {
+                automatonMap[i] = tokens.get(i).toAutomaton().minimize();
+        }
+        
+        for(Alternate alt1 : nonterminal.getAlternates()) {
+                for(Alternate alt2 : nonterminal.getAlternates()) {
+                        if(!alt1.equals(alt2)) {
+                                BitSet set1 = alt1.getPredictionSet();
+                                BitSet set2 = alt2.getPredictionSet();
+                                
+                                 for (int i = set1.nextSetBit(0); i >= 0; i = set1.nextSetBit(i+1)) {
+                                         for (int j = set2.nextSetBit(0); j >= 0; j = set2.nextSetBit(j+1)) {
+                                                 
+                                                 // the automaton for EOF is a subset of any dfa, so skip it.
+                                                 if(i == EOF || j == EOF) {
+                                                         continue;
+                                                 }
+                                                 
+                                                 if(i != j) {
+                                                         if(AutomatonOperations.prefix(automatonMap[i], automatonMap[j]) ||
+                                                                AutomatonOperations.prefix(automatonMap[j], automatonMap[i])) {
+                                                                 return false;
+                                                         }
+                                                 }
+                                         }
+                                 }
+                        }
+                }
+        }
+        
+        return true;
+}
 	
-	private static boolean arePredictionSetsDistinct(HeadGrammarSlot nonterminal) {
-			
-		if(nonterminal.getAlternates().size() == 1) {
-			return true;
-		}
-		
-		for(Alternate alt1 : nonterminal.getAlternates()) {
-			for(Alternate alt2 : nonterminal.getAlternates()) {
-				if(!alt1.equals(alt2)) {
-					if(!alt1.getPredictionSetAutomaton().intersection(alt2.getPredictionSetAutomaton()).isLanguageEmpty()) {
-						return false;
-					}
-				}
-			}
-		}
+    private static boolean arePredictionSetsDistinct(HeadGrammarSlot nonterminal) {
+        
+        if(nonterminal.getAlternates().size() == 1) {
+        	return true;
+        }
+        
+        for(Alternate alt1 : nonterminal.getAlternates()) {
+        	for(Alternate alt2 : nonterminal.getAlternates()) {
+        		if(!alt1.equals(alt2)) {
+        			if(alt1.getPredictionSet().intersects(alt2.getPredictionSet())) {
+        				return false;
+                    }
+        		}
+        	}
+        }
 
-		return true;
-	}
+        return true;
+}
 	
 	/**
 	 * 

@@ -13,8 +13,6 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
-import org.jgll.regex.Automaton;
-import org.jgll.regex.Matcher;
 import org.jgll.util.hashing.HashFunctionBuilder;
 import org.jgll.util.hashing.hashfunction.MurmurHash3;
 
@@ -28,11 +26,7 @@ public class Alternate implements Serializable {
 	
 	private BodyGrammarSlot condition;
 	
-	private transient Automaton predictionSetAutomaton;
-	
 	private BitSet predictionSet;
-	
-	private Matcher matcher;
 	
 	public Alternate(BodyGrammarSlot firstSlot) {
 		
@@ -213,22 +207,12 @@ public class Alternate implements Serializable {
 		return false;
 	}
 
-	public void setPredictionSet(Automaton predictionSet, BitSet array) {
-		this.predictionSetAutomaton = predictionSet;
+	public void setPredictionSet(BitSet array) {
 		this.predictionSet = array;
-		this.matcher = predictionSet.getMatcher();
-	}
-	
-	public Automaton getPredictionSetAutomaton() {
-		return predictionSetAutomaton;
 	}
 	
 	public BitSet getPredictionSet() {
 		return predictionSet;
-	}
-	
-	public Matcher getMatcher() {
-		return matcher;
 	}
 	
 	@Override

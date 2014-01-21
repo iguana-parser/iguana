@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
@@ -17,6 +18,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.StateAction;
 import org.jgll.regex.Matcher;
 import org.jgll.sppf.NonPackedNode;
@@ -138,13 +140,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 //			return slot.parse(parser, lexer);				
 //		}
 		
-		for (Alternate alt : alternates) {
-			if(lexer.match(ci, alt.getMatcher())) {
-				parser.addDescriptor(alt.getFirstSlot());
-			}
-		}
+//		for (Alternate alt : alternates) {
+//			if(lexer.match(ci, alt.getMatcher())) {
+//				parser.addDescriptor(alt.getFirstSlot());
+//			}
+//		}
 
-//		predictionSetAutomaton.match(lexer.getInput(), ci);
+		predictionSetAutomaton.match(lexer.getInput(), ci);
 		
 		return null;
 	}
@@ -246,10 +248,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 		int ci = recognizer.getCi();
 		
 		for(Alternate alternate : alternates) {
-			if(lexer.match(ci, alternate.getMatcher())) {
+			// TODO: put the check for recognizers here.
+//			if(lexer.match(ci, alternate.getMatcher())) {
 				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
 				recognizer.add(alternate.getFirstSlot(), cu, ci);
-			}
+//			}
 		}
 		return null;
 	}
@@ -325,31 +328,29 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return predictionSet;
 	}
 	
-	public void setPredictionSet(BitSet set) {
+	public void setPredictionSet(Automaton a, List<RegularExpression> regularExpressions) {
 		
-		List<Automaton> automatons = new ArrayList<>();
+		for(final Alternate alternate : alternates) {
+
+			BitSet bs = alternate.getPredictionSet();
+			
+			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+				
+				a.getState(regularExpressions.get(i)).addAction(new StateAction() {
+					
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void execute(int length, int state) {
+						parser.addDescriptor(alternate.getFirstSlot());
+					}
+				});
+			}
+		}
 		
-//		for(final Alternate alternate : alternates) {
-//			
-//			if(!alternate.isEpsilon()) {
-//				
-//				Automaton a = alternate.getPredictionSetAutomaton();
-//				a.addMatchAction(new StateAction() {
-//					
-//					private static final long serialVersionUID = 1L;
-//
-//					@Override
-//					public void execute(int length, int state) {
-//						parser.addDescriptor(alternate.getFirstSlot());
-//					}
-//				});
-//				automatons.add(a);
-//			}
-//		}
+		predictionSetAutomaton = a.getMatcher();
 		
-		predictionSetAutomaton = AutomatonOperations.or(automatons).getMatcher();
-		
-		this.predictionSet = set;
+//		this.predictionSet = set;
 	}
 	
 	public boolean contains(List<Symbol> list) {
