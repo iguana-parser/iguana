@@ -120,8 +120,8 @@ public class State implements Serializable {
 		return this;
 	}
 	
-	public State addRegularExpressions(Collection<RegularExpression> regularExpressions) {
-		regularExpressions.addAll(regularExpressions);
+	public State addRegularExpressions(Collection<RegularExpression> c) {
+		regularExpressions.addAll(c);
 		return this;
 	}
 	

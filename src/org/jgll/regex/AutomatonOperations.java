@@ -37,12 +37,9 @@ public class AutomatonOperations {
 		
 		State startState = new State();
 		
-		newStatesMap.put(initialState, startState);
+		addActions(initialState, startState);
 		
-		for(State state : initialState) {
-			startState.addActions(state.getActions());
-			startState.addRegularExpressions(state.getRegularExpressions());
-		}
+		newStatesMap.put(initialState, startState);
 		
 		Map<Tuple<State, Integer>, Set<State>> cache = new HashMap<>();
 		
@@ -59,10 +56,7 @@ public class AutomatonOperations {
 				if(destination == null) {
 					destination = new State();
 					newStatesMap.put(newState, destination);
-					for(State state : newState) {
-						destination.addActions(state.getActions());
-						destination.addRegularExpressions(state.getRegularExpressions());
-					}
+					addActions(newState, destination);
 				}
 				
 				State source = newStatesMap.get(stateSet);
@@ -94,6 +88,13 @@ public class AutomatonOperations {
 		return new Automaton(startState);
 	}
 	
+	private static void addActions(Set<State> src, State dest) {
+		for(State state : src) {
+			dest.addRegularExpressions(state.getRegularExpressions());
+			dest.addActions(state.getActions());
+		}
+	}
+ 	
 	public static Matcher createMatcher(Automaton nfa) {
 		
 		int[] intervals = nfa.getIntervals();
