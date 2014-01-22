@@ -89,8 +89,9 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			}
 			
 			if(endStates[stateId]) {
+				maximumMatched = length;
 				if(mode == SHORTEST_MATCH) {
-					maximumMatched = length;
+					break;
 				}
 			}
 		}

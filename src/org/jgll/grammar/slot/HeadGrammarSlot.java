@@ -349,7 +349,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 					@Override
 					public void execute(int length, int state) {
 						parser.addDescriptor(alternate.getFirstSlot());
-						lexer.setTokenAt(ci, index[0], length);
+//						lexer.setTokenAt(ci, index[0], length);
 					}
 				});
 			}
