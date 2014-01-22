@@ -66,10 +66,6 @@ public class Automaton implements Serializable {
 				map.put(regex, s);
 			}
 		}
-		
-		if(map.size() == 0) {
-			throw new RuntimeException("Each automaton should have one corresponding regular expression.");
-		}
 	}
 	
 	public State getStartState() {

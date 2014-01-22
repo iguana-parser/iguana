@@ -1,7 +1,6 @@
 package org.jgll.regex;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Deque;
@@ -109,7 +108,7 @@ public class AutomatonOperations {
 		boolean[] endStates = new boolean[statesCount];
 		
 		@SuppressWarnings("unchecked")
-		List<StateAction>[] actions = new List[statesCount];
+		Set<StateAction>[] actions = new Set[statesCount];
 		
 		for(int i = 0; i < transitionTable.length; i++) {
 			for(int j = 0; j < transitionTable[i].length; j++) {
@@ -118,7 +117,7 @@ public class AutomatonOperations {
 		}
 
 		for(State state : nfa.getAllStates()) {
-			actions[state.getId()] = new ArrayList<>();
+			actions[state.getId()] = new HashSet<>();
 			
 			for(Transition transition : state.getTransitions()) {
 				transitionTable[state.getId()][transition.getId()] = transition.getDestination().getId();

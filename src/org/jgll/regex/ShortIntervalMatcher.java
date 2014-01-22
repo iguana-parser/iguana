@@ -1,6 +1,6 @@
 package org.jgll.regex;
 
-import java.util.List;
+import java.util.Set;
 
 public class ShortIntervalMatcher extends AbstractMatcher {
 	
@@ -16,7 +16,7 @@ public class ShortIntervalMatcher extends AbstractMatcher {
 								boolean[] endStates, 
 								int startStateId, 
 								int[] intervals,
-								List<StateAction>[] matchActions) {
+								Set<StateAction>[] matchActions) {
 		
 		super(transitionTable, endStates, startStateId, intervals, matchActions);
 		

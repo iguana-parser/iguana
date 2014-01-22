@@ -55,6 +55,12 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	@Override
+	public void setTokenAt(int inputIndex, int tokenID, int length) {
+		System.out.println(String.format("%d, %d, %d", inputIndex, tokenID, length));
+		tokens[inputIndex][tokenID] = length;
+	}
+	
+	@Override
 	public int tokenLengthAt(int inputIndex, int tokenID) {
 		if(tokens[inputIndex][tokenID] == UNMATCHED) {
 			int length = grammar.getMatcher(tokenID).match(input, inputIndex);

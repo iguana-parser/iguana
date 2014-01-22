@@ -33,6 +33,13 @@ public interface GLLLexer {
 	public int tokenLengthAt(int inputIndex, int tokenID);
 	
 	/**
+	 * 
+	 * @param inputIndex
+	 * @param tokenID
+	 */
+	public void setTokenAt(int inputIndex, int tokenID, int length);
+	
+	/**
 	 * Returns the underlying input object. 
 	 */
 	public Input getInput();

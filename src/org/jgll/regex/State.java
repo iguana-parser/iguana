@@ -1,11 +1,9 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class State implements Serializable {
@@ -16,7 +14,7 @@ public class State implements Serializable {
 	
 	private Set<State> epsilonClosure;
 	
-	private List<StateAction> actions;
+	private Set<StateAction> actions;
 	
 	/**
 	 * The set of regular expressions whose final state is this state.
@@ -35,7 +33,7 @@ public class State implements Serializable {
 		this.transitions = new HashSet<>();
 		this.finalState = finalState;
 		this.epsilonClosure = new HashSet<>();
-		this.actions = new ArrayList<>();
+		this.actions = new HashSet<>();
 		this.regularExpressions = new HashSet<>();
 	}
 	
@@ -97,7 +95,7 @@ public class State implements Serializable {
 		return id;
 	}
 	
-	public List<StateAction> getActions() {
+	public Set<StateAction> getActions() {
 		return actions;
 	}
 	

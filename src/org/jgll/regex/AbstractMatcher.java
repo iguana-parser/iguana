@@ -1,7 +1,7 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import org.jgll.util.Input;
 
@@ -13,7 +13,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	
 	private final boolean[] endStates;
 	
-	private final List<StateAction>[] matchActions;
+	private final Set<StateAction>[] matchActions;
 
 	private final int startStateId;
 	
@@ -27,7 +27,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 						   boolean[] endStates, 
 						   int startStateId, 
 						   int[] intervals,
-						   List<StateAction>[] matchActions) {
+						   Set<StateAction>[] matchActions) {
 		
 		this.transitionTable = transitionTable;
 		this.endStates = endStates;
@@ -56,48 +56,9 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		this.id = id;
 	}
 	
-	public int shortestMatch(Input input, int inputIndex) {
-		int length = 0;
-
-		int stateId = startStateId;
-		
-		// If the start state is an accepting state, we can always match a string with length 0.
-		if(endStates[stateId]) {
-			return 0;
-		}
-		
-		for(int i = inputIndex; i < input.length(); i++) {
-			int transitionId = getTransitionId(input.charAt(i));
-			
-			if(transitionId == -1) {
-				break;
-			}
-			
-			stateId = transitionTable[stateId][transitionId];
-			length++;
-			
-			if(stateId == -1) {
-				break;
-			}
-			
-			if(endStates[stateId]) {
-				return length;
-			}
-		}
-		
-		return -1;
-	}
 
 	@Override
 	public int match(Input input, int inputIndex) {
-		if(mode == LONGEST_MATCH) {
-			return longestMatch(input, inputIndex);
-		} else {
-			return shortestMatch(input, inputIndex);
-		}
-	}
-
-	public int longestMatch(Input input, int inputIndex) {
 		int length = 0;
 
 		int stateId = startStateId;
@@ -128,7 +89,9 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			}
 			
 			if(endStates[stateId]) {
-				maximumMatched = length;
+				if(mode == SHORTEST_MATCH) {
+					maximumMatched = length;
+				}
 			}
 		}
 		

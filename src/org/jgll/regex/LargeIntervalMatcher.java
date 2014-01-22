@@ -1,6 +1,6 @@
 package org.jgll.regex;
 
-import java.util.List;
+import java.util.Set;
 
 import org.jgll.util.Input;
 
@@ -12,7 +12,7 @@ public class LargeIntervalMatcher extends AbstractMatcher {
 								boolean[] endStates, 
 								int startStateId, 
 								int[] intervals, 
-								List<StateAction>[] matchActions) {
+								Set<StateAction>[] matchActions) {
 		super(transitionTable, endStates, startStateId, intervals, matchActions);
 	}
 

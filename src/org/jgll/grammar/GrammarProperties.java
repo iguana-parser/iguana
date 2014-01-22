@@ -18,10 +18,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
-import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
 
 public class GrammarProperties {
 	
