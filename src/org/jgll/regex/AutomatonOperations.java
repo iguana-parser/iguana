@@ -825,6 +825,10 @@ public class AutomatonOperations {
 			@Override
 			public void visit(State state) {
 				State newState = new State();
+				
+				newState.addActions(state.getActions());
+				newState.addRegularExpressions(state.getRegularExpressions());
+				
 				newStates.put(state, newState);
 				if(state.isFinalState()) {
 					newState.setFinalState(true);
@@ -869,6 +873,8 @@ public class AutomatonOperations {
 			for(State f : c.getFinalStates()) {
 				f.setFinalState(false);
 				f.addTransition(Transition.emptyTransition(finalState));
+				finalState.addActions(f.getActions());
+				finalState.addRegularExpressions(f.getRegularExpressions());
 			}
 		}
 		
