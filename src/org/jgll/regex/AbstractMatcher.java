@@ -59,11 +59,10 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 
 	@Override
 	public int match(Input input, int inputIndex) {
+		
 		int length = 0;
 
 		int stateId = startStateId;
-		
-		int previousId = stateId;
 		
 		int maximumMatched = -1;
 		
@@ -71,19 +70,39 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		if(endStates[stateId]) {
 			maximumMatched = 0;
 			if(mode == SHORTEST_MATCH) {
-				executeActions(previousId, maximumMatched);
+				executeActions(stateId, maximumMatched);
 			}
+		}
+		
+		// Handling the EOF character
+		if(input.charAt(inputIndex) == 0) {
+			int transitionId = getTransitionId(0);
+
+			if(transitionId == -1) {
+				return -1;
+			}
+
+			stateId = transitionTable[stateId][transitionId];
+			
+			if(stateId == -1) {
+				return -1;
+			}
+			
+			if(endStates[stateId]) {
+				executeActions(stateId, 0);
+				return 0;
+			}
+			
+			return -1;
 		}
 		
 		for(int i = inputIndex; i < input.length(); i++) {
 			int transitionId = getTransitionId(input.charAt(i));
 			
 			if(transitionId == -1) {
-				previousId = stateId;
 				break;
 			}
 			
-			previousId = stateId;
 			stateId = transitionTable[stateId][transitionId];
 			length++;
 			
@@ -93,24 +112,16 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			
 			if(endStates[stateId]) {
 				maximumMatched = length;
+				executeActions(stateId, stateId);
 				if(mode == SHORTEST_MATCH) {
 					break;
 				}
 			}
 		}
 		
-		if(stateId != -1) {
-			previousId = stateId;
-		}
-		
-		// Match found
-		if(maximumMatched >= 0) {
-			executeActions(previousId, maximumMatched);
-		}
-		
 		return maximumMatched;
 	}
-
+	
 	private void executeActions(int previousId, int maximumMatched) {
 		for(StateAction action : matchActions[previousId]) {
 			action.execute(maximumMatched, previousId);

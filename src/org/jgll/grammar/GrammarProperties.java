@@ -18,6 +18,8 @@ import org.jgll.grammar.symbol.Alternate;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 
 public class GrammarProperties {
 	
@@ -199,6 +201,8 @@ public class GrammarProperties {
 			list.add(automatons[i]);
 		}
 		Automaton a = AutomatonOperations.or(list);
+		
+		GraphVizUtil.generateGraph(NFAToDot.toDot(a.determinize().minimize().getStartState()), "/Users/ali/output", "nfa", GraphVizUtil.LEFT_TO_RIGHT);
 		
 		for (HeadGrammarSlot head : nonterminals) {
 			

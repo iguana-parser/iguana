@@ -39,7 +39,6 @@ public class KeywordTest3 {
 	Character s = new Character('s');
 	Character ws = new Character(' ');
 
-
 	@Before
 	public void init() {
 		
@@ -49,9 +48,7 @@ public class KeywordTest3 {
 		
 		grammar = new GrammarBuilder().addRule(r1)
 								   .addRule(r2)
-								   .addRule(r3)
-								   .addRule(GrammarBuilder.fromKeyword(iff))
-								   .addRule(GrammarBuilder.fromKeyword(then)).build();
+								   .addRule(r3).build();
 		
 		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
