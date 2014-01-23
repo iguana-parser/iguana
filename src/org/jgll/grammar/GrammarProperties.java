@@ -1,7 +1,6 @@
 package org.jgll.grammar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -194,7 +193,12 @@ public class GrammarProperties {
 										 Automaton[] automatons, 
 										 List<RegularExpression> regularExpressions) {
 		
-		Automaton a = AutomatonOperations.or(Arrays.asList(automatons));
+		List<Automaton> list = new ArrayList<>();
+		// Skip Epsilon as it will match everything.
+		for(int i = 1; i < automatons.length; i++) {
+			list.add(automatons[i]);
+		}
+		Automaton a = AutomatonOperations.or(list);
 		
 		for (HeadGrammarSlot head : nonterminals) {
 			

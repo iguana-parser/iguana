@@ -70,6 +70,9 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		// If the start state is an accepting state, we can always match a string with length 0.
 		if(endStates[stateId]) {
 			maximumMatched = 0;
+			if(mode == SHORTEST_MATCH) {
+				executeActions(previousId, maximumMatched);
+			}
 		}
 		
 		for(int i = inputIndex; i < input.length(); i++) {
@@ -96,14 +99,22 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			}
 		}
 		
+		if(stateId != -1) {
+			previousId = stateId;
+		}
+		
 		// Match found
 		if(maximumMatched >= 0) {
-			for(StateAction action : matchActions[previousId]) {
-				action.execute(maximumMatched, previousId);
-			}
+			executeActions(previousId, maximumMatched);
 		}
 		
 		return maximumMatched;
+	}
+
+	private void executeActions(int previousId, int maximumMatched) {
+		for(StateAction action : matchActions[previousId]) {
+			action.execute(maximumMatched, previousId);
+		}
 	}
 	
 	@Override

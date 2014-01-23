@@ -24,14 +24,13 @@ public class KeywordTest1 {
 	private Grammar grammar;
 	private GLLParser rdParser;
 
-	Keyword iff = new Keyword("if", new int[] {'i', 'f'});
+	Keyword ifKeyword = new Keyword("if");
 
 	@Before
 	public void init() {
-		Rule r1 = new Rule(new Nonterminal("A"), iff);
+		Rule r1 = new Rule(new Nonterminal("A"), ifKeyword);
 		GrammarBuilder builder = new GrammarBuilder();
 		builder.addRule(r1);
-		builder.addRule(GrammarBuilder.fromKeyword(iff));
 		
 		grammar = builder.build();
 		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
@@ -39,7 +38,7 @@ public class KeywordTest1 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(BitSetUtil.from(grammar.getTokenID(iff)), grammar.getNonterminalByName("A").getFirstSet());
+		assertEquals(BitSetUtil.from(grammar.getTokenID(ifKeyword)), grammar.getNonterminalByName("A").getFirstSet());
 	}
 	
 	@Test

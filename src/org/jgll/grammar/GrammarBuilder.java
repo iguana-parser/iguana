@@ -356,7 +356,6 @@ public class GrammarBuilder implements Serializable {
 
 		GrammarProperties.setNullableHeads(nonterminals);
 		
-		
 		start = System.nanoTime();
 		GrammarProperties.setPredictionSets(nonterminals, automatons, tokens);
 		end = System.nanoTime();
@@ -378,7 +377,6 @@ public class GrammarBuilder implements Serializable {
 	private void createAutomatonsMap() {
 		dfas = new Matcher[tokens.size()];
 		automatons = new Automaton[tokens.size()];
-		
 		
 		for(RegularExpression regex : tokens) {
 			
