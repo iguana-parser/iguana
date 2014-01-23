@@ -15,6 +15,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,6 +64,7 @@ public class KeywordTest3 {
 	public void testParser() throws ParseError {
 		Input input = Input.fromString("if s then s");
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
+		System.out.println(ToJavaCode.toJavaCode(sppf, grammar));
 		assertTrue(sppf.deepEquals(getSPPF1()));
 	}
 		

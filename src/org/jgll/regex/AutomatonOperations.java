@@ -243,6 +243,13 @@ public class AutomatonOperations {
 				if(nfa.getState(j).isFinalState() && !nfa.getState(i).isFinalState()) {
 					table[i][j] = EPSILON;
 				}
+				// Differentiate between final states
+				
+				if(nfa.getState(i).isFinalState() && 
+				   nfa.getState(j).isFinalState() && 
+				   !nfa.getState(i).getActions().equals(nfa.getState(j).getActions())) {
+					table[i][j] = EPSILON;
+				}
 			}
 		}
 		
@@ -862,19 +869,10 @@ public class AutomatonOperations {
 	 */
 	public static Automaton or(List<Automaton> automatons) {
 		State startState = new State();
-		State finalState = new State(true);
 		
 		for(Automaton a : automatons) {
-			
 			Automaton c = a.copy();
 			startState.addTransition(Transition.emptyTransition(c.getStartState()));
-			
-			for(State f : c.getFinalStates()) {
-				f.setFinalState(false);
-				f.addTransition(Transition.emptyTransition(finalState));
-				finalState.addActions(f.getActions());
-				finalState.addRegularExpressions(f.getRegularExpressions());
-			}
 		}
 		
 		return new Automaton(startState);

@@ -69,10 +69,17 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		// If the start state is an accepting state, we can always match a string with length 0.
 		if(endStates[stateId]) {
 			maximumMatched = 0;
+
+			// Handling epsilon matching the empty input
+			if(input.isEmpty()) {
+				executeActions(stateId, maximumMatched);
+				return maximumMatched;
+			}
+
 			if(mode == SHORTEST_MATCH) {
 				executeActions(stateId, maximumMatched);
 			}
-		}
+		}		
 		
 		// Handling the EOF character
 		if(input.charAt(inputIndex) == 0) {
