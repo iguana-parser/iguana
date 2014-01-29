@@ -1,5 +1,7 @@
 package org.jgll.parser.lookup;
 
+import java.util.Map;
+
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -112,5 +114,7 @@ public interface LookupTable {
 	public Iterable<GSSNode> getGSSNodes();
 	
 	public void init(Input input);
+	
+	public Map<GSSNode, Iterable<GSSEdge>> getEdgesMap();
 	
 }	

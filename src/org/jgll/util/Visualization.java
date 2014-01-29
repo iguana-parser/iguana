@@ -1,5 +1,8 @@
 package org.jgll.util;
 
+import java.util.Map;
+
+import org.jgll.parser.GSSEdge;
 import org.jgll.parser.GSSNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.dot.GSSToDot;
@@ -30,9 +33,9 @@ public class Visualization {
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> nodes) {
+	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> nodes, Map<GSSNode, Iterable<GSSEdge>> map) {
 		GSSToDot toDot = new GSSToDot();
-		toDot.execute(nodes);
+		toDot.execute(nodes, map);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "gss");
 	}
 	

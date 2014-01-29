@@ -11,11 +11,12 @@ import org.jgll.util.hashing.IguanaSet;
 
 public class GSSTuple {
 
-	private GSSNode gssNode;
-	private List<NonPackedNode> nonPackedNodes;
-	private IguanaSet<GSSEdge> gssEdges;
+	private final GSSNode gssNode;
+	private final List<NonPackedNode> nonPackedNodes;
+	private final IguanaSet<GSSEdge> gssEdges;
 
-	public GSSTuple() {
+	public GSSTuple(GSSNode gssNode) {
+		this.gssNode = gssNode;
 		nonPackedNodes = new ArrayList<>();
 		gssEdges = HashTableFactory.getFactory().newHashSet(GSSEdge.externalHasher);
 	}

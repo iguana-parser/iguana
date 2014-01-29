@@ -48,9 +48,13 @@ public class GSSNode {
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 		
-	
 	public Iterable<GSSNode> getChildren() {
 		return children;
+	}
+	
+	// TODO: child or parent
+	public void addChild(GSSNode node) {
+		children.add(node);
 	}
 	
 	public int sizeChildren() {
