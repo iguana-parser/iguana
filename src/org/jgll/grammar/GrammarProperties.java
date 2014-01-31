@@ -190,15 +190,8 @@ public class GrammarProperties {
 	}
 	
 	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, 
-										 Automaton[] automatons, 
+										 Automaton a, 
 										 List<RegularExpression> regularExpressions) {
-		
-		List<Automaton> list = new ArrayList<>();
-		// Skip Epsilon as it will match everything.
-		for(int i = 1; i < automatons.length; i++) {
-			list.add(automatons[i]);
-		}
-		Automaton a = AutomatonOperations.or(list);
 		
 		for (HeadGrammarSlot head : nonterminals) {
 			
