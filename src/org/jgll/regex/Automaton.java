@@ -262,9 +262,6 @@ public class Automaton implements Serializable {
 		if(!deterministic) {
 			determinize();
 		}
-		if(!minimized) {
-			minimize();
-		}
 		return AutomatonOperations.createMatcher(this);
 	}
 	

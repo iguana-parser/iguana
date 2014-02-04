@@ -63,7 +63,7 @@ public class FilterTest1 {
 	
 	@Test
 	public void testInput() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+-a+a"), grammar, "E");
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a+a-a+a"), grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
 	

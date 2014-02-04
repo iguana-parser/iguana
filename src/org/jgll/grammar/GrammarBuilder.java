@@ -364,7 +364,7 @@ public class GrammarBuilder implements Serializable {
 		for(int i = 1; i < automatons.length; i++) {
 			list.add(automatons[i]);
 		}
-		Automaton a = AutomatonOperations.or(list).minimize();
+		Automaton a = AutomatonOperations.or(list);
 		
 		GrammarProperties.setPredictionSets(nonterminals, a, tokens);
 		end = System.nanoTime();
