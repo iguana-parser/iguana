@@ -39,6 +39,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Automaton;
+import org.jgll.regex.AutomatonOperations;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
@@ -357,7 +358,15 @@ public class GrammarBuilder implements Serializable {
 		GrammarProperties.setNullableHeads(nonterminals);
 		
 		start = System.nanoTime();
-		GrammarProperties.setPredictionSets(nonterminals, automatons, tokens);
+		
+		List<Automaton> list = new ArrayList<>();
+		// Skip Epsilon as it will match everything.
+		for(int i = 1; i < automatons.length; i++) {
+			list.add(automatons[i]);
+		}
+		Automaton a = AutomatonOperations.or(list);
+		
+		GrammarProperties.setPredictionSets(nonterminals, a, tokens);
 		end = System.nanoTime();
 		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
 		

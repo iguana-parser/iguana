@@ -7,6 +7,12 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.ParseError;
+import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +32,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 	private static final int EOF = 0;
 
 	private Grammar grammar;
+	private GLLParser parser;
 
 	Nonterminal E = new Nonterminal("E");
 	Nonterminal T = new Nonterminal("T");
@@ -55,6 +62,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 		
 		builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8);
 		grammar = builder.build();
+		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -73,5 +81,12 @@ public class LeftFactorizedArithmeticGrammarTest {
 		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("T").getFollowSet());
 		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(star), grammar.getTokenID(closePar), EOF), grammar.getNonterminalByName("F").getFollowSet());
 	}
+	
+	@Test
+	public void test() throws ParseError {
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a*a+a"), grammar, "E");
+		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", sppf, Input.fromString("a+a*a+a"));
+	}
+
 
 }
