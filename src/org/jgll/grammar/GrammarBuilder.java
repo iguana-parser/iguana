@@ -366,6 +366,10 @@ public class GrammarBuilder implements Serializable {
 		}
 		Automaton a = AutomatonOperations.or(list);
 		
+		// It's very important to make a deterministic at this point before
+		// passing it, to avoid expensive, repeated work.
+		a.determinize();
+		
 		GrammarProperties.setPredictionSets(nonterminals, a, tokens);
 		end = System.nanoTime();
 		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);

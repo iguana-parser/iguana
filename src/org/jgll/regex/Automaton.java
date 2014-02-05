@@ -259,10 +259,26 @@ public class Automaton implements Serializable {
 	}
 	
 	public Matcher getMatcher() {
+		
 		if(!deterministic) {
 			determinize();
 		}
+		
 		return AutomatonOperations.createMatcher(this);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		
+		for(RegularExpression regex : map.keySet()) {
+			sb.append(regex.toString()).append(" | ");
+		}
+		if(sb.length() >= 2) {
+			sb.delete(sb.length() - 2, sb.length());
+		}
+		
+		return sb.toString();
 	}
 	
 	public String toJavaCode() {
@@ -270,7 +286,10 @@ public class Automaton implements Serializable {
 	}
 	
 	public Automaton copy() {
-		return AutomatonOperations.copy(this);
+		Automaton copy = AutomatonOperations.copy(this);
+		copy.deterministic = deterministic;
+		copy.minimized = minimized;
+		return copy;
 	}
 	
 }
