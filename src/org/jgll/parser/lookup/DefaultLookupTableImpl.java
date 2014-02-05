@@ -149,14 +149,14 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 			set = factory.newHashSet(tableSize, Descriptor.levelBasedExternalHasher);
 			descriptorsSet[descriptor.getInputIndex()] = set;
 			set.add(descriptor);
-			descriptorsStack.add(descriptor);
+			descriptorsStack.push(descriptor);
 			return true;
 		}
 
 		Descriptor add = set.add(descriptor);
 
 		if (add == null) {
-			descriptorsStack.add(descriptor);
+			descriptorsStack.push(descriptor);
 			return true;
 		}
 

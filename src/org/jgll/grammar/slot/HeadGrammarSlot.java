@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -331,6 +332,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public void setPredictionSet(Automaton a, List<RegularExpression> regularExpressions) {
+		
+		Collections.reverse(alternates);
 		
 		for(final Alternate alternate : alternates) {
 
