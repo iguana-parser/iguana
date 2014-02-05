@@ -45,5 +45,10 @@ public class TrueMatcher implements Matcher, Serializable {
 	public Matcher setMode(int mode) {
 		return this;
 	}
+	
+	@Override
+	public void addStateAction(State state, StateAction action) {
+		// Do nothing
+	}
 
 }

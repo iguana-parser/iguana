@@ -34,4 +34,6 @@ public interface Matcher {
 	public int getId();
 	
 	public void setId(int id);
+	
+	public void addStateAction(State state, StateAction action);
 }

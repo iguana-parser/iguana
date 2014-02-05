@@ -670,7 +670,6 @@ public class AutomatonOperations {
 			}
 		});
 		
-		
 		// 1. creating a new start state and adding epsilon transitions to the final
 		// states of the original automata
 		State startState = new State();

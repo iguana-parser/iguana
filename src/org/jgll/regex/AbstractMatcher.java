@@ -1,6 +1,7 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.util.Input;
@@ -175,6 +176,15 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		return this;
 	}
 	
+	@Override
+	public void addStateAction(State state, StateAction action) {
+		Set<StateAction> set = matchActions[state.getId()];
+		if(set == null) {
+			set = new HashSet<>();
+		}
+		set.add(action);
+	}
+	
 	protected abstract int getTransitionId(int c);
-
+	
 }

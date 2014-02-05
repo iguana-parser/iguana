@@ -331,7 +331,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return predictionSet;
 	}
 	
-	public void setPredictionSet(Automaton a, List<RegularExpression> regularExpressions) {
+	public void setPredictionSet(Automaton a, Matcher m, List<RegularExpression> regularExpressions) {
 		
 		Collections.reverse(alternates);
 		
@@ -345,7 +345,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 				
 				index[0] = i;
 
-				a.getState(regularExpressions.get(i)).addAction(new StateAction() {
+				m.addStateAction(a.getState(regularExpressions.get(i)), new StateAction() {
 					
 					private static final long serialVersionUID = 1L;
 

@@ -17,6 +17,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
+import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
@@ -193,6 +194,8 @@ public class GrammarProperties {
 										 Automaton a, 
 										 List<RegularExpression> regularExpressions) {
 		
+		Matcher m = a.getMatcher();
+		
 		for (HeadGrammarSlot head : nonterminals) {
 			
 			for (Alternate alternate : head.getAlternates()) {
@@ -226,7 +229,7 @@ public class GrammarProperties {
 				predictionSet.or(head.getFollowSet());
 			}
 			predictionSet.clear(EPSILON);
-			head.setPredictionSet(a, regularExpressions);
+			head.setPredictionSet(a, m, regularExpressions);
 		}
 	}
 	
