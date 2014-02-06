@@ -36,4 +36,6 @@ public interface Matcher {
 	public void setId(int id);
 	
 	public void addStateAction(State state, StateAction action);
+	
+	public Matcher copy();
 }

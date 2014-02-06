@@ -358,7 +358,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 			}
 		}
 		
-		matcher = a.getMatcher();
+		matcher = m;
 	}
 	
 	public boolean contains(List<Symbol> list) {

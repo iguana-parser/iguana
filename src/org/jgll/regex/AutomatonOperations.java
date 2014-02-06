@@ -17,8 +17,6 @@ public class AutomatonOperations {
 	
 	public static Automaton makeDeterministic(Automaton nfa) {
 		
-		long start = System.nanoTime();
-		
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
 		
@@ -85,10 +83,6 @@ public class AutomatonOperations {
 				}
 			}			
 		}
-		
-		long end = System.nanoTime();
-		
-		System.out.println(nfa.toString() + " " + (end - start) / 1000_000);
 		
 		return new Automaton(startState);
 	}

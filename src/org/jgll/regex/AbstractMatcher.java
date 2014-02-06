@@ -10,19 +10,19 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final int[][] transitionTable;
+	protected final int[][] transitionTable;
 	
-	private final boolean[] endStates;
+	protected final boolean[] endStates;
 	
-	private final Set<StateAction>[] matchActions;
+	protected final Set<StateAction>[] matchActions;
 
-	private final int startStateId;
+	protected final int startStateId;
 	
 	protected final int[] intervals;
 	
-	private int id;
+	protected int id;
 	
-	private int mode = LONGEST_MATCH;
+	protected int mode = LONGEST_MATCH;
 
 	public AbstractMatcher(int[][] transitionTable, 
 						   boolean[] endStates, 
@@ -120,7 +120,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			
 			if(endStates[stateId]) {
 				maximumMatched = length;
-				executeActions(stateId, stateId);
+				executeActions(stateId, maximumMatched);
 				if(mode == SHORTEST_MATCH) {
 					break;
 				}

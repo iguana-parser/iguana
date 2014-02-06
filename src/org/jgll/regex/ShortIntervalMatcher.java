@@ -1,5 +1,6 @@
 package org.jgll.regex;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ShortIntervalMatcher extends AbstractMatcher {
@@ -40,6 +41,17 @@ public class ShortIntervalMatcher extends AbstractMatcher {
 		}
 		
 		return transitionIds[c - minimum];
+	}
+	
+	@Override
+	public Matcher copy() {
+		@SuppressWarnings("unchecked")
+		Set<StateAction>[] actions = new Set[matchActions.length];
+		for(int i = 0; i < actions.length; i++) {
+			actions[i] = new HashSet<>(matchActions[i]);
+		}
+		ShortIntervalMatcher matcher = new ShortIntervalMatcher(transitionTable, endStates, startStateId, intervals, actions);
+		return matcher;
 	}
 
 }

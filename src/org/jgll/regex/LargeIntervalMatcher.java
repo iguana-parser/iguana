@@ -1,5 +1,8 @@
 package org.jgll.regex;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jgll.util.Input;
@@ -74,6 +77,17 @@ public class LargeIntervalMatcher extends AbstractMatcher {
 			return getTransitionId(c, n + 1, end);
 		}
 		return -1;
+	}
+	
+	@Override
+	public Matcher copy() {
+		@SuppressWarnings("unchecked")
+		Set<StateAction>[] actions = new Set[matchActions.length];
+		for(int i = 0; i < actions.length; i++) {
+			actions[i] = new HashSet<>(matchActions[i]);
+		}
+		LargeIntervalMatcher matcher = new LargeIntervalMatcher(transitionTable, endStates, startStateId, intervals, actions);
+		return matcher;
 	}
 
 }

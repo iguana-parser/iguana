@@ -229,7 +229,7 @@ public class GrammarProperties {
 				predictionSet.or(head.getFollowSet());
 			}
 			predictionSet.clear(EPSILON);
-			head.setPredictionSet(a, m, regularExpressions);
+			head.setPredictionSet(a, m.copy(), regularExpressions);
 		}
 	}
 	

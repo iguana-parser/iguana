@@ -50,5 +50,10 @@ public class TrueMatcher implements Matcher, Serializable {
 	public void addStateAction(State state, StateAction action) {
 		// Do nothing
 	}
+	
+	@Override
+	public Matcher copy() {
+		return this;
+	}
 
 }
