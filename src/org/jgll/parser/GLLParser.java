@@ -5,10 +5,8 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.lookup.LookupTable;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -50,8 +48,6 @@ public interface GLLParser {
 	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode);
 	
 	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object);
-	
-	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int ci);
 	
 	/**
 	 * 

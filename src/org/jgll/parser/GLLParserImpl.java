@@ -10,14 +10,12 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
@@ -416,16 +414,6 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public GSSNode getCurrentGSSNode() {
 		return cu;
-	}
-	
-	@Override
-	public NonPackedNode getKeywordStub(Keyword keyword, HeadGrammarSlot slot, int inputIndex) {
-		int nextIndex = inputIndex + keyword.size();
-		NonPackedNode node = lookupTable.getNonPackedNode(slot, inputIndex, nextIndex);
-		node.addFirstPackedNode(new PackedNode(slot.getAlternateAt(0).getLastSlot().next(), nextIndex, node));
-		((NonterminalSymbolNode) node).setKeywordNode(true);
-		ci = nextIndex;
-		return node;
 	}
 
 	@Override

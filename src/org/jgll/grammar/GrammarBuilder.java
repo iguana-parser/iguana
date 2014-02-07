@@ -135,8 +135,6 @@ public class GrammarBuilder implements Serializable {
 		
 		nonterminals.addAll(collapsibleNonterminals);
 		
-		removeKeywordDefinitions();
-		
 		initializeGrammarProrperties();
 		
 		validateGrammar();
@@ -944,8 +942,9 @@ public class GrammarBuilder implements Serializable {
 
 		return this;
 	}
-	
-	public void removeKeywordDefinitions() {
+
+	// TODO: remove it!
+	private void removeKeywordDefinitions() {
 		Set<HeadGrammarSlot> keywordHeads = new HashSet<>();
 		
 		for(HeadGrammarSlot head : nonterminals) {
