@@ -1,8 +1,6 @@
 package org.jgll.regex;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.jgll.util.Input;

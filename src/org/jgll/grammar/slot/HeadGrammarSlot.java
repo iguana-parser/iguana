@@ -18,6 +18,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
+import org.jgll.regex.State;
 import org.jgll.regex.StateAction;
 import org.jgll.regex.Matcher;
 import org.jgll.sppf.NonPackedNode;
@@ -333,6 +334,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public void setPredictionSet(Automaton a, Matcher m, List<RegularExpression> regularExpressions) {
 		
+		System.out.println(this.getNonterminal().getName());
+		
 		Collections.reverse(alternates);
 		
 		for(final Alternate alternate : alternates) {
@@ -345,16 +348,18 @@ public class HeadGrammarSlot extends GrammarSlot {
 				
 				index[0] = i;
 
-				m.addStateAction(a.getState(regularExpressions.get(i)), new StateAction() {
-					
-					private static final long serialVersionUID = 1L;
+				for(State state : a.getState(regularExpressions.get(i))) {
+					m.addStateAction(state, new StateAction() {
+						
+						private static final long serialVersionUID = 1L;
 
-					@Override
-					public void execute(int length, int state) {
-						parser.addDescriptor(alternate.getFirstSlot());
-//						lexer.setTokenAt(ci, index[0], length);
-					}
-				});
+						@Override
+						public void execute(int length, int state) {
+							parser.addDescriptor(alternate.getFirstSlot());
+//							lexer.setTokenAt(ci, index[0], length);
+						}
+					});
+				}					
 			}
 		}
 		

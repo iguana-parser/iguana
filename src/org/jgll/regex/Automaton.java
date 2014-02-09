@@ -30,7 +30,7 @@ public class Automaton implements Serializable {
 	
 	private Set<State> finalStates;
 	
-	private Map<RegularExpression, State> map;
+	private Map<RegularExpression, Set<State>> map;
 	
 	public Automaton(State startState) {
 
@@ -63,7 +63,12 @@ public class Automaton implements Serializable {
 		
 		for(State s : finalStates) {
 			for(RegularExpression regex : s.getRegularExpressions()) {
-				map.put(regex, s);
+				Set<State> regexs = map.get(regex);
+				if(regexs == null) {
+					regexs = new HashSet<>();
+					map.put(regex, regexs);
+				}
+				regexs.add(s);
 			}
 		}
 	}
@@ -92,7 +97,12 @@ public class Automaton implements Serializable {
 	public Automaton addRegularExpression(RegularExpression regularExpression) {
 		for(State state : finalStates) {
 			state.addRegularExpression(regularExpression);
-			map.put(regularExpression, state);
+			
+			Set<State> set = map.get(regularExpression);
+			if(set == null) {
+				set = new HashSet<>();
+				map.put(regularExpression, set);
+			}
 		}
 		return this;
 	}
@@ -184,7 +194,7 @@ public class Automaton implements Serializable {
 	 * Returns the state that corresponds to the final state of 
 	 * the given automaton.
 	 */
-	public State getState(RegularExpression regularExpression) {
+	public Set<State> getState(RegularExpression regularExpression) {
 		return map.get(regularExpression);
 	}
 	
