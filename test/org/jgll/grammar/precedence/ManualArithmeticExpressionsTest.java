@@ -74,7 +74,6 @@ public class ManualArithmeticExpressionsTest {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a*a+a"), grammar, "E");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", sppf, Input.fromString("a+a*a+a"));
 	}
 	
 }
