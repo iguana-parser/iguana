@@ -21,7 +21,6 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.StateAction;
 import org.jgll.regex.Matcher;
-import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -58,7 +57,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private Alternate[] ll1Map;
 	
-	private transient List<Alternate> matchedAlternates;
+	private transient Set<BodyGrammarSlot> matchedAlternates;
 	
 	private transient int ci;
 	
@@ -67,7 +66,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.alternates = new ArrayList<>();
 		this.firstSet = new BitSet();
 		this.followSet = new BitSet();
-		this.matchedAlternates = new ArrayList<>();
+		this.matchedAlternates = new HashSet<>();
 	}
 	
 	public void addAlternate(Alternate alternate) {		
@@ -135,17 +134,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		ci = parser.getCurrentInputIndex();
 		
-		matchedAlternates = new ArrayList<>();
+		matchedAlternates = new HashSet<>();
 		matcher.match(lexer.getInput(), ci);
 		
-		if(matchedAlternates.size() == 1) {
-			parser.setCurrentSPPFNode(DummyNode.getInstance());
-			return matchedAlternates.get(0).getFirstSlot().parse(parser, lexer);
-		} 
-		else if(matchedAlternates.size() > 1){
-			for(Alternate alt : matchedAlternates) {
-				parser.addDescriptor(alt.getFirstSlot());
-			}
+		for(BodyGrammarSlot slot : matchedAlternates) {
+			parser.addDescriptor(slot);
 		}
 		
 		return null;
@@ -349,7 +342,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 
 						@Override
 						public void execute(int length, int state) {
-							matchedAlternates.add(alternate);
+							matchedAlternates.add(alternate.getFirstSlot());
 //							lexer.setTokenAt(ci, index[0], length);
 						}
 					});
@@ -382,5 +375,5 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public String toString() {
 		return nonterminal.toString();
 	}
-
+	
 }
