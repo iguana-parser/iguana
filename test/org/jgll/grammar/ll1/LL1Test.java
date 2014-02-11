@@ -1,6 +1,6 @@
 package org.jgll.grammar.ll1;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +16,6 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
-import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -96,18 +95,18 @@ public class LL1Test {
 	public void testPredictSets() {
 		// S ::= . A [a]
 		Alternate alt1 = grammar.getNonterminalByName("S").getAlternateAt(0);
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a)), alt1.getPredictionSet());
+		assertEquals(set(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a)), alt1.getPredictionSet());
 		
 		// A ::= . B D
 		Alternate alt2 = grammar.getNonterminalByName("A").getAlternateAt(0);
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a), EOF), alt2.getPredictionSet());
+		assertEquals(set(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a), EOF), alt2.getPredictionSet());
 		
 		// B ::= . [b]
 		Alternate alt3 = grammar.getNonterminalByName("B").getAlternateAt(0);
-		assertEquals(BitSetUtil.from(grammar.getTokenID(b)), alt3.getPredictionSet());
+		assertEquals(set(grammar.getTokenID(b)), alt3.getPredictionSet());
 
 		Alternate alt4 = grammar.getNonterminalByName("B").getAlternateAt(1);
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), grammar.getTokenID(a), EOF), alt4.getPredictionSet());
+		assertEquals(set(grammar.getTokenID(d), grammar.getTokenID(a), EOF), alt4.getPredictionSet());
 	}
 
 	@Test

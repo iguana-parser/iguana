@@ -68,7 +68,7 @@ public class GrammarProperties {
 		else if (currentSlot instanceof TokenGrammarSlot) {
 			changed = firstSet.add(((TokenGrammarSlot) currentSlot).getTokenID());
 			if(currentSlot.isNullable()) {
-				changed = addFirstSet(firstSet, currentSlot.next(), firstSets);
+				changed |= addFirstSet(firstSet, currentSlot.next(), firstSets);
 			}
 		}
 		
@@ -76,14 +76,16 @@ public class GrammarProperties {
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
-			changed = firstSet.addAll(firstSets.get(nonterminalGrammarSlot.getNonterminal()));
+			Set<Integer> set = new HashSet<>(firstSets.get(nonterminalGrammarSlot.getNonterminal()));
+			set.remove(Epsilon.TOKEN_ID);
+			changed = firstSet.addAll(set);
 			if (isNullable(nonterminalGrammarSlot.getNonterminal(), firstSets)) {
-				changed = addFirstSet(firstSet, currentSlot.next(), firstSets);
+				changed |= addFirstSet(firstSet, currentSlot.next(), firstSets);
 			}
 		}
 		
 		if (isChainNullable(currentSlot, firstSets)) {
-			changed = firstSet.add(Epsilon.TOKEN_ID);
+			changed |= firstSet.add(Epsilon.TOKEN_ID);
 		}
 		
 		return changed;
@@ -223,7 +225,7 @@ public class GrammarProperties {
 					if(currentSlot instanceof NonterminalGrammarSlot ||
 					   currentSlot instanceof TokenGrammarSlot) {
 						Set<Integer> set = new HashSet<>();
-						getChainFirstSet(currentSlot, set, followSets);
+						getChainFirstSet(currentSlot, set, firstSets);
 						if(isChainNullable(currentSlot, firstSets)) {
 							set.addAll(followSets.get(head));
 						}
