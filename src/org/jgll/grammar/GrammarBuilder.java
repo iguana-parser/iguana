@@ -92,6 +92,10 @@ public class GrammarBuilder implements Serializable {
 	
 	Matcher[] dfas;
 	
+	Map<HeadGrammarSlot, Set<Integer>> firstSets;
+
+	Map<HeadGrammarSlot, Set<Integer>> followSets;
+	
 	public GrammarBuilder() {
 		this("no-name");
 	}
@@ -347,8 +351,8 @@ public class GrammarBuilder implements Serializable {
 	private void initializeGrammarProrperties() {
 		
 		long start = System.nanoTime();
-		Map<HeadGrammarSlot, Set<Integer>> firstSets = GrammarProperties.calculateFirstSets(nonterminals);
-		Map<HeadGrammarSlot, Set<Integer>> followSets = GrammarProperties.calculateFollowSets(nonterminals, firstSets);
+		firstSets = GrammarProperties.calculateFirstSets(nonterminals);
+		followSets = GrammarProperties.calculateFollowSets(nonterminals, firstSets);
 		long end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 
@@ -370,7 +374,6 @@ public class GrammarBuilder implements Serializable {
 		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
 		
 		slots = GrammarProperties.setSlotIds(nonterminals, conditionSlots);
-		
 	}
 	
 	private void createAutomatonsMap() {
@@ -1097,7 +1100,7 @@ public class GrammarBuilder implements Serializable {
 	private int count;
 	
 	private List<HeadGrammarSlot> collapsibleNonterminals = new ArrayList<>();
-	
+
 	private void test(BodyGrammarSlot slot, Node<BodyGrammarSlot> node, int symbolIndex, HeadGrammarSlot headGrammarSlot) {
 		
 		if(node.size() == 0) {

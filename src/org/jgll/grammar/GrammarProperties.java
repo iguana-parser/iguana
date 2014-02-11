@@ -15,15 +15,14 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
 import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
 	
-	private static final int EPSILON = -1;
-	private static final int EOF = 0;
-
 	public static Map<HeadGrammarSlot, Set<Integer>> calculateFirstSets(Iterable<HeadGrammarSlot> nonterminals) {
 		
 		Map<HeadGrammarSlot, Set<Integer>> firstSets = new HashMap<>();
@@ -63,7 +62,7 @@ public class GrammarProperties {
 		boolean changed = false;
 		
 		if (currentSlot instanceof EpsilonGrammarSlot) {
-			changed = firstSet.add(EPSILON);
+			changed = firstSet.add(Epsilon.TOKEN_ID);
 		}
 
 		else if (currentSlot instanceof TokenGrammarSlot) {
@@ -72,6 +71,7 @@ public class GrammarProperties {
 				changed = addFirstSet(firstSet, currentSlot.next(), firstSets);
 			}
 		}
+		
 		// Nonterminal
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
@@ -83,14 +83,14 @@ public class GrammarProperties {
 		}
 		
 		if (isChainNullable(currentSlot, firstSets)) {
-			changed = firstSet.add(-1);
+			changed = firstSet.add(Epsilon.TOKEN_ID);
 		}
 		
 		return changed;
 	}
 	
 	private static boolean isNullable(HeadGrammarSlot nt, Map<HeadGrammarSlot, Set<Integer>> firstSets) {
-		return firstSets.get(nt).contains(-1);
+		return firstSets.get(nt).contains(Epsilon.TOKEN_ID);
 	}
 	
 	/**
@@ -137,6 +137,10 @@ public class GrammarProperties {
 																		 Map<HeadGrammarSlot, Set<Integer>> firstSets) {
 		
 		Map<HeadGrammarSlot, Set<Integer>> followSets = new HashMap<>();
+		
+		for (HeadGrammarSlot head : nonterminals) {
+			followSets.put(head, new HashSet<Integer>());
+		}
 		
 		boolean changed = true;
 
@@ -188,11 +192,11 @@ public class GrammarProperties {
 		for (HeadGrammarSlot head : nonterminals) {
 			// Remove the epsilon which may have been added from nullable
 			// nonterminals
-			followSets.get(head).remove(EPSILON);
+			followSets.get(head).remove(Epsilon.TOKEN_ID);
 
 			// Add the EOF to all nonterminals as each nonterminal can be used
 			// as the start symbol.
-			followSets.get(head).add(EOF);
+			followSets.get(head).add(EOF.TOKEN_ID);
 		}
 		
 		return followSets;
@@ -201,7 +205,7 @@ public class GrammarProperties {
 	public static void setNullableHeads(Iterable<HeadGrammarSlot> nonterminals,
 										Map<HeadGrammarSlot, Set<Integer>> firstSets) {
 		for (HeadGrammarSlot head : nonterminals) {
-			head.setNullable(firstSets.get(head).contains(EPSILON));
+			head.setNullable(firstSets.get(head).contains(Epsilon.TOKEN_ID));
 		}
 	}
 	
@@ -224,12 +228,12 @@ public class GrammarProperties {
 							set.addAll(followSets.get(head));
 						}
 						// Prediction sets should not contain epsilon
-						set.remove(EPSILON);
+						set.remove(Epsilon.TOKEN_ID);
 						alternate.setPredictionSet(set);
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {
 						Set<Integer> set = followSets.get(currentSlot.getHead());
-						set.remove(EPSILON);
+						set.remove(Epsilon.TOKEN_ID);
 						alternate.setPredictionSet(set);
 					} 
 					else {
@@ -242,7 +246,7 @@ public class GrammarProperties {
 			if(head.isNullable()) {
 				predictionSet.addAll(followSets.get(head));
 			}
-			predictionSet.remove(EPSILON);
+			predictionSet.remove(Epsilon.TOKEN_ID);
 			head.setPredictionSet(predictionSet, regularExpressions);
 		}
 	}
@@ -320,7 +324,7 @@ public class GrammarProperties {
 
 							// the automaton for EOF is a subset of any dfa, so
 							// skip it.
-							if (i == EOF || j == EOF) {
+							if (i == Epsilon.TOKEN_ID || j == EOF.TOKEN_ID) {
 								continue;
 							}
 

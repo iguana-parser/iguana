@@ -98,6 +98,8 @@ public class Grammar implements Serializable {
 		this.tokenIDMap = builder.tokenIDMap;
 		this.tokens = builder.tokens;
 		this.dfas = builder.dfas;
+		this.firstSets = builder.firstSets;
+		this.followSets = builder.followSets;
 		
 		this.matchers = new ArrayList<>();
 		for(RegularExpression regex : tokens) {

@@ -15,7 +15,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,7 +58,6 @@ public class DanglingElseGrammar3 {
 	@Test
 	public void test() throws ParseError {
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aasbs"), grammar, "S");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/output", sppf, Input.fromString("aasbs"));
 		assertTrue(sppf.deepEquals(getExpectedSPPF()));
 	}
 	
