@@ -2,6 +2,7 @@ package org.jgll.regex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -110,7 +111,11 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public Set<Integer> getFirstSet() {
-		return null;
+		Set<Integer> firstSet = new HashSet<>();
+		for(T t : regularExpressions) {
+			firstSet.addAll(t.getFirstSet());
+		}
+		return firstSet;
 	}
 	
 }

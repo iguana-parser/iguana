@@ -156,7 +156,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 			return null;
 		}
 		
-		assert set.size() == 0;
+		System.out.println(set.size());
+		assert set.size() == 1;
 		
 		BodyGrammarSlot currentSlot = set.iterator().next();
 		
