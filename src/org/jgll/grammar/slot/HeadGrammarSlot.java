@@ -44,27 +44,15 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private boolean ll1;
 	
-	private BitSet firstSet;
-	
-	private BitSet followSet;
-	
-	private Matcher matcher;
-	
-//	private BitSet predictionSet;
-		
 	private boolean ll1SubGrammar;
 	
 	private Alternate[] ll1Map;
-	
-	private transient int ci;
 	
 	private Map<Integer, Set<BodyGrammarSlot>> map;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
 		this.alternates = new ArrayList<>();
-		this.firstSet = new BitSet();
-		this.followSet = new BitSet();
 	}
 	
 	public void addAlternate(Alternate alternate) {		
@@ -130,7 +118,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
-		ci = parser.getCurrentInputIndex();
+		int ci = parser.getCurrentInputIndex();
 		
 		Set<BodyGrammarSlot> set = map.get(lexer.getInput().charAt(ci));
 
@@ -287,39 +275,12 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
-		
-	public BitSet getFirstSet() {
-		return firstSet;
-	}
-	
-	public BitSet getFirstSetWithoutEpsilon() {
-		BitSet set = new BitSet();
-		set.or(firstSet);
-		set.clear(0);
-		return set;
-	}
-	
-	public BitSet getFollowSet() {
-		return followSet;
-	}
-	
-	public BitSet getFollowSetAsBitSet() {
-		return followSet;
-	}
-	
-	public BitSet getFirstSetBitSet() {
-		return firstSet;
-	}
 	
 	public int getCountAlternates() {
 		return alternates.size();
 	}
 	
-	public Matcher getPredictionSetAutomaton() {
-		return matcher;
-	}
-	
-	public void setPredictionSet(Automaton a, Matcher m, List<RegularExpression> regularExpressions) {
+	public void setPredictionSet(Set<Integer> predictionSet, List<RegularExpression> regularExpressions) {
 		
 		map = new HashMap<>();
 

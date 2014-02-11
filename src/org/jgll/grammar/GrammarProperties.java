@@ -22,24 +22,28 @@ import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
 	
-	private static final int EPSILON = 0;
-	private static final int EOF = 1;
+	private static final int EPSILON = -1;
+	private static final int EOF = 0;
 
-	public static void calculateFirstSets(Iterable<HeadGrammarSlot> nonterminals) {
+	public static Map<HeadGrammarSlot, Set<Integer>> calculateFirstSets(Iterable<HeadGrammarSlot> nonterminals) {
+		
+		Map<HeadGrammarSlot, Set<Integer>> firstSets = new HashMap<>();
+		
 		boolean changed = true;
 
 		while (changed) {
+			
 			changed = false;
+			
 			for (HeadGrammarSlot head : nonterminals) {
-
 				for (Alternate alternate : head.getAlternates()) {
-					BitSet firstSet = head.getFirstSet();
-					BitSet copy = copy(firstSet);
-					addFirstSet(firstSet, alternate.getFirstSlot());
-					changed |= !copy.equals(firstSet);
+					Set<Integer> firstSet = firstSets.get(head);
+					changed |= addFirstSet(firstSet, alternate.getFirstSlot(), firstSets);
 				}
 			}
 		}
+		
+		return firstSets;
 	}
 	
 	/**
@@ -51,35 +55,39 @@ public class GrammarProperties {
 	 * 
 	 * @return true if adding any new terminals are added to the first set.
 	 */
-	private static void addFirstSet(BitSet firstSet, BodyGrammarSlot currentSlot) {
+	private static boolean addFirstSet(Set<Integer> firstSet, BodyGrammarSlot currentSlot, Map<HeadGrammarSlot, Set<Integer>> firstSets) {
 
+		boolean changed = false;
+		
 		if (currentSlot instanceof EpsilonGrammarSlot) {
-			firstSet.set(EPSILON);
+			changed = firstSet.add(EPSILON);
 		}
 
 		else if (currentSlot instanceof TokenGrammarSlot) {
-			firstSet.set(((TokenGrammarSlot) currentSlot).getTokenID());
+			changed = firstSet.add(((TokenGrammarSlot) currentSlot).getTokenID());
 			if(currentSlot.isNullable()) {
-				addFirstSet(firstSet, currentSlot.next());
+				changed = addFirstSet(firstSet, currentSlot.next(), firstSets);
 			}
 		}
 		// Nonterminal
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
-			firstSet.or(nonterminalGrammarSlot.getNonterminal().getFirstSetWithoutEpsilon());
-			if (isNullable(nonterminalGrammarSlot.getNonterminal())) {
-				addFirstSet(firstSet, currentSlot.next());
+			changed = firstSet.addAll(firstSets.get(nonterminalGrammarSlot.getNonterminal()));
+			if (isNullable(nonterminalGrammarSlot.getNonterminal(), firstSets)) {
+				changed = addFirstSet(firstSet, currentSlot.next(), firstSets);
 			}
 		}
 		
-		if (isChainNullable(currentSlot)) {
-			firstSet.set(0);
+		if (isChainNullable(currentSlot, firstSets)) {
+			changed = firstSet.add(-1);
 		}
+		
+		return changed;
 	}
 	
-	private static boolean isNullable(HeadGrammarSlot nt) {
-		return nt.getFirstSet().get(0);
+	private static boolean isNullable(HeadGrammarSlot nt, Map<HeadGrammarSlot, Set<Integer>> firstSets) {
+		return firstSets.get(nt).contains(-1);
 	}
 	
 	/**
@@ -89,47 +97,54 @@ public class GrammarProperties {
 	 * part beta is nullable.
 	 *   
 	 */
-	private static boolean isChainNullable(BodyGrammarSlot slot) {
+	private static boolean isChainNullable(BodyGrammarSlot slot, Map<HeadGrammarSlot, Set<Integer>> firstSets) {
 		if (!(slot instanceof LastGrammarSlot)) {
 			if(slot instanceof TokenGrammarSlot) {
-				return slot.isNullable() && isChainNullable(slot.next());
+				return slot.isNullable() && isChainNullable(slot.next(), firstSets);
 			}
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-			return isNullable(ntGrammarSlot.getNonterminal()) && isChainNullable(ntGrammarSlot.next());
+			return isNullable(ntGrammarSlot.getNonterminal(), firstSets) && isChainNullable(ntGrammarSlot.next(), firstSets);
 		}
 
 		return true;
 	}
 	
-	private static void getChainFirstSet(BodyGrammarSlot slot, BitSet set) {
+	private static void getChainFirstSet(BodyGrammarSlot slot, Set<Integer> set, Map<HeadGrammarSlot, Set<Integer>> firstSets) {
 		
 		if (!(slot instanceof LastGrammarSlot)) {
 			
 			if(slot instanceof TokenGrammarSlot) {
-				set.set(((TokenGrammarSlot) slot).getTokenID());
+				set.add(((TokenGrammarSlot) slot).getTokenID());
 				if(slot.isNullable()) {
-					getChainFirstSet(slot.next(), set);
+					getChainFirstSet(slot.next(), set, firstSets);
 				}
 			}
 			else {
 				NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-				set.or(ntGrammarSlot.getNonterminal().getFirstSet());
+				set.addAll(firstSets.get(ntGrammarSlot.getNonterminal()));
 				
-				if(isNullable(ntGrammarSlot.getNonterminal())) {
-					getChainFirstSet(ntGrammarSlot.next(), set);
+				if(isNullable(ntGrammarSlot.getNonterminal(), firstSets)) {
+					getChainFirstSet(ntGrammarSlot.next(), set, firstSets);
 				}
 			}
 		}
 	}
 	
-	public static void calculateFollowSets(Iterable<HeadGrammarSlot> nonterminals) {
+	public static Map<HeadGrammarSlot, Set<Integer>> calculateFollowSets(Iterable<HeadGrammarSlot> nonterminals, 
+																		 Map<HeadGrammarSlot, Set<Integer>> firstSets) {
+		
+		Map<HeadGrammarSlot, Set<Integer>> followSets = new HashMap<>();
+		
 		boolean changed = true;
 
 		while (changed) {
+			
 			changed = false;
+			
 			for (HeadGrammarSlot head : nonterminals) {
 
 				for (Alternate alternate : head.getAlternates()) {
+					
 					BodyGrammarSlot currentSlot = alternate.getFirstSlot();
 
 					while (!(currentSlot instanceof LastGrammarSlot)) {
@@ -143,27 +158,21 @@ public class GrammarProperties {
 							// follow set of X to the
 							// follow set of B.
 							if (next instanceof LastGrammarSlot) {
-								BitSet followSet = nonterminalGrammarSlot.getNonterminal().getFollowSet();
-								BitSet copy = copy(followSet);
-								followSet.or(head.getFollowSet());
-								changed |= !followSet.equals(copy);
+								Set<Integer> followSet = followSets.get(nonterminalGrammarSlot.getNonterminal());
+								changed |= followSet.addAll(followSets.get(head));
 								break;
 							}
 
 							// For rules of the form X ::= alpha B beta, add the
 							// first set of beta to
 							// the follow set of B.
-							BitSet followSet = nonterminalGrammarSlot.getNonterminal().getFollowSet();
-							BitSet copy = copy(followSet);
-							addFirstSet(followSet, currentSlot.next());
-							changed |= !followSet.equals(copy);
+							Set<Integer> followSet = followSets.get(nonterminalGrammarSlot.getNonterminal());
+							changed |= addFirstSet(followSet, currentSlot.next(), firstSets);
 
 							// If beta is nullable, then add the follow set of X
 							// to the follow set of B.
-							if (isChainNullable(next)) {
-								copy = copy(followSet);
-								followSet.or(head.getFollowSet());
-								changed |= !followSet.equals(copy);
+							if (isChainNullable(next, firstSets)) {
+								changed |= followSet.addAll(followSets.get(head));
 							}
 						}
 
@@ -176,25 +185,27 @@ public class GrammarProperties {
 		for (HeadGrammarSlot head : nonterminals) {
 			// Remove the epsilon which may have been added from nullable
 			// nonterminals
-			head.getFollowSet().clear(EPSILON);
+			followSets.get(head).remove(EPSILON);
 
 			// Add the EOF to all nonterminals as each nonterminal can be used
 			// as the start symbol.
-			head.getFollowSet().set(EOF);
+			followSets.get(head).add(EOF);
 		}
+		
+		return followSets;
 	}
 	
-	public static void setNullableHeads(Iterable<HeadGrammarSlot> nonterminals) {
+	public static void setNullableHeads(Iterable<HeadGrammarSlot> nonterminals,
+										Map<HeadGrammarSlot, Set<Integer>> firstSets) {
 		for (HeadGrammarSlot head : nonterminals) {
-			head.setNullable(head.getFirstSet().get(EPSILON));
+			head.setNullable(firstSets.get(head).contains(EPSILON));
 		}
 	}
 	
 	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, 
-										 Automaton a, 
-										 List<RegularExpression> regularExpressions) {
-		
-		Matcher m = a.getMatcher();
+										 List<RegularExpression> regularExpressions,
+										 Map<HeadGrammarSlot, Set<Integer>> firstSets,
+										 Map<HeadGrammarSlot, Set<Integer>> followSets) {
 		
 		for (HeadGrammarSlot head : nonterminals) {
 			
@@ -204,18 +215,18 @@ public class GrammarProperties {
 				
 					if(currentSlot instanceof NonterminalGrammarSlot ||
 					   currentSlot instanceof TokenGrammarSlot) {
-						BitSet set = new BitSet();
-						getChainFirstSet(currentSlot, set);
-						if(isChainNullable(currentSlot)) {
-							set.or(head.getFollowSet());
+						Set<Integer> set = new HashSet<>();
+						getChainFirstSet(currentSlot, set, followSets);
+						if(isChainNullable(currentSlot, firstSets)) {
+							set.addAll(followSets.get(head));
 						}
 						// Prediction sets should not contain epsilon
-						set.clear(EPSILON);
+						set.remove(EPSILON);
 						alternate.setPredictionSet(set);
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {
-						BitSet set = currentSlot.getHead().getFollowSetAsBitSet();
-						set.clear(EPSILON);
+						Set<Integer> set = followSets.get(currentSlot.getHead());
+						set.remove(EPSILON);
 						alternate.setPredictionSet(set);
 					} 
 					else {
@@ -223,12 +234,12 @@ public class GrammarProperties {
 					}
 			}
 			
-			BitSet predictionSet = new BitSet();
-			predictionSet.or(head.getFirstSet());
+			Set<Integer> predictionSet = new HashSet<>();
+			predictionSet.addAll(firstSets.get(head));
 			if(head.isNullable()) {
-				predictionSet.or(head.getFollowSet());
+				predictionSet.or(followSets.head.getFollowSet());
 			}
-			predictionSet.clear(EPSILON);
+			predictionSet.remove(EPSILON);
 			head.setPredictionSet(a, m.copy(), regularExpressions);
 		}
 	}
