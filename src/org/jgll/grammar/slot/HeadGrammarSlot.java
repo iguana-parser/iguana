@@ -51,7 +51,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private Matcher matcher;
 	
-	private BitSet predictionSet;
+//	private BitSet predictionSet;
 		
 	private boolean ll1SubGrammar;
 	
@@ -151,13 +151,14 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		List<SPPFNode> children = new ArrayList<>();
 		
-		int t = lexer.tokenAt(ci, this.predictionSet);
+		matchedAlternates = new HashSet<>();
+		matcher.match(lexer.getInput(), ci);
 		
-		if(t == -1) {
+		if(matchedAlternates.size() == 0) {
 			return null;
 		}
 		
-		BodyGrammarSlot currentSlot = ll1Map[t].getFirstSlot();
+		BodyGrammarSlot currentSlot = matchedAlternates.iterator().next();
 		
 		LastGrammarSlot lastSlot = null;
 		
@@ -315,10 +316,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	public Matcher getPredictionSetAutomaton() {
 		return matcher;
-	}
-	
-	public BitSet getPredictionSet() {
-		return predictionSet;
 	}
 	
 	public void setPredictionSet(Automaton a, Matcher m, List<RegularExpression> regularExpressions) {
