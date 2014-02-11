@@ -319,20 +319,22 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public void setPredictionSet(Automaton a, Matcher m, List<RegularExpression> regularExpressions) {
-		
-		Collections.reverse(alternates);
-		
-		for(final Alternate alternate : alternates) {
 
+		// The first alternate should be put in the stack the last to
+		// maintain the recursive-descent processing order
+		for(int i = alternates.size() - 1; i >= 0; i--) {
+		
+			final Alternate alternate = alternates.get(i);
+			
 			BitSet bs = alternate.getPredictionSet();
 
 			final int[] index = new int[1];
 			
-			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+			for (int j = bs.nextSetBit(0); j >= 0; j = bs.nextSetBit(j+1)) {
 				
-				index[0] = i;
+				index[0] = j;
 
-				for(State state : a.getState(regularExpressions.get(i))) {
+				for(State state : a.getState(regularExpressions.get(j))) {
 					m.addStateAction(state, new StateAction() {
 						
 						private static final long serialVersionUID = 1L;
