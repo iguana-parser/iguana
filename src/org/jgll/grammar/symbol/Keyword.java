@@ -1,8 +1,8 @@
 package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
@@ -14,8 +14,6 @@ public class Keyword extends AbstractRegularExpression {
 	private static final long serialVersionUID = 1L;
 	
 	private final String name;
-	
-	private final BitSet bitSet;
 	
 	private final Sequence<Character> seq;
 	
@@ -35,9 +33,6 @@ public class Keyword extends AbstractRegularExpression {
 		super(name);
 		this.name = name;
 		this.seq = seq;
-		
-		this.bitSet = new BitSet();
-		bitSet.set(seq.get(0).getValue());		
 	}
 	
 	private static Sequence<Character> toCharSequence(int[] chars) {
@@ -94,6 +89,11 @@ public class Keyword extends AbstractRegularExpression {
 	@Override
 	public RegularExpression copy() {
 		return new Keyword(name, seq);
+	}
+
+	@Override
+	public Set<Integer> getFirstSet() {
+		return seq.getFirstSet();
 	}
 	
 }

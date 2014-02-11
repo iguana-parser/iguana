@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.Alternate;
@@ -18,8 +19,6 @@ import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.State;
-import org.jgll.regex.StateAction;
 import org.jgll.regex.Matcher;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
@@ -60,6 +59,8 @@ public class HeadGrammarSlot extends GrammarSlot {
 	private transient Set<BodyGrammarSlot> matchedAlternates;
 	
 	private transient int ci;
+	
+	private Map<Integer, Set<BodyGrammarSlot>> map;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
@@ -134,10 +135,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		ci = parser.getCurrentInputIndex();
 		
-		matchedAlternates = new HashSet<>();
-		matcher.match(lexer.getInput(), ci);
+		Set<BodyGrammarSlot> set = map.get(lexer.getInput().charAt(ci));
 		
-		for(BodyGrammarSlot slot : matchedAlternates) {
+		for(BodyGrammarSlot slot : set) {
 			parser.addDescriptor(slot);
 		}
 		
@@ -319,37 +319,27 @@ public class HeadGrammarSlot extends GrammarSlot {
 	}
 	
 	public void setPredictionSet(Automaton a, Matcher m, List<RegularExpression> regularExpressions) {
-
-		// The first alternate should be put in the stack the last to
-		// maintain the recursive-descent processing order
-		for(int i = alternates.size() - 1; i >= 0; i--) {
 		
+		map = new HashMap<>();
+
+		for(int i = 0; i < alternates.size(); i++) {
+			
 			final Alternate alternate = alternates.get(i);
 			
 			BitSet bs = alternate.getPredictionSet();
 
-			final int[] index = new int[1];
-			
 			for (int j = bs.nextSetBit(0); j >= 0; j = bs.nextSetBit(j+1)) {
-				
-				index[0] = j;
-
-				for(State state : a.getState(regularExpressions.get(j))) {
-					m.addStateAction(state, new StateAction() {
-						
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public void execute(int length, int state) {
-							matchedAlternates.add(alternate.getFirstSlot());
-//							lexer.setTokenAt(ci, index[0], length);
-						}
-					});
-				}					
+				RegularExpression regex = regularExpressions.get(j);
+				for(int k : regex.getFirstSet()) {
+					Set<BodyGrammarSlot> set = map.get(k);
+					if(set == null) {
+						set = new HashSet<>();
+						map.put(k, set);
+					}
+					set.add(alternate.getFirstSlot());					
+				}
 			}
 		}
-		
-		matcher = m;
 	}
 	
 	public boolean contains(List<Symbol> list) {

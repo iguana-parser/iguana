@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import java.util.Set;
+
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 
 
@@ -27,6 +29,11 @@ public class RegexPlus extends AbstractRegularExpression {
 	@Override
 	public RegexPlus copy() {
 		return new RegexPlus(regexp.copy());
+	}
+
+	@Override
+	public Set<Integer> getFirstSet() {
+		return regexp.getFirstSet();
 	}
 
 }

@@ -52,5 +52,10 @@ public class RegexOpt extends AbstractRegularExpression {
 	public RegexOpt copy() {
 		return new RegexOpt(regexp.copy());
 	}
+
+	@Override
+	public Set<Integer> getFirstSet() {
+		return regexp.getFirstSet();
+	}
 	
 }

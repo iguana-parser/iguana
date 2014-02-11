@@ -1,8 +1,9 @@
 package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Automaton;
@@ -25,8 +26,6 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	
 	private final int end;
 	
-	private final BitSet testSet;
-	
 	public static Range in(int start, int end) {
 		return new Range(start, end);
 	}
@@ -40,9 +39,6 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		
 		this.start = start;
 		this.end = end;
-		
-		testSet = new BitSet();
-		testSet.set(start, end + 1);
 	}
 	
 	public int getStart() {
@@ -113,5 +109,14 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	@Override
 	public int compareTo(Range o) {
 		return start - o.start;
+	}
+
+	@Override
+	public Set<Integer> getFirstSet() {
+		Set<Integer> firstSet = new HashSet<>();
+		for(int i = start; i <= end; i++) {
+			firstSet.add(i);
+		}
+		return firstSet;
 	}
 }

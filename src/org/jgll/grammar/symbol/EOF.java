@@ -1,5 +1,8 @@
 package org.jgll.grammar.symbol;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
@@ -40,5 +43,12 @@ public class EOF extends AbstractRegularExpression {
 	@Override
 	public RegularExpression copy() {
 		return this;
+	}
+	
+	@Override
+	public Set<Integer> getFirstSet() {
+		Set<Integer> firstSet = new HashSet<>();
+		firstSet.add(-2);
+		return firstSet;
 	}
 }

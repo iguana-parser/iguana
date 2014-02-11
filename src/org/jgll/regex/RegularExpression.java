@@ -1,6 +1,7 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.jgll.grammar.symbol.Symbol;
 
@@ -17,5 +18,7 @@ public interface RegularExpression extends Serializable, Symbol {
 	 * regular expressions created from this automata.  
 	 */
 	public void addFinalStateAction(StateAction action);
+	
+	public Set<Integer> getFirstSet();
 	
 }

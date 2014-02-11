@@ -2,7 +2,9 @@ package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.regex.Automaton;
 import org.jgll.regex.State;
@@ -94,6 +96,13 @@ public class Character extends AbstractRegularExpression {
 		}
 		CharacterClass c = new CharacterClass(ranges);
 		return c;
+	}
+
+	@Override
+	public Set<Integer> getFirstSet() {
+		Set<Integer> firstSet = new HashSet<>();
+		firstSet.add(c);
+		return firstSet;
 	}
 
 }

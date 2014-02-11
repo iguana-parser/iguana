@@ -2,6 +2,7 @@ package org.jgll.regex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -126,6 +127,18 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public Set<Integer> getFirstSet() {
+		Set<Integer> firstSet = new HashSet<>();
+		for(T t : regularExpressions) {
+			firstSet.addAll(t.getFirstSet());
+			if(!t.isNullable()) {
+				break;
+			}
+		}
+		return firstSet;
 	}
 	
 }

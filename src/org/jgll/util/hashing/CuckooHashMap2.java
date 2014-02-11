@@ -10,7 +10,9 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
 /**
  * 
  * A hash set based on Cuckoo hashing.
- * 
+ * This implementation uses separate arrays for keeping values, instead
+ * of being backed by a hash set.
+ *
  * 
  * @author Ali Afroozeh
  *

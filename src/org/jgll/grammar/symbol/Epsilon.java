@@ -1,5 +1,8 @@
 package org.jgll.grammar.symbol;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jgll.regex.Automaton;
 import org.jgll.regex.State;
 
@@ -42,6 +45,13 @@ public class Epsilon extends AbstractRegularExpression {
 	@Override
 	public boolean isNullable() {
 		return true;
+	}
+	
+	@Override
+	public Set<Integer> getFirstSet() {
+		HashSet<Integer> firstSet = new HashSet<>();
+		firstSet.add(-1);
+		return firstSet;
 	}
 	
 }

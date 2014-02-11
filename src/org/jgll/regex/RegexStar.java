@@ -50,4 +50,9 @@ public class RegexStar extends AbstractRegularExpression {
 		return new RegexStar(regexp.copy());
 	}
 	
+	@Override
+	public Set<Integer> getFirstSet() {
+		return regexp.getFirstSet();
+	}
+	
 }

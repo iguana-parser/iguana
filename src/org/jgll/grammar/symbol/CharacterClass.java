@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegexAlt;
@@ -109,5 +110,10 @@ public class CharacterClass extends AbstractRegularExpression {
 		}
 		
 		return new CharacterClass(newRanges);
+	}
+
+	@Override
+	public Set<Integer> getFirstSet() {
+		return alt.getFirstSet();
 	}
 }

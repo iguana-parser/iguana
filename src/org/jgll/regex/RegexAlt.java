@@ -107,5 +107,10 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	public int hashCode() {
 		return regularExpressions.hashCode();
 	}
+
+	@Override
+	public Set<Integer> getFirstSet() {
+		return null;
+	}
 	
 }
