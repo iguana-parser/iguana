@@ -10,7 +10,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +48,7 @@ public class KeywordTest2 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(BitSetUtil.from(grammar.getTokenID(iff)), grammar.getNonterminalByName("A").getFirstSet());
+		assertEquals(set(grammar.getTokenID(iff)), grammar.getFirstSet(grammar.getNonterminalByName("A")));
 	}
 	
 	@Test

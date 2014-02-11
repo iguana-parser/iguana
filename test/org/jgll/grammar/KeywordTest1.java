@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Keyword;
@@ -8,7 +9,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class KeywordTest1 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(BitSetUtil.from(grammar.getTokenID(ifKeyword)), grammar.getNonterminalByName("A").getFirstSet());
+		assertEquals(set(grammar.getTokenID(ifKeyword)), grammar.getFirstSet(grammar.getNonterminalByName("A")));
 	}
 	
 	@Test

@@ -72,6 +72,10 @@ public class Grammar implements Serializable {
 	
 	private Matcher[] dfas;
 	
+	private Map<HeadGrammarSlot, Set<Integer>> firstSets;
+	
+	private Map<HeadGrammarSlot, Set<Integer>> followSets;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
@@ -327,5 +331,14 @@ public class Grammar implements Serializable {
 	public Matcher getDFA(int id) {
 		return dfas[id];
 	}
+	
+	public Set<Integer> getFirstSet(HeadGrammarSlot head) {
+		return firstSets.get(head);
+	}
+	
+	public Set<Integer> getFollowSet(HeadGrammarSlot head) {
+		return followSets.get(head);
+	}
+
 	
 }

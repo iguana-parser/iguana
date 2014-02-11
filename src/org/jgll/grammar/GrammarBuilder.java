@@ -39,7 +39,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Automaton;
-import org.jgll.regex.AutomatonOperations;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
@@ -348,33 +347,22 @@ public class GrammarBuilder implements Serializable {
 	private void initializeGrammarProrperties() {
 		
 		long start = System.nanoTime();
-		GrammarProperties.calculateFirstSets(nonterminals);
-		GrammarProperties.calculateFollowSets(nonterminals);
+		Map<HeadGrammarSlot, Set<Integer>> firstSets = GrammarProperties.calculateFirstSets(nonterminals);
+		Map<HeadGrammarSlot, Set<Integer>> followSets = GrammarProperties.calculateFollowSets(nonterminals, firstSets);
 		long end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 
-		GrammarProperties.setNullableHeads(nonterminals);
+		GrammarProperties.setNullableHeads(nonterminals, firstSets);
 		
 		start = System.nanoTime();
 		
-		List<Automaton> list = new ArrayList<>();
-		// Skip Epsilon as it will match everything.
-		for(int i = 1; i < automatons.length; i++) {
-			list.add(automatons[i]);
-		}
-		Automaton a = AutomatonOperations.or(list);
-		
-		// It's very important to make a deterministic at this point before
-		// passing it, to avoid expensive, repeated work.
-		a.determinize();
-		
-		GrammarProperties.setPredictionSets(nonterminals, a, tokens);
+		GrammarProperties.setPredictionSets(nonterminals, tokens, firstSets, followSets);
 		end = System.nanoTime();
 		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
 		
 		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
-		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals);
+		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals, firstSets);
 		
 		start = System.nanoTime();
 		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);

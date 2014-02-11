@@ -1,7 +1,7 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
@@ -13,7 +13,6 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
-import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ToJavaCode;
 import org.junit.Before;
@@ -57,7 +56,7 @@ public class KeywordTest3 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(BitSetUtil.from(grammar.getTokenID(iff), grammar.getTokenID(s)), grammar.getNonterminalByName("S").getFirstSet());
+		assertEquals(set(grammar.getTokenID(iff), grammar.getTokenID(s)), grammar.getFirstSet(grammar.getNonterminalByName("S")));
 	}
 	
 	@Test

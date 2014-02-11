@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,9 +16,7 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.Matcher;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -46,9 +43,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private boolean ll1SubGrammar;
 	
-	private Alternate[] ll1Map;
+	private Map<Integer, Set<BodyGrammarSlot>> predictionMapmap;
 	
-	private Map<Integer, Set<BodyGrammarSlot>> map;
+	private Set<Integer> predictionSet;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
@@ -120,7 +117,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		Set<BodyGrammarSlot> set = map.get(lexer.getInput().charAt(ci));
+		Set<BodyGrammarSlot> set = predictionMapmap.get(lexer.getInput().charAt(ci));
 
 		if(set != null) {
 			for(BodyGrammarSlot slot : set) {
@@ -138,7 +135,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		List<SPPFNode> children = new ArrayList<>();
 		
-		Set<BodyGrammarSlot> set = map.get(lexer.getInput().charAt(ci));
+		Set<BodyGrammarSlot> set = predictionMapmap.get(lexer.getInput().charAt(ci));
 		
 		if(set == null || set.isEmpty()) {
 			return null;
@@ -208,24 +205,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.ll1 = ll1;
 	}
 	
-	public void setLL1Map(int countTokens) {
-		ll1Map = new Alternate[countTokens];
-		
-		outer:
-		for(int i = 0; i < countTokens; i++) {
-			for(Alternate alternate : alternates) {
-				if(alternate.getPredictionSet().get(i)) {
-					if(ll1Map[i] != null) {
-						throw new RuntimeException("Something is not right here!");
-					} else {
-						ll1Map[i] = alternate;
-						continue outer;
-					}
-				}
-			}			
-		}
-	}
-	
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		int ci = recognizer.getCi();
@@ -280,25 +259,29 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return alternates.size();
 	}
 	
+	public Set<Integer> getPredictionSet() {
+		return predictionSet;
+	}
+	
 	public void setPredictionSet(Set<Integer> predictionSet, List<RegularExpression> regularExpressions) {
 		
-		map = new HashMap<>();
+		predictionMapmap = new HashMap<>();
 
 		for(int i = 0; i < alternates.size(); i++) {
 			
 			final Alternate alternate = alternates.get(i);
 			
-			BitSet bs = alternate.getPredictionSet();
+			Set<Integer> set = alternate.getPredictionSet();
 
-			for (int j = bs.nextSetBit(0); j >= 0; j = bs.nextSetBit(j+1)) {
+			for (int j : set) {
 				RegularExpression regex = regularExpressions.get(j);
 				for(int k : regex.getFirstSet()) {
-					Set<BodyGrammarSlot> set = map.get(k);
-					if(set == null) {
-						set = new HashSet<>();
-						map.put(k, set);
+					Set<BodyGrammarSlot> s = predictionMapmap.get(k);
+					if(s == null) {
+						s = new HashSet<>();
+						predictionMapmap.put(k, s);
 					}
-					set.add(alternate.getFirstSlot());					
+					s.add(alternate.getFirstSlot());					
 				}
 			}
 		}

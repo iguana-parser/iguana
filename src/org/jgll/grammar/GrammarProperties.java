@@ -17,7 +17,6 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.AutomatonOperations;
-import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
@@ -28,6 +27,10 @@ public class GrammarProperties {
 	public static Map<HeadGrammarSlot, Set<Integer>> calculateFirstSets(Iterable<HeadGrammarSlot> nonterminals) {
 		
 		Map<HeadGrammarSlot, Set<Integer>> firstSets = new HashMap<>();
+		
+		for (HeadGrammarSlot head : nonterminals) {
+			firstSets.put(head, new HashSet<Integer>());
+		}
 		
 		boolean changed = true;
 
@@ -237,10 +240,10 @@ public class GrammarProperties {
 			Set<Integer> predictionSet = new HashSet<>();
 			predictionSet.addAll(firstSets.get(head));
 			if(head.isNullable()) {
-				predictionSet.or(followSets.head.getFollowSet());
+				predictionSet.addAll(followSets.get(head));
 			}
 			predictionSet.remove(EPSILON);
-			head.setPredictionSet(a, m.copy(), regularExpressions);
+			head.setPredictionSet(predictionSet, regularExpressions);
 		}
 	}
 	
@@ -281,7 +284,6 @@ public class GrammarProperties {
 			boolean ll1 = isLL1(head, tokens);
 			if(ll1) {
 				head.setLL1(ll1);
-				head.setLL1Map(tokens.size());
 			}
 		}
 		
@@ -310,30 +312,29 @@ public class GrammarProperties {
         }
         
         for(Alternate alt1 : nonterminal.getAlternates()) {
-                for(Alternate alt2 : nonterminal.getAlternates()) {
-                        if(!alt1.equals(alt2)) {
-                                BitSet set1 = alt1.getPredictionSet();
-                                BitSet set2 = alt2.getPredictionSet();
-                                
-                                 for (int i = set1.nextSetBit(0); i >= 0; i = set1.nextSetBit(i+1)) {
-                                         for (int j = set2.nextSetBit(0); j >= 0; j = set2.nextSetBit(j+1)) {
-                                                 
-                                                 // the automaton for EOF is a subset of any dfa, so skip it.
-                                                 if(i == EOF || j == EOF) {
-                                                         continue;
-                                                 }
-                                                 
-                                                 if(i != j) {
-                                                         if(AutomatonOperations.prefix(automatonMap[i], automatonMap[j]) ||
-                                                                AutomatonOperations.prefix(automatonMap[j], automatonMap[i])) {
-                                                                 return false;
-                                                         }
-                                                 }
-                                         }
-                                 }
-                        }
-                }
-        }
+			for (Alternate alt2 : nonterminal.getAlternates()) {
+				if (!alt1.equals(alt2)) {
+
+					for (int i : alt1.getPredictionSet()) {
+						for (int j : alt2.getPredictionSet()) {
+
+							// the automaton for EOF is a subset of any dfa, so
+							// skip it.
+							if (i == EOF || j == EOF) {
+								continue;
+							}
+
+							if (i != j) {
+								if (AutomatonOperations.prefix(automatonMap[i], automatonMap[j])
+										|| AutomatonOperations.prefix(automatonMap[j], automatonMap[i])) {
+									return false;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
         
         return true;
 }
@@ -347,7 +348,13 @@ public class GrammarProperties {
         for(Alternate alt1 : nonterminal.getAlternates()) {
         	for(Alternate alt2 : nonterminal.getAlternates()) {
         		if(!alt1.equals(alt2)) {
-        			if(alt1.getPredictionSet().intersects(alt2.getPredictionSet())) {
+        			Set<Integer> s1 = new HashSet<>(alt1.getPredictionSet());
+        			Set<Integer> s2 = new HashSet<>(alt2.getPredictionSet());
+        			
+        			s1.retainAll(alt2.getPredictionSet());
+        			s2.retainAll(alt1.getPredictionSet());
+        			
+        			if(!s1.isEmpty() || !s2.isEmpty()) {
         				return false;
                     }
         		}
@@ -419,7 +426,7 @@ public class GrammarProperties {
 		}
 	}
 	
-	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateDirectReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals) {
+	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateDirectReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals, Map<HeadGrammarSlot, Set<Integer>> firstSets) {
 		
 		Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph = new HashMap<>();
 		
@@ -436,7 +443,7 @@ public class GrammarProperties {
 				}
 				
 				for (Alternate alternate : head.getAlternates()) {
-					changed |= calculateDirectReachabilityGraph(set, alternate.getFirstSlot(), changed, reachabilityGraph);
+					changed |= calculateDirectReachabilityGraph(set, alternate.getFirstSlot(), changed, reachabilityGraph, firstSets);
 				}
 			}
 		}
@@ -457,7 +464,8 @@ public class GrammarProperties {
 	 * @return
 	 */
 	private static boolean calculateDirectReachabilityGraph(Set<HeadGrammarSlot> set, BodyGrammarSlot currentSlot, boolean changed, 
-													  Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph) {
+													  Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph, 
+													  Map<HeadGrammarSlot, Set<Integer>> firstSets) {
 
 		if (currentSlot instanceof EpsilonGrammarSlot) {
 			return false;
@@ -476,8 +484,8 @@ public class GrammarProperties {
 			
 			changed = set.addAll(set2) || changed;
 			
-			if (isNullable(nonterminalGrammarSlot.getNonterminal())) {
-				return calculateDirectReachabilityGraph(set, currentSlot.next(), changed, reachabilityGraph) || changed;
+			if (isNullable(nonterminalGrammarSlot.getNonterminal(), firstSets)) {
+				return calculateDirectReachabilityGraph(set, currentSlot.next(), changed, reachabilityGraph, firstSets) || changed;
 			}
 			return changed;
 		}

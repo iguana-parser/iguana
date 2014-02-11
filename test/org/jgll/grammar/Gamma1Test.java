@@ -17,7 +17,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
-import org.jgll.util.BitSetUtil;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,15 +82,15 @@ public class Gamma1Test {
 	
 	@Test
 	public void testFirstSets() {
-		assertEquals(BitSetUtil.from(grammar.getTokenID(a), grammar.getTokenID(b), grammar.getTokenID(c), Epsilon.TOKEN_ID), grammar.getNonterminalByName("S").getFirstSet());
-		assertEquals(BitSetUtil.from(grammar.getTokenID(a), grammar.getTokenID(c)), grammar.getNonterminalByName("A").getFirstSet());
-		assertEquals(BitSetUtil.from(grammar.getTokenID(a), grammar.getTokenID(b)), grammar.getNonterminalByName("B").getFirstSet());
+		assertEquals(set(grammar.getTokenID(a), grammar.getTokenID(b), grammar.getTokenID(c), Epsilon.TOKEN_ID), grammar.getFirstSet(grammar.getNonterminalByName("S")));
+		assertEquals(set(grammar.getTokenID(a), grammar.getTokenID(c)), grammar.getFirstSet(grammar.getNonterminalByName("A")));
+		assertEquals(set(grammar.getTokenID(a), grammar.getTokenID(b)), grammar.getFirstSet(grammar.getNonterminalByName("B")));
 	}
 
 	@Test
 	public void testFollowSets() {
-		assertEquals(BitSetUtil.from(grammar.getTokenID(a), grammar.getTokenID(b), grammar.getTokenID(c), grammar.getTokenID(d), EOF.TOKEN_ID), grammar.getNonterminalByName("A").getFollowSet());
-		assertEquals(BitSetUtil.from(grammar.getTokenID(d), EOF.TOKEN_ID), grammar.getNonterminalByName("S").getFollowSet());
+		assertEquals(set(grammar.getTokenID(a), grammar.getTokenID(b), grammar.getTokenID(c), grammar.getTokenID(d), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("A")));
+		assertEquals(set(grammar.getTokenID(d), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("S")));
 	}
 	
 	@Test
