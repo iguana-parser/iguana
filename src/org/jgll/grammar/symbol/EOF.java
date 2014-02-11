@@ -48,7 +48,7 @@ public class EOF extends AbstractRegularExpression {
 	@Override
 	public Set<Integer> getFirstSet() {
 		Set<Integer> firstSet = new HashSet<>();
-		firstSet.add(-2);
+		firstSet.add(0);
 		return firstSet;
 	}
 }

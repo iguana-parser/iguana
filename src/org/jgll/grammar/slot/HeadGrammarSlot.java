@@ -56,8 +56,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private Alternate[] ll1Map;
 	
-	private transient Set<BodyGrammarSlot> matchedAlternates;
-	
 	private transient int ci;
 	
 	private Map<Integer, Set<BodyGrammarSlot>> map;
@@ -67,7 +65,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.alternates = new ArrayList<>();
 		this.firstSet = new BitSet();
 		this.followSet = new BitSet();
-		this.matchedAlternates = new HashSet<>();
 	}
 	
 	public void addAlternate(Alternate alternate) {		
@@ -136,9 +133,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 		ci = parser.getCurrentInputIndex();
 		
 		Set<BodyGrammarSlot> set = map.get(lexer.getInput().charAt(ci));
-		
-		for(BodyGrammarSlot slot : set) {
-			parser.addDescriptor(slot);
+
+		if(set != null) {
+			for(BodyGrammarSlot slot : set) {
+				parser.addDescriptor(slot);
+			}
 		}
 		
 		return null;
@@ -151,14 +150,15 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		List<SPPFNode> children = new ArrayList<>();
 		
-		matchedAlternates = new HashSet<>();
-		matcher.match(lexer.getInput(), ci);
+		Set<BodyGrammarSlot> set = map.get(lexer.getInput().charAt(ci));
 		
-		if(matchedAlternates.size() == 0) {
+		if(set == null || set.isEmpty()) {
 			return null;
 		}
 		
-		BodyGrammarSlot currentSlot = matchedAlternates.iterator().next();
+		assert set.size() == 0;
+		
+		BodyGrammarSlot currentSlot = set.iterator().next();
 		
 		LastGrammarSlot lastSlot = null;
 		
