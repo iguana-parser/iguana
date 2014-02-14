@@ -287,10 +287,7 @@ public class GrammarProperties {
 									   List<RegularExpression> tokens) {
 		
 		for (HeadGrammarSlot head : nonterminals) {
-			boolean ll1 = isLL1(head, tokens);
-			if(ll1) {
-				head.setLL1(ll1);
-			}
+			head.setLL1(isLL1(head, tokens));
 		}
 		
 		for (HeadGrammarSlot head : nonterminals) {
@@ -310,43 +307,11 @@ public class GrammarProperties {
     private static boolean isLL1(HeadGrammarSlot nonterminal, List<RegularExpression> tokens) {
         if(!arePredictionSetsDistinct(nonterminal)) {
                 return false;
-        }
-        
-        Automaton[] automatonMap = new Automaton[tokens.size()];
-        for(int i = 0; i < tokens.size(); i++) {
-                automatonMap[i] = tokens.get(i).toAutomaton().minimize();
-        }
-        
-        for(Alternate alt1 : nonterminal.getAlternates()) {
-			for (Alternate alt2 : nonterminal.getAlternates()) {
-				if (!alt1.equals(alt2)) {
-
-					for (int i : alt1.getPredictionSet()) {
-						for (int j : alt2.getPredictionSet()) {
-
-							// the automaton for EOF is a subset of any dfa, so
-							// skip it.
-							if (i == Epsilon.TOKEN_ID || j == EOF.TOKEN_ID) {
-								continue;
-							}
-
-							if (i != j) {
-								if (AutomatonOperations.prefix(automatonMap[i], automatonMap[j])
-										|| AutomatonOperations.prefix(automatonMap[j], automatonMap[i])) {
-									return false;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-        
+        }        
         return true;
 }
 	
     private static boolean arePredictionSetsDistinct(HeadGrammarSlot nonterminal) {
-        
         if(nonterminal.getAlternates().size() == 1) {
         	return true;
         }
@@ -360,15 +325,15 @@ public class GrammarProperties {
         			s1.retainAll(alt2.getPredictionSet());
         			s2.retainAll(alt1.getPredictionSet());
         			
-        			if(!s1.isEmpty() || !s2.isEmpty()) {
+        			if(s1.isEmpty() && s2.isEmpty()) {
         				return false;
                     }
         		}
         	}
         }
 
-        return true;
-}
+        return false;
+    }
 	
 	/**
 	 * 
