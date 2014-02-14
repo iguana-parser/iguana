@@ -285,9 +285,22 @@ public class GrammarProperties {
 	public static void setLLProperties(Iterable<HeadGrammarSlot> nonterminals, 
 									   Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph, 
 									   List<RegularExpression> tokens) {
+
+		// Calculating character level predictions
+		Map<Alternate, Set<Integer>> predictions = new HashMap<>();
+		for (HeadGrammarSlot head : nonterminals) {
+			Set<Integer> set = new HashSet<>();
+			for(Alternate alt : head.getAlternates()) {
+				for(int i : alt.getPredictionSet()) {
+					set.addAll(tokens.get(i).getFirstSet());
+				}
+				predictions.put(alt, set);
+			}
+		}
+
 		
 		for (HeadGrammarSlot head : nonterminals) {
-			head.setLL1(isLL1(head, tokens));
+			head.setLL1(isLL1(head, predictions));
 		}
 		
 		for (HeadGrammarSlot head : nonterminals) {
@@ -304,14 +317,7 @@ public class GrammarProperties {
 		
 	}
 	
-    private static boolean isLL1(HeadGrammarSlot nonterminal, List<RegularExpression> tokens) {
-        if(!arePredictionSetsDistinct(nonterminal)) {
-                return false;
-        }        
-        return true;
-}
-	
-    private static boolean arePredictionSetsDistinct(HeadGrammarSlot nonterminal) {
+    private static boolean isLL1(HeadGrammarSlot nonterminal, Map<Alternate, Set<Integer>> predictions) {
         if(nonterminal.getAlternates().size() == 1) {
         	return true;
         }
@@ -319,22 +325,18 @@ public class GrammarProperties {
         for(Alternate alt1 : nonterminal.getAlternates()) {
         	for(Alternate alt2 : nonterminal.getAlternates()) {
         		if(!alt1.equals(alt2)) {
-        			Set<Integer> s1 = new HashSet<>(alt1.getPredictionSet());
-        			Set<Integer> s2 = new HashSet<>(alt2.getPredictionSet());
-        			
-        			s1.retainAll(alt2.getPredictionSet());
-        			s2.retainAll(alt1.getPredictionSet());
-        			
-        			if(s1.isEmpty() && s2.isEmpty()) {
+        			HashSet<Integer> intersection = new HashSet<>(predictions.get(alt1));
+					intersection.retainAll(predictions.get(alt2));
+        			if(!intersection.isEmpty()) {
         				return false;
                     }
         		}
         	}
         }
 
-        return false;
+        return true;
     }
-	
+		
 	/**
 	 * 
 	 * Calculate the set of nonterminals that are reachable via the alternates of A.

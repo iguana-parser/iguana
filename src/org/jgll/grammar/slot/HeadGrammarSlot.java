@@ -141,6 +141,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 			return null;
 		}
 		
+		if(set.size() > 1) {
+			System.out.println(nonterminal.getName());
+		}
 		assert set.size() == 1;
 		
 		BodyGrammarSlot currentSlot = set.iterator().next();
