@@ -318,15 +318,11 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 
 	@Override
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
-		GSSTuple gssTuple = gssTuples[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
-		gssTuple.getNonPackedNodes().add(sppfNode);
-		System.out.println(gssTuple.getNonPackedNodes());
 	}
 
 	@Override
 	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode) {
-		GSSTuple gssTuple = gssTuples[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
-		return gssTuple.getNonPackedNodes();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package org.jgll.parser.gss;
 
 import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -27,7 +28,7 @@ class ArrayBasedGSSNode implements GSSNode {
 	 * to compare their right extent. This bit set is used for this purpose. 
 	 * Maybe Hashset implemetations are faster. We should figure it out.
 	 */
-	private BitSet addedPoppedElements;
+	private Set<Integer> addedPoppedElements;
 
 	private final int hash;
 	
@@ -43,16 +44,16 @@ class ArrayBasedGSSNode implements GSSNode {
 		this.inputIndex = inputIndex;
 		children = new ArrayList<>();
 		poppedElements = new ArrayList<>();
-		addedPoppedElements = new BitSet();
+		addedPoppedElements = new HashSet<>();
 		
 		this.hash = GSSNode.externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	@Override
 	public void addToPoppedElements(NonPackedNode node) {
-		if(!addedPoppedElements.get(node.getRightExtent())) {
+		if(!addedPoppedElements.contains(node.getRightExtent())) {
 			poppedElements.add(node);
-			addedPoppedElements.set(node.getRightExtent());
+			addedPoppedElements.add(node.getRightExtent());
 		}
 	}
 	
