@@ -253,10 +253,10 @@ public class GLLParserImpl implements GLLParser {
 		
 		if (cu != u0) {
 
-			log.trace("Pop %s, %d, %s", cu.getGrammarSlot(), ci, cn);
+			log.trace("Pop %s, %d, %s", cu, ci, cn);
 			
-			// Add (u, z) to P
-			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
+			cu.addToPoppedElements(ci, (NonPackedNode) cn);
+//			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
 			label:
 			for(GSSEdge edge : lookupTable.getEdges(cu)) {
@@ -314,12 +314,13 @@ public class GLLParserImpl implements GLLParser {
 	}
 	
 	private final GSSNode create(BodyGrammarSlot returnSlot, HeadGrammarSlot head, GSSNode u, int i, SPPFNode w) {
-		log.trace("GSSNode created: (%s, %d)",  returnSlot, i);
-
 		GSSNode v = lookupTable.getGSSNode(head, i);
 
 		if(lookupTable.getGSSEdge(v, u, w, returnSlot)) {
-			for (SPPFNode z : lookupTable.getPoppedElementsOf(v)) {
+			for (SPPFNode z : v.getPoppedElements()) {
+				if(z == null) {
+					continue;
+				}
 				SPPFNode x;
 				if(returnSlot instanceof LastGrammarSlot) {
 					x = getNonterminalNode((LastGrammarSlot) returnSlot, w, z);
@@ -348,13 +349,14 @@ public class GLLParserImpl implements GLLParser {
 		GrammarSlot t = slot.getHead();
 
 		int leftExtent;
-		int rightExtent = rightChild.getRightExtent();
 		
 		if (leftChild != DummyNode.getInstance()) {
 			leftExtent = leftChild.getLeftExtent();
 		} else {
 			leftExtent = rightChild.getLeftExtent();
 		}
+		
+		int rightExtent = rightChild.getRightExtent();
 		
 		NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(t, leftExtent, rightExtent);
 		

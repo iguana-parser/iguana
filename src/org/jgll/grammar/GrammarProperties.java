@@ -17,8 +17,6 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.regex.Automaton;
-import org.jgll.regex.AutomatonOperations;
 import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
@@ -289,8 +287,8 @@ public class GrammarProperties {
 		// Calculating character level predictions
 		Map<Alternate, Set<Integer>> predictions = new HashMap<>();
 		for (HeadGrammarSlot head : nonterminals) {
-			Set<Integer> set = new HashSet<>();
 			for(Alternate alt : head.getAlternates()) {
+				Set<Integer> set = new HashSet<>();
 				for(int i : alt.getPredictionSet()) {
 					set.addAll(tokens.get(i).getFirstSet());
 				}

@@ -6,6 +6,7 @@ import java.util.List;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
@@ -22,13 +23,15 @@ public class GSSNode {
 	/**
 	 * The initial GSS node
 	 */
-	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0, 0);
 
-	private final HeadGrammarSlot slot;
+	private final HeadGrammarSlot head;
 
 	private final int inputIndex;
 	
 	private List<GSSNode> children;
+	
+	private NonPackedNode[] poppedElements;
 
 	private final int hash;
 	
@@ -39,13 +42,25 @@ public class GSSNode {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	public GSSNode(HeadGrammarSlot slot, int inputIndex) {
-		this.slot = slot;
+	public GSSNode(HeadGrammarSlot head, int inputIndex, int inputSize) {
+		this.head = head;
 		this.inputIndex = inputIndex;
 		
 		children = new ArrayList<>();
 		
+		// Each GSS nodes can be popped from the GSS node's input index to the
+		// the length of input index.
+		poppedElements = new NonPackedNode[inputSize - inputIndex];
+		
 		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
+	}
+	
+	public void addToPoppedElements(int i, NonPackedNode node) {
+		poppedElements[i - inputIndex] = node;
+	}
+	
+	public NonPackedNode[] getPoppedElements() {
+		return poppedElements;
 	}
 		
 	public Iterable<GSSNode> getChildren() {
@@ -62,7 +77,7 @@ public class GSSNode {
 	}
 		
 	public GrammarSlot getGrammarSlot() {
-		return slot;
+		return head;
 	}
 
 	public int getInputIndex() {
@@ -82,7 +97,7 @@ public class GSSNode {
 		
 		GSSNode other = (GSSNode) obj;
 
-		return  slot == other.slot &&
+		return  head == other.head &&
 				inputIndex == other.inputIndex;
 	}
 
@@ -93,7 +108,7 @@ public class GSSNode {
 	
 	@Override
 	public String toString() {
-		return "(" + slot + "," + inputIndex + ")";
+		return "(" + head + "," + inputIndex + ")";
 	}
 
 	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {
@@ -102,12 +117,12 @@ public class GSSNode {
 
 		@Override
 		public int hash(GSSNode node, HashFunction f) {
-			return f.hash(node.slot.getId(), node.inputIndex);
+			return f.hash(node.head.getId(), node.inputIndex);
 		}
 
 		@Override
 		public boolean equals(GSSNode g1, GSSNode g2) {
-			return g1.slot.getId() == g2.slot.getId() &&
+			return g1.head.getId() == g2.head.getId() &&
 				   g1.inputIndex == g2.inputIndex;
 		}
 	}
@@ -118,12 +133,12 @@ public class GSSNode {
 
 		@Override
 		public int hash(GSSNode node, HashFunction f) {
-			return f.hash(node.slot.getId());
+			return f.hash(node.head.getId());
 		}
 
 		@Override
 		public boolean equals(GSSNode g1, GSSNode g2) {
-			return g1.slot == g2.slot;
+			return g1.head == g2.head;
 		}
 	}
 

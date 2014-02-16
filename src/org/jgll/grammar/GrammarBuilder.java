@@ -137,7 +137,7 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		nonterminals.addAll(collapsibleNonterminals);
-		
+				
 		initializeGrammarProrperties();
 		
 		validateGrammar();
@@ -201,10 +201,10 @@ public class GrammarBuilder implements Serializable {
 		BodyGrammarSlot currentSlot = null;
 
 		if (body.size() == 0) {
-			currentSlot = new EpsilonGrammarSlot(0, headGrammarSlot, rule.getObject());
-			headGrammarSlot.addAlternate(new Alternate(currentSlot));
-		}
-
+			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(0, headGrammarSlot, rule.getObject());
+			epsilonSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
+			headGrammarSlot.addAlternate(new Alternate(epsilonSlot));
+		} 
 		else {
 			int symbolIndex = 0;
 			BodyGrammarSlot firstSlot = null;
@@ -224,8 +224,9 @@ public class GrammarBuilder implements Serializable {
 
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot);
+			lastGrammarSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
 			headGrammarSlot.addAlternate(alternate);
-
+			
 			for(Entry<BodyGrammarSlot, Iterable<Condition>> e : conditions.entrySet()) {
 				for(Condition condition : e.getValue()) {
 					addCondition(e.getKey(), condition);
@@ -558,6 +559,11 @@ public class GrammarBuilder implements Serializable {
 			
 			Set<Alternate> alternates = head.without(patterns.get(pattern));
 			List<Alternate> copyAlternates = copyAlternates(freshNontermianl, alternates);
+
+			for(Alternate a : copyAlternates) {
+				((LastGrammarSlot) a.getLastSlot().next()).setAlternateIndex(copyAlternates.indexOf(a));
+			}
+			
 			freshNontermianl.setAlternates(copyAlternates);
 			existingAlternates.put(new HashSet<>(copyAlternates), freshNontermianl);
 		}
@@ -606,6 +612,11 @@ public class GrammarBuilder implements Serializable {
 			alt.setNonterminalAt(position, newNonterminal);
 			
 			List<Alternate> copy = copyAlternates(newNonterminal, filteredNonterminal.without(filteredAlternates));
+			
+			for(Alternate a : copy) {
+				((LastGrammarSlot) a.getLastSlot().next()).setAlternateIndex(copy.indexOf(a));
+			}
+			
 			existingAlternates.put(new HashSet<>(copy), newNonterminal);
 			newNonterminal.setAlternates(copy);
 
@@ -932,20 +943,6 @@ public class GrammarBuilder implements Serializable {
 		nonterminals.retainAll(referedNonterminals);
 
 		return this;
-	}
-
-	// TODO: remove it!
-	private void removeKeywordDefinitions() {
-		Set<HeadGrammarSlot> keywordHeads = new HashSet<>();
-		
-		for(HeadGrammarSlot head : nonterminals) {
-			if(head.getNonterminal().getName().startsWith("\"") &&
-			   head.getNonterminal().getName().endsWith("\"")) {
-				keywordHeads.add(head);
-			}
-		}
-		
-		nonterminals.removeAll(keywordHeads);
 	}
 	
 	private void removeUnusedNewNonterminals() {

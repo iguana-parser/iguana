@@ -26,6 +26,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 */
 	private transient Object object;
 	
+	protected int alternateIndex;
+	
 	public LastGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
 		super(position, previous, head);
 		this.object = object;
@@ -40,6 +42,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+		// TODO: check for follow sets at this point
 		parser.pop();
 		return null;
 	}
@@ -72,6 +75,15 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public boolean isNullable() {
 		return false;
+	}
+	
+	
+	public int getAlternateIndex() {
+		return alternateIndex;
+	}
+	
+	public void setAlternateIndex(int alternateIndex) {
+		this.alternateIndex = alternateIndex;
 	}
 
 	@Override

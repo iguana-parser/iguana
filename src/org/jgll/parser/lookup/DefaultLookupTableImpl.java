@@ -59,6 +59,8 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 
 	private int nonPackedNodesCount;
 
+	private Input input;
+
 	public DefaultLookupTableImpl(Grammar grammar) {
 		super(grammar);
 	}
@@ -67,6 +69,7 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 	@Override
 	public void init(Input input) {
 
+		this.input = input;
 		long start = System.nanoTime();
 
 		descriptorsStack = new ArrayDeque<>();
@@ -92,11 +95,14 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		GSSTuple gssTuple = gssTuples[head.getId()][inputIndex];
 
 		if (gssTuple == null) {
-			GSSNode gssNode = new GSSNode(head, inputIndex);
+			GSSNode gssNode = new GSSNode(head, inputIndex, input.length());
+			log.trace("GSSNode created: (%s, %d)",  head, inputIndex);
 			gssTuple = new GSSTuple(gssNode);
 			gssTuples[head.getId()][inputIndex] = gssTuple;
 			return gssNode;
 		}
+		
+		log.trace("GSSNode found: (%s, %d)",  head, inputIndex);
 
 		return gssTuple.getGssNode();
 	}
@@ -313,7 +319,7 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
 		GSSTuple gssTuple = gssTuples[gssNode.getGrammarSlot().getId()][gssNode.getInputIndex()];
 		gssTuple.getNonPackedNodes().add(sppfNode);
-//		System.out.println(gssTuple.getNonPackedNodes().size());
+		System.out.println(gssTuple.getNonPackedNodes());
 	}
 
 	@Override
