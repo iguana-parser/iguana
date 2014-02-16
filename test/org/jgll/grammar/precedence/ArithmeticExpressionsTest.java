@@ -67,12 +67,13 @@ public class ArithmeticExpressionsTest {
 		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a*a"), grammar, "E");
+		Input input = Input.fromString("a+a*a");
+		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
 	

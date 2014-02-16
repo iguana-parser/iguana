@@ -3,8 +3,8 @@ package org.jgll.parser.lookup;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.parser.GSSEdge;
-import org.jgll.parser.GSSNode;
+import org.jgll.parser.gss.GSSEdge;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;

@@ -1,7 +1,7 @@
 package org.jgll.grammar.precedence;
 
-import static org.jgll.util.CollectionsUtil.list;
-import static org.junit.Assert.assertTrue;
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
@@ -35,7 +35,7 @@ public class FilterTest1 {
 	private GLLParser parser;
 
 	@Before
-	public void init() {
+	public void createGrammar() {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
@@ -58,12 +58,13 @@ public class FilterTest1 {
 		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void testInput() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+-a+a"), grammar, "E");
+		Input input = Input.fromString("a+-a+a");
+		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
 	

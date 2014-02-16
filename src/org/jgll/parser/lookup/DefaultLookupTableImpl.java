@@ -12,8 +12,9 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
-import org.jgll.parser.GSSEdge;
-import org.jgll.parser.GSSNode;
+import org.jgll.parser.gss.GSSEdge;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeFactory;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -60,9 +61,12 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 	private int nonPackedNodesCount;
 
 	private Input input;
-
-	public DefaultLookupTableImpl(Grammar grammar) {
+	
+	private final GSSNodeFactory gssNodeFactory;
+	
+	public DefaultLookupTableImpl(Grammar grammar, GSSNodeFactory gssNodeFactory) {
 		super(grammar);
+		this.gssNodeFactory = gssNodeFactory;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -95,7 +99,7 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		GSSTuple gssTuple = gssTuples[head.getId()][inputIndex];
 
 		if (gssTuple == null) {
-			GSSNode gssNode = new GSSNode(head, inputIndex, input.length());
+			GSSNode gssNode = gssNodeFactory.createGSSNode(head, inputIndex);
 			log.trace("GSSNode created: (%s, %d)",  head, inputIndex);
 			gssTuple = new GSSTuple(gssNode);
 			gssTuples[head.getId()][inputIndex] = gssTuple;

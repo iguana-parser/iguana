@@ -1,6 +1,6 @@
 package org.jgll.grammar.precedence;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
@@ -10,7 +10,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,7 @@ public class ManualArithmeticExpressionsTest {
 	private GLLParser parser;
 
 	@Before
-	public void init() {
+	public void createGrammar() {
 
 		GrammarBuilder builder = new GrammarBuilder("ArithmeticExpressions");
 
@@ -67,12 +66,13 @@ public class ManualArithmeticExpressionsTest {
 		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a*a+a"), grammar, "E");
+		Input input = Input.fromString("a+a*a+a");
+		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		parser.parse(input, grammar, "E");
 	}
 	
 }

@@ -87,12 +87,13 @@ public class FilterTest7 {
 		builder.rewritePatterns();
 
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aaa+aaaa+aaaa"), grammar, "E");
+		Input input = Input.fromString("aaa+aaaa+aaaa");
+		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

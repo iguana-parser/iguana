@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
 
 
@@ -55,7 +55,7 @@ public class ParseError extends Exception {
 	public void printGrammarTrace(PrintStream out) {
 		out.println(toString());
 		
-		indent(out, 1, new GSSNode(((NonterminalGrammarSlot) slot).getNonterminal(), inputIndex, input.length()));
+//		indent(out, 1, new GSSNode(((NonterminalGrammarSlot) slot).getNonterminal(), inputIndex, input.length()));
 		
 		GSSNode gssNode = currentNode;
 		

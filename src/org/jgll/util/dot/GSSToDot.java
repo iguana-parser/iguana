@@ -5,8 +5,8 @@ import static org.jgll.util.dot.GraphVizUtil.GSS_NODE;
 
 import java.util.Map;
 
-import org.jgll.parser.GSSEdge;
-import org.jgll.parser.GSSNode;
+import org.jgll.parser.gss.GSSEdge;
+import org.jgll.parser.gss.GSSNode;
 
 public class GSSToDot extends ToDot {
 	

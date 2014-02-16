@@ -37,7 +37,7 @@ public class FilterTest3 {
 	private GLLParser parser;
 	
 	@Before
-	public void init() {
+	public void createGrammar() {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		Nonterminal E = new Nonterminal("E");
@@ -86,12 +86,13 @@ public class FilterTest3 {
 		builder.rewritePatterns();
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void testInput() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aaa+aaaaa+aaaa"), grammar, "E");
+		Input input = Input.fromString("aaa+aaaaa+aaaa");
+		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

@@ -12,6 +12,8 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
+import org.jgll.parser.gss.GSSEdge;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.LookupTable;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -255,7 +257,7 @@ public class GLLParserImpl implements GLLParser {
 
 			log.trace("Pop %s, %d, %s", cu, ci, cn);
 			
-			cu.addToPoppedElements(ci, (NonPackedNode) cn);
+			cu.addToPoppedElements((NonPackedNode) cn);
 //			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
 			label:

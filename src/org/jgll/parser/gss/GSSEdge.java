@@ -1,6 +1,7 @@
-package org.jgll.parser;
+package org.jgll.parser.gss;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.hashing.ExternalHasher;

@@ -2,8 +2,8 @@ package org.jgll.util;
 
 import java.util.Map;
 
-import org.jgll.parser.GSSEdge;
-import org.jgll.parser.GSSNode;
+import org.jgll.parser.gss.GSSEdge;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.dot.GSSToDot;
 import org.jgll.util.dot.GraphVizUtil;

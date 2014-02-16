@@ -37,7 +37,7 @@ public class FilterTest2 {
 
 	
 	@Before
-	public void init() {
+	public void createGrammar() {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
@@ -73,12 +73,13 @@ public class FilterTest2 {
 		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a^a^-a+a"), grammar, "E");
+		Input input = Input.fromString("a+a^a^-a+a");
+		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

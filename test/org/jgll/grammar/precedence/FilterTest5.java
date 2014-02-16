@@ -31,7 +31,7 @@ public class FilterTest5 {
 	private GLLParser parser;
 
 	@Before
-	public void init() {
+	public void createGrammar() {
 		
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
 		
@@ -70,12 +70,13 @@ public class FilterTest5 {
 		
 		builder.rewritePrecedencePatterns();
 		grammar =  builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void testParsers() throws ParseError {
-		parser.parse(Input.fromString("xawz"), grammar, "E");
+		Input input = Input.fromString("xawz");
+		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		parser.parse(input, grammar, "E");
 	}
 
 }
