@@ -60,7 +60,7 @@ public class DanglingElseGrammar1 {
 	@Test
 	public void test1() throws ParseError {
 		Input input = Input.fromString("aasbs");
-		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getExpectedSPPF1()));
 	}
@@ -68,7 +68,7 @@ public class DanglingElseGrammar1 {
 	@Test
 	public void test2() throws ParseError {
 		Input input = Input.fromString("aaaaasbsbsbs");
-		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aaaaasbsbsbs"), grammar, "S");
 		assertTrue(sppf.deepEquals(getExpectedSPPF2()));
 	}

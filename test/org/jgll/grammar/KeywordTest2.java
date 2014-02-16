@@ -25,7 +25,6 @@ import org.junit.Test;
 public class KeywordTest2 {
 	
 	private Grammar grammar;
-	private GLLParser parser;
 	
 	Nonterminal A = new Nonterminal("A");
 	Nonterminal B = new Nonterminal("B");
@@ -43,7 +42,6 @@ public class KeywordTest2 {
 		builder.addRule(GrammarBuilder.fromKeyword(iff));
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -53,7 +51,9 @@ public class KeywordTest2 {
 	
 	@Test
 	public void test() throws ParseError {
-		parser.parse(Input.fromString("ifb"), grammar, "A");
+		Input input = Input.fromString("ifb");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		parser.parse(input, grammar, "A");
 	}
 	
 }

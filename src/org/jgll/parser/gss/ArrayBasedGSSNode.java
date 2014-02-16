@@ -1,7 +1,7 @@
 package org.jgll.parser.gss;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.BitSet;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
@@ -10,7 +10,7 @@ import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.NonPackedNode;
 
 
-public class ArrayBasedGSSNode implements GSSNode {
+class ArrayBasedGSSNode implements GSSNode {
 
 	private final HeadGrammarSlot head;
 
@@ -18,9 +18,16 @@ public class ArrayBasedGSSNode implements GSSNode {
 	
 	private List<GSSNode> children;
 	
-	private int countPoppedElements;
+	private List<NonPackedNode> poppedElements;
 	
-	private NonPackedNode[] poppedElements;
+	/**
+	 * Added popped elements are of the form (N, i, j) where N and i are the label and
+	 * input input index of the current GSS node and thus are the same for this GSS node.
+	 * Therefore, in order to eliminate the duplicates of popped SPPF nodes, we need
+	 * to compare their right extent. This bit set is used for this purpose. 
+	 * Maybe Hashset implemetations are faster. We should figure it out.
+	 */
+	private BitSet addedPoppedElements;
 
 	private final int hash;
 	
@@ -34,53 +41,24 @@ public class ArrayBasedGSSNode implements GSSNode {
 	public ArrayBasedGSSNode(HeadGrammarSlot head, int inputIndex, int inputSize) {
 		this.head = head;
 		this.inputIndex = inputIndex;
-		
 		children = new ArrayList<>();
-		
-		// Each GSS nodes can be popped from the GSS node's input index to the
-		// the length of input index.
-		poppedElements = new NonPackedNode[inputSize - inputIndex];
+		poppedElements = new ArrayList<>();
+		addedPoppedElements = new BitSet();
 		
 		this.hash = GSSNode.externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
 	
 	@Override
 	public void addToPoppedElements(NonPackedNode node) {
-		if(poppedElements[node.getRightExtent()] == null) {
-			countPoppedElements++;
+		if(!addedPoppedElements.get(node.getRightExtent())) {
+			poppedElements.add(node);
+			addedPoppedElements.set(node.getRightExtent());
 		}
-		poppedElements[node.getRightExtent() - inputIndex] = node;
 	}
 	
 	@Override
 	public Iterable<NonPackedNode> getPoppedElements() {
-		return new Iterable<NonPackedNode>() {
-			
-			@Override
-			public Iterator<NonPackedNode> iterator() {
-				
-				return new Iterator<NonPackedNode>() {
-					
-					int i = 0;
-
-					@Override
-					public boolean hasNext() {
-						return i < countPoppedElements;
-					}
-
-					@Override
-					public NonPackedNode next() {
-						while(poppedElements[i++] == null) {}
-						return poppedElements[i++];
-					}
-
-					@Override
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-		};
+		return poppedElements;
 	}
 		
 	@Override

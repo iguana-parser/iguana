@@ -26,7 +26,6 @@ import org.junit.Test;
 public class EBNFTest1 {
 	
 	private Grammar grammar;
-	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -46,13 +45,13 @@ public class EBNFTest1 {
 		builder.addRules(newRules);
 		
 		grammar = builder.build();
-		
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		parser.parse(Input.fromString("aaaaaa"), grammar, "S");
+		Input input = Input.fromString("aaaaaa");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		parser.parse(input, grammar, "S");
 	}
 
 }

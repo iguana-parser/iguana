@@ -79,6 +79,11 @@ public interface GSSNode {
 
 		@Override
 		public void addChild(GSSNode node) {}
+		
+		@Override
+		public String toString() {
+			return "U0";
+		}
 	}
 
 }

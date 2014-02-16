@@ -6,12 +6,10 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.GLLParserImpl;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,12 +26,10 @@ import org.junit.Test;
 
 public class HiddenLeftRecursion {
 	
-	private GrammarBuilder builder;
 	private Grammar grammar;
-	private GLLParser parser;
 
 	@Before
-	public void init() {
+	public void createGrammar() {
 		Nonterminal A = new Nonterminal("A");
 		Nonterminal B = new Nonterminal("B");
 
@@ -43,21 +39,18 @@ public class HiddenLeftRecursion {
 		Rule r3 = new Rule(B, list(new Character('b')));
 		Rule r4 = new Rule(B);
 		
-		builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
+		GrammarBuilder builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
 													  .addRule(r2)
 													  .addRule(r3)
 													  .addRule(r4);
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("ba+a+a"), grammar, "A");
-		Visualization.generateSPPFNodesUnPacked("/Users/ali/output", sppf, Input.fromString("ba+a+a"));
-		Visualization.generateGSSGraph("/Users/ali/output", 
-									   ((GLLParserImpl)parser).getLookupTable().getGSSNodes(),
-									   ((GLLParserImpl)parser).getLookupTable().getEdgesMap());
+		Input input = Input.fromString("ba+a+a");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
 	}
 
 }

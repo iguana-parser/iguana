@@ -75,7 +75,7 @@ public class FilterTest5 {
 	@Test
 	public void testParsers() throws ParseError {
 		Input input = Input.fromString("xawz");
-		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		parser = ParserFactory.newParser(grammar, input);
 		parser.parse(input, grammar, "E");
 	}
 

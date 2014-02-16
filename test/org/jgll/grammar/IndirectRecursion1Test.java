@@ -33,12 +33,11 @@ import org.junit.Test;
  */
 public class IndirectRecursion1Test {
 
-	private GrammarBuilder builder;
 	private Grammar grammar;
-	private GLLParser parser;
+	private GrammarBuilder builder;
 
 	@Before
-	public void init() {
+	public void createGrammar() {
 		Nonterminal A = new Nonterminal("A");
 		Nonterminal B = new Nonterminal("B");
 		Nonterminal C = new Nonterminal("C");
@@ -53,12 +52,13 @@ public class IndirectRecursion1Test {
 													  .addRule(r4)
 													  .addRule(r5);
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bc"), grammar, "A");
+		Input input = Input.fromString("bc");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
 	

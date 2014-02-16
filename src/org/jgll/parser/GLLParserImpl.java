@@ -320,9 +320,6 @@ public class GLLParserImpl implements GLLParser {
 
 		if(lookupTable.getGSSEdge(v, u, w, returnSlot)) {
 			for (SPPFNode z : v.getPoppedElements()) {
-				if(z == null) {
-					continue;
-				}
 				SPPFNode x;
 				if(returnSlot instanceof LastGrammarSlot) {
 					x = getNonterminalNode((LastGrammarSlot) returnSlot, w, z);

@@ -32,7 +32,7 @@ import org.junit.rules.ExpectedException;
 public class FollowRestrictionTest {
 	
 	private Grammar grammar;
-	private GLLParser rdParser;
+	private GLLParser parser;
 
 	
 	@Before
@@ -51,7 +51,6 @@ public class FollowRestrictionTest {
 		builder.addRules(rules);
 
 		grammar = builder.build();
-		rdParser =  ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@org.junit.Rule
@@ -59,9 +58,11 @@ public class FollowRestrictionTest {
 	
 	@Test
 	public void testRDParser() throws Exception {
+		Input input = Input.fromString("abc:");
+		parser =  ParserFactory.newParser(grammar, input);
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:4");
-		rdParser.parse(Input.fromString("abc:"), grammar, "S");
+		parser.parse(input, grammar, "S");
 	}
 
 }

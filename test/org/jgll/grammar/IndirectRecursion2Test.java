@@ -33,9 +33,7 @@ import org.junit.Test;
 public class IndirectRecursion2Test {
 
 	private GrammarBuilder builder;
-	
 	private Grammar grammar;
-	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -50,7 +48,6 @@ public class IndirectRecursion2Test {
 													     .addRule(r3)
 													     .addRule(r4);
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -61,7 +58,9 @@ public class IndirectRecursion2Test {
 	
 	@Test
 	public void testParser() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("ad"), grammar, "A");
+		Input input = Input.fromString("ad");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
 	

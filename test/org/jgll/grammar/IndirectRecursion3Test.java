@@ -31,10 +31,8 @@ import org.junit.Test;
  */
 public class IndirectRecursion3Test {
 
-	private GrammarBuilder builder;
 	
 	private Grammar grammar;
-	private GLLParser rdParser;
 
 	@Before
 	public void init() {
@@ -54,13 +52,12 @@ public class IndirectRecursion3Test {
 		Rule r4 = new Rule(B, list(A, f));
 		Rule r5 = new Rule(C, list(A, g));
 		
-		builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
+		GrammarBuilder builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
 													     .addRule(r2)
 													     .addRule(r3)
 													     .addRule(r4)
 													     .addRule(r5);
 		grammar = builder.build();
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -70,14 +67,26 @@ public class IndirectRecursion3Test {
 	}
 	
 	@Test
-	public void test() throws ParseError {
-		NonterminalSymbolNode sppf1 = rdParser.parse(Input.fromString("efcfc"), grammar, "A");
+	public void test1() throws ParseError {
+		Input input = Input.fromString("efcfc");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf1 = parser.parse(input, grammar, "A");
 		assertTrue(sppf1.deepEquals(getSPPFNode1()));
-		
-		NonterminalSymbolNode sppf2 = rdParser.parse(Input.fromString("egdgdgd"), grammar, "A");
-		assertTrue(sppf2.deepEquals(getSPPFNode2()));
-		
-		NonterminalSymbolNode sppf3 = rdParser.parse(Input.fromString("egdfcgd"), grammar, "A");
+	}
+	
+	@Test
+	public void test2() throws ParseError {
+		Input input = Input.fromString("egdgdgd");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf2 = parser.parse(Input.fromString("egdgdgd"), grammar, "A");
+		assertTrue(sppf2.deepEquals(getSPPFNode2()));		
+	}
+	
+	@Test
+	public void test3() throws ParseError {
+		Input input = Input.fromString("egdfcgd");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf3 = parser.parse(input, grammar, "A");
 		assertTrue(sppf3.deepEquals(getSPPFNode3()));
 	}
 	

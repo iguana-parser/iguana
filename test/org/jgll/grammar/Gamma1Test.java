@@ -40,11 +40,9 @@ public class Gamma1Test {
 	private Nonterminal B = new Nonterminal("B");
 	
 	private Grammar grammar;
-	private GLLParser parser;
-
 
 	@Before
-	public void init() {
+	public void createGrammar() {
 		
 		GrammarBuilder builder = new GrammarBuilder("gamma1");
 		
@@ -70,7 +68,6 @@ public class Gamma1Test {
 		builder.addRule(r7);
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -95,7 +92,9 @@ public class Gamma1Test {
 	
 	@Test
 	public void testSPPF() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aad"), grammar, "S");
+		Input input = Input.fromString("aad");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

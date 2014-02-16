@@ -67,7 +67,7 @@ public class FilterTest4 {
 	@Test
 	public void testAssociativityAndPriority() throws ParseError {
 		Input input = Input.fromString("xawz");
-		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		parser = ParserFactory.newParser(grammar, input);
 		parser.parse(input, grammar, "E");
 	}
 

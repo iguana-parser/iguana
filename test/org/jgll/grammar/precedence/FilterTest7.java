@@ -92,7 +92,7 @@ public class FilterTest7 {
 	@Test
 	public void test() throws ParseError {
 		Input input = Input.fromString("aaa+aaaa+aaaa");
-		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}

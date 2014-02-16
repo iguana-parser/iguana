@@ -29,7 +29,6 @@ import org.junit.Test;
 public class KeywordTest3 {
 	
 	private Grammar grammar;
-	private GLLParser parser;
 	
 	Nonterminal S = new Nonterminal("S");
 	Keyword iff = new Keyword("if", new int[] {'i', 'f'});
@@ -48,8 +47,6 @@ public class KeywordTest3 {
 		grammar = new GrammarBuilder().addRule(r1)
 								   .addRule(r2)
 								   .addRule(r3).build();
-		
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	
@@ -61,6 +58,7 @@ public class KeywordTest3 {
 	@Test
 	public void testParser() throws ParseError {
 		Input input = Input.fromString("if s then s");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF1()));
 	}

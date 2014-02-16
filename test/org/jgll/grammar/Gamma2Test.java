@@ -30,7 +30,6 @@ import org.junit.Test;
 public class Gamma2Test {
 	
 	private Grammar grammar;
-	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -47,30 +46,34 @@ public class Gamma2Test {
 		builder.addRule(rule3);
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void testParsers1() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bbb"), grammar, "S");
+		Input input = Input.fromString("bbb");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF1()));
 	}
 	
 	@Test
 	public void testParsers2() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bbbbb"), grammar, "S");
+		Input input = Input.fromString("bbbbb");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getSPPF2()));
 	}
 	
 	@Test
 	public void test100bs() throws ParseError {
 		Input input = Input.fromString(get100b());
+		GLLParser parser = ParserFactory.newParser(grammar, input);
 		parser.parse(input, grammar, "S");
 	}
 	
 	private String get100b() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 200; i++) {
 			sb.append("b");
 		}
 		return sb.toString();

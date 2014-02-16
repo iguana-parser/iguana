@@ -30,7 +30,6 @@ import org.junit.rules.ExpectedException;
 public class KeywordExclusionTest {
 	
 	private Grammar grammar;
-	private GLLParser parser;
 
 	@Before
 	public void init() {
@@ -50,8 +49,6 @@ public class KeywordExclusionTest {
 		builder.addRules(rules);
 
 		grammar = builder.build();
-		
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@org.junit.Rule
@@ -60,30 +57,42 @@ public class KeywordExclusionTest {
 	
 	@Test
 	public void testWhen() throws ParseError {
+		Input input = Input.fromString("when");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:4");
-		parser.parse(Input.fromString("when"), grammar, "Id");
+		parser.parse(input, grammar, "Id");
 	}
 	
 	@Test
 	public void testIf() throws ParseError {
+		Input input = Input.fromString("if");		
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:2");
-		parser.parse(Input.fromString("if"), grammar, "Id");
+		parser.parse(input, grammar, "Id");
 	}
 	
 	@Test
 	public void testDo() throws ParseError {
+		Input input = Input.fromString("do");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:2");
-		parser.parse(Input.fromString("do"), grammar, "Id");
+		parser.parse(input, grammar, "Id");
 	}
 	
 	@Test
 	public void testWhile() throws ParseError {
+		Input input = Input.fromString("while");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+
 		thrown.expect(ParseError.class);
 		thrown.expectMessage("Parse error at line:1 column:5");
-		parser.parse(Input.fromString("while"), grammar, "Id");
+		parser.parse(input, grammar, "Id");
 	}
 
 }

@@ -33,10 +33,8 @@ public class DanglingElseGrammar2 {
 
 	private Grammar grammar;
 	
-	private GLLParser parser;
-
 	@Before
-	public void init() {
+	public void createGrammar() {
 		
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse");
 		
@@ -55,12 +53,13 @@ public class DanglingElseGrammar2 {
 		builder.addRule(rule3);
 		
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aasbs"), grammar, "S");
+		Input input = Input.fromString("aasbs");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getExpectedSPPF()));
 	}
 	

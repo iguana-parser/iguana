@@ -22,7 +22,6 @@ import org.junit.Test;
 public class KeywordTest1 {
 	
 	private Grammar grammar;
-	private GLLParser rdParser;
 
 	Keyword ifKeyword = new Keyword("if");
 
@@ -33,7 +32,6 @@ public class KeywordTest1 {
 		builder.addRule(r1);
 		
 		grammar = builder.build();
-		rdParser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -43,7 +41,9 @@ public class KeywordTest1 {
 	
 	@Test
 	public void test() throws ParseError {
-		rdParser.parse(Input.fromString("if"), grammar, "A");
+		Input input = Input.fromString("if");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		parser.parse(input, grammar, "A");
 	}
 	
 }

@@ -1,6 +1,7 @@
 package org.jgll.grammar.ll1;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -37,7 +38,6 @@ public class LL1Test {
 	private static final int EOF = 1;
 
 	private Grammar grammar;
-	private GLLParser parser;
 	
 	Nonterminal S = new Nonterminal("S");
 	Nonterminal A = new Nonterminal("A");
@@ -72,7 +72,6 @@ public class LL1Test {
 		builder.addRule(rule6);
 
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
@@ -111,7 +110,9 @@ public class LL1Test {
 
 	@Test
 	public void test1() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("bda"), grammar, "S");
+		Input input = Input.fromString("bda");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 3);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
@@ -132,7 +133,9 @@ public class LL1Test {
 	
 	@Test
 	public void test2() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a"), grammar, "S");
+		Input input = Input.fromString("a");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 1);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 0);
@@ -149,7 +152,9 @@ public class LL1Test {
 	
 	@Test
 	public void test3() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("ba"), grammar, "S");
+		Input input = Input.fromString("ba");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
@@ -168,7 +173,9 @@ public class LL1Test {
 
 	@Test
 	public void test4() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("da"), grammar, "S");
+		Input input = Input.fromString("da");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);

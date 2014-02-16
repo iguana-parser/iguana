@@ -55,7 +55,7 @@ public class ManualArithmeticExpressionsTest {
 		
 		// T ::= F
 		Rule rule4 = new Rule(T, list(F));
-		builder.addRule(rule4);		
+		builder.addRule(rule4);
 		
 		
 		// F ::= a
@@ -70,8 +70,8 @@ public class ManualArithmeticExpressionsTest {
 
 	@Test
 	public void test() throws ParseError {
-		Input input = Input.fromString("a+a*a+a");
-		parser = ParserFactory.createRecursiveDescentParser(grammar, input);
+		Input input = Input.fromString("a*a+a");
+		parser = ParserFactory.newParser(grammar, input);
 		parser.parse(input, grammar, "E");
 	}
 	

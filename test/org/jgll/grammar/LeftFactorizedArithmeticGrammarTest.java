@@ -5,6 +5,8 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -28,11 +30,7 @@ import org.junit.Test;
  */
 public class LeftFactorizedArithmeticGrammarTest {
 	
-	private static final int EPSILON = 0;
-	private static final int EOF = 0;
-
 	private Grammar grammar;
-	private GLLParser parser;
 
 	Nonterminal E = new Nonterminal("E");
 	Nonterminal T = new Nonterminal("T");
@@ -46,7 +44,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 	Character closePar = new Character(')');
 
 	@Before
-	public void init() {
+	public void createGrammar() {
 
 		GrammarBuilder builder = new GrammarBuilder("LeftFactorizedArithmeticExpressions");
 		
@@ -62,31 +60,31 @@ public class LeftFactorizedArithmeticGrammarTest {
 		
 		builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8);
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 	
 	@Test
 	public void testFirstSets() {
 		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getFirstSet(grammar.getNonterminalByName("E")));
-		assertEquals(set(grammar.getTokenID(plus), EPSILON), grammar.getFirstSet(grammar.getNonterminalByName("E1")));
-		assertEquals(set(grammar.getTokenID(star), EPSILON), grammar.getFirstSet(grammar.getNonterminalByName("T1")));
+		assertEquals(set(grammar.getTokenID(plus), Epsilon.TOKEN_ID), grammar.getFirstSet(grammar.getNonterminalByName("E1")));
+		assertEquals(set(grammar.getTokenID(star), Epsilon.TOKEN_ID), grammar.getFirstSet(grammar.getNonterminalByName("T1")));
 		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getFirstSet(grammar.getNonterminalByName("T")));
 		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getFirstSet(grammar.getNonterminalByName("F")));
 	}
 	
 	public void testFollowSets() {
-		assertEquals(from(grammar.getTokenID(closePar), EOF), grammar.getFollowSet(grammar.getNonterminalByName("E")));
-		assertEquals(from(grammar.getTokenID(closePar), EOF), grammar.getFollowSet(grammar.getNonterminalByName("E1")));
-		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF), grammar.getFollowSet(grammar.getNonterminalByName("T1")));
-		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF), grammar.getFollowSet(grammar.getNonterminalByName("T")));
-		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(star), grammar.getTokenID(closePar), EOF), grammar.getFollowSet(grammar.getNonterminalByName("F")));
+		assertEquals(from(grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("E")));
+		assertEquals(from(grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("E1")));
+		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("T1")));
+		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("T")));
+		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(star), grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("F")));
 	}
 	
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a*a+a"), grammar, "E");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", sppf, Input.fromString("a+a*a+a"));
+		Input input = Input.fromString("a+a*a+a");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
+		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", sppf, input);
 	}
-
 
 }

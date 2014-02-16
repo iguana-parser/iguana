@@ -60,8 +60,6 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 
 	private int nonPackedNodesCount;
 
-	private Input input;
-	
 	private final GSSNodeFactory gssNodeFactory;
 	
 	public DefaultLookupTableImpl(Grammar grammar, GSSNodeFactory gssNodeFactory) {
@@ -73,7 +71,6 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 	@Override
 	public void init(Input input) {
 
-		this.input = input;
 		long start = System.nanoTime();
 
 		descriptorsStack = new ArrayDeque<>();

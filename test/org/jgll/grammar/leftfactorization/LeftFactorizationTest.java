@@ -27,8 +27,9 @@ public class LeftFactorizationTest {
 		
 		Grammar grammar = builder.build();
 		
-		GLLParser parser = ParserFactory.createRecursiveDescentParser(grammar);
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("a+a*a"), grammar, "E");
+		Input input = Input.fromString("a+a*a");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
 	}
 	
 	@Test
@@ -49,8 +50,9 @@ public class LeftFactorizationTest {
 		
 		Grammar grammar = builder.build();
 		
-		GLLParser parser = ParserFactory.createRecursiveDescentParser(grammar);
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("ab"), grammar, "S");		
+		Input input = Input.fromString("ab");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");		
 	}
 	
 }

@@ -1,7 +1,7 @@
 package org.jgll.grammar.conditions;
 
-import static org.jgll.util.CollectionsUtil.list;
-import static org.junit.Assert.assertTrue;
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
@@ -38,10 +38,9 @@ import org.junit.Test;
 public class PrecedeRestrictionTest2 {
 	
 	private Grammar grammar;
-	private GLLParser parser;
 
 	@Before
-	public void init() {
+	public void createGrammar() {
 		Nonterminal S = new Nonterminal("S");
 		Keyword forr = new Keyword("for", new int[] { 'f', 'o', 'r' });
 		Keyword forall = new Keyword("forall", new int[] { 'f', 'o', 'r', 'a', 'l', 'l' });
@@ -67,12 +66,13 @@ public class PrecedeRestrictionTest2 {
 		builder.addRule(GrammarBuilder.fromKeyword(forall));
 
 		grammar = builder.build();
-		parser = ParserFactory.createRecursiveDescentParser(grammar);
 	}
 
 	@Test
 	public void test() throws ParseError {
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("forall"), grammar, "S");
+		Input input = Input.fromString("forall");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		assertTrue(sppf.deepEquals(getExpectedSPPF()));
 	}
 
