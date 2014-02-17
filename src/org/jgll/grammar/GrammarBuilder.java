@@ -353,7 +353,18 @@ public class GrammarBuilder implements Serializable {
 		
 		long start = System.nanoTime();
 		firstSets = GrammarProperties.calculateFirstSets(nonterminals);
+		
+		for(Set<Integer> s : firstSets.values()) {
+			System.out.println(s.size());
+		}
+		
 		followSets = GrammarProperties.calculateFollowSets(nonterminals, firstSets);
+		
+		for(Set<Integer> s : followSets.values()) {
+			System.out.println(s.size());
+		}
+
+		
 		long end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 
@@ -361,7 +372,7 @@ public class GrammarBuilder implements Serializable {
 		
 		start = System.nanoTime();
 		
-		GrammarProperties.setPredictionSets(nonterminals, tokens, firstSets, followSets);
+//		GrammarProperties.setPredictionSets(nonterminals, tokens, firstSets, followSets);
 		end = System.nanoTime();
 		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
 		
@@ -370,7 +381,7 @@ public class GrammarBuilder implements Serializable {
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals, firstSets);
 		
 		start = System.nanoTime();
-		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);
+//		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);
 		end = System.nanoTime();
 		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
 		

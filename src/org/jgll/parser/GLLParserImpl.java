@@ -90,7 +90,7 @@ public class GLLParserImpl implements GLLParser {
 
 	private long end;
 	
-	private boolean llOptimization = true;
+	private boolean llOptimization = false;
 
 	public GLLParserImpl(LookupTable lookupTable) {
 		this.lookupTable = lookupTable;
