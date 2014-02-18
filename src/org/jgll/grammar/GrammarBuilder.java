@@ -68,7 +68,7 @@ public class GrammarBuilder implements Serializable {
 	double stDevDescriptors;
 
 	String name;
-
+	
 	// Fields related to filtering
 	Map<Nonterminal, List<HeadGrammarSlot>> newNonterminalsMap;
 
@@ -137,10 +137,10 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		nonterminals.addAll(collapsibleNonterminals);
-				
-		initializeGrammarProrperties();
 		
 		validateGrammar();
+		
+		initializeGrammarProrperties();
 		
 		return new Grammar(this).init();
 	}
@@ -156,7 +156,11 @@ public class GrammarBuilder implements Serializable {
 			public void visit(NonterminalGrammarSlot slot) {
 				if (slot.getNonterminal().getAlternates().size() == 0) {
 					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal());
-				}				
+				}
+				
+				if(!nonterminals.contains(slot.getNonterminal())) {
+					throw new GrammarValidationException("Undefined nonterminal " + slot.getNonterminal());
+				}
 			}
 
 			@Override
@@ -354,16 +358,7 @@ public class GrammarBuilder implements Serializable {
 		long start = System.nanoTime();
 		firstSets = GrammarProperties.calculateFirstSets(nonterminals);
 		
-		for(Set<Integer> s : firstSets.values()) {
-			System.out.println(s.size());
-		}
-		
 		followSets = GrammarProperties.calculateFollowSets(nonterminals, firstSets);
-		
-		for(Set<Integer> s : followSets.values()) {
-			System.out.println(s.size());
-		}
-
 		
 		long end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
@@ -376,7 +371,7 @@ public class GrammarBuilder implements Serializable {
 		end = System.nanoTime();
 		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
 		
-		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
+//		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals, firstSets);
 		
@@ -956,12 +951,21 @@ public class GrammarBuilder implements Serializable {
 		return this;
 	}
 	
+	
+	/**
+	 * The reason that we only remove unused new nonterminals, instead of
+	 * all nonterminals, is that each nonterminal can be a potential start
+	 * symbol of the grammar.
+	 * 
+	 * New nonterminals are generated during the parser generation time and
+	 * are not visible to the outside. 
+	 */
 	private void removeUnusedNewNonterminals() {
 		Set<HeadGrammarSlot> reachableNonterminals = new HashSet<>();
 		Deque<HeadGrammarSlot> queue = new ArrayDeque<>();
 
-		for(Nonterminal nonterminal : newNonterminalsMap.keySet()) {
-			queue.add(nonterminalsMap.get(nonterminal));
+		for(HeadGrammarSlot head : nonterminals) {
+			queue.add(head);			
 		}
 		
 		while(!queue.isEmpty()) {
