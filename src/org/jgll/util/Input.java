@@ -339,12 +339,12 @@ public class Input {
 	public boolean isEndOfLine(int currentInputIndex) {
 		// TODO: unfinished
 		return input[currentInputIndex] == 0
-				|| lineColumns[currentInputIndex + 1].columnNumber == 0;
+				|| lineColumns[currentInputIndex + 1].columnNumber == 1;
 	}
 
 	public boolean isStartOfLine(int currentInputIndex) {
 		// TODO: check this?!
 		return currentInputIndex == 0
-				|| lineColumns[currentInputIndex].columnNumber == 0;
+				|| lineColumns[currentInputIndex].columnNumber == 1;
 	}
 }

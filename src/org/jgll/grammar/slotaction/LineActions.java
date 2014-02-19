@@ -15,7 +15,7 @@ public class LineActions {
 
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer) {
-				return lexer.getInput().isEndOfLine(parser.getCurrentInputIndex());
+				return !lexer.getInput().isEndOfLine(parser.getCurrentInputIndex());
 			}
 
 			@Override
