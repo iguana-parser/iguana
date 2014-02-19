@@ -44,7 +44,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 	
 	@Override
 	public boolean match(Input input, int start, int end) {
-		return match(input, 0) == end - start;
+		return match(input, start) == end - start;
 	}
 	
 	@Override
