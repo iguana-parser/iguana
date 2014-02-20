@@ -9,9 +9,9 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 
 
-public class NotPrecedeActions {
+public class PrecedeActions {
 
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(NotPrecedeActions.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(PrecedeActions.class);
 		
 	public static void fromRegularExpression(BodyGrammarSlot slot, final RegularExpression regex, final Condition condition) {
 		
@@ -25,7 +25,7 @@ public class NotPrecedeActions {
 
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
-				return matcher.matchBackwards(lexer.getInput(), inputIndex - 1) >= 0;
+				return matcher.matchBackwards(lexer.getInput(), inputIndex - 1) == -1;
 			}
 
 			@Override

@@ -25,10 +25,12 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.grammar.slotaction.FollowActions;
 import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
 import org.jgll.grammar.slotaction.NotMatchActions;
 import org.jgll.grammar.slotaction.NotPrecedeActions;
+import org.jgll.grammar.slotaction.PrecedeActions;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Character;
@@ -260,6 +262,12 @@ public class GrammarBuilder implements Serializable {
 		switch (condition.getType()) {
 		
 			case FOLLOW:
+				if (condition instanceof RegularExpressionCondition) {
+					FollowActions.fromRegularExpression(slot.next(), ((RegularExpressionCondition) condition).getRegularExpression(), condition);
+				} 
+				else {
+					FollowActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
+				}
 				break;
 				
 			case NOT_FOLLOW:
@@ -272,13 +280,19 @@ public class GrammarBuilder implements Serializable {
 				break;
 				
 			case PRECEDE:
+				assert !(condition instanceof ContextFreeCondition);
+				
+				if(condition instanceof RegularExpressionCondition) {
+					PrecedeActions.fromRegularExpression(slot, ((RegularExpressionCondition) condition).getRegularExpression(), condition);
+				} 
+
 				break;
 				
 			case NOT_PRECEDE:
 				assert !(condition instanceof ContextFreeCondition);
 				
 				if(condition instanceof RegularExpressionCondition) {
-					NotPrecedeActions.fromKeywordList(slot, ((RegularExpressionCondition) condition).getRegularExpression(), condition);
+					NotPrecedeActions.fromRegularExpression(slot, ((RegularExpressionCondition) condition).getRegularExpression(), condition);
 				} 
 				break;
 				
