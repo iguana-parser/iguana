@@ -14,8 +14,8 @@ public class LineActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer) {
-				return !lexer.getInput().isEndOfLine(parser.getCurrentInputIndex());
+			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+				return !lexer.getInput().isEndOfLine(inputIndex);
 			}
 
 			@Override
@@ -48,8 +48,8 @@ public class LineActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer) {
-				return lexer.getInput().isStartOfLine(parser.getCurrentInputIndex());
+			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+				return lexer.getInput().isStartOfLine(inputIndex);
 			}
 
 			@Override

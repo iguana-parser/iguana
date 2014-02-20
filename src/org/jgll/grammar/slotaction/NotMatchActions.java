@@ -19,13 +19,13 @@ public class NotMatchActions {
 				private GLLRecognizer recognizer;
 
 				@Override
-				public Boolean execute(GLLParser parser, GLLLexer lexer) {
+				public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
 					
 					if(recognizer == null) {
 						recognizer = RecognizerFactory.contextFreeRecognizer(parser.getGrammar());						
 					}
 					
-					return recognizer.recognize(lexer.getInput(), parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex(), ifNot);
+					return recognizer.recognize(lexer.getInput(), parser.getCurrentGSSNode().getInputIndex(), inputIndex, ifNot);
 				}
 
 				@Override
@@ -60,8 +60,8 @@ public class NotMatchActions {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean execute(GLLParser parser, GLLLexer lexer) {
-						return matcher.match(lexer.getInput(), parser.getCurrentGSSNode().getInputIndex(), parser.getCurrentInputIndex());
+					public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+						return matcher.match(lexer.getInput(), parser.getCurrentGSSNode().getInputIndex(), inputIndex);
 					}
 
 					@Override

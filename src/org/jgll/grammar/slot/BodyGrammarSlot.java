@@ -75,7 +75,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected boolean executePreConditions(GLLParser parser, GLLLexer lexer) {
 		for(SlotAction<Boolean> preCondition : preConditions) {
-			if(preCondition.execute(parser, lexer)) {
+			if(preCondition.execute(parser, lexer, parser.getCurrentInputIndex())) {
 				return true;
 			}
 		}
@@ -92,7 +92,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 */
 	protected boolean checkPopActions(GLLParser parser, GLLLexer lexer) {
 		for(SlotAction<Boolean> slotAction : next.popActions) {
-			if(slotAction.execute(parser, lexer)) {
+			if(slotAction.execute(parser, lexer, parser.getCurrentInputIndex())) {
 				return true;
 			}
 		}

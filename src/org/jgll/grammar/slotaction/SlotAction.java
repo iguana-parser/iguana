@@ -8,7 +8,7 @@ import org.jgll.parser.GLLParser;
 
 public interface SlotAction<T> extends Serializable {
 	
-	public T execute(GLLParser parser, GLLLexer lexer);
+	public T execute(GLLParser parser, GLLLexer lexer, int inputIndex);
 	
 	/**
 	 * The condition from which this grammar slot is created. 

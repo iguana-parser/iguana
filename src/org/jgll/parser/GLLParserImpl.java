@@ -265,7 +265,7 @@ public class GLLParserImpl implements GLLParser {
 				GrammarSlot slot = edge.getReturnSlot();
 				
 				for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) edge.getReturnSlot()).getPopActions()) {
-					if(popAction.execute(this, lexer)) {
+					if(popAction.execute(this, lexer, ci)) {
 						continue label;
 					}
 				}
@@ -326,6 +326,13 @@ public class GLLParserImpl implements GLLParser {
 				} else {
 					x = getIntermediateNode((BodyGrammarSlot) returnSlot, w, z);
 				}
+				
+				for(SlotAction<Boolean> popAction : returnSlot.getPopActions()) {
+					if(popAction.execute(this, lexer, z.getRightExtent())) {
+						continue;
+					}
+				}
+				
 				addDescriptor(returnSlot, u, z.getRightExtent(), x);
 			}
 		}

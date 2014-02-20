@@ -24,8 +24,8 @@ public class NotPrecedeActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer) {
-				return matcher.matchBackwards(lexer.getInput(), parser.getCurrentInputIndex() - 1) >= 0;
+			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+				return matcher.matchBackwards(lexer.getInput(), inputIndex - 1) >= 0;
 			}
 
 			@Override

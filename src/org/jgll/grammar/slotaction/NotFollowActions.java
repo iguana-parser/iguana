@@ -19,11 +19,11 @@ public class NotFollowActions {
 			private GLLRecognizer recognizer;
 			
 			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
 				if(recognizer == null) {
 					recognizer = RecognizerFactory.prefixContextFreeRecognizer(parser.getGrammar());
 				}
-				return recognizer.recognize(lexer.getInput(), parser.getCurrentInputIndex(), lexer.getInput().length(), firstSlot);
+				return recognizer.recognize(lexer.getInput(), inputIndex, lexer.getInput().length(), firstSlot);
 			}
 
 			@Override
@@ -57,8 +57,8 @@ public class NotFollowActions {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer) {
-				return matcher.match(lexer.getInput(), parser.getCurrentInputIndex()) >= 0;
+			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+				return matcher.match(lexer.getInput(), inputIndex) >= 0;
 			}
 
 			@Override
