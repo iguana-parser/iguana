@@ -319,6 +319,8 @@ public class GLLParserImpl implements GLLParser {
 		GSSNode v = lookupTable.getGSSNode(head, i);
 
 		if(lookupTable.getGSSEdge(v, u, w, returnSlot)) {
+			
+			label:
 			for (SPPFNode z : v.getPoppedElements()) {
 				SPPFNode x;
 				if(returnSlot instanceof LastGrammarSlot) {
@@ -327,9 +329,11 @@ public class GLLParserImpl implements GLLParser {
 					x = getIntermediateNode((BodyGrammarSlot) returnSlot, w, z);
 				}
 				
+				// Execute pop actions for continuations, when the GSS node already
+				// exits
 				for(SlotAction<Boolean> popAction : returnSlot.getPopActions()) {
 					if(popAction.execute(this, lexer, z.getRightExtent())) {
-						continue;
+						continue label;
 					}
 				}
 				
