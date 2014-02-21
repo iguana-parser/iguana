@@ -80,6 +80,12 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 			if(mode == SHORTEST_MATCH) {
 				executeActions(stateId, maximumMatched);
 			}
+			
+			// If the input index is EOF and the current state is an end state.
+			if(input.charAt(inputIndex) == 0) {
+				executeActions(stateId, 0);
+				return 0;
+			}
 		}		
 		
 		// Handling the EOF character
