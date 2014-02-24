@@ -54,6 +54,13 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		}
 				
 		TokenSymbolNode cr = parser.getTokenNode(tokenID, ci, length);
+		
+		// No GSS node is created for token grammar slots, therefore, pop
+		// actions should be executed at this point
+		if(executePopActions(parser, lexer)) {
+			return null;
+		}
+		
 		if(next instanceof LastGrammarSlot) {
 			parser.getNonterminalNode((LastGrammarSlot) next, cr);
 			parser.pop();

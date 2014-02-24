@@ -67,7 +67,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			if(next instanceof LastGrammarSlot) {
 				parser.getNonterminalNode((LastGrammarSlot) next, node);
 				
-				if(checkPopActions(parser, input)) {
+				if(executePopActions(parser, input)) {
 					return null;
 				}
 				parser.pop();

@@ -90,7 +90,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
 	 *								   | NegativeNumber
 	 */
-	protected boolean checkPopActions(GLLParser parser, GLLLexer lexer) {
+	protected boolean executePopActions(GLLParser parser, GLLLexer lexer) {
 		for(SlotAction<Boolean> slotAction : next.popActions) {
 			if(slotAction.execute(parser, lexer, parser.getCurrentInputIndex())) {
 				return true;
