@@ -240,7 +240,7 @@ public class Input {
 			return;
 		}
 		
-		for (int i = 0; i < input.length - 1; i++) {
+		for (int i = 0; i < input.length; i++) {
 			lineColumns[i] = new LineColumn(lineNumber, columnNumber);
 			if (input[i] == '\n') {
 				lineCount++;
@@ -254,7 +254,7 @@ public class Input {
 		}
 		
 		// The end of the line char column as the last character
-		lineColumns[input.length - 1] = new LineColumn(lineColumns[input.length - 2]);
+//		lineColumns[input.length - 1] = new LineColumn(lineColumns[input.length - 2]);
 	}
 		
 	private static class LineColumn {

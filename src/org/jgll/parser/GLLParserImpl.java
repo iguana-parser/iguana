@@ -182,7 +182,7 @@ public class GLLParserImpl implements GLLParser {
 	 */
 	@Override
 	public void recordParseError(GrammarSlot slot) {
-		if (errorIndex >= this.errorIndex) {
+		if (ci >= this.errorIndex) {
 			log.trace("Error recorded at %s %d", this, ci);
 			this.errorIndex = ci;
 			this.errorSlot = slot;

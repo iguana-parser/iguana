@@ -148,7 +148,6 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	public boolean isNullable() {
 		return RegularExpression.isNullable();
 	}
-
 	
 	public int getTokenID() {
 		return tokenID;
