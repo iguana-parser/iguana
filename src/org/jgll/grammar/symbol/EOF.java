@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.regex.Automaton;
-import org.jgll.regex.RegularExpression;
 import org.jgll.regex.State;
 import org.jgll.regex.Transition;
 
@@ -41,7 +40,7 @@ public class EOF extends AbstractRegularExpression {
 	}
 
 	@Override
-	public RegularExpression copy() {
+	public EOF copy() {
 		return this;
 	}
 	

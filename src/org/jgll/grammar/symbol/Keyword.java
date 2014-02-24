@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.regex.Automaton;
-import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;
 import org.jgll.util.Input;
 
@@ -87,7 +86,7 @@ public class Keyword extends AbstractRegularExpression {
 	}
 
 	@Override
-	public RegularExpression copy() {
+	public Keyword copy() {
 		return new Keyword(name, seq);
 	}
 

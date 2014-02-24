@@ -1,17 +1,17 @@
 package org.jgll.traversal;
 
-import static org.jgll.traversal.SPPFVisitorUtil.removeCollapsibleNode;
-import static org.jgll.traversal.SPPFVisitorUtil.removeIntermediateNode;
-import static org.jgll.traversal.SPPFVisitorUtil.removeListSymbolNode;
-import static org.jgll.traversal.SPPFVisitorUtil.visitChildren;
+import static org.jgll.traversal.SPPFVisitorUtil.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.symbol.CharacterClass;
+import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -39,11 +39,15 @@ import org.jgll.util.Input;
 public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	
 	private NodeListener<T, U> listener;
-	private Input input;
 	
-	public ModelBuilderVisitor(Input input, NodeListener<T, U> listener) {
+	private Input input;
+
+	private Grammar grammar;
+	
+	public ModelBuilderVisitor(Input input, NodeListener<T, U> listener, Grammar grammar) {
 		this.input = input;
 		this.listener = listener;
+		this.grammar = grammar;
 	}
 
 	@Override
@@ -271,8 +275,21 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 
 	@Override
 	public void visit(TokenSymbolNode node) {
-		// TODO Auto-generated method stub
-		
+		if(!node.isVisited()) {
+			node.setVisited(true);
+			
+			RegularExpression regex = grammar.getRegularExpressionById(node.getTokenID());
+			
+			System.out.println(regex.getClass());
+			assert regex instanceof CharacterClass;
+			
+			// For now we only support parse tree generation for character class
+			if(regex instanceof CharacterClass) {
+				int c = input.charAt(node.getLeftExtent());
+				Result<U> result = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				node.setObject(result);
+			}
+		}	
 	}
 	
 }

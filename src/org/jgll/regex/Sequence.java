@@ -89,11 +89,12 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		return regularExpressions.get(index);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public RegularExpression copy() {
-		List<RegularExpression> copy = new ArrayList<>();
-		for(RegularExpression regex : regularExpressions) {
-			copy.add(regex.copy());
+	public Sequence<T> copy() {
+		List<T> copy = new ArrayList<>();
+		for(T regex : regularExpressions) {
+			copy.add((T) regex.copy());
 		}
 		return new Sequence<>(copy);
 	}

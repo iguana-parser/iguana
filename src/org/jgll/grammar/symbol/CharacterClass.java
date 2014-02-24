@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegexAlt;
-import org.jgll.regex.RegularExpression;
 import org.jgll.util.CollectionsUtil;
 
 /**
@@ -80,8 +79,8 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 
 	@Override
-	public RegularExpression copy() {
-		return alt.copy();
+	public CharacterClass copy() {
+		return new CharacterClass(alt.copy());
 	}
 	
 	public CharacterClass not() {
