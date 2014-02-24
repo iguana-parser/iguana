@@ -59,31 +59,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			nonterminalSymbolNode.setVisited(true);
 			
 			if(nonterminalSymbolNode.isAmbiguous()) {
-				
 				buildAmbiguityNode(nonterminalSymbolNode);
-				
-			// Lazy creation of the children of a keyword.
-			} else if(nonterminalSymbolNode.isKeywordNode()) {
-				HeadGrammarSlot head = (HeadGrammarSlot) nonterminalSymbolNode.getGrammarSlot();
-				BodyGrammarSlot currentSlot = head.getAlternateAt(0).getFirstSlot();
-				
-				List<U> list = new ArrayList<>();
-				int i = nonterminalSymbolNode.getLeftExtent();
-				while(!(currentSlot instanceof LastGrammarSlot)) {
-					// TODO: fix it!
-//					CharacterClass terminal = null; //(CharacterClass) ((TerminalGrammarSlot)currentSlot).getTerminal();
-//					assert terminal.getRanges().size() == 1;
-//					Result<U> result = listener.terminal(terminal.getRanges().get(0).getStart(), input.getPositionInfo(i, ++i));
-//					list.add(result.getObject());
-//					currentSlot = currentSlot.next();
-				}
-
-				LastGrammarSlot slot = (LastGrammarSlot) nonterminalSymbolNode.getFirstPackedNodeGrammarSlot();
-				listener.startNode((T) slot.getObject());
-				Result<U> result = listener.endNode((T) slot.getObject(), list, 
-						input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
-				nonterminalSymbolNode.setObject(result);
-			
 			}
 			else {
 				
