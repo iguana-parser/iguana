@@ -31,15 +31,13 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	public SPPFLookupImpl(Grammar grammar, Input input) {
 		long start = System.nanoTime();
-
 		nonterminalNodes = new IguanaSet[input.length()];
 		
 		intermediateNodes = new IguanaSet[input.length()];
 
 		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.length()];
-
 		long end = System.nanoTime();
-		log.info("Lookup table initialization: %d ms", (end - start) / 1000_000);
+		log.info("SPPF lookup initialization: %d ms", (end - start) / 1000_000);
 	}
 
 	@Override
@@ -154,12 +152,14 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		
 	}
 
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
-		return null;
+		if (nonterminalNodes[inputSize - 1] == null) {
+			return null;
+		}
+		return nonterminalNodes[inputSize - 1].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
 	}
 
 	@Override
@@ -182,11 +182,6 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public int getTokenNodesCount() {
-		return 0;
-	}
-
-	@Override
-	public int getPackedNodesCount() {
 		int count = 0;
 		for(int i = 0; i < tokenSymbolNodes.length; i++) {
 			for(int j = 0; j < tokenSymbolNodes[i].length; j++) {
@@ -194,6 +189,11 @@ public class SPPFLookupImpl implements SPPFLookup {
 			}
 		}
 		return count;
+	}
+
+	@Override
+	public int getPackedNodesCount() {
+		return 0;
 	}
 
 }

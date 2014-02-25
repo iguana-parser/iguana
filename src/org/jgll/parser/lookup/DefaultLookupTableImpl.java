@@ -51,7 +51,7 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 
 	private IguanaSet<NonPackedNode>[] nonPackedNodes;
 
-	private IguanaSet<PackedNode>[] packedNodes;
+//	private IguanaSet<PackedNode>[] packedNodes;
 
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)

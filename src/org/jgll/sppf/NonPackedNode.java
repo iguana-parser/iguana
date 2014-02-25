@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.HashFunctions;
 
 /**
@@ -26,12 +25,8 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	protected List<SPPFNode> children;
 	
-	private int countPackedNode;
-	
 	private final int hash;
 	
-	private PackedNode firstPackedNode;
-
 	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
 		assert slot != null;
@@ -92,65 +87,26 @@ public abstract class NonPackedNode extends SPPFNode {
 	public String getLabel() {
 		return slot.toString();
 	}
-	
-	public void addFirstPackedNode(PackedNode packedNode) {
-		if(packedNode == null) {
-			throw new RuntimeException("The given packed node cannot be empty.");
-		}
-		
-		firstPackedNode = packedNode;
-		countPackedNode++;
-	}
 
-	public void addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
-		
-		if(packedNode == null) {
-			throw new RuntimeException("The given packed node cannot be empty.");
-		}
-		
-		createPackedNode(packedNode, leftChild, rightChild);
-		
-		if(countPackedNode == 0) {
-			firstPackedNode = packedNode;
-			if(leftChild != DummyNode.getInstance()) {
-				children.add(leftChild);
-			}
-			children.add(rightChild);
-		}
-		else if(countPackedNode == 1) {
-			children.clear();
-			children.add(firstPackedNode);
-			children.add(packedNode);
-		}
-		else {
-			children.add(packedNode);
-		}
-		
-		countPackedNode++;
-	}
-	
 	/**
 	 * Attaches the given left and right children to the given packed node.
 	 *  
 	 */
-	private void createPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
+	protected PackedNode attachChildren(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		if (leftChild != DummyNode.getInstance()) {
 			packedNode.addChild(leftChild);
 		}
 		
 		packedNode.addChild(rightChild);
+		
+		return packedNode;
 	}
 	
-	@Override
-	public boolean isAmbiguous() {
-		return countPackedNode > 1;
-	}
 	
 	public void addChild(SPPFNode node) {
 		//TODO: change it! PackedNodes cannot be added via this method at parse time.
 		if(node instanceof PackedNode) {
-			countPackedNode++;
 		}
 		children.add(node);
 	}
@@ -203,14 +159,6 @@ public abstract class NonPackedNode extends SPPFNode {
 	@Override
 	public int childrenCount() {
 		return children.size();
-	}
-	
-	public LastGrammarSlot getFirstPackedNodeGrammarSlot() {
-		return (LastGrammarSlot) firstPackedNode.getGrammarSlot();
-	}
-	
-	public int getCountPackedNode() {
-		return countPackedNode;
 	}
 	
 }
