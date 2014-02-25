@@ -21,8 +21,10 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -188,7 +190,18 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		IguanaSet<NonPackedNode> set = nonPackedNodes[index];
 
 		if (set == null) {
-			set = factory.newHashSet(tableSize, NonPackedNode.levelBasedExternalHasher);
+			set = factory.newHashSet(tableSize, new ExternalHasher<NonPackedNode>() {
+
+				public int hash(NonPackedNode nonPackedNode, HashFunction f) {
+					return f.hash(nonPackedNode.getGrammarSlot().getId(), nonPackedNode.getLeftExtent());
+				}
+				
+				@Override
+				public boolean equals(NonPackedNode node1, NonPackedNode node2) {
+					return  node1.getGrammarSlot() == node2.getGrammarSlot() &&
+							node1.getLeftExtent() == node2.getLeftExtent();
+				}
+			});
 			nonPackedNodes[index] = set;
 			set.add(key);
 			return key;

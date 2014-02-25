@@ -3,6 +3,7 @@ package org.jgll.parser.lookup;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -26,7 +27,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	private final IguanaSet<NonterminalSymbolNode>[] nonterminalNodes;
 
-	private final IguanaSet<NonPackedNode>[] intermediateNodes;
+	private final IguanaSet<IntermediateNode>[] intermediateNodes;
 	
 	public SPPFLookupImpl(Grammar grammar, Input input) {
 		long start = System.nanoTime();
@@ -49,6 +50,11 @@ public class SPPFLookupImpl implements SPPFLookup {
 			tokenSymbolNodes[tokenID][inputIndex] = node;
 		}
 		return node;
+	}
+	
+	@Override
+	public TokenSymbolNode findTokenSymbolNode(int tokenID, int inputIndex, int length) {
+		return tokenSymbolNodes[tokenID][inputIndex];
 	}
 
 	@Override
@@ -87,7 +93,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalSymbolNode hasNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	public NonterminalSymbolNode findNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		
 		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
 
@@ -100,25 +106,52 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalSymbolNode getIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return null;
+	public IntermediateNode getIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		IntermediateNode key = new IntermediateNode(grammarSlot, leftExtent, rightExtent);
+
+		IguanaSet<IntermediateNode> set = intermediateNodes[rightExtent];
+
+		if (set == null) {
+			set = factory.newHashSet(tableSize, new ExternalHasher<IntermediateNode>() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public int hash(IntermediateNode n, HashFunction f) {
+					return f.hash(n.getGrammarSlot().getId(), n.getLeftExtent());
+				}
+
+				@Override
+				public boolean equals(IntermediateNode n1, IntermediateNode n2) {
+					return n1.getGrammarSlot() == n2.getGrammarSlot() &&
+						   n1.getLeftExtent() == n2.getLeftExtent();
+				}
+			});
+			intermediateNodes[rightExtent] = set;
+			set.add(key);
+			return key;
+		}
+
+		IntermediateNode oldValue = set.add(key);
+		if (oldValue == null) {
+			oldValue = key;
+		}
+
+		return oldValue;
 	}
 
 	@Override
-	public NonterminalSymbolNode hasIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return null;
-	}
+	public IntermediateNode findIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		IguanaSet<IntermediateNode> set = intermediateNodes[rightExtent];
 
-	@Override
-	public NonPackedNode getNonPackedNode(NonPackedNode key) {
-		return null;
-	}
+		if (set == null) {
+			return null;
+		}
 
-	@Override
-	public NonPackedNode hasNonPackedNode(NonPackedNode key) {
-		return null;
+		IntermediateNode key = new IntermediateNode(grammarSlot, leftExtent, rightExtent);
+		return set.get(key);
 	}
-
+	
 	@Override
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		
@@ -131,12 +164,20 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public int getNonterminalNodesCount() {
-		return 0;
+		int count = 0;
+		for(IguanaSet<NonterminalSymbolNode> set : nonterminalNodes) {
+			count += set.size();
+		}
+		return count;
 	}
 
 	@Override
 	public int getIntermediateNodesCount() {
-		return 0;
+		int count = 0;
+		for(IguanaSet<IntermediateNode> set : intermediateNodes) {
+			count += set.size();
+		}
+		return count;
 	}
 
 	@Override
@@ -146,7 +187,13 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public int getPackedNodesCount() {
-		return 0;
+		int count = 0;
+		for(int i = 0; i < tokenSymbolNodes.length; i++) {
+			for(int j = 0; j < tokenSymbolNodes[i].length; j++) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 }

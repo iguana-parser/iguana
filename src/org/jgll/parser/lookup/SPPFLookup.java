@@ -2,6 +2,7 @@ package org.jgll.parser.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -9,7 +10,23 @@ import org.jgll.sppf.TokenSymbolNode;
 
 public interface SPPFLookup {
 
+	/**
+	 * 
+	 * @param tokenID
+	 * @param inputIndex
+	 * @param length
+	 * @return
+	 */
 	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length);
+	
+	/**
+	 * 
+	 * @param tokenID
+	 * @param inputIndex
+	 * @param length
+	 * @return
+	 */
+	public TokenSymbolNode findTokenSymbolNode(int tokenID, int inputIndex, int length);
 	
 	/**
 	 * 
@@ -32,31 +49,15 @@ public interface SPPFLookup {
 	 * @param leftExtent
 	 * @param rightExtent
 	 * 
+	 * @return null if no nonterminal node is found with the given parameters
+	 * 
 	 */
-	public NonterminalSymbolNode hasNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public NonterminalSymbolNode findNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
-	public NonterminalSymbolNode getIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public IntermediateNode getIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
-	public NonterminalSymbolNode hasIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
-	
-	/**
-	 * 
-	 * Returns an existing non-packed node that is equal to the provided key.
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public NonPackedNode getNonPackedNode(NonPackedNode key);
-	
-	/**
-	 * 
-	 * Returns the existing SPPF node equal to the given key, otherwise return null.
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public NonPackedNode hasNonPackedNode(NonPackedNode key);
-	
+	public IntermediateNode findIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+		
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 	
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize);
