@@ -8,8 +8,10 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class SPPFLookupImpl implements SPPFLookup {
@@ -51,17 +53,32 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public NonterminalSymbolNode getNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
 		NonterminalSymbolNode key = new NonterminalSymbolNode(grammarSlot, leftExtent, rightExtent);
 
+		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
+
 		if (set == null) {
-			set = factory.newHashSet(tableSize, NonPackedNode.levelBasedExternalHasher);
+			set = factory.newHashSet(tableSize, new ExternalHasher<NonterminalSymbolNode>() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public int hash(NonterminalSymbolNode n, HashFunction f) {
+					return f.hash(n.getGrammarSlot().getId(), n.getLeftExtent());
+				}
+
+				@Override
+				public boolean equals(NonterminalSymbolNode n1, NonterminalSymbolNode n2) {
+					return n1.getGrammarSlot() == n2.getGrammarSlot() &&
+						   n1.getLeftExtent() == n2.getLeftExtent();
+				}
+			});
 			nonterminalNodes[rightExtent] = set;
 			set.add(key);
 			return key;
 		}
 
-		NonterminalSymbolNode oldValue = nonterminalNodes[rightExtent].add(key);
+		NonterminalSymbolNode oldValue = set.add(key);
 		if (oldValue == null) {
 			oldValue = key;
 		}
@@ -71,7 +88,15 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public NonterminalSymbolNode hasNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return null;
+		
+		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
+
+		if (set == null) {
+			return null;
+		}
+
+		NonterminalSymbolNode key = new NonterminalSymbolNode(grammarSlot, leftExtent, rightExtent);
+		return set.get(key);
 	}
 
 	@Override

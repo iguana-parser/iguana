@@ -6,26 +6,17 @@ import java.util.List;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.HashFunctions;
-import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
- * A NonPackedNode corresponds to nonterminal symbol nodes or
- * intermediate symbols nodes in the GLL paper. These nodes 
- * have the common property of being related to a grammar slot
- * in the body of production rules.
+ * A NonPackedNode is the abstract super class for nonterminal and intermediate
+ * symbol nodes.
  * 
  * 
  * @author Ali Afroozeh
  * 
- * TODO: rename this class! The current name does not make much sense.
- *
  */
 
 public abstract class NonPackedNode extends SPPFNode {
-	
-	public static final ExternalHasher<NonPackedNode> externalHasher = new NonPackedNodeExternalHasher();
-	public static final ExternalHasher<NonPackedNode> levelBasedExternalHasher = new LevelBasedNonPackedNodeExternalHasher();
 	
 	protected final GrammarSlot slot;
 	
@@ -50,7 +41,7 @@ public abstract class NonPackedNode extends SPPFNode {
 		this.rightExtent = rightExtent;
 		this.children = new ArrayList<>();
 		
-		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction()); 
+		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), leftExtent, rightExtent); 
 	}
 	
 	@Override
@@ -221,40 +212,5 @@ public abstract class NonPackedNode extends SPPFNode {
 	public int getCountPackedNode() {
 		return countPackedNode;
 	}
-	
-	public static class NonPackedNodeExternalHasher implements ExternalHasher<NonPackedNode> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(NonPackedNode nonPackedNode, HashFunction f) {
-			return f.hash(nonPackedNode.slot.getId(), nonPackedNode.leftExtent, nonPackedNode.rightExtent);
-		}
-
-		@Override
-		public boolean equals(NonPackedNode node1, NonPackedNode node2) {
-			return  node1.rightExtent == node2.rightExtent &&
-					node1.slot == node2.slot &&
-					node1.leftExtent == node2.leftExtent;
-		}
-	}
-	
-	public static class LevelBasedNonPackedNodeExternalHasher implements ExternalHasher<NonPackedNode> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(NonPackedNode nonPackedNode, HashFunction f) {
-			return f.hash(nonPackedNode.slot.getId(), nonPackedNode.leftExtent);
-		}
-		
-		@Override
-		public boolean equals(NonPackedNode node1, NonPackedNode node2) {
-			return  node1.slot == node2.slot &&
-					node1.leftExtent == node2.leftExtent;
-		}
-
-	}
-
 	
 }
