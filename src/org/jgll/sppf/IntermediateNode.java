@@ -1,5 +1,6 @@
 package org.jgll.sppf;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -14,7 +15,7 @@ public class IntermediateNode extends NonPackedNode {
 	
 	private int firstPivot;
 		
-	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+	public IntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
 	
@@ -61,6 +62,11 @@ public class IntermediateNode extends NonPackedNode {
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
+	}
+
+	@Override
+	public BodyGrammarSlot getFirstPackedNodeGrammarSlot() {
+		return (BodyGrammarSlot) slot;
 	}
 
 }

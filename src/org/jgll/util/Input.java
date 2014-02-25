@@ -14,7 +14,7 @@ import org.jgll.traversal.PositionInfo;
 
 /**
  * 
- * Is backed by an integer array.
+ * Is backed by an integer array to support UTF-32. 
  * 
  * @author Ali Afroozeh
  *
@@ -35,7 +35,7 @@ public class Input {
 	
 	private URI uri;
 	
-	private static int[] fromString(String s) {
+	private static int[] convert(String s) {
 		int[] input = new int[s.length() + 1];
 		for (int i = 0; i < s.length(); i++) {
 			input[i] = s.codePointAt(i);
@@ -54,14 +54,16 @@ public class Input {
 		return new Input(input, URI.create("dummy:///"));
 	}
 	
-	
-	
 	public static Input fromIntArray(int[] input) {
 		return new Input(input, URI.create("dummy:///"));
 	}
 
+	public static Input fromString(String s) {
+		return new Input(convert(s), URI.create("dummy:///"));
+	}
+	
 	public static Input fromString(String s, URI uri) {
-		return new Input(fromString(s), uri);
+		return new Input(convert(s), uri);
 	}
 	
 	public static Input fromIntArray(int[] input, URI uri) {
@@ -69,7 +71,7 @@ public class Input {
 	}
 	
 	public static Input fromPath(String path) throws IOException {
-		return new Input(fromString(readTextFromFile(path)), URI.create("file:///" + path));
+		return new Input(convert(readTextFromFile(path)), URI.create("file:///" + path));
 	}
 
 	private Input(int[] input, URI uri) {
@@ -347,14 +349,10 @@ public class Input {
 	}
 
 	public boolean isEndOfLine(int currentInputIndex) {
-		// TODO: unfinished
-		return input[currentInputIndex] == 0
-				|| lineColumns[currentInputIndex + 1].columnNumber == 1;
+		return input[currentInputIndex] == 0 || lineColumns[currentInputIndex + 1].columnNumber == 1;
 	}
 
 	public boolean isStartOfLine(int currentInputIndex) {
-		// TODO: check this?!
-		return currentInputIndex == 0
-				|| lineColumns[currentInputIndex].columnNumber == 1;
+		return currentInputIndex == 0 || lineColumns[currentInputIndex].columnNumber == 1;
 	}
 }

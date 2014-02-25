@@ -1,6 +1,7 @@
 package org.jgll.parser.lookup;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
@@ -56,7 +57,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalSymbolNode getNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	public NonterminalSymbolNode getNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		NonterminalSymbolNode key = new NonterminalSymbolNode(grammarSlot, leftExtent, rightExtent);
 
 		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
@@ -91,7 +92,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalSymbolNode findNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	public NonterminalSymbolNode findNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		
 		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
 
@@ -104,7 +105,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public IntermediateNode getIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		IntermediateNode key = new IntermediateNode(grammarSlot, leftExtent, rightExtent);
 
 		IguanaSet<IntermediateNode> set = intermediateNodes[rightExtent];
@@ -139,7 +140,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public IntermediateNode findIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	public IntermediateNode findIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		IguanaSet<IntermediateNode> set = intermediateNodes[rightExtent];
 
 		if (set == null) {

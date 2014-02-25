@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 
@@ -160,5 +161,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	public int childrenCount() {
 		return children.size();
 	}
+	
+	public abstract BodyGrammarSlot getFirstPackedNodeGrammarSlot();
 	
 }

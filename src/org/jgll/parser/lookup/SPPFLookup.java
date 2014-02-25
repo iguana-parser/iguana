@@ -1,5 +1,6 @@
 package org.jgll.parser.lookup;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
@@ -38,7 +39,7 @@ public interface SPPFLookup {
 	 * @param rightExtent
 	 * @return
 	 */
-	public NonterminalSymbolNode getNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public NonterminalSymbolNode getNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
 	/**
 	 * 
@@ -52,11 +53,11 @@ public interface SPPFLookup {
 	 * @return null if no nonterminal node is found with the given parameters
 	 * 
 	 */
-	public NonterminalSymbolNode findNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public NonterminalSymbolNode findNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
-	public IntermediateNode getIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
-	public IntermediateNode findIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public IntermediateNode findIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent);
 		
 	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 	

@@ -7,7 +7,8 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.lookup.LookupTable;
+import org.jgll.parser.lookup.GSSLookup;
+import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -71,7 +72,9 @@ public interface GLLParser {
 	
 	public void recordParseError(GrammarSlot slot);
 	
-	public LookupTable getLookupTable();
+	public GSSLookup getGSSLookup();
+	
+	public SPPFLookup getSPPFLookup();
 	
 	public Grammar getGrammar();
 	

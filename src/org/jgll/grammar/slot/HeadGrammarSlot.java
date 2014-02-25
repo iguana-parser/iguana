@@ -15,8 +15,7 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.regex.RegularExpression;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.PackedNode;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 
 /**
@@ -178,16 +177,16 @@ public class HeadGrammarSlot extends GrammarSlot {
 			rightExtent = children.get(children.size() - 1).getRightExtent();
 		}
 
-		NonPackedNode ntNode = parser.getLookupTable().hasNonPackedNode(this, leftExtent, rightExtent);
+		NonterminalSymbolNode ntNode = parser.getSPPFLookup().findNonterminalNode(this, leftExtent, rightExtent);
 		
 		if(ntNode == null) {
-			ntNode = parser.getLookupTable().getNonPackedNode(this, leftExtent, rightExtent); 
+			ntNode = parser.getSPPFLookup().getNonterminalNode(this, leftExtent, rightExtent); 
 			
 			for(SPPFNode node : children) {
 				ntNode.addChild(node);
 			}
 			
-			ntNode.addFirstPackedNode(new PackedNode(lastSlot, ci, ntNode));
+			ntNode.addFirstPackedNode(lastSlot, ci);
 		}
 		
 		return ntNode;

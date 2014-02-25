@@ -1,6 +1,5 @@
 package org.jgll.sppf;
 
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
@@ -12,13 +11,24 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class NonterminalSymbolNode extends NonPackedNode {
 	
-	// input index, slot id
+	/**
+	 * Packed nodes under nonterminal nodes are of the form (slot, index) where
+	 * slot can be one of the alternates of the nonterminal. The input index varies
+	 * from the left-extent to the right-extent of the nonterminal node.
+	 * 
+	 * The first index of this array is the slot id and the second one is the input index.
+	 */
 	private PackedNode[][] packedNodes;
 	
 	private int firstPivot;
 	
-	public NonterminalSymbolNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		super(slot, leftExtent, rightExtent);
+	private LastGrammarSlot firstPackedNodeSlot;
+	
+	private final int numberOfAlternatives;
+	
+	public NonterminalSymbolNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
+		super(head, leftExtent, rightExtent);
+		this.numberOfAlternatives = head.getCountAlternates();
 	}
 	
 	@Override
@@ -26,7 +36,8 @@ public class NonterminalSymbolNode extends NonPackedNode {
 		visitAction.visit(this);
 	}
 	
-	public void addPackedNode(GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+	public void addPackedNode(LastGrammarSlot s, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		
 		assert leftChild  != null;
 		assert rightChild != null;
 		
@@ -36,24 +47,30 @@ public class NonterminalSymbolNode extends NonPackedNode {
 			}
 			children.add(rightChild);
 			firstPivot = pivot;
+			firstPackedNodeSlot = s;
 		} 
 		else if (packedNodes.length == 1) {
 			// Packed node does not exist
 			if(pivot != firstPivot) {
-				packedNodes = new PackedNode[rightExtent - leftExtent];
+				packedNodes = new PackedNode[numberOfAlternatives][rightExtent - leftExtent];
 				children.clear();
 				children.add(new PackedNode(slot, firstPivot, this));
 				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
 				children.add(newPackedNode);
-				packedNodes[pivot] = newPackedNode;
+				packedNodes[s.getAlternateIndex()][pivot - leftExtent] = newPackedNode;
 			}
 		}
 		else {
 			if(packedNodes[pivot - leftExtent] == null) {
 				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
-				packedNodes[pivot] = newPackedNode;
+				packedNodes[s.getAlternateIndex()][pivot - leftExtent] = newPackedNode;
 			}
 		}		
+	}
+	
+	public void addFirstPackedNode(LastGrammarSlot slot, int pivot) {
+		firstPackedNodeSlot = slot;
+		firstPivot = pivot;
 	}
 	
 	@Override
@@ -64,8 +81,9 @@ public class NonterminalSymbolNode extends NonPackedNode {
 		return ((HeadGrammarSlot) slot).getNonterminal().getName();
 	}
 	
+	@Override
 	public LastGrammarSlot getFirstPackedNodeGrammarSlot() {
-		return (LastGrammarSlot) firstPackedNode.getGrammarSlot();
+		return firstPackedNodeSlot;
 	}
 
 	@Override

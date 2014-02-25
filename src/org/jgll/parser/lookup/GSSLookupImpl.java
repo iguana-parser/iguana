@@ -9,22 +9,16 @@ import java.util.Map;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.GSSNodeFactory;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -37,9 +31,9 @@ import org.jgll.util.logging.LoggerWrapper;
  * @author Ali Afroozeh
  * 
  */
-public class DefaultLookupTableImpl extends AbstractLookupTable {
+public class GSSLookupImpl implements GSSLookup {
 
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(DefaultLookupTableImpl.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(GSSLookupImpl.class);
 
 	private HashTableFactory factory;
 
@@ -51,21 +45,20 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 
 	private IguanaSet<NonPackedNode>[] nonPackedNodes;
 
-//	private IguanaSet<PackedNode>[] packedNodes;
-
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)
 	 */
 	private GSSTuple[][] gssTuples;
 
-	private TokenSymbolNode[][] tokenSymbolNodes;
-
-	private int nonPackedNodesCount;
-
 	private final GSSNodeFactory gssNodeFactory;
 	
-	public DefaultLookupTableImpl(Grammar grammar, GSSNodeFactory gssNodeFactory) {
-		super(grammar);
+	private final Grammar grammar;
+	
+	private final int slotsSize;
+	
+	public GSSLookupImpl(Grammar grammar, GSSNodeFactory gssNodeFactory) {
+		this.grammar = grammar;
+		this.slotsSize = grammar.getGrammarSlots().size();		
 		this.gssNodeFactory = gssNodeFactory;
 	}
 
@@ -78,16 +71,11 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		descriptorsStack = new ArrayDeque<>();
 		descriptorsSet = new IguanaSet[input.length()];
 		nonPackedNodes = new IguanaSet[input.length()];
-		packedNodes = new IguanaSet[input.length()];
 
 		gssTuples = new GSSTuple[grammar.getNonterminals().size()][input.length()];
 
-		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.length()];
-
 		long end = System.nanoTime();
 		log.info("Lookup table initialization: %d ms", (end - start) / 1000_000);
-
-		nonPackedNodesCount = 0;
 
 		factory = HashTableFactory.getFactory();
 	}
@@ -172,58 +160,6 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		return false;
 	}
 
-	@Override
-	public NonPackedNode getNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
-		return getNonPackedNode(key);
-	}
-
-	@Override
-	public NonPackedNode hasNonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		NonPackedNode key = createNonPackedNode(slot, leftExtent, rightExtent);
-		return hasNonPackedNode(key);
-	}
-
-	@Override
-	public NonPackedNode getNonPackedNode(NonPackedNode key) {
-		int index = key.getRightExtent();
-		IguanaSet<NonPackedNode> set = nonPackedNodes[index];
-
-		if (set == null) {
-			set = factory.newHashSet(tableSize, new ExternalHasher<NonPackedNode>() {
-
-				public int hash(NonPackedNode nonPackedNode, HashFunction f) {
-					return f.hash(nonPackedNode.getGrammarSlot().getId(), nonPackedNode.getLeftExtent());
-				}
-				
-				@Override
-				public boolean equals(NonPackedNode node1, NonPackedNode node2) {
-					return  node1.getGrammarSlot() == node2.getGrammarSlot() &&
-							node1.getLeftExtent() == node2.getLeftExtent();
-				}
-			});
-			nonPackedNodes[index] = set;
-			set.add(key);
-			return key;
-		}
-
-		NonPackedNode oldValue = nonPackedNodes[index].add(key);
-		if (oldValue == null) {
-			oldValue = key;
-		}
-
-		return oldValue;
-	}
-
-	@Override
-	public NonPackedNode hasNonPackedNode(NonPackedNode key) {
-		int index = key.getRightExtent();
-		if (nonPackedNodes[index] == null) {
-			return null;
-		}
-		return nonPackedNodes[index].get(key);
-	}
-
 	@SuppressWarnings("unused")
 	private int getTotalCollisions() {
 		int total = 0;
@@ -243,18 +179,6 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 		return total;
 	}
 
-	@Override
-	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
-		if (nonPackedNodes[inputSize - 1] == null) {
-			return null;
-		}
-		return (NonterminalSymbolNode) nonPackedNodes[inputSize - 1].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
-	}
-
-	@Override
-	public int getNonPackedNodesCount() {
-		return nonPackedNodesCount;
-	}
 
 	@Override
 	public int getDescriptorsCount() {
@@ -263,40 +187,6 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 			if (descriptorsSet[i] != null) {
 				count += descriptorsSet[i].size();
 			}
-		}
-		return count;
-	}
-
-	@Override
-	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-
-		int index = parent.getRightExtent();
-		IguanaSet<PackedNode> set = packedNodes[index];
-
-		PackedNode packedNode = new PackedNode(slot, pivot, parent);
-
-		if (set == null) {
-			set = factory.newHashSet(tableSize, PackedNode.levelBasedExternalHasher);
-			packedNodes[index] = set;
-			parent.addPackedNode(packedNode, leftChild, rightChild);
-			set.add(packedNode);
-			return;
-		}
-
-		PackedNode add = set.add(packedNode);
-		if (add == null) {
-			parent.addPackedNode(packedNode, leftChild, rightChild);
-		}
-	}
-
-	@Override
-	public int getPackedNodesCount() {
-		int count = 0;
-		for (int i = 0; i < packedNodes.length; i++) {
-			if (packedNodes[i] == null) {
-				continue;
-			}
-			count += packedNodes[i].size();
 		}
 		return count;
 	}
@@ -356,16 +246,6 @@ public class DefaultLookupTableImpl extends AbstractLookupTable {
 			map.put(node, getEdges(node));
 		}
 		return map;
-	}
-
-	@Override
-	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length) {
-		TokenSymbolNode node = tokenSymbolNodes[tokenID][inputIndex];
-		if (node == null) {
-			node = new TokenSymbolNode(tokenID, inputIndex, length);
-			tokenSymbolNodes[tokenID][inputIndex] = node;
-		}
-		return node;
 	}
 
 }

@@ -14,8 +14,10 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.lookup.LookupTable;
+import org.jgll.parser.lookup.GSSLookup;
+import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -47,7 +49,9 @@ public class GLLParserImpl implements GLLParser {
 	 */
 	protected static final GSSNode u0 = GSSNode.U0;
 
-	protected LookupTable lookupTable;
+	private GSSLookup gssLookup;
+	
+	private SPPFLookup sppfLookup;
 
 	/**
 	 * u0 is the bottom of the GSS.
@@ -92,12 +96,12 @@ public class GLLParserImpl implements GLLParser {
 	
 	private boolean llOptimization = false;
 
-	public GLLParserImpl(LookupTable lookupTable) {
-		this.lookupTable = lookupTable;
+	public GLLParserImpl(GSSLookup lookupTable) {
+		this.gssLookup = lookupTable;
 	}
 	
-	public GLLParserImpl(LookupTable lookupTable, int regularListLength) {
-		this.lookupTable = lookupTable;
+	public GLLParserImpl(GSSLookup lookupTable, int regularListLength) {
+		this.gssLookup = lookupTable;
 		this.regularListLength = regularListLength;
 	}
 	
@@ -133,7 +137,7 @@ public class GLLParserImpl implements GLLParser {
 		this.input = lexer.getInput();
 		
 		init();
-		lookupTable.init(input);
+		gssLookup.init(input);
 	
 		log.info("Iguana started...");
 
@@ -145,7 +149,7 @@ public class GLLParserImpl implements GLLParser {
 			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, lexer);
 		} else {
 			L0.getInstance().parse(this, lexer, startSymbol);			
-			root = lookupTable.getStartSymbol(startSymbol, input.length());
+			root = sppfLookup.getStartSymbol(startSymbol, input.length());
 		}
 
 		end = System.nanoTime();
@@ -160,17 +164,18 @@ public class GLLParserImpl implements GLLParser {
 	}
 		
 	private void logParseStatistics(long duration) {
-		log.info("Parsing Time: " + duration/1000000 + " ms");
+		log.info("Parsing Time (nano-time): " + duration / 1000_000 + " ms");
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
 		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.info("Descriptors: %d", lookupTable.getDescriptorsCount());
-		log.debug("Non-packed nodes: %d", lookupTable.getNonPackedNodesCount());
-		log.debug("Packed nodes: %d", lookupTable.getPackedNodesCount());
-		log.debug("GSS Nodes: %d", lookupTable.getGSSNodesCount());
-		log.debug("GSS Edges: %d", lookupTable.getGSSEdgesCount());
+		log.info("Descriptors: %d", gssLookup.getDescriptorsCount());
+		log.debug("GSS Nodes: %d", gssLookup.getGSSNodesCount());
+		log.debug("GSS Edges: %d", gssLookup.getGSSEdgesCount());
+		log.debug("Nonterminal nodes: %d", sppfLookup.getNonterminalNodesCount());
+		log.debug("Intermediate nodes: %d", sppfLookup.getIntermediateNodesCount());
+		log.debug("Packed nodes: %d", sppfLookup.getPackedNodesCount());
 	}
 	
 	/**
@@ -213,7 +218,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public final void addDescriptor(GrammarSlot slot, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor descriptor = new Descriptor(slot, u, inputIndex, w);
-		boolean added = lookupTable.addDescriptor(descriptor);
+		boolean added = gssLookup.addDescriptor(descriptor);
 		if(added) {
 			log.trace("Descriptor created: %s : %b", descriptor, added);
 		}
@@ -223,7 +228,7 @@ public class GLLParserImpl implements GLLParser {
 	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object) {
 		Descriptor descriptor = new Descriptor(slot, currentGSSNode, inputIndex, currentNode);
 		descriptor.setObject(object);
-		boolean added = lookupTable.addDescriptor(descriptor);
+		boolean added = gssLookup.addDescriptor(descriptor);
 		if(added) {
 			log.trace("Descriptor created: %s : %b", descriptor, added);
 		}
@@ -261,7 +266,7 @@ public class GLLParserImpl implements GLLParser {
 //			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
 			
 			label:
-			for(GSSEdge edge : lookupTable.getEdges(cu)) {
+			for(GSSEdge edge : gssLookup.getEdges(cu)) {
 				GrammarSlot slot = edge.getReturnSlot();
 				
 				for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) edge.getReturnSlot()).getPopActions()) {
@@ -316,9 +321,9 @@ public class GLLParserImpl implements GLLParser {
 	}
 	
 	private final GSSNode create(BodyGrammarSlot returnSlot, HeadGrammarSlot head, GSSNode u, int i, SPPFNode w) {
-		GSSNode v = lookupTable.getGSSNode(head, i);
+		GSSNode v = gssLookup.getGSSNode(head, i);
 
-		if(lookupTable.getGSSEdge(v, u, w, returnSlot)) {
+		if(gssLookup.getGSSEdge(v, u, w, returnSlot)) {
 			
 			label:
 			for (SPPFNode z : v.getPoppedElements()) {
@@ -356,7 +361,7 @@ public class GLLParserImpl implements GLLParser {
 	
 	private final SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
-		GrammarSlot t = slot.getHead();
+		HeadGrammarSlot head = slot.getHead();
 
 		int leftExtent;
 		
@@ -368,9 +373,9 @@ public class GLLParserImpl implements GLLParser {
 		
 		int rightExtent = rightChild.getRightExtent();
 		
-		NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(t, leftExtent, rightExtent);
+		NonPackedNode newNode = (NonPackedNode) sppfLookup.getNonterminalNode(head, leftExtent, rightExtent);
 		
-		lookupTable.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		
 		return newNode;
 	}
@@ -395,21 +400,21 @@ public class GLLParserImpl implements GLLParser {
 			leftExtent = rightChild.getLeftExtent();
 		}
 		
-		NonPackedNode newNode = (NonPackedNode) lookupTable.getNonPackedNode(slot, leftExtent, rightExtent);
+		IntermediateNode newNode = sppfLookup.getIntermediateNode(slot, leftExtent, rightExtent);
 		
-		lookupTable.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		
 		return newNode;
 	}
 	
 	@Override
 	public boolean hasNextDescriptor() {
-		return lookupTable.hasNextDescriptor();
+		return gssLookup.hasNextDescriptor();
 	}
 	
 	@Override
 	public Descriptor nextDescriptor() {
-		Descriptor descriptor = lookupTable.nextDescriptor();
+		Descriptor descriptor = gssLookup.nextDescriptor();
 		ci = descriptor.getInputIndex();
 		cu = descriptor.getGSSNode();
 		cn = descriptor.getSPPFNode();
@@ -429,8 +434,12 @@ public class GLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public LookupTable getLookupTable() {
-		return lookupTable;
+	public GSSLookup getGSSLookup() {
+		return gssLookup;
+	}
+	
+	public SPPFLookup getSPPFLookup() {
+		return sppfLookup;
 	}
 
 	@Override
@@ -475,7 +484,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length) {
 		ci += length;
-		return lookupTable.getTokenSymbolNode(tokenID, inputIndex, length);
+		return sppfLookup.getTokenSymbolNode(tokenID, inputIndex, length);
 	}
 	
 }

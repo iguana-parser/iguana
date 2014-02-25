@@ -1,6 +1,6 @@
 package org.jgll.sppf;
 
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -12,7 +12,7 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class ListSymbolNode extends NonterminalSymbolNode {
 
-	public ListSymbolNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+	public ListSymbolNode(HeadGrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
 	
