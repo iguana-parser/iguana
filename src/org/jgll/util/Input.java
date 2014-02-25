@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +33,9 @@ public class Input {
 	 */
 	private int lineCount;
 	
-	public static Input fromString(String s) {
+	private URI uri;
+	
+	private static int[] fromString(String s) {
 		int[] input = new int[s.length() + 1];
 		for (int i = 0; i < s.length(); i++) {
 			input[i] = s.codePointAt(i);
@@ -41,26 +44,37 @@ public class Input {
 		// as Bitsets cannot work with negative values. 
 		input[s.length()] = 0; // TODO: we will run into some problems because Jurgen used 0 for escaping.
 
-		return new Input(input);
+		return input;
 	}
 	
 	public static Input fromChar(char c) {
 		int[] input = new int[2];
 		input[0] = c;
 		input[1] = 0;
-		return new Input(input);
+		return new Input(input, URI.create("dummy:///"));
 	}
 	
+	
+	
 	public static Input fromIntArray(int[] input) {
-		return new Input(input);
+		return new Input(input, URI.create("dummy:///"));
+	}
+
+	public static Input fromString(String s, URI uri) {
+		return new Input(fromString(s), uri);
+	}
+	
+	public static Input fromIntArray(int[] input, URI uri) {
+		return new Input(input, uri);
 	}
 	
 	public static Input fromPath(String path) throws IOException {
-		return fromString(readTextFromFile(path));
+		return new Input(fromString(readTextFromFile(path)), URI.create("file:///" + path));
 	}
 
-	private Input(int[] input) {
+	private Input(int[] input, URI uri) {
 		this.input = input;
+		this.uri = uri;
 		lineColumns = new LineColumn[input.length];
 		calculateLineLengths();
 	}
@@ -225,7 +239,8 @@ public class Input {
 								getLineNumber(leftExtent), 
 								getColumnNumber(leftExtent), 
 								getLineNumber(rightExtent), 
-								getColumnNumber(rightExtent));
+								getColumnNumber(rightExtent),
+								uri);
 	}
 	
 	
@@ -265,11 +280,6 @@ public class Input {
 		public LineColumn(int lineNumber, int columnNumber) {
 			this.lineNumber = lineNumber;
 			this.columnNumber = columnNumber;
-		}
-		
-		public LineColumn(LineColumn lineColumn) {
-			this.lineNumber = lineColumn.lineNumber;
-			this.columnNumber = lineColumn.columnNumber; 
 		}
 		
 		public int getLineNumber() {

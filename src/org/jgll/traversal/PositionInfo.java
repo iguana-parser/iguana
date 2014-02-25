@@ -1,5 +1,7 @@
 package org.jgll.traversal;
 
+import java.net.URI;
+
 
 /**
  * 
@@ -8,28 +10,30 @@ package org.jgll.traversal;
  */
 public class PositionInfo {
 	
-	private final int start;
 	private final int offset;
+	private final int length;
 	private final int startLineNumber;
 	private final int startColumnNumber;
 	private final int endLineNumber;
 	private final int endColumnNumber;
-
-	public PositionInfo(int start, int offset, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber) {
-		this.start = start;
+	private final URI uri;
+	
+	public PositionInfo(int offset, int length, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber, URI uri) {
 		this.offset = offset;
+		this.length = length;
 		this.startLineNumber = lineNumber;
 		this.startColumnNumber = columnNumber;
 		this.endLineNumber = endLineNumber;
 		this.endColumnNumber = endColumnNumber;
-	}
-	
-	public int getStart() {
-		return start;
+		this.uri = uri;
 	}
 	
 	public int getOffset() {
 		return offset;
+	}
+	
+	public int getLength() {
+		return length;
 	}
 
 	public int getLineNumber() {
@@ -46,6 +50,10 @@ public class PositionInfo {
 	
 	public int getEndColumnNumber() {
 		return endColumnNumber;
+	}
+	
+	public URI getURI() {
+		return uri;
 	}
 	
 }
