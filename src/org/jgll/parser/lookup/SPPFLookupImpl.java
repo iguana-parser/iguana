@@ -1,7 +1,5 @@
 package org.jgll.parser.lookup;
 
-import java.util.ArrayDeque;
-
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -10,12 +8,17 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class SPPFLookupImpl implements SPPFLookup {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(SPPFLookupImpl.class);
+	
+	private HashTableFactory factory;
+
+	private int tableSize = (int) Math.pow(2, 10);
 	
 	private final TokenSymbolNode[][] tokenSymbolNodes;
 	
@@ -38,12 +41,32 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length) {
-		return null;
+		TokenSymbolNode node = tokenSymbolNodes[tokenID][inputIndex];
+		if (node == null) {
+			node = new TokenSymbolNode(tokenID, inputIndex, length);
+			tokenSymbolNodes[tokenID][inputIndex] = node;
+		}
+		return node;
 	}
 
 	@Override
 	public NonterminalSymbolNode getNonterminalNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return null;
+		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
+		NonterminalSymbolNode key = new NonterminalSymbolNode(grammarSlot, leftExtent, rightExtent);
+
+		if (set == null) {
+			set = factory.newHashSet(tableSize, NonPackedNode.levelBasedExternalHasher);
+			nonterminalNodes[rightExtent] = set;
+			set.add(key);
+			return key;
+		}
+
+		NonterminalSymbolNode oldValue = nonterminalNodes[rightExtent].add(key);
+		if (oldValue == null) {
+			oldValue = key;
+		}
+
+		return oldValue;
 	}
 
 	@Override
