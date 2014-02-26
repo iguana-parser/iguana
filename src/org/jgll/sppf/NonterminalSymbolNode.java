@@ -20,9 +20,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 	 */
 	private PackedNode[][] packedNodes;
 	
-	private int firstPivot;
-	
-	private LastGrammarSlot firstPackedNodeSlot;
+	private PackedNode firstPackedNode;
 	
 	private final int numberOfAlternatives;
 	
@@ -41,36 +39,37 @@ public class NonterminalSymbolNode extends NonPackedNode {
 		assert leftChild  != null;
 		assert rightChild != null;
 		
-		if(packedNodes.length == 0) {
+		if(countPackedNodes == 0) {
 			if(leftChild != DummyNode.getInstance()) {
 				children.add(leftChild);
 			}
 			children.add(rightChild);
-			firstPivot = pivot;
-			firstPackedNodeSlot = s;
+			firstPackedNode = attachChildren(new PackedNode(slot, pivot, this), leftChild, rightChild);
+			countPackedNodes++;
 		} 
-		else if (packedNodes.length == 1) {
-			// Packed node does not exist
-			if(pivot != firstPivot) {
-				packedNodes = new PackedNode[numberOfAlternatives][rightExtent - leftExtent];
+		else if (countPackedNodes == 1) {
+			// if packed node does not exist
+			if(pivot != firstPackedNode.getPivot()) {
+				packedNodes = new PackedNode[numberOfAlternatives][rightExtent - leftExtent + 1];
 				children.clear();
-				children.add(new PackedNode(slot, firstPivot, this));
+				children.add(firstPackedNode);
 				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
 				children.add(newPackedNode);
 				packedNodes[s.getAlternateIndex()][pivot - leftExtent] = newPackedNode;
+				countPackedNodes++;
 			}
 		}
 		else {
-			if(packedNodes[pivot - leftExtent] == null) {
+			if(packedNodes[s.getAlternateIndex()][pivot - leftExtent] == null) {
 				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
 				packedNodes[s.getAlternateIndex()][pivot - leftExtent] = newPackedNode;
+				countPackedNodes++;
 			}
 		}		
 	}
 	
 	public void addFirstPackedNode(LastGrammarSlot slot, int pivot) {
-		firstPackedNodeSlot = slot;
-		firstPivot = pivot;
+		firstPackedNode = new PackedNode(slot, pivot, this);
 	}
 	
 	@Override
@@ -83,12 +82,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 	
 	@Override
 	public LastGrammarSlot getFirstPackedNodeGrammarSlot() {
-		return firstPackedNodeSlot;
-	}
-
-	@Override
-	public boolean isAmbiguous() {
-		return packedNodes.length > 1;
+		return (LastGrammarSlot) firstPackedNode.getGrammarSlot();
 	}
 
 }

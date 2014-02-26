@@ -82,19 +82,7 @@ public interface GLLParser {
 	 * Current descriptor being processed.
 	 */
 	public Descriptor getCurrentDescriptor();
-	
-	/**
-	 * Ring size is the length of largest chain of terminals in the body of production
-	 * rules. It can be derived automatically from the grammar, but the user can also
-	 * set it. Manual setting of this property is useful when regular lists are 
-	 * eagerly parsed.
-	 * 
-	 * @return {@link Integer#MAX_VALUE} when the parser is in the recursive descent mode.
-	 */
-	public int getRegularListLength();
-	
+		
 	public boolean isLLOptimizationEnabled();
-	
-	public long getParsingTime();
 	
 }

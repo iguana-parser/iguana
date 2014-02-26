@@ -56,16 +56,11 @@ public class GSSLookupImpl implements GSSLookup {
 	
 	private final int slotsSize;
 	
-	public GSSLookupImpl(Grammar grammar, GSSNodeFactory gssNodeFactory) {
+	public GSSLookupImpl(Grammar grammar, Input input, GSSNodeFactory gssNodeFactory) {
 		this.grammar = grammar;
 		this.slotsSize = grammar.getGrammarSlots().size();		
 		this.gssNodeFactory = gssNodeFactory;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void init(Input input) {
-
+		
 		long start = System.nanoTime();
 
 		descriptorsStack = new ArrayDeque<>();

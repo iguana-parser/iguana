@@ -2,10 +2,9 @@ package org.jgll.parser.lookup;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -39,6 +38,8 @@ public class SPPFLookupImpl implements SPPFLookup {
 		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.length()];
 		long end = System.nanoTime();
 		log.info("SPPF lookup initialization: %d ms", (end - start) / 1000_000);
+		
+		factory = HashTableFactory.getFactory();
 	}
 
 	@Override
@@ -152,7 +153,13 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+	public void addPackedNode(NonterminalSymbolNode parent, LastGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		parent.addPackedNode(slot, pivot, leftChild, rightChild);
+	}
+	
+	@Override
+	public void addPackedNode(IntermediateNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		parent.addPackedNode(slot, pivot, leftChild, rightChild);
 	}
 
 	@Override
@@ -167,7 +174,9 @@ public class SPPFLookupImpl implements SPPFLookup {
 	public int getNonterminalNodesCount() {
 		int count = 0;
 		for(IguanaSet<NonterminalSymbolNode> set : nonterminalNodes) {
-			count += set.size();
+			if(set != null) {
+				count += set.size();
+			}
 		}
 		return count;
 	}
@@ -176,7 +185,9 @@ public class SPPFLookupImpl implements SPPFLookup {
 	public int getIntermediateNodesCount() {
 		int count = 0;
 		for(IguanaSet<IntermediateNode> set : intermediateNodes) {
-			count += set.size();
+			if(set != null) {
+				count += set.size();
+			}
 		}
 		return count;
 	}
@@ -186,7 +197,9 @@ public class SPPFLookupImpl implements SPPFLookup {
 		int count = 0;
 		for(int i = 0; i < tokenSymbolNodes.length; i++) {
 			for(int j = 0; j < tokenSymbolNodes[i].length; j++) {
-				count++;
+				if(tokenSymbolNodes[i][j] != null) {
+					count++;
+				}
 			}
 		}
 		return count;

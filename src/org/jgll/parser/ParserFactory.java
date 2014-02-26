@@ -2,12 +2,17 @@ package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.parser.gss.ArrayBasedGSSNodeFactory;
-import org.jgll.parser.lookup.GSSLookupImpl;
+import org.jgll.parser.lookup.factory.DefaultGSSLookupFactory;
+import org.jgll.parser.lookup.factory.DefaultSPPFLookupFactory;
+import org.jgll.parser.lookup.factory.GSSLookupFactory;
+import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.util.Input;
 
 public class ParserFactory {
 	
 	public static GLLParser newParser(Grammar grammar, Input input) {
-		return new GLLParserImpl(new GSSLookupImpl(grammar, new ArrayBasedGSSNodeFactory(input)));
+		GSSLookupFactory gssLookupFactory = new DefaultGSSLookupFactory(new ArrayBasedGSSNodeFactory(input));
+		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
+		return new GLLParserImpl(gssLookupFactory, sppfLookupFactory);
 	}
 }

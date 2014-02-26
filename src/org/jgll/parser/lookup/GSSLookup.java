@@ -9,7 +9,6 @@ import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 /**
  * 
@@ -57,8 +56,6 @@ public interface GSSLookup {
 	public int getDescriptorsCount();
 	
 	public Iterable<GSSNode> getGSSNodes();
-	
-	public void init(Input input);
 	
 	public Map<GSSNode, Iterable<GSSEdge>> getEdgesMap();
 	

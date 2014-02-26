@@ -16,6 +16,8 @@ import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
+import org.jgll.parser.lookup.factory.GSSLookupFactory;
+import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
@@ -88,21 +90,16 @@ public class GLLParserImpl implements GLLParser {
 	 */
 	protected GSSNode errorGSSNode;
 	
-	protected int regularListLength = 10;
-
-	private long start;
-
-	private long end;
 	
 	private boolean llOptimization = false;
 
-	public GLLParserImpl(GSSLookup lookupTable) {
-		this.gssLookup = lookupTable;
-	}
-	
-	public GLLParserImpl(GSSLookup lookupTable, int regularListLength) {
-		this.gssLookup = lookupTable;
-		this.regularListLength = regularListLength;
+	private GSSLookupFactory gssLookupFactory;
+
+	private SPPFLookupFactory sppfLookupFactory;
+
+	public GLLParserImpl(GSSLookupFactory gssLookupFactory, SPPFLookupFactory sppfLookupFactory) {
+		this.gssLookupFactory = gssLookupFactory;
+		this.sppfLookupFactory = sppfLookupFactory;
 	}
 	
 	@Override
@@ -136,12 +133,12 @@ public class GLLParserImpl implements GLLParser {
 		
 		this.input = lexer.getInput();
 		
-		init();
-		gssLookup.init(input);
+		initParserState();
+		initLookups(grammar, input);
 	
 		log.info("Iguana started...");
 
-		start = System.nanoTime();
+		long start = System.nanoTime();
 		
 		NonterminalSymbolNode root;
 		
@@ -152,7 +149,7 @@ public class GLLParserImpl implements GLLParser {
 			root = sppfLookup.getStartSymbol(startSymbol, input.length());
 		}
 
-		end = System.nanoTime();
+		long end = System.nanoTime();
 		
 		if (root == null) {
 			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
@@ -195,7 +192,7 @@ public class GLLParserImpl implements GLLParser {
 		}
 	}
 
-	private void init() {
+	private void initParserState() {
 		cu = u0;
 		cn = DummyNode.getInstance();
 		ci = 0;
@@ -204,6 +201,10 @@ public class GLLParserImpl implements GLLParser {
 		errorGSSNode = null;
 	}
 	
+	private void initLookups(Grammar grammar, Input input) {
+		gssLookup = gssLookupFactory.createGSSLookupFactory(grammar, input);
+		sppfLookup = sppfLookupFactory.createSPPFLookup(grammar, input);
+	}
 
 	/**
 	 * Corresponds to the add method from the paper:
@@ -373,7 +374,7 @@ public class GLLParserImpl implements GLLParser {
 		
 		int rightExtent = rightChild.getRightExtent();
 		
-		NonPackedNode newNode = (NonPackedNode) sppfLookup.getNonterminalNode(head, leftExtent, rightExtent);
+		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(head, leftExtent, rightExtent);
 		
 		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		
@@ -448,11 +449,6 @@ public class GLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public int getRegularListLength() {
-		return regularListLength;
-	}
-
-	@Override
 	public SPPFNode getCurrentSPPFNode() {
 		return cn;
 	}
@@ -467,11 +463,6 @@ public class GLLParserImpl implements GLLParser {
 		return currentDescriptor;
 	}
 	
-	@Override
-	public long getParsingTime() {
-		return end - start;
-	}
-
 	public void setLlOptimization(boolean llOptimization) {
 		this.llOptimization = llOptimization;
 	}

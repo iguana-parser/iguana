@@ -57,7 +57,6 @@ public class Test6 {
 		Input input = Input.fromString("abc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf1 = parser.parse(input, grammar, "S");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf1, input);
 	}	
 }
 	
