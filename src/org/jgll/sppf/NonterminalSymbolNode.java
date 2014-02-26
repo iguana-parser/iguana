@@ -1,5 +1,6 @@
 package org.jgll.sppf;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
@@ -44,18 +45,25 @@ public class NonterminalSymbolNode extends NonPackedNode {
 				children.add(leftChild);
 			}
 			children.add(rightChild);
-			firstPackedNode = attachChildren(new PackedNode(slot, pivot, this), leftChild, rightChild);
+			firstPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
 			countPackedNodes++;
 		} 
 		else if (countPackedNodes == 1) {
 			// if packed node does not exist
 			if(pivot != firstPackedNode.getPivot()) {
+				// Initialize the packed nodes array for duplicate elimination
 				packedNodes = new PackedNode[numberOfAlternatives][rightExtent - leftExtent + 1];
+				
+				// Add the first packed node
 				children.clear();
 				children.add(firstPackedNode);
+				LastGrammarSlot grammarSlot = (LastGrammarSlot) firstPackedNode.getGrammarSlot();
+				packedNodes[grammarSlot.getAlternateIndex()][firstPackedNode.getPivot() - leftExtent] = firstPackedNode;
+				
+				// Add the second packed node
 				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
-				children.add(newPackedNode);
 				packedNodes[s.getAlternateIndex()][pivot - leftExtent] = newPackedNode;
+				children.add(newPackedNode);
 				countPackedNodes++;
 			}
 		}
@@ -63,6 +71,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 			if(packedNodes[s.getAlternateIndex()][pivot - leftExtent] == null) {
 				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
 				packedNodes[s.getAlternateIndex()][pivot - leftExtent] = newPackedNode;
+				children.add(newPackedNode);
 				countPackedNodes++;
 			}
 		}		

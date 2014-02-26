@@ -15,6 +15,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
 import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,12 +60,19 @@ public class Gamma2Test {
 	
 	@Test
 	public void testParsers2() throws ParseError {
+		Input input = Input.fromString("bbbb");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
+		assertTrue(sppf.deepEquals(getSPPF2()));
+	}
+	
+	@Test
+	public void testParsers3() throws ParseError {
 		Input input = Input.fromString("bbbbb");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, input);
-		assertTrue(sppf.deepEquals(getSPPF2()));
-	}
+		assertTrue(sppf.deepEquals(getSPPF3()));
+	}	
 	
 	@Test
 	public void test100bs() throws ParseError {
@@ -75,7 +83,7 @@ public class Gamma2Test {
 	
 	private String get100b() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 300; i++) {
 			sb.append("b");
 		}
 		return sb.toString();
@@ -117,6 +125,93 @@ public class Gamma2Test {
 	}
 	
 	private SPPFNode getSPPF2() {
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 4);
+		PackedNode node2 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 1, node1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 1);
+		TokenSymbolNode node4 = new TokenSymbolNode(2, 0, 1);
+		node3.addChild(node4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 4);
+		PackedNode node6 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 3, node5);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 3);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 2);
+		TokenSymbolNode node9 = new TokenSymbolNode(2, 1, 1);
+		node8.addChild(node9);
+		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
+		TokenSymbolNode node11 = new TokenSymbolNode(2, 2, 1);
+		node10.addChild(node11);
+		node7.addChild(node8);
+		node7.addChild(node10);
+		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 3, 4);
+		TokenSymbolNode node13 = new TokenSymbolNode(2, 3, 1);
+		node12.addChild(node13);
+		node6.addChild(node7);
+		node6.addChild(node12);
+		PackedNode node14 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 2, node5);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 4);
+		node15.addChild(node10);
+		node15.addChild(node12);
+		node14.addChild(node8);
+		node14.addChild(node15);
+		PackedNode node16 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 3, node5);
+		IntermediateNode node17 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= S S . S"), 1, 3);
+		node17.addChild(node8);
+		node17.addChild(node10);
+		node16.addChild(node17);
+		node16.addChild(node12);
+		node5.addChild(node6);
+		node5.addChild(node14);
+		node5.addChild(node16);
+		node2.addChild(node3);
+		node2.addChild(node5);
+		PackedNode node18 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 3, node1);
+		NonterminalSymbolNode node19 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 3);
+		PackedNode node20 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 1, node19);
+		node20.addChild(node3);
+		node20.addChild(node7);
+		PackedNode node21 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 2, node19);
+		NonterminalSymbolNode node22 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 2);
+		node22.addChild(node3);
+		node22.addChild(node8);
+		node21.addChild(node22);
+		node21.addChild(node10);
+		PackedNode node23 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 2, node19);
+		IntermediateNode node24 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= S S . S"), 0, 2);
+		node24.addChild(node3);
+		node24.addChild(node8);
+		node23.addChild(node24);
+		node23.addChild(node10);
+		node19.addChild(node20);
+		node19.addChild(node21);
+		node19.addChild(node23);
+		node18.addChild(node19);
+		node18.addChild(node12);
+		PackedNode node25 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S ."), 2, node1);
+		node25.addChild(node22);
+		node25.addChild(node15);
+		PackedNode node26 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 3, node1);
+		IntermediateNode node27 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= S S . S"), 0, 3);
+		PackedNode node28 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S . S"), 2, node27);
+		node28.addChild(node22);
+		node28.addChild(node10);
+		PackedNode node29 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S . S"), 1, node27);
+		node29.addChild(node3);
+		node29.addChild(node7);
+		node27.addChild(node28);
+		node27.addChild(node29);
+		node26.addChild(node27);
+		node26.addChild(node12);
+		PackedNode node30 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 2, node1);
+		node30.addChild(node24);
+		node30.addChild(node15);
+		node1.addChild(node2);
+		node1.addChild(node18);
+		node1.addChild(node25);
+		node1.addChild(node26);
+		node1.addChild(node30);
+		return node1;
+	}
+	
+	private SPPFNode getSPPF3() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 5);
 		PackedNode node2 = new PackedNode(grammar.getGrammarSlotByName("S ::= S S S ."), 4, node1);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= S S . S"), 0, 4);

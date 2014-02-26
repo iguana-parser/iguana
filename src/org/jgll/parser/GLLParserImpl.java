@@ -168,11 +168,11 @@ public class GLLParserImpl implements GLLParser {
 		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.info("Descriptors: %d", gssLookup.getDescriptorsCount());
-		log.debug("GSS Nodes: %d", gssLookup.getGSSNodesCount());
-		log.debug("GSS Edges: %d", gssLookup.getGSSEdgesCount());
-		log.debug("Nonterminal nodes: %d", sppfLookup.getNonterminalNodesCount());
-		log.debug("Intermediate nodes: %d", sppfLookup.getIntermediateNodesCount());
-		log.debug("Packed nodes: %d", sppfLookup.getPackedNodesCount());
+		log.info("GSS Nodes: %d", gssLookup.getGSSNodesCount());
+		log.info("GSS Edges: %d", gssLookup.getGSSEdgesCount());
+		log.info("Nonterminal nodes: %d", sppfLookup.getNonterminalNodesCount());
+		log.info("Intermediate nodes: %d", sppfLookup.getIntermediateNodesCount());
+		log.info("Packed nodes: %d", sppfLookup.getPackedNodesCount());
 	}
 	
 	/**

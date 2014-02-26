@@ -28,18 +28,25 @@ public class IntermediateNode extends NonPackedNode {
 				children.add(leftChild);
 			}
 			children.add(rightChild);
-			firstPackedNode = new PackedNode(s, pivot, this);
+			firstPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
 			countPackedNodes++;
 		} 
 		else if (countPackedNodes == 1) {
 			// Packed node does not exist
 			if(pivot != firstPackedNode.getPivot()) {
+				
+				// Initialize the packed nodes array for duplicate elimination
 				packedNodes = new PackedNode[rightExtent - leftExtent + 1];
+				
+				// Add the first packed node
 				children.clear();
 				children.add(firstPackedNode);
+				packedNodes[firstPackedNode.getPivot() - leftExtent] = firstPackedNode;
+				
+				// Add the second packed node
 				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
-				children.add(newPackedNode);
 				packedNodes[pivot - leftExtent] = newPackedNode;
+				children.add(newPackedNode);
 				countPackedNodes++;
 			}
 		}
@@ -47,6 +54,7 @@ public class IntermediateNode extends NonPackedNode {
 			if(packedNodes[pivot - leftExtent] == null) {
 				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
 				packedNodes[pivot - leftExtent] = newPackedNode;
+				children.add(newPackedNode);
 				countPackedNodes++;
 			}
 		}		

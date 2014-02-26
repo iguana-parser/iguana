@@ -89,7 +89,7 @@ public class FilterTest3 {
 	}
 
 	@Test
-	public void testInput() throws ParseError {
+	public void testParser() throws ParseError {
 		Input input = Input.fromString("aaa+aaaaa+aaaa");
 		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");

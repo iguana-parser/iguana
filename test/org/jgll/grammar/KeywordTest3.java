@@ -14,6 +14,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,6 +61,7 @@ public class KeywordTest3 {
 		Input input = Input.fromString("if s then s");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, input);
 		assertTrue(sppf.deepEquals(getSPPF1()));
 	}
 		
