@@ -91,7 +91,7 @@ public class Keyword extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Set<Integer> getFirstSet() {
+	public Set<Range> getFirstSet() {
 		return seq.getFirstSet();
 	}
 	

@@ -42,8 +42,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private boolean ll1SubGrammar;
 	
-//	private Map<Integer, Set<BodyGrammarSlot>> predictionMap;
-	
 	private Set<Integer> predictionSet;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal) {
@@ -114,19 +112,9 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
-//		int ci = parser.getCurrentInputIndex();
-		
 		for(Alternate alt : alternates) {
 			parser.addDescriptor(alt.getFirstSlot());
 		}
-		
-//		Set<BodyGrammarSlot> set = predictionMap.get(lexer.getInput().charAt(ci));
-//
-//		if(set != null) {
-//			for(BodyGrammarSlot slot : set) {
-//				parser.addDescriptor(slot);
-//			}
-//		}
 		
 		return null;
 	}

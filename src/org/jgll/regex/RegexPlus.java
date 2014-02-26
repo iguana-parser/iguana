@@ -3,6 +3,7 @@ package org.jgll.regex;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractRegularExpression;
+import org.jgll.grammar.symbol.Range;
 
 
 public class RegexPlus extends AbstractRegularExpression {
@@ -32,7 +33,7 @@ public class RegexPlus extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Set<Integer> getFirstSet() {
+	public Set<Range> getFirstSet() {
 		return regexp.getFirstSet();
 	}
 

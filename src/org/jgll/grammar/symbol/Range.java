@@ -112,11 +112,9 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 
 	@Override
-	public Set<Integer> getFirstSet() {
-		Set<Integer> firstSet = new HashSet<>();
-		for(int i = start; i <= end; i++) {
-			firstSet.add(i);
-		}
+	public Set<Range> getFirstSet() {
+		Set<Range> firstSet = new HashSet<>();
+		firstSet.add(this);
 		return firstSet;
 	}
 }

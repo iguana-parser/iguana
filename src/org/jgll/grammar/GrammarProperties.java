@@ -17,6 +17,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
@@ -290,7 +291,7 @@ public class GrammarProperties {
 			for(Alternate alt : head.getAlternates()) {
 				Set<Integer> set = new HashSet<>();
 				for(int i : alt.getPredictionSet()) {
-					set.addAll(tokens.get(i).getFirstSet());
+					set.addAll(convert(tokens.get(i).getFirstSet()));
 				}
 				predictions.put(alt, set);
 			}
@@ -312,7 +313,15 @@ public class GrammarProperties {
 				head.setLL1SubGrammar(condition);
 			}
 		}
-		
+	}
+	
+	/**
+	 * Converts a 
+	 * @param set
+	 * @return
+	 */
+	private static Set<Integer> convert(Set<Range> set) {
+		return null;
 	}
 	
     private static boolean isLL1(HeadGrammarSlot nonterminal, Map<Alternate, Set<Integer>> predictions) {

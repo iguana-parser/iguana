@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractRegularExpression;
+import org.jgll.grammar.symbol.Range;
 import org.jgll.util.CollectionsUtil;
 
 public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
@@ -110,8 +111,8 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	}
 
 	@Override
-	public Set<Integer> getFirstSet() {
-		Set<Integer> firstSet = new HashSet<>();
+	public Set<Range> getFirstSet() {
+		Set<Range> firstSet = new HashSet<>();
 		for(T t : regularExpressions) {
 			firstSet.addAll(t.getFirstSet());
 		}

@@ -99,9 +99,9 @@ public class Character extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Set<Integer> getFirstSet() {
-		Set<Integer> firstSet = new HashSet<>();
-		firstSet.add(c);
+	public Set<Range> getFirstSet() {
+		Set<Range> firstSet = new HashSet<>();
+		firstSet.add(new Range(c, c));
 		return firstSet;
 	}
 

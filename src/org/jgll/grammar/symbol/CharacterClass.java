@@ -112,7 +112,7 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Set<Integer> getFirstSet() {
+	public Set<Range> getFirstSet() {
 		return alt.getFirstSet();
 	}
 }

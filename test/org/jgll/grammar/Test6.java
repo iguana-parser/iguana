@@ -10,7 +10,6 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,6 +56,6 @@ public class Test6 {
 		Input input = Input.fromString("abc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf1 = parser.parse(input, grammar, "S");
-	}	
+	}
 }
 	
