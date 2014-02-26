@@ -14,8 +14,10 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
+import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
@@ -54,6 +56,8 @@ public class GLLParserImpl implements GLLParser {
 	private GSSLookup gssLookup;
 	
 	private SPPFLookup sppfLookup;
+	
+	private DescriptorLookup descriptorLookup;
 
 	/**
 	 * u0 is the bottom of the GSS.
@@ -96,10 +100,15 @@ public class GLLParserImpl implements GLLParser {
 	private GSSLookupFactory gssLookupFactory;
 
 	private SPPFLookupFactory sppfLookupFactory;
+	
+	private DescriptorLookupFactory descriptorLookupFactory;
 
-	public GLLParserImpl(GSSLookupFactory gssLookupFactory, SPPFLookupFactory sppfLookupFactory) {
+	public GLLParserImpl(GSSLookupFactory gssLookupFactory, 
+						 SPPFLookupFactory sppfLookupFactory, 
+						 DescriptorLookupFactory descriptorLookupFactory) {
 		this.gssLookupFactory = gssLookupFactory;
 		this.sppfLookupFactory = sppfLookupFactory;
+		this.descriptorLookupFactory = descriptorLookupFactory;
 	}
 	
 	@Override
@@ -167,7 +176,7 @@ public class GLLParserImpl implements GLLParser {
 		Runtime runtime = Runtime.getRuntime();
 		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.info("Descriptors: %d", gssLookup.getDescriptorsCount());
+		log.info("Descriptors: %d", descriptorLookup.getDescriptorsCount());
 		log.info("GSS Nodes: %d", gssLookup.getGSSNodesCount());
 		log.info("GSS Edges: %d", gssLookup.getGSSEdgesCount());
 		log.info("Nonterminal nodes: %d", sppfLookup.getNonterminalNodesCount());
@@ -204,6 +213,7 @@ public class GLLParserImpl implements GLLParser {
 	private void initLookups(Grammar grammar, Input input) {
 		gssLookup = gssLookupFactory.createGSSLookupFactory(grammar, input);
 		sppfLookup = sppfLookupFactory.createSPPFLookup(grammar, input);
+		descriptorLookup = descriptorLookupFactory.createDescriptorLookup(grammar, input);
 	}
 
 	/**
@@ -219,7 +229,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public final void addDescriptor(GrammarSlot slot, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor descriptor = new Descriptor(slot, u, inputIndex, w);
-		boolean added = gssLookup.addDescriptor(descriptor);
+		boolean added = descriptorLookup.addDescriptor(descriptor);
 		if(added) {
 			log.trace("Descriptor created: %s : %b", descriptor, added);
 		}
@@ -229,7 +239,7 @@ public class GLLParserImpl implements GLLParser {
 	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object) {
 		Descriptor descriptor = new Descriptor(slot, currentGSSNode, inputIndex, currentNode);
 		descriptor.setObject(object);
-		boolean added = gssLookup.addDescriptor(descriptor);
+		boolean added = descriptorLookup.addDescriptor(descriptor);
 		if(added) {
 			log.trace("Descriptor created: %s : %b", descriptor, added);
 		}
@@ -410,12 +420,12 @@ public class GLLParserImpl implements GLLParser {
 	
 	@Override
 	public boolean hasNextDescriptor() {
-		return gssLookup.hasNextDescriptor();
+		return descriptorLookup.hasNextDescriptor();
 	}
 	
 	@Override
 	public Descriptor nextDescriptor() {
-		Descriptor descriptor = gssLookup.nextDescriptor();
+		Descriptor descriptor = descriptorLookup.nextDescriptor();
 		ci = descriptor.getInputIndex();
 		cu = descriptor.getGSSNode();
 		cn = descriptor.getSPPFNode();
@@ -441,6 +451,10 @@ public class GLLParserImpl implements GLLParser {
 	
 	public SPPFLookup getSPPFLookup() {
 		return sppfLookup;
+	}
+	
+	public DescriptorLookup getDescriptorLookup() {
+		return descriptorLookup;
 	}
 
 	@Override

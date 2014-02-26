@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.parser.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -16,12 +15,6 @@ import org.jgll.sppf.SPPFNode;
  *
  */
 public interface GSSLookup {
-	
-	public boolean hasNextDescriptor();
-	
-	public Descriptor nextDescriptor();
-	
-	public boolean addDescriptor(Descriptor descriptor);
 	
 	/**
 	 * Returns true if there is a GSS edge from source to destination
@@ -52,8 +45,6 @@ public interface GSSLookup {
 	public int getGSSNodesCount();
 	
 	public int getGSSEdgesCount();
-	
-	public int getDescriptorsCount();
 	
 	public Iterable<GSSNode> getGSSNodes();
 	

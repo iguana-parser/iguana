@@ -1,8 +1,6 @@
 package org.jgll.parser.lookup;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +8,6 @@ import java.util.Map;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.parser.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.GSSNodeFactory;
@@ -39,10 +36,6 @@ public class GSSLookupImpl implements GSSLookup {
 
 	private int tableSize = (int) Math.pow(2, 10);
 
-	private Deque<Descriptor> descriptorsStack;
-
-	private IguanaSet<Descriptor>[] descriptorsSet;
-
 	private IguanaSet<NonPackedNode>[] nonPackedNodes;
 
 	/**
@@ -63,8 +56,6 @@ public class GSSLookupImpl implements GSSLookup {
 		
 		long start = System.nanoTime();
 
-		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new IguanaSet[input.length()];
 		nonPackedNodes = new IguanaSet[input.length()];
 
 		gssTuples = new GSSTuple[grammar.getNonterminals().size()][input.length()];
@@ -121,69 +112,6 @@ public class GSSLookupImpl implements GSSLookup {
 		}
 
 		return nodes;
-	}
-
-	@Override
-	public boolean hasNextDescriptor() {
-		return !descriptorsStack.isEmpty();
-	}
-
-	@Override
-	public Descriptor nextDescriptor() {
-		return descriptorsStack.pop();
-	}
-
-	@Override
-	public boolean addDescriptor(Descriptor descriptor) {
-
-		IguanaSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
-		if (set == null) {
-			set = factory.newHashSet(tableSize, Descriptor.levelBasedExternalHasher);
-			descriptorsSet[descriptor.getInputIndex()] = set;
-			set.add(descriptor);
-			descriptorsStack.push(descriptor);
-			return true;
-		}
-
-		Descriptor add = set.add(descriptor);
-
-		if (add == null) {
-			descriptorsStack.push(descriptor);
-			return true;
-		}
-
-		return false;
-	}
-
-	@SuppressWarnings("unused")
-	private int getTotalCollisions() {
-		int total = 0;
-
-		for (int i = 0; i < descriptorsSet.length; i++) {
-			if (descriptorsSet[i] != null) {
-				total += descriptorsSet[i].getCollisionCount();
-			}
-		}
-
-		for (int i = 0; i < nonPackedNodes.length; i++) {
-			if (nonPackedNodes[i] != null) {
-				total += nonPackedNodes[i].getCollisionCount();
-			}
-		}
-
-		return total;
-	}
-
-
-	@Override
-	public int getDescriptorsCount() {
-		int count = 0;
-		for (int i = 0; i < descriptorsSet.length; i++) {
-			if (descriptorsSet[i] != null) {
-				count += descriptorsSet[i].size();
-			}
-		}
-		return count;
 	}
 
 	@Override

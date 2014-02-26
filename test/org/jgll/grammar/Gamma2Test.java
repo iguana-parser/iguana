@@ -15,8 +15,6 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -83,7 +81,7 @@ public class Gamma2Test {
 	
 	private String get100b() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 300; i++) {
+		for(int i = 0; i < 100; i++) {
 			sb.append("b");
 		}
 		return sb.toString();
