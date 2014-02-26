@@ -41,7 +41,7 @@ public class GSSLookupImpl implements GSSLookup {
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)
 	 */
-	private GSSTuple[][] gssTuples;
+	private GSSNode[][] gssNodes;
 
 	private final GSSNodeFactory gssNodeFactory;
 	
@@ -58,7 +58,7 @@ public class GSSLookupImpl implements GSSLookup {
 
 		nonPackedNodes = new IguanaSet[input.length()];
 
-		gssTuples = new GSSTuple[grammar.getNonterminals().size()][input.length()];
+		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.length()];
 
 		long end = System.nanoTime();
 		log.info("Lookup table initialization: %d ms", (end - start) / 1000_000);
@@ -69,28 +69,27 @@ public class GSSLookupImpl implements GSSLookup {
 	@Override
 	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex) {
 
-		GSSTuple gssTuple = gssTuples[head.getId()][inputIndex];
+		GSSNode gssNode = gssNodes[head.getId()][inputIndex];
 
-		if (gssTuple == null) {
-			GSSNode gssNode = gssNodeFactory.createGSSNode(head, inputIndex);
+		if (gssNode == null) {
+			gssNode = gssNodeFactory.createGSSNode(head, inputIndex);
 			log.trace("GSSNode created: (%s, %d)",  head, inputIndex);
-			gssTuple = new GSSTuple(gssNode);
-			gssTuples[head.getId()][inputIndex] = gssTuple;
+			gssNodes[head.getId()][inputIndex] = gssNode;
 			return gssNode;
 		}
 		
 		log.trace("GSSNode found: (%s, %d)",  head, inputIndex);
 
-		return gssTuple.getGssNode();
+		return gssNode;
 	}
 
 	@Override
 	public int getGSSNodesCount() {
 		int count = 0;
 
-		for (int i = 0; i < gssTuples.length; i++) {
-			for (int j = 0; j < gssTuples[i].length; j++) {
-				if (gssTuples[i][j] != null) {
+		for (int i = 0; i < gssNodes.length; i++) {
+			for (int j = 0; j < gssNodes[i].length; j++) {
+				if (gssNodes[i][j] != null) {
 					count++;
 				}
 			}
@@ -103,10 +102,10 @@ public class GSSLookupImpl implements GSSLookup {
 	public Iterable<GSSNode> getGSSNodes() {
 		List<GSSNode> nodes = new ArrayList<>();
 
-		for (int i = 0; i < gssTuples.length; i++) {
-			for (int j = 0; j < gssTuples[i].length; j++) {
-				if (gssTuples[i][j] != null) {
-					nodes.add(gssTuples[i][j].getGssNode());
+		for (int i = 0; i < gssNodes.length; i++) {
+			for (int j = 0; j < gssNodes[i].length; j++) {
+				if (gssNodes[i][j] != null) {
+					nodes.add(gssNodes[i][j]);
 				}
 			}
 		}
@@ -116,25 +115,17 @@ public class GSSLookupImpl implements GSSLookup {
 
 	@Override
 	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
-
-		GSSTuple gssTuple = gssTuples[source.getGrammarSlot().getId()][source.getInputIndex()];
-
-		IguanaSet<GSSEdge> set = gssTuple.getGssEdges();
-
-		GSSEdge edge = new GSSEdge(returnSlot, node, destination);
-		source.addChild(destination);
-
-		return set.add(edge) == null;
+		return source.getGSSEdge(destination, node, returnSlot);
 	}
 
 	@Override
 	public int getGSSEdgesCount() {
 		int count = 0;
 
-		for (int i = 0; i < gssTuples.length; i++) {
-			for (int j = 0; j < gssTuples[i].length; j++) {
-				if (gssTuples[i][j] != null) {
-					count += gssTuples[i][j].getGssEdges().size();
+		for (int i = 0; i < gssNodes.length; i++) {
+			for (int j = 0; j < gssNodes[i].length; j++) {
+				if (gssNodes[i][j] != null) {
+					count += gssNodes[i][j].getCountGSSEdges();
 				}
 			}
 		}
@@ -144,6 +135,7 @@ public class GSSLookupImpl implements GSSLookup {
 
 	@Override
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
+		gssNode.addToPoppedElements(sppfNode);
 	}
 
 	@Override
@@ -158,8 +150,7 @@ public class GSSLookupImpl implements GSSLookup {
 
 	@Override
 	public Iterable<GSSEdge> getEdges(GSSNode node) {
-		GSSTuple gssTuple = gssTuples[node.getGrammarSlot().getId()][node.getInputIndex()];
-		return gssTuple.getGssEdges();
+		return node.getGSSEdges();
 	}
 	
 	@Override

@@ -273,8 +273,7 @@ public class GLLParserImpl implements GLLParser {
 
 			log.trace("Pop %s, %d, %s", cu, ci, cn);
 			
-			cu.addToPoppedElements((NonPackedNode) cn);
-//			lookupTable.addToPoppedElements(cu, (NonPackedNode) cn);
+			gssLookup.addToPoppedElements(cu, (NonPackedNode) cn);
 			
 			label:
 			for(GSSEdge edge : gssLookup.getEdges(cu)) {

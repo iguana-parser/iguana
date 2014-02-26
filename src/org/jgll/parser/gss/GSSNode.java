@@ -1,8 +1,10 @@
 package org.jgll.parser.gss;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
@@ -28,6 +30,12 @@ public interface GSSNode {
 	public int sizeChildren();
 		
 	public GrammarSlot getGrammarSlot();
+	
+	public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot);
+	
+	public Iterable<GSSEdge> getGSSEdges();
+	
+	public int getCountGSSEdges();
 
 	public int getInputIndex();
 
@@ -83,6 +91,21 @@ public interface GSSNode {
 		@Override
 		public String toString() {
 			return "U0";
+		}
+
+		@Override
+		public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Iterable<GSSEdge> getGSSEdges() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int getCountGSSEdges() {
+			return 0;
 		}
 	}
 

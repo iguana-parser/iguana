@@ -15,7 +15,7 @@ public class ArrayBasedGSSNodeFactory implements GSSNodeFactory {
 	
 	@Override
 	public GSSNode createGSSNode(GrammarSlot slot, int inputIndex) {
-		return new ArrayBasedGSSNode((HeadGrammarSlot) slot, inputIndex, inputSize);
+		return new DefaultGSSNodeImpl((HeadGrammarSlot) slot, inputIndex, inputSize);
 	}
 
 }

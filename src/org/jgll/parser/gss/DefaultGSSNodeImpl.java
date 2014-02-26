@@ -5,13 +5,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.util.hashing.CuckooHashSet;
 
 
-class ArrayBasedGSSNode implements GSSNode {
+class DefaultGSSNodeImpl implements GSSNode {
 
 	private final HeadGrammarSlot head;
 
@@ -29,6 +32,8 @@ class ArrayBasedGSSNode implements GSSNode {
 	 * Maybe Hashset implemetations are faster. We should figure it out.
 	 */
 	private Set<Integer> addedPoppedElements;
+	
+	private final CuckooHashSet<GSSEdge> gssEdges;
 
 	private final int hash;
 	
@@ -39,12 +44,13 @@ class ArrayBasedGSSNode implements GSSNode {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	public ArrayBasedGSSNode(HeadGrammarSlot head, int inputIndex, int inputSize) {
+	public DefaultGSSNodeImpl(HeadGrammarSlot head, int inputIndex, int inputSize) {
 		this.head = head;
 		this.inputIndex = inputIndex;
 		children = new ArrayList<>();
 		poppedElements = new ArrayList<>();
 		addedPoppedElements = new HashSet<>();
+		gssEdges = new CuckooHashSet<>(GSSEdge.externalHasher);
 		
 		this.hash = GSSNode.externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
@@ -88,6 +94,18 @@ class ArrayBasedGSSNode implements GSSNode {
 	}
 	
 	@Override
+	public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
+		GSSEdge edge = new GSSEdge(returnSlot, node, destination);
+		addChild(destination);
+		return gssEdges.add(edge) == null;
+	}
+	
+	@Override
+	public Iterable<GSSEdge> getGSSEdges() {
+		return gssEdges;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		
 		if(this == obj) {
@@ -112,6 +130,11 @@ class ArrayBasedGSSNode implements GSSNode {
 	@Override
 	public String toString() {
 		return "(" + head + "," + inputIndex + ")";
+	}
+
+	@Override
+	public int getCountGSSEdges() {
+		return gssEdges.size();
 	}
 	
 }
