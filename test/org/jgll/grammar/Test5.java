@@ -2,6 +2,8 @@ package org.jgll.grammar;
 
 import static org.jgll.util.CollectionsUtil.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -39,7 +41,8 @@ public class Test5 {
 		Rule r2 = new Rule(S, list(a, A, b));
 		Rule r3 = new Rule(A, list(a));
 		
-		grammar = new GrammarBuilder("test5").addRule(r1).addRule(r2).addRule(r3).build();
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		grammar = new GrammarBuilder("test5", factory).addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
 	@Test

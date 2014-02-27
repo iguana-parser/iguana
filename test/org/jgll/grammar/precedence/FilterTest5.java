@@ -4,6 +4,8 @@ import static org.jgll.util.CollectionsUtil.list;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -33,7 +35,8 @@ public class FilterTest5 {
 	@Before
 	public void createGrammar() {
 		
-		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering", factory);
 		
 		// E ::= E z
 		Nonterminal E = new Nonterminal("E");

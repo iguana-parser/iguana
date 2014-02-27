@@ -4,6 +4,8 @@ import static org.jgll.util.BitSetUtil.*;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -46,7 +48,8 @@ public class LeftFactorizedArithmeticGrammarTest {
 	@Before
 	public void createGrammar() {
 
-		GrammarBuilder builder = new GrammarBuilder("LeftFactorizedArithmeticExpressions");
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder("LeftFactorizedArithmeticExpressions", factory);
 		
 		Rule r1 = new Rule(E, list(T, E1));
 		Rule r2 = new Rule(E1, list(plus, T, E1));

@@ -3,6 +3,8 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -36,7 +38,9 @@ public class Test3 {
 		Rule r1 = new Rule(new Nonterminal("A"), list(new Nonterminal("B"), new Nonterminal("C")));
 		Rule r2 = new Rule(new Nonterminal("B"), list(new Character('b')));
 		Rule r3 = new Rule(new Nonterminal("C"), list(new Character('c')));
-		grammar = new GrammarBuilder("test3").addRule(r1).addRule(r2).addRule(r3).build();
+		
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		grammar = new GrammarBuilder("test3", factory).addRule(r1).addRule(r2).addRule(r3).build();
 		
 		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}

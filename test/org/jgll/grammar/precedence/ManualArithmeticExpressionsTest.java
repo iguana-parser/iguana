@@ -4,6 +4,8 @@ import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -35,7 +37,8 @@ public class ManualArithmeticExpressionsTest {
 	@Before
 	public void createGrammar() {
 
-		GrammarBuilder builder = new GrammarBuilder("ArithmeticExpressions");
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder("ArithmeticExpressions", factory);
 
 		Nonterminal E = new Nonterminal("E");
 		Nonterminal T = new Nonterminal("T");

@@ -7,6 +7,8 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -49,7 +51,8 @@ public class PrecedeRestrictionTest2 {
 		Character ws = new Character(' ');
 		Range az = new Range('a', 'z');
 
-		GrammarBuilder builder = new GrammarBuilder();
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder(factory);
 
 		Rule r1 = new Rule(S, forr, new Opt(L), Id);
 

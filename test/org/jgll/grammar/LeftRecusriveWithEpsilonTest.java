@@ -2,6 +2,8 @@ package org.jgll.grammar;
 
 import static org.jgll.util.CollectionsUtil.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -32,7 +34,10 @@ public class LeftRecusriveWithEpsilonTest {
 		Rule r1 = new Rule(A, list(A, A));
 		Rule r2 = new Rule(A, list(new Character('a')));
 		Rule r3 = new Rule(A);
-		GrammarBuilder builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
+
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder("IndirectRecursion", factory)
+													  .addRule(r1)
 													  .addRule(r2)
 													  .addRule(r3);
 		

@@ -4,6 +4,8 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -41,7 +43,8 @@ public class Gamma0Test {
 	@Before
 	public void init() {
 		
-		GrammarBuilder builder = new GrammarBuilder("gamma1");
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder("gamma1", factory);
 
 		Rule r1 = new Rule(S, list(a, S));
 		builder.addRule(r1);

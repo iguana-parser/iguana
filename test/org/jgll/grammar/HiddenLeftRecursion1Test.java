@@ -3,6 +3,8 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -56,8 +58,9 @@ public class HiddenLeftRecursion1Test {
 		Rule r6 = new Rule(D, list(y));
 		Rule r7 = new Rule(D);
 		
-
-		builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		builder = new GrammarBuilder("IndirectRecursion", factory)
+														 .addRule(r1)
 														 .addRule(r2)
 														 .addRule(r3)
 														 .addRule(r4)

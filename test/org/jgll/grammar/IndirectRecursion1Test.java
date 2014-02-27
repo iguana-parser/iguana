@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 import java.util.Set;
 
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -46,7 +48,10 @@ public class IndirectRecursion1Test {
 		Rule r3 = new Rule(B, list(A));
 		Rule r4 = new Rule(B, list(new Character('b')));
 		Rule r5 = new Rule(C, list(new Character('c')));
-		builder = new GrammarBuilder("IndirectRecursion").addRule(r1)
+		
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		builder = new GrammarBuilder("IndirectRecursion", factory)
+													  .addRule(r1)
 													  .addRule(r2)
 													  .addRule(r3)
 													  .addRule(r4)

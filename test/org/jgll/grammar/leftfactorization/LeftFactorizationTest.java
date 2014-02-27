@@ -6,6 +6,8 @@ import static org.jgll.util.CollectionsUtil.*;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBank;
 import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Character;
@@ -41,7 +43,8 @@ public class LeftFactorizationTest {
 		Character b = new Character('b');
 		Character c = new Character('c');
 		
-		GrammarBuilder builder = new GrammarBuilder("test");
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder("test", factory);
 		
 		builder.addRule(new Rule(S, list(A, b)));
 		builder.addRule(new Rule(S, list(A, c)));

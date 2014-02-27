@@ -3,6 +3,8 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -36,7 +38,9 @@ public class KeywordTest2 {
 		Rule r1 = new Rule(A, list(iff, B));
 		Rule r2 = new Rule(B, new Character('b'));
 		
-		GrammarBuilder builder = new GrammarBuilder();
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder(factory);
+		
 		builder.addRule(r1);
 		builder.addRule(r2);
 		builder.addRule(GrammarBuilder.fromKeyword(iff));

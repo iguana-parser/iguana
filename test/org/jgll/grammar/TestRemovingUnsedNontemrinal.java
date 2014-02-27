@@ -2,11 +2,12 @@ package org.jgll.grammar;
 
 import static org.jgll.util.CollectionsUtil.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.junit.Before;
-import org.junit.Test;
 
 
 /**
@@ -31,7 +32,8 @@ public class TestRemovingUnsedNontemrinal {
 	@Before
 	public void init() {
 		
-		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering");
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering", factory);
 		
 		Character b = new Character('b');
 		Character c = new Character('c');
@@ -51,13 +53,6 @@ public class TestRemovingUnsedNontemrinal {
 		builder.addRule(new Rule(E, list(e)));
 
 		grammar = builder.removeUnusedNonterminals(S).build();
-	}
-	
-	@Test
-	public void test() {
-		System.out.println(grammar);
-	}
-	
-	
+	}	
 	
 }

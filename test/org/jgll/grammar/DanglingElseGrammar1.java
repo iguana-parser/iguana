@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -37,7 +39,8 @@ public class DanglingElseGrammar1 {
 	@Before
 	public void createGrammar() {
 		
-		GrammarBuilder builder = new GrammarBuilder("DanglingElse");
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
 		Nonterminal S = new Nonterminal("S");
 		Character s = new Character('s');

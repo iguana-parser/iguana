@@ -2,6 +2,8 @@ package org.jgll.grammar;
 
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -30,7 +32,9 @@ public class Test1 {
 	@Before
 	public void init() {
 		Rule r1 = new Rule(new Nonterminal("A"));
-		grammar = new GrammarBuilder("epsilon").addRule(r1).build();
+		
+		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		grammar = new GrammarBuilder("epsilon", factory).addRule(r1).build();
 		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}
 	

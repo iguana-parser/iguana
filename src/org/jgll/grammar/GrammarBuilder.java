@@ -25,6 +25,7 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slotaction.FollowActions;
 import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
@@ -97,13 +98,16 @@ public class GrammarBuilder implements Serializable {
 	Map<HeadGrammarSlot, Set<Integer>> firstSets;
 
 	Map<HeadGrammarSlot, Set<Integer>> followSets;
+
+	private GrammarSlotFactory grammarSlotFactory;
 	
-	public GrammarBuilder() {
-		this("no-name");
+	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
+		this("no-name", grammarSlotFactory);
 	}
 	
-	public GrammarBuilder(String name) {
+	public GrammarBuilder(String name, GrammarSlotFactory grammarSlotFactory) {
 		this.name = name;
+		this.grammarSlotFactory = grammarSlotFactory;
 		nonterminals = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
 		precednecePatternsMap = new HashMap<>();
@@ -359,7 +363,7 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
 
 		if (headGrammarSlot == null) {
-			headGrammarSlot = new HeadGrammarSlot(nonterminal);
+			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal);
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
 			nonterminals.add(headGrammarSlot);
 		}
@@ -381,7 +385,7 @@ public class GrammarBuilder implements Serializable {
 		
 		start = System.nanoTime();
 		
-//		GrammarProperties.setPredictionSets(nonterminals, tokens, firstSets, followSets);
+		GrammarProperties.setPredictionSets(nonterminals, tokens, firstSets, followSets);
 		end = System.nanoTime();
 		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
 		
@@ -523,7 +527,7 @@ public class GrammarBuilder implements Serializable {
 			HeadGrammarSlot freshNonterminal = map.get(e.getValue());
 			
 			if(freshNonterminal == null) {
-				freshNonterminal = new HeadGrammarSlot(pattern.getNonterminal());
+				freshNonterminal = grammarSlotFactory.createHeadGrammarSlot(pattern.getNonterminal());
 				addNewNonterminal(freshNonterminal);
 				map.put(e.getValue(), freshNonterminal);
 			}
@@ -625,7 +629,7 @@ public class GrammarBuilder implements Serializable {
 		
 		if(newNonterminal == null) {
 			
-			newNonterminal = new HeadGrammarSlot(filteredNonterminal.getNonterminal());
+			newNonterminal = grammarSlotFactory.createHeadGrammarSlot(filteredNonterminal.getNonterminal());
 			
 			addNewNonterminal(newNonterminal);
 			
@@ -793,7 +797,7 @@ public class GrammarBuilder implements Serializable {
 			return copy;
 		}
 		
-		copy = new HeadGrammarSlot(head.getNonterminal());
+		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal());
 		addNewNonterminal(copy);
 		map.put(head, copy);
 		
@@ -820,7 +824,7 @@ public class GrammarBuilder implements Serializable {
 			return copy;
 		}
 		
-		copy = new HeadGrammarSlot(head.getNonterminal());
+		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal());
 		addNewNonterminal(copy);
 		map.put(head, copy);
 		
@@ -1143,7 +1147,7 @@ public class GrammarBuilder implements Serializable {
 		
 		Nonterminal nonterminal = new Nonterminal("C_" + ++count);
 		nonterminal.setCollapsible(true);
-		HeadGrammarSlot newHead = new HeadGrammarSlot(nonterminal);
+		HeadGrammarSlot newHead = grammarSlotFactory.createHeadGrammarSlot(nonterminal);
 		
 		nonterminalsMap.put(nonterminal, newHead);
 		collapsibleNonterminals.add(newHead);
