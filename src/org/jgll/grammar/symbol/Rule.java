@@ -21,7 +21,7 @@ public class Rule implements Serializable {
 	
 	private final Nonterminal head;
 	
-	private final transient Object object;
+	private final Serializable object;
 	
 	private List<Condition> conditions;
 	
@@ -41,7 +41,7 @@ public class Rule implements Serializable {
 		this(head, body, null);
 	}
 	
-	public Rule(Nonterminal head, List<? extends Symbol> body, Object object) {
+	public Rule(Nonterminal head, List<? extends Symbol> body, Serializable object) {
 		if(head == null) {
 			throw new IllegalArgumentException("head cannot be null.");
 		}
@@ -74,7 +74,7 @@ public class Rule implements Serializable {
 		return body.size();
 	}
 	
-	public Object getObject() {
+	public Serializable getObject() {
 		return object;
 	}
 		

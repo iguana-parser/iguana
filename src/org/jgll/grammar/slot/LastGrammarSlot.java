@@ -1,6 +1,7 @@
 package org.jgll.grammar.slot;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
 
 import org.jgll.grammar.symbol.Symbol;
@@ -24,11 +25,11 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	 * retrieved later when traversing the parse tree.
 	 * This object can be accessed via the getObject() method of a nonterminal symbol node.
 	 */
-	private transient Object object;
+	private Serializable object;
 	
 	protected int alternateIndex;
 	
-	public LastGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head, Object object) {
+	public LastGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object) {
 		super(position, previous, head);
 		this.object = object;
 	}
@@ -64,11 +65,11 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		throw new UnsupportedOperationException();
 	}
 	
-	public Object getObject() {
+	public Serializable getObject() {
 		return object;
 	}
 	
-	public void setObject(Object object) {
+	public void setObject(Serializable object) {
 		this.object = object;
 	}
 

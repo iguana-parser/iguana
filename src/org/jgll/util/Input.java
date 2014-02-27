@@ -57,6 +57,20 @@ public class Input {
 	public static Input fromIntArray(int[] input) {
 		return new Input(input, URI.create("dummy:///"));
 	}
+	
+	public static Input fromCharArray(char[] input, URI uri) {
+		int[] result = new int[Character.codePointCount(input, 0, input.length) + 1];
+		int j = 0;
+		
+		for(int i = 0; i < input.length; i++){
+			if (!Character.isLowSurrogate(input[i])) {
+				result[j++] = Character.codePointAt(input, i);
+			}
+		}
+		
+		result[result.length - 1] = 0;
+		return new Input(result, uri);
+	}
 
 	public static Input fromString(String s) {
 		return new Input(convert(s), URI.create("dummy:///"));
