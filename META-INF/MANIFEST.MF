@@ -13,6 +13,7 @@ Export-Package:
  org.jgll.grammar.patterns,
  org.jgll.grammar.precedence,
  org.jgll.grammar.slot,
+ org.jgll.grammar.slot.factory,
  org.jgll.grammar.slotaction,
  org.jgll.grammar.symbol,
  org.jgll.lexer,

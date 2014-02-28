@@ -16,7 +16,6 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,7 +59,6 @@ public class LeftFactorizedArithmeticGrammarTest {
 		Rule r7 = new Rule(F, list(openPar, E, closePar));
 		Rule r8 = new Rule(F, list(a));
 		
-		
 		builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8);
 		grammar = builder.build();
 	}
@@ -87,7 +85,6 @@ public class LeftFactorizedArithmeticGrammarTest {
 		Input input = Input.fromString("a+a*a+a");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", sppf, input);
 	}
 
 }

@@ -58,7 +58,11 @@ public class HeadGrammarSlotWithFirstFollowCheck extends HeadGrammarSlot {
 					}
 					s1.add(alt.getFirstSlot());
 					
-					predictionMap.put(r.getEnd() + 1, null);
+					Set<BodyGrammarSlot> s2 = predictionMap.get(r.getEnd() + 1);
+					if(s2 == null) {
+						predictionMap.put(r.getEnd() + 1, null);						
+					}
+					
 				}
 			}
  		}
