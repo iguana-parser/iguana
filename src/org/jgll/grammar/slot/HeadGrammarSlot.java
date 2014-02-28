@@ -256,29 +256,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return predictionSet;
 	}
 	
-	public void setPredictionSet(Set<Integer> predictionSet, List<RegularExpression> regularExpressions) {
-		
-//		predictionMap = new HashMap<>();
-//
-//		for(int i = 0; i < alternates.size(); i++) {
-//			
-//			final Alternate alternate = alternates.get(i);
-//			
-//			Set<Integer> set = alternate.getPredictionSet();
-//
-//			for (int j : set) {
-//				RegularExpression regex = regularExpressions.get(j);
-//				for(int k : regex.getFirstSet()) {
-//					Set<BodyGrammarSlot> s = predictionMap.get(k);
-//					if(s == null) {
-//						s = new HashSet<>();
-//						predictionMap.put(k, s);
-//					}
-//					s.add(alternate.getFirstSlot());					
-//				}
-//			}
-//		}
-		
+	public void setPredictionSet(List<RegularExpression> regularExpressions) {
 	}
 	
 	public boolean contains(List<Symbol> list) {

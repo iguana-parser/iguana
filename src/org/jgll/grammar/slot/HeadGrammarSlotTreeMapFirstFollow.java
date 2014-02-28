@@ -14,13 +14,13 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 
-public class HeadGrammarSlotWithFirstFollowCheck extends HeadGrammarSlot {
+public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
 	private NavigableMap<Integer, Set<BodyGrammarSlot>> predictionMap;
 
-	public HeadGrammarSlotWithFirstFollowCheck(Nonterminal nonterminal) {
+	public HeadGrammarSlotTreeMapFirstFollow(Nonterminal nonterminal) {
 		super(nonterminal);
 		predictionMap = new TreeMap<>();
 	}
@@ -43,7 +43,8 @@ public class HeadGrammarSlotWithFirstFollowCheck extends HeadGrammarSlot {
 		return null;
 	}
 	
-	public void setPredictionSet(Set<Integer> predictionSet, List<RegularExpression> regularExpressions) {
+	@Override
+	public void setPredictionSet(List<RegularExpression> regularExpressions) {
 		
 		predictionMap = new TreeMap<>();
 

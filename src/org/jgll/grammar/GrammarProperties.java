@@ -242,13 +242,7 @@ public class GrammarProperties {
 					}
 			}
 			
-			Set<Integer> predictionSet = new HashSet<>();
-			predictionSet.addAll(firstSets.get(head));
-			if(head.isNullable()) {
-				predictionSet.addAll(followSets.get(head));
-			}
-			predictionSet.remove(Epsilon.TOKEN_ID);
-			head.setPredictionSet(predictionSet, regularExpressions);
+			head.setPredictionSet(regularExpressions);
 		}
 	}
 	
