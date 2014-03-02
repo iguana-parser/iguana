@@ -214,8 +214,7 @@ public class GrammarProperties {
 		}
 	}
 	
-	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, 
-										 List<RegularExpression> regularExpressions,
+	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals,
 										 Map<Nonterminal, Set<RegularExpression>> firstSets,
 										 Map<Nonterminal, Set<RegularExpression>> followSets) {
 		
@@ -246,7 +245,7 @@ public class GrammarProperties {
 					}
 			}
 			
-			head.setPredictionSet(regularExpressions);
+			head.setPredictionSet();
 		}
 	}
 	

@@ -14,7 +14,6 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -256,7 +255,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return predictionSet;
 	}
 	
-	public void setPredictionSet(List<RegularExpression> regularExpressions) {
+	public void setPredictionSet() {
 	}
 	
 	public boolean contains(List<Symbol> list) {

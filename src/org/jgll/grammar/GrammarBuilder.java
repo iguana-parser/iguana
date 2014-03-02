@@ -385,7 +385,7 @@ public class GrammarBuilder implements Serializable {
 		
 		start = System.nanoTime();
 		
-		GrammarProperties.setPredictionSets(nonterminals, tokens, firstSets, followSets);
+		GrammarProperties.setPredictionSets(nonterminals, firstSets, followSets);
 		end = System.nanoTime();
 		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
 		
