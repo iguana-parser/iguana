@@ -251,7 +251,7 @@ public class GrammarBuilder implements Serializable {
 		
 		if(symbol instanceof RegularExpression) {
 			RegularExpression token = (RegularExpression) symbol;
-			return new TokenGrammarSlot(symbolIndex, currentSlot, token, headGrammarSlot, getTokenID(token));
+			return grammarSlotFactory.createTokenGrammarSlot(symbolIndex, currentSlot, token, headGrammarSlot, getTokenID(token));
 		}
 		
 		// Nonterminal
@@ -345,7 +345,7 @@ public class GrammarBuilder implements Serializable {
 			} 
 			else if(symbol instanceof RegularExpression) {
 				RegularExpression token = (RegularExpression) symbol;
-				currentSlot = new TokenGrammarSlot(index, currentSlot, token, null, getTokenID(token));
+				currentSlot = grammarSlotFactory.createTokenGrammarSlot(index, currentSlot, token, null, getTokenID(token));
 			}
 			
 			if(index == 0) {
@@ -1107,7 +1107,7 @@ public class GrammarBuilder implements Serializable {
 		
 		else if(slot instanceof TokenGrammarSlot) {
 			RegularExpression token = ((TokenGrammarSlot)slot).getSymbol();
-			TokenGrammarSlot newSlot = new TokenGrammarSlot(symbolIndex, previous, token, head, getTokenID(token));
+			TokenGrammarSlot newSlot = grammarSlotFactory.createTokenGrammarSlot(symbolIndex, previous, token, head, getTokenID(token));
 			copyActions(slot, newSlot);
 			return newSlot;
 		}

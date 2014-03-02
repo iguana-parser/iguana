@@ -20,7 +20,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int tokenID;
+	protected int tokenID;
 	
 	private RegularExpression RegularExpression;
 	
@@ -39,6 +39,10 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+
+		if(executePreConditions(parser, lexer)) {
+			return null;
+		}
 		
 		int ci = parser.getCurrentInputIndex();
 
@@ -49,10 +53,6 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		if(executePreConditions(parser, lexer)) {
-			return null;
-		}
-				
 		TokenSymbolNode cr = parser.getTokenNode(tokenID, ci, length);
 		
 		// No GSS node is created for token grammar slots, therefore, pop
