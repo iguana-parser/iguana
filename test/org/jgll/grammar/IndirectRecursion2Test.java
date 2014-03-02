@@ -56,8 +56,8 @@ public class IndirectRecursion2Test {
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammar.getNonterminalByName("A").isNullable());
-		assertTrue(grammar.getNonterminalByName("B").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("A").isNullable());
+		assertTrue(grammar.getHeadGrammarSlot("B").isNullable());
 	}
 	
 	@Test
@@ -71,17 +71,17 @@ public class IndirectRecursion2Test {
 	@Test
 	public void testReachabilityGraph() {
 		Set<HeadGrammarSlot> set = builder.getDirectReachableNonterminals("A");
-		assertTrue(set.contains(grammar.getNonterminalByName("A")));
-		assertTrue(set.contains(grammar.getNonterminalByName("B")));
+		assertTrue(set.contains(grammar.getHeadGrammarSlot("A")));
+		assertTrue(set.contains(grammar.getHeadGrammarSlot("B")));
 	}
 	
 	private SPPFNode expectedSPPF() {		
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 2);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [d]"), 0, 1);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B . A [d]"), 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 0);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
 		TokenSymbolNode node6 = new TokenSymbolNode(3, 0, 1);
 		node5.addChild(node6);
 		node2.addChild(node3);

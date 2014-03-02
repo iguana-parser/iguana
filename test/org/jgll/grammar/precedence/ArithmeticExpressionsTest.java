@@ -81,9 +81,9 @@ public class ArithmeticExpressionsTest {
 	}
 	
 	private SPPFNode getSPPFNode() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 5);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("E"), 0, 5);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E [+] . E2"), 0, 2);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("E"), 0, 1);
 		TokenSymbolNode node4 = new TokenSymbolNode(4, 0, 1);
 		node3.addChild(node4);
 		TokenSymbolNode node5 = new TokenSymbolNode(3, 1, 1);

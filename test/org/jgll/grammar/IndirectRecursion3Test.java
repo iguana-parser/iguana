@@ -66,8 +66,8 @@ public class IndirectRecursion3Test {
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammar.getNonterminalByName("A").isNullable());
-		assertFalse(grammar.getNonterminalByName("B").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("A").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("B").isNullable());
 	}
 	
 	@Test
@@ -95,11 +95,11 @@ public class IndirectRecursion3Test {
 	}
 	
 	private SPPFNode getSPPFNode1() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 4);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 2);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 4);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 2);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
 		TokenSymbolNode node6 = new TokenSymbolNode(4, 0, 1);
 		node5.addChild(node6);
 		TokenSymbolNode node7 = new TokenSymbolNode(5, 1, 1);
@@ -118,13 +118,13 @@ public class IndirectRecursion3Test {
 	}
 	
 	private SPPFNode getSPPFNode2() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 7);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 6);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 2);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 7);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 6);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
 		TokenSymbolNode node8 = new TokenSymbolNode(4, 0, 1);
 		node7.addChild(node8);
 		TokenSymbolNode node9 = new TokenSymbolNode(6, 1, 1);
@@ -149,13 +149,13 @@ public class IndirectRecursion3Test {
 	}
 	
 	private SPPFNode getSPPFNode3() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 7);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 6);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 2);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 7);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 6);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
 		TokenSymbolNode node8 = new TokenSymbolNode(4, 0, 1);
 		node7.addChild(node8);
 		TokenSymbolNode node9 = new TokenSymbolNode(6, 1, 1);

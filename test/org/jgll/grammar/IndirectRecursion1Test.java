@@ -70,19 +70,19 @@ public class IndirectRecursion1Test {
 	@Test
 	public void testReachabilityGraph() {
 		Set<HeadGrammarSlot> set = builder.getDirectReachableNonterminals("A");
-		assertTrue(set.contains(grammar.getNonterminalByName("A")));
-		assertTrue(set.contains(grammar.getNonterminalByName("B")));
+		assertTrue(set.contains(grammar.getHeadGrammarSlot("A")));
+		assertTrue(set.contains(grammar.getHeadGrammarSlot("B")));
 		
 		set = builder.getDirectReachableNonterminals("B");
-		assertTrue(set.contains(grammar.getNonterminalByName("A")));
+		assertTrue(set.contains(grammar.getHeadGrammarSlot("A")));
 	}
 	
 	private SPPFNode expectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 2);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 1);
 		TokenSymbolNode node3 = new TokenSymbolNode(3, 0, 1);
 		node2.addChild(node3);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 1, 2);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 1, 2);
 		TokenSymbolNode node5 = new TokenSymbolNode(4, 1, 1);
 		node4.addChild(node5);
 		node1.addChild(node2);

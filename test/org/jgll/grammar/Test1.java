@@ -40,7 +40,7 @@ public class Test1 {
 	
 	@Test
 	public void testNullable() {
-		assertTrue(grammar.getNonterminalByName("A").isNullable());
+		assertTrue(grammar.getHeadGrammarSlot("A").isNullable());
 	}
 	
 	@Test

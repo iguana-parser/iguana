@@ -56,16 +56,16 @@ public class Test4 {
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammar.getNonterminalByName("A").isNullable());
-		assertFalse(grammar.getNonterminalByName("B").isNullable());
-		assertFalse(grammar.getNonterminalByName("C").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("A").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("B").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("C").isNullable());
 	}
 	
 	@Test
 	public void testLL1() {
-		assertFalse(grammar.getNonterminalByName("A").isLL1SubGrammar());
-		assertTrue(grammar.getNonterminalByName("B").isLL1SubGrammar());
-		assertTrue(grammar.getNonterminalByName("C").isLL1SubGrammar());
+		assertFalse(grammar.getHeadGrammarSlot("A").isLL1SubGrammar());
+		assertTrue(grammar.getHeadGrammarSlot("B").isLL1SubGrammar());
+		assertTrue(grammar.getHeadGrammarSlot("C").isLL1SubGrammar());
 	}
 	
 	@Test
@@ -84,10 +84,10 @@ public class Test4 {
 	}
 	
 	private SPPFNode getSPPF1() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= [a] B . [c]"), 0, 2);
 		TokenSymbolNode node3 = new TokenSymbolNode(2, 0, 1);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 1, 2);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 1, 2);
 		TokenSymbolNode node5 = new TokenSymbolNode(4, 1, 1);
 		node4.addChild(node5);
 		node2.addChild(node3);
@@ -99,16 +99,16 @@ public class Test4 {
 	}
 	
 	private SPPFNode getSPPF2() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 0, 5);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 5);
 		TokenSymbolNode node3 = new TokenSymbolNode(2, 0, 1);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 1, 5);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 1, 5);
 		TokenSymbolNode node5 = new TokenSymbolNode(2, 1, 1);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 2, 5);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 2, 5);
 		TokenSymbolNode node7 = new TokenSymbolNode(2, 2, 1);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 3, 5);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 3, 5);
 		TokenSymbolNode node9 = new TokenSymbolNode(2, 3, 1);
-		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByName("C"), 4, 5);
+		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 4, 5);
 		TokenSymbolNode node11 = new TokenSymbolNode(3, 4, 1);
 		node10.addChild(node11);
 		node8.addChild(node9);

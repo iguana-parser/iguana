@@ -130,7 +130,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public final NonterminalSymbolNode parse(GLLLexer lexer, Grammar grammar, String startSymbolName) throws ParseError {
 		
-		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(startSymbolName);
+		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
 		
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");

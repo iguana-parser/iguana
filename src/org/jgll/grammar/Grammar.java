@@ -72,9 +72,9 @@ public class Grammar implements Serializable {
 	
 	private Matcher[] dfas;
 	
-	private Map<HeadGrammarSlot, Set<RegularExpression>> firstSets;
+	private Map<Nonterminal, Set<RegularExpression>> firstSets;
 	
-	private Map<HeadGrammarSlot, Set<RegularExpression>> followSets;
+	private Map<Nonterminal, Set<RegularExpression>> followSets;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -168,7 +168,7 @@ public class Grammar implements Serializable {
 		return slots;
 	}
 	
-	public HeadGrammarSlot getNonterminalByName(String name) {
+	public HeadGrammarSlot getHeadGrammarSlot(String name) {
 		return nameToNonterminals.get(new Nonterminal(name));
 	}
 	
@@ -334,12 +334,12 @@ public class Grammar implements Serializable {
 		return dfas[id];
 	}
 	
-	public Set<RegularExpression> getFirstSet(HeadGrammarSlot head) {
-		return firstSets.get(head);
+	public Set<RegularExpression> getFirstSet(Nonterminal nonterminal) {
+		return firstSets.get(nonterminal);
 	}
 	
-	public Set<RegularExpression> getFollowSet(HeadGrammarSlot head) {
-		return followSets.get(head);
+	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
+		return followSets.get(nonterminal);
 	}
 
 	

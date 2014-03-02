@@ -41,7 +41,7 @@ public class Test2 {
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammar.getNonterminalByName("A").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("A").isNullable());
 	}
 	
 	@Test

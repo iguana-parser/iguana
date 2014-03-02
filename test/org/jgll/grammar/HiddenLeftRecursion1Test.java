@@ -94,14 +94,14 @@ public class HiddenLeftRecursion1Test {
 	}
 	
 	private SPPFNode getSPPFNode1() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 2);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B . A [a]"), 0, 1);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 1);
 		TokenSymbolNode node5 = new TokenSymbolNode(5, 0, 1);
 		node4.addChild(node5);
 		node3.addChild(node4);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 2);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 2);
 		TokenSymbolNode node7 = new TokenSymbolNode(4, 1, 1);
 		node6.addChild(node7);
 		node2.addChild(node3);
@@ -113,14 +113,14 @@ public class HiddenLeftRecursion1Test {
 	}
 	
 	private SPPFNode getSPPFNode2() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 2);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D . A [b]"), 0, 1);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 0, 1);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("D"), 0, 1);
 		TokenSymbolNode node5 = new TokenSymbolNode(6, 0, 1);
 		node4.addChild(node5);
 		node3.addChild(node4);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 2);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 2);
 		TokenSymbolNode node7 = new TokenSymbolNode(4, 1, 1);
 		node6.addChild(node7);
 		node2.addChild(node3);
@@ -132,27 +132,27 @@ public class HiddenLeftRecursion1Test {
 	}
 	
 	private SPPFNode getSPPFNode3() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 8);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 8);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 7);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D . A [b]"), 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 0, 0);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("D"), 0, 0);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 7);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 7);
 		IntermediateNode node6 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 6);
 		IntermediateNode node7 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B . A [a]"), 0, 0);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 0);
 		node7.addChild(node8);
-		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 6);
+		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 6);
 		IntermediateNode node10 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 5);
-		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
+		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
 		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 4);
-		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 4);
+		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 4);
 		IntermediateNode node14 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 3);
-		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
 		IntermediateNode node16 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 2);
-		NonterminalSymbolNode node17 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 2);
+		NonterminalSymbolNode node17 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 2);
 		IntermediateNode node18 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 1);
-		NonterminalSymbolNode node19 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		NonterminalSymbolNode node19 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
 		TokenSymbolNode node20 = new TokenSymbolNode(4, 0, 1);
 		node19.addChild(node20);
 		node18.addChild(node7);
@@ -194,27 +194,27 @@ public class HiddenLeftRecursion1Test {
 	}
 	
 	private SPPFNode getSPPFNode4() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 8);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 8);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 7);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D . A [b]"), 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 0, 0);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("D"), 0, 0);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 7);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 7);
 		IntermediateNode node6 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 6);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 6);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 6);
 		IntermediateNode node8 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 5);
-		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 5);
+		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
 		IntermediateNode node10 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 4);
-		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 4);
+		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 4);
 		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 3);
-		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 3);
+		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
 		IntermediateNode node14 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 2);
 		IntermediateNode node15 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B . A [a]"), 0, 1);
-		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
+		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 1);
 		TokenSymbolNode node17 = new TokenSymbolNode(5, 0, 1);
 		node16.addChild(node17);
 		node15.addChild(node16);
-		NonterminalSymbolNode node18 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 2);
+		NonterminalSymbolNode node18 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 2);
 		TokenSymbolNode node19 = new TokenSymbolNode(4, 1, 1);
 		node18.addChild(node19);
 		node14.addChild(node15);
@@ -251,36 +251,36 @@ public class HiddenLeftRecursion1Test {
 	}
 	
 	private SPPFNode getSPPFNode5() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 11);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 11);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 10);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B . A [a]"), 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 0);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 0);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 10);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 10);
 		IntermediateNode node6 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 9);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 9);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 9);
 		IntermediateNode node8 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 8);
-		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 8);
+		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 8);
 		IntermediateNode node10 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 0, 7);
-		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 7);
+		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 7);
 		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D A . [b]"), 0, 6);
 		IntermediateNode node13 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= D . A [b]"), 0, 1);
-		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getNonterminalByName("D"), 0, 1);
+		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("D"), 0, 1);
 		TokenSymbolNode node15 = new TokenSymbolNode(6, 0, 1);
 		node14.addChild(node15);
 		node13.addChild(node14);
-		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 6);
+		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 6);
 		IntermediateNode node17 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 1, 5);
 		IntermediateNode node18 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B . A [a]"), 1, 1);
-		NonterminalSymbolNode node19 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 1, 1);
+		NonterminalSymbolNode node19 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 1, 1);
 		node18.addChild(node19);
-		NonterminalSymbolNode node20 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 5);
+		NonterminalSymbolNode node20 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 5);
 		IntermediateNode node21 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 1, 4);
-		NonterminalSymbolNode node22 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 4);
+		NonterminalSymbolNode node22 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 4);
 		IntermediateNode node23 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 1, 3);
-		NonterminalSymbolNode node24 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 3);
+		NonterminalSymbolNode node24 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 3);
 		IntermediateNode node25 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [a]"), 1, 2);
-		NonterminalSymbolNode node26 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 2);
+		NonterminalSymbolNode node26 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 2);
 		TokenSymbolNode node27 = new TokenSymbolNode(4, 1, 1);
 		node26.addChild(node27);
 		node25.addChild(node18);

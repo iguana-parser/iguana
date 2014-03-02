@@ -16,17 +16,18 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
 public class GrammarProperties {
 	
-	public static Map<HeadGrammarSlot, Set<RegularExpression>> calculateFirstSets(Iterable<HeadGrammarSlot> nonterminals) {
+	public static Map<Nonterminal, Set<RegularExpression>> calculateFirstSets(Iterable<HeadGrammarSlot> nonterminals) {
 		
-		Map<HeadGrammarSlot, Set<RegularExpression>> firstSets = new HashMap<>();
+		Map<Nonterminal, Set<RegularExpression>> firstSets = new HashMap<>();
 		
 		for (HeadGrammarSlot head : nonterminals) {
-			firstSets.put(head, new HashSet<RegularExpression>());
+			firstSets.put(head.getNonterminal(), new HashSet<RegularExpression>());
 		}
 		
 		boolean changed = true;
@@ -37,7 +38,7 @@ public class GrammarProperties {
 			
 			for (HeadGrammarSlot head : nonterminals) {
 				for (Alternate alternate : head.getAlternates()) {
-					Set<RegularExpression> firstSet = firstSets.get(head);
+					Set<RegularExpression> firstSet = firstSets.get(head.getNonterminal());
 					changed |= addFirstSet(firstSet, alternate.getFirstSlot(), firstSets);
 				}
 			}
@@ -57,7 +58,7 @@ public class GrammarProperties {
 	 */
 	private static boolean addFirstSet(Set<RegularExpression> firstSet, 
 									   BodyGrammarSlot currentSlot, 
-									   Map<HeadGrammarSlot, Set<RegularExpression>> firstSets) {
+									   Map<Nonterminal, Set<RegularExpression>> firstSets) {
 
 		boolean changed = false;
 		
@@ -76,10 +77,10 @@ public class GrammarProperties {
 		else if (currentSlot instanceof NonterminalGrammarSlot) {
 			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
 			
-			Set<RegularExpression> set = new HashSet<>(firstSets.get(nonterminalGrammarSlot.getNonterminal()));
+			Set<RegularExpression> set = new HashSet<>(firstSets.get(nonterminalGrammarSlot.getNonterminal().getNonterminal()));
 			set.remove(Epsilon.getInstance());
 			changed = firstSet.addAll(set);
-			if (isNullable(nonterminalGrammarSlot.getNonterminal(), firstSets)) {
+			if (isNullable(nonterminalGrammarSlot.getNonterminal().getNonterminal(), firstSets)) {
 				changed |= addFirstSet(firstSet, currentSlot.next(), firstSets);
 			}
 		}
@@ -91,7 +92,7 @@ public class GrammarProperties {
 		return changed;
 	}
 	
-	private static boolean isNullable(HeadGrammarSlot nt, Map<HeadGrammarSlot, Set<RegularExpression>> firstSets) {
+	private static boolean isNullable(Nonterminal nt, Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		return firstSets.get(nt).contains(Epsilon.getInstance());
 	}
 	
@@ -102,13 +103,13 @@ public class GrammarProperties {
 	 * part beta is nullable.
 	 *   
 	 */
-	private static boolean isChainNullable(BodyGrammarSlot slot, Map<HeadGrammarSlot, Set<RegularExpression>> firstSets) {
+	private static boolean isChainNullable(BodyGrammarSlot slot, Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		if (!(slot instanceof LastGrammarSlot)) {
 			if(slot instanceof TokenGrammarSlot) {
 				return slot.isNullable() && isChainNullable(slot.next(), firstSets);
 			}
 			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-			return isNullable(ntGrammarSlot.getNonterminal(), firstSets) && isChainNullable(ntGrammarSlot.next(), firstSets);
+			return isNullable(ntGrammarSlot.getNonterminal().getNonterminal(), firstSets) && isChainNullable(ntGrammarSlot.next(), firstSets);
 		}
 
 		return true;
@@ -116,7 +117,7 @@ public class GrammarProperties {
 	
 	private static void getChainFirstSet(BodyGrammarSlot slot, 
 										 Set<RegularExpression> set, 
-										 Map<HeadGrammarSlot, Set<RegularExpression>> firstSets) {
+										 Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		
 		if (!(slot instanceof LastGrammarSlot)) {
 			
@@ -128,22 +129,22 @@ public class GrammarProperties {
 			}
 			else {
 				NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-				set.addAll(firstSets.get(ntGrammarSlot.getNonterminal()));
+				set.addAll(firstSets.get(ntGrammarSlot.getNonterminal().getNonterminal()));
 				
-				if(isNullable(ntGrammarSlot.getNonterminal(), firstSets)) {
+				if(isNullable(ntGrammarSlot.getNonterminal().getNonterminal(), firstSets)) {
 					getChainFirstSet(ntGrammarSlot.next(), set, firstSets);
 				}
 			}
 		}
 	}
 	
-	public static Map<HeadGrammarSlot, Set<RegularExpression>> calculateFollowSets(Iterable<HeadGrammarSlot> nonterminals, 
-																		 		   Map<HeadGrammarSlot, Set<RegularExpression>> firstSets) {
+	public static Map<Nonterminal, Set<RegularExpression>> calculateFollowSets(Iterable<HeadGrammarSlot> nonterminals, 
+																		 		   Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		
-		Map<HeadGrammarSlot, Set<RegularExpression>> followSets = new HashMap<>();
+		Map<Nonterminal, Set<RegularExpression>> followSets = new HashMap<>();
 		
 		for (HeadGrammarSlot head : nonterminals) {
-			followSets.put(head, new HashSet<RegularExpression>());
+			followSets.put(head.getNonterminal(), new HashSet<RegularExpression>());
 		}
 		
 		boolean changed = true;
@@ -169,21 +170,21 @@ public class GrammarProperties {
 							// follow set of X to the
 							// follow set of B.
 							if (next instanceof LastGrammarSlot) {
-								Set<RegularExpression> followSet = followSets.get(nonterminalGrammarSlot.getNonterminal());
-								changed |= followSet.addAll(followSets.get(head));
+								Set<RegularExpression> followSet = followSets.get(nonterminalGrammarSlot.getNonterminal().getNonterminal());
+								changed |= followSet.addAll(followSets.get(head.getNonterminal()));
 								break;
 							}
 
 							// For rules of the form X ::= alpha B beta, add the
 							// first set of beta to
 							// the follow set of B.
-							Set<RegularExpression> followSet = followSets.get(nonterminalGrammarSlot.getNonterminal());
+							Set<RegularExpression> followSet = followSets.get(nonterminalGrammarSlot.getNonterminal().getNonterminal());
 							changed |= addFirstSet(followSet, currentSlot.next(), firstSets);
 
 							// If beta is nullable, then add the follow set of X
 							// to the follow set of B.
 							if (isChainNullable(next, firstSets)) {
-								changed |= followSet.addAll(followSets.get(head));
+								changed |= followSet.addAll(followSets.get(head.getNonterminal()));
 							}
 						}
 
@@ -196,27 +197,27 @@ public class GrammarProperties {
 		for (HeadGrammarSlot head : nonterminals) {
 			// Remove the epsilon which may have been added from nullable
 			// nonterminals
-			followSets.get(head).remove(Epsilon.getInstance());
+			followSets.get(head.getNonterminal()).remove(Epsilon.getInstance());
 
 			// Add the EOF to all nonterminals as each nonterminal can be used
 			// as the start symbol.
-			followSets.get(head).add(EOF.getInstance());
+			followSets.get(head.getNonterminal()).add(EOF.getInstance());
 		}
 		
 		return followSets;
 	}
 	
 	public static void setNullableHeads(Iterable<HeadGrammarSlot> nonterminals,
-										Map<HeadGrammarSlot, Set<RegularExpression>> firstSets) {
+										Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		for (HeadGrammarSlot head : nonterminals) {
-			head.setNullable(firstSets.get(head).contains(Epsilon.getInstance()));
+			head.setNullable(firstSets.get(head.getNonterminal()).contains(Epsilon.getInstance()));
 		}
 	}
 	
 	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals, 
 										 List<RegularExpression> regularExpressions,
-										 Map<HeadGrammarSlot, Set<RegularExpression>> firstSets,
-										 Map<HeadGrammarSlot, Set<RegularExpression>> followSets) {
+										 Map<Nonterminal, Set<RegularExpression>> firstSets,
+										 Map<Nonterminal, Set<RegularExpression>> followSets) {
 		
 		for (HeadGrammarSlot head : nonterminals) {
 			
@@ -229,14 +230,14 @@ public class GrammarProperties {
 						Set<RegularExpression> set = new HashSet<>();
 						getChainFirstSet(currentSlot, set, firstSets);
 						if(isChainNullable(currentSlot, firstSets)) {
-							set.addAll(followSets.get(head));
+							set.addAll(followSets.get(head.getNonterminal()));
 						}
 						// Prediction sets should not contain epsilon
 						set.remove(Epsilon.getInstance());
 						alternate.setPredictionSet(set);
 					} 
 					else if(currentSlot instanceof LastGrammarSlot) {
-						Set<RegularExpression> set = followSets.get(currentSlot.getHead());
+						Set<RegularExpression> set = followSets.get(currentSlot.getHead().getNonterminal());
 						set.remove(Epsilon.getInstance());
 						alternate.setPredictionSet(set);
 					} 
@@ -402,7 +403,7 @@ public class GrammarProperties {
 	}
 	
 	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateDirectReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals, 
-																							  Map<HeadGrammarSlot, Set<RegularExpression>> firstSets) {
+																							  Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		
 		Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph = new HashMap<>();
 		
@@ -441,7 +442,7 @@ public class GrammarProperties {
 	 */
 	private static boolean calculateDirectReachabilityGraph(Set<HeadGrammarSlot> set, BodyGrammarSlot currentSlot, boolean changed, 
 													  Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph, 
-													  Map<HeadGrammarSlot, Set<RegularExpression>> firstSets) {
+													  Map<Nonterminal, Set<RegularExpression>> firstSets) {
 
 		if (currentSlot instanceof EpsilonGrammarSlot) {
 			return false;
@@ -460,7 +461,7 @@ public class GrammarProperties {
 			
 			changed = set.addAll(set2) || changed;
 			
-			if (isNullable(nonterminalGrammarSlot.getNonterminal(), firstSets)) {
+			if (isNullable(nonterminalGrammarSlot.getNonterminal().getNonterminal(), firstSets)) {
 				return calculateDirectReachabilityGraph(set, currentSlot.next(), changed, reachabilityGraph, firstSets) || changed;
 			}
 			return changed;

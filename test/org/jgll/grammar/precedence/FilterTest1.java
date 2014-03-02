@@ -72,7 +72,7 @@ public class FilterTest1 {
 	}
 	
 	private SPPFNode getSPPFNode() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 6);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("E"), 0, 6);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E2 [+] . E1"), 0, 2);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 0, 1);
 		TokenSymbolNode node4 = new TokenSymbolNode(4, 0, 1);
@@ -82,7 +82,7 @@ public class FilterTest1 {
 		node2.addChild(node5);
 		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 1), 2, 6);
 		TokenSymbolNode node7 = new TokenSymbolNode(3, 2, 1);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 3, 6);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("E"), 3, 6);
 		IntermediateNode node9 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E2 [+] . E1"), 3, 5);
 		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 2), 3, 4);
 		TokenSymbolNode node11 = new TokenSymbolNode(4, 3, 1);

@@ -56,7 +56,7 @@ public class KeywordTest3 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(iff, s), grammar.getFirstSet(grammar.getNonterminalByName("S")));
+		assertEquals(set(iff, s), grammar.getFirstSet(S));
 	}
 	
 	@Test
@@ -69,22 +69,22 @@ public class KeywordTest3 {
 	}
 		
 	private SPPFNode getSPPF1() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 11);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 11);
 		TokenSymbolNode node2 = new TokenSymbolNode(2, 0, 2);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("L"), 2, 3);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("L"), 2, 3);
 		TokenSymbolNode node4 = new TokenSymbolNode(5, 2, 1);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 3, 4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 3, 4);
 		TokenSymbolNode node6 = new TokenSymbolNode(4, 3, 1);
 		node5.addChild(node6);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("L"), 4, 5);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("L"), 4, 5);
 		TokenSymbolNode node8 = new TokenSymbolNode(5, 4, 1);
 		node7.addChild(node8);
 		TokenSymbolNode node9 = new TokenSymbolNode(3, 5, 4);
-		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByName("L"), 9, 10);
+		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("L"), 9, 10);
 		TokenSymbolNode node11 = new TokenSymbolNode(5, 9, 1);
 		node10.addChild(node11);
-		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 10, 11);
+		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 10, 11);
 		TokenSymbolNode node13 = new TokenSymbolNode(4, 10, 1);
 		node12.addChild(node13);
 		node1.addChild(node2);

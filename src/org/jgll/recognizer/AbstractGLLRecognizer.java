@@ -68,7 +68,7 @@ public abstract class AbstractGLLRecognizer implements GLLRecognizer {
 			throw new RuntimeException("Input cannot be null.");
 		}
 		
-		HeadGrammarSlot startSymbol = grammar.getNonterminalByName(nonterminalName);
+		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(nonterminalName);
 		
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + nonterminalName + " found");

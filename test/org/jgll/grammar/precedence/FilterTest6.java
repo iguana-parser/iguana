@@ -116,7 +116,7 @@ public class FilterTest6 {
 	}
 
 	private SPPFNode getSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 17);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("E"), 0, 17);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E4 [-] . E3"), 0, 4);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 4), 0, 3);
 		IntermediateNode node4 = new IntermediateNode(grammar.getGrammarSlotByName("E4 ::= E4 [+] . E2"), 0, 2);
@@ -136,7 +136,7 @@ public class FilterTest6 {
 		node2.addChild(node10);
 		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 3), 4, 17);
 		TokenSymbolNode node12 = new TokenSymbolNode(4, 4, 1);
-		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 5, 17);
+		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("E"), 5, 17);
 		IntermediateNode node14 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E4 [+] . E3"), 5, 7);
 		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 4), 5, 6);
 		TokenSymbolNode node16 = new TokenSymbolNode(5, 5, 1);
@@ -146,7 +146,7 @@ public class FilterTest6 {
 		node14.addChild(node17);
 		NonterminalSymbolNode node18 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 3), 7, 17);
 		TokenSymbolNode node19 = new TokenSymbolNode(4, 7, 1);
-		NonterminalSymbolNode node20 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 8, 17);
+		NonterminalSymbolNode node20 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("E"), 8, 17);
 		IntermediateNode node21 = new IntermediateNode(grammar.getGrammarSlotByName("E ::= E4 [+] . E3"), 8, 16);
 		NonterminalSymbolNode node22 = new NonterminalSymbolNode(grammar.getNonterminalByNameAndIndex("E", 4), 8, 15);
 		IntermediateNode node23 = new IntermediateNode(grammar.getGrammarSlotByName("E4 ::= E4 [-] . E2"), 8, 14);

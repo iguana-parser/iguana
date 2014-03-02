@@ -68,14 +68,14 @@ public class DanglingElseGrammar2 {
 	
 	
 	private SPPFNode getExpectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 5);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 5);
 		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S [b] . S"), 0, 4);
 		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 0, 3);
 		TokenSymbolNode node4 = new TokenSymbolNode(2, 0, 1);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("([a] S)"), 1, 3);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 1, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("([a] S)"), 1, 3);
 		TokenSymbolNode node7 = new TokenSymbolNode(2, 1, 1);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 3);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 2, 3);
 		TokenSymbolNode node9 = new TokenSymbolNode(4, 2, 1);
 		node8.addChild(node9);
 		node6.addChild(node7);
@@ -86,7 +86,7 @@ public class DanglingElseGrammar2 {
 		TokenSymbolNode node10 = new TokenSymbolNode(3, 3, 1);
 		node2.addChild(node3);
 		node2.addChild(node10);
-		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 4, 5);
+		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 4, 5);
 		TokenSymbolNode node12 = new TokenSymbolNode(4, 4, 1);
 		node11.addChild(node12);
 		node1.addChild(node2);

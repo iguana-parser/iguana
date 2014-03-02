@@ -80,7 +80,7 @@ public class PrecedeRestrictionTest2 {
 	}
 
 	private SPPFNode getExpectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 6);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 6);
 		TokenSymbolNode node2 = new TokenSymbolNode(5, 0, 6);
 		node1.addChild(node2);
 		return node1;

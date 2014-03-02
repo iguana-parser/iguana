@@ -75,22 +75,22 @@ public class Gamma1Test {
 	
 	@Test
 	public void testNullables() {
-		assertTrue(grammar.getNonterminalByName("S").isNullable());
-		assertFalse(grammar.getNonterminalByName("A").isNullable());
-		assertFalse(grammar.getNonterminalByName("B").isNullable());
+		assertTrue(grammar.getHeadGrammarSlot("S").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("A").isNullable());
+		assertFalse(grammar.getHeadGrammarSlot("B").isNullable());
 	}
 	
 	@Test
 	public void testFirstSets() {
-		assertEquals(set(a, b, c, Epsilon.getInstance()), grammar.getFirstSet(grammar.getNonterminalByName("S")));
-		assertEquals(set(a, c), grammar.getFirstSet(grammar.getNonterminalByName("A")));
-		assertEquals(set(a, b), grammar.getFirstSet(grammar.getNonterminalByName("B")));
+		assertEquals(set(a, b, c, Epsilon.getInstance()), grammar.getFirstSet(S));
+		assertEquals(set(a, c), grammar.getFirstSet(A));
+		assertEquals(set(a, b), grammar.getFirstSet(B));
 	}
 
 	@Test
 	public void testFollowSets() {
-		assertEquals(set(a, b, c, d, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("A")));
-		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("S")));
+		assertEquals(set(a, b, c, d, EOF.getInstance()), grammar.getFollowSet(A));
+		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(S));
 	}
 	
 	@Test
@@ -102,17 +102,17 @@ public class Gamma1Test {
 	}
 	
 	public SPPFNode getSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 0, 3);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 3);
 		PackedNode node2 = new PackedNode(grammar.getGrammarSlotByName("S ::= B S ."), 1, node1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 0, 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 1);
 		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 3);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 1, 3);
 		IntermediateNode node6 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= A S . [d]"), 1, 2);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 1, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 2);
 		TokenSymbolNode node8 = new TokenSymbolNode(3, 1, 1);
 		node7.addChild(node8);
-		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 2, 2);
+		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 2, 2);
 		node6.addChild(node7);
 		node6.addChild(node9);
 		TokenSymbolNode node10 = new TokenSymbolNode(2, 2, 1);
@@ -122,10 +122,10 @@ public class Gamma1Test {
 		node2.addChild(node5);
 		PackedNode node11 = new PackedNode(grammar.getGrammarSlotByName("S ::= A S [d] ."), 2, node1);
 		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= A S . [d]"), 0, 2);
-		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getNonterminalByName("A"), 0, 1);
+		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
 		node13.addChild(node4);
-		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getNonterminalByName("S"), 1, 2);
-		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByName("B"), 1, 2);
+		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 1, 2);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 1, 2);
 		node15.addChild(node8);
 		node14.addChild(node15);
 		node14.addChild(node9);

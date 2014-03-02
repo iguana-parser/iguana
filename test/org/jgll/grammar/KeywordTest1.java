@@ -26,10 +26,11 @@ public class KeywordTest1 {
 	private Grammar grammar;
 
 	Keyword ifKeyword = new Keyword("if");
+	Nonterminal A = new Nonterminal("A");
 
 	@Before
 	public void init() {
-		Rule r1 = new Rule(new Nonterminal("A"), ifKeyword);
+		Rule r1 = new Rule(A, ifKeyword);
 		
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		GrammarBuilder builder = new GrammarBuilder(factory);
@@ -40,7 +41,7 @@ public class KeywordTest1 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(ifKeyword), grammar.getFirstSet(grammar.getNonterminalByName("A")));
+		assertEquals(set(ifKeyword), grammar.getFirstSet(A));
 	}
 	
 	@Test
