@@ -69,14 +69,14 @@ public class Gamma0Test {
 	
 	@Test
 	public void testFirstSets() {
-		assertEquals(set(grammar.getTokenID(a), Epsilon.TOKEN_ID), grammar.getFirstSet(grammar.getNonterminalByName("S")));
-		assertEquals(set(grammar.getTokenID(a)), grammar.getFirstSet(grammar.getNonterminalByName("A")));
+		assertEquals(set(a, Epsilon.getInstance()), grammar.getFirstSet(grammar.getNonterminalByName("S")));
+		assertEquals(set(a), grammar.getFirstSet(grammar.getNonterminalByName("A")));
 	}
 
 	@Test
 	public void testFollowSets() {
-		assertEquals(set(grammar.getTokenID(a), grammar.getTokenID(d), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("A")));
-		assertEquals(set(grammar.getTokenID(d), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("S")));
+		assertEquals(set(a, d, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("A")));
+		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("S")));
 	}
 	
 	@Test

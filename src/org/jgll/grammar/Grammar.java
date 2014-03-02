@@ -72,9 +72,9 @@ public class Grammar implements Serializable {
 	
 	private Matcher[] dfas;
 	
-	private Map<HeadGrammarSlot, Set<Integer>> firstSets;
+	private Map<HeadGrammarSlot, Set<RegularExpression>> firstSets;
 	
-	private Map<HeadGrammarSlot, Set<Integer>> followSets;
+	private Map<HeadGrammarSlot, Set<RegularExpression>> followSets;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -334,11 +334,11 @@ public class Grammar implements Serializable {
 		return dfas[id];
 	}
 	
-	public Set<Integer> getFirstSet(HeadGrammarSlot head) {
+	public Set<RegularExpression> getFirstSet(HeadGrammarSlot head) {
 		return firstSets.get(head);
 	}
 	
-	public Set<Integer> getFollowSet(HeadGrammarSlot head) {
+	public Set<RegularExpression> getFollowSet(HeadGrammarSlot head) {
 		return followSets.get(head);
 	}
 

@@ -49,8 +49,7 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 		predictionMap = new TreeMap<>();
 
 		for(Alternate alt : alternates) {
-			for(int i : alt.getPredictionSet()) {
-				RegularExpression regex = regularExpressions.get(i);
+			for(RegularExpression regex : regularExpressions) {
 				for(Range r : regex.getFirstSet()) {
 					Set<BodyGrammarSlot> s1 = predictionMap.get(r.getStart());
 					if(s1 == null) {

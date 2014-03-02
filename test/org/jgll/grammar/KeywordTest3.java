@@ -56,7 +56,7 @@ public class KeywordTest3 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(grammar.getTokenID(iff), grammar.getTokenID(s)), grammar.getFirstSet(grammar.getNonterminalByName("S")));
+		assertEquals(set(iff, s), grammar.getFirstSet(grammar.getNonterminalByName("S")));
 	}
 	
 	@Test

@@ -95,9 +95,9 @@ public class GrammarBuilder implements Serializable {
 	
 	Matcher[] dfas;
 	
-	Map<HeadGrammarSlot, Set<Integer>> firstSets;
+	Map<HeadGrammarSlot, Set<RegularExpression>> firstSets;
 
-	Map<HeadGrammarSlot, Set<Integer>> followSets;
+	Map<HeadGrammarSlot, Set<RegularExpression>> followSets;
 
 	private GrammarSlotFactory grammarSlotFactory;
 	

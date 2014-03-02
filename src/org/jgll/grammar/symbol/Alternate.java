@@ -12,6 +12,7 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.regex.RegularExpression;
 import org.jgll.util.hashing.HashFunctionBuilder;
 import org.jgll.util.hashing.hashfunction.MurmurHash3;
 
@@ -25,7 +26,7 @@ public class Alternate implements Serializable {
 	
 	private BodyGrammarSlot condition;
 	
-	private Set<Integer> predictionSet;
+	private transient Set<RegularExpression> predictionSet;
 	
 	public Alternate(BodyGrammarSlot firstSlot) {
 		
@@ -206,11 +207,11 @@ public class Alternate implements Serializable {
 		return false;
 	}
 
-	public void setPredictionSet(Set<Integer> set) {
+	public void setPredictionSet(Set<RegularExpression> set) {
 		this.predictionSet = set;
 	}
 	
-	public Set<Integer> getPredictionSet() {
+	public Set<RegularExpression> getPredictionSet() {
 		return predictionSet;
 	}
 	

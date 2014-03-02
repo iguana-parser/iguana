@@ -40,7 +40,7 @@ public class KeywordTest1 {
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(grammar.getTokenID(ifKeyword)), grammar.getFirstSet(grammar.getNonterminalByName("A")));
+		assertEquals(set(ifKeyword), grammar.getFirstSet(grammar.getNonterminalByName("A")));
 	}
 	
 	@Test

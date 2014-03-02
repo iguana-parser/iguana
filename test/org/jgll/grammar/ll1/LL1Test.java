@@ -12,6 +12,7 @@ import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -36,8 +37,6 @@ import org.junit.Test;
  * 
  */
 public class LL1Test {
-	
-	private static final int EOF = 1;
 
 	private Grammar grammar;
 	
@@ -97,18 +96,18 @@ public class LL1Test {
 	public void testPredictSets() {
 		// S ::= . A [a]
 		Alternate alt1 = grammar.getNonterminalByName("S").getAlternateAt(0);
-		assertEquals(set(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a)), alt1.getPredictionSet());
+		assertEquals(set(d, b, a), alt1.getPredictionSet());
 		
 		// A ::= . B D
 		Alternate alt2 = grammar.getNonterminalByName("A").getAlternateAt(0);
-		assertEquals(set(grammar.getTokenID(d), grammar.getTokenID(b), grammar.getTokenID(a), EOF), alt2.getPredictionSet());
+		assertEquals(set(d, b, a, EOF.getInstance()), alt2.getPredictionSet());
 		
 		// B ::= . [b]
 		Alternate alt3 = grammar.getNonterminalByName("B").getAlternateAt(0);
-		assertEquals(set(grammar.getTokenID(b)), alt3.getPredictionSet());
+		assertEquals(set(b), alt3.getPredictionSet());
 
 		Alternate alt4 = grammar.getNonterminalByName("B").getAlternateAt(1);
-		assertEquals(set(grammar.getTokenID(d), grammar.getTokenID(a), EOF), alt4.getPredictionSet());
+		assertEquals(set(d, a, EOF.getInstance()), alt4.getPredictionSet());
 	}
 
 	@Test
@@ -194,6 +193,5 @@ public class LL1Test {
 		
 		assertTrue(sppf.deepEquals(node1));
 	}
-
 	
 }

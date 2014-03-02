@@ -1,6 +1,5 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.BitSetUtil.*;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
@@ -14,7 +13,10 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,19 +67,19 @@ public class LeftFactorizedArithmeticGrammarTest {
 	
 	@Test
 	public void testFirstSets() {
-		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getFirstSet(grammar.getNonterminalByName("E")));
-		assertEquals(set(grammar.getTokenID(plus), Epsilon.TOKEN_ID), grammar.getFirstSet(grammar.getNonterminalByName("E1")));
-		assertEquals(set(grammar.getTokenID(star), Epsilon.TOKEN_ID), grammar.getFirstSet(grammar.getNonterminalByName("T1")));
-		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getFirstSet(grammar.getNonterminalByName("T")));
-		assertEquals(set(grammar.getTokenID(openPar), grammar.getTokenID(a)), grammar.getFirstSet(grammar.getNonterminalByName("F")));
+		assertEquals(set(openPar, a), grammar.getFirstSet(grammar.getNonterminalByName("E")));
+		assertEquals(set(plus, Epsilon.getInstance()), grammar.getFirstSet(grammar.getNonterminalByName("E1")));
+		assertEquals(set(star, Epsilon.getInstance()), grammar.getFirstSet(grammar.getNonterminalByName("T1")));
+		assertEquals(set(openPar, a), grammar.getFirstSet(grammar.getNonterminalByName("T")));
+		assertEquals(set(openPar, a), grammar.getFirstSet(grammar.getNonterminalByName("F")));
 	}
 	
 	public void testFollowSets() {
-		assertEquals(from(grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("E")));
-		assertEquals(from(grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("E1")));
-		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("T1")));
-		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("T")));
-		assertEquals(from(grammar.getTokenID(plus), grammar.getTokenID(star), grammar.getTokenID(closePar), EOF.TOKEN_ID), grammar.getFollowSet(grammar.getNonterminalByName("F")));
+		assertEquals(set(closePar, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("E")));
+		assertEquals(set(closePar, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("E1")));
+		assertEquals(set(plus, closePar, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("T1")));
+		assertEquals(set(plus, closePar, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("T")));
+		assertEquals(set(plus, star, closePar, EOF.getInstance()), grammar.getFollowSet(grammar.getNonterminalByName("F")));
 	}
 	
 	@Test
@@ -85,6 +87,60 @@ public class LeftFactorizedArithmeticGrammarTest {
 		Input input = Input.fromString("a+a*a+a");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
+		assertTrue(sppf.deepEquals(getSPPF()));
+	}
+	
+	private SPPFNode getSPPF() {
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalByName("E"), 0, 7);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalByName("T"), 0, 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalByName("F"), 0, 1);
+		TokenSymbolNode node4 = new TokenSymbolNode(6, 0, 1);
+		node3.addChild(node4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalByName("T1"), 1, 1);
+		node2.addChild(node3);
+		node2.addChild(node5);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalByName("E1"), 1, 7);
+		IntermediateNode node7 = new IntermediateNode(grammar.getGrammarSlotByName("E1 ::= [+] T . E1"), 1, 5);
+		TokenSymbolNode node8 = new TokenSymbolNode(2, 1, 1);
+		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalByName("T"), 2, 5);
+		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalByName("F"), 2, 3);
+		TokenSymbolNode node11 = new TokenSymbolNode(6, 2, 1);
+		node10.addChild(node11);
+		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalByName("T1"), 3, 5);
+		IntermediateNode node13 = new IntermediateNode(grammar.getGrammarSlotByName("T1 ::= [*] F . T1"), 3, 5);
+		TokenSymbolNode node14 = new TokenSymbolNode(3, 3, 1);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalByName("F"), 4, 5);
+		TokenSymbolNode node16 = new TokenSymbolNode(6, 4, 1);
+		node15.addChild(node16);
+		node13.addChild(node14);
+		node13.addChild(node15);
+		NonterminalSymbolNode node17 = new NonterminalSymbolNode(grammar.getNonterminalByName("T1"), 5, 5);
+		node12.addChild(node13);
+		node12.addChild(node17);
+		node9.addChild(node10);
+		node9.addChild(node12);
+		node7.addChild(node8);
+		node7.addChild(node9);
+		NonterminalSymbolNode node18 = new NonterminalSymbolNode(grammar.getNonterminalByName("E1"), 5, 7);
+		IntermediateNode node19 = new IntermediateNode(grammar.getGrammarSlotByName("E1 ::= [+] T . E1"), 5, 7);
+		TokenSymbolNode node20 = new TokenSymbolNode(2, 5, 1);
+		NonterminalSymbolNode node21 = new NonterminalSymbolNode(grammar.getNonterminalByName("T"), 6, 7);
+		NonterminalSymbolNode node22 = new NonterminalSymbolNode(grammar.getNonterminalByName("F"), 6, 7);
+		TokenSymbolNode node23 = new TokenSymbolNode(6, 6, 1);
+		node22.addChild(node23);
+		NonterminalSymbolNode node24 = new NonterminalSymbolNode(grammar.getNonterminalByName("T1"), 7, 7);
+		node21.addChild(node22);
+		node21.addChild(node24);
+		node19.addChild(node20);
+		node19.addChild(node21);
+		NonterminalSymbolNode node25 = new NonterminalSymbolNode(grammar.getNonterminalByName("E1"), 7, 7);
+		node18.addChild(node19);
+		node18.addChild(node25);
+		node6.addChild(node7);
+		node6.addChild(node18);
+		node1.addChild(node2);
+		node1.addChild(node6);
+		return node1;
 	}
 
 }
