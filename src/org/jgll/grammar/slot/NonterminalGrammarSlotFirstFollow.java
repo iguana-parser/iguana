@@ -29,7 +29,7 @@ public class NonterminalGrammarSlotFirstFollow extends NonterminalGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
-		if(!nonterminal.check(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
+		if(!nonterminal.test(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
 			parser.recordParseError(this);
 			return null;
 		}

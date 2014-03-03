@@ -46,7 +46,7 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	}
 	
 	@Override
-	public boolean check(int v) {
+	public boolean test(int v) {
 		if(v < min || v > max) {
 			return false;
 		}
@@ -57,21 +57,18 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	@Override
 	public void setPredictionSet() {
 		
-		predictionMap = new Set[max - min + 2];
+		predictionMap = new Set[max - min + 1];
 		
 		for(Alternate alt : alternates) {
 			for(RegularExpression regex : alt.getPredictionSet()) {
 				for(Range r : regex.getFirstSet()) {
-					Set<BodyGrammarSlot> s1 = predictionMap[r.getStart() - min];
-					if(s1 == null) {
-						s1 = new HashSet<>();
-						predictionMap[r.getStart() - min] =  s1;
-					}
-					s1.add(alt.getFirstSlot());
-					
-					Set<BodyGrammarSlot> s2 = predictionMap[r.getEnd() + 1 - min];
-					if(s2 == null) {
-						predictionMap[r.getEnd() + 1 - min] =  null;						
+					for(int i = r.getStart(); i <= r.getEnd(); i++) {
+						Set<BodyGrammarSlot> set = predictionMap[i - min];
+						if(set == null) {
+							set = new HashSet<>();
+							predictionMap[i - min] = set;
+						}
+						set.add(alt.getFirstSlot());
 					}
 				}
 			}

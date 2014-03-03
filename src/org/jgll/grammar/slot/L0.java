@@ -39,7 +39,7 @@ public class L0 extends HeadGrammarSlot {
 	
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer, HeadGrammarSlot start) {
 		
-		if(!start.check(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
+		if(!start.test(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
 			return null;
 		}
 		

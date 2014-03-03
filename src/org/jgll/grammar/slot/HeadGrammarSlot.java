@@ -108,7 +108,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 		this.nullable = nullable;
 	}
 	
-	public boolean check(int v) {
+	public boolean test(int v) {
 		return true;
 	}
 	
