@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.regex.RegularExpression;

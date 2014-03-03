@@ -30,7 +30,7 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		Set<BodyGrammarSlot> set = predictionMap[lexer.getInput().charAt(ci)];
+		Set<BodyGrammarSlot> set = predictionMap[lexer.getInput().charAt(ci) - min];
 		if(set != null) {
 			for(BodyGrammarSlot slot : set) {
 				parser.addDescriptor(slot);

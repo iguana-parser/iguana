@@ -22,16 +22,16 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	protected int tokenID;
 	
-	private RegularExpression RegularExpression;
+	private RegularExpression regularExpression;
 	
 	public TokenGrammarSlot(int position, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
 		super(position, previous, head);
-		this.RegularExpression = regularExpression;
+		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
 	}
 	
 	public TokenGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.RegularExpression, head, this.tokenID);
+		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.regularExpression, head, this.tokenID);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
@@ -146,7 +146,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean isNullable() {
-		return RegularExpression.isNullable();
+		return regularExpression.isNullable();
 	}
 	
 	public int getTokenID() {
@@ -155,7 +155,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public RegularExpression getSymbol() {
-		return RegularExpression;
+		return regularExpression;
 	}
 	
 	@Override

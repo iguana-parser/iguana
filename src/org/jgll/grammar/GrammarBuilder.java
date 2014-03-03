@@ -72,6 +72,8 @@ public class GrammarBuilder implements Serializable {
 
 	String name;
 	
+	private Map<Nonterminal, Set<List<Symbol>>> definitions;
+	
 	// Fields related to filtering
 	Map<Nonterminal, List<HeadGrammarSlot>> newNonterminalsMap;
 
@@ -98,7 +100,7 @@ public class GrammarBuilder implements Serializable {
 	Map<Nonterminal, Set<RegularExpression>> firstSets;
 
 	Map<Nonterminal, Set<RegularExpression>> followSets;
-
+	
 	private GrammarSlotFactory grammarSlotFactory;
 	
 	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
@@ -117,6 +119,8 @@ public class GrammarBuilder implements Serializable {
 		conditionSlots = new ArrayList<>();
 		newNonterminalsMap = new LinkedHashMap<>();
 		
+		definitions = new HashMap<>();
+		
 		tokenIDMap = new HashMap<>();
 		tokenIDMap.put(Epsilon.getInstance(), 0);
 		tokenIDMap.put(EOF.getInstance(), 1);
@@ -128,13 +132,17 @@ public class GrammarBuilder implements Serializable {
 
 	public Grammar build() {
 		long start = System.nanoTime();
-		
 		createAutomatonsMap();
-		
 		long end = System.nanoTime();
-		
 		log.info("Automatons created in %d ms", (end - start) / 1000_000);
 		
+		
+		start = System.nanoTime();
+		firstSets = GrammarProperties.calculateFirstSets(definitions);
+		followSets = GrammarProperties.calculateFollowSets(definitions, firstSets);
+		end = System.nanoTime();
+		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
+
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
 		
@@ -146,7 +154,24 @@ public class GrammarBuilder implements Serializable {
 		
 		validateGrammar();
 		
-		initializeGrammarProrperties();
+		GrammarProperties.setNullableHeads(nonterminals, firstSets);
+		
+		start = System.nanoTime();
+		
+		GrammarProperties.setPredictionSets(nonterminals, firstSets, followSets);
+		end = System.nanoTime();
+		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
+		
+//		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
+
+		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals, firstSets);
+		
+		start = System.nanoTime();
+//		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);
+		end = System.nanoTime();
+		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
+		
+		slots = GrammarProperties.setSlotIds(nonterminals, conditionSlots);
 		
 		return new Grammar(this).init();
 	}
@@ -194,8 +219,17 @@ public class GrammarBuilder implements Serializable {
 		}
 		return this;
 	}
- 
+	
 	public GrammarBuilder addRule(Rule rule) {
+		Set<List<Symbol>> definition = definitions.get(rule.getHead());
+		if(definition == null) {
+			definition = new HashSet<>();
+		}
+		definition.add(rule.getBody());
+		return this;
+	}
+ 
+	public void convert(Rule rule) {
 		
 		if (rule == null) {
 			throw new IllegalArgumentException("Rule cannot be null.");
@@ -243,8 +277,6 @@ public class GrammarBuilder implements Serializable {
 				}
 			}
 		}
-		
-		return this;
 	}
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
@@ -369,36 +401,6 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		return headGrammarSlot;
-	}
-	
-	private void initializeGrammarProrperties() {
-		
-		long start = System.nanoTime();
-		firstSets = GrammarProperties.calculateFirstSets(nonterminals);
-		
-		followSets = GrammarProperties.calculateFollowSets(nonterminals, firstSets);
-		
-		long end = System.nanoTime();
-		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
-
-		GrammarProperties.setNullableHeads(nonterminals, firstSets);
-		
-		start = System.nanoTime();
-		
-		GrammarProperties.setPredictionSets(nonterminals, firstSets, followSets);
-		end = System.nanoTime();
-		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
-		
-//		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
-
-		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals, firstSets);
-		
-		start = System.nanoTime();
-//		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals), tokens);
-		end = System.nanoTime();
-		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
-		
-		slots = GrammarProperties.setSlotIds(nonterminals, conditionSlots);
 	}
 	
 	private void createAutomatonsMap() {
