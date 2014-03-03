@@ -107,7 +107,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void setNullable(boolean nullable) {
 		this.nullable = nullable;
 	}
-
+	
+	public boolean check(int v) {
+		return true;
+	}
+	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
@@ -117,7 +121,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		
 		return null;
 	}
-	
 	
 	@Override
 	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {

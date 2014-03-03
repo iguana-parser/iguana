@@ -17,6 +17,13 @@ public class CharacterGrammarSlot extends TokenGrammarSlot {
 		this.c = c;
 	}
 	
+	public CharacterGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
+		CharacterGrammarSlot slot = new CharacterGrammarSlot(this.position, previous, this.c, head, this.tokenID);
+		slot.preConditions = preConditions;
+		slot.popActions = popActions;
+		return slot;
+	}
+	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		if(executePreConditions(parser, lexer)) {

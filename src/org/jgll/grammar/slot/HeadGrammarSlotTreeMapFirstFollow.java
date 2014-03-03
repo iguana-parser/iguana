@@ -43,6 +43,11 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 	}
 	
 	@Override
+	public boolean check(int v) {
+		return predictionMap.floorEntry(v).getValue() != null;
+	}
+	
+	@Override
 	public void setPredictionSet() {
 		
 		predictionMap = new TreeMap<>();
@@ -65,6 +70,5 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 			}
  		}
 	}
-
 
 }

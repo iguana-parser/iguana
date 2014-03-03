@@ -11,11 +11,16 @@ public class RangeGrammarSlot extends TokenGrammarSlot {
 	
 	private Range r;
 
-	public RangeGrammarSlot(int position, BodyGrammarSlot previous,
-								Range r,
-								HeadGrammarSlot head, int tokenID) {
+	public RangeGrammarSlot(int position, BodyGrammarSlot previous, Range r, HeadGrammarSlot head, int tokenID) {
 		super(position, previous, r, head, tokenID);
 		this.r = r;
+	}
+	
+	public RangeGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
+		RangeGrammarSlot slot = new RangeGrammarSlot(this.position, previous, this.r, head, this.tokenID);
+		slot.preConditions = preConditions;
+		slot.popActions = popActions;
+		return slot;
 	}
 	
 	@Override

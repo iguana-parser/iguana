@@ -6,6 +6,7 @@ import java.util.Set;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.CharacterGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.RangeGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Character;
@@ -38,6 +39,11 @@ public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 			}
 		}
 		return new TokenGrammarSlot(position, previous, regularExpression, head, tokenID);
+	}
+
+	@Override
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		return new NonterminalGrammarSlot(position, previous, nonterminal, head);
 	}
 
 }

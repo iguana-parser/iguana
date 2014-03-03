@@ -30,7 +30,12 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
+		if(lexer.getInput().charAt(ci) < min) {
+			System.out.println("WTF?");
+		}
+		
 		Set<BodyGrammarSlot> set = predictionMap[lexer.getInput().charAt(ci) - min];
+		
 		if(set != null) {
 			for(BodyGrammarSlot slot : set) {
 				parser.addDescriptor(slot);
@@ -40,12 +45,20 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 		return null;
 	}
 	
+	@Override
+	public boolean check(int v) {
+		if(v < min || v > max) {
+			return false;
+		}
+		return predictionMap[v] != null;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setPredictionSet() {
 		
-		predictionMap = new Set[max - min + 1];
-
+		predictionMap = new Set[max - min + 2];
+		
 		for(Alternate alt : alternates) {
 			for(RegularExpression regex : alt.getPredictionSet()) {
 				for(Range r : regex.getFirstSet()) {
