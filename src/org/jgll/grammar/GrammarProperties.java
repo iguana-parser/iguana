@@ -41,7 +41,7 @@ public class GrammarProperties {
 			for (Nonterminal head : nonterminals) {
 				for (List<Symbol> alternate : definitions.get(head)) {
 					Set<RegularExpression> firstSet = firstSets.get(head);
-					changed |= addFirstSet(firstSet, alternate, firstSets);
+					changed |= addFirstSet(firstSet, alternate, 0, firstSets);
 				}
 			}
 		}
@@ -59,7 +59,7 @@ public class GrammarProperties {
 	 * @return true if adding any new terminals are added to the first set.
 	 */
 	private static boolean addFirstSet(Set<RegularExpression> firstSet, 
-									   List<Symbol> alternate,
+									   List<Symbol> alternate, int index,
 									   Map<Nonterminal, Set<RegularExpression>> firstSets) {
 
 		boolean changed = false;
@@ -69,7 +69,8 @@ public class GrammarProperties {
 			return firstSet.add(Epsilon.getInstance());
 		}
 		
-		for (Symbol symbol : alternate) {
+		for(int i = index; i < alternate.size(); i++) {
+			Symbol symbol = alternate.get(i);
 
 			if (symbol instanceof RegularExpression) {
 				RegularExpression regularExpression = (RegularExpression) symbol;
@@ -90,10 +91,10 @@ public class GrammarProperties {
 					break;
 				}
 			}
-			
-			if (isChainNullable(alternate, firstSets)) {
-				changed |= firstSet.add(Epsilon.getInstance());
-			}
+		}
+		
+		if (isChainNullable(alternate, 0, firstSets)) {
+			changed |= firstSet.add(Epsilon.getInstance());
 		}
 		
 		return changed;
@@ -110,12 +111,19 @@ public class GrammarProperties {
 	 * part beta is nullable.
 	 *   
 	 */
-	private static boolean isChainNullable(List<Symbol> alternate, Map<Nonterminal, Set<RegularExpression>> firstSets) {
+	private static boolean isChainNullable(List<Symbol> alternate, int index, Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		
-		for(Symbol s : alternate) {
+		if(index >= alternate.size()) {
+			return true;
+		}
+		
+		for(int i = index; i < alternate.size(); i++) {
+			Symbol s = alternate.get(i);
 			
 			if(s instanceof RegularExpression) {
-				return false;
+				if(!((RegularExpression)s).isNullable()) {
+					return false;
+				}
 			}
 			
 			if(!isNullable((Nonterminal) s, firstSets)) {
@@ -182,17 +190,14 @@ public class GrammarProperties {
 
 				for (List<Symbol> alternate : definitions.get(head)) {
 					
-					// For rules of the form X ::= alpha B, add the
-					// follow set of X to the
-					// follow set of B.
-					if (alternate.get(alternate.size() - 1) instanceof Nonterminal) {
-						Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1); 
-						Set<RegularExpression> followSet = followSets.get(last);
-						changed |= followSet.addAll(followSets.get(head));
-						break;
+					if(alternate.size() == 0) {
+						continue;
 					}
 					
-					for(Symbol symbol : alternate) {
+					for(int i = 0; i < alternate.size(); i++) {
+					
+						Symbol symbol = alternate.get(i);
+						
 						if(symbol instanceof Nonterminal) {
 							Nonterminal nonterminal = (Nonterminal) symbol;
 
@@ -200,16 +205,13 @@ public class GrammarProperties {
 							// first set of beta to
 							// the follow set of B.
 							Set<RegularExpression> followSet = followSets.get(nonterminal);
-							// TODO: add index
-							changed |= addFirstSet(followSet, alternate, firstSets);
+							changed |= addFirstSet(followSet, alternate, i + 1, firstSets);
 
 							// If beta is nullable, then add the follow set of X
 							// to the follow set of B.
-							// TODO: add index
-							if (isChainNullable(alternate, firstSets)) {
+							if (isChainNullable(alternate, i + 1, firstSets)) {
 								changed |= followSet.addAll(followSets.get(head));
 							}
-
 						}
 					}
 				}

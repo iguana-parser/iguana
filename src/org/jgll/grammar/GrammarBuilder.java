@@ -74,6 +74,8 @@ public class GrammarBuilder implements Serializable {
 	
 	private Map<Nonterminal, Set<List<Symbol>>> definitions;
 	
+	private List<Rule> rules;
+	
 	// Fields related to filtering
 	Map<Nonterminal, List<HeadGrammarSlot>> newNonterminalsMap;
 
@@ -120,6 +122,7 @@ public class GrammarBuilder implements Serializable {
 		newNonterminalsMap = new LinkedHashMap<>();
 		
 		definitions = new HashMap<>();
+		rules = new ArrayList<>();
 		
 		tokenIDMap = new HashMap<>();
 		tokenIDMap.put(Epsilon.getInstance(), 0);
@@ -131,25 +134,25 @@ public class GrammarBuilder implements Serializable {
 	}
 
 	public Grammar build() {
+		
 		long start = System.nanoTime();
 		createAutomatonsMap();
 		long end = System.nanoTime();
 		log.info("Automatons created in %d ms", (end - start) / 1000_000);
-		
 		
 		start = System.nanoTime();
 		firstSets = GrammarProperties.calculateFirstSets(definitions);
 		followSets = GrammarProperties.calculateFollowSets(definitions, firstSets);
 		end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
-
+		
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
 		
 		for(List<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
 			nonterminals.addAll(newNonterminals);			
 		}
-		
+
 		nonterminals.addAll(collapsibleNonterminals);
 		
 		validateGrammar();
@@ -221,11 +224,15 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	public GrammarBuilder addRule(Rule rule) {
-		Set<List<Symbol>> definition = definitions.get(rule.getHead());
+		Nonterminal head = rule.getHead();
+		Set<List<Symbol>> definition = definitions.get(head);
 		if(definition == null) {
 			definition = new HashSet<>();
+			definitions.put(head, definition);
 		}
 		definition.add(rule.getBody());
+		rules.add(rule);
+		convert(rule);
 		return this;
 	}
  

@@ -83,7 +83,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 	}
 	
 	@Test
-	public void test() throws ParseError {
+	public void testParser() throws ParseError {
 		Input input = Input.fromString("a+a*a+a");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");

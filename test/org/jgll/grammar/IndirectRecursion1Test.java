@@ -9,6 +9,7 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -38,16 +39,20 @@ public class IndirectRecursion1Test {
 	private Grammar grammar;
 	private GrammarBuilder builder;
 
+	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal B = new Nonterminal("B");
+	private Nonterminal C = new Nonterminal("C");
+	Character a = new Character('a');
+	Character b = new Character('b');
+	Character c = new Character('c');
+
 	@Before
 	public void createGrammar() {
-		Nonterminal A = new Nonterminal("A");
-		Nonterminal B = new Nonterminal("B");
-		Nonterminal C = new Nonterminal("C");
 		Rule r1 = new Rule(A, list(B, C));
-		Rule r2 = new Rule(A, list(new Character('a')));
+		Rule r2 = new Rule(A, list(a));
 		Rule r3 = new Rule(B, list(A));
-		Rule r4 = new Rule(B, list(new Character('b')));
-		Rule r5 = new Rule(C, list(new Character('c')));
+		Rule r4 = new Rule(B, list(b));
+		Rule r5 = new Rule(C, list(c));
 		
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		builder = new GrammarBuilder("IndirectRecursion", factory)
@@ -59,8 +64,19 @@ public class IndirectRecursion1Test {
 		grammar = builder.build();
 	}
 	
+	
 	@Test
-	public void test() throws ParseError {
+	public void testFirstFollowSets() {
+		assertEquals(set(a, b), grammar.getFirstSet(A));
+		assertEquals(set(a, b), grammar.getFirstSet(B));
+		assertEquals(set(c), grammar.getFirstSet(C));
+		
+		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(A));
+		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(B));
+	}
+	
+	@Test
+	public void testParser() throws ParseError {
 		Input input = Input.fromString("bc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");

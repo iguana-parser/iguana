@@ -8,11 +8,11 @@ import org.jgll.sppf.TokenSymbolNode;
 public class CharacterGrammarSlot extends TokenGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Character c;
 
 	public CharacterGrammarSlot(int position, BodyGrammarSlot previous,
-								Character c,
-								HeadGrammarSlot head, int tokenID) {
+								Character c, HeadGrammarSlot head, int tokenID) {
 		super(position, previous, c, head, tokenID);
 		this.c = c;
 	}
