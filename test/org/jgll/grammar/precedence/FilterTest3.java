@@ -87,8 +87,6 @@ public class FilterTest3 {
 		builder.addExceptPattern(Eplus, rule5, 0, rule1);
 		builder.addExceptPattern(Eplus, rule5, 0, rule2);
 		
-		builder.rewritePatterns();
-		
 		grammar = builder.build();
 	}
 

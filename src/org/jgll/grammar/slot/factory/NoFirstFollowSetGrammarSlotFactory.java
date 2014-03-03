@@ -1,5 +1,8 @@
 package org.jgll.grammar.slot.factory;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.CharacterGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -14,7 +17,10 @@ import org.jgll.regex.RegularExpression;
 public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 
 	@Override
-	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal) {
+	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
+			Map<Nonterminal, Set<RegularExpression>> firstSets,
+			Map<Nonterminal, Set<RegularExpression>> followSets) {
+		
 		return new HeadGrammarSlot(nonterminal);
 	}
 	

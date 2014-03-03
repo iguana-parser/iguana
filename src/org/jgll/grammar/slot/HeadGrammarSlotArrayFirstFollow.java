@@ -49,16 +49,16 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 		for(Alternate alt : alternates) {
 			for(RegularExpression regex : alt.getPredictionSet()) {
 				for(Range r : regex.getFirstSet()) {
-					Set<BodyGrammarSlot> s1 = predictionMap[r.getStart()];
+					Set<BodyGrammarSlot> s1 = predictionMap[r.getStart() - min];
 					if(s1 == null) {
 						s1 = new HashSet<>();
-						predictionMap[r.getStart()] =  s1;
+						predictionMap[r.getStart() - min] =  s1;
 					}
 					s1.add(alt.getFirstSlot());
 					
-					Set<BodyGrammarSlot> s2 = predictionMap[r.getEnd() + 1];
+					Set<BodyGrammarSlot> s2 = predictionMap[r.getEnd() + 1 - min];
 					if(s2 == null) {
-						predictionMap[r.getEnd() + 1] =  null;						
+						predictionMap[r.getEnd() + 1 - min] =  null;						
 					}
 				}
 			}

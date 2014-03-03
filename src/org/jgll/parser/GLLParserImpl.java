@@ -1,6 +1,9 @@
 package org.jgll.parser;
 
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -148,6 +151,8 @@ public class GLLParserImpl implements GLLParser {
 		log.info("Iguana started...");
 
 		long start = System.nanoTime();
+		long startUserTime = getUserTime();
+		long startSystemTime = getSystemTime();
 		
 		NonterminalSymbolNode root;
 		
@@ -159,18 +164,22 @@ public class GLLParserImpl implements GLLParser {
 		}
 
 		long end = System.nanoTime();
+		long endUserTime = getUserTime();
+		long endSystemTime = getSystemTime();
 		
 		if (root == null) {
 			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 		}
 		
 		log.info("Parsing finished successfully.");
-		logParseStatistics(end - start);
+		logParseStatistics(end - start, endUserTime - startUserTime, endSystemTime - startSystemTime);
 		return root;
 	}
 		
-	private void logParseStatistics(long duration) {
-		log.info("Parsing Time (nano-time): " + duration / 1000_000 + " ms");
+	private void logParseStatistics(long duration, long durationUserTime, long durationSystemTime) {
+		log.info("Parsing Time (nano time): " + duration / 1000_000 + " ms");
+		log.info("Parsing Time (user time): " + durationUserTime / 1000_000 + " ms");
+		log.info("Parsing Time (system time): " + durationSystemTime / 1000_000 + " ms");
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
@@ -183,6 +192,19 @@ public class GLLParserImpl implements GLLParser {
 		log.info("Intermediate nodes: %d", sppfLookup.getIntermediateNodesCount());
 		log.info("Packed nodes: %d", sppfLookup.getPackedNodesCount());
 	}
+	
+	public static long getUserTime( ) {
+	    ThreadMXBean bean = ManagementFactory.getThreadMXBean( );
+	    return bean.isCurrentThreadCpuTimeSupported( ) ?
+	        bean.getCurrentThreadUserTime() : 0L;
+	}
+	
+	public long getSystemTime( ) {
+	    ThreadMXBean bean = ManagementFactory.getThreadMXBean( );
+	    return bean.isCurrentThreadCpuTimeSupported( ) ?
+	        (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime( )) : 0L;
+	}
+
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the

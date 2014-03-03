@@ -3,6 +3,9 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
@@ -77,14 +80,14 @@ public class Gamma2Test {
 	
 	@Test
 	public void test100bs() throws ParseError {
-		Input input = Input.fromString(get100b());
+		Input input = Input.fromString(get100b());		
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		parser.parse(input, grammar, "S");
 	}
 	
 	private String get100b() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 200; i++) {
 			sb.append("b");
 		}
 		return sb.toString();

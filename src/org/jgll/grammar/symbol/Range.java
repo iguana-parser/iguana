@@ -29,7 +29,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	public static Range in(int start, int end) {
 		return new Range(start, end);
 	}
-	
+		
 	public Range(int start, int end) {
 		super(Character.getString(start) + "-" + Character.getString(end));
 		

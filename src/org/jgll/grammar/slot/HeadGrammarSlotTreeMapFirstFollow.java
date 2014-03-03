@@ -61,7 +61,6 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 					if(s2 == null) {
 						predictionMap.put(r.getEnd() + 1, null);						
 					}
-					
 				}
 			}
  		}

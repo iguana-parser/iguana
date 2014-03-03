@@ -8,7 +8,6 @@ Export-Package:
  org.jgll.grammar.condition,
  org.jgll.grammar.conditions,
  org.jgll.grammar.ebnf,
- org.jgll.grammar.leftfactorization,
  org.jgll.grammar.ll1,
  org.jgll.grammar.patterns,
  org.jgll.grammar.precedence,

@@ -60,13 +60,10 @@ public class ManualArithmeticExpressionsTest {
 		Rule rule4 = new Rule(T, list(F));
 		builder.addRule(rule4);
 		
-		
 		// F ::= a
 		Rule rule5 = new Rule(F, list(new Character('a')));
 		builder.addRule(rule5);
 
-		
-		builder.rewritePrecedencePatterns();
 		
 		grammar = builder.build();
 	}

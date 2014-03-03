@@ -32,7 +32,6 @@ import org.jgll.grammar.slotaction.NotFollowActions;
 import org.jgll.grammar.slotaction.NotMatchActions;
 import org.jgll.grammar.slotaction.NotPrecedeActions;
 import org.jgll.grammar.slotaction.PrecedeActions;
-import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
@@ -142,13 +141,19 @@ public class GrammarBuilder implements Serializable {
 		end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 		
+		for(Rule rule : rules) {
+			convert(rule);
+		}
+		
+		rewritePatterns();
+		
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
 		
 		for(List<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
 			nonterminals.addAll(newNonterminals);			
 		}
-
+		
 		validateGrammar();
 		
 		GrammarProperties.setNullableHeads(nonterminals, firstSets);
@@ -226,7 +231,6 @@ public class GrammarBuilder implements Serializable {
 		}
 		definition.add(rule.getBody());
 		rules.add(rule);
-		convert(rule);
 		return this;
 	}
  
@@ -396,7 +400,7 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
 
 		if (headGrammarSlot == null) {
-			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal);
+			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, firstSets, followSets);
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
 			nonterminals.add(headGrammarSlot);
 		}
@@ -447,16 +451,16 @@ public class GrammarBuilder implements Serializable {
 		return builder.build();
 	}
 
-	public void rewritePatterns() {
+	private void rewritePatterns() {
 		rewritePrecedencePatterns();
 		rewriteExceptPatterns();
 	}
 	
-	public void rewriteExceptPatterns() {
+	private void rewriteExceptPatterns() {
 		rewriteExceptPatterns(groupPatterns(exceptPatterns));
 	}
 
-	public void rewritePrecedencePatterns() {
+	private void rewritePrecedencePatterns() {
 		for (Entry<Nonterminal, List<PrecedencePattern>> entry : precednecePatternsMap.entrySet()) {
 			log.debug("Applying the pattern %s with %d.", entry.getKey(), entry.getValue().size());
 
@@ -530,7 +534,7 @@ public class GrammarBuilder implements Serializable {
 			HeadGrammarSlot freshNonterminal = map.get(e.getValue());
 			
 			if(freshNonterminal == null) {
-				freshNonterminal = grammarSlotFactory.createHeadGrammarSlot(pattern.getNonterminal());
+				freshNonterminal = grammarSlotFactory.createHeadGrammarSlot(pattern.getNonterminal(), firstSets, followSets);
 				addNewNonterminal(freshNonterminal);
 				map.put(e.getValue(), freshNonterminal);
 			}
@@ -632,7 +636,7 @@ public class GrammarBuilder implements Serializable {
 		
 		if(newNonterminal == null) {
 			
-			newNonterminal = grammarSlotFactory.createHeadGrammarSlot(filteredNonterminal.getNonterminal());
+			newNonterminal = grammarSlotFactory.createHeadGrammarSlot(filteredNonterminal.getNonterminal(), firstSets, followSets);
 			
 			addNewNonterminal(newNonterminal);
 			
@@ -800,7 +804,7 @@ public class GrammarBuilder implements Serializable {
 			return copy;
 		}
 		
-		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal());
+		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal(), firstSets, followSets);
 		addNewNonterminal(copy);
 		map.put(head, copy);
 		
@@ -827,7 +831,7 @@ public class GrammarBuilder implements Serializable {
 			return copy;
 		}
 		
-		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal());
+		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal(), firstSets, followSets);
 		addNewNonterminal(copy);
 		map.put(head, copy);
 		
@@ -1013,52 +1017,5 @@ public class GrammarBuilder implements Serializable {
 			list.retainAll(reachableNonterminals);
 		}
 	}
-	
-	
-	
-	
-	private BodyGrammarSlot getBodyGrammarSlot(BodyGrammarSlot slot, int symbolIndex, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		
-		// Nonterminal
-		if (slot instanceof NonterminalGrammarSlot){
-			NonterminalGrammarSlot newSlot = new NonterminalGrammarSlot(symbolIndex, previous, ((NonterminalGrammarSlot) slot).getNonterminal(), head);
-			copyActions(slot, newSlot);
-			return newSlot;
-		}
-		
-		else if(slot instanceof EpsilonGrammarSlot) {
-			EpsilonGrammarSlot newSlot = new EpsilonGrammarSlot(symbolIndex, head, ((EpsilonGrammarSlot) slot).getObject());
-			copyActions(slot, newSlot);
-			return newSlot;
-		}
-		
-		else if(slot instanceof LastGrammarSlot) {
-			LastGrammarSlot newSlot = new LastGrammarSlot(symbolIndex, previous, head, ((LastGrammarSlot) slot).getObject());
-			copyActions(slot, newSlot);
-			return newSlot;
-		}
-		
-		else if(slot instanceof TokenGrammarSlot) {
-			RegularExpression token = ((TokenGrammarSlot)slot).getSymbol();
-			TokenGrammarSlot newSlot = grammarSlotFactory.createTokenGrammarSlot(symbolIndex, previous, token, head, getTokenID(token));
-			copyActions(slot, newSlot);
-			return newSlot;
-		}
-
-		else {
-			throw new RuntimeException("Should not be here! " + slot.getClass());
-		}
-	}
-	
-	private void copyActions(BodyGrammarSlot original, BodyGrammarSlot copy) {
-		for(SlotAction<Boolean> popAction : original.getPopActions()) {
-			copy.addPopAction(popAction);
-		}
-		
-		for(SlotAction<Boolean> preCondition : original.getPreConditions()) {
-			copy.addPreCondition(preCondition);
-		}
-	}
-	
 	
 }
