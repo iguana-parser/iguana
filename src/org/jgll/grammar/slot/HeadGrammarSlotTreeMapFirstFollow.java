@@ -44,7 +44,8 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 	
 	@Override
 	public boolean check(int v) {
-		return predictionMap.floorEntry(v).getValue() != null;
+		Entry<Integer, Set<BodyGrammarSlot>> e = predictionMap.floorEntry(v);
+		return e != null && e.getValue() != null;
 	}
 	
 	@Override

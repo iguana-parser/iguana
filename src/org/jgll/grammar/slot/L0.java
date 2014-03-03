@@ -37,15 +37,19 @@ public class L0 extends HeadGrammarSlot {
 		id = -1;
 	}
 	
-	public GrammarSlot parse(GLLParser parser, GLLLexer input, GrammarSlot start) {
+	public GrammarSlot parse(GLLParser parser, GLLLexer lexer, HeadGrammarSlot start) {
 		
-		GrammarSlot slot = start.parse(parser, input);
-		
-		while(slot != null) {
-			slot = slot.parse(parser, input);
+		if(!start.check(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
+			return null;
 		}
 		
-		return parse(parser, input);
+		GrammarSlot slot = start.parse(parser, lexer);
+		
+		while(slot != null) {
+			slot = slot.parse(parser, lexer);
+		}
+		
+		return parse(parser, lexer);
 	}
 	
 	@Override

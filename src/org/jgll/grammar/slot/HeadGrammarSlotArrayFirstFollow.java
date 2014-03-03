@@ -50,7 +50,7 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 		if(v < min || v > max) {
 			return false;
 		}
-		return predictionMap[v] != null;
+		return predictionMap[v - min] != null;
 	}
 	
 	@SuppressWarnings("unchecked")

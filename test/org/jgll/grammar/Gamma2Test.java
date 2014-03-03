@@ -3,9 +3,6 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
@@ -87,7 +84,7 @@ public class Gamma2Test {
 	
 	private String get100b() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 200; i++) {
+		for(int i = 0; i < 300; i++) {
 			sb.append("b");
 		}
 		return sb.toString();

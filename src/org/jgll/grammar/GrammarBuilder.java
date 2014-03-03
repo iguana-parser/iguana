@@ -294,7 +294,7 @@ public class GrammarBuilder implements Serializable {
 		// Nonterminal
 		else {
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return new NonterminalGrammarSlot(symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(symbolIndex, currentSlot, nonterminal, headGrammarSlot);						
 		}		
 	}
 
@@ -378,7 +378,7 @@ public class GrammarBuilder implements Serializable {
 		for(Symbol symbol : condition.getSymbols()) {
 			if(symbol instanceof Nonterminal) {
 				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-				currentSlot = new NonterminalGrammarSlot(index, currentSlot, nonterminal, null);
+				currentSlot = grammarSlotFactory.createNonterminalGrammarSlot(index, currentSlot, nonterminal, null);
 			} 
 			else if(symbol instanceof RegularExpression) {
 				RegularExpression token = (RegularExpression) symbol;
