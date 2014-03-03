@@ -45,10 +45,6 @@ import org.jgll.regex.Automaton;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
-import org.jgll.util.trie.Edge;
-import org.jgll.util.trie.ExternalEqual;
-import org.jgll.util.trie.Node;
-import org.jgll.util.trie.Trie;
 
 public class GrammarBuilder implements Serializable {
 
@@ -153,8 +149,6 @@ public class GrammarBuilder implements Serializable {
 			nonterminals.addAll(newNonterminals);			
 		}
 
-		nonterminals.addAll(collapsibleNonterminals);
-		
 		validateGrammar();
 		
 		GrammarProperties.setNullableHeads(nonterminals, firstSets);
@@ -1021,76 +1015,6 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	
-	public GrammarBuilder leftFactorize() {
-		for(HeadGrammarSlot head : nonterminals) {
-			leftFactorize(head);
-		}
-		
-		for(List<HeadGrammarSlot> list : newNonterminalsMap.values()) {
-			for(HeadGrammarSlot head : list) {
-				leftFactorize(head);
-			}
-		}
-		
-		return this;
-	}
-	
-	public void leftFactorize(String nonterminalName) {
-		HeadGrammarSlot head = nonterminalsMap.get(new Nonterminal(nonterminalName));
-		leftFactorize(head);
-	}
-	
-	public void leftFactorize(HeadGrammarSlot head) {
-
-		Trie<BodyGrammarSlot> trie = new Trie<>(new ExternalEqual<BodyGrammarSlot>() {
-
-			@Override
-			public boolean isEqual(BodyGrammarSlot s1, BodyGrammarSlot s2) {
-				
-				if(s1.getClass() != s2.getClass()) {
-					return false;
-				}
-				
-				if(s1 instanceof NonterminalGrammarSlot) {
-					NonterminalGrammarSlot ntSlot1 = (NonterminalGrammarSlot) s1;
-					NonterminalGrammarSlot ntSlot2 = (NonterminalGrammarSlot) s2;
-					return ntSlot1.getNonterminal() == ntSlot2.getNonterminal() && 
-						   ntSlot1.getPreConditions().equals(ntSlot2.getPreConditions()) &&
-						   ntSlot1.next().getPopActions().equals(ntSlot2.next().getPopActions()); 
-				}
-				
-				if(s1 instanceof LastGrammarSlot) {
-					return s1 == s2;
-				}
-
-				return s1.getSymbol().equals(s2.getSymbol());
-			}
-		});
-		
-		for(Alternate alt : head.getAlternates()) {
-			trie.add(alt.getSymbols());
-		}
-		
-		Node<BodyGrammarSlot> node = trie.getRoot();
-		
-		head.removeAllAlternates();
-		
-		for(Edge<BodyGrammarSlot> edge : node.getEdges()) {
-			
-			int symbolIndex = 0;
-			BodyGrammarSlot firstSlot = null;
-			
-			BodyGrammarSlot currentSlot = getBodyGrammarSlot(edge.getLabel(), symbolIndex, null, head);
-			
-			if(symbolIndex == 0) {
-				firstSlot = currentSlot;
-			}
-			
-			test(currentSlot, edge.getDestination(), symbolIndex, head);
-			Alternate alternate = new Alternate(firstSlot);
-			head.addAlternate(alternate);
-		}
-	}
 	
 	
 	private BodyGrammarSlot getBodyGrammarSlot(BodyGrammarSlot slot, int symbolIndex, BodyGrammarSlot previous, HeadGrammarSlot head) {
@@ -1136,63 +1060,5 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
-	private int count;
-	
-	private List<HeadGrammarSlot> collapsibleNonterminals = new ArrayList<>();
-
-	private void test(BodyGrammarSlot slot, Node<BodyGrammarSlot> node, int symbolIndex, HeadGrammarSlot headGrammarSlot) {
-		
-		if(node.size() == 0) {
-			return;
-		}
-		
-		if(node.size() == 1) {
-			BodyGrammarSlot s = node.getEdges().get(0).getLabel();
-			BodyGrammarSlot currentSlot = getBodyGrammarSlot(s, symbolIndex, slot, headGrammarSlot);
-			copyActions(s, currentSlot);
-			test(currentSlot, node.getEdges().get(0).getDestination(), symbolIndex + 1, headGrammarSlot);
-			return;
-		}
-		
-		Nonterminal nonterminal = new Nonterminal("C_" + ++count);
-		nonterminal.setCollapsible(true);
-		HeadGrammarSlot newHead = grammarSlotFactory.createHeadGrammarSlot(nonterminal);
-		
-		nonterminalsMap.put(nonterminal, newHead);
-		collapsibleNonterminals.add(newHead);
-		
-		NonterminalGrammarSlot ntSlot = new NonterminalGrammarSlot(symbolIndex + 1, slot, newHead, headGrammarSlot);
-		new LastGrammarSlot(symbolIndex + 2, ntSlot, headGrammarSlot, null);
-		
-		// Create the body of the collapsible node.
-		symbolIndex = 0;
-		BodyGrammarSlot firstSlot = null;
-		
-		for(Edge<BodyGrammarSlot> edge : node.getEdges()) {
-			BodyGrammarSlot s = edge.getLabel();
-			BodyGrammarSlot currentSlot;
-			if(s instanceof LastGrammarSlot) {
-				currentSlot = new EpsilonGrammarSlot(symbolIndex, newHead, ((LastGrammarSlot) s).getObject());
-				copyActions(s, currentSlot);
-				newHead.addAlternate(new Alternate(currentSlot));
-			} else {
-				currentSlot = getBodyGrammarSlot(edge.getLabel(), symbolIndex, null, newHead);
-				if(symbolIndex == 0) {
-					firstSlot = currentSlot;
-				}
-				test(currentSlot, edge.getDestination(), symbolIndex, newHead);
-				
-				Alternate alternate = new Alternate(firstSlot);
-				newHead.addAlternate(alternate);
-			}
-			
-			// Execute the pop actions of the last nonterminal before a collapsible 
-			// nonterminal as preconditions of the first symbol in the alternates of
-			// the collapsible nonterminal.
-			for(SlotAction<Boolean> action : s.getPopActions()) {
-				currentSlot.addPreCondition(action);
-			}
-		}
-	}
 	
 }
