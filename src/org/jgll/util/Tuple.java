@@ -21,7 +21,7 @@ public class Tuple<T, K> {
 		return k;
 	}
 	
-	public static <T, K> Tuple<T, K> from(T t, K k) {
+	public static <T, K> Tuple<T, K> of(T t, K k) {
 		return new Tuple<>(t, k);
 	}
 	

@@ -20,6 +20,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Tuple;
 
 public class GrammarProperties {
 	
@@ -302,36 +303,65 @@ public class GrammarProperties {
 		return slots;
 	}
 	
-	public static void setLLProperties(Iterable<HeadGrammarSlot> nonterminals, 
-									   Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph) {
+	public static Set<Nonterminal> calculateLLNonterminals(Map<Nonterminal, Set<List<Symbol>>> definitions, 
+											   Map<Nonterminal, Set<RegularExpression>> firstSets,
+											   Map<Nonterminal, Set<RegularExpression>> followSets,
+									   		   Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
 
+		Set<Nonterminal> nonterminals = definitions.keySet();
+		
+		Set<Nonterminal> ll1Nonterminals = new HashSet<>();
+		
+		Set<Nonterminal> ll1SubGrammarNonterminals = new HashSet<>();
+		
 		// Calculating character level predictions
-		Map<Alternate, Set<Integer>> predictions = new HashMap<>();
-		for (HeadGrammarSlot head : nonterminals) {
-			for(Alternate alt : head.getAlternates()) {
+		Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions = new HashMap<>();
+		
+		for (Nonterminal head : nonterminals) {
+
+			int alternateIndex = 0;
+			for(List<Symbol> alt : definitions.get(head)) {
+			
+				// Calculate the prediction set for the alternate
+				Set<RegularExpression> s = new HashSet<>();
+				addFirstSet(s, alt, 0, firstSets);
+				if(s.contains(Epsilon.getInstance())) {
+					s.addAll(followSets.get(head));
+				}
+
+				// Expand ranges into integers
 				Set<Integer> set = new HashSet<>();
-				for(RegularExpression r : alt.getPredictionSet()) {
+				for(RegularExpression r : s) {
 					set.addAll(convert(r.getFirstSet()));
 				}
-				predictions.put(alt, set);
+				
+				predictions.put(Tuple.of(head, alternateIndex), set);
+				
+				alternateIndex++;
+			}			
+		}
+		
+		for (Nonterminal head : nonterminals) {
+			if(isLL1(head, predictions, definitions)) {
+				ll1Nonterminals.add(head);
 			}
 		}
 		
-		for (HeadGrammarSlot head : nonterminals) {
-			head.setLL1(isLL1(head, predictions));
-		}
-		
-		for (HeadGrammarSlot head : nonterminals) {
-			if(head.isLL1()) {
-				boolean condition = true;
-				for(HeadGrammarSlot reachableHead : reachabilityGraph.get(head)) {
-					if(!reachableHead.isLL1()) {
-						condition = false;
+		for (Nonterminal head : nonterminals) {
+			if(ll1Nonterminals.contains(head)) {
+				boolean ll1SubGrammar = true;
+				for(Nonterminal reachableHead : reachabilityGraph.get(head)) {
+					if(!ll1Nonterminals.contains(reachableHead)) {
+						ll1SubGrammar = false;
 					}
 				}
-				head.setLL1SubGrammar(condition);
+				if(ll1SubGrammar) {
+					ll1SubGrammarNonterminals.add(head);
+				}
 			}
 		}
+		
+		return ll1SubGrammarNonterminals;
 	}
 	
 	/**
@@ -340,24 +370,35 @@ public class GrammarProperties {
 	 * @return
 	 */
 	private static Set<Integer> convert(Set<Range> set) {
-		return null;
+		Set<Integer> integerSet = new HashSet<>();
+		for(Range range : set) {
+			for(int i = range.getStart(); i < range.getEnd(); i++) {
+				integerSet.add(i);
+			}
+		}
+		return integerSet;
 	}
 	
-    private static boolean isLL1(HeadGrammarSlot nonterminal, Map<Alternate, Set<Integer>> predictions) {
-        if(nonterminal.getAlternates().size() == 1) {
+    private static boolean isLL1(Nonterminal nonterminal, Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions,
+    							 Map<Nonterminal, Set<List<Symbol>>> definitions) {
+    	
+    	int size = definitions.get(nonterminal).size();
+    	
+    	// If there is only one alternate
+		if(size == 1) {
         	return true;
         }
         
-        for(Alternate alt1 : nonterminal.getAlternates()) {
-        	for(Alternate alt2 : nonterminal.getAlternates()) {
-        		if(!alt1.equals(alt2)) {
-        			HashSet<Integer> intersection = new HashSet<>(predictions.get(alt1));
-					intersection.retainAll(predictions.get(alt2));
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+            	if(i != j) {
+            		HashSet<Integer> intersection = new HashSet<>(predictions.get(Tuple.of(nonterminal, i)));
+            		intersection.retainAll(predictions.get(Tuple.of(nonterminal, j)));
         			if(!intersection.isEmpty()) {
         				return false;
                     }
-        		}
-        	}
+            	}
+            }
         }
 
         return true;
@@ -389,35 +430,18 @@ public class GrammarProperties {
 			for (Nonterminal head : nonterminals) {
 				Set<Nonterminal> set = reachabilityGraph.get(head);
 				for (List<Symbol> alternate : definitions.get(head)) {
+					for(Symbol symbol : alternate) {
+						if(symbol instanceof Nonterminal) {
+							Nonterminal nonterminal = (Nonterminal) symbol;
+							changed |= set.add(nonterminal);
+							changed |= set.addAll(reachabilityGraph.get(nonterminal));
+						} 
+					}
 				}
 			}
 		}
 		
 		return reachabilityGraph;
-	}
-	
-	private static boolean calculateReachabilityGraph(List<Symbol> list, 
-												  	  Set<Nonterminal> set, 
-												  	  Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
-		
-		boolean changed = false;
-		
-		for(Symbol symbol : list) {
-			if(symbol instanceof Nonterminal) {
-				Nonterminal nonterminal = (Nonterminal) symbol;
-				changed |= set.add(nonterminal);
-				
-				Set<Nonterminal> set2 = reachabilityGraph.get(nonterminal);
-				if(set2 == null) {
-					set2 = new HashSet<>();
-				}
-				
-				changed |= set.addAll(set2);				
-			} 
-		}
-		
-		return changed;
-
 	}
 	
 	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateDirectReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals, 

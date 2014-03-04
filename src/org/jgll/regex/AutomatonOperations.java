@@ -784,7 +784,7 @@ public class AutomatonOperations {
 		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
-				newStates.put(Tuple.from(i, j), new State());
+				newStates.put(Tuple.of(i, j), new State());
 			}
 		}
 		
@@ -795,7 +795,7 @@ public class AutomatonOperations {
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
 				
-				State state = newStates.get(Tuple.from(i, j));
+				State state = newStates.get(Tuple.of(i, j));
 				State state1 = states1[i];
 				State state2 = states2[j];
 				
@@ -809,7 +809,7 @@ public class AutomatonOperations {
 					if(reachableStates1.size() == 1 && reachableStates2.size() == 1) {
 						State s1 = reachableStates1.iterator().next();
 						State s2 = reachableStates2.iterator().next();
-						state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.from(s1.getId(), s2.getId()))));
+						state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.of(s1.getId(), s2.getId()))));
 					}						
 				}
 				

@@ -141,6 +141,12 @@ public class GrammarBuilder implements Serializable {
 		end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 		
+		start = System.nanoTime();
+		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = GrammarProperties.calculateReachabilityGraph(definitions);
+		GrammarProperties.calculateLLNonterminals(definitions, firstSets, followSets, reachabilityGraph);
+		end = System.nanoTime();
+		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
+		
 		for(Rule rule : rules) {
 			convert(rule);
 		}
@@ -167,11 +173,6 @@ public class GrammarBuilder implements Serializable {
 //		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals, firstSets);
-		
-		start = System.nanoTime();
-		GrammarProperties.setLLProperties(nonterminals, GrammarProperties.calculateReachabilityGraph(nonterminals));
-		end = System.nanoTime();
-		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
 		
 		slots = GrammarProperties.setSlotIds(nonterminals, conditionSlots);
 		
