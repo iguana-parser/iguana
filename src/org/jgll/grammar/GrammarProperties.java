@@ -396,33 +396,53 @@ public class GrammarProperties {
 		return reachabilityGraph;
 	}
 	
-	private static boolean calculateReachabilityGraph(BodyGrammarSlot slot, 
-												  	  Set<HeadGrammarSlot> set, 
-												  	  Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph) {
+	public static Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph(Map<Nonterminal, Set<List<Symbol>>> definitions) {
 		
-		if(slot instanceof NonterminalGrammarSlot) {
-			HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) slot).getNonterminal();
-			boolean changed = false;
-			changed |= set.add(nonterminal);
+		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = new HashMap<>();
+		
+		boolean changed = true;
+		while (changed) {
 			
-			Set<HeadGrammarSlot> set2 = reachabilityGraph.get(nonterminal);
-			if(set2 == null) {
-				set2 = new HashSet<>();
+			changed = false;
+			
+			for (Nonterminal head : definitions.keySet()) {
+				Set<Nonterminal> set = reachabilityGraph.get(head);
+				if(set == null) {
+					set = new HashSet<>();
+					reachabilityGraph.put(head, set);
+				}
+				
+				for (List<Symbol> alternate : definitions.get(head)) {
+					changed |= calculateReachabilityGraph(alternate, set, reachabilityGraph);
+				}
 			}
-			
-			changed |= set.addAll(set2);
-			changed |= calculateReachabilityGraph(slot.next(), set, reachabilityGraph);
-			
-			return changed;
-		} 
-		
-		else if(slot instanceof LastGrammarSlot) {
-			return false;
 		}
 		
-		else {
-			return calculateReachabilityGraph(slot.next(), set, reachabilityGraph);
+		return reachabilityGraph;
+	}
+	
+	private static boolean calculateReachabilityGraph(List<Symbol> list, 
+												  	  Set<Nonterminal> set, 
+												  	  Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
+		
+		boolean changed = false;
+		
+		for(Symbol symbol : list) {
+			if(symbol instanceof Nonterminal) {
+				Nonterminal nonterminal = (Nonterminal) symbol;
+				changed |= set.add(nonterminal);
+				
+				Set<Nonterminal> set2 = reachabilityGraph.get(nonterminal);
+				if(set2 == null) {
+					set2 = new HashSet<>();
+				}
+				
+				changed |= set.addAll(set2);				
+			} 
 		}
+		
+		return changed;
+
 	}
 	
 	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateDirectReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals, 
