@@ -2,7 +2,6 @@ package org.jgll.grammar.slot;
 
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.sppf.SPPFNode;
 
 
 /**
@@ -35,29 +34,6 @@ public class NonterminalGrammarSlotFirstFollow extends NonterminalGrammarSlot {
 		}
 		
 		if(executePreConditions(parser, lexer)) {
-			return null;
-		}
-		
-		if(parser.isLLOptimizationEnabled() && nonterminal.isLL1SubGrammar()) {
-			SPPFNode node = nonterminal.parseLL1(parser, lexer);
-			
-			if(node == null) {
-				return null;
-			}
-			
-			if(next instanceof LastGrammarSlot) {
-				parser.getNonterminalNode((LastGrammarSlot) next, node);
-				
-				if(executePopActions(parser, lexer)) {
-					return null;
-				}
-				parser.pop();
-				
-			} else {
-				parser.getIntermediateNode(next, node);
-				return next;
-			}
-			
 			return null;
 		}
 				

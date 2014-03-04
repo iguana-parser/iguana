@@ -8,7 +8,6 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 
 /**
  * Corresponds to the last grammar slot in an alternate, e.g., X ::= alpha .
@@ -94,11 +93,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public boolean isNameEqual(BodyGrammarSlot slot) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
 		throw new UnsupportedOperationException();
 	}
 

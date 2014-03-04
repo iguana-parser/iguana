@@ -7,7 +7,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -62,11 +61,6 @@ public class L0 extends HeadGrammarSlot {
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
-		throw new UnsupportedOperationException();
 	}
 	
 	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer, GrammarSlot start) {

@@ -17,7 +17,6 @@ import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.SPPFNode;
 
 /**
  * 
@@ -120,68 +119,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 		}
 		
 		return null;
-	}
-	
-	@Override
-	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
-		int ci = parser.getCurrentInputIndex();
-		
-		List<SPPFNode> children = new ArrayList<>();
-		
-		Set<BodyGrammarSlot> set = null; // predictionMap.get(lexer.getInput().charAt(ci));
-		
-		if(set == null || set.isEmpty()) {
-			return null;
-		}
-		
-		if(set.size() > 1) {
-			System.out.println(nonterminal.getName());
-		}
-		assert set.size() == 1;
-		
-		BodyGrammarSlot currentSlot = set.iterator().next();
-		
-		LastGrammarSlot lastSlot = null;
-		
-		while(!(currentSlot instanceof LastGrammarSlot)) {
-			SPPFNode node = currentSlot.parseLL1(parser, lexer);
-			if(node == null) {
-				return null;
-			}
-			children.add(node);
-			currentSlot = currentSlot.next();
-		}
-		
-		lastSlot = (LastGrammarSlot) currentSlot;
-
-		int leftExtent;
-		int rightExtent;
-		
-		if(children.size() == 0) {
-			leftExtent = parser.getCurrentInputIndex();
-			rightExtent = leftExtent;
-		}
-		else if(children.size() == 1) {
-			leftExtent = children.get(0).getLeftExtent();
-			rightExtent = children.get(0).getRightExtent();
-		} else {
-			leftExtent = children.get(0).getLeftExtent();
-			rightExtent = children.get(children.size() - 1).getRightExtent();
-		}
-
-		NonterminalSymbolNode ntNode = parser.getSPPFLookup().findNonterminalNode(this, leftExtent, rightExtent);
-		
-		if(ntNode == null) {
-			ntNode = parser.getSPPFLookup().getNonterminalNode(this, leftExtent, rightExtent); 
-			
-			for(SPPFNode node : children) {
-				ntNode.addChild(node);
-			}
-			
-			ntNode.addFirstPackedNode(lastSlot, ci);
-		}
-		
-		return ntNode;
 	}
 	
 	public boolean isLL1SubGrammar() {

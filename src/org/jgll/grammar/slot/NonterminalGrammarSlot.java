@@ -7,7 +7,6 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 
 
 /**
@@ -51,49 +50,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(executePreConditions(parser, input)) {
 			return null;
 		}
-		
-		if(parser.isLLOptimizationEnabled() && nonterminal.isLL1SubGrammar()) {
-			SPPFNode node = nonterminal.parseLL1(parser, input);
-			
-			if(node == null) {
-				return null;
-			}
-			
-			if(next instanceof LastGrammarSlot) {
-				parser.getNonterminalNode((LastGrammarSlot) next, node);
-				
-				if(executePopActions(parser, input)) {
-					return null;
-				}
-				parser.pop();
-				
-			} else {
-				parser.getIntermediateNode(next, node);
-				return next;
-			}
-			
-			return null;
-		}
-				
+
 		parser.createGSSNode(next, nonterminal);
 		return nonterminal;
-	}
-	
-	@Override
-	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
-		int ci = parser.getCurrentInputIndex();
-		
-//		if(!test(ci, lexer)) {
-//			parser.recordParseError(this);
-//			return null;						
-//		}
-
-		if(executePreConditions(parser, lexer)) {
-			return null;
-		}
-
-		SPPFNode node = nonterminal.parseLL1(parser, lexer);
-		return node;
 	}
 	
 	@Override

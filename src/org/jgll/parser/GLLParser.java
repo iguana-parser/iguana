@@ -83,6 +83,4 @@ public interface GLLParser {
 	 */
 	public Descriptor getCurrentDescriptor();
 		
-	public boolean isLLOptimizationEnabled();
-	
 }

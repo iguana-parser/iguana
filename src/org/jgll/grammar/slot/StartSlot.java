@@ -6,7 +6,6 @@ import java.io.Writer;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 
 public class StartSlot extends GrammarSlot {
 
@@ -29,11 +28,6 @@ public class StartSlot extends GrammarSlot {
 	@Override
 	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer input) {
 		return null;
-	}
-
-	@Override
-	public SPPFNode parseLL1(GLLParser parser, GLLLexer input) {
-		throw new UnsupportedOperationException();
 	}
 
 }

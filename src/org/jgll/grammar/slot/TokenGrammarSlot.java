@@ -7,7 +7,6 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.regex.RegularExpression;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 
 /**
@@ -70,25 +69,6 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		}
 		
 		return next;
-	}
-	
-	@Override
-	public SPPFNode parseLL1(GLLParser parser, GLLLexer lexer) {
-		
-		int ci = parser.getCurrentInputIndex();
-
-		int length = lexer.tokenLengthAt(ci, tokenID);
-		
-		if(length < 0) {
-			parser.recordParseError(this);
-			return null;			
-		}
-		
-		if(executePreConditions(parser, lexer)) {
-			return null;
-		}
-		
-		return parser.getTokenNode(tokenID, ci, length);
 	}
 	
 	@Override

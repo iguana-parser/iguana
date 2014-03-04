@@ -97,9 +97,6 @@ public class GLLParserImpl implements GLLParser {
 	 */
 	protected GSSNode errorGSSNode;
 	
-	
-	private boolean llOptimization = false;
-
 	private GSSLookupFactory gssLookupFactory;
 
 	private SPPFLookupFactory sppfLookupFactory;
@@ -156,12 +153,8 @@ public class GLLParserImpl implements GLLParser {
 		
 		NonterminalSymbolNode root;
 		
-		if(llOptimization && startSymbol.isLL1SubGrammar()) {
-			root = (NonterminalSymbolNode) startSymbol.parseLL1(this, lexer);
-		} else {
-			L0.getInstance().parse(this, lexer, startSymbol);			
-			root = sppfLookup.getStartSymbol(startSymbol, input.length());
-		}
+		L0.getInstance().parse(this, lexer, startSymbol);			
+		root = sppfLookup.getStartSymbol(startSymbol, input.length());
 
 		long end = System.nanoTime();
 		long endUserTime = getUserTime();
@@ -498,15 +491,6 @@ public class GLLParserImpl implements GLLParser {
 		return currentDescriptor;
 	}
 	
-	public void setLlOptimization(boolean llOptimization) {
-		this.llOptimization = llOptimization;
-	}
-	
-	@Override
-	public boolean isLLOptimizationEnabled() {
-		return llOptimization;
-	}
-
 	@Override
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length) {
 		ci += length;

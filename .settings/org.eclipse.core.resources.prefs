@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/org/jgll/grammar/slot/LL1NonterminalGrammarSlot.java=UTF-8
 encoding//src/org/jgll/grammar/slot/NonterminalGrammarSlot.java=UTF-8
 encoding//src/org/jgll/grammar/slot/NonterminalGrammarSlotFirstFollow.java=UTF-8
 encoding//src/org/jgll/grammar/slot/TokenGrammarSlot.java=UTF-8

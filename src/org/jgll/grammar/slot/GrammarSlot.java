@@ -7,7 +7,6 @@ import java.io.Writer;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.SPPFNode;
 
 /**
  * A GrammarSlot is a position immediately before or after
@@ -34,8 +33,6 @@ public abstract class GrammarSlot implements Serializable {
 	public abstract void codeParser(Writer writer) throws IOException;
 	
 	public abstract GrammarSlot parse(GLLParser parser, GLLLexer lexer);
-	
-	public abstract SPPFNode parseLL1(GLLParser parser, GLLLexer lexer);
 	
 	public abstract GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer);
 	
