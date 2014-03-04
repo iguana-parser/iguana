@@ -366,54 +366,29 @@ public class GrammarProperties {
 	/**
 	 * 
 	 * Calculate the set of nonterminals that are reachable via the alternates of A.
-	 * In other words, if A is a nonterminal, reachable nonterminals are A =>* alpha B gamma
+	 * In other words, if A is a nonterminal, reachable nonterminals are all the B's such as
+	 * A =>* alpha B gamma. Note that this method does not calculate direct-nullable reachable
+	 * nonterminals.
 	 * 
-	 * @param nonterminals
-	 * @return
 	 */
-	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals) {
-		
-		Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph = new HashMap<>();
-		
-		boolean changed = true;
-		while (changed) {
-			
-			changed = false;
-			
-			for (HeadGrammarSlot head : nonterminals) {
-				Set<HeadGrammarSlot> set = reachabilityGraph.get(head);
-				if(set == null) {
-					set = new HashSet<>();
-					reachabilityGraph.put(head, set);
-				}
-				
-				for (Alternate alternate : head.getAlternates()) {
-					changed |= calculateReachabilityGraph(alternate.getFirstSlot(), set, reachabilityGraph);
-				}
-			}
-		}
-		
-		return reachabilityGraph;
-	}
-	
 	public static Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph(Map<Nonterminal, Set<List<Symbol>>> definitions) {
+		
+		Set<Nonterminal> nonterminals = definitions.keySet();
 		
 		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = new HashMap<>();
 		
+		for (Nonterminal head : nonterminals) {
+			reachabilityGraph.put(head, new HashSet<Nonterminal>());
+		}
+		
 		boolean changed = true;
 		while (changed) {
 			
 			changed = false;
 			
-			for (Nonterminal head : definitions.keySet()) {
+			for (Nonterminal head : nonterminals) {
 				Set<Nonterminal> set = reachabilityGraph.get(head);
-				if(set == null) {
-					set = new HashSet<>();
-					reachabilityGraph.put(head, set);
-				}
-				
 				for (List<Symbol> alternate : definitions.get(head)) {
-					changed |= calculateReachabilityGraph(alternate, set, reachabilityGraph);
 				}
 			}
 		}
