@@ -76,6 +76,8 @@ public class Grammar implements Serializable {
 	
 	private Map<Nonterminal, Set<RegularExpression>> followSets;
 	
+	private Set<Nonterminal> ll1SubGrammarNonterminals;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.nonterminals = builder.nonterminals;
@@ -100,6 +102,7 @@ public class Grammar implements Serializable {
 		this.dfas = builder.dfas;
 		this.firstSets = builder.firstSets;
 		this.followSets = builder.followSets;
+		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
 		
 		this.matchers = new ArrayList<>();
 		for(RegularExpression regex : tokens) {
@@ -323,11 +326,15 @@ public class Grammar implements Serializable {
 	public int getCountLL1Nonterminals() {
 		int count = 0;
 		for(HeadGrammarSlot head : nonterminals) {
-			if(head.isLL1SubGrammar()) {
+			if(isLL1SubGrammar(head.getNonterminal())) {
 				count++;
 			}
 		}
 		return count;
+	}
+	
+	public boolean isLL1SubGrammar(Nonterminal nonterminal) {
+		return ll1SubGrammarNonterminals.contains(nonterminal);
 	}
 	
 	public Matcher getDFA(int id) {

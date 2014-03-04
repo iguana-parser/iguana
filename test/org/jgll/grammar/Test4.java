@@ -34,15 +34,16 @@ import org.junit.Test;
 public class Test4 {
 
 	private Grammar grammar;
+
+	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal B = new Nonterminal("B");
+	private Nonterminal C = new Nonterminal("C");
+	private Character a = new Character('a');
+	private Character b = new Character('b');
+	private Character c = new Character('c');
 	
 	@Before
 	public void init() {
-		Nonterminal A = new Nonterminal("A");
-		Nonterminal B = new Nonterminal("B");
-		Nonterminal C = new Nonterminal("C");
-		Character a = new Character('a');
-		Character b = new Character('b');
-		Character c = new Character('c');
 		
 		Rule r1 = new Rule(A, list(a, B, c));
 		Rule r2 = new Rule(A, list(C));
@@ -63,9 +64,9 @@ public class Test4 {
 	
 	@Test
 	public void testLL1() {
-		assertFalse(grammar.getHeadGrammarSlot("A").isLL1SubGrammar());
-		assertTrue(grammar.getHeadGrammarSlot("B").isLL1SubGrammar());
-		assertTrue(grammar.getHeadGrammarSlot("C").isLL1SubGrammar());
+		assertTrue(grammar.isLL1SubGrammar(A));
+		assertTrue(grammar.isLL1SubGrammar(B));
+		assertTrue(grammar.isLL1SubGrammar(C));
 	}
 	
 	@Test

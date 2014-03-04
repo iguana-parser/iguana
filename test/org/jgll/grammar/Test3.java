@@ -32,12 +32,18 @@ public class Test3 {
 
 	private Grammar grammar;
 	private GLLRecognizer recognizer;
+
+	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal B = new Nonterminal("B");
+	private Nonterminal C = new Nonterminal("C");
+	private Character b = new Character('b');
+	private Character c = new Character('c');
 	
 	@Before
 	public void init() {
-		Rule r1 = new Rule(new Nonterminal("A"), list(new Nonterminal("B"), new Nonterminal("C")));
-		Rule r2 = new Rule(new Nonterminal("B"), list(new Character('b')));
-		Rule r3 = new Rule(new Nonterminal("C"), list(new Character('c')));
+		Rule r1 = new Rule(A, list(B, C));
+		Rule r2 = new Rule(B, list(b));
+		Rule r3 = new Rule(C, list(c));
 		
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		grammar = new GrammarBuilder("test3", factory).addRule(r1).addRule(r2).addRule(r3).build();
@@ -54,10 +60,9 @@ public class Test3 {
 	
 	@Test
 	public void testLL1() {
-		assertTrue(grammar.getHeadGrammarSlot("A").isLL1SubGrammar());
-		assertTrue(grammar.getHeadGrammarSlot("B").isLL1SubGrammar());
-		assertTrue(grammar.getHeadGrammarSlot("C").isLL1SubGrammar());
-		assertTrue(grammar.getHeadGrammarSlot("A").isLL1SubGrammar());
+		assertTrue(grammar.isLL1SubGrammar(A));
+		assertTrue(grammar.isLL1SubGrammar(B));
+		assertTrue(grammar.isLL1SubGrammar(C));
 	}
 	
 	@Test

@@ -98,7 +98,10 @@ public class GrammarBuilder implements Serializable {
 
 	Map<Nonterminal, Set<RegularExpression>> followSets;
 	
+	Set<Nonterminal> ll1SubGrammarNonterminals;
+
 	private GrammarSlotFactory grammarSlotFactory;
+
 	
 	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammarSlotFactory);
@@ -143,7 +146,7 @@ public class GrammarBuilder implements Serializable {
 		
 		start = System.nanoTime();
 		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = GrammarProperties.calculateReachabilityGraph(definitions);
-		GrammarProperties.calculateLLNonterminals(definitions, firstSets, followSets, reachabilityGraph);
+		ll1SubGrammarNonterminals = GrammarProperties.calculateLLNonterminals(definitions, firstSets, followSets, reachabilityGraph);
 		end = System.nanoTime();
 		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
 		

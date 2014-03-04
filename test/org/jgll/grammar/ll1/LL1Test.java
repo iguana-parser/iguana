@@ -86,10 +86,10 @@ public class LL1Test {
 	
 	@Test
 	public void ll1Test() {
-		assertTrue(grammar.getHeadGrammarSlot("S").isLL1SubGrammar());
-		assertTrue(grammar.getHeadGrammarSlot("A").isLL1SubGrammar());
-		assertTrue(grammar.getHeadGrammarSlot("B").isLL1SubGrammar());
-		assertTrue(grammar.getHeadGrammarSlot("D").isLL1SubGrammar());
+		assertTrue(grammar.isLL1SubGrammar(S));
+		assertTrue(grammar.isLL1SubGrammar(A));
+		assertTrue(grammar.isLL1SubGrammar(B));
+		assertTrue(grammar.isLL1SubGrammar(D));
 	}
 
 	@Test
