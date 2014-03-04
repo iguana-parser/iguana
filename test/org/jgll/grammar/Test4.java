@@ -16,6 +16,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,14 +71,16 @@ public class Test4 {
 	}
 	
 	@Test
-	public void test1() throws ParseError {
+	public void testParser1() throws ParseError {
 		Input input = Input.fromString("abc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf1 = parser.parse(input, grammar, "A");
+		Visualization.generateSPPFGraph("/Users/ali/output", getSPPF1(), input);
 		assertTrue(sppf1.deepEquals(getSPPF1()));
 	}
 	
-	public void test2() throws ParseError {
+	@Test
+	public void testParser2() throws ParseError {
 		Input input = Input.fromString("aaaac");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf2 = parser.parse(input, grammar, "A");

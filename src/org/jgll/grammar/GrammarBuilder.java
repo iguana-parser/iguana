@@ -297,17 +297,22 @@ public class GrammarBuilder implements Serializable {
 		for(int i = 0; i < rule.getBody().size(); i++) {
 			Symbol s = rule.getSymbolAt(i);
 			
+			if(i == index) {
+				sb.append(". ");
+			}
+			
 			if(s instanceof Nonterminal) {
 				sb.append(getNonterminalName((Nonterminal) s)).append(" ");
 			} else {
 				sb.append(s).append(" ");				
 			}
-			
-			if(i == index) {
-				sb.append(". ");
-			}
 		}
-		sb.delete(sb.length() - 1, sb.length());
+
+		if(index == rule.getBody().size()) {
+			sb.append(".");
+		} else {
+			sb.delete(sb.length() - 1, sb.length());			
+		}
 		
 		return sb.toString();
 	}
