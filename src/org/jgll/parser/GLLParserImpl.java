@@ -90,7 +90,7 @@ public class GLLParserImpl implements GLLParser {
 	/**
 	 * The last input index at which an error is occurred. 
 	 */
-	protected int errorIndex = -1;
+	protected int errorIndex;
 	
 	/**
 	 * The current GSS node at which an error is occurred.
@@ -221,7 +221,7 @@ public class GLLParserImpl implements GLLParser {
 		cn = DummyNode.getInstance();
 		ci = 0;
 		errorSlot = null;
-		errorIndex = -1;
+		errorIndex = 0;
 		errorGSSNode = null;
 	}
 	

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.io.Writer;
 
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -21,8 +22,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
-	public EpsilonGrammarSlot(int position, HeadGrammarSlot head, Serializable object) {
-		super(position, null, head, object);
+	public EpsilonGrammarSlot(Rule rule, int position, String label, HeadGrammarSlot head, Serializable object) {
+		super(rule, position, label, null, head, object);
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -21,16 +22,16 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	protected HeadGrammarSlot nonterminal;
 	
-	public NonterminalGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(position, previous, head);
+	public NonterminalGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(rule, position, label, previous, head);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
 		this.nonterminal = nonterminal;
 	}
 	
-	public NonterminalGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(this.position, previous, nonterminal, head);
+	public NonterminalGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(rule, position, label, previous, nonterminal, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -28,13 +29,13 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	protected int alternateIndex;
 	
-	public LastGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object) {
-		super(position, previous, head);
+	public LastGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object) {
+		super(rule, position, label, previous, head);
 		this.object = object;
 	}
 	
-	public LastGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		LastGrammarSlot slot = new LastGrammarSlot(this.position, previous, head, object);
+	public LastGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
+		LastGrammarSlot slot = new LastGrammarSlot(rule, position, label, previous, head, object);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

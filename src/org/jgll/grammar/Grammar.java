@@ -109,21 +109,14 @@ public class Grammar implements Serializable {
 			matchers.add(regex.toAutomaton().getMatcher());
 		}
 		
+		this.nameToSlots = new HashMap<>();
+		for(BodyGrammarSlot slot : slots) {
+			nameToSlots.put(slot.getLabel(), slot);
+		}
+		
 		printGrammarStatistics();
 	}
 	
-	public Grammar init() {
-		this.nameToSlots = new HashMap<>();
-
-		for(BodyGrammarSlot slot : slots) {
-			String label = grammarSlotToString(slot);
-			slot.setLabel(label);
-			nameToSlots.put(label, slot);
-		}		
-		
-		return this;
-	}
-
 	public void printGrammarStatistics() {
 		log.info("Grammar information:");
 		log.info("Nonterminals: %d", nonterminals.size());
@@ -189,35 +182,6 @@ public class Grammar implements Serializable {
 			return -1;
 		}
 		return newNonterminalsMap.get(head.getNonterminal()).indexOf(head) + 1;
-	}
-	
-	private String grammarSlotToString(BodyGrammarSlot slot) {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		BodyGrammarSlot current = slot;
-		sb.append(" . ");
-		sb.append(getSlotName(current)).append(" ");
-		
-		current = slot.previous();
-
-		while(current != null) {
-			sb.insert(0, " " + getSlotName(current));
-			current = current.previous();
-		}
-		
-		current = slot.next();
-
-		while(current != null) {
-			sb.append(getSlotName(current)).append(" ");
-			current = current.next();
-		}
-		
-		sb.delete(sb.length() - 2, sb.length());
-
-		sb.insert(0, " ::=");
-		sb.insert(0, getNonterminalName(slot.getHead()));
-		return sb.toString();
 	}
 	
 	private String getSlotName(BodyGrammarSlot slot) {
@@ -348,6 +312,4 @@ public class Grammar implements Serializable {
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
 		return followSets.get(nonterminal);
 	}
-
-	
 }

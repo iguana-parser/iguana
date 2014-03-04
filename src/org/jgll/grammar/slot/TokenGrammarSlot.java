@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -23,14 +24,14 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private RegularExpression regularExpression;
 	
-	public TokenGrammarSlot(int position, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
-		super(position, previous, head);
+	public TokenGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
+		super(rule, position, label, previous, head);
 		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
 	}
 	
-	public TokenGrammarSlot copy(BodyGrammarSlot previous, HeadGrammarSlot head) {
-		TokenGrammarSlot slot = new TokenGrammarSlot(this.position, previous, this.regularExpression, head, this.tokenID);
+	public TokenGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
+		TokenGrammarSlot slot = new TokenGrammarSlot(rule, position, label, previous, this.regularExpression, head, this.tokenID);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

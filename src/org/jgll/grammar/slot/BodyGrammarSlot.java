@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.slotaction.SlotAction;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -20,7 +21,7 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected BodyGrammarSlot previous;
+	protected final BodyGrammarSlot previous;
 	
 	protected BodyGrammarSlot next;
 	
@@ -37,15 +38,23 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected List<SlotAction<Boolean>> popActions;
 	
-	private String label;
+	protected final String label;
+
+	protected final Rule rule;
 	
-	public BodyGrammarSlot(int position, BodyGrammarSlot previous, HeadGrammarSlot head) {
+	public BodyGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
 		if(position < 0) {
 			throw new IllegalArgumentException("Position cannot be negative.");
 		}
 		
+		if(label == null) {
+			throw new IllegalArgumentException("Label cannot be null.");
+		}
+		
+		this.rule = rule;
 		this.position = position;
+		this.label = label;
 		this.head = head;
 		if(previous != null) {
 			previous.next = this;
@@ -116,13 +125,9 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	public BodyGrammarSlot previous() {
 		return previous;
 	}
-	
-	public void setPrevious(BodyGrammarSlot previous) {
-		this.previous = previous;
-	}
-	
-	public void setNext(BodyGrammarSlot next) {
-		this.next = next;
+
+	public Rule getRule() {
+		return rule;
 	}
 	
 	public int getPosition() {
@@ -133,13 +138,13 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return head;
 	}
 	
+	public String getLabel() {
+		return label;
+	}
+	
 	public abstract boolean isNullable();
 	
 	public abstract boolean isNameEqual(BodyGrammarSlot slot);
-	
-	public void setLabel(String label) {
-		this.label = label;
-	}
 	
 	@Override
 	public String toString() {
