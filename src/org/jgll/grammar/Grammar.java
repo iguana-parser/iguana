@@ -33,7 +33,7 @@ public class Grammar implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private List<HeadGrammarSlot> nonterminals;
+	private List<HeadGrammarSlot> headGrammarSlots;
 	
 	private List<BodyGrammarSlot> slots;
 	
@@ -80,7 +80,7 @@ public class Grammar implements Serializable {
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
-		this.nonterminals = builder.nonterminals;
+		this.headGrammarSlots = builder.headGrammarSlots;
 		this.slots = builder.slots;
 		this.nameToNonterminals = new HashMap<>();
 		this.nameToNonterminals = builder.nonterminalsMap;
@@ -119,7 +119,7 @@ public class Grammar implements Serializable {
 	
 	public void printGrammarStatistics() {
 		log.info("Grammar information:");
-		log.info("Nonterminals: %d", nonterminals.size());
+		log.info("Nonterminals: %d", headGrammarSlots.size());
 		log.info("Production rules: %d", numProductions());
 		log.info("Grammar slots: %d", slots.size());
 		log.debug("Longest terminal Chain: %d", longestTerminalChain);
@@ -135,7 +135,7 @@ public class Grammar implements Serializable {
 	
 	private int numProductions() {
 		int num = 0;
-		for(HeadGrammarSlot head : nonterminals) {
+		for(HeadGrammarSlot head : headGrammarSlots) {
 			num += head.getCountAlternates();
 		}
 		return num;
@@ -149,7 +149,7 @@ public class Grammar implements Serializable {
 	}
 	
 	public HeadGrammarSlot getNonterminal(int id) {
-		return nonterminals.get(id);
+		return headGrammarSlots.get(id);
 	}
 		
 	public BodyGrammarSlot getGrammarSlot(int id) {
@@ -157,7 +157,7 @@ public class Grammar implements Serializable {
 	}
 		
 	public List<HeadGrammarSlot> getNonterminals() {
-		return nonterminals;
+		return headGrammarSlots;
 	}
 	
 	public List<BodyGrammarSlot> getGrammarSlots() {
@@ -289,7 +289,7 @@ public class Grammar implements Serializable {
 	
 	public int getCountLL1Nonterminals() {
 		int count = 0;
-		for(HeadGrammarSlot head : nonterminals) {
+		for(HeadGrammarSlot head : headGrammarSlots) {
 			if(isLL1SubGrammar(head.getNonterminal())) {
 				count++;
 			}

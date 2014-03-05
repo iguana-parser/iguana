@@ -55,7 +55,7 @@ public class GrammarBuilder implements Serializable {
 
 	List<BodyGrammarSlot> slots;
 	
-	List<HeadGrammarSlot> nonterminals;
+	List<HeadGrammarSlot> headGrammarSlots;
 
 	int maximumNumAlternates;
 
@@ -101,7 +101,10 @@ public class GrammarBuilder implements Serializable {
 	Set<Nonterminal> ll1SubGrammarNonterminals;
 
 	private GrammarSlotFactory grammarSlotFactory;
-
+	
+	private Map<Nonterminal, Integer> nonterminalIds;
+	
+	private Map<List<Symbol>, Integer> intermediateNodeIds;
 	
 	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammarSlotFactory);
@@ -110,7 +113,7 @@ public class GrammarBuilder implements Serializable {
 	public GrammarBuilder(String name, GrammarSlotFactory grammarSlotFactory) {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
-		nonterminals = new ArrayList<>();
+		headGrammarSlots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
 		precednecePatternsMap = new HashMap<>();
 		existingAlternates = new HashMap<>();
@@ -118,6 +121,8 @@ public class GrammarBuilder implements Serializable {
 		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
 		newNonterminalsMap = new LinkedHashMap<>();
+		
+		nonterminalIds = new HashMap<>();
 		
 		definitions = new HashMap<>();
 		rules = new ArrayList<>();
@@ -150,7 +155,8 @@ public class GrammarBuilder implements Serializable {
 //		ll1SubGrammarNonterminals = GrammarProperties.calculateLLNonterminals(definitions, firstSets, followSets, reachabilityGraph);
 		end = System.nanoTime();
 		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
-		
+
+				
 		for(Rule rule : rules) {
 			convert(rule);
 		}
@@ -161,24 +167,24 @@ public class GrammarBuilder implements Serializable {
 		removeUnusedNewNonterminals();
 		
 		for(List<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
-			nonterminals.addAll(newNonterminals);			
+			headGrammarSlots.addAll(newNonterminals);			
 		}
 		
 		validateGrammar();
 		
-		GrammarProperties.setNullableHeads(nonterminals, firstSets);
+		GrammarProperties.setNullableHeads(headGrammarSlots, firstSets);
 		
 		start = System.nanoTime();
 		
-		GrammarProperties.setPredictionSets(nonterminals, firstSets, followSets);
+		GrammarProperties.setPredictionSets(headGrammarSlots, firstSets, followSets);
 		end = System.nanoTime();
 		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
 		
 //		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
-		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(nonterminals, firstSets);
+		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(headGrammarSlots, firstSets);
 		
-		slots = GrammarProperties.setSlotIds(nonterminals, conditionSlots);
+		slots = GrammarProperties.setSlotIds(headGrammarSlots, conditionSlots);
 		
 		return new Grammar(this);
 	}
@@ -196,7 +202,7 @@ public class GrammarBuilder implements Serializable {
 					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal());
 				}
 				
-				if(!nonterminals.contains(slot.getNonterminal())) {
+				if(!headGrammarSlots.contains(slot.getNonterminal())) {
 					throw new GrammarValidationException("Undefined nonterminal " + slot.getNonterminal());
 				}
 			}
@@ -215,7 +221,7 @@ public class GrammarBuilder implements Serializable {
 			
 		};
 
-		for (HeadGrammarSlot head : nonterminals) {
+		for (HeadGrammarSlot head : headGrammarSlots) {
 			GrammarVisitor.visit(head, action);
 		}
 	}
@@ -227,6 +233,9 @@ public class GrammarBuilder implements Serializable {
 		return this;
 	}
 	
+	int nonterminald = 0;
+	int intermediateId;
+	
 	public GrammarBuilder addRule(Rule rule) {
 		Nonterminal head = rule.getHead();
 		Set<List<Symbol>> definition = definitions.get(head);
@@ -236,6 +245,21 @@ public class GrammarBuilder implements Serializable {
 		}
 		definition.add(rule.getBody());
 		rules.add(rule);
+
+		if(!nonterminalIds.containsKey(head)) {
+			nonterminalIds.put(head, nonterminald++);
+		}
+
+		for(int i = 2; i < rule.getBody().size() - 1; i++) {
+			List<Symbol> prefix = new ArrayList<>();
+			for(int j = 0; j < i; i++) {
+				prefix.add(rule.getBody().get(j));
+			}
+			if(!intermediateNodeIds.containsKey(prefix)) {
+				intermediateNodeIds.put(prefix, intermediateId++);
+			}
+		}
+		
 		return this;
 	}
  
@@ -444,7 +468,7 @@ public class GrammarBuilder implements Serializable {
 		if (headGrammarSlot == null) {
 			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, firstSets, followSets);
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
-			nonterminals.add(headGrammarSlot);
+			headGrammarSlots.add(headGrammarSlot);
 		}
 
 		return headGrammarSlot;
@@ -1013,7 +1037,7 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 
-		nonterminals.retainAll(referedNonterminals);
+		headGrammarSlots.retainAll(referedNonterminals);
 
 		return this;
 	}
@@ -1031,7 +1055,7 @@ public class GrammarBuilder implements Serializable {
 		Set<HeadGrammarSlot> reachableNonterminals = new HashSet<>();
 		Deque<HeadGrammarSlot> queue = new ArrayDeque<>();
 
-		for(HeadGrammarSlot head : nonterminals) {
+		for(HeadGrammarSlot head : headGrammarSlots) {
 			queue.add(head);			
 		}
 		
