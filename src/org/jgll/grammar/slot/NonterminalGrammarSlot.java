@@ -22,8 +22,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	protected HeadGrammarSlot nonterminal;
 	
-	public NonterminalGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(rule, position, label, previous, head);
+	public NonterminalGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(rule, position, slotId, label, previous, head);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -31,7 +31,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	public NonterminalGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(rule, position, label, previous, nonterminal, head);
+		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(rule, position, slotId, label, previous, nonterminal, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

@@ -41,9 +41,12 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	protected final String label;
 
 	protected final Rule rule;
+
+	protected final int slotId;
 	
-	public BodyGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
+	public BodyGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
+		this.slotId = slotId;
 		if(position < 0) {
 			throw new IllegalArgumentException("Position cannot be negative.");
 		}

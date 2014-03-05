@@ -24,14 +24,14 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private RegularExpression regularExpression;
 	
-	public TokenGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
-		super(rule, position, label, previous, head);
+	public TokenGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
+		super(rule, position, slotId, label, previous, head);
 		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
 	}
 	
 	public TokenGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
-		TokenGrammarSlot slot = new TokenGrammarSlot(rule, position, label, previous, this.regularExpression, head, this.tokenID);
+		TokenGrammarSlot slot = new TokenGrammarSlot(rule, position, slotId, label, previous, this.regularExpression, head, this.tokenID);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

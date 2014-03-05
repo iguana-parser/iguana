@@ -22,8 +22,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
-	public EpsilonGrammarSlot(Rule rule, int position, String label, HeadGrammarSlot head, Serializable object) {
-		super(rule, position, label, null, head, object);
+	public EpsilonGrammarSlot(Rule rule, int position, int slotId, String label, HeadGrammarSlot head, Serializable object) {
+		super(rule, position, slotId, label, null, head, object);
 	}
 	
 	@Override

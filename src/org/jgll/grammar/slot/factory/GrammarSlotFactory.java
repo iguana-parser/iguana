@@ -20,20 +20,21 @@ public interface GrammarSlotFactory {
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
 												 Map<Nonterminal, Set<RegularExpression>> followSets);
 	
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(Rule rule, int position,
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(Rule rule, int position, int slotId,
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal, 
 															   HeadGrammarSlot head);
 
-	public LastGrammarSlot createLastGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object);
+	public LastGrammarSlot createLastGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object);
 	
 	
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(Rule rule, int position, String label, HeadGrammarSlot head, Serializable object);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(Rule rule, int position, int slotId, String label, HeadGrammarSlot head, Serializable object);
 	
 	
 	public TokenGrammarSlot createTokenGrammarSlot(Rule rule, 
 												   int position, 
+												   int slotId,
 												   String label,
 												   BodyGrammarSlot previous, 
 												   RegularExpression regularExpression, 

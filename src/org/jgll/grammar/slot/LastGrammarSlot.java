@@ -29,13 +29,13 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	protected int alternateIndex;
 	
-	public LastGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object) {
-		super(rule, position, label, previous, head);
+	public LastGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object) {
+		super(rule, position, slotId, label, previous, head);
 		this.object = object;
 	}
 	
 	public LastGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
-		LastGrammarSlot slot = new LastGrammarSlot(rule, position, label, previous, head, object);
+		LastGrammarSlot slot = new LastGrammarSlot(rule, position, slotId, label, previous, head, object);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

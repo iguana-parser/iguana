@@ -12,14 +12,14 @@ public class CharacterGrammarSlot extends TokenGrammarSlot {
 	
 	private Character c;
 
-	public CharacterGrammarSlot(Rule rule, int position, String label, BodyGrammarSlot previous,
+	public CharacterGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous,
 								Character c, HeadGrammarSlot head, int tokenID) {
-		super(rule, position, label, previous, c, head, tokenID);
+		super(rule, position, slotId, label, previous, c, head, tokenID);
 		this.c = c;
 	}
 	
 	public CharacterGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
-		CharacterGrammarSlot slot = new CharacterGrammarSlot(rule, position, label, previous, this.c, head, this.tokenID);
+		CharacterGrammarSlot slot = new CharacterGrammarSlot(rule, position, slotId, label, previous, this.c, head, this.tokenID);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

@@ -252,10 +252,7 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		for(int i = 2; i < rule.getBody().size(); i++) {
-			List<Symbol> prefix = new ArrayList<>();
-			for(int j = 0; j < i; j++) {
-				prefix.add(rule.getBody().get(j));
-			}
+			List<Symbol> prefix = rule.getBody().subList(0, i);
 			if(!intermediateNodeIds.containsKey(prefix)) {
 				intermediateNodeIds.put(prefix, intermediateId++);
 			}
@@ -280,7 +277,7 @@ public class GrammarBuilder implements Serializable {
 		BodyGrammarSlot currentSlot = null;
 
 		if (body.size() == 0) {
-			EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(rule, 0, getSlotName(rule, 0), headGrammarSlot, rule.getObject());
+			EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(rule, 0, getSlotId(rule, 0), getSlotName(rule, 0), headGrammarSlot, rule.getObject());
 			epsilonSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
 			headGrammarSlot.addAlternate(new Alternate(epsilonSlot));
 		} 
@@ -299,7 +296,7 @@ public class GrammarBuilder implements Serializable {
 				conditions.put(currentSlot, symbol.getConditions());
 			}
 
-			LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(rule, symbolIndex, getSlotName(rule, symbolIndex), currentSlot, headGrammarSlot, rule.getObject());
+			LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(rule, symbolIndex, getSlotId(rule, symbolIndex), getSlotName(rule, symbolIndex), currentSlot, headGrammarSlot, rule.getObject());
 
 			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot);
@@ -342,6 +339,20 @@ public class GrammarBuilder implements Serializable {
 		return sb.toString();
 	}
 	
+	private int getSlotId(Rule rule, int index) {
+		
+		if(rule.size() <= 2 || index <= 1) {
+			return -1;
+		}
+		
+		// Last grammar slot
+		if(index == rule.getBody().size()) {
+			return nonterminalIds.get(rule.getHead());
+		}
+		
+		return intermediateNodeIds.get(rule.getBody().subList(0, index));
+	}
+	
 	/**
 	 * If the nonterminal is introduced while rewriting, adds its index to it. 
 	 */
@@ -354,13 +365,13 @@ public class GrammarBuilder implements Serializable {
 		
 		if(symbol instanceof RegularExpression) {
 			RegularExpression token = (RegularExpression) symbol;
-			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, getSlotName(rule, symbolIndex), currentSlot, token, headGrammarSlot, getTokenID(token));
+			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, getSlotId(rule, symbolIndex), getSlotName(rule, symbolIndex), currentSlot, token, headGrammarSlot, getTokenID(token));
 		}
 		
 		// Nonterminal
 		else {
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(rule, symbolIndex, getSlotName(rule, symbolIndex), currentSlot, nonterminal, headGrammarSlot);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(rule, symbolIndex, getSlotId(rule, symbolIndex), getSlotName(rule, symbolIndex), currentSlot, nonterminal, headGrammarSlot);						
 		}		
 	}
 
@@ -445,11 +456,11 @@ public class GrammarBuilder implements Serializable {
 		for(Symbol symbol : condition.getSymbols()) {
 			if(symbol instanceof Nonterminal) {
 				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-				currentSlot = grammarSlotFactory.createNonterminalGrammarSlot(rule, index, getSlotName(rule, index), currentSlot, nonterminal, null);
+				currentSlot = grammarSlotFactory.createNonterminalGrammarSlot(rule, index, getSlotId(rule, index), getSlotName(rule, index), currentSlot, nonterminal, null);
 			} 
 			else if(symbol instanceof RegularExpression) {
 				RegularExpression token = (RegularExpression) symbol;
-				currentSlot = grammarSlotFactory.createTokenGrammarSlot(rule, index, getSlotName(rule, index), currentSlot, token, null, getTokenID(token));
+				currentSlot = grammarSlotFactory.createTokenGrammarSlot(rule, index, getSlotId(rule, index), getSlotName(rule, index), currentSlot, token, null, getTokenID(token));
 			}
 			
 			if(index == 0) {
@@ -458,7 +469,7 @@ public class GrammarBuilder implements Serializable {
 			index++;
 		}
 		
-		grammarSlotFactory.createLastGrammarSlot(rule, index, getSlotName(rule, index), currentSlot, null, null);
+		grammarSlotFactory.createLastGrammarSlot(rule, index, getSlotId(rule, index), getSlotName(rule, index), currentSlot, null, null);
 		conditionSlots.add(firstSlot);
 		return firstSlot;
 	}
