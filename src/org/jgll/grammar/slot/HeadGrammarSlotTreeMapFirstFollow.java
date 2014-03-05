@@ -56,6 +56,7 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 		for(Alternate alt : alternates) {
 			for(RegularExpression regex : alt.getPredictionSet()) {
 				for(Range r : regex.getFirstSet()) {
+					
 					Set<BodyGrammarSlot> s1 = predictionMap.get(r.getStart());
 					if(s1 == null) {
 						s1 = new HashSet<>();
@@ -63,9 +64,21 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 					}
 					s1.add(alt.getFirstSlot());
 					
-					Set<BodyGrammarSlot> s2 = predictionMap.get(r.getEnd() + 1);
-					if(s2 == null) {
-						predictionMap.put(r.getEnd() + 1, null);						
+					if(predictionMap.floorEntry(r.getStart() - 1) != null) {
+						s1.addAll(predictionMap.floorEntry(r.getStart() - 1).getValue());
+					}
+					
+					for(int i = r.getStart() + 1; i <= r.getEnd(); i++) {
+						if(predictionMap.get(i) != null) {
+							predictionMap.get(i).add(alt.getFirstSlot());
+						}
+					}
+					
+					if(predictionMap.ceilingEntry(r.getEnd() + 1) != null) {
+						Set<BodyGrammarSlot> s2 = predictionMap.get(r.getEnd() + 1);
+						if(s2 == null) {
+							predictionMap.put(r.getEnd() + 1, null);						
+						}						
 					}
 				}
 			}
