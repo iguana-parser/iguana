@@ -6,8 +6,6 @@ import java.util.List;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 
@@ -16,10 +14,6 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  *
  */
 public class PackedNode extends SPPFNode {
-	
-	public static final ExternalHasher<PackedNode> externalHasher = new PackedNodeExternalHasher();
-	public static final ExternalHasher<PackedNode> levelBasedExternalHasher = new PackedNodeLevelBasedExternalHasher();
-	public static final ExternalHasher<PackedNode> InsideParentHasher = new InsideParentExternalHasher();
 	
 	private final GrammarSlot slot;
 
@@ -43,7 +37,11 @@ public class PackedNode extends SPPFNode {
 		
 		this.children = new ArrayList<>(2);
 		
-		this.hash = levelBasedExternalHasher.hash(this, HashFunctions.defaulFunction());
+		this.hash = HashFunctions.defaulFunction().hash(slot.getId(),
+   						  								pivot,
+   						  								parent.getGrammarSlot().getId(),
+   						  								parent.getLeftExtent(),
+   						  								parent.getRightExtent());
 	}
 			
 	@Override
@@ -58,7 +56,11 @@ public class PackedNode extends SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  levelBasedExternalHasher.equals(this, other);
+		return  slot == other.slot &&
+		        pivot == other.pivot &&
+		        parent.getGrammarSlot() == other.parent.getGrammarSlot() &&
+		        parent.getLeftExtent() == other.parent.getLeftExtent() &&
+		        parent.getRightExtent() == other.parent.getRightExtent();
 	}
 	
 	public int getPivot() {
@@ -143,70 +145,6 @@ public class PackedNode extends SPPFNode {
 	@Override
 	public boolean isAmbiguous() {
 		return false;
-	}
-
-	public static class PackedNodeExternalHasher implements ExternalHasher<PackedNode> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(PackedNode packedNode, HashFunction f) {
- 			return f.hash(packedNode.slot.getId(),
-   						  packedNode.pivot,
-						  packedNode.parent.getGrammarSlot().getId(),
-						  packedNode.parent.getLeftExtent(),
-						  packedNode.parent.getRightExtent());
-		}
-
-		@Override
-		public boolean equals(PackedNode node1, PackedNode node2) {
-			return  node1.slot == node2.slot &&
-			        node1.pivot == node2.pivot &&
-			        node1.parent.getGrammarSlot() == node2.parent.getGrammarSlot() &&
-			        node1.parent.getLeftExtent() == node2.parent.getLeftExtent() &&
-			        node1.parent.getRightExtent() == node2.parent.getRightExtent();
-		}
-	}
-	
-	public static class PackedNodeLevelBasedExternalHasher implements ExternalHasher<PackedNode> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(PackedNode packedNode, HashFunction f) {
- 			return f.hash(packedNode.slot.getId(),
-   						  packedNode.pivot,
-						  packedNode.parent.getGrammarSlot().getId(),
-						  packedNode.parent.getLeftExtent());
-		}
-
-		@Override
-		public boolean equals(PackedNode node1, PackedNode node2) {
-			return  node1.slot == node2.slot &&
-			        node1.pivot == node2.pivot &&
-			        node1.parent.getGrammarSlot() == node2.parent.getGrammarSlot() &&
-			        node1.parent.getLeftExtent() == node2.parent.getLeftExtent();
-		}
-	}
-	
-	/**
-	 * Hash code for packed nodes when they are considered in the context of their parents.
-	 *
-	 */
-	public static class InsideParentExternalHasher implements ExternalHasher<PackedNode> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(PackedNode packedNode, HashFunction f) {
- 			return f.hash(packedNode.slot.getId(), packedNode.pivot);
-		}
-
-		@Override
-		public boolean equals(PackedNode node1, PackedNode node2) {
-			return node1.slot == node2.slot &&
-			       node1.pivot == node2.pivot;
-		}
 	}
 
 	@Override

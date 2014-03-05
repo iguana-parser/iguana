@@ -5,8 +5,6 @@ import java.util.Collections;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 
@@ -15,10 +13,6 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  *
  */
 public class TokenSymbolNode extends SPPFNode {
-	
-	public static final ExternalHasher<TokenSymbolNode> externalHasher = new TerminalSymbolNodeExternalHasher();
-	
-	public static final int EPSILON = -2;
 	
 	private final int tokenID;
 	
@@ -32,7 +26,7 @@ public class TokenSymbolNode extends SPPFNode {
 		this.tokenID = tokenID;
 		this.inputIndex = inputIndex;
 		this.length = length;
-		this.hash = externalHasher.hash(this, HashFunctions.defaulFunction());
+		this.hash = HashFunctions.defaulFunction().hash(tokenID, inputIndex);
 	}
 
 	@Override
@@ -113,23 +107,6 @@ public class TokenSymbolNode extends SPPFNode {
 	@Override
 	public GrammarSlot getGrammarSlot() {
 		throw new UnsupportedOperationException();
-	}
-
-	public static class TerminalSymbolNodeExternalHasher implements ExternalHasher<TokenSymbolNode> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(TokenSymbolNode t, HashFunction f) {
-			return f.hash(t.inputIndex, t.tokenID);
-		}
-
-		@Override
-		public boolean equals(TokenSymbolNode t1, TokenSymbolNode t2) {
-			return t1.tokenID == t2.tokenID &&
-				   t1.inputIndex == t2.inputIndex;
-
-		}
 	}
 
 	@Override
