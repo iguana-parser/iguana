@@ -123,6 +123,7 @@ public class GrammarBuilder implements Serializable {
 		newNonterminalsMap = new LinkedHashMap<>();
 		
 		nonterminalIds = new HashMap<>();
+		intermediateNodeIds = new HashMap<>();
 		
 		definitions = new HashMap<>();
 		rules = new ArrayList<>();
@@ -250,9 +251,9 @@ public class GrammarBuilder implements Serializable {
 			nonterminalIds.put(head, nonterminald++);
 		}
 
-		for(int i = 2; i < rule.getBody().size() - 1; i++) {
+		for(int i = 2; i < rule.getBody().size(); i++) {
 			List<Symbol> prefix = new ArrayList<>();
-			for(int j = 0; j < i; i++) {
+			for(int j = 0; j < i; j++) {
 				prefix.add(rule.getBody().get(j));
 			}
 			if(!intermediateNodeIds.containsKey(prefix)) {
