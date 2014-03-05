@@ -53,7 +53,7 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		int min = ranges.get(0).getStart();
 		int max = ranges.get(ranges.size() - 1).getEnd();
 		
-		if(max - min < 1000) {
+		if(max - min < 10000) {
 			return new HeadGrammarSlotArrayFirstFollow(nonterminal, min, max);
 		}
 		

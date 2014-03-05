@@ -29,8 +29,6 @@ public class NonterminalGrammarSlotFirstFollow extends NonterminalGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
-		System.out.println(nonterminal.getNonterminal().getName());
-		
 		if(!nonterminal.test(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
 			parser.recordParseError(this);
 			return null;

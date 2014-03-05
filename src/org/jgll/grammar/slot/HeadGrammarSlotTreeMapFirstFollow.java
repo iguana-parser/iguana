@@ -64,21 +64,23 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 					}
 					s1.add(alt.getFirstSlot());
 					
-					if(predictionMap.floorEntry(r.getStart() - 1) != null) {
-						s1.addAll(predictionMap.floorEntry(r.getStart() - 1).getValue());
+					Entry<Integer, Set<BodyGrammarSlot>> floorEntry = predictionMap.floorEntry(r.getStart() - 1);
+					if(floorEntry != null) {
+						s1.addAll(floorEntry.getValue());
 					}
-					
-					for(int i = r.getStart() + 1; i <= r.getEnd(); i++) {
-						if(predictionMap.get(i) != null) {
-							predictionMap.get(i).add(alt.getFirstSlot());
-						}
-					}
-					
-					if(predictionMap.ceilingEntry(r.getEnd() + 1) != null) {
-						Set<BodyGrammarSlot> s2 = predictionMap.get(r.getEnd() + 1);
+						
+					Set<BodyGrammarSlot> s2 = predictionMap.get(r.getEnd() + 1);
+					Entry<Integer, Set<BodyGrammarSlot>> upper = predictionMap.ceilingEntry(r.getEnd() + 1);
+					if(upper != null) {
 						if(s2 == null) {
-							predictionMap.put(r.getEnd() + 1, null);						
-						}						
+							s2 = new HashSet<>();
+							predictionMap.put(r.getEnd() + 1, s2);
+						}
+						s2.addAll(upper.getValue());
+					} else {
+						if(s2 == null) {
+							predictionMap.put(r.getEnd() + 1, new HashSet<BodyGrammarSlot>());						
+						}												
 					}
 				}
 			}
