@@ -101,7 +101,12 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 		for(Range range : map.keySet()) {
 			for(int i : list) {
 				if(i >= range.getStart() && i <= range.getEnd()) {
-					predictionMap.put(i, map.get(range));
+					Set<BodyGrammarSlot> s = predictionMap.get(i);
+					if(s == null) {
+						s = new HashSet<>();
+						predictionMap.put(i, s);
+					}
+					s.addAll(map.get(range));
 				}
 			}
 		}
