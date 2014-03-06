@@ -1,7 +1,12 @@
 package org.jgll.grammar.slot;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
@@ -52,39 +57,48 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 	public void setPredictionSet() {
 		
 		predictionMap = new TreeMap<>();
-
+		
+		Map<Range, Set<BodyGrammarSlot>> map = new HashMap<>();
+		
 		for(Alternate alt : alternates) {
 			for(RegularExpression regex : alt.getPredictionSet()) {
 				for(Range r : regex.getFirstSet()) {
-					
-					Set<BodyGrammarSlot> s1 = predictionMap.get(r.getStart());
-					if(s1 == null) {
-						s1 = new HashSet<>();
-						predictionMap.put(r.getStart(), s1);
+					Set<BodyGrammarSlot> set = map.get(r);
+					if(set == null) {
+						set = new HashSet<>();
+						map.put(r, set);
 					}
-					s1.add(alt.getFirstSlot());
-					
-					Entry<Integer, Set<BodyGrammarSlot>> floorEntry = predictionMap.floorEntry(r.getStart() - 1);
-					if(floorEntry != null) {
-						s1.addAll(floorEntry.getValue());
-					}
-						
-					Set<BodyGrammarSlot> s2 = predictionMap.get(r.getEnd() + 1);
-					Entry<Integer, Set<BodyGrammarSlot>> upper = predictionMap.ceilingEntry(r.getEnd() + 1);
-					if(upper != null) {
-						if(s2 == null) {
-							s2 = new HashSet<>();
-							predictionMap.put(r.getEnd() + 1, s2);
-						}
-						s2.addAll(upper.getValue());
-					} else {
-						if(s2 == null) {
-							predictionMap.put(r.getEnd() + 1, new HashSet<BodyGrammarSlot>());						
-						}												
-					}
+					set.add(alt.getFirstSlot());
 				}
 			}
- 		}
+		}
+		
+		Map<Integer, Range> starts = new HashMap<>();
+		Map<Integer, Range> ends = new HashMap<>();
+		
+		for(Range r : map.keySet()) {
+			starts.put(r.getStart(), r);
+			ends.put(r.getEnd(), r);
+		}
+		
+		Set<Integer> points = new HashSet<>(starts.keySet());
+		points.addAll(ends.keySet());
+		List<Integer> sortedPoints = new ArrayList<>(points);
+		Collections.sort(sortedPoints);
+		
+		
+		for(int i = 0; i < sortedPoints.size(); i++) {
+			int val = sortedPoints.get(i);
+			if(starts.containsKey(val)) {
+				predictionMap.put(val, map.get(starts.get(val)));				
+			} else {
+				if(i < sortedPoints.size() - 1) {
+					predictionMap.put(i + 1, map.get(ends.get(val)));
+				} else {
+					predictionMap.put(i + 1, new HashSet<BodyGrammarSlot>());
+				}
+			}
+		}
 	}
 
 }
