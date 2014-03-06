@@ -73,32 +73,40 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 			}
 		}
 		
-		Map<Integer, Range> starts = new HashMap<>();
-		Map<Integer, Range> ends = new HashMap<>();
+		Set<Integer> starts = new HashSet<>();
+		Set<Integer> ends = new HashSet<>();
 		
 		for(Range r : map.keySet()) {
-			starts.put(r.getStart(), r);
-			ends.put(r.getEnd(), r);
+			starts.add(r.getStart());
+			ends.add(r.getEnd());
 		}
 		
-		Set<Integer> points = new HashSet<>(starts.keySet());
-		points.addAll(ends.keySet());
+		Set<Integer> points = new HashSet<>(starts);
+		points.addAll(ends);
 		List<Integer> sortedPoints = new ArrayList<>(points);
 		Collections.sort(sortedPoints);
 		
+		Set<Integer> set = new HashSet<>();
+		for(int i : sortedPoints) {
+			if(starts.contains(i)) {
+				set.add(i);
+			} 
+			if(ends.contains(i)) {
+				set.add(i + 1);
+			}
+		}
+		List<Integer> list = new ArrayList<>(set);
+		Collections.sort(list);
 		
-		for(int i = 0; i < sortedPoints.size(); i++) {
-			int val = sortedPoints.get(i);
-			if(starts.containsKey(val)) {
-				predictionMap.put(val, map.get(starts.get(val)));				
-			} else {
-				if(i < sortedPoints.size() - 1) {
-					predictionMap.put(i + 1, map.get(ends.get(val)));
-				} else {
-					predictionMap.put(i + 1, new HashSet<BodyGrammarSlot>());
+		for(Range range : map.keySet()) {
+			for(int i : list) {
+				if(i >= range.getStart() && i <= range.getEnd()) {
+					predictionMap.put(i, map.get(range));
 				}
 			}
 		}
+		
+		predictionMap.put(list.get(list.size() - 1), new HashSet<BodyGrammarSlot>());
 	}
 
 }
