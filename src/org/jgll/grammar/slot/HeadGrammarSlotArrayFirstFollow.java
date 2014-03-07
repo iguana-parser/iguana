@@ -1,11 +1,12 @@
 package org.jgll.grammar.slot;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
@@ -14,32 +15,27 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Set<BodyGrammarSlot>[] predictionMap;
+	private Set<Integer>[] predictionMap;
 	
 	private int min;
 	
 	private int max;
 
-	public HeadGrammarSlotArrayFirstFollow(Nonterminal nonterminal, int min, int max) {
-		super(nonterminal);
+	public HeadGrammarSlotArrayFirstFollow(Nonterminal nonterminal, Set<List<Symbol>> alts, List<Set<RegularExpression>> predictionSets, boolean nullable, int min, int max) {
+		super(nonterminal, alts, nullable);
 		this.min = min;
 		this.max = max;
+		setPredictionSet(predictionSets);
 	}
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		if(lexer.getInput().charAt(ci) < min) {
-			System.out.println("WTF?");
-		}
+		Set<Integer> set = predictionMap[lexer.getInput().charAt(ci) - min];
 		
-		Set<BodyGrammarSlot> set = predictionMap[lexer.getInput().charAt(ci) - min];
-		
-		if(set != null) {
-			for(BodyGrammarSlot slot : set) {
-				parser.addDescriptor(slot);
-			}
+		for(int alternateIndex : set) {
+			parser.addDescriptor(alternates.get(alternateIndex).getFirstSlot());
 		}
 		
 		return null;
@@ -54,21 +50,20 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
-	public void setPredictionSet() {
+	private void setPredictionSet(List<Set<RegularExpression>> predictionSets) {
 		
 		predictionMap = new Set[max - min + 1];
 		
-		for(Alternate alt : alternates) {
-			for(RegularExpression regex : alt.getPredictionSet()) {
+		for(int i = 0; i < alts.size(); i++) {
+			for(RegularExpression regex : predictionSets.get(i)) {
 				for(Range r : regex.getFirstSet()) {
-					for(int i = r.getStart(); i <= r.getEnd(); i++) {
-						Set<BodyGrammarSlot> set = predictionMap[i - min];
+					for(int v = r.getStart(); v <= r.getEnd(); v++) {
+						Set<Integer> set = predictionMap[v - min];
 						if(set == null) {
 							set = new HashSet<>();
-							predictionMap[i - min] = set;
+							predictionMap[v - min] = set;
 						}
-						set.add(alt.getFirstSlot());
+						set.add(i);
 					}
 				}
 			}

@@ -1,16 +1,13 @@
 package org.jgll.grammar.slot;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 
@@ -24,8 +21,8 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 	
 	private int max;
 
-	public LL1HeadGrammarSlot(Nonterminal nonterminal, int min, int max) {
-		super(nonterminal);
+	public LL1HeadGrammarSlot(Nonterminal nonterminal, Set<List<Symbol>> alternates, boolean nullable, int min, int max) {
+		super(nonterminal, alternates, nullable);
 		this.min = min;
 		this.max = max;
 	}
@@ -100,31 +97,6 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 			return false;
 		}
 		return predictionMap[v] != null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setPredictionSet() {
-		
-		predictionMap = new Set[max - min + 2];
-		
-		for(Alternate alt : alternates) {
-			for(RegularExpression regex : alt.getPredictionSet()) {
-				for(Range r : regex.getFirstSet()) {
-					Set<BodyGrammarSlot> s1 = predictionMap[r.getStart() - min];
-					if(s1 == null) {
-						s1 = new HashSet<>();
-						predictionMap[r.getStart() - min] =  s1;
-					}
-					s1.add(alt.getFirstSlot());
-					
-					Set<BodyGrammarSlot> s2 = predictionMap[r.getEnd() + 1 - min];
-					if(s2 == null) {
-						predictionMap[r.getEnd() + 1 - min] =  null;						
-					}
-				}
-			}
- 		}
 	}
 
 }

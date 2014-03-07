@@ -11,9 +11,9 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
@@ -22,25 +22,21 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
-	private NavigableMap<Integer, Set<BodyGrammarSlot>> predictionMap;
+	private NavigableMap<Integer, Set<Integer>> predictionMap;
 
-	public HeadGrammarSlotTreeMapFirstFollow(Nonterminal nonterminal) {
-		super(nonterminal);
-		predictionMap = new TreeMap<>();
+	public HeadGrammarSlotTreeMapFirstFollow(Nonterminal nonterminal, Set<List<Symbol>> alternates, List<Set<RegularExpression>> predictionSets, boolean nullable) {
+		super(nonterminal, alternates, nullable);
+		setPredictionSet(predictionSets);
 	}
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		Entry<Integer, Set<BodyGrammarSlot>> e = predictionMap.floorEntry(lexer.getInput().charAt(ci));
+		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(lexer.getInput().charAt(ci));
 		if(e != null) {
-			Set<BodyGrammarSlot> set = e.getValue();
-
-			if(set != null) {
-				for(BodyGrammarSlot slot : set) {
-					parser.addDescriptor(slot);
-				}
+			for(Integer alternateIndex : e.getValue()) {
+				parser.addDescriptor(alternates.get(alternateIndex).getFirstSlot());
 			}			
 		}
 		
@@ -49,26 +45,26 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 	
 	@Override
 	public boolean test(int v) {
-		Entry<Integer, Set<BodyGrammarSlot>> e = predictionMap.floorEntry(v);
+		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
 		return e != null && e.getValue() != null;
 	}
 	
-	@Override
-	public void setPredictionSet() {
+	private void setPredictionSet(List<Set<RegularExpression>> predictionSets) {
 		
 		predictionMap = new TreeMap<>();
 		
-		Map<Range, Set<BodyGrammarSlot>> map = new HashMap<>();
+		// From range to the set of alternate indices
+		Map<Range, Set<Integer>> map = new HashMap<>();
 		
-		for(Alternate alt : alternates) {
-			for(RegularExpression regex : alt.getPredictionSet()) {
+		for(int i = 0; i < alts.size(); i++) {
+			for(RegularExpression regex : predictionSets.get(i)) {
 				for(Range r : regex.getFirstSet()) {
-					Set<BodyGrammarSlot> set = map.get(r);
+					Set<Integer> set = map.get(r);
 					if(set == null) {
 						set = new HashSet<>();
 						map.put(r, set);
 					}
-					set.add(alt.getFirstSlot());
+					set.add(i);
 				}
 			}
 		}
@@ -101,7 +97,7 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 		for(Range range : map.keySet()) {
 			for(int i : list) {
 				if(i >= range.getStart() && i <= range.getEnd()) {
-					Set<BodyGrammarSlot> s = predictionMap.get(i);
+					Set<Integer> s = predictionMap.get(i);
 					if(s == null) {
 						s = new HashSet<>();
 						predictionMap.put(i, s);
@@ -111,7 +107,7 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 			}
 		}
 		
-		predictionMap.put(list.get(list.size() - 1), new HashSet<BodyGrammarSlot>());
+		predictionMap.put(list.get(list.size() - 1), new HashSet<Integer>());
 	}
 
 }

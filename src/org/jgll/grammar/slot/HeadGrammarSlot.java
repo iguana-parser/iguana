@@ -37,9 +37,13 @@ public class HeadGrammarSlot extends GrammarSlot {
 	private boolean nullable;
 	
 	private Set<Integer> predictionSet;
+
+	protected Set<List<Symbol>> alts;
 	
-	public HeadGrammarSlot(Nonterminal nonterminal) {
+	public HeadGrammarSlot(Nonterminal nonterminal, Set<List<Symbol>> alts, boolean nullable) {
 		this.nonterminal = nonterminal;
+		this.alts = alts;
+		this.nullable = nullable;
 		this.alternates = new ArrayList<>();
 	}
 	
@@ -98,11 +102,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public boolean isNullable() {
 		return nullable;
 	}
-	
-	public void setNullable(boolean nullable) {
-		this.nullable = nullable;
-	}
-	
+		
 	public boolean test(int v) {
 		return true;
 	}
@@ -174,10 +174,7 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public Set<Integer> getPredictionSet() {
 		return predictionSet;
 	}
-	
-	public void setPredictionSet() {
-	}
-	
+		
 	public boolean contains(List<Symbol> list) {
 		for(Alternate alternate : alternates) {
 			if(alternate.match(list)) {

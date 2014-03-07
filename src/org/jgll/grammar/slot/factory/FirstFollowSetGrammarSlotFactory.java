@@ -24,14 +24,17 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 
 public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 
 	@Override
-	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal, 
+	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
+												 Set<List<Symbol>> alternates,
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
-												 Map<Nonterminal, Set<RegularExpression>> followSets) {
+												 Map<Nonterminal, Set<RegularExpression>> followSets,
+												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
 		Set<RegularExpression> set = new HashSet<>(firstSets.get(nonterminal));
 		if(set.contains(Epsilon.getInstance())) {
@@ -53,11 +56,14 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		int min = ranges.get(0).getStart();
 		int max = ranges.get(ranges.size() - 1).getEnd();
 		
+		boolean nullable = firstSets.get(nonterminal).contains(Epsilon.getInstance());
+		List<Set<RegularExpression>> predictionSet = predictionSets.get(nonterminal);
+		
 		if(max - min < 10000) {
-			return new HeadGrammarSlotArrayFirstFollow(nonterminal, min, max);
+			return new HeadGrammarSlotArrayFirstFollow(nonterminal, alternates, predictionSet, nullable, min, max);
 		}
 		
-		return new HeadGrammarSlotTreeMapFirstFollow(nonterminal);
+		return new HeadGrammarSlotTreeMapFirstFollow(nonterminal, alternates, predictionSet, nullable);
 	}
 	
 

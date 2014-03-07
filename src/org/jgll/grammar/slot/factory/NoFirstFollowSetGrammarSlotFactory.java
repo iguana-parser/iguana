@@ -1,6 +1,7 @@
 package org.jgll.grammar.slot.factory;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,9 +14,11 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.RangeGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 
 
@@ -23,10 +26,12 @@ public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
+			Set<List<Symbol>> alternates,
 			Map<Nonterminal, Set<RegularExpression>> firstSets,
-			Map<Nonterminal, Set<RegularExpression>> followSets) {
+			Map<Nonterminal, Set<RegularExpression>> followSets,
+			Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
-		return new HeadGrammarSlot(nonterminal);
+		return new HeadGrammarSlot(nonterminal, alternates, firstSets.get(nonterminal).contains(Epsilon.getInstance()));
 	}
 	
 	@Override

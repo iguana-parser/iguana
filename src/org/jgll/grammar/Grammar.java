@@ -78,6 +78,8 @@ public class Grammar implements Serializable {
 	
 	private Set<Nonterminal> ll1SubGrammarNonterminals;
 	
+	private Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.headGrammarSlots = builder.headGrammarSlots;
@@ -103,6 +105,7 @@ public class Grammar implements Serializable {
 		this.firstSets = builder.firstSets;
 		this.followSets = builder.followSets;
 		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
+		this.predictionSets = predictionSets;
 		
 		this.matchers = new ArrayList<>();
 		for(RegularExpression regex : tokens) {
@@ -309,6 +312,10 @@ public class Grammar implements Serializable {
 		return firstSets.get(nonterminal);
 	}
 	
+	public Set<RegularExpression> getPredictionSetForAlternate(Nonterminal nonterminal, int index) {
+		return predictionSets.get(nonterminal).get(index);
+	}
+	 
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
 		return followSets.get(nonterminal);
 	}

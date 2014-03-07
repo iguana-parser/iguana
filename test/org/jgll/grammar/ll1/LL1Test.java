@@ -10,7 +10,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
 import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
-import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -95,19 +94,15 @@ public class LL1Test {
 	@Test
 	public void testPredictSets() {
 		// S ::= . A [a]
-		Alternate alt1 = grammar.getHeadGrammarSlot("S").getAlternateAt(0);
-		assertEquals(set(d, b, a), alt1.getPredictionSet());
+		assertEquals(set(d, b, a), grammar.getPredictionSetForAlternate(S, 0));
 		
 		// A ::= . B D
-		Alternate alt2 = grammar.getHeadGrammarSlot("A").getAlternateAt(0);
-		assertEquals(set(d, b, a, EOF.getInstance()), alt2.getPredictionSet());
+		assertEquals(set(d, b, a, EOF.getInstance()), grammar.getPredictionSetForAlternate(A, 0));
 		
 		// B ::= . [b]
-		Alternate alt3 = grammar.getHeadGrammarSlot("B").getAlternateAt(0);
-		assertEquals(set(b), alt3.getPredictionSet());
+		assertEquals(set(b), grammar.getPredictionSetForAlternate(B, 0));
 
-		Alternate alt4 = grammar.getHeadGrammarSlot("B").getAlternateAt(1);
-		assertEquals(set(d, a, EOF.getInstance()), alt4.getPredictionSet());
+		assertEquals(set(d, a, EOF.getInstance()), grammar.getPredictionSetForAlternate(B, 1));
 	}
 
 	@Test

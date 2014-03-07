@@ -2,8 +2,11 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
@@ -32,7 +35,7 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	private L0() {
-		super(new Nonterminal("L0"));
+		super(new Nonterminal("L0"), new LinkedHashSet<List<Symbol>>(), false);
 		id = -1;
 	}
 	

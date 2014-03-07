@@ -106,6 +106,8 @@ public class GrammarBuilder implements Serializable {
 	
 	private Map<List<Symbol>, Integer> intermediateNodeIds;
 	
+	Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
+	
 	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammarSlotFactory);
 	}
@@ -147,6 +149,7 @@ public class GrammarBuilder implements Serializable {
 		start = System.nanoTime();
 		firstSets = GrammarProperties.calculateFirstSets(definitions);
 		followSets = GrammarProperties.calculateFollowSets(definitions, firstSets);
+		predictionSets = GrammarProperties.getPredictionSets(definitions, firstSets, followSets);
 		end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 		
@@ -173,13 +176,6 @@ public class GrammarBuilder implements Serializable {
 		
 		validateGrammar();
 		
-		GrammarProperties.setNullableHeads(headGrammarSlots, firstSets);
-		
-		start = System.nanoTime();
-		
-		GrammarProperties.setPredictionSets(headGrammarSlots, firstSets, followSets);
-		end = System.nanoTime();
-		log.info("Prediction sets are calcuated in in %d ms", (end - start) / 1000_000);
 		
 //		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
@@ -236,12 +232,13 @@ public class GrammarBuilder implements Serializable {
 	
 	int nonterminald = 0;
 	int intermediateId;
-	
+
 	public GrammarBuilder addRule(Rule rule) {
 		Nonterminal head = rule.getHead();
 		Set<List<Symbol>> definition = definitions.get(head);
 		if(definition == null) {
-			definition = new HashSet<>();
+			// The order in which alternates are added is important
+			definition = new LinkedHashSet<>();
 			definitions.put(head, definition);
 		}
 		definition.add(rule.getBody());
@@ -478,7 +475,7 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
 
 		if (headGrammarSlot == null) {
-			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, firstSets, followSets);
+			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, definitions.get(nonterminal), firstSets, followSets, predictionSets);
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
 			headGrammarSlots.add(headGrammarSlot);
 		}
@@ -612,7 +609,7 @@ public class GrammarBuilder implements Serializable {
 			HeadGrammarSlot freshNonterminal = map.get(e.getValue());
 			
 			if(freshNonterminal == null) {
-				freshNonterminal = grammarSlotFactory.createHeadGrammarSlot(pattern.getNonterminal(), firstSets, followSets);
+				freshNonterminal = grammarSlotFactory.createHeadGrammarSlot(pattern.getNonterminal(), definitions.get(pattern.getNonterminal()), firstSets, followSets, predictionSets);
 				addNewNonterminal(freshNonterminal);
 				map.put(e.getValue(), freshNonterminal);
 			}
@@ -714,7 +711,7 @@ public class GrammarBuilder implements Serializable {
 		
 		if(newNonterminal == null) {
 			
-			newNonterminal = grammarSlotFactory.createHeadGrammarSlot(filteredNonterminal.getNonterminal(), firstSets, followSets);
+			newNonterminal = grammarSlotFactory.createHeadGrammarSlot(filteredNonterminal.getNonterminal(), definitions.get(filteredNonterminal.getNonterminal()), firstSets, followSets, predictionSets);
 			
 			addNewNonterminal(newNonterminal);
 			
@@ -882,7 +879,7 @@ public class GrammarBuilder implements Serializable {
 			return copy;
 		}
 		
-		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal(), firstSets, followSets);
+		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal(), definitions.get(head.getNonterminal()), firstSets, followSets, predictionSets);
 		addNewNonterminal(copy);
 		map.put(head, copy);
 		
@@ -909,7 +906,7 @@ public class GrammarBuilder implements Serializable {
 			return copy;
 		}
 		
-		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal(), firstSets, followSets);
+		copy = grammarSlotFactory.createHeadGrammarSlot(head.getNonterminal(), definitions.get(head.getNonterminal()), firstSets, followSets, predictionSets);
 		addNewNonterminal(copy);
 		map.put(head, copy);
 		

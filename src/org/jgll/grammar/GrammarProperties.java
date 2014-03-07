@@ -10,9 +10,7 @@ import java.util.Set;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -134,42 +132,7 @@ public class GrammarProperties {
 
 		return true;
 	}
-	
-	private static boolean isChainNullable(BodyGrammarSlot slot, Map<Nonterminal, Set<RegularExpression>> firstSets) {
-		if (!(slot instanceof LastGrammarSlot)) {
-			if(slot instanceof TokenGrammarSlot) {
-				return slot.isNullable() && isChainNullable(slot.next(), firstSets);
-			}
-			NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-			return isNullable(ntGrammarSlot.getNonterminal().getNonterminal(), firstSets) && isChainNullable(ntGrammarSlot.next(), firstSets);
-		}
-
-		return true;
-	}
-	
-	private static void getChainFirstSet(BodyGrammarSlot slot, 
-										 Set<RegularExpression> set, 
-										 Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		
-		if (!(slot instanceof LastGrammarSlot)) {
-			
-			if(slot instanceof TokenGrammarSlot) {
-				set.add(((TokenGrammarSlot) slot).getSymbol());
-				if(slot.isNullable()) {
-					getChainFirstSet(slot.next(), set, firstSets);
-				}
-			}
-			else {
-				NonterminalGrammarSlot ntGrammarSlot = (NonterminalGrammarSlot) slot;
-				set.addAll(firstSets.get(ntGrammarSlot.getNonterminal().getNonterminal()));
-				
-				if(isNullable(ntGrammarSlot.getNonterminal().getNonterminal(), firstSets)) {
-					getChainFirstSet(ntGrammarSlot.next(), set, firstSets);
-				}
-			}
-		}
-	}
-	
 	public static Map<Nonterminal, Set<RegularExpression>> calculateFollowSets(Map<Nonterminal, Set<List<Symbol>>> definitions, 
 																		 	   Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		
@@ -232,46 +195,49 @@ public class GrammarProperties {
 		return followSets;
 	}
 	
-	public static void setNullableHeads(Iterable<HeadGrammarSlot> nonterminals,
-										Map<Nonterminal, Set<RegularExpression>> firstSets) {
-		for (HeadGrammarSlot head : nonterminals) {
-			head.setNullable(firstSets.get(head.getNonterminal()).contains(Epsilon.getInstance()));
-		}
-	}
-	
-	public static void setPredictionSets(Iterable<HeadGrammarSlot> nonterminals,
-										 Map<Nonterminal, Set<RegularExpression>> firstSets,
-										 Map<Nonterminal, Set<RegularExpression>> followSets) {
+	public static Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets(Map<Nonterminal, Set<List<Symbol>>> definitions,
+																				  Map<Nonterminal, Set<RegularExpression>> firstSets,
+																				  Map<Nonterminal, Set<RegularExpression>> followSets) {
+
+		Map<Nonterminal, List<Set<RegularExpression>>> predictionSets = new HashMap<>();
 		
-		for (HeadGrammarSlot head : nonterminals) {
+		for(Nonterminal nonterminal : definitions.keySet()) {
+			Set<List<Symbol>> alternates = definitions.get(nonterminal);
 			
-			for (Alternate alternate : head.getAlternates()) {
+			List<Set<RegularExpression>> list = new ArrayList<>();
+
+			for(List<Symbol> alternate : alternates) {
+				Set<RegularExpression> predictionSet = new HashSet<>();
 				
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
-				
-					if(currentSlot instanceof NonterminalGrammarSlot ||
-					   currentSlot instanceof TokenGrammarSlot) {
-						Set<RegularExpression> set = new HashSet<>();
-						getChainFirstSet(currentSlot, set, firstSets);
-						if(isChainNullable(currentSlot, firstSets)) {
-							set.addAll(followSets.get(head.getNonterminal()));
+				for(int i = 0; i < alternate.size(); i++) {
+					Symbol symbol = alternate.get(i);
+					if(symbol instanceof Nonterminal) {
+						predictionSet.addAll(firstSets.get(symbol));
+						if(!firstSets.get(symbol).contains(Epsilon.getInstance())) {
+							break;
 						}
-						// Prediction sets should not contain epsilon
-						set.remove(Epsilon.getInstance());
-						alternate.setPredictionSet(set);
 					} 
-					else if(currentSlot instanceof LastGrammarSlot) {
-						Set<RegularExpression> set = followSets.get(currentSlot.getHead().getNonterminal());
-						set.remove(Epsilon.getInstance());
-						alternate.setPredictionSet(set);
-					} 
-					else {
-						throw new RuntimeException("Unexpected grammar slot of type " + currentSlot.getClass());
+					else if (symbol instanceof RegularExpression) {
+						RegularExpression regex = (RegularExpression) symbol;
+						predictionSet.add(regex);
+						if(!regex.isNullable()) {
+							break;
+						}
 					}
+				}
+				
+				if(isChainNullable(alternate, 0, firstSets)) {
+					predictionSet.addAll(followSets.get(nonterminal));
+				}
+				predictionSet.remove(Epsilon.getInstance());
+				list.add(predictionSet);
+
 			}
-			
-			head.setPredictionSet();
+
+			predictionSets.put(nonterminal, list);
 		}
+		
+		return predictionSets;
 	}
 	
 	public static List<BodyGrammarSlot> setSlotIds(Iterable<HeadGrammarSlot> nonterminals, Iterable<BodyGrammarSlot> conditionSlots) {
