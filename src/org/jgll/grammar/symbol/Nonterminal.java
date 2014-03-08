@@ -1,7 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import org.jgll.parser.HashFunctions;
-
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -13,6 +11,10 @@ public class Nonterminal extends AbstractSymbol {
 	
 	public Nonterminal(String name) {
 		this(name, 0, false);
+	}
+	
+	public Nonterminal(String name, boolean ebnfList) {
+		this(name, 0, ebnfList);
 	}
 	
 	public Nonterminal(String name, int index) {
@@ -38,6 +40,11 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	@Override
+	public String getName() {
+		return index > 0 ? name + index : name;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) {
 			return true;
@@ -49,12 +56,12 @@ public class Nonterminal extends AbstractSymbol {
 		
 		Nonterminal other = (Nonterminal) obj;
 		
-		return name.equals(other.name) && index == other.index;
+		return name.equals(other.name);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(name.hashCode(), index);
+		return name.hashCode();
 	}
 
 	@Override

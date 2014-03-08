@@ -14,7 +14,6 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 
@@ -201,9 +200,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public NonterminalSymbolNode createSPPFNode(int leftExtent, int rightExtent) {
 		if(nonterminal.isEbnfList()) {
 			return new ListSymbolNode(this, leftExtent, rightExtent);
-		} 
-		else if (nonterminal.isCollapsible()) {
-			return new CollapsibleNode(this, leftExtent, rightExtent);
 		} else {
 			return new NonterminalSymbolNode(this, leftExtent, rightExtent);
 		}
