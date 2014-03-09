@@ -26,11 +26,14 @@ public class OperatorPrecedence {
 	
 	private Map<PrecedencePattern, Set<List<Symbol>>> patterns;
 	
+	private Map<Nonterminal, Integer> newNonterminals;
+	
 	public OperatorPrecedence(Map<Nonterminal, 
 							  Set<List<Symbol>>> definitions, 
 							  Map<PrecedencePattern, Set<List<Symbol>>> patterns) {
 		this.definitions = definitions;
 		this.patterns = patterns;
+		newNonterminals = new HashMap<>();
 	}
 	
 	public void rewritePatterns() {
@@ -125,17 +128,17 @@ public class OperatorPrecedence {
 		}
 	}
 	
-	private HeadGrammarSlot copyIndirectAtLeft(HeadGrammarSlot head, Nonterminal directNonterminal) {
-		return copyIndirectAtLeft(head, directNonterminal, new HashMap<HeadGrammarSlot, HeadGrammarSlot>());
+	private Nonterminal copyIndirectAtLeft(Nonterminal head, Nonterminal directNonterminal) {
+		return copyIndirectAtLeft(head, directNonterminal, new HashMap<Nonterminal, Nonterminal>());
 	}
 
-	private HeadGrammarSlot copyIndirectAtRight(HeadGrammarSlot head, Nonterminal directNonterminal) {
-		return copyIndirectAtRight(head, directNonterminal, new HashMap<HeadGrammarSlot, HeadGrammarSlot>());
+	private Nonterminal copyIndirectAtRight(Nonterminal head, Nonterminal directNonterminal) {
+		return copyIndirectAtRight(head, directNonterminal, new HashMap<Nonterminal, Nonterminal>());
 	}
 	
-	private HeadGrammarSlot copyIndirectAtLeft(HeadGrammarSlot head, Nonterminal directName, HashMap<HeadGrammarSlot, HeadGrammarSlot> map) {
+	private Nonterminal copyIndirectAtLeft(Nonterminal head, Nonterminal directName, HashMap<Nonterminal, Nonterminal> map) {
 		
-		HeadGrammarSlot copy = map.get(head);
+		Nonterminal copy = map.get(head);
 		if(copy != null) {
 			return copy;
 		}
@@ -185,6 +188,13 @@ public class OperatorPrecedence {
 		}
 		
 		return copy;
+	}
+	
+	private Nonterminal addNewNonterminal(Nonterminal nonterminal) {
+		Integer index = newNonterminals.get(nonterminal);
+		Nonterminal newNonterminal = new Nonterminal(nonterminal.getName(), index + 1);
+		newNonterminals.put(nonterminal, index + 1);
+		return newNonterminal;
 	}
 	
 	public boolean match(List<Symbol> list1, List<Symbol> list2) {
