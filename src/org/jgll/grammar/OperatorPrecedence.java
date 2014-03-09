@@ -34,10 +34,11 @@ public class OperatorPrecedence {
 		newNonterminals = new HashMap<>();
 	}
 	
-	public void rewritePatterns() {
+	public Map<Nonterminal, Set<List<Symbol>>> rewrite() {
 		for(Nonterminal nonterminal : definitions.keySet()) {
 			rewriteFirstLevel(nonterminal);
 		}
+		return definitions;
 	}
 
 	private void rewriteFirstLevel(Nonterminal head) {
