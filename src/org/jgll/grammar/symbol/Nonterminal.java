@@ -1,5 +1,7 @@
 package org.jgll.grammar.symbol;
 
+import org.jgll.parser.HashFunctions;
+
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -39,14 +41,13 @@ public class Nonterminal extends AbstractSymbol {
 		return false;
 	}
 	
-	@Override
-	public String getName() {
-		return index > 0 ? name + index : name;
+	public int getIndex() {
+		return index;
 	}
 	
 	@Override
 	public String toString() {
-		return getName();
+		return index > 0 ? name + index : name;
 	}
 	
 	@Override
@@ -61,12 +62,12 @@ public class Nonterminal extends AbstractSymbol {
 		
 		Nonterminal other = (Nonterminal) obj;
 		
-		return name.equals(other.name);
+		return name.equals(other.name) && index == other.index;
 	}
 	
 	@Override
 	public int hashCode() {
-		return name.hashCode();
+		return HashFunctions.defaulFunction().hash(name.hashCode(), index);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class OperatorPrecedence {
@@ -180,7 +181,7 @@ public class OperatorPrecedence {
 				
 				PrecedencePattern pattern = e.getKey();
 				
-				if(!match(alt, pattern.getParent())) {
+				if(!match(plain(alt), pattern.getParent())) {
 					continue;
 				}
 				
@@ -394,9 +395,25 @@ public class OperatorPrecedence {
 	}
 	
 	private Set<List<Symbol>> without(Nonterminal head, Set<List<Symbol>> set) {
-		Set<List<Symbol>> without = new HashSet<>(definitions.get(head));
-		without.remove(set);
+		Set<List<Symbol>> without = new LinkedHashSet<>();
+		for(List<Symbol> alt : definitions.get(head)) {
+			if(!set.contains(plain(alt))) {
+				without.add(alt);
+			}
+		}
 		return without;
+	}
+	
+	private List<Symbol> plain(List<Symbol> alternate) {
+		List<Symbol> plain = new ArrayList<>();
+		for(Symbol symbol : alternate) {
+			if(symbol instanceof Nonterminal && ((Nonterminal) symbol).getIndex() > 0) {
+				plain.add(new Nonterminal(symbol.getName()));
+			} else {
+				plain.add(symbol);
+			}
+		}
+		return plain;
 	}
 
 	
