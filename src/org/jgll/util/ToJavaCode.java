@@ -43,9 +43,8 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			if(grammar.isNewNonterminal((HeadGrammarSlot) node.getGrammarSlot())) {
-				int index = grammar.getIndex((HeadGrammarSlot) node.getGrammarSlot());
 				sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-						"grammar.getNonterminalByNameAndIndex(\"" + node.getGrammarSlot()  + "\", " + index + "), " + 
+						"grammar.getHeadGrammarSlot(\"" + node.getGrammarSlot() + "), " + 
 						node.getLeftExtent() + ", " + 
 						node.getRightExtent() + ");\n");
 			} else {
@@ -108,9 +107,8 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			if(grammar.isNewNonterminal((HeadGrammarSlot) node.getGrammarSlot())) {
-				int index = grammar.getIndex((HeadGrammarSlot) node.getGrammarSlot());
 				sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
-						"grammar.getNonterminalByNameAndIndex(\"" + node.getGrammarSlot()  + "\", " + index + "), " + 
+						"grammar.getNonterminalByNameAndIndex(\"" + node.getGrammarSlot() + "), " + 
 						node.getLeftExtent() + ", " + 
 						node.getRightExtent() + ");\n");
 			} else {

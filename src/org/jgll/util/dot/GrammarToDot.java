@@ -35,7 +35,7 @@ public class GrammarToDot {
 			HeadGrammarSlot head = todoQueue.poll();
 			
 			for(Alternate alternate : head.getAlternates()) {
-				sb.append("\"" + getId(head) + "\"" + String.format(NONTERMINAL_NODE, grammar.getNonterminalName(head)));
+				sb.append("\"" + getId(head) + "\"" + String.format(NONTERMINAL_NODE, head.getNonterminal().getName()));
 				
 				sb.append(EDGE + "\"" + getId(head) + "\"" + "->" + "{\"" + getId(alternate.getFirstSlot()) + "\"}" + "\n");
 				

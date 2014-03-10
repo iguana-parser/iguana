@@ -33,16 +33,19 @@ public class OperatorPrecedence {
 	
 	private Map<Set<List<Symbol>>, Nonterminal> existingAlternates;
 	
-	public OperatorPrecedence(Map<Nonterminal, Set<List<Symbol>>> definitions) {
-		this.definitions = definitions;
+	private Set<Rule> newRules;
+	
+	public OperatorPrecedence() {
 		this.newNonterminals = new HashMap<>();
 		this.precednecePatterns = new HashMap<>();
 		this.existingAlternates = new HashMap<>();
+		this.newRules = new HashSet<>();
 	}
 	
-	public Map<Nonterminal, Set<List<Symbol>>> rewrite() {
+	public Set<Rule> rewrite(Map<Nonterminal, Set<List<Symbol>>> definitions) {
+		this.definitions = new HashMap<>(definitions);
 		rewritePrecedencePatterns();
-		return definitions;
+		return newRules;
 	}
 	
 	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
@@ -195,7 +198,7 @@ public class OperatorPrecedence {
 			
 			existingAlternates.put(copy, newNonterminal);
 
-			definitions.put(newNonterminal, set);
+			addNewRules(newNonterminal, set);
 		} else {
 			alt.set(position, newNonterminal);
 		}
@@ -274,9 +277,9 @@ public class OperatorPrecedence {
 		// creating the body of fresh direct nonterminals
 		for(Entry<PrecedencePattern, Nonterminal> e : freshNonterminals.entrySet()) {
 			PrecedencePattern pattern = e.getKey();
-			Nonterminal freshNontermianl = e.getValue();
+			Nonterminal freshNonterminal = e.getValue();
 			Set<List<Symbol>> alternates = without(head, patterns.get(pattern));
-			definitions.put(freshNontermianl, alternates);
+			addNewRules(freshNonterminal, alternates);
 		}
 	}
 	
@@ -364,7 +367,7 @@ public class OperatorPrecedence {
 		map.put(head, copy);
 
 		Set<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
-		definitions.put(copy, copyAlternates);
+		addNewRules(copy, copyAlternates);
 		
 		for(List<Symbol> alt : copyAlternates) {
 			if(alt.get(0) instanceof Nonterminal) {
@@ -390,7 +393,7 @@ public class OperatorPrecedence {
 		map.put(head, copy);
 		
 		Set<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
-		definitions.put(copy, copyAlternates);
+		addNewRules(copy, copyAlternates);
 		
 		for(List<Symbol> alt : copyAlternates) {
 			if(alt.get(alt.size() - 1) instanceof Nonterminal) {
@@ -463,5 +466,12 @@ public class OperatorPrecedence {
 		return plain;
 	}
 
+	private void addNewRules(Nonterminal nonterminal, Set<List<Symbol>> alternates) {
+		definitions.put(nonterminal, alternates);
+		for(List<Symbol> alternate : alternates) {
+			Rule rule = new Rule(nonterminal, alternate);
+			newRules.add(rule);
+		}
+	}
 	
 }

@@ -46,8 +46,6 @@ public class Grammar implements Serializable {
 	
 	private transient Map<String, BodyGrammarSlot> nameToSlots;
 	
-	private Map<Nonterminal, List<HeadGrammarSlot>> newNonterminalsMap;
-	
 	private Set<HeadGrammarSlot> newNonterminals;
 	
 	private String name;
@@ -87,8 +85,6 @@ public class Grammar implements Serializable {
 		this.nameToNonterminals = new HashMap<>();
 		this.nameToNonterminals = builder.nonterminalsMap;
 		
-		this.newNonterminalsMap = builder.newNonterminalsMap;
-		
 		this.newNonterminals = new HashSet<>();
 		for(List<HeadGrammarSlot> newNonterminals : builder.newNonterminalsMap.values()) {
 			this.newNonterminals.addAll(newNonterminals);
@@ -105,7 +101,6 @@ public class Grammar implements Serializable {
 		this.firstSets = builder.firstSets;
 		this.followSets = builder.followSets;
 		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
-		this.predictionSets = predictionSets;
 		
 		this.matchers = new ArrayList<>();
 		for(RegularExpression regex : tokens) {
@@ -171,20 +166,8 @@ public class Grammar implements Serializable {
 		return nameToNonterminals.get(new Nonterminal(name));
 	}
 	
-	public HeadGrammarSlot getNonterminalByNameAndIndex(String name, int index) {
-		return newNonterminalsMap.get(new Nonterminal(name)).get(index - 1);
-	}
-	
 	public boolean isNewNonterminal(HeadGrammarSlot head) {
 		return newNonterminals.contains(head);
-	}
-	
-	public int getIndex(HeadGrammarSlot head) {
-		List<HeadGrammarSlot> list = newNonterminalsMap.get(head.getNonterminal());
-		if(list == null) {
-			return -1;
-		}
-		return newNonterminalsMap.get(head.getNonterminal()).indexOf(head) + 1;
 	}
 	
 	private String getSlotName(BodyGrammarSlot slot) {
@@ -192,7 +175,7 @@ public class Grammar implements Serializable {
 			return ((TokenGrammarSlot) slot).getSymbol().getName();
 		}
 		else if (slot instanceof NonterminalGrammarSlot) {
-			return getNonterminalName(((NonterminalGrammarSlot) slot).getNonterminal());
+			return ((NonterminalGrammarSlot) slot).getNonterminal().getNonterminal().getName();
 		} 
 		else {
 			return "";
@@ -246,7 +229,7 @@ public class Grammar implements Serializable {
 			
 			@Override
 			public void visit(HeadGrammarSlot head) {
-				sb.append(getNonterminalName(head)).append(" ::= ");
+				sb.append(head.getNonterminal().getName()).append(" ::= ");
 			}
 
 			@Override
@@ -260,14 +243,6 @@ public class Grammar implements Serializable {
 		// TODO: allow the user to specify the root of a grammar
 		GrammarVisitor.visit(this, action);
 		return sb.toString();
-	}
-	
-	/**
-	 * If the nonterminal is introduced while rewriting, adds its index to it. 
-	 */
-	public String getNonterminalName(HeadGrammarSlot head) {
-		String name = head.getNonterminal().getName();
-		return newNonterminals.contains(head) ? name + (newNonterminalsMap.get(head.getNonterminal()).indexOf(head) + 1) : name;			
 	}
 	
 	public int getTokenID(Symbol s) {

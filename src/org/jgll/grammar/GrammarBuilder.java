@@ -120,6 +120,8 @@ public class GrammarBuilder implements Serializable {
 		definitions = new HashMap<>();
 		rules = new ArrayList<>();
 		
+		operatorPrecedence = new OperatorPrecedence();
+		
 		tokenIDMap = new HashMap<>();
 		tokenIDMap.put(Epsilon.getInstance(), 0);
 		tokenIDMap.put(EOF.getInstance(), 1);
@@ -127,11 +129,12 @@ public class GrammarBuilder implements Serializable {
 		tokens = new ArrayList<>();
 		tokens.add(Epsilon.getInstance());
 		tokens.add(EOF.getInstance());
-		
-		operatorPrecedence = new OperatorPrecedence(definitions); 
 	}
 
 	public Grammar build() {
+		
+		Set<Rule> newRules = operatorPrecedence.rewrite(definitions);
+		addRules(newRules);
 		
 		long start = System.nanoTime();
 		createAutomatonsMap();
@@ -151,7 +154,6 @@ public class GrammarBuilder implements Serializable {
 //		ll1SubGrammarNonterminals = GrammarProperties.calculateLLNonterminals(definitions, firstSets, followSets, reachabilityGraph);
 		end = System.nanoTime();
 		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
-
 				
 		for(Rule rule : rules) {
 			convert(rule);
