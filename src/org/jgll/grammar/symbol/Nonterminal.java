@@ -29,6 +29,10 @@ public class Nonterminal extends AbstractSymbol {
 		this.index = index;
 	}
 	
+	public Nonterminal index(int index) {
+		return new Nonterminal(name, index);
+	}
+	
 	public boolean isEbnfList() {
 		if(ebnfList == true){
 			return true;

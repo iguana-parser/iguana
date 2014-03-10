@@ -39,14 +39,15 @@ public class FilterTest0 {
 
 	private Grammar grammar;
 	private GLLParser parser;
+	
+	Nonterminal E = new Nonterminal("E");
+	Character a = new Character('a');
 
 	@Before
 	public void init() {
 
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		GrammarBuilder builder = new GrammarBuilder("ArithmeticExpressions", factory);
-
-		Nonterminal E = new Nonterminal("E");
 
 		// E ::= E * E
 		Rule rule1 = new Rule(E, list(E, new Character('*'), E));
@@ -57,7 +58,7 @@ public class FilterTest0 {
 		builder.addRule(rule2);
 		
 		// E ::= a
-		Rule rule3 = new Rule(E, list(new Character('a')));
+		Rule rule3 = new Rule(E, list(a));
 		builder.addRule(rule3);
 
 		// (E * .E, E * E)
@@ -77,9 +78,9 @@ public class FilterTest0 {
 		
 		grammar = builder.build();
 	}
-
+	
 	@Test
-	public void test() throws ParseError {
+	public void testParser() throws ParseError {
 		Input input = Input.fromString("a+a*a");
 		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
