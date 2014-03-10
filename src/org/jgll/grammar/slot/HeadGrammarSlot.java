@@ -61,38 +61,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void removeAlternate(int index) {
 		alternates.remove(index);
 	}
-	
-	public Set<Alternate> without(List<Symbol> list) {
-		Set<Alternate> set = new HashSet<>(alternates);
-		for(Alternate alternate : alternates) {
-			if(alternate.match(list)) {
-				set.remove(alternate);
-			}
-		}
-		return set;
-	}
-	
-	public Set<Alternate> without(Set<List<Symbol>> withoutSet) {
-		Set<Alternate> set = new HashSet<>(alternates);
-		for(Alternate alternate : alternates) {
-			for(List<Symbol> list : withoutSet) {
-				if(alternate.match(list)) {
-					set.remove(alternate);
-				}
-			}
-		}
-		return set;
-	}
-	
-	public void remove(List<Symbol> list) {
-		Iterator<Alternate> it = alternates.iterator();
-		while(it.hasNext()) {
-			Alternate alternate = it.next();
-			if(alternate.match(list)) {
-				it.remove();
-			}
-		}
-	}
 		
 	public void removeAllAlternates() {
 		alternates.clear();
