@@ -45,6 +45,11 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	@Override
+	public String toString() {
+		return getName();
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) {
 			return true;

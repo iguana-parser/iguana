@@ -7,12 +7,15 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import org.jgll.grammar.patterns.AbstractPattern;
+import org.jgll.grammar.patterns.ExceptPattern;
 import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -22,34 +25,135 @@ public class OperatorPrecedence {
 	
 	private Map<Nonterminal, Set<List<Symbol>>> definitions;
 	
-	private Map<PrecedencePattern, Set<List<Symbol>>> patterns;
-	
 	private Map<Nonterminal, Integer> newNonterminals;
 	
-	public OperatorPrecedence(Map<Nonterminal, 
-							  Set<List<Symbol>>> definitions, 
-							  Map<PrecedencePattern, Set<List<Symbol>>> patterns) {
+	private Map<Nonterminal, List<PrecedencePattern>> precednecePatterns;
+	
+	private List<ExceptPattern> exceptPatterns;
+	
+	public OperatorPrecedence(Map<Nonterminal, Set<List<Symbol>>> definitions) {
 		this.definitions = definitions;
-		this.patterns = patterns;
-		newNonterminals = new HashMap<>();
+		this.newNonterminals = new HashMap<>();
+		this.precednecePatterns = new HashMap<>();
 	}
 	
 	public Map<Nonterminal, Set<List<Symbol>>> rewrite() {
-		for(Nonterminal nonterminal : definitions.keySet()) {
-			rewriteFirstLevel(nonterminal);
-		}
+		rewritePrecedencePatterns();
 		return definitions;
 	}
+	
+	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
+		PrecedencePattern pattern = new PrecedencePattern(nonterminal, parent.getBody(), position, child.getBody());
 
-	private void rewriteFirstLevel(Nonterminal head) {
+		if (precednecePatterns.containsKey(nonterminal)) {
+			precednecePatterns.get(nonterminal).add(pattern);
+		} else {
+			List<PrecedencePattern> set = new ArrayList<>();
+			set.add(pattern);
+			precednecePatterns.put(nonterminal, set);
+		}
+		log.debug("Precedence pattern added %s", pattern);
+	}
+	
+	public void addExceptPattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
+		ExceptPattern pattern = new ExceptPattern(nonterminal, parent.getBody(), position, child.getBody());
+		exceptPatterns.add(pattern);
+		log.debug("Except pattern added %s", pattern);
+	}
+	
+	/**
+	 * Groups filters based on their parent and position.
+	 * For example, two filters (E, E * .E, E + E) and
+	 * (E, E * .E, E * E) will be grouped as:
+	 * (E, E * .E, {E * E, E + E}) 
+	 * 
+	 * @param patterns
+	 * @return
+	 */
+	private <T extends AbstractPattern> Map<T, Set<List<Symbol>>> groupPatterns(Iterable<T> patterns) {
+		Map<T, Set<List<Symbol>>> group = new LinkedHashMap<>();
 		
-		// This is complicated shit! Document it for the future reference.
+		for(T pattern : patterns) {
+			Set<List<Symbol>> set = group.get(pattern);
+			if(set == null) {
+				set = new LinkedHashSet<>();
+				group.put(pattern, set);
+			}
+			set.add(pattern.getChild());
+		}
+		
+		return group;
+	}
+
+	
+	private void rewritePrecedencePatterns() {
+		for (Entry<Nonterminal, List<PrecedencePattern>> entry : precednecePatterns.entrySet()) {
+			log.debug("Applying the pattern %s with %d.", entry.getKey(), entry.getValue().size());
+
+			Nonterminal nonterminal = entry.getKey();
+			Map<PrecedencePattern, Set<List<Symbol>>> patterns = groupPatterns(entry.getValue());
+			
+			rewriteFirstLevel(nonterminal, patterns);
+			rewriteDeeperLevels(nonterminal, patterns);
+		}
+	}
+
+	private void rewriteDeeperLevels(Nonterminal head, Map<PrecedencePattern, Set<List<Symbol>>> patterns) {
+
+//		for(Entry<PrecedencePattern, Set<List<Symbol>>> e : patterns.entrySet()) {
+//			
+//			PrecedencePattern pattern = e.getKey();
+//			Set<List<Symbol>> children = e.getValue();
+//			
+//			for (List<Symbol> alt : definitions.get(head)) {
+//				if (pattern.isLeftMost() && match(alt, pattern.getParent())) {
+//					rewriteRightEnds(alt.get(0), pattern, children);
+//				}
+//
+//				if (pattern.isRightMost() && alt.match(pattern.getParent()) ){
+//					rewriteLeftEnds(alt.getNonterminalAt(alt.size() - 1), pattern, children);
+//				}
+//			}
+//		}
+	}
+	
+	private void rewriteLeftEnds(Nonterminal nonterminal, PrecedencePattern pattern, Set<List<Symbol>> children) {
+		
+		// Direct filtering
+		if(nonterminal.equals(pattern.getNonterminal())) {
+			
+			for(List<Symbol> alternate : definitions.get(nonterminal)) {
+				if(!(alternate.get(0) instanceof Nonterminal)) {
+					continue;
+				}
+
+				Nonterminal first = (Nonterminal) alternate.get(0);
+				
+				if(definitions.get(first).contains(children)) {
+//					Nonterminal newNonterminal = createNewNonterminal(alternate, 0, children);
+//					rewriteLeftEnds(newNonterminal, pattern, children);
+				}				
+			}
+			
+		} else {
+			assert pattern.isRightMost();
+
+//			List<Alternate> alternates = new ArrayList<>(); 
+//			getRightEnds(nonterminal, pattern.getNonterminal(), alternates);
+//
+//			for(Alternate alt : alternates) {
+//				rewriteLeftEnds(alt.getNonterminalAt(alt.size() - 1), pattern, children);
+//			}
+		}
+	}
+	
+	private void rewriteFirstLevel(Nonterminal head, Map<PrecedencePattern, Set<List<Symbol>>> patterns) {
+		
 		Map<PrecedencePattern, Nonterminal> freshNonterminals = new LinkedHashMap<>();
 		
 		Map<Set<List<Symbol>>, Nonterminal> map = new HashMap<>();
 		
-		
-		Set<Nonterminal> newNonterminals = new HashSet<>();
+		Map<String, Nonterminal> newNonterminals = new HashMap<>();
 		
 		int index = 0;
 		
@@ -62,7 +166,7 @@ public class OperatorPrecedence {
 			
 			if(freshNonterminal == null) {
 				freshNonterminal = new Nonterminal(pattern.getNonterminal().getName(), ++index);
-				newNonterminals.add(freshNonterminal);
+				newNonterminals.put(freshNonterminal.getName(), freshNonterminal);
 				map.put(e.getValue(), freshNonterminal);
 			}
 
@@ -289,10 +393,10 @@ public class OperatorPrecedence {
 		return copy;
 	}
 	
-	private Set<List<Symbol>> without(Nonterminal head, Set<List<Symbol>> list) {
-		Set<List<Symbol>> set = new HashSet<>(definitions.get(head));
-		set.retainAll(list);
-		return set;
+	private Set<List<Symbol>> without(Nonterminal head, Set<List<Symbol>> set) {
+		Set<List<Symbol>> without = new HashSet<>(definitions.get(head));
+		without.remove(set);
+		return without;
 	}
 
 	

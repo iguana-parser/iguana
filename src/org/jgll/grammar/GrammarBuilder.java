@@ -108,6 +108,8 @@ public class GrammarBuilder implements Serializable {
 	
 	Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
+	private OperatorPrecedence operatorPrecedence;
+	
 	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammarSlotFactory);
 	}
@@ -137,6 +139,8 @@ public class GrammarBuilder implements Serializable {
 		tokens = new ArrayList<>();
 		tokens.add(Epsilon.getInstance());
 		tokens.add(EOF.getInstance());
+		
+		operatorPrecedence = new OperatorPrecedence(definitions); 
 	}
 
 	public Grammar build() {
@@ -184,6 +188,10 @@ public class GrammarBuilder implements Serializable {
 		slots = GrammarProperties.setSlotIds(headGrammarSlots, conditionSlots);
 		
 		return new Grammar(this);
+	}
+	
+	public OperatorPrecedence getOperatorPrecedence() {
+		return operatorPrecedence;
 	}
 
 	public void validateGrammar() {
@@ -979,36 +987,12 @@ public class GrammarBuilder implements Serializable {
 		return set;
 	}
 
-	/**
-	 * 
-	 * Adds the given filter to the set of filters. If a filter with the same
-	 * nonterminal, alternate index, and alternate index already exists, only
-	 * the given filter alternates are added to the existing filter, effectively
-	 * updating the filter.
-	 * 
-	 * @param nonterminal
-	 * @param alternateIndex
-	 * @param position
-	 * @param filterdAlternates
-	 * 
-	 */
 	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
-		PrecedencePattern pattern = new PrecedencePattern(nonterminal, parent.getBody(), position, child.getBody());
-
-		if (precednecePatternsMap.containsKey(nonterminal)) {
-			precednecePatternsMap.get(nonterminal).add(pattern);
-		} else {
-			List<PrecedencePattern> set = new ArrayList<>();
-			set.add(pattern);
-			precednecePatternsMap.put(nonterminal, set);
-		}
-		log.debug("Precedence pattern added %s", pattern);
+		operatorPrecedence.addPrecedencePattern(nonterminal, parent, position, child);
 	}
 	
 	public void addExceptPattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
-		ExceptPattern pattern = new ExceptPattern(nonterminal, parent.getBody(), position, child.getBody());
-		exceptPatterns.add(pattern);
-		log.debug("Except pattern added %s", pattern);
+		operatorPrecedence.addExceptPattern(nonterminal, parent, position, child);
 	}
 	
 	public Set<HeadGrammarSlot> getDirectReachableNonterminals(String name) {

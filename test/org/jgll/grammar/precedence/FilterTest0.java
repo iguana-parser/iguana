@@ -3,6 +3,10 @@ package org.jgll.grammar.precedence;
 import static org.jgll.util.CollectionsUtil.list;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
 import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
@@ -10,6 +14,7 @@ import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
@@ -30,7 +35,7 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class ArithmeticExpressionsTest {
+public class FilterTest0 {
 
 	private Grammar grammar;
 	private GLLParser parser;
@@ -66,6 +71,9 @@ public class ArithmeticExpressionsTest {
 		
 		// (E + .E, E + E)
 		builder.addPrecedencePattern(E, rule2, 2, rule2);
+		
+		Map<Nonterminal, Set<List<Symbol>>> rewrite = builder.getOperatorPrecedence().rewrite();
+		System.out.println(rewrite);
 		
 		grammar = builder.build();
 	}
