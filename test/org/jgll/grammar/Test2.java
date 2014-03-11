@@ -23,15 +23,20 @@ import org.junit.Test;
 /**
  * 
  * A ::= 'a'
+ * 
+ * @author Ali Afroozeh
  */
 public class Test2 {
 
 	private Grammar grammar;
 	private GLLRecognizer recognizer;
+
+	private Nonterminal A = new Nonterminal("A");
+	private Character a = new Character('a');
 	
 	@Before
 	public void init() {
-		Rule r1 = new Rule(new Nonterminal("A"), list(new Character('a')));
+		Rule r1 = new Rule(A, list(a));
 		
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		grammar = new GrammarBuilder("a", factory).addRule(r1).build();
@@ -69,9 +74,9 @@ public class Test2 {
 	}
 	
 	private SPPFNode expectedSPPF() {
-		TokenSymbolNode node0 = new TokenSymbolNode(2, 0, 1);
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot(0), 0, 1);
-		node1.addChild(node0);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 1, 0, 1);
+		TokenSymbolNode node2 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
+		node1.addChild(node2);
 		return node1;
 	}
 

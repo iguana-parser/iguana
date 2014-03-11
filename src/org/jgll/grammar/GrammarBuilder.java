@@ -64,7 +64,7 @@ public class GrammarBuilder implements Serializable {
 
 	String name;
 	
-	private Map<Nonterminal, Set<List<Symbol>>> definitions;
+	Map<Nonterminal, Set<List<Symbol>>> definitions;
 	
 	private List<Rule> rules;
 	

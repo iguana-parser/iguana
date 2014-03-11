@@ -78,9 +78,11 @@ public class Grammar implements Serializable {
 	
 	private Map<Nonterminal, Integer> nonterminalIds;
 	
-	private Map<Integer, Nonterminal> reverseNonterminalIds;
+	private List<Nonterminal> nonterminals;
 	
 	private Object[][] objects;
+	
+	private Map<Nonterminal, Set<List<Symbol>>> definitions;
 	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
@@ -94,7 +96,6 @@ public class Grammar implements Serializable {
 		this.averageDescriptorsAtInput = builder.averageDescriptors;
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
 		this.reachabilityGraph = builder.directReachabilityGraph;
-		this.tokenIDMap = builder.tokenIDMap;
 		this.tokens = builder.tokens;
 		this.dfas = builder.dfas;
 		this.firstSets = builder.firstSets;
@@ -104,10 +105,12 @@ public class Grammar implements Serializable {
 		this.objects = builder.objects;
 		
 		this.nonterminalIds = builder.nonterminalIds;
-		reverseNonterminalIds = new HashMap<>();
+		this.nonterminals = new ArrayList<>();
 		for(Entry<Nonterminal, Integer> e : nonterminalIds.entrySet()) {
-			reverseNonterminalIds.put(e.getValue(), e.getKey());
+			nonterminals.add(e.getValue(), e.getKey());
 		}
+
+		this.tokenIDMap = builder.tokenIDMap;
 		
 		this.matchers = new ArrayList<>();
 		for(RegularExpression regex : tokens) {
@@ -118,6 +121,8 @@ public class Grammar implements Serializable {
 		for(BodyGrammarSlot slot : slots) {
 			nameToSlots.put(slot.getLabel(), slot);
 		}
+		
+		definitions = builder.definitions;
 		
 		printGrammarStatistics();
 	}
@@ -248,10 +253,6 @@ public class Grammar implements Serializable {
 		return sb.toString();
 	}
 	
-	public int getTokenID(Symbol s) {
-		return tokenIDMap.get(s);
-	}
-	
 	public Matcher getMatcher(int index) {
 		return matchers.get(index);
 	}
@@ -265,7 +266,7 @@ public class Grammar implements Serializable {
 	}
 	
 	public Nonterminal getNonterminalById(int index) {
-		return reverseNonterminalIds.get(index);
+		return nonterminals.get(index);
 	}
 	
 	public int getNonterminalId(Nonterminal nonterminal) {
@@ -274,6 +275,10 @@ public class Grammar implements Serializable {
 	
 	public RegularExpression getRegularExpressionById(int index) {
 		return tokens.get(index);
+	}
+	
+	public int getRegularExpressionId(RegularExpression regex) {
+		return tokenIDMap.get(regex);
 	}
 	
 	public int getCountLL1Nonterminals() {
@@ -308,5 +313,9 @@ public class Grammar implements Serializable {
 	
 	public Object getObject(int nonterminalId, int alternateId) {
 		return objects[nonterminalId][alternateId];
+	}
+	
+	public int getCountAlternates(Nonterminal nonterminal) {
+		return definitions.get(nonterminal).size();
 	}
 }

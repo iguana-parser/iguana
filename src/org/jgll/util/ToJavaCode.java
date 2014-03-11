@@ -30,7 +30,9 @@ public class ToJavaCode implements SPPFVisitor {
 	public void visit(TokenSymbolNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
-			sb.append("TokenSymbolNode node" + count + " = new TokenSymbolNode(" + node.getTokenID() + ", " + node.getLeftExtent() + ", " + node.getLength() + ");\n");
+			sb.append("TokenSymbolNode node" + count + " = new TokenSymbolNode(" +
+					"grammar.getRegularExpressionId(" + grammar.getRegularExpressionById(node.getTokenID()).getName() + "), " + 
+					node.getLeftExtent() + ", " + node.getLength() + ");\n");
 			node.setObject("node" + count++);
 		}
 	}
@@ -43,6 +45,7 @@ public class ToJavaCode implements SPPFVisitor {
 			
 			sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
 					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId())  + "), " + 
+					grammar.getCountAlternates(grammar.getNonterminalById(node.getId())) + ", " +
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
 			
