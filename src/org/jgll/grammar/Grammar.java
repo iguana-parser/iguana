@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -105,10 +104,7 @@ public class Grammar implements Serializable {
 		this.objects = builder.objects;
 		
 		this.nonterminalIds = builder.nonterminalIds;
-		this.nonterminals = new ArrayList<>();
-		for(Entry<Nonterminal, Integer> e : nonterminalIds.entrySet()) {
-			nonterminals.add(e.getValue(), e.getKey());
-		}
+		this.nonterminals = builder.nonterminals;
 
 		this.tokenIDMap = builder.tokenIDMap;
 		

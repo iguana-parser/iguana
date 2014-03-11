@@ -76,6 +76,8 @@ public class GrammarBuilder implements Serializable {
 	
 	List<RegularExpression> tokens;
 	
+	List<Nonterminal> nonterminals;
+	
 	Automaton[] automatons;
 	
 	Matcher[] dfas;
@@ -130,6 +132,8 @@ public class GrammarBuilder implements Serializable {
 		tokens = new ArrayList<>();
 		tokens.add(Epsilon.getInstance());
 		tokens.add(EOF.getInstance());
+		
+		nonterminals = new ArrayList<>();
 	}
 
 	public Grammar build() {
@@ -250,6 +254,7 @@ public class GrammarBuilder implements Serializable {
 
 		if(!nonterminalIds.containsKey(head)) {
 			nonterminalIds.put(head, nonterminalId++);
+			nonterminals.add(head);
 		}
 
 		for(int i = 2; i < rule.getBody().size(); i++) {
