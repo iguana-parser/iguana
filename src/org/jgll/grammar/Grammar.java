@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -83,6 +85,10 @@ public class Grammar implements Serializable {
 	
 	private Map<Nonterminal, Set<List<Symbol>>> definitions;
 	
+	private Map<List<Symbol>, Integer> intermediateNodeIds;
+	
+	private Map<Integer, List<Symbol>> reverseIntermediateNodeIds;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.headGrammarSlots = builder.headGrammarSlots;
@@ -119,6 +125,12 @@ public class Grammar implements Serializable {
 		}
 		
 		definitions = builder.definitions;
+		intermediateNodeIds = builder.intermediateNodeIds;
+		
+		reverseIntermediateNodeIds = new HashMap<>();
+		for(Entry<List<Symbol>, Integer> e : intermediateNodeIds.entrySet()) {
+			reverseIntermediateNodeIds.put(e.getValue(), e.getKey());
+		}
 		
 		printGrammarStatistics();
 	}
@@ -275,6 +287,18 @@ public class Grammar implements Serializable {
 	
 	public int getRegularExpressionId(RegularExpression regex) {
 		return tokenIDMap.get(regex);
+	}
+	
+	public int getIntermediateNodeId(Symbol...symbols) {
+		return getIntermediateNodeId(Arrays.asList(symbols));
+	}
+	
+	public int getIntermediateNodeId(List<Symbol> symbols) {
+		return intermediateNodeIds.get(symbols);
+	}
+	
+	public List<Symbol> getIntermediateNodeSequence(int id) {
+		return reverseIntermediateNodeIds.get(id);
 	}
 	
 	public int getCountLL1Nonterminals() {

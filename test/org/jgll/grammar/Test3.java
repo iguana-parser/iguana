@@ -70,7 +70,7 @@ public class Test3 {
 		Input input = Input.fromString("bc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
-		assertEquals(true, sppf.deepEquals(expectedSPPF()));
+		assertEquals(true, sppf.deepEquals(getSPPF()));
 	}
 	
 	@Test
@@ -104,7 +104,7 @@ public class Test3 {
 		assertEquals(true, result);
 	}
 	
-	private SPPFNode expectedSPPF() {
+	private SPPFNode getSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 1, 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 1, 0, 1);
 		TokenSymbolNode node3 = new TokenSymbolNode(grammar.getRegularExpressionId(b), 0, 1);
