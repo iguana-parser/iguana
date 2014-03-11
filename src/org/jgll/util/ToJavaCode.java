@@ -42,7 +42,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-					"grammar.getNonterminalByName(\"" + node.getId()  + "\"), " + 
+					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId())  + "), " + 
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
 			
@@ -98,7 +98,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
-					"grammar.getNonterminalByName(\"" + node.getId()  + "\"), " + 
+					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId())  + "), " + 
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
 				

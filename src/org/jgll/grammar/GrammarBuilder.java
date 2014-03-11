@@ -119,6 +119,7 @@ public class GrammarBuilder implements Serializable {
 		
 		definitions = new HashMap<>();
 		rules = new ArrayList<>();
+		objectMap = new HashMap<>();
 		
 		operatorPrecedence = new OperatorPrecedence();
 		
