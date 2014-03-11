@@ -12,6 +12,7 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ import org.junit.Test;
  *     | A B D
  *     
  * A ::= 'a'
- * B ::= 'b'
+ * B ::= 'b'§
  * C ::= 'c'
  * D ::= 'c'
  * 
@@ -31,18 +32,19 @@ public class Test6 {
 
 	private Grammar grammar;
 	
+	private Nonterminal S = new Nonterminal("S");
+	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal B = new Nonterminal("B");
+	private Nonterminal C = new Nonterminal("C");
+	private Nonterminal D = new Nonterminal("D");
+	
+	private Character a = new Character('a');
+	private Character b = new Character('b');
+	private Character c = new Character('c');
+
+	
 	@Before
 	public void init() {
-		Nonterminal S = new Nonterminal("S");
-		Nonterminal A = new Nonterminal("A");
-		Nonterminal B = new Nonterminal("B");
-		Nonterminal C = new Nonterminal("C");
-		Nonterminal D = new Nonterminal("D");
-		
-		Character a = new Character('a');
-		Character b = new Character('b');
-		Character c = new Character('c');
-		
 		Rule r1 = new Rule(S, list(A, B, C));
 		Rule r2 = new Rule(S, list(A, B, D));
 		Rule r3 = new Rule(A, list(a));
@@ -59,6 +61,7 @@ public class Test6 {
 		Input input = Input.fromString("abc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf1 = parser.parse(input, grammar, "S");
+		Visualization.generateSPPFGraph("/Users/ali/output", sppf1, grammar, input);
 	}
 }
 	

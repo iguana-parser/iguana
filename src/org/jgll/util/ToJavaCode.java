@@ -64,7 +64,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("IntermediateNode node" + count + " = new IntermediateNode(" +
-					  "grammar.getIntermediateNodeId(" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId()))  + "), " + 
+					  "grammar.getIntermediateNodeId(" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId()), ",")  + "), " + 
 					  node.getLeftExtent() + ", " + 
 					  node.getRightExtent() + ");\n");
 			

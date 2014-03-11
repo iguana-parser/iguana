@@ -14,6 +14,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
+import org.jgll.util.CollectionsUtil;
 import org.jgll.util.Input;
 
 /**
@@ -48,7 +49,8 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	public void visit(TokenSymbolNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
-			String label = grammar.getRegularExpressionById(node.getId()).getName();
+			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
+			String label = grammar.getRegularExpressionById(node.getId()).getName() + ": \"" + matchedInput + "\"";
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 		}
 	}
@@ -59,8 +61,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 			node.setVisited(true);
 	
 			String label = grammar.getNonterminalById(node.getId()).getName();
-			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n" + matchedInput);
+			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);
 			
 			SPPFVisitorUtil.visitChildren(node, this);
@@ -72,7 +73,8 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			sb.append("\"" + getId(node) + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			String label = CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId()));
+			sb.append("\"" + getId(node) + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);
 	
 			SPPFVisitorUtil.visitChildren(node, this);
