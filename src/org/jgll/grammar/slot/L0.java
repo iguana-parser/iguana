@@ -35,7 +35,7 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	private L0() {
-		super(new Nonterminal("L0"), new LinkedHashSet<List<Symbol>>(), false);
+		super(new Nonterminal("L0"), -1, new LinkedHashSet<List<Symbol>>(), false);
 		id = -1;
 	}
 	

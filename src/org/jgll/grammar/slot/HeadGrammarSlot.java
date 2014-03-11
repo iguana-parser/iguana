@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -38,9 +37,12 @@ public class HeadGrammarSlot extends GrammarSlot {
 	private Set<Integer> predictionSet;
 
 	protected Set<List<Symbol>> alts;
+
+	private final int nonterminalId;
 	
-	public HeadGrammarSlot(Nonterminal nonterminal, Set<List<Symbol>> alts, boolean nullable) {
+	public HeadGrammarSlot(Nonterminal nonterminal, int nonterminalId, Set<List<Symbol>> alts, boolean nullable) {
 		this.nonterminal = nonterminal;
+		this.nonterminalId = nonterminalId;
 		this.alts = alts;
 		this.nullable = nullable;
 		this.alternates = new ArrayList<>();
@@ -165,12 +167,17 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return nonterminal.toString();
 	}
 	
-	public NonterminalSymbolNode createSPPFNode(int leftExtent, int rightExtent) {
+	public NonterminalSymbolNode createSPPFNode(int nonterminalId, int numberOfAlternatives, int leftExtent, int rightExtent) {
 		if(nonterminal.isEbnfList()) {
-			return new ListSymbolNode(this, leftExtent, rightExtent);
+			return new ListSymbolNode(nonterminalId, numberOfAlternatives, leftExtent, rightExtent);
 		} else {
-			return new NonterminalSymbolNode(this, leftExtent, rightExtent);
+			return new NonterminalSymbolNode(nonterminalId, numberOfAlternatives, leftExtent, rightExtent);
 		}
+	}
+
+	@Override
+	public int getNodeId() {
+		return nonterminalId;
 	}
 	
 }

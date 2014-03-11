@@ -154,4 +154,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		return tokenID == other.tokenID;
 	}
 
+	@Override
+	public int getNodeId() {
+		return slotId;
+	}
+
 }

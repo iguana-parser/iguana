@@ -2,7 +2,6 @@ package org.jgll.sppf;
 
 import java.util.Collections;
 
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -52,16 +51,16 @@ public class TokenSymbolNode extends SPPFNode {
 	}
 	
 	@Override
-	public String getLabel() {
+	public String toString() {
 		return String.format("(%s, %d, %d)", tokenID, inputIndex, getRightExtent());
 	}
 	
-	@Override
-	public String toString() {
-		return getLabel();
+	public int getTokenID() {
+		return tokenID;
 	}
 	
-	public int getTokenID() {
+	@Override
+	public int getId() {
 		return tokenID;
 	}
 	
@@ -102,11 +101,6 @@ public class TokenSymbolNode extends SPPFNode {
 	@Override
 	public boolean isAmbiguous() {
 		return false;
-	}
-
-	@Override
-	public GrammarSlot getGrammarSlot() {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

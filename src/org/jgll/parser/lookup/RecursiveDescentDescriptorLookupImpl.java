@@ -6,8 +6,10 @@ import java.util.Deque;
 import org.jgll.grammar.Grammar;
 import org.jgll.parser.Descriptor;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.ExternalHasher;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.hashing.IguanaSet;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
@@ -49,7 +51,26 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 
 		IguanaSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
 		if (set == null) {
-			set = factory.newHashSet(tableSize, Descriptor.levelBasedExternalHasher);
+			set = factory.newHashSet(tableSize, new ExternalHasher<Descriptor>() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public int hash(Descriptor d, HashFunction f) {
+					return f.hash(d.getGrammarSlot().getId(), 
+		       					  d.getSPPFNode().getId(), 
+								  d.getGSSNode().getGrammarSlot().getId(),
+								  d.getGSSNode().getInputIndex());
+				}
+				
+				@Override
+				public boolean equals(Descriptor d1, Descriptor d2) {
+					return 	d1.getGrammarSlot().getId() == d2.getGrammarSlot().getId() && 
+		 					d1.getSPPFNode().getId() == d2.getSPPFNode().getId() && 
+							d1.getGSSNode().getGrammarSlot() == d2.getGSSNode().getGrammarSlot() &&
+							d1.getGSSNode().getInputIndex() == d2.getGSSNode().getInputIndex();
+				}
+			});
 			descriptorsSet[descriptor.getInputIndex()] = set;
 			set.add(descriptor);
 			descriptorsStack.push(descriptor);

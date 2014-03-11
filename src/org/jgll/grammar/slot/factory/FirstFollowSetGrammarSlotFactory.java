@@ -31,6 +31,7 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
+												 int nonterminalId,
 												 Set<List<Symbol>> alternates,
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
@@ -60,10 +61,10 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		List<Set<RegularExpression>> predictionSet = predictionSets.get(nonterminal);
 		
 		if(max - min < 10000) {
-			return new HeadGrammarSlotArrayFirstFollow(nonterminal, alternates, predictionSet, nullable, min, max);
+			return new HeadGrammarSlotArrayFirstFollow(nonterminal, nonterminalId, alternates, predictionSet, nullable, min, max);
 		}
 		
-		return new HeadGrammarSlotTreeMapFirstFollow(nonterminal, alternates, predictionSet, nullable);
+		return new HeadGrammarSlotTreeMapFirstFollow(nonterminal, nonterminalId, alternates, predictionSet, nullable);
 	}
 	
 

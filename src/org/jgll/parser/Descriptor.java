@@ -3,8 +3,6 @@ package org.jgll.parser;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * A {@code Descriptor} is used by the GLL parser to keep track of the 
@@ -26,9 +24,6 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  */
 
 public class Descriptor {
-	
-	public static final ExternalHasher<Descriptor> externalHasher = new DescriptorExternalHasher();
-	public static final ExternalHasher<Descriptor> levelBasedExternalHasher = new LevelBasedExternalHasher();
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -70,7 +65,11 @@ public class Descriptor {
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
 		
-		this.hash = levelBasedExternalHasher.hash(this, HashFunctions.defaulFunction());
+		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), 
+							       					    sppfNode.getId(), 
+													    gssNode.getGrammarSlot().getId(),
+													    gssNode.getInputIndex(),
+													    inputIndex);
 	}
 	
 	public GrammarSlot getGrammarSlot() {
@@ -107,7 +106,7 @@ public class Descriptor {
 		Descriptor other = (Descriptor) obj;
 		
 		return slot == other.slot &&
-			   sppfNode.getGrammarSlot() == other.sppfNode.getGrammarSlot() &&
+			   sppfNode.getId() == other.sppfNode.getId() &&
 			   gssNode.getGrammarSlot() == other.gssNode.getGrammarSlot() &&
 			   gssNode.getInputIndex() == other.gssNode.getInputIndex() &&
 			   inputIndex == other.getInputIndex();
@@ -126,50 +125,6 @@ public class Descriptor {
 	
 	public Object getObject() {
 		return object;
-	}
-	
-	public static class DescriptorExternalHasher implements ExternalHasher<Descriptor> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(Descriptor d, HashFunction f) {
-			return f.hash(d.slot.getId(), 
-       					  d.sppfNode.getGrammarSlot().getId(), 
-						  d.gssNode.getGrammarSlot().getId(),
-						  d.gssNode.getInputIndex(),
-						  d.inputIndex);
-		}
-
-		@Override
-		public boolean equals(Descriptor d1, Descriptor d2) {
-			return 	d1.inputIndex == d2.inputIndex &&
-					d1.slot.getId() == d2.slot.getId() && 
- 					d1.sppfNode.getGrammarSlot() == d2.sppfNode.getGrammarSlot() && 
-					d1.gssNode.getGrammarSlot() == d2.gssNode.getGrammarSlot() &&
-					d1.gssNode.getInputIndex() == d2.gssNode.getInputIndex();
-		}
-	}
-	
-	public static class LevelBasedExternalHasher implements ExternalHasher<Descriptor> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(Descriptor d, HashFunction f) {
-			return f.hash(d.slot.getId(), 
-       					  d.sppfNode.getGrammarSlot().getId(), 
-						  d.gssNode.getGrammarSlot().getId(),
-						  d.gssNode.getInputIndex());
-		}
-		
-		@Override
-		public boolean equals(Descriptor d1, Descriptor d2) {
-			return 	d1.slot.getId() == d2.slot.getId() && 
- 					d1.sppfNode.getGrammarSlot() == d2.sppfNode.getGrammarSlot() && 
-					d1.gssNode.getGrammarSlot() == d2.gssNode.getGrammarSlot() &&
-					d1.gssNode.getInputIndex() == d2.gssNode.getInputIndex();
-		}
 	}
 	
 }

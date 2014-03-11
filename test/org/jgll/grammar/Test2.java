@@ -70,7 +70,7 @@ public class Test2 {
 	
 	private SPPFNode expectedSPPF() {
 		TokenSymbolNode node0 = new TokenSymbolNode(2, 0, 1);
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminal(0), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot(0), 0, 1);
 		node1.addChild(node0);
 		return node1;
 	}

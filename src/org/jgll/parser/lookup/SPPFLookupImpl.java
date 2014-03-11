@@ -59,7 +59,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public NonterminalSymbolNode getNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		NonterminalSymbolNode key = grammarSlot.createSPPFNode(leftExtent, rightExtent);
+		NonterminalSymbolNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getCountAlternates(), leftExtent, rightExtent);
 
 		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
 
@@ -70,12 +70,12 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 				@Override
 				public int hash(NonterminalSymbolNode n, HashFunction f) {
-					return f.hash(n.getGrammarSlot().getId(), n.getLeftExtent());
+					return f.hash(n.getId(), n.getLeftExtent());
 				}
 
 				@Override
 				public boolean equals(NonterminalSymbolNode n1, NonterminalSymbolNode n2) {
-					return n1.getGrammarSlot() == n2.getGrammarSlot() &&
+					return n1.getId() == n2.getId() &&
 						   n1.getLeftExtent() == n2.getLeftExtent();
 				}
 			});
@@ -101,13 +101,13 @@ public class SPPFLookupImpl implements SPPFLookup {
 			return null;
 		}
 
-		NonterminalSymbolNode key = grammarSlot.createSPPFNode(leftExtent, rightExtent);
+		NonterminalSymbolNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getCountAlternates(), leftExtent, rightExtent);
 		return set.get(key);
 	}
 
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		IntermediateNode key = new IntermediateNode(grammarSlot, leftExtent, rightExtent);
+		IntermediateNode key = new IntermediateNode(grammarSlot.getNodeId(), leftExtent, rightExtent);
 
 		IguanaSet<IntermediateNode> set = intermediateNodes[rightExtent];
 
@@ -118,12 +118,12 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 				@Override
 				public int hash(IntermediateNode n, HashFunction f) {
-					return f.hash(n.getGrammarSlot().getId(), n.getLeftExtent());
+					return f.hash(n.getId(), n.getLeftExtent());
 				}
 
 				@Override
 				public boolean equals(IntermediateNode n1, IntermediateNode n2) {
-					return n1.getGrammarSlot() == n2.getGrammarSlot() &&
+					return n1.getId() == n2.getId() &&
 						   n1.getLeftExtent() == n2.getLeftExtent();
 				}
 			});
@@ -148,18 +148,18 @@ public class SPPFLookupImpl implements SPPFLookup {
 			return null;
 		}
 
-		IntermediateNode key = new IntermediateNode(grammarSlot, leftExtent, rightExtent);
+		IntermediateNode key = new IntermediateNode(grammarSlot.getId(), leftExtent, rightExtent);
 		return set.get(key);
 	}
 	
 	@Override
 	public void addPackedNode(NonterminalSymbolNode parent, LastGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		parent.addPackedNode(slot, pivot, leftChild, rightChild);
+		parent.addPackedNode(slot.getNodeId(), pivot, leftChild, rightChild);
 	}
 	
 	@Override
 	public void addPackedNode(IntermediateNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		parent.addPackedNode(slot, pivot, leftChild, rightChild);
+		parent.addPackedNode(pivot, leftChild, rightChild);
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 		if (nonterminalNodes[inputSize - 1] == null) {
 			return null;
 		}
-		return nonterminalNodes[inputSize - 1].get(new NonterminalSymbolNode(startSymbol, 0, inputSize - 1));
+		return nonterminalNodes[inputSize - 1].get(new NonterminalSymbolNode(startSymbol.getNodeId(), startSymbol.getCountAlternates(), 0, inputSize - 1));
 	}
 
 	@Override

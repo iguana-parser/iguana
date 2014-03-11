@@ -3,8 +3,6 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 
 /**
@@ -18,7 +16,7 @@ import org.jgll.parser.HashFunctions;
 
 public abstract class NonPackedNode extends SPPFNode {
 	
-	protected final GrammarSlot slot;
+	protected final int id;
 	
 	protected final int leftExtent;
 	
@@ -30,16 +28,13 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	private final int hash;
 	
-	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		
-		assert slot != null;
-		
-		this.slot = slot;
+	public NonPackedNode(int id, int leftExtent, int rightExtent) {
+		this.id = id;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
 		this.children = new ArrayList<>();
 		
-		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), leftExtent, rightExtent); 
+		this.hash = HashFunctions.defaulFunction().hash(id, leftExtent, rightExtent); 
 	}
 	
 	@Override
@@ -61,14 +56,15 @@ public abstract class NonPackedNode extends SPPFNode {
 		
 		NonPackedNode other = (NonPackedNode) obj;
 
-		return  slot == other.slot &&
+		return  id == other.id &&
 				leftExtent == other.leftExtent &&
 				rightExtent == other.rightExtent;
 	}
 	
+
 	@Override
-	public GrammarSlot getGrammarSlot() {
-		return slot;
+	public int getId() {
+		return id;
 	}
 	
 	@Override
@@ -83,14 +79,9 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", getLabel(), leftExtent, rightExtent);
+		return String.format("(%d, %d, %d)", id, leftExtent, rightExtent);
 	}
 	
-	@Override
-	public String getLabel() {
-		return slot.toString();
-	}
-
 	/**
 	 * Attaches the given left and right children to the given packed node.
 	 *  
@@ -169,6 +160,8 @@ public abstract class NonPackedNode extends SPPFNode {
 		return countPackedNodes > 1;
 	}
 	
-	public abstract BodyGrammarSlot getFirstPackedNodeGrammarSlot();
+	public int getFirstPackedNodeGrammarSlot() {
+		return id;
+	}
 	
 }

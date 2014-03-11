@@ -3,7 +3,6 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -15,7 +14,7 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class PackedNode extends SPPFNode {
 	
-	private final GrammarSlot slot;
+	private final int id;
 
 	private final int pivot;
 
@@ -25,21 +24,21 @@ public class PackedNode extends SPPFNode {
 	
 	private final int hash;
 	
-	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
+	public PackedNode(int id, int pivot, NonPackedNode parent) {
 		
-		assert slot != null;
+		assert id > 0;
 		assert pivot >= 0;
 		assert parent != null;
 		
-		this.slot = slot;
+		this.id = id;
 		this.pivot = pivot;
 		this.parent = parent;
 		
 		this.children = new ArrayList<>(2);
 		
-		this.hash = HashFunctions.defaulFunction().hash(slot.getId(),
+		this.hash = HashFunctions.defaulFunction().hash(id,
    						  								pivot,
-   						  								parent.getGrammarSlot().getId(),
+   						  								parent.getId(),
    						  								parent.getLeftExtent(),
    						  								parent.getRightExtent());
 	}
@@ -56,9 +55,9 @@ public class PackedNode extends SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  slot == other.slot &&
+		return  id == other.id &&
 		        pivot == other.pivot &&
-		        parent.getGrammarSlot() == other.parent.getGrammarSlot() &&
+		        parent.getId() == other.parent.getId() &&
 		        parent.getLeftExtent() == other.parent.getLeftExtent() &&
 		        parent.getRightExtent() == other.parent.getRightExtent();
 	}
@@ -68,8 +67,8 @@ public class PackedNode extends SPPFNode {
 	}
 	
 	@Override
-	public GrammarSlot getGrammarSlot() {
-		return slot;
+	public int getId() {
+		return id;
 	}
 	
 	public SPPFNode getParent() {
@@ -101,12 +100,7 @@ public class PackedNode extends SPPFNode {
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d)", getLabel(), getPivot());
-	}
-	
-	@Override
-	public String getLabel() {
-		return slot.toString();
+		return String.format("(%id, %d)", id, getPivot());
 	}
 	
 	@Override

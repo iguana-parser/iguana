@@ -149,5 +149,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		
 		return nonterminal.getNonterminal().equals(other.nonterminal.getNonterminal());
 	}
+
+	@Override
+	public int getNodeId() {
+		return slotId;
+	}
 	
 }

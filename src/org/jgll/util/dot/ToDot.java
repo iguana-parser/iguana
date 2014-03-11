@@ -30,11 +30,11 @@ public abstract class ToDot {
 	}
 	
 	protected String getId(NonPackedNode n) {
-		return n.getGrammarSlot().getId() + "," + n.getLeftExtent() + "," + n.getRightExtent();
+		return n.getId() + "," + n.getLeftExtent() + "," + n.getRightExtent();
 	}
 	
 	protected String getId(PackedNode p) {
-		return getId((NonPackedNode)p.getParent()) + "," + p.getGrammarSlot().getId() + "," + p.getPivot();
+		return getId((NonPackedNode)p.getParent()) + "," + p.getId() + "," + p.getPivot();
 	}
 
 }

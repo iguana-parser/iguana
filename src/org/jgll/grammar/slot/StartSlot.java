@@ -30,4 +30,9 @@ public class StartSlot extends GrammarSlot {
 		return null;
 	}
 
+	@Override
+	public int getNodeId() {
+		return 0;
+	}
+
 }

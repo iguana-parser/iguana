@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -43,9 +44,12 @@ public class SPPFToDotUnpacked extends ToDot {
 	SPPFNode[] permutation;
 
 	private Input input;
+
+	private Grammar grammar;
 	
-	public SPPFToDotUnpacked(Input input) {
+	public SPPFToDotUnpacked(Grammar grammar, Input input) {
 		this(input, false);
+		this.grammar = grammar;
 	}
 	
 	public SPPFToDotUnpacked(Input input, boolean showPackedNodeLabel) {
@@ -125,7 +129,10 @@ public class SPPFToDotUnpacked extends ToDot {
 	}
 
 	public void visit(NonterminalSymbolNode node, StringBuilder sb) {
-		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.getLabel())) + "\n");
+		
+		String label = grammar.getNonterminalById(node.getId()).getName();
+		
+		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 		
 		if(node.isAmbiguous()) {
 			

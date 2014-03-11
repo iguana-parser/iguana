@@ -2,6 +2,7 @@ package org.jgll.util.dot;
 
 import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.traversal.SPPFVisitor;
@@ -17,8 +18,8 @@ import org.jgll.util.Input;
  */
 public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	
-	public ToDotWithoutIntermediateNodes(Input input) {
-		super(input);
+	public ToDotWithoutIntermediateNodes(Grammar grammar, Input input) {
+		super(grammar, input);
 	}
 	
 	@Override
@@ -37,7 +38,8 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 				SPPFVisitorUtil.removeIntermediateNode(node);
 			}
 	
-			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.getLabel())) + "\n");
+			String label = grammar.getNonterminalById(node.getId()).getName();
+			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);
 			
 			SPPFVisitorUtil.visitChildren(node, this);

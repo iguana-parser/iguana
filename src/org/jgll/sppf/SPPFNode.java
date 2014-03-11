@@ -2,7 +2,6 @@ package org.jgll.sppf;
 
 import java.util.Iterator;
 
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.AmbiguousNodeCounter;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -22,11 +21,6 @@ public abstract class SPPFNode {
 	
 	private Object object;
 
-	/**
-	 * Returns the label of the node as it appears on the produced SPPF.
-	 */
-	public abstract String getLabel();
-
 	public abstract SPPFNode getChildAt(int index);
 	
 	public abstract Iterable<SPPFNode> getChildren();
@@ -39,13 +33,14 @@ public abstract class SPPFNode {
 
 	public abstract int childrenCount();
 
+	public abstract int getId();
+
 	public abstract int getLeftExtent();
 
 	public abstract int getRightExtent();
 
 	public abstract void accept(SPPFVisitor visitAction);
 	
-	public abstract GrammarSlot getGrammarSlot();
 	
 	public Object getObject() {
 		return object;

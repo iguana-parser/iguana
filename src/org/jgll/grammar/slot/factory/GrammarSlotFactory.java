@@ -19,6 +19,7 @@ import org.jgll.regex.RegularExpression;
 public interface GrammarSlotFactory {
 
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
+												 int nonterminalId,
 												 Set<List<Symbol>> alternates,
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
 												 Map<Nonterminal, Set<RegularExpression>> followSets,

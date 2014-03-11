@@ -61,7 +61,7 @@ public class GSSEdge {
 		if(node instanceof TokenSymbolNode) {
 			slotId2 = other.node.getLeftExtent();
 		} else {
-			slotId2 = other.node.getGrammarSlot().getId();
+			slotId2 = other.node.getId();
 		}
 		
 		//	Because destination.getInputIndex() == node.getLeftExtent, we don't use it here.
@@ -88,7 +88,7 @@ public class GSSEdge {
 			if(edge.node instanceof TokenSymbolNode) {
 				slotId = edge.node.getLeftExtent();
 			} else {
-				slotId = edge.node.getGrammarSlot().getId();
+				slotId = edge.node.getId();
 			}
 			
 			return f.hash(edge.returnSlot.getId(), 
@@ -105,14 +105,14 @@ public class GSSEdge {
 			if(e1.node instanceof TokenSymbolNode) {
 				slotId1 = e1.node.getLeftExtent();
 			} else {
-				slotId1 = e1.node.getGrammarSlot().getId();
+				slotId1 = e1.node.getId();
 			}
 
 			int slotId2 = 0;
 			if(e2.node instanceof TokenSymbolNode) {
 				slotId2 = e2.node.getLeftExtent();
 			} else {
-				slotId2 = e2.node.getGrammarSlot().getId();
+				slotId2 = e2.node.getId();
 			}
 			
 			return e1.returnSlot.getId() == e2.returnSlot.getId() &&

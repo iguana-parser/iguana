@@ -26,12 +26,13 @@ public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
+			int nontemrinalId,
 			Set<List<Symbol>> alternates,
 			Map<Nonterminal, Set<RegularExpression>> firstSets,
 			Map<Nonterminal, Set<RegularExpression>> followSets,
 			Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
-		return new HeadGrammarSlot(nonterminal, alternates, firstSets.get(nonterminal).contains(Epsilon.getInstance()));
+		return new HeadGrammarSlot(nonterminal, nontemrinalId, alternates, firstSets.get(nonterminal).contains(Epsilon.getInstance()));
 	}
 	
 	@Override

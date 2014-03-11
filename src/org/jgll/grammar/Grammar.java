@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -75,6 +76,12 @@ public class Grammar implements Serializable {
 	
 	private Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
+	private Map<Nonterminal, Integer> nonterminalIds;
+	
+	private Map<Integer, Nonterminal> reverseNonterminalIds;
+	
+	private Object[][] objects;
+	
 	public Grammar(GrammarBuilder builder) {
 		this.name = builder.name;
 		this.headGrammarSlots = builder.headGrammarSlots;
@@ -93,6 +100,14 @@ public class Grammar implements Serializable {
 		this.firstSets = builder.firstSets;
 		this.followSets = builder.followSets;
 		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
+		
+		this.objects = builder.objects;
+		
+		this.nonterminalIds = builder.nonterminalIds;
+		reverseNonterminalIds = new HashMap<>();
+		for(Entry<Nonterminal, Integer> e : nonterminalIds.entrySet()) {
+			reverseNonterminalIds.put(e.getValue(), e.getKey());
+		}
 		
 		this.matchers = new ArrayList<>();
 		for(RegularExpression regex : tokens) {
@@ -138,10 +153,10 @@ public class Grammar implements Serializable {
 		return name;
 	}
 	
-	public HeadGrammarSlot getNonterminal(int id) {
+	public HeadGrammarSlot getHeadGrammarSlot(int id) {
 		return headGrammarSlots.get(id);
 	}
-		
+	
 	public BodyGrammarSlot getGrammarSlot(int id) {
 		return slots.get(id);
 	}
@@ -249,6 +264,14 @@ public class Grammar implements Serializable {
 		return tokenIDMap.keySet();
 	}
 	
+	public Nonterminal getNonterminalById(int index) {
+		return reverseNonterminalIds.get(index);
+	}
+	
+	public int getNonterminalId(Nonterminal nonterminal) {
+		return nonterminalIds.get(nonterminal);
+	}
+	
 	public RegularExpression getRegularExpressionById(int index) {
 		return tokens.get(index);
 	}
@@ -281,5 +304,9 @@ public class Grammar implements Serializable {
 	 
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
 		return followSets.get(nonterminal);
+	}
+	
+	public Object getObject(int nonterminalId, int alternateId) {
+		return objects[nonterminalId][alternateId];
 	}
 }

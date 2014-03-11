@@ -39,6 +39,7 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class GrammarBuilder implements Serializable {
@@ -67,8 +68,6 @@ public class GrammarBuilder implements Serializable {
 	
 	private List<Rule> rules;
 	
-	// Fields related to filtering
-
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> directReachabilityGraph;
 	
 	private List<BodyGrammarSlot> conditionSlots;
@@ -89,13 +88,20 @@ public class GrammarBuilder implements Serializable {
 
 	private GrammarSlotFactory grammarSlotFactory;
 	
-	private Map<Nonterminal, Integer> nonterminalIds;
+	Map<Nonterminal, Integer> nonterminalIds;
 	
-	private Map<List<Symbol>, Integer> intermediateNodeIds;
+	Map<List<Symbol>, Integer> intermediateNodeIds;
 	
 	Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
 	private OperatorPrecedence operatorPrecedence;
+	
+	/**
+	 * Indexed by nonterminal index and alternate index
+	 */
+	Object[][] objects;
+	
+	Map<Tuple<Nonterminal, Integer>, Object> objectMap;
 	
 	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammarSlotFactory);
@@ -130,6 +136,14 @@ public class GrammarBuilder implements Serializable {
 		Set<Rule> newRules = operatorPrecedence.rewrite(definitions);
 		addRules(newRules);
 		
+		objects = new Object[definitions.size()][];
+		for(Nonterminal nonterminal : definitions.keySet()) {
+			objects[nonterminalIds.get(nonterminal)] = new Object[definitions.get(nonterminal).size()];
+		}
+		for(Entry<Tuple<Nonterminal, Integer>, Object> e : objectMap.entrySet()) {
+			objects[nonterminalIds.get(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
+		}
+		
 		long start = System.nanoTime();
 		createAutomatonsMap();
 		long end = System.nanoTime();
@@ -157,7 +171,6 @@ public class GrammarBuilder implements Serializable {
 		removeUnusedNewNonterminals();
 		
 		validateGrammar();
-		
 		
 //		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
@@ -216,7 +229,7 @@ public class GrammarBuilder implements Serializable {
 		return this;
 	}
 	
-	int nonterminald = 0;
+	int nonterminalId = 0;
 	int intermediateId;
 
 	public GrammarBuilder addRule(Rule rule) {
@@ -229,9 +242,13 @@ public class GrammarBuilder implements Serializable {
 		}
 		definition.add(rule.getBody());
 		rules.add(rule);
+		
+		if(rule.getObject() != null) {
+			objectMap.put(Tuple.of(head, definitions.get(head).size()), rule.getObject());
+		}
 
 		if(!nonterminalIds.containsKey(head)) {
-			nonterminalIds.put(head, nonterminald++);
+			nonterminalIds.put(head, nonterminalId++);
 		}
 
 		for(int i = 2; i < rule.getBody().size(); i++) {
@@ -452,7 +469,7 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
 
 		if (headGrammarSlot == null) {
-			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, definitions.get(nonterminal), firstSets, followSets, predictionSets);
+			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, nonterminalIds.get(nonterminal), definitions.get(nonterminal), firstSets, followSets, predictionSets);
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
 			headGrammarSlots.add(headGrammarSlot);
 		}

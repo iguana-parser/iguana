@@ -3,6 +3,7 @@ package org.jgll.util.dot;
 import static org.jgll.util.dot.GraphVizUtil.PACKED_NODE;
 import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -12,8 +13,8 @@ import org.jgll.util.Input;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
-	public ToDotWithoutIntermeidateAndLists(Input input) {
-		super(input);
+	public ToDotWithoutIntermeidateAndLists(Grammar grammar, Input input) {
+		super(grammar, input);
 	}
 
 	@Override
@@ -26,7 +27,10 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
 		
 			for(SPPFNode child : node.getChildren()) {
-				if(!child.getLabel().startsWith("layout")) {
+				
+				String label = grammar.getNonterminalById(child.getId()).getName();
+				
+				if(!label.startsWith("layout")) {
 				  addEdgeToChild(node, child);
 				  child.accept(this);
 				}
@@ -43,8 +47,10 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 	
 			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 		
+			
 			for(SPPFNode child : node.getChildren()) {
-				if(!child.getLabel().startsWith("layout")) {
+				String label = grammar.getNonterminalById(child.getId()).getName();
+				if(!label.startsWith("layout")) {
 				  addEdgeToChild(node, child);
 				  child.accept(this);
 				}

@@ -1,6 +1,5 @@
 package org.jgll.sppf;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -14,11 +13,11 @@ public class IntermediateNode extends NonPackedNode {
 	
 	private PackedNode firstPackedNode;
 		
-	public IntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		super(slot, leftExtent, rightExtent);
+	public IntermediateNode(int id, int leftExtent, int rightExtent) {
+		super(id, leftExtent, rightExtent);
 	}
 	
-	public void addPackedNode(BodyGrammarSlot s, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+	public void addPackedNode(int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		assert leftChild  != null;
 		assert rightChild != null;
@@ -28,7 +27,7 @@ public class IntermediateNode extends NonPackedNode {
 				children.add(leftChild);
 			}
 			children.add(rightChild);
-			firstPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
+			firstPackedNode = attachChildren(new PackedNode(id, pivot, this), leftChild, rightChild);
 			countPackedNodes++;
 		} 
 		else if (countPackedNodes == 1) {
@@ -44,7 +43,7 @@ public class IntermediateNode extends NonPackedNode {
 				packedNodes[firstPackedNode.getPivot() - leftExtent] = firstPackedNode;
 				
 				// Add the second packed node
-				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
+				PackedNode newPackedNode = attachChildren(new PackedNode(id, pivot, this), leftChild, rightChild);
 				packedNodes[pivot - leftExtent] = newPackedNode;
 				children.add(newPackedNode);
 				countPackedNodes++;
@@ -52,7 +51,7 @@ public class IntermediateNode extends NonPackedNode {
 		}
 		else {
 			if(packedNodes[pivot - leftExtent] == null) {
-				PackedNode newPackedNode = attachChildren(new PackedNode(s, pivot, this), leftChild, rightChild);
+				PackedNode newPackedNode = attachChildren(new PackedNode(id, pivot, this), leftChild, rightChild);
 				packedNodes[pivot - leftExtent] = newPackedNode;
 				children.add(newPackedNode);
 				countPackedNodes++;
@@ -60,18 +59,13 @@ public class IntermediateNode extends NonPackedNode {
 		}		
 	}
 	
-	public void addFirstPackedNode(BodyGrammarSlot slot, int pivot) {
-		firstPackedNode = new PackedNode(slot, pivot, this);
+	public void addFirstPackedNode(int packedNodeId, int pivot) {
+		firstPackedNode = new PackedNode(packedNodeId, pivot, this);
 	}
 	
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
-	}
-
-	@Override
-	public BodyGrammarSlot getFirstPackedNodeGrammarSlot() {
-		return (BodyGrammarSlot) slot;
 	}
 
 }

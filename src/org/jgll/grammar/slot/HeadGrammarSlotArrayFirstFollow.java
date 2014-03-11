@@ -21,8 +21,8 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	
 	private int max;
 
-	public HeadGrammarSlotArrayFirstFollow(Nonterminal nonterminal, Set<List<Symbol>> alts, List<Set<RegularExpression>> predictionSets, boolean nullable, int min, int max) {
-		super(nonterminal, alts, nullable);
+	public HeadGrammarSlotArrayFirstFollow(Nonterminal nonterminal, int nonterminalId, Set<List<Symbol>> alts, List<Set<RegularExpression>> predictionSets, boolean nullable, int min, int max) {
+		super(nonterminal, nonterminalId, alts, nullable);
 		this.min = min;
 		this.max = max;
 		setPredictionSet(predictionSets);

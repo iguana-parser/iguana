@@ -29,9 +29,11 @@ public class Test1 {
 	private Grammar grammar;
 	private GLLRecognizer recognizer;
 
+	private Nonterminal A = new Nonterminal("A");
+
 	@Before
 	public void init() {
-		Rule r1 = new Rule(new Nonterminal("A"));
+		Rule r1 = new Rule(A);
 		
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		grammar = new GrammarBuilder("epsilon", factory).addRule(r1).build();
@@ -62,7 +64,7 @@ public class Test1 {
 	}
 	
 	private SPPFNode expectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminal(0), 0, 0);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 0, 0, 0);
 		return node1;
 	}
 

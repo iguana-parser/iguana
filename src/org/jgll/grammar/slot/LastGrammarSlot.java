@@ -97,4 +97,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public int getNodeId() {
+		return alternateIndex;
+	}
+
 }
