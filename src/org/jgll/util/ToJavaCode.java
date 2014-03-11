@@ -1,7 +1,6 @@
 package org.jgll.util;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -42,18 +41,10 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setVisited(true);
 			node.setObject("node" + count);
 			
-			if(grammar.isNewNonterminal((HeadGrammarSlot) node.getGrammarSlot())) {
-				sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-						"grammar.getHeadGrammarSlot(\"" + node.getGrammarSlot() + "), " + 
-						node.getLeftExtent() + ", " + 
-						node.getRightExtent() + ");\n");
-			} else {
-				sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-						"grammar.getNonterminalByName(\"" + node.getGrammarSlot()  + "\"), " + 
-						node.getLeftExtent() + ", " + 
-						node.getRightExtent() + ");\n");
-				
-			}
+			sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
+					"grammar.getNonterminalByName(\"" + node.getGrammarSlot()  + "\"), " + 
+					node.getLeftExtent() + ", " + 
+					node.getRightExtent() + ");\n");
 			
 			count++;
 			
@@ -106,19 +97,11 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setVisited(true);
 			node.setObject("node" + count);
 			
-			if(grammar.isNewNonterminal((HeadGrammarSlot) node.getGrammarSlot())) {
-				sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
-						"grammar.getNonterminalByNameAndIndex(\"" + node.getGrammarSlot() + "), " + 
-						node.getLeftExtent() + ", " + 
-						node.getRightExtent() + ");\n");
-			} else {
-				sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
-						"grammar.getNonterminalByName(\"" + node.getGrammarSlot()  + "\"), " + 
-						node.getLeftExtent() + ", " + 
-						node.getRightExtent() + ");\n");
+			sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
+					"grammar.getNonterminalByName(\"" + node.getGrammarSlot()  + "\"), " + 
+					node.getLeftExtent() + ", " + 
+					node.getRightExtent() + ");\n");
 				
-			}
-			
 			count++;
 			
 			visitChildren(node);

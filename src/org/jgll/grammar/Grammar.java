@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,8 +45,6 @@ public class Grammar implements Serializable {
 	
 	private transient Map<String, BodyGrammarSlot> nameToSlots;
 	
-	private Set<HeadGrammarSlot> newNonterminals;
-	
 	private String name;
 	
 	private int longestTerminalChain;
@@ -85,11 +82,6 @@ public class Grammar implements Serializable {
 		this.nameToNonterminals = new HashMap<>();
 		this.nameToNonterminals = builder.nonterminalsMap;
 		
-		this.newNonterminals = new HashSet<>();
-		for(List<HeadGrammarSlot> newNonterminals : builder.newNonterminalsMap.values()) {
-			this.newNonterminals.addAll(newNonterminals);
-		}
-
 		this.maximumNumAlternates = builder.maximumNumAlternates;
 		this.maxDescriptorsAtInput = builder.maxDescriptors;
 		this.averageDescriptorsAtInput = builder.averageDescriptors;
@@ -164,10 +156,6 @@ public class Grammar implements Serializable {
 	
 	public HeadGrammarSlot getHeadGrammarSlot(String name) {
 		return nameToNonterminals.get(new Nonterminal(name));
-	}
-	
-	public boolean isNewNonterminal(HeadGrammarSlot head) {
-		return newNonterminals.contains(head);
 	}
 	
 	private String getSlotName(BodyGrammarSlot slot) {

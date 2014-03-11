@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -69,9 +68,6 @@ public class GrammarBuilder implements Serializable {
 	private List<Rule> rules;
 	
 	// Fields related to filtering
-	Map<Nonterminal, List<HeadGrammarSlot>> newNonterminalsMap;
-
-	private Map<Rule, LastGrammarSlot> ruleToLastSlotMap;
 
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> directReachabilityGraph;
 	
@@ -110,9 +106,7 @@ public class GrammarBuilder implements Serializable {
 		this.grammarSlotFactory = grammarSlotFactory;
 		headGrammarSlots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
-		ruleToLastSlotMap = new HashMap<>();
 		conditionSlots = new ArrayList<>();
-		newNonterminalsMap = new LinkedHashMap<>();
 		
 		nonterminalIds = new HashMap<>();
 		intermediateNodeIds = new HashMap<>();
@@ -161,10 +155,6 @@ public class GrammarBuilder implements Serializable {
 		
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
-		
-		for(List<HeadGrammarSlot> newNonterminals : newNonterminalsMap.values()) {
-			headGrammarSlots.addAll(newNonterminals);			
-		}
 		
 		validateGrammar();
 		
@@ -291,7 +281,6 @@ public class GrammarBuilder implements Serializable {
 
 			LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(rule, symbolIndex, getSlotId(rule, symbolIndex), getSlotName(rule, symbolIndex), currentSlot, headGrammarSlot, rule.getObject());
 
-			ruleToLastSlotMap.put(rule, lastGrammarSlot);
 			Alternate alternate = new Alternate(firstSlot);
 			lastGrammarSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
 			headGrammarSlot.addAlternate(alternate);
@@ -307,7 +296,7 @@ public class GrammarBuilder implements Serializable {
 	private String getSlotName(Rule rule, int index) {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(rule.getHead()).append(" ::= ");
+		sb.append(rule.getHead().getName()).append(" ::= ");
 		
 		for(int i = 0; i < rule.getBody().size(); i++) {
 			Symbol s = rule.getSymbolAt(i);
@@ -317,7 +306,7 @@ public class GrammarBuilder implements Serializable {
 			}
 			
 			if(s instanceof Nonterminal) {
-				sb.append(getNonterminalName((Nonterminal) s)).append(" ");
+				sb.append(s.getName()).append(" ");
 			} else {
 				sb.append(s).append(" ");				
 			}
@@ -344,14 +333,6 @@ public class GrammarBuilder implements Serializable {
 		}
 		
 		return intermediateNodeIds.get(rule.getBody().subList(0, index));
-	}
-	
-	/**
-	 * If the nonterminal is introduced while rewriting, adds its index to it. 
-	 */
-	public String getNonterminalName(Nonterminal nonterminal) {
-		String name = nonterminal.getName();
-		return newNonterminalsMap.values().contains(nonterminal) ? name + (newNonterminalsMap.get(nonterminal).indexOf(nonterminal) + 1) : name;			
 	}
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
@@ -616,10 +597,11 @@ public class GrammarBuilder implements Serializable {
 				}
 			}
 		}
-		
-		for(List<HeadGrammarSlot> list : newNonterminalsMap.values()) {
-			list.retainAll(reachableNonterminals);
-		}
+
+		// Remove new nonterminals
+//		for(List<HeadGrammarSlot> list : newNonterminalsMap.values()) {
+//			list.retainAll(reachableNonterminals);
+//		}
 	}
 	
 }
