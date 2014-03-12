@@ -1,6 +1,7 @@
 package org.jgll.util;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -84,9 +85,19 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setVisited(true);
 			node.setObject("node" + count);
 			
-			sb.append("PackedNode node" + count + " = new PackedNode(" +
-					  "grammar.getGrammarSlotByName(\"" + node.getId() + "\"), " + 
-					  node.getPivot() + ", " + node.getParent().getObject() + ");\n");
+			
+			if(node.getParent() instanceof NonterminalSymbolNode) {
+				Nonterminal nonterminal = grammar.getNonterminalById(node.getParent().getId());
+				sb.append("PackedNode node" + count + " = new PackedNode(" +
+						  "grammar.getPackedNodeId(" + nonterminal + ", " +
+						  CollectionsUtil.listToString(grammar.getDefinition(nonterminal, node.getId()), ", ") + "), " + 
+						  node.getPivot() + ", " + node.getParent().getObject() + ");\n");
+				
+			} else {
+				sb.append("PackedNode node" + count + " = new PackedNode(" +
+						  "grammar.getIntermediateNodeId(\"" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getParent().getId()), ",") + "\"), " + 
+						  node.getPivot() + ", " + node.getParent().getObject() + ");\n");				
+			}
 			
 			count++;
 			

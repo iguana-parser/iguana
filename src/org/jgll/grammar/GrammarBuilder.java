@@ -94,6 +94,8 @@ public class GrammarBuilder implements Serializable {
 	
 	Map<List<Symbol>, Integer> intermediateNodeIds;
 	
+	Map<Tuple<Nonterminal, List<Symbol>>, Integer> packedNodeIds;
+	
 	Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
 	private OperatorPrecedence operatorPrecedence;
@@ -103,7 +105,10 @@ public class GrammarBuilder implements Serializable {
 	 */
 	Object[][] objects;
 	
-	Map<Tuple<Nonterminal, Integer>, Object> objectMap;
+	/**
+	 * (Nonterminal id, alternate id) => object
+	 */
+	Map<Tuple<Integer, Integer>, Object> objectMap;
 	
 	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammarSlotFactory);
@@ -118,6 +123,7 @@ public class GrammarBuilder implements Serializable {
 		
 		nonterminalIds = new HashMap<>();
 		intermediateNodeIds = new HashMap<>();
+		packedNodeIds = new HashMap<>();
 		
 		definitions = new HashMap<>();
 		rules = new ArrayList<>();
@@ -145,8 +151,8 @@ public class GrammarBuilder implements Serializable {
 		for(Nonterminal nonterminal : definitions.keySet()) {
 			objects[nonterminalIds.get(nonterminal)] = new Object[definitions.get(nonterminal).size()];
 		}
-		for(Entry<Tuple<Nonterminal, Integer>, Object> e : objectMap.entrySet()) {
-			objects[nonterminalIds.get(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
+		for(Entry<Tuple<Integer, Integer>, Object> e : objectMap.entrySet()) {
+			objects[(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
 		}
 		
 		long start = System.nanoTime();
@@ -235,7 +241,7 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	int nonterminalId = 0;
-	int intermediateId;
+	int intermediateId = 0;
 
 	public GrammarBuilder addRule(Rule rule) {
 		Nonterminal head = rule.getHead();
@@ -245,23 +251,28 @@ public class GrammarBuilder implements Serializable {
 			definition = new LinkedHashSet<>();
 			definitions.put(head, definition);
 		}
-		definition.add(rule.getBody());
-		rules.add(rule);
-		
-		if(rule.getObject() != null) {
-			objectMap.put(Tuple.of(head, definitions.get(head).size()), rule.getObject());
-		}
 
-		if(!nonterminalIds.containsKey(head)) {
-			nonterminalIds.put(head, nonterminalId++);
-			nonterminals.add(head);
-		}
-
-		for(int i = 2; i < rule.getBody().size(); i++) {
-			List<Symbol> prefix = rule.getBody().subList(0, i);
-			if(!intermediateNodeIds.containsKey(prefix)) {
-				intermediateNodeIds.put(prefix, intermediateId++);
+		if(definition.add(rule.getBody())) {
+			rules.add(rule);
+			
+			if(rule.getObject() != null) {
+				objectMap.put(Tuple.of(nonterminalIds.get(head), definitions.get(head).size() - 1), rule.getObject());
 			}
+
+			if(!nonterminalIds.containsKey(head)) {
+				nonterminalIds.put(head, nonterminalId++);
+				nonterminals.add(head);
+			}
+
+			for(int i = 2; i < rule.getBody().size(); i++) {
+				List<Symbol> prefix = rule.getBody().subList(0, i);
+				if(!intermediateNodeIds.containsKey(prefix)) {
+					intermediateNodeIds.put(prefix, intermediateId++);
+				}
+			}
+			
+			packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), definitions.get(head).size() - 1);
+			
 		}
 		
 		return this;

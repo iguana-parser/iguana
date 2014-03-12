@@ -51,7 +51,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 		} 
 		else if (countPackedNodes == 1) {
 			// if packed node does not exist
-			if(pivot != firstPackedNode.getPivot()) {
+			if(pivot != firstPackedNode.getPivot() || packedNodeId != firstPackedNode.getId()) {
 				// Initialize the packed nodes array for duplicate elimination
 				packedNodes = new PackedNode[numberOfAlternatives][rightExtent - leftExtent + 1];
 				

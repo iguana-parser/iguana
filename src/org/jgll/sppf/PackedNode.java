@@ -100,7 +100,7 @@ public class PackedNode extends SPPFNode {
 	
 	@Override
 	public String toString() {
-		return String.format("(%id, %d)", id, getPivot());
+		return String.format("(%d, %d)", id, getPivot());
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,6 +22,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -79,6 +81,8 @@ public class Grammar implements Serializable {
 	
 	private Map<Nonterminal, Integer> nonterminalIds;
 	
+	private Map<Tuple<Nonterminal, List<Symbol>>, Integer> packedNodeIds;
+	
 	private List<Nonterminal> nonterminals;
 	
 	private Object[][] objects;
@@ -126,6 +130,7 @@ public class Grammar implements Serializable {
 		
 		definitions = builder.definitions;
 		intermediateNodeIds = builder.intermediateNodeIds;
+		packedNodeIds = builder.packedNodeIds;
 		
 		reverseIntermediateNodeIds = new HashMap<>();
 		for(Entry<List<Symbol>, Integer> e : intermediateNodeIds.entrySet()) {
@@ -301,6 +306,14 @@ public class Grammar implements Serializable {
 		return reverseIntermediateNodeIds.get(id);
 	}
 	
+	public int getPackedNodeId(Nonterminal nonterminal, List<Symbol> symbols) {
+		return packedNodeIds.get(Tuple.of(nonterminal, symbols));
+	}
+	
+	public int getPackedNodeId(Nonterminal nonterminal, Symbol...symbols) {
+		return packedNodeIds.get(Tuple.of(nonterminal, Arrays.asList(symbols)));
+	}
+	
 	public int getCountLL1Nonterminals() {
 		int count = 0;
 		for(HeadGrammarSlot head : headGrammarSlots) {
@@ -337,5 +350,14 @@ public class Grammar implements Serializable {
 	
 	public int getCountAlternates(Nonterminal nonterminal) {
 		return definitions.get(nonterminal).size();
+	}
+	
+	public List<Symbol> getDefinition(Nonterminal nonterminal, int alternateIndex) {
+		List<Symbol> list = null;
+		Iterator<List<Symbol>> it = definitions.get(nonterminal).iterator();
+		for(int i = 0; i <= alternateIndex; i++) {
+			list = it.next();
+		}
+		return list;
 	}
 }
