@@ -96,7 +96,9 @@ public abstract class NonPackedNode extends SPPFNode {
 			packedNode.addChild(leftChild);
 		}
 		
-		packedNode.addChild(rightChild);
+		if (rightChild != DummyNode.getInstance()) {
+			packedNode.addChild(rightChild);
+		}
 		
 		return packedNode;
 	}

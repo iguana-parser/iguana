@@ -264,7 +264,7 @@ public class GrammarBuilder implements Serializable {
 				nonterminals.add(head);
 			}
 
-			for(int i = 1; i < rule.getBody().size(); i++) {
+			for(int i = 2; i < rule.getBody().size(); i++) {
 				List<Symbol> prefix = rule.getBody().subList(0, i);
 				if(!intermediateNodeIds.containsKey(prefix)) {
 					intermediateNodeIds.put(prefix, intermediateId++);
@@ -356,16 +356,16 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private int getSlotId(Rule rule, int index) {
-		
-		if(rule.size() <= 1 || index == 0) {
+
+		if(rule.size() <= 2 || index <= 1) {
 			return -1;
 		}
-		
+
 		// Last grammar slot
 		if(index == rule.getBody().size()) {
 			return nonterminalIds.get(rule.getHead());
 		}
-		
+
 		return intermediateNodeIds.get(rule.getBody().subList(0, index));
 	}
 	

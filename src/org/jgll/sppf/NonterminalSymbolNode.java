@@ -45,7 +45,9 @@ public class NonterminalSymbolNode extends NonPackedNode {
 			if(leftChild != DummyNode.getInstance()) {
 				children.add(leftChild);
 			}
-			children.add(rightChild);
+			if(rightChild != DummyNode.getInstance()) {
+				children.add(rightChild);
+			}
 			firstPackedNode = attachChildren(new PackedNode(packedNodeId, pivot, this), leftChild, rightChild);
 			countPackedNodes++;
 		} 
@@ -76,10 +78,6 @@ public class NonterminalSymbolNode extends NonPackedNode {
 				countPackedNodes++;
 			}
 		}		
-	}
-	
-	public void addFirstPackedNode(int id, int pivot) {
-		firstPackedNode = new PackedNode(id, pivot, this);
 	}
 	
 	@Override

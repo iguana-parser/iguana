@@ -9,6 +9,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 
 /**
@@ -37,7 +38,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		// Do not create epsilon nodes
 		int ci = parser.getCurrentInputIndex();
 		NonterminalSymbolNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
-		node.addFirstPackedNode(alternateIndex, ci);
+		node.addPackedNode(alternateIndex, ci, DummyNode.getInstance(), DummyNode.getInstance());
 		parser.setCurrentSPPFNode(node);
 		parser.pop();
 		return null;

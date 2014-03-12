@@ -12,6 +12,11 @@ public class CollectionsUtil {
 	}
 	
 	public static <T> String listToString(List<T> elements, String sep) {
+		
+		if(elements.size() == 0) {
+			return "";
+		}
+		
 		StringBuilder sb = new StringBuilder();
 		for(T t : elements) {
 			sb.append(t.toString()).append(sep);
