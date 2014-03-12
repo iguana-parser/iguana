@@ -10,8 +10,6 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
