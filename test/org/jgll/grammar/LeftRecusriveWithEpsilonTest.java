@@ -12,6 +12,8 @@ import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,9 +48,11 @@ public class LeftRecusriveWithEpsilonTest {
 	
 	@Test
 	public void test() throws ParseError {
-		Input input = Input.fromString("a");
+		Input input = Input.fromString("");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+//		System.out.println(ToJavaCode.toJavaCode(sppf, grammar));
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, grammar, input);
 	}
 
 }

@@ -36,15 +36,20 @@ public class IndirectRecursion2Test {
 
 	private GrammarBuilder builder;
 	private Grammar grammar;
+	
+	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal B = new Nonterminal("B");
+
+	private Character a = new Character('a');
+	private Character b = new Character('b');
+	private Character d = new Character('d');
 
 	@Before
 	public void init() {
-		Nonterminal A = new Nonterminal("A");
-		Nonterminal B = new Nonterminal("B");
-		Rule r1 = new Rule(A, list(B, A, new Character('d')));
-		Rule r2 = new Rule(A, list(new Character('a')));
+		Rule r1 = new Rule(A, list(B, A, d));
+		Rule r2 = new Rule(A, list(a));
 		Rule r3 = new Rule(B);
-		Rule r4 = new Rule(B, list(new Character('b')));
+		Rule r4 = new Rule(B, list(b));
 
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		builder = new GrammarBuilder("IndirectRecursion", factory).addRule(r1)
@@ -76,19 +81,17 @@ public class IndirectRecursion2Test {
 	}
 	
 	private SPPFNode expectedSPPF() {		
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 2);
-		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B A . [d]"), 0, 1);
-		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("A ::= B . A [d]"), 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 0);
-		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
-		TokenSymbolNode node6 = new TokenSymbolNode(3, 0, 1);
-		node5.addChild(node6);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 2, 0, 2);
+		IntermediateNode node2 = new IntermediateNode(grammar.getIntermediateNodeId(B, A), 0, 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 0, 0);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 2, 0, 1);
+		TokenSymbolNode node5 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
+		node4.addChild(node5);
 		node2.addChild(node3);
-		node2.addChild(node5);
-		TokenSymbolNode node7 = new TokenSymbolNode(2, 1, 1);
+		node2.addChild(node4);
+		TokenSymbolNode node6 = new TokenSymbolNode(grammar.getRegularExpressionId(d), 1, 1);
 		node1.addChild(node2);
-		node1.addChild(node7);
+		node1.addChild(node6);
 		return node1;
 	}
 

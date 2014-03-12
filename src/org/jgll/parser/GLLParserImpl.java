@@ -10,6 +10,8 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
@@ -407,11 +409,10 @@ public class GLLParserImpl implements GLLParser {
 		
 		BodyGrammarSlot previous = slot.previous();
 		
-		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
-		// I'm going to loosen this property as we use rerefernces to identify 
-		// SPPF edges to children and two edges to the same child are possible. 
 		if(previous.isFirst()) {
-			return rightChild;
+			if ((previous instanceof NonterminalGrammarSlot || previous instanceof TokenGrammarSlot) && !previous.isNullable()) {
+				return rightChild;
+			} 		
 		}
 		
 		int leftExtent;

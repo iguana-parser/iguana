@@ -32,22 +32,21 @@ import org.junit.Test;
  *
  */
 public class IndirectRecursion3Test {
-
 	
 	private Grammar grammar;
+	
+	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal B = new Nonterminal("B");
+	private Nonterminal C = new Nonterminal("C");
+	
+	private Character c = new Character('c');
+	private Character d = new Character('d');
+	private Character e = new Character('e');
+	private Character f = new Character('f');
+	private Character g = new Character('g');
 
 	@Before
 	public void init() {
-		Nonterminal A = new Nonterminal("A");
-		Nonterminal B = new Nonterminal("B");
-		Nonterminal C = new Nonterminal("C");
-		
-		Character c = new Character('c');
-		Character d = new Character('d');
-		Character e = new Character('e');
-		Character f = new Character('f');
-		Character g = new Character('g');
-		
 		Rule r1 = new Rule(A, list(B, c));
 		Rule r2 = new Rule(A, list(C, d));
 		Rule r3 = new Rule(A, list(e));
@@ -74,106 +73,106 @@ public class IndirectRecursion3Test {
 	public void test1() throws ParseError {
 		Input input = Input.fromString("efcfc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf1 = parser.parse(input, grammar, "A");
-		assertTrue(sppf1.deepEquals(getSPPFNode1()));
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+		assertTrue(sppf.deepEquals(getSPPFNode1()));
 	}
 	
 	@Test
 	public void test2() throws ParseError {
 		Input input = Input.fromString("egdgdgd");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf2 = parser.parse(Input.fromString("egdgdgd"), grammar, "A");
-		assertTrue(sppf2.deepEquals(getSPPFNode2()));		
+		NonterminalSymbolNode sppf = parser.parse(Input.fromString("egdgdgd"), grammar, "A");
+		assertTrue(sppf.deepEquals(getSPPFNode2()));		
 	}
 	
 	@Test
 	public void test3() throws ParseError {
 		Input input = Input.fromString("egdfcgd");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf3 = parser.parse(input, grammar, "A");
-		assertTrue(sppf3.deepEquals(getSPPFNode3()));
+		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+		assertTrue(sppf.deepEquals(getSPPFNode3()));
 	}
 	
 	private SPPFNode getSPPFNode1() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 4);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 2);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
-		TokenSymbolNode node6 = new TokenSymbolNode(4, 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 5);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 1, 0, 4);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 3);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 1, 0, 2);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 1);
+		TokenSymbolNode node6 = new TokenSymbolNode(grammar.getRegularExpressionId(e), 0, 1);
 		node5.addChild(node6);
-		TokenSymbolNode node7 = new TokenSymbolNode(5, 1, 1);
+		TokenSymbolNode node7 = new TokenSymbolNode(grammar.getRegularExpressionId(f), 1, 1);
 		node4.addChild(node5);
 		node4.addChild(node7);
-		TokenSymbolNode node8 = new TokenSymbolNode(2, 2, 1);
+		TokenSymbolNode node8 = new TokenSymbolNode(grammar.getRegularExpressionId(c), 2, 1);
 		node3.addChild(node4);
 		node3.addChild(node8);
-		TokenSymbolNode node9 = new TokenSymbolNode(5, 3, 1);
+		TokenSymbolNode node9 = new TokenSymbolNode(grammar.getRegularExpressionId(f), 3, 1);
 		node2.addChild(node3);
 		node2.addChild(node9);
-		TokenSymbolNode node10 = new TokenSymbolNode(2, 4, 1);
+		TokenSymbolNode node10 = new TokenSymbolNode(grammar.getRegularExpressionId(c), 4, 1);
 		node1.addChild(node2);
 		node1.addChild(node10);
 		return node1;
 	}
 	
 	private SPPFNode getSPPFNode2() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 7);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 6);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 2);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
-		TokenSymbolNode node8 = new TokenSymbolNode(4, 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 7);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(C), 1, 0, 6);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 5);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(C), 1, 0, 4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalId(C), 1, 0, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 1);
+		TokenSymbolNode node8 = new TokenSymbolNode(grammar.getRegularExpressionId(e), 0, 1);
 		node7.addChild(node8);
-		TokenSymbolNode node9 = new TokenSymbolNode(6, 1, 1);
+		TokenSymbolNode node9 = new TokenSymbolNode(grammar.getRegularExpressionId(g), 1, 1);
 		node6.addChild(node7);
 		node6.addChild(node9);
-		TokenSymbolNode node10 = new TokenSymbolNode(3, 2, 1);
+		TokenSymbolNode node10 = new TokenSymbolNode(grammar.getRegularExpressionId(d), 2, 1);
 		node5.addChild(node6);
 		node5.addChild(node10);
-		TokenSymbolNode node11 = new TokenSymbolNode(6, 3, 1);
+		TokenSymbolNode node11 = new TokenSymbolNode(grammar.getRegularExpressionId(g), 3, 1);
 		node4.addChild(node5);
 		node4.addChild(node11);
-		TokenSymbolNode node12 = new TokenSymbolNode(3, 4, 1);
+		TokenSymbolNode node12 = new TokenSymbolNode(grammar.getRegularExpressionId(d), 4, 1);
 		node3.addChild(node4);
 		node3.addChild(node12);
-		TokenSymbolNode node13 = new TokenSymbolNode(6, 5, 1);
+		TokenSymbolNode node13 = new TokenSymbolNode(grammar.getRegularExpressionId(g), 5, 1);
 		node2.addChild(node3);
 		node2.addChild(node13);
-		TokenSymbolNode node14 = new TokenSymbolNode(3, 6, 1);
+		TokenSymbolNode node14 = new TokenSymbolNode(grammar.getRegularExpressionId(d), 6, 1);
 		node1.addChild(node2);
 		node1.addChild(node14);
 		return node1;
 	}
 	
 	private SPPFNode getSPPFNode3() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 7);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 6);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 5);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 0, 2);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
-		TokenSymbolNode node8 = new TokenSymbolNode(4, 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 7);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(C), 1, 0, 6);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 5);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 1, 0, 4);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalId(C), 1, 0, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 1);
+		TokenSymbolNode node8 = new TokenSymbolNode(grammar.getRegularExpressionId(e), 0, 1);
 		node7.addChild(node8);
-		TokenSymbolNode node9 = new TokenSymbolNode(6, 1, 1);
+		TokenSymbolNode node9 = new TokenSymbolNode(grammar.getRegularExpressionId(g), 1, 1);
 		node6.addChild(node7);
 		node6.addChild(node9);
-		TokenSymbolNode node10 = new TokenSymbolNode(3, 2, 1);
+		TokenSymbolNode node10 = new TokenSymbolNode(grammar.getRegularExpressionId(d), 2, 1);
 		node5.addChild(node6);
 		node5.addChild(node10);
-		TokenSymbolNode node11 = new TokenSymbolNode(5, 3, 1);
+		TokenSymbolNode node11 = new TokenSymbolNode(grammar.getRegularExpressionId(f), 3, 1);
 		node4.addChild(node5);
 		node4.addChild(node11);
-		TokenSymbolNode node12 = new TokenSymbolNode(2, 4, 1);
+		TokenSymbolNode node12 = new TokenSymbolNode(grammar.getRegularExpressionId(c), 4, 1);
 		node3.addChild(node4);
 		node3.addChild(node12);
-		TokenSymbolNode node13 = new TokenSymbolNode(6, 5, 1);
+		TokenSymbolNode node13 = new TokenSymbolNode(grammar.getRegularExpressionId(g), 5, 1);
 		node2.addChild(node3);
 		node2.addChild(node13);
-		TokenSymbolNode node14 = new TokenSymbolNode(3, 6, 1);
+		TokenSymbolNode node14 = new TokenSymbolNode(grammar.getRegularExpressionId(d), 6, 1);
 		node1.addChild(node2);
 		node1.addChild(node14);
 		return node1;

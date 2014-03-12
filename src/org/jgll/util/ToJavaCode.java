@@ -65,7 +65,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("IntermediateNode node" + count + " = new IntermediateNode(" +
-					  "grammar.getIntermediateNodeId(" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId()), ",")  + "), " + 
+					  "grammar.getIntermediateNodeId(" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId()), ", ")  + "), " + 
 					  node.getLeftExtent() + ", " + 
 					  node.getRightExtent() + ");\n");
 			
@@ -95,7 +95,7 @@ public class ToJavaCode implements SPPFVisitor {
 				
 			} else {
 				sb.append("PackedNode node" + count + " = new PackedNode(" +
-						  "grammar.getIntermediateNodeId(" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getParent().getId()), ",") + "), " + 
+						  "grammar.getIntermediateNodeId(" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getParent().getId()), ", ") + "), " + 
 						  node.getPivot() + ", " + node.getParent().getObject() + ");\n");				
 			}
 			

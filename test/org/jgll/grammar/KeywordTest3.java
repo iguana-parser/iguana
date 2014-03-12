@@ -12,11 +12,11 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +29,7 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
+
 public class KeywordTest3 {
 	
 	private Grammar grammar;
@@ -64,36 +65,45 @@ public class KeywordTest3 {
 		Input input = Input.fromString("if s then s");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, input);
-		assertTrue(sppf.deepEquals(getSPPF1()));
+		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 		
-	private SPPFNode getSPPF1() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 11);
-		TokenSymbolNode node2 = new TokenSymbolNode(2, 0, 2);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("L"), 2, 3);
-		TokenSymbolNode node4 = new TokenSymbolNode(5, 2, 1);
-		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 3, 4);
-		TokenSymbolNode node6 = new TokenSymbolNode(4, 3, 1);
-		node5.addChild(node6);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("L"), 4, 5);
-		TokenSymbolNode node8 = new TokenSymbolNode(5, 4, 1);
-		node7.addChild(node8);
-		TokenSymbolNode node9 = new TokenSymbolNode(3, 5, 4);
-		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("L"), 9, 10);
-		TokenSymbolNode node11 = new TokenSymbolNode(5, 9, 1);
+	private SPPFNode getSPPF() {
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 2, 0, 11);
+		IntermediateNode node2 = new IntermediateNode(grammar.getIntermediateNodeId(iff, L, S, L, then, L), 0, 10);
+		IntermediateNode node3 = new IntermediateNode(grammar.getIntermediateNodeId(iff, L, S, L, then), 0, 9);
+		IntermediateNode node4 = new IntermediateNode(grammar.getIntermediateNodeId(iff, L, S, L), 0, 5);
+		IntermediateNode node5 = new IntermediateNode(grammar.getIntermediateNodeId(iff, L, S), 0, 4);
+		IntermediateNode node6 = new IntermediateNode(grammar.getIntermediateNodeId(iff, L), 0, 3);
+		TokenSymbolNode node7 = new TokenSymbolNode(grammar.getRegularExpressionId(iff), 0, 2);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalId(L), 1, 2, 3);
+		TokenSymbolNode node9 = new TokenSymbolNode(grammar.getRegularExpressionId(ws), 2, 1);
+		node8.addChild(node9);
+		node6.addChild(node7);
+		node6.addChild(node8);
+		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 2, 3, 4);
+		TokenSymbolNode node11 = new TokenSymbolNode(grammar.getRegularExpressionId(s), 3, 1);
 		node10.addChild(node11);
-		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 10, 11);
-		TokenSymbolNode node13 = new TokenSymbolNode(4, 10, 1);
+		node5.addChild(node6);
+		node5.addChild(node10);
+		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalId(L), 1, 4, 5);
+		TokenSymbolNode node13 = new TokenSymbolNode(grammar.getRegularExpressionId(ws), 4, 1);
 		node12.addChild(node13);
+		node4.addChild(node5);
+		node4.addChild(node12);
+		TokenSymbolNode node14 = new TokenSymbolNode(grammar.getRegularExpressionId(then), 5, 4);
+		node3.addChild(node4);
+		node3.addChild(node14);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalId(L), 1, 9, 10);
+		TokenSymbolNode node16 = new TokenSymbolNode(grammar.getRegularExpressionId(ws), 9, 1);
+		node15.addChild(node16);
+		node2.addChild(node3);
+		node2.addChild(node15);
+		NonterminalSymbolNode node17 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 2, 10, 11);
+		TokenSymbolNode node18 = new TokenSymbolNode(grammar.getRegularExpressionId(s), 10, 1);
+		node17.addChild(node18);
 		node1.addChild(node2);
-		node1.addChild(node3);
-		node1.addChild(node5);
-		node1.addChild(node7);
-		node1.addChild(node9);
-		node1.addChild(node10);
-		node1.addChild(node12);
+		node1.addChild(node17);
 		return node1;
 	}
 	

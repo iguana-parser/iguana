@@ -94,12 +94,12 @@ public class IndirectRecursion1Test {
 	}
 	
 	private SPPFNode expectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 1);
-		TokenSymbolNode node3 = new TokenSymbolNode(3, 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 2, 0, 2);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 0, 1);
+		TokenSymbolNode node3 = new TokenSymbolNode(grammar.getRegularExpressionId(b), 0, 1);
 		node2.addChild(node3);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("C"), 1, 2);
-		TokenSymbolNode node5 = new TokenSymbolNode(4, 1, 1);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(C), 1, 1, 2);
+		TokenSymbolNode node5 = new TokenSymbolNode(grammar.getRegularExpressionId(c), 1, 1);
 		node4.addChild(node5);
 		node1.addChild(node2);
 		node1.addChild(node4);

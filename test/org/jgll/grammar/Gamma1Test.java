@@ -20,6 +20,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -98,34 +99,35 @@ public class Gamma1Test {
 		Input input = Input.fromString("aad");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
+		System.out.println(ToJavaCode.toJavaCode(sppf, grammar));
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	
 	public SPPFNode getSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 3);
-		PackedNode node2 = new PackedNode(grammar.getGrammarSlotByName("S ::= B S ."), 1, node1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 1);
-		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 0, 3);
+		PackedNode node2 = new PackedNode(grammar.getPackedNodeId(S, B, S), 1, node1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 0, 1);
+		TokenSymbolNode node4 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 1, 3);
-		IntermediateNode node6 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= A S . [d]"), 1, 2);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 1, 2);
-		TokenSymbolNode node8 = new TokenSymbolNode(3, 1, 1);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 1, 3);
+		IntermediateNode node6 = new IntermediateNode(grammar.getIntermediateNodeId(A,S), 1, 2);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 2, 1, 2);
+		TokenSymbolNode node8 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 1, 1);
 		node7.addChild(node8);
-		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 2, 2);
+		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 2, 2);
 		node6.addChild(node7);
 		node6.addChild(node9);
-		TokenSymbolNode node10 = new TokenSymbolNode(2, 2, 1);
+		TokenSymbolNode node10 = new TokenSymbolNode(grammar.getRegularExpressionId(d), 2, 1);
 		node5.addChild(node6);
 		node5.addChild(node10);
 		node2.addChild(node3);
 		node2.addChild(node5);
-		PackedNode node11 = new PackedNode(grammar.getGrammarSlotByName("S ::= A S [d] ."), 2, node1);
-		IntermediateNode node12 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= A S . [d]"), 0, 2);
-		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
+		PackedNode node11 = new PackedNode(grammar.getPackedNodeId(S, A, S, d), 2, node1);
+		IntermediateNode node12 = new IntermediateNode(grammar.getIntermediateNodeId(A,S), 0, 2);
+		NonterminalSymbolNode node13 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 2, 0, 1);
 		node13.addChild(node4);
-		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 1, 2);
-		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 1, 2);
+		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 1, 2);
+		NonterminalSymbolNode node15 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 1, 2);
 		node15.addChild(node8);
 		node14.addChild(node15);
 		node14.addChild(node9);
@@ -134,7 +136,7 @@ public class Gamma1Test {
 		node11.addChild(node12);
 		node11.addChild(node10);
 		node1.addChild(node2);
-		node1.addChild(node11);		
+		node1.addChild(node11);
 		return node1;
 	}
 	
