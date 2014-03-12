@@ -50,7 +50,8 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-			String label = grammar.getRegularExpressionById(node.getId()).getName() + ": \"" + matchedInput + "\"";
+			String label = String.format("(%s, %d, %d): \"%s\"", grammar.getRegularExpressionById(node.getId()).getName(),
+															 node.getLeftExtent(), node.getRightExtent(), matchedInput);
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 		}
 	}
@@ -60,7 +61,8 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			String label = grammar.getNonterminalById(node.getId()).getName();
+			String label = String.format("(%s, %d, %d)", grammar.getNonterminalById(node.getId()).getName(), 
+														 node.getLeftExtent(), node.getRightExtent());
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);
 			
@@ -73,7 +75,8 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			String label = CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId()));
+			String label = String.format("(%s, %d, %d)", CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId())), 
+														 node.getLeftExtent(), node.getRightExtent());
 			sb.append("\"" + getId(node) + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);
 	
