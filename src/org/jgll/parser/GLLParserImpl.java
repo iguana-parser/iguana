@@ -410,10 +410,10 @@ public class GLLParserImpl implements GLLParser {
 		BodyGrammarSlot previous = slot.previous();
 		
 		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
+		// I'm going to loosen this property as we use rerefernces to identify 
+		// SPPF edges to children and two edges to the same child are possible. 
 		if(previous.isFirst()) {
-			if ((previous instanceof NonterminalGrammarSlot || previous instanceof TokenGrammarSlot) && !previous.isNullable()) {
-				return rightChild;
-			} 		
+			return rightChild;
 		}
 		
 		int leftExtent;
