@@ -63,6 +63,10 @@ public class GrammarProperties {
 
 		boolean changed = false;
 		
+		if(alternate == null) {
+			return false;
+		}
+		 
 		//TODO: check if it is allowed or is it a good idea to enforce the instantiation of Epsilon.
 		if (alternate.size() == 0) {
 			return firstSet.add(Epsilon.getInstance());
@@ -154,7 +158,7 @@ public class GrammarProperties {
 
 				for (List<Symbol> alternate : definitions.get(head)) {
 					
-					if(alternate.size() == 0) {
+					if(alternate == null || alternate.size() == 0) {
 						continue;
 					}
 					
@@ -207,6 +211,11 @@ public class GrammarProperties {
 			List<Set<RegularExpression>> list = new ArrayList<>();
 
 			for(List<Symbol> alternate : alternates) {
+				
+				if(alternate == null) {
+					continue;
+				}
+				
 				Set<RegularExpression> predictionSet = new HashSet<>();
 				
 				for(int i = 0; i < alternate.size(); i++) {
@@ -396,6 +405,11 @@ public class GrammarProperties {
 			for (Nonterminal head : nonterminals) {
 				Set<Nonterminal> set = reachabilityGraph.get(head);
 				for (List<Symbol> alternate : definitions.get(head)) {
+					
+					if(alternate == null) {
+						continue;
+					}
+					
 					for(Symbol symbol : alternate) {
 						if(symbol instanceof Nonterminal) {
 							Nonterminal nonterminal = (Nonterminal) symbol;

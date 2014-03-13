@@ -1,7 +1,6 @@
 package org.jgll.sppf;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import org.jgll.traversal.AmbiguousNodeCounter;
 import org.jgll.traversal.SPPFVisitor;
@@ -41,7 +40,6 @@ public abstract class SPPFNode {
 	public abstract int getRightExtent();
 
 	public abstract void accept(SPPFVisitor visitAction);
-	
 	
 	public Object getObject() {
 		return object;

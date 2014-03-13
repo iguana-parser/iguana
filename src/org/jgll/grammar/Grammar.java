@@ -79,7 +79,7 @@ public class Grammar implements Serializable {
 	
 	private Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
-	private Map<Nonterminal, Integer> nonterminalIds;
+	private Map<String, Integer> nonterminalIds;
 	
 	private Map<Tuple<Nonterminal, List<Symbol>>, Integer> packedNodeIds;
 	
@@ -284,7 +284,7 @@ public class Grammar implements Serializable {
 	}
 	
 	public int getNonterminalId(Nonterminal nonterminal) {
-		return nonterminalIds.get(nonterminal);
+		return nonterminalIds.get(nonterminal.getName());
 	}
 	
 	public RegularExpression getRegularExpressionById(int index) {

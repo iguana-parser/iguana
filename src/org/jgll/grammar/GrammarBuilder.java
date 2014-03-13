@@ -90,7 +90,7 @@ public class GrammarBuilder implements Serializable {
 
 	private GrammarSlotFactory grammarSlotFactory;
 	
-	Map<Nonterminal, Integer> nonterminalIds;
+	Map<String, Integer> nonterminalIds;
 	
 	Map<List<Symbol>, Integer> intermediateNodeIds;
 	
@@ -149,7 +149,7 @@ public class GrammarBuilder implements Serializable {
 		
 		objects = new Object[definitions.size()][];
 		for(Nonterminal nonterminal : definitions.keySet()) {
-			objects[nonterminalIds.get(nonterminal)] = new Object[definitions.get(nonterminal).size()];
+			objects[nonterminalIds.get(nonterminal.getName())] = new Object[definitions.get(nonterminal).size()];
 		}
 		for(Entry<Tuple<Integer, Integer>, Object> e : objectMap.entrySet()) {
 			objects[(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
@@ -174,8 +174,9 @@ public class GrammarBuilder implements Serializable {
 		end = System.nanoTime();
 		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
 				
-		for(Rule rule : rules) {
-			convert(rule);
+		
+		for(Entry<Nonterminal, Set<List<Symbol>>> e : definitions.entrySet()) {
+			convert(e.getKey(), e.getValue());
 		}
 		
 		// related to rewriting the patterns
@@ -244,6 +245,7 @@ public class GrammarBuilder implements Serializable {
 	int intermediateId = 0;
 
 	public GrammarBuilder addRule(Rule rule) {
+		
 		Nonterminal head = rule.getHead();
 		Set<List<Symbol>> definition = definitions.get(head);
 		if(definition == null) {
@@ -256,84 +258,90 @@ public class GrammarBuilder implements Serializable {
 			rules.add(rule);
 			
 			if(rule.getObject() != null) {
-				objectMap.put(Tuple.of(nonterminalIds.get(head), definitions.get(head).size() - 1), rule.getObject());
+				objectMap.put(Tuple.of(nonterminalIds.get(head.getName()), definitions.get(head).size() - 1), rule.getObject());
 			}
 
-			if(!nonterminalIds.containsKey(head)) {
-				nonterminalIds.put(head, nonterminalId++);
+			if(!nonterminalIds.containsKey(head.getName())) {
+				nonterminalIds.put(head.getName(), nonterminalId++);
 				nonterminals.add(head);
 			}
 
-			for(int i = 2; i < rule.getBody().size(); i++) {
-				List<Symbol> prefix = rule.getBody().subList(0, i);
-				if(!intermediateNodeIds.containsKey(prefix)) {
-					intermediateNodeIds.put(prefix, intermediateId++);
+			if(rule.getBody() != null) {
+				for(int i = 2; i < rule.getBody().size(); i++) {
+					List<Symbol> prefix = rule.getBody().subList(0, i);
+					List<Symbol> plain = OperatorPrecedence.plain(prefix);
+					if(!intermediateNodeIds.containsKey(plain)) {
+						intermediateNodeIds.put(plain, intermediateId++);
+					}
 				}
+				
+				packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), definitions.get(head).size() - 1);
 			}
 			
-			packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), definitions.get(head).size() - 1);
 			
 		}
 		
 		return this;
 	}
  
-	public void convert(Rule rule) {
+	private void convert(Nonterminal head, Set<List<Symbol>> alternates) {
 		
-		if (rule == null) {
-			throw new IllegalArgumentException("Rule cannot be null.");
-		}
+		// Hack for keeping the alternate index of rewritten nonterminals intact.
 		
 		Map<BodyGrammarSlot, Iterable<Condition>> conditions = new HashMap<>();
 
-		Nonterminal head = rule.getHead();
-		List<Symbol> body = rule.getBody();
-
 		HeadGrammarSlot headGrammarSlot = getHeadGrammarSlot(head);
-
-		BodyGrammarSlot currentSlot = null;
-
-		if (body.size() == 0) {
-			EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(rule, 0, getSlotId(rule, 0), getSlotName(rule, 0), headGrammarSlot, rule.getObject());
-			epsilonSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
-			headGrammarSlot.addAlternate(new Alternate(epsilonSlot));
-		} 
-		else {
-			int symbolIndex = 0;
-			BodyGrammarSlot firstSlot = null;
-			for (Symbol symbol : body) {
-				
-				currentSlot = getBodyGrammarSlot(rule, symbol, symbolIndex, currentSlot, headGrammarSlot);
-
-				if (symbolIndex == 0) {
-					firstSlot = currentSlot;
-				}
-				symbolIndex++;
-				
-				conditions.put(currentSlot, symbol.getConditions());
-			}
-
-			LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(rule, symbolIndex, getSlotId(rule, symbolIndex), getSlotName(rule, symbolIndex), currentSlot, headGrammarSlot, rule.getObject());
-
-			Alternate alternate = new Alternate(firstSlot);
-			lastGrammarSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
-			headGrammarSlot.addAlternate(alternate);
+		
+		for(List<Symbol> body : alternates) {
 			
-			for(Entry<BodyGrammarSlot, Iterable<Condition>> e : conditions.entrySet()) {
-				for(Condition condition : e.getValue()) {
-					addCondition(e.getKey(), condition);
-				}
+			if(body == null) {
+				continue;
 			}
+			
+			BodyGrammarSlot currentSlot = null;
+	
+			if (body.size() == 0) {
+				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(getSlotId(body, 0), getSlotName(head, body, 0), headGrammarSlot);
+				epsilonSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
+				headGrammarSlot.addAlternate(new Alternate(epsilonSlot));
+			} 
+			else {
+				int symbolIndex = 0;
+				BodyGrammarSlot firstSlot = null;
+				for (Symbol symbol : body) {
+					
+					currentSlot = getBodyGrammarSlot(head, body, symbol, symbolIndex, currentSlot, headGrammarSlot);
+	
+					if (symbolIndex == 0) {
+						firstSlot = currentSlot;
+					}
+					symbolIndex++;
+					
+					conditions.put(currentSlot, symbol.getConditions());
+				}
+	
+				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot);
+	
+				Alternate alternate = new Alternate(firstSlot);
+				lastGrammarSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
+				headGrammarSlot.addAlternate(alternate);
+				
+				for(Entry<BodyGrammarSlot, Iterable<Condition>> e : conditions.entrySet()) {
+					for(Condition condition : e.getValue()) {
+						addCondition(e.getKey(), condition);
+					}
+				}
+		}
 		}
 	}
 	
-	private String getSlotName(Rule rule, int index) {
+	private String getSlotName(Nonterminal head, List<Symbol> body, int index) {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(rule.getHead().getName()).append(" ::= ");
+		sb.append(head.getName()).append(" ::= ");
 		
-		for(int i = 0; i < rule.getBody().size(); i++) {
-			Symbol s = rule.getSymbolAt(i);
+		for(int i = 0; i < body.size(); i++) {
+			Symbol s = body.get(i);
 			
 			if(i == index) {
 				sb.append(". ");
@@ -346,7 +354,7 @@ public class GrammarBuilder implements Serializable {
 			}
 		}
 
-		if(index == rule.getBody().size()) {
+		if(index == body.size()) {
 			sb.append(".");
 		} else {
 			sb.delete(sb.length() - 1, sb.length());			
@@ -355,31 +363,31 @@ public class GrammarBuilder implements Serializable {
 		return sb.toString();
 	}
 	
-	private int getSlotId(Rule rule, int index) {
+	private int getSlotId(List<Symbol> alt, int index) {
 
-		if(rule.size() <= 2 || index <= 1) {
+		if(alt.size() <= 2 || index <= 1) {
 			return -1;
 		}
 
 		// Last grammar slot
-		if(index == rule.getBody().size()) {
+		if(index == alt.size()) {
 			return -1;
 		}
 
-		return intermediateNodeIds.get(rule.getBody().subList(0, index));
+		return intermediateNodeIds.get(OperatorPrecedence.plain(alt.subList(0, index)));
 	}
 	
-	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
+	private BodyGrammarSlot getBodyGrammarSlot(Nonterminal head, List<Symbol> body, Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
 		
 		if(symbol instanceof RegularExpression) {
 			RegularExpression token = (RegularExpression) symbol;
-			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, getSlotId(rule, symbolIndex), getSlotName(rule, symbolIndex), currentSlot, token, headGrammarSlot, getTokenID(token));
+			return grammarSlotFactory.createTokenGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, token, headGrammarSlot, getTokenID(token));
 		}
 		
 		// Nonterminal
 		else {
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(rule, symbolIndex, getSlotId(rule, symbolIndex), getSlotName(rule, symbolIndex), currentSlot, nonterminal, headGrammarSlot);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, headGrammarSlot);						
 		}		
 	}
 
@@ -464,11 +472,11 @@ public class GrammarBuilder implements Serializable {
 		for(Symbol symbol : condition.getSymbols()) {
 			if(symbol instanceof Nonterminal) {
 				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-				currentSlot = grammarSlotFactory.createNonterminalGrammarSlot(rule, index, getSlotId(rule, index), getSlotName(rule, index), currentSlot, nonterminal, null);
+				currentSlot = grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(rule.getBody(), index), getSlotName(rule.getHead(), rule.getBody(), index), currentSlot, nonterminal, null);
 			} 
 			else if(symbol instanceof RegularExpression) {
 				RegularExpression token = (RegularExpression) symbol;
-				currentSlot = grammarSlotFactory.createTokenGrammarSlot(rule, index, getSlotId(rule, index), getSlotName(rule, index), currentSlot, token, null, getTokenID(token));
+				currentSlot = grammarSlotFactory.createTokenGrammarSlot(getSlotId(rule.getBody(), index), getSlotName(rule.getHead(), rule.getBody(), index), currentSlot, token, null, getTokenID(token));
 			}
 			
 			if(index == 0) {
@@ -477,7 +485,7 @@ public class GrammarBuilder implements Serializable {
 			index++;
 		}
 		
-		grammarSlotFactory.createLastGrammarSlot(rule, index, getSlotId(rule, index), getSlotName(rule, index), currentSlot, null, null);
+		grammarSlotFactory.createLastGrammarSlot(getSlotId(rule.getBody(), index), getSlotName(rule.getHead(), rule.getBody(), index), currentSlot, null);
 		conditionSlots.add(firstSlot);
 		return firstSlot;
 	}
@@ -486,7 +494,7 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
 
 		if (headGrammarSlot == null) {
-			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, nonterminalIds.get(nonterminal), definitions.get(nonterminal), firstSets, followSets, predictionSets);
+			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, nonterminalIds.get(nonterminal.getName()), definitions.get(nonterminal), firstSets, followSets, predictionSets);
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
 			headGrammarSlots.add(headGrammarSlot);
 		}

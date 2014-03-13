@@ -89,4 +89,5 @@ public class DummyNode extends SPPFNode {
 	public int getCountAmbiguousNodes() {
 		return 0;
 	}
+
 }

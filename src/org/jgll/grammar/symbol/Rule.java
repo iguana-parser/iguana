@@ -21,6 +21,11 @@ public class Rule implements Serializable {
 	
 	private final Nonterminal head;
 	
+	/**
+	 * An arbitrary data object that can be put in this grammar slot and
+	 * retrieved later when traversing the parse tree.
+	 * This object can be accessed via the getObject() method of a nonterminal symbol node.
+	 */
 	private final Serializable object;
 	
 	private List<Condition> conditions;
@@ -45,17 +50,19 @@ public class Rule implements Serializable {
 		if(head == null) {
 			throw new IllegalArgumentException("head cannot be null.");
 		}
-		if(body == null) {
-			throw new IllegalArgumentException("Object cannot be null.");
-		}
-		for(Symbol s : body) {
-			if(s == null) {
-				throw new IllegalArgumentException("Body of a rule cannot have null symbols.");
-			}
-		}
+		
 		this.head = head;
 		
-		this.body = new ArrayList<>(body);
+		if(body != null) {
+			for(Symbol s : body) {
+				if(s == null) {
+					throw new IllegalArgumentException("Body of a rule cannot have null symbols.");
+				}
+			}	
+			this.body = new ArrayList<>(body);
+		} else {
+			this.body = null;
+		}
 		
 		this.object = object;
 		
@@ -123,12 +130,12 @@ public class Rule implements Serializable {
 		
 		Rule other = (Rule) obj;
 		
-		return head.equals(other.head) && body.equals(other.body);
+		return head.equals(other.head) && body == null ? other.body == null : body.equals(other.body);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(head.hashCode(), body.hashCode());
+		return HashFunctions.defaulFunction().hash(head.hashCode(), body == null ? 0 : body.hashCode());
 	}
 	
 	

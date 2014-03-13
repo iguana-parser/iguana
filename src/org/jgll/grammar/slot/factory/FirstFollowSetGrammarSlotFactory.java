@@ -1,6 +1,5 @@
 package org.jgll.grammar.slot.factory;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,7 +22,6 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 
@@ -69,44 +67,41 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 	
 
 	@Override
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(Rule rule,
-															   int position, 
-															   int slotId,
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(int slotId,
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal, 
 															   HeadGrammarSlot head) {
-		return new NonterminalGrammarSlotFirstFollow(rule, position, slotId, label, previous, nonterminal, head);
+		return new NonterminalGrammarSlotFirstFollow(slotId, label, previous, nonterminal, head);
 	}
 
 	@Override
-	public TokenGrammarSlot createTokenGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, 
+	public TokenGrammarSlot createTokenGrammarSlot(int slotId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, 
 												   HeadGrammarSlot head, int tokenID) {
 		if(regularExpression instanceof Character) {
-			return new CharacterGrammarSlot(rule, position, slotId, label, previous, (Character) regularExpression, head, tokenID);
+			return new CharacterGrammarSlot(slotId, label, previous, (Character) regularExpression, head, tokenID);
 		}
 		else if (regularExpression instanceof Range) {
 			Range r = (Range) regularExpression;
 			if(r.getStart() == r.getEnd()) {
-				return new CharacterGrammarSlot(rule, position, slotId, label, previous, new Character(r.getStart()), head, tokenID);
+				return new CharacterGrammarSlot(slotId, label, previous, new Character(r.getStart()), head, tokenID);
 			} else {
-				return new RangeGrammarSlot(rule, position, slotId, label, previous, r, head, tokenID);
+				return new RangeGrammarSlot(slotId, label, previous, r, head, tokenID);
 			}
 		}
-		return new TokenGrammarSlot(rule, position, slotId, label, previous, regularExpression, head, tokenID);
+		return new TokenGrammarSlot(slotId, label, previous, regularExpression, head, tokenID);
 	}
 
 
 	@Override
-	public LastGrammarSlot createLastGrammarSlot(Rule rule, int position, int slotId, String label,
-			BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object) {
-		return new LastGrammarSlot(rule, position, slotId, label, previous, head, object);
+	public LastGrammarSlot createLastGrammarSlot(int slotId, String label,
+			BodyGrammarSlot previous, HeadGrammarSlot head) {
+		return new LastGrammarSlot(slotId, label, previous, head);
 	}
 	
 	@Override
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(Rule rule, int position, int slotId,
-			String label, HeadGrammarSlot head, Serializable object) {
-		return new EpsilonGrammarSlot(rule, position, slotId, label, head, object);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(int slotId, String label, HeadGrammarSlot head) {
+		return new EpsilonGrammarSlot(slotId, label, head);
 	}
 	
 }

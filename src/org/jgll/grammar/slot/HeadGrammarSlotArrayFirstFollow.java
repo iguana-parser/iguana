@@ -54,18 +54,22 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 		
 		predictionMap = new Set[max - min + 1];
 		
-		for(int i = 0; i < alts.size(); i++) {
-			for(RegularExpression regex : predictionSets.get(i)) {
-				for(Range r : regex.getFirstSet()) {
-					for(int v = r.getStart(); v <= r.getEnd(); v++) {
-						Set<Integer> set = predictionMap[v - min];
-						if(set == null) {
-							set = new HashSet<>();
-							predictionMap[v - min] = set;
+		int i = 0;
+		for(List<Symbol> alt : alts) {
+			if(alt != null) {
+				for(RegularExpression regex : predictionSets.get(i)) {
+					for(Range r : regex.getFirstSet()) {
+						for(int v = r.getStart(); v <= r.getEnd(); v++) {
+							Set<Integer> set = predictionMap[v - min];
+							if(set == null) {
+								set = new HashSet<>();
+								predictionMap[v - min] = set;
+							}
+							set.add(i);
 						}
-						set.add(i);
 					}
 				}
+				i++;
 			}
  		}
 	}

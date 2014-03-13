@@ -1,6 +1,5 @@
 package org.jgll.grammar.slot.factory;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +11,6 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 
@@ -25,21 +23,19 @@ public interface GrammarSlotFactory {
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets);
 	
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(Rule rule, int position, int slotId,
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(int slotId,
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal, 
 															   HeadGrammarSlot head);
 
-	public LastGrammarSlot createLastGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object);
+	public LastGrammarSlot createLastGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head);
 	
 	
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(Rule rule, int position, int slotId, String label, HeadGrammarSlot head, Serializable object);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(int slotId, String label, HeadGrammarSlot head);
 	
 	
-	public TokenGrammarSlot createTokenGrammarSlot(Rule rule, 
-												   int position, 
-												   int slotId,
+	public TokenGrammarSlot createTokenGrammarSlot(int slotId,
 												   String label,
 												   BodyGrammarSlot previous, 
 												   RegularExpression regularExpression, 

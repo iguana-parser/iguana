@@ -45,7 +45,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId())  + "), " + 
+					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId()).getName()  + "), " + 
 					grammar.getCountAlternates(grammar.getNonterminalById(node.getId())) + ", " +
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");

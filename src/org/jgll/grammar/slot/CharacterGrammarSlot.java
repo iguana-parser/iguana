@@ -1,7 +1,6 @@
 package org.jgll.grammar.slot;
 
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.TokenSymbolNode;
@@ -12,14 +11,14 @@ public class CharacterGrammarSlot extends TokenGrammarSlot {
 	
 	private Character c;
 
-	public CharacterGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous,
+	public CharacterGrammarSlot(int slotId, String label, BodyGrammarSlot previous,
 								Character c, HeadGrammarSlot head, int tokenID) {
-		super(rule, position, slotId, label, previous, c, head, tokenID);
+		super(slotId, label, previous, c, head, tokenID);
 		this.c = c;
 	}
 	
 	public CharacterGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
-		CharacterGrammarSlot slot = new CharacterGrammarSlot(rule, position, slotId, label, previous, this.c, head, this.tokenID);
+		CharacterGrammarSlot slot = new CharacterGrammarSlot(slotId, label, previous, this.c, head, this.tokenID);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;

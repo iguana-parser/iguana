@@ -1,10 +1,8 @@
 package org.jgll.grammar.slot;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -20,22 +18,14 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * An arbitrary data object that can be put in this grammar slot and
-	 * retrieved later when traversing the parse tree.
-	 * This object can be accessed via the getObject() method of a nonterminal symbol node.
-	 */
-	private Serializable object;
-	
 	protected int alternateIndex;
 	
-	public LastGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head, Serializable object) {
-		super(rule, position, slotId, label, previous, head);
-		this.object = object;
+	public LastGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		super(slotId, label, previous, head);
 	}
 	
 	public LastGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
-		LastGrammarSlot slot = new LastGrammarSlot(rule, position, slotId, label, previous, head, object);
+		LastGrammarSlot slot = new LastGrammarSlot(slotId, label, previous, head);
 		slot.preConditions = preConditions;
 		slot.popActions = popActions;
 		return slot;
@@ -63,14 +53,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void codeIfTestSetCheck(Writer writer) throws IOException {
 		throw new UnsupportedOperationException();
-	}
-	
-	public Serializable getObject() {
-		return object;
-	}
-	
-	public void setObject(Serializable object) {
-		this.object = object;
 	}
 
 	@Override

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.slotaction.SlotAction;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -25,13 +24,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected BodyGrammarSlot next;
 	
-	/**
-	 * The position from the beginning of the alternate.
-	 * Positions start from zero.
-	 * TODO: see if can be removed
-	 */
-	protected final int position;
-	
 	protected HeadGrammarSlot head;
 	
 	protected List<SlotAction<Boolean>> preConditions;
@@ -40,23 +32,16 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected final String label;
 
-	protected final Rule rule;
-
 	protected final int slotId;
 	
-	public BodyGrammarSlot(Rule rule, int position, int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
+	public BodyGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
 		this.slotId = slotId;
-		if(position < 0) {
-			throw new IllegalArgumentException("Position cannot be negative.");
-		}
 		
 		if(label == null) {
 			throw new IllegalArgumentException("Label cannot be null.");
 		}
 		
-		this.rule = rule;
-		this.position = position;
 		this.label = label;
 		this.head = head;
 		if(previous != null) {
@@ -129,14 +114,6 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 		return previous;
 	}
 
-	public Rule getRule() {
-		return rule;
-	}
-	
-	public int getPosition() {
-		return position;
-	}
-	
 	public HeadGrammarSlot getHead() {
 		return head;
 	}

@@ -303,6 +303,11 @@ public class OperatorPrecedence {
 		}
 		
 		for (List<Symbol> alt : definitions.get(head)) {
+			
+			if(alt == null) {
+				continue;
+			}
+			
 			if (alt.get(0) instanceof Nonterminal) {
 				Nonterminal first = (Nonterminal) alt.get(0);
 				if (first.equals(nonterminal)) {
@@ -335,6 +340,11 @@ public class OperatorPrecedence {
 		}
 		
 		for (List<Symbol> alt : definitions.get(head)) {
+			
+			if(alt == null) {
+				continue;
+			}
+			
 			if (alt.get(alt.size() - 1) instanceof NonterminalGrammarSlot) {
 				Nonterminal last = (Nonterminal) alt.get(alt.size() - 1);
 				if (last.equals(directNonterminal)) {
@@ -449,12 +459,14 @@ public class OperatorPrecedence {
 		for(List<Symbol> alt : definitions.get(head)) {
 			if(!set.contains(plain(alt))) {
 				without.add(alt);
+			} else {
+				without.add(null);
 			}
 		}
 		return without;
 	}
 	
-	private List<Symbol> plain(List<Symbol> alternate) {
+	public static List<Symbol> plain(List<Symbol> alternate) {
 		List<Symbol> plain = new ArrayList<>();
 		for(Symbol symbol : alternate) {
 			if(symbol instanceof Nonterminal && ((Nonterminal) symbol).getIndex() > 0) {
