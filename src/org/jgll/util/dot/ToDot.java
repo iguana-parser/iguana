@@ -18,7 +18,12 @@ public abstract class ToDot {
 			return "intermediate_" + getNodeId(node);
 		}
 		else if(node instanceof PackedNode) {
-			return "packed_" + getNodeId(((PackedNode) node).getParent()) + getNodeId(node);
+			SPPFNode parent = ((PackedNode) node).getParent();
+			if(parent instanceof NonterminalSymbolNode) {
+				return "packed_n_" + getNodeId(parent) + "_" + getNodeId((PackedNode)node);				
+			} else {
+				return "packed_i_" + getNodeId(parent) + "_" + getNodeId((PackedNode)node);
+			}
 		}
 		else if(node instanceof DummyNode) {
 			return "-1";
@@ -31,6 +36,10 @@ public abstract class ToDot {
 	
 	protected String getNodeId(SPPFNode node) {
 		return node.getId() + "," + node.getLeftExtent() + "," + node.getRightExtent();
+	}
+	
+	protected String getNodeId(PackedNode node) {
+		return node.getId() + "," + node.getPivot();
 	}
 	
 }

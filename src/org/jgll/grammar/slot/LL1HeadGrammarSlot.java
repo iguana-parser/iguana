@@ -8,6 +8,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 
@@ -84,7 +85,7 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 				ntNode.addChild(node);
 			}
 			
-			ntNode.addFirstPackedNode(lastSlot.getNodeId(), ci);
+			ntNode.addPackedNode(lastSlot.getNodeId(), ci, DummyNode.getInstance(), DummyNode.getInstance());
 		}
 		
 //		return ntNode;

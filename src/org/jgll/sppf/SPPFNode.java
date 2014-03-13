@@ -1,6 +1,7 @@
 package org.jgll.sppf;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import org.jgll.traversal.AmbiguousNodeCounter;
 import org.jgll.traversal.SPPFVisitor;
@@ -80,6 +81,8 @@ public abstract class SPPFNode {
 	 *       and should not be used while parsing.
 	 * 
 	 */
+	// TODO: doesn't work in case SPPF has a cycle
+	// TODO: create a set of packed nodes and then compare them instead of iterator stuff below.
 	public boolean deepEquals(SPPFNode node) {
 		
 		if(!this.equals(node)) {
@@ -130,5 +133,5 @@ public abstract class SPPFNode {
 		
 		return true;
 	}
-
+	
 }
