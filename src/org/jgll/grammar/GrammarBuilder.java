@@ -292,9 +292,12 @@ public class GrammarBuilder implements Serializable {
 
 		HeadGrammarSlot headGrammarSlot = getHeadGrammarSlot(head);
 		
+		int alternateIndex = 0;
+		
 		for(List<Symbol> body : alternates) {
 			
 			if(body == null) {
+				alternateIndex++;
 				continue;
 			}
 			
@@ -302,7 +305,7 @@ public class GrammarBuilder implements Serializable {
 	
 			if (body.size() == 0) {
 				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(getSlotId(body, 0), getSlotName(head, body, 0), headGrammarSlot);
-				epsilonSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
+				epsilonSlot.setAlternateIndex(0);
 				headGrammarSlot.addAlternate(new Alternate(epsilonSlot));
 			} 
 			else {
@@ -323,7 +326,7 @@ public class GrammarBuilder implements Serializable {
 				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot);
 	
 				Alternate alternate = new Alternate(firstSlot);
-				lastGrammarSlot.setAlternateIndex(headGrammarSlot.getCountAlternates());
+				lastGrammarSlot.setAlternateIndex(alternateIndex);
 				headGrammarSlot.addAlternate(alternate);
 				
 				for(Entry<BodyGrammarSlot, Iterable<Condition>> e : conditions.entrySet()) {
@@ -331,7 +334,8 @@ public class GrammarBuilder implements Serializable {
 						addCondition(e.getKey(), condition);
 					}
 				}
-		}
+			}
+			alternateIndex++;
 		}
 	}
 	
