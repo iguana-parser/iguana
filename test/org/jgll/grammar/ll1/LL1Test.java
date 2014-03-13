@@ -39,14 +39,13 @@ public class LL1Test {
 
 	private Grammar grammar;
 	
-	Nonterminal S = new Nonterminal("S");
-	Nonterminal A = new Nonterminal("A");
-	Nonterminal B = new Nonterminal("B");
-	Nonterminal D = new Nonterminal("D");
-
-	Character a = new Character('a');
-	Character b = new Character('b');
-	Character d = new Character('d');
+	private Nonterminal S = new Nonterminal("S");
+	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal B = new Nonterminal("B");
+	private Nonterminal D = new Nonterminal("D");
+	private Character a = new Character('a');
+	private Character b = new Character('b');
+	private Character d = new Character('d');
 
 	@Before
 	public void init() {
@@ -111,12 +110,12 @@ public class LL1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 3);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 2);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 1, 0, 3);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 1, 0, 2);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 0, 1);
 		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("D"), 1, 2);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalId(D), 2, 1, 2);
 		TokenSymbolNode node6 = new TokenSymbolNode(4, 1, 1);
 		node5.addChild(node6);
 		node2.addChild(node3);
@@ -134,10 +133,10 @@ public class LL1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 1);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 0);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("D"), 0, 0);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 1, 0, 1);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 1, 0, 0);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 0, 0);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(D), 2, 0, 0);
 		node2.addChild(node3);
 		node2.addChild(node4);
 		TokenSymbolNode node5 = new TokenSymbolNode(2, 0, 1);
@@ -153,12 +152,12 @@ public class LL1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 1, 0, 2);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 1, 0, 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 0, 1);
 		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("D"), 1, 1);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalId(D), 2, 1, 1);
 		node2.addChild(node3);
 		node2.addChild(node5);
 		TokenSymbolNode node6 = new TokenSymbolNode(2, 1, 1);
@@ -174,10 +173,10 @@ public class LL1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
 		
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("A"), 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("B"), 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("D"), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 1, 0, 2);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 1, 0, 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 0, 0);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(D), 2, 0, 1);
 		TokenSymbolNode node5 = new TokenSymbolNode(4, 0, 1);
 		node4.addChild(node5);
 		node2.addChild(node3);

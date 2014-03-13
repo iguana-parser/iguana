@@ -113,6 +113,7 @@ public class Grammar implements Serializable {
 		
 		this.objects = builder.objects;
 		
+		this.predictionSets = builder.predictionSets;
 		this.nonterminalIds = builder.nonterminalIds;
 		this.nonterminals = builder.nonterminals;
 

@@ -35,18 +35,20 @@ public class DanglingElseGrammar2 {
 
 	private Grammar grammar;
 	
+	private Nonterminal S = new Nonterminal("S");
+	private Character s = new Character('s');
+	private Character a = new Character('a');
+	private Character b = new Character('b');
+	private Group group = Group.of(a, S);
+
+	
 	@Before
 	public void createGrammar() {
 		
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
-		Nonterminal S = new Nonterminal("S");
-		Character s = new Character('s');
-		Character a = new Character('a');
-		Character b = new Character('b');
-
-		Rule rule1 = new Rule(S, list(Group.of(a, S).addCondition(ContextFreeCondition.notMatch(a, S, b, S))));
+		Rule rule1 = new Rule(S, list(group.addCondition(ContextFreeCondition.notMatch(a, S, b, S))));
 		builder.addRules(EBNFUtil.rewrite(rule1));
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));
@@ -68,26 +70,26 @@ public class DanglingElseGrammar2 {
 	
 	
 	private SPPFNode getExpectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 5);
-		IntermediateNode node2 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S [b] . S"), 0, 4);
-		IntermediateNode node3 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 0, 3);
-		TokenSymbolNode node4 = new TokenSymbolNode(2, 0, 1);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 1, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("([a] S)"), 1, 3);
-		TokenSymbolNode node7 = new TokenSymbolNode(2, 1, 1);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 2, 3);
-		TokenSymbolNode node9 = new TokenSymbolNode(4, 2, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 0, 5);
+		IntermediateNode node2 = new IntermediateNode(grammar.getIntermediateNodeId(a, S, b), 0, 4);
+		IntermediateNode node3 = new IntermediateNode(grammar.getIntermediateNodeId(a, S), 0, 3);
+		TokenSymbolNode node4 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 1, 3);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalId(group), 1, 1, 3);
+		TokenSymbolNode node7 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 1, 1);
+		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 2, 3);
+		TokenSymbolNode node9 = new TokenSymbolNode(grammar.getRegularExpressionId(s), 2, 1);
 		node8.addChild(node9);
 		node6.addChild(node7);
 		node6.addChild(node8);
 		node5.addChild(node6);
 		node3.addChild(node4);
 		node3.addChild(node5);
-		TokenSymbolNode node10 = new TokenSymbolNode(3, 3, 1);
+		TokenSymbolNode node10 = new TokenSymbolNode(grammar.getRegularExpressionId(b), 3, 1);
 		node2.addChild(node3);
 		node2.addChild(node10);
-		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 4, 5);
-		TokenSymbolNode node12 = new TokenSymbolNode(4, 4, 1);
+		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 4, 5);
+		TokenSymbolNode node12 = new TokenSymbolNode(grammar.getRegularExpressionId(s), 4, 1);
 		node11.addChild(node12);
 		node1.addChild(node2);
 		node1.addChild(node11);

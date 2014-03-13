@@ -40,16 +40,17 @@ import org.junit.Test;
 public class PrecedeRestrictionTest2 {
 	
 	private Grammar grammar;
+	
+	private Nonterminal S = new Nonterminal("S");
+	private Keyword forr = new Keyword("for", new int[] { 'f', 'o', 'r' });
+	private Keyword forall = new Keyword("forall", new int[] { 'f', 'o', 'r', 'a', 'l', 'l' });
+	private Nonterminal L = new Nonterminal("L");
+	private Nonterminal Id = new Nonterminal("Id");
+	private Character ws = new Character(' ');
+	private Range az = new Range('a', 'z');
 
 	@Before
 	public void createGrammar() {
-		Nonterminal S = new Nonterminal("S");
-		Keyword forr = new Keyword("for", new int[] { 'f', 'o', 'r' });
-		Keyword forall = new Keyword("forall", new int[] { 'f', 'o', 'r', 'a', 'l', 'l' });
-		Nonterminal L = new Nonterminal("L");
-		Nonterminal Id = new Nonterminal("Id");
-		Character ws = new Character(' ');
-		Range az = new Range('a', 'z');
 
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		GrammarBuilder builder = new GrammarBuilder(factory);
@@ -80,8 +81,8 @@ public class PrecedeRestrictionTest2 {
 	}
 
 	private SPPFNode getExpectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 6);
-		TokenSymbolNode node2 = new TokenSymbolNode(5, 0, 6);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 2, 0, 6);
+		TokenSymbolNode node2 = new TokenSymbolNode(grammar.getRegularExpressionId(forall), 0, 6);
 		node1.addChild(node2);
 		return node1;
 	}

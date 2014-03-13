@@ -363,7 +363,7 @@ public class GrammarBuilder implements Serializable {
 
 		// Last grammar slot
 		if(index == rule.getBody().size()) {
-			return nonterminalIds.get(rule.getHead());
+			return -1;
 		}
 
 		return intermediateNodeIds.get(rule.getBody().subList(0, index));

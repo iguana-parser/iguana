@@ -32,6 +32,11 @@ import org.junit.Test;
 public class DanglingElseGrammar3 {
 
 	private Grammar grammar;
+	
+	Nonterminal S = new Nonterminal("S");
+	Character s = new Character('s');
+	Character a = new Character('a');
+	Character b = new Character('b');
 
 	@Before
 	public void init() {
@@ -39,11 +44,6 @@ public class DanglingElseGrammar3 {
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
-		Nonterminal S = new Nonterminal("S");
-		Character s = new Character('s');
-		Character a = new Character('a');
-		Character b = new Character('b');
-
 		Rule rule1 = new Rule(S, list(a, S.addCondition(ContextFreeCondition.notFollow(b, S))));
 		builder.addRule(rule1);
 		
@@ -65,22 +65,22 @@ public class DanglingElseGrammar3 {
 	}
 	
 	private SPPFNode getExpectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 0, 5);
-		TokenSymbolNode node2 = new TokenSymbolNode(2, 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 1, 5);
-		IntermediateNode node4 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S [b] . S"), 1, 4);
-		IntermediateNode node5 = new IntermediateNode(grammar.getGrammarSlotByName("S ::= [a] S . [b] S"), 1, 3);
-		TokenSymbolNode node6 = new TokenSymbolNode(2, 1, 1);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 2, 3);
-		TokenSymbolNode node8 = new TokenSymbolNode(4, 2, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 0, 5);
+		TokenSymbolNode node2 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 1, 5);
+		IntermediateNode node4 = new IntermediateNode(grammar.getIntermediateNodeId(a, S, b), 1, 4);
+		IntermediateNode node5 = new IntermediateNode(grammar.getIntermediateNodeId(a, S), 1, 3);
+		TokenSymbolNode node6 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 1, 1);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 2, 3);
+		TokenSymbolNode node8 = new TokenSymbolNode(grammar.getRegularExpressionId(s), 2, 1);
 		node7.addChild(node8);
 		node5.addChild(node6);
 		node5.addChild(node7);
-		TokenSymbolNode node9 = new TokenSymbolNode(3, 3, 1);
+		TokenSymbolNode node9 = new TokenSymbolNode(grammar.getRegularExpressionId(b), 3, 1);
 		node4.addChild(node5);
 		node4.addChild(node9);
-		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getHeadGrammarSlot("S"), 4, 5);
-		TokenSymbolNode node11 = new TokenSymbolNode(4, 4, 1);
+		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 4, 5);
+		TokenSymbolNode node11 = new TokenSymbolNode(grammar.getRegularExpressionId(s), 4, 1);
 		node10.addChild(node11);
 		node3.addChild(node4);
 		node3.addChild(node10);

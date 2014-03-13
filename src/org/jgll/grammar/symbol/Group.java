@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jgll.util.CollectionsUtil;
 
-public class Group extends AbstractSymbol {
+public class Group extends Nonterminal {
 
 	private static final long serialVersionUID = 1L;
 
