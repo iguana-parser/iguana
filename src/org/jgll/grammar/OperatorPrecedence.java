@@ -83,7 +83,7 @@ public class OperatorPrecedence {
 	 * @param patterns
 	 * @return
 	 */
-	private <T extends AbstractPattern> Map<T, Set<List<Symbol>>> groupPatterns(Iterable<T> patterns) {
+	private <T extends AbstractPattern> Map<T, List<List<Symbol>>> groupPatterns(Iterable<T> patterns) {
 		Map<T, Set<List<Symbol>>> group = new LinkedHashMap<>();
 		
 		for(T pattern : patterns) {
@@ -95,7 +95,12 @@ public class OperatorPrecedence {
 			set.add(pattern.getChild());
 		}
 		
-		return group;
+		Map<T, List<List<Symbol>>> result = new LinkedHashMap<>();
+		for(Entry<T, Set<List<Symbol>>> e : group.entrySet()) {
+			result.put(e.getKey(), new ArrayList<>(e.getValue()));
+		}
+		
+		return result;
 	}
 	
 	private void rewritePrecedencePatterns() {
@@ -103,19 +108,19 @@ public class OperatorPrecedence {
 			log.debug("Applying the pattern %s with %d.", entry.getKey(), entry.getValue().size());
 
 			Nonterminal nonterminal = entry.getKey();
-			Map<PrecedencePattern, Set<List<Symbol>>> patterns = groupPatterns(entry.getValue());
+			Map<PrecedencePattern, List<List<Symbol>>> patterns = groupPatterns(entry.getValue());
 			
 			rewriteFirstLevel(nonterminal, patterns);
 			rewriteDeeperLevels(nonterminal, patterns);
 		}
 	}
 
-	private void rewriteDeeperLevels(Nonterminal head, Map<PrecedencePattern, Set<List<Symbol>>> patterns) {
+	private void rewriteDeeperLevels(Nonterminal head, Map<PrecedencePattern, List<List<Symbol>>> patterns) {
 
-		for(Entry<PrecedencePattern, Set<List<Symbol>>> e : patterns.entrySet()) {
+		for(Entry<PrecedencePattern, List<List<Symbol>>> e : patterns.entrySet()) {
 			
 			PrecedencePattern pattern = e.getKey();
-			Set<List<Symbol>> children = e.getValue();
+			List<List<Symbol>> children = e.getValue();
 			
 			for (List<Symbol> alt : definitions.get(head)) {
 				if (pattern.isLeftMost() && match(plain(alt), pattern.getParent())) {
@@ -129,7 +134,7 @@ public class OperatorPrecedence {
 		}
 	}
 	
-	private void rewriteLeftEnds(Nonterminal nonterminal, PrecedencePattern pattern, Set<List<Symbol>> children) {
+	private void rewriteLeftEnds(Nonterminal nonterminal, PrecedencePattern pattern, List<List<Symbol>> children) {
 		
 		// Direct filtering
 		if(plainEqual(nonterminal, pattern.getNonterminal())) {
@@ -164,7 +169,7 @@ public class OperatorPrecedence {
 		}
 	}
 	
-	private void rewriteRightEnds(Nonterminal nonterminal, PrecedencePattern pattern, Set<List<Symbol>> children) {
+	private void rewriteRightEnds(Nonterminal nonterminal, PrecedencePattern pattern, List<List<Symbol>> children) {
 		
 		// Direct filtering
 		if(plainEqual(nonterminal, pattern.getNonterminal())) {
@@ -200,7 +205,7 @@ public class OperatorPrecedence {
 		}
 	}
 	
-	private Nonterminal createNewNonterminal(List<Symbol> alt, int position, Set<List<Symbol>> filteredAlternates) {
+	private Nonterminal createNewNonterminal(List<Symbol> alt, int position, List<List<Symbol>> filteredAlternates) {
 		
 		Nonterminal filteredNonterminal = (Nonterminal) alt.get(position);
 
@@ -227,18 +232,18 @@ public class OperatorPrecedence {
 
 
 	
-	private void rewriteFirstLevel(Nonterminal head, Map<PrecedencePattern, Set<List<Symbol>>> patterns) {
+	private void rewriteFirstLevel(Nonterminal head, Map<PrecedencePattern, List<List<Symbol>>> patterns) {
 		
 		Map<PrecedencePattern, Nonterminal> freshNonterminals = new LinkedHashMap<>();
 		
-		Map<Set<List<Symbol>>, Nonterminal> map = new HashMap<>();
+		Map<List<List<Symbol>>, Nonterminal> map = new HashMap<>();
 		
 		if(!newNonterminals.containsKey(head.getName())) {
 			newNonterminals.put(head.getName(), 0);
 		}
 		
 		// Creating fresh nonterminals
-		for(Entry<PrecedencePattern, Set<List<Symbol>>> e : patterns.entrySet()) {
+		for(Entry<PrecedencePattern, List<List<Symbol>>> e : patterns.entrySet()) {
 			
 			PrecedencePattern pattern = e.getKey();
 			
@@ -256,7 +261,7 @@ public class OperatorPrecedence {
 		}
 		
 		// Replacing nonterminals with their fresh ones
-		for(Entry<PrecedencePattern, Set<List<Symbol>>> e : patterns.entrySet()) {
+		for(Entry<PrecedencePattern, List<List<Symbol>>> e : patterns.entrySet()) {
 			
 			for(List<Symbol> alt : definitions.get(head)) {
 				
@@ -480,7 +485,7 @@ public class OperatorPrecedence {
 		return copy;
 	}
 	
-	private List<List<Symbol>> without(Nonterminal head, Set<List<Symbol>> set) {
+	private List<List<Symbol>> without(Nonterminal head, List<List<Symbol>> set) {
 		List<List<Symbol>> without = new ArrayList<>();
 		for(List<Symbol> alt : definitions.get(head)) {
 			
@@ -519,7 +524,7 @@ public class OperatorPrecedence {
 		}
 	}
 	
-	private boolean contains(Nonterminal nonterminal, Set<List<Symbol>> alternates) {
+	private boolean contains(Nonterminal nonterminal, List<List<Symbol>> alternates) {
 		
 		List<List<Symbol>> set = definitions.get(nonterminal);
 		

@@ -267,7 +267,8 @@ public class GrammarBuilder implements Serializable {
 			definition = new ArrayList<>();
 			definitions.put(head, definition);
 		}
-
+		definition.add(rule.getBody());
+		
 		rules.add(rule);
 		
 		if(rule.getObject() != null) {

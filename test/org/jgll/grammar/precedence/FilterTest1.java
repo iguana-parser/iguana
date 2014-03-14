@@ -60,6 +60,7 @@ public class FilterTest1 {
 		builder.addPrecedencePattern(E, rule1, 0, rule2);
 		
 		grammar = builder.build();
+		System.out.println(grammar);
 	}
 	
 	@Test
