@@ -110,6 +110,11 @@ public class Rule implements Serializable {
 		
 	@Override
 	public String toString() {
+		
+		if(body == null) {
+			return "";
+		}
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append(head).append(" ::= ");
 		for(Symbol s : body) {

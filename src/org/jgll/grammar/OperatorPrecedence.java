@@ -25,7 +25,7 @@ public class OperatorPrecedence {
 	
 	private Map<Nonterminal, Set<List<Symbol>>> definitions;
 	
-	private Map<Nonterminal, Integer> newNonterminals;
+	private Map<String, Integer> newNonterminals;
 	
 	private Map<Nonterminal, List<PrecedencePattern>> precednecePatterns;
 	
@@ -45,6 +45,13 @@ public class OperatorPrecedence {
 	public Set<Rule> rewrite(Map<Nonterminal, Set<List<Symbol>>> definitions) {
 		this.definitions = new HashMap<>(definitions);
 		rewritePrecedencePatterns();
+		
+		for(Nonterminal nonterminal : this.definitions.keySet()) {
+			if(nonterminal.getIndex() > 0) {
+				addNewRules(nonterminal, this.definitions.get(nonterminal));
+			}
+		}
+		
 		return newRules;
 	}
 	
@@ -125,17 +132,23 @@ public class OperatorPrecedence {
 	private void rewriteLeftEnds(Nonterminal nonterminal, PrecedencePattern pattern, Set<List<Symbol>> children) {
 		
 		// Direct filtering
-		if(nonterminal.equals(pattern.getNonterminal())) {
+		if(plainEqual(nonterminal, pattern.getNonterminal())) {
 			
 			for(List<Symbol> alternate : definitions.get(nonterminal)) {
+				
+				if(alternate == null) {
+					continue;
+				}
+				
 				if(!(alternate.get(0) instanceof Nonterminal)) {
 					continue;
 				}
 
 				Nonterminal first = (Nonterminal) alternate.get(0);
 				
-				if(definitions.get(first).contains(children)) {
+				if(contains(first, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, 0, children);
+					alternate.set(0, newNonterminal);
 					rewriteLeftEnds(newNonterminal, pattern, children);
 				}
 			}			
@@ -154,20 +167,26 @@ public class OperatorPrecedence {
 	private void rewriteRightEnds(Nonterminal nonterminal, PrecedencePattern pattern, Set<List<Symbol>> children) {
 		
 		// Direct filtering
-		if(nonterminal.equals(pattern.getNonterminal())) {
+		if(plainEqual(nonterminal, pattern.getNonterminal())) {
 			
 			for(List<Symbol> alternate : definitions.get(nonterminal)) {
+				
+				if(alternate == null) {
+					continue;
+				}
+				
 				if(!(alternate.get(alternate.size() - 1) instanceof Nonterminal)) {
 					continue;
 				}
 
 				Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1); 
 				
-				if(definitions.get(last).contains(children)) {
+				if(contains(last, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, children);
 					rewriteRightEnds(newNonterminal, pattern, children);
 				}				
 			}
+			
 		} else {
 			
 			assert pattern.isLeftMost();
@@ -198,7 +217,7 @@ public class OperatorPrecedence {
 			
 			existingAlternates.put(copy, newNonterminal);
 
-			addNewRules(newNonterminal, set);
+			definitions.put(newNonterminal, set);
 		} else {
 			alt.set(position, newNonterminal);
 		}
@@ -214,9 +233,9 @@ public class OperatorPrecedence {
 		
 		Map<Set<List<Symbol>>, Nonterminal> map = new HashMap<>();
 		
-		Map<String, Nonterminal> newNonterminals = new HashMap<>();
-		
-		int index = 0;
+		if(!newNonterminals.containsKey(head.getName())) {
+			newNonterminals.put(head.getName(), 0);
+		}
 		
 		// Creating fresh nonterminals
 		for(Entry<PrecedencePattern, Set<List<Symbol>>> e : patterns.entrySet()) {
@@ -226,8 +245,10 @@ public class OperatorPrecedence {
 			Nonterminal freshNonterminal = map.get(e.getValue());
 			
 			if(freshNonterminal == null) {
-				freshNonterminal = new Nonterminal(pattern.getNonterminal().getName(), ++index);
-				newNonterminals.put(freshNonterminal.getName(), freshNonterminal);
+				
+				int index = newNonterminals.get(pattern.getNonterminal().getName());
+				freshNonterminal = new Nonterminal(pattern.getNonterminal().getName(), index + 1);
+				newNonterminals.put(freshNonterminal.getName(), index + 1);
 				map.put(e.getValue(), freshNonterminal);
 			}
 
@@ -278,8 +299,8 @@ public class OperatorPrecedence {
 		for(Entry<PrecedencePattern, Nonterminal> e : freshNonterminals.entrySet()) {
 			PrecedencePattern pattern = e.getKey();
 			Nonterminal freshNonterminal = e.getValue();
-			Set<List<Symbol>> alternates = without(head, patterns.get(pattern));
-			addNewRules(freshNonterminal, alternates);
+			Set<List<Symbol>> alternates = copyAlternates(without(head, patterns.get(pattern)));
+			definitions.put(freshNonterminal, alternates);
 		}
 	}
 	
@@ -377,7 +398,7 @@ public class OperatorPrecedence {
 		map.put(head, copy);
 
 		Set<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
-		addNewRules(copy, copyAlternates);
+		definitions.put(copy, copyAlternates);
 		
 		for(List<Symbol> alt : copyAlternates) {
 			if(alt.get(0) instanceof Nonterminal) {
@@ -403,7 +424,7 @@ public class OperatorPrecedence {
 		map.put(head, copy);
 		
 		Set<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
-		addNewRules(copy, copyAlternates);
+		definitions.put(copy, copyAlternates);
 		
 		for(List<Symbol> alt : copyAlternates) {
 			if(alt.get(alt.size() - 1) instanceof Nonterminal) {
@@ -420,9 +441,9 @@ public class OperatorPrecedence {
 	}
 	
 	private Nonterminal createNewNonterminal(Nonterminal nonterminal) {
-		Integer index = newNonterminals.get(nonterminal);
+		int index = newNonterminals.get(nonterminal.getName());
 		Nonterminal newNonterminal = new Nonterminal(nonterminal.getName(), index + 1);
-		newNonterminals.put(nonterminal, index + 1);
+		newNonterminals.put(nonterminal.getName(), index + 1);
 		return newNonterminal;
 	}
 	
@@ -444,11 +465,16 @@ public class OperatorPrecedence {
 		Set<List<Symbol>> copy = new LinkedHashSet<>();
 		
 		for(List<Symbol> alternate : alternates) {
-			List<Symbol> copyAlt = new ArrayList<>();
-			for(Symbol symbol : alternate) {
-				copyAlt.add(symbol);
+			
+			if(alternate == null) {
+				copy.add(null);
+			} else {
+				List<Symbol> copyAlt = new ArrayList<>();
+				for(Symbol symbol : alternate) {
+					copyAlt.add(symbol);
+				}
+				copy.add(copyAlt);				
 			}
-			copy.add(copyAlt);
 		}
 		
 		return copy;
@@ -457,7 +483,11 @@ public class OperatorPrecedence {
 	private Set<List<Symbol>> without(Nonterminal head, Set<List<Symbol>> set) {
 		Set<List<Symbol>> without = new LinkedHashSet<>();
 		for(List<Symbol> alt : definitions.get(head)) {
-			if(!set.contains(plain(alt))) {
+			
+			if(alt == null) {
+				without.add(null);
+			} 
+			else if (!set.contains(plain(alt))) {
 				without.add(alt);
 			} else {
 				without.add(null);
@@ -477,13 +507,37 @@ public class OperatorPrecedence {
 		}
 		return plain;
 	}
+	
+	public static boolean plainEqual(Nonterminal n1, Nonterminal n2) {
+		return n1.getName().equals(n2.getName());
+	}
 
 	private void addNewRules(Nonterminal nonterminal, Set<List<Symbol>> alternates) {
-		definitions.put(nonterminal, alternates);
 		for(List<Symbol> alternate : alternates) {
 			Rule rule = new Rule(nonterminal, alternate);
 			newRules.add(rule);
 		}
+	}
+	
+	private boolean contains(Nonterminal nonterminal, Set<List<Symbol>> alternates) {
+		
+		Set<List<Symbol>> set = definitions.get(nonterminal);
+		
+		for(List<Symbol> alt1 : set) {
+			
+			if(alt1 == null) continue;
+			
+			for(List<Symbol> alt2 : alternates) {
+				
+				if(alt2 == null) continue;
+				
+				if(plain(alt1).equals(alt2)) {
+					return true;
+				}
+			}			
+		}
+		
+		return false;
 	}
 	
 }

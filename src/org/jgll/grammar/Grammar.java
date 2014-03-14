@@ -197,7 +197,7 @@ public class Grammar implements Serializable {
 			return ((TokenGrammarSlot) slot).getSymbol().getName();
 		}
 		else if (slot instanceof NonterminalGrammarSlot) {
-			return ((NonterminalGrammarSlot) slot).getNonterminal().getNonterminal().getName();
+			return ((NonterminalGrammarSlot) slot).getNonterminal().getNonterminal().toString();
 		} 
 		else {
 			return "";
@@ -251,7 +251,7 @@ public class Grammar implements Serializable {
 			
 			@Override
 			public void visit(HeadGrammarSlot head) {
-				sb.append(head.getNonterminal().getName()).append(" ::= ");
+				sb.append(head.getNonterminal()).append(" ::= ");
 			}
 
 			@Override
