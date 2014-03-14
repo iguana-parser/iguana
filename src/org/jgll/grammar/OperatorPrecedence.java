@@ -188,6 +188,7 @@ public class OperatorPrecedence {
 				
 				if(contains(last, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, children);
+					alternate.set(alternate.size() - 1, newNonterminal);
 					rewriteRightEnds(newNonterminal, pattern, children);
 				}				
 			}
@@ -213,22 +214,14 @@ public class OperatorPrecedence {
 		Nonterminal newNonterminal = existingAlternates.get(plain2(set));
 		
 		if(newNonterminal == null) {
-			
 			newNonterminal = createNewNonterminal(filteredNonterminal);
-			
-			alt.set(position, newNonterminal);
-			
-			existingAlternates.put(plain2(copyAlternates(set)), newNonterminal);
-
-			definitions.put(newNonterminal, set);
-		} else {
-			alt.set(position, newNonterminal);
+			List<List<Symbol>> copy = copyAlternates(set);
+			existingAlternates.put(plain2(copy), newNonterminal);
+			definitions.put(newNonterminal, copy);
 		}
 		
 		return newNonterminal;
 	}
-
-
 	
 	private void rewriteFirstLevel(Nonterminal head, Map<PrecedencePattern, List<List<Symbol>>> patterns) {
 		
