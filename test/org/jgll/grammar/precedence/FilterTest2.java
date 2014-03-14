@@ -18,15 +18,16 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * 
- * E ::= 0 E ^ E	(right)
- *     > 1 E + E	(left)
- *     > 2 - E
- *     | 3 a
+ * E ::= E ^ E	(right)
+ *     > E + E	(left)
+ *     > - E
+ *     | a
  * 
  * 
  * @author Ali Afroozeh
@@ -37,6 +38,12 @@ public class FilterTest2 {
 	private Grammar grammar;
 	private GLLParser parser;
 
+	private Nonterminal E = new Nonterminal("E");
+	private Character a = new Character('a');
+	private Character hat = new Character('^');
+	private Character plus = new Character('+');
+	private Character minus = new Character('-');
+
 	
 	@Before
 	public void createGrammar() {
@@ -44,17 +51,20 @@ public class FilterTest2 {
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering", factory);
 		
-		Nonterminal E = new Nonterminal("E");
-		Rule rule0 = new Rule(E, list(E, new Character('^'), E));
+		// E ::= E ^ E
+		Rule rule0 = new Rule(E, list(E, hat, E));
 		builder.addRule(rule0);
 		
-		Rule rule1 = new Rule(E, list(E, new Character('+'), E));
+		// E ::= E + E
+		Rule rule1 = new Rule(E, list(E, plus, E));
 		builder.addRule(rule1);
 		
-		Rule rule2 = new Rule(E, list(new Character('-'), E));
+		// E ::= E - E
+		Rule rule2 = new Rule(E, list(minus, E));
 		builder.addRule(rule2);
 		
-		Rule rule3 = new Rule(E, list(new Character('a')));
+		// E ::= a
+		Rule rule3 = new Rule(E, list(a));
 		builder.addRule(rule3);
 		
 		// left associative E + E
@@ -74,6 +84,7 @@ public class FilterTest2 {
 		builder.addPrecedencePattern(E, rule0, 2, rule1);
 		
 		grammar = builder.build();
+		System.out.println(grammar);
 	}
 
 	@Test
@@ -81,6 +92,7 @@ public class FilterTest2 {
 		Input input = Input.fromString("a+a^a^-a+a");
 		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, grammar, input);
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

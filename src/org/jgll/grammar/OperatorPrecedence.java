@@ -210,7 +210,7 @@ public class OperatorPrecedence {
 		Nonterminal filteredNonterminal = (Nonterminal) alt.get(position);
 
 		List<List<Symbol>> set = without(filteredNonterminal, filteredAlternates);
-		Nonterminal newNonterminal = existingAlternates.get(set);
+		Nonterminal newNonterminal = existingAlternates.get(plain2(set));
 		
 		if(newNonterminal == null) {
 			
@@ -218,9 +218,7 @@ public class OperatorPrecedence {
 			
 			alt.set(position, newNonterminal);
 			
-			List<List<Symbol>> copy = copyAlternates(set);
-			
-			existingAlternates.put(copy, newNonterminal);
+			existingAlternates.put(plain2(copyAlternates(set)), newNonterminal);
 
 			definitions.put(newNonterminal, set);
 		} else {
@@ -499,6 +497,20 @@ public class OperatorPrecedence {
 			}
 		}
 		return without;
+	}
+	
+	public static List<List<Symbol>> plain2(List<List<Symbol>> alternates) {
+		List<List<Symbol>> list = new ArrayList<>();
+		
+		for(List<Symbol> l : alternates) {
+			if(l == null) {
+				list.add(null);
+			} else {
+				list.add(plain(l));				
+			}
+		}
+		
+		return list;
 	}
 	
 	public static List<Symbol> plain(List<Symbol> alternate) {
