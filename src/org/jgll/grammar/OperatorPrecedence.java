@@ -23,7 +23,7 @@ public class OperatorPrecedence {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(OperatorPrecedence.class);
 	
-	private Map<Nonterminal, Set<List<Symbol>>> definitions;
+	private Map<Nonterminal, List<List<Symbol>>> definitions;
 	
 	private Map<String, Integer> newNonterminals;
 	
@@ -31,7 +31,7 @@ public class OperatorPrecedence {
 	
 	private List<ExceptPattern> exceptPatterns;
 	
-	private Map<Set<List<Symbol>>, Nonterminal> existingAlternates;
+	private Map<List<List<Symbol>>, Nonterminal> existingAlternates;
 	
 	private Set<Rule> newRules;
 	
@@ -42,7 +42,7 @@ public class OperatorPrecedence {
 		this.newRules = new HashSet<>();
 	}
 	
-	public Set<Rule> rewrite(Map<Nonterminal, Set<List<Symbol>>> definitions) {
+	public Set<Rule> rewrite(Map<Nonterminal, List<List<Symbol>>> definitions) {
 		this.definitions = new HashMap<>(definitions);
 		rewritePrecedencePatterns();
 		
@@ -204,7 +204,7 @@ public class OperatorPrecedence {
 		
 		Nonterminal filteredNonterminal = (Nonterminal) alt.get(position);
 
-		Set<List<Symbol>> set = without(filteredNonterminal, filteredAlternates);
+		List<List<Symbol>> set = without(filteredNonterminal, filteredAlternates);
 		Nonterminal newNonterminal = existingAlternates.get(set);
 		
 		if(newNonterminal == null) {
@@ -213,7 +213,7 @@ public class OperatorPrecedence {
 			
 			alt.set(position, newNonterminal);
 			
-			Set<List<Symbol>> copy = copyAlternates(set);
+			List<List<Symbol>> copy = copyAlternates(set);
 			
 			existingAlternates.put(copy, newNonterminal);
 
@@ -299,7 +299,7 @@ public class OperatorPrecedence {
 		for(Entry<PrecedencePattern, Nonterminal> e : freshNonterminals.entrySet()) {
 			PrecedencePattern pattern = e.getKey();
 			Nonterminal freshNonterminal = e.getValue();
-			Set<List<Symbol>> alternates = copyAlternates(without(head, patterns.get(pattern)));
+			List<List<Symbol>> alternates = copyAlternates(without(head, patterns.get(pattern)));
 			definitions.put(freshNonterminal, alternates);
 		}
 	}
@@ -397,7 +397,7 @@ public class OperatorPrecedence {
 		copy = createNewNonterminal(head);
 		map.put(head, copy);
 
-		Set<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
+		List<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
 		definitions.put(copy, copyAlternates);
 		
 		for(List<Symbol> alt : copyAlternates) {
@@ -423,7 +423,7 @@ public class OperatorPrecedence {
 		copy = createNewNonterminal(head);
 		map.put(head, copy);
 		
-		Set<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
+		List<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
 		definitions.put(copy, copyAlternates);
 		
 		for(List<Symbol> alt : copyAlternates) {
@@ -461,8 +461,8 @@ public class OperatorPrecedence {
 		return true;
 	}
 	
-	private Set<List<Symbol>> copyAlternates(Set<List<Symbol>> alternates) {
-		Set<List<Symbol>> copy = new LinkedHashSet<>();
+	private List<List<Symbol>> copyAlternates(List<List<Symbol>> alternates) {
+		List<List<Symbol>> copy = new ArrayList<>();
 		
 		for(List<Symbol> alternate : alternates) {
 			
@@ -480,8 +480,8 @@ public class OperatorPrecedence {
 		return copy;
 	}
 	
-	private Set<List<Symbol>> without(Nonterminal head, Set<List<Symbol>> set) {
-		Set<List<Symbol>> without = new LinkedHashSet<>();
+	private List<List<Symbol>> without(Nonterminal head, Set<List<Symbol>> set) {
+		List<List<Symbol>> without = new ArrayList<>();
 		for(List<Symbol> alt : definitions.get(head)) {
 			
 			if(alt == null) {
@@ -512,7 +512,7 @@ public class OperatorPrecedence {
 		return n1.getName().equals(n2.getName());
 	}
 
-	private void addNewRules(Nonterminal nonterminal, Set<List<Symbol>> alternates) {
+	private void addNewRules(Nonterminal nonterminal, List<List<Symbol>> alternates) {
 		for(List<Symbol> alternate : alternates) {
 			Rule rule = new Rule(nonterminal, alternate);
 			newRules.add(rule);
@@ -521,7 +521,7 @@ public class OperatorPrecedence {
 	
 	private boolean contains(Nonterminal nonterminal, Set<List<Symbol>> alternates) {
 		
-		Set<List<Symbol>> set = definitions.get(nonterminal);
+		List<List<Symbol>> set = definitions.get(nonterminal);
 		
 		for(List<Symbol> alt1 : set) {
 			

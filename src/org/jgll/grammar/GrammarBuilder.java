@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -64,7 +63,7 @@ public class GrammarBuilder implements Serializable {
 
 	String name;
 	
-	Map<Nonterminal, Set<List<Symbol>>> definitions;
+	Map<Nonterminal, List<List<Symbol>>> definitions;
 	
 	private List<Rule> rules;
 	
@@ -175,7 +174,7 @@ public class GrammarBuilder implements Serializable {
 		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
 				
 		
-		for(Entry<Nonterminal, Set<List<Symbol>>> e : definitions.entrySet()) {
+		for(Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
 			convert(e.getKey(), e.getValue());
 		}
 		
@@ -243,48 +242,61 @@ public class GrammarBuilder implements Serializable {
 	
 	int nonterminalId = 0;
 	int intermediateId = 0;
+	Map<Nonterminal, Set<List<Symbol>>> addedDefinitions = new HashMap<>();
 
 	public GrammarBuilder addRule(Rule rule) {
 		
+		if(rule.getBody() != null) {
+			Set<List<Symbol>> set = addedDefinitions.get(rule.getHead());
+			
+			if(set != null && set.contains(rule.getBody())) {
+				return this;
+			} else {
+				if(set == null) {
+					set = new HashSet<>();
+					addedDefinitions.put(rule.getHead(), set);
+				}
+				set.add(rule.getBody());
+			}			
+		}
+		
 		Nonterminal head = rule.getHead();
-		Set<List<Symbol>> definition = definitions.get(head);
+		List<List<Symbol>> definition = definitions.get(head);
 		if(definition == null) {
 			// The order in which alternates are added is important
-			definition = new LinkedHashSet<>();
+			definition = new ArrayList<>();
 			definitions.put(head, definition);
 		}
 
-		if(definition.add(rule.getBody())) {
-			rules.add(rule);
-			
-			if(rule.getObject() != null) {
-				objectMap.put(Tuple.of(nonterminalIds.get(head.getName()), definitions.get(head).size() - 1), rule.getObject());
-			}
-
-			if(!nonterminalIds.containsKey(head.getName())) {
-				nonterminalIds.put(head.getName(), nonterminalId++);
-				nonterminals.add(head);
-			}
-
-			if(rule.getBody() != null) {
-				for(int i = 2; i < rule.getBody().size(); i++) {
-					List<Symbol> prefix = rule.getBody().subList(0, i);
-					List<Symbol> plain = OperatorPrecedence.plain(prefix);
-					if(!intermediateNodeIds.containsKey(plain)) {
-						intermediateNodeIds.put(plain, intermediateId++);
-					}
-				}
-				
-				packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), definitions.get(head).size() - 1);
-			}
-			
-			
+		rules.add(rule);
+		
+		if(rule.getObject() != null) {
+			objectMap.put(Tuple.of(nonterminalIds.get(head.getName()), definitions.get(head).size() - 1), rule.getObject());
 		}
+
+		if(!nonterminalIds.containsKey(head.getName())) {
+			nonterminalIds.put(head.getName(), nonterminalId++);
+			nonterminals.add(head);
+		}
+
+		if(rule.getBody() != null) {
+			for(int i = 2; i < rule.getBody().size(); i++) {
+				List<Symbol> prefix = rule.getBody().subList(0, i);
+				List<Symbol> plain = OperatorPrecedence.plain(prefix);
+				if(!intermediateNodeIds.containsKey(plain)) {
+					intermediateNodeIds.put(plain, intermediateId++);
+				}
+			}
+			
+			packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), definitions.get(head).size() - 1);
+		}
+			
+			
 		
 		return this;
 	}
  
-	private void convert(Nonterminal head, Set<List<Symbol>> alternates) {
+	private void convert(Nonterminal head, List<List<Symbol>> alternates) {
 		
 		// Hack for keeping the alternate index of rewritten nonterminals intact.
 		

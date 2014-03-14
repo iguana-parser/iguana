@@ -30,7 +30,7 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
 												 int nonterminalId,
-												 Set<List<Symbol>> alternates,
+												 List<List<Symbol>> alternates,
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {

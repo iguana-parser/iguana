@@ -67,6 +67,7 @@ public class FilterTest1 {
 		Input input = Input.fromString("a+-a+a");
 		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, grammar, input);
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
 	

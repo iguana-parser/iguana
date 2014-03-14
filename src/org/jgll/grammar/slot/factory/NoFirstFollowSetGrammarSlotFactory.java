@@ -1,6 +1,5 @@
 package org.jgll.grammar.slot.factory;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +25,7 @@ public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
 			int nontemrinalId,
-			Set<List<Symbol>> alternates,
+			List<List<Symbol>> alternates,
 			Map<Nonterminal, Set<RegularExpression>> firstSets,
 			Map<Nonterminal, Set<RegularExpression>> followSets,
 			Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {

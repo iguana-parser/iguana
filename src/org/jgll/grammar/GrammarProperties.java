@@ -22,7 +22,7 @@ import org.jgll.util.Tuple;
 
 public class GrammarProperties {
 	
-	public static Map<Nonterminal, Set<RegularExpression>> calculateFirstSets(Map<Nonterminal, Set<List<Symbol>>> definitions) {
+	public static Map<Nonterminal, Set<RegularExpression>> calculateFirstSets(Map<Nonterminal, List<List<Symbol>>> definitions) {
 		
 		Map<Nonterminal, Set<RegularExpression>> firstSets = new HashMap<>();
 		
@@ -137,7 +137,7 @@ public class GrammarProperties {
 		return true;
 	}
 		
-	public static Map<Nonterminal, Set<RegularExpression>> calculateFollowSets(Map<Nonterminal, Set<List<Symbol>>> definitions, 
+	public static Map<Nonterminal, Set<RegularExpression>> calculateFollowSets(Map<Nonterminal, List<List<Symbol>>> definitions, 
 																		 	   Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		
 		Map<Nonterminal, Set<RegularExpression>> followSets = new HashMap<>();
@@ -199,14 +199,14 @@ public class GrammarProperties {
 		return followSets;
 	}
 	
-	public static Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets(Map<Nonterminal, Set<List<Symbol>>> definitions,
-																				  Map<Nonterminal, Set<RegularExpression>> firstSets,
-																				  Map<Nonterminal, Set<RegularExpression>> followSets) {
+	public static Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets(Map<Nonterminal, List<List<Symbol>>> definitions,
+																				   Map<Nonterminal, Set<RegularExpression>> firstSets,
+																				   Map<Nonterminal, Set<RegularExpression>> followSets) {
 
 		Map<Nonterminal, List<Set<RegularExpression>>> predictionSets = new HashMap<>();
 		
 		for(Nonterminal nonterminal : definitions.keySet()) {
-			Set<List<Symbol>> alternates = definitions.get(nonterminal);
+			List<List<Symbol>> alternates = definitions.get(nonterminal);
 			
 			List<Set<RegularExpression>> list = new ArrayList<>();
 
@@ -387,7 +387,7 @@ public class GrammarProperties {
 	 * nonterminals.
 	 * 
 	 */
-	public static Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph(Map<Nonterminal, Set<List<Symbol>>> definitions) {
+	public static Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph(Map<Nonterminal, List<List<Symbol>>> definitions) {
 		
 		Set<Nonterminal> nonterminals = definitions.keySet();
 		

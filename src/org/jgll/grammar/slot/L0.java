@@ -2,7 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.symbol.Nonterminal;
@@ -35,7 +35,7 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	private L0() {
-		super(new Nonterminal("L0"), -1, new LinkedHashSet<List<Symbol>>(), false);
+		super(new Nonterminal("L0"), -1, new ArrayList<List<Symbol>>(), false);
 		id = -1;
 	}
 	

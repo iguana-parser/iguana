@@ -36,11 +36,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private Set<Integer> predictionSet;
 
-	protected Set<List<Symbol>> alts;
+	protected List<List<Symbol>> alts;
 
 	private final int nonterminalId;
 	
-	public HeadGrammarSlot(Nonterminal nonterminal, int nonterminalId, Set<List<Symbol>> alts, boolean nullable) {
+	public HeadGrammarSlot(Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alts, boolean nullable) {
 		this.nonterminal = nonterminal;
 		this.nonterminalId = nonterminalId;
 		this.alts = alts;

@@ -87,7 +87,7 @@ public class Grammar implements Serializable {
 	
 	private Object[][] objects;
 	
-	private Map<Nonterminal, Set<List<Symbol>>> definitions;
+	private Map<Nonterminal, List<List<Symbol>>> definitions;
 	
 	private Map<List<Symbol>, Integer> intermediateNodeIds;
 	
