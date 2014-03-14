@@ -18,6 +18,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,6 +72,7 @@ public class FilterTest0 {
 		builder.addPrecedencePattern(E, rule2, 2, rule2);
 				
 		grammar = builder.build();
+		System.out.println(grammar);
 	}
 	
 	@Test
@@ -78,6 +80,7 @@ public class FilterTest0 {
 		Input input = Input.fromString("a+a*a");
 		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
+		Visualization.generateGSSGraph("/Users/aliafroozeh/output", parser.getGSSLookup().getGSSNodes(), parser.getGSSLookup().getEdgesMap());
 		assertTrue(sppf.deepEquals(getSPPFNode()));
 	}
 	

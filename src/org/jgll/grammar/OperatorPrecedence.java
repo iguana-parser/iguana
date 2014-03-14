@@ -39,6 +39,7 @@ public class OperatorPrecedence {
 		this.newNonterminals = new HashMap<>();
 		this.precednecePatterns = new HashMap<>();
 		this.existingAlternates = new HashMap<>();
+		this.exceptPatterns = new ArrayList<>();
 		this.newRules = new ArrayList<>();
 	}
 	
@@ -437,6 +438,10 @@ public class OperatorPrecedence {
 	}
 	
 	private Nonterminal createNewNonterminal(Nonterminal nonterminal) {
+		if(!newNonterminals.containsKey(nonterminal.getName())) {
+			newNonterminals.put(nonterminal.getName(), 0);
+		}
+		
 		int index = newNonterminals.get(nonterminal.getName());
 		Nonterminal newNonterminal = new Nonterminal(nonterminal.getName(), index + 1);
 		newNonterminals.put(nonterminal.getName(), index + 1);
