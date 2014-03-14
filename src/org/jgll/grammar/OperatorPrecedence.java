@@ -33,16 +33,16 @@ public class OperatorPrecedence {
 	
 	private Map<List<List<Symbol>>, Nonterminal> existingAlternates;
 	
-	private Set<Rule> newRules;
+	private List<Rule> newRules;
 	
 	public OperatorPrecedence() {
 		this.newNonterminals = new HashMap<>();
 		this.precednecePatterns = new HashMap<>();
 		this.existingAlternates = new HashMap<>();
-		this.newRules = new HashSet<>();
+		this.newRules = new ArrayList<>();
 	}
 	
-	public Set<Rule> rewrite(Map<Nonterminal, List<List<Symbol>>> definitions) {
+	public List<Rule> rewrite(Map<Nonterminal, List<List<Symbol>>> definitions) {
 		this.definitions = new HashMap<>(definitions);
 		rewritePrecedencePatterns();
 		

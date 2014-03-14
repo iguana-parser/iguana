@@ -143,7 +143,7 @@ public class GrammarBuilder implements Serializable {
 
 	public Grammar build() {
 		
-		Set<Rule> newRules = operatorPrecedence.rewrite(definitions);
+		List<Rule> newRules = operatorPrecedence.rewrite(definitions);
 		addRules(newRules);
 		
 		objects = new Object[definitions.size()][];
