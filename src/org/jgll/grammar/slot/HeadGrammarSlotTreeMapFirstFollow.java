@@ -36,7 +36,7 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(lexer.getInput().charAt(ci));
 		if(e != null) {
 			for(Integer alternateIndex : e.getValue()) {
-				parser.addDescriptor(alternates.get(alternateIndex).getFirstSlot());
+				parser.addDescriptor(firstSlots[alternateIndex]);
 			}			
 		}
 		
@@ -56,7 +56,7 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 		// From range to the set of alternate indices
 		Map<Range, Set<Integer>> map = new HashMap<>();
 		
-		for(int i = 0; i < alts.size(); i++) {
+		for(int i = 0; i < firstSlots.length; i++) {
 			Set<RegularExpression> predictionSet = predictionSets.get(i);
 			
 			if(predictionSet.isEmpty()) continue;

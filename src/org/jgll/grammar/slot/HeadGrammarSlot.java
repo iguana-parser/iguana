@@ -2,12 +2,9 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
@@ -28,44 +25,21 @@ public class HeadGrammarSlot extends GrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	protected List<Alternate> alternates;
-	
 	protected final Nonterminal nonterminal;
 	
 	private boolean nullable;
 	
 	private Set<Integer> predictionSet;
 
-	protected List<List<Symbol>> alts;
+	protected BodyGrammarSlot firstSlots[];
 
 	private final int nonterminalId;
 	
 	public HeadGrammarSlot(Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alts, boolean nullable) {
 		this.nonterminal = nonterminal;
 		this.nonterminalId = nonterminalId;
-		this.alts = alts;
+		this.firstSlots = new BodyGrammarSlot[alts.size()];
 		this.nullable = nullable;
-		this.alternates = new ArrayList<>();
-	}
-	
-	public void addAlternate(Alternate alternate) {		
-		alternates.add(alternate);
-	}
-	
-	public void setAlternates(List<Alternate> alternates) {
-		this.alternates = alternates;
-	}
-	
-	public void removeAlternate(Alternate alternate) {
-		alternates.remove(alternate);
-	}
-	
-	public void removeAlternate(int index) {
-		alternates.remove(index);
-	}
-		
-	public void removeAllAlternates() {
-		alternates.clear();
 	}
 		
 	public boolean isNullable() {
@@ -76,11 +50,19 @@ public class HeadGrammarSlot extends GrammarSlot {
 		return true;
 	}
 	
+	public void setFirstGrammarSlotForAlternate(BodyGrammarSlot slot, int index) {
+		firstSlots[index] = slot;
+	}
+	
+	public BodyGrammarSlot[] getFirstSlots() {
+		return firstSlots;
+	}
+	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
-		for(Alternate alt : alternates) {
-			parser.addDescriptor(alt.getFirstSlot());
+		for(BodyGrammarSlot slot : firstSlots) {
+			parser.addDescriptor(slot);
 		}
 		
 		return null;
@@ -90,11 +72,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
 		int ci = recognizer.getCi();
 		
-		for(Alternate alternate : alternates) {
+		for(BodyGrammarSlot slot : firstSlots) {
 			// TODO: put the check for recognizers here.
 //			if(lexer.match(ci, alternate.getMatcher())) {
 				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-				recognizer.add(alternate.getFirstSlot(), cu, ci);
+				recognizer.add(slot, cu, ci);
 //			}
 		}
 		return null;
@@ -104,62 +86,28 @@ public class HeadGrammarSlot extends GrammarSlot {
 	public void codeParser(Writer writer) throws IOException {
 		writer.append("// " + nonterminal.getName() + "\n");
 		writer.append("private void parse_" + id + "() {\n");
-		for (Alternate alternate : alternates) {
-			writer.append("   //" + alternate.getFirstSlot() + "\n");
-			alternate.getFirstSlot().codeIfTestSetCheck(writer);			
-			writer.append("   add(grammar.getGrammarSlot(" + alternate.getFirstSlot().getId() + "), cu, ci, DummyNode.getInstance());\n");
+		for(BodyGrammarSlot slot : firstSlots) {
+			writer.append("   //" + slot + "\n");
+			slot.codeIfTestSetCheck(writer);			
+			writer.append("   add(grammar.getGrammarSlot(" + slot.getId() + "), cu, ci, DummyNode.getInstance());\n");
 			writer.append("}\n");
 		}
 		writer.append("   label = L0;\n");
 		writer.append("}\n");
 
-		for (Alternate alternate : alternates) {
-			writer.append("// " + alternate + "\n");
-			writer.append("private void parse_" + alternate.getFirstSlot().getId() + "() {\n");
-			alternate.getFirstSlot().codeParser(writer);
+		for(BodyGrammarSlot slot : firstSlots) {
+			writer.append("// " + slot + "\n");
+			writer.append("private void parse_" + slot.getId() + "() {\n");
+			slot.codeParser(writer);
 		}
-	}
-	
-	public Alternate getAlternateAt(int index) {
-		return alternates.get(index);
-	}
-	
-	public List<Alternate> getAlternates() {
-		return new ArrayList<>(alternates);
-	}
-	
-	public Set<Alternate> getAlternatesAsSet() {
-		return new HashSet<>(alternates);
 	}
 	
 	public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
-	
-	public int getCountAlternates() {
-		return alternates.size();
-	}
-	
+		
 	public Set<Integer> getPredictionSet() {
 		return predictionSet;
-	}
-		
-	public boolean contains(List<Symbol> list) {
-		for(Alternate alternate : alternates) {
-			if(alternate.match(list)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean contains(Set<List<Symbol>> set) {
-		for(List<Symbol> list : set) {
-			if(contains(list)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override

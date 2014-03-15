@@ -59,7 +59,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public NonterminalSymbolNode getNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		NonterminalSymbolNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getCountAlternates(), leftExtent, rightExtent);
+		NonterminalSymbolNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
 
 		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
 
@@ -101,7 +101,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 			return null;
 		}
 
-		NonterminalSymbolNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getCountAlternates(), leftExtent, rightExtent);
+		NonterminalSymbolNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
 		return set.get(key);
 	}
 
@@ -167,7 +167,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 		if (nonterminalNodes[inputSize - 1] == null) {
 			return null;
 		}
-		return nonterminalNodes[inputSize - 1].get(new NonterminalSymbolNode(startSymbol.getNodeId(), startSymbol.getCountAlternates(), 0, inputSize - 1));
+		return nonterminalNodes[inputSize - 1].get(new NonterminalSymbolNode(startSymbol.getNodeId(), startSymbol.getFirstSlots().length, 0, inputSize - 1));
 	}
 
 	@Override

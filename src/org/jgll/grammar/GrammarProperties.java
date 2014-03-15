@@ -11,7 +11,6 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -254,8 +253,8 @@ public class GrammarProperties {
 		List<BodyGrammarSlot> slots = new ArrayList<>();
 		
 		for(HeadGrammarSlot nonterminal : nonterminals) {
-			for (Alternate alternate : nonterminal.getAlternates()) {
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+			for (BodyGrammarSlot slot : nonterminal.getFirstSlots()) {
+				BodyGrammarSlot currentSlot = slot;
 				
 				while(currentSlot != null) {
 					slots.add(currentSlot);
@@ -441,8 +440,8 @@ public class GrammarProperties {
 					reachabilityGraph.put(head, set);
 				}
 				
-				for (Alternate alternate : head.getAlternates()) {
-					changed |= calculateDirectReachabilityGraph(set, alternate.getFirstSlot(), changed, reachabilityGraph, firstSets);
+				for (BodyGrammarSlot slot : head.getFirstSlots()) {
+					changed |= calculateDirectReachabilityGraph(set, slot, changed, reachabilityGraph, firstSets);
 				}
 			}
 		}

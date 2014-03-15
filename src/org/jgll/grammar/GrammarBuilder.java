@@ -27,7 +27,6 @@ import org.jgll.grammar.slotaction.NotFollowActions;
 import org.jgll.grammar.slotaction.NotMatchActions;
 import org.jgll.grammar.slotaction.NotPrecedeActions;
 import org.jgll.grammar.slotaction.PrecedeActions;
-import org.jgll.grammar.symbol.Alternate;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -205,20 +204,20 @@ public class GrammarBuilder implements Serializable {
 
 			@Override
 			public void visit(NonterminalGrammarSlot slot) {
-				if (slot.getNonterminal().getAlternates().size() == 0) {
-					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal());
-				}
-				
-				if(!headGrammarSlots.contains(slot.getNonterminal())) {
-					throw new GrammarValidationException("Undefined nonterminal " + slot.getNonterminal());
-				}
+//				if (slot.getNonterminal().getAlternates().size() == 0) {
+//					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal());
+//				}
+//				
+//				if(!headGrammarSlots.contains(slot.getNonterminal())) {
+//					throw new GrammarValidationException("Undefined nonterminal " + slot.getNonterminal());
+//				}
 			}
 
 			@Override
 			public void visit(HeadGrammarSlot head) {
-				if (head.getAlternates().size() == 0) {
-					throw new GrammarValidationException("No alternates defined for " + head);
-				}
+//				if (head.getAlternates().size() == 0) {
+//					throw new GrammarValidationException("No alternates defined for " + head);
+//				}
 			}
 
 			@Override
@@ -316,8 +315,8 @@ public class GrammarBuilder implements Serializable {
 	
 			if (body.size() == 0) {
 				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(getSlotId(body, 0), getSlotName(head, body, 0), headGrammarSlot);
-				epsilonSlot.setAlternateIndex(0);
-				headGrammarSlot.addAlternate(new Alternate(epsilonSlot));
+				epsilonSlot.setAlternateIndex(alternateIndex);
+				headGrammarSlot.setFirstGrammarSlotForAlternate(epsilonSlot, alternateIndex);
 			} 
 			else {
 				int symbolIndex = 0;
@@ -336,9 +335,8 @@ public class GrammarBuilder implements Serializable {
 	
 				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot);
 	
-				Alternate alternate = new Alternate(firstSlot);
 				lastGrammarSlot.setAlternateIndex(alternateIndex);
-				headGrammarSlot.addAlternate(alternate);
+				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
 				
 				for(Entry<BodyGrammarSlot, Iterable<Condition>> e : conditions.entrySet()) {
 					for(Condition condition : e.getValue()) {
@@ -598,9 +596,8 @@ public class GrammarBuilder implements Serializable {
 			HeadGrammarSlot head = queue.poll();
 			referedNonterminals.add(head);
 			
-			for(Alternate alternate : head.getAlternates()) {
-				
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+			for(BodyGrammarSlot slot : head.getFirstSlots()) {
+				BodyGrammarSlot currentSlot = slot;
 				
 				while(currentSlot.next() != null) {
 					if(currentSlot instanceof NonterminalGrammarSlot) {
@@ -639,9 +636,11 @@ public class GrammarBuilder implements Serializable {
 			HeadGrammarSlot head = queue.poll();
 			reachableNonterminals.add(head);
 			
-			for(Alternate alternate : head.getAlternates()) {
+			for(BodyGrammarSlot slot : head.getFirstSlots()) {
 				
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+				if(slot == null) continue;
+				
+				BodyGrammarSlot currentSlot = slot;
 				
 				while(currentSlot.next() != null) {
 					if(currentSlot instanceof NonterminalGrammarSlot) {

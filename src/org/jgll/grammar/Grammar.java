@@ -159,8 +159,8 @@ public class Grammar implements Serializable {
 	
 	private int numProductions() {
 		int num = 0;
-		for(HeadGrammarSlot head : headGrammarSlots) {
-			num += head.getCountAlternates();
+		for(Nonterminal head : definitions.keySet()) {
+			num += definitions.get(head).size();
 		}
 		return num;
 	}

@@ -26,7 +26,7 @@ public class PackedNode extends SPPFNode {
 	
 	public PackedNode(int id, int pivot, NonPackedNode parent) {
 		
-		assert id > 0;
+		assert id >= 0;
 		assert pivot >= 0;
 		assert parent != null;
 		

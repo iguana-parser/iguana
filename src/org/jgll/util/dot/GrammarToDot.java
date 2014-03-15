@@ -15,7 +15,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.symbol.Alternate;
 
 public class GrammarToDot {
 	
@@ -34,13 +33,13 @@ public class GrammarToDot {
 		while(!todoQueue.isEmpty()) {
 			HeadGrammarSlot head = todoQueue.poll();
 			
-			for(Alternate alternate : head.getAlternates()) {
+			for(BodyGrammarSlot slot : head.getFirstSlots()) {
 				sb.append("\"" + getId(head) + "\"" + String.format(NONTERMINAL_NODE, head.getNonterminal().getName()));
 				
-				sb.append(EDGE + "\"" + getId(head) + "\"" + "->" + "{\"" + getId(alternate.getFirstSlot()) + "\"}" + "\n");
+				sb.append(EDGE + "\"" + getId(head) + "\"" + "->" + "{\"" + getId(slot) + "\"}" + "\n");
 				
 				BodyGrammarSlot previousSlot = null;
-				BodyGrammarSlot currentSlot = alternate.getFirstSlot();
+				BodyGrammarSlot currentSlot = slot;
 				while(currentSlot != null){
 					if(currentSlot instanceof NonterminalGrammarSlot) {
 						HeadGrammarSlot nonterminal = ((NonterminalGrammarSlot) currentSlot).getNonterminal();

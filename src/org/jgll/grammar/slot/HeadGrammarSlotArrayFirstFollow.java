@@ -35,7 +35,7 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 		Set<Integer> set = predictionMap[lexer.getInput().charAt(ci) - min];
 		
 		for(int alternateIndex : set) {
-			parser.addDescriptor(alternates.get(alternateIndex).getFirstSlot());
+			parser.addDescriptor(firstSlots[alternateIndex]);
 		}
 		
 		return null;
@@ -54,7 +54,7 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 		
 		predictionMap = new Set[max - min + 1];
 		
-		for(int i = 0; i < alts.size(); i++) {
+		for(int i = 0; i < firstSlots.length; i++) {
 			Set<RegularExpression> predictionSet = predictionSets.get(i);
 			
 			if(predictionSet.isEmpty()) continue;
