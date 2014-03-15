@@ -46,6 +46,7 @@ public class OperatorPrecedence {
 	public List<Rule> rewrite(Map<Nonterminal, List<List<Symbol>>> definitions) {
 		this.definitions = new HashMap<>(definitions);
 		rewritePrecedencePatterns();
+		rewriteExceptPatterns();
 		
 		for(Nonterminal nonterminal : this.definitions.keySet()) {
 			if(nonterminal.getIndex() > 0) {
@@ -55,6 +56,36 @@ public class OperatorPrecedence {
 		
 		return newRules;
 	}
+	
+	private void rewriteExceptPatterns() {
+		rewriteExceptPatterns(groupPatterns(exceptPatterns));
+	}
+	
+	private void rewriteExceptPatterns(Map<ExceptPattern, List<List<Symbol>>> patterns) {
+		for(Entry<ExceptPattern, List<List<Symbol>>> e : patterns.entrySet()) {
+			ExceptPattern pattern = e.getKey();
+			
+			for(List<Symbol> alt : definitions.get(pattern.getNonterminal())) {
+				if (match(alt, pattern.getParent())) {
+					Nonterminal newNonterminal = createNewNonterminal(alt, pattern.getPosition(), e.getValue());
+					alt.set(pattern.getPosition(), newNonterminal);
+				}
+			}
+			
+			if(newNonterminals.containsKey(pattern.getNonterminal().getName())) {
+				int index = newNonterminals.get(pattern.getNonterminal().getName());
+				for(int i = 1; i <= index; i++) {
+					for(List<Symbol> alt : definitions.get(new Nonterminal(pattern.getNonterminal().getName(), i))) {
+						if (match(plain(alt), pattern.getParent())) {
+							Nonterminal newNonterminal = createNewNonterminal(alt, pattern.getPosition(), e.getValue());
+							alt.set(pattern.getPosition(), newNonterminal);
+						}
+					}					
+				}
+			}
+		}
+	}
+
 	
 	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
 		PrecedencePattern pattern = new PrecedencePattern(nonterminal, parent.getBody(), position, child.getBody());
