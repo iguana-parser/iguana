@@ -44,6 +44,29 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		}
 		set.remove(Epsilon.getInstance());
 		
+		List<Range> ranges = getSortedRanges(set);
+		int min = getMin(ranges);
+		int max = getMax(ranges);
+		
+		boolean nullable = firstSets.get(nonterminal).contains(Epsilon.getInstance());
+		List<Set<RegularExpression>> predictionSet = predictionSets.get(nonterminal);
+		
+		if(max - min < 10000) {
+			return new HeadGrammarSlotArrayFirstFollow(headGrammarSlotId++, nonterminal, nonterminalId, alternates, predictionSet, nullable, min, max);
+		}
+		
+		return new HeadGrammarSlotTreeMapFirstFollow(headGrammarSlotId++, nonterminal, nonterminalId, alternates, predictionSet, nullable);
+	}
+	
+	private int getMin(List<Range> ranges) {
+		return ranges.get(0).getStart();
+	}
+	
+	private int getMax(List<Range> ranges) {
+		return ranges.get(ranges.size() - 1).getEnd();
+	}
+	
+	private List<Range> getSortedRanges(Set<RegularExpression> set) {
 		List<Range> ranges = new ArrayList<>();
 		for(RegularExpression regex : set) {
 			for(Range range : regex.getFirstSet()) {
@@ -55,17 +78,7 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		
 		assert ranges.size() > 0;
 		
-		int min = ranges.get(0).getStart();
-		int max = ranges.get(ranges.size() - 1).getEnd();
-		
-		boolean nullable = firstSets.get(nonterminal).contains(Epsilon.getInstance());
-		List<Set<RegularExpression>> predictionSet = predictionSets.get(nonterminal);
-		
-		if(max - min < 10000) {
-			return new HeadGrammarSlotArrayFirstFollow(headGrammarSlotId++, nonterminal, nonterminalId, alternates, predictionSet, nullable, min, max);
-		}
-		
-		return new HeadGrammarSlotTreeMapFirstFollow(headGrammarSlotId++, nonterminal, nonterminalId, alternates, predictionSet, nullable);
+		return ranges;
 	}
 	
 

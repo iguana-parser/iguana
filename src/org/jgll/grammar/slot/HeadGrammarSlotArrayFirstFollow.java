@@ -15,17 +15,30 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * A mapping from an input value to a set of alternatives of this nonterminal
+	 * that can be predicted for that input value.
+	 */
 	private Set<Integer>[] predictionMap;
+	
+	private boolean[] followSetMap;
 	
 	private int min;
 	
 	private int max;
 
-	public HeadGrammarSlotArrayFirstFollow(int id, Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alts, List<Set<RegularExpression>> predictionSets, boolean nullable, int min, int max) {
+	public HeadGrammarSlotArrayFirstFollow(int id, 
+										   Nonterminal nonterminal, 
+										   int nonterminalId, 
+										   List<List<Symbol>> alts, 
+										   Set<RegularExpression> followSet,
+										   List<Set<RegularExpression>> predictionSets,
+										   boolean nullable, int min, int max) {
 		super(id, nonterminal, nonterminalId, alts, nullable);
 		this.min = min;
 		this.max = max;
 		setPredictionSet(predictionSets);
+		setFollowSet(followSet);
 	}
 	
 	@Override
@@ -47,6 +60,14 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 			return false;
 		}
 		return predictionMap[v - min] != null;
+	}
+	
+	@Override
+	public boolean testFollowSet(int v) {
+		if(v < min || v > max) {
+			return false;
+		}
+		return followSetMap[v - min];
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -72,6 +93,19 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 				}
 			}
 		}
+	}
+	
+	private void setFollowSet(Set<RegularExpression> followSet) {
+		followSetMap = new boolean[max - min + 1];
+		
+		for(RegularExpression regex : followSet) {
+			for(Range r : regex.getFirstSet()) {
+				for(int v = r.getStart(); v <= r.getEnd(); v++) {
+					followSetMap[v - min] = true;
+				}
+			}
+		}
+		
 	}
 
 }

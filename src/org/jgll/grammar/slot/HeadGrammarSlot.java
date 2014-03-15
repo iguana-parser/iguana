@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
-import java.util.Set;
 
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
@@ -28,8 +27,6 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	private boolean nullable;
 	
-	private Set<Integer> predictionSet;
-
 	protected BodyGrammarSlot firstSlots[];
 
 	private final int nonterminalId;
@@ -49,6 +46,10 @@ public class HeadGrammarSlot implements GrammarSlot {
 	}
 		
 	public boolean test(int v) {
+		return true;
+	}
+	
+	public boolean testFollowSet(int v) {
 		return true;
 	}
 	
@@ -94,10 +95,6 @@ public class HeadGrammarSlot implements GrammarSlot {
 		return nonterminal;
 	}
 		
-	public Set<Integer> getPredictionSet() {
-		return predictionSet;
-	}
-
 	@Override
 	public String toString() {
 		return nonterminal.toString();
