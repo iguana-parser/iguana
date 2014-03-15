@@ -24,8 +24,6 @@ Export-Package:
  org.jgll.parser.gss,
  org.jgll.parser.lookup,
  org.jgll.parser.lookup.factory,
- org.jgll.recognizer,
- org.jgll.recognizer.lookup,
  org.jgll.regex,
  org.jgll.sppf,
  org.jgll.traversal,

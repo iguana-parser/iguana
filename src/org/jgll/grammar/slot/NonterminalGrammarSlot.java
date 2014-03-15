@@ -6,7 +6,6 @@ import java.io.Writer;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.recognizer.GLLRecognizer;
 
 
 /**
@@ -21,19 +20,15 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	protected HeadGrammarSlot nonterminal;
 	
-	public NonterminalGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(slotId, label, previous, head);
+	protected final int nodeId;
+	
+	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(id, label, previous, head);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
 		this.nonterminal = nonterminal;
-	}
-	
-	public NonterminalGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		NonterminalGrammarSlot slot = new NonterminalGrammarSlot(slotId, label, previous, nonterminal, head);
-		slot.preConditions = preConditions;
-		slot.popActions = popActions;
-		return slot;
+		this.nodeId = nodeId;
 	}
 	
 	public HeadGrammarSlot getNonterminal() {
@@ -54,21 +49,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		parser.createGSSNode(next, nonterminal);
 		return nonterminal;
 	}
-	
-	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
-		int ci = recognizer.getCi();
-		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-		
-//		if(test(ci, lexer)) {
-			recognizer.update(recognizer.create(next, cu, ci), ci);
-			return nonterminal;
-//		} else { 
-//			recognizer.recognitionError(cu, ci);
-//			return null;
-//		}
-	}
-
 	
 	@Override
 	public void codeParser(Writer writer) throws IOException {
@@ -135,23 +115,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public boolean isNameEqual(BodyGrammarSlot slot) {
-		if(this == slot) {
-			return true;
-		}
-		
-		if(!(slot instanceof NonterminalGrammarSlot)) {
-			return false;
-		}
-		
-		NonterminalGrammarSlot other = (NonterminalGrammarSlot) slot;
-		
-		return nonterminal.getNonterminal().equals(other.nonterminal.getNonterminal());
-	}
-
-	@Override
 	public int getNodeId() {
-		return slotId;
+		return nodeId;
 	}
 	
 }

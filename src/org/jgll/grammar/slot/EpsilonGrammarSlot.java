@@ -1,7 +1,6 @@
 package org.jgll.grammar.slot;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 
 import org.jgll.grammar.symbol.Epsilon;
@@ -22,8 +21,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
-	public EpsilonGrammarSlot(int slotId, String label, HeadGrammarSlot head) {
-		super(slotId, label, null, head);
+	public EpsilonGrammarSlot(int id, String label, HeadGrammarSlot head) {
+		super(id, label, null, head);
 	}
 	
 	@Override

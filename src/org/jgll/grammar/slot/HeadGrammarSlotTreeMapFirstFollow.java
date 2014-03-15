@@ -24,8 +24,8 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 	
 	private NavigableMap<Integer, Set<Integer>> predictionMap;
 
-	public HeadGrammarSlotTreeMapFirstFollow(Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alternates, List<Set<RegularExpression>> predictionSets, boolean nullable) {
-		super(nonterminal, nonterminalId, alternates, nullable);
+	public HeadGrammarSlotTreeMapFirstFollow(int id, Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alternates, List<Set<RegularExpression>> predictionSets, boolean nullable) {
+		super(id, nonterminal, nonterminalId, alternates, nullable);
 		setPredictionSet(predictionSets);
 	}
 	

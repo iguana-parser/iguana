@@ -9,8 +9,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 
@@ -20,8 +18,6 @@ import org.jgll.util.logging.LoggerWrapper;
  *
  */
 public class L0 extends HeadGrammarSlot {
-	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(L0.class);
 	
 	private static final long serialVersionUID = 1L;
 
@@ -35,8 +31,7 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	private L0() {
-		super(new Nonterminal("L0"), -1, new ArrayList<List<Symbol>>(), false);
-		id = -1;
+		super(-1, new Nonterminal("L0"), -1, new ArrayList<List<Symbol>>(), false);
 	}
 	
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer, HeadGrammarSlot start) {
@@ -66,34 +61,6 @@ public class L0 extends HeadGrammarSlot {
 		return null;
 	}
 	
-	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer, GrammarSlot start) {
-		GrammarSlot slot = start.recognize(recognizer, lexer);
-		
-		while(slot != null) {
-			slot = slot.recognize(recognizer, lexer);
-		}
-		
-		return recognize(recognizer, lexer);
-	}
-	
-	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
-		while(recognizer.hasNextDescriptor()) {
-			org.jgll.recognizer.Descriptor descriptor = recognizer.nextDescriptor();
-			GrammarSlot slot = descriptor.getGrammarSlot();
-			org.jgll.recognizer.GSSNode cu = descriptor.getGSSNode();
-			int ci = descriptor.getInputIndex();
-			recognizer.update(cu, ci);
-			log.trace("Processing (%s, %s, %s)", slot, ci, cu);
-			slot = slot.recognize(recognizer, lexer);
-			while(slot != null) {
-				slot = slot.recognize(recognizer, lexer);
-			}
-		}
-		return null;
-	}
-
-
 	@Override
 	public void codeParser(Writer writer) throws IOException {
 		writer.append("case L0:\n");

@@ -17,25 +17,25 @@ import org.jgll.regex.RegularExpression;
 public interface GrammarSlotFactory {
 
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
-												 int nonterminalId,
+												 int nodeId,
 												 List<List<Symbol>> alternates,
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets);
 	
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(int slotId,
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(int nodeId,
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal, 
 															   HeadGrammarSlot head);
 
-	public LastGrammarSlot createLastGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head);
+	public LastGrammarSlot createLastGrammarSlot(int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot head);
 	
 	
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(int slotId, String label, HeadGrammarSlot head);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(int nodeId, String label, HeadGrammarSlot head);
 	
 	
-	public TokenGrammarSlot createTokenGrammarSlot(int slotId,
+	public TokenGrammarSlot createTokenGrammarSlot(int nodeId,
 												   String label,
 												   BodyGrammarSlot previous, 
 												   RegularExpression regularExpression, 

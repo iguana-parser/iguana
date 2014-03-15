@@ -4,8 +4,6 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 
@@ -16,14 +14,10 @@ public class NotFollowActions {
 		slot.addPopAction(new SlotAction<Boolean>() {
 			
 			private static final long serialVersionUID = 1L;
-			private GLLRecognizer recognizer;
 			
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
-				if(recognizer == null) {
-					recognizer = RecognizerFactory.prefixContextFreeRecognizer(parser.getGrammar());
-				}
-				return recognizer.recognize(lexer.getInput(), inputIndex, lexer.getInput().length(), firstSlot);
+				throw new UnsupportedOperationException();
 			}
 
 			@Override

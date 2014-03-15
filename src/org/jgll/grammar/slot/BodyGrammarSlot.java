@@ -16,11 +16,13 @@ import org.jgll.parser.GLLParser;
  * @author Ali Afroozeh
  *
  */
-public abstract class BodyGrammarSlot extends GrammarSlot implements Serializable {
+public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	protected final BodyGrammarSlot previous;
+	
+	protected final int id;
 	
 	protected BodyGrammarSlot next;
 	
@@ -32,11 +34,9 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	protected final String label;
 
-	protected final int slotId;
-	
-	public BodyGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
+	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
 		
-		this.slotId = slotId;
+		this.id = id;
 		
 		if(label == null) {
 			throw new IllegalArgumentException("Label cannot be null.");
@@ -124,7 +124,10 @@ public abstract class BodyGrammarSlot extends GrammarSlot implements Serializabl
 	
 	public abstract boolean isNullable();
 	
-	public abstract boolean isNameEqual(BodyGrammarSlot slot);
+	@Override
+	public int getId() {
+		return id;
+	}
 	
 	@Override
 	public String toString() {

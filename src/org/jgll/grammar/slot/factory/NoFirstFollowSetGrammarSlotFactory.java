@@ -21,6 +21,9 @@ import org.jgll.regex.RegularExpression;
 
 
 public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
+	
+	private int headGrammarSlotId;
+	private int bodyGrammarSlotId;
 
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
@@ -30,28 +33,28 @@ public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 			Map<Nonterminal, Set<RegularExpression>> followSets,
 			Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
-		return new HeadGrammarSlot(nonterminal, nontemrinalId, alternates, firstSets.get(nonterminal).contains(Epsilon.getInstance()));
+		return new HeadGrammarSlot(headGrammarSlotId++, nonterminal, nontemrinalId, alternates, firstSets.get(nonterminal).contains(Epsilon.getInstance()));
 	}
 	
 	@Override
 	public TokenGrammarSlot createTokenGrammarSlot(int slotId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
 		if(regularExpression instanceof Character) {
-			return new CharacterGrammarSlot(slotId, label, previous, (Character) regularExpression, head, tokenID);
+			return new CharacterGrammarSlot(bodyGrammarSlotId++, slotId, label, previous, (Character) regularExpression, head, tokenID);
 		}
 		else if (regularExpression instanceof Range) {
 			Range r = (Range) regularExpression;
 			if(r.getStart() == r.getEnd()) {
-				return new CharacterGrammarSlot(slotId, label, previous, new Character(r.getStart()), head, tokenID);
+				return new CharacterGrammarSlot(bodyGrammarSlotId++, slotId, label, previous, new Character(r.getStart()), head, tokenID);
 			} else {
-				return new RangeGrammarSlot(slotId, label, previous, r, head, tokenID);
+				return new RangeGrammarSlot(bodyGrammarSlotId++, slotId, label, previous, r, head, tokenID);
 			}
 		}
-		return new TokenGrammarSlot(slotId, label, previous, regularExpression, head, tokenID);
+		return new TokenGrammarSlot(bodyGrammarSlotId++, slotId, label, previous, regularExpression, head, tokenID);
 	}
 
 	@Override
 	public NonterminalGrammarSlot createNonterminalGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		return new NonterminalGrammarSlot(slotId, label, previous, nonterminal, head);
+		return new NonterminalGrammarSlot(bodyGrammarSlotId++, slotId, label, previous, nonterminal, head);
 	}
 	
 	@Override

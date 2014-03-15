@@ -248,35 +248,6 @@ public class GrammarProperties {
 		return predictionSets;
 	}
 	
-	public static List<BodyGrammarSlot> setSlotIds(Iterable<HeadGrammarSlot> nonterminals, Iterable<BodyGrammarSlot> conditionSlots) {
-		
-		List<BodyGrammarSlot> slots = new ArrayList<>();
-		
-		for(HeadGrammarSlot nonterminal : nonterminals) {
-			for (BodyGrammarSlot slot : nonterminal.getFirstSlots()) {
-				BodyGrammarSlot currentSlot = slot;
-				
-				while(currentSlot != null) {
-					slots.add(currentSlot);
-					currentSlot = currentSlot.next();
-				}
-			}
-		}
-		
-		int i = 0;
-		for (HeadGrammarSlot head : nonterminals) {
-			head.setId(i++);
-		}
-		for (BodyGrammarSlot slot : slots) {
-			slot.setId(i++);
-		}
-		for(BodyGrammarSlot slot : conditionSlots) {
-			slot.setId(i++);
-		}
-		
-		return slots;
-	}
-	
 	public static Set<Nonterminal> calculateLLNonterminals(Map<Nonterminal, Set<List<Symbol>>> definitions, 
 											   Map<Nonterminal, Set<RegularExpression>> firstSets,
 											   Map<Nonterminal, Set<RegularExpression>> followSets,

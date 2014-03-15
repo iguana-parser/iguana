@@ -5,15 +5,10 @@ import java.io.Writer;
 
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.recognizer.GLLRecognizer;
 
-public class StartSlot extends GrammarSlot {
+public class StartSlot implements GrammarSlot {
 
 	private static final long serialVersionUID = 1L;
-
-	public StartSlot(String label) {
-		id = -2;
-	}
 
 	@Override
 	public void codeParser(Writer writer) throws IOException {
@@ -26,13 +21,13 @@ public class StartSlot extends GrammarSlot {
 	}
 
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer input) {
-		return null;
+	public int getNodeId() {
+		return 0;
 	}
 
 	@Override
-	public int getNodeId() {
-		return 0;
+	public int getId() {
+		return -2;
 	}
 
 }

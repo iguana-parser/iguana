@@ -15,17 +15,10 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	public LL1NonterminalGrammarSlot(int slotId, String label, BodyGrammarSlot previous, LL1HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(slotId, label, previous, nonterminal, head);
+	public LL1NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, LL1HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
+		super(id, nodeId, label, previous, nonterminal, head);
 	}
 	
-	public LL1NonterminalGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		LL1NonterminalGrammarSlot slot = new LL1NonterminalGrammarSlot(slotId, label, previous, (LL1HeadGrammarSlot) nonterminal, head);
-		slot.preConditions = preConditions;
-		slot.popActions = popActions;
-		return slot;
-	}
-
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		

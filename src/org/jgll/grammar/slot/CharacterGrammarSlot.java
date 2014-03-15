@@ -11,17 +11,10 @@ public class CharacterGrammarSlot extends TokenGrammarSlot {
 	
 	private Character c;
 
-	public CharacterGrammarSlot(int slotId, String label, BodyGrammarSlot previous,
+	public CharacterGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous,
 								Character c, HeadGrammarSlot head, int tokenID) {
-		super(slotId, label, previous, c, head, tokenID);
+		super(id, nodeId, label, previous, c, head, tokenID);
 		this.c = c;
-	}
-	
-	public CharacterGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
-		CharacterGrammarSlot slot = new CharacterGrammarSlot(slotId, label, previous, this.c, head, this.tokenID);
-		slot.preConditions = preConditions;
-		slot.popActions = popActions;
-		return slot;
 	}
 	
 	@Override

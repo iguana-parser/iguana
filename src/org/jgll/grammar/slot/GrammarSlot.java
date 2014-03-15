@@ -6,7 +6,6 @@ import java.io.Writer;
 
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.recognizer.GLLRecognizer;
 
 /**
  * A GrammarSlot is a position immediately before or after
@@ -20,29 +19,14 @@ import org.jgll.recognizer.GLLRecognizer;
  * @author Ali Afroozeh
  *
  */
-public abstract class GrammarSlot implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * A unique integer specifying this grammar slot.
-	 * The id field is used later for looking up grammar slots.
-	 */
-	protected int id;
+public interface GrammarSlot extends Serializable {
 	
 	public abstract void codeParser(Writer writer) throws IOException;
 	
 	public abstract GrammarSlot parse(GLLParser parser, GLLLexer lexer);
 	
-	public abstract GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer);
-	
 	public abstract int getNodeId();
 	
-	public int getId() {
-		return id;
-	}
+	public int getId();
 	
-	public void setId(int id) {
-		this.id = id;
-	}
 }

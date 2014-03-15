@@ -9,7 +9,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 
@@ -21,7 +20,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
  * @author Ali Afroozeh
  * 
  */
-public class HeadGrammarSlot extends GrammarSlot {
+public class HeadGrammarSlot implements GrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -35,7 +34,10 @@ public class HeadGrammarSlot extends GrammarSlot {
 
 	private final int nonterminalId;
 	
-	public HeadGrammarSlot(Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alts, boolean nullable) {
+	private final int id;
+	
+	public HeadGrammarSlot(int id, Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alts, boolean nullable) {
+		this.id = id;
 		this.nonterminal = nonterminal;
 		this.nonterminalId = nonterminalId;
 		this.firstSlots = new BodyGrammarSlot[alts.size()];
@@ -65,20 +67,6 @@ public class HeadGrammarSlot extends GrammarSlot {
 			parser.addDescriptor(slot);
 		}
 		
-		return null;
-	}
-	
-	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
-		int ci = recognizer.getCi();
-		
-		for(BodyGrammarSlot slot : firstSlots) {
-			// TODO: put the check for recognizers here.
-//			if(lexer.match(ci, alternate.getMatcher())) {
-				org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-				recognizer.add(slot, cu, ci);
-//			}
-		}
 		return null;
 	}
 	
@@ -126,6 +114,11 @@ public class HeadGrammarSlot extends GrammarSlot {
 	@Override
 	public int getNodeId() {
 		return nonterminalId;
+	}
+	
+	@Override
+	public int getId() {
+		return id;
 	}
 	
 }

@@ -185,8 +185,21 @@ public class GrammarBuilder implements Serializable {
 //		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
 		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(headGrammarSlots, firstSets);
+
 		
-		slots = GrammarProperties.setSlotIds(headGrammarSlots, conditionSlots);
+		slots = new ArrayList<>();
+		
+		for(HeadGrammarSlot nonterminal : headGrammarSlots) {
+			for (BodyGrammarSlot slot : nonterminal.getFirstSlots()) {
+				BodyGrammarSlot currentSlot = slot;
+				
+				while(currentSlot != null) {
+					slots.add(currentSlot);
+					currentSlot = currentSlot.next();
+				}
+			}
+		}
+
 		
 		return new Grammar(this);
 	}

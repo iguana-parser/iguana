@@ -5,7 +5,6 @@ import java.io.Writer;
 
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.recognizer.GLLRecognizer;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.TokenSymbolNode;
 
@@ -19,23 +18,19 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected int tokenID;
+	protected final int tokenID;
 	
-	private RegularExpression regularExpression;
+	protected final int nodeId;
 	
-	public TokenGrammarSlot(int slotId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
-		super(slotId, label, previous, head);
+	private final RegularExpression regularExpression;
+	
+	public TokenGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
+		super(id, label, previous, head);
 		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
+		this.nodeId = nodeId;
 	}
 	
-	public TokenGrammarSlot copy(BodyGrammarSlot previous, String label, HeadGrammarSlot head) {
-		TokenGrammarSlot slot = new TokenGrammarSlot(slotId, label, previous, this.regularExpression, head, this.tokenID);
-		slot.preConditions = preConditions;
-		slot.popActions = popActions;
-		return slot;
-	}
-		
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 
@@ -72,49 +67,6 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot recognize(GLLRecognizer recognizer, GLLLexer lexer) {
-		int ci = recognizer.getCi();
-		org.jgll.recognizer.GSSNode cu = recognizer.getCu();
-		
-		int length = lexer.tokenLengthAt(ci, tokenID);
-		
-		// A::= x1
-		if(previous == null && next.next() == null) {
-			if(length > 0) {
-				ci += length;
-				recognizer.update(cu, ci);
-			} else {
-				recognizer.recognitionError(cu, ci);
-				return null;
-			}
-		}
-		
-		// A ::= x1...xf, f ≥ 2
-		else if(previous == null && !(next.next() == null)) {
-			if(length > 0) {
-				ci += length;
-				recognizer.update(cu, ci);
-			} else {
-				recognizer.recognitionError(cu, ci);
-				return null;
-			}
-		}
-		
-		// A ::= α · a β
-		else {
-			if(length > 0) {
-				ci += length;
-				recognizer.update(cu, ci);
-			} else {
-				recognizer.recognitionError(cu, ci);
-				return null;
-			}
-		}
-		
-		return next;
-	}
-	
-	@Override
 	public void codeParser(Writer writer) throws IOException {
 		throw new UnsupportedOperationException();
 	}
@@ -139,23 +91,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public boolean isNameEqual(BodyGrammarSlot slot) {
-		if(this == slot) {
-			return true;
-		}
-		
-		if(!(slot instanceof TokenGrammarSlot)) {
-			return false;
-		}
-		
-		TokenGrammarSlot other = (TokenGrammarSlot) slot;
-		
-		return tokenID == other.tokenID;
-	}
-
-	@Override
 	public int getNodeId() {
-		return slotId;
+		return nodeId;
 	}
 
 }

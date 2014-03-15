@@ -11,8 +11,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
-import org.jgll.recognizer.GLLRecognizer;
-import org.jgll.recognizer.RecognizerFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
@@ -29,7 +27,6 @@ import org.junit.Test;
 public class Test1 {
 	
 	private Grammar grammar;
-	private GLLRecognizer recognizer;
 
 	private Nonterminal A = new Nonterminal("A");
 
@@ -39,7 +36,6 @@ public class Test1 {
 		
 		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
 		grammar = new GrammarBuilder("epsilon", factory).addRule(r1).build();
-		recognizer = RecognizerFactory.contextFreeRecognizer(grammar);
 	}
 	
 	@Test
@@ -55,15 +51,6 @@ public class Test1 {
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
 	
-	@Test
-	public void testRecognizerSuccess() {
-		assertTrue(recognizer.recognize(Input.fromString(""), grammar, "A"));
-	}
-	
-	@Test
-	public void testRecognizerFail() {
-		assertFalse(recognizer.recognize(Input.fromString("a"), grammar, "A"));
-	}
 	
 	private SPPFNode expectedSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 0, 0, 0);
