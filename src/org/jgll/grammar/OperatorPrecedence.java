@@ -76,10 +76,13 @@ public class OperatorPrecedence {
 				int index = newNonterminals.get(pattern.getNonterminal().getName());
 				for(int i = 1; i <= index; i++) {
 					for(List<Symbol> alt : definitions.get(new Nonterminal(pattern.getNonterminal().getName(), i))) {
-						if (match(plain(alt), pattern.getParent())) {
-							Nonterminal newNonterminal = createNewNonterminal(alt, pattern.getPosition(), e.getValue());
-							alt.set(pattern.getPosition(), newNonterminal);
-						}
+						
+						if(alt != null) {
+							if (match(plain(alt), pattern.getParent())) {
+								Nonterminal newNonterminal = createNewNonterminal(alt, pattern.getPosition(), e.getValue());
+								alt.set(pattern.getPosition(), newNonterminal);
+							}
+						}						
 					}					
 				}
 			}

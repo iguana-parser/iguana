@@ -271,13 +271,13 @@ public class GrammarBuilder implements Serializable {
 		
 		rules.add(rule);
 		
-		if(rule.getObject() != null) {
-			objectMap.put(Tuple.of(nonterminalIds.get(head.getName()), definitions.get(head).size() - 1), rule.getObject());
-		}
-
 		if(!nonterminalIds.containsKey(head.getName())) {
 			nonterminalIds.put(head.getName(), nonterminalId++);
 			nonterminals.add(head);
+		}
+		
+		if(rule.getObject() != null) {
+			objectMap.put(Tuple.of(nonterminalIds.get(head.getName()), definitions.get(head).size() - 1), rule.getObject());
 		}
 
 		if(rule.getBody() != null) {
@@ -292,8 +292,6 @@ public class GrammarBuilder implements Serializable {
 			packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), definitions.get(head).size() - 1);
 		}
 			
-			
-		
 		return this;
 	}
  

@@ -212,11 +212,12 @@ public class GrammarProperties {
 
 			for(List<Symbol> alternate : alternates) {
 				
+				Set<RegularExpression> predictionSet = new HashSet<>();
+
 				if(alternate == null) {
+					list.add(predictionSet);
 					continue;
 				}
-				
-				Set<RegularExpression> predictionSet = new HashSet<>();
 				
 				for(int i = 0; i < alternate.size(); i++) {
 					Symbol symbol = alternate.get(i);
@@ -240,7 +241,6 @@ public class GrammarProperties {
 				}
 				predictionSet.remove(Epsilon.getInstance());
 				list.add(predictionSet);
-
 			}
 
 			predictionSets.put(nonterminal, list);

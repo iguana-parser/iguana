@@ -39,12 +39,14 @@ public class Tuple<T, K> {
 		@SuppressWarnings("unchecked")
 		Tuple<T, K> other = (Tuple<T, K>) obj;
 		
-		return t.equals(other.t) && k.equals(other.k);
+		return t == null ? other.t == null : t.equals(other.t) &&
+			   k == null ? other.k == null : k.equals(other.k);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(t.hashCode(), k.hashCode());
+		return HashFunctions.defaulFunction().hash(t == null ? 0 : t.hashCode(), 
+												   k == null ? 0 : k.hashCode());
 	}
 	
 	@Override

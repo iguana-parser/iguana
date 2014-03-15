@@ -57,7 +57,11 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 		Map<Range, Set<Integer>> map = new HashMap<>();
 		
 		for(int i = 0; i < alts.size(); i++) {
-			for(RegularExpression regex : predictionSets.get(i)) {
+			Set<RegularExpression> predictionSet = predictionSets.get(i);
+			
+			if(predictionSet.isEmpty()) continue;
+			
+			for(RegularExpression regex : predictionSet) {
 				for(Range r : regex.getFirstSet()) {
 					Set<Integer> set = map.get(r);
 					if(set == null) {
