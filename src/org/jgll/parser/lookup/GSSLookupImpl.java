@@ -14,8 +14,6 @@ import org.jgll.parser.gss.GSSNodeFactory;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.HashTableFactory;
-import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -32,12 +30,6 @@ public class GSSLookupImpl implements GSSLookup {
 
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GSSLookupImpl.class);
 
-	private HashTableFactory factory;
-
-	private int tableSize = (int) Math.pow(2, 10);
-
-	private IguanaSet<NonPackedNode>[] nonPackedNodes;
-
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)
 	 */
@@ -47,40 +39,28 @@ public class GSSLookupImpl implements GSSLookup {
 	
 	private final Grammar grammar;
 	
-	private final int slotsSize;
-	
 	public GSSLookupImpl(Grammar grammar, Input input, GSSNodeFactory gssNodeFactory) {
 		this.grammar = grammar;
-		this.slotsSize = grammar.getGrammarSlots().size();		
 		this.gssNodeFactory = gssNodeFactory;
 		
 		long start = System.nanoTime();
-
-		nonPackedNodes = new IguanaSet[input.length()];
 
 		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.length()];
 
 		long end = System.nanoTime();
 		log.info("Lookup table initialization: %d ms", (end - start) / 1000_000);
-
-		factory = HashTableFactory.getFactory();
 	}
 
 	@Override
 	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex) {
-
-		GSSNode gssNode = gssNodes[head.getId()][inputIndex];
-
-		if (gssNode == null) {
-			gssNode = gssNodeFactory.createGSSNode(head, inputIndex);
-			log.trace("GSSNode created: (%s, %d)",  head, inputIndex);
-			gssNodes[head.getId()][inputIndex] = gssNode;
-			return gssNode;
-		}
-		
-		log.trace("GSSNode found: (%s, %d)",  head, inputIndex);
-
+		GSSNode gssNode = gssNodeFactory.createGSSNode(head, inputIndex);
+		gssNodes[head.getId()][inputIndex] = gssNode;		
 		return gssNode;
+	}
+	
+	@Override
+	public GSSNode hasGSSNode(HeadGrammarSlot head, int inputIndex) {
+		return gssNodes[head.getId()][inputIndex];
 	}
 
 	@Override

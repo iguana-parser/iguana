@@ -59,19 +59,18 @@ public class FilterTest0 {
 		builder.addRule(rule3);
 
 		// (E * .E, E * E)
-		builder.addPrecedencePattern(E, rule1, 2, rule1);
-		
-		// (E * .E, E + E)
-		builder.addPrecedencePattern(E, rule1, 0, rule2);
-		
-		// (.E * E, E + E)
-		builder.addPrecedencePattern(E, rule1, 2, rule2);
-		
-		// (E + .E, E + E)
-		builder.addPrecedencePattern(E, rule2, 2, rule2);
-				
+//		builder.addPrecedencePattern(E, rule1, 2, rule1);
+//		
+//		// (E * .E, E + E)
+//		builder.addPrecedencePattern(E, rule1, 0, rule2);
+//		
+//		// (.E * E, E + E)
+//		builder.addPrecedencePattern(E, rule1, 2, rule2);
+//		
+//		// (E + .E, E + E)
+//		builder.addPrecedencePattern(E, rule2, 2, rule2);
+//				
 		grammar = builder.build();
-		System.out.println(grammar);
 	}
 	
 	@Test

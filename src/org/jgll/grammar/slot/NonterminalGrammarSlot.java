@@ -45,9 +45,12 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(executePreConditions(parser, input)) {
 			return null;
 		}
-
-		parser.createGSSNode(next, nonterminal);
-		return nonterminal;
+		
+		if(!parser.hasGSSNode(next, nonterminal)) {
+			parser.createGSSNode(next, nonterminal);			
+			return nonterminal;
+		}
+		return null;
 	}
 	
 	@Override

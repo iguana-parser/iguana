@@ -31,9 +31,10 @@ public interface GLLParser {
 	/**
 	 * Creates a new GSSNode with the given grammar slot.
 	 * 
-	 * @param slot
 	 */
 	public void createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
+	
+	public boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
 	

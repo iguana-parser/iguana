@@ -25,13 +25,8 @@ public class NonterminalGrammarSlotFirstFollow extends NonterminalGrammarSlot {
 			parser.recordParseError(this);
 			return null;
 		}
-		
-		if(executePreConditions(parser, lexer)) {
-			return null;
-		}
-				
-		parser.createGSSNode(next, nonterminal);
-		return nonterminal;
+
+		return super.parse(parser, lexer);
 	}
 
 	

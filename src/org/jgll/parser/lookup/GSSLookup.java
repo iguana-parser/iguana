@@ -31,6 +31,12 @@ public interface GSSLookup {
 	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex);
 	
 	/**
+	 * Returns an already existing GSS node with the given parametrs. If no such
+	 * GSS node exists, returns null.
+	 */
+	public GSSNode hasGSSNode(HeadGrammarSlot head, int inputIndex);
+	
+	/**
 	 * Returns the GSS nodes reachable from the given GSS node.
 	 * 
 	 */

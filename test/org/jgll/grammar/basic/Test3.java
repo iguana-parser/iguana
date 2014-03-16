@@ -17,6 +17,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -67,6 +68,7 @@ public class Test3 {
 		Input input = Input.fromString("bc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, grammar, input);
 		assertEquals(true, sppf.deepEquals(getSPPF()));
 	}
 	
