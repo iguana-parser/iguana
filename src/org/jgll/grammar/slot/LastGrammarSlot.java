@@ -25,7 +25,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
-		// TODO: check for follow sets at this point
 		parser.pop();
 		return null;
 	}
