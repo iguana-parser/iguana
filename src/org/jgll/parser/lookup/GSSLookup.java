@@ -17,9 +17,8 @@ import org.jgll.sppf.SPPFNode;
 public interface GSSLookup {
 	
 	/**
-	 * Returns true if there is a GSS edge from source to destination
-	 * with the given node as label. If no such edge exists, a new
-	 * edge with the given properties will be created.
+	 * Returns true if there is no GSS edge from source to destination
+	 * with the given node as label. If such an edge exists, false is returned.
 	 * 
 	 */
 	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot);

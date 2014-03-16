@@ -340,9 +340,10 @@ public class GLLParserImpl implements GLLParser {
 	 */
 	@Override
 	public final void createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
-		cu = gssLookup.getGSSNode(head, ci);
+		GSSNode v = gssLookup.getGSSNode(head, ci);
 		log.trace("GSSNode created: (%s, %d)",  head, ci);
-		createContinuation(slot, cu, cn, cu);
+		createGSSEdge(slot, cu, cn, v);
+		cu = v;
 	}
 	
 	@Override
@@ -351,11 +352,11 @@ public class GLLParserImpl implements GLLParser {
 		if(v == null) return false;
 		
 		log.trace("GSSNode found: (%s, %d)",  head, ci);
-		createContinuation(slot, cu, cn, v);
+		createGSSEdge(slot, cu, cn, v);
 		return true;
 	}
 	
-	private void createContinuation(BodyGrammarSlot returnSlot, GSSNode u, SPPFNode w, GSSNode v) {
+	private void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode u, SPPFNode w, GSSNode v) {
 		if(gssLookup.getGSSEdge(v, u, w, returnSlot)) {
 			
 			label:
