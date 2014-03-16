@@ -29,10 +29,10 @@ public interface GrammarSlotFactory {
 															   HeadGrammarSlot nonterminal, 
 															   HeadGrammarSlot head);
 
-	public LastGrammarSlot createLastGrammarSlot(int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot head);
+	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head);
 	
 	
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(int nodeId, String label, HeadGrammarSlot head);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head);
 	
 	
 	public TokenGrammarSlot createTokenGrammarSlot(int nodeId,

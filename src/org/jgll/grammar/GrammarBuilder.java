@@ -327,7 +327,7 @@ public class GrammarBuilder implements Serializable {
 			BodyGrammarSlot currentSlot = null;
 	
 			if (body.size() == 0) {
-				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(getSlotId(body, 0), getSlotName(head, body, 0), headGrammarSlot);
+				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(getSlotName(head, body, 0), headGrammarSlot);
 				epsilonSlot.setAlternateIndex(alternateIndex);
 				headGrammarSlot.setFirstGrammarSlotForAlternate(epsilonSlot, alternateIndex);
 			} 
@@ -346,7 +346,7 @@ public class GrammarBuilder implements Serializable {
 					conditions.put(currentSlot, symbol.getConditions());
 				}
 	
-				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot);
+				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot);
 	
 				lastGrammarSlot.setAlternateIndex(alternateIndex);
 				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
@@ -511,7 +511,7 @@ public class GrammarBuilder implements Serializable {
 			index++;
 		}
 		
-		grammarSlotFactory.createLastGrammarSlot(getSlotId(rule.getBody(), index), getSlotName(rule.getHead(), rule.getBody(), index), currentSlot, null);
+		grammarSlotFactory.createLastGrammarSlot(getSlotName(rule.getHead(), rule.getBody(), index), currentSlot, null);
 		conditionSlots.add(firstSlot);
 		return firstSlot;
 	}

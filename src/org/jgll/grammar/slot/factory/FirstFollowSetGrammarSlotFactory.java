@@ -38,21 +38,35 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
-		Set<RegularExpression> set = new HashSet<>(firstSets.get(nonterminal));
+		Set<RegularExpression> firstSet = firstSets.get(nonterminal);
+		Set<RegularExpression> followSet = followSets.get(nonterminal);
+		
+		Set<RegularExpression> set = new HashSet<>(firstSet);
 		if(set.contains(Epsilon.getInstance())) {
-			set.addAll(followSets.get(nonterminal));
+			set.addAll(followSet);
 		}
 		set.remove(Epsilon.getInstance());
 		
-		List<Range> ranges = getSortedRanges(set);
-		int min = getMin(ranges);
-		int max = getMax(ranges);
+		List<Range> rangesPredictionSet = getSortedRanges(set);
+		int minPredictionSet = getMin(rangesPredictionSet);
+		int maxPredictionSet = getMax(rangesPredictionSet);
 		
-		boolean nullable = firstSets.get(nonterminal).contains(Epsilon.getInstance());
+		boolean nullable = firstSet.contains(Epsilon.getInstance());
 		List<Set<RegularExpression>> predictionSet = predictionSets.get(nonterminal);
 		
-		if(max - min < 10000) {
-			return new HeadGrammarSlotArrayFirstFollow(headGrammarSlotId++, nonterminal, nonterminalId, alternates, predictionSet, nullable, min, max);
+		List<Range> rangesFollowSet = getSortedRanges(followSet);
+		int minFollowSet = getMin(rangesFollowSet);
+		int maxFollowSet = getMax(rangesFollowSet);
+		
+		if(maxPredictionSet - minPredictionSet < 10000) {
+			return new HeadGrammarSlotArrayFirstFollow(headGrammarSlotId++, 
+													   nonterminal, 
+													   nonterminalId, 
+													   alternates, 
+													   followSet, 
+													   predictionSet, nullable, 
+													   minPredictionSet, maxPredictionSet,
+													   minFollowSet, maxFollowSet);
 		}
 		
 		return new HeadGrammarSlotTreeMapFirstFollow(headGrammarSlotId++, nonterminal, nonterminalId, alternates, predictionSet, nullable);
@@ -110,14 +124,13 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 
 
 	@Override
-	public LastGrammarSlot createLastGrammarSlot(int slotId, String label,
-			BodyGrammarSlot previous, HeadGrammarSlot head) {
-		return new LastGrammarSlot(slotId, label, previous, head);
+	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head);
 	}
 	
 	@Override
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(int slotId, String label, HeadGrammarSlot head) {
-		return new EpsilonGrammarSlot(slotId, label, head);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head) {
+		return new EpsilonGrammarSlot(bodyGrammarSlotId++, label, head);
 	}
 	
 }

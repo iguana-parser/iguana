@@ -58,13 +58,13 @@ public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 	}
 	
 	@Override
-	public LastGrammarSlot createLastGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		return new LastGrammarSlot(slotId, label, previous, head);
+	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
+		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head);
 	}
 
 	@Override
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(int slotId, String label, HeadGrammarSlot head) {
-		return new EpsilonGrammarSlot(slotId, label, head);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head) {
+		return new EpsilonGrammarSlot(bodyGrammarSlotId++, label, head);
 	}
 
 }

@@ -23,9 +23,13 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	
 	private boolean[] followSetMap;
 	
-	private int min;
+	private final int minPredictionSet;
 	
-	private int max;
+	private final int maxPredictionSet;
+	
+	private final int minFollowSet;
+	
+	private final int maxFollowSet;
 
 	public HeadGrammarSlotArrayFirstFollow(int id, 
 										   Nonterminal nonterminal, 
@@ -33,10 +37,14 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 										   List<List<Symbol>> alts, 
 										   Set<RegularExpression> followSet,
 										   List<Set<RegularExpression>> predictionSets,
-										   boolean nullable, int min, int max) {
+										   boolean nullable, 
+										   int minPrediction, int maxPrediction, 
+										   int minFollowSet, int maxFollowSet) {
 		super(id, nonterminal, nonterminalId, alts, nullable);
-		this.min = min;
-		this.max = max;
+		this.minPredictionSet = minPrediction;
+		this.maxPredictionSet = maxPrediction;
+		this.minFollowSet = minFollowSet;
+		this.maxFollowSet = maxFollowSet;
 		setPredictionSet(predictionSets);
 		setFollowSet(followSet);
 	}
@@ -45,7 +53,7 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		Set<Integer> set = predictionMap[lexer.getInput().charAt(ci) - min];
+		Set<Integer> set = predictionMap[lexer.getInput().charAt(ci) - minPredictionSet];
 		
 		for(int alternateIndex : set) {
 			parser.addDescriptor(firstSlots[alternateIndex]);
@@ -56,24 +64,24 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	
 	@Override
 	public boolean test(int v) {
-		if(v < min || v > max) {
+		if(v < minPredictionSet || v > maxPredictionSet) {
 			return false;
 		}
-		return predictionMap[v - min] != null;
+		return predictionMap[v - minPredictionSet] != null;
 	}
 	
 	@Override
 	public boolean testFollowSet(int v) {
-		if(v < min || v > max) {
+		if(v < minFollowSet || v > maxFollowSet) {
 			return false;
 		}
-		return followSetMap[v - min];
+		return followSetMap[v - minFollowSet];
 	}
 	
 	@SuppressWarnings("unchecked")
 	private void setPredictionSet(List<Set<RegularExpression>> predictionSets) {
 		
-		predictionMap = new Set[max - min + 1];
+		predictionMap = new Set[maxPredictionSet - minPredictionSet + 1];
 		
 		for(int i = 0; i < firstSlots.length; i++) {
 			Set<RegularExpression> predictionSet = predictionSets.get(i);
@@ -83,10 +91,10 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 			for(RegularExpression regex : predictionSet) {
 				for(Range r : regex.getFirstSet()) {
 					for(int v = r.getStart(); v <= r.getEnd(); v++) {
-						Set<Integer> set = predictionMap[v - min];
+						Set<Integer> set = predictionMap[v - minPredictionSet];
 						if(set == null) {
 							set = new HashSet<>();
-							predictionMap[v - min] = set;
+							predictionMap[v - minPredictionSet] = set;
 						}
 						set.add(i);
 					}
@@ -96,12 +104,12 @@ public class HeadGrammarSlotArrayFirstFollow extends HeadGrammarSlot {
 	}
 	
 	private void setFollowSet(Set<RegularExpression> followSet) {
-		followSetMap = new boolean[max - min + 1];
+		followSetMap = new boolean[maxFollowSet - minFollowSet + 1];
 		
 		for(RegularExpression regex : followSet) {
 			for(Range r : regex.getFirstSet()) {
 				for(int v = r.getStart(); v <= r.getEnd(); v++) {
-					followSetMap[v - min] = true;
+					followSetMap[v - minFollowSet] = true;
 				}
 			}
 		}
