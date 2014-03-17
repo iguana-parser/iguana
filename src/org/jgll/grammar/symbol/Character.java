@@ -24,7 +24,7 @@ public class Character extends AbstractRegularExpression {
 	private final BitSet bitSet;
 	
 	public Character(int c) {
-		super("[" + getString(c) + "]");
+		super(getString(c));
 		this.c = c;
 		this.bitSet = new BitSet();
 		bitSet.set(c);

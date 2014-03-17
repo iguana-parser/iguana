@@ -1,4 +1,4 @@
-package org.jgll.grammar.precedence;
+package org.jgll.disambiguation.precedence;
 
 import static org.jgll.util.CollectionsUtil.*;
 

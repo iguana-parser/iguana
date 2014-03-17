@@ -62,11 +62,11 @@ public class OperatorPrecedence {
 	}
 	
 	private void rewriteExceptPatterns(Map<ExceptPattern, List<List<Symbol>>> patterns) {
-		for(Entry<ExceptPattern, List<List<Symbol>>> e : patterns.entrySet()) {
+		for (Entry<ExceptPattern, List<List<Symbol>>> e : patterns.entrySet()) {
 			ExceptPattern pattern = e.getKey();
 			
-			for(List<Symbol> alt : definitions.get(pattern.getNonterminal())) {
-				if (match(alt, pattern.getParent())) {
+			for (List<Symbol> alt : definitions.get(pattern.getNonterminal())) {
+				if (match(plain(alt), pattern.getParent())) {
 					Nonterminal newNonterminal = createNewNonterminal(alt, pattern.getPosition(), e.getValue());
 					alt.set(pattern.getPosition(), newNonterminal);
 				}
