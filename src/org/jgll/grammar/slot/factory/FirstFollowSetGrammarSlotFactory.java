@@ -25,6 +25,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Tuple;
 
 public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 	
@@ -48,16 +49,16 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		}
 		set.remove(Epsilon.getInstance());
 		
-		List<Range> rangesPredictionSet = getSortedRanges(set);
-		int minPredictionSet = getMin(rangesPredictionSet);
-		int maxPredictionSet = getMax(rangesPredictionSet);
+		Tuple<Integer, Integer> minMax = getMinMax(set);
+		int minPredictionSet = minMax.getFirst();
+		int maxPredictionSet = minMax.getSecond();
 		
 		boolean nullable = firstSet.contains(Epsilon.getInstance());
 		List<Set<RegularExpression>> predictionSet = predictionSets.get(nonterminal);
 		
-		List<Range> rangesFollowSet = getSortedRanges(followSet);
-		int minFollowSet = getMin(rangesFollowSet);
-		int maxFollowSet = getMax(rangesFollowSet);
+		Tuple<Integer, Integer> followSetsMinMax = getMinMax(followSet);
+		int minFollowSet = followSetsMinMax.getFirst();
+		int maxFollowSet = followSetsMinMax.getSecond();
 		
 		if(maxPredictionSet - minPredictionSet < 10000) {
 			return new HeadGrammarSlotArrayFirstFollow(headGrammarSlotId++, 
@@ -73,29 +74,28 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		return new HeadGrammarSlotTreeMapFirstFollow(headGrammarSlotId++, nonterminal, nonterminalId, alternates, predictionSet, nullable);
 	}
 	
-	private int getMin(List<Range> ranges) {
-		return ranges.get(0).getStart();
-	}
-	
-	private int getMax(List<Range> ranges) {
-		return ranges.get(ranges.size() - 1).getEnd();
-	}
-	
-	private List<Range> getSortedRanges(Set<RegularExpression> set) {
-		List<Range> ranges = new ArrayList<>();
+	private Tuple<Integer, Integer> getMinMax(Set<RegularExpression> set) {
+		Set<Range> ranges = new HashSet<>();
 		for(RegularExpression regex : set) {
 			for(Range range : regex.getFirstSet()) {
 				ranges.add(range);
 			}
 		}
 		
-		Collections.sort(ranges);
+		int min = Integer.MAX_VALUE;
+		int max = 0;
 		
-		assert ranges.size() > 0;
+		for(Range range : ranges) {
+			if(range.getStart() < min) {
+				min = range.getStart();
+			}
+			if(range.getEnd() > max) {
+				max = range.getEnd();
+			}
+		}
 		
-		return ranges;
-	}
-	
+		return Tuple.of(min, max);
+	}	
 
 	@Override
 	public NonterminalGrammarSlot createNonterminalGrammarSlot(int nodeId,
