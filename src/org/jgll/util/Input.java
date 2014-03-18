@@ -361,6 +361,11 @@ public class Input {
 	public boolean isEmpty() {
 		return length() == 1;
 	}
+	
+	
+	public URI getURI() {
+		return uri;
+	}
 
 	public boolean isEndOfLine(int currentInputIndex) {
 		return input[currentInputIndex] == 0 || lineColumns[currentInputIndex + 1].columnNumber == 1;

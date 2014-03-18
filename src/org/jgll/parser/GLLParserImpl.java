@@ -143,7 +143,8 @@ public class GLLParserImpl implements GLLParser {
 		initParserState();
 		initLookups(grammar, input);
 	
-		log.info("Iguana started...");
+		log.info("Iguana started:");
+		log.info("Parsing %s:", input.getURI());
 
 		long start = System.nanoTime();
 		long startUserTime = getUserTime();
@@ -159,7 +160,8 @@ public class GLLParserImpl implements GLLParser {
 		long endSystemTime = getSystemTime();
 		
 		if (root == null) {
-			throw new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
+			ParseError e = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
+			log.info("Parsing error:\n %s", e);
 		}
 		
 		log.info("Parsing finished successfully.");
@@ -168,13 +170,15 @@ public class GLLParserImpl implements GLLParser {
 	}
 		
 	private void logParseStatistics(long duration, long durationUserTime, long durationSystemTime) {
+		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
+		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
+
 		log.info("Parsing Time (nano time): " + duration / 1000_000 + " ms");
 		log.info("Parsing Time (user time): " + durationUserTime / 1000_000 + " ms");
 		log.info("Parsing Time (system time): " + durationSystemTime / 1000_000 + " ms");
 		
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
 		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
 		log.info("Descriptors: %d", descriptorLookup.getDescriptorsCount());
 		log.info("GSS Nodes: %d", gssLookup.getGSSNodesCount());
