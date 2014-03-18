@@ -77,17 +77,19 @@ public class TreeMapPredictionTest implements PredictionTest {
 						predictionMap.put(i, s);
 					}
 					s.addAll(map.get(range));
+					
+					if(!predictionMap.containsKey(range.getEnd() + 1)) {
+						predictionMap.put(range.getEnd() + 1, new HashSet<Integer>());
+					}
 				}
 			}
 		}
-		
-		predictionMap.put(list.get(list.size() - 1), new HashSet<Integer>());
 	}
 	
 	@Override
 	public boolean test(int v) {
 		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
-		return e != null && e.getValue() != null;
+		return e != null && ! e.getValue().isEmpty();
 	}
 
 	@Override
