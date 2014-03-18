@@ -19,8 +19,8 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.firstfollow.ArrayFollowTest;
 import org.jgll.grammar.slot.firstfollow.ArrayPredictionTest;
 import org.jgll.grammar.slot.firstfollow.FollowTest;
-import org.jgll.grammar.slot.firstfollow.TreeMapFollowSet;
-import org.jgll.grammar.slot.firstfollow.TreeMapPredictionSet;
+import org.jgll.grammar.slot.firstfollow.TreeMapFollowTest;
+import org.jgll.grammar.slot.firstfollow.TreeMapPredictionTest;
 import org.jgll.grammar.slot.firstfollow.PredictionTest;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Epsilon;
@@ -70,13 +70,13 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		if(maxPredictionSet - minPredictionSet < 10000) {
 			predictionTest = new ArrayPredictionTest(predictionSet, alternates.size(), minPredictionSet, maxPredictionSet);
 		} else {
-			predictionTest = new TreeMapPredictionSet(predictionSet, alternates.size());
+			predictionTest = new TreeMapPredictionTest(predictionSet, alternates.size());
 		}
 		
 		if(maxFollowSet - minFollowSet < 10000) {
 			followSetTest = new ArrayFollowTest(followSet, minFollowSet, maxFollowSet);
 		} else {
-			followSetTest = new TreeMapFollowSet(followSet);
+			followSetTest = new TreeMapFollowTest(followSet);
 		}
 		
 		return new HeadGrammarSlotFirstFollow(headGrammarSlotId++, 

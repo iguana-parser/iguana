@@ -2,8 +2,10 @@ package org.jgll.grammar.slot.firstfollow;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
@@ -12,29 +14,39 @@ import java.util.Map.Entry;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
-public class TreeMapFollowSet implements FollowTest {
+public class TreeMapPredictionTest implements PredictionTest {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final NavigableMap<Integer, Boolean> predictionMap;
-	
-	
-	public TreeMapFollowSet(Set<RegularExpression> followSet) {
+	private NavigableMap<Integer, Set<Integer>> predictionMap;
+
+	public TreeMapPredictionTest(List<Set<RegularExpression>> predictionSets, int countAlternates) {
 		predictionMap = new TreeMap<>();
 		
 		// From range to the set of alternate indices
-		Set<Range> ranges = new HashSet<>();
+		Map<Range, Set<Integer>> map = new HashMap<>();
 		
-		for(RegularExpression regex : followSet) {
-			for(Range r : regex.getFirstSet()) {
-				ranges.add(r);
+		for(int i = 0; i < countAlternates; i++) {
+			Set<RegularExpression> predictionSet = predictionSets.get(i);
+			
+			if(predictionSet.isEmpty()) continue;
+			
+			for(RegularExpression regex : predictionSet) {
+				for(Range r : regex.getFirstSet()) {
+					Set<Integer> set = map.get(r);
+					if(set == null) {
+						set = new HashSet<>();
+						map.put(r, set);
+					}
+					set.add(i);
+				}
 			}
 		}
 		
 		Set<Integer> starts = new HashSet<>();
 		Set<Integer> ends = new HashSet<>();
 		
-		for(Range r : ranges) {
+		for(Range r : map.keySet()) {
 			starts.add(r.getStart());
 			ends.add(r.getEnd());
 		}
@@ -56,22 +68,32 @@ public class TreeMapFollowSet implements FollowTest {
 		List<Integer> list = new ArrayList<>(set);
 		Collections.sort(list);
 		
-		for(Range range : ranges) {
+		for(Range range : map.keySet()) {
 			for(int i : list) {
 				if(i >= range.getStart() && i <= range.getEnd()) {
-					predictionMap.put(i, true);
+					Set<Integer> s = predictionMap.get(i);
+					if(s == null) {
+						s = new HashSet<>();
+						predictionMap.put(i, s);
+					}
+					s.addAll(map.get(range));
 				}
 			}
 		}
 		
-		predictionMap.put(list.get(list.size() - 1), false);
+		predictionMap.put(list.get(list.size() - 1), new HashSet<Integer>());
 	}
-	
 	
 	@Override
 	public boolean test(int v) {
-		Entry<Integer, Boolean> e = predictionMap.floorEntry(v);
+		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
 		return e != null && e.getValue() != null;
+	}
+
+	@Override
+	public Set<Integer> get(int v) {
+		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
+		return e == null ? null : e.getValue();
 	}
 
 }
