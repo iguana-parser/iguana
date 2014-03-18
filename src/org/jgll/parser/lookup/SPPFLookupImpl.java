@@ -210,4 +210,9 @@ public class SPPFLookupImpl implements SPPFLookup {
 		return 0;
 	}
 
+	@Override
+	public void addPackedNode(NonterminalSymbolNode parent, LastGrammarSlot slot, int pivot, SPPFNode child) {
+		
+	}
+
 }

@@ -60,6 +60,8 @@ public interface SPPFLookup {
 		
 	public void addPackedNode(NonterminalSymbolNode parent, LastGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 	
+	public void addPackedNode(NonterminalSymbolNode parent, LastGrammarSlot slot, int pivot, SPPFNode child);
+	
 	public void addPackedNode(IntermediateNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 	
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize);

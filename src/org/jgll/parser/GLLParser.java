@@ -38,7 +38,9 @@ public interface GLLParser {
 	
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
 	
-	public void getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild);
+	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child);
+	
+	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
 	
 	public void getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild);
 	

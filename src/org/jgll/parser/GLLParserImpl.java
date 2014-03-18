@@ -161,7 +161,7 @@ public class GLLParserImpl implements GLLParser {
 		
 		if (root == null) {
 			ParseError e = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
-			log.info("Parsing error:\n %s", e);
+			log.info("Parse error:\n %s", e);
 		}
 		
 		log.info("Parsing finished successfully.");
@@ -384,10 +384,21 @@ public class GLLParserImpl implements GLLParser {
 			}
 		}
 	}
-	
+
 	@Override
-	public void getNonterminalNode(LastGrammarSlot slot, SPPFNode rightChild) {
-		cn = getNonterminalNode(slot, cn, rightChild);
+	public final NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child) {
+		HeadGrammarSlot head = slot.getHead();
+
+		int leftExtent = child.getLeftExtent();
+		int rightExtent = child.getRightExtent();
+		
+		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(head, leftExtent, rightExtent);
+		
+		sppfLookup.addPackedNode(newNode, slot, leftExtent, child);
+		
+		cn = newNode;
+		
+		return newNode;
 	}
 	
 	@Override
@@ -395,7 +406,8 @@ public class GLLParserImpl implements GLLParser {
 		cn = getIntermediateNode(slot, cn, rightChild);
 	}
 	
-	private final SPPFNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+	@Override
+	public final NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		HeadGrammarSlot head = slot.getHead();
 
@@ -412,6 +424,8 @@ public class GLLParserImpl implements GLLParser {
 		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(head, leftExtent, rightExtent);
 		
 		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+		
+		cn = newNode;
 		
 		return newNode;
 	}
