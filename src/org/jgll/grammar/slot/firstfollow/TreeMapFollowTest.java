@@ -60,18 +60,19 @@ public class TreeMapFollowTest implements FollowTest {
 			for(int i : list) {
 				if(i >= range.getStart() && i <= range.getEnd()) {
 					followMap.put(i, true);
+					if(!followMap.containsKey(range.getEnd() + 1)) {
+						followMap.put(range.getEnd() + 1, false);
+					}
 				}
 			}
-		}
-		
-		followMap.put(list.get(list.size() - 1), false);
+		}		
 	}
 	
 	
 	@Override
 	public boolean test(int v) {
 		Entry<Integer, Boolean> e = followMap.floorEntry(v);
-		return e != null && e.getValue() != null;
+		return e != null && e.getValue();
 	}
 
 }

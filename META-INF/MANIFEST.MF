@@ -4,7 +4,9 @@ Bundle-Name: iguana
 Bundle-SymbolicName: iguana
 Bundle-Version: 1.0.0.qualifier
 Export-Package: 
+ org.jgll.disambiguation.precedence,
  org.jgll.grammar;uses:="org.jgll.parser",
+ org.jgll.grammar.basic,
  org.jgll.grammar.condition,
  org.jgll.grammar.conditions,
  org.jgll.grammar.ebnf,
@@ -12,6 +14,7 @@ Export-Package:
  org.jgll.grammar.patterns,
  org.jgll.grammar.slot,
  org.jgll.grammar.slot.factory,
+ org.jgll.grammar.slot.firstfollow,
  org.jgll.grammar.slotaction,
  org.jgll.grammar.symbol,
  org.jgll.lexer,
