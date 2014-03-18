@@ -13,12 +13,14 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * 
@@ -90,12 +92,68 @@ public class FilterTest8 {
 		Input input = Input.fromString("a+a[a+a]");
 		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, grammar, input);
-//		assertTrue(sppf.deepEquals(getSPPF()));
+		assertTrue(sppf.deepEquals(getSPPF1()));
 	}
+	
+	@org.junit.Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
+	@Test
+	public void test2() throws ParseError {
+		Input input = Input.fromString("a+a*a+[a+a]");
+		parser = ParserFactory.newParser(grammar, input);
+		thrown.expect(ParseError.class);
+		parser.parse(input, grammar, "E");
+	}
+	
+	@Test
+	public void test3() throws ParseError {
+		Input input = Input.fromString("a[a][a+a]");
+		parser = ParserFactory.newParser(grammar, input);
+		thrown.expect(ParseError.class);
+		parser.parse(input, grammar, "E");
+	}	
 
-	private SPPFNode getSPPF() {
-		return null;
+
+	private SPPFNode getSPPF1() {
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 0, 8);
+		IntermediateNode node2 = new IntermediateNode(grammar.getIntermediateNodeId(E, plus), 0, 2);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 0, 1);
+		TokenSymbolNode node4 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
+		node3.addChild(node4);
+		TokenSymbolNode node5 = new TokenSymbolNode(grammar.getRegularExpressionId(plus), 1, 1);
+		node2.addChild(node3);
+		node2.addChild(node5);
+		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 2, 8);
+		IntermediateNode node7 = new IntermediateNode(grammar.getIntermediateNodeId(E, ob, E), 2, 7);
+		IntermediateNode node8 = new IntermediateNode(grammar.getIntermediateNodeId(E, ob), 2, 4);
+		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 2, 3);
+		TokenSymbolNode node10 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 2, 1);
+		node9.addChild(node10);
+		TokenSymbolNode node11 = new TokenSymbolNode(grammar.getRegularExpressionId(ob), 3, 1);
+		node8.addChild(node9);
+		node8.addChild(node11);
+		NonterminalSymbolNode node12 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 4, 7);
+		IntermediateNode node13 = new IntermediateNode(grammar.getIntermediateNodeId(E, plus), 4, 6);
+		NonterminalSymbolNode node14 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 4, 5);
+		TokenSymbolNode node15 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 4, 1);
+		node14.addChild(node15);
+		TokenSymbolNode node16 = new TokenSymbolNode(grammar.getRegularExpressionId(plus), 5, 1);
+		node13.addChild(node14);
+		node13.addChild(node16);
+		NonterminalSymbolNode node17 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 6, 7);
+		TokenSymbolNode node18 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 6, 1);
+		node17.addChild(node18);
+		node12.addChild(node13);
+		node12.addChild(node17);
+		node7.addChild(node8);
+		node7.addChild(node12);
+		TokenSymbolNode node19 = new TokenSymbolNode(grammar.getRegularExpressionId(cb), 7, 1);
+		node6.addChild(node7);
+		node6.addChild(node19);
+		node1.addChild(node2);
+		node1.addChild(node6);
+		return node1;
 	}
 
 }
