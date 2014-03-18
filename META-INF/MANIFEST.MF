@@ -10,7 +10,6 @@ Export-Package:
  org.jgll.grammar.ebnf,
  org.jgll.grammar.ll1,
  org.jgll.grammar.patterns,
- org.jgll.grammar.precedence,
  org.jgll.grammar.slot,
  org.jgll.grammar.slot.factory,
  org.jgll.grammar.slotaction,

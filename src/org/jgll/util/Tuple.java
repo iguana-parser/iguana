@@ -1,9 +1,13 @@
 package org.jgll.util;
 
+import java.io.Serializable;
+
 import org.jgll.parser.HashFunctions;
 
 
-public class Tuple<T, K> {
+public class Tuple<T, K> implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private T t;
 	private K k;

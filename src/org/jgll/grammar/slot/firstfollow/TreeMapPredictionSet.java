@@ -1,62 +1,32 @@
-package org.jgll.grammar.slot;
+package org.jgll.grammar.slot.firstfollow;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
-import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 
-public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
-
+public class TreeMapPredictionSet implements PredictionTest {
+	
 	private static final long serialVersionUID = 1L;
 	
 	private NavigableMap<Integer, Set<Integer>> predictionMap;
 
-	public HeadGrammarSlotTreeMapFirstFollow(int id, Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alternates, List<Set<RegularExpression>> predictionSets, boolean nullable) {
-		super(id, nonterminal, nonterminalId, alternates, nullable);
-		setPredictionSet(predictionSets);
-	}
-	
-	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
-		int ci = parser.getCurrentInputIndex();
-		
-		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(lexer.getInput().charAt(ci));
-		if(e != null) {
-			for(Integer alternateIndex : e.getValue()) {
-				parser.addDescriptor(firstSlots[alternateIndex]);
-			}			
-		}
-		
-		return null;
-	}
-	
-	@Override
-	public boolean test(int v) {
-		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
-		return e != null && e.getValue() != null;
-	}
-	
-	private void setPredictionSet(List<Set<RegularExpression>> predictionSets) {
-		
+	public TreeMapPredictionSet(List<Set<RegularExpression>> predictionSets, int countAlternates) {
 		predictionMap = new TreeMap<>();
 		
 		// From range to the set of alternate indices
 		Map<Range, Set<Integer>> map = new HashMap<>();
 		
-		for(int i = 0; i < firstSlots.length; i++) {
+		for(int i = 0; i < countAlternates; i++) {
 			Set<RegularExpression> predictionSet = predictionSets.get(i);
 			
 			if(predictionSet.isEmpty()) continue;
@@ -112,6 +82,18 @@ public class HeadGrammarSlotTreeMapFirstFollow extends HeadGrammarSlot {
 		}
 		
 		predictionMap.put(list.get(list.size() - 1), new HashSet<Integer>());
+	}
+	
+	@Override
+	public boolean test(int v) {
+		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
+		return e != null && e.getValue() != null;
+	}
+
+	@Override
+	public Set<Integer> get(int v) {
+		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
+		return e == null ? null : e.getValue();
 	}
 
 }
