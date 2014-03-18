@@ -64,7 +64,6 @@ public class KeywordExclusionTest {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		
 		thrown.expect(ParseError.class);
-		thrown.expectMessage("Parse error at line:1 column:4");
 		parser.parse(input, grammar, "Id");
 	}
 	
@@ -74,7 +73,6 @@ public class KeywordExclusionTest {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		
 		thrown.expect(ParseError.class);
-		thrown.expectMessage("Parse error at line:1 column:2");
 		parser.parse(input, grammar, "Id");
 	}
 	
@@ -84,7 +82,6 @@ public class KeywordExclusionTest {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 
 		thrown.expect(ParseError.class);
-		thrown.expectMessage("Parse error at line:1 column:2");
 		parser.parse(input, grammar, "Id");
 	}
 	
@@ -94,7 +91,6 @@ public class KeywordExclusionTest {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 
 		thrown.expect(ParseError.class);
-		thrown.expectMessage("Parse error at line:1 column:5");
 		parser.parse(input, grammar, "Id");
 	}
 

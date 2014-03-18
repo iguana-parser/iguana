@@ -68,15 +68,15 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		FollowTest followSetTest;
 		
 		if(maxPredictionSet - minPredictionSet < 10000) {
-			predictionTest = new TreeMapPredictionSet(predictionSet, alternates.size());
-		} else {
 			predictionTest = new ArrayPredictionTest(predictionSet, alternates.size(), minPredictionSet, maxPredictionSet);
+		} else {
+			predictionTest = new TreeMapPredictionSet(predictionSet, alternates.size());
 		}
 		
 		if(maxFollowSet - minFollowSet < 10000) {
-			followSetTest = new TreeMapFollowSet(followSet);
-		} else {
 			followSetTest = new ArrayFollowTest(followSet, minFollowSet, maxFollowSet);
+		} else {
+			followSetTest = new TreeMapFollowSet(followSet);
 		}
 		
 		return new HeadGrammarSlotFirstFollow(headGrammarSlotId++, 
