@@ -40,11 +40,11 @@ public class RangeGrammarSlot extends TokenGrammarSlot {
 		}
 		
 		if(next instanceof LastGrammarSlot) {
-			parser.getNonterminalNode((LastGrammarSlot) next, cr);
+			parser.getNonterminalNode((LastGrammarSlot) next, parser.getCurrentSPPFNode(), cr);
 			parser.pop();
 			return null;
 		} else {
-			parser.getIntermediateNode(next, cr);
+			parser.getIntermediateNode(next, parser.getCurrentSPPFNode(), cr);
 		}
 		
 		return next;

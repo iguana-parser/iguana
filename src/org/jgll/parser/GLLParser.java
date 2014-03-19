@@ -9,6 +9,7 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -38,11 +39,29 @@ public interface GLLParser {
 	
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
 	
-	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child);
-	
+	/**
+	 * 
+	 * Returns an existing nonterminal node with the given slot, left and right children,
+	 * or creates one if no such node exists.
+	 * 
+	 * @param slot
+	 * @param leftChild
+	 * @param rightChild
+	 * 
+	 */
 	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
 	
-	public void getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild);
+	/**
+	 * Returns an existing nonterminal node with the given slot and its only child, or creates one
+	 * if no such node exists.
+	 * 
+	 * @param slot
+	 * @param child
+	 * @return
+	 */
+	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child);
+	
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
 	
 	/**
 	 * Adds a descriptor with the current input index, current GSS node and a 

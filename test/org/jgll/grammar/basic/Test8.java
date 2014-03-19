@@ -1,6 +1,7 @@
 package org.jgll.grammar.basic;
 
 import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,7 @@ public class Test8 {
 		Input input = Input.fromString("");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+//		assertTrue(sppf.deepEquals(getSPPF1()));
 	}
 	
 	@Test

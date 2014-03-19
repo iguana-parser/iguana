@@ -402,8 +402,18 @@ public class GLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public void getIntermediateNode(BodyGrammarSlot slot, SPPFNode rightChild) {
-		cn = getIntermediateNode(slot, cn, rightChild);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+				
+		int leftExtent = leftChild.getLeftExtent();
+		int rightExtent = rightChild.getRightExtent();
+		
+		IntermediateNode newNode = sppfLookup.getIntermediateNode(slot, leftExtent, rightExtent);
+		
+		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+		
+		cn = newNode;
+		
+		return newNode;
 	}
 	
 	@Override
@@ -426,33 +436,6 @@ public class GLLParserImpl implements GLLParser {
 		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		
 		cn = newNode;
-		
-		return newNode;
-	}
-	
-	private final SPPFNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
-		
-		BodyGrammarSlot previous = slot.previous();
-		
-		// if (alpha is a terminal or a not nullable nonterminal and beta != empty)
-		// I'm going to loosen this property as we use refernces to identify 
-		// SPPF edges to children and two edges to the same child are possible. 
-		if(previous.isFirst()) {
-			return rightChild;
-		}
-				
-		int leftExtent;
-		int rightExtent = rightChild.getRightExtent();
-		
-		if (leftChild != DummyNode.getInstance()) {
-			leftExtent = leftChild.getLeftExtent();
-		} else {
-			leftExtent = rightChild.getLeftExtent();
-		}
-		
-		IntermediateNode newNode = sppfLookup.getIntermediateNode(slot, leftExtent, rightExtent);
-		
-		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		
 		return newNode;
 	}

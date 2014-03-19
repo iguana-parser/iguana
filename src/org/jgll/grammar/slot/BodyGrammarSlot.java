@@ -3,13 +3,8 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.lexer.GLLLexer;
-import org.jgll.parser.GLLParser;
 
 /**
  * 
@@ -28,10 +23,6 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	protected HeadGrammarSlot head;
 	
-	protected List<SlotAction<Boolean>> preConditions;
-	
-	protected List<SlotAction<Boolean>> popActions;
-	
 	protected final String label;
 
 	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
@@ -48,53 +39,9 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 			previous.next = this;
 		}
 		this.previous = previous;
-		this.preConditions = new ArrayList<>();
-		this.popActions = new ArrayList<>();
 	}
 	
 	public abstract Symbol getSymbol();
-	
-	public void addPopAction(SlotAction<Boolean> popAction) {
-		popActions.add(popAction);
-	}
-	
-	public Iterable<SlotAction<Boolean>> getPopActions() {
-		return popActions;
-	}
-		
-	public void addPreCondition(SlotAction<Boolean> preCondition) {
-		preConditions.add(preCondition);
-	}
-	
-	public List<SlotAction<Boolean>> getPreConditions() {
-		return preConditions;
-	}
-	
-	protected boolean executePreConditions(GLLParser parser, GLLLexer lexer) {
-		for(SlotAction<Boolean> preCondition : preConditions) {
-			if(preCondition.execute(parser, lexer, parser.getCurrentInputIndex())) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-	
-	/**
-	 * Because some grammar slots e.g., keywords are directly created without 
-	 * a pop action, at this point the popActions for the next slots
-     * should be checked.
-	 * Applicable for the case: Expr ::= "-" !>> [0-9] Expr
-	 *								   | NegativeNumber
-	 */
-	protected boolean executePopActions(GLLParser parser, GLLLexer lexer) {
-		for(SlotAction<Boolean> slotAction : next.popActions) {
-			if(slotAction.execute(parser, lexer, parser.getCurrentInputIndex())) {
-				return true;
-			}
-		}
-		return false;
-	}
 		
 	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
 	

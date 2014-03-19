@@ -40,7 +40,7 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 		}
 		
 		if(next instanceof LastGrammarSlot) {
-			parser.getNonterminalNode((LastGrammarSlot) next, node);
+			parser.getNonterminalNode((LastGrammarSlot) next, parser.getCurrentSPPFNode(), node);
 			
 			if(executePopActions(parser, lexer)) {
 				return null;
@@ -48,7 +48,7 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 			parser.pop();
 			
 		} else {
-			parser.getIntermediateNode(next, node);
+			parser.getIntermediateNode(next, parser.getCurrentSPPFNode(), node);
 			return next;
 		}
 		
