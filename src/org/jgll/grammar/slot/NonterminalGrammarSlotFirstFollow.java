@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot;
 
+import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 
@@ -14,8 +15,8 @@ public class NonterminalGrammarSlotFirstFollow extends NonterminalGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	public NonterminalGrammarSlotFirstFollow(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal) {
-		super(id, nodeId, label, previous, nonterminal);
+	public NonterminalGrammarSlotFirstFollow(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, ConditionTest preConditions) {
+		super(id, nodeId, label, previous, nonterminal, preConditions);
 	}
 	
 	@Override

@@ -344,7 +344,7 @@ public class GrammarBuilder implements Serializable {
 					symbolIndex++;
 				}
 	
-				ConditionTest postCondition = getPostConditions(body.get(symbolIndex).getConditions());
+				ConditionTest postCondition = getPostConditions(body.get(body.size() - 1).getConditions());
 				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot, postCondition);
 	
 				lastGrammarSlot.setAlternateIndex(alternateIndex);
@@ -410,8 +410,9 @@ public class GrammarBuilder implements Serializable {
 		
 		// Nonterminal
 		else {
+			ConditionTest preConditions = getPreConditions(symbol.getConditions());
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditions);						
 		}		
 	}
 	

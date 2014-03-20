@@ -11,7 +11,6 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.specialized.FirstTokenSlot;
-import org.jgll.grammar.slot.specialized.OnlyOneTokenSlot;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -47,25 +46,23 @@ public class NoFirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		
 		RegularExpression regularExpression = (RegularExpression) body.get(symbolIndex);
 		
-		if(body.size() == 1 && symbolIndex == 0) {
-			return new OnlyOneTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID);
-		} 
-		else if ( symbolIndex == 0) {
-			return new FirstTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID);
+		if (symbolIndex == 0) {
+			return new FirstTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 		} 
 		else {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID);
+			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 		}
 	}
 
 	@Override
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(int slotId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal) {
-		return new NonterminalGrammarSlot(bodyGrammarSlotId++, slotId, label, previous, nonterminal);
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(int slotId, String label, BodyGrammarSlot previous,
+															   HeadGrammarSlot nonterminal, ConditionTest postConditions) {
+		return new NonterminalGrammarSlot(bodyGrammarSlotId++, slotId, label, previous, nonterminal, postConditions);
 	}
 	
 	@Override
-	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postCondition) {
-		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head);
+	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postConditions) {
+		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, postConditions);
 	}
 
 	@Override

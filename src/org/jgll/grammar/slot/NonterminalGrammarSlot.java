@@ -7,6 +7,9 @@ import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.lookup.SPPFLookup;
+import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.SPPFNode;
 
 
 /**
@@ -23,8 +26,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	protected final int nodeId;
 	
-	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal) {
-		super(id, label, previous);
+	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, ConditionTest preConditions) {
+		super(id, label, previous, preConditions, null);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -134,6 +137,19 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public ConditionTest getPostConditions() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
+		int leftExtent = leftChild.getLeftExtent();
+		int rightExtent = rightChild.getRightExtent();
+		
+		SPPFLookup sppfLookup = parser.getSPPFLookup();
+		IntermediateNode newNode = sppfLookup.getIntermediateNode(this, leftExtent, rightExtent);
+		
+		sppfLookup.addPackedNode(newNode, this, rightChild.getLeftExtent(), leftChild, rightChild);
+		
+		return newNode;
 	}
 	
 }

@@ -293,18 +293,12 @@ public class GLLParserImpl implements GLLParser {
 			
 			label:
 			for(GSSEdge edge : gssLookup.getEdges(cu)) {
-				GrammarSlot slot = edge.getReturnSlot();
+				BodyGrammarSlot slot = edge.getReturnSlot();
 				
 				if(edge.getReturnSlot().getPostConditions().execute(this, lexer, ci)) {
 					continue label;
 				}
-				
-				SPPFNode y;
-				if(slot instanceof LastGrammarSlot) {
-					y = getNonterminalNode((LastGrammarSlot) slot, edge.getNode(), cn);
-				} else {
-					y = getIntermediateNode((BodyGrammarSlot) slot, edge.getNode(), cn);
-				}
+				SPPFNode y = slot.createNode(this, edge.getNode(), cn);
 				addDescriptor(edge.getReturnSlot(), edge.getDestination(), ci, y);
 			}
 		}
@@ -361,12 +355,8 @@ public class GLLParserImpl implements GLLParser {
 			
 			label:
 			for (SPPFNode z : v.getPoppedElements()) {
-				SPPFNode x;
-				if(returnSlot instanceof LastGrammarSlot) {
-					x = getNonterminalNode((LastGrammarSlot) returnSlot, w, z);
-				} else {
-					x = getIntermediateNode((BodyGrammarSlot) returnSlot, w, z);
-				}
+				
+				SPPFNode x = returnSlot.createNode(this, w, z);
 				
 				// Execute pop actions for continuations, when the GSS node already
 				// exits
@@ -379,61 +369,6 @@ public class GLLParserImpl implements GLLParser {
 		}
 	}
 
-	@Override
-	public final NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child) {
-		HeadGrammarSlot head = slot.getHead();
-
-		int leftExtent = child.getLeftExtent();
-		int rightExtent = child.getRightExtent();
-		
-		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(head, leftExtent, rightExtent);
-		
-		sppfLookup.addPackedNode(newNode, slot, leftExtent, child);
-		
-		cn = newNode;
-		
-		return newNode;
-	}
-	
-	@Override
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
-				
-		int leftExtent = leftChild.getLeftExtent();
-		int rightExtent = rightChild.getRightExtent();
-		
-		IntermediateNode newNode = sppfLookup.getIntermediateNode(slot, leftExtent, rightExtent);
-		
-		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
-		
-		cn = newNode;
-		
-		return newNode;
-	}
-	
-	@Override
-	public final NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
-		
-		HeadGrammarSlot head = slot.getHead();
-
-		int leftExtent;
-		
-		if (leftChild != DummyNode.getInstance()) {
-			leftExtent = leftChild.getLeftExtent();
-		} else {
-			leftExtent = rightChild.getLeftExtent();
-		}
-		
-		int rightExtent = rightChild.getRightExtent();
-		
-		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(head, leftExtent, rightExtent);
-		
-		sppfLookup.addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
-		
-		cn = newNode;
-		
-		return newNode;
-	}
-	
 	@Override
 	public boolean hasNextDescriptor() {
 		return descriptorLookup.hasNextDescriptor();

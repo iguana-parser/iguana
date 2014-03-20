@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot;
 
+import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.SPPFNode;
@@ -15,8 +16,8 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	public LL1NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, LL1HeadGrammarSlot nonterminal) {
-		super(id, nodeId, label, previous, nonterminal);
+	public LL1NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, LL1HeadGrammarSlot nonterminal, ConditionTest preConditions) {
+		super(id, nodeId, label, previous, nonterminal, preConditions);
 	}
 	
 	@Override
@@ -39,18 +40,18 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 			return null;
 		}
 		
-		if(next instanceof LastGrammarSlot) {
-			parser.getNonterminalNode((LastGrammarSlot) next, parser.getCurrentSPPFNode(), node);
+//		if(next instanceof LastGrammarSlot) {
+//			parser.getNonterminalNode((LastGrammarSlot) next, parser.getCurrentSPPFNode(), node);
 			
 //			if(executePopActions(parser, lexer)) {
 //				return null;
 //			}
-			parser.pop();
-			
-		} else {
-			parser.getIntermediateNode(next, parser.getCurrentSPPFNode(), node);
-			return next;
-		}
+//			parser.pop();
+//			
+//		} else {
+//			parser.getIntermediateNode(next, parser.getCurrentSPPFNode(), node);
+//			return next;
+//		}
 		
 		return null;
 	}

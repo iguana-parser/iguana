@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot;
 
+import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 
@@ -14,8 +15,8 @@ public class LastGrammarSlotFirstFollow extends LastGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	public LastGrammarSlotFirstFollow(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		super(id, label, previous, head);
+	public LastGrammarSlotFirstFollow(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postConditions) {
+		super(id, label, previous, head, postConditions);
 	}
 	
 	@Override

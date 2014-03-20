@@ -4,12 +4,10 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
-import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -38,30 +36,6 @@ public interface GLLParser {
 	public boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
-	
-	/**
-	 * 
-	 * Returns an existing nonterminal node with the given slot, left and right children,
-	 * or creates one if no such node exists.
-	 * 
-	 * @param slot
-	 * @param leftChild
-	 * @param rightChild
-	 * 
-	 */
-	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
-	
-	/**
-	 * Returns an existing nonterminal node with the given slot and its only child, or creates one
-	 * if no such node exists.
-	 * 
-	 * @param slot
-	 * @param child
-	 * @return
-	 */
-	public NonterminalSymbolNode getNonterminalNode(LastGrammarSlot slot, SPPFNode child);
-	
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild);
 	
 	/**
 	 * Adds a descriptor with the current input index, current GSS node and a 

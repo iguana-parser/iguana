@@ -27,9 +27,10 @@ public interface GrammarSlotFactory {
 	public NonterminalGrammarSlot createNonterminalGrammarSlot(int nodeId,
 															   String label,
 															   BodyGrammarSlot previous, 
-															   HeadGrammarSlot nonterminal);
+															   HeadGrammarSlot nonterminal,
+															   ConditionTest preConditions);
 
-	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postCondition);
+	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postConditions);
 	
 	
 	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head);

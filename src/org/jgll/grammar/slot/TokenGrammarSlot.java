@@ -3,9 +3,13 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.regex.RegularExpression;
+import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 
 /**
@@ -24,8 +28,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private final RegularExpression regularExpression;
 	
-	public TokenGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID) {
-		super(id, label, previous);
+	public TokenGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID,
+							ConditionTest preConditions, ConditionTest postConditions) {
+		super(id, label, previous, preConditions, postConditions);
 		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
 		this.nodeId = nodeId;
@@ -53,9 +58,25 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		
 		TokenSymbolNode cr = parser.getTokenNode(tokenID, ci, length);
 		
-		parser.getIntermediateNode(next, parser.getCurrentSPPFNode(), cr);
+		SPPFNode node = createNode(parser, parser.getCurrentSPPFNode(), cr);
+		
+		parser.setCurrentSPPFNode(node);
 		
 		return next;
+	}
+	
+	@Override
+	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
+		int leftExtent = leftChild.getLeftExtent();
+		int rightExtent = rightChild.getRightExtent();
+		
+		SPPFLookup sppfLookup = parser.getSPPFLookup();
+		
+		IntermediateNode newNode = sppfLookup.getIntermediateNode(this, leftExtent, rightExtent);
+		
+		sppfLookup.addPackedNode(newNode, this, rightChild.getLeftExtent(), leftChild, rightChild);
+		
+		return newNode;
 	}
 	
 	@Override

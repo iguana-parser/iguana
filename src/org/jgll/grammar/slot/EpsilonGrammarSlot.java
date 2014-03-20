@@ -22,7 +22,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	private static final long serialVersionUID = 1L;
 	
 	public EpsilonGrammarSlot(int id, String label, HeadGrammarSlot head) {
-		super(id, label, null, head);
+		super(id, label, null, head, null);
 	}
 	
 	@Override

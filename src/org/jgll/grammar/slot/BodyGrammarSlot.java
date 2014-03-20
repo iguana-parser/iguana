@@ -6,6 +6,8 @@ import java.io.Writer;
 
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.parser.GLLParser;
+import org.jgll.sppf.SPPFNode;
 
 /**
  * 
@@ -24,11 +26,11 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	protected final String label;
 	
-	protected ConditionTest preConditions;
+	protected final ConditionTest preConditions;
 
-	protected ConditionTest postConditions;
+	protected final ConditionTest postConditions;
 
-	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous) {
+	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, ConditionTest preConditions, ConditionTest postConditions) {
 		
 		this.id = id;
 		
@@ -43,6 +45,8 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 		}
 		
 		this.previous = previous;
+		this.preConditions = preConditions;
+		this.postConditions = postConditions;
 	}
 	
 	public abstract Symbol getSymbol();
@@ -74,6 +78,8 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	}
 	
 	public abstract boolean isNullable();
+	
+	public abstract SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild);
 	
 	public ConditionTest getPreConditions() {
 		return preConditions;
