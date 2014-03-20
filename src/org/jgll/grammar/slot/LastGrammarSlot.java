@@ -3,7 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.slot.test.ConditionsTest;
+import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -73,12 +73,12 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public ConditionsTest getPreConditions() {
+	public ConditionTest getPreConditions() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public ConditionsTest getPostConditions() {
+	public ConditionTest getPostConditions() {
 		throw new UnsupportedOperationException();
 	}
 

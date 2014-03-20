@@ -3,7 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.jgll.grammar.slot.test.ConditionsTest;
+import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -41,12 +41,19 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer input) {
+	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+		
+		int ci = parser.getCurrentInputIndex();
+		
+		if(preConditions.execute(parser, lexer, ci)) {
+			return null;
+		}
 		
 		if(!parser.hasGSSNode(next, nonterminal)) {
 			parser.createGSSNode(next, nonterminal);			
 			return nonterminal;
 		}
+		
 		return null;
 	}
 	
@@ -120,12 +127,12 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public ConditionsTest getPreConditions() {
+	public ConditionTest getPreConditions() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public ConditionsTest getPostConditions() {
+	public ConditionTest getPostConditions() {
 		throw new UnsupportedOperationException();
 	}
 	

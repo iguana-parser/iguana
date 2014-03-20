@@ -10,7 +10,6 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.gss.GSSEdge;
@@ -292,26 +291,24 @@ public class GLLParserImpl implements GLLParser {
 			
 			gssLookup.addToPoppedElements(cu, (NonPackedNode) cn);
 			
+			label:
 			for(GSSEdge edge : gssLookup.getEdges(cu)) {
-				pop(edge.getReturnSlot(), edge.getNode(), edge.getDestination());
+				GrammarSlot slot = edge.getReturnSlot();
+				
+				if(edge.getReturnSlot().getPostConditions().execute(this, lexer, ci)) {
+					continue label;
+				}
+				
+				SPPFNode y;
+				if(slot instanceof LastGrammarSlot) {
+					y = getNonterminalNode((LastGrammarSlot) slot, edge.getNode(), cn);
+				} else {
+					y = getIntermediateNode((BodyGrammarSlot) slot, edge.getNode(), cn);
+				}
+				addDescriptor(edge.getReturnSlot(), edge.getDestination(), ci, y);
 			}
 		}
 	}
-	
-	public final void pop(BodyGrammarSlot slot, SPPFNode node, GSSNode destination) {
-		
-		gssLookup.addToPoppedElements(cu, (NonPackedNode) cn);
-		
-		SPPFNode y;
-		if(slot instanceof LastGrammarSlot) {
-			y = getNonterminalNode((LastGrammarSlot) slot, node, cn);
-		} else {
-			y = getIntermediateNode((BodyGrammarSlot) slot, node, cn);
-		}
-		addDescriptor(slot, destination, ci, y);
-		
-	}
-
 	
 	/**
 	 * 
@@ -373,10 +370,8 @@ public class GLLParserImpl implements GLLParser {
 				
 				// Execute pop actions for continuations, when the GSS node already
 				// exits
-				for(SlotAction<Boolean> popAction : returnSlot.getPopActions()) {
-					if(popAction.execute(this, lexer, z.getRightExtent())) {
-						continue label;
-					}
+				if(returnSlot.getPostConditions().execute(this, lexer, ci)) {
+					continue label;
 				}
 				
 				addDescriptor(returnSlot, u, z.getRightExtent(), x);

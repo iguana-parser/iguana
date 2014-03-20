@@ -20,14 +20,14 @@ public class TreeMapPredictionTest implements PredictionTest {
 	
 	private NavigableMap<Integer, Set<Integer>> predictionMap;
 
-	public TreeMapPredictionTest(List<Set<RegularExpression>> predictionSets, int countAlternates) {
+	public TreeMapPredictionTest(List<? extends Set<? extends RegularExpression>> predictionSets, int countAlternates) {
 		predictionMap = new TreeMap<>();
 		
 		// From range to the set of alternate indices
 		Map<Range, Set<Integer>> map = new HashMap<>();
 		
 		for(int i = 0; i < countAlternates; i++) {
-			Set<RegularExpression> predictionSet = predictionSets.get(i);
+			Set<? extends RegularExpression> predictionSet = predictionSets.get(i);
 			
 			if(predictionSet.isEmpty()) continue;
 			

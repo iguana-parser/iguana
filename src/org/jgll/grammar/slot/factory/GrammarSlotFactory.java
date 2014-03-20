@@ -10,9 +10,8 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
-import org.jgll.grammar.slot.test.ConditionsTest;
+import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 
@@ -30,18 +29,18 @@ public interface GrammarSlotFactory {
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal);
 
-	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head);
+	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postCondition);
 	
 	
 	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head);
 	
 	
-	public TokenGrammarSlot createTokenGrammarSlot(Rule rule,
+	public TokenGrammarSlot createTokenGrammarSlot(List<Symbol> body,
 												   int symbolIndex, 
 												   int nodeId,
 												   String label,
 												   BodyGrammarSlot previous, 
 												   int tokenID, 
-												   ConditionsTest preConditions,
-												   ConditionsTest postConditions);
+												   ConditionTest preConditions,
+												   ConditionTest postConditions);
 }

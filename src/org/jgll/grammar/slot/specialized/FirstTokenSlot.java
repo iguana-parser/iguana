@@ -2,7 +2,6 @@ package org.jgll.grammar.slot.specialized;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.GLLLexer;
@@ -10,24 +9,17 @@ import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.TokenSymbolNode;
 
-/**
- * Corresponds to the case A ::= .x, where x is the only terminal
- * in the right hand side of the rule.
- * 
- * @author Ali Afroozeh
- *
- */
-public class OnlyOneTokenSlot extends TokenGrammarSlot {
-	
+public class FirstTokenSlot extends TokenGrammarSlot {
+
 	private static final long serialVersionUID = 1L;
-	
-	public OnlyOneTokenSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID) {
+
+	public FirstTokenSlot(int id, int nodeId, String label,
+			BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID) {
 		super(id, nodeId, label, previous, regularExpression, tokenID);
 	}
-	
+
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
-
 		int ci = parser.getCurrentInputIndex();
 		
 		if(preConditions.execute(parser, lexer, ci)) {
@@ -41,15 +33,14 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 			return null;
 		}
 		
-		if(postConditions.execute(parser, lexer, ci)) {
+		if(postConditions.execute(parser, lexer, ci + length)) {
 			return null;
 		}
 		
 		TokenSymbolNode cn = parser.getTokenNode(tokenID, ci, length);
-		
-		parser.getNonterminalNode((LastGrammarSlot) next, cn);
-		parser.pop();
-		return null;
+		parser.setCurrentSPPFNode(cn);
+
+		return next;
 	}
 
 	@Override
@@ -60,6 +51,6 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 	@Override
 	public ConditionTest getPostConditions() {
 		throw new UnsupportedOperationException();
-	}	
+	}
 
 }

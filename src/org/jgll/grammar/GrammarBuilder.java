@@ -21,13 +21,16 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
-import org.jgll.grammar.slot.test.ConditionsTest;
+import org.jgll.grammar.slot.test.ConditionTest;
+import org.jgll.grammar.slot.test.DefaultConditionTest;
+import org.jgll.grammar.slot.test.TrueConditionTest;
 import org.jgll.grammar.slotaction.FollowActions;
 import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
 import org.jgll.grammar.slotaction.NotMatchActions;
 import org.jgll.grammar.slotaction.NotPrecedeActions;
 import org.jgll.grammar.slotaction.PrecedeActions;
+import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -329,11 +332,11 @@ public class GrammarBuilder implements Serializable {
 				headGrammarSlot.setFirstGrammarSlotForAlternate(epsilonSlot, alternateIndex);
 			} 
 			else {
-				int symbolIndex = 0;
 				BodyGrammarSlot firstSlot = null;
-				for (Symbol symbol : body) {
+				int symbolIndex = 0;
+				for (; symbolIndex < body.size(); symbolIndex++) {
 					
-					currentSlot = getBodyGrammarSlot(rule, symbolIndex, head, body, symbol, symbolIndex, currentSlot, headGrammarSlot);
+					currentSlot = getBodyGrammarSlot(head, body, symbolIndex, currentSlot);
 	
 					if (symbolIndex == 0) {
 						firstSlot = currentSlot;
@@ -341,16 +344,11 @@ public class GrammarBuilder implements Serializable {
 					symbolIndex++;
 				}
 	
-				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot);
+				ConditionTest postCondition = getPostConditions(body.get(symbolIndex).getConditions());
+				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot, postCondition);
 	
 				lastGrammarSlot.setAlternateIndex(alternateIndex);
 				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
-				
-				for(Entry<BodyGrammarSlot, Iterable<Condition>> e : conditions.entrySet()) {
-					for(Condition condition : e.getValue()) {
-						addCondition(e.getKey(), condition);
-					}
-				}
 			}
 			alternateIndex++;
 		}
@@ -398,17 +396,16 @@ public class GrammarBuilder implements Serializable {
 		return intermediateNodeIds.get(OperatorPrecedence.plain(alt.subList(0, index)));
 	}
 	
-	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot) {
-		
-		Nonterminal head = rule.getHead();
-		
-		List<Symbol> body = rule.getBody();
+	private BodyGrammarSlot getBodyGrammarSlot(Nonterminal head, List<Symbol> body, int symbolIndex, BodyGrammarSlot currentSlot) {
+		Symbol symbol = body.get(symbolIndex);
 		
 		if(symbol instanceof RegularExpression) {
 			RegularExpression token = (RegularExpression) symbol;
-			Tuple<ConditionsTest, ConditionsTest> conditions = getConditions(symbol.getConditions());
-			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, getSlotId(body, symbolIndex), 
-					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), conditions.getFirst(), conditions.getSecond());
+			ConditionTest preConditions = getPreConditions(symbol.getConditions());
+			ConditionTest postConditions = getPostConditions(symbol.getConditions());
+			
+			return grammarSlotFactory.createTokenGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), 
+					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), preConditions, postConditions);
 		}
 		
 		// Nonterminal
@@ -417,18 +414,16 @@ public class GrammarBuilder implements Serializable {
 			return grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal);						
 		}		
 	}
-
-	private Tuple<ConditionsTest, ConditionsTest> getConditions(final Set<Condition> conditions) {
-
-		ConditionsTest preConditions = new ConditionsTest();
-		ConditionsTest postConditions = new ConditionsTest();
+	
+	private ConditionTest getPostConditions(final Set<Condition> conditions) {
+		List<SlotAction<Boolean>> postConditionActions = new ArrayList<>();
 		
 		for (Condition condition : conditions) {
 			switch (condition.getType()) {
 				
 				case FOLLOW:
 					if (condition instanceof RegularExpressionCondition) {
-						postConditions.addCondition(FollowActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						postConditionActions.add(FollowActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
 					} 
 					else {
 //						postConditions.addCondition(convertCondition((ContextFreeCondition) condition), condition);
@@ -437,17 +432,51 @@ public class GrammarBuilder implements Serializable {
 					
 				case NOT_FOLLOW:
 					if (condition instanceof RegularExpressionCondition) {
-						postConditions.addCondition(NotFollowActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						postConditionActions.add(NotFollowActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
 					} 
 					else {
 					}
 					break;
 					
+				case MATCH:
+					break;
+						
+				case NOT_MATCH:
+					postConditionActions.add(NotMatchActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+					break;
+
+				case END_OF_LINE:
+					postConditionActions.add(LineActions.addEndOfLine(condition));
+				  break;
+				  
+				default:
+					throw new RuntimeException("Should not reach here.");
+			}
+		}
+		
+		ConditionTest postCondition;
+		
+		if(postConditionActions.size() > 0) {
+			postCondition = new DefaultConditionTest(postConditionActions);
+		} else {
+			postCondition = new TrueConditionTest();
+		}
+
+		return postCondition;
+	}
+
+	private ConditionTest getPreConditions(final Set<Condition> conditions) {
+
+		List<SlotAction<Boolean>> preConditionActions = new ArrayList<>();
+		
+		for (Condition condition : conditions) {
+			switch (condition.getType()) {
+
 				case PRECEDE:
 					assert !(condition instanceof ContextFreeCondition);
 					
 					if(condition instanceof RegularExpressionCondition) {
-						preConditions.addCondition(PrecedeActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						preConditionActions.add(PrecedeActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
 					} 
 
 					break;
@@ -456,29 +485,28 @@ public class GrammarBuilder implements Serializable {
 					assert !(condition instanceof ContextFreeCondition);
 					
 					if(condition instanceof RegularExpressionCondition) {
-						preConditions.addCondition(NotPrecedeActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						preConditionActions.add(NotPrecedeActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
 					} 
 					break;
 					
-				case MATCH:
-					break;
-						
-				case NOT_MATCH:
-					postConditions.addCondition(NotMatchActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
-					break;
-					
 				case START_OF_LINE:
-				  preConditions.addCondition(LineActions.addStartOfLine(condition));
+					preConditionActions.add(LineActions.addStartOfLine(condition));
 				  break;
 				  
-				case END_OF_LINE:
-					postConditions.addCondition(LineActions.addEndOfLine(condition));
-				  break;
+				default:
+					throw new RuntimeException("Should not reach here.");
 			}
 		}
-		
-		return Tuple.of(preConditions, postConditions);
 
+		ConditionTest preCondition;
+		
+		if(preConditionActions.size() > 0) {
+			preCondition = new DefaultConditionTest(preConditionActions);
+		} else {
+			preCondition = new TrueConditionTest();
+		}
+		
+		return preCondition;
 	}
 
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {

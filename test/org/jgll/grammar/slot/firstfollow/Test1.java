@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.slot.test.TreeMapFollowTest;
 import org.jgll.grammar.symbol.Range;
-import org.jgll.regex.RegularExpression;
 import org.junit.Test;
 
 public class Test1 {
@@ -13,8 +12,8 @@ public class Test1 {
 	@Test
 	public void test1() {
 		
-		RegularExpression r1 = Range.in(1, 3);
-		RegularExpression r2 = Range.in(5, 7);
+		Range r1 = Range.in(1, 3);
+		Range r2 = Range.in(5, 7);
 		
 		TreeMapFollowTest test = new TreeMapFollowTest(set(r1, r2));
 		
@@ -31,9 +30,9 @@ public class Test1 {
 	@Test
 	public void test2() {
 		
-		RegularExpression r1 = Range.in(1, 7);
-		RegularExpression r2 = Range.in(3, 6);
-		RegularExpression r3 = Range.in(4, 11);
+		Range r1 = Range.in(1, 7);
+		Range r2 = Range.in(3, 6);
+		Range r3 = Range.in(4, 11);
 		
 		TreeMapFollowTest test = new TreeMapFollowTest(set(r1, r2, r3));
 		
@@ -54,10 +53,10 @@ public class Test1 {
 	@Test
 	public void test3() {
 		
-		RegularExpression r1 = Range.in(1, 2);
-		RegularExpression r2 = Range.in(4, 7);
-		RegularExpression r3 = Range.in(5, 11);
-		RegularExpression r4 = Range.in(13, 18);
+		Range r1 = Range.in(1, 2);
+		Range r2 = Range.in(4, 7);
+		Range r3 = Range.in(5, 11);
+		Range r4 = Range.in(13, 18);
 		
 		TreeMapFollowTest test = new TreeMapFollowTest(set(r1, r2, r3, r4));
 	

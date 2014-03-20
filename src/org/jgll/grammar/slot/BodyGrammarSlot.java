@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
-import org.jgll.grammar.slot.test.ConditionsTest;
+import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 
 /**
@@ -23,6 +23,10 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	protected BodyGrammarSlot next;
 	
 	protected final String label;
+	
+	protected ConditionTest preConditions;
+
+	protected ConditionTest postConditions;
 
 	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous) {
 		
@@ -71,9 +75,13 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	public abstract boolean isNullable();
 	
-	public abstract ConditionsTest getPreConditions();
+	public ConditionTest getPreConditions() {
+		return preConditions;
+	}
 	
-	public abstract ConditionsTest getPostConditions();
+	public ConditionTest getPostConditions() {
+		return postConditions;
+	}
 	
 	@Override
 	public int getId() {

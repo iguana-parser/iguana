@@ -14,6 +14,7 @@ import java.util.Set;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
 public class GrammarToDot {
@@ -59,7 +60,7 @@ public class GrammarToDot {
 					currentSlot = currentSlot.next();
 					
 				}
-				sb.append(END_EDGE + "\"" + getId(previousSlot) + "\"" + "->" + "{\"" + getId(((BodyGrammarSlot) previousSlot).getHead()) + "\"}" + "\n");
+				sb.append(END_EDGE + "\"" + getId(previousSlot) + "\"" + "->" + "{\"" + getId(((LastGrammarSlot) previousSlot).getHead()) + "\"}" + "\n");
 				sb.append("\n");
 			}
 

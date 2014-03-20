@@ -19,7 +19,7 @@ public class TreeMapFollowTest implements FollowTest {
 	private final NavigableMap<Integer, Boolean> followMap;
 	
 	
-	public TreeMapFollowTest(Set<RegularExpression> followSet) {
+	public TreeMapFollowTest(Set<? extends RegularExpression> followSet) {
 		followMap = new TreeMap<>();
 		
 		// From range to the set of alternate indices
