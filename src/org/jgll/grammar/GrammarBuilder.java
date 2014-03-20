@@ -21,6 +21,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
+import org.jgll.grammar.slot.test.ConditionsTest;
 import org.jgll.grammar.slotaction.FollowActions;
 import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
@@ -67,8 +68,6 @@ public class GrammarBuilder implements Serializable {
 	private List<Rule> rules;
 	
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> directReachabilityGraph;
-	
-	private List<BodyGrammarSlot> conditionSlots;
 	
 	Map<RegularExpression, Integer> tokenIDMap;
 	
@@ -117,7 +116,6 @@ public class GrammarBuilder implements Serializable {
 		this.grammarSlotFactory = grammarSlotFactory;
 		headGrammarSlots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
-		conditionSlots = new ArrayList<>();
 		
 		nonterminalIds = new HashMap<>();
 		intermediateNodeIds = new HashMap<>();
@@ -312,10 +310,6 @@ public class GrammarBuilder implements Serializable {
  
 	private void convert(Nonterminal head, List<List<Symbol>> alternates) {
 		
-		// Hack for keeping the alternate index of rewritten nonterminals intact.
-		
-		Map<BodyGrammarSlot, Iterable<Condition>> conditions = new HashMap<>();
-
 		HeadGrammarSlot headGrammarSlot = getHeadGrammarSlot(head);
 		
 		int alternateIndex = 0;
@@ -339,14 +333,12 @@ public class GrammarBuilder implements Serializable {
 				BodyGrammarSlot firstSlot = null;
 				for (Symbol symbol : body) {
 					
-					currentSlot = getBodyGrammarSlot(head, body, symbol, symbolIndex, currentSlot, headGrammarSlot);
+					currentSlot = getBodyGrammarSlot(rule, symbolIndex, head, body, symbol, symbolIndex, currentSlot, headGrammarSlot);
 	
 					if (symbolIndex == 0) {
 						firstSlot = currentSlot;
 					}
 					symbolIndex++;
-					
-					conditions.put(currentSlot, symbol.getConditions());
 				}
 	
 				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot);
@@ -406,117 +398,87 @@ public class GrammarBuilder implements Serializable {
 		return intermediateNodeIds.get(OperatorPrecedence.plain(alt.subList(0, index)));
 	}
 	
-	private BodyGrammarSlot getBodyGrammarSlot(Nonterminal head, List<Symbol> body, Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot, HeadGrammarSlot headGrammarSlot) {
+	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, Symbol symbol, int symbolIndex, BodyGrammarSlot currentSlot) {
+		
+		Nonterminal head = rule.getHead();
+		
+		List<Symbol> body = rule.getBody();
 		
 		if(symbol instanceof RegularExpression) {
 			RegularExpression token = (RegularExpression) symbol;
-			return grammarSlotFactory.createTokenGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, token, headGrammarSlot, getTokenID(token));
+			Tuple<ConditionsTest, ConditionsTest> conditions = getConditions(symbol.getConditions());
+			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, getSlotId(body, symbolIndex), 
+					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), conditions.getFirst(), conditions.getSecond());
 		}
 		
 		// Nonterminal
 		else {
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, headGrammarSlot);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal);						
 		}		
 	}
 
-	private void addCondition(BodyGrammarSlot slot, final Condition condition) {
+	private Tuple<ConditionsTest, ConditionsTest> getConditions(final Set<Condition> conditions) {
 
-		switch (condition.getType()) {
+		ConditionsTest preConditions = new ConditionsTest();
+		ConditionsTest postConditions = new ConditionsTest();
 		
-			case FOLLOW:
-				if (condition instanceof RegularExpressionCondition) {
-					FollowActions.fromRegularExpression(slot.next(), ((RegularExpressionCondition) condition).getRegularExpression(), condition);
-				} 
-				else {
-					FollowActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
-				}
-				break;
+		for (Condition condition : conditions) {
+			switch (condition.getType()) {
 				
-			case NOT_FOLLOW:
-				if (condition instanceof RegularExpressionCondition) {
-					NotFollowActions.fromRegularExpression(slot.next(), ((RegularExpressionCondition) condition).getRegularExpression(), condition);
-				} 
-				else {
-					NotFollowActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
-				}
-				break;
-				
-			case PRECEDE:
-				assert !(condition instanceof ContextFreeCondition);
-				
-				if(condition instanceof RegularExpressionCondition) {
-					PrecedeActions.fromRegularExpression(slot, ((RegularExpressionCondition) condition).getRegularExpression(), condition);
-				} 
-
-				break;
-				
-			case NOT_PRECEDE:
-				assert !(condition instanceof ContextFreeCondition);
-				
-				if(condition instanceof RegularExpressionCondition) {
-					NotPrecedeActions.fromRegularExpression(slot, ((RegularExpressionCondition) condition).getRegularExpression(), condition);
-				} 
-				break;
-				
-			case MATCH:
-				break;
+				case FOLLOW:
+					if (condition instanceof RegularExpressionCondition) {
+						postConditions.addCondition(FollowActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+					} 
+					else {
+//						postConditions.addCondition(convertCondition((ContextFreeCondition) condition), condition);
+					}
+					break;
 					
-			case NOT_MATCH:
-				if(condition instanceof ContextFreeCondition) {
-					NotMatchActions.fromGrammarSlot(slot.next(), convertCondition((ContextFreeCondition) condition), condition);
-				} 
-				else {
-					NotMatchActions.fromRegularExpression(slot.next(), ((RegularExpressionCondition) condition).getRegularExpression(), condition);
-				}
-				break;
-				
-			case START_OF_LINE:
-			  LineActions.addStartOfLine(slot, condition);
-			  break;
-			  
-			case END_OF_LINE:
-			  LineActions.addEndOfLine(slot.next(), condition);
-			  break;
-		}
-	}
-		
-	// TODO: context-free conditions should have a head, to calculate first 
-	// and follow sets.
-	private BodyGrammarSlot convertCondition(ContextFreeCondition condition) {
-		
-		if(condition == null) {
-			return null;
-		}
-		
-		if(condition.getSymbols().size() == 0) {
-			throw new IllegalArgumentException("The list of symbols cannot be empty.");
-		}
-		
-		BodyGrammarSlot currentSlot = null;
-		BodyGrammarSlot firstSlot = null;
+				case NOT_FOLLOW:
+					if (condition instanceof RegularExpressionCondition) {
+						postConditions.addCondition(NotFollowActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+					} 
+					else {
+					}
+					break;
+					
+				case PRECEDE:
+					assert !(condition instanceof ContextFreeCondition);
+					
+					if(condition instanceof RegularExpressionCondition) {
+						preConditions.addCondition(PrecedeActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+					} 
 
-		int index = 0;
-		Rule rule = new Rule(new Nonterminal("Dummy"), condition.getSymbols());
-		for(Symbol symbol : condition.getSymbols()) {
-			if(symbol instanceof Nonterminal) {
-				HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-				currentSlot = grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(rule.getBody(), index), getSlotName(rule.getHead(), rule.getBody(), index), currentSlot, nonterminal, null);
-			} 
-			else if(symbol instanceof RegularExpression) {
-				RegularExpression token = (RegularExpression) symbol;
-				currentSlot = grammarSlotFactory.createTokenGrammarSlot(getSlotId(rule.getBody(), index), getSlotName(rule.getHead(), rule.getBody(), index), currentSlot, token, null, getTokenID(token));
+					break;
+					
+				case NOT_PRECEDE:
+					assert !(condition instanceof ContextFreeCondition);
+					
+					if(condition instanceof RegularExpressionCondition) {
+						preConditions.addCondition(NotPrecedeActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+					} 
+					break;
+					
+				case MATCH:
+					break;
+						
+				case NOT_MATCH:
+					postConditions.addCondition(NotMatchActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+					break;
+					
+				case START_OF_LINE:
+				  preConditions.addCondition(LineActions.addStartOfLine(condition));
+				  break;
+				  
+				case END_OF_LINE:
+					postConditions.addCondition(LineActions.addEndOfLine(condition));
+				  break;
 			}
-			
-			if(index == 0) {
-				firstSlot = currentSlot;
-			}
-			index++;
 		}
 		
-		grammarSlotFactory.createLastGrammarSlot(getSlotName(rule.getHead(), rule.getBody(), index), currentSlot, null);
-		conditionSlots.add(firstSlot);
-		return firstSlot;
+		return Tuple.of(preConditions, postConditions);
+
 	}
 
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {

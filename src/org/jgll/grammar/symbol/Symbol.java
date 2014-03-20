@@ -2,6 +2,7 @@ package org.jgll.grammar.symbol;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 
@@ -23,7 +24,7 @@ public interface Symbol extends Serializable {
 	 */
 	public Symbol addConditions(Collection<Condition> conditions);
 	
-	public Collection<Condition> getConditions();
+	public Set<Condition> getConditions();
 	
 	public Symbol copy();
 }

@@ -1,4 +1,4 @@
-package org.jgll.grammar.slot;
+package org.jgll.grammar.slot.test;
 
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.lexer.GLLLexer;

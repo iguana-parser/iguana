@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.CharacterGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlotFirstFollow;
@@ -14,18 +13,19 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlotFirstFollow;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlotFirstFollow;
-import org.jgll.grammar.slot.RangeGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
-import org.jgll.grammar.slot.firstfollow.ArrayFollowTest;
-import org.jgll.grammar.slot.firstfollow.ArrayPredictionTest;
-import org.jgll.grammar.slot.firstfollow.FollowTest;
-import org.jgll.grammar.slot.firstfollow.TreeMapFollowTest;
-import org.jgll.grammar.slot.firstfollow.TreeMapPredictionTest;
-import org.jgll.grammar.slot.firstfollow.PredictionTest;
-import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.slot.specialized.OnlyOneTokenSlot;
+import org.jgll.grammar.slot.test.ArrayFollowTest;
+import org.jgll.grammar.slot.test.ArrayPredictionTest;
+import org.jgll.grammar.slot.test.ConditionsTest;
+import org.jgll.grammar.slot.test.FollowTest;
+import org.jgll.grammar.slot.test.PredictionTest;
+import org.jgll.grammar.slot.test.TreeMapFollowTest;
+import org.jgll.grammar.slot.test.TreeMapPredictionTest;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Tuple;
@@ -115,26 +115,28 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 	public NonterminalGrammarSlot createNonterminalGrammarSlot(int nodeId,
 															   String label,
 															   BodyGrammarSlot previous, 
-															   HeadGrammarSlot nonterminal, 
-															   HeadGrammarSlot head) {
-		return new NonterminalGrammarSlotFirstFollow(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, head);
+															   HeadGrammarSlot nonterminal) {
+		return new NonterminalGrammarSlotFirstFollow(bodyGrammarSlotId++, nodeId, label, previous, nonterminal);
 	}
 
 	@Override
-	public TokenGrammarSlot createTokenGrammarSlot(int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, 
-												   HeadGrammarSlot head, int tokenID) {
-		if(regularExpression instanceof Character) {
-			return new CharacterGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, (Character) regularExpression, head, tokenID);
+	public TokenGrammarSlot createTokenGrammarSlot(Rule rule, int symbolIndex, int nodeId, String label, BodyGrammarSlot previous,
+												   int tokenID, ConditionsTest preConditions,
+												   ConditionsTest postConditions) {
+		
+		RegularExpression regularExpression = (RegularExpression) rule.getSymbolAt(symbolIndex);
+		
+		if(preConditions == null && postConditions == null) {
+			if(rule.size() == 1 && symbolIndex == 0) {
+				return new OnlyOneTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID);
+			}			
+		} else if (preConditions != null) {
+			return null;			
+		} else {
+			return null;
 		}
-		else if (regularExpression instanceof Range) {
-			Range r = (Range) regularExpression;
-			if(r.getStart() == r.getEnd()) {
-				return new CharacterGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, new Character(r.getStart()), head, tokenID);
-			} else {
-				return new RangeGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, r, head, tokenID);
-			}
-		}
-		return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, head, tokenID);
+		
+		return null;
 	}
 
 

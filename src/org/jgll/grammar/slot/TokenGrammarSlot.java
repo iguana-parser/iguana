@@ -21,8 +21,8 @@ public abstract class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	private final RegularExpression regularExpression;
 	
-	public TokenGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
-		super(id, label, previous, head);
+	public TokenGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID) {
+		super(id, label, previous);
 		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
 		this.nodeId = nodeId;

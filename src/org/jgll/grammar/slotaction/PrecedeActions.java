@@ -1,7 +1,6 @@
 package org.jgll.grammar.slotaction;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.Matcher;
@@ -13,13 +12,13 @@ public class PrecedeActions {
 
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(PrecedeActions.class);
 		
-	public static void fromRegularExpression(BodyGrammarSlot slot, final RegularExpression regex, final Condition condition) {
+	public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
 		
-		log.debug("Precede restriction added %s <<! %s", regex, slot);
+		log.debug("Precede restriction added %s <<! %s", regex);
 		
 		final Matcher matcher = regex.toAutomaton().reverse().getMatcher();
 
-		slot.addPreCondition(new SlotAction<Boolean>() {
+		return new SlotAction<Boolean>() {
 			
 			private static final long serialVersionUID = 1L;
 
@@ -47,6 +46,6 @@ public class PrecedeActions {
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
 			}
-		});
+		};
 	}
 }

@@ -3,8 +3,8 @@ package org.jgll.grammar.slot;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.slot.firstfollow.FollowTest;
-import org.jgll.grammar.slot.firstfollow.PredictionTest;
+import org.jgll.grammar.slot.test.FollowTest;
+import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;

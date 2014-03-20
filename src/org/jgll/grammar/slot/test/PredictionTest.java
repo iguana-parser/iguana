@@ -1,4 +1,4 @@
-package org.jgll.grammar.slot.firstfollow;
+package org.jgll.grammar.slot.test;
 
 import java.io.Serializable;
 import java.util.Set;

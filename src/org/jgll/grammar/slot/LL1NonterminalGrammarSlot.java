@@ -15,8 +15,8 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	public LL1NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, LL1HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(id, nodeId, label, previous, nonterminal, head);
+	public LL1NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, LL1HeadGrammarSlot nonterminal) {
+		super(id, nodeId, label, previous, nonterminal);
 	}
 	
 	@Override
@@ -27,9 +27,9 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 			return null;
 		}
 		
-		if(executePreConditions(parser, lexer)) {
-			return null;
-		}
+//		if(executePreConditions(parser, lexer)) {
+//			return null;
+//		}
 
 		nonterminal.parse(parser, lexer);
 		
@@ -42,9 +42,9 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 		if(next instanceof LastGrammarSlot) {
 			parser.getNonterminalNode((LastGrammarSlot) next, parser.getCurrentSPPFNode(), node);
 			
-			if(executePopActions(parser, lexer)) {
-				return null;
-			}
+//			if(executePopActions(parser, lexer)) {
+//				return null;
+//			}
 			parser.pop();
 			
 		} else {

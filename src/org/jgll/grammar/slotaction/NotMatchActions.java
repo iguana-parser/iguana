@@ -9,9 +9,9 @@ import org.jgll.regex.RegularExpression;
 
 public class NotMatchActions {
 
-	  public static void fromGrammarSlot(BodyGrammarSlot slot, final BodyGrammarSlot ifNot, final Condition condition) {
+	  public static SlotAction<Boolean> fromGrammarSlot(final BodyGrammarSlot ifNot, final Condition condition) {
 
-			slot.addPopAction(new SlotAction<Boolean>() {
+			return new SlotAction<Boolean>() {
 				
 				private static final long serialVersionUID = 1L;
 
@@ -40,14 +40,14 @@ public class NotMatchActions {
 					return getCondition().equals(other.getCondition());
 				}
 
-			});
+			};
 		}
 	  
-		public static void fromRegularExpression(BodyGrammarSlot slot, final RegularExpression regex, final Condition condition) {
+		public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
 			
 			final Matcher matcher = regex.toAutomaton().getMatcher();
 			
-				slot.addPopAction(new SlotAction<Boolean>() {
+			return	new SlotAction<Boolean>() {
 					
 					private static final long serialVersionUID = 1L;
 
@@ -76,6 +76,6 @@ public class NotMatchActions {
 						return getCondition().equals(other.getCondition());
 					}
 
-				});
+				};
 		}
 }

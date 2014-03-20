@@ -292,25 +292,24 @@ public class GLLParserImpl implements GLLParser {
 			
 			gssLookup.addToPoppedElements(cu, (NonPackedNode) cn);
 			
-			label:
 			for(GSSEdge edge : gssLookup.getEdges(cu)) {
-				GrammarSlot slot = edge.getReturnSlot();
-				
-				for(SlotAction<Boolean> popAction : ((BodyGrammarSlot) edge.getReturnSlot()).getPopActions()) {
-					if(popAction.execute(this, lexer, ci)) {
-						continue label;
-					}
-				}
-				
-				SPPFNode y;
-				if(slot instanceof LastGrammarSlot) {
-					y = getNonterminalNode((LastGrammarSlot) slot, edge.getNode(), cn);
-				} else {
-					y = getIntermediateNode((BodyGrammarSlot) slot, edge.getNode(), cn);
-				}
-				addDescriptor(edge.getReturnSlot(), edge.getDestination(), ci, y);
+				pop(edge.getReturnSlot(), edge.getNode(), edge.getDestination());
 			}
 		}
+	}
+	
+	public final void pop(BodyGrammarSlot slot, SPPFNode node, GSSNode destination) {
+		
+		gssLookup.addToPoppedElements(cu, (NonPackedNode) cn);
+		
+		SPPFNode y;
+		if(slot instanceof LastGrammarSlot) {
+			y = getNonterminalNode((LastGrammarSlot) slot, node, cn);
+		} else {
+			y = getIntermediateNode((BodyGrammarSlot) slot, node, cn);
+		}
+		addDescriptor(slot, destination, ci, y);
+		
 	}
 
 	

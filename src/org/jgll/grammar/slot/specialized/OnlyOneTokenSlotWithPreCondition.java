@@ -1,24 +1,22 @@
 package org.jgll.grammar.slot.specialized;
 
-import java.util.List;
-
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.PostCondition;
-import org.jgll.grammar.slotaction.SlotAction;
+import org.jgll.grammar.slot.test.ConditionsTest;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 
-public class OnlyOneTokenSlotWithPreCondition extends OnlyOneTokenSlot implements PostCondition {
+public class OnlyOneTokenSlotWithPreCondition extends OnlyOneTokenSlot {
 	
-	private List<SlotAction<Boolean>> postConditions;
 	
+	private final ConditionsTest conditions;
+
 	public OnlyOneTokenSlotWithPreCondition(int id, int nodeId, String label,
 			BodyGrammarSlot previous, RegularExpression regularExpression,
-			HeadGrammarSlot head, int tokenID) {
-		super(id, nodeId, label, previous, regularExpression, head, tokenID);
+			int tokenID, ConditionsTest conditions) {
+		super(id, nodeId, label, previous, regularExpression, tokenID);
+		this.conditions = conditions;
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -28,27 +26,11 @@ public class OnlyOneTokenSlotWithPreCondition extends OnlyOneTokenSlot implement
 				
 		GrammarSlot result = super.parse(parser, lexer);
 		
-		if(execute(parser, lexer)) {
+		if(conditions.execute(parser, lexer)) {
 			return null;
 		}
 
 		return result;
-	}
-
-	@Override
-	public boolean execute(GLLParser parser, GLLLexer lexer) {
-		for(SlotAction<Boolean> preCondition : postConditions) {
-			if(preCondition.execute(parser, lexer, parser.getCurrentInputIndex())) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public void addPostCondition(SlotAction<Boolean> postCondition) {
-		postConditions.add(postCondition);
 	}
 
 }

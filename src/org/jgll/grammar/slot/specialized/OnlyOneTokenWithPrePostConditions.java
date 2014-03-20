@@ -7,28 +7,35 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 
-public class OnlyOneTokenSlotWithPostCondition extends OnlyOneTokenSlot {
+public class OnlyOneTokenWithPrePostConditions extends OnlyOneTokenSlot {
 	
 	private static final long serialVersionUID = 1L;
 
+
+	private ConditionsTest preConditions;
 	private ConditionsTest postConditions;
 
-	public OnlyOneTokenSlotWithPostCondition(int id, int nodeId, String label,
-			BodyGrammarSlot previous, RegularExpression regularExpression,
-			int tokenID, ConditionsTest conditions) {
+	public OnlyOneTokenWithPrePostConditions(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression,
+			int tokenID, ConditionsTest preConditions, ConditionsTest postConditions) {
 		super(id, nodeId, label, previous, regularExpression, tokenID);
-		this.postConditions = conditions;
+		this.preConditions = preConditions;
+		this.postConditions = postConditions;
 	}
-
-
+	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+		
+		if(preConditions.execute(parser, lexer)) {
+			return null;
+		}
+		
+		GrammarSlot result = super.parse(parser, lexer);
 		
 		if(postConditions.execute(parser, lexer)) {
 			return null;
 		}
 		
-		return super.parse(parser, lexer);
+		return result;
 	}
 
 }

@@ -14,8 +14,8 @@ public class NonterminalGrammarSlotFirstFollow extends NonterminalGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	public NonterminalGrammarSlotFirstFollow(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(id, nodeId, label, previous, nonterminal, head);
+	public NonterminalGrammarSlotFirstFollow(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal) {
+		super(id, nodeId, label, previous, nonterminal);
 	}
 	
 	@Override

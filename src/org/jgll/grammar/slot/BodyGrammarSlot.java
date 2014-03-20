@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.test.ConditionsTest;
 import org.jgll.grammar.symbol.Symbol;
 
 /**
@@ -15,17 +16,15 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected final BodyGrammarSlot previous;
-	
 	protected final int id;
+
+	protected final BodyGrammarSlot previous;
 	
 	protected BodyGrammarSlot next;
 	
-	protected HeadGrammarSlot head;
-	
 	protected final String label;
 
-	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
+	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous) {
 		
 		this.id = id;
 		
@@ -34,10 +33,11 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 		}
 		
 		this.label = label;
-		this.head = head;
+
 		if(previous != null) {
 			previous.next = this;
 		}
+		
 		this.previous = previous;
 	}
 	
@@ -47,6 +47,10 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	public boolean isFirst() {
 		return previous == null;
+	}
+	
+	public boolean isLast() {
+		return next.next == null;
 	}
 	
 	public void codeElseTestSetCheck(Writer writer) throws IOException {
@@ -61,15 +65,15 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 		return previous;
 	}
 
-	public HeadGrammarSlot getHead() {
-		return head;
-	}
-	
 	public String getLabel() {
 		return label;
 	}
 	
 	public abstract boolean isNullable();
+	
+	public abstract ConditionsTest getPreConditions();
+	
+	public abstract ConditionsTest getPostConditions();
 	
 	@Override
 	public int getId() {

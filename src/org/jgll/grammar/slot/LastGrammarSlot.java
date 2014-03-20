@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.test.ConditionsTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -18,9 +19,12 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	private static final long serialVersionUID = 1L;
 	
 	protected int alternateIndex;
+
+	protected HeadGrammarSlot head;
 	
 	public LastGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head) {
-		super(id, label, previous, head);
+		super(id, label, previous);
+		this.head = head;
 	}
 	
 	@Override
@@ -50,6 +54,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		return alternateIndex;
 	}
 	
+	public HeadGrammarSlot getHead() {
+		return head;
+	}
+	
 	public void setAlternateIndex(int alternateIndex) {
 		this.alternateIndex = alternateIndex;
 	}
@@ -62,6 +70,16 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public int getNodeId() {
 		return alternateIndex;
+	}
+
+	@Override
+	public ConditionsTest getPreConditions() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ConditionsTest getPostConditions() {
+		throw new UnsupportedOperationException();
 	}
 
 }

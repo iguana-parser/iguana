@@ -27,11 +27,6 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer input) {
-		
-		if(executePreConditions(parser, input)) {
-			return null;
-		}
-		
 		// A ::= ε
 		// Do not create epsilon nodes
 		int ci = parser.getCurrentInputIndex();

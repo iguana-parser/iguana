@@ -3,7 +3,8 @@ package org.jgll.grammar.symbol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 
@@ -11,7 +12,7 @@ public abstract class AbstractSymbol implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected final List<Condition> conditions;
+	protected final Set<Condition> conditions;
 	
 	protected final String name;
 	
@@ -21,14 +22,14 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	public AbstractSymbol(String name, Iterable<Condition> conditions) {
 		this.name = name;
-		this.conditions = new ArrayList<>();
+		this.conditions = new HashSet<>();
 		for(Condition condition : conditions) {
 			this.conditions.add(condition);
 		}
 	}
 	
 	@Override
-	public Collection<Condition> getConditions() {
+	public Set<Condition> getConditions() {
 		return conditions;
 	}
 	

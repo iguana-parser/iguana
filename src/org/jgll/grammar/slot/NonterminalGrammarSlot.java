@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.test.ConditionsTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -22,8 +23,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	protected final int nodeId;
 	
-	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, HeadGrammarSlot head) {
-		super(id, label, previous, head);
+	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal) {
+		super(id, label, previous);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -41,10 +42,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer input) {
-		
-		if(executePreConditions(parser, input)) {
-			return null;
-		}
 		
 		if(!parser.hasGSSNode(next, nonterminal)) {
 			parser.createGSSNode(next, nonterminal);			
@@ -120,6 +117,16 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public int getNodeId() {
 		return nodeId;
+	}
+
+	@Override
+	public ConditionsTest getPreConditions() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ConditionsTest getPostConditions() {
+		throw new UnsupportedOperationException();
 	}
 	
 }

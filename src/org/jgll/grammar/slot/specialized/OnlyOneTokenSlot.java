@@ -2,9 +2,9 @@ package org.jgll.grammar.slot.specialized;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.grammar.slot.test.ConditionsTest;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
@@ -21,8 +21,8 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public OnlyOneTokenSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, HeadGrammarSlot head, int tokenID) {
-		super(id, nodeId, label, previous, regularExpression, head, tokenID);
+	public OnlyOneTokenSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID) {
+		super(id, nodeId, label, previous, regularExpression, tokenID);
 	}
 	
 	@Override
@@ -42,6 +42,16 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 		parser.getNonterminalNode((LastGrammarSlot) next, cn);
 		parser.pop();
 		return null;
+	}
+
+	@Override
+	public ConditionsTest getPreConditions() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ConditionsTest getPostConditions() {
+		throw new UnsupportedOperationException();
 	}	
 
 }

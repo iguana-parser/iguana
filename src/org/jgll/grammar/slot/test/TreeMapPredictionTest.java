@@ -1,4 +1,4 @@
-package org.jgll.grammar.slot.firstfollow;
+package org.jgll.grammar.slot.test;
 
 import java.util.ArrayList;
 import java.util.Collections;

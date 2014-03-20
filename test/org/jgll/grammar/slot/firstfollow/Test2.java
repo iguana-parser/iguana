@@ -3,6 +3,7 @@ package org.jgll.grammar.slot.firstfollow;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.slot.test.TreeMapPredictionTest;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 import org.junit.Test;

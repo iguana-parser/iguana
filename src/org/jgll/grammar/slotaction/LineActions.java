@@ -1,15 +1,14 @@
 package org.jgll.grammar.slotaction;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 
 public class LineActions {
 
-	public static void addEndOfLine(BodyGrammarSlot slot, final Condition condition) {
+	public static SlotAction<Boolean> addEndOfLine(final Condition condition) {
 		
-		slot.addPopAction(new SlotAction<Boolean>() {
+		return new SlotAction<Boolean>() {
 
 			private static final long serialVersionUID = 1L;
 
@@ -38,12 +37,12 @@ public class LineActions {
 				return getCondition().equals(other.getCondition());
 			}
 
-		});
+		};
 	}
 
-	public static void addStartOfLine(BodyGrammarSlot slot, final Condition condition) {
+	public static SlotAction<Boolean> addStartOfLine(final Condition condition) {
 		
-		slot.addPopAction(new SlotAction<Boolean>() {
+		return new SlotAction<Boolean>() {
 
 			private static final long serialVersionUID = 1L;
 
@@ -72,7 +71,7 @@ public class LineActions {
 				return getCondition().equals(other.getCondition());
 			}
 
-		});
+		};
 	}
 
 }
