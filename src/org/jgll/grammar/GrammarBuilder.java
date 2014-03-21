@@ -23,7 +23,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.slot.test.DefaultConditionTest;
-import org.jgll.grammar.slot.test.TrueConditionTest;
+import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.slotaction.FollowActions;
 import org.jgll.grammar.slotaction.LineActions;
 import org.jgll.grammar.slotaction.NotFollowActions;
@@ -460,7 +460,7 @@ public class GrammarBuilder implements Serializable {
 		if(postConditionActions.size() > 0) {
 			postCondition = new DefaultConditionTest(postConditionActions);
 		} else {
-			postCondition = new TrueConditionTest();
+			postCondition = new FalseConditionTest();
 		}
 
 		return postCondition;
@@ -504,7 +504,7 @@ public class GrammarBuilder implements Serializable {
 		if(preConditionActions.size() > 0) {
 			preCondition = new DefaultConditionTest(preConditionActions);
 		} else {
-			preCondition = new TrueConditionTest();
+			preCondition = new FalseConditionTest();
 		}
 		
 		return preCondition;

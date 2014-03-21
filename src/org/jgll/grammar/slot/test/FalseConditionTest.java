@@ -6,11 +6,11 @@ import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 
-public class TrueConditionTest implements ConditionTest {
+public class FalseConditionTest implements ConditionTest {
 
 	@Override
 	public boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
-		return true;
+		return false;
 	}
 
 	@Override
