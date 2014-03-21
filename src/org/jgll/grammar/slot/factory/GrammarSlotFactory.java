@@ -28,7 +28,8 @@ public interface GrammarSlotFactory {
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
-															   ConditionTest preConditions);
+															   ConditionTest preConditions,
+															   ConditionTest postConditions);
 
 	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postConditions);
 	

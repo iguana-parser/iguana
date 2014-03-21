@@ -137,14 +137,18 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
-															   ConditionTest preConditions) {
-		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions);
+															   ConditionTest preConditions,
+															   ConditionTest postConditions) {
+		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions);
 	}
 
 	@Override
 	public TokenGrammarSlot createTokenGrammarSlot(List<Symbol> body, int symbolIndex, int nodeId, 
 												   String label, BodyGrammarSlot previous,
 												   int tokenID, ConditionTest preConditions, ConditionTest postConditions) {
+		
+		if(preConditions == null) throw new IllegalArgumentException("PreConditions cannot be null.");
+		if(postConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
 		
 		RegularExpression regularExpression = (RegularExpression) body.get(symbolIndex);
 		
@@ -160,8 +164,11 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	}
 
 	@Override
-	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postCondition) {
-		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, postCondition);
+	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postConditions) {
+		
+		if(postConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
+		
+		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, postConditions);
 	}
 	
 	@Override

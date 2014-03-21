@@ -28,6 +28,7 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 			BodyGrammarSlot previous, RegularExpression regularExpression,
 			int tokenID, ConditionTest preConditions,
 			ConditionTest postConditions) {
+		
 		super(id, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 	}
 	
@@ -58,7 +59,7 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 		
 		parser.pop();
 		
-		return next;
+		return null;
 	}
 	
 	@Override

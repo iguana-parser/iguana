@@ -26,8 +26,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	protected final int nodeId;
 	
-	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, ConditionTest preConditions) {
-		super(id, label, previous, preConditions, null);
+	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, ConditionTest preConditions, ConditionTest postConditions) {
+		super(id, label, previous, preConditions, postConditions);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}

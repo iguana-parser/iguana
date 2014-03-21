@@ -36,7 +36,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		if(head.testFollowSet(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
 			parser.pop();			
 		}
-		parser.pop();
 		return null;
 	}
 	

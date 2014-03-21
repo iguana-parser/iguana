@@ -13,8 +13,8 @@ public class SecondNonterminalSlot extends NonterminalGrammarSlot {
 
 	public SecondNonterminalSlot(int id, int nodeId, String label,
 			BodyGrammarSlot previous, HeadGrammarSlot nonterminal,
-			ConditionTest preConditions) {
-		super(id, nodeId, label, previous, nonterminal, preConditions);
+			ConditionTest preConditions, ConditionTest postConditions) {
+		super(id, nodeId, label, previous, nonterminal, preConditions, postConditions);
 	}
 	
 	@Override

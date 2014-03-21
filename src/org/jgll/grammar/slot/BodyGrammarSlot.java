@@ -31,12 +31,12 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	protected final ConditionTest postConditions;
 
 	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, ConditionTest preConditions, ConditionTest postConditions) {
-		
-		this.id = id;
-		
+
 		if(label == null) {
 			throw new IllegalArgumentException("Label cannot be null.");
 		}
+		
+		this.id = id;
 		
 		this.label = label;
 
