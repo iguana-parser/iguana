@@ -6,7 +6,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -43,7 +43,7 @@ public class FollowRestrictionTest {
 		Nonterminal Label = new Nonterminal("Label");
 		Range az = new Range('a', 'z');
 		
-		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder(factory);
 		
 		Rule r1 = new Rule(S, Label.addCondition(RegularExpressionCondition.notFollow(new Keyword(":", new int[] {':'}))));

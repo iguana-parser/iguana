@@ -4,7 +4,7 @@ import static org.jgll.util.CollectionsUtil.list;
 import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.condition.ContextFreeCondition;
-import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -41,7 +41,7 @@ public class DanglingElseGrammar3 {
 	@Before
 	public void init() {
 		
-		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
 		Rule rule1 = new Rule(S, list(a, S.addCondition(ContextFreeCondition.notFollow(b, S))));

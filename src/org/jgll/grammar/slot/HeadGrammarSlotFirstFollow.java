@@ -25,6 +25,7 @@ public class HeadGrammarSlotFirstFollow extends HeadGrammarSlot {
 									  PredictionTest predictiTest,
 									  FollowTest followTest,
 									  boolean nullable) {
+		
 		super(id, nonterminal, nonterminalId, alts, nullable);
 		this.predictionTest = predictiTest;
 		this.followTest = followTest;

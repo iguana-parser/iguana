@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
@@ -50,7 +50,7 @@ public class LL1Test {
 	@Before
 	public void init() {
 		
-		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 
 		Rule rule1 = new Rule(S, list(A, a));

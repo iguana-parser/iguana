@@ -3,7 +3,7 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.list;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
@@ -33,7 +33,7 @@ public class GrammarBank {
 	 */
 	public static GrammarBuilder arithmeticExpressions() {
 		
-		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("ArithmeticExpressions", factory);
 
 		Nonterminal E = new Nonterminal("E");
@@ -80,7 +80,7 @@ public class GrammarBank {
 	 */
 	public static GrammarBuilder danglingElse() {
 		
-		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
 		Nonterminal S = new Nonterminal("S");

@@ -33,6 +33,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+		if(head.testFollowSet(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
+			parser.pop();			
+		}
 		parser.pop();
 		return null;
 	}
@@ -96,16 +99,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public int getNodeId() {
 		return alternateIndex;
-	}
-
-	@Override
-	public ConditionTest getPreConditions() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public ConditionTest getPostConditions() {
-		throw new UnsupportedOperationException();
 	}
 
 }

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
@@ -46,7 +46,7 @@ public class DanglingElseGrammar1 {
 	@Before
 	public void createGrammar() {
 		
-		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
 		

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -47,7 +47,7 @@ public class Test5 {
 		Rule r2 = new Rule(S, list(a, A, b));
 		Rule r3 = new Rule(A, list(a));
 		
-		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		grammar = new GrammarBuilder("test5", factory).addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	

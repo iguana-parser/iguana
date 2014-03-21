@@ -48,6 +48,11 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
+		if(!nonterminal.test(lexer.getInput().charAt(ci))) {
+			parser.recordParseError(this);
+			return null;
+		}
+		
 		if(preConditions.execute(parser, lexer, ci)) {
 			return null;
 		}
@@ -127,16 +132,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public int getNodeId() {
 		return nodeId;
-	}
-
-	@Override
-	public ConditionTest getPreConditions() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public ConditionTest getPostConditions() {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

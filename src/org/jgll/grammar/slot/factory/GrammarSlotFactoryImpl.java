@@ -10,9 +10,7 @@ import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlotFirstFollow;
 import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlotFirstFollow;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlotFirstFollow;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.specialized.FirstTokenSlot;
 import org.jgll.grammar.slot.specialized.OnlyOneTokenSlot;
@@ -23,6 +21,8 @@ import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.slot.test.TreeMapFollowTest;
 import org.jgll.grammar.slot.test.TreeMapPredictionTest;
+import org.jgll.grammar.slot.test.TrueFollowSet;
+import org.jgll.grammar.slot.test.TruePredictionSet;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
@@ -30,10 +30,21 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Tuple;
 
-public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
+public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	
 	private int headGrammarSlotId;
 	private int bodyGrammarSlotId;
+	private boolean firstFollowCheck;
+	
+	
+	public GrammarSlotFactoryImpl() {
+		this(true);
+	}
+	
+	public GrammarSlotFactoryImpl(boolean firstFollowCheck) {
+		this.firstFollowCheck = firstFollowCheck;
+	}
+
 	
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
@@ -42,6 +53,16 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
+		
+		if(! firstFollowCheck) {
+			return new HeadGrammarSlotFirstFollow(headGrammarSlotId++, 
+					   nonterminal, 
+					   nonterminalId, 
+					   alternates, 
+					   new TruePredictionSet(alternates.size()), 
+					   new TrueFollowSet(), 
+					   false);
+		}
 		
 		Set<RegularExpression> firstSet = firstSets.get(nonterminal);
 		Set<RegularExpression> followSet = followSets.get(nonterminal);
@@ -117,7 +138,7 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
 															   ConditionTest preConditions) {
-		return new NonterminalGrammarSlotFirstFollow(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions);
+		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions);
 	}
 
 	@Override
@@ -140,7 +161,7 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 
 	@Override
 	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postCondition) {
-		return new LastGrammarSlotFirstFollow(bodyGrammarSlotId++, label, previous, head, postCondition);
+		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, postCondition);
 	}
 	
 	@Override

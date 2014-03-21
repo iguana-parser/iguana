@@ -81,11 +81,11 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	public abstract SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild);
 	
-	public ConditionTest getPreConditions() {
+	public final ConditionTest getPreConditions() {
 		return preConditions;
 	}
 	
-	public ConditionTest getPostConditions() {
+	public final ConditionTest getPostConditions() {
 		return postConditions;
 	}
 	

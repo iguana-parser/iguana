@@ -9,6 +9,7 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.regex.RegularExpression;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -73,7 +74,7 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 		LastGrammarSlot last = (LastGrammarSlot) next;
 		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(last.getHead(), leftExtent, rightExtent);
 		
-		sppfLookup.addPackedNode(newNode, last, rightChild.getLeftExtent(), rightChild);
+		sppfLookup.addPackedNode(newNode, last, rightChild.getLeftExtent(), DummyNode.getInstance(), rightChild);
 		
 		return newNode;
 	}

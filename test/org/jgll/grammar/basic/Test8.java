@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.slot.factory.FirstFollowSetGrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -44,7 +44,7 @@ public class Test8 {
 		Rule r2 = new Rule(A, list(new Character('a')));
 		Rule r3 = new Rule(A);
 
-		GrammarSlotFactory factory = new FirstFollowSetGrammarSlotFactory();
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("IndirectRecursion", factory)
 													  .addRule(r1)
 													  .addRule(r2)
