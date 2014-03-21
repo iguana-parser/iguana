@@ -161,6 +161,11 @@ public class SPPFLookupImpl implements SPPFLookup {
 	public void addPackedNode(IntermediateNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		parent.addPackedNode(pivot, leftChild, rightChild);
 	}
+	
+	@Override
+	public void addPackedNode(NonterminalSymbolNode parent, LastGrammarSlot slot, int pivot, SPPFNode child) {
+		
+	}
 
 	@Override
 	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
@@ -208,11 +213,6 @@ public class SPPFLookupImpl implements SPPFLookup {
 	@Override
 	public int getPackedNodesCount() {
 		return 0;
-	}
-
-	@Override
-	public void addPackedNode(NonterminalSymbolNode parent, LastGrammarSlot slot, int pivot, SPPFNode child) {
-		
 	}
 
 }

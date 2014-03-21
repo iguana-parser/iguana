@@ -12,7 +12,8 @@ public class FirstTokenSlot extends TokenGrammarSlot {
 	private static final long serialVersionUID = 1L;
 
 	public FirstTokenSlot(int id, int nodeId, String label,
-			BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID, ConditionTest preConditions, ConditionTest postConditions) {
+						  BodyGrammarSlot previous, RegularExpression regularExpression, 
+						  int tokenID, ConditionTest preConditions, ConditionTest postConditions) {
 		super(id, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 	}
 	

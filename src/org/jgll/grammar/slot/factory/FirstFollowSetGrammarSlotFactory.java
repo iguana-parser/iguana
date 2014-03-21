@@ -15,6 +15,7 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlotFirstFollow;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.specialized.FirstTokenSlot;
+import org.jgll.grammar.slot.specialized.OnlyOneTokenSlot;
 import org.jgll.grammar.slot.test.ArrayFollowTest;
 import org.jgll.grammar.slot.test.ArrayPredictionTest;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -126,7 +127,10 @@ public class FirstFollowSetGrammarSlotFactory implements GrammarSlotFactory {
 		
 		RegularExpression regularExpression = (RegularExpression) body.get(symbolIndex);
 		
-		if (symbolIndex == 0) {
+		if (symbolIndex == 0 && body.size() == 1) {
+			return new OnlyOneTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
+		}
+		else if (symbolIndex == 0) {
 			return new FirstTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 		} 
 		else {
