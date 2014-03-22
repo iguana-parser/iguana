@@ -14,6 +14,8 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.specialized.FirstTokenSlot;
 import org.jgll.grammar.slot.specialized.OnlyOneTokenSlot;
+import org.jgll.grammar.slot.specialized.SecondAndLastTokenSlot;
+import org.jgll.grammar.slot.specialized.SecondNonterminalSlot;
 import org.jgll.grammar.slot.test.ArrayFollowTest;
 import org.jgll.grammar.slot.test.ArrayPredictionTest;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -54,7 +56,7 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
-		if(! firstFollowCheck) {
+		if(!firstFollowCheck) {
 			return new HeadGrammarSlotFirstFollow(headGrammarSlotId++, 
 					   nonterminal, 
 					   nonterminalId, 
@@ -133,12 +135,19 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	}	
 
 	@Override
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(int nodeId,
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(List<Symbol> body, 
+															   int symbolIndex, 
+															   int nodeId,
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
 															   ConditionTest preConditions,
 															   ConditionTest postConditions) {
+		
+		if(symbolIndex == 1) {
+			return new SecondNonterminalSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions);
+		}
+		
 		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions);
 	}
 
@@ -157,7 +166,10 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		}
 		else if (symbolIndex == 0) {
 			return new FirstTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
-		} 
+		}
+		else if (symbolIndex == 1 && body.size() == 2) {
+			return new SecondAndLastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
+		}
 		else {
 			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 		}

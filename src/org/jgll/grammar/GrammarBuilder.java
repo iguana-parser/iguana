@@ -412,7 +412,7 @@ public class GrammarBuilder implements Serializable {
 			ConditionTest preConditions = getPreConditions(symbol.getConditions());
 			ConditionTest postConditions = getPostConditions(symbol.getConditions());
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditions, postConditions);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditions, postConditions);						
 		}		
 	}
 	

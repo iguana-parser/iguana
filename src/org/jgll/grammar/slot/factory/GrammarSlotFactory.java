@@ -24,7 +24,9 @@ public interface GrammarSlotFactory {
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets);
 	
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(int nodeId,
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(List<Symbol> body, 
+															   int symbolIndex,
+															   int nodeId,
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,

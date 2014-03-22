@@ -21,66 +21,47 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * A ::= B C
- * B ::= 'b'
- * C ::= 'c'
+ * 
+ * A ::= 'a' 'b'
  * 
  * @author Ali Afroozeh
- *
  */
 public class Test3 {
 
 	private Grammar grammar;
 
 	private Nonterminal A = new Nonterminal("A");
-	private Nonterminal B = new Nonterminal("B");
-	private Nonterminal C = new Nonterminal("C");
+	private Character a = new Character('a');
 	private Character b = new Character('b');
-	private Character c = new Character('c');
 	
 	@Before
 	public void init() {
-		Rule r1 = new Rule(A, list(B, C));
-		Rule r2 = new Rule(B, list(b));
-		Rule r3 = new Rule(C, list(c));
+		Rule r1 = new Rule(A, list(a, b));
 		
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		grammar = new GrammarBuilder("test3", factory).addRule(r1).addRule(r2).addRule(r3).build();
+		grammar = new GrammarBuilder("a", factory).addRule(r1).build();
 	}
 	
 	@Test
 	public void testNullable() {
 		assertFalse(grammar.getHeadGrammarSlot("A").isNullable());
-		assertFalse(grammar.getHeadGrammarSlot("B").isNullable());
-		assertFalse(grammar.getHeadGrammarSlot("C").isNullable());
-	}
-	
-	@Test
-	public void testLL1() {
-		assertTrue(grammar.isLL1SubGrammar(A));
-		assertTrue(grammar.isLL1SubGrammar(B));
-		assertTrue(grammar.isLL1SubGrammar(C));
 	}
 	
 	@Test
 	public void testParser() throws ParseError {
-		Input input = Input.fromString("bc");
+		Input input = Input.fromString("ab");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
-		assertEquals(true, sppf.deepEquals(getSPPF()));
+		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	
-	private SPPFNode getSPPF() {
+	private SPPFNode expectedSPPF() {
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 1, 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 1, 0, 1);
-		TokenSymbolNode node3 = new TokenSymbolNode(grammar.getRegularExpressionId(b), 0, 1);
-		node2.addChild(node3);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(C), 1, 1, 2);
-		TokenSymbolNode node5 = new TokenSymbolNode(grammar.getRegularExpressionId(c), 1, 1);
-		node4.addChild(node5);
+		TokenSymbolNode node2 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
+		TokenSymbolNode node3 = new TokenSymbolNode(grammar.getRegularExpressionId(b), 1, 2);
 		node1.addChild(node2);
-		node1.addChild(node4);		
+		node1.addChild(node3);
 		return node1;
 	}
-	
+
 }
