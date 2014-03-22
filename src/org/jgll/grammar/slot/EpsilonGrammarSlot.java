@@ -22,9 +22,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
-	public EpsilonGrammarSlot(int id, String label, HeadGrammarSlot head,
-							  NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
-		super(id, label, null, head, null, nodeCreator, nodeCreatorFromPop);
+	public EpsilonGrammarSlot(int id, String label, HeadGrammarSlot head, NodeCreator nodeCreatorFromPop) {
+		super(id, label, null, head, null, nodeCreatorFromPop);
 	}
 	
 	@Override

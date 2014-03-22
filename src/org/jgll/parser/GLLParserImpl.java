@@ -284,7 +284,8 @@ public class GLLParserImpl implements GLLParser {
 				if(edge.getReturnSlot().getPostConditions().execute(this, lexer, ci)) {
 					continue label;
 				}
-				SPPFNode y = slot.createNodeFromPop(this, edge.getNode(), cn);
+				
+				SPPFNode y = slot.getNodeCreatorFromPop().create(this, slot, edge.getNode(), cn);
 				addDescriptor(edge.getReturnSlot(), edge.getDestination(), ci, y);
 			}
 		}
@@ -342,13 +343,13 @@ public class GLLParserImpl implements GLLParser {
 			label:
 			for (SPPFNode z : v.getPoppedElements()) {
 				
-				SPPFNode x = returnSlot.createNodeFromPop(this, w, z);
-				
 				// Execute pop actions for continuations, when the GSS node already
 				// exits
 				if(returnSlot.getPostConditions().execute(this, lexer, ci)) {
 					continue label;
 				}
+				
+				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
 				
 				addDescriptor(returnSlot, u, z.getRightExtent(), x);
 			}

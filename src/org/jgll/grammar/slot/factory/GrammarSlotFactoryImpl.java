@@ -12,12 +12,11 @@ import org.jgll.grammar.slot.HeadGrammarSlotFirstFollow;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
-import org.jgll.grammar.slot.specialized.FirstTokenSlot;
+import org.jgll.grammar.slot.nodecreator.IntermediateNodeCreator;
+import org.jgll.grammar.slot.nodecreator.NodeCreator;
+import org.jgll.grammar.slot.nodecreator.NonterminalNodeCreator;
+import org.jgll.grammar.slot.nodecreator.RightChildNodeCreator;
 import org.jgll.grammar.slot.specialized.LastTokenSlot;
-import org.jgll.grammar.slot.specialized.OnlyOneTokenSlot;
-import org.jgll.grammar.slot.specialized.SecondAndLastTokenSlot;
-import org.jgll.grammar.slot.specialized.SecondNonterminalSlot;
-import org.jgll.grammar.slot.specialized.SecondTokenSlot;
 import org.jgll.grammar.slot.test.ArrayFollowTest;
 import org.jgll.grammar.slot.test.ArrayPredictionTest;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -31,7 +30,12 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.regex.RegularExpression;
+import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Tuple;
 
 public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
@@ -40,6 +44,9 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	private int bodyGrammarSlotId;
 	private boolean firstFollowCheck;
 	
+	private NonterminalNodeCreator nonterminalNodeCreator = new NonterminalNodeCreator();
+	private RightChildNodeCreator rightNodeCreator = new RightChildNodeCreator();
+	private IntermediateNodeCreator intermediateNodeCreator = new IntermediateNodeCreator();
 	
 	public GrammarSlotFactoryImpl() {
 		this(true);
@@ -147,10 +154,10 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 															   ConditionTest postConditions) {
 		
 		if(symbolIndex == 1) {
-			return new SecondNonterminalSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions);
+			return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions, rightNodeCreator);
 		}
 		
-		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions);
+		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions, intermediateNodeCreator);
 	}
 
 	@Override
@@ -164,22 +171,39 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		RegularExpression regularExpression = (RegularExpression) body.get(symbolIndex);
 		
 		if (symbolIndex == 0 && body.size() == 1) {
-			return new OnlyOneTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
-		}
-		else if (symbolIndex == 1 && body.size() == 2) {
-			return new SecondAndLastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
-		}
-		else if (symbolIndex == body.size() - 1) {
-			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
-		}
-		else if (symbolIndex == 0) {
-			return new FirstTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
-		}
-		else if (symbolIndex == 1) {
-			return new SecondTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
-		}
-		else {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
+			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, new NodeCreator() {
+				
+				@Override
+				public SPPFNode create(GLLParser parser, BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+					int leftExtent = rightChild.getLeftExtent();
+					int rightExtent = rightChild.getRightExtent();
+					
+					SPPFLookup sppfLookup = parser.getSPPFLookup();
+					
+					LastGrammarSlot last = (LastGrammarSlot) slot;
+					NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(last.getHead(), leftExtent, rightExtent);
+					
+					sppfLookup.addPackedNode(newNode, last, rightChild.getLeftExtent(), DummyNode.getInstance(), rightChild);
+					return newNode;
+				}
+			}, null);
+		} else {
+			if (symbolIndex == 1 && body.size() == 2) {
+				return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, rightNodeCreator);
+			} else {
+				if (symbolIndex == body.size() - 1) {
+					return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, intermediateNodeCreator);
+				}
+				else if (symbolIndex == 0) {
+					return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, rightNodeCreator, null);
+				}
+				else if (symbolIndex == 1) {
+					return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, intermediateNodeCreator, rightNodeCreator);
+				}
+				else {
+					return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, intermediateNodeCreator);
+				}
+			}
 		}
 	}
 
@@ -188,12 +212,12 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		
 		if(postConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
 		
-		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, postConditions);
+		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, postConditions, nonterminalNodeCreator);
 	}
 	
 	@Override
 	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head) {
-		return new EpsilonGrammarSlot(bodyGrammarSlotId++, label, head);
+		return new EpsilonGrammarSlot(bodyGrammarSlotId++, label, head, nonterminalNodeCreator);
 	}
 	
 }
