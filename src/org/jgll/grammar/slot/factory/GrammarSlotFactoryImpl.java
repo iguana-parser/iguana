@@ -175,19 +175,18 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		} else {
 			if (symbolIndex == 1 && body.size() == 2) {
 				return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, rightNodeCreator);
-			} else {
-				if (symbolIndex == body.size() - 1) {
-					return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, intermediateNodeCreator);
-				}
-				else if (symbolIndex == 0) {
-					return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, rightNodeCreator, null);
-				}
-				else if (symbolIndex == 1) {
-					return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, intermediateNodeCreator, rightNodeCreator);
-				}
-				else {
-					return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, intermediateNodeCreator);
-				}
+			} 
+			else if (symbolIndex == body.size() - 1) {
+				return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, intermediateNodeCreator);
+			}
+			else if (symbolIndex == 0) {
+				return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, rightNodeCreator, null);
+			}
+			else if (symbolIndex == 1) {
+				return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, intermediateNodeCreator, rightNodeCreator);
+			}
+			else {
+				return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, intermediateNodeCreator, intermediateNodeCreator);
 			}
 		}
 	}

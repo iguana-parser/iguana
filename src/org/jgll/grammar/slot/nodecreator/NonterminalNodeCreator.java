@@ -17,7 +17,7 @@ public class NonterminalNodeCreator implements NodeCreator {
 		
 		SPPFLookup sppfLookup = parser.getSPPFLookup();
 		
-		LastGrammarSlot lastGrammarSlot = (LastGrammarSlot)slot;
+		LastGrammarSlot lastGrammarSlot = (LastGrammarSlot) slot;
 		
 		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(lastGrammarSlot.getHead(), leftExtent, rightExtent);
 		

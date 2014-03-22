@@ -14,7 +14,7 @@ public class PrecedeActions {
 		
 	public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
 		
-		log.debug("Precede restriction added %s <<! %s", regex);
+		log.debug("Precede restriction added <<! %s", regex);
 		
 		final Matcher matcher = regex.toAutomaton().reverse().getMatcher();
 
