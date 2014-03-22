@@ -49,11 +49,6 @@ public class Descriptor {
 	
 	private final int hash;
 	
-	/**
-	 * Arbitrary date to store in a descriptor.
-	 */
-	private Object object;
-	
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
@@ -117,14 +112,6 @@ public class Descriptor {
 		return "(" + slot + ", " + inputIndex + ", " +
 			   "(" + gssNode.getGrammarSlot() + ", " + gssNode.getInputIndex() + ")" +
 			   ", " + sppfNode + ")";
-	}
-
-	public void setObject(Object object) {
-		this.object = object;
-	}
-	
-	public Object getObject() {
-		return object;
 	}
 	
 }

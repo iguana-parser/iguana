@@ -149,8 +149,6 @@ public class Grammar implements Serializable {
 		log.debug("Longest terminal Chain: %d", longestTerminalChain);
 		log.debug("Maximum number alternates: %d", maximumNumAlternates);
 		log.debug("Maximum descriptors: %d", maxDescriptorsAtInput);
-		log.trace("Average descriptors: %d", averageDescriptorsAtInput);
-		log.trace("Standard Deviation descriptors: %d", stDevDescriptors);
 	}
 	
 	public Set<HeadGrammarSlot> getReachableNonterminals(HeadGrammarSlot nonterminal) {

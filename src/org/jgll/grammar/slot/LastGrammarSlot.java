@@ -3,14 +3,11 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.lookup.SPPFLookup;
-import org.jgll.sppf.DummyNode;
-import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.SPPFNode;
 
 /**
  * Corresponds to the last grammar slot in an alternate, e.g., X ::= alpha .
@@ -26,8 +23,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 
 	protected HeadGrammarSlot head;
 	
-	public LastGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postConditions) {
-		super(id, label, previous, null, postConditions);
+	public LastGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head, 
+						   ConditionTest postConditions, NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
+		super(id, label, previous, null, postConditions, nodeCreator, nodeCreatorFromPop);
 		this.head = head;
 	}
 	
@@ -37,28 +35,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 			parser.pop();			
 		}
 		return null;
-	}
-	
-	@Override
-	public SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
-
-		int leftExtent;
-		
-		if (leftChild != DummyNode.getInstance()) {
-			leftExtent = leftChild.getLeftExtent();
-		} else {
-			leftExtent = rightChild.getLeftExtent();
-		}
-		
-		int rightExtent = rightChild.getRightExtent();
-		
-		SPPFLookup sppfLookup = parser.getSPPFLookup();
-		
-		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(head, leftExtent, rightExtent);
-		
-		sppfLookup.addPackedNode(newNode, this, rightChild.getLeftExtent(), leftChild, rightChild);
-		
-		return newNode;
 	}
 	
 	@Override

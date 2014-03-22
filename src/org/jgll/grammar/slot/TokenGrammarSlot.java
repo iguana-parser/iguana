@@ -3,12 +3,11 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.regex.RegularExpression;
-import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 
@@ -29,8 +28,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	private final RegularExpression regularExpression;
 	
 	public TokenGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID,
-							ConditionTest preConditions, ConditionTest postConditions) {
-		super(id, label, previous, preConditions, postConditions);
+							ConditionTest preConditions, ConditionTest postConditions,
+							NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
+		super(id, label, previous, preConditions, postConditions, nodeCreator, nodeCreatorFromPop);
 		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
 		this.nodeId = nodeId;
@@ -58,38 +58,11 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		
 		TokenSymbolNode cr = parser.getTokenNode(tokenID, ci, length);
 		
-		SPPFNode node = createNode(parser, parser.getCurrentSPPFNode(), cr);
+		SPPFNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		
 		parser.setCurrentSPPFNode(node);
 		
 		return next;
-	}
-	
-	@Override
-	public SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
-		int leftExtent = leftChild.getLeftExtent();
-		int rightExtent = rightChild.getRightExtent();
-		
-		SPPFLookup sppfLookup = parser.getSPPFLookup();
-		
-		IntermediateNode newNode = sppfLookup.getIntermediateNode(this, leftExtent, rightExtent);
-		
-		sppfLookup.addPackedNode(newNode, this, rightChild.getLeftExtent(), leftChild, rightChild);
-		
-		return newNode;
-	}
-	
-	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
-		int leftExtent = leftChild.getLeftExtent();
-		int rightExtent = rightChild.getRightExtent();
-		
-		SPPFLookup sppfLookup = parser.getSPPFLookup();
-		
-		IntermediateNode newNode = sppfLookup.getIntermediateNode(next, leftExtent, rightExtent);
-		
-		sppfLookup.addPackedNode(newNode, next, rightChild.getLeftExtent(), leftChild, rightChild);
-		
-		return newNode;
 	}
 	
 	@Override

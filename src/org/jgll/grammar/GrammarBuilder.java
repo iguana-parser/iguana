@@ -443,7 +443,11 @@ public class GrammarBuilder implements Serializable {
 					break;
 						
 				case NOT_MATCH:
-					postConditionActions.add(NotMatchActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+					if (condition instanceof RegularExpressionCondition) {
+						postConditionActions.add(NotMatchActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+					} else {
+						
+					}
 					break;
 
 				case END_OF_LINE:
@@ -451,7 +455,7 @@ public class GrammarBuilder implements Serializable {
 				  break;
 				  
 				default:
-					throw new RuntimeException("Should not reach here.");
+					break;
 			}
 		}
 		
@@ -495,7 +499,7 @@ public class GrammarBuilder implements Serializable {
 				  break;
 				  
 				default:
-					throw new RuntimeException("Should not reach here.");
+					break;
 			}
 		}
 

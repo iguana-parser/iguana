@@ -45,8 +45,6 @@ public interface GLLParser {
 	
 	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode);
 	
-	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object);
-	
 	/**
 	 * 
 	 * @return

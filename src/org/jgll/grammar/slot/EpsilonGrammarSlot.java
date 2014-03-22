@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
@@ -21,8 +22,9 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
 	
-	public EpsilonGrammarSlot(int id, String label, HeadGrammarSlot head) {
-		super(id, label, null, head, null);
+	public EpsilonGrammarSlot(int id, String label, HeadGrammarSlot head,
+							  NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
+		super(id, label, null, head, null, nodeCreator, nodeCreatorFromPop);
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 /**
  * 
- * A wrapper for java.util.logging, providing the same feeling as the SLF4J.
+ * A wrapper for java.util.logging, providing a similar interface to SLF4J.
  * 
  * @author Ali Afroozeh
  *
@@ -19,8 +19,8 @@ public class LoggerWrapper {
 		this.logger = logger;
 		logger.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
-		logger.setLevel(Level.INFO);
-		handler.setLevel(Level.INFO);
+		logger.setLevel(Level.FINEST);
+		handler.setLevel(Level.FINEST);
 		handler.setFormatter(new ParserLogFormatter());
 		logger.addHandler(handler);
 	}
@@ -28,6 +28,18 @@ public class LoggerWrapper {
 	public static <T> LoggerWrapper getLogger(Class<T> clazz) {
 		return new LoggerWrapper(Logger.getLogger(clazz.getName()));
 	}
+	
+	public void info(String s, Object arg) {
+		if(logger.isLoggable(Level.INFO)) {
+			logger.info(String.format(s, arg));
+		}
+	}
+	
+	public void info(String s, Object arg1, Object arg2) {
+		if(logger.isLoggable(Level.INFO)) {
+			logger.info(String.format(s, arg1, arg2));
+		}
+	}	
 	
 	public void info(String s, Object...args) {
 		if(logger.isLoggable(Level.INFO)) {
@@ -53,12 +65,59 @@ public class LoggerWrapper {
 		}
 	}
 	
+	public void debug(String s, Object arg) {
+		if(logger.isLoggable(Level.FINE)) {
+			logger.fine(String.format(s, arg));
+		}
+	}
+	
+	public void debug(String s, Object arg1, Object arg2) {
+		if(logger.isLoggable(Level.FINE)) {
+			logger.fine(String.format(s, arg1, arg2));
+		}
+	}
+
+	public void debug(String s, Object arg1, Object arg2, Object arg3) {
+		if(logger.isLoggable(Level.FINE)) {
+			logger.fine(String.format(s, arg1, arg2, arg3));
+		}
+	}
+	
+	public void debug(String s, Object arg1, Object arg2, Object arg3, Object arg4) {
+		if(logger.isLoggable(Level.FINE)) {
+			logger.fine(String.format(s, arg1, arg2, arg3, arg4));
+		}
+	}	
+	
 	public void trace(String s, Object...args) {
 		if(logger.isLoggable(Level.FINEST)) {
 			logger.finest(String.format(s, args));
 		}
 	}
 	
+	public void trace(String s, Object arg) {
+		if(logger.isLoggable(Level.FINEST)) {
+			logger.finest(String.format(s, arg));
+		}
+	}
+
+	public void trace(String s, Object arg1, Object arg2) {
+		if(logger.isLoggable(Level.FINEST)) {
+			logger.finest(String.format(s, arg1, arg2));
+		}
+	}
+
+	public void trace(String s, Object arg1, Object arg2, Object arg3) {
+		if(logger.isLoggable(Level.FINEST)) {
+			logger.finest(String.format(s, arg1, arg2, arg3));
+		}
+	}	
+	
+	public void trace(String s, Object arg1, Object arg2, Object arg3, Object arg4) {
+		if(logger.isLoggable(Level.FINEST)) {
+			logger.finest(String.format(s, arg1, arg2, arg3, arg4));
+		}
+	}	
 	
 	
 }

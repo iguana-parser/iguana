@@ -17,6 +17,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -97,6 +98,7 @@ public class FilterTest3 {
 		Input input = Input.fromString("aaa+aaaaa+aaaa");
 		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, grammar, input);
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	

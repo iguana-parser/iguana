@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.parser.GLLParser;
-import org.jgll.sppf.SPPFNode;
 
 /**
  * 
@@ -29,8 +28,14 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	protected final ConditionTest preConditions;
 
 	protected final ConditionTest postConditions;
+	
+	protected final NodeCreator nodeCreator;
+	
+	protected final NodeCreator nodeCreatorFromPop;
 
-	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, ConditionTest preConditions, ConditionTest postConditions) {
+	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, 
+						   ConditionTest preConditions, ConditionTest postConditions,
+						   NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 
 		if(label == null) {
 			throw new IllegalArgumentException("Label cannot be null.");
@@ -47,6 +52,8 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 		this.previous = previous;
 		this.preConditions = preConditions;
 		this.postConditions = postConditions;
+		this.nodeCreator = nodeCreator;
+		this.nodeCreatorFromPop = nodeCreatorFromPop;
 	}
 	
 	public abstract Symbol getSymbol();
@@ -79,7 +86,9 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	public abstract boolean isNullable();
 	
-	public abstract SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild);
+	public NodeCreator getNodeCreatorFromPop() {
+		return nodeCreatorFromPop;
+	}
 	
 	public final ConditionTest getPreConditions() {
 		return preConditions;

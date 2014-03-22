@@ -3,14 +3,11 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.lookup.SPPFLookup;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.SPPFNode;
-
 
 /**
  * A grammar slot immediately before a nonterminal.
@@ -26,8 +23,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	protected final int nodeId;
 	
-	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, ConditionTest preConditions, ConditionTest postConditions) {
-		super(id, label, previous, preConditions, postConditions);
+	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
+								  ConditionTest preConditions, ConditionTest postConditions,
+								  NodeCreator nodeCreator) {
+		super(id, label, previous, preConditions, postConditions, nodeCreator, null);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
@@ -132,19 +131,5 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public int getNodeId() {
 		return nodeId;
-	}
-
-	@Override
-	public SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
-		int leftExtent = leftChild.getLeftExtent();
-		int rightExtent = rightChild.getRightExtent();
-		
-		SPPFLookup sppfLookup = parser.getSPPFLookup();
-		IntermediateNode newNode = sppfLookup.getIntermediateNode(this, leftExtent, rightExtent);
-		
-		sppfLookup.addPackedNode(newNode, this, rightChild.getLeftExtent(), leftChild, rightChild);
-		
-		return newNode;
-	}
-	
+	}	
 }

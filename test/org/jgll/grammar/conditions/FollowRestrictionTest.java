@@ -60,11 +60,10 @@ public class FollowRestrictionTest {
 	public ExpectedException thrown = ExpectedException.none();
 	
 	@Test
-	public void testRDParser() throws Exception {
+	public void testParser() throws Exception {
 		Input input = Input.fromString("abc:");
 		parser =  ParserFactory.newParser(grammar, input);
 		thrown.expect(ParseError.class);
-		thrown.expectMessage("Parse error at line:1 column:4");
 		parser.parse(input, grammar, "S");
 	}
 

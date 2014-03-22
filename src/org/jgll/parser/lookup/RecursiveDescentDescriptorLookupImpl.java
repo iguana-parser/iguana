@@ -24,6 +24,7 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 
 	private HashTableFactory factory;
 	
+	@SuppressWarnings("unchecked")
 	public RecursiveDescentDescriptorLookupImpl(Grammar grammar, Input input) {
 		long start = System.nanoTime();
 
@@ -74,6 +75,7 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 			descriptorsSet[descriptor.getInputIndex()] = set;
 			set.add(descriptor);
 			descriptorsStack.push(descriptor);
+			log.trace("Descriptor created: %s", descriptor);
 			return true;
 		}
 
@@ -81,6 +83,7 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 
 		if (add == null) {
 			descriptorsStack.push(descriptor);
+			log.trace("Descriptor created: %s", descriptor);
 			return true;
 		}
 

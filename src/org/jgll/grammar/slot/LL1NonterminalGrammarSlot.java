@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot;
 
+import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -16,8 +17,10 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	
 	private static final long serialVersionUID = 1L;
 
-	public LL1NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, LL1HeadGrammarSlot nonterminal, ConditionTest preConditions, ConditionTest postConditions) {
-		super(id, nodeId, label, previous, nonterminal, preConditions, postConditions);
+	public LL1NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, 
+									 LL1HeadGrammarSlot nonterminal, ConditionTest preConditions, ConditionTest postConditions,
+									 NodeCreator nodeCreator) {
+		super(id, nodeId, label, previous, nonterminal, preConditions, postConditions, nodeCreator);
 	}
 	
 	@Override

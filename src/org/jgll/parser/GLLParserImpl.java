@@ -159,6 +159,7 @@ public class GLLParserImpl implements GLLParser {
 		if (root == null) {
 			ParseError e = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 			log.info("Parse error:\n %s", e);
+			throw e;
 		}
 		
 		log.info("Parsing finished successfully.");
@@ -243,20 +244,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public final void addDescriptor(GrammarSlot slot, GSSNode u, int inputIndex, SPPFNode w) {
 		Descriptor descriptor = new Descriptor(slot, u, inputIndex, w);
-		boolean added = descriptorLookup.addDescriptor(descriptor);
-		if(added) {
-			log.trace("Descriptor created: %s : %b", descriptor, added);
-		}
-	}
-	
-	@Override
-	public void addDescriptor(GrammarSlot slot, GSSNode currentGSSNode, int inputIndex, SPPFNode currentNode, Object object) {
-		Descriptor descriptor = new Descriptor(slot, currentGSSNode, inputIndex, currentNode);
-		descriptor.setObject(object);
-		boolean added = descriptorLookup.addDescriptor(descriptor);
-		if(added) {
-			log.trace("Descriptor created: %s : %b", descriptor, added);
-		}
+		descriptorLookup.addDescriptor(descriptor);
 	}
 	
 	@Override
