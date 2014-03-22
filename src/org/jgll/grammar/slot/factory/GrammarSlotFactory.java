@@ -33,7 +33,12 @@ public interface GrammarSlotFactory {
 															   ConditionTest preConditions,
 															   ConditionTest postConditions);
 
-	public LastGrammarSlot createLastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postConditions);
+	public LastGrammarSlot createLastGrammarSlot(List<Symbol> body,
+											     int symbolIndex, 
+											     String label, 
+												 BodyGrammarSlot previous, 
+												 HeadGrammarSlot head, 
+												 ConditionTest postConditions);
 	
 	
 	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head);
