@@ -13,8 +13,8 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.specialized.FirstTokenSlot;
+import org.jgll.grammar.slot.specialized.LastTokenSlot;
 import org.jgll.grammar.slot.specialized.OnlyOneTokenSlot;
-import org.jgll.grammar.slot.specialized.SecondAndLastTokenSlot;
 import org.jgll.grammar.slot.specialized.SecondNonterminalSlot;
 import org.jgll.grammar.slot.test.ArrayFollowTest;
 import org.jgll.grammar.slot.test.ArrayPredictionTest;
@@ -167,8 +167,8 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		else if (symbolIndex == 0) {
 			return new FirstTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 		}
-		else if (symbolIndex == 1 && body.size() == 2) {
-			return new SecondAndLastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
+		else if (symbolIndex == body.size() - 1) {
+			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 		}
 		else {
 			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);

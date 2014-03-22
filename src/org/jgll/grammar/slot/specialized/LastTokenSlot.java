@@ -10,20 +10,20 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 
-public class SecondAndLastTokenSlot extends TokenGrammarSlot {
+public class LastTokenSlot extends TokenGrammarSlot {
 
 	private static final long serialVersionUID = 1L;
-
-	public SecondAndLastTokenSlot(int id, int nodeId, String label,
-			BodyGrammarSlot previous, RegularExpression regularExpression,
-			int tokenID, ConditionTest preConditions,
-			ConditionTest postConditions) {
+	
+	public LastTokenSlot(int id, int nodeId, String label,
+ 						 BodyGrammarSlot previous, RegularExpression regularExpression,
+						 int tokenID, ConditionTest preConditions,
+						 ConditionTest postConditions) {
+		
 		super(id, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
 	}
 
 	@Override
 	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
-		
 		int leftExtent = leftChild.getLeftExtent();
 		int rightExtent = rightChild.getRightExtent();
 		
@@ -36,5 +36,4 @@ public class SecondAndLastTokenSlot extends TokenGrammarSlot {
 		
 		return newNode;
 	}
-
 }
