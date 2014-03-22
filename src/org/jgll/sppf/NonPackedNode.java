@@ -29,6 +29,11 @@ public abstract class NonPackedNode extends SPPFNode {
 	private final int hash;
 	
 	public NonPackedNode(int id, int leftExtent, int rightExtent) {
+		
+		assert id >= 0;
+		assert leftExtent >= 0;
+		assert rightExtent >= 0;
+		
 		this.id = id;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;

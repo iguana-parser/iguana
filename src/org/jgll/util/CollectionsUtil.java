@@ -13,6 +13,8 @@ public class CollectionsUtil {
 	
 	public static <T> String listToString(List<T> elements, String sep) {
 		
+		if(elements == null) throw new IllegalArgumentException("Elements cannot be null.");
+		
 		if(elements.size() == 0) {
 			return "";
 		}

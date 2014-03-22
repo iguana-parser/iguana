@@ -72,15 +72,24 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		
 		SPPFLookup sppfLookup = parser.getSPPFLookup();
 		
-		IntermediateNode newNode = sppfLookup.getIntermediateNode(next, leftExtent, rightExtent);
+		IntermediateNode newNode = sppfLookup.getIntermediateNode(this, leftExtent, rightExtent);
 		
-		sppfLookup.addPackedNode(newNode, next, rightChild.getLeftExtent(), leftChild, rightChild);
+		sppfLookup.addPackedNode(newNode, this, rightChild.getLeftExtent(), leftChild, rightChild);
 		
 		return newNode;
 	}
 	
 	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
-		return createNodeFromPop(parser, leftChild, rightChild);
+		int leftExtent = leftChild.getLeftExtent();
+		int rightExtent = rightChild.getRightExtent();
+		
+		SPPFLookup sppfLookup = parser.getSPPFLookup();
+		
+		IntermediateNode newNode = sppfLookup.getIntermediateNode(next, leftExtent, rightExtent);
+		
+		sppfLookup.addPackedNode(newNode, next, rightChild.getLeftExtent(), leftChild, rightChild);
+		
+		return newNode;
 	}
 	
 	@Override

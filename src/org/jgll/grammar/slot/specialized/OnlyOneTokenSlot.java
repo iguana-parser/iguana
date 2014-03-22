@@ -1,18 +1,14 @@
 package org.jgll.grammar.slot.specialized;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.test.ConditionTest;
-import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
 
 /**
  * Handles the case A ::= .x where x is a token grammar slot 
@@ -20,7 +16,7 @@ import org.jgll.sppf.TokenSymbolNode;
  * @author Ali Afroozeh
  *
  */
-public class OnlyOneTokenSlot extends TokenGrammarSlot {
+public class OnlyOneTokenSlot extends LastTokenSlot {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,36 +26,6 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 			ConditionTest postConditions) {
 		
 		super(id, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions);
-	}
-	
-	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
-		int ci = parser.getCurrentInputIndex();
-		
-		if(preConditions.execute(parser, lexer, ci)) {
-			return null;
-		}
-
-		int length = lexer.tokenLengthAt(ci, tokenID);
-		
-		if(length < 0) {
-			parser.recordParseError(this);
-			return null;
-		}
-		
-		if(postConditions.execute(parser, lexer, ci + length)) {
-			return null;
-		}
-		
-		TokenSymbolNode cr = parser.getTokenNode(tokenID, ci, length);
-		
-		SPPFNode node = createNode(parser, parser.getCurrentSPPFNode(), cr);
-		
-		parser.setCurrentSPPFNode(node);
-		
-		parser.pop();
-		
-		return null;
 	}
 	
 	@Override
