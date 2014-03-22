@@ -79,7 +79,7 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	
 	public abstract boolean isNullable();
 	
-	public abstract SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild);
+	public abstract SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild);
 	
 	public final ConditionTest getPreConditions() {
 		return preConditions;

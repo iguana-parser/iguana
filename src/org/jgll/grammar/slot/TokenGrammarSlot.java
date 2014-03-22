@@ -66,7 +66,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
+	public SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
 		int leftExtent = leftChild.getLeftExtent();
 		int rightExtent = rightChild.getRightExtent();
 		
@@ -77,6 +77,10 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		sppfLookup.addPackedNode(newNode, next, rightChild.getLeftExtent(), leftChild, rightChild);
 		
 		return newNode;
+	}
+	
+	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
+		return createNodeFromPop(parser, leftChild, rightChild);
 	}
 	
 	@Override

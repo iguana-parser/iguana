@@ -80,5 +80,10 @@ public class OnlyOneTokenSlot extends TokenGrammarSlot {
 		return newNode;
 	}
 
+	@Override
+	public SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
+		throw new UnsupportedOperationException("Cannot create a node from this slot at pop");
+	}
+
 
 }

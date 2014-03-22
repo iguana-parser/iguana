@@ -18,7 +18,7 @@ public class SecondNonterminalSlot extends NonterminalGrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
+	public SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
 		return rightChild;
 	}
 }

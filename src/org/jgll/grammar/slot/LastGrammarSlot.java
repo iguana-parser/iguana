@@ -40,7 +40,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public SPPFNode createNode(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
+	public SPPFNode createNodeFromPop(GLLParser parser, SPPFNode leftChild, SPPFNode rightChild) {
 
 		int leftExtent;
 		
