@@ -32,6 +32,7 @@ import org.jgll.grammar.slotaction.NotPrecedeActions;
 import org.jgll.grammar.slotaction.PrecedeActions;
 import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Keyword;
@@ -79,8 +80,6 @@ public class GrammarBuilder implements Serializable {
 	List<RegularExpression> tokens;
 	
 	List<Nonterminal> nonterminals;
-	
-	Automaton[] automatons;
 	
 	Matcher[] dfas;
 	
@@ -156,10 +155,8 @@ public class GrammarBuilder implements Serializable {
 			objects[(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
 		}
 		
-		long start = System.nanoTime();
-		createAutomatonsMap();
-		long end = System.nanoTime();
-		log.info("Automatons created in %d ms", (end - start) / 1000_000);
+		long start;
+		long end;
 		
 		start = System.nanoTime();
 		firstSets = GrammarProperties.calculateFirstSets(definitions);
@@ -182,6 +179,11 @@ public class GrammarBuilder implements Serializable {
 		}
 		end = System.nanoTime();
 		log.info("Grammar Graph is composed in %d ms", (end - start) / 1000_000);
+		
+		start = System.nanoTime();
+		createAutomatonsMap();
+		end = System.nanoTime();
+		log.info("Automatons created in %d ms", (end - start) / 1000_000);
 		
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
@@ -549,23 +551,25 @@ public class GrammarBuilder implements Serializable {
 	
 	private void createAutomatonsMap() {
 		dfas = new Matcher[tokens.size()];
-		automatons = new Automaton[tokens.size()];
 		
 		for(RegularExpression regex : tokens) {
 			
 			Integer id = tokenIDMap.get(regex);
-
-			if(regex instanceof Character) {
-				System.out.println("Character");
-				Matcher matcher = new CharacterMatcher(((Character) regex).getValue());
-				dfas[id] = matcher;
-			} 
-			else if (regex instanceof Range) {
-				System.out.println("Range");
+			
+			if(regex instanceof CharacterClass) {
+				CharacterClass charClass = (CharacterClass) regex;
+				if(charClass.size() == 1) {
+					Range range = charClass.get(0);
+					
+					if(range.getStart() == range.getEnd()) {
+						System.out.println("Character");
+						Matcher matcher = new CharacterMatcher(range.getStart());
+						dfas[id] = matcher;
+					}
+				} 
 			}
 			else {
 				Automaton a = regex.toAutomaton().minimize();
-				automatons[id] = a;
 				Matcher matcher = a.getMatcher();
 				dfas[id] = matcher;
 			}			

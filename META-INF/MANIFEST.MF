@@ -8,7 +8,6 @@ Export-Package:
  org.jgll.grammar;uses:="org.jgll.parser",
  org.jgll.grammar.basic,
  org.jgll.grammar.condition,
- org.jgll.grammar.conditions,
  org.jgll.grammar.ebnf,
  org.jgll.grammar.ll1,
  org.jgll.grammar.patterns,

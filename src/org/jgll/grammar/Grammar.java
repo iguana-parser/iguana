@@ -67,8 +67,6 @@ public class Grammar implements Serializable {
 	
 	private List<RegularExpression> tokens;
 	
-	private List<Matcher> matchers;
-	
 	private Matcher[] dfas;
 	
 	private Map<Nonterminal, Set<RegularExpression>> firstSets;
@@ -118,11 +116,6 @@ public class Grammar implements Serializable {
 		this.nonterminals = builder.nonterminals;
 
 		this.tokenIDMap = builder.tokenIDMap;
-		
-		this.matchers = new ArrayList<>();
-		for(RegularExpression regex : tokens) {
-			matchers.add(regex.toAutomaton().getMatcher());
-		}
 		
 		this.nameToSlots = new HashMap<>();
 		for(BodyGrammarSlot slot : slots) {
@@ -266,7 +259,7 @@ public class Grammar implements Serializable {
 	}
 	
 	public Matcher getMatcher(int index) {
-		return matchers.get(index);
+		return dfas[index];
 	}
 	
 	public int getCountTokens() {

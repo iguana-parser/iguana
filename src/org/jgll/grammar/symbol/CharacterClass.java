@@ -115,4 +115,13 @@ public class CharacterClass extends AbstractRegularExpression {
 	public Set<Range> getFirstSet() {
 		return alt.getFirstSet();
 	}
+	
+	public int size() {
+		return alt.size();
+	}
+	
+	public Range get(int index) {
+		return alt.get(index);
+	}
+	
 }

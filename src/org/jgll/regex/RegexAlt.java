@@ -88,6 +88,14 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		return regularExpressions.iterator();
 	}
 	
+	public int size() {
+		return regularExpressions.size();
+	}
+	
+	public T get(int index) {
+		return regularExpressions.get(index);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 	
