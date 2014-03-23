@@ -36,10 +36,12 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Automaton;
 import org.jgll.regex.RegularExpression;
+import org.jgll.regex.matcher.CharacterMatcher;
 import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
@@ -552,13 +554,21 @@ public class GrammarBuilder implements Serializable {
 		for(RegularExpression regex : tokens) {
 			
 			Integer id = tokenIDMap.get(regex);
-			Automaton a = regex.toAutomaton().minimize();
-			
-			automatons[id] = a;
 
-			Matcher dfa = a.getMatcher();
-			dfa.setId(id);
-			dfas[id] = dfa;
+			if(regex instanceof Character) {
+				System.out.println("Character");
+				Matcher matcher = new CharacterMatcher(((Character) regex).getValue());
+				dfas[id] = matcher;
+			} 
+			else if (regex instanceof Range) {
+				System.out.println("Range");
+			}
+			else {
+				Automaton a = regex.toAutomaton().minimize();
+				automatons[id] = a;
+				Matcher matcher = a.getMatcher();
+				dfas[id] = matcher;
+			}			
 		}
 	}
 	

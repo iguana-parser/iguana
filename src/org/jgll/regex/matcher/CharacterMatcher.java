@@ -1,49 +1,53 @@
 package org.jgll.regex.matcher;
 
-import java.io.Serializable;
-
 import org.jgll.regex.State;
 import org.jgll.regex.StateAction;
 import org.jgll.util.Input;
 
+public class CharacterMatcher implements Matcher {
 
-public class TrueMatcher implements Matcher, Serializable {
+	private final int c;
 	
-	private static final long serialVersionUID = 1L;
+	public CharacterMatcher(int c) {
+		this.c = c;
+	}
 	
 	@Override
 	public boolean match(Input input) {
-		return true;
+		return input.charAt(0) == c;
 	}
 
 	@Override
 	public int match(Input input, int inputIndex) {
-		return 0;
+		return input.charAt(inputIndex) == c ? 1 : -1;
 	}
 
 	@Override
 	public boolean match(Input input, int start, int end) {
-		return true;
+		return input.charAt(start) == c;
 	}
 
 	@Override
 	public int matchBackwards(Input input, int inputIndex) {
-		return 0;
+		if(inputIndex > 0) {
+			return input.charAt(inputIndex - 1) == c ? 1 : -1;
+		}
+		return -1;
 	}
 
 	@Override
 	public Matcher setMode(int mode) {
-		return this;
+		return null;
 	}
-	
+
 	@Override
 	public void addStateAction(State state, StateAction action) {
-		// Do nothing
+		
 	}
-	
+
 	@Override
 	public Matcher copy() {
-		return this;
+		return new CharacterMatcher(c);
 	}
 
 }

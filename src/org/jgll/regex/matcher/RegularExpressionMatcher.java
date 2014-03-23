@@ -50,17 +50,6 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 	}
 	
 	@Override
-	public int getId() {
-		return id;
-	}
-	
-	@Override
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-
-	@Override
 	public int match(Input input, int inputIndex) {
 		
 		int length = 0;
@@ -195,7 +184,7 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 
 	@Override
 	public Matcher copy() {
-		return null;
+		return new RegularExpressionMatcher(transitionTable, endStates, startStateId, transitions, matchActions);
 	}
 	
 }
