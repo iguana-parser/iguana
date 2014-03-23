@@ -1,5 +1,7 @@
-package org.jgll.regex;
+package org.jgll.regex.matcher;
 
+import org.jgll.regex.State;
+import org.jgll.regex.StateAction;
 import org.jgll.util.Input;
 
 public interface Matcher {

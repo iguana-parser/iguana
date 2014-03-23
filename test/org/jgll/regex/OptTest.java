@@ -3,6 +3,7 @@ package org.jgll.regex;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
+import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
 import org.junit.Test;
 

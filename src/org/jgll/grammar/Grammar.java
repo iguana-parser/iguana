@@ -20,8 +20,8 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
+import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 

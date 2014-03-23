@@ -4,8 +4,8 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
+import org.jgll.regex.matcher.Matcher;
 
 public class NotFollowActions {
 	

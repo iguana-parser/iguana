@@ -2,7 +2,7 @@ package org.jgll.lexer;
 
 import java.util.BitSet;
 
-import org.jgll.regex.Matcher;
+import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
 
 

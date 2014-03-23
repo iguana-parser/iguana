@@ -1,12 +1,14 @@
-package org.jgll.regex;
+package org.jgll.regex.matcher;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.regex.State;
+import org.jgll.regex.StateAction;
 import org.jgll.util.Input;
 
-public abstract class AbstractMatcher implements Matcher, Serializable {
+public class RegularExpressionMatcher implements Matcher, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -18,22 +20,22 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 
 	protected final int startStateId;
 	
-	protected final int[] intervals;
-	
 	protected int id;
 	
 	protected int mode = LONGEST_MATCH;
 
-	public AbstractMatcher(int[][] transitionTable, 
+	private Transitions transitions;
+
+	public RegularExpressionMatcher(int[][] transitionTable, 
 						   boolean[] endStates, 
-						   int startStateId, 
-						   int[] intervals,
+						   int startStateId,
+						   Transitions transitions,
 						   Set<StateAction>[] matchActions) {
 		
 		this.transitionTable = transitionTable;
 		this.endStates = endStates;
 		this.startStateId = startStateId;
-		this.intervals = intervals;
+		this.transitions = transitions;
 		this.matchActions = matchActions;
 	}
 
@@ -90,7 +92,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		
 		// Handling the EOF character
 		if(input.charAt(inputIndex) == 0) {
-			int transitionId = getTransitionId(0);
+			int transitionId = transitions.getTransitionId(0);
 
 			if(transitionId == -1) {
 				return -1;
@@ -111,7 +113,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		}
 		
 		for(int i = inputIndex; i < input.length(); i++) {
-			int transitionId = getTransitionId(input.charAt(i));
+			int transitionId = transitions.getTransitionId(input.charAt(i));
 			
 			if(transitionId == -1) {
 				break;
@@ -155,7 +157,7 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		}
 		
 		for(int i = inputIndex; i >= 0; i--) {
-			int transitionId = getTransitionId(input.charAt(i));
+			int transitionId = transitions.getTransitionId(input.charAt(i));
 			
 			if(transitionId == -1) {
 				break;
@@ -190,7 +192,10 @@ public abstract class AbstractMatcher implements Matcher, Serializable {
 		}
 		set.add(action);
 	}
-	
-	protected abstract int getTransitionId(int c);
+
+	@Override
+	public Matcher copy() {
+		return null;
+	}
 	
 }

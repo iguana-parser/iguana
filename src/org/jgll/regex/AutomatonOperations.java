@@ -11,6 +11,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.regex.matcher.LargeIntervalTransitions;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.RegularExpressionMatcher;
+import org.jgll.regex.matcher.ShortIntervalTransitions;
+import org.jgll.regex.matcher.Transitions;
+import org.jgll.regex.matcher.TrueMatcher;
 import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
@@ -129,11 +135,13 @@ public class AutomatonOperations {
 			}
 		}
 		
+		Transitions transitions;
 		if(intervals[intervals.length - 1] - intervals[0] > Character.MAX_VALUE) {
-			return new LargeIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, actions);					
+			transitions = new LargeIntervalTransitions(intervals);
 		} else {
-			return new ShortIntervalMatcher(transitionTable, endStates, nfa.getStartState().getId(), intervals, actions);
+			transitions = new ShortIntervalTransitions(intervals);
 		}
+		return new RegularExpressionMatcher(transitionTable, endStates, nfa.getStartState().getId(), transitions, actions);
 	}
 	
 	private static Set<State> epsilonClosure2(Set<State> states) {

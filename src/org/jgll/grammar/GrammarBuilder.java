@@ -39,8 +39,8 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Automaton;
-import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
+import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 
