@@ -562,7 +562,6 @@ public class GrammarBuilder implements Serializable {
 					Range range = charClass.get(0);
 					
 					if(range.getStart() == range.getEnd()) {
-						System.out.println("Character");
 						Matcher matcher = new CharacterMatcher(range.getStart());
 						dfas[id] = matcher;
 						continue;

@@ -126,10 +126,10 @@ public class GrammarProperties {
 				if(!((RegularExpression)s).isNullable()) {
 					return false;
 				}
-			}
-			
-			if(!isNullable((Nonterminal) s, firstSets)) {
-				return false;
+			} else {
+				if(!isNullable((Nonterminal) s, firstSets)) {
+					return false;
+				}				
 			}
 		}
 

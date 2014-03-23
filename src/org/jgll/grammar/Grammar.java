@@ -3,7 +3,6 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
