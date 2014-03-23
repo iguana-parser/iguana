@@ -14,10 +14,10 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -98,7 +98,6 @@ public class FilterTest3 {
 		Input input = Input.fromString("aaa+aaaaa+aaaa");
 		parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, grammar, input);
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	
@@ -111,8 +110,8 @@ public class FilterTest3 {
 		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 3, 0, 1);
 		TokenSymbolNode node7 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
 		node6.addChild(node7);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 1, 3);
-		NonterminalSymbolNode node9 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 1, 2);
+		ListSymbolNode node8 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 1, 3);
+		ListSymbolNode node9 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 1, 2);
 		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 3, 1, 2);
 		TokenSymbolNode node11 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 1, 1);
 		node10.addChild(node11);
@@ -131,10 +130,10 @@ public class FilterTest3 {
 		NonterminalSymbolNode node16 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 3, 4, 5);
 		TokenSymbolNode node17 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 4, 1);
 		node16.addChild(node17);
-		NonterminalSymbolNode node18 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 5, 9);
-		NonterminalSymbolNode node19 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 5, 8);
-		NonterminalSymbolNode node20 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 5, 7);
-		NonterminalSymbolNode node21 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 5, 6);
+		ListSymbolNode node18 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 5, 9);
+		ListSymbolNode node19 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 5, 8);
+		ListSymbolNode node20 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 5, 7);
+		ListSymbolNode node21 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 5, 6);
 		NonterminalSymbolNode node22 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 3, 5, 6);
 		TokenSymbolNode node23 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 5, 1);
 		node22.addChild(node23);
@@ -165,9 +164,9 @@ public class FilterTest3 {
 		NonterminalSymbolNode node32 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 3, 10, 11);
 		TokenSymbolNode node33 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 10, 1);
 		node32.addChild(node33);
-		NonterminalSymbolNode node34 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 11, 14);
-		NonterminalSymbolNode node35 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 11, 13);
-		NonterminalSymbolNode node36 = new NonterminalSymbolNode(grammar.getNonterminalId(EPlus), 2, 11, 12);
+		ListSymbolNode node34 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 11, 14);
+		ListSymbolNode node35 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 11, 13);
+		ListSymbolNode node36 = new ListSymbolNode(grammar.getNonterminalId(EPlus), 2, 11, 12);
 		NonterminalSymbolNode node37 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 3, 11, 12);
 		TokenSymbolNode node38 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 11, 1);
 		node37.addChild(node38);
@@ -186,6 +185,7 @@ public class FilterTest3 {
 		node31.addChild(node34);
 		node1.addChild(node2);
 		node1.addChild(node31);
+
 		return node1;
 	}
 

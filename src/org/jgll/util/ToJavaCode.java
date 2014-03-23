@@ -112,12 +112,13 @@ public class ToJavaCode implements SPPFVisitor {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			node.setObject("node" + count);
-			
+
 			sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
-					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId())  + "), " + 
+					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId()).getName()  + "), " + 
+					grammar.getCountAlternates(grammar.getNonterminalById(node.getId())) + ", " +
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
-				
+			
 			count++;
 			
 			visitChildren(node);

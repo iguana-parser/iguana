@@ -75,7 +75,7 @@ public class OperatorPrecedence {
 			if(newNonterminals.containsKey(pattern.getNonterminal().getName())) {
 				int index = newNonterminals.get(pattern.getNonterminal().getName());
 				for(int i = 1; i <= index; i++) {
-					for(List<Symbol> alt : definitions.get(new Nonterminal(pattern.getNonterminal().getName(), i))) {
+					for(List<Symbol> alt : definitions.get(new Nonterminal(pattern.getNonterminal().getName(), i, pattern.getNonterminal().isEbnfList()))) {
 						
 						if(alt != null) {
 							if (match(plain(alt), pattern.getParent())) {
@@ -278,7 +278,7 @@ public class OperatorPrecedence {
 			if(freshNonterminal == null) {
 				
 				int index = newNonterminals.get(pattern.getNonterminal().getName());
-				freshNonterminal = new Nonterminal(pattern.getNonterminal().getName(), index + 1);
+				freshNonterminal = new Nonterminal(pattern.getNonterminal().getName(), index + 1, pattern.getNonterminal().isEbnfList());
 				newNonterminals.put(freshNonterminal.getName(), index + 1);
 				map.put(e.getValue(), freshNonterminal);
 			}
@@ -477,7 +477,7 @@ public class OperatorPrecedence {
 		}
 		
 		int index = newNonterminals.get(nonterminal.getName());
-		Nonterminal newNonterminal = new Nonterminal(nonterminal.getName(), index + 1);
+		Nonterminal newNonterminal = new Nonterminal(nonterminal.getName(), index + 1, nonterminal.isEbnfList());
 		newNonterminals.put(nonterminal.getName(), index + 1);
 		return newNonterminal;
 	}
@@ -549,7 +549,7 @@ public class OperatorPrecedence {
 		List<Symbol> plain = new ArrayList<>();
 		for(Symbol symbol : alternate) {
 			if(symbol instanceof Nonterminal && ((Nonterminal) symbol).getIndex() > 0) {
-				plain.add(new Nonterminal(symbol.getName()));
+				plain.add(new Nonterminal(symbol.getName(), ((Nonterminal) symbol).isEbnfList()));
 			} else {
 				plain.add(symbol);
 			}
