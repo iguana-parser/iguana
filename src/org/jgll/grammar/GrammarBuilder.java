@@ -565,14 +565,13 @@ public class GrammarBuilder implements Serializable {
 						System.out.println("Character");
 						Matcher matcher = new CharacterMatcher(range.getStart());
 						dfas[id] = matcher;
+						continue;
 					}
 				} 
 			}
-			else {
-				Automaton a = regex.toAutomaton().minimize();
-				Matcher matcher = a.getMatcher();
-				dfas[id] = matcher;
-			}			
+			Automaton a = regex.toAutomaton().minimize();
+			Matcher matcher = a.getMatcher();
+			dfas[id] = matcher;
 		}
 	}
 	
