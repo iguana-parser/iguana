@@ -344,8 +344,9 @@ public class GLLParserImpl implements GLLParser {
 			for (SPPFNode z : v.getPoppedElements()) {
 				
 				// Execute pop actions for continuations, when the GSS node already
-				// exits
-				if(returnSlot.getPostConditions().execute(this, lexer, ci)) {
+				// exits. The input index will be the right extend of the node
+				// stored in the popped elements.
+				if(returnSlot.getPostConditions().execute(this, lexer, z.getRightExtent())) {
 					continue label;
 				}
 				

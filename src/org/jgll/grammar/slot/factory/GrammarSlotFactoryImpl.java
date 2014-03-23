@@ -170,23 +170,40 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		
 		RegularExpression regularExpression = (RegularExpression) body.get(symbolIndex);
 		
+		// A ::= .x
 		if (symbolIndex == 0 && body.size() == 1) {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalWithOneChildNodeCreator, null);
+			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+									 preConditions, postConditions, nonterminalWithOneChildNodeCreator, null);
 		} 
+		
+		// A ::= x . y
 		else if (symbolIndex == 1 && body.size() == 2) {
-			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, rightNodeCreator);
+			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+									 preConditions, postConditions, nonterminalNodeCreator, rightNodeCreator);
 		} 
+		
+		// A ::= alpha .x  where |alpha| > 1
 		else if (symbolIndex == body.size() - 1) {
-			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, nonterminalNodeCreator, intermediateNodeCreator);
+			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+									 preConditions, postConditions, nonterminalNodeCreator, intermediateNodeCreator);
 		}
+		
+		// A ::= .x alpha  where |alpha| >= 1
 		else if (symbolIndex == 0) {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, rightNodeCreator, null);
+			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+										preConditions, postConditions, rightNodeCreator, null);
 		}
+		
+		// A ::= x . y alpha  where |alpha| >= 1
 		else if (symbolIndex == 1) {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, intermediateNodeCreator, rightNodeCreator);
+			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+										preConditions, postConditions, intermediateNodeCreator, rightNodeCreator);
 		}
+		
+		// A ::= beta .x alpha where |beta| >=1 and |alpha| >= 1
 		else {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, preConditions, postConditions, intermediateNodeCreator, intermediateNodeCreator);
+			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+										preConditions, postConditions, intermediateNodeCreator, intermediateNodeCreator);
 		}
 	}
 

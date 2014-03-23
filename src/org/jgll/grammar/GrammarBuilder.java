@@ -425,10 +425,8 @@ public class GrammarBuilder implements Serializable {
 			
 			if (symbolIndex > 0) {
 				if(body.get(symbolIndex - 1) instanceof Nonterminal) {
-					if(body.get(symbolIndex - 1) instanceof Nonterminal) {
-						ConditionTest postConditionsTest = getPostConditions(body.get(symbolIndex - 1).getConditions());
-						return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, postConditionsTest);						
-					}
+					ConditionTest postConditionsTest = getPostConditions(body.get(symbolIndex - 1).getConditions());
+					return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, postConditionsTest);						
 				}
 			}
 			
