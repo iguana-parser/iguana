@@ -3,7 +3,10 @@ package org.jgll.grammar.slot;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.Set;
 
+import org.jgll.grammar.slot.test.FollowTest;
+import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
@@ -33,12 +36,20 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	private final int id;
 	
-	public HeadGrammarSlot(int id, Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alts, boolean nullable) {
+	private final PredictionTest predictionTest;
+	
+	private final FollowTest followTest;
+	
+	public HeadGrammarSlot(int id, Nonterminal nonterminal, 
+						   int nonterminalId, List<List<Symbol>> alts, boolean nullable, 
+						   PredictionTest predictionTest, FollowTest followTest) {
 		this.id = id;
 		this.nonterminal = nonterminal;
 		this.nonterminalId = nonterminalId;
 		this.firstSlots = new BodyGrammarSlot[alts.size()];
 		this.nullable = nullable;
+		this.followTest = followTest;
+		this.predictionTest = predictionTest;
 	}
 		
 	public boolean isNullable() {
@@ -46,11 +57,11 @@ public class HeadGrammarSlot implements GrammarSlot {
 	}
 		
 	public boolean test(int v) {
-		return true;
+		return predictionTest.test(v);
 	}
 	
 	public boolean testFollowSet(int v) {
-		return true;
+		return followTest.test(v);
 	}
 	
 	public void setFirstGrammarSlotForAlternate(BodyGrammarSlot slot, int index) {
@@ -63,9 +74,14 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+		int ci = parser.getCurrentInputIndex();
 		
-		for(BodyGrammarSlot slot : firstSlots) {
-			parser.addDescriptor(slot);
+		Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));
+		
+		if(set == null) return null;
+		
+		for(int alternateIndex : set) {
+			parser.addDescriptor(firstSlots[alternateIndex]);
 		}
 		
 		return null;

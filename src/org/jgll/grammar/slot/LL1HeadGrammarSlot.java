@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.slot.test.FollowTest;
+import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
@@ -22,8 +24,10 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 	
 	private int max;
 
-	public LL1HeadGrammarSlot(int id, Nonterminal nonterminal, int nonterminalId, List<List<Symbol>> alternates, boolean nullable, int min, int max) {
-		super(id, nonterminal, nonterminalId, alternates, nullable);
+	public LL1HeadGrammarSlot(int id, Nonterminal nonterminal, int nonterminalId,
+							  List<List<Symbol>> alternates, boolean nullable, int min, int max,
+							  PredictionTest predictionTest, FollowTest followTest) {
+		super(id, nonterminal, nonterminalId, alternates, nullable, predictionTest, followTest);
 		this.min = min;
 		this.max = max;
 	}

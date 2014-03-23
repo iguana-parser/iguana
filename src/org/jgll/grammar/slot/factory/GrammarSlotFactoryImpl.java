@@ -8,7 +8,6 @@ import java.util.Set;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlotFirstFollow;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
@@ -65,16 +64,6 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
-		if(!firstFollowCheck) {
-			return new HeadGrammarSlotFirstFollow(headGrammarSlotId++, 
-					   nonterminal, 
-					   nonterminalId, 
-					   alternates, 
-					   new TruePredictionSet(alternates.size()), 
-					   new TrueFollowSet(), 
-					   false);
-		}
-		
 		Set<RegularExpression> firstSet = firstSets.get(nonterminal);
 		Set<RegularExpression> followSet = followSets.get(nonterminal);
 		
@@ -99,25 +88,33 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		
 		FollowTest followSetTest;
 		
-		if(maxPredictionSet - minPredictionSet < 10000) {
-			predictionTest = new ArrayPredictionTest(predictionSet, alternates.size(), minPredictionSet, maxPredictionSet);
+		if(firstFollowCheck) {
+			if(maxPredictionSet - minPredictionSet < 10000) {
+				predictionTest = new ArrayPredictionTest(predictionSet, alternates.size(), minPredictionSet, maxPredictionSet);
+			} else {
+				predictionTest = new TreeMapPredictionTest(predictionSet, alternates.size());
+			}
 		} else {
-			predictionTest = new TreeMapPredictionTest(predictionSet, alternates.size());
+			predictionTest = new TruePredictionSet(alternates.size());
+		}
+
+		if(firstFollowCheck) {
+			if(maxFollowSet - minFollowSet < 10000) {
+				followSetTest = new ArrayFollowTest(followSet, minFollowSet, maxFollowSet);
+			} else {
+				followSetTest = new TreeMapFollowTest(followSet);
+			}			
+		} else {
+			followSetTest = new TrueFollowSet();
 		}
 		
-		if(maxFollowSet - minFollowSet < 10000) {
-			followSetTest = new ArrayFollowTest(followSet, minFollowSet, maxFollowSet);
-		} else {
-			followSetTest = new TreeMapFollowTest(followSet);
-		}
-		
-		return new HeadGrammarSlotFirstFollow(headGrammarSlotId++, 
+		return new HeadGrammarSlot(headGrammarSlotId++, 
 											   nonterminal, 
 											   nonterminalId, 
 											   alternates, 
+											   nullable,
 											   predictionTest, 
-											   followSetTest, 
-											   nullable);
+											   followSetTest);
 	}
 	
 	private Tuple<Integer, Integer> getMinMax(Set<RegularExpression> set) {
