@@ -1,4 +1,4 @@
-package org.jgll.grammar.conditions;
+package org.jgll.disambiguation.conditions;
 
 import static org.jgll.util.CollectionsUtil.list;
 
@@ -23,7 +23,7 @@ import org.junit.rules.ExpectedException;
 
 /**
  * 
- * S ::= Label !>> ":"
+ * S ::= Label !>> "8" [0-9]
  *
  * Label ::= [a-z]+ !>> [a-z]
  * 
@@ -31,7 +31,7 @@ import org.junit.rules.ExpectedException;
  * @author Ali Afroozeh
  *
  */
-public class FollowRestrictionTest {
+public class FollowRestrictionTest2 {
 	
 	private Grammar grammar;
 	private GLLParser parser;
@@ -42,11 +42,12 @@ public class FollowRestrictionTest {
 		Nonterminal S = new Nonterminal("S");
 		Nonterminal Label = new Nonterminal("Label");
 		Range az = new Range('a', 'z');
+		Range zero_nine = new Range('0', '9');
 		
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder(factory);
 		
-		Rule r1 = new Rule(S, Label.addCondition(RegularExpressionCondition.notFollow(new Keyword(":", new int[] {':'}))));
+		Rule r1 = new Rule(S, Label.addCondition(RegularExpressionCondition.notFollow(new Keyword("8", new int[] {'8'}))), zero_nine);
 		
 		Rule r2 = new Rule(Label, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)));
 		
@@ -60,11 +61,19 @@ public class FollowRestrictionTest {
 	public ExpectedException thrown = ExpectedException.none();
 	
 	@Test
-	public void testParser() throws Exception {
-		Input input = Input.fromString("abc:");
+	public void testParser1() throws Exception {
+		Input input = Input.fromString("abc8");
 		parser =  ParserFactory.newParser(grammar, input);
 		thrown.expect(ParseError.class);
 		parser.parse(input, grammar, "S");
 	}
+	
+	@Test
+	public void testParser2() throws Exception {
+		Input input = Input.fromString("abc3");
+		parser =  ParserFactory.newParser(grammar, input);
+		parser.parse(input, grammar, "S");
+	}
+
 
 }

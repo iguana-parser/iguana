@@ -1,7 +1,7 @@
-package org.jgll.grammar.conditions;
+package org.jgll.disambiguation.conditions;
 
-import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
@@ -30,14 +30,14 @@ import org.junit.Test;
  * 
  * S ::= "for" L? Id | "forall"
  * 
- * Id ::= "for" !<< [a-z]+ !>> [a-z]
+ * Id ::= [a-z] !<< [a-z]+ !>> [a-z]
  * 
  * L ::= " "
  * 
  * @author Ali Afroozeh
  * 
  */
-public class PrecedeRestrictionTest2 {
+public class PrecedeRestrictionTest1 {
 	
 	private Grammar grammar;
 	
@@ -50,7 +50,7 @@ public class PrecedeRestrictionTest2 {
 	private Range az = new Range('a', 'z');
 
 	@Before
-	public void createGrammar() {
+	public void createParser() {
 
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder(factory);
@@ -59,7 +59,7 @@ public class PrecedeRestrictionTest2 {
 
 		Rule r2 = new Rule(S, forall);
 
-		Rule r3 = new Rule(Id, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notPrecede(forr)));
+		Rule r3 = new Rule(Id, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notPrecede(az)));
 
 		Rule r4 = new Rule(L, ws);
 

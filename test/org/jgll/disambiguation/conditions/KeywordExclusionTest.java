@@ -1,4 +1,4 @@
-package org.jgll.grammar.conditions;
+package org.jgll.disambiguation.conditions;
 
 import static org.jgll.util.CollectionsUtil.list;
 
