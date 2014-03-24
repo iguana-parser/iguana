@@ -1,7 +1,6 @@
 package org.jgll.grammar.slotaction;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
@@ -9,7 +8,7 @@ import org.jgll.regex.matcher.Matcher;
 
 public class NotFollowActions {
 	
-	public static SlotAction<Boolean> fromGrammarSlot(final BodyGrammarSlot firstSlot, final Condition condition) {
+	public static SlotAction<Boolean> fromGrammarSlot(final Condition condition) {
 		
 		return new SlotAction<Boolean>() {
 			
@@ -38,6 +37,11 @@ public class NotFollowActions {
 				@SuppressWarnings("unchecked")
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
+			}
+			
+			@Override
+			public String toString() {
+				return condition.toString();
 			}
 		};
 	 }
@@ -73,6 +77,11 @@ public class NotFollowActions {
 				@SuppressWarnings("unchecked")
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
+			}
+			
+			@Override
+			public String toString() {
+				return condition.toString();
 			}
 
 		};

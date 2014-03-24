@@ -1,8 +1,10 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
 
@@ -22,4 +24,6 @@ public interface RegularExpression extends Serializable, Symbol {
 	
 	public Set<Range> getFirstSet();
 	
+	@Override
+	public RegularExpression addConditions(Collection<Condition> conditions);	
 }

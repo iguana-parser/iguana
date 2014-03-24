@@ -5,16 +5,11 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.matcher.Matcher;
-import org.jgll.util.logging.LoggerWrapper;
 
 
 public class PrecedeActions {
 
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(PrecedeActions.class);
-		
 	public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
-		
-		log.debug("Precede restriction added <<! %s", regex);
 		
 		final Matcher matcher = regex.toAutomaton().reverse().getMatcher();
 
@@ -46,6 +41,12 @@ public class PrecedeActions {
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
 			}
+			
+			@Override
+			public String toString() {
+				return condition.toString();
+			}
+
 		};
 	}
 }

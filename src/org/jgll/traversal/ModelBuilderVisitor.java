@@ -253,8 +253,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			
 			RegularExpression regex = grammar.getRegularExpressionById(node.getTokenID());
 			
-			assert regex instanceof CharacterClass;
-			
 			// For now we only support parse tree generation for character class
 			if(regex instanceof CharacterClass) {
 				int c = input.charAt(node.getLeftExtent());

@@ -38,6 +38,12 @@ public class FollowActions {
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
 			}
+			
+			@Override
+			public String toString() {
+				return condition.toString();
+			}
+
 		};
 	 }
 	
@@ -72,6 +78,11 @@ public class FollowActions {
 				@SuppressWarnings("unchecked")
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
+			}
+			
+			@Override
+			public String toString() {
+				return condition.toString();
 			}
 
 		};

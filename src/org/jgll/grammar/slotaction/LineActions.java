@@ -36,6 +36,11 @@ public class LineActions {
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
 			}
+			
+			@Override
+			public String toString() {
+				return condition.toString();
+			}
 
 		};
 	}
@@ -69,6 +74,11 @@ public class LineActions {
 				@SuppressWarnings("unchecked")
 				SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
 				return getCondition().equals(other.getCondition());
+			}
+			
+			@Override
+			public String toString() {
+				return condition.toString();
 			}
 
 		};
