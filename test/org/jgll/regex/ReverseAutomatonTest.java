@@ -3,6 +3,8 @@ package org.jgll.regex;
 import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.symbol.Keyword;
+import org.jgll.regex.Automaton;
+import org.jgll.regex.RegularExpression;
 import org.jgll.util.Input;
 import org.junit.Test;
 

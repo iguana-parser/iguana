@@ -158,28 +158,6 @@ public class AutomatonOperations {
 		return newStates;
 	}
 	
-	private static Set<State> epsilonClosure(Set<State> states) {
-		Set<State> newStates = new HashSet<>();
-		for(State state : states) {
-			newStates.addAll(epsilonClosure(state));
-		}
-		return newStates;
-	}
-	
-	private static Set<State> epsilonClosure(State state) {
-		Set<State> newStates = new HashSet<>();
-		newStates.add(state);
-		for(Transition t : state.getTransitions()) {
-			if(t.isEpsilonTransition()) {
-				State destination = t.getDestination();
-				newStates.add(destination);
-				newStates.addAll(epsilonClosure(destination));
-			}
-		}
-		
-		return newStates;
-	}
-	
 	private static Map<Tuple<Integer, Integer>, Set<State>> move(Set<State> states, 
 																 int[] intervals, 
 																 Map<Tuple<State, Integer>, Set<State>> cache) {
@@ -768,6 +746,47 @@ public class AutomatonOperations {
 			State state2 = a2.getState(j);
 			
 			if(state1.isFinalState() && state2.isFinalState()) {
+				state.setFinalState(true);
+			}
+			
+			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
+				startState = state;
+			}
+		}
+		
+		return new Automaton(startState);
+	}
+	
+	/**
+	 *  A state in the resulting intersection automata is final
+	 *  if the first state is final but the second one is not. 
+	 * 
+	 */
+	public static Automaton difference(Automaton a1, Automaton a2) {
+		a1 = a1.copy();
+		a2 = a2.copy();
+		
+		if(!a1.isDeterministic()) {
+			a1.determinize();
+		}
+		
+		if(!a2.isDeterministic()) {
+			a2.determinize();
+		}
+		
+		State startState = null;
+		
+		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
+		
+		for(Entry<Tuple<Integer, Integer>, State> e : map.entrySet()) {
+			int i = e.getKey().getFirst();
+			int j = e.getKey().getSecond();
+			State state = e.getValue();
+			
+			State state1 = a1.getState(i);
+			State state2 = a2.getState(j);
+			
+			if(state1.isFinalState() && !state2.isFinalState()) {
 				state.setFinalState(true);
 			}
 			

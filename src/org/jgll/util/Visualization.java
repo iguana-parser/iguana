@@ -5,9 +5,11 @@ import java.util.Map;
 import org.jgll.grammar.Grammar;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.regex.State;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.dot.GSSToDot;
 import org.jgll.util.dot.GraphVizUtil;
+import org.jgll.util.dot.NFAToDot;
 import org.jgll.util.dot.SPPFToDot;
 import org.jgll.util.dot.SPPFToDotUnpacked;
 import org.jgll.util.dot.ToDotWithoutIntermediateNodes;
@@ -47,6 +49,11 @@ public class Visualization {
 		for(String s : toDot.getResult()) {
 			GraphVizUtil.generateGraph(s, outputDir, "sppf-" + ++i);
 		}
+	}
+	
+	public static void generateAutomatonGraph(String outputDir, State startState) {
+		String dot = NFAToDot.toDot(startState);
+		GraphVizUtil.generateGraph(dot, outputDir, "automaton");
 	}
 
 }
