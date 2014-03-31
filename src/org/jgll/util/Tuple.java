@@ -9,8 +9,8 @@ public class Tuple<T, K> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private T t;
-	private K k;
+	protected T t;
+	protected K k;
 
 	public Tuple(T t, K k) {
 		this.t = t;

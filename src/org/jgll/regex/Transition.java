@@ -19,6 +19,10 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	public Transition(int start, int end, State destination) {
 
+		if(end < start) {
+			throw new IllegalArgumentException("start cannot be less than end.");
+		}
+		
 		if(destination == null) {
 			throw new IllegalArgumentException("Destination cannot be null.");
 		}

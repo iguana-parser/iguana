@@ -2,7 +2,9 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Input;
 import org.jgll.util.Visualization;
@@ -18,8 +20,13 @@ public class DiffernceTest {
 
 	@Test
 	public void test1() {
-		Automaton a = AutomatonOperations.intersection(id.toAutomaton(), k1.toAutomaton());
-		Visualization.generateAutomatonGraph("/Users/ali/output", a.getStartState());
+		RegexStar star = new RegexStar(new CharacterClass(new Range('a', 'z')));
+		
+		Automaton c1 = AutomatonOperations.makeComplete(star.toAutomaton(), AutomatonOperations.merge(AutomatonOperations.getIntervals(star.toAutomaton()), AutomatonOperations.getIntervals(k1.toAutomaton())));
+		Automaton c2 = AutomatonOperations.makeComplete(k1.toAutomaton(), AutomatonOperations.merge(AutomatonOperations.getIntervals(star.toAutomaton()), AutomatonOperations.getIntervals(k1.toAutomaton())));
+		
+		Automaton a = AutomatonOperations.difference(star.toAutomaton(), k1.toAutomaton());
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a.getStartState());
 		assertTrue(a.getMatcher().match(Input.fromString("first")));
 	}
 

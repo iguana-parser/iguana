@@ -3,7 +3,9 @@ package org.jgll.regex;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class State implements Serializable {
@@ -12,9 +14,19 @@ public class State implements Serializable {
 
 	private final Set<Transition> transitions;
 	
+	/**
+	 * Epsilon closure set for this set, i.e., the set of states reachable 
+	 * from epsilon transitions from this state.
+	 */
 	private Set<State> epsilonClosure;
 	
 	private Set<StateAction> actions;
+	
+	/**
+	 * A map from the start interval of each transition to the transition.
+	 * This map is used for fast lookup of transitions.
+	 */
+	private Map<Integer, Transition> transitionsMap;
 	
 	/**
 	 * The set of regular expressions whose final state is this state.
@@ -31,6 +43,7 @@ public class State implements Serializable {
 	
 	public State(boolean finalState) {
 		this.transitions = new HashSet<>();
+		this.transitionsMap = new HashMap<>();
 		this.finalState = finalState;
 		this.epsilonClosure = new HashSet<>();
 		this.actions = new HashSet<>();
@@ -72,6 +85,7 @@ public class State implements Serializable {
 	}
 	
 	public void addTransition(Transition transition) {
+		transitionsMap.put(transition.getStart(), transition);
 		transitions.add(transition);
 		
 		if(transition.isEpsilonTransition()) {
@@ -129,6 +143,14 @@ public class State implements Serializable {
 	
 	public Set<State> getEpsilonClosure() {
 		return epsilonClosure;
+	}
+	
+	public Transition getTransition(int start) {
+		return transitionsMap.get(start);
+	}
+	
+	public boolean hasTransition(int start) {
+		return transitionsMap.containsKey(start);
 	}
 	
 	@Override
