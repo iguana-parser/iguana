@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.regex.State;
-import org.jgll.regex.StateAction;
+import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.StateAction;
 import org.jgll.util.Input;
 
 public class RegularExpressionMatcher implements Matcher, Serializable {

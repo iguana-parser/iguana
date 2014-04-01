@@ -5,7 +5,7 @@ import java.util.Map;
 import org.jgll.grammar.Grammar;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.regex.State;
+import org.jgll.regex.automaton.State;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.dot.GSSToDot;
 import org.jgll.util.dot.GraphVizUtil;

@@ -3,8 +3,8 @@ package org.jgll.grammar.symbol;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.regex.Automaton;
-import org.jgll.regex.State;
+import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.State;
 
 
 public class Epsilon extends AbstractRegularExpression {

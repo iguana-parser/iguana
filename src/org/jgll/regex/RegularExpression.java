@@ -7,6 +7,8 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.StateAction;
 
 public interface RegularExpression extends Serializable, Symbol {
 

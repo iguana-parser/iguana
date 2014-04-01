@@ -9,6 +9,9 @@ import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.Transition;
 import org.jgll.util.CollectionsUtil;
 
 public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {

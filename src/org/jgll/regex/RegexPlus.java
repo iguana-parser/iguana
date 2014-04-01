@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.regex.automaton.Automaton;
 
 
 public class RegexPlus extends AbstractRegularExpression {

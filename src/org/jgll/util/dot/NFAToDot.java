@@ -1,9 +1,9 @@
 package org.jgll.util.dot;
 
-import org.jgll.regex.AutomatonVisitor;
-import org.jgll.regex.State;
-import org.jgll.regex.Transition;
-import org.jgll.regex.VisitAction;
+import org.jgll.regex.automaton.AutomatonVisitor;
+import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.Transition;
+import org.jgll.regex.automaton.VisitAction;
 
 
 public class NFAToDot {

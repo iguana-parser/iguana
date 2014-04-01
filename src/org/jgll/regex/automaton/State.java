@@ -1,4 +1,4 @@
-package org.jgll.regex;
+package org.jgll.regex.automaton;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.jgll.regex.RegularExpression;
 
 public class State implements Serializable {
 

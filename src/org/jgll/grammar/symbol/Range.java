@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.parser.HashFunctions;
-import org.jgll.regex.Automaton;
-import org.jgll.regex.State;
-import org.jgll.regex.Transition;
+import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.Transition;
 
 
 /**

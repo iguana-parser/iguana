@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.StateAction;
+import org.jgll.regex.automaton.StateAction;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {

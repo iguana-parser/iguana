@@ -2,8 +2,6 @@ package org.jgll.util;
 
 import java.io.Serializable;
 
-import org.jgll.parser.HashFunctions;
-
 
 public class Tuple<T, K> implements Serializable {
 	
@@ -49,13 +47,11 @@ public class Tuple<T, K> implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(t == null ? 0 : t.hashCode(), 
-												   k == null ? 0 : k.hashCode());
+		return (t == null ? 0 : t.hashCode()) + (k == null ? 0 : k.hashCode());
 	}
 	
 	@Override
 	public String toString() {
 		return String.format("(%s, %s)", t, k);
 	}
-
 }

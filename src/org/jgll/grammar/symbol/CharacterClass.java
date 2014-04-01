@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.regex.Automaton;
 import org.jgll.regex.RegexAlt;
+import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.CollectionsUtil;
 
 /**

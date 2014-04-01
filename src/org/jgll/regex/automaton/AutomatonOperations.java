@@ -1,4 +1,4 @@
-package org.jgll.regex;
+package org.jgll.regex.automaton;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -712,13 +712,8 @@ public class AutomatonOperations {
 		a1 = a1.copy();
 		a2 = a2.copy();
 		
-		if(!a1.isDeterministic()) {
-			a1.determinize();
-		}
-		
-		if(!a2.isDeterministic()) {
-			a2.determinize();
-		}
+		a1.determinize();
+		a2.determinize();
 		
 		State startState = null;
 		
@@ -754,13 +749,8 @@ public class AutomatonOperations {
 		a1 = a1.copy();
 		a2 = a2.copy();
 		
-		if(!a1.isDeterministic()) {
-			a1.determinize();
-		}
-		
-		if(!a2.isDeterministic()) {
-			a2.determinize();
-		}
+		a1.determinize();
+		a2.determinize();
 		
 		State startState = null;
 		
@@ -795,13 +785,8 @@ public class AutomatonOperations {
 		a1 = a1.copy();
 		a2 = a2.copy();
 		
-		if(!a1.isDeterministic()) {
-			a1.determinize();
-		}
-		
-		if(!a2.isDeterministic()) {
-			a2.determinize();
-		}
+		a1.determinize();		
+		a2.determinize();
 		
 		int[] intervals = merge(getIntervals(a1), getIntervals(a2));
 		a1 = makeComplete(a1, intervals);
@@ -836,6 +821,9 @@ public class AutomatonOperations {
 	 */
 	private static Map<UnOrderedTuple<Integer, Integer>, State> product(Automaton a1, Automaton a2) {
 		
+		a1.determinize();
+		a2.determinize();
+		
 		State[] states1 = a1.getAllStates();
 		State[] states2 = a2.getAllStates();
 		
@@ -855,7 +843,7 @@ public class AutomatonOperations {
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
 				
-				State state = newStates.get(Tuple.of(i, j));
+				State state = newStates.get(UnOrderedTuple.of(i, j));
 				State state1 = states1[i];
 				State state2 = states2[j];
 				
@@ -863,16 +851,13 @@ public class AutomatonOperations {
 					Set<State> reachableStates1 = state1.move(intervals[t]);
 					Set<State> reachableStates2 = state2.move(intervals[t]);
 					
-					if(reachableStates1.size() > 1) {
-						System.out.println("WTF?");
-					}
-					
-					assert reachableStates1.size() == 1; // Automatons are already determinized.
+					// Automatons are already determinized.
+					assert reachableStates1.size() == 1; 
 					assert reachableStates2.size() == 1;
 
 					State s1 = reachableStates1.iterator().next();
 					State s2 = reachableStates2.iterator().next();
-					state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.of(s1.getId(), s2.getId()))));
+					state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(UnOrderedTuple.of(s1.getId(), s2.getId()))));
 				}
 				
 			}
@@ -990,7 +975,7 @@ public class AutomatonOperations {
 						} else {
 							state.addTransition(new Transition(intervals[i], intervals[i + 1] - 1 , dummyState));
 						}
-					}					
+					}
 				}
 			}
 		});

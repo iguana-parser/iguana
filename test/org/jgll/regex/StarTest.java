@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package org.jgll.regex.matcher;
 
-import org.jgll.regex.State;
-import org.jgll.regex.StateAction;
+import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.StateAction;
 import org.jgll.util.Input;
 
 public class CharacterMatcher implements Matcher {

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.regex.Automaton;
 import org.jgll.regex.Sequence;
+import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.Input;
 
 public class Keyword extends AbstractRegularExpression {

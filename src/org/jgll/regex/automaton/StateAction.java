@@ -1,4 +1,4 @@
-package org.jgll.regex;
+package org.jgll.regex.automaton;
 
 import java.io.Serializable;
 

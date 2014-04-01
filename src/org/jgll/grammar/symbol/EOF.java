@@ -3,9 +3,9 @@ package org.jgll.grammar.symbol;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.regex.Automaton;
-import org.jgll.regex.State;
-import org.jgll.regex.Transition;
+import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.Transition;
 
 public class EOF extends AbstractRegularExpression {
 	
