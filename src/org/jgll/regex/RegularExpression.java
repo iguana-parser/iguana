@@ -27,5 +27,6 @@ public interface RegularExpression extends Serializable, Symbol {
 	public Set<Range> getFirstSet();
 	
 	@Override
-	public RegularExpression addConditions(Collection<Condition> conditions);	
+	public RegularExpression addConditions(Collection<Condition> conditions);
+	
 }

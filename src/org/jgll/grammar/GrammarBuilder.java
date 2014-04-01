@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -357,6 +358,27 @@ public class GrammarBuilder implements Serializable {
 		}
 	}
 	
+	/**
+	 * Removes unnecssary follow restrictions
+	 */
+	private void removeConditions(RegularExpression regex) {
+		Set<Condition> conditions = regex.getConditions();
+		Set<Condition> set = new HashSet<>(conditions);
+		
+		for (Condition condition : conditions) {
+			if(condition.getType() == ConditionType.NOT_MATCH) {
+				set.add(condition);
+			} 
+			else if (condition.getType() == ConditionType.NOT_FOLLOW) {
+				set.add(condition);
+			}
+		}
+		
+		// Make RegularExpression completely immutable. Now this works because
+		// getConditons can be modified.
+		regex.getConditions().removeAll(set);
+	}
+	
 	private String getSlotName(Nonterminal head, List<Symbol> body, int index) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -403,6 +425,7 @@ public class GrammarBuilder implements Serializable {
 		Symbol symbol = body.get(symbolIndex);
 		
 		if(symbol instanceof RegularExpression) {
+			removeConditions((RegularExpression) symbol);
 			RegularExpression token = (RegularExpression) symbol;
 			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
 			
@@ -568,7 +591,7 @@ public class GrammarBuilder implements Serializable {
 					}
 				} 
 			}
-			Automaton a = regex.toAutomaton().minimize();
+			Automaton a = regex.toAutomaton();
 			Matcher matcher = a.getMatcher();
 			dfas[id] = matcher;
 		}

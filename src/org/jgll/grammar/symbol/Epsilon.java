@@ -34,7 +34,7 @@ public class Epsilon extends AbstractRegularExpression {
 
     @Override
     public Automaton toAutomaton() {
-        return createNFA();
+        return combineConditions(createNFA());
     }
     
     private Automaton createNFA() {

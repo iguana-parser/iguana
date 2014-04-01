@@ -22,10 +22,10 @@ public class RegexStar extends AbstractRegularExpression {
 	
 	@Override
 	public Automaton toAutomaton() {
-		return createNFA().addFinalStateActions(actions).addRegularExpression(this);
+		return combineConditions(createAutomaton().addFinalStateActions(actions).addRegularExpression(this));
 	}
 	
-	private Automaton createNFA() {
+	private Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(true);
 		

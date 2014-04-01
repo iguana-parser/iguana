@@ -100,16 +100,16 @@ public class AutomatonOperations {
 		}
 	}
  	
-	public static Matcher createMatcher(Automaton nfa) {
+	public static Matcher createMatcher(Automaton a) {
 		
-		int[] intervals = nfa.getIntervals();
+		int[] intervals = a.getIntervals();
 		
 		if(intervals.length == 0) {
 			return new TrueMatcher();
 		}
 		
-		int statesCount = nfa.getCountStates();
-		int inputLength = nfa.getIntervals().length;
+		int statesCount = a.getCountStates();
+		int inputLength = a.getIntervals().length;
 		int[][] transitionTable = new int[statesCount][inputLength];
 		boolean[] endStates = new boolean[statesCount];
 		
@@ -122,7 +122,7 @@ public class AutomatonOperations {
 			}
 		}
 
-		for(State state : nfa.getAllStates()) {
+		for(State state : a.getAllStates()) {
 			actions[state.getId()] = new HashSet<>();
 			
 			for(Transition transition : state.getTransitions()) {
@@ -141,7 +141,7 @@ public class AutomatonOperations {
 		} else {
 			transitions = new ShortIntervalTransitions(intervals);
 		}
-		return new RegularExpressionMatcher(transitionTable, endStates, nfa.getStartState().getId(), transitions, actions);
+		return new RegularExpressionMatcher(transitionTable, endStates, a.getStartState().getId(), transitions, actions);
 	}
 	
 	private static Set<State> epsilonClosure2(Set<State> states) {

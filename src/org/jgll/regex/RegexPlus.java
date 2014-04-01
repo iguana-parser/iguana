@@ -20,7 +20,7 @@ public class RegexPlus extends AbstractRegularExpression {
 	
 	@Override
 	public Automaton toAutomaton() {
-		return regexp.toAutomaton().addFinalStateActions(actions).addRegularExpression(this);
+		return combineConditions(regexp.toAutomaton().addFinalStateActions(actions).addRegularExpression(this));
 	}
 	
 	@Override

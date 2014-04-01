@@ -14,7 +14,7 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	protected final Set<Condition> conditions;
 	
-	protected final String name;
+	protected String name;
 	
 	public AbstractSymbol(String name) {
 		this(name, new ArrayList<Condition>());
@@ -46,6 +46,7 @@ public abstract class AbstractSymbol implements Symbol {
 	@Override
 	public Symbol addConditions(Collection<Condition> conditions) {
 		AbstractSymbol s = (AbstractSymbol) this.copy();
+		s.name = name;
 		s.conditions.addAll(this.conditions);
 		s.conditions.addAll(conditions);
 		return s;

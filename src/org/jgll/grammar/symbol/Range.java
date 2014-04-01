@@ -72,7 +72,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		return start == other.start && end == other.end;
 	}
 
-	private Automaton createNFA() {
+	private Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(true).addActions(actions).addRegularExpression(this);
 		startState.addTransition(new Transition(start, end, finalState));
@@ -81,7 +81,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 
 	@Override
 	public Automaton toAutomaton() {
-		return createNFA();
+		return combineConditions(createAutomaton());
 	}
 
 	@Override
