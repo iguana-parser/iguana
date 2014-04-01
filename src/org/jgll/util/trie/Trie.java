@@ -5,10 +5,8 @@ import java.util.Iterator;
 public class Trie<T> {
 
 	private Node<T> root;
-	private ExternalEqual<T> externalEquals;
 	
-	public Trie(ExternalEqual<T> stringizer) {
-		this.externalEquals = stringizer;
+	public Trie() {
 		this.root = new Node<>();
 	}
 	
@@ -44,7 +42,7 @@ public class Trie<T> {
 	
 	private Node<T> getNodeWithEdgeLabel(Node<T> node, T label) {
 		for(Edge<T> edge : node.getEdges()) {
-			if(externalEquals.isEqual(edge.getLabel(), label)) {
+			if(edge.getLabel().equals(label)) {
 				return edge.getDestination();
 			}
 		}
