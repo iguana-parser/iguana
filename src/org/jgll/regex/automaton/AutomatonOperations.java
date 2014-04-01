@@ -708,31 +708,20 @@ public class AutomatonOperations {
 	 * Union(a1, a2) = a1 | a2 
 	 */
 	public static Automaton union(Automaton a1, Automaton a2) {
+		return union(new Automaton[] {a1, a2});
+	}
+	
+	public static Automaton union(Automaton...automatons) {
+		State startState = new State();
+		State finalState = new State(true);
 		
-		a1 = a1.copy();
-		a2 = a2.copy();
-		
-		a1.determinize();
-		a2.determinize();
-		
-		State startState = null;
-		
-		Map<UnOrderedTuple<Integer, Integer>, State> map = product(a1, a2);
-		
-		for(Entry<UnOrderedTuple<Integer, Integer>, State> e : map.entrySet()) {
-			int i = e.getKey().getFirst();
-			int j = e.getKey().getSecond();
-			State state = e.getValue();
+		for(Automaton nfa : automatons) {
+			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 			
-			State state1 = a1.getState(i);
-			State state2 = a2.getState(j);
-			
-			if(state1.isFinalState() || state2.isFinalState()) {
-				state.setFinalState(true);
-			}
-			
-			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
-				startState = state;
+			Set<State> finalStates = nfa.getFinalStates();
+			for(State s : finalStates) {
+				s.setFinalState(false);
+				s.addTransition(Transition.emptyTransition(finalState));				
 			}
 		}
 		
@@ -745,12 +734,6 @@ public class AutomatonOperations {
 	 * 
 	 */
 	public static Automaton intersection(Automaton a1, Automaton a2) {
-		
-		a1 = a1.copy();
-		a2 = a2.copy();
-		
-		a1.determinize();
-		a2.determinize();
 		
 		State startState = null;
 		
@@ -784,9 +767,6 @@ public class AutomatonOperations {
 	public static Automaton difference(Automaton a1, Automaton a2) {
 		a1 = a1.copy();
 		a2 = a2.copy();
-		
-		a1.determinize();		
-		a2.determinize();
 		
 		int[] intervals = merge(getIntervals(a1), getIntervals(a2));
 		a1 = makeComplete(a1, intervals);
@@ -850,6 +830,11 @@ public class AutomatonOperations {
 				for(int t = 0; t < intervals.length - 1; t++) {
 					Set<State> reachableStates1 = state1.move(intervals[t]);
 					Set<State> reachableStates2 = state2.move(intervals[t]);
+					
+					// If one of the states is a dead state
+					if(reachableStates1.size() == 0 || reachableStates2.size() == 0) {
+						continue;
+					}
 					
 					// Automatons are already determinized.
 					assert reachableStates1.size() == 1; 
