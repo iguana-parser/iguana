@@ -32,12 +32,8 @@ public class Epsilon extends AbstractRegularExpression {
 		return this;
 	}
 
-    @Override
-    public Automaton toAutomaton() {
-        return combineConditions(createNFA());
-    }
-    
-    private Automaton createNFA() {
+	@Override
+    protected Automaton createAutomaton() {
     	State state = new State(true).addActions(actions).addRegularExpression(this);
         return new Automaton(state);
     }

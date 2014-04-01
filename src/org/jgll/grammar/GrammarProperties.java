@@ -419,7 +419,11 @@ public class GrammarProperties {
 		
 		return reachabilityGraph;
 	}
-
+	
+	public static Map<Nonterminal, List<List<Symbol>>> leftFactorize(Map<Nonterminal, List<List<Symbol>>> definitions) {
+		return null;
+	}
+	
 	/**
 	 * 
 	 * Calculates the set of nonterminals that are directly reachable from a given nonterminal.

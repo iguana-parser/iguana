@@ -13,7 +13,7 @@ import org.jgll.regex.automaton.StateAction;
 public interface RegularExpression extends Serializable, Symbol {
 
 	public Automaton toAutomaton();
-	
+
 	public boolean isNullable();
 	
 	public RegularExpression copy();

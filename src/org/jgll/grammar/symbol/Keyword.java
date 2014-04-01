@@ -71,15 +71,11 @@ public class Keyword extends AbstractRegularExpression {
 		return seq.hashCode();
 	}
 	
-	private Automaton createAutomaton() {
+	@Override
+	protected Automaton createAutomaton() {
 		return seq.toAutomaton().addFinalStateActions(actions).addRegularExpression(this);
 	}
 	
-	@Override
-	public Automaton toAutomaton() {
-		return combineConditions(createAutomaton());
-	}
-
 	@Override
 	public boolean isNullable() {
 		return false;

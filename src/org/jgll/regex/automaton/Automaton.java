@@ -48,6 +48,10 @@ public class Automaton implements Serializable {
 	private void init(Automaton newAutomaton) {
 		startState = newAutomaton.getStartState();
 		
+		deterministic = newAutomaton.deterministic;
+
+		minimized = newAutomaton.minimized;
+		
 		intervals = AutomatonOperations.getIntervals(this);
 		
 		AutomatonOperations.setStateIDs(this);

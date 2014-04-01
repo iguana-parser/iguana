@@ -205,12 +205,14 @@ public class AutomatonOperations {
 	 * Note: unreachable states are already removed as we gather the states
 	 * reachable from the start state of the given NFA.
 	 * 
-	 * @param nfa
+	 * @param automaton
 	 * @return
 	 */
-	public static Automaton minimize(Automaton nfa) {
+	public static Automaton minimize(Automaton automaton) {
 		
-		int[][] table = new int[nfa.getCountStates()][nfa.getCountStates()];
+		automaton = automaton.copy();
+		
+		int[][] table = new int[automaton.getCountStates()][automaton.getCountStates()];
 		
 		final int EMPTY = -2;
 		final int EPSILON = -1;
@@ -223,23 +225,23 @@ public class AutomatonOperations {
 		
 		for (int i = 0; i < table.length; i++) {
 			for (int j = 0; j < i; j++) {
-				if(nfa.getState(i).isFinalState() && !nfa.getState(j).isFinalState()) {
+				if(automaton.getState(i).isFinalState() && !automaton.getState(j).isFinalState()) {
 					table[i][j] = EPSILON;
 				}
-				if(nfa.getState(j).isFinalState() && !nfa.getState(i).isFinalState()) {
+				if(automaton.getState(j).isFinalState() && !automaton.getState(i).isFinalState()) {
 					table[i][j] = EPSILON;
 				}
 				
 				// Differentiate between final states
-				if(nfa.getState(i).isFinalState() && 
-				   nfa.getState(j).isFinalState() && 
-				   !nfa.getState(i).getActions().equals(nfa.getState(j).getActions())) {
+				if(automaton.getState(i).isFinalState() && 
+				   automaton.getState(j).isFinalState() && 
+				   !automaton.getState(i).getActions().equals(automaton.getState(j).getActions())) {
 					table[i][j] = EPSILON;
 				}
 			}
 		}
 		
-		int[] intervals = nfa.getIntervals();
+		int[] intervals = automaton.getIntervals();
 		
 		boolean changed = true;
 		
@@ -252,8 +254,8 @@ public class AutomatonOperations {
 						// If two states i and j are distinct
 						if(table[i][j] == EMPTY) {
 							for(int t = 0; t < intervals.length; t++) {
-								State q1 = moveTransition(nfa.getState(i), intervals[t]);
-								State q2 = moveTransition(nfa.getState(j), intervals[t]);
+								State q1 = moveTransition(automaton.getState(i), intervals[t]);
+								State q2 = moveTransition(automaton.getState(j), intervals[t]);
 
 								// If both states i and j have no outgoing transitions on the interval t, continue with the
 								// next transition.
@@ -300,8 +302,8 @@ public class AutomatonOperations {
 		for (int i = 0; i < table.length; i++) {
 			for (int j = 0; j < i; j++) {
 				if(table[i][j] == EMPTY) {
-					State stateI = nfa.getState(i);
-					State stateJ = nfa.getState(j);
+					State stateI = automaton.getState(i);
+					State stateJ = automaton.getState(j);
 					
 					Set<State> partitionI = partitionsMap.get(stateI);
 					Set<State> partitionJ = partitionsMap.get(stateJ);
@@ -333,7 +335,7 @@ public class AutomatonOperations {
 		
 		State startState = null;
 		
-		for(State state : nfa.getAllStates()) {
+		for(State state : automaton.getAllStates()) {
 			if(partitionsMap.get(state) == null) {
 				Set<State> set = new HashSet<>();
 				set.add(state);
@@ -350,7 +352,7 @@ public class AutomatonOperations {
 				newState.addActions(state.getActions());
 				newState.addRegularExpressions(state.getRegularExpressions());
 				
-				if(nfa.getStartState() == state) {
+				if(automaton.getStartState() == state) {
 					startState = newState;
 				}
 				if(state.isFinalState()) {
@@ -360,7 +362,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		for(State state : nfa.getAllStates()) {
+		for(State state : automaton.getAllStates()) {
 			for(Transition t : state.getTransitions()) {
 				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));;				
 			}
@@ -612,13 +614,15 @@ public class AutomatonOperations {
 	 * at a state may be chosen.  
 	 * 
 	 */
-	public static Automaton mergeTransitions(final Automaton automaton) {
+	public static Automaton mergeTransitions(Automaton automaton) {
+		
+		final Automaton a = automaton.copy();
 		
 		final State[] startStates = new State[1];
 		
 		final Map<State, State> newStates = new HashMap<>();
 		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
+		AutomatonVisitor.visit(a, new VisitAction() {
 
 			@Override
 			public void visit(State state) {
@@ -630,13 +634,13 @@ public class AutomatonOperations {
 				}
 				newStates.put(state, newState);
 				
-				if(automaton.getStartState() == state) {
+				if(a.getStartState() == state) {
 					startStates[0] = newState;
 				}
  			}
 		});
 		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
+		AutomatonVisitor.visit(a, new VisitAction() {
 
 			@Override
 			public void visit(State state) {
@@ -712,11 +716,12 @@ public class AutomatonOperations {
 		return union(new Automaton[] {a1, a2});
 	}
 	
-	public static Automaton union(Automaton...automatons) {
+	public static Automaton union(Iterable<Automaton> automatons) {
 		State startState = new State();
 		State finalState = new State(true);
 		
 		for(Automaton nfa : automatons) {
+			nfa = nfa.copy();
 			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
 			
 			Set<State> finalStates = nfa.getFinalStates();
@@ -727,6 +732,10 @@ public class AutomatonOperations {
 		}
 		
 		return new Automaton(startState);
+	}
+	
+	public static Automaton union(Automaton...automatons) {
+		return union(Arrays.asList(automatons));
 	}
 	
 	/**
@@ -804,10 +813,8 @@ public class AutomatonOperations {
 	 */
 	private static Map<Tuple<Integer, Integer>, State> product(Automaton a1, Automaton a2) {
 		
-		// If the automatons are not minimized here, and the result be later minimized,
-		// it may lead to unpredictable results. Figure it out why later!
-		a1.determinize();
-		a2.determinize();
+		a1.minimize();
+		a2.minimize();
 		
 		State[] states1 = a1.getAllStates();
 		State[] states2 = a2.getAllStates();
@@ -941,19 +948,17 @@ public class AutomatonOperations {
 		return copy;
 	}
 	
-	public static Automaton makeComplete(Automaton a, final int[] intervals) {
-		return makeComplete(a.getStartState(), intervals);
-	}
-	
 	/**
 	 * Makes the transition function complete, i.e., from each state 
 	 * there will be all outgoing transitions.
 	 */
-	public static Automaton makeComplete(State startState, final int[] intervals) {
+	public static Automaton makeComplete(Automaton a, final int[] intervals) {
+		
+		a = a.copy();
 		
 		final State dummyState = new State();
 		
-		AutomatonVisitor.visit(startState, new VisitAction() {
+		AutomatonVisitor.visit(a.getStartState(), new VisitAction() {
 			
 			@Override
 			public void visit(State state) {
@@ -969,6 +974,6 @@ public class AutomatonOperations {
 			}
 		});
 		
-		return new Automaton(startState);
+		return new Automaton(a.getStartState());
 	}
 }

@@ -63,13 +63,8 @@ public class Character extends AbstractRegularExpression {
 			return "\\u" + Integer.toHexString(c);
 		}
 	}
-
-	@Override
-	public Automaton toAutomaton() {
-		return combineConditions(createAutomaton());
-	}
 	
-	private Automaton createAutomaton() {
+	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(true).addActions(actions).addRegularExpression(this);
 		startState.addTransition(new Transition(c, finalState));

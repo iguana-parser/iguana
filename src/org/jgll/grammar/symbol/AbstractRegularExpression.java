@@ -1,8 +1,12 @@
 package org.jgll.grammar.symbol;
 
+import static org.jgll.regex.automaton.AutomatonOperations.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
@@ -18,6 +22,8 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	private static final long serialVersionUID = 1L;
 	
 	protected List<StateAction> actions;
+	
+	private Automaton automaton;
 
 	public AbstractRegularExpression(String name) {
 		super(name);
@@ -33,29 +39,34 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	public RegularExpression addConditions(Collection<Condition> conditions) {
 		return (RegularExpression) super.addConditions(conditions);
 	}
+	
+	@Override
+	public Automaton toAutomaton() {
+		if (automaton == null) {
+			automaton = combineConditions(createAutomaton());
+		}
+		return automaton;
+	}
+	
+	protected abstract Automaton createAutomaton();
 
 	protected Automaton combineConditions(Automaton a) {
-
-		Automaton union = null;
+		
+		Set<Automaton> notMatchSet = new HashSet<>();
 		
 		for(Condition condition : conditions) {
 			if(condition.getType() == ConditionType.NOT_MATCH && condition instanceof RegularExpressionCondition) {
 				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
 				RegularExpression regex = regexCondition.getRegularExpression();
-				if(union == null) {
-					union = regex.toAutomaton();
-				} else {
-					union = AutomatonOperations.union(union, regex.toAutomaton());
-				}
-				
+				notMatchSet.add(regex.toAutomaton());
 			}
 		}
 
-		if(union == null) {
-			return a;
-		}
+		if(notMatchSet.size() == 0) return a;
 		
-		return AutomatonOperations.difference(a, union);
+		System.out.println("Fuck! " + notMatchSet.size());
+		
+		return AutomatonOperations.difference(a, union(notMatchSet));
 	}
 	
 }

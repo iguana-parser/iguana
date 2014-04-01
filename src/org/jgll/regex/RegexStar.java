@@ -21,11 +21,7 @@ public class RegexStar extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public Automaton toAutomaton() {
-		return combineConditions(createAutomaton().addFinalStateActions(actions).addRegularExpression(this));
-	}
-	
-	private Automaton createAutomaton() {
+	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(true);
 		

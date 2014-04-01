@@ -44,11 +44,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	}
 
 	@Override
-	public Automaton toAutomaton() {
-		return combineConditions(createAutomaton().addFinalStateActions(actions).addRegularExpression(this));
-	}
-	
-	private Automaton createAutomaton() {
+	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(true);
 		

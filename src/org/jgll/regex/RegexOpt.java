@@ -20,16 +20,7 @@ public class RegexOpt extends AbstractRegularExpression {
 		this.regexp = regexp;
 	}
 	
-	@Override
-	public Automaton toAutomaton() {
-		return combineConditions(createAutomaton().addFinalStateActions(actions).addRegularExpression(this));
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	private Automaton createAutomaton() {
+	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(true).addActions(actions);
 		

@@ -19,8 +19,8 @@ public class RegexPlus extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public Automaton toAutomaton() {
-		return combineConditions(regexp.toAutomaton().addFinalStateActions(actions).addRegularExpression(this));
+	protected Automaton createAutomaton() {
+		return regexp.toAutomaton();
 	}
 	
 	@Override
