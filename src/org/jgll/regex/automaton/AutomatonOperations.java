@@ -18,7 +18,6 @@ import org.jgll.regex.matcher.ShortIntervalTransitions;
 import org.jgll.regex.matcher.Transitions;
 import org.jgll.regex.matcher.TrueMatcher;
 import org.jgll.util.Tuple;
-import org.jgll.util.UnOrderedTuple;
 
 public class AutomatonOperations {
 	
@@ -230,8 +229,8 @@ public class AutomatonOperations {
 				if(nfa.getState(j).isFinalState() && !nfa.getState(i).isFinalState()) {
 					table[i][j] = EPSILON;
 				}
-				// Differentiate between final states
 				
+				// Differentiate between final states
 				if(nfa.getState(i).isFinalState() && 
 				   nfa.getState(j).isFinalState() && 
 				   !nfa.getState(i).getActions().equals(nfa.getState(j).getActions())) {
@@ -440,18 +439,20 @@ public class AutomatonOperations {
 	}
 	
 	public static int[] merge(int[] i1, int[] i2) {
-		int[] merged = new int[i1.length + i2.length];
+		Set<Integer> set = new HashSet<>();
+		
+		for(int i = 0; i < i1.length; i++) {
+			set.add(i1[i]);
+		}
+		
+		for(int i = 0; i < i2.length; i++) {
+			set.add(i2[i]);
+		}
 		
 		int i = 0;
-		while(i < i1.length) {
-			merged[i] = i1[i];
-			i++;
-		}
-
-		int j = 0;
-		while(j < i2.length) {
-			merged[i + j] = i2[j];
-			j++;
+		int[] merged = new int[set.size()];
+		for(int c : set) {
+			merged[i++] = c;
 		}
 
 		Arrays.sort(merged);
@@ -737,9 +738,9 @@ public class AutomatonOperations {
 		
 		State startState = null;
 		
-		Map<UnOrderedTuple<Integer, Integer>, State> map = product(a1, a2);
+		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
 		
-		for(Entry<UnOrderedTuple<Integer, Integer>, State> e : map.entrySet()) {
+		for(Entry<Tuple<Integer, Integer>, State> e : map.entrySet()) {
 			int i = e.getKey().getFirst();
 			int j = e.getKey().getSecond();
 			State state = e.getValue();
@@ -765,18 +766,20 @@ public class AutomatonOperations {
 	 * 
 	 */
 	public static Automaton difference(Automaton a1, Automaton a2) {
+		
 		a1 = a1.copy();
 		a2 = a2.copy();
 		
 		int[] intervals = merge(getIntervals(a1), getIntervals(a2));
+		
 		a1 = makeComplete(a1, intervals);
 		a2 = makeComplete(a2, intervals);
 		
-		Map<UnOrderedTuple<Integer, Integer>, State> map = product(a1, a2);
+		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
 		
 		State startState = null;
 		
-		for(Entry<UnOrderedTuple<Integer, Integer>, State> e : map.entrySet()) {
+		for(Entry<Tuple<Integer, Integer>, State> e : map.entrySet()) {
 			int i = e.getKey().getFirst();
 			int j = e.getKey().getSecond();
 			State state = e.getValue();
@@ -799,20 +802,21 @@ public class AutomatonOperations {
 	/**
 	 * Produces the Cartesian product of the states of an automata.
 	 */
-	private static Map<UnOrderedTuple<Integer, Integer>, State> product(Automaton a1, Automaton a2) {
+	private static Map<Tuple<Integer, Integer>, State> product(Automaton a1, Automaton a2) {
 		
+		// If the automatons are not minimized here, and the result be later minimized,
+		// it may lead to unpredictable results. Figure it out why later!
 		a1.determinize();
 		a2.determinize();
 		
 		State[] states1 = a1.getAllStates();
 		State[] states2 = a2.getAllStates();
 		
-		
-		Map<UnOrderedTuple<Integer, Integer>, State> newStates = new HashMap<>();
+		Map<Tuple<Integer, Integer>, State> newStates = new HashMap<>();
 		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
-				newStates.put(UnOrderedTuple.of(i, j), new State());
+				newStates.put(Tuple.of(i, j), new State());
 			}
 		}
 		
@@ -823,7 +827,7 @@ public class AutomatonOperations {
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
 				
-				State state = newStates.get(UnOrderedTuple.of(i, j));
+				State state = newStates.get(Tuple.of(i, j));
 				State state1 = states1[i];
 				State state2 = states2[j];
 				
@@ -842,7 +846,7 @@ public class AutomatonOperations {
 
 					State s1 = reachableStates1.iterator().next();
 					State s2 = reachableStates2.iterator().next();
-					state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(UnOrderedTuple.of(s1.getId(), s2.getId()))));
+					state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.of(s1.getId(), s2.getId()))));
 				}
 				
 			}
