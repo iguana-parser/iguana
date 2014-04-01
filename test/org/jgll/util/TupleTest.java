@@ -18,8 +18,7 @@ public class TupleTest {
 	public void testOrderedTuple() {
 		Tuple<Integer, Integer> t1 = new Tuple<>(2, 3);
 		Tuple<Integer, Integer> t2 = new Tuple<>(3, 2);
-		assertFalse(t1.hashCode() == t2.hashCode());
-		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(t2));
 	}
 	
 }

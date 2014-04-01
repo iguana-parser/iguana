@@ -360,9 +360,9 @@ public class GrammarBuilder implements Serializable {
 	
 	/**
 	 * Removes unnecssary follow restrictions
+	 * @return 
 	 */
-	private void removeConditions(RegularExpression regex) {
-		Set<Condition> conditions = regex.getConditions();
+	private ConditionTest getPostConditionsForRegularExpression(Set<Condition> conditions) {
 		Set<Condition> set = new HashSet<>(conditions);
 		
 		for (Condition condition : conditions) {
@@ -376,7 +376,7 @@ public class GrammarBuilder implements Serializable {
 		
 		// Make RegularExpression completely immutable. Now this works because
 		// getConditons can be modified.
-		regex.getConditions().removeAll(set);
+		return getPostConditions(set);
 	}
 	
 	private String getSlotName(Nonterminal head, List<Symbol> body, int index) {
@@ -425,7 +425,6 @@ public class GrammarBuilder implements Serializable {
 		Symbol symbol = body.get(symbolIndex);
 		
 		if(symbol instanceof RegularExpression) {
-			removeConditions((RegularExpression) symbol);
 			RegularExpression token = (RegularExpression) symbol;
 			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
 			
@@ -439,7 +438,7 @@ public class GrammarBuilder implements Serializable {
 				}
 			}
 
-			ConditionTest postConditionsTest = getPostConditions(conditions);
+			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(conditions);
 			
 			return grammarSlotFactory.createTokenGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), 
 					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), preConditionsTest, postConditionsTest);
@@ -461,11 +460,12 @@ public class GrammarBuilder implements Serializable {
 		}		
 	}
 	
-	
 	private ConditionTest getPostConditions(final Set<Condition> conditions) {
+		
 		List<SlotAction<Boolean>> postConditionActions = new ArrayList<>();
 		
 		for (Condition condition : conditions) {
+			
 			switch (condition.getType()) {
 				
 				case FOLLOW:
