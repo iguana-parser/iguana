@@ -49,10 +49,10 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		State finalState = new State(true);
 		
 		for(RegularExpression regexp : regularExpressions) {
-			Automaton nfa = regexp.toAutomaton();
-			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
+			Automaton automaton = regexp.toAutomaton().copy();
+			startState.addTransition(Transition.emptyTransition(automaton.getStartState()));
 			
-			Set<State> finalStates = nfa.getFinalStates();
+			Set<State> finalStates = automaton.getFinalStates();
 			for(State s : finalStates) {
 				s.setFinalState(false);
 				s.addTransition(Transition.emptyTransition(finalState));				

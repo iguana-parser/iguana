@@ -43,18 +43,18 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		State startState = new State();
 		State finalState = new State(true);
 
-		Automaton[] nfas = new Automaton[regularExpressions.size()];
+		Automaton[] automatons = new Automaton[regularExpressions.size()];
 		for(int i = 0; i < regularExpressions.size(); i++) {
-			nfas[i] = regularExpressions.get(i).toAutomaton();
+			automatons[i] = regularExpressions.get(i).toAutomaton().copy();
 		}
 		
-		startState.addTransition(Transition.emptyTransition(nfas[0].getStartState()));
+		startState.addTransition(Transition.emptyTransition(automatons[0].getStartState()));
 		
 		// Middle regular expressions
 		int i = 0;
 		for(; i < regularExpressions.size() - 1; i++) {
-			Automaton nfa = nfas[i];
-			Automaton nextNFA = nfas[i+1];
+			Automaton nfa = automatons[i];
+			Automaton nextNFA = automatons[i+1];
 			
 			Set<State> finalStates = nfa.getFinalStates();
 			for(State s : finalStates) {
@@ -63,7 +63,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			}
 		}
 		
-		for(State s : nfas[i].getFinalStates()) {
+		for(State s : automatons[i].getFinalStates()) {
 			s.setFinalState(false);
 			s.addTransition(Transition.emptyTransition(finalState));
 		}

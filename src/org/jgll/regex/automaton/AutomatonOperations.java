@@ -21,18 +21,18 @@ import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
 	
-	public static Automaton makeDeterministic(Automaton nfa) {
+	public static Automaton makeDeterministic(Automaton automaton) {
 		
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
 		
 		Set<State> initialState = new HashSet<>();
-		initialState.add(nfa.getStartState());
+		initialState.add(automaton.getStartState());
 		initialState = epsilonClosure2(initialState);
 		visitedStates.add(initialState);
 		processList.add(initialState);
 		
-		int[] intervals = nfa.getIntervals();
+		int[] intervals = automaton.getIntervals();
 				
 		/**
 		 * A map from the set of NFA states to the new state in the produced DFA.
@@ -209,8 +209,6 @@ public class AutomatonOperations {
 	 * @return
 	 */
 	public static Automaton minimize(Automaton automaton) {
-		
-		automaton = automaton.copy();
 		
 		int[][] table = new int[automaton.getCountStates()][automaton.getCountStates()];
 		
@@ -614,15 +612,13 @@ public class AutomatonOperations {
 	 * at a state may be chosen.  
 	 * 
 	 */
-	public static Automaton mergeTransitions(Automaton automaton) {
-		
-		final Automaton a = automaton.copy();
+	public static Automaton mergeTransitions(final Automaton automaton) {
 		
 		final State[] startStates = new State[1];
 		
 		final Map<State, State> newStates = new HashMap<>();
 		
-		AutomatonVisitor.visit(a, new VisitAction() {
+		AutomatonVisitor.visit(automaton, new VisitAction() {
 
 			@Override
 			public void visit(State state) {
@@ -634,13 +630,13 @@ public class AutomatonOperations {
 				}
 				newStates.put(state, newState);
 				
-				if(a.getStartState() == state) {
+				if(automaton.getStartState() == state) {
 					startStates[0] = newState;
 				}
  			}
 		});
 		
-		AutomatonVisitor.visit(a, new VisitAction() {
+		AutomatonVisitor.visit(automaton, new VisitAction() {
 
 			@Override
 			public void visit(State state) {
@@ -775,9 +771,6 @@ public class AutomatonOperations {
 	 * 
 	 */
 	public static Automaton difference(Automaton a1, Automaton a2) {
-		
-		a1 = a1.copy();
-		a2 = a2.copy();
 		
 		int[] intervals = merge(getIntervals(a1), getIntervals(a2));
 		

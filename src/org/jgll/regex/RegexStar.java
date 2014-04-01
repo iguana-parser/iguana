@@ -25,15 +25,15 @@ public class RegexStar extends AbstractRegularExpression {
 		State startState = new State();
 		State finalState = new State(true);
 		
-		Automaton nfa = regexp.toAutomaton();
+		Automaton automaton = regexp.toAutomaton().copy();
 		
-		startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
+		startState.addTransition(Transition.emptyTransition(automaton.getStartState()));
 		
-		Set<State> finalStates = nfa.getFinalStates();
+		Set<State> finalStates = automaton.getFinalStates();
 		for(State s : finalStates) {
 			s.setFinalState(false);
 			s.addTransition(Transition.emptyTransition(finalState));
-			s.addTransition(Transition.emptyTransition(nfa.getStartState()));
+			s.addTransition(Transition.emptyTransition(automaton.getStartState()));
 		}
 		
 		startState.addTransition(Transition.emptyTransition(finalState));

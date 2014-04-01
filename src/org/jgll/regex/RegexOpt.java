@@ -24,10 +24,10 @@ public class RegexOpt extends AbstractRegularExpression {
 		State startState = new State();
 		State finalState = new State(true).addActions(actions);
 		
-		Automaton nfa = regexp.toAutomaton();
-		startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
+		Automaton automaton = regexp.toAutomaton().copy();
+		startState.addTransition(Transition.emptyTransition(automaton.getStartState()));
 		
-		Set<State> finalStates = nfa.getFinalStates();
+		Set<State> finalStates = automaton.getFinalStates();
 		for(State s : finalStates) {
 			s.setFinalState(false);
 			s.addTransition(Transition.emptyTransition(finalState));			

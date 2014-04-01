@@ -9,6 +9,7 @@ import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.StateAction;
 import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class AltTest {
@@ -67,9 +68,9 @@ public class AltTest {
 			}
 		});
 		
-		Automaton nfa = regexp.toAutomaton();
+		Automaton automaton = regexp.toAutomaton();
 		
-		Matcher dfa = nfa.getMatcher();
+		Matcher dfa = automaton.getMatcher();
 		
 		assertTrue(dfa.match(Input.fromString("when")));
 		assertEquals(4, l[0]);
