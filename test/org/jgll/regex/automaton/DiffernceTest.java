@@ -1,16 +1,13 @@
 package org.jgll.regex.automaton;
 
-import static org.jgll.regex.automaton.AutomatonOperations.difference;
-import static org.jgll.regex.automaton.AutomatonOperations.union;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.jgll.regex.automaton.AutomatonOperations.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
 import org.jgll.util.Input;
 import org.junit.Test;
-
 
 public class DiffernceTest {
 	
@@ -22,7 +19,6 @@ public class DiffernceTest {
 	@Test
 	public void test1() {		
 		Automaton a = difference(id.toAutomaton(), k1.toAutomaton());
-		a = difference(id.toAutomaton(), k1.toAutomaton());
 		assertTrue(a.getMatcher().match(Input.fromString("first")));
 		assertFalse(a.getMatcher().match(Input.fromString("if")));
 	}

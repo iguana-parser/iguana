@@ -12,6 +12,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegexPlus;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -43,7 +44,8 @@ public class KeywordExclusionTest2 {
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder(factory);
 		
-		Rule r1 = new Rule(Id, new RegexPlus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(iff, when, doo, whilee)));
+		RegexAlt<Keyword> alt = new RegexAlt<>(iff, when, doo, whilee);
+		Rule r1 = new Rule(Id, new RegexPlus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(alt)));
 		
 		builder.addRule(r1);
 

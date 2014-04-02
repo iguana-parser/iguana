@@ -1,6 +1,6 @@
 package org.jgll.disambiguation.conditions;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarBuilder;
@@ -16,6 +16,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseError;
 import org.jgll.parser.ParserFactory;
+import org.jgll.regex.RegexAlt;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,8 +46,9 @@ public class KeywordExclusionTest {
 		
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder(factory);
-		
-		Rule r1 = new Rule(Id, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(iff, when, doo, whilee)));
+
+		RegexAlt<Keyword> alt = new RegexAlt<>(iff, when, doo, whilee);
+		Rule r1 = new Rule(Id, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(alt)));
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1));
 		builder.addRules(rules);

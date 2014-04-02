@@ -776,6 +776,7 @@ public class AutomatonOperations {
 		int[] intervals = merge(getIntervals(a1), getIntervals(a2));
 		
 		a1 = makeComplete(a1, intervals);
+
 		a2 = makeComplete(a2, intervals);
 		
 		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
@@ -969,6 +970,6 @@ public class AutomatonOperations {
 			}
 		});
 		
-		return a;
+		return new Automaton(a.getStartState());
 	}
 }

@@ -45,7 +45,7 @@ public class ParseError extends Exception {
 		int lineNumber = input.getLineNumber(inputIndex);
 		int columnNumber = input.getColumnNumber(inputIndex);
 		
-		return "Parse error at line:" + lineNumber + " column:" + columnNumber;
+		return String.format("Parse error at input index: %d, line: %d, column: %d", inputIndex, lineNumber, columnNumber);
 	}
 	
 	public void printGrammarTrace() {

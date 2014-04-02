@@ -202,8 +202,8 @@ public class Automaton implements Serializable {
 			return this;
 		}
 		
-		deterministic = true;
 		init(AutomatonOperations.makeDeterministic(this));
+		deterministic = true;
 		return this;
 	}
 	public Automaton reverse() {
@@ -231,8 +231,8 @@ public class Automaton implements Serializable {
 			return this;
 		}
 		
-		this.minimized = true;
 		init(AutomatonOperations.minimize(this));
+		this.minimized = true;
 		return this;
 	}
 	
