@@ -21,6 +21,7 @@ public class UnionTest {
 		assertFalse(a.getMatcher().match(Input.fromString("else")));
 	}
 	
+	@Test
 	public void test3() {
 		Automaton a = union(k1.toAutomaton(), union(k2.toAutomaton(), k3.toAutomaton()));
 		assertTrue(a.getMatcher().match(Input.fromString("if")));

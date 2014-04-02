@@ -58,7 +58,6 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 
 		if (notMatch == null) return a;
 		
-		
 		return AutomatonOperations.difference(a, notMatch);
 	}
 	

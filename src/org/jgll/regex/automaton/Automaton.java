@@ -237,7 +237,8 @@ public class Automaton implements Serializable {
 	}
 	
 	public Matcher getMatcher() {
-		minimize();
+//		minimize();
+		determinize();
 		return AutomatonOperations.createMatcher(this);
 	}
 		

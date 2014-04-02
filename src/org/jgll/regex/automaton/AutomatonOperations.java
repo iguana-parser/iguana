@@ -948,6 +948,7 @@ public class AutomatonOperations {
 	 */
 	public static Automaton makeComplete(Automaton a, final int[] intervals) {
 		
+		a.determinize();
 		a = a.copy();
 		
 		final State dummyState = new State();

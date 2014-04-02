@@ -26,6 +26,7 @@ Export-Package:
  org.jgll.parser.lookup,
  org.jgll.parser.lookup.factory,
  org.jgll.regex,
+ org.jgll.regex.automaton,
  org.jgll.sppf,
  org.jgll.traversal,
  org.jgll.util;uses:="org.jgll.sppf",
