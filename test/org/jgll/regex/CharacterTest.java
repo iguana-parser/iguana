@@ -25,7 +25,7 @@ public class CharacterTest {
 		RegularExpression regexp = new Character('a');
 		Automaton nfa = regexp.toAutomaton();
 		Matcher dfa = nfa.getMatcher();
-		assertEquals(1, dfa.match(Input.fromString("a")));
+		assertEquals(1, dfa.match(Input.fromString("a"), 0));
 	}
 
 }

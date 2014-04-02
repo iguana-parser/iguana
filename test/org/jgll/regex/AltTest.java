@@ -10,6 +10,7 @@ import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
 import org.junit.Test;
 
+
 public class AltTest {
 	
 	@Test
@@ -45,11 +46,10 @@ public class AltTest {
 		RegularExpression regexp = new RegexAlt<>(new Keyword("when"), new Keyword("if"));
 
 		Automaton automaton = regexp.toAutomaton();
-		
+
 		Matcher dfa = automaton.getMatcher();
 		
-		assertEquals(4, dfa.match(Input.fromString("when")));
-		
-		assertEquals(2, dfa.match(Input.fromString("if")));
+		assertEquals(4, dfa.match(Input.fromString("when"), 0));
+		assertEquals(2, dfa.match(Input.fromString("if"), 0));
 	}
 }

@@ -366,10 +366,10 @@ public class GrammarBuilder implements Serializable {
 		Set<Condition> set = new HashSet<>(conditions);
 		
 		for (Condition condition : conditions) {
-			if(condition.getType() == ConditionType.NOT_MATCH) {
+			if(condition.getType() != ConditionType.NOT_MATCH) {
 				set.add(condition);
 			} 
-			else if (condition.getType() == ConditionType.NOT_FOLLOW) {
+			else if (condition.getType() != ConditionType.NOT_FOLLOW) {
 				set.add(condition);
 			}
 		}

@@ -713,14 +713,15 @@ public class AutomatonOperations {
 	}
 	
 	public static Automaton union(Iterable<Automaton> automatons) {
+		
 		State startState = new State();
 		State finalState = new State(true);
 		
-		for(Automaton nfa : automatons) {
-			nfa = nfa.copy();
-			startState.addTransition(Transition.emptyTransition(nfa.getStartState()));
+		for(Automaton automaton : automatons) {
+			automaton = automaton.copy();
+			startState.addTransition(Transition.emptyTransition(automaton.getStartState()));
 			
-			Set<State> finalStates = nfa.getFinalStates();
+			Set<State> finalStates = automaton.getFinalStates();
 			for(State s : finalStates) {
 				s.setFinalState(false);
 				s.addTransition(Transition.emptyTransition(finalState));				
@@ -806,8 +807,8 @@ public class AutomatonOperations {
 	 */
 	private static Map<Tuple<Integer, Integer>, State> product(Automaton a1, Automaton a2) {
 		
-		a1.minimize();
-		a2.minimize();
+		a1.determinize();
+		a2.determinize();
 		
 		State[] states1 = a1.getAllStates();
 		State[] states2 = a2.getAllStates();
@@ -967,6 +968,6 @@ public class AutomatonOperations {
 			}
 		});
 		
-		return new Automaton(a.getStartState());
+		return a;
 	}
 }

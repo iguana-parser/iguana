@@ -66,7 +66,7 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	protected Automaton createAutomaton() {
-		return alt.toAutomaton().addFinalStateActions(actions).addRegularExpression(this);
+		return alt.toAutomaton();
 	}
 
 	@Override

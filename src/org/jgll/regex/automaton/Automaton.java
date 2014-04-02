@@ -4,12 +4,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import org.jgll.regex.RegularExpression;
 import org.jgll.regex.matcher.Matcher;
 
 /**
@@ -32,8 +29,6 @@ public class Automaton implements Serializable {
 	private boolean minimized;
 	
 	private Set<State> finalStates;
-	
-	private Map<RegularExpression, Set<State>> map;
 	
 	public Automaton(State startState) {
 
@@ -64,20 +59,7 @@ public class Automaton implements Serializable {
 			states[s.getId()]  = s;
 		}
 		
-		finalStates = AutomatonOperations.getFinalStates(this);
-		
-		map = new HashMap<>();
-		
-		for(State s : finalStates) {
-			for(RegularExpression regex : s.getRegularExpressions()) {
-				Set<State> regexs = map.get(regex);
-				if(regexs == null) {
-					regexs = new HashSet<>();
-					map.put(regex, regexs);
-				}
-				regexs.add(s);
-			}
-		}
+		finalStates = AutomatonOperations.getFinalStates(this);		
 	}
 	
 	public State getStartState() {
@@ -97,19 +79,6 @@ public class Automaton implements Serializable {
 	public Automaton addFinalStateActions(Collection<StateAction> actions) {
 		for(State state : finalStates) {
 			state.addActions(actions);
-		}
-		return this;
-	}
-	
-	public Automaton addRegularExpression(RegularExpression regularExpression) {
-		for(State state : finalStates) {
-			state.addRegularExpression(regularExpression);
-			
-			Set<State> set = map.get(regularExpression);
-			if(set == null) {
-				set = new HashSet<>();
-				map.put(regularExpression, set);
-			}
 		}
 		return this;
 	}
@@ -197,14 +166,6 @@ public class Automaton implements Serializable {
 		return true;
 	}
 	
-	/**
-	 * Returns the state that corresponds to the final state of 
-	 * the given automaton.
-	 */
-	public Set<State> getState(RegularExpression regularExpression) {
-		return map.get(regularExpression);
-	}
-	
 	public boolean isDeterministic() {
 		return deterministic;
 	}
@@ -279,21 +240,7 @@ public class Automaton implements Serializable {
 		minimize();
 		return AutomatonOperations.createMatcher(this);
 	}
-	
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
 		
-		for(RegularExpression regex : map.keySet()) {
-			sb.append(regex.toString()).append(" | ");
-		}
-		if(sb.length() >= 2) {
-			sb.delete(sb.length() - 2, sb.length());
-		}
-		
-		return sb.toString();
-	}
-	
 	public String toJavaCode() {
 		return AutomatonOperations.toJavaCode(this);
 	}
