@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.NonPackedNode;
@@ -84,7 +83,7 @@ class DefaultGSSNodeImpl implements GSSNode {
 	}
 		
 	@Override
-	public GrammarSlot getGrammarSlot() {
+	public HeadGrammarSlot getGrammarSlot() {
 		return head;
 	}
 

@@ -6,7 +6,6 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
@@ -69,7 +68,7 @@ public class ParseError extends Exception {
 		if(node == GSSNode.U0) {
 			return;
 		}
-		out.println(String.format("%" + i * 2 + "s, %d", ((BodyGrammarSlot) node.getGrammarSlot()).previous().toString(), node.getInputIndex()));
+		out.println(String.format("%" + i * 2 + "s, %d", node.getGrammarSlot(), node.getInputIndex()));
 	}
 	
 	private GSSNode findMergePoint(GSSNode node, PrintStream out, int i) {

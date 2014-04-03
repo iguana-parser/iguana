@@ -1,7 +1,7 @@
 package org.jgll.parser.gss;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -29,7 +29,7 @@ public interface GSSNode {
 	
 	public int sizeChildren();
 		
-	public GrammarSlot getGrammarSlot();
+	public HeadGrammarSlot getGrammarSlot();
 	
 	public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot);
 	
@@ -76,7 +76,7 @@ public interface GSSNode {
 		}
 
 		@Override
-		public GrammarSlot getGrammarSlot() {
+		public HeadGrammarSlot getGrammarSlot() {
 			return L0.getInstance();
 		}
 
