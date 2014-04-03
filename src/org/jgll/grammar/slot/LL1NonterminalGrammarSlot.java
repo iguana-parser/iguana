@@ -18,9 +18,11 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	private static final long serialVersionUID = 1L;
 
 	public LL1NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, 
-									 LL1HeadGrammarSlot nonterminal, ConditionTest preConditions, ConditionTest postConditions,
+									 LL1HeadGrammarSlot nonterminal, 
+									 ConditionTest preConditions, 
+									 ConditionTest popConditions,
 									 NodeCreator nodeCreator) {
-		super(id, nodeId, label, previous, nonterminal, preConditions, postConditions, nodeCreator);
+		super(id, nodeId, label, previous, nonterminal, preConditions, popConditions, nodeCreator);
 	}
 	
 	@Override

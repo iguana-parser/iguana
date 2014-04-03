@@ -142,25 +142,31 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 
 	@Override
 	public NonterminalGrammarSlot createNonterminalGrammarSlot(List<Symbol> body, 
-															   int symbolIndex, 
+															   int symbolIndex,
 															   int nodeId,
 															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
 															   ConditionTest preConditions,
-															   ConditionTest postConditions) {
+															   ConditionTest popConditions) {
 		
 		if(symbolIndex == 1) {
-			return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions, rightNodeCreator);
+			return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, popConditions, rightNodeCreator);
 		}
 		
-		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, postConditions, intermediateNodeCreator);
+		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, popConditions, intermediateNodeCreator);
 	}
 
 	@Override
-	public TokenGrammarSlot createTokenGrammarSlot(List<Symbol> body, int symbolIndex, int nodeId, 
-												   String label, BodyGrammarSlot previous,
-												   int tokenID, ConditionTest preConditions, ConditionTest postConditions) {
+	public TokenGrammarSlot createTokenGrammarSlot(List<Symbol> body,
+												   int symbolIndex, 
+												   int nodeId,
+												   String label,
+												   BodyGrammarSlot previous, 
+												   int tokenID, 
+												   ConditionTest preConditions,
+												   ConditionTest postConditions,
+												   ConditionTest popConditions) {
 		
 		if(preConditions == null) throw new IllegalArgumentException("PreConditions cannot be null.");
 		if(postConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
@@ -170,50 +176,55 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		// A ::= .x
 		if (symbolIndex == 0 && body.size() == 1) {
 			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
-									 preConditions, postConditions, nonterminalWithOneChildNodeCreator, null);
+									 preConditions, postConditions, popConditions, nonterminalWithOneChildNodeCreator, null);
 		} 
 		
 		// A ::= x . y
 		else if (symbolIndex == 1 && body.size() == 2) {
 			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
-									 preConditions, postConditions, nonterminalNodeCreator, rightNodeCreator);
+									 preConditions, postConditions, popConditions, nonterminalNodeCreator, rightNodeCreator);
 		} 
 		
 		// A ::= alpha .x  where |alpha| > 1
 		else if (symbolIndex == body.size() - 1) {
 			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
-									 preConditions, postConditions, nonterminalNodeCreator, intermediateNodeCreator);
+									 preConditions, postConditions, popConditions, nonterminalNodeCreator, intermediateNodeCreator);
 		}
 		
 		// A ::= .x alpha  where |alpha| >= 1
 		else if (symbolIndex == 0) {
 			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
-										preConditions, postConditions, rightNodeCreator, null);
+										preConditions, postConditions, popConditions, rightNodeCreator, null);
 		}
 		
 		// A ::= x . y alpha  where |alpha| >= 1
 		else if (symbolIndex == 1) {
 			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
-										preConditions, postConditions, intermediateNodeCreator, rightNodeCreator);
+										preConditions, postConditions, popConditions, intermediateNodeCreator, rightNodeCreator);
 		}
 		
 		// A ::= beta .x alpha where |beta| >=1 and |alpha| >= 1
 		else {
 			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
-										preConditions, postConditions, intermediateNodeCreator, intermediateNodeCreator);
+										preConditions, postConditions, popConditions, intermediateNodeCreator, intermediateNodeCreator);
 		}
 	}
 
 	@Override
-	public LastGrammarSlot createLastGrammarSlot(List<Symbol> body, int symbolIndex, String label, BodyGrammarSlot previous, HeadGrammarSlot head, ConditionTest postConditions) {
+	public LastGrammarSlot createLastGrammarSlot(List<Symbol> body, 
+												 int symbolIndex, 
+												 String label, 
+												 BodyGrammarSlot previous, 
+												 HeadGrammarSlot head, 
+												 ConditionTest popConditions) {
 		
-		if(postConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
+		if(popConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
 
 		if(symbolIndex == 1) {
-			return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, postConditions, nonterminalWithOneChildNodeCreator);
+			return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, popConditions, nonterminalWithOneChildNodeCreator);
 		}
 		
-		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, postConditions, nonterminalNodeCreator);
+		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, popConditions, nonterminalNodeCreator);
 	}
 	
 	@Override

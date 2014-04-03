@@ -31,14 +31,14 @@ public interface GrammarSlotFactory {
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
 															   ConditionTest preConditions,
-															   ConditionTest postConditions);
+															   ConditionTest popConditions);
 
 	public LastGrammarSlot createLastGrammarSlot(List<Symbol> body,
 											     int symbolIndex, 
 											     String label, 
 												 BodyGrammarSlot previous, 
 												 HeadGrammarSlot head, 
-												 ConditionTest postConditions);
+												 ConditionTest popConditions);
 	
 	
 	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head);
@@ -51,5 +51,6 @@ public interface GrammarSlotFactory {
 												   BodyGrammarSlot previous, 
 												   int tokenID, 
 												   ConditionTest preConditions,
-												   ConditionTest postConditions);
+												   ConditionTest postConditions,
+												   ConditionTest popConditions);
 }

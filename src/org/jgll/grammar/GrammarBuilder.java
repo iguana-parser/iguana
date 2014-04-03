@@ -369,9 +369,9 @@ public class GrammarBuilder implements Serializable {
 			if(condition.getType() != ConditionType.NOT_MATCH) {
 				set.add(condition);
 			} 
-			else if (condition.getType() != ConditionType.NOT_FOLLOW) {
-				set.add(condition);
-			}
+//			else if (condition.getType() != ConditionType.NOT_FOLLOW) {
+//				set.add(condition);
+//			}
 		}
 		
 		// Make RegularExpression completely immutable. Now this works because
@@ -426,22 +426,13 @@ public class GrammarBuilder implements Serializable {
 		
 		if(symbol instanceof RegularExpression) {
 			RegularExpression token = (RegularExpression) symbol;
+			
 			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
-			
-			// Post conditions for nonterminal slots are executed at the pop action, therefore, 
-			// they should be added to the next slot
-			Set<Condition> conditions = symbol.getConditions();
-			
-			if (symbolIndex > 0) {
-				if(body.get(symbolIndex - 1) instanceof Nonterminal) {
-					conditions.addAll(body.get(symbolIndex - 1).getConditions());
-				}
-			}
-
-			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(conditions);
+			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(symbol.getConditions());
+			ConditionTest popConditionsTest = null;
 			
 			return grammarSlotFactory.createTokenGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), 
-					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), preConditionsTest, postConditionsTest);
+					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), preConditionsTest, postConditionsTest, popConditionsTest);
 		}
 		
 		// Nonterminal
@@ -449,11 +440,9 @@ public class GrammarBuilder implements Serializable {
 			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 			
-			if (symbolIndex > 0) {
-				if(body.get(symbolIndex - 1) instanceof Nonterminal) {
-					ConditionTest postConditionsTest = getPostConditions(body.get(symbolIndex - 1).getConditions());
-					return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, postConditionsTest);						
-				}
+			if (symbolIndex < body.size() - 1) {
+				Symbol next = body.get(symbolIndex + 1);
+				next = next.addConditions(symbol.getConditions());
 			}
 			
 			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, new FalseConditionTest());						

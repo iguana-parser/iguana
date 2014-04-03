@@ -29,12 +29,14 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 
 	protected final ConditionTest postConditions;
 	
+	protected final ConditionTest popConditions;
+	
 	protected final NodeCreator nodeCreator;
 	
 	protected final NodeCreator nodeCreatorFromPop;
 
 	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, 
-						   ConditionTest preConditions, ConditionTest postConditions,
+						   ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
 						   NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 
 		if(label == null) {
@@ -52,6 +54,7 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 		this.previous = previous;
 		this.preConditions = preConditions;
 		this.postConditions = postConditions;
+		this.popConditions = popConditions;
 		this.nodeCreator = nodeCreator;
 		this.nodeCreatorFromPop = nodeCreatorFromPop;
 	}
@@ -97,6 +100,10 @@ public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
 	public final ConditionTest getPostConditions() {
 		return postConditions;
 	}
+	
+	public final ConditionTest getPopConditions() {
+		return popConditions;
+	}	
 	
 	@Override
 	public int getId() {

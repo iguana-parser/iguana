@@ -28,9 +28,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	private final RegularExpression regularExpression;
 	
 	public TokenGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID,
-							ConditionTest preConditions, ConditionTest postConditions,
+							ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
 							NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
-		super(id, label, previous, preConditions, postConditions, nodeCreator, nodeCreatorFromPop);
+		super(id, label, previous, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
 		this.nodeId = nodeId;

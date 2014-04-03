@@ -18,10 +18,11 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	public LastTokenSlot(int id, int nodeId, String label,
  						 BodyGrammarSlot previous, RegularExpression regularExpression,
 						 int tokenID, ConditionTest preConditions,
-						 ConditionTest postConditions, NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
+						 ConditionTest postConditions, ConditionTest popConditions,
+						 NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 		
 		super(id, nodeId, label, previous, regularExpression,
-			  tokenID, preConditions, postConditions, nodeCreator, nodeCreatorFromPop);
+			  tokenID, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 	}
 	
 	@Override
