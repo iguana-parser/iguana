@@ -318,6 +318,8 @@ public class GrammarBuilder implements Serializable {
  
 	private void convert(Nonterminal head, List<List<Symbol>> alternates) {
 		
+		popActions.clear();
+		
 		HeadGrammarSlot headGrammarSlot = getHeadGrammarSlot(head);
 		
 		int alternateIndex = 0;
@@ -348,7 +350,7 @@ public class GrammarBuilder implements Serializable {
 					}
 				}
 	
-				ConditionTest postCondition = getPostConditions(body.get(body.size() - 1).getConditions());
+				ConditionTest postCondition = getPostConditions(popActions);
 				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(body, symbolIndex, getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot, postCondition);
 	
 				lastGrammarSlot.setAlternateIndex(alternateIndex);
@@ -421,6 +423,8 @@ public class GrammarBuilder implements Serializable {
 		return intermediateNodeIds.get(OperatorPrecedence.plain(alt.subList(0, index)));
 	}
 	
+	Set<Condition> popActions = new HashSet<>();
+	
 	private BodyGrammarSlot getBodyGrammarSlot(Nonterminal head, List<Symbol> body, int symbolIndex, BodyGrammarSlot currentSlot) {
 		Symbol symbol = body.get(symbolIndex);
 		
@@ -429,7 +433,7 @@ public class GrammarBuilder implements Serializable {
 			
 			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
 			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(symbol.getConditions());
-			ConditionTest popConditionsTest = null;
+			ConditionTest popConditionsTest = getPostConditions(popActions);
 			
 			return grammarSlotFactory.createTokenGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), 
 					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), preConditionsTest, postConditionsTest, popConditionsTest);
@@ -438,14 +442,14 @@ public class GrammarBuilder implements Serializable {
 		// Nonterminal
 		else {
 			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
-			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
+			ConditionTest popConditionsTest = getPostConditions(popActions);
 			
 			if (symbolIndex < body.size() - 1) {
-				Symbol next = body.get(symbolIndex + 1);
-				next = next.addConditions(symbol.getConditions());
+				popActions = symbol.getConditions();
 			}
 			
-			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, new FalseConditionTest());						
+			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
+			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, popConditionsTest);						
 		}		
 	}
 	

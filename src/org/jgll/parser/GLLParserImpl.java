@@ -281,7 +281,7 @@ public class GLLParserImpl implements GLLParser {
 			for(GSSEdge edge : gssLookup.getEdges(cu)) {
 				BodyGrammarSlot slot = edge.getReturnSlot();
 				
-				if(edge.getReturnSlot().getPostConditions().execute(this, lexer, ci)) {
+				if(edge.getReturnSlot().getPopConditions().execute(this, lexer, ci)) {
 					continue label;
 				}
 				
@@ -346,7 +346,7 @@ public class GLLParserImpl implements GLLParser {
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node
 				// stored in the popped elements.
-				if(returnSlot.getPostConditions().execute(this, lexer, z.getRightExtent())) {
+				if(returnSlot.getPopConditions().execute(this, lexer, z.getRightExtent())) {
 					continue label;
 				}
 				
