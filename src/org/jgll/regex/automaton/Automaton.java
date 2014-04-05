@@ -30,6 +30,8 @@ public class Automaton implements Serializable {
 	
 	private Set<State> finalStates;
 	
+	private Set<State> rejectStates;
+	
 	public Automaton(State startState) {
 
 		if(startState == null) {
@@ -59,7 +61,9 @@ public class Automaton implements Serializable {
 			states[s.getId()]  = s;
 		}
 		
-		finalStates = AutomatonOperations.getFinalStates(this);		
+		finalStates = AutomatonOperations.getFinalStates(this);
+		
+		rejectStates = AutomatonOperations.getRejectStates(this);
 	}
 	
 	public State getStartState() {
@@ -68,6 +72,10 @@ public class Automaton implements Serializable {
 	
 	public Set<State> getFinalStates() {
 		return finalStates;
+	}
+	
+	public Set<State> getRejectStates() {
+		return rejectStates;
 	}
 	
 	public void addFinalStateAction(StateAction action) {

@@ -37,6 +37,8 @@ public class State implements Serializable {
 	
 	private boolean finalState;
 	
+	private boolean rejectState;
+	
 	private int id;
 	
 	public State() {
@@ -80,6 +82,14 @@ public class State implements Serializable {
 	
 	public boolean isFinalState() {
 		return finalState;
+	}
+	
+	public boolean isRejectState() {
+		return rejectState;
+	}
+	
+	public void setRejectState(boolean rejectState) {
+		this.rejectState = rejectState;
 	}
 	
 	public void setFinalState(boolean finalState) {

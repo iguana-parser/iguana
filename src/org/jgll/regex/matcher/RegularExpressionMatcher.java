@@ -16,6 +16,8 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 	
 	protected final boolean[] endStates;
 	
+	protected final boolean[] rejectStates;
+	
 	protected final Set<StateAction>[] matchActions;
 
 	protected final int startStateId;
@@ -28,12 +30,14 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 
 	public RegularExpressionMatcher(int[][] transitionTable, 
 						   boolean[] endStates, 
+						   boolean[] rejectStates,
 						   int startStateId,
 						   Transitions transitions,
 						   Set<StateAction>[] matchActions) {
 		
 		this.transitionTable = transitionTable;
 		this.endStates = endStates;
+		this.rejectStates = rejectStates;
 		this.startStateId = startStateId;
 		this.transitions = transitions;
 		this.matchActions = matchActions;
@@ -122,6 +126,11 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 					break;
 				}
 			}
+			
+			// If ended up in a reject state, clean up the latest final state
+			if(rejectStates[stateId]) {
+				maximumMatched = -1;
+			}
 		}
 		
 		return maximumMatched;
@@ -184,7 +193,7 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 
 	@Override
 	public Matcher copy() {
-		return new RegularExpressionMatcher(transitionTable, endStates, startStateId, transitions, matchActions);
+		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, startStateId, transitions, matchActions);
 	}
 	
 }

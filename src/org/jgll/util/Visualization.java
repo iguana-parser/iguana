@@ -9,7 +9,7 @@ import org.jgll.regex.automaton.State;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.dot.GSSToDot;
 import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.NFAToDot;
+import org.jgll.util.dot.AutomatonToDot;
 import org.jgll.util.dot.SPPFToDot;
 import org.jgll.util.dot.SPPFToDotUnpacked;
 import org.jgll.util.dot.ToDotWithoutIntermediateNodes;
@@ -52,7 +52,7 @@ public class Visualization {
 	}
 	
 	public static void generateAutomatonGraph(String outputDir, State startState) {
-		String dot = NFAToDot.toDot(startState);
+		String dot = AutomatonToDot.toDot(startState);
 		GraphVizUtil.generateGraph(dot, outputDir, "automaton");
 	}
 

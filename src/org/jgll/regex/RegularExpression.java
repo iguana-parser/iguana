@@ -22,4 +22,7 @@ public interface RegularExpression extends Serializable, Symbol {
 	@Override
 	public RegularExpression addConditions(Collection<Condition> conditions);
 	
+	@Override
+	public RegularExpression addCondition(Condition condition);
+	
 }

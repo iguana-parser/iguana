@@ -87,6 +87,10 @@ public class AutomatonOperations {
 					e.getValue().setFinalState(true);
 					continue outer;
 				}
+				if(s.isRejectState()) {
+					e.getValue().setRejectState(true);
+					continue outer;					
+				}
 			}			
 		}
 		
@@ -112,6 +116,7 @@ public class AutomatonOperations {
 		int inputLength = a.getIntervals().length;
 		int[][] transitionTable = new int[statesCount][inputLength];
 		boolean[] endStates = new boolean[statesCount];
+		boolean[] rejectStates = new boolean[statesCount];
 		
 		@SuppressWarnings("unchecked")
 		Set<StateAction>[] actions = new Set[statesCount];
@@ -133,6 +138,10 @@ public class AutomatonOperations {
 				endStates[state.getId()] = true;
 				actions[state.getId()] = state.getActions();
 			}
+			
+			if(state.isRejectState()) {
+				rejectStates[state.getId()] = true;
+			}
 		}
 		
 		Transitions transitions;
@@ -141,7 +150,7 @@ public class AutomatonOperations {
 		} else {
 			transitions = new ShortIntervalTransitions(intervals);
 		}
-		return new RegularExpressionMatcher(transitionTable, endStates, a.getStartState().getId(), transitions, actions);
+		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, a.getStartState().getId(), transitions, actions);
 	}
 	
 	private static Set<State> epsilonClosure2(Set<State> states) {
@@ -600,6 +609,23 @@ public class AutomatonOperations {
 		
 		return finalStates;
 	}
+	
+	public static Set<State> getRejectStates(Automaton automaton) {
+		
+		final Set<State> rejectStates = new HashSet<>();
+		
+		AutomatonVisitor.visit(automaton, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				if(state.isRejectState()) {
+					rejectStates.add(state);
+				}
+			} 
+		});
+		
+		return rejectStates;
+	}	
 	
 	/**
 	 * Merges consecutive outgoing transitions of a state that are of the form\
