@@ -28,7 +28,7 @@ public class AutomatonOperations {
 		
 		Set<State> initialState = new HashSet<>();
 		initialState.add(automaton.getStartState());
-		initialState = epsilonClosure2(initialState);
+		initialState = epsilonClosure(initialState);
 		visitedStates.add(initialState);
 		processList.add(initialState);
 		
@@ -55,7 +55,7 @@ public class AutomatonOperations {
 
 			for(Entry<Tuple<Integer, Integer>, Set<State>> e : transitionsMap.entrySet()) {
 				Set<State> states = e.getValue();
-				Set<State> newState = epsilonClosure2(states);
+				Set<State> newState = epsilonClosure(states);
 				
 				State destination = newStatesMap.get(newState);
 				if(destination == null) {
@@ -87,8 +87,17 @@ public class AutomatonOperations {
 					e.getValue().setFinalState(true);
 					continue outer;
 				}
+			}			
+		}
+		
+		// Setting the reject states.
+		outer:
+		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+			for(State s : e.getKey()) {
 				if(s.isRejectState()) {
-					e.getValue().setRejectState(true);
+					State state = e.getValue();
+					state.setFinalState(false);
+					state.setRejectState(true);
 					continue outer;					
 				}
 			}			
@@ -153,14 +162,14 @@ public class AutomatonOperations {
 		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, a.getStartState().getId(), transitions, actions);
 	}
 	
-	private static Set<State> epsilonClosure2(Set<State> states) {
+	private static Set<State> epsilonClosure(Set<State> states) {
 		Set<State> newStates = new HashSet<>(states);
 		
 		for(State state : states) {
 			Set<State> s = state.getEpsilonClosure();
 			if(!s.isEmpty()) {
 				newStates.addAll(s);
-				newStates.addAll(epsilonClosure2(s));
+				newStates.addAll(epsilonClosure(s));
 			}
 		}
 		
@@ -536,9 +545,13 @@ public class AutomatonOperations {
 	}
 	
 	public static Set<State> getAllStates(Automaton automaton) {
+		return getAllStates(automaton.getStartState());
+	}
+	
+	public static Set<State> getAllStates(State startState) {
 		final Set<State> states = new HashSet<>();
 		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
+		AutomatonVisitor.visit(startState, new VisitAction() {
 			
 			@Override
 			public void visit(State state) {
@@ -817,8 +830,11 @@ public class AutomatonOperations {
 			State state1 = a1.getState(i);
 			State state2 = a2.getState(j);
 			
-			if(state1.isFinalState() && !state2.isFinalState()) {
+			if (state1.isFinalState() && !state2.isFinalState()) {
 				state.setFinalState(true);
+			}
+			else if (!state1.isFinalState() && state2.isFinalState()) {
+				state.setRejectState(true);
 			}
 			
 			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
@@ -901,6 +917,9 @@ public class AutomatonOperations {
 				newStates.put(state, newState);
 				if(state.isFinalState()) {
 					newState.setFinalState(true);
+				}
+				if(state.isRejectState()) {
+					newState.setRejectState(true);
 				}
 				if(state == automaton.getStartState()) {
 					startState[0] = newState;
