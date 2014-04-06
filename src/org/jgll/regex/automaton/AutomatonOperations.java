@@ -833,7 +833,7 @@ public class AutomatonOperations {
 			if (state1.isFinalState() && !state2.isFinalState()) {
 				state.setFinalState(true);
 			}
-			else if (!state1.isFinalState() && state2.isFinalState()) {
+			else if (state1.isFinalState() && state2.isFinalState()) {
 				state.setRejectState(true);
 			}
 			

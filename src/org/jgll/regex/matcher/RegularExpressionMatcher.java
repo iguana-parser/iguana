@@ -60,10 +60,12 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 
 		int stateId = startStateId;
 		
+		int previousMinimumMatched = -1;
+		
 		int maximumMatched = -1;
 		
 		// If the start state is an accepting state, we can always match a string with length 0.
-		if(endStates[stateId]) {
+		if(endStates[stateId] && !rejectStates[stateId]) {
 			maximumMatched = 0;
 
 			// Handling epsilon matching the empty input
@@ -97,7 +99,7 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 				return -1;
 			}
 			
-			if(endStates[stateId]) {
+			if(endStates[stateId] && !rejectStates[stateId]) {
 				executeActions(stateId, 0);
 				return 0;
 			}
@@ -120,6 +122,7 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 			}
 			
 			if(endStates[stateId]) {
+				previousMinimumMatched = maximumMatched;
 				maximumMatched = length;
 				executeActions(stateId, maximumMatched);
 				if(mode == SHORTEST_MATCH) {
@@ -131,6 +134,7 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 			if(rejectStates[stateId]) {
 				maximumMatched = -1;
 			}
+			
 		}
 		
 		return maximumMatched;
