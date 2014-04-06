@@ -12,6 +12,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateAction;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.Visualization;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
