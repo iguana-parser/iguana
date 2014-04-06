@@ -13,7 +13,6 @@ import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateAction;
 import org.jgll.regex.automaton.Transition;
-import org.jgll.util.Visualization;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
@@ -57,7 +56,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 			if(condition.getType() == ConditionType.NOT_MATCH && condition instanceof RegularExpressionCondition) {
 				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
 				RegularExpression regex = regexCondition.getRegularExpression();
-				result = regex.toAutomaton();
+				result = AutomatonOperations.difference(result, regex.toAutomaton());
 			}
 			
 			if(condition.getType() == ConditionType.NOT_FOLLOW && condition instanceof RegularExpressionCondition) {
@@ -66,7 +65,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 				
 				Automaton c = regex.toAutomaton().determinize().copy();
 				
-				for(State s : a.getFinalStates()) {
+				for(State s : result.getFinalStates()) {
 					s.addTransition(Transition.emptyTransition(c.getStartState()));
 				}
 				
@@ -75,7 +74,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 					s.setRejectState(true);
 				}
 				
-				result = AutomatonOperations.difference(a, c);
+				result = new Automaton(result.getStartState());
 			}
 		}
 
