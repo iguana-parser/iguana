@@ -23,7 +23,8 @@ public class FollowRestrictionTest {
 	public void init() {
 		// id !>> [:]
 		RegularExpression id = RegularExpressionExamples.getId();
-		RegularExpression r1 = id.addCondition(RegularExpressionCondition.notFollow(new Keyword(":")));
+		RegularExpression r1 = id /*.addCondition(RegularExpressionCondition.notFollow(new Keyword(":")))*/
+								 .addCondition(RegularExpressionCondition.notMatch(new Keyword("test")));
 		matcher1 = r1.toAutomaton().getMatcher();
 		
 		// id !>> "<>"
@@ -37,9 +38,10 @@ public class FollowRestrictionTest {
 	
 	@Test
 	public void test1() {
-		assertEquals(-1, matcher1.match(Input.fromString("test:"), 0));
+		assertEquals(-1, matcher1.match(Input.fromString("test"), 0));
 		assertEquals(-1, matcher1.match(Input.fromString("testtest:"), 0));
 		assertEquals(4, matcher1.match(Input.fromString("test?"), 0));
+		assertEquals(4, matcher1.match(Input.fromString("test"), 0));
 	}
 	
 	@Test
@@ -47,6 +49,7 @@ public class FollowRestrictionTest {
 		assertEquals(-1, matcher2.match(Input.fromString("test<>"), 0));
 		assertEquals(-1, matcher2.match(Input.fromString("testtest<>"), 0));
 		assertEquals(4, matcher2.match(Input.fromString("test?"), 0));
+		assertEquals(4, matcher2.match(Input.fromString("test"), 0));
 	}
 
 	@Test

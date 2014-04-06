@@ -9,6 +9,7 @@ import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateAction;
 import org.jgll.regex.automaton.Transition;
@@ -74,7 +75,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 					s.setRejectState(true);
 				}
 				
-				result = new Automaton(a.getStartState());
+				result = AutomatonOperations.difference(a, c);
 			}
 		}
 
