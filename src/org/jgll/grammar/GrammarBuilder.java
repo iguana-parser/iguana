@@ -350,8 +350,8 @@ public class GrammarBuilder implements Serializable {
 					}
 				}
 	
-				ConditionTest postCondition = getPostConditions(popActions);
-				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(body, symbolIndex, getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot, postCondition);
+				ConditionTest popCondition = getPostConditions(popActions);
+				LastGrammarSlot lastGrammarSlot = grammarSlotFactory.createLastGrammarSlot(body, symbolIndex, getSlotName(head, body, symbolIndex), currentSlot, headGrammarSlot, popCondition);
 	
 				lastGrammarSlot.setAlternateIndex(alternateIndex);
 				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
@@ -444,9 +444,7 @@ public class GrammarBuilder implements Serializable {
 			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
 			ConditionTest popConditionsTest = getPostConditions(popActions);
 			
-			if (symbolIndex < body.size() - 1) {
-				popActions = symbol.getConditions();
-			}
+			popActions = symbol.getConditions();
 			
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, popConditionsTest);						
