@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot.test;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.jgll.grammar.slotaction.SlotAction;
@@ -7,8 +8,10 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class DefaultConditionTest implements ConditionTest {
+public class DefaultConditionTest implements ConditionTest, Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(DefaultConditionTest.class);
 
 	private final List<SlotAction<Boolean>> conditions;

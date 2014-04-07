@@ -1,11 +1,15 @@
 package org.jgll.regex.matcher;
 
+import java.io.Serializable;
+
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateAction;
 import org.jgll.util.Input;
 
-public class CharacterMatcher implements Matcher {
+public class CharacterMatcher implements Matcher, Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private final int c;
 	
 	public CharacterMatcher(int c) {

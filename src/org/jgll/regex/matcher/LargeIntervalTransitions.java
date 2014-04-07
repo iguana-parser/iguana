@@ -1,6 +1,10 @@
 package org.jgll.regex.matcher;
 
-public class LargeIntervalTransitions implements Transitions {
+import java.io.Serializable;
+
+public class LargeIntervalTransitions implements Transitions, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private final int[] transitionIds;
 	
