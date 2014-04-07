@@ -21,6 +21,8 @@ public class DiffernceTest {
 		Automaton a = difference(id.toAutomaton(), k1.toAutomaton());
 		assertEquals(5, a.getMatcher().match(Input.fromString("first"), 0));
 		assertEquals(-1, a.getMatcher().match(Input.fromString("if"), 0));
+		assertEquals(-1, a.getMatcher().match(Input.fromString("if:"), 0));
+		assertEquals(5, a.getMatcher().match(Input.fromString("first:"), 0));
 	}
 	
 	@Test

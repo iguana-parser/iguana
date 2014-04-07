@@ -16,7 +16,7 @@ public class RegularExpressionExamples {
 	public static RegularExpression getId() {
 		CharacterClass c1 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'));
 		CharacterClass c2 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'), new Range('0', '9'));
-		return new Sequence<>(c1, new RegexStar(c2));
+		return new RegexStar(new CharacterClass(new Range('a', 'z')));
 	}
 	
 	/**

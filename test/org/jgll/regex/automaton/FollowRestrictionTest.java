@@ -10,6 +10,7 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
 import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,11 @@ public class FollowRestrictionTest {
 	public void init() {
 		// id !>> [:]
 		RegularExpression id = RegularExpressionExamples.getId();
-		RegularExpression r1 = id .addCondition(RegularExpressionCondition.notFollow(new Keyword(":")));
+		RegularExpression r1 = id .addCondition(RegularExpressionCondition.notFollow(new Keyword(":")))
+				.addCondition(RegularExpressionCondition.notMatch(new Keyword("set")));
+		
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", r1.toAutomaton().determinize().getStartState());
+		
 		matcher1 = r1.toAutomaton().getMatcher();
 		
 		// id !>> "<>"
@@ -41,6 +46,7 @@ public class FollowRestrictionTest {
 		assertEquals(-1, matcher1.match(Input.fromString("testtest:"), 0));
 		assertEquals(4, matcher1.match(Input.fromString("test?"), 0));
 		assertEquals(4, matcher1.match(Input.fromString("test"), 0));
+		assertEquals(-1, matcher1.match(Input.fromString("set"), 0));
 	}
 	
 	@Test

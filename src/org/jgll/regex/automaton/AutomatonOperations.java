@@ -92,18 +92,31 @@ public class AutomatonOperations {
 		
 		// Setting the reject states. If during the process of making a DFA deterministic,
 		// a reject and a final state are merged, consider it as a final state.
+//		outer:
+//		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+//			for(State s : e.getKey()) {
+//				if(s.isRejectState()) {
+//					State state = e.getValue();
+//					if(!state.isFinalState()) {
+//						state.setRejectState(true);
+//					}
+//					continue outer;					
+//				}
+//			}			
+//		}
+		
 		outer:
 		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
 			for(State s : e.getKey()) {
 				if(s.isRejectState()) {
 					State state = e.getValue();
-					if(!state.isFinalState()) {
-						state.setRejectState(true);
-					}
+					state.setFinalState(false);
+					state.setRejectState(true);
 					continue outer;					
 				}
 			}			
 		}
+
 		
 		return new Automaton(startState);
 	}
