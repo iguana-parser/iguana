@@ -571,16 +571,18 @@ public class GrammarBuilder implements Serializable {
 			Integer id = tokenIDMap.get(regex);
 			
 			if(regex instanceof CharacterClass) {
-				CharacterClass charClass = (CharacterClass) regex;
-				if(charClass.size() == 1) {
-					Range range = charClass.get(0);
-					
-					if(range.getStart() == range.getEnd()) {
-						Matcher matcher = new CharacterMatcher(range.getStart());
-						dfas[id] = matcher;
-						continue;
-					}
-				} 
+				if(regex.getConditions().isEmpty()) {
+					CharacterClass charClass = (CharacterClass) regex;
+					if(charClass.size() == 1) {
+						Range range = charClass.get(0);
+						
+						if(range.getStart() == range.getEnd()) {
+							Matcher matcher = new CharacterMatcher(range.getStart());
+							dfas[id] = matcher;
+							continue;
+						}
+					}					
+				}
 			}
 			Automaton a = regex.toAutomaton();
 			Matcher matcher = a.getMatcher();
