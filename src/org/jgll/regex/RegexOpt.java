@@ -22,7 +22,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	protected Automaton createAutomaton() {
 		State startState = new State();
-		State finalState = new State(true).addActions(actions);
+		State finalState = new State(true);
 		
 		Automaton automaton = regexp.toAutomaton().copy();
 		startState.addTransition(Transition.emptyTransition(automaton.getStartState()));

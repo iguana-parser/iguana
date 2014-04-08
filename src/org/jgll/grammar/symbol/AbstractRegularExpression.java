@@ -1,8 +1,6 @@
 package org.jgll.grammar.symbol;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
@@ -11,7 +9,6 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.StateAction;
 import org.jgll.regex.automaton.Transition;
 
 
@@ -19,13 +16,10 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 
 	private static final long serialVersionUID = 1L;
 	
-	protected List<StateAction> actions;
-	
 	private Automaton automaton;
 
 	public AbstractRegularExpression(String name) {
 		super(name);
-		actions = new ArrayList<>();
 	}
 	
 	@Override

@@ -66,7 +66,7 @@ public class Character extends AbstractRegularExpression {
 	
 	protected Automaton createAutomaton() {
 		State startState = new State();
-		State finalState = new State(true).addActions(actions).addRegularExpression(this);
+		State finalState = new State(true).addRegularExpression(this);
 		startState.addTransition(new Transition(c, finalState));
 		return new Automaton(startState);
 	}

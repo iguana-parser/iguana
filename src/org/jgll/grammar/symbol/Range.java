@@ -75,7 +75,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	@Override
 	protected Automaton createAutomaton() {
 		State startState = new State();
-		State finalState = new State(true).addActions(actions).addRegularExpression(this);
+		State finalState = new State(true).addRegularExpression(this);
 		startState.addTransition(new Transition(start, end, finalState));
 		return new Automaton(startState);
 	}

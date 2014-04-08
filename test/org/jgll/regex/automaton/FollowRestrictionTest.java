@@ -64,11 +64,11 @@ public class FollowRestrictionTest {
 
 	@Test
 	public void test4() {
-		RegularExpression r1 = new Character('a').addCondition(RegularExpressionCondition.notFollow(new Character('a')));
-		RegularExpression r2 = new Character('b').addCondition(RegularExpressionCondition.notFollow(new Character('a')));
+		RegularExpression r1 = new Character('*').not();
+		RegularExpression r2 = new Character('*').addCondition(RegularExpressionCondition.notFollow(new Character('/')));
 		
 		RegexStar star = new RegexStar(new RegexAlt<>(r1, r2));
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", star.toAutomaton().determinize().getStartState());
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", star.toAutomaton().getStartState());
 		Matcher m = star.toAutomaton().getMatcher();
 		
 		System.out.println(m.match(Input.fromString("ab"), 0));

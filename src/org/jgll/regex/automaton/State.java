@@ -22,8 +22,6 @@ public class State implements Serializable {
 	 */
 	private Set<State> epsilonClosure;
 	
-	private Set<StateAction> actions;
-	
 	/**
 	 * A map from the start interval of each transition to the transition.
 	 * This map is used for fast lookup of transitions.
@@ -52,7 +50,6 @@ public class State implements Serializable {
 		this.transitionsMap = new HashMap<>();
 		this.finalState = finalState;
 		this.epsilonClosure = new HashSet<>();
-		this.actions = new HashSet<>();
 		this.regularExpressions = new HashSet<>();
 	}
 	
@@ -129,20 +126,6 @@ public class State implements Serializable {
 	
 	public int getId() {
 		return id;
-	}
-	
-	public Set<StateAction> getActions() {
-		return actions;
-	}
-	
-	public State addAction(StateAction action) {
-		actions.add(action);
-		return this;
-	}
-	
-	public State addActions(Collection<StateAction> actions) {
-		this.actions.addAll(actions);
-		return this;
 	}
 	
 	public Set<RegularExpression> getRegularExpressions() {

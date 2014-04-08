@@ -42,8 +42,6 @@ public class AutomatonOperations {
 		
 		State startState = new State();
 		
-		addActions(initialState, startState);
-		
 		newStatesMap.put(initialState, startState);
 		
 		Map<Tuple<State, Integer>, Set<State>> cache = new HashMap<>();
@@ -61,7 +59,6 @@ public class AutomatonOperations {
 				if(destination == null) {
 					destination = new State();
 					newStatesMap.put(newState, destination);
-					addActions(newState, destination);
 				}
 				
 				State source = newStatesMap.get(stateSet);
@@ -121,13 +118,6 @@ public class AutomatonOperations {
 		return new Automaton(startState);
 	}
 	
-	private static void addActions(Set<State> src, State dest) {
-		for(State state : src) {
-			dest.addRegularExpressions(state.getRegularExpressions());
-			dest.addActions(state.getActions());
-		}
-	}
- 	
 	public static Matcher createMatcher(Automaton a) {
 		
 		int[] intervals = a.getIntervals();
@@ -142,9 +132,6 @@ public class AutomatonOperations {
 		boolean[] endStates = new boolean[statesCount];
 		boolean[] rejectStates = new boolean[statesCount];
 		
-		@SuppressWarnings("unchecked")
-		Set<StateAction>[] actions = new Set[statesCount];
-		
 		for(int i = 0; i < transitionTable.length; i++) {
 			for(int j = 0; j < transitionTable[i].length; j++) {
 				transitionTable[i][j] = -1;
@@ -152,7 +139,6 @@ public class AutomatonOperations {
 		}
 
 		for(State state : a.getAllStates()) {
-			actions[state.getId()] = new HashSet<>();
 			
 			for(Transition transition : state.getTransitions()) {
 				transitionTable[state.getId()][transition.getId()] = transition.getDestination().getId();
@@ -160,7 +146,6 @@ public class AutomatonOperations {
 			
 			if(state.isFinalState()) {
 				endStates[state.getId()] = true;
-				actions[state.getId()] = state.getActions();
 			}
 			
 			if(state.isRejectState()) {
@@ -174,7 +159,7 @@ public class AutomatonOperations {
 		} else {
 			transitions = new ShortIntervalTransitions(intervals);
 		}
-		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, a.getStartState().getId(), transitions, actions);
+		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, a.getStartState().getId(), transitions);
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
@@ -265,8 +250,7 @@ public class AutomatonOperations {
 				
 				// Differentiate between final states
 				if(automaton.getState(i).isFinalState() && 
-				   automaton.getState(j).isFinalState() && 
-				   !automaton.getState(i).getActions().equals(automaton.getState(j).getActions())) {
+				   automaton.getState(j).isFinalState()) {
 					table[i][j] = EPSILON;
 				}
 			}
@@ -380,7 +364,6 @@ public class AutomatonOperations {
 			State newState = new State();
 			for(State state : set) {
 				
-				newState.addActions(state.getActions());
 				newState.addRegularExpressions(state.getRegularExpressions());
 				
 				if(automaton.getStartState() == state) {
@@ -930,7 +913,6 @@ public class AutomatonOperations {
 			public void visit(State state) {
 				State newState = new State();
 				
-				newState.addActions(state.getActions());
 				newState.addRegularExpressions(state.getRegularExpressions());
 				
 				newStates.put(state, newState);

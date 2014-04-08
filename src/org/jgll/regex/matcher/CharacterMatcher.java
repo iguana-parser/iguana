@@ -2,8 +2,6 @@ package org.jgll.regex.matcher;
 
 import java.io.Serializable;
 
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.StateAction;
 import org.jgll.util.Input;
 
 public class CharacterMatcher implements Matcher, Serializable {
@@ -42,11 +40,6 @@ public class CharacterMatcher implements Matcher, Serializable {
 	@Override
 	public Matcher setMode(int mode) {
 		return null;
-	}
-
-	@Override
-	public void addStateAction(State state, StateAction action) {
-		
 	}
 
 	@Override

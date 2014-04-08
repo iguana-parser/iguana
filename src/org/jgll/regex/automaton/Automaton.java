@@ -3,7 +3,6 @@ package org.jgll.regex.automaton;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -76,19 +75,6 @@ public class Automaton implements Serializable {
 	
 	public Set<State> getRejectStates() {
 		return rejectStates;
-	}
-	
-	public void addFinalStateAction(StateAction action) {
-		for(State state : finalStates) {
-			state.addAction(action);
-		}
-	}
-	
-	public Automaton addFinalStateActions(Collection<StateAction> actions) {
-		for(State state : finalStates) {
-			state.addActions(actions);
-		}
-		return this;
 	}
 	
 	public int getCountStates() {

@@ -1,7 +1,5 @@
 package org.jgll.regex.matcher;
 
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.StateAction;
 import org.jgll.util.Input;
 
 public interface Matcher {
@@ -32,8 +30,6 @@ public interface Matcher {
 	public int matchBackwards(Input input, int inputIndex);
 	
 	public Matcher setMode(int mode);
-	
-	public void addStateAction(State state, StateAction action);
 	
 	public Matcher copy();
 }

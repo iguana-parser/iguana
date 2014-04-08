@@ -1,11 +1,7 @@
 package org.jgll.regex.matcher;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.StateAction;
 import org.jgll.util.Input;
 
 public class RegularExpressionMatcher implements Matcher, Serializable {
@@ -18,8 +14,6 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 	
 	protected final boolean[] rejectStates;
 	
-	protected final Set<StateAction>[] matchActions;
-
 	protected final int startStateId;
 	
 	protected int id;
@@ -32,15 +26,13 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 						   boolean[] endStates, 
 						   boolean[] rejectStates,
 						   int startStateId,
-						   Transitions transitions,
-						   Set<StateAction>[] matchActions) {
+						   Transitions transitions) {
 		
 		this.transitionTable = transitionTable;
 		this.endStates = endStates;
 		this.rejectStates = rejectStates;
 		this.startStateId = startStateId;
 		this.transitions = transitions;
-		this.matchActions = matchActions;
 	}
 
 	@Override
@@ -68,17 +60,11 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 
 			// Handling epsilon matching the empty input
 			if(input.isEmpty()) {
-				executeActions(stateId, maximumMatched);
 				return maximumMatched;
-			}
-
-			if(mode == SHORTEST_MATCH) {
-				executeActions(stateId, maximumMatched);
 			}
 			
 			// If the input index is EOF and the current state is an end state.
 			if(input.charAt(inputIndex) == 0) {
-				executeActions(stateId, 0);
 				return 0;
 			}
 		}		
@@ -98,7 +84,6 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 			}
 			
 			if(endStates[stateId] && !rejectStates[stateId]) {
-				executeActions(stateId, 0);
 				return 0;
 			}
 			
@@ -121,7 +106,6 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 			
 			if(endStates[stateId]) {
 				maximumMatched = length;
-				executeActions(stateId, maximumMatched);
 				if(mode == SHORTEST_MATCH) {
 					break;
 				}
@@ -135,12 +119,6 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 		}
 		
 		return maximumMatched;
-	}
-	
-	private void executeActions(int previousId, int maximumMatched) {
-		for(StateAction action : matchActions[previousId]) {
-			action.execute(maximumMatched, previousId);
-		}
 	}
 	
 	@Override
@@ -184,17 +162,8 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 	}
 	
 	@Override
-	public void addStateAction(State state, StateAction action) {
-		Set<StateAction> set = matchActions[state.getId()];
-		if(set == null) {
-			set = new HashSet<>();
-		}
-		set.add(action);
-	}
-
-	@Override
 	public Matcher copy() {
-		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, startStateId, transitions, matchActions);
+		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, startStateId, transitions);
 	}
 	
 }
