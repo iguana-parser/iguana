@@ -10,6 +10,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
 
+import static org.jgll.regex.automaton.TransitionActionsFactory.*;
 /**
  * 
  * @author Ali Afroozeh

@@ -1,6 +1,8 @@
 package org.jgll.regex.automaton;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jgll.grammar.symbol.Range;
 import org.jgll.parser.HashFunctions;
@@ -17,6 +19,12 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	private int id;
 	
+	private Set<TransitionAction> actions;
+	
+	public Transition(int c, State destination) {
+		this(c, c, destination);
+	}
+	
 	public Transition(int start, int end, State destination) {
 
 		if(end < start) {
@@ -30,10 +38,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 		this.start = start;
 		this.end = end;
 		this.destination = destination;
-	}
-	
-	public Transition(int c, State destination) {
-		this(c, c, destination);
+		this.actions = new HashSet<>();
 	}
 	
 	public static Transition emptyTransition(State destination) {
@@ -109,4 +114,14 @@ public class Transition implements Comparable<Transition>, Serializable {
 	public int compareTo(Transition t) {
 		return this.start - t.getStart();
 	}
+
+	public Transition addTransitionAction(TransitionAction action) {
+		actions.add(action);
+		return this;
+	}
+	
+	public Set<TransitionAction> getActions() {
+		return actions;
+	}
+	
 }

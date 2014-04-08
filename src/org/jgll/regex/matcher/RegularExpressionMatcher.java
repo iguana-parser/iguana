@@ -2,6 +2,7 @@ package org.jgll.regex.matcher;
 
 import java.io.Serializable;
 
+import org.jgll.regex.automaton.TransitionAction;
 import org.jgll.util.Input;
 
 public class RegularExpressionMatcher implements Matcher, Serializable {
@@ -21,18 +22,22 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 	protected int mode = LONGEST_MATCH;
 
 	private Transitions transitions;
+	
+	private TransitionAction[] transitionActions;
 
 	public RegularExpressionMatcher(int[][] transitionTable, 
 						   boolean[] endStates, 
 						   boolean[] rejectStates,
 						   int startStateId,
-						   Transitions transitions) {
+						   Transitions transitions, 
+						   TransitionAction[] transitionActions) {
 		
 		this.transitionTable = transitionTable;
 		this.endStates = endStates;
 		this.rejectStates = rejectStates;
 		this.startStateId = startStateId;
 		this.transitions = transitions;
+		this.transitionActions = transitionActions;
 	}
 
 	@Override
@@ -104,6 +109,10 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 				break;
 			}
 			
+			if(transitionActions[transitionId].execute(input, inputIndex + length)) {
+				maximumMatched = -1;
+			}
+			
 			if(endStates[stateId]) {
 				maximumMatched = length;
 				if(mode == SHORTEST_MATCH) {
@@ -163,7 +172,7 @@ public class RegularExpressionMatcher implements Matcher, Serializable {
 	
 	@Override
 	public Matcher copy() {
-		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, startStateId, transitions);
+		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, startStateId, transitions, transitionActions);
 	}
 	
 }

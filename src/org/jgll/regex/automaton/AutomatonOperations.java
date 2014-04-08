@@ -32,8 +32,6 @@ public class AutomatonOperations {
 		visitedStates.add(initialState);
 		processList.add(initialState);
 		
-		int[] intervals = automaton.getIntervals();
-				
 		/**
 		 * A map from the set of NFA states to the new state in the produced DFA.
 		 * This map is used for sharing DFA states.
@@ -49,7 +47,7 @@ public class AutomatonOperations {
 		while(!processList.isEmpty()) {
 			Set<State> stateSet = processList.poll();
 			
-			Map<Tuple<Integer, Integer>, Set<State>> transitionsMap = move(stateSet, intervals, cache);
+			Map<Tuple<Integer, Integer>, Set<State>> transitionsMap = move(stateSet, cache);
 
 			for(Entry<Tuple<Integer, Integer>, Set<State>> e : transitionsMap.entrySet()) {
 				Set<State> states = e.getValue();
@@ -132,6 +130,12 @@ public class AutomatonOperations {
 		boolean[] endStates = new boolean[statesCount];
 		boolean[] rejectStates = new boolean[statesCount];
 		
+		TransitionAction[] transitionActions = new TransitionAction[inputLength];
+		
+		for(Transition t : getAllTransitions(a)) {
+			transitionActions[t.getId()] = t.getTransitionAction();
+		}
+		
 		for(int i = 0; i < transitionTable.length; i++) {
 			for(int j = 0; j < transitionTable[i].length; j++) {
 				transitionTable[i][j] = -1;
@@ -159,7 +163,7 @@ public class AutomatonOperations {
 		} else {
 			transitions = new ShortIntervalTransitions(intervals);
 		}
-		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, a.getStartState().getId(), transitions);
+		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, a.getStartState().getId(), transitions, transitionActions);
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
@@ -177,8 +181,9 @@ public class AutomatonOperations {
 	}
 	
 	private static Map<Tuple<Integer, Integer>, Set<State>> move(Set<State> states, 
-																 int[] intervals, 
 																 Map<Tuple<State, Integer>, Set<State>> cache) {
+		
+		int[] intervals = getIntervalsOfStates(states);
 		
 		Map<Tuple<Integer, Integer>, Set<State>> map = new HashMap<>();
 		
@@ -474,6 +479,30 @@ public class AutomatonOperations {
 		Arrays.sort(merged);
 		
 		return merged;
+	}
+	
+	public static int[] getIntervalsOfStates(Set<State> states) {
+		
+		Set<Integer> set = new HashSet<>();
+		
+		for(State state : states) {
+			for(Transition transition : state.getTransitions()) {
+				if(!transition.isEpsilonTransition()) {
+					set.add(transition.getStart());
+					set.add(transition.getEnd() + 1);						
+				}
+			}
+		}
+		
+		Integer[] array = set.toArray(new Integer[] {});
+		Arrays.sort(array);
+		
+		int[] result = new int[array.length];
+		for(int i = 0; i < array.length; i++) {
+			result[i] = array[i];
+		}
+		
+		return result;			
 	}
 	
 	public static int[] getIntervals(Set<Transition> transitions) {

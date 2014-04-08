@@ -2,6 +2,8 @@ package org.jgll.regex.matcher;
 
 import java.io.Serializable;
 
+import org.jgll.regex.automaton.State;
+
 public class LargeIntervalTransitions implements Transitions, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -38,7 +40,11 @@ public class LargeIntervalTransitions implements Transitions, Serializable {
 		return getTransitionId(v, 0, intervals.length - 1);
 	}
 
-	
+	@Override
+	public State move(int v) {
+		return null;
+	}
+
 	private int getTransitionId(int c, int start, int end) {
 		
 		if(end == start ) {
