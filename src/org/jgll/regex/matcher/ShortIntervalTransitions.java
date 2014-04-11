@@ -1,9 +1,12 @@
 package org.jgll.regex.matcher;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.jgll.regex.automaton.RunnableState;
+import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.Input;
 
 public class ShortIntervalTransitions implements Transitions, Serializable {
 	
@@ -15,7 +18,10 @@ public class ShortIntervalTransitions implements Transitions, Serializable {
 	
 	private final int maximum;
 
-	public ShortIntervalTransitions(Transition[] transitions) {
+	private final Map<State, RunnableState> map;
+
+	public ShortIntervalTransitions(Transition[] transitions, Map<State, RunnableState> map) {
+		this.map = map;
 		minimum = transitions[0].getStart();
 		maximum = transitions[transitions.length - 1].getEnd();
 		
@@ -29,13 +35,19 @@ public class ShortIntervalTransitions implements Transitions, Serializable {
  	}
 	
 	@Override
-	public RunnableState move(int v) {
+	public RunnableState move(Input input, int inputIndex) {
+		int v = input.charAt(inputIndex);
 		if(v < minimum || v > maximum - 1) {
 			return null;
 		}
 		
 		Transition transition = transitionIds[v - minimum];
-		return null;
+		
+		if (transition.executeActions(input, inputIndex)) {
+			return null;
+		}
+		
+		return map.get(transition.getDestination());
 	}
 
 }

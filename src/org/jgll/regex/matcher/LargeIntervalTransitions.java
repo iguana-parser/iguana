@@ -3,6 +3,7 @@ package org.jgll.regex.matcher;
 import java.io.Serializable;
 
 import org.jgll.regex.automaton.RunnableState;
+import org.jgll.util.Input;
 
 public class LargeIntervalTransitions implements Transitions, Serializable {
 
@@ -32,16 +33,7 @@ public class LargeIntervalTransitions implements Transitions, Serializable {
 	}
 	
 	@Override
-	public int getTransitionId(int v) {
-		if(v < minimum || v > maximum) {
-			return -1;
-		}
-		
-		return getTransitionId(v, 0, intervals.length - 1);
-	}
-
-	@Override
-	public RunnableState move(int v) {
+	public RunnableState move(Input input, int inputIndex) {
 		return null;
 	}
 
