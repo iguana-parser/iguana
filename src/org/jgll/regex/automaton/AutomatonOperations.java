@@ -132,10 +132,6 @@ public class AutomatonOperations {
 		
 		TransitionAction[] transitionActions = new TransitionAction[inputLength];
 		
-		for(Transition t : getAllTransitions(a)) {
-			transitionActions[t.getId()] = t.getTransitionAction();
-		}
-		
 		for(int i = 0; i < transitionTable.length; i++) {
 			for(int j = 0; j < transitionTable[i].length; j++) {
 				transitionTable[i][j] = -1;
@@ -164,6 +160,25 @@ public class AutomatonOperations {
 			transitions = new ShortIntervalTransitions(intervals);
 		}
 		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, a.getStartState().getId(), transitions, transitionActions);
+	}
+	
+	
+	public static RunnableState createRunnableAutomaton(Automaton a) {
+		
+		final Map<State, RunnableState> map = new HashMap<>();
+		
+		return createRunnableState(a.getStartState(), map);
+		
+	}
+	
+	
+	private static RunnableState createRunnableState(State state, Map<State, RunnableState> map) {
+		RunnableState runnableState = map.get(state);
+		if(runnableState == null) {
+			runnableState = new RunnableState(null);
+			map.put(state, runnableState);
+		}
+		return runnableState;
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {

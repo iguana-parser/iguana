@@ -6,6 +6,9 @@ import java.util.Set;
 
 import org.jgll.grammar.symbol.Range;
 import org.jgll.parser.HashFunctions;
+import org.jgll.regex.matcher.ShortIntervalTransitions;
+import org.jgll.regex.matcher.Transitions;
+import org.jgll.util.Input;
 
 public class Transition implements Comparable<Transition>, Serializable {
 	
@@ -122,6 +125,21 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	public Set<TransitionAction> getActions() {
 		return actions;
+	}
+	
+	public boolean executeActions(Input input, int index) {
+		
+		for (TransitionAction action : actions) {
+			if(action.execute(input, index)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public Transitions getTransitions() {
+		return new ShortIntervalTransitions(null);
 	}
 	
 }

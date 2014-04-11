@@ -2,37 +2,40 @@ package org.jgll.regex.matcher;
 
 import java.io.Serializable;
 
+import org.jgll.regex.automaton.RunnableState;
+import org.jgll.regex.automaton.Transition;
+
 public class ShortIntervalTransitions implements Transitions, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final int[] transitionIds;
+	private final Transition[] transitionIds;
 	
 	private final int minimum;
 	
 	private final int maximum;
 
-	public ShortIntervalTransitions(int[] intervals) {
+	public ShortIntervalTransitions(Transition[] transitions) {
+		minimum = transitions[0].getStart();
+		maximum = transitions[transitions.length - 1].getEnd();
 		
-		minimum = intervals[0];
-		maximum = intervals[intervals.length - 1];
-		transitionIds = new int[maximum - minimum];
-		
+		transitionIds = new Transition[maximum - minimum + 1];
 		int k = 0;
-		for(int i = 0; i < intervals.length - 1; i++) {
-			for(int j = intervals[i]; j < intervals[i+1]; j++) {
-				transitionIds[k++] = i;
+		for (Transition t : transitions) {
+			for(int i = t.getStart(); i < t.getEnd(); i++) {
+				transitionIds[k++] = t;
 			}
 		}
-	}
+ 	}
 	
 	@Override
-	public int getTransitionId(int v) {
+	public RunnableState move(int v) {
 		if(v < minimum || v > maximum - 1) {
-			return -1;
+			return null;
 		}
 		
-		return transitionIds[v - minimum];
+		Transition transition = transitionIds[v - minimum];
+		return null;
 	}
 
 }

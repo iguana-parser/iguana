@@ -11,9 +11,18 @@ public class RunnableState {
 		this.transitions = transitions;
 	}
 	
-	public RunnableState run(Input input, int index) {
-		Transition transition = transitions.getTransition(index);
-		return null;
+	public int run(Input input, int index) {
+		
+		int length = -1;
+		
+		RunnableState currentState = transitions.move(index);
+		
+		while (currentState != null) {
+			currentState = transitions.move(index);
+			length++;
+		}
+		
+		return length;
 	}
 
 }

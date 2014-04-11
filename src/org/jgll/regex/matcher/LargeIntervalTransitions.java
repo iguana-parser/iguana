@@ -2,7 +2,7 @@ package org.jgll.regex.matcher;
 
 import java.io.Serializable;
 
-import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.RunnableState;
 
 public class LargeIntervalTransitions implements Transitions, Serializable {
 
@@ -41,7 +41,7 @@ public class LargeIntervalTransitions implements Transitions, Serializable {
 	}
 
 	@Override
-	public State move(int v) {
+	public RunnableState move(int v) {
 		return null;
 	}
 

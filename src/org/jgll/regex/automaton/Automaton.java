@@ -235,7 +235,11 @@ public class Automaton implements Serializable {
 		determinize();
 		return AutomatonOperations.createMatcher(this);
 	}
-		
+	
+	public RunnableState getRunnableAutomaton() {
+		return AutomatonOperations.createRunnableAutomaton(this);
+	}
+	
 	public String toJavaCode() {
 		return AutomatonOperations.toJavaCode(this);
 	}
