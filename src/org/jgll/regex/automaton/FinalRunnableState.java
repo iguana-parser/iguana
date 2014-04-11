@@ -4,8 +4,8 @@ import org.jgll.util.Input;
 
 public class FinalRunnableState extends RunnableState {
 	
-	public FinalRunnableState(boolean finalState) {
-		super(finalState);
+	public FinalRunnableState(boolean finalState, boolean rejectState) {
+		super(finalState, rejectState);
 	}
 
 	@Override

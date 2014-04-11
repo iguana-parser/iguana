@@ -4,8 +4,8 @@ import static org.jgll.util.CollectionsUtil.list;
 import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.condition.ContextFreeCondition;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;

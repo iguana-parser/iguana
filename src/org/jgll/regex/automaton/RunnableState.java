@@ -6,10 +6,14 @@ import org.jgll.util.Input;
 public class RunnableState {
 	
 	private Transitions transitions;
+	
 	private boolean finalState;
 	
-	public RunnableState(boolean finalState) {
+	private boolean rejectState;
+	
+	public RunnableState(boolean finalState, boolean rejectState) {
 		this.finalState = finalState;
+		this.rejectState = rejectState;
 	}
 	
 	public void setTransitions(Transitions transitions) {
@@ -26,6 +30,10 @@ public class RunnableState {
 	
 	public boolean isFinalState() {
 		return finalState;
+	}
+	
+	public boolean isRejectState() {
+		return rejectState;
 	}
 	
 }

@@ -120,9 +120,9 @@ public class AutomatonOperations {
 		// Create a new runnable state for each state
 		for (State state : a.getAllStates()) {
 			if (state.getCountTransitions() > 0) {
-				map.put(state, new RunnableState(state.isFinalState()));
+				map.put(state, new RunnableState(state.isFinalState(), state.isRejectState()));
 			} else {
-				map.put(state, new FinalRunnableState(state.isFinalState()));
+				map.put(state, new FinalRunnableState(state.isFinalState(), state.isRejectState()));
 			}
 		}
 		

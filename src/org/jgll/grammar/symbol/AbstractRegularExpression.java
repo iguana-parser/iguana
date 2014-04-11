@@ -8,8 +8,6 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.Transition;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
@@ -51,25 +49,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
 				RegularExpression regex = regexCondition.getRegularExpression();
 				result = AutomatonOperations.difference(result, regex.toAutomaton());
-			}
-			
-			if(condition.getType() == ConditionType.NOT_FOLLOW && condition instanceof RegularExpressionCondition) {
-				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
-				RegularExpression regex = regexCondition.getRegularExpression();
-				
-				Automaton c = regex.toAutomaton().determinize().copy();
-				
-				for(State s : result.getFinalStates()) {
-					s.addTransition(Transition.epsilonTransition(c.getStartState()));
-				}
-				
-				for(State s : c.getFinalStates()) {
-					s.setFinalState(false);
-					s.setRejectState(true);
-				}
-				
-				result = new Automaton(result.getStartState());
-			}
+			}			
 		}
 
 		return result;

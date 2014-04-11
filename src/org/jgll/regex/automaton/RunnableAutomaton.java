@@ -31,13 +31,14 @@ public class RunnableAutomaton implements Serializable {
 		
 		while (true) {
 			
-			if(currentState.isFinalState()) {
-				maximumMatched = length;
-			}
+			if(currentState.isFinalState()) maximumMatched = length;
+			
+			if(currentState.isRejectState()) maximumMatched = -1;
 			
 			currentState = currentState.move(input, index++);
 			
 			if (currentState == null) break;
+			
 			length++;
 		}
 		
@@ -52,13 +53,14 @@ public class RunnableAutomaton implements Serializable {
 		
 		while (true) {
 			
-			if(currentState.isFinalState()) {
-				maximumMatched = length;
-			}
+			if(currentState.isFinalState()) maximumMatched = length;
+			
+			if(currentState.isRejectState()) maximumMatched = -1;
 
 			currentState = currentState.move(input, index--);
 			
 			if (currentState == null) break;
+			
 			length++;
 		}
 		

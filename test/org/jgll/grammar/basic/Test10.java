@@ -58,6 +58,8 @@ public class Test10 {
 		Input input = Input.fromString("");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+		
+		// TODO: stackoverflow bug due to the cycle in the SPPF. Fix it later!
 //		assertTrue(sppf.deepEquals(getSPPF1()));
 	}
 	
