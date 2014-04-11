@@ -57,8 +57,10 @@ public class AutomatonOperations {
 				}
 				
 				State source = newStatesMap.get(stateSet);
+				
 				// The state should have been created before.
 				assert source != null;
+				
 				Transition transition = new Transition(e.getKey().getFirst(), e.getKey().getSecond(), destination);
 				source.addTransition(transition);
 				
@@ -172,12 +174,11 @@ public class AutomatonOperations {
 		return newStates;
 	}
 	
-	private static Map<Tuple<Integer, Integer>, Set<State>> move(Set<State> states, 
-																 Map<Tuple<State, Integer>, Set<State>> cache) {
+	private static Map<Transition, Set<State>> move(Set<State> states, Map<Tuple<State, Integer>, Set<State>> cache) {
 		
 		int[] intervals = getIntervalsOfStates(states);
 		
-		Map<Tuple<Integer, Integer>, Set<State>> map = new HashMap<>();
+		Map<Transition, Set<State>> map = new HashMap<>();
 		
 		for(int i = 0; i < intervals.length; i++) {
 			

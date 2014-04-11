@@ -23,12 +23,8 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	private Set<TransitionAction> actions;
 	
-	public Transition(int c, State destination) {
-		this(c, c, destination);
-	}
-	
-	public Transition(int start, int end, State destination) {
-
+	public Transition(int start, int end, State destination, Set<TransitionAction> actions) {
+		
 		if(end < start) {
 			throw new IllegalArgumentException("start cannot be less than end.");
 		}
@@ -40,7 +36,15 @@ public class Transition implements Comparable<Transition>, Serializable {
 		this.start = start;
 		this.end = end;
 		this.destination = destination;
-		this.actions = new HashSet<>();
+		this.actions = new HashSet<>();		
+	}
+	
+	public Transition(int c, State destination) {
+		this(c, c, destination);
+	}
+	
+	public Transition(int start, int end, State destination) {
+		this(start, end, destination, new HashSet<TransitionAction>());
 	}
 	
 	public static Transition epsilonTransition(State destination) {
@@ -122,7 +126,9 @@ public class Transition implements Comparable<Transition>, Serializable {
 	}
 
 	public Transition addTransitionAction(TransitionAction action) {
-		actions.add(action);
+		if(actions != null) {
+			actions.add(action);			
+		}
 		return this;
 	}
 	

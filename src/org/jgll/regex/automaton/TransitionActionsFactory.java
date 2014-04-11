@@ -14,6 +14,10 @@ public class TransitionActionsFactory {
 
 	public static TransitionAction getPostActions(Set<Condition> conditions) {
 		
+		if (conditions.size() == 0) {
+			return null;
+		}
+		
 		final List<RegularExpression> notFollows = new ArrayList<>();
 		
 		for(Condition condition : conditions) {
@@ -46,7 +50,8 @@ public class TransitionActionsFactory {
 		
 		return new TransitionAction() {
 
-			RegularExpression regex = new RegexAlt<>(notFollows);
+			RegularExpression regex = notFollows.size() == 1 ? notFollows.get(0) : new RegexAlt<>(notFollows);
+			
 			RunnableAutomaton r = regex.toAutomaton().getRunnableAutomaton();
 			
 			@Override
