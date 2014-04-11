@@ -4,14 +4,13 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.matcher.Matcher;
-
+import org.jgll.regex.automaton.RunnableAutomaton;
 
 public class PrecedeActions {
 
 	public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
 		
-		final Matcher matcher = regex.toAutomaton().reverse().getMatcher();
+		final RunnableAutomaton r = regex.toAutomaton().reverse().getRunnableAutomaton();
 
 		return new SlotAction<Boolean>() {
 			
@@ -19,7 +18,7 @@ public class PrecedeActions {
 
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
-				return matcher.matchBackwards(lexer.getInput(), inputIndex - 1) == -1;
+				return r.matchBackwards(lexer.getInput(), inputIndex - 1) == -1;
 			}
 
 			@Override

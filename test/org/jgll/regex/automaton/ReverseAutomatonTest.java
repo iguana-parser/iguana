@@ -14,7 +14,7 @@ public class ReverseAutomatonTest {
 	public void test() {
 		RegularExpression r = new Keyword("test");
 		Automaton a = r.toAutomaton().reverse();
-		assertTrue(a.getMatcher().match(Input.fromString("tset")));
+		assertTrue(a.getRunnableAutomaton().match(Input.fromString("tset")));
 	}
 
 }

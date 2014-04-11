@@ -6,7 +6,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class AltTest {
 		
 		assertEquals(6, nfa.getCountStates());
 		
-		Matcher dfa = nfa.getMatcher();
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));
 		assertEquals(1, dfa.match(Input.fromString("b"), 0));
 	}
@@ -35,7 +35,7 @@ public class AltTest {
 		
 		Automaton result = AutomatonOperations.or(k1.toAutomaton(), k2.toAutomaton());
 
-		Matcher dfa = result.getMatcher();
+		RunnableAutomaton dfa = result.getRunnableAutomaton();
 		assertEquals(3, dfa.match(Input.fromString("for"), 0));
 		assertEquals(6, dfa.match(Input.fromString("forall"), 0));
 	}
@@ -47,7 +47,7 @@ public class AltTest {
 
 		Automaton automaton = regexp.toAutomaton();
 
-		Matcher dfa = automaton.getMatcher();
+		RunnableAutomaton dfa = automaton.getRunnableAutomaton();
 		
 		assertEquals(4, dfa.match(Input.fromString("when"), 0));
 		assertEquals(2, dfa.match(Input.fromString("if"), 0));

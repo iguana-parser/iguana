@@ -8,7 +8,6 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
 
 public class TransitionActionsFactory {
@@ -48,11 +47,11 @@ public class TransitionActionsFactory {
 		return new TransitionAction() {
 
 			RegularExpression regex = new RegexAlt<>(notFollows);
-			Matcher m = regex.toAutomaton().getMatcher();
+			RunnableAutomaton r = regex.toAutomaton().getRunnableAutomaton();
 			
 			@Override
 			public boolean execute(Input input, int index) {
-				return m.match(input, index) > 0;
+				return r.match(input, index) > 0;
 			}
 			
 			@Override

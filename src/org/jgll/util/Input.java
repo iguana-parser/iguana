@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jgll.grammar.symbol.EOF;
 import org.jgll.traversal.PositionInfo;
 
 /**
@@ -40,9 +41,7 @@ public class Input {
 		for (int i = 0; i < s.length(); i++) {
 			input[i] = s.codePointAt(i);
 		}
-		// The EOF character is assumed to have value 0 instead of the more common -1.  
-		// as Bitsets cannot work with negative values. 
-		input[s.length()] = 0; // TODO: we will run into some problems because Jurgen used 0 for escaping.
+		input[s.length()] = EOF.VALUE;
 
 		return input;
 	}

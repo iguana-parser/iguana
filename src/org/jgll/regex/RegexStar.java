@@ -27,16 +27,16 @@ public class RegexStar extends AbstractRegularExpression {
 		
 		Automaton automaton = regexp.toAutomaton().copy();
 		
-		startState.addTransition(Transition.emptyTransition(automaton.getStartState()));
+		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		
 		Set<State> finalStates = automaton.getFinalStates();
 		for(State s : finalStates) {
 			s.setFinalState(false);
-			s.addTransition(Transition.emptyTransition(finalState));
-			s.addTransition(Transition.emptyTransition(automaton.getStartState()));
+			s.addTransition(Transition.epsilonTransition(finalState));
+			s.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		}
 		
-		startState.addTransition(Transition.emptyTransition(finalState));
+		startState.addTransition(Transition.epsilonTransition(finalState));
 		
 		return new Automaton(startState);
 	}

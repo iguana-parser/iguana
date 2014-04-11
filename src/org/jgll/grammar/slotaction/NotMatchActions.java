@@ -4,7 +4,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
 
 public class NotMatchActions {
 
@@ -49,7 +49,7 @@ public class NotMatchActions {
 	  
 		public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
 			
-			final Matcher matcher = regex.toAutomaton().getMatcher();
+			final RunnableAutomaton r = regex.toAutomaton().getRunnableAutomaton();
 			
 			return	new SlotAction<Boolean>() {
 					
@@ -57,7 +57,9 @@ public class NotMatchActions {
 
 					@Override
 					public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
-						return matcher.match(lexer.getInput(), parser.getCurrentGSSNode().getInputIndex(), inputIndex);
+						int start = parser.getCurrentGSSNode().getInputIndex();
+						int end = inputIndex;
+						return r.match(lexer.getInput(), start, end);
 					}
 
 					@Override

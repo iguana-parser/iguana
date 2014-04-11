@@ -6,7 +6,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class StarTest {
 				
 		assertEquals(4, nfa.getCountStates());
 		
-		Matcher matcher = nfa.getMatcher();
+		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		
 		assertEquals(0, matcher.match(Input.fromString(""), 0));
 		assertEquals(1, matcher.match(Input.fromString("a"), 0));
@@ -38,7 +38,7 @@ public class StarTest {
 		RegularExpression regexp = new RegexStar(new Sequence<>(new RegexPlus(new CharacterClass(new Range('a', 'a')))));
 		Automaton nfa = regexp.toAutomaton();
 		
-		Matcher matcher = nfa.getMatcher();
+		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		
 		assertEquals(0, matcher.match(Input.fromString(""), 0));
 		assertEquals(1, matcher.match(Input.fromString("a"), 0));

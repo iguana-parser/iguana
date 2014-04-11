@@ -48,7 +48,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			automatons[i] = regularExpressions.get(i).toAutomaton().copy();
 		}
 		
-		startState.addTransition(Transition.emptyTransition(automatons[0].getStartState()));
+		startState.addTransition(Transition.epsilonTransition(automatons[0].getStartState()));
 		
 		// Middle regular expressions
 		int i = 0;
@@ -59,13 +59,13 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			Set<State> finalStates = nfa.getFinalStates();
 			for(State s : finalStates) {
 				s.setFinalState(false);
-				s.addTransition(Transition.emptyTransition(nextNFA.getStartState()));
+				s.addTransition(Transition.epsilonTransition(nextNFA.getStartState()));
 			}
 		}
 		
 		for(State s : automatons[i].getFinalStates()) {
 			s.setFinalState(false);
-			s.addTransition(Transition.emptyTransition(finalState));
+			s.addTransition(Transition.epsilonTransition(finalState));
 		}
 				
 		return new Automaton(startState);

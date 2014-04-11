@@ -6,8 +6,6 @@ import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.regex.matcher.Matcher;
-
 /**
  * 
  * @author Ali Afroozeh
@@ -230,13 +228,8 @@ public class Automaton implements Serializable {
 		return this;
 	}
 	
-	public Matcher getMatcher() {
-//		minimize();
+	public RunnableAutomaton getRunnableAutomaton() {
 		determinize();
-		return AutomatonOperations.createMatcher(this);
-	}
-	
-	public RunnableState getRunnableAutomaton() {
 		return AutomatonOperations.createRunnableAutomaton(this);
 	}
 	

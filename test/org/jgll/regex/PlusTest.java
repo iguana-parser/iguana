@@ -1,10 +1,11 @@
 package org.jgll.regex;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class PlusTest {
 
 		assertEquals(8, nfa.getCountStates());
 		
-		Matcher dfa = nfa.getMatcher();
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));
 		assertEquals(2, dfa.match(Input.fromString("aa"), 0));

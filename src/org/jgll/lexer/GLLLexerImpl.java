@@ -3,7 +3,6 @@ package org.jgll.lexer;
 import java.util.BitSet;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
@@ -33,17 +32,12 @@ public class GLLLexerImpl implements GLLLexer {
 	}
 	
 	@Override
-	public boolean match(int inputIndex, Matcher m) {
-		return m.match(input, inputIndex) > 0;
-	}
-	
-	@Override
 	public int tokenAt(int inputIndex, BitSet set) {
 		for (int i = set.nextSetBit(0); i >= 0; i = set.nextSetBit(i+1)) {
 			if(tokens[inputIndex][i] >= 0) {
 				return i;
 			} else {
-				int length = grammar.getMatcher(i).match(input, inputIndex);
+				int length = grammar.getAutomaton(i).match(input, inputIndex);
 				tokens[inputIndex][i] = length;
 				
 				if(length >= 0) {
@@ -63,7 +57,7 @@ public class GLLLexerImpl implements GLLLexer {
 	@Override
 	public int tokenLengthAt(int inputIndex, int tokenID) {
 		if(tokens[inputIndex][tokenID] == UNMATCHED) {
-			int length = grammar.getMatcher(tokenID).match(input, inputIndex);
+			int length = grammar.getAutomaton(tokenID).match(input, inputIndex);
 			tokens[inputIndex][tokenID] = length;
 			return length;
 		}

@@ -42,7 +42,7 @@ public class IntersectionTest {
 		a1.intersection(a2);
 
 		assertFalse(a1.isLanguageEmpty());
-		assertTrue(a1.getMatcher().match(Input.fromString("111001110001")));
+		assertTrue(a1.getRunnableAutomaton().match(Input.fromString("111001110001")));
 	}
 	
 	@Test

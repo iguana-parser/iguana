@@ -37,8 +37,6 @@ public class State implements Serializable {
 	
 	private boolean rejectState;
 	
-	private boolean conditionState;
-	
 	private int id;
 	
 	public State() {
@@ -87,20 +85,12 @@ public class State implements Serializable {
 		return rejectState;
 	}
 	
-	public boolean isConditionState() {
-		return conditionState;
-	}
-	
 	public void setRejectState(boolean rejectState) {
 		this.rejectState = rejectState;
 	}
 	
 	public void setFinalState(boolean finalState) {
 		this.finalState = finalState;
-	}
-	
-	public void setConditionState(boolean conditionState) {
-		this.conditionState = conditionState;
 	}
 	
 	public void addTransition(Transition transition) {

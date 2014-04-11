@@ -11,7 +11,6 @@ import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegexStar;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
-import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
 import org.jgll.util.Visualization;
 import org.junit.Test;
@@ -27,7 +26,7 @@ public class FollowRestrictionTest {
 		RegularExpression r1 = id .addCondition(RegularExpressionCondition.notFollow(new Keyword(":")))
 				.addCondition(RegularExpressionCondition.notMatch(new Keyword("set")));
 		
-		Matcher matcher = r1.toAutomaton().getMatcher();
+		RunnableAutomaton matcher = r1.toAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test:"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("testtest:"), 0));
@@ -41,7 +40,7 @@ public class FollowRestrictionTest {
 		
 		// id !>> "<>"
 		RegularExpression r2 = id.addCondition(RegularExpressionCondition.notFollow(new Keyword("<>")));
-		Matcher matcher = r2.toAutomaton().getMatcher();
+		RunnableAutomaton matcher = r2.toAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test<>"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("testtest<>"), 0));
@@ -55,7 +54,7 @@ public class FollowRestrictionTest {
 		// id !>> [a-z]
 		RegularExpression r3 = id.addCondition(RegularExpressionCondition.notFollow(new CharacterClass(Range.in('a', 'z'))));
 
-		Matcher matcher = r3.toAutomaton().getMatcher();
+		RunnableAutomaton matcher = r3.toAutomaton().getRunnableAutomaton();
 		
 		assertEquals(4, matcher.match(Input.fromString("test"), 0));
 		assertEquals(8, matcher.match(Input.fromString("testtest)"), 0));
@@ -69,7 +68,7 @@ public class FollowRestrictionTest {
 		
 		RegexStar star = new RegexStar(new RegexAlt<>(r1, r2));
 		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", star.toAutomaton().getStartState());
-		Matcher m = star.toAutomaton().getMatcher();
+		RunnableAutomaton m = star.toAutomaton().getRunnableAutomaton();
 		
 		System.out.println(m.match(Input.fromString("ab"), 0));
 	}

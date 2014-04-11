@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class SequenceTest {
 
 		assertEquals(6, nfa.getCountStates());
 
-		Matcher dfa = nfa.getMatcher();
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertTrue(dfa.match(Input.fromString("ab")));
 		assertFalse(dfa.match(Input.fromString("ac")));
@@ -33,7 +33,7 @@ public class SequenceTest {
 
 		assertEquals(6, nfa.getCountStates());
 
-		Matcher dfa = nfa.getMatcher();
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertTrue(dfa.match(Input.fromString("a0")));
 		assertTrue(dfa.match(Input.fromString("a5")));
@@ -54,7 +54,7 @@ public class SequenceTest {
 		RegularExpression regexp = new Sequence<>(new Range('a', 'z'), new Range('b', 'm'));
 		Automaton nfa = regexp.toAutomaton();
 		
-		Matcher matcher = nfa.getMatcher();
+		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		assertTrue(matcher.match(Input.fromString("dm")));
 	}
 	

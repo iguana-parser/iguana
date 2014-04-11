@@ -22,18 +22,15 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.matcher.CharacterMatcher;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -73,7 +70,7 @@ public class GrammarBuilder implements Serializable {
 	
 	List<Nonterminal> nonterminals;
 	
-	Matcher[] dfas;
+	RunnableAutomaton[] dfas;
 	
 	Map<Nonterminal, Set<RegularExpression>> firstSets;
 
@@ -455,29 +452,28 @@ public class GrammarBuilder implements Serializable {
 	}
 	
 	private void createAutomatonsMap() {
-		dfas = new Matcher[tokens.size()];
+		dfas = new RunnableAutomaton[tokens.size()];
 		
 		for(RegularExpression regex : tokens) {
 			
 			Integer id = tokenIDMap.get(regex);
 			
-			if(regex instanceof CharacterClass) {
-				if(regex.getConditions().isEmpty()) {
-					CharacterClass charClass = (CharacterClass) regex;
-					if(charClass.size() == 1) {
-						Range range = charClass.get(0);
-						
-						if(range.getStart() == range.getEnd()) {
-							Matcher matcher = new CharacterMatcher(range.getStart());
-							dfas[id] = matcher;
-							continue;
-						}
-					}					
-				}
-			}
+//			if(regex instanceof CharacterClass) {
+//				if(regex.getConditions().isEmpty()) {
+//					CharacterClass charClass = (CharacterClass) regex;
+//					if(charClass.size() == 1) {
+//						Range range = charClass.get(0);
+//						
+//						if(range.getStart() == range.getEnd()) {
+//							Matcher matcher = new CharacterMatcher(range.getStart());
+//							dfas[id] = matcher;
+//							continue;
+//						}
+//					}					
+//				}
+//			}
 			Automaton a = regex.toAutomaton();
-			Matcher matcher = a.getMatcher();
-			dfas[id] = matcher;
+			dfas[id] = a.getRunnableAutomaton();
 		}
 	}
 	

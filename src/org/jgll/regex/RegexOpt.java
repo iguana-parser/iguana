@@ -25,15 +25,15 @@ public class RegexOpt extends AbstractRegularExpression {
 		State finalState = new State(true);
 		
 		Automaton automaton = regexp.toAutomaton().copy();
-		startState.addTransition(Transition.emptyTransition(automaton.getStartState()));
+		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		
 		Set<State> finalStates = automaton.getFinalStates();
 		for(State s : finalStates) {
 			s.setFinalState(false);
-			s.addTransition(Transition.emptyTransition(finalState));			
+			s.addTransition(Transition.epsilonTransition(finalState));			
 		}
 		
-		startState.addTransition(Transition.emptyTransition(finalState));
+		startState.addTransition(Transition.epsilonTransition(finalState));
 		
 		return new Automaton(startState);
 	}

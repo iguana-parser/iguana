@@ -12,11 +12,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.regex.matcher.LargeIntervalTransitions;
-import org.jgll.regex.matcher.Matcher;
-import org.jgll.regex.matcher.RegularExpressionMatcher;
 import org.jgll.regex.matcher.ShortIntervalTransitions;
 import org.jgll.regex.matcher.Transitions;
-import org.jgll.regex.matcher.TrueMatcher;
 import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
@@ -116,69 +113,49 @@ public class AutomatonOperations {
 		return new Automaton(startState);
 	}
 	
-	public static Matcher createMatcher(Automaton a) {
-		
-		int[] intervals = a.getIntervals();
-		
-		if(intervals.length == 0) {
-			return new TrueMatcher();
-		}
-		
-		int statesCount = a.getCountStates();
-		int inputLength = a.getIntervals().length;
-		int[][] transitionTable = new int[statesCount][inputLength];
-		boolean[] endStates = new boolean[statesCount];
-		boolean[] rejectStates = new boolean[statesCount];
-		
-		TransitionAction[] transitionActions = new TransitionAction[inputLength];
-		
-		for(int i = 0; i < transitionTable.length; i++) {
-			for(int j = 0; j < transitionTable[i].length; j++) {
-				transitionTable[i][j] = -1;
-			}
-		}
-
-		for(State state : a.getAllStates()) {
-			
-			for(Transition transition : state.getTransitions()) {
-				transitionTable[state.getId()][transition.getId()] = transition.getDestination().getId();
-			}
-			
-			if(state.isFinalState()) {
-				endStates[state.getId()] = true;
-			}
-			
-			if(state.isRejectState()) {
-				rejectStates[state.getId()] = true;
-			}
-		}
-		
-		Transitions transitions;
-		if(intervals[intervals.length - 1] - intervals[0] > Character.MAX_VALUE) {
-			transitions = new LargeIntervalTransitions(intervals);
-		} else {
-			transitions = new ShortIntervalTransitions(intervals);
-		}
-		return new RegularExpressionMatcher(transitionTable, endStates, rejectStates, a.getStartState().getId(), transitions, transitionActions);
-	}
-	
-	
-	public static RunnableState createRunnableAutomaton(Automaton a) {
+	public static RunnableAutomaton createRunnableAutomaton(Automaton a) {
 		
 		final Map<State, RunnableState> map = new HashMap<>();
 		
-		return createRunnableState(a.getStartState(), map);
-		
-	}
-	
-	
-	private static RunnableState createRunnableState(State state, Map<State, RunnableState> map) {
-		RunnableState runnableState = map.get(state);
-		if(runnableState == null) {
-			runnableState = new RunnableState(null);
-			map.put(state, runnableState);
+		// Create a new runnable state for each state
+		for (State state : a.getAllStates()) {
+			if (state.getCountTransitions() > 0) {
+				map.put(state, new RunnableState(state.isFinalState()));
+			} else {
+				map.put(state, new FinalRunnableState(state.isFinalState()));
+			}
 		}
-		return runnableState;
+		
+		final Map<Transition, RunnableState> transitionsMap = new HashMap<>();
+		
+		AutomatonVisitor.visit(a, new VisitAction() {
+			
+			@Override
+			public void visit(State state) {
+				for (Transition t : state.getTransitions()) {
+					transitionsMap.put(t, map.get(t.getDestination()));
+				}
+			}
+		});
+
+		for (Entry<State, RunnableState> e : map.entrySet()) {
+			Transition[] sortedTransitions = e.getKey().getSortedTransitions();
+			
+			if (sortedTransitions.length > 0) {
+				Transitions transitions;
+				
+				if (sortedTransitions[sortedTransitions.length - 1].getEnd() - sortedTransitions[0].getStart() <= Character.MAX_VALUE) {
+					transitions = new ShortIntervalTransitions(sortedTransitions, transitionsMap);
+				} else {
+					transitions = new LargeIntervalTransitions(sortedTransitions, transitionsMap);
+				}
+				
+				e.getValue().setTransitions(transitions);				
+			}
+			
+		}
+		
+		return new RunnableAutomaton(map.get(a.getStartState()));
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
@@ -766,7 +743,7 @@ public class AutomatonOperations {
 		State startState = new State();
 		
 		for(State finalState : automaton.getFinalStates()) {
-			startState.addTransition(Transition.emptyTransition(newStates.get(finalState)));
+			startState.addTransition(Transition.epsilonTransition(newStates.get(finalState)));
 		}
 		
 		// 2. Reversing the transitions
@@ -800,12 +777,12 @@ public class AutomatonOperations {
 		
 		for(Automaton automaton : automatons) {
 			automaton = automaton.copy();
-			startState.addTransition(Transition.emptyTransition(automaton.getStartState()));
+			startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 			
 			Set<State> finalStates = automaton.getFinalStates();
 			for(State s : finalStates) {
 				s.setFinalState(false);
-				s.addTransition(Transition.emptyTransition(finalState));				
+				s.addTransition(Transition.epsilonTransition(finalState));				
 			}
 		}
 		
@@ -999,7 +976,7 @@ public class AutomatonOperations {
 		
 		for(Automaton a : automatons) {
 			Automaton c = a.copy();
-			startState.addTransition(Transition.emptyTransition(c.getStartState()));
+			startState.addTransition(Transition.epsilonTransition(c.getStartState()));
 		}
 		
 		return new Automaton(startState);

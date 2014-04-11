@@ -6,7 +6,7 @@ import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Constants;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class CharacterClassTest {
 		
 		assertEquals(6, nfa.getCountStates());
 
-		Matcher dfa = nfa.getMatcher();
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertTrue(dfa.match(Input.fromChar('a')));
 		assertTrue(dfa.match(Input.fromChar('f')));
@@ -40,7 +40,7 @@ public class CharacterClassTest {
 
 		assertEquals(8, nfa.getCountStates());
 
-		Matcher dfa = nfa.getMatcher();
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertTrue(dfa.match(Input.fromChar('1')));
 		assertTrue(dfa.match(Input.fromChar('2')));

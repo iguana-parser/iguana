@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.parser.HashFunctions;
-import org.jgll.regex.matcher.ShortIntervalTransitions;
-import org.jgll.regex.matcher.Transitions;
 import org.jgll.util.Input;
 
 public class Transition implements Comparable<Transition>, Serializable {
@@ -44,8 +43,12 @@ public class Transition implements Comparable<Transition>, Serializable {
 		this.actions = new HashSet<>();
 	}
 	
-	public static Transition emptyTransition(State destination) {
+	public static Transition epsilonTransition(State destination) {
 		return new Transition(-1, destination);
+	}
+	
+	public static Transition EOFTransition(State destination) {
+		return new Transition(EOF.VALUE, destination);
 	}
 	
 	public int getStart() {
@@ -137,9 +140,5 @@ public class Transition implements Comparable<Transition>, Serializable {
 		
 		return false;
 	}
-	
-	public Transitions getTransitions() {
-		return new ShortIntervalTransitions(null);
-	}
-	
+		
 }

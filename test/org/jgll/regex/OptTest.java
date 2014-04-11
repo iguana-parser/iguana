@@ -1,10 +1,11 @@
 package org.jgll.regex;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -16,9 +17,9 @@ public class OptTest {
 		Automaton nfa = regexp.toAutomaton();
 		assertEquals(4, nfa.getCountStates());
 
-		Matcher dfa = nfa.getMatcher();
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertTrue(dfa.match(Input.fromString("a")));
-		assertTrue(dfa.match(Input.fromString("")));
+		assertEquals(0, dfa.match(Input.fromString(""), 0));
 	}
 
 }

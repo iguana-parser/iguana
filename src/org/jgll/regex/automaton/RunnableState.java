@@ -6,23 +6,26 @@ import org.jgll.util.Input;
 public class RunnableState {
 	
 	private Transitions transitions;
-
-	public RunnableState(Transitions transitions) {
-		this.transitions = transitions;
+	private boolean finalState;
+	
+	public RunnableState(boolean finalState) {
+		this.finalState = finalState;
 	}
 	
-	public int run(Input input, int index) {
-		
-		int length = -1;
-		
-		RunnableState currentState = transitions.move(index);
-		
-		while (currentState != null) {
-			currentState = transitions.move(index);
-			length++;
-		}
-		
-		return length;
+	public void setTransitions(Transitions transitions) {
+		this.transitions = transitions;
 	}
 
+	public Transitions getTransitions() {
+		return transitions;
+	}
+	
+	public RunnableState move(Input input, int inputIndex) {
+		return transitions.move(input, inputIndex);
+	}
+	
+	public boolean isFinalState() {
+		return finalState;
+	}
+	
 }

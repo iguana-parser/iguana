@@ -12,7 +12,9 @@ public class EOF extends AbstractRegularExpression {
 	private static final long serialVersionUID = 1L;
 	
 	public static final int TOKEN_ID = 1;
-
+	
+	public static int VALUE = -1;
+	
 	private static EOF instance;
 	
 	public static EOF getInstance() {
@@ -29,7 +31,7 @@ public class EOF extends AbstractRegularExpression {
 	protected Automaton createAutomaton() {
     	State startState = new State();
     	State endState = new State(true).addRegularExpression(this);
-    	startState.addTransition(new Transition(0, endState));
+    	startState.addTransition(new Transition(VALUE, endState));
         return new Automaton(startState);		
 	}
 

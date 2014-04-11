@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.jgll.regex.automaton.RunnableState;
-import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
 
@@ -12,24 +11,31 @@ public class ShortIntervalTransitions implements Transitions, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final Transition[] transitionIds;
+	/**
+	 * transitionsMap[c] holds the corresponding transition for the input value c. 
+	 */
+	private final Transition[] transitionsMap;
+	
+	/**
+	 * states[c] holds the next state for the input value c.
+	 */
+	private final RunnableState[] states;
 	
 	private final int minimum;
 	
 	private final int maximum;
 
-	private final Map<State, RunnableState> map;
-
-	public ShortIntervalTransitions(Transition[] transitions, Map<State, RunnableState> map) {
-		this.map = map;
+	public ShortIntervalTransitions(Transition[] transitions, Map<Transition, RunnableState> map) {
 		minimum = transitions[0].getStart();
 		maximum = transitions[transitions.length - 1].getEnd();
 		
-		transitionIds = new Transition[maximum - minimum + 1];
-		int k = 0;
+		transitionsMap = new Transition[maximum - minimum + 1];
+		states = new RunnableState[maximum - minimum + 1];
+		
 		for (Transition t : transitions) {
-			for(int i = t.getStart(); i < t.getEnd(); i++) {
-				transitionIds[k++] = t;
+			for(int i = t.getStart(); i <= t.getEnd(); i++) {
+				transitionsMap[i - minimum] = t;
+				states[i - minimum] = map.get(t);
 			}
 		}
  	}
@@ -37,17 +43,19 @@ public class ShortIntervalTransitions implements Transitions, Serializable {
 	@Override
 	public RunnableState move(Input input, int inputIndex) {
 		int v = input.charAt(inputIndex);
-		if(v < minimum || v > maximum - 1) {
+		if(v < minimum || v > maximum) {
 			return null;
 		}
 		
-		Transition transition = transitionIds[v - minimum];
+		Transition transition = transitionsMap[v - minimum];
+		
+		if(transition == null) return null;
 		
 		if (transition.executeActions(input, inputIndex)) {
 			return null;
 		}
 		
-		return map.get(transition.getDestination());
+		return states[v - minimum];
 	}
 
 }

@@ -20,7 +20,8 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.automaton.RunnableAutomaton;
+import org.jgll.regex.automaton.RunnableState;
 import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -66,7 +67,7 @@ public class Grammar implements Serializable {
 	
 	private List<RegularExpression> tokens;
 	
-	private Matcher[] dfas;
+	private RunnableAutomaton[] dfas;
 	
 	private Map<Nonterminal, Set<RegularExpression>> firstSets;
 	
@@ -257,7 +258,7 @@ public class Grammar implements Serializable {
 		return sb.toString();
 	}
 	
-	public Matcher getMatcher(int index) {
+	public RunnableAutomaton getAutomaton(int index) {
 		return dfas[index];
 	}
 	
@@ -317,10 +318,6 @@ public class Grammar implements Serializable {
 	
 	public boolean isLL1SubGrammar(Nonterminal nonterminal) {
 		return ll1SubGrammarNonterminals.contains(nonterminal);
-	}
-	
-	public Matcher getDFA(int id) {
-		return dfas[id];
 	}
 	
 	public Set<RegularExpression> getFirstSet(Nonterminal nonterminal) {

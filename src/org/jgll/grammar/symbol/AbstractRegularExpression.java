@@ -60,7 +60,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 				Automaton c = regex.toAutomaton().determinize().copy();
 				
 				for(State s : result.getFinalStates()) {
-					s.addTransition(Transition.emptyTransition(c.getStartState()));
+					s.addTransition(Transition.epsilonTransition(c.getStartState()));
 				}
 				
 				for(State s : c.getFinalStates()) {

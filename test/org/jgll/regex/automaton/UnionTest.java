@@ -16,18 +16,18 @@ public class UnionTest {
 	@Test
 	public void test1() {
 		Automaton a = union(k1.toAutomaton(), k2.toAutomaton());
-		assertTrue(a.getMatcher().match(Input.fromString("if")));
-		assertTrue(a.getMatcher().match(Input.fromString("when")));
-		assertFalse(a.getMatcher().match(Input.fromString("else")));
+		assertTrue(a.getRunnableAutomaton().match(Input.fromString("if")));
+		assertTrue(a.getRunnableAutomaton().match(Input.fromString("when")));
+		assertFalse(a.getRunnableAutomaton().match(Input.fromString("else")));
 	}
 	
 	@Test
 	public void test3() {
 		Automaton a = union(k1.toAutomaton(), union(k2.toAutomaton(), k3.toAutomaton()));
-		assertTrue(a.getMatcher().match(Input.fromString("if")));
-		assertTrue(a.getMatcher().match(Input.fromString("when")));
-		assertTrue(a.getMatcher().match(Input.fromString("new")));
-		assertFalse(a.getMatcher().match(Input.fromString("else")));
+		assertTrue(a.getRunnableAutomaton().match(Input.fromString("if")));
+		assertTrue(a.getRunnableAutomaton().match(Input.fromString("when")));
+		assertTrue(a.getRunnableAutomaton().match(Input.fromString("new")));
+		assertFalse(a.getRunnableAutomaton().match(Input.fromString("else")));
 	}
 
 }

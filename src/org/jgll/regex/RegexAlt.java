@@ -50,12 +50,12 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		
 		for(RegularExpression regexp : regularExpressions) {
 			Automaton automaton = regexp.toAutomaton().copy();
-			startState.addTransition(Transition.emptyTransition(automaton.getStartState()));
+			startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 			
 			Set<State> finalStates = automaton.getFinalStates();
 			for(State s : finalStates) {
 				s.setFinalState(false);
-				s.addTransition(Transition.emptyTransition(finalState));				
+				s.addTransition(Transition.epsilonTransition(finalState));				
 			}
 		}
 		
