@@ -56,7 +56,9 @@ public class TransitionActionsFactory {
 			
 			@Override
 			public boolean execute(Input input, int index) {
-				return r.match(input, index) > 0;
+				// Run from the next input index
+				if (index + 1 > input.length() - 1)  return false;
+				return r.match(input, index + 1) > 0;
 			}
 			
 			@Override

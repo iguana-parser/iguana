@@ -28,7 +28,7 @@ public class CharacterTest {
 		Automaton nfa = regexp.toAutomaton();
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertEquals(2, nfa.getCountStates());
-		assertEquals(0, dfa.match(Input.fromString("ab"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("ab"), 0));
 	}
 
 

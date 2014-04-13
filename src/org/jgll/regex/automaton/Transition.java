@@ -36,7 +36,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 		this.start = start;
 		this.end = end;
 		this.destination = destination;
-		this.actions = new HashSet<>();		
+		this.actions = actions;		
 	}
 	
 	public Transition(int c, State destination) {
@@ -126,7 +126,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 	}
 
 	public Transition addTransitionAction(TransitionAction action) {
-		if(actions != null) {
+		if(action != null) {
 			actions.add(action);			
 		}
 		return this;
