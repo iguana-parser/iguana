@@ -2,19 +2,32 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SequenceTest {
 	
+	private RegularExpression seq1;
+	private RegularExpression seq2;
+	private RegularExpression seq3;
+
+	@Before
+	public void init() {
+		seq1 = new Sequence<>(new Character('a'), new Character('b'));		
+		seq2 = new Sequence<>(new Range('a', 'z'), new Range('0', '9'));
+		seq3 = new Sequence<>(new Range('a', 'z'), new Range('b', 'm'));
+	}
+	
 	@Test
 	public void test1() {
-		RegularExpression regexp = new Sequence<>(new Character('a'), new Character('b'));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = seq1.toAutomaton();
 
 		assertEquals(6, nfa.getCountStates());
 
@@ -28,8 +41,7 @@ public class SequenceTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regexp = new Sequence<>(new Range('a', 'z'), new Range('0', '9'));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = seq2.toAutomaton();
 
 		assertEquals(6, nfa.getCountStates());
 
@@ -51,11 +63,19 @@ public class SequenceTest {
 	 */
 	@Test
 	public void test3() {
-		RegularExpression regexp = new Sequence<>(new Range('a', 'z'), new Range('b', 'm'));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = seq3.toAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		assertTrue(matcher.match(Input.fromString("dm")));
+	}
+	
+	@Test
+	public void test1WithPostCondition() {
+		// [a][b] !>> [c]
+		RegularExpression r = seq1.addCondition(RegularExpressionCondition.notFollow(new Character('c')));
+		RunnableAutomaton dfa = r.toAutomaton().getRunnableAutomaton();
+
+		assertEquals(-1, dfa.match(Input.fromString("abc"), 0));
 	}
 	
 }
