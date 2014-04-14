@@ -21,9 +21,9 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	private int id;
 	
-	private Set<TransitionAction> actions;
+	private Set<Action> actions;
 	
-	public Transition(int start, int end, State destination, Set<TransitionAction> actions) {
+	public Transition(int start, int end, State destination, Set<Action> actions) {
 		
 		if(end < start) 		throw new IllegalArgumentException("start cannot be less than end.");
 		if(destination == null) throw new IllegalArgumentException("Destination cannot be null.");
@@ -40,7 +40,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 	}
 	
 	public Transition(int start, int end, State destination) {
-		this(start, end, destination, new HashSet<TransitionAction>());
+		this(start, end, destination, new HashSet<Action>());
 	}
 	
 	public static Transition epsilonTransition(State destination) {
@@ -121,20 +121,20 @@ public class Transition implements Comparable<Transition>, Serializable {
 		return this.start - t.getStart();
 	}
 
-	public Transition addTransitionAction(TransitionAction action) {
+	public Transition addTransitionAction(Action action) {
 		if(action != null) {
 			actions.add(action);			
 		}
 		return this;
 	}
 	
-	public Set<TransitionAction> getActions() {
+	public Set<Action> getActions() {
 		return actions;
 	}
 	
 	public boolean executeActions(Input input, int index) {
 		
-		for (TransitionAction action : actions) {
+		for (Action action : actions) {
 			if(action.execute(input, index)) {
 				return true;
 			}

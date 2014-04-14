@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Input;
 
 public class State implements Serializable {
 
@@ -41,17 +42,28 @@ public class State implements Serializable {
 	
 	private int id;
 	
+	private Set<Action> actions;
+	
 	public State() {
-		this(false);
+		this(false, new HashSet<Action>());
 	}
 	
 	public State(boolean finalState) {
+		this(finalState, new HashSet<Action>());
+	}
+	
+	public State(Set<Action> actions) {
+		this(false, actions);
+	}
+	
+	public State(boolean finalState, Set<Action> actions) {
 		this.transitions = new HashSet<>();
 		this.transitionsMap = new HashMap<>();
 		this.finalState = finalState;
 		this.epsilonClosure = new HashSet<>();
 		this.regularExpressions = new HashSet<>();
 		this.incomingStates = new HashSet<>();
+		this.actions = actions;
 	}
 	
 	public Set<Transition> getTransitions() {
@@ -155,7 +167,7 @@ public class State implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "State" + id;
+		return "State" + id + " " + (actions.isEmpty() ? "" : actions);
 	}
 	
 	public Set<State> getIncomingStates() {
@@ -165,5 +177,29 @@ public class State implements Serializable {
 	public void addIncomingState(State state) {
 		incomingStates.add(state);
 	}
-
+	
+	public void addAction(Action action) {
+		if (action != null) {
+			actions.add(action);
+		}
+	}
+	
+	public void addActions(Set<Action> actions) {
+		this.actions.addAll(actions);
+	}
+	
+	public boolean executeActions(Input input, int index) {
+		
+		for (Action action : actions) {
+			if(action.execute(input, index)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public Set<Action> getActions() {
+		return actions;
+	}
 }

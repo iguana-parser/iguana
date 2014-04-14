@@ -12,7 +12,7 @@ import org.jgll.util.Input;
 
 public class TransitionActionsFactory {
 
-	public static TransitionAction getPostActions(Set<Condition> conditions) {
+	public static Action getPostActions(Set<Condition> conditions) {
 		
 		if (conditions.size() == 0) {
 			return null;
@@ -48,7 +48,7 @@ public class TransitionActionsFactory {
 			}
 		}
 		
-		return new TransitionAction() {
+		return new Action() {
 
 			RegularExpression regex = notFollows.size() == 1 ? notFollows.get(0) : new RegexAlt<>(notFollows);
 			
@@ -56,9 +56,8 @@ public class TransitionActionsFactory {
 			
 			@Override
 			public boolean execute(Input input, int index) {
-				// Run from the next input index
-				if (index + 1 > input.length() - 1)  return false;
-				return r.match(input, index + 1) > 0;
+				if (index> input.length() - 1)  return false;
+				return r.match(input, index) > 0;
 			}
 			
 			@Override

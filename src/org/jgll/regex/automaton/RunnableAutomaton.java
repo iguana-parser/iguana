@@ -22,7 +22,7 @@ public class RunnableAutomaton implements Serializable {
 		return match(input, start) == end - start;
 	}
 	
-	public int match(Input input, int index) {
+	public int match(Input input, int inputIndex) {
 		int maximumMatched = -1;
 
 		int length = 0;
@@ -31,11 +31,17 @@ public class RunnableAutomaton implements Serializable {
 		
 		while (true) {
 			
-			if(currentState.isFinalState()) maximumMatched = length;
+			if (currentState.isFinalState()) {
+				if (currentState.executeActions(input, inputIndex)) {
+					maximumMatched = -1;
+				} else {
+					maximumMatched = length;
+				}
+			}
 			
-			if(currentState.isRejectState()) maximumMatched = -1;
+			if (currentState.isRejectState()) maximumMatched = -1;
 			
-			currentState = currentState.move(input, index++);
+			currentState = currentState.move(input, inputIndex++);
 			
 			if (currentState == null) break;
 			
@@ -53,9 +59,9 @@ public class RunnableAutomaton implements Serializable {
 		
 		while (true) {
 			
-			if(currentState.isFinalState()) maximumMatched = length;
+			if (currentState.isFinalState()) maximumMatched = length;
 			
-			if(currentState.isRejectState()) maximumMatched = -1;
+			if (currentState.isRejectState()) maximumMatched = -1;
 
 			currentState = currentState.move(input, index--);
 			

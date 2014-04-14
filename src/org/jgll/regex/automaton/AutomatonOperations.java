@@ -35,7 +35,9 @@ public class AutomatonOperations {
 		 */
 		Map<Set<State>, State> newStatesMap = new HashMap<>();
 		
+		
 		State startState = new State();
+		addActions(initialState, startState);
 		
 		newStatesMap.put(initialState, startState);
 		
@@ -53,6 +55,9 @@ public class AutomatonOperations {
 				State destination = newStatesMap.get(newState);
 				if(destination == null) {
 					destination = new State();
+					
+					addActions(states, destination);
+					
 					newStatesMap.put(newState, destination);
 				}
 				
@@ -99,20 +104,13 @@ public class AutomatonOperations {
 			}			
 		}
 		
-//		outer:
-//		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-//			for(State s : e.getKey()) {
-//				if(s.isRejectState()) {
-//					State state = e.getValue();
-//					state.setFinalState(false);
-//					state.setRejectState(true);
-//					continue outer;					
-//				}
-//			}			
-//		}
-
-		
 		return new Automaton(startState);
+	}
+
+	private static void addActions(Set<State> initialState, State startState) {
+		for (State s : initialState) {
+			startState.addActions(s.getActions());
+		}
 	}
 	
 	public static RunnableAutomaton createRunnableAutomaton(Automaton a) {
@@ -122,7 +120,7 @@ public class AutomatonOperations {
 		// Create a new runnable state for each state
 		for (State state : a.getAllStates()) {
 			if (state.getCountTransitions() > 0) {
-				map.put(state, new RunnableState(state.isFinalState(), state.isRejectState()));
+				map.put(state, new RunnableState(state.isFinalState(), state.isRejectState(), state.getActions()));
 			} else {
 				map.put(state, new FinalRunnableState(state.isFinalState(), state.isRejectState()));
 			}
@@ -179,9 +177,9 @@ public class AutomatonOperations {
 		int start;
 		int end;
 		Set<State> states;
-		Set<TransitionAction> actions;
+		Set<Action> actions;
 		
-		public MoveResult(int start, int end, Set<State> states, Set<TransitionAction> actions) {
+		public MoveResult(int start, int end, Set<State> states, Set<Action> actions) {
 			this.start = start;
 			this.end = end;
 			this.states = states;
@@ -196,7 +194,7 @@ public class AutomatonOperations {
 	
 	private static Set<MoveResult> move(Set<State> states, Map<Tuple<State, Integer>, Set<State>> cache) {
 		
-		Map<Integer, Set<TransitionAction>> transitionActions = new HashMap<>();
+		Map<Integer, Set<Action>> transitionActions = new HashMap<>();
 		int[] intervals = getIntervals(states, transitionActions);
 		
 		Set<MoveResult> resultSet = new HashSet<>();
@@ -225,8 +223,8 @@ public class AutomatonOperations {
 			
 			// Creating the transitions for the reachable states based on the transition intervals.
 			if(!reachableStates.isEmpty()) {
-				Set<TransitionAction> actions = transitionActions.get(intervals[i]);
-				actions = actions == null ? new HashSet<TransitionAction>() : actions;
+				Set<Action> actions = transitionActions.get(intervals[i]);
+				actions = actions == null ? new HashSet<Action>() : actions;
 				if(i + 1 < intervals.length) {
 					resultSet.add(new MoveResult(intervals[i], intervals[i + 1] - 1, reachableStates, actions));
 				} 
@@ -497,7 +495,7 @@ public class AutomatonOperations {
 		return merged;
 	}
 	
-	public static int[] getIntervals(Set<State> states, Map<Integer, Set<TransitionAction>> map) {
+	public static int[] getIntervals(Set<State> states, Map<Integer, Set<Action>> map) {
 		
 		Set<Integer> set = new HashSet<>();
 
@@ -507,7 +505,7 @@ public class AutomatonOperations {
 					set.add(transition.getStart());
 					set.add(transition.getEnd() + 1);	
 					
-					Set<TransitionAction> s = map.get(transition.getStart());
+					Set<Action> s = map.get(transition.getStart());
 					if(s == null) {
 						s = new HashSet<>();
 						map.put(transition.getStart(), s);

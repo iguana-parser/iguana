@@ -25,11 +25,11 @@ public class AutomatonToDot {
 			public void visit(State state) {
 				
 				if(state.isFinalState()) {
-					sb.append("\"state" + state.getId() + "\"" + String.format(FINAL_NODE, state.getId()) + "\n");
+					sb.append("\"state" + state.getId() + "\"" + String.format(FINAL_NODE, state.toString()) + "\n");
 				} else if (state.isRejectState()) {
-					sb.append("\"state" + state.getId() + "\"" + String.format(REJECT_NODE, state.getId()) + "\n");
+					sb.append("\"state" + state.getId() + "\"" + String.format(REJECT_NODE, state.toString()) + "\n");
 				} else {
-					sb.append("\"state" + state.getId() + "\"" + String.format(NODE, state.getId()) + "\n");					
+					sb.append("\"state" + state.getId() + "\"" + String.format(NODE, state.toString()) + "\n");					
 				}
 				
 				for(Transition transition : state.getTransitions()) {

@@ -1,5 +1,8 @@
 package org.jgll.regex.automaton;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.jgll.regex.matcher.Transitions;
 import org.jgll.util.Input;
 
@@ -11,9 +14,16 @@ public class RunnableState {
 	
 	private boolean rejectState;
 	
-	public RunnableState(boolean finalState, boolean rejectState) {
+	private Set<Action> actions;
+	
+	public RunnableState(boolean finalState, boolean rejectState, Set<Action> actions) {
 		this.finalState = finalState;
 		this.rejectState = rejectState;
+		this.actions = actions;
+	}
+	
+	public RunnableState(boolean finalState, boolean rejectState) {
+		this(finalState, rejectState, Collections.<Action>emptySet());
 	}
 	
 	public void setTransitions(Transitions transitions) {
@@ -34,6 +44,20 @@ public class RunnableState {
 	
 	public boolean isRejectState() {
 		return rejectState;
+	}
+	
+	public Set<Action> getActions() {
+		return actions;
+	}
+	
+	public boolean executeActions(Input input, int inputIndex) {
+		for (Action action : actions) {
+			if (action.execute(input, inputIndex)) {
+				return  true;
+			}
+		}
+		
+		return false;
 	}
 	
 }

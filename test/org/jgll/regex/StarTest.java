@@ -9,7 +9,6 @@ import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class StarTest {
@@ -49,13 +48,11 @@ public class StarTest {
 		RegularExpression regexp = new RegexStar(new Character('a')).addCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Automaton nfa = regexp.toAutomaton();
 		
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", nfa.determinize().getStartState());
-				
 		assertEquals(4, nfa.getCountStates());
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		
-//		assertEquals(-1, matcher.match(Input.fromString(":"), 0));
+		assertEquals(-1, matcher.match(Input.fromString(":"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("a:"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("aa:"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("aaa:"), 0));

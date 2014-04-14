@@ -3,6 +3,7 @@ package org.jgll.regex.matcher;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.jgll.regex.automaton.RejectState;
 import org.jgll.regex.automaton.RunnableState;
 import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
@@ -51,8 +52,8 @@ public class ShortIntervalTransitions implements Transitions, Serializable {
 		
 		if(transition == null) return null;
 		
-		if (transition.executeActions(input, inputIndex)) {
-			return null;
+		if (transition.executeActions(input, inputIndex + 1)) {
+			return RejectState.getInstance();
 		}
 		
 		return states[v - minimum];
