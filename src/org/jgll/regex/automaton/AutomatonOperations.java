@@ -986,7 +986,10 @@ public class AutomatonOperations {
 			public void visit(State state) {
 				for(Transition transition : state.getTransitions()) {
 					State newState = newStates.get(state);
-					newState.addTransition(new Transition(transition.getStart(), transition.getEnd(), newStates.get(transition.getDestination())));
+					newState.addTransition(new Transition(transition.getStart(), 
+														  transition.getEnd(), 
+														  newStates.get(transition.getDestination()),
+														  transition.getActions()));
 				}
 			}
 		});

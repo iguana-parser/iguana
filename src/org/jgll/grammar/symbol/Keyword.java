@@ -12,8 +12,6 @@ public class Keyword extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final String name;
-	
 	private final Sequence<Character> seq;
 	
 	public Keyword(String s) {
@@ -31,7 +29,7 @@ public class Keyword extends AbstractRegularExpression {
 	public Keyword(String name, Sequence<Character> seq) {
 		super(name);
 		this.name = name;
-		this.seq = seq;
+		this.seq = seq.clone();
 	}
 	
 	private static Sequence<Character> toCharSequence(int[] chars) {
@@ -82,13 +80,13 @@ public class Keyword extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Keyword copy() {
-		return new Keyword(name, seq);
-	}
-
-	@Override
 	public Set<Range> getFirstSet() {
 		return seq.getFirstSet();
+	}
+	
+	@Override
+	public Keyword clone() {
+		return (Keyword) super.clone();
 	}
 	
 }

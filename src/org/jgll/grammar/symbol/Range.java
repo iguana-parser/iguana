@@ -85,11 +85,6 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		return false;
 	}
 
-	@Override
-	public Range copy() {
-		return new Range(start, end);
-	}
-
 	public CharacterClass not() {
 		List<Range> ranges = new ArrayList<>();
 		if(start >= 1) {
@@ -112,5 +107,10 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		Set<Range> firstSet = new HashSet<>();
 		firstSet.add(this);
 		return firstSet;
+	}
+	
+	@Override
+	public Range clone() {
+		return (Range) super.clone();
 	}
 }

@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,8 +20,9 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<T> regularExpressions;
+	private List<T> regularExpressions;
 	
+	@SuppressWarnings("unchecked")
 	public RegexAlt(List<T> regularExpressions) {
 		super("(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")");
 		
@@ -31,7 +34,12 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 			throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
 		}
 		
-		this.regularExpressions = regularExpressions;
+		List<T> list = new ArrayList<>();
+		for(RegularExpression regex : regularExpressions) {
+			list.add((T) regex.clone());
+		}
+		
+		this.regularExpressions = list;
 	}
 	
 	@SafeVarargs
@@ -54,6 +62,15 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 			
 			Set<State> finalStates = automaton.getFinalStates();
 			for(State s : finalStates) {
+				
+				for (State incomingState : s.getIncomingStates()) {
+					for (Transition t : incomingState.getTransitions()) {
+						if(t.getDestination() == s) {
+							t.addTransitionAction(getPostActions(conditions));
+						}
+					}
+				}			
+				
 				s.setFinalState(false);
 				s.addTransition(Transition.epsilonTransition(finalState));				
 			}
@@ -74,12 +91,8 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public RegexAlt<T> copy() {
-		List<T> copy = new ArrayList<>();
-		for(RegularExpression regex : regularExpressions) {
-			copy.add((T) regex.copy());
-		}
-		return new RegexAlt<>(copy);
+	public RegexAlt<T> clone() {
+		return (RegexAlt<T>) super.clone();
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	public RegexOpt(RegularExpression regexp) {
 		super(regexp.getName() + "?");
-		this.regexp = regexp;
+		this.regexp = regexp.clone();
 	}
 	
 	protected Automaton createAutomaton() {
@@ -42,10 +42,10 @@ public class RegexOpt extends AbstractRegularExpression {
 	public boolean isNullable() {
 		return true;
 	}
-
+	
 	@Override
-	public RegexOpt copy() {
-		return new RegexOpt(regexp.copy());
+	public RegexOpt clone() {
+		return (RegexOpt) super.clone();
 	}
 
 	@Override

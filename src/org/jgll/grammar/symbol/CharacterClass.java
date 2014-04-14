@@ -28,12 +28,15 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 	
 	public CharacterClass(List<Range> ranges) {
-		this(new RegexAlt<>(ranges));
-	}
-	
-	public CharacterClass(RegexAlt<Range> alt) {
-		super("[" + CollectionsUtil.listToString(alt.getRegularExpressions(), " ") + "]");
-		this.alt = alt;
+		super("[" + CollectionsUtil.listToString(ranges, " ") + "]");
+		
+		List<Range> list = new ArrayList<>();
+		
+		for(Range range : ranges) {
+			list.add(range.clone());
+		}
+		
+		this.alt = new RegexAlt<>(list);
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {
@@ -74,11 +77,6 @@ public class CharacterClass extends AbstractRegularExpression {
 		return false;
 	}
 
-	@Override
-	public CharacterClass copy() {
-		return new CharacterClass(alt.copy());
-	}
-	
 	public CharacterClass not() {
 		List<Range> newRanges = new ArrayList<>();
 		
@@ -118,6 +116,11 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	public Range get(int index) {
 		return alt.get(index);
+	}
+	
+	@Override
+	public CharacterClass clone() {
+		return (CharacterClass) super.clone();
 	}
 	
 }

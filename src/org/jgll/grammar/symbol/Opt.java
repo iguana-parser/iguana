@@ -8,16 +8,16 @@ public class Opt extends AbstractSymbol {
 	
 	public Opt(Symbol s) {
 		super(s.getName() + "?");
-		this.s = s;
+		this.s = s.clone();
 	}
 	
 	public Symbol getSymbol() {
 		return s;
 	}
-
+	
 	@Override
-	public Opt copy() {
-		return new Opt(s.copy());
+	public Opt clone() {
+		return (Opt) super.clone();
 	}
 	
 }

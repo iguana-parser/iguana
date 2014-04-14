@@ -77,12 +77,12 @@ public class Character extends AbstractRegularExpression {
 	public boolean isNullable() {
 		return false;
 	}
-
-	@Override
-	public Character copy() {
-		return new Character(c);
-	}
 	
+	@Override
+	public Character clone() {
+		return (Character) super.clone();
+	}
+
 	public CharacterClass not() {
 		List<Range> ranges = new ArrayList<>();
 		if(c >= 1) {

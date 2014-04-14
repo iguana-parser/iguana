@@ -18,20 +18,22 @@ public class Alt extends AbstractSymbol {
 	
 	public Alt(List<Symbol> symbols) {
 		super(CollectionsUtil.listToString(Arrays.asList(symbols), "|"));
-		this.symbols = symbols;
+		
+		List<Symbol> list = new ArrayList<>();
+		for(Symbol s : symbols) {
+			list.add(s.clone());
+		}
+		
+		this.symbols = list;
 	}
 	
 	public List<Symbol> getSymbols() {
 		return symbols;
 	}
-
+	
 	@Override
-	public Alt copy() {
-		List<Symbol> list = new ArrayList<>();
-		for(Symbol s : symbols) {
-			list.add(s.copy());
-		}
-		return new Alt(list);
+	public Alt clone() {
+		return (Alt) super.clone();
 	}
 	
 }

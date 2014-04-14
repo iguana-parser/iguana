@@ -28,11 +28,6 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Epsilon copy() {
-		return this;
-	}
-
-	@Override
     protected Automaton createAutomaton() {
     	State state = new State(true).addRegularExpression(this);
         return new Automaton(state);
@@ -48,6 +43,11 @@ public class Epsilon extends AbstractRegularExpression {
 		HashSet<Range> firstSet = new HashSet<>();
 		firstSet.add(new Range(-1, -1));
 		return firstSet;
+	}
+	
+	@Override
+	public Epsilon clone() {
+		return (Epsilon) super.clone();
 	}
 	
 }

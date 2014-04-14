@@ -73,11 +73,10 @@ public class Nonterminal extends AbstractSymbol {
 	public int hashCode() {
 		return HashFunctions.defaulFunction().hash(name.hashCode(), index);
 	}
-
+	
 	@Override
-	public Symbol copy() {
-		Nonterminal copy = new Nonterminal(name, index, ebnfList);
-		return copy;
+	public Nonterminal clone() {
+		return (Nonterminal) super.clone();
 	}
 
 }

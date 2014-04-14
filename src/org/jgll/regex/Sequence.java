@@ -22,13 +22,20 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	private final List<T> regularExpressions;
 	
+	@SuppressWarnings("unchecked")
 	public Sequence(List<T> regularExpressions) {
 		super(CollectionsUtil.listToString(regularExpressions, " "));
 		
 		if(regularExpressions.size() == 0) {
 			throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		}
-		this.regularExpressions = regularExpressions;
+		
+		List<T> list = new ArrayList<>();
+		for(T regex : regularExpressions) {
+			list.add((T) regex.clone());
+		}
+		
+		this.regularExpressions = list;
 	}
 	
 	@SafeVarargs
@@ -92,17 +99,13 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	public T get(int index) {
 		return regularExpressions.get(index);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Sequence<T> copy() {
-		List<T> copy = new ArrayList<>();
-		for(T regex : regularExpressions) {
-			copy.add((T) regex.copy());
-		}
-		return new Sequence<>(copy);
+	public Sequence<T> clone() {
+		return (Sequence<T>) super.clone();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {

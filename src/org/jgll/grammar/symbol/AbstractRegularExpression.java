@@ -21,16 +21,6 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	}
 	
 	@Override
-	public RegularExpression addConditions(Collection<Condition> conditions) {
-		return (RegularExpression) super.addConditions(conditions);
-	}
-	
-	@Override
-	public RegularExpression addCondition(Condition condition) {
-		return (RegularExpression) super.addCondition(condition);
-	}
-	
-	@Override
 	public Automaton toAutomaton() {
 		if (automaton == null) {
 			automaton = combineConditions(createAutomaton());
@@ -53,6 +43,21 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 		}
 
 		return result;
+	}
+	
+	@Override
+	public AbstractRegularExpression clone() {
+		return (AbstractRegularExpression) super.clone();
+	}
+	
+	@Override
+	public RegularExpression addCondition(Condition condition) {
+		return (RegularExpression) super.addCondition(condition);
+	}
+	
+	@Override
+	public RegularExpression addConditions(Collection<Condition> conditions) {
+		return (RegularExpression) super.addConditions(conditions);
 	}
 	
 }

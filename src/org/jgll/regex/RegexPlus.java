@@ -15,7 +15,8 @@ public class RegexPlus extends AbstractRegularExpression {
 	
 	public RegexPlus(RegularExpression regexp) {
 		super(regexp.getName() + "+");
-		this.regexp = new Sequence<>(regexp, new RegexStar(regexp));
+		RegularExpression copy = regexp.clone();
+		this.regexp = new Sequence<>(new RegexStar(regexp), copy);
 	}
 	
 	@Override
@@ -29,8 +30,8 @@ public class RegexPlus extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public RegexPlus copy() {
-		return new RegexPlus(regexp.copy());
+	public RegexPlus clone() {
+		return (RegexPlus) super.clone();
 	}
 
 	@Override

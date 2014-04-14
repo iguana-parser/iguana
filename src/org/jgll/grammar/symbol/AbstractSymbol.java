@@ -1,7 +1,6 @@
 package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +34,8 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	@Override
 	public Symbol addCondition(Condition condition) {
-		return addConditions(Arrays.asList(condition));
+		this.conditions.add(condition);
+		return this;
 	}
 	
 	@Override
@@ -45,15 +45,22 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	@Override
 	public Symbol addConditions(Collection<Condition> conditions) {
-		AbstractSymbol s = (AbstractSymbol) this.copy();
-		s.name = name;
-		s.conditions.addAll(this.conditions);
-		s.conditions.addAll(conditions);
-		return s;
+		this.conditions.addAll(conditions);
+		return this;
 	}
 	
 	@Override
 	public String toString() {
 		return name;
 	}
+	
+	@Override
+	public AbstractSymbol clone() {
+		try {
+			return (AbstractSymbol) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException("Should not reach here.");
+		}
+	}
+	
 }

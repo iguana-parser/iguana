@@ -12,19 +12,16 @@ import org.jgll.grammar.condition.Condition;
  * @author Ali Afroozeh
  *
  */
-public interface Symbol extends Serializable {
+public interface Symbol extends Serializable, Cloneable {
 	
 	public String getName();
 	
 	public Symbol addCondition(Condition condition);
 	
-	/**
-	 * Creates a copy of the current symbol and adds the given conditions
-	 * to it. 
-	 */
 	public Symbol addConditions(Collection<Condition> conditions);
 	
 	public Set<Condition> getConditions();
 	
-	public Symbol copy();
-}
+	public Symbol clone();
+	
+}	

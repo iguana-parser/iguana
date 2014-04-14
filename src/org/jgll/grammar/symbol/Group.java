@@ -14,7 +14,13 @@ public class Group extends Nonterminal {
 
 	public Group(List<? extends Symbol> symbols) {
 		super("(" + CollectionsUtil.listToString(symbols) + ")");
-		this.symbols = symbols;
+		
+		List<Symbol> list = new ArrayList<>();
+		for(Symbol s : symbols) {
+			list.add(s.clone());
+		}
+		
+		this.symbols = list;
 	}
 	
 	@SafeVarargs
@@ -27,12 +33,8 @@ public class Group extends Nonterminal {
 	}
 
 	@Override
-	public Symbol copy() {
-		List<Symbol> list = new ArrayList<>();
-		for(Symbol s : symbols) {
-			list.add(s.copy());
-		}
-		return new Group(list);
+	public Group clone() {
+		return (Group) super.clone();
 	}
 	
 }

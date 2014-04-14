@@ -9,16 +9,16 @@ public class Star extends AbstractSymbol {
 	
 	public Star(Symbol s) {
 		super(s.getName() + "*");
-		this.s = s;
+		this.s = s.clone();
 	}
 	
 	public Symbol getSymbol() {
 		return s;
 	}
-
+	
 	@Override
-	public Star copy() {
-		return new Star(s.copy());
+	public Star clone() {
+		return (Star) super.clone();
 	}
 	
 }

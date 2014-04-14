@@ -23,7 +23,7 @@ public class FollowRestrictionTest {
 	public void test1() {
 		
 		// id !>> [:]
-		RegularExpression r1 = id .addCondition(RegularExpressionCondition.notFollow(new Keyword(":")))
+		RegularExpression r1 = id.addCondition(RegularExpressionCondition.notFollow(new Keyword(":")))
 				.addCondition(RegularExpressionCondition.notMatch(new Keyword("set")));
 		
 		RunnableAutomaton matcher = r1.toAutomaton().getRunnableAutomaton();

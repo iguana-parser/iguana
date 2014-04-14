@@ -17,7 +17,7 @@ public class RegexStar extends AbstractRegularExpression {
 	
 	public RegexStar(RegularExpression regexp) {
 		super(regexp + "*");
-		this.regexp = regexp;
+		this.regexp = regexp.clone();
 	}
 	
 	@Override
@@ -46,13 +46,14 @@ public class RegexStar extends AbstractRegularExpression {
 		return true;
 	}
 
-	public RegexStar copy() {
-		return new RegexStar(regexp.copy());
-	}
-	
 	@Override
 	public Set<Range> getFirstSet() {
 		return regexp.getFirstSet();
+	}
+	
+	@Override
+	public RegexStar clone() {
+		return (RegexStar) super.clone();
 	}
 	
 }

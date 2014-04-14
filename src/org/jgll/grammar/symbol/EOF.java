@@ -39,16 +39,16 @@ public class EOF extends AbstractRegularExpression {
 	public boolean isNullable() {
 		return false;
 	}
-
-	@Override
-	public EOF copy() {
-		return this;
-	}
 	
 	@Override
 	public Set<Range> getFirstSet() {
 		Set<Range> firstSet = new HashSet<>();
 		firstSet.add(new Range(VALUE, VALUE));
 		return firstSet;
+	}
+	
+	@Override
+	public EOF clone() {
+		return this;
 	}
 }

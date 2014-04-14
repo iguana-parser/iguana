@@ -9,7 +9,7 @@ public class Plus extends AbstractSymbol {
 	
 	public Plus(Symbol s) {
 		super(s.getName() + "+");
-		this.s = s;
+		this.s = s.clone();
 	}
 	
 	public Symbol getSymbol() {
@@ -17,8 +17,8 @@ public class Plus extends AbstractSymbol {
 	}
 
 	@Override
-	public Plus copy() {
-		return new Plus(s.copy());
+	public Plus clone() {
+		return (Plus) super.clone();
 	}
 	
 }

@@ -2,6 +2,7 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.automaton.Automaton;
@@ -29,7 +30,7 @@ public class AltTest {
 	}
 	
 	@Test
-	public void test() {
+	public void test2() {
 		Keyword k1 = new Keyword("for");
 		Keyword k2 = new Keyword("forall");
 		
@@ -42,7 +43,7 @@ public class AltTest {
 
 	
 	@Test
-	public void testMatchAction() {
+	public void test3() {
 		RegularExpression regexp = new RegexAlt<>(new Keyword("when"), new Keyword("if"));
 
 		Automaton automaton = regexp.toAutomaton();
@@ -52,4 +53,20 @@ public class AltTest {
 		assertEquals(4, dfa.match(Input.fromString("when"), 0));
 		assertEquals(2, dfa.match(Input.fromString("if"), 0));
 	}
+	
+	@Test
+	public void test4() {
+		RegularExpression a = new Character('a').addCondition(RegularExpressionCondition.notFollow(new Character('c')));
+		Character b = new Character('b');
+		
+		RegularExpression regexp = new RegexAlt<>(a, b).addCondition(RegularExpressionCondition.notFollow(new Character('d')));
+		Automaton nfa = regexp.toAutomaton();
+		
+		assertEquals(6, nfa.getCountStates());
+		
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
+		assertEquals(-1, dfa.match(Input.fromString("ac"), 0));
+		assertEquals(1, dfa.match(Input.fromString("b"), 0));
+	}
+
 }

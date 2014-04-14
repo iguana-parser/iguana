@@ -15,14 +15,15 @@ public interface RegularExpression extends Serializable, Symbol {
 
 	public boolean isNullable();
 	
-	public RegularExpression copy();
-	
 	public Set<Range> getFirstSet();
 	
 	@Override
-	public RegularExpression addConditions(Collection<Condition> conditions);
+	public RegularExpression clone();
 	
 	@Override
 	public RegularExpression addCondition(Condition condition);
+	
+	@Override
+	public RegularExpression addConditions(Collection<Condition> conditions);
 	
 }
