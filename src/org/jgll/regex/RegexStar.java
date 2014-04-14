@@ -26,6 +26,7 @@ public class RegexStar extends AbstractRegularExpression {
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		startState.addAction(getPostActions(conditions));
+		
 		State finalState = new State(true);
 		
 		Automaton automaton = regexp.toAutomaton().copy();

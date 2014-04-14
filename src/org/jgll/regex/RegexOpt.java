@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import static org.jgll.regex.automaton.TransitionActionsFactory.*;
+
 import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractRegularExpression;
@@ -22,6 +24,8 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	protected Automaton createAutomaton() {
 		State startState = new State();
+		startState.addAction(getPostActions(conditions));
+		
 		State finalState = new State(true);
 		
 		Automaton automaton = regexp.toAutomaton().copy();
@@ -30,6 +34,15 @@ public class RegexOpt extends AbstractRegularExpression {
 		Set<State> finalStates = automaton.getFinalStates();
 		for(State s : finalStates) {
 			s.setFinalState(false);
+			
+			for (State incomingState : s.getIncomingStates()) {
+				for (Transition t : incomingState.getTransitions()) {
+					if(t.getDestination() == s) {
+						t.addTransitionAction(getPostActions(conditions));
+					}
+				}
+			}
+			
 			s.addTransition(Transition.epsilonTransition(finalState));			
 		}
 		
