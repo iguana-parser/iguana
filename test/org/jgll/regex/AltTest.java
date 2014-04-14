@@ -40,7 +40,6 @@ public class AltTest {
 		assertEquals(3, dfa.match(Input.fromString("for"), 0));
 		assertEquals(6, dfa.match(Input.fromString("forall"), 0));
 	}
-
 	
 	@Test
 	public void test3() {
@@ -55,7 +54,7 @@ public class AltTest {
 	}
 	
 	@Test
-	public void test4() {
+	public void test1WithPostConditions() {
 		RegularExpression a = new Character('a').addCondition(RegularExpressionCondition.notFollow(new Character('c')));
 		Character b = new Character('b');
 		
@@ -67,6 +66,18 @@ public class AltTest {
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertEquals(-1, dfa.match(Input.fromString("ac"), 0));
 		assertEquals(1, dfa.match(Input.fromString("b"), 0));
+	}
+	
+	@Test
+	public void test2WithPostConditions() {
+		Keyword k1 = (Keyword) new Keyword("for").addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		Keyword k2 = new Keyword("forall");
+		
+		Automaton result = AutomatonOperations.or(k1.toAutomaton(), k2.toAutomaton());
+
+		RunnableAutomaton dfa = result.getRunnableAutomaton();
+		assertEquals(-1, dfa.match(Input.fromString("for:"), 0));
+		assertEquals(6, dfa.match(Input.fromString("forall"), 0));
 	}
 
 }
