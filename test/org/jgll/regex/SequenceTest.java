@@ -8,7 +8,6 @@ import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,9 +27,9 @@ public class SequenceTest {
 	@Test
 	public void test1() {
 		Automaton nfa = seq1.toAutomaton();
-
-		assertEquals(6, nfa.getCountStates());
-
+		
+		assertEquals(4, nfa.getCountStates());
+		
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertTrue(dfa.match(Input.fromString("ab")));
@@ -43,7 +42,7 @@ public class SequenceTest {
 	public void test2() {
 		Automaton nfa = seq2.toAutomaton();
 
-		assertEquals(6, nfa.getCountStates());
+		assertEquals(4, nfa.getCountStates());
 
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
@@ -74,8 +73,31 @@ public class SequenceTest {
 		// [a][b] !>> [c]
 		RegularExpression r = seq1.addCondition(RegularExpressionCondition.notFollow(new Character('c')));
 		RunnableAutomaton dfa = r.toAutomaton().getRunnableAutomaton();
-
 		assertEquals(-1, dfa.match(Input.fromString("abc"), 0));
 	}
+	
+	@Test
+	public void test2WithPostConditions() {
+		RegularExpression r = seq2.addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+
+		RunnableAutomaton dfa = r.toAutomaton().getRunnableAutomaton();
+		
+		assertEquals(-1, dfa.match(Input.fromString("a0:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("a5:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("a9:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("c7:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("z0:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("a9:"), 0));
+	}
+
+	@Test
+	public void test3WithPostConditions() {
+		RegularExpression r = seq3.addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		Automaton nfa = r.toAutomaton();
+		
+		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
+		assertEquals(-1, matcher.match(Input.fromString("dm:"), 0));
+	}
+
 	
 }

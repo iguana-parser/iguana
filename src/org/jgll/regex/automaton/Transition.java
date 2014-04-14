@@ -25,13 +25,9 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	public Transition(int start, int end, State destination, Set<TransitionAction> actions) {
 		
-		if(end < start) {
-			throw new IllegalArgumentException("start cannot be less than end.");
-		}
-		
-		if(destination == null) {
-			throw new IllegalArgumentException("Destination cannot be null.");
-		}
+		if(end < start) 		throw new IllegalArgumentException("start cannot be less than end.");
+		if(destination == null) throw new IllegalArgumentException("Destination cannot be null.");
+		if (actions == null)    throw new IllegalArgumentException("Transition actions cannot be null.");
 		
 		this.start = start;
 		this.end = end;
@@ -117,7 +113,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 			return "-1";
 		}
 		
-		return Range.in(start, end).toString();
+		return Range.in(start, end).toString() + " " + (actions.isEmpty() ? "" : actions.toString());
 	}
 
 	@Override

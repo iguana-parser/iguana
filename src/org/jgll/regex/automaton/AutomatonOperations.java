@@ -225,11 +225,13 @@ public class AutomatonOperations {
 			
 			// Creating the transitions for the reachable states based on the transition intervals.
 			if(!reachableStates.isEmpty()) {
+				Set<TransitionAction> actions = transitionActions.get(intervals[i]);
+				actions = actions == null ? new HashSet<TransitionAction>() : actions;
 				if(i + 1 < intervals.length) {
-					resultSet.add(new MoveResult(intervals[i], intervals[i + 1] - 1, reachableStates, transitionActions.get(intervals[i])));
+					resultSet.add(new MoveResult(intervals[i], intervals[i + 1] - 1, reachableStates, actions));
 				} 
 				if(i + 1 == intervals.length) {
-					resultSet.add(new MoveResult(intervals[i] - 1, intervals[i] - 1, reachableStates, transitionActions.get(intervals[i])));
+					resultSet.add(new MoveResult(intervals[i] - 1, intervals[i] - 1, reachableStates, actions));
 				}
 			}			
 		}

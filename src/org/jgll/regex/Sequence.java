@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -40,35 +42,37 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	protected Automaton createAutomaton() {
-		State startState = new State();
-		State finalState = new State(true);
 
-		Automaton[] automatons = new Automaton[regularExpressions.size()];
+		List<Automaton> automatons = new ArrayList<>();
 		for(int i = 0; i < regularExpressions.size(); i++) {
-			automatons[i] = regularExpressions.get(i).toAutomaton().copy();
+			automatons.add(regularExpressions.get(i).toAutomaton().copy());
 		}
 		
-		startState.addTransition(Transition.epsilonTransition(automatons[0].getStartState()));
+		Automaton result = automatons.get(0);
+		State startState = result.getStartState();
 		
-		// Middle regular expressions
-		int i = 0;
-		for(; i < regularExpressions.size() - 1; i++) {
-			Automaton nfa = automatons[i];
-			Automaton nextNFA = automatons[i+1];
+		for (int i = 1; i < automatons.size(); i++) {
+			Automaton next = automatons.get(i);
 			
-			Set<State> finalStates = nfa.getFinalStates();
-			for(State s : finalStates) {
+			for(State s : result.getFinalStates()) {
 				s.setFinalState(false);
-				s.addTransition(Transition.epsilonTransition(nextNFA.getStartState()));
+				s.addTransition(Transition.epsilonTransition(next.getStartState()));
 			}
+			
+			result = new Automaton(startState);
 		}
 		
-		for(State s : automatons[i].getFinalStates()) {
-			s.setFinalState(false);
-			s.addTransition(Transition.epsilonTransition(finalState));
+		for(State s : result.getFinalStates()) {
+			for (State incomingState : s.getIncomingStates()) {
+				for (Transition t : incomingState.getTransitions()) {
+					if(t.getDestination() == s) {
+						t.addTransitionAction(getPostActions(conditions));
+					}
+				}
+			}			
 		}
-				
-		return new Automaton(startState);
+		
+		return result;
 	}
 	
 	@Override
