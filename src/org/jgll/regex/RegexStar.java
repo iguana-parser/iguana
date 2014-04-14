@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
+
 import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractRegularExpression;
@@ -30,9 +32,19 @@ public class RegexStar extends AbstractRegularExpression {
 		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		
 		Set<State> finalStates = automaton.getFinalStates();
+		
 		for(State s : finalStates) {
 			s.setFinalState(false);
 			s.addTransition(Transition.epsilonTransition(finalState));
+			
+			for (State incomingState : s.getIncomingStates()) {
+				for (Transition t : incomingState.getTransitions()) {
+					if(t.getDestination() == s) {
+						t.addTransitionAction(getPostActions(conditions));
+					}
+				}
+			}
+			
 			s.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		}
 		
