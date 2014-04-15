@@ -503,7 +503,7 @@ public class AutomatonOperations {
 			for(Transition transition : state.getTransitions()) {
 				if(!transition.isEpsilonTransition()) {
 					set.add(transition.getStart());
-					set.add(transition.getEnd() + 1);	
+					set.add(transition.getEnd() + 1);
 				}
 			}
 		}
@@ -519,7 +519,9 @@ public class AutomatonOperations {
 		for (State state : states) {
 			for (Transition transition : state.getTransitions()) {
 				for (int i : result) {
-					if (transition.getStart() >= i || i <= transition.getEnd() ) {
+//					System.out.println(transition.getActions());
+
+					if (transition.getStart() >= i && i <= transition.getEnd() ) {
 						Set<Action> s = map.get(i);
 						if (s == null) {
 							s = new HashSet<>();

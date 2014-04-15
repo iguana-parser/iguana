@@ -23,8 +23,9 @@ public class FollowRestrictionTest {
 	public void test1() {
 		
 		// id !>> [:]
-		RegularExpression r1 = id.addCondition(RegularExpressionCondition.notFollow(new Keyword(":")))
-				.addCondition(RegularExpressionCondition.notMatch(new Keyword("set")));
+		RegularExpression r1 = id.addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", r1.toAutomaton().getStartState());
 		
 		RunnableAutomaton matcher = r1.toAutomaton().getRunnableAutomaton();
 		
@@ -67,7 +68,7 @@ public class FollowRestrictionTest {
 		RegularExpression r2 = new Character('*').addCondition(RegularExpressionCondition.notFollow(new Character('/')));
 		
 		RegexStar star = new RegexStar(new RegexAlt<>(r1, r2));
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", star.toAutomaton().getStartState());
+//		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", star.toAutomaton().getStartState());
 		RunnableAutomaton m = star.toAutomaton().getRunnableAutomaton();
 		
 		System.out.println(m.match(Input.fromString("ab"), 0));

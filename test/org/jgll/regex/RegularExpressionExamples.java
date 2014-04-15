@@ -14,9 +14,9 @@ public class RegularExpressionExamples {
 	 * Id ::= [a-zA-Z][a-zA-Z0-9]*
 	 */
 	public static RegularExpression getId() {
-		CharacterClass c1 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'));
-		CharacterClass c2 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'), new Range('0', '9'));
-		return new Sequence<>(c1, new RegexStar(c2));
+		CharacterClass c1 = new CharacterClass(new Range('a', 'z'));
+		CharacterClass c2 = new CharacterClass(new Range('a', 'z'));
+		return new Sequence<>(c1, c2);
 	}
 	
 	/**
