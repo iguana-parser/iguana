@@ -68,4 +68,9 @@ public class RegularExpressionCondition extends Condition {
 		
 		return type == other.type && regularExpression.equals(other.regularExpression);
 	}
+	
+	@Override
+	public int hashCode() {
+		return type.hashCode() * 31 + regularExpression.hashCode();
+	}
 }

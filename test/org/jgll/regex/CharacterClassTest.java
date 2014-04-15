@@ -84,6 +84,27 @@ public class CharacterClassTest {
 		assertEquals(-1, dfa.match(Input.fromString("5:"), 0));
 		assertEquals(-1, dfa.match(Input.fromString("8:"), 0));
 	}
+	
+	@Test
+	public void test2WithPostConditions() {
+		RegularExpression regexp = new CharacterClass(new Range('1', '5'), new Range('1', '7'), new Range('3', '8'))
+								   .addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		
+		Automaton nfa = regexp.toAutomaton();
+		
+		assertEquals(8, nfa.getCountStates());
+
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
+		
+		assertEquals(-1, dfa.match(Input.fromString("1:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("2:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("3:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("4:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("5:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("6:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("7:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("8:"), 0));
+	}
 
 	
 }

@@ -1,24 +1,20 @@
 package org.jgll.regex.automaton;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.regex.RegexAlt;
-import org.jgll.regex.RegularExpression;
-import org.jgll.util.Input;
 
 public class TransitionActionsFactory {
 
-	public static Action getPostActions(Set<Condition> conditions) {
+	public static Action getPostActions(final Set<Condition> conditions) {
 		
 		if (conditions.size() == 0) {
 			return null;
 		}
 		
-		final List<RegularExpression> notFollows = new ArrayList<>();
+		Set<Condition> notFollowConditions = new HashSet<>();
 		
 		for(Condition condition : conditions) {
 			
@@ -35,8 +31,7 @@ public class TransitionActionsFactory {
 				
 			case NOT_FOLLOW:
 				if (condition instanceof RegularExpressionCondition) {
-					RegularExpression regex = ((RegularExpressionCondition) condition).getRegularExpression();
-					notFollows.add(regex);
+					notFollowConditions.add(condition);
 				} 
 				else {
 				}
@@ -48,23 +43,9 @@ public class TransitionActionsFactory {
 			}
 		}
 		
-		return new Action() {
+		
+		return new NotFollowAction(notFollowConditions);
 
-			RegularExpression regex = notFollows.size() == 1 ? notFollows.get(0) : new RegexAlt<>(notFollows);
-			
-			RunnableAutomaton r = regex.toAutomaton().getRunnableAutomaton();
-			
-			@Override
-			public boolean execute(Input input, int index) {
-				if (index> input.length() - 1)  return false;
-				return r.match(input, index) > 0;
-			}
-			
-			@Override
-			public String toString() {
-				return "!>> " + regex.toString();
-			}
-		};
 	}
 	
 }

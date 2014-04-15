@@ -498,19 +498,12 @@ public class AutomatonOperations {
 	public static int[] getIntervals(Set<State> states, Map<Integer, Set<Action>> map) {
 		
 		Set<Integer> set = new HashSet<>();
-
+		
 		for(State state : states) {
 			for(Transition transition : state.getTransitions()) {
 				if(!transition.isEpsilonTransition()) {
 					set.add(transition.getStart());
 					set.add(transition.getEnd() + 1);	
-					
-					Set<Action> s = map.get(transition.getStart());
-					if(s == null) {
-						s = new HashSet<>();
-						map.put(transition.getStart(), s);
-					}
-					s.addAll(transition.getActions());					
 				}
 			}
 		}
@@ -521,6 +514,21 @@ public class AutomatonOperations {
 		int[] result = new int[array.length];
 		for(int i = 0; i < array.length; i++) {
 			result[i] = array[i];
+		}
+		
+		for (State state : states) {
+			for (Transition transition : state.getTransitions()) {
+				for (int i : result) {
+					if (transition.getStart() >= i || i <= transition.getEnd() ) {
+						Set<Action> s = map.get(i);
+						if (s == null) {
+							s = new HashSet<>();
+							map.put(i, s);
+						}
+						s.addAll(transition.getActions());
+					}
+				}
+			}
 		}
 		
 		return result;
