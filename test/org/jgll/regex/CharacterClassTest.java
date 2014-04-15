@@ -2,6 +2,8 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.condition.RegularExpressionCondition;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Constants;
 import org.jgll.grammar.symbol.Range;
@@ -64,5 +66,24 @@ public class CharacterClassTest {
 		
 		assertEquals(expected, c.not());
 	}
+	
+	@Test
+	public void test1WithPostConditions() {
+		RegularExpression regexp = new CharacterClass(new Range('a', 'z'), new Range('1', '8'))
+								       .addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		Automaton nfa = regexp.toAutomaton();
+		
+		assertEquals(6, nfa.getCountStates());
+
+		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
+		
+		assertEquals(-1, dfa.match(Input.fromString("a:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("f:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("z:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("1:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("5:"), 0));
+		assertEquals(-1, dfa.match(Input.fromString("8:"), 0));
+	}
+
 	
 }
