@@ -1,5 +1,7 @@
 package org.jgll.grammar.symbol;
 
+import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -76,7 +78,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(true).addRegularExpression(this);
-		startState.addTransition(new Transition(start, end, finalState));
+		startState.addTransition(new Transition(start, end, finalState).addTransitionAction(getPostActions(conditions)));
 		return new Automaton(startState);
 	}
 
