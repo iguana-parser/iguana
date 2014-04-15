@@ -49,10 +49,16 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	protected Automaton createAutomaton() {
-
+		
 		List<Automaton> automatons = new ArrayList<>();
 		for(int i = 0; i < regularExpressions.size(); i++) {
 			automatons.add(regularExpressions.get(i).toAutomaton().copy());
+		}
+		
+		if (!conditions.isEmpty()) {
+			for (Automaton a : automatons) {
+				a.determinize();
+			}
 		}
 		
 		Automaton result = automatons.get(0);

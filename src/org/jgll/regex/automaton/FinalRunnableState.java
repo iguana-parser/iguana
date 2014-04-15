@@ -13,4 +13,9 @@ public class FinalRunnableState extends RunnableState {
 		return null;
 	}
 	
+	@Override
+	public FinalRunnableState clone() {
+		return (FinalRunnableState) super.clone();
+	}
+	
 }

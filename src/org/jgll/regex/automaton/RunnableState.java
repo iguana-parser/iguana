@@ -6,7 +6,7 @@ import java.util.Set;
 import org.jgll.regex.matcher.Transitions;
 import org.jgll.util.Input;
 
-public class RunnableState {
+public class RunnableState implements Cloneable {
 	
 	private Transitions transitions;
 	
@@ -25,7 +25,7 @@ public class RunnableState {
 	public RunnableState(boolean finalState, boolean rejectState) {
 		this(finalState, rejectState, Collections.<Action>emptySet());
 	}
-	
+		
 	public void setTransitions(Transitions transitions) {
 		this.transitions = transitions;
 	}
@@ -46,6 +46,11 @@ public class RunnableState {
 		return rejectState;
 	}
 	
+	
+	public void setRejectState(boolean rejectState) {
+		this.rejectState = rejectState;
+	}
+	
 	public Set<Action> getActions() {
 		return actions;
 	}
@@ -58,6 +63,16 @@ public class RunnableState {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public RunnableState clone() {
+		try {
+			return (RunnableState) super.clone();
+		}
+		catch (CloneNotSupportedException e) {
+			throw new RuntimeException("Should not reach here!");
+		}
 	}
 	
 }

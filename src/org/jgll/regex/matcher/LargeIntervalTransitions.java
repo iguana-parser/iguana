@@ -43,8 +43,10 @@ public class LargeIntervalTransitions implements Transitions, Serializable {
 		
 		if (transition == null) return null;
 		
-		if (transition.executeActions(input, inputIndex)) {
-			return null;
+		if (transition.executeActions(input, inputIndex + 1)) {
+			RunnableState state = states.floorEntry(v).getValue().clone();
+			state.setRejectState(true);
+			return state;
 		}
 		
 		return states.floorEntry(v).getValue();

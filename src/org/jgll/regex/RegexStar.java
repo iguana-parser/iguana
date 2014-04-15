@@ -24,12 +24,17 @@ public class RegexStar extends AbstractRegularExpression {
 	
 	@Override
 	protected Automaton createAutomaton() {
+		
 		State startState = new State();
 		startState.addAction(getPostActions(conditions));
 		
 		State finalState = new State(true);
 		
 		Automaton automaton = regexp.toAutomaton().copy();
+		
+		if (!conditions.isEmpty()) {
+			automaton.determinize();
+		}
 		
 		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		

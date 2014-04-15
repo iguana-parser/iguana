@@ -19,13 +19,12 @@ public class FollowRestrictionTest {
 	
 	RegularExpression id = RegularExpressionExamples.getId();
 	
-	@Test
+//	@Test
 	public void test1() {
 		
 		// id !>> [:]
-		RegularExpression r1 = id.addCondition(RegularExpressionCondition.notFollow(new Character(':')));
-		
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", r1.toAutomaton().getStartState());
+		RegularExpression r1 = id.addCondition(RegularExpressionCondition.notFollow(new Character(':')))				
+								 .addCondition(RegularExpressionCondition.notMatch(new Keyword("set")));
 		
 		RunnableAutomaton matcher = r1.toAutomaton().getRunnableAutomaton();
 		
@@ -54,6 +53,7 @@ public class FollowRestrictionTest {
 		
 		// id !>> [a-z]
 		RegularExpression r3 = id.addCondition(RegularExpressionCondition.notFollow(new CharacterClass(Range.in('a', 'z'))));
+		Visualization.generateAutomatonGraph("/Users/ali/output", r3.toAutomaton().getStartState());
 
 		RunnableAutomaton matcher = r3.toAutomaton().getRunnableAutomaton();
 		

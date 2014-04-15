@@ -53,11 +53,23 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	protected Automaton createAutomaton() {
+
+		List<Automaton> automatons = new ArrayList<>();
+		for (RegularExpression regexp : regularExpressions) {
+			automatons.add(regexp.toAutomaton().copy());
+		}
+		
+		// This helps by avoiding adding transition actions on epsilon transitions.
+		if (!conditions.isEmpty()) {
+			for (Automaton a : automatons) {
+				a.determinize();
+			}
+		}
+		
 		State startState = new State();
 		State finalState = new State(true);
 		
-		for(RegularExpression regexp : regularExpressions) {
-			Automaton automaton = regexp.toAutomaton().copy();
+		for(Automaton automaton : automatons) {
 			startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 			
 			Set<State> finalStates = automaton.getFinalStates();

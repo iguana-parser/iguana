@@ -195,7 +195,7 @@ public class AutomatonOperations {
 	private static Set<MoveResult> move(Set<State> states, Map<Tuple<State, Integer>, Set<State>> cache) {
 		
 		Map<Integer, Set<Action>> transitionActions = new HashMap<>();
-		int[] intervals = getIntervals(states, transitionActions);
+		int[] intervals = getIntervalsOfStates(states, transitionActions);
 		
 		Set<MoveResult> resultSet = new HashSet<>();
 		
@@ -495,54 +495,25 @@ public class AutomatonOperations {
 		return merged;
 	}
 	
-	public static int[] getIntervals(Set<State> states, Map<Integer, Set<Action>> map) {
+	public static int[] getIntervalsOfStates(Set<State> states, Map<Integer, Set<Action>> map) {
 		
-		Set<Integer> set = new HashSet<>();
-		
-		for(State state : states) {
-			for(Transition transition : state.getTransitions()) {
-				if(!transition.isEpsilonTransition()) {
-					set.add(transition.getStart());
-					set.add(transition.getEnd() + 1);
-				}
-			}
-		}
-		
-		Integer[] array = set.toArray(new Integer[] {});
-		Arrays.sort(array);
-		
-		int[] result = new int[array.length];
-		for(int i = 0; i < array.length; i++) {
-			result[i] = array[i];
-		}
-		
+		Set<Transition> transitions = new HashSet<>();
 		for (State state : states) {
-			for (Transition transition : state.getTransitions()) {
-				for (int i : result) {
-//					System.out.println(transition.getActions());
-
-					if (transition.getStart() >= i && i <= transition.getEnd() ) {
-						Set<Action> s = map.get(i);
-						if (s == null) {
-							s = new HashSet<>();
-							map.put(i, s);
-						}
-						s.addAll(transition.getActions());
-					}
-				}
-			}
+			transitions.addAll(state.getTransitions());
 		}
 		
-		return result;
+		return getIntervals(transitions, map);
+		
 	}
 	
-	public static int[] getIntervals(Set<Transition> transitions) {
+	public static int[] getIntervals(Set<Transition> transitions, Map<Integer, Set<Action>> map) {
+		
 		Set<Integer> set = new HashSet<>();
 		
 		for(Transition transition : transitions) {
 			if(!transition.isEpsilonTransition()) {
 				set.add(transition.getStart());
-				set.add(transition.getEnd() + 1);						
+				set.add(transition.getEnd() + 1);
 			}
 		}
 		
@@ -554,15 +525,54 @@ public class AutomatonOperations {
 			result[i] = array[i];
 		}
 		
-		return result;		
+		for (Transition transition : transitions) {
+			for (int i : result) {
+
+				if (transition.getStart() <= i && i <= transition.getEnd() ) {
+					Set<Action> s = map.get(i);
+					if (s == null) {
+						s = new HashSet<>();
+						map.put(i, s);
+					}
+					s.addAll(transition.getActions());
+				} else {
+					Set<Action> s = map.get(i);
+					if (s == null) {
+						s = new HashSet<>();
+						map.put(i, s);
+					}
+				}
+			}
+			
+			if (result.length > 0) {
+				int last = result[result.length - 1] - 1;
+				if (transition.getStart() <= last && last <= transition.getEnd()) {
+					Set<Action> s = map.get(last);
+					if (s == null) {
+						s = new HashSet<>();
+						map.put(last, s);
+					}
+					s.addAll(transition.getActions());
+				} else {
+					Set<Action> s = map.get(last);
+					if (s == null) {
+						s = new HashSet<>();
+						map.put(last, s);
+					}
+				}
+			}
+ 		}
+		
+		return result;
 	}
+
 	
 	public static int[] getIntervals(Automaton automaton) {		
-		return getIntervals(getAllTransitions(automaton.getStartState()));
+		return getIntervals(getAllTransitions(automaton.getStartState()), new HashMap<Integer, Set<Action>>());
 	}
 	
 	public static int[] getIntervals(State startState) {		
-		return getIntervals(getAllTransitions(startState));
+		return getIntervals(getAllTransitions(startState), new HashMap<Integer, Set<Action>>());
 	}	
 	
 	public static Set<Transition> getAllTransitions(Automaton a) {
@@ -870,11 +880,13 @@ public class AutomatonOperations {
 	 */
 	public static Automaton difference(Automaton a1, Automaton a2) {
 		
-		int[] intervals = merge(getIntervals(a1), getIntervals(a2));
+		Map<Integer, Set<Action>> transitionActionsMap = new HashMap<>();
+		Set<Transition> transitions = getAllTransitions(a1);
+		transitions.addAll(getAllTransitions(a2));
+		int[] intervals = getIntervals(transitions, transitionActionsMap);
 		
-		a1 = makeComplete(a1, intervals);
-
-		a2 = makeComplete(a2, intervals);
+		a1 = makeComplete(a1, intervals, transitionActionsMap);
+		a2 = makeComplete(a2, intervals, transitionActionsMap);
 		
 		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
 		
@@ -927,8 +939,10 @@ public class AutomatonOperations {
 		}
 		
 		Set<Transition> transitions = getAllTransitions(a1);
-		transitions.addAll(getAllTransitions(a2) );
-		int[] intervals = getIntervals(transitions);
+		transitions.addAll(getAllTransitions(a2));
+		
+		Map<Integer, Set<Action>> map = new HashMap<>();
+		int[] intervals = getIntervals(transitions, map);
 		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
@@ -952,7 +966,10 @@ public class AutomatonOperations {
 
 					State s1 = reachableStates1.iterator().next();
 					State s2 = reachableStates2.iterator().next();
-					state.addTransition(new Transition(intervals[t], intervals[t + 1] - 1, newStates.get(Tuple.of(s1.getId(), s2.getId()))));
+					state.addTransition(new Transition(intervals[t], 
+													   intervals[t + 1] - 1, 
+													   newStates.get(Tuple.of(s1.getId(), s2.getId())),
+													   map.get(intervals[t])));
 				}
 				
 			}
@@ -1056,7 +1073,7 @@ public class AutomatonOperations {
 	 * Makes the transition function complete, i.e., from each state 
 	 * there will be all outgoing transitions.
 	 */
-	public static Automaton makeComplete(Automaton a, final int[] intervals) {
+	public static Automaton makeComplete(Automaton a, final int[] intervals, final Map<Integer, Set<Action>> map) {
 		
 		a.determinize();
 		a = a.copy();
@@ -1070,9 +1087,15 @@ public class AutomatonOperations {
 				for(int i = 0; i < intervals.length; i++) {
 					if(!state.hasTransition(intervals[i])) {
 						if(i + 1 == intervals.length) {
-							state.addTransition(new Transition(intervals[i] - 1, intervals[i] - 1, dummyState));
+							if (map.get(intervals[i] - 1) == null) {
+								System.out.println("");
+							}
+							state.addTransition(new Transition(intervals[i] - 1, intervals[i] - 1, dummyState, map.get(intervals[i] - 1)));
 						} else {
-							state.addTransition(new Transition(intervals[i], intervals[i + 1] - 1 , dummyState));
+							if (map.get(intervals[i]) == null) {
+								System.out.println("");
+							}
+							state.addTransition(new Transition(intervals[i], intervals[i + 1] - 1 , dummyState, map.get(intervals[i])));
 						}
 					}
 				}

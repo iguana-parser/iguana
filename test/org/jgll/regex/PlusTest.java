@@ -37,8 +37,6 @@ public class PlusTest {
 		RegularExpression regexp = new RegexPlus(new Character('a')).addCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Automaton nfa = regexp.toAutomaton();
 
-		assertEquals(6, nfa.getCountStates());
-		
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));
