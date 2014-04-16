@@ -55,7 +55,7 @@ public class RegexStar extends AbstractRegularExpression {
 		
 		startState.addTransition(Transition.epsilonTransition(finalState));
 		
-		return new Automaton(startState);
+		return new Automaton(startState, name);
 	}
 	
 	@Override

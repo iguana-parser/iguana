@@ -32,7 +32,7 @@ public class EOF extends AbstractRegularExpression {
     	State startState = new State();
     	State endState = new State(true).addRegularExpression(this);
     	startState.addTransition(new Transition(VALUE, endState));
-        return new Automaton(startState);		
+        return new Automaton(startState, name);		
 	}
 
 	@Override

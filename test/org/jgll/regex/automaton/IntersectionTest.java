@@ -26,7 +26,7 @@ public class IntersectionTest {
 		x1.addTransition(new Transition('1', x0));
 		
 		// Matches an odd number of 1's.
-		Automaton a1 = new Automaton(x0);
+		Automaton a1 = new Automaton(x0, "a1");
 		
 		State y0 = new State(true);
 		State y1 = new State();
@@ -37,7 +37,7 @@ public class IntersectionTest {
 		y1.addTransition(new Transition('1', y0));
 		
 		// Matches an string of even length.
-		Automaton a2 = new Automaton(y0);
+		Automaton a2 = new Automaton(y0, "a2");
 		
 		a1.intersection(a2);
 

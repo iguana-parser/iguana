@@ -29,13 +29,21 @@ public class Automaton implements Serializable {
 	
 	private Set<State> rejectStates;
 	
+	private String name;
+	
+
 	public Automaton(State startState) {
+		this(startState, "no-name");
+	}
+
+	public Automaton(State startState, String name) {
 
 		if(startState == null) {
 			throw new IllegalArgumentException("Start symbol cannot be null.");
 		}
 		
 		this.startState = startState;
+		this.name = name;
 		init(this);
 	}
 
@@ -241,7 +249,21 @@ public class Automaton implements Serializable {
 		Automaton copy = AutomatonOperations.copy(this);
 		copy.deterministic = deterministic;
 		copy.minimized = minimized;
+		copy.name = name;
 		return copy;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public Automaton setName(String name) {
+		this.name = name;
+		return this;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

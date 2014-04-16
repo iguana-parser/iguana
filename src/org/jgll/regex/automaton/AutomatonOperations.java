@@ -14,6 +14,7 @@ import java.util.Set;
 import org.jgll.regex.matcher.LargeIntervalTransitions;
 import org.jgll.regex.matcher.ShortIntervalTransitions;
 import org.jgll.regex.matcher.Transitions;
+import org.jgll.util.CollectionsUtil;
 import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
@@ -101,7 +102,7 @@ public class AutomatonOperations {
 			}			
 		}
 		
-		return new Automaton(startState);
+		return new Automaton(startState, automaton.getName());
 	}
 
 	private static void addActions(Set<State> initialState, State startState) {
@@ -398,7 +399,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState);
+		return new Automaton(startState, automaton.getName());
 	}
 
 	/**
@@ -760,7 +761,7 @@ public class AutomatonOperations {
 			}
 		});
 		
-		return new Automaton(startStates[0]);
+		return new Automaton(startStates[0], automaton.getName());
 	}
 	
 	/**
@@ -806,7 +807,7 @@ public class AutomatonOperations {
 		// 2. making the start state final
 		newStates.get(automaton.getStartState()).setFinalState(true);
 		 
-		return new Automaton(startState);
+		return new Automaton(startState, automaton.getName());
 	}
 	
 	/**
@@ -832,7 +833,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState);
+		return new Automaton(startState, CollectionsUtil.listToString(automatons, " | "));
 	}
 	
 	public static Automaton union(Automaton...automatons) {
@@ -867,7 +868,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState);
+		return new Automaton(startState, a1.toString() + "/\\" + a2.toString());
 	}
 	
 	/**
@@ -913,7 +914,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState);
+		return new Automaton(startState, a1.toString() + "-" + a2.toString());
 	}
 	
 	/**
@@ -1018,7 +1019,7 @@ public class AutomatonOperations {
 			}
 		});
 		
-		return new Automaton(startState[0]);
+		return new Automaton(startState[0], automaton.getName());
 	}
 	
 	public static Automaton or(Automaton...automatons) {
@@ -1037,7 +1038,7 @@ public class AutomatonOperations {
 			startState.addTransition(Transition.epsilonTransition(c.getStartState()));
 		}
 		
-		return new Automaton(startState);
+		return new Automaton(startState, CollectionsUtil.listToString(automatons, " | "));
 	}
 	
 	
@@ -1095,6 +1096,6 @@ public class AutomatonOperations {
 			}
 		});
 		
-		return new Automaton(a.getStartState());
+		return new Automaton(a.getStartState(), a.getName());
 	}
 }

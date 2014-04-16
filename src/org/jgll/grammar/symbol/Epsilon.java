@@ -30,7 +30,7 @@ public class Epsilon extends AbstractRegularExpression {
 	@Override
     protected Automaton createAutomaton() {
     	State state = new State(true).addRegularExpression(this);
-        return new Automaton(state);
+        return new Automaton(state, name);
     }
 
 	@Override

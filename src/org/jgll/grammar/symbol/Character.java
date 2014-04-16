@@ -65,7 +65,7 @@ public class Character extends AbstractRegularExpression {
 		State finalState = new State(true).addRegularExpression(this);
 		Transition transition = new Transition(c, finalState).addTransitionAction(getPostActions(conditions));
 		startState.addTransition(transition);
-		return new Automaton(startState);
+		return new Automaton(startState, name);
 	}
 
 	@Override
