@@ -18,7 +18,9 @@ public class Star extends AbstractSymbol {
 	
 	@Override
 	public Star clone() {
-		return (Star) super.clone();
+		Star clone = (Star) super.clone();
+		clone.s = s.clone();
+		return clone;
 	}
 	
 }

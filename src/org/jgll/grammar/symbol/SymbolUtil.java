@@ -1,14 +1,14 @@
-package org.jgll.regex;
+package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Util {
+public class SymbolUtil {
 	
 	@SuppressWarnings("unchecked")
-	public static <T extends RegularExpression> List<T> cloneList(List<T> regularExpressions) {
+	public static <T extends Symbol> List<T> cloneList(List<T> symbols) {
 		List<T> list = new ArrayList<>();
-		for(T regex : regularExpressions) {
+		for(T regex : symbols) {
 			list.add((T) regex.clone());
 		}
 		

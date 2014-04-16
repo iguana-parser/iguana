@@ -1,6 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,13 +13,7 @@ public class Group extends Nonterminal {
 
 	public Group(List<? extends Symbol> symbols) {
 		super("(" + CollectionsUtil.listToString(symbols) + ")");
-		
-		List<Symbol> list = new ArrayList<>();
-		for(Symbol s : symbols) {
-			list.add(s.clone());
-		}
-		
-		this.symbols = list;
+		this.symbols = SymbolUtil.cloneList(symbols);
 	}
 	
 	@SafeVarargs
@@ -34,7 +27,9 @@ public class Group extends Nonterminal {
 
 	@Override
 	public Group clone() {
-		return (Group) super.clone();
+		Group clone = (Group) super.clone();
+		clone.symbols = SymbolUtil.cloneList(symbols);
+		return clone;
 	}
 	
 }

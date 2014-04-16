@@ -18,7 +18,9 @@ public class Plus extends AbstractSymbol {
 
 	@Override
 	public Plus clone() {
-		return (Plus) super.clone();
+		Plus clone = (Plus) super.clone();
+		clone.s = s.clone();
+		return clone;
 	}
 	
 }

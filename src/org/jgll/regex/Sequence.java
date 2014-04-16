@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.SymbolUtil;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
@@ -27,7 +28,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		}
 		
-		this.regularExpressions = Util.cloneList(regularExpressions);
+		this.regularExpressions = SymbolUtil.cloneList(regularExpressions);
 	}
 	
 	@SafeVarargs
@@ -88,7 +89,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	@Override
 	public Sequence<T> clone() {
 		Sequence<T> clone = (Sequence<T>) super.clone();
-		clone.regularExpressions = Util.cloneList(regularExpressions);
+		clone.regularExpressions = SymbolUtil.cloneList(regularExpressions);
 		return clone;
 	}
 

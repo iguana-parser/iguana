@@ -17,7 +17,9 @@ public class Opt extends AbstractSymbol {
 	
 	@Override
 	public Opt clone() {
-		return (Opt) super.clone();
+		Opt clone = (Opt) super.clone();
+		clone.s = s.clone();
+		return clone;
 	}
 	
 }
