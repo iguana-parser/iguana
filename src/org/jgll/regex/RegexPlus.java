@@ -11,33 +11,34 @@ public class RegexPlus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final RegularExpression regexp;
+	private RegularExpression plus;
 	
 	public RegexPlus(RegularExpression regexp) {
 		super(regexp.getName() + "+");
-		RegularExpression copy = regexp.clone();
-		this.regexp = new Sequence<>(new RegexStar(regexp), copy);
+		this.plus = new Sequence<>(new RegexStar(regexp.clone()), regexp.clone());
 	}
 	
 	@Override
 	protected Automaton createAutomaton() {
-		regexp.addConditions(conditions);
-		return regexp.toAutomaton();
+		plus.addConditions(conditions);
+		return plus.toAutomaton();
 	}
 	
 	@Override
 	public boolean isNullable() {
-		return regexp.isNullable();
+		return plus.isNullable();
 	}
 	
 	@Override
 	public RegexPlus clone() {
-		return (RegexPlus) super.clone();
+		RegexPlus clone = (RegexPlus) super.clone();
+		clone.plus = plus.clone();
+		return clone;
 	}
 
 	@Override
 	public Set<Range> getFirstSet() {
-		return regexp.getFirstSet();
+		return plus.getFirstSet();
 	}
 
 }

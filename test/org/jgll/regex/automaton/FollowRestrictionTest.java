@@ -12,14 +12,13 @@ import org.jgll.regex.RegexStar;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class FollowRestrictionTest {
 	
 	RegularExpression id = RegularExpressionExamples.getId();
 	
-//	@Test
+	@Test
 	public void test1() {
 		
 		// id !>> [:]
@@ -53,7 +52,6 @@ public class FollowRestrictionTest {
 		
 		// id !>> [a-z]
 		RegularExpression r3 = id.addCondition(RegularExpressionCondition.notFollow(new CharacterClass(Range.in('a', 'z'))));
-		Visualization.generateAutomatonGraph("/Users/ali/output", r3.toAutomaton().getStartState());
 
 		RunnableAutomaton matcher = r3.toAutomaton().getRunnableAutomaton();
 		
@@ -64,14 +62,16 @@ public class FollowRestrictionTest {
 
 	@Test
 	public void test4() {
+		// (![*] | [*] !>> [/])*
 		RegularExpression r1 = new Character('*').not();
 		RegularExpression r2 = new Character('*').addCondition(RegularExpressionCondition.notFollow(new Character('/')));
-		
 		RegexStar star = new RegexStar(new RegexAlt<>(r1, r2));
-//		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", star.toAutomaton().getStartState());
+		
 		RunnableAutomaton m = star.toAutomaton().getRunnableAutomaton();
 		
-		System.out.println(m.match(Input.fromString("ab"), 0));
+		assertEquals(2, m.match(Input.fromString("ab"), 0));
+		assertEquals(-1, m.match(Input.fromString("*/"), 0));
+		assertEquals(7, m.match(Input.fromString("/*aaa**"), 0));
 	}
 	
 }

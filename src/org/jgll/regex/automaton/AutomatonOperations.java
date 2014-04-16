@@ -49,16 +49,13 @@ public class AutomatonOperations {
 			Set<MoveResult> transitionsSet = move(stateSet, cache);
 
 			for(MoveResult r : transitionsSet) {
-				Set<State> states = r.states;
-				Set<State> newState = epsilonClosure(states);
+				Set<State> newStatesSet = epsilonClosure(r.states);
 				
-				State destination = newStatesMap.get(newState);
-				if(destination == null) {
-					destination = new State();
-					
-					addActions(states, destination);
-					
-					newStatesMap.put(newState, destination);
+				State newState = newStatesMap.get(newStatesSet);
+				if(newState == null) {
+					newState = new State();
+					addActions(newStatesSet, newState);
+					newStatesMap.put(newStatesSet, newState);
 				}
 				
 				State source = newStatesMap.get(stateSet);
@@ -66,12 +63,12 @@ public class AutomatonOperations {
 				// The state should have been created before.
 				assert source != null;
 				
-				Transition transition = new Transition(r.start, r.end, destination, r.actions);
+				Transition transition = new Transition(r.start, r.end, newState, r.actions);
 				source.addTransition(transition);
 				
-				if(!visitedStates.contains(newState)) {
-					visitedStates.add(newState);
-					processList.add(newState);
+				if(!visitedStates.contains(newStatesSet)) {
+					visitedStates.add(newStatesSet);
+					processList.add(newStatesSet);
 				}
 			}
 		}
@@ -120,9 +117,9 @@ public class AutomatonOperations {
 		// Create a new runnable state for each state
 		for (State state : a.getAllStates()) {
 			if (state.getCountTransitions() > 0) {
-				map.put(state, new RunnableState(state.isFinalState(), state.isRejectState(), state.getActions()));
+				map.put(state, new RunnableState(state.getId(), state.isFinalState(), state.isRejectState(), state.getActions()));
 			} else {
-				map.put(state, new FinalRunnableState(state.isFinalState(), state.isRejectState()));
+				map.put(state, new FinalRunnableState(state.getId(), state.isFinalState(), state.isRejectState()));
 			}
 		}
 		
@@ -934,7 +931,9 @@ public class AutomatonOperations {
 		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
-				newStates.put(Tuple.of(i, j), new State());
+				Set<Action> actions = states1[i].getActions();
+				actions.addAll(states2[j].getActions());
+				newStates.put(Tuple.of(i, j), new State(actions));
 			}
 		}
 		
@@ -988,7 +987,7 @@ public class AutomatonOperations {
 			
 			@Override
 			public void visit(State state) {
-				State newState = new State();
+				State newState = new State(state.getActions());
 				
 				newState.addRegularExpressions(state.getRegularExpressions());
 				
@@ -1087,14 +1086,8 @@ public class AutomatonOperations {
 				for(int i = 0; i < intervals.length; i++) {
 					if(!state.hasTransition(intervals[i])) {
 						if(i + 1 == intervals.length) {
-							if (map.get(intervals[i] - 1) == null) {
-								System.out.println("");
-							}
 							state.addTransition(new Transition(intervals[i] - 1, intervals[i] - 1, dummyState, map.get(intervals[i] - 1)));
 						} else {
-							if (map.get(intervals[i]) == null) {
-								System.out.println("");
-							}
 							state.addTransition(new Transition(intervals[i], intervals[i + 1] - 1 , dummyState, map.get(intervals[i])));
 						}
 					}

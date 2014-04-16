@@ -33,6 +33,7 @@ public class StarTest {
 		
 	@Test
 	public void test2() {
+		// ([a-a]+)*
 		RegularExpression regexp = new RegexStar(new Sequence<>(new RegexPlus(new CharacterClass(new Range('a', 'a')))));
 		Automaton nfa = regexp.toAutomaton();
 		

@@ -15,7 +15,7 @@ public class RegexOpt extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 
-	private final RegularExpression regexp;
+	private RegularExpression regexp;
 	
 	public RegexOpt(RegularExpression regexp) {
 		super(regexp.getName() + "?");
@@ -27,22 +27,14 @@ public class RegexOpt extends AbstractRegularExpression {
 		startState.addAction(getPostActions(conditions));
 		
 		State finalState = new State(true);
-		
-		Automaton automaton = regexp.toAutomaton().copy();
+
+		regexp.addConditions(conditions);
+		Automaton automaton = regexp.toAutomaton();
 		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		
 		Set<State> finalStates = automaton.getFinalStates();
 		for(State s : finalStates) {
 			s.setFinalState(false);
-			
-			for (State incomingState : s.getIncomingStates()) {
-				for (Transition t : incomingState.getTransitions()) {
-					if(t.getDestination() == s) {
-						t.addTransitionAction(getPostActions(conditions));
-					}
-				}
-			}
-			
 			s.addTransition(Transition.epsilonTransition(finalState));			
 		}
 		
@@ -58,7 +50,9 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	@Override
 	public RegexOpt clone() {
-		return (RegexOpt) super.clone();
+		RegexOpt clone = (RegexOpt) super.clone();
+		clone.regexp = regexp.clone();
+		return clone;
 	}
 
 	@Override

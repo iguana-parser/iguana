@@ -1,7 +1,5 @@
 package org.jgll.regex;
 
-import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -20,9 +18,8 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<T> regularExpressions;
+	private List<T> regularExpressions;
 	
-	@SuppressWarnings("unchecked")
 	public Sequence(List<T> regularExpressions) {
 		super(CollectionsUtil.listToString(regularExpressions, " "));
 		
@@ -30,12 +27,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		}
 		
-		List<T> list = new ArrayList<>();
-		for(T regex : regularExpressions) {
-			list.add((T) regex.clone());
-		}
-		
-		this.regularExpressions = list;
+		this.regularExpressions = Util.cloneList(regularExpressions);
 	}
 	
 	@SafeVarargs
@@ -50,17 +42,13 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	@Override
 	protected Automaton createAutomaton() {
 		
+		regularExpressions.get(regularExpressions.size() - 1).addConditions(conditions);
+		
 		List<Automaton> automatons = new ArrayList<>();
 		for(int i = 0; i < regularExpressions.size(); i++) {
-			automatons.add(regularExpressions.get(i).toAutomaton().copy());
+			automatons.add(regularExpressions.get(i).toAutomaton());
 		}
-		
-		if (!conditions.isEmpty()) {
-			for (Automaton a : automatons) {
-				a.determinize();
-			}
-		}
-		
+				
 		Automaton result = automatons.get(0);
 		State startState = result.getStartState();
 		
@@ -73,16 +61,6 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			}
 			
 			result = new Automaton(startState);
-		}
-		
-		for(State s : result.getFinalStates()) {
-			for (State incomingState : s.getIncomingStates()) {
-				for (Transition t : incomingState.getTransitions()) {
-					if(t.getDestination() == s) {
-						t.addTransitionAction(getPostActions(conditions));
-					}
-				}
-			}			
 		}
 		
 		return result;
@@ -109,7 +87,9 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	@SuppressWarnings("unchecked")
 	@Override
 	public Sequence<T> clone() {
-		return (Sequence<T>) super.clone();
+		Sequence<T> clone = (Sequence<T>) super.clone();
+		clone.regularExpressions = Util.cloneList(regularExpressions);
+		return clone;
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public abstract class AbstractSymbol implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected final Set<Condition> conditions;
+	protected Set<Condition> conditions;
 	
 	protected String name;
 	
@@ -57,7 +57,9 @@ public abstract class AbstractSymbol implements Symbol {
 	@Override
 	public AbstractSymbol clone() {
 		try {
-			return (AbstractSymbol) super.clone();
+			AbstractSymbol clone = (AbstractSymbol) super.clone();
+			clone.conditions = new HashSet<>(conditions);
+			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException("Should not reach here.");
 		}

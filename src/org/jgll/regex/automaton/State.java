@@ -17,8 +17,6 @@ public class State implements Serializable {
 
 	private final Set<Transition> transitions;
 	
-	private final Set<State> incomingStates;
-	
 	/**
 	 * Epsilon closure set for this set, i.e., the set of states reachable 
 	 * from epsilon transitions from this state.
@@ -62,7 +60,6 @@ public class State implements Serializable {
 		this.finalState = finalState;
 		this.epsilonClosure = new HashSet<>();
 		this.regularExpressions = new HashSet<>();
-		this.incomingStates = new HashSet<>();
 		this.actions = actions;
 	}
 	
@@ -115,8 +112,6 @@ public class State implements Serializable {
 		if(transition.isEpsilonTransition()) {
 			epsilonClosure.add(transition.getDestination());
 		}
-		
-		transition.getDestination().addIncomingState(this);
 	}
 	
 	public void removeTransition(Transition transition) {
@@ -168,14 +163,6 @@ public class State implements Serializable {
 	@Override
 	public String toString() {
 		return "State" + id + " " + (actions.isEmpty() ? "" : actions);
-	}
-	
-	public Set<State> getIncomingStates() {
-		return incomingStates;
-	}
-	
-	public void addIncomingState(State state) {
-		incomingStates.add(state);
 	}
 	
 	public void addAction(Action action) {

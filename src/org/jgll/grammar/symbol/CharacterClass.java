@@ -121,7 +121,9 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	@Override
 	public CharacterClass clone() {
-		return (CharacterClass) super.clone();
+		CharacterClass clone = (CharacterClass) super.clone();
+		clone.alt = alt.clone();
+		return clone;
 	}
 	
 }

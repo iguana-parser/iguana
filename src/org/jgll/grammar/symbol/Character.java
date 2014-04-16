@@ -1,7 +1,8 @@
 package org.jgll.grammar.symbol;
 
+import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
+
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,8 +10,6 @@ import java.util.Set;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
-
-import static org.jgll.regex.automaton.TransitionActionsFactory.*;
 /**
  * 
  * @author Ali Afroozeh
@@ -22,13 +21,9 @@ public class Character extends AbstractRegularExpression {
 	
 	private final int c;
 	
-	private final BitSet bitSet;
-	
 	public Character(int c) {
 		super(getString(c));
 		this.c = c;
-		this.bitSet = new BitSet();
-		bitSet.set(c);
 	}
 	
 	public static Character from(int c) {

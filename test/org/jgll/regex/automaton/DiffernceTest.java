@@ -8,7 +8,6 @@ import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class DiffernceTest {
@@ -40,7 +39,6 @@ public class DiffernceTest {
 		RegexAlt<Keyword> alt = new RegexAlt<>(k1, k2, k3);
 		
 		Automaton a = difference(id.toAutomaton(), alt.toAutomaton());
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a.getStartState());
 		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));
 		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if"), 0));
 		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("when"), 0));

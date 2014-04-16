@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.jgll.regex.automaton.RejectState;
 import org.jgll.regex.automaton.RunnableState;
 import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
@@ -29,7 +30,6 @@ public class LargeIntervalTransitions implements Transitions, Serializable {
 				states.put(t.getEnd() + 1, null);
 			}
 		}
-		
 	}
 	
 	@Override
@@ -44,9 +44,7 @@ public class LargeIntervalTransitions implements Transitions, Serializable {
 		if (transition == null) return null;
 		
 		if (transition.executeActions(input, inputIndex + 1)) {
-			RunnableState state = states.floorEntry(v).getValue().clone();
-			state.setRejectState(true);
-			return state;
+			return RejectState.getInstance();
 		}
 		
 		return states.floorEntry(v).getValue();

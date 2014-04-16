@@ -16,14 +16,17 @@ public class RunnableState implements Cloneable {
 	
 	private Set<Action> actions;
 	
-	public RunnableState(boolean finalState, boolean rejectState, Set<Action> actions) {
+	private final int id;
+	
+	public RunnableState(int id, boolean finalState, boolean rejectState, Set<Action> actions) {
 		this.finalState = finalState;
 		this.rejectState = rejectState;
 		this.actions = actions;
+		this.id = id;
 	}
 	
-	public RunnableState(boolean finalState, boolean rejectState) {
-		this(finalState, rejectState, Collections.<Action>emptySet());
+	public RunnableState(int id, boolean finalState, boolean rejectState) {
+		this(id, finalState, rejectState, Collections.<Action>emptySet());
 	}
 		
 	public void setTransitions(Transitions transitions) {
@@ -73,6 +76,15 @@ public class RunnableState implements Cloneable {
 		catch (CloneNotSupportedException e) {
 			throw new RuntimeException("Should not reach here!");
 		}
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	@Override
+	public String toString() {
+		return "State" + id;
 	}
 	
 }

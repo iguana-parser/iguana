@@ -15,7 +15,7 @@ public class RegexStar extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final RegularExpression regexp;
+	private RegularExpression regexp;
 	
 	public RegexStar(RegularExpression regexp) {
 		super(regexp + "*");
@@ -25,12 +25,19 @@ public class RegexStar extends AbstractRegularExpression {
 	@Override
 	protected Automaton createAutomaton() {
 		
+		/*
+		 * Kleene star is a different beast. We cannot simply decide on 
+		 * internal transitions to execute actions. We should execute the actions
+		 * only when one loop has been done.
+		 */
+		
 		State startState = new State();
 		startState.addAction(getPostActions(conditions));
 		
 		State finalState = new State(true);
+		finalState.addAction(getPostActions(conditions));
 		
-		Automaton automaton = regexp.toAutomaton().copy();
+		Automaton automaton = regexp.toAutomaton();
 		
 		if (!conditions.isEmpty()) {
 			automaton.determinize();
@@ -43,15 +50,6 @@ public class RegexStar extends AbstractRegularExpression {
 		for(State s : finalStates) {
 			s.setFinalState(false);
 			s.addTransition(Transition.epsilonTransition(finalState));
-			
-			for (State incomingState : s.getIncomingStates()) {
-				for (Transition t : incomingState.getTransitions()) {
-					if(t.getDestination() == s) {
-						t.addTransitionAction(getPostActions(conditions));
-					}
-				}
-			}
-			
 			s.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		}
 		
@@ -72,7 +70,9 @@ public class RegexStar extends AbstractRegularExpression {
 	
 	@Override
 	public RegexStar clone() {
-		return (RegexStar) super.clone();
+		RegexStar clone = (RegexStar) super.clone();
+		clone.regexp = regexp.clone();
+		return clone;
 	}
 	
 }

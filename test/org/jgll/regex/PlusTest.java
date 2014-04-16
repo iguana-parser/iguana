@@ -8,6 +8,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class PlusTest {
@@ -35,8 +36,9 @@ public class PlusTest {
 	@Test
 	public void test2() {
 		RegularExpression regexp = new RegexPlus(new Character('a')).addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		
 		Automaton nfa = regexp.toAutomaton();
-
+		
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));
