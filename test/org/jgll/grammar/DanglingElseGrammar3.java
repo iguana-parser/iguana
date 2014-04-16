@@ -1,9 +1,9 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.list;
-import static org.junit.Assert.assertTrue;
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
-import org.jgll.grammar.condition.ContextFreeCondition;
+import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Character;
@@ -44,7 +44,7 @@ public class DanglingElseGrammar3 {
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
-		Rule rule1 = new Rule(S, list(a, S.addCondition(ContextFreeCondition.notFollow(b, S))));
+		Rule rule1 = new Rule(S, list(a, S.clone().addCondition(RegularExpressionCondition.notFollow(new Character('b')))));
 		builder.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));
