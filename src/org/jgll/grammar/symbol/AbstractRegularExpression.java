@@ -23,7 +23,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	@Override
 	public Automaton toAutomaton() {
 		if (automaton == null) {
-			automaton = combineConditions(createAutomaton());
+			automaton = createAutomaton();
 		}
 		return automaton;
 	}
@@ -47,7 +47,9 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	
 	@Override
 	public AbstractRegularExpression clone() {
-		return (AbstractRegularExpression) super.clone();
+		AbstractRegularExpression clone = (AbstractRegularExpression) super.clone();
+		clone.automaton = toAutomaton().copy();
+		return clone;
 	}
 	
 	@Override

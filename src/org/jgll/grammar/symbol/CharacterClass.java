@@ -29,14 +29,7 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	public CharacterClass(List<Range> ranges) {
 		super("[" + CollectionsUtil.listToString(ranges, " ") + "]");
-		
-		List<Range> list = new ArrayList<>();
-		
-		for(Range range : ranges) {
-			list.add(range.clone());
-		}
-		
-		this.alt = new RegexAlt<>(list);
+		this.alt = new RegexAlt<>(SymbolUtil.cloneList(ranges));
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {

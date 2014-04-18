@@ -17,6 +17,11 @@ public class RegularExpressionCondition extends Condition {
 	
 	public RegularExpressionCondition(ConditionType type, RegularExpression regularExpression) {
 		super(type);
+		
+		if (regularExpression.getConditions().size() != 0) {
+			throw new IllegalArgumentException("RegularExpression conditions cannot have conditions themselves.");
+		}
+		
 		this.regularExpression = regularExpression;
 	}
 

@@ -12,7 +12,7 @@ public class Keyword extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final Sequence<Character> seq;
+	private Sequence<Character> seq;
 	
 	public Keyword(String s) {
 		this("no-name", s);
@@ -87,7 +87,9 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	public Keyword clone() {
-		return (Keyword) super.clone();
+		Keyword clone = (Keyword) super.clone();
+		clone.seq = seq.clone();
+		return clone;
 	}
 	
 }

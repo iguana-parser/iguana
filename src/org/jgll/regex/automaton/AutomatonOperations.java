@@ -163,7 +163,16 @@ public class AutomatonOperations {
 			Set<State> s = state.getEpsilonClosure();
 			if(!s.isEmpty()) {
 				newStates.addAll(s);
+				
+//				System.out.println("s = " + s);
+//				System.out.println("newStates = " + newStates);
+				
+				if (newStates.toString().equals("[State229 , State230 , State224 ]")) {
+					System.out.println("WTF?");
+				}
 				newStates.addAll(epsilonClosure(s));
+				
+			
 			}
 		}
 		
@@ -877,6 +886,8 @@ public class AutomatonOperations {
 	 * 
 	 */
 	public static Automaton difference(Automaton a1, Automaton a2) {
+		
+		System.out.println("diff " + a1 + " " + a2);
 		
 		Map<Integer, Set<Action>> transitionActionsMap = new HashMap<>();
 		Set<Transition> transitions = getAllTransitions(a1);

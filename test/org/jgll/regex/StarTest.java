@@ -44,6 +44,17 @@ public class StarTest {
 		assertEquals(5, matcher.match(Input.fromString("aaaaa"), 0));
 	}
 	
+	
+	@Test
+	public void test3() {
+		// ([a-z]+ | [(-)] | "*")*
+		CharacterClass c1 = new CharacterClass(new Range('a', 'z'));
+		CharacterClass c2 = new CharacterClass(new Range('(', ')'));
+		Character c3 = new Character('*');
+		
+		RegularExpression regex = new RegexAlt<>(new RegexPlus(c1), c2, c3);
+	}
+	
 	@Test
 	public void test1WithPreConditions() {
 		RegularExpression regexp = new RegexStar(new Character('a')).addCondition(RegularExpressionCondition.notFollow(new Character(':')));

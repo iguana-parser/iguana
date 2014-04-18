@@ -25,6 +25,7 @@ public class FollowRestrictionTest {
 		RegularExpression r1 = id.addCondition(RegularExpressionCondition.notFollow(new Character(':')))				
 								 .addCondition(RegularExpressionCondition.notMatch(new Keyword("set")));
 		
+		
 		RunnableAutomaton matcher = r1.toAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test:"), 0));
