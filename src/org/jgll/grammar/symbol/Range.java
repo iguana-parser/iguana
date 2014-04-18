@@ -3,11 +3,14 @@ package org.jgll.grammar.symbol;
 import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
@@ -31,13 +34,15 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	public static Range in(int start, int end) {
 		return new Range(start, end);
 	}
-		
+	
 	public Range(int start, int end) {
-		super(Character.getString(start) + "-" + Character.getString(end));
+		this(start, end, Collections.<Condition>emptySet());
+	}
 		
-		if(end < start) {
-			throw new IllegalArgumentException("Start cannot be less than end.");
-		}
+	public Range(int start, int end, Set<Condition> conditions) {
+		super(Character.getString(start) + "-" + Character.getString(end), conditions);
+		
+		if(end < start) throw new IllegalArgumentException("Start cannot be less than end.");
 		
 		this.start = start;
 		this.end = end;
@@ -110,9 +115,10 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		firstSet.add(this);
 		return firstSet;
 	}
-	
+
 	@Override
-	public Range clone() {
-		return (Range) super.clone();
+	public RegularExpression withConditions(Set<Condition> conditions) {
+		return null;
 	}
+	
 }

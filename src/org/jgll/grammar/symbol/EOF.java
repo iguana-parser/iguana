@@ -3,6 +3,8 @@ package org.jgll.grammar.symbol;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
@@ -46,9 +48,10 @@ public class EOF extends AbstractRegularExpression {
 		firstSet.add(new Range(VALUE, VALUE));
 		return firstSet;
 	}
-	
+
 	@Override
-	public EOF clone() {
+	public RegularExpression withConditions(Set<Condition> conditions) {
 		return this;
 	}
+	
 }

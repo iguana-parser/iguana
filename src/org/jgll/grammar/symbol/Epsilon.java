@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 
@@ -44,10 +45,10 @@ public class Epsilon extends AbstractRegularExpression {
 		firstSet.add(new Range(-1, -1));
 		return firstSet;
 	}
-	
+
 	@Override
-	public Epsilon clone() {
-		return (Epsilon) super.clone();
+	public Epsilon withConditions(Set<Condition> conditions) {
+		return this;
 	}
 	
 }

@@ -53,7 +53,7 @@ public class DanglingElseGrammar1 {
 		Rule rule1 = new Rule(S, list(a, S));
 		builder.addRule(rule1);
 		
-		Rule rule2 = new Rule(S, list(group.addCondition(ContextFreeCondition.notMatch(a, S))));
+		Rule rule2 = new Rule(S, list(group.withCondition(ContextFreeCondition.notMatch(a, S))));
 		
 		builder.addRules(EBNFUtil.rewrite(rule2));
 		

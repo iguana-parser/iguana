@@ -71,14 +71,14 @@ public class SequenceTest {
 	@Test
 	public void test1WithPostCondition() {
 		// [a][b] !>> [c]
-		RegularExpression r = seq1.addCondition(RegularExpressionCondition.notFollow(new Character('c')));
+		RegularExpression r = seq1.withCondition(RegularExpressionCondition.notFollow(new Character('c')));
 		RunnableAutomaton dfa = r.toAutomaton().getRunnableAutomaton();
 		assertEquals(-1, dfa.match(Input.fromString("abc"), 0));
 	}
 	
 	@Test
 	public void test2WithPostConditions() {
-		RegularExpression r = seq2.addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		RegularExpression r = seq2.withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 
 		RunnableAutomaton dfa = r.toAutomaton().getRunnableAutomaton();
 		
@@ -92,7 +92,7 @@ public class SequenceTest {
 
 	@Test
 	public void test3WithPostConditions() {
-		RegularExpression r = seq3.addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		RegularExpression r = seq3.withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Automaton nfa = r.toAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();

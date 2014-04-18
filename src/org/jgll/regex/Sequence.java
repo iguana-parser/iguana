@@ -2,14 +2,15 @@ package org.jgll.regex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
-import org.jgll.grammar.symbol.SymbolUtil;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
@@ -19,32 +20,41 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	private static final long serialVersionUID = 1L;
 
-	private List<T> regularExpressions;
+	private final List<T> regularExpressions;
+	
+	@SuppressWarnings("unchecked")
+	public Sequence(List<T> regularExpressions, Set<Condition> conditions) {
+		super(CollectionsUtil.listToString(regularExpressions, " "), conditions);
+		
+		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
+		
+		List<T> list = new ArrayList<>();
+		
+		int i;
+		for (i = 0; i < regularExpressions.size() - 1; i++) {
+			list.add(regularExpressions.get(i));
+		}
+		// Add the conditions to the last element
+		list.add((T) regularExpressions.get(i).withConditions(conditions));
+		
+		this.regularExpressions = list;
+	}
 	
 	public Sequence(List<T> regularExpressions) {
-		super(CollectionsUtil.listToString(regularExpressions, " "));
-		
-		if(regularExpressions.size() == 0) {
-			throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
-		}
-		
-		this.regularExpressions = SymbolUtil.cloneList(regularExpressions);
+		this(regularExpressions, Collections.<Condition>emptySet());
 	}
 	
 	@SafeVarargs
 	public Sequence(T...regularExpressions) {
 		this(Arrays.asList(regularExpressions));
 	}
-	
+		
 	public List<T> getRegularExpressions() {
 		return regularExpressions;
 	}
 
 	@Override
 	protected Automaton createAutomaton() {
-		
-		regularExpressions.get(regularExpressions.size() - 1).addConditions(conditions);
-		
 		List<Automaton> automatons = new ArrayList<>();
 		for(int i = 0; i < regularExpressions.size(); i++) {
 			automatons.add(regularExpressions.get(i).toAutomaton());
@@ -83,14 +93,6 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	
 	public T get(int index) {
 		return regularExpressions.get(index);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public Sequence<T> clone() {
-		Sequence<T> clone = (Sequence<T>) super.clone();
-		clone.regularExpressions = SymbolUtil.cloneList(regularExpressions);
-		return clone;
 	}
 
 	@Override
@@ -134,6 +136,11 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			}
 		}
 		return firstSet;
+	}
+
+	@Override
+	public Sequence<T> withConditions(Set<Condition> conditions) {
+		return new Sequence<>(regularExpressions, conditions);
 	}
 	
 }

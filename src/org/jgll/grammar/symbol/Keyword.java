@@ -1,9 +1,11 @@
 package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.Input;
@@ -12,7 +14,7 @@ public class Keyword extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Sequence<Character> seq;
+	private final Sequence<Character> seq;
 	
 	public Keyword(String s) {
 		this("no-name", s);
@@ -27,9 +29,13 @@ public class Keyword extends AbstractRegularExpression {
 	}
 	
 	public Keyword(String name, Sequence<Character> seq) {
-		super(name);
+		this(name, seq, Collections.<Condition>emptySet());
+	}
+	
+	public Keyword(String name, Sequence<Character> seq, Set<Condition> conditions) {
+		super(name, conditions);
 		this.name = name;
-		this.seq = seq.clone();
+		this.seq = seq.withConditions(conditions);
 	}
 	
 	private static Sequence<Character> toCharSequence(int[] chars) {
@@ -71,7 +77,6 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	protected Automaton createAutomaton() {
-		seq.addConditions(conditions);
 		return seq.toAutomaton();
 	}
 	
@@ -84,12 +89,15 @@ public class Keyword extends AbstractRegularExpression {
 	public Set<Range> getFirstSet() {
 		return seq.getFirstSet();
 	}
+
+	@Override
+	public Keyword withConditions(Set<Condition> conditions) {
+		return new Keyword(name, seq, conditions);
+	}
 	
 	@Override
-	public Keyword clone() {
-		Keyword clone = (Keyword) super.clone();
-		clone.seq = seq.clone();
-		return clone;
+	public Keyword withCondition(Condition condition) {
+		return (Keyword) super.withCondition(condition);
 	}
 	
 }

@@ -47,9 +47,9 @@ public class FollowRestrictionTest2 {
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder(factory);
 		
-		Rule r1 = new Rule(S, Label.addCondition(RegularExpressionCondition.notFollow(new Keyword("8", new int[] {'8'}))), zero_nine);
+		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword("8", new int[] {'8'}))), zero_nine);
 		
-		Rule r2 = new Rule(Label, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)));
+		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1, r2));
 		builder.addRules(rules);

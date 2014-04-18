@@ -3,10 +3,12 @@ package org.jgll.grammar.symbol;
 import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
@@ -21,9 +23,13 @@ public class Character extends AbstractRegularExpression {
 	
 	private final int c;
 	
-	public Character(int c) {
-		super(getString(c));
+	public Character(int c, Set<Condition> conditions) {
+		super(getString(c), conditions);
 		this.c = c;
+	}
+	
+	public Character(int c) {
+		this(c, Collections.<Condition>emptySet());
 	}
 	
 	public static Character from(int c) {
@@ -73,11 +79,6 @@ public class Character extends AbstractRegularExpression {
 		return false;
 	}
 	
-	@Override
-	public Character clone() {
-		return (Character) super.clone();
-	}
-
 	public CharacterClass not() {
 		List<Range> ranges = new ArrayList<>();
 		if(c >= 1) {
@@ -95,6 +96,11 @@ public class Character extends AbstractRegularExpression {
 		Set<Range> firstSet = new HashSet<>();
 		firstSet.add(new Range(c, c));
 		return firstSet;
+	}
+
+	@Override
+	public Character withConditions(Set<Condition> conditions) {
+		return new Character(c, conditions);
 	}
 
 }

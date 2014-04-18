@@ -2,12 +2,13 @@ package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.util.CollectionsUtil;
 
 /**
  * Character class represents a set of {@link Range} instances.
@@ -21,15 +22,23 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private RegexAlt<Range> alt;
+	private final RegexAlt<Range> alt;
 	
 	public CharacterClass(Range...ranges) {
-		this(Arrays.asList(ranges));
+		this(Arrays.asList(ranges), Collections.<Condition>emptySet());
+	}
+	
+	public CharacterClass(List<Range> ranges, Set<Condition> conditions) {
+		this(new RegexAlt<>(ranges), conditions);
+	}
+	
+	public CharacterClass(RegexAlt<Range> alt, Set<Condition> conditions) {
+		super(alt.toString(), conditions);
+		this.alt = alt.withConditions(conditions);
 	}
 	
 	public CharacterClass(List<Range> ranges) {
-		super("[" + CollectionsUtil.listToString(ranges, " ") + "]");
-		this.alt = new RegexAlt<>(SymbolUtil.cloneList(ranges));
+		this(ranges, Collections.<Condition>emptySet());
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {
@@ -37,7 +46,7 @@ public class CharacterClass extends AbstractRegularExpression {
 		for(Character c : chars) {
 			list.add(Range.in(c.getValue(), c.getValue()));
 		}
-		return new CharacterClass(list);
+		return new CharacterClass(list, Collections.<Condition>emptySet());
 	}
 	
 	@Override
@@ -62,7 +71,6 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	protected Automaton createAutomaton() {
-		alt.addConditions(conditions);
 		return alt.toAutomaton();
 	}
 
@@ -96,7 +104,7 @@ public class CharacterClass extends AbstractRegularExpression {
 			newRanges.add(Range.in(ranges[i].getEnd() + 1, Constants.MAX_UTF32_VAL));
 		}
 		
-		return new CharacterClass(newRanges);
+		return new CharacterClass(newRanges, conditions);
 	}
 
 	@Override
@@ -111,12 +119,10 @@ public class CharacterClass extends AbstractRegularExpression {
 	public Range get(int index) {
 		return alt.get(index);
 	}
-	
+
 	@Override
-	public CharacterClass clone() {
-		CharacterClass clone = (CharacterClass) super.clone();
-		clone.alt = alt.clone();
-		return clone;
+	public CharacterClass withConditions(Set<Condition> conditions) {
+		return new CharacterClass(alt, conditions);
 	}
 	
 }

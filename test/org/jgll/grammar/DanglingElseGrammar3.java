@@ -44,7 +44,7 @@ public class DanglingElseGrammar3 {
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
-		Rule rule1 = new Rule(S, list(a, S.clone().addCondition(RegularExpressionCondition.notFollow(new Character('b')))));
+		Rule rule1 = new Rule(S, list(a, S.withCondition(RegularExpressionCondition.notFollow(new Character('b')))));
 		builder.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));

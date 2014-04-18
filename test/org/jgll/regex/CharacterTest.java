@@ -24,7 +24,7 @@ public class CharacterTest {
 	@Test
 	public void test2() {
 		// [a] !>> [b]
-		RegularExpression regexp = new Character('a').addCondition(RegularExpressionCondition.notFollow(new Character('b')));
+		RegularExpression regexp = new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b')));
 		Automaton nfa = regexp.toAutomaton();
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertEquals(2, nfa.getCountStates());

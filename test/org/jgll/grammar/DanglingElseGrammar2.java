@@ -48,7 +48,7 @@ public class DanglingElseGrammar2 {
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
 		
-		Rule rule1 = new Rule(S, list(group.addCondition(ContextFreeCondition.notMatch(a, S, b, S))));
+		Rule rule1 = new Rule(S, list(group.withCondition(ContextFreeCondition.notMatch(a, S, b, S))));
 		builder.addRules(EBNFUtil.rewrite(rule1));
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));

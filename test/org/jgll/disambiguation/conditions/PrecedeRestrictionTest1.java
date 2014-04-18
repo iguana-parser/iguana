@@ -59,7 +59,7 @@ public class PrecedeRestrictionTest1 {
 
 		Rule r2 = new Rule(S, forall);
 
-		Rule r3 = new Rule(Id, new Plus(az).addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notPrecede(az)));
+		Rule r3 = new Rule(Id, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)).withCondition(RegularExpressionCondition.notPrecede(az)));
 
 		Rule r4 = new Rule(L, ws);
 

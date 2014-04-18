@@ -2,8 +2,10 @@ package org.jgll.regex;
 
 import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
 
+import java.util.Collections;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
@@ -15,11 +17,15 @@ public class RegexStar extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private RegularExpression regexp;
+	private final RegularExpression regexp;
+	
+	public RegexStar(RegularExpression regexp, Set<Condition> conditions) {
+		super(regexp + "*", conditions);
+		this.regexp = regexp;
+	}
 	
 	public RegexStar(RegularExpression regexp) {
-		super(regexp + "*");
-		this.regexp = regexp.clone();
+		this(regexp, Collections.<Condition>emptySet());
 	}
 	
 	@Override
@@ -67,12 +73,10 @@ public class RegexStar extends AbstractRegularExpression {
 	public Set<Range> getFirstSet() {
 		return regexp.getFirstSet();
 	}
-	
+
 	@Override
-	public RegexStar clone() {
-		RegexStar clone = (RegexStar) super.clone();
-		clone.regexp = regexp.clone();
-		return clone;
+	public RegexStar withConditions(Set<Condition> conditions) {
+		return new RegexStar(regexp, conditions);
 	}
 	
 }

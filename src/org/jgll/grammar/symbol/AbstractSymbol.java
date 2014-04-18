@@ -1,7 +1,6 @@
 package org.jgll.grammar.symbol;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,15 +15,12 @@ public abstract class AbstractSymbol implements Symbol {
 	protected String name;
 	
 	public AbstractSymbol(String name) {
-		this(name, new ArrayList<Condition>());
+		this(name, Collections.<Condition>emptySet());
 	}
 	
-	public AbstractSymbol(String name, Iterable<Condition> conditions) {
+	public AbstractSymbol(String name, Set<Condition> conditions) {
 		this.name = name;
-		this.conditions = new HashSet<>();
-		for(Condition condition : conditions) {
-			this.conditions.add(condition);
-		}
+		this.conditions = new HashSet<>(conditions);
 	}
 	
 	@Override
@@ -33,20 +29,8 @@ public abstract class AbstractSymbol implements Symbol {
 	}
 	
 	@Override
-	public Symbol addCondition(Condition condition) {
-		this.conditions.add(condition);
-		return this;
-	}
-	
-	@Override
 	public String getName() {
 		return name;
-	}
-	
-	@Override
-	public Symbol addConditions(Collection<Condition> conditions) {
-		this.conditions.addAll(conditions);
-		return this;
 	}
 	
 	@Override
@@ -55,14 +39,9 @@ public abstract class AbstractSymbol implements Symbol {
 	}
 	
 	@Override
-	public AbstractSymbol clone() {
-		try {
-			AbstractSymbol clone = (AbstractSymbol) super.clone();
-			clone.conditions = new HashSet<>(conditions);
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException("Should not reach here.");
-		}
+	public Symbol withCondition(Condition condition) {
+		Set<Condition> conditions = new HashSet<>();
+		return withConditions(conditions);
 	}
 	
 }

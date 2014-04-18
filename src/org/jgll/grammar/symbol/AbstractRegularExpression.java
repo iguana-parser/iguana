@@ -1,6 +1,7 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
@@ -14,17 +15,19 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 
 	private static final long serialVersionUID = 1L;
 	
-	private Automaton automaton;
+	protected final Automaton automaton;
 
 	public AbstractRegularExpression(String name) {
-		super(name);
+		this(name, Collections.<Condition>emptySet());
+	}
+	
+	public AbstractRegularExpression(String name, Set<Condition> conditions) {
+		super(name, conditions);
+		this.automaton = combineConditions(createAutomaton());
 	}
 	
 	@Override
 	public Automaton toAutomaton() {
-		if (automaton == null) {
-			automaton = createAutomaton();
-		}
 		return automaton;
 	}
 	
@@ -46,20 +49,8 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	}
 	
 	@Override
-	public AbstractRegularExpression clone() {
-		AbstractRegularExpression clone = (AbstractRegularExpression) super.clone();
-		clone.automaton = toAutomaton().copy();
-		return clone;
-	}
-	
-	@Override
-	public RegularExpression addCondition(Condition condition) {
-		return (RegularExpression) super.addCondition(condition);
-	}
-	
-	@Override
-	public RegularExpression addConditions(Collection<Condition> conditions) {
-		return (RegularExpression) super.addConditions(conditions);
+	public RegularExpression withCondition(Condition condition) {
+		return (RegularExpression) super.withCondition(condition);
 	}
 	
 }

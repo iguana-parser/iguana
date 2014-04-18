@@ -33,7 +33,7 @@ public class PlusTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regexp = new RegexPlus(new Character('a')).addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		RegularExpression regexp = new RegexPlus(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		
 		Automaton nfa = regexp.toAutomaton();
 		

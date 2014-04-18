@@ -1,8 +1,12 @@
 package org.jgll.grammar.symbol;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.util.CollectionsUtil;
 
 public class Group extends Nonterminal {
@@ -11,25 +15,18 @@ public class Group extends Nonterminal {
 
 	private List<? extends Symbol> symbols;
 
-	public Group(List<? extends Symbol> symbols) {
-		super("(" + CollectionsUtil.listToString(symbols) + ")");
-		this.symbols = SymbolUtil.cloneList(symbols);
+	public Group(List<? extends Symbol> symbols, Set<Condition> conditions) {
+		super("(" + CollectionsUtil.listToString(symbols) + ")", conditions);
+		this.symbols = new ArrayList<>(symbols);
 	}
 	
 	@SafeVarargs
 	public static <T extends Symbol> Group of(T...symbols) {
-		return new Group(Arrays.asList(symbols));
+		return new Group(Arrays.asList(symbols), Collections.<Condition>emptySet());
 	}
 
 	public List<? extends Symbol> getSymbols() {
 		return symbols;
 	}
 
-	@Override
-	public Group clone() {
-		Group clone = (Group) super.clone();
-		clone.symbols = SymbolUtil.cloneList(symbols);
-		return clone;
-	}
-	
 }

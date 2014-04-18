@@ -59,7 +59,7 @@ public class EBNFUtil {
 			Nonterminal newNt = new Nonterminal(s.getName(), true);
 			rules.add(new Rule(newNt, newNt, in));
 			rules.add(new Rule(newNt, in));
-			newNt.addConditions(s.getConditions());
+			newNt = newNt.withConditions(s.getConditions());
 			return newNt;
 		} 
 		
@@ -68,7 +68,7 @@ public class EBNFUtil {
 			Nonterminal newNt = new Nonterminal(s.getName(), true);
 			rules.add(new Rule(newNt, in));
 			rules.add(new Rule(newNt));
-			newNt.addConditions(s.getConditions());
+			newNt = newNt.withConditions(s.getConditions());
 			return newNt;
 		} 
 		
@@ -76,7 +76,7 @@ public class EBNFUtil {
 			List<? extends Symbol> symbols = ((Group) s).getSymbols();
 			Nonterminal newNt = new Nonterminal(s.getName(), false);
 			rules.add(new Rule(newNt, symbols));
-			newNt.addConditions(s.getConditions());
+			newNt = newNt.withConditions(s.getConditions());
 			return newNt;
 		}
 		

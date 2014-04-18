@@ -1,26 +1,33 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.jgll.grammar.condition.Condition;
+
 
 public class Star extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Symbol s;
+	private final Symbol s;
+	
+	public Star(Symbol s, Set<Condition> conditions) {
+		super(s.getName() + "*", conditions);
+		this.s = s;
+	}
 	
 	public Star(Symbol s) {
-		super(s.getName() + "*");
-		this.s = s.clone();
+		this(s, Collections.<Condition>emptySet());
 	}
 	
 	public Symbol getSymbol() {
 		return s;
 	}
-	
+
 	@Override
-	public Star clone() {
-		Star clone = (Star) super.clone();
-		clone.s = s.clone();
-		return clone;
+	public Star withConditions(Set<Condition> conditions) {
+		return new Star(s, conditions);
 	}
 	
 }

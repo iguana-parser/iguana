@@ -1,7 +1,6 @@
 package org.jgll.regex;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
@@ -18,12 +17,13 @@ public interface RegularExpression extends Serializable, Symbol {
 	public Set<Range> getFirstSet();
 	
 	@Override
-	public RegularExpression clone();
+	/**
+	 * Creates a new instance of this regular expression object with
+	 * the given conditions.
+	 */
+	public RegularExpression withConditions(Set<Condition> conditions);
 	
 	@Override
-	public RegularExpression addCondition(Condition condition);
-	
-	@Override
-	public RegularExpression addConditions(Collection<Condition> conditions);
+	public RegularExpression withCondition(Condition condition);
 	
 }

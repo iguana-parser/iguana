@@ -57,7 +57,7 @@ public class StarTest {
 	
 	@Test
 	public void test1WithPreConditions() {
-		RegularExpression regexp = new RegexStar(new Character('a')).addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		RegularExpression regexp = new RegexStar(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Automaton nfa = regexp.toAutomaton();
 		
 		assertEquals(4, nfa.getCountStates());

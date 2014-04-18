@@ -1,7 +1,11 @@
 package org.jgll.regex;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
@@ -11,16 +15,22 @@ public class RegexPlus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private RegularExpression plus;
+	private final RegularExpression plus;
+	
+	public RegexPlus(RegularExpression regexp, Set<Condition> conditions) {
+		super(regexp.getName() + "+", conditions);
+		List<RegularExpression> list = new ArrayList<>();
+		list.add(new RegexStar(regexp));
+		list.add(regexp);
+		this.plus = new Sequence<>(list, conditions);
+	}
 	
 	public RegexPlus(RegularExpression regexp) {
-		super(regexp.getName() + "+");
-		this.plus = new Sequence<>(new RegexStar(regexp.clone()), regexp.clone());
+		this(regexp, Collections.<Condition>emptySet());
 	}
 	
 	@Override
 	protected Automaton createAutomaton() {
-		plus.addConditions(conditions);
 		return plus.toAutomaton().setName(name);
 	}
 	
@@ -30,15 +40,13 @@ public class RegexPlus extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public RegexPlus clone() {
-		RegexPlus clone = (RegexPlus) super.clone();
-		clone.plus = plus.clone();
-		return clone;
+	public Set<Range> getFirstSet() {
+		return plus.getFirstSet();
 	}
 
 	@Override
-	public Set<Range> getFirstSet() {
-		return plus.getFirstSet();
+	public RegexPlus withConditions(Set<Condition> conditions) {
+		return new RegexPlus(plus, conditions);
 	}
 
 }

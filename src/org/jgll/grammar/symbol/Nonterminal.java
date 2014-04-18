@@ -1,5 +1,9 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
 
@@ -15,6 +19,10 @@ public class Nonterminal extends AbstractSymbol {
 		this(name, 0, false);
 	}
 	
+	public Nonterminal(String name, Set<Condition> conditions) {
+		this(name, 0, false, conditions);
+	}
+	
 	public Nonterminal(String name, boolean ebnfList) {
 		this(name, 0, ebnfList);
 	}
@@ -24,7 +32,11 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	public Nonterminal(String name, int index, boolean ebnfList) {
-		super(name);
+		this(name, index, ebnfList, Collections.<Condition>emptySet());
+	}
+	
+	public Nonterminal(String name, int index, boolean ebnfList, Set<Condition> conditions) {
+		super(name, conditions);
 		this.ebnfList = ebnfList;
 		this.index = index;
 	}
@@ -73,10 +85,10 @@ public class Nonterminal extends AbstractSymbol {
 	public int hashCode() {
 		return HashFunctions.defaulFunction().hash(name.hashCode(), index);
 	}
-	
-	@Override
-	public Nonterminal clone() {
-		return (Nonterminal) super.clone();
-	}
 
+	@Override
+	public Nonterminal withConditions(Set<Condition> conditions) {
+		return new Nonterminal(name, index, ebnfList, conditions);
+	}
+	
 }

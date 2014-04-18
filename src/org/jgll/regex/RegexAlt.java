@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
-import org.jgll.grammar.symbol.SymbolUtil;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
@@ -19,8 +19,24 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	private static final long serialVersionUID = 1L;
 
-	private List<T> regularExpressions;
+	private final List<T> regularExpressions;
 	
+	@SuppressWarnings("unchecked")
+	public RegexAlt(List<T> regularExpressions, Set<Condition> conditions) {
+		super("(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")", conditions);
+		
+		if(regularExpressions == null) throw new IllegalArgumentException("The list of regular expressions cannot be null.");
+		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
+
+		List<T> list = new ArrayList<>();
+		for (T regex : regularExpressions) {
+			list.add((T) regex.withConditions(conditions));
+		}
+		
+		this.regularExpressions = list;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public RegexAlt(List<T> regularExpressions) {
 		super("(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")");
 		
@@ -31,8 +47,13 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		if(regularExpressions.size() == 0) {
 			throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
 		}
+
+		List<T> list = new ArrayList<>();
+		for (T regex : regularExpressions) {
+			list.add((T) regex.withConditions(conditions));
+		}
 		
-		this.regularExpressions = SymbolUtil.cloneList(regularExpressions);
+		this.regularExpressions = list;
 	}
 	
 	@SafeVarargs
@@ -49,18 +70,17 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 		List<Automaton> automatons = new ArrayList<>();
 		for (RegularExpression regexp : regularExpressions) {
-			regexp.addConditions(conditions);
 			automatons.add(regexp.toAutomaton());
 		}
 		
 		State startState = new State();
 		State finalState = new State(true);
 		
-		for(Automaton automaton : automatons) {
+		for (Automaton automaton : automatons) {
 			startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 			
 			Set<State> finalStates = automaton.getFinalStates();
-			for(State s : finalStates) {
+			for (State s : finalStates) {
 				s.setFinalState(false);
 				s.addTransition(Transition.epsilonTransition(finalState));				
 			}
@@ -71,22 +91,14 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public boolean isNullable() {
-		for(RegularExpression regex : regularExpressions) {
-			if(regex.isNullable()) {
+		for (RegularExpression regex : regularExpressions) {
+			if (regex.isNullable()) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public RegexAlt<T> clone() {
-		RegexAlt<T> clone = (RegexAlt<T>) super.clone();
-		clone.regularExpressions = SymbolUtil.cloneList(regularExpressions);
-		return clone;
-	}
-
 	@Override
 	public Iterator<T> iterator() {
 		return regularExpressions.iterator();
@@ -125,10 +137,15 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	@Override
 	public Set<Range> getFirstSet() {
 		Set<Range> firstSet = new HashSet<>();
-		for(T t : regularExpressions) {
+		for (T t : regularExpressions) {
 			firstSet.addAll(t.getFirstSet());
 		}
 		return firstSet;
+	}
+
+	@Override
+	public RegexAlt<T> withConditions(Set<Condition> conditions) {
+		return new RegexAlt<>(regularExpressions, conditions);
 	}
 	
 }

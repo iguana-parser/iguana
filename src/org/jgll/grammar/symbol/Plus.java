@@ -1,15 +1,24 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.jgll.grammar.condition.Condition;
+
 
 public class Plus extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Symbol s;
+	private final Symbol s;
 	
 	public Plus(Symbol s) {
-		super(s.getName() + "+");
-		this.s = s.clone();
+		this(s, Collections.<Condition>emptySet());
+	}
+	
+	public Plus(Symbol s, Set<Condition> conditions) {
+		super(s.getName() + "+", conditions);
+		this.s = s;
 	}
 	
 	public Symbol getSymbol() {
@@ -17,10 +26,8 @@ public class Plus extends AbstractSymbol {
 	}
 
 	@Override
-	public Plus clone() {
-		Plus clone = (Plus) super.clone();
-		clone.s = s.clone();
-		return clone;
+	public Plus withConditions(Set<Condition> conditions) {
+		return new Plus(s, conditions);
 	}
 	
 }

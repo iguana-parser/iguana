@@ -55,10 +55,10 @@ public class AltTest {
 	
 	@Test
 	public void test1WithPostConditions() {
-		RegularExpression a = new Character('a').addCondition(RegularExpressionCondition.notFollow(new Character('c')));
+		RegularExpression a = new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('c')));
 		Character b = new Character('b');
 		
-		RegularExpression regexp = new RegexAlt<>(a, b).addCondition(RegularExpressionCondition.notFollow(new Character('d')));
+		RegularExpression regexp = new RegexAlt<>(a, b).withCondition(RegularExpressionCondition.notFollow(new Character('d')));
 		Automaton nfa = regexp.toAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
@@ -70,7 +70,7 @@ public class AltTest {
 	
 	@Test
 	public void test2WithPostConditions() {
-		Keyword k1 = (Keyword) new Keyword("for").addCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		Keyword k1 = (Keyword) new Keyword("for").withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Keyword k2 = new Keyword("forall");
 		
 		Automaton result = AutomatonOperations.or(k1.toAutomaton(), k2.toAutomaton());
