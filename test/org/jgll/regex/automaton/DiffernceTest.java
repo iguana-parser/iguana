@@ -19,7 +19,7 @@ public class DiffernceTest {
 
 	@Test
 	public void test1() {		
-		Automaton a = difference(id.toAutomaton(), k1.toAutomaton());
+		Automaton a = difference(id.getAutomaton(), k1.getAutomaton());
 		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));
 		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if"), 0));
 		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if:"), 0));
@@ -28,7 +28,7 @@ public class DiffernceTest {
 	
 	@Test
 	public void test2() {
-		Automaton a = difference(id.toAutomaton(), union(k1.toAutomaton(), k2.toAutomaton()));
+		Automaton a = difference(id.getAutomaton(), union(k1.getAutomaton(), k2.getAutomaton()));
 		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));
 		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if"), 0));
 		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("when"), 0));
@@ -38,7 +38,7 @@ public class DiffernceTest {
 	public void test3() {
 		RegexAlt<Keyword> alt = new RegexAlt<>(k1, k2, k3);
 		
-		Automaton a = difference(id.toAutomaton(), alt.toAutomaton());
+		Automaton a = difference(id.getAutomaton(), alt.getAutomaton());
 		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));
 		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if"), 0));
 		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("when"), 0));

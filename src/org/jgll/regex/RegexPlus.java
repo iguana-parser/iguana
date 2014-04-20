@@ -31,7 +31,7 @@ public class RegexPlus extends AbstractRegularExpression {
 	
 	@Override
 	protected Automaton createAutomaton() {
-		return plus.toAutomaton().setName(name);
+		return plus.getAutomaton().setName(name);
 	}
 	
 	@Override

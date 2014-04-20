@@ -26,7 +26,7 @@ public class FollowRestrictionTest {
 								 .withCondition(RegularExpressionCondition.notMatch(new Keyword("set")));
 		
 		
-		RunnableAutomaton matcher = r1.toAutomaton().getRunnableAutomaton();
+		RunnableAutomaton matcher = r1.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test:"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("testtest:"), 0));
@@ -40,7 +40,7 @@ public class FollowRestrictionTest {
 		
 		// id !>> "<>"
 		RegularExpression r2 = id.withCondition(RegularExpressionCondition.notFollow(new Keyword("<>")));
-		RunnableAutomaton matcher = r2.toAutomaton().getRunnableAutomaton();
+		RunnableAutomaton matcher = r2.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test<>"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("testtest<>"), 0));
@@ -54,7 +54,7 @@ public class FollowRestrictionTest {
 		// id !>> [a-z]
 		RegularExpression r3 = id.withCondition(RegularExpressionCondition.notFollow(new CharacterClass(Range.in('a', 'z'))));
 
-		RunnableAutomaton matcher = r3.toAutomaton().getRunnableAutomaton();
+		RunnableAutomaton matcher = r3.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(4, matcher.match(Input.fromString("test"), 0));
 		assertEquals(8, matcher.match(Input.fromString("testtest)"), 0));
@@ -68,7 +68,7 @@ public class FollowRestrictionTest {
 		RegularExpression r2 = new Character('*').withCondition(RegularExpressionCondition.notFollow(new Character('/')));
 		RegexStar star = new RegexStar(new RegexAlt<>(r1, r2));
 		
-		RunnableAutomaton m = star.toAutomaton().getRunnableAutomaton();
+		RunnableAutomaton m = star.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(2, m.match(Input.fromString("ab"), 0));
 		assertEquals(-1, m.match(Input.fromString("*/"), 0));

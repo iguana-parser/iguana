@@ -10,14 +10,13 @@ import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class CharacterClassTest {
 	
 	public void test1() {
 		RegularExpression regexp = new CharacterClass(new Range('a', 'z'), new Range('1', '8'));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
 
@@ -37,7 +36,7 @@ public class CharacterClassTest {
 	
 	public void test2() {
 		RegularExpression regexp = new CharacterClass(new Range('1', '5'), new Range('1', '7'), new Range('3', '8'));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 
 		assertEquals(8, nfa.getCountStates());
 
@@ -68,7 +67,7 @@ public class CharacterClassTest {
 	public void test1WithPostConditions() {
 		RegularExpression regexp = new CharacterClass(new Range('a', 'z'), new Range('1', '8'))
 								       .withCondition(RegularExpressionCondition.notFollow(new Character(':')));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
 
@@ -87,13 +86,11 @@ public class CharacterClassTest {
 		RegularExpression regexp = new CharacterClass(new Range('1', '5'), new Range('1', '7'), new Range('3', '8'))
 								   .withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(8, nfa.getCountStates());
 
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
-		
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", nfa.getStartState());
 		
 		assertEquals(-1, dfa.match(Input.fromString("1:"), 0));
 		assertEquals(-1, dfa.match(Input.fromString("2:"), 0));

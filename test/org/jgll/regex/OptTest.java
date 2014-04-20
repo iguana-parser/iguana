@@ -15,7 +15,7 @@ public class OptTest {
 	@Test
 	public void test1() {
 		RegularExpression regexp = new RegexOpt(new Character('a'));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 		assertEquals(4, nfa.getCountStates());
 
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
@@ -26,7 +26,7 @@ public class OptTest {
 	@Test
 	public void test2() {
 		RegularExpression regexp = new RegexOpt(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 		
 		
 		assertEquals(4, nfa.getCountStates());

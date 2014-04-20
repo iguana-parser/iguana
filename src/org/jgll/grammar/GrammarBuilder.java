@@ -472,7 +472,7 @@ public class GrammarBuilder implements Serializable {
 //					}					
 //				}
 //			}
-			Automaton a = regex.toAutomaton();
+			Automaton a = regex.getAutomaton();
 			dfas[id] = a.getRunnableAutomaton();
 		}
 	}

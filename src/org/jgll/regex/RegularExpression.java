@@ -10,7 +10,7 @@ import org.jgll.regex.automaton.Automaton;
 
 public interface RegularExpression extends Serializable, Symbol {
 
-	public Automaton toAutomaton();
+	public Automaton getAutomaton();
 
 	public boolean isNullable();
 	

@@ -13,7 +13,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testId() {
-		Automaton nfa = RegularExpressionExamples.getId().toAutomaton();
+		Automaton nfa = RegularExpressionExamples.getId().getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 
@@ -27,15 +27,15 @@ public class ExamplesTest {
 	
 	@Test
 	public void testIntersectionKeywordId() {
-		Automaton idAutomaton = RegularExpressionExamples.getId().toAutomaton().determinize();
-		Automaton forAutomaton = new Keyword("for").toAutomaton().determinize();
+		Automaton idAutomaton = RegularExpressionExamples.getId().getAutomaton().determinize();
+		Automaton forAutomaton = new Keyword("for").getAutomaton().determinize();
 		
 		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
 	}
 	
 	@Test
 	public void testFloat() {
-		Automaton nfa = RegularExpressionExamples.getFloat().toAutomaton();
+		Automaton nfa = RegularExpressionExamples.getFloat().getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 
@@ -51,21 +51,21 @@ public class ExamplesTest {
 	
 	@Test
 	public void testJavaUnicodeEscape() {
-		Automaton nfa = RegularExpressionExamples.getJavaUnicodeEscape().toAutomaton();
+		Automaton nfa = RegularExpressionExamples.getJavaUnicodeEscape().getAutomaton();
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertTrue(dfa.match(Input.fromString("\\u0123")));		
 	}
 	
 	@Test
 	public void testCharacter() {
-		Automaton nfa = RegularExpressionExamples.getCharacter().toAutomaton();
+		Automaton nfa = RegularExpressionExamples.getCharacter().getAutomaton();
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		assertTrue(matcher.match(Input.fromString("'ab'")));
 	}
 	
 	@Test
 	public void testStringPart() {
-		Automaton a = RegularExpressionExamples.getStringPart().toAutomaton();
+		Automaton a = RegularExpressionExamples.getStringPart().getAutomaton();
 		RunnableAutomaton matcher = a.getRunnableAutomaton();
 		
 		assertTrue(matcher.match(Input.fromString("abcd")));

@@ -9,6 +9,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Test;
 
 
@@ -20,7 +21,7 @@ public class AltTest {
 		Character b = new Character('b');
 		
 		RegularExpression regexp = new RegexAlt<>(a, b);
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
 		
@@ -34,7 +35,7 @@ public class AltTest {
 		Keyword k1 = new Keyword("for");
 		Keyword k2 = new Keyword("forall");
 		
-		Automaton result = AutomatonOperations.or(k1.toAutomaton(), k2.toAutomaton());
+		Automaton result = AutomatonOperations.or(k1.getAutomaton(), k2.getAutomaton());
 
 		RunnableAutomaton dfa = result.getRunnableAutomaton();
 		assertEquals(3, dfa.match(Input.fromString("for"), 0));
@@ -45,7 +46,7 @@ public class AltTest {
 	public void test3() {
 		RegularExpression regexp = new RegexAlt<>(new Keyword("when"), new Keyword("if"));
 
-		Automaton automaton = regexp.toAutomaton();
+		Automaton automaton = regexp.getAutomaton();
 
 		RunnableAutomaton dfa = automaton.getRunnableAutomaton();
 		
@@ -55,11 +56,14 @@ public class AltTest {
 	
 	@Test
 	public void test1WithPostConditions() {
+		// ([a] !>> [c] | [b]) !>> c
 		RegularExpression a = new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('c')));
 		Character b = new Character('b');
 		
 		RegularExpression regexp = new RegexAlt<>(a, b).withCondition(RegularExpressionCondition.notFollow(new Character('d')));
-		Automaton nfa = regexp.toAutomaton();
+		System.out.println(regexp);
+		Automaton nfa = regexp.getAutomaton();
+		Visualization.generateAutomatonGraph("/Users/ali/output", nfa.getStartState());
 		
 		assertEquals(6, nfa.getCountStates());
 		
@@ -73,7 +77,7 @@ public class AltTest {
 		Keyword k1 = (Keyword) new Keyword("for").withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Keyword k2 = new Keyword("forall");
 		
-		Automaton result = AutomatonOperations.or(k1.toAutomaton(), k2.toAutomaton());
+		Automaton result = AutomatonOperations.or(k1.getAutomaton(), k2.getAutomaton());
 
 		RunnableAutomaton dfa = result.getRunnableAutomaton();
 		assertEquals(-1, dfa.match(Input.fromString("for:"), 0));

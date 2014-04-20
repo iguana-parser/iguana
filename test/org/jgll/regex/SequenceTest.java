@@ -26,7 +26,7 @@ public class SequenceTest {
 	
 	@Test
 	public void test1() {
-		Automaton nfa = seq1.toAutomaton();
+		Automaton nfa = seq1.getAutomaton();
 		
 		assertEquals(4, nfa.getCountStates());
 		
@@ -40,7 +40,7 @@ public class SequenceTest {
 	
 	@Test
 	public void test2() {
-		Automaton nfa = seq2.toAutomaton();
+		Automaton nfa = seq2.getAutomaton();
 
 		assertEquals(4, nfa.getCountStates());
 
@@ -62,7 +62,7 @@ public class SequenceTest {
 	 */
 	@Test
 	public void test3() {
-		Automaton nfa = seq3.toAutomaton();
+		Automaton nfa = seq3.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		assertTrue(matcher.match(Input.fromString("dm")));
@@ -72,7 +72,7 @@ public class SequenceTest {
 	public void test1WithPostCondition() {
 		// [a][b] !>> [c]
 		RegularExpression r = seq1.withCondition(RegularExpressionCondition.notFollow(new Character('c')));
-		RunnableAutomaton dfa = r.toAutomaton().getRunnableAutomaton();
+		RunnableAutomaton dfa = r.getAutomaton().getRunnableAutomaton();
 		assertEquals(-1, dfa.match(Input.fromString("abc"), 0));
 	}
 	
@@ -80,7 +80,7 @@ public class SequenceTest {
 	public void test2WithPostConditions() {
 		RegularExpression r = seq2.withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 
-		RunnableAutomaton dfa = r.toAutomaton().getRunnableAutomaton();
+		RunnableAutomaton dfa = r.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, dfa.match(Input.fromString("a0:"), 0));
 		assertEquals(-1, dfa.match(Input.fromString("a5:"), 0));
@@ -93,7 +93,7 @@ public class SequenceTest {
 	@Test
 	public void test3WithPostConditions() {
 		RegularExpression r = seq3.withCondition(RegularExpressionCondition.notFollow(new Character(':')));
-		Automaton nfa = r.toAutomaton();
+		Automaton nfa = r.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		assertEquals(-1, matcher.match(Input.fromString("dm:"), 0));

@@ -51,7 +51,7 @@ public class IntersectionTest {
 		RegularExpression id = RegularExpressionExamples.getId();
 		
 		// Should not overlap, therefore the intersection should be empty.
-		assertTrue(f.toAutomaton().intersection(id.toAutomaton()).isLanguageEmpty());
+		assertTrue(f.getAutomaton().intersection(id.getAutomaton()).isLanguageEmpty());
 	}
 	
 	@Test
@@ -59,8 +59,8 @@ public class IntersectionTest {
 		Keyword k1 = new Keyword("for");
 		Keyword k2 = new Keyword("forall");
 
-		assertTrue(AutomatonOperations.prefix(k1.toAutomaton(), k2.toAutomaton()));
-		assertFalse(AutomatonOperations.prefix(k2.toAutomaton(), k1.toAutomaton()));
+		assertTrue(AutomatonOperations.prefix(k1.getAutomaton(), k2.getAutomaton()));
+		assertFalse(AutomatonOperations.prefix(k2.getAutomaton(), k1.getAutomaton()));
 	}
 	
 }

@@ -49,7 +49,7 @@ public class FollowActions {
 	
 	public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
 		
-		final RunnableAutomaton matcher = regex.toAutomaton().getRunnableAutomaton();
+		final RunnableAutomaton matcher = regex.getAutomaton().getRunnableAutomaton();
 		
 		return new SlotAction<Boolean>() {
 			

@@ -15,7 +15,7 @@ public class UnionTest {
 
 	@Test
 	public void test1() {
-		Automaton a = union(k1.toAutomaton(), k2.toAutomaton());
+		Automaton a = union(k1.getAutomaton(), k2.getAutomaton());
 		assertTrue(a.getRunnableAutomaton().match(Input.fromString("if")));
 		assertTrue(a.getRunnableAutomaton().match(Input.fromString("when")));
 		assertFalse(a.getRunnableAutomaton().match(Input.fromString("else")));
@@ -23,7 +23,7 @@ public class UnionTest {
 	
 	@Test
 	public void test3() {
-		Automaton a = union(k1.toAutomaton(), union(k2.toAutomaton(), k3.toAutomaton()));
+		Automaton a = union(k1.getAutomaton(), union(k2.getAutomaton(), k3.getAutomaton()));
 		assertTrue(a.getRunnableAutomaton().match(Input.fromString("if")));
 		assertTrue(a.getRunnableAutomaton().match(Input.fromString("when")));
 		assertTrue(a.getRunnableAutomaton().match(Input.fromString("new")));

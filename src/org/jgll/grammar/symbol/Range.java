@@ -1,6 +1,6 @@
 package org.jgll.grammar.symbol;
 
-import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
+import static org.jgll.regex.automaton.TransitionActionsFactory.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
-import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
@@ -117,8 +116,8 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 
 	@Override
-	public RegularExpression withConditions(Set<Condition> conditions) {
-		return null;
+	public Range withConditions(Set<Condition> conditions) {
+		return new Range(start, end, conditions);
 	}
 	
 }

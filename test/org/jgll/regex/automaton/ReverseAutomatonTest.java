@@ -13,7 +13,7 @@ public class ReverseAutomatonTest {
 	@Test
 	public void test() {
 		RegularExpression r = new Keyword("test");
-		Automaton a = r.toAutomaton().reverse();
+		Automaton a = r.getAutomaton().reverse();
 		assertTrue(a.getRunnableAutomaton().match(Input.fromString("tset")));
 	}
 

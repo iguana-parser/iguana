@@ -15,7 +15,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 
 	private static final long serialVersionUID = 1L;
 	
-	protected final Automaton automaton;
+	protected Automaton automaton;
 
 	public AbstractRegularExpression(String name) {
 		this(name, Collections.<Condition>emptySet());
@@ -23,11 +23,13 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	
 	public AbstractRegularExpression(String name, Set<Condition> conditions) {
 		super(name, conditions);
-		this.automaton = combineConditions(createAutomaton());
 	}
 	
 	@Override
-	public Automaton toAutomaton() {
+	public Automaton getAutomaton() {
+		if (automaton == null) {
+			automaton = combineConditions(createAutomaton());
+		}
 		return automaton;
 	}
 	
@@ -41,7 +43,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 			if(condition.getType() == ConditionType.NOT_MATCH && condition instanceof RegularExpressionCondition) {
 				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
 				RegularExpression regex = regexCondition.getRegularExpression();
-				result = AutomatonOperations.difference(result, regex.toAutomaton());
+				result = AutomatonOperations.difference(result, regex.getAutomaton());
 			}			
 		}
 

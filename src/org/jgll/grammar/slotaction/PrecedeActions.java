@@ -10,7 +10,7 @@ public class PrecedeActions {
 
 	public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
 		
-		final RunnableAutomaton r = regex.toAutomaton().reverse().getRunnableAutomaton();
+		final RunnableAutomaton r = regex.getAutomaton().reverse().getRunnableAutomaton();
 
 		return new SlotAction<Boolean>() {
 			

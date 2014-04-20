@@ -57,7 +57,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	protected Automaton createAutomaton() {
 		List<Automaton> automatons = new ArrayList<>();
 		for(int i = 0; i < regularExpressions.size(); i++) {
-			automatons.add(regularExpressions.get(i).toAutomaton());
+			automatons.add(regularExpressions.get(i).getAutomaton());
 		}
 				
 		Automaton result = automatons.get(0);

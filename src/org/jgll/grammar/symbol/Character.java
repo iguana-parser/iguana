@@ -66,6 +66,7 @@ public class Character extends AbstractRegularExpression {
 		}
 	}
 	
+	@Override
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(true).addRegularExpression(this);

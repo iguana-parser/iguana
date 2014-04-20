@@ -14,7 +14,7 @@ public class PlusTest {
 	@Test
 	public void test1() {
 		RegularExpression regexp = new RegexPlus(new Character('a'));
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 
 		assertEquals(6, nfa.getCountStates());
 		
@@ -35,7 +35,7 @@ public class PlusTest {
 	public void test2() {
 		RegularExpression regexp = new RegexPlus(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		
-		Automaton nfa = regexp.toAutomaton();
+		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		

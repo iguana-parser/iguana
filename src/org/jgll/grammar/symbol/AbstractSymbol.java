@@ -41,6 +41,7 @@ public abstract class AbstractSymbol implements Symbol {
 	@Override
 	public Symbol withCondition(Condition condition) {
 		Set<Condition> conditions = new HashSet<>();
+		conditions.add(condition);
 		return withConditions(conditions);
 	}
 	

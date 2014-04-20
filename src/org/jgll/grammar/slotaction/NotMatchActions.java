@@ -49,7 +49,7 @@ public class NotMatchActions {
 	  
 		public static SlotAction<Boolean> fromRegularExpression(final RegularExpression regex, final Condition condition) {
 			
-			final RunnableAutomaton r = regex.toAutomaton().getRunnableAutomaton();
+			final RunnableAutomaton r = regex.getAutomaton().getRunnableAutomaton();
 			
 			return	new SlotAction<Boolean>() {
 					

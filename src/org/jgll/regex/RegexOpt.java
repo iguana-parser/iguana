@@ -34,7 +34,7 @@ public class RegexOpt extends AbstractRegularExpression {
 		
 		State finalState = new State(true);
 
-		Automaton automaton = regexp.toAutomaton();
+		Automaton automaton = regexp.getAutomaton();
 		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		
 		Set<State> finalStates = automaton.getFinalStates();
@@ -60,7 +60,7 @@ public class RegexOpt extends AbstractRegularExpression {
 
 	@Override
 	public RegularExpression withConditions(Set<Condition> conditions) {
-		return new RegexOpt(this, conditions);
+		return new RegexOpt(regexp, conditions);
 	}
 	
 }
