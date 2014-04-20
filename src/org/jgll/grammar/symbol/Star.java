@@ -27,6 +27,7 @@ public class Star extends AbstractSymbol {
 
 	@Override
 	public Star withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new Star(s, conditions);
 	}
 	

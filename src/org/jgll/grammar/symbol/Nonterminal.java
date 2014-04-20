@@ -88,6 +88,7 @@ public class Nonterminal extends AbstractSymbol {
 
 	@Override
 	public Nonterminal withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new Nonterminal(name, index, ebnfList, conditions);
 	}
 	

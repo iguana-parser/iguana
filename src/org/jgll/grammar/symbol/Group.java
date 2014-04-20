@@ -28,5 +28,11 @@ public class Group extends Nonterminal {
 	public List<? extends Symbol> getSymbols() {
 		return symbols;
 	}
-
+	
+	@Override
+	public Nonterminal withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
+		return new Group(symbols, conditions);
+	}
+	
 }

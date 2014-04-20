@@ -27,6 +27,7 @@ public class Plus extends AbstractSymbol {
 
 	@Override
 	public Plus withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new Plus(s, conditions);
 	}
 	

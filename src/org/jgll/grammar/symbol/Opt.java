@@ -26,6 +26,7 @@ public class Opt extends AbstractSymbol {
 
 	@Override
 	public Opt withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new Opt(s, conditions);
 	}
 }
