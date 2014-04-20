@@ -16,11 +16,11 @@ public interface RegularExpression extends Serializable, Symbol {
 	
 	public Set<Range> getFirstSet();
 	
-	@Override
 	/**
 	 * Creates a new instance of this regular expression object with
 	 * the given conditions.
 	 */
+	@Override
 	public RegularExpression withConditions(Set<Condition> conditions);
 	
 	@Override

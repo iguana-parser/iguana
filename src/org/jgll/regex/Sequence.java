@@ -55,9 +55,11 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	protected Automaton createAutomaton() {
+		
 		List<Automaton> automatons = new ArrayList<>();
+		
 		for(int i = 0; i < regularExpressions.size(); i++) {
-			automatons.add(regularExpressions.get(i).getAutomaton());
+			automatons.add(regularExpressions.get(i).getAutomaton().copy());
 		}
 				
 		Automaton result = automatons.get(0);
@@ -140,6 +142,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public Sequence<T> withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new Sequence<>(regularExpressions, conditions);
 	}
 	

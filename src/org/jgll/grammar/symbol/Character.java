@@ -101,6 +101,7 @@ public class Character extends AbstractRegularExpression {
 
 	@Override
 	public Character withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new Character(c, conditions);
 	}
 

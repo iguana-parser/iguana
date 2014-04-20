@@ -46,6 +46,7 @@ public class RegexPlus extends AbstractRegularExpression {
 
 	@Override
 	public RegexPlus withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new RegexPlus(plus, conditions);
 	}
 

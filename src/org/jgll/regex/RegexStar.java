@@ -43,7 +43,7 @@ public class RegexStar extends AbstractRegularExpression {
 		State finalState = new State(true);
 		finalState.addAction(getPostActions(conditions));
 		
-		Automaton automaton = regexp.getAutomaton();
+		Automaton automaton = regexp.getAutomaton().copy();
 		
 		if (!conditions.isEmpty()) {
 			automaton.determinize();
@@ -76,6 +76,7 @@ public class RegexStar extends AbstractRegularExpression {
 
 	@Override
 	public RegexStar withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new RegexStar(regexp, conditions);
 	}
 	

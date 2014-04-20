@@ -53,7 +53,7 @@ public class ExamplesTest {
 	public void testJavaUnicodeEscape() {
 		Automaton nfa = RegularExpressionExamples.getJavaUnicodeEscape().getAutomaton();
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
-		assertTrue(dfa.match(Input.fromString("\\u0123")));		
+		assertTrue(dfa.match(Input.fromString("\\u0123")));
 	}
 	
 	@Test

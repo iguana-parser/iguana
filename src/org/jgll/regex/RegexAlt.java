@@ -70,7 +70,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 		List<Automaton> automatons = new ArrayList<>();
 		for (RegularExpression regexp : regularExpressions) {
-			automatons.add(regexp.getAutomaton());
+			automatons.add(regexp.getAutomaton().copy());
 		}
 		
 		State startState = new State();
@@ -145,6 +145,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public RegexAlt<T> withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new RegexAlt<>(regularExpressions, conditions);
 	}
 	

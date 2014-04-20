@@ -92,6 +92,7 @@ public class Keyword extends AbstractRegularExpression {
 
 	@Override
 	public Keyword withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new Keyword(name, seq, conditions);
 	}
 	

@@ -117,6 +117,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 
 	@Override
 	public Range withConditions(Set<Condition> conditions) {
+		conditions.addAll(this.conditions);
 		return new Range(start, end, conditions);
 	}
 	
