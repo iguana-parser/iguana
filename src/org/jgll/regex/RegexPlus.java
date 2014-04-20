@@ -9,6 +9,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.util.CollectionsUtil;
 
 
 public class RegexPlus extends AbstractRegularExpression {
@@ -22,7 +23,7 @@ public class RegexPlus extends AbstractRegularExpression {
 		List<RegularExpression> list = new ArrayList<>();
 		list.add(new RegexStar(regexp));
 		list.add(regexp);
-		this.plus = new Sequence<>(list, conditions);
+		this.plus = new Sequence<>(list, getNotFollowConditions());
 	}
 	
 	public RegexPlus(RegularExpression regexp) {
@@ -46,8 +47,7 @@ public class RegexPlus extends AbstractRegularExpression {
 
 	@Override
 	public RegexPlus withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new RegexPlus(plus, conditions);
+		return new RegexPlus(plus, CollectionsUtil.union(conditions, this.conditions));
 	}
 
 }

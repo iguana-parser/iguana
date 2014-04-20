@@ -11,6 +11,7 @@ import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.CollectionsUtil;
 
 
 public class RegexStar extends AbstractRegularExpression {
@@ -36,7 +37,6 @@ public class RegexStar extends AbstractRegularExpression {
 		 * internal transitions to execute actions. We should execute the actions
 		 * only when one loop has been done.
 		 */
-		
 		State startState = new State();
 		startState.addAction(getPostActions(conditions));
 		
@@ -76,8 +76,7 @@ public class RegexStar extends AbstractRegularExpression {
 
 	@Override
 	public RegexStar withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new RegexStar(regexp, conditions);
+		return new RegexStar(regexp, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }

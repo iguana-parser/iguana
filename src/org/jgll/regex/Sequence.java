@@ -35,7 +35,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			list.add(regularExpressions.get(i));
 		}
 		// Add the conditions to the last element
-		list.add((T) regularExpressions.get(i).withConditions(conditions));
+		list.add((T) regularExpressions.get(i).withConditions(getNotFollowConditions()));
 		
 		this.regularExpressions = list;
 	}
@@ -142,8 +142,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public Sequence<T> withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Sequence<>(regularExpressions, conditions);
+		return new Sequence<>(regularExpressions, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }

@@ -12,6 +12,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.CollectionsUtil;
 /**
  * 
  * @author Ali Afroozeh
@@ -101,8 +102,7 @@ public class Character extends AbstractRegularExpression {
 
 	@Override
 	public Character withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Character(c, conditions);
+		return new Character(c, CollectionsUtil.union(conditions, this.conditions));
 	}
 
 }

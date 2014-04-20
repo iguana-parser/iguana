@@ -11,6 +11,7 @@ import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.CollectionsUtil;
 
 
 public class RegexOpt extends AbstractRegularExpression {
@@ -25,7 +26,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	public RegexOpt(RegularExpression regexp, Set<Condition> conditions) {
 		super(regexp.getName() + "?", conditions);
-		this.regexp = regexp.withConditions(conditions);
+		this.regexp = regexp.withConditions(getNotFollowConditions());
 	}
 	
 	protected Automaton createAutomaton() {
@@ -60,8 +61,7 @@ public class RegexOpt extends AbstractRegularExpression {
 
 	@Override
 	public RegularExpression withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new RegexOpt(regexp, conditions);
+		return new RegexOpt(regexp, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }

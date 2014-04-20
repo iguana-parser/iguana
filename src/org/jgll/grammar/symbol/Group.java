@@ -31,8 +31,7 @@ public class Group extends Nonterminal {
 	
 	@Override
 	public Nonterminal withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Group(symbols, conditions);
+		return new Group(symbols, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }

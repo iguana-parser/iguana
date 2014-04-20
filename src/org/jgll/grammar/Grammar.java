@@ -21,7 +21,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.RunnableAutomaton;
-import org.jgll.regex.automaton.RunnableState;
 import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 

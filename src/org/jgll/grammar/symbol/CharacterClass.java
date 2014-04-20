@@ -9,6 +9,7 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.util.CollectionsUtil;
 
 /**
  * Character class represents a set of {@link Range} instances.
@@ -122,8 +123,7 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	public CharacterClass withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new CharacterClass(alt, conditions);
+		return new CharacterClass(alt, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }

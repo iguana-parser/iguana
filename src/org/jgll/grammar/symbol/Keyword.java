@@ -8,6 +8,7 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.util.CollectionsUtil;
 import org.jgll.util.Input;
 
 public class Keyword extends AbstractRegularExpression {
@@ -92,8 +93,7 @@ public class Keyword extends AbstractRegularExpression {
 
 	@Override
 	public Keyword withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Keyword(name, seq, conditions);
+		return new Keyword(name, seq, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 	@Override

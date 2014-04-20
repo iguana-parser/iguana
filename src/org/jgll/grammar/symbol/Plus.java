@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.CollectionsUtil;
 
 
 public class Plus extends AbstractSymbol {
@@ -27,8 +28,7 @@ public class Plus extends AbstractSymbol {
 
 	@Override
 	public Plus withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Plus(s, conditions);
+		return new Plus(s, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }

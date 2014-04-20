@@ -40,6 +40,13 @@ public class CollectionsUtil {
 	@SafeVarargs
 	public static <T> List<T> list(T...objects){
 		return Arrays.asList(objects);
-	}	
+	}
+	
+	public static <T> Set<T> union(Set<T> set1, Set<T> set2) {
+		Set<T> set = new HashSet<>();
+		set.addAll(set1);
+		set.addAll(set2);
+		return set;
+	}
 
 }

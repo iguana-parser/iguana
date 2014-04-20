@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
+import org.jgll.util.CollectionsUtil;
 
 
 public class Nonterminal extends AbstractSymbol {
@@ -88,8 +89,7 @@ public class Nonterminal extends AbstractSymbol {
 
 	@Override
 	public Nonterminal withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Nonterminal(name, index, ebnfList, conditions);
+		return new Nonterminal(name, index, ebnfList, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }

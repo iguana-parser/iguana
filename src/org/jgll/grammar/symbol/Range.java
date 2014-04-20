@@ -13,6 +13,7 @@ import org.jgll.parser.HashFunctions;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.CollectionsUtil;
 
 
 /**
@@ -117,8 +118,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 
 	@Override
 	public Range withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Range(start, end, conditions);
+		return new Range(start, end, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }

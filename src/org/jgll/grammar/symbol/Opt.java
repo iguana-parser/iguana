@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.CollectionsUtil;
 
 public class Opt extends AbstractSymbol {
 
@@ -26,7 +27,6 @@ public class Opt extends AbstractSymbol {
 
 	@Override
 	public Opt withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Opt(s, conditions);
+		return new Opt(s, CollectionsUtil.union(conditions, this.conditions));
 	}
 }

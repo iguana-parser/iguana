@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.CollectionsUtil;
 
 
 public class Star extends AbstractSymbol {
@@ -27,8 +28,7 @@ public class Star extends AbstractSymbol {
 
 	@Override
 	public Star withConditions(Set<Condition> conditions) {
-		conditions.addAll(this.conditions);
-		return new Star(s, conditions);
+		return new Star(s, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
 }
