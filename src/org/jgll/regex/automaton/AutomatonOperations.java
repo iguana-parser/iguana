@@ -142,12 +142,12 @@ public class AutomatonOperations {
 			if (sortedTransitions.length > 0) {
 				Transitions transitions;
 				
-				if (sortedTransitions[sortedTransitions.length - 1].getEnd() - sortedTransitions[0].getStart() <= Character.MAX_VALUE) {
+//				if (sortedTransitions[sortedTransitions.length - 1].getEnd() - sortedTransitions[0].getStart() <= Character.MAX_VALUE) {
 					transitions = new ShortIntervalTransitions(sortedTransitions, transitionsMap);
-				} else {
-					transitions = new LargeIntervalTransitions(sortedTransitions, transitionsMap);
-				}
-				
+//				} else {
+//					transitions = new LargeIntervalTransitions(sortedTransitions, transitionsMap);
+//				}
+//				
 				e.getValue().setTransitions(transitions);				
 			}
 			
@@ -193,6 +193,7 @@ public class AutomatonOperations {
 	private static Set<MoveResult> move(Set<State> states, Map<Tuple<State, Integer>, Set<State>> cache) {
 		
 		Map<Integer, Set<Action>> transitionActions = new HashMap<>();
+		
 		int[] intervals = getIntervalsOfStates(states, transitionActions);
 		
 		Set<MoveResult> resultSet = new HashSet<>();

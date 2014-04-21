@@ -6,6 +6,7 @@ import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Test;
 
 
@@ -72,6 +73,18 @@ public class ExamplesTest {
 		assertFalse(matcher.match(Input.fromString("\\aa")));
 		assertFalse(matcher.match(Input.fromString("\"aaa")));
 	}
+	
+	@Test
+	public void testMultilineComment() {
+		Automaton a = RegularExpressionExamples.getMultilineComment().getAutomaton();
+		
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a.determinize().getStartState());
+		
+		RunnableAutomaton matcher = a.getRunnableAutomaton();
+		
+		assertTrue(matcher.match(Input.fromString("/*a*/")));
+	}
+	
 	
 	// TODO: fix it
 //	@Test

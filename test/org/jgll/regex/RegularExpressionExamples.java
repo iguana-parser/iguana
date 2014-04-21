@@ -3,6 +3,7 @@ package org.jgll.regex;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Keyword;
@@ -69,6 +70,20 @@ public class RegularExpressionExamples {
 		Keyword newline = new Keyword("\\n");
 
 		return new RegexAlt<>(new RegexPlus(c.not()), newline);
+	}
+	
+	// "/*" (![*] | [*] !>> [/])* "*/"
+	public static RegularExpression getMultilineComment() {
+		
+		Keyword r1 = new Keyword("/*");
+		Character star = new Character('*');
+		Character slash = new Character('/');
+
+		RegularExpression r2 = new RegexStar(new RegexAlt<>(star.not(), star.withCondition(RegularExpressionCondition.notFollow(slash))));
+		
+		Keyword r3 = new Keyword("*/");
+		
+		return new Sequence<>(r1, r2, r3);
 	}
 	 
 }
