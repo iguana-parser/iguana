@@ -79,11 +79,11 @@ public class RegularExpressionExamples {
 		Character star = new Character('*');
 		Character slash = new Character('/');
 
-		RegularExpression r2 = new RegexStar(new RegexAlt<>(star.not(), star.withCondition(RegularExpressionCondition.notFollow(slash))));
+		RegularExpression r2 = new RegexStar(new RegexAlt<>(new Sequence<>(star, slash)));
 		
 		Keyword r3 = new Keyword("*/");
 		
-		return new Sequence<>(r1, r2, r3);
+		return new Sequence<>(r2, r3);
 	}
 	 
 }

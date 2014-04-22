@@ -9,6 +9,8 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
+import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.Transition;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
@@ -44,7 +46,25 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
 				RegularExpression regex = regexCondition.getRegularExpression();
 				result = AutomatonOperations.difference(result, regex.getAutomaton());
-			}			
+			} 
+			else if (condition.getType() == ConditionType.NOT_FOLLOW && condition instanceof RegularExpressionCondition) {
+				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
+				RegularExpression regex = regexCondition.getRegularExpression();
+				
+				Automaton automaton = regex.getAutomaton().copy();
+
+				for (State state : result.getFinalStates()) {
+					automaton.getStartState().setAntiAcceptState(true);
+					state.addTransition(Transition.epsilonTransition(automaton.getStartState()));
+				}
+				
+				for (State state : automaton.getFinalStates()) {
+					state.setAntiAcceptState(true);
+					state.setFinalState(false);
+				}
+				
+				result = new Automaton(result.getStartState());
+			}
 		}
 
 		return result;

@@ -23,7 +23,7 @@ public class RegexPlus extends AbstractRegularExpression {
 		List<RegularExpression> list = new ArrayList<>();
 		list.add(new RegexStar(regexp));
 		list.add(regexp);
-		this.plus = new Sequence<>(list, getNotFollowConditions());
+		this.plus = new Sequence<>(list);
 	}
 	
 	public RegexPlus(RegularExpression regexp) {

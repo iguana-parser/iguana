@@ -2,6 +2,8 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.condition.RegularExpressionCondition;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
@@ -78,12 +80,26 @@ public class ExamplesTest {
 	public void testMultilineComment() {
 		Automaton a = RegularExpressionExamples.getMultilineComment().getAutomaton();
 		
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a.determinize().getStartState());
+		RunnableAutomaton matcher = a.getRunnableAutomaton();
+		
+		assertTrue(matcher.match(Input.fromString("/*a*/")));
+	}
+	
+	@Test
+	public void test() {
+		RegularExpression r = new RegexPlus(new RegexAlt<>(new Character('b'), new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b')))));
+		r = new Sequence<>(r, new Keyword("ba"));
+		System.out.println(r);
+//		RegularExpression r = new RegexPlus(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character('a')));
+		Automaton a = r.getAutomaton(); //RegularExpressionExamples.getMultilineComment().getAutomaton();
+		
+		Visualization.generateAutomatonGraph("/Users/ali/output", a.determinize().getStartState());
 		
 		RunnableAutomaton matcher = a.getRunnableAutomaton();
 		
 		assertTrue(matcher.match(Input.fromString("/*a*/")));
 	}
+
 	
 	
 	// TODO: fix it

@@ -38,6 +38,8 @@ public class State implements Serializable {
 	
 	private boolean rejectState;
 	
+	private boolean antiAcceptState;
+	
 	private int id;
 	
 	private Set<Action> actions;
@@ -99,6 +101,14 @@ public class State implements Serializable {
 	
 	public void setRejectState(boolean rejectState) {
 		this.rejectState = rejectState;
+	}
+	
+	public boolean isAntiAcceptState() {
+		return antiAcceptState;
+	}
+	
+	public void setAntiAcceptState(boolean antiAcceptState) {
+		this.antiAcceptState = antiAcceptState;
 	}
 	
 	public void setFinalState(boolean finalState) {

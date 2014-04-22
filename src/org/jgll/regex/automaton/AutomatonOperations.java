@@ -102,6 +102,19 @@ public class AutomatonOperations {
 			}			
 		}
 		
+		outer:
+		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+			for(State s : e.getKey()) {
+				if(s.isAntiAcceptState()) {
+					State state = e.getValue();
+					state.setAntiAcceptState(true);
+					state.setFinalState(false);
+					continue outer;					
+				}
+			}
+		}
+
+		
 		return new Automaton(startState, automaton.getName());
 	}
 
@@ -1001,6 +1014,9 @@ public class AutomatonOperations {
 				}
 				if(state.isRejectState()) {
 					newState.setRejectState(true);
+				}
+				if (state.isAntiAcceptState()) {
+					newState.setAntiAcceptState(true);
 				}
 				if(state == automaton.getStartState()) {
 					startState[0] = newState;
