@@ -80,8 +80,8 @@ public class AutomatonOperations {
 		outer:
 		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
 			for(State s : e.getKey()) {
-				if(s.isFinalState()) {
-					e.getValue().setFinalState(true);
+				if(s.getStateType() == StateType.FINAL) {
+					e.getValue().setStateType(StateType.FINAL);
 					continue outer;
 				}
 			}			
@@ -92,27 +92,33 @@ public class AutomatonOperations {
 		outer:
 		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
 			for(State s : e.getKey()) {
-				if(s.isRejectState()) {
+				if(s.getStateType() == StateType.REJECT) {
 					State state = e.getValue();
-					if(!state.isFinalState()) {
-						state.setRejectState(true);
+					if(state.getStateType() != StateType.FINAL) {
+						state.setStateType(StateType.REJECT);
 					}
 					continue outer;					
 				}
 			}			
 		}
 		
-		outer:
-		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-			for(State s : e.getKey()) {
-				if(s.isAntiAcceptState()) {
-					State state = e.getValue();
-					state.setAntiAcceptState(true);
-					state.setFinalState(false);
-					continue outer;					
-				}
-			}
-		}
+//		outer:
+//		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+//			for (State s : e.getKey()) {
+//				if (s.isLookaheadRejectState()) {
+//					State state = e.getValue();
+//					state.setLookaheadRejectState(true);
+//					state.setFinalState(false);
+//					continue outer;					
+//				} 
+//				else if (s.isLookaheadAcceptState()) {
+//					State state = e.getValue();
+//					state.setLookaheadAcceptState(true);
+//					state.setFinalState(false);
+//					continue outer;										
+//				}
+//			}
+//		}
 
 		
 		return new Automaton(startState, automaton.getName());
@@ -131,9 +137,9 @@ public class AutomatonOperations {
 		// Create a new runnable state for each state
 		for (State state : a.getAllStates()) {
 			if (state.getCountTransitions() > 0) {
-				map.put(state, new RunnableState(state.getId(), state.isFinalState(), state.isRejectState(), state.getActions()));
+				map.put(state, new RunnableState(state.getId(), state.getStateType(), state.getActions()));
 			} else {
-				map.put(state, new FinalRunnableState(state.getId(), state.isFinalState(), state.isRejectState()));
+				map.put(state, new FinalRunnableState(state.getId(), state.getStateType()));
 			}
 		}
 		
@@ -163,7 +169,6 @@ public class AutomatonOperations {
 //				
 				e.getValue().setTransitions(transitions);				
 			}
-			
 		}
 		
 		return new RunnableAutomaton(map.get(a.getStartState()));
@@ -401,7 +406,7 @@ public class AutomatonOperations {
 					startState = newState;
 				}
 				if(state.isFinalState()) {
-					newState.setFinalState(true);
+					newState.setStateType(StateType.FINAL);
 				}
 				newStates.put(state, newState);
 			}
@@ -711,7 +716,7 @@ public class AutomatonOperations {
 			
 			@Override
 			public void visit(State state) {
-				if(state.isRejectState()) {
+				if(state.getStateType() == StateType.REJECT) {
 					rejectStates.add(state);
 				}
 			} 
@@ -743,7 +748,7 @@ public class AutomatonOperations {
 			public void visit(State state) {
 				State newState;
 				if(state.isFinalState()) {
-					newState = new State(true);
+					newState = new State(StateType.FINAL);
 				} else {
 					newState = new State();					
 				}
@@ -819,7 +824,7 @@ public class AutomatonOperations {
 		});
 		
 		// 2. making the start state final
-		newStates.get(automaton.getStartState()).setFinalState(true);
+		newStates.get(automaton.getStartState()).setStateType(StateType.FINAL);
 		 
 		return new Automaton(startState, automaton.getName());
 	}
@@ -834,7 +839,7 @@ public class AutomatonOperations {
 	public static Automaton union(Iterable<Automaton> automatons) {
 		
 		State startState = new State();
-		State finalState = new State(true);
+		State finalState = new State(StateType.FINAL);
 		
 		for(Automaton automaton : automatons) {
 			automaton = automaton.copy();
@@ -842,7 +847,7 @@ public class AutomatonOperations {
 			
 			Set<State> finalStates = automaton.getFinalStates();
 			for(State s : finalStates) {
-				s.setFinalState(false);
+				s.setStateType(StateType.FINAL);
 				s.addTransition(Transition.epsilonTransition(finalState));				
 			}
 		}
@@ -874,7 +879,7 @@ public class AutomatonOperations {
 			State state2 = a2.getState(j);
 			
 			if(state1.isFinalState() && state2.isFinalState()) {
-				state.setFinalState(true);
+				state.setStateType(StateType.FINAL);
 			}
 			
 			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
@@ -915,15 +920,22 @@ public class AutomatonOperations {
 			State state2 = a2.getState(j);
 			
 			
-			if(state1.isRejectState() || state2.isRejectState()) {
-				state.setRejectState(true);
+			if(state1.getStateType() == StateType.REJECT || state2.getStateType() == StateType.REJECT) {
+				state.setStateType(StateType.REJECT);
 			}
 			else if (state1.isFinalState() && !state2.isFinalState()) {
-				state.setFinalState(true);
+				state.setStateType(StateType.FINAL);
 			}
+			else if (state1.getStateType() == StateType.LOOKAHEAD_REJECT || state2.getStateType() == StateType.LOOKAHEAD_REJECT) {
+				state.setStateType(StateType.LOOKAHEAD_REJECT);
+			}
+			else if (state1.getStateType() == StateType.LOOKAHEAD_ACCEPT || state2.getStateType() == StateType.LOOKAHEAD_ACCEPT) {
+				state.setStateType(StateType.LOOKAHEAD_ACCEPT);
+			}
+			//TODO: put a comment to document these conditions
 			else if (state1.isFinalState() && state2.isFinalState()) {
-				state.setRejectState(true);
-			}
+				state.setStateType(StateType.REJECT);
+			} 
 			
 			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
 				startState = state;
@@ -1009,15 +1021,8 @@ public class AutomatonOperations {
 				newState.addRegularExpressions(state.getRegularExpressions());
 				
 				newStates.put(state, newState);
-				if(state.isFinalState()) {
-					newState.setFinalState(true);
-				}
-				if(state.isRejectState()) {
-					newState.setRejectState(true);
-				}
-				if (state.isAntiAcceptState()) {
-					newState.setAntiAcceptState(true);
-				}
+				newState.setStateType(state.getStateType());
+				
 				if(state == automaton.getStartState()) {
 					startState[0] = newState;
 				}
@@ -1060,6 +1065,42 @@ public class AutomatonOperations {
 		return new Automaton(startState, CollectionsUtil.listToString(automatons, " | "));
 	}
 	
+	public static Automaton concat(Automaton a1, Automaton a2) {
+
+		a1 = a1.copy();
+		a2 = a2.copy();
+		
+		State startState = a1.getStartState();
+		
+		for (State state : a1.getFinalStates()) {
+			state.addTransition(Transition.epsilonTransition(a2.getStartState()));
+		}
+		
+		for (State state : a2.getFinalStates()) {
+			state.setStateType(StateType.LOOKAHEAD_ACCEPT);
+		}
+		
+		return new Automaton(startState);
+	}
+	
+	public static Automaton concatCondition(Automaton a1, Automaton a2) {
+		
+		a1 = a1.copy();
+		a2 = a2.copy();
+		
+		State startState = a1.getStartState();
+		
+		for (State state : a1.getFinalStates()) {
+			state.addTransition(Transition.epsilonTransition(a2.getStartState()));
+			state.setStateType(StateType.NORMAL);
+		}
+		
+		for (State state : a2.getFinalStates()) {
+			state.setStateType(StateType.REJECT);
+		}
+		
+		return new Automaton(startState).determinize();		
+	}	
 	
 	/**
 	 * Returns true if there is a sentence accepted by the automaton a1 which is is a prefix of
@@ -1081,7 +1122,7 @@ public class AutomatonOperations {
 			
 			@Override
 			public void visit(State state) {
-				state.setFinalState(true);
+				state.setStateType(StateType.FINAL);
 			}
 		});
 		

@@ -22,7 +22,7 @@ public class MergeTransitionsTest {
 	
 	private Automaton getAutomaton() {
 		State state1 = new State();
-		State state2 = new State(true);
+		State state2 = new State(StateType.FINAL);
 		state1.addTransition(new Transition(48, 57, state2));
 		return new Automaton(state1);
 	}

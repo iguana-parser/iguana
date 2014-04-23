@@ -79,7 +79,7 @@ public class RegularExpressionExamples {
 		Character star = new Character('*');
 		Character slash = new Character('/');
 
-		RegularExpression r2 = new RegexStar(new RegexAlt<>(new Sequence<>(star, slash)));
+		RegularExpression r2 = new RegexStar(new Sequence<>(star, slash));
 		
 		Keyword r3 = new Keyword("*/");
 		

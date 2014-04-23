@@ -186,7 +186,7 @@ public class Automaton implements Serializable {
 		 */
 		
 		// Covers the case of the automaton for the empty regular expression
-		if(startState.isFinalState()) {
+		if(startState.getStateType() == StateType.FINAL) {
 			if(startState.getCountTransitions() == 1 && 
 			   startState.getTransitions().iterator().next().isEpsilonTransition()) {
 				return true;

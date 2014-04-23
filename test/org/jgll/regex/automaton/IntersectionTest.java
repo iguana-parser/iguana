@@ -18,7 +18,7 @@ public class IntersectionTest {
 	public void test1() {
 		
 		State x0 = new State();
-		State x1 = new State(true);
+		State x1 = new State(StateType.FINAL);
 		
 		x0.addTransition(new Transition('0', x0));
 		x0.addTransition(new Transition('1', x1));
@@ -28,7 +28,7 @@ public class IntersectionTest {
 		// Matches an odd number of 1's.
 		Automaton a1 = new Automaton(x0, "a1");
 		
-		State y0 = new State(true);
+		State y0 = new State(StateType.FINAL);
 		State y1 = new State();
 		
 		y0.addTransition(new Transition('0', y1));

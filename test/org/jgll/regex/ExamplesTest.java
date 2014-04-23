@@ -87,17 +87,22 @@ public class ExamplesTest {
 	
 	@Test
 	public void test() {
-		RegularExpression r = new RegexPlus(new RegexAlt<>(new Character('b'), new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b')))));
-		r = new Sequence<>(r, new Keyword("ba"));
+//		RegularExpression r = new RegexPlus(new RegexAlt<>(new Character('b'), new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b')))));
+//		r = new Sequence<>(r, new Keyword("ba"));
+//		RegularExpression r = new RegexPlus(new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b'))));
+		
+		RegularExpression r = new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b')));
+		
 		System.out.println(r);
-//		RegularExpression r = new RegexPlus(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character('a')));
 		Automaton a = r.getAutomaton(); //RegularExpressionExamples.getMultilineComment().getAutomaton();
 		
 		Visualization.generateAutomatonGraph("/Users/ali/output", a.determinize().getStartState());
 		
 		RunnableAutomaton matcher = a.getRunnableAutomaton();
 		
-		assertTrue(matcher.match(Input.fromString("/*a*/")));
+		assertEquals(1, matcher.match(Input.fromString("a"), 0));
+		assertEquals(-1, matcher.match(Input.fromString("ab"), 0));
+		assertEquals(1, matcher.match(Input.fromString("ac"), 0));
 	}
 
 	

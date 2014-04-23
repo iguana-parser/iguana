@@ -15,7 +15,7 @@ public class RejectState extends RunnableState {
 	}
 	
 	private RejectState() {
-		super(-1, true, true);
+		super(-1, StateType.REJECT);
 	}
 	
 	@Override

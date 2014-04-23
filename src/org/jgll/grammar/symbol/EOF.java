@@ -7,6 +7,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 
 public class EOF extends AbstractRegularExpression {
@@ -32,7 +33,7 @@ public class EOF extends AbstractRegularExpression {
 	
 	protected Automaton createAutomaton() {
     	State startState = new State();
-    	State endState = new State(true).addRegularExpression(this);
+    	State endState = new State(StateType.FINAL).addRegularExpression(this);
     	startState.addTransition(new Transition(VALUE, endState));
         return new Automaton(startState, name);		
 	}

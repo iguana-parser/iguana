@@ -17,8 +17,8 @@ public class MinimizationTest {
 		State q2 = new State();
 		State q3 = new State();
 		State q4 = new State();
-		State q5 = new State(true);
-		State q6 = new State(true);
+		State q5 = new State(StateType.FINAL);
+		State q6 = new State(StateType.FINAL);
 		State q7 = new State();
 		
 		q0.addTransition(new Transition('0', q7));
@@ -57,7 +57,7 @@ public class MinimizationTest {
 		State state2 = new State();
 		State state3 = new State();
 		State state4 = new State();
-		State state5 = new State(true);
+		State state5 = new State(StateType.FINAL);
 		state5.addTransition(new Transition(49, 49, state5));
 		state5.addTransition(new Transition(48, 48, state5));
 		state4.addTransition(new Transition(49, 49, state5));
@@ -77,7 +77,7 @@ public class MinimizationTest {
 		State b = new State();
 		State c = new State();
 		State d = new State();
-		State e = new State(true);
+		State e = new State(StateType.FINAL);
 		
 		a.addTransition(new Transition('0', b));
 		a.addTransition(new Transition('1', c));
@@ -96,7 +96,7 @@ public class MinimizationTest {
 		State state1 = new State();
 		State state2 = new State();
 		State state3 = new State();
-		State state4 = new State(true);
+		State state4 = new State(StateType.FINAL);
 		state3.addTransition(new Transition(48, 49, state4));
 		state2.addTransition(new Transition(48, 49, state3));
 		state1.addTransition(new Transition(49, 49, state2));
@@ -107,11 +107,11 @@ public class MinimizationTest {
 	
 	@Test
 	public void test3() {
-		State a = new State(true);
+		State a = new State(StateType.FINAL);
 		State b = new State();
-		State c = new State(true);
+		State c = new State(StateType.FINAL);
 		State d = new State();
-		State e = new State(true);
+		State e = new State(StateType.FINAL);
 		
 		a.addTransition(new Transition('0', a));
 		a.addTransition(new Transition('1', b));
@@ -132,10 +132,10 @@ public class MinimizationTest {
 	}
 	
 	private Automaton getAutomaton3() {
-		State state1 = new State(true);
+		State state1 = new State(StateType.FINAL);
 		state1.addTransition(new Transition(48, 48, state1));
 		State state2 = new State();
-		State state3 = new State(true);
+		State state3 = new State(StateType.FINAL);
 		state3.addTransition(new Transition(48, 48, state3));
 		state3.addTransition(new Transition(49, 49, state3));
 		state2.addTransition(new Transition(48, 48, state3));
@@ -154,7 +154,7 @@ public class MinimizationTest {
 		State f = new State();
 		State g = new State();
 		State h = new State();
-		State i = new State(true);
+		State i = new State(StateType.FINAL);
 		
 		a.addTransition(new Transition('1', b));
 		a.addTransition(new Transition('2', c));
@@ -181,7 +181,7 @@ public class MinimizationTest {
 		State state2 = new State();
 		State state3 = new State();
 		State state4 = new State();
-		State state5 = new State(true);
+		State state5 = new State(StateType.FINAL);
 		state4.addTransition(new Transition(49, 51, state5));
 		state3.addTransition(new Transition(50, 50, state4));
 		State state6 = new State();

@@ -29,23 +29,31 @@ public class RunnableAutomaton implements Serializable {
 		
 		RunnableState currentState = state;
 		
+		loop:
 		while (true) {
 			
-			if (currentState.isFinalState()) {
-				if (currentState.executeActions(input, inputIndex)) {
+			switch (currentState.getStateType()) {
+				case REJECT:
 					maximumMatched = -1;
-				} else {
+					break loop;
+					
+				case LOOKAHEAD_ACCEPT:
+					maximumMatched = -1;
+					break loop;
+					
+				case LOOKAHEAD_REJECT:
+					 maximumMatched = -1;
+					 break loop;
+
+				case FINAL:
 					maximumMatched = length;
-				}
+					 
+				case NORMAL:
+					currentState = currentState.move(input, inputIndex++);
+					if (currentState == null) break loop;
+					length++;
+					break;
 			}
-			
-			if (currentState.isRejectState()) maximumMatched = -1;
-			
-			currentState = currentState.move(input, inputIndex++);
-			
-			if (currentState == null) break;
-			
-			length++;
 		}
 		
 		return maximumMatched;
@@ -59,9 +67,9 @@ public class RunnableAutomaton implements Serializable {
 		
 		while (true) {
 			
-			if (currentState.isFinalState()) maximumMatched = length;
-			
-			if (currentState.isRejectState()) maximumMatched = -1;
+//			if (currentState.isFinalState()) maximumMatched = length;
+//			
+//			if (currentState.isRejectState()) maximumMatched = -1;
 
 			currentState = currentState.move(input, index--);
 			

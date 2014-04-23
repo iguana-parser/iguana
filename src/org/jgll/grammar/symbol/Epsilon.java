@@ -6,6 +6,7 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.StateType;
 
 
 public class Epsilon extends AbstractRegularExpression {
@@ -30,7 +31,7 @@ public class Epsilon extends AbstractRegularExpression {
 
 	@Override
     protected Automaton createAutomaton() {
-    	State state = new State(true).addRegularExpression(this);
+    	State state = new State(StateType.FINAL).addRegularExpression(this);
         return new Automaton(state, name);
     }
 

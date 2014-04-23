@@ -10,23 +10,20 @@ public class RunnableState implements Cloneable {
 	
 	private Transitions transitions;
 	
-	private boolean finalState;
+	private final StateType stateType;
 	
-	private boolean rejectState;
-	
-	private Set<Action> actions;
+	private final Set<Action> actions;
 	
 	private final int id;
 	
-	public RunnableState(int id, boolean finalState, boolean rejectState, Set<Action> actions) {
-		this.finalState = finalState;
-		this.rejectState = rejectState;
+	public RunnableState(int id, StateType stateType, Set<Action> actions) {
+		this.stateType = stateType;
 		this.actions = actions;
 		this.id = id;
 	}
 	
-	public RunnableState(int id, boolean finalState, boolean rejectState) {
-		this(id, finalState, rejectState, Collections.<Action>emptySet());
+	public RunnableState(int id, StateType stateType) {
+		this(id, stateType, Collections.<Action>emptySet());
 	}
 		
 	public void setTransitions(Transitions transitions) {
@@ -41,17 +38,8 @@ public class RunnableState implements Cloneable {
 		return transitions.move(input, inputIndex);
 	}
 	
-	public boolean isFinalState() {
-		return finalState;
-	}
-	
-	public boolean isRejectState() {
-		return rejectState;
-	}
-	
-	
-	public void setRejectState(boolean rejectState) {
-		this.rejectState = rejectState;
+	public StateType getStateType() {
+		return stateType;
 	}
 	
 	public Set<Action> getActions() {

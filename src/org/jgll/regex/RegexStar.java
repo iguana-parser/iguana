@@ -10,6 +10,7 @@ import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 import org.jgll.util.CollectionsUtil;
 
@@ -40,7 +41,7 @@ public class RegexStar extends AbstractRegularExpression {
 		State startState = new State();
 		startState.addAction(getPostActions(conditions));
 		
-		State finalState = new State(true);
+		State finalState = new State(StateType.FINAL);
 		finalState.addAction(getPostActions(conditions));
 		
 		Automaton automaton = regexp.getAutomaton().copy();
@@ -54,7 +55,7 @@ public class RegexStar extends AbstractRegularExpression {
 		Set<State> finalStates = automaton.getFinalStates();
 		
 		for(State s : finalStates) {
-			s.setFinalState(false);
+			s.setStateType(StateType.NORMAL);
 			s.addTransition(Transition.epsilonTransition(finalState));
 			s.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		}

@@ -34,32 +34,28 @@ public class State implements Serializable {
 	 */
 	private Set<RegularExpression> regularExpressions;
 	
-	private boolean finalState;
-	
-	private boolean rejectState;
-	
-	private boolean antiAcceptState;
+	private StateType stateType = StateType.NORMAL;
 	
 	private int id;
 	
 	private Set<Action> actions;
 	
 	public State() {
-		this(false, new HashSet<Action>());
+		this(StateType.NORMAL, new HashSet<Action>());
 	}
 	
-	public State(boolean finalState) {
-		this(finalState, new HashSet<Action>());
+	public State(StateType stateType) {
+		this(stateType, new HashSet<Action>());
 	}
 	
 	public State(Set<Action> actions) {
-		this(false, actions);
+		this(StateType.NORMAL, actions);
 	}
 	
-	public State(boolean finalState, Set<Action> actions) {
+	public State(StateType stateType, Set<Action> actions) {
 		this.transitions = new HashSet<>();
 		this.transitionsMap = new HashMap<>();
-		this.finalState = finalState;
+		this.stateType = stateType;
 		this.epsilonClosure = new HashSet<>();
 		this.regularExpressions = new HashSet<>();
 		this.actions = actions;
@@ -91,28 +87,16 @@ public class State implements Serializable {
 		return set;
 	}
 	
+	public StateType getStateType() {
+		return stateType;
+	}
+	
 	public boolean isFinalState() {
-		return finalState;
+		return stateType == StateType.FINAL;
 	}
 	
-	public boolean isRejectState() {
-		return rejectState;
-	}
-	
-	public void setRejectState(boolean rejectState) {
-		this.rejectState = rejectState;
-	}
-	
-	public boolean isAntiAcceptState() {
-		return antiAcceptState;
-	}
-	
-	public void setAntiAcceptState(boolean antiAcceptState) {
-		this.antiAcceptState = antiAcceptState;
-	}
-	
-	public void setFinalState(boolean finalState) {
-		this.finalState = finalState;
+	public void setStateType(StateType stateType) {
+		this.stateType = stateType;
 	}
 	
 	public void addTransition(Transition transition) {
@@ -131,6 +115,7 @@ public class State implements Serializable {
 	public void removeTransitions(Collection<Transition> c) {
 		transitions.removeAll(c);
 	}
+	
 	
 	public void setId(int id) {
 		this.id = id;
