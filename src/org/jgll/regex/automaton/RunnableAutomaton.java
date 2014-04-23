@@ -36,20 +36,20 @@ public class RunnableAutomaton implements Serializable {
 				case REJECT:
 					maximumMatched = -1;
 					break loop;
-					
-				case LOOKAHEAD_ACCEPT:
-					maximumMatched = -1;
-					break loop;
-					
+										
 				case LOOKAHEAD_REJECT:
 					 maximumMatched = -1;
 					 break loop;
 
+				case LOOKAHEAD_ACCEPT:
+					length--;
+					break loop;
+					 
 				case FINAL:
 					maximumMatched = length;
-					 
+					
 				case NORMAL:
-					currentState = currentState.move(input, inputIndex++);
+					currentState = currentState.move(input, inputIndex + length);
 					if (currentState == null) break loop;
 					length++;
 					break;

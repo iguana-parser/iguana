@@ -102,24 +102,25 @@ public class AutomatonOperations {
 			}			
 		}
 		
-//		outer:
-//		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-//			for (State s : e.getKey()) {
-//				if (s.isLookaheadRejectState()) {
-//					State state = e.getValue();
-//					state.setLookaheadRejectState(true);
-//					state.setFinalState(false);
-//					continue outer;					
-//				} 
-//				else if (s.isLookaheadAcceptState()) {
-//					State state = e.getValue();
-//					state.setLookaheadAcceptState(true);
-//					state.setFinalState(false);
-//					continue outer;										
-//				}
-//			}
-//		}
+		outer:
+		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+			for (State s : e.getKey()) {
+				if (s.getStateType() == StateType.LOOKAHEAD_REJECT) {
+					State state = e.getValue();
+					state.setStateType(StateType.LOOKAHEAD_REJECT);
+					continue outer;					
+				} 
+			}
+		}
 
+
+		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+			for (State state : e.getKey()) {
+				if (state.getStateType() == StateType.LOOKAHEAD_ACCEPT) {
+					state.setStateType(StateType.LOOKAHEAD_ACCEPT);
+				}
+			}
+		}
 		
 		return new Automaton(startState, automaton.getName());
 	}
@@ -1096,7 +1097,7 @@ public class AutomatonOperations {
 		}
 		
 		for (State state : a2.getFinalStates()) {
-			state.setStateType(StateType.REJECT);
+			state.setStateType(StateType.LOOKAHEAD_REJECT);
 		}
 		
 		return new Automaton(startState).determinize();		

@@ -9,7 +9,7 @@ import org.jgll.regex.automaton.VisitAction;
 public class AutomatonToDot {
 	
 	private static final String NODE = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
-	private static final String REJECT_NODE = "[shape=squre, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
+	private static final String REJECT_NODE = "[shape=box, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	private static final String LOOKAHEAD_REJECT_NODE = "[shape=oval, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	private static final String LOOKAHEAD_ACCEPT_NODE = "[shape=diamond, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	private static final String FINAL_NODE = "[shape=doublecircle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
