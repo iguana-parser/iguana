@@ -3,7 +3,6 @@ package org.jgll.regex;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Keyword;

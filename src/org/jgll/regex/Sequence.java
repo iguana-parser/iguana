@@ -32,11 +32,9 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		List<T> list = new ArrayList<>();
 		
 		int i;
-		for (i = 0; i < regularExpressions.size() - 1; i++) {
-			list.add(regularExpressions.get(i));
+		for (i = 0; i < regularExpressions.size(); i++) {
+			list.add((T) regularExpressions.get(i).withoutConditions());
 		}
-		// Add the conditions to the last element
-		list.add((T) regularExpressions.get(i).withConditions(getNotFollowConditions()));
 		
 		this.regularExpressions = list;
 	}
@@ -144,6 +142,11 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	@Override
 	public Sequence<T> withConditions(Set<Condition> conditions) {
 		return new Sequence<>(regularExpressions, CollectionsUtil.union(conditions, this.conditions));
+	}
+	
+	@Override
+	public Sequence<T> withoutConditions() {
+		return new Sequence<>(regularExpressions);
 	}
 	
 }

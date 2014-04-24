@@ -29,4 +29,9 @@ public class Opt extends AbstractSymbol {
 	public Opt withConditions(Set<Condition> conditions) {
 		return new Opt(s, CollectionsUtil.union(conditions, this.conditions));
 	}
+	
+	@Override
+	public Symbol withoutConditions() {
+		return new Opt(s);
+	}
 }

@@ -1,7 +1,5 @@
 package org.jgll.regex;
 
-import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
-
 import java.util.Collections;
 import java.util.Set;
 
@@ -23,7 +21,7 @@ public class RegexStar extends AbstractRegularExpression {
 	
 	public RegexStar(RegularExpression regexp, Set<Condition> conditions) {
 		super(regexp + "*", conditions);
-		this.regexp = regexp;
+		this.regexp = regexp.withoutConditions();
 	}
 	
 	public RegexStar(RegularExpression regexp) {
@@ -33,16 +31,9 @@ public class RegexStar extends AbstractRegularExpression {
 	@Override
 	protected Automaton createAutomaton() {
 		
-		/*
-		 * Kleene star is a different beast. We cannot simply decide on 
-		 * internal transitions to execute actions. We should execute the actions
-		 * only when one loop has been done.
-		 */
 		State startState = new State();
-		startState.addAction(getPostActions(conditions));
 		
 		State finalState = new State(StateType.FINAL);
-		finalState.addAction(getPostActions(conditions));
 		
 		Automaton automaton = regexp.getAutomaton().copy();
 		
@@ -78,6 +69,11 @@ public class RegexStar extends AbstractRegularExpression {
 	@Override
 	public RegexStar withConditions(Set<Condition> conditions) {
 		return new RegexStar(regexp, CollectionsUtil.union(conditions, this.conditions));
+	}
+	
+	@Override
+	public RegexStar withoutConditions() {
+		return new RegexStar(regexp);
 	}
 	
 }

@@ -31,4 +31,9 @@ public class Star extends AbstractSymbol {
 		return new Star(s, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
+	@Override
+	public Star withoutConditions() {
+		return new Star(s);
+	}
+	
 }

@@ -31,7 +31,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 		List<T> list = new ArrayList<>();
 		for (T regex : regularExpressions) {
-			list.add((T) regex.withConditions(getNotFollowConditions()));
+			list.add((T) regex.withoutConditions());
 		}
 		
 		this.regularExpressions = list;
@@ -147,6 +147,11 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	@Override
 	public RegexAlt<T> withConditions(Set<Condition> conditions) {
 		return new RegexAlt<>(regularExpressions, CollectionsUtil.union(conditions, this.conditions));
+	}
+
+	@Override
+	public RegexAlt<T> withoutConditions() {
+		return new RegexAlt<>(regularExpressions);
 	}
 	
 }

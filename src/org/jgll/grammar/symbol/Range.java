@@ -122,4 +122,9 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		return new Range(start, end, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
+	@Override
+	public Range withoutConditions() {
+		return new Range(start, end);
+	}
+	
 }

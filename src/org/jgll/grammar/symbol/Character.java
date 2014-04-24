@@ -1,7 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import static org.jgll.regex.automaton.TransitionActionsFactory.getPostActions;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -104,6 +102,11 @@ public class Character extends AbstractRegularExpression {
 	@Override
 	public Character withConditions(Set<Condition> conditions) {
 		return new Character(c, CollectionsUtil.union(conditions, this.conditions));
+	}
+	
+	@Override
+	public Character withoutConditions() {
+		return new Character(c);
 	}
 
 }

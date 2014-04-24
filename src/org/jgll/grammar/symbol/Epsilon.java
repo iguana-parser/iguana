@@ -52,4 +52,9 @@ public class Epsilon extends AbstractRegularExpression {
 		return this;
 	}
 	
+	@Override
+	public Epsilon withoutConditions() {
+		return this;
+	}
+	
 }

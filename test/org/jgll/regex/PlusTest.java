@@ -7,6 +7,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class PlusTest {
@@ -33,11 +34,15 @@ public class PlusTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regexp = new RegexPlus(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		
-		Automaton nfa = regexp.getAutomaton();
 		
-		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
+		RegularExpression regexp = new Sequence<>(new RegexPlus(new Character('a')), new Character(':'));
+		
+		Automaton automaton = regexp.getAutomaton();
+		
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", automaton.getStartState());
+		
+		RunnableAutomaton dfa = automaton.getRunnableAutomaton();
 		
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));
 		assertEquals(-1, dfa.match(Input.fromString("a:"), 0));

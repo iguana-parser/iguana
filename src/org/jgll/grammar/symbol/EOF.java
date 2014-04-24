@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -51,7 +50,12 @@ public class EOF extends AbstractRegularExpression {
 	}
 
 	@Override
-	public RegularExpression withConditions(Set<Condition> conditions) {
+	public EOF withConditions(Set<Condition> conditions) {
+		return this;
+	}
+
+	@Override
+	public EOF withoutConditions() {
 		return this;
 	}
 	

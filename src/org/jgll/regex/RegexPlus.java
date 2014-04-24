@@ -16,13 +16,16 @@ public class RegexPlus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
+	private final RegularExpression regex;
+	
 	private final RegularExpression plus;
 	
-	public RegexPlus(RegularExpression regexp, Set<Condition> conditions) {
-		super(regexp.getName() + "+", conditions);
+	public RegexPlus(RegularExpression regex, Set<Condition> conditions) {
+		super(regex.getName() + "+", conditions);
+		this.regex = regex;
 		List<RegularExpression> list = new ArrayList<>();
-		list.add(new RegexStar(regexp));
-		list.add(regexp);
+		list.add(new RegexStar(regex.withoutConditions()));
+		list.add(regex.withoutConditions());
 		this.plus = new Sequence<>(list);
 	}
 	
@@ -47,7 +50,12 @@ public class RegexPlus extends AbstractRegularExpression {
 
 	@Override
 	public RegexPlus withConditions(Set<Condition> conditions) {
-		return new RegexPlus(plus, CollectionsUtil.union(conditions, this.conditions));
+		return new RegexPlus(regex, CollectionsUtil.union(conditions, this.conditions));
+	}
+
+	@Override
+	public RegexPlus withoutConditions() {
+		return new RegexPlus(regex);
 	}
 
 }

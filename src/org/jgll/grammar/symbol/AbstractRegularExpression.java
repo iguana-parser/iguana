@@ -7,11 +7,8 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.Sequence;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.Transition;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
@@ -52,21 +49,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
 				RegularExpression regex = regexCondition.getRegularExpression();
 				
-				if (!(regex instanceof Character) && !(regex instanceof CharacterClass)) {
-					continue;
-				} 
-				
-				CharacterClass not;
-				if (regex instanceof Character) {
-					not = ((Character) regex).not();
-				} else {
-					not = ((CharacterClass) regex).not();
-				}
-
-				Automaton accept = AutomatonOperations.concat(a, not.getAutomaton());
-				Automaton reject = AutomatonOperations.concatCondition(a, regex.getAutomaton());
-								
-				result = AutomatonOperations.difference(accept, reject);
+				result = AutomatonOperations.addCondition(result, regex.getAutomaton());
 			}
 		}
 

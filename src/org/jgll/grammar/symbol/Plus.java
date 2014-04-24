@@ -31,4 +31,9 @@ public class Plus extends AbstractSymbol {
 		return new Plus(s, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
+	@Override
+	public Symbol withoutConditions() {
+		return new Plus(s);
+	}
+	
 }

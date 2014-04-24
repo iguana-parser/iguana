@@ -92,4 +92,9 @@ public class Nonterminal extends AbstractSymbol {
 		return new Nonterminal(name, index, ebnfList, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
+	@Override
+	public Nonterminal withoutConditions() {
+		return new Nonterminal(name, index, ebnfList);
+	}
+	
 }

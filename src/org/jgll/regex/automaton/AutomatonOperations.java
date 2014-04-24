@@ -848,7 +848,7 @@ public class AutomatonOperations {
 			
 			Set<State> finalStates = automaton.getFinalStates();
 			for(State s : finalStates) {
-				s.setStateType(StateType.FINAL);
+				s.setStateType(StateType.NORMAL);
 				s.addTransition(Transition.epsilonTransition(finalState));				
 			}
 		}
@@ -1066,41 +1066,23 @@ public class AutomatonOperations {
 		return new Automaton(startState, CollectionsUtil.listToString(automatons, " | "));
 	}
 	
-	public static Automaton concat(Automaton a1, Automaton a2) {
-
-		a1 = a1.copy();
-		a2 = a2.copy();
+	public static Automaton addCondition(Automaton main, Automaton condition) {
 		
-		State startState = a1.getStartState();
+		main = main.copy();
+		condition = condition.copy();
 		
-		for (State state : a1.getFinalStates()) {
-			state.addTransition(Transition.epsilonTransition(a2.getStartState()));
-		}
+		State startState = main.getStartState();
 		
-		for (State state : a2.getFinalStates()) {
-			state.setStateType(StateType.LOOKAHEAD_ACCEPT);
-		}
-		
-		return new Automaton(startState);
-	}
-	
-	public static Automaton concatCondition(Automaton a1, Automaton a2) {
-		
-		a1 = a1.copy();
-		a2 = a2.copy();
-		
-		State startState = a1.getStartState();
-		
-		for (State state : a1.getFinalStates()) {
-			state.addTransition(Transition.epsilonTransition(a2.getStartState()));
+		for (State state : main.getFinalStates()) {
+			state.addTransition(Transition.epsilonTransition(condition.getStartState()));
 			state.setStateType(StateType.NORMAL);
 		}
 		
-		for (State state : a2.getFinalStates()) {
+		for (State state : condition.getFinalStates()) {
 			state.setStateType(StateType.LOOKAHEAD_REJECT);
 		}
 		
-		return new Automaton(startState).determinize();		
+		return new Automaton(startState);		
 	}	
 	
 	/**

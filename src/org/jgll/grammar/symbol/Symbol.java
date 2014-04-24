@@ -31,4 +31,8 @@ public interface Symbol extends Serializable, Cloneable {
 	 */
 	public Symbol withCondition(Condition condition);
 	
+	/**
+	 * Creates a copy of this symbol without conditions 
+	 */
+	public Symbol withoutConditions();
 }	

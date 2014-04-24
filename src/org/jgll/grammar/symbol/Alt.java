@@ -37,4 +37,9 @@ public class Alt extends AbstractSymbol {
 		return new Alt(symbols, CollectionsUtil.union(conditions, this.conditions));
 	}
 	
+	@Override
+	public Symbol withoutConditions() {
+		return new Alt(symbols);
+	}
+	
 }

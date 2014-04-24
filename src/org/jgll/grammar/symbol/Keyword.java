@@ -101,4 +101,9 @@ public class Keyword extends AbstractRegularExpression {
 		return (Keyword) super.withCondition(condition);
 	}
 	
+	@Override
+	public Keyword withoutConditions() {
+		return new Keyword(name, seq);
+	}
+	
 }

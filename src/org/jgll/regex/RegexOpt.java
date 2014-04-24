@@ -27,7 +27,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	public RegexOpt(RegularExpression regexp, Set<Condition> conditions) {
 		super(regexp.getName() + "?", conditions);
-		this.regexp = regexp.withConditions(getNotFollowConditions());
+		this.regexp = regexp.withoutConditions();
 	}
 	
 	protected Automaton createAutomaton() {
@@ -63,6 +63,11 @@ public class RegexOpt extends AbstractRegularExpression {
 	@Override
 	public RegularExpression withConditions(Set<Condition> conditions) {
 		return new RegexOpt(regexp, CollectionsUtil.union(conditions, this.conditions));
+	}
+
+	@Override
+	public RegexOpt withoutConditions() {
+		return new RegexOpt(regexp);
 	}
 	
 }

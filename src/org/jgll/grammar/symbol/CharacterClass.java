@@ -38,6 +38,10 @@ public class CharacterClass extends AbstractRegularExpression {
 		this.alt = alt.withConditions(conditions);
 	}
 	
+	public CharacterClass(RegexAlt<Range> alt) {
+		this(alt, Collections.<Condition>emptySet());
+	}
+	
 	public CharacterClass(List<Range> ranges) {
 		this(ranges, Collections.<Condition>emptySet());
 	}
@@ -124,6 +128,11 @@ public class CharacterClass extends AbstractRegularExpression {
 	@Override
 	public CharacterClass withConditions(Set<Condition> conditions) {
 		return new CharacterClass(alt, CollectionsUtil.union(conditions, this.conditions));
+	}
+	
+	@Override
+	public CharacterClass withoutConditions() {
+		return new CharacterClass(alt);
 	}
 	
 }
