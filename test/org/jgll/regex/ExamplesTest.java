@@ -2,13 +2,10 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 
@@ -82,41 +79,6 @@ public class ExamplesTest {
 		
 		RunnableAutomaton matcher = a.getRunnableAutomaton();
 		
-		assertTrue(matcher.match(Input.fromString("/*a*/")));
-	}
-	
-	@Test
-	public void test() {
-//		RegularExpression r = new RegexPlus(new RegexAlt<>(new Character('b'), new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b')))));
-//		r = new Sequence<>(r, new Keyword("ba"));
-//		RegularExpression r = new RegexPlus(new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b'))));
-		
-		RegularExpression r = new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b')));
-		
-		System.out.println(r);
-		Automaton a = r.getAutomaton(); //RegularExpressionExamples.getMultilineComment().getAutomaton();
-		
-		Visualization.generateAutomatonGraph("/Users/ali/output", a.determinize().getStartState());
-		
-		RunnableAutomaton matcher = a.getRunnableAutomaton();
-		
-//		assertEquals(1, matcher.match(Input.fromString("a"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("ab"), 0));
-//		assertEquals(1, matcher.match(Input.fromString("ac"), 0));
-	}
-
-	
-	
-	// TODO: fix it
-//	@Test
-//	public void shortestVsLongestMatch() {
-//		Automaton  a = RegularExpressionExamples.getId().toAutomaton();
-//		RunnableState matcher = a.getRunnableAutomaton();
-//		
-//		assertEquals(8, matcher.match(Input.fromString("Variable"), 0));
-//		
-//		matcher = matcher.setMode(Matcher.SHORTEST_MATCH);
-//		assertEquals(1, matcher.match(Input.fromString("Variable"), 0));
-//	}
-	
+//		assertTrue(matcher.match(Input.fromString("/*a*/")));
+	}	
 }

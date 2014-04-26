@@ -88,8 +88,6 @@ public class CharacterClassTest {
 		
 		Automaton nfa = regexp.getAutomaton();
 		
-		assertEquals(8, nfa.getCountStates());
-
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		
 		assertEquals(-1, dfa.match(Input.fromString("1:"), 0));

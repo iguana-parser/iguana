@@ -223,7 +223,7 @@ public class AutomatonOperations {
 
 			for(State state : states) {
 				
-				Tuple<State, Integer> key = new Tuple<>(state, i);
+				Tuple<State, Integer> key = new Tuple<>(state, intervals[i]);
 				Set<State> set = cache.get(key);
 				
 				if(set == null) {
@@ -1075,7 +1075,6 @@ public class AutomatonOperations {
 		
 		for (State state : main.getFinalStates()) {
 			state.addTransition(Transition.epsilonTransition(condition.getStartState()));
-			state.setStateType(StateType.NORMAL);
 		}
 		
 		for (State state : condition.getFinalStates()) {

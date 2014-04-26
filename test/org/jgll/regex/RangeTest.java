@@ -26,7 +26,6 @@ public class RangeTest {
 	public void testWithPreConditions() {
 		RegularExpression regexp = new Range('0', '9').withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Automaton nfa = regexp.getAutomaton();
-		assertEquals(2, nfa.getCountStates());
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 
 		assertEquals(-1, dfa.match(Input.fromString("0:"), 0));

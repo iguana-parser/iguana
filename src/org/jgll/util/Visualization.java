@@ -5,6 +5,7 @@ import java.util.Map;
 import org.jgll.grammar.Grammar;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.dot.GSSToDot;
@@ -51,9 +52,14 @@ public class Visualization {
 		}
 	}
 	
+	public static void generateAutomatonGraph(String outputDir, Automaton automaton) {
+		generateAutomatonGraph(outputDir, automaton.getStartState());
+	}
+	
 	public static void generateAutomatonGraph(String outputDir, State startState) {
 		String dot = AutomatonToDot.toDot(startState);
 		GraphVizUtil.generateGraph(dot, outputDir, "automaton");
 	}
+
 
 }

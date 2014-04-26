@@ -82,7 +82,7 @@ public class RegularExpressionExamples {
 		
 		Keyword r3 = new Keyword("*/");
 		
-		return new Sequence<>(r2, r3);
+		return new Sequence<>(r1, r2, r3);
 	}
 	 
 }

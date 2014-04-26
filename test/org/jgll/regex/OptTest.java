@@ -28,9 +28,6 @@ public class OptTest {
 		RegularExpression regexp = new RegexOpt(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Automaton nfa = regexp.getAutomaton();
 		
-		
-		assertEquals(4, nfa.getCountStates());
-
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertEquals(-1, dfa.match(Input.fromString("a:"), 0));
 		assertEquals(-1, dfa.match(Input.fromString(":"), 0));

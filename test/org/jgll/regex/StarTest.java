@@ -60,8 +60,6 @@ public class StarTest {
 		RegularExpression regexp = new RegexStar(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
 		Automaton nfa = regexp.getAutomaton();
 		
-		assertEquals(4, nfa.getCountStates());
-		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString(":"), 0));

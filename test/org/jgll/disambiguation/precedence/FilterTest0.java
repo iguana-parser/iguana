@@ -42,7 +42,7 @@ public class FilterTest0 {
 
 	@Before
 	public void init() {
-
+		
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarBuilder builder = new GrammarBuilder("ArithmeticExpressions", factory);
 
