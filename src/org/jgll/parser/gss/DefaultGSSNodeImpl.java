@@ -28,7 +28,7 @@ class DefaultGSSNodeImpl implements GSSNode {
 	 * input input index of the current GSS node and thus are the same for this GSS node.
 	 * Therefore, in order to eliminate the duplicates of popped SPPF nodes, we need
 	 * to compare their right extent. This bit set is used for this purpose. 
-	 * Maybe Hashset implemetations are faster. We should figure it out.
+	 * Maybe Hashset implementations are faster. We should figure it out.
 	 */
 	private Set<Integer> addedPoppedElements;
 	

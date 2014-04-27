@@ -24,6 +24,8 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 
 	private HashTableFactory factory;
 	
+	private int descriptorsCount;
+	
 	@SuppressWarnings("unchecked")
 	public RecursiveDescentDescriptorLookupImpl(Grammar grammar, Input input) {
 		long start = System.nanoTime();
@@ -46,10 +48,9 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 	public Descriptor nextDescriptor() {
 		return descriptorsStack.pop();
 	}
-
+	
 	@Override
 	public boolean addDescriptor(Descriptor descriptor) {
-
 		IguanaSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
 		if (set == null) {
 			set = factory.newHashSet(tableSize, new ExternalHasher<Descriptor>() {
@@ -75,13 +76,18 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 			descriptorsSet[descriptor.getInputIndex()] = set;
 			set.add(descriptor);
 			descriptorsStack.push(descriptor);
-			log.trace("Descriptor created: %s", descriptor);
 			return true;
 		}
 
 		Descriptor add = set.add(descriptor);
+		return add == null;
+	}
 
-		if (add == null) {
+	@Override
+	public boolean scheduleDescriptor(Descriptor descriptor) {
+
+		if (addDescriptor(descriptor)) {
+			descriptorsCount++;
 			descriptorsStack.push(descriptor);
 			log.trace("Descriptor created: %s", descriptor);
 			return true;
@@ -92,13 +98,7 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 	
 	@Override
 	public int getDescriptorsCount() {
-		int count = 0;
-		for (int i = 0; i < descriptorsSet.length; i++) {
-			if (descriptorsSet[i] != null) {
-				count += descriptorsSet[i].size();
-			}
-		}
-		return count;
+		return descriptorsCount;
 	}
 
 

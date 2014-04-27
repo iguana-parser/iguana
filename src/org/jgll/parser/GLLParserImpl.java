@@ -9,6 +9,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.gss.GSSEdge;
@@ -242,14 +243,13 @@ public class GLLParserImpl implements GLLParser {
 	 * }
 	 */
 	@Override
-	public final void addDescriptor(GrammarSlot slot, GSSNode u, int inputIndex, SPPFNode w) {
-		Descriptor descriptor = new Descriptor(slot, u, inputIndex, w);
-		descriptorLookup.addDescriptor(descriptor);
+	public final void scheduleDescriptor(Descriptor descriptor) {
+		descriptorLookup.scheduleDescriptor(descriptor);
 	}
 	
 	@Override
 	public void addDescriptor(GrammarSlot label) {
-		addDescriptor(label, cu, ci, DummyNode.getInstance());
+		scheduleDescriptor(new Descriptor(label, cu, ci, DummyNode.getInstance()));
 	}	
 	
 	/**
@@ -270,23 +270,39 @@ public class GLLParserImpl implements GLLParser {
 	 */
 	@Override
 	public final void pop() {
+		pop(cu, ci, (NonPackedNode) cn);
+	}
+	
+	public final void pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
 		
-		if (cu != u0) {
+		if (gssNode != u0) {
 
-			log.trace("Pop %s, %d, %s", cu, ci, cn);
+			log.trace("Pop %s, %d, %s", gssNode, inputIndex, node);
 			
-			gssLookup.addToPoppedElements(cu, (NonPackedNode) cn);
+			gssLookup.addToPoppedElements(gssNode, node);
 			
 			label:
-			for(GSSEdge edge : gssLookup.getEdges(cu)) {
-				BodyGrammarSlot slot = edge.getReturnSlot();
+			for(GSSEdge edge : gssLookup.getEdges(gssNode)) {
+				BodyGrammarSlot returnSlot = edge.getReturnSlot();
 				
-				if(edge.getReturnSlot().getPopConditions().execute(this, lexer, ci)) {
+				if(returnSlot.getPopConditions().execute(this, lexer, inputIndex)) {
 					continue label;
 				}
 				
-				SPPFNode y = slot.getNodeCreatorFromPop().create(this, slot, edge.getNode(), cn);
-				addDescriptor(edge.getReturnSlot(), edge.getDestination(), ci, y);
+				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
+				
+				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
+				// creating descriptors
+				
+				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, y);
+				if (returnSlot instanceof LastGrammarSlot) {
+					if (descriptorLookup.addDescriptor(descriptor)) {
+						pop(edge.getDestination(), inputIndex, (NonPackedNode) y);
+					}
+				} else {
+					scheduleDescriptor(descriptor);					
+				}
+				
 			}
 		}
 	}
@@ -352,7 +368,18 @@ public class GLLParserImpl implements GLLParser {
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
 				
-				addDescriptor(returnSlot, u, z.getRightExtent(), x);
+				Descriptor descriptor = new Descriptor(returnSlot, u, z.getRightExtent(), x);
+				
+				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
+				// creating descriptors
+				if (returnSlot instanceof LastGrammarSlot) {
+					if (descriptorLookup.addDescriptor(descriptor)) {
+						descriptorLookup.addDescriptor(descriptor);						
+					}
+					pop(u, z.getRightExtent(), (NonPackedNode) x);
+				} else {
+					scheduleDescriptor(descriptor);					
+				}
 			}
 		}
 	}
