@@ -78,9 +78,15 @@ public class HeadGrammarSlot implements GrammarSlot {
 		
 		Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));
 		
-		if(set == null) return null;
+		if (set == null) return null;
 		
-		for(int alternateIndex : set) {
+		// If there is only one alternative, skip descriptor creation and jump to the beginning
+		// of the alternative
+		if (set.size() == 1) {
+			return firstSlots[set.iterator().next()];
+		}
+		
+		for (int alternateIndex : set) {
 			parser.addDescriptor(firstSlots[alternateIndex]);
 		}
 		
