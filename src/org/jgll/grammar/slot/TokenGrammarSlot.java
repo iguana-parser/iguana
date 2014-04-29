@@ -41,7 +41,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 		int ci = parser.getCurrentInputIndex();
 		
-		if(preConditions.execute(parser, lexer, ci)) {
+		if(preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) {
 			return null;
 		}
 
@@ -52,7 +52,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		if(postConditions.execute(parser, lexer, ci + length)) {
+		if(postConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci + length)) {
 			return null;
 		}
 		

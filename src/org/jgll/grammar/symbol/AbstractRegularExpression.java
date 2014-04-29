@@ -28,7 +28,8 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	@Override
 	public Automaton getAutomaton() {
 		if (automaton == null) {
-			automaton = combineConditions(createAutomaton());
+//			automaton = combineConditions(createAutomaton());
+			automaton = createAutomaton();
 		}
 		return automaton;
 	}

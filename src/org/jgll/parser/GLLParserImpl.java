@@ -285,7 +285,7 @@ public class GLLParserImpl implements GLLParser {
 			for(GSSEdge edge : gssLookup.getEdges(gssNode)) {
 				BodyGrammarSlot returnSlot = edge.getReturnSlot();
 				
-				if(returnSlot.getPopConditions().execute(this, lexer, inputIndex)) {
+				if(returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
 					continue label;
 				}
 				
@@ -293,11 +293,14 @@ public class GLLParserImpl implements GLLParser {
 				
 				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
 				// creating descriptors
+				GSSNode destinationGSS = edge.getDestination();
+				Descriptor descriptor = new Descriptor(returnSlot, destinationGSS, inputIndex, y);
 				
-				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, y);
 				if (returnSlot instanceof LastGrammarSlot) {
 					if (descriptorLookup.addDescriptor(descriptor)) {
-						pop(edge.getDestination(), inputIndex, (NonPackedNode) y);
+						if(!returnSlot.getPopConditions().execute(this, lexer, destinationGSS, inputIndex)) {
+							pop(destinationGSS, inputIndex, (NonPackedNode) y);
+						}
 					}
 				} else {
 					scheduleDescriptor(descriptor);					
@@ -353,30 +356,32 @@ public class GLLParserImpl implements GLLParser {
 		return true;
 	}
 	
-	private void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode u, SPPFNode w, GSSNode v) {
-		if(gssLookup.getGSSEdge(v, u, w, returnSlot)) {
+	private void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source) {
+		if(gssLookup.getGSSEdge(source, destination, w, returnSlot)) {
 			
 			label:
-			for (SPPFNode z : v.getPoppedElements()) {
+			for (SPPFNode z : source.getPoppedElements()) {
 				
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node
 				// stored in the popped elements.
-				if(returnSlot.getPopConditions().execute(this, lexer, z.getRightExtent())) {
+				if(returnSlot.getPopConditions().execute(this, lexer, destination, z.getRightExtent())) {
 					continue label;
 				}
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
 				
-				Descriptor descriptor = new Descriptor(returnSlot, u, z.getRightExtent(), x);
+				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
 				
 				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
 				// creating descriptors
 				if (returnSlot instanceof LastGrammarSlot) {
 					if (descriptorLookup.addDescriptor(descriptor)) {
-						descriptorLookup.addDescriptor(descriptor);						
+						if(!returnSlot.getPopConditions().execute(this, lexer, destination, ci)) {
+							descriptorLookup.addDescriptor(descriptor);						
+						}
 					}
-					pop(u, z.getRightExtent(), (NonPackedNode) x);
+					pop(destination, z.getRightExtent(), (NonPackedNode) x);
 				} else {
 					scheduleDescriptor(descriptor);					
 				}

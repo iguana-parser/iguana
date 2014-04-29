@@ -3,6 +3,7 @@ package org.jgll.grammar.slotaction;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.RunnableAutomaton;
 
@@ -18,7 +19,7 @@ public class NotPrecedeActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
 				return r.matchBackwards(lexer.getInput(), inputIndex - 1) >= 0;
 			}
 

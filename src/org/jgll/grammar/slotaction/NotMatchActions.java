@@ -3,6 +3,7 @@ package org.jgll.grammar.slotaction;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.RunnableAutomaton;
 
@@ -15,7 +16,7 @@ public class NotMatchActions {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+				public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
 					throw new UnsupportedOperationException();
 				}
 
@@ -56,8 +57,8 @@ public class NotMatchActions {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
-						int start = parser.getCurrentGSSNode().getInputIndex();
+					public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
+						int start = gssNode.getInputIndex();
 						int end = inputIndex;
 						return r.match(lexer.getInput(), start, end);
 					}

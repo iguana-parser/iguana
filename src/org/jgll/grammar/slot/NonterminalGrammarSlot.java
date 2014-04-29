@@ -52,7 +52,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		if(preConditions.execute(parser, lexer, ci)) {
+		if(preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) {
 			return null;
 		}
 		

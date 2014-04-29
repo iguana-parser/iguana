@@ -3,6 +3,7 @@ package org.jgll.grammar.slotaction;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
 
 public class LineActions {
 
@@ -13,7 +14,7 @@ public class LineActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
 				return !lexer.getInput().isEndOfLine(inputIndex);
 			}
 
@@ -52,7 +53,7 @@ public class LineActions {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean execute(GLLParser parser, GLLLexer lexer, int inputIndex) {
+			public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
 				return !lexer.getInput().isStartOfLine(inputIndex);
 			}
 
