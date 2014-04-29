@@ -1,8 +1,12 @@
 package org.jgll.parser.gss;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
+import org.jgll.parser.Descriptor;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.hashing.ExternalHasher;
@@ -38,6 +42,8 @@ public interface GSSNode {
 	public int getCountGSSEdges();
 
 	public int getInputIndex();
+	
+	public boolean addDescriptor(Descriptor descriptor);
 
 	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {
 		
@@ -56,6 +62,12 @@ public interface GSSNode {
 	}
 	
 	static class DummyGSSNode implements GSSNode {
+		
+		private Set<Descriptor> descriptors;
+		
+		public DummyGSSNode() {
+			descriptors = new HashSet<>();
+		}
 		
 		@Override
 		public void addToPoppedElements(NonPackedNode node) {}
@@ -106,6 +118,11 @@ public interface GSSNode {
 		@Override
 		public int getCountGSSEdges() {
 			return 0;
+		}
+
+		@Override
+		public boolean addDescriptor(Descriptor descriptor) {
+			return descriptors.add(descriptor);
 		}
 	}
 

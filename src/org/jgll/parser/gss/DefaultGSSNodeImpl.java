@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.parser.Descriptor;
 import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -36,6 +37,8 @@ class DefaultGSSNodeImpl implements GSSNode {
 
 	private final int hash;
 	
+	private Set<Descriptor> descriptors;
+	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
 	 * {@code position} and {@code index}
@@ -50,6 +53,8 @@ class DefaultGSSNodeImpl implements GSSNode {
 		poppedElements = new ArrayList<>();
 		addedPoppedElements = new HashSet<>();
 		gssEdges = new CuckooHashSet<>(GSSEdge.externalHasher);
+		
+		descriptors = new HashSet<>();
 		
 		this.hash = GSSNode.externalHasher.hash(this, HashFunctions.defaulFunction());
 	}
@@ -134,6 +139,11 @@ class DefaultGSSNodeImpl implements GSSNode {
 	@Override
 	public int getCountGSSEdges() {
 		return gssEdges.size();
+	}
+
+	@Override
+	public boolean addDescriptor(Descriptor descriptor) {
+		return descriptors.add(descriptor);
 	}
 	
 }

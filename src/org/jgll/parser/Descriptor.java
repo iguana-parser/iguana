@@ -62,8 +62,6 @@ public class Descriptor {
 		
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), 
 							       					    sppfNode.getId(), 
-													    gssNode.getGrammarSlot().getId(),
-													    gssNode.getInputIndex(),
 													    inputIndex);
 	}
 	
@@ -102,8 +100,6 @@ public class Descriptor {
 		
 		return slot == other.slot &&
 			   sppfNode.getId() == other.sppfNode.getId() &&
-			   gssNode.getGrammarSlot() == other.gssNode.getGrammarSlot() &&
-			   gssNode.getInputIndex() == other.gssNode.getInputIndex() &&
 			   inputIndex == other.getInputIndex();
 	}
 	

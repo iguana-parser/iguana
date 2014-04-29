@@ -12,9 +12,9 @@ import org.jgll.util.hashing.IguanaSet;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
+public class DescriptorLookupImpl implements DescriptorLookup {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(RecursiveDescentDescriptorLookupImpl.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(DescriptorLookupImpl.class);
 
 	private Deque<Descriptor> descriptorsStack;
 
@@ -27,7 +27,7 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 	private int descriptorsCount;
 	
 	@SuppressWarnings("unchecked")
-	public RecursiveDescentDescriptorLookupImpl(Grammar grammar, Input input) {
+	public DescriptorLookupImpl(Grammar grammar, Input input) {
 		long start = System.nanoTime();
 
 		descriptorsStack = new ArrayDeque<>();
@@ -51,35 +51,36 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 	
 	@Override
 	public boolean addDescriptor(Descriptor descriptor) {
-		IguanaSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
-		if (set == null) {
-			set = factory.newHashSet(tableSize, new ExternalHasher<Descriptor>() {
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public int hash(Descriptor d, HashFunction f) {
-					return f.hash(d.getGrammarSlot().getId(), 
-		       					  d.getSPPFNode().getId(), 
-								  d.getGSSNode().getGrammarSlot().getId(),
-								  d.getGSSNode().getInputIndex());
-				}
-				
-				@Override
-				public boolean equals(Descriptor d1, Descriptor d2) {
-					return 	d1.getGrammarSlot().getId() == d2.getGrammarSlot().getId() && 
-		 					d1.getSPPFNode().getId() == d2.getSPPFNode().getId() && 
-							d1.getGSSNode().getGrammarSlot() == d2.getGSSNode().getGrammarSlot() &&
-							d1.getGSSNode().getInputIndex() == d2.getGSSNode().getInputIndex();
-				}
-			});
-			descriptorsSet[descriptor.getInputIndex()] = set;
-			set.add(descriptor);
-			return true;
-		}
-
-		Descriptor add = set.add(descriptor);
-		return add == null;
+		return descriptor.getGSSNode().addDescriptor(descriptor);
+//		IguanaSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
+//		if (set == null) {
+//			set = factory.newHashSet(tableSize, new ExternalHasher<Descriptor>() {
+//
+//				private static final long serialVersionUID = 1L;
+//
+//				@Override
+//				public int hash(Descriptor d, HashFunction f) {
+//					return f.hash(d.getGrammarSlot().getId(), 
+//		       					  d.getSPPFNode().getId(), 
+//								  d.getGSSNode().getGrammarSlot().getId(),
+//								  d.getGSSNode().getInputIndex());
+//				}
+//				
+//				@Override
+//				public boolean equals(Descriptor d1, Descriptor d2) {
+//					return 	d1.getGrammarSlot().getId() == d2.getGrammarSlot().getId() && 
+//		 					d1.getSPPFNode().getId() == d2.getSPPFNode().getId() && 
+//							d1.getGSSNode().getGrammarSlot() == d2.getGSSNode().getGrammarSlot() &&
+//							d1.getGSSNode().getInputIndex() == d2.getGSSNode().getInputIndex();
+//				}
+//			});
+//			descriptorsSet[descriptor.getInputIndex()] = set;
+//			set.add(descriptor);
+//			return true;
+//		}
+//
+//		Descriptor add = set.add(descriptor);
+//		return add == null;
 	}
 
 	@Override
