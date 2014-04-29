@@ -59,23 +59,38 @@ public class RunnableAutomaton implements Serializable {
 		return maximumMatched;
 	}
 	
-	public int matchBackwards(Input input, int index) {
+	public int matchBackwards(Input input, int inputIndex) {
 		int maximumMatched = -1;
+
 		int length = 0;
 		
 		RunnableState currentState = state;
 		
+		loop:
 		while (true) {
 			
-//			if (currentState.isFinalState()) maximumMatched = length;
-//			
-//			if (currentState.isRejectState()) maximumMatched = -1;
+			switch (currentState.getStateType()) {
+				case REJECT:
+					maximumMatched = -1;
+					break loop;
+										
+				case LOOKAHEAD_REJECT:
+					 maximumMatched = -1;
+					 break loop;
 
-			currentState = currentState.move(input, index--);
-			
-			if (currentState == null) break;
-			
-			length++;
+				case LOOKAHEAD_ACCEPT:
+					length--;
+					break loop;
+					 
+				case FINAL:
+					maximumMatched = length;
+					
+				case NORMAL:
+					currentState = currentState.move(input, inputIndex - length);
+					if (currentState == null) break loop;
+					length++;
+					break;
+			}
 		}
 		
 		return maximumMatched;

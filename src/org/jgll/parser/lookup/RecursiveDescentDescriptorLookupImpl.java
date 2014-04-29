@@ -75,7 +75,6 @@ public class RecursiveDescentDescriptorLookupImpl implements DescriptorLookup {
 			});
 			descriptorsSet[descriptor.getInputIndex()] = set;
 			set.add(descriptor);
-			descriptorsStack.push(descriptor);
 			return true;
 		}
 

@@ -298,8 +298,11 @@ public class GLLParserImpl implements GLLParser {
 				
 				if (returnSlot instanceof LastGrammarSlot) {
 					if (descriptorLookup.addDescriptor(descriptor)) {
-						if(!returnSlot.getPopConditions().execute(this, lexer, destinationGSS, inputIndex)) {
-							pop(destinationGSS, inputIndex, (NonPackedNode) y);
+						if (!returnSlot.getPopConditions().execute(this, lexer, destinationGSS, inputIndex)) {
+							HeadGrammarSlot head = destinationGSS.getGrammarSlot();
+							if (head.testFollowSet(lexer.getInput().charAt(ci))) {
+								pop(destinationGSS, inputIndex, (NonPackedNode) y);
+							}
 						}
 					}
 				} else {
@@ -375,13 +378,17 @@ public class GLLParserImpl implements GLLParser {
 				
 				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
 				// creating descriptors
+				
+				int newInputIndex = z.getRightExtent();
 				if (returnSlot instanceof LastGrammarSlot) {
 					if (descriptorLookup.addDescriptor(descriptor)) {
-						if(!returnSlot.getPopConditions().execute(this, lexer, destination, ci)) {
-							descriptorLookup.addDescriptor(descriptor);						
+						if (!returnSlot.getPopConditions().execute(this, lexer, destination, newInputIndex)) {
+							HeadGrammarSlot head = destination.getGrammarSlot();
+							if (head.testFollowSet(lexer.getInput().charAt(newInputIndex))) {
+								pop(destination, newInputIndex, (NonPackedNode) x);
+							}
 						}
 					}
-					pop(destination, z.getRightExtent(), (NonPackedNode) x);
 				} else {
 					scheduleDescriptor(descriptor);					
 				}
