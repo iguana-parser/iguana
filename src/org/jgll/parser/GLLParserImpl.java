@@ -132,6 +132,8 @@ public class GLLParserImpl implements GLLParser {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
 		}
 		
+		GSSNode.U0.clearDescriptors();
+		
 		this.grammar = grammar;
 		
 		this.lexer = lexer;
@@ -300,7 +302,7 @@ public class GLLParserImpl implements GLLParser {
 					if (descriptorLookup.addDescriptor(descriptor)) {
 						if (!returnSlot.getPopConditions().execute(this, lexer, destinationGSS, inputIndex)) {
 							HeadGrammarSlot head = destinationGSS.getGrammarSlot();
-							if (head.testFollowSet(lexer.getInput().charAt(ci))) {
+							if (head.testFollowSet(lexer.getInput().charAt(inputIndex))) {
 								pop(destinationGSS, inputIndex, (NonPackedNode) y);
 							}
 						}

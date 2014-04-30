@@ -44,6 +44,8 @@ public interface GSSNode {
 	public int getInputIndex();
 	
 	public boolean addDescriptor(Descriptor descriptor);
+	
+	public void clearDescriptors();
 
 	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {
 		
@@ -123,6 +125,11 @@ public interface GSSNode {
 		@Override
 		public boolean addDescriptor(Descriptor descriptor) {
 			return descriptors.add(descriptor);
+		}
+
+		@Override
+		public void clearDescriptors() {
+			descriptors.clear();
 		}
 	}
 

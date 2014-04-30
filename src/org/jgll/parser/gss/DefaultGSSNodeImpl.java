@@ -145,5 +145,10 @@ class DefaultGSSNodeImpl implements GSSNode {
 	public boolean addDescriptor(Descriptor descriptor) {
 		return descriptors.add(descriptor);
 	}
+
+	@Override
+	public void clearDescriptors() {
+		descriptors.clear();
+	}
 	
 }
