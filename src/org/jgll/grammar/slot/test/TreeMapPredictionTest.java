@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -73,7 +74,7 @@ public class TreeMapPredictionTest implements PredictionTest {
 				if(i >= range.getStart() && i <= range.getEnd()) {
 					Set<Integer> s = predictionMap.get(i);
 					if(s == null) {
-						s = new HashSet<>();
+						s = new LinkedHashSet<>();
 						predictionMap.put(i, s);
 					}
 					s.addAll(map.get(range));

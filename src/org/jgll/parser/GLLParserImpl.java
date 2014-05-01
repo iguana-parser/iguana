@@ -364,6 +364,8 @@ public class GLLParserImpl implements GLLParser {
 	private void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source) {
 		if(gssLookup.getGSSEdge(source, destination, w, returnSlot)) {
 			
+			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
+			
 			label:
 			for (SPPFNode z : source.getPoppedElements()) {
 				

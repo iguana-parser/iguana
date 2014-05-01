@@ -33,6 +33,8 @@ class DefaultGSSNodeImpl implements GSSNode {
 	 */
 	private Set<Integer> addedPoppedElements;
 	
+	// TODO: for recursive descent ordering, we need to traverse the GSS edges
+	// the way they are added, so we need a hashset with ordering.
 	private final CuckooHashSet<GSSEdge> gssEdges;
 
 	private final int hash;
@@ -107,6 +109,13 @@ class DefaultGSSNodeImpl implements GSSNode {
 	@Override
 	public Iterable<GSSEdge> getGSSEdges() {
 		return gssEdges;
+//		return new Iterable<GSSEdge>() {
+//			
+//			@Override
+//			public Iterator<GSSEdge> iterator() {
+//				return new LinkedList<>(gssEdges).descendingIterator();
+//			}
+//		};		
 	}
 	
 	@Override

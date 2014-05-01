@@ -1,6 +1,6 @@
 package org.jgll.grammar.slot.test;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +28,7 @@ public class ArrayPredictionTest implements PredictionTest {
 		this.max = max;
 		predictionMap = new Set[max - min + 1];
 		
-		for(int i = 0; i < countAlternates; i++) {
+		for(int i = countAlternates - 1 ; i >= 0; i--) {
 			Set<RegularExpression> predictionSet = predictionSets.get(i);
 			
 			if(predictionSet.isEmpty()) continue;
@@ -38,7 +38,7 @@ public class ArrayPredictionTest implements PredictionTest {
 					for(int v = r.getStart(); v <= r.getEnd(); v++) {
 						Set<Integer> set = predictionMap[v - min];
 						if(set == null) {
-							set = new HashSet<>();
+							set = new LinkedHashSet<>();
 							predictionMap[v - min] = set;
 						}
 						set.add(i);

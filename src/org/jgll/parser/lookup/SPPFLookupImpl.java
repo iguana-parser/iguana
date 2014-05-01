@@ -64,6 +64,9 @@ public class SPPFLookupImpl implements SPPFLookup {
 		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
 
 		if (set == null) {
+			
+			log.trace("Nonterminal node created: %s", key);
+			
 			set = factory.newHashSet(tableSize, new ExternalHasher<NonterminalSymbolNode>() {
 
 				private static final long serialVersionUID = 1L;
@@ -86,6 +89,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 		NonterminalSymbolNode oldValue = set.add(key);
 		if (oldValue == null) {
+			log.trace("Nonterminal node created: %s", key);
 			oldValue = key;
 		}
 
