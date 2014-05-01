@@ -31,8 +31,8 @@ public class Epsilon extends AbstractRegularExpression {
 
 	@Override
     protected Automaton createAutomaton() {
-    	State state = new State(StateType.FINAL).addRegularExpression(this);
-        return new Automaton(state, name);
+    	State state = new State(StateType.FINAL);
+        return new Automaton(state, name).setRegularExpression(this);
     }
 
 	@Override

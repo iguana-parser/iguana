@@ -72,7 +72,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 				s.addTransition(Transition.epsilonTransition(next.getStartState()));
 			}
 			
-			result = new Automaton(startState, this.name);
+			result = new Automaton(startState, this.name).setRegularExpression(this);
 		}
 		
 		return result;

@@ -6,6 +6,8 @@ import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.regex.RegularExpression;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -31,7 +33,6 @@ public class Automaton implements Serializable {
 	
 	private String name;
 	
-
 	public Automaton(State startState) {
 		this(startState, "no-name");
 	}
@@ -104,6 +105,19 @@ public class Automaton implements Serializable {
 	
 	public int[] getIntervals() {
 		return intervals;
+	}
+	
+	/**
+	 * Adds the given regular expression to the final states of this
+	 * automaton.
+	 * 
+	 * @param regex the given regular expression
+	 */
+	public Automaton setRegularExpression(RegularExpression regex) {
+		for (State state : finalStates) {
+			state.addRegularExpression(regex);
+		}
+		return this;
 	}
 	
 	/**

@@ -47,7 +47,7 @@ public class RegexOpt extends AbstractRegularExpression {
 		
 		startState.addTransition(Transition.epsilonTransition(finalState));
 		
-		return new Automaton(startState, name);
+		return new Automaton(startState, name).setRegularExpression(this);
 	}
 
 	@Override

@@ -78,7 +78,7 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	protected Automaton createAutomaton() {
-		return seq.getAutomaton();
+		return seq.getAutomaton().setRegularExpression(this);
 	}
 	
 	@Override
