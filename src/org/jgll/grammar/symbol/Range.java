@@ -85,7 +85,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
 		startState.addTransition(new Transition(start, end, finalState).addTransitionAction(getPostActions(conditions)));
-		return new Automaton(startState, name).setRegularExpression(this);
+		return new Automaton(startState, name);
 	}
 
 	@Override

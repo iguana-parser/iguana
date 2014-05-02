@@ -87,7 +87,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 			}
 		}
 		
-		return new Automaton(startState, name).setRegularExpression(this);
+		return new Automaton(startState, name);
 	}
 
 	@Override

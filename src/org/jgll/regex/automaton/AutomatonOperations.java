@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.jgll.regex.matcher.LargeIntervalTransitions;
 import org.jgll.regex.matcher.ShortIntervalTransitions;
 import org.jgll.regex.matcher.Transitions;
 import org.jgll.util.CollectionsUtil;
@@ -36,9 +35,8 @@ public class AutomatonOperations {
 		 */
 		Map<Set<State>, State> newStatesMap = new HashMap<>();
 		
-		
 		State startState = new State();
-		addActions(initialState, startState);
+		addProperties(initialState, startState);
 		
 		newStatesMap.put(initialState, startState);
 		
@@ -55,7 +53,7 @@ public class AutomatonOperations {
 				State newState = newStatesMap.get(newStatesSet);
 				if(newState == null) {
 					newState = new State();
-					addActions(newStatesSet, newState);
+					addProperties(newStatesSet, newState);
 					newStatesMap.put(newStatesSet, newState);
 				}
 				
@@ -78,9 +76,9 @@ public class AutomatonOperations {
 		
 		// Setting the final states.
 		outer:
-		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-			for(State s : e.getKey()) {
-				if(s.getStateType() == StateType.FINAL) {
+		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+			for (State s : e.getKey()) {
+				if (s.getStateType() == StateType.FINAL) {
 					e.getValue().setStateType(StateType.FINAL);
 					continue outer;
 				}
@@ -90,11 +88,11 @@ public class AutomatonOperations {
 		// Setting the reject states. If during the process of making a DFA deterministic,
 		// a reject and a final state are merged, consider it as a final state.
 		outer:
-		for(Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-			for(State s : e.getKey()) {
-				if(s.getStateType() == StateType.REJECT) {
+		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+			for (State s : e.getKey()) {
+				if (s.getStateType() == StateType.REJECT) {
 					State state = e.getValue();
-					if(state.getStateType() != StateType.FINAL) {
+					if (state.getStateType() != StateType.FINAL) {
 						state.setStateType(StateType.REJECT);
 					}
 					continue outer;					
@@ -125,9 +123,10 @@ public class AutomatonOperations {
 		return new Automaton(startState, automaton.getName());
 	}
 
-	private static void addActions(Set<State> initialState, State startState) {
+	private static void addProperties(Set<State> initialState, State newState) {
 		for (State s : initialState) {
-			startState.addActions(s.getActions());
+			newState.addActions(s.getActions());
+			newState.addRegularExpressions(s.getRegularExpressions());
 		}
 	}
 	

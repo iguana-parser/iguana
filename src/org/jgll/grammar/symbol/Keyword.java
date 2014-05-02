@@ -18,7 +18,7 @@ public class Keyword extends AbstractRegularExpression {
 	private final Sequence<Character> seq;
 	
 	public Keyword(String s) {
-		this("no-name", s);
+		this(s, s);
 	}
 	
 	public Keyword(String name, String s) {
@@ -78,7 +78,7 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	protected Automaton createAutomaton() {
-		return seq.getAutomaton().setRegularExpression(this);
+		return seq.getAutomaton();
 	}
 	
 	@Override
