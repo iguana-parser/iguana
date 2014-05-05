@@ -50,6 +50,7 @@ public class FilterTest0 {
 		Rule rule1 = new Rule(E, list(E, star, E));
 		builder.addRule(rule1);
 		
+		
 		// E ::= E + E
 		Rule rule2 = new Rule(E, list(E, plus, E));
 		builder.addRule(rule2);
@@ -71,6 +72,7 @@ public class FilterTest0 {
 		builder.addPrecedencePattern(E, rule2, 2, rule2);
 				
 		grammar = builder.build();
+		System.out.println(grammar);
 	}
 	
 	@Test

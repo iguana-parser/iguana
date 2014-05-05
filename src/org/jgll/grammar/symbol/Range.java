@@ -57,8 +57,12 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		return end;
 	}
 	
-	public boolean contains(Range range) {
-		return start <= range.start && end >= range.end;
+	public boolean contains(Range other) {
+		return start <= other.start && end >= other.end;
+	}
+	
+	public boolean overlaps(Range other) {
+		return !(end < other.start);
 	}
 
 	@Override
@@ -115,6 +119,11 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		Set<Range> firstSet = new HashSet<>();
 		firstSet.add(this);
 		return firstSet;
+	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return Collections.emptySet();
 	}
 
 	@Override

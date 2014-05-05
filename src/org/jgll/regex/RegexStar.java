@@ -65,6 +65,11 @@ public class RegexStar extends AbstractRegularExpression {
 	public Set<Range> getFirstSet() {
 		return regexp.getFirstSet();
 	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return regexp.getFirstSet();
+	}
 
 	@Override
 	public RegexStar withConditions(Set<Condition> conditions) {

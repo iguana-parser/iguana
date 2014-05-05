@@ -90,6 +90,11 @@ public class Keyword extends AbstractRegularExpression {
 	public Set<Range> getFirstSet() {
 		return seq.getFirstSet();
 	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return Collections.emptySet();
+	}
 
 	@Override
 	public Keyword withConditions(Set<Condition> conditions) {

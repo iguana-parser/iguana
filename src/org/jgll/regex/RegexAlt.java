@@ -2,6 +2,7 @@ package org.jgll.regex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -142,6 +143,11 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 			firstSet.addAll(t.getFirstSet());
 		}
 		return firstSet;
+	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return Collections.emptySet();
 	}
 
 	@Override

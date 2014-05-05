@@ -59,6 +59,10 @@ public class Transition implements Comparable<Transition>, Serializable {
 		return end;
 	}
 	
+	public Range getRange() {
+		return Range.in(start, end);
+	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}

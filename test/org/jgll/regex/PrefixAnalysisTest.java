@@ -19,7 +19,7 @@ public class PrefixAnalysisTest {
 		
 		List<RegularExpression> list = CollectionsUtil.list(k1, k2, k3, id);
 		
-		RegularExpressionsUtil.addFollowRestrictions(list);
+		System.out.println(RegularExpressionsUtil.addFollowRestrictions(list));
 	}
 	
 }

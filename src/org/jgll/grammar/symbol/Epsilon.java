@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,6 +56,11 @@ public class Epsilon extends AbstractRegularExpression {
 	@Override
 	public Epsilon withoutConditions() {
 		return this;
+	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return Collections.emptySet();
 	}
 	
 }

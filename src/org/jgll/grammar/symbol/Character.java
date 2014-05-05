@@ -98,6 +98,11 @@ public class Character extends AbstractRegularExpression {
 		firstSet.add(new Range(c, c));
 		return firstSet;
 	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return Collections.emptySet();
+	}
 
 	@Override
 	public Character withConditions(Set<Condition> conditions) {

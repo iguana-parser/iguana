@@ -138,6 +138,11 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		}
 		return firstSet;
 	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return Collections.emptySet();
+	}
 
 	@Override
 	public Sequence<T> withConditions(Set<Condition> conditions) {

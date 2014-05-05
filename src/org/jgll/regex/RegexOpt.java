@@ -59,6 +59,11 @@ public class RegexOpt extends AbstractRegularExpression {
 	public Set<Range> getFirstSet() {
 		return regexp.getFirstSet();
 	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return Collections.emptySet();
+	}
 
 	@Override
 	public RegularExpression withConditions(Set<Condition> conditions) {

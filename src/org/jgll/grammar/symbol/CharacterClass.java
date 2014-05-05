@@ -117,6 +117,11 @@ public class CharacterClass extends AbstractRegularExpression {
 		return alt.getFirstSet();
 	}
 	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return Collections.emptySet();
+	}
+	
 	public int size() {
 		return alt.size();
 	}

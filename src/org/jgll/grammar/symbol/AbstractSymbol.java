@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
+import org.jgll.util.CollectionsUtil;
 
 public abstract class AbstractSymbol implements Symbol {
 
@@ -36,7 +37,7 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	@Override
 	public String toString() {
-		return name;
+		return conditions.isEmpty() ? name : "(" + name + CollectionsUtil.listToString(conditions) + ")";
 	}
 	
 	@Override

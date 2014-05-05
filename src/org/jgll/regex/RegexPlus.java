@@ -47,6 +47,11 @@ public class RegexPlus extends AbstractRegularExpression {
 	public Set<Range> getFirstSet() {
 		return plus.getFirstSet();
 	}
+	
+	@Override
+	public Set<Range> getNotFollowSet() {
+		return plus.getFirstSet();
+	}
 
 	@Override
 	public RegexPlus withConditions(Set<Condition> conditions) {
