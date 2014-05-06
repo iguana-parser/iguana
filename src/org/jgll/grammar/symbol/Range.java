@@ -62,7 +62,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 	
 	public boolean overlaps(Range other) {
-		return !(end < other.start);
+		return end > other.start || other.end > start;
 	}
 
 	@Override

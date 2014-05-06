@@ -13,7 +13,6 @@ import org.jgll.regex.automaton.AutomatonVisitor;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
 import org.jgll.regex.automaton.VisitAction;
-import org.jgll.util.Visualization;
 
 public class RegularExpressionsUtil {
 
@@ -33,12 +32,15 @@ public class RegularExpressionsUtil {
 			@Override
 			public void visit(State state) {
 				if (state.isFinalState()) {
-					System.out.println(state.getRegularExpressions());
 					for (RegularExpression regex : state.getRegularExpressions()) {
 						for (Transition t : state.getTransitions()) {
-							for (Range range : regex.getNotFollowSet()) {
-								if (!range.overlaps(t.getRange())) {
-									newRegularExpressions.add(regex.withCondition(RegularExpressionCondition.notFollow(t.getRange())));
+							if (regex.getNotFollowSet().isEmpty()) {
+								newRegularExpressions.add(regex.withCondition(RegularExpressionCondition.notFollow(t.getRange())));
+							} else {
+								for (Range range : regex.getNotFollowSet()) {
+									if (!range.overlaps(t.getRange())) {
+										newRegularExpressions.add(regex.withCondition(RegularExpressionCondition.notFollow(t.getRange())));
+									}								
 								}								
 							}
 						}

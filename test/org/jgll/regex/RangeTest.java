@@ -13,6 +13,23 @@ import org.junit.Test;
 public class RangeTest {
 	
 	@Test
+	public void overlappingTest1() {
+		Range r1 = Range.in('a', 'f');
+		Range r2 = Range.in('d', 'k');
+		assertTrue(r1.overlaps(r2));
+		assertTrue(r2.overlaps(r1));
+	}
+	
+	@Test
+	public void overlappingTest2() {
+		Range r1 = Range.in('a', 'z');
+		Range r2 = Range.in('s', 'u');
+		assertTrue(r1.overlaps(r2));
+		assertTrue(r2.overlaps(r1));
+	}
+	
+	
+	@Test
 	public void test() {
 		RegularExpression regexp = new Range('0', '9');
 		Automaton nfa = regexp.getAutomaton();
