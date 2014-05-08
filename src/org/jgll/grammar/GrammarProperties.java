@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
@@ -18,6 +19,9 @@ import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Tuple;
+import org.jgll.util.trie.Edge;
+import org.jgll.util.trie.Node;
+import org.jgll.util.trie.Trie;
 
 public class GrammarProperties {
 	
@@ -421,7 +425,24 @@ public class GrammarProperties {
 	}
 	
 	public static Map<Nonterminal, List<List<Symbol>>> leftFactorize(Map<Nonterminal, List<List<Symbol>>> definitions) {
-		return null;
+		
+		Map<Nonterminal, List<List<Symbol>>> leftFactorized = new HashMap<>();
+		
+		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
+			
+			Trie<Symbol> trie = new Trie<>();
+			
+			for (List<Symbol> alternative : e.getValue()) {
+				trie.addToRoot(alternative);
+			}
+			
+			Node<Symbol> root = trie.getRoot();
+			for (Edge<Symbol> edge : root.getEdges()) {
+				
+			}
+		}
+		
+		return leftFactorized;
 	}
 	
 	/**

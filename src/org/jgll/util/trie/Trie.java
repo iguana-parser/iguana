@@ -1,7 +1,5 @@
 package org.jgll.util.trie;
 
-import java.util.Iterator;
-
 public class Trie<T> {
 
 	private Node<T> root;
@@ -49,14 +47,9 @@ public class Trie<T> {
 		return null;
 	}
 	
-	public void add(Iterable<T> labels) {
-	
+	public void addToRoot(Iterable<T> labels) {
 		Node<T> node = root;
-		
-		Iterator<T> it = labels.iterator();
-		
-		while(it.hasNext()) {
-			T label = it.next();
+		for (T label : labels) {
 			node = add(node, label);
 		}
 	}
