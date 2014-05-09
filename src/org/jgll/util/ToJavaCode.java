@@ -1,6 +1,6 @@
 package org.jgll.util;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -15,13 +15,13 @@ public class ToJavaCode implements SPPFVisitor {
 	
 	private int count = 1;
 	private StringBuilder sb = new StringBuilder();
-	private Grammar grammar;
+	private GrammarGraph grammar;
 
-	public ToJavaCode(Grammar grammar) {
+	public ToJavaCode(GrammarGraph grammar) {
 		this.grammar = grammar;
 	}
 	
-	public static String toJavaCode(NonterminalSymbolNode node, Grammar grammar) {
+	public static String toJavaCode(NonterminalSymbolNode node, GrammarGraph grammar) {
 		ToJavaCode toJavaCode = new ToJavaCode(grammar);
 		toJavaCode.visit(node);
 		return toJavaCode.toString();

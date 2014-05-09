@@ -1,10 +1,8 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
@@ -27,13 +25,12 @@ import org.junit.Test;
  */
 public class EBNFTest1 {
 	
-	private Grammar grammar;
+	private GrammarGraph grammarGraph;
 
 	@Before
 	public void init() {
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder("EBNF", factory);
+		Grammar grammar = new Grammar();
 		
 		Nonterminal S = new Nonterminal("S");
 		Nonterminal A = new Nonterminal("A");
@@ -45,16 +42,16 @@ public class EBNFTest1 {
 		
 		Iterable<Rule> newRules = EBNFUtil.rewrite(list(rule1, rule2));
 		
-		builder.addRules(newRules);
+		grammar.addRules(newRules);
 		
-		grammar = builder.build();
+		grammarGraph = grammar.toGrammarGraph();
 	}
 	
 	@Test
 	public void test() throws ParseError {
 		Input input = Input.fromString("aaaaaa");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		parser.parse(input, grammar, "S");
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		parser.parse(input, grammarGraph, "S");
 	}
 
 }

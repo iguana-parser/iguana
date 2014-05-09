@@ -1,6 +1,6 @@
 package org.jgll.parser;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -21,9 +21,9 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public NonterminalSymbolNode parse(GLLLexer lexer, Grammar grammar, String startSymbolName) throws ParseError;
+	public NonterminalSymbolNode parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName) throws ParseError;
 	
-	public NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError;
+	public NonterminalSymbolNode parse(Input input, GrammarGraph grammar, String startSymbolName) throws ParseError;
 	
 	public void pop();
 	
@@ -70,7 +70,7 @@ public interface GLLParser {
 	
 	public SPPFLookup getSPPFLookup();
 	
-	public Grammar getGrammar();
+	public GrammarGraph getGrammar();
 	
 	/**
 	 * Current descriptor being processed.

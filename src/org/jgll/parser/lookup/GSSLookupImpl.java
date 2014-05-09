@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
@@ -37,9 +37,9 @@ public class GSSLookupImpl implements GSSLookup {
 
 	private final GSSNodeFactory gssNodeFactory;
 	
-	private final Grammar grammar;
+	private final GrammarGraph grammar;
 	
-	public GSSLookupImpl(Grammar grammar, Input input, GSSNodeFactory gssNodeFactory) {
+	public GSSLookupImpl(GrammarGraph grammar, Input input, GSSNodeFactory gssNodeFactory) {
 		this.grammar = grammar;
 		this.gssNodeFactory = gssNodeFactory;
 		

@@ -2,7 +2,7 @@ package org.jgll.lexer;
 
 import java.util.BitSet;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.util.Input;
 
 public class GLLLexerImpl implements GLLLexer {
@@ -16,9 +16,9 @@ public class GLLLexerImpl implements GLLLexer {
 
 	private Input input;
 
-	private Grammar grammar;
+	private GrammarGraph grammar;
 
-	public GLLLexerImpl(Input input, Grammar grammar) {
+	public GLLLexerImpl(Input input, GrammarGraph grammar) {
 		this.input = input;
 		this.grammar = grammar;
 		

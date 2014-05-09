@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -45,9 +45,9 @@ public class SPPFToDotUnpacked extends ToDot {
 
 	private Input input;
 
-	private Grammar grammar;
+	private GrammarGraph grammar;
 	
-	public SPPFToDotUnpacked(Grammar grammar, Input input) {
+	public SPPFToDotUnpacked(GrammarGraph grammar, Input input) {
 		this(input, false);
 		this.grammar = grammar;
 	}

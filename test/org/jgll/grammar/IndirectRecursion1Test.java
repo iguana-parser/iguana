@@ -3,11 +3,6 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import java.util.Set;
-
-import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -36,8 +31,7 @@ import org.junit.Test;
  */
 public class IndirectRecursion1Test {
 
-	private Grammar grammar;
-	private GrammarBuilder builder;
+	private GrammarGraph grammarGraph;
 
 	private Nonterminal A = new Nonterminal("A");
 	private Nonterminal B = new Nonterminal("B");
@@ -54,52 +48,41 @@ public class IndirectRecursion1Test {
 		Rule r4 = new Rule(B, list(b));
 		Rule r5 = new Rule(C, list(c));
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		builder = new GrammarBuilder("IndirectRecursion", factory)
+		grammarGraph = new Grammar()
 													  .addRule(r1)
 													  .addRule(r2)
 													  .addRule(r3)
 													  .addRule(r4)
-													  .addRule(r5);
-		grammar = builder.build();
+													  .addRule(r5).toGrammarGraph();
 	}
 	
 	
 	@Test
 	public void testFirstFollowSets() {
-		assertEquals(set(a, b), grammar.getFirstSet(A));
-		assertEquals(set(a, b), grammar.getFirstSet(B));
-		assertEquals(set(c), grammar.getFirstSet(C));
+		assertEquals(set(a, b), grammarGraph.getFirstSet(A));
+		assertEquals(set(a, b), grammarGraph.getFirstSet(B));
+		assertEquals(set(c), grammarGraph.getFirstSet(C));
 		
-		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(A));
-		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(B));
+		assertEquals(set(c, EOF.getInstance()), grammarGraph.getFollowSet(A));
+		assertEquals(set(c, EOF.getInstance()), grammarGraph.getFollowSet(B));
 	}
 	
 	@Test
 	public void testParser() throws ParseError {
 		Input input = Input.fromString("bc");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "A");
 		assertTrue(sppf.deepEquals(expectedSPPF()));
 	}
-	
-	@Test
-	public void testReachabilityGraph() {
-		Set<HeadGrammarSlot> set = builder.getDirectReachableNonterminals("A");
-		assertTrue(set.contains(grammar.getHeadGrammarSlot("A")));
-		assertTrue(set.contains(grammar.getHeadGrammarSlot("B")));
-		
-		set = builder.getDirectReachableNonterminals("B");
-		assertTrue(set.contains(grammar.getHeadGrammarSlot("A")));
-	}
+
 	
 	private SPPFNode expectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 2, 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 2, 0, 1);
-		TokenSymbolNode node3 = new TokenSymbolNode(grammar.getRegularExpressionId(b), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 2, 0, 2);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 2, 0, 1);
+		TokenSymbolNode node3 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(b), 0, 1);
 		node2.addChild(node3);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammar.getNonterminalId(C), 1, 1, 2);
-		TokenSymbolNode node5 = new TokenSymbolNode(grammar.getRegularExpressionId(c), 1, 1);
+		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(C), 1, 1, 2);
+		TokenSymbolNode node5 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(c), 1, 1);
 		node4.addChild(node5);
 		node1.addChild(node2);
 		node1.addChild(node4);

@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.symbol.Alt;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -23,13 +23,13 @@ import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
 import org.jgll.util.trie.Trie;
 
-public class GrammarProperties {
+public class GrammarOperations {
 	
-	public static Map<Nonterminal, Set<RegularExpression>> calculateFirstSets(Map<Nonterminal, List<List<Symbol>>> definitions) {
+	public static Map<Nonterminal, Set<RegularExpression>> calculateFirstSets(Grammar grammar) {
 		
 		Map<Nonterminal, Set<RegularExpression>> firstSets = new HashMap<>();
 		
-		Set<Nonterminal> nonterminals = definitions.keySet();
+		Set<Nonterminal> nonterminals = grammar.getNonterminals();
 		for (Nonterminal head : nonterminals) {
 			firstSets.put(head, new HashSet<RegularExpression>());
 		}
@@ -41,7 +41,7 @@ public class GrammarProperties {
 			changed = false;
 			
 			for (Nonterminal head : nonterminals) {
-				for (List<Symbol> alternate : definitions.get(head)) {
+				for (List<Symbol> alternate : grammar.getAlternatives(head)) {
 					Set<RegularExpression> firstSet = firstSets.get(head);
 					changed |= addFirstSet(firstSet, alternate, 0, firstSets);
 				}
@@ -81,7 +81,7 @@ public class GrammarProperties {
 			if (symbol instanceof RegularExpression) {
 				RegularExpression regularExpression = (RegularExpression) symbol;
 				changed |= firstSet.add(regularExpression);
-				if(!regularExpression.isNullable()) {
+				if (!regularExpression.isNullable()) {
 					break;
 				}
 			}
@@ -140,12 +140,12 @@ public class GrammarProperties {
 		return true;
 	}
 		
-	public static Map<Nonterminal, Set<RegularExpression>> calculateFollowSets(Map<Nonterminal, List<List<Symbol>>> definitions, 
+	public static Map<Nonterminal, Set<RegularExpression>> calculateFollowSets(Grammar grammar, 
 																		 	   Map<Nonterminal, Set<RegularExpression>> firstSets) {
 		
 		Map<Nonterminal, Set<RegularExpression>> followSets = new HashMap<>();
 		
-		Set<Nonterminal> nonterminals = definitions.keySet();
+		Set<Nonterminal> nonterminals = grammar.getNonterminals();
 		
 		for (Nonterminal head : nonterminals) {
 			followSets.put(head, new HashSet<RegularExpression>());
@@ -159,7 +159,7 @@ public class GrammarProperties {
 			
 			for (Nonterminal head : nonterminals) {
 
-				for (List<Symbol> alternate : definitions.get(head)) {
+				for (List<Symbol> alternate : grammar.getAlternatives(head)) {
 					
 					if(alternate == null || alternate.size() == 0) {
 						continue;
@@ -202,14 +202,14 @@ public class GrammarProperties {
 		return followSets;
 	}
 	
-	public static Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets(Map<Nonterminal, List<List<Symbol>>> definitions,
+	public static Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets(Grammar grammar,
 																				   Map<Nonterminal, Set<RegularExpression>> firstSets,
 																				   Map<Nonterminal, Set<RegularExpression>> followSets) {
 
 		Map<Nonterminal, List<Set<RegularExpression>>> predictionSets = new HashMap<>();
 		
-		for(Nonterminal nonterminal : definitions.keySet()) {
-			List<List<Symbol>> alternates = definitions.get(nonterminal);
+		for(Nonterminal nonterminal : grammar.getNonterminals()) {
+			List<List<Symbol>> alternates = grammar.getAlternatives(nonterminal);
 			
 			List<Set<RegularExpression>> list = new ArrayList<>();
 
@@ -252,12 +252,12 @@ public class GrammarProperties {
 		return predictionSets;
 	}
 	
-	public static Set<Nonterminal> calculateLLNonterminals(Map<Nonterminal, Set<List<Symbol>>> definitions, 
+	public static Set<Nonterminal> calculateLLNonterminals(Grammar grammar, 
 											   Map<Nonterminal, Set<RegularExpression>> firstSets,
 											   Map<Nonterminal, Set<RegularExpression>> followSets,
 									   		   Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
 
-		Set<Nonterminal> nonterminals = definitions.keySet();
+		Set<Nonterminal> nonterminals = grammar.getNonterminals();
 		
 		Set<Nonterminal> ll1Nonterminals = new HashSet<>();
 		
@@ -269,7 +269,7 @@ public class GrammarProperties {
 		for (Nonterminal head : nonterminals) {
 
 			int alternateIndex = 0;
-			for(List<Symbol> alt : definitions.get(head)) {
+			for(List<Symbol> alt : grammar.getAlternatives(head)) {
 			
 				// Calculate the prediction set for the alternate
 				Set<RegularExpression> s = new HashSet<>();
@@ -291,7 +291,7 @@ public class GrammarProperties {
 		}
 		
 		for (Nonterminal head : nonterminals) {
-			if(isLL1(head, predictions, definitions)) {
+			if(isLL1(head, predictions, grammar)) {
 				ll1Nonterminals.add(head);
 			}
 		}
@@ -329,9 +329,9 @@ public class GrammarProperties {
 	}
 	
     private static boolean isLL1(Nonterminal nonterminal, Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions,
-    							 Map<Nonterminal, Set<List<Symbol>>> definitions) {
+    							 Grammar grammar) {
     	
-    	int size = definitions.get(nonterminal).size();
+    	int size = grammar.getAlternatives(nonterminal).size();
     	
     	// If there is only one alternate
 		if(size == 1) {
@@ -361,9 +361,9 @@ public class GrammarProperties {
 	 * nonterminals.
 	 * 
 	 */
-	public static Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph(Map<Nonterminal, List<List<Symbol>>> definitions) {
+	public static Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph(Grammar grammar) {
 		
-		Set<Nonterminal> nonterminals = definitions.keySet();
+		Set<Nonterminal> nonterminals = grammar.getNonterminals();
 		
 		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = new HashMap<>();
 		
@@ -378,7 +378,7 @@ public class GrammarProperties {
 			
 			for (Nonterminal head : nonterminals) {
 				Set<Nonterminal> set = reachabilityGraph.get(head);
-				for (List<Symbol> alternate : definitions.get(head)) {
+				for (List<Symbol> alternate : grammar.getAlternatives(head)) {
 					
 					if(alternate == null) {
 						continue;
@@ -424,25 +424,48 @@ public class GrammarProperties {
 		return reachabilityGraph;
 	}
 	
-	public static Map<Nonterminal, List<List<Symbol>>> leftFactorize(Map<Nonterminal, List<List<Symbol>>> definitions) {
+	public static Map<Nonterminal, List<List<Symbol>>> leftFactorize(Grammar grammar) {
 		
 		Map<Nonterminal, List<List<Symbol>>> leftFactorized = new HashMap<>();
 		
-		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
-			
+		for (Nonterminal nonterminal : grammar.getNonterminals()) {
+		
 			Trie<Symbol> trie = new Trie<>();
-			
-			for (List<Symbol> alternative : e.getValue()) {
-				trie.addToRoot(alternative);
+
+			Node<Symbol> node = trie.getRoot();
+			for (List<Symbol> alternative : grammar.getAlternatives(nonterminal)) {
+				for (Symbol s : alternative) {
+					trie.add(node, s);
+				}
 			}
+			trie.add(node, Epsilon.getInstance());
 			
-			Node<Symbol> root = trie.getRoot();
-			for (Edge<Symbol> edge : root.getEdges()) {
+			List<List<Symbol>> newAlternatives = new ArrayList<>();
 				
-			}
+			Symbol symbol = retrieve(trie.getRoot());
+			System.out.println(symbol);
+			
+			leftFactorized.put(nonterminal, newAlternatives);
 		}
 		
 		return leftFactorized;
+	}
+	
+	private static Symbol retrieve(Node<Symbol> node) {
+		
+		if (node.size() == 0) return null;
+		
+		if (node.size() == 1 && node.getEdges().get(0).getLabel() == Epsilon.getInstance()) return null;
+
+		if (node.size() == 1) {
+			return node.getEdges().get(0).getLabel();
+		}
+
+		List<Symbol> symbols = new ArrayList<>();
+		for (Edge<Symbol> edge : node.getEdges()) {
+			symbols.add(retrieve(edge.getDestination()));
+		}
+		return new  Alt(symbols);
 	}
 	
 	/**
@@ -490,7 +513,7 @@ public class GrammarProperties {
 			return changed;
 		}	
 	}
-	
+	 
 	public static void setPredictionSetsForConditionals(Iterable<BodyGrammarSlot> conditionSlots) {
 		// TODO: rewrite this.
 //		for(BodyGrammarSlot slot : conditionSlots) {

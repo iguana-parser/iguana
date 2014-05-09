@@ -1,14 +1,11 @@
 package org.jgll.grammar.basic;
 
 import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -33,7 +30,7 @@ import org.junit.Test;
  */
 public class Test10 {
 	
-	private Grammar grammar;
+	private GrammarGraph grammarGraph;
 	
 	private Nonterminal A = new Nonterminal("A");
 
@@ -44,20 +41,16 @@ public class Test10 {
 		Rule r2 = new Rule(A, list(new Character('a')));
 		Rule r3 = new Rule(A);
 
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder("IndirectRecursion", factory)
-													  .addRule(r1)
-													  .addRule(r2)
-													  .addRule(r3);
-		
-		grammar = builder.build();
+		grammarGraph = new Grammar().addRule(r1)
+									.addRule(r2)
+									.addRule(r3).toGrammarGraph();
 	}
 	
 	@Test
 	public void test1() throws ParseError {
 		Input input = Input.fromString("");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "A");
 		
 		// TODO: stackoverflow bug due to the cycle in the SPPF. Fix it later!
 //		assertTrue(sppf.deepEquals(getSPPF1()));
@@ -66,15 +59,15 @@ public class Test10 {
 	@Test
 	public void test2() throws ParseError {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "A");
 	}
 
 	
 	private SPPFNode getSPPF1() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 3, 0, 0);
-		PackedNode node2 = new PackedNode(grammar.getPackedNodeId(A, new ArrayList<Symbol>()), 0, node1);
-		PackedNode node3 = new PackedNode(grammar.getPackedNodeId(A, A, A), 0, node1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 3, 0, 0);
+		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(A, new ArrayList<Symbol>()), 0, node1);
+		PackedNode node3 = new PackedNode(grammarGraph.getPackedNodeId(A, A, A), 0, node1);
 		node3.addChild(node1);
 		node3.addChild(node1);
 		node1.addChild(node2);

@@ -2,7 +2,7 @@ package org.jgll.util.dot;
 
 import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.traversal.SPPFVisitor;
@@ -18,7 +18,7 @@ import org.jgll.util.Input;
  */
 public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	
-	public ToDotWithoutIntermediateNodes(Grammar grammar, Input input) {
+	public ToDotWithoutIntermediateNodes(GrammarGraph grammar, Input input) {
 		super(grammar, input);
 	}
 	

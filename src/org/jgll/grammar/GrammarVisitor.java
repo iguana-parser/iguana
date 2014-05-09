@@ -14,7 +14,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
  */
 public class GrammarVisitor {
 	
-	public static void visit(Grammar grammar, GrammarVisitAction action) {
+	public static void visit(GrammarGraph grammar, GrammarVisitAction action) {
 		for(HeadGrammarSlot head : grammar.getNonterminals()) {
 			visit(head, action);
 		}

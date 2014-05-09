@@ -4,9 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -35,7 +33,7 @@ import org.junit.Test;
  */
 public class Test6 {
 
-	private Grammar grammar;
+	private GrammarGraph grammar;
 
 	private Nonterminal A = new Nonterminal("A");
 	private Nonterminal B = new Nonterminal("B");
@@ -53,8 +51,7 @@ public class Test6 {
 		Rule r4 = new Rule(C, list(a, C));
 		Rule r5 = new Rule(C, list(c));
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		grammar = new GrammarBuilder("test4", factory).addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
+		grammar = new Grammar().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).toGrammarGraph();
 	}
 	
 	@Test

@@ -1,12 +1,11 @@
 package org.jgll.disambiguation.precedence;
 
-import static org.jgll.util.CollectionsUtil.list;
-import static org.junit.Assert.assertTrue;
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarBuilder;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
+import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -33,6 +32,7 @@ import org.junit.Test;
  */
 public class FilterTest5 {
 
+	private GrammarGraph grammarGraph;
 	private Grammar grammar;
 	private GLLParser parser;
 	
@@ -46,66 +46,67 @@ public class FilterTest5 {
 	@Before
 	public void createGrammar() {
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder("TwoLevelFiltering", factory);
-		
 		// E ::= E z
 		Rule rule1 = new Rule(E, list(E, z));
-		builder.addRule(rule1);
+		grammar.addRule(rule1);
 		
 		// E ::=  x E
 		Rule rule2 = new Rule(E, list(x, E));
-		builder.addRule(rule2);
+		grammar.addRule(rule2);
 		
 		// E ::= E w
 		Rule rule3 = new Rule(E, list(E, w));
-		builder.addRule(rule3);
+		grammar.addRule(rule3);
 		
 		// E ::= y E
 		Rule rule4 = new Rule(E, list(y, E));
-		builder.addRule(rule4);
+		grammar.addRule(rule4);
 		
 		// E ::= a
 		Rule rule5 = new Rule(E, list(a));
-		builder.addRule(rule5);
+		grammar.addRule(rule5);
+		
+		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
 		
 		// (E, .E z, x E) 
-		builder.addPrecedencePattern(E, rule1, 0, rule2);
+		operatorPrecedence.addPrecedencePattern(E, rule1, 0, rule2);
 		
 		// (E, .E z, y E) 
-		builder.addPrecedencePattern(E, rule1, 0, rule4);
+		operatorPrecedence.addPrecedencePattern(E, rule1, 0, rule4);
 		
 		// (E, x .E, E w)
-		builder.addPrecedencePattern(E, rule2, 1, rule3);
+		operatorPrecedence.addPrecedencePattern(E, rule2, 1, rule3);
 		
 		// (E, .E w, y E)
-		builder.addPrecedencePattern(E, rule3, 0, rule4);
+		operatorPrecedence.addPrecedencePattern(E, rule3, 0, rule4);
 		
-		grammar =  builder.build();
+		grammar = operatorPrecedence.rewrite(grammar);
+		
+		grammarGraph =  grammar.toGrammarGraph();
 	}
 
 	@Test
 	public void testParsers() throws ParseError {
 		Input input = Input.fromString("xawz");
-		parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "E");
+		parser = ParserFactory.newParser(grammarGraph, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "E");
 		assertTrue(sppf.deepEquals(getSPPF()));
 	}
 	
 	private SPPFNode getSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 0, 4);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 0, 3);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 0, 2);
-		TokenSymbolNode node4 = new TokenSymbolNode(grammar.getRegularExpressionId(x), 0, 1);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammar.getNonterminalId(E), 5, 1, 2);
-		TokenSymbolNode node6 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 1, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 5, 0, 4);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 5, 0, 3);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 5, 0, 2);
+		TokenSymbolNode node4 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(x), 0, 1);
+		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 5, 1, 2);
+		TokenSymbolNode node6 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 1, 1);
 		node5.addChild(node6);
 		node3.addChild(node4);
 		node3.addChild(node5);
-		TokenSymbolNode node7 = new TokenSymbolNode(grammar.getRegularExpressionId(w), 2, 1);
+		TokenSymbolNode node7 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(w), 2, 1);
 		node2.addChild(node3);
 		node2.addChild(node7);
-		TokenSymbolNode node8 = new TokenSymbolNode(grammar.getRegularExpressionId(z), 3, 1);
+		TokenSymbolNode node8 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(z), 3, 1);
 		node1.addChild(node2);
 		node1.addChild(node8);
 		return node1;

@@ -4,7 +4,7 @@ package org.jgll.parser;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -74,7 +74,7 @@ public class GLLParserImpl implements GLLParser {
 	/**
 	 * 
 	 */
-	protected Grammar grammar;
+	protected GrammarGraph grammar;
 	
 	protected Descriptor currentDescriptor;
 	
@@ -108,7 +108,7 @@ public class GLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public NonterminalSymbolNode parse(Input input, Grammar grammar, String startSymbolName) throws ParseError {
+	public NonterminalSymbolNode parse(Input input, GrammarGraph grammar, String startSymbolName) throws ParseError {
 		return parse(new GLLLexerImpl(input, grammar), grammar, startSymbolName);
 	}
 	
@@ -124,7 +124,7 @@ public class GLLParserImpl implements GLLParser {
 	 * @throws RuntimeException if no nonterminal with the given start symbol name is found.
 	 */
 	@Override
-	public final NonterminalSymbolNode parse(GLLLexer lexer, Grammar grammar, String startSymbolName) throws ParseError {
+	public final NonterminalSymbolNode parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName) throws ParseError {
 		
 		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
 		
@@ -228,7 +228,7 @@ public class GLLParserImpl implements GLLParser {
 		errorGSSNode = null;
 	}
 	
-	private void initLookups(Grammar grammar, Input input) {
+	private void initLookups(GrammarGraph grammar, Input input) {
 		gssLookup = gssLookupFactory.createGSSLookupFactory(grammar, input);
 		sppfLookup = sppfLookupFactory.createSPPFLookup(grammar, input);
 		descriptorLookup = descriptorLookupFactory.createDescriptorLookup(grammar, input);
@@ -440,7 +440,7 @@ public class GLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public Grammar getGrammar() {
+	public GrammarGraph getGrammar() {
 		return grammar;
 	}
 

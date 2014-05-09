@@ -1,10 +1,8 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -31,44 +29,43 @@ public class GrammarBank {
      *      | ( E )
      *    	| a
 	 */
-	public static GrammarBuilder arithmeticExpressions() {
+	public static Grammar arithmeticExpressions() {
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder("ArithmeticExpressions", factory);
+		Grammar grammar = new Grammar();
 
 		Nonterminal E = new Nonterminal("E");
 
 		Rule rule1 = new Rule(E, list(E, new Character('^'), E));
-		builder.addRule(rule1);
+		grammar.addRule(rule1);
 		
 		Rule rule2 = new Rule(E, list(new Character('-'), E));
-		builder.addRule(rule2);
+		grammar.addRule(rule2);
 
 		Rule rule3 = new Rule(E, list(E, new Character('*'), E));
-		builder.addRule(rule3);
+		grammar.addRule(rule3);
 		
 		Rule rule4 = new Rule(E, list(E, new Character('/'), E));
-		builder.addRule(rule4);
+		grammar.addRule(rule4);
 		
 		Rule rule5 = new Rule(E, list(E, new Character('+'), E));
-		builder.addRule(rule5);
+		grammar.addRule(rule5);
 		
 		Rule rule6 = new Rule(E, list(E, new Character('-'), E));
-		builder.addRule(rule6);
+		grammar.addRule(rule6);
 		
 		Rule rule7 = new Rule(E, list(new Character('a')));
-		builder.addRule(rule7);
+		grammar.addRule(rule7);
 		
 		Rule rule8 = new Rule(E, list(E, new Character('-'), E, new Character(';')));
-		builder.addRule(rule8);
+		grammar.addRule(rule8);
 				
 		Rule rule9 = new Rule(E, list(E, new Character('+')));
-		builder.addRule(rule9);
+		grammar.addRule(rule9);
 
 		Rule rule10 = new Rule(E, list(new Character('('), E, new Character(')')));
-		builder.addRule(rule10);
+		grammar.addRule(rule10);
 		
-		return builder;
+		return grammar;
 	}
 	
 	/**
@@ -78,10 +75,9 @@ public class GrammarBank {
 	 *     | s
 	 *      
 	 */
-	public static GrammarBuilder danglingElse() {
+	public static Grammar danglingElse() {
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
+		Grammar grammar = new Grammar();
 		
 		Nonterminal S = new Nonterminal("S");
 		Character s = new Character('s');
@@ -89,15 +85,15 @@ public class GrammarBank {
 		Character b = new Character('b');
 
 		Rule rule1 = new Rule(S, list(a, S));
-		builder.addRule(rule1);
+		grammar.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(Group.of(a, S, b, S)));
-		builder.addRules(EBNFUtil.rewrite(rule2));
+		grammar.addRules(EBNFUtil.rewrite(rule2));
 		
 		Rule rule3 = new Rule(S, list(s));
-		builder.addRule(rule3);
+		grammar.addRule(rule3);
 
-		return builder;
+		return grammar;
 	}
 	
 }

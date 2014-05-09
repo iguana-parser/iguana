@@ -1,6 +1,6 @@
 package org.jgll.parser.lookup;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
@@ -29,7 +29,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	private final IguanaSet<IntermediateNode>[] intermediateNodes;
 	
-	public SPPFLookupImpl(Grammar grammar, Input input) {
+	public SPPFLookupImpl(GrammarGraph grammar, Input input) {
 		long start = System.nanoTime();
 		nonterminalNodes = new IguanaSet[input.length()];
 		

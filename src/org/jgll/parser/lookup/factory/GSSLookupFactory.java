@@ -1,12 +1,12 @@
 package org.jgll.parser.lookup.factory;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.util.Input;
 
 
 public interface GSSLookupFactory {
 	
-	public GSSLookup createGSSLookupFactory(Grammar grammar, Input input);
+	public GSSLookup createGSSLookupFactory(GrammarGraph grammar, Input input);
 
 }

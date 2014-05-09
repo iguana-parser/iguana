@@ -3,7 +3,7 @@ package org.jgll.util.dot;
 import static org.jgll.util.dot.GraphVizUtil.PACKED_NODE;
 import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -13,7 +13,7 @@ import org.jgll.util.Input;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
-	public ToDotWithoutIntermeidateAndLists(Grammar grammar, Input input) {
+	public ToDotWithoutIntermeidateAndLists(GrammarGraph grammar, Input input) {
 		super(grammar, input);
 	}
 

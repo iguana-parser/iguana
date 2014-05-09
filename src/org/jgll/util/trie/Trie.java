@@ -25,7 +25,14 @@ public class Trie<T> {
 		return node;
 	}
 	
-	private Node<T> add(Node<T> node, T label) {
+	public void addToRoot(Iterable<T> labels) {
+		Node<T> node = root;
+		for (T label : labels) {
+			node = add(node, label);
+		}
+	}
+	
+	public Node<T> add(Node<T> node, T label) {
 		if(node.size() == 0) {
 			return insert(node, label);
 		}
@@ -46,14 +53,7 @@ public class Trie<T> {
 		}
 		return null;
 	}
-	
-	public void addToRoot(Iterable<T> labels) {
-		Node<T> node = root;
-		for (T label : labels) {
-			node = add(node, label);
-		}
-	}
-	
+		
 	private Node<T> insert(Node<T> node, T label) {
 		Node<T> newNode = new Node<>();
 		node.addChild(new Edge<T>(label, newNode));

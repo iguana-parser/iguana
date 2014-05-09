@@ -4,7 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Character;
@@ -33,7 +33,7 @@ import org.junit.Test;
  */
 public class Test13 {
 
-	private Grammar grammar;
+	private GrammarGraph grammarGraph;
 
 	private Nonterminal S = new Nonterminal("S");
 	private Nonterminal A = new Nonterminal("A");
@@ -54,36 +54,35 @@ public class Test13 {
 		Rule r8 = new Rule(D, list(a));
 		Rule r9 = new Rule(D);
 
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		grammar = new GrammarBuilder("Test3", factory).addRule(r1).addRule(r2).addRule(r3).
+		grammarGraph = new Grammar().addRule(r1).addRule(r2).addRule(r3).
 													   addRule(r4).addRule(r5).addRule(r6).
-													   addRule(r7).addRule(r8).addRule(r9).build();
+													   addRule(r7).addRule(r8).addRule(r9).toGrammarGraph();
 	}
 	
 	@Test
 	public void testNullable() {
-		assertTrue(grammar.getHeadGrammarSlot("S").isNullable());
-		assertTrue(grammar.getHeadGrammarSlot("A").isNullable());
-		assertTrue(grammar.getHeadGrammarSlot("B").isNullable());
-		assertTrue(grammar.getHeadGrammarSlot("C").isNullable());
-		assertTrue(grammar.getHeadGrammarSlot("D").isNullable());
+		assertTrue(grammarGraph.getHeadGrammarSlot("S").isNullable());
+		assertTrue(grammarGraph.getHeadGrammarSlot("A").isNullable());
+		assertTrue(grammarGraph.getHeadGrammarSlot("B").isNullable());
+		assertTrue(grammarGraph.getHeadGrammarSlot("C").isNullable());
+		assertTrue(grammarGraph.getHeadGrammarSlot("D").isNullable());
 	}
 	
 	@Test
 	public void testParser() throws ParseError {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/output", sppf, grammar, input);
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
+		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/output", sppf, grammarGraph, input);
 //		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	
 	private SPPFNode expectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(A), 1, 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammar.getNonterminalId(B), 1, 0, 1);
-		TokenSymbolNode node3 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 2);
+		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 1, 0, 1);
+		TokenSymbolNode node3 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 0, 1);
 		node2.addChild(node3);
-		TokenSymbolNode node4 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 1, 1);
+		TokenSymbolNode node4 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 1, 1);
 		node1.addChild(node2);
 		node1.addChild(node4);
 		return node1;

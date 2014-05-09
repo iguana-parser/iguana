@@ -2,8 +2,6 @@ package org.jgll.grammar;
 
 import static org.jgll.util.CollectionsUtil.*;
 
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -28,7 +26,7 @@ import org.junit.Test;
 
 public class HiddenLeftRecursion {
 	
-	private Grammar grammar;
+	private GrammarGraph grammarGraph;
 
 	@Before
 	public void createGrammar() {
@@ -41,19 +39,17 @@ public class HiddenLeftRecursion {
 		Rule r3 = new Rule(B, list(new Character('b')));
 		Rule r4 = new Rule(B);
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder("IndirectRecursion", factory).addRule(r1)
+		grammarGraph = new Grammar().addRule(r1)
 													  .addRule(r2)
 													  .addRule(r3)
-													  .addRule(r4);
-		grammar = builder.build();
+													  .addRule(r4).toGrammarGraph();
 	}
 	
 	@Test
 	public void test() throws ParseError {
 		Input input = Input.fromString("ba+a+a");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "A");
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "A");
 	}
 
 }

@@ -1,6 +1,6 @@
 package org.jgll.parser.lookup.factory;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.gss.GSSNodeFactory;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.GSSLookupImpl;
@@ -16,7 +16,7 @@ public class DefaultGSSLookupFactory implements GSSLookupFactory {
 	}
 	
 	@Override
-	public GSSLookup createGSSLookupFactory(Grammar grammar, Input input) {
+	public GSSLookup createGSSLookupFactory(GrammarGraph grammar, Input input) {
 		return new GSSLookupImpl(grammar, input, gssNodeFactory);
 	}
 

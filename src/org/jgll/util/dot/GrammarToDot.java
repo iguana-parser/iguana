@@ -11,7 +11,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
@@ -19,7 +19,7 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
 public class GrammarToDot {
 	
-	public static String toDot(Grammar grammar) {
+	public static String toDot(GrammarGraph grammar) {
 		StringBuilder sb = new StringBuilder();
 		
 		Set<HeadGrammarSlot> visitedHeads = new HashSet<>();

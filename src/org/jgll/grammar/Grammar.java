@@ -1,153 +1,93 @@
 package org.jgll.grammar;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.Writer;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.EpsilonGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.grammar.slot.factory.GrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.RegularExpression;
-import org.jgll.regex.automaton.RunnableAutomaton;
-import org.jgll.util.Tuple;
-import org.jgll.util.logging.LoggerWrapper;
+import org.jgll.util.CollectionsUtil;
 
-/**
- * 
- * @author Ali Afroozeh
- *
- */
-public class Grammar implements Serializable {
-	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(Grammar.class);
-	
-	private static final long serialVersionUID = 1L;
-	
-	private List<HeadGrammarSlot> headGrammarSlots;
-	
-	private List<BodyGrammarSlot> slots;
-	
-	/**
-	 * A map from nonterminal names to their corresponding head ‚slots.
-	 * This map is used to locate head grammar slots by name for parsing
-	 * from any arbitrary nonterminal.
-	 */
-	Map<Nonterminal, HeadGrammarSlot> nameToNonterminals;
-	
-	private transient Map<String, BodyGrammarSlot> nameToSlots;
-	
-	private String name;
-	
-	private int longestTerminalChain;
-	
-	private int maximumNumAlternates;
-	
-	private int maxDescriptorsAtInput;
-	
-	private int averageDescriptorsAtInput;
-	
-	private int stDevDescriptors;
-	
-	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
-	
-	private Map<RegularExpression, Integer> tokenIDMap;
-	
-	private List<RegularExpression> tokens;
-	
-	private RunnableAutomaton[] dfas;
-	
-	private Map<Nonterminal, Set<RegularExpression>> firstSets;
-	
-	private Map<Nonterminal, Set<RegularExpression>> followSets;
-	
-	private Set<Nonterminal> ll1SubGrammarNonterminals;
-	
-	private Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
-	
-	private Map<String, Integer> nonterminalIds;
-	
-	private Map<Tuple<Nonterminal, List<Symbol>>, Integer> packedNodeIds;
-	
-	private List<Nonterminal> nonterminals;
-	
-	private Object[][] objects;
-	
+public class Grammar {
+
 	private Map<Nonterminal, List<List<Symbol>>> definitions;
-	
-	private Map<List<Symbol>, Integer> intermediateNodeIds;
-	
-	private Map<Integer, List<Symbol>> reverseIntermediateNodeIds;
-	
-	public Grammar(GrammarBuilder builder) {
-		this.name = builder.name;
-		this.headGrammarSlots = builder.headGrammarSlots;
-		this.slots = builder.slots;
-		this.nameToNonterminals = new HashMap<>();
-		this.nameToNonterminals = builder.nonterminalsMap;
-		
-		this.maximumNumAlternates = builder.maximumNumAlternates;
-		this.maxDescriptorsAtInput = builder.maxDescriptors;
-		this.averageDescriptorsAtInput = builder.averageDescriptors;
-		this.stDevDescriptors = (int) builder.stDevDescriptors;
-		this.reachabilityGraph = builder.directReachabilityGraph;
-		this.tokens = builder.tokens;
-		this.dfas = builder.dfas;
-		this.firstSets = builder.firstSets;
-		this.followSets = builder.followSets;
-		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
-		
-		this.objects = builder.objects;
-		
-		this.predictionSets = builder.predictionSets;
-		this.nonterminalIds = builder.nonterminalIds;
-		this.nonterminals = builder.nonterminals;
 
-		this.tokenIDMap = builder.tokenIDMap;
-		
-		this.nameToSlots = new HashMap<>();
-		for(BodyGrammarSlot slot : slots) {
-			nameToSlots.put(slot.getLabel(), slot);
+	private Map<Nonterminal, List<Object>> objects;
+	
+	private Map<Nonterminal, Set<List<Symbol>>> addedDefinitions;
+	
+	private Set<Rule> rules;
+	
+	public Grammar() {
+		definitions = new HashMap<>();
+		addedDefinitions = new HashMap<>();
+		objects = new HashMap<>();
+		rules = new HashSet<>();
+	}
+	
+	public Grammar addRules(Iterable<Rule> rules) {
+		for (Rule rule : rules) {
+			addRule(rule);
+		}
+		return this;
+	}
+	
+	public Grammar addRule(Rule rule) {
+		if(rule.getBody() != null) {
+			Set<List<Symbol>> set = addedDefinitions.get(rule.getHead());
+			
+			if(set != null && set.contains(rule.getBody())) {
+				return this;
+			} else {
+				if(set == null) {
+					set = new HashSet<>();
+					addedDefinitions.put(rule.getHead(), set);
+				}
+				set.add(rule.getBody());
+				rules.add(rule);
+			}			
 		}
 		
-		definitions = builder.definitions;
-		intermediateNodeIds = builder.intermediateNodeIds;
-		packedNodeIds = builder.packedNodeIds;
-		
-		reverseIntermediateNodeIds = new HashMap<>();
-		for(Entry<List<Symbol>, Integer> e : intermediateNodeIds.entrySet()) {
-			reverseIntermediateNodeIds.put(e.getValue(), e.getKey());
+		Nonterminal head = rule.getHead();
+		List<List<Symbol>> definition = definitions.get(head);
+		List<Object> list = objects.get(head);
+		if(definition == null) {
+			// The order in which alternates are added is important
+			definition = new ArrayList<>();
+			definitions.put(head, definition);
+			list = new ArrayList<>();
+			objects.put(head, list);
 		}
+		definition.add(rule.getBody());
+		list.add(rule.getObject());
 		
-		printGrammarStatistics();
+		return this;
 	}
 	
-	public void printGrammarStatistics() {
-		log.info("Grammar information:");
-		log.info("Nonterminals: %d", headGrammarSlots.size());
-		log.info("Production rules: %d", numProductions());
-		log.info("Grammar slots: %d", slots.size());
-		log.debug("Longest terminal Chain: %d", longestTerminalChain);
-		log.debug("Maximum number alternates: %d", maximumNumAlternates);
-		log.debug("Maximum descriptors: %d", maxDescriptorsAtInput);
+	public Map<Nonterminal, List<List<Symbol>>> getDefinitions() {
+		return definitions;
 	}
 	
-	public Set<HeadGrammarSlot> getReachableNonterminals(HeadGrammarSlot nonterminal) {
-		return reachabilityGraph.get(nonterminal);
+	public List<List<Symbol>> getAlternatives(Nonterminal nonterminal) {
+		return definitions.get(nonterminal);
 	}
 	
-	private int numProductions() {
+	public Set<Nonterminal> getNonterminals() {
+		return definitions.keySet();
+	}
+	
+	public Set<Rule> getRules() {
+		return rules;
+	}
+	
+	public int sizeRules() {
 		int num = 0;
 		for(Nonterminal head : definitions.keySet()) {
 			num += definitions.get(head).size();
@@ -155,196 +95,35 @@ public class Grammar implements Serializable {
 		return num;
 	}
 	
-	public void code(Writer writer, String packageName) throws IOException {
+	public GrammarGraph toGrammarGraph() {
+		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
+		GrammarBuilder builder = new GrammarBuilder(this, factory);
+		return builder.build();
 	}
 	
-	public String getName() {
-		return name;
-	}
-	
-	public HeadGrammarSlot getHeadGrammarSlot(int id) {
-		return headGrammarSlots.get(id);
-	}
-	
-	public BodyGrammarSlot getGrammarSlot(int id) {
-		return slots.get(id);
-	}
+	public void validate() {
 		
-	public List<HeadGrammarSlot> getNonterminals() {
-		return headGrammarSlots;
-	}
-	
-	public List<BodyGrammarSlot> getGrammarSlots() {
-		return slots;
-	}
-	
-	public HeadGrammarSlot getHeadGrammarSlot(String name) {
-		return nameToNonterminals.get(new Nonterminal(name));
-	}
-	
-	private String getSlotName(BodyGrammarSlot slot) {
-		if(slot instanceof TokenGrammarSlot) {
-			return ((TokenGrammarSlot) slot).getSymbol().getName();
+		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
+			Nonterminal head = e.getKey();
+			if (!definitions.containsKey(head)) {
+				throw new RuntimeException(head + " is not defined.");
+			}
 		}
-		else if (slot instanceof NonterminalGrammarSlot) {
-			return ((NonterminalGrammarSlot) slot).getNonterminal().getNonterminal().toString();
-		} 
-		else {
-			return "";
-		}
-	}
-	
-	public BodyGrammarSlot getGrammarSlotByName(String name) {
-		return nameToSlots.get(name);
-	}
-	
-	public int getLongestTerminalChain() {
-		return longestTerminalChain;
-	}
-	
-	public int getMaximumNumAlternates() {
-		return maximumNumAlternates;
-	}
-	
-	public int getMaxDescriptorsAtInput() {
-		return maxDescriptorsAtInput;
-	}
-	
-	public int getAverageDescriptorsAtInput() {
-		return averageDescriptorsAtInput;
-	}
-	
-	public int getStDevDescriptors() {
-		return stDevDescriptors;
 	}
 	
 	@Override
 	public String toString() {
+		StringBuilder sb = new StringBuilder();
 		
-		final StringBuilder sb = new StringBuilder();
+		for (Nonterminal nonterminal : definitions.keySet()) {
+			sb.append(nonterminal).append(" ::= ");
+			for (List<Symbol> alternatives : definitions.get(nonterminal)) {
+				if (alternatives == null) continue;
+				sb.append(CollectionsUtil.listToString(alternatives)).append("\n");
+			}
+		}
 		
-		GrammarVisitAction action = new GrammarVisitAction() {
-			
-			@Override
-			public void visit(LastGrammarSlot slot) {
-				if(slot instanceof EpsilonGrammarSlot) {
-					sb.append(" epsilon\n");
-				} else {
-					sb.append("\n");
-				}
-			}
-			
-			@Override
-			public void visit(NonterminalGrammarSlot slot) {
-				sb.append(" ").append(getSlotName(slot));
-			}
-			
-			@Override
-			public void visit(HeadGrammarSlot head) {
-				sb.append(head.getNonterminal()).append(" ::= ");
-			}
-
-			@Override
-			public void visit(TokenGrammarSlot slot) {
-				sb.append(" ").append(getSlotName(slot));
-			}
-
-		};
-		
-		// The first nonterminal is the starting point
-		// TODO: allow the user to specify the root of a grammar
-		GrammarVisitor.visit(this, action);
 		return sb.toString();
 	}
 	
-	public RunnableAutomaton getAutomaton(int index) {
-		return dfas[index];
-	}
-	
-	public int getCountTokens() {
-		return tokenIDMap.size() + 2;
-	}
-	
-	public Iterable<RegularExpression> getTokens() {
-		return tokenIDMap.keySet();
-	}
-	
-	public Nonterminal getNonterminalById(int index) {
-		return nonterminals.get(index);
-	}
-	
-	public int getNonterminalId(Nonterminal nonterminal) {
-		return nonterminalIds.get(nonterminal.getName());
-	}
-	
-	public RegularExpression getRegularExpressionById(int index) {
-		return tokens.get(index);
-	}
-	
-	public int getRegularExpressionId(RegularExpression regex) {
-		return tokenIDMap.get(regex);
-	}
-	
-	public int getIntermediateNodeId(Symbol...symbols) {
-		return getIntermediateNodeId(Arrays.asList(symbols));
-	}
-	
-	public int getIntermediateNodeId(List<Symbol> symbols) {
-		return intermediateNodeIds.get(symbols);
-	}
-	
-	public List<Symbol> getIntermediateNodeSequence(int id) {
-		return reverseIntermediateNodeIds.get(id);
-	}
-	
-	public int getPackedNodeId(Nonterminal nonterminal, List<Symbol> symbols) {
-		return packedNodeIds.get(Tuple.of(nonterminal, symbols));
-	}
-	
-	public int getPackedNodeId(Nonterminal nonterminal, Symbol...symbols) {
-		return packedNodeIds.get(Tuple.of(nonterminal, Arrays.asList(symbols)));
-	}
-	
-	public int getCountLL1Nonterminals() {
-		int count = 0;
-		for(HeadGrammarSlot head : headGrammarSlots) {
-			if(isLL1SubGrammar(head.getNonterminal())) {
-				count++;
-			}
-		}
-		return count;
-	}
-	
-	public boolean isLL1SubGrammar(Nonterminal nonterminal) {
-		return ll1SubGrammarNonterminals.contains(nonterminal);
-	}
-	
-	public Set<RegularExpression> getFirstSet(Nonterminal nonterminal) {
-		return firstSets.get(nonterminal);
-	}
-	
-	public Set<RegularExpression> getPredictionSetForAlternate(Nonterminal nonterminal, int index) {
-		return predictionSets.get(nonterminal).get(index);
-	}
-	 
-	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
-		return followSets.get(nonterminal);
-	}
-	
-	public Object getObject(int nonterminalId, int alternateId) {
-		return objects[nonterminalId][alternateId];
-	}
-	
-	public int getCountAlternates(Nonterminal nonterminal) {
-		return definitions.get(nonterminal).size();
-	}
-	
-	public List<Symbol> getDefinition(Nonterminal nonterminal, int alternateIndex) {
-		List<Symbol> list = null;
-		Iterator<List<Symbol>> it = definitions.get(nonterminal).iterator();
-		for(int i = 0; i <= alternateIndex; i++) {
-			list = it.next();
-		}
-		return list;
-	}
 }

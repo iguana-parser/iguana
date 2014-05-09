@@ -3,7 +3,7 @@ package org.jgll.parser.lookup;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.Descriptor;
 import org.jgll.util.Input;
 import org.jgll.util.hashing.ExternalHasher;
@@ -27,7 +27,7 @@ public class DescriptorLookupImpl implements DescriptorLookup {
 	private int descriptorsCount;
 	
 	@SuppressWarnings("unchecked")
-	public DescriptorLookupImpl(Grammar grammar, Input input) {
+	public DescriptorLookupImpl(GrammarGraph grammar, Input input) {
 		long start = System.nanoTime();
 
 		descriptorsStack = new ArrayDeque<>();

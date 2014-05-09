@@ -5,7 +5,7 @@ import static org.jgll.util.dot.GraphVizUtil.INTERMEDIATE_NODE;
 import static org.jgll.util.dot.GraphVizUtil.PACKED_NODE;
 import static org.jgll.util.dot.GraphVizUtil.SYMBOL_NODE;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -32,9 +32,9 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	protected Input input;
 
-	protected Grammar grammar;
+	protected GrammarGraph grammar;
 	
-	public SPPFToDot(Grammar grammar, Input input) {
+	public SPPFToDot(GrammarGraph grammar, Input input) {
 		this(input, false);
 		this.grammar = grammar;
 	}

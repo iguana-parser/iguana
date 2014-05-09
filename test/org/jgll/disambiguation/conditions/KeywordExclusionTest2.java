@@ -1,10 +1,8 @@
 package org.jgll.disambiguation.conditions;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
@@ -29,6 +27,7 @@ import org.junit.rules.ExpectedException;
  */
 public class KeywordExclusionTest2 {
 	
+	private GrammarGraph grammarGraph;
 	private Grammar grammar;
 
 	@Before
@@ -41,15 +40,12 @@ public class KeywordExclusionTest2 {
 		Keyword doo = new Keyword("do", "do");
 		Keyword whilee = new Keyword("while", "while");
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder(factory);
-		
 		RegexAlt<Keyword> alt = new RegexAlt<>(iff, when, doo, whilee);
 		Rule r1 = new Rule(Id, new RegexPlus(az).withCondition(RegularExpressionCondition.notFollow(az)).withCondition(RegularExpressionCondition.notMatch(alt)));
 		
-		builder.addRule(r1);
+		grammar.addRule(r1);
 
-		grammar = builder.build();
+		grammarGraph = grammar.toGrammarGraph();
 	}
 	
 	@org.junit.Rule
@@ -59,37 +55,37 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testWhen() throws ParseError {
 		Input input = Input.fromString("when");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
 		
 		thrown.expect(ParseError.class);
-		parser.parse(input, grammar, "Id");
+		parser.parse(input, grammarGraph, "Id");
 	}
 	
 	@Test
 	public void testIf() throws ParseError {
 		Input input = Input.fromString("if");		
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
 		
 		thrown.expect(ParseError.class);
-		parser.parse(input, grammar, "Id");
+		parser.parse(input, grammarGraph, "Id");
 	}
 	
 	@Test
 	public void testDo() throws ParseError {
 		Input input = Input.fromString("do");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
 
 		thrown.expect(ParseError.class);
-		parser.parse(input, grammar, "Id");
+		parser.parse(input, grammarGraph, "Id");
 	}
 	
 	@Test
 	public void testWhile() throws ParseError {
 		Input input = Input.fromString("while");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
 
 		thrown.expect(ParseError.class);
-		parser.parse(input, grammar, "Id");
+		parser.parse(input, grammarGraph, "Id");
 	}
 
 }

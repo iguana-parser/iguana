@@ -3,8 +3,6 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -23,7 +21,7 @@ import org.junit.Test;
  */
 public class KeywordTest1 {
 	
-	private Grammar grammar;
+	private GrammarGraph grammarGraph;
 
 	Keyword ifKeyword = new Keyword("if");
 	Nonterminal A = new Nonterminal("A");
@@ -32,23 +30,22 @@ public class KeywordTest1 {
 	public void init() {
 		Rule r1 = new Rule(A, ifKeyword);
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder(factory);
-		builder.addRule(r1);
+		Grammar grammar = new Grammar();
+		grammar.addRule(r1);
 		
-		grammar = builder.build();
+		grammarGraph = grammar.toGrammarGraph();
 	}
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(ifKeyword), grammar.getFirstSet(A));
+		assertEquals(set(ifKeyword), grammarGraph.getFirstSet(A));
 	}
 	
 	@Test
 	public void test() throws ParseError {
 		Input input = Input.fromString("if");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		parser.parse(input, grammar, "A");
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		parser.parse(input, grammarGraph, "A");
 	}
 	
 }

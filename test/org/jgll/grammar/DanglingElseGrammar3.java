@@ -4,8 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -31,7 +29,7 @@ import org.junit.Test;
  */
 public class DanglingElseGrammar3 {
 
-	private Grammar grammar;
+	private GrammarGraph grammarGraph;
 	
 	Nonterminal S = new Nonterminal("S");
 	Character s = new Character('s');
@@ -41,46 +39,45 @@ public class DanglingElseGrammar3 {
 	@Before
 	public void init() {
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder("DanglingElse", factory);
+		Grammar grammar = new Grammar();
 		
 		Rule rule1 = new Rule(S, list(a, S.withCondition(RegularExpressionCondition.notFollow(new Character('b')))));
-		builder.addRule(rule1);
+		grammar.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));
-		builder.addRule(rule2);
+		grammar.addRule(rule2);
 		
 		Rule rule3 = new Rule(S, list(s));
-		builder.addRule(rule3);
+		grammar.addRule(rule3);
 		
-		grammar =  builder.build();
+		grammarGraph =  grammar.toGrammarGraph();
 	}
 	
 	@Test
 	public void test() throws ParseError {
 		Input input = Input.fromString("aasbs");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
+		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
 		assertTrue(sppf.deepEquals(getExpectedSPPF()));
 	}
 	
 	private SPPFNode getExpectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 0, 5);
-		TokenSymbolNode node2 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 1, 5);
-		IntermediateNode node4 = new IntermediateNode(grammar.getIntermediateNodeId(a, S, b), 1, 4);
-		IntermediateNode node5 = new IntermediateNode(grammar.getIntermediateNodeId(a, S), 1, 3);
-		TokenSymbolNode node6 = new TokenSymbolNode(grammar.getRegularExpressionId(a), 1, 1);
-		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 2, 3);
-		TokenSymbolNode node8 = new TokenSymbolNode(grammar.getRegularExpressionId(s), 2, 1);
+		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 3, 0, 5);
+		TokenSymbolNode node2 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 0, 1);
+		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 3, 1, 5);
+		IntermediateNode node4 = new IntermediateNode(grammarGraph.getIntermediateNodeId(a, S, b), 1, 4);
+		IntermediateNode node5 = new IntermediateNode(grammarGraph.getIntermediateNodeId(a, S), 1, 3);
+		TokenSymbolNode node6 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 1, 1);
+		NonterminalSymbolNode node7 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 3, 2, 3);
+		TokenSymbolNode node8 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(s), 2, 1);
 		node7.addChild(node8);
 		node5.addChild(node6);
 		node5.addChild(node7);
-		TokenSymbolNode node9 = new TokenSymbolNode(grammar.getRegularExpressionId(b), 3, 1);
+		TokenSymbolNode node9 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(b), 3, 1);
 		node4.addChild(node5);
 		node4.addChild(node9);
-		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammar.getNonterminalId(S), 3, 4, 5);
-		TokenSymbolNode node11 = new TokenSymbolNode(grammar.getRegularExpressionId(s), 4, 1);
+		NonterminalSymbolNode node10 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 3, 4, 5);
+		TokenSymbolNode node11 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(s), 4, 1);
 		node10.addChild(node11);
 		node3.addChild(node4);
 		node3.addChild(node10);

@@ -1,13 +1,11 @@
 package org.jgll.disambiguation.conditions;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
@@ -33,6 +31,7 @@ import org.junit.rules.ExpectedException;
  */
 public class FollowRestrictionTest2 {
 	
+	private GrammarGraph grammarGraph;
 	private Grammar grammar;
 	private GLLParser parser;
 
@@ -44,17 +43,14 @@ public class FollowRestrictionTest2 {
 		Range az = new Range('a', 'z');
 		Range zero_nine = new Range('0', '9');
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder(factory);
-		
 		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword("8", new int[] {'8'}))), zero_nine);
 		
 		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1, r2));
-		builder.addRules(rules);
+		grammar.addRules(rules);
 
-		grammar = builder.build();
+		grammarGraph = grammar.toGrammarGraph();
 	}
 	
 	@org.junit.Rule
@@ -63,16 +59,16 @@ public class FollowRestrictionTest2 {
 	@Test
 	public void testParser1() throws Exception {
 		Input input = Input.fromString("abc8");
-		parser =  ParserFactory.newParser(grammar, input);
+		parser =  ParserFactory.newParser(grammarGraph, input);
 		thrown.expect(ParseError.class);
-		parser.parse(input, grammar, "S");
+		parser.parse(input, grammarGraph, "S");
 	}
 	
 	@Test
 	public void testParser2() throws Exception {
 		Input input = Input.fromString("abc3");
-		parser =  ParserFactory.newParser(grammar, input);
-		parser.parse(input, grammar, "S");
+		parser =  ParserFactory.newParser(grammarGraph, input);
+		parser.parse(input, grammarGraph, "S");
 	}
 
 

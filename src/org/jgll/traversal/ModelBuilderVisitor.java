@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.CollapsibleNode;
@@ -39,9 +39,9 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	
 	private Input input;
 
-	private Grammar grammar;
+	private GrammarGraph grammar;
 	
-	public ModelBuilderVisitor(Input input, NodeListener<T, U> listener, Grammar grammar) {
+	public ModelBuilderVisitor(Input input, NodeListener<T, U> listener, GrammarGraph grammar) {
 		this.input = input;
 		this.listener = listener;
 		this.grammar = grammar;

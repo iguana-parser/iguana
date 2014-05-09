@@ -1,13 +1,11 @@
 package org.jgll.disambiguation.conditions;
 
-import static org.jgll.util.CollectionsUtil.list;
+import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
@@ -33,6 +31,7 @@ import org.junit.rules.ExpectedException;
  */
 public class FollowRestrictionTest {
 	
+	private GrammarGraph grammarGraph;
 	private Grammar grammar;
 	private GLLParser parser;
 
@@ -43,17 +42,14 @@ public class FollowRestrictionTest {
 		Nonterminal Label = new Nonterminal("Label");
 		Range az = new Range('a', 'z');
 		
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder(factory);
-		
 		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword(":", new int[] {':'}))));
 		
 		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1, r2));
-		builder.addRules(rules);
+		grammar.addRules(rules);
 
-		grammar = builder.build();
+		grammarGraph = grammar.toGrammarGraph();
 	}
 	
 	@org.junit.Rule
@@ -62,9 +58,9 @@ public class FollowRestrictionTest {
 	@Test
 	public void testParser() throws Exception {
 		Input input = Input.fromString("abc:");
-		parser =  ParserFactory.newParser(grammar, input);
+		parser =  ParserFactory.newParser(grammarGraph, input);
 		thrown.expect(ParseError.class);
-		parser.parse(input, grammar, "S");
+		parser.parse(input, grammarGraph, "S");
 	}
 
 }

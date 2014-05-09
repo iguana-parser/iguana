@@ -13,12 +13,12 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
+import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Character;
@@ -58,9 +58,7 @@ public class GrammarBuilder implements Serializable {
 
 	String name;
 	
-	Map<Nonterminal, List<List<Symbol>>> definitions;
-	
-	private List<Rule> rules;
+	Grammar grammar;
 	
 	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> directReachabilityGraph;
 	
@@ -88,8 +86,6 @@ public class GrammarBuilder implements Serializable {
 	
 	Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
-	private OperatorPrecedence operatorPrecedence;
-	
 	/**
 	 * Indexed by nonterminal index and alternate index
 	 */
@@ -100,13 +96,15 @@ public class GrammarBuilder implements Serializable {
 	 */
 	Map<Tuple<Integer, Integer>, Object> objectMap;
 	
-	public GrammarBuilder(GrammarSlotFactory grammarSlotFactory) {
-		this("no-name", grammarSlotFactory);
+	public GrammarBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
+		this("no-name", grammar, grammarSlotFactory);
 	}
 	
-	public GrammarBuilder(String name, GrammarSlotFactory grammarSlotFactory) {
+	public GrammarBuilder(String name, Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
+		this.grammar = grammar;
+		
 		headGrammarSlots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
 		
@@ -114,11 +112,7 @@ public class GrammarBuilder implements Serializable {
 		intermediateNodeIds = new HashMap<>();
 		packedNodeIds = new HashMap<>();
 		
-		definitions = new HashMap<>();
-		rules = new ArrayList<>();
 		objectMap = new HashMap<>();
-		
-		operatorPrecedence = new OperatorPrecedence();
 		
 		tokenIDMap = new HashMap<>();
 		tokenIDMap.put(Epsilon.getInstance(), 0);
@@ -131,26 +125,30 @@ public class GrammarBuilder implements Serializable {
 		nonterminals = new ArrayList<>();
 	}
 
-	public Grammar build() {
+	public GrammarGraph build() {
 		
-		List<Rule> newRules = operatorPrecedence.rewrite(definitions);
-		addRules(newRules);
+		calculateIds();
 		
-		objects = new Object[definitions.size()][];
-		for(Nonterminal nonterminal : definitions.keySet()) {
-			objects[nonterminalIds.get(nonterminal.getName())] = new Object[definitions.get(nonterminal).size()];
+		objects = new Object[grammar.getNonterminals().size()][];
+		for(Nonterminal nonterminal : grammar.getNonterminals()) {
+			objects[nonterminalIds.get(nonterminal.getName())] = new Object[grammar.getAlternatives(nonterminal).size()];
 		}
+		
 		for(Entry<Tuple<Integer, Integer>, Object> e : objectMap.entrySet()) {
 			objects[(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
 		}
+		
+//		for(Entry<Tuple<Integer, Integer>, Object> e : objectMap.entrySet()) {
+//			objects[(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
+//		}
 		
 		long start;
 		long end;
 		
 		start = System.nanoTime();
-		firstSets = GrammarProperties.calculateFirstSets(definitions);
-		followSets = GrammarProperties.calculateFollowSets(definitions, firstSets);
-		predictionSets = GrammarProperties.getPredictionSets(definitions, firstSets, followSets);
+		firstSets = GrammarOperations.calculateFirstSets(grammar);
+		followSets = GrammarOperations.calculateFollowSets(grammar, firstSets);
+		predictionSets = GrammarOperations.getPredictionSets(grammar, firstSets, followSets);
 		end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 		
@@ -163,9 +161,11 @@ public class GrammarBuilder implements Serializable {
 				
 		
 		start = System.nanoTime();
-		for(Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
-			convert(e.getKey(), e.getValue());
+		
+		for (Nonterminal nonterminal : grammar.getNonterminals()) {
+			convert(nonterminal);
 		}
+
 		end = System.nanoTime();
 		log.info("Grammar Graph is composed in %d ms", (end - start) / 1000_000);
 		
@@ -177,11 +177,9 @@ public class GrammarBuilder implements Serializable {
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
 		
-		validateGrammar();
-		
 //		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 
-		directReachabilityGraph = GrammarProperties.calculateDirectReachabilityGraph(headGrammarSlots, firstSets);
+		directReachabilityGraph = GrammarOperations.calculateDirectReachabilityGraph(headGrammarSlots, firstSets);
 
 		
 		slots = new ArrayList<>();
@@ -198,114 +196,46 @@ public class GrammarBuilder implements Serializable {
 		}
 
 		
-		return new Grammar(this);
-	}
-	
-	public OperatorPrecedence getOperatorPrecedence() {
-		return operatorPrecedence;
-	}
-
-	public void validateGrammar() {
-		GrammarVisitAction action = new GrammarVisitAction() {
-
-			@Override
-			public void visit(LastGrammarSlot slot) {
-			}
-
-			@Override
-			public void visit(NonterminalGrammarSlot slot) {
-//				if (slot.getNonterminal().getAlternates().size() == 0) {
-//					throw new GrammarValidationException("No alternates defined for " + slot.getNonterminal());
-//				}
-//				
-//				if(!headGrammarSlots.contains(slot.getNonterminal())) {
-//					throw new GrammarValidationException("Undefined nonterminal " + slot.getNonterminal());
-//				}
-			}
-
-			@Override
-			public void visit(HeadGrammarSlot head) {
-//				if (head.getAlternates().size() == 0) {
-//					throw new GrammarValidationException("No alternates defined for " + head);
-//				}
-			}
-
-			@Override
-			public void visit(TokenGrammarSlot slot) {
-				// TODO Auto-generated method stub
-			}
-			
-		};
-
-		for (HeadGrammarSlot head : headGrammarSlots) {
-			GrammarVisitor.visit(head, action);
-		}
-	}
-	
-	public GrammarBuilder addRules(Iterable<Rule> rules) {
-		for(Rule rule : rules) {
-			addRule(rule);
-		}
-		return this;
+		return new GrammarGraph(this);
 	}
 	
 	int nonterminalId = 0;
 	int intermediateId = 0;
 	Map<Nonterminal, Set<List<Symbol>>> addedDefinitions = new HashMap<>();
 
-	public GrammarBuilder addRule(Rule rule) {
-		
-		if(rule.getBody() != null) {
-			Set<List<Symbol>> set = addedDefinitions.get(rule.getHead());
+	public GrammarBuilder calculateIds() {
+				
+		for (Rule rule : grammar.getRules()) {
 			
-			if(set != null && set.contains(rule.getBody())) {
-				return this;
-			} else {
-				if(set == null) {
-					set = new HashSet<>();
-					addedDefinitions.put(rule.getHead(), set);
-				}
-				set.add(rule.getBody());
-			}			
-		}
-		
-		Nonterminal head = rule.getHead();
-		List<List<Symbol>> definition = definitions.get(head);
-		if(definition == null) {
-			// The order in which alternates are added is important
-			definition = new ArrayList<>();
-			definitions.put(head, definition);
-		}
-		definition.add(rule.getBody());
-		
-		rules.add(rule);
-		
-		if(!nonterminalIds.containsKey(head.getName())) {
-			nonterminalIds.put(head.getName(), nonterminalId++);
-			nonterminals.add(head);
-		}
-		
-		if(rule.getObject() != null) {
-			objectMap.put(Tuple.of(nonterminalIds.get(head.getName()), definitions.get(head).size() - 1), rule.getObject());
-		}
-
-		if(rule.getBody() != null) {
-			for(int i = 2; i < rule.getBody().size(); i++) {
-				List<Symbol> prefix = rule.getBody().subList(0, i);
-				List<Symbol> plain = OperatorPrecedence.plain(prefix);
-				if(!intermediateNodeIds.containsKey(plain)) {
-					intermediateNodeIds.put(plain, intermediateId++);
-				}
+			Nonterminal head = rule.getHead();
+			
+			if(!nonterminalIds.containsKey(head.getName())) {
+				nonterminalIds.put(head.getName(), nonterminalId++);
+				nonterminals.add(head);
 			}
 			
-			packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), definitions.get(head).size() - 1);
+			if(rule.getObject() != null) {
+				objectMap.put(Tuple.of(nonterminalIds.get(head.getName()), grammar.getAlternatives(head).size() - 1), rule.getObject());
+			}
+
+			if(rule.getBody() != null) {
+				for(int i = 2; i < rule.getBody().size(); i++) {
+					List<Symbol> prefix = rule.getBody().subList(0, i);
+					List<Symbol> plain = OperatorPrecedence.plain(prefix);
+					if(!intermediateNodeIds.containsKey(plain)) {
+						intermediateNodeIds.put(plain, intermediateId++);
+					}
+				}
+				
+				packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), grammar.getAlternatives(head).size() - 1);
+			}
 		}
-			
+		
 		return this;
 	}
  
-	private void convert(Nonterminal head, List<List<Symbol>> alternates) {
-		
+	private void convert(Nonterminal head) {
+		List<List<Symbol>> alternates = grammar.getAlternatives(head);
 		popActions.clear();
 		
 		HeadGrammarSlot headGrammarSlot = getHeadGrammarSlot(head);
@@ -443,7 +373,7 @@ public class GrammarBuilder implements Serializable {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
 
 		if (headGrammarSlot == null) {
-			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, nonterminalIds.get(nonterminal.getName()), definitions.get(nonterminal), firstSets, followSets, predictionSets);
+			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, nonterminalIds.get(nonterminal.getName()), grammar.getAlternatives(nonterminal), firstSets, followSets, predictionSets);
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
 			headGrammarSlots.add(headGrammarSlot);
 		}
@@ -514,14 +444,6 @@ public class GrammarBuilder implements Serializable {
 			set.add(t);
 		}
 		return set;
-	}
-
-	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
-		operatorPrecedence.addPrecedencePattern(nonterminal, parent, position, child);
-	}
-	
-	public void addExceptPattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
-		operatorPrecedence.addExceptPattern(nonterminal, parent, position, child);
 	}
 	
 	public Set<HeadGrammarSlot> getDirectReachableNonterminals(String name) {

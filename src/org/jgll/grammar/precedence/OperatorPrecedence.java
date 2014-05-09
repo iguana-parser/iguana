@@ -1,4 +1,4 @@
-package org.jgll.grammar;
+package org.jgll.grammar.precedence;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.patterns.AbstractPattern;
 import org.jgll.grammar.patterns.ExceptPattern;
 import org.jgll.grammar.patterns.PrecedencePattern;
@@ -43,8 +44,8 @@ public class OperatorPrecedence {
 		this.newRules = new ArrayList<>();
 	}
 	
-	public List<Rule> rewrite(Map<Nonterminal, List<List<Symbol>>> definitions) {
-		this.definitions = new HashMap<>(definitions);
+	public Grammar rewrite(Grammar grammar) {
+		this.definitions = new HashMap<>(grammar.getDefinitions());
 		rewritePrecedencePatterns();
 		rewriteExceptPatterns();
 		
@@ -54,7 +55,16 @@ public class OperatorPrecedence {
 			}
 		}
 		
-		return newRules;
+		Grammar rewrittenGrammar = new Grammar();
+		for (Rule rule : grammar.getRules()) {
+			rewrittenGrammar.addRule(rule);
+		}
+		
+		for (Rule rule : newRules) {
+			rewrittenGrammar.addRule(rule);
+		}
+		
+		return rewrittenGrammar;
 	}
 	
 	private void rewriteExceptPatterns() {
