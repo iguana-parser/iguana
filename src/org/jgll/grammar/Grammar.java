@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.jgll.grammar.exception.NonterminalNotDefinedException;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -103,14 +104,23 @@ public class Grammar {
 		return builder.build();
 	}
 	
-	public void validate() {
+	public Set<RuntimeException> validate() {
+		
+		Set<RuntimeException> validationExceptions = new HashSet<>();
 		
 		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
-			Nonterminal head = e.getKey();
-			if (!definitions.containsKey(head)) {
-				throw new RuntimeException(head + " is not defined.");
+			for (List<Symbol> alternative : e.getValue()) {
+				for (Symbol s : alternative) {
+					if (s instanceof Nonterminal) {
+						if (!definitions.containsKey(s)) {
+							validationExceptions.add(new NonterminalNotDefinedException((Nonterminal) s));
+						}						
+					}
+				}
 			}
 		}
+		
+		return validationExceptions;
 	}
 	
 	@Override
@@ -126,6 +136,10 @@ public class Grammar {
 		}
 		
 		return sb.toString();
+	}
+	
+	public Object getObject(Nonterminal nonterminal, int alternateIndex) {
+		return objects.get(nonterminal).get(alternateIndex);
 	}
 	
 }

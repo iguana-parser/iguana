@@ -13,6 +13,8 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
+import org.jgll.grammar.exception.GrammarValidationException;
+import org.jgll.grammar.exception.NonterminalNotDefinedException;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
@@ -91,11 +93,6 @@ public class GrammarBuilder implements Serializable {
 	 */
 	Object[][] objects;
 	
-	/**
-	 * (Nonterminal id, alternate id) => object
-	 */
-	Map<Tuple<Integer, Integer>, Object> objectMap;
-	
 	public GrammarBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammar, grammarSlotFactory);
 	}
@@ -104,6 +101,11 @@ public class GrammarBuilder implements Serializable {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
 		this.grammar = grammar;
+
+		Set<RuntimeException> exceptions = grammar.validate();
+		if (!exceptions.isEmpty()) {
+			throw new GrammarValidationException(exceptions);
+		}
 		
 		headGrammarSlots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
@@ -111,8 +113,6 @@ public class GrammarBuilder implements Serializable {
 		nonterminalIds = new HashMap<>();
 		intermediateNodeIds = new HashMap<>();
 		packedNodeIds = new HashMap<>();
-		
-		objectMap = new HashMap<>();
 		
 		tokenIDMap = new HashMap<>();
 		tokenIDMap.put(Epsilon.getInstance(), 0);
@@ -133,14 +133,13 @@ public class GrammarBuilder implements Serializable {
 		for(Nonterminal nonterminal : grammar.getNonterminals()) {
 			objects[nonterminalIds.get(nonterminal.getName())] = new Object[grammar.getAlternatives(nonterminal).size()];
 		}
-		
-		for(Entry<Tuple<Integer, Integer>, Object> e : objectMap.entrySet()) {
-			objects[(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
+
+		for (Nonterminal nonterminal : grammar.getNonterminals()) {
+			for (int alternateIndex = 0; alternateIndex < grammar.getAlternatives(nonterminal).size(); alternateIndex++) {
+				int nonterminalIndex = nonterminalIds.get(nonterminal.getName());
+				objects[nonterminalIndex][alternateIndex] = grammar.getObject(nonterminal, alternateIndex);				
+			}
 		}
-		
-//		for(Entry<Tuple<Integer, Integer>, Object> e : objectMap.entrySet()) {
-//			objects[(e.getKey().getFirst())][e.getKey().getSecond()] = e.getValue();
-//		}
 		
 		long start;
 		long end;
@@ -214,10 +213,6 @@ public class GrammarBuilder implements Serializable {
 				nonterminals.add(head);
 			}
 			
-			if(rule.getObject() != null) {
-				objectMap.put(Tuple.of(nonterminalIds.get(head.getName()), grammar.getAlternatives(head).size() - 1), rule.getObject());
-			}
-
 			if(rule.getBody() != null) {
 				for(int i = 2; i < rule.getBody().size(); i++) {
 					List<Symbol> prefix = rule.getBody().subList(0, i);

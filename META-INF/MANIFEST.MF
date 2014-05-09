@@ -12,6 +12,7 @@ Export-Package:
  org.jgll.grammar.ebnf;uses:="org.jgll.grammar.symbol",
  org.jgll.grammar.ll1,
  org.jgll.grammar.patterns;uses:="org.jgll.grammar.symbol",
+ org.jgll.grammar.precedence,
  org.jgll.grammar.slot;
   uses:="org.jgll.lexer,
    org.jgll.grammar.slot.test,
