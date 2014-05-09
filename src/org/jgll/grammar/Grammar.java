@@ -23,13 +23,13 @@ public class Grammar {
 	
 	private Map<Nonterminal, Set<List<Symbol>>> addedDefinitions;
 	
-	private Set<Rule> rules;
+	private List<Rule> rules;
 	
 	public Grammar() {
 		definitions = new HashMap<>();
 		addedDefinitions = new HashMap<>();
 		objects = new HashMap<>();
-		rules = new HashSet<>();
+		rules = new ArrayList<>();
 	}
 	
 	public Grammar addRules(Iterable<Rule> rules) {
@@ -66,6 +66,8 @@ public class Grammar {
 			objects.put(head, list);
 		}
 		definition.add(rule.getBody());
+		rules.add(rule);
+		
 		list.add(rule.getObject());
 		
 		return this;
@@ -83,7 +85,7 @@ public class Grammar {
 		return definitions.keySet();
 	}
 	
-	public Set<Rule> getRules() {
+	public List<Rule> getRules() {
 		return rules;
 	}
 	

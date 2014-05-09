@@ -46,6 +46,8 @@ public class FilterTest7 {
 	@Before
 	public void init() {
 		
+		grammar = new Grammar();
+		
 		// E ::= EPlus E
 		Rule rule1 = new Rule(E, list(EPlus, E));
 		grammar.addRule(rule1);

@@ -38,6 +38,9 @@ public class FollowRestrictionTest2 {
 	
 	@Before
 	public void init() {
+		
+		grammar = new Grammar();
+		
 		Nonterminal S = new Nonterminal("S");
 		Nonterminal Label = new Nonterminal("Label");
 		Range az = new Range('a', 'z');

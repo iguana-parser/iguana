@@ -48,6 +48,8 @@ public class FilterTest8 {
 	@Before
 	public void init() {
 		
+		grammar = new Grammar();
+		
 		// E ::= E [ E ]
 		Rule rule1 = new Rule(E, list(E, ob, E, cb));
 		grammar.addRule(rule1);

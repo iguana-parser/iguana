@@ -35,6 +35,8 @@ public class ManualArithmeticExpressionsTest {
 
 	@Before
 	public void createGrammar() {
+		
+		grammar = new Grammar();
 
 		Nonterminal E = new Nonterminal("E");
 		Nonterminal T = new Nonterminal("T");

@@ -42,8 +42,10 @@ public class KeywordExclusionTest {
 		Keyword when = new Keyword("when", "when");
 		Keyword doo = new Keyword("do", "do");
 		Keyword whilee = new Keyword("while", "while");
-		
 		RegexAlt<Keyword> alt = new RegexAlt<>(iff, when, doo, whilee);
+		
+		grammar = new Grammar();
+		
 		Rule r1 = new Rule(Id, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)).withCondition(RegularExpressionCondition.notMatch(alt)));
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1));

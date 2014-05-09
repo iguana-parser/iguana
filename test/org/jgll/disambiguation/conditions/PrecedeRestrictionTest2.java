@@ -51,6 +51,8 @@ public class PrecedeRestrictionTest2 {
 
 	@Before
 	public void createGrammar() {
+		
+		grammar = new Grammar();
 
 		Rule r1 = new Rule(S, forr, new Opt(L), Id);
 

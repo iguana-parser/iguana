@@ -41,6 +41,8 @@ public class FollowRestrictionTest {
 		Nonterminal S = new Nonterminal("S");
 		Nonterminal Label = new Nonterminal("Label");
 		Range az = new Range('a', 'z');
+
+		grammar = new Grammar();
 		
 		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword(":", new int[] {':'}))));
 		

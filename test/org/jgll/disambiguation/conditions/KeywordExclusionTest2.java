@@ -32,6 +32,9 @@ public class KeywordExclusionTest2 {
 
 	@Before
 	public void init() {
+		
+		grammar = new Grammar();
+		
 		Nonterminal Id = new Nonterminal("Id");
 		Range az = new Range('a', 'z');
 		
