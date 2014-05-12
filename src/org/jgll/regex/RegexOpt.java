@@ -34,9 +34,14 @@ public class RegexOpt extends AbstractRegularExpression {
 	}
 	
 	public RegexOpt(RegularExpression regexp, Set<Condition> conditions, Object object) {
-		super(getName(regexp), conditions, object);
+		this(getName(regexp), regexp, conditions, object);
+	}
+	
+	public RegexOpt(String name, RegularExpression regexp, Set<Condition> conditions, Object object) {
+		super(name, conditions, object);
 		this.regexp = regexp.withoutConditions();
 	}
+
 
 	private static String getName(RegularExpression regexp) {
 		return regexp.getName() + "?";

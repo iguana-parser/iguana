@@ -41,11 +41,11 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 	
 	public Range(int start, int end, Set<Condition> conditions) {
-		this(start, end, conditions, null);
+		this(getName(start, end), start, end, conditions, null);
 	}
 		
-	public Range(int start, int end, Set<Condition> conditions, Object object) {
-		super(getName(start, end), conditions, object);
+	public Range(String name, int start, int end, Set<Condition> conditions, Object object) {
+		super(name, conditions, object);
 		
 		if(end < start) throw new IllegalArgumentException("Start cannot be less than end.");
 		

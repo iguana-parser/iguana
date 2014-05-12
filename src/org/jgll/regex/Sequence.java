@@ -24,16 +24,16 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	private final List<T> regularExpressions;
 	
 	public Sequence(List<T> regularExpressions, Object object) {
-		this(regularExpressions, Collections.<Condition>emptySet(), object);
+		this(getName(regularExpressions), regularExpressions, Collections.<Condition>emptySet(), object);
 	}
 	
 	public Sequence(List<T> regularExpressions, Set<Condition> conditions) {
-		this(regularExpressions, conditions, null);
+		this(getName(regularExpressions), regularExpressions, conditions, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	public Sequence(List<T> regularExpressions, Set<Condition> conditions, Object object) {
-		super(getName(regularExpressions), conditions, object);
+	public Sequence(String name, List<T> regularExpressions, Set<Condition> conditions, Object object) {
+		super(name, conditions, object);
 		
 		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		

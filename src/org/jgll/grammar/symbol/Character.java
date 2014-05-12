@@ -32,9 +32,13 @@ public class Character extends AbstractRegularExpression {
 	}
 	
 	public Character(int c, Set<Condition> conditions, Object object) {
-		super(getName(c), conditions, object);
-		this.c = c;
+		this(getName(c), c, conditions, object);
 	}
+	
+	public Character(String name, int c, Set<Condition> conditions, Object object) {
+		super(name, conditions, object);
+		this.c = c;
+	}	
 	
 	public static Character from(int c) {
 		return new Character(c);

@@ -23,17 +23,21 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	private final List<T> regularExpressions;
 	
+	public RegexAlt(List<T> regularExpressions) {
+		this(regularExpressions, null);
+	}
+	
 	public RegexAlt(List<T> regularExpressions, Object object) {
-		this(regularExpressions, Collections.<Condition>emptySet(), object);
+		this(getName(regularExpressions), regularExpressions, Collections.<Condition>emptySet(), object);
 	}
 	
 	public RegexAlt(List<T> regularExpressions, Set<Condition> conditions) {
-		this(regularExpressions, conditions, null);
+		this(getName(regularExpressions), regularExpressions, conditions, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	public RegexAlt(List<T> regularExpressions, Set<Condition> conditions, Object object) {
-		super(getName(regularExpressions), conditions, object);
+	public RegexAlt(String name, List<T> regularExpressions, Set<Condition> conditions, Object object) {
+		super(name, conditions, object);
 		
 		if(regularExpressions == null) throw new IllegalArgumentException("The list of regular expressions cannot be null.");
 		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
@@ -41,26 +45,6 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		List<T> list = new ArrayList<>();
 		for (T regex : regularExpressions) {
 			list.add((T) regex.withoutConditions());
-		}
-		
-		this.regularExpressions = list;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public RegexAlt(List<T> regularExpressions) {
-		super(getName(regularExpressions));
-		
-		if(regularExpressions == null) {
-			throw new IllegalArgumentException("The list of regular expressions cannot be null.");
-		}
-		
-		if(regularExpressions.size() == 0) {
-			throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
-		}
-
-		List<T> list = new ArrayList<>();
-		for (T regex : regularExpressions) {
-			list.add((T) regex.withConditions(conditions));
 		}
 		
 		this.regularExpressions = list;

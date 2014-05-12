@@ -33,17 +33,21 @@ public class RegexPlus extends AbstractRegularExpression {
 		this(regex, conditions, null);
 	}
 	
-	private static String getName(RegularExpression regexp) {
-		return regexp.getName() + "+";
+	public RegexPlus(RegularExpression regex, Set<Condition> conditions, Object object) {
+		this(getName(regex), regex, conditions, object);
 	}
 	
-	public RegexPlus(RegularExpression regex, Set<Condition> conditions, Object object) {
-		super(getName(regex), conditions, object);
+	public RegexPlus(String name, RegularExpression regex, Set<Condition> conditions, Object object) {
+		super(name, conditions, object);
 		this.regex = regex;
 		List<RegularExpression> list = new ArrayList<>();
 		list.add(new RegexStar(regex.withoutConditions()));
 		list.add(regex.withoutConditions());
 		this.plus = new Sequence<>(list);
+	}
+	
+	private static String getName(RegularExpression regexp) {
+		return regexp.getName() + "+";
 	}
 	
 	@Override

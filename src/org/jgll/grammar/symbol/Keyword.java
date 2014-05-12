@@ -30,7 +30,11 @@ public class Keyword extends AbstractRegularExpression {
 	}
 	
 	public Keyword(Sequence<Character> seq, Set<Condition> conditions, Object object) {
-		super(seq.getName(), conditions, object);
+		this(seq.getName(), seq, conditions, object);
+	}
+	
+	public Keyword(String name, Sequence<Character> seq, Set<Condition> conditions, Object object) {
+		super(name, conditions, object);
 		this.seq = seq.withConditions(conditions);
 	}
 	
