@@ -100,7 +100,7 @@ public class Grammar {
 	
 	public GrammarGraph toGrammarGraph() {
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarBuilder builder = new GrammarBuilder(this, factory);
+		GrammarGraphBuilder builder = new GrammarGraphBuilder(this, factory);
 		return builder.build();
 	}
 	
@@ -110,6 +110,7 @@ public class Grammar {
 		
 		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
 			for (List<Symbol> alternative : e.getValue()) {
+				if (alternative == null) continue; // Rewritten priority alternatives
 				for (Symbol s : alternative) {
 					if (s instanceof Nonterminal) {
 						if (!definitions.containsKey(s)) {

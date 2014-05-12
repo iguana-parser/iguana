@@ -38,11 +38,11 @@ import org.jgll.util.logging.LoggerWrapper;
 
 import static org.jgll.grammar.Conditions.*;
 
-public class GrammarBuilder implements Serializable {
+public class GrammarGraphBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(GrammarBuilder.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(GrammarGraphBuilder.class);
 
 	Map<Nonterminal, HeadGrammarSlot> nonterminalsMap;
 
@@ -93,11 +93,11 @@ public class GrammarBuilder implements Serializable {
 	 */
 	Object[][] objects;
 	
-	public GrammarBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
+	public GrammarGraphBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammar, grammarSlotFactory);
 	}
 	
-	public GrammarBuilder(String name, Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
+	public GrammarGraphBuilder(String name, Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
 		this.grammar = grammar;
@@ -202,7 +202,7 @@ public class GrammarBuilder implements Serializable {
 	int intermediateId = 0;
 	Map<Nonterminal, Set<List<Symbol>>> addedDefinitions = new HashMap<>();
 
-	public GrammarBuilder calculateIds() {
+	public GrammarGraphBuilder calculateIds() {
 				
 		for (Rule rule : grammar.getRules()) {
 			
@@ -451,7 +451,7 @@ public class GrammarBuilder implements Serializable {
 	 * @param head
 	 * @return
 	 */
-	public GrammarBuilder removeUnusedNonterminals(Nonterminal nonterminal) {
+	public GrammarGraphBuilder removeUnusedNonterminals(Nonterminal nonterminal) {
 
 		Set<HeadGrammarSlot> referedNonterminals = new HashSet<>();
 		Deque<HeadGrammarSlot> queue = new ArrayDeque<>();

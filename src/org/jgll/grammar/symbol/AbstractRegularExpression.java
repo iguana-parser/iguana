@@ -17,12 +17,15 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	
 	protected Automaton automaton;
 
+	private Object object;
+
 	public AbstractRegularExpression(String name) {
-		this(name, Collections.<Condition>emptySet());
+		this(name, Collections.<Condition>emptySet(), null);
 	}
 	
-	public AbstractRegularExpression(String name, Set<Condition> conditions) {
+	public AbstractRegularExpression(String name, Set<Condition> conditions, Object object) {
 		super(name, conditions);
+		this.object = object;
 	}
 	
 	@Override
@@ -60,6 +63,11 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	@Override
 	public RegularExpression withCondition(Condition condition) {
 		return (RegularExpression) super.withCondition(condition);
+	}
+	
+	@Override
+	public Object getObject() {
+		return object;
 	}
 	
 }

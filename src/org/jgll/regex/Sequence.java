@@ -23,9 +23,17 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	private final List<T> regularExpressions;
 	
-	@SuppressWarnings("unchecked")
+	public Sequence(List<T> regularExpressions, Object object) {
+		this(regularExpressions, Collections.<Condition>emptySet(), object);
+	}
+	
 	public Sequence(List<T> regularExpressions, Set<Condition> conditions) {
-		super(CollectionsUtil.listToString(regularExpressions, " "), conditions);
+		this(regularExpressions, conditions, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Sequence(List<T> regularExpressions, Set<Condition> conditions, Object object) {
+		super(getName(regularExpressions), conditions, object);
 		
 		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		
@@ -46,6 +54,10 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	@SafeVarargs
 	public Sequence(T...regularExpressions) {
 		this(Arrays.asList(regularExpressions));
+	}
+	
+	private static <T> String getName(List<T> regularExpressions) {
+		return CollectionsUtil.listToString(regularExpressions, " ");
 	}
 		
 	public List<T> getRegularExpressions() {

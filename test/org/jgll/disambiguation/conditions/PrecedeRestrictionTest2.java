@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarBuilder;
+import org.jgll.grammar.GrammarGraphBuilder;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Character;
@@ -42,8 +42,8 @@ public class PrecedeRestrictionTest2 {
 	private Grammar grammar;
 	
 	private Nonterminal S = new Nonterminal("S");
-	private Keyword forr = new Keyword("for", new int[] { 'f', 'o', 'r' });
-	private Keyword forall = new Keyword("forall", new int[] { 'f', 'o', 'r', 'a', 'l', 'l' });
+	private Keyword forr = new Keyword("for");
+	private Keyword forall = new Keyword("forall");
 	private Nonterminal L = new Nonterminal("L");
 	private Nonterminal Id = new Nonterminal("Id");
 	private Character ws = new Character(' ');
@@ -65,8 +65,8 @@ public class PrecedeRestrictionTest2 {
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1, r2, r3, r4));
 		grammar.addRules(rules);
 
-		grammar.addRule(GrammarBuilder.fromKeyword(forr));
-		grammar.addRule(GrammarBuilder.fromKeyword(forall));
+		grammar.addRule(GrammarGraphBuilder.fromKeyword(forr));
+		grammar.addRule(GrammarGraphBuilder.fromKeyword(forall));
 
 		grammarGraph = grammar.toGrammarGraph();
 	}

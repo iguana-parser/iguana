@@ -25,9 +25,21 @@ public class RegexOpt extends AbstractRegularExpression {
 		this(regexp, Collections.<Condition>emptySet());
 	}
 	
+	public RegexOpt(RegularExpression regexp, Object object) {
+		this(regexp, Collections.<Condition>emptySet(), object);
+	}
+	
 	public RegexOpt(RegularExpression regexp, Set<Condition> conditions) {
-		super(regexp.getName() + "?", conditions);
+		this(regexp, conditions, null);
+	}
+	
+	public RegexOpt(RegularExpression regexp, Set<Condition> conditions, Object object) {
+		super(getName(regexp), conditions, object);
 		this.regexp = regexp.withoutConditions();
+	}
+
+	private static String getName(RegularExpression regexp) {
+		return regexp.getName() + "?";
 	}
 	
 	protected Automaton createAutomaton() {

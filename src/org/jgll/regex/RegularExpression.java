@@ -16,6 +16,8 @@ public interface RegularExpression extends Serializable, Symbol {
 	
 	public Set<Range> getFirstSet();
 	
+	public Object getObject();
+	
 	/**
 	 * The set of characters (ranges) that cannot follow this regular expressions. 
 	 */

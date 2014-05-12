@@ -33,8 +33,8 @@ public class KeywordTest3 {
 	private GrammarGraph grammarGraph;
 	
 	Nonterminal S = new Nonterminal("S");
-	Keyword iff = new Keyword("if", new int[] {'i', 'f'});
-	Keyword then = new Keyword("then", new int[] {'t', 'h', 'e', 'n'});
+	Keyword iff = new Keyword("if");
+	Keyword then = new Keyword("then");
 	Nonterminal L = new Nonterminal("L");
 	Character s = new Character('s');
 	Character ws = new Character(' ');

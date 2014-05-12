@@ -22,14 +22,18 @@ public class Character extends AbstractRegularExpression {
 	private static final long serialVersionUID = 1L;
 	
 	private final int c;
-	
-	public Character(int c, Set<Condition> conditions) {
-		super(getString(c), conditions);
-		this.c = c;
-	}
-	
+
 	public Character(int c) {
 		this(c, Collections.<Condition>emptySet());
+	}
+	
+	public Character(int c, Set<Condition> conditions) {
+		this(c, conditions, null);
+	}
+	
+	public Character(int c, Set<Condition> conditions, Object object) {
+		super(getName(c), conditions, object);
+		this.c = c;
 	}
 	
 	public static Character from(int c) {
@@ -58,7 +62,7 @@ public class Character extends AbstractRegularExpression {
 		return c == other.c;
 	}
 
-	public static String getString(int c) {
+	public static String getName(int c) {
 		if(c >= Constants.FIRST_PRINTABLE_CHAR && c <= java.lang.Character.MAX_VALUE) {
 			return (char)c + "";			
 		} else {

@@ -46,7 +46,7 @@ public class FollowRestrictionTest2 {
 		Range az = new Range('a', 'z');
 		Range zero_nine = new Range('0', '9');
 		
-		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword("8", new int[] {'8'}))), zero_nine);
+		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword("8"))), zero_nine);
 		
 		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
 		

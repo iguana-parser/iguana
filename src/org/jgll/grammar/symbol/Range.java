@@ -39,14 +39,22 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	public Range(int start, int end) {
 		this(start, end, Collections.<Condition>emptySet());
 	}
-		
+	
 	public Range(int start, int end, Set<Condition> conditions) {
-		super(Character.getString(start) + "-" + Character.getString(end), conditions);
+		this(start, end, conditions, null);
+	}
+		
+	public Range(int start, int end, Set<Condition> conditions, Object object) {
+		super(getName(start, end), conditions, object);
 		
 		if(end < start) throw new IllegalArgumentException("Start cannot be less than end.");
 		
 		this.start = start;
 		this.end = end;
+	}
+
+	private static String getName(int start, int end) {
+		return Character.getName(start) + "-" + Character.getName(end);
 	}
 	
 	public int getStart() {

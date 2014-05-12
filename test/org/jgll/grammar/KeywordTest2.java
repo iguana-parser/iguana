@@ -28,7 +28,7 @@ public class KeywordTest2 {
 	
 	Nonterminal A = new Nonterminal("A");
 	Nonterminal B = new Nonterminal("B");
-	Keyword iff = new Keyword("if", new int[] {'i', 'f'});
+	Keyword iff = new Keyword("if");
 
 	@Before
 	public void init() {
@@ -40,7 +40,7 @@ public class KeywordTest2 {
 		
 		grammar.addRule(r1);
 		grammar.addRule(r2);
-		grammar.addRule(GrammarBuilder.fromKeyword(iff));
+		grammar.addRule(GrammarGraphBuilder.fromKeyword(iff));
 		
 		grammarGraph = grammar.toGrammarGraph();
 	}

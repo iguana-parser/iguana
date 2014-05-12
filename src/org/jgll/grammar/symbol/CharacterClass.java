@@ -34,10 +34,14 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 	
 	public CharacterClass(RegexAlt<Range> alt, Set<Condition> conditions) {
-		super(alt.toString(), conditions);
-		this.alt = alt.withConditions(conditions);
+		this(alt, Collections.<Condition>emptySet(), conditions);
 	}
 	
+	public CharacterClass(RegexAlt<Range> alt, Set<Condition> conditions, Object object) {
+		super(alt.getName(), conditions, object);
+		this.alt = alt.withConditions(conditions);
+	}
+
 	public CharacterClass(RegexAlt<Range> alt) {
 		this(alt, Collections.<Condition>emptySet());
 	}

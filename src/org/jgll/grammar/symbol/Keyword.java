@@ -18,24 +18,19 @@ public class Keyword extends AbstractRegularExpression {
 	private final Sequence<Character> seq;
 	
 	public Keyword(String s) {
-		this(s, s);
+		this(Input.toIntArray(s));
 	}
 	
-	public Keyword(String name, String s) {
-		this(name, Input.toIntArray(s));
+	public Keyword(int[] chars) {
+		this(toCharSequence(chars));
 	}
 	
-	public Keyword(String name, int[] chars) {
-		this(name, toCharSequence(chars));
+	public Keyword(Sequence<Character> seq) {
+		this(seq, Collections.<Condition>emptySet(), null);
 	}
 	
-	public Keyword(String name, Sequence<Character> seq) {
-		this(name, seq, Collections.<Condition>emptySet());
-	}
-	
-	public Keyword(String name, Sequence<Character> seq, Set<Condition> conditions) {
-		super(name, conditions);
-		this.name = name;
+	public Keyword(Sequence<Character> seq, Set<Condition> conditions, Object object) {
+		super(seq.getName(), conditions, object);
 		this.seq = seq.withConditions(conditions);
 	}
 	
@@ -98,7 +93,7 @@ public class Keyword extends AbstractRegularExpression {
 
 	@Override
 	public Keyword withConditions(Set<Condition> conditions) {
-		return new Keyword(name, seq, CollectionsUtil.union(conditions, this.conditions));
+		return new Keyword(seq, CollectionsUtil.union(conditions, this.conditions), null);
 	}
 	
 	@Override
@@ -108,7 +103,7 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	public Keyword withoutConditions() {
-		return new Keyword(name, seq);
+		return new Keyword(seq);
 	}
 	
 }

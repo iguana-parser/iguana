@@ -44,7 +44,7 @@ public class FollowRestrictionTest {
 
 		grammar = new Grammar();
 		
-		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword(":", new int[] {':'}))));
+		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword(":"))));
 		
 		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
 		

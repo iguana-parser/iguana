@@ -38,10 +38,10 @@ public class KeywordExclusionTest {
 		Nonterminal Id = new Nonterminal("Id");
 		Range az = new Range('a', 'z');
 		
-		Keyword iff = new Keyword("if", "if");
-		Keyword when = new Keyword("when", "when");
-		Keyword doo = new Keyword("do", "do");
-		Keyword whilee = new Keyword("while", "while");
+		Keyword iff = new Keyword("if");
+		Keyword when = new Keyword("when");
+		Keyword doo = new Keyword("do");
+		Keyword whilee = new Keyword("while");
 		RegexAlt<Keyword> alt = new RegexAlt<>(iff, when, doo, whilee);
 		
 		grammar = new Grammar();

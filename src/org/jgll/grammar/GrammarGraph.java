@@ -90,7 +90,7 @@ public class GrammarGraph implements Serializable {
 	
 	private Map<Integer, List<Symbol>> reverseIntermediateNodeIds;
 	
-	public GrammarGraph(GrammarBuilder builder) {
+	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
 		this.headGrammarSlots = builder.headGrammarSlots;
 		this.slots = builder.slots;

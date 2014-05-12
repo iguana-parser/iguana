@@ -23,9 +23,17 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	private final List<T> regularExpressions;
 	
-	@SuppressWarnings("unchecked")
+	public RegexAlt(List<T> regularExpressions, Object object) {
+		this(regularExpressions, Collections.<Condition>emptySet(), object);
+	}
+	
 	public RegexAlt(List<T> regularExpressions, Set<Condition> conditions) {
-		super("(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")", conditions);
+		this(regularExpressions, conditions, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public RegexAlt(List<T> regularExpressions, Set<Condition> conditions, Object object) {
+		super(getName(regularExpressions), conditions, object);
 		
 		if(regularExpressions == null) throw new IllegalArgumentException("The list of regular expressions cannot be null.");
 		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
@@ -40,7 +48,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	
 	@SuppressWarnings("unchecked")
 	public RegexAlt(List<T> regularExpressions) {
-		super("(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")");
+		super(getName(regularExpressions));
 		
 		if(regularExpressions == null) {
 			throw new IllegalArgumentException("The list of regular expressions cannot be null.");
@@ -61,6 +69,10 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	@SafeVarargs
 	public RegexAlt(T...regularExpressions) {
 		this(Arrays.asList(regularExpressions));
+	}
+	
+	private static <T> String getName(List<T> regularExpressions) {
+		return "(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")";
 	}
 	
 	public List<T> getRegularExpressions() {

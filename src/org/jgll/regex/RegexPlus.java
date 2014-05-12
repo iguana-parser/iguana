@@ -20,17 +20,30 @@ public class RegexPlus extends AbstractRegularExpression {
 	
 	private final RegularExpression plus;
 	
+	
+	public RegexPlus(RegularExpression regexp) {
+		this(regexp, Collections.<Condition>emptySet());
+	}
+	
+	public RegexPlus(RegularExpression regexp, Object object) {
+		this(regexp, Collections.<Condition>emptySet(), object);
+	}
+
 	public RegexPlus(RegularExpression regex, Set<Condition> conditions) {
-		super(regex.getName() + "+", conditions);
+		this(regex, conditions, null);
+	}
+	
+	private static String getName(RegularExpression regexp) {
+		return regexp.getName() + "+";
+	}
+	
+	public RegexPlus(RegularExpression regex, Set<Condition> conditions, Object object) {
+		super(getName(regex), conditions, object);
 		this.regex = regex;
 		List<RegularExpression> list = new ArrayList<>();
 		list.add(new RegexStar(regex.withoutConditions()));
 		list.add(regex.withoutConditions());
 		this.plus = new Sequence<>(list);
-	}
-	
-	public RegexPlus(RegularExpression regexp) {
-		this(regexp, Collections.<Condition>emptySet());
 	}
 	
 	@Override

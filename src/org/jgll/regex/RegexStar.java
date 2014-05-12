@@ -20,12 +20,24 @@ public class RegexStar extends AbstractRegularExpression {
 	private final RegularExpression regexp;
 	
 	public RegexStar(RegularExpression regexp, Set<Condition> conditions) {
-		super(regexp + "*", conditions);
+		this(regexp, conditions, null);
+	}
+	
+	public RegexStar(RegularExpression regexp, Set<Condition> conditions, Object object) {
+		super(getName(regexp), conditions, object);
 		this.regexp = regexp.withoutConditions();
 	}
 	
 	public RegexStar(RegularExpression regexp) {
 		this(regexp, Collections.<Condition>emptySet());
+	}
+	
+	public RegexStar(RegularExpression regexp, Object object) {
+		this(regexp, Collections.<Condition>emptySet(), object);
+	}
+
+	private static String getName(RegularExpression regexp) {
+		return regexp + "*";
 	}
 	
 	@Override
