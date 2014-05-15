@@ -36,11 +36,11 @@ public class LeftFactorizedArithmeticGrammarTest {
 	Nonterminal E1 = new Nonterminal("E1");
 	Nonterminal F = new Nonterminal("F");
 	Nonterminal T1 = new Nonterminal("T1");
-	Character plus = new Character('+');
-	Character star = new Character('*');
-	Character a = new Character('a');
-	Character openPar = new Character('(');
-	Character closePar = new Character(')');
+	Character plus = Character.from('+');
+	Character star = Character.from('*');
+	Character a = Character.from('a');
+	Character openPar = Character.from('(');
+	Character closePar = Character.from(')');
 
 	@Before
 	public void createGrammar() {

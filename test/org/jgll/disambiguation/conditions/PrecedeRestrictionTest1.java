@@ -42,12 +42,12 @@ public class PrecedeRestrictionTest1 {
 	private Grammar grammar;
 	
 	private Nonterminal S = new Nonterminal("S");
-	private Keyword forr = new Keyword("for");
-	private Keyword forall = new Keyword("forall");
+	private Keyword forr = Keyword.from("for");
+	private Keyword forall = Keyword.from("forall");
 	private Nonterminal L = new Nonterminal("L");
 	private Nonterminal Id = new Nonterminal("Id");
-	private Character ws = new Character(' ');
-	private Range az = new Range('a', 'z');
+	private Character ws = Character.from(' ');
+	private Range az = Range.in('a', 'z');
 
 	@Before
 	public void createParser() {

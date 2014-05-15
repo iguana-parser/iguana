@@ -11,7 +11,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
-import org.jgll.util.CollectionsUtil;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -23,25 +23,13 @@ public class Character extends AbstractRegularExpression {
 	
 	private final int c;
 
-	public Character(int c) {
-		this(c, Collections.<Condition>emptySet());
-	}
-	
-	public Character(int c, Set<Condition> conditions) {
-		this(c, conditions, null);
-	}
-	
-	public Character(int c, Set<Condition> conditions, Object object) {
-		this(getName(c), c, conditions, object);
-	}
-	
-	public Character(String name, int c, Set<Condition> conditions, Object object) {
-		super(name, conditions, object);
+	public Character(int c, String label, Set<Condition> conditions, Object object) {
+		super(getName(c), label, conditions, object);
 		this.c = c;
 	}	
 	
 	public static Character from(int c) {
-		return new Character(c);
+		return new Character(c, null, Collections.<Condition>emptySet(), null);
 	}
 	
 	public int getValue() {
@@ -96,14 +84,14 @@ public class Character extends AbstractRegularExpression {
 		if(c < Constants.MAX_UTF32_VAL) {
 			ranges.add(Range.in(c + 1, Constants.MAX_UTF32_VAL));
 		}
-		CharacterClass c = new CharacterClass(ranges);
+		CharacterClass c = CharacterClass.from(ranges);
 		return c;
 	}
 
 	@Override
 	public Set<Range> getFirstSet() {
 		Set<Range> firstSet = new HashSet<>();
-		firstSet.add(new Range(c, c));
+		firstSet.add(Range.in(c, c));
 		return firstSet;
 	}
 	
@@ -114,12 +102,24 @@ public class Character extends AbstractRegularExpression {
 
 	@Override
 	public Character withConditions(Set<Condition> conditions) {
-		return new Character(c, CollectionsUtil.union(conditions, this.conditions));
+		return new Builder(c).addConditions(conditions).addConditions(this.conditions).build();
 	}
 	
 	@Override
 	public Character withoutConditions() {
-		return new Character(c);
+		return new Builder(c).build();
+	}
+	
+	public static class Builder extends SymbolBuilder<Character> {
+		
+		private int c;
+		
+		public Builder(int c) { this.c = c; }
+
+		@Override
+		public Character build() {
+			return new Character(c, label, conditions, object);
+		}
 	}
 
 }

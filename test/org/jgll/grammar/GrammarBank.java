@@ -35,34 +35,34 @@ public class GrammarBank {
 
 		Nonterminal E = new Nonterminal("E");
 
-		Rule rule1 = new Rule(E, list(E, new Character('^'), E));
+		Rule rule1 = new Rule(E, list(E, Character.from('^'), E));
 		grammar.addRule(rule1);
 		
-		Rule rule2 = new Rule(E, list(new Character('-'), E));
+		Rule rule2 = new Rule(E, list(Character.from('-'), E));
 		grammar.addRule(rule2);
 
-		Rule rule3 = new Rule(E, list(E, new Character('*'), E));
+		Rule rule3 = new Rule(E, list(E, Character.from('*'), E));
 		grammar.addRule(rule3);
 		
-		Rule rule4 = new Rule(E, list(E, new Character('/'), E));
+		Rule rule4 = new Rule(E, list(E, Character.from('/'), E));
 		grammar.addRule(rule4);
 		
-		Rule rule5 = new Rule(E, list(E, new Character('+'), E));
+		Rule rule5 = new Rule(E, list(E, Character.from('+'), E));
 		grammar.addRule(rule5);
 		
-		Rule rule6 = new Rule(E, list(E, new Character('-'), E));
+		Rule rule6 = new Rule(E, list(E, Character.from('-'), E));
 		grammar.addRule(rule6);
 		
-		Rule rule7 = new Rule(E, list(new Character('a')));
+		Rule rule7 = new Rule(E, list(Character.from('a')));
 		grammar.addRule(rule7);
 		
-		Rule rule8 = new Rule(E, list(E, new Character('-'), E, new Character(';')));
+		Rule rule8 = new Rule(E, list(E, Character.from('-'), E, Character.from(';')));
 		grammar.addRule(rule8);
 				
-		Rule rule9 = new Rule(E, list(E, new Character('+')));
+		Rule rule9 = new Rule(E, list(E, Character.from('+')));
 		grammar.addRule(rule9);
 
-		Rule rule10 = new Rule(E, list(new Character('('), E, new Character(')')));
+		Rule rule10 = new Rule(E, list(Character.from('('), E, Character.from(')')));
 		grammar.addRule(rule10);
 		
 		return grammar;
@@ -80,9 +80,9 @@ public class GrammarBank {
 		Grammar grammar = new Grammar();
 		
 		Nonterminal S = new Nonterminal("S");
-		Character s = new Character('s');
-		Character a = new Character('a');
-		Character b = new Character('b');
+		Character s = Character.from('s');
+		Character a = Character.from('a');
+		Character b = Character.from('b');
 
 		Rule rule1 = new Rule(S, list(a, S));
 		grammar.addRule(rule1);

@@ -34,9 +34,9 @@ public class IndirectRecursion2Test {
 	private Nonterminal A = new Nonterminal("A");
 	private Nonterminal B = new Nonterminal("B");
 
-	private Character a = new Character('a');
-	private Character b = new Character('b');
-	private Character d = new Character('d');
+	private Character a = Character.from('a');
+	private Character b = Character.from('b');
+	private Character d = Character.from('d');
 
 	@Before
 	public void init() {

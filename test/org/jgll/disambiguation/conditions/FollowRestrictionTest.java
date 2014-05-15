@@ -40,11 +40,11 @@ public class FollowRestrictionTest {
 	public void init() {
 		Nonterminal S = new Nonterminal("S");
 		Nonterminal Label = new Nonterminal("Label");
-		Range az = new Range('a', 'z');
+		Range az = Range.in('a', 'z');
 
 		grammar = new Grammar();
 		
-		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword(":"))));
+		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(Keyword.from(":"))));
 		
 		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
 		

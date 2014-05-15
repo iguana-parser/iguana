@@ -11,6 +11,7 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -22,22 +23,10 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	private static final long serialVersionUID = 1L;
 
 	private final List<T> regularExpressions;
-	
-	public RegexAlt(List<T> regularExpressions) {
-		this(regularExpressions, null);
-	}
-	
-	public RegexAlt(List<T> regularExpressions, Object object) {
-		this(getName(regularExpressions), regularExpressions, Collections.<Condition>emptySet(), object);
-	}
-	
-	public RegexAlt(List<T> regularExpressions, Set<Condition> conditions) {
-		this(getName(regularExpressions), regularExpressions, conditions, null);
-	}
 
 	@SuppressWarnings("unchecked")
-	public RegexAlt(String name, List<T> regularExpressions, Set<Condition> conditions, Object object) {
-		super(name, conditions, object);
+	public RegexAlt(List<T> regularExpressions, String label, Set<Condition> conditions, Object object) {
+		super(getName(regularExpressions), label, conditions, object);
 		
 		if(regularExpressions == null) throw new IllegalArgumentException("The list of regular expressions cannot be null.");
 		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
@@ -51,9 +40,14 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	}
 	
 	@SafeVarargs
-	public RegexAlt(T...regularExpressions) {
-		this(Arrays.asList(regularExpressions));
+	public static <T extends RegularExpression> RegexAlt<T> from(T...regularExpressions) {
+		return from(Arrays.asList(regularExpressions));
 	}
+	
+	public static <T extends RegularExpression> RegexAlt<T> from(List<T> regularExpressions) {
+		return new Builder<>(regularExpressions).build();
+	}
+
 	
 	private static <T> String getName(List<T> regularExpressions) {
 		return "(" + CollectionsUtil.listToString(regularExpressions, " | ") + ")";
@@ -148,12 +142,25 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public RegexAlt<T> withConditions(Set<Condition> conditions) {
-		return new RegexAlt<>(regularExpressions, CollectionsUtil.union(conditions, this.conditions));
+		return new Builder<>(regularExpressions).addConditions(conditions).addConditions(this.conditions).build();
 	}
 
 	@Override
 	public RegexAlt<T> withoutConditions() {
-		return new RegexAlt<>(regularExpressions);
+		return new Builder<>(regularExpressions).build();
 	}
 	
+	public static class Builder<T extends RegularExpression> extends SymbolBuilder<RegexAlt<T>> {
+		
+		private List<T> regularExpressions;
+
+		public Builder(List<T> regularExpressions) {
+			this.regularExpressions = regularExpressions;
+		}
+
+		@Override
+		public RegexAlt<T> build() {
+			return new RegexAlt<>(regularExpressions, label, conditions, object);
+		}
+	}
 }

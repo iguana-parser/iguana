@@ -44,7 +44,7 @@ public class Epsilon extends AbstractRegularExpression {
 	@Override
 	public Set<Range> getFirstSet() {
 		HashSet<Range> firstSet = new HashSet<>();
-		firstSet.add(new Range(-1, -1));
+		firstSet.add(Range.in(-1, -1));
 		return firstSet;
 	}
 

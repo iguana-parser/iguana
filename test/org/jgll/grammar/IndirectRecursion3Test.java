@@ -37,11 +37,11 @@ public class IndirectRecursion3Test {
 	private Nonterminal B = new Nonterminal("B");
 	private Nonterminal C = new Nonterminal("C");
 	
-	private Character c = new Character('c');
-	private Character d = new Character('d');
-	private Character e = new Character('e');
-	private Character f = new Character('f');
-	private Character g = new Character('g');
+	private Character c = Character.from('c');
+	private Character d = Character.from('d');
+	private Character e = Character.from('e');
+	private Character f = Character.from('f');
+	private Character g = Character.from('g');
 
 	@Before
 	public void init() {

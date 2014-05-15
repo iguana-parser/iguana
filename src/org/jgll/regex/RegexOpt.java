@@ -8,12 +8,11 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
-import org.jgll.util.CollectionsUtil;
-
 
 public class RegexOpt extends AbstractRegularExpression {
 
@@ -21,27 +20,14 @@ public class RegexOpt extends AbstractRegularExpression {
 
 	private final RegularExpression regexp;
 	
-	public RegexOpt(RegularExpression regexp) {
-		this(regexp, Collections.<Condition>emptySet());
-	}
-	
-	public RegexOpt(RegularExpression regexp, Object object) {
-		this(regexp, Collections.<Condition>emptySet(), object);
-	}
-	
-	public RegexOpt(RegularExpression regexp, Set<Condition> conditions) {
-		this(regexp, conditions, null);
-	}
-	
-	public RegexOpt(RegularExpression regexp, Set<Condition> conditions, Object object) {
-		this(getName(regexp), regexp, conditions, object);
-	}
-	
-	public RegexOpt(String name, RegularExpression regexp, Set<Condition> conditions, Object object) {
-		super(name, conditions, object);
+	public RegexOpt(RegularExpression regexp, String label, Set<Condition> conditions, Object object) {
+		super(getName(regexp), label, conditions, object);
 		this.regexp = regexp.withoutConditions();
 	}
 
+	public static RegexOpt from(RegularExpression regexp) {
+		return new Builder(regexp).build();
+	}
 
 	private static String getName(RegularExpression regexp) {
 		return regexp.getName() + "?";
@@ -84,12 +70,26 @@ public class RegexOpt extends AbstractRegularExpression {
 
 	@Override
 	public RegularExpression withConditions(Set<Condition> conditions) {
-		return new RegexOpt(regexp, CollectionsUtil.union(conditions, this.conditions));
+		return new Builder(regexp).addConditions(this.conditions).addConditions(conditions).build();
 	}
 
 	@Override
 	public RegexOpt withoutConditions() {
-		return new RegexOpt(regexp);
+		return RegexOpt.from(regexp);
+	}
+	
+	public static class Builder extends SymbolBuilder<RegexOpt> {
+
+		private RegularExpression regexp;
+		
+		public Builder(RegularExpression regexp) {
+			this.regexp = regexp;
+		}
+		
+		@Override
+		public RegexOpt build() {
+			return new RegexOpt(regexp, label, conditions, object);
+		}
 	}
 	
 }

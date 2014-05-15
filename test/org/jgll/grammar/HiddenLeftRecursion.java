@@ -33,10 +33,10 @@ public class HiddenLeftRecursion {
 		Nonterminal A = new Nonterminal("A");
 		Nonterminal B = new Nonterminal("B");
 
-		Rule r1 = new Rule(A, list(B, A, new Character('+'), A));
-		Rule r2 = new Rule(A, list(new Character('a')));
+		Rule r1 = new Rule(A, list(B, A, Character.from('+'), A));
+		Rule r2 = new Rule(A, list(Character.from('a')));
 		
-		Rule r3 = new Rule(B, list(new Character('b')));
+		Rule r3 = new Rule(B, list(Character.from('b')));
 		Rule r4 = new Rule(B);
 		
 		grammarGraph = new Grammar().addRule(r1)

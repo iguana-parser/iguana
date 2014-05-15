@@ -32,16 +32,16 @@ public class DanglingElseGrammar3 {
 	private GrammarGraph grammarGraph;
 	
 	Nonterminal S = new Nonterminal("S");
-	Character s = new Character('s');
-	Character a = new Character('a');
-	Character b = new Character('b');
+	Character s = Character.from('s');
+	Character a = Character.from('a');
+	Character b = Character.from('b');
 
 	@Before
 	public void init() {
 		
 		Grammar grammar = new Grammar();
 		
-		Rule rule1 = new Rule(S, list(a, S.withCondition(RegularExpressionCondition.notFollow(new Character('b')))));
+		Rule rule1 = new Rule(S, list(a, S.withCondition(RegularExpressionCondition.notFollow(Character.from('b')))));
 		grammar.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));

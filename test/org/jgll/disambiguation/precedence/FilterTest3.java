@@ -41,8 +41,8 @@ public class FilterTest3 {
 	
 	private Nonterminal E = new Nonterminal("E");
 	private Nonterminal EPlus = new Nonterminal("E+", true);
-	private Character a = new Character('a');
-	private Character plus = new Character('+');
+	private Character a = Character.from('a');
+	private Character plus = Character.from('+');
 	
 	@Before
 	public void createGrammar() {

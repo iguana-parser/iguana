@@ -32,10 +32,10 @@ public class Gamma0Test {
 
 	private GrammarGraph grammarGraph;
 	
-	private Character a = new Character('a');
+	private Character a = Character.from('a');
 	private Nonterminal S = new Nonterminal("S");
 	private Nonterminal A = new Nonterminal("A");
-	private Character d = new Character('d');
+	private Character d = Character.from('d');
 
 
 	@Before

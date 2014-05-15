@@ -31,7 +31,7 @@ public class Gamma2Test {
 	
 	private GrammarGraph grammarGraph;
 	private Nonterminal S = new Nonterminal("S");
-	private Character b = new Character('b');
+	private Character b = Character.from('b');
 	
 	@Before
 	public void init() {

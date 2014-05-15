@@ -34,8 +34,8 @@ public class Test9 {
 	private Nonterminal S = new Nonterminal("S");
 	private Nonterminal A = new Nonterminal("A");
 	
-	private Character a = new Character('a');
-	private Character b = new Character('b');
+	private Character a = Character.from('a');
+	private Character b = Character.from('b');
 
 	
 	@Before

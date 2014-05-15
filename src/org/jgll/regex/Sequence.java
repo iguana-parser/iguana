@@ -11,6 +11,7 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -22,18 +23,10 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	private static final long serialVersionUID = 1L;
 
 	private final List<T> regularExpressions;
-	
-	public Sequence(List<T> regularExpressions, Object object) {
-		this(getName(regularExpressions), regularExpressions, Collections.<Condition>emptySet(), object);
-	}
-	
-	public Sequence(List<T> regularExpressions, Set<Condition> conditions) {
-		this(getName(regularExpressions), regularExpressions, conditions, null);
-	}
 
 	@SuppressWarnings("unchecked")
-	public Sequence(String name, List<T> regularExpressions, Set<Condition> conditions, Object object) {
-		super(name, conditions, object);
+	public Sequence(List<T> regularExpressions, String label, Set<Condition> conditions, Object object) {
+		super(getName(regularExpressions), label, conditions, object);
 		
 		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		
@@ -47,13 +40,13 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		this.regularExpressions = list;
 	}
 	
-	public Sequence(List<T> regularExpressions) {
-		this(regularExpressions, Collections.<Condition>emptySet());
+	public static <T extends RegularExpression> Sequence<T> from(List<T> regularExpressions) {
+		return new Builder<>(regularExpressions).build();
 	}
 	
 	@SafeVarargs
-	public Sequence(T...regularExpressions) {
-		this(Arrays.asList(regularExpressions));
+	public static <T extends RegularExpression> Sequence<T> from(T...regularExpressions) {
+		return from(Arrays.asList(regularExpressions));
 	}
 	
 	private static <T> String getName(List<T> regularExpressions) {
@@ -158,12 +151,27 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public Sequence<T> withConditions(Set<Condition> conditions) {
-		return new Sequence<>(regularExpressions, CollectionsUtil.union(conditions, this.conditions));
+		return new Builder<>(regularExpressions).addConditions(this.conditions).addConditions(conditions).build();
 	}
 	
 	@Override
 	public Sequence<T> withoutConditions() {
-		return new Sequence<>(regularExpressions);
+		return Sequence.from(regularExpressions);
+	}
+	
+	public static class Builder<T extends RegularExpression> extends SymbolBuilder<Sequence<T>> {
+
+		private List<T> regularExpressions;
+
+		public Builder(List<T> regularExpressions) {
+			this.regularExpressions = regularExpressions;
+		}
+		
+		@Override
+		public Sequence<T> build() {
+			return new Sequence<>(regularExpressions, label, conditions, object);
+		}
+		
 	}
 	
 }

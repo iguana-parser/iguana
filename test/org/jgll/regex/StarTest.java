@@ -15,7 +15,7 @@ public class StarTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regexp = new RegexStar(new Character('a'));
+		RegularExpression regexp = RegexStar.from(Character.from('a'));
 		Automaton nfa = regexp.getAutomaton();
 				
 		assertEquals(4, nfa.getCountStates());
@@ -34,7 +34,7 @@ public class StarTest {
 	@Test
 	public void test2() {
 		// ([a-a]+)*
-		RegularExpression regexp = new RegexStar(new Sequence<>(new RegexPlus(new CharacterClass(new Range('a', 'a')))));
+		RegularExpression regexp = RegexStar.from(Sequence.from(RegexPlus.from(CharacterClass.from(Range.in('a', 'a')))));
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
@@ -48,16 +48,16 @@ public class StarTest {
 	@Test
 	public void test3() {
 		// ([a-z]+ | [(-)] | "*")*
-		CharacterClass c1 = new CharacterClass(new Range('a', 'z'));
-		CharacterClass c2 = new CharacterClass(new Range('(', ')'));
-		Character c3 = new Character('*');
+		CharacterClass c1 = CharacterClass.from(Range.in('a', 'z'));
+		CharacterClass c2 = CharacterClass.from(Range.in('(', ')'));
+		Character c3 = Character.from('*');
 		
-		RegularExpression regex = new RegexAlt<>(new RegexPlus(c1), c2, c3);
+		RegularExpression regex = RegexAlt.from(RegexPlus.from(c1), c2, c3);
 	}
 	
 	@Test
 	public void test1WithPreConditions() {
-		RegularExpression regexp = new RegexStar(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		RegularExpression regexp = RegexStar.from(Character.from('a')).withCondition(RegularExpressionCondition.notFollow(Character.from(':')));
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();

@@ -32,10 +32,10 @@ import org.junit.Test;
  */
 public class Gamma1Test {
 	
-	private Character a = new Character('a');
-	private Character b = new Character('b');
-	private Character c = new Character('c');
-	private Character d = new Character('d');
+	private Character a = Character.from('a');
+	private Character b = Character.from('b');
+	private Character c = Character.from('c');
+	private Character d = Character.from('d');
 	private Nonterminal S = new Nonterminal("S");
 	private Nonterminal A = new Nonterminal("A");
 	private Nonterminal B = new Nonterminal("B");

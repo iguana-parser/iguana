@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
-import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -40,7 +38,7 @@ public class Test13 {
 	private Nonterminal B = new Nonterminal("B");
 	private Nonterminal C = new Nonterminal("C");
 	private Nonterminal D = new Nonterminal("D");
-	private Character a = new Character('a');
+	private Character a = Character.from('a');
 	
 	@Before
 	public void init() {

@@ -38,9 +38,9 @@ public class Test6 {
 	private Nonterminal A = new Nonterminal("A");
 	private Nonterminal B = new Nonterminal("B");
 	private Nonterminal C = new Nonterminal("C");
-	private Character a = new Character('a');
-	private Character b = new Character('b');
-	private Character c = new Character('c');
+	private Character a = Character.from('a');
+	private Character b = Character.from('b');
+	private Character c = Character.from('c');
 	
 	@Before
 	public void init() {

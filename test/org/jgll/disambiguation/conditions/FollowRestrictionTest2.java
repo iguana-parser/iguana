@@ -43,10 +43,10 @@ public class FollowRestrictionTest2 {
 		
 		Nonterminal S = new Nonterminal("S");
 		Nonterminal Label = new Nonterminal("Label");
-		Range az = new Range('a', 'z');
-		Range zero_nine = new Range('0', '9');
+		Range az = Range.in('a', 'z');
+		Range zero_nine = Range.in('0', '9');
 		
-		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(new Keyword("8"))), zero_nine);
+		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(Keyword.from("8"))), zero_nine);
 		
 		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
 		

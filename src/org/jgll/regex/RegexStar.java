@@ -1,16 +1,15 @@
 package org.jgll.regex;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
-import org.jgll.util.CollectionsUtil;
 
 
 public class RegexStar extends AbstractRegularExpression {
@@ -19,24 +18,12 @@ public class RegexStar extends AbstractRegularExpression {
 	
 	private final RegularExpression regexp;
 	
-	public RegexStar(RegularExpression regexp) {
-		this(regexp, Collections.<Condition>emptySet());
+	public static RegexStar from(RegularExpression regexp) {
+		return new Builder(regexp).build();
 	}
-	
-	public RegexStar(RegularExpression regexp, Object object) {
-		this(regexp, Collections.<Condition>emptySet(), object);
-	}
-	
-	public RegexStar(RegularExpression regexp, Set<Condition> conditions) {
-		this(regexp, conditions, null);
-	}
-	
-	public RegexStar(RegularExpression regexp, Set<Condition> conditions, Object object) {
-		this(getName(regexp), regexp, conditions, object);
-	}
-	
-	public RegexStar(String name, RegularExpression regexp, Set<Condition> conditions, Object object) {
-		super(name, conditions, object);
+
+	public RegexStar(RegularExpression regexp, String label, Set<Condition> conditions, Object object) {
+		super(getName(regexp), label, conditions, object);
 		this.regexp = regexp.withoutConditions();
 	}
 	
@@ -89,12 +76,26 @@ public class RegexStar extends AbstractRegularExpression {
 
 	@Override
 	public RegexStar withConditions(Set<Condition> conditions) {
-		return new RegexStar(regexp, CollectionsUtil.union(conditions, this.conditions));
+		return new Builder(regexp).addConditions(this.conditions).addConditions(conditions).build();
 	}
 	
 	@Override
 	public RegexStar withoutConditions() {
-		return new RegexStar(regexp);
+		return RegexStar.from(regexp);
+	}
+	
+	public static class Builder extends SymbolBuilder<RegexStar> {
+
+		private RegularExpression regex;
+
+		public Builder(RegularExpression regex) {
+			this.regex = regex;
+		}
+		
+		@Override
+		public RegexStar build() {
+			return new RegexStar(regex, label, conditions, object);
+		}
 	}
 	
 }

@@ -18,6 +18,8 @@ public interface RegularExpression extends Serializable, Symbol {
 	
 	public Object getObject();
 	
+	public String getLabel();
+	
 	/**
 	 * The set of characters (ranges) that cannot follow this regular expressions. 
 	 */

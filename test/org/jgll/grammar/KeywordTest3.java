@@ -33,11 +33,11 @@ public class KeywordTest3 {
 	private GrammarGraph grammarGraph;
 	
 	Nonterminal S = new Nonterminal("S");
-	Keyword iff = new Keyword("if");
-	Keyword then = new Keyword("then");
+	Keyword iff = Keyword.from("if");
+	Keyword then = Keyword.from("then");
 	Nonterminal L = new Nonterminal("L");
-	Character s = new Character('s');
-	Character ws = new Character(' ');
+	Character s = Character.from('s');
+	Character ws = Character.from(' ');
 
 	@Before
 	public void init() {

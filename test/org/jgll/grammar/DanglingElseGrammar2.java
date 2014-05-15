@@ -34,9 +34,9 @@ public class DanglingElseGrammar2 {
 	private GrammarGraph grammarGraph;
 	
 	private Nonterminal S = new Nonterminal("S");
-	private Character s = new Character('s');
-	private Character a = new Character('a');
-	private Character b = new Character('b');
+	private Character s = Character.from('s');
+	private Character a = Character.from('a');
+	private Character b = Character.from('b');
 	private Group group = Group.of(a, S);
 
 	

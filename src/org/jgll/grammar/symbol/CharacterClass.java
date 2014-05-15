@@ -9,7 +9,6 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.util.CollectionsUtil;
 
 /**
  * Character class represents a set of {@link Range} instances.
@@ -25,29 +24,9 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	private final RegexAlt<Range> alt;
 	
-	public CharacterClass(Range...ranges) {
-		this(Arrays.asList(ranges), Collections.<Condition>emptySet());
-	}
-	
-	public CharacterClass(List<Range> ranges, Set<Condition> conditions) {
-		this(new RegexAlt<>(ranges), conditions);
-	}
-	
-	public CharacterClass(RegexAlt<Range> alt, Set<Condition> conditions) {
-		this(alt, Collections.<Condition>emptySet(), conditions);
-	}
-	
-	public CharacterClass(RegexAlt<Range> alt, Set<Condition> conditions, Object object) {
-		super(alt.getName(), conditions, object);
+	public CharacterClass(RegexAlt<Range> alt, String label, Set<Condition> conditions, Object object) {
+		super(alt.getName(), label, conditions, object);
 		this.alt = alt.withConditions(conditions);
-	}
-
-	public CharacterClass(RegexAlt<Range> alt) {
-		this(alt, Collections.<Condition>emptySet());
-	}
-	
-	public CharacterClass(List<Range> ranges) {
-		this(ranges, Collections.<Condition>emptySet());
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {
@@ -55,7 +34,15 @@ public class CharacterClass extends AbstractRegularExpression {
 		for(Character c : chars) {
 			list.add(Range.in(c.getValue(), c.getValue()));
 		}
-		return new CharacterClass(list, Collections.<Condition>emptySet());
+		return new Builder(list).build();
+	}
+	
+	public static CharacterClass from(Range...ranges) {
+		return from(Arrays.asList(ranges));
+	}
+	
+	public static CharacterClass from(List<Range> ranges) {
+		return new Builder(ranges).build();
 	}
 	
 	@Override
@@ -113,7 +100,7 @@ public class CharacterClass extends AbstractRegularExpression {
 			newRanges.add(Range.in(ranges[i].getEnd() + 1, Constants.MAX_UTF32_VAL));
 		}
 		
-		return new CharacterClass(newRanges, conditions);
+		return new Builder(newRanges).addConditions(conditions).build();
 	}
 
 	@Override
@@ -136,12 +123,31 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	public CharacterClass withConditions(Set<Condition> conditions) {
-		return new CharacterClass(alt, CollectionsUtil.union(conditions, this.conditions));
+		return new Builder(alt).addConditions(conditions).build();
 	}
 	
 	@Override
 	public CharacterClass withoutConditions() {
-		return new CharacterClass(alt);
+		return new Builder(alt).build();
+	}
+	
+	public static class Builder extends SymbolBuilder<CharacterClass> {
+
+		private RegexAlt<Range> alt;
+		
+		public Builder(List<Range> ranges) {
+			this.alt = RegexAlt.from(ranges);
+		}
+		
+		public Builder(RegexAlt<Range> alt) {
+			this.alt = alt;
+		}
+		
+		@Override
+		public CharacterClass build() {
+			return new CharacterClass(alt, label, conditions, object);
+		}
+		
 	}
 	
 }

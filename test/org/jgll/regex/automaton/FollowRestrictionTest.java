@@ -22,8 +22,8 @@ public class FollowRestrictionTest {
 	public void test1() {
 		
 		// id !>> [:]
-		RegularExpression r1 = id.withCondition(RegularExpressionCondition.notFollow(new Character(':')))				
-								 .withCondition(RegularExpressionCondition.notMatch(new Keyword("set")));
+		RegularExpression r1 = id.withCondition(RegularExpressionCondition.notFollow(Character.from(':')))				
+								 .withCondition(RegularExpressionCondition.notMatch(Keyword.from("set")));
 		
 		
 		RunnableAutomaton matcher = r1.getAutomaton().getRunnableAutomaton();
@@ -39,7 +39,7 @@ public class FollowRestrictionTest {
 	public void test2() {
 		
 		// id !>> "<>"
-		RegularExpression r2 = id.withCondition(RegularExpressionCondition.notFollow(new Keyword("<>")));
+		RegularExpression r2 = id.withCondition(RegularExpressionCondition.notFollow(Keyword.from("<>")));
 		RunnableAutomaton matcher = r2.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test<>"), 0));
@@ -52,7 +52,7 @@ public class FollowRestrictionTest {
 	public void test3() {
 		
 		// id !>> [a-z]
-		RegularExpression r3 = id.withCondition(RegularExpressionCondition.notFollow(new CharacterClass(Range.in('a', 'z'))));
+		RegularExpression r3 = id.withCondition(RegularExpressionCondition.notFollow(CharacterClass.from(Range.in('a', 'z'))));
 
 		RunnableAutomaton matcher = r3.getAutomaton().getRunnableAutomaton();
 		
@@ -64,9 +64,9 @@ public class FollowRestrictionTest {
 	@Test
 	public void test4() {
 		// (![*] | [*] !>> [/])*
-		RegularExpression r1 = new Character('*').not();
-		RegularExpression r2 = new Character('*').withCondition(RegularExpressionCondition.notFollow(new Character('/')));
-		RegexStar star = new RegexStar(new RegexAlt<>(r1, r2));
+		RegularExpression r1 = Character.from('*').not();
+		RegularExpression r2 = Character.from('*').withCondition(RegularExpressionCondition.notFollow(Character.from('/')));
+		RegexStar star = RegexStar.from(RegexAlt.from(r1, r2));
 		
 		RunnableAutomaton m = star.getAutomaton().getRunnableAutomaton();
 		

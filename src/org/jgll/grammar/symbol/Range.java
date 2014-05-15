@@ -14,7 +14,6 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
-import org.jgll.util.CollectionsUtil;
 
 
 /**
@@ -33,19 +32,11 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	private final int end;
 	
 	public static Range in(int start, int end) {
-		return new Range(start, end);
-	}
-	
-	public Range(int start, int end) {
-		this(start, end, Collections.<Condition>emptySet());
-	}
-	
-	public Range(int start, int end, Set<Condition> conditions) {
-		this(getName(start, end), start, end, conditions, null);
+		return new Builder(start, end).build();
 	}
 		
-	public Range(String name, int start, int end, Set<Condition> conditions, Object object) {
-		super(name, conditions, object);
+	public Range(int start, int end, String label, Set<Condition> conditions, Object object) {
+		super(getName(start, end), label, conditions, object);
 		
 		if(end < start) throw new IllegalArgumentException("Start cannot be less than end.");
 		
@@ -113,8 +104,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		if(end < MAX_UTF32_VAL) {
 			ranges.add(Range.in(end + 1, MAX_UTF32_VAL));
 		}
-		CharacterClass c = new CharacterClass(ranges);
-		return c;
+		return CharacterClass.fromRanges(ranges);
 	}
 
 	@Override
@@ -136,12 +126,29 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 
 	@Override
 	public Range withConditions(Set<Condition> conditions) {
-		return new Range(start, end, CollectionsUtil.union(conditions, this.conditions));
+		return new Builder(start, end).addConditions(this.conditions).addConditions(conditions).build();
 	}
 	
 	@Override
 	public Range withoutConditions() {
-		return new Range(start, end);
+		return Range.in(start, end);
+	}
+	
+	public static class Builder extends SymbolBuilder<Range> {
+
+		private int start;
+		private int end;
+
+		public Builder(int start, int end) {
+			this.start = start;
+			this.end = end;
+		}
+		
+		@Override
+		public Range build() {
+			return new Range(start, end, label, conditions, object);
+		}
+		
 	}
 	
 }

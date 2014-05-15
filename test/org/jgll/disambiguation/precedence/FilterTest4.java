@@ -39,10 +39,10 @@ public class FilterTest4 {
 	private GLLParser parser;
 	
 	private Nonterminal E = new Nonterminal("E");
-	private Character a = new Character('a');
-	private Character w = new Character('w');
-	private Character x = new Character('x');
-	private Character z = new Character('z');
+	private Character a = Character.from('a');
+	private Character w = Character.from('w');
+	private Character x = Character.from('x');
+	private Character z = Character.from('z');
 
 	@Before
 	public void createGrammar() {

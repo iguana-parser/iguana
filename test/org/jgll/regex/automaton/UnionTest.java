@@ -9,9 +9,9 @@ import org.junit.Test;
 
 public class UnionTest {
 	
-	private Keyword k1 = new Keyword("if");
-	private Keyword k2 = new Keyword("when");
-	private Keyword k3 = new Keyword("new");
+	private Keyword k1 = Keyword.from("if");
+	private Keyword k2 = Keyword.from("when");
+	private Keyword k3 = Keyword.from("new");
 
 	@Test
 	public void test1() {

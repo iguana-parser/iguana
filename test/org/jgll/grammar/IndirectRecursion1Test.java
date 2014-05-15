@@ -36,9 +36,9 @@ public class IndirectRecursion1Test {
 	private Nonterminal A = new Nonterminal("A");
 	private Nonterminal B = new Nonterminal("B");
 	private Nonterminal C = new Nonterminal("C");
-	Character a = new Character('a');
-	Character b = new Character('b');
-	Character c = new Character('c');
+	Character a = Character.from('a');
+	Character b = Character.from('b');
+	Character c = Character.from('c');
 
 	@Before
 	public void createGrammar() {

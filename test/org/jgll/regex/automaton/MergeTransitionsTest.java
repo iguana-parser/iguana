@@ -15,7 +15,7 @@ public class MergeTransitionsTest {
 	
 	@Test
 	public void test() {
-		RegularExpression regexp = new CharacterClass(Range.in('0', '4'), Range.in('5', '7'), Range.in('8', '9'));
+		RegularExpression regexp = CharacterClass.from(Range.in('0', '4'), Range.in('5', '7'), Range.in('8', '9'));
 		Automaton a = mergeTransitions(regexp.getAutomaton().minimize());
 		assertEquals(a, getAutomaton());
 	}

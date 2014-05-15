@@ -36,15 +36,15 @@ public class KeywordExclusionTest2 {
 		grammar = new Grammar();
 		
 		Nonterminal Id = new Nonterminal("Id");
-		Range az = new Range('a', 'z');
+		Range az = Range.in('a', 'z');
 		
-		Keyword iff = new Keyword("if");
-		Keyword when = new Keyword("when");
-		Keyword doo = new Keyword("do");
-		Keyword whilee = new Keyword("while");
+		Keyword iff = Keyword.from("if");
+		Keyword when = Keyword.from("when");
+		Keyword doo = Keyword.from("do");
+		Keyword whilee = Keyword.from("while");
 		
-		RegexAlt<Keyword> alt = new RegexAlt<>(iff, when, doo, whilee);
-		Rule r1 = new Rule(Id, new RegexPlus(az).withCondition(RegularExpressionCondition.notFollow(az)).withCondition(RegularExpressionCondition.notMatch(alt)));
+		RegexAlt<Keyword> alt = RegexAlt.from(iff, when, doo, whilee);
+		Rule r1 = new Rule(Id, RegexPlus.from(az).withCondition(RegularExpressionCondition.notFollow(az)).withCondition(RegularExpressionCondition.notMatch(alt)));
 		
 		grammar.addRule(r1);
 

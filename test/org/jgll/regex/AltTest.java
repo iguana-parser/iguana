@@ -16,10 +16,10 @@ public class AltTest {
 	
 	@Test
 	public void test1() {
-		Character a = new Character('a');
-		Character b = new Character('b');
+		Character a = Character.from('a');
+		Character b = Character.from('b');
 		
-		RegularExpression regexp = new RegexAlt<>(a, b);
+		RegularExpression regexp = RegexAlt.from(a, b);
 		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
@@ -31,8 +31,8 @@ public class AltTest {
 	
 	@Test
 	public void test2() {
-		Keyword k1 = new Keyword("for");
-		Keyword k2 = new Keyword("forall");
+		Keyword k1 = Keyword.from("for");
+		Keyword k2 = Keyword.from("forall");
 		
 		Automaton result = AutomatonOperations.or(k1.getAutomaton(), k2.getAutomaton());
 
@@ -43,7 +43,7 @@ public class AltTest {
 	
 	@Test
 	public void test3() {
-		RegularExpression regexp = new RegexAlt<>(new Keyword("when"), new Keyword("if"));
+		RegularExpression regexp = RegexAlt.from(Keyword.from("when"), Keyword.from("if"));
 
 		Automaton automaton = regexp.getAutomaton();
 
@@ -56,10 +56,10 @@ public class AltTest {
 	@Test
 	public void test1WithPostConditions() {
 		// ([a] !>> [c] | [b]) !>> c
-		RegularExpression a = new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('c')));
-		Character b = new Character('b');
+		RegularExpression a = Character.from('a').withCondition(RegularExpressionCondition.notFollow(Character.from('c')));
+		Character b = Character.from('b');
 		
-		RegularExpression regexp = new RegexAlt<>(a, b).withCondition(RegularExpressionCondition.notFollow(new Character('d')));
+		RegularExpression regexp = RegexAlt.from(a, b).withCondition(RegularExpressionCondition.notFollow(Character.from('d')));
 		System.out.println(regexp);
 		Automaton nfa = regexp.getAutomaton();
 		
@@ -71,8 +71,8 @@ public class AltTest {
 	
 	@Test
 	public void test2WithPostConditions() {
-		Keyword k1 = (Keyword) new Keyword("for").withCondition(RegularExpressionCondition.notFollow(new Character(':')));
-		Keyword k2 = new Keyword("forall");
+		Keyword k1 = (Keyword) Keyword.from("for").withCondition(RegularExpressionCondition.notFollow(Character.from(':')));
+		Keyword k2 = Keyword.from("forall");
 		
 		Automaton result = AutomatonOperations.or(k1.getAutomaton(), k2.getAutomaton());
 

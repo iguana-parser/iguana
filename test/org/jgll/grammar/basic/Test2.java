@@ -29,7 +29,7 @@ public class Test2 {
 	private GrammarGraph grammarGraph;
 
 	private Nonterminal A = new Nonterminal("A");
-	private Character a = new Character('a');
+	private Character a = Character.from('a');
 	
 	@Before
 	public void init() {

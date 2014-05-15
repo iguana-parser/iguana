@@ -34,7 +34,7 @@ public class EBNFTest1 {
 		
 		Nonterminal S = new Nonterminal("S");
 		Nonterminal A = new Nonterminal("A");
-		Character a = new Character('a');
+		Character a = Character.from('a');
 		
 		Rule rule1 = new Rule(S, list(new Plus(A)));
 		

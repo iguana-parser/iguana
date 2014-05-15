@@ -18,13 +18,16 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	protected Automaton automaton;
 
 	private Object object;
+	
+	private String label;
 
 	public AbstractRegularExpression(String name) {
-		this(name, Collections.<Condition>emptySet(), null);
+		this(name, null, Collections.<Condition>emptySet(), null);
 	}
 	
-	public AbstractRegularExpression(String name, Set<Condition> conditions, Object object) {
+	public AbstractRegularExpression(String name, String label, Set<Condition> conditions, Object object) {
 		super(name, conditions);
+		this.label = label;
 		this.object = object;
 	}
 	
@@ -68,6 +71,11 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	@Override
 	public Object getObject() {
 		return object;
+	}
+	
+	@Override
+	public String getLabel() {
+		return label;
 	}
 	
 }

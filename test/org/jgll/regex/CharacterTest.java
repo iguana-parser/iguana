@@ -13,7 +13,7 @@ public class CharacterTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regexp = new Character('a');
+		RegularExpression regexp = Character.from('a');
 		Automaton nfa = regexp.getAutomaton();
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertEquals(2, nfa.getCountStates());
@@ -24,7 +24,7 @@ public class CharacterTest {
 	@Test
 	public void test2() {
 		// [a] !>> [b]
-		RegularExpression regexp = new Character('a').withCondition(RegularExpressionCondition.notFollow(new Character('b')));
+		RegularExpression regexp = Character.from('a').withCondition(RegularExpressionCondition.notFollow(Character.from('b')));
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();

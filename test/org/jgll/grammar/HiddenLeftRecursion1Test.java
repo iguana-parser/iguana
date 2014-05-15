@@ -39,11 +39,11 @@ public class HiddenLeftRecursion1Test {
 	private Nonterminal B = new Nonterminal("B");
 	private Nonterminal D = new Nonterminal("D");
 	
-	private Character a = new Character('a');
-	private Character b = new Character('b');
-	private Character c = new Character('c');
-	private Character x = new Character('x');
-	private Character y = new Character('y');
+	private Character a = Character.from('a');
+	private Character b = Character.from('b');
+	private Character c = Character.from('c');
+	private Character x = Character.from('x');
+	private Character y = Character.from('y');
 
 	@Before
 	public void init() {		

@@ -28,7 +28,7 @@ public class ExamplesTest {
 	@Test
 	public void testIntersectionKeywordId() {
 		Automaton idAutomaton = RegularExpressionExamples.getId().getAutomaton().determinize();
-		Automaton forAutomaton = new Keyword("for").getAutomaton().determinize();
+		Automaton forAutomaton = Keyword.from("for").getAutomaton().determinize();
 		
 		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
 	}

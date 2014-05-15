@@ -23,7 +23,7 @@ public class KeywordTest1 {
 	
 	private GrammarGraph grammarGraph;
 
-	Keyword ifKeyword = new Keyword("if");
+	Keyword ifKeyword = Keyword.from("if");
 	Nonterminal A = new Nonterminal("A");
 
 	@Before

@@ -13,7 +13,7 @@ public class PlusTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regexp = new RegexPlus(new Character('a'));
+		RegularExpression regexp = RegexPlus.from(Character.from('a'));
 		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
@@ -35,7 +35,7 @@ public class PlusTest {
 	public void test2() {
 		
 		// [a]+ !>> [:]
-		RegularExpression regexp = new RegexPlus(new Character('a')).withCondition(RegularExpressionCondition.notFollow(new Character(':')));
+		RegularExpression regexp = RegexPlus.from(Character.from('a')).withCondition(RegularExpressionCondition.notFollow(Character.from(':')));
 		
 		Automaton automaton = regexp.getAutomaton();
 		

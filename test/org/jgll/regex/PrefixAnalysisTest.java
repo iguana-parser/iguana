@@ -12,10 +12,10 @@ public class PrefixAnalysisTest {
 
 	@Test
 	public void test() {
-		Keyword k1 = new Keyword("while");
-		Keyword k2 = new Keyword("if");
-		Keyword k3 = new Keyword("public");
-		RegularExpression id = new RegexPlus(new CharacterClass(Range.in('a', 'z')));
+		Keyword k1 = Keyword.from("while");
+		Keyword k2 = Keyword.from("if");
+		Keyword k3 = Keyword.from("public");
+		RegularExpression id = RegexPlus.from(CharacterClass.from(Range.in('a', 'z')));
 		
 		List<RegularExpression> list = CollectionsUtil.list(k1, k2, k3, id);
 		

@@ -56,8 +56,8 @@ public class IntersectionTest {
 	
 	@Test
 	public void test3() {
-		Keyword k1 = new Keyword("for");
-		Keyword k2 = new Keyword("forall");
+		Keyword k1 = Keyword.from("for");
+		Keyword k2 = Keyword.from("forall");
 
 		assertTrue(AutomatonOperations.prefix(k1.getAutomaton(), k2.getAutomaton()));
 		assertFalse(AutomatonOperations.prefix(k2.getAutomaton(), k1.getAutomaton()));

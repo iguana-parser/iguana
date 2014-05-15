@@ -14,17 +14,17 @@ public class RegularExpressionExamples {
 	 * Id ::= [a-zA-Z][a-zA-Z0-9]*
 	 */
 	public static RegularExpression getId() {
-		CharacterClass c1 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'));
-		CharacterClass c2 = new CharacterClass(new Range('a', 'z'), new Range('A', 'Z'), new Range('0', '9'));
-		return new Sequence<>(c1, new RegexStar(c2));
+		CharacterClass c1 = CharacterClass.from(Range.in('a', 'z'), Range.in('A', 'Z'));
+		CharacterClass c2 = CharacterClass.from(Range.in('a', 'z'), Range.in('A', 'Z'), Range.in('0', '9'));
+		return Sequence.from(c1, RegexStar.from(c2));
 	}
 	
 	/**
 	 * Float ::= [0-9]+[.][0-9]+
 	 */
 	public static RegularExpression getFloat() {
-		CharacterClass c = new CharacterClass(new Range('0', '9'));
-		return new Sequence<>(new RegexPlus(c), new Character('.'), new RegexPlus(c));
+		CharacterClass c = CharacterClass.from(Range.in('0', '9'));
+		return Sequence.from(RegexPlus.from(c), Character.from('.'), RegexPlus.from(c));
 	}
 	
 	/**
@@ -33,17 +33,17 @@ public class RegularExpressionExamples {
 	public static RegularExpression getJavaUnicodeEscape() {
 		List<RegularExpression> regularExpressions = new ArrayList<>();
 
-		regularExpressions.add(new Keyword("\\"));
+		regularExpressions.add(Keyword.from("\\"));
 		
-		regularExpressions.add(new RegexPlus(Character.from('u')));
+		regularExpressions.add(RegexPlus.from(Character.from('u')));
 		
-		CharacterClass c = new CharacterClass(new Range('0', '9'), new Range('a', 'z'), new Range('A', 'Z'));
+		CharacterClass c = CharacterClass.from(Range.in('0', '9'), Range.in('a', 'z'), Range.in('A', 'Z'));
 		regularExpressions.add(c);
 		regularExpressions.add(c);
 		regularExpressions.add(c);
 		regularExpressions.add(c);
 		
-		return new Sequence<>(regularExpressions);
+		return Sequence.from(regularExpressions);
 	}
 	
 	/**
@@ -54,9 +54,9 @@ public class RegularExpressionExamples {
 	public static RegularExpression getCharacter() {
 		List<RegularExpression> regularExpressions = new ArrayList<>();
 		regularExpressions.add(Character.from('\''));
-		regularExpressions.add(new RegexPlus(Character.from('\'').not()));
+		regularExpressions.add(RegexPlus.from(Character.from('\'').not()));
 		regularExpressions.add(Character.from('\''));
-		return new Sequence<>(regularExpressions);
+		return Sequence.from(regularExpressions);
 	}
 	
 	/**
@@ -66,23 +66,23 @@ public class RegularExpressionExamples {
 		Character c1 = Character.from('"');
 		Character c2 = Character.from('\\');
 		CharacterClass c = CharacterClass.fromChars(c1, c2);
-		Keyword newline = new Keyword("\\n");
+		Keyword newline = Keyword.from("\\n");
 
-		return new RegexAlt<>(new RegexPlus(c.not()), newline);
+		return RegexAlt.from(RegexPlus.from(c.not()), newline);
 	}
 	
 	// "/*" (![*] | [*] !>> [/])* "*/"
 	public static RegularExpression getMultilineComment() {
 		
-		Keyword r1 = new Keyword("/*");
-		Character star = new Character('*');
-		Character slash = new Character('/');
+		Keyword r1 = Keyword.from("/*");
+		Character star = Character.from('*');
+		Character slash = Character.from('/');
 
-		RegularExpression r2 = new RegexStar(new Sequence<>(star, slash));
+		RegularExpression r2 = RegexStar.from(Sequence.from(star, slash));
 		
-		Keyword r3 = new Keyword("*/");
+		Keyword r3 = Keyword.from("*/");
 		
-		return new Sequence<>(r1, r2, r3);
+		return Sequence.from(r1, r2, r3);
 	}
 	 
 }

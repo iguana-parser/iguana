@@ -8,7 +8,6 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.util.CollectionsUtil;
 import org.jgll.util.Input;
 
 public class Keyword extends AbstractRegularExpression {
@@ -17,34 +16,22 @@ public class Keyword extends AbstractRegularExpression {
 	
 	private final Sequence<Character> seq;
 	
-	public Keyword(String s) {
-		this(Input.toIntArray(s));
+	public static Keyword from(String s) {
+		return new Builder(Input.toIntArray(s)).build();
 	}
 	
-	public Keyword(int[] chars) {
-		this(toCharSequence(chars));
-	}
-	
-	public Keyword(Sequence<Character> seq) {
-		this(seq, Collections.<Condition>emptySet(), null);
-	}
-	
-	public Keyword(Sequence<Character> seq, Set<Condition> conditions, Object object) {
-		this(seq.getName(), seq, conditions, object);
-	}
-	
-	public Keyword(String name, Sequence<Character> seq, Set<Condition> conditions, Object object) {
-		super(name, conditions, object);
+	public Keyword(Sequence<Character> seq, String label, Set<Condition> conditions, Object object) {
+		super(seq.getName(), label, conditions, object);
 		this.seq = seq.withConditions(conditions);
 	}
 	
 	private static Sequence<Character> toCharSequence(int[] chars) {
 		List<Character> list = new ArrayList<>();
 		for(int c : chars) {
-			list.add(new Character(c));
+			list.add(Character.from(c));
 		}
 		
-		return new Sequence<>(list);		
+		return Sequence.from(list);		
 	}
 		
 	public int size() {
@@ -97,7 +84,7 @@ public class Keyword extends AbstractRegularExpression {
 
 	@Override
 	public Keyword withConditions(Set<Condition> conditions) {
-		return new Keyword(seq, CollectionsUtil.union(conditions, this.conditions), null);
+		return new Builder(seq).addConditions(this.conditions).addConditions(conditions).build();
 	}
 	
 	@Override
@@ -107,7 +94,27 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	public Keyword withoutConditions() {
-		return new Keyword(seq);
+		return new Builder(seq).build();
+	}
+	
+	public static class Builder extends SymbolBuilder<Keyword> {
+		
+		private Sequence<Character> seq;
+				
+		public Builder(int[] chars) {
+			this(toCharSequence(chars));
+		}
+		
+		public Builder(Sequence<Character> seq) {
+			this.seq = seq;
+		}
+
+
+		@Override
+		public Keyword build() {
+			return new Keyword(seq, label, conditions, object);
+		}
+		
 	}
 	
 }

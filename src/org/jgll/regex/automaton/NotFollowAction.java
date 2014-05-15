@@ -25,7 +25,7 @@ public class NotFollowAction implements Action {
 			notFollows.add(((RegularExpressionCondition) condition).getRegularExpression());
 		}
 		
-		regex = notFollows.size() == 1 ? notFollows.get(0) : new RegexAlt<>(notFollows);
+		regex = notFollows.size() == 1 ? notFollows.get(0) : RegexAlt.from(notFollows);
 		r = regex.getAutomaton().getRunnableAutomaton();
 	}
 	

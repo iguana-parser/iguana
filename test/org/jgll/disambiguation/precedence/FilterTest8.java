@@ -35,11 +35,11 @@ import org.junit.rules.ExpectedException;
 public class FilterTest8 {
 	
 	private Nonterminal E = new Nonterminal("E");
-	private Character a = new Character('a');
-	private Character plus = new Character('+');
-	private Character star = new Character('*');
-	private Character ob = new Character('[');
-	private Character cb = new Character(']');
+	private Character a = Character.from('a');
+	private Character plus = Character.from('+');
+	private Character star = Character.from('*');
+	private Character ob = Character.from('[');
+	private Character cb = Character.from(']');
 	
 	private GrammarGraph grammarGraph;
 	private Grammar grammar;

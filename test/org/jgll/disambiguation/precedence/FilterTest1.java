@@ -39,9 +39,9 @@ public class FilterTest1 {
 	private GLLParser parser;
 
 	private Nonterminal E = new Nonterminal("E");
-	private Character plus = new Character('+');
-	private Character minus = new Character('-');
-	private Character a = new Character('a');
+	private Character plus = Character.from('+');
+	private Character minus = Character.from('-');
+	private Character a = Character.from('a');
 	
 	@Before
 	public void createGrammar() {

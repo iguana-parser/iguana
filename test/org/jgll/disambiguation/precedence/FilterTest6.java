@@ -38,10 +38,10 @@ public class FilterTest6 {
 	private GLLParser parser;
 
 	private Nonterminal E = new Nonterminal("E");
-	private Character star = new Character('*');
-	private Character minus = new Character('-');
-	private Character plus = new Character('+');
-	private Character a = new Character('a');
+	private Character star = Character.from('*');
+	private Character minus = Character.from('-');
+	private Character plus = Character.from('+');
+	private Character a = Character.from('a');
 
 	@Before
 	public void createGrammar() {

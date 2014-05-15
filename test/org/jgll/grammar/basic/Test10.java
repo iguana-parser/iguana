@@ -38,7 +38,7 @@ public class Test10 {
 	public void init() {
 		
 		Rule r1 = new Rule(A, list(A, A));
-		Rule r2 = new Rule(A, list(new Character('a')));
+		Rule r2 = new Rule(A, list(Character.from('a')));
 		Rule r3 = new Rule(A);
 
 		grammarGraph = new Grammar().addRule(r1)

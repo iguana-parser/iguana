@@ -43,7 +43,7 @@ public class ManualArithmeticExpressionsTest {
 		Nonterminal F = new Nonterminal("F");
 
 		// E ::= E + T
-		Rule rule1 = new Rule(E, list(E, new Character('+'), T));
+		Rule rule1 = new Rule(E, list(E, Character.from('+'), T));
 		grammar.addRule(rule1);
 		
 		// E ::= T
@@ -51,7 +51,7 @@ public class ManualArithmeticExpressionsTest {
 		grammar.addRule(rule2);
 		
 		// T ::= T * F
-		Rule rule3 = new Rule(T, list(T, new Character('*'), F));
+		Rule rule3 = new Rule(T, list(T, Character.from('*'), F));
 		grammar.addRule(rule3);
 		
 		// T ::= F
@@ -59,7 +59,7 @@ public class ManualArithmeticExpressionsTest {
 		grammar.addRule(rule4);
 		
 		// F ::= a
-		Rule rule5 = new Rule(F, list(new Character('a')));
+		Rule rule5 = new Rule(F, list(Character.from('a')));
 		grammar.addRule(rule5);
 
 		grammarGraph = grammar.toGrammarGraph();

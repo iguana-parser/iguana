@@ -28,13 +28,13 @@ public class KeywordTest2 {
 	
 	Nonterminal A = new Nonterminal("A");
 	Nonterminal B = new Nonterminal("B");
-	Keyword iff = new Keyword("if");
+	Keyword iff = Keyword.from("if");
 
 	@Before
 	public void init() {
 		
 		Rule r1 = new Rule(A, list(iff, B));
-		Rule r2 = new Rule(B, new Character('b'));
+		Rule r2 = new Rule(B, Character.from('b'));
 		
 		Grammar grammar = new Grammar();
 		

@@ -13,9 +13,9 @@ import org.junit.Test;
 public class DiffernceTest {
 	
 	private RegularExpression id = RegularExpressionExamples.getId();
-	private Keyword k1 = new Keyword("if");
-	private Keyword k2 = new Keyword("when");
-	private Keyword k3 = new Keyword("new");
+	private Keyword k1 = Keyword.from("if");
+	private Keyword k2 = Keyword.from("when");
+	private Keyword k3 = Keyword.from("new");
 
 	@Test
 	public void test1() {		
@@ -36,7 +36,7 @@ public class DiffernceTest {
 	
 	@Test
 	public void test3() {
-		RegexAlt<Keyword> alt = new RegexAlt<>(k1, k2, k3);
+		RegexAlt<Keyword> alt = RegexAlt.from(k1, k2, k3);
 		
 		Automaton a = difference(id.getAutomaton(), alt.getAutomaton());
 		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));
