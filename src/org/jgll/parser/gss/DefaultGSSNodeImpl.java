@@ -11,7 +11,6 @@ import org.jgll.parser.Descriptor;
 import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.CuckooHashSet;
 
 
 class DefaultGSSNodeImpl implements GSSNode {
@@ -35,7 +34,7 @@ class DefaultGSSNodeImpl implements GSSNode {
 	
 	// TODO: for recursive descent ordering, we need to traverse the GSS edges
 	// the way they are added, so we need a hashset with ordering.
-	private final CuckooHashSet<GSSEdge> gssEdges;
+	private final Set<GSSEdge> gssEdges;
 
 	private final int hash;
 	
@@ -54,7 +53,7 @@ class DefaultGSSNodeImpl implements GSSNode {
 		children = new ArrayList<>();
 		poppedElements = new ArrayList<>();
 		addedPoppedElements = new HashSet<>();
-		gssEdges = new CuckooHashSet<>(GSSEdge.externalHasher);
+		gssEdges = new HashSet<>();
 		
 		descriptors = new HashSet<>();
 		
@@ -103,7 +102,7 @@ class DefaultGSSNodeImpl implements GSSNode {
 	public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
 		GSSEdge edge = new GSSEdge(returnSlot, node, destination);
 		addChild(destination);
-		return gssEdges.add(edge) == null;
+		return gssEdges.add(edge);
 	}
 	
 	@Override

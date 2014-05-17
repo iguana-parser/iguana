@@ -104,7 +104,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		if(end < MAX_UTF32_VAL) {
 			ranges.add(Range.in(end + 1, MAX_UTF32_VAL));
 		}
-		return CharacterClass.fromRanges(ranges);
+		return CharacterClass.from(ranges);
 	}
 
 	@Override
