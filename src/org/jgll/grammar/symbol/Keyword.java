@@ -17,7 +17,11 @@ public class Keyword extends AbstractRegularExpression {
 	private final Sequence<Character> seq;
 	
 	public static Keyword from(String s) {
-		return new Builder(Input.toIntArray(s)).build();
+		return from(Input.toIntArray(s));
+	}
+	
+	public static Keyword from(int[] chars) {
+		return new Builder(toCharSequence(chars)).build();
 	}
 	
 	public Keyword(Sequence<Character> seq, String label, Set<Condition> conditions, Object object) {
@@ -31,7 +35,7 @@ public class Keyword extends AbstractRegularExpression {
 			list.add(Character.from(c));
 		}
 		
-		return Sequence.from(list);		
+		return Sequence.from(list);
 	}
 		
 	public int size() {
@@ -101,14 +105,9 @@ public class Keyword extends AbstractRegularExpression {
 		
 		private Sequence<Character> seq;
 				
-		public Builder(int[] chars) {
-			this(toCharSequence(chars));
-		}
-		
 		public Builder(Sequence<Character> seq) {
 			this.seq = seq;
 		}
-
 
 		@Override
 		public Keyword build() {

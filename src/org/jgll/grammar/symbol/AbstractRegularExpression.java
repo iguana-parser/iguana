@@ -9,6 +9,7 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
+import org.jgll.util.CollectionsUtil;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
@@ -76,6 +77,14 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	@Override
 	public String getLabel() {
 		return label;
+	}
+	
+	@Override
+	public String toString() {
+		return conditions.isEmpty() ? 
+					label == null ? name : label + ":" + name
+					: 
+					"(" + label == null ? name : label + ":" + name + CollectionsUtil.listToString(conditions) + ")";
 	}
 	
 }

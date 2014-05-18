@@ -6,10 +6,6 @@ import java.util.Deque;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.Descriptor;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.HashTableFactory;
-import org.jgll.util.hashing.IguanaSet;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class DescriptorLookupImpl implements DescriptorLookup {
@@ -18,25 +14,15 @@ public class DescriptorLookupImpl implements DescriptorLookup {
 
 	private Deque<Descriptor> descriptorsStack;
 
-	private IguanaSet<Descriptor>[] descriptorsSet;
-	
-	private int tableSize = (int) Math.pow(2, 10);
-
-	private HashTableFactory factory;
-	
 	private int descriptorsCount;
 	
-	@SuppressWarnings("unchecked")
 	public DescriptorLookupImpl(GrammarGraph grammar, Input input) {
 		long start = System.nanoTime();
 
 		descriptorsStack = new ArrayDeque<>();
-		descriptorsSet = new IguanaSet[input.length()];
 
 		long end = System.nanoTime();
 		log.info("Descriptor lookup initialization: %d ms", (end - start) / 1000_000);
-
-		factory = HashTableFactory.getFactory();
 	}
 	
 	@Override

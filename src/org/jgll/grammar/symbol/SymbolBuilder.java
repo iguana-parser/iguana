@@ -13,17 +13,22 @@ public abstract class SymbolBuilder<T> {
 	
 	protected Set<Condition> conditions = new HashSet<>();
 	
-	public SymbolBuilder<T>  addLabel(String label) {
+	public SymbolBuilder<T> addLabel(String label) {
 		this.label = label;
 		return this;
 	}
 	
-	public SymbolBuilder<T>  addCondition(Condition condition) {
+	public SymbolBuilder<T> addCondition(Condition condition) {
 		conditions.add(condition);
 		return this;
 	}
 	
-	public SymbolBuilder<T>  addConditions(Iterable<Condition> conditions) {
+	public SymbolBuilder<T> addObject(Object object) {
+		this.object = object;
+		return this;
+	}
+	
+	public SymbolBuilder<T> addConditions(Iterable<Condition> conditions) {
 		for (Condition condition : conditions) {
 			this.conditions.add(condition);
 		}
