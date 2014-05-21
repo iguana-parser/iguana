@@ -11,6 +11,7 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.descriptor.DescriptorFactory;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.OriginalGSSEdgeImpl;
 import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
@@ -115,7 +116,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	public final void createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head) {
 		GSSNode v = gssLookup.getGSSNode(returnSlot, ci);
 		log.trace("GSSNode created: (%s, %d)",  head, ci);
-		createGSSEdge(returnSlot, cu, cn, v);
+		createGSSEdge(cu, cn, v);
 		cu = v;
 	}
 	
@@ -125,17 +126,22 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		if(v == null) return false;
 		
 		log.trace("GSSNode found: (%s, %d)",  head, ci);
-		createGSSEdge(slot, cu, cn, v);
+		createGSSEdge(cu, cn, v);
 		return true;
 	}
 	
-	protected void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source) {
-		if(gssLookup.getGSSEdge(source, destination, w, returnSlot)) {
+	protected void createGSSEdge(GSSNode destination, SPPFNode w, GSSNode source) {
+		
+		GSSEdge edge = new OriginalGSSEdgeImpl(w, destination);
+		
+		if(source.getGSSEdge(edge)) {
 			
-			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
+			log.trace("GSS Edge created from %s to %s", source, destination);
 			
 			label:
 			for (SPPFNode z : source.getPoppedElements()) {
+				
+				BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 				
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node

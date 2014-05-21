@@ -98,9 +98,8 @@ class GSSNodeImpl implements GSSNode {
 	}
 	
 	@Override
-	public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
-		GSSEdge edge = new GSSEdge(returnSlot, node, destination);
-		addChild(destination);
+	public boolean getGSSEdge(GSSEdge edge) {
+		addChild(edge.getDestination());
 		return gssEdges.add(edge);
 	}
 	

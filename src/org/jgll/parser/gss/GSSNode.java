@@ -3,13 +3,11 @@ package org.jgll.parser.gss;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.SPPFNode;
 
 /**
  *
@@ -32,7 +30,7 @@ public interface GSSNode {
 		
 	public GrammarSlot getGrammarSlot();
 	
-	public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot);
+	public boolean getGSSEdge(GSSEdge edge);
 	
 	public Iterable<GSSEdge> getGSSEdges();
 	
@@ -89,8 +87,8 @@ public interface GSSNode {
 		}
 
 		@Override
-		public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
-			throw new UnsupportedOperationException();
+		public boolean getGSSEdge(GSSEdge edge) {
+			throw new UnsupportedOperationException();			
 		}
 
 		@Override

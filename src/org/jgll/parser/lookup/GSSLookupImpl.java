@@ -91,11 +91,6 @@ public class GSSLookupImpl implements GSSLookup {
 	}
 
 	@Override
-	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot) {
-		return source.getGSSEdge(destination, node, returnSlot);
-	}
-
-	@Override
 	public int getGSSEdgesCount() {
 		int count = 0;
 

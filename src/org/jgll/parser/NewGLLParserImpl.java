@@ -10,6 +10,7 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.descriptor.DescriptorFactory;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.NewGSSEdgeImpl;
 import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
@@ -126,8 +127,9 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	protected void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source) {
-		if(gssLookup.getGSSEdge(source, destination, w, returnSlot)) {
-			
+		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
+		
+		if(source.getGSSEdge(edge)) {
 			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
 			
 			label:

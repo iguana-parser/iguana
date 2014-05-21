@@ -317,8 +317,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public abstract boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
-	protected abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source);
-
 	@Override
 	public boolean hasNextDescriptor() {
 		return descriptorLookup.hasNextDescriptor();

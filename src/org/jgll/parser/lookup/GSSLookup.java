@@ -2,13 +2,10 @@ package org.jgll.parser.lookup;
 
 import java.util.Map;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.SPPFNode;
-
 /**
  * 
  * @author Ali Afroozeh
@@ -16,13 +13,6 @@ import org.jgll.sppf.SPPFNode;
  */
 public interface GSSLookup {
 	
-	/**
-	 * Returns true if there is no GSS edge from source to destination
-	 * with the given node as label. If such an edge exists, false is returned.
-	 * 
-	 */
-	public boolean getGSSEdge(GSSNode source, GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot);
-
 	/**
 	 * Returns an already existing GSS node with the given grammar slot and input 
 	 * index, or creates a new GSS node with given parameters.  
