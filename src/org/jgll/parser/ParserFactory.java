@@ -1,6 +1,8 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.parser.descriptor.DescriptorFactory;
+import org.jgll.parser.descriptor.factory.DescriptorFactory1;
 import org.jgll.parser.gss.ArrayBasedGSSNodeFactory;
 import org.jgll.parser.lookup.factory.DefaultDescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.DefaultGSSLookupFactory;
@@ -16,6 +18,7 @@ public class ParserFactory {
 		GSSLookupFactory gssLookupFactory = new DefaultGSSLookupFactory(new ArrayBasedGSSNodeFactory(input));
 		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
 		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();
-		return new GLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
+		DescriptorFactory descriptorFactory = new DescriptorFactory1();
+		return new GLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorFactory, descriptorLookupFactory);
 	}
 }

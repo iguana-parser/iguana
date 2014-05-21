@@ -13,6 +13,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
+import org.jgll.parser.descriptor.DescriptorFactory;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
@@ -97,15 +98,20 @@ public class GLLParserImpl implements GLLParser {
 	private GSSLookupFactory gssLookupFactory;
 
 	private SPPFLookupFactory sppfLookupFactory;
+
+	private DescriptorFactory descriptorFactory;
 	
 	private DescriptorLookupFactory descriptorLookupFactory;
+	
 
 	public GLLParserImpl(GSSLookupFactory gssLookupFactory, 
 						 SPPFLookupFactory sppfLookupFactory, 
+						 DescriptorFactory descriptorFactory,
 						 DescriptorLookupFactory descriptorLookupFactory) {
 		this.gssLookupFactory = gssLookupFactory;
 		this.sppfLookupFactory = sppfLookupFactory;
 		this.descriptorLookupFactory = descriptorLookupFactory;
+		this.descriptorFactory = descriptorFactory;
 	}
 	
 	@Override
@@ -252,7 +258,7 @@ public class GLLParserImpl implements GLLParser {
 	
 	@Override
 	public void addDescriptor(GrammarSlot label) {
-		scheduleDescriptor(new Descriptor(label, cu, ci, DummyNode.getInstance()));
+		scheduleDescriptor(descriptorFactory.createDescriptor(label, cu, ci, DummyNode.getInstance()));
 	}	
 	
 	/**
@@ -297,7 +303,7 @@ public class GLLParserImpl implements GLLParser {
 				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
 				// creating descriptors
 				GSSNode destinationGSS = edge.getDestination();
-				Descriptor descriptor = new Descriptor(returnSlot, destinationGSS, inputIndex, y);
+				Descriptor descriptor = descriptorFactory.createDescriptor(returnSlot, destinationGSS, inputIndex, y);
 				
 				if (returnSlot instanceof LastGrammarSlot) {
 					if (descriptorLookup.addDescriptor(descriptor)) {
@@ -379,7 +385,7 @@ public class GLLParserImpl implements GLLParser {
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
 				
-				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
+				Descriptor descriptor = descriptorFactory.createDescriptor(returnSlot, destination, z.getRightExtent(), x);
 				
 				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
 				// creating descriptors
