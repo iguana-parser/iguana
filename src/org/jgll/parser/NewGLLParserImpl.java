@@ -55,26 +55,28 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				
 				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
 				
-				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
-				// creating descriptors
-				GSSNode destinationGSS = edge.getDestination();
-				Descriptor descriptor = descriptorFactory.createDescriptor(returnSlot, destinationGSS, inputIndex, y);
-				
-				if (returnSlot instanceof LastGrammarSlot) {
-					if (descriptorLookup.addDescriptor(descriptor)) {
-						if (!returnSlot.getPopConditions().execute(this, lexer, destinationGSS, inputIndex)) {
-							HeadGrammarSlot head = (HeadGrammarSlot) destinationGSS.getGrammarSlot();
-							if (head.testFollowSet(lexer.getInput().charAt(inputIndex))) {
-								pop(destinationGSS, inputIndex, (NonPackedNode) y);
-							}
-						}
-					}
-				} else {
-					scheduleDescriptor(descriptor);					
-				}
-				
+				createContinuation(returnSlot, inputIndex, edge.getDestination(), y);
 			}
 		}
+	}
+	
+	private void createContinuation(BodyGrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {
+		Descriptor descriptor = descriptorFactory.createDescriptor(slot, gssNode, inputIndex, sppfNode);
+
+		// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
+		// creating descriptors
+		if (slot instanceof LastGrammarSlot) {
+			if (descriptorLookup.addDescriptor(descriptor)) {
+				if (!slot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
+					HeadGrammarSlot head = (HeadGrammarSlot) gssNode.getGrammarSlot();
+					if (head.testFollowSet(lexer.getInput().charAt(inputIndex))) {
+						pop(gssNode, inputIndex, (NonPackedNode) sppfNode);
+					}
+				}
+			}
+		} else {
+			scheduleDescriptor(descriptor);					
+		}		
 	}
 	
 	/**
@@ -140,23 +142,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
 				
-				Descriptor descriptor = descriptorFactory.createDescriptor(returnSlot, destination, z.getRightExtent(), x);
-				
-				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
-				// creating descriptors
-				int newInputIndex = z.getRightExtent();
-				if (returnSlot instanceof LastGrammarSlot) {
-					if (descriptorLookup.addDescriptor(descriptor)) {
-						if (!returnSlot.getPopConditions().execute(this, lexer, destination, newInputIndex)) {
-							HeadGrammarSlot head = (HeadGrammarSlot) destination.getGrammarSlot();
-							if (head.testFollowSet(lexer.getInput().charAt(newInputIndex))) {
-								pop(destination, newInputIndex, (NonPackedNode) x);
-							}
-						}
-					}
-				} else {
-					scheduleDescriptor(descriptor);					
-				}
+				createContinuation(returnSlot, z.getRightExtent(), destination, x);
 			}
 		}
 	}	

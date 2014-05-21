@@ -5,6 +5,7 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.descriptor.DescriptorFactory;
@@ -63,7 +64,12 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				if (returnSlot instanceof LastGrammarSlot) {
 					if (descriptorLookup.addDescriptor(descriptor)) {
 						if (!returnSlot.getPopConditions().execute(this, lexer, destinationGSS, inputIndex)) {
-							HeadGrammarSlot head = (HeadGrammarSlot) destinationGSS.getGrammarSlot();
+							BodyGrammarSlot slot = (BodyGrammarSlot) destinationGSS.getGrammarSlot();
+							
+							// Destination grammar slot is of the form X ::= alpha X. beta
+							// and the pop action will create a node X, so we check the follow set
+							// of X at this position to prevent unnecessary pop.
+							HeadGrammarSlot head = ((NonterminalGrammarSlot) slot.previous()).getNonterminal();
 							if (head.testFollowSet(lexer.getInput().charAt(inputIndex))) {
 								pop(destinationGSS, inputIndex, (NonPackedNode) y);
 							}
