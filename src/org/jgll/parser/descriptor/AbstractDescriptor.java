@@ -1,29 +1,11 @@
-package org.jgll.parser;
+package org.jgll.parser.descriptor;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.parser.HashFunctions;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.SPPFNode;
 
-/**
- * A {@code Descriptor} is used by the GLL parser to keep track of the 
- * nonterminals that have been encountered during the parsing process but that
- * have not been processed yet.
- * <br />
- * A descriptor is a 4-tuple that contains a {@code label} that is used to
- * indicate the code that has to be executed to parse the encountered 
- * nonterminal, a {@code gssNode} which represents the current top in the 
- * Graph Structured Stack, an {@code index}, which is the current location in 
- * the input string and an {@code sppfNode} which is the SPPF node that was
- * created for the nonterminal.
- * 
- * Note: this class has a natural ordering that is inconsistent with equals.
- * 
- * @author Maarten Manders
- * @author Ali Afroozeh
- * 
- */
-
-public class Descriptor {
+public abstract class AbstractDescriptor implements Descriptor {
 	
 	/**
 	 * The label that indicates the parser code to execute for the encountered
@@ -47,9 +29,7 @@ public class Descriptor {
 	 */
 	private final SPPFNode sppfNode;
 	
-	private final int hash;
-	
-	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
+	public AbstractDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
 		assert inputIndex >= 0;
@@ -59,10 +39,6 @@ public class Descriptor {
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
-		
-		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), 
-							       					    sppfNode.getId(), 
-													    inputIndex);
 	}
 	
 	public GrammarSlot getGrammarSlot() {
@@ -83,7 +59,9 @@ public class Descriptor {
 	
 	@Override
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(slot.getId(), 
+				    							   sppfNode.getId(), 
+				    							   inputIndex);
 	}
 	
 	@Override
@@ -98,8 +76,8 @@ public class Descriptor {
 		
 		Descriptor other = (Descriptor) obj;
 		
-		return slot == other.slot &&
-			   sppfNode.getId() == other.sppfNode.getId() &&
+		return slot == other.getGrammarSlot() &&
+			   sppfNode.getId() == other.getSPPFNode().getId() &&
 			   inputIndex == other.getInputIndex();
 	}
 	
@@ -109,5 +87,5 @@ public class Descriptor {
 			   "(" + gssNode.getGrammarSlot() + ", " + gssNode.getInputIndex() + ")" +
 			   ", " + sppfNode + ")";
 	}
-	
+
 }

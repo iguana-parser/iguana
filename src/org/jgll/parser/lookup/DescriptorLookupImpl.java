@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.parser.Descriptor;
+import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 

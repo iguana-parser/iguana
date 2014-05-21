@@ -6,7 +6,7 @@ import java.util.Set;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
-import org.jgll.parser.Descriptor;
+import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
 

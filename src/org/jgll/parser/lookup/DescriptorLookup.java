@@ -1,6 +1,6 @@
 package org.jgll.parser.lookup;
 
-import org.jgll.parser.Descriptor;
+import org.jgll.parser.descriptor.Descriptor;
 
 public interface DescriptorLookup {
 
