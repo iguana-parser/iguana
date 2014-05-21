@@ -3,7 +3,7 @@ package org.jgll.parser.lookup;
 import java.util.Map;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -27,13 +27,13 @@ public interface GSSLookup {
 	 * Returns an already existing GSS node with the given grammar slot and input 
 	 * index, or creates a new GSS node with given parameters.  
 	 */
-	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex);
+	public GSSNode getGSSNode(GrammarSlot head, int inputIndex);
 	
 	/**
 	 * Returns an already existing GSS node with the given parametrs. If no such
 	 * GSS node exists, returns null.
 	 */
-	public GSSNode hasGSSNode(HeadGrammarSlot head, int inputIndex);
+	public GSSNode hasGSSNode(GrammarSlot head, int inputIndex);
 	
 	/**
 	 * Returns the GSS nodes reachable from the given GSS node.

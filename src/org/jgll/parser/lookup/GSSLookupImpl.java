@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.GSSNodeFactory;
@@ -37,10 +37,7 @@ public class GSSLookupImpl implements GSSLookup {
 
 	private final GSSNodeFactory gssNodeFactory;
 	
-	private final GrammarGraph grammar;
-	
 	public GSSLookupImpl(GrammarGraph grammar, Input input, GSSNodeFactory gssNodeFactory) {
-		this.grammar = grammar;
 		this.gssNodeFactory = gssNodeFactory;
 		
 		long start = System.nanoTime();
@@ -52,14 +49,14 @@ public class GSSLookupImpl implements GSSLookup {
 	}
 
 	@Override
-	public GSSNode getGSSNode(HeadGrammarSlot head, int inputIndex) {
+	public GSSNode getGSSNode(GrammarSlot head, int inputIndex) {
 		GSSNode gssNode = gssNodeFactory.createGSSNode(head, inputIndex);
 		gssNodes[head.getId()][inputIndex] = gssNode;		
 		return gssNode;
 	}
 	
 	@Override
-	public GSSNode hasGSSNode(HeadGrammarSlot head, int inputIndex) {
+	public GSSNode hasGSSNode(GrammarSlot head, int inputIndex) {
 		return gssNodes[head.getId()][inputIndex];
 	}
 

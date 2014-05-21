@@ -9,12 +9,10 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.descriptor.DescriptorFactory;
-import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.parser.lookup.GSSLookup;
@@ -41,9 +39,9 @@ import org.jgll.util.logging.LoggerWrapper;
  * @author Ali Afroozeh
  * 
  */
-public class GLLParserImpl implements GLLParser {
+public abstract class AbstractGLLParserImpl implements GLLParser {
 		
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
+	protected static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParserImpl.class);
 	
 	static {		
 		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
@@ -54,11 +52,11 @@ public class GLLParserImpl implements GLLParser {
 	 */
 	protected static final GSSNode u0 = GSSNode.U0;
 
-	private GSSLookup gssLookup;
+	protected GSSLookup gssLookup;
 	
-	private SPPFLookup sppfLookup;
+	protected SPPFLookup sppfLookup;
 	
-	private DescriptorLookup descriptorLookup;
+	protected DescriptorLookup descriptorLookup;
 
 	/**
 	 * u0 is the bottom of the GSS.
@@ -95,16 +93,16 @@ public class GLLParserImpl implements GLLParser {
 	 */
 	protected GSSNode errorGSSNode;
 	
-	private GSSLookupFactory gssLookupFactory;
+	protected GSSLookupFactory gssLookupFactory;
 
-	private SPPFLookupFactory sppfLookupFactory;
+	protected SPPFLookupFactory sppfLookupFactory;
 
-	private DescriptorFactory descriptorFactory;
+	protected DescriptorFactory descriptorFactory;
 	
-	private DescriptorLookupFactory descriptorLookupFactory;
+	protected DescriptorLookupFactory descriptorLookupFactory;
 	
 
-	public GLLParserImpl(GSSLookupFactory gssLookupFactory, 
+	public AbstractGLLParserImpl(GSSLookupFactory gssLookupFactory, 
 						 SPPFLookupFactory sppfLookupFactory, 
 						 DescriptorFactory descriptorFactory,
 						 DescriptorLookupFactory descriptorLookupFactory) {
@@ -282,45 +280,8 @@ public class GLLParserImpl implements GLLParser {
 		pop(cu, ci, (NonPackedNode) cn);
 	}
 	
-	public final void pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
-		
-		if (gssNode != u0) {
+	protected abstract void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 
-			log.trace("Pop %s, %d, %s", gssNode, inputIndex, node);
-			
-			gssLookup.addToPoppedElements(gssNode, node);
-			
-			label:
-			for(GSSEdge edge : gssLookup.getEdges(gssNode)) {
-				BodyGrammarSlot returnSlot = edge.getReturnSlot();
-				
-				if(returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
-					continue label;
-				}
-				
-				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
-				
-				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
-				// creating descriptors
-				GSSNode destinationGSS = edge.getDestination();
-				Descriptor descriptor = descriptorFactory.createDescriptor(returnSlot, destinationGSS, inputIndex, y);
-				
-				if (returnSlot instanceof LastGrammarSlot) {
-					if (descriptorLookup.addDescriptor(descriptor)) {
-						if (!returnSlot.getPopConditions().execute(this, lexer, destinationGSS, inputIndex)) {
-							HeadGrammarSlot head = destinationGSS.getGrammarSlot();
-							if (head.testFollowSet(lexer.getInput().charAt(inputIndex))) {
-								pop(destinationGSS, inputIndex, (NonPackedNode) y);
-							}
-						}
-					}
-				} else {
-					scheduleDescriptor(descriptor);					
-				}
-				
-			}
-		}
-	}
 	
 	/**
 	 * 
@@ -338,7 +299,7 @@ public class GLLParserImpl implements GLLParser {
 	 * 	 return v
 	 * }
 	 * 
-	 * @param slot the grammar label
+	 * @param returnSlot the grammar label
 	 * 
 	 * @param nonterminalIndex the index of the nonterminal appearing as the head of the rule
 	 *                         where this position refers to. 
@@ -351,61 +312,12 @@ public class GLLParserImpl implements GLLParser {
      *
 	 */
 	@Override
-	public final void createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
-		GSSNode v = gssLookup.getGSSNode(head, ci);
-		log.trace("GSSNode created: (%s, %d)",  head, ci);
-		createGSSEdge(slot, cu, cn, v);
-		cu = v;
-	}
+	public abstract void createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head);
 	
 	@Override
-	public final boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
-		GSSNode v = gssLookup.hasGSSNode(head, ci);
-		if(v == null) return false;
-		
-		log.trace("GSSNode found: (%s, %d)",  head, ci);
-		createGSSEdge(slot, cu, cn, v);
-		return true;
-	}
+	public abstract boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
-	private void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source) {
-		if(gssLookup.getGSSEdge(source, destination, w, returnSlot)) {
-			
-			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
-			
-			label:
-			for (SPPFNode z : source.getPoppedElements()) {
-				
-				// Execute pop actions for continuations, when the GSS node already
-				// exits. The input index will be the right extend of the node
-				// stored in the popped elements.
-				if(returnSlot.getPopConditions().execute(this, lexer, destination, z.getRightExtent())) {
-					continue label;
-				}
-				
-				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
-				
-				Descriptor descriptor = descriptorFactory.createDescriptor(returnSlot, destination, z.getRightExtent(), x);
-				
-				// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
-				// creating descriptors
-				
-				int newInputIndex = z.getRightExtent();
-				if (returnSlot instanceof LastGrammarSlot) {
-					if (descriptorLookup.addDescriptor(descriptor)) {
-						if (!returnSlot.getPopConditions().execute(this, lexer, destination, newInputIndex)) {
-							HeadGrammarSlot head = destination.getGrammarSlot();
-							if (head.testFollowSet(lexer.getInput().charAt(newInputIndex))) {
-								pop(destination, newInputIndex, (NonPackedNode) x);
-							}
-						}
-					}
-				} else {
-					scheduleDescriptor(descriptor);					
-				}
-			}
-		}
-	}
+	protected abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source);
 
 	@Override
 	public boolean hasNextDescriptor() {

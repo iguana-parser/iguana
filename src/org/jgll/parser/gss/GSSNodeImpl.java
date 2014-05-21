@@ -6,16 +6,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
 
+class GSSNodeImpl implements GSSNode {
 
-class NewGSSNodeImpl implements GSSNode {
-
-	private final HeadGrammarSlot head;
+	private final GrammarSlot head;
 
 	private final int inputIndex;
 	
@@ -47,7 +46,7 @@ class NewGSSNodeImpl implements GSSNode {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	public NewGSSNodeImpl(HeadGrammarSlot head, int inputIndex, int inputSize) {
+	public GSSNodeImpl(GrammarSlot head, int inputIndex) {
 		this.head = head;
 		this.inputIndex = inputIndex;
 		children = new ArrayList<>();
@@ -89,7 +88,7 @@ class NewGSSNodeImpl implements GSSNode {
 	}
 		
 	@Override
-	public HeadGrammarSlot getGrammarSlot() {
+	public GrammarSlot getGrammarSlot() {
 		return head;
 	}
 
@@ -141,7 +140,7 @@ class NewGSSNodeImpl implements GSSNode {
 	
 	@Override
 	public String toString() {
-		return "(" + head + "," + inputIndex + ")";
+		return String.format("(%s, %d)", head, inputIndex);
 	}
 
 	@Override

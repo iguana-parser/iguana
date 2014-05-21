@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
 import org.jgll.parser.descriptor.Descriptor;
@@ -29,7 +30,7 @@ public interface GSSNode {
 	
 	public int sizeChildren();
 		
-	public HeadGrammarSlot getGrammarSlot();
+	public GrammarSlot getGrammarSlot();
 	
 	public boolean getGSSEdge(GSSNode destination, SPPFNode node, BodyGrammarSlot returnSlot);
 	
