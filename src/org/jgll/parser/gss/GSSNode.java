@@ -9,8 +9,6 @@ import org.jgll.grammar.slot.L0;
 import org.jgll.parser.Descriptor;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.hashing.ExternalHasher;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  *
@@ -18,8 +16,6 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  * 
  */
 public interface GSSNode {
-	
-	public static final ExternalHasher<GSSNode> externalHasher = new GSSNodeExternalHasher();
 	
 	public static final GSSNode U0 = new DummyGSSNode();
 	
@@ -46,22 +42,6 @@ public interface GSSNode {
 	public boolean addDescriptor(Descriptor descriptor);
 	
 	public void clearDescriptors();
-
-	public static class GSSNodeExternalHasher implements ExternalHasher<GSSNode> {
-		
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int hash(GSSNode node, HashFunction f) {
-			return f.hash(node.getGrammarSlot().getId(), node.getInputIndex());
-		}
-
-		@Override
-		public boolean equals(GSSNode g1, GSSNode g2) {
-			return g1.getGrammarSlot() == g2.getGrammarSlot() &&
-				   g1.getInputIndex() == g2.getInputIndex();
-		}
-	}
 	
 	static class DummyGSSNode implements GSSNode {
 		

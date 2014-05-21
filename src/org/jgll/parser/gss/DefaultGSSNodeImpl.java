@@ -57,7 +57,7 @@ class DefaultGSSNodeImpl implements GSSNode {
 		
 		descriptors = new HashSet<>();
 		
-		this.hash = GSSNode.externalHasher.hash(this, HashFunctions.defaulFunction());
+		this.hash = HashFunctions.defaulFunction().hash(head.getId(), inputIndex);
 	}
 	
 	@Override
