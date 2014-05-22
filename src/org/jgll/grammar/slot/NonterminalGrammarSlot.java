@@ -8,6 +8,9 @@ import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * A grammar slot immediately before a nonterminal.
@@ -16,6 +19,8 @@ import org.jgll.parser.GLLParser;
  *
  */
 public class NonterminalGrammarSlot extends BodyGrammarSlot {
+	
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(NonterminalGrammarSlot.class);
 	
 	private static final long serialVersionUID = 1L;
 
@@ -46,6 +51,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
+		GSSNode cu = parser.getCurrentGSSNode();
+		SPPFNode cn = parser.getCurrentSPPFNode();
 		
 		if(!nonterminal.test(lexer.getInput().charAt(ci))) {
 			parser.recordParseError(this);
@@ -56,12 +63,15 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		if(!parser.hasGSSNode(next, nonterminal)) {
-			parser.createGSSNode(next, nonterminal);			
+		GSSNode gssNode = parser.hasGSSNode(next, nonterminal);
+		if(gssNode == null) {
+			gssNode = parser.createGSSNode(next, nonterminal);
+			parser.createGSSEdge(next, cu, cn, gssNode);
 			return nonterminal;
 		}
 		
-		return null;
+		log.trace("GSSNode found: %s",  gssNode);
+		return parser.createGSSEdge(next, cu, cn, gssNode);
 	}
 	
 	@Override

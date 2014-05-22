@@ -101,6 +101,14 @@ public class GSSNode {
 		return gssEdges.add(edge);
 	}
 	
+	public int countGSSEdges() {
+		return gssEdges.size();
+	}
+	
+	public int countPoppedElements() {
+		return poppedElements.size();
+	}
+	
 	public Iterable<GSSEdge> getGSSEdges() {
 		return gssEdges;
 //		return new Iterable<GSSEdge>() {

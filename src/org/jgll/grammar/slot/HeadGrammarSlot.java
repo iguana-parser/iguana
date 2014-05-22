@@ -13,6 +13,7 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * 
@@ -23,6 +24,8 @@ import org.jgll.sppf.NonterminalSymbolNode;
  * 
  */
 public class HeadGrammarSlot implements GrammarSlot {
+	
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(HeadGrammarSlot.class);
 	
 	private static final long serialVersionUID = 1L;
 
@@ -83,7 +86,9 @@ public class HeadGrammarSlot implements GrammarSlot {
 		// If there is only one alternative, skip descriptor creation and jump to the beginning
 		// of the alternative
 		if (set.size() == 1) {
-			return firstSlots[set.iterator().next()];
+			BodyGrammarSlot slot = firstSlots[set.iterator().next()];
+			log.trace("Processing (%s, %d, %s, %s)", slot, parser.getCurrentInputIndex(), parser.getCurrentGSSNode(), parser.getCurrentSPPFNode());
+			return slot;
 		}
 		
 		for (int alternateIndex : set) {

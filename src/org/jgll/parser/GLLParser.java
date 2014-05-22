@@ -26,15 +26,17 @@ public interface GLLParser {
 	
 	public NonterminalSymbolNode parse(Input input, GrammarGraph grammar, String startSymbolName) throws ParseError;
 	
-	public void pop();
+	public GrammarSlot pop();
 	
 	/**
 	 * Creates a new GSSNode with the given grammar slot.
 	 * 
 	 */
-	public void createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
+	public GSSNode createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
-	public boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
+	public GSSNode hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
+	
+	public GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source);
 	
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
 	

@@ -60,5 +60,10 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	public int hashCode() {
 		return hash;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("(%s, %s, %s)", returnSlot, node, destination);
+	}
 
 }

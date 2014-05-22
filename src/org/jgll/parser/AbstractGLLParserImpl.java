@@ -5,7 +5,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
@@ -271,47 +270,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	 * }
 	 */
 	@Override
-	public final void pop() {
-		pop(cu, ci, (NonPackedNode) cn);
+	public final GrammarSlot pop() {
+		return pop(cu, ci, (NonPackedNode) cn);
 	}
 	
-	protected abstract void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
+	protected abstract GrammarSlot pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 
-	
-	/**
-	 * 
-	 * create(L, u, w) {
-     *	 let w be the value of cn
-	 *	 if there is not already a GSS node labelled (L,A ::= alpha . beta, ci) create one
-	 * 	 let v be the GSS node labelled (L,A ::= alpha . beta, ci)
-	 *   if there is not an edge from v to cu labelled w {
-	 * 		create an edge from v to cu labelled w
-	 * 		for all ((v, z) in P) {
-	 * 			let x be the node returned by getNodeP(A ::= alpha . beta, w, z)
-	 * 			add(L, cu, h, x)) where h is the right extent of z
-	 * 		}
-	 * 	 }
-	 * 	 return v
-	 * }
-	 * 
-	 * @param returnSlot the grammar label
-	 * 
-	 * @param nonterminalIndex the index of the nonterminal appearing as the head of the rule
-	 *                         where this position refers to. 
-	 * 
-	 * @param alternateIndex the index of the alternate of the rule where this position refers to.
-	 * 
-	 * @param position the position in the body of the rule where this position refers to
-	 *
-	 * @return 
-     *
-	 */
-	@Override
-	public abstract void createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head);
-	
-	@Override
-	public abstract boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
-	
 	@Override
 	public boolean hasNextDescriptor() {
 		return descriptorLookup.hasNextDescriptor();
@@ -324,7 +288,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		cu = descriptor.getGSSNode();
 		cn = descriptor.getSPPFNode();
 		currentDescriptor = descriptor;
-		log.trace("Processing (%s, %s, %s, %s)", descriptor.getGrammarSlot(), ci, cu, cn);
+		log.trace("Processing %s", descriptor);
 		return descriptor;
 	}
 	

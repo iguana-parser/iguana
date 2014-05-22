@@ -3,6 +3,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lexer.GLLLexerImpl;
@@ -36,7 +37,8 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		return parse(new GLLLexerImpl(input, grammar), grammar, startSymbolName);
 	}
 	
-	public final void pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
+	@Override
+	public final GrammarSlot pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
 		
 		if (gssNode != u0) {
 
@@ -44,8 +46,31 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 			
 			gssLookup.addToPoppedElements(gssNode, node);
 			
+			// Optimization for the case when only one GSS Edge is available.
+			// No scheduling of descriptors, rather direct jump to the slot
+			// to be processed.
+			if (gssNode.countGSSEdges() == 1) {
+				GSSEdge edge = gssNode.getGSSEdges().iterator().next();
+				BodyGrammarSlot returnSlot = edge.getReturnSlot();
+				
+				if(returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
+					return null;
+				}
+
+				SPPFNode sppfNode = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
+				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, sppfNode);
+				if (descriptorLookup.addDescriptor(descriptor)) {
+					cn = sppfNode;
+					cu = edge.getDestination();
+					ci = inputIndex;
+					log.trace("Processing %s", descriptor);
+					return returnSlot;
+				}
+				return null;
+			}
+			
 			label:
-			for(GSSEdge edge : gssLookup.getEdges(gssNode)) {
+			for(GSSEdge edge : gssNode.getGSSEdges()) {
 				BodyGrammarSlot returnSlot = edge.getReturnSlot();
 				
 				if(returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
@@ -57,6 +82,8 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				createContinuation(returnSlot, inputIndex, edge.getDestination(), y);
 			}
 		}
+		
+		return null;
 	}
 	
 	private void createContinuation(BodyGrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {
@@ -107,28 +134,44 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
      *
 	 */
 	@Override
-	public final void createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head) {
-		GSSNode v = gssLookup.getGSSNode(head, ci);
-		log.trace("GSSNode created: (%s, %d)",  head, ci);
-		createGSSEdge(returnSlot, cu, cn, v);
-		cu = v;
+	public final GSSNode createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head) {
+		cu = gssLookup.getGSSNode(head, ci);
+		log.trace("GSSNode created: %s",  cu);
+		return cu;
 	}
 	
 	@Override
-	public final boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
-		GSSNode v = gssLookup.hasGSSNode(head, ci);
-		if(v == null) return false;
-		
-		log.trace("GSSNode found: (%s, %d)",  head, ci);
-		createGSSEdge(slot, cu, cn, v);
-		return true;
+	public final GSSNode hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
+		return gssLookup.hasGSSNode(head, ci);
 	}
 	
-	protected void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source) {
+	@Override
+	public GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		
 		if(source.getGSSEdge(edge)) {
 			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
+
+			// Optimization for the case when only one element is in the popped elements.
+			// No scheduling of descriptors, rather direct jump to the slot
+			// to be processed.
+			if (source.countPoppedElements() == 1) {
+				SPPFNode z = source.getPoppedElements().iterator().next();
+				if(returnSlot.getPopConditions().execute(this, lexer, destination, z.getRightExtent())) {
+					return null;
+				}
+				
+				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z);
+				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
+				if (descriptorLookup.addDescriptor(descriptor)) {
+					cn = x;
+					cu = destination;
+					ci = z.getRightExtent();
+					log.trace("Processing %s", descriptor);
+					return returnSlot;
+				}
+				return null;
+			}
 			
 			label:
 			for (SPPFNode z : source.getPoppedElements()) {
@@ -145,5 +188,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				createContinuation(returnSlot, z.getRightExtent(), destination, x);
 			}
 		}
-	}	
+		
+		return null;
+	}
 }

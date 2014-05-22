@@ -1,9 +1,6 @@
 package org.jgll.parser.lookup;
 
-import java.util.Map;
-
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 /**
@@ -31,8 +28,6 @@ public interface GSSLookup {
 	 */
 	public Iterable<GSSNode> getChildren(GSSNode node);
 	
-	public Iterable<GSSEdge> getEdges(GSSNode node);
-
 	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	
 	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode);

@@ -29,13 +29,15 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
+		
+		if(head.testFollowSet(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
+			// Do not create epsilon nodes
+			NonterminalSymbolNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
+			node.addPackedNode(alternateIndex, ci, DummyNode.getInstance(), DummyNode.getInstance());
+			parser.setCurrentSPPFNode(node);
+			return parser.pop();
+		}
 
-		// A ::= ε
-		// Do not create epsilon nodes
-		NonterminalSymbolNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
-		node.addPackedNode(alternateIndex, ci, DummyNode.getInstance(), DummyNode.getInstance());
-		parser.setCurrentSPPFNode(node);
-		parser.pop();
 		return null;
 	}
 	

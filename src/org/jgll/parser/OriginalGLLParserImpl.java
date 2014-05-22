@@ -3,6 +3,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -37,7 +38,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		return parse(new GLLLexerImpl(input, grammar), grammar, startSymbolName);
 	}
 	
-	public final void pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
+	@Override
+	public final GrammarSlot pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
 		
 		if (gssNode != u0) {
 
@@ -48,14 +50,16 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			BodyGrammarSlot returnSlot = (BodyGrammarSlot) gssNode.getGrammarSlot();
 
 			if (returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
-				return;
+				return null; 
 			}
 			
-			for (GSSEdge edge : gssLookup.getEdges(gssNode)) {
+			for (GSSEdge edge : gssNode.getGSSEdges()) {
 				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
 				createContinuation(returnSlot, inputIndex, edge.getDestination(), y);
 			}
 		}
+		
+		return null;
 	}
 	
 	private void createContinuation(BodyGrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {

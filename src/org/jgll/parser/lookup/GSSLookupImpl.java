@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
@@ -111,9 +110,4 @@ public class GSSLookupImpl implements GSSLookup {
 		return node.getChildren();
 	}
 
-	@Override
-	public Iterable<GSSEdge> getEdges(GSSNode node) {
-		return node.getGSSEdges();
-	}
-	
 }
