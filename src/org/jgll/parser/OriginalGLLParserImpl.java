@@ -63,6 +63,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
 		// creating descriptors
 		Descriptor descriptor = new Descriptor(slot, gssNode, inputIndex, sppfNode);
+		scheduleDescriptor(descriptor);					
 
 		if (slot instanceof LastGrammarSlot) {
 			if (descriptorLookup.addDescriptor(descriptor)) {
@@ -126,10 +127,10 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	
 	@Override
 	public final boolean hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
-		GSSNode v = gssLookup.hasGSSNode(head, ci);
+		GSSNode v = gssLookup.hasGSSNode(slot, ci);
 		if(v == null) return false;
 		
-		log.trace("GSSNode found: (%s, %d)",  head, ci);
+		log.trace("GSSNode found: (%s, %d)",  slot, ci);
 		createGSSEdge(cu, cn, v);
 		return true;
 	}

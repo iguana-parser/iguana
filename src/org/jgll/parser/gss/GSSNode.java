@@ -20,7 +20,7 @@ public class GSSNode {
 	
 	public static final GSSNode U0 = new GSSNode(L0.getInstance(), -1);
 	
-	private final GrammarSlot head;
+	private final GrammarSlot slot;
 
 	private final int inputIndex;
 	
@@ -52,8 +52,8 @@ public class GSSNode {
 	 * @param slot
 	 * @param inputIndex
 	 */
-	public GSSNode(GrammarSlot head, int inputIndex) {
-		this.head = head;
+	public GSSNode(GrammarSlot slot, int inputIndex) {
+		this.slot = slot;
 		this.inputIndex = inputIndex;
 		children = new ArrayList<>();
 		poppedElements = new ArrayList<>();
@@ -62,7 +62,7 @@ public class GSSNode {
 		
 		descriptors = new HashSet<>();
 		
-		this.hash = HashFunctions.defaulFunction().hash(head.getId(), inputIndex);
+		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 	
 	public void addToPoppedElements(NonPackedNode node) {
@@ -89,7 +89,7 @@ public class GSSNode {
 	}
 		
 	public GrammarSlot getGrammarSlot() {
-		return head;
+		return slot;
 	}
 
 	public int getInputIndex() {
@@ -124,7 +124,7 @@ public class GSSNode {
 		
 		GSSNode other = (GSSNode) obj;
 
-		return  head == other.getGrammarSlot() &&
+		return  slot == other.getGrammarSlot() &&
 				inputIndex == other.getInputIndex();
 	}
 
@@ -133,7 +133,7 @@ public class GSSNode {
 	}
 	
 	public String toString() {
-		return String.format("(%s, %d)", head, inputIndex);
+		return String.format("(%s, %d)", slot, inputIndex);
 	}
 
 	public int getCountGSSEdges() {
