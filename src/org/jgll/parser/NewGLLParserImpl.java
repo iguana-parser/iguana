@@ -7,7 +7,6 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.parser.descriptor.DescriptorFactory;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.NewGSSEdgeImpl;
@@ -28,9 +27,8 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		
 	public NewGLLParserImpl(GSSLookupFactory gssLookupFactory, 
 						 SPPFLookupFactory sppfLookupFactory, 
-						 DescriptorFactory descriptorFactory,
 						 DescriptorLookupFactory descriptorLookupFactory) {
-		super(gssLookupFactory, sppfLookupFactory, descriptorFactory, descriptorLookupFactory);
+		super(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
 	}
 	
 	@Override
@@ -62,7 +60,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	private void createContinuation(BodyGrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {
-		Descriptor descriptor = descriptorFactory.createDescriptor(slot, gssNode, inputIndex, sppfNode);
+		Descriptor descriptor = new Descriptor(slot, gssNode, inputIndex, sppfNode);
 
 		// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
 		// creating descriptors

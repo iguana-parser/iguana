@@ -1,11 +1,13 @@
 package org.jgll.parser.gss;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
+import org.jgll.parser.HashFunctions;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.sppf.NonPackedNode;
 
@@ -14,102 +16,136 @@ import org.jgll.sppf.NonPackedNode;
  * @author Ali Afroozeh
  * 
  */
-public interface GSSNode {
+public class GSSNode {
 	
-	public static final GSSNode U0 = new DummyGSSNode();
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), -1);
 	
-	public void addToPoppedElements(NonPackedNode node);
+	private final GrammarSlot head;
+
+	private final int inputIndex;
 	
-	public Iterable<NonPackedNode> getPoppedElements();
+	private List<GSSNode> children;
+	
+	private List<NonPackedNode> poppedElements;
+	
+	/**
+	 * Added popped elements are of the form (N, i, j) where N and i are the label and
+	 * input input index of the current GSS node and thus are the same for this GSS node.
+	 * Therefore, in order to eliminate the duplicates of popped SPPF nodes, we need
+	 * to compare their right extent. This bit set is used for this purpose. 
+	 * Maybe Hashset implementations are faster. We should figure it out.
+	 */
+	private Set<Integer> addedPoppedElements;
+	
+	// TODO: for recursive descent ordering, we need to traverse the GSS edges
+	// the way they are added, so we need a hashset with ordering.
+	private final Set<GSSEdge> gssEdges;
+
+	private final int hash;
+	
+	private Set<Descriptor> descriptors;
+	
+	/**
+	 * Creates a new {@code GSSNode} with the given {@code label},
+	 * {@code position} and {@code index}
+	 * 
+	 * @param slot
+	 * @param inputIndex
+	 */
+	public GSSNode(GrammarSlot head, int inputIndex) {
+		this.head = head;
+		this.inputIndex = inputIndex;
+		children = new ArrayList<>();
+		poppedElements = new ArrayList<>();
+		addedPoppedElements = new HashSet<>();
+		gssEdges = new HashSet<>();
 		
-	public Iterable<GSSNode> getChildren();
-	
-	public void addChild(GSSNode node);
-	
-	public int sizeChildren();
+		descriptors = new HashSet<>();
 		
-	public GrammarSlot getGrammarSlot();
+		this.hash = HashFunctions.defaulFunction().hash(head.getId(), inputIndex);
+	}
 	
-	public boolean getGSSEdge(GSSEdge edge);
+	public void addToPoppedElements(NonPackedNode node) {
+		if(!addedPoppedElements.contains(node.getRightExtent())) {
+			poppedElements.add(node);
+			addedPoppedElements.add(node.getRightExtent());
+		}
+	}
 	
-	public Iterable<GSSEdge> getGSSEdges();
-	
-	public int getCountGSSEdges();
-
-	public int getInputIndex();
-	
-	public boolean addDescriptor(Descriptor descriptor);
-	
-	public void clearDescriptors();
-	
-	static class DummyGSSNode implements GSSNode {
+	public Iterable<NonPackedNode> getPoppedElements() {
+		return poppedElements;
+	}
 		
-		private Set<Descriptor> descriptors;
+	public Iterable<GSSNode> getChildren() {
+		return children;
+	}
+
+	public void addChild(GSSNode node) {
+		children.add(node);
+	}
+	
+	public int sizeChildren() {
+		return children.size();
+	}
 		
-		public DummyGSSNode() {
-			descriptors = new HashSet<>();
+	public GrammarSlot getGrammarSlot() {
+		return head;
+	}
+
+	public int getInputIndex() {
+		return inputIndex;
+	}
+	
+	public boolean getGSSEdge(GSSEdge edge) {
+		addChild(edge.getDestination());
+		return gssEdges.add(edge);
+	}
+	
+	public Iterable<GSSEdge> getGSSEdges() {
+		return gssEdges;
+//		return new Iterable<GSSEdge>() {
+//			
+//			@Override
+//			public Iterator<GSSEdge> iterator() {
+//				return new LinkedList<>(gssEdges).descendingIterator();
+//			}
+//		};		
+	}
+	
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof GSSNode)) {
+			return false;
 		}
 		
-		@Override
-		public void addToPoppedElements(NonPackedNode node) {}
+		GSSNode other = (GSSNode) obj;
 
-		@Override
-		public Iterable<NonPackedNode> getPoppedElements() {
-			throw new UnsupportedOperationException();
-		}
+		return  head == other.getGrammarSlot() &&
+				inputIndex == other.getInputIndex();
+	}
 
-		@Override
-		public Iterable<GSSNode> getChildren() {
-			throw new UnsupportedOperationException();
-		}
+	public int hashCode() {
+		return hash;
+	}
+	
+	public String toString() {
+		return String.format("(%s, %d)", head, inputIndex);
+	}
 
-		@Override
-		public int sizeChildren() {
-			return 0;
-		}
+	public int getCountGSSEdges() {
+		return gssEdges.size();
+	}
 
-		@Override
-		public HeadGrammarSlot getGrammarSlot() {
-			return L0.getInstance();
-		}
+	public boolean addDescriptor(Descriptor descriptor) {
+		return descriptors.add(descriptor);
+	}
 
-		@Override
-		public int getInputIndex() {
-			return 0;
-		}
-
-		@Override
-		public void addChild(GSSNode node) {}
-		
-		@Override
-		public String toString() {
-			return "U0";
-		}
-
-		@Override
-		public boolean getGSSEdge(GSSEdge edge) {
-			throw new UnsupportedOperationException();			
-		}
-
-		@Override
-		public Iterable<GSSEdge> getGSSEdges() {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public int getCountGSSEdges() {
-			return 0;
-		}
-
-		@Override
-		public boolean addDescriptor(Descriptor descriptor) {
-			return descriptors.add(descriptor);
-		}
-
-		@Override
-		public void clearDescriptors() {
-			descriptors.clear();
-		}
+	public void clearDescriptors() {
+		descriptors.clear();
 	}
 
 }

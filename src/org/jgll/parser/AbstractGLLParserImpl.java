@@ -12,7 +12,6 @@ import org.jgll.grammar.slot.L0;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.parser.descriptor.DescriptorFactory;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.parser.lookup.GSSLookup;
@@ -97,19 +96,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 
 	protected SPPFLookupFactory sppfLookupFactory;
 
-	protected DescriptorFactory descriptorFactory;
-	
 	protected DescriptorLookupFactory descriptorLookupFactory;
 	
 
 	public AbstractGLLParserImpl(GSSLookupFactory gssLookupFactory, 
 						 SPPFLookupFactory sppfLookupFactory, 
-						 DescriptorFactory descriptorFactory,
 						 DescriptorLookupFactory descriptorLookupFactory) {
 		this.gssLookupFactory = gssLookupFactory;
 		this.sppfLookupFactory = sppfLookupFactory;
 		this.descriptorLookupFactory = descriptorLookupFactory;
-		this.descriptorFactory = descriptorFactory;
 	}
 	
 	@Override
@@ -256,7 +251,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public void addDescriptor(GrammarSlot label) {
-		scheduleDescriptor(descriptorFactory.createDescriptor(label, cu, ci, DummyNode.getInstance()));
+		scheduleDescriptor(new Descriptor(label, cu, ci, DummyNode.getInstance()));
 	}	
 	
 	/**

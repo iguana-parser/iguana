@@ -5,14 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeFactory;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -35,14 +31,11 @@ public class GSSLookupImpl implements GSSLookup {
 	 */
 	private GSSNode[][] gssNodes;
 
-	private final GSSNodeFactory gssNodeFactory;
-	
-	public GSSLookupImpl(GrammarGraph grammar, Input input, GSSNodeFactory gssNodeFactory) {
-		this.gssNodeFactory = gssNodeFactory;
+	public GSSLookupImpl(Input input, int size) {
 		
 		long start = System.nanoTime();
 
-		gssNodes = new GSSNode[grammar.getNonterminals().size()][input.length()];
+		gssNodes = new GSSNode[size][input.length()];
 
 		long end = System.nanoTime();
 		log.info("Lookup table initialization: %d ms", (end - start) / 1000_000);
@@ -50,7 +43,7 @@ public class GSSLookupImpl implements GSSLookup {
 
 	@Override
 	public GSSNode getGSSNode(GrammarSlot head, int inputIndex) {
-		GSSNode gssNode = gssNodeFactory.createGSSNode(head, inputIndex);
+		GSSNode gssNode = new GSSNode(head, inputIndex);
 		gssNodes[head.getId()][inputIndex] = gssNode;		
 		return gssNode;
 	}

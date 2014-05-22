@@ -8,7 +8,6 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.parser.descriptor.DescriptorFactory;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.OriginalGSSEdgeImpl;
@@ -29,9 +28,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		
 	public OriginalGLLParserImpl(GSSLookupFactory gssLookupFactory, 
 						 SPPFLookupFactory sppfLookupFactory, 
-						 DescriptorFactory descriptorFactory,
 						 DescriptorLookupFactory descriptorLookupFactory) {
-		super(gssLookupFactory, sppfLookupFactory, descriptorFactory, descriptorLookupFactory);
+		super(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
 	}
 	
 	@Override
@@ -64,7 +62,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		
 		// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
 		// creating descriptors
-		Descriptor descriptor = descriptorFactory.createDescriptor(slot, gssNode, inputIndex, sppfNode);
+		Descriptor descriptor = new Descriptor(slot, gssNode, inputIndex, sppfNode);
 
 		if (slot instanceof LastGrammarSlot) {
 			if (descriptorLookup.addDescriptor(descriptor)) {
@@ -73,6 +71,12 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 					// Destination grammar slot is of the form X ::= alpha X. beta
 					// and the pop action will create a node X, so we check the follow set
 					// of X at this position to prevent unnecessary pop.
+					
+					if (gssNode == GSSNode.U0) {
+						pop(gssNode, inputIndex, (NonPackedNode) sppfNode);
+						return;
+					}
+					
 					HeadGrammarSlot head = ((NonterminalGrammarSlot) ((BodyGrammarSlot) gssNode.getGrammarSlot()).previous()).getNonterminal();
 					if (head.testFollowSet(lexer.getInput().charAt(inputIndex))) {
 						pop(gssNode, inputIndex, (NonPackedNode) sppfNode);
@@ -115,7 +119,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	@Override
 	public final void createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head) {
 		GSSNode v = gssLookup.getGSSNode(returnSlot, ci);
-		log.trace("GSSNode created: (%s, %d)",  head, ci);
+		log.trace("GSSNode created: (%s, %d)",  returnSlot, ci);
 		createGSSEdge(cu, cn, v);
 		cu = v;
 	}
