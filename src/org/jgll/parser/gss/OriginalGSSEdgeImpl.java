@@ -25,7 +25,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 
 	@Override
 	public BodyGrammarSlot getReturnSlot() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	public GSSNode getDestination() {

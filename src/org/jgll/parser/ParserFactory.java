@@ -19,11 +19,11 @@ public class ParserFactory {
 		return new NewGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
 	}
 	
-//	public static GLLParser newParser(GrammarGraph grammar, Input input) {
-//		GSSLookupFactory gssLookupFactory = new OriginalGSSLookupFactory();
-//		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
-//		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();
-//		return new OriginalGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
-//	}
+	public static GLLParser originalParser(GrammarGraph grammar, Input input) {
+		GSSLookupFactory gssLookupFactory = new OriginalGSSLookupFactory();
+		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
+		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();
+		return new OriginalGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
+	}
 
 }

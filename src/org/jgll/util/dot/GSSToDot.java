@@ -19,7 +19,8 @@ public class GSSToDot extends ToDot {
 			sb.append("\"" + getId(gssNode) + "\"" + String.format(GSS_NODE, gssNode.toString()) + "\n");
 			
 			for(GSSEdge edge : map.get(gssNode)) {
-				sb.append(String.format(GSS_EDGE, edge.getReturnSlot()) + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(edge.getDestination()) + "\"}" + "\n");				
+				String label = edge.getReturnSlot() == null ? "" : String.format(GSS_EDGE, edge.getReturnSlot()); 
+				sb.append(label + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(edge.getDestination()) + "\"}" + "\n");				
 			}
 		}
 	}
