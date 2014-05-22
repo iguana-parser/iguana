@@ -43,6 +43,4 @@ public interface GSSLookup {
 	
 	public Iterable<GSSNode> getGSSNodes();
 	
-	public Map<GSSNode, Iterable<GSSEdge>> getEdgesMap();
-	
 }	

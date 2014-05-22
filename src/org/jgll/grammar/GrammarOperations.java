@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.EpsilonGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.symbol.Alt;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -25,9 +21,47 @@ import org.jgll.util.trie.Trie;
 
 public class GrammarOperations {
 	
-	public static Map<Nonterminal, Set<RegularExpression>> calculateFirstSets(Grammar grammar) {
+	private Grammar grammar;
+
+	private Map<Nonterminal, Set<RegularExpression>> firstSets;
+	
+	private Map<Nonterminal, Set<RegularExpression>> followSets;
+
+	private Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
+
+	private Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
+	
+	private Set<Nonterminal> nullableNonterminals;
+	
+	public GrammarOperations(Grammar grammar) {
+		this.grammar = grammar;
+		this.firstSets = new HashMap<>();
+		this.nullableNonterminals = new HashSet<>();
+		this.followSets = new HashMap<>();
+		this.predictionSets = new HashMap<>();
 		
-		Map<Nonterminal, Set<RegularExpression>> firstSets = new HashMap<>();
+		calculateFirstSets();
+		calculateFollowSets();
+		calcualtePredictionSets();
+	}
+	
+	public Map<Nonterminal, Set<RegularExpression>> getFirstSets() {
+		return firstSets;
+	}
+	
+	public Map<Nonterminal, Set<RegularExpression>> getFollowSets() {
+		return followSets;
+	}
+	
+	public Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets() {
+		return predictionSets;
+	}
+	
+	public Map<Nonterminal, Set<Nonterminal>> getReachabilityGraph() {
+		return reachabilityGraph;
+	}
+	
+	private void calculateFirstSets() {
 		
 		Set<Nonterminal> nonterminals = grammar.getNonterminals();
 		for (Nonterminal head : nonterminals) {
@@ -41,14 +75,12 @@ public class GrammarOperations {
 			changed = false;
 			
 			for (Nonterminal head : nonterminals) {
+				Set<RegularExpression> firstSet = firstSets.get(head);
 				for (List<Symbol> alternate : grammar.getAlternatives(head)) {
-					Set<RegularExpression> firstSet = firstSets.get(head);
-					changed |= addFirstSet(firstSet, alternate, 0, firstSets);
+					changed |= addFirstSet(head, firstSet, alternate, 0);
 				}
 			}
 		}
-		
-		return firstSets;
 	}
 	
 	/**
@@ -60,9 +92,7 @@ public class GrammarOperations {
 	 * 
 	 * @return true if adding any new terminals are added to the first set.
 	 */
-	private static boolean addFirstSet(Set<RegularExpression> firstSet, 
-									   List<Symbol> alternate, int index,
-									   Map<Nonterminal, Set<RegularExpression>> firstSets) {
+	private boolean addFirstSet(Nonterminal head, Set<RegularExpression> firstSet, List<Symbol> alternate, int index) {
 
 		boolean changed = false;
 		
@@ -72,6 +102,7 @@ public class GrammarOperations {
 		 
 		//TODO: check if it is allowed or is it a good idea to enforce the instantiation of Epsilon.
 		if (alternate.size() == 0) {
+			nullableNonterminals.add(head);
 			return firstSet.add(Epsilon.getInstance());
 		}
 		
@@ -93,21 +124,22 @@ public class GrammarOperations {
 				Set<RegularExpression> set = new HashSet<>(firstSets.get(nonterminal));
 				set.remove(Epsilon.getInstance());
 				changed |= firstSet.addAll(set);
-				if (!isNullable(nonterminal, firstSets)) {
+				if (!isNullable(nonterminal)) {
 					break;
 				}
 			}
 		}
 		
-		if (isChainNullable(alternate, 0, firstSets)) {
+		if (isChainNullable(alternate, 0)) {
+			nullableNonterminals.add(head);
 			changed |= firstSet.add(Epsilon.getInstance());
 		}
 		
 		return changed;
 	}
 	
-	private static boolean isNullable(Nonterminal nt, Map<Nonterminal, Set<RegularExpression>> firstSets) {
-		return firstSets.get(nt).contains(Epsilon.getInstance());
+	private boolean isNullable(Nonterminal nt) {
+		return nullableNonterminals.contains(nt);
 	}
 	
 	/**
@@ -117,7 +149,7 @@ public class GrammarOperations {
 	 * part beta is nullable.
 	 *   
 	 */
-	private static boolean isChainNullable(List<Symbol> alternate, int index, Map<Nonterminal, Set<RegularExpression>> firstSets) {
+	private boolean isChainNullable(List<Symbol> alternate, int index) {
 		
 		if(index >= alternate.size()) {
 			return true;
@@ -131,7 +163,7 @@ public class GrammarOperations {
 					return false;
 				}
 			} else {
-				if(!isNullable((Nonterminal) s, firstSets)) {
+				if(!isNullable((Nonterminal) s)) {
 					return false;
 				}				
 			}
@@ -140,10 +172,7 @@ public class GrammarOperations {
 		return true;
 	}
 		
-	public static Map<Nonterminal, Set<RegularExpression>> calculateFollowSets(Grammar grammar, 
-																		 	   Map<Nonterminal, Set<RegularExpression>> firstSets) {
-		
-		Map<Nonterminal, Set<RegularExpression>> followSets = new HashMap<>();
+	private void calculateFollowSets() {
 		
 		Set<Nonterminal> nonterminals = grammar.getNonterminals();
 		
@@ -176,11 +205,11 @@ public class GrammarOperations {
 							// first set of beta to
 							// the follow set of B.
 							Set<RegularExpression> followSet = followSets.get(nonterminal);
-							changed |= addFirstSet(followSet, alternate, i + 1, firstSets);
+							changed |= addFirstSet(nonterminal, followSet, alternate, i + 1);
 
 							// If beta is nullable, then add the follow set of X
 							// to the follow set of B.
-							if (isChainNullable(alternate, i + 1, firstSets)) {
+							if (isChainNullable(alternate, i + 1)) {
 								changed |= followSet.addAll(followSets.get(head));
 							}
 						}
@@ -198,16 +227,10 @@ public class GrammarOperations {
 			// as the start symbol.
 			followSets.get(head).add(EOF.getInstance());
 		}
-		
-		return followSets;
 	}
 	
-	public static Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets(Grammar grammar,
-																				   Map<Nonterminal, Set<RegularExpression>> firstSets,
-																				   Map<Nonterminal, Set<RegularExpression>> followSets) {
+	private void calcualtePredictionSets() {
 
-		Map<Nonterminal, List<Set<RegularExpression>>> predictionSets = new HashMap<>();
-		
 		for(Nonterminal nonterminal : grammar.getNonterminals()) {
 			List<List<Symbol>> alternates = grammar.getAlternatives(nonterminal);
 			
@@ -239,7 +262,7 @@ public class GrammarOperations {
 					}
 				}
 				
-				if(isChainNullable(alternate, 0, firstSets)) {
+				if(isChainNullable(alternate, 0)) {
 					predictionSet.addAll(followSets.get(nonterminal));
 				}
 				predictionSet.remove(Epsilon.getInstance());
@@ -248,14 +271,9 @@ public class GrammarOperations {
 
 			predictionSets.put(nonterminal, list);
 		}
-		
-		return predictionSets;
 	}
 	
-	public static Set<Nonterminal> calculateLLNonterminals(Grammar grammar, 
-											   Map<Nonterminal, Set<RegularExpression>> firstSets,
-											   Map<Nonterminal, Set<RegularExpression>> followSets,
-									   		   Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
+	public Set<Nonterminal> calculateLLNonterminals() {
 
 		Set<Nonterminal> nonterminals = grammar.getNonterminals();
 		
@@ -273,7 +291,7 @@ public class GrammarOperations {
 			
 				// Calculate the prediction set for the alternate
 				Set<RegularExpression> s = new HashSet<>();
-				addFirstSet(s, alt, 0, firstSets);
+				addFirstSet(head, s, alt, 0);
 				if(s.contains(Epsilon.getInstance())) {
 					s.addAll(followSets.get(head));
 				}
@@ -398,32 +416,6 @@ public class GrammarOperations {
 		return reachabilityGraph;
 	}
 	
-	public static Map<HeadGrammarSlot, Set<HeadGrammarSlot>> calculateDirectReachabilityGraph(Iterable<HeadGrammarSlot> nonterminals, 
-																							  Map<Nonterminal, Set<RegularExpression>> firstSets) {
-		
-		Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph = new HashMap<>();
-		
-		boolean changed = true;
-
-		while (changed) {
-			changed = false;
-			for (HeadGrammarSlot head : nonterminals) {
-
-				Set<HeadGrammarSlot> set = reachabilityGraph.get(head);
-				if(set == null) {
-					set = new HashSet<>();
-					reachabilityGraph.put(head, set);
-				}
-				
-				for (BodyGrammarSlot slot : head.getFirstSlots()) {
-					changed |= calculateDirectReachabilityGraph(set, slot, changed, reachabilityGraph, firstSets);
-				}
-			}
-		}
-		
-		return reachabilityGraph;
-	}
-	
 	public static Map<Nonterminal, List<List<Symbol>>> leftFactorize(Grammar grammar) {
 		
 		Map<Nonterminal, List<List<Symbol>>> leftFactorized = new HashMap<>();
@@ -468,75 +460,4 @@ public class GrammarOperations {
 		return new  Alt(symbols);
 	}
 	
-	/**
-	 * 
-	 * Calculates the set of nonterminals that are directly reachable from a given nonterminal.
-	 * In other words, if A is a nonterminal, direct reachable nonterminals from A are the set of B's 
-	 * such as A =>* B gamma.
-	 * 
-	 * @param set
-	 * @param currentSlot
-	 * @param changed
-	 * @param reachabilityGraph
-	 * @return
-	 */
-	private static boolean calculateDirectReachabilityGraph(Set<HeadGrammarSlot> set, BodyGrammarSlot currentSlot, boolean changed, 
-													  Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph, 
-													  Map<Nonterminal, Set<RegularExpression>> firstSets) {
-
-		if (currentSlot instanceof EpsilonGrammarSlot) {
-			return false;
-		}
-		
-		else if (currentSlot instanceof NonterminalGrammarSlot) {
-			NonterminalGrammarSlot nonterminalGrammarSlot = (NonterminalGrammarSlot) currentSlot;
-			
-			changed = set.add(nonterminalGrammarSlot.getNonterminal()) || changed;
-			
-			Set<HeadGrammarSlot> set2 = reachabilityGraph.get(nonterminalGrammarSlot.getNonterminal());
-			if(set2 == null) {
-				set2 = new HashSet<>();
-				reachabilityGraph.put(nonterminalGrammarSlot.getNonterminal(), set2);
-			}
-			
-			changed = set.addAll(set2) || changed;
-			
-			if (isNullable(nonterminalGrammarSlot.getNonterminal().getNonterminal(), firstSets)) {
-				return calculateDirectReachabilityGraph(set, currentSlot.next(), changed, reachabilityGraph, firstSets) || changed;
-			}
-			return changed;
-		}
-		
-		// TODO: check the effect of adding TokenGrammarSlot
-		// ignore LastGrammarSlot
-		else {
-			return changed;
-		}	
-	}
-	 
-	public static void setPredictionSetsForConditionals(Iterable<BodyGrammarSlot> conditionSlots) {
-		// TODO: rewrite this.
-//		for(BodyGrammarSlot slot : conditionSlots) {
-//			while(slot != null) {
-//				if(slot instanceof NonterminalGrammarSlot || slot instanceof TokenGrammarSlot) {
-//					BitSet set = new BitSet();
-//					getChainFirstSet(slot, set);
-//					// TODO: fix and uncomment it later
-////					if(isChainNullable(slot)) {
-////						set.addAll(head.getFollowSet());
-////					}
-//					slot.setPredictionSet(set);
-//				} 
-//				else if(slot instanceof LastGrammarSlot) {
-//					// TODO: fix and uncomment it later
-//					//slot.setPredictionSet(slot.getHead().getFollowSetAsBitSet());
-//				}
-//				else {
-//					throw new RuntimeException("Unexpected grammar slot: " + slot.getClass());
-//				}
-//				slot = slot.next();
-//			}
-//		}
-	}
-
 }

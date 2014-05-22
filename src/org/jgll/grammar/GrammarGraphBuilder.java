@@ -1,5 +1,8 @@
 package org.jgll.grammar;
 
+import static org.jgll.grammar.Conditions.getPostConditions;
+import static org.jgll.grammar.Conditions.getPreConditions;
+
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -8,13 +11,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.exception.GrammarValidationException;
-import org.jgll.grammar.exception.NonterminalNotDefinedException;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
@@ -35,8 +36,6 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
-
-import static org.jgll.grammar.Conditions.*;
 
 public class GrammarGraphBuilder implements Serializable {
 
@@ -61,8 +60,6 @@ public class GrammarGraphBuilder implements Serializable {
 	String name;
 	
 	Grammar grammar;
-	
-	Map<HeadGrammarSlot, Set<HeadGrammarSlot>> directReachabilityGraph;
 	
 	Map<RegularExpression, Integer> tokenIDMap;
 	
@@ -144,12 +141,15 @@ public class GrammarGraphBuilder implements Serializable {
 		long start;
 		long end;
 		
+		
 		start = System.nanoTime();
-		firstSets = GrammarOperations.calculateFirstSets(grammar);
-		followSets = GrammarOperations.calculateFollowSets(grammar, firstSets);
-		predictionSets = GrammarOperations.getPredictionSets(grammar, firstSets, followSets);
+		GrammarOperations grammarOperations = new GrammarOperations(grammar);
 		end = System.nanoTime();
 		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
+		
+		firstSets = grammarOperations.getFirstSets();
+		followSets = grammarOperations.getFollowSets();
+		predictionSets = grammarOperations.getPredictionSets();
 		
 //		start = System.nanoTime();
 //		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = GrammarProperties.calculateReachabilityGraph(definitions);
@@ -177,9 +177,6 @@ public class GrammarGraphBuilder implements Serializable {
 		removeUnusedNewNonterminals();
 		
 //		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
-
-		directReachabilityGraph = GrammarOperations.calculateDirectReachabilityGraph(headGrammarSlots, firstSets);
-
 		
 		slots = new ArrayList<>();
 		
@@ -441,10 +438,6 @@ public class GrammarGraphBuilder implements Serializable {
 		return set;
 	}
 	
-	public Set<HeadGrammarSlot> getDirectReachableNonterminals(String name) {
-		return directReachabilityGraph.get(nonterminalsMap.get(new Nonterminal(name)));
-	}
-
 	/**
 	 * Removes non-reachable nonterminals from the given nonterminal
 	 * 

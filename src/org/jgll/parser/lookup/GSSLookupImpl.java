@@ -1,9 +1,7 @@
 package org.jgll.parser.lookup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
@@ -118,13 +116,4 @@ public class GSSLookupImpl implements GSSLookup {
 		return node.getGSSEdges();
 	}
 	
-	@Override
-	public Map<GSSNode, Iterable<GSSEdge>> getEdgesMap() {
-		Map<GSSNode, Iterable<GSSEdge>> map = new HashMap<>();
-		for(GSSNode node : getGSSNodes()) {
-			map.put(node, getEdges(node));
-		}
-		return map;
-	}
-
 }

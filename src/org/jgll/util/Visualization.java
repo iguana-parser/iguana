@@ -1,9 +1,6 @@
 package org.jgll.util;
 
-import java.util.Map;
-
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -37,9 +34,9 @@ public class Visualization {
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> nodes, Map<GSSNode, Iterable<GSSEdge>> map) {
+	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> gssNodes) {
 		GSSToDot toDot = new GSSToDot();
-		toDot.execute(nodes, map);
+		toDot.execute(gssNodes);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "gss");
 	}
 	
@@ -60,6 +57,5 @@ public class Visualization {
 		String dot = AutomatonToDot.toDot(startState);
 		GraphVizUtil.generateGraph(dot, outputDir, "automaton");
 	}
-
 
 }

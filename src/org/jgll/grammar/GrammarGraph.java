@@ -60,8 +60,6 @@ public class GrammarGraph implements Serializable {
 	
 	private int stDevDescriptors;
 	
-	private Map<HeadGrammarSlot, Set<HeadGrammarSlot>> reachabilityGraph;
-	
 	private Map<RegularExpression, Integer> tokenIDMap;
 	
 	private List<RegularExpression> tokens;
@@ -101,7 +99,6 @@ public class GrammarGraph implements Serializable {
 		this.maxDescriptorsAtInput = builder.maxDescriptors;
 		this.averageDescriptorsAtInput = builder.averageDescriptors;
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
-		this.reachabilityGraph = builder.directReachabilityGraph;
 		this.tokens = builder.tokens;
 		this.dfas = builder.dfas;
 		this.firstSets = builder.firstSets;
@@ -141,10 +138,6 @@ public class GrammarGraph implements Serializable {
 		log.debug("Longest terminal Chain: %d", longestTerminalChain);
 		log.debug("Maximum number alternates: %d", maximumNumAlternates);
 		log.debug("Maximum descriptors: %d", maxDescriptorsAtInput);
-	}
-	
-	public Set<HeadGrammarSlot> getReachableNonterminals(HeadGrammarSlot nonterminal) {
-		return reachabilityGraph.get(nonterminal);
 	}
 	
 	public void code(Writer writer, String packageName) throws IOException {
