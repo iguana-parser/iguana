@@ -10,7 +10,7 @@ import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -61,19 +61,21 @@ public class DanglingElseGrammar1 {
 	}
 	
 	@Test
-	public void test1() throws ParseError {
+	public void test1() {
 		Input input = Input.fromString("aasbs");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-		assertTrue(sppf.deepEquals(getExpectedSPPF1()));
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF1()));
 	}
 	
 	@Test
-	public void test2() throws ParseError {
+	public void test2() {
 		Input input = Input.fromString("aaaaasbsbsbs");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("aaaaasbsbsbs"), grammarGraph, "S");
-		assertTrue(sppf.deepEquals(getExpectedSPPF2()));
+		ParseResult result = parser.parse(Input.fromString("aaaaasbsbsbs"), grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF2()));
 	}
 	
 	private SPPFNode getExpectedSPPF1() {

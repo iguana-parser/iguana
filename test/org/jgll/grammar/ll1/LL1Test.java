@@ -10,7 +10,7 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -99,10 +99,11 @@ public class LL1Test {
 	}
 
 	@Test
-	public void test1() throws ParseError {
+	public void test1() {
 		Input input = Input.fromString("bda");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
 
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 3);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 2);
@@ -118,15 +119,16 @@ public class LL1Test {
 		node1.addChild(node2);
 		node1.addChild(node7);
 		
-		assertTrue(sppf.deepEquals(node1));
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(node1));
 	}
 	
 	@Test
-	public void test2() throws ParseError {
+	public void test2() {
 		Input input = Input.fromString("a");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
+		
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 1);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 0);
 		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 2, 0, 0);
@@ -137,14 +139,15 @@ public class LL1Test {
 		node1.addChild(node2);
 		node1.addChild(node5);
 		
-		assertTrue(sppf.deepEquals(node1));
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(node1));
 	}
 	
 	@Test
-	public void test3() throws ParseError {
+	public void test3() {
 		Input input = Input.fromString("ba");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
 
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 1);
@@ -158,14 +161,15 @@ public class LL1Test {
 		node1.addChild(node2);
 		node1.addChild(node6);
 		
-		assertTrue(sppf.deepEquals(node1));
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(node1));
 	}
 
 	@Test
-	public void test4() throws ParseError {
+	public void test4() {
 		Input input = Input.fromString("da");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
 		
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 1);
@@ -179,7 +183,7 @@ public class LL1Test {
 		node1.addChild(node2);
 		node1.addChild(node6);
 		
-		assertTrue(sppf.deepEquals(node1));
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(node1));
 	}
 	
 }

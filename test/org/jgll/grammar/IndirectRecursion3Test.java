@@ -6,9 +6,7 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
-import org.jgll.parser.ParserFactory;
+import org.jgll.parser.*;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -66,27 +64,27 @@ public class IndirectRecursion3Test {
 	}
 	
 	@Test
-	public void test1() throws ParseError {
+	public void test1() {
 		Input input = Input.fromString("efcfc");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "A");
-		assertTrue(sppf.deepEquals(getSPPFNode1()));
+		ParseResult result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode1()));
 	}
 	
 	@Test
-	public void test2() throws ParseError {
+	public void test2() {
 		Input input = Input.fromString("egdgdgd");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(Input.fromString("egdgdgd"), grammarGraph, "A");
-		assertTrue(sppf.deepEquals(getSPPFNode2()));		
+		ParseResult result = parser.parse(Input.fromString("egdgdgd"), grammarGraph, "A");
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode2()));		
 	}
 	
 	@Test
-	public void test3() throws ParseError {
+	public void test3() {
 		Input input = Input.fromString("egdfcgd");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "A");
-		assertTrue(sppf.deepEquals(getSPPFNode3()));
+		ParseResult result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode3()));
 	}
 	
 	private SPPFNode getSPPFNode1() {

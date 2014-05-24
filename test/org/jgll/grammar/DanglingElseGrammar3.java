@@ -7,9 +7,7 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
-import org.jgll.parser.ParserFactory;
+import org.jgll.parser.*;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -54,11 +52,12 @@ public class DanglingElseGrammar3 {
 	}
 	
 	@Test
-	public void test() throws ParseError {
+	public void test() {
 		Input input = Input.fromString("aasbs");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-		assertTrue(sppf.deepEquals(getExpectedSPPF()));
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF()));
 	}
 	
 	private SPPFNode getExpectedSPPF() {

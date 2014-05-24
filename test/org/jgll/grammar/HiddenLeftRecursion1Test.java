@@ -6,9 +6,7 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
-import org.jgll.parser.ParserFactory;
+import org.jgll.parser.*;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -67,31 +65,33 @@ public class HiddenLeftRecursion1Test {
 	}
 	
 	@Test
-	public void test() throws ParseError {
+	public void test() {
 		Input input = Input.fromString("xca");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf1 = parser.parse(input, grammarGraph, "A");
-		assertTrue(sppf1.deepEquals(getSPPFNode1()));
+		ParseResult result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode1()));
 		
 		input = Input.fromString("ycb");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf2 = parser.parse(input, grammarGraph, "A");
-		assertTrue(sppf2.deepEquals(getSPPFNode2()));
+		result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode2()));
 		
 		input = Input.fromString("cababaab");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf3 = parser.parse(input, grammarGraph, "A");
-		assertTrue(sppf3.deepEquals(getSPPFNode3()));
+		result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode3()));
 		
 		input = Input.fromString("xcabbbbb");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf4 = parser.parse(input, grammarGraph, "A");
-		assertTrue(sppf4.deepEquals(getSPPFNode4()));
+		result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode4()));
 
 		input = Input.fromString("ycaaaabaaaa");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf5 = parser.parse(input, grammarGraph, "A");
-		assertTrue(sppf5.deepEquals(getSPPFNode5()));
+		result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode5()));
 	}
 	
 	private SPPFNode getSPPFNode1() {

@@ -3,16 +3,12 @@ package org.jgll.grammar;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.jgll.grammar.symbol.*;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
-import org.jgll.parser.ParserFactory;
-import org.jgll.util.Input;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgll.parser.*;
+import org.jgll.util.*;
+import org.junit.*;
 
 /**
  * A ::= "if" B
@@ -51,7 +47,7 @@ public class KeywordTest2 {
 	}
 	
 	@Test
-	public void test() throws ParseError {
+	public void test() {
 		Input input = Input.fromString("ifb");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
 		parser.parse(input, grammarGraph, "A");

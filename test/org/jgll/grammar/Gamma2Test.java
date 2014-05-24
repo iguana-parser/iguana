@@ -6,9 +6,7 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
-import org.jgll.parser.ParserFactory;
+import org.jgll.parser.*;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -51,31 +49,34 @@ public class Gamma2Test {
 	}
 	
 	@Test
-	public void testParsers1() throws ParseError {
+	public void testParsers1() {
 		Input input = Input.fromString("bbb");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-		assertTrue(sppf.deepEquals(getSPPF1()));
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF1()));
 	}
 	
 	@Test
-	public void testParsers2() throws ParseError {
+	public void testParsers2() {
 		Input input = Input.fromString("bbbb");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-		assertTrue(sppf.deepEquals(getSPPF2()));
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF2()));
 	}
 	
 	@Test
-	public void testParsers3() throws ParseError {
+	public void testParsers3() {
 		Input input = Input.fromString("bbbbb");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-		assertTrue(sppf.deepEquals(getSPPF3()));
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF3()));
 	}	
 	
 	@Test
-	public void test100bs() throws ParseError {
+	public void test100bs() {
 		Input input = Input.fromString(get100b());		
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
 		parser.parse(input, grammarGraph, "S");

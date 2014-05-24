@@ -1,6 +1,6 @@
 package org.jgll.grammar.basic;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.list;
 import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
@@ -9,7 +9,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -49,11 +49,12 @@ public class Test9 {
 	}
 	
 	@Test
-	public void testParser() throws ParseError {
+	public void testParser() {
 		Input input = Input.fromString("ab");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
-		assertTrue(sppf.deepEquals(getSPPF()));
+		ParseResult result = parser.parse(input, grammar, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 	
 	private SPPFNode getSPPF() {

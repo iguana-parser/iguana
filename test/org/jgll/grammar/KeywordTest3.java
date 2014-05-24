@@ -1,22 +1,15 @@
 package org.jgll.grammar;
 
-import static org.junit.Assert.*;
 import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
+import org.jgll.grammar.symbol.*;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
-import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
-import org.jgll.util.Input;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgll.parser.*;
+import org.jgll.sppf.*;
+import org.jgll.util.*;
+import org.junit.*;
 
 /**
  * S ::= "if" L S L "then" L S 
@@ -58,11 +51,11 @@ public class KeywordTest3 {
 	}
 	
 	@Test
-	public void testParser() throws ParseError {
+	public void testParser() {
 		Input input = Input.fromString("if s then s");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-		assertTrue(sppf.deepEquals(getSPPF()));
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 		
 	private SPPFNode getSPPF() {
