@@ -10,13 +10,12 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -79,12 +78,12 @@ public class FilterTest4 {
 	}
 
 	@Test
-	public void testAssociativityAndPriority() throws ParseError {
+	public void testAssociativityAndPriority() {
 		Input input = Input.fromString("xawz");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "E");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", sppf, grammarGraph, input);
-		assertTrue(sppf.deepEquals(getSPPF()));
+		ParseResult result = parser.parse(input, grammarGraph, "E");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 	
 	private SPPFNode getSPPF() {

@@ -7,7 +7,7 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -40,11 +40,12 @@ public class Test1 {
 	}
 	
 	@Test
-	public void testSPPF() throws ParseError {
+	public void testSPPF() {
 		Input input = Input.fromString("");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "A");
-		assertTrue(sppf.deepEquals(expectedSPPF()));
+		ParseResult result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(expectedSPPF()));
 	}
 	
 	

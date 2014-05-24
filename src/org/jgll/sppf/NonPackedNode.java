@@ -175,4 +175,8 @@ public abstract class NonPackedNode extends SPPFNode {
 		return id;
 	}
 	
+	public int getCountPackedNodes() {
+		return countPackedNodes;
+	}
+	
 }

@@ -1,6 +1,7 @@
 package org.jgll.disambiguation.conditions;
 
 import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -12,12 +13,11 @@ import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  * 
@@ -56,15 +56,12 @@ public class FollowRestrictionTest2 {
 		grammarGraph = grammar.toGrammarGraph();
 	}
 	
-	@org.junit.Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
 	@Test
-	public void testParser1() throws Exception {
+	public void testParser1() {
 		Input input = Input.fromString("abc8");
 		parser =  ParserFactory.newParser(grammarGraph, input);
-		thrown.expect(ParseError.class);
-		parser.parse(input, grammarGraph, "S");
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseError());
 	}
 	
 	@Test

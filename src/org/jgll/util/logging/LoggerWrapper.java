@@ -29,6 +29,12 @@ public class LoggerWrapper {
 		return new LoggerWrapper(Logger.getLogger(clazz.getName()));
 	}
 	
+	public void info(String s) {
+		if(logger.isLoggable(Level.INFO)) {
+			logger.info(s);
+		}		
+	}
+	
 	public void info(String s, Object arg) {
 		if(logger.isLoggable(Level.INFO)) {
 			logger.info(String.format(s, arg));
@@ -47,6 +53,12 @@ public class LoggerWrapper {
 		}
 	}
 	
+	public void warning(String s) {
+		if(logger.isLoggable(Level.WARNING)) {
+			logger.warning(s);
+		}
+	}
+	
 	public void warning(String s, Object...args) {
 		if(logger.isLoggable(Level.WARNING)) {
 			logger.warning(String.format(s, args));
@@ -56,6 +68,12 @@ public class LoggerWrapper {
 	public void error(String s, Object...args) {
 		if(logger.isLoggable(Level.SEVERE)) {
 			logger.severe(String.format(s, args));
+		}
+	}
+	
+	public void debug(String s) {
+		if(logger.isLoggable(Level.FINE)) {
+			logger.fine(s);
 		}
 	}
 
@@ -88,6 +106,12 @@ public class LoggerWrapper {
 			logger.fine(String.format(s, arg1, arg2, arg3, arg4));
 		}
 	}	
+
+	public void trace(String s) {
+		if(logger.isLoggable(Level.FINEST)) {
+			logger.finest(s);
+		}
+	}
 	
 	public void trace(String s, Object...args) {
 		if(logger.isLoggable(Level.FINEST)) {
@@ -118,6 +142,5 @@ public class LoggerWrapper {
 			logger.finest(String.format(s, arg1, arg2, arg3, arg4));
 		}
 	}	
-	
 	
 }

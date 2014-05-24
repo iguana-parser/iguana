@@ -16,8 +16,7 @@ import org.jgll.util.Input;
  * @author Ali Afroozeh
  *
  */
-@SuppressWarnings("serial")
-public class ParseError extends Exception {
+public class ParseError implements ParseResult {
 
 	private final GSSNode currentNode;
 	private final GrammarSlot slot;
@@ -25,7 +24,6 @@ public class ParseError extends Exception {
 	private Input input;
 	
 	public ParseError(GrammarSlot slot, Input input, int inputIndex, GSSNode curerntNode) {
-		super(getMessage(input, inputIndex));
 		this.slot = slot;
 		this.input = input;
 		this.inputIndex = inputIndex;
@@ -111,6 +109,26 @@ public class ParseError extends Exception {
 		}
 		
 		return frontier.poll();
+	}
+
+	@Override
+	public boolean isParseError() {
+		return true;
+	}
+
+	@Override
+	public boolean isParseSuccess() {
+		return false;
+	}
+
+	@Override
+	public ParseError asParseError() {
+		return this;
+	}
+
+	@Override
+	public ParseSuccess asParseSuccess() {
+		throw new RuntimeException("Cannot call getParseSuccess on ParseError.");
 	}
  	
 }

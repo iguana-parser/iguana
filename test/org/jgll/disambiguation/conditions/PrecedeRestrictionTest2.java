@@ -16,7 +16,7 @@ import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -72,11 +72,12 @@ public class PrecedeRestrictionTest2 {
 	}
 
 	@Test
-	public void test() throws ParseError {
+	public void test() {
 		Input input = Input.fromString("forall");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-		assertTrue(sppf.deepEquals(getExpectedSPPF()));
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF()));
 	}
 
 	private SPPFNode getExpectedSPPF() {

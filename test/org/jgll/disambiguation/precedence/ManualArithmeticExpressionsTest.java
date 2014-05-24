@@ -1,6 +1,7 @@
 package org.jgll.disambiguation.precedence;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.jgll.util.CollectionsUtil.list;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -8,7 +9,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -66,10 +67,12 @@ public class ManualArithmeticExpressionsTest {
 	}
 
 	@Test
-	public void test() throws ParseError {
+	public void testParser() {
 		Input input = Input.fromString("a*a+a");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		parser.parse(input, grammarGraph, "E");
+		ParseResult result = parser.parse(input, grammarGraph, "E");
+		assertTrue(result.isParseSuccess());
+		// TODO: add tree comparison text here.
 	}
 	
 }

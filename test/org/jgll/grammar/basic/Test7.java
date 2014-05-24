@@ -9,7 +9,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -49,11 +49,12 @@ public class Test7 {
 	}
 	
 	@Test
-	public void test1() throws ParseError {
+	public void test() {
 		Input input = Input.fromString("aab");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammar, "S");
-		assertTrue(sppf.deepEquals(getSPPF()));
+		ParseResult result = parser.parse(input, grammar, "S");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}	
 
 	

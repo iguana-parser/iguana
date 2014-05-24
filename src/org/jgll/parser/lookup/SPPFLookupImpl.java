@@ -211,7 +211,52 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public int getPackedNodesCount() {
-		return 0;
+		int count = 0;
+		
+		for(IguanaSet<NonterminalSymbolNode> set : nonterminalNodes) {
+			if(set == null) continue;
+		
+			for (NonterminalSymbolNode nt : set) {
+				if (nt.isAmbiguous()) {
+					count += nt.getCountPackedNodes();
+				}
+			}
+		}
+		
+		for(IguanaSet<IntermediateNode> set : intermediateNodes) {
+			if(set == null) continue;
+		
+			for (IntermediateNode nt : set) {
+				if (nt.isAmbiguous()) {
+					count += nt.getCountPackedNodes();;
+				}
+			}
+		}
+
+		return count;
+	}
+	
+	@Override
+	public int getAmbiguitiesCount() {
+		int count = 0;
+		
+		for(IguanaSet<NonterminalSymbolNode> set : nonterminalNodes) {
+			if(set == null) continue;
+		
+			for (NonterminalSymbolNode nt : set) {
+				if (nt.isAmbiguous()) count++;
+			}
+		}
+		
+		for(IguanaSet<IntermediateNode> set : intermediateNodes) {
+			if(set == null) continue;
+		
+			for (IntermediateNode nt : set) {
+				if (nt.isAmbiguous()) count++;
+			}
+		}
+
+		return count;
 	}
 
 }

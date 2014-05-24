@@ -9,7 +9,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -69,19 +69,21 @@ public class Test6 {
 	}
 	
 	@Test
-	public void testParser1() throws ParseError {
+	public void testParser1() {
 		Input input = Input.fromString("abc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf1 = parser.parse(input, grammar, "A");
-		assertTrue(sppf1.deepEquals(getSPPF1()));
+		ParseResult result = parser.parse(input, grammar, "A");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF1()));
 	}
 	
 	@Test
-	public void testParser2() throws ParseError {
+	public void testParser2() {
 		Input input = Input.fromString("aaaac");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		NonterminalSymbolNode sppf2 = parser.parse(input, grammar, "A");
-		assertTrue(sppf2.deepEquals(getSPPF2()));
+		ParseResult result = parser.parse(input, grammar, "A");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF2()));
 	}
 	
 	private SPPFNode getSPPF1() {

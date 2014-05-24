@@ -24,6 +24,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ParseStatistics;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -96,6 +97,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected SPPFLookupFactory sppfLookupFactory;
 
 	protected DescriptorLookupFactory descriptorLookupFactory;
+
+	private ParseStatistics parseStatistics;
 	
 
 	public AbstractGLLParserImpl(GSSLookupFactory gssLookupFactory, 
@@ -107,7 +110,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public NonterminalSymbolNode parse(Input input, GrammarGraph grammar, String startSymbolName) throws ParseError {
+	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName) {
 		return parse(new GLLLexerImpl(input, grammar), grammar, startSymbolName);
 	}
 	
@@ -123,7 +126,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	 * @throws RuntimeException if no nonterminal with the given start symbol name is found.
 	 */
 	@Override
-	public final NonterminalSymbolNode parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName) throws ParseError {
+	public final ParseResult parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName) {
 		
 		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
 		
@@ -142,7 +145,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		initParserState();
 		initLookups(grammar, input);
 	
-		log.info("Iguana started:");
 		log.info("Parsing %s:", input.getURI());
 
 		long start = System.nanoTime();
@@ -154,38 +156,46 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		L0.getInstance().parse(this, lexer, startSymbol);			
 		root = sppfLookup.getStartSymbol(startSymbol, input.length());
 
+		ParseResult parseResult;
+		
 		long end = System.nanoTime();
 		long endUserTime = getUserTime();
 		long endSystemTime = getSystemTime();
 		
 		if (root == null) {
-			ParseError e = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
-			log.info("Parse error:\n %s", e);
-			throw e;
+			parseResult = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
+			log.info("Parse error:\n %s", parseResult);
+		} else {
+			parseStatistics = new ParseStatistics(input, end - start,
+					  endUserTime - startUserTime,
+					  endSystemTime - startSystemTime, 
+					  getMemoryUsed(),
+					  descriptorLookup.getDescriptorsCount(), 
+					  gssLookup.getGSSNodesCount(), 
+					  gssLookup.getGSSEdgesCount(), 
+					  sppfLookup.getNonterminalNodesCount(), 
+					  sppfLookup.getIntermediateNodesCount(), 
+					  sppfLookup.getPackedNodesCount(), 
+					  sppfLookup.getAmbiguitiesCount());
+
+			parseResult = new ParseSuccess(root, parseStatistics);
+			log.info("Parsing finished successfully.");			
+			log.info(parseStatistics.toString());
 		}
 		
-		log.info("Parsing finished successfully.");
-		logParseStatistics(end - start, endUserTime - startUserTime, endSystemTime - startSystemTime);
-		return root;
+		return parseResult;
 	}
-		
-	private void logParseStatistics(long duration, long durationUserTime, long durationSystemTime) {
-		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
-		log.info("Input size: %d, loc: %d", input.length(), input.getLineCount());
 
-		log.info("Parsing Time (nano time): " + duration / 1000_000 + " ms");
-		log.info("Parsing Time (user time): " + durationUserTime / 1000_000 + " ms");
-		log.info("Parsing Time (system time): " + durationSystemTime / 1000_000 + " ms");
-		
+	private int getMemoryUsed() {
 		int mb = 1024 * 1024;
 		Runtime runtime = Runtime.getRuntime();
-		log.info("Memory used: %d mb", (runtime.totalMemory() - runtime.freeMemory()) / mb);
-		log.info("Descriptors: %d", descriptorLookup.getDescriptorsCount());
-		log.info("GSS Nodes: %d", gssLookup.getGSSNodesCount());
-		log.info("GSS Edges: %d", gssLookup.getGSSEdgesCount());
-		log.info("Nonterminal nodes: %d", sppfLookup.getNonterminalNodesCount());
-		log.info("Intermediate nodes: %d", sppfLookup.getIntermediateNodesCount());
-		log.info("Packed nodes: %d", sppfLookup.getPackedNodesCount());
+		int memoryUsed = (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
+		return memoryUsed;
+	}
+		
+	@Override
+	public ParseStatistics getParseStatistics() {
+		return parseStatistics;
 	}
 	
 	public static long getUserTime( ) {

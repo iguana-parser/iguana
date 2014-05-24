@@ -1,6 +1,7 @@
 package org.jgll.disambiguation.conditions;
 
 import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.assertTrue;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -12,13 +13,12 @@ import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.regex.RegexAlt;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 
 /**
@@ -54,44 +54,36 @@ public class KeywordExclusionTest {
 		grammarGraph = grammar.toGrammarGraph();
 	}
 	
-	@org.junit.Rule
-	public ExpectedException thrown = ExpectedException.none();
-
-	
 	@Test
-	public void testWhen() throws ParseError {
+	public void testWhen() {
 		Input input = Input.fromString("when");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		
-		thrown.expect(ParseError.class);
-		parser.parse(input, grammarGraph, "Id");
+		ParseResult result = parser.parse(input, grammarGraph, "Id");
+		assertTrue(result.isParseError());
 	}
 	
 	@Test
-	public void testIf() throws ParseError {
+	public void testIf() {
 		Input input = Input.fromString("if");		
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		
-		thrown.expect(ParseError.class);
-		parser.parse(input, grammarGraph, "Id");
+		ParseResult result = parser.parse(input, grammarGraph, "Id");
+		assertTrue(result.isParseError());
 	}
 	
 	@Test
-	public void testDo() throws ParseError {
+	public void testDo() {
 		Input input = Input.fromString("do");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-
-		thrown.expect(ParseError.class);
-		parser.parse(input, grammarGraph, "Id");
+		ParseResult result = parser.parse(input, grammarGraph, "Id");
+		assertTrue(result.isParseError());
 	}
 	
 	@Test
-	public void testWhile() throws ParseError {
+	public void testWhile() {
 		Input input = Input.fromString("while");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-
-		thrown.expect(ParseError.class);
-		parser.parse(input, grammarGraph, "Id");
+		ParseResult result = parser.parse(input, grammarGraph, "Id");
+		assertTrue(result.isParseError());
 	}
 
 }

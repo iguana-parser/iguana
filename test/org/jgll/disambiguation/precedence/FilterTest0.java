@@ -10,7 +10,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -80,11 +80,12 @@ public class FilterTest0 {
 	}
 	
 	@Test
-	public void testParser() throws ParseError {
+	public void testParser() {
 		Input input = Input.fromString("a+a*a");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "E");
-		assertTrue(sppf.deepEquals(getSPPFNode()));
+		ParseResult result = parser.parse(input, grammarGraph, "E");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode()));
 	}
 	
 	private SPPFNode getSPPFNode() {

@@ -10,7 +10,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
@@ -19,7 +19,6 @@ import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  * 
@@ -89,30 +88,28 @@ public class FilterTest8 {
 	}
 	
 	@Test
-	public void test1() throws ParseError {
+	public void test1() {
 		Input input = Input.fromString("a+a[a+a]");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "E");
-		assertTrue(sppf.deepEquals(getSPPF1()));
+		ParseResult result = parser.parse(input, grammarGraph, "E");
+		assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF1()));
 	}
 	
-	@org.junit.Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
 	@Test
-	public void test2() throws ParseError {
+	public void test2() {
 		Input input = Input.fromString("a+a*a+[a+a]");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		thrown.expect(ParseError.class);
-		parser.parse(input, grammarGraph, "E");
+		ParseResult result = parser.parse(input, grammarGraph, "E");
+		assertTrue(result.isParseError());
 	}
 	
 	@Test
-	public void test3() throws ParseError {
+	public void test3() {
 		Input input = Input.fromString("a[a][a+a]");
 		parser = ParserFactory.newParser(grammarGraph, input);
-		thrown.expect(ParseError.class);
-		parser.parse(input, grammarGraph, "E");
+		ParseResult result = parser.parse(input, grammarGraph, "E");
+		assertTrue(result.isParseError());
 	}	
 
 

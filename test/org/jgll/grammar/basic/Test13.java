@@ -9,13 +9,12 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseError;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -67,11 +66,11 @@ public class Test13 {
 	}
 	
 	@Test
-	public void testParser() throws ParseError {
+	public void testParser() {
 		Input input = Input.fromString("a");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		NonterminalSymbolNode sppf = parser.parse(input, grammarGraph, "S");
-		Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/ali/output", sppf, grammarGraph, input);
+		ParseResult result = parser.parse(input, grammarGraph, "S");
+		assertTrue(result.isParseSuccess());
 //		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	

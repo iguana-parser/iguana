@@ -9,10 +9,10 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ParseStatistics;
 
 /**
  * 
@@ -22,9 +22,9 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public NonterminalSymbolNode parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName) throws ParseError;
+	public ParseResult parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName);
 	
-	public NonterminalSymbolNode parse(Input input, GrammarGraph grammar, String startSymbolName) throws ParseError;
+	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName);
 	
 	public GrammarSlot pop();
 	
@@ -79,5 +79,7 @@ public interface GLLParser {
 	 * Current descriptor being processed.
 	 */
 	public Descriptor getCurrentDescriptor();
+	
+	public ParseStatistics getParseStatistics();
 		
 }

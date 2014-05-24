@@ -1,12 +1,10 @@
 package org.jgll.parser;
 
 
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
@@ -15,9 +13,7 @@ import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.Input;
 
 /**
 
@@ -30,11 +26,6 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 						 SPPFLookupFactory sppfLookupFactory, 
 						 DescriptorLookupFactory descriptorLookupFactory) {
 		super(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
-	}
-	
-	@Override
-	public NonterminalSymbolNode parse(Input input, GrammarGraph grammar, String startSymbolName) throws ParseError {
-		return parse(new GLLLexerImpl(input, grammar), grammar, startSymbolName);
 	}
 	
 	@Override
