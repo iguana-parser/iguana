@@ -5,13 +5,8 @@ import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.util.dot.GSSToDot;
-import org.jgll.util.dot.GraphVizUtil;
-import org.jgll.util.dot.AutomatonToDot;
-import org.jgll.util.dot.SPPFToDot;
-import org.jgll.util.dot.SPPFToDotUnpacked;
-import org.jgll.util.dot.ToDotWithoutIntermediateNodes;
-import org.jgll.util.dot.ToDotWithoutIntermeidateAndLists;
+import org.jgll.util.trie.*;
+import org.jgll.util.visualization.*;
 
 
 public class Visualization {
@@ -56,6 +51,11 @@ public class Visualization {
 	public static void generateAutomatonGraph(String outputDir, State startState) {
 		String dot = AutomatonToDot.toDot(startState);
 		GraphVizUtil.generateGraph(dot, outputDir, "automaton");
+	}
+	
+	public static <T> void generateTrieGraph(String outputDir, Trie<T> trie) {
+		String dot = new TrieToDot<>(trie).toString();
+		GraphVizUtil.generateGraph(dot, outputDir, "trie");
 	}
 
 }

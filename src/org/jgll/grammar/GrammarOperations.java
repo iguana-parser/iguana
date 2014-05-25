@@ -7,17 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.Alt;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Range;
-import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.*;
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.Tuple;
+import org.jgll.util.*;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
 import org.jgll.util.trie.Trie;
+import org.jgll.util.visualization.*;
 
 public class GrammarOperations {
 	
@@ -416,9 +412,9 @@ public class GrammarOperations {
 		return reachabilityGraph;
 	}
 	
-	public static Map<Nonterminal, List<List<Symbol>>> leftFactorize(Grammar grammar) {
+	public Grammar leftFactorize() {
 		
-		Map<Nonterminal, List<List<Symbol>>> leftFactorized = new HashMap<>();
+		Grammar leftFactorized = new Grammar();
 		
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
 		
@@ -431,13 +427,15 @@ public class GrammarOperations {
 				}
 			}
 			trie.add(node, Epsilon.getInstance());
+
+			Visualization.generateTrieGraph("/Users/aliafroozeh/output", trie);
 			
 			List<List<Symbol>> newAlternatives = new ArrayList<>();
 				
 			Symbol symbol = retrieve(trie.getRoot());
 			System.out.println(symbol);
 			
-			leftFactorized.put(nonterminal, newAlternatives);
+//			leftFactorized.addRule(new Rule(head, newAlternatives));
 		}
 		
 		return leftFactorized;
