@@ -164,7 +164,7 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public HeadGrammarSlot getHeadGrammarSlot(String name) {
-		return nameToNonterminals.get(new Nonterminal(name));
+		return nameToNonterminals.get(Nonterminal.withName(name));
 	}
 	
 	private String getSlotName(BodyGrammarSlot slot) {

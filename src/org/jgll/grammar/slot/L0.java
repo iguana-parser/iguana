@@ -33,7 +33,7 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	private L0() {
-		super(-1, new Nonterminal("L0"), -1, new ArrayList<List<Symbol>>(), false, new TruePredictionSet(0), new TrueFollowSet());
+		super(-1, Nonterminal.withName("L0"), -1, new ArrayList<List<Symbol>>(), false, new TruePredictionSet(0), new TrueFollowSet());
 	}
 	
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer, HeadGrammarSlot start) {

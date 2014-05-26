@@ -3,11 +3,11 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.*;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
@@ -29,7 +29,7 @@ import org.junit.Test;
 public class Gamma2Test {
 	
 	private GrammarGraph grammarGraph;
-	private Nonterminal S = new Nonterminal("S");
+	private Nonterminal S = Nonterminal.withName("S");
 	private Character b = Character.from('b');
 	
 	@Before

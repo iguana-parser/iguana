@@ -2,16 +2,17 @@ package org.jgll.grammar.leftfactorization;
 
 import static org.jgll.util.CollectionsUtil.*;
 
-import org.jgll.grammar.*;
-import org.jgll.grammar.symbol.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarOperations;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.junit.*;
+import org.junit.Test;
 
 
 public class LeftFactorizationTest {
 
-	private Nonterminal E = new Nonterminal("E");
+	private Nonterminal E = Nonterminal.withName("E");
 	private Character a = Character.from('a');
 	private Character star = Character.from('*');
 	private Character plus = Character.from('+');

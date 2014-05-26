@@ -36,7 +36,7 @@ public class FilterTest5 {
 	private Grammar grammar;
 	private GLLParser parser;
 	
-	private Nonterminal E = new Nonterminal("E");
+	private Nonterminal E = Nonterminal.withName("E");
 	private Character a = Character.from('a');
 	private Character w = Character.from('w');
 	private Character x = Character.from('x');

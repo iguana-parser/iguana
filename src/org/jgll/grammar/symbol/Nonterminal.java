@@ -1,11 +1,10 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
-import org.jgll.grammar.condition.Condition;
-import org.jgll.parser.HashFunctions;
-import org.jgll.util.CollectionsUtil;
+import org.jgll.grammar.condition.*;
+import org.jgll.parser.*;
+import org.jgll.util.*;
 
 
 public class Nonterminal extends AbstractSymbol {
@@ -16,34 +15,14 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final int index;
 	
-	public Nonterminal(String name) {
-		this(name, 0, false);
-	}
-	
-	public Nonterminal(String name, Set<Condition> conditions) {
-		this(name, 0, false, conditions);
-	}
-	
-	public Nonterminal(String name, boolean ebnfList) {
-		this(name, 0, ebnfList);
-	}
-	
-	public Nonterminal(String name, int index) {
-		this(name, index, false);
-	}
-	
-	public Nonterminal(String name, int index, boolean ebnfList) {
-		this(name, index, ebnfList, Collections.<Condition>emptySet());
+	public static Nonterminal withName(String name) {
+		return new Builder(name).build();
 	}
 	
 	public Nonterminal(String name, int index, boolean ebnfList, Set<Condition> conditions) {
 		super(name, conditions);
 		this.ebnfList = ebnfList;
 		this.index = index;
-	}
-	
-	public Nonterminal index(int index) {
-		return new Nonterminal(name, index);
 	}
 	
 	public boolean isEbnfList() {
@@ -94,7 +73,36 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public Nonterminal withoutConditions() {
-		return new Nonterminal(name, index, ebnfList);
+		return new Builder(name).build();
+	}
+	
+	public static class Builder extends SymbolBuilder<Nonterminal> {
+
+		private String name;
+		
+		private boolean ebnfList;
+		
+		private int index;
+
+		public Builder(String name) {
+			this.name = name;
+		}
+		
+		public Builder setIndex(int index) {
+			this.index = index;
+			return this;
+		}
+		
+		public Builder setEbnfList(boolean ebnfList) {
+			this.ebnfList = ebnfList;
+			return this;
+		}
+		
+		@Override
+		public Nonterminal build() {
+			return new Nonterminal(name, index, ebnfList, conditions);
+		}
+		
 	}
 	
 }

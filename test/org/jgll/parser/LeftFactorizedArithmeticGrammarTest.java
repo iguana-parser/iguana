@@ -3,14 +3,20 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.*;
-import org.jgll.grammar.symbol.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.*;
-import org.jgll.sppf.*;
-import org.jgll.util.*;
-import org.junit.*;
+import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.util.Input;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 	E  ::= T E1
@@ -24,11 +30,11 @@ public class LeftFactorizedArithmeticGrammarTest {
 	
 	private GrammarGraph grammarGraph;
 
-	Nonterminal E = new Nonterminal("E");
-	Nonterminal T = new Nonterminal("T");
-	Nonterminal E1 = new Nonterminal("E1");
-	Nonterminal F = new Nonterminal("F");
-	Nonterminal T1 = new Nonterminal("T1");
+	Nonterminal E = Nonterminal.withName("E");
+	Nonterminal T = Nonterminal.withName("T");
+	Nonterminal E1 = Nonterminal.withName("E1");
+	Nonterminal F = Nonterminal.withName("F");
+	Nonterminal T1 = Nonterminal.withName("T1");
 	Character plus = Character.from('+');
 	Character star = Character.from('*');
 	Character a = Character.from('a');

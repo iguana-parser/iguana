@@ -1,7 +1,7 @@
 package org.jgll.disambiguation.precedence;
 
-import static org.jgll.util.CollectionsUtil.list;
-import static org.junit.Assert.assertTrue;
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -39,9 +39,9 @@ public class ManualArithmeticExpressionsTest {
 		
 		grammar = new Grammar();
 
-		Nonterminal E = new Nonterminal("E");
-		Nonterminal T = new Nonterminal("T");
-		Nonterminal F = new Nonterminal("F");
+		Nonterminal E = Nonterminal.withName("E");
+		Nonterminal T = Nonterminal.withName("T");
+		Nonterminal F = Nonterminal.withName("F");
 
 		// E ::= E + T
 		Rule rule1 = new Rule(E, list(E, Character.from('+'), T));

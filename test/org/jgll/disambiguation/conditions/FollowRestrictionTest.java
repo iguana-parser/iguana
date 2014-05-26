@@ -38,8 +38,8 @@ public class FollowRestrictionTest {
 	
 	@Before
 	public void init() {
-		Nonterminal S = new Nonterminal("S");
-		Nonterminal Label = new Nonterminal("Label");
+		Nonterminal S = Nonterminal.withName("S");
+		Nonterminal Label = Nonterminal.withName("Label");
 		Range az = Range.in('a', 'z');
 
 		grammar = new Grammar();

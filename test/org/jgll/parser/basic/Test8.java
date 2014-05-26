@@ -1,7 +1,7 @@
 package org.jgll.parser.basic;
 
 import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -36,11 +36,11 @@ public class Test8 {
 
 	private GrammarGraph grammar;
 	
-	private Nonterminal S = new Nonterminal("S");
-	private Nonterminal A = new Nonterminal("A");
-	private Nonterminal B = new Nonterminal("B");
-	private Nonterminal C = new Nonterminal("C");
-	private Nonterminal D = new Nonterminal("D");
+	private Nonterminal S = Nonterminal.withName("S");
+	private Nonterminal A = Nonterminal.withName("A");
+	private Nonterminal B = Nonterminal.withName("B");
+	private Nonterminal C = Nonterminal.withName("C");
+	private Nonterminal D = Nonterminal.withName("D");
 	
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');

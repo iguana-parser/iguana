@@ -30,9 +30,9 @@ public class Test5 {
 
 	private GrammarGraph grammar;
 
-	private Nonterminal A = new Nonterminal("A");
-	private Nonterminal B = new Nonterminal("B");
-	private Nonterminal C = new Nonterminal("C");
+	private Nonterminal A = Nonterminal.withName("A");
+	private Nonterminal B = Nonterminal.withName("B");
+	private Nonterminal C = Nonterminal.withName("C");
 	private Character b = Character.from('b');
 	private Character c = Character.from('c');
 	

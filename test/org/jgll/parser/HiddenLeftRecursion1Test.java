@@ -3,11 +3,11 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.*;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -34,9 +34,9 @@ public class HiddenLeftRecursion1Test {
 
 	private GrammarGraph grammarGraph;
 	
-	private Nonterminal A = new Nonterminal("A");
-	private Nonterminal B = new Nonterminal("B");
-	private Nonterminal D = new Nonterminal("D");
+	private Nonterminal A = Nonterminal.withName("A");
+	private Nonterminal B = Nonterminal.withName("B");
+	private Nonterminal D = Nonterminal.withName("D");
 	
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');

@@ -33,7 +33,7 @@ public class FilterTest0 {
 
 	private GLLParser parser;
 	
-	private Nonterminal E = new Nonterminal("E");
+	private Nonterminal E = Nonterminal.withName("E");
 	private Character a = Character.from('a');
 	private Character star = Character.from('*');
 	private Character plus = Character.from('+');

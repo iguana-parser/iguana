@@ -41,11 +41,11 @@ public class PrecedeRestrictionTest1 {
 	private GrammarGraph grammarGraph;
 	private Grammar grammar;
 	
-	private Nonterminal S = new Nonterminal("S");
+	private Nonterminal S = Nonterminal.withName("S");
 	private Keyword forr = Keyword.from("for");
 	private Keyword forall = Keyword.from("forall");
-	private Nonterminal L = new Nonterminal("L");
-	private Nonterminal Id = new Nonterminal("Id");
+	private Nonterminal L = Nonterminal.withName("L");
+	private Nonterminal Id = Nonterminal.withName("Id");
 	private Character ws = Character.from(' ');
 	private Range az = Range.in('a', 'z');
 

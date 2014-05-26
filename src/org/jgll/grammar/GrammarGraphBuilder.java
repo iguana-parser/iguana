@@ -421,7 +421,7 @@ public class GrammarGraphBuilder implements Serializable {
 	 * @return
 	 */
 	public static Rule fromKeyword(Keyword keyword) {
-		Rule.Builder builder = new Rule.Builder(new Nonterminal(keyword.getName()));
+		Rule.Builder builder = new Rule.Builder(Nonterminal.withName(keyword.getName()));
 		for(Character c : keyword.getSequence()) {
 			builder.addSymbol(c);
 		}

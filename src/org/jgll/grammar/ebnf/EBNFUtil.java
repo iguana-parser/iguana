@@ -56,7 +56,7 @@ public class EBNFUtil {
 		 */
 		if(s instanceof Plus) {
 			Symbol in = ((Plus) s).getSymbol();
-			Nonterminal newNt = new Nonterminal(s.getName(), true);
+			Nonterminal newNt = new Nonterminal.Builder(s.getName()).setEbnfList(true).build();
 			rules.add(new Rule(newNt, newNt, in));
 			rules.add(new Rule(newNt, in));
 			newNt = newNt.withConditions(s.getConditions());
@@ -65,7 +65,7 @@ public class EBNFUtil {
 		
 		else if (s instanceof Opt) {
 			Symbol in = ((Opt) s).getSymbol();
-			Nonterminal newNt = new Nonterminal(s.getName(), true);
+			Nonterminal newNt = new Nonterminal.Builder(s.getName()).setEbnfList(true).build();
 			rules.add(new Rule(newNt, in));
 			rules.add(new Rule(newNt));
 			newNt = newNt.withConditions(s.getConditions());
@@ -74,7 +74,7 @@ public class EBNFUtil {
 		
 		else if (s instanceof Group) {
 			List<? extends Symbol> symbols = ((Group) s).getSymbols();
-			Nonterminal newNt = new Nonterminal(s.getName(), false);
+			Nonterminal newNt = Nonterminal.withName(s.getName());
 			rules.add(new Rule(newNt, symbols));
 			newNt = newNt.withConditions(s.getConditions());
 			return newNt;

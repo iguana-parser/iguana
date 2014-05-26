@@ -38,8 +38,8 @@ public class FilterTest7 {
 	private Grammar grammar;
 	private GLLParser parser;
 	
-	private Nonterminal E = new Nonterminal("E");
-	private Nonterminal EPlus = new Nonterminal("EPlus", true);
+	private Nonterminal E = Nonterminal.withName("E");
+	private Nonterminal EPlus = new Nonterminal.Builder("EPlus").setEbnfList(true).build();
 	private Character a = Character.from('a');
 	private Character plus = Character.from('+');
 

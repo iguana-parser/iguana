@@ -1,7 +1,7 @@
 package org.jgll.disambiguation.precedence;
 
-import static org.jgll.util.CollectionsUtil.list;
-import static org.junit.Assert.assertTrue;
+import static org.jgll.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -33,7 +33,7 @@ import org.junit.Test;
  */
 public class FilterTest8 {
 	
-	private Nonterminal E = new Nonterminal("E");
+	private Nonterminal E = Nonterminal.withName("E");
 	private Character a = Character.from('a');
 	private Character plus = Character.from('+');
 	private Character star = Character.from('*');

@@ -34,10 +34,10 @@ public class LL1Test {
 
 	private GrammarGraph grammarGraph;
 	
-	private Nonterminal S = new Nonterminal("S");
-	private Nonterminal A = new Nonterminal("A");
-	private Nonterminal B = new Nonterminal("B");
-	private Nonterminal D = new Nonterminal("D");
+	private Nonterminal S = Nonterminal.withName("S");
+	private Nonterminal A = Nonterminal.withName("A");
+	private Nonterminal B = Nonterminal.withName("B");
+	private Nonterminal D = Nonterminal.withName("D");
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
 	private Character d = Character.from('d');

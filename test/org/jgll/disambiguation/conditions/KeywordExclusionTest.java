@@ -1,7 +1,7 @@
 package org.jgll.disambiguation.conditions;
 
 import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -35,7 +35,7 @@ public class KeywordExclusionTest {
 
 	@Before
 	public void init() {
-		Nonterminal Id = new Nonterminal("Id");
+		Nonterminal Id = Nonterminal.withName("Id");
 		Range az = Range.in('a', 'z');
 		
 		Keyword iff = Keyword.from("if");

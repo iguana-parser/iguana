@@ -3,8 +3,8 @@ package org.jgll.parser.basic;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -32,8 +32,8 @@ public class Test7 {
 
 	private GrammarGraph grammar;
 	
-	private Nonterminal S = new Nonterminal("S");
-	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal S = Nonterminal.withName("S");
+	private Nonterminal A = Nonterminal.withName("A");
 	
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');

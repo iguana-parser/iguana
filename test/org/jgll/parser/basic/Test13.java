@@ -32,11 +32,11 @@ public class Test13 {
 
 	private GrammarGraph grammarGraph;
 
-	private Nonterminal S = new Nonterminal("S");
-	private Nonterminal A = new Nonterminal("A");
-	private Nonterminal B = new Nonterminal("B");
-	private Nonterminal C = new Nonterminal("C");
-	private Nonterminal D = new Nonterminal("D");
+	private Nonterminal S = Nonterminal.withName("S");
+	private Nonterminal A = Nonterminal.withName("A");
+	private Nonterminal B = Nonterminal.withName("B");
+	private Nonterminal C = Nonterminal.withName("C");
+	private Nonterminal D = Nonterminal.withName("D");
 	private Character a = Character.from('a');
 	
 	@Before

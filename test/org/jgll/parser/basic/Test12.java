@@ -29,8 +29,8 @@ public class Test12 {
 
 	private GrammarGraph grammarGraph;
 
-	private Nonterminal A = new Nonterminal("A");
-	private Nonterminal B = new Nonterminal("B");
+	private Nonterminal A = Nonterminal.withName("A");
+	private Nonterminal B = Nonterminal.withName("B");
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
 	

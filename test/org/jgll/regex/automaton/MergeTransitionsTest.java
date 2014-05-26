@@ -6,9 +6,6 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.Transition;
 import org.junit.Test;
 
 public class MergeTransitionsTest {

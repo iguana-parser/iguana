@@ -39,8 +39,8 @@ public class FilterTest3 {
 	
 	private GLLParser parser;
 	
-	private Nonterminal E = new Nonterminal("E");
-	private Nonterminal EPlus = new Nonterminal("E+", true);
+	private Nonterminal E = Nonterminal.withName("E");
+	private Nonterminal EPlus = new Nonterminal.Builder("E+").setEbnfList(true).build();
 	private Character a = Character.from('a');
 	private Character plus = Character.from('+');
 	

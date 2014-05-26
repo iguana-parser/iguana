@@ -1,7 +1,7 @@
 package org.jgll.parser.basic;
 
 import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class Test10 {
 	
 	private GrammarGraph grammarGraph;
 	
-	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal A = Nonterminal.withName("A");
 
 	@Before
 	public void init() {

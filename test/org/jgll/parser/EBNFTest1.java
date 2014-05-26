@@ -2,14 +2,16 @@ package org.jgll.parser;
 
 import static org.jgll.util.CollectionsUtil.*;
 
-import org.jgll.grammar.*;
-import org.jgll.grammar.ebnf.*;
-import org.jgll.grammar.symbol.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.*;
-import org.jgll.util.*;
-import org.junit.*;
+import org.jgll.util.Input;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 
@@ -29,8 +31,8 @@ public class EBNFTest1 {
 		
 		Grammar grammar = new Grammar();
 		
-		Nonterminal S = new Nonterminal("S");
-		Nonterminal A = new Nonterminal("A");
+		Nonterminal S = Nonterminal.withName("S");
+		Nonterminal A = Nonterminal.withName("A");
 		Character a = Character.from('a');
 		
 		Rule rule1 = new Rule(S, list(new Plus(A)));

@@ -26,7 +26,7 @@ public class Test1 {
 	
 	private GrammarGraph grammarGraph;
 
-	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal A = Nonterminal.withName("A");
 
 	@Before
 	public void init() {

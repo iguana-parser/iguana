@@ -3,16 +3,14 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
@@ -35,7 +33,7 @@ public class DanglingElseGrammar1 {
 	private GrammarGraph grammarGraph;
 	private GLLParser parser;
 	
-	private Nonterminal S = new Nonterminal("S");
+	private Nonterminal S = Nonterminal.withName("S");
 	private Character s = Character.from('s');
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');

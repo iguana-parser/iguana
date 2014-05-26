@@ -85,7 +85,8 @@ public class OperatorPrecedence {
 			if(newNonterminals.containsKey(pattern.getNonterminal().getName())) {
 				int index = newNonterminals.get(pattern.getNonterminal().getName());
 				for(int i = 1; i <= index; i++) {
-					for(List<Symbol> alt : definitions.get(new Nonterminal(pattern.getNonterminal().getName(), i, pattern.getNonterminal().isEbnfList()))) {
+					Nonterminal nonterminal = new Nonterminal.Builder(pattern.getNonterminal().getName()).setIndex(i).setEbnfList(pattern.getNonterminal().isEbnfList()).build();
+					for(List<Symbol> alt : definitions.get(nonterminal)) {
 						
 						if(alt != null) {
 							if (match(plain(alt), pattern.getParent())) {
@@ -288,7 +289,7 @@ public class OperatorPrecedence {
 			if(freshNonterminal == null) {
 				
 				int index = newNonterminals.get(pattern.getNonterminal().getName());
-				freshNonterminal = new Nonterminal(pattern.getNonterminal().getName(), index + 1, pattern.getNonterminal().isEbnfList());
+				freshNonterminal = new Nonterminal.Builder(pattern.getNonterminal().getName()).setIndex(index + 1).setEbnfList(pattern.getNonterminal().isEbnfList()).build();
 				newNonterminals.put(freshNonterminal.getName(), index + 1);
 				map.put(e.getValue(), freshNonterminal);
 			}
@@ -487,7 +488,7 @@ public class OperatorPrecedence {
 		}
 		
 		int index = newNonterminals.get(nonterminal.getName());
-		Nonterminal newNonterminal = new Nonterminal(nonterminal.getName(), index + 1, nonterminal.isEbnfList());
+		Nonterminal newNonterminal = new Nonterminal.Builder(nonterminal.getName()).setIndex(index + 1).setEbnfList(nonterminal.isEbnfList()).build();
 		newNonterminals.put(nonterminal.getName(), index + 1);
 		return newNonterminal;
 	}
@@ -559,7 +560,8 @@ public class OperatorPrecedence {
 		List<Symbol> plain = new ArrayList<>();
 		for(Symbol symbol : alternate) {
 			if(symbol instanceof Nonterminal && ((Nonterminal) symbol).getIndex() > 0) {
-				plain.add(new Nonterminal(symbol.getName(), ((Nonterminal) symbol).isEbnfList()));
+				Nonterminal nonterminal = new Nonterminal.Builder(symbol.getName()).setEbnfList(((Nonterminal) symbol).isEbnfList()).build();
+				plain.add(nonterminal);
 			} else {
 				plain.add(symbol);
 			}

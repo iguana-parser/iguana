@@ -422,11 +422,12 @@ public class GrammarOperations {
 
 			Node<Symbol> node = trie.getRoot();
 			for (List<Symbol> alternative : grammar.getAlternatives(nonterminal)) {
+				node = trie.getRoot();
 				for (Symbol s : alternative) {
-					trie.add(node, s);
+					node = trie.add(node, s);
 				}
+				trie.add(node, Epsilon.getInstance());
 			}
-			trie.add(node, Epsilon.getInstance());
 
 			Visualization.generateTrieGraph("/Users/aliafroozeh/output", trie);
 			
@@ -447,15 +448,26 @@ public class GrammarOperations {
 		
 		if (node.size() == 1 && node.getEdges().get(0).getLabel() == Epsilon.getInstance()) return null;
 
-		if (node.size() == 1) {
-			return node.getEdges().get(0).getLabel();
-		}
-
-		List<Symbol> symbols = new ArrayList<>();
+		List<Symbol> outer = new ArrayList<>();
+		
 		for (Edge<Symbol> edge : node.getEdges()) {
-			symbols.add(retrieve(edge.getDestination()));
+			List<Symbol> inner = new ArrayList<>();
+			inner.add(edge.getLabel());
+			Symbol next = retrieve(edge.getDestination());
+			if (next != null) {
+				inner.add(next);
+			}
+			if (outer.size() == 1){
+				outer.add(inner.get(0));
+			} else {
+				outer.add(Group.of(inner));
+			}
 		}
-		return new  Alt(symbols);
+		if (outer.size() == 1){
+			return outer.get(0);
+		} else {
+			return new Alt(outer);
+		}
 	}
 	
 }

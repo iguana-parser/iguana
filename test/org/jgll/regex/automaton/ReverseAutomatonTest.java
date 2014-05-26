@@ -1,10 +1,9 @@
 package org.jgll.regex.automaton;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 

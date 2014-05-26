@@ -2,10 +2,6 @@ package org.jgll.regex.automaton;
 
 import static org.junit.Assert.*;
 
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.AutomatonOperations;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.Transition;
 import org.junit.Test;
 
 public class MinimizationTest {

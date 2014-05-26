@@ -3,13 +3,14 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.*;
-import org.jgll.grammar.symbol.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.*;
-import org.jgll.util.*;
-import org.junit.*;
+import org.jgll.util.Input;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 
@@ -28,8 +29,8 @@ public class HiddenLeftRecursion {
 
 	@Before
 	public void createGrammar() {
-		Nonterminal A = new Nonterminal("A");
-		Nonterminal B = new Nonterminal("B");
+		Nonterminal A = Nonterminal.withName("A");
+		Nonterminal B = Nonterminal.withName("B");
 
 		Rule r1 = new Rule(A, list(B, A, Character.from('+'), A));
 		Rule r2 = new Rule(A, list(Character.from('a')));

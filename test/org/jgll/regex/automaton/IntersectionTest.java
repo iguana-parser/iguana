@@ -5,10 +5,6 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.AutomatonOperations;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
 import org.junit.Test;
 

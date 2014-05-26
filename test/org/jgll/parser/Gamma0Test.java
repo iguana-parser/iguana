@@ -4,14 +4,21 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.*;
-import org.jgll.grammar.symbol.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.*;
-import org.jgll.sppf.*;
-import org.jgll.util.*;
-import org.junit.*;
+import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.PackedNode;
+import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.util.Input;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *	S ::= a S 
@@ -25,8 +32,8 @@ public class Gamma0Test {
 	private GrammarGraph grammarGraph;
 	
 	private Character a = Character.from('a');
-	private Nonterminal S = new Nonterminal("S");
-	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal S = Nonterminal.withName("S");
+	private Nonterminal A = Nonterminal.withName("A");
 	private Character d = Character.from('d');
 
 

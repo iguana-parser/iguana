@@ -28,7 +28,7 @@ public class Test2 {
 
 	private GrammarGraph grammarGraph;
 
-	private Nonterminal A = new Nonterminal("A");
+	private Nonterminal A = Nonterminal.withName("A");
 	private Character a = Character.from('a');
 	
 	@Before

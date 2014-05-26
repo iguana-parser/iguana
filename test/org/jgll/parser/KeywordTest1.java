@@ -3,12 +3,14 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.*;
-import org.jgll.grammar.symbol.*;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.*;
-import org.jgll.util.*;
-import org.junit.*;
+import org.jgll.util.Input;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * A ::= "if"
@@ -21,7 +23,7 @@ public class KeywordTest1 {
 	private GrammarGraph grammarGraph;
 
 	Keyword ifKeyword = Keyword.from("if");
-	Nonterminal A = new Nonterminal("A");
+	Nonterminal A = Nonterminal.withName("A");
 
 	@Before
 	public void init() {

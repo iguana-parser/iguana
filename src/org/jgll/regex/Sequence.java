@@ -171,7 +171,6 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		public Sequence<T> build() {
 			return new Sequence<>(regularExpressions, label, conditions, object);
 		}
-		
 	}
 	
 }

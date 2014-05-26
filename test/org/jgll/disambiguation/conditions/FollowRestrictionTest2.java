@@ -1,7 +1,7 @@
 package org.jgll.disambiguation.conditions;
 
 import static org.jgll.util.CollectionsUtil.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -41,8 +41,8 @@ public class FollowRestrictionTest2 {
 		
 		grammar = new Grammar();
 		
-		Nonterminal S = new Nonterminal("S");
-		Nonterminal Label = new Nonterminal("Label");
+		Nonterminal S = Nonterminal.withName("S");
+		Nonterminal Label = Nonterminal.withName("Label");
 		Range az = Range.in('a', 'z');
 		Range zero_nine = Range.in('0', '9');
 		
