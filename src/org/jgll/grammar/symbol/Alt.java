@@ -20,7 +20,7 @@ public class Alt extends AbstractSymbol {
 	}
 	
 	public Alt(List<Symbol> symbols, Set<Condition> conditions) {
-		super("(" + CollectionsUtil.listToString(symbols, "|") + ")", conditions);
+		super("[" + CollectionsUtil.listToString(symbols, "|") + "]", conditions);
 		this.symbols = new ArrayList<>(symbols);
 	}
 	

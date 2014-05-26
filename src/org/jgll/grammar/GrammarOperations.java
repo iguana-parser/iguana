@@ -7,13 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.*;
+import org.jgll.grammar.symbol.Alt;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Group;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.*;
+import org.jgll.util.Tuple;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
 import org.jgll.util.trie.Trie;
-import org.jgll.util.visualization.*;
 
 public class GrammarOperations {
 	
@@ -429,14 +435,7 @@ public class GrammarOperations {
 				trie.add(node, Epsilon.getInstance());
 			}
 
-			Visualization.generateTrieGraph("/Users/aliafroozeh/output", trie);
-			
-			List<List<Symbol>> newAlternatives = new ArrayList<>();
-				
-			Symbol symbol = retrieve(trie.getRoot());
-			System.out.println(symbol);
-			
-//			leftFactorized.addRule(new Rule(head, newAlternatives));
+			leftFactorized.addRule(new Rule(nonterminal, retrieve(trie.getRoot())));
 		}
 		
 		return leftFactorized;
@@ -457,7 +456,7 @@ public class GrammarOperations {
 			if (next != null) {
 				inner.add(next);
 			}
-			if (outer.size() == 1){
+			if (inner.size() == 1){
 				outer.add(inner.get(0));
 			} else {
 				outer.add(Group.of(inner));
