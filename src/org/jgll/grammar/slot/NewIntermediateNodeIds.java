@@ -12,8 +12,6 @@ import org.jgll.util.CollectionsUtil;
 
 public class NewIntermediateNodeIds implements IntermediateNodeIds {
 	
-	private int intermediateId = 0;
-	
 	private Map<List<Symbol>, Integer> intermediateNodeIds;
 	
 	private Map<Integer, List<Symbol>> idToNameMap;
@@ -29,6 +27,8 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 	
 	@Override
 	public void calculateIds() {
+		int intermediateId = 0;
+		
 		for (Rule rule : grammar.getRules()) {
 			if (rule.getBody() != null) {
 				for (int i = 2; i < rule.getBody().size(); i++) {
@@ -45,7 +45,9 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 	}
 
 	@Override
-	public int getSlotId(List<Symbol> alt, int index) {
+	public int getSlotId(Rule rule, int index) {
+		
+		List<Symbol> alt = rule.getBody();
 
 		if(alt.size() <= 2 || index <= 1) {
 			return -1;
@@ -60,8 +62,8 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 	}
 	
 	@Override
-	public int getSlotId(List<? extends Symbol> alt) {
-		return intermediateNodeIds.get(alt);
+	public int getSlotId(Rule rule) {
+		return intermediateNodeIds.get(rule.getBody());
 	}
 
 	@Override

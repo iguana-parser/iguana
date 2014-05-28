@@ -244,7 +244,7 @@ public class GrammarGraphBuilder implements Serializable {
 				int symbolIndex = 0;
 				for (; symbolIndex < body.size(); symbolIndex++) {
 					
-					currentSlot = getBodyGrammarSlot(head, body, symbolIndex, currentSlot);
+					currentSlot = getBodyGrammarSlot(new Rule(head, body), symbolIndex, currentSlot);
 	
 					if (symbolIndex == 0) {
 						firstSlot = currentSlot;
@@ -313,7 +313,10 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	Set<Condition> popActions = new HashSet<>();
 	
-	private BodyGrammarSlot getBodyGrammarSlot(Nonterminal head, List<Symbol> body, int symbolIndex, BodyGrammarSlot currentSlot) {
+	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int symbolIndex, BodyGrammarSlot currentSlot) {
+		Nonterminal head = rule.getHead();
+		List<Symbol> body = rule.getBody();
+		
 		Symbol symbol = body.get(symbolIndex);
 		
 		if(symbol instanceof RegularExpression) {
@@ -323,7 +326,7 @@ public class GrammarGraphBuilder implements Serializable {
 			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(symbol.getConditions());
 			ConditionTest popConditionsTest = getPostConditions(popActions);
 			
-			return grammarSlotFactory.createTokenGrammarSlot(body, symbolIndex, intermediateNodeIds.getSlotId(body, symbolIndex), 
+			return grammarSlotFactory.createTokenGrammarSlot(body, symbolIndex, intermediateNodeIds.getSlotId(rule, symbolIndex), 
 					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), preConditionsTest, postConditionsTest, popConditionsTest);
 		}
 		
@@ -335,7 +338,7 @@ public class GrammarGraphBuilder implements Serializable {
 			popActions = symbol.getConditions();
 			
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, intermediateNodeIds.getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, popConditionsTest);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, intermediateNodeIds.getSlotId(rule, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, popConditionsTest);						
 		}		
 	}
 

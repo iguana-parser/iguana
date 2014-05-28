@@ -18,6 +18,7 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.RunnableAutomaton;
@@ -264,11 +265,11 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public int getIntermediateNodeId(List<? extends Symbol> symbols) {
-		return intermediateNodeIds.getSlotId(symbols);
+		return intermediateNodeIds.getSlotId(new Rule(Nonterminal.withName("n"), symbols));
 	}
 	
 	public int getIntermediateNodeId(Symbol...symbols) {
-		return intermediateNodeIds.getSlotId(Arrays.asList(symbols));
+		return intermediateNodeIds.getSlotId(new Rule(Nonterminal.withName("n"), Arrays.asList(symbols)));
 	}
 	
 	public List<Symbol> getIntermediateNodeSequence(int id) {
