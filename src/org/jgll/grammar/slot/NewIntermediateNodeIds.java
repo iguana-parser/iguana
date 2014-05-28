@@ -16,7 +16,7 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 	
 	private Map<List<Symbol>, Integer> intermediateNodeIds;
 	
-	private Map<Integer, String> idToNameMap;
+	private Map<Integer, List<Symbol>> idToNameMap;
 	
 	private Grammar grammar;
 
@@ -24,6 +24,7 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 		this.grammar = grammar;
 		this.intermediateNodeIds = new HashMap<>();
 		this.idToNameMap = new HashMap<>();
+		calculateIds();
 	}
 	
 	@Override
@@ -35,7 +36,7 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 					List<Symbol> plain = OperatorPrecedence.plain(prefix);
 					if (!intermediateNodeIds.containsKey(plain)) {
 						intermediateNodeIds.put(plain, intermediateId);
-						idToNameMap.put(intermediateId, CollectionsUtil.listToString(plain));
+						idToNameMap.put(intermediateId, plain);
 						intermediateId++;
 					}
 				}
@@ -57,10 +58,21 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 
 		return intermediateNodeIds.get(OperatorPrecedence.plain(alt.subList(0, index)));
 	}
+	
+	@Override
+	public int getSlotId(List<Symbol> alt) {
+		return intermediateNodeIds.get(alt);
+	}
 
 	@Override
 	public String getSlotName(int id) {
-		return idToNameMap.get(id);
+		return CollectionsUtil.listToString(idToNameMap.get(id), " ");
+	}
+	
+	@Override
+	public List<Symbol> getSequence(int id) {
+		
+		return null;
 	}
 	
 }

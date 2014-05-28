@@ -17,6 +17,7 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -84,6 +85,7 @@ public class FilterTest0 {
 		Input input = Input.fromString("a+a*a");
 		parser = ParserFactory.newParser(grammarGraph, input);
 		ParseResult result = parser.parse(input, grammarGraph, "E");
+		System.out.println(ToJavaCode.toJavaCode((NonterminalSymbolNode) result.asParseSuccess().getSPPFNode(), grammarGraph));
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode()));
 	}

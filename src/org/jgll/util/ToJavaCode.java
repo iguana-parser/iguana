@@ -19,6 +19,7 @@ public class ToJavaCode implements SPPFVisitor {
 
 	public ToJavaCode(GrammarGraph grammar) {
 		this.grammar = grammar;
+		sb.append("SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);\n");
 	}
 	
 	public static String toJavaCode(NonterminalSymbolNode node, GrammarGraph grammar) {
@@ -31,9 +32,9 @@ public class ToJavaCode implements SPPFVisitor {
 	public void visit(TokenSymbolNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
-			sb.append("TokenSymbolNode node" + count + " = new TokenSymbolNode(" +
-					"grammar.getRegularExpressionId(" + grammar.getRegularExpressionById(node.getTokenID()).getName() + "), " + 
-					node.getLeftExtent() + ", " + node.getLength() + ");\n");
+			sb.append("TokenSymbolNode node" + count + " = factory.createTokenNode(" +
+					  grammar.getRegularExpressionById(node.getTokenID()).getName() + ", " +
+					  node.getLeftExtent() + ", " + node.getLength() + ");\n");
 			node.setObject("node" + count++);
 		}
 	}
@@ -44,9 +45,8 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setVisited(true);
 			node.setObject("node" + count);
 			
-			sb.append("NonterminalSymbolNode node" + count + " = new NonterminalSymbolNode(" +
-					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId()).getName()  + "), " + 
-					grammar.getCountAlternates(grammar.getNonterminalById(node.getId())) + ", " +
+			sb.append("NonterminalSymbolNode node" + count + " = factory.createNonterminalNode(" +
+					grammar.getNonterminalById(node.getId()).getName() + ", " +
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
 			
@@ -64,8 +64,8 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setVisited(true);
 			node.setObject("node" + count);
 
-			sb.append("IntermediateNode node" + count + " = new IntermediateNode(" +
-					  "grammar.getIntermediateNodeId(" + grammar.getIntermediateNodeSequence(node.getId())  + "), " + 
+			sb.append("IntermediateNode node" + count + " = factory.createIntermediateNode(" +
+					  grammar.getIntermediateNodeSequence(node.getId()) + "), " + 
 					  node.getLeftExtent() + ", " + 
 					  node.getRightExtent() + ");\n");
 			
@@ -95,7 +95,7 @@ public class ToJavaCode implements SPPFVisitor {
 				
 			} else {
 				sb.append("PackedNode node" + count + " = new PackedNode(" +
-						  "grammar.getIntermediateNodeId(" + grammar.getIntermediateNodeSequence(node.getParent().getId()) + "), " + 
+						  "grammar.getIntermediateNodeId(" + "\"" + grammar.getIntermediateNodeSequence(node.getParent().getId()) + "\"" + "), " + 
 						  node.getPivot() + ", " + node.getParent().getObject() + ");\n");				
 			}
 			
