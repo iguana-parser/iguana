@@ -11,8 +11,10 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,12 +49,8 @@ public class IndirectRecursion1Test {
 		Rule r4 = new Rule(B, list(b));
 		Rule r5 = new Rule(C, list(c));
 		
-		grammarGraph = new Grammar()
-													  .addRule(r1)
-													  .addRule(r2)
-													  .addRule(r3)
-													  .addRule(r4)
-													  .addRule(r5).toGrammarGraph();
+		grammarGraph = new Grammar().addRule(r1).addRule(r2).addRule(r3)
+								  .addRule(r4).addRule(r5).toGrammarGraph();
 	}
 	
 	
@@ -71,17 +69,19 @@ public class IndirectRecursion1Test {
 		Input input = Input.fromString("bc");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
 		ParseResult result = parser.parse(input, grammarGraph, "A");
+		System.out.println(ToJavaCode.toJavaCode((NonterminalSymbolNode) result.asParseSuccess().getSPPFNode(), grammarGraph));
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(expectedSPPF()));
 	}
 
 	
 	private SPPFNode expectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 2, 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 2, 0, 1);
-		TokenSymbolNode node3 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(b), 0, 1);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
+		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 2);
+		NonterminalSymbolNode node2 = factory.createNonterminalNode(B, 0, 1);
+		TokenSymbolNode node3 = factory.createTokenNode(b, 0, 1);
 		node2.addChild(node3);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(C), 1, 1, 2);
-		TokenSymbolNode node5 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(c), 1, 1);
+		NonterminalSymbolNode node4 = factory.createNonterminalNode(C, 1, 2);
+		TokenSymbolNode node5 = factory.createTokenNode(c, 1, 1);
 		node4.addChild(node5);
 		node1.addChild(node2);
 		node1.addChild(node4);

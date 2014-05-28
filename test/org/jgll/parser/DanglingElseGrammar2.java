@@ -11,17 +11,16 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * 
- * S ::= a S b S | a S \ a S b S | s
+ * S ::= a S b S 
+ * 	   | a S \ a S b S 
+ *     | s
  * 
  * @author Ali Afroozeh
  * 
@@ -67,30 +66,7 @@ public class DanglingElseGrammar2 {
 	}
 
 	private SPPFNode getExpectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 3, 0, 5);
-		IntermediateNode node2 = new IntermediateNode(grammarGraph.getIntermediateNodeId(a, S, b), 0, 4);
-		IntermediateNode node3 = new IntermediateNode(grammarGraph.getIntermediateNodeId(a, S), 0, 3);
-		TokenSymbolNode node4 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 0, 1);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 3, 1, 3);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(group), 1, 1, 3);
-		TokenSymbolNode node7 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 1, 1);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 3, 2, 3);
-		TokenSymbolNode node9 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(s), 2, 1);
-		node8.addChild(node9);
-		node6.addChild(node7);
-		node6.addChild(node8);
-		node5.addChild(node6);
-		node3.addChild(node4);
-		node3.addChild(node5);
-		TokenSymbolNode node10 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(b), 3, 1);
-		node2.addChild(node3);
-		node2.addChild(node10);
-		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 3, 4, 5);
-		TokenSymbolNode node12 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(s), 4, 1);
-		node11.addChild(node12);
-		node1.addChild(node2);
-		node1.addChild(node11);
-		return node1;
+		return null;
 	}
 
 }

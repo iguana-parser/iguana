@@ -89,13 +89,14 @@ public class ToJavaCode implements SPPFVisitor {
 			if(node.getParent() instanceof NonterminalSymbolNode) {
 				Nonterminal nonterminal = grammar.getNonterminalById(node.getParent().getId());
 				sb.append("PackedNode node" + count + " = new PackedNode(" +
-						  "grammar.getPackedNodeId(" + nonterminal + ", " +
+						  "grammarGraph.getPackedNodeId(" + nonterminal + ", " +
 						  CollectionsUtil.listToString(grammar.getDefinition(nonterminal, node.getId()), ", ") + "), " + 
 						  node.getPivot() + ", " + node.getParent().getObject() + ");\n");
 				
 			} else {
 				sb.append("PackedNode node" + count + " = new PackedNode(" +
-						  "grammar.getIntermediateNodeId(" + "\"" + grammar.getIntermediateNodeSequence(node.getParent().getId()) + "\"" + "), " + 
+						  "grammarGraph.getIntermediateNodeId(" + 
+						  "list(" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getParent().getId()), ", ") + ")), " + 
 						  node.getPivot() + ", " + node.getParent().getObject() + ");\n");				
 			}
 			

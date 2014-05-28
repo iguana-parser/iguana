@@ -11,6 +11,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -44,10 +45,7 @@ public class IndirectRecursion2Test {
 		Rule r3 = new Rule(B);
 		Rule r4 = new Rule(B, list(b));
 
-		grammarGraph = new Grammar().addRule(r1)
-								     		  .addRule(r2)
-								     		  .addRule(r3)
-								     		  .addRule(r4).toGrammarGraph();
+		grammarGraph = new Grammar().addRule(r1).addRule(r2).addRule(r3).addRule(r4).toGrammarGraph();
 	}
 	
 	@Test
@@ -61,6 +59,7 @@ public class IndirectRecursion2Test {
 		Input input = Input.fromString("ad");
 		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
 		ParseResult result = parser.parse(input, grammarGraph, "A");
+		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(expectedSPPF()));
 	}
 	
@@ -73,15 +72,16 @@ public class IndirectRecursion2Test {
 	}
 	
 	private SPPFNode expectedSPPF() {		
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 2, 0, 2);
-		IntermediateNode node2 = new IntermediateNode(grammarGraph.getIntermediateNodeId(B, A), 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 2, 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 2, 0, 1);
-		TokenSymbolNode node5 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 0, 1);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
+		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 2);
+		IntermediateNode node2 = factory.createIntermediateNode(list(B, A), 0, 1);
+		NonterminalSymbolNode node3 = factory.createNonterminalNode(B, 0, 0);
+		NonterminalSymbolNode node4 = factory.createNonterminalNode(A, 0, 1);
+		TokenSymbolNode node5 = factory.createTokenNode(a, 0, 1);
 		node4.addChild(node5);
 		node2.addChild(node3);
 		node2.addChild(node4);
-		TokenSymbolNode node6 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(d), 1, 1);
+		TokenSymbolNode node6 = factory.createTokenNode(d, 1, 1);
 		node1.addChild(node2);
 		node1.addChild(node6);
 		return node1;

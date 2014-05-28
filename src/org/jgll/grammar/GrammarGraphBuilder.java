@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
@@ -196,22 +197,20 @@ public class GrammarGraphBuilder implements Serializable {
 		return new GrammarGraph(this);
 	}
 	
-	int nonterminalId = 0;
-	Map<Nonterminal, Set<List<Symbol>>> addedDefinitions = new HashMap<>();
-
 	public GrammarGraphBuilder calculateIds() {
-				
-		for (Rule rule : grammar.getRules()) {
+		
+		for (Entry<Nonterminal, List<List<Symbol>>> e :grammar.getDefinitions().entrySet()) {
+			Nonterminal nonterminal = e.getKey();
+			List<List<Symbol>> alternatives = e.getValue();
 			
-			Nonterminal head = rule.getHead();
-			
-			if(!nonterminalIds.containsKey(head.getName())) {
-				nonterminalIds.put(head.getName(), nonterminalId++);
-				nonterminals.add(head);
+			if(!nonterminalIds.containsKey(nonterminal.getName())) {
+				nonterminalIds.put(nonterminal.getName(), nonterminalIds.size());
+				nonterminals.add(nonterminal);
 			}
 			
-			if(rule.getBody() != null) {				
-				packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), grammar.getAlternatives(head).size() - 1);
+			int i = 0;
+			for (List<Symbol> alternative : alternatives) {
+				packedNodeIds.put(Tuple.of(nonterminal, alternative), i++);
 			}
 		}
 		
