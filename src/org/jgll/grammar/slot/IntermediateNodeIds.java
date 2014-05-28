@@ -15,6 +15,6 @@ public interface IntermediateNodeIds {
 	
 	public int getSlotId(List<Symbol> alt, int index);
 	
-	public int getSlotId(List<Symbol> alt);
+	public int getSlotId(List<? extends Symbol> alt);
 	
 }

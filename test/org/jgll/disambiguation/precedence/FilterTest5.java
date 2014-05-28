@@ -14,8 +14,10 @@ import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -92,24 +94,26 @@ public class FilterTest5 {
 		Input input = Input.fromString("xawz");
 		parser = ParserFactory.newParser(grammarGraph, input);
 		ParseResult result = parser.parse(input, grammarGraph, "E");
+		System.out.println(ToJavaCode.toJavaCode((NonterminalSymbolNode) result.asParseSuccess().getSPPFNode(), grammarGraph));
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 	
 	private SPPFNode getSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 5, 0, 4);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 5, 0, 3);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 5, 0, 2);
-		TokenSymbolNode node4 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(x), 0, 1);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 5, 1, 2);
-		TokenSymbolNode node6 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 1, 1);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
+		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 4);
+		NonterminalSymbolNode node2 = factory.createNonterminalNode(E, 0, 3);
+		NonterminalSymbolNode node3 = factory.createNonterminalNode(E, 0, 2);
+		TokenSymbolNode node4 = factory.createTokenNode(x, 0, 1);
+		NonterminalSymbolNode node5 = factory.createNonterminalNode(E, 1, 2);
+		TokenSymbolNode node6 = factory.createTokenNode(a, 1, 1);
 		node5.addChild(node6);
 		node3.addChild(node4);
 		node3.addChild(node5);
-		TokenSymbolNode node7 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(w), 2, 1);
+		TokenSymbolNode node7 = factory.createTokenNode(w, 2, 1);
 		node2.addChild(node3);
 		node2.addChild(node7);
-		TokenSymbolNode node8 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(z), 3, 1);
+		TokenSymbolNode node8 = factory.createTokenNode(z, 3, 1);
 		node1.addChild(node2);
 		node1.addChild(node8);
 		return node1;

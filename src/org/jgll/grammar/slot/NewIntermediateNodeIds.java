@@ -60,7 +60,7 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 	}
 	
 	@Override
-	public int getSlotId(List<Symbol> alt) {
+	public int getSlotId(List<? extends Symbol> alt) {
 		return intermediateNodeIds.get(alt);
 	}
 
@@ -71,8 +71,7 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 	
 	@Override
 	public List<Symbol> getSequence(int id) {
-		
-		return null;
+		return idToNameMap.get(id);
 	}
 	
 }

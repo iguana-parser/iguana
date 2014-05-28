@@ -14,6 +14,7 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -55,15 +56,16 @@ public class Test4 {
 	}
 	
 	private SPPFNode expectedSPPF() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 3);
-		IntermediateNode node2 = new IntermediateNode(grammarGraph.getIntermediateNodeId(a, b), 0, 2);
-		TokenSymbolNode node3 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 0, 1);
-		TokenSymbolNode node4 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(b), 1, 1);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
+		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 3);
+		IntermediateNode node2 = factory.createIntermediateNode(list(a, b), 0, 2);
+		TokenSymbolNode node3 = factory.createTokenNode(a, 0, 1);
+		TokenSymbolNode node4 = factory.createTokenNode(b, 1, 1);
 		node2.addChild(node3);
 		node2.addChild(node4);
-		TokenSymbolNode node5 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(c), 2, 1);
+		TokenSymbolNode node5 = factory.createTokenNode(c, 2, 1);
 		node1.addChild(node2);
-		node1.addChild(node5);		
+		node1.addChild(node5);
 		return node1;
 	}
 

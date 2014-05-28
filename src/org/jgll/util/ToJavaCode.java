@@ -65,7 +65,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("IntermediateNode node" + count + " = factory.createIntermediateNode(" +
-					  grammar.getIntermediateNodeSequence(node.getId()) + "), " + 
+					  "list(" + CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId()), ", ") + "), " + 
 					  node.getLeftExtent() + ", " + 
 					  node.getRightExtent() + ");\n");
 			
@@ -113,9 +113,8 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setVisited(true);
 			node.setObject("node" + count);
 
-			sb.append("ListSymbolNode node" + count + " = new ListSymbolNode(" +
-					"grammar.getNonterminalId(" + grammar.getNonterminalById(node.getId()).getName()  + "), " + 
-					grammar.getCountAlternates(grammar.getNonterminalById(node.getId())) + ", " +
+			sb.append("ListSymbolNode node" + count + " = factory.createListNode(" +
+					grammar.getNonterminalById(node.getId()).getName() + ", " +
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ");\n");
 			

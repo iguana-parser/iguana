@@ -15,9 +15,9 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,30 +85,30 @@ public class FilterTest0 {
 		Input input = Input.fromString("a+a*a");
 		parser = ParserFactory.newParser(grammarGraph, input);
 		ParseResult result = parser.parse(input, grammarGraph, "E");
-		System.out.println(ToJavaCode.toJavaCode((NonterminalSymbolNode) result.asParseSuccess().getSPPFNode(), grammarGraph));
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode()));
 	}
 	
 	private SPPFNode getSPPFNode() {
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 3, 0, 5);
-		IntermediateNode node2 = new IntermediateNode(grammarGraph.getIntermediateNodeId(E, plus), 0, 2);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 3, 0, 1);
-		TokenSymbolNode node4 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 0, 1);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
+		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 5);
+		IntermediateNode node2 = factory.createIntermediateNode(list(E, plus), 0, 2);
+		NonterminalSymbolNode node3 = factory.createNonterminalNode(E, 0, 1);
+		TokenSymbolNode node4 = factory.createTokenNode(a, 0, 1);
 		node3.addChild(node4);
-		TokenSymbolNode node5 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(plus), 1, 1);
+		TokenSymbolNode node5 = factory.createTokenNode(plus, 1, 1);
 		node2.addChild(node3);
 		node2.addChild(node5);
-		NonterminalSymbolNode node6 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 2, 2, 5);
-		IntermediateNode node7 = new IntermediateNode(grammarGraph.getIntermediateNodeId(E, star), 2, 4);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 2, 2, 3);
-		TokenSymbolNode node9 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 2, 1);
+		NonterminalSymbolNode node6 = factory.createNonterminalNode(E, 2, 5);
+		IntermediateNode node7 = factory.createIntermediateNode(list(E, star), 2, 4);
+		NonterminalSymbolNode node8 = factory.createNonterminalNode(E, 2, 3);
+		TokenSymbolNode node9 = factory.createTokenNode(a, 2, 1);
 		node8.addChild(node9);
-		TokenSymbolNode node10 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(star), 3, 1);
+		TokenSymbolNode node10 = factory.createTokenNode(star, 3, 1);
 		node7.addChild(node8);
 		node7.addChild(node10);
-		NonterminalSymbolNode node11 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(E), 1, 4, 5);
-		TokenSymbolNode node12 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 4, 1);
+		NonterminalSymbolNode node11 = factory.createNonterminalNode(E, 4, 5);
+		TokenSymbolNode node12 = factory.createTokenNode(a, 4, 1);
 		node11.addChild(node12);
 		node6.addChild(node7);
 		node6.addChild(node11);
