@@ -1,7 +1,6 @@
 package org.jgll.grammar;
 
-import static org.jgll.grammar.Conditions.getPostConditions;
-import static org.jgll.grammar.Conditions.getPreConditions;
+import static org.jgll.grammar.Conditions.*;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
@@ -16,11 +15,12 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.exception.GrammarValidationException;
-import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.IntermediateNodeIds;
 import org.jgll.grammar.slot.LastGrammarSlot;
+import org.jgll.grammar.slot.NewIntermediateNodeIds;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -79,11 +79,11 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	Map<String, Integer> nonterminalIds;
 	
-	Map<List<Symbol>, Integer> intermediateNodeIds;
-	
 	Map<Tuple<Nonterminal, List<Symbol>>, Integer> packedNodeIds;
 	
 	Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
+	
+	IntermediateNodeIds intermediateNodeIds;
 	
 	/**
 	 * Indexed by nonterminal index and alternate index
@@ -91,13 +91,15 @@ public class GrammarGraphBuilder implements Serializable {
 	Object[][] objects;
 	
 	public GrammarGraphBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
-		this("no-name", grammar, grammarSlotFactory);
+		this("no-name", grammar, grammarSlotFactory, new NewIntermediateNodeIds(grammar));
 	}
 	
-	public GrammarGraphBuilder(String name, Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
+	public GrammarGraphBuilder(String name, Grammar grammar, GrammarSlotFactory grammarSlotFactory,
+							   IntermediateNodeIds intermediateNodeIds) {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
 		this.grammar = grammar;
+		this.intermediateNodeIds = intermediateNodeIds;;
 
 		Set<RuntimeException> exceptions = grammar.validate();
 		if (!exceptions.isEmpty()) {
@@ -108,7 +110,6 @@ public class GrammarGraphBuilder implements Serializable {
 		nonterminalsMap = new HashMap<>();
 		
 		nonterminalIds = new HashMap<>();
-		intermediateNodeIds = new HashMap<>();
 		packedNodeIds = new HashMap<>();
 		
 		tokenIDMap = new HashMap<>();
@@ -196,7 +197,6 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 	
 	int nonterminalId = 0;
-	int intermediateId = 0;
 	Map<Nonterminal, Set<List<Symbol>>> addedDefinitions = new HashMap<>();
 
 	public GrammarGraphBuilder calculateIds() {
@@ -210,15 +210,7 @@ public class GrammarGraphBuilder implements Serializable {
 				nonterminals.add(head);
 			}
 			
-			if(rule.getBody() != null) {
-				for(int i = 2; i < rule.getBody().size(); i++) {
-					List<Symbol> prefix = rule.getBody().subList(0, i);
-					List<Symbol> plain = OperatorPrecedence.plain(prefix);
-					if(!intermediateNodeIds.containsKey(plain)) {
-						intermediateNodeIds.put(plain, intermediateId++);
-					}
-				}
-				
+			if(rule.getBody() != null) {				
 				packedNodeIds.put(Tuple.of(rule.getHead(), rule.getBody()), grammar.getAlternatives(head).size() - 1);
 			}
 		}
@@ -319,19 +311,6 @@ public class GrammarGraphBuilder implements Serializable {
 		return sb.toString();
 	}
 	
-	private int getSlotId(List<Symbol> alt, int index) {
-
-		if(alt.size() <= 2 || index <= 1) {
-			return -1;
-		}
-
-		// Last grammar slot
-		if(index == alt.size()) {
-			return -1;
-		}
-
-		return intermediateNodeIds.get(OperatorPrecedence.plain(alt.subList(0, index)));
-	}
 	
 	Set<Condition> popActions = new HashSet<>();
 	
@@ -345,7 +324,7 @@ public class GrammarGraphBuilder implements Serializable {
 			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(symbol.getConditions());
 			ConditionTest popConditionsTest = getPostConditions(popActions);
 			
-			return grammarSlotFactory.createTokenGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), 
+			return grammarSlotFactory.createTokenGrammarSlot(body, symbolIndex, intermediateNodeIds.getSlotId(body, symbolIndex), 
 					getSlotName(head, body, symbolIndex), currentSlot, getTokenID(token), preConditionsTest, postConditionsTest, popConditionsTest);
 		}
 		
@@ -357,7 +336,7 @@ public class GrammarGraphBuilder implements Serializable {
 			popActions = symbol.getConditions();
 			
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, popConditionsTest);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, intermediateNodeIds.getSlotId(body, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, popConditionsTest);						
 		}		
 	}
 

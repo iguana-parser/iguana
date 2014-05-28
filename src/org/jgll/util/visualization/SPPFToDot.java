@@ -11,7 +11,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
-import org.jgll.util.CollectionsUtil;
 import org.jgll.util.Input;
 
 /**
@@ -72,7 +71,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			String label = String.format("(%s, %d, %d)", CollectionsUtil.listToString(grammar.getIntermediateNodeSequence(node.getId())), 
+			String label = String.format("(%s, %d, %d)", grammar.getIntermediateNodeSequence(node.getId()), 
 														 node.getLeftExtent(), node.getRightExtent());
 			sb.append("\"" + getId(node) + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);

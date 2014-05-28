@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.IntermediateNodeIds;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
@@ -84,9 +84,7 @@ public class GrammarGraph implements Serializable {
 	
 	private Grammar grammar;
 	
-	private Map<List<Symbol>, Integer> intermediateNodeIds;
-	
-	private Map<Integer, List<Symbol>> reverseIntermediateNodeIds;
+	private IntermediateNodeIds intermediateNodeIds;
 	
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
@@ -121,11 +119,6 @@ public class GrammarGraph implements Serializable {
 		grammar = builder.grammar;
 		intermediateNodeIds = builder.intermediateNodeIds;
 		packedNodeIds = builder.packedNodeIds;
-		
-		reverseIntermediateNodeIds = new HashMap<>();
-		for(Entry<List<Symbol>, Integer> e : intermediateNodeIds.entrySet()) {
-			reverseIntermediateNodeIds.put(e.getValue(), e.getKey());
-		}
 		
 		printGrammarStatistics();
 	}
@@ -270,16 +263,12 @@ public class GrammarGraph implements Serializable {
 		return tokenIDMap.get(regex);
 	}
 	
-	public int getIntermediateNodeId(Symbol...symbols) {
-		return getIntermediateNodeId(Arrays.asList(symbols));
+	public int getIntermediateNodeId(List<Symbol> symbols, int index) {
+		return intermediateNodeIds.getSlotId(symbols, index);
 	}
 	
-	public int getIntermediateNodeId(List<Symbol> symbols) {
-		return intermediateNodeIds.get(symbols);
-	}
-	
-	public List<Symbol> getIntermediateNodeSequence(int id) {
-		return reverseIntermediateNodeIds.get(id);
+	public String getIntermediateNodeSequence(int id) {
+		return intermediateNodeIds.getSlotName(id);
 	}
 	
 	public int getPackedNodeId(Nonterminal nonterminal, List<Symbol> symbols) {

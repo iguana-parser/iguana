@@ -435,13 +435,13 @@ public class GrammarOperations {
 				trie.add(node, Epsilon.getInstance());
 			}
 
-			leftFactorized.addRule(new Rule(nonterminal, retrieve(trie.getRoot())));
+			leftFactorized.addRule(new Rule(nonterminal, retrieve1(trie.getRoot())));
 		}
 		
 		return leftFactorized;
 	}
 	
-	private static Symbol retrieve(Node<Symbol> node) {
+	private static Symbol retrieve1(Node<Symbol> node) {
 		
 		if (node.size() == 0) return null;
 		
@@ -452,7 +452,7 @@ public class GrammarOperations {
 		for (Edge<Symbol> edge : node.getEdges()) {
 			List<Symbol> inner = new ArrayList<>();
 			inner.add(edge.getLabel());
-			Symbol next = retrieve(edge.getDestination());
+			Symbol next = retrieve1(edge.getDestination());
 			if (next != null) {
 				inner.add(next);
 			}
@@ -468,5 +468,40 @@ public class GrammarOperations {
 			return new Alt(outer);
 		}
 	}
+	
+	private static List<List<Symbol>> retrieve2(Node<Symbol> node, Set<Rule> newRules) {
+		
+		if (node.size() == 0) return null;
+		
+		if (node.size() == 1 && node.getEdges().get(0).getLabel() == Epsilon.getInstance()) return null;
+
+		List<Symbol> outer = new ArrayList<>();
+		
+		for (Edge<Symbol> edge : node.getEdges()) {
+			List<Symbol> inner = new ArrayList<>();
+			inner.add(edge.getLabel());
+			
+			retrieve2(edge.getDestination(), newRules);
+			
+//			Symbol next = 
+//			if (next != null) {
+//				inner.add(next);
+//			}
+			if (inner.size() == 1){
+				outer.add(inner.get(0));
+			} else {
+				outer.add(Group.of(inner));
+			}
+		}
+		
+		return null;
+		
+//		if (outer.size() == 1){
+//			return outer.get(0);
+//		} else {
+//			return new Alt(outer);
+//		}
+	}
+
 	
 }
