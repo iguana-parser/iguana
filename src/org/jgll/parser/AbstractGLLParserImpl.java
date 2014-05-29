@@ -99,11 +99,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected DescriptorLookupFactory descriptorLookupFactory;
 
 	private ParseStatistics parseStatistics;
-	
 
 	public AbstractGLLParserImpl(GSSLookupFactory gssLookupFactory, 
-						 SPPFLookupFactory sppfLookupFactory, 
-						 DescriptorLookupFactory descriptorLookupFactory) {
+								 SPPFLookupFactory sppfLookupFactory, 
+								 DescriptorLookupFactory descriptorLookupFactory) {
 		this.gssLookupFactory = gssLookupFactory;
 		this.sppfLookupFactory = sppfLookupFactory;
 		this.descriptorLookupFactory = descriptorLookupFactory;

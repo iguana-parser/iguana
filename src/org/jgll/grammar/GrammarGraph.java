@@ -272,8 +272,8 @@ public class GrammarGraph implements Serializable {
 		return intermediateNodeIds.getSlotId(new Rule(Nonterminal.withName("n"), Arrays.asList(symbols)));
 	}
 	
-	public List<Symbol> getIntermediateNodeSequence(int id) {
-		return intermediateNodeIds.getSequence(id);
+	public String getIntermediateNodeLabel(int id) {
+		return intermediateNodeIds.getSlotName(id);
 	}
 	
 	public int getPackedNodeId(Nonterminal nonterminal, List<Symbol> symbols) {

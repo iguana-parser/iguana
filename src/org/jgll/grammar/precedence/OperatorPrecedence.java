@@ -556,6 +556,12 @@ public class OperatorPrecedence {
 		return list;
 	}
 	
+	public static Rule plain(Rule rule) {
+		Nonterminal plainHead = (Nonterminal) plain(rule.getHead());
+		List<Symbol> plainAlternate = plain(rule.getBody());
+		return new Rule(plainHead, plainAlternate);
+	}
+	
 	public static List<Symbol> plain(List<Symbol> alternate) {
 		List<Symbol> plain = new ArrayList<>();
 		for(Symbol symbol : alternate) {
@@ -567,6 +573,14 @@ public class OperatorPrecedence {
 			}
 		}
 		return plain;
+	}
+	
+	public static Symbol plain(Symbol symbol) {
+		if(symbol instanceof Nonterminal && ((Nonterminal) symbol).getIndex() > 0) {
+			return new Nonterminal.Builder(symbol.getName()).setEbnfList(((Nonterminal) symbol).isEbnfList()).build();
+		} else {
+			return symbol;
+		}
 	}
 	
 	public static boolean plainEqual(Nonterminal n1, Nonterminal n2) {
