@@ -64,45 +64,14 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			
 			for (GSSEdge edge : gssNode.getGSSEdges()) {
 				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
-				createContinuation(returnSlot, inputIndex, edge.getDestination(), y);
+				scheduleDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
 			}
 		}
 		
 		return null;
 	}
 	
-	
-	private void createContinuation(BodyGrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {
-		
-		// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
-		// creating descriptors
-		Descriptor descriptor = new Descriptor(slot, gssNode, inputIndex, sppfNode);
-		scheduleDescriptor(descriptor);					
 
-		if (slot instanceof LastGrammarSlot) {
-			if (descriptorLookup.addDescriptor(descriptor)) {
-				if (!slot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
-					
-					// Destination grammar slot is of the form X ::= alpha X. beta
-					// and the pop action will create a node X, so we check the follow set
-					// of X at this position to prevent unnecessary pop.
-					
-					if (gssNode == GSSNode.U0) {
-						pop(gssNode, inputIndex, (NonPackedNode) sppfNode);
-						return;
-					}
-					
-					HeadGrammarSlot head = ((NonterminalGrammarSlot) ((BodyGrammarSlot) gssNode.getGrammarSlot()).previous()).getNonterminal();
-					if (head.testFollowSet(lexer.getInput().charAt(inputIndex))) {
-						pop(gssNode, inputIndex, (NonPackedNode) sppfNode);
-					}
-				}
-			}
-		} else {
-			scheduleDescriptor(descriptor);					
-		}		
-	}
-	
 	/**
 	 * 
 	 * create(L, u, w) {
@@ -186,7 +155,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				}
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
-				createContinuation(returnSlot, z.getRightExtent(), destination, x);
+				scheduleDescriptor(new Descriptor(returnSlot, destination, z.getRightExtent(), x));
 			}
 		}
 		
