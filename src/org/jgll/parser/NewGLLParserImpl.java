@@ -70,30 +70,11 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				
 				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
 				
-				createContinuation(returnSlot, inputIndex, edge.getDestination(), y);
+				scheduleDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
 			}
 		}
 		
 		return null;
-	}
-	
-	private void createContinuation(BodyGrammarSlot slot, int inputIndex, GSSNode gssNode, SPPFNode sppfNode) {
-		Descriptor descriptor = new Descriptor(slot, gssNode, inputIndex, sppfNode);
-
-		// Perform a direct pop for continuations of the form A ::= alpha ., instead of 
-		// creating descriptors
-		if (slot instanceof LastGrammarSlot) {
-			if (descriptorLookup.addDescriptor(descriptor)) {
-				if (!slot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
-					HeadGrammarSlot head = (HeadGrammarSlot) gssNode.getGrammarSlot();
-					if (head.testFollowSet(lexer.getInput().charAt(inputIndex))) {
-						pop(gssNode, inputIndex, (NonPackedNode) sppfNode);
-					}
-				}
-			}
-		} else {
-			scheduleDescriptor(descriptor);					
-		}		
 	}
 	
 	/**
@@ -176,7 +157,8 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
 				
-				createContinuation(returnSlot, z.getRightExtent(), destination, x);
+				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
+				scheduleDescriptor(descriptor);
 			}
 		}
 		
