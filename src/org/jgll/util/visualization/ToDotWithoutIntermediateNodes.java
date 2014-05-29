@@ -18,8 +18,8 @@ import org.jgll.util.Input;
  */
 public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	
-	public ToDotWithoutIntermediateNodes(GrammarGraph grammar, Input input) {
-		super(grammar, input);
+	public ToDotWithoutIntermediateNodes(GrammarGraph grammarGraph, Input input) {
+		super(grammarGraph, input);
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 				SPPFVisitorUtil.removeIntermediateNode(node);
 			}
 	
-			String label = grammar.getNonterminalById(node.getId()).getName();
+			String label = grammarGraph.getNonterminalById(node.getId()).getName();
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);
 			

@@ -12,8 +12,8 @@ import org.jgll.util.Input;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
-	public ToDotWithoutIntermeidateAndLists(GrammarGraph grammar, Input input) {
-		super(grammar, input);
+	public ToDotWithoutIntermeidateAndLists(GrammarGraph grammarGraph, Input input) {
+		super(grammarGraph, input);
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 		
 			for(SPPFNode child : node.getChildren()) {
 				
-				String label = grammar.getNonterminalById(child.getId()).getName();
+				String label = grammarGraph.getNonterminalById(child.getId()).getName();
 				
 				if(!label.startsWith("layout")) {
 				  addEdgeToChild(node, child);
@@ -48,7 +48,7 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 		
 			
 			for(SPPFNode child : node.getChildren()) {
-				String label = grammar.getNonterminalById(child.getId()).getName();
+				String label = grammarGraph.getNonterminalById(child.getId()).getName();
 				if(!label.startsWith("layout")) {
 				  addEdgeToChild(node, child);
 				  child.accept(this);
