@@ -68,8 +68,11 @@ public class Grammar {
 		}
 		definition.add(rule.getBody());
 		rules.add(rule);
-		
+		if (rule.getObject() == null && rule.getHead().getIndex() == 0) {
+			System.out.println("WTF?");
+		}
 		list.add(rule.getObject());
+		
 		
 		return this;
 	}

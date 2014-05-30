@@ -16,6 +16,7 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.exception.GrammarValidationException;
+import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -23,7 +24,6 @@ import org.jgll.grammar.slot.IntermediateNodeIds;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NewIntermediateNodeIds;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.OriginalIntermediateNodeIds;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Character;
@@ -130,14 +130,16 @@ public class GrammarGraphBuilder implements Serializable {
 		calculateIds();
 		
 		objects = new Object[grammar.getNonterminals().size()][];
-		for(Nonterminal nonterminal : grammar.getNonterminals()) {
-			objects[nonterminalIds.get(nonterminal.getName())] = new Object[grammar.getAlternatives(nonterminal).size()];
-		}
 
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
-			for (int alternateIndex = 0; alternateIndex < grammar.getAlternatives(nonterminal).size(); alternateIndex++) {
+			List<List<Symbol>> alternatives = grammar.getAlternatives(nonterminal);
+			objects[nonterminalIds.get(nonterminal.getName())] = new Object[alternatives.size()];
+			for (int alternateIndex = 0; alternateIndex < alternatives.size(); alternateIndex++) {
 				int nonterminalIndex = nonterminalIds.get(nonterminal.getName());
-				objects[nonterminalIndex][alternateIndex] = grammar.getObject(nonterminal, alternateIndex);				
+				if (grammar.getObject(nonterminal, alternateIndex) == null) {
+					System.out.println("WTF?");
+				}
+				objects[nonterminalIndex][alternateIndex] = grammar.getObject((Nonterminal) OperatorPrecedence.plain(nonterminal), alternateIndex);				
 			}
 		}
 		
