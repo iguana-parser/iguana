@@ -9,6 +9,7 @@ import java.util.List;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.regex.RegularExpression;
+import org.jgll.regex.Sequence;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -252,6 +253,23 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			node.setVisited(true);
 			
 			RegularExpression regex = grammar.getRegularExpressionById(node.getTokenID());
+			
+			if (regex instanceof Sequence) {
+				Sequence<CharacterClass> sequence = (Sequence<CharacterClass>) regex;
+				Object object = regex.getObject();
+				listener.startNode((T) object);
+				
+				List<U> childrenVal = new ArrayList<>();
+				for (int i = 0; i < sequence.getRegularExpressions().size(); i++) {
+					int c = input.charAt(node.getLeftExtent());
+					Result<U> t = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+					childrenVal.add(t.getObject());
+				}
+				
+				Result<U> result = listener.endNode((T) object, childrenVal, 
+						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				node.setObject(result);
+			}
 			
 			// For now we only support parse tree generation for character class
 			if(regex instanceof CharacterClass) {

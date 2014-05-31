@@ -35,7 +35,7 @@ public class PlusTest {
 	public void test2() {
 		
 		// [a]+ !>> [:]
-		RegularExpression regexp = RegexPlus.from(Character.from('a')).withCondition(RegularExpressionCondition.notFollow(Character.from(':')));
+		RegularExpression regexp = new RegexPlus.Builder(Character.from('a')).addCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		
 		Automaton automaton = regexp.getAutomaton();
 		

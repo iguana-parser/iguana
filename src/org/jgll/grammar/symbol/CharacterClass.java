@@ -26,7 +26,7 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	public CharacterClass(RegexAlt<Range> alt, String label, Set<Condition> conditions, Object object) {
 		super(alt.getName(), label, conditions, object);
-		this.alt = alt.withConditions(conditions);
+		this.alt = alt;
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {
@@ -120,27 +120,26 @@ public class CharacterClass extends AbstractRegularExpression {
 	public Range get(int index) {
 		return alt.get(index);
 	}
-
-	@Override
-	public CharacterClass withConditions(Set<Condition> conditions) {
-		return new Builder(alt).addConditions(conditions).build();
-	}
-	
-	@Override
-	public CharacterClass withoutConditions() {
-		return new Builder(alt).build();
-	}
 	
 	public static class Builder extends SymbolBuilder<CharacterClass> {
 
 		private RegexAlt<Range> alt;
 		
+		public Builder(Range...ranges) {
+			this(Arrays.asList(ranges));
+		}
+		
 		public Builder(List<Range> ranges) {
-			this.alt = RegexAlt.from(ranges);
+			this(RegexAlt.from(ranges));
 		}
 		
 		public Builder(RegexAlt<Range> alt) {
 			this.alt = alt;
+		}
+		
+		public Builder(CharacterClass charClass) {
+			super(charClass);
+			this.alt = charClass.alt;
 		}
 		
 		@Override
@@ -148,6 +147,11 @@ public class CharacterClass extends AbstractRegularExpression {
 			return new CharacterClass(alt, label, conditions, object);
 		}
 		
+	}
+
+	@Override
+	public SymbolBuilder<CharacterClass> builder() {
+		return new Builder(this);
 	}
 	
 }

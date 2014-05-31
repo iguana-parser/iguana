@@ -24,7 +24,7 @@ public class RegexStar extends AbstractRegularExpression {
 
 	public RegexStar(RegularExpression regexp, String label, Set<Condition> conditions, Object object) {
 		super(getName(regexp), label, conditions, object);
-		this.regexp = regexp.withoutConditions();
+		this.regexp = regexp;
 	}
 	
 	private static String getName(RegularExpression regexp) {
@@ -74,16 +74,6 @@ public class RegexStar extends AbstractRegularExpression {
 		return regexp.getFirstSet();
 	}
 
-	@Override
-	public RegexStar withConditions(Set<Condition> conditions) {
-		return new Builder(regexp).addConditions(this.conditions).addConditions(conditions).build();
-	}
-	
-	@Override
-	public RegexStar withoutConditions() {
-		return RegexStar.from(regexp);
-	}
-	
 	public static class Builder extends SymbolBuilder<RegexStar> {
 
 		private RegularExpression regex;
@@ -92,10 +82,20 @@ public class RegexStar extends AbstractRegularExpression {
 			this.regex = regex;
 		}
 		
+		public Builder(RegexStar regexStar) {
+			super(regexStar);
+			this.regex = regexStar.regexp;
+		}
+		
 		@Override
 		public RegexStar build() {
 			return new RegexStar(regex, label, conditions, object);
 		}
 	}
-	
+
+	@Override
+	public SymbolBuilder<RegexStar> builder() {
+		return new Builder(this);
+	}
+
 }

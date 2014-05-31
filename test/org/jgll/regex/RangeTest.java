@@ -41,7 +41,7 @@ public class RangeTest {
 	
 	@Test
 	public void testWithPreConditions() {
-		RegularExpression regexp = Range.in('0', '9').withCondition(RegularExpressionCondition.notFollow(Character.from(':')));
+		RegularExpression regexp = new Range.Builder('0', '9').addCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Automaton nfa = regexp.getAutomaton();
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 

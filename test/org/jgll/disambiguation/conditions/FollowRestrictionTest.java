@@ -44,9 +44,9 @@ public class FollowRestrictionTest {
 
 		grammar = new Grammar();
 		
-		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(Keyword.from(":"))));
+		Rule r1 = new Rule(S, Label.builder().addCondition(RegularExpressionCondition.notFollow(Keyword.from(":"))).build());
 		
-		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
+		Rule r2 = new Rule(Label, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).build());
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1, r2));
 		grammar.addRules(rules);

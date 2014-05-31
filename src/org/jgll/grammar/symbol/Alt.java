@@ -2,7 +2,6 @@ package org.jgll.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -15,31 +14,45 @@ public class Alt extends AbstractSymbol {
 	
 	private final List<Symbol> symbols;
 	
-	public Alt(Symbol...list) {
-		this(Arrays.asList(list));
+	public static Alt from(Symbol...symbols) {
+		return new Builder(Arrays.asList(symbols)).build();
 	}
 	
-	public Alt(List<Symbol> symbols, Set<Condition> conditions) {
-		super("[" + CollectionsUtil.listToString(symbols, "|") + "]", conditions);
+	public static Alt from(List<Symbol> symbols) {
+		return new Builder(symbols).build();
+	}
+	
+	public Alt(List<Symbol> symbols, Set<Condition> conditions, String label, Object object) {
+		super("[" + CollectionsUtil.listToString(symbols, "|") + "]", conditions, label, object);
 		this.symbols = new ArrayList<>(symbols);
-	}
-	
-	public Alt(List<Symbol> symbols) {
-		this(symbols, Collections.<Condition>emptySet());
 	}
 	
 	public List<Symbol> getSymbols() {
 		return symbols;
 	}
+	
+	public static class Builder extends SymbolBuilder<Alt> {
+
+		private List<Symbol> symbols;
+		
+		public Builder(List<Symbol> symbols) {
+			this.symbols = symbols;
+		}
+		
+		public Builder(Alt alt) {
+			super(alt);
+			this.symbols = alt.symbols;
+		}
+		
+		@Override
+		public Alt build() {
+			return new Alt(symbols, conditions, label, symbols);
+		}
+	}
 
 	@Override
-	public Alt withConditions(Set<Condition> conditions) {
-		return new Alt(symbols, CollectionsUtil.union(conditions, this.conditions));
+	public SymbolBuilder<? extends Symbol> builder() {
+		return new Builder(this);
 	}
-	
-	@Override
-	public Symbol withoutConditions() {
-		return new Alt(symbols);
-	}
-	
+
 }

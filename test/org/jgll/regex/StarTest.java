@@ -57,7 +57,7 @@ public class StarTest {
 	
 	@Test
 	public void test1WithPreConditions() {
-		RegularExpression regexp = RegexStar.from(Character.from('a')).withCondition(RegularExpressionCondition.notFollow(Character.from(':')));
+		RegexStar regexp = new RegexStar.Builder(Character.from('a')).addCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();

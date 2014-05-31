@@ -46,9 +46,9 @@ public class FollowRestrictionTest2 {
 		Range az = Range.in('a', 'z');
 		Range zero_nine = Range.in('0', '9');
 		
-		Rule r1 = new Rule(S, Label.withCondition(RegularExpressionCondition.notFollow(Keyword.from("8"))), zero_nine);
+		Rule r1 = new Rule(S, Label.builder().addCondition(RegularExpressionCondition.notFollow(Keyword.from("8"))).build(), zero_nine);
 		
-		Rule r2 = new Rule(Label, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)));
+		Rule r2 = new Rule(Label, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).build());
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1, r2));
 		grammar.addRules(rules);

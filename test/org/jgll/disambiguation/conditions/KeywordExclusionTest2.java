@@ -46,9 +46,10 @@ public class KeywordExclusionTest2 {
 		Keyword whilee = Keyword.from("while");
 		
 		RegexAlt<Keyword> alt = RegexAlt.from(iff, when, doo, whilee);
-		Rule r1 = new Rule(Id, RegexPlus.from(az).withCondition(RegularExpressionCondition.notFollow(az)).withCondition(RegularExpressionCondition.notMatch(alt)));
+		Rule r1 = new Rule(Id, RegexPlus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(alt)).build());
 		
 		grammar.addRule(r1);
+		System.out.println(grammar);
 
 		grammarGraph = grammar.toGrammarGraph();
 	}

@@ -46,7 +46,7 @@ public class KeywordExclusionTest {
 		
 		grammar = new Grammar();
 		
-		Rule r1 = new Rule(Id, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)).withCondition(RegularExpressionCondition.notMatch(alt)));
+		Rule r1 = new Rule(Id, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(alt)).build());
 		
 		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1));
 		grammar.addRules(rules);

@@ -17,22 +17,10 @@ public interface Symbol extends Serializable, Cloneable {
 	
 	public Set<Condition> getConditions();
 	
-	/**
-	 * Creates a copy of this symbol with the given conditions
-	 * 
-	 * @param conditions the given conditions.
-	 */
-	public Symbol withConditions(Set<Condition> conditions);
+	public Object getObject();
 	
-	/**
-	 * Creates a copy of this symbol with the given condition.
-	 * 
-	 * @param condition the given codintion.
-	 */
-	public Symbol withCondition(Condition condition);
+	public String getLabel();
 	
-	/**
-	 * Creates a copy of this symbol without conditions 
-	 */
-	public Symbol withoutConditions();
+	public SymbolBuilder<? extends Symbol> builder();
+	
 }	

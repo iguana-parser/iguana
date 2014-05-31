@@ -24,19 +24,13 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 
 	private final List<T> regularExpressions;
 
-	@SuppressWarnings("unchecked")
 	public RegexAlt(List<T> regularExpressions, String label, Set<Condition> conditions, Object object) {
 		super(getName(regularExpressions), label, conditions, object);
 		
 		if(regularExpressions == null) throw new IllegalArgumentException("The list of regular expressions cannot be null.");
 		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The list of regular expressions cannot be empty.");
 
-		List<T> list = new ArrayList<>();
-		for (T regex : regularExpressions) {
-			list.add((T) regex.withoutConditions());
-		}
-		
-		this.regularExpressions = list;
+		this.regularExpressions = new ArrayList<>(regularExpressions);
 	}
 	
 	@SafeVarargs
@@ -140,27 +134,32 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		return Collections.emptySet();
 	}
 
-	@Override
-	public RegexAlt<T> withConditions(Set<Condition> conditions) {
-		return new Builder<>(regularExpressions).addConditions(conditions).addConditions(this.conditions).build();
-	}
-
-	@Override
-	public RegexAlt<T> withoutConditions() {
-		return new Builder<>(regularExpressions).build();
-	}
-	
 	public static class Builder<T extends RegularExpression> extends SymbolBuilder<RegexAlt<T>> {
 		
 		private List<T> regularExpressions;
 
+		@SafeVarargs
+		public Builder(T...regularExpressions) {
+			this(Arrays.asList(regularExpressions));
+		}
+		
 		public Builder(List<T> regularExpressions) {
 			this.regularExpressions = regularExpressions;
+		}
+		
+		public Builder(RegexAlt<T> regexAlt) {
+			super(regexAlt);
+			this.regularExpressions = regexAlt.regularExpressions;
 		}
 
 		@Override
 		public RegexAlt<T> build() {
 			return new RegexAlt<>(regularExpressions, label, conditions, object);
 		}
+	}
+
+	@Override
+	public SymbolBuilder<RegexAlt<T>> builder() {
+		return new Builder<>(this);
 	}
 }

@@ -465,7 +465,7 @@ public class GrammarOperations {
 		if (outer.size() == 1){
 			return outer.get(0);
 		} else {
-			return new Alt(outer);
+			return Alt.from(outer);
 		}
 	}
 	

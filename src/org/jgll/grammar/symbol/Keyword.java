@@ -26,7 +26,7 @@ public class Keyword extends AbstractRegularExpression {
 	
 	public Keyword(Sequence<Character> seq, String label, Set<Condition> conditions, Object object) {
 		super(seq.getName(), label, conditions, object);
-		this.seq = seq.withConditions(conditions);
+		this.seq = seq;
 	}
 	
 	private static Sequence<Character> toCharSequence(int[] chars) {
@@ -86,27 +86,21 @@ public class Keyword extends AbstractRegularExpression {
 		return Collections.emptySet();
 	}
 
-	@Override
-	public Keyword withConditions(Set<Condition> conditions) {
-		return new Builder(seq).addConditions(this.conditions).addConditions(conditions).build();
-	}
-	
-	@Override
-	public Keyword withCondition(Condition condition) {
-		return (Keyword) super.withCondition(condition);
-	}
-	
-	@Override
-	public Keyword withoutConditions() {
-		return new Builder(seq).build();
-	}
-	
 	public static class Builder extends SymbolBuilder<Keyword> {
 		
 		private Sequence<Character> seq;
 				
+		public Builder(String s) {
+			this.seq = toCharSequence(Input.toIntArray(s));
+		}
+		
 		public Builder(Sequence<Character> seq) {
 			this.seq = seq;
+		}
+		
+		public Builder(Keyword keyword) {
+			super(keyword);
+			this.seq = keyword.seq;
 		}
 
 		@Override
@@ -115,5 +109,10 @@ public class Keyword extends AbstractRegularExpression {
 		}
 		
 	}
-	
+
+	@Override
+	public SymbolBuilder<Keyword> builder() {
+		return new Builder(this);
+	}
+
 }

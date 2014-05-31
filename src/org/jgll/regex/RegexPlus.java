@@ -26,8 +26,8 @@ public class RegexPlus extends AbstractRegularExpression {
 		super(getName(regex), label, conditions, object);
 		this.regex = regex;
 		List<RegularExpression> list = new ArrayList<>();
-		list.add(RegexStar.from(regex.withoutConditions()));
-		list.add(regex.withoutConditions());
+		list.add(RegexStar.from(regex));
+		list.add(regex);
 		this.plus = Sequence.from(list);
 	}
 	
@@ -55,16 +55,6 @@ public class RegexPlus extends AbstractRegularExpression {
 		return plus.getFirstSet();
 	}
 
-	@Override
-	public RegexPlus withConditions(Set<Condition> conditions) {
-		return new Builder(regex).addConditions(this.conditions).addConditions(this.conditions).build();
-	}
-
-	@Override
-	public RegexPlus withoutConditions() {
-		return RegexPlus.from(regex);
-	}
-	
 	public static class Builder extends SymbolBuilder<RegexPlus> {
 
 		private RegularExpression regex;
@@ -73,10 +63,20 @@ public class RegexPlus extends AbstractRegularExpression {
 			this.regex = regex;
 		}
 		
+		public Builder(RegexPlus regexPlus) {
+			super(regexPlus);
+			this.regex = regexPlus.regex;
+		}
+		
 		@Override
 		public RegexPlus build() {
 			return new RegexPlus(regex, label, conditions, regex);
 		}
+	}
+
+	@Override
+	public SymbolBuilder<RegexPlus> builder() {
+		return new Builder(this);
 	}
 
 }

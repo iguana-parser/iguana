@@ -28,7 +28,7 @@ public class EOF extends AbstractRegularExpression {
 	}
 	
 	private EOF() {
-		super("$");
+		super("$", null, Collections.<Condition>emptySet(), null);
 	}
 	
 	protected Automaton createAutomaton() {
@@ -51,18 +51,13 @@ public class EOF extends AbstractRegularExpression {
 	}
 
 	@Override
-	public EOF withConditions(Set<Condition> conditions) {
-		return this;
-	}
-
-	@Override
-	public EOF withoutConditions() {
-		return this;
-	}
-
-	@Override
 	public Set<Range> getNotFollowSet() {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public SymbolBuilder<EOF> builder() {
+		throw new UnsupportedOperationException();
 	}
 	
 }

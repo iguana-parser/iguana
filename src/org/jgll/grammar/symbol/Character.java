@@ -100,26 +100,26 @@ public class Character extends AbstractRegularExpression {
 		return Collections.emptySet();
 	}
 
-	@Override
-	public Character withConditions(Set<Condition> conditions) {
-		return new Builder(c).addConditions(conditions).addConditions(this.conditions).build();
-	}
-	
-	@Override
-	public Character withoutConditions() {
-		return new Builder(c).build();
-	}
-	
 	public static class Builder extends SymbolBuilder<Character> {
 		
 		private int c;
 		
 		public Builder(int c) { this.c = c; }
 
+		public Builder(Character character) {
+			super(character);
+			this.c = character.c;
+		}
+		
 		@Override
 		public Character build() {
 			return new Character(c, label, conditions, object);
 		}
+	}
+
+	@Override
+	public SymbolBuilder<Character> builder() {
+		return new Builder(this);
 	}
 
 }

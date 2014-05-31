@@ -24,20 +24,12 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	private final List<T> regularExpressions;
 
-	@SuppressWarnings("unchecked")
 	public Sequence(List<T> regularExpressions, String label, Set<Condition> conditions, Object object) {
 		super(getName(regularExpressions), label, conditions, object);
 		
 		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		
-		List<T> list = new ArrayList<>();
-		
-		int i;
-		for (i = 0; i < regularExpressions.size(); i++) {
-			list.add((T) regularExpressions.get(i).withoutConditions());
-		}
-		
-		this.regularExpressions = list;
+		this.regularExpressions = new ArrayList<>(regularExpressions);
 	}
 	
 	public static <T extends RegularExpression> Sequence<T> from(List<T> regularExpressions) {
@@ -149,16 +141,6 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		return Collections.emptySet();
 	}
 
-	@Override
-	public Sequence<T> withConditions(Set<Condition> conditions) {
-		return new Builder<>(regularExpressions).addConditions(this.conditions).addConditions(conditions).build();
-	}
-	
-	@Override
-	public Sequence<T> withoutConditions() {
-		return Sequence.from(regularExpressions);
-	}
-	
 	public static class Builder<T extends RegularExpression> extends SymbolBuilder<Sequence<T>> {
 
 		private List<T> regularExpressions;
@@ -167,10 +149,20 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 			this.regularExpressions = regularExpressions;
 		}
 		
+		public Builder(Sequence<T> seq) {
+			super(seq);
+			this.regularExpressions = seq.regularExpressions;
+		}
+		
 		@Override
 		public Sequence<T> build() {
 			return new Sequence<>(regularExpressions, label, conditions, object);
 		}
+	}
+
+	@Override
+	public SymbolBuilder<Sequence<T>> builder() {
+		return new Builder<>(this);
 	}
 	
 }

@@ -22,7 +22,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	public RegexOpt(RegularExpression regexp, String label, Set<Condition> conditions, Object object) {
 		super(getName(regexp), label, conditions, object);
-		this.regexp = regexp.withoutConditions();
+		this.regexp = regexp;
 	}
 
 	public static RegexOpt from(RegularExpression regexp) {
@@ -68,16 +68,6 @@ public class RegexOpt extends AbstractRegularExpression {
 		return Collections.emptySet();
 	}
 
-	@Override
-	public RegularExpression withConditions(Set<Condition> conditions) {
-		return new Builder(regexp).addConditions(this.conditions).addConditions(conditions).build();
-	}
-
-	@Override
-	public RegexOpt withoutConditions() {
-		return RegexOpt.from(regexp);
-	}
-	
 	public static class Builder extends SymbolBuilder<RegexOpt> {
 
 		private RegularExpression regexp;
@@ -86,10 +76,20 @@ public class RegexOpt extends AbstractRegularExpression {
 			this.regexp = regexp;
 		}
 		
+		public Builder(RegexOpt opt) {
+			super(opt);
+			this.regexp = opt.regexp;
+		}
+		
 		@Override
 		public RegexOpt build() {
 			return new RegexOpt(regexp, label, conditions, object);
 		}
+	}
+
+	@Override
+	public SymbolBuilder<RegexOpt> builder() {
+		return new Builder(this);
 	}
 	
 }

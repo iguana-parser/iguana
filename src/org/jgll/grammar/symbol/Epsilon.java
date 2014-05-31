@@ -27,7 +27,7 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 	
 	private Epsilon() {
-		super("epsilon");
+		super("epsilon", null, Collections.<Condition>emptySet(), null);
 	}
 
 	@Override
@@ -47,20 +47,15 @@ public class Epsilon extends AbstractRegularExpression {
 		firstSet.add(Range.in(-1, -1));
 		return firstSet;
 	}
-
-	@Override
-	public Epsilon withConditions(Set<Condition> conditions) {
-		return this;
-	}
-	
-	@Override
-	public Epsilon withoutConditions() {
-		return this;
-	}
 	
 	@Override
 	public Set<Range> getNotFollowSet() {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public SymbolBuilder<Epsilon> builder() {
+		throw new UnsupportedOperationException();
 	}
 	
 }

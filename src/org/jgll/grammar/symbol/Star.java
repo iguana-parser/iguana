@@ -1,10 +1,8 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.util.CollectionsUtil;
 
 
 public class Star extends AbstractSymbol {
@@ -13,13 +11,13 @@ public class Star extends AbstractSymbol {
 	
 	private final Symbol s;
 	
-	public Star(Symbol s, Set<Condition> conditions) {
-		super(s.getName() + "*", conditions);
+	public Star(Symbol s, Set<Condition> conditions, String label, Object object) {
+		super(s.getName() + "*", conditions, label, object);
 		this.s = s;
 	}
 	
-	public Star(Symbol s) {
-		this(s, Collections.<Condition>emptySet());
+	public Star from(Symbol s) {
+		return new Builder(s).build();
 	}
 	
 	public Symbol getSymbol() {
@@ -27,13 +25,29 @@ public class Star extends AbstractSymbol {
 	}
 
 	@Override
-	public Star withConditions(Set<Condition> conditions) {
-		return new Star(s, CollectionsUtil.union(conditions, this.conditions));
+	public SymbolBuilder<? extends Symbol> builder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
-	@Override
-	public Star withoutConditions() {
-		return new Star(s);
+	public static class Builder extends SymbolBuilder<Star> {
+
+		private Symbol s;
+
+		public Builder(Symbol s) {
+			this.s = s;
+		}
+		
+		public Builder(Star star) {
+			super(star);
+			this.s = star.s;
+		}
+		
+		@Override
+		public Star build() {
+			return new Star(s, conditions, label, object);
+		}
+		
 	}
-	
+
 }

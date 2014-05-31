@@ -124,16 +124,6 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		return Collections.emptySet();
 	}
 
-	@Override
-	public Range withConditions(Set<Condition> conditions) {
-		return new Builder(start, end).addConditions(this.conditions).addConditions(conditions).build();
-	}
-	
-	@Override
-	public Range withoutConditions() {
-		return Range.in(start, end);
-	}
-	
 	public static class Builder extends SymbolBuilder<Range> {
 
 		private int start;
@@ -144,11 +134,22 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 			this.end = end;
 		}
 		
+		public Builder(Range range) {
+			super(range);
+			this.start = range.start;
+			this.end = range.end;
+		}
+		
 		@Override
 		public Range build() {
 			return new Range(start, end, label, conditions, object);
 		}
 		
+	}
+
+	@Override
+	public SymbolBuilder<Range> builder() {
+		return new Builder(this);
 	}
 	
 }

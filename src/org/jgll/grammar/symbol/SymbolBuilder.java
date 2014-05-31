@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 
-public abstract class SymbolBuilder<T> {
+public abstract class SymbolBuilder<T extends Symbol> {
 	
 	protected String label;
 	
@@ -13,7 +13,17 @@ public abstract class SymbolBuilder<T> {
 	
 	protected Set<Condition> conditions = new HashSet<>();
 	
-	public SymbolBuilder<T> addLabel(String label) {
+	public SymbolBuilder() {
+		
+	}
+	
+	public SymbolBuilder(T t) {
+		this.label = t.getLabel();
+		this.object = t.getObject();
+		this.conditions = t.getConditions();
+	}
+	
+	public SymbolBuilder<T> setLabel(String label) {
 		this.label = label;
 		return this;
 	}
@@ -23,12 +33,17 @@ public abstract class SymbolBuilder<T> {
 		return this;
 	}
 	
-	public SymbolBuilder<T> addObject(Object object) {
+	public SymbolBuilder<T> setObject(Object object) {
 		this.object = object;
 		return this;
 	}
 	
-	public SymbolBuilder<T> addConditions(Iterable<Condition> conditions) {
+	public SymbolBuilder<T> removeConditions() {
+		this.conditions.clear();
+		return this;
+	}
+	
+ 	public SymbolBuilder<T> addConditions(Iterable<Condition> conditions) {
 		for (Condition condition : conditions) {
 			this.conditions.add(condition);
 		}

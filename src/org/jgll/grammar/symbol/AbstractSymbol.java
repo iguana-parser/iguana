@@ -1,6 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,16 +11,18 @@ public abstract class AbstractSymbol implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected Set<Condition> conditions;
+	protected final Set<Condition> conditions;
 	
-	protected String name;
+	protected final String name;
 	
-	public AbstractSymbol(String name) {
-		this(name, Collections.<Condition>emptySet());
-	}
+	protected final Object object;
 	
-	public AbstractSymbol(String name, Set<Condition> conditions) {
+	protected final String label;
+	
+	public AbstractSymbol(String name, Set<Condition> conditions, String label, Object object) {
 		this.name = name;
+		this.label = label;
+		this.object = object;
 		this.conditions = new HashSet<>(conditions);
 	}
 	
@@ -36,15 +37,21 @@ public abstract class AbstractSymbol implements Symbol {
 	}
 	
 	@Override
-	public String toString() {
-		return conditions.isEmpty() ? name : "(" + name + CollectionsUtil.listToString(conditions) + ")";
+	public Object getObject() {
+		return object;
 	}
 	
 	@Override
-	public Symbol withCondition(Condition condition) {
-		Set<Condition> conditions = new HashSet<>();
-		conditions.add(condition);
-		return withConditions(conditions);
+	public String getLabel() {
+		return label;
+	}
+	
+	@Override
+	public String toString() {
+		return conditions.isEmpty() ? 
+				label == null ? name : label + ":" + name
+				: 
+				"(" + label == null ? name : label + ":" + name + CollectionsUtil.listToString(conditions) + ")";
 	}
 	
 	protected Set<Condition> getNotFollowConditions() {

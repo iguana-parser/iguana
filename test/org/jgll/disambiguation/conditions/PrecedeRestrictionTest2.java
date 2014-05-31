@@ -54,11 +54,11 @@ public class PrecedeRestrictionTest2 {
 		
 		grammar = new Grammar();
 
-		Rule r1 = new Rule(S, forr, new Opt(L), Id);
+		Rule r1 = new Rule(S, forr, Opt.from(L), Id);
 
 		Rule r2 = new Rule(S, forall);
 
-		Rule r3 = new Rule(Id, new Plus(az).withCondition(RegularExpressionCondition.notFollow(az)).withCondition(RegularExpressionCondition.notPrecede(forr)));
+		Rule r3 = new Rule(Id, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notPrecede(forr)).build());
 
 		Rule r4 = new Rule(L, ws);
 

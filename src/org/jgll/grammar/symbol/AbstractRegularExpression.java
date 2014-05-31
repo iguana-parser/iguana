@@ -1,6 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
@@ -9,7 +8,6 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
-import org.jgll.util.CollectionsUtil;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
@@ -17,19 +15,9 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	private static final long serialVersionUID = 1L;
 	
 	protected Automaton automaton;
-
-	private Object object;
-	
-	private String label;
-
-	public AbstractRegularExpression(String name) {
-		this(name, null, Collections.<Condition>emptySet(), null);
-	}
 	
 	public AbstractRegularExpression(String name, String label, Set<Condition> conditions, Object object) {
-		super(name, conditions);
-		this.label = label;
-		this.object = object;
+		super(name, conditions, label, object);
 	}
 	
 	@Override
@@ -63,28 +51,5 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 
 		return result;
 	}
-	
-	@Override
-	public RegularExpression withCondition(Condition condition) {
-		return (RegularExpression) super.withCondition(condition);
-	}
-	
-	@Override
-	public Object getObject() {
-		return object;
-	}
-	
-	@Override
-	public String getLabel() {
-		return label;
-	}
-	
-	@Override
-	public String toString() {
-		return conditions.isEmpty() ? 
-					label == null ? name : label + ":" + name
-					: 
-					"(" + label == null ? name : label + ":" + name + CollectionsUtil.listToString(conditions) + ")";
-	}
-	
+
 }

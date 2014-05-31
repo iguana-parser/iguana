@@ -4,8 +4,6 @@ import java.util.*;
 
 import org.jgll.grammar.condition.*;
 import org.jgll.parser.*;
-import org.jgll.util.*;
-
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -19,8 +17,8 @@ public class Nonterminal extends AbstractSymbol {
 		return new Builder(name).build();
 	}
 	
-	public Nonterminal(String name, int index, boolean ebnfList, Set<Condition> conditions) {
-		super(name, conditions);
+	public Nonterminal(String name, int index, boolean ebnfList, Set<Condition> conditions, String label, Object object) {
+		super(name, conditions, label, object);
 		this.ebnfList = ebnfList;
 		this.index = index;
 	}
@@ -66,16 +64,6 @@ public class Nonterminal extends AbstractSymbol {
 		return HashFunctions.defaulFunction().hash(name.hashCode(), index);
 	}
 
-	@Override
-	public Nonterminal withConditions(Set<Condition> conditions) {
-		return new Nonterminal(name, index, ebnfList, CollectionsUtil.union(conditions, this.conditions));
-	}
-	
-	@Override
-	public Nonterminal withoutConditions() {
-		return new Builder(name).build();
-	}
-	
 	public static class Builder extends SymbolBuilder<Nonterminal> {
 
 		private String name;
@@ -83,6 +71,13 @@ public class Nonterminal extends AbstractSymbol {
 		private boolean ebnfList;
 		
 		private int index;
+		
+		public Builder(Nonterminal nonterminal) {
+			super(nonterminal);
+			this.name = nonterminal.name;
+			this.ebnfList = nonterminal.ebnfList;
+			this.index = nonterminal.index;
+		}
 
 		public Builder(String name) {
 			this.name = name;
@@ -100,9 +95,14 @@ public class Nonterminal extends AbstractSymbol {
 		
 		@Override
 		public Nonterminal build() {
-			return new Nonterminal(name, index, ebnfList, conditions);
+			return new Nonterminal(name, index, ebnfList, conditions, label, object);
 		}
 		
+	}
+
+	@Override
+	public SymbolBuilder<? extends Nonterminal> builder() {
+		return new Builder(this);
 	}
 	
 }
