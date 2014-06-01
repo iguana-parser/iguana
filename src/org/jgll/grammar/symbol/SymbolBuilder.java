@@ -11,16 +11,17 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	
 	protected Object object;
 	
-	protected Set<Condition> conditions = new HashSet<>();
+	protected Set<Condition> conditions;
 	
 	public SymbolBuilder() {
-		
+		this.conditions = new HashSet<>();
 	}
 	
 	public SymbolBuilder(T t) {
+		this();
 		this.label = t.getLabel();
 		this.object = t.getObject();
-		this.conditions = t.getConditions();
+		this.conditions = t.getConditions() == null ? new HashSet<Condition>() : new HashSet<>(t.getConditions());
 	}
 	
 	public SymbolBuilder<T> setLabel(String label) {

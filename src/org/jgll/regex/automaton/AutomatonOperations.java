@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.regex.matcher.LargeIntervalTransitions;
 import org.jgll.regex.matcher.ShortIntervalTransitions;
 import org.jgll.regex.matcher.Transitions;
 import org.jgll.util.CollectionsUtil;
@@ -161,17 +162,17 @@ public class AutomatonOperations {
 			if (sortedTransitions.length > 0) {
 				Transitions transitions;
 				
-//				if (sortedTransitions[sortedTransitions.length - 1].getEnd() - sortedTransitions[0].getStart() <= Character.MAX_VALUE) {
+				if (sortedTransitions[sortedTransitions.length - 1].getEnd() - sortedTransitions[0].getStart() <= Character.MAX_VALUE) {
 					transitions = new ShortIntervalTransitions(sortedTransitions, transitionsMap);
-//				} else {
-//					transitions = new LargeIntervalTransitions(sortedTransitions, transitionsMap);
-//				}
-//				
+				} else {
+					transitions = new LargeIntervalTransitions(sortedTransitions, transitionsMap);
+				}
+				
 				e.getValue().setTransitions(transitions);				
 			}
 		}
 		
-		return new RunnableAutomaton(map.get(a.getStartState()));
+		return new DefaultRunnableAutomaton(map.get(a.getStartState()));
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
