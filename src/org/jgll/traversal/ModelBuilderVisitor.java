@@ -261,7 +261,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				
 				List<U> childrenVal = new ArrayList<>();
 				for (int i = 0; i < sequence.getRegularExpressions().size(); i++) {
-					int c = input.charAt(node.getLeftExtent());
+					int c = sequence.get(i).get(0).getStart();
 					Result<U> t = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
 					childrenVal.add(t.getObject());
 				}
@@ -272,10 +272,14 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			}
 			
 			// For now we only support parse tree generation for character class
-			if(regex instanceof CharacterClass) {
+			else if (regex instanceof CharacterClass) {
 				int c = input.charAt(node.getLeftExtent());
 				Result<U> result = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
 				node.setObject(result);
+			}
+			
+			else {
+				throw new RuntimeException("Should not come here!");
 			}
 		}	
 	}
