@@ -18,7 +18,7 @@ import org.jgll.sppf.NonPackedNode;
  */
 public class GSSNode {
 	
-	public static final GSSNode U0 = new GSSNode(L0.getInstance(), -1);
+	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 	
 	private final GrammarSlot slot;
 
