@@ -48,10 +48,7 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	@Override
 	public String toString() {
-		return conditions.isEmpty() ? 
-				label == null ? name : label + ":" + name
-				: 
-				"(" + label == null ? name : label + ":" + name + CollectionsUtil.listToString(conditions) + ")";
+		return conditions.isEmpty() ? name :  "(" + name + CollectionsUtil.listToString(conditions) + ")";
 	}
 	
 	protected Set<Condition> getNotFollowConditions() {

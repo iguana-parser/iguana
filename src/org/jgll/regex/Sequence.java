@@ -120,11 +120,6 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	}
 	
 	@Override
-	public String toString() {
-		return getName();
-	}
-
-	@Override
 	public Set<Range> getFirstSet() {
 		Set<Range> firstSet = new HashSet<>();
 		for(T t : regularExpressions) {

@@ -116,7 +116,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			
 			Result<U> result;
 			
-			if(packedNode.getLastChild() instanceof CollapsibleNode) {
+			if(packedNode.childrenCount() > 0 && packedNode.getLastChild() instanceof CollapsibleNode) {
 				CollapsibleNode lastChild = (CollapsibleNode) packedNode.getLastChild();
 				Object object = getObject(lastChild);
 				listener.startNode((T) object);
