@@ -1,5 +1,7 @@
 package org.jgll.grammar.symbol;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +31,15 @@ public class EOF extends AbstractRegularExpression {
 	
 	private EOF() {
 		super("$", null, Collections.<Condition>emptySet(), null);
+	}
+	
+	private Object readResolve()  {
+	    return instance;
+	}
+	
+	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+	    ois.defaultReadObject();
+	    instance = this;
 	}
 	
 	protected Automaton createAutomaton() {

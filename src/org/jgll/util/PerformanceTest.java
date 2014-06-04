@@ -53,7 +53,7 @@ public class PerformanceTest {
 	public static void main(String[] args) {
 		String grammarPath = "file:///Users/aliafroozeh/java";
 		String inputPath = "/Users/aliafroozeh/test.java";
-		String startSymbol = "start[CompiliationUnit]";
+		String startSymbol = "start[CompilationUnit]";
 		int runCount = 1;
 		int warmupCount = 1;		
 		try {

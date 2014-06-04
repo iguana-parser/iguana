@@ -110,6 +110,13 @@ public class ParseError implements ParseResult {
 		
 		return frontier.poll();
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Parse error at %d, line: %d, column: %d", inputIndex, 
+							 input.getLineNumber(inputIndex), 
+							 input.getColumnNumber(inputIndex));
+	}
 
 	@Override
 	public boolean isParseError() {
