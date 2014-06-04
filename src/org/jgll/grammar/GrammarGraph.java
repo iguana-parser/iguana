@@ -100,13 +100,10 @@ public class GrammarGraph implements Serializable {
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
 		this.tokens = builder.tokens;
 		this.dfas = builder.dfas;
-		this.firstSets = builder.firstSets;
-		this.followSets = builder.followSets;
 		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
 		
 		this.objects = builder.objects;
 		
-		this.predictionSets = builder.predictionSets;
 		this.nonterminalIds = builder.nonterminalIds;
 		this.nonterminals = builder.nonterminals;
 
@@ -298,14 +295,6 @@ public class GrammarGraph implements Serializable {
 		return ll1SubGrammarNonterminals.contains(nonterminal);
 	}
 	
-	public Set<RegularExpression> getFirstSet(Nonterminal nonterminal) {
-		return firstSets.get(nonterminal);
-	}
-	
-	public Set<RegularExpression> getPredictionSetForAlternate(Nonterminal nonterminal, int index) {
-		return predictionSets.get(nonterminal).get(index);
-	}
-	 
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
 		return followSets.get(nonterminal);
 	}

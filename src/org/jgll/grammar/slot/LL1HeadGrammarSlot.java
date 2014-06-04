@@ -16,7 +16,6 @@ import org.jgll.sppf.SPPFNode;
 
 public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 
-	private static final long serialVersionUID = 1L;
 	
 	private Set<BodyGrammarSlot>[] predictionMap;
 	
@@ -44,9 +43,6 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 			return null;
 		}
 		
-		if(set.size() > 1) {
-			System.out.println(nonterminal.getName());
-		}
 		assert set.size() == 1;
 		
 		BodyGrammarSlot currentSlot = set.iterator().next();

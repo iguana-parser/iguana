@@ -6,7 +6,7 @@ import org.jgll.util.*;
 
 public class ParserFactory {
 
-	public static GLLParser newParser(GrammarGraph grammar, Input input) {
+	public static GLLParser newParser(Grammar grammar, Input input) {
 		GSSLookupFactory gssLookupFactory = new NewGSSLookupFactory();
 		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
 		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();

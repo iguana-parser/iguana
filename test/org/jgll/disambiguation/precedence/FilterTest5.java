@@ -17,7 +17,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,8 +33,6 @@ import org.junit.Test;
  */
 public class FilterTest5 {
 
-	private GrammarGraph grammarGraph;
-	private Grammar grammar;
 	private GLLParser parser;
 	
 	private Nonterminal E = Nonterminal.withName("E");
@@ -45,30 +42,32 @@ public class FilterTest5 {
 	private Character y = Character.from('y');
 	private Character z = Character.from('z');
 
+	private Grammar grammar;
+
 	@Before
 	public void createGrammar() {
 		
-		grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E z
 		Rule rule1 = new Rule(E, list(E, z));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 		
 		// E ::=  x E
 		Rule rule2 = new Rule(E, list(x, E));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 		
 		// E ::= E w
 		Rule rule3 = new Rule(E, list(E, w));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 		
 		// E ::= y E
 		Rule rule4 = new Rule(E, list(y, E));
-		grammar.addRule(rule4);
+		builder.addRule(rule4);
 		
 		// E ::= a
 		Rule rule5 = new Rule(E, list(a));
-		grammar.addRule(rule5);
+		builder.addRule(rule5);
 		
 		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
 		
@@ -84,22 +83,20 @@ public class FilterTest5 {
 		// (E, .E w, y E)
 		operatorPrecedence.addPrecedencePattern(E, rule3, 0, rule4);
 		
-		grammar = operatorPrecedence.rewrite(grammar);
-		
-		grammarGraph =  grammar.toGrammarGraph();
+		grammar = operatorPrecedence.transform(builder.build());
 	}
 
 	@Test
 	public void testParsers() {
 		Input input = Input.fromString("xawz");
-		parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
-		System.out.println(ToJavaCode.toJavaCode((NonterminalSymbolNode) result.asParseSuccess().getSPPFNode(), grammarGraph));
+		parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 	
 	private SPPFNode getSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 4);
 		NonterminalSymbolNode node2 = factory.createNonterminalNode(E, 0, 3);

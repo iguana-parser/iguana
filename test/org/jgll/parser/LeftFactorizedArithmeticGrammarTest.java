@@ -28,24 +28,24 @@ import org.junit.Test;
  *  
  */
 public class LeftFactorizedArithmeticGrammarTest {
-	
-	private GrammarGraph grammarGraph;
 
-	Nonterminal E = Nonterminal.withName("E");
-	Nonterminal T = Nonterminal.withName("T");
-	Nonterminal E1 = Nonterminal.withName("E1");
-	Nonterminal F = Nonterminal.withName("F");
-	Nonterminal T1 = Nonterminal.withName("T1");
-	Character plus = Character.from('+');
-	Character star = Character.from('*');
-	Character a = Character.from('a');
-	Character openPar = Character.from('(');
-	Character closePar = Character.from(')');
+	private Grammar grammar;
+	
+	private Nonterminal E = Nonterminal.withName("E");
+	private Nonterminal T = Nonterminal.withName("T");
+	private Nonterminal E1 = Nonterminal.withName("E1");
+	private Nonterminal F = Nonterminal.withName("F");
+	private Nonterminal T1 = Nonterminal.withName("T1");
+	private Character plus = Character.from('+');
+	private Character star = Character.from('*');
+	private Character a = Character.from('a');
+	private Character openPar = Character.from('(');
+	private Character closePar = Character.from(')');
 
 	@Before
 	public void createGrammar() {
 
-		Grammar grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		Rule r1 = new Rule(E, list(T, E1));
 		Rule r2 = new Rule(E1, list(plus, T, E1));
@@ -56,37 +56,37 @@ public class LeftFactorizedArithmeticGrammarTest {
 		Rule r7 = new Rule(F, list(openPar, E, closePar));
 		Rule r8 = new Rule(F, list(a));
 		
-		grammar.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8);
-		grammarGraph = grammar.toGrammarGraph();
+		grammar = builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8).build();
 	}
 	
 	@Test
 	public void testFirstSets() {
-		assertEquals(set(openPar, a), grammarGraph.getFirstSet(E));
-		assertEquals(set(plus, Epsilon.getInstance()), grammarGraph.getFirstSet(E1));
-		assertEquals(set(star, Epsilon.getInstance()), grammarGraph.getFirstSet(T1));
-		assertEquals(set(openPar, a), grammarGraph.getFirstSet(T));
-		assertEquals(set(openPar, a), grammarGraph.getFirstSet(F));
+		assertEquals(set(openPar, a), grammar.getFirstSet(E));
+		assertEquals(set(plus, Epsilon.getInstance()), grammar.getFirstSet(E1));
+		assertEquals(set(star, Epsilon.getInstance()), grammar.getFirstSet(T1));
+		assertEquals(set(openPar, a), grammar.getFirstSet(T));
+		assertEquals(set(openPar, a), grammar.getFirstSet(F));
 	}
 	
 	public void testFollowSets() {
-		assertEquals(set(closePar, EOF.getInstance()), grammarGraph.getFollowSet(E));
-		assertEquals(set(closePar, EOF.getInstance()), grammarGraph.getFollowSet(E1));
-		assertEquals(set(plus, closePar, EOF.getInstance()), grammarGraph.getFollowSet(T1));
-		assertEquals(set(plus, closePar, EOF.getInstance()), grammarGraph.getFollowSet(T));
-		assertEquals(set(plus, star, closePar, EOF.getInstance()), grammarGraph.getFollowSet(F));
+		assertEquals(set(closePar, EOF.getInstance()), grammar.getFollowSet(E));
+		assertEquals(set(closePar, EOF.getInstance()), grammar.getFollowSet(E1));
+		assertEquals(set(plus, closePar, EOF.getInstance()), grammar.getFollowSet(T1));
+		assertEquals(set(plus, closePar, EOF.getInstance()), grammar.getFollowSet(T));
+		assertEquals(set(plus, star, closePar, EOF.getInstance()), grammar.getFollowSet(F));
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a+a*a+a");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 	
 	private SPPFNode getSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 7);
 		NonterminalSymbolNode node2 = factory.createNonterminalNode(T, 0, 1);

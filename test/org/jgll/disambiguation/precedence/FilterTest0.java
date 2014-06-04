@@ -40,25 +40,24 @@ public class FilterTest0 {
 	private Character plus = Character.from('+');
 
 	private Grammar grammar;
-	private GrammarGraph grammarGraph;
 
 	@Before
 	public void init() {
 		
-		grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E * E
 		Rule rule1 = new Rule(E, list(E, star, E));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 		
 		
 		// E ::= E + E
 		Rule rule2 = new Rule(E, list(E, plus, E));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 		
 		// E ::= a
 		Rule rule3 = new Rule(E, list(a));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 
 		
 		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
@@ -75,21 +74,21 @@ public class FilterTest0 {
 		// (E, E + .E, E + E)
 		operatorPrecedence.addPrecedencePattern(E, rule2, 2, rule2);
 		
-		grammar = operatorPrecedence.rewrite(grammar);
-		grammarGraph = grammar.toGrammarGraph();
-				
+		
+		grammar = operatorPrecedence.transform(builder.build());
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a+a*a");
-		parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
+		parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode()));
 	}
 	
 	private SPPFNode getSPPFNode() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 5);
 		IntermediateNode node2 = factory.createIntermediateNode(list(E, plus), 0, 2);

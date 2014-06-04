@@ -22,8 +22,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(NonterminalGrammarSlot.class);
 	
-	private static final long serialVersionUID = 1L;
-
 	protected HeadGrammarSlot nonterminal;
 	
 	protected final int nodeId;

@@ -35,8 +35,6 @@ import org.junit.Test;
  */
 public class FilterTest7 {
 
-	private GrammarGraph grammarGraph;
-	private Grammar grammar;
 	private GLLParser parser;
 	
 	private Nonterminal E = Nonterminal.withName("E");
@@ -44,30 +42,32 @@ public class FilterTest7 {
 	private Character a = Character.from('a');
 	private Character plus = Character.from('+');
 
+	private Grammar grammar;
+
 	@Before
 	public void init() {
 		
-		grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= EPlus E
 		Rule rule1 = new Rule(E, list(EPlus, E));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 		
 		// E ::=  E + E
 		Rule rule2 = new Rule(E, list(E, plus, E));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 		
 		// E ::= a
 		Rule rule3 = new Rule(E, list(a));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 		
 		// EPlus ::= EPlus E
 		Rule rule4 = new Rule(EPlus, list(EPlus, E));
-		grammar.addRule(rule4);
+		builder.addRule(rule4);
 		
 		// EPlus ::= E
 		Rule rule5 = new Rule(EPlus, list(E));
-		grammar.addRule(rule5);
+		builder.addRule(rule5);
 		
 		
 		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
@@ -92,20 +92,20 @@ public class FilterTest7 {
 		operatorPrecedence.addExceptPattern(EPlus, rule5, 0, rule1);
 		operatorPrecedence.addExceptPattern(EPlus, rule5, 0, rule2);
 		
-		grammar = operatorPrecedence.rewrite(grammar);
-		grammarGraph = grammar.toGrammarGraph();
+		grammar = operatorPrecedence.transform(builder.build());
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("aaa+aaaa+aaaa");
-		parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
+		parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 	
 	private NonterminalSymbolNode getSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 13);
 		IntermediateNode node2 = factory.createIntermediateNode(list(E, plus), 0, 9);

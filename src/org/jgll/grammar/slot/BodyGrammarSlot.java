@@ -13,9 +13,7 @@ import org.jgll.grammar.symbol.Symbol;
  * @author Ali Afroozeh
  *
  */
-public abstract class BodyGrammarSlot implements GrammarSlot, Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public abstract class BodyGrammarSlot implements GrammarSlot {
 	
 	protected final int id;
 

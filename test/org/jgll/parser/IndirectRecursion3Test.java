@@ -31,12 +31,11 @@ import org.junit.Test;
  */
 public class IndirectRecursion3Test {
 	
-	private GrammarGraph grammarGraph;
-	
+	private Grammar grammar;
+
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
 	private Nonterminal C = Nonterminal.withName("C");
-	
 	private Character c = Character.from('c');
 	private Character d = Character.from('d');
 	private Character e = Character.from('e');
@@ -51,21 +50,21 @@ public class IndirectRecursion3Test {
 		Rule r4 = new Rule(B, list(A, f));
 		Rule r5 = new Rule(C, list(A, g));
 		
-		grammarGraph = new Grammar().addRule(r1).addRule(r2).addRule(r3)
-								    .addRule(r4).addRule(r5).toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3)
+								    .addRule(r4).addRule(r5).build();
 	}
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammarGraph.getHeadGrammarSlot("A").isNullable());
-		assertFalse(grammarGraph.getHeadGrammarSlot("B").isNullable());
+		assertFalse(grammar.isNullable(A));
+		assertFalse(grammar.isNullable(B));
 	}
 	
 	@Test
 	public void test1() {
 		Input input = Input.fromString("efcfc");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode1()));
 	}
@@ -73,8 +72,8 @@ public class IndirectRecursion3Test {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("egdgdgd");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(Input.fromString("egdgdgd"), grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(Input.fromString("egdgdgd"), grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode2()));		
 	}
@@ -82,13 +81,14 @@ public class IndirectRecursion3Test {
 	@Test
 	public void test3() {
 		Input input = Input.fromString("egdfcgd");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode3()));
 	}
 	
 	private SPPFNode getSPPFNode1() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 5);
 		NonterminalSymbolNode node2 = factory.createNonterminalNode(B, 0, 4);
@@ -113,6 +113,7 @@ public class IndirectRecursion3Test {
 	}
 	
 	private SPPFNode getSPPFNode2() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 7);
 		NonterminalSymbolNode node2 = factory.createNonterminalNode(C, 0, 6);
@@ -145,6 +146,7 @@ public class IndirectRecursion3Test {
 	}
 	
 	private SPPFNode getSPPFNode3() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 7);
 		NonterminalSymbolNode node2 = factory.createNonterminalNode(C, 0, 6);

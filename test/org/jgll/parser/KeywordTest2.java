@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarGraphBuilder;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
@@ -24,11 +23,11 @@ import org.junit.Test;
  */
 public class KeywordTest2 {
 	
-	private GrammarGraph grammarGraph;
-	
-	Nonterminal A = Nonterminal.withName("A");
-	Nonterminal B = Nonterminal.withName("B");
-	Keyword iff = Keyword.from("if");
+	private Grammar grammar;
+
+	private Nonterminal A = Nonterminal.withName("A");
+	private Nonterminal B = Nonterminal.withName("B");
+	private Keyword iff = Keyword.from("if");
 
 	@Before
 	public void init() {
@@ -36,25 +35,25 @@ public class KeywordTest2 {
 		Rule r1 = new Rule(A, list(iff, B));
 		Rule r2 = new Rule(B, Character.from('b'));
 		
-		Grammar grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
-		grammar.addRule(r1);
-		grammar.addRule(r2);
-		grammar.addRule(GrammarGraphBuilder.fromKeyword(iff));
+		builder.addRule(r1);
+		builder.addRule(r2);
+		builder.addRule(GrammarGraphBuilder.fromKeyword(iff));
 		
-		grammarGraph = grammar.toGrammarGraph();
+		grammar = builder.build();
 	}
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(iff), grammarGraph.getFirstSet(A));
+		assertEquals(set(iff), grammar.getFirstSet(A));
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("ifb");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		parser.parse(input, grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		parser.parse(input, grammar.toGrammarGraph(), "A");
 	}
 	
 }

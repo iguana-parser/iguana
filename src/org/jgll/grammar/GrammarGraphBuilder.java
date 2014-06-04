@@ -71,10 +71,6 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	RunnableAutomaton[] dfas;
 	
-	Map<Nonterminal, Set<RegularExpression>> firstSets;
-
-	Map<Nonterminal, Set<RegularExpression>> followSets;
-	
 	Set<Nonterminal> ll1SubGrammarNonterminals;
 
 	private GrammarSlotFactory grammarSlotFactory;
@@ -82,8 +78,6 @@ public class GrammarGraphBuilder implements Serializable {
 	Map<String, Integer> nonterminalIds;
 	
 	Map<Tuple<Nonterminal, List<Symbol>>, Integer> packedNodeIds;
-	
-	Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
 	IntermediateNodeIds intermediateNodeIds;
 	
@@ -136,9 +130,6 @@ public class GrammarGraphBuilder implements Serializable {
 			objects[nonterminalIds.get(nonterminal.getName())] = new Object[alternatives.size()];
 			for (int alternateIndex = 0; alternateIndex < alternatives.size(); alternateIndex++) {
 				int nonterminalIndex = nonterminalIds.get(nonterminal.getName());
-				if (grammar.getObject(nonterminal, alternateIndex) == null) {
-					System.out.println("WTF?");
-				}
 				objects[nonterminalIndex][alternateIndex] = grammar.getObject((Nonterminal) OperatorPrecedence.plain(nonterminal), alternateIndex);				
 			}
 		}
@@ -147,14 +138,9 @@ public class GrammarGraphBuilder implements Serializable {
 		long end;
 		
 		
-		start = System.nanoTime();
-		GrammarOperations grammarOperations = new GrammarOperations(grammar);
-		end = System.nanoTime();
-		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
-		
-		firstSets = grammarOperations.getFirstSets();
-		followSets = grammarOperations.getFollowSets();
-		predictionSets = grammarOperations.getPredictionSets();
+//		start = System.nanoTime();
+//		end = System.nanoTime();
+//		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
 		
 //		start = System.nanoTime();
 //		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = GrammarProperties.calculateReachabilityGraph(definitions);
@@ -349,7 +335,7 @@ public class GrammarGraphBuilder implements Serializable {
 		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
 
 		if (headGrammarSlot == null) {
-			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, nonterminalIds.get(nonterminal.getName()), grammar.getAlternatives(nonterminal), firstSets, followSets, predictionSets);
+			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, nonterminalIds.get(nonterminal.getName()), grammar.getAlternatives(nonterminal), grammar.getFirstSets(), grammar.getFollowSets(), grammar.getPredictionSets());
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
 			headGrammarSlots.add(headGrammarSlot);
 		}

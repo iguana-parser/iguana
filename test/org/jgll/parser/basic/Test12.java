@@ -27,37 +27,37 @@ import org.junit.Test;
  */
 public class Test12 {
 
-	private GrammarGraph grammarGraph;
-
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
+	private Grammar grammar;
 	
 	@Before
 	public void init() {
 		Rule r1 = new Rule(A, list(B, a));
 		Rule r2 = new Rule(B, list(b));
 		
-		grammarGraph = new Grammar().addRule(r1).addRule(r2).toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).build();
 	}
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammarGraph.getHeadGrammarSlot("A").isNullable());
-		assertFalse(grammarGraph.getHeadGrammarSlot("B").isNullable());
+		assertFalse(grammar.isNullable(A));
+		assertFalse(grammar.isNullable(B));
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("ba");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(expectedSPPF()));
 	}
 	
 	private SPPFNode expectedSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 1, 0, 1);
 		TokenSymbolNode node3 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(b), 0, 1);

@@ -28,33 +28,34 @@ import org.junit.Test;
  *
  */
 public class Gamma2Test {
+
+	private Grammar grammar;
 	
-	private GrammarGraph grammarGraph;
 	private Nonterminal S = Nonterminal.withName("S");
 	private Character b = Character.from('b');
 	
 	@Before
 	public void init() {
 		
-		Grammar grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		Rule rule1 = new Rule(S, list(S, S, S));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(S, S));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 		
 		Rule rule3 = new Rule(S, list(b));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 		
-		grammarGraph = grammar.toGrammarGraph();
+		grammar = builder.build();
 	}
 	
 	@Test
 	public void testParsers1() {
 		Input input = Input.fromString("bbb");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF1()));
 	}
@@ -62,8 +63,8 @@ public class Gamma2Test {
 	@Test
 	public void testParsers2() {
 		Input input = Input.fromString("bbbb");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF2()));
 	}
@@ -71,8 +72,8 @@ public class Gamma2Test {
 	@Test
 	public void testParsers3() {
 		Input input = Input.fromString("bbbbb");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF3()));
 	}	
@@ -80,8 +81,8 @@ public class Gamma2Test {
 	@Test
 	public void test100bs() {
 		Input input = Input.fromString(get100b());		
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		parser.parse(input, grammar.toGrammarGraph(), "S");
 	}
 	
 	private String get100b() {
@@ -93,6 +94,7 @@ public class Gamma2Test {
 	}
 	
 	private SPPFNode getSPPF1() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 3);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 2, node1);
@@ -129,6 +131,7 @@ public class Gamma2Test {
 	}
 	
 	private SPPFNode getSPPF2() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 4);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 3, node1);
@@ -217,6 +220,7 @@ public class Gamma2Test {
 	}
 	
 	private SPPFNode getSPPF3() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 5);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 4, node1);

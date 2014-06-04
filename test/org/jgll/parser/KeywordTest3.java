@@ -30,14 +30,14 @@ import org.junit.Test;
 
 public class KeywordTest3 {
 	
-	private GrammarGraph grammarGraph;
-	
-	Nonterminal S = Nonterminal.withName("S");
-	Keyword iff = Keyword.from("if");
-	Keyword then = Keyword.from("then");
-	Nonterminal L = Nonterminal.withName("L");
-	Character s = Character.from('s');
-	Character ws = Character.from(' ');
+	private Grammar grammar;
+
+	private Nonterminal S = Nonterminal.withName("S");
+	private Keyword iff = Keyword.from("if");
+	private Keyword then = Keyword.from("then");
+	private Nonterminal L = Nonterminal.withName("L");
+	private Character s = Character.from('s');
+	private Character ws = Character.from(' ');
 
 	@Before
 	public void init() {
@@ -46,27 +46,26 @@ public class KeywordTest3 {
 		Rule r2 = new Rule(S, s);
 		Rule r3 = new Rule(L, ws);
 		
-		grammarGraph = new Grammar().addRule(r1)
-										     .addRule(r2)
-  										     .addRule(r3).toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(iff, s), grammarGraph.getFirstSet(S));
+		assertEquals(set(iff, s), grammar.getFirstSet(S));
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("if s then s");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 		
 	private SPPFNode getSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 11);
 		IntermediateNode node2 = factory.createIntermediateNode(list(iff, L, S, L, then, L), 0, 10);

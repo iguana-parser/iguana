@@ -30,62 +30,62 @@ import org.junit.Test;
  */
 public class Gamma0Test {
 
-	private GrammarGraph grammarGraph;
-	
 	private Character a = Character.from('a');
 	private Nonterminal S = Nonterminal.withName("S");
 	private Nonterminal A = Nonterminal.withName("A");
 	private Character d = Character.from('d');
 
+	private Grammar grammar;
 
 	@Before
 	public void init() {
 		
-		Grammar grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 
 		Rule r1 = new Rule(S, list(a, S));
-		grammar.addRule(r1);
+		builder.addRule(r1);
 		
 		Rule r2 = new Rule(S, list(A, S, d));
-		grammar.addRule(r2);
+		builder.addRule(r2);
 		
 		Rule r3 = new Rule(S);
-		grammar.addRule(r3);
+		builder.addRule(r3);
 		
 		Rule r4 = new Rule(A, list(a));
-		grammar.addRule(r4);
+		builder.addRule(r4);
 		
-		grammarGraph = grammar.toGrammarGraph();
+		grammar = builder.build();
 	}
 	
 	@Test
 	public void testNullables() {
-		assertTrue(grammarGraph.getHeadGrammarSlot("S").isNullable());
-		assertFalse(grammarGraph.getHeadGrammarSlot("A").isNullable());
+		assertTrue(grammar.isNullable(S));
+		assertFalse(grammar.isNullable(A));
 	}
 	
 	@Test
 	public void testFirstSets() {
-		assertEquals(set(a, Epsilon.getInstance()), grammarGraph.getFirstSet(S));
-		assertEquals(set(a), grammarGraph.getFirstSet(A));
+		assertEquals(set(a, Epsilon.getInstance()), grammar.getFirstSet(S));
+		assertEquals(set(a), grammar.getFirstSet(A));
 	}
 
 	@Test
 	public void testFollowSets() {
-		assertEquals(set(a, d, EOF.getInstance()), grammarGraph.getFollowSet(A));
-		assertEquals(set(d, EOF.getInstance()), grammarGraph.getFollowSet(S));
+		assertEquals(set(a, d, EOF.getInstance()), grammar.getFollowSet(A));
+		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(S));
 	}
 	
 	@Test
 	public void testSPPF() {
 		Input input = Input.fromString("aad");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 	
 	public SPPFNode getSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 3);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, a, S), 1, node1);

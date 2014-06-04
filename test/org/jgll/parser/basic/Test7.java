@@ -31,11 +31,10 @@ import org.junit.Test;
  */
 public class Test7 {
 
-	private GrammarGraph grammarGraph;
-	
+	private Grammar grammar;
+
 	private Nonterminal S = Nonterminal.withName("S");
 	private Nonterminal A = Nonterminal.withName("A");
-	
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
 	private Character c = Character.from('c');
@@ -46,20 +45,21 @@ public class Test7 {
 		Rule r2 = new Rule(S, list(a, A, b));
 		Rule r3 = new Rule(A, list(a));
 		
-		grammarGraph = new Grammar().addRule(r1).addRule(r2).addRule(r3).toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("aab");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}	
 
 	
 	private SPPFNode getSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 3);
 		IntermediateNode node2 = factory.createIntermediateNode(list(a, A), 0, 2);

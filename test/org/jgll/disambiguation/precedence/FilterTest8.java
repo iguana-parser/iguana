@@ -41,34 +41,33 @@ public class FilterTest8 {
 	private Character ob = Character.from('[');
 	private Character cb = Character.from(']');
 	
-	private GrammarGraph grammarGraph;
-	private Grammar grammar;
 	private GLLParser parser;
+	private Grammar grammar;
 	
 	@Before
 	public void init() {
 		
-		grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E [ E ]
 		Rule rule1 = new Rule(E, list(E, ob, E, cb));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 		
 		// E ::= E +
 		Rule rule2 = new Rule(E, list(E, plus));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 		
 		// E ::= E *
 		Rule rule3 = new Rule(E, list(E, star));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 		
 		// E ::= E + E
 		Rule rule4 = new Rule(E, list(E, plus, E));
-		grammar.addRule(rule4);
+		builder.addRule(rule4);
 		
 		// E ::= a
 		Rule rule5 = new Rule(E, list(a));
-		grammar.addRule(rule5);
+		builder.addRule(rule5);
 		
 		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
 		// (E, .E [ E ], E + E)
@@ -84,15 +83,14 @@ public class FilterTest8 {
 		operatorPrecedence.addExceptPattern(E, rule1, 0, rule2);
 		operatorPrecedence.addExceptPattern(E, rule1, 0, rule3);
 
-		grammar = operatorPrecedence.rewrite(grammar);
-		grammarGraph = grammar.toGrammarGraph();
+		grammar = operatorPrecedence.transform(builder.build());
 	}
 	
 	@Test
 	public void test1() {
 		Input input = Input.fromString("a+a[a+a]");
-		parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
+		parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF1()));
 	}
@@ -100,21 +98,22 @@ public class FilterTest8 {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("a+a*a+[a+a]");
-		parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
+		parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void test3() {
 		Input input = Input.fromString("a[a][a+a]");
-		parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
+		parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseError());
 	}	
 
 
 	private SPPFNode getSPPF1() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 8);
 		IntermediateNode node2 = factory.createIntermediateNode(list(E, plus), 0, 2);

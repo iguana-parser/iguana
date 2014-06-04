@@ -17,8 +17,6 @@ import org.jgll.parser.GLLParser;
  */
 public class LastGrammarSlot extends BodyGrammarSlot {
 	
-	private static final long serialVersionUID = 1L;
-	
 	protected int alternateIndex;
 
 	protected HeadGrammarSlot head;

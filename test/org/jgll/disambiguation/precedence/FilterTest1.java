@@ -33,52 +33,50 @@ import org.junit.Test;
  */
 public class FilterTest1 {
 
-	private GrammarGraph grammarGraph;
-	private Grammar grammar;
-	
-	
 	private GLLParser parser;
 
 	private Nonterminal E = Nonterminal.withName("E");
 	private Character plus = Character.from('+');
 	private Character minus = Character.from('-');
 	private Character a = Character.from('a');
+
+	private Grammar grammar;
 	
 	@Before
 	public void createGrammar() {
 		
-		grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E + E
 		Rule rule1 = new Rule(E, list(E, plus, E));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 		
 		// E ::= - E
 		Rule rule2 = new Rule(E, list(minus, E));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 		
 		// E ::= a
 		Rule rule3 = new Rule(E, list(a));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 		
 		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
 		operatorPrecedence.addPrecedencePattern(E, rule1, 2, rule1);
 		operatorPrecedence.addPrecedencePattern(E, rule1, 0, rule2);
-		grammar = operatorPrecedence.rewrite(grammar);
 		
-		grammarGraph = grammar.toGrammarGraph();
+		grammar = operatorPrecedence.transform(builder.build());
 	}
 	
 	@Test
 	public void testParser1() {
 		Input input = Input.fromString("a+-a+a");
-		parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
+		parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode()));
 	}
 	
 	private SPPFNode getSPPFNode() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 6);
 		IntermediateNode node2 = factory.createIntermediateNode(list(E, plus), 0, 2);

@@ -1,6 +1,8 @@
 package org.jgll.grammar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,70 +13,47 @@ import java.util.Map.Entry;
 import org.jgll.grammar.exception.NonterminalNotDefinedException;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.RegularExpression;
 import org.jgll.util.CollectionsUtil;
 
-public class Grammar {
+/**
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
+public class Grammar implements Serializable {
 
-	private Map<Nonterminal, List<List<Symbol>>> definitions;
+	private static final long serialVersionUID = 1L;
 
-	private Map<Nonterminal, List<Object>> objects;
+	private final Map<Nonterminal, List<List<Symbol>>> definitions;
+
+	private final Map<Nonterminal, List<Object>> objects;
 	
-	private Map<Nonterminal, Set<List<Symbol>>> addedDefinitions;
+	private final Map<Nonterminal, Set<RegularExpression>> firstSets;
 	
-	private List<Rule> rules;
+	private final Map<Nonterminal, Set<RegularExpression>> followSets;
 	
-	public Grammar() {
-		definitions = new HashMap<>();
-		addedDefinitions = new HashMap<>();
-		objects = new HashMap<>();
-		rules = new ArrayList<>();
-	}
+	private final Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
-	public Grammar addRules(Iterable<Rule> rules) {
-		for (Rule rule : rules) {
-			addRule(rule);
-		}
-		return this;
-	}
+	private final List<Rule> rules;
 	
-	public Grammar addRule(Rule rule) {
-		if(rule.getBody() != null) {
-			Set<List<Symbol>> set = addedDefinitions.get(rule.getHead());
-			
-			if(set != null && set.contains(rule.getBody())) {
-				return this;
-			} else {
-				if(set == null) {
-					set = new HashSet<>();
-					addedDefinitions.put(rule.getHead(), set);
-				}
-				set.add(rule.getBody());
-				rules.add(rule);
-			}			
-		}
-		
-		Nonterminal head = rule.getHead();
-		List<List<Symbol>> definition = definitions.get(head);
-		List<Object> list = objects.get(head);
-		if(definition == null) {
-			// The order in which alternates are added is important
-			definition = new ArrayList<>();
-			definitions.put(head, definition);
-			list = new ArrayList<>();
-			objects.put(head, list);
-		}
-		definition.add(rule.getBody());
-		rules.add(rule);
-		if (rule.getObject() == null && rule.getHead().getIndex() == 0) {
-			System.out.println("WTF?");
-		}
-		list.add(rule.getObject());
-		
-		
-		return this;
+	public Grammar(Map<Nonterminal, List<List<Symbol>>> definitions,
+				   List<Rule> rules,
+				   Map<Nonterminal, List<Object>> objects,
+				   Map<Nonterminal, Set<RegularExpression>> firstSets,
+				   Map<Nonterminal, Set<RegularExpression>> followSets,
+				   Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
+		this.definitions = new HashMap<>(definitions);
+		this.rules = new ArrayList<>(rules);
+		this.objects = new HashMap<>(objects);
+		this.firstSets = new HashMap<>(firstSets);
+		this.followSets = new HashMap<>(followSets);
+		this.predictionSets = new HashMap<>(predictionSets);
 	}
 	
 	public Map<Nonterminal, List<List<Symbol>>> getDefinitions() {
@@ -101,6 +80,34 @@ public class Grammar {
 		return num;
 	}
 	
+	public Map<Nonterminal, Set<RegularExpression>> getFirstSets() {
+		return Collections.unmodifiableMap(firstSets);
+	}
+	
+	public Map<Nonterminal, Set<RegularExpression>> getFollowSets() {
+		return Collections.unmodifiableMap(followSets);
+	}
+	
+	public Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets() {
+		return Collections.unmodifiableMap(predictionSets);
+	}
+	
+	public Set<RegularExpression> getFirstSet(Nonterminal nonterminal) {
+		return firstSets.get(nonterminal);
+	}
+	
+	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
+		return followSets.get(nonterminal);
+	}
+	
+	public Set<RegularExpression> getPredictionSet(Nonterminal nonterminal, int alternativeIndex) {
+		return predictionSets.get(nonterminal).get(alternativeIndex);
+	}
+	
+	public boolean isNullable(Nonterminal nonterminal) {
+		return firstSets.get(nonterminal).contains(Epsilon.getInstance());
+	}
+	 
 	public GrammarGraph toGrammarGraph() {
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarGraphBuilder builder = new GrammarGraphBuilder(this, factory);
@@ -144,6 +151,65 @@ public class Grammar {
 	
 	public Object getObject(Nonterminal nonterminal, int alternateIndex) {
 		return objects.get(nonterminal).get(alternateIndex);
+	}
+	
+	public static class Builder {
+		
+		private Map<Nonterminal, Set<List<Symbol>>> addedDefinitions;
+		private List<Rule> rules;
+		private final Map<Nonterminal, List<List<Symbol>>> definitions;
+		private final Map<Nonterminal, List<Object>> objects;
+
+		public Builder() {
+			this.addedDefinitions = new HashMap<>();
+			this.rules = new ArrayList<>();
+			this.definitions = new HashMap<>();
+			this.objects = new HashMap<>();
+		}
+		
+		public Grammar build() {
+			GrammarOperations op = new GrammarOperations(definitions);
+			return new Grammar(definitions, rules, objects, op.getFirstSets(), op.getFollowSets(), op.getPredictionSets());
+		}
+		
+		public Builder addRule(Rule rule) {
+			if(rule.getBody() != null) {
+				Set<List<Symbol>> set = addedDefinitions.get(rule.getHead());
+				
+				if(set != null && set.contains(rule.getBody())) {
+					return this;
+				} else {
+					if(set == null) {
+						set = new HashSet<>();
+						addedDefinitions.put(rule.getHead(), set);
+					}
+					set.add(rule.getBody());
+					rules.add(rule);
+				}			
+			}
+			
+			Nonterminal head = rule.getHead();
+			List<List<Symbol>> definition = definitions.get(head);
+			List<Object> list = objects.get(head);
+			if(definition == null) {
+				// The order in which alternates are added is important
+				definition = new ArrayList<>();
+				definitions.put(head, definition);
+				list = new ArrayList<>();
+				objects.put(head, list);
+			}
+			definition.add(rule.getBody());
+			rules.add(rule);
+			list.add(rule.getObject());
+			return this;
+		}
+		
+		public Builder addRules(Iterable<Rule> rules) {
+			for (Rule rule : rules) {
+				addRule(rule);
+			}
+			return this;
+		}
 	}
 	
 }

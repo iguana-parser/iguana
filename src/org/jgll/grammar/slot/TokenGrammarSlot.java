@@ -19,8 +19,6 @@ import org.jgll.sppf.TokenSymbolNode;
  */
 public class TokenGrammarSlot extends BodyGrammarSlot {
 	
-	private static final long serialVersionUID = 1L;
-	
 	protected final int tokenID;
 	
 	protected final int nodeId;

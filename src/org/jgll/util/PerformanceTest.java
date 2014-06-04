@@ -15,12 +15,21 @@ public class PerformanceTest {
 	private ParseResult result;
 
 	private ParseResult[] results;
+
+	private final Input input;
+
+	private final String startSymbol;
+
+	private final Grammar grammar;
 	
-	public PerformanceTest(int runCount) {
+	public PerformanceTest(Grammar grammar, Input input, String startSymbol, int runCount) {
+		this.grammar = grammar;
+		this.input = input;
+		this.startSymbol = startSymbol;
 		this.runCount = runCount;
 	}
 	
-	public void run(Grammar grammar, Input input, String startSymbol) {
+	public void run() {
 
 		results = new ParseResult[runCount];
 		
@@ -28,12 +37,12 @@ public class PerformanceTest {
 		GLLParser parser = null;
 		
 		for (int i = 0; i < warmupCount; i++) {
-			parser = ParserFactory.newParser(grammar.toGrammarGraph(), input);
+			parser = ParserFactory.newParser(grammar, input);
 			result = parser.parse(input, grammarGraph, startSymbol);
 		}
 		
 		for (int i = 0; i < runCount; i++) {			
-			parser = ParserFactory.newParser(grammar.toGrammarGraph(), input);
+			parser = ParserFactory.newParser(grammar, input);
 			result =  parser.parse(input, grammarGraph, startSymbol);
 			results[i] = result;
 		}
@@ -41,6 +50,10 @@ public class PerformanceTest {
 	
 	public ParseResult getResult() {
 		return result;
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 	
 }

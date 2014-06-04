@@ -1,7 +1,6 @@
 package org.jgll.grammar.slot;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 
 import org.jgll.lexer.GLLLexer;
@@ -19,7 +18,7 @@ import org.jgll.parser.GLLParser;
  * @author Ali Afroozeh
  *
  */
-public interface GrammarSlot extends Serializable {
+public interface GrammarSlot {
 	
 	public abstract void codeParser(Writer writer) throws IOException;
 	

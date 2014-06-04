@@ -7,23 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.Alt;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Range;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Tuple;
-import org.jgll.util.trie.Edge;
-import org.jgll.util.trie.Node;
-import org.jgll.util.trie.Trie;
 
 public class GrammarOperations {
 	
-	private Grammar grammar;
+	private final Map<Nonterminal, List<List<Symbol>>> definitions;
 
 	private Map<Nonterminal, Set<RegularExpression>> firstSets;
 	
@@ -35,8 +29,8 @@ public class GrammarOperations {
 	
 	private Set<Nonterminal> nullableNonterminals;
 	
-	public GrammarOperations(Grammar grammar) {
-		this.grammar = grammar;
+	public GrammarOperations(Map<Nonterminal, List<List<Symbol>>> definitions) {
+		this.definitions = definitions;
 		this.firstSets = new HashMap<>();
 		this.nullableNonterminals = new HashSet<>();
 		this.followSets = new HashMap<>();
@@ -65,7 +59,7 @@ public class GrammarOperations {
 	
 	private void calculateFirstSets() {
 		
-		Set<Nonterminal> nonterminals = grammar.getNonterminals();
+		Set<Nonterminal> nonterminals = definitions.keySet();
 		for (Nonterminal head : nonterminals) {
 			firstSets.put(head, new HashSet<RegularExpression>());
 		}
@@ -78,7 +72,7 @@ public class GrammarOperations {
 			
 			for (Nonterminal head : nonterminals) {
 				Set<RegularExpression> firstSet = firstSets.get(head);
-				for (List<Symbol> alternate : grammar.getAlternatives(head)) {
+				for (List<Symbol> alternate : definitions.get(head)) {
 					changed |= addFirstSet(head, firstSet, alternate, 0);
 				}
 			}
@@ -176,7 +170,7 @@ public class GrammarOperations {
 		
 	private void calculateFollowSets() {
 		
-		Set<Nonterminal> nonterminals = grammar.getNonterminals();
+		Set<Nonterminal> nonterminals = definitions.keySet();
 		
 		for (Nonterminal head : nonterminals) {
 			followSets.put(head, new HashSet<RegularExpression>());
@@ -190,7 +184,7 @@ public class GrammarOperations {
 			
 			for (Nonterminal head : nonterminals) {
 
-				for (List<Symbol> alternate : grammar.getAlternatives(head)) {
+				for (List<Symbol> alternate : definitions.get(head)) {
 					
 					if(alternate == null || alternate.size() == 0) {
 						continue;
@@ -233,8 +227,8 @@ public class GrammarOperations {
 	
 	private void calcualtePredictionSets() {
 
-		for(Nonterminal nonterminal : grammar.getNonterminals()) {
-			List<List<Symbol>> alternates = grammar.getAlternatives(nonterminal);
+		for(Nonterminal nonterminal : definitions.keySet()) {
+			List<List<Symbol>> alternates = definitions.get(nonterminal);
 			
 			List<Set<RegularExpression>> list = new ArrayList<>();
 
@@ -277,7 +271,7 @@ public class GrammarOperations {
 	
 	public Set<Nonterminal> calculateLLNonterminals() {
 
-		Set<Nonterminal> nonterminals = grammar.getNonterminals();
+		Set<Nonterminal> nonterminals = definitions.keySet();
 		
 		Set<Nonterminal> ll1Nonterminals = new HashSet<>();
 		
@@ -289,7 +283,7 @@ public class GrammarOperations {
 		for (Nonterminal head : nonterminals) {
 
 			int alternateIndex = 0;
-			for(List<Symbol> alt : grammar.getAlternatives(head)) {
+			for(List<Symbol> alt : definitions.get(head)) {
 			
 				// Calculate the prediction set for the alternate
 				Set<RegularExpression> s = new HashSet<>();
@@ -311,7 +305,7 @@ public class GrammarOperations {
 		}
 		
 		for (Nonterminal head : nonterminals) {
-			if(isLL1(head, predictions, grammar)) {
+			if(isLL1(head, predictions)) {
 				ll1Nonterminals.add(head);
 			}
 		}
@@ -348,10 +342,9 @@ public class GrammarOperations {
 		return integerSet;
 	}
 	
-    private static boolean isLL1(Nonterminal nonterminal, Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions,
-    							 Grammar grammar) {
+    private boolean isLL1(Nonterminal nonterminal, Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions) {
     	
-    	int size = grammar.getAlternatives(nonterminal).size();
+    	int size = definitions.get(nonterminal).size();
     	
     	// If there is only one alternate
 		if(size == 1) {
@@ -418,90 +411,5 @@ public class GrammarOperations {
 		return reachabilityGraph;
 	}
 	
-	public Grammar leftFactorize() {
-		
-		Grammar leftFactorized = new Grammar();
-		
-		for (Nonterminal nonterminal : grammar.getNonterminals()) {
-		
-			Trie<Symbol> trie = new Trie<>();
-
-			Node<Symbol> node = trie.getRoot();
-			for (List<Symbol> alternative : grammar.getAlternatives(nonterminal)) {
-				node = trie.getRoot();
-				for (Symbol s : alternative) {
-					node = trie.add(node, s);
-				}
-				trie.add(node, Epsilon.getInstance());
-			}
-
-			leftFactorized.addRule(new Rule(nonterminal, retrieve1(trie.getRoot())));
-		}
-		
-		return leftFactorized;
-	}
-	
-	private static Symbol retrieve1(Node<Symbol> node) {
-		
-		if (node.size() == 0) return null;
-		
-		if (node.size() == 1 && node.getEdges().get(0).getLabel() == Epsilon.getInstance()) return null;
-
-		List<Symbol> outer = new ArrayList<>();
-		
-		for (Edge<Symbol> edge : node.getEdges()) {
-			List<Symbol> inner = new ArrayList<>();
-			inner.add(edge.getLabel());
-			Symbol next = retrieve1(edge.getDestination());
-			if (next != null) {
-				inner.add(next);
-			}
-			if (inner.size() == 1){
-				outer.add(inner.get(0));
-			} else {
-				outer.add(Group.of(inner));
-			}
-		}
-		if (outer.size() == 1){
-			return outer.get(0);
-		} else {
-			return Alt.from(outer);
-		}
-	}
-	
-	private static List<List<Symbol>> retrieve2(Node<Symbol> node, Set<Rule> newRules) {
-		
-		if (node.size() == 0) return null;
-		
-		if (node.size() == 1 && node.getEdges().get(0).getLabel() == Epsilon.getInstance()) return null;
-
-		List<Symbol> outer = new ArrayList<>();
-		
-		for (Edge<Symbol> edge : node.getEdges()) {
-			List<Symbol> inner = new ArrayList<>();
-			inner.add(edge.getLabel());
-			
-			retrieve2(edge.getDestination(), newRules);
-			
-//			Symbol next = 
-//			if (next != null) {
-//				inner.add(next);
-//			}
-			if (inner.size() == 1){
-				outer.add(inner.get(0));
-			} else {
-				outer.add(Group.of(inner));
-			}
-		}
-		
-		return null;
-		
-//		if (outer.size() == 1){
-//			return outer.get(0);
-//		} else {
-//			return new Alt(outer);
-//		}
-	}
-
 	
 }

@@ -31,9 +31,9 @@ import org.junit.Test;
  */
 public class Test10 {
 	
-	private GrammarGraph grammarGraph;
-	
 	private Nonterminal A = Nonterminal.withName("A");
+	
+	private Grammar grammar;
 
 	@Before
 	public void init() {
@@ -42,16 +42,14 @@ public class Test10 {
 		Rule r2 = new Rule(A, list(Character.from('a')));
 		Rule r3 = new Rule(A);
 
-		grammarGraph = new Grammar().addRule(r1)
-									.addRule(r2)
-									.addRule(r3).toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
 	@Test
 	public void test1() {
 		Input input = Input.fromString("");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		
 		// TODO: stackoverflow bug due to the cycle in the SPPF. Fix it later!
@@ -61,13 +59,14 @@ public class Test10 {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 	}
 
 	
 	private SPPFNode getSPPF1() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 3, 0, 0);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(A, new ArrayList<Symbol>()), 0, node1);
 		PackedNode node3 = new PackedNode(grammarGraph.getPackedNodeId(A, A, A), 0, node1);

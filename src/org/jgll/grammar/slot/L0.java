@@ -21,8 +21,6 @@ import org.jgll.parser.GLLParser;
  */
 public class L0 extends HeadGrammarSlot {
 	
-	private static final long serialVersionUID = 1L;
-
 	private static L0 instance;
 	
 	public static L0 getInstance() {

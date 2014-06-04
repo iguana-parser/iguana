@@ -27,8 +27,6 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(HeadGrammarSlot.class);
 	
-	private static final long serialVersionUID = 1L;
-
 	protected final Nonterminal nonterminal;
 	
 	private boolean nullable;

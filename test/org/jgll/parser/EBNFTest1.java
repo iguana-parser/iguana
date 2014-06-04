@@ -3,12 +3,11 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,33 +23,31 @@ import org.junit.Test;
  */
 public class EBNFTest1 {
 	
-	private GrammarGraph grammarGraph;
+	private Grammar grammar;
 
 	@Before
 	public void init() {
 		
-		Grammar grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		Nonterminal S = Nonterminal.withName("S");
 		Nonterminal A = Nonterminal.withName("A");
 		Character a = Character.from('a');
 		
 		Rule rule1 = new Rule(S, list(Plus.from(A)));
-		
+		builder.addRule(rule1);
 		Rule rule2 = new Rule(A, list(a));
+		builder.addRule(rule2);
 		
-		Iterable<Rule> newRules = EBNFUtil.rewrite(list(rule1, rule2));
-		
-		grammar.addRules(newRules);
-		
-		grammarGraph = grammar.toGrammarGraph();
+		EBNFToBNF ebnfToBNF = new EBNFToBNF();
+		grammar = ebnfToBNF.transform(builder.build());
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("aaaaaa");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		parser.parse(input, grammar.toGrammarGraph(), "S");
 	}
 
 }

@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -25,7 +24,7 @@ import org.junit.Test;
 
 public class HiddenLeftRecursion {
 	
-	private GrammarGraph grammarGraph;
+	private Grammar grammar;
 
 	@Before
 	public void createGrammar() {
@@ -38,17 +37,14 @@ public class HiddenLeftRecursion {
 		Rule r3 = new Rule(B, list(Character.from('b')));
 		Rule r4 = new Rule(B);
 		
-		grammarGraph = new Grammar().addRule(r1)
-													  .addRule(r2)
-													  .addRule(r3)
-													  .addRule(r4).toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("ba+a+a");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 	}
 

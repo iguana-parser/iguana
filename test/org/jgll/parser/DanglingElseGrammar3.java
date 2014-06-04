@@ -29,40 +29,40 @@ import org.junit.Test;
  */
 public class DanglingElseGrammar3 {
 
-	private GrammarGraph grammarGraph;
-	
 	Nonterminal S = Nonterminal.withName("S");
 	Character s = Character.from('s');
 	Character a = Character.from('a');
 	Character b = Character.from('b');
+	private Grammar grammar;
 
 	@Before
 	public void init() {
 		
-		Grammar grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		Rule rule1 = new Rule(S, list(a, S.builder().addCondition(RegularExpressionCondition.notFollow(Character.from('b'))).build()));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 		
 		Rule rule3 = new Rule(S, list(s));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 		
-		grammarGraph =  grammar.toGrammarGraph();
+		grammar = builder.build();
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("aasbs");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF()));
 	}
 	
 	private SPPFNode getExpectedSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 5);
 		TokenSymbolNode node2 = factory.createTokenNode(a, 0, 1);

@@ -14,7 +14,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,14 +31,14 @@ import org.junit.Test;
  */
 public class IndirectRecursion1Test {
 
-	private GrammarGraph grammarGraph;
+	private Grammar grammar;
 
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
 	private Nonterminal C = Nonterminal.withName("C");
-	Character a = Character.from('a');
-	Character b = Character.from('b');
-	Character c = Character.from('c');
+	private Character a = Character.from('a');
+	private Character b = Character.from('b');
+	private Character c = Character.from('c');
 
 	@Before
 	public void createGrammar() {
@@ -49,32 +48,32 @@ public class IndirectRecursion1Test {
 		Rule r4 = new Rule(B, list(b));
 		Rule r5 = new Rule(C, list(c));
 		
-		grammarGraph = new Grammar().addRule(r1).addRule(r2).addRule(r3)
-								  .addRule(r4).addRule(r5).toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3)
+								  	   .addRule(r4).addRule(r5).build();
 	}
 	
 	
 	@Test
 	public void testFirstFollowSets() {
-		assertEquals(set(a, b), grammarGraph.getFirstSet(A));
-		assertEquals(set(a, b), grammarGraph.getFirstSet(B));
-		assertEquals(set(c), grammarGraph.getFirstSet(C));
+		assertEquals(set(a, b), grammar.getFirstSet(A));
+		assertEquals(set(a, b), grammar.getFirstSet(B));
+		assertEquals(set(c), grammar.getFirstSet(C));
 		
-		assertEquals(set(c, EOF.getInstance()), grammarGraph.getFollowSet(A));
-		assertEquals(set(c, EOF.getInstance()), grammarGraph.getFollowSet(B));
+		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(A));
+		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(B));
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("bc");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "A");
-		System.out.println(ToJavaCode.toJavaCode((NonterminalSymbolNode) result.asParseSuccess().getSPPFNode(), grammarGraph));
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(expectedSPPF()));
 	}
 
 	
 	private SPPFNode expectedSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 2);
 		NonterminalSymbolNode node2 = factory.createNonterminalNode(B, 0, 1);

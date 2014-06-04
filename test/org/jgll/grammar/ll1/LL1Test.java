@@ -32,6 +32,7 @@ import org.junit.Test;
  */
 public class LL1Test {
 
+	private Grammar grammar;
 	private GrammarGraph grammarGraph;
 	
 	private Nonterminal S = Nonterminal.withName("S");
@@ -45,26 +46,27 @@ public class LL1Test {
 	@Before
 	public void init() {
 		
-		Grammar grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 
 		Rule rule1 = new Rule(S, list(A, a));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 
 		Rule rule2 = new Rule(A, list(B, D));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 
 		Rule rule3 = new Rule(B, list(b));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 
 		Rule rule4 = new Rule(B);
-		grammar.addRule(rule4);
+		builder.addRule(rule4);
 
 		Rule rule5 = new Rule(D, list(d));
-		grammar.addRule(rule5);
+		builder.addRule(rule5);
 
 		Rule rule6 = new Rule(D);
-		grammar.addRule(rule6);
+		builder.addRule(rule6);
 
+		grammar = builder.build();
 		grammarGraph = grammar.toGrammarGraph();
 	}
 	
@@ -87,21 +89,21 @@ public class LL1Test {
 	@Test
 	public void testPredictSets() {
 		// S ::= . A [a]
-		assertEquals(set(d, b, a), grammarGraph.getPredictionSetForAlternate(S, 0));
+		assertEquals(set(d, b, a), grammar.getPredictionSet(S, 0));
 		
 		// A ::= . B D
-		assertEquals(set(d, b, a, EOF.getInstance()), grammarGraph.getPredictionSetForAlternate(A, 0));
+		assertEquals(set(d, b, a, EOF.getInstance()), grammar.getPredictionSet(A, 0));
 		
 		// B ::= . [b]
-		assertEquals(set(b), grammarGraph.getPredictionSetForAlternate(B, 0));
+		assertEquals(set(b), grammar.getPredictionSet(B, 0));
 
-		assertEquals(set(d, a, EOF.getInstance()), grammarGraph.getPredictionSetForAlternate(B, 1));
+		assertEquals(set(d, a, EOF.getInstance()), grammar.getPredictionSet(B, 1));
 	}
 
 	@Test
 	public void test1() {
 		Input input = Input.fromString("bda");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 
@@ -125,7 +127,7 @@ public class LL1Test {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 		
@@ -145,7 +147,7 @@ public class LL1Test {
 	@Test
 	public void test3() {
 		Input input = Input.fromString("ba");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 
@@ -167,7 +169,7 @@ public class LL1Test {
 	@Test
 	public void test4() {
 		Input input = Input.fromString("da");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
+		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 		

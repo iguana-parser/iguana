@@ -30,8 +30,8 @@ import org.junit.Test;
  */
 public class Test13 {
 
-	private GrammarGraph grammarGraph;
-
+	private Grammar grammar;
+	
 	private Nonterminal S = Nonterminal.withName("S");
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
@@ -51,30 +51,31 @@ public class Test13 {
 		Rule r8 = new Rule(D, list(a));
 		Rule r9 = new Rule(D);
 
-		grammarGraph = new Grammar().addRule(r1).addRule(r2).addRule(r3).
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).
 													   addRule(r4).addRule(r5).addRule(r6).
-													   addRule(r7).addRule(r8).addRule(r9).toGrammarGraph();
+													   addRule(r7).addRule(r8).addRule(r9).build();
 	}
 	
 	@Test
 	public void testNullable() {
-		assertTrue(grammarGraph.getHeadGrammarSlot("S").isNullable());
-		assertTrue(grammarGraph.getHeadGrammarSlot("A").isNullable());
-		assertTrue(grammarGraph.getHeadGrammarSlot("B").isNullable());
-		assertTrue(grammarGraph.getHeadGrammarSlot("C").isNullable());
-		assertTrue(grammarGraph.getHeadGrammarSlot("D").isNullable());
+		assertTrue(grammar.isNullable(S));
+		assertTrue(grammar.isNullable(A));
+		assertTrue(grammar.isNullable(B));
+		assertTrue(grammar.isNullable(C));
+		assertTrue(grammar.isNullable(D));
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 //		assertEquals(true, sppf.deepEquals(expectedSPPF()));
 	}
 	
 	private SPPFNode expectedSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 2);
 		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 1, 0, 1);
 		TokenSymbolNode node3 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 0, 1);

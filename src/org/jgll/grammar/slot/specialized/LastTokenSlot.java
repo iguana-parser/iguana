@@ -13,8 +13,6 @@ import org.jgll.sppf.TokenSymbolNode;
 
 public class LastTokenSlot extends TokenGrammarSlot {
 
-	private static final long serialVersionUID = 1L;
-	
 	public LastTokenSlot(int id, int nodeId, String label,
  						 BodyGrammarSlot previous, RegularExpression regularExpression,
 						 int tokenID, ConditionTest preConditions,

@@ -35,18 +35,16 @@ import org.junit.Test;
  */
 public class Test8 {
 
-	private GrammarGraph grammarGraph;
-	
+	private Grammar grammar;
+
 	private Nonterminal S = Nonterminal.withName("S");
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
 	private Nonterminal C = Nonterminal.withName("C");
 	private Nonterminal D = Nonterminal.withName("D");
-	
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
 	private Character c = Character.from('c');
-
 	
 	@Before
 	public void init() {
@@ -57,19 +55,20 @@ public class Test8 {
 		Rule r5 = new Rule(C, list(c));
 		Rule r6 = new Rule(D, list(c));
 		
-		grammarGraph = new Grammar().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).build();
 	}
 	
 	@Test
 	public void test1() {
 		Input input = Input.fromString("abc");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF()));
 	}
 	
 	public SPPFNode getSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 3);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, A, B, C), 2, node1);

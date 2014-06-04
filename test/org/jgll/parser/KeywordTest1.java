@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -20,31 +19,27 @@ import org.junit.Test;
  */
 public class KeywordTest1 {
 	
-	private GrammarGraph grammarGraph;
-
-	Keyword ifKeyword = Keyword.from("if");
-	Nonterminal A = Nonterminal.withName("A");
+	private Grammar grammar;
+	
+	private Keyword ifKeyword = Keyword.from("if");
+	private Nonterminal A = Nonterminal.withName("A");
 
 	@Before
 	public void init() {
 		Rule r1 = new Rule(A, ifKeyword);
-		
-		Grammar grammar = new Grammar();
-		grammar.addRule(r1);
-		
-		grammarGraph = grammar.toGrammarGraph();
+		grammar = new Grammar.Builder().addRule(r1).build();
 	}
 	
 	@Test
 	public void testFirstSet() {
-		assertEquals(set(ifKeyword), grammarGraph.getFirstSet(A));
+		assertEquals(set(ifKeyword), grammar.getFirstSet(A));
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("if");
-		GLLParser parser = ParserFactory.newParser(grammarGraph, input);
-		parser.parse(input, grammarGraph, "A");
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		parser.parse(input, grammar.toGrammarGraph(), "A");
 	}
 	
 }

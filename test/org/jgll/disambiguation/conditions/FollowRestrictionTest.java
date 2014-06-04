@@ -1,17 +1,15 @@
 package org.jgll.disambiguation.conditions;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.ebnf.EBNFUtil;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -31,10 +29,8 @@ import org.junit.Test;
  */
 public class FollowRestrictionTest {
 	
-	private GrammarGraph grammarGraph;
-	private Grammar grammar;
 	private GLLParser parser;
-
+	private Grammar grammar;
 	
 	@Before
 	public void init() {
@@ -42,23 +38,21 @@ public class FollowRestrictionTest {
 		Nonterminal Label = Nonterminal.withName("Label");
 		Range az = Range.in('a', 'z');
 
-		grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule r1 = new Rule(S, Label.builder().addCondition(RegularExpressionCondition.notFollow(Keyword.from(":"))).build());
-		
+		Rule r1 = new Rule(S, Label.builder().addCondition(RegularExpressionCondition.notFollow(Keyword.from(":"))).build());		
 		Rule r2 = new Rule(Label, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).build());
+		builder.addRule(r1).addRule(r2);
 		
-		Iterable<Rule> rules = EBNFUtil.rewrite(list(r1, r2));
-		grammar.addRules(rules);
-
-		grammarGraph = grammar.toGrammarGraph();
+		EBNFToBNF ebnfToBNF = new EBNFToBNF();
+		grammar = ebnfToBNF.transform(builder.build());
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("abc:");
-		parser =  ParserFactory.newParser(grammarGraph, input);
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		parser =  ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseError());
 	}
 

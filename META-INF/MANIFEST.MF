@@ -14,7 +14,6 @@ Export-Package:
    org.jgll.regex.automaton,
    org.jgll.grammar.symbol",
  org.jgll.grammar.condition;uses:="org.jgll.regex,org.jgll.grammar.symbol",
- org.jgll.grammar.ebnf;uses:="org.jgll.grammar.symbol",
  org.jgll.grammar.ll1,
  org.jgll.grammar.patterns;uses:="org.jgll.grammar.symbol",
  org.jgll.grammar.precedence;uses:="org.jgll.grammar.symbol,org.jgll.grammar",

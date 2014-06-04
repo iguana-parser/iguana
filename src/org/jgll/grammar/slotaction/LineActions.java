@@ -11,8 +11,6 @@ public class LineActions {
 		
 		return new SlotAction<Boolean>() {
 
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
 				return !lexer.getInput().isEndOfLine(inputIndex);
@@ -49,8 +47,6 @@ public class LineActions {
 	public static SlotAction<Boolean> addStartOfLine(final Condition condition) {
 		
 		return new SlotAction<Boolean>() {
-
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {

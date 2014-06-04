@@ -13,8 +13,6 @@ public class NotFollowActions {
 		
 		return new SlotAction<Boolean>() {
 			
-			private static final long serialVersionUID = 1L;
-			
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
 				throw new UnsupportedOperationException();
@@ -52,8 +50,6 @@ public class NotFollowActions {
 		final RunnableAutomaton r = regex.getAutomaton().getRunnableAutomaton();
 		
 		return new SlotAction<Boolean>() {
-			
-			private static final long serialVersionUID = 1L;
 			
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {

@@ -18,9 +18,10 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.transformation.GrammarTransformation;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class OperatorPrecedence {
+public class OperatorPrecedence implements GrammarTransformation {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(OperatorPrecedence.class);
 	
@@ -44,7 +45,8 @@ public class OperatorPrecedence {
 		this.newRules = new ArrayList<>();
 	}
 	
-	public Grammar rewrite(Grammar grammar) {
+	@Override
+	public Grammar transform(Grammar grammar) {
 		this.definitions = new HashMap<>(grammar.getDefinitions());
 		rewritePrecedencePatterns();
 		rewriteExceptPatterns();
@@ -55,16 +57,16 @@ public class OperatorPrecedence {
 			}
 		}
 		
-		Grammar rewrittenGrammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		for (Rule rule : grammar.getRules()) {
-			rewrittenGrammar.addRule(rule);
+			builder.addRule(rule);
 		}
 		
 		for (Rule rule : newRules) {
-			rewrittenGrammar.addRule(rule);
+			builder.addRule(rule);
 		}
 		
-		return rewrittenGrammar;
+		return builder.build();
 	}
 	
 	private void rewriteExceptPatterns() {

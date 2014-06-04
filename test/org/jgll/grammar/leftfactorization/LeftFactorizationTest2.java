@@ -7,6 +7,7 @@ import org.jgll.grammar.GrammarOperations;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.transformation.LeftFactorize;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,37 +18,37 @@ public class LeftFactorizationTest2 {
 	private Character a = Character.from('a');
 	private Character star = Character.from('*');
 	private Character plus = Character.from('+');
-
 	private Grammar grammar;
 
 	
 	@Before
 	public void init() {
-		grammar = new Grammar();
+		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E * E
 		Rule rule1 = new Rule(E, list(E, star, E));
-		grammar.addRule(rule1);
+		builder.addRule(rule1);
 		
 		
 		// E ::= E + E
 		Rule rule2 = new Rule(E, list(E, plus, E));
-		grammar.addRule(rule2);
+		builder.addRule(rule2);
 		
 		// E ::= E +
 		Rule rule3 = new Rule(E, list(E, plus));
-		grammar.addRule(rule3);
+		builder.addRule(rule3);
 		
 		// E ::= a
 		Rule rule4 = new Rule(E, list(a));
-		grammar.addRule(rule4);		
+		builder.addRule(rule4);
+		
+		grammar = builder.build();
 	}
 	
 	@Test
 	public void test1() {
-		GrammarOperations op = new GrammarOperations(grammar);
-		Grammar g = op.leftFactorize();
-		System.out.println(g);
+		LeftFactorize lf = new LeftFactorize();
+		System.out.println(lf.transform(grammar));
 	}
 	
 }

@@ -8,8 +8,6 @@ import org.jgll.parser.GLLParser;
 
 public class StartSlot implements GrammarSlot {
 
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public void codeParser(Writer writer) throws IOException {
 		
