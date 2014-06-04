@@ -11,7 +11,7 @@ import org.jgll.grammar.condition.Condition;
  * @author Ali Afroozeh
  *
  */
-public interface Symbol extends Serializable, Cloneable {
+public interface Symbol extends Serializable {
 	
 	public String getName();
 	

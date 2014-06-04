@@ -29,6 +29,10 @@ public class Epsilon extends AbstractRegularExpression {
 	private Epsilon() {
 		super("epsilon", null, Collections.<Condition>emptySet(), null);
 	}
+	
+	protected Object readResolve()  {
+	    return instance;
+	}
 
 	@Override
     protected Automaton createAutomaton() {
