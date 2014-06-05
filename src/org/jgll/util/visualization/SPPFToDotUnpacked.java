@@ -100,7 +100,6 @@ public class SPPFToDotUnpacked extends ToDot {
 				return add(i + 1, node);
 			}
 			
-			System.out.println(map);
 			StringBuilder sb = new StringBuilder();
 			visit(node, sb);
 			 			

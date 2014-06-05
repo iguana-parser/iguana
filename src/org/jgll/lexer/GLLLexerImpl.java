@@ -50,7 +50,6 @@ public class GLLLexerImpl implements GLLLexer {
 	
 	@Override
 	public void setTokenAt(int inputIndex, int tokenID, int length) {
-		System.out.println(String.format("%d, %d, %d", inputIndex, tokenID, length));
 		tokens[inputIndex][tokenID] = length;
 	}
 	

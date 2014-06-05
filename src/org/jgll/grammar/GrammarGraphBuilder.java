@@ -346,8 +346,6 @@ public class GrammarGraphBuilder implements Serializable {
 	private void createAutomatonsMap() {
 		dfas = new RunnableAutomaton[tokens.size()];
 		
-		System.out.println(tokens);
-		
 		for(RegularExpression regex : tokens) {
 			
 			Integer id = tokenIDMap.get(regex);
@@ -368,7 +366,6 @@ public class GrammarGraphBuilder implements Serializable {
 //			}
 			Automaton a = regex.getAutomaton();
 			dfas[id] = a.getRunnableAutomaton();
-			System.out.println(a);
 		}
 	}
 	

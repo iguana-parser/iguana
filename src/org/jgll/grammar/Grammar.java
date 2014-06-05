@@ -152,16 +152,16 @@ public class Grammar implements Serializable {
 	public Object getObject(Nonterminal nonterminal, int alternateIndex) {
 		return objects.get(nonterminal).get(alternateIndex);
 	}
-	
+ 	
 	public static class Builder {
 		
-		private Map<Nonterminal, Set<List<Symbol>>> addedDefinitions;
+		private Set<Rule> addedRules;
 		private List<Rule> rules;
 		private final Map<Nonterminal, List<List<Symbol>>> definitions;
 		private final Map<Nonterminal, List<Object>> objects;
 
 		public Builder() {
-			this.addedDefinitions = new HashMap<>();
+			this.addedRules = new HashSet<>();
 			this.rules = new ArrayList<>();
 			this.definitions = new HashMap<>();
 			this.objects = new HashMap<>();
@@ -173,34 +173,26 @@ public class Grammar implements Serializable {
 		}
 		
 		public Builder addRule(Rule rule) {
-			if(rule.getBody() != null) {
-				Set<List<Symbol>> set = addedDefinitions.get(rule.getHead());
-				
-				if(set != null && set.contains(rule.getBody())) {
-					return this;
-				} else {
-					if(set == null) {
-						set = new HashSet<>();
-						addedDefinitions.put(rule.getHead(), set);
-					}
-					set.add(rule.getBody());
-					rules.add(rule);
-				}			
+			
+			if (addedRules.contains(rule)) {
+				return this;
 			}
 			
 			Nonterminal head = rule.getHead();
 			List<List<Symbol>> definition = definitions.get(head);
 			List<Object> list = objects.get(head);
-			if(definition == null) {
-				// The order in which alternates are added is important
+			
+			if (definition == null) {
 				definition = new ArrayList<>();
 				definitions.put(head, definition);
 				list = new ArrayList<>();
 				objects.put(head, list);
 			}
-			definition.add(rule.getBody());
+
 			rules.add(rule);
+			definition.add(rule.getBody());
 			list.add(rule.getObject());
+		
 			return this;
 		}
 		
