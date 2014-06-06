@@ -175,7 +175,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 					  sppfLookup.getNonterminalNodesCount(), 
 					  sppfLookup.getIntermediateNodesCount(), 
 					  sppfLookup.getPackedNodesCount(), 
-					  root.getCountAmbiguousNodes());
+					  root.getCountAmbiguousNodes(grammar, input));
 
 			parseResult = new ParseSuccess(root, parseStatistics);
 			log.info("Parsing finished successfully.");			

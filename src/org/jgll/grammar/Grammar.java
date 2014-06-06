@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.jgll.grammar.exception.GrammarValidationException;
 import org.jgll.grammar.exception.NonterminalNotDefinedException;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
@@ -114,7 +115,7 @@ public class Grammar implements Serializable {
 		return builder.build();
 	}
 	
-	public Set<RuntimeException> validate() {
+	private static Set<RuntimeException> validate(Map<Nonterminal, List<List<Symbol>>> definitions) {
 		
 		Set<RuntimeException> validationExceptions = new HashSet<>();
 		
@@ -168,6 +169,10 @@ public class Grammar implements Serializable {
 		}
 		
 		public Grammar build() {
+			Set<RuntimeException> exceptions = validate(definitions);
+			if (!exceptions.isEmpty()) {
+				throw new GrammarValidationException(exceptions);
+			}
 			GrammarOperations op = new GrammarOperations(definitions);
 			return new Grammar(definitions, rules, objects, op.getFirstSets(), op.getFollowSets(), op.getPredictionSets());
 		}

@@ -40,7 +40,7 @@ public class CLIguanaInterpreter {
 	}
 
 	public List<ParseResult> run() {
-
+		
 		List<ParseResult> results = new ArrayList<>();
 
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
@@ -49,17 +49,18 @@ public class CLIguanaInterpreter {
 		for (int i = 0; i < warmupCount; i++) {
 			parser = ParserFactory.newParser(grammar, input);
 			parser.parse(input, grammarGraph, startSymbol);
-			waitForGC();
+//			waitForGC();
 		}
-
+		
 		if (runCount == 1) {
 			parser = ParserFactory.newParser(grammar, input);
-			results.add(parser.parse(input, grammarGraph, startSymbol));			
+			results.add(parser.parse(input, grammarGraph, startSymbol));
+//			Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", results.get(0).asParseSuccess().getSPPFNode(), grammarGraph, input);
 		} else {
 			for (int i = 0; i < runCount; i++) {
 				parser = ParserFactory.newParser(grammar, input);
 				results.add(parser.parse(input, grammarGraph, startSymbol));
-				waitForGC();
+//				waitForGC();
 			}			
 		}
 

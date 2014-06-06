@@ -15,7 +15,6 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
-import org.jgll.grammar.exception.GrammarValidationException;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
@@ -97,11 +96,6 @@ public class GrammarGraphBuilder implements Serializable {
 		this.grammar = grammar;
 		this.intermediateNodeIds = intermediateNodeIds;;
 
-		Set<RuntimeException> exceptions = grammar.validate();
-		if (!exceptions.isEmpty()) {
-			throw new GrammarValidationException(exceptions);
-		}
-		
 		headGrammarSlots = new ArrayList<>();
 		nonterminalsMap = new HashMap<>();
 		
