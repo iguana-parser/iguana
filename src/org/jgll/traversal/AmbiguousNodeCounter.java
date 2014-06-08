@@ -69,8 +69,10 @@ public class AmbiguousNodeCounter implements SPPFVisitor {
 			visitedNodes.add(node);
 			
 			if (node.isAmbiguous()) {
-//				System.out.println(node);
-//				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", node, grammarGraph, input);
+				System.out.println(String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()),
+																 node.getLeftExtent(),
+																 node.getRightExtent()));
+				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", node, grammarGraph, input);
 				count++;
 			}
 			
