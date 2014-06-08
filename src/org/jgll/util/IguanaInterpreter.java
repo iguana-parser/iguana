@@ -1,6 +1,6 @@
 package org.jgll.util;
 
-import java.net.URI;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -12,7 +12,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 
-public class CLIguanaInterpreter {
+public class IguanaInterpreter {
 
 	private static final int DEFAULT_WARMUP_COUNT = 0;
 	private static final int DEFAULT_RUN_COUNT = 1;
@@ -27,7 +27,7 @@ public class CLIguanaInterpreter {
 
 	private final Grammar grammar;
 
-	public CLIguanaInterpreter(Grammar grammar, Input input, String startSymbol, int warmupCount, int runCount) {
+	public IguanaInterpreter(Grammar grammar, Input input, String startSymbol, int warmupCount, int runCount) {
 
 		if (warmupCount < DEFAULT_WARMUP_COUNT) throw new IllegalArgumentException("Warmup count should be >= " + DEFAULT_WARMUP_COUNT);
 		if (runCount < DEFAULT_WARMUP_COUNT) throw new IllegalArgumentException("Run count should be >= " + DEFAULT_RUN_COUNT);
@@ -116,15 +116,15 @@ public class CLIguanaInterpreter {
 	}
 
 	public static void main(String[] args) {
-		String grammarPath = "file:///Users/aliafroozeh/java";
-		String inputPath = "/Users/aliafroozeh/test.java";
-		String startSymbol = "start[CompilationUnit]";
+		String grammarPath = args[0];
+		String inputPath = args[1];
+		String startSymbol = args[2];
 		int runCount = 1;
 		int warmupCount = 0;
 		try {
 			System.out.println("Parsing " + inputPath + "...");
-			Grammar grammar = GrammarUtil.load(URI.create(grammarPath));
-			CLIguanaInterpreter test = new CLIguanaInterpreter(grammar, Input.fromPath(inputPath), startSymbol, warmupCount, runCount);
+			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
+			IguanaInterpreter test = new IguanaInterpreter(grammar, Input.fromPath(inputPath), startSymbol, warmupCount, runCount);
 			test.printResult(test.run());
 		} catch (Exception e) {
 			e.printStackTrace();

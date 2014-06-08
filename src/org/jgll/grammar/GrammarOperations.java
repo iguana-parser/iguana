@@ -410,6 +410,4 @@ public class GrammarOperations {
 		
 		return reachabilityGraph;
 	}
-	
-	
 }
