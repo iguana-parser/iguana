@@ -1,7 +1,11 @@
 package org.jgll.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -10,8 +14,10 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.GLLParser;
@@ -144,10 +150,33 @@ public class IguanaInterpreter {
                 .withDescription("The input file")
                 .hasArg()
                 .create("i"));
+		
+		options.addOption(OptionBuilder.withLongOpt("dir")
+                .withDescription("The directory to search for files")
+                .hasArg()
+                .create("d"));
+		
+		options.addOption(OptionBuilder.withLongOpt("ext")
+                .withDescription("The file extension name to search")
+                .hasArg()
+                .create("e"));
+		
+		options.addOption(OptionBuilder.withLongOpt("warmup")
+                .withDescription("The warmup count")
+                .hasArg()
+                .create("w"));
+		
+		options.addOption(OptionBuilder.withLongOpt("run")
+                .withDescription("The run count")
+                .hasArg()
+                .create("r"));
 
 		String grammarPath = null;
-		String inputPath = null;
 		String startSymbol = null;
+		String inputDir = null;
+		
+		List<Input> inputs = new ArrayList<>();
+		
 		int runCount = 1;
 		int warmupCount = 0;
 		
@@ -158,10 +187,36 @@ public class IguanaInterpreter {
 	        	grammarPath = line.getOptionValue("g");
 	        }
 	        if (line.hasOption("s")) {
-	        	inputPath = line.getOptionValue("s");
+	        	startSymbol = line.getOptionValue("s");
 	        }
+
 	        if (line.hasOption("i")) {
-	        	inputPath = line.getOptionValue("i");
+	        	String inputPath = line.getOptionValue("i");
+	        	try {
+					inputs.add(Input.fromPath(inputPath));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	        } else if (line.hasOption("d")) {
+	        	inputDir = line.getOptionValue("d");
+	        	
+	        	if (!line.hasOption("e")) {
+	        		System.out.println("File extension is not specified.");
+	        		System.exit(1);
+	        	} else {
+	        		String ext = line.getOptionValue("e");
+	        		@SuppressWarnings("rawtypes")
+					Collection files = FileUtils.listFiles(new File(inputDir), new String[] {ext}, true);
+	        		@SuppressWarnings("rawtypes")
+					Iterator it = files.iterator();
+	        		while(it.hasNext()) {
+	        			try {
+							inputs.add(Input.fromFile((File) it.next()));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+	        		}
+	        	}
 	        }
 	    }
 		catch (ParseException e) {
@@ -169,10 +224,12 @@ public class IguanaInterpreter {
 		}
 		
 		try {
-			System.out.println("Parsing " + inputPath + "...");
-			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
-			IguanaInterpreter test = new IguanaInterpreter(grammar, Input.fromPath(inputPath), startSymbol, warmupCount, runCount);
-			test.printResult(test.run());
+			for (Input input : inputs) {
+				Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
+				System.out.println("Parsing " + input.getURI() + "...");
+				IguanaInterpreter test = new IguanaInterpreter(grammar, input, startSymbol, warmupCount, runCount);
+				test.printResult(test.run());				
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

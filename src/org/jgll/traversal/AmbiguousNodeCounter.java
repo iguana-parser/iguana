@@ -12,22 +12,18 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 
 public class AmbiguousNodeCounter implements SPPFVisitor {
 
 	private int count;
 	
+	private Set<SPPFNode> ambiguousNodes;
+	
 	private Set<SPPFNode> visitedNodes;
 
-	private GrammarGraph grammarGraph;
-
-	private Input input;
-	
 	public AmbiguousNodeCounter(GrammarGraph grammarGraph, Input input) {
-		this.grammarGraph = grammarGraph;
-		this.input = input;
 		visitedNodes = new HashSet<>();
+		ambiguousNodes = new HashSet<>();
 	}
 
 	@Override
@@ -69,10 +65,7 @@ public class AmbiguousNodeCounter implements SPPFVisitor {
 			visitedNodes.add(node);
 			
 			if (node.isAmbiguous()) {
-				System.out.println(String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()),
-																 node.getLeftExtent(),
-																 node.getRightExtent()));
-				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", node, grammarGraph, input);
+				ambiguousNodes.add(node);
 				count++;
 			}
 			
@@ -80,6 +73,10 @@ public class AmbiguousNodeCounter implements SPPFVisitor {
 				child.accept(this);
 			}
 		}
+	}
+	
+	public Set<SPPFNode> getAmbiguousNodes() {
+		return ambiguousNodes;
 	}
 	
 	public int getCount() {

@@ -86,6 +86,10 @@ public class Input {
 	public static Input fromPath(String path) throws IOException {
 		return new Input(convert(readTextFromFile(path)), URI.create("file:///" + path));
 	}
+	
+	public static Input fromFile(File file) throws IOException {
+		return new Input(convert(readTextFromFile(file)), file.toURI());
+	}
 
 	private Input(int[] input, URI uri) {
 		this.input = input;
