@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.GLLParser;
@@ -115,12 +121,53 @@ public class IguanaInterpreter {
  						results.get(0).asParseSuccess().getParseStatistics().getAmbiguitiesCount()));
 	}
 
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
-		String grammarPath = args[0];
-		String inputPath = args[1];
-		String startSymbol = args[2];
+		
+		Options options = new Options();
+		
+		options.addOption( "v", "verbose", false, "run verbosely." );
+		
+		options.addOption(OptionBuilder.withLongOpt("grammar")
+		                  .withDescription("The grammar file")
+		                  .hasArg()
+		                  .isRequired()
+		                  .create("g"));
+		
+		options.addOption(OptionBuilder.withLongOpt("start")
+                .withDescription("The start symbol")
+                .hasArg()
+                .isRequired()
+                .create("s"));
+
+		options.addOption(OptionBuilder.withLongOpt("input")
+                .withDescription("The input file")
+                .hasArg()
+                .create("i"));
+
+		String grammarPath = null;
+		String inputPath = null;
+		String startSymbol = null;
 		int runCount = 1;
 		int warmupCount = 0;
+		
+		CommandLineParser parser = new BasicParser();
+	    try {
+	        CommandLine line = parser.parse(options, args);
+	        if (line.hasOption("g")) {
+	        	grammarPath = line.getOptionValue("g");
+	        }
+	        if (line.hasOption("s")) {
+	        	inputPath = line.getOptionValue("s");
+	        }
+	        if (line.hasOption("i")) {
+	        	inputPath = line.getOptionValue("i");
+	        }
+	    }
+		catch (ParseException e) {
+			System.out.println(e.getMessage());
+		}
+		
 		try {
 			System.out.println("Parsing " + inputPath + "...");
 			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
