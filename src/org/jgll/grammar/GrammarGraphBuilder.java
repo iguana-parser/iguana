@@ -33,8 +33,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -67,8 +65,6 @@ public class GrammarGraphBuilder implements Serializable {
 	List<RegularExpression> tokens;
 	
 	List<Nonterminal> nonterminals;
-	
-	RunnableAutomaton[] dfas;
 	
 	Set<Nonterminal> ll1SubGrammarNonterminals;
 
@@ -154,7 +150,6 @@ public class GrammarGraphBuilder implements Serializable {
 		log.info("Grammar Graph is composed in %d ms", (end - start) / 1000_000);
 		
 		start = System.nanoTime();
-		createAutomatonsMap();
 		end = System.nanoTime();
 		log.info("Automatons created in %d ms", (end - start) / 1000_000);
 		
@@ -335,32 +330,6 @@ public class GrammarGraphBuilder implements Serializable {
 		}
 
 		return headGrammarSlot;
-	}
-	
-	private void createAutomatonsMap() {
-		dfas = new RunnableAutomaton[tokens.size()];
-		
-		for(RegularExpression regex : tokens) {
-			
-			Integer id = tokenIDMap.get(regex);
-			
-//			if(regex instanceof CharacterClass) {
-//				if(regex.getConditions().isEmpty()) {
-//					CharacterClass charClass = (CharacterClass) regex;
-//					if(charClass.size() == 1) {
-//						Range range = charClass.get(0);
-//						
-//						if(range.getStart() == range.getEnd()) {
-//							Matcher matcher = new CharacterMatcher(range.getStart());
-//							dfas[id] = matcher;
-//							continue;
-//						}
-//					}					
-//				}
-//			}
-			Automaton a = regex.getAutomaton();
-			dfas[id] = a.getRunnableAutomaton();
-		}
 	}
 	
 	private int getTokenID(RegularExpression token) {

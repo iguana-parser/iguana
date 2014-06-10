@@ -7,10 +7,10 @@ public class DefaultRunnableAutomaton implements RunnableAutomaton {
 
 		private static final long serialVersionUID = 1L;
 		
-		private RunnableState state;
+		private final RunnableState startState;
 
 		public DefaultRunnableAutomaton(RunnableState startState) {
-			this.state = startState;
+			this.startState = startState;
 		}
 		
 		public boolean match(Input input) {
@@ -26,7 +26,7 @@ public class DefaultRunnableAutomaton implements RunnableAutomaton {
 
 			int length = 0;
 			
-			RunnableState currentState = state;
+			RunnableState currentState = startState;
 			
 			loop:
 			while (true) {
@@ -63,7 +63,7 @@ public class DefaultRunnableAutomaton implements RunnableAutomaton {
 
 			int length = 0;
 			
-			RunnableState currentState = state;
+			RunnableState currentState = startState;
 			
 			loop:
 			while (true) {

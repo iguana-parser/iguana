@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.jgll.grammar.exception.GrammarValidationException;
 import org.jgll.grammar.exception.NonterminalNotDefinedException;
@@ -49,12 +49,13 @@ public class Grammar implements Serializable {
 				   Map<Nonterminal, Set<RegularExpression>> firstSets,
 				   Map<Nonterminal, Set<RegularExpression>> followSets,
 				   Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
-		this.definitions = new HashMap<>(definitions);
-		this.rules = new ArrayList<>(rules);
-		this.objects = new HashMap<>(objects);
-		this.firstSets = new HashMap<>(firstSets);
-		this.followSets = new HashMap<>(followSets);
-		this.predictionSets = new HashMap<>(predictionSets);
+		
+		this.definitions = Collections.unmodifiableMap(definitions);
+		this.rules = Collections.unmodifiableList(rules);
+		this.objects = Collections.unmodifiableMap(objects);
+		this.firstSets = Collections.unmodifiableMap(firstSets);
+		this.followSets = Collections.unmodifiableMap(followSets);
+		this.predictionSets = Collections.unmodifiableMap(predictionSets);
 	}
 	
 	public Map<Nonterminal, List<List<Symbol>>> getDefinitions() {
@@ -82,27 +83,27 @@ public class Grammar implements Serializable {
 	}
 	
 	public Map<Nonterminal, Set<RegularExpression>> getFirstSets() {
-		return Collections.unmodifiableMap(firstSets);
+		return firstSets;
 	}
 	
 	public Map<Nonterminal, Set<RegularExpression>> getFollowSets() {
-		return Collections.unmodifiableMap(followSets);
+		return followSets;
 	}
 	
 	public Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets() {
-		return Collections.unmodifiableMap(predictionSets);
+		return predictionSets;
 	}
 	
 	public Set<RegularExpression> getFirstSet(Nonterminal nonterminal) {
-		return firstSets.get(nonterminal);
+		return Collections.unmodifiableSet(firstSets.get(nonterminal));
 	}
 	
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
-		return followSets.get(nonterminal);
+		return Collections.unmodifiableSet(followSets.get(nonterminal));
 	}
 	
 	public Set<RegularExpression> getPredictionSet(Nonterminal nonterminal, int alternativeIndex) {
-		return predictionSets.get(nonterminal).get(alternativeIndex);
+		return Collections.unmodifiableSet(predictionSets.get(nonterminal).get(alternativeIndex));
 	}
 	
 	public boolean isNullable(Nonterminal nonterminal) {

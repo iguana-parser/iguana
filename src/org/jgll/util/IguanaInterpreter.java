@@ -2,7 +2,6 @@ package org.jgll.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,7 +13,6 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
@@ -23,6 +21,7 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.SPPFNode;
 
 public class IguanaInterpreter {
 
@@ -118,13 +117,18 @@ public class IguanaInterpreter {
 			sumNanoTime += parseStatistics.getNanoTime();
 			sumUserTime += parseStatistics.getUserTime();
 			sumMemory += parseStatistics.getMemoryUsed();
+			
+			for (SPPFNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
+//				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammar.toGrammarGraph(), input);
+			}
 		}
 
-		System.out.println(String.format("Nano time: %d ms, User time: %d ms, Memory: %d mb, Ambiguities: %d",
+		System.out.println(String.format("Input size: %s, Nano time: %d ms, User time: %d ms, Memory: %d mb, Ambiguities: %d",
+				        results.get(0).asParseSuccess().getParseStatistics().getInput().length(),
 						sumNanoTime / (1000_000 * runCount),
 						sumUserTime / (1000_000 * runCount),
 						sumMemory / runCount,
- 						results.get(0).asParseSuccess().getParseStatistics().getAmbiguitiesCount()));
+ 						results.get(0).asParseSuccess().getParseStatistics().getCountAmbiguousNodes()));
 	}
 
 	@SuppressWarnings("static-access")
@@ -224,8 +228,8 @@ public class IguanaInterpreter {
 		}
 		
 		try {
+			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
 			for (Input input : inputs) {
-				Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
 				System.out.println("Parsing " + input.getURI() + "...");
 				IguanaInterpreter test = new IguanaInterpreter(grammar, input, startSymbol, warmupCount, runCount);
 				test.printResult(test.run());				

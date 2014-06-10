@@ -1,7 +1,6 @@
 package org.jgll.grammar.slot;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 
 import org.jgll.grammar.slot.nodecreator.NodeCreator;

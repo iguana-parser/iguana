@@ -59,7 +59,6 @@ public class GSSNode {
 		poppedElements = new ArrayList<>();
 		addedPoppedElements = new HashSet<>();
 		gssEdges = new HashSet<>();
-		
 		descriptors = new HashSet<>();
 		
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
@@ -153,7 +152,11 @@ public class GSSNode {
 	}
 
 	public void clearDescriptors() {
-		descriptors.clear();
+		children.clear();;
+		poppedElements.clear();;
+		addedPoppedElements.clear();
+		gssEdges.clear();
+		descriptors.clear();;
 	}
 
 }

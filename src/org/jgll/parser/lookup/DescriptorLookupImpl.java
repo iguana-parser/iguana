@@ -18,9 +18,7 @@ public class DescriptorLookupImpl implements DescriptorLookup {
 	
 	public DescriptorLookupImpl(GrammarGraph grammar, Input input) {
 		long start = System.nanoTime();
-
 		descriptorsStack = new ArrayDeque<>();
-
 		long end = System.nanoTime();
 		log.info("Descriptor lookup initialization: %d ms", (end - start) / 1000_000);
 	}

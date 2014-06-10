@@ -1,11 +1,10 @@
 package org.jgll.sppf;
 
 import java.util.Iterator;
+import java.util.Set;
 
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.traversal.AmbiguousNodeCounter;
+import org.jgll.traversal.AmbiguousNodesVisitor;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.Input;
 
 /**
  * An SPPF node is a node in an Shared Packed Parse Forest. This data structure
@@ -59,10 +58,10 @@ public abstract class SPPFNode {
 		this.visited = visited;
 	}
 	
-	public int getCountAmbiguousNodes(GrammarGraph grammarGraph, Input input) {
-		AmbiguousNodeCounter visitor = new AmbiguousNodeCounter(grammarGraph, input);
+	public Set<NonPackedNode> getAmbiguousNodes() {
+		AmbiguousNodesVisitor visitor = new AmbiguousNodesVisitor();
 		accept(visitor);
-		return visitor.getCount();
+		return visitor.getAmbiguousNodes();
 	}
 	
 	/**

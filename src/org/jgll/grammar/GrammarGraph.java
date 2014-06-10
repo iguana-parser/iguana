@@ -3,6 +3,7 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -65,21 +66,17 @@ public class GrammarGraph implements Serializable {
 	
 	private List<RegularExpression> tokens;
 	
-	private RunnableAutomaton[] dfas;
-	
-	private Map<Nonterminal, Set<RegularExpression>> firstSets;
-	
 	private Map<Nonterminal, Set<RegularExpression>> followSets;
 	
 	private Set<Nonterminal> ll1SubGrammarNonterminals;
-	
-	private Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
 	
 	private Map<String, Integer> nonterminalIds;
 	
 	private Map<Tuple<Nonterminal, List<Symbol>>, Integer> packedNodeIds;
 	
 	private List<Nonterminal> nonterminals;
+	
+	private List<RunnableAutomaton> runnableAutomatons;
 	
 	private Object[][] objects;
 	
@@ -99,7 +96,6 @@ public class GrammarGraph implements Serializable {
 		this.averageDescriptorsAtInput = builder.averageDescriptors;
 		this.stDevDescriptors = (int) builder.stDevDescriptors;
 		this.tokens = builder.tokens;
-		this.dfas = builder.dfas;
 		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
 		
 		this.objects = builder.objects;
@@ -117,6 +113,11 @@ public class GrammarGraph implements Serializable {
 		grammar = builder.grammar;
 		intermediateNodeIds = builder.intermediateNodeIds;
 		packedNodeIds = builder.packedNodeIds;
+		
+		runnableAutomatons = new ArrayList<>();
+		for (RegularExpression token : tokens) {
+			runnableAutomatons.add(token.getAutomaton().getRunnableAutomaton());
+		}
 		
 		printGrammarStatistics();
 	}
@@ -234,7 +235,7 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public RunnableAutomaton getAutomaton(int index) {
-		return dfas[index];
+		return runnableAutomatons.get(index);
 	}
 	
 	public int getCountTokens() {
