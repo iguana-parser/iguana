@@ -229,13 +229,10 @@ public class IguanaInterpreter {
 		
 		try {
 			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
-			for (int i = 0; i < 2; i++) {
-				grammar.toGrammarGraph();
-//				for (Input input : inputs) {
-//					System.out.println("Parsing " + input.getURI() + "...");
-//					IguanaInterpreter test = new IguanaInterpreter(grammar, input, startSymbol, warmupCount, runCount);
-//					test.printResult(test.run());				
-//				}
+			for (Input input : inputs) {
+				System.out.println("Parsing " + input.getURI() + "...");
+				IguanaInterpreter test = new IguanaInterpreter(grammar, input, startSymbol, warmupCount, runCount);
+				test.printResult(test.run());				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

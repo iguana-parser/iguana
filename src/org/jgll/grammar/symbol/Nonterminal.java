@@ -24,13 +24,13 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	public boolean isEbnfList() {
-		if(ebnfList == true){
+		if (ebnfList == true) {
 			return true;
-		} else{
+		} else {
 			if(name.startsWith("List")) {
 				return true;
 			}
-		} 
+		}
 
 		return false;
 	}
@@ -97,7 +97,6 @@ public class Nonterminal extends AbstractSymbol {
 		public Nonterminal build() {
 			return new Nonterminal(name, index, ebnfList, conditions, label, object);
 		}
-		
 	}
 
 	@Override

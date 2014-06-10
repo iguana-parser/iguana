@@ -29,11 +29,7 @@ public class Rule implements Serializable {
 	private final Serializable object;
 	
 	public Rule(Nonterminal head) {
-		this(head, new ArrayList<Symbol>(), null);
-	}
-	
-	private Rule(Builder builder) {
-		this(builder.head, builder.body);
+		this(head, Collections.<Symbol>emptyList(), null);
 	}
 	
 	public Rule(Nonterminal head, Symbol...body) {
@@ -57,7 +53,7 @@ public class Rule implements Serializable {
 					throw new IllegalArgumentException("Body of a rule cannot have null symbols.");
 				}
 			}	
-			this.body = new ArrayList<>(body);
+			this.body = Collections.unmodifiableList(body);
 		} else {
 			this.body = null;
 		}
@@ -71,7 +67,7 @@ public class Rule implements Serializable {
 	}
 	
 	public List<Symbol> getBody() {
-		return Collections.unmodifiableList(body);
+		return body;
 	}
 	
 	public int size() {
@@ -133,8 +129,10 @@ public class Rule implements Serializable {
 	
 	
 	public static class Builder {
+		
 		private Nonterminal head;
 		private List<Symbol> body;
+		private Serializable object;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -146,8 +144,13 @@ public class Rule implements Serializable {
 			return this;
 		}
 		
+		public Builder setObject(Serializable object) {
+			this.object = object;
+			return this;
+		}
+		
 		public Rule build() {
-			return new Rule(this);
+			return new Rule(head, body, object);
 		}
 	}
 }
