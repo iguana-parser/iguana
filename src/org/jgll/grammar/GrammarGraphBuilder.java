@@ -314,6 +314,9 @@ public class GrammarGraphBuilder implements Serializable {
 			ConditionTest popConditionsTest = getPostConditions(popActions);
 			
 			popActions = symbol.getConditions();
+			if (popActions.size() != 0) {
+			   System.out.println(popActions);
+			}
 			
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 			return grammarSlotFactory.createNonterminalGrammarSlot(body, symbolIndex, intermediateNodeIds.getSlotId(rule, symbolIndex), getSlotName(head, body, symbolIndex), currentSlot, nonterminal, preConditionsTest, popConditionsTest);						

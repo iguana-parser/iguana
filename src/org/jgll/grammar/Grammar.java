@@ -50,7 +50,16 @@ public class Grammar implements Serializable {
 				   Map<Nonterminal, Set<RegularExpression>> followSets,
 				   Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
-		this.definitions = Collections.unmodifiableMap(definitions);
+		Map<Nonterminal, List<List<Symbol>>> tmp = new HashMap<>();
+		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
+			List<List<Symbol>> tmpList = new ArrayList<>();
+			for (List<Symbol> list : e.getValue()) {
+				tmpList.add(Collections.unmodifiableList(list));
+			}
+			tmp.put(e.getKey(), Collections.unmodifiableList(tmpList));
+		}
+		this.definitions = Collections.unmodifiableMap(tmp);
+		
 		this.rules = Collections.unmodifiableList(rules);
 		this.objects = Collections.unmodifiableMap(objects);
 		this.firstSets = Collections.unmodifiableMap(firstSets);

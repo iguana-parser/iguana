@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public abstract class AbstractSymbol implements Symbol {
 		this.name = name;
 		this.label = label;
 		this.object = object;
-		this.conditions = new HashSet<>(conditions);
+		this.conditions = Collections.unmodifiableSet(conditions);
 	}
 	
 	@Override

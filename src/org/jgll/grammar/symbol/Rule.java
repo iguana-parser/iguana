@@ -3,9 +3,9 @@ package org.jgll.grammar.symbol;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
 /**
@@ -27,8 +27,6 @@ public class Rule implements Serializable {
 	 * This object can be accessed via the getObject() method of a nonterminal symbol node.
 	 */
 	private final Serializable object;
-	
-	private List<Condition> conditions;
 	
 	public Rule(Nonterminal head) {
 		this(head, new ArrayList<Symbol>(), null);
@@ -65,16 +63,15 @@ public class Rule implements Serializable {
 		}
 		
 		this.object = object;
-		
-		this.conditions = new ArrayList<>();
 	}
+		
 		
 	public Nonterminal getHead() {
 		return head;
 	}
 	
 	public List<Symbol> getBody() {
-		return body;
+		return Collections.unmodifiableList(body);
 	}
 	
 	public int size() {
@@ -85,15 +82,6 @@ public class Rule implements Serializable {
 		return object;
 	}
 		
-	public Rule addCondition(Condition condition) {
-		conditions.add(condition);
-		return this;
-	}
-	
-	public Iterable<Condition> getConditions() {
-		return conditions;
-	}
-	
 	/**
 	 * Returns the symbols at the given  
 	 * 
