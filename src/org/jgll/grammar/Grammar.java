@@ -50,6 +50,7 @@ public class Grammar implements Serializable {
 				   Map<Nonterminal, Set<RegularExpression>> followSets,
 				   Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
+		// Forcing all nested collectios to be immutable
 		Map<Nonterminal, List<List<Symbol>>> tmp = new HashMap<>();
 		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
 			List<List<Symbol>> tmpList = new ArrayList<>();
@@ -62,9 +63,28 @@ public class Grammar implements Serializable {
 		
 		this.rules = Collections.unmodifiableList(rules);
 		this.objects = Collections.unmodifiableMap(objects);
-		this.firstSets = Collections.unmodifiableMap(firstSets);
-		this.followSets = Collections.unmodifiableMap(followSets);
-		this.predictionSets = Collections.unmodifiableMap(predictionSets);
+		
+		Map<Nonterminal, Set<RegularExpression>> tmpFirstSets= new HashMap<>();
+		for (Entry<Nonterminal, Set<RegularExpression>> e : firstSets.entrySet()) {
+			tmpFirstSets.put(e.getKey(), Collections.unmodifiableSet(e.getValue()));
+		}
+		this.firstSets = Collections.unmodifiableMap(tmpFirstSets);
+		
+		Map<Nonterminal, Set<RegularExpression>> tmpFollowSets= new HashMap<>();
+		for (Entry<Nonterminal, Set<RegularExpression>> e : followSets.entrySet()) {
+			tmpFollowSets.put(e.getKey(), Collections.unmodifiableSet(e.getValue()));
+		}
+		this.followSets = Collections.unmodifiableMap(tmpFollowSets);
+		
+		Map<Nonterminal, List<Set<RegularExpression>>> tmpPredictionSets = new HashMap<>();
+		for (Entry <Nonterminal, List<Set<RegularExpression>>> e : predictionSets.entrySet()) {
+			List<Set<RegularExpression>> tmpList = new ArrayList<>();
+			for (Set<RegularExpression> set : e.getValue()) {
+				tmpList.add(Collections.unmodifiableSet(set));
+			}
+			tmpPredictionSets.put(e.getKey(), Collections.unmodifiableList(tmpList));
+		}
+		this.predictionSets = Collections.unmodifiableMap(tmpPredictionSets);
 	}
 	
 	public Map<Nonterminal, List<List<Symbol>>> getDefinitions() {
@@ -104,15 +124,15 @@ public class Grammar implements Serializable {
 	}
 	
 	public Set<RegularExpression> getFirstSet(Nonterminal nonterminal) {
-		return Collections.unmodifiableSet(firstSets.get(nonterminal));
+		return firstSets.get(nonterminal);
 	}
 	
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
-		return Collections.unmodifiableSet(followSets.get(nonterminal));
+		return followSets.get(nonterminal);
 	}
 	
 	public Set<RegularExpression> getPredictionSet(Nonterminal nonterminal, int alternativeIndex) {
-		return Collections.unmodifiableSet(predictionSets.get(nonterminal).get(alternativeIndex));
+		return predictionSets.get(nonterminal).get(alternativeIndex);
 	}
 	
 	public boolean isNullable(Nonterminal nonterminal) {

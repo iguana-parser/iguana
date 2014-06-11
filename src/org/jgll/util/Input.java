@@ -22,7 +22,7 @@ import org.jgll.traversal.PositionInfo;
  */
 public class Input {
 
-	private int[] input;
+	private int[] characters;
 
 	/**
 	 * This array keeps the line and column information associated with each input index.
@@ -92,18 +92,18 @@ public class Input {
 	}
 
 	private Input(int[] input, URI uri) {
-		this.input = input;
+		this.characters = input;
 		this.uri = uri;
 		lineColumns = new LineColumn[input.length];
 		calculateLineLengths();
 	}
 	
 	public int charAt(int index) {
-		return input[index];
+		return characters[index];
 	}
 
 	public int length() {
-		return input.length;
+		return characters.length;
 	}
 	
 	/**
@@ -146,7 +146,7 @@ public class Input {
 		int length = end - start + 1;
 		int[] subInput = new int[length];
 		
-		System.arraycopy(input, start, subInput, 0, length);
+		System.arraycopy(characters, start, subInput, 0, length);
 		
 		return subInput;
 	}
@@ -162,7 +162,7 @@ public class Input {
 	 	
 		int i = 0;
 		while(i < target.length) {
-			if(target[i] != input[start + i]) {
+			if(target[i] != characters[start + i]) {
 				return false;
 			}
 			i++;
@@ -187,7 +187,7 @@ public class Input {
 		int i = target.length - 1;
 		int j = start - 1;
 		while(i >= 0) {
-			if(target[i] != input[j]) {
+			if(target[i] != characters[j]) {
 				return false;
 			}
 			i--;
@@ -205,7 +205,7 @@ public class Input {
 		
 		int i = 0;
 		while(i < target.length) {
-			if(target[i] != input[from + i]) {
+			if(target[i] != characters[from + i]) {
 				return false;
 			}
 			i++;
@@ -249,7 +249,7 @@ public class Input {
 		
 		Input other = (Input) obj;
 		
-		return Arrays.equals(input, other.input);
+		return Arrays.equals(characters, other.characters);
 	}
 	
 	public PositionInfo getPositionInfo(int leftExtent, int rightExtent) {
@@ -269,18 +269,18 @@ public class Input {
 		int columnNumber = 1;
 
 		// Empty input: only the end of line symbol
-		if(input.length == 1) {
+		if(characters.length == 1) {
 			lineColumns[0] = new LineColumn(lineNumber, columnNumber);
 			return;
 		}
 		
-		for (int i = 0; i < input.length; i++) {
+		for (int i = 0; i < characters.length; i++) {
 			lineColumns[i] = new LineColumn(lineNumber, columnNumber);
-			if (input[i] == '\n') {
+			if (characters[i] == '\n') {
 				lineCount++;
 				lineNumber++;
 				columnNumber = 1;
-			} else if (input[i] == '\r') {
+			} else if (characters[i] == '\r') {
 				columnNumber = 1;
 			} else {
 				columnNumber++;
@@ -338,7 +338,7 @@ public class Input {
 		List<Character> charList = new ArrayList<>();
 		
 		for(int i = start; i < end; i++) {
-			char[] chars = Character.toChars(input[i]);
+			char[] chars = Character.toChars(characters[i]);
 			for(char c : chars) {
 				charList.add(c);
 			}			
@@ -354,7 +354,7 @@ public class Input {
 	
 	@Override
 	public String toString() {
-		return subString(0, input.length);
+		return subString(0, characters.length);
 	}
 	
 	public int getLineCount() {
@@ -371,7 +371,11 @@ public class Input {
 	}
 
 	public boolean isEndOfLine(int currentInputIndex) {
-		return input[currentInputIndex] == 0 || lineColumns[currentInputIndex + 1].columnNumber == 1;
+		return characters[currentInputIndex] == 0 || lineColumns[currentInputIndex + 1].columnNumber == 1;
+	}
+	
+	public int[] getCharacters() {
+		return characters;
 	}
 
 	public boolean isStartOfLine(int currentInputIndex) {

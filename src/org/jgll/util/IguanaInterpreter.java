@@ -55,6 +55,7 @@ public class IguanaInterpreter {
 		List<ParseResult> results = new ArrayList<>();
 
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
+
 		GLLParser parser = null;
 
 		for (int i = 0; i < warmupCount; i++) {
@@ -233,7 +234,7 @@ public class IguanaInterpreter {
 				System.out.println("Parsing " + input.getURI() + "...");
 				IguanaInterpreter test = new IguanaInterpreter(grammar, input, startSymbol, warmupCount, runCount);
 				test.printResult(test.run());				
-			}
+			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -15,11 +15,11 @@ public class ArrayPredictionTest implements PredictionTest {
 	 * A mapping from an input value to a set of alternatives of this nonterminal
 	 * that can be predicted for that input value.
 	 */
-	private Set<Integer>[] predictionMap;
+	private final Set<Integer>[] predictionMap;
 
-	private int min;
+	private final int min;
 
-	private int max;
+	private final int max;
 	
 	@SuppressWarnings("unchecked")
 	public ArrayPredictionTest(List<Set<RegularExpression>> predictionSets, int countAlternates, int min, int max) {
