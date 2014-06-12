@@ -3,7 +3,6 @@ package org.jgll.traversal;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
@@ -11,7 +10,6 @@ import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
-import org.jgll.util.Input;
 
 public class AmbiguousNodesVisitor implements SPPFVisitor {
 

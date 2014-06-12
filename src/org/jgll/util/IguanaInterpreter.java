@@ -1,7 +1,6 @@
 package org.jgll.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,43 +17,19 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
 
 public class IguanaInterpreter {
 
-	private static final int DEFAULT_WARMUP_COUNT = 0;
-	private static final int DEFAULT_RUN_COUNT = 1;
-
-	private int warmupCount;
-
-	private int runCount;
-
-	private final Input input;
-
-	private final String startSymbol;
-
-	private final Grammar grammar;
-
-	public IguanaInterpreter(Grammar grammar, Input input, String startSymbol, int warmupCount, int runCount) {
-
-		if (warmupCount < DEFAULT_WARMUP_COUNT) throw new IllegalArgumentException("Warmup count should be >= " + DEFAULT_WARMUP_COUNT);
-		if (runCount < DEFAULT_WARMUP_COUNT) throw new IllegalArgumentException("Run count should be >= " + DEFAULT_RUN_COUNT);
-
-		this.grammar = grammar;
-		this.input = input;
-		this.startSymbol = startSymbol;
-		this.warmupCount = warmupCount;
-		this.runCount = runCount;
-	}
-
-	public List<ParseResult> run() {
+	private static List<ParseResult> run(Grammar grammar, GrammarGraph grammarGraph, Input input, 
+			                             String startSymbol, int warmupCount, int runCount) {
 		
 		List<ParseResult> results = new ArrayList<>();
-
-		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 
 		GLLParser parser = null;
 
@@ -101,7 +76,7 @@ public class IguanaInterpreter {
 		}
 	}
 
-	public void printResult(List<ParseResult> results) {
+	private static void printResult(List<ParseResult> results, int runCount, GrammarGraph grammarGraph, Input input) {
 
 		long sumNanoTime = 0;
 		long sumUserTime = 0;
@@ -120,17 +95,26 @@ public class IguanaInterpreter {
 			sumMemory += parseStatistics.getMemoryUsed();
 			
 			for (SPPFNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
-//				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammar.toGrammarGraph(), input);
+//				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammarGraph, input);
 			}
 		}
-
+		
+		ParseStatistics parseStatistics = results.get(0).asParseSuccess().getParseStatistics();
 		System.out.println(String.format("Input size: %s, Nano time: %d ms, User time: %d ms, Memory: %d mb, Ambiguities: %d",
-				        results.get(0).asParseSuccess().getParseStatistics().getInput().length(),
+				        parseStatistics.getInput().length(),
 						sumNanoTime / (1000_000 * runCount),
 						sumUserTime / (1000_000 * runCount),
 						sumMemory / runCount,
- 						results.get(0).asParseSuccess().getParseStatistics().getCountAmbiguousNodes()));
-	}
+ 						parseStatistics.getCountAmbiguousNodes()));
+		
+		for (NonPackedNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
+			Nonterminal nt = grammarGraph.getNonterminalById(ambiguousNode.getId());
+			int line = input.getLineNumber(ambiguousNode.getLeftExtent());
+			int column = input.getColumnNumber(ambiguousNode.getLeftExtent());
+			System.out.println(String.format("Node: %s, length: %d, line: %d, column: %d", nt, 
+					ambiguousNode.getRightExtent() - ambiguousNode.getLeftExtent(), line, column));
+		}
+ 	}
 
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
@@ -222,11 +206,12 @@ public class IguanaInterpreter {
 		
 		try {
 			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
+			GrammarGraph grammarGraph = grammar.toGrammarGraph();
 			for (String inputPath : inputPaths) {
 				Input input = Input.fromPath(inputPath);
 				System.out.println("Parsing " + input.getURI() + "...");
-				IguanaInterpreter test = new IguanaInterpreter(grammar, input, startSymbol, warmupCount, runCount);
-				test.printResult(test.run());				
+				List<ParseResult> results = IguanaInterpreter.run(grammar, grammarGraph, input, startSymbol, warmupCount, runCount);
+				printResult(results, runCount, grammarGraph, input);
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
