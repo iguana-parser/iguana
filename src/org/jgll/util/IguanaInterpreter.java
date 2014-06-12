@@ -180,7 +180,7 @@ public class IguanaInterpreter {
 		String startSymbol = null;
 		String inputDir = null;
 		
-		List<Input> inputs = new ArrayList<>();
+		List<String> inputPaths = new ArrayList<>();
 		
 		int runCount = 1;
 		int warmupCount = 0;
@@ -197,11 +197,7 @@ public class IguanaInterpreter {
 
 	        if (line.hasOption("i")) {
 	        	String inputPath = line.getOptionValue("i");
-	        	try {
-					inputs.add(Input.fromPath(inputPath));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				inputPaths.add(inputPath);
 	        } else if (line.hasOption("d")) {
 	        	inputDir = line.getOptionValue("d");
 	        	
@@ -215,11 +211,7 @@ public class IguanaInterpreter {
 	        		@SuppressWarnings("rawtypes")
 					Iterator it = files.iterator();
 	        		while(it.hasNext()) {
-	        			try {
-							inputs.add(Input.fromFile((File) it.next()));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						inputPaths.add(((File) it.next()).getPath());
 	        		}
 	        	}
 	        }
@@ -230,7 +222,8 @@ public class IguanaInterpreter {
 		
 		try {
 			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
-			for (Input input : inputs) {
+			for (String inputPath : inputPaths) {
+				Input input = Input.fromPath(inputPath);
 				System.out.println("Parsing " + input.getURI() + "...");
 				IguanaInterpreter test = new IguanaInterpreter(grammar, input, startSymbol, warmupCount, runCount);
 				test.printResult(test.run());				
