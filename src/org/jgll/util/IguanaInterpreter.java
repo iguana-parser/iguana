@@ -120,7 +120,7 @@ public class IguanaInterpreter {
 			sumMemory += parseStatistics.getMemoryUsed();
 			
 			for (SPPFNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
-				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammar.toGrammarGraph(), input);
+//				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammar.toGrammarGraph(), input);
 			}
 		}
 
@@ -197,7 +197,7 @@ public class IguanaInterpreter {
 
 	        if (line.hasOption("i")) {
 	        	String inputPath = line.getOptionValue("i");
-	        	inputPaths.add(inputPath);
+				inputPaths.add(inputPath);
 	        } else if (line.hasOption("d")) {
 	        	inputDir = line.getOptionValue("d");
 	        	
@@ -211,7 +211,7 @@ public class IguanaInterpreter {
 	        		@SuppressWarnings("rawtypes")
 					Iterator it = files.iterator();
 	        		while(it.hasNext()) {
-	        			inputPaths.add(((File) it.next()).getPath());
+						inputPaths.add(((File) it.next()).getPath());
 	        		}
 	        	}
 	        }
