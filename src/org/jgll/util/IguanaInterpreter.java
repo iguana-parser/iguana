@@ -3,8 +3,10 @@ package org.jgll.util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -150,6 +152,11 @@ public class IguanaInterpreter {
                 .hasArg()
                 .create("e"));
 		
+		options.addOption(OptionBuilder.withLongOpt("ignore")
+                .withDescription("The files to be ignored")
+                .hasArgs()
+                .create());
+		
 		options.addOption(OptionBuilder.withLongOpt("warmup")
                 .withDescription("The warmup count")
                 .hasArg()
@@ -164,7 +171,8 @@ public class IguanaInterpreter {
 		String startSymbol = null;
 		String inputDir = null;
 		
-		List<String> inputPaths = new ArrayList<>();
+		Set<String> inputPaths = new HashSet<>();
+		Set<String> ignorePaths = new HashSet<>();
 		
 		int runCount = 1;
 		int warmupCount = 0;
@@ -198,6 +206,12 @@ public class IguanaInterpreter {
 						inputPaths.add(((File) it.next()).getPath());
 	        		}
 	        	}
+	        	
+	        	if (line.hasOption("ignore")) {
+	        		for (String option : line.getOptionValues("ignore")) {
+	        			ignorePaths.add(option);
+	        		}
+	        	}
 	        }
 	    }
 		catch (ParseException e) {
@@ -207,11 +221,17 @@ public class IguanaInterpreter {
 		try {
 			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
 			GrammarGraph grammarGraph = grammar.toGrammarGraph();
-			for (String inputPath : inputPaths) {
-				Input input = Input.fromPath(inputPath);
-				System.out.println("Parsing " + input.getURI() + "...");
-				List<ParseResult> results = IguanaInterpreter.run(grammar, grammarGraph, input, startSymbol, warmupCount, runCount);
-				printResult(results, runCount, grammarGraph, input);
+			
+			for (String inputPath : inputPaths) {				
+				
+				for (String s : ignorePaths) {
+					if (!inputPath.endsWith(s)) {
+						Input input = Input.fromPath(inputPath);
+						System.out.println("Parsing " + input.getURI() + "...");
+						List<ParseResult> results = IguanaInterpreter.run(grammar, grammarGraph, input, startSymbol, warmupCount, runCount);
+						printResult(results, runCount, grammarGraph, input);
+					}
+				}
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
