@@ -1,16 +1,17 @@
 package org.jgll.util;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.symbol.EOF;
 import org.jgll.traversal.PositionInfo;
 
 /**
@@ -36,14 +37,8 @@ public class Input {
 	
 	private URI uri;
 	
-	private static int[] convert(String s) {
-		int[] input = new int[s.length() + 1];
-		for (int i = 0; i < s.length(); i++) {
-			input[i] = s.codePointAt(i);
-		}
-		input[s.length()] = EOF.VALUE;
-
-		return input;
+	public static Input fromString(String s) {
+		return fromCharArray(s.toCharArray(), URI.create("dummy:///"));
 	}
 	
 	public static Input fromChar(char c) {
@@ -71,24 +66,16 @@ public class Input {
 		return new Input(result, uri);
 	}
 
-	public static Input fromString(String s) {
-		return new Input(convert(s), URI.create("dummy:///"));
-	}
-	
-	public static Input fromString(String s, URI uri) {
-		return new Input(convert(s), uri);
-	}
-	
 	public static Input fromIntArray(int[] input, URI uri) {
 		return new Input(input, uri);
 	}
 	
 	public static Input fromPath(String path) throws IOException {
-		return new Input(convert(readTextFromFile(path)), URI.create("file:///" + path));
+		return new Input(readTextFromFile(path), URI.create("file:///" + path));
 	}
 	
 	public static Input fromFile(File file) throws IOException {
-		return new Input(convert(readTextFromFile(file)), file.toURI());
+		return new Input(readTextFromFile(file), file.toURI());
 	}
 
 	private Input(int[] input, URI uri) {
@@ -113,22 +100,37 @@ public class Input {
 	 *            the path to the text file
 	 * @throws IOException
 	 */
-	private static String readTextFromFile(String path) throws IOException {
+	private static int[] readTextFromFile(String path) throws IOException {
 		return readTextFromFile(new File(path));
 	}
 
-	private static String readTextFromFile(File file) throws IOException {
-		StringBuilder sb = new StringBuilder();
+	private static int[] readTextFromFile(File file) throws IOException {
+		List<Integer> input = new ArrayList<>();
 
-		InputStream in = new BufferedInputStream(new FileInputStream(file));
+		Reader in = new BufferedReader(new FileReader(file));
 		int c = 0;
 		while ((c = in.read()) != -1) {
-			sb.append((char) c);
+			if (!Character.isHighSurrogate((char) c)) {
+				input.add(c);
+			} else {
+				int next = 0;
+				if ((next = in.read()) != -1) {
+					input.add(Character.toCodePoint((char)c, (char)next));					
+				}
+			}
 		}
+		
+		input.add(-1);
 
 		in.close();
+		
+		int[] intInput = new int[input.size()];
+		int i = 0;
+		for (Integer v : input) {
+			intInput[i++] = v;
+		}
 
-		return sb.toString();
+		return intInput;
 	}
 
 	public static String read(InputStream is) throws IOException {
