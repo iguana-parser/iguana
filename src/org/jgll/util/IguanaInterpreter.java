@@ -1,5 +1,6 @@
 package org.jgll.util;
 
+import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;

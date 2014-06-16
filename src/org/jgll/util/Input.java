@@ -37,6 +37,10 @@ public class Input {
 	
 	private URI uri;
 	
+	public static Input fromString(String s, URI uri) {
+		return fromCharArray(s.toCharArray(), uri);
+	}
+	
 	public static Input fromString(String s) {
 		return fromCharArray(s.toCharArray(), URI.create("dummy:///"));
 	}
