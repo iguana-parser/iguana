@@ -1,9 +1,14 @@
 package org.jgll.util.unicode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.jgll.grammar.symbol.CharacterClass;
+import org.jgll.grammar.symbol.Range;
 
 /**
  * 
@@ -21,6 +26,17 @@ public class UnicodeUtil {
 	
 	public static Set<Integer> getValuesInCategory(String categoryName) {
 		return categoriesMap.get(categoryName);
+	}
+	
+	public static CharacterClass reverse(Range range) {
+		List<Range> ranges = new ArrayList<>();
+		if(range.getStart() >= 1) {
+			ranges.add(Range.in(1, range.getStart() - 1));
+		}
+		if(range.getEnd() < MAX_UTF32_VAL) {
+			ranges.add(Range.in(range.getEnd() + 1, MAX_UTF32_VAL));
+		}
+		return CharacterClass.from(ranges);
 	}
 	
 	private static Map<Byte, String> categoryNames = new HashMap<>();
@@ -97,7 +113,6 @@ public class UnicodeUtil {
 			}
 			set.add(i);
 	    }
-
 	}
 	
 }

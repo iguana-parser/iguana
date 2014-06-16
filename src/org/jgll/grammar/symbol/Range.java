@@ -2,10 +2,8 @@ package org.jgll.grammar.symbol;
 
 import static org.jgll.regex.automaton.TransitionActionsFactory.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
@@ -14,6 +12,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.unicode.UnicodeUtil;
 
 
 /**
@@ -25,8 +24,6 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int MAX_UTF32_VAL = 0x10FFFF;
-
 	private final int start;
 	
 	private final int end;
@@ -97,14 +94,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 
 	public CharacterClass not() {
-		List<Range> ranges = new ArrayList<>();
-		if(start >= 1) {
-			ranges.add(Range.in(1, start - 1));
-		}
-		if(end < MAX_UTF32_VAL) {
-			ranges.add(Range.in(end + 1, MAX_UTF32_VAL));
-		}
-		return CharacterClass.from(ranges);
+		return UnicodeUtil.reverse(this);
 	}
 
 	@Override
