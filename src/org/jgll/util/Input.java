@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jgll.grammar.symbol.EOF;
 import org.jgll.traversal.PositionInfo;
 
 /**
@@ -48,7 +49,7 @@ public class Input {
 	public static Input fromChar(char c) {
 		int[] input = new int[2];
 		input[0] = c;
-		input[1] = 0;
+		input[1] = EOF.VALUE;
 		return new Input(input, URI.create("dummy:///"));
 	}
 	
@@ -66,7 +67,7 @@ public class Input {
 			}
 		}
 		
-		result[result.length - 1] = 0;
+		result[result.length - 1] = EOF.VALUE;
 		return new Input(result, uri);
 	}
 
@@ -124,7 +125,7 @@ public class Input {
 			}
 		}
 		
-		input.add(-1);
+		input.add(EOF.VALUE);
 
 		in.close();
 		

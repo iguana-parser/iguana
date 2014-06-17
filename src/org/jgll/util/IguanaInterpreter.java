@@ -1,6 +1,9 @@
 package org.jgll.util;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -27,6 +30,7 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.SPPFNode;
 
 public class IguanaInterpreter {
+
 
 	private static List<ParseResult> run(Grammar grammar, GrammarGraph grammarGraph, Input input, 
 			                             String startSymbol, int warmupCount, int runCount) {
@@ -169,28 +173,48 @@ public class IguanaInterpreter {
 
 		String grammarPath = null;
 		String startSymbol = null;
-		String inputDir = null;
-		
-		Set<String> inputPaths = new HashSet<>();
-		Set<String> ignorePaths = new HashSet<>();
+
+		Grammar grammar = null;
+		GrammarGraph grammarGraph = null;
 		
 		int runCount = 1;
 		int warmupCount = 0;
 		
-		CommandLineParser parser = new BasicParser();
+		CommandLineParser commandLineParser = new BasicParser();
+		
 	    try {
-	        CommandLine line = parser.parse(options, args);
+	        CommandLine line = commandLineParser.parse(options, args);
+	        
+	        // Grammar
 	        if (line.hasOption("g")) {
 	        	grammarPath = line.getOptionValue("g");
+				try {
+					grammar = GrammarUtil.load(new File(grammarPath).toURI());
+					grammarGraph = grammar.toGrammarGraph();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 	        }
+	        
+	        // Start symbol
 	        if (line.hasOption("s")) {
 	        	startSymbol = line.getOptionValue("s");
 	        }
 
+	        // Input
 	        if (line.hasOption("i")) {
 	        	String inputPath = line.getOptionValue("i");
-				inputPaths.add(inputPath);
+	        	try {
+					parse(startSymbol, runCount, warmupCount, grammar, grammarGraph, Input.fromPath(inputPath));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 	        } else if (line.hasOption("d")) {
+	    		String inputDir = null;
+	    		
+	    		Set<String> inputPaths = new HashSet<>();
+	    		Set<String> ignorePaths = new HashSet<>();
+	        	
 	        	inputDir = line.getOptionValue("d");
 	        	
 	        	if (!line.hasOption("e")) {
@@ -212,30 +236,53 @@ public class IguanaInterpreter {
 	        			ignorePaths.add(option);
 	        		}
 	        	}
+	        	
+	    		try {
+	    			for (String inputPath : inputPaths) {								
+	    				if (!ignore(ignorePaths, inputPath)) {
+	    					parse(startSymbol, runCount, warmupCount, grammar, grammarGraph, Input.fromPath(inputPath));
+	    				}
+	    			}
+	    		} catch (Exception e) {
+	    			e.printStackTrace();
+	    		}
+	        	
+	        } else {
+	        	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	        	try {
+					String commandLineInput = in.readLine();
+					System.out.println(commandLineInput);
+					parse(startSymbol, runCount, warmupCount, grammar, grammarGraph, Input.fromString(commandLineInput));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 	        }
 	    }
 		catch (ParseException e) {
 			System.out.println(e.getMessage());
 		}
 		
-		try {
-			Grammar grammar = GrammarUtil.load(new File(grammarPath).toURI());
-			GrammarGraph grammarGraph = grammar.toGrammarGraph();
-			
-			for (String inputPath : inputPaths) {				
-				
-				for (String s : ignorePaths) {
-					if (!inputPath.endsWith(s)) {
-						Input input = Input.fromPath(inputPath);
-						System.out.println("Parsing " + input.getURI() + "...");
-						List<ParseResult> results = IguanaInterpreter.run(grammar, grammarGraph, input, startSymbol, warmupCount, runCount);
-						printResult(results, runCount, grammarGraph, input);
-					}
-				}
-			}		
-		} catch (Exception e) {
-			e.printStackTrace();
+	}
+
+	private static void parse(String startSymbol, int runCount,
+ 							  int warmupCount, Grammar grammar, GrammarGraph grammarGraph,
+							  Input input) throws IOException {
+		
+		System.out.println("Parsing " + input.getURI() + "...");
+		List<ParseResult> results = IguanaInterpreter.run(grammar, grammarGraph, input, startSymbol, warmupCount, runCount);
+		printResult(results, runCount, grammarGraph, input);
+	}
+	
+	private static boolean ignore(Set<String> ignorePaths, String inputPath) {
+		if (ignorePaths.isEmpty()) {
+			return false;
 		}
+		for (String s : ignorePaths) {
+			if (!inputPath.endsWith(s)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

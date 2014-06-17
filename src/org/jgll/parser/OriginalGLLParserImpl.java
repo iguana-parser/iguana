@@ -32,7 +32,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		
 		if (gssNode != u0) {
 
-			log.trace("Pop %s, %d, %s", gssNode, inputIndex, node);
+			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 			
 			gssLookup.addToPoppedElements(gssNode, node);
 
