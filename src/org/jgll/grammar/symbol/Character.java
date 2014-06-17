@@ -11,6 +11,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.unicode.UnicodeUtil;
 
 /**
  * 
@@ -55,10 +56,10 @@ public class Character extends AbstractRegularExpression {
 	}
 
 	public static String getName(int c) {
-		if(c >= Constants.FIRST_PRINTABLE_CHAR && c <= java.lang.Character.MAX_VALUE) {
-			return (char)c + "";			
+		if(UnicodeUtil.isPrintableAscii(c)) {
+			return (char) c + "";			
 		} else {
-			return "\\u" + Integer.toHexString(c);
+			return "\\u" + String.format("%04X", c);
 		}
 	}
 	

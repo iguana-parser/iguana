@@ -42,7 +42,11 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 
 	private static String getName(int start, int end) {
-		return Character.getName(start) + "-" + Character.getName(end);
+		if (start == end) {
+			return Character.getName(start);
+		} else {
+			return Character.getName(start) + "-" + Character.getName(end);			
+		}
 	}
 	
 	public int getStart() {

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.util.CollectionsUtil;
 
 /**
  * Character class represents a set of {@link Range} instances.
@@ -25,7 +26,7 @@ public class CharacterClass extends AbstractRegularExpression {
 	private final RegexAlt<Range> alt;
 	
 	public CharacterClass(RegexAlt<Range> alt, String label, Set<Condition> conditions, Object object) {
-		super(alt.getName(), label, conditions, object);
+		super(getName(alt), label, conditions, object);
 		this.alt = alt;
 	}
 	
@@ -43,6 +44,10 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	public static CharacterClass from(List<Range> ranges) {
 		return new Builder(ranges).build();
+	}
+	
+	private static String getName(RegexAlt<Range> alt) {
+		return "[" + CollectionsUtil.listToString(alt.getRegularExpressions()) + "]";
 	}
 	
 	@Override

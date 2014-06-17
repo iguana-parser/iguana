@@ -1,6 +1,7 @@
 package org.jgll.util.unicode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +29,30 @@ public class UnicodeUtil {
 		return categoriesMap.get(categoryName);
 	}
 	
+	public static CharacterClass getCharacterClassInCategory(String categoryName) {
+		List<Integer> vals = new ArrayList<>(categoriesMap.get(categoryName));
+		Collections.sort(vals);
+
+		List<Range> ranges = new ArrayList<>();
+		
+		int start = vals.get(0);
+		int end = vals.get(0);
+		
+		for (int i = 1; i < vals.size(); i++) {
+			if (vals.get(i) - end > 1) {
+				ranges.add(Range.in(start, end));
+				start = vals.get(i);
+			}
+			end = vals.get(i);
+		}
+		
+		return CharacterClass.from(ranges);
+	}
+	
+	public static boolean isPrintableAscii(int codePoint) {
+		return '\u0020' < codePoint && codePoint < '\u007f';
+	}
+	
 	public static CharacterClass reverse(Range range) {
 		List<Range> ranges = new ArrayList<>();
 		if(range.getStart() >= 1) {
@@ -43,7 +68,7 @@ public class UnicodeUtil {
 	
 	private static Map<String, Set<Integer>> categoriesMap = new HashMap<>();
 	
-	{
+	static {
 	    categoryNames.put(Character.UNASSIGNED, "Cn");
 
 	    categoryNames.put(Character.UPPERCASE_LETTER, "Lu");
@@ -105,7 +130,7 @@ public class UnicodeUtil {
 	    categoryNames.put(Character.FINAL_QUOTE_PUNCTUATION, "Pf");
 	    
 	    for (int i = 0; i <= MAX_UTF32_VAL; i++) {
-	    	String categoryName = categoryNames.get(i);
+	    	String categoryName = categoryNames.get((byte) Character.getType(i));
 			Set<Integer> set = categoriesMap.get(categoryName);
 			if (set == null) {
 				set = new HashSet<>();
