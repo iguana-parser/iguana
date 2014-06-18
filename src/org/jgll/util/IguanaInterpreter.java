@@ -27,6 +27,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.NonterminalSymbolNode;
 import org.jgll.sppf.SPPFNode;
 
 public class IguanaInterpreter {
@@ -101,7 +102,7 @@ public class IguanaInterpreter {
 			sumMemory += parseStatistics.getMemoryUsed();
 			
 			for (SPPFNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
-//				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammarGraph, input);
+				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammarGraph, input);
 			}
 		}
 		
@@ -114,10 +115,15 @@ public class IguanaInterpreter {
  						parseStatistics.getCountAmbiguousNodes()));
 		
 		for (NonPackedNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
-			Nonterminal nt = grammarGraph.getNonterminalById(ambiguousNode.getId());
+			String label;
+			if (ambiguousNode instanceof NonterminalSymbolNode) {
+				label = grammarGraph.getNonterminalById(ambiguousNode.getId()).getName();
+			} else {
+				label = grammarGraph.getIntermediateNodeLabel(ambiguousNode.getId());
+			}
 			int line = input.getLineNumber(ambiguousNode.getLeftExtent());
 			int column = input.getColumnNumber(ambiguousNode.getLeftExtent());
-			System.out.println(String.format("Node: %s, length: %d, line: %d, column: %d", nt, 
+			System.out.println(String.format("Node: %s, length: %d, line: %d, column: %d", label, 
 					ambiguousNode.getRightExtent() - ambiguousNode.getLeftExtent(), line, column));
 		}
  	}
