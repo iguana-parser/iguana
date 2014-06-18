@@ -18,6 +18,9 @@ public class NotPrecedeActions {
 			
 			@Override
 			public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
+				if (inputIndex == 0) {
+					return false;
+				}
 				return r.matchBackwards(lexer.getInput(), inputIndex - 1) >= 0;
 			}
 
