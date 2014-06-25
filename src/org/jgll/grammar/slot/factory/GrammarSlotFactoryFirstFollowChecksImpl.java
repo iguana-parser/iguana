@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot.factory;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,17 +16,22 @@ import org.jgll.grammar.slot.nodecreator.NonterminalNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NonterminalWithOneChildNodeCreator;
 import org.jgll.grammar.slot.nodecreator.RightChildNodeCreator;
 import org.jgll.grammar.slot.specialized.LastTokenSlot;
+import org.jgll.grammar.slot.test.ArrayFollowTest;
+import org.jgll.grammar.slot.test.ArrayPredictionTest;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
-import org.jgll.grammar.slot.test.TrueFollowSet;
-import org.jgll.grammar.slot.test.TruePredictionSet;
+import org.jgll.grammar.slot.test.TreeMapFollowTest;
+import org.jgll.grammar.slot.test.TreeMapPredictionTest;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Tuple;
 
-public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
+public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFactory {
+	
 	private int headGrammarSlotId;
 	private int bodyGrammarSlotId;
 	
@@ -34,13 +40,12 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	private IntermediateNodeCreator intermediateNodeCreator;
 	private NonterminalWithOneChildNodeCreator nonterminalWithOneChildNodeCreator;
 	
-	public GrammarSlotFactoryImpl() {
+	public GrammarSlotFactoryFirstFollowChecksImpl() {
 		this.nonterminalNodeCreator = new NonterminalNodeCreator();
 		this.rightNodeCreator = new RightChildNodeCreator();
 		this.intermediateNodeCreator = new IntermediateNodeCreator();
 		this.nonterminalWithOneChildNodeCreator = new NonterminalWithOneChildNodeCreator();
 	}
-
 	
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
@@ -50,11 +55,41 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets) {
 		
-
+		Set<RegularExpression> firstSet = firstSets.get(nonterminal);
+		Set<RegularExpression> followSet = followSets.get(nonterminal);
 		
-		PredictionTest predictionTest = new TruePredictionSet(alternates.size());
-		boolean nullable = firstSets.get(nonterminal).contains(Epsilon.getInstance());
-		FollowTest followSetTest = new TrueFollowSet();
+		Set<RegularExpression> set = new HashSet<>(firstSet);
+		if(set.contains(Epsilon.getInstance())) {
+			set.addAll(followSet);
+		}
+		set.remove(Epsilon.getInstance());
+		
+		Tuple<Integer, Integer> minMax = getMinMax(set);
+		int minPredictionSet = minMax.getFirst();
+		int maxPredictionSet = minMax.getSecond();
+		
+		boolean nullable = firstSet.contains(Epsilon.getInstance());
+		List<Set<RegularExpression>> predictionSet = predictionSets.get(nonterminal);
+		
+		Tuple<Integer, Integer> followSetsMinMax = getMinMax(followSet);
+		int minFollowSet = followSetsMinMax.getFirst();
+		int maxFollowSet = followSetsMinMax.getSecond();
+		
+		PredictionTest predictionTest;
+		
+		FollowTest followSetTest;
+		
+		if(maxPredictionSet - minPredictionSet < 10000) {
+			predictionTest = new ArrayPredictionTest(predictionSet, alternates.size(), minPredictionSet, maxPredictionSet);
+		} else {
+			predictionTest = new TreeMapPredictionTest(predictionSet, alternates.size());
+		}
+
+		if(maxFollowSet - minFollowSet < 10000) {
+			followSetTest = new ArrayFollowTest(followSet, minFollowSet, maxFollowSet);
+		} else {
+			followSetTest = new TreeMapFollowTest(followSet);
+		}			
 		
 		return new HeadGrammarSlot(headGrammarSlotId++, 
 								   nonterminal, 
@@ -64,6 +99,29 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 								   predictionTest, 
 								   followSetTest);
 	}
+	
+	private Tuple<Integer, Integer> getMinMax(Set<RegularExpression> set) {
+		Set<Range> ranges = new HashSet<>();
+		for(RegularExpression regex : set) {
+			for(Range range : regex.getFirstSet()) {
+				ranges.add(range);
+			}
+		}
+		
+		int min = Integer.MAX_VALUE;
+		int max = 0;
+		
+		for(Range range : ranges) {
+			if(range.getStart() < min) {
+				min = range.getStart();
+			}
+			if(range.getEnd() > max) {
+				max = range.getEnd();
+			}
+		}
+		
+		return Tuple.of(min, max);
+	}	
 
 	@Override
 	public NonterminalGrammarSlot createNonterminalGrammarSlot(List<Symbol> body, 
@@ -156,4 +214,5 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head) {
 		return new EpsilonGrammarSlot(bodyGrammarSlotId++, label, head);
 	}
+	
 }

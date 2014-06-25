@@ -13,6 +13,7 @@ import java.util.Set;
 import org.jgll.grammar.exception.GrammarValidationException;
 import org.jgll.grammar.exception.NonterminalNotDefinedException;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
+import org.jgll.grammar.slot.factory.GrammarSlotFactoryFirstFollowChecksImpl;
 import org.jgll.grammar.slot.factory.GrammarSlotFactoryImpl;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -140,6 +141,12 @@ public class Grammar implements Serializable {
 	}
 	 
 	public GrammarGraph toGrammarGraph() {
+		GrammarSlotFactory factory = new GrammarSlotFactoryFirstFollowChecksImpl();
+		GrammarGraphBuilder builder = new GrammarGraphBuilder(this, factory);
+		return builder.build();
+	}
+	
+	public GrammarGraph toGrammarGraphWithoutFirstFollowChecks() {
 		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
 		GrammarGraphBuilder builder = new GrammarGraphBuilder(this, factory);
 		return builder.build();

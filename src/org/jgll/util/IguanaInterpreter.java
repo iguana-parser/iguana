@@ -102,7 +102,7 @@ public class IguanaInterpreter {
 			sumMemory += parseStatistics.getMemoryUsed();
 			
 			for (SPPFNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
-				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammarGraph, input);
+//				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammarGraph, input);
 			}
 		}
 		
@@ -141,6 +141,10 @@ public class IguanaInterpreter {
 		                  .isRequired()
 		                  .create("g"));
 		
+		options.addOption(OptionBuilder.withLongOpt("no-first-follow")
+                .withDescription("Enable first/follow checks")
+                .create("n"));
+		
 		options.addOption(OptionBuilder.withLongOpt("start")
                 .withDescription("The start symbol")
                 .hasArg()
@@ -176,6 +180,7 @@ public class IguanaInterpreter {
                 .withDescription("The run count")
                 .hasArg()
                 .create("r"));
+		
 
 		String grammarPath = null;
 		String startSymbol = null;
@@ -183,8 +188,6 @@ public class IguanaInterpreter {
 		Grammar grammar = null;
 		GrammarGraph grammarGraph = null;
 		
-		int runCount = 1;
-		int warmupCount = 0;
 		
 		CommandLineParser commandLineParser = new BasicParser();
 		
@@ -196,7 +199,12 @@ public class IguanaInterpreter {
 	        	grammarPath = line.getOptionValue("g");
 				try {
 					grammar = GrammarUtil.load(new File(grammarPath).toURI());
-					grammarGraph = grammar.toGrammarGraph();
+					
+					if (line.hasOption("n")) {
+						grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();
+					} else {
+						grammarGraph = grammar.toGrammarGraph();						
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -206,7 +214,28 @@ public class IguanaInterpreter {
 	        if (line.hasOption("s")) {
 	        	startSymbol = line.getOptionValue("s");
 	        }
+	        
+			int runCount = 1;
+			int warmupCount = 0;
 
+			if (line.hasOption("r")) {
+				try {
+					runCount = Integer.parseInt(line.getOptionValue("r"));
+				} catch(Exception e) {
+					System.out.println("Run count should be a positive number.");
+					System.exit(1);
+				}
+			}
+			
+			if (line.hasOption("w")) {
+				try {
+					warmupCount = Integer.parseInt(line.getOptionValue("w"));
+				} catch(Exception e) {
+					System.out.println("Warm up count should be a positive number.");
+					System.exit(1);
+				}
+			}
+	        
 	        // Input
 	        if (line.hasOption("i")) {
 	        	String inputPath = line.getOptionValue("i");
