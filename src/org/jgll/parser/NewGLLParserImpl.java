@@ -34,7 +34,9 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 
 			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 			
-			gssLookup.addToPoppedElements(gssNode, node);
+			if (!gssLookup.addToPoppedElements(gssNode, node)) {
+				return null;
+			}
 			
 			// Optimization for the case when only one GSS Edge is available.
 			// No scheduling of descriptors, rather direct jump to the slot

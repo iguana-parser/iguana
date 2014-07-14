@@ -96,8 +96,8 @@ public class GSSLookupImpl implements GSSLookup {
 	}
 
 	@Override
-	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
-		gssNode.addToPoppedElements(sppfNode);
+	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
+		return gssNode.addToPoppedElements(sppfNode);
 	}
 
 	@Override

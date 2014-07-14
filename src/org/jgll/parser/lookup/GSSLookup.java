@@ -28,7 +28,7 @@ public interface GSSLookup {
 	 */
 	public Iterable<GSSNode> getChildren(GSSNode node);
 	
-	public void addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
+	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	
 	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode);
 	

@@ -80,14 +80,14 @@ public class Gamma2Test {
 	
 	@Test
 	public void test100bs() {
-		Input input = Input.fromString(get100b());		
+		Input input = Input.fromString(getBs(100));		
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		parser.parse(input, grammar.toGrammarGraph(), "S");
 	}
 	
-	private String get100b() {
+	private String getBs(int size) {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < size; i++) {
 			sb.append("b");
 		}
 		return sb.toString();

@@ -64,11 +64,14 @@ public class GSSNode {
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 	
-	public void addToPoppedElements(NonPackedNode node) {
+	public boolean addToPoppedElements(NonPackedNode node) {
 		if(!addedPoppedElements.contains(node.getRightExtent())) {
 			poppedElements.add(node);
 			addedPoppedElements.add(node.getRightExtent());
-		}
+			return true;
+		} 
+		
+		return false;
 	}
 	
 	public Iterable<NonPackedNode> getPoppedElements() {
