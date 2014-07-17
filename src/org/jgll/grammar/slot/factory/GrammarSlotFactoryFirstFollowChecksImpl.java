@@ -80,7 +80,7 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 		FollowTest followSetTest;
 		
 		if(maxPredictionSet - minPredictionSet < 10000) {
-			predictionTest = new ArrayPredictionTest(predictionSet, alternates.size(), minPredictionSet, maxPredictionSet);
+			predictionTest = new ArrayPredictionTest(predictionSet, minPredictionSet, maxPredictionSet);
 		} else {
 			predictionTest = new TreeMapPredictionTest(predictionSet, alternates.size());
 		}

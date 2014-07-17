@@ -263,7 +263,7 @@ public class GrammarGraphBuilder implements Serializable {
 	private String getSlotName(Nonterminal head, List<Symbol> body, int index) {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(head.getName()).append(" ::= ");
+		sb.append(head.toString()).append(" ::= ");
 		
 		for(int i = 0; i < body.size(); i++) {
 			Symbol s = body.get(i);
@@ -273,7 +273,7 @@ public class GrammarGraphBuilder implements Serializable {
 			}
 			
 			if(s instanceof Nonterminal) {
-				sb.append(s.getName()).append(" ");
+				sb.append(s.toString()).append(" ");
 			} else {
 				sb.append(s).append(" ");				
 			}

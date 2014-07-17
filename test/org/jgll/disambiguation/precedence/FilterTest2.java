@@ -34,8 +34,6 @@ import org.junit.Test;
  */
 public class FilterTest2 {
 
-	private GrammarGraph grammarGraph;
-	
 	private GLLParser parser;
 
 	private Nonterminal E = Nonterminal.withName("E");
@@ -99,6 +97,7 @@ public class FilterTest2 {
 	}
 	
 	private SPPFNode getSPPF() {
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalSymbolNode node1 = factory.createNonterminalNode(E, 0, 10);
 		IntermediateNode node2 = factory.createIntermediateNode(list(E, plus), 0, 2);

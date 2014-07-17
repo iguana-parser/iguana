@@ -56,7 +56,11 @@ public class Grammar implements Serializable {
 		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
 			List<List<Symbol>> tmpList = new ArrayList<>();
 			for (List<Symbol> list : e.getValue()) {
-				tmpList.add(Collections.unmodifiableList(list));
+				if (list == null) {
+					tmpList.add(null);
+				} else {
+					tmpList.add(Collections.unmodifiableList(list));					
+				}
 			}
 			tmp.put(e.getKey(), Collections.unmodifiableList(tmpList));
 		}

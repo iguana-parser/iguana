@@ -35,19 +35,25 @@ public class OperatorPrecedence implements GrammarTransformation {
 	
 	private Map<List<List<Symbol>>, Nonterminal> existingAlternates;
 	
-	private List<Rule> newRules;
-	
 	public OperatorPrecedence() {
 		this.newNonterminals = new HashMap<>();
 		this.precednecePatterns = new HashMap<>();
 		this.existingAlternates = new HashMap<>();
 		this.exceptPatterns = new ArrayList<>();
-		this.newRules = new ArrayList<>();
 	}
 	
 	@Override
 	public Grammar transform(Grammar grammar) {
-		this.definitions = new HashMap<>(grammar.getDefinitions());
+		this.definitions = new HashMap<>();
+		for (Entry<Nonterminal, List<List<Symbol>>> e : grammar.getDefinitions().entrySet()) {
+			List<List<Symbol>> listOfList = new ArrayList<>();
+			for (List<Symbol> list : e.getValue()) {
+				List<Symbol> newList = new ArrayList<>(list); 
+				listOfList.add(newList);					
+			}
+			definitions.put(e.getKey(), listOfList);
+		}
+		
 		rewritePrecedencePatterns();
 		rewriteExceptPatterns();
 		
@@ -58,14 +64,13 @@ public class OperatorPrecedence implements GrammarTransformation {
 		}
 		
 		Grammar.Builder builder = new Grammar.Builder();
-		for (Rule rule : grammar.getRules()) {
-			builder.addRule(rule);
+		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
+			for (List<Symbol> list : e.getValue()) {
+				Rule rule = new Rule(e.getKey(), list);
+				builder.addRule(rule);
+			}
 		}
-		
-		for (Rule rule : newRules) {
-			builder.addRule(rule);
-		}
-		
+
 		return builder.build();
 	}
 	
@@ -590,10 +595,7 @@ public class OperatorPrecedence implements GrammarTransformation {
 	}
 
 	private void addNewRules(Nonterminal nonterminal, List<List<Symbol>> alternates) {
-		for(List<Symbol> alternate : alternates) {
-			Rule rule = new Rule(nonterminal, alternate);
-			newRules.add(rule);
-		}
+		definitions.put(nonterminal, alternates);
 	}
 	
 	private boolean contains(Nonterminal nonterminal, List<List<Symbol>> alternates) {

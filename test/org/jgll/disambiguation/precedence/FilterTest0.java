@@ -74,7 +74,6 @@ public class FilterTest0 {
 		// (E, E + .E, E + E)
 		operatorPrecedence.addPrecedencePattern(E, rule2, 2, rule2);
 		
-		
 		grammar = operatorPrecedence.transform(builder.build());
 	}
 	

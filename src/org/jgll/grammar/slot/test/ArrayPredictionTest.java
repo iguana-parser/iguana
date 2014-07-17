@@ -22,13 +22,13 @@ public class ArrayPredictionTest implements PredictionTest {
 	private final int max;
 	
 	@SuppressWarnings("unchecked")
-	public ArrayPredictionTest(List<Set<RegularExpression>> predictionSets, int countAlternates, int min, int max) {
+	public ArrayPredictionTest(List<Set<RegularExpression>> predictionSets, int min, int max) {
 			
 		this.min = min;
 		this.max = max;
 		predictionMap = new Set[max - min + 1];
 		
-		for(int i = countAlternates - 1 ; i >= 0; i--) {
+		for(int i = predictionSets.size() - 1 ; i >= 0; i--) {
 			Set<RegularExpression> predictionSet = predictionSets.get(i);
 			
 			if(predictionSet.isEmpty()) continue;
