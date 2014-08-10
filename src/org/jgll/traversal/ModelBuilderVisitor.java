@@ -49,38 +49,38 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(NonterminalSymbolNode nonterminalSymbolNode) {
-		removeIntermediateNode(nonterminalSymbolNode);
+	public void visit(NonterminalSymbolNode node) {
+		removeIntermediateNode(node);
 		
-		if(!nonterminalSymbolNode.isVisited()) {
+		if(!node.isVisited()) {
 		
-			nonterminalSymbolNode.setVisited(true);
+			node.setVisited(true);
 			
-			if(nonterminalSymbolNode.isAmbiguous()) {
-				buildAmbiguityNode(nonterminalSymbolNode);
+			if(node.isAmbiguous()) {
+				buildAmbiguityNode(node);
 			}
 			else {
 				
-				T object = (T) grammar.getObject(nonterminalSymbolNode.getId(), nonterminalSymbolNode.getFirstPackedNodeGrammarSlot());
+				T object = (T) grammar.getObject(node.getId(), node.getFirstPackedNodeGrammarSlot());
 				
 				Result<U> result;
 				
-				if(nonterminalSymbolNode.getLastChild() instanceof CollapsibleNode) {
-					CollapsibleNode lastChild = (CollapsibleNode) nonterminalSymbolNode.getLastChild();
+				if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
+					CollapsibleNode lastChild = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
 					Object lastChildObject = getObject(lastChild);
 					listener.startNode((T) lastChildObject);
-					visitChildren(nonterminalSymbolNode, this);
-					removeCollapsibleNode(nonterminalSymbolNode);
-					result = listener.endNode((T) lastChildObject, getChildrenValues(nonterminalSymbolNode), 
-								input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
+					visitChildren(node, this);
+					removeCollapsibleNode(node);
+					result = listener.endNode((T) lastChildObject, getChildrenValues(node), 
+								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
 				} else {
 					listener.startNode(object);
-					visitChildren(nonterminalSymbolNode, this);
-					result = listener.endNode(object, getChildrenValues(nonterminalSymbolNode), 
-								input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
+					visitChildren(node, this);
+					result = listener.endNode(object, getChildrenValues(node), 
+								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
 				}
 
-				nonterminalSymbolNode.setObject(result);
+				node.setObject(result);
 			}
 		}
 	}
@@ -112,28 +112,27 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			list.add(node);
 		}
 		for(SPPFNode child : list) {
-			PackedNode packedNode = (PackedNode) child;
+			PackedNode node = (PackedNode) child;
 			
 			Result<U> result;
 			
-			if(packedNode.childrenCount() > 0 && packedNode.getLastChild() instanceof CollapsibleNode) {
-				CollapsibleNode lastChild = (CollapsibleNode) packedNode.getLastChild();
+			if(node.childrenCount() > 0 && node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
+				CollapsibleNode lastChild = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
 				Object object = getObject(lastChild);
 				listener.startNode((T) object);
 				
-				removeCollapsibleNode(packedNode);
+				removeCollapsibleNode(node);
 				
-				packedNode.accept(this);
-				result = listener.endNode((T) object, getChildrenValues(packedNode), 
-						input.getPositionInfo(packedNode.getLeftExtent(), packedNode.getRightExtent()));
-				packedNode.setObject(result);				
+				node.accept(this);
+				result = listener.endNode((T) object, getChildrenValues(node), input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				node.setObject(result);				
 			} else {
 				T object = (T) grammar.getObject(nonterminalSymbolNode.getId(), nonterminalSymbolNode.getFirstPackedNodeGrammarSlot());
 				listener.startNode(object);
-				packedNode.accept(this);
-				result = listener.endNode(object, getChildrenValues(packedNode), 
-						input.getPositionInfo(packedNode.getLeftExtent(), packedNode.getRightExtent()));
-				packedNode.setObject(result);				
+				node.accept(this);
+				result = listener.endNode(object, getChildrenValues(node), 
+						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				node.setObject(result);				
 			}
 			
 			if(result != Result.filter()) {

@@ -1,6 +1,7 @@
 package org.jgll.sppf;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.jgll.traversal.SPPFVisitor;
 
@@ -56,7 +57,7 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
-	public Iterable<SPPFNode> getChildren() {
+	public List<SPPFNode> getChildren() {
 		return Collections.emptyList();
 	}
 	
@@ -73,16 +74,6 @@ public class DummyNode extends SPPFNode {
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		// do nothing
-	}
-
-	@Override
-	public SPPFNode getLastChild() {
-		return null;
-	}
-
-	@Override
-	public SPPFNode getFirstChild() {
-		return null;
 	}
 
 }

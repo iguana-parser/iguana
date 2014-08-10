@@ -1,6 +1,7 @@
 package org.jgll.sppf;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.jgll.traversal.AmbiguousNodesVisitor;
@@ -24,12 +25,8 @@ public abstract class SPPFNode {
 
 	public abstract SPPFNode getChildAt(int index);
 	
-	public abstract Iterable<SPPFNode> getChildren();
-	
-	public abstract SPPFNode getLastChild();
-	
-	public abstract SPPFNode getFirstChild();
-	
+	public abstract List<SPPFNode> getChildren();
+		
 	public abstract boolean isAmbiguous();
 
 	public abstract int childrenCount();

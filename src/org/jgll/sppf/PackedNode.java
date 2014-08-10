@@ -22,8 +22,6 @@ public class PackedNode extends SPPFNode {
 	
 	private final List<SPPFNode> children;
 	
-	private final int hash;
-	
 	public PackedNode(int id, int pivot, NonPackedNode parent) {
 		
 		assert id >= 0;
@@ -35,12 +33,6 @@ public class PackedNode extends SPPFNode {
 		this.parent = parent;
 		
 		this.children = new ArrayList<>(2);
-		
-		this.hash = HashFunctions.defaulFunction().hash(id,
-   						  								pivot,
-   						  								parent.getId(),
-   						  								parent.getLeftExtent(),
-   						  								parent.getRightExtent());
 	}
 			
 	@Override
@@ -95,7 +87,7 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(id, pivot, parent.getId(), parent.getLeftExtent(), parent.getRightExtent());
 	}
 	
 	@Override
@@ -132,7 +124,7 @@ public class PackedNode extends SPPFNode {
 	}
 
 	@Override
-	public Iterable<SPPFNode> getChildren() {
+	public List<SPPFNode> getChildren() {
 		return children;
 	}
 
@@ -140,16 +132,5 @@ public class PackedNode extends SPPFNode {
 	public boolean isAmbiguous() {
 		return false;
 	}
-
-	@Override
-	public SPPFNode getLastChild() {
-		return children.get(children.size() - 1);
-	}
-
-	@Override
-	public SPPFNode getFirstChild() {
-		return children.get(0);
-	}
-
 
 }

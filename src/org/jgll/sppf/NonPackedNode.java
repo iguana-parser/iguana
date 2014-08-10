@@ -22,11 +22,9 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	protected final int rightExtent;
 	
-	protected List<SPPFNode> children;
+	protected final List<SPPFNode> children;
 	
 	protected int countPackedNodes;
-	
-	private final int hash;
 	
 	public NonPackedNode(int id, int leftExtent, int rightExtent) {
 		
@@ -37,14 +35,12 @@ public abstract class NonPackedNode extends SPPFNode {
 		this.id = id;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
-		this.children = new ArrayList<>();
-		
-		this.hash = HashFunctions.defaulFunction().hash(id, leftExtent, rightExtent); 
+		this.children = new ArrayList<>(2);
 	}
 	
 	@Override
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(id, leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -144,20 +140,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	@Override
-	public SPPFNode getFirstChild() {
-		return children.get(0);
-	}
-	
-	@Override
-	public SPPFNode getLastChild() {
-		if(children.size() == 0) {
-			return null;
-		}
-		return children.get(children.size() - 1);
-	}
-	
-	@Override
-	public Iterable<SPPFNode> getChildren() {
+	public List<SPPFNode> getChildren() {
 		return children;
 	}
 	

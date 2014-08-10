@@ -1,6 +1,7 @@
 package org.jgll.sppf;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
@@ -19,13 +20,10 @@ public class TokenSymbolNode extends SPPFNode {
 	
 	private final int length;
 	
-	private final int hash;
-	
 	public TokenSymbolNode(int tokenID, int inputIndex, int length) {
 		this.tokenID = tokenID;
 		this.inputIndex = inputIndex;
 		this.length = length;
-		this.hash = HashFunctions.defaulFunction().hash(tokenID, inputIndex);
 	}
 
 	@Override
@@ -47,7 +45,7 @@ public class TokenSymbolNode extends SPPFNode {
 	
 	@Override
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(tokenID, inputIndex);
 	}
 	
 	@Override
@@ -94,23 +92,13 @@ public class TokenSymbolNode extends SPPFNode {
 	}
 
 	@Override
-	public Iterable<SPPFNode> getChildren() {
+	public List<SPPFNode> getChildren() {
 		return Collections.emptyList();
 	}
 	
 	@Override
 	public boolean isAmbiguous() {
 		return false;
-	}
-
-	@Override
-	public SPPFNode getLastChild() {
-		return null;
-	}
-
-	@Override
-	public SPPFNode getFirstChild() {
-		return null;
 	}
 
 }
