@@ -10,7 +10,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -113,8 +113,8 @@ public class SPPFToDotUnpacked extends ToDot {
 	
 	private void visit(SPPFNode node, StringBuilder sb) {
 
-		if(node instanceof NonterminalSymbolNode) {
-			visit((NonterminalSymbolNode) node, sb);
+		if(node instanceof NonterminalNode) {
+			visit((NonterminalNode) node, sb);
 		} 
 		else if(node instanceof PackedNode) {
 			visit((PackedNode)node, sb);
@@ -124,7 +124,7 @@ public class SPPFToDotUnpacked extends ToDot {
 		}
 	}
 
-	public void visit(NonterminalSymbolNode node, StringBuilder sb) {
+	public void visit(NonterminalNode node, StringBuilder sb) {
 		
 		String label = grammar.getNonterminalById(node.getId()).getName();
 		
@@ -206,7 +206,7 @@ public class SPPFToDotUnpacked extends ToDot {
 	}
 
 	public void visit(ListSymbolNode node) {
-		visit((NonterminalSymbolNode) node);
+		visit((NonterminalNode) node);
 	}
 	
 	private void createPermutationMaps(SPPFNode node) {
@@ -229,7 +229,7 @@ public class SPPFToDotUnpacked extends ToDot {
 			}
 			
 			@Override
-			public void visit(NonterminalSymbolNode node) {
+			public void visit(NonterminalNode node) {
 				if(node.isAmbiguous()) {
 					map.put(node, 0);
 				}

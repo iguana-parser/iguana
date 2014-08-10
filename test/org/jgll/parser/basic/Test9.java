@@ -12,7 +12,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -60,17 +60,17 @@ public class Test9 {
 	
 	private SPPFNode getSPPF() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 2);
+		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(S), 1, 0, 2);
 		IntermediateNode node2 = new IntermediateNode(grammarGraph.getIntermediateNodeId(A,A), 0, 1);
 		PackedNode node3 = new PackedNode(grammarGraph.getIntermediateNodeId(A,A), 0, node2);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 2, 0, 0);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 2, 0, 1);
+		NonterminalNode node4 = new NonterminalNode(grammarGraph.getNonterminalId(A), 2, 0, 0);
+		NonterminalNode node5 = new NonterminalNode(grammarGraph.getNonterminalId(A), 2, 0, 1);
 		TokenSymbolNode node6 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 0, 1);
 		node5.addChild(node6);
 		node3.addChild(node4);
 		node3.addChild(node5);
 		PackedNode node7 = new PackedNode(grammarGraph.getIntermediateNodeId(A,A), 1, node2);
-		NonterminalSymbolNode node8 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 2, 1, 1);
+		NonterminalNode node8 = new NonterminalNode(grammarGraph.getNonterminalId(A), 2, 1, 1);
 		node7.addChild(node5);
 		node7.addChild(node8);
 		node2.addChild(node3);

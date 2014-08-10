@@ -17,7 +17,7 @@ public class IntermediateNode extends NonPackedNode {
 		super(id, leftExtent, rightExtent);
 	}
 	
-	public void addPackedNode(int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+	public boolean addPackedNode(int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		assert leftChild  != null;
 		assert rightChild != null;
@@ -32,31 +32,32 @@ public class IntermediateNode extends NonPackedNode {
 		} 
 		else if (countPackedNodes == 1) {
 			// Packed node does not exist
-			if(pivot != firstPackedNode.getPivot()) {
-				
-				// Initialize the packed nodes array for duplicate elimination
-				packedNodes = new PackedNode[rightExtent - leftExtent + 1];
-				
-				// Add the first packed node
-				children.clear();
-				children.add(firstPackedNode);
-				packedNodes[firstPackedNode.getPivot() - leftExtent] = firstPackedNode;
-				
-				// Add the second packed node
-				PackedNode newPackedNode = attachChildren(new PackedNode(id, pivot, this), leftChild, rightChild);
-				packedNodes[pivot - leftExtent] = newPackedNode;
-				children.add(newPackedNode);
-				countPackedNodes++;
-			}
+			if(pivot == firstPackedNode.getPivot()) return false;
+			
+			// Initialize the packed nodes array for duplicate elimination
+			packedNodes = new PackedNode[rightExtent - leftExtent + 1];
+			
+			// Add the first packed node
+			children.clear();
+			children.add(firstPackedNode);
+			packedNodes[firstPackedNode.getPivot() - leftExtent] = firstPackedNode;
+			
+			// Add the second packed node
+			PackedNode newPackedNode = attachChildren(new PackedNode(id, pivot, this), leftChild, rightChild);
+			packedNodes[pivot - leftExtent] = newPackedNode;
+			children.add(newPackedNode);
+			countPackedNodes++;
 		}
 		else {
-			if(packedNodes[pivot - leftExtent] == null) {
-				PackedNode newPackedNode = attachChildren(new PackedNode(id, pivot, this), leftChild, rightChild);
-				packedNodes[pivot - leftExtent] = newPackedNode;
-				children.add(newPackedNode);
-				countPackedNodes++;
-			}
-		}		
+			if(packedNodes[pivot - leftExtent] != null) return false;
+			
+			PackedNode newPackedNode = attachChildren(new PackedNode(id, pivot, this), leftChild, rightChild);
+			packedNodes[pivot - leftExtent] = newPackedNode;
+			children.add(newPackedNode);
+			countPackedNodes++;
+		}	
+		
+		return true;
 	}
 	
 	public void addFirstPackedNode(int packedNodeId, int pivot) {

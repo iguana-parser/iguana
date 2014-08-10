@@ -2,7 +2,7 @@ package org.jgll.util.visualization;
 
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -11,7 +11,7 @@ public abstract class ToDot {
 	
 	protected String getId(SPPFNode node) {
 		
-		if(node instanceof NonterminalSymbolNode) {
+		if(node instanceof NonterminalNode) {
 			return "nontermianl_" + getNodeId(node);
 		}
 		else if (node instanceof IntermediateNode) {
@@ -19,7 +19,7 @@ public abstract class ToDot {
 		}
 		else if(node instanceof PackedNode) {
 			SPPFNode parent = ((PackedNode) node).getParent();
-			if(parent instanceof NonterminalSymbolNode) {
+			if(parent instanceof NonterminalNode) {
 				return "packed_n_" + getNodeId(parent) + "_" + getNodeId((PackedNode)node);				
 			} else {
 				return "packed_i_" + getNodeId(parent) + "_" + getNodeId((PackedNode)node);

@@ -12,7 +12,7 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.ListSymbolNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -125,11 +125,11 @@ public class HeadGrammarSlot implements GrammarSlot {
 		return nonterminal.toString();
 	}
 	
-	public NonterminalSymbolNode createSPPFNode(int nonterminalId, int numberOfAlternatives, int leftExtent, int rightExtent) {
+	public NonterminalNode createSPPFNode(int nonterminalId, int numberOfAlternatives, int leftExtent, int rightExtent) {
 		if(nonterminal.isEbnfList()) {
 			return new ListSymbolNode(nonterminalId, numberOfAlternatives, leftExtent, rightExtent);
 		} else {
-			return new NonterminalSymbolNode(nonterminalId, numberOfAlternatives, leftExtent, rightExtent);
+			return new NonterminalNode(nonterminalId, numberOfAlternatives, leftExtent, rightExtent);
 		}
 	}
 

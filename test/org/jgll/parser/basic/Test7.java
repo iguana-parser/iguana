@@ -12,7 +12,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
@@ -61,10 +61,10 @@ public class Test7 {
 	private SPPFNode getSPPF() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 3);
+		NonterminalNode node1 = factory.createNonterminalNode(S, 0, 3);
 		IntermediateNode node2 = factory.createIntermediateNode(list(a, A), 0, 2);
 		TokenSymbolNode node3 = factory.createTokenNode(a, 0, 1);
-		NonterminalSymbolNode node4 = factory.createNonterminalNode(A, 1, 2);
+		NonterminalNode node4 = factory.createNonterminalNode(A, 1, 2);
 		TokenSymbolNode node5 = factory.createTokenNode(a, 1, 1);
 		node4.addChild(node5);
 		node2.addChild(node3);

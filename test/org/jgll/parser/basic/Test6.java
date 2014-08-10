@@ -12,7 +12,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
@@ -89,10 +89,10 @@ public class Test6 {
 	private SPPFNode getSPPF1() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 3);
+		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 3);
 		IntermediateNode node2 = factory.createIntermediateNode(list(a, B), 0, 2);
 		TokenSymbolNode node3 = factory.createTokenNode(a, 0, 1);
-		NonterminalSymbolNode node4 = factory.createNonterminalNode(B, 1, 2);
+		NonterminalNode node4 = factory.createNonterminalNode(B, 1, 2);
 		TokenSymbolNode node5 = factory.createTokenNode(b, 1, 1);
 		node4.addChild(node5);
 		node2.addChild(node3);
@@ -106,16 +106,16 @@ public class Test6 {
 	private SPPFNode getSPPF2() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 5);
-		NonterminalSymbolNode node2 = factory.createNonterminalNode(C, 0, 5);
+		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 5);
+		NonterminalNode node2 = factory.createNonterminalNode(C, 0, 5);
 		TokenSymbolNode node3 = factory.createTokenNode(a, 0, 1);
-		NonterminalSymbolNode node4 = factory.createNonterminalNode(C, 1, 5);
+		NonterminalNode node4 = factory.createNonterminalNode(C, 1, 5);
 		TokenSymbolNode node5 = factory.createTokenNode(a, 1, 1);
-		NonterminalSymbolNode node6 = factory.createNonterminalNode(C, 2, 5);
+		NonterminalNode node6 = factory.createNonterminalNode(C, 2, 5);
 		TokenSymbolNode node7 = factory.createTokenNode(a, 2, 1);
-		NonterminalSymbolNode node8 = factory.createNonterminalNode(C, 3, 5);
+		NonterminalNode node8 = factory.createNonterminalNode(C, 3, 5);
 		TokenSymbolNode node9 = factory.createTokenNode(a, 3, 1);
-		NonterminalSymbolNode node10 = factory.createNonterminalNode(C, 4, 5);
+		NonterminalNode node10 = factory.createNonterminalNode(C, 4, 5);
 		TokenSymbolNode node11 = factory.createTokenNode(c, 4, 1);
 		node10.addChild(node11);
 		node8.addChild(node9);

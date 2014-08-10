@@ -12,7 +12,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -107,12 +107,12 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 3);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 2);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 2, 0, 1);
+		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(S), 1, 0, 3);
+		NonterminalNode node2 = new NonterminalNode(grammarGraph.getNonterminalId(A), 1, 0, 2);
+		NonterminalNode node3 = new NonterminalNode(grammarGraph.getNonterminalId(B), 2, 0, 1);
 		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(D), 2, 1, 2);
+		NonterminalNode node5 = new NonterminalNode(grammarGraph.getNonterminalId(D), 2, 1, 2);
 		TokenSymbolNode node6 = new TokenSymbolNode(4, 1, 1);
 		node5.addChild(node6);
 		node2.addChild(node3);
@@ -131,10 +131,10 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 		
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 1);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 0);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 2, 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(D), 2, 0, 0);
+		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(S), 1, 0, 1);
+		NonterminalNode node2 = new NonterminalNode(grammarGraph.getNonterminalId(A), 1, 0, 0);
+		NonterminalNode node3 = new NonterminalNode(grammarGraph.getNonterminalId(B), 2, 0, 0);
+		NonterminalNode node4 = new NonterminalNode(grammarGraph.getNonterminalId(D), 2, 0, 0);
 		node2.addChild(node3);
 		node2.addChild(node4);
 		TokenSymbolNode node5 = new TokenSymbolNode(2, 0, 1);
@@ -151,12 +151,12 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 2, 0, 1);
+		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(S), 1, 0, 2);
+		NonterminalNode node2 = new NonterminalNode(grammarGraph.getNonterminalId(A), 1, 0, 1);
+		NonterminalNode node3 = new NonterminalNode(grammarGraph.getNonterminalId(B), 2, 0, 1);
 		TokenSymbolNode node4 = new TokenSymbolNode(3, 0, 1);
 		node3.addChild(node4);
-		NonterminalSymbolNode node5 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(D), 2, 1, 1);
+		NonterminalNode node5 = new NonterminalNode(grammarGraph.getNonterminalId(D), 2, 1, 1);
 		node2.addChild(node3);
 		node2.addChild(node5);
 		TokenSymbolNode node6 = new TokenSymbolNode(2, 1, 1);
@@ -173,10 +173,10 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 		
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 1, 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 1);
-		NonterminalSymbolNode node3 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 2, 0, 0);
-		NonterminalSymbolNode node4 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(D), 2, 0, 1);
+		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(S), 1, 0, 2);
+		NonterminalNode node2 = new NonterminalNode(grammarGraph.getNonterminalId(A), 1, 0, 1);
+		NonterminalNode node3 = new NonterminalNode(grammarGraph.getNonterminalId(B), 2, 0, 0);
+		NonterminalNode node4 = new NonterminalNode(grammarGraph.getNonterminalId(D), 2, 0, 1);
 		TokenSymbolNode node5 = new TokenSymbolNode(4, 0, 1);
 		node4.addChild(node5);
 		node2.addChild(node3);

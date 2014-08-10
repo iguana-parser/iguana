@@ -6,7 +6,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.lookup.SPPFLookup;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 
 public class NonterminalNodeCreator implements NodeCreator, Serializable {
@@ -23,7 +23,7 @@ public class NonterminalNodeCreator implements NodeCreator, Serializable {
 		
 		LastGrammarSlot lastGrammarSlot = (LastGrammarSlot) slot;
 		
-		NonterminalSymbolNode newNode = sppfLookup.getNonterminalNode(lastGrammarSlot.getHead(), leftExtent, rightExtent);
+		NonterminalNode newNode = sppfLookup.getNonterminalNode(lastGrammarSlot.getHead(), leftExtent, rightExtent);
 		
 		sppfLookup.addPackedNode(newNode, lastGrammarSlot, rightChild.getLeftExtent(), leftChild, rightChild);
 		

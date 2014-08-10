@@ -14,7 +14,7 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Input;
@@ -67,7 +67,7 @@ public class Test10 {
 	
 	private SPPFNode getSPPF1() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 3, 0, 0);
+		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(A), 3, 0, 0);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(A, new ArrayList<Symbol>()), 0, node1);
 		PackedNode node3 = new PackedNode(grammarGraph.getPackedNodeId(A, A, A), 0, node1);
 		node3.addChild(node1);

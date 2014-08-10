@@ -4,7 +4,7 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -22,7 +22,7 @@ public class ToJavaCode implements SPPFVisitor {
 		sb.append("SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);\n");
 	}
 	
-	public static String toJavaCode(NonterminalSymbolNode node, GrammarGraph grammar) {
+	public static String toJavaCode(NonterminalNode node, GrammarGraph grammar) {
 		ToJavaCode toJavaCode = new ToJavaCode(grammar);
 		toJavaCode.visit(node);
 		return toJavaCode.toString();
@@ -40,7 +40,7 @@ public class ToJavaCode implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(NonterminalSymbolNode node) {
+	public void visit(NonterminalNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			node.setObject("node" + count);
@@ -86,7 +86,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 			
 			
-			if(node.getParent() instanceof NonterminalSymbolNode) {
+			if(node.getParent() instanceof NonterminalNode) {
 				Nonterminal nonterminal = grammar.getNonterminalById(node.getParent().getId());
 				sb.append("PackedNode node" + count + " = new PackedNode(" +
 						  "grammarGraph.getPackedNodeId(" + nonterminal + ", " +

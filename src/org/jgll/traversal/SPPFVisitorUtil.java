@@ -7,7 +7,7 @@ import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 
@@ -46,7 +46,7 @@ public class SPPFVisitorUtil {
 	 * The process terminates when all intermediate nodes are removed.
 	 *       
 	 */
-	public static void removeIntermediateNode(NonterminalSymbolNode node) {
+	public static void removeIntermediateNode(NonterminalNode node) {
 		if(node.getChildAt(0) instanceof IntermediateNode) {
 			
 			IntermediateNode intermediateNode = (IntermediateNode) node.getChildAt(0);
@@ -167,7 +167,7 @@ public class SPPFVisitorUtil {
 		}
 	}
 	
-	public static void removeCollapsibleNode(NonterminalSymbolNode node) {
+	public static void removeCollapsibleNode(NonterminalNode node) {
 		
 		// Check for keyword nodes that their children are not yet created.
 		if(node.childrenCount() == 0) {

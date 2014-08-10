@@ -11,7 +11,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
@@ -58,8 +58,8 @@ public class Test12 {
 	
 	private SPPFNode expectedSPPF() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(A), 1, 0, 2);
-		NonterminalSymbolNode node2 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(B), 1, 0, 1);
+		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(A), 1, 0, 2);
+		NonterminalNode node2 = new NonterminalNode(grammarGraph.getNonterminalId(B), 1, 0, 1);
 		TokenSymbolNode node3 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(b), 0, 1);
 		node2.addChild(node3);
 		TokenSymbolNode node4 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(a), 1, 1);

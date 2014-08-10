@@ -20,7 +20,7 @@ import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
@@ -150,7 +150,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		long startUserTime = getUserTime();
 		long startSystemTime = getSystemTime();
 		
-		NonterminalSymbolNode root;
+		NonterminalNode root;
 		
 		L0.getInstance().parse(this, lexer, startSymbol);			
 		root = sppfLookup.getStartSymbol(startSymbol, input.length());

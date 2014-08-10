@@ -8,7 +8,7 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
@@ -90,11 +90,11 @@ public class IndirectRecursion3Test {
 	private SPPFNode getSPPFNode1() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 5);
-		NonterminalSymbolNode node2 = factory.createNonterminalNode(B, 0, 4);
-		NonterminalSymbolNode node3 = factory.createNonterminalNode(A, 0, 3);
-		NonterminalSymbolNode node4 = factory.createNonterminalNode(B, 0, 2);
-		NonterminalSymbolNode node5 = factory.createNonterminalNode(A, 0, 1);
+		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 5);
+		NonterminalNode node2 = factory.createNonterminalNode(B, 0, 4);
+		NonterminalNode node3 = factory.createNonterminalNode(A, 0, 3);
+		NonterminalNode node4 = factory.createNonterminalNode(B, 0, 2);
+		NonterminalNode node5 = factory.createNonterminalNode(A, 0, 1);
 		TokenSymbolNode node6 = factory.createTokenNode(e, 0, 1);
 		node5.addChild(node6);
 		TokenSymbolNode node7 = factory.createTokenNode(f, 1, 1);
@@ -115,13 +115,13 @@ public class IndirectRecursion3Test {
 	private SPPFNode getSPPFNode2() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 7);
-		NonterminalSymbolNode node2 = factory.createNonterminalNode(C, 0, 6);
-		NonterminalSymbolNode node3 = factory.createNonterminalNode(A, 0, 5);
-		NonterminalSymbolNode node4 = factory.createNonterminalNode(C, 0, 4);
-		NonterminalSymbolNode node5 = factory.createNonterminalNode(A, 0, 3);
-		NonterminalSymbolNode node6 = factory.createNonterminalNode(C, 0, 2);
-		NonterminalSymbolNode node7 = factory.createNonterminalNode(A, 0, 1);
+		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 7);
+		NonterminalNode node2 = factory.createNonterminalNode(C, 0, 6);
+		NonterminalNode node3 = factory.createNonterminalNode(A, 0, 5);
+		NonterminalNode node4 = factory.createNonterminalNode(C, 0, 4);
+		NonterminalNode node5 = factory.createNonterminalNode(A, 0, 3);
+		NonterminalNode node6 = factory.createNonterminalNode(C, 0, 2);
+		NonterminalNode node7 = factory.createNonterminalNode(A, 0, 1);
 		TokenSymbolNode node8 = factory.createTokenNode(e, 0, 1);
 		node7.addChild(node8);
 		TokenSymbolNode node9 = factory.createTokenNode(g, 1, 1);
@@ -148,13 +148,13 @@ public class IndirectRecursion3Test {
 	private SPPFNode getSPPFNode3() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 7);
-		NonterminalSymbolNode node2 = factory.createNonterminalNode(C, 0, 6);
-		NonterminalSymbolNode node3 = factory.createNonterminalNode(A, 0, 5);
-		NonterminalSymbolNode node4 = factory.createNonterminalNode(B, 0, 4);
-		NonterminalSymbolNode node5 = factory.createNonterminalNode(A, 0, 3);
-		NonterminalSymbolNode node6 = factory.createNonterminalNode(C, 0, 2);
-		NonterminalSymbolNode node7 = factory.createNonterminalNode(A, 0, 1);
+		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 7);
+		NonterminalNode node2 = factory.createNonterminalNode(C, 0, 6);
+		NonterminalNode node3 = factory.createNonterminalNode(A, 0, 5);
+		NonterminalNode node4 = factory.createNonterminalNode(B, 0, 4);
+		NonterminalNode node5 = factory.createNonterminalNode(A, 0, 3);
+		NonterminalNode node6 = factory.createNonterminalNode(C, 0, 2);
+		NonterminalNode node7 = factory.createNonterminalNode(A, 0, 1);
 		TokenSymbolNode node8 = factory.createTokenNode(e, 0, 1);
 		node7.addChild(node8);
 		TokenSymbolNode node9 = factory.createTokenNode(g, 1, 1);

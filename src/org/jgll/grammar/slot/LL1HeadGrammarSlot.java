@@ -11,7 +11,7 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 
 public class LL1HeadGrammarSlot extends HeadGrammarSlot {
@@ -76,7 +76,7 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 			rightExtent = children.get(children.size() - 1).getRightExtent();
 		}
 
-		NonterminalSymbolNode ntNode = parser.getSPPFLookup().findNonterminalNode(this, leftExtent, rightExtent);
+		NonterminalNode ntNode = parser.getSPPFLookup().findNonterminalNode(this, leftExtent, rightExtent);
 		
 		if(ntNode == null) {
 			ntNode = parser.getSPPFLookup().getNonterminalNode(this, leftExtent, rightExtent); 

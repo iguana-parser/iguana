@@ -27,7 +27,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 
 public class IguanaInterpreter {
@@ -116,7 +116,7 @@ public class IguanaInterpreter {
 		
 		for (NonPackedNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
 			String label;
-			if (ambiguousNode instanceof NonterminalSymbolNode) {
+			if (ambiguousNode instanceof NonterminalNode) {
 				label = grammarGraph.getNonterminalById(ambiguousNode.getId()).getName();
 			} else {
 				label = grammarGraph.getIntermediateNodeLabel(ambiguousNode.getId());

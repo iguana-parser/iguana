@@ -12,7 +12,7 @@ package org.jgll.sppf;
  * @author Ali Afroozeh
  *
  */
-public class CollapsibleNode extends NonterminalSymbolNode {
+public class CollapsibleNode extends NonterminalNode {
 
 	public CollapsibleNode(int nonterminalId, int numberOfAlternatives, int leftExtent, int rightExtent) {
 		super(nonterminalId, numberOfAlternatives, leftExtent, rightExtent);

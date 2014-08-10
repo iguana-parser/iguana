@@ -13,7 +13,7 @@ import org.jgll.regex.Sequence;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -49,7 +49,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(NonterminalSymbolNode node) {
+	public void visit(NonterminalNode node) {
 		removeIntermediateNode(node);
 		
 		if(!node.isVisited()) {
@@ -103,7 +103,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		return grammar.getObject(node.getId(), node.getFirstPackedNodeGrammarSlot());
 	}
 
-	private void buildAmbiguityNode(NonterminalSymbolNode nonterminalSymbolNode) {
+	private void buildAmbiguityNode(NonterminalNode nonterminalSymbolNode) {
 		
 		int nPackedNodes = 0;
 		

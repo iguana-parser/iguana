@@ -5,7 +5,7 @@ import static org.jgll.util.visualization.GraphVizUtil.*;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -53,7 +53,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	}
 
 	@Override
-	public void visit(NonterminalSymbolNode node) {
+	public void visit(NonterminalNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
@@ -112,7 +112,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(ListSymbolNode node) {
-		visit((NonterminalSymbolNode) node);
+		visit((NonterminalNode) node);
 	}
 	
 	public String getString() {

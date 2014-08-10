@@ -5,7 +5,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
@@ -25,9 +25,11 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	private final TokenSymbolNode[][] tokenSymbolNodes;
 	
-	private final IguanaSet<NonterminalSymbolNode>[] nonterminalNodes;
+	private final IguanaSet<NonterminalNode>[] nonterminalNodes;
 
 	private final IguanaSet<IntermediateNode>[] intermediateNodes;
+	
+	private int countPackedNodes;
 	
 	public SPPFLookupImpl(GrammarGraph grammar, Input input) {
 		long start = System.nanoTime();
@@ -58,26 +60,26 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalSymbolNode getNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		NonterminalSymbolNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
+	public NonterminalNode getNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		NonterminalNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
 
-		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
+		IguanaSet<NonterminalNode> set = nonterminalNodes[rightExtent];
 
 		if (set == null) {
 			
 			log.trace("Nonterminal node created: %s", key);
 			
-			set = factory.newHashSet(tableSize, new ExternalHasher<NonterminalSymbolNode>() {
+			set = factory.newHashSet(tableSize, new ExternalHasher<NonterminalNode>() {
 
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public int hash(NonterminalSymbolNode n, HashFunction f) {
+				public int hash(NonterminalNode n, HashFunction f) {
 					return f.hash(n.getId(), n.getLeftExtent());
 				}
 
 				@Override
-				public boolean equals(NonterminalSymbolNode n1, NonterminalSymbolNode n2) {
+				public boolean equals(NonterminalNode n1, NonterminalNode n2) {
 					return n1.getId() == n2.getId() &&
 						   n1.getLeftExtent() == n2.getLeftExtent();
 				}
@@ -87,7 +89,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 			return key;
 		}
 
-		NonterminalSymbolNode oldValue = set.add(key);
+		NonterminalNode oldValue = set.add(key);
 		if (oldValue == null) {
 			log.trace("Nonterminal node created: %s", key);
 			oldValue = key;
@@ -97,15 +99,15 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalSymbolNode findNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	public NonterminalNode findNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		
-		IguanaSet<NonterminalSymbolNode> set = nonterminalNodes[rightExtent];
+		IguanaSet<NonterminalNode> set = nonterminalNodes[rightExtent];
 
 		if (set == null) {
 			return null;
 		}
 
-		NonterminalSymbolNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
+		NonterminalNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
 		return set.get(key);
 	}
 
@@ -157,27 +159,27 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public void addPackedNode(NonterminalSymbolNode parent, LastGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		parent.addPackedNode(slot.getNodeId(), pivot, leftChild, rightChild);
+	public void addPackedNode(NonterminalNode parent, LastGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		if (parent.addPackedNode(slot.getNodeId(), pivot, leftChild, rightChild)) countPackedNodes++;
 	}
 	
 	@Override
 	public void addPackedNode(IntermediateNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		parent.addPackedNode(pivot, leftChild, rightChild);
+		if (parent.addPackedNode(pivot, leftChild, rightChild)) countPackedNodes++;
 	}
 	
 	@Override
-	public NonterminalSymbolNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
+	public NonterminalNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
 		if (nonterminalNodes[inputSize - 1] == null) {
 			return null;
 		}
-		return nonterminalNodes[inputSize - 1].get(new NonterminalSymbolNode(startSymbol.getNodeId(), startSymbol.getFirstSlots().length, 0, inputSize - 1));
+		return nonterminalNodes[inputSize - 1].get(new NonterminalNode(startSymbol.getNodeId(), startSymbol.getFirstSlots().length, 0, inputSize - 1));
 	}
 
 	@Override
 	public int getNonterminalNodesCount() {
 		int count = 0;
-		for(IguanaSet<NonterminalSymbolNode> set : nonterminalNodes) {
+		for(IguanaSet<NonterminalNode> set : nonterminalNodes) {
 			if(set != null) {
 				count += set.size();
 			}
@@ -211,28 +213,6 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public int getPackedNodesCount() {
-		int count = 0;
-		
-		for(IguanaSet<NonterminalSymbolNode> set : nonterminalNodes) {
-			if(set == null) continue;
-		
-			for (NonterminalSymbolNode nt : set) {
-				if (nt.isAmbiguous()) {
-					count += nt.getCountPackedNodes();
-				}
-			}
-		}
-		
-		for(IguanaSet<IntermediateNode> set : intermediateNodes) {
-			if(set == null) continue;
-		
-			for (IntermediateNode nt : set) {
-				if (nt.isAmbiguous()) {
-					count += nt.getCountPackedNodes();;
-				}
-			}
-		}
-
-		return count;
+		return countPackedNodes;
 	}
 }

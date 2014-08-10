@@ -9,7 +9,7 @@ import org.jgll.traversal.SPPFVisitor;
  * @author Ali Afroozeh
  *
  */
-public class ListSymbolNode extends NonterminalSymbolNode {
+public class ListSymbolNode extends NonterminalNode {
 
 	public ListSymbolNode(int id, int numberOfAlternatives, int leftExtent, int rightExtent) {
 		super(id, numberOfAlternatives, leftExtent, rightExtent);

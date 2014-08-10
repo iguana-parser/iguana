@@ -3,7 +3,7 @@ package org.jgll.util.visualization;
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
@@ -23,7 +23,7 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	}
 	
 	@Override
-	public void visit(NonterminalSymbolNode node) {
+	public void visit(NonterminalNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			

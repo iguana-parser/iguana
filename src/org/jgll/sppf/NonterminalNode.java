@@ -7,7 +7,7 @@ import org.jgll.traversal.SPPFVisitor;
  * @author Ali Afroozeh
  *
  */
-public class NonterminalSymbolNode extends NonPackedNode {
+public class NonterminalNode extends NonPackedNode {
 	
 	/**
 	 * Packed nodes under nonterminal nodes are of the form (slot, index) where
@@ -22,7 +22,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 	
 	private final int numberOfAlternatives;
 	
-	public NonterminalSymbolNode(int nonterminalId, int numberOfAlternatives, int leftExtent, int rightExtent) {
+	public NonterminalNode(int nonterminalId, int numberOfAlternatives, int leftExtent, int rightExtent) {
 		super(nonterminalId, leftExtent, rightExtent);
 		this.numberOfAlternatives = numberOfAlternatives;
 	}
@@ -36,7 +36,7 @@ public class NonterminalSymbolNode extends NonPackedNode {
 	 * Packed node id is effectively the alternate index from which this packed node is
 	 * going to be created. 
 	 */
-	public void addPackedNode(int packedNodeId, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+	public boolean addPackedNode(int packedNodeId, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		
 		assert leftChild  != null;
 		assert rightChild != null;
@@ -52,32 +52,36 @@ public class NonterminalSymbolNode extends NonPackedNode {
 			countPackedNodes++;
 		} 
 		else if (countPackedNodes == 1) {
+			
 			// if packed node does not exist
-			if(pivot != firstPackedNode.getPivot() || packedNodeId != firstPackedNode.getId()) {
-				// Initialize the packed nodes array for duplicate elimination
-				packedNodes = new PackedNode[numberOfAlternatives][rightExtent - leftExtent + 1];
-				
-				// Add the first packed node
-				children.clear();
-				children.add(firstPackedNode);
-				int firstPackedNodeId = firstPackedNode.getId();
-				packedNodes[firstPackedNodeId][firstPackedNode.getPivot() - leftExtent] = firstPackedNode;
-				
-				// Add the second packed node
-				PackedNode newPackedNode = attachChildren(new PackedNode(packedNodeId, pivot, this), leftChild, rightChild);
-				packedNodes[packedNodeId][pivot - leftExtent] = newPackedNode;
-				children.add(newPackedNode);
-				countPackedNodes++;
-			}
+			if(pivot == firstPackedNode.getPivot() && packedNodeId == firstPackedNode.getId()) return false;
+			
+			
+			// Initialize the packed nodes array for duplicate elimination
+			packedNodes = new PackedNode[numberOfAlternatives][rightExtent - leftExtent + 1];
+			
+			// Add the first packed node
+			children.clear();
+			children.add(firstPackedNode);
+			int firstPackedNodeId = firstPackedNode.getId();
+			packedNodes[firstPackedNodeId][firstPackedNode.getPivot() - leftExtent] = firstPackedNode;
+			
+			// Add the second packed node
+			PackedNode newPackedNode = attachChildren(new PackedNode(packedNodeId, pivot, this), leftChild, rightChild);
+			packedNodes[packedNodeId][pivot - leftExtent] = newPackedNode;
+			children.add(newPackedNode);
+			countPackedNodes++;
 		}
 		else {
-			if(packedNodes[packedNodeId][pivot - leftExtent] == null) {
-				PackedNode newPackedNode = attachChildren(new PackedNode(packedNodeId, pivot, this), leftChild, rightChild);
-				packedNodes[packedNodeId][pivot - leftExtent] = newPackedNode;
-				children.add(newPackedNode);
-				countPackedNodes++;
-			}
-		}		
+			if(packedNodes[packedNodeId][pivot - leftExtent] != null) return false;
+			
+			PackedNode newPackedNode = attachChildren(new PackedNode(packedNodeId, pivot, this), leftChild, rightChild);
+			packedNodes[packedNodeId][pivot - leftExtent] = newPackedNode;
+			children.add(newPackedNode);
+			countPackedNodes++;
+		}
+		
+		return true;
 	}
 	
 	@Override

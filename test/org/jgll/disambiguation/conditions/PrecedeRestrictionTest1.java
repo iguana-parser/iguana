@@ -17,7 +17,7 @@ import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
@@ -82,7 +82,7 @@ public class PrecedeRestrictionTest1 {
 
 	private SPPFNode getExpectedSPPF() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		NonterminalSymbolNode node1 = new NonterminalSymbolNode(grammarGraph.getNonterminalId(S), 2, 0, 6);
+		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(S), 2, 0, 6);
 		TokenSymbolNode node2 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(forall), 0, 6);
 		node1.addChild(node2);
 		return node1;

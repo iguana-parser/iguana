@@ -9,7 +9,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
@@ -73,10 +73,10 @@ public class IndirectRecursion2Test {
 	private SPPFNode expectedSPPF() {		
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(A, 0, 2);
+		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 2);
 		IntermediateNode node2 = factory.createIntermediateNode(list(B, A), 0, 1);
-		NonterminalSymbolNode node3 = factory.createNonterminalNode(B, 0, 0);
-		NonterminalSymbolNode node4 = factory.createNonterminalNode(A, 0, 1);
+		NonterminalNode node3 = factory.createNonterminalNode(B, 0, 0);
+		NonterminalNode node4 = factory.createNonterminalNode(A, 0, 1);
 		TokenSymbolNode node5 = factory.createTokenNode(a, 0, 1);
 		node4.addChild(node5);
 		node2.addChild(node3);

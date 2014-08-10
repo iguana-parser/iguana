@@ -9,7 +9,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalSymbolNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
@@ -80,9 +80,11 @@ public class Gamma2Test {
 	
 	@Test
 	public void test100bs() {
-		Input input = Input.fromString(getBs(100));		
-		GLLParser parser = ParserFactory.newParser(grammar, input);
-		parser.parse(input, grammar.toGrammarGraph(), "S");
+		for (int i = 1; i < 50; i++) {
+			Input input = Input.fromString(getBs(i*10));		
+			GLLParser parser = ParserFactory.newParser(grammar, input);
+			parser.parse(input, grammar.toGrammarGraph(), "S");			
+		}
 	}
 	
 	private String getBs(int size) {
@@ -96,30 +98,30 @@ public class Gamma2Test {
 	private SPPFNode getSPPF1() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 3);
+		NonterminalNode node1 = factory.createNonterminalNode(S, 0, 3);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode(list(S, S), 0, 2);
-		NonterminalSymbolNode node4 = factory.createNonterminalNode(S, 0, 1);
+		NonterminalNode node4 = factory.createNonterminalNode(S, 0, 1);
 		TokenSymbolNode node5 = factory.createTokenNode(b, 0, 1);
 		node4.addChild(node5);
-		NonterminalSymbolNode node6 = factory.createNonterminalNode(S, 1, 2);
+		NonterminalNode node6 = factory.createNonterminalNode(S, 1, 2);
 		TokenSymbolNode node7 = factory.createTokenNode(b, 1, 1);
 		node6.addChild(node7);
 		node3.addChild(node4);
 		node3.addChild(node6);
-		NonterminalSymbolNode node8 = factory.createNonterminalNode(S, 2, 3);
+		NonterminalNode node8 = factory.createNonterminalNode(S, 2, 3);
 		TokenSymbolNode node9 = factory.createTokenNode(b, 2, 1);
 		node8.addChild(node9);
 		node2.addChild(node3);
 		node2.addChild(node8);
 		PackedNode node10 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 1, node1);
-		NonterminalSymbolNode node11 = factory.createNonterminalNode(S, 1, 3);
+		NonterminalNode node11 = factory.createNonterminalNode(S, 1, 3);
 		node11.addChild(node6);
 		node11.addChild(node8);
 		node10.addChild(node4);
 		node10.addChild(node11);
 		PackedNode node12 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 2, node1);
-		NonterminalSymbolNode node13 = factory.createNonterminalNode(S, 0, 2);
+		NonterminalNode node13 = factory.createNonterminalNode(S, 0, 2);
 		node13.addChild(node4);
 		node13.addChild(node6);
 		node12.addChild(node13);
@@ -133,18 +135,18 @@ public class Gamma2Test {
 	private SPPFNode getSPPF2() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 4);
+		NonterminalNode node1 = factory.createNonterminalNode(S, 0, 4);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 3, node1);
 		IntermediateNode node3 = factory.createIntermediateNode(list(S, S), 0, 3);
 		PackedNode node4 = new PackedNode(grammarGraph.getIntermediateNodeId(list(S, S)), 1, node3);
-		NonterminalSymbolNode node5 = factory.createNonterminalNode(S, 0, 1);
+		NonterminalNode node5 = factory.createNonterminalNode(S, 0, 1);
 		TokenSymbolNode node6 = factory.createTokenNode(b, 0, 1);
 		node5.addChild(node6);
-		NonterminalSymbolNode node7 = factory.createNonterminalNode(S, 1, 3);
-		NonterminalSymbolNode node8 = factory.createNonterminalNode(S, 1, 2);
+		NonterminalNode node7 = factory.createNonterminalNode(S, 1, 3);
+		NonterminalNode node8 = factory.createNonterminalNode(S, 1, 2);
 		TokenSymbolNode node9 = factory.createTokenNode(b, 1, 1);
 		node8.addChild(node9);
-		NonterminalSymbolNode node10 = factory.createNonterminalNode(S, 2, 3);
+		NonterminalNode node10 = factory.createNonterminalNode(S, 2, 3);
 		TokenSymbolNode node11 = factory.createTokenNode(b, 2, 1);
 		node10.addChild(node11);
 		node7.addChild(node8);
@@ -152,14 +154,14 @@ public class Gamma2Test {
 		node4.addChild(node5);
 		node4.addChild(node7);
 		PackedNode node12 = new PackedNode(grammarGraph.getIntermediateNodeId(list(S, S)), 2, node3);
-		NonterminalSymbolNode node13 = factory.createNonterminalNode(S, 0, 2);
+		NonterminalNode node13 = factory.createNonterminalNode(S, 0, 2);
 		node13.addChild(node5);
 		node13.addChild(node8);
 		node12.addChild(node13);
 		node12.addChild(node10);
 		node3.addChild(node4);
 		node3.addChild(node12);
-		NonterminalSymbolNode node14 = factory.createNonterminalNode(S, 3, 4);
+		NonterminalNode node14 = factory.createNonterminalNode(S, 3, 4);
 		TokenSymbolNode node15 = factory.createTokenNode(b, 3, 1);
 		node14.addChild(node15);
 		node2.addChild(node3);
@@ -168,13 +170,13 @@ public class Gamma2Test {
 		IntermediateNode node17 = factory.createIntermediateNode(list(S, S), 0, 2);
 		node17.addChild(node5);
 		node17.addChild(node8);
-		NonterminalSymbolNode node18 = factory.createNonterminalNode(S, 2, 4);
+		NonterminalNode node18 = factory.createNonterminalNode(S, 2, 4);
 		node18.addChild(node10);
 		node18.addChild(node14);
 		node16.addChild(node17);
 		node16.addChild(node18);
 		PackedNode node19 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 3, node1);
-		NonterminalSymbolNode node20 = factory.createNonterminalNode(S, 0, 3);
+		NonterminalNode node20 = factory.createNonterminalNode(S, 0, 3);
 		PackedNode node21 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 2, node20);
 		node21.addChild(node17);
 		node21.addChild(node10);
@@ -190,7 +192,7 @@ public class Gamma2Test {
 		node19.addChild(node20);
 		node19.addChild(node14);
 		PackedNode node24 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 1, node1);
-		NonterminalSymbolNode node25 = factory.createNonterminalNode(S, 1, 4);
+		NonterminalNode node25 = factory.createNonterminalNode(S, 1, 4);
 		PackedNode node26 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 3, node25);
 		IntermediateNode node27 = factory.createIntermediateNode(list(S, S), 1, 3);
 		node27.addChild(node8);
@@ -222,37 +224,37 @@ public class Gamma2Test {
 	private SPPFNode getSPPF3() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalSymbolNode node1 = factory.createNonterminalNode(S, 0, 5);
+		NonterminalNode node1 = factory.createNonterminalNode(S, 0, 5);
 		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 4, node1);
 		IntermediateNode node3 = factory.createIntermediateNode(list(S, S), 0, 4);
 		PackedNode node4 = new PackedNode(grammarGraph.getIntermediateNodeId(list(S, S)), 1, node3);
-		NonterminalSymbolNode node5 = factory.createNonterminalNode(S, 0, 1);
+		NonterminalNode node5 = factory.createNonterminalNode(S, 0, 1);
 		TokenSymbolNode node6 = factory.createTokenNode(b, 0, 1);
 		node5.addChild(node6);
-		NonterminalSymbolNode node7 = factory.createNonterminalNode(S, 1, 4);
+		NonterminalNode node7 = factory.createNonterminalNode(S, 1, 4);
 		PackedNode node8 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 3, node7);
 		IntermediateNode node9 = factory.createIntermediateNode(list(S, S), 1, 3);
-		NonterminalSymbolNode node10 = factory.createNonterminalNode(S, 1, 2);
+		NonterminalNode node10 = factory.createNonterminalNode(S, 1, 2);
 		TokenSymbolNode node11 = factory.createTokenNode(b, 1, 1);
 		node10.addChild(node11);
-		NonterminalSymbolNode node12 = factory.createNonterminalNode(S, 2, 3);
+		NonterminalNode node12 = factory.createNonterminalNode(S, 2, 3);
 		TokenSymbolNode node13 = factory.createTokenNode(b, 2, 1);
 		node12.addChild(node13);
 		node9.addChild(node10);
 		node9.addChild(node12);
-		NonterminalSymbolNode node14 = factory.createNonterminalNode(S, 3, 4);
+		NonterminalNode node14 = factory.createNonterminalNode(S, 3, 4);
 		TokenSymbolNode node15 = factory.createTokenNode(b, 3, 1);
 		node14.addChild(node15);
 		node8.addChild(node9);
 		node8.addChild(node14);
 		PackedNode node16 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 2, node7);
-		NonterminalSymbolNode node17 = factory.createNonterminalNode(S, 2, 4);
+		NonterminalNode node17 = factory.createNonterminalNode(S, 2, 4);
 		node17.addChild(node12);
 		node17.addChild(node14);
 		node16.addChild(node10);
 		node16.addChild(node17);
 		PackedNode node18 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 3, node7);
-		NonterminalSymbolNode node19 = factory.createNonterminalNode(S, 1, 3);
+		NonterminalNode node19 = factory.createNonterminalNode(S, 1, 3);
 		node19.addChild(node10);
 		node19.addChild(node12);
 		node18.addChild(node19);
@@ -263,7 +265,7 @@ public class Gamma2Test {
 		node4.addChild(node5);
 		node4.addChild(node7);
 		PackedNode node20 = new PackedNode(grammarGraph.getIntermediateNodeId(list(S, S)), 3, node3);
-		NonterminalSymbolNode node21 = factory.createNonterminalNode(S, 0, 3);
+		NonterminalNode node21 = factory.createNonterminalNode(S, 0, 3);
 		PackedNode node22 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 2, node21);
 		IntermediateNode node23 = factory.createIntermediateNode(list(S, S), 0, 2);
 		node23.addChild(node5);
@@ -274,7 +276,7 @@ public class Gamma2Test {
 		node24.addChild(node5);
 		node24.addChild(node19);
 		PackedNode node25 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 2, node21);
-		NonterminalSymbolNode node26 = factory.createNonterminalNode(S, 0, 2);
+		NonterminalNode node26 = factory.createNonterminalNode(S, 0, 2);
 		node26.addChild(node5);
 		node26.addChild(node10);
 		node25.addChild(node26);
@@ -290,7 +292,7 @@ public class Gamma2Test {
 		node3.addChild(node4);
 		node3.addChild(node20);
 		node3.addChild(node27);
-		NonterminalSymbolNode node28 = factory.createNonterminalNode(S, 4, 5);
+		NonterminalNode node28 = factory.createNonterminalNode(S, 4, 5);
 		TokenSymbolNode node29 = factory.createTokenNode(b, 4, 1);
 		node28.addChild(node29);
 		node2.addChild(node3);
@@ -305,13 +307,13 @@ public class Gamma2Test {
 		node33.addChild(node12);
 		node31.addChild(node32);
 		node31.addChild(node33);
-		NonterminalSymbolNode node34 = factory.createNonterminalNode(S, 3, 5);
+		NonterminalNode node34 = factory.createNonterminalNode(S, 3, 5);
 		node34.addChild(node14);
 		node34.addChild(node28);
 		node30.addChild(node31);
 		node30.addChild(node34);
 		PackedNode node35 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 2, node1);
-		NonterminalSymbolNode node36 = factory.createNonterminalNode(S, 2, 5);
+		NonterminalNode node36 = factory.createNonterminalNode(S, 2, 5);
 		PackedNode node37 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 3, node36);
 		node37.addChild(node12);
 		node37.addChild(node34);
@@ -330,7 +332,7 @@ public class Gamma2Test {
 		node35.addChild(node23);
 		node35.addChild(node36);
 		PackedNode node41 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 4, node1);
-		NonterminalSymbolNode node42 = factory.createNonterminalNode(S, 0, 4);
+		NonterminalNode node42 = factory.createNonterminalNode(S, 0, 4);
 		PackedNode node43 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S, S), 3, node42);
 		node43.addChild(node31);
 		node43.addChild(node14);
@@ -357,7 +359,7 @@ public class Gamma2Test {
 		node48.addChild(node21);
 		node48.addChild(node34);
 		PackedNode node49 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 1, node1);
-		NonterminalSymbolNode node50 = factory.createNonterminalNode(S, 1, 5);
+		NonterminalNode node50 = factory.createNonterminalNode(S, 1, 5);
 		PackedNode node51 = new PackedNode(grammarGraph.getPackedNodeId(S, S, S), 4, node50);
 		node51.addChild(node7);
 		node51.addChild(node28);
