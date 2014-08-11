@@ -72,4 +72,7 @@ public interface SPPFLookup {
 	
 	public int getPackedNodesCount();
 	
+	public int getAmbiguousNodesCount();
+
+	
 }

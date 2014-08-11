@@ -1,8 +1,5 @@
 package org.jgll.util;
 
-import java.util.Set;
-
-import org.jgll.sppf.NonPackedNode;
 
 public class ParseStatistics {
 
@@ -17,8 +14,7 @@ public class ParseStatistics {
 	private final int nonterminalNodesCount;
 	private final int intermediateNodesCount;
 	private final int packedNodesCount;
-	
-	private final Set<NonPackedNode> ambiguousNodes;
+	private final int ambiguousNodesCount;
 	
 	private final Input input;
 	
@@ -26,7 +22,7 @@ public class ParseStatistics {
 						   int memoryUsed, int descriptorsCount, int gssNodesCount,
 						   int gssEdgesCount, int nonterminalNodesCount,
 						   int intermediateNodesCount, int packedNodesCount,
-						   Set<NonPackedNode> ambiguousNodes) {
+						   int ambiguousNodesCount) {
 		this.input = input;
 		this.nanoTime = nanoTime;
 		this.systemTime = systemTime;
@@ -38,7 +34,7 @@ public class ParseStatistics {
 		this.nonterminalNodesCount = nonterminalNodesCount;
 		this.intermediateNodesCount = intermediateNodesCount;
 		this.packedNodesCount = packedNodesCount;
-		this.ambiguousNodes = ambiguousNodes;
+		this.ambiguousNodesCount = ambiguousNodesCount;
 	}
 
 	public long getNanoTime() {
@@ -81,12 +77,8 @@ public class ParseStatistics {
 		return packedNodesCount;
 	}
 	
-	public Set<NonPackedNode> getAmbiguousNodes() {
-		return ambiguousNodes;
-	}
-	
 	public int getCountAmbiguousNodes() {
-		return ambiguousNodes.size();
+		return ambiguousNodesCount;
 	}
 	
 	public Input getInput() {
@@ -107,7 +99,7 @@ public class ParseStatistics {
 		sb.append("Nonterminal nodes: ").append(nonterminalNodesCount).append("\n");
 		sb.append("Intermediate nodes: ").append(intermediateNodesCount).append("\n");
 		sb.append("Packed nodes: ").append(packedNodesCount).append("\n");
-		sb.append("Ambiguities: ").append(ambiguousNodes.size()).append("\n");
+		sb.append("Ambiguities: ").append(ambiguousNodesCount).append("\n");
 		return sb.toString();
 	}
 }

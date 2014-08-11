@@ -113,13 +113,6 @@ public class GSSNode {
 	
 	public Iterable<GSSEdge> getGSSEdges() {
 		return gssEdges;
-//		return new Iterable<GSSEdge>() {
-//			
-//			@Override
-//			public Iterator<GSSEdge> iterator() {
-//				return new LinkedList<>(gssEdges).descendingIterator();
-//			}
-//		};		
 	}
 	
 	public boolean equals(Object obj) {
@@ -150,8 +143,8 @@ public class GSSNode {
 		return gssEdges.size();
 	}
 
-	public boolean addDescriptor(Descriptor descriptor) {
-		return descriptors.add(descriptor);
+	public boolean hasDescriptor(Descriptor descriptor) {
+		return !descriptors.add(descriptor);
 	}
 
 	public void clearDescriptors() {

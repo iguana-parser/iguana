@@ -11,6 +11,8 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.descriptor.Descriptor;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.util.logging.LoggerWrapper;
@@ -90,7 +92,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 		}
 		
 		for (int alternateIndex : set) {
-			parser.addDescriptor(firstSlots[alternateIndex]);
+			parser.scheduleDescriptor(new Descriptor(firstSlots[alternateIndex], parser.getCurrentGSSNode(), ci, DummyNode.getInstance()));
 		}
 		
 		return null;

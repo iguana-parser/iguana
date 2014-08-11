@@ -101,9 +101,9 @@ public class IguanaInterpreter {
 			sumUserTime += parseStatistics.getUserTime();
 			sumMemory += parseStatistics.getMemoryUsed();
 			
-			for (SPPFNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
+//			for (SPPFNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
 //				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammarGraph, input);
-			}
+//			}
 		}
 		
 		ParseStatistics parseStatistics = results.get(0).asParseSuccess().getParseStatistics();
@@ -114,18 +114,18 @@ public class IguanaInterpreter {
 						sumMemory / runCount,
  						parseStatistics.getCountAmbiguousNodes()));
 		
-		for (NonPackedNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
-			String label;
-			if (ambiguousNode instanceof NonterminalNode) {
-				label = grammarGraph.getNonterminalById(ambiguousNode.getId()).getName();
-			} else {
-				label = grammarGraph.getIntermediateNodeLabel(ambiguousNode.getId());
-			}
-			int line = input.getLineNumber(ambiguousNode.getLeftExtent());
-			int column = input.getColumnNumber(ambiguousNode.getLeftExtent());
-			System.out.println(String.format("Node: %s, length: %d, line: %d, column: %d", label, 
-					ambiguousNode.getRightExtent() - ambiguousNode.getLeftExtent(), line, column));
-		}
+//		for (NonPackedNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
+//			String label;
+//			if (ambiguousNode instanceof NonterminalNode) {
+//				label = grammarGraph.getNonterminalById(ambiguousNode.getId()).getName();
+//			} else {
+//				label = grammarGraph.getIntermediateNodeLabel(ambiguousNode.getId());
+//			}
+//			int line = input.getLineNumber(ambiguousNode.getLeftExtent());
+//			int column = input.getColumnNumber(ambiguousNode.getLeftExtent());
+//			System.out.println(String.format("Node: %s, length: %d, line: %d, column: %d", label, 
+//					ambiguousNode.getRightExtent() - ambiguousNode.getLeftExtent(), line, column));
+//		}
  	}
 
 	@SuppressWarnings("static-access")

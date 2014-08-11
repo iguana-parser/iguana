@@ -83,7 +83,8 @@ public class Gamma2Test {
 		for (int i = 1; i < 50; i++) {
 			Input input = Input.fromString(getBs(i*10));		
 			GLLParser parser = ParserFactory.newParser(grammar, input);
-			parser.parse(input, grammar.toGrammarGraph(), "S");			
+			ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+			System.out.println(result.asParseSuccess().getParseStatistics());
 		}
 	}
 	

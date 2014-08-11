@@ -175,7 +175,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 					  sppfLookup.getNonterminalNodesCount(), 
 					  sppfLookup.getIntermediateNodesCount(), 
 					  sppfLookup.getPackedNodesCount(), 
-					  root.getAmbiguousNodes());
+					  sppfLookup.getAmbiguousNodesCount());
 
 			parseResult = new ParseSuccess(root, parseStatistics);
 			log.info("Parsing finished successfully.");			
@@ -258,8 +258,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public void addDescriptor(GrammarSlot label) {
-		scheduleDescriptor(new Descriptor(label, cu, ci, DummyNode.getInstance()));
+	public boolean hasDescriptor(Descriptor descriptor) {
+		return descriptorLookup.addDescriptor(descriptor);
 	}	
 	
 	/**

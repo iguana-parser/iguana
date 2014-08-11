@@ -64,7 +64,8 @@ public class Descriptor {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(slot.getId(), sppfNode.getId(), inputIndex);
+		// The label of SPPFNode is the same as the slot
+		return HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 	
 	@Override
@@ -79,9 +80,7 @@ public class Descriptor {
 		
 		Descriptor other = (Descriptor) obj;
 		
-		return slot == other.slot &&
-			   sppfNode.getId() == other.sppfNode.getId() &&
-			   inputIndex == other.inputIndex;
+		return slot == other.slot && inputIndex == other.inputIndex;
 	}
 	
 	@Override

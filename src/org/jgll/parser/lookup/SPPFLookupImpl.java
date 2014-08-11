@@ -31,6 +31,8 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	private int countPackedNodes;
 	
+	private int countAmbiguousNodes;
+	
 	public SPPFLookupImpl(GrammarGraph grammar, Input input) {
 		long start = System.nanoTime();
 		nonterminalNodes = new IguanaSet[input.length()];
@@ -160,12 +162,22 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public void addPackedNode(NonterminalNode parent, LastGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		if (parent.addPackedNode(slot.getNodeId(), pivot, leftChild, rightChild)) countPackedNodes++;
+		boolean ambiguousBefore = parent.isAmbiguous();
+		if (parent.addPackedNode(slot.getNodeId(), pivot, leftChild, rightChild)) {
+			countPackedNodes++;
+			boolean ambiguousAfter = parent.isAmbiguous();
+			if (!ambiguousBefore && ambiguousAfter) countAmbiguousNodes++;
+		}
 	}
 	
 	@Override
 	public void addPackedNode(IntermediateNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		if (parent.addPackedNode(pivot, leftChild, rightChild)) countPackedNodes++;
+		boolean ambiguousBefore = parent.isAmbiguous();
+		if (parent.addPackedNode(pivot, leftChild, rightChild)) {
+			countPackedNodes++;
+			boolean ambiguousAfter = parent.isAmbiguous();
+			if (!ambiguousBefore && ambiguousAfter) countAmbiguousNodes++;
+		}
 	}
 	
 	@Override
@@ -214,5 +226,10 @@ public class SPPFLookupImpl implements SPPFLookup {
 	@Override
 	public int getPackedNodesCount() {
 		return countPackedNodes;
+	}
+	
+	@Override
+	public int getAmbiguousNodesCount() {
+		return countAmbiguousNodes;
 	}
 }

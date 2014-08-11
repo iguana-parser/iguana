@@ -35,49 +35,15 @@ public class DescriptorLookupImpl implements DescriptorLookup {
 	
 	@Override
 	public boolean addDescriptor(Descriptor descriptor) {
-		return descriptor.getGSSNode().addDescriptor(descriptor);
-//		IguanaSet<Descriptor> set = descriptorsSet[descriptor.getInputIndex()];
-//		if (set == null) {
-//			set = factory.newHashSet(tableSize, new ExternalHasher<Descriptor>() {
-//
-//				private static final long serialVersionUID = 1L;
-//
-//				@Override
-//				public int hash(Descriptor d, HashFunction f) {
-//					return f.hash(d.getGrammarSlot().getId(), 
-//		       					  d.getSPPFNode().getId(), 
-//								  d.getGSSNode().getGrammarSlot().getId(),
-//								  d.getGSSNode().getInputIndex());
-//				}
-//				
-//				@Override
-//				public boolean equals(Descriptor d1, Descriptor d2) {
-//					return 	d1.getGrammarSlot().getId() == d2.getGrammarSlot().getId() && 
-//		 					d1.getSPPFNode().getId() == d2.getSPPFNode().getId() && 
-//							d1.getGSSNode().getGrammarSlot() == d2.getGSSNode().getGrammarSlot() &&
-//							d1.getGSSNode().getInputIndex() == d2.getGSSNode().getInputIndex();
-//				}
-//			});
-//			descriptorsSet[descriptor.getInputIndex()] = set;
-//			set.add(descriptor);
-//			return true;
-//		}
-//
-//		Descriptor add = set.add(descriptor);
-//		return add == null;
+		return descriptor.getGSSNode().hasDescriptor(descriptor);
 	}
 
 	@Override
 	public boolean scheduleDescriptor(Descriptor descriptor) {
-
-		if (addDescriptor(descriptor)) {
-			descriptorsCount++;
-			descriptorsStack.push(descriptor);
-			log.trace("Descriptor created: %s", descriptor);
-			return true;
-		}
-
-		return false;
+		descriptorsCount++;
+		descriptorsStack.push(descriptor);
+		log.trace("Descriptor created: %s", descriptor);
+		return true;
 	}
 	
 	@Override

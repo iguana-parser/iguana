@@ -41,10 +41,9 @@ public interface GLLParser {
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
 	
 	/**
-	 * Adds a descriptor with the current input index, current GSS node and a 
-	 * dummy node. 
+	 * @return true if no such descriptor exists.
 	 */
-	public void addDescriptor(GrammarSlot slot);
+	public boolean hasDescriptor(Descriptor descriptor);
 	
 	public void scheduleDescriptor(Descriptor descriptor);
 	

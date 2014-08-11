@@ -50,7 +50,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		
 				SPPFNode sppfNode = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
 				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, sppfNode);
-				if (descriptorLookup.addDescriptor(descriptor)) {
+				
+				if (!hasDescriptor(descriptor)) {
 					cn = sppfNode;
 					cu = edge.getDestination();
 					ci = inputIndex;
@@ -62,7 +63,10 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			
 			for (GSSEdge edge : gssNode.getGSSEdges()) {
 				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
-				scheduleDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
+				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, y);
+				if (!hasDescriptor(descriptor)) {
+					scheduleDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
+				}
 			}
 		}
 		
@@ -132,7 +136,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z);
 				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
-				if (descriptorLookup.addDescriptor(descriptor)) {
+				
+				if (!hasDescriptor(descriptor)) {
 					cn = x;
 					cu = destination;
 					ci = z.getRightExtent();
@@ -153,7 +158,10 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				}
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
-				scheduleDescriptor(new Descriptor(returnSlot, destination, z.getRightExtent(), x));
+				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
+				if (!hasDescriptor(descriptor)) {
+					scheduleDescriptor(descriptor);
+				}
 			}
 		}
 		
