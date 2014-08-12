@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.L0;
 import org.jgll.parser.HashFunctions;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.sppf.NonPackedNode;
@@ -17,8 +16,6 @@ import org.jgll.sppf.NonPackedNode;
  * 
  */
 public class GSSNode {
-	
-	public static final GSSNode U0 = new GSSNode(L0.getInstance(), 0);
 	
 	private final GrammarSlot slot;
 

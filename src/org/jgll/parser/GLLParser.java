@@ -79,6 +79,4 @@ public interface GLLParser {
 	 */
 	public Descriptor getCurrentDescriptor();
 	
-	public ParseStatistics getParseStatistics();
-		
 }

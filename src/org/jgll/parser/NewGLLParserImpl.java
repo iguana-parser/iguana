@@ -1,9 +1,12 @@
 package org.jgll.parser;
 
 
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.L0;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
@@ -11,8 +14,12 @@ import org.jgll.parser.gss.NewGSSEdgeImpl;
 import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.BenchmarkUtil;
+import org.jgll.util.ParseStatistics;
 
 /**
 
@@ -26,57 +33,121 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 						 DescriptorLookupFactory descriptorLookupFactory) {
 		super(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
 	}
+		
+	@Override
+	public ParseResult parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName) {
+		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
+		
+		if(startSymbol == null) {
+			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
+		}
+		
+		this.grammar = grammar;
+		this.lexer = lexer;
+		this.input = lexer.getInput();
+		
+		initParserState();
+		initLookups(grammar, input);
+	
+		log.info("Parsing %s:", input.getURI());
+
+		long start = System.nanoTime();
+		long startUserTime = BenchmarkUtil.getUserTime();
+		long startSystemTime = BenchmarkUtil.getSystemTime();
+		
+		cu = createGSSNode(null, startSymbol);
+		
+		NonterminalNode root;
+		
+		L0.getInstance().parse(this, lexer, startSymbol);			
+		root = sppfLookup.getStartSymbol(startSymbol, input.length());
+
+		ParseResult parseResult;
+		
+		long end = System.nanoTime();
+		long endUserTime = BenchmarkUtil.getUserTime();
+		long endSystemTime = BenchmarkUtil.getSystemTime();
+		
+		if (root == null) {
+			parseResult = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
+			log.info("Parse error:\n %s", parseResult);
+		} else {
+			ParseStatistics parseStatistics = new ParseStatistics(input, end - start,
+					  endUserTime - startUserTime,
+					  endSystemTime - startSystemTime, 
+					  BenchmarkUtil.getMemoryUsed(),
+					  descriptorLookup.getDescriptorsCount(), 
+					  gssLookup.getGSSNodesCount(), 
+					  gssLookup.getGSSEdgesCount(), 
+					  sppfLookup.getNonterminalNodesCount(), 
+					  sppfLookup.getIntermediateNodesCount(), 
+					  sppfLookup.getPackedNodesCount(), 
+					  sppfLookup.getAmbiguousNodesCount());
+
+			parseResult = new ParseSuccess(root, parseStatistics);
+			log.info("Parsing finished successfully.");			
+			log.info(parseStatistics.toString());
+		}
+		
+		return parseResult;
+	}
+	
+	private void initParserState() {
+		cu = null;
+		cn = DummyNode.getInstance();
+		ci = 0;
+		errorSlot = null;
+		errorIndex = 0;
+		errorGSSNode = null;
+	}
 	
 	@Override
 	public final GrammarSlot pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
 		
-		if (gssNode != u0) {
-
-			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
+		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
+		
+		if (!gssLookup.addToPoppedElements(gssNode, node)) {
+			return null;
+		}
+		
+		// Optimization for the case when only one GSS Edge is available.
+		// No scheduling of descriptors, rather direct jump to the slot
+		// to be processed.
+		if (gssNode.countGSSEdges() == 1) {
+			GSSEdge edge = gssNode.getGSSEdges().iterator().next();
+			BodyGrammarSlot returnSlot = edge.getReturnSlot();
 			
-			if (!gssLookup.addToPoppedElements(gssNode, node)) {
+			if(returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
 				return null;
 			}
-			
-			// Optimization for the case when only one GSS Edge is available.
-			// No scheduling of descriptors, rather direct jump to the slot
-			// to be processed.
-			if (gssNode.countGSSEdges() == 1) {
-				GSSEdge edge = gssNode.getGSSEdges().iterator().next();
-				BodyGrammarSlot returnSlot = edge.getReturnSlot();
-				
-				if(returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
-					return null;
-				}
 
-				SPPFNode sppfNode = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
-				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, sppfNode);
-				
-				if (!hasDescriptor(descriptor)) {
-					cn = sppfNode;
-					cu = edge.getDestination();
-					ci = inputIndex;
-					log.trace("Processing %s", descriptor);
-					return returnSlot;
-				}
-				return null;
+			SPPFNode sppfNode = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
+			Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, sppfNode);
+			
+			if (!hasDescriptor(descriptor)) {
+				cn = sppfNode;
+				cu = edge.getDestination();
+				ci = inputIndex;
+				log.trace("Processing %s", descriptor);
+				return returnSlot;
+			}
+			return null;
+		}
+		
+		label:
+		for(GSSEdge edge : gssNode.getGSSEdges()) {
+			BodyGrammarSlot returnSlot = edge.getReturnSlot();
+			
+			if(returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
+				continue label;
 			}
 			
-			label:
-			for(GSSEdge edge : gssNode.getGSSEdges()) {
-				BodyGrammarSlot returnSlot = edge.getReturnSlot();
-				
-				if(returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
-					continue label;
-				}
-				
-				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
-				
-				
-				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, y);
-				if (!hasDescriptor(descriptor)) {
-					scheduleDescriptor(descriptor);
-				}
+			SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
+			
+			
+			Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, y);
+			if (!hasDescriptor(descriptor)) {
+				scheduleDescriptor(descriptor);
 			}
 		}
 		

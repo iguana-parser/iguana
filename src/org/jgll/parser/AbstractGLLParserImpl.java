@@ -6,8 +6,6 @@ import java.lang.management.ThreadMXBean;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.L0;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.lexer.GLLLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
@@ -20,11 +18,9 @@ import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ParseStatistics;
 import org.jgll.util.hashing.HashTableFactory;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -46,11 +42,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
 	}
 	
-	/**
-	 * u0 is the bottom of the GSS.
-	 */
-	protected static final GSSNode u0 = GSSNode.U0;
-
 	protected GSSLookup gssLookup;
 	
 	protected SPPFLookup sppfLookup;
@@ -60,7 +51,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	/**
 	 * u0 is the bottom of the GSS.
 	 */
-	protected GSSNode cu = u0;
+	protected GSSNode cu;
 	
 	protected SPPFNode cn = DummyNode.getInstance();
 	
@@ -98,8 +89,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 
 	protected DescriptorLookupFactory descriptorLookupFactory;
 
-	private ParseStatistics parseStatistics;
-
 	public AbstractGLLParserImpl(GSSLookupFactory gssLookupFactory, 
 								 SPPFLookupFactory sppfLookupFactory, 
 								 DescriptorLookupFactory descriptorLookupFactory) {
@@ -113,102 +102,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return parse(new GLLLexerImpl(input, grammar), grammar, startSymbolName);
 	}
 	
-	/**
-	 * Parses the given input string. If the parsing of the input was successful,
-	 * the root of SPPF is returned.
-	 * 
-	 * @param input the input string to be parsed.
-	 * @return the SPPF root resulting from parsing the input
-	 * 
-	 * @throws ParseError a {@link ParseError} if the descriptor set is empty, but
-	 * 								  no SPPF root has been found.
-	 * @throws RuntimeException if no nonterminal with the given start symbol name is found.
-	 */
 	@Override
-	public final ParseResult parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName) {
-		
-		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
-		
-		if(startSymbol == null) {
-			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
-		}
-		
-		GSSNode.U0.clearDescriptors();
-		
-		this.grammar = grammar;
-		
-		this.lexer = lexer;
-		
-		this.input = lexer.getInput();
-		
-		initParserState();
-		initLookups(grammar, input);
-	
-		log.info("Parsing %s:", input.getURI());
-
-		long start = System.nanoTime();
-		long startUserTime = getUserTime();
-		long startSystemTime = getSystemTime();
-		
-		NonterminalNode root;
-		
-		L0.getInstance().parse(this, lexer, startSymbol);			
-		root = sppfLookup.getStartSymbol(startSymbol, input.length());
-
-		ParseResult parseResult;
-		
-		long end = System.nanoTime();
-		long endUserTime = getUserTime();
-		long endSystemTime = getSystemTime();
-		
-		if (root == null) {
-			parseResult = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
-			log.info("Parse error:\n %s", parseResult);
-		} else {
-			parseStatistics = new ParseStatistics(input, end - start,
-					  endUserTime - startUserTime,
-					  endSystemTime - startSystemTime, 
-					  getMemoryUsed(),
-					  descriptorLookup.getDescriptorsCount(), 
-					  gssLookup.getGSSNodesCount(), 
-					  gssLookup.getGSSEdgesCount(), 
-					  sppfLookup.getNonterminalNodesCount(), 
-					  sppfLookup.getIntermediateNodesCount(), 
-					  sppfLookup.getPackedNodesCount(), 
-					  sppfLookup.getAmbiguousNodesCount());
-
-			parseResult = new ParseSuccess(root, parseStatistics);
-			log.info("Parsing finished successfully.");			
-			log.info(parseStatistics.toString());
-		}
-		
-		return parseResult;
-	}
-
-	private int getMemoryUsed() {
-		int mb = 1024 * 1024;
-		Runtime runtime = Runtime.getRuntime();
-		int memoryUsed = (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
-		return memoryUsed;
-	}
-		
-	@Override
-	public ParseStatistics getParseStatistics() {
-		return parseStatistics;
-	}
-	
-	public static long getUserTime( ) {
-	    ThreadMXBean bean = ManagementFactory.getThreadMXBean( );
-	    return bean.isCurrentThreadCpuTimeSupported( ) ?
-	        bean.getCurrentThreadUserTime() : 0L;
-	}
-	
-	public long getSystemTime( ) {
-	    ThreadMXBean bean = ManagementFactory.getThreadMXBean( );
-	    return bean.isCurrentThreadCpuTimeSupported( ) ?
-	        (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime( )) : 0L;
-	}
-
+	public abstract ParseResult parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName);
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -226,17 +121,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			this.errorGSSNode = cu;
 		}
 	}
-
-	private void initParserState() {
-		cu = u0;
-		cn = DummyNode.getInstance();
-		ci = 0;
-		errorSlot = null;
-		errorIndex = 0;
-		errorGSSNode = null;
-	}
 	
-	private void initLookups(GrammarGraph grammar, Input input) {
+	protected void initLookups(GrammarGraph grammar, Input input) {
 		gssLookup = gssLookupFactory.createGSSLookupFactory(grammar, input);
 		sppfLookup = sppfLookupFactory.createSPPFLookup(grammar, input);
 		descriptorLookup = descriptorLookupFactory.createDescriptorLookup(grammar, input);

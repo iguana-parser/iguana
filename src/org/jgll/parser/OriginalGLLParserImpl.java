@@ -1,9 +1,12 @@
 package org.jgll.parser;
 
 
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.L0;
+import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
@@ -11,20 +14,95 @@ import org.jgll.parser.gss.OriginalGSSEdgeImpl;
 import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.BenchmarkUtil;
+import org.jgll.util.ParseStatistics;
 
 /**
-
+ *
  * @author Ali Afroozeh
  * 
  */
 public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
+	
+	protected static final GSSNode u0 = new GSSNode(L0.getInstance(), 0);
 		
 	public OriginalGLLParserImpl(GSSLookupFactory gssLookupFactory, 
 						 SPPFLookupFactory sppfLookupFactory, 
 						 DescriptorLookupFactory descriptorLookupFactory) {
 		super(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
+	}
+	
+	@Override
+	public ParseResult parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName) {
+		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
+		
+		if(startSymbol == null) {
+			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
+		}
+		
+		u0.clearDescriptors();
+		
+		this.grammar = grammar;
+		
+		this.lexer = lexer;
+		
+		this.input = lexer.getInput();
+		
+		initParserState();
+		initLookups(grammar, input);
+	
+		log.info("Parsing %s:", input.getURI());
+
+		long start = System.nanoTime();
+		long startUserTime = BenchmarkUtil.getUserTime();
+		long startSystemTime = BenchmarkUtil.getSystemTime();
+		
+		NonterminalNode root;
+		
+		L0.getInstance().parse(this, lexer, startSymbol);			
+		root = sppfLookup.getStartSymbol(startSymbol, input.length());
+
+		ParseResult parseResult;
+		
+		long end = System.nanoTime();
+		long endUserTime = BenchmarkUtil.getUserTime();
+		long endSystemTime = BenchmarkUtil.getSystemTime();
+		
+		if (root == null) {
+			parseResult = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
+			log.info("Parse error:\n %s", parseResult);
+		} else {
+			ParseStatistics parseStatistics = new ParseStatistics(input, end - start,
+					  endUserTime - startUserTime,
+					  endSystemTime - startSystemTime, 
+					  BenchmarkUtil.getMemoryUsed(),
+					  descriptorLookup.getDescriptorsCount(), 
+					  gssLookup.getGSSNodesCount(), 
+					  gssLookup.getGSSEdgesCount(), 
+					  sppfLookup.getNonterminalNodesCount(), 
+					  sppfLookup.getIntermediateNodesCount(), 
+					  sppfLookup.getPackedNodesCount(), 
+					  sppfLookup.getAmbiguousNodesCount());
+
+			parseResult = new ParseSuccess(root, parseStatistics);
+			log.info("Parsing finished successfully.");			
+			log.info(parseStatistics.toString());
+		}
+		
+		return parseResult;
+	}
+	
+	private void initParserState() {
+		cu = u0;
+		cn = DummyNode.getInstance();
+		ci = 0;
+		errorSlot = null;
+		errorIndex = 0;
+		errorGSSNode = null;
 	}
 	
 	@Override
@@ -167,4 +245,5 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		
 		return null;
 	}
+
 }
