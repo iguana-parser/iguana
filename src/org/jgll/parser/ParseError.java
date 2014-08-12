@@ -56,14 +56,14 @@ public class ParseError implements ParseResult {
 		
 		GSSNode gssNode = currentNode;
 		
-		while(gssNode != GSSNode.U0) {
+		while(gssNode != null) {
 			indent(out, 1, gssNode);			
 			gssNode = findMergePoint(gssNode, out, 1);
 		}
 	}
 
 	private void indent(PrintStream out, int i, GSSNode node) {
-		if(node == GSSNode.U0) {
+		if(node == null) {
 			return;
 		}
 		out.println(String.format("%" + i * 2 + "s, %d", node.getGrammarSlot(), node.getInputIndex()));

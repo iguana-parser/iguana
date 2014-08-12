@@ -85,5 +85,10 @@ public class OriginalIntermediateNodeIds implements IntermediateNodeIds {
 	public int getSlotId(Rule rule) {
 		return -1;
 	}
+	
+	@Override
+	public String toString() {
+		return intermediateNodeIds.toString();
+	}
 
 }

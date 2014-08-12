@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -246,6 +247,11 @@ public class Grammar implements Serializable {
 			for (Rule rule : rules) {
 				addRule(rule);
 			}
+			return this;
+		}
+		
+		public Builder addRules(Rule...rules) {
+			addRules(Arrays.asList(rules));
 			return this;
 		}
 	}

@@ -3,7 +3,6 @@ package org.jgll.grammar.leftfactorization;
 import static org.jgll.util.CollectionsUtil.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarOperations;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;

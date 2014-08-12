@@ -10,7 +10,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.util.CollectionsUtil;
 
-public class NewIntermediateNodeIds implements IntermediateNodeIds {
+public class SharedPrefixIntermediateNodeIds implements IntermediateNodeIds {
 	
 	private Map<List<Symbol>, Integer> intermediateNodeIds;
 	
@@ -18,7 +18,7 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 	
 	private Grammar grammar;
 
-	public NewIntermediateNodeIds(Grammar grammar) {
+	public SharedPrefixIntermediateNodeIds(Grammar grammar) {
 		this.grammar = grammar;
 		this.intermediateNodeIds = new HashMap<>();
 		this.idToNameMap = new HashMap<>();
@@ -76,4 +76,8 @@ public class NewIntermediateNodeIds implements IntermediateNodeIds {
 		return idToNameMap.get(id);
 	}
 	
+	@Override
+	public String toString() {
+		return intermediateNodeIds.toString();
+	}
 }

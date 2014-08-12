@@ -24,8 +24,6 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	protected final List<SPPFNode> children;
 	
-	protected int countPackedNodes;
-	
 	public NonPackedNode(int id, int leftExtent, int rightExtent) {
 		
 		assert id >= 0;
@@ -106,9 +104,6 @@ public abstract class NonPackedNode extends SPPFNode {
 
 	public void addChild(SPPFNode node) {
 		//TODO: change it! PackedNodes cannot be added via this method at parse time.
-		if(node instanceof PackedNode) {
-			countPackedNodes++;
-		}
 		children.add(node);
 	}
 	
@@ -151,7 +146,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	@Override
 	public boolean isAmbiguous() {
-		return countPackedNodes > 1;
+		return children.size() > 1;
 	}
 	
 	public int getFirstPackedNodeGrammarSlot() {
@@ -159,7 +154,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public int getCountPackedNodes() {
-		return countPackedNodes;
+		return children.size();
 	}
 	
 }
