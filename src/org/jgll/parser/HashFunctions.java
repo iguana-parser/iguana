@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 import org.jgll.util.hashing.hashfunction.HashFunction;
 import org.jgll.util.hashing.hashfunction.MurmurHash3;
+import org.jgll.util.hashing.hashfunction.PrimeMultiplication;
 import org.jgll.util.hashing.hashfunction.XXHash;
 
 public class HashFunctions {
@@ -10,8 +11,10 @@ public class HashFunctions {
 	
 	private static HashFunction xxhash = new XXHash();
 	
+	private static HashFunction primeMultiplication = new PrimeMultiplication();
+	
 	public static HashFunction defaulFunction() {
-		return murmur3;
+		return primeMultiplication;
 	}
 	
 	public static HashFunction xxHash() {
