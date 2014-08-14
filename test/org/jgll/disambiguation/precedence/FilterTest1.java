@@ -72,7 +72,7 @@ public class FilterTest1 {
 		parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode()));
 	}
 	
 	private SPPFNode getSPPFNode() {

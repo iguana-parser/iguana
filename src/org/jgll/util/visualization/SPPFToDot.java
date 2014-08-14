@@ -71,7 +71,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			String label = String.format("(%s, %d, %d)", grammarGraph.getIntermediateNodeLabel(node.getId()), 
+			String label = String.format("(%s, %d, %d)", grammarGraph.getIntermediateNodeSlot(node.getId()), 
 														 node.getLeftExtent(), node.getRightExtent());
 			sb.append("\"" + getId(node) + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);

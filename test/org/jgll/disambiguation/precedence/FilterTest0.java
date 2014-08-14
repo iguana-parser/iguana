@@ -18,6 +18,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -83,7 +84,8 @@ public class FilterTest0 {
 		parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode()));
+        System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot(), grammar.toGrammarGraph()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode()));
 	}
 	
 	private SPPFNode getSPPFNode() {

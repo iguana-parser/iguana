@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 
@@ -22,8 +23,13 @@ public class SPPFNodeFactory {
 										 rightExtent);
 	}
 
-	public IntermediateNode createIntermediateNode(List<? extends Symbol> symbols, int leftExtent, int rightExtent) {
-		int id = grammarGraph.getIntermediateNodeId(symbols);
+	public IntermediateNode createIntermediateNode(String s, int leftExtent, int rightExtent) {
+		int id = grammarGraph.getIntermediateNodeId(s);
+		return new IntermediateNode(id, leftExtent, rightExtent);
+	}
+	
+	public IntermediateNode createIntermediateNode(Rule rule, int position, int leftExtent, int rightExtent) {
+		int id = grammarGraph.getIntermediateNodeId(rule, position);
 		return new IntermediateNode(id, leftExtent, rightExtent);
 	}
 	

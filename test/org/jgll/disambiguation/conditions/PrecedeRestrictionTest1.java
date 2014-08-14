@@ -77,14 +77,14 @@ public class PrecedeRestrictionTest1 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF()));
 	}
 
 	private SPPFNode getExpectedSPPF() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(S), 2, 0, 6);
 		TokenSymbolNode node2 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(forall), 0, 6);
-		node1.addChild(node2);
+		node1.init().addChild(node2);
 		return node1;
 	}
 

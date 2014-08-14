@@ -20,7 +20,7 @@ public class PackedNode extends SPPFNode {
 
 	private final SPPFNode parent;
 	
-	private final List<SPPFNode> children;
+	private List<SPPFNode> children;
 	
 	public PackedNode(int id, int pivot, NonPackedNode parent) {
 		
@@ -31,7 +31,6 @@ public class PackedNode extends SPPFNode {
 		this.id = id;
 		this.pivot = pivot;
 		this.parent = parent;
-		
 		this.children = new ArrayList<>(2);
 	}
 			

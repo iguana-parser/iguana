@@ -1,32 +1,27 @@
 package org.jgll.grammar.slot;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.util.CollectionsUtil;
+import org.jgll.util.Tuple;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 public class SharedPrefixIntermediateNodeIds implements IntermediateNodeIds {
 	
-	private Map<List<Symbol>, Integer> intermediateNodeIds;
+	private BiMap<List<Symbol>, Integer> intermediateNodeIds;
 	
-	private Map<Integer, List<Symbol>> idToNameMap;
-	
-	private Grammar grammar;
-
 	public SharedPrefixIntermediateNodeIds(Grammar grammar) {
-		this.grammar = grammar;
-		this.intermediateNodeIds = new HashMap<>();
-		this.idToNameMap = new HashMap<>();
-		calculateIds();
+		this.intermediateNodeIds = HashBiMap.create();
+		calculateIds(grammar);
 	}
 	
-	@Override
-	public void calculateIds() {
+	private void calculateIds(Grammar grammar) {
 		int intermediateId = 0;
 		
 		for (Rule rule : grammar.getRules()) {
@@ -34,11 +29,8 @@ public class SharedPrefixIntermediateNodeIds implements IntermediateNodeIds {
 				for (int i = 2; i < rule.getBody().size(); i++) {
 					List<Symbol> prefix = rule.getBody().subList(0, i);
 					List<Symbol> plain = OperatorPrecedence.plain(prefix);
-					if (!intermediateNodeIds.containsKey(plain)) {
-						intermediateNodeIds.put(plain, intermediateId);
-						idToNameMap.put(intermediateId, plain);
-						intermediateId++;
-					}
+					intermediateNodeIds.put(plain, intermediateId);
+					intermediateId++;
 				}
 			}
 		}
@@ -62,22 +54,27 @@ public class SharedPrefixIntermediateNodeIds implements IntermediateNodeIds {
 	}
 	
 	@Override
-	public int getSlotId(Rule rule) {
-		return intermediateNodeIds.get(rule.getBody());
-	}
-
-	@Override
 	public String getSlotName(int id) {
-		return CollectionsUtil.listToString(idToNameMap.get(id), " ");
+		return CollectionsUtil.listToString(intermediateNodeIds.inverse().get(id), " ");
 	}
 	
 	@Override
-	public List<Symbol> getSequence(int id) {
-		return idToNameMap.get(id);
+	public List<Symbol> getPrefix(int id) {
+		return intermediateNodeIds.inverse().get(id);
 	}
 	
 	@Override
 	public String toString() {
 		return intermediateNodeIds.toString();
+	}
+
+	@Override
+	public Tuple<Rule, Integer> getSlot(int id) {
+		throw new RuntimeException("Should not be here.");
+	}
+
+	@Override
+	public int getSlotId(String s) {
+		throw new RuntimeException("Should not be here.");
 	}
 }

@@ -1,8 +1,6 @@
 package org.jgll.grammar.slot;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.precedence.OperatorPrecedence;
@@ -10,23 +8,25 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.util.Tuple;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 public class OriginalIntermediateNodeIds implements IntermediateNodeIds {
 	
-	private Map<Tuple<Rule, Integer>, Integer> intermediateNodeIds;
+	private BiMap<Tuple<Rule, Integer>, Integer> intermediateNodeIds;
 	
-	private Map<Integer, Tuple<Rule, Integer>> idToNameMap;
+	private BiMap<String, Integer> names;
 	
 	private Grammar grammar;
 	
 	public OriginalIntermediateNodeIds(Grammar grammar) {
 		this.grammar = grammar;
-		this.intermediateNodeIds = new HashMap<>();
-		this.idToNameMap = new HashMap<>();
+		this.intermediateNodeIds = HashBiMap.create();
+		this.names = HashBiMap.create();
 		calculateIds();
 	}
 
-	@Override
-	public void calculateIds() {
+	private void calculateIds() {
 		int intermediateId = 0;
 		
 		for (Rule rule : grammar.getRules()) {
@@ -34,20 +34,21 @@ public class OriginalIntermediateNodeIds implements IntermediateNodeIds {
 				Rule plainRule = OperatorPrecedence.plain(rule);
 				for (int i = 2; i < rule.getBody().size(); i++) {
 					Tuple<Rule, Integer> t = Tuple.of(plainRule, i);
-					if (!intermediateNodeIds.containsKey(t)) {
-						intermediateNodeIds.put(t, intermediateId);
-						idToNameMap.put(intermediateId, t);
-						intermediateId++;
-					}
+					intermediateNodeIds.put(t, intermediateId);
+					names.put(getName(t), intermediateId);
+					intermediateId++;
 				}
 			}
 		}
 	}
 
-	@Override
+	@Override	
 	public String getSlotName(int id) {
-		Tuple<Rule, Integer> t = idToNameMap.get(id);
-		Rule rule = t.getFirst();
+		return names.inverse().get(id);
+	}
+	
+	private String getName(Tuple<Rule, Integer> t) {
+		Rule rule = t.getFirst(); 
 		int index = t.getSecond();
 		StringBuilder sb = new StringBuilder();
 		sb.append(rule.getHead()).append(" ::= ");
@@ -55,12 +56,13 @@ public class OriginalIntermediateNodeIds implements IntermediateNodeIds {
 			if (i == index) sb.append(". ");
 			sb.append(rule.getBody().get(i)).append(" ");
 		}
+		sb.delete(sb.length() - 1, sb.length());
 		return sb.toString();
 	}
 
 	@Override
-	public List<Symbol> getSequence(int id) {
-		Tuple<Rule, Integer> t = idToNameMap.get(id);
+	public List<Symbol> getPrefix(int id) {
+		Tuple<Rule, Integer> t = intermediateNodeIds.inverse().get(id);
 		return t.getFirst().getBody().subList(0, t.getSecond());
 	}
 
@@ -78,17 +80,21 @@ public class OriginalIntermediateNodeIds implements IntermediateNodeIds {
 			return -1;
 		}
 		
-		return intermediateNodeIds.get(Tuple.of(rule, index));
+		return intermediateNodeIds.get(Tuple.of(OperatorPrecedence.plain(rule), index));
 	}
 
-	@Override
-	public int getSlotId(Rule rule) {
-		return -1;
-	}
-	
 	@Override
 	public String toString() {
 		return intermediateNodeIds.toString();
 	}
 
+	@Override
+	public Tuple<Rule, Integer> getSlot(int id) {
+		return intermediateNodeIds.inverse().get(id);
+	}
+	
+	@Override
+	public int getSlotId(String s) {
+		return names.get(s);
+	}
 }

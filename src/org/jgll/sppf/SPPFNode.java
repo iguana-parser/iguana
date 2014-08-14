@@ -2,9 +2,7 @@ package org.jgll.sppf;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.jgll.traversal.AmbiguousNodesVisitor;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -36,7 +34,7 @@ public abstract class SPPFNode {
 	public abstract int getLeftExtent();
 
 	public abstract int getRightExtent();
-
+	
 	public abstract void accept(SPPFVisitor visitAction);
 	
 	public Object getObject() {
@@ -53,12 +51,6 @@ public abstract class SPPFNode {
 
 	public void setVisited(boolean visited) {
 		this.visited = visited;
-	}
-	
-	public Set<NonPackedNode> getAmbiguousNodes() {
-		AmbiguousNodesVisitor visitor = new AmbiguousNodesVisitor();
-		accept(visitor);
-		return visitor.getAmbiguousNodes();
 	}
 	
 	/**

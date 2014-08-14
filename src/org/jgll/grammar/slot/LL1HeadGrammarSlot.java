@@ -12,6 +12,7 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 
 public class LL1HeadGrammarSlot extends HeadGrammarSlot {
@@ -85,7 +86,7 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 				ntNode.addChild(node);
 			}
 			
-			ntNode.addPackedNode(lastSlot.getNodeId(), ci, DummyNode.getInstance(), DummyNode.getInstance());
+			ntNode.addPackedNode(new PackedNode(lastSlot.getNodeId(), ci, ntNode), DummyNode.getInstance(), DummyNode.getInstance());
 		}
 		
 //		return ntNode;

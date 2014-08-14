@@ -66,7 +66,7 @@ public class IndirectRecursion3Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode1()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode1()));
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ public class IndirectRecursion3Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(Input.fromString("egdgdgd"), grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode2()));		
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode2()));		
 	}
 	
 	@Test
@@ -84,7 +84,7 @@ public class IndirectRecursion3Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode3()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode3()));
 	}
 	
 	private SPPFNode getSPPFNode1() {

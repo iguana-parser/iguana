@@ -6,9 +6,10 @@ import java.util.Map;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
@@ -60,6 +61,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 		NonterminalNode value = nonterminalNodes.get(key);
 		if (value == null) {
 			value = key;
+			value.init();
 			log.trace("Nonterminal node created: %s", key);
 			nonterminalNodes.put(key, value);
 		}
@@ -79,6 +81,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 		
 		if (value == null) {
 			value = key;
+			value.init();
 			log.trace("Intermediate node created: %s", key);
 			intermediateNodes.put(key, value);
 		}
@@ -92,19 +95,10 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public void addPackedNode(NonterminalNode parent, LastGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+		PackedNode packedNode = new PackedNode(slot.getNodeId(), pivot, parent);
 		boolean ambiguousBefore = parent.isAmbiguous();
-		if (parent.addPackedNode(slot.getNodeId(), pivot, leftChild, rightChild)) {
-			countPackedNodes++;
-			boolean ambiguousAfter = parent.isAmbiguous();
-			if (!ambiguousBefore && ambiguousAfter) countAmbiguousNodes++;
-		}
-	}
-	
-	@Override
-	public void addPackedNode(IntermediateNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		boolean ambiguousBefore = parent.isAmbiguous();
-		if (parent.addPackedNode(pivot, leftChild, rightChild)) {
+		if (parent.addPackedNode(packedNode, leftChild, rightChild)) {
 			countPackedNodes++;
 			boolean ambiguousAfter = parent.isAmbiguous();
 			if (!ambiguousBefore && ambiguousAfter) countAmbiguousNodes++;

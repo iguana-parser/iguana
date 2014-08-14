@@ -1,6 +1,5 @@
 package org.jgll.sppf;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.parser.HashFunctions;
@@ -22,7 +21,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	protected final int rightExtent;
 	
-	protected final List<SPPFNode> children;
+	protected List<SPPFNode> children;
 	
 	public NonPackedNode(int id, int leftExtent, int rightExtent) {
 		
@@ -33,8 +32,9 @@ public abstract class NonPackedNode extends SPPFNode {
 		this.id = id;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
-		this.children = new ArrayList<>(2);
 	}
+
+	public abstract NonPackedNode init();
 	
 	@Override
 	public int hashCode() {
@@ -83,6 +83,12 @@ public abstract class NonPackedNode extends SPPFNode {
 	@Override
 	public String toString() {
 		return String.format("(%d, %d, %d)", id, leftExtent, rightExtent);
+	}
+	
+	public boolean addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
+		PackedNode newPackedNode = attachChildren(packedNode, leftChild, rightChild);
+		children.add(newPackedNode);
+		return true;
 	}
 	
 	/**

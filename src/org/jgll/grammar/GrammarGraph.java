@@ -262,21 +262,23 @@ public class GrammarGraph implements Serializable {
 		return tokenIDMap.get(regex);
 	}
 	
-	public int getIntermediateNodeId(List<? extends Symbol> symbols) {
-		return intermediateNodeIds.getSlotId(new Rule(Nonterminal.withName("n"), symbols));
+	public int getIntermediateNodeId(String s) {
+		return intermediateNodeIds.getSlotId(s);
+	}	
+	
+	public int getIntermediateNodeId(Rule rule, int index) {
+		return intermediateNodeIds.getSlotId(rule, index);
 	}
 	
-	public int getIntermediateNodeId(Symbol...symbols) {
-		return intermediateNodeIds.getSlotId(new Rule(Nonterminal.withName("n"), Arrays.asList(symbols)));
-	}
-	
-	public String getIntermediateNodeLabel(int id) {
-		return intermediateNodeIds.getSlotName(id);
+	public Tuple<Rule, Integer> getIntermediateNodeSlot(int id) {
+		return intermediateNodeIds.getSlot(id);
 	}
 	
 	public int getPackedNodeId(Nonterminal nonterminal, List<Symbol> symbols) {
 		return packedNodeIds.get(Tuple.of(nonterminal, symbols));
 	}
+	
+	
 	
 	public int getPackedNodeId(Nonterminal nonterminal, Symbol...symbols) {
 		return packedNodeIds.get(Tuple.of(nonterminal, Arrays.asList(symbols)));

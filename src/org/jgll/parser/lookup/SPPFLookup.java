@@ -2,8 +2,8 @@ package org.jgll.parser.lookup;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
@@ -57,11 +57,9 @@ public interface SPPFLookup {
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
 	public IntermediateNode findIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	
+	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 		
-	public void addPackedNode(NonterminalNode parent, LastGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
-	
-	public void addPackedNode(IntermediateNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
-	
 	public NonterminalNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize);
 	
 	public int getNonterminalNodesCount();

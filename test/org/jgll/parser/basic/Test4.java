@@ -51,7 +51,7 @@ public class Test4 {
 		Input input = Input.fromString("abc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(expectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
 	}
 	
 	private SPPFNode expectedSPPF() {

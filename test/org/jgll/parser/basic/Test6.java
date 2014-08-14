@@ -74,7 +74,7 @@ public class Test6 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF1()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1()));
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class Test6 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF2()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2()));
 	}
 	
 	private SPPFNode getSPPF1() {

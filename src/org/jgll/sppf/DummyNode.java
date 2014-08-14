@@ -8,6 +8,8 @@ import org.jgll.traversal.SPPFVisitor;
 /**
  * 
  * @author Ali Afroozeh
+ * 
+ * TODO: try to replace it with null, doesn't much make sense
  *
  */
 public class DummyNode extends SPPFNode {

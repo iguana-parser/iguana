@@ -66,7 +66,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode1()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode1()));
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode2()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode2()));
 	}
 	
 	@Test
@@ -84,7 +84,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode3()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode3()));
 	}
 	
 	@Test
@@ -93,7 +93,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode4()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode4()));
 	}
 	
 	@Test
@@ -102,7 +102,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode5()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode5()));
 	}
 	
 	private SPPFNode getSPPFNode1() {

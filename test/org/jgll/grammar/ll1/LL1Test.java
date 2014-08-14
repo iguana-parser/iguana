@@ -121,7 +121,7 @@ public class LL1Test {
 		node1.addChild(node2);
 		node1.addChild(node7);
 		
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(node1));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(node1));
 	}
 	
 	@Test
@@ -141,7 +141,7 @@ public class LL1Test {
 		node1.addChild(node2);
 		node1.addChild(node5);
 		
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(node1));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(node1));
 	}
 	
 	@Test
@@ -163,7 +163,7 @@ public class LL1Test {
 		node1.addChild(node2);
 		node1.addChild(node6);
 		
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(node1));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(node1));
 	}
 
 	@Test
@@ -185,7 +185,7 @@ public class LL1Test {
 		node1.addChild(node2);
 		node1.addChild(node6);
 		
-		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(node1));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(node1));
 	}
 	
 }

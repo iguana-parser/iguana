@@ -1,5 +1,7 @@
 package org.jgll.sppf;
 
+import java.util.ArrayList;
+
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -13,19 +15,15 @@ public class IntermediateNode extends NonPackedNode {
 		super(id, leftExtent, rightExtent);
 	}
 	
-	public boolean addPackedNode(int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		
-		assert leftChild  != null;
-		assert rightChild != null;
-		
-		PackedNode newPackedNode = attachChildren(new PackedNode(id, pivot, this), leftChild, rightChild);
-		children.add(newPackedNode);
-		return true;		
-	}
-	
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
+	}
+	
+	@Override
+	public IntermediateNode init() {
+		children = new ArrayList<>(2);
+		return this;
 	}
 
 }
