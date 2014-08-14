@@ -22,8 +22,11 @@ import org.jgll.grammar.slot.test.TrueFollowSet;
 import org.jgll.grammar.slot.test.TruePredictionSet;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
+
+import static org.jgll.grammar.slot.BodyGrammarSlot.*;
 
 public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	private int headGrammarSlotId;
@@ -44,7 +47,6 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	
 	@Override
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
-												 int nonterminalId,
 												 List<List<Symbol>> alternates,
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
@@ -58,7 +60,6 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		
 		return new HeadGrammarSlot(headGrammarSlotId++, 
 								   nonterminal, 
-								   nonterminalId, 
 								   alternates, 
 								   nullable,
 								   predictionTest, 
@@ -66,27 +67,23 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	}
 
 	@Override
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(List<Symbol> body, 
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(Rule rule, 
 															   int symbolIndex,
-															   int nodeId,
-															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
 															   ConditionTest preConditions,
 															   ConditionTest popConditions) {
 		
 		if(symbolIndex == 1) {
-			return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, popConditions, rightNodeCreator);
+			return new NonterminalGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, nonterminal, preConditions, popConditions, rightNodeCreator);
 		}
 		
-		return new NonterminalGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, nonterminal, preConditions, popConditions, intermediateNodeCreator);
+		return new NonterminalGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, nonterminal, preConditions, popConditions, intermediateNodeCreator);
 	}
 
 	@Override
-	public TokenGrammarSlot createTokenGrammarSlot(List<Symbol> body,
+	public TokenGrammarSlot createTokenGrammarSlot(Rule rule,
 												   int symbolIndex, 
-												   int nodeId,
-												   String label,
 												   BodyGrammarSlot previous, 
 												   int tokenID, 
 												   ConditionTest preConditions,
@@ -96,49 +93,48 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		if(preConditions == null) throw new IllegalArgumentException("PreConditions cannot be null.");
 		if(postConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
 		
-		RegularExpression regularExpression = (RegularExpression) body.get(symbolIndex);
+		RegularExpression regularExpression = (RegularExpression) rule.getBody().get(symbolIndex);
 		
 		// A ::= .x
-		if (symbolIndex == 0 && body.size() == 1) {
-			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+		if (symbolIndex == 0 && rule.size() == 1) {
+			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
 									 preConditions, postConditions, popConditions, nonterminalWithOneChildNodeCreator, null);
 		} 
 		
 		// A ::= x . y
-		else if (symbolIndex == 1 && body.size() == 2) {
-			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+		else if (symbolIndex == 1 && rule.size() == 2) {
+			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
 									 preConditions, postConditions, popConditions, nonterminalNodeCreator, rightNodeCreator);
 		} 
 		
 		// A ::= alpha .x  where |alpha| > 1
-		else if (symbolIndex == body.size() - 1) {
-			return new LastTokenSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+		else if (symbolIndex == rule.size() - 1) {
+			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
 									 preConditions, postConditions, popConditions, nonterminalNodeCreator, intermediateNodeCreator);
 		}
 		
 		// A ::= .x alpha  where |alpha| >= 1
 		else if (symbolIndex == 0) {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
 										preConditions, postConditions, popConditions, rightNodeCreator, null);
 		}
 		
 		// A ::= x . y alpha  where |alpha| >= 1
 		else if (symbolIndex == 1) {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
 										preConditions, postConditions, popConditions, intermediateNodeCreator, rightNodeCreator);
 		}
 		
 		// A ::= beta .x alpha where |beta| >=1 and |alpha| >= 1
 		else {
-			return new TokenGrammarSlot(bodyGrammarSlotId++, nodeId, label, previous, regularExpression, tokenID, 
+			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
 										preConditions, postConditions, popConditions, intermediateNodeCreator, intermediateNodeCreator);
 		}
 	}
 
 	@Override
-	public LastGrammarSlot createLastGrammarSlot(List<Symbol> body, 
+	public LastGrammarSlot createLastGrammarSlot(Rule rule, 
 												 int symbolIndex, 
-												 String label, 
 												 BodyGrammarSlot previous, 
 												 HeadGrammarSlot head, 
 												 ConditionTest popConditions) {
@@ -146,14 +142,14 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		if(popConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
 
 		if(symbolIndex == 1) {
-			return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, popConditions, nonterminalWithOneChildNodeCreator);
+			return new LastGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, head, popConditions, nonterminalWithOneChildNodeCreator);
 		}
 		
-		return new LastGrammarSlot(bodyGrammarSlotId++, label, previous, head, popConditions, nonterminalNodeCreator);
+		return new LastGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, head, popConditions, nonterminalNodeCreator);
 	}
 	
 	@Override
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head) {
-		return new EpsilonGrammarSlot(bodyGrammarSlotId++, label, head);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(HeadGrammarSlot head) {
+		return new EpsilonGrammarSlot(bodyGrammarSlotId++, head + " ::= .", head);
 	}
 }

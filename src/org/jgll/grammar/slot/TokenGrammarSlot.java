@@ -21,17 +21,14 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	protected final int tokenID;
 	
-	protected final int nodeId;
-	
 	private final RegularExpression regularExpression;
 	
-	public TokenGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID,
+	public TokenGrammarSlot(int id, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID,
 							ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
 							NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 		super(id, label, previous, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 		this.regularExpression = regularExpression;
 		this.tokenID = tokenID;
-		this.nodeId = nodeId;
 	}
 	
 	@Override
@@ -85,11 +82,6 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public RegularExpression getSymbol() {
 		return regularExpression;
-	}
-	
-	@Override
-	public int getNodeId() {
-		return nodeId;
 	}
 
 }

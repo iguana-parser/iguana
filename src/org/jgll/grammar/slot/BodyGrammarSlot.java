@@ -2,9 +2,12 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 
 /**
@@ -110,6 +113,38 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 	@Override
 	public String toString() {
 		return label;
+	}
+	
+	public static String getSlotName(Rule rule, int index) {
+		
+		Nonterminal head = rule.getHead();
+		List<Symbol> body = rule.getBody();
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(head.toString()).append(" ::= ");
+		
+		for(int i = 0; i < body.size(); i++) {
+			Symbol s = body.get(i);
+			
+			if(i == index) {
+				sb.append(". ");
+			}
+			
+			if(s instanceof Nonterminal) {
+				sb.append(s.toString()).append(" ");
+			} else {
+				sb.append(s).append(" ");				
+			}
+		}
+
+		if(index == body.size()) {
+			sb.append(".");
+		} else {
+			sb.delete(sb.length() - 1, sb.length());			
+		}
+		
+		return sb.toString();
 	}
 	
 }

@@ -24,8 +24,6 @@ public interface GrammarSlot {
 	
 	public abstract GrammarSlot parse(GLLParser parser, GLLLexer lexer);
 	
-	public abstract int getNodeId();
-	
 	public int getId();
 	
 }

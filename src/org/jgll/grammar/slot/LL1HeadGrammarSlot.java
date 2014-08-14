@@ -24,10 +24,10 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 	
 	private int max;
 
-	public LL1HeadGrammarSlot(int id, Nonterminal nonterminal, int nonterminalId,
+	public LL1HeadGrammarSlot(int id, Nonterminal nonterminal, 
 							  List<List<Symbol>> alternates, boolean nullable, int min, int max,
 							  PredictionTest predictionTest, FollowTest followTest) {
-		super(id, nonterminal, nonterminalId, alternates, nullable, predictionTest, followTest);
+		super(id, nonterminal, alternates, nullable, predictionTest, followTest);
 		this.min = min;
 		this.max = max;
 	}
@@ -86,7 +86,7 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 				ntNode.addChild(node);
 			}
 			
-			ntNode.addPackedNode(new PackedNode(lastSlot.getNodeId(), ci, ntNode), DummyNode.getInstance(), DummyNode.getInstance());
+			ntNode.addPackedNode(new PackedNode(lastSlot.getId(), ci, ntNode), DummyNode.getInstance(), DummyNode.getInstance());
 		}
 		
 //		return ntNode;

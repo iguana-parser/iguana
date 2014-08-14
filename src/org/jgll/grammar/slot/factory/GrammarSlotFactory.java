@@ -12,42 +12,37 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 
 public interface GrammarSlotFactory {
 
 	public HeadGrammarSlot createHeadGrammarSlot(Nonterminal nonterminal,
-												 int nodeId,
 												 List<List<Symbol>> alternates,
 												 Map<Nonterminal, Set<RegularExpression>> firstSets,
 												 Map<Nonterminal, Set<RegularExpression>> followSets,
 												 Map<Nonterminal, List<Set<RegularExpression>>> predictionSets);
 	
-	public NonterminalGrammarSlot createNonterminalGrammarSlot(List<Symbol> body, 
+	public NonterminalGrammarSlot createNonterminalGrammarSlot(Rule rule, 
 															   int symbolIndex,
-															   int nodeId,
-															   String label,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
 															   ConditionTest preConditions,
 															   ConditionTest popConditions);
 
-	public LastGrammarSlot createLastGrammarSlot(List<Symbol> body,
+	public LastGrammarSlot createLastGrammarSlot(Rule rule,
 											     int symbolIndex, 
-											     String label, 
 												 BodyGrammarSlot previous, 
 												 HeadGrammarSlot head, 
 												 ConditionTest popConditions);
 	
 	
-	public EpsilonGrammarSlot createEpsilonGrammarSlot(String label, HeadGrammarSlot head);
+	public EpsilonGrammarSlot createEpsilonGrammarSlot(HeadGrammarSlot head);
 	
 	
-	public TokenGrammarSlot createTokenGrammarSlot(List<Symbol> body,
+	public TokenGrammarSlot createTokenGrammarSlot(Rule rule,
 												   int symbolIndex, 
-												   int nodeId,
-												   String label,
 												   BodyGrammarSlot previous, 
 												   int tokenID, 
 												   ConditionTest preConditions,

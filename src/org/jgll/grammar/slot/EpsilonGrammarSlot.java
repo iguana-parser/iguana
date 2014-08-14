@@ -32,7 +32,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		if(head.testFollowSet(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
 			// Do not create epsilon nodes
 			NonterminalNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
-			node.addPackedNode(new PackedNode(alternateIndex, ci, node), DummyNode.getInstance(), DummyNode.getInstance());
+			node.addPackedNode(new PackedNode(id, ci, node), DummyNode.getInstance(), DummyNode.getInstance());
 			parser.setCurrentSPPFNode(node);
 			return parser.pop();
 		}

@@ -111,8 +111,6 @@ public class GrammarGraph implements Serializable {
 		}
 		
 		grammar = builder.grammar;
-		intermediateNodeIds = builder.intermediateNodeIds;
-		packedNodeIds = builder.packedNodeIds;
 		
 		runnableAutomatons = new ArrayList<>();
 		for (RegularExpression token : tokens) {

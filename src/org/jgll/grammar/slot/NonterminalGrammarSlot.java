@@ -24,9 +24,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	protected HeadGrammarSlot nonterminal;
 	
-	protected final int nodeId;
-	
-	public NonterminalGrammarSlot(int id, int nodeId, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
+	public NonterminalGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
 								  ConditionTest preConditions, ConditionTest popConditions,
 								  NodeCreator nodeCreatorFromPop) {
 		super(id, label, previous, preConditions, null, popConditions, null, nodeCreatorFromPop);
@@ -34,7 +32,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}
 		this.nonterminal = nonterminal;
-		this.nodeId = nodeId;
 	}
 	
 	public HeadGrammarSlot getNonterminal() {
@@ -137,8 +134,4 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		return nonterminal.getNonterminal();
 	}
 
-	@Override
-	public int getNodeId() {
-		return nodeId;
-	}	
 }

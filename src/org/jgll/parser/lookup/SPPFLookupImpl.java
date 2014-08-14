@@ -57,7 +57,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public NonterminalNode getNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		NonterminalNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
+		NonterminalNode key = grammarSlot.createSPPFNode(grammarSlot.getId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
 		NonterminalNode value = nonterminalNodes.get(key);
 		if (value == null) {
 			value = key;
@@ -70,13 +70,13 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public NonterminalNode findNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent) {		
-		NonterminalNode key = grammarSlot.createSPPFNode(grammarSlot.getNodeId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
+		NonterminalNode key = grammarSlot.createSPPFNode(grammarSlot.getId(), grammarSlot.getFirstSlots().length, leftExtent, rightExtent);
 		return nonterminalNodes.get(key);
 	}
 
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		IntermediateNode key = new IntermediateNode(grammarSlot.getNodeId(), leftExtent, rightExtent);
+		IntermediateNode key = new IntermediateNode(grammarSlot.getId(), leftExtent, rightExtent);
 		IntermediateNode value = intermediateNodes.get(key);
 		
 		if (value == null) {
@@ -96,7 +96,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		PackedNode packedNode = new PackedNode(slot.getNodeId(), pivot, parent);
+		PackedNode packedNode = new PackedNode(slot.getId(), pivot, parent);
 		boolean ambiguousBefore = parent.isAmbiguous();
 		if (parent.addPackedNode(packedNode, leftChild, rightChild)) {
 			countPackedNodes++;
@@ -107,7 +107,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public NonterminalNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
-		return nonterminalNodes.get(new NonterminalNode(startSymbol.getNodeId(), startSymbol.getFirstSlots().length, 0, inputSize - 1));
+		return nonterminalNodes.get(new NonterminalNode(startSymbol.getId(), startSymbol.getFirstSlots().length, 0, inputSize - 1));
 	}
 
 	@Override

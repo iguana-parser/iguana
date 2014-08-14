@@ -17,8 +17,6 @@ import org.jgll.parser.GLLParser;
  */
 public class LastGrammarSlot extends BodyGrammarSlot {
 	
-	protected int alternateIndex;
-
 	protected HeadGrammarSlot head;
 	
 	public LastGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head, 
@@ -51,27 +49,13 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		return false;
 	}
 	
-	
-	public int getAlternateIndex() {
-		return alternateIndex;
-	}
-	
 	public HeadGrammarSlot getHead() {
 		return head;
-	}
-	
-	public void setAlternateIndex(int alternateIndex) {
-		this.alternateIndex = alternateIndex;
 	}
 
 	@Override
 	public Symbol getSymbol() {
 		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int getNodeId() {
-		return alternateIndex;
 	}
 
 }
