@@ -37,7 +37,7 @@ public class GrammarGraph implements Serializable {
 	
 	private List<HeadGrammarSlot> headGrammarSlots;
 	
-	private List<BodyGrammarSlot> slots;
+	private BiMap<BodyGrammarSlot, Integer> slots;
 	
 	/**
 	 * A map from nonterminal names to their corresponding head ‚slots.
@@ -46,7 +46,7 @@ public class GrammarGraph implements Serializable {
 	 */
 	Map<Nonterminal, HeadGrammarSlot> nameToNonterminals;
 	
-	private transient Map<String, BodyGrammarSlot> nameToSlots;
+	private  Map<String, BodyGrammarSlot> nameToSlots;
 	
 	private String name;
 	
@@ -85,7 +85,7 @@ public class GrammarGraph implements Serializable {
 		this.regularExpressions = builder.regularExpressions;
 		
 		this.nameToSlots = new HashMap<>();
-		for(BodyGrammarSlot slot : slots) {
+		for(BodyGrammarSlot slot : slots.keySet()) {
 			nameToSlots.put(slot.getLabel(), slot);
 		}
 		
@@ -124,15 +124,11 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public BodyGrammarSlot getGrammarSlot(int id) {
-		return slots.get(id);
+		return slots.inverse().get(id);
 	}
 		
 	public List<HeadGrammarSlot> getNonterminals() {
 		return headGrammarSlots;
-	}
-	
-	public List<BodyGrammarSlot> getGrammarSlots() {
-		return slots;
 	}
 	
 	public HeadGrammarSlot getHeadGrammarSlot(String name) {

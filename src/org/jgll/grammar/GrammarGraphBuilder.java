@@ -18,6 +18,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.IntermediateNodeIds;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.OriginalIntermediateNodeIds;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
@@ -43,7 +44,7 @@ public class GrammarGraphBuilder implements Serializable {
 
 	Map<Nonterminal, HeadGrammarSlot> nonterminalsMap;
 
-	List<BodyGrammarSlot> slots;
+	BiMap<BodyGrammarSlot, Integer> slots;
 	
 	List<HeadGrammarSlot> headGrammarSlots;
 
@@ -89,6 +90,7 @@ public class GrammarGraphBuilder implements Serializable {
 		regularExpressions.put(Epsilon.getInstance(), 0);
 		regularExpressions.put(EOF.getInstance(), 1);
 		
+		slots = HashBiMap.create();
 		nonterminals = HashBiMap.create();
 	}
 
@@ -139,20 +141,6 @@ public class GrammarGraphBuilder implements Serializable {
 		
 //		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 		
-		slots = new ArrayList<>();
-		
-		for(HeadGrammarSlot nonterminal : headGrammarSlots) {
-			for (BodyGrammarSlot slot : nonterminal.getFirstSlots()) {
-				BodyGrammarSlot currentSlot = slot;
-				
-				while(currentSlot != null) {
-					slots.add(currentSlot);
-					currentSlot = currentSlot.next();
-				}
-			}
-		}
-
-		
 		return new GrammarGraph(this);
 	}
 	
@@ -175,6 +163,7 @@ public class GrammarGraphBuilder implements Serializable {
 	
 			if (body.size() == 0) {
 				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(headGrammarSlot);
+				slots.put(epsilonSlot, epsilonSlot.getId());
 				headGrammarSlot.setFirstGrammarSlotForAlternate(epsilonSlot, alternateIndex);
 			} 
 			else {
@@ -183,6 +172,7 @@ public class GrammarGraphBuilder implements Serializable {
 				for (; symbolIndex < body.size(); symbolIndex++) {
 					
 					currentSlot = getBodyGrammarSlot(new Rule(head, body), symbolIndex, currentSlot);
+					slots.put(currentSlot, currentSlot.getId());
 	
 					if (symbolIndex == 0) {
 						firstSlot = currentSlot;
@@ -190,7 +180,8 @@ public class GrammarGraphBuilder implements Serializable {
 				}
 	
 				ConditionTest popCondition = getPostConditions(popActions);
-				grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popCondition);
+				LastGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popCondition);
+				slots.put(lastSlot, lastSlot.getId());
 				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
 			}
 			alternateIndex++;

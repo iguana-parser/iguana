@@ -81,7 +81,7 @@ public class ToJavaCode implements SPPFVisitor {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			node.setObject("node" + count);
-			
+
 			sb.append("PackedNode node" + count + " = factory.createPackedNode(" +
 					  "\"" + grammar.getGrammarSlot(node.getId()) + "\", " + 
 					  node.getPivot() + ", " + node.getParent().getObject() + ");\n");				

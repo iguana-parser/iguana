@@ -97,11 +97,11 @@ public class FilterTest0 {
 	private SPPFNode getSPPFNode() {
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 5).init();
-		PackedNode node2 = factory.createPackedNode("E ::= E . + E2", 2, node1);
-		IntermediateNode node3 = factory.createIntermediateNode("E ::= . E + E2", 0, 2).init();
-		PackedNode node4 = factory.createPackedNode("E ::= . E + E2", 1, node3);
+		PackedNode node2 = factory.createPackedNode("E ::= E + E2 .", 2, node1);
+		IntermediateNode node3 = factory.createIntermediateNode("E ::= E + . E2", 0, 2).init();
+		PackedNode node4 = factory.createPackedNode("E ::= E + . E2", 1, node3);
 		NonterminalNode node5 = factory.createNonterminalNode("E", 0, 1).init();
-		PackedNode node6 = factory.createPackedNode("E ::= E + E2 .", 0, node5);
+		PackedNode node6 = factory.createPackedNode("E ::= a .", 0, node5);
 		TokenSymbolNode node7 = factory.createTokenNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
@@ -123,7 +123,7 @@ public class FilterTest0 {
 		node12.addChild(node16);
 		node11.addChild(node12);
 		NonterminalNode node17 = factory.createNonterminalNode("E", 4, 5).init();
-		PackedNode node18 = factory.createPackedNode("E ::= a .", 4, node17);
+		PackedNode node18 = factory.createPackedNode("E1 ::= a .", 4, node17);
 		TokenSymbolNode node19 = factory.createTokenNode("a", 4, 1);
 		node18.addChild(node19);
 		node17.addChild(node18);
