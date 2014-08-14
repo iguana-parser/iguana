@@ -48,21 +48,13 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	List<HeadGrammarSlot> headGrammarSlots;
 
-	int maximumNumAlternates;
-
-	int maxDescriptors;
-	
-	int averageDescriptors;
-	
-	double stDevDescriptors;
-
 	String name;
 	
 	Grammar grammar;
 	
 	BiMap<RegularExpression, Integer> regularExpressions;
 	
-	BiMap<Nonterminal, Integer> nonterminals;
+	Map<Integer, Nonterminal> nonterminals;
 	
 	Set<Nonterminal> ll1SubGrammarNonterminals;
 
@@ -91,7 +83,7 @@ public class GrammarGraphBuilder implements Serializable {
 		regularExpressions.put(EOF.getInstance(), 1);
 		
 		slots = HashBiMap.create();
-		nonterminals = HashBiMap.create();
+		nonterminals = new HashMap<>();
 	}
 
 	public GrammarGraph build() {
@@ -245,7 +237,7 @@ public class GrammarGraphBuilder implements Serializable {
 		if (headGrammarSlot == null) {
 			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, grammar.getAlternatives(nonterminal), grammar.getFirstSets(), grammar.getFollowSets(), grammar.getPredictionSets());
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
-			nonterminals.put(nonterminal, nonterminals.size());
+			nonterminals.put(headGrammarSlot.getId(), nonterminal);
 			headGrammarSlots.add(headGrammarSlot);
 		}
 

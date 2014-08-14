@@ -45,6 +45,8 @@ public class Grammar implements Serializable {
 	
 	private final List<Rule> rules;
 	
+	private GrammarGraph grammarGraph;
+	
 	public Grammar(Map<Nonterminal, List<List<Symbol>>> definitions,
 				   List<Rule> rules,
 				   Map<Nonterminal, List<Object>> objects,
@@ -146,15 +148,21 @@ public class Grammar implements Serializable {
 	}
 	 
 	public GrammarGraph toGrammarGraph() {
-		GrammarSlotFactory factory = new GrammarSlotFactoryFirstFollowChecksImpl();
-		GrammarGraphBuilder builder = new GrammarGraphBuilder(this, factory);
-		return builder.build();
+		if (grammarGraph == null) {
+			GrammarSlotFactory factory = new GrammarSlotFactoryFirstFollowChecksImpl();
+			GrammarGraphBuilder builder = new GrammarGraphBuilder(this, factory);
+			grammarGraph =  builder.build();
+		}
+		return grammarGraph;
 	}
 	
 	public GrammarGraph toGrammarGraphWithoutFirstFollowChecks() {
-		GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
-		GrammarGraphBuilder builder = new GrammarGraphBuilder(this, factory);
-		return builder.build();
+		if (grammarGraph == null) {
+			GrammarSlotFactory factory = new GrammarSlotFactoryImpl();
+			GrammarGraphBuilder builder = new GrammarGraphBuilder(this, factory);
+			grammarGraph = builder.build();
+		}
+		return grammarGraph;
 	}
 	
 	private static Set<RuntimeException> validate(Map<Nonterminal, List<List<Symbol>>> definitions) {

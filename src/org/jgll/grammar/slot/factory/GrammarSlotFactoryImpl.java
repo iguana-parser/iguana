@@ -1,5 +1,8 @@
 package org.jgll.grammar.slot.factory;
 
+import static org.jgll.grammar.slot.BodyGrammarSlot.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,10 +29,10 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 
-import static org.jgll.grammar.slot.BodyGrammarSlot.*;
-
 public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
-	private int headGrammarSlotId;
+	
+	private Map<String, Integer> headGrammarSlotIds = new HashMap<>();
+	
 	private int bodyGrammarSlotId;
 	
 	private NonterminalNodeCreator nonterminalNodeCreator;
@@ -58,7 +61,13 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		boolean nullable = firstSets.get(nonterminal).contains(Epsilon.getInstance());
 		FollowTest followSetTest = new TrueFollowSet();
 		
-		return new HeadGrammarSlot(headGrammarSlotId++, 
+		Integer id = headGrammarSlotIds.get(nonterminal.getName());
+		if (id == null) {
+			id = headGrammarSlotIds.size();
+			headGrammarSlotIds.put(nonterminal.getName(), id);
+		}
+		
+		return new HeadGrammarSlot(id, 
 								   nonterminal, 
 								   alternates, 
 								   nullable,

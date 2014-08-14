@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -19,8 +18,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,8 +40,6 @@ public class FilterTest0 {
 	private Character plus = Character.from('+');
 
 	private Grammar grammar;
-
-	private GrammarGraph grammarGraph;
 
 	@Before
 	public void init() {
@@ -80,22 +75,19 @@ public class FilterTest0 {
 		operatorPrecedence.addPrecedencePattern(E, rule2, 2, rule2);
 		
 		grammar = operatorPrecedence.transform(builder.build());
-		grammarGraph = grammar.toGrammarGraph();
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a+a*a");
 		parser = ParserFactory.newParser(grammar, input);
-		ParseResult result = parser.parse(input, grammarGraph, "E");
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
-//        System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot(), grammarGraph));
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode()));
 	}
 	
 	private SPPFNode getSPPFNode() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 5).init();
 		PackedNode node2 = factory.createPackedNode("E ::= E + E2 .", 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("E ::= E + . E2", 0, 2).init();

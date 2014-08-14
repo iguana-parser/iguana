@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot.factory;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,8 @@ import static org.jgll.grammar.slot.BodyGrammarSlot.*;
 
 public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFactory {
 	
-	private int headGrammarSlotId;
+	private Map<String, Integer> headGrammarSlotIds = new HashMap<>();
+
 	private int bodyGrammarSlotId;
 	
 	private NonterminalNodeCreator nonterminalNodeCreator;
@@ -91,9 +93,15 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 			followSetTest = new ArrayFollowTest(followSet, minFollowSet, maxFollowSet);
 		} else {
 			followSetTest = new TreeMapFollowTest(followSet);
-		}			
+		}
 		
-		return new HeadGrammarSlot(headGrammarSlotId++, 
+		Integer id = headGrammarSlotIds.get(nonterminal.getName());
+		if (id == null) {
+			id = headGrammarSlotIds.size();
+			headGrammarSlotIds.put(nonterminal.getName(), id);
+		}
+		
+		return new HeadGrammarSlot(id, 
 								   nonterminal, 
 								   alternates, 
 								   nullable,

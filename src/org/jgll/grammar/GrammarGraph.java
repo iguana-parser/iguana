@@ -60,7 +60,7 @@ public class GrammarGraph implements Serializable {
 	
 	private Set<Nonterminal> ll1SubGrammarNonterminals;
 	
-	private BiMap<Nonterminal, Integer> nonterminals;
+	private Map<Integer, Nonterminal> nonterminals;
 	
 	private Map<Integer, RunnableAutomaton> runnableAutomatons;
 	
@@ -207,11 +207,11 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public Nonterminal getNonterminalById(int index) {
-		return nonterminals.inverse().get(index);
+		return nonterminals.get(index);
 	}
 	
 	public int getNonterminalId(Nonterminal nonterminal) {
-		return nonterminals.get(nonterminal);
+		return nameToNonterminals.get(nonterminal).getId();
 	}
 	
 	public RegularExpression getRegularExpressionById(int index) {
@@ -220,6 +220,10 @@ public class GrammarGraph implements Serializable {
 	
 	public int getRegularExpressionId(RegularExpression regex) {
 		return regularExpressions.get(regex);
+	}
+	
+	public Set<BodyGrammarSlot> getGrammarSlots() {
+		return slots.keySet();
 	}
 	
 	public RegularExpression getRegularExpressionByName(String name) {
