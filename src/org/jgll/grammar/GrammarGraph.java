@@ -3,28 +3,26 @@ package org.jgll.grammar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.IntermediateNodeIds;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.RunnableAutomaton;
-import org.jgll.util.Tuple;
 import org.jgll.util.logging.LoggerWrapper;
+
+import com.google.common.collect.BiMap;
 
 /**
  * 
@@ -53,36 +51,22 @@ public class GrammarGraph implements Serializable {
 	private String name;
 	
 	private int longestTerminalChain;
+
+	private BiMap<RegularExpression, Integer> regularExpressions;
 	
-	private int maximumNumAlternates;
-	
-	private int maxDescriptorsAtInput;
-	
-	private int averageDescriptorsAtInput;
-	
-	private int stDevDescriptors;
-	
-	private Map<RegularExpression, Integer> tokenIDMap;
-	
-	private List<RegularExpression> tokens;
+	private Map<String, RegularExpression> regularExpressionNames;
 	
 	private Map<Nonterminal, Set<RegularExpression>> followSets;
 	
 	private Set<Nonterminal> ll1SubGrammarNonterminals;
 	
-	private Map<String, Integer> nonterminalIds;
+	private BiMap<Nonterminal, Integer> nonterminals;
 	
-	private Map<Tuple<Nonterminal, List<Symbol>>, Integer> packedNodeIds;
-	
-	private List<Nonterminal> nonterminals;
-	
-	private List<RunnableAutomaton> runnableAutomatons;
+	private Map<Integer, RunnableAutomaton> runnableAutomatons;
 	
 	private Object[][] objects;
 	
 	private Grammar grammar;
-	
-	private IntermediateNodeIds intermediateNodeIds;
 	
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
@@ -91,31 +75,31 @@ public class GrammarGraph implements Serializable {
 		this.nameToNonterminals = new HashMap<>();
 		this.nameToNonterminals = builder.nonterminalsMap;
 		
-		this.maximumNumAlternates = builder.maximumNumAlternates;
-		this.maxDescriptorsAtInput = builder.maxDescriptors;
-		this.averageDescriptorsAtInput = builder.averageDescriptors;
-		this.stDevDescriptors = (int) builder.stDevDescriptors;
-		this.tokens = builder.tokens;
+		this.regularExpressions = builder.regularExpressions;
 		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
 		
 		this.objects = builder.objects;
 		
-		this.nonterminalIds = builder.nonterminalIds;
 		this.nonterminals = builder.nonterminals;
 
-		this.tokenIDMap = builder.tokenIDMap;
+		this.regularExpressions = builder.regularExpressions;
 		
 		this.nameToSlots = new HashMap<>();
 		for(BodyGrammarSlot slot : slots) {
 			nameToSlots.put(slot.getLabel(), slot);
 		}
 		
-		grammar = builder.grammar;
-		
-		runnableAutomatons = new ArrayList<>();
-		for (RegularExpression token : tokens) {
-			runnableAutomatons.add(token.getAutomaton().getRunnableAutomaton());
+		regularExpressionNames = new HashMap<>();
+		for(Entry<RegularExpression, Integer> entry : regularExpressions.entrySet()) {
+			regularExpressionNames.put(entry.getKey().getName(), entry.getKey());
 		}
+		
+		runnableAutomatons = new HashMap<>();
+		for (RegularExpression regex : regularExpressions.keySet()) {
+			runnableAutomatons.put(regularExpressions.get(regex), regex.getAutomaton().getRunnableAutomaton());
+		}
+		
+		grammar = builder.grammar;
 		
 		printGrammarStatistics();
 	}
@@ -126,8 +110,6 @@ public class GrammarGraph implements Serializable {
 		log.info("Production rules: %d", grammar.sizeRules());
 		log.info("Grammar slots: %d", slots.size());
 		log.debug("Longest terminal Chain: %d", longestTerminalChain);
-		log.debug("Maximum number alternates: %d", maximumNumAlternates);
-		log.debug("Maximum descriptors: %d", maxDescriptorsAtInput);
 	}
 	
 	public void code(Writer writer, String packageName) throws IOException {
@@ -177,22 +159,6 @@ public class GrammarGraph implements Serializable {
 		return longestTerminalChain;
 	}
 	
-	public int getMaximumNumAlternates() {
-		return maximumNumAlternates;
-	}
-	
-	public int getMaxDescriptorsAtInput() {
-		return maxDescriptorsAtInput;
-	}
-	
-	public int getAverageDescriptorsAtInput() {
-		return averageDescriptorsAtInput;
-	}
-	
-	public int getStDevDescriptors() {
-		return stDevDescriptors;
-	}
-	
 	@Override
 	public String toString() {
 		
@@ -237,49 +203,31 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public int getCountTokens() {
-		return tokenIDMap.size() + 2;
+		return regularExpressions.size();
 	}
 	
 	public Iterable<RegularExpression> getTokens() {
-		return tokenIDMap.keySet();
+		return regularExpressions.keySet();
 	}
 	
 	public Nonterminal getNonterminalById(int index) {
-		return nonterminals.get(index);
+		return nonterminals.inverse().get(index);
 	}
 	
 	public int getNonterminalId(Nonterminal nonterminal) {
-		return nonterminalIds.get(nonterminal.getName());
+		return nonterminals.get(nonterminal);
 	}
 	
 	public RegularExpression getRegularExpressionById(int index) {
-		return tokens.get(index);
+		return regularExpressions.inverse().get(index);
 	}
 	
 	public int getRegularExpressionId(RegularExpression regex) {
-		return tokenIDMap.get(regex);
+		return regularExpressions.get(regex);
 	}
 	
-	public int getIntermediateNodeId(String s) {
-		return intermediateNodeIds.getSlotId(s);
-	}	
-	
-	public int getIntermediateNodeId(Rule rule, int index) {
-		return intermediateNodeIds.getSlotId(rule, index);
-	}
-	
-	public Tuple<Rule, Integer> getIntermediateNodeSlot(int id) {
-		return intermediateNodeIds.getSlot(id);
-	}
-	
-	public int getPackedNodeId(Nonterminal nonterminal, List<Symbol> symbols) {
-		return packedNodeIds.get(Tuple.of(nonterminal, symbols));
-	}
-	
-	
-	
-	public int getPackedNodeId(Nonterminal nonterminal, Symbol...symbols) {
-		return packedNodeIds.get(Tuple.of(nonterminal, Arrays.asList(symbols)));
+	public RegularExpression getRegularExpressionByName(String name) {
+		return regularExpressionNames.get(name);
 	}
 	
 	public int getCountLL1Nonterminals() {
