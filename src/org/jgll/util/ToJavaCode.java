@@ -1,6 +1,7 @@
 package org.jgll.util;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
@@ -32,7 +33,7 @@ public class ToJavaCode implements SPPFVisitor {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			sb.append("TokenSymbolNode node" + count + " = factory.createTokenNode(" +
-					  "\"" + grammar.getRegularExpressionById(node.getTokenID()).getName() + "\", " +
+					  "\"" + escape(grammar.getRegularExpressionById(node.getTokenID()).getName()) + "\", " +
 					  node.getLeftExtent() + ", " + node.getLength() + ");\n");
 			node.setObject("node" + count++);
 		}
@@ -64,7 +65,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("IntermediateNode node" + count + " = factory.createIntermediateNode(" +
-					  "\"" + grammar.getGrammarSlot(node.getId()) + "\", " + 
+					  "\"" + escape(grammar.getGrammarSlot(node.getId()).toString()) + "\", " + 
 					  node.getLeftExtent() + ", " + 
 					  node.getRightExtent() + ").init();\n");
 			
@@ -83,7 +84,7 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("PackedNode node" + count + " = factory.createPackedNode(" +
-					  "\"" + grammar.getGrammarSlot(node.getId()) + "\", " + 
+					  "\"" + escape(grammar.getGrammarSlot(node.getId()).toString()) + "\", " + 
 					  node.getPivot() + ", " + node.getParent().getObject() + ");\n");				
 			
 			count++;
@@ -103,7 +104,7 @@ public class ToJavaCode implements SPPFVisitor {
 			sb.append("ListSymbolNode node" + count + " = factory.createListNode(" +
 					grammar.getNonterminalById(node.getId()).getName() + ", " +
 					node.getLeftExtent() + ", " + 
-					node.getRightExtent() + ");\n");
+					node.getRightExtent() + ").init();\n");
 			
 			count++;
 			
@@ -125,6 +126,10 @@ public class ToJavaCode implements SPPFVisitor {
 			assert childName != null;
 			sb.append(node.getObject() + ".addChild(" + childName + ");\n");
 		}
+	}
+	
+	private String escape(String s) {
+		return s.replaceAll("\\\\", "\\\\\\\\");
 	}
 
 	@Override

@@ -4,12 +4,12 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
@@ -68,22 +68,28 @@ public class IndirectRecursion1Test {
 		Input input = Input.fromString("bc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
+		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
 	}
 
 	
 	private SPPFNode expectedSPPF() {
-		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 2);
-		NonterminalNode node2 = factory.createNonterminalNode(B, 0, 1);
-		TokenSymbolNode node3 = factory.createTokenNode(b, 0, 1);
-		node2.addChild(node3);
-		NonterminalNode node4 = factory.createNonterminalNode(C, 1, 2);
-		TokenSymbolNode node5 = factory.createTokenNode(c, 1, 1);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
+		PackedNode node2 = factory.createPackedNode("A ::= B C .", 1, node1);
+		NonterminalNode node3 = factory.createNonterminalNode("B", 0, 1).init();
+		PackedNode node4 = factory.createPackedNode("B ::= b .", 0, node3);
+		TokenSymbolNode node5 = factory.createTokenNode("b", 0, 1);
 		node4.addChild(node5);
+		node3.addChild(node4);
+		NonterminalNode node6 = factory.createNonterminalNode("C", 1, 2).init();
+		PackedNode node7 = factory.createPackedNode("C ::= c .", 1, node6);
+		TokenSymbolNode node8 = factory.createTokenNode("c", 1, 1);
+		node7.addChild(node8);
+		node6.addChild(node7);
+		node2.addChild(node3);
+		node2.addChild(node6);
 		node1.addChild(node2);
-		node1.addChild(node4);
 		return node1;
 	}
 

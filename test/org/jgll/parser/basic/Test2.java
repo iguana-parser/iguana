@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -12,6 +11,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
@@ -54,10 +54,11 @@ public class Test2 {
 	}
 	
 	private SPPFNode expectedSPPF() {
-		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 1);
-		TokenSymbolNode node2 = factory.createTokenNode(a, 0, 1);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 1).init();
+		PackedNode node2 = factory.createPackedNode("A ::= a .", 0, node1);
+		TokenSymbolNode node3 = factory.createTokenNode("a", 0, 1);
+		node2.addChild(node3);
 		node1.addChild(node2);
 		return node1;
 	}

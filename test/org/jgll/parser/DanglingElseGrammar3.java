@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -63,33 +62,32 @@ public class DanglingElseGrammar3 {
 	}
 	
 	private SPPFNode getExpectedSPPF() {
-		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalNode node1 = factory.createNonterminalNode(S, 0, 5).init();
-		PackedNode node2 = new PackedNode(grammarGraph.getPackedNodeId(S, a, S), 1, node1);
-		TokenSymbolNode node3 = factory.createTokenNode(a, 0, 1);
-		NonterminalNode node4 = factory.createNonterminalNode(S, 1, 5).init();
-		PackedNode node5 = new PackedNode(grammarGraph.getPackedNodeId(S, a, S, b, S), 4, node4);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 5).init();
+		PackedNode node2 = factory.createPackedNode("S ::= a S .", 1, node1);
+		TokenSymbolNode node3 = factory.createTokenNode("a", 0, 1);
+		NonterminalNode node4 = factory.createNonterminalNode("S", 1, 5).init();
+		PackedNode node5 = factory.createPackedNode("S ::= a S b S .", 4, node4);
 		IntermediateNode node6 = factory.createIntermediateNode("S ::= a S b . S", 1, 4).init();
-		PackedNode node7 = new PackedNode(grammarGraph.getIntermediateNodeId("S ::= a S b . S"), 3, node6);
+		PackedNode node7 = factory.createPackedNode("S ::= a S b . S", 3, node6);
 		IntermediateNode node8 = factory.createIntermediateNode("S ::= a S . b S", 1, 3).init();
-		PackedNode node9 = new PackedNode(grammarGraph.getIntermediateNodeId("S ::= a S . b S"), 2, node8);
-		TokenSymbolNode node10 = factory.createTokenNode(a, 1, 1);
-		NonterminalNode node11 = factory.createNonterminalNode(S, 2, 3).init();
-		PackedNode node12 = new PackedNode(grammarGraph.getPackedNodeId(S, s), 2, node11);
-		TokenSymbolNode node13 = factory.createTokenNode(s, 2, 1);
+		PackedNode node9 = factory.createPackedNode("S ::= a S . b S", 2, node8);
+		TokenSymbolNode node10 = factory.createTokenNode("a", 1, 1);
+		NonterminalNode node11 = factory.createNonterminalNode("S", 2, 3).init();
+		PackedNode node12 = factory.createPackedNode("S ::= s .", 2, node11);
+		TokenSymbolNode node13 = factory.createTokenNode("s", 2, 1);
 		node12.addChild(node13);
 		node11.addChild(node12);
 		node9.addChild(node10);
 		node9.addChild(node11);
 		node8.addChild(node9);
-		TokenSymbolNode node14 = factory.createTokenNode(b, 3, 1);
+		TokenSymbolNode node14 = factory.createTokenNode("b", 3, 1);
 		node7.addChild(node8);
 		node7.addChild(node14);
 		node6.addChild(node7);
-		NonterminalNode node15 = factory.createNonterminalNode(S, 4, 5).init();
-		PackedNode node16 = new PackedNode(grammarGraph.getPackedNodeId(S, s), 4, node15);
-		TokenSymbolNode node17 = factory.createTokenNode(s, 4, 1);
+		NonterminalNode node15 = factory.createNonterminalNode("S", 4, 5).init();
+		PackedNode node16 = factory.createPackedNode("S ::= s .", 4, node15);
+		TokenSymbolNode node17 = factory.createTokenNode("s", 4, 1);
 		node16.addChild(node17);
 		node15.addChild(node16);
 		node5.addChild(node6);

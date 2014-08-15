@@ -4,12 +4,12 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
@@ -62,7 +62,6 @@ public class IndirectRecursion2Test {
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
 	}
 	
-	@Test
 	//TODO: fix it
 	public void testReachabilityGraph() {
 //		Set<HeadGrammarSlot> set = builder.getDirectReachableNonterminals("A");
@@ -71,19 +70,26 @@ public class IndirectRecursion2Test {
 	}
 	
 	private SPPFNode expectedSPPF() {		
-		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
-		NonterminalNode node1 = factory.createNonterminalNode(A, 0, 2);
-		IntermediateNode node2 = factory.createIntermediateNode(list(B, A), 0, 1);
-		NonterminalNode node3 = factory.createNonterminalNode(B, 0, 0);
-		NonterminalNode node4 = factory.createNonterminalNode(A, 0, 1);
-		TokenSymbolNode node5 = factory.createTokenNode(a, 0, 1);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
+		PackedNode node2 = factory.createPackedNode("A ::= B A d .", 1, node1);
+		IntermediateNode node3 = factory.createIntermediateNode("A ::= B A . d", 0, 1).init();
+		PackedNode node4 = factory.createPackedNode("A ::= B A . d", 0, node3);
+		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0).init();
+		PackedNode node6 = factory.createPackedNode("B ::= .", 0, node5);
+		node5.addChild(node6);
+		NonterminalNode node7 = factory.createNonterminalNode("A", 0, 1).init();
+		PackedNode node8 = factory.createPackedNode("A ::= a .", 0, node7);
+		TokenSymbolNode node9 = factory.createTokenNode("a", 0, 1);
+		node8.addChild(node9);
+		node7.addChild(node8);
 		node4.addChild(node5);
+		node4.addChild(node7);
+		node3.addChild(node4);
+		TokenSymbolNode node10 = factory.createTokenNode("d", 1, 1);
 		node2.addChild(node3);
-		node2.addChild(node4);
-		TokenSymbolNode node6 = factory.createTokenNode(d, 1, 1);
+		node2.addChild(node10);
 		node1.addChild(node2);
-		node1.addChild(node6);
 		return node1;
 	}
 

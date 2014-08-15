@@ -9,6 +9,7 @@ import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.RegularExpression;
 
 /**
  * 
@@ -132,10 +133,12 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 			}
 			
 			if(s instanceof Nonterminal) {
-				sb.append(s.toString()).append(" ");
+				sb.append(s.toString());
 			} else {
-				sb.append(s).append(" ");				
+				sb.append(s);				
 			}
+			
+			sb.append(" ");
 		}
 
 		if(index == body.size()) {

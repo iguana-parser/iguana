@@ -92,6 +92,8 @@ public class FilterTest5 {
 		parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
+		System.out.println(org.jgll.util.ToJavaCode.toJavaCode(result.asParseSuccess().getRoot(), grammar.toGrammarGraph()));
+
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
 	}
 	

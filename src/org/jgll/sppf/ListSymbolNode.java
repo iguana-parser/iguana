@@ -19,5 +19,11 @@ public class ListSymbolNode extends NonterminalNode {
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
 	}
+	
+	@Override
+	public ListSymbolNode init() {
+		super.init();
+		return this;
+	}
 
 }
