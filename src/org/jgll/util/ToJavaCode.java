@@ -18,7 +18,7 @@ public class ToJavaCode implements SPPFVisitor {
 
 	public ToJavaCode(GrammarGraph grammar) {
 		this.grammar = grammar;
-		sb.append("SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);\n");
+		sb.append("SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());\n");
 	}
 	
 	public static String toJavaCode(NonterminalNode node, GrammarGraph grammar) {
