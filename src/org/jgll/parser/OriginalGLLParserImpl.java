@@ -80,7 +80,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 					  endUserTime - startUserTime,
 					  endSystemTime - startSystemTime, 
 					  BenchmarkUtil.getMemoryUsed(),
-					  descriptorLookup.getDescriptorsCount(), 
+					  descriptorsCount, 
 					  gssLookup.getGSSNodesCount(), 
 					  gssLookup.getGSSEdgesCount(), 
 					  sppfLookup.getNonterminalNodesCount(), 
@@ -134,6 +134,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 					cu = edge.getDestination();
 					ci = inputIndex;
 					log.trace("Processing %s", descriptor);
+					descriptorsCount++;
 					return returnSlot;
 				}
 				return null;
@@ -220,6 +221,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 					cu = destination;
 					ci = z.getRightExtent();
 					log.trace("Processing %s", descriptor);
+					descriptorsCount++;
 					return returnSlot;
 				}
 				return null;

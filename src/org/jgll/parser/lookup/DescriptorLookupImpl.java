@@ -14,8 +14,6 @@ public class DescriptorLookupImpl implements DescriptorLookup {
 
 	private Deque<Descriptor> descriptorsStack;
 
-	private int descriptorsCount;
-	
 	public DescriptorLookupImpl(GrammarGraph grammar, Input input) {
 		long start = System.nanoTime();
 		descriptorsStack = new ArrayDeque<>();
@@ -39,17 +37,8 @@ public class DescriptorLookupImpl implements DescriptorLookup {
 	}
 
 	@Override
-	public boolean scheduleDescriptor(Descriptor descriptor) {
-		descriptorsCount++;
+	public void scheduleDescriptor(Descriptor descriptor) {
 		descriptorsStack.push(descriptor);
-		log.trace("Descriptor created: %s", descriptor);
-		return true;
 	}
 	
-	@Override
-	public int getDescriptorsCount() {
-		return descriptorsCount;
-	}
-
-
 }

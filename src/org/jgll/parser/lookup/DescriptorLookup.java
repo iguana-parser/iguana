@@ -8,10 +8,8 @@ public interface DescriptorLookup {
 	
 	public Descriptor nextDescriptor();
 	
-	public boolean scheduleDescriptor(Descriptor descriptor);
+	public void scheduleDescriptor(Descriptor descriptor);
 	
 	public boolean addDescriptor(Descriptor descriptor);
 
-	public int getDescriptorsCount();
-	
 }

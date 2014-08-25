@@ -1,9 +1,6 @@
 package org.jgll.parser;
 
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
-
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.lexer.GLLLexer;
@@ -88,6 +85,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected SPPFLookupFactory sppfLookupFactory;
 
 	protected DescriptorLookupFactory descriptorLookupFactory;
+	
+	protected int descriptorsCount;
 
 	public AbstractGLLParserImpl(GSSLookupFactory gssLookupFactory, 
 								 SPPFLookupFactory sppfLookupFactory, 
@@ -141,6 +140,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public final void scheduleDescriptor(Descriptor descriptor) {
 		descriptorLookup.scheduleDescriptor(descriptor);
+		log.trace("Descriptor created: %s", descriptor);
+		descriptorsCount++;
 	}
 	
 	@Override
