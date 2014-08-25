@@ -8,6 +8,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.util.Input;
+import org.jgll.util.ParseStatistics;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +49,11 @@ public class Gamma2WithEpsilonTest {
         GLLParser parser = ParserFactory.newParser(grammar, input);
         ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
         assertTrue(result.isParseSuccess());
-        assertEquals(129, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
+        ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+		assertEquals(129, parseStatistics.getDescriptorsCount());
+		assertEquals(21, parseStatistics.getNonterminalNodesCount());
+		assertEquals(21, parseStatistics.getIntermediateNodesCount());
+		assertEquals(179, parseStatistics.getPackedNodesCount());
     }
     
     @Test
@@ -57,7 +62,11 @@ public class Gamma2WithEpsilonTest {
         GLLParser parser = ParserFactory.newParser(grammar, input);
         ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
         assertTrue(result.isParseSuccess());
-        assertEquals(374, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
+        ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+		assertEquals(374, parseStatistics.getDescriptorsCount());
+		assertEquals(66, parseStatistics.getNonterminalNodesCount());
+		assertEquals(66, parseStatistics.getIntermediateNodesCount());
+		assertEquals(879, parseStatistics.getPackedNodesCount());
     }
     
     @Test
@@ -66,7 +75,11 @@ public class Gamma2WithEpsilonTest {
         GLLParser parser = ParserFactory.newParser(grammar, input);
         ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
         assertTrue(result.isParseSuccess());
-        assertEquals(26159, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
+        ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+		assertEquals(26159, parseStatistics.getDescriptorsCount());
+		assertEquals(5151, parseStatistics.getNonterminalNodesCount());
+		assertEquals(5151, parseStatistics.getIntermediateNodesCount());
+		assertEquals(530754, parseStatistics.getPackedNodesCount());
     }
     
     private String getBs(int size) {

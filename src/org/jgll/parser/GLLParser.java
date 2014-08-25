@@ -12,7 +12,6 @@ import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
-import org.jgll.util.ParseStatistics;
 
 /**
  * 
