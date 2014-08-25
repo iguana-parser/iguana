@@ -14,6 +14,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ParseStatistics;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,7 +57,11 @@ public class Gamma2Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
-		assertEquals(31, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
+		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+		assertEquals(31, parseStatistics.getDescriptorsCount());
+		assertEquals(6, parseStatistics.getNonterminalNodesCount());
+		assertEquals(3, parseStatistics.getIntermediateNodesCount());
+		assertEquals(12, parseStatistics.getPackedNodesCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1()));
 	}
 	
@@ -66,7 +71,11 @@ public class Gamma2Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
-		assertEquals(50, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
+		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+		assertEquals(50, parseStatistics.getDescriptorsCount());
+		assertEquals(10, parseStatistics.getNonterminalNodesCount());
+		assertEquals(6, parseStatistics.getIntermediateNodesCount());
+		assertEquals(28, parseStatistics.getPackedNodesCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2()));
 	}
 	
@@ -76,7 +85,11 @@ public class Gamma2Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
-		assertEquals(74, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
+		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+		assertEquals(74, parseStatistics.getDescriptorsCount());
+		assertEquals(15, parseStatistics.getNonterminalNodesCount());
+		assertEquals(10, parseStatistics.getIntermediateNodesCount());
+		assertEquals(55, parseStatistics.getPackedNodesCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF3()));
 	}
 	
@@ -86,7 +99,11 @@ public class Gamma2Test {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
-		assertEquals(25154, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
+		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+		assertEquals(25154, parseStatistics.getDescriptorsCount());
+		assertEquals(5050, parseStatistics.getNonterminalNodesCount());
+		assertEquals(4950, parseStatistics.getIntermediateNodesCount());
+		assertEquals(495100, parseStatistics.getPackedNodesCount());
 	}	
 	
 	private String getBs(int size) {
