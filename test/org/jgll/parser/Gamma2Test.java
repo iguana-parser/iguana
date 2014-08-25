@@ -54,8 +54,9 @@ public class Gamma2Test {
 	public void testParsers1() {
 		Input input = Input.fromString("bbb");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
+		assertEquals(31, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1()));
 	}
 	
@@ -63,8 +64,9 @@ public class Gamma2Test {
 	public void testParsers2() {
 		Input input = Input.fromString("bbbb");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
+		assertEquals(50, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2()));
 	}
 	
@@ -72,20 +74,20 @@ public class Gamma2Test {
 	public void testParsers3() {
 		Input input = Input.fromString("bbbbb");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
+		assertEquals(74, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF3()));
-	}	
+	}
 	
 	@Test
-	public void test100bs() {
-		for (int i = 1; i <= 50; i++) {
-			Input input = Input.fromString(getBs(i*10));		
-			GLLParser parser = ParserFactory.newParser(grammar, input);
-			ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
-			System.out.println(result.asParseSuccess().getParseStatistics());
-		}
-	}
+	public void testParsers4() {
+		Input input = Input.fromString(getBs(100));
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
+		assertTrue(result.isParseSuccess());
+		assertEquals(25154, result.asParseSuccess().getParseStatistics().getDescriptorsCount());
+	}	
 	
 	private String getBs(int size) {
 		StringBuilder sb = new StringBuilder();
