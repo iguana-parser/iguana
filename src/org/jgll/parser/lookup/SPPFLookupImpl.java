@@ -6,6 +6,7 @@ import java.util.Map;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
@@ -19,7 +20,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(SPPFLookupImpl.class);
 	
-	private final TokenSymbolNode[][] tokenSymbolNodes;
+	private final Map<TokenSymbolNode, TokenSymbolNode> tokenNodes;
 	
 	private final Map<NonterminalNode, NonterminalNode> nonterminalNodes;
 
@@ -30,29 +31,31 @@ public class SPPFLookupImpl implements SPPFLookup {
 	private int countAmbiguousNodes;
 	
 	public SPPFLookupImpl(GrammarGraph grammar, Input input) {
-		long start = System.nanoTime();
-
 		nonterminalNodes = new HashMap<>();
 		intermediateNodes = new HashMap<>();
-
-		tokenSymbolNodes = new TokenSymbolNode[grammar.getCountTokens()][input.length()];
-		long end = System.nanoTime();
-		log.info("SPPF lookup initialization: %d ms", (end - start) / 1000_000);
+		tokenNodes = new HashMap<>();
 	}
 
 	@Override
 	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length) {
-		TokenSymbolNode node = tokenSymbolNodes[tokenID][inputIndex];
-		if (node == null) {
-			node = new TokenSymbolNode(tokenID, inputIndex, length);
-			tokenSymbolNodes[tokenID][inputIndex] = node;
+		TokenSymbolNode key = new TokenSymbolNode(tokenID, inputIndex, length);
+		TokenSymbolNode value = tokenNodes.get(key);
+		if (value == null) {
+			value = key;
+			tokenNodes.put(key, value);
 		}
-		return node;
+		return value;
+	}
+	
+	@Override
+	public TokenSymbolNode getEpsilonNode(int inputIndex) {
+		return getTokenSymbolNode(Epsilon.TOKEN_ID, inputIndex, 0);
 	}
 	
 	@Override
 	public TokenSymbolNode findTokenSymbolNode(int tokenID, int inputIndex, int length) {
-		return tokenSymbolNodes[tokenID][inputIndex];
+		TokenSymbolNode key = new TokenSymbolNode(tokenID, inputIndex, length);
+		return tokenNodes.get(key);
 	}
 
 	@Override
@@ -122,15 +125,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public int getTokenNodesCount() {
-		int count = 0;
-		for(int i = 0; i < tokenSymbolNodes.length; i++) {
-			for(int j = 0; j < tokenSymbolNodes[i].length; j++) {
-				if(tokenSymbolNodes[i][j] != null) {
-					count++;
-				}
-			}
-		}
-		return count;
+		return tokenNodes.size();
 	}
 
 	@Override

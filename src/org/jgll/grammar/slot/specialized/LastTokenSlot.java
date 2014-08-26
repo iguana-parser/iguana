@@ -19,8 +19,8 @@ public class LastTokenSlot extends TokenGrammarSlot {
 						 ConditionTest postConditions, ConditionTest popConditions,
 						 NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 		
-		super(id, label, previous, regularExpression,
-			  tokenID, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
+		super(id, label, previous, regularExpression, tokenID, preConditions, 
+			  postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 	}
 	
 	@Override

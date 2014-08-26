@@ -62,6 +62,7 @@ public class Gamma2Test {
 		assertEquals(6, parseStatistics.getNonterminalNodesCount());
 		assertEquals(3, parseStatistics.getIntermediateNodesCount());
 		assertEquals(12, parseStatistics.getPackedNodesCount());
+		assertEquals(3, parseStatistics.getTerminalNodesCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1()));
 	}
 	
@@ -76,6 +77,7 @@ public class Gamma2Test {
 		assertEquals(10, parseStatistics.getNonterminalNodesCount());
 		assertEquals(6, parseStatistics.getIntermediateNodesCount());
 		assertEquals(28, parseStatistics.getPackedNodesCount());
+		assertEquals(4, parseStatistics.getTerminalNodesCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2()));
 	}
 	
@@ -90,6 +92,7 @@ public class Gamma2Test {
 		assertEquals(15, parseStatistics.getNonterminalNodesCount());
 		assertEquals(10, parseStatistics.getIntermediateNodesCount());
 		assertEquals(55, parseStatistics.getPackedNodesCount());
+		assertEquals(5, parseStatistics.getTerminalNodesCount());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF3()));
 	}
 	
@@ -103,6 +106,7 @@ public class Gamma2Test {
 		assertEquals(25154, parseStatistics.getDescriptorsCount());
 		assertEquals(5050, parseStatistics.getNonterminalNodesCount());
 		assertEquals(4950, parseStatistics.getIntermediateNodesCount());
+		assertEquals(100, parseStatistics.getTerminalNodesCount());
 		assertEquals(495100, parseStatistics.getPackedNodesCount());
 	}	
 	

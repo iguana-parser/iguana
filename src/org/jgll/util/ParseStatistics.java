@@ -12,6 +12,7 @@ public class ParseStatistics {
 	private final int gssNodesCount;
 	private final int gssEdgesCount;
 	private final int nonterminalNodesCount;
+	private final int terminalNodesCount;
 	private final int intermediateNodesCount;
 	private final int packedNodesCount;
 	private final int ambiguousNodesCount;
@@ -20,7 +21,7 @@ public class ParseStatistics {
 	
 	public ParseStatistics(Input input, long nanoTime, long userTime, long systemTime,
 						   int memoryUsed, int descriptorsCount, int gssNodesCount,
-						   int gssEdgesCount, int nonterminalNodesCount,
+						   int gssEdgesCount, int nonterminalNodesCount, int terminalNodesCount,
 						   int intermediateNodesCount, int packedNodesCount,
 						   int ambiguousNodesCount) {
 		this.input = input;
@@ -32,6 +33,7 @@ public class ParseStatistics {
 		this.gssNodesCount = gssNodesCount;
 		this.gssEdgesCount = gssEdgesCount;
 		this.nonterminalNodesCount = nonterminalNodesCount;
+		this.terminalNodesCount = terminalNodesCount;
 		this.intermediateNodesCount = intermediateNodesCount;
 		this.packedNodesCount = packedNodesCount;
 		this.ambiguousNodesCount = ambiguousNodesCount;
@@ -67,6 +69,10 @@ public class ParseStatistics {
 	
 	public int getNonterminalNodesCount() {
 		return nonterminalNodesCount;
+	}
+	
+	public int getTerminalNodesCount() {
+		return terminalNodesCount;
 	}
 	
 	public int getIntermediateNodesCount() {

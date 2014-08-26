@@ -53,6 +53,7 @@ public class Gamma2WithEpsilonTest {
 		assertEquals(129, parseStatistics.getDescriptorsCount());
 		assertEquals(21, parseStatistics.getNonterminalNodesCount());
 		assertEquals(21, parseStatistics.getIntermediateNodesCount());
+		assertEquals(11, parseStatistics.getTerminalNodesCount());
 		assertEquals(179, parseStatistics.getPackedNodesCount());
     }
     
@@ -66,6 +67,7 @@ public class Gamma2WithEpsilonTest {
 		assertEquals(374, parseStatistics.getDescriptorsCount());
 		assertEquals(66, parseStatistics.getNonterminalNodesCount());
 		assertEquals(66, parseStatistics.getIntermediateNodesCount());
+		assertEquals(21, parseStatistics.getTerminalNodesCount());
 		assertEquals(879, parseStatistics.getPackedNodesCount());
     }
     
@@ -79,6 +81,7 @@ public class Gamma2WithEpsilonTest {
 		assertEquals(26159, parseStatistics.getDescriptorsCount());
 		assertEquals(5151, parseStatistics.getNonterminalNodesCount());
 		assertEquals(5151, parseStatistics.getIntermediateNodesCount());
+		assertEquals(201, parseStatistics.getTerminalNodesCount());
 		assertEquals(530754, parseStatistics.getPackedNodesCount());
     }
     

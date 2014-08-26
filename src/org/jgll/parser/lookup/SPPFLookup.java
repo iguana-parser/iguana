@@ -19,6 +19,8 @@ public interface SPPFLookup {
 	 */
 	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length);
 	
+	public TokenSymbolNode getEpsilonNode(int inputIndex);
+	
 	/**
 	 * 
 	 * @param tokenID

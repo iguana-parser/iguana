@@ -83,7 +83,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 					  descriptorsCount, 
 					  gssLookup.getGSSNodesCount(), 
 					  gssLookup.getGSSEdgesCount(), 
-					  sppfLookup.getNonterminalNodesCount(), 
+					  sppfLookup.getNonterminalNodesCount(),
+					  sppfLookup.getTokenNodesCount(),
 					  sppfLookup.getIntermediateNodesCount(), 
 					  sppfLookup.getPackedNodesCount(), 
 					  sppfLookup.getAmbiguousNodesCount());
