@@ -13,6 +13,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.util.IguanaBenchmark;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.junit.Before;
@@ -109,6 +110,16 @@ public class Gamma2Test {
 		assertEquals(100, parseStatistics.getTerminalNodesCount());
 		assertEquals(495100, parseStatistics.getPackedNodesCount());
 	}	
+	
+	@Test
+	public void test() {
+		for (int i = 1; i <= 50; i++) {
+			Input input = Input.fromString(getBs(i * 10));
+			GLLParser parser = ParserFactory.newParser(grammar, input);
+			ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
+			System.out.println(IguanaBenchmark.format(result.asParseSuccess().getParseStatistics()));
+		}
+	}
 	
 	private String getBs(int size) {
 		StringBuilder sb = new StringBuilder();

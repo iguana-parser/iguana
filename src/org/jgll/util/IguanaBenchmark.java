@@ -4,14 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -22,112 +18,40 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.SPPFNode;
 
-public class IguanaInterpreter {
+import com.google.common.testing.GcFinalization;
 
+public class IguanaBenchmark {
 
-	private static List<ParseResult> run(Grammar grammar, GrammarGraph grammarGraph, Input input, 
-			                             String startSymbol, int warmupCount, int runCount) {
-		
-		List<ParseResult> results = new ArrayList<>();
-
-		GLLParser parser = null;
-
-		for (int i = 0; i < warmupCount; i++) {
-			parser = ParserFactory.newParser(grammar, input);
-			parser.parse(input, grammarGraph, startSymbol);
-//			waitForGC();
-		}
-		
-		if (runCount == 1) {
-			parser = ParserFactory.newParser(grammar, input);
-			results.add(parser.parse(input, grammarGraph, startSymbol));
-//			Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", results.get(0).asParseSuccess().getSPPFNode(), grammarGraph, input);
-		} else {
-			for (int i = 0; i < runCount; i++) {
-				parser = ParserFactory.newParser(grammar, input);
-				results.add(parser.parse(input, grammarGraph, startSymbol));
-//				waitForGC();
-			}			
-		}
-
-		return results;
+	public static String header() {
+       return String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %-15s %-15s",
+    		   				"size", 
+    		   				"user_time", 
+    		   				"cpu_time", 
+    		   				"nano_time", 
+    		   				"nonterminal_nodes", 
+    		   				"intermediate_nodes", 
+    		   				"terminal_nodes",
+    		   				"packed_nodes", 
+    		   				"ambiguous_nodes");
 	}
+	
+	public static String format(ParseStatistics statistics) {
+    	return String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
+    			statistics.getInput().length() - 1, 
+    			statistics.getUserTime() / 1000_000,
+    			statistics.getSystemTime() / 1000_000, 
+    			statistics.getNanoTime() / 1000_000,
+    			statistics.getNonterminalNodesCount(),
+    			statistics.getIntermediateNodesCount(),
+    			statistics.getTerminalNodesCount(), 
+    			statistics.getPackedNodesCount(), 
+    			statistics.getCountAmbiguousNodes());
 
-	private void waitForGC() {
-		System.gc();
-		System.gc();
-		System.runFinalization();
-
-		final CountDownLatch latch = new CountDownLatch(1);
-		new Object() {
-			@Override
-			protected void finalize() {
-				latch.countDown();
-			}
-		};
-		System.gc();
-		System.gc();
-		System.runFinalization();
-		try {
-			latch.await(2, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
 	}
-
-	private static void printResult(List<ParseResult> results, int runCount, GrammarGraph grammarGraph, Input input) {
-
-		long sumNanoTime = 0;
-		long sumUserTime = 0;
-		int sumMemory = 0;
-
-		for (ParseResult result : results) {
-			// TODO: Later add a check to ensure all results are parse errors
-			if (result.isParseError()) {
-				System.out.println(result.asParseError());
-				return;
-			}
-
-			ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
-			sumNanoTime += parseStatistics.getNanoTime();
-			sumUserTime += parseStatistics.getUserTime();
-			sumMemory += parseStatistics.getMemoryUsed();
-			
-//			for (SPPFNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
-//				Visualization.generateSPPFGraphWithoutIntermeiateNodes("/Users/aliafroozeh/output", ambiguousNode, grammarGraph, input);
-//			}
-		}
-		
-		ParseStatistics parseStatistics = results.get(0).asParseSuccess().getParseStatistics();
-		System.out.println(String.format("Input size: %s, Nano time: %d ms, User time: %d ms, Memory: %d mb, Ambiguities: %d",
-				        parseStatistics.getInput().length(),
-						sumNanoTime / (1000_000 * runCount),
-						sumUserTime / (1000_000 * runCount),
-						sumMemory / runCount,
- 						parseStatistics.getCountAmbiguousNodes()));
-		
-//		for (NonPackedNode ambiguousNode : parseStatistics.getAmbiguousNodes()) {
-//			String label;
-//			if (ambiguousNode instanceof NonterminalNode) {
-//				label = grammarGraph.getNonterminalById(ambiguousNode.getId()).getName();
-//			} else {
-//				label = grammarGraph.getIntermediateNodeLabel(ambiguousNode.getId());
-//			}
-//			int line = input.getLineNumber(ambiguousNode.getLeftExtent());
-//			int column = input.getColumnNumber(ambiguousNode.getLeftExtent());
-//			System.out.println(String.format("Node: %s, length: %d, line: %d, column: %d", label, 
-//					ambiguousNode.getRightExtent() - ambiguousNode.getLeftExtent(), line, column));
-//		}
- 	}
-
+	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 		
@@ -304,8 +228,10 @@ public class IguanaInterpreter {
 							  Input input) throws IOException {
 		
 		System.out.println("Parsing " + input.getURI() + "...");
-		List<ParseResult> results = IguanaInterpreter.run(grammar, grammarGraph, input, startSymbol, warmupCount, runCount);
-		printResult(results, runCount, grammarGraph, input);
+		GLLParser parser = ParserFactory.newParser();
+		parser.parse(input, grammarGraph, startSymbol);
+		GcFinalization.awaitFullGc();
+//		printResult(results, runCount, grammarGraph, input);
 	}
 	
 	private static boolean ignore(Set<String> ignorePaths, String inputPath) {
