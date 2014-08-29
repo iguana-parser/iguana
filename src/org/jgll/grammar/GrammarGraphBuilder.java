@@ -1,7 +1,5 @@
 package org.jgll.grammar;
 
-import static org.jgll.grammar.Conditions.*;
-
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -12,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jgll.FalseConditions;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -65,6 +64,8 @@ public class GrammarGraphBuilder implements Serializable {
 	 */
 	Object[][] objects;
 	
+	private Conditions conditions;
+	
 	public GrammarGraphBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammar, grammarSlotFactory, new OriginalIntermediateNodeIds(grammar));
 	}
@@ -84,6 +85,7 @@ public class GrammarGraphBuilder implements Serializable {
 		
 		slots = HashBiMap.create();
 		nonterminals = new HashMap<>();
+		conditions = new DefaultConditionsImpl();
 	}
 
 	public GrammarGraph build() {
@@ -171,7 +173,7 @@ public class GrammarGraphBuilder implements Serializable {
 					}
 				}
 	
-				ConditionTest popCondition = getPostConditions(popActions);
+				ConditionTest popCondition = conditions.getPostConditions(popActions);
 				LastGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popCondition);
 				slots.put(lastSlot, lastSlot.getId());
 				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
@@ -184,10 +186,10 @@ public class GrammarGraphBuilder implements Serializable {
 	 * Removes unnecssary follow restrictions
 	 * @return 
 	 */
-	private ConditionTest getPostConditionsForRegularExpression(Set<Condition> conditions) {
-		Set<Condition> set = new HashSet<>(conditions);
+	private ConditionTest getPostConditionsForRegularExpression(Set<Condition> c) {
+		Set<Condition> set = new HashSet<>(c);
 		
-		for (Condition condition : conditions) {
+		for (Condition condition : c) {
 			if(condition.getType() != ConditionType.NOT_MATCH) {
 				set.add(condition);
 			} 
@@ -198,7 +200,7 @@ public class GrammarGraphBuilder implements Serializable {
 		
 		// Make RegularExpression completely immutable. Now this works because
 		// getConditons can be modified.
-		return getPostConditions(set);
+		return conditions.getPostConditions(set);
 	}
 	
 	
@@ -212,17 +214,17 @@ public class GrammarGraphBuilder implements Serializable {
 		if(symbol instanceof RegularExpression) {
 			RegularExpression token = (RegularExpression) symbol;
 			
-			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
+			ConditionTest preConditionsTest = conditions.getPreConditions(symbol.getConditions());
 			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(symbol.getConditions());
-			ConditionTest popConditionsTest = getPostConditions(popActions);
+			ConditionTest popConditionsTest = conditions.getPostConditions(popActions);
 			
 			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, currentSlot, getTokenID(token), preConditionsTest, postConditionsTest, popConditionsTest);
 		}
 		
 		// Nonterminal
 		else {
-			ConditionTest preConditionsTest = getPreConditions(symbol.getConditions());
-			ConditionTest popConditionsTest = getPostConditions(popActions);
+			ConditionTest preConditionsTest = conditions.getPreConditions(symbol.getConditions());
+			ConditionTest popConditionsTest = conditions.getPostConditions(popActions);
 			
 			popActions = new HashSet<>(symbol.getConditions());
 			

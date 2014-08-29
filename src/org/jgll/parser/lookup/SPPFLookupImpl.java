@@ -29,8 +29,11 @@ public class SPPFLookupImpl implements SPPFLookup {
 	private int countPackedNodes;
 	
 	private int countAmbiguousNodes;
+
+	private GrammarGraph grammar;
 	
 	public SPPFLookupImpl(GrammarGraph grammar, Input input) {
+		this.grammar = grammar;
 		nonterminalNodes = new HashMap<>();
 		intermediateNodes = new HashMap<>();
 		tokenNodes = new HashMap<>();
@@ -42,6 +45,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 		TokenSymbolNode value = tokenNodes.get(key);
 		if (value == null) {
 			value = key;
+//			System.out.println(grammar.getRegularExpressionById(value.getId()) + ", " + value.getLeftExtent() + ", " + value.getRightExtent());
 			tokenNodes.put(key, value);
 		}
 		return value;
@@ -64,6 +68,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 		NonterminalNode value = nonterminalNodes.get(key);
 		if (value == null) {
 			value = key;
+//			System.out.println(grammar.getNonterminalById(value.getId()) + ", " + value.getLeftExtent() + ", " + value.getRightExtent());
 			value.init();
 			log.trace("Nonterminal node created: %s", key);
 			nonterminalNodes.put(key, value);

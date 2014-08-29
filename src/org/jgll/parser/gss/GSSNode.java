@@ -2,6 +2,7 @@ package org.jgll.parser.gss;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class GSSNode {
 		children = new ArrayList<>();
 		poppedElements = new ArrayList<>();
 		addedPoppedElements = new HashSet<>();
-		gssEdges = new HashSet<>();
+		gssEdges = new LinkedHashSet<>();
 		descriptors = new HashSet<>();
 		
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
