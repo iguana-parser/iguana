@@ -12,7 +12,7 @@ import org.jgll.traversal.SPPFVisitor;
 public class NonterminalNode extends NonPackedNode {
 	
 	
-	public NonterminalNode(int nonterminalId, int numberOfAlternatives, int leftExtent, int rightExtent) {
+	public NonterminalNode(int nonterminalId, int leftExtent, int rightExtent) {
 		super(nonterminalId, leftExtent, rightExtent);
 	}
 	

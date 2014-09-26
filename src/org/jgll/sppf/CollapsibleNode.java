@@ -14,8 +14,8 @@ package org.jgll.sppf;
  */
 public class CollapsibleNode extends NonterminalNode {
 
-	public CollapsibleNode(int nonterminalId, int numberOfAlternatives, int leftExtent, int rightExtent) {
-		super(nonterminalId, numberOfAlternatives, leftExtent, rightExtent);
+	public CollapsibleNode(int nonterminalId, int leftExtent, int rightExtent) {
+		super(nonterminalId, leftExtent, rightExtent);
 	}
 	
 	@Override

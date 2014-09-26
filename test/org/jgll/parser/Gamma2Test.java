@@ -113,12 +113,10 @@ public class Gamma2Test {
 	
 	@Test
 	public void test() {
-		for (int i = 1; i <= 50; i++) {
-			Input input = Input.fromString(getBs(i * 10));
-			GLLParser parser = ParserFactory.newParser(grammar, input);
-			ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
-			System.out.println(IguanaBenchmark.format(result.asParseSuccess().getParseStatistics()));
-		}
+		Input input = Input.fromString(getBs(100));
+		GLLParser parser = ParserFactory.newParser(grammar, input);
+		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
+		System.out.println(IguanaBenchmark.format(result.asParseSuccess().getParseStatistics()));
 	}
 	
 	private String getBs(int size) {

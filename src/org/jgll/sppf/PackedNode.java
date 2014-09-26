@@ -46,11 +46,7 @@ public class PackedNode extends SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  id == other.id &&
-		        pivot == other.pivot &&
-		        parent.getId() == other.parent.getId() &&
-		        parent.getLeftExtent() == other.parent.getLeftExtent() &&
-		        parent.getRightExtent() == other.parent.getRightExtent();
+		return  id == other.id && pivot == other.pivot;
 	}
 	
 	public int getPivot() {
@@ -86,7 +82,7 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(id, pivot, parent.getId(), parent.getLeftExtent(), parent.getRightExtent());
+		return HashFunctions.defaulFunction().hash(id, pivot);
 	}
 	
 	@Override

@@ -14,7 +14,6 @@ public class SPPFNodeFactory {
 	public NonterminalNode createNonterminalNode(String s, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = Nonterminal.withName(s);
 		return new NonterminalNode(grammarGraph.getNonterminalId(nonterminal), 
-										 grammarGraph.getCountAlternates(nonterminal), 
 										 leftExtent, 
 										 rightExtent);
 	}
@@ -30,7 +29,6 @@ public class SPPFNodeFactory {
 	
 	public ListSymbolNode createListNode(Nonterminal nonterminal, int leftExtent, int rightExtent) {
 		return new ListSymbolNode(grammarGraph.getNonterminalId(nonterminal), 
-				 grammarGraph.getCountAlternates(nonterminal), 
 				 leftExtent, 
 				 rightExtent);
 	}
