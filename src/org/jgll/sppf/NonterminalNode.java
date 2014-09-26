@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.ArrayList;
 
+import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -14,6 +15,29 @@ public class NonterminalNode extends NonPackedNode {
 	
 	public NonterminalNode(int nonterminalId, int leftExtent, int rightExtent) {
 		super(nonterminalId, leftExtent, rightExtent);
+	}
+	
+	@Override
+	public int hashCode() {
+		return HashFunctions.defaulFunction().hash(id, leftExtent, rightExtent);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if (!(obj instanceof NonterminalNode)) {
+			return false;
+		}
+		
+		NonterminalNode other = (NonterminalNode) obj;
+
+		return  id == other.id &&
+				leftExtent == other.leftExtent &&
+				rightExtent == other.rightExtent;
 	}
 	
 	@Override

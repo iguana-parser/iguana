@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.ArrayList;
 
+import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -18,6 +19,29 @@ public class IntermediateNode extends NonPackedNode {
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
+	}
+	
+	@Override
+	public int hashCode() {
+		return HashFunctions.defaulFunction().hash(id, leftExtent, rightExtent);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) {
+			return true;
+		}
+		
+		if (!(obj instanceof IntermediateNode)) {
+			return false;
+		}
+		
+		IntermediateNode other = (IntermediateNode) obj;
+
+		return  id == other.id &&
+				leftExtent == other.leftExtent &&
+				rightExtent == other.rightExtent;
 	}
 	
 	@Override

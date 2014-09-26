@@ -2,8 +2,6 @@ package org.jgll.sppf;
 
 import java.util.List;
 
-import org.jgll.parser.HashFunctions;
-
 /**
  * A NonPackedNode is the abstract super class for nonterminal and intermediate
  * symbol nodes.
@@ -35,34 +33,6 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 
 	public abstract NonPackedNode init();
-	
-	@Override
-	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(id, leftExtent, rightExtent);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == null) {
-			return false;
-		}
-		
-		if(this == obj) {
-			return true;
-		}
-
-		// Only nodes with the same concrete class can be equal.
-		if(this.getClass() != obj.getClass()) {
-			return false;
-		}
-		
-		NonPackedNode other = (NonPackedNode) obj;
-
-		return  id == other.id &&
-				leftExtent == other.leftExtent &&
-				rightExtent == other.rightExtent;
-	}
 	
 
 	@Override

@@ -18,7 +18,6 @@ public class OriginalIntermediateNode extends IntermediateNode {
 		return this;
 	}
 	
-	
 	@Override
 	public boolean addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
 		PackedNode newPackedNode = attachChildren(packedNode, leftChild, rightChild);

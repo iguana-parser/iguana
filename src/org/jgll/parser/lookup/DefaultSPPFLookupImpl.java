@@ -5,6 +5,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.OriginalIntermediateNode;
 import org.jgll.sppf.OriginalNonterminalNode;
 import org.jgll.util.Input;
 
@@ -21,7 +22,7 @@ public class DefaultSPPFLookupImpl extends SPPFLookupImpl {
 	
 	@Override
 	protected IntermediateNode createIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return new IntermediateNode(grammarSlot.getId(), leftExtent, rightExtent);
+		return new OriginalIntermediateNode(grammarSlot.getId(), leftExtent, rightExtent);
 	}
 
 }
