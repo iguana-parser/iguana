@@ -78,7 +78,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 		return value;
 	}
 	
-	private NonterminalNode createNonterminalNode(Nonterminal nonterminal, int nonterminalId, int leftExtent, int rightExtent) {
+	protected NonterminalNode createNonterminalNode(Nonterminal nonterminal, int nonterminalId, int leftExtent, int rightExtent) {
 		if(nonterminal.isEbnfList()) {
 			return new ListSymbolNode(nonterminalId, leftExtent, rightExtent);
 		} else {
@@ -86,8 +86,8 @@ public class SPPFLookupImpl implements SPPFLookup {
 		}
 	}
 	
-	private IntermediateNode createIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return createIntermediateNode(grammarSlot, leftExtent, rightExtent);
+	protected IntermediateNode createIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		return new IntermediateNode(grammarSlot.getId(), leftExtent, rightExtent);
 	}
 
 	@Override

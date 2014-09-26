@@ -8,14 +8,14 @@ public class ParserFactory {
 	
 	public static GLLParser newParser() {
 		GSSLookupFactory gssLookupFactory = new NewGSSLookupFactory();
-		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
+		SPPFLookupFactory sppfLookupFactory = new NewSPPFLookupFactory();
 		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();
 		return new NewGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
 	}
 
 	public static GLLParser newParser(Grammar grammar, Input input) {
 		GSSLookupFactory gssLookupFactory = new NewGSSLookupFactory();
-		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
+		SPPFLookupFactory sppfLookupFactory = new NewSPPFLookupFactory();
 		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();
 		return new NewGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
 	}
