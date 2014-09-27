@@ -27,11 +27,13 @@ import com.google.common.testing.GcFinalization;
 public class IguanaBenchmark {
 
 	public static String header() {
-       return String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %-15s %-15s",
+       return String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-15s %-15s",
     		   				"size", 
     		   				"user_time", 
     		   				"cpu_time", 
     		   				"nano_time", 
+    		   				"gss_nodes",
+    		   				"gss_edges",
     		   				"nonterminal_nodes", 
     		   				"intermediate_nodes", 
     		   				"terminal_nodes",
@@ -40,11 +42,13 @@ public class IguanaBenchmark {
 	}
 	
 	public static String format(ParseStatistics statistics) {
-    	return String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
+    	return String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
     			statistics.getInput().length() - 1, 
     			statistics.getUserTime() / 1000_000,
     			statistics.getSystemTime() / 1000_000, 
     			statistics.getNanoTime() / 1000_000,
+    			statistics.getGssNodesCount(),
+    			statistics.getGssEdgesCount(),
     			statistics.getNonterminalNodesCount(),
     			statistics.getIntermediateNodesCount(),
     			statistics.getTerminalNodesCount(), 
@@ -140,8 +144,8 @@ public class IguanaBenchmark {
 	        	startSymbol = line.getOptionValue("s");
 	        }
 	        
-			int runCount = 1;
-			int warmupCount = 0;
+			int runCount = 10;
+			int warmupCount = 10;
 
 			if (line.hasOption("r")) {
 				try {
@@ -229,7 +233,7 @@ public class IguanaBenchmark {
 							  Input input) throws IOException {
 		
 		for (int i = 0; i < 10; i++) {
-			GLLParser parser = ParserFactory.newParser();
+			GLLParser parser = ParserFactory.originalParser();
 			parser.parse(Input.fromPath("/Users/aliafroozeh/test.java"), grammarGraph, startSymbol);
 //			System.out.println(header());
 //			System.out.println(format(result.asParseSuccess().getParseStatistics()));
@@ -240,7 +244,7 @@ public class IguanaBenchmark {
 		
 		System.out.println(input.getURI());
 		for (int i = 0; i < runCount; i++) {
-			GLLParser parser = ParserFactory.newParser();
+			GLLParser parser = ParserFactory.originalParser();
 			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 			if (result.isParseSuccess()) {
 				System.out.println(format(result.asParseSuccess().getParseStatistics()));

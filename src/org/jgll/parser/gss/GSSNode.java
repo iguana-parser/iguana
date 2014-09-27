@@ -37,7 +37,7 @@ public class GSSNode {
 	
 	// TODO: for recursive descent ordering, we need to traverse the GSS edges
 	// the way they are added, so we need a hashset with ordering.
-	private final Set<GSSEdge> gssEdges;
+	private final List<GSSEdge> gssEdges;
 
 	private final int hash;
 	
@@ -56,7 +56,7 @@ public class GSSNode {
 		children = new ArrayList<>();
 		poppedElements = new ArrayList<>();
 		addedPoppedElements = new HashSet<>();
-		gssEdges = new LinkedHashSet<>();
+		gssEdges = new ArrayList<>();
 		descriptors = new HashSet<>();
 		
 		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);

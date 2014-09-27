@@ -7,13 +7,8 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
-import org.jgll.util.logging.LoggerWrapper;
 
 /**
- * 
- * This implementation is optimized for input files with an average number of
- * line of codes (less than 3000).
- * 
  * 
  * 
  * @author Ali Afroozeh
@@ -21,21 +16,13 @@ import org.jgll.util.logging.LoggerWrapper;
  */
 public class GSSLookupImpl implements GSSLookup {
 
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(GSSLookupImpl.class);
-
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)
 	 */
 	private GSSNode[][] gssNodes;
 
 	public GSSLookupImpl(Input input, int size) {
-		
-		long start = System.nanoTime();
-
 		gssNodes = new GSSNode[size][input.length()];
-
-		long end = System.nanoTime();
-		log.info("Lookup table initialization: %d ms", (end - start) / 1000_000);
 	}
 
 	@Override

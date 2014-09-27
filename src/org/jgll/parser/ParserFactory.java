@@ -20,7 +20,7 @@ public class ParserFactory {
 		return new NewGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
 	}
 	
-	public static GLLParser originalParser(Grammar grammar, Input input) {
+	public static GLLParser originalParser() {
 		GSSLookupFactory gssLookupFactory = new OriginalGSSLookupFactory();
 		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
 		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();

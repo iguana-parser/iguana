@@ -56,7 +56,7 @@ public class Gamma2Test {
 	@Test
 	public void testParsers1() {
 		Input input = Input.fromString("bbb");
-		GLLParser parser = ParserFactory.originalParser(grammar, input);
+		GLLParser parser = ParserFactory.originalParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
@@ -72,7 +72,7 @@ public class Gamma2Test {
 	@Test
 	public void testParsers2() {
 		Input input = Input.fromString("bbbb");
-		GLLParser parser = ParserFactory.originalParser(grammar, input);
+		GLLParser parser = ParserFactory.originalParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
@@ -87,7 +87,7 @@ public class Gamma2Test {
 	@Test
 	public void testParsers3() {
 		Input input = Input.fromString("bbbbb");
-		GLLParser parser = ParserFactory.originalParser(grammar, input);
+		GLLParser parser = ParserFactory.originalParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
@@ -102,7 +102,7 @@ public class Gamma2Test {
 	@Test
 	public void testParsers4() {
 		Input input = Input.fromString(getBs(100));
-		GLLParser parser = ParserFactory.originalParser(grammar, input);
+		GLLParser parser = ParserFactory.originalParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
