@@ -38,8 +38,6 @@ public class GSSNode {
 	// the way they are added, so we need a hashset with ordering.
 	private final List<GSSEdge> gssEdges;
 
-	private final int hash;
-	
 	private Set<Descriptor> descriptors;
 	
 	/**
@@ -57,8 +55,6 @@ public class GSSNode {
 		addedPoppedElements = new HashSet<>();
 		gssEdges = new ArrayList<>();
 		descriptors = new HashSet<>();
-		
-		this.hash = HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 	
 	public boolean addToPoppedElements(NonPackedNode node) {
@@ -129,7 +125,7 @@ public class GSSNode {
 	}
 
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(slot.getId(), inputIndex);
 	}
 	
 	public String toString() {
