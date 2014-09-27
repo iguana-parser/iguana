@@ -9,14 +9,9 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 	private SPPFNode node;
 	private GSSNode destination;
 
-	private final int hash;
-
 	public OriginalGSSEdgeImpl(SPPFNode node, GSSNode destination) {
 		this.node = node;
 		this.destination = destination;
-		this.hash = HashFunctions.defaulFunction().hash(node.getId(),
-														destination.getInputIndex(), 
-														destination.getGrammarSlot().getId());
 	}
 
 	public SPPFNode getNode() {
@@ -34,7 +29,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 
 	@Override
 	public boolean equals(Object obj) {
-
+		
 		if (this == obj) {
 			return true;
 		}
@@ -48,14 +43,13 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 		// Because destination.getInputIndex() == node.getLeftExtent, and
 		//         node.getRightExtent() == source.getLeftExtent 
 		// we don't use them here.
-		return 	node.getId() == other.getNode().getId()
-				&& destination.getInputIndex() == other.getDestination().getInputIndex()
+		return 	destination.getInputIndex() == other.getDestination().getInputIndex()
 				&& destination.getGrammarSlot() == other.getDestination().getGrammarSlot();
 	}
 
 	@Override
 	public int hashCode() {
-		return hash;
+		return HashFunctions.defaulFunction().hash(destination.getInputIndex(), destination.getGrammarSlot().getId());
 	}
 
 }

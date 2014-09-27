@@ -29,7 +29,7 @@ public class BenchmarkGamma {
 		
 		// Warmup
 		for (int i = 1; i <= 10; i++) {
-			GLLParser parser = ParserFactory.originalParser();
+			GLLParser parser = ParserFactory.newParser();
 			parser.parse(Input.fromString(getBs(30)), grammar.toGrammarGraph(), "S");
 		}
 		GcFinalization.awaitFullGc();
@@ -37,7 +37,7 @@ public class BenchmarkGamma {
 		System.out.println(IguanaBenchmark.header());
 		for (int i = 1; i <= 50; i++) {
 			for (int j = 0; j < 1; j++) {
-				GLLParser parser = ParserFactory.originalParser();
+				GLLParser parser = ParserFactory.newParser();
 				ParseResult res = parser.parse(Input.fromString(getBs(i * 10)), grammar.toGrammarGraph(), "S");
 
 				if (res.isParseSuccess()) {

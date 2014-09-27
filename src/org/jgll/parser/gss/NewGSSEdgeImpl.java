@@ -10,16 +10,10 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	private SPPFNode node;
 	private GSSNode destination;
 
-	private final int hash;
-
 	public NewGSSEdgeImpl(BodyGrammarSlot slot, SPPFNode node, GSSNode destination) {
 		this.returnSlot = slot;
 		this.node = node;
 		this.destination = destination;
-		this.hash = HashFunctions.defaulFunction().hash(returnSlot.getId(), 
-														node.getId(),
-														destination.getInputIndex(), 
-														destination.getGrammarSlot().getId());
 	}
 
 	public SPPFNode getNode() {
@@ -48,17 +42,17 @@ public class NewGSSEdgeImpl implements GSSEdge {
 		GSSEdge other = (GSSEdge) obj;
 
 		// Because destination.getInputIndex() == node.getLeftExtent, and
-		//         node.getRightExtent() == source.getLeftExtent 
-		// we don't use them here.
+		// node.getRightExtent() == source.getLeftExtent we don't use them here.
 		return 	returnSlot == other.getReturnSlot()
-				&& node.getId() == other.getNode().getId()
 				&& destination.getInputIndex() == other.getDestination().getInputIndex()
 				&& destination.getGrammarSlot() == other.getDestination().getGrammarSlot();
 	}
 
 	@Override
 	public int hashCode() {
-		return hash;
+		return  HashFunctions.defaulFunction().hash(returnSlot.getId(), 
+													destination.getInputIndex(), 
+													destination.getGrammarSlot().getId());
 	}
 	
 	@Override
