@@ -164,12 +164,18 @@ public class IguanaBenchmark {
 					System.exit(1);
 				}
 			}
+			
+			try {
+				warmup(startSymbol, grammarGraph, warmupCount);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 	        
 	        // Input
 	        if (line.hasOption("i")) {
 	        	String inputPath = line.getOptionValue("i");
 	        	try {
-					parse(startSymbol, runCount, warmupCount, grammar, grammarGraph, Input.fromPath(inputPath));
+					parse(startSymbol, runCount, grammar, grammarGraph, Input.fromPath(inputPath));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -204,7 +210,7 @@ public class IguanaBenchmark {
 	    		try {
 	    			for (String inputPath : inputPaths) {								
 	    				if (!ignore(ignorePaths, inputPath)) {
-	    					parse(startSymbol, runCount, warmupCount, grammar, grammarGraph, Input.fromPath(inputPath));
+	    					parse(startSymbol, runCount, grammar, grammarGraph, Input.fromPath(inputPath));
 	    				}
 	    			}
 	    		} catch (Exception e) {
@@ -216,7 +222,7 @@ public class IguanaBenchmark {
 	        	try {
 					String commandLineInput = in.readLine();
 					System.out.println(commandLineInput);
-					parse(startSymbol, runCount, warmupCount, grammar, grammarGraph, Input.fromString(commandLineInput));
+					parse(startSymbol, runCount, grammar, grammarGraph, Input.fromString(commandLineInput));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -228,19 +234,17 @@ public class IguanaBenchmark {
 		
 	}
 
-	private static void parse(String startSymbol, int runCount,
- 							  int warmupCount, Grammar grammar, GrammarGraph grammarGraph,
-							  Input input) throws IOException {
-		
-		for (int i = 0; i < 10; i++) {
+	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
+		for (int i = 0; i < warmupCount; i++) {
 			GLLParser parser = ParserFactory.originalParser();
 			parser.parse(Input.fromPath("/Users/aliafroozeh/test.java"), grammarGraph, startSymbol);
-//			System.out.println(header());
-//			System.out.println(format(result.asParseSuccess().getParseStatistics()));
-//			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, Input.fromPath("/Users/aliafroozeh/test.java"));
 		}
-		GcFinalization.awaitFullGc();
-		
+		GcFinalization.awaitFullGc();		
+	}
+	
+	private static void parse(String startSymbol, int runCount,
+ 							  Grammar grammar, GrammarGraph grammarGraph,
+							  Input input) throws IOException {
 		
 		System.out.println(input.getURI());
 		for (int i = 0; i < runCount; i++) {

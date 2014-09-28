@@ -34,7 +34,6 @@ public abstract class NonPackedNode extends SPPFNode {
 
 	public abstract NonPackedNode init();
 	
-
 	@Override
 	public int getId() {
 		return id;
