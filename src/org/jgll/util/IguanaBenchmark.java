@@ -144,8 +144,8 @@ public class IguanaBenchmark {
 	        	startSymbol = line.getOptionValue("s");
 	        }
 	        
-			int runCount = 10;
-			int warmupCount = 10;
+			int runCount = 1;
+			int warmupCount = 1;
 
 			if (line.hasOption("r")) {
 				try {
@@ -184,6 +184,7 @@ public class IguanaBenchmark {
 	    		
 	    		Set<String> inputPaths = new LinkedHashSet<>();
 	    		Set<String> ignorePaths = new LinkedHashSet<>();
+//	    		ignorePaths.add("mcs/class/corlib/System/Console.cs");
 	        	
 	        	inputDir = line.getOptionValue("d");
 	        	
@@ -235,11 +236,11 @@ public class IguanaBenchmark {
 	}
 
 	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
-		for (int i = 0; i < warmupCount; i++) {
-			GLLParser parser = ParserFactory.originalParser();
-			parser.parse(Input.fromPath("/Users/aliafroozeh/test.java"), grammarGraph, startSymbol);
-		}
-		GcFinalization.awaitFullGc();		
+//		for (int i = 0; i < warmupCount; i++) {
+//			GLLParser parser = ParserFactory.newParser();
+//			parser.parse(Input.fromPath("/Users/aliafroozeh/test.java"), grammarGraph, startSymbol);
+//		}
+//		GcFinalization.awaitFullGc();		
 	}
 	
 	private static void parse(String startSymbol, int runCount,
@@ -248,12 +249,14 @@ public class IguanaBenchmark {
 		
 		System.out.println(input.getURI());
 		for (int i = 0; i < runCount; i++) {
-			GLLParser parser = ParserFactory.originalParser();
+			GLLParser parser = ParserFactory.newParser();
 			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 			if (result.isParseSuccess()) {
 				System.out.println(format(result.asParseSuccess().getParseStatistics()));
 			} else {
-				System.out.println("Parse error.");
+//				System.out.println("Parse error.");
+				System.out.println(result.asParseError().getMessage(input, result.asParseError().getInputIndex()));
+//				System.exit(0);
 			}
 			parser = null;
 			result = null;

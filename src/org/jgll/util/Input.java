@@ -1,17 +1,19 @@
 package org.jgll.util;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BOMInputStream;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.traversal.PositionInfo;
 
@@ -39,11 +41,16 @@ public class Input {
 	private URI uri;
 	
 	public static Input fromString(String s, URI uri) {
-		return fromCharArray(s.toCharArray(), uri);
+		try {
+			return new Input(fromStream(IOUtils.toInputStream(s, "UTF-8")), uri);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		throw new RuntimeException();
 	}
 	
 	public static Input fromString(String s) {
-		return fromCharArray(s.toCharArray(), URI.create("dummy:///"));
+		return fromString(s, URI.create("dummy:///"));
 	}
 	
 	public static Input fromChar(char c) {
@@ -56,31 +63,48 @@ public class Input {
 	public static Input fromIntArray(int[] input) {
 		return new Input(input, URI.create("dummy:///"));
 	}
-	
-	public static Input fromCharArray(char[] input, URI uri) {
-		int[] result = new int[Character.codePointCount(input, 0, input.length) + 1];
-		int j = 0;
+
+	private static int[] fromStream(InputStream in) throws IOException {
+		BOMInputStream bomIn = new BOMInputStream(in, false);
+		Reader reader = new BufferedReader(new InputStreamReader(bomIn));
 		
-		for(int i = 0; i < input.length; i++){
-			if (!Character.isLowSurrogate(input[i])) {
-				result[j++] = Character.codePointAt(input, i);
+		List<Integer> input = new ArrayList<>();
+
+		int c = 0;
+		while ((c = reader.read()) != -1) {
+			if (!Character.isHighSurrogate((char) c)) {
+				input.add(c);
+			} else {
+				int next = 0;
+				if ((next = reader.read()) != -1) {
+					input.add(Character.toCodePoint((char)c, (char)next));					
+				}
 			}
 		}
 		
-		result[result.length - 1] = EOF.VALUE;
-		return new Input(result, uri);
-	}
+		input.add(EOF.VALUE);
 
+		reader.close();
+		
+		int[] intInput = new int[input.size()];
+		int i = 0;
+		for (Integer v : input) {
+			intInput[i++] = v;
+		}
+
+		return intInput;
+	}
+	
 	public static Input fromIntArray(int[] input, URI uri) {
 		return new Input(input, uri);
 	}
 	
 	public static Input fromPath(String path) throws IOException {
-		return new Input(readTextFromFile(path), URI.create("file:///" + path));
+		return fromFile(new File(path));
 	}
 	
 	public static Input fromFile(File file) throws IOException {
-		return new Input(readTextFromFile(file), file.toURI());
+		return new Input(fromStream(new FileInputStream(file)), file.toURI());
 	}
 
 	private Input(int[] input, URI uri) {
@@ -96,57 +120,6 @@ public class Input {
 
 	public int length() {
 		return characters.length;
-	}
-	
-	/**
-	 * Returns the whole contents of a text file as a string.
-	 * 
-	 * @param path
-	 *            the path to the text file
-	 * @throws IOException
-	 */
-	private static int[] readTextFromFile(String path) throws IOException {
-		return readTextFromFile(new File(path));
-	}
-
-	private static int[] readTextFromFile(File file) throws IOException {
-		List<Integer> input = new ArrayList<>();
-
-		Reader in = new BufferedReader(new FileReader(file));
-		int c = 0;
-		while ((c = in.read()) != -1) {
-			if (!Character.isHighSurrogate((char) c)) {
-				input.add(c);
-			} else {
-				int next = 0;
-				if ((next = in.read()) != -1) {
-					input.add(Character.toCodePoint((char)c, (char)next));					
-				}
-			}
-		}
-		
-		input.add(EOF.VALUE);
-
-		in.close();
-		
-		int[] intInput = new int[input.size()];
-		int i = 0;
-		for (Integer v : input) {
-			intInput[i++] = v;
-		}
-
-		return intInput;
-	}
-
-	public static String read(InputStream is) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		BufferedInputStream in = new BufferedInputStream(is);
-		int c = 0;
-		while ((c = in.read()) != -1) {
-			sb.append((char) c);
-		}
-		in.close();
-		return sb.toString();
 	}
 	
 	public int[] subInput(int start, int end) {
@@ -388,4 +361,5 @@ public class Input {
 	public boolean isStartOfLine(int currentInputIndex) {
 		return currentInputIndex == 0 || lineColumns[currentInputIndex].columnNumber == 1;
 	}
+	
 }
