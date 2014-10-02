@@ -59,7 +59,11 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	
 			String label = String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()).getName(), 
 														 node.getLeftExtent(), node.getRightExtent());
-			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
+			if (node.isAmbiguous()) {
+				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
+			} else {
+				sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");				
+			}
 			addEdgesToChildren(node);
 			
 			SPPFVisitorUtil.visitChildren(node, this);
@@ -73,7 +77,11 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	
 			String label = String.format("(%s, %d, %d)", grammarGraph.getGrammarSlot(node.getId()), 
 														 node.getLeftExtent(), node.getRightExtent());
-			sb.append("\"" + getId(node) + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
+			if (node.isAmbiguous()) {
+				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
+			} else {
+				sb.append("\"" + getId(node) + "\"" + String.format(INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
+			}
 			addEdgesToChildren(node);
 	
 			SPPFVisitorUtil.visitChildren(node, this);

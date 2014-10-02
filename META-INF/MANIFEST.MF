@@ -71,4 +71,5 @@ Export-Package:
    org.jgll.util,
    org.jgll.regex.automaton,
    org.jgll.grammar"
-Require-Bundle: com.google.guava;bundle-version="12.0.0"
+Require-Bundle: com.google.guava;bundle-version="12.0.0",
+ org.apache.commons.io;bundle-version="2.0.1"

@@ -201,6 +201,13 @@ public class Input {
 		}
 		return array;
 	}
+	
+	public LineColumn getLineColumn(int index) {
+		if(index < 0 || index >= lineColumns.length) {
+			return new LineColumn(0, 0);
+		}
+		return lineColumns[index];
+	}
  
 	public int getLineNumber(int index) {
 		if(index < 0 || index >= lineColumns.length) {

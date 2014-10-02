@@ -253,9 +253,10 @@ public class IguanaBenchmark {
 			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 			if (result.isParseSuccess()) {
 				System.out.println(format(result.asParseSuccess().getParseStatistics()));
+//				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
 			} else {
 //				System.out.println("Parse error.");
-				System.out.println(result.asParseError().getMessage(input, result.asParseError().getInputIndex()));
+				System.out.println(result.asParseError());
 //				System.exit(0);
 			}
 			parser = null;

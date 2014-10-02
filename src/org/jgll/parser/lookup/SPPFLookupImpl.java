@@ -33,9 +33,12 @@ public class SPPFLookupImpl implements SPPFLookup {
 	private int countAmbiguousNodes;
 
 	private GrammarGraph grammar;
+
+	private Input input;
 	
 	public SPPFLookupImpl(GrammarGraph grammar, Input input) {
 		this.grammar = grammar;
+		this.input = input;
 		nonterminalNodes = new HashMap<>();
 		intermediateNodes = new HashMap<>();
 		tokenNodes = new HashMap<>();
@@ -123,7 +126,15 @@ public class SPPFLookupImpl implements SPPFLookup {
 		if (parent.addPackedNode(packedNode, leftChild, rightChild)) {
 			countPackedNodes++;
 			boolean ambiguousAfter = parent.isAmbiguous();
-			if (!ambiguousBefore && ambiguousAfter) countAmbiguousNodes++;
+			if (!ambiguousBefore && ambiguousAfter) {
+				log.warning("Ambiguity at line: %d, column: %d \n %s\n %s \n %s",
+						input.getLineNumber(parent.getLeftExtent()),
+						input.getColumnNumber(parent.getLeftExtent()),
+						grammar.getGrammarSlot(slot.getId()), 
+						grammar.getGrammarSlot(parent.getFirstPackedNodeGrammarSlot()),
+						input.subString(parent.getLeftExtent(), parent.getRightExtent()));
+				countAmbiguousNodes++;
+			}
 		}
 	}
 	
