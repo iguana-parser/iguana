@@ -17,7 +17,6 @@ import org.jgll.util.trie.Trie;
 
 public class LeftFactorize implements GrammarTransformation {
 	
-	@Override
 	public Grammar transform(Grammar grammar) {
 		
 		Grammar.Builder builder = new Grammar.Builder();
@@ -101,5 +100,17 @@ public class LeftFactorize implements GrammarTransformation {
 //		} else {
 //			return new Alt(outer);
 //		}
+	}
+
+	@Override
+	public Iterable<Rule> transform(Iterable<Rule> rules) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<Rule> transform(Rule rule) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

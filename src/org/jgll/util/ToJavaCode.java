@@ -47,6 +47,7 @@ public class ToJavaCode implements SPPFVisitor {
 			
 			sb.append("NonterminalNode node" + count + " = factory.createNonterminalNode(" +
 					"\"" + grammar.getNonterminalById(node.getId()).getName() + "\", " +
+					grammar.getNonterminalById(node.getId()).getIndex() + ", " +
 					node.getLeftExtent() + ", " + 
 					node.getRightExtent() + ").init();\n");
 			

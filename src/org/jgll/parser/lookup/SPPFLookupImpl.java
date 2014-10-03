@@ -68,8 +68,8 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalNode getNonterminalNode(HeadGrammarSlot slot, int leftExtent, int rightExtent) {
-		NonterminalNode key = createNonterminalNode(slot.getNonterminal(), slot.getId(), leftExtent, rightExtent);
+	public NonterminalNode getNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
+		NonterminalNode key = createNonterminalNode(head.getNonterminal(), grammar.getNonterminalId(head.getNonterminal()), leftExtent, rightExtent);
 		NonterminalNode value = nonterminalNodes.get(key);
 		if (value == null) {
 			value = key;
@@ -94,8 +94,8 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalNode findNonterminalNode(HeadGrammarSlot slot, int leftExtent, int rightExtent) {		
-		NonterminalNode key = createNonterminalNode(slot.getNonterminal(), slot.getId(), leftExtent, rightExtent);
+	public NonterminalNode findNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {		
+		NonterminalNode key = createNonterminalNode(head.getNonterminal(), grammar.getNonterminalId(head.getNonterminal()), leftExtent, rightExtent);
 		return nonterminalNodes.get(key);
 	}
 
@@ -140,7 +140,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public NonterminalNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
-		return nonterminalNodes.get(createNonterminalNode(startSymbol.getNonterminal(), startSymbol.getId(), 0, inputSize - 1));
+		return nonterminalNodes.get(createNonterminalNode(startSymbol.getNonterminal(), grammar.getNonterminalId(startSymbol.getNonterminal()), 0, inputSize - 1));
 	}
 
 	@Override

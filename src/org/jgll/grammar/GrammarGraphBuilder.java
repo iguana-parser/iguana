@@ -52,7 +52,7 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	BiMap<RegularExpression, Integer> regularExpressions;
 	
-	Map<Integer, Nonterminal> nonterminals;
+	BiMap<Nonterminal, Integer> nonterminals;
 	
 	Set<Nonterminal> ll1SubGrammarNonterminals;
 
@@ -83,7 +83,7 @@ public class GrammarGraphBuilder implements Serializable {
 		regularExpressions.put(EOF.getInstance(), 1);
 		
 		slots = HashBiMap.create();
-		nonterminals = new HashMap<>();
+		nonterminals = HashBiMap.create();
 		conditions = new DefaultConditionsImpl();
 	}
 
@@ -238,7 +238,11 @@ public class GrammarGraphBuilder implements Serializable {
 		if (headGrammarSlot == null) {
 			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, grammar.getAlternatives(nonterminal), grammar.getFirstSets(), grammar.getFollowSets(), grammar.getPredictionSets());
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
-			nonterminals.put(headGrammarSlot.getId(), nonterminal);
+			
+			if (!nonterminals.containsKey(nonterminal)) {
+				nonterminals.put(nonterminal, headGrammarSlot.getId());
+			}
+			
 			headGrammarSlots.add(headGrammarSlot);
 		}
 

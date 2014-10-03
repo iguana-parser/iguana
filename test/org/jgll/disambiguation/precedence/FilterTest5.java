@@ -97,14 +97,14 @@ public class FilterTest5 {
 	
 	private SPPFNode getSPPF() {
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
-		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 4).init();
+		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 4).init();
 		PackedNode node2 = factory.createPackedNode("E ::= E1 z .", 3, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("E", 0, 3).init();
+		NonterminalNode node3 = factory.createNonterminalNode("E", 1, 0, 3).init();
 		PackedNode node4 = factory.createPackedNode("E1 ::= E3 w .", 2, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("E", 0, 2).init();
+		NonterminalNode node5 = factory.createNonterminalNode("E", 3, 0, 2).init();
 		PackedNode node6 = factory.createPackedNode("E3 ::= x E5 .", 1, node5);
 		TokenSymbolNode node7 = factory.createTokenNode("x", 0, 1);
-		NonterminalNode node8 = factory.createNonterminalNode("E", 1, 2).init();
+		NonterminalNode node8 = factory.createNonterminalNode("E", 5, 1, 2).init();
 		PackedNode node9 = factory.createPackedNode("E5 ::= a .", 1, node8);
 		TokenSymbolNode node10 = factory.createTokenNode("a", 1, 1);
 		node9.addChild(node10);
