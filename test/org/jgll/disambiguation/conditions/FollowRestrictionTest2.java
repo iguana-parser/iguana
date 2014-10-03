@@ -9,7 +9,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -48,8 +47,7 @@ public class FollowRestrictionTest2 {
 		builder.addRule(r1);
 		builder.addRule(r2);
 
-		EBNFToBNF ebnfToBNF = new EBNFToBNF();
-		grammar = ebnfToBNF.transform(builder.build());
+		grammar = builder.build();
 	}
 	
 	@Test
@@ -61,10 +59,11 @@ public class FollowRestrictionTest2 {
 	}
 	
 	@Test
-	public void testParser2() throws Exception {
+	public void testParser2() {
 		Input input = Input.fromString("abc3");
 		parser =  ParserFactory.newParser(grammar, input);
-		parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		assertTrue(result.isParseError());
 	}
 
 

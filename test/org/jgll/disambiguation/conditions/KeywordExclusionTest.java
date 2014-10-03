@@ -9,7 +9,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -46,8 +45,7 @@ public class KeywordExclusionTest {
 		Rule r1 = new Rule(Id, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(alt)).build());
 		builder.addRule(r1);
 		
-		EBNFToBNF ebnfToBNF = new EBNFToBNF();
-		grammar = ebnfToBNF.transform(builder.build());
+		grammar = builder.build();
 	}
 	
 	@Test
