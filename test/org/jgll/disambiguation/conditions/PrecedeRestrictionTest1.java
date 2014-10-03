@@ -13,12 +13,13 @@ import org.jgll.grammar.symbol.Opt;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -67,8 +68,7 @@ public class PrecedeRestrictionTest1 {
 		builder.addRule(GrammarGraphBuilder.fromKeyword(forr));
 		builder.addRule(GrammarGraphBuilder.fromKeyword(forall));
 		
-		EBNFToBNF ebnfToBNF = new EBNFToBNF();
-		grammar = ebnfToBNF.transform(builder.build());
+		grammar = builder.build();
 	}
 
 	@Test
@@ -82,9 +82,12 @@ public class PrecedeRestrictionTest1 {
 
 	private SPPFNode getExpectedSPPF() {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		NonterminalNode node1 = new NonterminalNode(grammarGraph.getNonterminalId(S), 2, 0, 6);
-		TokenSymbolNode node2 = new TokenSymbolNode(grammarGraph.getRegularExpressionId(forall), 0, 6);
-		node1.init().addChild(node2);
+		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6).init();
+		PackedNode node2 = factory.createPackedNode("S ::= f o r a l l .", 0, node1);
+		TokenSymbolNode node3 = factory.createTokenNode("f o r a l l", 0, 6);
+		node2.addChild(node3);
+		node1.addChild(node2);		
 		return node1;
 	}
 

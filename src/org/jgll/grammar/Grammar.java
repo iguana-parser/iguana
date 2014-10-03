@@ -20,6 +20,7 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.CollectionsUtil;
 
@@ -210,12 +211,15 @@ public class Grammar implements Serializable {
 		private List<Rule> rules;
 		private final Map<Nonterminal, List<List<Symbol>>> definitions;
 		private final Map<Nonterminal, List<Object>> objects;
+		
+		private final EBNFToBNF ebnfToBNF;
 
 		public Builder() {
 			this.addedRules = new HashSet<>();
 			this.rules = new ArrayList<>();
 			this.definitions = new HashMap<>();
 			this.objects = new HashMap<>();
+			this.ebnfToBNF = new EBNFToBNF();
 		}
 		
 		public Grammar build() {
@@ -229,25 +233,30 @@ public class Grammar implements Serializable {
 		
 		public Builder addRule(Rule rule) {
 			
-			if (addedRules.contains(rule)) {
-				return this;
-			}
-			
-			Nonterminal head = rule.getHead();
-			List<List<Symbol>> definition = definitions.get(head);
-			List<Object> list = objects.get(head);
-			
-			if (definition == null) {
-				definition = new ArrayList<>();
-				definitions.put(head, definition);
-				list = new ArrayList<>();
-				objects.put(head, list);
-			}
+			Iterable<Rule> newRules = ebnfToBNF.transform(rule);
+			for (Rule r : newRules) {
+				
+				if (addedRules.contains(r)) {
+					continue;
+				}
+				
+				Nonterminal head = r.getHead();
+				List<List<Symbol>> definition = definitions.get(head);
+				List<Object> list = objects.get(head);
+				
+				if (definition == null) {
+					definition = new ArrayList<>();
+					definitions.put(head, definition);
+					list = new ArrayList<>();
+					objects.put(head, list);
+				}
 
-			rules.add(rule);
-			definition.add(rule.getBody());
-			list.add(rule.getObject());
-		
+				rules.add(r);
+				definition.add(r.getBody());
+				list.add(r.getObject());
+				
+			}
+			
 			return this;
 		}
 		

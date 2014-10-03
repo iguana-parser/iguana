@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Opt;
@@ -23,16 +22,21 @@ public class EBNFToBNF implements GrammarTransformation {
 	}
 	
 	@Override
-	public Grammar transform(Grammar grammar) {
-		Grammar.Builder builder = new Grammar.Builder();
-		
+	public Iterable<Rule> transform(Iterable<Rule> rules) {
 		Set<Rule> newRules = new HashSet<>();
 		
-		for(Rule rule : grammar.getRules()) {
+		for(Rule rule : rules) {
 			newRules.add(rewrite(rule, newRules));
 		}
 		
-		return builder.addRules(newRules).build();
+		return newRules;
+	}
+	
+	@Override
+	public Iterable<Rule> transform(Rule rule) {
+		Set<Rule> newRules = new HashSet<>();
+		newRules.add(rewrite(rule, newRules));
+		return newRules;
 	}
 	
 	private boolean isEBNF(Symbol s) {
@@ -92,6 +96,5 @@ public class EBNFToBNF implements GrammarTransformation {
 		cache.put(s, newNt);
 		return newNt;
 	}
-
 
 }

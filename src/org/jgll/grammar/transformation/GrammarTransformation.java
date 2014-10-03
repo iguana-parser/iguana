@@ -1,9 +1,11 @@
 package org.jgll.grammar.transformation;
 
-import org.jgll.grammar.Grammar;
+import org.jgll.grammar.symbol.Rule;
 
 public interface GrammarTransformation {
 	
-	public Grammar transform(Grammar grammar);
+	public Iterable<Rule> transform(Iterable<Rule> rules);
+	
+	public Iterable<Rule> transform(Rule rule);
 
 }
