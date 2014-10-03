@@ -31,7 +31,7 @@ import org.jgll.regex.RegularExpression;
 
 public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	
-	private Map<String, Integer> headGrammarSlotIds = new HashMap<>();
+	private Map<Nonterminal, Integer> headGrammarSlotIds = new HashMap<>();
 	
 	private int bodyGrammarSlotId;
 	
@@ -61,10 +61,10 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		boolean nullable = firstSets.get(nonterminal).contains(Epsilon.getInstance());
 		FollowTest followSetTest = new TrueFollowSet();
 		
-		Integer id = headGrammarSlotIds.get(nonterminal.getName());
+		Integer id = headGrammarSlotIds.get(nonterminal);
 		if (id == null) {
 			id = headGrammarSlotIds.size();
-			headGrammarSlotIds.put(nonterminal.getName(), id);
+			headGrammarSlotIds.put(nonterminal, id);
 		}
 		
 		return new HeadGrammarSlot(id, 

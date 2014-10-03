@@ -18,6 +18,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.ToJavaCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -93,6 +94,7 @@ public class FilterTest3 {
 		operatorPrecedence.addExceptPattern(EPlus, rule5, 0, rule2);
 		
 		grammar = operatorPrecedence.transform(builder.build());
+		System.out.println(grammar);
 	}
 
 	@Test
@@ -100,6 +102,7 @@ public class FilterTest3 {
 		Input input = Input.fromString("aaa+aaaaa+aaaa");
 		parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
+		System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot(), grammar.toGrammarGraph()));
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
 	}

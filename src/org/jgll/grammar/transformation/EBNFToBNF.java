@@ -49,8 +49,10 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		Rule.Builder builder = new Rule.Builder(rule.getHead());
 		
-		for(Symbol s : rule.getBody()) {
-			builder.addSymbol(rewrite(s, newRules));
+		if (rule.getBody() != null) {
+			for(Symbol s : rule.getBody()) {
+				builder.addSymbol(rewrite(s, newRules));
+			}
 		}
 		
 		return builder.build();

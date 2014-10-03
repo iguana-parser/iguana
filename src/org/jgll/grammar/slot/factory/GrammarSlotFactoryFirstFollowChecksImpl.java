@@ -36,7 +36,7 @@ import static org.jgll.grammar.slot.BodyGrammarSlot.*;
 
 public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFactory {
 	
-	private Map<String, Integer> headGrammarSlotIds = new HashMap<>();
+	private Map<Nonterminal, Integer> headGrammarSlotIds = new HashMap<>();
 
 	private int bodyGrammarSlotId;
 	
@@ -95,10 +95,10 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 			followSetTest = new TreeMapFollowTest(followSet);
 		}
 		
-		Integer id = headGrammarSlotIds.get(nonterminal.getName());
+		Integer id = headGrammarSlotIds.get(nonterminal);
 		if (id == null) {
 			id = headGrammarSlotIds.size();
-			headGrammarSlotIds.put(nonterminal.getName(), id);
+			headGrammarSlotIds.put(nonterminal, id);
 		}
 		
 		return new HeadGrammarSlot(id, 
