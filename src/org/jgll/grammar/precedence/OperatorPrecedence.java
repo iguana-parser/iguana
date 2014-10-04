@@ -292,7 +292,6 @@ public class OperatorPrecedence {
 			Nonterminal freshNonterminal = map.get(e.getValue());
 			
 			if(freshNonterminal == null) {
-				
 				int index = newNonterminals.get(pattern.getNonterminal().getName());
 				freshNonterminal = new Nonterminal.Builder(pattern.getNonterminal().getName()).setIndex(index + 1).setEbnfList(pattern.getNonterminal().isEbnfList()).build();
 				newNonterminals.put(freshNonterminal.getName(), index + 1);
