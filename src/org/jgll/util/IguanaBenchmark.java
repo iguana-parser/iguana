@@ -236,11 +236,11 @@ public class IguanaBenchmark {
 	}
 
 	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
-//		for (int i = 0; i < warmupCount; i++) {
-//			GLLParser parser = ParserFactory.newParser();
-//			parser.parse(Input.fromPath("/Users/aliafroozeh/test.java"), grammarGraph, startSymbol);
-//		}
-//		GcFinalization.awaitFullGc();		
+		for (int i = 0; i < warmupCount; i++) {
+			GLLParser parser = ParserFactory.newParser();
+			parser.parse(Input.fromPath("/Users/aliafroozeh/test.cs"), grammarGraph, startSymbol);
+		}
+		GcFinalization.awaitFullGc();		
 	}
 	
 	private static void parse(String startSymbol, int runCount,
