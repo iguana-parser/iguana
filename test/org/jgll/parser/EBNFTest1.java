@@ -7,7 +7,6 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,8 +38,7 @@ public class EBNFTest1 {
 		Rule rule2 = new Rule(A, list(a));
 		builder.addRule(rule2);
 		
-		EBNFToBNF ebnfToBNF = new EBNFToBNF();
-		grammar = ebnfToBNF.transform(builder.build());
+		grammar = builder.build();
 	}
 	
 	@Test
