@@ -93,17 +93,18 @@ public class FilterTest2 {
 		parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
+		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
 	}
 	
 	private SPPFNode getSPPF() {
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
-		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 10).init();
+		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 10).init();
 		PackedNode node2 = factory.createPackedNode("E ::= E2 + E1 .", 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("E ::= E2 + . E1", 0, 2).init();
 		PackedNode node4 = factory.createPackedNode("E ::= E2 + . E1", 1, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("E", 0, 1).init();
-		PackedNode node6 = factory.createPackedNode("E ::= a .", 0, node5);
+		NonterminalNode node5 = factory.createNonterminalNode("E", 2, 0, 1).init();
+		PackedNode node6 = factory.createPackedNode("E2 ::= a .", 0, node5);
 		TokenSymbolNode node7 = factory.createTokenNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
@@ -111,12 +112,12 @@ public class FilterTest2 {
 		node4.addChild(node5);
 		node4.addChild(node8);
 		node3.addChild(node4);
-		NonterminalNode node9 = factory.createNonterminalNode("E", 2, 10).init();
+		NonterminalNode node9 = factory.createNonterminalNode("E", 1, 2, 10).init();
 		PackedNode node10 = factory.createPackedNode("E1 ::= E3 ^ E1 .", 4, node9);
 		IntermediateNode node11 = factory.createIntermediateNode("E1 ::= E3 ^ . E1", 2, 4).init();
 		PackedNode node12 = factory.createPackedNode("E1 ::= E3 ^ . E1", 3, node11);
-		NonterminalNode node13 = factory.createNonterminalNode("E", 2, 3).init();
-		PackedNode node14 = factory.createPackedNode("E1 ::= a .", 2, node13);
+		NonterminalNode node13 = factory.createNonterminalNode("E", 3, 2, 3).init();
+		PackedNode node14 = factory.createPackedNode("E3 ::= a .", 2, node13);
 		TokenSymbolNode node15 = factory.createTokenNode("a", 2, 1);
 		node14.addChild(node15);
 		node13.addChild(node14);
@@ -124,12 +125,12 @@ public class FilterTest2 {
 		node12.addChild(node13);
 		node12.addChild(node16);
 		node11.addChild(node12);
-		NonterminalNode node17 = factory.createNonterminalNode("E", 4, 10).init();
+		NonterminalNode node17 = factory.createNonterminalNode("E", 1, 4, 10).init();
 		PackedNode node18 = factory.createPackedNode("E1 ::= E3 ^ E1 .", 6, node17);
 		IntermediateNode node19 = factory.createIntermediateNode("E1 ::= E3 ^ . E1", 4, 6).init();
 		PackedNode node20 = factory.createPackedNode("E1 ::= E3 ^ . E1", 5, node19);
-		NonterminalNode node21 = factory.createNonterminalNode("E", 4, 5).init();
-		PackedNode node22 = factory.createPackedNode("E1 ::= a .", 4, node21);
+		NonterminalNode node21 = factory.createNonterminalNode("E", 3, 4, 5).init();
+		PackedNode node22 = factory.createPackedNode("E3 ::= a .", 4, node21);
 		TokenSymbolNode node23 = factory.createTokenNode("a", 4, 1);
 		node22.addChild(node23);
 		node21.addChild(node22);
@@ -137,15 +138,15 @@ public class FilterTest2 {
 		node20.addChild(node21);
 		node20.addChild(node24);
 		node19.addChild(node20);
-		NonterminalNode node25 = factory.createNonterminalNode("E", 6, 10).init();
+		NonterminalNode node25 = factory.createNonterminalNode("E", 1, 6, 10).init();
 		PackedNode node26 = factory.createPackedNode("E1 ::= - E .", 7, node25);
 		TokenSymbolNode node27 = factory.createTokenNode("-", 6, 1);
-		NonterminalNode node28 = factory.createNonterminalNode("E", 7, 10).init();
+		NonterminalNode node28 = factory.createNonterminalNode("E", 0, 7, 10).init();
 		PackedNode node29 = factory.createPackedNode("E ::= E2 + E1 .", 9, node28);
 		IntermediateNode node30 = factory.createIntermediateNode("E ::= E2 + . E1", 7, 9).init();
 		PackedNode node31 = factory.createPackedNode("E ::= E2 + . E1", 8, node30);
-		NonterminalNode node32 = factory.createNonterminalNode("E", 7, 8).init();
-		PackedNode node33 = factory.createPackedNode("E ::= a .", 7, node32);
+		NonterminalNode node32 = factory.createNonterminalNode("E", 2, 7, 8).init();
+		PackedNode node33 = factory.createPackedNode("E2 ::= a .", 7, node32);
 		TokenSymbolNode node34 = factory.createTokenNode("a", 7, 1);
 		node33.addChild(node34);
 		node32.addChild(node33);
@@ -153,7 +154,7 @@ public class FilterTest2 {
 		node31.addChild(node32);
 		node31.addChild(node35);
 		node30.addChild(node31);
-		NonterminalNode node36 = factory.createNonterminalNode("E", 9, 10).init();
+		NonterminalNode node36 = factory.createNonterminalNode("E", 1, 9, 10).init();
 		PackedNode node37 = factory.createPackedNode("E1 ::= a .", 9, node36);
 		TokenSymbolNode node38 = factory.createTokenNode("a", 9, 1);
 		node37.addChild(node38);
