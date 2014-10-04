@@ -1,7 +1,6 @@
 package org.jgll.util;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
@@ -103,9 +102,10 @@ public class ToJavaCode implements SPPFVisitor {
 			node.setObject("node" + count);
 
 			sb.append("ListSymbolNode node" + count + " = factory.createListNode(" +
-					grammar.getNonterminalById(node.getId()).getName() + ", " +
-					node.getLeftExtent() + ", " + 
-					node.getRightExtent() + ").init();\n");
+					  "\"" + grammar.getNonterminalById(node.getId()).getName() + "\", " +
+					  grammar.getNonterminalById(node.getId()).getIndex() + ", " +
+					  node.getLeftExtent() + ", " + 
+					  node.getRightExtent() + ").init();\n");
 			
 			count++;
 			

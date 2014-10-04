@@ -29,11 +29,15 @@ public class SPPFNodeFactory {
 	public TokenSymbolNode createTokenNode(String s, int leftExtent, int rightExtent) {
 		return new TokenSymbolNode(grammarGraph.getRegularExpressionId(grammarGraph.getRegularExpressionByName(s)), leftExtent, rightExtent - leftExtent);
 	}
+
+	public ListSymbolNode createListNode(String s, int index, int leftExtent, int rightExtent) {
+		Nonterminal nonterminal = new Nonterminal.Builder(s).setIndex(index).build();
+		return new ListSymbolNode(grammarGraph.getNonterminalId(nonterminal), leftExtent, rightExtent);
+	}
 	
-	public ListSymbolNode createListNode(Nonterminal nonterminal, int leftExtent, int rightExtent) {
-		return new ListSymbolNode(grammarGraph.getNonterminalId(nonterminal), 
-				 leftExtent, 
-				 rightExtent);
+	public ListSymbolNode createListNode(String s, int leftExtent, int rightExtent) {
+		Nonterminal nonterminal = Nonterminal.withName(s);
+		return new ListSymbolNode(grammarGraph.getNonterminalId(nonterminal), leftExtent, rightExtent);
 	}
 	
 	public PackedNode createPackedNode(String s, int pivot, NonPackedNode parent) {
