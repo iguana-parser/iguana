@@ -87,15 +87,4 @@ public class ArrayGSSLookupImpl implements GSSLookup {
 	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
 		return gssNode.addToPoppedElements(sppfNode);
 	}
-
-	@Override
-	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Iterable<GSSNode> getChildren(GSSNode node) {
-		return node.getChildren();
-	}
-
 }

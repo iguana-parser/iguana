@@ -9,7 +9,8 @@ import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.RegularExpression;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.util.Input;
 
 /**
  * 
@@ -35,6 +36,8 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 	protected final NodeCreator nodeCreator;
 	
 	protected final NodeCreator nodeCreatorFromPop;
+	
+	private GSSNode[] gssNodes;
 
 	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, 
 						   ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
@@ -148,6 +151,33 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		}
 		
 		return sb.toString();
+	}
+	
+	@Override
+	public GSSNode getGSSNode(int inputIndex) {
+		GSSNode gssNode = new GSSNode(this, inputIndex);
+		gssNodes[inputIndex] = gssNode;
+		return gssNode;
+	}
+
+	@Override
+	public GSSNode hasGSSNode(int inputIndex) {
+		return gssNodes == null? null : gssNodes[inputIndex];
+	}
+
+	@Override
+	public void init(Input input) {
+		gssNodes = new GSSNode[input.length()];
+	}
+	
+	@Override
+	public void reset() {
+		gssNodes = null;		
+	}
+	
+	@Override
+	public boolean isInitialized() {
+		return gssNodes != null;
 	}
 	
 }

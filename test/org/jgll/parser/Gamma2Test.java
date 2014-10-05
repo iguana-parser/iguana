@@ -60,7 +60,6 @@ public class Gamma2Test {
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammar.toGrammarGraph(), input);
 //		assertEquals(31, parseStatistics.getDescriptorsCount());
 		assertEquals(6, parseStatistics.getNonterminalNodesCount());
 		assertEquals(3, parseStatistics.getIntermediateNodesCount());

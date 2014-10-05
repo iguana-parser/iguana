@@ -19,7 +19,6 @@ public class HashGSSLookupImpl implements GSSLookup {
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)
 	 */
-//	private GSSNode[][] gssNodes;
 	private Map<GSSNode.Key, GSSNode> gssNodes;
 	
 	public HashGSSLookupImpl(Input input, int size) {
@@ -62,16 +61,6 @@ public class HashGSSLookupImpl implements GSSLookup {
 	@Override
 	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
 		return gssNode.addToPoppedElements(sppfNode);
-	}
-
-	@Override
-	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Iterable<GSSNode> getChildren(GSSNode node) {
-		return node.getChildren();
 	}
 
 }

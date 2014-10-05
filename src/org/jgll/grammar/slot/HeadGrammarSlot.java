@@ -12,7 +12,9 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.DummyNode;
+import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -38,6 +40,8 @@ public class HeadGrammarSlot implements GrammarSlot {
 	private final PredictionTest predictionTest;
 	
 	private final FollowTest followTest;
+	
+	private GSSNode[] gssNodes;
 	
 	public HeadGrammarSlot(int id, Nonterminal nonterminal, 
 						   List<List<Symbol>> alts, boolean nullable, 
@@ -127,4 +131,31 @@ public class HeadGrammarSlot implements GrammarSlot {
 		return id;
 	}
 	
+	@Override
+	public GSSNode getGSSNode(int inputIndex) {
+		GSSNode gssNode = new GSSNode(this, inputIndex);
+		gssNodes[inputIndex] = gssNode;
+		return gssNode;
+	}
+
+	@Override
+	public GSSNode hasGSSNode(int inputIndex) {
+		return gssNodes == null ? null : gssNodes[inputIndex];
+	}
+
+	@Override
+	public void init(Input input) {
+		gssNodes = new GSSNode[input.length()];
+	}
+
+	@Override
+	public void reset() {
+		gssNodes = null;
+	}
+
+	@Override
+	public boolean isInitialized() {
+		return gssNodes != null;
+	}
+
 }

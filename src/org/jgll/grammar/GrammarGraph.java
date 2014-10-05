@@ -264,4 +264,18 @@ public class GrammarGraph implements Serializable {
 		}
 		return list;
 	}
+	
+	public void reset() {
+		for (HeadGrammarSlot head : headGrammarSlots) {
+			head.reset();
+			for (BodyGrammarSlot slot : head.getFirstSlots()) {
+				BodyGrammarSlot current = slot;
+				while (current != null) {
+					current.reset();
+					current = current.next();
+				}
+			}
+		}
+	}
+	
 }

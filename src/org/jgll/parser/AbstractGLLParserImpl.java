@@ -122,7 +122,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected void initLookups(GrammarGraph grammar, Input input) {
-		gssLookup = gssLookupFactory.createGSSLookupFactory(grammar, input);
+		gssLookup = gssLookupFactory.createGSSLookup(grammar, input);
 		sppfLookup = sppfLookupFactory.createSPPFLookup(grammar, input);
 		descriptorLookup = descriptorLookupFactory.createDescriptorLookup(grammar, input);
 	}
