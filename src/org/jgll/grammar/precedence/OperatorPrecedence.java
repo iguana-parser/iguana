@@ -293,7 +293,10 @@ public class OperatorPrecedence {
 			
 			if(freshNonterminal == null) {
 				int index = newNonterminals.get(pattern.getNonterminal().getName());
-				freshNonterminal = new Nonterminal.Builder(pattern.getNonterminal().getName()).setIndex(index + 1).setEbnfList(pattern.getNonterminal().isEbnfList()).build();
+				freshNonterminal = new Nonterminal.Builder(pattern.getNonterminal().getName())
+												  .setIndex(index + 1)
+												  .setEbnfList(pattern.getNonterminal().isEbnfList())
+												  .build();
 				newNonterminals.put(freshNonterminal.getName(), index + 1);
 				map.put(e.getValue(), freshNonterminal);
 			}
@@ -323,20 +326,20 @@ public class OperatorPrecedence {
 						copy = copyIndirectAtLeft((Nonterminal) alt.get(pattern.getPosition()), pattern.getNonterminal());
 						getLeftEnds(copy, pattern.getNonterminal(), alternates);
 						for(List<Symbol> a : alternates) {
-							a.set(0, freshNonterminals.get(pattern));
+							a.set(0, new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(a.get(0).getConditions()).build());
 						}
 					} else {
 						copy = copyIndirectAtRight((Nonterminal) alt.get(pattern.getPosition()), pattern.getNonterminal());
 						getRightEnds(copy, pattern.getNonterminal(), alternates);
 						for(List<Symbol> a : alternates) {
-							a.set(a.size() - 1, freshNonterminals.get(pattern));
+							a.set(a.size() - 1, new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(a.get(a.size() - 1).getConditions()).build());
 						}
 					}
 					
-					alt.set(pattern.getPosition(), copy);
+					alt.set(pattern.getPosition(), new Nonterminal.Builder(copy).addConditions(alt.get(pattern.getPosition()).getConditions()).build());
 					
 				} else {
-					alt.set(pattern.getPosition(), freshNonterminals.get(pattern));
+					alt.set(pattern.getPosition(), new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(alt.get(pattern.getPosition()).getConditions()).build());
 				}
 			}
 		}
@@ -487,13 +490,19 @@ public class OperatorPrecedence {
 	}
 	
 	private Nonterminal createNewNonterminal(Nonterminal nonterminal) {
+		
 		if(!newNonterminals.containsKey(nonterminal.getName())) {
 			newNonterminals.put(nonterminal.getName(), 0);
 		}
 		
 		int index = newNonterminals.get(nonterminal.getName());
-		Nonterminal newNonterminal = new Nonterminal.Builder(nonterminal.getName()).setIndex(index + 1).setEbnfList(nonterminal.isEbnfList()).build();
+		Nonterminal newNonterminal = new Nonterminal.Builder(nonterminal.getName())
+												    .setIndex(index + 1)
+												    .setEbnfList(nonterminal.isEbnfList())
+												    .addConditions(nonterminal.getConditions())
+												    .build();
 		newNonterminals.put(nonterminal.getName(), index + 1);
+		
 		return newNonterminal;
 	}
 	

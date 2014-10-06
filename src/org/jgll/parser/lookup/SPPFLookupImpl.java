@@ -16,6 +16,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class SPPFLookupImpl implements SPPFLookup {
@@ -134,6 +135,8 @@ public class SPPFLookupImpl implements SPPFLookup {
 						grammar.getGrammarSlot(parent.getFirstPackedNodeGrammarSlot()),
 						input.subString(parent.getLeftExtent(), parent.getRightExtent()));
 				countAmbiguousNodes++;
+				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", parent, grammar, input);
+				System.exit(0);
 			}
 		}
 	}

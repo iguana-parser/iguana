@@ -28,7 +28,6 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 			node.setVisited(true);
 			
 			if(node.isAmbiguous()) {
-				
 				int i = 0;
 				while(i < node.childrenCount()) {
 					SPPFVisitorUtil.removeIntermediateNode((PackedNode) node.getChildAt(i));
@@ -38,11 +37,39 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 				SPPFVisitorUtil.removeIntermediateNode(node);
 			}
 	
-			String label = grammarGraph.getNonterminalById(node.getId()).getName();
+			String label = String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()).getName(), 
+					 node.getLeftExtent(), node.getRightExtent());
+
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			addEdgesToChildren(node);
 			
 			SPPFVisitorUtil.visitChildren(node, this);
 		}		
+	}
+	
+	@Override
+	public void visit(PackedNode node) {
+		if(!node.isVisited()) {
+			node.setVisited(true);
+			
+			if(node.isAmbiguous()) {
+				int i = 0;
+				while(i < node.childrenCount()) {
+					SPPFVisitorUtil.removeIntermediateNode((PackedNode) node.getChildAt(i));
+					i++;
+				}
+			} else {
+				SPPFVisitorUtil.removeIntermediateNode(node);
+			}
+	
+			if(showPackedNodeLabel) {
+				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
+			} else {
+				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
+			}
+			addEdgesToChildren(node);
+			
+			SPPFVisitorUtil.visitChildren(node, this);
+		}
 	}
 }

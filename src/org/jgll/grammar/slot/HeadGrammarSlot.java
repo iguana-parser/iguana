@@ -91,6 +91,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 		}
 		
 		for (int alternateIndex : set) {
+			if (firstSlots[alternateIndex] == null) continue;  // TODO: remove these null alternatives altogether.
 			parser.scheduleDescriptor(new Descriptor(firstSlots[alternateIndex], parser.getCurrentGSSNode(), ci, DummyNode.getInstance()));
 		}
 		
