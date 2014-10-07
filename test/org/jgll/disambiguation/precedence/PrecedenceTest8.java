@@ -32,7 +32,7 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class FilterTest8 {
+public class PrecedenceTest8 {
 	
 	private Nonterminal E = Nonterminal.withName("E");
 	private Character a = Character.from('a');

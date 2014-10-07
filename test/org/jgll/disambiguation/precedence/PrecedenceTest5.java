@@ -31,7 +31,7 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class FilterTest5 {
+public class PrecedenceTest5 {
 
 	private GLLParser parser;
 	
