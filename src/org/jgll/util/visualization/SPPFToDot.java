@@ -57,7 +57,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			String label = String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()).getName(), 
+			String label = String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()), 
 														 node.getLeftExtent(), node.getRightExtent());
 			if (node.isAmbiguous()) {
 				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");

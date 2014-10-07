@@ -14,7 +14,6 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.patterns.AbstractPattern;
 import org.jgll.grammar.patterns.ExceptPattern;
 import org.jgll.grammar.patterns.PrecedencePattern;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -245,7 +244,6 @@ public class OperatorPrecedence {
 			}
 			
 		} else {
-			
 			assert pattern.isLeftMost();
 
 			Set<List<Symbol>> alternates = new LinkedHashSet<>(); 
@@ -351,6 +349,7 @@ public class OperatorPrecedence {
 			List<List<Symbol>> alternates = copyAlternates(without(head, patterns.get(pattern)));
 			definitions.put(freshNonterminal, alternates);
 		}
+		
 	}
 	
 	/**
@@ -415,7 +414,7 @@ public class OperatorPrecedence {
 				continue;
 			}
 			
-			if (alt.get(alt.size() - 1) instanceof NonterminalGrammarSlot) {
+			if (alt.get(alt.size() - 1) instanceof Nonterminal) {
 				Nonterminal last = (Nonterminal) alt.get(alt.size() - 1);
 				if (last.equals(directNonterminal)) {
 					alternates.add(alt);
@@ -619,7 +618,7 @@ public class OperatorPrecedence {
 				if(plain(alt1).equals(alt2)) {
 					return true;
 				}
-			}			
+			}
 		}
 		
 		return false;

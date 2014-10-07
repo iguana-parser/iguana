@@ -37,6 +37,6 @@ public class PrecedencePattern extends AbstractPattern implements Serializable {
 	}
 	
 	public boolean isRightMost() {
-		return position == child.size() - 1;
+		return position == parent.size() - 1;
 	}
 }
