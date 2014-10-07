@@ -127,6 +127,7 @@ public class IguanaBenchmark {
 	        	grammarPath = line.getOptionValue("g");
 				try {
 					grammar = GrammarUtil.load(new File(grammarPath).toURI());
+//					System.out.println(grammar);
 					
 //					if (line.hasOption("n")) {
 						grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();
@@ -237,7 +238,10 @@ public class IguanaBenchmark {
 	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
 		for (int i = 0; i < 1; i++) {
 			GLLParser parser = ParserFactory.newParser();
-			parser.parse(Input.fromPath("/Users/aliafroozeh/test.ml"), grammarGraph, startSymbol);
+			Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
+			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
+//			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
+			System.out.println(result);
 			grammarGraph.reset();
 		}
 		GcFinalization.awaitFullGc();
