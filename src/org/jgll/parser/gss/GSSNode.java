@@ -147,5 +147,31 @@ public class GSSNode {
 		gssEdges.clear();
 		descriptors.clear();;
 	}
+	
+	public static class Key {
+		private final int id;
+		private final int inputIndex;
+		
+		public Key(int id, int inputIndex) {
+			this.id = id;
+			this.inputIndex = inputIndex;
+		}
+		
+		@Override
+		public int hashCode() {
+			return HashFunctions.defaulFunction().hash(id, inputIndex);
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == this) return true;
+			
+			if (!(obj instanceof Key)) return false;
+			
+			Key other = (Key) obj;
+			
+			return other.id == id && other.inputIndex == inputIndex;
+		}
+	}
 
 }

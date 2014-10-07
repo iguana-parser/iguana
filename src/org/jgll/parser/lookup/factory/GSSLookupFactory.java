@@ -7,6 +7,6 @@ import org.jgll.util.Input;
 
 public interface GSSLookupFactory {
 	
-	public GSSLookup createGSSLookupFactory(GrammarGraph grammar, Input input);
+	public GSSLookup createGSSLookup(GrammarGraph grammar, Input input);
 
 }

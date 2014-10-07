@@ -14,23 +14,15 @@ public interface GSSLookup {
 	 * Returns an already existing GSS node with the given grammar slot and input 
 	 * index, or creates a new GSS node with given parameters.  
 	 */
-	public GSSNode getGSSNode(GrammarSlot head, int inputIndex);
+	public GSSNode getGSSNode(GrammarSlot slot, int inputIndex);
 	
 	/**
 	 * Returns an already existing GSS node with the given parametrs. If no such
 	 * GSS node exists, returns null.
 	 */
-	public GSSNode hasGSSNode(GrammarSlot head, int inputIndex);
-	
-	/**
-	 * Returns the GSS nodes reachable from the given GSS node.
-	 * 
-	 */
-	public Iterable<GSSNode> getChildren(GSSNode node);
-	
+	public GSSNode hasGSSNode(GrammarSlot slot, int inputIndex);
+
 	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
-	
-	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode);
 	
 	public int getGSSNodesCount();
 	

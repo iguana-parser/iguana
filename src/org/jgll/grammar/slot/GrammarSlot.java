@@ -5,6 +5,8 @@ import java.io.Writer;
 
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.util.Input;
 
 /**
  * A GrammarSlot is a position immediately before or after
@@ -26,4 +28,14 @@ public interface GrammarSlot {
 	
 	public int getId();
 	
+	public GSSNode getGSSNode(int inputIndex);
+	
+	public GSSNode hasGSSNode(int inputIndex);
+	
+	public boolean isInitialized();
+	
+	public void init(Input input);
+	
+	public void reset();
+
 }

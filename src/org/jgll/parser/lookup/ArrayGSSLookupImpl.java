@@ -1,3 +1,4 @@
+
 package org.jgll.parser.lookup;
 
 import java.util.ArrayList;
@@ -14,14 +15,14 @@ import org.jgll.util.Input;
  * @author Ali Afroozeh
  * 
  */
-public class GSSLookupImpl implements GSSLookup {
+public class ArrayGSSLookupImpl implements GSSLookup {
 
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)
 	 */
 	private GSSNode[][] gssNodes;
 
-	public GSSLookupImpl(Input input, int size) {
+	public ArrayGSSLookupImpl(Input input, int size) {
 		gssNodes = new GSSNode[size][input.length()];
 	}
 
@@ -86,15 +87,4 @@ public class GSSLookupImpl implements GSSLookup {
 	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
 		return gssNode.addToPoppedElements(sppfNode);
 	}
-
-	@Override
-	public Iterable<NonPackedNode> getPoppedElementsOf(GSSNode gssNode) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Iterable<GSSNode> getChildren(GSSNode node) {
-		return node.getChildren();
-	}
-
 }

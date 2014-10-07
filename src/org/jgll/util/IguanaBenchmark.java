@@ -54,7 +54,6 @@ public class IguanaBenchmark {
     			statistics.getTerminalNodesCount(), 
     			statistics.getPackedNodesCount(), 
     			statistics.getCountAmbiguousNodes());
-
 	}
 	
 	@SuppressWarnings("static-access")
@@ -236,11 +235,12 @@ public class IguanaBenchmark {
 	}
 
 	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
-//		for (int i = 0; i < warmupCount; i++) {
-//			GLLParser parser = ParserFactory.newParser();
-//			parser.parse(Input.fromPath("/Users/aliafroozeh/test.java"), grammarGraph, startSymbol);
-//		}
-//		GcFinalization.awaitFullGc();		
+		for (int i = 0; i < 1; i++) {
+			GLLParser parser = ParserFactory.newParser();
+			parser.parse(Input.fromPath("/Users/aliafroozeh/test.ml"), grammarGraph, startSymbol);
+			grammarGraph.reset();
+		}
+		GcFinalization.awaitFullGc();
 	}
 	
 	private static void parse(String startSymbol, int runCount,
@@ -254,11 +254,13 @@ public class IguanaBenchmark {
 			if (result.isParseSuccess()) {
 				System.out.println(format(result.asParseSuccess().getParseStatistics()));
 //				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
+//				System.exit(0);
 			} else {
 //				System.out.println("Parse error.");
 				System.out.println(result.asParseError());
 //				System.exit(0);
 			}
+			grammarGraph.reset();
 			parser = null;
 			result = null;
 			GcFinalization.awaitFullGc();

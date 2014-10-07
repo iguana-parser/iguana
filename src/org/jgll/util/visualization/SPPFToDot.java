@@ -22,7 +22,7 @@ import org.jgll.util.Input;
  */
 public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	
-	private final boolean showPackedNodeLabel;
+	protected final boolean showPackedNodeLabel;
 	
 	protected StringBuilder sb;
 
