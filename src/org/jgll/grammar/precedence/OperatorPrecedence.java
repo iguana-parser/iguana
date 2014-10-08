@@ -174,83 +174,100 @@ public class OperatorPrecedence {
 			
 			for (List<Symbol> alt : definitions.get(head)) {
 				if (pattern.isLeftMost() && match(plain(alt), pattern.getParent())) {
-					rewriteRightEnds((Nonterminal)alt.get(0), pattern, children);
+					rewriteRightEnds((Nonterminal)alt.get(0), pattern, children, new HashSet<Nonterminal>());
 				}
 
 				if (pattern.isRightMost() && match(plain(alt), pattern.getParent())) {
-					rewriteLeftEnds((Nonterminal)alt.get(alt.size() - 1), pattern, children);
+					rewriteLeftEnds((Nonterminal)alt.get(alt.size() - 1), pattern, children, new HashSet<Nonterminal>());
 				}
 			}
 		}
 	}
 	
-	private void rewriteLeftEnds(Nonterminal nonterminal, PrecedencePattern pattern, List<List<Symbol>> children) {
+	private void rewriteLeftEnds(Nonterminal nonterminal, PrecedencePattern pattern, List<List<Symbol>> children, Set<Nonterminal> visited) {
 		
-		// Direct filtering
-		if(plainEqual(nonterminal, pattern.getNonterminal())) {
+		if (visited.contains(nonterminal)) {
+			return;
+		} else {
+			visited.add(nonterminal);
+		}
+		
 			
-			for(List<Symbol> alternate : definitions.get(nonterminal)) {
-				
-				if(alternate == null) {
-					continue;
-				}
-				
-				if(!(alternate.get(0) instanceof Nonterminal)) {
-					continue;
-				}
+		for(List<Symbol> alternate : definitions.get(nonterminal)) {
+			
+			if(alternate == null) {
+				continue;
+			}
+			
+			if(!(alternate.get(0) instanceof Nonterminal)) {
+				continue;
+			}
 
-				Nonterminal first = (Nonterminal) alternate.get(0);
-				
+			Nonterminal first = (Nonterminal) alternate.get(0);
+			
+			if (plainEqual(first, pattern.getNonterminal())) {
 				if(contains(first, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, 0, children);
 					alternate.set(0, newNonterminal);
-					rewriteLeftEnds(newNonterminal, pattern, children);
-				}
-			}			
-		} else {
-			assert pattern.isRightMost();
-
-			Set<List<Symbol>> alternates = new LinkedHashSet<>(); 
-			getRightEnds(nonterminal, pattern.getNonterminal(), alternates);
-
-			for(List<Symbol> alt : alternates) {
-				rewriteLeftEnds((Nonterminal) alt.get(alt.size() - 1), pattern, children);
+					rewriteLeftEnds(newNonterminal, pattern, children, visited);
+				}				
+			} else {
+				assert pattern.isRightMost();
+				rewriteLeftEnds(first, pattern, children, visited);
 			}
-		}
+		}			
 	}
 	
-	private void rewriteRightEnds(Nonterminal nonterminal, PrecedencePattern pattern, List<List<Symbol>> children) {
+	private void rewriteRightEnds(Nonterminal nonterminal, PrecedencePattern pattern, List<List<Symbol>> children, Set<Nonterminal> visited) {
 		
-		// Direct filtering
-		if(plainEqual(nonterminal, pattern.getNonterminal())) {
+		if (visited.contains(nonterminal)) {
+			return;
+		} else {
+			visited.add(nonterminal);
+		}
 			
-			for(List<Symbol> alternate : definitions.get(nonterminal)) {
-				
-				if(alternate == null) {
-					continue;
-				}
-				
-				if(!(alternate.get(alternate.size() - 1) instanceof Nonterminal)) {
-					continue;
-				}
+		for(List<Symbol> alternate : definitions.get(nonterminal)) {
+			
+			if(alternate == null) {
+				continue;
+			}
+			
+			if(!(alternate.get(alternate.size() - 1) instanceof Nonterminal)) {
+				continue;
+			}
 
-				Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1); 
-				
+			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1); 
+			
+			if (plainEqual(last, pattern.getNonterminal())) {
 				if(contains(last, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, children);
 					alternate.set(alternate.size() - 1, newNonterminal);
-					rewriteRightEnds(newNonterminal, pattern, children);
+					rewriteRightEnds(newNonterminal, pattern, children, visited);
 				}				
-			}
-			
-		} else {
-			assert pattern.isLeftMost();
+			} else {
+				assert pattern.isLeftMost();
+//				Nonterminal newNonterminal = createNewNonterminal(last);
+//				List<List<Symbol>> copy = copyAlternates(definitions.get(last));
+//				definitions.put(newNonterminal, copy);
 
-			Set<List<Symbol>> alternates = new LinkedHashSet<>(); 
-			getLeftEnds(nonterminal, pattern.getNonterminal(), alternates);
+				boolean test = false;
+				for (List<Symbol> alt : definitions.get(last)) {
+					if (alt != null && alt.get(alt.size() - 1) instanceof Nonterminal) {
+						if (contains((Nonterminal) alt.get(alt.size() - 1), children)) {
+							test = true;
+							break;
+						}						
+					}	
+				}
+				
+				if (test) {
+					Nonterminal newNonterminal = createNewNonterminal(last);
+					alternate.set(alternate.size() - 1, newNonterminal);
+					List<List<Symbol>> copy = copyAlternates(definitions.get(last));
+					definitions.put(newNonterminal, copy);
+					rewriteRightEnds(newNonterminal, pattern, children, visited);
+				}
 
-			for(List<Symbol> alt : alternates) {
-				rewriteRightEnds((Nonterminal) alt.get(0), pattern, children);
 			}
 		}
 	}
@@ -367,8 +384,10 @@ public class OperatorPrecedence {
 	
 	private void getLeftEnds(Nonterminal head, Nonterminal nonterminal, Set<List<Symbol>> nonterminals, Set<Nonterminal> visited) {
 		
-		if(visited.contains(head)) {
+		if (visited.contains(head)) {
 			return;
+		} else {
+		    visited.add(head);
 		}
 		
 		for (List<Symbol> alt : definitions.get(head)) {
@@ -379,10 +398,9 @@ public class OperatorPrecedence {
 			
 			if (alt.get(0) instanceof Nonterminal) {
 				Nonterminal first = (Nonterminal) alt.get(0);
-				if (first.equals(nonterminal)) {
+				if (plainEqual(first, nonterminal)) {
 					nonterminals.add(alt);
 				} else {
-					visited.add(first);
 					getLeftEnds(first, nonterminal, nonterminals, visited);
 				}
 			}
@@ -406,6 +424,8 @@ public class OperatorPrecedence {
 		
 		if(visited.contains(head)) {
 			return;
+		} else {
+			visited.add(head);
 		}
 		
 		for (List<Symbol> alt : definitions.get(head)) {
@@ -416,10 +436,9 @@ public class OperatorPrecedence {
 			
 			if (alt.get(alt.size() - 1) instanceof Nonterminal) {
 				Nonterminal last = (Nonterminal) alt.get(alt.size() - 1);
-				if (last.equals(directNonterminal)) {
+				if (plainEqual(last, directNonterminal)) {
 					alternates.add(alt);
 				} else {
-					visited.add(last);
 					getRightEnds(last, directNonterminal, alternates, visited);
 				}
 			}

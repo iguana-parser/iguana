@@ -74,6 +74,7 @@ public class PrecedenceTest9 {
 		operatorPrecedence.addPrecedencePattern(E, rule2, 0, rule3);
 		
 		grammar = operatorPrecedence.transform(builder.build());
+		System.out.println(grammar);
 	}
 	
 	@Test

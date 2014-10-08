@@ -18,7 +18,7 @@ import org.junit.Test;
 
 /**
  * 
- * E ::= E X  (none)
+ * E ::= E X    (none)
  * 	   > E ; E  (right)
  * 	   > - E
  *     | a
@@ -73,10 +73,10 @@ public class PrecedenceTest10 {
 		
 		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
 
-		// (E, E X, E ";" E)
+		// (E, .E X, E ";" E)
 		operatorPrecedence.addPrecedencePattern(E, rule1, 0, rule2);
 		
-		// (E, E X, E ";" E)
+		// (E, E .X, E ";" E)
 		operatorPrecedence.addPrecedencePattern(E, rule1, 1, rule2);
 		
 		// (E, .E X, - E)
