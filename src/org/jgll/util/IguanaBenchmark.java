@@ -236,11 +236,10 @@ public class IguanaBenchmark {
 	}
 
 	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 10; i++) {
 			GLLParser parser = ParserFactory.newParser();
 			Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
 			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
-//			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
 			System.out.println(result);
 			grammarGraph.reset();
 		}
