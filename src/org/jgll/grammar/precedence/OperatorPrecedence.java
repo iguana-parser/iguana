@@ -199,7 +199,7 @@ public class OperatorPrecedence {
 				continue;
 			}
 			
-			if(!(alternate.get(0) instanceof Nonterminal)) {
+			if (alternate.size() == 0 || !(alternate.get(0) instanceof Nonterminal)) {
 				continue;
 			}
 
@@ -228,11 +228,11 @@ public class OperatorPrecedence {
 			
 		for(List<Symbol> alternate : definitions.get(nonterminal)) {
 			
-			if(alternate == null) {
+			if (alternate == null) {
 				continue;
 			}
 			
-			if(!(alternate.get(alternate.size() - 1) instanceof Nonterminal)) {
+			if (alternate.size() == 0 || !(alternate.get(alternate.size() - 1) instanceof Nonterminal)) {
 				continue;
 			}
 
@@ -252,7 +252,7 @@ public class OperatorPrecedence {
 
 				boolean test = false;
 				for (List<Symbol> alt : definitions.get(last)) {
-					if (alt != null && alt.get(alt.size() - 1) instanceof Nonterminal) {
+					if (alt != null && alt.size() > 0 && alt.get(alt.size() - 1) instanceof Nonterminal) {
 						if (contains((Nonterminal) alt.get(alt.size() - 1), children)) {
 							test = true;
 							break;
@@ -392,7 +392,7 @@ public class OperatorPrecedence {
 		
 		for (List<Symbol> alt : definitions.get(head)) {
 			
-			if(alt == null) {
+			if(alt == null || alt.size() == 0) {
 				continue;
 			}
 			
@@ -430,7 +430,7 @@ public class OperatorPrecedence {
 		
 		for (List<Symbol> alt : definitions.get(head)) {
 			
-			if(alt == null) {
+			if(alt == null || alt.size() == 0) {
 				continue;
 			}
 			
