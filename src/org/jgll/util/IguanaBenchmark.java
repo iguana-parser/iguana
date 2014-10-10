@@ -2,11 +2,16 @@ package org.jgll.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.apache.commons.cli.BasicParser;
@@ -58,6 +63,18 @@ public class IguanaBenchmark {
 	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
+		
+		System.out.println(IguanaBenchmark.header());
+
+		
+		Set<String> skipList = new HashSet<>();
+		try (Scanner scanner = new Scanner(new File("/Users/aliafroozeh/list.txt"))){
+			while(scanner.hasNextLine()) {
+				skipList.add(scanner.nextLine());
+			}
+		} catch (FileNotFoundException e2) {
+			e2.printStackTrace();
+		}
 		
 		Options options = new Options();
 		
@@ -198,7 +215,10 @@ public class IguanaBenchmark {
 	        		@SuppressWarnings("rawtypes")
 					Iterator it = files.iterator();
 	        		while(it.hasNext()) {
-						inputPaths.add(((File) it.next()).getPath());
+						String path = ((File) it.next()).getPath();
+						if (!skipList.contains(path)) {
+							inputPaths.add(path);							
+						}
 	        		}
 	        	}
 	        	
@@ -236,11 +256,12 @@ public class IguanaBenchmark {
 	}
 
 	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
-		for (int i = 0; i < 10; i++) {
-			GLLParser parser = ParserFactory.newParser();
+		for (int i = 0; i < warmupCount; i++) {
+			GLLParser parser = ParserFactory.originalParser();
 			Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
-			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
-			System.out.println(result);
+			parser.parse(input, grammarGraph, startSymbol);
+//			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
+//			System.out.println(result);
 			grammarGraph.reset();
 		}
 		GcFinalization.awaitFullGc();
@@ -252,7 +273,7 @@ public class IguanaBenchmark {
 		
 		System.out.println(input.getURI());
 		for (int i = 0; i < runCount; i++) {
-			GLLParser parser = ParserFactory.newParser();
+			GLLParser parser = ParserFactory.originalParser();
 			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 			if (result.isParseSuccess()) {
 				System.out.println(format(result.asParseSuccess().getParseStatistics()));
@@ -261,6 +282,7 @@ public class IguanaBenchmark {
 			} else {
 //				System.out.println("Parse error.");
 				System.out.println(result.asParseError());
+				break;
 //				System.exit(0);
 			}
 			grammarGraph.reset();
@@ -268,6 +290,9 @@ public class IguanaBenchmark {
 			result = null;
 			GcFinalization.awaitFullGc();
 		}
+		
+		grammarGraph.reset();
+		GcFinalization.awaitFullGc();
 	}
 	
 	private static boolean ignore(Set<String> ignorePaths, String inputPath) {

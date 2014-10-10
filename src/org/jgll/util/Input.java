@@ -122,15 +122,6 @@ public class Input {
 		return characters.length;
 	}
 	
-	public int[] subInput(int start, int end) {
-		int length = end - start + 1;
-		int[] subInput = new int[length];
-		
-		System.arraycopy(characters, start, subInput, 0, length);
-		
-		return subInput;
-	}
-	
 	public boolean match(int start, int end, String target) {
 		return match(start, end, toIntArray(target));
 	}
@@ -325,6 +316,7 @@ public class Input {
 		List<Character> charList = new ArrayList<>();
 		
 		for(int i = start; i < end; i++) {
+			if (characters[i] == -1) continue;
 			char[] chars = Character.toChars(characters[i]);
 			for(char c : chars) {
 				charList.add(c);
@@ -341,7 +333,7 @@ public class Input {
 	
 	@Override
 	public String toString() {
-		return subString(0, characters.length);
+		return subString(0, characters.length - 1);
 	}
 	
 	public int getLineCount() {

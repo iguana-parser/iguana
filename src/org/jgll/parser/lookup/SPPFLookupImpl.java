@@ -128,15 +128,15 @@ public class SPPFLookupImpl implements SPPFLookup {
 			countPackedNodes++;
 			boolean ambiguousAfter = parent.isAmbiguous();
 			if (!ambiguousBefore && ambiguousAfter) {
-				log.warning("Ambiguity at line: %d, column: %d \n %s\n %s \n %s",
-						input.getLineNumber(parent.getLeftExtent()),
-						input.getColumnNumber(parent.getLeftExtent()),
-						grammar.getGrammarSlot(slot.getId()), 
-						grammar.getGrammarSlot(parent.getFirstPackedNodeGrammarSlot()),
-						input.subString(parent.getLeftExtent(), parent.getRightExtent()));
+//				log.warning("Ambiguity at line: %d, column: %d \n %s\n %s \n %s",
+//						input.getLineNumber(parent.getLeftExtent()),
+//						input.getColumnNumber(parent.getLeftExtent()),
+//						grammar.getGrammarSlot(slot.getId()), 
+//						grammar.getGrammarSlot(parent.getFirstPackedNodeGrammarSlot()),
+//						input.subString(parent.getLeftExtent(), parent.getRightExtent()));
 				countAmbiguousNodes++;
-				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", parent, grammar, input);
-				System.exit(0);
+//				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", parent, grammar, input);
+//				System.exit(0);
 			}
 		}
 	}

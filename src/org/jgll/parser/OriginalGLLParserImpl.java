@@ -113,7 +113,9 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 
 			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 			
-			gssLookup.addToPoppedElements(gssNode, node);
+			if (!gssLookup.addToPoppedElements(gssNode, node)) {
+				return null;
+			}
 
 			BodyGrammarSlot returnSlot = (BodyGrammarSlot) gssNode.getGrammarSlot();
 
