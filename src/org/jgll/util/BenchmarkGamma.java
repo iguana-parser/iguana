@@ -42,38 +42,40 @@ public class BenchmarkGamma {
 	}
 	
 	public static void main(String[] args) {
+		
+		int warmupCount = 10;
+		int runCount = 10;
+		
 		Grammar grammar = gamma2();
-		System.out.println(grammar);
 		String startSymbol = "S";
-		GrammarGraph grammarGraph = grammar.toGrammarGraph();
+		GrammarGraph grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();
 		
 		// Warmup
-		for (int i = 1; i <= 10; i++) {
+		for (int i = 1; i <= warmupCount; i++) {
 			GLLParser parser = ParserFactory.newParser();
-			ParseResult res = parser.parse(Input.fromString(getBs(200)), grammarGraph, startSymbol);
-			System.out.println(IguanaBenchmark.format(res.asParseSuccess().getParseStatistics()));
-//			grammarGraph.reset();
+			parser.parse(Input.fromString(getBs(420)), grammarGraph, startSymbol);
+			grammarGraph.reset();
 		}
 		GcFinalization.awaitFullGc();
 		
-//		System.out.println(IguanaBenchmark.header());
-//		for (int i = 1; i <= 50; i++) {
-//			for (int j = 0; j < 1; j++) {
-//				GLLParser parser = ParserFactory.newParser();
-//				Input input = Input.fromString(getBs(i * 10));
-//				ParseResult res = parser.parse(input, grammarGraph, startSymbol);
-//
-//				if (res.isParseSuccess()) {
-//					System.out.println(IguanaBenchmark.format(res.asParseSuccess().getParseStatistics()));
-//				} else {
-//					System.out.println("Parse error");
-//				}
-//				parser = null;
-//				res = null;
-//				grammarGraph.reset();
-//				GcFinalization.awaitFullGc();
-//			}
-//		}
+		System.out.println(IguanaBenchmark.header());
+		for (int i = 1; i <= 80; i++) {
+			for (int j = 0; j < runCount; j++) {
+				GLLParser parser = ParserFactory.newParser();
+				Input input = Input.fromString(getBs(i * 10));
+				ParseResult res = parser.parse(input, grammarGraph, startSymbol);
+
+				if (res.isParseSuccess()) {
+					System.out.println(IguanaBenchmark.format(res.asParseSuccess().getParseStatistics()));
+				} else {
+					System.out.println("Parse error");
+				}
+				parser = null;
+				res = null;
+				grammarGraph.reset();
+				GcFinalization.awaitFullGc();
+			}
+		}
 	}
 	
 	

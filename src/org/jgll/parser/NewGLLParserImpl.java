@@ -201,7 +201,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	public GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		
-		if(source.getGSSEdge(edge)) {
+		if(gssLookup.getGSSEdge(source, edge)) {
 			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
 
 			// Optimization for the case when only one element is in the popped elements.

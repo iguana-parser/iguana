@@ -68,13 +68,13 @@ public class IguanaBenchmark {
 
 		
 		Set<String> skipList = new HashSet<>();
-		try (Scanner scanner = new Scanner(new File("/Users/aliafroozeh/list.txt"))){
-			while(scanner.hasNextLine()) {
-				skipList.add(scanner.nextLine());
-			}
-		} catch (FileNotFoundException e2) {
-			e2.printStackTrace();
-		}
+//		try (Scanner scanner = new Scanner(new File("/Users/aliafroozeh/list.txt"))){
+//			while(scanner.hasNextLine()) {
+//				skipList.add(scanner.nextLine());
+//			}
+//		} catch (FileNotFoundException e2) {
+//			e2.printStackTrace();
+//		}
 		
 		Options options = new Options();
 		
@@ -147,9 +147,9 @@ public class IguanaBenchmark {
 //					System.out.println(grammar);
 					
 //					if (line.hasOption("n")) {
-						grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();
+//						grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();
 //					} else {
-//						grammarGraph = grammar.toGrammarGraph();						
+						grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();	
 //					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -257,14 +257,14 @@ public class IguanaBenchmark {
 
 	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
 		for (int i = 0; i < warmupCount; i++) {
-			GLLParser parser = ParserFactory.originalParser();
-			Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
-			parser.parse(input, grammarGraph, startSymbol);
+			GLLParser parser = ParserFactory.newParser();
+			Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
+			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 //			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
-//			System.out.println(result);
+			System.out.println(format(result.asParseSuccess().getParseStatistics()));
 			grammarGraph.reset();
+//			GcFinalization.awaitFullGc();
 		}
-		GcFinalization.awaitFullGc();
 	}
 	
 	private static void parse(String startSymbol, int runCount,
@@ -273,7 +273,7 @@ public class IguanaBenchmark {
 		
 		System.out.println(input.getURI());
 		for (int i = 0; i < runCount; i++) {
-			GLLParser parser = ParserFactory.originalParser();
+			GLLParser parser = ParserFactory.newParser();
 			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 			if (result.isParseSuccess()) {
 				System.out.println(format(result.asParseSuccess().getParseStatistics()));

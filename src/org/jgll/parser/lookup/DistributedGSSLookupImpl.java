@@ -1,13 +1,19 @@
 package org.jgll.parser.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 
 public class DistributedGSSLookupImpl implements GSSLookup {
 	
+	private int countGSSEdges;
+	
+	private int countGSSNodes;
+	
 	@Override
 	public GSSNode getGSSNode(GrammarSlot head, int inputIndex) {
+		countGSSNodes++;
 		return head.getGSSNode(inputIndex);
 	}
 
@@ -23,17 +29,23 @@ public class DistributedGSSLookupImpl implements GSSLookup {
 
 	@Override
 	public int getGSSNodesCount() {
-		return 0;
+		return countGSSNodes;
 	}
 
 	@Override
 	public int getGSSEdgesCount() {
-		return 0;
+		return countGSSEdges;
 	}
 
 	@Override
 	public Iterable<GSSNode> getGSSNodes() {
 		return null;
+	}
+
+	@Override
+	public boolean getGSSEdge(GSSNode node, GSSEdge edge) {
+		countGSSEdges++;
+		return node.getGSSEdge(edge);
 	}
 
 }

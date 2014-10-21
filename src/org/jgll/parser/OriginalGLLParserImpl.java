@@ -202,7 +202,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		
 		GSSEdge edge = new OriginalGSSEdgeImpl(w, destination);
 		
-		if(source.getGSSEdge(edge)) {
+		if(gssLookup.getGSSEdge(source, edge)) {
 			
 			BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 			

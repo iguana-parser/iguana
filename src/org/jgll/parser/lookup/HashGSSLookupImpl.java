@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
@@ -61,6 +62,11 @@ public class HashGSSLookupImpl implements GSSLookup {
 	@Override
 	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
 		return gssNode.addToPoppedElements(sppfNode);
+	}
+
+	@Override
+	public boolean getGSSEdge(GSSNode gssNode, GSSEdge edge) {
+		return gssNode.getGSSEdge(edge);
 	}
 
 }

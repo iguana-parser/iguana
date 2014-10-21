@@ -1,6 +1,7 @@
 package org.jgll.parser.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 /**
@@ -21,6 +22,8 @@ public interface GSSLookup {
 	 * GSS node exists, returns null.
 	 */
 	public GSSNode hasGSSNode(GrammarSlot slot, int inputIndex);
+	
+	public boolean getGSSEdge(GSSNode gssNode, GSSEdge edge);
 
 	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
 	
