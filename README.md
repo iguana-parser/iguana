@@ -1,8 +1,15 @@
 Iguana
 ======
 
-Prototype parser run-time, back-end for different kinds of parser generators, including [Rascal](http://www.rascal-mpl.org).
+Iguana is a Java implemenation of the GLL parsing algorithm. Iguana has the following features:
 
-Iguana is based on the GLL parsing algorithm, and provides scannerless parsing features.
+- Binarized SPPF construction in cubic time and space
+- Scannerless parsing
+- Supporting common lexical disambiguation mechanism such as follow restrictions, precede restrictions, and keyword reservation
+- Support unicode (under development)
 
-We are currently extending it to be able to cover the disambiguation features of Rascal and to provide full unicode support as required by Rascal.
+Iguana is currently a prototype and is set to replace the parser in [Rascal](http://www.rascal-mpl.org).
+
+
+Example
+======
