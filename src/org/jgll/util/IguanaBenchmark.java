@@ -2,16 +2,12 @@ package org.jgll.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 
 import org.apache.commons.cli.BasicParser;
@@ -31,40 +27,10 @@ import com.google.common.testing.GcFinalization;
 
 public class IguanaBenchmark {
 
-	public static String header() {
-       return String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-15s %-15s",
-    		   				"size", 
-    		   				"user_time", 
-    		   				"cpu_time", 
-    		   				"nano_time", 
-    		   				"gss_nodes",
-    		   				"gss_edges",
-    		   				"nonterminal_nodes", 
-    		   				"intermediate_nodes", 
-    		   				"terminal_nodes",
-    		   				"packed_nodes", 
-    		   				"ambiguous_nodes");
-	}
-	
-	public static String format(ParseStatistics statistics) {
-    	return String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
-    			statistics.getInput().length() - 1, 
-    			statistics.getUserTime() / 1000_000,
-    			statistics.getSystemTime() / 1000_000, 
-    			statistics.getNanoTime() / 1000_000,
-    			statistics.getGssNodesCount(),
-    			statistics.getGssEdgesCount(),
-    			statistics.getNonterminalNodesCount(),
-    			statistics.getIntermediateNodesCount(),
-    			statistics.getTerminalNodesCount(), 
-    			statistics.getPackedNodesCount(), 
-    			statistics.getCountAmbiguousNodes());
-	}
-	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 		
-		System.out.println(IguanaBenchmark.header());
+		System.out.println(BenchmarkUtil.header());
 
 		
 		Set<String> skipList = new HashSet<>();
@@ -261,7 +227,7 @@ public class IguanaBenchmark {
 			Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
 			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 //			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
-			System.out.println(format(result.asParseSuccess().getParseStatistics()));
+			System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
 			grammarGraph.reset();
 //			GcFinalization.awaitFullGc();
 		}
@@ -276,7 +242,7 @@ public class IguanaBenchmark {
 			GLLParser parser = ParserFactory.newParser();
 			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 			if (result.isParseSuccess()) {
-				System.out.println(format(result.asParseSuccess().getParseStatistics()));
+				System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
 //				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
 //				System.exit(0);
 			} else {

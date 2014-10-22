@@ -58,7 +58,7 @@ public class BenchmarkGamma {
 		}
 		GcFinalization.awaitFullGc();
 		
-		System.out.println(IguanaBenchmark.header());
+		System.out.println(BenchmarkUtil.header());
 		for (int i = 1; i <= 80; i++) {
 			for (int j = 0; j < runCount; j++) {
 				GLLParser parser = ParserFactory.newParser();
@@ -66,7 +66,7 @@ public class BenchmarkGamma {
 				ParseResult res = parser.parse(input, grammarGraph, startSymbol);
 
 				if (res.isParseSuccess()) {
-					System.out.println(IguanaBenchmark.format(res.asParseSuccess().getParseStatistics()));
+					System.out.println(BenchmarkUtil.format(res.asParseSuccess().getParseStatistics()));
 				} else {
 					System.out.println("Parse error");
 				}
