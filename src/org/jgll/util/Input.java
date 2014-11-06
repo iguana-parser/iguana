@@ -1,6 +1,7 @@
 package org.jgll.util;
 
 import java.io.BufferedReader;
+import java.io.CharArrayReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
+import org.apache.commons.io.input.ReaderInputStream;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.traversal.PositionInfo;
 
@@ -44,11 +46,21 @@ public class Input {
 		try {
 			return new Input(fromStream(IOUtils.toInputStream(s, "UTF-8")), uri);
 		} catch (IOException e) {
+			assert false : "this should not happen from a string";
 			e.printStackTrace();
 		}
 		throw new RuntimeException();
 	}
 	
+	public static Input fromCharArray(char[] s, URI uri) {
+		try {
+			return new Input(fromStream(new ReaderInputStream(new CharArrayReader(s))), uri);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+		throw new RuntimeException("unexpected implementation exception");
+		
+	}
 	public static Input fromString(String s) {
 		return fromString(s, URI.create("dummy:///"));
 	}
