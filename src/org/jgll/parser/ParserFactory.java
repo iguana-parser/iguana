@@ -6,6 +6,10 @@ import org.jgll.util.*;
 
 public class ParserFactory {
 	
+	public static GLLParser getParser() {
+		return newParser();
+	}
+	
 	public static GLLParser newParser() {
 		GSSLookupFactory gssLookupFactory = new DistributedGSSLookupFactory();
 		SPPFLookupFactory sppfLookupFactory = new NewSPPFLookupFactory();
@@ -21,7 +25,7 @@ public class ParserFactory {
 	}
 	
 	public static GLLParser originalParser() {
-		GSSLookupFactory gssLookupFactory = new DistributedGSSLookupFactory();
+		GSSLookupFactory gssLookupFactory = new HashGSSLookupFactory();
 		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
 		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();
 		return new OriginalGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
