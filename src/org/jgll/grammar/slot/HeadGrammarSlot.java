@@ -159,4 +159,10 @@ public class HeadGrammarSlot implements GrammarSlot {
 		return gssNodes != null;
 	}
 
+	@Override
+	public void code(StringBuilder sb) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

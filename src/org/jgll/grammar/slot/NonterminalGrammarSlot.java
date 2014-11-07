@@ -134,4 +134,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		return nonterminal.getNonterminal();
 	}
 
+	@Override
+	public void code(StringBuilder sb) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

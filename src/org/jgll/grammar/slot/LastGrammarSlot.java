@@ -58,4 +58,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public void code(StringBuilder sb) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

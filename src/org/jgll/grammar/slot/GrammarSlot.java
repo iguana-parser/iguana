@@ -38,4 +38,6 @@ public interface GrammarSlot {
 	
 	public void reset();
 
+	public void code(StringBuilder sb);
+	
 }

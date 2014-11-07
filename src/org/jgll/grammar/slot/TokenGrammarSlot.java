@@ -1,5 +1,7 @@
 package org.jgll.grammar.slot;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.IOException;
 import java.io.Writer;
 
@@ -82,6 +84,19 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public RegularExpression getSymbol() {
 		return regularExpression;
+	}
+
+	@Override
+	public void code(StringBuilder sb) {		
+		sb.append("// " + label).append(NL)
+		  .append("case " + id + ":").append(NL)
+		  .append(TAB).append("int tokenID = " + tokenID).append(NL)
+		  .append(TAB).append("int length = lexer.tokenLengthAt(ci, tokenID);").append(NL)
+		  .append(TAB).append("if (length < 0) {").append(NL)
+		  .append(TAB).append(TAB).append("break;").append(NL)
+		  .append(TAB).append("}").append(NL)
+		  .append("cr = parser.getTokenNode(tokenID, ci, length);")
+		  ;
 	}
 
 }
