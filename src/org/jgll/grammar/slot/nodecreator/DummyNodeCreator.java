@@ -19,13 +19,13 @@ public class DummyNodeCreator implements NodeCreator {
 	private DummyNodeCreator() {}
 
 	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-
-	@Override
 	public SPPFNode create(GLLParser parser, BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
 		return DummyNode.getInstance();
 	}
-
+	
+	@Override
+	public String getConstructorCode() {
+		return "DummyNodeCreator.getInstance()";
+	}
+	
 }
