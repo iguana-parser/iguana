@@ -112,6 +112,21 @@ public class GrammarGraph implements Serializable {
 		log.debug("Longest terminal Chain: %d", longestTerminalChain);
 	}
 	
+	public String getCode() {
+		StringBuilder sb = new StringBuilder();
+		for (HeadGrammarSlot head : headGrammarSlots) {
+			head.code(sb);
+			for (BodyGrammarSlot slot : head.getFirstSlots()) {
+				BodyGrammarSlot current = slot;
+				while (current != null) {
+					current.code(sb);
+					current = current.next();
+				}
+			}
+		}
+		return sb.toString();
+	}
+	
 	public void code(Writer writer, String packageName) throws IOException {
 	}
 	

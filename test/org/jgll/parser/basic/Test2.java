@@ -24,6 +24,7 @@ import org.junit.Test;
  * A ::= 'a'
  * 
  * @author Ali Afroozeh
+ * 
  */
 public class Test2 {
 
@@ -35,13 +36,17 @@ public class Test2 {
 	@Before
 	public void init() {
 		Rule r1 = new Rule(A, list(a));
-		
 		grammar = new Grammar.Builder().addRule(r1).build();
 	}
 	
 	@Test
 	public void testNullable() {
 		assertFalse(grammar.isNullable(A));
+	}
+	
+	@Test
+	public void test() {
+		System.out.println(grammar.toGrammarGraph().getCode());
 	}
 	
 	@Test
