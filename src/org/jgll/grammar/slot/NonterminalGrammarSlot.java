@@ -2,8 +2,10 @@ package org.jgll.grammar.slot;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
+import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
+import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
@@ -26,7 +28,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public NonterminalGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
 								  ConditionTest preConditions, ConditionTest popConditions,
 								  NodeCreator nodeCreatorFromPop) {
-		super(id, label, previous, preConditions, null, popConditions, null, nodeCreatorFromPop);
+		super(id, label, previous, preConditions, FalseConditionTest.getInstance(), popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
 		if(nonterminal == null) {
 			throw new IllegalArgumentException("Nonterminal cannot be null.");
 		}

@@ -1,5 +1,7 @@
 package org.jgll.grammar.slot;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.util.List;
 import java.util.Set;
 
@@ -136,11 +138,21 @@ public class HeadGrammarSlot implements GrammarSlot {
 	public boolean isInitialized() {
 		return gssNodes != null;
 	}
-
+	
 	@Override
 	public void code(StringBuilder sb) {
-		// TODO Auto-generated method stub
-		
+		sb.append("// " + nonterminal.getName()).append(NL)
+		  .append("case " + id + ":").append(NL)
+		  .append(TAB).append("Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));").append(NL)
+		  .append(TAB).append("if (set == null) return null;").append(NL)
+		  .append(TAB).append("if (set.size() == 1) {").append(NL)
+		  .append(TAB).append(TAB).append("log.trace(\"Processing (%s, %d, %s, %s)\", slot, ci, cu, cn);").append(NL)
+		  .append(TAB).append(TAB).append("return firstSlots[set.iterator().next()];").append(NL)
+		  .append(TAB).append("}").append(NL)
+		  .append(TAB).append("for (int alternateIndex : set) {").append(NL)
+		  .append(TAB).append(TAB).append("if (firstSlots[alternateIndex] == null) continue;").append(NL)
+		  .append(TAB).append(TAB).append("scheduleDescriptor(new Descriptor(firstSlots[alternateIndex], cu, ci, DummyNode.getInstance()));").append(NL)
+		  .append(TAB).append("}").append(NL);
 	}
 
 }
