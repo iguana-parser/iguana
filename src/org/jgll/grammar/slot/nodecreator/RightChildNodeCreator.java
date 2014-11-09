@@ -15,4 +15,9 @@ public class RightChildNodeCreator implements NodeCreator, Serializable {
 		return rightChild;
 	}
 
+	@Override
+	public String getConstructorCode() {
+		return "new RightChildNodeCreator()";
+	}
+
 }

@@ -70,7 +70,7 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		return "Epsilon.getInstance()";
 	}
 	

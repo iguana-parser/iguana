@@ -124,7 +124,7 @@ public class Character extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		return "Character.from(" + c + ")";
 	}
 

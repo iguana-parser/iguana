@@ -16,7 +16,7 @@ public class FalseConditionTest implements ConditionTest, Serializable {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		return "new FalseConditionTest()";
 	}
 

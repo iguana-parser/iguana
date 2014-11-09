@@ -164,18 +164,14 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("List<RegularExpression> list = new ArrayList<>();");
-		sb.append("list.add(");
 		for (RegularExpression regex : regularExpressions) {
-			 sb.append(regex.toCode() + ", ");
+			 sb.append(regex.getConstructorCode() + ", ");
 		}
 		sb.delete(sb.length() - 2, sb.length());
-		sb.append(")");
 		
-		sb.append("new RegexAlt(regex, new HashSet<>(), null);");
-		return sb.toString();
+		return "new RegexAlt(list(" + sb.toString() + "), new HashSet<>(), null)";
 	}
 }

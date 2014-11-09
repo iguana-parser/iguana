@@ -99,14 +99,14 @@ public class RegexStar extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexStar(")
-		  .append(regexp.toCode() + ", ")
+		  .append(regexp.getConstructorCode() + ", ")
 		  .append(label + ", ")
 		  .append("new HashSet<>(), ")
 		  .append("null")
-		  .append(");")
+		  .append(")")
 		  ;
 		return sb.toString();
 	}

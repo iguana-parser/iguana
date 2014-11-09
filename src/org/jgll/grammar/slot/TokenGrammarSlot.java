@@ -85,10 +85,28 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	public RegularExpression getSymbol() {
 		return regularExpression;
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new TokenGrammarSlot(")
+		  .append(id + ", ")
+		  .append("\"" +  label + "\"" + ", ")
+		  .append("null, ")
+		  .append(regularExpression.getConstructorCode() + ", ")
+		  .append(tokenID + ", ")
+		  .append(preConditions.getConstructorCode() + ", ")
+		  .append(postConditions.getConstructorCode() + ", ")
+		  .append(popConditions.getConstructorCode() + ", ")
+		  .append(nodeCreator.getConstructorCode() + ", ")
+		  .append(nodeCreatorFromPop.getConstructorCode() + ")");
+		return sb.toString();
+	}
 
 	@Override
-	public void code(StringBuilder sb) {		
-		sb.append("// " + label).append(NL)
+	public void code(StringBuilder sb) {
+		sb.append("TokenGrammarSlot slot" + id + " = ").append(getConstructorCode() + ")").append(NL)
+		  .append("// " + label).append(NL)
 		  .append("case " + id + ":").append(NL)
 		  .append(TAB).append("int tokenID = " + tokenID).append(NL)
 		  .append(TAB).append("int length = lexer.tokenLengthAt(ci, tokenID);").append(NL)

@@ -72,7 +72,7 @@ public class EOF extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		return "EOF.getInstance()";
 	}
 	

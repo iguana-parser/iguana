@@ -93,10 +93,10 @@ public class RegexOpt extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexOpt(")
-		  .append(regexp.toCode() + ", ")
+		  .append(regexp.getConstructorCode() + ", ")
 		  .append(label + ", ")
 		  .append("new HashSet<>(), ")
 		  .append("null")

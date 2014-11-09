@@ -27,4 +27,9 @@ public class IntermediateNodeCreator implements NodeCreator, Serializable {
 		return newNode;
 	}
 
+	@Override
+	public String getConstructorCode() {
+		return "new IntermediateNodeCreator()";
+	}
+
 }

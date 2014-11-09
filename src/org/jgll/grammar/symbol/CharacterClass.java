@@ -160,10 +160,10 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new CharacterClass(")
-		  .append(alt.toCode() + ", ")
+		  .append(alt.getConstructorCode() + ", ")
 		  .append(label + ", ")
 		  .append("null")
 		  .append(")");

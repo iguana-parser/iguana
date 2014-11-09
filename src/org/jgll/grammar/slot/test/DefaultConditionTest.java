@@ -36,7 +36,7 @@ public class DefaultConditionTest implements ConditionTest, Serializable {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("List<ConditionTest> list = new ArrayList();");
 		for (SlotAction<Boolean> slotAction : conditions) {

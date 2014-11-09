@@ -13,6 +13,7 @@ import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.IntermediateNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NonterminalNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NonterminalWithOneChildNodeCreator;
@@ -107,7 +108,7 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		// A ::= .x
 		if (symbolIndex == 0 && rule.size() == 1) {
 			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
-									 preConditions, postConditions, popConditions, nonterminalWithOneChildNodeCreator, null);
+									 preConditions, postConditions, popConditions, nonterminalWithOneChildNodeCreator, DummyNodeCreator.getInstance());
 		} 
 		
 		// A ::= x . y
@@ -125,7 +126,7 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		// A ::= .x alpha  where |alpha| >= 1
 		else if (symbolIndex == 0) {
 			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
-										preConditions, postConditions, popConditions, rightNodeCreator, null);
+										preConditions, postConditions, popConditions, rightNodeCreator, DummyNodeCreator.getInstance());
 		}
 		
 		// A ::= x . y alpha  where |alpha| >= 1

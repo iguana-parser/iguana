@@ -141,4 +141,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		;		  
 	}
 
+	@Override
+	public String getConstructorCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

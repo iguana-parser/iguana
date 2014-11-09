@@ -147,7 +147,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 	
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		return "Range.in(" + start + ", " + end + ")";
 	}
 	

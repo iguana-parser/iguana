@@ -76,14 +76,14 @@ public class RegexPlus extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexPlus(")
-		  .append(plus.toCode() + ", ")
+		  .append(plus.getConstructorCode() + ", ")
 		  .append(label + ", ")
 		  .append("new HashSet<>(), ")
 		  .append("null")
-		  .append(");")
+		  .append(")")
 		  ;
 		return sb.toString();
 	}

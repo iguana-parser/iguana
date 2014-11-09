@@ -116,10 +116,10 @@ public class Keyword extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new Keyword(")
-		  .append(seq.toCode() + ", ")
+		  .append(seq.getConstructorCode() + ", ")
 		  .append(label + ", ")
 		  .append("null")
 		  .append(")");

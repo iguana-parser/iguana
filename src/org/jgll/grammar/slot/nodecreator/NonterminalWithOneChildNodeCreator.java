@@ -27,5 +27,10 @@ public class NonterminalWithOneChildNodeCreator implements NodeCreator, Serializ
 		sppfLookup.addPackedNode(newNode, last, rightChild.getLeftExtent(), DummyNode.getInstance(), rightChild);
 		return newNode;
 	}
+
+	@Override
+	public String getConstructorCode() {
+		return "new NonterminalWithOneChildNodeCreator()";
+	}
 	
 }
