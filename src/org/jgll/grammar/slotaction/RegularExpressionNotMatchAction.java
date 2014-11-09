@@ -50,8 +50,8 @@ public class RegularExpressionNotMatchAction implements SlotAction<Boolean> {
 	}
 
 	@Override
-	public String toCode() {
-		return "new RegularExpressionNotMatchAction(" + condition.toCode() + ")";
+	public String getConstructorCode() {
+		return "new RegularExpressionNotMatchAction(" + condition.getConstructorCode() + ")";
 	}
 	
 }

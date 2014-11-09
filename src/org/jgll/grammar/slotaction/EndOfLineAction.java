@@ -41,8 +41,8 @@ public class EndOfLineAction implements SlotAction<Boolean> {
 	}
 
 	@Override
-	public String toCode() {
-		return "new EndOfLineAction(" + condition.toCode() + ");";
+	public String getConstructorCode() {
+		return "new EndOfLineAction(" + condition.getConstructorCode() + ");";
 	}
 
 }

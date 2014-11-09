@@ -41,8 +41,8 @@ public class StartOfLineAction implements SlotAction<Boolean> {
 	}
 
 	@Override
-	public String toCode() {
-		return "new StartOfLineAction(" + condition.toCode() + ");";
+	public String getConstructorCode() {
+		return "new StartOfLineAction(" + condition.getConstructorCode() + ");";
 	}
 	
 }

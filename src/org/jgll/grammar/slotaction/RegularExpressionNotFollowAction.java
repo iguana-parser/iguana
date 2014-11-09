@@ -48,8 +48,8 @@ public class RegularExpressionNotFollowAction implements SlotAction<Boolean> {
 	}
 	
 	@Override
-	public String toCode() {
-		return "new RegularExpressionNotFollowAction(" + condition.toCode() + ")";
+	public String getConstructorCode() {
+		return "new RegularExpressionNotFollowAction(" + condition.getConstructorCode() + ")";
 	}	
 	
 }

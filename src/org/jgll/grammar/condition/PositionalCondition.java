@@ -32,7 +32,7 @@ public class PositionalCondition extends Condition {
 	}
 	
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		return "new PositionalCondition(" + type.name() + ")";
 	}
 

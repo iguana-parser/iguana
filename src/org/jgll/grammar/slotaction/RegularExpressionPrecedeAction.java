@@ -48,8 +48,8 @@ public class RegularExpressionPrecedeAction implements SlotAction<Boolean> {
 	}
 	
 	@Override
-	public String toCode() {
-		return "new RegularExpressionPrecedeAction(" + condition.toCode() + ")";
+	public String getConstructorCode() {
+		return "new RegularExpressionPrecedeAction(" + condition.getConstructorCode() + ")";
 	}
 
 }

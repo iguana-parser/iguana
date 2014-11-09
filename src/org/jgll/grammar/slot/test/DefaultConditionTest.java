@@ -40,7 +40,7 @@ public class DefaultConditionTest implements ConditionTest, Serializable {
 		StringBuilder sb = new StringBuilder();
 		sb.append("List<ConditionTest> list = new ArrayList();");
 		for (SlotAction<Boolean> slotAction : conditions) {
-			sb.append("list.add(" + slotAction.toCode() + ");");
+			sb.append("list.add(" + slotAction.getConstructorCode() + ");");
 		}
 		sb.append("ConditionTest test  = new ConditionTest(list);");
 		return sb.toString();

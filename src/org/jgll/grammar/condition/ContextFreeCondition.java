@@ -104,7 +104,7 @@ public class ContextFreeCondition extends Condition {
 	}
 
 	@Override
-	public String toCode() {
+	public String getConstructorCode() {
 		throw new UnsupportedOperationException();
 	}
 }

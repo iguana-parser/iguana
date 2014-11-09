@@ -2,8 +2,10 @@ package org.jgll.grammar.condition;
 
 import java.io.Serializable;
 
+import org.jgll.util.generator.ConstructorCode;
 
-public abstract class Condition implements Serializable {
+
+public abstract class Condition implements Serializable, ConstructorCode {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -16,6 +18,4 @@ public abstract class Condition implements Serializable {
 	public ConditionType getType() {
 		return type;
 	}
-	
-	public abstract String toCode();
 }

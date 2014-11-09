@@ -47,8 +47,8 @@ public class RegularExpressionNotPrecedeAction implements SlotAction<Boolean> {
 	}	
 	
 	@Override
-	public String toCode() {
-		return "new RegularExpressionNotPrecedeAction(" + condition.toCode() + ")";
+	public String getConstructorCode() {
+		return "new RegularExpressionNotPrecedeAction(" + condition.getConstructorCode() + ")";
 	}
 	
 }
