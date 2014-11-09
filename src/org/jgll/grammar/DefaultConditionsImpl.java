@@ -10,12 +10,12 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.slot.test.DefaultConditionTest;
 import org.jgll.grammar.slot.test.FalseConditionTest;
-import org.jgll.grammar.slotaction.FollowActions;
 import org.jgll.grammar.slotaction.LineActions;
-import org.jgll.grammar.slotaction.NotFollowActions;
-import org.jgll.grammar.slotaction.NotMatchActions;
-import org.jgll.grammar.slotaction.NotPrecedeActions;
-import org.jgll.grammar.slotaction.PrecedeActions;
+import org.jgll.grammar.slotaction.RegularExpressionFollowAction;
+import org.jgll.grammar.slotaction.RegularExpressionNotFollowAction;
+import org.jgll.grammar.slotaction.RegularExpressionNotMatchAction;
+import org.jgll.grammar.slotaction.RegularExpressionNotPrecedeAction;
+import org.jgll.grammar.slotaction.RegularExpressionPrecedeAction;
 import org.jgll.grammar.slotaction.SlotAction;
 
 public class DefaultConditionsImpl implements Conditions {
@@ -31,7 +31,7 @@ public class DefaultConditionsImpl implements Conditions {
 				
 				case FOLLOW:
 					if (condition instanceof RegularExpressionCondition) {
-						postConditionActions.add(FollowActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						postConditionActions.add(new RegularExpressionFollowAction((RegularExpressionCondition) condition));
 					} 
 					else {
 //						postConditions.addCondition(convertCondition((ContextFreeCondition) condition), condition);
@@ -40,7 +40,7 @@ public class DefaultConditionsImpl implements Conditions {
 					
 				case NOT_FOLLOW:
 					if (condition instanceof RegularExpressionCondition) {
-						postConditionActions.add(NotFollowActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						postConditionActions.add(new RegularExpressionNotFollowAction((RegularExpressionCondition) condition));
 					} 
 					else {
 					}
@@ -51,7 +51,7 @@ public class DefaultConditionsImpl implements Conditions {
 						
 				case NOT_MATCH:
 					if (condition instanceof RegularExpressionCondition) {
-						postConditionActions.add(NotMatchActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						postConditionActions.add(new RegularExpressionNotMatchAction((RegularExpressionCondition) condition));
 					} else {
 						
 					}
@@ -89,7 +89,7 @@ public class DefaultConditionsImpl implements Conditions {
 					assert !(condition instanceof ContextFreeCondition);
 					
 					if(condition instanceof RegularExpressionCondition) {
-						preConditionActions.add(PrecedeActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						preConditionActions.add(new RegularExpressionPrecedeAction((RegularExpressionCondition) condition));
 					} 
 
 					break;
@@ -98,7 +98,7 @@ public class DefaultConditionsImpl implements Conditions {
 					assert !(condition instanceof ContextFreeCondition);
 					
 					if(condition instanceof RegularExpressionCondition) {
-						preConditionActions.add(NotPrecedeActions.fromRegularExpression(((RegularExpressionCondition) condition).getRegularExpression(), condition));
+						preConditionActions.add(new RegularExpressionNotPrecedeAction((RegularExpressionCondition) condition));
 					} 
 					break;
 					

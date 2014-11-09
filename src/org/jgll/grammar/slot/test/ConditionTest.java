@@ -8,4 +8,6 @@ public interface ConditionTest {
 	
 	public boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex);
 	
+	public String toCode();
+	
 }

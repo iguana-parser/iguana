@@ -34,5 +34,11 @@ public class DefaultConditionTest implements ConditionTest, Serializable {
 	public Iterable<SlotAction<Boolean>> getConditions() {
 		return conditions;
 	}
+
+	@Override
+	public String toCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

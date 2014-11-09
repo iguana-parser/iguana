@@ -1,5 +1,7 @@
 package org.jgll.grammar.slot;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.IOException;
 import java.io.Writer;
 
@@ -57,7 +59,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if(preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) {
 			return null;
 		}
-		
 		
 		GSSNode gssNode = parser.hasGSSNode(next, nonterminal);
 		if(gssNode == null) {
@@ -136,8 +137,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void code(StringBuilder sb) {
-		// TODO Auto-generated method stub
-		
+		sb.append("// " + label).append(NL)
+		;		  
 	}
 
 }

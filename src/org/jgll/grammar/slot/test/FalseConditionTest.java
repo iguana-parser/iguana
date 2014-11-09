@@ -15,4 +15,9 @@ public class FalseConditionTest implements ConditionTest, Serializable {
 		return false;
 	}
 
+	@Override
+	public String toCode() {
+		return "new FalseConditionTest()";
+	}
+
 }
