@@ -158,5 +158,16 @@ public class CharacterClass extends AbstractRegularExpression {
 	public SymbolBuilder<CharacterClass> builder() {
 		return new Builder(this);
 	}
+
+	@Override
+	public String toCode() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new CharacterClass(")
+		  .append(alt.toCode() + ", ")
+		  .append(label + ", ")
+		  .append("null")
+		  .append(")");
+		return sb.toString();
+	}
 	
 }

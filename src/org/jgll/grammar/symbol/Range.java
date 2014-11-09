@@ -146,4 +146,9 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		return new Builder(this);
 	}
 	
+	@Override
+	public String toCode() {
+		return "Range.in(" + start + ", " + end + ")";
+	}
+	
 }

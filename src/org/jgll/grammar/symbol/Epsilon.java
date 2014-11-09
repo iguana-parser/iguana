@@ -68,5 +68,10 @@ public class Epsilon extends AbstractRegularExpression {
 	public SymbolBuilder<Epsilon> builder() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public String toCode() {
+		return "Epsilon.getInstance()";
+	}
 	
 }

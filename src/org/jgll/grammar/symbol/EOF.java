@@ -70,5 +70,10 @@ public class EOF extends AbstractRegularExpression {
 	public SymbolBuilder<EOF> builder() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public String toCode() {
+		return "EOF.getInstance()";
+	}
 	
 }

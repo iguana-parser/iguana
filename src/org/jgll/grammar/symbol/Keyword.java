@@ -114,5 +114,16 @@ public class Keyword extends AbstractRegularExpression {
 	public SymbolBuilder<Keyword> builder() {
 		return new Builder(this);
 	}
+	
+	@Override
+	public String toCode() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new Keyword(")
+		  .append(seq.toCode() + ", ")
+		  .append(label + ", ")
+		  .append("null")
+		  .append(")");
+		return sb.toString();
+	}
 
 }
