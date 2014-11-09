@@ -91,5 +91,18 @@ public class RegexOpt extends AbstractRegularExpression {
 	public SymbolBuilder<RegexOpt> builder() {
 		return new Builder(this);
 	}
+
+	@Override
+	public String toCode() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new RegexOpt(")
+		  .append(regexp.toCode() + ", ")
+		  .append(label + ", ")
+		  .append("new HashSet<>(), ")
+		  .append("null")
+		  .append(")")
+		  ;
+		return sb.toString();
+	}
 	
 }

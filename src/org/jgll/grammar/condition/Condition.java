@@ -16,4 +16,6 @@ public abstract class Condition implements Serializable {
 	public ConditionType getType() {
 		return type;
 	}
+	
+	public abstract String toCode();
 }

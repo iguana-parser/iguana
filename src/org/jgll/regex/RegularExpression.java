@@ -20,4 +20,6 @@ public interface RegularExpression extends Serializable, Symbol {
 	 */
 	public Set<Range> getNotFollowSet();
 	
+	public String toCode();
+	
 }

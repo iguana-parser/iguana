@@ -37,8 +37,13 @@ public class DefaultConditionTest implements ConditionTest, Serializable {
 
 	@Override
 	public String toCode() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append("List<ConditionTest> list = new ArrayList();");
+		for (SlotAction<Boolean> slotAction : conditions) {
+			sb.append("list.add(" + slotAction.toCode() + ");");
+		}
+		sb.append("ConditionTest test  = new ConditionTest(list);");
+		return sb.toString();
 	}
 	
 }

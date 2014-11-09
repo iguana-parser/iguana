@@ -162,4 +162,20 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	public SymbolBuilder<RegexAlt<T>> builder() {
 		return new Builder<>(this);
 	}
+
+	@Override
+	public String toCode() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("List<RegularExpression> list = new ArrayList<>();");
+		sb.append("list.add(");
+		for (RegularExpression regex : regularExpressions) {
+			 sb.append(regex.toCode() + ", ");
+		}
+		sb.delete(sb.length() - 2, sb.length());
+		sb.append(")");
+		
+		sb.append("new RegexAlt(regex, new HashSet<>(), null);");
+		return sb.toString();
+	}
 }

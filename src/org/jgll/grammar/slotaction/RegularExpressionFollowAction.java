@@ -14,8 +14,7 @@ public class RegularExpressionFollowAction implements SlotAction<Boolean> {
 
 	public RegularExpressionFollowAction(RegularExpressionCondition condition) {
 		this.condition = condition;
-		this.r = condition.getRegularExpression().getAutomaton()
-				.getRunnableAutomaton();
+		this.r = condition.getRegularExpression().getAutomaton().getRunnableAutomaton();
 	}
 
 	@Override
@@ -42,6 +41,11 @@ public class RegularExpressionFollowAction implements SlotAction<Boolean> {
 	@Override
 	public String toString() {
 		return condition.toString();
+	}
+
+	@Override
+	public String toCode() {
+		return "new RegularExpressionFollowAction(" + condition.toCode() + ")";
 	}
 
 }

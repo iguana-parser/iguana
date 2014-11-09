@@ -14,8 +14,6 @@ public class RegexPlus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final RegularExpression regex;
-	
 	private final RegularExpression plus;
 	
 	public static RegexPlus from(RegularExpression regexp) {
@@ -24,7 +22,6 @@ public class RegexPlus extends AbstractRegularExpression {
 	
 	public RegexPlus(RegularExpression regex, String label, Set<Condition> conditions, Object object) {
 		super(getName(regex), label, conditions, object);
-		this.regex = regex;
 		List<RegularExpression> list = new ArrayList<>();
 		list.add(RegexStar.from(regex));
 		list.add(regex);
@@ -65,7 +62,6 @@ public class RegexPlus extends AbstractRegularExpression {
 		
 		public Builder(RegexPlus regexPlus) {
 			super(regexPlus);
-			this.regex = regexPlus.regex;
 		}
 		
 		@Override
@@ -77,6 +73,19 @@ public class RegexPlus extends AbstractRegularExpression {
 	@Override
 	public SymbolBuilder<RegexPlus> builder() {
 		return new Builder(this);
+	}
+
+	@Override
+	public String toCode() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new RegexPlus(")
+		  .append(plus.toCode() + ", ")
+		  .append(label + ", ")
+		  .append("new HashSet<>(), ")
+		  .append("null")
+		  .append(");")
+		  ;
+		return sb.toString();
 	}
 
 }

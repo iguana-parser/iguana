@@ -98,4 +98,17 @@ public class RegexStar extends AbstractRegularExpression {
 		return new Builder(this);
 	}
 
+	@Override
+	public String toCode() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new RegexStar(")
+		  .append(regexp.toCode() + ", ")
+		  .append(label + ", ")
+		  .append("new HashSet<>(), ")
+		  .append("null")
+		  .append(");")
+		  ;
+		return sb.toString();
+	}
+
 }

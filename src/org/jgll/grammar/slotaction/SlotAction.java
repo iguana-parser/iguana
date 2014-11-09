@@ -14,4 +14,5 @@ public interface SlotAction<T> {
 	 */
 	public Condition getCondition();
 	
+	public String toCode();
 }

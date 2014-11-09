@@ -6,17 +6,19 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ContextFreeCondition;
+import org.jgll.grammar.condition.PositionalCondition;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.slot.test.DefaultConditionTest;
 import org.jgll.grammar.slot.test.FalseConditionTest;
-import org.jgll.grammar.slotaction.LineActions;
+import org.jgll.grammar.slotaction.EndOfLineAction;
 import org.jgll.grammar.slotaction.RegularExpressionFollowAction;
 import org.jgll.grammar.slotaction.RegularExpressionNotFollowAction;
 import org.jgll.grammar.slotaction.RegularExpressionNotMatchAction;
 import org.jgll.grammar.slotaction.RegularExpressionNotPrecedeAction;
 import org.jgll.grammar.slotaction.RegularExpressionPrecedeAction;
 import org.jgll.grammar.slotaction.SlotAction;
+import org.jgll.grammar.slotaction.StartOfLineAction;
 
 public class DefaultConditionsImpl implements Conditions {
 	
@@ -58,7 +60,7 @@ public class DefaultConditionsImpl implements Conditions {
 					break;
 
 				case END_OF_LINE:
-					postConditionActions.add(LineActions.addEndOfLine(condition));
+					postConditionActions.add(new EndOfLineAction((PositionalCondition) condition));
 				  break;
 				  
 				default:
@@ -103,7 +105,7 @@ public class DefaultConditionsImpl implements Conditions {
 					break;
 					
 				case START_OF_LINE:
-					preConditionActions.add(LineActions.addStartOfLine(condition));
+					preConditionActions.add(new StartOfLineAction((PositionalCondition) condition));
 				  break;
 				  
 				default:

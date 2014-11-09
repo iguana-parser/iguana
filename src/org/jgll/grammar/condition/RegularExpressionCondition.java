@@ -61,13 +61,9 @@ public class RegularExpressionCondition extends Condition {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
-			return true;
-		}
+		if(this == obj) return true;
 		
-		if(!(obj instanceof RegularExpressionCondition)) {
-			return false;
-		}
+		if(!(obj instanceof RegularExpressionCondition)) return false;
 		
 		RegularExpressionCondition other = (RegularExpressionCondition) obj;
 		
@@ -77,5 +73,10 @@ public class RegularExpressionCondition extends Condition {
 	@Override
 	public int hashCode() {
 		return type.hashCode() * 31 + regularExpression.hashCode();
+	}
+
+	@Override
+	public String toCode() {
+		return "new RegularExpressionCondition(" + type.name() + "," + regularExpression.toCode() + ")";
 	}
 }

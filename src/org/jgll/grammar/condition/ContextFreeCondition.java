@@ -102,4 +102,9 @@ public class ContextFreeCondition extends Condition {
 		
 		return type == other.type && symbols.equals(other.symbols);
 	}
+
+	@Override
+	public String toCode() {
+		throw new UnsupportedOperationException();
+	}
 }

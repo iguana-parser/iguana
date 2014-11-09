@@ -48,5 +48,10 @@ public class RegularExpressionNotMatchAction implements SlotAction<Boolean> {
 	public String toString() {
 		return condition.toString();
 	}
+
+	@Override
+	public String toCode() {
+		return "new RegularExpressionNotMatchAction(" + condition.toCode() + ")";
+	}
 	
 }

@@ -1,25 +1,22 @@
 package org.jgll.grammar.slotaction;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.RegularExpressionCondition;
+import org.jgll.grammar.condition.PositionalCondition;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.regex.automaton.RunnableAutomaton;
 
-public class RegularExpressionNotFollowAction implements SlotAction<Boolean> {
+public class EndOfLineAction implements SlotAction<Boolean> {
 	
-	private final RegularExpressionCondition condition;
-	private final RunnableAutomaton r;
+	private PositionalCondition condition;
 
-	public RegularExpressionNotFollowAction(RegularExpressionCondition condition) {
+	public EndOfLineAction(PositionalCondition condition) {
 		this.condition = condition;
-		r = condition.getRegularExpression().getAutomaton().getRunnableAutomaton();
 	}
 	
 	@Override
 	public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
-		return r.match(lexer.getInput(), inputIndex) >= 0;
+		return !lexer.getInput().isEndOfLine(inputIndex);
 	}
 
 	@Override
@@ -29,13 +26,9 @@ public class RegularExpressionNotFollowAction implements SlotAction<Boolean> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
-			return true;
-		}
+		if(this == obj) return true;
 		
-		if(!(obj instanceof SlotAction)) {
-			return false;
-		}
+		if(!(obj instanceof SlotAction)) return false;
 		
 		@SuppressWarnings("unchecked")
 		SlotAction<Boolean> other = (SlotAction<Boolean>) obj;
@@ -46,10 +39,10 @@ public class RegularExpressionNotFollowAction implements SlotAction<Boolean> {
 	public String toString() {
 		return condition.toString();
 	}
-	
+
 	@Override
 	public String toCode() {
-		return "new RegularExpressionNotFollowAction(" + condition.toCode() + ")";
-	}	
-	
+		return "new EndOfLineAction(" + condition.toCode() + ");";
+	}
+
 }
