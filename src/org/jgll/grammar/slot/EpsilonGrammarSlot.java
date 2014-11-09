@@ -1,8 +1,5 @@
 package org.jgll.grammar.slot;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
@@ -44,19 +41,5 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	public Symbol getSymbol() {
 		return Epsilon.getInstance();
 	}
-	
-	@Override
-	public void codeParser(Writer writer) throws IOException {
-		/**
-		 * code(A ::= ε) =
-		 * 				  cR ::= getNodeT(ε,cI);
-		 * 				  cN ::= getNodeP(A ::= ·,cN,cR)
-		 * 				  pop(cU , cI , cN );
-		 * 				  goto L0;
-		 */
-		writer.append("   cr = getNodeT(-2, ci);\n");
-		writer.append("   cn = getNodeP(grammar.getGrammarSlot(" + id + "), cn, cr);\n");
-		writer.append("   pop(cu, ci, cn);\n");
-		writer.append("   label = L0;\n}\n");
-	}	
+
 }

@@ -73,7 +73,7 @@ public class DefaultConditionsImpl implements Conditions {
 		if(postConditionActions.size() > 0) {
 			postCondition = new DefaultConditionTest(postConditionActions);
 		} else {
-			postCondition = new FalseConditionTest();
+			postCondition = FalseConditionTest.getInstance();
 		}
 
 		return postCondition;
@@ -118,7 +118,7 @@ public class DefaultConditionsImpl implements Conditions {
 		if(preConditionActions.size() > 0) {
 			preCondition = new DefaultConditionTest(preConditionActions);
 		} else {
-			preCondition = new FalseConditionTest();
+			preCondition = FalseConditionTest.getInstance();
 		}
 		
 		return preCondition;

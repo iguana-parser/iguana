@@ -86,7 +86,17 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public String getConstructorCode() {
-		return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append("new NonterminalGrammarSlot(")
+		  .append(id + ", ")
+		  .append("\"" +  label + "\"" + ", ")
+		  .append("null, ")
+		  .append("headSlot" + nonterminal.getId() + ", ")
+		  .append(preConditions.getConstructorCode() + ", ")
+		  .append(popConditions.getConstructorCode() + ", ")
+		  .append(nodeCreator.getConstructorCode() + ", ")
+		  .append(nodeCreatorFromPop.getConstructorCode() + ")");
+		return sb.toString();
 	}
 
 }

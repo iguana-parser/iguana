@@ -9,6 +9,17 @@ import org.jgll.parser.gss.GSSNode;
 public class FalseConditionTest implements ConditionTest, Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	private FalseConditionTest() {}
+	
+	private static FalseConditionTest instance;
+	
+	public static FalseConditionTest getInstance() {
+		if (instance == null) {
+			instance = new FalseConditionTest();
+		}
+		return instance;
+	} 
 
 	@Override
 	public boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
@@ -17,7 +28,7 @@ public class FalseConditionTest implements ConditionTest, Serializable {
 
 	@Override
 	public String getConstructorCode() {
-		return "new FalseConditionTest()";
+		return "FalseConditionTest.getInstance()";
 	}
 
 }
