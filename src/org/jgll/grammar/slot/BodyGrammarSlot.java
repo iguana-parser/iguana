@@ -1,7 +1,5 @@
 package org.jgll.grammar.slot;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
@@ -66,18 +64,12 @@ public abstract class BodyGrammarSlot implements GrammarSlot, ConstructorCode {
 	
 	public abstract Symbol getSymbol();
 		
-	public abstract void codeIfTestSetCheck(Writer writer) throws IOException;
-	
 	public boolean isFirst() {
 		return previous == null;
 	}
 	
 	public boolean isLast() {
 		return next.next == null;
-	}
-	
-	public void codeElseTestSetCheck(Writer writer) throws IOException {
-		writer.append("} else { newParseError(grammar.getGrammarSlot(" + this.id +  "), ci); label = L0; return; } \n");
 	}
 	
 	public BodyGrammarSlot next() {

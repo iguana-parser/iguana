@@ -61,7 +61,6 @@ public class L0 extends HeadGrammarSlot {
 		return null;
 	}
 	
-	@Override
 	public void codeParser(Writer writer) throws IOException {
 		writer.append("case L0:\n");
 		writer.append("if (lookupTable.hasNextDescriptor()) {\n");

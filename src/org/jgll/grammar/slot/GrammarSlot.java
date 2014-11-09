@@ -1,8 +1,5 @@
 package org.jgll.grammar.slot;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -21,8 +18,6 @@ import org.jgll.util.Input;
  *
  */
 public interface GrammarSlot {
-	
-	public abstract void codeParser(Writer writer) throws IOException;
 	
 	public abstract GrammarSlot parse(GLLParser parser, GLLLexer lexer);
 	

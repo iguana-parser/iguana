@@ -2,9 +2,6 @@ package org.jgll.grammar.slot;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.GLLLexer;
@@ -62,16 +59,6 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		return next;
 	}
 	
-	@Override
-	public void codeParser(Writer writer) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void codeIfTestSetCheck(Writer writer) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public boolean isNullable() {
 		return regularExpression.isNullable();

@@ -2,9 +2,6 @@ package org.jgll.grammar.slot;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
@@ -72,60 +69,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public void codeParser(Writer writer) throws IOException {
-		
-		if(previous == null) {
-			codeIfTestSetCheck(writer);
-			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
-			writer.append("   label = " + nonterminal.getId() + ";\n");
-			codeElseTestSetCheck(writer);
-			writer.append("}\n");
-			
-			writer.append("// " + next + "\n");
-			writer.append("private void parse_" + next.id + "() {\n");
-			
-			BodyGrammarSlot slot = next;
-			while(slot != null) {
-				slot.codeParser(writer);
-				slot = slot.next;
-			}
-		} 
-		
-		else { 
-		
-			// TODO: add the testSet check
-			// code(A ::= α · Xl β) = 
-			//						if(test(I[cI ], A, Xβ) {
-			// 							cU :=create(RXl,cU,cI,cN); 
-			//							gotoLX 
-			//						}
-			// 						else goto L0
-			// RXl:
-			codeIfTestSetCheck(writer);
-			writer.append("   cu = create(grammar.getGrammarSlot(" + next.id + "), cu, ci, cn);\n");
-			writer.append("   label = " + nonterminal.getId() + ";\n");
-			codeElseTestSetCheck(writer);
-			writer.append("}\n");
-			
-			writer.append("// " + next + "\n");
-			writer.append("private void parse_" + next.id + "(){\n");
-		}
-	}
-	
-	@Override
-	public void codeIfTestSetCheck(Writer writer) throws IOException {
-		writer.append("if (");
-//		int i = 0;
-//		for(Terminal terminal : testSet) {
-//			writer.append(terminal.getMatchCode());
-//			if(++i < testSet.size()) {
-//				writer.append(" || ");
-//			}
-//		}
-		writer.append(") {\n");
-	}
-			
-	@Override
 	public boolean isNullable() {
 		return nonterminal.isNullable();
 	}
@@ -143,7 +86,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public String getConstructorCode() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

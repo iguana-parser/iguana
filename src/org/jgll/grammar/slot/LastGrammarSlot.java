@@ -1,8 +1,5 @@
 package org.jgll.grammar.slot;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Symbol;
@@ -33,17 +30,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		return null;
 	}
 	
-	@Override
-	public void codeParser(Writer writer) throws IOException {
-		writer.append("   pop(cu, ci, cn);\n");
-		writer.append("   label = L0;\n}\n");
-	}
-		
-	@Override
-	public void codeIfTestSetCheck(Writer writer) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public boolean isNullable() {
 		return false;

@@ -1,7 +1,5 @@
 package org.jgll.grammar.slot;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 import java.util.Set;
 
@@ -96,26 +94,6 @@ public class HeadGrammarSlot implements GrammarSlot {
 		}
 		
 		return null;
-	}
-	
-	@Override
-	public void codeParser(Writer writer) throws IOException {
-		writer.append("// " + nonterminal.getName() + "\n");
-		writer.append("private void parse_" + id + "() {\n");
-		for(BodyGrammarSlot slot : firstSlots) {
-			writer.append("   //" + slot + "\n");
-			slot.codeIfTestSetCheck(writer);			
-			writer.append("   add(grammar.getGrammarSlot(" + slot.getId() + "), cu, ci, DummyNode.getInstance());\n");
-			writer.append("}\n");
-		}
-		writer.append("   label = L0;\n");
-		writer.append("}\n");
-
-		for(BodyGrammarSlot slot : firstSlots) {
-			writer.append("// " + slot + "\n");
-			writer.append("private void parse_" + slot.getId() + "() {\n");
-			slot.codeParser(writer);
-		}
 	}
 	
 	public Nonterminal getNonterminal() {
