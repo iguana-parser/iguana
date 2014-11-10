@@ -22,7 +22,9 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.CollectionsUtil;
+
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 
 /**
  * 
@@ -194,7 +196,7 @@ public class Grammar implements Serializable {
 			sb.append(nonterminal).append(" ::= ");
 			for (List<Symbol> alternatives : definitions.get(nonterminal)) {
 				if (alternatives == null) continue;
-				sb.append(CollectionsUtil.listToString(alternatives)).append("\n");
+				sb.append(listToString(alternatives)).append("\n");
 			}
 		}
 		

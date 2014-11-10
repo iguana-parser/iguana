@@ -1,12 +1,12 @@
 package org.jgll.grammar.condition;
 
-import static org.jgll.util.CollectionsUtil.listToString;
-
 import java.util.Arrays;
 import java.util.List;
 
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Symbol;
+
+import static org.jgll.util.generator.GeneratorUtil.*;
 
 public class ContextFreeCondition extends Condition {
 	

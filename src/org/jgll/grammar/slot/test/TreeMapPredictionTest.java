@@ -19,7 +19,7 @@ public class TreeMapPredictionTest implements PredictionTest {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private NavigableMap<Integer, Set<Integer>> predictionMap;
+	private final NavigableMap<Integer, Set<Integer>> predictionMap;
 
 	public TreeMapPredictionTest(List<? extends Set<? extends RegularExpression>> predictionSets, int countAlternates) {
 		predictionMap = new TreeMap<>();
@@ -87,6 +87,10 @@ public class TreeMapPredictionTest implements PredictionTest {
 		}
 	}
 	
+	public TreeMapPredictionTest(NavigableMap<Integer, Set<Integer>> predictionMap) {
+		this.predictionMap = predictionMap;
+	}
+	
 	@Override
 	public boolean test(int v) {
 		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
@@ -97,6 +101,12 @@ public class TreeMapPredictionTest implements PredictionTest {
 	public Set<Integer> get(int v) {
 		Entry<Integer, Set<Integer>> e = predictionMap.floorEntry(v);
 		return e == null ? null : e.getValue();
+	}
+
+	@Override
+	public String getConstructorCode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

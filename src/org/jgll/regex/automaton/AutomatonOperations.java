@@ -1,5 +1,7 @@
 package org.jgll.regex.automaton;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -14,7 +16,6 @@ import java.util.Set;
 import org.jgll.regex.matcher.LargeIntervalTransitions;
 import org.jgll.regex.matcher.ShortIntervalTransitions;
 import org.jgll.regex.matcher.Transitions;
-import org.jgll.util.CollectionsUtil;
 import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
@@ -853,7 +854,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		return new Automaton(startState, CollectionsUtil.listToString(automatons, " | "));
+		return new Automaton(startState, listToString(automatons, " | "));
 	}
 	
 	public static Automaton union(Automaton...automatons) {
@@ -1063,7 +1064,7 @@ public class AutomatonOperations {
 			startState.addTransition(Transition.epsilonTransition(c.getStartState()));
 		}
 		
-		return new Automaton(startState, CollectionsUtil.listToString(automatons, " | "));
+		return new Automaton(startState, listToString(automatons, " | "));
 	}
 	
 	public static Automaton addCondition(Automaton main, Automaton condition) {

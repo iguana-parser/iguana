@@ -2,13 +2,11 @@ package org.jgll.grammar.slot;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
-import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
@@ -42,13 +40,16 @@ public class HeadGrammarSlot implements GrammarSlot {
 	private final FollowTest followTest;
 	
 	private GSSNode[] gssNodes;
+
+	private int altsCount;
 	
 	public HeadGrammarSlot(int id, Nonterminal nonterminal, 
-						   List<List<Symbol>> alts, boolean nullable, 
+						   int altsCount, boolean nullable, 
 						   PredictionTest predictionTest, FollowTest followTest) {
 		this.id = id;
 		this.nonterminal = nonterminal;
-		this.firstSlots = new BodyGrammarSlot[alts.size()];
+		this.altsCount = altsCount;
+		this.firstSlots = new BodyGrammarSlot[altsCount];
 		this.nullable = nullable;
 		this.followTest = followTest;
 		this.predictionTest = predictionTest;
@@ -139,6 +140,32 @@ public class HeadGrammarSlot implements GrammarSlot {
 		return gssNodes != null;
 	}
 	
+//	StringBuilder sb = new StringBuilder();
+//	sb.append("new TokenGrammarSlot(")
+//	  .append(id + ", ")
+//	  .append("\"" +  label + "\"" + ", ")
+//	  .append("null, ")
+//	  .append(regularExpression.getConstructorCode() + ", ")
+//	  .append(tokenID + ", ")
+//	  .append(preConditions.getConstructorCode() + ", ")
+//	  .append(postConditions.getConstructorCode() + ", ")
+//	  .append(popConditions.getConstructorCode() + ", ")
+//	  .append(nodeCreator.getConstructorCode() + ", ")
+//	  .append(nodeCreatorFromPop.getConstructorCode() + ")");
+//	return sb.toString();
+	
+	@Override
+	public String getConstructorCode() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new TokenGrammarSlot(")
+		  .append(id + ", ")
+		  .append("Nonterminal.withName(" + nonterminal.getName() + ")" + ", ")
+		  .append(altsCount + ", ")
+		  .append(nullable + ", ")
+		  ;
+		return sb.toString();
+	}
+	
 	@Override
 	public void code(StringBuilder sb) {
 		sb.append("// " + nonterminal.getName()).append(NL)
@@ -152,7 +179,9 @@ public class HeadGrammarSlot implements GrammarSlot {
 		  .append(TAB).append("for (int alternateIndex : set) {").append(NL)
 		  .append(TAB).append(TAB).append("if (firstSlots[alternateIndex] == null) continue;").append(NL)
 		  .append(TAB).append(TAB).append("scheduleDescriptor(new Descriptor(firstSlots[alternateIndex], cu, ci, DummyNode.getInstance()));").append(NL)
-		  .append(TAB).append("}").append(NL);
+		  .append(TAB).append("}").append(NL)
+		  .append(TAB).append("break;").append(NL)
+		  .append(NL);
 	}
 
 }

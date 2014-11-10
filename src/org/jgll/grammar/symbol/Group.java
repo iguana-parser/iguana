@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.util.CollectionsUtil;
+
+import static org.jgll.util.generator.GeneratorUtil.*;
 
 public class Group extends Nonterminal {
 
@@ -15,7 +16,7 @@ public class Group extends Nonterminal {
 	private final List<? extends Symbol> symbols;
 
 	public Group(List<? extends Symbol> symbols, Set<Condition> conditions, String label, Object object) {
-		super("(" + CollectionsUtil.listToString(symbols) + ")", 0, false, conditions, label, object);
+		super("(" + listToString(symbols) + ")", 0, false, conditions, label, object);
 		this.symbols = new ArrayList<>(symbols);
 	}
 	

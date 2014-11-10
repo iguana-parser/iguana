@@ -70,7 +70,7 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		
 		return new HeadGrammarSlot(id, 
 								   nonterminal, 
-								   alternates, 
+								   alternates.size(), 
 								   nullable,
 								   predictionTest, 
 								   followSetTest);

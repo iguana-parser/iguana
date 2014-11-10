@@ -12,6 +12,8 @@ import org.jgll.util.Tuple;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 public class SharedPrefixIntermediateNodeIds implements IntermediateNodeIds {
 	
 	private BiMap<List<Symbol>, Integer> intermediateNodeIds;
@@ -55,7 +57,7 @@ public class SharedPrefixIntermediateNodeIds implements IntermediateNodeIds {
 	
 	@Override
 	public String getSlotName(int id) {
-		return CollectionsUtil.listToString(intermediateNodeIds.inverse().get(id), " ");
+		return listToString(intermediateNodeIds.inverse().get(id), " ");
 	}
 	
 	@Override

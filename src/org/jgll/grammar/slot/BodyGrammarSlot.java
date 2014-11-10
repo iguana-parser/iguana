@@ -9,14 +9,13 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
-import org.jgll.util.generator.ConstructorCode;
 
 /**
  * 
  * @author Ali Afroozeh
  *
  */
-public abstract class BodyGrammarSlot implements GrammarSlot, ConstructorCode {
+public abstract class BodyGrammarSlot implements GrammarSlot {
 	
 	protected final int id;
 

@@ -2,13 +2,10 @@ package org.jgll.grammar.slot;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jgll.grammar.slot.test.TrueFollowSet;
 import org.jgll.grammar.slot.test.TruePredictionSet;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 
@@ -31,7 +28,7 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	private L0() {
-		super(-1, Nonterminal.withName("L0"), new ArrayList<List<Symbol>>(), false, new TruePredictionSet(0), new TrueFollowSet());
+		super(-1, Nonterminal.withName("L0"), 0, false, new TruePredictionSet(0), new TrueFollowSet());
 	}
 	
 	public GrammarSlot parse(GLLParser parser, GLLLexer lexer, HeadGrammarSlot start) {

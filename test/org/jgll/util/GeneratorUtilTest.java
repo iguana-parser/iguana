@@ -6,8 +6,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
 
-public class CollectionsUtilTest {
+public class GeneratorUtilTest {
 
 	@Test
 	public void testListToString() {
@@ -17,7 +18,7 @@ public class CollectionsUtilTest {
 		elements.add(3);
 		elements.add(4);
 		elements.add(5);
-		String s = CollectionsUtil.listToString(elements);
+		String s = listToString(elements);
 		Assert.assertEquals("1 2 3 4 5", s);
 	}
 	
@@ -29,7 +30,7 @@ public class CollectionsUtilTest {
 		elements.add(3);
 		elements.add(4);
 		elements.add(5);
-		String s = CollectionsUtil.listToString(elements, ",");
+		String s = listToString(elements, ",");
 		Assert.assertEquals("1,2,3,4,5", s);
 	}
 

@@ -48,6 +48,12 @@ public class ArrayPredictionTest implements PredictionTest {
 		}
 	}
 	
+	public ArrayPredictionTest(Set<Integer>[] predictionMap, int min, int max) {
+		this.predictionMap = predictionMap;
+		this.min = min;
+		this.max = max;
+	}
+	
 	@Override
 	public boolean test(int v) {
 		if(v < min || v > max) {
@@ -59,6 +65,12 @@ public class ArrayPredictionTest implements PredictionTest {
 	@Override
 	public Set<Integer> get(int v) {
 		return predictionMap[v - min];
+	}
+
+	@Override
+	public String getConstructorCode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

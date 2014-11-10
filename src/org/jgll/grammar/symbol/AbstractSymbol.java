@@ -6,7 +6,8 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
-import org.jgll.util.CollectionsUtil;
+
+import static org.jgll.util.generator.GeneratorUtil.*;
 
 public abstract class AbstractSymbol implements Symbol {
 
@@ -49,7 +50,7 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	@Override
 	public String toString() {
-		return conditions.isEmpty() ? name :  "(" + name + CollectionsUtil.listToString(conditions) + ")";
+		return conditions.isEmpty() ? name :  "(" + name + listToString(conditions) + ")";
 	}
 	
 	protected Set<Condition> getNotFollowConditions() {

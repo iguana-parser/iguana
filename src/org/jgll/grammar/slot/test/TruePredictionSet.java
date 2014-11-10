@@ -25,5 +25,10 @@ public class TruePredictionSet implements PredictionTest {
 	public final Set<Integer> get(int v) {
 		return predictionSet;
 	}
+
+	@Override
+	public String getConstructorCode() {
+		return "new TruePredictionSet()";
+	}
 	
 }

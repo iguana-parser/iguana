@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.util.CollectionsUtil;
+import static org.jgll.util.generator.GeneratorUtil.*;
 
 public class Alt extends AbstractSymbol {
 
@@ -23,7 +23,7 @@ public class Alt extends AbstractSymbol {
 	}
 	
 	public Alt(List<Symbol> symbols, Set<Condition> conditions, String label, Object object) {
-		super("[" + CollectionsUtil.listToString(symbols, "|") + "]", conditions, label, object);
+		super("[" + listToString(symbols, "|") + "]", conditions, label, object);
 		this.symbols = new ArrayList<>(symbols);
 	}
 	

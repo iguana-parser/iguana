@@ -101,7 +101,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		  .append(TAB).append(TAB).append("break;").append(NL)
 		  .append(TAB).append("}").append(NL)
 		  .append(TAB).append("cr = parser.getTokenNode(tokenID, ci, length);").append(NL)
-		  .append(TAB).append("break;").append(NL);
+		  .append(TAB).append("break;").append(NL)
+		  .append(NL);
 	}
 
 }

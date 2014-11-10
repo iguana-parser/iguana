@@ -4,6 +4,7 @@ import org.jgll.lexer.GLLLexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
+import org.jgll.util.generator.ConstructorCode;
 
 /**
  * A GrammarSlot is a position immediately before or after
@@ -17,7 +18,7 @@ import org.jgll.util.Input;
  * @author Ali Afroozeh
  *
  */
-public interface GrammarSlot {
+public interface GrammarSlot extends ConstructorCode {
 	
 	public abstract GrammarSlot parse(GLLParser parser, GLLLexer lexer);
 	

@@ -104,7 +104,7 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 		
 		return new HeadGrammarSlot(id, 
 								   nonterminal, 
-								   alternates, 
+								   alternates.size(), 
 								   nullable,
 								   predictionTest, 
 								   followSetTest);

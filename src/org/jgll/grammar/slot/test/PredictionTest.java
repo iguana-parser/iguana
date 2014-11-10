@@ -3,7 +3,9 @@ package org.jgll.grammar.slot.test;
 import java.io.Serializable;
 import java.util.Set;
 
-public interface PredictionTest extends Serializable {
+import org.jgll.util.generator.ConstructorCode;
+
+public interface PredictionTest extends Serializable, ConstructorCode {
 	
 	public boolean test(int v);
 	
