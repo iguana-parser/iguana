@@ -121,10 +121,6 @@ public class GrammarGraph implements Serializable {
 		
 		// GLL fields
 		sb.append("private int cs;").append(" // Current grammar slot").append(NL);
-		sb.append("private int ci;").append(" // Current input index").append(NL);
-		sb.append("private GSSNode cu;").append(" // Current GSS node").append(NL);
-		sb.append("private SPPFNode cn;").append(" // Current SPPFNode").append(NL);
-		sb.append("private GLLLexer lexer;").append(NL);
 		sb.append(NL);
 		
 		// Generate field declarations
@@ -142,30 +138,24 @@ public class GrammarGraph implements Serializable {
 		
 		sb.append(NL);
 		
-		sb.append("public void parse() {").append(NL);
-		sb.append(TAB).append("while (true) {").append(NL);
-		sb.append(TAB).append(TAB).append("switch (cs) {").append(NL);
+		sb.append("@Override").append(NL)
+		  .append("protected void parse(HeadGrammarSlot startSymbolName) {").append(NL)
+		  .append(TAB).append("while (true) {").append(NL)
+		  .append(TAB).append(TAB).append("switch (cs) {").append(NL);
 
-		sb.append("case L0:").append(NL);
-		sb.append(TAB).append("if (hasNextDescriptor()) {").append(NL);
-		sb.append(TAB).append(TAB).append("Descriptor descriptor = nextDescriptor();").append(NL);
-		sb.append(TAB).append(TAB).append("log.trace(\"Processing %s\", descriptor);").append(NL);
-		sb.append(TAB).append(TAB).append("cu = descriptor.getGSSNode();").append(NL);
-		sb.append(TAB).append(TAB).append("ci = descriptor.getInputIndex();").append(NL);
-		sb.append(TAB).append(TAB).append("cn = descriptor.getSPPFNode();").append(NL);
-		sb.append(TAB).append(TAB).append("cs = descriptor.getLabel().getId();").append(NL);
-		sb.append(TAB).append(TAB).append("break").append(NL);
-		sb.append(TAB).append("} else {").append(NL);
-		sb.append("end = System.nanoTime();\n");
-		sb.append("log(start, end);\n");
-		sb.append("NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);\n");
-		sb.append("if (root == null) {");
-		sb.append("log.info(\"Parsing failed.\");\n");
-		sb.append("throw new ParseError(errorSlot, errorIndex);\n");
-		sb.append("}\n");
-		sb.append("return root;\n");
-		sb.append("}\n");
-
+		sb.append("case L0:").append(NL)
+		  .append(TAB).append("if (hasNextDescriptor()) {").append(NL)
+		  .append(TAB).append(TAB).append("Descriptor descriptor = nextDescriptor();").append(NL)
+		  .append(TAB).append(TAB).append("log.trace(\"Processing %s\", descriptor);").append(NL)
+		  .append(TAB).append(TAB).append("cu = descriptor.getGSSNode();").append(NL)
+		  .append(TAB).append(TAB).append("ci = descriptor.getInputIndex();").append(NL)
+		  .append(TAB).append(TAB).append("cn = descriptor.getSPPFNode();").append(NL)
+		  .append(TAB).append(TAB).append("cs = descriptor.getGrammarSlot().getId();").append(NL)
+		  .append(TAB).append(TAB).append("break;").append(NL)
+		  .append(TAB).append("} else {").append(NL)
+		  .append(TAB).append(TAB).append("return;").append(NL)
+		  .append(TAB).append("}").append(NL)
+		  .append(NL);
 		
 		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {

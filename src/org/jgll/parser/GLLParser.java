@@ -4,7 +4,6 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
@@ -20,8 +19,6 @@ import org.jgll.util.Input;
  *
  */
 public interface GLLParser {
-	
-	public ParseResult parse(Lexer lexer, GrammarGraph grammar, String startSymbolName);
 	
 	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName);
 	

@@ -90,12 +90,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName) {
-		return parse(new LexerImpl(input, grammar), grammar, startSymbolName);
-	}
-	
-	@Override
-	public final ParseResult parse(Lexer lexer, GrammarGraph grammar, String startSymbolName) {
+	public final ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName) {
+		
+		lexer = new LexerImpl(input, grammar);
+		
 		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
 		
 		if(startSymbol == null) {
@@ -103,8 +101,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 		
 		this.grammar = grammar;
-		
-		this.lexer = lexer;
 		
 		this.input = lexer.getInput();
 		

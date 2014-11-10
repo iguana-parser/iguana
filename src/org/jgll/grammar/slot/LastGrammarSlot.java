@@ -54,9 +54,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		  .append(TAB).append(TAB).append("cs = pop().getId();").append(NL)
 		  .append(TAB).append(TAB).append("break;").append(NL)
 		  .append(TAB).append("}").append(NL)
-		  .append(TAB).append(TAB).append("cs = L0;").append(NL)
-		  .append(TAB).append(TAB).append("break;").append(NL)
-		  .append(NL);
+		  .append(TAB).append("cs = L0;").append(NL)
+		  .append(TAB).append("break;").append(NL);
 	}
 
 	@Override
