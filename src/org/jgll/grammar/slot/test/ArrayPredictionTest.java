@@ -85,7 +85,7 @@ public class ArrayPredictionTest implements PredictionTest {
 
 	@Override
 	public String getConstructorCode() {
-		return "new ArrayPredictionTest(" + convert(predictionMap) + "))";
+		return "new ArrayPredictionTest(" + convert(predictionMap) + ", " + min + ", " + max + ")";
 	}
 
 }

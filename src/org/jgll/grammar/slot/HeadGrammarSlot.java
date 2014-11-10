@@ -148,13 +148,14 @@ public class HeadGrammarSlot implements GrammarSlot {
 		  .append("Nonterminal.withName(\"" + nonterminal.getName() + "\")" + ", ")
 		  .append(altsCount + ", ")
 		  .append(nullable + ", ")
-		  .append(predictionTest.getConstructorCode());
+		  .append(predictionTest.getConstructorCode() + ", ")
+		  .append(followTest.getConstructorCode() + ")");
 		return sb.toString();
 	}
 	
 	@Override
 	public void code(StringBuilder sb) {
-		sb.append("HeadGrammarSlot slot" + id + " = ").append(getConstructorCode() + ");").append(NL)
+		sb.append("HeadGrammarSlot slot" + id + " = ").append(getConstructorCode() + ";").append(NL)
 		  .append("// " + nonterminal.getName()).append(NL)
 		  .append("case " + id + ":").append(NL)
 		  .append(TAB).append("Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));").append(NL)

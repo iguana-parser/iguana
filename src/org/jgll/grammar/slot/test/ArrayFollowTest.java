@@ -48,7 +48,7 @@ public class ArrayFollowTest implements FollowTest {
 
 	@Override
 	public String getConstructorCode() {
-		return "new ArrayFollowTest(new boolean[]{" + Joiner.on(",").join(Booleans.asList(followSetMap)) + "})";
+		return "new ArrayFollowTest(new boolean[]{" + Joiner.on(",").join(Booleans.asList(followSetMap)) + "}" + ", " + min + ", " + max + ")";
 	}
 
 }

@@ -127,9 +127,6 @@ public class GrammarGraph implements Serializable {
 		return sb.toString();
 	}
 	
-	public void code(Writer writer, String packageName) throws IOException {
-	}
-	
 	public String getName() {
 		return name;
 	}
