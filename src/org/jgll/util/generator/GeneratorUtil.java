@@ -3,7 +3,7 @@ package org.jgll.util.generator;
 public class GeneratorUtil {
 	
 	public static final String TAB = "  ";
-	public static final String NL = "\n";
+	public static final String NL = System.getProperty("line.separator");
 	
 	public static <T> String listToString(T[] elements) {
 		return listToString(elements, " ");

@@ -1,8 +1,8 @@
 package org.jgll.grammar;
 
-import java.io.IOException;
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.Serializable;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -114,6 +114,39 @@ public class GrammarGraph implements Serializable {
 	
 	public String getCode() {
 		StringBuilder sb = new StringBuilder();
+
+		sb.append("private static final LoggerWrapper log = LoggerWrapper.getLogger(Test.class);").append(NL);
+		sb.append("private static final int L0 = -1;").append(NL);
+		sb.append(NL);
+		
+		// GLL fields
+		sb.append("private int cs;").append(" // Current grammar slot").append(NL);
+		sb.append("private int ci;").append(" // Current input index").append(NL);
+		sb.append("private GSSNode cu;").append(" // Current GSS node").append(NL);
+		sb.append("private SPPFNode cn;").append(" // Current SPPFNode").append(NL);
+		sb.append("private GLLLexer lexer;").append(NL);
+		sb.append(NL);
+		
+		// Generate field declarations
+		for (HeadGrammarSlot head : headGrammarSlots) {
+			for (BodyGrammarSlot slot : head.getFirstSlots()) {
+				sb.append("@SuppressWarnings(\"unchecked\")").append(NL)
+				  .append("HeadGrammarSlot slot" + head.getId() + " = ").append(head.getConstructorCode() + ";").append(NL);
+				BodyGrammarSlot current = slot;
+				while (current != null) {
+					sb.append("TokenGrammarSlot slot" + current.getId() + " = ").append(current.getConstructorCode() + ";").append(NL);
+					current = current.next();
+				}
+			}
+		}
+		
+		sb.append(NL);
+		
+		sb.append("public void parse() {").append(NL);
+		sb.append(TAB).append("while (true) {").append(NL);
+		sb.append(TAB).append(TAB).append("switch (cs) {").append(NL);
+
+		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			head.code(sb);
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
@@ -124,6 +157,11 @@ public class GrammarGraph implements Serializable {
 				}
 			}
 		}
+		
+		sb.append(TAB).append(TAB).append("}").append(NL);
+		sb.append(TAB).append("}").append(NL);
+		sb.append("}").append(NL);
+		
 		return sb.toString();
 	}
 	

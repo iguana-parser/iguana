@@ -41,7 +41,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 		int length = lexer.tokenLengthAt(ci, tokenID);
 		
-		if(length < 0) {
+		if (length < 0) {
 			parser.recordParseError(this);
 			return null;
 		}
@@ -92,15 +92,16 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void code(StringBuilder sb) {
-		sb.append("TokenGrammarSlot slot" + id + " = ").append(getConstructorCode() + ";").append(NL)
-		  .append("// " + label).append(NL)
+		sb.append("// " + label).append(NL)
 		  .append("case " + id + ":").append(NL)
 		  .append(TAB).append("int length = lexer.tokenLengthAt(ci, " + tokenID + ");").append(NL)
 		  .append(TAB).append("if (length < 0) {").append(NL)
+		  .append(TAB).append(TAB).append("recordParseError(slot" + id + ");").append(NL)
+		  .append(TAB).append(TAB).append("cs = L0;").append(NL)
 		  .append(TAB).append(TAB).append("break;").append(NL)
 		  .append(TAB).append("}").append(NL)
-		  .append(TAB).append("cr = parser.getTokenNode(" + tokenID + ", ci, length);").append(NL)
-		  .append(TAB).append("break;").append(NL)
+		  .append(TAB).append("TokenSymbolNode cr = getTokenNode(" + tokenID + ", ci, length);").append(NL)
+		  .append(TAB).append("cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);")
 		  .append(NL);
 	}
 

@@ -98,7 +98,7 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 		
 		Integer id = headGrammarSlotIds.get(nonterminal);
 		if (id == null) {
-			id = headGrammarSlotIds.size();
+			id = bodyGrammarSlotId++;
 			headGrammarSlotIds.put(nonterminal, id);
 		}
 		

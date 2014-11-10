@@ -67,6 +67,10 @@ public class HeadGrammarSlot implements GrammarSlot {
 		return followTest.test(v);
 	}
 	
+	public Set<Integer> getPredictionSet(int v) {
+		return predictionTest.get(v);
+	}
+	
 	public void setFirstGrammarSlotForAlternate(BodyGrammarSlot slot, int index) {
 		firstSlots[index] = slot;
 	}
@@ -155,19 +159,18 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	@Override
 	public void code(StringBuilder sb) {
-		sb.append("@SuppressWarnings(\"unchecked\")").append(NL)
-		  .append("HeadGrammarSlot slot" + id + " = ").append(getConstructorCode() + ";").append(NL)
-		  .append("// " + nonterminal.getName()).append(NL)
+		sb.append("// " + nonterminal.getName()).append(NL)
 		  .append("case " + id + ":").append(NL)
-		  .append(TAB).append("Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));").append(NL)
-		  .append(TAB).append("if (set == null) return null;").append(NL)
+		  .append(TAB).append("Set<Integer> set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));").append(NL)
+		  .append(TAB).append("if (set == null) { cs = L0; break; }").append(NL)
 		  .append(TAB).append("if (set.size() == 1) {").append(NL)
-		  .append(TAB).append(TAB).append("log.trace(\"Processing (%s, %d, %s, %s)\", slot, ci, cu, cn);").append(NL)
-		  .append(TAB).append(TAB).append("return firstSlots[set.iterator().next()];").append(NL)
+		  .append(TAB).append(TAB).append("cs = slot" + id + ".getFirstSlots()[set.iterator().next()].getId();").append(NL)
+		  .append(TAB).append(TAB).append("log.trace(\"Processing (%s, %d, %s, %s)\", cs, ci, cu, cn);").append(NL)
+		  .append(TAB).append(TAB).append("break;").append(NL)
 		  .append(TAB).append("}").append(NL)
 		  .append(TAB).append("for (int alternateIndex : set) {").append(NL)
-		  .append(TAB).append(TAB).append("if (firstSlots[alternateIndex] == null) continue;").append(NL)
-		  .append(TAB).append(TAB).append("scheduleDescriptor(new Descriptor(firstSlots[alternateIndex], cu, ci, DummyNode.getInstance()));").append(NL)
+		  .append(TAB).append(TAB).append("if (slot" + id + ".getFirstSlots()[alternateIndex] == null) continue;").append(NL)
+		  .append(TAB).append(TAB).append("scheduleDescriptor(new Descriptor(slot" + id + ".getFirstSlots()[alternateIndex], cu, ci, DummyNode.getInstance()));").append(NL)
 		  .append(TAB).append("}").append(NL)
 		  .append(TAB).append("break;").append(NL)
 		  .append(NL);

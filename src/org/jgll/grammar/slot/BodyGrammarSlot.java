@@ -89,6 +89,10 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		return nodeCreatorFromPop;
 	}
 	
+	public NodeCreator getNodeCreator() {
+		return nodeCreator;
+	}
+	
 	public final ConditionTest getPreConditions() {
 		return preConditions;
 	}
