@@ -140,36 +140,22 @@ public class HeadGrammarSlot implements GrammarSlot {
 		return gssNodes != null;
 	}
 	
-//	StringBuilder sb = new StringBuilder();
-//	sb.append("new TokenGrammarSlot(")
-//	  .append(id + ", ")
-//	  .append("\"" +  label + "\"" + ", ")
-//	  .append("null, ")
-//	  .append(regularExpression.getConstructorCode() + ", ")
-//	  .append(tokenID + ", ")
-//	  .append(preConditions.getConstructorCode() + ", ")
-//	  .append(postConditions.getConstructorCode() + ", ")
-//	  .append(popConditions.getConstructorCode() + ", ")
-//	  .append(nodeCreator.getConstructorCode() + ", ")
-//	  .append(nodeCreatorFromPop.getConstructorCode() + ")");
-//	return sb.toString();
-	
 	@Override
 	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("new TokenGrammarSlot(")
+		sb.append("new HeadGrammarSlot(")
 		  .append(id + ", ")
-		  .append("Nonterminal.withName(" + nonterminal.getName() + ")" + ", ")
+		  .append("Nonterminal.withName(\"" + nonterminal.getName() + "\")" + ", ")
 		  .append(altsCount + ", ")
 		  .append(nullable + ", ")
-		  .append(predictionTest.getConstructorCode())
-		  ;
+		  .append(predictionTest.getConstructorCode());
 		return sb.toString();
 	}
 	
 	@Override
 	public void code(StringBuilder sb) {
-		sb.append("// " + nonterminal.getName()).append(NL)
+		sb.append("HeadGrammarSlot slot" + id + " = ").append(getConstructorCode() + ");").append(NL)
+		  .append("// " + nonterminal.getName()).append(NL)
 		  .append("case " + id + ":").append(NL)
 		  .append(TAB).append("Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));").append(NL)
 		  .append(TAB).append("if (set == null) return null;").append(NL)
