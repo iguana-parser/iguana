@@ -92,7 +92,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void code(StringBuilder sb) {
-		sb.append("TokenGrammarSlot slot" + id + " = ").append(getConstructorCode() + ");").append(NL)
+		sb.append("TokenGrammarSlot slot" + id + " = ").append(getConstructorCode() + ";").append(NL)
 		  .append("// " + label).append(NL)
 		  .append("case " + id + ":").append(NL)
 		  .append(TAB).append("int length = lexer.tokenLengthAt(ci, " + tokenID + ");").append(NL)

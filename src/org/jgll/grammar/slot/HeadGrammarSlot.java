@@ -155,7 +155,8 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	@Override
 	public void code(StringBuilder sb) {
-		sb.append("HeadGrammarSlot slot" + id + " = ").append(getConstructorCode() + ";").append(NL)
+		sb.append("@SuppressWarnings(\"unchecked\")").append(NL)
+		  .append("HeadGrammarSlot slot" + id + " = ").append(getConstructorCode() + ";").append(NL)
 		  .append("// " + nonterminal.getName()).append(NL)
 		  .append("case " + id + ":").append(NL)
 		  .append(TAB).append("Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));").append(NL)
