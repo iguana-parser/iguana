@@ -5,6 +5,9 @@ import java.util.Set;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
+import com.google.common.base.Joiner;
+import com.google.common.primitives.Booleans;
+
 public class ArrayFollowTest implements FollowTest {
 
 	private static final long serialVersionUID = 1L;
@@ -14,6 +17,12 @@ public class ArrayFollowTest implements FollowTest {
 	private final int min;
 	
 	private final int max;
+	
+	public ArrayFollowTest(boolean[] followSetMap, int min, int max) {
+		this.followSetMap = followSetMap;
+		this.min = min;
+		this.max = max;
+	}
 
 	public ArrayFollowTest(Set<RegularExpression> followSet, int min, int max) {
 		this.min = min;
@@ -35,6 +44,11 @@ public class ArrayFollowTest implements FollowTest {
 			return false;
 		}
 		return followSetMap[v - min];
+	}
+
+	@Override
+	public String getConstructorCode() {
+		return "new ArrayFollowTest(new boolean[]{" + Joiner.on(",").join(Booleans.asList(followSetMap)) + "})";
 	}
 
 }

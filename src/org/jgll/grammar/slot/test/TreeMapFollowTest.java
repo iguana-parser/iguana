@@ -12,12 +12,13 @@ import java.util.Map.Entry;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
+import com.google.common.base.Joiner;
+
 public class TreeMapFollowTest implements FollowTest {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private final NavigableMap<Integer, Boolean> followMap;
-	
 	
 	public TreeMapFollowTest(Set<? extends RegularExpression> followSet) {
 		followMap = new TreeMap<>();
@@ -73,6 +74,13 @@ public class TreeMapFollowTest implements FollowTest {
 	public boolean test(int v) {
 		Entry<Integer, Boolean> e = followMap.floorEntry(v);
 		return e != null && e.getValue();
+	}
+	
+	@Override
+	public String getConstructorCode() {
+//		Joiner.MapJoiner
+//		Joiner.on(",").join(followMap.entrySet().iterator());
+		return null;
 	}
 
 }

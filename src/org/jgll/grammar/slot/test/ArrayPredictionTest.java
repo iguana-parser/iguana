@@ -7,6 +7,9 @@ import java.util.Set;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
+import com.google.common.base.Joiner;
+
+
 public class ArrayPredictionTest implements PredictionTest {
 
 	private static final long serialVersionUID = 1L;
@@ -66,11 +69,23 @@ public class ArrayPredictionTest implements PredictionTest {
 	public Set<Integer> get(int v) {
 		return predictionMap[v - min];
 	}
+	
+	private String convert(Set<Integer>[] array) {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("new Set[] {");
+		for (Set<Integer> set : array) {
+			sb.append("Sets.newHashSet(" + Joiner.on(", ").join(set) + "), ");
+		}
+		sb.delete(sb.length() - 2, sb.length());
+		sb.append("}");
+		
+		return sb.toString();
+	}
 
 	@Override
 	public String getConstructorCode() {
-		// TODO Auto-generated method stub
-		return null;
+		return "new ArrayPredictionTest(" + convert(predictionMap) + "))";
 	}
 
 }

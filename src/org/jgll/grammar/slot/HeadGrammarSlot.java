@@ -162,6 +162,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 		  .append("Nonterminal.withName(" + nonterminal.getName() + ")" + ", ")
 		  .append(altsCount + ", ")
 		  .append(nullable + ", ")
+		  .append(predictionTest.getConstructorCode())
 		  ;
 		return sb.toString();
 	}

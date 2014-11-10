@@ -9,4 +9,9 @@ public class TrueFollowSet implements FollowTest {
 		return true;
 	}
 
+	@Override
+	public String getConstructorCode() {
+		return null;
+	}
+
 }
