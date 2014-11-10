@@ -7,7 +7,7 @@ import java.util.Set;
 import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalNode;
@@ -32,7 +32,7 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
 		List<SPPFNode> children = new ArrayList<>();

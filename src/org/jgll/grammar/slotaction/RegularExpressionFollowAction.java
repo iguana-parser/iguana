@@ -2,7 +2,7 @@ package org.jgll.grammar.slotaction;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.automaton.RunnableAutomaton;
@@ -18,7 +18,7 @@ public class RegularExpressionFollowAction implements SlotAction<Boolean> {
 	}
 
 	@Override
-	public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
+	public Boolean execute(GLLParser parser, Lexer lexer, GSSNode gssNode, int inputIndex) {
 		return r.match(lexer.getInput(), inputIndex) == -1;
 	}
 

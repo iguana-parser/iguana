@@ -7,7 +7,7 @@ import java.util.Set;
 import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
@@ -80,7 +80,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
 		Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));

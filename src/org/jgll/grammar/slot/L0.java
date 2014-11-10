@@ -1,12 +1,9 @@
 package org.jgll.grammar.slot;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import org.jgll.grammar.slot.test.TrueFollowSet;
 import org.jgll.grammar.slot.test.TruePredictionSet;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 
 /**
@@ -31,23 +28,8 @@ public class L0 extends HeadGrammarSlot {
 		super(-1, Nonterminal.withName("L0"), 0, false, new TruePredictionSet(0), new TrueFollowSet());
 	}
 	
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer, HeadGrammarSlot start) {
-		
-		if(!start.test(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
-			return null;
-		}
-		
-		GrammarSlot slot = start.parse(parser, lexer);
-		
-		while(slot != null) {
-			slot = slot.parse(parser, lexer);
-		}
-		
-		return parse(parser, lexer);
-	}
-	
 	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		while(parser.hasNextDescriptor()) {
 			GrammarSlot slot = parser.nextDescriptor().getGrammarSlot();
 			slot = slot.parse(parser, lexer);
@@ -56,28 +38,6 @@ public class L0 extends HeadGrammarSlot {
 			}
 		}
 		return null;
-	}
-	
-	public void codeParser(Writer writer) throws IOException {
-		writer.append("case L0:\n");
-		writer.append("if (lookupTable.hasNextDescriptor()) {\n");
-		writer.append("Descriptor descriptor = lookupTable.nextDescriptor();\n");
-		writer.append("log.debug(\"Processing {}\", descriptor);");
-		writer.append("cu = descriptor.getGSSNode();\n");
-		writer.append("ci = descriptor.getInputIndex();\n");
-		writer.append("cn = descriptor.getSPPFNode();\n");
-		writer.append("label = descriptor.getLabel().getId();\n");
-		writer.append("break;\n");
-		writer.append("} else {\n");
-		writer.append("end = System.nanoTime();\n");
-		writer.append("log(start, end);\n");
-		writer.append("NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);\n");
-		writer.append("if (root == null) {");
-		writer.append("log.info(\"Parsing failed.\");\n");
-		writer.append("throw new ParseError(errorSlot, errorIndex);\n");
-		writer.append("}\n");
-		writer.append("return root;\n");
-		writer.append("}\n");
 	}
 	
 	@Override

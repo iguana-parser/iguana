@@ -40,18 +40,18 @@ public class Test14 {
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).build();
 	}
 
-	@Test
-	public void test() throws Exception {
-		System.out.println(BenchmarkUtil.header());
-		for (int i = 3; i < 10000; i+=2) {
-			Input input = Input.fromString(BenchmarkUtil.getChars('x', i));
-			GLLParser parser = ParserFactory.newParser(grammar, input);
-			GrammarGraph grammarGraph = grammar.toGrammarGraph();
-			ParseResult result = parser.parse(input, grammarGraph, "A");
-			System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
-			assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
-			grammarGraph.reset();
-		}
-	}
+//	@Test
+//	public void test() throws Exception {
+//		System.out.println(BenchmarkUtil.header());
+//		for (int i = 3; i < 10000; i+=2) {
+//			Input input = Input.fromString(BenchmarkUtil.getChars('x', i));
+//			GLLParser parser = ParserFactory.newParser(grammar, input);
+//			GrammarGraph grammarGraph = grammar.toGrammarGraph();
+//			ParseResult result = parser.parse(input, grammarGraph, "A");
+//			System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
+//			assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
+//			grammarGraph.reset();
+//		}
+//	}
 	
 }

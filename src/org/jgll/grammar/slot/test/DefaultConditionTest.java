@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.jgll.grammar.slotaction.SlotAction;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.logging.LoggerWrapper;
@@ -21,7 +21,7 @@ public class DefaultConditionTest implements ConditionTest, Serializable {
 		this.conditions = conditions;
 	}
 
-	public boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
+	public boolean execute(GLLParser parser, Lexer lexer, GSSNode gssNode, int inputIndex) {
 		for(SlotAction<Boolean> condition : conditions) {
 			if(condition.execute(parser, lexer, gssNode, inputIndex)) {
 				log.trace("Condition %s executed.", condition);

@@ -4,7 +4,7 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.SPPFNode;
@@ -31,7 +31,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 
 		int ci = parser.getCurrentInputIndex();
 		
@@ -79,7 +79,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		sb.append("new TokenGrammarSlot(")
 		  .append(id + ", ")
 		  .append("\"" +  label + "\"" + ", ")
-		  .append("null, ")
+		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
 		  .append(regularExpression.getConstructorCode() + ", ")
 		  .append(tokenID + ", ")
 		  .append(preConditions.getConstructorCode() + ", ")
@@ -101,7 +101,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		  .append(TAB).append(TAB).append("break;").append(NL)
 		  .append(TAB).append("}").append(NL)
 		  .append(TAB).append("TokenSymbolNode cr = getTokenNode(" + tokenID + ", ci, length);").append(NL)
-		  .append(TAB).append("cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);")
+		  .append(TAB).append("cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);").append(NL)
 		  .append(NL);
 	}
 

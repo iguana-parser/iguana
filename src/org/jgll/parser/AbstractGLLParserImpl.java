@@ -3,8 +3,10 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.lexer.GLLLexer;
-import org.jgll.lexer.GLLLexerImpl;
+import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.L0;
+import org.jgll.lexer.Lexer;
+import org.jgll.lexer.LexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
@@ -15,19 +17,17 @@ import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.HashTableFactory;
+import org.jgll.util.ParseStatistics;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
- * GLLParser is the abstract base class for all the generated GLL parsers.
- * This class provides common methods for SPPF and GSS construction.
  * 
- * Based on the paper "GLL: parse tree generation."
  * 
- * @author Maarten Manders
  * @author Ali Afroozeh
  * 
  */
@@ -35,19 +35,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 	protected static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParserImpl.class);
 	
-	static {		
-		HashTableFactory.init(HashTableFactory.OPEN_ADDRESSING);
-	}
-	
 	protected GSSLookup gssLookup;
 	
 	protected SPPFLookup sppfLookup;
 	
 	protected DescriptorLookup descriptorLookup;
 
-	/**
-	 * u0 is the bottom of the GSS.
-	 */
 	protected GSSNode cu;
 	
 	protected SPPFNode cn = DummyNode.getInstance();
@@ -56,7 +49,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected Input input;
 	
-	protected GLLLexer lexer;
+	protected Lexer lexer;
 	
 	/**
 	 * 
@@ -98,11 +91,87 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName) {
-		return parse(new GLLLexerImpl(input, grammar), grammar, startSymbolName);
+		return parse(new LexerImpl(input, grammar), grammar, startSymbolName);
 	}
 	
 	@Override
-	public abstract ParseResult parse(GLLLexer lexer, GrammarGraph grammar, String startSymbolName);
+	public final ParseResult parse(Lexer lexer, GrammarGraph grammar, String startSymbolName) {
+		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
+		
+		if(startSymbol == null) {
+			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
+		}
+		
+		this.grammar = grammar;
+		
+		this.lexer = lexer;
+		
+		this.input = lexer.getInput();
+		
+		initLookups(grammar, input);
+
+		initParserState(startSymbol);
+	
+		log.info("Parsing %s:", input.getURI());
+
+		long start = System.nanoTime();
+		long startUserTime = BenchmarkUtil.getUserTime();
+		long startSystemTime = BenchmarkUtil.getSystemTime();
+		
+		NonterminalNode root;
+		
+		parse(startSymbol);
+		
+		root = sppfLookup.getStartSymbol(startSymbol, input.length());
+
+		ParseResult parseResult;
+		
+		long end = System.nanoTime();
+		long endUserTime = BenchmarkUtil.getUserTime();
+		long endSystemTime = BenchmarkUtil.getSystemTime();
+		
+		if (root == null) {
+			parseResult = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
+			log.info("Parse error:\n %s", parseResult);
+		} else {
+			ParseStatistics parseStatistics = new ParseStatistics(input, end - start,
+					  endUserTime - startUserTime,
+					  endSystemTime - startSystemTime, 
+					  BenchmarkUtil.getMemoryUsed(),
+					  descriptorsCount, 
+					  gssLookup.getGSSNodesCount(), 
+					  gssLookup.getGSSEdgesCount(), 
+					  sppfLookup.getNonterminalNodesCount(),
+					  sppfLookup.getTokenNodesCount(),
+					  sppfLookup.getIntermediateNodesCount(), 
+					  sppfLookup.getPackedNodesCount(), 
+					  sppfLookup.getAmbiguousNodesCount());
+
+			parseResult = new ParseSuccess(root, parseStatistics);
+			log.info("Parsing finished successfully.");			
+			log.info(parseStatistics.toString());
+		}
+		
+		return parseResult;
+	}
+	
+	protected void parse(HeadGrammarSlot startSymbol) {
+
+		if(!startSymbol.test(lexer.getInput().charAt(ci))) {
+			recordParseError(startSymbol);
+			return;
+		}
+		
+		GrammarSlot slot = startSymbol.parse(this, lexer);
+		
+		while(slot != null) {
+			slot = slot.parse(this, lexer);
+		}
+		
+		L0.getInstance().parse(this, lexer);
+	}
+	
+	protected abstract void initParserState(HeadGrammarSlot startSymbol);
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the

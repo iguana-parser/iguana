@@ -5,7 +5,7 @@ import java.util.BitSet;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.util.Input;
 
-public class GLLLexerImpl implements GLLLexer {
+public class LexerImpl implements Lexer {
 	
 	private static final int UNMATCHED = -1;
 
@@ -18,7 +18,7 @@ public class GLLLexerImpl implements GLLLexer {
 
 	private GrammarGraph grammar;
 
-	public GLLLexerImpl(Input input, GrammarGraph grammar) {
+	public LexerImpl(Input input, GrammarGraph grammar) {
 		this.input = input;
 		this.grammar = grammar;
 		

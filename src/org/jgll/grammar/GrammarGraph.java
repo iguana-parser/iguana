@@ -134,7 +134,7 @@ public class GrammarGraph implements Serializable {
 				  .append("HeadGrammarSlot slot" + head.getId() + " = ").append(head.getConstructorCode() + ";").append(NL);
 				BodyGrammarSlot current = slot;
 				while (current != null) {
-					sb.append("TokenGrammarSlot slot" + current.getId() + " = ").append(current.getConstructorCode() + ";").append(NL);
+					sb.append("BodyGrammarSlot slot" + current.getId() + " = ").append(current.getConstructorCode() + ";").append(NL);
 					current = current.next();
 				}
 			}
@@ -146,6 +146,27 @@ public class GrammarGraph implements Serializable {
 		sb.append(TAB).append("while (true) {").append(NL);
 		sb.append(TAB).append(TAB).append("switch (cs) {").append(NL);
 
+		sb.append("case L0:").append(NL);
+		sb.append(TAB).append("if (hasNextDescriptor()) {").append(NL);
+		sb.append(TAB).append(TAB).append("Descriptor descriptor = nextDescriptor();").append(NL);
+		sb.append(TAB).append(TAB).append("log.trace(\"Processing %s\", descriptor);").append(NL);
+		sb.append(TAB).append(TAB).append("cu = descriptor.getGSSNode();").append(NL);
+		sb.append(TAB).append(TAB).append("ci = descriptor.getInputIndex();").append(NL);
+		sb.append(TAB).append(TAB).append("cn = descriptor.getSPPFNode();").append(NL);
+		sb.append(TAB).append(TAB).append("cs = descriptor.getLabel().getId();").append(NL);
+		sb.append(TAB).append(TAB).append("break").append(NL);
+		sb.append(TAB).append("} else {").append(NL);
+		sb.append("end = System.nanoTime();\n");
+		sb.append("log(start, end);\n");
+		sb.append("NonterminalSymbolNode root = lookupTable.getStartSymbol(startSymbol);\n");
+		sb.append("if (root == null) {");
+		sb.append("log.info(\"Parsing failed.\");\n");
+		sb.append("throw new ParseError(errorSlot, errorIndex);\n");
+		sb.append("}\n");
+		sb.append("return root;\n");
+		sb.append("}\n");
+
+		
 		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			head.code(sb);

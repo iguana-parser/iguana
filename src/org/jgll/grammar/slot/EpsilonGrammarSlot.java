@@ -2,7 +2,7 @@ package org.jgll.grammar.slot;
 
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalNode;
@@ -22,7 +22,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
 		

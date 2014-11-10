@@ -5,7 +5,7 @@ import java.util.BitSet;
 import org.jgll.util.Input;
 
 
-public interface GLLLexer {
+public interface Lexer {
 
 	public int tokenAt(int inputIndex, BitSet set);
 	

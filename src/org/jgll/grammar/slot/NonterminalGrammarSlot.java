@@ -7,7 +7,7 @@ import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.SPPFNode;
@@ -44,7 +44,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
 		GSSNode cu = parser.getCurrentGSSNode();

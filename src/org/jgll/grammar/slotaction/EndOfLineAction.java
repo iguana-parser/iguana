@@ -2,7 +2,7 @@ package org.jgll.grammar.slotaction;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.PositionalCondition;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 
@@ -15,7 +15,7 @@ public class EndOfLineAction implements SlotAction<Boolean> {
 	}
 	
 	@Override
-	public Boolean execute(GLLParser parser, GLLLexer lexer, GSSNode gssNode, int inputIndex) {
+	public Boolean execute(GLLParser parser, Lexer lexer, GSSNode gssNode, int inputIndex) {
 		return !lexer.getInput().isEndOfLine(inputIndex);
 	}
 

@@ -2,7 +2,7 @@ package org.jgll.grammar.slot;
 
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
-import org.jgll.lexer.GLLLexer;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.SPPFNode;
 
@@ -24,7 +24,7 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, GLLLexer lexer) {
+	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		
 		if(!nonterminal.test(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
 			parser.recordParseError(this);
