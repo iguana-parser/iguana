@@ -175,8 +175,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		GSSNode gssNode = hasGSSNode(slot, head);
 		if (gssNode == null) {
+			log.trace("GSSNode created: %s",  cu);
 			gssNode = createGSSNode(slot, head);
 			createGSSEdge(slot, cu, cn, gssNode);
+			cu = gssNode;
 			return head;
 		}
 		

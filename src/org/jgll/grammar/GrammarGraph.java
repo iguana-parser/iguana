@@ -208,6 +208,7 @@ public class GrammarGraph implements Serializable {
 		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			head.code(writer);
+			writer.println();
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
 				BodyGrammarSlot current = slot;
 				while (current != null) {

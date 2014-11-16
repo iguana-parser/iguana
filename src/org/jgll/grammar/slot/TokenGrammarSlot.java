@@ -102,7 +102,6 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		writer.println("  }");
 		writer.println("  cr = getTokenNode(" + tokenID + ", ci, length);");
 		writer.println("  cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);");
-		writer.println();
 	}
 
 }
