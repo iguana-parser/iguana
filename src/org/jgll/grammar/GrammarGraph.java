@@ -121,7 +121,9 @@ public class GrammarGraph implements Serializable {
 		writer.println();
 		
 		// Imports
+		writer.println("import java.util.Map;");
 		writer.println("import java.util.Set;");
+		writer.println("import java.util.HashMap;");
 		writer.println("import org.jgll.grammar.slot.*;");
 		writer.println("import org.jgll.grammar.slot.nodecreator.*;");
 		writer.println("import org.jgll.grammar.slot.test.*;");
@@ -151,9 +153,11 @@ public class GrammarGraph implements Serializable {
 		writer.println("private Set<Integer> set; // First/follow set");
 		writer.println();
 		
+		writer.println("private Map<String, HeadGrammarSlot> startSymbols = new HashMap<>();");
+		
 		// Generate Head grammar slots. They should be declared first to avoid forward reference declaration.
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			writer.println("HeadGrammarSlot slot" + head.getId() + " = " + head.getConstructorCode() + ";");
+			writer.println("private HeadGrammarSlot slot" + head.getId() + " = " + head.getConstructorCode() + ";");
 		}
 		
 		// Generate body grammar slots
@@ -161,7 +165,7 @@ public class GrammarGraph implements Serializable {
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
 				BodyGrammarSlot current = slot;
 				while (current != null) {
-					writer.println("BodyGrammarSlot slot" + current.getId() + " = " + current.getConstructorCode() + ";");
+					writer.println("private BodyGrammarSlot slot" + current.getId() + " = " + current.getConstructorCode() + ";");
 					current = current.next();
 				}
 			}
@@ -180,10 +184,23 @@ public class GrammarGraph implements Serializable {
 				writer.println("  slot" + head.getId() + ".setFirstGrammarSlotForAlternate(slot" + slot.getId() + ", " + i++ + ");");
 			}
 		}
+		
+		// Add start symbols
+		for (HeadGrammarSlot head : headGrammarSlots) {
+			writer.println("  startSymbols.put(\"" + head.getNonterminal().getName() + "\", slot" + head.getId() + ");");
+		}
+		
 		writer.println("}");
 		writer.println();
 
-		
+		// Overriding the getStartSymbol method
+		writer.println("@Override");
+		writer.println("protected HeadGrammarSlot getStartSymbol(String name) {");
+		writer.println("    HeadGrammarSlot startSymbol = startSymbols.get(name);");
+		writer.println("    cs = startSymbol.getId();");
+		writer.println("    return startSymbol;");
+		writer.println("}");
+
 		writer.println();
 		
 		writer.println("@Override");

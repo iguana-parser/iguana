@@ -92,18 +92,16 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public final ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName) {
+
+		this.grammar = grammar;
+		this.input = input;
+		this.lexer = new LexerImpl(input, grammar);
 		
-		lexer = new LexerImpl(input, grammar);
-		
-		HeadGrammarSlot startSymbol = grammar.getHeadGrammarSlot(startSymbolName);
+		HeadGrammarSlot startSymbol = getStartSymbol(startSymbolName);
 		
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
 		}
-		
-		this.grammar = grammar;
-		
-		this.input = lexer.getInput();
 		
 		initLookups(grammar, input);
 
@@ -150,6 +148,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 		
 		return parseResult;
+	}
+	
+	protected HeadGrammarSlot getStartSymbol(String name) {
+		return grammar.getHeadGrammarSlot(name);
 	}
 	
 	protected void parse(HeadGrammarSlot startSymbol) {
