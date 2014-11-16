@@ -100,6 +100,16 @@ public class Test6 {
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2()));
 	}
 	
+	@Test
+	public void testGenerated2() {
+		StringWriter writer = new StringWriter();
+		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		GLLParser parser = CompilationUtil.getParser(writer.toString());
+		ParseResult result = parser.parse(Input.fromString("aaaac"), grammar.toGrammarGraph(), "A");
+    	assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2()));
+	}
+	
 	private SPPFNode getSPPF1() {
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 3).init();
