@@ -72,13 +72,15 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		writer.println("  if (!slot" + nonterminal.getId() + ".test(lexer.getInput().charAt(ci))) {");
 		writer.println("    recordParseError(slot" + id + ");");
 		writer.println("    cs = L0;");
-		writer.println("    break;");
-		writer.println("  }");
-		writer.println("  if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) {");
+		writer.println("  } else if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) {");
 		writer.println("    cs = L0;");
-		writer.println("    break;");
+		writer.println("  } else {");
+		writer.println("    GrammarSlot returnSlot = create(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
+		writer.println("    if (returnSlot != null) {");
+		writer.println("      cs = returnSlot.getId();");
+		writer.println("    }");
+		writer.println("    cs = L0;");
 		writer.println("  }");
-		writer.println("  cs = create(slot" + next.getId() + ", slot" + nonterminal.getId() + ").getId();");
 		writer.println("  break;");
 	}
 	
