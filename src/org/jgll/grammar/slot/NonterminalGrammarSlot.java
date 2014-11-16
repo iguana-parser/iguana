@@ -78,8 +78,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		writer.println("    GrammarSlot returnSlot = create(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
 		writer.println("    if (returnSlot != null) {");
 		writer.println("      cs = returnSlot.getId();");
+		writer.println("    } else {");
+		writer.println("      cs = L0;");
 		writer.println("    }");
-		writer.println("    cs = L0;");
 		writer.println("  }");
 		writer.println("  break;");
 	}
