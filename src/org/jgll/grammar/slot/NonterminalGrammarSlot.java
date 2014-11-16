@@ -9,9 +9,6 @@ import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.util.logging.LoggerWrapper;
 
 /**
  * A grammar slot immediately before a nonterminal.
@@ -20,8 +17,6 @@ import org.jgll.util.logging.LoggerWrapper;
  *
  */
 public class NonterminalGrammarSlot extends BodyGrammarSlot {
-	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(NonterminalGrammarSlot.class);
 	
 	protected HeadGrammarSlot nonterminal;
 	
@@ -47,8 +42,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		
 		int ci = parser.getCurrentInputIndex();
-		GSSNode cu = parser.getCurrentGSSNode();
-		SPPFNode cn = parser.getCurrentSPPFNode();
 		
 		if (!nonterminal.test(lexer.getInput().charAt(ci))) {
 			parser.recordParseError(this);
@@ -58,16 +51,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		if (preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) {
 			return null;
 		}
-		
-		GSSNode gssNode = parser.hasGSSNode(next, nonterminal);
-		if (gssNode == null) {
-			gssNode = parser.createGSSNode(next, nonterminal);
-			parser.createGSSEdge(next, cu, cn, gssNode);
-			return nonterminal;
-		}
-		
-		log.trace("GSSNode found: %s",  gssNode);
-		return parser.createGSSEdge(next, cu, cn, gssNode);
+
+		return parser.create(next, nonterminal);
 	}
 	
 	@Override
@@ -89,33 +74,24 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		writer.println("    cs = L0;");
 		writer.println("    break;");
 		writer.println("  }");
-		writer.println("if (preConditions.execute(this, lexer, cu, ci)) {");
+		writer.println("if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) {");
 		writer.println("    cs = L0;");
 		writer.println("    break;");
 		writer.println("}");
-		writer.println("GSSNode gssNode = hasGSSNode(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
-		writer.println("if (gssNode == null) {");
-		writer.println("  gssNode = parser.createGSSNode(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
-		writer.println("  parser.createGSSEdge(next, cu, cn, gssNode);");
-		writer.println("  cs = slot" +  nonterminal.getId() + ";");
-		writer.println("  break;");
-		writer.println("}");
-		writer.println("log.trace(\"GSSNode found: %s\",  gssNode);");
-		writer.println("cs = parser.createGSSEdge(slot" + next.getId() + ", cu, cn, gssNode).getId();");
+		writer.println("cs = create(slot" + next.getId() + ", slot" + nonterminal.getId() + ").getId();");
 		writer.println("break;");
 	}
-
+	
 	@Override
 	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new NonterminalGrammarSlot(")
 		  .append(id + ", ")
 		  .append("\"" +  label + "\"" + ", ")
-		  .append("null, ")
+		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
 		  .append("slot" + nonterminal.getId() + ", ")
 		  .append(preConditions.getConstructorCode() + ", ")
 		  .append(popConditions.getConstructorCode() + ", ")
-		  .append(nodeCreator.getConstructorCode() + ", ")
 		  .append(nodeCreatorFromPop.getConstructorCode() + ")");
 		return sb.toString();
 	}

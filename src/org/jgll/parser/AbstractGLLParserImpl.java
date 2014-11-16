@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
@@ -169,6 +170,27 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected abstract void initParserState(HeadGrammarSlot startSymbol);
 	
+	@Override
+	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head) {
+		
+		GSSNode gssNode = hasGSSNode(slot, head);
+		if (gssNode == null) {
+			gssNode = createGSSNode(slot, head);
+			createGSSEdge(slot, cu, cn, gssNode);
+			return head;
+		}
+		
+		log.trace("GSSNode found: %s",  gssNode);
+		return createGSSEdge(slot, cu, cn, gssNode);
+	}
+	
+	public abstract GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source);
+	
+	public abstract GSSNode createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head);
+	
+	public abstract GSSNode hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
+
+	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
 	 * inputIndex of the new parse error is greater than the previous one. In
@@ -192,16 +214,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		descriptorLookup = descriptorLookupFactory.createDescriptorLookup(grammar, input);
 	}
 
-	/**
-	 * Corresponds to the add method from the paper:
-	 * 
-	 * add(L, u, i, w) { 
-	 * 	if(L, u, w) in ui { 
-	 * 		add (L, u, w) to ui
-	 * 		 add (L, u, i, w) to R 
-	 *   } 
-	 * }
-	 */
 	@Override
 	public final void scheduleDescriptor(Descriptor descriptor) {
 		descriptorLookup.scheduleDescriptor(descriptor);
@@ -214,22 +226,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return descriptorLookup.addDescriptor(descriptor);
 	}	
 	
-	/**
-	 * Pops the current element from GSS. When the top element, cu, is popped, there
-	 * may be possibly n children. For each child u, reachable via an edge labelled
-	 * by an SPPF node w, a new descriptor is added to the set of descriptors
-	 * to be processed.
-	 * 
-	 * pop(u, i, z) { 
-	 * 	if (u != u0) { 
-	 * 		let (L, k) be the label of u 
-	 * 		add (u, z) to P 
-	 * 		for each edge (u, w, v) { 
-	 * 			let y be the node returned by getNodeP(L, w, u)
-	 * 			add(L, v, i , y)) 
-	 *      } 
-	 * }
-	 */
 	@Override
 	public final GrammarSlot pop() {
 		return pop(cu, ci, (NonPackedNode) cn);

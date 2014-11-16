@@ -24,15 +24,7 @@ public interface GLLParser {
 	
 	public GrammarSlot pop();
 	
-	/**
-	 * Creates a new GSSNode with the given grammar slot.
-	 * 
-	 */
-	public GSSNode createGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
-	
-	public GSSNode hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
-	
-	public GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source);
+	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
 	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
 	

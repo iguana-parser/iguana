@@ -160,7 +160,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 	public void code(PrintWriter writer) {
 		writer.println("// " + nonterminal.getName());
 		writer.println("case " + id + ":");
-		writer.println("  Set<Integer> set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));");
+		writer.println("  set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));");
 		writer.println("  if (set == null) { cs = L0; break; }");
 		writer.println("  if (set.size() == 1) {");
 		writer.println("    cs = slot" + id + ".getFirstSlots()[set.iterator().next()].getId();");
@@ -172,7 +172,6 @@ public class HeadGrammarSlot implements GrammarSlot {
 		writer.println("    scheduleDescriptor(new Descriptor(slot" + id + ".getFirstSlots()[alternateIndex], cu, ci, DummyNode.getInstance()));");
 		writer.println("  }");
 		writer.println("  break;");
-		writer.println();
 	}
 
 }

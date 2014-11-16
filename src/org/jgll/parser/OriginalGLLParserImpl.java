@@ -91,35 +91,6 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		return null;
 	}
 	
-
-	/**
-	 * 
-	 * create(L, u, w) {
-     *	 let w be the value of cn
-	 *	 if there is not already a GSS node labelled (L,A ::= alpha . beta, ci) create one
-	 * 	 let v be the GSS node labelled (L,A ::= alpha . beta, ci)
-	 *   if there is not an edge from v to cu labelled w {
-	 * 		create an edge from v to cu labelled w
-	 * 		for all ((v, z) in P) {
-	 * 			let x be the node returned by getNodeP(A ::= alpha . beta, w, z)
-	 * 			add(L, cu, h, x)) where h is the right extent of z
-	 * 		}
-	 * 	 }
-	 * 	 return v
-	 * }
-	 * 
-	 * @param returnSlot the grammar label
-	 * 
-	 * @param nonterminalIndex the index of the nonterminal appearing as the head of the rule
-	 *                         where this position refers to. 
-	 * 
-	 * @param alternateIndex the index of the alternate of the rule where this position refers to.
-	 * 
-	 * @param position the position in the body of the rule where this position refers to
-	 *
-	 * @return 
-     *
-	 */
 	@Override
 	public final GSSNode createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head) {
 		if (! returnSlot.isInitialized()) returnSlot.init(input);

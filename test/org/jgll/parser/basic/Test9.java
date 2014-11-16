@@ -17,6 +17,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,7 +53,7 @@ public class Test9 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("ab");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertEquals(1, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());

@@ -136,9 +136,39 @@ public class GrammarGraph implements Serializable {
 		writer.println();
 
 		// Class definition
-		writer.println("public class Test extends NewGLLParserImpl {");
+		writer.println("@SuppressWarnings(\"unchecked\")");
+		writer.println("public class " + className + " extends NewGLLParserImpl {");
 		writer.println();
 		
+		writer.println("private static final LoggerWrapper log = LoggerWrapper.getLogger(" + className + ".class);");
+		writer.println("private static final int L0 = -1;");
+		writer.println();
+		
+		// GLL fields
+		writer.println("private int cs; // Current grammar slot");
+		writer.println("private int length; // The length of matched terminal");
+		writer.println("private SPPFNode cr; // The matched SPPF node");
+		writer.println("private Set<Integer> set; // First/follow set");
+		writer.println();
+		
+		// Generate Head grammar slots. They should be declared first to avoid forward reference declaration.
+		for (HeadGrammarSlot head : headGrammarSlots) {
+			writer.println("HeadGrammarSlot slot" + head.getId() + " = " + head.getConstructorCode() + ";");
+		}
+		
+		// Generate body grammar slots
+		for (HeadGrammarSlot head : headGrammarSlots) {
+			for (BodyGrammarSlot slot : head.getFirstSlots()) {
+				BodyGrammarSlot current = slot;
+				while (current != null) {
+					writer.println("BodyGrammarSlot slot" + current.getId() + " = " + current.getConstructorCode() + ";");
+					current = current.next();
+				}
+			}
+		}
+		
+		writer.println();
+
 		// Constructor
 		writer.println("public " + className + "() {");
 		writer.println("  super(new DistributedGSSLookupFactory(), new NewSPPFLookupFactory(), new DefaultDescriptorLookupFactory());");
@@ -152,29 +182,7 @@ public class GrammarGraph implements Serializable {
 		}
 		writer.println("}");
 		writer.println();
-		
-		writer.println("private static final LoggerWrapper log = LoggerWrapper.getLogger(" + className + ".class);");
-		writer.println("private static final int L0 = -1;");
-		writer.println();
-		
-		// GLL fields
-		writer.println("private int cs; // Current grammar slot");
-		writer.println("private int length; // The length of matched terminal");
-		writer.println("private SPPFNode cr; // The matched SPPF node");
-		writer.println();
-		
-		// Generate field declarations
-		for (HeadGrammarSlot head : headGrammarSlots) {
-			for (BodyGrammarSlot slot : head.getFirstSlots()) {
-				writer.println("@SuppressWarnings(\"unchecked\")");
-				writer.println("HeadGrammarSlot slot" + head.getId() + " = " + head.getConstructorCode() + ";");
-				BodyGrammarSlot current = slot;
-				while (current != null) {
-					writer.println("BodyGrammarSlot slot" + current.getId() + " = " + current.getConstructorCode() + ";");
-					current = current.next();
-				}
-			}
-		}
+
 		
 		writer.println();
 		
@@ -204,6 +212,7 @@ public class GrammarGraph implements Serializable {
 				BodyGrammarSlot current = slot;
 				while (current != null) {
 					current.code(writer);
+					writer.println();
 					current = current.next();
 				}
 			}
