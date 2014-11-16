@@ -26,8 +26,6 @@ import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.truth.codegen.CompilingClassLoader;
-
 /**
  * 
  * A ::= 'a'
@@ -54,23 +52,13 @@ public class Test2 {
 	}
 	
 	@Test
-	public void test() {
+	public void testGenerated() {
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate("test", "Test", new PrintWriter(writer));
-		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
-		
-		Input input = Input.fromString("a");
-		try {
-			GLLParser parser = (GLLParser) clazz.newInstance();
-			Method parseMethod = clazz.getMethod("parse", new Class[] {Input.class, GrammarGraph.class, String.class});
-			ParseResult result = (ParseResult) parseMethod.invoke(parser, input, grammar.toGrammarGraph(), "A");
-			assertTrue(result.isParseSuccess());
-			assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
-		} catch (IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException
-				| SecurityException | InstantiationException e) {
-			e.printStackTrace();
-		}
+		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		GLLParser parser = CompilationUtil.getParser(writer.toString());
+		ParseResult result = parser.parse(Input.fromString("a"), grammar.toGrammarGraph(), "A");
+    	assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
 	}
 	
 	@Test

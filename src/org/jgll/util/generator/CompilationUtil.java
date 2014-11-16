@@ -1,12 +1,27 @@
 package org.jgll.util.generator;
 
+import org.jgll.parser.GLLParser;
 import org.jgll.util.BenchmarkUtil;
 
 import com.google.common.truth.codegen.CompilingClassLoader;
 import com.google.common.truth.codegen.CompilingClassLoader.CompilerException;
 
 public class CompilationUtil {
-
+	
+	public static GLLParser getParser(String code) {
+		Class<?> clazz = CompilationUtil.getClass("test", "Test", code);
+		
+		GLLParser parser = null;
+		try {
+			parser = (GLLParser) clazz.newInstance();
+		} catch (IllegalAccessException | IllegalArgumentException
+				| SecurityException | InstantiationException e) {
+			e.printStackTrace();
+		}
+		
+		return parser;
+	}
+	
 	public static Class<?> getClass(String packageName, String className, String code) {
 		
 		Class<?> clazz = null;

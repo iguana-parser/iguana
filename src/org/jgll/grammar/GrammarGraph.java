@@ -111,6 +111,10 @@ public class GrammarGraph implements Serializable {
 		log.debug("Longest terminal Chain: %d", longestTerminalChain);
 	}
 	
+	public void generate(PrintWriter writer) {
+		generate("test", "Test", writer);
+	}
+	
 	public void generate(String packageName, String className, PrintWriter writer) {
 		
 		writer.println("package " + packageName + ";");
