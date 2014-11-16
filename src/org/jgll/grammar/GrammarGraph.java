@@ -122,25 +122,14 @@ public class GrammarGraph implements Serializable {
 		
 		// Imports
 		writer.println("import java.util.Set;");
-		writer.println("import org.jgll.grammar.slot.BodyGrammarSlot;");
-		writer.println("import org.jgll.grammar.slot.GrammarSlot;");
-		writer.println("import org.jgll.grammar.slot.HeadGrammarSlot;");
-		writer.println("import org.jgll.grammar.slot.LastGrammarSlot;");
-		writer.println("import org.jgll.grammar.slot.TokenGrammarSlot;");
-		writer.println("import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;");
-		writer.println("import org.jgll.grammar.slot.nodecreator.NonterminalWithOneChildNodeCreator;");
-		writer.println("import org.jgll.grammar.slot.test.ArrayFollowTest;");
-		writer.println("import org.jgll.grammar.slot.test.ArrayPredictionTest;");
-		writer.println("import org.jgll.grammar.slot.test.FalseConditionTest;");
-		writer.println("import org.jgll.grammar.symbol.Character;");
-		writer.println("import org.jgll.grammar.symbol.Nonterminal;");
+		writer.println("import org.jgll.grammar.slot.*;");
+		writer.println("import org.jgll.grammar.slot.nodecreator.*;");
+		writer.println("import org.jgll.grammar.slot.test.*;");
+		writer.println("import org.jgll.grammar.symbol.*;");
 		writer.println("import org.jgll.parser.NewGLLParserImpl;");
 		writer.println("import org.jgll.parser.descriptor.Descriptor;");
-		writer.println("import org.jgll.parser.lookup.factory.DefaultDescriptorLookupFactory;");
-		writer.println("import org.jgll.parser.lookup.factory.DistributedGSSLookupFactory;");
-		writer.println("import org.jgll.parser.lookup.factory.NewSPPFLookupFactory;");
-		writer.println("import org.jgll.sppf.DummyNode;");
-		writer.println("import org.jgll.sppf.TokenSymbolNode;");
+		writer.println("import org.jgll.parser.lookup.factory.*;");
+		writer.println("import org.jgll.sppf.*;");
 		writer.println("import org.jgll.util.logging.LoggerWrapper;");
 		writer.println("import com.google.common.collect.Sets;");
 		writer.println();

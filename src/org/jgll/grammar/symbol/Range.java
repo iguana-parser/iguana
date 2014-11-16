@@ -103,7 +103,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 
 	@Override
 	public int compareTo(Range o) {
-		return start - o.start;
+		return start == o.start ? end - o.end : start - o.start;
 	}
 
 	@Override

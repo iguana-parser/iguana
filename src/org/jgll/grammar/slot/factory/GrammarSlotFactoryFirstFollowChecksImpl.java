@@ -1,5 +1,7 @@
 package org.jgll.grammar.slot.factory;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +33,7 @@ import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.CollectionsUtil;
 import org.jgll.util.Tuple;
 
 import static org.jgll.grammar.slot.BodyGrammarSlot.*;
@@ -111,26 +114,19 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 	}
 	
 	private Tuple<Integer, Integer> getMinMax(Set<RegularExpression> set) {
+
 		Set<Range> ranges = new HashSet<>();
+		
 		for(RegularExpression regex : set) {
 			for(Range range : regex.getFirstSet()) {
 				ranges.add(range);
 			}
 		}
 		
-		int min = Integer.MAX_VALUE;
-		int max = 0;
-		
-		for(Range range : ranges) {
-			if(range.getStart() < min) {
-				min = range.getStart();
-			}
-			if(range.getEnd() > max) {
-				max = range.getEnd();
-			}
-		}
-		
-		return Tuple.of(min, max);
+		ArrayList<Range> array = new ArrayList<Range>(ranges);
+		Collections.sort(array);
+
+		return Tuple.of(array.get(0).getStart(), array.get(array.size() - 1).getEnd());
 	}	
 
 	@Override

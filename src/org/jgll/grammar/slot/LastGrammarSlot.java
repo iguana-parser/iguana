@@ -2,8 +2,10 @@ package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
 
+import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
+import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
@@ -20,7 +22,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	public LastGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head, 
 						   ConditionTest popConditions, NodeCreator nodeCreatorFromPop) {
-		super(id, label, previous, null, null, popConditions, null, nodeCreatorFromPop);
+		super(id, label, previous, FalseConditionTest.getInstance(), FalseConditionTest.getInstance(), 
+			  popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
 		this.head = head;
 	}
 	
@@ -46,13 +49,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		throw new UnsupportedOperationException();
 	}
 
-//	GrammarSlot returnSlot = pop();
-//	if (returnSlot != null) {
-//	    cs = returnSlot.getId();
-//	    break;			
-//	}
-
-	
 	@Override
 	public void code(PrintWriter writer) {
 		writer.println("// " + label);
@@ -74,7 +70,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		sb.append("new LastGrammarSlot(")
 		  .append(id + ", ")
 		  .append("\"" + label + "\"" + ", ")
-		  .append("slot" + previous.getId() + ", ")
+		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
 		  .append("slot" + head.getId() + ", ")
 		  .append(popConditions.getConstructorCode() + ", ")
 		  .append(nodeCreatorFromPop.getConstructorCode() + ")");
