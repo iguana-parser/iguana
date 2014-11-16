@@ -3,6 +3,9 @@ package org.jgll.parser.basic;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -16,6 +19,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,15 +65,26 @@ public class Test5 {
 	}
 	
 	@Test
+	public void testGenerated() {
+		StringWriter writer = new StringWriter();
+		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		System.out.println(writer.toString());
+		GLLParser parser = CompilationUtil.getParser(writer.toString());
+		ParseResult result = parser.parse(Input.fromString("bc"), grammar.toGrammarGraph(), "A");
+    	assertTrue(result.isParseSuccess());
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF()));
+	}
+	
+	@Test
 	public void testParser() {
 		Input input = Input.fromString("bc");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF()));
 	}
 	
-	private SPPFNode getSPPF() {
+	private SPPFNode getExpectedSPPF() {
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("A ::= B C .", 1, node1);

@@ -50,17 +50,17 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		GSSNode cu = parser.getCurrentGSSNode();
 		SPPFNode cn = parser.getCurrentSPPFNode();
 		
-		if(!nonterminal.test(lexer.getInput().charAt(ci))) {
+		if (!nonterminal.test(lexer.getInput().charAt(ci))) {
 			parser.recordParseError(this);
 			return null;
 		}
 		
-		if(preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) {
+		if (preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) {
 			return null;
 		}
 		
 		GSSNode gssNode = parser.hasGSSNode(next, nonterminal);
-		if(gssNode == null) {
+		if (gssNode == null) {
 			gssNode = parser.createGSSNode(next, nonterminal);
 			parser.createGSSEdge(next, cu, cn, gssNode);
 			return nonterminal;
@@ -83,6 +83,26 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void code(PrintWriter writer) {
 		writer.println("// " + label);
+		writer.println("case " + id + ":");
+		writer.println("  if (slot" + nonterminal.getId() + ".test(lexer.getInput().charAt(ci))) {");
+		writer.println("    recordParseError(slot" + id + ");");
+		writer.println("    cs = L0;");
+		writer.println("    break;");
+		writer.println("  }");
+		writer.println("if (preConditions.execute(this, lexer, cu, ci)) {");
+		writer.println("    cs = L0;");
+		writer.println("    break;");
+		writer.println("}");
+		writer.println("GSSNode gssNode = hasGSSNode(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
+		writer.println("if (gssNode == null) {");
+		writer.println("  gssNode = parser.createGSSNode(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
+		writer.println("  parser.createGSSEdge(next, cu, cn, gssNode);");
+		writer.println("  cs = slot" +  nonterminal.getId() + ";");
+		writer.println("  break;");
+		writer.println("}");
+		writer.println("log.trace(\"GSSNode found: %s\",  gssNode);");
+		writer.println("cs = parser.createGSSEdge(slot" + next.getId() + ", cu, cn, gssNode).getId();");
+		writer.println("break;");
 	}
 
 	@Override
@@ -92,7 +112,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		  .append(id + ", ")
 		  .append("\"" +  label + "\"" + ", ")
 		  .append("null, ")
-		  .append("headSlot" + nonterminal.getId() + ", ")
+		  .append("slot" + nonterminal.getId() + ", ")
 		  .append(preConditions.getConstructorCode() + ", ")
 		  .append(popConditions.getConstructorCode() + ", ")
 		  .append(nodeCreator.getConstructorCode() + ", ")
