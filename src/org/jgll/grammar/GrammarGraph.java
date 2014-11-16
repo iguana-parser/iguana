@@ -125,6 +125,7 @@ public class GrammarGraph implements Serializable {
 		writer.println("import org.jgll.grammar.slot.*;");
 		writer.println("import org.jgll.grammar.slot.nodecreator.*;");
 		writer.println("import org.jgll.grammar.slot.test.*;");
+		writer.println("import org.jgll.grammar.symbol.Character;");
 		writer.println("import org.jgll.grammar.symbol.*;");
 		writer.println("import org.jgll.parser.NewGLLParserImpl;");
 		writer.println("import org.jgll.parser.descriptor.Descriptor;");
