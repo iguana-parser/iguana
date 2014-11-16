@@ -75,7 +75,11 @@ public class ArrayPredictionTest implements PredictionTest {
 		
 		sb.append("new Set[] {");
 		for (Set<Integer> set : array) {
-			sb.append("Sets.newHashSet(" + Joiner.on(", ").join(set) + "), ");
+			if (set == null) {
+				sb.append("null, ");
+			} else {
+				sb.append("Sets.newHashSet(" + Joiner.on(", ").join(set) + "), ");				
+			}
 		}
 		sb.delete(sb.length() - 2, sb.length());
 		sb.append("}");

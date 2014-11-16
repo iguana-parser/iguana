@@ -177,7 +177,7 @@ public class GrammarGraph implements Serializable {
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			int i = 0;
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
-				writer.println("  slot" + head.getId() + ".setFirstGrammarSlotForAlternate(slot" + slot.getId() + ", " + i + ");");
+				writer.println("  slot" + head.getId() + ".setFirstGrammarSlotForAlternate(slot" + slot.getId() + ", " + i++ + ");");
 			}
 		}
 		writer.println("}");

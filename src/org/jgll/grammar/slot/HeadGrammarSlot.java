@@ -171,6 +171,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 		writer.println("    if (slot" + id + ".getFirstSlots()[alternateIndex] == null) continue;");
 		writer.println("    scheduleDescriptor(new Descriptor(slot" + id + ".getFirstSlots()[alternateIndex], cu, ci, DummyNode.getInstance()));");
 		writer.println("  }");
+		writer.println("  cs = L0;");
 		writer.println("  break;");
 	}
 
