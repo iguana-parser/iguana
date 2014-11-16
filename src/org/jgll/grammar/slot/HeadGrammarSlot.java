@@ -164,7 +164,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 		writer.println("  if (set == null) { cs = L0; break; }");
 		writer.println("  if (set.size() == 1) {");
 		writer.println("    cs = slot" + id + ".getFirstSlots()[set.iterator().next()].getId();");
-		writer.println("    log.trace(\"Processing (%s, %d, %s, %s)\", cs, ci, cu, cn);");
+		writer.println("    log.trace(\"Processing (%s, %d, %s, %s)\", slot" + id + ".getFirstSlots()[set.iterator().next()]" + ", ci, cu, cn);");
 		writer.println("    break;");
 		writer.println("  }");
 		writer.println("  for (int alternateIndex : set) {");

@@ -60,6 +60,11 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		writer.println("    NonterminalNode node = sppfLookup.getNonterminalNode(slot" + head.getId() + ", ci, ci);");
 		writer.println("    sppfLookup.addPackedNode(node, slot" + id + ", ci, DummyNode.getInstance(), epsilonNode);");
 		writer.println("    cn = node;");
+		writer.println("    GrammarSlot returnSlot = pop();");
+		writer.println("    if (returnSlot != null) {");
+		writer.println("      cs = returnSlot.getId();");
+		writer.println("      break;");
+		writer.println("    }");
 		writer.println("  }");
 		writer.println("  cs = L0;");
 		writer.println("  break;");
