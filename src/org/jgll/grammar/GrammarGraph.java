@@ -159,6 +159,8 @@ public class GrammarGraph implements Serializable {
 		
 		// GLL fields
 		writer.println("private int cs; // Current grammar slot");
+		writer.println("private int length; // The length of matched terminal");
+		writer.println("private SPPFNode cr; // The matched SPPF node");
 		writer.println();
 		
 		// Generate field declarations

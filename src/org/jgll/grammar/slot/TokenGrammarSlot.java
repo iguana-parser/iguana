@@ -94,13 +94,13 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	public void code(PrintWriter writer) {
 		writer.println("// " + label);
 		writer.println("case " + id + ":");
-		writer.println("  int length = lexer.tokenLengthAt(ci, " + tokenID + ");");
+		writer.println("  length = lexer.tokenLengthAt(ci, " + tokenID + ");");
 		writer.println("  if (length < 0) {");
 		writer.println("    recordParseError(slot" + id + ");");
 		writer.println("    cs = L0;");
 		writer.println("    break;");
 		writer.println("  }");
-		writer.println("  TokenSymbolNode cr = getTokenNode(" + tokenID + ", ci, length);");
+		writer.println("  cr = getTokenNode(" + tokenID + ", ci, length);");
 		writer.println("  cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);");
 		writer.println();
 	}
