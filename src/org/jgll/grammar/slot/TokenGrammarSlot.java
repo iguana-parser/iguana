@@ -1,6 +1,6 @@
 package org.jgll.grammar.slot;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
+import java.io.PrintWriter;
 
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -91,18 +91,18 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void code(StringBuilder sb) {
-		sb.append("// " + label).append(NL)
-		  .append("case " + id + ":").append(NL)
-		  .append(TAB).append("int length = lexer.tokenLengthAt(ci, " + tokenID + ");").append(NL)
-		  .append(TAB).append("if (length < 0) {").append(NL)
-		  .append(TAB).append(TAB).append("recordParseError(slot" + id + ");").append(NL)
-		  .append(TAB).append(TAB).append("cs = L0;").append(NL)
-		  .append(TAB).append(TAB).append("break;").append(NL)
-		  .append(TAB).append("}").append(NL)
-		  .append(TAB).append("TokenSymbolNode cr = getTokenNode(" + tokenID + ", ci, length);").append(NL)
-		  .append(TAB).append("cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);").append(NL)
-		  .append(NL);
+	public void code(PrintWriter writer) {
+		writer.println("// " + label);
+		writer.println("case " + id + ":");
+		writer.println("  int length = lexer.tokenLengthAt(ci, " + tokenID + ");");
+		writer.println("  if (length < 0) {");
+		writer.println("    recordParseError(slot" + id + ");");
+		writer.println("    cs = L0;");
+		writer.println("    break;");
+		writer.println("  }");
+		writer.println("  TokenSymbolNode cr = getTokenNode(" + tokenID + ", ci, length);");
+		writer.println("  cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);");
+		writer.println();
 	}
 
 }

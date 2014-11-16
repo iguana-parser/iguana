@@ -1,7 +1,6 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -112,68 +111,112 @@ public class GrammarGraph implements Serializable {
 		log.debug("Longest terminal Chain: %d", longestTerminalChain);
 	}
 	
-	public String getCode() {
-		StringBuilder sb = new StringBuilder();
+	public void generate(String packageName, String className, PrintWriter writer) {
+		
+		writer.println("package " + packageName + ";");
+		writer.println();
+		
+		// Imports
+		writer.println("import java.util.Set;");
+		writer.println("import org.jgll.grammar.slot.BodyGrammarSlot;");
+		writer.println("import org.jgll.grammar.slot.GrammarSlot;");
+		writer.println("import org.jgll.grammar.slot.HeadGrammarSlot;");
+		writer.println("import org.jgll.grammar.slot.LastGrammarSlot;");
+		writer.println("import org.jgll.grammar.slot.TokenGrammarSlot;");
+		writer.println("import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;");
+		writer.println("import org.jgll.grammar.slot.nodecreator.NonterminalWithOneChildNodeCreator;");
+		writer.println("import org.jgll.grammar.slot.test.ArrayFollowTest;");
+		writer.println("import org.jgll.grammar.slot.test.ArrayPredictionTest;");
+		writer.println("import org.jgll.grammar.slot.test.FalseConditionTest;");
+		writer.println("import org.jgll.grammar.symbol.Character;");
+		writer.println("import org.jgll.grammar.symbol.Nonterminal;");
+		writer.println("import org.jgll.parser.NewGLLParserImpl;");
+		writer.println("import org.jgll.parser.descriptor.Descriptor;");
+		writer.println("import org.jgll.parser.lookup.factory.DefaultDescriptorLookupFactory;");
+		writer.println("import org.jgll.parser.lookup.factory.DistributedGSSLookupFactory;");
+		writer.println("import org.jgll.parser.lookup.factory.NewSPPFLookupFactory;");
+		writer.println("import org.jgll.sppf.DummyNode;");
+		writer.println("import org.jgll.sppf.TokenSymbolNode;");
+		writer.println("import org.jgll.util.logging.LoggerWrapper;");
+		writer.println("import com.google.common.collect.Sets;");
+		writer.println();
 
-		sb.append("private static final LoggerWrapper log = LoggerWrapper.getLogger(Test.class);").append(NL);
-		sb.append("private static final int L0 = -1;").append(NL);
-		sb.append(NL);
+		// Class definition
+		writer.println("public class Test extends NewGLLParserImpl {");
+		writer.println();
+		
+		// Constructor
+		writer.println("public " + className + "() {");
+		writer.println("  super(new DistributedGSSLookupFactory(), new NewSPPFLookupFactory(), new DefaultDescriptorLookupFactory());");
+		
+		// Create alternative links
+		for (HeadGrammarSlot head : headGrammarSlots) {
+			int i = 0;
+			for (BodyGrammarSlot slot : head.getFirstSlots()) {
+				writer.println("  slot" + head.getId() + ".setFirstGrammarSlotForAlternate(slot" + slot.getId() + ", " + i + ");");
+			}
+		}
+		writer.println("}");
+		writer.println();
+		
+		writer.println("private static final LoggerWrapper log = LoggerWrapper.getLogger(" + className + ".class);");
+		writer.println("private static final int L0 = -1;");
+		writer.println();
 		
 		// GLL fields
-		sb.append("private int cs;").append(" // Current grammar slot").append(NL);
-		sb.append(NL);
+		writer.println("private int cs; // Current grammar slot");
+		writer.println();
 		
 		// Generate field declarations
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
-				sb.append("@SuppressWarnings(\"unchecked\")").append(NL)
-				  .append("HeadGrammarSlot slot" + head.getId() + " = ").append(head.getConstructorCode() + ";").append(NL);
+				writer.println("@SuppressWarnings(\"unchecked\")");
+				writer.println("HeadGrammarSlot slot" + head.getId() + " = " + head.getConstructorCode() + ";");
 				BodyGrammarSlot current = slot;
 				while (current != null) {
-					sb.append("BodyGrammarSlot slot" + current.getId() + " = ").append(current.getConstructorCode() + ";").append(NL);
+					writer.println("BodyGrammarSlot slot" + current.getId() + " = " + current.getConstructorCode() + ";");
 					current = current.next();
 				}
 			}
 		}
 		
-		sb.append(NL);
+		writer.println();
 		
-		sb.append("@Override").append(NL)
-		  .append("protected void parse(HeadGrammarSlot startSymbolName) {").append(NL)
-		  .append(TAB).append("while (true) {").append(NL)
-		  .append(TAB).append(TAB).append("switch (cs) {").append(NL);
+		writer.println("@Override");
+		writer.println("protected void parse(HeadGrammarSlot startSymbolName) {");
+		writer.println("  while (true) {");
+		writer.println("    switch (cs) {");
 
-		sb.append("case L0:").append(NL)
-		  .append(TAB).append("if (hasNextDescriptor()) {").append(NL)
-		  .append(TAB).append(TAB).append("Descriptor descriptor = nextDescriptor();").append(NL)
-		  .append(TAB).append(TAB).append("log.trace(\"Processing %s\", descriptor);").append(NL)
-		  .append(TAB).append(TAB).append("cu = descriptor.getGSSNode();").append(NL)
-		  .append(TAB).append(TAB).append("ci = descriptor.getInputIndex();").append(NL)
-		  .append(TAB).append(TAB).append("cn = descriptor.getSPPFNode();").append(NL)
-		  .append(TAB).append(TAB).append("cs = descriptor.getGrammarSlot().getId();").append(NL)
-		  .append(TAB).append(TAB).append("break;").append(NL)
-		  .append(TAB).append("} else {").append(NL)
-		  .append(TAB).append(TAB).append("return;").append(NL)
-		  .append(TAB).append("}").append(NL)
-		  .append(NL);
+		writer.println("case L0:");
+		writer.println("  if (hasNextDescriptor()) {");
+		writer.println("    Descriptor descriptor = nextDescriptor();");
+		writer.println("    log.trace(\"Processing %s\", descriptor);");
+		writer.println("    cu = descriptor.getGSSNode();");
+		writer.println("    ci = descriptor.getInputIndex();");
+		writer.println("    cn = descriptor.getSPPFNode();");
+		writer.println("    cs = descriptor.getGrammarSlot().getId();");
+		writer.println("    break;");
+		writer.println("  } else {");
+		writer.println("    return;");
+		writer.println("  }");
+		writer.println();
 		
 		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			head.code(sb);
+			head.code(writer);
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
 				BodyGrammarSlot current = slot;
 				while (current != null) {
-					current.code(sb);
+					current.code(writer);
 					current = current.next();
 				}
 			}
 		}
 		
-		sb.append(TAB).append(TAB).append("}").append(NL);
-		sb.append(TAB).append("}").append(NL);
-		sb.append("}").append(NL);
-		
-		return sb.toString();
+		writer.println("    }");
+		writer.println("  }");
+		writer.println("}");
+		writer.println("}");
 	}
 	
 	public String getName() {

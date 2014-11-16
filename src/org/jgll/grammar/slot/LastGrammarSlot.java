@@ -1,6 +1,6 @@
 package org.jgll.grammar.slot;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
+import java.io.PrintWriter;
 
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -46,16 +46,26 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		throw new UnsupportedOperationException();
 	}
 
+//	GrammarSlot returnSlot = pop();
+//	if (returnSlot != null) {
+//	    cs = returnSlot.getId();
+//	    break;			
+//	}
+
+	
 	@Override
-	public void code(StringBuilder sb) {
-		sb.append("// " + label).append(NL)
-		  .append("case " + id + ":").append(NL)
-		  .append(TAB).append("if (slot" + head.getId() + ".testFollowSet(lexer.getInput().charAt(ci))) {").append(NL)
-		  .append(TAB).append(TAB).append("cs = pop().getId();").append(NL)
-		  .append(TAB).append(TAB).append("break;").append(NL)
-		  .append(TAB).append("}").append(NL)
-		  .append(TAB).append("cs = L0;").append(NL)
-		  .append(TAB).append("break;").append(NL);
+	public void code(PrintWriter writer) {
+		writer.println("// " + label);
+		writer.println("case " + id + ":");
+		writer.println("  if (slot" + head.getId() + ".testFollowSet(lexer.getInput().charAt(ci))) {");
+		writer.println("    GrammarSlot returnSlot = pop();");
+		writer.println("    if (returnSlot != null) {");
+		writer.println("       cs = returnSlot.getId();");
+		writer.println("       break;");
+		writer.println("    }");
+		writer.println("  }");
+		writer.println("  cs = L0;");
+		writer.println("  break;");
 	}
 
 	@Override

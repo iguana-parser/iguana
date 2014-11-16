@@ -3,7 +3,13 @@ package org.jgll.parser.basic;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -16,8 +22,11 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.truth.codegen.CompilingClassLoader;
 
 /**
  * 
@@ -46,7 +55,22 @@ public class Test2 {
 	
 	@Test
 	public void test() {
-		System.out.println(grammar.toGrammarGraph().getCode());
+		StringWriter writer = new StringWriter();
+		grammar.toGrammarGraph().generate("test", "Test", new PrintWriter(writer));
+		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
+		
+		Input input = Input.fromString("a");
+		try {
+			GLLParser parser = (GLLParser) clazz.newInstance();
+			Method parseMethod = clazz.getMethod("parse", new Class[] {Input.class, GrammarGraph.class, String.class});
+			ParseResult result = (ParseResult) parseMethod.invoke(parser, input, grammar.toGrammarGraph(), "A");
+			assertTrue(result.isParseSuccess());
+			assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException
+				| SecurityException | InstantiationException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

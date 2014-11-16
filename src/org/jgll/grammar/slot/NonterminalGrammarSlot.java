@@ -1,6 +1,6 @@
 package org.jgll.grammar.slot;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
+import java.io.PrintWriter;
 
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
@@ -81,9 +81,8 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void code(StringBuilder sb) {
-		sb.append("// " + label).append(NL)
-		;		  
+	public void code(PrintWriter writer) {
+		writer.println("// " + label);
 	}
 
 	@Override

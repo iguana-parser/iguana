@@ -1,7 +1,6 @@
 package org.jgll.grammar.slot;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
+import java.io.PrintWriter;
 import java.util.Set;
 
 import org.jgll.grammar.slot.test.FollowTest;
@@ -158,22 +157,22 @@ public class HeadGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public void code(StringBuilder sb) {
-		sb.append("// " + nonterminal.getName()).append(NL)
-		  .append("case " + id + ":").append(NL)
-		  .append(TAB).append("Set<Integer> set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));").append(NL)
-		  .append(TAB).append("if (set == null) { cs = L0; break; }").append(NL)
-		  .append(TAB).append("if (set.size() == 1) {").append(NL)
-		  .append(TAB).append(TAB).append("cs = slot" + id + ".getFirstSlots()[set.iterator().next()].getId();").append(NL)
-		  .append(TAB).append(TAB).append("log.trace(\"Processing (%s, %d, %s, %s)\", cs, ci, cu, cn);").append(NL)
-		  .append(TAB).append(TAB).append("break;").append(NL)
-		  .append(TAB).append("}").append(NL)
-		  .append(TAB).append("for (int alternateIndex : set) {").append(NL)
-		  .append(TAB).append(TAB).append("if (slot" + id + ".getFirstSlots()[alternateIndex] == null) continue;").append(NL)
-		  .append(TAB).append(TAB).append("scheduleDescriptor(new Descriptor(slot" + id + ".getFirstSlots()[alternateIndex], cu, ci, DummyNode.getInstance()));").append(NL)
-		  .append(TAB).append("}").append(NL)
-		  .append(TAB).append("break;").append(NL)
-		  .append(NL);
+	public void code(PrintWriter writer) {
+		writer.println("// " + nonterminal.getName());
+		writer.println("case " + id + ":");
+		writer.println("  Set<Integer> set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));");
+		writer.println("  if (set == null) { cs = L0; break; }");
+		writer.println("  if (set.size() == 1) {");
+		writer.println("    cs = slot" + id + ".getFirstSlots()[set.iterator().next()].getId();");
+		writer.println("    log.trace(\"Processing (%s, %d, %s, %s)\", cs, ci, cu, cn);");
+		writer.println("    break;");
+		writer.println("  }");
+		writer.println("  for (int alternateIndex : set) {");
+		writer.println("    if (slot" + id + ".getFirstSlots()[alternateIndex] == null) continue;");
+		writer.println("    scheduleDescriptor(new Descriptor(slot" + id + ".getFirstSlots()[alternateIndex], cu, ci, DummyNode.getInstance()));");
+		writer.println("  }");
+		writer.println("  break;");
+		writer.println();
 	}
 
 }
