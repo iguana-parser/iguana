@@ -69,20 +69,20 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void code(PrintWriter writer) {
+		writer.println("// " + escape(label));
 		writer.println("private final int slot" + id + "() {");
 		writer.println("  if (!slot" + nonterminal.getId() + ".test(lexer.getInput().charAt(ci))) {");
 		writer.println("    recordParseError(slot" + id + ");");
-		writer.println("    cs = L0;");
-		writer.println("  } else if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) {");
-		writer.println("    cs = L0;");
-		writer.println("  } else {");
-		writer.println("    GrammarSlot returnSlot = create(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
-		writer.println("    if (returnSlot != null) {");
-		writer.println("      cs = returnSlot.getId();");
-		writer.println("    } else {");
-		writer.println("      cs = L0;");
-		writer.println("    }");
+		writer.println("    return L0;");
 		writer.println("  }");
+		writer.println("  if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) {");
+		writer.println("    return L0;");
+		writer.println("  }");
+		writer.println("  GrammarSlot returnSlot = create(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
+		writer.println("  if (returnSlot != null) {");
+		writer.println("    return returnSlot.getId();");
+		writer.println("  }");
+		writer.println("  return L0;");
 		writer.println("}");
 	}
 	

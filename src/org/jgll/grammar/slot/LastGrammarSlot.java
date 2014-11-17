@@ -53,6 +53,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void code(PrintWriter writer) {
+		writer.println("// " + escape(label));
 		writer.println("private final int slot" + id + "() {");
 		writer.println("  if (slot" + head.getId() + ".testFollowSet(lexer.getInput().charAt(ci))) {");
 		writer.println("    GrammarSlot returnSlot = pop();");

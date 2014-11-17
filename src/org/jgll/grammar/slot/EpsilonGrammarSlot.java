@@ -55,6 +55,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	
 	@Override
 	public void code(PrintWriter writer) {
+		writer.println("// " + escape(label));
 		writer.println("private final int slot" + id + "() {");
 		writer.println("  if (slot" + head.getId() + ".testFollowSet(lexer.getInput().charAt(ci))) {");
 		writer.println("    TokenSymbolNode epsilonNode = sppfLookup.getEpsilonNode(ci);");
@@ -66,6 +67,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		writer.println("      return returnSlot.getId();");
 		writer.println("    }");
 		writer.println("  }");
+		writer.println("  return L0;");
 		writer.println("}");
 	}
 	

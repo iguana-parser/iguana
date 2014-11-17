@@ -161,20 +161,19 @@ public class HeadGrammarSlot implements GrammarSlot {
 	@Override
 	public void code(PrintWriter writer) {
 		writer.println("// " + escape(nonterminal.getName()));
-		writer.println("case " + id + ":");
-		writer.println("  set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));");
-		writer.println("  if (set == null) { cs = L0; break; }");
+		writer.println("private final int slot" + id + "() {");
+		writer.println("  Set<Integer> set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));");
+		writer.println("  if (set == null) return L0;");
 		writer.println("  if (set.size() == 1) {");
-		writer.println("    cs = slot" + id + ".getFirstSlots()[set.iterator().next()].getId();");
 		writer.println("    log.trace(\"Processing (%s, %d, %s, %s)\", slot" + id + ".getFirstSlots()[set.iterator().next()]" + ", ci, cu, cn);");
-		writer.println("    break;");
+		writer.println("    return slot" + id + ".getFirstSlots()[set.iterator().next()].getId();");
 		writer.println("  }");
 		writer.println("  for (int alternateIndex : set) {");
 		writer.println("    if (slot" + id + ".getFirstSlots()[alternateIndex] == null) continue;");
 		writer.println("    scheduleDescriptor(new Descriptor(slot" + id + ".getFirstSlots()[alternateIndex], cu, ci, DummyNode.getInstance()));");
 		writer.println("  }");
-		writer.println("  cs = L0;");
-		writer.println("  break;");
+		writer.println("  return L0;");
+		writer.println("}");
 	}
 
 }

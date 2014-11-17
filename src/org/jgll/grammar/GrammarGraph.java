@@ -125,6 +125,7 @@ public class GrammarGraph implements Serializable {
 		// Imports
 		writer.println("import java.util.*;");
 		writer.println("import org.jgll.grammar.slot.*;");
+		writer.println("import org.jgll.grammar.slot.specialized.*;");
 		writer.println("import org.jgll.grammar.slot.nodecreator.*;");
 		writer.println("import org.jgll.grammar.slot.test.*;");
 		writer.println("import org.jgll.grammar.symbol.Character;");
@@ -154,8 +155,6 @@ public class GrammarGraph implements Serializable {
 		// GLL fields
 		writer.println("private int cs; // Current grammar slot");
 		writer.println("private int length; // The length of matched terminal");
-		writer.println("private SPPFNode cr; // The matched SPPF node");
-		writer.println("private Set<Integer> set; // First/follow set");
 		writer.println();
 		
 		writer.println("private Map<String, HeadGrammarSlot> startSymbols = new HashMap<>();");
@@ -230,7 +229,7 @@ public class GrammarGraph implements Serializable {
 		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			
-			writer.println("// " + head.toString());
+			writer.println("// " + escape(head.toString()));
 			writer.println("case " + head.getId() + ":");
 			writer.println("  cs = slot" + head.getId() + "();");
 			writer.println("  break;");
@@ -242,8 +241,12 @@ public class GrammarGraph implements Serializable {
 					
 					writer.println("// " + current.toString());
 					writer.println("case " + current.getId() + ":");
-					writer.println("  cs = slot" + current.getId() + "();");
-					writer.println("  break;");
+					if (current.getClass() == TokenGrammarSlot.class) {
+						writer.println("  slot" + current.getId() + "();");
+					} else {
+						writer.println("  cs = slot" + current.getId() + "();");
+						writer.println("  break;");						
+					}
 					writer.println();
 					
 					current = current.next();
@@ -253,8 +256,12 @@ public class GrammarGraph implements Serializable {
 		
 		writer.println("    }");
 		writer.println("  }");
+		writer.println("}");
+		writer.println();
 		// End parse method
 		
+		// Grammar slot methods
+
 		for (HeadGrammarSlot head : headGrammarSlots) {
 				
 			head.code(writer);
@@ -269,9 +276,6 @@ public class GrammarGraph implements Serializable {
 				}
 			}
 		}
-		
-		
-		writer.println("}");
 		writer.println("}");
 	}
 	

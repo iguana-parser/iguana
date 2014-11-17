@@ -70,14 +70,15 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	
 	@Override
 	public void code(PrintWriter writer) {
+		writer.println("// " + escape(label));
 		writer.println("private final int slot" + id + "() {");
-		writer.println("if (preConditions.execute(this, lexer, cu, ci)) return L0;");
+		writer.println("  if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) return L0;");
 		writer.println("  length = lexer.tokenLengthAt(ci, " + tokenID + ");");
 		writer.println("  if (length < 0) {");
 		writer.println("    recordParseError(slot" + id + ");");
 		writer.println("    return L0;");
 		writer.println("  }");
-		writer.println("if (postConditions.execute(parser, lexer, cu, ci + length)) return L0;");
+		writer.println("  if (slot" + id + ".getPostConditions().execute(this, lexer, cu, ci + length)) return L0;");
 		writer.println("  SPPFNode cr = getTokenNode(" + tokenID + ", ci, length);");
 		writer.println("  cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);");
 		writer.println("  GrammarSlot returnSlot = pop();");

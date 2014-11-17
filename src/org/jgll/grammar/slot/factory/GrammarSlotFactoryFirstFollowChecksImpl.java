@@ -33,7 +33,6 @@ import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.CollectionsUtil;
 import org.jgll.util.Tuple;
 
 import static org.jgll.grammar.slot.BodyGrammarSlot.*;
