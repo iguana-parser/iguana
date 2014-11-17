@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -159,9 +160,10 @@ public class GrammarGraph implements Serializable {
 		
 		writer.println("private Map<String, HeadGrammarSlot> startSymbols = new HashMap<>();");
 		
-		// Generate Head grammar slots. They should be declared first to avoid forward reference declaration.
+		// Generate Head grammar slots. 
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			writer.println("private HeadGrammarSlot slot" + head.getId() + " = " + head.getConstructorCode() + ";");
+			//writer.println("private HeadGrammarSlot slot" + head.getId() + " = " + head.getConstructorCode() + ";");
+			writer.println("private HeadGrammarSlot slot" + head.getId() + ";");
 		}
 		
 		// Generate body grammar slots
@@ -169,7 +171,8 @@ public class GrammarGraph implements Serializable {
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
 				BodyGrammarSlot current = slot;
 				while (current != null) {
-					writer.println("private BodyGrammarSlot slot" + current.getId() + " = " + current.getConstructorCode() + ";");
+//					writer.println("private BodyGrammarSlot slot" + current.getId() + " = " + current.getConstructorCode() + ";");
+					writer.println("private BodyGrammarSlot slot" + current.getId() + ";");
 					current = current.next();
 				}
 			}
@@ -193,9 +196,50 @@ public class GrammarGraph implements Serializable {
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			writer.println("  startSymbols.put(\"" + escape(head.getNonterminal().getName()) + "\", slot" + head.getId() + ");");
 		}
-		
+
 		writer.println("}");
 		writer.println();
+		// End constructor
+		
+		// Init heads method
+		writer.println("private void initHeadGrammarSlots() {");
+		for (HeadGrammarSlot head : headGrammarSlots) {
+			writer.println("slot" + head.getId() + " = " + head.getConstructorCode() + ";");
+		}
+		writer.println("}");
+		writer.println();
+		// end init
+		
+		
+		// Init body grammar slot method
+		ArrayList<BodyGrammarSlot> bodyGrammarSlots = new ArrayList<>(slots.keySet());
+		int n = slots.size() / 200;
+		int r = slots.size() % 200;
+		
+		for (int i = 0; i < n; i++) {
+			writer.println("private void initBodyGrammarSlots" + i + "() {");
+			// Generate body grammar slots
+			
+			for (int j = i * 200; j < (i + 1) * 200; j++ ) {
+				BodyGrammarSlot current = bodyGrammarSlots.get(j);
+				writer.println("  slot" + current.getId() + " = " + current.getConstructorCode() + ";");
+			}
+			
+			writer.println("}");
+			writer.println();
+		}
+		
+		// The remaining
+		writer.println("private void initBodyGrammarSlots" + n + "() {");
+		for (int j = n * 200; j < bodyGrammarSlots.size(); j++ ) {
+			BodyGrammarSlot current = bodyGrammarSlots.get(j);
+			writer.println("  slot" + current.getId() + " = " + current.getConstructorCode() + ";");
+		}
+		writer.println("}");
+		writer.println();
+		
+		// end init
+
 
 		// Overriding the getStartSymbol method
 		writer.println("@Override");
