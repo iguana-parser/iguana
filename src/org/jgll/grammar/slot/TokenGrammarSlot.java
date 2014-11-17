@@ -23,7 +23,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	protected final int tokenID;
 	
-	private final RegularExpression regularExpression;
+	protected final RegularExpression regularExpression;
 	
 	public TokenGrammarSlot(int id, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID,
 							ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
@@ -95,16 +95,17 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void code(PrintWriter writer) {
-		writer.println("// " + escape(label));
-		writer.println("case " + id + ":");
+		writer.println("private final int slot" + id + "() {");
+		writer.println("if (preConditions.execute(this, lexer, cu, ci)) return L0;");
 		writer.println("  length = lexer.tokenLengthAt(ci, " + tokenID + ");");
 		writer.println("  if (length < 0) {");
 		writer.println("    recordParseError(slot" + id + ");");
-		writer.println("    cs = L0;");
-		writer.println("    break;");
+		writer.println("    return L0;");
 		writer.println("  }");
+		writer.println("if (postConditions.execute(parser, lexer, cu, ci + length)) return L0;");
 		writer.println("  cr = getTokenNode(" + tokenID + ", ci, length);");
 		writer.println("  cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);");
+		writer.println("}");
 	}
 
 }

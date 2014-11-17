@@ -229,8 +229,37 @@ public class GrammarGraph implements Serializable {
 		
 		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {
+			
+			writer.println("// " + head.toString());
+			writer.println("case " + head.getId() + ":");
+			writer.println("  cs = slot" + head.getId() + "();");
+			writer.println("  break;");
+			writer.println();
+						
+			for (BodyGrammarSlot slot : head.getFirstSlots()) {
+				BodyGrammarSlot current = slot;
+				while (current != null) {
+					
+					writer.println("// " + current.toString());
+					writer.println("case " + current.getId() + ":");
+					writer.println("  cs = slot" + current.getId() + "();");
+					writer.println("  break;");
+					writer.println();
+					
+					current = current.next();
+				}
+			}
+		}
+		
+		writer.println("    }");
+		writer.println("  }");
+		// End parse method
+		
+		for (HeadGrammarSlot head : headGrammarSlots) {
+				
 			head.code(writer);
 			writer.println();
+						
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
 				BodyGrammarSlot current = slot;
 				while (current != null) {
@@ -241,8 +270,7 @@ public class GrammarGraph implements Serializable {
 			}
 		}
 		
-		writer.println("    }");
-		writer.println("  }");
+		
 		writer.println("}");
 		writer.println("}");
 	}

@@ -68,6 +68,7 @@ public class Test5 {
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		System.out.println(writer.toString());
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
 		ParseResult result = parser.parse(Input.fromString("bc"), grammar.toGrammarGraph(), "A");
     	assertTrue(result.isParseSuccess());
