@@ -173,6 +173,6 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		}
 		sb.delete(sb.length() - 2, sb.length());
 		
-		return "new RegexAlt(list(" + sb.toString() + "), new HashSet<>(), null)";
-	}
+		return "new RegexAlt(list(" + sb.toString() + "), \"" + escape(label) + "\", new HashSet<Condition>(), null)";
+	} 
 }

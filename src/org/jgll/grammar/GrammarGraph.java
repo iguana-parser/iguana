@@ -21,6 +21,8 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.logging.LoggerWrapper;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import com.google.common.collect.BiMap;
 
 /**
@@ -121,20 +123,23 @@ public class GrammarGraph implements Serializable {
 		writer.println();
 		
 		// Imports
-		writer.println("import java.util.Map;");
-		writer.println("import java.util.Set;");
-		writer.println("import java.util.HashMap;");
+		writer.println("import java.util.*;");
 		writer.println("import org.jgll.grammar.slot.*;");
 		writer.println("import org.jgll.grammar.slot.nodecreator.*;");
 		writer.println("import org.jgll.grammar.slot.test.*;");
 		writer.println("import org.jgll.grammar.symbol.Character;");
 		writer.println("import org.jgll.grammar.symbol.*;");
+		writer.println("import org.jgll.regex.*;");
 		writer.println("import org.jgll.parser.NewGLLParserImpl;");
 		writer.println("import org.jgll.parser.descriptor.Descriptor;");
 		writer.println("import org.jgll.parser.lookup.factory.*;");
 		writer.println("import org.jgll.sppf.*;");
+		writer.println("import org.jgll.grammar.condition.*;");
+		writer.println("import org.jgll.grammar.slotaction.*;");
 		writer.println("import org.jgll.util.logging.LoggerWrapper;");
 		writer.println("import com.google.common.collect.Sets;");
+		writer.println("import static org.jgll.grammar.condition.ConditionType.*;");
+		writer.println("import static org.jgll.util.CollectionsUtil.*;");
 		writer.println();
 
 		// Class definition
@@ -187,7 +192,7 @@ public class GrammarGraph implements Serializable {
 		
 		// Add start symbols
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			writer.println("  startSymbols.put(\"" + head.getNonterminal().getName() + "\", slot" + head.getId() + ");");
+			writer.println("  startSymbols.put(\"" + escape(head.getNonterminal().getName()) + "\", slot" + head.getId() + ");");
 		}
 		
 		writer.println("}");

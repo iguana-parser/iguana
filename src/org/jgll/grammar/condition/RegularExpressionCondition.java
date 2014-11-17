@@ -77,6 +77,6 @@ public class RegularExpressionCondition extends Condition {
 
 	@Override
 	public String getConstructorCode() {
-		return "new RegularExpressionCondition(" + type.name() + "," + regularExpression.getConstructorCode() + ")";
+		return "new RegularExpressionCondition(" + type.name() + ", " + regularExpression.getConstructorCode() + ")";
 	}
 }

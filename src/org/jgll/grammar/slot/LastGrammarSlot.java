@@ -10,6 +10,8 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 /**
  * Corresponds to the last grammar slot in an alternate, e.g., X ::= alpha .
  * 
@@ -69,7 +71,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new LastGrammarSlot(")
 		  .append(id + ", ")
-		  .append("\"" + label + "\"" + ", ")
+		  .append("\"" + escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
 		  .append("slot" + head.getId() + ", ")
 		  .append(popConditions.getConstructorCode() + ", ")

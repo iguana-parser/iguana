@@ -170,7 +170,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		}
 		sb.delete(sb.length() - 2, sb.length());
 		
-		return "new Sequence(" + sb.toString() + ", new HashSet<>(), null)";
+		return "new Sequence(list(" + sb.toString() + "), \"" + escape(label) + "\", new HashSet<>(), null)";
 	}
 	
 }

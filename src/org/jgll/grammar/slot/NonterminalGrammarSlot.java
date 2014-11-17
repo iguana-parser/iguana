@@ -10,6 +10,8 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 /**
  * A grammar slot immediately before a nonterminal.
  *
@@ -90,7 +92,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new NonterminalGrammarSlot(")
 		  .append(id + ", ")
-		  .append("\"" +  label + "\"" + ", ")
+		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
 		  .append("slot" + nonterminal.getId() + ", ")
 		  .append(preConditions.getConstructorCode() + ", ")

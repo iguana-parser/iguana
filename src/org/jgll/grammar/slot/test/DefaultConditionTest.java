@@ -15,9 +15,9 @@ public class DefaultConditionTest implements ConditionTest, Serializable {
 
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(DefaultConditionTest.class);
 
-	private final List<SlotAction<Boolean>> conditions;
+	private final List<? extends SlotAction<Boolean>> conditions;
 	
-	public DefaultConditionTest(List<SlotAction<Boolean>> conditions) {
+	public DefaultConditionTest(List<? extends SlotAction<Boolean>> conditions) {
 		this.conditions = conditions;
 	}
 
@@ -31,19 +31,19 @@ public class DefaultConditionTest implements ConditionTest, Serializable {
 		return false;
 	}
 	
-	public Iterable<SlotAction<Boolean>> getConditions() {
+	public Iterable<? extends SlotAction<Boolean>> getConditions() {
 		return conditions;
 	}
 
 	@Override
 	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("List<ConditionTest> list = new ArrayList();");
 		for (SlotAction<Boolean> slotAction : conditions) {
-			sb.append("list.add(" + slotAction.getConstructorCode() + ");");
+			sb.append(slotAction.getConstructorCode() + ", ");
 		}
-		sb.append("ConditionTest test  = new ConditionTest(list);");
-		return sb.toString();
+		sb.delete(sb.length() - 2, sb.length());
+		
+		return "new DefaultConditionTest(list(" + sb.toString() + "))";
 	}
 	
 }

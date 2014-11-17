@@ -166,7 +166,8 @@ public class CharacterClass extends AbstractRegularExpression {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new CharacterClass(")
 		  .append(alt.getConstructorCode() + ", ")
-		  .append(label + ", ")
+		  .append("\"" + escape(label) + "\", ")
+		  .append("new HashSet<Condition>(), ")
 		  .append("null")
 		  .append(")");
 		return sb.toString();

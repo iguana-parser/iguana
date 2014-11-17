@@ -12,6 +12,8 @@ import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TokenSymbolNode;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 /**
  * The grammar slot representing an empty body.
  * 
@@ -46,7 +48,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new EpsilonGrammarSlot(")
 		  .append(id + ", ")
-		  .append("\"" + label + "\"" + ", ")
+		  .append("\"" + escape(label) + "\"" + ", ")
 		  .append("slot" + head.getId() + ")");
 		return sb.toString();
 	}

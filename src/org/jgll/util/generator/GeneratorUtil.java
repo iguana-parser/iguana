@@ -3,7 +3,8 @@ package org.jgll.util.generator;
 public class GeneratorUtil {
 	
 	public static String escape(String s) {
-		return s.replaceAll("\"", "\\\\\"");
+		if (s == null) return "";
+		return s.replace("\\", "\\\\").replace("\"", "\\\"");
 	}
 	
 	public static <T> String listToString(T[] elements) {
