@@ -3,6 +3,9 @@ package org.jgll.parser;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -16,6 +19,7 @@ import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
+import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,6 +72,23 @@ public class Gamma2Test {
 	}
 	
 	@Test
+	public void testGenerated1() {
+		Input input = Input.fromString("bbb");
+		StringWriter writer = new StringWriter();
+		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		GLLParser parser = CompilationUtil.getParser(writer.toString());		
+		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
+		assertTrue(result.isParseSuccess());
+		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+//		assertEquals(31, parseStatistics.getDescriptorsCount());
+		assertEquals(6, parseStatistics.getNonterminalNodesCount());
+		assertEquals(3, parseStatistics.getIntermediateNodesCount());
+		assertEquals(12, parseStatistics.getPackedNodesCount());
+		assertEquals(3, parseStatistics.getTerminalNodesCount());
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1()));
+	}
+	
+	@Test
 	public void testParsers2() {
 		Input input = Input.fromString("bbbb");
 		GLLParser parser = ParserFactory.originalParser();
@@ -75,6 +96,23 @@ public class Gamma2Test {
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(50, parseStatistics.getDescriptorsCount());
+		assertEquals(10, parseStatistics.getNonterminalNodesCount());
+		assertEquals(6, parseStatistics.getIntermediateNodesCount());
+		assertEquals(28, parseStatistics.getPackedNodesCount());
+		assertEquals(4, parseStatistics.getTerminalNodesCount());
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2()));
+	}
+	
+	@Test
+	public void testGenerated2() {
+		Input input = Input.fromString("bbbb");
+		StringWriter writer = new StringWriter();
+		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		GLLParser parser = CompilationUtil.getParser(writer.toString());		
+		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
+		assertTrue(result.isParseSuccess());
+		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+//		assertEquals(31, parseStatistics.getDescriptorsCount());
 		assertEquals(10, parseStatistics.getNonterminalNodesCount());
 		assertEquals(6, parseStatistics.getIntermediateNodesCount());
 		assertEquals(28, parseStatistics.getPackedNodesCount());
@@ -98,6 +136,23 @@ public class Gamma2Test {
 	}
 	
 	@Test
+	public void testGenerated3() {
+		Input input = Input.fromString("bbbbb");
+		StringWriter writer = new StringWriter();
+		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		GLLParser parser = CompilationUtil.getParser(writer.toString());		
+		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
+		assertTrue(result.isParseSuccess());
+		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+//		assertEquals(74, parseStatistics.getDescriptorsCount());
+		assertEquals(15, parseStatistics.getNonterminalNodesCount());
+		assertEquals(10, parseStatistics.getIntermediateNodesCount());
+		assertEquals(55, parseStatistics.getPackedNodesCount());
+		assertEquals(5, parseStatistics.getTerminalNodesCount());
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF3()));
+	}
+	
+	@Test
 	public void testParsers4() {
 		Input input = Input.fromString(getBs(100));
 		GLLParser parser = ParserFactory.originalParser();
@@ -109,14 +164,22 @@ public class Gamma2Test {
 		assertEquals(4950, parseStatistics.getIntermediateNodesCount());
 		assertEquals(100, parseStatistics.getTerminalNodesCount());
 		assertEquals(495100, parseStatistics.getPackedNodesCount());
-	}	
+	}
 	
 	@Test
-	public void test() {
+	public void testGenerated4() {
 		Input input = Input.fromString(getBs(100));
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		StringWriter writer = new StringWriter();
+		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		GLLParser parser = CompilationUtil.getParser(writer.toString());		
 		ParseResult result = parser.parse(input, grammar.toGrammarGraphWithoutFirstFollowChecks(), "S");
-		System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
+		assertTrue(result.isParseSuccess());
+		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+//		assertEquals(25154, parseStatistics.getDescriptorsCount());
+		assertEquals(5050, parseStatistics.getNonterminalNodesCount());
+		assertEquals(4950, parseStatistics.getIntermediateNodesCount());
+		assertEquals(100, parseStatistics.getTerminalNodesCount());
+		assertEquals(495100, parseStatistics.getPackedNodesCount());
 	}
 	
 	private String getBs(int size) {
