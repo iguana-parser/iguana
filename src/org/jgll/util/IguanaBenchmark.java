@@ -98,6 +98,7 @@ public class IguanaBenchmark {
 
 		Grammar grammar = null;
 		GrammarGraph grammarGraph = null;
+		Class<?> clazz = null;
 		
 		
 		CommandLineParser commandLineParser = new BasicParser();

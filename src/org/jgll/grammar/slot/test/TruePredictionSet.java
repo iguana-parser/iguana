@@ -28,7 +28,7 @@ public class TruePredictionSet implements PredictionTest {
 
 	@Override
 	public String getConstructorCode() {
-		return "new TruePredictionSet()";
+		return "new TruePredictionSet(" + predictionSet.size() + ")";
 	}
 	
 }

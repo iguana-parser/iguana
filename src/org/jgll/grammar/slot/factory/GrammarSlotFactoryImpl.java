@@ -64,7 +64,7 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		
 		Integer id = headGrammarSlotIds.get(nonterminal);
 		if (id == null) {
-			id = headGrammarSlotIds.size();
+			id = bodyGrammarSlotId++;
 			headGrammarSlotIds.put(nonterminal, id);
 		}
 		

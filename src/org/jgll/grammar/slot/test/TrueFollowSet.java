@@ -11,7 +11,7 @@ public class TrueFollowSet implements FollowTest {
 
 	@Override
 	public String getConstructorCode() {
-		return null;
+		return "new TrueFollowSet()";
 	}
 
 }

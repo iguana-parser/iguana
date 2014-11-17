@@ -9,7 +9,7 @@ import com.google.common.truth.codegen.CompilingClassLoader.CompilerException;
 public class CompilationUtil {
 	
 	public static GLLParser getParser(String code) {
-		Class<?> clazz = CompilationUtil.getClass("test", "Test", code);
+		Class<?> clazz = getClass("test", "Test", code);
 		
 		GLLParser parser = null;
 		try {

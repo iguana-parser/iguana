@@ -2,6 +2,10 @@ package org.jgll.util.generator;
 
 public class GeneratorUtil {
 	
+	public static String escape(String s) {
+		return s.replaceAll("\"", "\\\\\"");
+	}
+	
 	public static <T> String listToString(T[] elements) {
 		return listToString(elements, " ");
 	}

@@ -10,6 +10,9 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
+
 /**
  * A grammar slot whose next immediate symbol is a terminal.
  * 
@@ -78,7 +81,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new TokenGrammarSlot(")
 		  .append(id + ", ")
-		  .append("\"" +  label + "\"" + ", ")
+		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
 		  .append(regularExpression.getConstructorCode() + ", ")
 		  .append(tokenID + ", ")
@@ -92,7 +95,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void code(PrintWriter writer) {
-		writer.println("// " + label);
+		writer.println("// " + escape(label));
 		writer.println("case " + id + ":");
 		writer.println("  length = lexer.tokenLengthAt(ci, " + tokenID + ");");
 		writer.println("  if (length < 0) {");

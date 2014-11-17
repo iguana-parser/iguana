@@ -14,6 +14,8 @@ import org.jgll.sppf.DummyNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 /**
  * 
  * The grammar slot corresponding to the head of a rule.
@@ -148,7 +150,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new HeadGrammarSlot(")
 		  .append(id + ", ")
-		  .append("Nonterminal.withName(\"" + nonterminal.getName() + "\")" + ", ")
+		  .append("Nonterminal.withName(\"" + escape(nonterminal.getName()) + "\")" + ", ")
 		  .append(altsCount + ", ")
 		  .append(nullable + ", ")
 		  .append(predictionTest.getConstructorCode() + ", ")
@@ -158,7 +160,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	@Override
 	public void code(PrintWriter writer) {
-		writer.println("// " + nonterminal.getName());
+		writer.println("// " + escape(nonterminal.getName()));
 		writer.println("case " + id + ":");
 		writer.println("  set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));");
 		writer.println("  if (set == null) { cs = L0; break; }");
