@@ -3,6 +3,9 @@ package org.jgll.parser.basic;
 import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -16,6 +19,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.Input;
+import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,10 +58,22 @@ public class Test12 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
+		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
 	}
 	
-	private SPPFNode expectedSPPF() {
+	@Test
+	public void testGenerated() {
+		StringWriter writer = new StringWriter();
+		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		GLLParser parser = CompilationUtil.getParser(writer.toString());
+		ParseResult result = parser.parse(Input.fromString("ba"), grammar.toGrammarGraph(), "A");
+    	assertTrue(result.isParseSuccess());
+    	assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
+	}
+	
+	private SPPFNode getSPPF() {
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("A ::= B a .", 1, node1);
