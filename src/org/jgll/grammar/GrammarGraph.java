@@ -283,7 +283,7 @@ public class GrammarGraph implements Serializable {
 				BodyGrammarSlot current = slot;
 				while (current != null) {
 					
-					writer.println("// " + current.toString());
+					writer.println("// " + escape(current.toString()));
 					writer.println("case " + current.getId() + ":");
 					if (current.getClass() == TokenGrammarSlot.class) {
 						writer.println("  slot" + current.getId() + "();");
