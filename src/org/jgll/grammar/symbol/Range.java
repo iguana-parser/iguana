@@ -67,7 +67,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(start, end);
+		return HashFunctions.defaulFunction.hash(start, end);
 	}
 
 	@Override

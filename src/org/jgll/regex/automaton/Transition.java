@@ -107,7 +107,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(start, end, destination.hashCode());
+		return HashFunctions.defaulFunction.hash(start, end, destination.hashCode());
 	}
 	
 	@Override

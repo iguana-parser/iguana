@@ -109,8 +109,8 @@ public class CuckooHashSet<T> implements IguanaSet<T> {
 	}
 	
 	private void generateNewHashFunctions() {
-		function1 = HashFunctions.murmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
-		function2 = HashFunctions.murmurHash3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
+		function1 = HashFunctions.murmur3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
+		function2 = HashFunctions.murmur3(RandomUtil.random.nextInt(Integer.MAX_VALUE));
 	}
 	
 	@Override

@@ -51,7 +51,7 @@ public class AbstractPattern implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(nonterminal.hashCode(), position, parent.hashCode());
+		return HashFunctions.defaulFunction.hash(nonterminal.hashCode(), position, parent.hashCode());
 	}
 	
 	/**

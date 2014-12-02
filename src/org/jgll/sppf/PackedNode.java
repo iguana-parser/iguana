@@ -82,7 +82,7 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(id, pivot);
+		return HashFunctions.defaulFunction.hash(id, pivot);
 	}
 	
 	@Override

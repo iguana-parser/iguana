@@ -28,7 +28,7 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 	
 	private ExternalHasher<T> hasher;
 	
-	private HashFunction hashFunction = HashFunctions.murmurHash3();
+	private HashFunction hashFunction = HashFunctions.murmur3;
 	
 	/**
 	 * capacity - 1

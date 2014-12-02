@@ -45,7 +45,7 @@ public class TokenSymbolNode extends SPPFNode {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(tokenID, inputIndex);
+		return HashFunctions.defaulFunction.hash(tokenID, inputIndex);
 	}
 	
 	@Override

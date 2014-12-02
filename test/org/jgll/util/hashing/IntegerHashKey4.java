@@ -58,7 +58,7 @@ public class IntegerHashKey4 {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(k1, k2, k3, k4);
+		return HashFunctions.defaulFunction.hash(k1, k2, k3, k4);
 	}
 	
 }

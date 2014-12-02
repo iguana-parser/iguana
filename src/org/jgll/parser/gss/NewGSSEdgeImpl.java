@@ -50,9 +50,9 @@ public class NewGSSEdgeImpl implements GSSEdge {
 
 	@Override
 	public int hashCode() {
-		return  HashFunctions.defaulFunction().hash(returnSlot.getId(), 
-													destination.getInputIndex(), 
-													destination.getGrammarSlot().getId());
+		return  HashFunctions.defaulFunction.hash(returnSlot.getId(), 
+												  destination.getInputIndex(), 
+												  destination.getGrammarSlot().getId());
 	}
 	
 	@Override

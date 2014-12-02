@@ -124,7 +124,7 @@ public class Rule implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(head.hashCode(), body == null ? 0 : body.hashCode());
+		return HashFunctions.defaulFunction.hash(head.hashCode(), body == null ? 0 : body.hashCode());
 	}
 	
 	

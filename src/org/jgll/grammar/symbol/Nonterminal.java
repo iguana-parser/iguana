@@ -61,7 +61,7 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction().hash(name.hashCode(), index);
+		return HashFunctions.defaulFunction.hash(name.hashCode(), index);
 	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {

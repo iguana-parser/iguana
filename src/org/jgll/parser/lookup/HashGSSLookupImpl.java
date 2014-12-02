@@ -20,7 +20,7 @@ public class HashGSSLookupImpl implements GSSLookup {
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)
 	 */
-	private Map<GSSNode.Key, GSSNode> gssNodes;
+	private Map<GSSNode, GSSNode> gssNodes;
 	
 	public HashGSSLookupImpl(Input input, int size) {
 		gssNodes = new HashMap<>();
@@ -29,13 +29,13 @@ public class HashGSSLookupImpl implements GSSLookup {
 	@Override
 	public GSSNode getGSSNode(GrammarSlot head, int inputIndex) {
 		GSSNode gssNode = new GSSNode(head, inputIndex);
-		gssNodes.put(new GSSNode.Key(head.getId(), inputIndex), gssNode);		
+		gssNodes.put(new GSSNode(head, inputIndex), gssNode);		
 		return gssNode;
 	}
 	
 	@Override
 	public GSSNode hasGSSNode(GrammarSlot head, int inputIndex) {
-		return gssNodes.get(new GSSNode.Key(head.getId(), inputIndex));
+		return gssNodes.get(new GSSNode(head, inputIndex));
 	}
 
 	@Override
