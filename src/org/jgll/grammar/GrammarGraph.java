@@ -272,32 +272,19 @@ public class GrammarGraph implements Serializable {
 		
 		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			
 			writer.println("// " + escape(head.toString()));
 			writer.println("case " + head.getId() + ":");
 			writer.println("  cs = slot" + head.getId() + "();");
 			writer.println("  break;");
 			writer.println();
-						
-			for (BodyGrammarSlot slot : head.getFirstSlots()) {
-				BodyGrammarSlot current = slot;
-				while (current != null) {
-					
-					writer.println("// " + escape(current.toString()));
-					writer.println("case " + current.getId() + ":");
-					if (current.getClass() == TokenGrammarSlot.class) {
-						writer.println("  slot" + current.getId() + "();");
-					} else {
-						writer.println("  cs = slot" + current.getId() + "();");
-						writer.println("  break;");						
-					}
-					writer.println();
-					
-					current = current.next();
-				}
-			}
 		}
 		
+		if (bodyGrammarSlots.size() > 2500) {
+			int mainLoops = bodyGrammarSlots.size() / 2500;
+		} else {
+			generateCases(writer, bodyGrammarSlots, 0, bodyGrammarSlots.size());
+		}
+				
 		writer.println("    }");
 		writer.println("  }");
 		writer.println("}");
@@ -321,6 +308,25 @@ public class GrammarGraph implements Serializable {
 			}
 		}
 		writer.println("}");
+	}
+	
+	
+	private void generateCases(PrintWriter writer, List<BodyGrammarSlot> slots, int start, int end) {
+		
+		for (int i = start; i < end; i++) {
+			BodyGrammarSlot current = slots.get(i);
+			
+			writer.println("// " + escape(current.toString()));
+			writer.println("case " + current.getId() + ":");
+			if (current.getClass() == TokenGrammarSlot.class) {
+				writer.println("  slot" + current.getId() + "();");
+			} else {
+				writer.println("  cs = slot" + current.getId() + "();");
+				writer.println("  break;");						
+			}
+			writer.println();
+		}
+		
 	}
 	
 	public String getName() {
