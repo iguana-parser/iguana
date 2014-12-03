@@ -20,7 +20,6 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.OriginalIntermediateNodeIds;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Character;

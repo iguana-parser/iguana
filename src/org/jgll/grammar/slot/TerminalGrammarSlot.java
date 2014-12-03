@@ -18,7 +18,11 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	
 	@Override
 	public String getConstructorCode() {
-		return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append("new TerminalGrammarSlot(")
+		  .append(regex.getConstructorCode())
+		  .append(")");
+		return sb.toString();
 	}
 
 	@Override
