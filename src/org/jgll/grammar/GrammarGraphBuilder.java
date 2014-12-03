@@ -19,6 +19,8 @@ import org.jgll.grammar.slot.IntermediateNodeIds;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.OriginalIntermediateNodeIds;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Character;
@@ -41,6 +43,8 @@ public class GrammarGraphBuilder implements Serializable {
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GrammarGraphBuilder.class);
 
 	Map<Nonterminal, HeadGrammarSlot> nonterminalsMap;
+	
+	Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
 
 	BiMap<BodyGrammarSlot, Integer> slots;
 	
@@ -88,17 +92,6 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 
 	public GrammarGraph build() {
-		
-		objects = new Object[grammar.getNonterminals().size()][];
-
-//		for (Nonterminal nonterminal : grammar.getNonterminals()) {
-//			List<List<Symbol>> alternatives = grammar.getAlternatives(nonterminal);
-//			objects[nonterminalIds.get(nonterminal.getName())] = new Object[alternatives.size()];
-//			for (int alternateIndex = 0; alternateIndex < alternatives.size(); alternateIndex++) {
-//				int nonterminalIndex = nonterminalIds.get(nonterminal.getName());
-//				objects[nonterminalIndex][alternateIndex] = grammar.getObject((Nonterminal) OperatorPrecedence.plain(nonterminal), alternateIndex);				
-//			}
-//		}
 		
 		long start;
 		long end;
@@ -211,13 +204,13 @@ public class GrammarGraphBuilder implements Serializable {
 		Symbol symbol = rule.getBody().get(symbolIndex);
 		
 		if(symbol instanceof RegularExpression) {
-			RegularExpression token = (RegularExpression) symbol;
+			RegularExpression regex = (RegularExpression) symbol;
 			
 			ConditionTest preConditionsTest = conditions.getPreConditions(symbol.getConditions());
 			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(symbol.getConditions());
 			ConditionTest popConditionsTest = conditions.getPostConditions(popActions);
 			
-			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, currentSlot, getTokenID(token), preConditionsTest, postConditionsTest, popConditionsTest);
+			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, currentSlot, getTerminalGrammarSlot(regex), preConditionsTest, postConditionsTest, popConditionsTest);
 		}
 		
 		// Nonterminal
@@ -249,16 +242,16 @@ public class GrammarGraphBuilder implements Serializable {
 		return headGrammarSlot;
 	}
 	
-	private int getTokenID(RegularExpression regex) {
-		if (regularExpressions.containsKey(regex)) {
-			return regularExpressions.get(regex);
-		}
-
-		int id = regularExpressions.size();
-		regularExpressions.put(regex, id);
-		return id;
-	}
 	
+	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex) {
+		TerminalGrammarSlot slot = terminalsMap.get(regex);
+		if (slot == null) {
+			slot = new TerminalGrammarSlot(regex);
+			terminalsMap.put(regex, slot);
+		}
+		return slot;
+	}
+		
 	/**
 	 * Creates the corresponding grammar rule for the given keyword.
 	 * For example, for the keyword "if", a rule If ::= [i][f]
