@@ -13,21 +13,21 @@ public class SPPFNodeFactory {
 	
 	public NonterminalNode createNonterminalNode(String s, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = Nonterminal.withName(s);
-		return new NonterminalNode(grammarGraph.getNonterminalId(nonterminal), leftExtent, rightExtent);
+		return new NonterminalNode(grammarGraph.getHeadGrammarSlot(nonterminal), leftExtent, rightExtent);
 	}
 	
 	public NonterminalNode createNonterminalNode(String s, int index, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = new Nonterminal.Builder(s).setIndex(index).build();
-		return new NonterminalNode(grammarGraph.getNonterminalId(nonterminal), leftExtent, rightExtent);
+		return new NonterminalNode(grammarGraph.getHeadGrammarSlot(nonterminal), leftExtent, rightExtent);
 	}
 
 	public IntermediateNode createIntermediateNode(String s, int leftExtent, int rightExtent) {
 		int id = grammarGraph.getGrammarSlotByName(s).getId();
-		return new IntermediateNode(id, leftExtent, rightExtent);
+		return new IntermediateNode(grammarGraph.getGrammarSlot(id), leftExtent, rightExtent);
 	}
 	
 	public TokenSymbolNode createTokenNode(String s, int leftExtent, int rightExtent) {
-		return new TokenSymbolNode(grammarGraph.getRegularExpressionId(grammarGraph.getRegularExpressionByName(s)), leftExtent, rightExtent - leftExtent);
+		return new TokenSymbolNode(grammarGraph.getGrammarSlotByName(grammarGraph.getRegularExpressionByName(s)), leftExtent, rightExtent - leftExtent);
 	}
 
 	public ListSymbolNode createListNode(String s, int index, int leftExtent, int rightExtent) {

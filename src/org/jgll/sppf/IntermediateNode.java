@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.ArrayList;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -12,8 +13,8 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class IntermediateNode extends NonPackedNode {
 	
-	public IntermediateNode(int id, int leftExtent, int rightExtent) {
-		super(id, leftExtent, rightExtent);
+	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -23,7 +24,7 @@ public class IntermediateNode extends NonPackedNode {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(id, leftExtent, rightExtent);
+		return HashFunctions.defaulFunction.hash(slot.getId(), leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -39,7 +40,7 @@ public class IntermediateNode extends NonPackedNode {
 		
 		IntermediateNode other = (IntermediateNode) obj;
 
-		return  id == other.id &&
+		return  slot == other.getGrammarSlot() &&
 				leftExtent == other.leftExtent &&
 				rightExtent == other.rightExtent;
 	}
@@ -49,5 +50,4 @@ public class IntermediateNode extends NonPackedNode {
 		children = new ArrayList<>(2);
 		return this;
 	}
-
 }

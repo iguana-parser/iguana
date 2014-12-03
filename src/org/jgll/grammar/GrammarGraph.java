@@ -345,8 +345,8 @@ public class GrammarGraph implements Serializable {
 		return headGrammarSlots;
 	}
 	
-	public HeadGrammarSlot getHeadGrammarSlot(String name) {
-		return nameToNonterminals.get(Nonterminal.withName(name));
+	public HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
+		return nameToNonterminals.get(nonterminal);
 	}
 	
 	private String getSlotName(BodyGrammarSlot slot) {

@@ -2,6 +2,8 @@ package org.jgll.sppf;
 
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
+
 /**
  * A NonPackedNode is the abstract super class for nonterminal and intermediate
  * symbol nodes.
@@ -13,7 +15,7 @@ import java.util.List;
 
 public abstract class NonPackedNode extends SPPFNode {
 	
-	protected final int id;
+	protected final GrammarSlot slot;
 	
 	protected final int leftExtent;
 	
@@ -21,13 +23,13 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	protected List<SPPFNode> children;
 	
-	public NonPackedNode(int id, int leftExtent, int rightExtent) {
+	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		
-		assert id >= 0;
+		assert slot != null;
 		assert leftExtent >= 0;
 		assert rightExtent >= 0;
 		
-		this.id = id;
+		this.slot = slot;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
 	}
@@ -35,8 +37,8 @@ public abstract class NonPackedNode extends SPPFNode {
 	public abstract NonPackedNode init();
 	
 	@Override
-	public int getId() {
-		return id;
+	public GrammarSlot getGrammarSlot() {
+		return slot;
 	}
 	
 	@Override
@@ -51,7 +53,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	
 	@Override
 	public String toString() {
-		return String.format("(%d, %d, %d)", id, leftExtent, rightExtent);
+		return String.format("(%s, %d, %d)", slot, leftExtent, rightExtent);
 	}
 	
 	public boolean addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
@@ -125,7 +127,7 @@ public abstract class NonPackedNode extends SPPFNode {
 	}
 	
 	public int getFirstPackedNodeGrammarSlot() {
-		return id;
+		return slot.getId();
 	}
 	
 	public int getCountPackedNodes() {

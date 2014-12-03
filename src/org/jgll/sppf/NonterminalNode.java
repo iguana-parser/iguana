@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.ArrayList;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -13,13 +14,13 @@ import org.jgll.traversal.SPPFVisitor;
 public class NonterminalNode extends NonPackedNode {
 	
 	
-	public NonterminalNode(int nonterminalId, int leftExtent, int rightExtent) {
-		super(nonterminalId, leftExtent, rightExtent);
+	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(id, leftExtent, rightExtent);
+		return HashFunctions.defaulFunction.hash(slot.getId(), leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -35,7 +36,7 @@ public class NonterminalNode extends NonPackedNode {
 		
 		NonterminalNode other = (NonterminalNode) obj;
 
-		return  id == other.id &&
+		return  slot == other.slot &&
 				leftExtent == other.leftExtent &&
 				rightExtent == other.rightExtent;
 	}
@@ -53,7 +54,7 @@ public class NonterminalNode extends NonPackedNode {
 	
 	@Override
 	public int getFirstPackedNodeGrammarSlot() {
-		return children.get(0).getId();
+		return children.get(0).getGrammarSlot().getId();
 	}
 
 }

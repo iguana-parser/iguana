@@ -3,6 +3,8 @@ package org.jgll.sppf;
 import java.util.Collections;
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -14,14 +16,14 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class TokenSymbolNode extends SPPFNode {
 	
-	private final int tokenID;
+	private final TokenGrammarSlot slot;
 	
 	private final int inputIndex;
 	
 	private final int length;
 	
-	public TokenSymbolNode(int tokenID, int inputIndex, int length) {
-		this.tokenID = tokenID;
+	public TokenSymbolNode(TokenGrammarSlot tokenID, int inputIndex, int length) {
+		this.slot = tokenID;
 		this.inputIndex = inputIndex;
 		this.length = length;
 	}
@@ -39,27 +41,23 @@ public class TokenSymbolNode extends SPPFNode {
 		
 		TokenSymbolNode other = (TokenSymbolNode) obj;
 		
-		return tokenID == other.tokenID &&
+		return slot == other.slot &&
 			   inputIndex == other.inputIndex;
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(tokenID, inputIndex);
+		return HashFunctions.defaulFunction.hash(slot.getId(), inputIndex);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", tokenID, inputIndex, getRightExtent());
-	}
-	
-	public int getTokenID() {
-		return tokenID;
+		return String.format("(%s, %d, %d)", slot, inputIndex, getRightExtent());
 	}
 	
 	@Override
-	public int getId() {
-		return tokenID;
+	public GrammarSlot getGrammarSlot() {
+		return slot;
 	}
 	
 	@Override

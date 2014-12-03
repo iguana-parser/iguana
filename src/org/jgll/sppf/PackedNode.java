@@ -3,6 +3,8 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -14,7 +16,7 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class PackedNode extends SPPFNode {
 	
-	private final int id;
+	private final BodyGrammarSlot slot;
 
 	private final int pivot;
 
@@ -22,13 +24,13 @@ public class PackedNode extends SPPFNode {
 	
 	private List<SPPFNode> children;
 	
-	public PackedNode(int id, int pivot, NonPackedNode parent) {
+	public PackedNode(BodyGrammarSlot slot, int pivot, NonPackedNode parent) {
 		
-		assert id >= 0;
+		assert slot != null;
 		assert pivot >= 0;
 		assert parent != null;
 		
-		this.id = id;
+		this.slot = slot;
 		this.pivot = pivot;
 		this.parent = parent;
 		this.children = new ArrayList<>(2);
@@ -46,16 +48,16 @@ public class PackedNode extends SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  id == other.id && pivot == other.pivot;
+		return  slot == other.slot && pivot == other.pivot;
 	}
 	
 	public int getPivot() {
 		return pivot;
 	}
-	
+
 	@Override
-	public int getId() {
-		return id;
+	public GrammarSlot getGrammarSlot() {
+		return slot;
 	}
 	
 	public SPPFNode getParent() {
@@ -82,12 +84,12 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(id, pivot);
+		return HashFunctions.defaulFunction.hash(slot.getId(), pivot);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%d, %d)", id, getPivot());
+		return String.format("(%s, %d)", slot, getPivot());
 	}
 	
 	@Override
