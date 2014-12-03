@@ -10,7 +10,7 @@ public class DefaultSPPFLookupFactory implements SPPFLookupFactory {
 
 	@Override
 	public SPPFLookup createSPPFLookup(GrammarGraph grammar, Input input) {
-		return new DefaultSPPFLookupImpl(grammar, input);
+		return new DefaultSPPFLookupImpl();
 	}
 
 }

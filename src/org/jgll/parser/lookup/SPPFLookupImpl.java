@@ -3,11 +3,10 @@ package org.jgll.parser.lookup;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
@@ -15,7 +14,6 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TokenSymbolNode;
-import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class SPPFLookupImpl implements SPPFLookup {
@@ -32,21 +30,15 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	private int countAmbiguousNodes;
 
-	private GrammarGraph grammar;
-
-	private Input input;
-	
-	public SPPFLookupImpl(GrammarGraph grammar, Input input) {
-		this.grammar = grammar;
-		this.input = input;
+	public SPPFLookupImpl() {
 		nonterminalNodes = new HashMap<>();
 		intermediateNodes = new HashMap<>();
 		tokenNodes = new HashMap<>();
 	}
 
 	@Override
-	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length) {
-		TokenSymbolNode key = new TokenSymbolNode(tokenID, inputIndex, length);
+	public TokenSymbolNode getTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+		TokenSymbolNode key = new TokenSymbolNode(slot, inputIndex, length);
 		TokenSymbolNode value = tokenNodes.get(key);
 		if (value == null) {
 			value = key;
@@ -62,14 +54,14 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public TokenSymbolNode findTokenSymbolNode(int tokenID, int inputIndex, int length) {
-		TokenSymbolNode key = new TokenSymbolNode(tokenID, inputIndex, length);
+	public TokenSymbolNode findTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+		TokenSymbolNode key = new TokenSymbolNode(slot, inputIndex, length);
 		return tokenNodes.get(key);
 	}
 
 	@Override
 	public NonterminalNode getNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
-		NonterminalNode key = createNonterminalNode(head.getNonterminal(), grammar.getNonterminalId(head.getNonterminal()), leftExtent, rightExtent);
+		NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent);
 		NonterminalNode value = nonterminalNodes.get(key);
 		if (value == null) {
 			value = key;
@@ -81,21 +73,21 @@ public class SPPFLookupImpl implements SPPFLookup {
 		return value;
 	}
 	
-	protected NonterminalNode createNonterminalNode(Nonterminal nonterminal, int nonterminalId, int leftExtent, int rightExtent) {
-		if(nonterminal.isEbnfList()) {
-			return new ListSymbolNode(nonterminalId, leftExtent, rightExtent);
+	protected NonterminalNode createNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
+		if(head.getNonterminal().isEbnfList()) {
+			return new ListSymbolNode(head, leftExtent, rightExtent);
 		} else {
-			return new NonterminalNode(nonterminalId, leftExtent, rightExtent);
+			return new NonterminalNode(head, leftExtent, rightExtent);
 		}
 	}
 	
 	protected IntermediateNode createIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return new IntermediateNode(grammarSlot.getId(), leftExtent, rightExtent);
+		return new IntermediateNode(grammarSlot, leftExtent, rightExtent);
 	}
 
 	@Override
 	public NonterminalNode findNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {		
-		NonterminalNode key = createNonterminalNode(head.getNonterminal(), grammar.getNonterminalId(head.getNonterminal()), leftExtent, rightExtent);
+		NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent);
 		return nonterminalNodes.get(key);
 	}
 
@@ -121,7 +113,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
-		PackedNode packedNode = new PackedNode(slot.getId(), pivot, parent);
+		PackedNode packedNode = new PackedNode(slot, pivot, parent);
 		boolean ambiguousBefore = parent.isAmbiguous();
 		if (parent.addPackedNode(packedNode, leftChild, rightChild)) {
 			countPackedNodes++;
@@ -142,7 +134,7 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public NonterminalNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
-		return nonterminalNodes.get(createNonterminalNode(startSymbol.getNonterminal(), grammar.getNonterminalId(startSymbol.getNonterminal()), 0, inputSize - 1));
+		return nonterminalNodes.get(createNonterminalNode(startSymbol, 0, inputSize - 1));
 	}
 
 	@Override

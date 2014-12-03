@@ -4,8 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.TokenGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.parser.HashFunctions;
+import org.jgll.regex.RegularExpression;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -16,14 +17,14 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class TokenSymbolNode extends SPPFNode {
 	
-	private final TokenGrammarSlot slot;
+	private final TerminalGrammarSlot slot;
 	
 	private final int inputIndex;
 	
 	private final int length;
 	
-	public TokenSymbolNode(TokenGrammarSlot tokenID, int inputIndex, int length) {
-		this.slot = tokenID;
+	public TokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.length = length;
 	}
@@ -52,12 +53,16 @@ public class TokenSymbolNode extends SPPFNode {
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", slot, inputIndex, getRightExtent());
+		return String.format("(%s, %d, %d)", slot.getRegularExpression(), inputIndex, getRightExtent());
 	}
 	
 	@Override
 	public GrammarSlot getGrammarSlot() {
 		return slot;
+	}
+	
+	public RegularExpression getRegularExpression() {
+		return slot.getRegularExpression();
 	}
 	
 	@Override

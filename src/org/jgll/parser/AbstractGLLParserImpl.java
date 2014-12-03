@@ -6,6 +6,8 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.lexer.Lexer;
 import org.jgll.lexer.LexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
@@ -151,7 +153,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected HeadGrammarSlot getStartSymbol(String name) {
-		return grammar.getHeadGrammarSlot(name);
+		return grammar.getHeadGrammarSlot(Nonterminal.withName(name));
 	}
 	
 	protected void parse(HeadGrammarSlot startSymbol) {
@@ -297,9 +299,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length) {
+	public TokenSymbolNode getTokenNode(TerminalGrammarSlot slot, int inputIndex, int length) {
 		ci += length;
-		return sppfLookup.getTokenSymbolNode(tokenID, inputIndex, length);
+		return sppfLookup.getTokenSymbolNode(slot, inputIndex, length);
 	}
 	
 }

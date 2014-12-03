@@ -52,9 +52,4 @@ public class NonterminalNode extends NonPackedNode {
 		return this;
 	}
 	
-	@Override
-	public int getFirstPackedNodeGrammarSlot() {
-		return children.get(0).getGrammarSlot().getId();
-	}
-
 }

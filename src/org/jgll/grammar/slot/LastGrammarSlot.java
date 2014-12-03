@@ -22,6 +22,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	protected HeadGrammarSlot head;
 	
+	protected Object object;
+	
 	public LastGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head, 
 						   ConditionTest popConditions, NodeCreator nodeCreatorFromPop) {
 		super(id, label, previous, FalseConditionTest.getInstance(), FalseConditionTest.getInstance(), 
@@ -49,6 +51,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public Symbol getSymbol() {
 		throw new UnsupportedOperationException();
+	}
+	
+	public Object getObject() {
+		return object;
 	}
 
 	@Override

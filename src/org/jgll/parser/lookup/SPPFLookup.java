@@ -2,6 +2,7 @@ package org.jgll.parser.lookup;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
@@ -12,12 +13,12 @@ public interface SPPFLookup {
 
 	/**
 	 * 
-	 * @param tokenID
+	 * @param terminal
 	 * @param inputIndex
 	 * @param length
 	 * @return
 	 */
-	public TokenSymbolNode getTokenSymbolNode(int tokenID, int inputIndex, int length);
+	public TokenSymbolNode getTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length);
 	
 	public TokenSymbolNode getEpsilonNode(int inputIndex);
 	
@@ -28,7 +29,7 @@ public interface SPPFLookup {
 	 * @param length
 	 * @return
 	 */
-	public TokenSymbolNode findTokenSymbolNode(int tokenID, int inputIndex, int length);
+	public TokenSymbolNode findTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length);
 	
 	/**
 	 * 
@@ -54,11 +55,11 @@ public interface SPPFLookup {
 	 * @return null if no nonterminal node is found with the given parameters
 	 * 
 	 */
-	public NonterminalNode findNonterminalNode(HeadGrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public NonterminalNode findNonterminalNode(HeadGrammarSlot slot, int leftExtent, int rightExtent);
 	
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
-	public IntermediateNode findIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent);
+	public IntermediateNode findIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild);
 		
@@ -73,6 +74,5 @@ public interface SPPFLookup {
 	public int getPackedNodesCount();
 	
 	public int getAmbiguousNodesCount();
-
 	
 }

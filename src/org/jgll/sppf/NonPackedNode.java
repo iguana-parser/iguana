@@ -126,10 +126,6 @@ public abstract class NonPackedNode extends SPPFNode {
 		return children.size() > 1;
 	}
 	
-	public int getFirstPackedNodeGrammarSlot() {
-		return slot.getId();
-	}
-	
 	public int getCountPackedNodes() {
 		return children.size();
 	}

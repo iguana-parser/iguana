@@ -1,5 +1,7 @@
 package org.jgll.sppf;
 
+import org.jgll.grammar.slot.HeadGrammarSlot;
+
 
 
 /**
@@ -14,8 +16,8 @@ package org.jgll.sppf;
  */
 public class CollapsibleNode extends NonterminalNode {
 
-	public CollapsibleNode(int nonterminalId, int leftExtent, int rightExtent) {
-		super(nonterminalId, leftExtent, rightExtent);
+	public CollapsibleNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
+		super(head, leftExtent, rightExtent);
 	}
 	
 	@Override

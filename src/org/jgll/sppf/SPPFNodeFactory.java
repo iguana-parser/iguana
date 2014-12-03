@@ -27,21 +27,21 @@ public class SPPFNodeFactory {
 	}
 	
 	public TokenSymbolNode createTokenNode(String s, int leftExtent, int rightExtent) {
-		return new TokenSymbolNode(grammarGraph.getGrammarSlotByName(grammarGraph.getRegularExpressionByName(s)), leftExtent, rightExtent - leftExtent);
+		return new TokenSymbolNode(grammarGraph.getTerminalGrammarSlot(grammarGraph.getRegularExpressionByName(s)), leftExtent, rightExtent - leftExtent);
 	}
 
 	public ListSymbolNode createListNode(String s, int index, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = new Nonterminal.Builder(s).setIndex(index).build();
-		return new ListSymbolNode(grammarGraph.getNonterminalId(nonterminal), leftExtent, rightExtent);
+		return new ListSymbolNode(grammarGraph.getHeadGrammarSlot(nonterminal), leftExtent, rightExtent);
 	}
 	
 	public ListSymbolNode createListNode(String s, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = Nonterminal.withName(s);
-		return new ListSymbolNode(grammarGraph.getNonterminalId(nonterminal), leftExtent, rightExtent);
+		return new ListSymbolNode(grammarGraph.getHeadGrammarSlot(nonterminal), leftExtent, rightExtent);
 	}
 	
 	public PackedNode createPackedNode(String s, int pivot, NonPackedNode parent) {
-		return new PackedNode(grammarGraph.getGrammarSlotByName(s).getId(), pivot, parent);
+		return new PackedNode(grammarGraph.getGrammarSlotByName(s), pivot, parent);
 	}
 	
 }

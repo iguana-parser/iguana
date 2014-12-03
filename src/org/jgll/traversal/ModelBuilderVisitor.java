@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;
@@ -61,7 +63,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			}
 			else {
 				
-				T object = (T) grammar.getObject(node.getId(), node.getFirstPackedNodeGrammarSlot());
+				T object = (T) getObject(node);
 				
 				Result<U> result;
 				
@@ -85,6 +87,15 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		}
 	}
 	
+	private Object getObject(NonterminalNode node) {
+		assert node.getChildAt(0) instanceof PackedNode;
+		PackedNode packedNode = (PackedNode) node.getChildAt(0);
+		
+		assert packedNode.getGrammarSlot() instanceof LastGrammarSlot;
+		LastGrammarSlot grammarSlot = (LastGrammarSlot) packedNode.getGrammarSlot();
+		return grammarSlot.getObject();
+	}
+	
 	// TODO: does not work for collapsible nodes which are ambiguous.
 	// They should be lifted, similar to intermediate nodes.
 	private Object getObject(CollapsibleNode node) {
@@ -99,8 +110,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			}			
 		}
 		
-		
-		return grammar.getObject(node.getId(), node.getFirstPackedNodeGrammarSlot());
+		return getObject(node);
 	}
 
 	private void buildAmbiguityNode(NonterminalNode nonterminalSymbolNode) {
@@ -127,7 +137,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				result = listener.endNode((T) object, getChildrenValues(node), input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
 				node.setObject(result);				
 			} else {
-				T object = (T) grammar.getObject(nonterminalSymbolNode.getId(), nonterminalSymbolNode.getFirstPackedNodeGrammarSlot());
+				T object = (T) getObject(nonterminalSymbolNode);
 				listener.startNode(object);
 				node.accept(this);
 				result = listener.endNode(object, getChildrenValues(node), 
@@ -173,7 +183,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				buildAmbiguityNode(listNode);
 			}	
 			else {
-				T object = (T) grammar.getObject(listNode.getId(), listNode.getFirstPackedNodeGrammarSlot());
+				T object = (T) getObject(listNode);
 				listener.startNode(object);
 				visitChildren(listNode, this);
 				Result<U> result = listener.endNode(object, getChildrenValues(listNode), 
@@ -251,7 +261,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			
-			RegularExpression regex = grammar.getRegularExpressionById(node.getTokenID());
+			RegularExpression regex = node.getRegularExpression();
 			
 			if (regex instanceof Sequence) {
 				Sequence<CharacterClass> sequence = (Sequence<CharacterClass>) regex;

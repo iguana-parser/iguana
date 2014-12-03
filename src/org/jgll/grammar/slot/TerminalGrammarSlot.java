@@ -5,11 +5,15 @@ import java.io.PrintWriter;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.regex.RegularExpression;
 import org.jgll.util.Input;
 
 public class TerminalGrammarSlot implements GrammarSlot {
 
-	public TerminalGrammarSlot() {
+	private RegularExpression regex;
+
+	public TerminalGrammarSlot(RegularExpression regex) {
+		this.regex = regex;
 	}
 	
 	@Override
@@ -35,6 +39,10 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	@Override
 	public GSSNode hasGSSNode(int inputIndex) {
 		return null;
+	}
+	
+	public RegularExpression getRegularExpression() {
+		return regex;
 	}
 
 	@Override

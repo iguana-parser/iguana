@@ -4,6 +4,7 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
@@ -26,7 +27,7 @@ public interface GLLParser {
 	
 	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
-	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
+	public TokenSymbolNode getTokenNode(TerminalGrammarSlot slot, int inputIndex, int length);
 	
 	/**
 	 * @return true if no such descriptor exists.

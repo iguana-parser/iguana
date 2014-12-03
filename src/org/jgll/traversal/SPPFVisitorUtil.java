@@ -64,7 +64,7 @@ public class SPPFVisitorUtil {
 				for(SPPFNode child : intermediateNode.getChildren()) {
 					// For each packed node of the intermediate node create a new packed node
 					PackedNode pn = (PackedNode) child;
-					PackedNode newPackedNode = new PackedNode(node.getFirstPackedNodeGrammarSlot(), node.childrenCount(), node);
+					PackedNode newPackedNode = null; //new PackedNode(node.getFirstPackedNodeGrammarSlot(), node.childrenCount(), node);
 					for(SPPFNode sn : pn.getChildren()) {
 						newPackedNode.addChild(sn);					
 					}
@@ -136,7 +136,7 @@ public class SPPFVisitorUtil {
 				for(SPPFNode child : intermediateNode.getChildren()) {
 					// For each packed node of the intermediate node create a new packed node
 					PackedNode pn = (PackedNode) child;
-					PackedNode newPackedNode = new PackedNode(parentOfPackedNode.getFirstPackedNodeGrammarSlot(), parentOfPackedNode.childrenCount(), parentOfPackedNode);
+					PackedNode newPackedNode = null; //new PackedNode(parentOfPackedNode.getFirstPackedNodeGrammarSlot(), parentOfPackedNode.childrenCount(), parentOfPackedNode);
 					for(SPPFNode sn : pn.getChildren()) {
 						newPackedNode.addChild(sn);					
 					}

@@ -9,7 +9,7 @@ public class NewSPPFLookupFactory implements SPPFLookupFactory {
 
 	@Override
 	public SPPFLookup createSPPFLookup(GrammarGraph grammar, Input input) {
-		return new SPPFLookupImpl(grammar, input);
+		return new SPPFLookupImpl();
 	}
 
 }

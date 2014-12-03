@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,14 +17,13 @@ import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.logging.LoggerWrapper;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 import com.google.common.collect.BiMap;
 
@@ -47,6 +48,8 @@ public class GrammarGraph implements Serializable {
 	 * from any arbitrary nonterminal.
 	 */
 	Map<Nonterminal, HeadGrammarSlot> nameToNonterminals;
+	
+	Map<RegularExpression, TerminalGrammarSlot> terminals;
 	
 	private  Map<String, BodyGrammarSlot> nameToSlots;
 	
@@ -359,6 +362,10 @@ public class GrammarGraph implements Serializable {
 		else {
 			return "";
 		}
+	}
+	
+	public TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regularExpression) {
+		return terminals.get(regularExpression);
 	}
 	
 	public BodyGrammarSlot getGrammarSlotByName(String name) {

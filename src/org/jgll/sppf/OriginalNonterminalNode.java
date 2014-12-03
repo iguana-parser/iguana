@@ -3,13 +3,15 @@ package org.jgll.sppf;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.slot.HeadGrammarSlot;
+
 
 public class OriginalNonterminalNode extends NonterminalNode {
 
 	private Set<PackedNode> packedNodes;
 	
-	public OriginalNonterminalNode(int nonterminalId, int leftExtent, int rightExtent) {
-		super(nonterminalId, leftExtent, rightExtent);
+	public OriginalNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
+		super(head, leftExtent, rightExtent);
 	}	
 	
 	@Override
@@ -18,7 +20,6 @@ public class OriginalNonterminalNode extends NonterminalNode {
 		packedNodes = new HashSet<>();
 		return this;
 	}
-	
 	
 	@Override
 	public boolean addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {

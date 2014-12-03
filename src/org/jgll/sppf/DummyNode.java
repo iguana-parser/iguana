@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.Collections;
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -44,11 +45,6 @@ public class DummyNode extends SPPFNode {
 	}
 	
 	@Override
-	public int getId() {
-		return -1;
-	}
-
-	@Override
 	public SPPFNode getChildAt(int index) {
 		return null;
 	}
@@ -76,6 +72,12 @@ public class DummyNode extends SPPFNode {
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		// do nothing
+	}
+
+	@Override
+	public GrammarSlot getGrammarSlot() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
