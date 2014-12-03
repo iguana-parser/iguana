@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import java.util.ArrayList;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
@@ -49,5 +50,10 @@ public class IntermediateNode extends NonPackedNode {
 	public IntermediateNode init() {
 		children = new ArrayList<>(2);
 		return this;
+	}
+
+	@Override
+	public BodyGrammarSlot getGrammarSlot() {
+		return (BodyGrammarSlot) slot;
 	}
 }

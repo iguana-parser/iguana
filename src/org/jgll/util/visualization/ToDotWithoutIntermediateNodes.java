@@ -37,7 +37,7 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 				SPPFVisitorUtil.removeIntermediateNode(node);
 			}
 	
-			String label = String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()).getName(), 
+			String label = String.format("(%s, %d, %d)", node.getGrammarSlot().toString(), 
 					 node.getLeftExtent(), node.getRightExtent());
 
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");

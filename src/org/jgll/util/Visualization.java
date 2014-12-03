@@ -36,7 +36,7 @@ public class Visualization {
 	}
 	
 	public static void generateSPPFNodesUnPacked(String outputDir, SPPFNode node, GrammarGraph grammar, Input input) {
-		SPPFToDotUnpacked toDot = new SPPFToDotUnpacked(grammar, input);
+		SPPFToDotUnpacked toDot = new SPPFToDotUnpacked(input);
 		toDot.visit(node);
 		int i = 0;
 		for(String s : toDot.getResult()) {

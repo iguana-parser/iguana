@@ -1,5 +1,8 @@
 package org.jgll.util.visualization;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
@@ -9,7 +12,11 @@ import org.jgll.sppf.TokenSymbolNode;
 
 public abstract class ToDot {
 	
+	private Map<SPPFNode, Integer> idsMap = new HashMap<>();
+	
 	protected String getId(SPPFNode node) {
+		
+		idsMap.putIfAbsent(node, idsMap.size());
 		
 		if(node instanceof NonterminalNode) {
 			return "nontermianl_" + getNodeId(node);
@@ -35,11 +42,11 @@ public abstract class ToDot {
 	}
 	
 	protected String getNodeId(SPPFNode node) {
-		return node.getId() + "," + node.getLeftExtent() + "," + node.getRightExtent();
+		return node.getGrammarSlot().toString() + "," + node.getLeftExtent() + "," + node.getRightExtent();
 	}
 	
 	protected String getNodeId(PackedNode node) {
-		return node.getId() + "," + node.getPivot();
+		return idsMap.get(node) + "," + node.getPivot();
 	}
 	
 }

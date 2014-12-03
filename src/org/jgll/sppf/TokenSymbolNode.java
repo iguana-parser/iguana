@@ -3,7 +3,6 @@ package org.jgll.sppf;
 import java.util.Collections;
 import java.util.List;
 
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.RegularExpression;
@@ -57,7 +56,7 @@ public class TokenSymbolNode extends SPPFNode {
 	}
 	
 	@Override
-	public GrammarSlot getGrammarSlot() {
+	public TerminalGrammarSlot getGrammarSlot() {
 		return slot;
 	}
 	

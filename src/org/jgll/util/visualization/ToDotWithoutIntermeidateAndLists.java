@@ -27,7 +27,7 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 		
 			for(SPPFNode child : node.getChildren()) {
 				
-				String label = grammarGraph.getNonterminalById(child.getId()).getName();
+				String label = child.getGrammarSlot().toString();
 				
 				if(!label.startsWith("layout")) {
 				  addEdgeToChild(node, child);
@@ -48,7 +48,7 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 		
 			
 			for(SPPFNode child : node.getChildren()) {
-				String label = grammarGraph.getNonterminalById(child.getId()).getName();
+				String label = child.getGrammarSlot().toString();
 				if(!label.startsWith("layout")) {
 				  addEdgeToChild(node, child);
 				  child.accept(this);

@@ -77,10 +77,10 @@ public class LL1Test {
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammarGraph.getHeadGrammarSlot("S").isNullable());
-		assertTrue(grammarGraph.getHeadGrammarSlot("A").isNullable());
-		assertTrue(grammarGraph.getHeadGrammarSlot("B").isNullable());
-		assertTrue(grammarGraph.getHeadGrammarSlot("D").isNullable());
+		assertEquals(false, grammar.isNullable(S));
+		assertEquals(true, grammar.isNullable(A));
+		assertEquals(true, grammar.isNullable(B));
+		assertEquals(true, grammar.isNullable(D));
 	}
 	
 	@Test

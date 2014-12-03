@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -51,5 +52,11 @@ public class NonterminalNode extends NonPackedNode {
 		children = new ArrayList<>(2);
 		return this;
 	}
+	
+	@Override
+	public HeadGrammarSlot getGrammarSlot() {
+		return (HeadGrammarSlot) slot;
+	}
+
 	
 }
