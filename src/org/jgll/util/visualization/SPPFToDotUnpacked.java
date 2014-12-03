@@ -42,11 +42,8 @@ public class SPPFToDotUnpacked extends ToDot {
 
 	private Input input;
 
-	private GrammarGraph grammar;
-	
-	public SPPFToDotUnpacked(GrammarGraph grammar, Input input) {
+	public SPPFToDotUnpacked(Input input) {
 		this(input, false);
-		this.grammar = grammar;
 	}
 	
 	public SPPFToDotUnpacked(Input input, boolean showPackedNodeLabel) {
@@ -126,7 +123,7 @@ public class SPPFToDotUnpacked extends ToDot {
 
 	public void visit(NonterminalNode node, StringBuilder sb) {
 		
-		String label = grammar.getNonterminalById(node.getId()).getName();
+		String label = node.getGrammarSlot().toString();
 		
 		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 		

@@ -16,9 +16,11 @@ import org.jgll.util.Input;
 /**
  * Creates a Graphviz's dot format representation of an SPPF node.
  * 
+ * 
  * @author Ali Afroozeh
  * 
  * @see SPPFVisitor
+ * 
  */
 public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	
@@ -28,11 +30,8 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	protected Input input;
 
-	protected GrammarGraph grammarGraph;
-	
 	public SPPFToDot(GrammarGraph grammar, Input input) {
 		this(input, false);
-		this.grammarGraph = grammar;
 	}
 	
 	public SPPFToDot(Input input, boolean showPackedNodeLabel) {
@@ -46,8 +45,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-			String label = String.format("(%s, %d, %d): \"%s\"", grammarGraph.getRegularExpressionById(node.getId()).getName(),
-															 node.getLeftExtent(), node.getRightExtent(), matchedInput);
+			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), matchedInput);
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 		}
 	}
@@ -57,8 +55,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			String label = String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()), 
-														 node.getLeftExtent(), node.getRightExtent());
+			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
 			if (node.isAmbiguous()) {
 				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			} else {
@@ -75,8 +72,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 	
-			String label = String.format("(%s, %d, %d)", grammarGraph.getGrammarSlot(node.getId()), 
-														 node.getLeftExtent(), node.getRightExtent());
+			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
 			if (node.isAmbiguous()) {
 				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
 			} else {

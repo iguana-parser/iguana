@@ -12,6 +12,7 @@ import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.IntermediateNodeCreator;
@@ -95,7 +96,7 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 	public TokenGrammarSlot createTokenGrammarSlot(Rule rule,
 												   int symbolIndex, 
 												   BodyGrammarSlot previous, 
-												   int tokenID, 
+												   TerminalGrammarSlot slot,
 												   ConditionTest preConditions,
 												   ConditionTest postConditions,
 												   ConditionTest popConditions) {
@@ -103,41 +104,39 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		if(preConditions == null) throw new IllegalArgumentException("PreConditions cannot be null.");
 		if(postConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
 		
-		RegularExpression regularExpression = (RegularExpression) rule.getBody().get(symbolIndex);
-		
 		// A ::= .x
 		if (symbolIndex == 0 && rule.size() == 1) {
-			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
+			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, slot, 
 									 preConditions, postConditions, popConditions, nonterminalWithOneChildNodeCreator, DummyNodeCreator.getInstance());
 		} 
 		
 		// A ::= x . y
 		else if (symbolIndex == 1 && rule.size() == 2) {
-			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
+			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, slot, 
 									 preConditions, postConditions, popConditions, nonterminalNodeCreator, rightNodeCreator);
 		} 
 		
 		// A ::= alpha .x  where |alpha| > 1
 		else if (symbolIndex == rule.size() - 1) {
-			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
+			return new LastTokenSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, slot, 
 									 preConditions, postConditions, popConditions, nonterminalNodeCreator, intermediateNodeCreator);
 		}
 		
 		// A ::= .x alpha  where |alpha| >= 1
 		else if (symbolIndex == 0) {
-			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
+			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, slot, 
 										preConditions, postConditions, popConditions, rightNodeCreator, DummyNodeCreator.getInstance());
 		}
 		
 		// A ::= x . y alpha  where |alpha| >= 1
 		else if (symbolIndex == 1) {
-			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
+			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, slot, 
 										preConditions, postConditions, popConditions, intermediateNodeCreator, rightNodeCreator);
 		}
 		
 		// A ::= beta .x alpha where |beta| >=1 and |alpha| >= 1
 		else {
-			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, regularExpression, tokenID, 
+			return new TokenGrammarSlot(bodyGrammarSlotId++,  getSlotName(rule, symbolIndex), previous, slot, 
 										preConditions, postConditions, popConditions, intermediateNodeCreator, intermediateNodeCreator);
 		}
 	}

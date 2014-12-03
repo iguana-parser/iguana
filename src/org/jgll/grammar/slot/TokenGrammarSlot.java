@@ -21,16 +21,13 @@ import static org.jgll.util.generator.GeneratorUtil.*;
  */
 public class TokenGrammarSlot extends BodyGrammarSlot {
 	
-	protected final int tokenID;
+	protected final TerminalGrammarSlot slot;
 	
-	protected final RegularExpression regularExpression;
-	
-	public TokenGrammarSlot(int id, String label, BodyGrammarSlot previous, RegularExpression regularExpression, int tokenID,
+	public TokenGrammarSlot(int id, String label, BodyGrammarSlot previous, TerminalGrammarSlot slot,
 							ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
 							NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 		super(id, label, previous, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
-		this.regularExpression = regularExpression;
-		this.tokenID = tokenID;
+		this.slot = slot;
 	}
 	
 	@Override
@@ -42,7 +39,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 
-		int length = lexer.tokenLengthAt(ci, tokenID);
+		int length = lexer.tokenLengthAt(ci, slot.getId());
 		
 		if (length < 0) {
 			parser.recordParseError(this);
@@ -53,7 +50,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		TokenSymbolNode cr = parser.getTokenNode(tokenID, ci, length);
+		TokenSymbolNode cr = parser.getTokenNode(slot, ci, length);
 		
 		SPPFNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		
@@ -64,16 +61,16 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public boolean isNullable() {
-		return regularExpression.isNullable();
+		return slot.getRegularExpression().isNullable();
 	}
 	
 	public int getTokenID() {
-		return tokenID;
+		return slot.getId();
 	}
 	
 	@Override
 	public RegularExpression getSymbol() {
-		return regularExpression;
+		return slot.getRegularExpression();
 	}
 	
 	@Override
@@ -83,8 +80,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		  .append(id + ", ")
 		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
-		  .append(regularExpression.getConstructorCode() + ", ")
-		  .append(tokenID + ", ")
+		  .append(slot.getConstructorCode() + ", ")
+		  .append(slot.getId() + ", ")
 		  .append(preConditions.getConstructorCode() + ", ")
 		  .append(postConditions.getConstructorCode() + ", ")
 		  .append(popConditions.getConstructorCode() + ", ")
@@ -98,13 +95,13 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		writer.println("// " + escape(label));
 		writer.println("private final int slot" + id + "() {");
 		writer.println("if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) return L0;");
-		writer.println("  length = lexer.tokenLengthAt(ci, " + tokenID + ");");
+		writer.println("  length = lexer.tokenLengthAt(ci, " + slot.getId() + ");");
 		writer.println("  if (length < 0) {");
 		writer.println("    recordParseError(slot" + id + ");");
 		writer.println("    return L0;");
 		writer.println("  }");
 		writer.println("  if (slot" + id + ".getPostConditions().execute(this, lexer, cu, ci + length)) return L0;");
-		writer.println("  SPPFNode cr = getTokenNode(" + tokenID + ", ci, length);");
+		writer.println("  SPPFNode cr = getTokenNode(" + slot.getId() + ", ci, length);");
 		writer.println("  cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);");
 		writer.println("  return L0;");
 		writer.println("}");

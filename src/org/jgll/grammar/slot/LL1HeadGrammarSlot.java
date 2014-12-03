@@ -85,7 +85,7 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 				ntNode.addChild(node);
 			}
 			
-			ntNode.addPackedNode(new PackedNode(lastSlot.getId(), ci, ntNode), DummyNode.getInstance(), DummyNode.getInstance());
+			ntNode.addPackedNode(new PackedNode(lastSlot, ci, ntNode), DummyNode.getInstance(), DummyNode.getInstance());
 		}
 		
 //		return ntNode;
