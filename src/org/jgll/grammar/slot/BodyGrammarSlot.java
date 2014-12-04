@@ -106,11 +106,6 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 	}	
 	
 	@Override
-	public int getId() {
-		return id;
-	}
-	
-	@Override
 	public String toString() {
 		return label;
 	}

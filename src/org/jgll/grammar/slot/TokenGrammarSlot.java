@@ -64,10 +64,6 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		return slot.getRegularExpression().isNullable();
 	}
 	
-	public int getTokenID() {
-		return slot.getId();
-	}
-	
 	@Override
 	public RegularExpression getSymbol() {
 		return slot.getRegularExpression();

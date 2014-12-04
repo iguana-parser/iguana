@@ -114,11 +114,6 @@ public class HeadGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public int getId() {
-		return id;
-	}
-	
-	@Override
 	public GSSNode getGSSNode(int inputIndex) {
 		GSSNode gssNode = new GSSNode(this, inputIndex);
 		gssNodes[inputIndex] = gssNode;

@@ -24,8 +24,6 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	public abstract GrammarSlot parse(GLLParser parser, Lexer lexer);
 	
-	public int getId();
-	
 	public GSSNode getGSSNode(int inputIndex);
 	
 	public GSSNode hasGSSNode(int inputIndex);

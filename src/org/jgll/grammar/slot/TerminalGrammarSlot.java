@@ -31,11 +31,6 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 
 	@Override
-	public int getId() {
-		return 0;
-	}
-
-	@Override
 	public GSSNode getGSSNode(int inputIndex) {
 		return null;
 	}
