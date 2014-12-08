@@ -14,14 +14,13 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class NonterminalNode extends NonPackedNode {
 	
-	
 	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.getId(), leftExtent, rightExtent);
+		return HashFunctions.defaulFunction.hash(slot.hashCode(), leftExtent, rightExtent);
 	}
 	
 	@Override

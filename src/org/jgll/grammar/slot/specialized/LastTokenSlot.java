@@ -17,13 +17,11 @@ import org.jgll.sppf.TokenSymbolNode;
 
 public class LastTokenSlot extends TokenGrammarSlot {
 
-	public LastTokenSlot(int id, String label,
- 						 BodyGrammarSlot previous, TerminalGrammarSlot slot, ConditionTest preConditions,
-						 ConditionTest postConditions, ConditionTest popConditions,
+	public LastTokenSlot(String label, BodyGrammarSlot previous, TerminalGrammarSlot slot, 
+						 ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
 						 NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 		
-		super(id, label, previous, slot, preConditions, 
-			  postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
+		super(label, previous, slot, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 	}
 	
 	@Override

@@ -17,7 +17,6 @@ import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
@@ -40,18 +39,20 @@ public class GrammarGraph implements Serializable {
 	
 	private List<HeadGrammarSlot> headGrammarSlots;
 	
-	private BiMap<BodyGrammarSlot, Integer> slots;
+	private Resolver resolver;
 	
-	/**
-	 * A map from nonterminal names to their corresponding head ‚slots.
-	 * This map is used to locate head grammar slots by name for parsing
-	 * from any arbitrary nonterminal.
-	 */
-	Map<Nonterminal, HeadGrammarSlot> nameToNonterminals;
-	
-	Map<RegularExpression, TerminalGrammarSlot> terminals;
-	
-	private  Map<String, BodyGrammarSlot> nameToSlots;
+	private Set<BodyGrammarSlot> slots;
+//	
+//	/**
+//	 * A map from nonterminal names to their corresponding head ‚slots.
+//	 * This map is used to locate head grammar slots by name for parsing
+//	 * from any arbitrary nonterminal.
+//	 */
+//	Map<Nonterminal, HeadGrammarSlot> nameToNonterminals;
+//	
+//	Map<RegularExpression, TerminalGrammarSlot> terminals;
+//	
+//	private  Map<String, BodyGrammarSlot> nameToSlots;
 	
 	private String name;
 	
@@ -69,31 +70,19 @@ public class GrammarGraph implements Serializable {
 	
 	private Map<Integer, RunnableAutomaton> runnableAutomatons;
 	
-	private Object[][] objects;
-	
 	private Grammar grammar;
 	
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
 		this.headGrammarSlots = builder.headGrammarSlots;
-		this.slots = builder.slots;
-		this.nameToNonterminals = new HashMap<>();
-		this.nameToNonterminals = builder.nonterminalsMap;
 		
 		this.regularExpressions = builder.regularExpressions;
 		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
 		
-		this.objects = builder.objects;
-		
 		this.nonterminals = builder.nonterminals;
 
 		this.regularExpressions = builder.regularExpressions;
-		
-		this.nameToSlots = new HashMap<>();
-		for(BodyGrammarSlot slot : slots.keySet()) {
-			nameToSlots.put(slot.getLabel(), slot);
-		}
-		
+				
 		regularExpressionNames = new HashMap<>();
 		for(Entry<RegularExpression, Integer> entry : regularExpressions.entrySet()) {
 			regularExpressionNames.put(entry.getKey().getName(), entry.getKey());
@@ -166,7 +155,7 @@ public class GrammarGraph implements Serializable {
 		// Generate Head grammar slots. 
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			//writer.println("private HeadGrammarSlot slot" + head.getId() + " = " + head.getConstructorCode() + ";");
-			writer.println("private HeadGrammarSlot slot" + head.getId() + ";");
+			writer.println("private HeadGrammarSlot slot" + resolver.getId(head) + ";");
 		}
 		
 		// Generate body grammar slots
@@ -175,7 +164,7 @@ public class GrammarGraph implements Serializable {
 				BodyGrammarSlot current = slot;
 				while (current != null) {
 //					writer.println("private BodyGrammarSlot slot" + current.getId() + " = " + current.getConstructorCode() + ";");
-					writer.println("private BodyGrammarSlot slot" + current.getId() + ";");
+					writer.println("private BodyGrammarSlot slot" + resolver.getId(current) + ";");
 					current = current.next();
 				}
 			}
@@ -191,13 +180,13 @@ public class GrammarGraph implements Serializable {
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			int i = 0;
 			for (BodyGrammarSlot slot : head.getFirstSlots()) {
-				writer.println("  slot" + head.getId() + ".setFirstGrammarSlotForAlternate(slot" + slot.getId() + ", " + i++ + ");");
+				writer.println("  slot" + resolver.getId(head) + ".setFirstGrammarSlotForAlternate(slot" + resolver.getId(slot) + ", " + i++ + ");");
 			}
 		}
 		
 		// Add start symbols
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			writer.println("  startSymbols.put(\"" + escape(head.getNonterminal().getName()) + "\", slot" + head.getId() + ");");
+			writer.println("  startSymbols.put(\"" + escape(head.getNonterminal().getName()) + "\", slot" + resolver.getId(head) + ");");
 		}
 
 		writer.println("}");
@@ -207,7 +196,7 @@ public class GrammarGraph implements Serializable {
 		// Init heads method
 		writer.println("private void initHeadGrammarSlots() {");
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			writer.println("slot" + head.getId() + " = " + head.getConstructorCode() + ";");
+			writer.println("slot" + resolver.getId(head) + " = " + head.getConstructorCode() + ";");
 		}
 		writer.println("}");
 		writer.println();
@@ -215,7 +204,7 @@ public class GrammarGraph implements Serializable {
 		
 		
 		// Init body grammar slot method
-		ArrayList<BodyGrammarSlot> bodyGrammarSlots = new ArrayList<>(slots.keySet());
+		ArrayList<BodyGrammarSlot> bodyGrammarSlots = new ArrayList<>(slots);
 		int n = slots.size() / 200;
 		int r = slots.size() % 200;
 		
@@ -225,7 +214,7 @@ public class GrammarGraph implements Serializable {
 			
 			for (int j = i * 200; j < (i + 1) * 200; j++ ) {
 				BodyGrammarSlot current = bodyGrammarSlots.get(j);
-				writer.println("  slot" + current.getId() + " = " + current.getConstructorCode() + ";");
+				writer.println("  slot" + resolver.getId(current) + " = " + current.getConstructorCode() + ";");
 			}
 			
 			writer.println("}");
@@ -236,7 +225,7 @@ public class GrammarGraph implements Serializable {
 		writer.println("private void initBodyGrammarSlots" + n + "() {");
 		for (int j = n * 200; j < bodyGrammarSlots.size(); j++ ) {
 			BodyGrammarSlot current = bodyGrammarSlots.get(j);
-			writer.println("  slot" + current.getId() + " = " + current.getConstructorCode() + ";");
+			writer.println("  slot" + resolver.getId(current) + " = " + current.getConstructorCode() + ";");
 		}
 		writer.println("}");
 		writer.println();
@@ -276,8 +265,8 @@ public class GrammarGraph implements Serializable {
 		// Generate the body of switch case
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			writer.println("// " + escape(head.toString()));
-			writer.println("case " + head.getId() + ":");
-			writer.println("  cs = slot" + head.getId() + "();");
+			writer.println("case " + resolver.getId(head) + ":");
+			writer.println("  cs = slot" + resolver.getId(head) + "();");
 			writer.println("  break;");
 			writer.println();
 		}
@@ -320,11 +309,11 @@ public class GrammarGraph implements Serializable {
 			BodyGrammarSlot current = slots.get(i);
 			
 			writer.println("// " + escape(current.toString()));
-			writer.println("case " + current.getId() + ":");
+			writer.println("case " + resolver.getId(current) + ":");
 			if (current.getClass() == TokenGrammarSlot.class) {
-				writer.println("  slot" + current.getId() + "();");
+				writer.println("  slot" + resolver.getId(current) + "();");
 			} else {
-				writer.println("  cs = slot" + current.getId() + "();");
+				writer.println("  cs = slot" + resolver.getId(current) + "();");
 				writer.println("  break;");						
 			}
 			writer.println();
@@ -340,18 +329,10 @@ public class GrammarGraph implements Serializable {
 		return headGrammarSlots.get(id);
 	}
 	
-	public BodyGrammarSlot getGrammarSlot(int id) {
-		return slots.inverse().get(id);
-	}
-		
 	public List<HeadGrammarSlot> getNonterminals() {
 		return headGrammarSlots;
 	}
-	
-	public HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
-		return nameToNonterminals.get(nonterminal);
-	}
-	
+		
 	private String getSlotName(BodyGrammarSlot slot) {
 		if(slot instanceof TokenGrammarSlot) {
 			return ((TokenGrammarSlot) slot).getSymbol().getName();
@@ -363,15 +344,7 @@ public class GrammarGraph implements Serializable {
 			return "";
 		}
 	}
-	
-	public TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regularExpression) {
-		return terminals.get(regularExpression);
-	}
-	
-	public BodyGrammarSlot getGrammarSlotByName(String name) {
-		return nameToSlots.get(name);
-	}
-	
+		
 	public int getLongestTerminalChain() {
 		return longestTerminalChain;
 	}
@@ -444,7 +417,7 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public Set<BodyGrammarSlot> getGrammarSlots() {
-		return slots.keySet();
+		return slots;
 	}
 	
 	public RegularExpression getRegularExpressionByName(String name) {
@@ -468,11 +441,7 @@ public class GrammarGraph implements Serializable {
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
 		return followSets.get(nonterminal);
 	}
-	
-	public Object getObject(int nonterminalId, int alternateId) {
-		return objects[nonterminalId][alternateId];
-	}
-	
+		
 	public int getCountAlternates(Nonterminal nonterminal) {
 		return grammar.getAlternatives(nonterminal).size();
 	}
@@ -497,6 +466,10 @@ public class GrammarGraph implements Serializable {
 				}
 			}
 		}
+	}
+	
+	public Resolver getResolver() {
+		return resolver;
 	}
 	
 }

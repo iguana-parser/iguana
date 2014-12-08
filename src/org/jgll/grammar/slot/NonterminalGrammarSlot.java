@@ -22,13 +22,13 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	protected HeadGrammarSlot nonterminal;
 	
-	public NonterminalGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
+	public NonterminalGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
 								  ConditionTest preConditions, ConditionTest popConditions,
 								  NodeCreator nodeCreatorFromPop) {
-		super(id, label, previous, preConditions, FalseConditionTest.getInstance(), popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
-		if(nonterminal == null) {
-			throw new IllegalArgumentException("Nonterminal cannot be null.");
-		}
+		super(label, previous, preConditions, FalseConditionTest.getInstance(), popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
+		
+		if(nonterminal == null) throw new IllegalArgumentException("Nonterminal cannot be null.");
+		
 		this.nonterminal = nonterminal;
 	}
 	

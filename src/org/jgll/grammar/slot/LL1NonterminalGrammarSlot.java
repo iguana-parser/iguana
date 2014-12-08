@@ -15,12 +15,12 @@ import org.jgll.sppf.SPPFNode;
  */
 public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	
-	public LL1NonterminalGrammarSlot(int id, String label, BodyGrammarSlot previous, 
+	public LL1NonterminalGrammarSlot(String label, BodyGrammarSlot previous, 
 									 LL1HeadGrammarSlot nonterminal, 
 									 ConditionTest preConditions, 
 									 ConditionTest popConditions,
 									 NodeCreator nodeCreator) {
-		super(id, label, previous, nonterminal, preConditions, popConditions, nodeCreator);
+		super(label, previous, nonterminal, preConditions, popConditions, nodeCreator);
 	}
 	
 	@Override

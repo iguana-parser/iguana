@@ -23,10 +23,10 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	protected final TerminalGrammarSlot slot;
 	
-	public TokenGrammarSlot(int id, String label, BodyGrammarSlot previous, TerminalGrammarSlot slot,
+	public TokenGrammarSlot(String label, BodyGrammarSlot previous, TerminalGrammarSlot slot,
 							ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
 							NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
-		super(id, label, previous, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
+		super(label, previous, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 		this.slot = slot;
 	}
 	

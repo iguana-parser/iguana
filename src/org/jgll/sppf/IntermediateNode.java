@@ -25,7 +25,7 @@ public class IntermediateNode extends NonPackedNode {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.getId(), leftExtent, rightExtent);
+		return HashFunctions.defaulFunction.hash(slot.hashCode(), leftExtent, rightExtent);
 	}
 	
 	@Override

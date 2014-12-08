@@ -14,7 +14,7 @@ import org.jgll.traversal.SPPFVisitor;
  * @author Ali Afroozeh
  *
  */
-public class PackedNode extends SPPFNode {
+public class PackedNode implements SPPFNode {
 	
 	private final BodyGrammarSlot slot;
 
@@ -84,7 +84,7 @@ public class PackedNode extends SPPFNode {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.getId(), pivot);
+		return HashFunctions.defaulFunction.hash(slot.hashCode(), pivot);
 	}
 	
 	@Override

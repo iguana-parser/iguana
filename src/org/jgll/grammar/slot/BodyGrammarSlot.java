@@ -17,8 +17,6 @@ import org.jgll.util.Input;
  */
 public abstract class BodyGrammarSlot implements GrammarSlot {
 	
-	protected final int id;
-
 	protected final BodyGrammarSlot previous;
 	
 	protected BodyGrammarSlot next;
@@ -37,15 +35,13 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 	
 	private GSSNode[] gssNodes;
 
-	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, 
+	public BodyGrammarSlot(String label, BodyGrammarSlot previous, 
 						   ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
 						   NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 
 		if(label == null) {
 			throw new IllegalArgumentException("Label cannot be null.");
 		}
-		
-		this.id = id;
 		
 		this.label = label;
 

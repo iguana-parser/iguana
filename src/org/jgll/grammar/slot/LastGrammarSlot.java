@@ -24,9 +24,9 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	protected Object object;
 	
-	public LastGrammarSlot(int id, String label, BodyGrammarSlot previous, HeadGrammarSlot head, 
+	public LastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, 
 						   ConditionTest popConditions, NodeCreator nodeCreatorFromPop) {
-		super(id, label, previous, FalseConditionTest.getInstance(), FalseConditionTest.getInstance(), 
+		super(label, previous, FalseConditionTest.getInstance(), FalseConditionTest.getInstance(), 
 			  popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
 		this.head = head;
 	}

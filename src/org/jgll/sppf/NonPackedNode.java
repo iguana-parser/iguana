@@ -13,7 +13,7 @@ import org.jgll.grammar.slot.GrammarSlot;
  * 
  */
 
-public abstract class NonPackedNode extends SPPFNode {
+public abstract class NonPackedNode implements SPPFNode {
 	
 	protected final GrammarSlot slot;
 	

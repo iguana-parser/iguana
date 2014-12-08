@@ -4,54 +4,35 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
- * An SPPF node is a node in an Shared Packed Parse Forest. This data structure
- * is used to store the parse forest that is the result of parsing an input
- * string with a GLL parser. <br />
  * 
- * @author Maarten Manders
  * @author Ali Afroozeh
  * 
  */
 
-public abstract class SPPFNode {
-
-	private boolean visited;
+public interface SPPFNode {
 	
-	private Object object;
-
-	public abstract SPPFNode getChildAt(int index);
+	public SPPFNode getChildAt(int index);
 	
-	public abstract List<SPPFNode> getChildren();
+	public List<SPPFNode> getChildren();
 		
-	public abstract boolean isAmbiguous();
+	public boolean isAmbiguous();
 
-	public abstract int childrenCount();
+	public int childrenCount();
 
-	public abstract GrammarSlot getGrammarSlot();
+	public GrammarSlot getGrammarSlot();
 
-	public abstract int getLeftExtent();
+	public int getLeftExtent();
 
-	public abstract int getRightExtent();
+	public int getRightExtent();
 	
-	public abstract void accept(SPPFVisitor visitAction);
+	public void accept(SPPFVisitor visitAction);
 	
-	public Object getObject() {
-		return object;
-	}
-	
-	public void setObject(Object object) {
-		this.object = object;
-	}
-	
-	public boolean isVisited() {
-		return visited;
-	}
-
-	public void setVisited(boolean visited) {
-		this.visited = visited;
+	default int FullHashCode() {
+		return HashFunctions.defaulFunction.hash(getGrammarSlot().hashCode(), getLeftExtent(), getRightExtent());
 	}
 	
 	/**
@@ -72,7 +53,7 @@ public abstract class SPPFNode {
 	 */
 	// TODO: doesn't work in case SPPF has a cycle
 	// TODO: create a set of packed nodes and then compare them instead of iterator stuff below.
-	public boolean deepEquals(SPPFNode node) {
+	default boolean deepEquals(SPPFNode node) {
 		
 		if(!this.equals(node)) {
 			return false;

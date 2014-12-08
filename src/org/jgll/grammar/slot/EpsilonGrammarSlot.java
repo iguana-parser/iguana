@@ -24,7 +24,7 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	public EpsilonGrammarSlot(int id, String label, HeadGrammarSlot head) {
-		super(id, label, null, head, FalseConditionTest.getInstance(), DummyNodeCreator.getInstance());
+		super(label, null, head, FalseConditionTest.getInstance(), DummyNodeCreator.getInstance());
 	}
 	
 	@Override
