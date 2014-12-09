@@ -12,7 +12,7 @@ import java.util.List;
  * 
  */
 
-public abstract class NonPackedNode extends AbstractSPPFNode {
+public abstract class NonPackedNode implements SPPFNode {
 	
 	protected final Object slot;
 	
@@ -114,4 +114,35 @@ public abstract class NonPackedNode extends AbstractSPPFNode {
 		return rightExtent;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(this == obj) 
+			return true;
+		
+		if (!(obj instanceof SPPFNode)) 
+			return false;
+		
+		return SPPFUtil.getInstance().equals(this, (SPPFNode) obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return SPPFUtil.getInstance().hash(this);
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("(%s, %d, %d)", getGrammarSlot(), getLeftExtent(), getRightExtent());
+	}
+	
+	@FunctionalInterface
+	public static interface Equals {
+		public boolean equals(SPPFNode node, SPPFNode other);
+	}
+	
+	@FunctionalInterface
+	public static interface Hash {
+	  public int hash(SPPFNode node);
+	}
 }

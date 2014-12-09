@@ -38,13 +38,11 @@ public class PackedNode implements SPPFNode {
 			
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if(this == obj) 
 			return true;
-		}
 
-		if (!(obj instanceof PackedNode)) {
+		if (!(obj instanceof PackedNode)) 
 			return false;
-		}
 		
 		PackedNode other = (PackedNode) obj;
 		

@@ -1,7 +1,6 @@
 package org.jgll.sppf;
 
 import java.util.Collections;
-import java.util.List;
 
 import org.jgll.regex.RegularExpression;
 import org.jgll.traversal.SPPFVisitor;
@@ -29,16 +28,6 @@ public class TerminalSymbolNode extends NonPackedNode {
 	}
 
 	@Override
-	public int childrenCount() {
-		return 0;
-	}
-
-	@Override
-	public List<SPPFNode> getChildren() {
-		return Collections.emptyList();
-	}
-	
-	@Override
 	public boolean isAmbiguous() {
 		return false;
 	}
@@ -49,8 +38,9 @@ public class TerminalSymbolNode extends NonPackedNode {
 	}
 
 	@Override
-	public NonPackedNode init() {
-		return null;
+	public TerminalSymbolNode init() {
+		children = Collections.emptyList();
+		return this;
 	}
 
 }

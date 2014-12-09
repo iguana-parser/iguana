@@ -2,6 +2,8 @@ package org.jgll.sppf;
 
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
+import static org.jgll.sppf.NonPackedNode.*;
+
 /**
  *
  * 
@@ -10,9 +12,9 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
  */
 public class SPPFUtil {
 
-	private final SPPFHash sppfHash;
+	private final Hash sppfHash;
 	
-	private final SPPFEquals sppfEquals;
+	private final Equals sppfEquals;
 	
 	private static SPPFUtil instance;
 	
@@ -32,11 +34,11 @@ public class SPPFUtil {
 		     (node, other) -> node.getLeftExtent() == other.getLeftExtent() && node.getRightExtent() == other.getRightExtent());
 	}	
 	
-	public static void init(SPPFHash hash, SPPFEquals equals) {
+	public static void init(Hash hash, Equals equals) {
 		instance = new SPPFUtil(hash, equals);
 	}
 	
-	private SPPFUtil(SPPFHash hash, SPPFEquals equals) {
+	private SPPFUtil(Hash hash, Equals equals) {
 		this.sppfHash = hash;
 		this.sppfEquals = equals;
 	}
