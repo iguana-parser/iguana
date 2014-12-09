@@ -29,7 +29,7 @@ public class HashGSSLookupImpl implements GSSLookup {
 	@Override
 	public GSSNode getGSSNode(GrammarSlot head, int inputIndex) {
 		GSSNode gssNode = new GSSNode(head, inputIndex);
-		gssNodes.put(new GSSNode(head, inputIndex), gssNode);		
+		gssNodes.put(gssNode, gssNode);		
 		return gssNode;
 	}
 	

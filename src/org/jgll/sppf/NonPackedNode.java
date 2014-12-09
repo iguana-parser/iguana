@@ -79,10 +79,7 @@ public abstract class NonPackedNode implements SPPFNode {
 	
 	@Override
 	public SPPFNode getChildAt(int index) {
-		if(children.size() > index) {
-			return children.get(index);
-		}
-		return null;
+		return index < children.size() ? children.get(index) : null;
 	}
 	
 	@Override

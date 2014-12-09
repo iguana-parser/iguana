@@ -23,16 +23,6 @@ public class TerminalSymbolNode extends NonPackedNode {
 	}
 
 	@Override
-	public SPPFNode getChildAt(int index) {
-		return null;
-	}
-
-	@Override
-	public boolean isAmbiguous() {
-		return false;
-	}
-
-	@Override
 	public RegularExpression getGrammarSlot() {
 		return (RegularExpression) slot;
 	}
