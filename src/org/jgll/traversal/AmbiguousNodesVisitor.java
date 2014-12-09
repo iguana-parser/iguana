@@ -9,7 +9,7 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 
 public class AmbiguousNodesVisitor implements SPPFVisitor {
 
@@ -48,7 +48,7 @@ public class AmbiguousNodesVisitor implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(TokenSymbolNode node) {
+	public void visit(TerminalSymbolNode node) {
 	}
 	
 	private boolean isVisited(SPPFNode node) {

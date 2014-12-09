@@ -10,7 +10,7 @@ import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
@@ -33,7 +33,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		int ci = parser.getCurrentInputIndex();
 		
 		if(head.testFollowSet(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
-			TokenSymbolNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
+			TerminalSymbolNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
 			NonterminalNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
 			parser.getSPPFLookup().addPackedNode(node, this, ci, DummyNode.getInstance(), epsilonNode);
 			parser.setCurrentSPPFNode(node);

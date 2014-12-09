@@ -18,7 +18,7 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
 /**
@@ -257,7 +257,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(TokenSymbolNode node) {
+	public void visit(TerminalSymbolNode node) {
 		if(!node.isVisited()) {
 			node.setVisited(true);
 			

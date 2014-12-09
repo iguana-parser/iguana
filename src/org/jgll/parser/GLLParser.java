@@ -10,7 +10,7 @@ import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 
 /**
@@ -27,7 +27,7 @@ public interface GLLParser {
 	
 	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
-	public TokenSymbolNode getTokenNode(TerminalGrammarSlot slot, int inputIndex, int length);
+	public TerminalSymbolNode getTokenNode(TerminalGrammarSlot slot, int inputIndex, int length);
 	
 	/**
 	 * @return true if no such descriptor exists.

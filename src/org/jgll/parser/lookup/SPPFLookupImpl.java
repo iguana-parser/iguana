@@ -13,14 +13,14 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class SPPFLookupImpl implements SPPFLookup {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(SPPFLookupImpl.class);
 	
-	private final Map<TokenSymbolNode, TokenSymbolNode> tokenNodes;
+	private final Map<TerminalSymbolNode, TerminalSymbolNode> tokenNodes;
 	
 	private final Map<NonterminalNode, NonterminalNode> nonterminalNodes;
 
@@ -37,9 +37,9 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public TokenSymbolNode getTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		TokenSymbolNode key = new TokenSymbolNode(slot, inputIndex, length);
-		TokenSymbolNode value = tokenNodes.get(key);
+	public TerminalSymbolNode getTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+		TerminalSymbolNode key = new TerminalSymbolNode(slot, inputIndex, length);
+		TerminalSymbolNode value = tokenNodes.get(key);
 		if (value == null) {
 			value = key;
 //			System.out.println(grammar.getRegularExpressionById(value.getId()) + ", " + value.getLeftExtent() + ", " + value.getRightExtent());
@@ -49,13 +49,13 @@ public class SPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public TokenSymbolNode getEpsilonNode(int inputIndex) {
+	public TerminalSymbolNode getEpsilonNode(int inputIndex) {
 		return getTokenSymbolNode(Epsilon.TOKEN_ID, inputIndex, 0);
 	}
 	
 	@Override
-	public TokenSymbolNode findTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		TokenSymbolNode key = new TokenSymbolNode(slot, inputIndex, length);
+	public TerminalSymbolNode findTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+		TerminalSymbolNode key = new TerminalSymbolNode(slot, inputIndex, length);
 		return tokenNodes.get(key);
 	}
 

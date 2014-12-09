@@ -22,7 +22,7 @@ import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
@@ -153,7 +153,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected HeadGrammarSlot getStartSymbol(String name) {
-		return grammar.getHeadGrammarSlot(Nonterminal.withName(name));
+		return grammar.getResolver().getHead(Nonterminal.withName(name));
 	}
 	
 	protected void parse(HeadGrammarSlot startSymbol) {
@@ -299,7 +299,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public TokenSymbolNode getTokenNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+	public TerminalSymbolNode getTokenNode(TerminalGrammarSlot slot, int inputIndex, int length) {
 		ci += length;
 		return sppfLookup.getTokenSymbolNode(slot, inputIndex, length);
 	}

@@ -7,7 +7,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 
 public interface SPPFLookup {
 
@@ -18,9 +18,9 @@ public interface SPPFLookup {
 	 * @param length
 	 * @return
 	 */
-	public TokenSymbolNode getTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length);
+	public TerminalSymbolNode getTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length);
 	
-	public TokenSymbolNode getEpsilonNode(int inputIndex);
+	public TerminalSymbolNode getEpsilonNode(int inputIndex);
 	
 	/**
 	 * 
@@ -29,7 +29,7 @@ public interface SPPFLookup {
 	 * @param length
 	 * @return
 	 */
-	public TokenSymbolNode findTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length);
+	public TerminalSymbolNode findTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length);
 	
 	/**
 	 * 

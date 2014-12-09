@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -21,29 +20,6 @@ public class IntermediateNode extends NonPackedNode {
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
-	}
-	
-	@Override
-	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.hashCode(), leftExtent, rightExtent);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(this == obj) {
-			return true;
-		}
-		
-		if (!(obj instanceof IntermediateNode)) {
-			return false;
-		}
-		
-		IntermediateNode other = (IntermediateNode) obj;
-
-		return  slot == other.getGrammarSlot() &&
-				leftExtent == other.leftExtent &&
-				rightExtent == other.rightExtent;
 	}
 	
 	@Override

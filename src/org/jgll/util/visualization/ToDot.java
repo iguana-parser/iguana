@@ -8,7 +8,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 
 public abstract class ToDot {
 	
@@ -35,7 +35,7 @@ public abstract class ToDot {
 		else if(node instanceof DummyNode) {
 			return "-1";
 		} 
-		else if(node instanceof TokenSymbolNode) {
+		else if(node instanceof TerminalSymbolNode) {
 			return "token_" + getNodeId(node);
 		}
 		throw new RuntimeException("Node of type " +  node.getClass() + " could not be matched.");

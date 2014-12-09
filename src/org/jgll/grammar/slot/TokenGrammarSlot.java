@@ -8,7 +8,7 @@ import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
@@ -50,7 +50,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		TokenSymbolNode cr = parser.getTokenNode(slot, ci, length);
+		TerminalSymbolNode cr = parser.getTokenNode(slot, ci, length);
 		
 		SPPFNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		

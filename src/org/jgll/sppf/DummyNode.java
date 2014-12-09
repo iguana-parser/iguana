@@ -13,7 +13,7 @@ import org.jgll.traversal.SPPFVisitor;
  * TODO: try to replace it with null, doesn't much make sense
  *
  */
-public class DummyNode extends SPPFNode {
+public class DummyNode implements SPPFNode {
 	
 	private static DummyNode instance;
 	

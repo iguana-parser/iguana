@@ -3,8 +3,6 @@ package org.jgll.sppf;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -23,17 +21,13 @@ public interface SPPFNode {
 
 	public int childrenCount();
 
-	public GrammarSlot getGrammarSlot();
+	public Object getGrammarSlot();
 
 	public int getLeftExtent();
 
 	public int getRightExtent();
 	
 	public void accept(SPPFVisitor visitAction);
-	
-	default int FullHashCode() {
-		return HashFunctions.defaulFunction.hash(getGrammarSlot().hashCode(), getLeftExtent(), getRightExtent());
-	}
 	
 	/**
 	 * Compares this SPPFNode with the given node and their 

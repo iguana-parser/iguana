@@ -25,22 +25,22 @@ public class SPPFNodeFactory {
 		return new IntermediateNode(grammarGraph.getResolver().getGrammarSlot(s), leftExtent, rightExtent);
 	}
 	
-	public TokenSymbolNode createTokenNode(String s, int leftExtent, int rightExtent) {
-		return new TokenSymbolNode(grammarGraph.getResolver().getRegularExpression(s), leftExtent, rightExtent - leftExtent);
+	public TerminalSymbolNode createTokenNode(String s, int leftExtent, int rightExtent) {
+		return new TerminalSymbolNode(grammarGraph.getResolver().getRegularExpression(s), leftExtent, rightExtent);
 	}
 
 	public ListSymbolNode createListNode(String s, int index, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = new Nonterminal.Builder(s).setIndex(index).build();
-		return new ListSymbolNode(grammarGraph.getHeadGrammarSlot(nonterminal), leftExtent, rightExtent);
+		return new ListSymbolNode(grammarGraph.getResolver().getHead(nonterminal), leftExtent, rightExtent);
 	}
 	
 	public ListSymbolNode createListNode(String s, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = Nonterminal.withName(s);
-		return new ListSymbolNode(grammarGraph.getHeadGrammarSlot(nonterminal), leftExtent, rightExtent);
+		return new ListSymbolNode(grammarGraph.getResolver().getHead(nonterminal), leftExtent, rightExtent);
 	}
 	
 	public PackedNode createPackedNode(String s, int pivot, NonPackedNode parent) {
-		return new PackedNode(grammarGraph.getGrammarSlotByName(s), pivot, parent);
+		return new PackedNode(grammarGraph.getResolver().getGrammarSlot(s), pivot, parent);
 	}
 	
 }

@@ -233,10 +233,6 @@ public class Grammar implements Serializable {
 			return new Grammar(definitions, rules, objects, op.getFirstSets(), op.getFollowSets(), op.getPredictionSets());
 		}
 		
-		public Void t() {
-			return null;
-		}
-		
 		public Builder addRule(Rule rule) {
 			
 			Iterable<Rule> newRules = ebnfToBNF.transform(rule);

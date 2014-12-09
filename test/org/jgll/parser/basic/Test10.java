@@ -17,7 +17,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
@@ -88,7 +88,7 @@ public class Test10 {
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 1).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a .", 0, node1);
-		TokenSymbolNode node3 = factory.createTokenNode("a", 0, 1);
+		TerminalSymbolNode node3 = factory.createTokenNode("a", 0, 1);
 		node2.addChild(node3);
 		PackedNode node4 = factory.createPackedNode("A ::= A A .", 1, node1);
 		NonterminalNode node5 = factory.createNonterminalNode("A", 1, 1).init();

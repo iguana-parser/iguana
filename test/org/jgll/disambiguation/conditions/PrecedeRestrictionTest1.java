@@ -20,7 +20,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,7 +85,7 @@ public class PrecedeRestrictionTest1 {
 		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6).init();
 		PackedNode node2 = factory.createPackedNode("S ::= f o r a l l .", 0, node1);
-		TokenSymbolNode node3 = factory.createTokenNode("f o r a l l", 0, 6);
+		TerminalSymbolNode node3 = factory.createTokenNode("f o r a l l", 0, 6);
 		node2.addChild(node3);
 		node1.addChild(node2);		
 		return node1;

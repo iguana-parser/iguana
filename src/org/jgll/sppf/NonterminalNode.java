@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -16,29 +15,6 @@ public class NonterminalNode extends NonPackedNode {
 	
 	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
-	}
-	
-	@Override
-	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.hashCode(), leftExtent, rightExtent);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(this == obj) {
-			return true;
-		}
-		
-		if (!(obj instanceof NonterminalNode)) {
-			return false;
-		}
-		
-		NonterminalNode other = (NonterminalNode) obj;
-
-		return  slot == other.slot &&
-				leftExtent == other.leftExtent &&
-				rightExtent == other.rightExtent;
 	}
 	
 	@Override
