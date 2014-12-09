@@ -34,8 +34,6 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	protected BodyGrammarSlot firstSlots[];
 
-	private final int id;
-	
 	private final PredictionTest predictionTest;
 	
 	private final FollowTest followTest;
@@ -44,10 +42,9 @@ public class HeadGrammarSlot implements GrammarSlot {
 
 	private int altsCount;
 	
-	public HeadGrammarSlot(int id, Nonterminal nonterminal, 
+	public HeadGrammarSlot(Nonterminal nonterminal, 
 						   int altsCount, boolean nullable, 
 						   PredictionTest predictionTest, FollowTest followTest) {
-		this.id = id;
 		this.nonterminal = nonterminal;
 		this.altsCount = altsCount;
 		this.firstSlots = new BodyGrammarSlot[altsCount];
