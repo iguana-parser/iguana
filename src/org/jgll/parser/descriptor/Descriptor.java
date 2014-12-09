@@ -65,7 +65,7 @@ public class Descriptor {
 	@Override
 	public int hashCode() {
 		// The label of SPPFNode is the same as the slot
-		return HashFunctions.defaulFunction.hash(slot.getId(), inputIndex);
+		return HashFunctions.defaulFunction.hash(slot.hashCode(), inputIndex);
 	}
 	
 	@Override

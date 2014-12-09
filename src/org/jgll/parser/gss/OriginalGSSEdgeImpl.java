@@ -49,7 +49,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(destination.getInputIndex(), destination.getGrammarSlot().getId());
+		return HashFunctions.defaulFunction.hash(destination.getInputIndex(), destination.getGrammarSlot().hashCode());
 	}
 
 }

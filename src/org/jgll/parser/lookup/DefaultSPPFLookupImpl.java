@@ -7,7 +7,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.OriginalIntermediateNode;
 import org.jgll.sppf.OriginalNonterminalNode;
 
-public class DefaultSPPFLookupImpl extends SPPFLookupImpl {
+public class DefaultSPPFLookupImpl extends GlobalSPPFLookupImpl {
 
 	@Override
 	protected NonterminalNode createNonterminalNode(HeadGrammarSlot slot, int leftExtent, int rightExtent) {

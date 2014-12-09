@@ -7,18 +7,20 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.SPPFUtil;
 import org.jgll.sppf.TerminalSymbolNode;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class SPPFLookupImpl implements SPPFLookup {
+public class GlobalSPPFLookupImpl implements SPPFLookup {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(SPPFLookupImpl.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(GlobalSPPFLookupImpl.class);
 	
 	private final Map<TerminalSymbolNode, TerminalSymbolNode> tokenNodes;
 	
@@ -30,7 +32,8 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	private int countAmbiguousNodes;
 
-	public SPPFLookupImpl() {
+	public GlobalSPPFLookupImpl() {
+		SPPFUtil.initGlobal(HashFunctions.defaulFunction);
 		nonterminalNodes = new HashMap<>();
 		intermediateNodes = new HashMap<>();
 		tokenNodes = new HashMap<>();
@@ -38,14 +41,11 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public TerminalSymbolNode getTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		TerminalSymbolNode key = new TerminalSymbolNode(slot, inputIndex, length);
-		TerminalSymbolNode value = tokenNodes.get(key);
-		if (value == null) {
-			value = key;
-//			System.out.println(grammar.getRegularExpressionById(value.getId()) + ", " + value.getLeftExtent() + ", " + value.getRightExtent());
-			tokenNodes.put(key, value);
-		}
-		return value;
+		final TerminalSymbolNode key = new TerminalSymbolNode(slot.getRegularExpression(), inputIndex, length);
+		return tokenNodes.computeIfAbsent(key, k -> { 
+													  log.trace("Terminal node created: %s", key); 
+													  return key.init(); 
+													});
 	}
 	
 	@Override
@@ -55,22 +55,17 @@ public class SPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public TerminalSymbolNode findTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		TerminalSymbolNode key = new TerminalSymbolNode(slot, inputIndex, length);
+		TerminalSymbolNode key = new TerminalSymbolNode(slot.getRegularExpression(), inputIndex, length);
 		return tokenNodes.get(key);
 	}
 
 	@Override
 	public NonterminalNode getNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
-		NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent);
-		NonterminalNode value = nonterminalNodes.get(key);
-		if (value == null) {
-			value = key;
-//			System.out.println(grammar.getNonterminalById(value.getId()) + ", " + value.getLeftExtent() + ", " + value.getRightExtent());
-			value.init();
-			log.trace("Nonterminal node created: %s", key);
-			nonterminalNodes.put(key, value);
-		}
-		return value;
+		final NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent);
+		return nonterminalNodes.computeIfAbsent(key, k -> { 
+													        log.trace("Nonterminal node created: %s", key); 
+															return key.init(); 
+													      });
 	}
 	
 	protected NonterminalNode createNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
@@ -93,16 +88,11 @@ public class SPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
-		IntermediateNode value = intermediateNodes.get(key);
-		
-		if (value == null) {
-			value = key;
-			value.init();
-			log.trace("Intermediate node created: %s", key);
-			intermediateNodes.put(key, value);
-		}
-		return value;
+		final IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
+		return intermediateNodes.computeIfAbsent(key, k -> { 
+														      log.trace("Intermediate node created: %s", key); 
+														      return key.init(); 
+														   });
 	}
 
 	@Override
