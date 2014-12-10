@@ -97,7 +97,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
 		  .append("slot" + registry.getId(nonterminal) + ", ")
-		  .append(preConditions.getConstructorCode(registry) + ", ")
+		  .append(getConstructorCode(preConditions, registry) + ", ")
 		  .append(popConditions.getConstructorCode(registry) + ", ")
 		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
 		return sb.toString();
