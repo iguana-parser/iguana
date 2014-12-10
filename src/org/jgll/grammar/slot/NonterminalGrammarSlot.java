@@ -1,8 +1,10 @@
 package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
+import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -24,7 +26,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	protected HeadGrammarSlot nonterminal;
 	
 	public NonterminalGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
-								  ConditionTest preConditions, ConditionTest popConditions,
+								  Set<Condition> preConditions, ConditionTest popConditions,
 								  NodeCreator nodeCreatorFromPop) {
 		super(label, previous, preConditions, FalseConditionTest.getInstance(), popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
 		
@@ -51,10 +53,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 		
-		if (preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) {
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser))) {
 			return null;
 		}
-
+		
 		return parser.create(next, nonterminal);
 	}
 	

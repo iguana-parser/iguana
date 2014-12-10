@@ -1,7 +1,9 @@
 package org.jgll.grammar.slot;
 
 import java.util.List;
+import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -23,7 +25,7 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 	
 	protected final String label;
 	
-	protected final ConditionTest preConditions;
+	protected final Set<Condition> preConditions;
 
 	protected final ConditionTest postConditions;
 	
@@ -36,12 +38,10 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 	private GSSNode[] gssNodes;
 
 	public BodyGrammarSlot(String label, BodyGrammarSlot previous, 
-						   ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
+						   Set<Condition> preConditions, ConditionTest postConditions, ConditionTest popConditions,
 						   NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 
-		if(label == null) {
-			throw new IllegalArgumentException("Label cannot be null.");
-		}
+		if(label == null) throw new IllegalArgumentException("Label cannot be null.");
 		
 		this.label = label;
 
@@ -89,15 +89,15 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		return nodeCreator;
 	}
 	
-	public final ConditionTest getPreConditions() {
+	public Set<Condition> getPreConditions() {
 		return preConditions;
 	}
 	
-	public final ConditionTest getPostConditions() {
+	public ConditionTest getPostConditions() {
 		return postConditions;
 	}
 	
-	public final ConditionTest getPopConditions() {
+	public ConditionTest getPopConditions() {
 		return popConditions;
 	}	
 	
