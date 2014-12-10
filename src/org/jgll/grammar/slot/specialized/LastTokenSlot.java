@@ -29,7 +29,8 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		if (preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) return null;
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser)))
+			return null;
 
 		int length = lexer.tokenLengthAt(ci, slot);
 		
@@ -38,9 +39,12 @@ public class LastTokenSlot extends TokenGrammarSlot {
 			return null;
 		}
 		
-		if (postConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci + length)) return null;
+		parser.setCurrentInputIndex(ci + length);
 		
-		TerminalSymbolNode cr = parser.getTerminalNode(slot, ci, length);
+		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser)))
+			return null;
+		
+		TerminalSymbolNode cr = parser.getTerminalNode(slot, ci, ci + length);
 		
 		SPPFNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		
@@ -51,15 +55,15 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
-	StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 		sb.append("new LastTokenSlot(")
 		  .append(registry.getId(this) + ", ")
 		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
 		  .append(slot.getConstructorCode(registry) + ", ")
-		  .append(preConditions.getConstructorCode(registry) + ", ")
-		  .append(postConditions.getConstructorCode(registry) + ", ")
-		  .append(popConditions.getConstructorCode(registry) + ", ")
+		  .append(getConstructorCode(preConditions, registry) + ", ")
+		  .append(getConstructorCode(postConditions, registry) + ", ")
+		  .append(getConstructorCode(popConditions, registry) + ", ")
 		  .append(nodeCreator.getConstructorCode(registry) + ", ")
 		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
 		return sb.toString();
