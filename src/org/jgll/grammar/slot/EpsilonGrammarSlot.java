@@ -1,10 +1,12 @@
 package org.jgll.grammar.slot;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.PrintWriter;
+import java.util.HashSet;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
-import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.Lexer;
@@ -12,8 +14,6 @@ import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalSymbolNode;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 /**
  * The grammar slot representing an empty body.
@@ -25,7 +25,7 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 public class EpsilonGrammarSlot extends LastGrammarSlot {
 
 	public EpsilonGrammarSlot(String label, HeadGrammarSlot head) {
-		super(label, null, head, FalseConditionTest.getInstance(), DummyNodeCreator.getInstance());
+		super(label, null, head, new HashSet<>(), DummyNodeCreator.getInstance());
 	}
 	
 	@Override

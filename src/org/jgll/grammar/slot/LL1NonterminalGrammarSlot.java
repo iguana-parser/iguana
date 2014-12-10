@@ -1,7 +1,9 @@
 package org.jgll.grammar.slot;
 
+import java.util.Set;
+
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
-import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.SPPFNode;
@@ -17,8 +19,8 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	
 	public LL1NonterminalGrammarSlot(String label, BodyGrammarSlot previous, 
 									 LL1HeadGrammarSlot nonterminal, 
-									 ConditionTest preConditions, 
-									 ConditionTest popConditions,
+									 Set<Condition> preConditions, 
+									 Set<Condition> popConditions,
 									 NodeCreator nodeCreator) {
 		super(label, previous, nonterminal, preConditions, popConditions, nodeCreator);
 	}

@@ -5,6 +5,10 @@ import org.jgll.parser.GLLParser;
 @FunctionalInterface
 public interface SlotAction {
 	
-	public boolean execute(GLLParser parser);
+	default boolean execute(GLLParser parser) {
+		return execute(parser, parser.getCurrentInputIndex());
+	}
+	
+	public boolean execute(GLLParser parser, int inputIndex);
 	
 }

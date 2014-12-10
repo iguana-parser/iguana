@@ -12,13 +12,12 @@ import org.jgll.sppf.TerminalSymbolNode;
 public interface SPPFLookup {
 
 	/**
-	 * 
 	 * @param terminal
 	 * @param inputIndex
 	 * @param length
 	 * @return
 	 */
-	public TerminalSymbolNode getTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length);
+	public TerminalSymbolNode getTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
 	
 	public TerminalSymbolNode getEpsilonNode(int inputIndex);
 	
@@ -29,7 +28,7 @@ public interface SPPFLookup {
 	 * @param length
 	 * @return
 	 */
-	public TerminalSymbolNode findTokenSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length);
+	public TerminalSymbolNode findTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
 	
 	/**
 	 * 

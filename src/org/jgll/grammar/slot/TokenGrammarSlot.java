@@ -1,17 +1,18 @@
 package org.jgll.grammar.slot;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.PrintWriter;
+import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
-import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalSymbolNode;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 
 /**
@@ -25,7 +26,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	protected final TerminalGrammarSlot slot;
 	
 	public TokenGrammarSlot(String label, BodyGrammarSlot previous, TerminalGrammarSlot slot,
-							ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
+							Set<Condition> preConditions, Set<Condition> postConditions, Set<Condition> popConditions,
 							NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 		super(label, previous, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 		this.slot = slot;
@@ -36,9 +37,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 		int ci = parser.getCurrentInputIndex();
 		
-		if(preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) {
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser))) 
 			return null;
-		}
 
 		int length = lexer.tokenLengthAt(ci, slot);
 		
@@ -46,12 +46,13 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 			parser.recordParseError(this);
 			return null;
 		}
+
+		parser.setCurrentInputIndex(ci + length);
 		
-		if(postConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci + length)) {
+		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser))) 
 			return null;
-		}
 		
-		TerminalSymbolNode cr = parser.getTokenNode(slot, ci, length);
+		TerminalSymbolNode cr = parser.getTerminalNode(slot, ci, ci + length);
 		
 		SPPFNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		
@@ -79,9 +80,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous) + ", "))
 		  .append(slot.getConstructorCode(registry) + ", ")
 		  .append(registry.getId(slot) + ", ")
-		  .append(preConditions.getConstructorCode(registry) + ", ")
-		  .append(postConditions.getConstructorCode(registry) + ", ")
-		  .append(popConditions.getConstructorCode(registry) + ", ")
+		  .append(getConstructorCode(preConditions, registry) + ", ")
+		  .append(getConstructorCode(postConditions, registry) + ", ")
+		  .append(getConstructorCode(popConditions, registry) + ", ")
 		  .append(nodeCreator.getConstructorCode(registry) + ", ")
 		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
 		return sb.toString();

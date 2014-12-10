@@ -120,7 +120,7 @@ public class Keyword extends AbstractRegularExpression {
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new Keyword(")
-		  .append(seq.getConstructorCode() + ", ")
+		  .append(seq.getConstructorCode(registry) + ", ")
 		  .append(label + ", ")
 		  .append("null")
 		  .append(")");

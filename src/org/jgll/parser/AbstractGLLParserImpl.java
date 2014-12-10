@@ -292,6 +292,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public void setCurrentSPPFNode(SPPFNode node) {
 		this.cn = node;
 	}
+	
+	@Override
+	public void setCurrentInputIndex(int i) {
+		this.ci = i;
+	}
 
 	@Override
 	public Descriptor getCurrentDescriptor() {
@@ -304,9 +309,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public TerminalSymbolNode getTokenNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+	public TerminalSymbolNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int length) {
 		ci += length;
-		return sppfLookup.getTokenSymbolNode(slot, inputIndex, length);
+		return sppfLookup.getTerminalSymbolNode(slot, inputIndex, length);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package org.jgll.grammar.slot.factory;
 
+import static org.jgll.grammar.slot.BodyGrammarSlot.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -7,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -22,7 +25,6 @@ import org.jgll.grammar.slot.nodecreator.RightChildNodeCreator;
 import org.jgll.grammar.slot.specialized.LastTokenSlot;
 import org.jgll.grammar.slot.test.ArrayFollowTest;
 import org.jgll.grammar.slot.test.ArrayPredictionTest;
-import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.slot.test.TreeMapFollowTest;
@@ -34,8 +36,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Tuple;
-
-import static org.jgll.grammar.slot.BodyGrammarSlot.*;
 
 public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFactory {
 	
@@ -122,8 +122,8 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 															   int symbolIndex,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
-															   ConditionTest preConditions,
-															   ConditionTest popConditions) {
+															   Set<Condition> preConditions,
+															   Set<Condition> popConditions) {
 		
 		if(symbolIndex == 1) {
 			return new NonterminalGrammarSlot(getSlotName(rule, symbolIndex), previous, nonterminal, preConditions, popConditions, rightNodeCreator);
@@ -137,9 +137,9 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 												   int symbolIndex, 
 												   BodyGrammarSlot previous, 
 												   TerminalGrammarSlot terminalSlot, 
-												   ConditionTest preConditions,
-												   ConditionTest postConditions,
-												   ConditionTest popConditions) {
+												   Set<Condition> preConditions,
+												   Set<Condition> postConditions,
+												   Set<Condition> popConditions) {
 		
 		if(preConditions == null) throw new IllegalArgumentException("PreConditions cannot be null.");
 		if(postConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
@@ -188,7 +188,7 @@ public class GrammarSlotFactoryFirstFollowChecksImpl implements GrammarSlotFacto
 												 int symbolIndex, 
 												 BodyGrammarSlot previous, 
 												 HeadGrammarSlot head, 
-												 ConditionTest popConditions) {
+												 Set<Condition> popConditions) {
 		
 		if(popConditions == null) throw new IllegalArgumentException("PostConditions cannot be null.");
 

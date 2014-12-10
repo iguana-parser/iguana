@@ -27,7 +27,7 @@ public interface GLLParser {
 	
 	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
-	public TerminalSymbolNode getTokenNode(TerminalGrammarSlot slot, int inputIndex, int length);
+	public TerminalSymbolNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
 	
 	/**
 	 * @return true if no such descriptor exists.
@@ -54,6 +54,8 @@ public interface GLLParser {
 	public SPPFNode getCurrentSPPFNode();
 	
 	public void setCurrentSPPFNode(SPPFNode node);
+	
+	public void setCurrentInputIndex(int i);
 	
 	public void recordParseError(GrammarSlot slot);
 	

@@ -1,19 +1,18 @@
 package org.jgll.grammar.slot;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.PrintWriter;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
-import org.jgll.grammar.slot.test.ConditionTest;
-import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 /**
  * A grammar slot immediately before a nonterminal.
@@ -26,9 +25,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	protected HeadGrammarSlot nonterminal;
 	
 	public NonterminalGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
-								  Set<Condition> preConditions, ConditionTest popConditions,
-								  NodeCreator nodeCreatorFromPop) {
-		super(label, previous, preConditions, FalseConditionTest.getInstance(), popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
+								  Set<Condition> preConditions, Set<Condition> popConditions, NodeCreator nodeCreatorFromPop) {
+		
+		super(label, previous, preConditions, new HashSet<>(), popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
 		
 		if(nonterminal == null) throw new IllegalArgumentException("Nonterminal cannot be null.");
 		
@@ -98,7 +97,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
 		  .append("slot" + registry.getId(nonterminal) + ", ")
 		  .append(getConstructorCode(preConditions, registry) + ", ")
-		  .append(popConditions.getConstructorCode(registry) + ", ")
+		  .append(getConstructorCode(popConditions, registry) + ", ")
 		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
 		return sb.toString();
 	}

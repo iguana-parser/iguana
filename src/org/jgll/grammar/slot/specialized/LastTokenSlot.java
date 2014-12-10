@@ -3,14 +3,15 @@ package org.jgll.grammar.slot.specialized;
 import static org.jgll.util.generator.GeneratorUtil.*;
 
 import java.io.PrintWriter;
+import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
-import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.SPPFNode;
@@ -19,7 +20,7 @@ import org.jgll.sppf.TerminalSymbolNode;
 public class LastTokenSlot extends TokenGrammarSlot {
 
 	public LastTokenSlot(String label, BodyGrammarSlot previous, TerminalGrammarSlot slot, 
-						 ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
+						 Set<Condition> preConditions, Set<Condition> postConditions, Set<Condition> popConditions,
 						 NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 		super(label, previous, slot, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 	}
@@ -39,7 +40,7 @@ public class LastTokenSlot extends TokenGrammarSlot {
 		
 		if (postConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci + length)) return null;
 		
-		TerminalSymbolNode cr = parser.getTokenNode(slot, ci, length);
+		TerminalSymbolNode cr = parser.getTerminalNode(slot, ci, length);
 		
 		SPPFNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -11,7 +12,6 @@ import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TokenGrammarSlot;
-import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -29,14 +29,14 @@ public interface GrammarSlotFactory {
 															   int symbolIndex,
 															   BodyGrammarSlot previous, 
 															   HeadGrammarSlot nonterminal,
-															   ConditionTest preConditions,
-															   ConditionTest popConditions);
+															   Set<Condition> preConditions,
+															   Set<Condition> popConditions);
 
 	public LastGrammarSlot createLastGrammarSlot(Rule rule,
 											     int symbolIndex, 
 												 BodyGrammarSlot previous, 
 												 HeadGrammarSlot head, 
-												 ConditionTest popConditions);
+												 Set<Condition> popConditions);
 	
 	
 	public EpsilonGrammarSlot createEpsilonGrammarSlot(HeadGrammarSlot head);
@@ -46,7 +46,7 @@ public interface GrammarSlotFactory {
 												   int symbolIndex, 
 												   BodyGrammarSlot previous, 
 												   TerminalGrammarSlot terminalSlot, 
-												   ConditionTest preConditions,
-												   ConditionTest postConditions,
-												   ConditionTest popConditions);
+												   Set<Condition> preConditions,
+												   Set<Condition> postConditions,
+												   Set<Condition> popConditions);
 }

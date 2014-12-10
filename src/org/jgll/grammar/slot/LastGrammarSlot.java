@@ -1,17 +1,18 @@
 package org.jgll.grammar.slot;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
-import org.jgll.grammar.slot.test.ConditionTest;
-import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 /**
  * Corresponds to the last grammar slot in an alternate, e.g., X ::= alpha .
@@ -26,8 +27,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	protected Object object;
 	
 	public LastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, 
-						   ConditionTest popConditions, NodeCreator nodeCreatorFromPop) {
-		super(label, previous, FalseConditionTest.getInstance(), FalseConditionTest.getInstance(), 
+						   Set<Condition> popConditions, NodeCreator nodeCreatorFromPop) {
+		super(label, previous, new HashSet<>(), new HashSet<>(), 
 			  popConditions, DummyNodeCreator.getInstance(), nodeCreatorFromPop);
 		this.head = head;
 	}
@@ -80,7 +81,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		  .append("\"" + escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous) + ", "))
 		  .append("slot" + registry.getId(head) + ", ")
-		  .append(popConditions.getConstructorCode(registry) + ", ")
+		  .append(getConstructorCode(popConditions, registry) + ", ")
 		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
 		return sb.toString();
 	}
