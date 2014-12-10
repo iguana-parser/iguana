@@ -31,26 +31,26 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	
 	protected abstract Automaton createAutomaton();
 
-	protected Automaton combineConditions(Automaton a) {
-		
-		Automaton result = a;
-		
-		for(Condition condition : conditions) {
-			if(condition.getType() == ConditionType.NOT_MATCH && condition instanceof RegularExpressionCondition) {
-				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
-				RegularExpression regex = regexCondition.getRegularExpression();
-				result = AutomatonOperations.difference(result, regex.getAutomaton());
-			} 
-			else if (condition.getType() == ConditionType.NOT_FOLLOW && condition instanceof RegularExpressionCondition) {
-				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
-				RegularExpression regex = regexCondition.getRegularExpression();
-				
-				result = AutomatonOperations.addCondition(result, regex.getAutomaton());
-			}
-		}
-
-		return result;
-	}
+//	protected Automaton combineConditions(Automaton a) {
+//		
+//		Automaton result = a;
+//		
+//		for(Condition condition : conditions) {
+//			if(condition.getType() == ConditionType.NOT_MATCH && condition instanceof RegularExpressionCondition) {
+//				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
+//				RegularExpression regex = regexCondition.getRegularExpression();
+//				result = AutomatonOperations.difference(result, regex.getAutomaton());
+//			} 
+//			else if (condition.getType() == ConditionType.NOT_FOLLOW && condition instanceof RegularExpressionCondition) {
+//				RegularExpressionCondition regexCondition = (RegularExpressionCondition) condition;
+//				RegularExpression regex = regexCondition.getRegularExpression();
+//				
+//				result = AutomatonOperations.addCondition(result, regex.getAutomaton());
+//			}
+//		}
+//
+//		return result;
+//	}
 	
 	@Override
 	public String toString() {

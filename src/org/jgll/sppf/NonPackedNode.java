@@ -92,7 +92,6 @@ public abstract class NonPackedNode implements SPPFNode {
 		return children.size();
 	}
 	
-	@Override
 	public boolean isAmbiguous() {
 		return children.size() > 1;
 	}

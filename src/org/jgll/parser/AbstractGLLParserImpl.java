@@ -9,7 +9,7 @@ import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.lexer.Lexer;
-import org.jgll.lexer.LexerImpl;
+import org.jgll.lexer.UnmemoizedLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
@@ -97,7 +97,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 
 		this.grammar = grammar;
 		this.input = input;
-		this.lexer = new LexerImpl(input, grammar);
+		this.lexer = new UnmemoizedLexerImpl(input);
 		
 		HeadGrammarSlot startSymbol = getStartSymbol(startSymbolName);
 		
@@ -158,7 +158,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected void parse(HeadGrammarSlot startSymbol) {
 
-		if(!startSymbol.test(lexer.getInput().charAt(ci))) {
+		if(!startSymbol.test(lexer.charAt(ci))) {
 			recordParseError(startSymbol);
 			return;
 		}
@@ -296,6 +296,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public Descriptor getCurrentDescriptor() {
 		return currentDescriptor;
+	}
+	
+	@Override
+	public Input getInput() {
+		return input;
 	}
 	
 	@Override

@@ -1,7 +1,5 @@
 package org.jgll.regex;
 
-import static org.jgll.regex.automaton.TransitionActionsFactory.*;
-
 import java.util.Collections;
 import java.util.Set;
 
@@ -35,7 +33,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	protected Automaton createAutomaton() {
 		State startState = new State();
-		startState.addAction(getPostActions(conditions));
+//		startState.addAction(getPostActions(conditions));
 		
 		State finalState = new State(StateType.FINAL);
 

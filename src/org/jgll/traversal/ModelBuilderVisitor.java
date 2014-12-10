@@ -42,12 +42,9 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	
 	private Input input;
 
-	private GrammarGraph grammar;
-	
 	public ModelBuilderVisitor(Input input, NodeListener<T, U> listener, GrammarGraph grammar) {
 		this.input = input;
 		this.listener = listener;
-		this.grammar = grammar;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.condition.PositionalCondition;
 import org.jgll.grammar.condition.RegularExpressionCondition;
+import org.jgll.grammar.condition.SlotAction;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.slot.test.DefaultConditionTest;
 import org.jgll.grammar.slot.test.FalseConditionTest;
@@ -17,7 +18,6 @@ import org.jgll.grammar.slotaction.RegularExpressionNotFollowAction;
 import org.jgll.grammar.slotaction.RegularExpressionNotMatchAction;
 import org.jgll.grammar.slotaction.RegularExpressionNotPrecedeAction;
 import org.jgll.grammar.slotaction.RegularExpressionPrecedeAction;
-import org.jgll.grammar.slotaction.SlotAction;
 import org.jgll.grammar.slotaction.StartOfLineAction;
 
 public class DefaultConditionsImpl implements Conditions {

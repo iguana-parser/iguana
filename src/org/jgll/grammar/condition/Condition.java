@@ -14,8 +14,7 @@ public abstract class Condition implements Serializable, ConstructorCode {
 	public Condition (ConditionType type) {
 		this.type = type;
 	}
+
+	public abstract SlotAction getSlotAction();
 	
-	public ConditionType getType() {
-		return type;
-	}
 }

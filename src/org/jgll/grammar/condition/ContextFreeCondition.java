@@ -107,4 +107,9 @@ public class ContextFreeCondition extends Condition {
 	public String getConstructorCode() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public SlotAction getSlotAction() {
+		throw new UnsupportedOperationException();
+	}
 }

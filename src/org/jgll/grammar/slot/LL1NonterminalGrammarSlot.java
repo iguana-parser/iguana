@@ -26,7 +26,7 @@ public class LL1NonterminalGrammarSlot extends NonterminalGrammarSlot {
 	@Override
 	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		
-		if(!nonterminal.test(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
+		if(!nonterminal.test(lexer.charAt(parser.getCurrentInputIndex()))) {
 			parser.recordParseError(this);
 			return null;
 		}

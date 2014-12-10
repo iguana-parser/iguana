@@ -63,6 +63,8 @@ public interface GLLParser {
 	
 	public GrammarGraph getGrammar();
 	
+	public Input getInput();
+	
 	/**
 	 * Current descriptor being processed.
 	 */

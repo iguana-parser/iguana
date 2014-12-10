@@ -23,7 +23,7 @@ import static org.jgll.util.generator.GeneratorUtil.*;
  */
 public class EpsilonGrammarSlot extends LastGrammarSlot {
 
-	public EpsilonGrammarSlot(int id, String label, HeadGrammarSlot head) {
+	public EpsilonGrammarSlot(String label, HeadGrammarSlot head) {
 		super(label, null, head, FalseConditionTest.getInstance(), DummyNodeCreator.getInstance());
 	}
 	
@@ -32,7 +32,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if(head.testFollowSet(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
+		if(head.testFollowSet(lexer.charAt(parser.getCurrentInputIndex()))) {
 			TerminalSymbolNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
 			NonterminalNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
 			parser.getSPPFLookup().addPackedNode(node, this, ci, DummyNode.getInstance(), epsilonNode);

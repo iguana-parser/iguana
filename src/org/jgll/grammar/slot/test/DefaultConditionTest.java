@@ -3,7 +3,7 @@ package org.jgll.grammar.slot.test;
 import java.io.Serializable;
 import java.util.List;
 
-import org.jgll.grammar.slotaction.SlotAction;
+import org.jgll.grammar.condition.SlotAction;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;

@@ -45,7 +45,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if (!nonterminal.test(lexer.getInput().charAt(ci))) {
+		if (!nonterminal.test(lexer.charAt(ci))) {
 			parser.recordParseError(this);
 			return null;
 		}

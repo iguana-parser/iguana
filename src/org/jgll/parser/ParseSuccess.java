@@ -1,7 +1,6 @@
 package org.jgll.parser;
 
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.traversal.ModelBuilderVisitor;
 import org.jgll.util.ParseStatistics;
 
 public class ParseSuccess implements ParseResult {
@@ -40,12 +39,6 @@ public class ParseSuccess implements ParseResult {
 	
 	public ParseStatistics getParseStatistics() {
 		return parseStatistics;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <T, U> U build(ModelBuilderVisitor<T, U> visitor) {
-		sppfNode.accept(visitor);
-		return (U) sppfNode.getObject();
 	}
 
 }

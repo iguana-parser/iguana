@@ -20,7 +20,6 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	public LastTokenSlot(String label, BodyGrammarSlot previous, TerminalGrammarSlot slot, 
 						 ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
 						 NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
-		
 		super(label, previous, slot, preConditions, postConditions, popConditions, nodeCreator, nodeCreatorFromPop);
 	}
 	
@@ -30,7 +29,7 @@ public class LastTokenSlot extends TokenGrammarSlot {
 		
 		if (preConditions.execute(parser, lexer, parser.getCurrentGSSNode(), ci)) return null;
 
-		int length = lexer.tokenLengthAt(ci, slot.getId());
+		int length = lexer.tokenLengthAt(ci, slot);
 		
 		if (length < 0) {
 			parser.recordParseError(this);

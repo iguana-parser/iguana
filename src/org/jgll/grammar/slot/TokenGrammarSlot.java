@@ -39,7 +39,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 			return null;
 		}
 
-		int length = lexer.tokenLengthAt(ci, slot.getId());
+		int length = lexer.tokenLengthAt(ci, slot);
 		
 		if (length < 0) {
 			parser.recordParseError(this);

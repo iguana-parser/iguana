@@ -55,11 +55,11 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	protected Set<Condition> getNotFollowConditions() {
 		Set<Condition> set = new HashSet<>();
-		for (Condition condition : conditions) {
-			if (condition.getType() == ConditionType.NOT_FOLLOW) {
-				set.add(condition);
-			}
-		}
+//		for (Condition condition : conditions) {
+//			if (condition.getType() == ConditionType.NOT_FOLLOW) {
+//				set.add(condition);
+//			}
+//		}
 		return set;
 	}
 	

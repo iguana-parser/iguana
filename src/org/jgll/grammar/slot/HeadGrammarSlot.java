@@ -81,7 +81,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		Set<Integer> set = predictionTest.get(lexer.getInput().charAt(ci));
+		Set<Integer> set = predictionTest.get(lexer.charAt(ci));
 		
 		if (set == null) return null;
 		

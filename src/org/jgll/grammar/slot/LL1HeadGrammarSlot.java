@@ -23,10 +23,9 @@ public class LL1HeadGrammarSlot extends HeadGrammarSlot {
 	
 	private int max;
 
-	public LL1HeadGrammarSlot(int id, Nonterminal nonterminal, 
-							  int altsCount, boolean nullable, int min, int max,
+	public LL1HeadGrammarSlot(Nonterminal nonterminal, int altsCount, boolean nullable, int min, int max,
 							  PredictionTest predictionTest, FollowTest followTest) {
-		super(id, nonterminal, altsCount, nullable, predictionTest, followTest);
+		super(nonterminal, altsCount, nullable, predictionTest, followTest);
 		this.min = min;
 		this.max = max;
 	}

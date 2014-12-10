@@ -25,7 +25,7 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	private L0() {
-		super(-1, Nonterminal.withName("L0"), 0, false, new TruePredictionSet(0), new TrueFollowSet());
+		super(Nonterminal.withName("L0"), 0, false, new TruePredictionSet(0), new TrueFollowSet());
 	}
 	
 	@Override

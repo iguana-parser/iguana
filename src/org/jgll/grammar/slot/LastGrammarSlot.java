@@ -33,7 +33,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
-		if (head.testFollowSet(lexer.getInput().charAt(parser.getCurrentInputIndex()))) {
+		if (head.testFollowSet(lexer.charAt(parser.getCurrentInputIndex()))) {
 			return parser.pop();			
 		}
 		return null;
