@@ -153,7 +153,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected HeadGrammarSlot getStartSymbol(String name) {
-		return grammar.getResolver().getHead(Nonterminal.withName(name));
+		return grammar.getRegistry().getHead(Nonterminal.withName(name));
 	}
 	
 	protected void parse(HeadGrammarSlot startSymbol) {
@@ -293,11 +293,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		this.cn = node;
 	}
 	
-	@Override
-	public void setCurrentInputIndex(int i) {
-		this.ci = i;
-	}
-
 	@Override
 	public Descriptor getCurrentDescriptor() {
 		return currentDescriptor;

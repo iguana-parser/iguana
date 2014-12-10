@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
@@ -16,12 +17,10 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.IntermediateNodeIds;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.OriginalIntermediateNodeIds;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
-import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -45,8 +44,6 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
 
-	BiMap<BodyGrammarSlot, Integer> slots;
-	
 	List<HeadGrammarSlot> headGrammarSlots;
 
 	String name;
@@ -54,8 +51,6 @@ public class GrammarGraphBuilder implements Serializable {
 	Grammar grammar;
 	
 	BiMap<RegularExpression, Integer> regularExpressions;
-	
-	BiMap<Nonterminal, Integer> nonterminals;
 	
 	Set<Nonterminal> ll1SubGrammarNonterminals;
 
@@ -65,8 +60,6 @@ public class GrammarGraphBuilder implements Serializable {
 	 * Indexed by nonterminal index and alternate index
 	 */
 	Object[][] objects;
-	
-	private Conditions conditions;
 	
 	public GrammarGraphBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammar, grammarSlotFactory, new OriginalIntermediateNodeIds(grammar));
@@ -84,10 +77,6 @@ public class GrammarGraphBuilder implements Serializable {
 		regularExpressions = HashBiMap.create();
 		regularExpressions.put(Epsilon.getInstance(), 0);
 		regularExpressions.put(EOF.getInstance(), 1);
-		
-		slots = HashBiMap.create();
-		nonterminals = HashBiMap.create();
-		conditions = new DefaultConditionsImpl();
 	}
 
 	public GrammarGraph build() {
@@ -148,7 +137,6 @@ public class GrammarGraphBuilder implements Serializable {
 	
 			if (body.size() == 0) {
 				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(headGrammarSlot);
-				slots.put(epsilonSlot, epsilonSlot.getId());
 				headGrammarSlot.setFirstGrammarSlotForAlternate(epsilonSlot, alternateIndex);
 			} 
 			else {
@@ -157,44 +145,18 @@ public class GrammarGraphBuilder implements Serializable {
 				for (; symbolIndex < body.size(); symbolIndex++) {
 					
 					currentSlot = getBodyGrammarSlot(new Rule(head, body), symbolIndex, currentSlot);
-					slots.put(currentSlot, currentSlot.getId());
 	
 					if (symbolIndex == 0) {
 						firstSlot = currentSlot;
 					}
 				}
 	
-				ConditionTest popCondition = conditions.getPostConditions(popActions);
-				LastGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popCondition);
-				slots.put(lastSlot, lastSlot.getId());
+				grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popActions);
 				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
 			}
 			alternateIndex++;
 		}
 	}
-	
-	/**
-	 * Removes unnecssary follow restrictions
-	 * @return 
-	 */
-	private ConditionTest getPostConditionsForRegularExpression(Set<Condition> c) {
-		Set<Condition> set = new HashSet<>(c);
-		
-		for (Condition condition : c) {
-			if(condition.getType() != ConditionType.NOT_MATCH) {
-				set.add(condition);
-			} 
-//			else if (condition.getType() != ConditionType.NOT_FOLLOW) {
-//				set.add(condition);
-//			}
-		}
-		
-		// Make RegularExpression completely immutable. Now this works because
-		// getConditons can be modified.
-		return conditions.getPostConditions(set);
-	}
-	
-	
 	
 	Set<Condition> popActions = new HashSet<>();
 	
@@ -205,22 +167,18 @@ public class GrammarGraphBuilder implements Serializable {
 		if(symbol instanceof RegularExpression) {
 			RegularExpression regex = (RegularExpression) symbol;
 			
-			ConditionTest preConditionsTest = conditions.getPreConditions(symbol.getConditions());
-			ConditionTest postConditionsTest = getPostConditionsForRegularExpression(symbol.getConditions());
-			ConditionTest popConditionsTest = conditions.getPostConditions(popActions);
+			Set<Condition> preConditionsTest = symbol.getConditions();
+			Set<Condition> postConditionsTest = symbol.getConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
 			
-			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, currentSlot, getTerminalGrammarSlot(regex), preConditionsTest, postConditionsTest, popConditionsTest);
+			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, currentSlot, getTerminalGrammarSlot(regex), preConditionsTest, postConditionsTest, popActions);
 		}
 		
 		// Nonterminal
 		else {
-			ConditionTest preConditionsTest = conditions.getPreConditions(symbol.getConditions());
-			ConditionTest popConditionsTest = conditions.getPostConditions(popActions);
-			
 			popActions = new HashSet<>(symbol.getConditions());
 			
 			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(rule, symbolIndex, currentSlot, nonterminal, preConditionsTest, popConditionsTest);						
+			return grammarSlotFactory.createNonterminalGrammarSlot(rule, symbolIndex, currentSlot, nonterminal, symbol.getConditions(), popActions);						
 		}		
 	}
 
@@ -230,10 +188,6 @@ public class GrammarGraphBuilder implements Serializable {
 		if (headGrammarSlot == null) {
 			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, grammar.getAlternatives(nonterminal), grammar.getFirstSets(), grammar.getFollowSets(), grammar.getPredictionSets());
 			nonterminalsMap.put(nonterminal, headGrammarSlot);
-			
-			if (!nonterminals.containsKey(nonterminal)) {
-				nonterminals.put(nonterminal, headGrammarSlot.getId());
-			}
 			
 			headGrammarSlots.add(headGrammarSlot);
 		}

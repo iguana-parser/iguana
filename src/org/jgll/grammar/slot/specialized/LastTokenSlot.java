@@ -29,7 +29,7 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		int ci = parser.getCurrentInputIndex();
 		
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser)))
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci)))
 			return null;
 
 		int length = lexer.tokenLengthAt(ci, slot);
@@ -39,9 +39,7 @@ public class LastTokenSlot extends TokenGrammarSlot {
 			return null;
 		}
 		
-		parser.setCurrentInputIndex(ci + length);
-		
-		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser)))
+		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length)))
 			return null;
 		
 		TerminalSymbolNode cr = parser.getTerminalNode(slot, ci, ci + length);

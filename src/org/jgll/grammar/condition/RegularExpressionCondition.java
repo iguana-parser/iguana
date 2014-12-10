@@ -40,22 +40,22 @@ public class RegularExpressionCondition extends Condition {
 		switch (type) {
 		
 		    case FOLLOW:
-		    	return (p) -> r.match(p.getInput(), p.getCurrentInputIndex()) == -1;
+		    	return (input, node, i) -> r.match(input, i) == -1;
 		    	
 		    case NOT_FOLLOW:
-		    	return (p) -> r.match(p.getInput(), p.getCurrentInputIndex()) >= 0;
+		    	return (input, node, i) -> r.match(input, i) >= 0;
 		    	
 		    case MATCH:
 		    	throw new RuntimeException("Unsupported");
 		
 			case NOT_MATCH: 
-				return (p) -> r.match(p.getInput(), p.getCurrentGSSNode().getInputIndex(), p.getCurrentInputIndex());
+				return (input, node, i) -> r.match(input, node.getInputIndex(), i);
 				
 			case NOT_PRECEDE:
-				return (p) -> r.matchBackwards(p.getInput(), p.getCurrentInputIndex() - 1) >= 0;
+				return (input, node, i) -> r.matchBackwards(input, i - 1) >= 0;
 				
 			case PRECEDE:
-				return (p) -> r.matchBackwards(p.getInput(), p.getCurrentInputIndex() - 1) == -1;
+				return (input, node, i) -> r.matchBackwards(input, i - 1) == -1;
 				
 			default:
 				throw new RuntimeException("Unexpected error occured.");

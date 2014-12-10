@@ -49,15 +49,13 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 
 			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 			
-			if (!gssLookup.addToPoppedElements(gssNode, node)) {
+			if (!gssLookup.addToPoppedElements(gssNode, node))
 				return null;
-			}
 
 			BodyGrammarSlot returnSlot = (BodyGrammarSlot) gssNode.getGrammarSlot();
 
-			if (returnSlot.getPopConditions().execute(this, lexer, gssNode, inputIndex)) {
+			if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
 				return null; 
-			}
 			
 			// Optimization for the case when only one GSS Edge is available.
 			// No scheduling of descriptors, rather direct jump to the slot
@@ -118,9 +116,9 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			// to be processed.
 			if (source.countPoppedElements() == 1) {
 				SPPFNode z = source.getPoppedElements().iterator().next();
-				if(returnSlot.getPopConditions().execute(this, lexer, destination, z.getRightExtent())) {
+				
+				if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
 					return null;
-				}
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z);
 				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
@@ -142,9 +140,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node
 				// stored in the popped elements.
-				if(returnSlot.getPopConditions().execute(this, lexer, destination, z.getRightExtent())) {
+				if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
 					continue label;
-				}
 				
 				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
 				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
