@@ -2,6 +2,7 @@ package org.jgll.grammar.slot.nodecreator;
 
 import java.io.Serializable;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.GLLParser;
@@ -31,7 +32,7 @@ public class NonterminalNodeCreator implements NodeCreator, Serializable {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "new NonterminalNodeCreator()";
 	}
 

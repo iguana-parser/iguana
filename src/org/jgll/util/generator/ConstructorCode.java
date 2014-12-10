@@ -1,5 +1,7 @@
 package org.jgll.util.generator;
 
+import org.jgll.grammar.GrammarSlotRegistry;
+
 /**
  * 
  * 
@@ -8,6 +10,6 @@ package org.jgll.util.generator;
  */
 public interface ConstructorCode {
 	
-	public String getConstructorCode();
+	public String getConstructorCode(GrammarSlotRegistry registry);
 	
 }

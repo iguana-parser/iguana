@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -68,17 +69,17 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void code(PrintWriter writer) {
+	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(label));
-		writer.println("private final int slot" + id + "() {");
-		writer.println("  if (!slot" + nonterminal.getId() + ".test(lexer.getInput().charAt(ci))) {");
-		writer.println("    recordParseError(slot" + id + ");");
+		writer.println("private final int slot" + registry.getId(this) + "() {");
+		writer.println("  if (!slot" + registry.getId(nonterminal) + ".test(lexer.getInput().charAt(ci))) {");
+		writer.println("    recordParseError(slot" + registry.getId(this) + ");");
 		writer.println("    return L0;");
 		writer.println("  }");
-		writer.println("  if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) {");
+		writer.println("  if (slot" + registry.getId(this) + ".getPreConditions().execute(this, lexer, cu, ci)) {");
 		writer.println("    return L0;");
 		writer.println("  }");
-		writer.println("  GrammarSlot returnSlot = create(slot" + next.getId() + ", slot" + nonterminal.getId() + ");");
+		writer.println("  GrammarSlot returnSlot = create(slot" + registry.getId(next) + ", slot" + registry.getId(nonterminal) + ");");
 		writer.println("  if (returnSlot != null) {");
 		writer.println("    return returnSlot.getId();");
 		writer.println("  }");
@@ -87,16 +88,16 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new NonterminalGrammarSlot(")
-		  .append(id + ", ")
+		  .append(registry.getId(this) + ", ")
 		  .append("\"" +  escape(label) + "\"" + ", ")
-		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
-		  .append("slot" + nonterminal.getId() + ", ")
-		  .append(preConditions.getConstructorCode() + ", ")
-		  .append(popConditions.getConstructorCode() + ", ")
-		  .append(nodeCreatorFromPop.getConstructorCode() + ")");
+		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
+		  .append("slot" + registry.getId(nonterminal) + ", ")
+		  .append(preConditions.getConstructorCode(registry) + ", ")
+		  .append(popConditions.getConstructorCode(registry) + ", ")
+		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
 		return sb.toString();
 	}
 

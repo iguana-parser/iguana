@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.slot.test.ConditionTest;
@@ -58,10 +59,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void code(PrintWriter writer) {
+	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(label));
-		writer.println("private final int slot" + id + "() {");
-		writer.println("  if (slot" + head.getId() + ".testFollowSet(lexer.getInput().charAt(ci))) {");
+		writer.println("private final int slot" + registry.getId(this) + "() {");
+		writer.println("  if (slot" + registry.getId(head) + ".testFollowSet(lexer.getInput().charAt(ci))) {");
 		writer.println("    GrammarSlot returnSlot = pop();");
 		writer.println("    if (returnSlot != null) {");
 		writer.println("       return returnSlot.getId();");
@@ -72,15 +73,15 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new LastGrammarSlot(")
-		  .append(id + ", ")
+		  .append(registry.getId(this) + ", ")
 		  .append("\"" + escape(label) + "\"" + ", ")
-		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
-		  .append("slot" + head.getId() + ", ")
-		  .append(popConditions.getConstructorCode() + ", ")
-		  .append(nodeCreatorFromPop.getConstructorCode() + ")");
+		  .append((previous == null ? "null" : "slot" + registry.getId(previous) + ", "))
+		  .append("slot" + registry.getId(head) + ", ")
+		  .append(popConditions.getConstructorCode(registry) + ", ")
+		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
 		return sb.toString();
 	}
 

@@ -16,7 +16,7 @@ import org.jgll.regex.RegularExpression;
  * @author Ali Afroozeh
  *
  */
-public class Resolver {
+public class GrammarSlotRegistry {
 
 	private Map<HeadGrammarSlot, Integer> nonterminalIndexes = new HashMap<>();
 	private Map<TerminalGrammarSlot, Integer> terminalsIndexes = new HashMap<>();
@@ -24,7 +24,7 @@ public class Resolver {
 	private Map<Nonterminal, HeadGrammarSlot> nonterminals = new HashMap<>();
 	private Map<RegularExpression, TerminalGrammarSlot> terminals = new HashMap<>();
 	
-	public Resolver(Set<HeadGrammarSlot> heads, Set<TerminalGrammarSlot> terminalSlots) {
+	public GrammarSlotRegistry(Set<HeadGrammarSlot> heads, Set<TerminalGrammarSlot> terminalSlots) {
 		
 		for (HeadGrammarSlot head : heads) {
 			nonterminals.put(head.getNonterminal(), head);

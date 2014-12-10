@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.PrintWriter;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -138,31 +139,31 @@ public class HeadGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new HeadGrammarSlot(")
-		  .append(id + ", ")
+		  .append(registry.getId(this) + ", ")
 		  .append("Nonterminal.withName(\"" + escape(nonterminal.getName()) + "\")" + ", ")
 		  .append(altsCount + ", ")
 		  .append(nullable + ", ")
-		  .append(predictionTest.getConstructorCode() + ", ")
-		  .append(followTest.getConstructorCode() + ")");
+		  .append(predictionTest.getConstructorCode(registry) + ", ")
+		  .append(followTest.getConstructorCode(registry) + ")");
 		return sb.toString();
 	}
 	
 	@Override
-	public void code(PrintWriter writer) {
+	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(nonterminal.getName()));
-		writer.println("private final int slot" + id + "() {");
-		writer.println("  Set<Integer> set = slot" + id + ".getPredictionSet(lexer.getInput().charAt(ci));");
+		writer.println("private final int slot" + registry.getId(this) + "() {");
+		writer.println("  Set<Integer> set = slot" + registry.getId(this) + ".getPredictionSet(lexer.getInput().charAt(ci));");
 		writer.println("  if (set == null) return L0;");
 		writer.println("  if (set.size() == 1) {");
-		writer.println("    log.trace(\"Processing (%s, %d, %s, %s)\", slot" + id + ".getFirstSlots()[set.iterator().next()]" + ", ci, cu, cn);");
-		writer.println("    return slot" + id + ".getFirstSlots()[set.iterator().next()].getId();");
+		writer.println("    log.trace(\"Processing (%s, %d, %s, %s)\", slot" + registry.getId(this) + ".getFirstSlots()[set.iterator().next()]" + ", ci, cu, cn);");
+		writer.println("    return slot" + registry.getId(this) + ".getFirstSlots()[set.iterator().next()].getId();");
 		writer.println("  }");
 		writer.println("  for (int alternateIndex : set) {");
-		writer.println("    if (slot" + id + ".getFirstSlots()[alternateIndex] == null) continue;");
-		writer.println("    scheduleDescriptor(new Descriptor(slot" + id + ".getFirstSlots()[alternateIndex], cu, ci, DummyNode.getInstance()));");
+		writer.println("    if (slot" + registry.getId(this) + ".getFirstSlots()[alternateIndex] == null) continue;");
+		writer.println("    scheduleDescriptor(new Descriptor(slot" + registry.getId(this) + ".getFirstSlots()[alternateIndex], cu, ci, DummyNode.getInstance()));");
 		writer.println("  }");
 		writer.println("  return L0;");
 		writer.println("}");

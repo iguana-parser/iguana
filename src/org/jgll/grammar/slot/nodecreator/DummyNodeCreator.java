@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot.nodecreator;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
@@ -24,7 +25,7 @@ public class DummyNodeCreator implements NodeCreator {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "DummyNodeCreator.getInstance()";
 	}
 	

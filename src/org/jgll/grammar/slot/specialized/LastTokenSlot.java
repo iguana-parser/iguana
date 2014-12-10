@@ -4,6 +4,7 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 
 import java.io.PrintWriter;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
@@ -48,34 +49,34 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 	StringBuilder sb = new StringBuilder();
 		sb.append("new LastTokenSlot(")
-		  .append(id + ", ")
+		  .append(registry.getId(this) + ", ")
 		  .append("\"" +  escape(label) + "\"" + ", ")
-		  .append((previous == null ? "null" : "slot" + previous.getId()) + ", ")
-		  .append(slot.getConstructorCode() + ", ")
-		  .append(preConditions.getConstructorCode() + ", ")
-		  .append(postConditions.getConstructorCode() + ", ")
-		  .append(popConditions.getConstructorCode() + ", ")
-		  .append(nodeCreator.getConstructorCode() + ", ")
-		  .append(nodeCreatorFromPop.getConstructorCode() + ")");
+		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
+		  .append(slot.getConstructorCode(registry) + ", ")
+		  .append(preConditions.getConstructorCode(registry) + ", ")
+		  .append(postConditions.getConstructorCode(registry) + ", ")
+		  .append(popConditions.getConstructorCode(registry) + ", ")
+		  .append(nodeCreator.getConstructorCode(registry) + ", ")
+		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
 		return sb.toString();
 	}
 	
 	@Override
-	public void code(PrintWriter writer) {
+	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(label));
-		writer.println("private final int slot" + id + "() {");
-		writer.println("  if (slot" + id + ".getPreConditions().execute(this, lexer, cu, ci)) return L0;");
-		writer.println("  length = lexer.tokenLengthAt(ci, " + slot.getId() + ");");
+		writer.println("private final int slot" + registry.getId(this) + "() {");
+		writer.println("  if (slot" + registry.getId(this) + ".getPreConditions().execute(this, lexer, cu, ci)) return L0;");
+		writer.println("  length = lexer.tokenLengthAt(ci, " + registry.getId(slot) + ");");
 		writer.println("  if (length < 0) {");
-		writer.println("    recordParseError(slot" + id + ");");
+		writer.println("    recordParseError(slot" + registry.getId(this) + ");");
 		writer.println("    return L0;");
 		writer.println("  }");
-		writer.println("  if (slot" + id + ".getPostConditions().execute(this, lexer, cu, ci + length)) return L0;");
-		writer.println("  SPPFNode cr = getTokenNode(" + slot.getId() + ", ci, length);");
-		writer.println("  cn = slot" + id + ".getNodeCreator().create(this, slot" + next.getId() + ", cn, cr);");
+		writer.println("  if (slot" + registry.getId(this) + ".getPostConditions().execute(this, lexer, cu, ci + length)) return L0;");
+		writer.println("  SPPFNode cr = getTokenNode(" + registry.getId(slot) + ", ci, length);");
+		writer.println("  cn = slot" + registry.getId(this) + ".getNodeCreator().create(this, slot" + registry.getId(next) + ", cn, cr);");
 		writer.println("  GrammarSlot returnSlot = pop();");
 		writer.println("  if (returnSlot != null) {");
 		writer.println("     return returnSlot.getId();");

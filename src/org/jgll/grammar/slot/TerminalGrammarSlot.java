@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -17,10 +18,10 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new TerminalGrammarSlot(")
-		  .append(regex.getConstructorCode())
+		  .append(regex.getConstructorCode(registry))
 		  .append(")");
 		return sb.toString();
 	}
@@ -60,7 +61,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 
 	@Override
-	public void code(PrintWriter writer) {
+	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		
 	}
 

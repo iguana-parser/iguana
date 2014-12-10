@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.test.FalseConditionTest;
 import org.jgll.grammar.symbol.Epsilon;
@@ -44,23 +45,23 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new EpsilonGrammarSlot(")
-		  .append(id + ", ")
+		  .append(registry.getId(this) + ", ")
 		  .append("\"" + escape(label) + "\"" + ", ")
-		  .append("slot" + head.getId() + ")");
+		  .append("slot" + registry.getId(head) + ")");
 		return sb.toString();
 	}
 	
 	@Override
-	public void code(PrintWriter writer) {
+	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(label));
-		writer.println("private final int slot" + id + "() {");
-		writer.println("  if (slot" + head.getId() + ".testFollowSet(lexer.getInput().charAt(ci))) {");
+		writer.println("private final int slot" + registry.getId(this) + "() {");
+		writer.println("  if (slot" + registry.getId(head) + ".testFollowSet(lexer.getInput().charAt(ci))) {");
 		writer.println("    TokenSymbolNode epsilonNode = sppfLookup.getEpsilonNode(ci);");
-		writer.println("    NonterminalNode node = sppfLookup.getNonterminalNode(slot" + head.getId() + ", ci, ci);");
-		writer.println("    sppfLookup.addPackedNode(node, slot" + id + ", ci, DummyNode.getInstance(), epsilonNode);");
+		writer.println("    NonterminalNode node = sppfLookup.getNonterminalNode(slot" + registry.getId(head) + ", ci, ci);");
+		writer.println("    sppfLookup.addPackedNode(node, slot" + registry.getId(this) + ", ci, DummyNode.getInstance(), epsilonNode);");
 		writer.println("    cn = node;");
 		writer.println("    GrammarSlot returnSlot = pop();");
 		writer.println("    if (returnSlot != null) {");

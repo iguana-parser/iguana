@@ -39,7 +39,7 @@ public class GrammarGraph implements Serializable {
 	
 	private List<HeadGrammarSlot> headGrammarSlots;
 	
-	private Resolver resolver;
+	private GrammarSlotRegistry resolver;
 	
 	private Set<BodyGrammarSlot> slots;
 	
@@ -457,7 +457,7 @@ public class GrammarGraph implements Serializable {
 		}
 	}
 	
-	public Resolver getResolver() {
+	public GrammarSlotRegistry getResolver() {
 		return resolver;
 	}
 	

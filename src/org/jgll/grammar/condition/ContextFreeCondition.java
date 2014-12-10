@@ -3,6 +3,7 @@ package org.jgll.grammar.condition;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Symbol;
 
@@ -104,7 +105,7 @@ public class ContextFreeCondition extends Condition {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		throw new UnsupportedOperationException();
 	}
 

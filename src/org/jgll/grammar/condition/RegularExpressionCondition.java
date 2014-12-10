@@ -1,5 +1,6 @@
 package org.jgll.grammar.condition;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.RunnableAutomaton;
 
@@ -84,8 +85,8 @@ public class RegularExpressionCondition extends Condition {
 	}
 
 	@Override
-	public String getConstructorCode() {
-		return "new RegularExpressionCondition(" + type.name() + ", " + regularExpression.getConstructorCode() + ")";
+	public String getConstructorCode(GrammarSlotRegistry registry) {
+		return "new RegularExpressionCondition(" + type.name() + ", " + regularExpression.getConstructorCode(registry) + ")";
 	}
 	
 	public static RegularExpressionCondition notMatch(RegularExpression regularExpression) {

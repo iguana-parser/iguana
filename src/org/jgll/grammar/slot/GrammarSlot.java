@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -34,6 +35,6 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	public void reset();
 
-	public void code(PrintWriter writer);
+	public void code(PrintWriter writer, GrammarSlotRegistry registry);
 	
 }

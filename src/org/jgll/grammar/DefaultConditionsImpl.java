@@ -12,13 +12,6 @@ import org.jgll.grammar.condition.SlotAction;
 import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.slot.test.DefaultConditionTest;
 import org.jgll.grammar.slot.test.FalseConditionTest;
-import org.jgll.grammar.slotaction.EndOfLineAction;
-import org.jgll.grammar.slotaction.RegularExpressionFollowAction;
-import org.jgll.grammar.slotaction.RegularExpressionNotFollowAction;
-import org.jgll.grammar.slotaction.RegularExpressionNotMatchAction;
-import org.jgll.grammar.slotaction.RegularExpressionNotPrecedeAction;
-import org.jgll.grammar.slotaction.RegularExpressionPrecedeAction;
-import org.jgll.grammar.slotaction.StartOfLineAction;
 
 public class DefaultConditionsImpl implements Conditions {
 	

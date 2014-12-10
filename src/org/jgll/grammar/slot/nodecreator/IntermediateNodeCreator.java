@@ -2,6 +2,7 @@ package org.jgll.grammar.slot.nodecreator;
 
 import java.io.Serializable;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.lookup.SPPFLookup;
@@ -28,7 +29,7 @@ public class IntermediateNodeCreator implements NodeCreator, Serializable {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "new IntermediateNodeCreator()";
 	}
 

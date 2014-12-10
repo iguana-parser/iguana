@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.regex.automaton.Automaton;
@@ -71,7 +72,7 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "Epsilon.getInstance()";
 	}
 	

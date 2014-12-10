@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
@@ -162,7 +163,7 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new CharacterClass(")
 		  .append(alt.getConstructorCode() + ", ")
