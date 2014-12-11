@@ -15,7 +15,10 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
 public class GrammarToDot {
 	
+	private static GrammarGraph grammar;
+
 	public static String toDot(GrammarGraph grammar) {
+		GrammarToDot.grammar = grammar;
 		StringBuilder sb = new StringBuilder();
 		
 		Set<HeadGrammarSlot> visitedHeads = new HashSet<>();
@@ -66,11 +69,11 @@ public class GrammarToDot {
 	}
 	
 	private static String getId(HeadGrammarSlot head) {
-		return "n" + head.getId();
+		return "n" + grammar.getRegistry().getId(head);
 	}
 	
 	private static String getId(BodyGrammarSlot slot) {
-		return "s" + slot.getId();
+		return "s" + grammar.getRegistry().getId(slot);
 	}
 	
 }

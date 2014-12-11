@@ -2,6 +2,9 @@ package org.jgll.util.visualization;
 
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -29,6 +32,8 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	protected StringBuilder sb;
 
 	protected Input input;
+	
+	protected Set<SPPFNode> visited = new HashSet<>();
 
 	public SPPFToDot(GrammarGraph grammar, Input input) {
 		this(input, false);
@@ -42,8 +47,8 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(TerminalSymbolNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
+		if(!visited.contains(node)) {
+			visited.add(node);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
 			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), matchedInput);
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
@@ -52,9 +57,9 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(NonterminalNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
+		if(!visited.contains(node)) {
+			visited.add(node);
+			
 			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
 			if (node.isAmbiguous()) {
 				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
@@ -69,9 +74,9 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(IntermediateNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
+		if(!visited.contains(node)) {
+			visited.add(node);
+			
 			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
 			if (node.isAmbiguous()) {
 				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
@@ -86,9 +91,9 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(PackedNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
+		if(!visited.contains(node)) {
+			visited.add(node);
+			
 			if(showPackedNodeLabel) {
 				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
 			} else {

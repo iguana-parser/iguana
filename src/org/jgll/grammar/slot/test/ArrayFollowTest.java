@@ -2,6 +2,7 @@ package org.jgll.grammar.slot.test;
 
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
@@ -47,7 +48,7 @@ public class ArrayFollowTest implements FollowTest {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "new ArrayFollowTest(new boolean[]{" + Joiner.on(",").join(Booleans.asList(followSetMap)) + "}" + ", " + min + ", " + max + ")";
 	}
 

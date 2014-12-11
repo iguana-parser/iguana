@@ -1,5 +1,7 @@
 package org.jgll.grammar.slot.test;
 
+import org.jgll.grammar.GrammarSlotRegistry;
+
 public class TrueFollowSet implements FollowTest {
 
 	private static final long serialVersionUID = 1L;
@@ -10,7 +12,7 @@ public class TrueFollowSet implements FollowTest {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "new TrueFollowSet()";
 	}
 

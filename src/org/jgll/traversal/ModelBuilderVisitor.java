@@ -3,11 +3,14 @@ package org.jgll.traversal;
 import static org.jgll.traversal.SPPFVisitorUtil.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.regex.RegularExpression;
@@ -41,7 +44,11 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	private NodeListener<T, U> listener;
 	
 	private Input input;
-
+	
+	private Set<SPPFNode> visited = new HashSet<>();
+	
+	private Map<SPPFNode, Object> objects = new HashMap<>();
+	
 	public ModelBuilderVisitor(Input input, NodeListener<T, U> listener, GrammarGraph grammar) {
 		this.input = input;
 		this.listener = listener;
@@ -51,10 +58,9 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	public void visit(NonterminalNode node) {
 		removeIntermediateNode(node);
 		
-		if(!node.isVisited()) {
-		
-			node.setVisited(true);
-			
+		if (!visited.contains(node)) {
+			visited.add(node);
+						
 			if(node.isAmbiguous()) {
 				buildAmbiguityNode(node);
 			}
@@ -79,7 +85,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
 				}
 
-				node.setObject(result);
+				objects.put(node, result);
 			}
 		}
 	}
@@ -132,14 +138,13 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				
 				node.accept(this);
 				result = listener.endNode((T) object, getChildrenValues(node), input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				node.setObject(result);				
+				objects.put(node, result);
 			} else {
 				T object = (T) getObject(nonterminalSymbolNode);
 				listener.startNode(object);
 				node.accept(this);
-				result = listener.endNode(object, getChildrenValues(node), 
-						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				node.setObject(result);				
+				result = listener.endNode(object, getChildrenValues(node), input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				objects.put(node, result);
 			}
 			
 			if(result != Result.filter()) {
@@ -150,7 +155,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		if(nPackedNodes > 1) {
 			Result<U> result = listener.buildAmbiguityNode(getChildrenValues(nonterminalSymbolNode), 
 					input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
-			nonterminalSymbolNode.setObject(result);
+			objects.put(nonterminalSymbolNode, result);
 		}
 	}
 
@@ -161,31 +166,33 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(PackedNode packedNode) {
-		removeIntermediateNode(packedNode);
-		removeListSymbolNode(packedNode);
-		
-		if(!packedNode.isVisited()) {
-			packedNode.setVisited(true);
-			visitChildren(packedNode, this);
+	public void visit(PackedNode node) {
+		removeIntermediateNode(node);
+		removeListSymbolNode(node);
+
+		if (!visited.contains(node)) {
+			visited.add(node);
+			visitChildren(node, this);
 		}
 	}
 
 	@Override
-	public void visit(ListSymbolNode listNode) {
-		removeListSymbolNode(listNode);
-		if(!listNode.isVisited()) {
-			listNode.setVisited(true);
-			if(listNode.isAmbiguous()) {
-				buildAmbiguityNode(listNode);
+	public void visit(ListSymbolNode node) {
+		removeListSymbolNode(node);
+		
+		if (!visited.contains(node)) {
+			visited.add(node);
+
+			if(node.isAmbiguous()) {
+				buildAmbiguityNode(node);
 			}	
 			else {
-				T object = (T) getObject(listNode);
+				T object = (T) getObject(node);
 				listener.startNode(object);
-				visitChildren(listNode, this);
-				Result<U> result = listener.endNode(object, getChildrenValues(listNode), 
-						input.getPositionInfo(listNode.getLeftExtent(), listNode.getRightExtent()));
-				listNode.setObject(result);
+				visitChildren(node, this);
+				Result<U> result = listener.endNode(object, getChildrenValues(node), 
+						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				objects.put(node, result);
 			}
 		}
 	}
@@ -207,8 +214,8 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 						while (iterator.hasNext()) {
 							next = iterator.next();
 							
-							if(next.getObject() == Result.filter()) {
-								node.setObject(Result.filter());
+							if(objects.get(next) == Result.filter()) {
+								objects.put(node, Result.filter());
 								// Go to the next child
 								if(!iterator.hasNext()) {
 									return false;
@@ -216,7 +223,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 								next = iterator.next();
 							} 
 							
-							else if(next.getObject() == Result.skip()) {
+							else if(objects.get(next) == Result.skip()) {
 								// Go to the next child
 								if(!iterator.hasNext()) {
 									return false;
@@ -224,7 +231,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 								next = iterator.next();
 							}
 							
-							else if(next.getObject() == null) {
+							else if(objects.get(next) == null) {
 								if(!iterator.hasNext()) {
 									return false;
 								}
@@ -240,7 +247,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 
 					@Override
 					public U next() {
-						return ((Result<U>) next.getObject()).getObject();
+						return ((Result<U>) objects.get(next)).getObject();
 					}
 
 					@Override
@@ -255,10 +262,10 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 
 	@Override
 	public void visit(TerminalSymbolNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
+		if (!visited.contains(node)) {
+			visited.add(node);
 			
-			RegularExpression regex = node.getRegularExpression();
+			RegularExpression regex = node.getGrammarSlot();
 			
 			if (regex instanceof Sequence) {
 				Sequence<CharacterClass> sequence = (Sequence<CharacterClass>) regex;
@@ -274,14 +281,14 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				
 				Result<U> result = listener.endNode((T) object, childrenVal, 
 						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				node.setObject(result);
+				objects.put(node, result);
 			}
 			
 			// For now we only support parse tree generation for character class
 			else if (regex instanceof CharacterClass) {
 				int c = input.charAt(node.getLeftExtent());
 				Result<U> result = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				node.setObject(result);
+				objects.put(node, result);
 			}
 			
 			else {

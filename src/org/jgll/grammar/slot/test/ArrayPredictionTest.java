@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
@@ -88,7 +89,7 @@ public class ArrayPredictionTest implements PredictionTest {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "new ArrayPredictionTest(" + convert(predictionMap) + ", " + min + ", " + max + ")";
 	}
 

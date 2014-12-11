@@ -1,7 +1,9 @@
 package org.jgll.util;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.sppf.IntermediateNode;
@@ -17,6 +19,8 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 public class ToJavaCode implements SPPFVisitor {
 	
 	private Map<SPPFNode, Integer> idsMap = new HashMap<>();
+	
+	protected Set<SPPFNode> visited = new HashSet<>();
 
 	private int count = 1;
 	private StringBuilder sb = new StringBuilder();
@@ -33,12 +37,11 @@ public class ToJavaCode implements SPPFVisitor {
 	
 	@Override
 	public void visit(TerminalSymbolNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
+		if(!visited.contains(node)) {
+			visited.add(node);
 			sb.append("TokenSymbolNode node" + count + " = factory.createTokenNode(" +
-					  "\"" + escape(node.getGrammarSlot().getRegularExpression().toString()) + "\", " +
-					  node.getLeftExtent() + ", " + node.getLength() + ");\n");
-			node.setObject("node" + count++);
+					  "\"" + escape(node.getGrammarSlot().toString()) + "\", " +
+					  node.getLeftExtent() + ", " + node.getRightExtent() + ");\n");
 		}
 	}
 
@@ -82,7 +85,7 @@ public class ToJavaCode implements SPPFVisitor {
 
 		sb.append("PackedNode node" + count + " = factory.createPackedNode(" +
 				  "\"" + escape(node.getGrammarSlot().toString()) + "\", " + 
-				  node.getPivot() + ", " + node.getParent().getObject() + ");\n");				
+				  node.getPivot() + ", " + "node" + idsMap.get(node.getParent()) + ");\n");				
 		
 		count++;
 		
@@ -117,9 +120,7 @@ public class ToJavaCode implements SPPFVisitor {
 	
 	private void addChildren(SPPFNode node) {
 		for(SPPFNode child : node.getChildren()) {
-			String childName = (String) child.getObject();
-			assert childName != null;
-			sb.append(node.getObject() + ".addChild(" + childName + ");\n");
+			sb.append("node" + idsMap.get(node) + ".addChild(" + "node" + idsMap.get(child) + ");\n");
 		}
 	}
 	

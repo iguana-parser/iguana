@@ -20,8 +20,8 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 	public void visit(NonterminalNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);
 		
-		if(!node.isVisited()) {
-			node.setVisited(true);
+		if(!visited.contains(node)) {
+			visited.add(node);
 	
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
 		
@@ -41,8 +41,8 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 	public void visit(PackedNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);
 		
-		if(!node.isVisited()) {
-			node.setVisited(true);
+		if(!visited.contains(node)) {
+			visited.add(node);
 	
 			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 		

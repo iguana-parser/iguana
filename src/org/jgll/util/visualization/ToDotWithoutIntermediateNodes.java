@@ -24,8 +24,9 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	
 	@Override
 	public void visit(NonterminalNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
+
+		if(!visited.contains(node)) {
+			visited.add(node);
 			
 			if(node.isAmbiguous()) {
 				int i = 0;
@@ -49,8 +50,9 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	
 	@Override
 	public void visit(PackedNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
+
+		if(!visited.contains(node)) {
+			visited.add(node);
 			
 			if(node.isAmbiguous()) {
 				int i = 0;
