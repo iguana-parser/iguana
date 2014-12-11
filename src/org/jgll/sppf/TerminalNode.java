@@ -1,19 +1,16 @@
 package org.jgll.sppf;
 
-import java.util.Collections;
-
 import org.jgll.regex.RegularExpression;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
  * 
- * 
  * @author Ali Afroozeh
  *
  */
-public class TerminalSymbolNode extends NonPackedNode {
+public class TerminalNode extends NonPackedNode {
 	
-	public TerminalSymbolNode(RegularExpression slot, int leftExtent, int rightExtent) {
+	public TerminalNode(RegularExpression slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
 	
@@ -28,9 +25,13 @@ public class TerminalSymbolNode extends NonPackedNode {
 	}
 
 	@Override
-	public TerminalSymbolNode init() {
-		children = Collections.emptyList();
+	public TerminalNode init() {
 		return this;
+	}
+	
+	@Override
+	public int childrenCount() {
+		return 0;
 	}
 
 }

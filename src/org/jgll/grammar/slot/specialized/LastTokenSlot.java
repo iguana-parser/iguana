@@ -15,7 +15,7 @@ import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TerminalNode;
 
 public class LastTokenSlot extends TokenGrammarSlot {
 
@@ -42,7 +42,7 @@ public class LastTokenSlot extends TokenGrammarSlot {
 		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length)))
 			return null;
 		
-		TerminalSymbolNode cr = parser.getTerminalNode(slot, ci, ci + length);
+		TerminalNode cr = parser.getTerminalNode(slot, ci, ci + length);
 		
 		SPPFNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		

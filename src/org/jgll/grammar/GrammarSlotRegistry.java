@@ -34,6 +34,10 @@ public class GrammarSlotRegistry {
 			 				   Map<RegularExpression, TerminalGrammarSlot> terminals, 
 			 				   Map<String, BodyGrammarSlot> slots) {
 		
+		if (heads == null) throw new IllegalArgumentException();
+		if (terminals == null) throw new IllegalArgumentException();
+		if (slots == null) throw new IllegalArgumentException();
+		
 		this.nonterminals = new HashMap<>(heads);
 		this.slots = new HashMap<>(slots);
 		this.terminals = new HashMap<>(terminals);

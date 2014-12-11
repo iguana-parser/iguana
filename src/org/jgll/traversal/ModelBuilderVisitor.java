@@ -21,7 +21,7 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 
 /**
@@ -261,7 +261,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(TerminalSymbolNode node) {
+	public void visit(TerminalNode node) {
 		if (!visited.contains(node)) {
 			visited.add(node);
 			

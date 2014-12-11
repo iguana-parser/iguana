@@ -7,7 +7,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TerminalNode;
 
 public interface SPPFLookup {
 
@@ -17,9 +17,9 @@ public interface SPPFLookup {
 	 * @param length
 	 * @return
 	 */
-	public TerminalSymbolNode getTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
+	public TerminalNode getTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
 	
-	public TerminalSymbolNode getEpsilonNode(int inputIndex);
+	public TerminalNode getEpsilonNode(int inputIndex);
 	
 	/**
 	 * 
@@ -28,7 +28,7 @@ public interface SPPFLookup {
 	 * @param length
 	 * @return
 	 */
-	public TerminalSymbolNode findTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
+	public TerminalNode findTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
 	
 	/**
 	 * 

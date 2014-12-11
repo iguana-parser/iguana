@@ -11,7 +11,7 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.traversal.SPPFVisitor;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
@@ -36,7 +36,7 @@ public class ToJavaCode implements SPPFVisitor {
 	}
 	
 	@Override
-	public void visit(TerminalSymbolNode node) {
+	public void visit(TerminalNode node) {
 		if(!visited.contains(node)) {
 			visited.add(node);
 			sb.append("TokenSymbolNode node" + count + " = factory.createTokenNode(" +

@@ -15,14 +15,14 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFUtil;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class GlobalSPPFLookupImpl implements SPPFLookup {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GlobalSPPFLookupImpl.class);
 	
-	private final Map<TerminalSymbolNode, TerminalSymbolNode> tokenNodes;
+	private final Map<TerminalNode, TerminalNode> tokenNodes;
 	
 	private final Map<NonterminalNode, NonterminalNode> nonterminalNodes;
 
@@ -40,8 +40,8 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public TerminalSymbolNode getTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		final TerminalSymbolNode key = new TerminalSymbolNode(slot.getRegularExpression(), inputIndex, length);
+	public TerminalNode getTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+		final TerminalNode key = new TerminalNode(slot.getRegularExpression(), inputIndex, length);
 		return tokenNodes.computeIfAbsent(key, k -> { 
 													  log.trace("Terminal node created: %s", key); 
 													  return key.init(); 
@@ -49,13 +49,13 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public TerminalSymbolNode getEpsilonNode(int inputIndex) {
+	public TerminalNode getEpsilonNode(int inputIndex) {
 		return getTerminalSymbolNode(Epsilon.TOKEN_ID, inputIndex, 0);
 	}
 	
 	@Override
-	public TerminalSymbolNode findTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		TerminalSymbolNode key = new TerminalSymbolNode(slot.getRegularExpression(), inputIndex, length);
+	public TerminalNode findTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+		TerminalNode key = new TerminalNode(slot.getRegularExpression(), inputIndex, length);
 		return tokenNodes.get(key);
 	}
 

@@ -22,7 +22,7 @@ import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
@@ -304,7 +304,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public TerminalSymbolNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int length) {
 		ci += length;
 		return sppfLookup.getTerminalSymbolNode(slot, inputIndex, length);
 	}

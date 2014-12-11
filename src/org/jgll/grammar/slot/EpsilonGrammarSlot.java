@@ -13,7 +13,7 @@ import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.TerminalSymbolNode;
+import org.jgll.sppf.TerminalNode;
 
 /**
  * The grammar slot representing an empty body.
@@ -34,7 +34,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		int ci = parser.getCurrentInputIndex();
 		
 		if(head.testFollowSet(lexer.charAt(parser.getCurrentInputIndex()))) {
-			TerminalSymbolNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
+			TerminalNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
 			NonterminalNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
 			parser.getSPPFLookup().addPackedNode(node, this, ci, DummyNode.getInstance(), epsilonNode);
 			parser.setCurrentSPPFNode(node);

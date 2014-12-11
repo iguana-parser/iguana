@@ -25,8 +25,8 @@ public class SPPFNodeFactory {
 		return new IntermediateNode(grammarGraph.getRegistry().getGrammarSlot(s), leftExtent, rightExtent);
 	}
 	
-	public TerminalSymbolNode createTokenNode(String s, int leftExtent, int rightExtent) {
-		return new TerminalSymbolNode(grammarGraph.getRegistry().getRegularExpression(s), leftExtent, rightExtent);
+	public TerminalNode createTokenNode(String s, int leftExtent, int rightExtent) {
+		return new TerminalNode(grammarGraph.getRegistry().getRegularExpression(s), leftExtent, rightExtent);
 	}
 
 	public ListSymbolNode createListNode(String s, int index, int leftExtent, int rightExtent) {

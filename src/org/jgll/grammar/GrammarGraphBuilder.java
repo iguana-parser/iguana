@@ -19,6 +19,7 @@ import org.jgll.grammar.slot.OriginalIntermediateNodeIds;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -54,9 +55,10 @@ public class GrammarGraphBuilder implements Serializable {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
 		this.grammar = grammar;
-
-		slots = new HashMap<>();
-		nonterminalsMap = new HashMap<>();
+		this.slots = new HashMap<>();
+		this.nonterminalsMap = new HashMap<>();
+		this.terminalsMap = new HashMap<>();
+		terminalsMap.put(Epsilon.getInstance(), new TerminalGrammarSlot(Epsilon.getInstance()));
 	}
 
 	public GrammarGraph build() {
