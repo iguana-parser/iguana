@@ -6,8 +6,8 @@ import java.util.List;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 
@@ -122,7 +122,7 @@ public class SPPFVisitorUtil {
 			IntermediateNode intermediateNode = (IntermediateNode) parent.getChildAt(0);
 
 			if(intermediateNode.isAmbiguous()) {
-				NonPackedNode parentOfPackedNode = (NonPackedNode) parent.getParent();
+				NonterminalOrIntermediateNode parentOfPackedNode = (NonterminalOrIntermediateNode) parent.getParent();
 
 				List<SPPFNode> restOfChildren = new ArrayList<>();
 

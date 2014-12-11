@@ -11,7 +11,7 @@ import org.jgll.traversal.SPPFVisitor;
  * @author Ali Afroozeh
  *
  */
-public class NonterminalNode extends NonPackedNode {
+public class NonterminalNode extends NonterminalOrIntermediateNode {
 	
 	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);

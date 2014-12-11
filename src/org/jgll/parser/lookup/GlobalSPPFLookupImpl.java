@@ -12,6 +12,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFUtil;
@@ -44,7 +45,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 		final TerminalNode key = new TerminalNode(slot.getRegularExpression(), inputIndex, length);
 		return tokenNodes.computeIfAbsent(key, k -> { 
 													  log.trace("Terminal node created: %s", key); 
-													  return key.init(); 
+													  return key; 
 													});
 	}
 	
@@ -105,7 +106,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
 		PackedNode packedNode = new PackedNode(slot, pivot, parent);
 		boolean ambiguousBefore = parent.isAmbiguous();
-		if (parent.addPackedNode(packedNode, leftChild, rightChild)) {
+		if (((NonterminalOrIntermediateNode) parent).addPackedNode(packedNode, leftChild, rightChild)) {
 			countPackedNodes++;
 			boolean ambiguousAfter = parent.isAmbiguous();
 			if (!ambiguousBefore && ambiguousAfter) {

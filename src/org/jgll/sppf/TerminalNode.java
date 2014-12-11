@@ -1,5 +1,8 @@
 package org.jgll.sppf;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.jgll.regex.RegularExpression;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -25,13 +28,23 @@ public class TerminalNode extends NonPackedNode {
 	}
 
 	@Override
-	public TerminalNode init() {
-		return this;
-	}
-	
-	@Override
 	public int childrenCount() {
 		return 0;
 	}
+	
+	@Override
+	public boolean isAmbiguous() {
+		return false;
+	}
 
+	@Override
+	public SPPFNode getChildAt(int index) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<SPPFNode> getChildren() {
+		return Collections.emptyList();
+	}
+	
 }
