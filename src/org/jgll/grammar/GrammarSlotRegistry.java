@@ -28,6 +28,8 @@ public class GrammarSlotRegistry {
 	private Map<RegularExpression, TerminalGrammarSlot> terminals = new HashMap<>();
 	private Map<String, BodyGrammarSlot> slots = new HashMap<>();
 	
+	private Map<String, RegularExpression> regularExpressions = new HashMap<>();
+	
 	public GrammarSlotRegistry(Map<Nonterminal, HeadGrammarSlot> heads, 
 			 				   Map<RegularExpression, TerminalGrammarSlot> terminals, 
 			 				   Map<String, BodyGrammarSlot> slots) {
@@ -47,6 +49,10 @@ public class GrammarSlotRegistry {
 		for (Entry<RegularExpression, TerminalGrammarSlot> e : terminals.entrySet()) {
 			ids.put(e.getValue(), nextId.incrementAndGet());
 		}
+		
+		for (RegularExpression regex : terminals.keySet()) {
+			regularExpressions.put(regex.toString(), regex);
+		}
 	}
 
 	public HeadGrammarSlot getHead(Nonterminal nt) {
@@ -62,11 +68,11 @@ public class GrammarSlotRegistry {
 	}
 	
 	public RegularExpression getRegularExpression(String s) {
-		return null;
+		return regularExpressions.get(s);
 	}
 	
 	public int getId(GrammarSlot slot) {
 		return ids.get(slot);
 	}
-	
+
 }

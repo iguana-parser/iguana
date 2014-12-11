@@ -5,6 +5,7 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,17 +33,13 @@ public class GrammarGraph implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private List<HeadGrammarSlot> headGrammarSlots;
-	
 	private GrammarSlotRegistry registry;
+
+	private List<HeadGrammarSlot> headGrammarSlots;
 	
 	private Set<BodyGrammarSlot> slots;
 	
 	private String name;
-	
-	private int longestTerminalChain;
-
-	private Map<String, RegularExpression> regularExpressionNames;
 	
 	private Map<Nonterminal, Set<RegularExpression>> followSets;
 	
@@ -50,14 +47,10 @@ public class GrammarGraph implements Serializable {
 	
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
-		this.headGrammarSlots = builder.headGrammarSlots;
-		
-		this.registry = new GrammarSlotRegistry(heads, terminalSlots)
-		
+		this.registry = new GrammarSlotRegistry(builder.nonterminalsMap, builder.terminalsMap, builder.slots);
+		this.headGrammarSlots = new ArrayList<>(builder.nonterminalsMap.values());
+		this.slots = new HashSet<>(builder.slots.values());
 		grammar = builder.grammar;
-		
-		this.slots = builder.slots;
-		
 		printGrammarStatistics();
 	}
 	
@@ -66,7 +59,6 @@ public class GrammarGraph implements Serializable {
 		log.info("Nonterminals: %d", headGrammarSlots.size());
 		log.info("Production rules: %d", grammar.sizeRules());
 		log.info("Grammar slots: %d", slots.size());
-		log.debug("Longest terminal Chain: %d", longestTerminalChain);
 	}
 	
 	public void generate(PrintWriter writer) {
@@ -308,10 +300,6 @@ public class GrammarGraph implements Serializable {
 		}
 	}
 		
-	public int getLongestTerminalChain() {
-		return longestTerminalChain;
-	}
-	
 	@Override
 	public String toString() {
 		
@@ -353,10 +341,6 @@ public class GrammarGraph implements Serializable {
 	
 	public Set<BodyGrammarSlot> getGrammarSlots() {
 		return slots;
-	}
-	
-	public RegularExpression getRegularExpressionByName(String name) {
-		return regularExpressionNames.get(name);
 	}
 	
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
