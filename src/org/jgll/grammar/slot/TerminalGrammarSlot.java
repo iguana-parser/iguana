@@ -18,15 +18,6 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("new TerminalGrammarSlot(")
-		  .append(regex.getConstructorCode(registry))
-		  .append(")");
-		return sb.toString();
-	}
-
-	@Override
 	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
 		return null;
 	}
@@ -63,6 +54,15 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	@Override
 	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		
+	}
+	
+	@Override
+	public String getConstructorCode(GrammarSlotRegistry registry) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new TerminalGrammarSlot(")
+		  .append(regex.getConstructorCode(registry))
+		  .append(")");
+		return sb.toString();
 	}
 
 }

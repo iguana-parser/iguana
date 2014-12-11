@@ -92,7 +92,6 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new NonterminalGrammarSlot(")
-		  .append(registry.getId(this) + ", ")
 		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
 		  .append("slot" + registry.getId(nonterminal) + ", ")

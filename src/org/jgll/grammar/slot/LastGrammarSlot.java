@@ -77,7 +77,6 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new LastGrammarSlot(")
-		  .append(registry.getId(this) + ", ")
 		  .append("\"" + escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous) + ", "))
 		  .append("slot" + registry.getId(head) + ", ")

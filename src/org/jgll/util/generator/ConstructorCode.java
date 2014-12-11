@@ -16,7 +16,7 @@ public interface ConstructorCode {
 	public String getConstructorCode(GrammarSlotRegistry registry);
 	
 	default String getConstructorCode(Set<? extends ConstructorCode> set, GrammarSlotRegistry registry) {
-		return set.stream().map(a -> a.getConstructorCode(registry)).collect(Collectors.joining(", "));
+		return "Sets.newHashSet(" + set.stream().map(a -> a.getConstructorCode(registry)).collect(Collectors.joining(", ")) + ")";
 	}
 	
 }

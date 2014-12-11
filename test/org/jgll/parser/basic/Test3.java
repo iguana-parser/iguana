@@ -61,6 +61,7 @@ public class Test3 {
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		System.out.println(writer.toString());
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
 		ParseResult result = parser.parse(Input.fromString("ab"), grammar.toGrammarGraph(), "A");
     	assertTrue(result.isParseSuccess());
@@ -72,7 +73,7 @@ public class Test3 {
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a b .", 1, node1);
 		TerminalNode node3 = factory.createTokenNode("a", 0, 1);
-		TerminalNode node4 = factory.createTokenNode("b", 1, 1);
+		TerminalNode node4 = factory.createTokenNode("b", 1, 2);
 		node2.addChild(node3);
 		node2.addChild(node4);
 		node1.addChild(node2);

@@ -48,7 +48,6 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new EpsilonGrammarSlot(")
-		  .append(registry.getId(this) + ", ")
 		  .append("\"" + escape(label) + "\"" + ", ")
 		  .append("slot" + registry.getId(head) + ")");
 		return sb.toString();

@@ -142,7 +142,6 @@ public class HeadGrammarSlot implements GrammarSlot {
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new HeadGrammarSlot(")
-		  .append(registry.getId(this) + ", ")
 		  .append("Nonterminal.withName(\"" + escape(nonterminal.getName()) + "\")" + ", ")
 		  .append(altsCount + ", ")
 		  .append(nullable + ", ")

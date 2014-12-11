@@ -55,7 +55,6 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new LastTokenSlot(")
-		  .append(registry.getId(this) + ", ")
 		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
 		  .append(slot.getConstructorCode(registry) + ", ")

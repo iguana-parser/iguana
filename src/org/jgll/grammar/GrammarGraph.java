@@ -84,7 +84,6 @@ public class GrammarGraph implements Serializable {
 		writer.println("import org.jgll.parser.lookup.factory.*;");
 		writer.println("import org.jgll.sppf.*;");
 		writer.println("import org.jgll.grammar.condition.*;");
-		writer.println("import org.jgll.grammar.slotaction.*;");
 		writer.println("import org.jgll.util.logging.LoggerWrapper;");
 		writer.println("import com.google.common.collect.Sets;");
 		writer.println("import static org.jgll.grammar.condition.ConditionType.*;");

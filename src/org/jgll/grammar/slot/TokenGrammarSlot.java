@@ -73,11 +73,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new TokenGrammarSlot(")
-		  .append(registry.getId(this) + ", ")
 		  .append("\"" +  escape(label) + "\"" + ", ")
-		  .append((previous == null ? "null" : "slot" + registry.getId(previous) + ", "))
+		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
 		  .append(slot.getConstructorCode(registry) + ", ")
-		  .append(registry.getId(slot) + ", ")
 		  .append(getConstructorCode(preConditions, registry) + ", ")
 		  .append(getConstructorCode(postConditions, registry) + ", ")
 		  .append(getConstructorCode(popConditions, registry) + ", ")
