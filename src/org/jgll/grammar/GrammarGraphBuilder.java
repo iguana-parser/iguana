@@ -17,13 +17,12 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.IntermediateNodeIds;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.OriginalIntermediateNodeIds;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -31,89 +30,52 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.logging.LoggerWrapper;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-
 public class GrammarGraphBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GrammarGraphBuilder.class);
 
-	Map<Nonterminal, HeadGrammarSlot> nonterminalsMap;
+	private Map<Nonterminal, HeadGrammarSlot> nonterminalsMap;
 	
-	Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
+	private Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
 
-	List<HeadGrammarSlot> headGrammarSlots;
+	private Map<String, BodyGrammarSlot> slots;
 
 	String name;
 	
 	Grammar grammar;
 	
-	BiMap<RegularExpression, Integer> regularExpressions;
-	
-	Set<Nonterminal> ll1SubGrammarNonterminals;
-
 	private GrammarSlotFactory grammarSlotFactory;
-	
-	/**
-	 * Indexed by nonterminal index and alternate index
-	 */
-	Object[][] objects;
 	
 	public GrammarGraphBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
 		this("no-name", grammar, grammarSlotFactory, new OriginalIntermediateNodeIds(grammar));
 	}
 	
-	public GrammarGraphBuilder(String name, Grammar grammar, GrammarSlotFactory grammarSlotFactory,
+	public GrammarGraphBuilder(String name, Grammar grammar, 
+							   GrammarSlotFactory grammarSlotFactory,
 							   IntermediateNodeIds intermediateNodeIds) {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
 		this.grammar = grammar;
 
-		headGrammarSlots = new ArrayList<>();
+		slots = new HashMap<>();
 		nonterminalsMap = new HashMap<>();
-		
-		regularExpressions = HashBiMap.create();
-		regularExpressions.put(Epsilon.getInstance(), 0);
-		regularExpressions.put(EOF.getInstance(), 1);
 	}
 
 	public GrammarGraph build() {
 		
-		long start;
-		long end;
-		
-		
-//		start = System.nanoTime();
-//		end = System.nanoTime();
-//		log.info("First and follow set calculation in %d ms", (end - start) / 1000_000);
-		
-//		start = System.nanoTime();
-//		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = GrammarProperties.calculateReachabilityGraph(definitions);
-		ll1SubGrammarNonterminals = new HashSet<>();
-//		ll1SubGrammarNonterminals = GrammarProperties.calculateLLNonterminals(definitions, firstSets, followSets, reachabilityGraph);
-//		end = System.nanoTime();
-//		log.info("LL1 property is calcuated in in %d ms", (end - start) / 1000_000);
-				
-		
-		start = System.nanoTime();
+		long start = System.nanoTime();
 		
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
 			convert(nonterminal);
 		}
 
-		end = System.nanoTime();
+		long end = System.nanoTime();
 		log.info("Grammar Graph is composed in %d ms", (end - start) / 1000_000);
-		
-		start = System.nanoTime();
-		end = System.nanoTime();
-		log.info("Automatons created in %d ms", (end - start) / 1000_000);
-		
+				
 		// related to rewriting the patterns
 		removeUnusedNewNonterminals();
-		
-//		GrammarProperties.setPredictionSetsForConditionals(conditionSlots);
 		
 		return new GrammarGraph(this);
 	}
@@ -137,6 +99,7 @@ public class GrammarGraphBuilder implements Serializable {
 	
 			if (body.size() == 0) {
 				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(headGrammarSlot);
+				slots.put(epsilonSlot.toString(), epsilonSlot);
 				headGrammarSlot.setFirstGrammarSlotForAlternate(epsilonSlot, alternateIndex);
 			} 
 			else {
@@ -145,13 +108,15 @@ public class GrammarGraphBuilder implements Serializable {
 				for (; symbolIndex < body.size(); symbolIndex++) {
 					
 					currentSlot = getBodyGrammarSlot(new Rule(head, body), symbolIndex, currentSlot);
+					slots.add(currentSlot);
 	
 					if (symbolIndex == 0) {
 						firstSlot = currentSlot;
 					}
 				}
 	
-				grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popActions);
+				LastGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popActions);
+				slots.add(lastSlot);
 				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
 			}
 			alternateIndex++;
@@ -183,26 +148,12 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 
 	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
-		HeadGrammarSlot headGrammarSlot = nonterminalsMap.get(nonterminal);
-
-		if (headGrammarSlot == null) {
-			headGrammarSlot = grammarSlotFactory.createHeadGrammarSlot(nonterminal, grammar.getAlternatives(nonterminal), grammar.getFirstSets(), grammar.getFollowSets(), grammar.getPredictionSets());
-			nonterminalsMap.put(nonterminal, headGrammarSlot);
-			
-			headGrammarSlots.add(headGrammarSlot);
-		}
-
-		return headGrammarSlot;
+		return nonterminalsMap.computeIfAbsent(nonterminal, k -> grammarSlotFactory.createHeadGrammarSlot(nonterminal, grammar.getAlternatives(nonterminal), grammar.getFirstSets(), grammar.getFollowSets(), grammar.getPredictionSets()));		
 	}
 	
 	
 	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex) {
-		TerminalGrammarSlot slot = terminalsMap.get(regex);
-		if (slot == null) {
-			slot = new TerminalGrammarSlot(regex);
-			terminalsMap.put(regex, slot);
-		}
-		return slot;
+		return terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
 	}
 		
 	/**

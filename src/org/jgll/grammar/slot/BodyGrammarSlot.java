@@ -74,10 +74,6 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		return previous;
 	}
 
-	public String getLabel() {
-		return label;
-	}
-	
 	public abstract boolean isNullable();
 	
 	public NodeCreator getNodeCreatorFromPop() {

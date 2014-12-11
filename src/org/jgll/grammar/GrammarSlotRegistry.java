@@ -2,9 +2,11 @@ package org.jgll.grammar;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -18,22 +20,32 @@ import org.jgll.regex.RegularExpression;
  */
 public class GrammarSlotRegistry {
 
-	private Map<HeadGrammarSlot, Integer> nonterminalIndexes = new HashMap<>();
-	private Map<TerminalGrammarSlot, Integer> terminalsIndexes = new HashMap<>();
+	private AtomicInteger nextId = new AtomicInteger();
+	
+	private Map<GrammarSlot, Integer> ids = new HashMap<>();
 	
 	private Map<Nonterminal, HeadGrammarSlot> nonterminals = new HashMap<>();
 	private Map<RegularExpression, TerminalGrammarSlot> terminals = new HashMap<>();
+	private Map<String, BodyGrammarSlot> slots = new HashMap<>();
 	
-	public GrammarSlotRegistry(Set<HeadGrammarSlot> heads, Set<TerminalGrammarSlot> terminalSlots) {
+	public GrammarSlotRegistry(Map<Nonterminal, HeadGrammarSlot> heads, 
+			 				   Map<RegularExpression, TerminalGrammarSlot> terminals, 
+			 				   Map<String, BodyGrammarSlot> slots) {
 		
-		for (HeadGrammarSlot head : heads) {
-			nonterminals.put(head.getNonterminal(), head);
-			nonterminalIndexes.put(head, nonterminalIndexes.size());
+		this.nonterminals = new HashMap<>(heads);
+		this.slots = new HashMap<>(slots);
+		this.terminals = new HashMap<>(terminals);
+		
+		for (Entry<Nonterminal, HeadGrammarSlot> e : heads.entrySet()) {
+			ids.put(e.getValue(), nextId.incrementAndGet());
+		}
+
+		for (Entry<String, BodyGrammarSlot> e : slots.entrySet()) {
+			ids.put(e.getValue(), nextId.incrementAndGet());
 		}
 		
-		for (TerminalGrammarSlot terminal : terminalSlots) {
-			terminals.put(terminal.getRegularExpression(), terminal);
-			terminalsIndexes.put(terminal, terminals.size());
+		for (Entry<RegularExpression, TerminalGrammarSlot> e : terminals.entrySet()) {
+			ids.put(e.getValue(), nextId.incrementAndGet());
 		}
 	}
 
@@ -46,23 +58,15 @@ public class GrammarSlotRegistry {
 	}
 
 	public BodyGrammarSlot getGrammarSlot(String s) {
-		return null;
+		return slots.get(s);
 	}
 	
 	public RegularExpression getRegularExpression(String s) {
 		return null;
 	}
 	
-	public int getId(HeadGrammarSlot nt) {
-		return nonterminalIndexes.get(nt);
-	}
-	
-	public int getId(TerminalGrammarSlot t) {
-		return terminalsIndexes.get(t);
-	}
-	
-	public int getId(BodyGrammarSlot s) {
-		return -1;
+	public int getId(GrammarSlot slot) {
+		return ids.get(slot);
 	}
 	
 }

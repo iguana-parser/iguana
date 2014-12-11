@@ -5,11 +5,9 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -21,10 +19,7 @@ import org.jgll.grammar.slot.TokenGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.logging.LoggerWrapper;
-
-import com.google.common.collect.BiMap;
 
 /**
  * 
@@ -47,15 +42,9 @@ public class GrammarGraph implements Serializable {
 	
 	private int longestTerminalChain;
 
-	private BiMap<RegularExpression, Integer> regularExpressions;
-	
 	private Map<String, RegularExpression> regularExpressionNames;
 	
 	private Map<Nonterminal, Set<RegularExpression>> followSets;
-	
-	private Set<Nonterminal> ll1SubGrammarNonterminals;
-	
-	private Map<Integer, RunnableAutomaton> runnableAutomatons;
 	
 	private Grammar grammar;
 	
@@ -63,22 +52,11 @@ public class GrammarGraph implements Serializable {
 		this.name = builder.name;
 		this.headGrammarSlots = builder.headGrammarSlots;
 		
-		this.regularExpressions = builder.regularExpressions;
-		this.ll1SubGrammarNonterminals = builder.ll1SubGrammarNonterminals;
-		
-		this.regularExpressions = builder.regularExpressions;
-				
-		regularExpressionNames = new HashMap<>();
-		for(Entry<RegularExpression, Integer> entry : regularExpressions.entrySet()) {
-			regularExpressionNames.put(entry.getKey().getName(), entry.getKey());
-		}
-		
-		runnableAutomatons = new HashMap<>();
-		for (RegularExpression regex : regularExpressions.keySet()) {
-			runnableAutomatons.put(regularExpressions.get(regex), regex.getAutomaton().getRunnableAutomaton());
-		}
+		this.registry = new GrammarSlotRegistry(heads, terminalSlots)
 		
 		grammar = builder.grammar;
+		
+		this.slots = builder.slots;
 		
 		printGrammarStatistics();
 	}
@@ -373,46 +351,12 @@ public class GrammarGraph implements Serializable {
 		return sb.toString();
 	}
 	
-	public RunnableAutomaton getAutomaton(int index) {
-		return runnableAutomatons.get(index);
-	}
-	
-	public int getCountTokens() {
-		return regularExpressions.size();
-	}
-	
-	public Iterable<RegularExpression> getTokens() {
-		return regularExpressions.keySet();
-	}
-	
-	public RegularExpression getRegularExpressionById(int index) {
-		return regularExpressions.inverse().get(index);
-	}
-	
-	public int getRegularExpressionId(RegularExpression regex) {
-		return regularExpressions.get(regex);
-	}
-	
 	public Set<BodyGrammarSlot> getGrammarSlots() {
 		return slots;
 	}
 	
 	public RegularExpression getRegularExpressionByName(String name) {
 		return regularExpressionNames.get(name);
-	}
-	
-	public int getCountLL1Nonterminals() {
-		int count = 0;
-		for(HeadGrammarSlot head : headGrammarSlots) {
-			if(isLL1SubGrammar(head.getNonterminal())) {
-				count++;
-			}
-		}
-		return count;
-	}
-	
-	public boolean isLL1SubGrammar(Nonterminal nonterminal) {
-		return ll1SubGrammarNonterminals.contains(nonterminal);
 	}
 	
 	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
