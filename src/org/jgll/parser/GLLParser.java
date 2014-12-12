@@ -23,9 +23,9 @@ public interface GLLParser {
 	
 	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName);
 	
-	public GrammarSlot pop();
+	public void pop();
 	
-	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
+	public HeadGrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
 	
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
 	

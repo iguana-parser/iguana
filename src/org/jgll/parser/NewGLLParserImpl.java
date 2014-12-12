@@ -2,7 +2,6 @@ package org.jgll.parser;
 
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
@@ -36,37 +35,13 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final GrammarSlot pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
+	public final void pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
 		
 		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 		
-		if (!gssLookup.addToPoppedElements(gssNode, node)) {
-			return null;
-		}
+		if (!gssLookup.addToPoppedElements(gssNode, node))
+			return;
 		
-		// Optimization for the case when only one GSS Edge is available.
-		// No scheduling of descriptors, rather direct jump to the slot
-		// to be processed.
-		if (gssNode.countGSSEdges() == 1) {
-			GSSEdge edge = gssNode.getGSSEdges().iterator().next();
-			BodyGrammarSlot returnSlot = edge.getReturnSlot();
-			
-			if(returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
-				return null;
-
-			NonPackedNode sppfNode = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
-			Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, sppfNode);
-			
-			if (!hasDescriptor(descriptor)) {
-				cn = sppfNode;
-				cu = edge.getDestination();
-				ci = inputIndex;
-				log.trace("Processing %s", descriptor);
-				descriptorsCount++;
-				return returnSlot;
-			}
-			return null;
-		}
 		
 		label:
 		for(GSSEdge edge : gssNode.getGSSEdges()) {
@@ -82,8 +57,6 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				scheduleDescriptor(descriptor);
 			}
 		}
-		
-		return null;
 	}
 	
 	@Override
@@ -98,36 +71,12 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source) {
+	public void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		
 		if(gssLookup.getGSSEdge(source, edge)) {
 			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
 
-			// Optimization for the case when only one element is in the popped elements.
-			// No scheduling of descriptors, rather direct jump to the slot
-			// to be processed.
-			if (source.countPoppedElements() == 1) {
-				
-				NonPackedNode z = source.getPoppedElements().iterator().next();
-				
-				if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
-					return null;
-				
-				NonPackedNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z);
-				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
-				
-				if (!hasDescriptor(descriptor)) {
-					cn = x;
-					cu = destination;
-					ci = z.getRightExtent();
-					log.trace("Processing %s", descriptor);
-					descriptorsCount++;
-					return returnSlot;
-				}
-				return null;
-			}
-			
 			label:
 			for (NonPackedNode z : source.getPoppedElements()) {
 				
@@ -145,7 +94,5 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				}
 			}
 		}
-		
-		return null;
 	}
 }

@@ -38,7 +38,7 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 			NonterminalNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
 			parser.getSPPFLookup().addPackedNode(node, this, ci, DummyNode.getInstance(), epsilonNode);
 			parser.setCurrentSPPFNode(node);
-			return parser.pop();
+			parser.pop();
 		}
 
 		return null;

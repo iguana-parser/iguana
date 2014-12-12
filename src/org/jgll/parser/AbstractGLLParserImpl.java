@@ -21,7 +21,6 @@ import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
@@ -175,7 +174,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected abstract void initParserState(HeadGrammarSlot startSymbol);
 	
 	@Override
-	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head) {
+	public HeadGrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head) {
 		
 		GSSNode gssNode = hasGSSNode(slot, head);
 		if (gssNode == null) {
@@ -187,10 +186,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 		
 		log.trace("GSSNode found: %s",  gssNode);
-		return createGSSEdge(slot, cu, cn, gssNode);
+		createGSSEdge(slot, cu, cn, gssNode);
+		return null;
 	}
 	
-	public abstract GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
+	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
 	
 	public abstract GSSNode createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head);
 	
@@ -233,11 +233,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}	
 	
 	@Override
-	public final GrammarSlot pop() {
-		return pop(cu, ci, (NonPackedNode) cn);
+	public final void pop() {
+		pop(cu, ci, (NonPackedNode) cn);
 	}
 	
-	protected abstract GrammarSlot pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
+	protected abstract void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 
 	@Override
 	public boolean hasNextDescriptor() {

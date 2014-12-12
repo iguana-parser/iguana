@@ -48,7 +48,9 @@ public class LastTokenSlot extends TokenGrammarSlot {
 		
 		parser.setCurrentSPPFNode(node);
 		
-		return parser.pop();
+		parser.pop();
+		
+		return null;
 	}
 	
 	@Override

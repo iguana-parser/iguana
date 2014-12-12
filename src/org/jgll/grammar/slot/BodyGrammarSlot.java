@@ -162,4 +162,8 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		return gssNodes != null;
 	}
 	
+	public int getId() {
+		return 0;
+	}
+	
 }

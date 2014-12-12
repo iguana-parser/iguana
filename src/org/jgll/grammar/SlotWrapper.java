@@ -46,7 +46,8 @@ public class SlotWrapper extends BodyGrammarSlot {
 	public boolean isNullable() {
 		return slot.isNullable();
 	}
-	
+
+	@Override
 	public int getId() {
 		return id;
 	}

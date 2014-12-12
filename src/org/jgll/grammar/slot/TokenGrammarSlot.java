@@ -72,7 +72,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("new TokenGrammarSlot(")
+		sb.append("new SlotWrapper(")
+		  .append(registry.getId(this) + ", ")
+		  .append("new TokenGrammarSlot(")
 		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
 		  .append(slot.getConstructorCode(registry) + ", ")
@@ -80,7 +82,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		  .append(getConstructorCode(postConditions, registry) + ", ")
 		  .append(getConstructorCode(popConditions, registry) + ", ")
 		  .append(nodeCreator.getConstructorCode(registry) + ", ")
-		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
+		  .append(nodeCreatorFromPop.getConstructorCode(registry) + "))");
 		return sb.toString();
 	}
 
