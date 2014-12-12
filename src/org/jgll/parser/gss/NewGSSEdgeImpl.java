@@ -2,21 +2,21 @@ package org.jgll.parser.gss;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.HashFunctions;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonPackedNode;
 
 public class NewGSSEdgeImpl implements GSSEdge {
 	
 	private BodyGrammarSlot returnSlot;
-	private SPPFNode node;
+	private NonPackedNode node;
 	private GSSNode destination;
 
-	public NewGSSEdgeImpl(BodyGrammarSlot slot, SPPFNode node, GSSNode destination) {
+	public NewGSSEdgeImpl(BodyGrammarSlot slot, NonPackedNode node, GSSNode destination) {
 		this.returnSlot = slot;
 		this.node = node;
 		this.destination = destination;
 	}
 
-	public SPPFNode getNode() {
+	public NonPackedNode getNode() {
 		return node;
 	}
 

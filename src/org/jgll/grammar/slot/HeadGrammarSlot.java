@@ -167,5 +167,5 @@ public class HeadGrammarSlot implements GrammarSlot {
 		writer.println("  return L0;");
 		writer.println("}");
 	}
-
+	
 }

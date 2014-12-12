@@ -46,7 +46,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 
 	protected GSSNode cu;
 	
-	protected SPPFNode cn = DummyNode.getInstance();
+	protected NonPackedNode cn = DummyNode.getInstance();
 	
 	protected int ci = 0;
 	
@@ -190,7 +190,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return createGSSEdge(slot, cu, cn, gssNode);
 	}
 	
-	public abstract GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source);
+	public abstract GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
 	
 	public abstract GSSNode createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head);
 	
@@ -284,12 +284,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public SPPFNode getCurrentSPPFNode() {
+	public NonPackedNode getCurrentSPPFNode() {
 		return cn;
 	}
 
 	@Override
-	public void setCurrentSPPFNode(SPPFNode node) {
+	public void setCurrentSPPFNode(NonPackedNode node) {
 		this.cn = node;
 	}
 	

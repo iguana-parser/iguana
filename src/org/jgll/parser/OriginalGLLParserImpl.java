@@ -14,7 +14,6 @@ import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.SPPFNode;
 
 /**
  *
@@ -63,7 +62,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			if (gssNode.countGSSEdges() == 1) {
 				GSSEdge edge = gssNode.getGSSEdges().iterator().next();
 		
-				SPPFNode sppfNode = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
+				NonPackedNode sppfNode = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
 				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, sppfNode);
 				
 				if (!hasDescriptor(descriptor)) {
@@ -78,7 +77,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			}
 			
 			for (GSSEdge edge : gssNode.getGSSEdges()) {
-				SPPFNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
+				NonPackedNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
 				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, y);
 				if (!hasDescriptor(descriptor)) {
 					scheduleDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
@@ -101,7 +100,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public GrammarSlot createGSSEdge(BodyGrammarSlot slot, GSSNode destination, SPPFNode w, GSSNode source) {
+	public GrammarSlot createGSSEdge(BodyGrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source) {
 		
 		GSSEdge edge = new OriginalGSSEdgeImpl(w, destination);
 		
@@ -115,12 +114,12 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			// No scheduling of descriptors, rather direct jump to the slot
 			// to be processed.
 			if (source.countPoppedElements() == 1) {
-				SPPFNode z = source.getPoppedElements().iterator().next();
+				NonPackedNode z = source.getPoppedElements().iterator().next();
 				
 				if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
 					return null;
 				
-				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z);
+				NonPackedNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z);
 				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
 				
 				if (!hasDescriptor(descriptor)) {
@@ -135,7 +134,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			}
 			
 			label:
-			for (SPPFNode z : source.getPoppedElements()) {
+			for (NonPackedNode z : source.getPoppedElements()) {
 				
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node
@@ -143,7 +142,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
 					continue label;
 				
-				SPPFNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
+				NonPackedNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
 				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
 				if (!hasDescriptor(descriptor)) {
 					scheduleDescriptor(descriptor);

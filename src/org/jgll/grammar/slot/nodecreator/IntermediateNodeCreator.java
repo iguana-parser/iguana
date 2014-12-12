@@ -7,14 +7,14 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonPackedNode;
 
 public class IntermediateNodeCreator implements NodeCreator, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public SPPFNode create(GLLParser parser, BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+	public NonPackedNode create(GLLParser parser, BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		
 		int leftExtent = leftChild.getLeftExtent();
 		int rightExtent = rightChild.getRightExtent();

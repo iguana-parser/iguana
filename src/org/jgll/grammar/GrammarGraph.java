@@ -161,7 +161,7 @@ public class GrammarGraph implements Serializable {
 		// Init heads method
 		writer.println("private void initHeadGrammarSlots() {");
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			writer.println("slot" + registry.getId(head) + " = " + head.getConstructorCode(registry) + ";");
+			writer.println("  slot" + registry.getId(head) + " = " + head.getConstructorCode(registry) + ";");
 		}
 		writer.println("}");
 		writer.println();

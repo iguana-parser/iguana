@@ -36,5 +36,5 @@ public interface GrammarSlot extends ConstructorCode {
 	public void reset();
 
 	public void code(PrintWriter writer, GrammarSlotRegistry registry);
-	
+
 }

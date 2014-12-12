@@ -11,7 +11,7 @@ import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 
 
@@ -52,7 +52,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		
 		TerminalNode cr = parser.getTerminalNode(slot, ci, ci + length);
 		
-		SPPFNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
+		NonPackedNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		
 		parser.setCurrentSPPFNode(node);
 		

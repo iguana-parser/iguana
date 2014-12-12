@@ -9,7 +9,7 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 
@@ -51,9 +51,9 @@ public interface GLLParser {
 	
 	public GSSNode getCurrentGSSNode();
 	
-	public SPPFNode getCurrentSPPFNode();
+	public NonPackedNode getCurrentSPPFNode();
 	
-	public void setCurrentSPPFNode(SPPFNode node);
+	public void setCurrentSPPFNode(NonPackedNode node);
 	
 	public void recordParseError(GrammarSlot slot);
 	

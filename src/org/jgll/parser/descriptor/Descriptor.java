@@ -1,9 +1,9 @@
 package org.jgll.parser.descriptor;
 
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonPackedNode;
 
 /**
  * @author Ali Afroozeh
@@ -12,15 +12,15 @@ import org.jgll.sppf.SPPFNode;
 
 public class Descriptor {
 	
-	private final GrammarSlot slot;
+	private final BodyGrammarSlot slot;
 	
 	private final GSSNode gssNode;
 	
 	private final int inputIndex;
 	
-	private final SPPFNode sppfNode;
+	private final NonPackedNode sppfNode;
 
-	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
+	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
 		assert inputIndex >= 0;
@@ -32,7 +32,7 @@ public class Descriptor {
 		this.sppfNode = sppfNode;
 	}
 	
-	public GrammarSlot getGrammarSlot() {
+	public BodyGrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
@@ -44,7 +44,7 @@ public class Descriptor {
 		return inputIndex;
 	}
 
-	public SPPFNode getSPPFNode() {
+	public NonPackedNode getSPPFNode() {
 		return sppfNode;
 	}
 	
