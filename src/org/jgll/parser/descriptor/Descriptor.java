@@ -12,26 +12,12 @@ import org.jgll.sppf.SPPFNode;
 
 public class Descriptor {
 	
-	/**
-	 * The label that indicates the parser code to execute for the encountered
-	 * nonterminal.
-	 */
 	private final GrammarSlot slot;
 	
-	/**
-	 * The associated GSSNode.
-	 */
 	private final GSSNode gssNode;
 	
-	/**
-	 * The current index in the input string.
-	 */
 	private final int inputIndex;
 	
-	/**
-	 * The SPPF node that was created before parsing the encountered 
-	 * nonterminal.
-	 */
 	private final SPPFNode sppfNode;
 
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {

@@ -154,7 +154,7 @@ public class HeadGrammarSlot implements GrammarSlot {
 	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(nonterminal.getName()));
 		writer.println("private final int slot" + registry.getId(this) + "() {");
-		writer.println("  Set<Integer> set = slot" + registry.getId(this) + ".getPredictionSet(lexer.getInput().charAt(ci));");
+		writer.println("  Set<Integer> set = slot" + registry.getId(this) + ".getPredictionSet(lexer.charAt(ci));");
 		writer.println("  if (set == null) return L0;");
 		writer.println("  if (set.size() == 1) {");
 		writer.println("    log.trace(\"Processing (%s, %d, %s, %s)\", slot" + registry.getId(this) + ".getFirstSlots()[set.iterator().next()]" + ", ci, cu, cn);");

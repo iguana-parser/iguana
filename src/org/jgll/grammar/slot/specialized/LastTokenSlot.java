@@ -70,14 +70,14 @@ public class LastTokenSlot extends TokenGrammarSlot {
 	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(label));
 		writer.println("private final int slot" + registry.getId(this) + "() {");
-		writer.println("  if (slot" + registry.getId(this) + ".getPreConditions().execute(this, lexer, cu, ci)) return L0;");
-		writer.println("  length = lexer.tokenLengthAt(ci, " + registry.getId(slot) + ");");
+		writer.println("  if (slot" + registry.getId(this) + ".getPreConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, cu, ci))) return L0;");
+		writer.println("  length = lexer.tokenLengthAt(ci, slot" + registry.getId(slot) + ");");
 		writer.println("  if (length < 0) {");
 		writer.println("    recordParseError(slot" + registry.getId(this) + ");");
 		writer.println("    return L0;");
 		writer.println("  }");
-		writer.println("  if (slot" + registry.getId(this) + ".getPostConditions().execute(this, lexer, cu, ci + length)) return L0;");
-		writer.println("  SPPFNode cr = getTokenNode(" + registry.getId(slot) + ", ci, length);");
+		writer.println("  if (slot" + registry.getId(this) + ".getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, cu, ci + length))) return L0;");
+		writer.println("  SPPFNode cr = getTerminalNode(slot" + registry.getId(slot) + ", ci, ci + length);");
 		writer.println("  cn = slot" + registry.getId(this) + ".getNodeCreator().create(this, slot" + registry.getId(next) + ", cn, cr);");
 		writer.println("  GrammarSlot returnSlot = pop();");
 		writer.println("  if (returnSlot != null) {");

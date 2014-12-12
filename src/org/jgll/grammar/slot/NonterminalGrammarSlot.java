@@ -73,7 +73,7 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(label));
 		writer.println("private final int slot" + registry.getId(this) + "() {");
-		writer.println("  if (!slot" + registry.getId(nonterminal) + ".test(lexer.getInput().charAt(ci))) {");
+		writer.println("  if (!slot" + registry.getId(nonterminal) + ".test(lexer.charAt(ci))) {");
 		writer.println("    recordParseError(slot" + registry.getId(this) + ");");
 		writer.println("    return L0;");
 		writer.println("  }");

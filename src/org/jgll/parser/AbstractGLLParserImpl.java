@@ -304,9 +304,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		ci += length;
-		return sppfLookup.getTerminalSymbolNode(slot, inputIndex, length);
+	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		ci = rightExtent;
+		return sppfLookup.getTerminalSymbolNode(slot, leftExtent, rightExtent);
 	}
 	
 }
