@@ -89,7 +89,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		writer.println("// " + escape(label));
 		writer.println("private final int slot" + registry.getId(this) + "() {");
 		writer.println("  if (slot" + registry.getId(this) + ".getPreConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, cu, ci))) return L0;");
-		writer.println("  length = lexer.tokenLengthAt(ci, slot" + registry.getId(slot) + ");");
+		writer.println("  int length = lexer.tokenLengthAt(ci, slot" + registry.getId(slot) + ");");
 		writer.println("  if (length < 0) {");
 		writer.println("    recordParseError(slot" + registry.getId(this) + ");");
 		writer.println("    return L0;");

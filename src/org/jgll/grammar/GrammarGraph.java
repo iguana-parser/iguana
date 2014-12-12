@@ -101,7 +101,6 @@ public class GrammarGraph implements Serializable {
 		
 		// GLL fields
 		writer.println("private int cs; // Current grammar slot");
-		writer.println("private int length; // The length of matched terminal");
 		writer.println();
 		
 		writer.println("private Map<String, HeadGrammarSlot> startSymbols = new HashMap<>();");
@@ -125,10 +124,22 @@ public class GrammarGraph implements Serializable {
 		}
 		
 		writer.println();
-
+		
+		// Init body grammar slot method
+		ArrayList<BodyGrammarSlot> bodyGrammarSlots = new ArrayList<>(slots);
+		int n = slots.size() / 200;
+		int r = slots.size() % 200;
+		
 		// Constructor
 		writer.println("public " + className + "() {");
 		writer.println("  super(new DistributedGSSLookupFactory(), new NewSPPFLookupFactory(), new DefaultDescriptorLookupFactory());");
+		
+        for (int i = 0; i < n; i++) {
+            writer.println("  initBodyGrammarSlots" + i + "();");
+        }
+        if (r > 0) {
+            writer.println("  initBodyGrammarSlots" + n + "();");
+        }
 		
 		// Create alternative links
 		for (HeadGrammarSlot head : headGrammarSlots) {
@@ -156,11 +167,6 @@ public class GrammarGraph implements Serializable {
 		writer.println();
 		// end init
 		
-		
-		// Init body grammar slot method
-		ArrayList<BodyGrammarSlot> bodyGrammarSlots = new ArrayList<>(slots);
-		int n = slots.size() / 200;
-		int r = slots.size() % 200;
 		
 		for (int i = 0; i < n; i++) {
 			writer.println("private void initBodyGrammarSlots" + i + "() {");
