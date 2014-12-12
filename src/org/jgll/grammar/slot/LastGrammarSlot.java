@@ -64,10 +64,7 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		writer.println("// " + escape(label));
 		writer.println("private final int slot" + registry.getId(this) + "() {");
 		writer.println("  if (slot" + registry.getId(head) + ".testFollowSet(lexer.charAt(ci))) {");
-		writer.println("    GrammarSlot returnSlot = pop();");
-		writer.println("    if (returnSlot != null) {");
-		writer.println("       return returnSlot.getId();");
-		writer.println("    }");
+		writer.println("    pop();");
 		writer.println("  }");
 		writer.println("  return L0;");
 		writer.println("}");

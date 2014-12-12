@@ -1,9 +1,8 @@
-package org.jgll.grammar;
+package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;

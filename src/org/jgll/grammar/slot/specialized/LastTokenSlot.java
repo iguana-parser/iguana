@@ -79,12 +79,9 @@ public class LastTokenSlot extends TokenGrammarSlot {
 		writer.println("    return L0;");
 		writer.println("  }");
 		writer.println("  if (slot" + registry.getId(this) + ".getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, cu, ci + length))) return L0;");
-		writer.println("  SPPFNode cr = getTerminalNode(slot" + registry.getId(slot) + ", ci, ci + length);");
+		writer.println("  NonPackedNode cr = getTerminalNode(slot" + registry.getId(slot) + ", ci, ci + length);");
 		writer.println("  cn = slot" + registry.getId(this) + ".getNodeCreator().create(this, slot" + registry.getId(next) + ", cn, cr);");
-		writer.println("  GrammarSlot returnSlot = pop();");
-		writer.println("  if (returnSlot != null) {");
-		writer.println("     return returnSlot.getId();");
-		writer.println("  }"); 
+		writer.println("  pop();");
 		writer.println("  return L0;");
 		writer.println("}");
 	}
