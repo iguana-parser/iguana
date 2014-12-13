@@ -19,6 +19,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,9 +62,9 @@ public class Test3 {
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));
-		System.out.println(writer.toString());
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
 		ParseResult result = parser.parse(Input.fromString("ab"), grammar.toGrammarGraph(), "A");
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammar.toGrammarGraph(), Input.fromString("ab"));
     	assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
 	}

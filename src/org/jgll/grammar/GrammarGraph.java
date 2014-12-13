@@ -5,8 +5,8 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class GrammarGraph implements Serializable {
 		this.registry = new GrammarSlotRegistry(builder.nonterminalsMap, builder.terminalsMap, builder.slots);
 		this.headGrammarSlots = new ArrayList<>(builder.nonterminalsMap.values());
 		this.terminals = new ArrayList<>(builder.terminalsMap.values());
-		this.slots = new HashSet<>(builder.slots.values());
+		this.slots = new LinkedHashSet<>(builder.slots.values());
 		grammar = builder.grammar;
 		printGrammarStatistics();
 	}
@@ -108,10 +108,16 @@ public class GrammarGraph implements Serializable {
 		writer.println();
 		
 		writer.println("private Map<String, Integer> startSymbols = new HashMap<>();");
+		writer.println();
 		
-		// Generate Head grammar slots. 
+		// Generate Head grammar slots
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			writer.println("private HeadGrammarSlot slot" + registry.getId(head) + ";");
+		}
+		
+		// Generate Terminal grammar slots
+		for (TerminalGrammarSlot terminal : terminals) {
+			writer.println("private TerminalGrammarSlot slot" + registry.getId(terminal) + ";");
 		}
 		
 		// Generate body grammar slots
@@ -135,6 +141,8 @@ public class GrammarGraph implements Serializable {
 		// Constructor
 		writer.println("public " + className + "() {");
 		writer.println("  super(new DistributedGSSLookupFactory(), new NewSPPFLookupFactory(), new DefaultDescriptorLookupFactory());");
+		writer.println("  initHeadGrammarSlots();");
+		writer.println("  initTerminalGrammarSlots();");
 		
         for (int i = 0; i < n; i++) {
             writer.println("  initBodyGrammarSlots" + i + "();");
@@ -271,7 +279,6 @@ public class GrammarGraph implements Serializable {
 		writer.println("}");
 	}
 	
-	
 	private void generateCases(PrintWriter writer, List<BodyGrammarSlot> slots, int start, int end) {
 		
 		for (int i = start; i < end; i++) {
@@ -287,7 +294,6 @@ public class GrammarGraph implements Serializable {
 			}
 			writer.println();
 		}
-		
 	}
 	
 	public String getName() {

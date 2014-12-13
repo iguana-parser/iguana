@@ -1,8 +1,8 @@
 package org.jgll.grammar;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,9 +55,9 @@ public class GrammarGraphBuilder implements Serializable {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
 		this.grammar = grammar;
-		this.slots = new HashMap<>();
-		this.nonterminalsMap = new HashMap<>();
-		this.terminalsMap = new HashMap<>();
+		this.slots = new LinkedHashMap<>();
+		this.nonterminalsMap = new LinkedHashMap<>();
+		this.terminalsMap = new LinkedHashMap<>();
 		terminalsMap.put(Epsilon.getInstance(), new TerminalGrammarSlot(Epsilon.getInstance()));
 	}
 
