@@ -77,7 +77,6 @@ public class GrammarGraph implements Serializable {
 		// Imports
 		writer.println("import java.util.*;");
 		writer.println("import org.jgll.grammar.slot.*;");
-		writer.println("import org.jgll.grammar.slot.specialized.*;");
 		writer.println("import org.jgll.grammar.slot.nodecreator.*;");
 		writer.println("import org.jgll.grammar.slot.test.*;");
 		writer.println("import org.jgll.grammar.symbol.Character;");

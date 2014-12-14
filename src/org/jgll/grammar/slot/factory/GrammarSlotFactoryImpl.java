@@ -19,7 +19,6 @@ import org.jgll.grammar.slot.nodecreator.IntermediateNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NonterminalNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NonterminalWithOneChildNodeCreator;
 import org.jgll.grammar.slot.nodecreator.RightChildNodeCreator;
-import org.jgll.grammar.slot.specialized.LastTokenSlot;
 import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.slot.test.TrueFollowSet;
@@ -94,19 +93,19 @@ public class GrammarSlotFactoryImpl implements GrammarSlotFactory {
 		
 		// A ::= .x
 		if (symbolIndex == 0 && rule.size() == 1) {
-			return new LastTokenSlot(getSlotName(rule, symbolIndex), previous, slot, 
+			return new TokenGrammarSlot(getSlotName(rule, symbolIndex), previous, slot, 
 									 preConditions, postConditions, popConditions, nonterminalWithOneChildNodeCreator, DummyNodeCreator.getInstance());
 		} 
 		
 		// A ::= x . y
 		else if (symbolIndex == 1 && rule.size() == 2) {
-			return new LastTokenSlot(getSlotName(rule, symbolIndex), previous, slot, 
+			return new TokenGrammarSlot(getSlotName(rule, symbolIndex), previous, slot, 
 									 preConditions, postConditions, popConditions, nonterminalNodeCreator, rightNodeCreator);
 		} 
 		
 		// A ::= alpha .x  where |alpha| > 1
 		else if (symbolIndex == rule.size() - 1) {
-			return new LastTokenSlot(getSlotName(rule, symbolIndex), previous, slot, 
+			return new TokenGrammarSlot(getSlotName(rule, symbolIndex), previous, slot, 
 									 preConditions, postConditions, popConditions, nonterminalNodeCreator, intermediateNodeCreator);
 		}
 		

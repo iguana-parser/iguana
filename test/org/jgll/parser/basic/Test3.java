@@ -62,7 +62,8 @@ public class Test3 {
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));
-		GLLParser parser = CompilationUtil.getParser(writer.toString());
+		GLLParser parser = new org.jgll.parser.basic.Test();// CompilationUtil.getParser(writer.toString());
+//		System.out.println(writer.toString());
 		ParseResult result = parser.parse(Input.fromString("ab"), grammar.toGrammarGraph(), "A");
 		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammar.toGrammarGraph(), Input.fromString("ab"));
     	assertTrue(result.isParseSuccess());
