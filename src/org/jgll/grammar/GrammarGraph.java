@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
@@ -91,6 +92,7 @@ public class GrammarGraph implements Serializable {
 		writer.println("import com.google.common.collect.Sets;");
 		writer.println("import static org.jgll.grammar.condition.ConditionType.*;");
 		writer.println("import static org.jgll.util.CollectionsUtil.*;");
+		writer.println("import org.jgll.grammar.GrammarSlotRegistry;");
 		writer.println();
 
 		// Class definition
@@ -100,6 +102,8 @@ public class GrammarGraph implements Serializable {
 		
 		writer.println("private static final LoggerWrapper log = LoggerWrapper.getLogger(" + className + ".class);");
 		writer.println("private static final int L0 = -1;");
+		
+		writer.println("private GrammarSlotRegistry registry;");
 		writer.println();
 		
 		// GLL fields
@@ -162,7 +166,11 @@ public class GrammarGraph implements Serializable {
 		for (HeadGrammarSlot head : headGrammarSlots) {
 			writer.println("  startSymbols.put(\"" + escape(head.getNonterminal().getName()) + "\", " + registry.getId(head) + ");");
 		}
-
+		
+		// initialize Registry
+		writer.println("  initializeRegistry();");
+		writer.println();
+		
 		writer.println("}");
 		writer.println();
 		// End constructor
@@ -219,6 +227,22 @@ public class GrammarGraph implements Serializable {
 
 		writer.println();
 		
+		String arg1 = "Arrays.asList(" + headGrammarSlots.stream().map(h -> "slot" + registry.getId(h)).collect(Collectors.joining(", ")) + ")";
+		String arg2 = "Arrays.asList(" + terminals.stream().map(h -> "slot" + registry.getId(h)).collect(Collectors.joining(", ")) + ")";
+		String arg3 = "Arrays.asList(" + slots.stream().map(h -> "slot" + registry.getId(h)).collect(Collectors.joining(", ")) + ")";
+
+		// Initializing the registry
+		writer.println("private void initializeRegistry() {");
+		writer.println("  registry = GrammarSlotRegistry.from(" + arg1 + ", " + arg2 + ", " + arg3 + ");");		
+		writer.println("}");
+		writer.println();
+		
+		// Get registry
+		writer.println("@Override");
+		writer.println("public GrammarSlotRegistry getRegistry() {");
+		writer.println("	return registry;");
+		writer.println("}");
+		
 		writer.println("@Override");
 		writer.println("protected void parse(HeadGrammarSlot startSymbolName) {");
 		writer.println("  while (true) {");
@@ -260,7 +284,6 @@ public class GrammarGraph implements Serializable {
 		// End parse method
 		
 		// Grammar slot methods
-
 		for (HeadGrammarSlot head : headGrammarSlots) {
 				
 			head.code(writer, registry);
@@ -275,6 +298,7 @@ public class GrammarGraph implements Serializable {
 				}
 			}
 		}
+		
 		writer.println("}");
 	}
 	

@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -279,11 +280,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public GrammarGraph getGrammar() {
-		return grammar;
-	}
-
-	@Override
 	public NonPackedNode getCurrentSPPFNode() {
 		return cn;
 	}
@@ -301,6 +297,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public Input getInput() {
 		return input;
+	}
+	
+	@Override
+	public GrammarSlotRegistry getRegistry() {
+		return grammar.getRegistry();
 	}
 	
 	@Override

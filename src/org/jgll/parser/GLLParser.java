@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -61,9 +62,9 @@ public interface GLLParser {
 	
 	public SPPFLookup getSPPFLookup();
 	
-	public GrammarGraph getGrammar();
-	
 	public Input getInput();
+	
+	public GrammarSlotRegistry getRegistry();
 	
 	/**
 	 * Current descriptor being processed.

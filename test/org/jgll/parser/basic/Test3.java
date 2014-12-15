@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -19,7 +20,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,23 +55,21 @@ public class Test3 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(grammar.toGrammarGraph().getRegistry())));
 	}
 	
 	@Test
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));
-		GLLParser parser = new org.jgll.parser.basic.Test();// CompilationUtil.getParser(writer.toString());
-//		System.out.println(writer.toString());
+		GLLParser parser = CompilationUtil.getParser(writer.toString());
 		ParseResult result = parser.parse(Input.fromString("ab"), grammar.toGrammarGraph(), "A");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammar.toGrammarGraph(), Input.fromString("ab"));
     	assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getRegistry())));
 	}
 	
-	private SPPFNode expectedSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode expectedSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a b .", 1, node1);
 		TerminalNode node3 = factory.createTokenNode("a", 0, 1);

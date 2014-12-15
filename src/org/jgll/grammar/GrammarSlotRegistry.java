@@ -1,9 +1,10 @@
 package org.jgll.grammar;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -24,16 +25,26 @@ public class GrammarSlotRegistry {
 	
 	private Map<GrammarSlot, Integer> ids = new HashMap<>();
 	
-	private Map<Nonterminal, HeadGrammarSlot> nonterminals = new HashMap<>();
-	private Map<RegularExpression, TerminalGrammarSlot> terminals = new HashMap<>();
-	private Map<String, BodyGrammarSlot> slots = new HashMap<>();
+	private Map<Nonterminal, HeadGrammarSlot> nonterminals;
+	private Map<RegularExpression, TerminalGrammarSlot> terminals;
+	private Map<String, BodyGrammarSlot> slots;
 	
 	private Map<String, RegularExpression> regularExpressions = new HashMap<>();
+	
+	public static GrammarSlotRegistry from(Collection<HeadGrammarSlot> heads, 
+							   Collection<TerminalGrammarSlot> terminals, 
+							   Collection<BodyGrammarSlot> slots) {
+
+		return new GrammarSlotRegistry(
+			 heads.stream().collect(Collectors.toMap(x -> x.getNonterminal(), x -> x)),
+		     terminals.stream().collect(Collectors.toMap(x -> x.getRegularExpression(), x -> x)),
+		     slots.stream().collect(Collectors.toMap(x -> x.toString(), x -> x)));
+	}
 	
 	public GrammarSlotRegistry(Map<Nonterminal, HeadGrammarSlot> heads, 
 			 				   Map<RegularExpression, TerminalGrammarSlot> terminals, 
 			 				   Map<String, BodyGrammarSlot> slots) {
-		
+
 		if (heads == null) throw new IllegalArgumentException();
 		if (terminals == null) throw new IllegalArgumentException();
 		if (slots == null) throw new IllegalArgumentException();
@@ -42,21 +53,11 @@ public class GrammarSlotRegistry {
 		this.slots = new HashMap<>(slots);
 		this.terminals = new HashMap<>(terminals);
 		
-		for (Entry<Nonterminal, HeadGrammarSlot> e : heads.entrySet()) {
-			ids.put(e.getValue(), nextId.incrementAndGet());
-		}
-
-		for (Entry<String, BodyGrammarSlot> e : slots.entrySet()) {
-			ids.put(e.getValue(), nextId.incrementAndGet());
-		}
+		heads.values().stream().forEach(h -> ids.put(h, nextId.incrementAndGet()));
+		terminals.values().stream().forEach(t -> ids.put(t, nextId.incrementAndGet()));
+		slots.values().stream().forEach(s -> ids.put(s, nextId.incrementAndGet()));
 		
-		for (Entry<RegularExpression, TerminalGrammarSlot> e : terminals.entrySet()) {
-			ids.put(e.getValue(), nextId.incrementAndGet());
-		}
-		
-		for (RegularExpression regex : terminals.keySet()) {
-			regularExpressions.put(regex.toString(), regex);
-		}
+		terminals.keySet().stream().forEach(t -> regularExpressions.put(t.toString(), t));
 	}
 
 	public HeadGrammarSlot getHead(Nonterminal nt) {
