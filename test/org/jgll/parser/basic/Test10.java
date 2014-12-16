@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -84,8 +85,8 @@ public class Test10 {
     	assertTrue(result.isParseSuccess());
 	}
 	
-	private SPPFNode getSPPF1() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getSPPF1(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 1).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a .", 0, node1);
 		TerminalNode node3 = factory.createTokenNode("a", 0, 1);

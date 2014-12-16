@@ -4,6 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
@@ -64,7 +65,7 @@ public class DanglingElseGrammar1 {
 		parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF1()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF1(parser.getRegistry())));
 	}
 	
 	@Test
@@ -73,11 +74,11 @@ public class DanglingElseGrammar1 {
 		parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(Input.fromString("aaaaasbsbsbs"), grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF2()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF2(parser.getRegistry())));
 	}
 	
-	private SPPFNode getExpectedSPPF1() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getExpectedSPPF1(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 5).init();
 		PackedNode node2 = factory.createPackedNode("S ::= a S .", 1, node1);
 		TerminalNode node3 = factory.createTokenNode("a", 0, 1);
@@ -141,8 +142,8 @@ public class DanglingElseGrammar1 {
 		return node1;
 	}
 	
-	private SPPFNode getExpectedSPPF2() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getExpectedSPPF2(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 12).init();
 		PackedNode node2 = factory.createPackedNode("S ::= a S .", 1, node1);
 		TerminalNode node3 = factory.createTokenNode("a", 0, 1);

@@ -14,12 +14,9 @@ import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -112,7 +109,7 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3).init();
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 2, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 2).init();
@@ -145,7 +142,7 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 		
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 1).init();
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 0, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 0).init();
@@ -177,7 +174,7 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 		
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 1, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 1).init();
@@ -210,7 +207,7 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammarGraph, "S");
 		assertTrue(result.isParseSuccess());
 		
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 1, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 1).init();

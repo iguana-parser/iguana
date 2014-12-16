@@ -17,7 +17,6 @@ Export-Package:
  org.jgll.grammar.slot.factory,
  org.jgll.grammar.slot.firstfollow,
  org.jgll.grammar.slot.nodecreator,
- org.jgll.grammar.slot.specialized,
  org.jgll.grammar.slot.test,
  org.jgll.grammar.symbol,
  org.jgll.grammar.transformation,

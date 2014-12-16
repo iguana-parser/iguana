@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -52,7 +53,7 @@ public class Test1 {
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
 		ParseResult result = parser.parse(Input.fromString(""), grammar.toGrammarGraph(), "A");
     	assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getRegistry())));
 	}
 	
 	@Test
@@ -61,12 +62,12 @@ public class Test1 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getRegistry())));
 	}
 	
 	
-	private SPPFNode expectedSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode expectedSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 0).init();
 		PackedNode node2 = factory.createPackedNode("A ::= .", 0, node1);
 		TerminalNode node3 = factory.createTokenNode("epsilon", 0, 0);

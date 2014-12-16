@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -78,7 +79,7 @@ public class Test13 {
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertEquals(3, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 	
 	@Test
@@ -89,11 +90,11 @@ public class Test13 {
 		ParseResult result = parser.parse(Input.fromString("a"), grammar.toGrammarGraph(), "S");
     	assertTrue(result.isParseSuccess());
     	assertEquals(3, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 	
-	private SPPFNode getSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 1).init();
 		PackedNode node2 = factory.createPackedNode("S ::= A B C D .", 1, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= A B C . D", 0, 1).init();

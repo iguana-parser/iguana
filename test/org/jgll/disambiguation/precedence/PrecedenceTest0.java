@@ -4,6 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -84,11 +85,11 @@ public class PrecedenceTest0 {
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode(parser.getRegistry())));
 	}
 	
-	private SPPFNode getSPPFNode() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getSPPFNode(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 5).init();
 		PackedNode node2 = factory.createPackedNode("E ::= E + E2 .", 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("E ::= E + . E2", 0, 2).init();

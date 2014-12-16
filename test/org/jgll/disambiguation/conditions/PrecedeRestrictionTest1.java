@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarGraphBuilder;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
@@ -77,12 +78,12 @@ public class PrecedeRestrictionTest1 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));
 	}
 
-	private SPPFNode getExpectedSPPF() {
+	private SPPFNode getExpectedSPPF(GrammarSlotRegistry registry) {
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammarGraph);
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6).init();
 		PackedNode node2 = factory.createPackedNode("S ::= f o r a l l .", 0, node1);
 		TerminalNode node3 = factory.createTokenNode("f o r a l l", 0, 6);

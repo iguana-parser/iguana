@@ -4,6 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
@@ -19,7 +20,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -102,12 +102,11 @@ public class PrecedenceTest10 {
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammar.toGrammarGraph(), input);
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 	
-	private SPPFNode getSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 6).init();
 		PackedNode node2 = factory.createPackedNode("E ::= E1 X1 .", 1, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("E", 1, 0, 1).init();

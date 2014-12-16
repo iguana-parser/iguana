@@ -4,6 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
@@ -61,11 +62,11 @@ public class DanglingElseGrammar2 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));
 	}
 
-	private SPPFNode getExpectedSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getExpectedSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 5).init();
 		PackedNode node2 = factory.createPackedNode("S ::= (a S) .", 0, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("(a S)", 0, 0, 5).init();

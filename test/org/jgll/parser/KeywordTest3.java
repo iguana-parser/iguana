@@ -4,6 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -60,11 +61,11 @@ public class KeywordTest3 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 		
-	private SPPFNode getSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 11).init();
 		PackedNode node2 = factory.createPackedNode("S ::= i f L S L t h e n L S .", 10, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= i f L S L t h e n L . S", 0, 10).init();

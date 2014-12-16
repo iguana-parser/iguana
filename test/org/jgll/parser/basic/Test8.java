@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -67,7 +68,7 @@ public class Test8 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 	
 	@Test
@@ -77,11 +78,11 @@ public class Test8 {
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
 		ParseResult result = parser.parse(Input.fromString("abc"), grammar.toGrammarGraph(), "S");
     	assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 	
-	public SPPFNode getSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	public SPPFNode getSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 3).init();
 		PackedNode node2 = factory.createPackedNode("S ::= A B C .", 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= A B . C", 0, 2).init();
