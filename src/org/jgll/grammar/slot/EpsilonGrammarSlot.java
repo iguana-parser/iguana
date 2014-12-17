@@ -49,7 +49,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new EpsilonGrammarSlot(")
 		  .append("\"" + escape(label) + "\"" + ", ")
-		  .append("slot" + registry.getId(head) + ")");
+		  .append("slot" + registry.getId(head) + ")")
+		  .append(".withId(").append(registry.getId(this)).append(")");
 		return sb.toString();
 	}
 	
@@ -57,8 +58,8 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	public void code(PrintWriter writer, GrammarSlotRegistry registry) {
 		writer.println("// " + escape(label));
 		writer.println("private final int slot" + registry.getId(this) + "() {");
-		writer.println("  if (slot" + registry.getId(head) + ".testFollowSet(lexer.getInput().charAt(ci))) {");
-		writer.println("    TokenSymbolNode epsilonNode = sppfLookup.getEpsilonNode(ci);");
+		writer.println("  if (slot" + registry.getId(head) + ".testFollowSet(lexer.charAt(ci))) {");
+		writer.println("    TerminalNode epsilonNode = sppfLookup.getEpsilonNode(ci);");
 		writer.println("    NonterminalNode node = sppfLookup.getNonterminalNode(slot" + registry.getId(head) + ", ci, ci);");
 		writer.println("    sppfLookup.addPackedNode(node, slot" + registry.getId(this) + ", ci, DummyNode.getInstance(), epsilonNode);");
 		writer.println("    cn = node;");

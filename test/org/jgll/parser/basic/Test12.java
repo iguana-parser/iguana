@@ -83,7 +83,7 @@ public class Test12 {
 		TerminalNode node5 = factory.createTokenNode("b", 0, 1);
 		node4.addChild(node5);
 		node3.addChild(node4);
-		TerminalNode node6 = factory.createTokenNode("a", 1, 1);
+		TerminalNode node6 = factory.createTokenNode("a", 1, 2);
 		node2.addChild(node3);
 		node2.addChild(node6);
 		node1.addChild(node2);

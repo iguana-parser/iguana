@@ -24,6 +24,11 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	
 	protected HeadGrammarSlot nonterminal;
 	
+	private NonterminalGrammarSlot(int id, NonterminalGrammarSlot slot) {
+		this(slot.label, slot.previous, slot.nonterminal, slot.preConditions, slot.popConditions, slot.nodeCreatorFromPop);
+		this.id = id;
+	}
+	
 	public NonterminalGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot nonterminal, 
 								  Set<Condition> preConditions, Set<Condition> popConditions, NodeCreator nodeCreatorFromPop) {
 		
@@ -77,10 +82,10 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		writer.println("    recordParseError(slot" + registry.getId(this) + ");");
 		writer.println("    return L0;");
 		writer.println("  }");
-		writer.println("  if (slot" + registry.getId(this) + ".getPreConditions().execute(this, lexer, cu, ci)) {");
+		writer.println("  if (slot" + registry.getId(this) + ".getPreConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, cu, ci))) {");
 		writer.println("    return L0;");
 		writer.println("  }");
-		writer.println("  GrammarSlot returnSlot = create(slot" + registry.getId(next) + ", slot" + registry.getId(nonterminal) + ");");
+		writer.println("  HeadGrammarSlot returnSlot = create(slot" + registry.getId(next) + ", slot" + registry.getId(nonterminal) + ");");
 		writer.println("  if (returnSlot != null) {");
 		writer.println("    return returnSlot.getId();");
 		writer.println("  }");
@@ -97,8 +102,14 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		  .append("slot" + registry.getId(nonterminal) + ", ")
 		  .append(getConstructorCode(preConditions, registry) + ", ")
 		  .append(getConstructorCode(popConditions, registry) + ", ")
-		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
+		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")")
+		  .append(".withId(").append(registry.getId(this)).append(")");
 		return sb.toString();
+	}
+
+	@Override
+	public NonterminalGrammarSlot withId(int id) {
+		return new NonterminalGrammarSlot(id, this);
 	}
 
 }

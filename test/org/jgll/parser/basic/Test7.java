@@ -80,13 +80,13 @@ public class Test7 {
 		TerminalNode node5 = factory.createTokenNode("a", 0, 1);
 		NonterminalNode node6 = factory.createNonterminalNode("A", 1, 2).init();
 		PackedNode node7 = factory.createPackedNode("A ::= a .", 1, node6);
-		TerminalNode node8 = factory.createTokenNode("a", 1, 1);
+		TerminalNode node8 = factory.createTokenNode("a", 1, 2);
 		node7.addChild(node8);
 		node6.addChild(node7);
 		node4.addChild(node5);
 		node4.addChild(node6);
 		node3.addChild(node4);
-		TerminalNode node9 = factory.createTokenNode("b", 2, 1);
+		TerminalNode node9 = factory.createTokenNode("b", 2, 3);
 		node2.addChild(node3);
 		node2.addChild(node9);
 		node1.addChild(node2);

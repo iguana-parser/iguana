@@ -110,7 +110,7 @@ public class GrammarGraph implements Serializable {
 		writer.println("private int cs; // Current grammar slot");
 		writer.println();
 		
-		writer.println("private Map<String, Integer> startSymbols = new HashMap<>();");
+		writer.println("private Map<String, HeadGrammarSlot> startSymbols = new HashMap<>();");
 		writer.println();
 		
 		// Generate Head grammar slots
@@ -164,7 +164,7 @@ public class GrammarGraph implements Serializable {
 		
 		// Add start symbols
 		for (HeadGrammarSlot head : headGrammarSlots) {
-			writer.println("  startSymbols.put(\"" + escape(head.getNonterminal().getName()) + "\", " + registry.getId(head) + ");");
+			writer.println("  startSymbols.put(\"" + escape(head.getNonterminal().getName()) + "\", slot" + registry.getId(head) + ");");
 		}
 		
 		// initialize Registry
@@ -221,8 +221,9 @@ public class GrammarGraph implements Serializable {
 		// Overriding the getStartSymbol method
 		writer.println("@Override");
 		writer.println("protected HeadGrammarSlot getStartSymbol(String name) {");
-		writer.println("    cs = startSymbols.get(name);");
-		writer.println("    return slot" + registry.getId(headGrammarSlots.get(0)) + ";");
+		writer.println("  HeadGrammarSlot startSymbol = startSymbols.get(name);");
+		writer.println("  cs = startSymbol.getId();");
+		writer.println("  return startSymbol;");
 		writer.println("}");
 
 		writer.println();

@@ -37,4 +37,8 @@ public interface GrammarSlot extends ConstructorCode {
 
 	public void code(PrintWriter writer, GrammarSlotRegistry registry);
 
+	public GrammarSlot withId(int id);
+	
+	public int getId();
+
 }

@@ -13,6 +13,9 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.regex.RegularExpression;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 /**
  * 
  * 
@@ -23,7 +26,7 @@ public class GrammarSlotRegistry {
 
 	private AtomicInteger nextId = new AtomicInteger();
 	
-	private Map<GrammarSlot, Integer> ids = new HashMap<>();
+	private BiMap<GrammarSlot, Integer> ids = HashBiMap.create();
 	
 	private Map<Nonterminal, HeadGrammarSlot> nonterminals;
 	private Map<RegularExpression, TerminalGrammarSlot> terminals;
@@ -78,6 +81,10 @@ public class GrammarSlotRegistry {
 	
 	public int getId(GrammarSlot slot) {
 		return ids.get(slot);
+	}
+	
+	public GrammarSlot get(int id) {
+		return ids.inverse().get(id);
 	}
 
 }

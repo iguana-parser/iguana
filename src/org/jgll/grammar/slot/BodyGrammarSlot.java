@@ -35,7 +35,9 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 	protected final NodeCreator nodeCreatorFromPop;
 	
 	private GSSNode[] gssNodes;
-
+	
+	protected int id;
+	
 	public BodyGrammarSlot(String label, BodyGrammarSlot previous, 
 						   Set<Condition> preConditions, Set<Condition> postConditions, Set<Condition> popConditions,
 						   NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
@@ -162,8 +164,8 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		return gssNodes != null;
 	}
 	
+	@Override
 	public int getId() {
-		return 0;
+		return id;
 	}
-	
 }

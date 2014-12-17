@@ -35,13 +35,20 @@ public class HeadGrammarSlot implements GrammarSlot {
 	
 	protected BodyGrammarSlot firstSlots[];
 
-	private final PredictionTest predictionTest;
+	protected final PredictionTest predictionTest;
 	
-	private final FollowTest followTest;
+	protected final FollowTest followTest;
 	
 	private GSSNode[] gssNodes;
 
-	private int altsCount;
+	protected final int altsCount;
+	
+	private int id;
+	
+	public HeadGrammarSlot(int id, HeadGrammarSlot slot) {
+		this(slot.nonterminal, slot.altsCount, slot.nullable, slot.predictionTest, slot.followTest);
+		this.id = id;
+	}
 	
 	public HeadGrammarSlot(Nonterminal nonterminal, 
 						   int altsCount, boolean nullable, 
@@ -146,7 +153,8 @@ public class HeadGrammarSlot implements GrammarSlot {
 		  .append(altsCount + ", ")
 		  .append(nullable + ", ")
 		  .append(predictionTest.getConstructorCode(registry) + ", ")
-		  .append(followTest.getConstructorCode(registry) + ")");
+		  .append(followTest.getConstructorCode(registry) + ")")
+		  .append(".withId(").append(registry.getId(this)).append(")");
 		return sb.toString();
 	}
 	
@@ -166,6 +174,16 @@ public class HeadGrammarSlot implements GrammarSlot {
 		writer.println("  }");
 		writer.println("  return L0;");
 		writer.println("}");
+	}
+	
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public HeadGrammarSlot withId(int id) {
+		return new HeadGrammarSlot(id, this);
 	}
 	
 }

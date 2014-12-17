@@ -26,6 +26,11 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	
 	protected Object object;
 	
+	public LastGrammarSlot(int id, LastGrammarSlot slot) {
+		this(slot.label, slot.previous, slot.head, slot.popConditions, slot.nodeCreatorFromPop);
+		this.id = id;
+	}
+	
 	public LastGrammarSlot(String label, BodyGrammarSlot previous, HeadGrammarSlot head, 
 						   Set<Condition> popConditions, NodeCreator nodeCreatorFromPop) {
 		super(label, previous, new HashSet<>(), new HashSet<>(), 
@@ -78,8 +83,14 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous) + ", "))
 		  .append("slot" + registry.getId(head) + ", ")
 		  .append(getConstructorCode(popConditions, registry) + ", ")
-		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")");
+		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")")
+		  .append(".withId(").append(registry.getId(this)).append(")");
 		return sb.toString();
+	}
+
+	@Override
+	public LastGrammarSlot withId(int id) {
+		return new LastGrammarSlot(id, this);
 	}
 
 }

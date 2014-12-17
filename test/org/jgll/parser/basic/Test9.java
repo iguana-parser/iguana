@@ -102,7 +102,7 @@ public class Test9 {
 		node11.addChild(node5);
 		node3.addChild(node4);
 		node3.addChild(node11);
-		TerminalNode node15 = factory.createTokenNode("b", 1, 1);
+		TerminalNode node15 = factory.createTokenNode("b", 1, 2);
 		node2.addChild(node3);
 		node2.addChild(node15);
 		node1.addChild(node2);

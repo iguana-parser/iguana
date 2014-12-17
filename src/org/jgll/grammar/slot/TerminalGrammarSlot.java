@@ -12,7 +12,14 @@ import org.jgll.util.Input;
 public class TerminalGrammarSlot implements GrammarSlot {
 
 	private RegularExpression regex;
+	
+	private int id;
 
+	private TerminalGrammarSlot(int id, TerminalGrammarSlot slot) {
+		this(slot.regex);
+		this.id = id;
+	}
+	
 	public TerminalGrammarSlot(RegularExpression regex) {
 		this.regex = regex;
 	}
@@ -61,8 +68,19 @@ public class TerminalGrammarSlot implements GrammarSlot {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new TerminalGrammarSlot(")
 		  .append(regex.getConstructorCode(registry))
-		  .append(")");
+		  .append(")")
+		  .append(".withId(").append(registry.getId(this)).append(")");
 		return sb.toString();
+	}
+	
+	@Override
+	public int getId() {
+		return id;
+	}
+	
+	@Override
+	public TerminalGrammarSlot withId(int id) {
+		return new TerminalGrammarSlot(id, this);
 	}
 
 }

@@ -25,6 +25,11 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 	protected final TerminalGrammarSlot slot;
 	
+	public TokenGrammarSlot(int id, TokenGrammarSlot slot) {
+		this(slot.label, slot.previous, slot.slot, slot.preConditions, slot.postConditions, slot.popConditions, slot.nodeCreator, slot.nodeCreatorFromPop);
+		this.id = id;
+	}
+	
 	public TokenGrammarSlot(String label, BodyGrammarSlot previous, TerminalGrammarSlot slot,
 							Set<Condition> preConditions, Set<Condition> postConditions, Set<Condition> popConditions,
 							NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
@@ -72,9 +77,7 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("new SlotWrapper(")
-		  .append(registry.getId(this) + ", ")
-		  .append("new TokenGrammarSlot(")
+		sb.append("new TokenGrammarSlot(")
 		  .append("\"" +  escape(label) + "\"" + ", ")
 		  .append((previous == null ? "null" : "slot" + registry.getId(previous)) + ", ")
 		  .append(slot.getConstructorCode(registry) + ", ")
@@ -82,7 +85,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		  .append(getConstructorCode(postConditions, registry) + ", ")
 		  .append(getConstructorCode(popConditions, registry) + ", ")
 		  .append(nodeCreator.getConstructorCode(registry) + ", ")
-		  .append(nodeCreatorFromPop.getConstructorCode(registry) + "))");
+		  .append(nodeCreatorFromPop.getConstructorCode(registry) + ")")
+		  .append(".withId(").append(registry.getId(this)).append(")");
 		return sb.toString();
 	}
 
@@ -103,4 +107,9 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		writer.println("}");
 	}
 
+	
+	@Override
+	public TokenGrammarSlot withId(int id) {
+		return new TokenGrammarSlot(id, this);
+	}
 }

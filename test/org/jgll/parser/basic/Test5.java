@@ -95,7 +95,7 @@ public class Test5 {
 		node3.addChild(node4);
 		NonterminalNode node6 = factory.createNonterminalNode("C", 1, 2).init();
 		PackedNode node7 = factory.createPackedNode("C ::= c .", 1, node6);
-		TerminalNode node8 = factory.createTokenNode("c", 1, 1);
+		TerminalNode node8 = factory.createTokenNode("c", 1, 2);
 		node7.addChild(node8);
 		node6.addChild(node7);
 		node2.addChild(node3);
