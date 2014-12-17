@@ -86,7 +86,7 @@ public class PrecedeRestrictionTest1 {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6).init();
 		PackedNode node2 = factory.createPackedNode("S ::= f o r a l l .", 0, node1);
-		TerminalNode node3 = factory.createTokenNode("f o r a l l", 0, 6);
+		TerminalNode node3 = factory.createTerminalNode("f o r a l l", 0, 6);
 		node2.addChild(node3);
 		node1.addChild(node2);		
 		return node1;

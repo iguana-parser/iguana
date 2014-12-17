@@ -107,14 +107,14 @@ public class Gamma1Test {
 		PackedNode node4 = factory.createPackedNode("S ::= A S . d", 1, node3);
 		NonterminalNode node5 = factory.createNonterminalNode("A", 0, 1).init();
 		PackedNode node6 = factory.createPackedNode("A ::= a .", 0, node5);
-		TerminalNode node7 = factory.createTokenNode("a", 0, 1);
+		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
 		NonterminalNode node8 = factory.createNonterminalNode("S", 1, 2).init();
 		PackedNode node9 = factory.createPackedNode("S ::= B S .", 2, node8);
 		NonterminalNode node10 = factory.createNonterminalNode("B", 1, 2).init();
 		PackedNode node11 = factory.createPackedNode("B ::= a .", 1, node10);
-		TerminalNode node12 = factory.createTokenNode("a", 1, 1);
+		TerminalNode node12 = factory.createTerminalNode("a", 1, 1);
 		node11.addChild(node12);
 		node10.addChild(node11);
 		NonterminalNode node13 = factory.createNonterminalNode("S", 2, 2).init();
@@ -126,7 +126,7 @@ public class Gamma1Test {
 		node4.addChild(node5);
 		node4.addChild(node8);
 		node3.addChild(node4);
-		TerminalNode node15 = factory.createTokenNode("d", 2, 1);
+		TerminalNode node15 = factory.createTerminalNode("d", 2, 1);
 		node2.addChild(node3);
 		node2.addChild(node15);
 		PackedNode node16 = factory.createPackedNode("S ::= B S .", 1, node1);

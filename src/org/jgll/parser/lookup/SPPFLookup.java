@@ -3,6 +3,7 @@ package org.jgll.parser.lookup;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
@@ -17,9 +18,12 @@ public interface SPPFLookup {
 	 * @param length
 	 * @return
 	 */
-	public TerminalNode getTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
+	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
 	
-	public TerminalNode getEpsilonNode(int inputIndex);
+	
+	default TerminalNode getEpsilonNode(int inputIndex) {
+		return getTerminalNode(Epsilon.TOKEN_ID, inputIndex, inputIndex);
+	}
 	
 	/**
 	 * 

@@ -84,14 +84,14 @@ public class Test11 {
 		PackedNode node4 = factory.createPackedNode("A ::= B a . c", 1, node3);
 		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 1).init();
 		PackedNode node6 = factory.createPackedNode("B ::= b .", 0, node5);
-		TerminalNode node7 = factory.createTokenNode("b", 0, 1);
+		TerminalNode node7 = factory.createTerminalNode("b", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		TerminalNode node8 = factory.createTokenNode("a", 1, 2);
+		TerminalNode node8 = factory.createTerminalNode("a", 1, 2);
 		node4.addChild(node5);
 		node4.addChild(node8);
 		node3.addChild(node4);
-		TerminalNode node9 = factory.createTokenNode("c", 2, 3);
+		TerminalNode node9 = factory.createTerminalNode("c", 2, 3);
 		node2.addChild(node3);
 		node2.addChild(node9);
 		node1.addChild(node2);

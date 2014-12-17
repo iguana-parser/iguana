@@ -75,12 +75,12 @@ public class Test4 {
 		PackedNode node2 = factory.createPackedNode("A ::= a b c .", 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("A ::= a b . c", 0, 2).init();
 		PackedNode node4 = factory.createPackedNode("A ::= a b . c", 1, node3);
-		TerminalNode node5 = factory.createTokenNode("a", 0, 1);
-		TerminalNode node6 = factory.createTokenNode("b", 1, 2);
+		TerminalNode node5 = factory.createTerminalNode("a", 0, 1);
+		TerminalNode node6 = factory.createTerminalNode("b", 1, 2);
 		node4.addChild(node5);
 		node4.addChild(node6);
 		node3.addChild(node4);
-		TerminalNode node7 = factory.createTokenNode("c", 2, 3);
+		TerminalNode node7 = factory.createTerminalNode("c", 2, 3);
 		node2.addChild(node3);
 		node2.addChild(node7);
 		node1.addChild(node2);

@@ -1,6 +1,7 @@
 package org.jgll.sppf;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 
 public class SPPFNodeFactory {
@@ -16,6 +17,10 @@ public class SPPFNodeFactory {
 		return new NonterminalNode(registry.getHead(nonterminal), leftExtent, rightExtent);
 	}
 	
+	public TerminalNode createEpsilonNode(int inputIndex) {
+		return new TerminalNode(Epsilon.getInstance(), inputIndex, inputIndex);
+	}
+	
 	public NonterminalNode createNonterminalNode(String s, int index, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = new Nonterminal.Builder(s).setIndex(index).build();
 		return new NonterminalNode(registry.getHead(nonterminal), leftExtent, rightExtent);
@@ -25,7 +30,7 @@ public class SPPFNodeFactory {
 		return new IntermediateNode(registry.getGrammarSlot(s), leftExtent, rightExtent);
 	}
 	
-	public TerminalNode createTokenNode(String s, int leftExtent, int rightExtent) {
+	public TerminalNode createTerminalNode(String s, int leftExtent, int rightExtent) {
 		return new TerminalNode(registry.getRegularExpression(s), leftExtent, rightExtent);
 	}
 

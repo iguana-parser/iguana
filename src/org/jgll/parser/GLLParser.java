@@ -5,13 +5,11 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 
 /**
@@ -27,9 +25,7 @@ public interface GLLParser {
 	public void pop();
 	
 	public HeadGrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
-	
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
-	
+		
 	/**
 	 * @return true if no such descriptor exists.
 	 */

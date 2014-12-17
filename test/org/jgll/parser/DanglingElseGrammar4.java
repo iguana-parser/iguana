@@ -67,13 +67,13 @@ public class DanglingElseGrammar4 {
 		PackedNode node2 = factory.createPackedNode("S ::= a S b .", 3, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= a S . b", 0, 3).init();
 		PackedNode node4 = factory.createPackedNode("S ::= a S . b", 1, node3);
-		TerminalNode node5 = factory.createTokenNode("a", 0, 1);
+		TerminalNode node5 = factory.createTerminalNode("a", 0, 1);
 		NonterminalNode node6 = factory.createNonterminalNode("S", 0, 1, 3).init();
 		PackedNode node7 = factory.createPackedNode("S ::= a S .", 2, node6);
-		TerminalNode node8 = factory.createTokenNode("a", 1, 1);
+		TerminalNode node8 = factory.createTerminalNode("a", 1, 1);
 		NonterminalNode node9 = factory.createNonterminalNode("S", 0, 2, 3).init();
 		PackedNode node10 = factory.createPackedNode("S ::= s .", 2, node9);
-		TerminalNode node11 = factory.createTokenNode("s", 2, 1);
+		TerminalNode node11 = factory.createTerminalNode("s", 2, 1);
 		node10.addChild(node11);
 		node9.addChild(node10);
 		node7.addChild(node8);
@@ -82,7 +82,7 @@ public class DanglingElseGrammar4 {
 		node4.addChild(node5);
 		node4.addChild(node6);
 		node3.addChild(node4);
-		TerminalNode node12 = factory.createTokenNode("b", 3, 1);
+		TerminalNode node12 = factory.createTerminalNode("b", 3, 1);
 		node2.addChild(node3);
 		node2.addChild(node12);
 		PackedNode node13 = factory.createPackedNode("S ::= a S .", 1, node1);

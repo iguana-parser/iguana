@@ -1,11 +1,12 @@
 package org.jgll.util;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import static org.jgll.util.generator.GeneratorUtil.*;
 
-import org.jgll.grammar.GrammarGraph;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
@@ -14,19 +15,16 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.traversal.SPPFVisitor;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
 public class ToJavaCode implements SPPFVisitor {
+	
+	private AtomicInteger id = new AtomicInteger(1);
 	
 	private Map<SPPFNode, Integer> idsMap = new HashMap<>();
 	
-	protected Set<SPPFNode> visited = new HashSet<>();
-
-	private int count = 1;
 	private StringBuilder sb = new StringBuilder();
 
 	public ToJavaCode() {
-		sb.append("SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());\n");
+		sb.append("SPPFNodeFactory factory = new SPPFNodeFactory(registry);\n");
 	}
 	
 	public static String toJavaCode(NonterminalNode node) {
@@ -37,26 +35,30 @@ public class ToJavaCode implements SPPFVisitor {
 	
 	@Override
 	public void visit(TerminalNode node) {
-		if(!visited.contains(node)) {
-			visited.add(node);
-			sb.append("TokenSymbolNode node" + count + " = factory.createTokenNode(" +
+		
+		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null)
+			return;
+		
+		if (node.getGrammarSlot() == Epsilon.getInstance()) {
+			sb.append("TerminalNode node" + idsMap.get(node) + " = factory.createEpsilonNode(" + node.getLeftExtent() + ");\n");
+		} else {
+			sb.append("TerminalNode node" + idsMap.get(node) + " = factory.createTerminalNode(" +
 					  "\"" + escape(node.getGrammarSlot().toString()) + "\", " +
-					  node.getLeftExtent() + ", " + node.getRightExtent() + ");\n");
+					  node.getLeftExtent() + ", " + node.getRightExtent() + ");\n");			
 		}
 	}
 
 	@Override
 	public void visit(NonterminalNode node) {
 		
-		if (idsMap.put(node, idsMap.size()) != null) return;
+		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null)
+			return;
 		
-		sb.append("NonterminalNode node" + count + " = factory.createNonterminalNode(" +
+		sb.append("NonterminalNode node" + idsMap.get(node) + " = factory.createNonterminalNode(" +
 				"\"" + node.getGrammarSlot().getNonterminal() + "\", " + 
-				idsMap.get(node) + ", " +
+				node.getGrammarSlot().getNonterminal().getIndex() + ", " +
 				node.getLeftExtent() + ", " + 
 				node.getRightExtent() + ").init();\n");
-		
-		count++;
 		
 		visitChildren(node);
 		
@@ -66,14 +68,12 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public void visit(IntermediateNode node) {
 		
-		if (idsMap.put(node, idsMap.size()) != null) return;
+		if (idsMap.put(node, id.getAndIncrement()) != null) return;
 		
-		sb.append("IntermediateNode node" + count + " = factory.createIntermediateNode(" +
+		sb.append("IntermediateNode node" + idsMap.get(node) + " = factory.createIntermediateNode(" +
 				  "\"" + escape(node.getGrammarSlot().toString()) + "\", " + 
 				  node.getLeftExtent() + ", " + 
 				  node.getRightExtent() + ").init();\n");
-		
-		count++;
 		
 		visitChildren(node);
 		
@@ -82,12 +82,13 @@ public class ToJavaCode implements SPPFVisitor {
 
 	@Override
 	public void visit(PackedNode node) {
+		
+		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null)
+			return;
 
-		sb.append("PackedNode node" + count + " = factory.createPackedNode(" +
+		sb.append("PackedNode node" + idsMap.get(node) + " = factory.createPackedNode(" +
 				  "\"" + escape(node.getGrammarSlot().toString()) + "\", " + 
 				  node.getPivot() + ", " + "node" + idsMap.get(node.getParent()) + ");\n");				
-		
-		count++;
 		
 		visitChildren(node);
 		
@@ -97,15 +98,13 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public void visit(ListSymbolNode node) {
 
-		if (idsMap.put(node, idsMap.size()) != null) return;
+		if (idsMap.put(node, id.getAndIncrement()) != null) return;
 		
-		sb.append("ListSymbolNode node" + count + " = factory.createListNode(" +
+		sb.append("ListSymbolNode node" + idsMap.get(node) + " = factory.createListNode(" +
 				  "\"" + node.getGrammarSlot().toString() + "\", " +
 				  idsMap.get(node) + ", " +
 				  node.getLeftExtent() + ", " + 
 				  node.getRightExtent() + ").init();\n");
-		
-		count++;
 		
 		visitChildren(node);
 			

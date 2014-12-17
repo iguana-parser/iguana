@@ -49,17 +49,14 @@ public interface SPPFNode {
 	// TODO: create a set of packed nodes and then compare them instead of iterator stuff below.
 	default boolean deepEquals(SPPFNode node) {
 		
-		if(!this.equals(node)) {
+		if(!this.equals(node))
 			return false;
-		}
 		
-		if(this.childrenCount() != node.childrenCount()) {
+		if(this.childrenCount() != node.childrenCount())
 			return false;
-		}
 		
-		if(this.isAmbiguous() ^ node.isAmbiguous()) {
+		if(this.isAmbiguous() ^ node.isAmbiguous())
 			return false;
-		}
 		
 		// Packed nodes are not ordered, so we have to search
 		// through the packed nodes of the given node to match

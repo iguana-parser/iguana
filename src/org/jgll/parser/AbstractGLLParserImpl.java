@@ -7,7 +7,6 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.lexer.Lexer;
 import org.jgll.lexer.UnmemoizedLexerImpl;
@@ -22,7 +21,6 @@ import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.TerminalNode;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
@@ -302,12 +300,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public GrammarSlotRegistry getRegistry() {
 		return grammar.getRegistry();
-	}
-	
-	@Override
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		ci = rightExtent;
-		return sppfLookup.getTerminalSymbolNode(slot, leftExtent, rightExtent);
 	}
 	
 }

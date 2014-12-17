@@ -70,7 +70,7 @@ public class Test1 {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 0).init();
 		PackedNode node2 = factory.createPackedNode("A ::= .", 0, node1);
-		TerminalNode node3 = factory.createTokenNode("epsilon", 0, 0);
+		TerminalNode node3 = factory.createTerminalNode("epsilon", 0, 0);
 		node2.addChild(node3);
 		node1.addChild(node2);
 		return node1;

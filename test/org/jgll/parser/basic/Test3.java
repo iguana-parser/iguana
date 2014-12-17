@@ -72,8 +72,8 @@ public class Test3 {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a b .", 1, node1);
-		TerminalNode node3 = factory.createTokenNode("a", 0, 1);
-		TerminalNode node4 = factory.createTokenNode("b", 1, 2);
+		TerminalNode node3 = factory.createTerminalNode("a", 0, 1);
+		TerminalNode node4 = factory.createTerminalNode("b", 1, 2);
 		node2.addChild(node3);
 		node2.addChild(node4);
 		node1.addChild(node2);

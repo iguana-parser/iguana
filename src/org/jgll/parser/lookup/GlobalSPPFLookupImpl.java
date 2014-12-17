@@ -6,7 +6,6 @@ import java.util.Map;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -41,17 +40,12 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public TerminalNode getTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
+	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int length) {
 		final TerminalNode key = new TerminalNode(slot.getRegularExpression(), inputIndex, length);
 		return tokenNodes.computeIfAbsent(key, k -> { 
 													  log.trace("Terminal node created: %s", key); 
 													  return key; 
 													});
-	}
-	
-	@Override
-	public TerminalNode getEpsilonNode(int inputIndex) {
-		return getTerminalSymbolNode(Epsilon.TOKEN_ID, inputIndex, 0);
 	}
 	
 	@Override

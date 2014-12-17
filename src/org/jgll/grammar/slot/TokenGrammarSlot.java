@@ -54,8 +54,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 
 		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length))) 
 			return null;
-		
-		TerminalNode cr = parser.getTerminalNode(slot, ci, ci + length);
+	
+		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, ci, ci + length);
 		
 		NonPackedNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		
