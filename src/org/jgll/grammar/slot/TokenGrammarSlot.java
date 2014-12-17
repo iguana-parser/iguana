@@ -57,6 +57,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	
 		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, ci, ci + length);
 		
+		parser.setCurrentInputIndex(ci + length);
+		
 		NonPackedNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		
 		parser.setCurrentSPPFNode(node);
@@ -101,7 +103,8 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 		writer.println("    return L0;");
 		writer.println("  }");
 		writer.println("  if (slot" + registry.getId(this) + ".getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, cu, ci + length))) return L0;");
-		writer.println("  NonPackedNode cr = getTerminalNode(slot" + registry.getId(slot) + ", ci, ci + length);");
+		writer.println("  NonPackedNode cr = sppfLookup.getTerminalNode(slot" + registry.getId(slot) + ", ci, ci + length);");
+		writer.println("  ci = ci + length;");
 		writer.println("  cn = slot" + registry.getId(this) + ".getNodeCreator().create(this, slot" + registry.getId(next) + ", cn, cr);");
 		writer.println("  return L0;");
 		writer.println("}");

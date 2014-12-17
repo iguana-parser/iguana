@@ -52,6 +52,8 @@ public interface GLLParser {
 	
 	public void setCurrentSPPFNode(NonPackedNode node);
 	
+	public void setCurrentInputIndex(int inputIndex);
+	
 	public void recordParseError(GrammarSlot slot);
 	
 	public GSSLookup getGSSLookup();

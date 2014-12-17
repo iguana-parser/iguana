@@ -58,27 +58,8 @@ public interface SPPFNode {
 		if(this.isAmbiguous() ^ node.isAmbiguous())
 			return false;
 		
-		// Packed nodes are not ordered, so we have to search
-		// through the packed nodes of the given node to match
-		// a packed node. This implementation may not be efficient for
-		// ambiguous nodes having many packed nodes.
 		if(this.isAmbiguous() && node.isAmbiguous()) {
-			Iterator<SPPFNode> thisIt = getChildren().iterator();
-
-			outer:
-			while(thisIt.hasNext()) {
-				SPPFNode thisChild = thisIt.next();
-				Iterator<SPPFNode> otherIt = node.getChildren().iterator();
-				while(otherIt.hasNext()) {
-					SPPFNode otherChild = otherIt.next();
-					if(thisChild.deepEquals(otherChild)) {
-						continue outer;
-					}
-				} 
-				return false;
-			}
-			
-			return true;
+			return compareAmbiguousNodes(this, node);
 		}
 		
 		Iterator<SPPFNode> thisIt = getChildren().iterator();
@@ -93,6 +74,32 @@ public interface SPPFNode {
 		}
 		
 		return true;
+	}
+	
+	
+	// Packed nodes are not ordered, so we have to search
+	// through the packed nodes of the given node to match
+	// a packed node. This implementation may not be efficient for
+	// ambiguous nodes having many packed nodes.
+	static boolean compareAmbiguousNodes(SPPFNode node1, SPPFNode node2) {
+		
+		Iterator<SPPFNode> thisIt = node1.getChildren().iterator();
+
+		outer:
+		while(thisIt.hasNext()) {
+			SPPFNode thisChild = thisIt.next();
+			Iterator<SPPFNode> otherIt = node2.getChildren().iterator();
+			while(otherIt.hasNext()) {
+				SPPFNode otherChild = otherIt.next();
+				if(thisChild.deepEquals(otherChild)) {
+					continue outer;
+				}
+			} 
+			return false;
+		}
+		
+		return true;
+		
 	}
 	
 }

@@ -297,6 +297,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return input;
 	}
 	
+	public void setCurrentInputIndex(int inputIndex) {
+		this.ci = inputIndex;
+	}
+	
 	@Override
 	public GrammarSlotRegistry getRegistry() {
 		return grammar.getRegistry();

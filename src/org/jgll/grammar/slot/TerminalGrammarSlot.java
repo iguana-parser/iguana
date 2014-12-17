@@ -82,5 +82,10 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	public TerminalGrammarSlot withId(int id) {
 		return new TerminalGrammarSlot(id, this);
 	}
+	
+	@Override
+	public String toString() {
+		return regex.toString();
+	}
 
 }
