@@ -10,6 +10,7 @@ import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.regex.RegularExpression;
 
@@ -24,7 +25,7 @@ import com.google.common.collect.HashBiMap;
  */
 public class GrammarSlotRegistry {
 
-	private AtomicInteger nextId = new AtomicInteger();
+	private AtomicInteger nextId = new AtomicInteger(1);
 	
 	private BiMap<GrammarSlot, Integer> ids = HashBiMap.create();
 	
@@ -55,6 +56,8 @@ public class GrammarSlotRegistry {
 		this.nonterminals = new HashMap<>(heads);
 		this.slots = new HashMap<>(slots);
 		this.terminals = new HashMap<>(terminals);
+		
+		ids.put(Epsilon.TOKEN_ID, 0);
 		
 		heads.values().stream().forEach(h -> ids.put(h, nextId.incrementAndGet()));
 		terminals.values().stream().forEach(t -> ids.put(t, nextId.incrementAndGet()));

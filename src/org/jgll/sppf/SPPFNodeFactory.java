@@ -18,7 +18,7 @@ public class SPPFNodeFactory {
 	}
 	
 	public TerminalNode createEpsilonNode(int inputIndex) {
-		return new TerminalNode(Epsilon.getInstance(), inputIndex, inputIndex);
+		return new TerminalNode(Epsilon.TOKEN_ID, inputIndex, inputIndex);
 	}
 	
 	public NonterminalNode createNonterminalNode(String s, int index, int leftExtent, int rightExtent) {
@@ -31,7 +31,7 @@ public class SPPFNodeFactory {
 	}
 	
 	public TerminalNode createTerminalNode(String s, int leftExtent, int rightExtent) {
-		return new TerminalNode(registry.getRegularExpression(s), leftExtent, rightExtent);
+		return new TerminalNode(registry.getTerminal(registry.getRegularExpression(s)), leftExtent, rightExtent);
 	}
 
 	public ListSymbolNode createListNode(String s, int index, int leftExtent, int rightExtent) {

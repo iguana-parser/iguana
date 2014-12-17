@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -21,7 +22,7 @@ public interface SPPFNode {
 
 	public int childrenCount();
 
-	public Object getGrammarSlot();
+	public GrammarSlot getGrammarSlot();
 
 	public int getLeftExtent();
 

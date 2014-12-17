@@ -41,7 +41,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 
 	@Override
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		final TerminalNode key = new TerminalNode(slot.getRegularExpression(), inputIndex, length);
+		final TerminalNode key = new TerminalNode(slot, inputIndex, length);
 		return tokenNodes.computeIfAbsent(key, k -> { 
 													  log.trace("Terminal node created: %s", key); 
 													  return key; 
@@ -50,7 +50,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	
 	@Override
 	public TerminalNode findTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int length) {
-		TerminalNode key = new TerminalNode(slot.getRegularExpression(), inputIndex, length);
+		TerminalNode key = new TerminalNode(slot, inputIndex, length);
 		return tokenNodes.get(key);
 	}
 

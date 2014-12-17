@@ -2,6 +2,8 @@ package org.jgll.sppf;
 
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
+
 
 public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
@@ -9,7 +11,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	
 	public abstract NonterminalOrIntermediateNode init();
 	
-	public NonterminalOrIntermediateNode(Object slot, int leftExtent, int rightExtent) {
+	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
 

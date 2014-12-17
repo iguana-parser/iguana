@@ -22,6 +22,7 @@ import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 import org.jgll.util.ToJavaCode;
+import org.jgll.util.Visualization;
 import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,7 +80,8 @@ public class Test13 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot()));
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", getSPPF(parser.getRegistry()), parser.getRegistry(), input);
+//		System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot()));
 		assertEquals(3, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}

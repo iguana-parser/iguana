@@ -1,8 +1,6 @@
 package org.jgll.util.visualization;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
@@ -12,11 +10,13 @@ import org.jgll.sppf.TerminalNode;
 
 public abstract class ToDot {
 	
-	private Map<SPPFNode, Integer> idsMap = new HashMap<>();
+	private GrammarSlotRegistry registry;
+	
+	public ToDot(GrammarSlotRegistry registry) {
+		this.registry = registry;
+	}
 	
 	protected String getId(SPPFNode node) {
-		
-		idsMap.putIfAbsent(node, idsMap.size());
 		
 		if(node instanceof NonterminalNode) {
 			return "nontermianl_" + getNodeId(node);
@@ -42,11 +42,11 @@ public abstract class ToDot {
 	}
 	
 	protected String getNodeId(SPPFNode node) {
-		return node.getGrammarSlot().toString() + "," + node.getLeftExtent() + "," + node.getRightExtent();
+		return registry.getId(node.getGrammarSlot()) + "_" + node.getLeftExtent() + "_" + node.getRightExtent();
 	}
 	
 	protected String getNodeId(PackedNode node) {
-		return idsMap.get(node) + "," + node.getPivot();
+		return getNodeId(node.getParent()) + "_" + registry.getId(node.getGrammarSlot()) + "_" + node.getPivot();
 	}
 	
 }

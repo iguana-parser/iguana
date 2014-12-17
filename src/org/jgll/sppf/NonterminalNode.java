@@ -2,7 +2,6 @@ package org.jgll.sppf;
 
 import java.util.ArrayList;
 
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -13,7 +12,7 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class NonterminalNode extends NonterminalOrIntermediateNode {
 	
-	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+	public NonterminalNode(HeadGrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
 	

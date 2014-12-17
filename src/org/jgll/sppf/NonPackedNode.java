@@ -1,5 +1,7 @@
 package org.jgll.sppf;
 
+import org.jgll.grammar.slot.GrammarSlot;
+
 
 /**
  * 
@@ -13,13 +15,13 @@ package org.jgll.sppf;
 
 public abstract class NonPackedNode implements SPPFNode {
 	
-	protected final Object slot;
+	protected final GrammarSlot slot;
 	
 	protected final int leftExtent;
 	
 	protected final int rightExtent;
 	
-	public NonPackedNode(Object slot, int leftExtent, int rightExtent) {
+	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		this.slot = slot;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;

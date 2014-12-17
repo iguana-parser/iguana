@@ -39,7 +39,7 @@ public class ToJavaCode implements SPPFVisitor {
 		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null)
 			return;
 		
-		if (node.getGrammarSlot() == Epsilon.getInstance()) {
+		if (node.getGrammarSlot() == Epsilon.TOKEN_ID) {
 			sb.append("TerminalNode node" + idsMap.get(node) + " = factory.createEpsilonNode(" + node.getLeftExtent() + ");\n");
 		} else {
 			sb.append("TerminalNode node" + idsMap.get(node) + " = factory.createTerminalNode(" +

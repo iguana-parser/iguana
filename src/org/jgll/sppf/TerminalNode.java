@@ -3,7 +3,7 @@ package org.jgll.sppf;
 import java.util.Collections;
 import java.util.List;
 
-import org.jgll.regex.RegularExpression;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -13,7 +13,7 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class TerminalNode extends NonPackedNode {
 	
-	public TerminalNode(RegularExpression slot, int leftExtent, int rightExtent) {
+	public TerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
 	
@@ -23,8 +23,8 @@ public class TerminalNode extends NonPackedNode {
 	}
 
 	@Override
-	public RegularExpression getGrammarSlot() {
-		return (RegularExpression) slot;
+	public TerminalGrammarSlot getGrammarSlot() {
+		return (TerminalGrammarSlot) slot;
 	}
 
 	@Override
