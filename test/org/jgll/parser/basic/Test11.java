@@ -59,7 +59,7 @@ public class Test11 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("bac");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());

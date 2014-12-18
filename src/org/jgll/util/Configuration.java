@@ -1,8 +1,13 @@
 package org.jgll.util;
 
+import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 public class Configuration {
+	
+	public static final Configuration DEFAULT = new Builder().setGSSType(GSSType.NEW)
+															 .setHashFunction(HashFunctions.primeMultiplication)
+															 .setLookupType(LookupType.MAP_DISTRIBUTED).build(); 
 	
 	private final GSSType gssType;
 	
@@ -36,6 +41,21 @@ public class Configuration {
 		
 		public Configuration build() {
 			return new Configuration(this);
+		}
+		
+		public Builder setGSSType(GSSType gssType) {
+			this.gssType = gssType;
+			return this;
+		}
+		
+		public Builder setHashFunction(HashFunction hashFunction) {
+			this.hashFunction = hashFunction;
+			return this;
+		}
+		
+		public Builder setLookupType(LookupType lookupType) {
+			this.lookupType = lookupType;
+			return this;
 		}
 	}
 	

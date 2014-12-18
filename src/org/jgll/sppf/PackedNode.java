@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -43,9 +42,12 @@ public class PackedNode implements SPPFNode {
 		if (!(obj instanceof PackedNode)) 
 			return false;
 		
-		PackedNode other = (PackedNode) obj;
-		
-		return  slot == other.slot && pivot == other.pivot;
+		return  SPPFUtil.getInstance().equals(this, (PackedNode) obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return SPPFUtil.getInstance().hash(this);
 	}
 	
 	public int getPivot() {
@@ -69,11 +71,6 @@ public class PackedNode implements SPPFNode {
 		children.remove(node);
 	}
 
-	@Override
-	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.hashCode(), pivot);
-	}
-	
 	@Override
 	public String toString() {
 		return String.format("(%s, %d)", slot, getPivot());

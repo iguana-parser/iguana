@@ -78,7 +78,7 @@ public class Test5 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("bc");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));

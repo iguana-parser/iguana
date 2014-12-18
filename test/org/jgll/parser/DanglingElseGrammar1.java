@@ -62,7 +62,7 @@ public class DanglingElseGrammar1 {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("aasbs");
-		parser = ParserFactory.newParser(grammar, input);
+		parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF1(parser.getRegistry())));
@@ -70,8 +70,7 @@ public class DanglingElseGrammar1 {
 	
 	@Test
 	public void test2() {
-		Input input = Input.fromString("aaaaasbsbsbs");
-		parser = ParserFactory.newParser(grammar, input);
+		parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(Input.fromString("aaaaasbsbsbs"), grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF2(parser.getRegistry())));

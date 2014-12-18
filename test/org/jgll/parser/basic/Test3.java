@@ -52,7 +52,7 @@ public class Test3 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("ab");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(grammar.toGrammarGraph().getRegistry())));

@@ -43,7 +43,7 @@ public class HiddenLeftRecursion {
 	@Test
 	public void test() {
 		Input input = Input.fromString("ba+a+a");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 	}

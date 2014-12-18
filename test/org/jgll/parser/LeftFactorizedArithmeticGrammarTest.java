@@ -80,7 +80,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a+a*a+a");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));

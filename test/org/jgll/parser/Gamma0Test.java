@@ -18,8 +18,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
-import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -80,10 +78,8 @@ public class Gamma0Test {
 	@Test
 	public void test() {
 		Input input = Input.fromString("aad");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
-//		Visualization.generateSPPFGraph("/Users/aliafroozeh/output",getSPPF(parser.getRegistry()), grammar.toGrammarGraph(), input);
-//		System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot()));
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}

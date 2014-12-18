@@ -85,7 +85,7 @@ public class PrecedenceTest9 {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("a,-a;a");
-		parser = ParserFactory.newParser(grammar, input);
+		parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());

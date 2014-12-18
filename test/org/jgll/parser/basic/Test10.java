@@ -51,7 +51,7 @@ public class Test10 {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		
@@ -71,7 +71,7 @@ public class Test10 {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 	}

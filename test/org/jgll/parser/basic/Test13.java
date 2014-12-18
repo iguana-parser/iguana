@@ -77,7 +77,7 @@ public class Test13 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
 		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), parser.getRegistry(), input);

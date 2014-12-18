@@ -90,7 +90,7 @@ public class PrecedenceTest5 {
 	@Test
 	public void testParsers() {
 		Input input = Input.fromString("xawz");
-		parser = ParserFactory.newParser(grammar, input);
+		parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
