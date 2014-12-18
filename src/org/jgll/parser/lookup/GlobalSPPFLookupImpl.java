@@ -6,15 +6,12 @@ import java.util.Map;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.SPPFUtil;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -33,7 +30,6 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	private int countAmbiguousNodes;
 
 	public GlobalSPPFLookupImpl() {
-		SPPFUtil.initGlobal(HashFunctions.defaulFunction);
 		nonterminalNodes = new HashMap<>();
 		intermediateNodes = new HashMap<>();
 		tokenNodes = new HashMap<>();
@@ -97,7 +93,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, SPPFNode leftChild, SPPFNode rightChild) {
+	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		PackedNode packedNode = new PackedNode(slot, pivot, parent);
 		boolean ambiguousBefore = parent.isAmbiguous();
 		if (((NonterminalOrIntermediateNode) parent).addPackedNode(packedNode, leftChild, rightChild)) {

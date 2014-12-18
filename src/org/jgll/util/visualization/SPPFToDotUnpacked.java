@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -183,7 +182,7 @@ public class SPPFToDotUnpacked extends ToDot {
 		return parseTrees;
 	}
 	
-	protected void addEdgesToChildren(SPPFNode node, Iterable<SPPFNode> children, StringBuilder sb) {
+	protected void addEdgesToChildren(SPPFNode node, Iterable<? extends SPPFNode> children, StringBuilder sb) {
 		for (SPPFNode child : children) {
 			addEdgeToChild(node, child, sb);
 		}

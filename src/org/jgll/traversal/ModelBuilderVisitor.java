@@ -70,22 +70,22 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				
 				Result<U> result;
 				
-				if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
-					CollapsibleNode lastChild = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
-					Object lastChildObject = getObject(lastChild);
-					listener.startNode((T) lastChildObject);
-					visitChildren(node, this);
-					removeCollapsibleNode(node);
-					result = listener.endNode((T) lastChildObject, getChildrenValues(node), 
-								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				} else {
-					listener.startNode(object);
-					visitChildren(node, this);
-					result = listener.endNode(object, getChildrenValues(node), 
-								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				}
+//				if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
+//					CollapsibleNode lastChild = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
+//					Object lastChildObject = getObject(lastChild);
+//					listener.startNode((T) lastChildObject);
+//					visitChildren(node, this);
+//					removeCollapsibleNode(node);
+//					result = listener.endNode((T) lastChildObject, getChildrenValues(node), 
+//								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+//				} else {
+//					listener.startNode(object);
+//					visitChildren(node, this);
+//					result = listener.endNode(object, getChildrenValues(node), 
+//								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+//				}
 
-				objects.put(node, result);
+//				objects.put(node, result);
 			}
 		}
 	}
@@ -103,15 +103,15 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	// They should be lifted, similar to intermediate nodes.
 	private Object getObject(CollapsibleNode node) {
 		
-		CollapsibleNode collapsibleNode = node;
-		if(collapsibleNode.childrenCount() > 0) {
-			while(collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1) instanceof CollapsibleNode) {
-				collapsibleNode = (CollapsibleNode) collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1);
-				if(collapsibleNode.childrenCount() == 0) {
-					break;
-				}
-			}			
-		}
+//		CollapsibleNode collapsibleNode = node;
+//		if(collapsibleNode.childrenCount() > 0) {
+//			while(collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1) instanceof CollapsibleNode) {
+//				collapsibleNode = (CollapsibleNode) collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1);
+//				if(collapsibleNode.childrenCount() == 0) {
+//					break;
+//				}
+//			}			
+//		}
 		
 		return getObject(node);
 	}
@@ -137,13 +137,13 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				removeCollapsibleNode(node);
 				
 				node.accept(this);
-				result = listener.endNode((T) object, getChildrenValues(node), input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				result = listener.endNode((T) object, getChildrenValues(node), input.getPositionInfo(node.getParent().getLeftExtent(), node.getParent().getRightExtent()));
 				objects.put(node, result);
 			} else {
 				T object = (T) getObject(nonterminalSymbolNode);
 				listener.startNode(object);
 				node.accept(this);
-				result = listener.endNode(object, getChildrenValues(node), input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				result = listener.endNode(object, getChildrenValues(node), input.getPositionInfo(node.getParent().getLeftExtent(), node.getParent().getRightExtent()));
 				objects.put(node, result);
 			}
 			
@@ -199,7 +199,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	
 	private Iterable<U> getChildrenValues(final SPPFNode node) {
 
-		final Iterator<SPPFNode> iterator = node.getChildren().iterator();
+		final Iterator<? extends SPPFNode> iterator = node.getChildren().iterator();
 
 		return new Iterable<U>() {
 

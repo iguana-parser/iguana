@@ -16,7 +16,7 @@ public interface SPPFNode {
 	
 	public SPPFNode getChildAt(int index);
 	
-	public List<SPPFNode> getChildren();
+	public List<? extends SPPFNode> getChildren();
 		
 	public boolean isAmbiguous();
 
@@ -24,10 +24,6 @@ public interface SPPFNode {
 
 	public GrammarSlot getGrammarSlot();
 
-	public int getLeftExtent();
-
-	public int getRightExtent();
-	
 	public void accept(SPPFVisitor visitAction);
 	
 	/**
@@ -63,9 +59,9 @@ public interface SPPFNode {
 			return compareAmbiguousNodes(this, node);
 		}
 		
-		Iterator<SPPFNode> thisIt = getChildren().iterator();
-		Iterator<SPPFNode> otherIt = node.getChildren().iterator();
-
+		Iterator<? extends SPPFNode> thisIt = getChildren().iterator();		
+		Iterator<? extends SPPFNode> otherIt = node.getChildren().iterator();
+		
 		while(thisIt.hasNext() && otherIt.hasNext()) {
 			SPPFNode thisChild = thisIt.next();
 			SPPFNode otherChild = otherIt.next();
@@ -84,12 +80,12 @@ public interface SPPFNode {
 	// ambiguous nodes having many packed nodes.
 	static boolean compareAmbiguousNodes(SPPFNode node1, SPPFNode node2) {
 		
-		Iterator<SPPFNode> thisIt = node1.getChildren().iterator();
+		Iterator<? extends SPPFNode> thisIt = node1.getChildren().iterator();
 
 		outer:
 		while(thisIt.hasNext()) {
 			SPPFNode thisChild = thisIt.next();
-			Iterator<SPPFNode> otherIt = node2.getChildren().iterator();
+			Iterator<? extends SPPFNode> otherIt = node2.getChildren().iterator();
 			while(otherIt.hasNext()) {
 				SPPFNode otherChild = otherIt.next();
 				if(thisChild.deepEquals(otherChild)) {

@@ -6,6 +6,7 @@ import java.util.List;
 import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
@@ -47,41 +48,41 @@ public class SPPFVisitorUtil {
 	 *       
 	 */
 	public static void removeIntermediateNode(NonterminalNode node) {
-		if(node.getChildAt(0) instanceof IntermediateNode) {
-			
-			IntermediateNode intermediateNode = (IntermediateNode) node.getChildAt(0);
-
-			if(intermediateNode.isAmbiguous()) {
-				List<SPPFNode> restOfChildren = new ArrayList<>();
-
-				node.removeChild(intermediateNode);
-
-				while(node.childrenCount() > 0) {
-					restOfChildren.add(node.getChildAt(0));
-					node.removeChild(node.getChildAt(0));
-				}
-
-				for(SPPFNode child : intermediateNode.getChildren()) {
-					// For each packed node of the intermediate node create a new packed node
-					PackedNode pn = (PackedNode) child;
-					PackedNode newPackedNode = null; //new PackedNode(node.getFirstPackedNodeGrammarSlot(), node.childrenCount(), node);
-					for(SPPFNode sn : pn.getChildren()) {
-						newPackedNode.addChild(sn);					
-					}
-
-					for(SPPFNode c : restOfChildren) {
-						newPackedNode.addChild(c);
-					}
-
-					node.addChild(newPackedNode);
-					removeIntermediateNode(newPackedNode);
-				}
-
-			} else {
-				node.replaceWithChildren(intermediateNode);
-				removeIntermediateNode(node);
-			}
-		}
+		
+//		if(node.getChildAt(0) instanceof IntermediateNode) {
+//			
+//			IntermediateNode intermediateNode = (IntermediateNode) node.getChildAt(0);
+//
+//			if(intermediateNode.isAmbiguous()) {
+//				List<NonPackedNode> restOfChildren = new ArrayList<>();
+//
+//				node.removeChild(intermediateNode);
+//
+//				while(node.childrenCount() > 0) {
+//					restOfChildren.add(node.getChildAt(0));
+//					node.removeChild(node.getChildAt(0));
+//				}
+//
+//				for(PackedNode child : intermediateNode.getChildren()) {
+//					// For each packed node of the intermediate node create a new packed node
+//					PackedNode newPackedNode = null; //new PackedNode(node.getFirstPackedNodeGrammarSlot(), node.childrenCount(), node);
+//					for(NonPackedNode sn : child.getChildren()) {
+//						newPackedNode.addChild(sn);					
+//					}
+//
+//					for(NonPackedNode c : restOfChildren) {
+//						newPackedNode.addChild(c);
+//					}
+//
+//					node.addChild(newPackedNode);
+//					removeIntermediateNode(newPackedNode);
+//				}
+//
+//			} else {
+//				node.replaceWithChildren(intermediateNode);
+//				removeIntermediateNode(node);
+//			}
+//		}
 	}
 
 
@@ -117,54 +118,54 @@ public class SPPFVisitorUtil {
 	 * 
 	 */
 	public static void removeIntermediateNode(PackedNode parent) {
-		if(parent.getChildAt(0) instanceof IntermediateNode) {
-
-			IntermediateNode intermediateNode = (IntermediateNode) parent.getChildAt(0);
-
-			if(intermediateNode.isAmbiguous()) {
-				NonterminalOrIntermediateNode parentOfPackedNode = (NonterminalOrIntermediateNode) parent.getParent();
-
-				List<SPPFNode> restOfChildren = new ArrayList<>();
-
-				parentOfPackedNode.removeChild(parent);
-				parent.removeChild(intermediateNode);
-
-				for(SPPFNode sn : parent.getChildren()) {
-					restOfChildren.add(sn);
-				}
-
-				for(SPPFNode child : intermediateNode.getChildren()) {
-					// For each packed node of the intermediate node create a new packed node
-					PackedNode pn = (PackedNode) child;
-					PackedNode newPackedNode = null; //new PackedNode(parentOfPackedNode.getFirstPackedNodeGrammarSlot(), parentOfPackedNode.childrenCount(), parentOfPackedNode);
-					for(SPPFNode sn : pn.getChildren()) {
-						newPackedNode.addChild(sn);					
-					}
-
-					for(SPPFNode c : restOfChildren) {
-						newPackedNode.addChild(c);
-					}
-
-					parentOfPackedNode.addChild(newPackedNode);
-					removeIntermediateNode(newPackedNode);
-				}
-
-			} else {
-				parent.replaceWithChildren(intermediateNode);
-				removeIntermediateNode(parent);
-			}
-		}
+//		if(parent.getChildAt(0) instanceof IntermediateNode) {
+//
+//			IntermediateNode intermediateNode = (IntermediateNode) parent.getChildAt(0);
+//
+//			if(intermediateNode.isAmbiguous()) {
+//				NonterminalOrIntermediateNode parentOfPackedNode = (NonterminalOrIntermediateNode) parent.getParent();
+//
+//				List<SPPFNode> restOfChildren = new ArrayList<>();
+//
+//				parentOfPackedNode.removeChild(parent);
+//				parent.removeChild(intermediateNode);
+//
+//				for(SPPFNode sn : parent.getChildren()) {
+//					restOfChildren.add(sn);
+//				}
+//
+//				for(SPPFNode child : intermediateNode.getChildren()) {
+//					// For each packed node of the intermediate node create a new packed node
+//					PackedNode pn = (PackedNode) child;
+//					PackedNode newPackedNode = null; //new PackedNode(parentOfPackedNode.getFirstPackedNodeGrammarSlot(), parentOfPackedNode.childrenCount(), parentOfPackedNode);
+//					for(SPPFNode sn : pn.getChildren()) {
+//						newPackedNode.addChild(sn);					
+//					}
+//
+//					for(SPPFNode c : restOfChildren) {
+//						newPackedNode.addChild(c);
+//					}
+//
+//					parentOfPackedNode.addChild(newPackedNode);
+//					removeIntermediateNode(newPackedNode);
+//				}
+//
+//			} else {
+//				parent.replaceWithChildren(intermediateNode);
+//				removeIntermediateNode(parent);
+//			}
+//		}
 	}
 
 	public static void removeListSymbolNode(ListSymbolNode node) {
-		if(!node.isAmbiguous()) {
-			removeIntermediateNode(node);
-			if(node.getChildAt(0) instanceof ListSymbolNode) {
-				ListSymbolNode child = (ListSymbolNode) node.getChildAt(0);
-				node.replaceWithChildren(child);
-				removeListSymbolNode(node);
-			}
-		}
+//		if(!node.isAmbiguous()) {
+//			removeIntermediateNode(node);
+//			if(node.getChildAt(0) instanceof ListSymbolNode) {
+//				ListSymbolNode child = (ListSymbolNode) node.getChildAt(0);
+//				node.replaceWithChildren(child);
+//				removeListSymbolNode(node);
+//			}
+//		}
 	}
 	
 	public static void removeCollapsibleNode(NonterminalNode node) {
@@ -174,26 +175,26 @@ public class SPPFVisitorUtil {
 			return;
 		}
 		
-		if(!node.isAmbiguous()) {
-			if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
-				CollapsibleNode child = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
-				removeIntermediateNode(child);
-				node.replaceWithChildren(child);
-				
-				// Push the saved object to the parent.
-//				LastGrammarSlot slot = (LastGrammarSlot) node.getFirstPackedNodeGrammarSlot();
-//				slot.setObject(((LastGrammarSlot)child.getFirstPackedNodeGrammarSlot()).getObject());
-				
-				removeCollapsibleNode(node);
-			}
-		}
+//		if(!node.isAmbiguous()) {
+//			if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
+//				CollapsibleNode child = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
+//				removeIntermediateNode(child);
+//				node.replaceWithChildren(child);
+//				
+//				// Push the saved object to the parent.
+////				LastGrammarSlot slot = (LastGrammarSlot) node.getFirstPackedNodeGrammarSlot();
+////				slot.setObject(((LastGrammarSlot)child.getFirstPackedNodeGrammarSlot()).getObject());
+//				
+//				removeCollapsibleNode(node);
+//			}
+//		}
 	}
 	
 	public static void removeCollapsibleNode(PackedNode node) {
 		if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
 			CollapsibleNode child = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
 			removeIntermediateNode(child);
-			node.replaceWithChildren(child);		
+//			node.replaceWithChildren(child);		
 			
 //			LastGrammarSlot slot = (LastGrammarSlot) child.getFirstPackedNodeGrammarSlot();
 //			((LastGrammarSlot)node.getGrammarSlot()).setObject(slot.getObject());
@@ -206,7 +207,7 @@ public class SPPFVisitorUtil {
 		removeIntermediateNode(node);
 		if(node.getChildAt(0) instanceof ListSymbolNode) {
 			ListSymbolNode child = (ListSymbolNode) node.getChildAt(0);
-			node.replaceWithChildren(child);
+//			node.replaceWithChildren(child);
 			removeListSymbolNode(node);
 		}
 	}

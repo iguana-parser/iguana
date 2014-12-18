@@ -16,9 +16,10 @@ public abstract class ToDot {
 	protected String getId(SPPFNode node) {
 		
 		if (node instanceof NonPackedNode) {
-			return registry.getId(node.getGrammarSlot()) + "_" + node.getLeftExtent() + "_" + node.getRightExtent();
+			NonPackedNode nonPackedNode = (NonPackedNode) node;
+			return registry.getId(node.getGrammarSlot()) + "_" + nonPackedNode.getLeftExtent() + "_" + nonPackedNode.getRightExtent();
 		} else {			
-			PackedNode packedNode = (PackedNode)node;
+			PackedNode packedNode = (PackedNode) node;
 			return  getId(packedNode.getParent())  + "_" + registry.getId(packedNode.getGrammarSlot()) + "_" + packedNode.getPivot();			
 		}
 	}

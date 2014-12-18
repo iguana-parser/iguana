@@ -7,7 +7,7 @@ import org.jgll.grammar.slot.GrammarSlot;
 
 public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
-	protected List<SPPFNode> children;
+	protected List<PackedNode> children;
 	
 	public abstract NonterminalOrIntermediateNode init();
 	
@@ -15,7 +15,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 		super(slot, leftExtent, rightExtent);
 	}
 
-	public void addChild(SPPFNode node) {
+	public void addChild(PackedNode node) {
 		//TODO: change it! PackedNodes cannot be added via this method at parse time.
 		children.add(node);
 	}
@@ -24,22 +24,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 		children.remove(node);
 	}
 	
-	/**
-	 * Replaces the given node with its children.
-	 * If this does node have the given node as child,
-	 * nothing will happen.  
-	 */
-	public void replaceWithChildren(SPPFNode node) {
-		int index = children.indexOf(node);
-		children.remove(node);
-		if(index >= 0) {
-			for(SPPFNode child : node.getChildren()) {
-				children.add(index++, child);				
-			}
-		}
-	}
-	
-	public boolean addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
+	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
 		children.add(attachChildren(packedNode, leftChild, rightChild));
 		return true;
 	}
@@ -48,7 +33,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	 * Attaches the given left and right children to the given packed node.
 	 *  
 	 */
-	protected PackedNode attachChildren(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
+	protected PackedNode attachChildren(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
 		
 		if (leftChild != DummyNode.getInstance())
 			packedNode.addChild(leftChild);
@@ -60,12 +45,12 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	}
 	
 	@Override
-	public SPPFNode getChildAt(int index) {
+	public PackedNode getChildAt(int index) {
 		return index < children.size() ? children.get(index) : null;
 	}
 	
 	@Override
-	public List<SPPFNode> getChildren() {
+	public List<PackedNode> getChildren() {
 		return children;
 	}
 	

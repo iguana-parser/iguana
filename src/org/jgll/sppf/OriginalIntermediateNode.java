@@ -21,7 +21,7 @@ public class OriginalIntermediateNode extends IntermediateNode {
 	}
 	
 	@Override
-	public boolean addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
+	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
 		PackedNode newPackedNode = attachChildren(packedNode, leftChild, rightChild);
 		if (!packedNodes.contains(newPackedNode)) {
 			children.add(newPackedNode);

@@ -20,9 +20,9 @@ public class PackedNode implements SPPFNode {
 
 	private final int pivot;
 
-	private final SPPFNode parent;
+	private final NonPackedNode parent;
 	
-	private List<SPPFNode> children;
+	private List<NonPackedNode> children;
 	
 	public PackedNode(BodyGrammarSlot slot, int pivot, NonPackedNode parent) {
 		assert slot != null;
@@ -57,26 +57,16 @@ public class PackedNode implements SPPFNode {
 		return slot;
 	}
 	
-	public SPPFNode getParent() {
+	public NonPackedNode getParent() {
 		return parent;
 	}
 	
-	public void addChild(SPPFNode node) {
+	public void addChild(NonPackedNode node) {
 		children.add(node);
 	}
 
 	public void removeChild(SPPFNode node) {
 		children.remove(node);
-	}
-	
-	public void replaceWithChildren(SPPFNode node) {
-		int index = children.indexOf(node);
-		children.remove(node);
-		if(index >= 0) {
-			for(SPPFNode child : node.getChildren()) {
-				children.add(index++, child);				
-			}
-		}
 	}
 
 	@Override
@@ -89,16 +79,6 @@ public class PackedNode implements SPPFNode {
 		return String.format("(%s, %d)", slot, getPivot());
 	}
 	
-	@Override
-	public int getLeftExtent() {
-		return parent.getLeftExtent();
-	}
-
-	@Override
-	public int getRightExtent() {
-		return parent.getRightExtent();
-	}
-
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
@@ -118,13 +98,23 @@ public class PackedNode implements SPPFNode {
 	}
 
 	@Override
-	public List<SPPFNode> getChildren() {
+	public List<NonPackedNode> getChildren() {
 		return children;
 	}
 
 	@Override
 	public boolean isAmbiguous() {
 		return false;
+	}
+	
+	@FunctionalInterface
+	public static interface PackedNodeEquals {
+		public boolean equals(NonPackedNode node, NonPackedNode other);
+	}
+	
+	@FunctionalInterface
+	public static interface NonPackedNodeHash {
+	  public int hash(NonPackedNode node);
 	}
 
 }

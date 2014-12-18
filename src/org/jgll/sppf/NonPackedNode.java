@@ -27,12 +27,10 @@ public abstract class NonPackedNode implements SPPFNode {
 		this.rightExtent = rightExtent;
 	}
 
-	@Override
 	public int getLeftExtent() {
 		return leftExtent;
 	}
 	
-	@Override
 	public int getRightExtent() {
 		return rightExtent;
 	}
@@ -43,10 +41,10 @@ public abstract class NonPackedNode implements SPPFNode {
 		if(this == obj) 
 			return true;
 		
-		if (!(obj instanceof SPPFNode)) 
+		if (!(obj instanceof NonPackedNode)) 
 			return false;
 		
-		return SPPFUtil.getInstance().equals(this, (SPPFNode) obj);
+		return SPPFUtil.getInstance().equals(this, (NonPackedNode) obj);
 	}
 
 	@Override
@@ -59,13 +57,4 @@ public abstract class NonPackedNode implements SPPFNode {
 		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getRightExtent());
 	}
 	
-	@FunctionalInterface
-	public static interface Equals {
-		public boolean equals(SPPFNode node, SPPFNode other);
-	}
-	
-	@FunctionalInterface
-	public static interface Hash {
-	  public int hash(SPPFNode node);
-	}
 }
