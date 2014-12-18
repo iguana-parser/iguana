@@ -68,7 +68,8 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public void visit(IntermediateNode node) {
 		
-		if (idsMap.put(node, id.getAndIncrement()) != null) return;
+		if (idsMap.put(node, id.getAndIncrement()) != null) 
+			return;
 		
 		sb.append("IntermediateNode node" + idsMap.get(node) + " = factory.createIntermediateNode(" +
 				  "\"" + escape(node.getGrammarSlot().toString()) + "\", " + 
@@ -83,10 +84,7 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public void visit(PackedNode node) {
 		
-		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null)
-			return;
-
-		sb.append("PackedNode node" + idsMap.get(node) + " = factory.createPackedNode(" +
+		sb.append("PackedNode node" + id.getAndIncrement() + " = factory.createPackedNode(" +
 				  "\"" + escape(node.getGrammarSlot().toString()) + "\", " + 
 				  node.getPivot() + ", " + "node" + idsMap.get(node.getParent()) + ");\n");				
 		

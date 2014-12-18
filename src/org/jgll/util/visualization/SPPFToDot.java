@@ -8,6 +8,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -33,7 +34,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	protected Input input;
 	
-	protected Set<SPPFNode> visited = new HashSet<>();
+	protected Set<NonPackedNode> visited = new HashSet<>();
 
 	public SPPFToDot(GrammarSlotRegistry registry, Input input) {
 		this(input, registry, false);
@@ -48,6 +49,7 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(TerminalNode node) {
+		
 		if(!visited.contains(node)) {
 			visited.add(node);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
@@ -92,18 +94,14 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(PackedNode node) {
-		if(!visited.contains(node)) {
-			visited.add(node);
-			
-			if(showPackedNodeLabel) {
-				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
-			} else {
-				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
-			}
-			addEdgesToChildren(node);
-			
-			SPPFVisitorUtil.visitChildren(node, this);
+		if(showPackedNodeLabel) {
+			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
+		} else {
+			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 		}
+		addEdgesToChildren(node);
+		
+		SPPFVisitorUtil.visitChildren(node, this);
 	}
 	
 	protected void addEdgesToChildren(SPPFNode node) {
@@ -113,6 +111,13 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	}
 	
 	protected void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
+		
+		if (childNode instanceof PackedNode) {
+			if(!((PackedNode) childNode).getParent().equals(parentNode)) {
+				System.out.println("WTF?!");
+			}
+		}
+		
 		sb.append(EDGE + "\"" + getId(parentNode) + "\"" + "->" + "{\"" + getId(childNode) + "\"}" + "\n");
 	}
 	

@@ -25,7 +25,6 @@ public class PackedNode implements SPPFNode {
 	private List<SPPFNode> children;
 	
 	public PackedNode(BodyGrammarSlot slot, int pivot, NonPackedNode parent) {
-		
 		assert slot != null;
 		assert pivot >= 0;
 		assert parent != null;

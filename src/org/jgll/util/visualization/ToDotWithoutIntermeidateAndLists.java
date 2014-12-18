@@ -41,18 +41,14 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 	public void visit(PackedNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);
 		
-		if(!visited.contains(node)) {
-			visited.add(node);
+		sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 	
-			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 		
-			
-			for(SPPFNode child : node.getChildren()) {
-				String label = child.getGrammarSlot().toString();
-				if(!label.startsWith("layout")) {
-				  addEdgeToChild(node, child);
-				  child.accept(this);
-				}
+		for(SPPFNode child : node.getChildren()) {
+			String label = child.getGrammarSlot().toString();
+			if(!label.startsWith("layout")) {
+			  addEdgeToChild(node, child);
+			  child.accept(this);
 			}
 		}
 	}

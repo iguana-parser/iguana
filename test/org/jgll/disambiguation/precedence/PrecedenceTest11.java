@@ -105,7 +105,6 @@ public class PrecedenceTest11 {
 		assertTrue(result.isParseSuccess());
 //		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 //		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF()));
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammar.toGrammarGraph(), input);
 	}	
 
 }

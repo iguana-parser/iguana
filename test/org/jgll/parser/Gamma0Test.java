@@ -82,7 +82,7 @@ public class Gamma0Test {
 		Input input = Input.fromString("aad");
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output",getSPPF(parser.getRegistry()), grammar.toGrammarGraph(), input);
+//		Visualization.generateSPPFGraph("/Users/aliafroozeh/output",getSPPF(parser.getRegistry()), grammar.toGrammarGraph(), input);
 //		System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot()));
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));

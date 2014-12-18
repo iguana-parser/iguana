@@ -40,8 +40,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	}
 	
 	public boolean addPackedNode(PackedNode packedNode, SPPFNode leftChild, SPPFNode rightChild) {
-		PackedNode newPackedNode = attachChildren(packedNode, leftChild, rightChild);
-		children.add(newPackedNode);
+		children.add(attachChildren(packedNode, leftChild, rightChild));
 		return true;
 	}
 	

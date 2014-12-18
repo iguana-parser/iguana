@@ -50,28 +50,23 @@ public class ToDotWithoutIntermediateNodes extends SPPFToDot {
 	
 	@Override
 	public void visit(PackedNode node) {
-
-		if(!visited.contains(node)) {
-			visited.add(node);
-			
-			if(node.isAmbiguous()) {
-				int i = 0;
-				while(i < node.childrenCount()) {
-					SPPFVisitorUtil.removeIntermediateNode((PackedNode) node.getChildAt(i));
-					i++;
-				}
-			} else {
-				SPPFVisitorUtil.removeIntermediateNode(node);
+		if(node.isAmbiguous()) {
+			int i = 0;
+			while(i < node.childrenCount()) {
+				SPPFVisitorUtil.removeIntermediateNode((PackedNode) node.getChildAt(i));
+				i++;
 			}
-	
-			if(showPackedNodeLabel) {
-				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
-			} else {
-				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
-			}
-			addEdgesToChildren(node);
-			
-			SPPFVisitorUtil.visitChildren(node, this);
+		} else {
+			SPPFVisitorUtil.removeIntermediateNode(node);
 		}
+
+		if(showPackedNodeLabel) {
+			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
+		} else {
+			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
+		}
+		addEdgesToChildren(node);
+		
+		SPPFVisitorUtil.visitChildren(node, this);
 	}
 }

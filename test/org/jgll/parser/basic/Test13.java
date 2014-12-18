@@ -80,8 +80,8 @@ public class Test13 {
 		GLLParser parser = ParserFactory.newParser(grammar, input);
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", getSPPF(parser.getRegistry()), parser.getRegistry(), input);
-//		System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot()));
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), parser.getRegistry(), input);
+		System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot()));
 		assertEquals(3, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}

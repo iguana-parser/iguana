@@ -265,7 +265,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		if (!visited.contains(node)) {
 			visited.add(node);
 			
-			RegularExpression regex = node.getGrammarSlot();
+			RegularExpression regex = node.getGrammarSlot().getRegularExpression();
 			
 			if (regex instanceof Sequence) {
 				Sequence<CharacterClass> sequence = (Sequence<CharacterClass>) regex;

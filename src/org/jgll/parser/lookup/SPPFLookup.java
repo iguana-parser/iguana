@@ -14,11 +14,11 @@ public interface SPPFLookup {
 
 	/**
 	 * @param terminal
-	 * @param inputIndex
-	 * @param length
+	 * @param leftExtent
+	 * @param rightExtent
 	 * @return
 	 */
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
+	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	
 	default TerminalNode getEpsilonNode(int inputIndex) {
@@ -28,11 +28,11 @@ public interface SPPFLookup {
 	/**
 	 * 
 	 * @param tokenID
-	 * @param inputIndex
-	 * @param length
+	 * @param leftExtent
+	 * @param rightExtent
 	 * @return
 	 */
-	public TerminalNode findTerminalSymbolNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent);
+	public TerminalNode findTerminalSymbolNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	/**
 	 * 
