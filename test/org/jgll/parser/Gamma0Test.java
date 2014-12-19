@@ -80,6 +80,7 @@ public class Gamma0Test {
 		Input input = Input.fromString("aad");
 		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		assertEquals(1, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
@@ -112,8 +113,25 @@ public class Gamma0Test {
 		node4.addChild(node5);
 		node2.addChild(node3);
 		node2.addChild(node4);
+		PackedNode node15 = factory.createPackedNode("S ::= A S d .", 2, node1);
+		IntermediateNode node16 = factory.createIntermediateNode("S ::= A S . d", 0, 2).init();
+		PackedNode node17 = factory.createPackedNode("S ::= A S . d", 1, node16);
+		NonterminalNode node18 = factory.createNonterminalNode("A", 0, 0, 1).init();
+		PackedNode node19 = factory.createPackedNode("A ::= a .", 0, node18);
+		node19.addChild(node3);
+		node18.addChild(node19);
+		NonterminalNode node21 = factory.createNonterminalNode("S", 0, 1, 2).init();
+		PackedNode node22 = factory.createPackedNode("S ::= a S .", 2, node21);
+		node22.addChild(node10);
+		node22.addChild(node11);
+		node21.addChild(node22);
+		node17.addChild(node18);
+		node17.addChild(node21);
+		node16.addChild(node17);
+		node15.addChild(node16);
+		node15.addChild(node14);
 		node1.addChild(node2);
-		node1.addChild(node5);
+		node1.addChild(node15);
 		return node1;
 	}
 	
