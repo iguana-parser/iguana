@@ -13,9 +13,7 @@ import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.IntermediateNodeIds;
 import org.jgll.grammar.slot.LastGrammarSlot;
-import org.jgll.grammar.slot.OriginalIntermediateNodeIds;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
@@ -46,12 +44,11 @@ public class GrammarGraphBuilder implements Serializable {
 	private GrammarSlotFactory grammarSlotFactory;
 	
 	public GrammarGraphBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
-		this("no-name", grammar, grammarSlotFactory, new OriginalIntermediateNodeIds(grammar));
+		this("no-name", grammar, grammarSlotFactory);
 	}
 	
 	public GrammarGraphBuilder(String name, Grammar grammar, 
-							   GrammarSlotFactory grammarSlotFactory,
-							   IntermediateNodeIds intermediateNodeIds) {
+							   GrammarSlotFactory grammarSlotFactory) {
 		this.name = name;
 		this.grammarSlotFactory = grammarSlotFactory;
 		this.grammar = grammar;
