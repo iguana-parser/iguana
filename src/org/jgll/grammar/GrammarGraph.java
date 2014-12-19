@@ -92,6 +92,7 @@ public class GrammarGraph implements Serializable {
 		writer.println("import com.google.common.collect.Sets;");
 		writer.println("import static org.jgll.grammar.condition.ConditionType.*;");
 		writer.println("import static org.jgll.util.CollectionsUtil.*;");
+		writer.println("import org.jgll.util.*;");
 		writer.println("import org.jgll.grammar.GrammarSlotRegistry;");
 		writer.println();
 
@@ -144,6 +145,7 @@ public class GrammarGraph implements Serializable {
 		// Constructor
 		writer.println("public " + className + "() {");
 		writer.println("  super(new DistributedGSSLookupFactory(), new NewSPPFLookupFactory(), new DefaultDescriptorLookupFactory());");
+		writer.println("  SPPFUtil.init(Configuration.DEFAULT);");
 		writer.println("  initHeadGrammarSlots();");
 		writer.println("  initTerminalGrammarSlots();");
 		

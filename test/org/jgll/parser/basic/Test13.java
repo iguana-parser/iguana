@@ -21,8 +21,6 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.ToJavaCode;
-import org.jgll.util.Visualization;
 import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,8 +78,6 @@ public class Test13 {
 		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), parser.getRegistry(), input);
-		System.out.println(ToJavaCode.toJavaCode(result.asParseSuccess().getRoot()));
 		assertEquals(3, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
@@ -168,7 +164,7 @@ public class Test13 {
 		PackedNode node41 = factory.createPackedNode("C ::= .", 0, node40);
 		node41.addChild(node16);
 		node40.addChild(node41);
-		node38.addChild(node39);
+		node38.addChild(node24);
 		node38.addChild(node40);
 		node37.addChild(node38);
 		NonterminalNode node43 = factory.createNonterminalNode("D", 0, 0, 1).init();

@@ -71,7 +71,7 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public void visit(IntermediateNode node) {
 		
-		if (idsMap.put(node, id.getAndIncrement()) != null) 
+		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null) 
 			return;
 		
 		sb.append("IntermediateNode node" + idsMap.get(node) + " = factory.createIntermediateNode(" +
@@ -102,7 +102,7 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public void visit(ListSymbolNode node) {
 
-		if (idsMap.put(node, id.getAndIncrement()) != null) return;
+		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null) return;
 		
 		sb.append("ListSymbolNode node" + idsMap.get(node) + " = factory.createListNode(" +
 				  "\"" + node.getGrammarSlot().toString() + "\", " +
