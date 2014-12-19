@@ -7,7 +7,6 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalNode;
 
 public interface SPPFLookup {

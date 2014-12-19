@@ -7,7 +7,7 @@ public class Configuration {
 	
 	public static final Configuration DEFAULT = new Builder().setGSSType(GSSType.NEW)
 															 .setHashFunction(HashFunctions.primeMultiplication)
-															 .setLookupType(LookupType.MAP_DISTRIBUTED).build(); 
+															 .setLookupType(LookupType.MAP_GLOBAL).build(); 
 	
 	private final GSSType gssType;
 	

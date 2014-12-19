@@ -1,5 +1,7 @@
 package org.jgll.sppf;
 
+import java.util.List;
+
 import org.jgll.grammar.slot.GrammarSlot;
 
 
@@ -56,5 +58,7 @@ public abstract class NonPackedNode implements SPPFNode {
 	public String toString() {
 		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getRightExtent());
 	}
+	
+	public abstract List<PackedNode> getChildren();
 	
 }

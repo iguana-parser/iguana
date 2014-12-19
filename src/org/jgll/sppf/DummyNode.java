@@ -45,7 +45,7 @@ public class DummyNode extends NonPackedNode {
 	}
 
 	@Override
-	public List<SPPFNode> getChildren() {
+	public List<PackedNode> getChildren() {
 		return Collections.emptyList();
 	}
 

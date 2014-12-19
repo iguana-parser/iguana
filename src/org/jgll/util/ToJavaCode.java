@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -19,7 +20,9 @@ public class ToJavaCode implements SPPFVisitor {
 	
 	private AtomicInteger id = new AtomicInteger(1);
 	
-	private Map<SPPFNode, Integer> idsMap = new HashMap<>();
+	private Map<NonPackedNode, Integer> idsMap = new HashMap<>();
+	
+	private Map<NonPackedNode, Map<PackedNode, Integer>> packedNodeIds = new HashMap<>();
 	
 	private StringBuilder sb = new StringBuilder();
 
@@ -84,7 +87,10 @@ public class ToJavaCode implements SPPFVisitor {
 	@Override
 	public void visit(PackedNode node) {
 		
-		sb.append("PackedNode node" + id.getAndIncrement() + " = factory.createPackedNode(" +
+		Map<PackedNode, Integer> map = packedNodeIds.computeIfAbsent(node.getParent(), k -> new HashMap<>() );
+		map.put(node, id.getAndIncrement());
+		
+		sb.append("PackedNode node" + packedNodeIds.get(node.getParent()).get(node) + " = factory.createPackedNode(" +
 				  "\"" + escape(node.getGrammarSlot().toString()) + "\", " + 
 				  node.getPivot() + ", " + "node" + idsMap.get(node.getParent()) + ");\n");				
 		
@@ -115,9 +121,15 @@ public class ToJavaCode implements SPPFVisitor {
 		}
 	}
 	
-	private void addChildren(SPPFNode node) {
-		for(SPPFNode child : node.getChildren()) {
-			sb.append("node" + idsMap.get(node) + ".addChild(" + "node" + idsMap.get(child) + ");\n");
+	private void addChildren(PackedNode node) {
+		for(NonPackedNode child : node.getChildren()) {
+			sb.append("node" + packedNodeIds.get(node.getParent()).get(node) + ".addChild(" + "node" + idsMap.get(child) + ");\n");
+		}
+	}
+	
+	private void addChildren(NonPackedNode node) {
+		for(PackedNode child : node.getChildren()) {
+			sb.append("node" + idsMap.get(node) + ".addChild(" + "node" + packedNodeIds.get(node).get(child)  + ");\n");
 		}
 	}
 	

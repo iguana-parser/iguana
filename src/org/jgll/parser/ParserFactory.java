@@ -32,7 +32,7 @@ public class ParserFactory {
 		
 		Configuration config = new Builder().setGSSType(GSSType.ORIGINAL)
 											.setHashFunction(HashFunctions.primeMultiplication)
-											.setLookupType(LookupType.MAP_DISTRIBUTED).build();
+											.setLookupType(LookupType.MAP_GLOBAL).build();
 		SPPFUtil.init(config);
 		GSSLookupFactory gssLookupFactory = new HashGSSLookupFactory();
 		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
