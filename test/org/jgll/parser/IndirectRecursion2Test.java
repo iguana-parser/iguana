@@ -72,24 +72,26 @@ public class IndirectRecursion2Test {
 	
 	private SPPFNode expectedSPPF(GrammarSlotRegistry registry) {		
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("A ::= B A d .", 1, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("A ::= B A . d", 0, 1).init();
 		PackedNode node4 = factory.createPackedNode("A ::= B A . d", 0, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0).init();
+		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 0).init();
 		PackedNode node6 = factory.createPackedNode("B ::= .", 0, node5);
+		TerminalNode node7 = factory.createEpsilonNode(0);
+		node6.addChild(node7);
 		node5.addChild(node6);
-		NonterminalNode node7 = factory.createNonterminalNode("A", 0, 1).init();
-		PackedNode node8 = factory.createPackedNode("A ::= a .", 0, node7);
-		TerminalNode node9 = factory.createTerminalNode("a", 0, 1);
+		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 0, 1).init();
+		PackedNode node9 = factory.createPackedNode("A ::= a .", 0, node8);
+		TerminalNode node10 = factory.createTerminalNode("a", 0, 1);
+		node9.addChild(node10);
 		node8.addChild(node9);
-		node7.addChild(node8);
 		node4.addChild(node5);
-		node4.addChild(node7);
+		node4.addChild(node8);
 		node3.addChild(node4);
-		TerminalNode node10 = factory.createTerminalNode("d", 1, 1);
+		TerminalNode node11 = factory.createTerminalNode("d", 1, 2);
 		node2.addChild(node3);
-		node2.addChild(node10);
+		node2.addChild(node11);
 		node1.addChild(node2);
 		return node1;
 	}
