@@ -3,7 +3,6 @@ package org.jgll.disambiguation.conditions;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarGraphBuilder;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.RegularExpressionCondition;
@@ -82,7 +81,6 @@ public class PrecedeRestrictionTest1 {
 	}
 
 	private SPPFNode getExpectedSPPF(GrammarSlotRegistry registry) {
-		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6).init();
 		PackedNode node2 = factory.createPackedNode("S ::= f o r a l l .", 0, node1);

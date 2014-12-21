@@ -58,7 +58,7 @@ public class ToJavaCode implements SPPFVisitor {
 			return;
 		
 		sb.append("NonterminalNode node" + idsMap.get(node) + " = factory.createNonterminalNode(" +
-				"\"" + node.getGrammarSlot().getNonterminal() + "\", " + 
+				"\"" + node.getGrammarSlot().getNonterminal().getName() + "\", " + 
 				node.getGrammarSlot().getNonterminal().getIndex() + ", " +
 				node.getLeftExtent() + ", " + 
 				node.getRightExtent() + ").init();\n");
@@ -105,8 +105,8 @@ public class ToJavaCode implements SPPFVisitor {
 		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null) return;
 		
 		sb.append("ListSymbolNode node" + idsMap.get(node) + " = factory.createListNode(" +
-				  "\"" + node.getGrammarSlot().toString() + "\", " +
-				  idsMap.get(node) + ", " +
+				  "\"" + node.getGrammarSlot().getNonterminal().getName() + "\", " +
+				  node.getGrammarSlot().getNonterminal().getIndex() + ", " +
 				  node.getLeftExtent() + ", " + 
 				  node.getRightExtent() + ").init();\n");
 		

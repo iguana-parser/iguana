@@ -99,7 +99,7 @@ public class PrecedenceTest0 {
 		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		TerminalNode node8 = factory.createTerminalNode("+", 1, 1);
+		TerminalNode node8 = factory.createTerminalNode("+", 1, 2);
 		node4.addChild(node5);
 		node4.addChild(node8);
 		node3.addChild(node4);
@@ -109,16 +109,16 @@ public class PrecedenceTest0 {
 		PackedNode node12 = factory.createPackedNode("E2 ::= E2 * . E1", 3, node11);
 		NonterminalNode node13 = factory.createNonterminalNode("E", 2, 2, 3).init();
 		PackedNode node14 = factory.createPackedNode("E2 ::= a .", 2, node13);
-		TerminalNode node15 = factory.createTerminalNode("a", 2, 1);
+		TerminalNode node15 = factory.createTerminalNode("a", 2, 3);
 		node14.addChild(node15);
 		node13.addChild(node14);
-		TerminalNode node16 = factory.createTerminalNode("*", 3, 1);
+		TerminalNode node16 = factory.createTerminalNode("*", 3, 4);
 		node12.addChild(node13);
 		node12.addChild(node16);
 		node11.addChild(node12);
 		NonterminalNode node17 = factory.createNonterminalNode("E", 1, 4, 5).init();
 		PackedNode node18 = factory.createPackedNode("E1 ::= a .", 4, node17);
-		TerminalNode node19 = factory.createTerminalNode("a", 4, 1);
+		TerminalNode node19 = factory.createTerminalNode("a", 4, 5);
 		node18.addChild(node19);
 		node17.addChild(node18);
 		node10.addChild(node11);
