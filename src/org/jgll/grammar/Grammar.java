@@ -236,6 +236,7 @@ public class Grammar implements Serializable {
 		public Builder addRule(Rule rule) {
 			
 			Iterable<Rule> newRules = ebnfToBNF.transform(rule);
+			
 			for (Rule r : newRules) {
 				
 				if (addedRules.contains(r)) {

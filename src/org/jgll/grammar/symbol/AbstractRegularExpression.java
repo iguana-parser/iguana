@@ -3,11 +3,8 @@ package org.jgll.grammar.symbol;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.ConditionType;
-import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.AutomatonOperations;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {

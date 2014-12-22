@@ -47,7 +47,7 @@ public class LeftFactorizationTest2 {
 	@Test
 	public void test1() {
 		LeftFactorize lf = new LeftFactorize();
-		System.out.println(lf.transform(grammar));
+		lf.transform(grammar);
 	}
 	
 }

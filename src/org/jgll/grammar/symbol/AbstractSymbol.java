@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.ConditionType;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
