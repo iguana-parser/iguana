@@ -3,7 +3,6 @@ package org.jgll.regex.automaton;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.regex.matcher.Transitions;
 import org.jgll.util.Input;
 
 public class RunnableState implements Cloneable {

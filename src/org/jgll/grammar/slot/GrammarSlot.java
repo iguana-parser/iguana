@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.io.PrintWriter;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
@@ -23,22 +22,22 @@ import org.jgll.util.generator.ConstructorCode;
  */
 public interface GrammarSlot extends ConstructorCode {
 	
-	public abstract GrammarSlot parse(GLLParser parser, Lexer lexer);
+	public GrammarSlot execute(GLLParser parser, Input input, int i);
 	
-	public GSSNode getGSSNode(int inputIndex);
+	default GSSNode getGSSNode(int inputIndex) { return null; }
 	
-	public GSSNode hasGSSNode(int inputIndex);
+	default GSSNode hasGSSNode(int inputIndex) { return null; }
 	
-	public boolean isInitialized();
+	default boolean isInitialized() { return false; }
 	
-	public void init(Input input);
+	default void init(Input input) { }
 	
-	public void reset();
+	default void reset() { }
 
-	public void code(PrintWriter writer, GrammarSlotRegistry registry);
+	default void code(PrintWriter writer, GrammarSlotRegistry registry) { }
 
-	public GrammarSlot withId(int id);
+	default GrammarSlot withId(int id) { return this; }
 	
-	public int getId();
+	default int getId() {return 0; }
 
 }

@@ -1,5 +1,7 @@
 package org.jgll.grammar.slot;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.PrintWriter;
 import java.util.Set;
 
@@ -7,15 +9,12 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.test.FollowTest;
 import org.jgll.grammar.slot.test.PredictionTest;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.DummyNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 /**
  * 
@@ -86,10 +85,10 @@ public class HeadGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
+	public GrammarSlot execute(GLLParser parser, Input input, int i) {
 		int ci = parser.getCurrentInputIndex();
 		
-		Set<Integer> set = predictionTest.get(lexer.charAt(ci));
+		Set<Integer> set = predictionTest.get(input.charAt(ci));
 		
 		if (set == null) return null;
 		

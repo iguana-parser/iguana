@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.io.PrintWriter;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.RegularExpression;
@@ -25,7 +24,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
+	public GrammarSlot execute(GLLParser parser, Input input, int i) {
 		return null;
 	}
 

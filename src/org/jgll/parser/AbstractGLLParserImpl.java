@@ -161,13 +161,13 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			return;
 		}
 		
-		GrammarSlot slot = startSymbol.parse(this, lexer);
+		GrammarSlot slot = startSymbol.execute(this, lexer);
 		
 		while(slot != null) {
-			slot = slot.parse(this, lexer);
+			slot = slot.execute(this, lexer);
 		}
 		
-		L0.getInstance().parse(this, lexer);
+		L0.getInstance().execute(this, lexer);
 	}
 	
 	protected abstract void initParserState(HeadGrammarSlot startSymbol);
@@ -304,6 +304,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public GrammarSlotRegistry getRegistry() {
 		return grammar.getRegistry();
+	}
+	
+	@Override
+	public Lexer getLexer() {
+		return lexer;
 	}
 	
 }

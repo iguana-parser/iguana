@@ -8,11 +8,11 @@ import java.util.Set;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Input;
 
 
 /**
@@ -38,26 +38,24 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
+	public GrammarSlot execute(GLLParser parser, Input input, int i) {
 
-		int ci = parser.getCurrentInputIndex();
-		
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci))) 
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), i))) 
 			return null;
 
-		int length = lexer.tokenLengthAt(ci, slot);
+		int length = slot.getRegularExpression().matcher().match(input, i);
 		
 		if (length < 0) {
 			parser.recordParseError(this);
 			return null;
 		}
 
-		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length))) 
+		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), i + length))) 
 			return null;
 	
-		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, ci, ci + length);
+		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, i, i + length);
 		
-		parser.setCurrentInputIndex(ci + length);
+		parser.setCurrentInputIndex(i + length);
 		
 		NonPackedNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		

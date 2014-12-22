@@ -3,8 +3,9 @@ package org.jgll.grammar.slot;
 import org.jgll.grammar.slot.test.TrueFollowSet;
 import org.jgll.grammar.slot.test.TruePredictionSet;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.descriptor.Descriptor;
+import org.jgll.util.Input;
 
 /**
  * 
@@ -29,13 +30,11 @@ public class L0 extends HeadGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
+	public GrammarSlot execute(GLLParser parser, Input input, int i) {
 		while(parser.hasNextDescriptor()) {
-			GrammarSlot slot = parser.nextDescriptor().getGrammarSlot();
-			slot = slot.parse(parser, lexer);
-			while(slot != null) {
-				slot = slot.parse(parser, lexer);
-			}
+			Descriptor descriptor = parser.nextDescriptor();
+			GrammarSlot slot = descriptor.getGrammarSlot();
+			slot = slot.execute(parser, input, descriptor.getInputIndex());
 		}
 		return null;
 	}

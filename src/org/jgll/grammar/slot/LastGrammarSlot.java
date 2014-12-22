@@ -11,8 +11,8 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.util.Input;
 
 /**
  * Corresponds to the last grammar slot in an alternate, e.g., X ::= alpha .
@@ -39,8 +39,8 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
-		if (head.testFollowSet(lexer.charAt(parser.getCurrentInputIndex()))) {
+	public GrammarSlot execute(GLLParser parser, Input input, int i) {
+		if (head.testFollowSet(input.charAt(i))) {
 			parser.pop();			
 		}
 		return null;

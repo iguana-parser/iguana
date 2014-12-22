@@ -9,11 +9,11 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Input;
 
 /**
  * The grammar slot representing an empty body.
@@ -29,11 +29,11 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
+	public GrammarSlot execute(GLLParser parser, Input input, int i) {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if(head.testFollowSet(lexer.charAt(parser.getCurrentInputIndex()))) {
+		if(head.testFollowSet(input.charAt(i))) {
 			TerminalNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
 			NonterminalNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
 			parser.getSPPFLookup().addPackedNode(node, this, ci, DummyNode.getInstance(), epsilonNode);

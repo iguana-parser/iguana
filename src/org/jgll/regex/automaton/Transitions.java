@@ -1,6 +1,5 @@
-package org.jgll.regex.matcher;
+package org.jgll.regex.automaton;
 
-import org.jgll.regex.automaton.RunnableState;
 import org.jgll.util.Input;
 
 public interface Transitions {

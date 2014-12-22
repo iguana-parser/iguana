@@ -5,6 +5,7 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.lexer.Lexer;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
@@ -32,6 +33,8 @@ public interface GLLParser {
 	public boolean hasDescriptor(Descriptor descriptor);
 	
 	public void scheduleDescriptor(Descriptor descriptor);
+	
+	public Lexer getLexer();
 	
 	/**
 	 * 

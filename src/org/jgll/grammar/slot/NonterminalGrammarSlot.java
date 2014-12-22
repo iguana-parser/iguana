@@ -11,8 +11,8 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
+import org.jgll.util.Input;
 
 /**
  * A grammar slot immediately before a nonterminal.
@@ -48,11 +48,11 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot parse(GLLParser parser, Lexer lexer) {
+	public GrammarSlot execute(GLLParser parser, Input input, int i) {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if (!nonterminal.test(lexer.charAt(ci))) {
+		if (!nonterminal.test(input.charAt(ci))) {
 			parser.recordParseError(this);
 			return null;
 		}

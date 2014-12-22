@@ -17,7 +17,6 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 		super(name, conditions, label, object);
 	}
 	
-	@Override
 	public Automaton getAutomaton() {
 		if (automaton == null) {
 //			automaton = combineConditions(createAutomaton());

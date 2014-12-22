@@ -13,9 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.jgll.regex.matcher.LargeIntervalTransitions;
-import org.jgll.regex.matcher.ShortIntervalTransitions;
-import org.jgll.regex.matcher.Transitions;
 import org.jgll.util.Tuple;
 
 public class AutomatonOperations {
