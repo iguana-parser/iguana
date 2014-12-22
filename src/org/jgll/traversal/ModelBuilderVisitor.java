@@ -3,10 +3,15 @@ package org.jgll.traversal;
 import static org.jgll.traversal.SPPFVisitorUtil.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;
@@ -16,7 +21,7 @@ import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 
 /**
@@ -39,68 +44,76 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	private NodeListener<T, U> listener;
 	
 	private Input input;
-
-	private GrammarGraph grammar;
+	
+	private Set<SPPFNode> visited = new HashSet<>();
+	
+	private Map<SPPFNode, Object> objects = new HashMap<>();
 	
 	public ModelBuilderVisitor(Input input, NodeListener<T, U> listener, GrammarGraph grammar) {
 		this.input = input;
 		this.listener = listener;
-		this.grammar = grammar;
 	}
 
 	@Override
 	public void visit(NonterminalNode node) {
 		removeIntermediateNode(node);
 		
-		if(!node.isVisited()) {
-		
-			node.setVisited(true);
-			
+		if (!visited.contains(node)) {
+			visited.add(node);
+						
 			if(node.isAmbiguous()) {
 				buildAmbiguityNode(node);
 			}
 			else {
 				
-				T object = (T) grammar.getObject(node.getId(), node.getFirstPackedNodeGrammarSlot());
+				T object = (T) getObject(node);
 				
 				Result<U> result;
 				
-				if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
-					CollapsibleNode lastChild = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
-					Object lastChildObject = getObject(lastChild);
-					listener.startNode((T) lastChildObject);
-					visitChildren(node, this);
-					removeCollapsibleNode(node);
-					result = listener.endNode((T) lastChildObject, getChildrenValues(node), 
-								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				} else {
-					listener.startNode(object);
-					visitChildren(node, this);
-					result = listener.endNode(object, getChildrenValues(node), 
-								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				}
+//				if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
+//					CollapsibleNode lastChild = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
+//					Object lastChildObject = getObject(lastChild);
+//					listener.startNode((T) lastChildObject);
+//					visitChildren(node, this);
+//					removeCollapsibleNode(node);
+//					result = listener.endNode((T) lastChildObject, getChildrenValues(node), 
+//								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+//				} else {
+//					listener.startNode(object);
+//					visitChildren(node, this);
+//					result = listener.endNode(object, getChildrenValues(node), 
+//								input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+//				}
 
-				node.setObject(result);
+//				objects.put(node, result);
 			}
 		}
+	}
+	
+	private Object getObject(NonterminalNode node) {
+		assert node.getChildAt(0) instanceof PackedNode;
+		PackedNode packedNode = (PackedNode) node.getChildAt(0);
+		
+		assert packedNode.getGrammarSlot() instanceof LastGrammarSlot;
+		LastGrammarSlot grammarSlot = (LastGrammarSlot) packedNode.getGrammarSlot();
+		return grammarSlot.getObject();
 	}
 	
 	// TODO: does not work for collapsible nodes which are ambiguous.
 	// They should be lifted, similar to intermediate nodes.
 	private Object getObject(CollapsibleNode node) {
 		
-		CollapsibleNode collapsibleNode = node;
-		if(collapsibleNode.childrenCount() > 0) {
-			while(collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1) instanceof CollapsibleNode) {
-				collapsibleNode = (CollapsibleNode) collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1);
-				if(collapsibleNode.childrenCount() == 0) {
-					break;
-				}
-			}			
-		}
+//		CollapsibleNode collapsibleNode = node;
+//		if(collapsibleNode.childrenCount() > 0) {
+//			while(collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1) instanceof CollapsibleNode) {
+//				collapsibleNode = (CollapsibleNode) collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1);
+//				if(collapsibleNode.childrenCount() == 0) {
+//					break;
+//				}
+//			}			
+//		}
 		
-		
-		return grammar.getObject(node.getId(), node.getFirstPackedNodeGrammarSlot());
+		return getObject(node);
 	}
 
 	private void buildAmbiguityNode(NonterminalNode nonterminalSymbolNode) {
@@ -124,15 +137,14 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				removeCollapsibleNode(node);
 				
 				node.accept(this);
-				result = listener.endNode((T) object, getChildrenValues(node), input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				node.setObject(result);				
+				result = listener.endNode((T) object, getChildrenValues(node), input.getPositionInfo(node.getParent().getLeftExtent(), node.getParent().getRightExtent()));
+				objects.put(node, result);
 			} else {
-				T object = (T) grammar.getObject(nonterminalSymbolNode.getId(), nonterminalSymbolNode.getFirstPackedNodeGrammarSlot());
+				T object = (T) getObject(nonterminalSymbolNode);
 				listener.startNode(object);
 				node.accept(this);
-				result = listener.endNode(object, getChildrenValues(node), 
-						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				node.setObject(result);				
+				result = listener.endNode(object, getChildrenValues(node), input.getPositionInfo(node.getParent().getLeftExtent(), node.getParent().getRightExtent()));
+				objects.put(node, result);
 			}
 			
 			if(result != Result.filter()) {
@@ -143,7 +155,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		if(nPackedNodes > 1) {
 			Result<U> result = listener.buildAmbiguityNode(getChildrenValues(nonterminalSymbolNode), 
 					input.getPositionInfo(nonterminalSymbolNode.getLeftExtent(), nonterminalSymbolNode.getRightExtent()));
-			nonterminalSymbolNode.setObject(result);
+			objects.put(nonterminalSymbolNode, result);
 		}
 	}
 
@@ -154,38 +166,40 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(PackedNode packedNode) {
-		removeIntermediateNode(packedNode);
-		removeListSymbolNode(packedNode);
-		
-		if(!packedNode.isVisited()) {
-			packedNode.setVisited(true);
-			visitChildren(packedNode, this);
+	public void visit(PackedNode node) {
+		removeIntermediateNode(node);
+		removeListSymbolNode(node);
+
+		if (!visited.contains(node)) {
+			visited.add(node);
+			visitChildren(node, this);
 		}
 	}
 
 	@Override
-	public void visit(ListSymbolNode listNode) {
-		removeListSymbolNode(listNode);
-		if(!listNode.isVisited()) {
-			listNode.setVisited(true);
-			if(listNode.isAmbiguous()) {
-				buildAmbiguityNode(listNode);
+	public void visit(ListSymbolNode node) {
+		removeListSymbolNode(node);
+		
+		if (!visited.contains(node)) {
+			visited.add(node);
+
+			if(node.isAmbiguous()) {
+				buildAmbiguityNode(node);
 			}	
 			else {
-				T object = (T) grammar.getObject(listNode.getId(), listNode.getFirstPackedNodeGrammarSlot());
+				T object = (T) getObject(node);
 				listener.startNode(object);
-				visitChildren(listNode, this);
-				Result<U> result = listener.endNode(object, getChildrenValues(listNode), 
-						input.getPositionInfo(listNode.getLeftExtent(), listNode.getRightExtent()));
-				listNode.setObject(result);
+				visitChildren(node, this);
+				Result<U> result = listener.endNode(object, getChildrenValues(node), 
+						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+				objects.put(node, result);
 			}
 		}
 	}
 	
 	private Iterable<U> getChildrenValues(final SPPFNode node) {
 
-		final Iterator<SPPFNode> iterator = node.getChildren().iterator();
+		final Iterator<? extends SPPFNode> iterator = node.getChildren().iterator();
 
 		return new Iterable<U>() {
 
@@ -200,8 +214,8 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 						while (iterator.hasNext()) {
 							next = iterator.next();
 							
-							if(next.getObject() == Result.filter()) {
-								node.setObject(Result.filter());
+							if(objects.get(next) == Result.filter()) {
+								objects.put(node, Result.filter());
 								// Go to the next child
 								if(!iterator.hasNext()) {
 									return false;
@@ -209,7 +223,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 								next = iterator.next();
 							} 
 							
-							else if(next.getObject() == Result.skip()) {
+							else if(objects.get(next) == Result.skip()) {
 								// Go to the next child
 								if(!iterator.hasNext()) {
 									return false;
@@ -217,7 +231,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 								next = iterator.next();
 							}
 							
-							else if(next.getObject() == null) {
+							else if(objects.get(next) == null) {
 								if(!iterator.hasNext()) {
 									return false;
 								}
@@ -233,7 +247,7 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 
 					@Override
 					public U next() {
-						return ((Result<U>) next.getObject()).getObject();
+						return ((Result<U>) objects.get(next)).getObject();
 					}
 
 					@Override
@@ -247,11 +261,11 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	}
 
 	@Override
-	public void visit(TokenSymbolNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
+	public void visit(TerminalNode node) {
+		if (!visited.contains(node)) {
+			visited.add(node);
 			
-			RegularExpression regex = grammar.getRegularExpressionById(node.getTokenID());
+			RegularExpression regex = node.getGrammarSlot().getRegularExpression();
 			
 			if (regex instanceof Sequence) {
 				Sequence<CharacterClass> sequence = (Sequence<CharacterClass>) regex;
@@ -267,14 +281,14 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 				
 				Result<U> result = listener.endNode((T) object, childrenVal, 
 						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				node.setObject(result);
+				objects.put(node, result);
 			}
 			
 			// For now we only support parse tree generation for character class
 			else if (regex instanceof CharacterClass) {
 				int c = input.charAt(node.getLeftExtent());
 				Result<U> result = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				node.setObject(result);
+				objects.put(node, result);
 			}
 			
 			else {

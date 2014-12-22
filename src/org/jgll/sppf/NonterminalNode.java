@@ -2,7 +2,7 @@ package org.jgll.sppf;
 
 import java.util.ArrayList;
 
-import org.jgll.parser.HashFunctions;
+import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -10,34 +10,10 @@ import org.jgll.traversal.SPPFVisitor;
  * @author Ali Afroozeh
  *
  */
-public class NonterminalNode extends NonPackedNode {
+public class NonterminalNode extends NonterminalOrIntermediateNode {
 	
-	
-	public NonterminalNode(int nonterminalId, int leftExtent, int rightExtent) {
-		super(nonterminalId, leftExtent, rightExtent);
-	}
-	
-	@Override
-	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(id, leftExtent, rightExtent);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(this == obj) {
-			return true;
-		}
-		
-		if (!(obj instanceof NonterminalNode)) {
-			return false;
-		}
-		
-		NonterminalNode other = (NonterminalNode) obj;
-
-		return  id == other.id &&
-				leftExtent == other.leftExtent &&
-				rightExtent == other.rightExtent;
+	public NonterminalNode(HeadGrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -52,8 +28,9 @@ public class NonterminalNode extends NonPackedNode {
 	}
 	
 	@Override
-	public int getFirstPackedNodeGrammarSlot() {
-		return children.get(0).getId();
+	public HeadGrammarSlot getGrammarSlot() {
+		return (HeadGrammarSlot) slot;
 	}
 
+	
 }

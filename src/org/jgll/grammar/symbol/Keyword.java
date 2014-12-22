@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.automaton.Automaton;
@@ -116,10 +117,10 @@ public class Keyword extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new Keyword(")
-		  .append(seq.getConstructorCode() + ", ")
+		  .append(seq.getConstructorCode(registry) + ", ")
 		  .append(label + ", ")
 		  .append("null")
 		  .append(")");

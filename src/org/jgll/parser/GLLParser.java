@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
@@ -8,8 +9,7 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.parser.lookup.SPPFLookup;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 /**
@@ -22,12 +22,10 @@ public interface GLLParser {
 	
 	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName);
 	
-	public GrammarSlot pop();
+	public void pop();
 	
-	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
-	
-	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length);
-	
+	public HeadGrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
+		
 	/**
 	 * @return true if no such descriptor exists.
 	 */
@@ -50,9 +48,11 @@ public interface GLLParser {
 	
 	public GSSNode getCurrentGSSNode();
 	
-	public SPPFNode getCurrentSPPFNode();
+	public NonPackedNode getCurrentSPPFNode();
 	
-	public void setCurrentSPPFNode(SPPFNode node);
+	public void setCurrentSPPFNode(NonPackedNode node);
+	
+	public void setCurrentInputIndex(int inputIndex);
 	
 	public void recordParseError(GrammarSlot slot);
 	
@@ -60,7 +60,9 @@ public interface GLLParser {
 	
 	public SPPFLookup getSPPFLookup();
 	
-	public GrammarGraph getGrammar();
+	public Input getInput();
+	
+	public GrammarSlotRegistry getRegistry();
 	
 	/**
 	 * Current descriptor being processed.

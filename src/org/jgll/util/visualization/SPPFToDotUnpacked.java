@@ -7,13 +7,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
 import org.jgll.util.Input;
@@ -42,14 +42,12 @@ public class SPPFToDotUnpacked extends ToDot {
 
 	private Input input;
 
-	private GrammarGraph grammar;
-	
-	public SPPFToDotUnpacked(GrammarGraph grammar, Input input) {
-		this(input, false);
-		this.grammar = grammar;
+	public SPPFToDotUnpacked(Input input, GrammarSlotRegistry registry) {
+		this(input, registry, false);
 	}
 	
-	public SPPFToDotUnpacked(Input input, boolean showPackedNodeLabel) {
+	public SPPFToDotUnpacked(Input input, GrammarSlotRegistry registry, boolean showPackedNodeLabel) {
+		super(registry);
 		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;
 		this.parseTrees = new HashSet<>();
@@ -126,7 +124,7 @@ public class SPPFToDotUnpacked extends ToDot {
 
 	public void visit(NonterminalNode node, StringBuilder sb) {
 		
-		String label = grammar.getNonterminalById(node.getId()).getName();
+		String label = node.getGrammarSlot().toString();
 		
 		sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 		
@@ -184,7 +182,7 @@ public class SPPFToDotUnpacked extends ToDot {
 		return parseTrees;
 	}
 	
-	protected void addEdgesToChildren(SPPFNode node, Iterable<SPPFNode> children, StringBuilder sb) {
+	protected void addEdgesToChildren(SPPFNode node, Iterable<? extends SPPFNode> children, StringBuilder sb) {
 		for (SPPFNode child : children) {
 			addEdgeToChild(node, child, sb);
 		}
@@ -237,7 +235,7 @@ public class SPPFToDotUnpacked extends ToDot {
 			}
 			
 			@Override
-			public void visit(TokenSymbolNode node) {}
+			public void visit(TerminalNode node) {}
 		};
 		
 		node.accept(sppfVisitor);

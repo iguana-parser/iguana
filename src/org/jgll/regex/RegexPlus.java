@@ -1,9 +1,8 @@
 package org.jgll.regex;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
@@ -14,18 +13,15 @@ public class RegexPlus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final RegularExpression plus;
+	private final RegularExpression regex;
 	
-	public static RegexPlus from(RegularExpression regexp) {
-		return new Builder(regexp).build();
+	public static RegexPlus from(RegularExpression regex) {
+		return new Builder(regex).build();
 	}
 	
 	public RegexPlus(RegularExpression regex, String label, Set<Condition> conditions, Object object) {
 		super(getName(regex), label, conditions, object);
-		List<RegularExpression> list = new ArrayList<>();
-		list.add(RegexStar.from(regex));
-		list.add(regex);
-		this.plus = Sequence.from(list);
+		this.regex = regex;
 	}
 	
 	private static String getName(RegularExpression regexp) {
@@ -34,22 +30,22 @@ public class RegexPlus extends AbstractRegularExpression {
 	
 	@Override
 	protected Automaton createAutomaton() {
-		return plus.getAutomaton().setName(name);
+		return regex.getAutomaton().setName(name);
 	}
 	
 	@Override
 	public boolean isNullable() {
-		return plus.isNullable();
+		return regex.isNullable();
 	}
 	
 	@Override
 	public Set<Range> getFirstSet() {
-		return plus.getFirstSet();
+		return regex.getFirstSet();
 	}
 	
 	@Override
 	public Set<Range> getNotFollowSet() {
-		return plus.getFirstSet();
+		return regex.getFirstSet();
 	}
 
 	public static class Builder extends SymbolBuilder<RegexPlus> {
@@ -58,10 +54,6 @@ public class RegexPlus extends AbstractRegularExpression {
 		
 		public Builder(RegularExpression regex) {
 			this.regex = regex;
-		}
-		
-		public Builder(RegexPlus regexPlus) {
-			super(regexPlus);
 		}
 		
 		@Override
@@ -76,10 +68,10 @@ public class RegexPlus extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexPlus(")
-		  .append(plus.getConstructorCode() + ", ")
+		  .append(regex.getConstructorCode(registry) + ", ")
 		  .append(label + ", ")
 		  .append("new HashSet<>(), ")
 		  .append("null")

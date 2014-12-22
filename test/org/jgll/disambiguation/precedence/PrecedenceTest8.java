@@ -4,6 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -16,7 +17,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,17 +90,17 @@ public class PrecedenceTest8 {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("a+a[a+a]");
-		parser = ParserFactory.newParser(grammar, input);
+		parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1(parser.getRegistry())));
 	}
 	
 	@Test
 	public void test2() {
 		Input input = Input.fromString("a+a*a+[a+a]");
-		parser = ParserFactory.newParser(grammar, input);
+		parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseError());
 	}
@@ -107,24 +108,24 @@ public class PrecedenceTest8 {
 	@Test
 	public void test3() {
 		Input input = Input.fromString("a[a][a+a]");
-		parser = ParserFactory.newParser(grammar, input);
+		parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseError());
 	}	
 
 
-	private SPPFNode getSPPF1() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getSPPF1(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 8).init();
 		PackedNode node2 = factory.createPackedNode("E ::= E + E .", 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("E ::= E + . E", 0, 2).init();
 		PackedNode node4 = factory.createPackedNode("E ::= E + . E", 1, node3);
 		NonterminalNode node5 = factory.createNonterminalNode("E", 0, 0, 1).init();
 		PackedNode node6 = factory.createPackedNode("E ::= a .", 0, node5);
-		TokenSymbolNode node7 = factory.createTokenNode("a", 0, 1);
+		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		TokenSymbolNode node8 = factory.createTokenNode("+", 1, 1);
+		TerminalNode node8 = factory.createTerminalNode("+", 1, 2);
 		node4.addChild(node5);
 		node4.addChild(node8);
 		node3.addChild(node4);
@@ -136,10 +137,10 @@ public class PrecedenceTest8 {
 		PackedNode node14 = factory.createPackedNode("E ::= E2 [ . E ]", 3, node13);
 		NonterminalNode node15 = factory.createNonterminalNode("E", 2, 2, 3).init();
 		PackedNode node16 = factory.createPackedNode("E2 ::= a .", 2, node15);
-		TokenSymbolNode node17 = factory.createTokenNode("a", 2, 1);
+		TerminalNode node17 = factory.createTerminalNode("a", 2, 3);
 		node16.addChild(node17);
 		node15.addChild(node16);
-		TokenSymbolNode node18 = factory.createTokenNode("[", 3, 1);
+		TerminalNode node18 = factory.createTerminalNode("[", 3, 4);
 		node14.addChild(node15);
 		node14.addChild(node18);
 		node13.addChild(node14);
@@ -149,16 +150,16 @@ public class PrecedenceTest8 {
 		PackedNode node22 = factory.createPackedNode("E ::= E + . E", 5, node21);
 		NonterminalNode node23 = factory.createNonterminalNode("E", 0, 4, 5).init();
 		PackedNode node24 = factory.createPackedNode("E ::= a .", 4, node23);
-		TokenSymbolNode node25 = factory.createTokenNode("a", 4, 1);
+		TerminalNode node25 = factory.createTerminalNode("a", 4, 5);
 		node24.addChild(node25);
 		node23.addChild(node24);
-		TokenSymbolNode node26 = factory.createTokenNode("+", 5, 1);
+		TerminalNode node26 = factory.createTerminalNode("+", 5, 6);
 		node22.addChild(node23);
 		node22.addChild(node26);
 		node21.addChild(node22);
 		NonterminalNode node27 = factory.createNonterminalNode("E", 0, 6, 7).init();
 		PackedNode node28 = factory.createPackedNode("E ::= a .", 6, node27);
-		TokenSymbolNode node29 = factory.createTokenNode("a", 6, 1);
+		TerminalNode node29 = factory.createTerminalNode("a", 6, 7);
 		node28.addChild(node29);
 		node27.addChild(node28);
 		node20.addChild(node21);
@@ -167,7 +168,7 @@ public class PrecedenceTest8 {
 		node12.addChild(node13);
 		node12.addChild(node19);
 		node11.addChild(node12);
-		TokenSymbolNode node30 = factory.createTokenNode("]", 7, 1);
+		TerminalNode node30 = factory.createTerminalNode("]", 7, 8);
 		node10.addChild(node11);
 		node10.addChild(node30);
 		node9.addChild(node10);

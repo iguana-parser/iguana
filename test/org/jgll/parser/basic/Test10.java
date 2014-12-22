@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -17,7 +18,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class Test10 {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 		
@@ -70,7 +71,7 @@ public class Test10 {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
 	}
@@ -84,11 +85,11 @@ public class Test10 {
     	assertTrue(result.isParseSuccess());
 	}
 	
-	private SPPFNode getSPPF1() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getSPPF1(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 1).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a .", 0, node1);
-		TokenSymbolNode node3 = factory.createTokenNode("a", 0, 1);
+		TerminalNode node3 = factory.createTerminalNode("a", 0, 1);
 		node2.addChild(node3);
 		PackedNode node4 = factory.createPackedNode("A ::= A A .", 1, node1);
 		NonterminalNode node5 = factory.createNonterminalNode("A", 1, 1).init();

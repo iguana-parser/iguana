@@ -1,9 +1,10 @@
 package org.jgll.grammar.slot;
 
 import java.util.List;
+import java.util.Set;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
-import org.jgll.grammar.slot.test.ConditionTest;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -17,35 +18,31 @@ import org.jgll.util.Input;
  */
 public abstract class BodyGrammarSlot implements GrammarSlot {
 	
-	protected final int id;
-
 	protected final BodyGrammarSlot previous;
 	
 	protected BodyGrammarSlot next;
 	
 	protected final String label;
 	
-	protected final ConditionTest preConditions;
+	protected final Set<Condition> preConditions;
 
-	protected final ConditionTest postConditions;
+	protected final Set<Condition> postConditions;
 	
-	protected final ConditionTest popConditions;
+	protected final Set<Condition> popConditions;
 	
 	protected final NodeCreator nodeCreator;
 	
 	protected final NodeCreator nodeCreatorFromPop;
 	
 	private GSSNode[] gssNodes;
-
-	public BodyGrammarSlot(int id, String label, BodyGrammarSlot previous, 
-						   ConditionTest preConditions, ConditionTest postConditions, ConditionTest popConditions,
+	
+	protected int id;
+	
+	public BodyGrammarSlot(String label, BodyGrammarSlot previous, 
+						   Set<Condition> preConditions, Set<Condition> postConditions, Set<Condition> popConditions,
 						   NodeCreator nodeCreator, NodeCreator nodeCreatorFromPop) {
 
-		if(label == null) {
-			throw new IllegalArgumentException("Label cannot be null.");
-		}
-		
-		this.id = id;
+		if(label == null) throw new IllegalArgumentException("Label cannot be null.");
 		
 		this.label = label;
 
@@ -79,10 +76,6 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		return previous;
 	}
 
-	public String getLabel() {
-		return label;
-	}
-	
 	public abstract boolean isNullable();
 	
 	public NodeCreator getNodeCreatorFromPop() {
@@ -93,22 +86,17 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		return nodeCreator;
 	}
 	
-	public final ConditionTest getPreConditions() {
+	public Set<Condition> getPreConditions() {
 		return preConditions;
 	}
 	
-	public final ConditionTest getPostConditions() {
+	public Set<Condition> getPostConditions() {
 		return postConditions;
 	}
 	
-	public final ConditionTest getPopConditions() {
+	public Set<Condition> getPopConditions() {
 		return popConditions;
 	}	
-	
-	@Override
-	public int getId() {
-		return id;
-	}
 	
 	@Override
 	public String toString() {
@@ -176,4 +164,8 @@ public abstract class BodyGrammarSlot implements GrammarSlot {
 		return gssNodes != null;
 	}
 	
+	@Override
+	public int getId() {
+		return id;
+	}
 }

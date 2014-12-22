@@ -3,6 +3,8 @@ package org.jgll.sppf;
 import java.util.Collections;
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.L0;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -12,13 +14,17 @@ import org.jgll.traversal.SPPFVisitor;
  * TODO: try to replace it with null, doesn't much make sense
  *
  */
-public class DummyNode extends SPPFNode {
+public class DummyNode extends NonPackedNode {
 	
+	private DummyNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
+	}
+
 	private static DummyNode instance;
 	
 	public static DummyNode getInstance() {
 		if(instance == null) {
-			instance = new DummyNode();
+			instance = new DummyNode(L0.getInstance(), -1, -1);
 		}
 		return instance;
 	}
@@ -32,40 +38,15 @@ public class DummyNode extends SPPFNode {
 	public int hashCode() {
 		return 16769023;
 	}
-	
-	@Override
-	public int getLeftExtent() {
-		return -1;
-	}
-
-	@Override
-	public int getRightExtent() {
-		return -1;
-	}
-	
-	@Override
-	public int getId() {
-		return -1;
-	}
 
 	@Override
 	public SPPFNode getChildAt(int index) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int childrenCount() {
-		return 0;
-	}
-
-	@Override
-	public List<SPPFNode> getChildren() {
+	public List<PackedNode> getChildren() {
 		return Collections.emptyList();
-	}
-	
-	@Override
-	public String toString() {
-		return "$";
 	}
 
 	@Override
@@ -74,8 +55,18 @@ public class DummyNode extends SPPFNode {
 	}
 
 	@Override
+	public int childrenCount() {
+		return 0;
+	}
+
+	@Override
+	public L0 getGrammarSlot() {
+		return L0.getInstance();
+	}
+
+	@Override
 	public void accept(SPPFVisitor visitAction) {
-		// do nothing
+		throw new UnsupportedOperationException();
 	}
 
 }

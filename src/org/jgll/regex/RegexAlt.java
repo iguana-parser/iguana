@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
@@ -165,11 +166,11 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		
 		for (RegularExpression regex : regularExpressions) {
-			 sb.append(regex.getConstructorCode() + ", ");
+			 sb.append(regex.getConstructorCode(registry) + ", ");
 		}
 		sb.delete(sb.length() - 2, sb.length());
 		

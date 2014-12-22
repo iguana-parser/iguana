@@ -4,7 +4,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalNode;
 
 /**
  * Provides a standard interface based on the command pattern for
@@ -17,7 +17,7 @@ import org.jgll.sppf.TokenSymbolNode;
  */
 public interface SPPFVisitor {
 
-	public void visit(TokenSymbolNode node);
+	public void visit(TerminalNode node);
 
 	public void visit(NonterminalNode node);
 	

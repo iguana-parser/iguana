@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -72,7 +73,7 @@ public class EOF extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "EOF.getInstance()";
 	}
 	

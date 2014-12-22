@@ -1,5 +1,8 @@
 package org.jgll.grammar.condition;
 
+import org.jgll.grammar.GrammarSlotRegistry;
+
+
 
 /**
  *  
@@ -10,8 +13,11 @@ public class PositionalCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private transient final SlotAction action;
+	
 	public PositionalCondition(ConditionType type) {
 		super(type);
+		action = createSlotAction();
 	}
 	
 	@Override
@@ -32,8 +38,28 @@ public class PositionalCondition extends Condition {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "new PositionalCondition(" + type.name() + ")";
+	}
+
+	private SlotAction createSlotAction() {
+
+		switch (type) {
+		
+			case START_OF_LINE:
+		    	return (input, node, i) -> !input.isStartOfLine(i);
+		    
+			case END_OF_LINE:
+				return (input, node, i) -> !input.isEndOfLine(i);
+		
+		    default: 
+		    	throw new RuntimeException();
+		}
+	}
+	
+	@Override
+	public SlotAction getSlotAction() {
+		return action;
 	}
 
 }

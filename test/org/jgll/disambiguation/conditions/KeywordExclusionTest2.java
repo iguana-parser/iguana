@@ -53,7 +53,7 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testWhen() {
 		Input input = Input.fromString("when");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "Id");
 		assertTrue(result.isParseError());
 	}
@@ -61,7 +61,7 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testIf() {
 		Input input = Input.fromString("if");		
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "Id");
 		assertTrue(result.isParseError());
 	}
@@ -69,7 +69,7 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testDo() {
 		Input input = Input.fromString("do");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "Id");
 		assertTrue(result.isParseError());
 	}
@@ -77,7 +77,7 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testWhile() {
 		Input input = Input.fromString("while");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "Id");
 		assertTrue(result.isParseError());
 	}

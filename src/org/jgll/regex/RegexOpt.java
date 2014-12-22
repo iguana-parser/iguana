@@ -1,10 +1,9 @@
 package org.jgll.regex;
 
-import static org.jgll.regex.automaton.TransitionActionsFactory.*;
-
 import java.util.Collections;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Range;
@@ -35,7 +34,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	protected Automaton createAutomaton() {
 		State startState = new State();
-		startState.addAction(getPostActions(conditions));
+//		startState.addAction(getPostActions(conditions));
 		
 		State finalState = new State(StateType.FINAL);
 
@@ -93,10 +92,10 @@ public class RegexOpt extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexOpt(")
-		  .append(regexp.getConstructorCode() + ", ")
+		  .append(regexp.getConstructorCode(registry) + ", ")
 		  .append(label + ", ")
 		  .append("new HashSet<>(), ")
 		  .append("null")

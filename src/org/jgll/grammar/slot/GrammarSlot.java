@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.lexer.Lexer;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -24,8 +25,6 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	public abstract GrammarSlot parse(GLLParser parser, Lexer lexer);
 	
-	public int getId();
-	
 	public GSSNode getGSSNode(int inputIndex);
 	
 	public GSSNode hasGSSNode(int inputIndex);
@@ -36,6 +35,10 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	public void reset();
 
-	public void code(PrintWriter writer);
+	public void code(PrintWriter writer, GrammarSlotRegistry registry);
+
+	public GrammarSlot withId(int id);
 	
+	public int getId();
+
 }

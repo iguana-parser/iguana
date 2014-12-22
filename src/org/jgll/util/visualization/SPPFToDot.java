@@ -2,13 +2,17 @@ package org.jgll.util.visualization;
 
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
-import org.jgll.grammar.GrammarGraph;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.traversal.SPPFVisitorUtil;
 import org.jgll.util.Input;
@@ -16,9 +20,11 @@ import org.jgll.util.Input;
 /**
  * Creates a Graphviz's dot format representation of an SPPF node.
  * 
+ * 
  * @author Ali Afroozeh
  * 
  * @see SPPFVisitor
+ * 
  */
 public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	
@@ -27,38 +33,37 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	protected StringBuilder sb;
 
 	protected Input input;
-
-	protected GrammarGraph grammarGraph;
 	
-	public SPPFToDot(GrammarGraph grammar, Input input) {
-		this(input, false);
-		this.grammarGraph = grammar;
+	protected Set<NonPackedNode> visited = new HashSet<>();
+
+	public SPPFToDot(GrammarSlotRegistry registry, Input input) {
+		this(input, registry, false);
 	}
 	
-	public SPPFToDot(Input input, boolean showPackedNodeLabel) {
+	public SPPFToDot(Input input, GrammarSlotRegistry registry, boolean showPackedNodeLabel) {
+		super(registry);
 		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;
 		this.sb = new StringBuilder();
 	}
 
 	@Override
-	public void visit(TokenSymbolNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
+	public void visit(TerminalNode node) {
+		
+		if(!visited.contains(node)) {
+			visited.add(node);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-			String label = String.format("(%s, %d, %d): \"%s\"", grammarGraph.getRegularExpressionById(node.getId()).getName(),
-															 node.getLeftExtent(), node.getRightExtent(), matchedInput);
+			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), matchedInput);
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 		}
 	}
 
 	@Override
 	public void visit(NonterminalNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
-			String label = String.format("(%s, %d, %d)", grammarGraph.getNonterminalById(node.getId()), 
-														 node.getLeftExtent(), node.getRightExtent());
+		if(!visited.contains(node)) {
+			visited.add(node);
+			
+			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
 			if (node.isAmbiguous()) {
 				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			} else {
@@ -72,11 +77,10 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(IntermediateNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
-			String label = String.format("(%s, %d, %d)", grammarGraph.getGrammarSlot(node.getId()), 
-														 node.getLeftExtent(), node.getRightExtent());
+		if(!visited.contains(node)) {
+			visited.add(node);
+			
+			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
 			if (node.isAmbiguous()) {
 				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_INTERMEDIATE_NODE, replaceWhiteSpace(label)) + "\n");
 			} else {
@@ -90,18 +94,14 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 
 	@Override
 	public void visit(PackedNode node) {
-		if(!node.isVisited()) {
-			node.setVisited(true);
-	
-			if(showPackedNodeLabel) {
-				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
-			} else {
-				sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
-			}
-			addEdgesToChildren(node);
-			
-			SPPFVisitorUtil.visitChildren(node, this);
+		if(showPackedNodeLabel) {
+			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, replaceWhiteSpace(node.toString())) + "\n");
+		} else {
+			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 		}
+		addEdgesToChildren(node);
+		
+		SPPFVisitorUtil.visitChildren(node, this);
 	}
 	
 	protected void addEdgesToChildren(SPPFNode node) {
@@ -111,6 +111,13 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	}
 	
 	protected void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
+		
+		if (childNode instanceof PackedNode) {
+			if(!((PackedNode) childNode).getParent().equals(parentNode)) {
+				System.out.println("WTF?!");
+			}
+		}
+		
 		sb.append(EDGE + "\"" + getId(parentNode) + "\"" + "->" + "{\"" + getId(childNode) + "\"}" + "\n");
 	}
 	

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.ConditionType;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
@@ -55,11 +54,11 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	protected Set<Condition> getNotFollowConditions() {
 		Set<Condition> set = new HashSet<>();
-		for (Condition condition : conditions) {
-			if (condition.getType() == ConditionType.NOT_FOLLOW) {
-				set.add(condition);
-			}
-		}
+//		for (Condition condition : conditions) {
+//			if (condition.getType() == ConditionType.NOT_FOLLOW) {
+//				set.add(condition);
+//			}
+//		}
 		return set;
 	}
 	

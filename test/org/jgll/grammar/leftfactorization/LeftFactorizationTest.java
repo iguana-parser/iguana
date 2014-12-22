@@ -10,6 +10,19 @@ import org.jgll.grammar.transformation.LeftFactorize;
 import org.junit.Test;
 
 
+/**
+ * 
+ * E ::= E * E
+ *     | E + E
+ *     | a
+ * 
+ * 
+ * E ::= E ((* E) | (+ E))
+ *     | a
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class LeftFactorizationTest {
 
 	private Nonterminal E = Nonterminal.withName("E");
@@ -37,8 +50,7 @@ public class LeftFactorizationTest {
 		
 
 		LeftFactorize lf = new LeftFactorize();
-		Grammar g = lf.transform(builder.build());
-		System.out.println(g);
+		lf.transform(builder.build());
 	}
 	
 }

@@ -3,6 +3,8 @@ package org.jgll.grammar.slot.test;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
+
 public class TruePredictionSet implements PredictionTest {
 
 	private static final long serialVersionUID = 1L;
@@ -27,7 +29,7 @@ public class TruePredictionSet implements PredictionTest {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "new TruePredictionSet(" + predictionSet.size() + ")";
 	}
 	

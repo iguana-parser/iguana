@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.jgll.grammar.symbol.Alt;
 import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Opt;
@@ -42,7 +44,8 @@ public class EBNFToBNF implements GrammarTransformation {
 	private boolean isEBNF(Symbol s) {
 		return s instanceof Plus ||
 			   s instanceof Opt ||
-			   s instanceof Group;
+			   s instanceof Group ||
+			   s instanceof Alt;
 	}
 	
 	private Rule rewrite(Rule rule, Set<Rule> newRules) {
@@ -61,39 +64,47 @@ public class EBNFToBNF implements GrammarTransformation {
 	
 	public Symbol rewrite(Symbol s, Set<Rule> rules) {
 		
-		if(!isEBNF(s)) {
+		if(!isEBNF(s))
 			return s;
-		}
 		
-		Nonterminal newNt = cache.get(s);
-		if (newNt != null) return newNt;
+		if (cache.get(s) != null) 
+			return cache.get(s);
 		
 		/**
 		 * S+ ::= S+ S
 		 *      | S
 		 */
+		
+		final Nonterminal newNt;
+		
 		if(s instanceof Plus) {
 			Symbol in = ((Plus) s).getSymbol();
 			newNt = new Nonterminal.Builder(s.getName()).setEbnfList(true).addConditions(s.getConditions()).build();
-			rules.add(new Rule(newNt, newNt, in));
-			rules.add(new Rule(newNt, in));
+			rules.add(new Rule(newNt, newNt, rewrite(in, rules)));
+			rules.add(new Rule(newNt, rewrite(in, rules)));
 		} 
 		
 		else if (s instanceof Opt) {
 			Symbol in = ((Opt) s).getSymbol();
 			newNt = new Nonterminal.Builder(s.getName()).setEbnfList(true).addConditions(s.getConditions()).build();
-			rules.add(new Rule(newNt, in));
+			rules.add(new Rule(newNt, rewrite(in, rules)));
 			rules.add(new Rule(newNt));
 		} 
 		
 		else if (s instanceof Group) {
-			List<? extends Symbol> symbols = ((Group) s).getSymbols();
+			List<Symbol> symbols = ((Group) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
 			newNt = new Nonterminal.Builder(s.getName()).addConditions(s.getConditions()).build();
 			rules.add(new Rule(newNt, symbols));
 		} 
 		
+		else if (s instanceof Alt) {
+			newNt = new Nonterminal.Builder(s.getName()).addConditions(s.getConditions()).build();
+			List<Symbol> symbols = ((Alt) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
+			symbols.forEach(x -> rules.add(new Rule(newNt, x)));
+		}
+		
 		else {
-			throw new IllegalStateException("Should not be here!");			
+			throw new IllegalStateException("Unknown symbol type.");			
 		}
 		
 		cache.put(s, newNt);

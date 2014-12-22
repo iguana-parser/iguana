@@ -32,6 +32,8 @@ public class Automaton implements Serializable {
 	private Set<State> rejectStates;
 	
 	private String name;
+
+	private RunnableAutomaton runnableAutomaton;
 	
 	public Automaton(State startState) {
 		this(startState, "no-name");
@@ -251,8 +253,12 @@ public class Automaton implements Serializable {
 	}
 	
 	public RunnableAutomaton getRunnableAutomaton() {
+		if (runnableAutomaton != null)
+			return runnableAutomaton;
+		
 		determinize();
-		return AutomatonOperations.createRunnableAutomaton(this);
+		runnableAutomaton = AutomatonOperations.createRunnableAutomaton(this);
+		return runnableAutomaton;
 	}
 	
 	public String toJavaCode() {

@@ -2,7 +2,7 @@ package org.jgll.util.visualization;
 
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
-import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -12,22 +12,22 @@ import org.jgll.util.Input;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
-	public ToDotWithoutIntermeidateAndLists(GrammarGraph grammarGraph, Input input) {
-		super(grammarGraph, input);
+	public ToDotWithoutIntermeidateAndLists(GrammarSlotRegistry registry, Input input) {
+		super(registry, input);
 	}
 
 	@Override
 	public void visit(NonterminalNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);
 		
-		if(!node.isVisited()) {
-			node.setVisited(true);
+		if(!visited.contains(node)) {
+			visited.add(node);
 	
 			sb.append("\"" + getId(node) + "\"" + String.format(SYMBOL_NODE, replaceWhiteSpace(node.toString())) + "\n");
 		
 			for(SPPFNode child : node.getChildren()) {
 				
-				String label = grammarGraph.getNonterminalById(child.getId()).getName();
+				String label = child.getGrammarSlot().toString();
 				
 				if(!label.startsWith("layout")) {
 				  addEdgeToChild(node, child);
@@ -41,18 +41,14 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 	public void visit(PackedNode node) {
 		SPPFVisitorUtil.removeIntermediateNode(node);
 		
-		if(!node.isVisited()) {
-			node.setVisited(true);
+		sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 	
-			sb.append("\"" + getId(node) + "\"" + String.format(PACKED_NODE, "") + "\n");
 		
-			
-			for(SPPFNode child : node.getChildren()) {
-				String label = grammarGraph.getNonterminalById(child.getId()).getName();
-				if(!label.startsWith("layout")) {
-				  addEdgeToChild(node, child);
-				  child.accept(this);
-				}
+		for(SPPFNode child : node.getChildren()) {
+			String label = child.getGrammarSlot().toString();
+			if(!label.startsWith("layout")) {
+			  addEdgeToChild(node, child);
+			  child.accept(this);
 			}
 		}
 	}

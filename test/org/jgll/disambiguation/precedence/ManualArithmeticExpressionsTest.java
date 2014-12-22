@@ -67,7 +67,7 @@ public class ManualArithmeticExpressionsTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a*a+a");
-		parser = ParserFactory.newParser(grammar, input);
+		parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
 		assertTrue(result.isParseSuccess());
 		// TODO: add tree comparison text here.

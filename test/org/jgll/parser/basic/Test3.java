@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -17,7 +18,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
@@ -51,10 +52,10 @@ public class Test3 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("ab");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(grammar.toGrammarGraph().getRegistry())));
 	}
 	
 	@Test
@@ -64,15 +65,15 @@ public class Test3 {
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
 		ParseResult result = parser.parse(Input.fromString("ab"), grammar.toGrammarGraph(), "A");
     	assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getRegistry())));
 	}
 	
-	private SPPFNode expectedSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode expectedSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a b .", 1, node1);
-		TokenSymbolNode node3 = factory.createTokenNode("a", 0, 1);
-		TokenSymbolNode node4 = factory.createTokenNode("b", 1, 1);
+		TerminalNode node3 = factory.createTerminalNode("a", 0, 1);
+		TerminalNode node4 = factory.createTerminalNode("b", 1, 2);
 		node2.addChild(node3);
 		node2.addChild(node4);
 		node1.addChild(node2);

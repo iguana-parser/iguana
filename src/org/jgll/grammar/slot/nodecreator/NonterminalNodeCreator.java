@@ -2,19 +2,20 @@ package org.jgll.grammar.slot.nodecreator;
 
 import java.io.Serializable;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.lookup.SPPFLookup;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.SPPFNode;
 
 public class NonterminalNodeCreator implements NodeCreator, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public SPPFNode create(GLLParser parser, BodyGrammarSlot slot, SPPFNode leftChild, SPPFNode rightChild) {
+	public NonPackedNode create(GLLParser parser, BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		int leftExtent = leftChild.getLeftExtent();
 		
 		int rightExtent = rightChild.getRightExtent();
@@ -31,7 +32,7 @@ public class NonterminalNodeCreator implements NodeCreator, Serializable {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "new NonterminalNodeCreator()";
 	}
 

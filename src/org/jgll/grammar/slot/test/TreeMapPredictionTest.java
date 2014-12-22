@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Range;
 import org.jgll.regex.RegularExpression;
 
@@ -104,7 +105,7 @@ public class TreeMapPredictionTest implements PredictionTest {
 	}
 
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		// TODO Auto-generated method stub
 		return null;
 	}

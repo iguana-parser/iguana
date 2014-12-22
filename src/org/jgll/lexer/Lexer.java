@@ -1,14 +1,11 @@
 package org.jgll.lexer;
 
-import java.util.BitSet;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 
-import org.jgll.util.Input;
 
 
 public interface Lexer {
 
-	public int tokenAt(int inputIndex, BitSet set);
-	
 	/**
 	 * 
 	 * Returns the length of the token found at the given input index
@@ -19,18 +16,8 @@ public interface Lexer {
 	 * 
 	 * @return -1 if no such tokens exists at the given input index.
 	 */
-	public int tokenLengthAt(int inputIndex, int tokenID);
+	public int tokenLengthAt(int inputIndex, TerminalGrammarSlot t);
 	
-	/**
-	 * 
-	 * @param inputIndex
-	 * @param tokenID
-	 */
-	public void setTokenAt(int inputIndex, int tokenID, int length);
-	
-	/**
-	 * Returns the underlying input object. 
-	 */
-	public Input getInput();
+	public int charAt(int index);
 
 }

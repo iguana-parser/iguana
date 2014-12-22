@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraphBuilder;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
@@ -19,7 +20,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
-import org.jgll.sppf.TokenSymbolNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,17 +73,17 @@ public class PrecedeRestrictionTest2 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("forall");
-		GLLParser parser = ParserFactory.newParser(grammar, input);
+		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF()));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));
 	}
 
-	private SPPFNode getExpectedSPPF() {
-		SPPFNodeFactory factory = new SPPFNodeFactory(grammar.toGrammarGraph());
+	private SPPFNode getExpectedSPPF(GrammarSlotRegistry registry) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6).init();
 		PackedNode node2 = factory.createPackedNode("S ::= f o r a l l .", 0, node1);
-		TokenSymbolNode node3 = factory.createTokenNode("f o r a l l", 0, 6);
+		TerminalNode node3 = factory.createTerminalNode("f o r a l l", 0, 6);
 		node2.addChild(node3);
 		node1.addChild(node2);
 		return node1;

@@ -1,11 +1,10 @@
 package org.jgll.grammar.symbol;
 
-import static org.jgll.regex.automaton.TransitionActionsFactory.*;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.automaton.Automaton;
@@ -88,7 +87,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
-		startState.addTransition(new Transition(start, end, finalState).addTransitionAction(getPostActions(conditions)));
+//		startState.addTransition(new Transition(start, end, finalState).addTransitionAction(getPostActions(conditions)));
 		return new Automaton(startState, name);
 	}
 
@@ -147,7 +146,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return "Range.in(" + start + ", " + end + ")";
 	}
 	

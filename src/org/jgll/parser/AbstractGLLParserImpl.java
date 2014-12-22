@@ -2,12 +2,14 @@ package org.jgll.parser;
 
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.L0;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.lexer.Lexer;
-import org.jgll.lexer.LexerImpl;
+import org.jgll.lexer.UnmemoizedLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
@@ -19,8 +21,6 @@ import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TokenSymbolNode;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
@@ -44,7 +44,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 
 	protected GSSNode cu;
 	
-	protected SPPFNode cn = DummyNode.getInstance();
+	protected NonPackedNode cn = DummyNode.getInstance();
 	
 	protected int ci = 0;
 	
@@ -95,7 +95,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 
 		this.grammar = grammar;
 		this.input = input;
-		this.lexer = new LexerImpl(input, grammar);
+		this.lexer = new UnmemoizedLexerImpl(input);
 		
 		HeadGrammarSlot startSymbol = getStartSymbol(startSymbolName);
 		
@@ -151,12 +151,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected HeadGrammarSlot getStartSymbol(String name) {
-		return grammar.getHeadGrammarSlot(name);
+		return grammar.getRegistry().getHead(Nonterminal.withName(name));
 	}
 	
 	protected void parse(HeadGrammarSlot startSymbol) {
 
-		if(!startSymbol.test(lexer.getInput().charAt(ci))) {
+		if(!startSymbol.test(lexer.charAt(ci))) {
 			recordParseError(startSymbol);
 			return;
 		}
@@ -173,7 +173,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected abstract void initParserState(HeadGrammarSlot startSymbol);
 	
 	@Override
-	public GrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head) {
+	public HeadGrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head) {
 		
 		GSSNode gssNode = hasGSSNode(slot, head);
 		if (gssNode == null) {
@@ -185,10 +185,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 		
 		log.trace("GSSNode found: %s",  gssNode);
-		return createGSSEdge(slot, cu, cn, gssNode);
+		createGSSEdge(slot, cu, cn, gssNode);
+		return null;
 	}
 	
-	public abstract GrammarSlot createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, SPPFNode w, GSSNode source);
+	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
 	
 	public abstract GSSNode createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head);
 	
@@ -231,11 +232,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}	
 	
 	@Override
-	public final GrammarSlot pop() {
-		return pop(cu, ci, (NonPackedNode) cn);
+	public final void pop() {
+		pop(cu, ci, (NonPackedNode) cn);
 	}
 	
-	protected abstract GrammarSlot pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
+	protected abstract void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 
 	@Override
 	public boolean hasNextDescriptor() {
@@ -277,29 +278,32 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public GrammarGraph getGrammar() {
-		return grammar;
-	}
-
-	@Override
-	public SPPFNode getCurrentSPPFNode() {
+	public NonPackedNode getCurrentSPPFNode() {
 		return cn;
 	}
 
 	@Override
-	public void setCurrentSPPFNode(SPPFNode node) {
+	public void setCurrentSPPFNode(NonPackedNode node) {
 		this.cn = node;
 	}
-
+	
 	@Override
 	public Descriptor getCurrentDescriptor() {
 		return currentDescriptor;
 	}
 	
 	@Override
-	public TokenSymbolNode getTokenNode(int tokenID, int inputIndex, int length) {
-		ci += length;
-		return sppfLookup.getTokenSymbolNode(tokenID, inputIndex, length);
+	public Input getInput() {
+		return input;
+	}
+	
+	public void setCurrentInputIndex(int inputIndex) {
+		this.ci = inputIndex;
+	}
+	
+	@Override
+	public GrammarSlotRegistry getRegistry() {
+		return grammar.getRegistry();
 	}
 	
 }

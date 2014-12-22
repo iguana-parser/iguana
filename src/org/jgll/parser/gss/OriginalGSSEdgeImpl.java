@@ -2,19 +2,19 @@ package org.jgll.parser.gss;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.HashFunctions;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonPackedNode;
 
 public class OriginalGSSEdgeImpl implements GSSEdge {
 	
-	private SPPFNode node;
+	private NonPackedNode node;
 	private GSSNode destination;
 
-	public OriginalGSSEdgeImpl(SPPFNode node, GSSNode destination) {
+	public OriginalGSSEdgeImpl(NonPackedNode node, GSSNode destination) {
 		this.node = node;
 		this.destination = destination;
 	}
 
-	public SPPFNode getNode() {
+	public NonPackedNode getNode() {
 		return node;
 	}
 
@@ -49,7 +49,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(destination.getInputIndex(), destination.getGrammarSlot().getId());
+		return HashFunctions.defaulFunction.hash(destination.getInputIndex(), destination.getGrammarSlot().hashCode());
 	}
 
 }

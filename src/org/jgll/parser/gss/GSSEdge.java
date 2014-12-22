@@ -1,11 +1,11 @@
 package org.jgll.parser.gss;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonPackedNode;
 
 public interface GSSEdge {
 
-	public SPPFNode getNode();
+	public NonPackedNode getNode();
 
 	public BodyGrammarSlot getReturnSlot();
 

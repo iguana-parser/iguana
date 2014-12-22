@@ -1,9 +1,9 @@
 package org.jgll.parser.descriptor;
 
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.SPPFNode;
+import org.jgll.sppf.NonPackedNode;
 
 /**
  * @author Ali Afroozeh
@@ -12,29 +12,15 @@ import org.jgll.sppf.SPPFNode;
 
 public class Descriptor {
 	
-	/**
-	 * The label that indicates the parser code to execute for the encountered
-	 * nonterminal.
-	 */
-	private final GrammarSlot slot;
+	private final BodyGrammarSlot slot;
 	
-	/**
-	 * The associated GSSNode.
-	 */
 	private final GSSNode gssNode;
 	
-	/**
-	 * The current index in the input string.
-	 */
 	private final int inputIndex;
 	
-	/**
-	 * The SPPF node that was created before parsing the encountered 
-	 * nonterminal.
-	 */
-	private final SPPFNode sppfNode;
+	private final NonPackedNode sppfNode;
 
-	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, SPPFNode sppfNode) {
+	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
 		assert inputIndex >= 0;
@@ -46,7 +32,7 @@ public class Descriptor {
 		this.sppfNode = sppfNode;
 	}
 	
-	public GrammarSlot getGrammarSlot() {
+	public BodyGrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
@@ -58,14 +44,14 @@ public class Descriptor {
 		return inputIndex;
 	}
 
-	public SPPFNode getSPPFNode() {
+	public NonPackedNode getSPPFNode() {
 		return sppfNode;
 	}
 	
 	@Override
 	public int hashCode() {
 		// The label of SPPFNode is the same as the slot
-		return HashFunctions.defaulFunction.hash(slot.getId(), inputIndex);
+		return HashFunctions.defaulFunction.hash(slot.hashCode(), inputIndex);
 	}
 	
 	@Override

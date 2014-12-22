@@ -3,55 +3,28 @@ package org.jgll.sppf;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
- * An SPPF node is a node in an Shared Packed Parse Forest. This data structure
- * is used to store the parse forest that is the result of parsing an input
- * string with a GLL parser. <br />
  * 
- * @author Maarten Manders
  * @author Ali Afroozeh
  * 
  */
 
-public abstract class SPPFNode {
-
-	private boolean visited;
+public interface SPPFNode {
 	
-	private Object object;
-
-	public abstract SPPFNode getChildAt(int index);
+	public SPPFNode getChildAt(int index);
 	
-	public abstract List<SPPFNode> getChildren();
+	public List<? extends SPPFNode> getChildren();
 		
-	public abstract boolean isAmbiguous();
+	public boolean isAmbiguous();
 
-	public abstract int childrenCount();
+	public int childrenCount();
 
-	public abstract int getId();
+	public GrammarSlot getGrammarSlot();
 
-	public abstract int getLeftExtent();
-
-	public abstract int getRightExtent();
-	
-	public abstract void accept(SPPFVisitor visitAction);
-	
-	public Object getObject() {
-		return object;
-	}
-	
-	public void setObject(Object object) {
-		this.object = object;
-	}
-	
-	public boolean isVisited() {
-		return visited;
-	}
-
-	public void setVisited(boolean visited) {
-		this.visited = visited;
-	}
+	public void accept(SPPFVisitor visitAction);
 	
 	/**
 	 * Compares this SPPFNode with the given node and their 
@@ -71,46 +44,24 @@ public abstract class SPPFNode {
 	 */
 	// TODO: doesn't work in case SPPF has a cycle
 	// TODO: create a set of packed nodes and then compare them instead of iterator stuff below.
-	public boolean deepEquals(SPPFNode node) {
+	default boolean deepEquals(SPPFNode node) {
 		
-		if(!this.equals(node)) {
+		if(!this.equals(node))
 			return false;
-		}
 		
-		if(this.childrenCount() != node.childrenCount()) {
+		if(this.childrenCount() != node.childrenCount())
 			return false;
-		}
 		
-		if(this.isAmbiguous() ^ node.isAmbiguous()) {
+		if(this.isAmbiguous() ^ node.isAmbiguous())
 			return false;
-		}
 		
-		// Packed nodes are not ordered, so we have to search
-		// through the packed nodes of the given node to match
-		// a packed node. This implementation may not be efficient for
-		// ambiguous nodes having many packed nodes.
 		if(this.isAmbiguous() && node.isAmbiguous()) {
-			Iterator<SPPFNode> thisIt = getChildren().iterator();
-
-			outer:
-			while(thisIt.hasNext()) {
-				SPPFNode thisChild = thisIt.next();
-				Iterator<SPPFNode> otherIt = node.getChildren().iterator();
-				while(otherIt.hasNext()) {
-					SPPFNode otherChild = otherIt.next();
-					if(thisChild.deepEquals(otherChild)) {
-						continue outer;
-					}
-				} 
-				return false;
-			}
-			
-			return true;
+			return compareAmbiguousNodes(this, node);
 		}
 		
-		Iterator<SPPFNode> thisIt = getChildren().iterator();
-		Iterator<SPPFNode> otherIt = node.getChildren().iterator();
-
+		Iterator<? extends SPPFNode> thisIt = getChildren().iterator();		
+		Iterator<? extends SPPFNode> otherIt = node.getChildren().iterator();
+		
 		while(thisIt.hasNext() && otherIt.hasNext()) {
 			SPPFNode thisChild = thisIt.next();
 			SPPFNode otherChild = otherIt.next();
@@ -120,6 +71,32 @@ public abstract class SPPFNode {
 		}
 		
 		return true;
+	}
+	
+	
+	// Packed nodes are not ordered, so we have to search
+	// through the packed nodes of the given node to match
+	// a packed node. This implementation may not be efficient for
+	// ambiguous nodes having many packed nodes.
+	static boolean compareAmbiguousNodes(SPPFNode node1, SPPFNode node2) {
+		
+		Iterator<? extends SPPFNode> thisIt = node1.getChildren().iterator();
+
+		outer:
+		while(thisIt.hasNext()) {
+			SPPFNode thisChild = thisIt.next();
+			Iterator<? extends SPPFNode> otherIt = node2.getChildren().iterator();
+			while(otherIt.hasNext()) {
+				SPPFNode otherChild = otherIt.next();
+				if(thisChild.deepEquals(otherChild)) {
+					continue outer;
+				}
+			} 
+			return false;
+		}
+		
+		return true;
+		
 	}
 	
 }

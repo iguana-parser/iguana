@@ -32,5 +32,4 @@ public interface GSSLookup {
 	public int getGSSEdgesCount();
 	
 	public Iterable<GSSNode> getGSSNodes();
-	
 }	
