@@ -3,14 +3,14 @@ package org.jgll.sppf;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
 
 public class OriginalNonterminalNode extends NonterminalNode {
 
 	private Set<PackedNode> packedNodes;
 	
-	public OriginalNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
+	public OriginalNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
 		super(head, leftExtent, rightExtent);
 	}	
 	

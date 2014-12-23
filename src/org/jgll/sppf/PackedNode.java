@@ -3,7 +3,6 @@ package org.jgll.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.traversal.SPPFVisitor;
@@ -16,7 +15,7 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class PackedNode implements SPPFNode {
 	
-	private final BodyGrammarSlot slot;
+	private final GrammarSlot slot;
 
 	private final int pivot;
 
@@ -24,7 +23,7 @@ public class PackedNode implements SPPFNode {
 	
 	private List<NonPackedNode> children;
 	
-	public PackedNode(BodyGrammarSlot slot, int pivot, NonPackedNode parent) {
+	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
 		assert slot != null;
 		assert pivot >= 0;
 		assert parent != null;

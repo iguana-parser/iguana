@@ -1,10 +1,9 @@
-package org.jgll.grammar.slotnew;
+package org.jgll.grammar.slot;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 
 

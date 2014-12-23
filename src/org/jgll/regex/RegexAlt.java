@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,8 +19,6 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
 

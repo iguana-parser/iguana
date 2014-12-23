@@ -1,12 +1,12 @@
 package org.jgll.grammar.symbol;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 public abstract class AbstractSymbol implements Symbol {
 

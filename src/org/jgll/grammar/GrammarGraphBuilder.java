@@ -10,10 +10,7 @@ import java.util.stream.Collectors;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;

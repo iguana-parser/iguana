@@ -1,7 +1,6 @@
 package org.jgll.grammar.slot.nodecreator;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;

@@ -12,7 +12,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
 import org.jgll.util.generator.CompilationUtil;
 
 import com.google.common.testing.GcFinalization;

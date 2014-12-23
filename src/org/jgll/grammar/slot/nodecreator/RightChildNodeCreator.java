@@ -3,7 +3,6 @@ package org.jgll.grammar.slot.nodecreator;
 import java.io.Serializable;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
 

@@ -1,5 +1,7 @@
 package org.jgll.grammar.symbol;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,8 +12,6 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 
 /**

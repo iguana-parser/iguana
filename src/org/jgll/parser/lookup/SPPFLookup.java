@@ -1,7 +1,5 @@
 package org.jgll.parser.lookup;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.IntermediateNode;

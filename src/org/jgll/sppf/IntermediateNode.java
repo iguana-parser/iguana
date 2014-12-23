@@ -2,7 +2,6 @@ package org.jgll.sppf;
 
 import java.util.ArrayList;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -29,7 +28,7 @@ public class IntermediateNode extends NonterminalOrIntermediateNode {
 	}
 
 	@Override
-	public BodyGrammarSlot getGrammarSlot() {
-		return (BodyGrammarSlot) slot;
+	public GrammarSlot getGrammarSlot() {
+		return (GrammarSlot) slot;
 	}
 }

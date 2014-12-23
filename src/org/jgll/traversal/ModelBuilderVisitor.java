@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.slot.LastGrammarSlot;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;

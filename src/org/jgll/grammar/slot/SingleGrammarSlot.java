@@ -1,7 +1,6 @@
-package org.jgll.grammar.slotnew;
+package org.jgll.grammar.slot;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;

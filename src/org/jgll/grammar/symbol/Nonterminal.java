@@ -1,9 +1,9 @@
 package org.jgll.grammar.symbol;
 
-import java.util.*;
+import java.util.Set;
 
-import org.jgll.grammar.condition.*;
-import org.jgll.parser.*;
+import org.jgll.grammar.condition.Condition;
+import org.jgll.parser.HashFunctions;
 
 public class Nonterminal extends AbstractSymbol {
 

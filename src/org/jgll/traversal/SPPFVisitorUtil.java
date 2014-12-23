@@ -1,14 +1,8 @@
 package org.jgll.traversal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jgll.sppf.CollapsibleNode;
-import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 

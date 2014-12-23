@@ -1,8 +1,6 @@
 package org.jgll.parser;
 
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;

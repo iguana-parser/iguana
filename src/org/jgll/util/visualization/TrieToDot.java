@@ -1,8 +1,11 @@
 package org.jgll.util.visualization;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.jgll.util.trie.*;
+import org.jgll.util.trie.Edge;
+import org.jgll.util.trie.Node;
+import org.jgll.util.trie.Trie;
 
 
 public class TrieToDot<T> {

@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +24,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.regex.RegularExpression;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 
 /**

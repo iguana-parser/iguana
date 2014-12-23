@@ -1,9 +1,8 @@
-package org.jgll.grammar.slotnew;
+package org.jgll.grammar.slot;
 
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;

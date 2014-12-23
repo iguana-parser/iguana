@@ -29,7 +29,7 @@ import org.jgll.traversal.PositionInfo;
 public class Input {
 
 	private int[] characters;
-
+	
 	/**
 	 * This array keeps the line and column information associated with each input index.
 	 */

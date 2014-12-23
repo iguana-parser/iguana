@@ -1,13 +1,13 @@
 package org.jgll.grammar.symbol;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
-
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 public class Group extends Nonterminal {
 

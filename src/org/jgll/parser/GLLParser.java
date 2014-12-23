@@ -2,9 +2,8 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.HeadGrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.GSSLookup;
@@ -24,7 +23,7 @@ public interface GLLParser {
 	
 	public void pop();
 	
-	public HeadGrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head);
+	public NonterminalGrammarSlot create(GrammarSlot returnSlot, NonterminalGrammarSlot head);
 		
 	/**
 	 * @return true if no such descriptor exists.
