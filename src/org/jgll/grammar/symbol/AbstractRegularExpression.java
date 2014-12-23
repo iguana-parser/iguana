@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 
@@ -17,6 +18,17 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 		super(name, conditions, label, object);
 	}
 	
+	@Override
+	public Matcher getMatcher() {
+		return (input, i) -> automaton.getRunnableAutomaton().match(input, i);
+	}
+	
+	@Override
+	public Matcher getBackwardsMatcher() {
+		return (input, i) -> automaton.getRunnableAutomaton().matchBackwards(input, i);
+	}
+	
+	@Override
 	public Automaton getAutomaton() {
 		if (automaton == null) {
 //			automaton = combineConditions(createAutomaton());

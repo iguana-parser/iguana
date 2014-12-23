@@ -3,6 +3,7 @@ package org.jgll.grammar.slotnew;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.GLLParser;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 
@@ -15,8 +16,8 @@ public class SingleGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
-		return transition.execute(parser, input, i);
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
+		transition.execute(parser, input, node);
 	}
 
 	@Override

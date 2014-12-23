@@ -11,6 +11,7 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
@@ -29,19 +30,17 @@ public class EpsilonGrammarSlot extends LastGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
 		
 		int ci = parser.getCurrentInputIndex();
 		
-		if(head.testFollowSet(input.charAt(i))) {
+		if(head.testFollowSet(input.charAt(ci))) {
 			TerminalNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
-			NonterminalNode node = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
-			parser.getSPPFLookup().addPackedNode(node, this, ci, DummyNode.getInstance(), epsilonNode);
-			parser.setCurrentSPPFNode(node);
+			NonterminalNode newNode = parser.getSPPFLookup().getNonterminalNode(this.getHead(), ci, ci);
+			parser.getSPPFLookup().addPackedNode(newNode, this, ci, DummyNode.getInstance(), epsilonNode);
+			parser.setCurrentSPPFNode(newNode);
 			parser.pop();
 		}
-
-		return null;
 	}
 	
 	@Override

@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.L0;
 import org.jgll.traversal.SPPFVisitor;
 
 /**
@@ -24,7 +23,7 @@ public class DummyNode extends NonPackedNode {
 	
 	public static DummyNode getInstance() {
 		if(instance == null) {
-			instance = new DummyNode(L0.getInstance(), -1, -1);
+			instance = new DummyNode(null, -1, -1);
 		}
 		return instance;
 	}
@@ -60,8 +59,8 @@ public class DummyNode extends NonPackedNode {
 	}
 
 	@Override
-	public L0 getGrammarSlot() {
-		return L0.getInstance();
+	public GrammarSlot getGrammarSlot() {
+		return null;
 	}
 
 	@Override

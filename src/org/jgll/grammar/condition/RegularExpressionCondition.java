@@ -2,7 +2,6 @@ package org.jgll.grammar.condition;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.automaton.RunnableAutomaton;
 
 /**
  * Conditions relating to the keyword exclusions or follow restrictions. 
@@ -26,7 +25,7 @@ public class RegularExpressionCondition extends Condition {
 		if (regularExpression.getConditions().size() != 0)
 			throw new IllegalArgumentException("RegularExpression conditions cannot have conditions themselves.");
 		
-		action = createSlotAction(regularExpression.getAutomaton().getRunnableAutomaton());
+		action = createSlotAction(regularExpression);
 	}
 
 	@Override
@@ -35,27 +34,27 @@ public class RegularExpressionCondition extends Condition {
 	}
 	
 	
-	public SlotAction createSlotAction(RunnableAutomaton r) {
+	public SlotAction createSlotAction(RegularExpression r) {
 		
 		switch (type) {
 		
 		    case FOLLOW:
-		    	return (input, node, i) -> r.match(input, i) == -1;
+		    	return (input, node, i) -> r.getMatcher().match(input, i) == -1;
 		    	
 		    case NOT_FOLLOW:
-		    	return (input, node, i) -> r.match(input, i) >= 0;
+		    	return (input, node, i) -> r.getMatcher().match(input, i) >= 0;
 		    	
 		    case MATCH:
 		    	throw new RuntimeException("Unsupported");
 		
 			case NOT_MATCH: 
-				return (input, node, i) -> r.match(input, node.getInputIndex(), i);
+				return (input, node, i) -> r.getMatcher().match(input, node.getInputIndex(), i);
 				
 			case NOT_PRECEDE:
-				return (input, node, i) -> r.matchBackwards(input, i - 1) >= 0;
+				return (input, node, i) -> r.getBackwardsMatcher().match(input, i - 1) >= 0;
 				
 			case PRECEDE:
-				return (input, node, i) -> r.matchBackwards(input, i - 1) == -1;
+				return (input, node, i) -> r.getBackwardsMatcher().match(input, i - 1) == -1;
 				
 			default:
 				throw new RuntimeException("Unexpected error occured.");

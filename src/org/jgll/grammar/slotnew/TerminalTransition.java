@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
@@ -14,36 +15,39 @@ public class TerminalTransition extends AbstractTransition {
 
 	private TerminalGrammarSlot slot;
 
-	public TerminalTransition(TerminalGrammarSlot slot, GrammarSlot origin, GrammarSlot dest, Set<Condition> preConditions, Set<Condition> postConditions) {
-		super(origin, dest, preConditions, postConditions);
+	public TerminalTransition(TerminalGrammarSlot slot, 
+							  GrammarSlot origin, 
+							  GrammarSlot dest, 
+							  Set<Condition> preConditions, 
+							  Set<Condition> postConditions,
+							  NodeCreator nodeCreator) {
+		super(origin, dest, preConditions, postConditions, nodeCreator);
 		this.slot = slot;
 	}
 
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
 		
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), i))) 
-			return null;
+		int ci = node.getRightExtent();
+		
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(input, parser.getCurrentGSSNode(), ci))) 
+			return;
 
-		int length = slot.getRegularExpression().matcher().match(input, i);
+		int length = slot.getRegularExpression().getMatcher().match(input, ci);
 		
 		if (length < 0) {
 			parser.recordParseError(origin);
-			return null;
+			return;
 		}
 
-		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), i + length))) 
-			return null;
+		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length))) 
+			return;
 	
-		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, i, i + length);
+		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, ci, ci + length);
 		
-		parser.setCurrentInputIndex(i + length);
+		NonPackedNode newNode = nodeCreator.create(parser, dest, node, cr);
 		
-		NonPackedNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
-		
-		parser.setCurrentSPPFNode(node);
-		
-		return next;		
+		dest.execute(parser, input, newNode);		
 	}
 
 }

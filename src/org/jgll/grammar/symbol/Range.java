@@ -10,7 +10,6 @@ import org.jgll.parser.HashFunctions;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
-import org.jgll.regex.automaton.Transition;
 import org.jgll.util.unicode.UnicodeUtil;
 
 

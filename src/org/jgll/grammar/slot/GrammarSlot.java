@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 import org.jgll.util.generator.ConstructorCode;
 
@@ -22,7 +23,7 @@ import org.jgll.util.generator.ConstructorCode;
  */
 public interface GrammarSlot extends ConstructorCode {
 	
-	public GrammarSlot execute(GLLParser parser, Input input, int i);
+	public void execute(GLLParser parser, Input input, NonPackedNode node);
 	
 	default GSSNode getGSSNode(int inputIndex) { return null; }
 	

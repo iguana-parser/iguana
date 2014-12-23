@@ -5,11 +5,16 @@ import java.util.Set;
 
 import org.jgll.grammar.symbol.Range;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.generator.ConstructorCode;
 
 public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
 
-	public Matcher matcher();
+	public Matcher getMatcher();
+	
+	public Matcher getBackwardsMatcher();
+	
+	public Automaton getAutomaton();
 	
 	public boolean isNullable();
 	

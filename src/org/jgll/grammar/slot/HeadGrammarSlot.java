@@ -13,6 +13,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
@@ -85,27 +86,25 @@ public class HeadGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
 		int ci = parser.getCurrentInputIndex();
 		
 		Set<Integer> set = predictionTest.get(input.charAt(ci));
 		
-		if (set == null) return null;
+		if (set == null) return;
 		
 		// If there is only one alternative, skip descriptor creation and jump to the beginning
 		// of the alternative
 		if (set.size() == 1) {
 			BodyGrammarSlot slot = firstSlots[set.iterator().next()];
 			log.trace("Processing (%s, %d, %s, %s)", slot, parser.getCurrentInputIndex(), parser.getCurrentGSSNode(), parser.getCurrentSPPFNode());
-			return slot;
+			return;
 		}
 		
 		for (int alternateIndex : set) {
 			if (firstSlots[alternateIndex] == null) continue;  // TODO: remove these null alternatives altogether.
 			parser.scheduleDescriptor(new Descriptor(firstSlots[alternateIndex], parser.getCurrentGSSNode(), ci, DummyNode.getInstance()));
 		}
-		
-		return null;
 	}
 	
 	public Nonterminal getNonterminal() {
@@ -184,5 +183,5 @@ public class HeadGrammarSlot implements GrammarSlot {
 	public HeadGrammarSlot withId(int id) {
 		return new HeadGrammarSlot(id, this);
 	}
-	
+
 }

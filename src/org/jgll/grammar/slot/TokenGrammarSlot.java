@@ -38,30 +38,32 @@ public class TokenGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
+		
+		int ci = node.getRightExtent();
 
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), i))) 
-			return null;
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci))) 
+			return;
 
-		int length = slot.getRegularExpression().matcher().match(input, i);
+		int length = slot.getRegularExpression().getMatcher().match(input, ci);
 		
 		if (length < 0) {
 			parser.recordParseError(this);
-			return null;
+			return;
 		}
 
-		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), i + length))) 
-			return null;
+		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length))) 
+			return;
 	
-		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, i, i + length);
+		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, ci, ci + length);
 		
-		parser.setCurrentInputIndex(i + length);
+		parser.setCurrentInputIndex(ci + length);
 		
-		NonPackedNode node = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
+		NonPackedNode newNode = nodeCreator.create(parser, next, parser.getCurrentSPPFNode(), cr);
 		
-		parser.setCurrentSPPFNode(node);
+		parser.setCurrentSPPFNode(newNode);
 		
-		return next;
+		next.execute(parser, input, newNode);
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package org.jgll.parser;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.L0;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
@@ -21,7 +20,7 @@ import org.jgll.sppf.NonPackedNode;
  */
 public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	
-	protected static final GSSNode u0 = new GSSNode(L0.getInstance(), 0);
+	protected static final GSSNode u0 = new GSSNode(null, 0);
 		
 	public OriginalGLLParserImpl(GSSLookupFactory gssLookupFactory, 
 						 SPPFLookupFactory sppfLookupFactory, 

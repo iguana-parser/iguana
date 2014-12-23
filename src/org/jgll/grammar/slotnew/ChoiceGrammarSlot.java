@@ -5,6 +5,7 @@ import java.util.List;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.GLLParser;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 
@@ -17,9 +18,8 @@ public class ChoiceGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
-		transitions.forEach(t -> t.execute(parser, input, i));
-		return null;
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
+		transitions.forEach(t -> t.execute(parser, input, node));
 	}
 
 	@Override

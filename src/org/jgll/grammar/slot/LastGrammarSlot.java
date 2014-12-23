@@ -12,6 +12,7 @@ import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParser;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 /**
@@ -39,11 +40,10 @@ public class LastGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
-		if (head.testFollowSet(input.charAt(i))) {
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
+		if (head.testFollowSet(input.charAt(node.getRightExtent()))) {
 			parser.pop();			
 		}
-		return null;
 	}
 	
 	@Override

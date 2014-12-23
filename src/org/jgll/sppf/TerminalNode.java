@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.Collections;
 import java.util.List;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 
@@ -13,7 +14,7 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class TerminalNode extends NonPackedNode {
 	
-	public TerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
+	public TerminalNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
 	}
 	

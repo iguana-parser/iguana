@@ -6,6 +6,7 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.RegularExpression;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 public class TerminalGrammarSlot implements GrammarSlot {
@@ -24,8 +25,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
-		return null;
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
 	}
 
 	@Override

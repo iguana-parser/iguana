@@ -12,6 +12,7 @@ import org.jgll.grammar.slot.nodecreator.DummyNodeCreator;
 import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.GLLParser;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 /**
@@ -48,20 +49,19 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public GrammarSlot execute(GLLParser parser, Input input, int i) {
+	public void execute(GLLParser parser, Input input, NonPackedNode node) {
 		
-		int ci = parser.getCurrentInputIndex();
+		int ci = node.getRightExtent();
 		
 		if (!nonterminal.test(input.charAt(ci))) {
 			parser.recordParseError(this);
-			return null;
+			return;
 		}
 		
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci))) {
-			return null;
-		}
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci)))
+			return;
 		
-		return parser.create(next, nonterminal);
+		parser.create(next, nonterminal).execute(parser, input, node);
 	}
 	
 	@Override

@@ -6,10 +6,7 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.HeadGrammarSlot;
-import org.jgll.grammar.slot.L0;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.lexer.Lexer;
-import org.jgll.lexer.UnmemoizedLexerImpl;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
@@ -49,8 +46,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected int ci = 0;
 	
 	protected Input input;
-	
-	protected Lexer lexer;
 	
 	/**
 	 * 
@@ -95,7 +90,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 
 		this.grammar = grammar;
 		this.input = input;
-		this.lexer = new UnmemoizedLexerImpl(input);
 		
 		HeadGrammarSlot startSymbol = getStartSymbol(startSymbolName);
 		
@@ -155,19 +149,20 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected void parse(HeadGrammarSlot startSymbol) {
-
-		if(!startSymbol.test(lexer.charAt(ci))) {
+		
+		if(!startSymbol.test(input.charAt(ci))) {
 			recordParseError(startSymbol);
 			return;
 		}
 		
-		GrammarSlot slot = startSymbol.execute(this, lexer);
+		startSymbol.execute(this, input, cn);
 		
-		while(slot != null) {
-			slot = slot.execute(this, lexer);
+		
+		while(hasNextDescriptor()) {
+			Descriptor descriptor = nextDescriptor();
+			GrammarSlot slot = descriptor.getGrammarSlot();
+			slot.execute(this, input, descriptor.getSPPFNode());
 		}
-		
-		L0.getInstance().execute(this, lexer);
 	}
 	
 	protected abstract void initParserState(HeadGrammarSlot startSymbol);
@@ -304,11 +299,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public GrammarSlotRegistry getRegistry() {
 		return grammar.getRegistry();
-	}
-	
-	@Override
-	public Lexer getLexer() {
-		return lexer;
 	}
 	
 }
