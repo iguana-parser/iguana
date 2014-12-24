@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -27,25 +28,24 @@ public class GrammarSlotRegistry {
 	
 	private BiMap<GrammarSlot, Integer> ids = HashBiMap.create();
 	
-	private Map<Nonterminal, HeadGrammarSlot> nonterminals;
+	private Map<Nonterminal, NonterminalGrammarSlot> nonterminals;
 	private Map<RegularExpression, TerminalGrammarSlot> terminals;
-	private Map<String, BodyGrammarSlot> slots;
+	private Map<String, GrammarSlot> slots;
 	
 	private Map<String, RegularExpression> regularExpressions = new HashMap<>();
 	
-	public static GrammarSlotRegistry from(Collection<HeadGrammarSlot> heads, 
-							   Collection<TerminalGrammarSlot> terminals, 
-							   Collection<BodyGrammarSlot> slots) {
-
+	public static GrammarSlotRegistry from(Collection<NonterminalGrammarSlot> heads, 
+							   			   Collection<TerminalGrammarSlot> terminals, 
+							   			   Collection<GrammarSlot> slots) {
 		return new GrammarSlotRegistry(
 			 heads.stream().collect(Collectors.toMap(x -> x.getNonterminal(), x -> x)),
 		     terminals.stream().collect(Collectors.toMap(x -> x.getRegularExpression(), x -> x)),
 		     slots.stream().collect(Collectors.toMap(x -> x.toString(), x -> x)));
 	}
 	
-	public GrammarSlotRegistry(Map<Nonterminal, HeadGrammarSlot> heads, 
+	public GrammarSlotRegistry(Map<Nonterminal, NonterminalGrammarSlot> heads, 
 			 				   Map<RegularExpression, TerminalGrammarSlot> terminals, 
-			 				   Map<String, BodyGrammarSlot> slots) {
+			 				   Map<String, GrammarSlot> slots) {
 
 		if (heads == null) throw new IllegalArgumentException();
 		if (terminals == null) throw new IllegalArgumentException();
@@ -64,7 +64,7 @@ public class GrammarSlotRegistry {
 		terminals.keySet().stream().forEach(t -> regularExpressions.put(t.toString(), t));
 	}
 
-	public HeadGrammarSlot getHead(Nonterminal nt) {
+	public NonterminalGrammarSlot getHead(Nonterminal nt) {
 		return nonterminals.get(nt);
 	}
 	
@@ -72,7 +72,7 @@ public class GrammarSlotRegistry {
 		return terminals.get(regex);
 	}
 
-	public BodyGrammarSlot getGrammarSlot(String s) {
+	public GrammarSlot getGrammarSlot(String s) {
 		return slots.get(s);
 	}
 	

@@ -12,7 +12,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -33,9 +35,9 @@ public class GrammarGraph implements Serializable {
 	
 	private GrammarSlotRegistry registry;
 
-	private List<HeadGrammarSlot> headGrammarSlots;
+	private List<NonterminalGrammarSlot> headGrammarSlots;
 	
-	private Set<BodyGrammarSlot> slots;
+	private Set<GrammarSlot> slots;
 	
 	private List<TerminalGrammarSlot> terminals;
 	
@@ -322,15 +324,15 @@ public class GrammarGraph implements Serializable {
 		return name;
 	}
 	
-	public HeadGrammarSlot getHeadGrammarSlot(int id) {
+	public GrammarSlot getHeadGrammarSlot(int id) {
 		return headGrammarSlots.get(id);
 	}
 	
-	public List<HeadGrammarSlot> getNonterminals() {
+	public List<NonterminalGrammarSlot> getNonterminals() {
 		return headGrammarSlots;
 	}
 		
-	private String getSlotName(BodyGrammarSlot slot) {
+	private String getSlotName(GrammarSlot slot) {
 		if(slot instanceof TokenGrammarSlot) {
 			return ((TokenGrammarSlot) slot).getSymbol().getName();
 		}
@@ -350,7 +352,7 @@ public class GrammarGraph implements Serializable {
 		GrammarVisitAction action = new GrammarVisitAction() {
 			
 			@Override
-			public void visit(LastGrammarSlot slot) {
+			public void visit(EndGrammarSlot slot) {
 				if(slot instanceof EpsilonGrammarSlot) {
 					sb.append(" epsilon\n");
 				} else {

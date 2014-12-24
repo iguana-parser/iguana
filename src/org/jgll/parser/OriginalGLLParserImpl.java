@@ -1,6 +1,8 @@
 package org.jgll.parser;
 
 
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
@@ -27,7 +29,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	protected void initParserState(HeadGrammarSlot startSymbol) {
+	protected void initParserState(NonterminalGrammarSlot startSymbol) {
 		u0.clearDescriptors();
 		cu = u0;
 		cn = DummyNode.getInstance();
@@ -47,7 +49,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			if (!gssLookup.addToPoppedElements(gssNode, node))
 				return;
 
-			BodyGrammarSlot returnSlot = (BodyGrammarSlot) gssNode.getGrammarSlot();
+			GrammarSlot returnSlot = gssNode.getGrammarSlot();
 
 			if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
 				return; 
@@ -63,24 +65,24 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final GSSNode createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head) {
+	public final GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot head) {
 		if (! returnSlot.isInitialized()) returnSlot.init(input);
 		return gssLookup.getGSSNode(returnSlot, ci);
 	}
 	
 	@Override
-	public final GSSNode hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head) {
+	public final GSSNode hasGSSNode(GrammarSlot slot, NonterminalGrammarSlot head) {
 		return gssLookup.hasGSSNode(slot, ci);
 	}
 	
 	@Override
-	public void createGSSEdge(BodyGrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source) {
+	public void createGSSEdge(GrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source) {
 		
 		GSSEdge edge = new OriginalGSSEdgeImpl(w, destination);
 		
 		if(gssLookup.getGSSEdge(source, edge)) {
 			
-			BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
+			GrammarSlot returnSlot = source.getGrammarSlot();
 			
 			log.trace("GSS Edge created from %s to %s", source, destination);
 			

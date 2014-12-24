@@ -8,12 +8,10 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 
-public class EpsilonGrammarSlot implements GrammarSlot {
-
-	private NonterminalGrammarSlot nonterminal;
+public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	public EpsilonGrammarSlot(NonterminalGrammarSlot nonterminal) {
-		this.nonterminal = nonterminal;
+		super(nonterminal);
 	}
 	
 	@Override

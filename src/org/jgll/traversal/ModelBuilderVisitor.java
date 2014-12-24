@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;
@@ -93,8 +94,8 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		assert node.getChildAt(0) instanceof PackedNode;
 		PackedNode packedNode = (PackedNode) node.getChildAt(0);
 		
-		assert packedNode.getGrammarSlot() instanceof LastGrammarSlot;
-		LastGrammarSlot grammarSlot = (LastGrammarSlot) packedNode.getGrammarSlot();
+		assert packedNode.getGrammarSlot() instanceof EndGrammarSlot;
+		EndGrammarSlot grammarSlot = (EndGrammarSlot) packedNode.getGrammarSlot();
 		return grammarSlot.getObject();
 	}
 	

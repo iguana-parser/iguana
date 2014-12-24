@@ -3,6 +3,8 @@ package org.jgll.parser.lookup;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
@@ -49,7 +51,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public NonterminalNode getNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
+	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
 		final NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent);
 		return nonterminalNodes.computeIfAbsent(key, k -> { 
 													        log.trace("Nonterminal node created: %s", key); 
@@ -57,7 +59,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 													      });
 	}
 	
-	protected NonterminalNode createNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {
+	protected NonterminalNode createNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
 		if(head.getNonterminal().isEbnfList()) {
 			return new ListSymbolNode(head, leftExtent, rightExtent);
 		} else {
@@ -65,18 +67,18 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 		}
 	}
 	
-	protected IntermediateNode createIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	protected IntermediateNode createIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		return new IntermediateNode(grammarSlot, leftExtent, rightExtent);
 	}
 
 	@Override
-	public NonterminalNode findNonterminalNode(HeadGrammarSlot head, int leftExtent, int rightExtent) {		
+	public NonterminalNode findNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {		
 		NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent);
 		return nonterminalNodes.get(key);
 	}
 
 	@Override
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	public IntermediateNode getIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		final IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
 		return intermediateNodes.computeIfAbsent(key, k -> { 
 														      log.trace("Intermediate node created: %s", key); 
@@ -85,13 +87,13 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 
 	@Override
-	public IntermediateNode findIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+	public IntermediateNode findIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
 		return intermediateNodes.get(key);
 	}
 	
 	@Override
-	public void addPackedNode(NonPackedNode parent, BodyGrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		PackedNode packedNode = new PackedNode(slot, pivot, parent);
 		boolean ambiguousBefore = parent.isAmbiguous();
 		if (((NonterminalOrIntermediateNode) parent).addPackedNode(packedNode, leftChild, rightChild)) {
@@ -112,7 +114,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public NonterminalNode getStartSymbol(HeadGrammarSlot startSymbol, int inputSize) {
+	public NonterminalNode getStartSymbol(NonterminalGrammarSlot startSymbol, int inputSize) {
 		return nonterminalNodes.get(createNonterminalNode(startSymbol, 0, inputSize - 1));
 	}
 

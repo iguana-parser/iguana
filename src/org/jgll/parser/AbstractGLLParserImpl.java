@@ -4,6 +4,7 @@ package org.jgll.parser;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
@@ -89,7 +90,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		this.grammar = grammar;
 		this.input = input;
 		
-		HeadGrammarSlot startSymbol = getStartSymbol(startSymbolName);
+		NonterminalGrammarSlot startSymbol = getStartSymbol(startSymbolName);
 		
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
@@ -142,11 +143,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return parseResult;
 	}
 	
-	protected HeadGrammarSlot getStartSymbol(String name) {
+	protected NonterminalGrammarSlot getStartSymbol(String name) {
 		return grammar.getRegistry().getHead(Nonterminal.withName(name));
 	}
 	
-	protected void parse(HeadGrammarSlot startSymbol) {
+	protected void parse(NonterminalGrammarSlot startSymbol) {
 		
 		if(!startSymbol.test(input.charAt(ci))) {
 			recordParseError(startSymbol);
@@ -163,10 +164,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 	}
 	
-	protected abstract void initParserState(HeadGrammarSlot startSymbol);
+	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
-	public HeadGrammarSlot create(BodyGrammarSlot slot, HeadGrammarSlot head) {
+	public NonterminalGrammarSlot create(GrammarSlot slot, NonterminalGrammarSlot head) {
 		
 		GSSNode gssNode = hasGSSNode(slot, head);
 		if (gssNode == null) {
@@ -182,11 +183,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return null;
 	}
 	
-	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
+	public abstract void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
 	
-	public abstract GSSNode createGSSNode(BodyGrammarSlot returnSlot, HeadGrammarSlot head);
+	public abstract GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot head);
 	
-	public abstract GSSNode hasGSSNode(BodyGrammarSlot slot, HeadGrammarSlot head);
+	public abstract GSSNode hasGSSNode(GrammarSlot slot, NonterminalGrammarSlot head);
 
 	
 	/**

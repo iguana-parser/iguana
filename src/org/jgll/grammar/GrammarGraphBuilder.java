@@ -10,7 +10,10 @@ import java.util.stream.Collectors;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
+import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
@@ -28,11 +31,11 @@ public class GrammarGraphBuilder implements Serializable {
 
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(GrammarGraphBuilder.class);
 
-	Map<Nonterminal, HeadGrammarSlot> nonterminalsMap;
+	Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
 	
 	Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
 	
-	Map<String, BodyGrammarSlot> slots;
+	Map<String, GrammarSlot> slots;
 
 	String name;
 	
@@ -73,7 +76,7 @@ public class GrammarGraphBuilder implements Serializable {
 		List<List<Symbol>> alternates = grammar.getAlternatives(head);
 		popActions.clear();
 		
-		HeadGrammarSlot headGrammarSlot = getHeadGrammarSlot(head);
+		NonterminalGrammarSlot headGrammarSlot = getHeadGrammarSlot(head);
 		
 		int alternateIndex = 0;
 		
@@ -84,7 +87,7 @@ public class GrammarGraphBuilder implements Serializable {
 				continue;
 			}
 			
-			BodyGrammarSlot currentSlot = null;
+			GrammarSlot currentSlot = null;
 	
 			if (body.size() == 0) {
 				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(headGrammarSlot);
@@ -92,7 +95,7 @@ public class GrammarGraphBuilder implements Serializable {
 				headGrammarSlot.setFirstGrammarSlotForAlternate(epsilonSlot, alternateIndex);
 			} 
 			else {
-				BodyGrammarSlot firstSlot = null;
+				GrammarSlot firstSlot = null;
 				int symbolIndex = 0;
 				for (; symbolIndex < body.size(); symbolIndex++) {
 					
@@ -104,7 +107,7 @@ public class GrammarGraphBuilder implements Serializable {
 					}
 				}
 	
-				LastGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popActions);
+				EndGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popActions);
 				slots.put(lastSlot.toString(), lastSlot);
 				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
 			}
@@ -131,12 +134,12 @@ public class GrammarGraphBuilder implements Serializable {
 		else {
 			popActions = new HashSet<>(symbol.getConditions());
 			
-			HeadGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
+			NonterminalGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
 			return grammarSlotFactory.createNonterminalGrammarSlot(rule, symbolIndex, currentSlot, nonterminal, symbol.getConditions(), popActions);						
 		}		
 	}
 
-	private HeadGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
+	private NonterminalGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
 		return nonterminalsMap.computeIfAbsent(nonterminal, k -> grammarSlotFactory.createHeadGrammarSlot(nonterminal, grammar.getAlternatives(nonterminal), grammar.getFirstSets(), grammar.getFollowSets(), grammar.getPredictionSets()));		
 	}
 	
