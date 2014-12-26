@@ -6,7 +6,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -58,12 +58,12 @@ public class RegexOpt extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public Set<Range> getFirstSet() {
+	public Set<CharacterRange> getFirstSet() {
 		return regexp.getFirstSet();
 	}
 	
 	@Override
-	public Set<Range> getNotFollowSet() {
+	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 

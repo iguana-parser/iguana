@@ -15,7 +15,6 @@ import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.slot.factory.GrammarSlotFactory;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Keyword;
@@ -41,16 +40,13 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	Grammar grammar;
 	
-	private GrammarSlotFactory grammarSlotFactory;
 	
-	public GrammarGraphBuilder(Grammar grammar, GrammarSlotFactory grammarSlotFactory) {
-		this("no-name", grammar, grammarSlotFactory);
+	public GrammarGraphBuilder(Grammar grammar) {
+		this("no-name", grammar);
 	}
 	
-	public GrammarGraphBuilder(String name, Grammar grammar, 
-							   GrammarSlotFactory grammarSlotFactory) {
+	public GrammarGraphBuilder(String name, Grammar grammar) {
 		this.name = name;
-		this.grammarSlotFactory = grammarSlotFactory;
 		this.grammar = grammar;
 		this.slots = new LinkedHashMap<>();
 		this.nonterminalsMap = new LinkedHashMap<>();
@@ -73,51 +69,61 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 	
 	private void convert(Nonterminal head) {
-		List<List<Symbol>> alternates = grammar.getAlternatives(head);
+		
+		List<Rule> rules = grammar.getAlternatives(head);
 		popActions.clear();
 		
-		NonterminalGrammarSlot headGrammarSlot = getHeadGrammarSlot(head);
+		NonterminalGrammarSlot nonterminalSlot = getHeadGrammarSlot(head);
 		
 		int alternateIndex = 0;
 		
-		for(List<Symbol> body : alternates) {
+		for(Rule rule : rules) {
 			
-			if(body == null) {
+			if(rule == null) {
 				alternateIndex++;
 				continue;
 			}
 			
+			addAlternative(nonterminalSlot, rule);
+			
 			GrammarSlot currentSlot = null;
 	
-			if (body.size() == 0) {
-				EpsilonGrammarSlot epsilonSlot = grammarSlotFactory.createEpsilonGrammarSlot(headGrammarSlot);
-				slots.put(epsilonSlot.toString(), epsilonSlot);
-				headGrammarSlot.setFirstGrammarSlotForAlternate(epsilonSlot, alternateIndex);
-			} 
-			else {
-				GrammarSlot firstSlot = null;
-				int symbolIndex = 0;
-				for (; symbolIndex < body.size(); symbolIndex++) {
-					
-					currentSlot = getBodyGrammarSlot(new Rule(head, body), symbolIndex, currentSlot);
-					slots.put(currentSlot.toString(), currentSlot);
-	
-					if (symbolIndex == 0) {
-						firstSlot = currentSlot;
-					}
-				}
-	
-				EndGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, headGrammarSlot, popActions);
-				slots.put(lastSlot.toString(), lastSlot);
-				headGrammarSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
-			}
 			alternateIndex++;
+		}
+	}
+	
+	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
+		if (rule.size() == 0) {
+			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(head);
+			slots.put(epsilonSlot.toString(), epsilonSlot);
+		} 
+		else {
+
+			for (Symbol symbol : rule.getBody()) {
+				
+			}
+			
+			GrammarSlot firstSlot = null;
+			int symbolIndex = 0;
+			for (; symbolIndex < body.size(); symbolIndex++) {
+				
+				currentSlot = getBodyGrammarSlot(new Rule(head, body), symbolIndex, currentSlot);
+				slots.put(currentSlot.toString(), currentSlot);
+
+				if (symbolIndex == 0) {
+					firstSlot = currentSlot;
+				}
+			}
+
+			EndGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, nonterminalSlot, popActions);
+			slots.put(lastSlot.toString(), lastSlot);
+			nonterminalSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
 		}
 	}
 	
 	Set<Condition> popActions = new HashSet<>();
 	
-	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int symbolIndex, BodyGrammarSlot currentSlot) {
+	private GrammarSlot getBodyGrammarSlot(Rule rule, int symbolIndex, GrammarSlot currentSlot) {
 		
 		Symbol symbol = rule.getBody().get(symbolIndex);
 		
@@ -148,102 +154,4 @@ public class GrammarGraphBuilder implements Serializable {
 		return terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
 	}
 		
-	/**
-	 * Creates the corresponding grammar rule for the given keyword.
-	 * For example, for the keyword "if", a rule If ::= [i][f]
-	 * is returned.
-	 * 
-	 * @param keyword
-	 * @return
-	 */
-	public static Rule fromKeyword(Keyword keyword) {
-		Rule.Builder builder = new Rule.Builder(Nonterminal.withName(keyword.getName()));
-		for(Character c : keyword.getSequence()) {
-			builder.addSymbol(c);
-		}
-		return builder.build();
-	}
-
-	
-	
-//	/**
-//	 * Removes non-reachable nonterminals from the given nonterminal
-//	 * 
-//	 * @param head
-//	 * @return
-//	 */
-//	public GrammarGraphBuilder removeUnusedNonterminals(Nonterminal nonterminal) {
-//
-//		Set<HeadGrammarSlot> referedNonterminals = new HashSet<>();
-//		Deque<HeadGrammarSlot> queue = new ArrayDeque<>();
-//		queue.add(nonterminalsMap.get(nonterminal));
-//		
-//		while(!queue.isEmpty()) {
-//			HeadGrammarSlot head = queue.poll();
-//			referedNonterminals.add(head);
-//			
-//			for(BodyGrammarSlot slot : head.getFirstSlots()) {
-//				BodyGrammarSlot currentSlot = slot;
-//				
-//				while(currentSlot.next() != null) {
-//					if(currentSlot instanceof NonterminalGrammarSlot) {
-//						if(!referedNonterminals.contains(((NonterminalGrammarSlot) currentSlot).getNonterminal())) {
-//							queue.add(((NonterminalGrammarSlot) currentSlot).getNonterminal());
-//						}
-//					}
-//					currentSlot = currentSlot.next();
-//				}
-//			}
-//		}
-//
-//		headGrammarSlots.retainAll(referedNonterminals);
-//
-//		return this;
-//	}
-//	
-	
-//	/**
-//	 * The reason that we only remove unused new nonterminals, instead of
-//	 * all nonterminals, is that each nonterminal can be a potential start
-//	 * symbol of the grammar.
-//	 * 
-//	 * New nonterminals are generated during the parser generation time and
-//	 * are not visible to the outside. 
-//	 */
-//	private void removeUnusedNewNonterminals() {
-//		Set<HeadGrammarSlot> reachableNonterminals = new HashSet<>();
-//		Deque<HeadGrammarSlot> queue = new ArrayDeque<>();
-//
-//		for(HeadGrammarSlot head : headGrammarSlots) {
-//			queue.add(head);			
-//		}
-//		
-//		while(!queue.isEmpty()) {
-//			HeadGrammarSlot head = queue.poll();
-//			reachableNonterminals.add(head);
-//			
-//			for(BodyGrammarSlot slot : head.getFirstSlots()) {
-//				
-//				if(slot == null) continue;
-//				
-//				BodyGrammarSlot currentSlot = slot;
-//				
-//				while(currentSlot.next() != null) {
-//					if(currentSlot instanceof NonterminalGrammarSlot) {
-//						HeadGrammarSlot reachableHead = ((NonterminalGrammarSlot) currentSlot).getNonterminal();
-//						if(!reachableNonterminals.contains(reachableHead)) {
-//							queue.add(reachableHead);
-//						}
-//					}
-//					currentSlot = currentSlot.next();
-//				}
-//			}
-//		}
-
-		// Remove new nonterminals
-//		for(List<HeadGrammarSlot> list : newNonterminalsMap.values()) {
-//			list.retainAll(reachableNonterminals);
-//		}
-//	}
-	
 }

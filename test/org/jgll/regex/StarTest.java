@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
@@ -34,7 +34,7 @@ public class StarTest {
 	@Test
 	public void test2() {
 		// ([a-a]+)*
-		RegularExpression regexp = RegexStar.from(Sequence.from(RegexPlus.from(CharacterClass.from(Range.in('a', 'a')))));
+		RegularExpression regexp = RegexStar.from(Sequence.from(RegexPlus.from(CharacterClass.from(CharacterRange.in('a', 'a')))));
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
@@ -48,8 +48,8 @@ public class StarTest {
 	@Test
 	public void test3() {
 		// ([a-z]+ | [(-)] | "*")*
-		CharacterClass c1 = CharacterClass.from(Range.in('a', 'z'));
-		CharacterClass c2 = CharacterClass.from(Range.in('(', ')'));
+		CharacterClass c1 = CharacterClass.from(CharacterRange.in('a', 'z'));
+		CharacterClass c2 = CharacterClass.from(CharacterRange.in('(', ')'));
 		Character c3 = Character.from('*');
 		
 		RegularExpression regex = RegexAlt.from(RegexPlus.from(c1), c2, c3);

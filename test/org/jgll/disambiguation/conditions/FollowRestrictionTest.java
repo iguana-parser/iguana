@@ -7,7 +7,7 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
@@ -35,7 +35,7 @@ public class FollowRestrictionTest {
 	public void init() {
 		Nonterminal S = Nonterminal.withName("S");
 		Nonterminal Label = Nonterminal.withName("Label");
-		Range az = Range.in('a', 'z');
+		CharacterRange az = CharacterRange.in('a', 'z');
 
 		Grammar.Builder builder = new Grammar.Builder();
 		

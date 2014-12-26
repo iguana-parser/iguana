@@ -6,7 +6,7 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Constants;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
@@ -15,7 +15,7 @@ import org.junit.Test;
 public class CharacterClassTest {
 	
 	public void test1() {
-		RegularExpression regexp = CharacterClass.from(Range.in('a', 'z'), Range.in('1', '8'));
+		RegularExpression regexp = CharacterClass.from(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'));
 		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
@@ -35,7 +35,7 @@ public class CharacterClassTest {
 	}
 	
 	public void test2() {
-		RegularExpression regexp = CharacterClass.from(Range.in('1', '5'), Range.in('1', '7'), Range.in('3', '8'));
+		RegularExpression regexp = CharacterClass.from(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'));
 		Automaton nfa = regexp.getAutomaton();
 
 		assertEquals(8, nfa.getCountStates());
@@ -56,16 +56,16 @@ public class CharacterClassTest {
 	}
 	
 	public void notTest() {
-		CharacterClass c = CharacterClass.from(Range.in('0', '9'), Range.in('a', 'z'));
-		CharacterClass expected = CharacterClass.from(Range.in(1, '0' - 1), 
-													  Range.in('9' + 1, 'a' - 1), 
-													  Range.in('z' + 1, Constants.MAX_UTF32_VAL));
+		CharacterClass c = CharacterClass.from(CharacterRange.in('0', '9'), CharacterRange.in('a', 'z'));
+		CharacterClass expected = CharacterClass.from(CharacterRange.in(1, '0' - 1), 
+													  CharacterRange.in('9' + 1, 'a' - 1), 
+													  CharacterRange.in('z' + 1, Constants.MAX_UTF32_VAL));
 		
 		assertEquals(expected, c.not());
 	}
 	
 	public void test1WithPostConditions() {
-		RegularExpression regexp = new CharacterClass.Builder(Range.in('a', 'z'), Range.in('1', '8'))
+		RegularExpression regexp = new CharacterClass.Builder(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'))
 								       .addCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Automaton nfa = regexp.getAutomaton();
 		
@@ -83,7 +83,7 @@ public class CharacterClassTest {
 	
 	@Test
 	public void test2WithPostConditions() {
-		RegularExpression regexp = new CharacterClass.Builder(Range.in('1', '5'), Range.in('1', '7'), Range.in('3', '8'))
+		RegularExpression regexp = new CharacterClass.Builder(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'))
 								   .addCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		
 		Automaton nfa = regexp.getAutomaton();

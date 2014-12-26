@@ -127,6 +127,16 @@ public class Rule implements Serializable {
 		return HashFunctions.defaulFunction.hash(head.hashCode(), body == null ? 0 : body.hashCode());
 	}
 	
+	public Position getPosition(int i) {
+		if (i > size())
+			throw new IllegalArgumentException("i cannot be greater than the size.");
+		
+		return new Position(this, i);
+	}
+	
+	public static Builder builder(Nonterminal nonterminal) {
+		return new Builder(nonterminal);
+	}
 	
 	public static class Builder {
 		

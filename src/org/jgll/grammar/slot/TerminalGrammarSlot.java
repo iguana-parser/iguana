@@ -7,7 +7,6 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 
-
 public class TerminalGrammarSlot implements GrammarSlot {
 	
 	private RegularExpression regex;

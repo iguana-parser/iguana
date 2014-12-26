@@ -15,7 +15,7 @@ import org.jgll.regex.automaton.Automaton;
 
 
 /**
- * Character class represents a set of {@link Range} instances.
+ * Character class represents a set of {@link CharacterRange} instances.
  * For example, [A-Za-z0-9] represents a character which is
  * either [A-Z], [a-z] or [0-9].
  * 
@@ -26,30 +26,30 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final RegexAlt<Range> alt;
+	private final RegexAlt<CharacterRange> alt;
 	
-	public CharacterClass(RegexAlt<Range> alt, String label, Set<Condition> conditions, Object object) {
+	public CharacterClass(RegexAlt<CharacterRange> alt, String label, Set<Condition> conditions, Object object) {
 		super(getName(alt), label, conditions, object);
 		this.alt = alt;
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {
-		List<Range> list = new ArrayList<>();
+		List<CharacterRange> list = new ArrayList<>();
 		for(Character c : chars) {
-			list.add(Range.in(c.getValue(), c.getValue()));
+			list.add(CharacterRange.in(c.getValue(), c.getValue()));
 		}
 		return new Builder(list).build();
 	}
 	
-	public static CharacterClass from(Range...ranges) {
+	public static CharacterClass from(CharacterRange...ranges) {
 		return from(Arrays.asList(ranges));
 	}
 	
-	public static CharacterClass from(List<Range> ranges) {
+	public static CharacterClass from(List<CharacterRange> ranges) {
 		return new Builder(ranges).build();
 	}
 	
-	private static String getName(RegexAlt<Range> alt) {
+	private static String getName(RegexAlt<CharacterRange> alt) {
 		return "[" + listToString(alt.getRegularExpressions()) + "]";
 	}
 	
@@ -84,40 +84,40 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 
 	public CharacterClass not() {
-		List<Range> newRanges = new ArrayList<>();
+		List<CharacterRange> newRanges = new ArrayList<>();
 		
 		int i = 0;
 		
-		Range[] ranges = alt.getRegularExpressions().toArray(new Range[] {});
+		CharacterRange[] ranges = alt.getRegularExpressions().toArray(new CharacterRange[] {});
 		Arrays.sort(ranges);
 		
 		if(ranges[i].getStart() >= 1) {
-			newRanges.add(Range.in(1, ranges[i].getStart() - 1));
+			newRanges.add(CharacterRange.in(1, ranges[i].getStart() - 1));
 		}
 		
 		for(; i < ranges.length - 1; i++) {
-			Range r1 = ranges[i];
-			Range r2 = ranges[i + 1];
+			CharacterRange r1 = ranges[i];
+			CharacterRange r2 = ranges[i + 1];
 			
 			if(r2.getStart() > r1.getEnd() + 1) {
-				newRanges.add(Range.in(r1.getEnd() + 1, r2.getStart() - 1));
+				newRanges.add(CharacterRange.in(r1.getEnd() + 1, r2.getStart() - 1));
 			}
 		}
 		
 		if(ranges[i].getEnd() < Constants.MAX_UTF32_VAL) {
-			newRanges.add(Range.in(ranges[i].getEnd() + 1, Constants.MAX_UTF32_VAL));
+			newRanges.add(CharacterRange.in(ranges[i].getEnd() + 1, Constants.MAX_UTF32_VAL));
 		}
 		
 		return new Builder(newRanges).addConditions(conditions).build();
 	}
 
 	@Override
-	public Set<Range> getFirstSet() {
+	public Set<CharacterRange> getFirstSet() {
 		return alt.getFirstSet();
 	}
 	
 	@Override
-	public Set<Range> getNotFollowSet() {
+	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 	
@@ -125,23 +125,23 @@ public class CharacterClass extends AbstractRegularExpression {
 		return alt.size();
 	}
 	
-	public Range get(int index) {
+	public CharacterRange get(int index) {
 		return alt.get(index);
 	}
 	
 	public static class Builder extends SymbolBuilder<CharacterClass> {
 
-		private RegexAlt<Range> alt;
+		private RegexAlt<CharacterRange> alt;
 		
-		public Builder(Range...ranges) {
+		public Builder(CharacterRange...ranges) {
 			this(Arrays.asList(ranges));
 		}
 		
-		public Builder(List<Range> ranges) {
+		public Builder(List<CharacterRange> ranges) {
 			this(RegexAlt.from(ranges));
 		}
 		
-		public Builder(RegexAlt<Range> alt) {
+		public Builder(RegexAlt<CharacterRange> alt) {
 			this.alt = alt;
 		}
 		

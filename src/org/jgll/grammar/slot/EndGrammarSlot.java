@@ -15,9 +15,8 @@ public class EndGrammarSlot implements GrammarSlot {
 
 	@Override
 	public void execute(GLLParser parser, Input input, NonPackedNode node) {
-		if (nonterminal.test(node.getRightExtent())) {
+		if (nonterminal.test(node.getRightExtent()))
 			parser.pop();
-		}
 	}
 	
 	@Override
@@ -29,4 +28,8 @@ public class EndGrammarSlot implements GrammarSlot {
 		return null;
 	}
 	
+	public NonterminalGrammarSlot getNonterminal() {
+		return nonterminal;
+	}
+
 }

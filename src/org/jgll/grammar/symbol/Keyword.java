@@ -78,13 +78,30 @@ public class Keyword extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Set<Range> getFirstSet() {
+	public Set<CharacterRange> getFirstSet() {
 		return seq.getFirstSet();
 	}
 	
 	@Override
-	public Set<Range> getNotFollowSet() {
+	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
+	}
+	
+	/**
+	 * 
+	 * Creates the corresponding grammar rule for this keyword.
+	 * For example, for the keyword "if", a rule If ::= [i][f]
+	 * is returned.
+	 * 
+	 */
+	public Rule toRule() {
+		Rule.Builder builder = Rule.builder(Nonterminal.withName(name));
+		seq.forEach(c -> builder.addSymbol(c));
+		return builder.build();
+	}
+	
+	public static Builder builder(String s) {
+		return new Builder(s);
 	}
 
 	public static class Builder extends SymbolBuilder<Keyword> {

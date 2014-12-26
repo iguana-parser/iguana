@@ -4,7 +4,7 @@ import static org.jgll.regex.automaton.AutomatonOperations.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.CharacterClass;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.RegularExpression;
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ public class MergeTransitionsTest {
 	
 	@Test
 	public void test() {
-		RegularExpression regexp = CharacterClass.from(Range.in('0', '4'), Range.in('5', '7'), Range.in('8', '9'));
+		RegularExpression regexp = CharacterClass.from(CharacterRange.in('0', '4'), CharacterRange.in('5', '7'), CharacterRange.in('8', '9'));
 		Automaton a = mergeTransitions(regexp.getAutomaton().minimize());
 		assertEquals(a, getAutomaton());
 	}

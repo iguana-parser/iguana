@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.AutomatonVisitor;
@@ -37,7 +37,7 @@ public class RegularExpressionsUtil {
 							if (regex.getNotFollowSet().isEmpty()) {
 								newRegularExpressions.add((RegularExpression) regex.builder().addCondition(RegularExpressionCondition.notFollow(t.getRange())).build());
 							} else {
-								for (Range range : regex.getNotFollowSet()) {
+								for (CharacterRange range : regex.getNotFollowSet()) {
 									if (!range.overlaps(t.getRange())) {
 										newRegularExpressions.add((RegularExpression) regex.builder().addCondition(RegularExpressionCondition.notFollow(t.getRange())));
 									}								

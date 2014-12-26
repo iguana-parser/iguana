@@ -63,6 +63,10 @@ public class Nonterminal extends AbstractSymbol {
 	public int hashCode() {
 		return HashFunctions.defaulFunction.hash(name.hashCode(), index);
 	}
+	
+	public static Builder builder(String name) {
+		return new Builder(name);
+	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
 

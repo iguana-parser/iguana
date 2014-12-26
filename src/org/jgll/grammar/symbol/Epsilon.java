@@ -55,14 +55,14 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public Set<Range> getFirstSet() {
-		HashSet<Range> firstSet = new HashSet<>();
-		firstSet.add(Range.in(-1, -1));
+	public Set<CharacterRange> getFirstSet() {
+		HashSet<CharacterRange> firstSet = new HashSet<>();
+		firstSet.add(CharacterRange.in(-1, -1));
 		return firstSet;
 	}
 	
 	@Override
-	public Set<Range> getNotFollowSet() {
+	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 

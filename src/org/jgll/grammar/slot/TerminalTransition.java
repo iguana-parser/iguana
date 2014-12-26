@@ -1,9 +1,5 @@
 package org.jgll.grammar.slot;
 
-import java.util.Set;
-
-import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.slot.nodecreator.NodeCreator;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
@@ -16,11 +12,8 @@ public class TerminalTransition extends AbstractTransition {
 
 	public TerminalTransition(TerminalGrammarSlot slot, 
 							  GrammarSlot origin, 
-							  GrammarSlot dest, 
-							  Set<Condition> preConditions, 
-							  Set<Condition> postConditions,
-							  NodeCreator nodeCreator) {
-		super(origin, dest, preConditions, postConditions, nodeCreator);
+							  GrammarSlot dest) {
+		super(origin, dest);
 		this.slot = slot;
 	}
 
@@ -29,7 +22,7 @@ public class TerminalTransition extends AbstractTransition {
 		
 		int ci = node.getRightExtent();
 		
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(input, parser.getCurrentGSSNode(), ci))) 
+		if (origin.getPreConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, parser.getCurrentGSSNode(), ci))) 
 			return;
 
 		int length = slot.getRegularExpression().getMatcher().match(input, ci);
@@ -39,14 +32,20 @@ public class TerminalTransition extends AbstractTransition {
 			return;
 		}
 
-		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length))) 
+		if (origin.getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length))) 
 			return;
 	
 		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, ci, ci + length);
 		
-		NonPackedNode newNode = nodeCreator.create(parser, dest, node, cr);
+		NonPackedNode newNode;
 		
-		dest.execute(parser, input, newNode);		
+		if (origin.isFirst()) {
+			newNode = cr; 
+		} else {
+			newNode = parser.getSPPFLookup().getIntermediateNode(dest, node, cr);
+		}
+		
+		dest.execute(parser, input, newNode);
 	}
 
 }

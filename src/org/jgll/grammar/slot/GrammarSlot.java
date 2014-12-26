@@ -1,8 +1,11 @@
 package org.jgll.grammar.slot;
 
 import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -25,6 +28,28 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	public void execute(GLLParser parser, Input input, NonPackedNode node);
 	
+	/**
+	 * Corresponds to a grammar position A ::=  x . \alpha 
+	 */
+	default boolean isFirst() {
+		return false;
+	}
+	
+	/**
+	 * Corresponds to a grammar position A ::= \alpha . 
+	 */
+	default boolean isLast() {
+		return false;
+	}
+	
+	default Set<Condition> getPreConditions() {
+		return Collections.emptySet();
+	}
+	
+	default Set<Condition> getPostConditions() {
+		return Collections.emptySet();
+	}
+	
 	default GSSNode getGSSNode(int inputIndex) { return null; }
 	
 	default GSSNode hasGSSNode(int inputIndex) { return null; }
@@ -39,6 +64,5 @@ public interface GrammarSlot extends ConstructorCode {
 
 	default GrammarSlot withId(int id) { return this; }
 	
-	default int getId() {return 0; }
-
+	default int getId() { return 0; }
 }

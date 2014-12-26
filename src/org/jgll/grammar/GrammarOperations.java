@@ -1,6 +1,5 @@
 package org.jgll.grammar;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,59 +9,62 @@ import java.util.Set;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.Position;
+import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Tuple;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.SetMultimap;
+
+/**
+ * 
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class GrammarOperations {
 	
-	private final Map<Nonterminal, List<List<Symbol>>> definitions;
+	private final ListMultimap<Nonterminal, Rule> definitions;
 
-	private Map<Nonterminal, Set<RegularExpression>> firstSets;
+	private final SetMultimap<Nonterminal, RegularExpression> firstSets;
 	
-	private Map<Nonterminal, Set<RegularExpression>> followSets;
+	private final SetMultimap<Nonterminal, RegularExpression> followSets;
+	
+	private final SetMultimap<Position, RegularExpression> predictionSets;
 
-	private Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
+	private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
 
-	private Map<Nonterminal, List<Set<RegularExpression>>> predictionSets;
+	private final Set<Nonterminal> nullableNonterminals;
 	
-	private Set<Nonterminal> nullableNonterminals;
-	
-	public GrammarOperations(Map<Nonterminal, List<List<Symbol>>> definitions) {
+	public GrammarOperations(ListMultimap<Nonterminal, Rule> definitions) {
 		this.definitions = definitions;
-		this.firstSets = new HashMap<>();
+		this.firstSets = HashMultimap.create();
 		this.nullableNonterminals = new HashSet<>();
-		this.followSets = new HashMap<>();
-		this.predictionSets = new HashMap<>();
+		this.followSets = HashMultimap.create();
+		this.reachabilityGraph = HashMultimap.create();
+		this.predictionSets = HashMultimap.create();
 		
 		calculateFirstSets();
 		calculateFollowSets();
 		calcualtePredictionSets();
 	}
 	
-	public Map<Nonterminal, Set<RegularExpression>> getFirstSets() {
+	public SetMultimap<Nonterminal, RegularExpression> getFirstSets() {
 		return firstSets;
 	}
 	
-	public Map<Nonterminal, Set<RegularExpression>> getFollowSets() {
+	public SetMultimap<Nonterminal, RegularExpression> getFollowSets() {
 		return followSets;
-	}
-	
-	public Map<Nonterminal, List<Set<RegularExpression>>> getPredictionSets() {
-		return predictionSets;
-	}
-	
-	public Map<Nonterminal, Set<Nonterminal>> getReachabilityGraph() {
-		return reachabilityGraph;
 	}
 	
 	private void calculateFirstSets() {
 		
 		Set<Nonterminal> nonterminals = definitions.keySet();
-		for (Nonterminal head : nonterminals) {
-			firstSets.put(head, new HashSet<RegularExpression>());
-		}
 		
 		boolean changed = true;
 
@@ -72,8 +74,8 @@ public class GrammarOperations {
 			
 			for (Nonterminal head : nonterminals) {
 				Set<RegularExpression> firstSet = firstSets.get(head);
-				for (List<Symbol> alternate : definitions.get(head)) {
-					changed |= addFirstSet(head, firstSet, alternate, 0);
+				for (Rule alternate : definitions.get(head)) {
+					changed |= addFirstSet(head, firstSet, alternate.getBody(), 0);
 				}
 			}
 		}
@@ -172,10 +174,6 @@ public class GrammarOperations {
 		
 		Set<Nonterminal> nonterminals = definitions.keySet();
 		
-		for (Nonterminal head : nonterminals) {
-			followSets.put(head, new HashSet<RegularExpression>());
-		}
-		
 		boolean changed = true;
 
 		while (changed) {
@@ -184,15 +182,16 @@ public class GrammarOperations {
 			
 			for (Nonterminal head : nonterminals) {
 
-				for (List<Symbol> alternate : definitions.get(head)) {
+				for (Rule rule : definitions.get(head)) {
+					List<Symbol> alternative = rule.getBody();
 					
-					if(alternate == null || alternate.size() == 0) {
+					if(alternative == null || alternative.size() == 0) {
 						continue;
 					}
 					
-					for(int i = 0; i < alternate.size(); i++) {
+					for(int i = 0; i < alternative.size(); i++) {
 					
-						Symbol symbol = alternate.get(i);
+						Symbol symbol = alternative.get(i);
 						
 						if(symbol instanceof Nonterminal) {
 							Nonterminal nonterminal = (Nonterminal) symbol;
@@ -201,11 +200,11 @@ public class GrammarOperations {
 							// first set of beta to
 							// the follow set of B.
 							Set<RegularExpression> followSet = followSets.get(nonterminal);
-							changed |= addFirstSet(nonterminal, followSet, alternate, i + 1);
+							changed |= addFirstSet(nonterminal, followSet, alternative, i + 1);
 
 							// If beta is nullable, then add the follow set of X
 							// to the follow set of B.
-							if (isChainNullable(alternate, i + 1)) {
+							if (isChainNullable(alternative, i + 1)) {
 								changed |= followSet.addAll(followSets.get(head));
 							}
 						}
@@ -227,46 +226,54 @@ public class GrammarOperations {
 	
 	private void calcualtePredictionSets() {
 
-		for(Nonterminal nonterminal : definitions.keySet()) {
-			List<List<Symbol>> alternates = definitions.get(nonterminal);
+		for (Nonterminal nonterminal : definitions.keySet()) {
+			List<Rule> rules = definitions.get(nonterminal);
 			
-			List<Set<RegularExpression>> list = new ArrayList<>();
-
-			for(List<Symbol> alternate : alternates) {
-				
-				Set<RegularExpression> predictionSet = new HashSet<>();
-
-				if(alternate == null) {
-					list.add(predictionSet);
-					continue;
+			for (Rule rule : rules) {
+				for (int i = 0; i <= rule.size(); i++) {
+					calculatePredictionSet(rule.getPosition(i));
 				}
-				
-				for(int i = 0; i < alternate.size(); i++) {
-					Symbol symbol = alternate.get(i);
-					if(symbol instanceof Nonterminal) {
-						predictionSet.addAll(firstSets.get(symbol));
-						if(!firstSets.get(symbol).contains(Epsilon.getInstance())) {
-							break;
-						}
-					} 
-					else if (symbol instanceof RegularExpression) {
-						RegularExpression regex = (RegularExpression) symbol;
-						predictionSet.add(regex);
-						if(!regex.isNullable()) {
-							break;
-						}
-					}
-				}
-				
-				if(isChainNullable(alternate, 0)) {
-					predictionSet.addAll(followSets.get(nonterminal));
-				}
-				predictionSet.remove(Epsilon.getInstance());
-				list.add(predictionSet);
 			}
-
-			predictionSets.put(nonterminal, list);
 		}
+	}
+	
+	
+	private void calculatePredictionSet(Position position) {
+		
+		Rule rule = position.getRule();
+		int index = position.getPosition();
+		
+		List<Symbol> alternate = rule.getBody();
+		
+		if (alternate == null)
+			return;
+		
+		for (int i = index; i < alternate.size(); i++) {
+			
+			Symbol symbol = alternate.get(i);
+			
+			if (symbol instanceof Nonterminal) {
+				Nonterminal nonterminal = (Nonterminal) symbol;
+				predictionSets.putAll(position, firstSets.get(nonterminal));
+				
+				if (!firstSets.get(nonterminal).contains(Epsilon.getInstance())) {
+					break;
+				}
+			} 
+			else if (symbol instanceof RegularExpression) {
+				RegularExpression regex = (RegularExpression) symbol;
+				predictionSets.put(position, regex);
+				if(!regex.isNullable()) {
+					break;
+				}
+			}
+		}
+		
+		if (isChainNullable(alternate, 0)) {
+			predictionSets.putAll(position, followSets.get(rule.getHead()));
+		}
+		
+		predictionSets.remove(position, Epsilon.getInstance());
 	}
 	
 	public Set<Nonterminal> calculateLLNonterminals() {
@@ -283,7 +290,9 @@ public class GrammarOperations {
 		for (Nonterminal head : nonterminals) {
 
 			int alternateIndex = 0;
-			for(List<Symbol> alt : definitions.get(head)) {
+			for(Rule rule : definitions.get(head)) {
+				
+				List<Symbol> alt = rule.getBody();
 			
 				// Calculate the prediction set for the alternate
 				Set<RegularExpression> s = new HashSet<>();
@@ -332,9 +341,9 @@ public class GrammarOperations {
 	 * @param set
 	 * @return
 	 */
-	private static Set<Integer> convert(Set<Range> set) {
+	private static Set<Integer> convert(Set<CharacterRange> set) {
 		Set<Integer> integerSet = new HashSet<>();
-		for(Range range : set) {
+		for(CharacterRange range : set) {
 			for(int i = range.getStart(); i < range.getEnd(); i++) {
 				integerSet.add(i);
 			}
@@ -385,13 +394,16 @@ public class GrammarOperations {
 		}
 		
 		boolean changed = true;
+		
 		while (changed) {
 			
 			changed = false;
 			
 			for (Nonterminal head : nonterminals) {
 				Set<Nonterminal> set = reachabilityGraph.get(head);
-				for (List<Symbol> alternate : grammar.getAlternatives(head)) {
+				for (Rule rule : grammar.getAlternatives(head)) {
+					
+					List<Symbol> alternate = rule.getBody();
 					
 					if(alternate == null) {
 						continue;

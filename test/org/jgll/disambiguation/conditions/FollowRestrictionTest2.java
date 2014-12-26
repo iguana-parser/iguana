@@ -7,7 +7,7 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
@@ -38,8 +38,8 @@ public class FollowRestrictionTest2 {
 		
 		Nonterminal S = Nonterminal.withName("S");
 		Nonterminal Label = Nonterminal.withName("Label");
-		Range az = Range.in('a', 'z');
-		Range zero_nine = Range.in('0', '9');
+		CharacterRange az = CharacterRange.in('a', 'z');
+		CharacterRange zero_nine = CharacterRange.in('0', '9');
 		
 		Rule r1 = new Rule(S, Label.builder().addCondition(RegularExpressionCondition.notFollow(Keyword.from("8"))).build(), zero_nine);
 		

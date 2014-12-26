@@ -18,7 +18,7 @@ import org.jgll.util.unicode.UnicodeUtil;
  * @author Ali Afroozeh
  *
  */
-public class Range extends AbstractRegularExpression implements Comparable<Range> {
+public class CharacterRange extends AbstractRegularExpression implements Comparable<CharacterRange> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -26,11 +26,11 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	
 	private final int end;
 	
-	public static Range in(int start, int end) {
+	public static CharacterRange in(int start, int end) {
 		return new Builder(start, end).build();
 	}
 		
-	public Range(int start, int end, String label, Set<Condition> conditions, Object object) {
+	public CharacterRange(int start, int end, String label, Set<Condition> conditions, Object object) {
 		super(getName(start, end), label, conditions, object);
 		
 		if(end < start) throw new IllegalArgumentException("Start cannot be less than end.");
@@ -55,11 +55,11 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		return end;
 	}
 	
-	public boolean contains(Range other) {
+	public boolean contains(CharacterRange other) {
 		return start <= other.start && end >= other.end;
 	}
 	
-	public boolean overlaps(Range other) {
+	public boolean overlaps(CharacterRange other) {
 		return end > other.start || other.end > start;
 	}
 
@@ -73,11 +73,11 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof Range)) {
+		if (!(obj instanceof CharacterRange)) {
 			return false;
 		}
 		
-		Range other = (Range) obj;
+		CharacterRange other = (CharacterRange) obj;
 		
 		return start == other.start && end == other.end;
 	}
@@ -86,7 +86,7 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
-//		startState.addTransition(new Transition(start, end, finalState).addTransitionAction(getPostActions(conditions)));
+//		startState.addTransition(new Transition(start, end, finalState);//.addTransitionAction(getPostActions(conditions)));
 		return new Automaton(startState, name);
 	}
 
@@ -100,23 +100,27 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 	}
 
 	@Override
-	public int compareTo(Range o) {
+	public int compareTo(CharacterRange o) {
 		return start == o.start ? end - o.end : start - o.start;
 	}
 
 	@Override
-	public Set<Range> getFirstSet() {
-		Set<Range> firstSet = new HashSet<>();
+	public Set<CharacterRange> getFirstSet() {
+		Set<CharacterRange> firstSet = new HashSet<>();
 		firstSet.add(this);
 		return firstSet;
 	}
 	
 	@Override
-	public Set<Range> getNotFollowSet() {
+	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 
-	public static class Builder extends SymbolBuilder<Range> {
+	public static Builder builder(int start, int end) {
+		return new Builder(start, end);
+	}
+	
+	public static class Builder extends SymbolBuilder<CharacterRange> {
 
 		private int start;
 		private int end;
@@ -126,21 +130,21 @@ public class Range extends AbstractRegularExpression implements Comparable<Range
 			this.end = end;
 		}
 		
-		public Builder(Range range) {
+		public Builder(CharacterRange range) {
 			super(range);
 			this.start = range.start;
 			this.end = range.end;
 		}
 		
 		@Override
-		public Range build() {
-			return new Range(start, end, label, conditions, object);
+		public CharacterRange build() {
+			return new CharacterRange(start, end, label, conditions, object);
 		}
 		
 	}
 
 	@Override
-	public SymbolBuilder<Range> builder() {
+	public SymbolBuilder<CharacterRange> builder() {
 		return new Builder(this);
 	}
 	

@@ -56,14 +56,14 @@ public class EOF extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public Set<Range> getFirstSet() {
-		Set<Range> firstSet = new HashSet<>();
-		firstSet.add(Range.in(VALUE, VALUE));
+	public Set<CharacterRange> getFirstSet() {
+		Set<CharacterRange> firstSet = new HashSet<>();
+		firstSet.add(CharacterRange.in(VALUE, VALUE));
 		return firstSet;
 	}
 
 	@Override
-	public Set<Range> getNotFollowSet() {
+	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 

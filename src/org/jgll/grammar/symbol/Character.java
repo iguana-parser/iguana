@@ -79,26 +79,26 @@ public class Character extends AbstractRegularExpression {
 	}
 	
 	public CharacterClass not() {
-		List<Range> ranges = new ArrayList<>();
+		List<CharacterRange> ranges = new ArrayList<>();
 		if(c >= 1) {
-			ranges.add(Range.in(1, c - 1));
+			ranges.add(CharacterRange.in(1, c - 1));
 		}
 		if(c < Constants.MAX_UTF32_VAL) {
-			ranges.add(Range.in(c + 1, Constants.MAX_UTF32_VAL));
+			ranges.add(CharacterRange.in(c + 1, Constants.MAX_UTF32_VAL));
 		}
 		CharacterClass c = CharacterClass.from(ranges);
 		return c;
 	}
 
 	@Override
-	public Set<Range> getFirstSet() {
-		Set<Range> firstSet = new HashSet<>();
-		firstSet.add(Range.in(c, c));
+	public Set<CharacterRange> getFirstSet() {
+		Set<CharacterRange> firstSet = new HashSet<>();
+		firstSet.add(CharacterRange.in(c, c));
 		return firstSet;
 	}
 	
 	@Override
-	public Set<Range> getNotFollowSet() {
+	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 

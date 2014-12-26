@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraphBuilder;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -39,7 +38,7 @@ public class KeywordTest2 {
 		
 		builder.addRule(r1);
 		builder.addRule(r2);
-		builder.addRule(GrammarGraphBuilder.fromKeyword(iff));
+		builder.addRule(iff.toRule());
 		
 		grammar = builder.build();
 	}

@@ -1,6 +1,9 @@
 package org.jgll.grammar.slot;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.parser.GLLParser;
@@ -8,12 +11,17 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
 
+/**
+ * 
+ * @author Al Afroozeh
+ *
+ */
 public class ChoiceGrammarSlot implements GrammarSlot {
 
-	private List<Transition> transitions;
+	private final List<Transition> transitions;
 
 	public ChoiceGrammarSlot(List<Transition> transitions) {
-		this.transitions = transitions;
+		this.transitions = new ArrayList<>(transitions);
 	}
 	
 	@Override
@@ -23,8 +31,15 @@ public class ChoiceGrammarSlot implements GrammarSlot {
 
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<Transition> getTransitions() {
+		return transitions;
+	}
+	
+	public Set<GrammarSlot> getReachableSlots() {
+		return transitions.stream().map(t -> t.destination()).collect(Collectors.toSet());
 	}
 
 }

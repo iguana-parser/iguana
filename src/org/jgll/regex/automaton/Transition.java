@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.Input;
 
@@ -59,8 +59,8 @@ public class Transition implements Comparable<Transition>, Serializable {
 		return end;
 	}
 	
-	public Range getRange() {
-		return Range.in(start, end);
+	public CharacterRange getRange() {
+		return CharacterRange.in(start, end);
 	}
 	
 	public void setId(int id) {
@@ -117,7 +117,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 			return "-1";
 		}
 		
-		return Range.in(start, end).toString() + " " + (actions.isEmpty() ? "" : actions.toString());
+		return CharacterRange.in(start, end).toString() + " " + (actions.isEmpty() ? "" : actions.toString());
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 	}
 
 	public Transition addTransitionAction(Action action) {
-		if(action != null) {
+		if (action != null) {
 			actions.add(action);			
 		}
 		return this;
@@ -139,7 +139,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 	public boolean executeActions(Input input, int index) {
 		
 		for (Action action : actions) {
-			if(action.execute(input, index)) {
+			if (action.execute(input, index)) {
 				return true;
 			}
 		}

@@ -13,7 +13,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -123,8 +123,8 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	}
 
 	@Override
-	public Set<Range> getFirstSet() {
-		Set<Range> firstSet = new HashSet<>();
+	public Set<CharacterRange> getFirstSet() {
+		Set<CharacterRange> firstSet = new HashSet<>();
 		for (T t : regularExpressions) {
 			firstSet.addAll(t.getFirstSet());
 		}
@@ -132,7 +132,7 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 	}
 	
 	@Override
-	public Set<Range> getNotFollowSet() {
+	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 

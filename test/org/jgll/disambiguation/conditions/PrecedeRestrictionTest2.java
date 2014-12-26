@@ -3,7 +3,6 @@ package org.jgll.disambiguation.conditions;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraphBuilder;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
@@ -11,7 +10,7 @@ import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Opt;
 import org.jgll.grammar.symbol.Plus;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
@@ -44,7 +43,7 @@ public class PrecedeRestrictionTest2 {
 	private Nonterminal L = Nonterminal.withName("L");
 	private Nonterminal Id = Nonterminal.withName("Id");
 	private Character ws = Character.from(' ');
-	private Range az = Range.in('a', 'z');
+	private CharacterRange az = CharacterRange.in('a', 'z');
 	private Grammar grammar;
 
 	@Before
@@ -64,8 +63,8 @@ public class PrecedeRestrictionTest2 {
 		builder.addRule(r2);
 		builder.addRule(r3);
 		builder.addRule(r4);
-		builder.addRule(GrammarGraphBuilder.fromKeyword(forr));
-		builder.addRule(GrammarGraphBuilder.fromKeyword(forall));
+		builder.addRule(forr.toRule());
+		builder.addRule(forall.toRule());
 
 		grammar = builder.build();
 	}

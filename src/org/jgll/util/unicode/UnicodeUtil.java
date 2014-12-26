@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.CharacterClass;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 
 /**
  * 
@@ -33,14 +33,14 @@ public class UnicodeUtil {
 		List<Integer> vals = new ArrayList<>(categoriesMap.get(categoryName));
 		Collections.sort(vals);
 
-		List<Range> ranges = new ArrayList<>();
+		List<CharacterRange> ranges = new ArrayList<>();
 		
 		int start = vals.get(0);
 		int end = vals.get(0);
 		
 		for (int i = 1; i < vals.size(); i++) {
 			if (vals.get(i) - end > 1) {
-				ranges.add(Range.in(start, end));
+				ranges.add(CharacterRange.in(start, end));
 				start = vals.get(i);
 			}
 			end = vals.get(i);
@@ -53,13 +53,13 @@ public class UnicodeUtil {
 		return '\u0020' < codePoint && codePoint < '\u007f';
 	}
 	
-	public static CharacterClass reverse(Range range) {
-		List<Range> ranges = new ArrayList<>();
+	public static CharacterClass reverse(CharacterRange range) {
+		List<CharacterRange> ranges = new ArrayList<>();
 		if(range.getStart() >= 1) {
-			ranges.add(Range.in(1, range.getStart() - 1));
+			ranges.add(CharacterRange.in(1, range.getStart() - 1));
 		}
 		if(range.getEnd() < MAX_UTF32_VAL) {
-			ranges.add(Range.in(range.getEnd() + 1, MAX_UTF32_VAL));
+			ranges.add(CharacterRange.in(range.getEnd() + 1, MAX_UTF32_VAL));
 		}
 		return CharacterClass.from(ranges);
 	}

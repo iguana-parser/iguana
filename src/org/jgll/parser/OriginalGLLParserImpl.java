@@ -44,22 +44,19 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 		
 		if (gssNode != u0) {
 
-			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
-			
 			if (!gssLookup.addToPoppedElements(gssNode, node))
 				return;
 
 			GrammarSlot returnSlot = gssNode.getGrammarSlot();
 
-			if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
-				return; 
+			if (returnSlot.getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
+				return;
+			
+			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 						
 			for (GSSEdge edge : gssNode.getGSSEdges()) {
-				NonPackedNode y = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, edge.getNode(), node);
-				Descriptor descriptor = new Descriptor(returnSlot, edge.getDestination(), inputIndex, y);
-				if (!hasDescriptor(descriptor)) {
-					scheduleDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
-				}
+				NonPackedNode y = sppfLookup.getNode(returnSlot, edge.getNode(), node);
+				addDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
 			}
 		}
 	}
@@ -86,20 +83,16 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			
 			log.trace("GSS Edge created from %s to %s", source, destination);
 			
-			label:
 			for (NonPackedNode z : source.getPoppedElements()) {
 				
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node
 				// stored in the popped elements.
-				if (returnSlot.getPopConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
-					continue label;
+				if (returnSlot.getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
+					continue;
 				
-				NonPackedNode x = returnSlot.getNodeCreatorFromPop().create(this, returnSlot, w, z); 
-				Descriptor descriptor = new Descriptor(returnSlot, destination, z.getRightExtent(), x);
-				if (!hasDescriptor(descriptor)) {
-					scheduleDescriptor(descriptor);
-				}
+				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z);
+				addDescriptor(new Descriptor(returnSlot, destination, z.getRightExtent(), x));
 			}
 		}
 	}

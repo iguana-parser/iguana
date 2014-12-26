@@ -156,7 +156,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		startSymbol.execute(this, input, cn);
 		
-		
 		while(hasNextDescriptor()) {
 			Descriptor descriptor = nextDescriptor();
 			GrammarSlot slot = descriptor.getGrammarSlot();

@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
@@ -14,14 +14,14 @@ import org.junit.Test;
 public class SequenceTest {
 	
 	private Sequence<Character> seq1;
-	private Sequence<Range> seq2;
-	private Sequence<Range> seq3;
+	private Sequence<CharacterRange> seq2;
+	private Sequence<CharacterRange> seq3;
 
 	@Before
 	public void init() {
 		seq1 = Sequence.from(Character.from('a'), Character.from('b'));		
-		seq2 = Sequence.from(Range.in('a', 'z'), Range.in('0', '9'));
-		seq3 = Sequence.from(Range.in('a', 'z'), Range.in('b', 'm'));
+		seq2 = Sequence.from(CharacterRange.in('a', 'z'), CharacterRange.in('0', '9'));
+		seq3 = Sequence.from(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm'));
 	}
 	
 	@Test
@@ -78,7 +78,7 @@ public class SequenceTest {
 	
 	@Test
 	public void test2WithPostConditions() {
-		Sequence<Range> r = seq2.builder().addCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		Sequence<CharacterRange> r = seq2.builder().addCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 
 		RunnableAutomaton dfa = r.getAutomaton().getRunnableAutomaton();
 		

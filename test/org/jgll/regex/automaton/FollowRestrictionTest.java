@@ -6,7 +6,7 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegexStar;
 import org.jgll.regex.RegularExpression;
@@ -52,7 +52,7 @@ public class FollowRestrictionTest {
 	public void test3() {
 		
 		// id !>> [a-z]
-		RegularExpression r3 = (RegularExpression) id.builder().addCondition(RegularExpressionCondition.notFollow(CharacterClass.from(Range.in('a', 'z')))).build();
+		RegularExpression r3 = (RegularExpression) id.builder().addCondition(RegularExpressionCondition.notFollow(CharacterClass.from(CharacterRange.in('a', 'z')))).build();
 
 		RunnableAutomaton matcher = r3.getAutomaton().getRunnableAutomaton();
 		

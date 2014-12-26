@@ -113,7 +113,7 @@ public class GrammarGraph implements Serializable {
 		writer.println();
 		
 		// Generate Head grammar slots
-		for (HeadGrammarSlot head : headGrammarSlots) {
+		for (NonterminalGrammarSlot head : headGrammarSlots) {
 			writer.println("private HeadGrammarSlot slot" + registry.getId(head) + ";");
 		}
 		
@@ -123,9 +123,9 @@ public class GrammarGraph implements Serializable {
 		}
 		
 		// Generate body grammar slots
-		for (HeadGrammarSlot head : headGrammarSlots) {
-			for (BodyGrammarSlot slot : head.getFirstSlots()) {
-				BodyGrammarSlot current = slot;
+		for (NonterminalGrammarSlot head : headGrammarSlots) {
+			for (GrammarSlot slot : head.getReachableSlots()) {
+				GrammarSlot current = slot;
 				while (current != null) {
 					writer.println("private BodyGrammarSlot slot" + registry.getId(current) + ";");
 					current = current.next();
@@ -136,7 +136,7 @@ public class GrammarGraph implements Serializable {
 		writer.println();
 		
 		// Init body grammar slot method
-		ArrayList<BodyGrammarSlot> bodyGrammarSlots = new ArrayList<>(slots);
+		ArrayList<GrammarSlot> bodyGrammarSlots = new ArrayList<>(slots);
 		int n = slots.size() / 200;
 		int r = slots.size() % 200;
 		
@@ -155,9 +155,9 @@ public class GrammarGraph implements Serializable {
         }
 		
 		// Create alternative links
-		for (HeadGrammarSlot head : headGrammarSlots) {
+		for (GrammarSlot head : headGrammarSlots) {
 			int i = 0;
-			for (BodyGrammarSlot slot : head.getFirstSlots()) {
+			for (GrammarSlot slot : head.getFirstSlots()) {
 				writer.println("  slot" + registry.getId(head) + ".setFirstGrammarSlotForAlternate(slot" + registry.getId(slot) + ", " + i++ + ");");
 			}
 		}

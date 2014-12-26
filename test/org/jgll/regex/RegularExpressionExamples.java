@@ -6,7 +6,7 @@ import java.util.List;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 
 public class RegularExpressionExamples {
 
@@ -14,8 +14,8 @@ public class RegularExpressionExamples {
 	 * Id ::= [a-zA-Z][a-zA-Z0-9]*
 	 */
 	public static RegularExpression getId() {
-		CharacterClass c1 = CharacterClass.from(Range.in('a', 'z'), Range.in('A', 'Z'));
-		CharacterClass c2 = CharacterClass.from(Range.in('a', 'z'), Range.in('A', 'Z'), Range.in('0', '9'));
+		CharacterClass c1 = CharacterClass.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'));
+		CharacterClass c2 = CharacterClass.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'), CharacterRange.in('0', '9'));
 		return Sequence.from(c1, RegexStar.from(c2));
 	}
 	
@@ -23,7 +23,7 @@ public class RegularExpressionExamples {
 	 * Float ::= [0-9]+[.][0-9]+
 	 */
 	public static RegularExpression getFloat() {
-		CharacterClass c = CharacterClass.from(Range.in('0', '9'));
+		CharacterClass c = CharacterClass.from(CharacterRange.in('0', '9'));
 		return Sequence.from(RegexPlus.from(c), Character.from('.'), RegexPlus.from(c));
 	}
 	
@@ -37,7 +37,7 @@ public class RegularExpressionExamples {
 		
 		regularExpressions.add(RegexPlus.from(Character.from('u')));
 		
-		CharacterClass c = CharacterClass.from(Range.in('0', '9'), Range.in('a', 'z'), Range.in('A', 'Z'));
+		CharacterClass c = CharacterClass.from(CharacterRange.in('0', '9'), CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'));
 		regularExpressions.add(c);
 		regularExpressions.add(c);
 		regularExpressions.add(c);

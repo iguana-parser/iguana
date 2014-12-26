@@ -25,17 +25,18 @@ public interface GLLParser {
 	
 	public NonterminalGrammarSlot create(GrammarSlot returnSlot, NonterminalGrammarSlot head);
 		
-	/**
-	 * @return true if no such descriptor exists.
-	 */
 	public boolean hasDescriptor(Descriptor descriptor);
 	
 	public void scheduleDescriptor(Descriptor descriptor);
 	
-	/**
-	 * 
-	 * @return
-	 */
+	default boolean addDescriptor(Descriptor descriptor) {
+		if (hasDescriptor(descriptor)) {
+			scheduleDescriptor(descriptor);
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean hasNextDescriptor();
 	
 	/**

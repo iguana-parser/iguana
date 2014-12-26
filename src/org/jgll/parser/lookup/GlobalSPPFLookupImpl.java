@@ -45,7 +45,7 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public TerminalNode findTerminalSymbolNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
+	public TerminalNode findTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		TerminalNode key = new TerminalNode(slot, leftExtent, rightExtent);
 		return tokenNodes.get(key);
 	}

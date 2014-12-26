@@ -21,5 +21,5 @@ public class NonterminalGrammarSlot extends ChoiceGrammarSlot {
 	public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
-
+	
 }

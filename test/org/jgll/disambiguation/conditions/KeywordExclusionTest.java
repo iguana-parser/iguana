@@ -7,7 +7,7 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
-import org.jgll.grammar.symbol.Range;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
@@ -32,7 +32,7 @@ public class KeywordExclusionTest {
 	@Before
 	public void init() {
 		Nonterminal Id = Nonterminal.withName("Id");
-		Range az = Range.in('a', 'z');
+		CharacterRange az = CharacterRange.in('a', 'z');
 		
 		Keyword iff = Keyword.from("if");
 		Keyword when = Keyword.from("when");

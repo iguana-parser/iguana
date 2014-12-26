@@ -1,5 +1,6 @@
 package org.jgll.parser.lookup;
 
+import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
@@ -19,19 +20,44 @@ public interface SPPFLookup {
 	 */
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 	
+	public TerminalNode findTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	default TerminalNode getEpsilonNode(int inputIndex) {
 		return getTerminalNode(Epsilon.TOKEN_ID, inputIndex, inputIndex);
 	}
 	
-	/**
-	 * 
-	 * @param tokenID
-	 * @param leftExtent
-	 * @param rightExtent
-	 * @return
-	 */
-	public TerminalNode findTerminalSymbolNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
+	default NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+
+		// A ::= X . \alpha, in this case leftChild is the dummy node. 
+		if (slot.isFirst()) {
+			return rightChild;
+		}
+		
+		// A ::= \alpha .
+		if (slot.isLast()) {
+			return getNonterminalNode((EndGrammarSlot) slot, leftChild, rightChild);
+		}
+		
+		return getIntermediateNode(slot, leftChild, rightChild);
+	}
+	
+	default NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), leftChild.getLeftExtent(), rightChild.getRightExtent());
+		addPackedNode(newNode, slot, leftChild.getRightExtent(), leftChild, rightChild);
+		return newNode;
+	}
+	
+	default NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
+		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent());
+		addPackedNode(newNode, slot, child.getRightExtent(), child, null);
+		return newNode;
+	}
+	
+	default IntermediateNode getIntermediateNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
+		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+		return newNode;
+	}
 	
 	/**
 	 * 

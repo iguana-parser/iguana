@@ -91,15 +91,16 @@ public class LL1Test {
 	@Test
 	public void testPredictSets() {
 		// S ::= . A [a]
-		assertEquals(set(d, b, a), grammar.getPredictionSet(S, 0));
+		assertEquals(set(d, b, a), grammar.getPredictionSet(new Rule(S, list(A, a)), 0));
 		
 		// A ::= . B D
-		assertEquals(set(d, b, a, EOF.getInstance()), grammar.getPredictionSet(A, 0));
+		assertEquals(set(d, b, a, EOF.getInstance()), grammar.getPredictionSet(new Rule(A, list(B, D)), 0));
 		
 		// B ::= . [b]
-		assertEquals(set(b), grammar.getPredictionSet(B, 0));
+		assertEquals(set(b), grammar.getPredictionSet(new Rule(B, list(b)), 0));
 
-		assertEquals(set(d, a, EOF.getInstance()), grammar.getPredictionSet(B, 1));
+		// A ::= epsilon
+		assertEquals(set(d, a, EOF.getInstance()), grammar.getPredictionSet(new Rule(B), 1));
 	}
 
 	@Test
