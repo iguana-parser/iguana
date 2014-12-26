@@ -25,7 +25,8 @@ public class LeftFactorize implements GrammarTransformation {
 			Trie<Symbol> trie = new Trie<>();
 
 			Node<Symbol> node = trie.getRoot();
-			for (List<Symbol> alternative : grammar.getAlternatives(nonterminal)) {
+			for (Rule rule : grammar.getAlternatives(nonterminal)) {
+				List<Symbol> alternative = rule.getBody();
 				node = trie.getRoot();
 				for (Symbol s : alternative) {
 					node = trie.add(node, s);

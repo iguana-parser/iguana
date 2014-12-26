@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.patterns.AbstractPattern;
@@ -314,16 +315,16 @@ public class OperatorPrecedence {
 		Nonterminal filteredNonterminal = (Nonterminal) alt.get(position);
 
 		List<List<Symbol>> set = without(filteredNonterminal, filteredAlternates);
-		Nonterminal newNonterminal = existingAlternates.get(plain2(set));
 		
-		if(newNonterminal == null) {
-			newNonterminal = createNewNonterminal(filteredNonterminal);
+		return existingAlternates.computeIfAbsent(plain2(set), k -> { 
+			Nonterminal newNonterminal = createNewNonterminal(filteredNonterminal);
 			List<List<Symbol>> copy = copyAlternates(set);
 			existingAlternates.put(plain2(copy), newNonterminal);
-			definitions.put(newNonterminal, copy);
-		}
+			List<Rule> collect = copy.stream().map(l -> new Rule(newNonterminal, l)).collect(Collectors.toList());
+			definitions.putAll(newNonterminal, collect);
+			return newNonterminal;
+		});
 		
-		return newNonterminal;
 	}
 	
 	private void rewriteFirstLevel(Nonterminal head, Map<PrecedencePattern, List<List<Symbol>>> patterns) {
@@ -403,9 +404,9 @@ public class OperatorPrecedence {
 			PrecedencePattern pattern = e.getKey();
 			Nonterminal freshNonterminal = e.getValue();
 			List<List<Symbol>> alternates = deepCopy(without(head, patterns.get(pattern)), pattern.getNonterminal());
-			definitions.put(freshNonterminal, alternates);
+			definitions.putAll(freshNonterminal, alternates.stream().map(l -> new Rule(freshNonterminal, l)).collect(Collectors.toList()));
 		}
-		
+
 	}
 	
 	/**
@@ -507,8 +508,9 @@ public class OperatorPrecedence {
 		copy = createNewNonterminal(head);
 		map.put(head, copy);
 
-		List<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
-		definitions.put(copy, copyAlternates);
+		List<List<Symbol>> alternates = definitions.get(head).stream().map(r -> r.getBody()).collect(Collectors.toList());
+		List<List<Symbol>> copyAlternates = copyAlternates(alternates);
+		definitions.putAll(copy, copyAlternates.stream().map(l -> new Rule(head, l)).collect(Collectors.toList()));
 		
 		for(List<Symbol> alt : copyAlternates) {
 			if(alt.get(0) instanceof Nonterminal) {
@@ -532,9 +534,10 @@ public class OperatorPrecedence {
 		
 		copy = createNewNonterminal(head);
 		map.put(head, copy);
-		
-		List<List<Symbol>> copyAlternates = copyAlternates(definitions.get(head));
-		definitions.put(copy, copyAlternates);
+
+		List<List<Symbol>> alternates = definitions.get(head).stream().map(r -> r.getBody()).collect(Collectors.toList());
+		List<List<Symbol>> copyAlternates = copyAlternates(alternates);
+		definitions.putAll(copy, copyAlternates.stream().map(l -> new Rule(head, l)).collect(Collectors.toList()));
 		
 		for(List<Symbol> alt : copyAlternates) {
 			if(alt.get(alt.size() - 1) instanceof Nonterminal) {
@@ -609,7 +612,11 @@ public class OperatorPrecedence {
 					} else {
 						Nonterminal newNonterminal = createNewNonterminal(n);
 						map.put(n,  newNonterminal);
-						definitions.put(newNonterminal, deepCopy(definitions.get(n), nonterminal, map));
+
+						List<List<Symbol>> alternates = definitions.get(n).stream().map(r -> r.getBody()).collect(Collectors.toList());
+						List<List<Symbol>> copyAlternates = deepCopy(alternates, nonterminal, map);
+
+						definitions.putAll(newNonterminal, copyAlternates.stream().map(l -> new Rule(n, l)).collect(Collectors.toList()));
 						copyAlt.add(newNonterminal);				
 					}
 					continue;
@@ -620,7 +627,15 @@ public class OperatorPrecedence {
 		return copyAlt;
 	}
 	
+//	private List<Rule> copyAlternates(List<Rule> rules) {
+//		List<Rule> copy = new ArrayList<>();
+//		rules.forEach(r -> copy.add(r.getBody() == null ? new Rule(r.getHead()) : new Rule(r.getHead(), new ArrayList<>(r.getBody()))));
+//		return copy;
+//	}
+//	
+	
 	private List<List<Symbol>> copyAlternates(List<List<Symbol>> alternates) {
+		
 		List<List<Symbol>> copy = new ArrayList<>();
 		
 		for(List<Symbol> alternate : alternates) {
