@@ -41,9 +41,9 @@ public class FollowRestrictionTest2 {
 		CharacterRange az = CharacterRange.in('a', 'z');
 		CharacterRange zero_nine = CharacterRange.in('0', '9');
 		
-		Rule r1 = new Rule(S, Label.builder().addCondition(RegularExpressionCondition.notFollow(Keyword.from("8"))).build(), zero_nine);
+		Rule r1 = new Rule(S, Label.builder().addPreCondition(RegularExpressionCondition.notFollow(Keyword.from("8"))).build(), zero_nine);
 		
-		Rule r2 = new Rule(Label, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).build());
+		Rule r2 = new Rule(Label, Plus.from(az).builder().addPreCondition(RegularExpressionCondition.notFollow(az)).build());
 		builder.addRule(r1);
 		builder.addRule(r2);
 

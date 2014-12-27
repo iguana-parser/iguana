@@ -1,19 +1,21 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Set;
 
-import org.jgll.grammar.condition.Condition;
-
-
+/**
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class Star extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final Symbol s;
 	
-	public Star(Symbol s, Set<Condition> conditions, String label, Object object) {
-		super(s.getName() + "*", conditions, label, object);
-		this.s = s;
+	private Star(Builder builder) {
+		super(builder);
+		this.s = builder.s;
 	}
 	
 	public Star from(Symbol s) {
@@ -24,17 +26,12 @@ public class Star extends AbstractSymbol {
 		return s;
 	}
 
-	@Override
-	public SymbolBuilder<? extends Symbol> builder() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	public static class Builder extends SymbolBuilder<Star> {
 
 		private Symbol s;
 
 		public Builder(Symbol s) {
+			super(s.getName() + "*");
 			this.s = s;
 		}
 		
@@ -45,9 +42,12 @@ public class Star extends AbstractSymbol {
 		
 		@Override
 		public Star build() {
-			return new Star(s, conditions, label, object);
+			return new Star(this);
 		}
-		
+	}
+	
+	public static Builder builder(Symbol s) {
+		return new Builder(s);
 	}
 
 }

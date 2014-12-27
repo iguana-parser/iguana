@@ -1,7 +1,6 @@
 package org.jgll.grammar;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,14 +9,14 @@ import java.util.stream.Collectors;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
-import org.jgll.grammar.slot.EndGrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.NonterminalTransition;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.slot.TerminalTransition;
 import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -39,7 +38,6 @@ public class GrammarGraphBuilder implements Serializable {
 	String name;
 	
 	Grammar grammar;
-	
 	
 	public GrammarGraphBuilder(Grammar grammar) {
 		this("no-name", grammar);
@@ -71,25 +69,10 @@ public class GrammarGraphBuilder implements Serializable {
 	private void convert(Nonterminal head) {
 		
 		List<Rule> rules = grammar.getAlternatives(head);
-		popActions.clear();
 		
-		NonterminalGrammarSlot nonterminalSlot = getHeadGrammarSlot(head);
+		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(head, k -> new NonterminalGrammarSlot(head));
 		
-		int alternateIndex = 0;
-		
-		for(Rule rule : rules) {
-			
-			if(rule == null) {
-				alternateIndex++;
-				continue;
-			}
-			
-			addAlternative(nonterminalSlot, rule);
-			
-			GrammarSlot currentSlot = null;
-	
-			alternateIndex++;
-		}
+		rules.forEach(r -> addAlternative(nonterminalSlot, r));
 	}
 	
 	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
@@ -98,60 +81,33 @@ public class GrammarGraphBuilder implements Serializable {
 			slots.put(epsilonSlot.toString(), epsilonSlot);
 		} 
 		else {
-
+			
+			GrammarSlot currentSlot = head;
+			
 			for (Symbol symbol : rule.getBody()) {
-				
-			}
-			
-			GrammarSlot firstSlot = null;
-			int symbolIndex = 0;
-			for (; symbolIndex < body.size(); symbolIndex++) {
-				
-				currentSlot = getBodyGrammarSlot(new Rule(head, body), symbolIndex, currentSlot);
-				slots.put(currentSlot.toString(), currentSlot);
-
-				if (symbolIndex == 0) {
-					firstSlot = currentSlot;
+				// Terminal
+				if (symbol instanceof RegularExpression) {
+					RegularExpression regex = (RegularExpression) symbol;
+					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
+					GrammarSlot slot = new BodyGrammarSlot();
+					Set<Condition> preConditions = symbol.getPreConditions();
+					Set<Condition> postConditions = symbol.getPreConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
+					currentSlot.addTransition(new TerminalTransition(terminalSlot, currentSlot, slot, preConditions, postConditions));
+					currentSlot = slot;
+					
+				} 
+				else if (symbol instanceof Nonterminal) {
+					Nonterminal nonterminal = (Nonterminal) symbol;
+					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(nonterminal));
+					GrammarSlot slot = new BodyGrammarSlot();
+					Set<Condition> preConditions = symbol.getPreConditions();
+					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, preConditions));
+					currentSlot = slot;
 				}
-			}
-
-			EndGrammarSlot lastSlot = grammarSlotFactory.createLastGrammarSlot(new Rule(head, body), symbolIndex, currentSlot, nonterminalSlot, popActions);
-			slots.put(lastSlot.toString(), lastSlot);
-			nonterminalSlot.setFirstGrammarSlotForAlternate(firstSlot, alternateIndex);
+				
+				slots.put(currentSlot.toString(), currentSlot);
+			}			
 		}
 	}
 	
-	Set<Condition> popActions = new HashSet<>();
-	
-	private GrammarSlot getBodyGrammarSlot(Rule rule, int symbolIndex, GrammarSlot currentSlot) {
-		
-		Symbol symbol = rule.getBody().get(symbolIndex);
-		
-		if(symbol instanceof RegularExpression) {
-			RegularExpression regex = (RegularExpression) symbol;
-			
-			Set<Condition> preConditionsTest = symbol.getConditions();
-			Set<Condition> postConditionsTest = symbol.getConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
-			
-			return grammarSlotFactory.createTokenGrammarSlot(rule, symbolIndex, currentSlot, getTerminalGrammarSlot(regex), preConditionsTest, postConditionsTest, popActions);
-		}
-		
-		// Nonterminal
-		else {
-			popActions = new HashSet<>(symbol.getConditions());
-			
-			NonterminalGrammarSlot nonterminal = getHeadGrammarSlot((Nonterminal) symbol);
-			return grammarSlotFactory.createNonterminalGrammarSlot(rule, symbolIndex, currentSlot, nonterminal, symbol.getConditions(), popActions);						
-		}		
-	}
-
-	private NonterminalGrammarSlot getHeadGrammarSlot(Nonterminal nonterminal) {
-		return nonterminalsMap.computeIfAbsent(nonterminal, k -> grammarSlotFactory.createHeadGrammarSlot(nonterminal, grammar.getAlternatives(nonterminal), grammar.getFirstSets(), grammar.getFollowSets(), grammar.getPredictionSets()));		
-	}
-	
-	
-	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex) {
-		return terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
-	}
-		
 }

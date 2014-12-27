@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.Input;
@@ -25,9 +24,9 @@ public class Keyword extends AbstractRegularExpression {
 		return new Builder(toCharSequence(chars)).build();
 	}
 	
-	public Keyword(Sequence<Character> seq, String label, Set<Condition> conditions, Object object) {
-		super(seq.getName(), label, conditions, object);
-		this.seq = seq;
+	private Keyword(Builder builder) {
+		super(builder);
+		this.seq = builder.seq;
 	}
 	
 	private static Sequence<Character> toCharSequence(int[] chars) {
@@ -100,19 +99,17 @@ public class Keyword extends AbstractRegularExpression {
 		return builder.build();
 	}
 	
-	public static Builder builder(String s) {
-		return new Builder(s);
-	}
-
 	public static class Builder extends SymbolBuilder<Keyword> {
 		
 		private Sequence<Character> seq;
 				
 		public Builder(String s) {
+			super(toCharSequence(Input.toIntArray(s)).getName());
 			this.seq = toCharSequence(Input.toIntArray(s));
 		}
 		
 		public Builder(Sequence<Character> seq) {
+			super(seq.getName());
 			this.seq = seq;
 		}
 		
@@ -123,14 +120,17 @@ public class Keyword extends AbstractRegularExpression {
 
 		@Override
 		public Keyword build() {
-			return new Keyword(seq, label, conditions, object);
+			return new Keyword(this);
 		}
 		
 	}
 
-	@Override
-	public SymbolBuilder<Keyword> builder() {
-		return new Builder(this);
+	public static Builder builder(Sequence<Character> seq) {
+		return new Builder(seq);
+	}
+	
+	public static Builder builder(String s) {
+		return new Builder(toCharSequence(Input.toIntArray(s)));
 	}
 	
 	@Override

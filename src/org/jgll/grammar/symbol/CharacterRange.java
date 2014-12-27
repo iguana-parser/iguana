@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -30,13 +29,13 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		return new Builder(start, end).build();
 	}
 		
-	public CharacterRange(int start, int end, String label, Set<Condition> conditions, Object object) {
-		super(getName(start, end), label, conditions, object);
+	private CharacterRange(Builder builder) {
+		super(builder);
 		
-		if(end < start) throw new IllegalArgumentException("Start cannot be less than end.");
+		if(builder.end < builder.start) throw new IllegalArgumentException("Start cannot be less than end.");
 		
-		this.start = start;
-		this.end = end;
+		this.start = builder.start;
+		this.end = builder.end;
 	}
 
 	private static String getName(int start, int end) {
@@ -116,16 +115,13 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		return Collections.emptySet();
 	}
 
-	public static Builder builder(int start, int end) {
-		return new Builder(start, end);
-	}
-	
 	public static class Builder extends SymbolBuilder<CharacterRange> {
 
 		private int start;
 		private int end;
 
 		public Builder(int start, int end) {
+			super(getName(start, end));
 			this.start = start;
 			this.end = end;
 		}
@@ -138,14 +134,13 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		
 		@Override
 		public CharacterRange build() {
-			return new CharacterRange(start, end, label, conditions, object);
+			return new CharacterRange(this);
 		}
 		
 	}
 
-	@Override
-	public SymbolBuilder<CharacterRange> builder() {
-		return new Builder(this);
+	public static Builder builder(int start, int end) {
+		return new Builder(start, end);
 	}
 	
 	@Override

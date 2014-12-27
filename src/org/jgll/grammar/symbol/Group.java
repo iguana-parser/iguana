@@ -1,23 +1,21 @@
 package org.jgll.grammar.symbol;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
-import org.jgll.grammar.condition.Condition;
+import org.jgll.util.generator.GeneratorUtil;
 
-public class Group extends Nonterminal {
+import com.google.common.collect.ImmutableList;
+
+public class Group extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 
 	private final List<? extends Symbol> symbols;
 
-	public Group(List<? extends Symbol> symbols, Set<Condition> conditions, String label, Object object) {
-		super("(" + listToString(symbols) + ")", 0, false, conditions, label, object);
-		this.symbols = new ArrayList<>(symbols);
+	private Group(Builder builder) {
+		super(builder);
+		this.symbols = ImmutableList.copyOf(builder.symbols);
 	}
 	
 	@SafeVarargs
@@ -38,6 +36,7 @@ public class Group extends Nonterminal {
 		private List<? extends Symbol> symbols;
 		
 		public Builder(List<? extends Symbol> symbols) {
+			super("(" + GeneratorUtil.listToString(symbols) + ")");
 			this.symbols = symbols;
 		}
 		
@@ -48,13 +47,8 @@ public class Group extends Nonterminal {
 
 		@Override
 		public Group build() {
-			return new Group(symbols, conditions, label, object);
+			return new Group(this);
 		}
-	}
-	
-	@Override
-	public SymbolBuilder<Group> builder() {
-		return new Builder(this);
 	}
 	
 }

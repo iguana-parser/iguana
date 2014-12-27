@@ -1,5 +1,10 @@
 package org.jgll.util.generator;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 public class GeneratorUtil {
 	
 	public static String escape(String s) {
@@ -12,18 +17,7 @@ public class GeneratorUtil {
 	}
 
 	public static <T> String listToString(T[] elements, String sep) {
-		
-		if(elements == null) throw new IllegalArgumentException("Elements cannot be null.");
-
-		if(elements.length == 0) return "";
-		
-		StringBuilder sb = new StringBuilder();
-		for(Object t : elements) {
-			sb.append(t.toString()).append(sep);
-		}
-		sb.delete(sb.length() - sep.length(), sb.length());
-		return sb.toString();
-
+		return listToString(Arrays.asList(elements), sep);
 	}
 	
 	public static <T> String listToString(Iterable<T> elements) {
@@ -32,18 +26,11 @@ public class GeneratorUtil {
 	
 	public static <T> String listToString(Iterable<T> elements, String sep) {
 		
-		if(elements == null) throw new IllegalArgumentException("Elements cannot be null.");
-
-		if(! elements.iterator().hasNext()) {
-			return "";
-		}
+		if(elements == null) throw new IllegalArgumentException("elements cannot be null.");
 		
-		StringBuilder sb = new StringBuilder();
-		for(T t : elements) {
-			sb.append(t.toString()).append(sep);
-		}
-		sb.delete(sb.length() - sep.length(), sb.length());
-		return sb.toString();
+		Stream<T> stream = StreamSupport.stream(elements.spliterator(), false);
+		
+		return stream.map(a -> a.toString()).collect(Collectors.joining(sep));
 	}
 	
 }

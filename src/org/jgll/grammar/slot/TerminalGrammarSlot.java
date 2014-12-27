@@ -1,10 +1,10 @@
 package org.jgll.grammar.slot;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.parser.GLLParser;
 import org.jgll.regex.RegularExpression;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.Input;
 
 
 public class TerminalGrammarSlot implements GrammarSlot {
@@ -20,12 +20,18 @@ public class TerminalGrammarSlot implements GrammarSlot {
 		return null;
 	}
 
-	@Override
-	public void execute(GLLParser parser, Input input, NonPackedNode node) {
-	}
-	
 	public RegularExpression getRegularExpression() {
 		return regex;
+	}
+
+	@Override
+	public Set<Transition> getTransitions() {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public boolean addTransition(Transition transition) {
+		return false;
 	}
 
 }

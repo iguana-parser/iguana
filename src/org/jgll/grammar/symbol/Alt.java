@@ -1,13 +1,11 @@
 package org.jgll.grammar.symbol;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
-import org.jgll.grammar.condition.Condition;
+import org.jgll.util.generator.GeneratorUtil;
+
+import com.google.common.collect.ImmutableList;
 
 public class Alt extends AbstractSymbol {
 
@@ -23,9 +21,9 @@ public class Alt extends AbstractSymbol {
 		return new Builder(symbols).build();
 	}
 	
-	public Alt(List<Symbol> symbols, Set<Condition> conditions, String label, Object object) {
-		super("[" + listToString(symbols, "|") + "]", conditions, label, object);
-		this.symbols = new ArrayList<>(symbols);
+	private Alt(Builder builder) {
+		super(builder);
+		this.symbols = ImmutableList.copyOf(builder.symbols);
 	}
 	
 	public List<Symbol> getSymbols() {
@@ -37,6 +35,7 @@ public class Alt extends AbstractSymbol {
 		private List<Symbol> symbols;
 		
 		public Builder(List<Symbol> symbols) {
+			super(GeneratorUtil.listToString(symbols, "|"));
 			this.symbols = symbols;
 		}
 		
@@ -47,13 +46,16 @@ public class Alt extends AbstractSymbol {
 		
 		@Override
 		public Alt build() {
-			return new Alt(symbols, conditions, label, symbols);
+			return new Alt(this);
 		}
 	}
 
-	@Override
-	public SymbolBuilder<? extends Symbol> builder() {
-		return new Builder(this);
+	public static Builder builder(Symbol...symbols) {
+		return new Builder(Arrays.asList(symbols));
+	}
+	
+	public static Builder builder(List<Symbol> symbols) {
+		return new Builder(symbols);
 	}
 
 }

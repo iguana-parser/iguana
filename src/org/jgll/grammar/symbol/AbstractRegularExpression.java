@@ -1,8 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Set;
-
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
@@ -14,8 +11,8 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	
 	protected Automaton automaton;
 	
-	public AbstractRegularExpression(String name, String label, Set<Condition> conditions, Object object) {
-		super(name, conditions, label, object);
+	public AbstractRegularExpression(SymbolBuilder<? extends RegularExpression> builder) {
+		super(builder);
 	}
 	
 	@Override

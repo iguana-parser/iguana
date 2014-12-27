@@ -35,11 +35,11 @@ public class RegularExpressionsUtil {
 					for (RegularExpression regex : state.getRegularExpressions()) {
 						for (Transition t : state.getTransitions()) {
 							if (regex.getNotFollowSet().isEmpty()) {
-								newRegularExpressions.add((RegularExpression) regex.builder().addCondition(RegularExpressionCondition.notFollow(t.getRange())).build());
+								newRegularExpressions.add((RegularExpression) regex.builder().addPreCondition(RegularExpressionCondition.notFollow(t.getRange())).build());
 							} else {
 								for (CharacterRange range : regex.getNotFollowSet()) {
 									if (!range.overlaps(t.getRange())) {
-										newRegularExpressions.add((RegularExpression) regex.builder().addCondition(RegularExpressionCondition.notFollow(t.getRange())));
+										newRegularExpressions.add((RegularExpression) regex.builder().addPreCondition(RegularExpressionCondition.notFollow(t.getRange())));
 									}								
 								}								
 							}

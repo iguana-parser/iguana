@@ -15,12 +15,12 @@ public interface Symbol extends Serializable {
 	
 	public String getName();
 	
-	public Set<Condition> getConditions();
+	public Set<Condition> getPreConditions();
+	
+	public Set<Condition> getPostConditions();
 	
 	public Object getObject();
 	
 	public String getLabel();
-	
-	public SymbolBuilder<? extends Symbol> builder();
 	
 }	

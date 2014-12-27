@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -31,7 +30,12 @@ public class EOF extends AbstractRegularExpression {
 	}
 	
 	private EOF() {
-		super("$", null, Collections.<Condition>emptySet(), null);
+		super(new SymbolBuilder<EOF>("$") {
+			@Override
+			public EOF build() {
+				return EOF.getInstance();
+			}
+		});
 	}
 	
 	private Object readResolve()  {
@@ -65,11 +69,6 @@ public class EOF extends AbstractRegularExpression {
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
-	}
-
-	@Override
-	public SymbolBuilder<EOF> builder() {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

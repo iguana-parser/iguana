@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -25,13 +24,13 @@ public class Character extends AbstractRegularExpression {
 	
 	private final int c;
 
-	public Character(int c, String label, Set<Condition> conditions, Object object) {
-		super(getName(c), label, conditions, object);
-		this.c = c;
+	private Character(Builder builder) {
+		super(builder);
+		this.c = builder.c;
 	}	
 	
 	public static Character from(int c) {
-		return new Character(c, null, Collections.<Condition>emptySet(), null);
+		return new Builder(c).build();
 	}
 	
 	public int getValue() {
@@ -106,7 +105,10 @@ public class Character extends AbstractRegularExpression {
 		
 		private int c;
 		
-		public Builder(int c) { this.c = c; }
+		public Builder(int c) {
+			super(getName(c));
+			this.c = c; 
+		}
 
 		public Builder(Character character) {
 			super(character);
@@ -115,13 +117,12 @@ public class Character extends AbstractRegularExpression {
 		
 		@Override
 		public Character build() {
-			return new Character(c, label, conditions, object);
+			return new Character(this);
 		}
 	}
 
-	@Override
-	public SymbolBuilder<Character> builder() {
-		return new Builder(this);
+	public static Builder builder(int c) {
+		return new Builder(c);
 	}
 
 	@Override

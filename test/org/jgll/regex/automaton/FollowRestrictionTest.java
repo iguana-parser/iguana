@@ -22,8 +22,8 @@ public class FollowRestrictionTest {
 	public void test1() {
 		
 		// id !>> [:]
-		RegularExpression r1 = (RegularExpression) id.builder().addCondition(RegularExpressionCondition.notFollow(Character.from(':')))				
-								 .addCondition(RegularExpressionCondition.notMatch(Keyword.from("set"))).build();
+		RegularExpression r1 = (RegularExpression) id.builder().addPreCondition(RegularExpressionCondition.notFollow(Character.from(':')))				
+								 .addPreCondition(RegularExpressionCondition.notMatch(Keyword.from("set"))).build();
 		
 		
 		RunnableAutomaton matcher = r1.getAutomaton().getRunnableAutomaton();
@@ -39,7 +39,7 @@ public class FollowRestrictionTest {
 	public void test2() {
 		
 		// id !>> "<>"
-		RegularExpression r2 = (RegularExpression) id.builder().addCondition(RegularExpressionCondition.notFollow(Keyword.from("<>"))).build();
+		RegularExpression r2 = (RegularExpression) id.builder().addPreCondition(RegularExpressionCondition.notFollow(Keyword.from("<>"))).build();
 		RunnableAutomaton matcher = r2.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test<>"), 0));
@@ -52,7 +52,7 @@ public class FollowRestrictionTest {
 	public void test3() {
 		
 		// id !>> [a-z]
-		RegularExpression r3 = (RegularExpression) id.builder().addCondition(RegularExpressionCondition.notFollow(CharacterClass.from(CharacterRange.in('a', 'z')))).build();
+		RegularExpression r3 = (RegularExpression) id.builder().addPreCondition(RegularExpressionCondition.notFollow(CharacterClass.from(CharacterRange.in('a', 'z')))).build();
 
 		RunnableAutomaton matcher = r3.getAutomaton().getRunnableAutomaton();
 		
@@ -65,7 +65,7 @@ public class FollowRestrictionTest {
 	public void test4() {
 		// (![*] | [*] !>> [/])*
 		CharacterClass r1 = Character.from('*').not();
-		Character r2 = new Character.Builder('*').addCondition(RegularExpressionCondition.notFollow(Character.from('/'))).build();
+		Character r2 = new Character.Builder('*').addPreCondition(RegularExpressionCondition.notFollow(Character.from('/'))).build();
 		RegexStar star = RegexStar.from(RegexAlt.from(r1, r2));
 		
 		RunnableAutomaton m = star.getAutomaton().getRunnableAutomaton();

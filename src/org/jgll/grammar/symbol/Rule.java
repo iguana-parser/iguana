@@ -74,6 +74,10 @@ public class Rule implements Serializable {
 		return body.size();
 	}
 	
+	public Symbol symbolAt(int i) {
+		return body.get(i);
+	}
+	
 	public Serializable getObject() {
 		return object;
 	}

@@ -381,20 +381,20 @@ public class OperatorPrecedence {
 						copy = copyIndirectAtLeft((Nonterminal) alt.get(pattern.getPosition()), pattern.getNonterminal());
 						getLeftEnds(copy, pattern.getNonterminal(), alternates);
 						for(List<Symbol> a : alternates) {
-							a.set(0, new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(a.get(0).getConditions()).build());
+							a.set(0, new Nonterminal.Builder(freshNonterminals.get(pattern)).addPreConditions(a.get(0).getPreConditions()).build());
 						}
 					} else {
 						copy = copyIndirectAtRight((Nonterminal) alt.get(pattern.getPosition()), pattern.getNonterminal());
 						getRightEnds(copy, pattern.getNonterminal(), alternates);
 						for(List<Symbol> a : alternates) {
-							a.set(a.size() - 1, new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(a.get(a.size() - 1).getConditions()).build());
+							a.set(a.size() - 1, new Nonterminal.Builder(freshNonterminals.get(pattern)).addPreConditions(a.get(a.size() - 1).getPreConditions()).build());
 						}
 					}
 					
-					alt.set(pattern.getPosition(), new Nonterminal.Builder(copy).addConditions(alt.get(pattern.getPosition()).getConditions()).build());
+					alt.set(pattern.getPosition(), new Nonterminal.Builder(copy).addPreConditions(alt.get(pattern.getPosition()).getPreConditions()).build());
 					
 				} else {
-					alt.set(pattern.getPosition(), new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(alt.get(pattern.getPosition()).getConditions()).build());
+					alt.set(pattern.getPosition(), new Nonterminal.Builder(freshNonterminals.get(pattern)).addPreConditions(alt.get(pattern.getPosition()).getPreConditions()).build());
 				}
 			}
 		}
@@ -563,7 +563,7 @@ public class OperatorPrecedence {
 		Nonterminal newNonterminal = new Nonterminal.Builder(nonterminal.getName())
 												    .setIndex(index + 1)
 												    .setEbnfList(nonterminal.isEbnfList())
-												    .addConditions(nonterminal.getConditions())
+												    .addPreConditions(nonterminal.getPreConditions())
 												    .build();
 		newNonterminals.put(nonterminal.getName(), index + 1);
 		

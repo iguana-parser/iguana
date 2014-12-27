@@ -22,7 +22,7 @@ public class RegularExpressionCondition extends Condition {
 		super(type);
 		this.regularExpression = regularExpression;
 		
-		if (regularExpression.getConditions().size() != 0)
+		if (regularExpression.getPreConditions().size() != 0)
 			throw new IllegalArgumentException("RegularExpression conditions cannot have conditions themselves.");
 		
 		action = createSlotAction(regularExpression);

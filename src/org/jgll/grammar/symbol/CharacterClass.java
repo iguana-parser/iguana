@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
 
@@ -28,9 +27,9 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	private final RegexAlt<CharacterRange> alt;
 	
-	public CharacterClass(RegexAlt<CharacterRange> alt, String label, Set<Condition> conditions, Object object) {
-		super(getName(alt), label, conditions, object);
-		this.alt = alt;
+	private CharacterClass(Builder builder) {
+		super(builder);
+		this.alt = builder.alt;
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {
@@ -108,7 +107,7 @@ public class CharacterClass extends AbstractRegularExpression {
 			newRanges.add(CharacterRange.in(ranges[i].getEnd() + 1, Constants.MAX_UTF32_VAL));
 		}
 		
-		return new Builder(newRanges).addConditions(conditions).build();
+		return new Builder(newRanges).addPreConditions(preConditions).build();
 	}
 
 	@Override
@@ -142,6 +141,7 @@ public class CharacterClass extends AbstractRegularExpression {
 		}
 		
 		public Builder(RegexAlt<CharacterRange> alt) {
+			super(getName(alt));
 			this.alt = alt;
 		}
 		
@@ -152,14 +152,17 @@ public class CharacterClass extends AbstractRegularExpression {
 		
 		@Override
 		public CharacterClass build() {
-			return new CharacterClass(alt, label, conditions, object);
+			return new CharacterClass(this);
 		}
 		
 	}
 
-	@Override
-	public SymbolBuilder<CharacterClass> builder() {
-		return new Builder(this);
+	public static Builder builder(CharacterRange...ranges) {
+		return new Builder(ranges);
+	}
+	
+	public static Builder builder(List<CharacterRange> ranges) {
+		return new Builder(ranges);
 	}
 
 	@Override

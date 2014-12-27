@@ -2,17 +2,19 @@ package org.jgll.grammar.symbol;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+
+import com.google.common.collect.ImmutableSet;
 
 public abstract class AbstractSymbol implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected final Set<Condition> conditions;
+	protected final Set<Condition> preConditions;
+	
+	protected final Set<Condition> postConditions;
 	
 	protected final String name;
 	
@@ -20,16 +22,22 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	protected final String label;
 	
-	public AbstractSymbol(String name, Set<Condition> conditions, String label, Object object) {
-		this.name = name;
-		this.label = label;
-		this.object = object;
-		this.conditions = Collections.unmodifiableSet(conditions);
+	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
+		this.name = builder.name;
+		this.label = builder.label;
+		this.object = builder.object;
+		this.preConditions = ImmutableSet.copyOf(builder.preConditions);
+		this.postConditions = ImmutableSet.copyOf(builder.postConditions);
 	}
 	
 	@Override
-	public Set<Condition> getConditions() {
-		return conditions;
+	public Set<Condition> getPreConditions() {
+		return preConditions;
+	}
+	
+	@Override
+	public Set<Condition> getPostConditions() {
+		return postConditions;
 	}
 	
 	@Override
@@ -49,17 +57,7 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	@Override
 	public String toString() {
-		return conditions.isEmpty() ? name :  "(" + name + listToString(conditions) + ")";
-	}
-	
-	protected Set<Condition> getNotFollowConditions() {
-		Set<Condition> set = new HashSet<>();
-//		for (Condition condition : conditions) {
-//			if (condition.getType() == ConditionType.NOT_FOLLOW) {
-//				set.add(condition);
-//			}
-//		}
-		return set;
+		return preConditions.isEmpty() ? name :  "(" + name + listToString(preConditions) + ")";
 	}
 	
 }

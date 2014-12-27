@@ -1,5 +1,9 @@
 package org.jgll.grammar.slot;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
@@ -7,12 +11,19 @@ import org.jgll.util.Input;
 
 public class NonterminalTransition extends AbstractTransition {
 
-	private NonterminalGrammarSlot slot;
+	private final NonterminalGrammarSlot slot;
+	
+	private final Set<Condition> preConditions;
 
-	public NonterminalTransition(NonterminalGrammarSlot slot, 
-								 GrammarSlot origin, GrammarSlot dest) {
+	public NonterminalTransition(NonterminalGrammarSlot slot, GrammarSlot origin, GrammarSlot dest) {
+		this(slot, origin, dest, Collections.emptySet());
+	}	
+	
+	public NonterminalTransition(NonterminalGrammarSlot slot, GrammarSlot origin,
+			                     GrammarSlot dest, Set<Condition> preConditions) {
 		super(origin, dest);
 		this.slot = slot;
+		this.preConditions = preConditions;
 	}
 
 	@Override
@@ -24,10 +35,11 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		if (origin.getPreConditions().stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci)))
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci)))
 			return;
 		
-		NonterminalGrammarSlot nonterminal = parser.create(dest, slot); 
+		NonterminalGrammarSlot nonterminal = parser.create(dest, slot);
+		
 		if (nonterminal != null) 
 			nonterminal.execute(parser, input, node);
 	}

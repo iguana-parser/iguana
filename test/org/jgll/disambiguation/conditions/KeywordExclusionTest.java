@@ -42,7 +42,7 @@ public class KeywordExclusionTest {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule r1 = new Rule(Id, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).addCondition(RegularExpressionCondition.notMatch(alt)).build());
+		Rule r1 = new Rule(Id, Plus.from(az).builder().addPreCondition(RegularExpressionCondition.notFollow(az)).addPreCondition(RegularExpressionCondition.notMatch(alt)).build());
 		builder.addRule(r1);
 		
 		grammar = builder.build();

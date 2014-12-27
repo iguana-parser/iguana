@@ -39,8 +39,8 @@ public class FollowRestrictionTest {
 
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule r1 = new Rule(S, Label.builder().addCondition(RegularExpressionCondition.notFollow(Keyword.from(":"))).build());		
-		Rule r2 = new Rule(Label, Plus.from(az).builder().addCondition(RegularExpressionCondition.notFollow(az)).build());
+		Rule r1 = new Rule(S, Label.builder().addPreCondition(RegularExpressionCondition.notFollow(Keyword.from(":"))).build());		
+		Rule r2 = new Rule(Label, Plus.from(az).builder().addPreCondition(RegularExpressionCondition.notFollow(az)).build());
 		builder.addRule(r1).addRule(r2);
 		
 		grammar = builder.build();

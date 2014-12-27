@@ -1,8 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Set;
-
-import org.jgll.grammar.condition.Condition;
 
 
 public class Plus extends AbstractSymbol {
@@ -15,9 +12,9 @@ public class Plus extends AbstractSymbol {
 		return new Builder(s).build();
 	}
 	
-	public Plus(Symbol s, Set<Condition> conditions, String label, Object object) {
-		super(s.getName() + "+", conditions, label, object);
-		this.s = s;
+	private Plus(Builder builder) {
+		super(builder);
+		this.s = builder.s;
 	}
 	
 	public Symbol getSymbol() {
@@ -29,6 +26,7 @@ public class Plus extends AbstractSymbol {
 		private Symbol s;
 		
 		public Builder(Symbol s) {
+			super(s.getName() + "+");
 			this.s = s;
 		}
 		
@@ -39,13 +37,12 @@ public class Plus extends AbstractSymbol {
 		
 		@Override
 		public Plus build() {
-			return new Plus(s, conditions, label, object);
+			return new Plus(this);
 		}
 	}
 	
-	@Override
-	public SymbolBuilder<Plus> builder() {
-		return new Builder(this);
+	public static Builder builder(Symbol s) {
+		return new Builder(s);
 	}
 	
 }

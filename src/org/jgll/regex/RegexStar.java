@@ -41,7 +41,7 @@ public class RegexStar extends AbstractRegularExpression {
 		
 		Automaton automaton = regexp.getAutomaton().copy();
 		
-		if (!conditions.isEmpty()) {
+		if (!preConditions.isEmpty()) {
 			automaton.determinize();
 		}
 		

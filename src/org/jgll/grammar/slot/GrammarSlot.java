@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
@@ -26,7 +27,13 @@ import org.jgll.util.generator.ConstructorCode;
  */
 public interface GrammarSlot extends ConstructorCode {
 	
-	public void execute(GLLParser parser, Input input, NonPackedNode node);
+	default void execute(GLLParser parser, Input input, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(parser, input, node));
+	}
+	
+	default Set<GrammarSlot> getReachableSlots() {
+		return getTransitions().stream().map(t -> t.destination()).collect(Collectors.toSet());
+	}
 	
 	/**
 	 * Corresponds to a grammar position A ::=  x . \alpha 
@@ -42,11 +49,7 @@ public interface GrammarSlot extends ConstructorCode {
 		return false;
 	}
 	
-	default Set<Condition> getPreConditions() {
-		return Collections.emptySet();
-	}
-	
-	default Set<Condition> getPostConditions() {
+	default Set<Condition> getConditions() {
 		return Collections.emptySet();
 	}
 	
@@ -54,12 +57,12 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	default GSSNode hasGSSNode(int inputIndex) { return null; }
 	
-	default boolean isInitialized() { return false; }
-	
-	default void init(Input input) { }
-	
 	default void reset() { }
-
+	
+	public boolean addTransition(Transition transition);
+	
+	public Set<Transition> getTransitions();
+	
 	default void code(PrintWriter writer, GrammarSlotRegistry registry) { }
 
 	default GrammarSlot withId(int id) { return this; }

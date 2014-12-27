@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -31,7 +30,12 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 	
 	private Epsilon() {
-		super("epsilon", null, Collections.<Condition>emptySet(), null);
+		super(new SymbolBuilder<Epsilon>("epsilon") {
+			@Override
+			public Epsilon build() {
+				return Epsilon.getInstance();
+			}
+		});
 	}
 	
 	private Object readResolve()  {
@@ -64,11 +68,6 @@ public class Epsilon extends AbstractRegularExpression {
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
-	}
-
-	@Override
-	public SymbolBuilder<Epsilon> builder() {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class DanglingElseGrammar1 {
 		Rule rule1 = new Rule(S, list(a, S));
 		builder.addRule(rule1);
 		
-		Rule rule2 = new Rule(S, list(group.builder().addCondition(ContextFreeCondition.notMatch(a, S)).build()));
+		Rule rule2 = new Rule(S, list(group.builder().addPreCondition(ContextFreeCondition.notMatch(a, S)).build()));
 		builder.addRule(rule2);
 		
 		Rule rule3 = new Rule(S, list(s));

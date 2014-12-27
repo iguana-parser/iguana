@@ -1,16 +1,20 @@
 package org.jgll.grammar.slot;
 
-import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.symbol.Nonterminal;
 
 
-public class NonterminalGrammarSlot extends ChoiceGrammarSlot {
+public class NonterminalGrammarSlot extends BodyGrammarSlot {
 
-	private Nonterminal nonterminal;
+	private final Nonterminal nonterminal;
 
-	public NonterminalGrammarSlot(Nonterminal nonterminal, List<Transition> transitions) {
+	public NonterminalGrammarSlot(Nonterminal nonterminal, Set<Transition> transitions) {
 		super(transitions);
+		this.nonterminal = nonterminal;
+	}
+	
+	public NonterminalGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
 	}
 	

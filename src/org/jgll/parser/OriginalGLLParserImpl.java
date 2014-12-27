@@ -49,7 +49,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 
 			GrammarSlot returnSlot = gssNode.getGrammarSlot();
 
-			if (returnSlot.getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
+			if (returnSlot.getConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
 				return;
 			
 			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
@@ -63,7 +63,6 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	
 	@Override
 	public final GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot head) {
-		if (! returnSlot.isInitialized()) returnSlot.init(input);
 		return gssLookup.getGSSNode(returnSlot, ci);
 	}
 	
@@ -88,7 +87,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node
 				// stored in the popped elements.
-				if (returnSlot.getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
+				if (returnSlot.getConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
 					continue;
 				
 				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z);

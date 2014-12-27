@@ -44,7 +44,7 @@ public class DanglingElseGrammar2 {
 
 		Grammar.Builder builder = new Grammar.Builder();
 
-		Rule rule1 = new Rule(S, list(group.builder().addCondition(ContextFreeCondition.notMatch(a, S, b, S)).build()));
+		Rule rule1 = new Rule(S, list(group.builder().addPreCondition(ContextFreeCondition.notMatch(a, S, b, S)).build()));
 		builder.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));

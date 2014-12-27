@@ -1,8 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.Set;
-
-import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
 public class Nonterminal extends AbstractSymbol {
@@ -17,10 +14,10 @@ public class Nonterminal extends AbstractSymbol {
 		return new Builder(name).build();
 	}
 	
-	public Nonterminal(String name, int index, boolean ebnfList, Set<Condition> conditions, String label, Object object) {
-		super(name, conditions, label, object);
-		this.ebnfList = ebnfList;
-		this.index = index;
+	private Nonterminal(Builder builder) {
+		super(builder);
+		this.ebnfList = builder.ebnfList;
+		this.index = builder.index;
 	}
 	
 	public boolean isEbnfList() {
@@ -70,8 +67,6 @@ public class Nonterminal extends AbstractSymbol {
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
 
-		private String name;
-		
 		private boolean ebnfList;
 		
 		private int index;
@@ -84,7 +79,7 @@ public class Nonterminal extends AbstractSymbol {
 		}
 
 		public Builder(String name) {
-			this.name = name;
+			super(name);
 		}
 		
 		public Builder setIndex(int index) {
@@ -99,13 +94,8 @@ public class Nonterminal extends AbstractSymbol {
 		
 		@Override
 		public Nonterminal build() {
-			return new Nonterminal(name, index, ebnfList, conditions, label, object);
+			return new Nonterminal(this);
 		}
-	}
-
-	@Override
-	public SymbolBuilder<? extends Nonterminal> builder() {
-		return new Builder(this);
 	}
 	
 }

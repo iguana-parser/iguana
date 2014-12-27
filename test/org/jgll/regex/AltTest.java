@@ -56,10 +56,10 @@ public class AltTest {
 	@Test
 	public void test1WithPostConditions() {
 		// ([a] !>> [c] | [b]) !>> c
-		RegularExpression a = new Character.Builder('a').addCondition(RegularExpressionCondition.notFollow(Character.from('c'))).build();
+		RegularExpression a = new Character.Builder('a').addPreCondition(RegularExpressionCondition.notFollow(Character.from('c'))).build();
 		Character b = Character.from('b');
 		
-		RegularExpression regexp = new RegexAlt.Builder<>(a, b).addCondition(RegularExpressionCondition.notFollow(Character.from('d'))).build();
+		RegularExpression regexp = new RegexAlt.Builder<>(a, b).addPreCondition(RegularExpressionCondition.notFollow(Character.from('d'))).build();
 		System.out.println(regexp);
 		Automaton nfa = regexp.getAutomaton();
 		
@@ -71,7 +71,7 @@ public class AltTest {
 	
 	@Test
 	public void test2WithPostConditions() {
-		Keyword k1 = new Keyword.Builder("for").addCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		Keyword k1 = new Keyword.Builder("for").addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Keyword k2 = Keyword.from("forall");
 		
 		Automaton result = AutomatonOperations.or(k1.getAutomaton(), k2.getAutomaton());

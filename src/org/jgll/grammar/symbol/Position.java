@@ -37,4 +37,17 @@ public class Position {
 		
 		return rule.equals(other.rule) && position == other.position;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(rule.getHead()).append(" :: =");
+		for (int i = 0; i <= rule.size(); i++) {
+			sb.append(rule.symbolAt(i) + " ");
+			if (i == position) {
+				sb.append(". ");
+			}
+		}
+		return sb.toString();
+	}
 }

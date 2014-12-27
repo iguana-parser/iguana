@@ -1,5 +1,9 @@
 package org.jgll.grammar.slot;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
@@ -8,13 +12,22 @@ import org.jgll.util.Input;
 
 public class TerminalTransition extends AbstractTransition {
 
-	private TerminalGrammarSlot slot;
+	private final TerminalGrammarSlot slot;
+	
+	private final Set<Condition> preConditions;
+	
+	private final Set<Condition> postConditions;
 
-	public TerminalTransition(TerminalGrammarSlot slot, 
-							  GrammarSlot origin, 
-							  GrammarSlot dest) {
+	public TerminalTransition(TerminalGrammarSlot slot, GrammarSlot origin, GrammarSlot dest) {
+		this(slot, origin, dest, Collections.emptySet(), Collections.emptySet());
+	}
+	
+	public TerminalTransition(TerminalGrammarSlot slot, GrammarSlot origin, GrammarSlot dest, 
+							  Set<Condition> preConditions, Set<Condition> postConditions) {
 		super(origin, dest);
 		this.slot = slot;
+		this.preConditions = preConditions;
+		this.postConditions = postConditions;
 	}
 
 	@Override
@@ -22,7 +35,7 @@ public class TerminalTransition extends AbstractTransition {
 		
 		int ci = node.getRightExtent();
 		
-		if (origin.getPreConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, parser.getCurrentGSSNode(), ci))) 
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(input, parser.getCurrentGSSNode(), ci))) 
 			return;
 
 		int length = slot.getRegularExpression().getMatcher().match(input, ci);
@@ -32,7 +45,7 @@ public class TerminalTransition extends AbstractTransition {
 			return;
 		}
 
-		if (origin.getPostConditions().stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length))) 
+		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), ci + length))) 
 			return;
 	
 		TerminalNode cr = parser.getSPPFLookup().getTerminalNode(slot, ci, ci + length);

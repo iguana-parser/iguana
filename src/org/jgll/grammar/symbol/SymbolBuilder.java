@@ -7,21 +7,27 @@ import org.jgll.grammar.condition.Condition;
 
 public abstract class SymbolBuilder<T extends Symbol> {
 	
+	protected String name;
+	
 	protected String label;
 	
 	protected Object object;
 	
-	protected Set<Condition> conditions;
+	protected Set<Condition> preConditions;
 	
-	public SymbolBuilder() {
-		this.conditions = new HashSet<>();
+	protected Set<Condition> postConditions;
+	
+	public SymbolBuilder(String name) {
+		this.name = name;
+		this.preConditions = new HashSet<>();
+		this.postConditions = new HashSet<>();
 	}
 	
 	public SymbolBuilder(T t) {
-		this();
+		this(t.getName());
 		this.label = t.getLabel();
 		this.object = t.getObject();
-		this.conditions = t.getConditions() == null ? new HashSet<Condition>() : new HashSet<>(t.getConditions());
+		this.preConditions = t.getPreConditions() == null ? new HashSet<Condition>() : new HashSet<>(t.getPreConditions());
 	}
 	
 	public SymbolBuilder<T> setLabel(String label) {
@@ -29,25 +35,28 @@ public abstract class SymbolBuilder<T extends Symbol> {
 		return this;
 	}
 	
-	public SymbolBuilder<T> addCondition(Condition condition) {
-		conditions.add(condition);
+	public SymbolBuilder<T> addPreCondition(Condition condition) {
+		preConditions.add(condition);
 		return this;
 	}
+	
+	public SymbolBuilder<T> addPostCondition(Condition condition) {
+		postConditions.add(condition);
+		return this;
+	}	
 	
 	public SymbolBuilder<T> setObject(Object object) {
 		this.object = object;
 		return this;
 	}
 	
-	public SymbolBuilder<T> removeConditions() {
-		this.conditions.clear();
+ 	public SymbolBuilder<T> addPreConditions(Iterable<Condition> conditions) {
+ 		conditions.forEach(c -> preConditions.add(c));
 		return this;
 	}
-	
- 	public SymbolBuilder<T> addConditions(Iterable<Condition> conditions) {
-		for (Condition condition : conditions) {
-			this.conditions.add(condition);
-		}
+ 	
+ 	public SymbolBuilder<T> addPostConditions(Iterable<Condition> conditions) {
+ 		conditions.forEach(c -> postConditions.add(c));
 		return this;
 	}
 	
