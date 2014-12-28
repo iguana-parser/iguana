@@ -7,13 +7,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.generator.GeneratorUtil;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -41,14 +41,13 @@ public class GrammarGraph implements Serializable {
 	
 	private Grammar grammar;
 	
-	
-	
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
-		this.registry = new GrammarSlotRegistry(builder.nonterminalsMap, builder.terminalsMap, builder.slots);
+		Map<String, GrammarSlot> slotsMap = builder.slots.stream().collect(Collectors.toMap(s -> s.toString(), s -> s));
+		this.registry = new GrammarSlotRegistry(builder.nonterminalsMap, builder.terminalsMap, slotsMap);
 		this.headGrammarSlots = new ArrayList<>(builder.nonterminalsMap.values());
 		this.terminals = new ArrayList<>(builder.terminalsMap.values());
-		this.slots = new LinkedHashSet<>(builder.slots.values());
+		this.slots = new LinkedHashSet<>(builder.slots);
 		grammar = builder.grammar;
 		printGrammarStatistics();
 	}

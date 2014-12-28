@@ -41,13 +41,18 @@ public class Position {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(rule.getHead()).append(" :: =");
-		for (int i = 0; i <= rule.size(); i++) {
-			sb.append(rule.symbolAt(i) + " ");
-			if (i == position) {
-				sb.append(". ");
+		sb.append(rule.getHead()).append(" ::= ");
+		
+		if (rule.size() == 0) 
+			sb.append(".");
+		else 
+			for (int i = 0; i <= rule.size(); i++) {
+				sb.append(rule.symbolAt(i) + " ");
+				if (i == position) {
+					sb.append(". ");
+				}
 			}
-		}
+		
 		return sb.toString();
 	}
 }

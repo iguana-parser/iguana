@@ -1,6 +1,7 @@
 package org.jgll.grammar.slot;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
@@ -10,8 +11,8 @@ import org.jgll.util.Input;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
-	public EpsilonGrammarSlot(NonterminalGrammarSlot nonterminal) {
-		super(nonterminal);
+	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal) {
+		super(position, nonterminal);
 	}
 	
 	@Override

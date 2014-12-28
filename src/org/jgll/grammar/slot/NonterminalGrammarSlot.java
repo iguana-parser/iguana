@@ -8,7 +8,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.gss.GSSNode;
 
 
-public class NonterminalGrammarSlot extends BodyGrammarSlot {
+public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	private final Nonterminal nonterminal;
 	

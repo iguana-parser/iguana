@@ -4,15 +4,17 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 
-public class EndGrammarSlot implements GrammarSlot {
+public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(NonterminalGrammarSlot nonterminal) {
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal) {
+		super(position);
 		this.nonterminal = nonterminal;
 	}
 
@@ -45,9 +47,4 @@ public class EndGrammarSlot implements GrammarSlot {
 		return false;
 	}
 	
-	@Override
-	public String toString() {
-		return nonterminal.toString();
-	}
-
 }

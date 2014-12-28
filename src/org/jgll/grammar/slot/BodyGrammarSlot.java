@@ -1,29 +1,26 @@
 package org.jgll.grammar.slot;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.symbol.Position;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {
 
-	public BodyGrammarSlot() {
-		super();
-	}
-	
-	public BodyGrammarSlot(Set<Transition> transitions) {
-		super(transitions);
+	private final Position position;
+
+	public BodyGrammarSlot(Position position) {
+		this.position = position;
 	}
 	
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("new BodyGrammarSlot(")
-		  .append("Sets.newHashSet(")
-		  .append(transitions.stream().map(t -> t.getConstructorCode(registry)).collect(Collectors.joining(", ")))
-		  .append("))");
-		return sb.toString();
+		return new StringBuilder()
+    	  .append("new BodyGrammarSlot(")
+    	  .append(")").toString();
 	}
-
+	
+	@Override
+	public String toString() {
+		return position.toString();
+	}
 }

@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.EpsilonTransition;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -22,19 +24,16 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.logging.LoggerWrapper;
 
 public class GrammarGraphBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(GrammarGraphBuilder.class);
-
 	Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
 	
 	Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
 	
-	Map<String, GrammarSlot> slots;
+	List<GrammarSlot> slots;
 
 	String name;
 	
@@ -47,23 +46,16 @@ public class GrammarGraphBuilder implements Serializable {
 	public GrammarGraphBuilder(String name, Grammar grammar) {
 		this.name = name;
 		this.grammar = grammar;
-		this.slots = new LinkedHashMap<>();
+		this.slots = new ArrayList<>();
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
 		terminalsMap.put(Epsilon.getInstance(), new TerminalGrammarSlot(Epsilon.getInstance()));
 	}
 
 	public GrammarGraph build() {
-		
-		long start = System.nanoTime();
-		
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
 			convert(nonterminal);
 		}
-
-		long end = System.nanoTime();
-		log.info("Grammar Graph is composed in %d ms", (end - start) / 1000_000);
-				
 		return new GrammarGraph(this);
 	}
 	
@@ -82,37 +74,46 @@ public class GrammarGraphBuilder implements Serializable {
 	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
 		
 		if (rule.size() == 0) {
-			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(head);
+			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(rule.getPosition(0), head);
 			head.addTransition(new EpsilonTransition(head, epsilonSlot));
-			slots.put(epsilonSlot.toString(), epsilonSlot);
+			slots.add(epsilonSlot);
 		} 
 		else {
 			
 			GrammarSlot currentSlot = head;
 			
-			for (Symbol symbol : rule.getBody()) {
+			for (int i = 0; i < rule.size(); i++) {
+				Symbol symbol = rule.symbolAt(i);
+				
 				// Terminal
 				if (symbol instanceof RegularExpression) {
 					RegularExpression regex = (RegularExpression) symbol;
 					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
-					GrammarSlot slot = new BodyGrammarSlot();
+					GrammarSlot slot = getBodyGrammarSlot(rule, i, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					Set<Condition> postConditions = symbol.getPreConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
 					currentSlot.addTransition(new TerminalTransition(terminalSlot, currentSlot, slot, preConditions, postConditions));
 					currentSlot = slot;
-					
 				} 
 				else if (symbol instanceof Nonterminal) {
 					Nonterminal nonterminal = (Nonterminal) symbol;
 					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(nonterminal));
-					GrammarSlot slot = new BodyGrammarSlot();
+					GrammarSlot slot = getBodyGrammarSlot(rule, i, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, preConditions));
 					currentSlot = slot;
 				}
 				
-				slots.put(currentSlot.toString(), currentSlot);
-			}			
+				slots.add(currentSlot);
+			}		
+		}
+	}
+	
+	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, NonterminalGrammarSlot nonterminal) {
+		if (i == rule.size() - 1) {
+			return new BodyGrammarSlot(rule.getPosition(i));
+		} else {
+			return new EndGrammarSlot(rule.getPosition(i), nonterminal);
 		}
 	}
 	
