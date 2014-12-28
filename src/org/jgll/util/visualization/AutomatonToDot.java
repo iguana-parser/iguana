@@ -15,8 +15,6 @@ public class AutomatonToDot {
 	private static final String FINAL_NODE = "[shape=doublecircle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	private static final String TRANSITION = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
 	
-
-	
 	public static String toDot(State startState) {
 		
 		final StringBuilder sb = new StringBuilder();

@@ -18,6 +18,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.jgll.util.generator.CompilationUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +40,7 @@ public class Test1 {
 	public void init() {
 		Rule r1 = new Rule(A);
 		grammar = new Grammar.Builder().addRule(r1).build();
+		Visualization.generateGrammarGraph("/Users/aliafroozeh/output", grammar.toGrammarGraph());
 	}
 	
 	@Test

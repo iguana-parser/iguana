@@ -25,9 +25,8 @@ public class GraphVizUtil {
 	public static final String GSS_EDGE = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
 	
 	public static final String NONTERMINAL_NODE = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
-	public static final String SLOT_NODE = "[shape=box, style=rounded, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
-	public static final String NONTERMINAL_EDGE = "edge [color=black, style=dashed, penwidth=0.5, arrowsize=0.7];";
-	public static final String END_EDGE = "edge [color=black, style=dotted, penwidth=0.5, arrowsize=0.7];";
+	public static final String END_NODE = "[shape=doublecircle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
+	public static final String TRANSITION = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
 	
 	public static final int TOP_DOWN = 0;
 	public static final int LEFT_TO_RIGHT = 1;
@@ -52,7 +51,8 @@ public class GraphVizUtil {
 		sb.append("nodesep=.6").append(lineSeparator);
 		sb.append("ranksep=.4").append(lineSeparator);		
 		sb.append("ordering=out").append(lineSeparator);
-		if(layout == LEFT_TO_RIGHT) {
+		
+		if (layout == LEFT_TO_RIGHT) {
 			sb.append("rankdir=LR").append(lineSeparator);
 		}
 		

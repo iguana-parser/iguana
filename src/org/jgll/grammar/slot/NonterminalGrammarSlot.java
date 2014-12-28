@@ -26,4 +26,9 @@ public class NonterminalGrammarSlot extends BodyGrammarSlot {
 		return nonterminal;
 	}
 	
+	@Override
+	public String toString() {
+		return nonterminal.getName();
+	}
+	
 }

@@ -11,6 +11,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
+import org.jgll.grammar.slot.EpsilonTransition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.NonterminalTransition;
@@ -67,7 +68,6 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 	
 	private void convert(Nonterminal head) {
-		
 		List<Rule> rules = grammar.getAlternatives(head);
 		
 		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(head, k -> new NonterminalGrammarSlot(head));
@@ -76,8 +76,12 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 	
 	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
+		
+		System.out.println(rule);
+		
 		if (rule.size() == 0) {
 			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(head);
+			head.addTransition(new EpsilonTransition(head, epsilonSlot));
 			slots.put(epsilonSlot.toString(), epsilonSlot);
 		} 
 		else {

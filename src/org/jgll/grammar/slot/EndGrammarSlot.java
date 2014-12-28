@@ -44,5 +44,10 @@ public class EndGrammarSlot implements GrammarSlot {
 	public boolean addTransition(Transition transition) {
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return nonterminal.toString();
+	}
 
 }
