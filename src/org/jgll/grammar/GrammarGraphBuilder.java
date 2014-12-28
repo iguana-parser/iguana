@@ -70,14 +70,16 @@ public class GrammarGraphBuilder implements Serializable {
 	private void convert(Nonterminal head) {
 		List<Rule> rules = grammar.getAlternatives(head);
 		
-		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(head, k -> new NonterminalGrammarSlot(head));
+		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(head, k -> {
+						NonterminalGrammarSlot n = new NonterminalGrammarSlot(head);
+						nonterminalsMap.put(n.getNonterminal(), n);
+						return n;
+					});
 		
 		rules.forEach(r -> addAlternative(nonterminalSlot, r));
 	}
 	
 	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
-		
-		System.out.println(rule);
 		
 		if (rule.size() == 0) {
 			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(head);

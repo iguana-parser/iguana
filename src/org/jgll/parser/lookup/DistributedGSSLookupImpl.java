@@ -1,7 +1,6 @@
 package org.jgll.parser.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;

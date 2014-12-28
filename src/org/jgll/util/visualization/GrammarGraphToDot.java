@@ -30,7 +30,7 @@ public class GrammarGraphToDot {
 			sb.append("\"" + r.getId(slot) + "\"" + String.format(END_NODE, escape(slot.toString())) + "\n");
 		}
 		
-		slot.getTransitions().forEach(t -> sb.append(sb.append(String.format(TRANSITION, t.toString()) + "\"" + r.getId(slot) + "\"" + "->" + "{\"" + r.getId(t.destination()) + "\"}" + "\n")));
+		slot.getTransitions().forEach(t -> sb.append(String.format(TRANSITION, t.toString()) + "\"" + r.getId(slot) + "\"" + "->" + "{\"" + r.getId(t.destination()) + "\"}" + "\n"));
 		slot.getTransitions().forEach(t -> toDot(t.destination(), sb, r));
 	}
 	

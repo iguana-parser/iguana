@@ -16,7 +16,7 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.traversal.SPPFVisitor;
 
-public class ToJavaCode implements SPPFVisitor {
+public class SPPFToJavaCode implements SPPFVisitor {
 	
 	private AtomicInteger id = new AtomicInteger(1);
 	
@@ -26,12 +26,12 @@ public class ToJavaCode implements SPPFVisitor {
 	
 	private StringBuilder sb = new StringBuilder();
 
-	public ToJavaCode() {
+	public SPPFToJavaCode() {
 		sb.append("SPPFNodeFactory factory = new SPPFNodeFactory(registry);\n");
 	}
 	
 	public static String toJavaCode(NonterminalNode node) {
-		ToJavaCode toJavaCode = new ToJavaCode();
+		SPPFToJavaCode toJavaCode = new SPPFToJavaCode();
 		toJavaCode.visit(node);
 		return toJavaCode.toString();
 	}

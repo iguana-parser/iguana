@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.parser.HashFunctions;
 
 public class Nonterminal extends AbstractSymbol {
@@ -96,6 +97,19 @@ public class Nonterminal extends AbstractSymbol {
 		public Nonterminal build() {
 			return new Nonterminal(this);
 		}
+	}
+
+	@Override
+	public String getConstructorCode(GrammarSlotRegistry registry) {
+		return new StringBuilder()
+		  .append("Nonterminal.builder(\"" + name + "\")")
+		  .append(label == null? "" : ".setLabel(" + label + ")")
+		  .append(object == null? "" : ".setObject(" + object + ")")
+		  .append(preConditions.isEmpty()? "" : ".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
+		  .append(postConditions.isEmpty()? "" : ".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
+		  .append(index == 0 ? "" : ".setIndex(" + index + ")")
+		  .append(ebnfList == false? "" : ".setEbnfList(" + ebnfList + ")")
+		  .append(".build()").toString();
 	}
 	
 }

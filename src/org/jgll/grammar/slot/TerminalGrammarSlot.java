@@ -34,4 +34,8 @@ public class TerminalGrammarSlot implements GrammarSlot {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return regex.toString();
+	}
 }

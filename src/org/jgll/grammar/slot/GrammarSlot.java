@@ -1,11 +1,9 @@
 package org.jgll.grammar.slot;
 
-import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -63,8 +61,6 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	public Set<Transition> getTransitions();
 	
-	default void code(PrintWriter writer, GrammarSlotRegistry registry) { }
-
 	default GrammarSlot withId(int id) { return this; }
 	
 	default int getId() { return 0; }

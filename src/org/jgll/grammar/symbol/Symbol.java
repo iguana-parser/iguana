@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.generator.ConstructorCode;
 
 /**
  * 
@@ -11,7 +12,7 @@ import org.jgll.grammar.condition.Condition;
  * @author Ali Afroozeh
  *
  */
-public interface Symbol extends Serializable {
+public interface Symbol extends ConstructorCode, Serializable {
 	
 	public String getName();
 	

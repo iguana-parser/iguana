@@ -23,7 +23,7 @@ public class DummyNode extends NonPackedNode {
 	
 	public static DummyNode getInstance() {
 		if(instance == null) {
-			instance = new DummyNode(null, -1, -1);
+			instance = new DummyNode(null, 0, 0);
 		}
 		return instance;
 	}

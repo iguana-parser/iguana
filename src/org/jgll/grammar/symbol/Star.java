@@ -1,5 +1,7 @@
 package org.jgll.grammar.symbol;
 
+import org.jgll.grammar.GrammarSlotRegistry;
+
 
 /**
  * 
@@ -25,6 +27,21 @@ public class Star extends AbstractSymbol {
 	public Symbol getSymbol() {
 		return s;
 	}
+	
+	@Override
+	public String getConstructorCode(GrammarSlotRegistry registry) {
+		return new StringBuilder()
+		  .append("new Star.builder(" + s.getConstructorCode(registry) + ")")
+		  .append(".setLabel(" + label + ")")
+		  .append(".setObject(" + object + ")")
+		  .append(".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
+		  .append(".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
+		  .append(".build()").toString();
+	}
+	
+	public static Builder builder(Symbol s) {
+		return new Builder(s);
+	}
 
 	public static class Builder extends SymbolBuilder<Star> {
 
@@ -46,8 +63,4 @@ public class Star extends AbstractSymbol {
 		}
 	}
 	
-	public static Builder builder(Symbol s) {
-		return new Builder(s);
-	}
-
 }

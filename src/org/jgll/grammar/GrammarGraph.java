@@ -1,26 +1,19 @@
 package org.jgll.grammar;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.EndGrammarSlot;
-import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.generator.GeneratorUtil;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -47,6 +40,8 @@ public class GrammarGraph implements Serializable {
 	private Map<Nonterminal, Set<RegularExpression>> followSets;
 	
 	private Grammar grammar;
+	
+	
 	
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
@@ -357,5 +352,19 @@ public class GrammarGraph implements Serializable {
 	public GrammarSlotRegistry getRegistry() {
 		return registry;
 	}
+	
+	public void toJavaCode(PrintWriter writer) {
+		
+		headGrammarSlots.forEach(n -> writer.println("NonterminalGrammarSlot slot" + registry.getId(n) + " = " + n.getConstructorCode(registry) + ";"));
+		slots.forEach(s -> writer.println("GrammarSlot slot"+ registry.getId(s) + " = " + s.getConstructorCode(registry) + ";"));
+		
+		for (NonterminalGrammarSlot n : headGrammarSlots) {
+			toJavaCode(n, writer);
+		}
+	}
+	
+	private void toJavaCode(GrammarSlot slot, PrintWriter writer) {
+		slot.getTransitions().forEach(t -> writer.println("slot" + registry.getId(slot) + ".addTransition(" + t.getConstructorCode(registry) + "));"));
+ 	}
 	
 }

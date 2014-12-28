@@ -6,7 +6,7 @@ import java.util.Set;
 
 public abstract class AbstractGrammarSlot implements GrammarSlot {
 
-	private final Set<Transition> transitions;
+	protected final Set<Transition> transitions;
 
 	public AbstractGrammarSlot() {
 		this.transitions = new HashSet<>();

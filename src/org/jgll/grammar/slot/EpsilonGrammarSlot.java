@@ -28,7 +28,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
-		return null;
+		return "new EpsilonGrammarSlot(slot" + registry.getId(nonterminal) + ")";
 	}
 
 }
