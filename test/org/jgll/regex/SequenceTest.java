@@ -13,20 +13,20 @@ import org.junit.Test;
 
 public class SequenceTest {
 	
-	private Sequence<Character> seq1;
-	private Sequence<CharacterRange> seq2;
-	private Sequence<CharacterRange> seq3;
+	private Sequence.Builder<Character> seq1;
+	private Sequence.Builder<CharacterRange> seq2;
+	private Sequence.Builder<CharacterRange> seq3;
 
 	@Before
 	public void init() {
-		seq1 = Sequence.from(Character.from('a'), Character.from('b'));		
-		seq2 = Sequence.from(CharacterRange.in('a', 'z'), CharacterRange.in('0', '9'));
-		seq3 = Sequence.from(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm'));
+		seq1 = Sequence.builder(Character.from('a'), Character.from('b'));		
+		seq2 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('0', '9'));
+		seq3 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm'));
 	}
 	
 	@Test
 	public void test1() {
-		Automaton nfa = seq1.getAutomaton();
+		Automaton nfa = seq1.build().getAutomaton();
 		
 		assertEquals(4, nfa.getCountStates());
 		
@@ -40,7 +40,7 @@ public class SequenceTest {
 	
 	@Test
 	public void test2() {
-		Automaton nfa = seq2.getAutomaton();
+		Automaton nfa = seq2.build().getAutomaton();
 
 		assertEquals(4, nfa.getCountStates());
 
@@ -62,7 +62,7 @@ public class SequenceTest {
 	 */
 	@Test
 	public void test3() {
-		Automaton nfa = seq3.getAutomaton();
+		Automaton nfa = seq3.build().getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		assertTrue(matcher.match(Input.fromString("dm")));
@@ -71,14 +71,14 @@ public class SequenceTest {
 	@Test
 	public void test1WithPostCondition() {
 		// [a][b] !>> [c]
-		Sequence<Character> r = seq1.builder().addPreCondition(RegularExpressionCondition.notFollow(Character.from('c'))).build();
+		Sequence<Character> r = seq1.addPostCondition(RegularExpressionCondition.notFollow(Character.from('c'))).build();
 		RunnableAutomaton dfa = r.getAutomaton().getRunnableAutomaton();
 		assertEquals(-1, dfa.match(Input.fromString("abc"), 0));
 	}
 	
 	@Test
 	public void test2WithPostConditions() {
-		Sequence<CharacterRange> r = seq2.builder().addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		Sequence<CharacterRange> r = seq2.addPostCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 
 		RunnableAutomaton dfa = r.getAutomaton().getRunnableAutomaton();
 		
@@ -92,7 +92,7 @@ public class SequenceTest {
 
 	@Test
 	public void test3WithPostConditions() {
-		RegularExpression r = seq3.builder().addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		RegularExpression r = seq3.addPostCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Automaton nfa = r.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();

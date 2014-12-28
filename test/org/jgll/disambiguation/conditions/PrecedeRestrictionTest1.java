@@ -46,6 +46,9 @@ public class PrecedeRestrictionTest1 {
 	private Nonterminal Id = Nonterminal.withName("Id");
 	private Character ws = Character.from(' ');
 	private CharacterRange az = CharacterRange.in('a', 'z');
+	
+	private Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az))
+			                              .addPostCondition(RegularExpressionCondition.notPrecede(az)).build();
 
 	@Before
 	public void createParser() {
@@ -56,7 +59,7 @@ public class PrecedeRestrictionTest1 {
 
 		Rule r2 = new Rule(S, forall);
 
-		Rule r3 = new Rule(Id, Plus.from(az).builder().addPreCondition(RegularExpressionCondition.notFollow(az)).addPreCondition(RegularExpressionCondition.notPrecede(az)).build());
+		Rule r3 = new Rule(Id, AZPlus);
 
 		Rule r4 = new Rule(L, ws);
 

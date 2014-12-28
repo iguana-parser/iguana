@@ -3,7 +3,6 @@ package org.jgll.regex;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -17,15 +16,15 @@ public class RegexStar extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final RegularExpression regexp;
+	private final RegularExpression regex;
 	
 	public static RegexStar from(RegularExpression regexp) {
 		return new Builder(regexp).build();
 	}
 
-	public RegexStar(RegularExpression regexp, String label, Set<Condition> conditions, Object object) {
-		super(getName(regexp), label, conditions, object);
-		this.regexp = regexp;
+	public RegexStar(Builder builder) {
+		super(builder);
+		this.regex = builder.regex;
 	}
 	
 	private static String getName(RegularExpression regexp) {
@@ -39,7 +38,7 @@ public class RegexStar extends AbstractRegularExpression {
 		
 		State finalState = new State(StateType.FINAL);
 		
-		Automaton automaton = regexp.getAutomaton().copy();
+		Automaton automaton = regex.getAutomaton().copy();
 		
 		if (!preConditions.isEmpty()) {
 			automaton.determinize();
@@ -67,12 +66,12 @@ public class RegexStar extends AbstractRegularExpression {
 
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		return regexp.getFirstSet();
+		return regex.getFirstSet();
 	}
 	
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
-		return regexp.getFirstSet();
+		return regex.getFirstSet();
 	}
 
 	public static class Builder extends SymbolBuilder<RegexStar> {
@@ -80,30 +79,26 @@ public class RegexStar extends AbstractRegularExpression {
 		private RegularExpression regex;
 
 		public Builder(RegularExpression regex) {
+			super(getName(regex));
 			this.regex = regex;
 		}
 		
 		public Builder(RegexStar regexStar) {
 			super(regexStar);
-			this.regex = regexStar.regexp;
+			this.regex = regexStar.regex;
 		}
 		
 		@Override
 		public RegexStar build() {
-			return new RegexStar(regex, label, conditions, object);
+			return new RegexStar(this);
 		}
-	}
-
-	@Override
-	public SymbolBuilder<RegexStar> builder() {
-		return new Builder(this);
 	}
 
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexStar(")
-		  .append(regexp.getConstructorCode(registry) + ", ")
+		  .append(regex.getConstructorCode(registry) + ", ")
 		  .append(label + ", ")
 		  .append("new HashSet<>(), ")
 		  .append("null")

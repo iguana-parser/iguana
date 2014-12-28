@@ -7,6 +7,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.RegexStar;
 import org.jgll.regex.RegularExpression;
@@ -16,13 +17,13 @@ import org.junit.Test;
 
 public class FollowRestrictionTest {
 	
-	RegularExpression id = RegularExpressionExamples.getId();
+	SymbolBuilder<? extends RegularExpression> idBuilder = RegularExpressionExamples.getId();
 	
 	@Test
 	public void test1() {
 		
 		// id !>> [:]
-		RegularExpression r1 = (RegularExpression) id.builder().addPreCondition(RegularExpressionCondition.notFollow(Character.from(':')))				
+		RegularExpression r1 = idBuilder.addPostCondition(RegularExpressionCondition.notFollow(Character.from(':')))				
 								 .addPreCondition(RegularExpressionCondition.notMatch(Keyword.from("set"))).build();
 		
 		
@@ -39,7 +40,7 @@ public class FollowRestrictionTest {
 	public void test2() {
 		
 		// id !>> "<>"
-		RegularExpression r2 = (RegularExpression) id.builder().addPreCondition(RegularExpressionCondition.notFollow(Keyword.from("<>"))).build();
+		RegularExpression r2 = idBuilder.addPreCondition(RegularExpressionCondition.notFollow(Keyword.from("<>"))).build();
 		RunnableAutomaton matcher = r2.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test<>"), 0));
@@ -52,7 +53,7 @@ public class FollowRestrictionTest {
 	public void test3() {
 		
 		// id !>> [a-z]
-		RegularExpression r3 = (RegularExpression) id.builder().addPreCondition(RegularExpressionCondition.notFollow(CharacterClass.from(CharacterRange.in('a', 'z')))).build();
+		RegularExpression r3 = idBuilder.addPreCondition(RegularExpressionCondition.notFollow(CharacterClass.from(CharacterRange.in('a', 'z')))).build();
 
 		RunnableAutomaton matcher = r3.getAutomaton().getRunnableAutomaton();
 		

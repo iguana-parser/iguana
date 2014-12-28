@@ -116,7 +116,7 @@ public class IguanaBenchmark {
 //					if (line.hasOption("n")) {
 //						grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();
 //					} else {
-						grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();	
+						grammarGraph = grammar.toGrammarGraph();	
 //					}
 				} catch (Exception e) {
 					e.printStackTrace();

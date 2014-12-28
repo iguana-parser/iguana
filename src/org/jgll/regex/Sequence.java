@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -26,12 +25,12 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	private final List<T> regularExpressions;
 
-	public Sequence(List<T> regularExpressions, String label, Set<Condition> conditions, Object object) {
-		super(getName(regularExpressions), label, conditions, object);
+	public Sequence(Builder<T> builder) {
+		super(builder);
 		
-		if(regularExpressions.size() == 0) throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
+		if(builder.regularExpressions.size() == 0) throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
 		
-		this.regularExpressions = new ArrayList<>(regularExpressions);
+		this.regularExpressions = new ArrayList<>(builder.regularExpressions);
 	}
 	
 	public static <T extends RegularExpression> Sequence<T> from(List<T> regularExpressions) {
@@ -143,6 +142,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		private List<T> regularExpressions;
 
 		public Builder(List<T> regularExpressions) {
+			super(getName(regularExpressions));
 			this.regularExpressions = regularExpressions;
 		}
 		
@@ -153,13 +153,17 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		
 		@Override
 		public Sequence<T> build() {
-			return new Sequence<>(regularExpressions, label, conditions, object);
+			return new Sequence<>(this);
 		}
 	}
 
-	@Override
-	public SymbolBuilder<Sequence<T>> builder() {
-		return new Builder<>(this);
+	@SafeVarargs
+	public static <T extends RegularExpression> Builder<T> builder(T...regularExpressions) {
+		return new Builder<>(Arrays.asList(regularExpressions));
+	}
+	
+	public static <T extends RegularExpression> Builder<T> builder(List<T> regularExpressions) {
+		return new Builder<>(regularExpressions);
 	}
 	
 	@Override

@@ -45,6 +45,8 @@ public class PrecedeRestrictionTest2 {
 	private Character ws = Character.from(' ');
 	private CharacterRange az = CharacterRange.in('a', 'z');
 	private Grammar grammar;
+	private Plus AZPlus = Plus.builder(az).addPreCondition(RegularExpressionCondition.notFollow(az))
+			                              .addPostCondition(RegularExpressionCondition.notPrecede(forr)).build();
 
 	@Before
 	public void createGrammar() {
@@ -55,7 +57,7 @@ public class PrecedeRestrictionTest2 {
 
 		Rule r2 = new Rule(S, forall);
 
-		Rule r3 = new Rule(Id, Plus.from(az).builder().addPreCondition(RegularExpressionCondition.notFollow(az)).addPreCondition(RegularExpressionCondition.notPrecede(forr)).build());
+		Rule r3 = new Rule(Id, AZPlus);
 
 		Rule r4 = new Rule(L, ws);
 		

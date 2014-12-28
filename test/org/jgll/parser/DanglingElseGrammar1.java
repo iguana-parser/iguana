@@ -38,7 +38,7 @@ public class DanglingElseGrammar1 {
 	private Character s = Character.from('s');
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
-	private Group group = Group.of(a, S, b, S);
+	private Group group = Group.builder(a, S, b, S).addPreCondition(ContextFreeCondition.notMatch(a, S)).build();
 
 	private Grammar grammar;
 	
@@ -51,7 +51,7 @@ public class DanglingElseGrammar1 {
 		Rule rule1 = new Rule(S, list(a, S));
 		builder.addRule(rule1);
 		
-		Rule rule2 = new Rule(S, list(group.builder().addPreCondition(ContextFreeCondition.notMatch(a, S)).build()));
+		Rule rule2 = new Rule(S, list(group));
 		builder.addRule(rule2);
 		
 		Rule rule3 = new Rule(S, list(s));

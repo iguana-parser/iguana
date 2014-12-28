@@ -4,15 +4,15 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.condition.RegularExpressionCondition;
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.regex.RegexAlt;
-import org.jgll.regex.RegexPlus;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,9 +41,11 @@ public class KeywordExclusionTest2 {
 		Keyword when = Keyword.from("when");
 		Keyword doo = Keyword.from("do");
 		Keyword whilee = Keyword.from("while");
+		RegexAlt<Keyword> alt = RegexAlt.from(iff, when, doo, whilee);		
+		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az))
+									  .addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
-		RegexAlt<Keyword> alt = RegexAlt.from(iff, when, doo, whilee);
-		Rule r1 = new Rule(Id, RegexPlus.from(az).builder().addPreCondition(RegularExpressionCondition.notFollow(az)).addPreCondition(RegularExpressionCondition.notMatch(alt)).build());
+		Rule r1 = new Rule(Id, AZPlus);
 		
 		builderr.addRule(r1);
 

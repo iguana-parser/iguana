@@ -3,7 +3,6 @@ package org.jgll.regex;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -19,9 +18,9 @@ public class RegexPlus extends AbstractRegularExpression {
 		return new Builder(regex).build();
 	}
 	
-	public RegexPlus(RegularExpression regex, String label, Set<Condition> conditions, Object object) {
-		super(getName(regex), label, conditions, object);
-		this.regex = regex;
+	private RegexPlus(Builder builder) {
+		super(builder);
+		this.regex = builder.regex;
 	}
 	
 	private static String getName(RegularExpression regexp) {
@@ -53,18 +52,18 @@ public class RegexPlus extends AbstractRegularExpression {
 		private RegularExpression regex;
 		
 		public Builder(RegularExpression regex) {
+			super(getName(regex));
 			this.regex = regex;
 		}
 		
 		@Override
 		public RegexPlus build() {
-			return new RegexPlus(regex, label, conditions, regex);
+			return new RegexPlus(this);
 		}
 	}
 
-	@Override
-	public SymbolBuilder<RegexPlus> builder() {
-		return new Builder(this);
+	public static Builder builder(RegularExpression regex) {
+		return new Builder(regex);
 	}
 
 	@Override

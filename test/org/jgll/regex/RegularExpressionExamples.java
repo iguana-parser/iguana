@@ -5,32 +5,33 @@ import java.util.List;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.SymbolBuilder;
 
 public class RegularExpressionExamples {
 
 	/**
 	 * Id ::= [a-zA-Z][a-zA-Z0-9]*
 	 */
-	public static RegularExpression getId() {
+	public static SymbolBuilder<? extends RegularExpression> getId() {
 		CharacterClass c1 = CharacterClass.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'));
 		CharacterClass c2 = CharacterClass.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'), CharacterRange.in('0', '9'));
-		return Sequence.from(c1, RegexStar.from(c2));
+		return Sequence.builder(c1, RegexStar.from(c2));
 	}
 	
 	/**
 	 * Float ::= [0-9]+[.][0-9]+
 	 */
-	public static RegularExpression getFloat() {
+	public static SymbolBuilder<? extends RegularExpression> getFloat() {
 		CharacterClass c = CharacterClass.from(CharacterRange.in('0', '9'));
-		return Sequence.from(RegexPlus.from(c), Character.from('.'), RegexPlus.from(c));
+		return Sequence.builder(RegexPlus.from(c), Character.from('.'), RegexPlus.from(c));
 	}
 	
 	/**
 	 * UnicodeEscape ::= "\\" [u]+ [0-9 A-F a-f] [0-9 A-F a-f] [0-9 A-F a-f] [0-9 A-F a-f];
 	 */
-	public static RegularExpression getJavaUnicodeEscape() {
+	public static SymbolBuilder<? extends RegularExpression> getJavaUnicodeEscape() {
 		List<RegularExpression> regularExpressions = new ArrayList<>();
 
 		regularExpressions.add(Keyword.from("\\"));
@@ -43,7 +44,7 @@ public class RegularExpressionExamples {
 		regularExpressions.add(c);
 		regularExpressions.add(c);
 		
-		return Sequence.from(regularExpressions);
+		return Sequence.builder(regularExpressions);
 	}
 	
 	/**
@@ -51,28 +52,28 @@ public class RegularExpressionExamples {
 	 * 
 	 * @return
 	 */
-	public static RegularExpression getCharacter() {
+	public static SymbolBuilder<? extends RegularExpression> getCharacter() {
 		List<RegularExpression> regularExpressions = new ArrayList<>();
 		regularExpressions.add(Character.from('\''));
 		regularExpressions.add(RegexPlus.from(Character.from('\'').not()));
 		regularExpressions.add(Character.from('\''));
-		return Sequence.from(regularExpressions);
+		return Sequence.builder(regularExpressions);
 	}
 	
 	/**
 	 * StringPart ::= !["\\]+ | "\n"
 	 */
-	public static RegularExpression getStringPart() {
+	public static SymbolBuilder<? extends RegularExpression> getStringPart() {
 		Character c1 = Character.from('"');
 		Character c2 = Character.from('\\');
 		CharacterClass c = CharacterClass.fromChars(c1, c2);
 		Keyword newline = Keyword.from("\\n");
 
-		return RegexAlt.from(RegexPlus.from(c.not()), newline);
+		return RegexAlt.builder(RegexPlus.from(c.not()), newline);
 	}
 	
 	// "/*" (![*] | [*] !>> [/])* "*/"
-	public static RegularExpression getMultilineComment() {
+	public static SymbolBuilder<? extends RegularExpression> getMultilineComment() {
 		
 		Keyword r1 = Keyword.from("/*");
 		Character star = Character.from('*');
@@ -82,7 +83,7 @@ public class RegularExpressionExamples {
 		
 		Keyword r3 = Keyword.from("*/");
 		
-		return Sequence.from(r1, r2, r3);
+		return Sequence.builder(r1, r2, r3);
 	}
 	 
 }

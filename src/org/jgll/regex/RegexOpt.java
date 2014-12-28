@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -17,11 +16,11 @@ public class RegexOpt extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 
-	private final RegularExpression regexp;
+	private final RegularExpression regex;
 	
-	public RegexOpt(RegularExpression regexp, String label, Set<Condition> conditions, Object object) {
-		super(getName(regexp), label, conditions, object);
-		this.regexp = regexp;
+	public RegexOpt(Builder builder) {
+		super(builder);
+		this.regex = builder.regex;
 	}
 
 	public static RegexOpt from(RegularExpression regexp) {
@@ -38,7 +37,7 @@ public class RegexOpt extends AbstractRegularExpression {
 		
 		State finalState = new State(StateType.FINAL);
 
-		Automaton automaton = regexp.getAutomaton().copy();
+		Automaton automaton = regex.getAutomaton().copy();
 		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
 		
 		Set<State> finalStates = automaton.getFinalStates();
@@ -59,7 +58,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		return regexp.getFirstSet();
+		return regex.getFirstSet();
 	}
 	
 	@Override
@@ -69,33 +68,33 @@ public class RegexOpt extends AbstractRegularExpression {
 
 	public static class Builder extends SymbolBuilder<RegexOpt> {
 
-		private RegularExpression regexp;
+		private RegularExpression regex;
 		
-		public Builder(RegularExpression regexp) {
-			this.regexp = regexp;
+		public Builder(RegularExpression regex) {
+			super(getName(regex));
+			this.regex = regex;
 		}
 		
 		public Builder(RegexOpt opt) {
 			super(opt);
-			this.regexp = opt.regexp;
+			this.regex = opt.regex;
 		}
 		
 		@Override
 		public RegexOpt build() {
-			return new RegexOpt(regexp, label, conditions, object);
+			return new RegexOpt(this);
 		}
 	}
 
-	@Override
-	public SymbolBuilder<RegexOpt> builder() {
-		return new Builder(this);
+	public static Builder builder(RegularExpression regex) {
+		return new Builder(regex);
 	}
 
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexOpt(")
-		  .append(regexp.getConstructorCode(registry) + ", ")
+		  .append(regex.getConstructorCode(registry) + ", ")
 		  .append(label + ", ")
 		  .append("new HashSet<>(), ")
 		  .append("null")

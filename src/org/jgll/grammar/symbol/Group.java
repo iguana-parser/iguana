@@ -31,6 +31,15 @@ public class Group extends AbstractSymbol {
 		return symbols;
 	}
 	
+	public static Builder builder(List<? extends Symbol> symbols) {
+		return new Builder(symbols);
+	}
+
+	@SafeVarargs
+	public static <T extends Symbol> Builder builder(T...symbols) {
+		return new Builder(Arrays.asList(symbols));
+	}	
+	
 	public static class Builder extends SymbolBuilder<Group> {
 		
 		private List<? extends Symbol> symbols;

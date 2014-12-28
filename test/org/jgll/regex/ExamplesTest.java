@@ -13,7 +13,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testId() {
-		Automaton nfa = RegularExpressionExamples.getId().getAutomaton();
+		Automaton nfa = RegularExpressionExamples.getId().build().getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 
@@ -27,7 +27,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testIntersectionKeywordId() {
-		Automaton idAutomaton = RegularExpressionExamples.getId().getAutomaton().determinize();
+		Automaton idAutomaton = RegularExpressionExamples.getId().build().getAutomaton().determinize();
 		Automaton forAutomaton = Keyword.from("for").getAutomaton().determinize();
 		
 		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
@@ -35,7 +35,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testFloat() {
-		Automaton nfa = RegularExpressionExamples.getFloat().getAutomaton();
+		Automaton nfa = RegularExpressionExamples.getFloat().build().getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 
@@ -51,21 +51,21 @@ public class ExamplesTest {
 	
 	@Test
 	public void testJavaUnicodeEscape() {
-		Automaton nfa = RegularExpressionExamples.getJavaUnicodeEscape().getAutomaton();
+		Automaton nfa = RegularExpressionExamples.getJavaUnicodeEscape().build().getAutomaton();
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
 		assertTrue(dfa.match(Input.fromString("\\u0123")));
 	}
 	
 	@Test
 	public void testCharacter() {
-		Automaton nfa = RegularExpressionExamples.getCharacter().getAutomaton();
+		Automaton nfa = RegularExpressionExamples.getCharacter().build().getAutomaton();
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
 		assertTrue(matcher.match(Input.fromString("'ab'")));
 	}
 	
 	@Test
 	public void testStringPart() {
-		Automaton a = RegularExpressionExamples.getStringPart().getAutomaton();
+		Automaton a = RegularExpressionExamples.getStringPart().build().getAutomaton();
 		RunnableAutomaton matcher = a.getRunnableAutomaton();
 		
 		assertTrue(matcher.match(Input.fromString("abcd")));
@@ -75,7 +75,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testMultilineComment() {
-		Automaton a = RegularExpressionExamples.getMultilineComment().getAutomaton();
+		Automaton a = RegularExpressionExamples.getMultilineComment().build().getAutomaton();
 		
 		RunnableAutomaton matcher = a.getRunnableAutomaton();
 		

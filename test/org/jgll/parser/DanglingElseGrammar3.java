@@ -41,7 +41,7 @@ public class DanglingElseGrammar3 {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule rule1 = new Rule(S, list(a, S.builder().addPreCondition(RegularExpressionCondition.notFollow(Character.from('b'))).build()));
+		Rule rule1 = new Rule(S, list(a, Nonterminal.builder("S").addPreCondition(RegularExpressionCondition.notFollow(Character.from('b'))).build()));
 		builder.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));

@@ -37,14 +37,14 @@ public class DanglingElseGrammar2 {
 	private Character s = Character.from('s');
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
-	private Group group = Group.of(a, S);
+	private Group group = Group.builder(a, S).addPreCondition(ContextFreeCondition.notMatch(a, S, b, S)).build();
 
 	@Before
 	public void createGrammar() {
 
 		Grammar.Builder builder = new Grammar.Builder();
 
-		Rule rule1 = new Rule(S, list(group.builder().addPreCondition(ContextFreeCondition.notMatch(a, S, b, S)).build()));
+		Rule rule1 = new Rule(S, list(group));
 		builder.addRule(rule1);
 		
 		Rule rule2 = new Rule(S, list(a, S, b, S));

@@ -43,8 +43,8 @@ public class IntersectionTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression f = RegularExpressionExamples.getFloat();
-		RegularExpression id = RegularExpressionExamples.getId();
+		RegularExpression f = RegularExpressionExamples.getFloat().build();
+		RegularExpression id = RegularExpressionExamples.getId().build();
 		
 		// Should not overlap, therefore the intersection should be empty.
 		assertTrue(f.getAutomaton().intersection(id.getAutomaton()).isLanguageEmpty());

@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class DiffernceTest {
 	
-	private RegularExpression id = RegularExpressionExamples.getId();
+	private RegularExpression id = RegularExpressionExamples.getId().build();
 	private Keyword k1 = Keyword.from("if");
 	private Keyword k2 = Keyword.from("when");
 	private Keyword k3 = Keyword.from("new");

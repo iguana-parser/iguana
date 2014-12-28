@@ -51,7 +51,7 @@ public class BenchmarkGamma {
 		
 		Grammar grammar = gamma2();
 		String startSymbol = "S";
-		GrammarGraph grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();
+		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		
 		StringWriter writer = new StringWriter();
 		grammarGraph.generate(new PrintWriter(writer));
