@@ -2,13 +2,16 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.lookup.GSSLookup;
-import org.jgll.parser.lookup.SPPFLookup;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 
 /**
@@ -26,16 +29,25 @@ public interface GLLParser {
 	}
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
-
 	
-	public NonterminalGrammarSlot create(GrammarSlot returnSlot, NonterminalGrammarSlot head);
-		
+	public NonterminalGrammarSlot create(GrammarSlot slot, NonterminalGrammarSlot head);
+	
+	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
+
+	public TerminalNode getEpsilonNode(int inputIndex);
+	
+	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
+	
+	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child);
+	
+	public IntermediateNode getIntermediateNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
+	
 	public boolean hasDescriptor(Descriptor descriptor);
 	
 	public void scheduleDescriptor(Descriptor descriptor);
 	
 	default boolean addDescriptor(Descriptor descriptor) {
-		if (hasDescriptor(descriptor)) {
+		if (!hasDescriptor(descriptor)) {
 			scheduleDescriptor(descriptor);
 			return true;
 		}
@@ -57,17 +69,8 @@ public interface GLLParser {
 	
 	public void recordParseError(GrammarSlot slot);
 	
-	public GSSLookup getGSSLookup();
-	
-	public SPPFLookup getSPPFLookup();
-	
 	public Input getInput();
 	
 	public GrammarSlotRegistry getRegistry();
-	
-	/**
-	 * Current descriptor being processed.
-	 */
-	public Descriptor getCurrentDescriptor();
 	
 }

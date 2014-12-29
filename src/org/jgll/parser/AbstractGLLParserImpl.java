@@ -3,8 +3,10 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
@@ -15,8 +17,10 @@ import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
@@ -154,12 +158,14 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			return;
 		}
 		
-		startSymbol.execute(this, input, cn);
+		startSymbol.execute(this, ci, cn);
 		
 		while(hasNextDescriptor()) {
 			Descriptor descriptor = nextDescriptor();
 			GrammarSlot slot = descriptor.getGrammarSlot();
-			slot.execute(this, input, descriptor.getSPPFNode());
+			ci = descriptor.getInputIndex();
+			cu = descriptor.getGSSNode();
+			slot.execute(this, ci, descriptor.getSPPFNode());
 		}
 	}
 	
@@ -250,11 +256,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return cu;
 	}
 
-	@Override
-	public GSSLookup getGSSLookup() {
-		return gssLookup;
-	}
-	
 	public SPPFLookup getSPPFLookup() {
 		return sppfLookup;
 	}
@@ -269,11 +270,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public Descriptor getCurrentDescriptor() {
-		return currentDescriptor;
-	}
-	
-	@Override
 	public Input getInput() {
 		return input;
 	}
@@ -285,6 +281,31 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public GrammarSlotRegistry getRegistry() {
 		return grammar.getRegistry();
+	}
+	
+	@Override
+	public TerminalNode getEpsilonNode(int inputIndex) {
+		return sppfLookup.getEpsilonNode(inputIndex);
+	}
+	
+	@Override
+	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
+		return sppfLookup.getNonterminalNode(slot, child);
+	}
+	
+	@Override
+	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild);
+	}
+	
+	@Override
+	public IntermediateNode getIntermediateNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
+	}
+	
+	@Override
+	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		return sppfLookup.getTerminalNode(slot, leftExtent, rightExtent);
 	}
 	
 }

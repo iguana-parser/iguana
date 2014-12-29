@@ -4,9 +4,7 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
-import org.jgll.util.Input;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
@@ -15,12 +13,10 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	}
 	
 	@Override
-	public void execute(GLLParser parser, Input input, NonPackedNode node) {
-		int ci = node.getRightExtent();
-		if (nonterminal.test(ci)) {
-			TerminalNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
-			NonterminalNode cn = parser.getSPPFLookup().getNonterminalNode(this, epsilonNode);
-			parser.pop(parser.getCurrentGSSNode(), ci, cn);
+	public void execute(GLLParser parser, int i, NonPackedNode node) {
+		if (nonterminal.test(i)) {
+			TerminalNode epsilonNode = parser.getEpsilonNode(i);
+			parser.pop(parser.getCurrentGSSNode(), i, parser.getNonterminalNode(this, epsilonNode));
 		}
 	}
 	

@@ -10,14 +10,17 @@ import java.util.stream.Collectors;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
+import org.jgll.grammar.slot.AbstractTerminalTransition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
-import org.jgll.grammar.slot.EndTerminalGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.EpsilonTransition;
+import org.jgll.grammar.slot.FirstAndLastTerminalTransition;
+import org.jgll.grammar.slot.FirstTerminalTransition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.NonterminalTransition;
+import org.jgll.grammar.slot.BeforeLastTerminalTransition;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalTransition;
 import org.jgll.grammar.symbol.Epsilon;
@@ -87,7 +90,7 @@ public class GrammarGraphBuilder implements Serializable {
 					GrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					Set<Condition> postConditions = symbol.getPreConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
-					currentSlot.addTransition(new TerminalTransition(terminalSlot, currentSlot, slot, preConditions, postConditions));
+					currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
 					currentSlot = slot;
 				} 
 				else if (symbol instanceof Nonterminal) {
@@ -104,15 +107,29 @@ public class GrammarGraphBuilder implements Serializable {
 		}
 	}
 	
+	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
+															 GrammarSlot origin, GrammarSlot dest,
+															 Set<Condition> preConditions, Set<Condition> postConditions) {
+		
+		if (i == 1 && rule.size() > 1) {
+			return new FirstTerminalTransition(slot, origin, dest, preConditions, postConditions);
+		} 
+		else if (i == 1 && rule.size() == 1) {
+			return new FirstAndLastTerminalTransition(slot, origin, dest, preConditions, postConditions);
+		} 
+		else if (i == rule.size())  {
+			return new BeforeLastTerminalTransition(slot, origin, dest, preConditions, postConditions);
+		} 
+		else {
+			return new TerminalTransition(slot, origin, dest, preConditions, postConditions);
+		}
+	}
+	
 	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, NonterminalGrammarSlot nonterminal) {
-		if (i == rule.size() - 1) {
-			return new BodyGrammarSlot(rule.getPosition(i));
+		if (i == rule.size()) {
+			return new EndGrammarSlot(rule.getPosition(i), nonterminal);
 		} else {
-			if (rule.size() == 1 && rule.symbolAt(0) instanceof RegularExpression) {
-				return new EndTerminalGrammarSlot(rule.getPosition(i), nonterminal);
-			} else {
-				return new EndGrammarSlot(rule.getPosition(i), nonterminal);
-			}
+			return new BodyGrammarSlot(rule.getPosition(i));
 		}
 	}
 	

@@ -24,4 +24,9 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return position.toString();
 	}
 	
+	@Override
+	public boolean isFirst() {
+		return position.isFirst();
+	}
+	
 }

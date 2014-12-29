@@ -25,7 +25,7 @@ public class Position {
 	}
 	
 	public boolean isFirst() {
-		return position == 0;
+		return position == 1;
 	}
 	
 	public boolean isLast() {

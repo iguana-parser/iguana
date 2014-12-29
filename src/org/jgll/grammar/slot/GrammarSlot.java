@@ -8,7 +8,6 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.Input;
 import org.jgll.util.generator.ConstructorCode;
 
 /**
@@ -25,8 +24,8 @@ import org.jgll.util.generator.ConstructorCode;
  */
 public interface GrammarSlot extends ConstructorCode {
 	
-	default void execute(GLLParser parser, Input input, NonPackedNode node) {
-		getTransitions().forEach(t -> t.execute(parser, input, node));
+	default void execute(GLLParser parser, int i, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(parser, i, node));
 	}
 	
 	default Set<GrammarSlot> getReachableSlots() {

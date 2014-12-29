@@ -5,7 +5,10 @@ import java.util.Map;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.sppf.DummyNode;
+import org.jgll.sppf.NonPackedNode;
 
 
 public class NonterminalGrammarSlot extends AbstractGrammarSlot {
@@ -17,6 +20,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	public NonterminalGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
 		this.gssNodes = new HashMap<>();
+	}
+	
+	public void execute(GLLParser parser, int i, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(parser, i, DummyNode.getInstance()));
 	}
 	
 	public boolean test(int v)  {

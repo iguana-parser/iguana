@@ -118,7 +118,7 @@ public class Test6 {
 		PackedNode node4 = factory.createPackedNode("A ::= a B . c", 1, node3);
 		TerminalNode node5 = factory.createTerminalNode("a", 0, 1);
 		NonterminalNode node6 = factory.createNonterminalNode("B", 1, 2).init();
-		PackedNode node7 = factory.createPackedNode("B ::= b .", 1, node6);
+		PackedNode node7 = factory.createPackedNode("B ::= b .", 2, node6);
 		TerminalNode node8 = factory.createTerminalNode("b", 1, 2);
 		node7.addChild(node8);
 		node6.addChild(node7);
@@ -149,7 +149,7 @@ public class Test6 {
 		PackedNode node13 = factory.createPackedNode("C ::= a C .", 4, node12);
 		TerminalNode node14 = factory.createTerminalNode("a", 3, 4);
 		NonterminalNode node15 = factory.createNonterminalNode("C", 4, 5).init();
-		PackedNode node16 = factory.createPackedNode("C ::= c .", 4, node15);
+		PackedNode node16 = factory.createPackedNode("C ::= c .", 5, node15);
 		TerminalNode node17 = factory.createTerminalNode("c", 4, 5);
 		node16.addChild(node17);
 		node15.addChild(node16);

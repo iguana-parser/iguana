@@ -7,7 +7,6 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.Input;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 	
@@ -19,9 +18,9 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void execute(GLLParser parser, Input input, NonPackedNode node) {
-		if (nonterminal.test(node.getRightExtent()))
-			parser.pop();
+	public void execute(GLLParser parser, int i, NonPackedNode node) {
+		if (nonterminal.test(i))
+			parser.pop(parser.getCurrentGSSNode(), i, node);
 	}
 	
 	@Override
