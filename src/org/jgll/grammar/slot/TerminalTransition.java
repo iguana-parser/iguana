@@ -73,5 +73,5 @@ public class TerminalTransition extends AbstractTransition {
 			.append(getConstructorCode(postConditions, registry))
 			.toString();
 	}
-
+	
 }

@@ -23,7 +23,14 @@ public class Position {
 	public int getPosition() {
 		return position;
 	}
-
+	
+	public boolean isFirst() {
+		return position == 0;
+	}
+	
+	public boolean isLast() {
+		return position == rule.size();
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -43,16 +50,22 @@ public class Position {
 		StringBuilder sb = new StringBuilder();
 		sb.append(rule.getHead()).append(" ::= ");
 		
-		if (rule.size() == 0) 
+		if (rule.size() == 0) { 
 			sb.append(".");
-		else 
-			for (int i = 0; i <= rule.size(); i++) {
-				sb.append(rule.symbolAt(i) + " ");
+		} else {
+			int i;
+			for (i = 0; i < rule.size(); i++) {
 				if (i == position) {
 					sb.append(". ");
 				}
+				sb.append(rule.symbolAt(i) + " ");
 			}
+			
+			if (position == rule.size()) {
+				sb.append(".");
+			}
+		}
 		
-		return sb.toString();
+		return sb.toString().trim();
 	}
 }

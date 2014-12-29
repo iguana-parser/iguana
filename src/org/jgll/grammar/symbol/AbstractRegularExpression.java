@@ -17,12 +17,12 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	
 	@Override
 	public Matcher getMatcher() {
-		return (input, i) -> automaton.getRunnableAutomaton().match(input, i);
+		return (input, i) -> getAutomaton().getRunnableAutomaton().match(input, i);
 	}
 	
 	@Override
 	public Matcher getBackwardsMatcher() {
-		return (input, i) -> automaton.getRunnableAutomaton().matchBackwards(input, i);
+		return (input, i) -> getAutomaton().getRunnableAutomaton().matchBackwards(input, i);
 	}
 	
 	@Override

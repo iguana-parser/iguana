@@ -24,24 +24,17 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 		children.remove(node);
 	}
 	
-	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
-		children.add(attachChildren(packedNode, leftChild, rightChild));
+	public boolean addPackedNode(PackedNode packedNode, NonPackedNode child) {
+		packedNode.addChild(child);
+		children.add(packedNode);
 		return true;
 	}
 	
-	/**
-	 * Attaches the given left and right children to the given packed node.
-	 *  
-	 */
-	protected PackedNode attachChildren(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
-		
-		if (leftChild != DummyNode.getInstance())
-			packedNode.addChild(leftChild);
-		
-		if (rightChild != DummyNode.getInstance())
-			packedNode.addChild(rightChild);
-		
-		return packedNode;
+	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
+		packedNode.addChild(leftChild);
+		packedNode.addChild(rightChild);
+		children.add(packedNode);
+		return true;
 	}
 	
 	@Override

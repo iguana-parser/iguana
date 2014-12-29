@@ -21,7 +21,12 @@ public interface GLLParser {
 	
 	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName);
 	
-	public void pop();
+	default void pop() {
+		pop(getCurrentGSSNode(), getCurrentInputIndex(), getCurrentSPPFNode());
+	}
+	
+	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
+
 	
 	public NonterminalGrammarSlot create(GrammarSlot returnSlot, NonterminalGrammarSlot head);
 		
@@ -49,10 +54,6 @@ public interface GLLParser {
 	public GSSNode getCurrentGSSNode();
 	
 	public NonPackedNode getCurrentSPPFNode();
-	
-	public void setCurrentSPPFNode(NonPackedNode node);
-	
-	public void setCurrentInputIndex(int inputIndex);
 	
 	public void recordParseError(GrammarSlot slot);
 	

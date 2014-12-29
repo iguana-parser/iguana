@@ -1,6 +1,5 @@
 package org.jgll.parser.basic;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import java.io.PrintWriter;
@@ -40,7 +39,7 @@ public class Test2 {
 	
 	@Before
 	public void init() {
-		Rule r1 = new Rule(A, list(a));
+		Rule r1 = Rule.builder(A).addSymbol(a).build();
 		grammar = new Grammar.Builder().addRule(r1).build();
 	}
 	
@@ -71,7 +70,7 @@ public class Test2 {
 	private SPPFNode expectedSPPF(GrammarSlotRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 1).init();
-		PackedNode node2 = factory.createPackedNode("A ::= a .", 0, node1);
+		PackedNode node2 = factory.createPackedNode("A ::= a .", 1, node1);
 		TerminalNode node3 = factory.createTerminalNode("a", 0, 1);
 		node2.addChild(node3);
 		node1.addChild(node2);

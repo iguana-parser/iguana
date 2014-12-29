@@ -1,6 +1,5 @@
 package org.jgll.parser.basic;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import java.io.PrintWriter;
@@ -47,9 +46,9 @@ public class Test9 {
 	@Before
 	public void init() {
 		
-		Rule r1 = new Rule(S, list(A, A, b));
-		Rule r3 = new Rule(A, list(a));
-		Rule r4 = new Rule(A);
+		Rule r1 = Rule.builder(S).addSymbols(A, A, b).build();
+		Rule r3 = Rule.builder(A).addSymbol(a).build();
+		Rule r4 = Rule.builder(A).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r3).addRule(r4).build();
 	}

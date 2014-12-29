@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
-import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
@@ -20,10 +19,8 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 		int ci = node.getRightExtent();
 		if (nonterminal.test(ci)) {
 			TerminalNode epsilonNode = parser.getSPPFLookup().getEpsilonNode(ci);
-			NonterminalNode newNode = parser.getSPPFLookup().getNonterminalNode(nonterminal, ci, ci);
-			parser.getSPPFLookup().addPackedNode(newNode, this, ci, DummyNode.getInstance(), epsilonNode);
-			parser.setCurrentSPPFNode(newNode);
-			parser.pop();
+			NonterminalNode cn = parser.getSPPFLookup().getNonterminalNode(this, epsilonNode);
+			parser.pop(parser.getCurrentGSSNode(), ci, cn);
 		}
 	}
 	

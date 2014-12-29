@@ -8,6 +8,7 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.TerminalNode;
 
 public interface SPPFLookup {
@@ -49,7 +50,7 @@ public interface SPPFLookup {
 	
 	default NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
 		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent());
-		addPackedNode(newNode, slot, child.getRightExtent(), child, null);
+		addPackedNode(newNode, slot, child.getRightExtent(), child);
 		return newNode;
 	}
 	
@@ -89,7 +90,9 @@ public interface SPPFLookup {
 	
 	public IntermediateNode findIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent);
 	
-	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild);
+	void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild);
+	
+	void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode child);
 		
 	public NonterminalNode getStartSymbol(NonterminalGrammarSlot startSymbol, int inputSize);
 	

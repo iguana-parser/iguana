@@ -320,7 +320,7 @@ public class OperatorPrecedence {
 			Nonterminal newNonterminal = createNewNonterminal(filteredNonterminal);
 			List<List<Symbol>> copy = copyAlternates(set);
 			existingAlternates.put(plain2(copy), newNonterminal);
-			List<Rule> collect = copy.stream().map(l -> new Rule(newNonterminal, l)).collect(Collectors.toList());
+			List<Rule> collect = copy.stream().map(l -> Rule.builder(newNonterminal).addSymbols(l).build()).collect(Collectors.toList());
 			definitions.putAll(newNonterminal, collect);
 			return newNonterminal;
 		});
@@ -404,7 +404,7 @@ public class OperatorPrecedence {
 			PrecedencePattern pattern = e.getKey();
 			Nonterminal freshNonterminal = e.getValue();
 			List<List<Symbol>> alternates = deepCopy(without(head, patterns.get(pattern)), pattern.getNonterminal());
-			definitions.putAll(freshNonterminal, alternates.stream().map(l -> new Rule(freshNonterminal, l)).collect(Collectors.toList()));
+			definitions.putAll(freshNonterminal, alternates.stream().map(l -> Rule.builder(freshNonterminal).addSymbols(l).build()).collect(Collectors.toList()));
 		}
 
 	}
@@ -510,7 +510,7 @@ public class OperatorPrecedence {
 
 		List<List<Symbol>> alternates = definitions.get(head).stream().map(r -> r.getBody()).collect(Collectors.toList());
 		List<List<Symbol>> copyAlternates = copyAlternates(alternates);
-		definitions.putAll(copy, copyAlternates.stream().map(l -> new Rule(head, l)).collect(Collectors.toList()));
+		definitions.putAll(copy, copyAlternates.stream().map(l -> Rule.builder(head).addSymbols(l).build()).collect(Collectors.toList()));
 		
 		for(List<Symbol> alt : copyAlternates) {
 			if(alt.get(0) instanceof Nonterminal) {
@@ -537,7 +537,7 @@ public class OperatorPrecedence {
 
 		List<List<Symbol>> alternates = definitions.get(head).stream().map(r -> r.getBody()).collect(Collectors.toList());
 		List<List<Symbol>> copyAlternates = copyAlternates(alternates);
-		definitions.putAll(copy, copyAlternates.stream().map(l -> new Rule(head, l)).collect(Collectors.toList()));
+		definitions.putAll(copy, copyAlternates.stream().map(l -> Rule.builder(head).addSymbols(l).build()).collect(Collectors.toList()));
 		
 		for(List<Symbol> alt : copyAlternates) {
 			if(alt.get(alt.size() - 1) instanceof Nonterminal) {
@@ -616,7 +616,7 @@ public class OperatorPrecedence {
 						List<List<Symbol>> alternates = definitions.get(n).stream().map(r -> r.getBody()).collect(Collectors.toList());
 						List<List<Symbol>> copyAlternates = deepCopy(alternates, nonterminal, map);
 
-						definitions.putAll(newNonterminal, copyAlternates.stream().map(l -> new Rule(n, l)).collect(Collectors.toList()));
+						definitions.putAll(newNonterminal, copyAlternates.stream().map(l -> Rule.builder(n).addSymbols(l).build()).collect(Collectors.toList()));
 						copyAlt.add(newNonterminal);				
 					}
 					continue;
@@ -691,7 +691,7 @@ public class OperatorPrecedence {
 	public static Rule plain(Rule rule) {
 		Nonterminal plainHead = (Nonterminal) plain(rule.getHead());
 		List<Symbol> plainAlternate = plain(rule.getBody());
-		return new Rule(plainHead, plainAlternate);
+		return Rule.builder(plainHead).addSymbols(plainAlternate).build();
 	}
 	
 	public static List<Symbol> plain(List<Symbol> alternate) {

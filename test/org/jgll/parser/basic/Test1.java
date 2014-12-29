@@ -37,7 +37,7 @@ public class Test1 {
 
 	@Before
 	public void init() {
-		Rule r1 = new Rule(A);
+		Rule r1 = Rule.builder(A).build();
 		grammar = new Grammar.Builder().addRule(r1).build();
 	}
 	

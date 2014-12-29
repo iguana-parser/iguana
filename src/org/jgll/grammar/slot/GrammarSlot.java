@@ -34,19 +34,15 @@ public interface GrammarSlot extends ConstructorCode {
 	}
 	
 	/**
-	 * Corresponds to a grammar position A ::=  x . \alpha 
+	 * Corresponds to a grammar position A ::=  . \alpha 
 	 */
-	default boolean isFirst() {
-		return false;
-	}
+	default boolean isFirst() { return false; }
 	
 	/**
 	 * Corresponds to a grammar position A ::= \alpha . 
 	 */
-	default boolean isLast() {
-		return false;
-	}
-	
+	default boolean isLast() { return false; }
+
 	default Set<Condition> getConditions() {
 		return Collections.emptySet();
 	}

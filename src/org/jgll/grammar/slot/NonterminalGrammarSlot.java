@@ -50,4 +50,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		return gssNodes.get(inputIndex); 
 	}
 
+	@Override
+	public boolean isFirst() {
+		return true;
+	}
+
 }

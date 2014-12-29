@@ -23,13 +23,25 @@ public class OriginalNonterminalNode extends NonterminalNode {
 	
 	@Override
 	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
-		PackedNode newPackedNode = attachChildren(packedNode, leftChild, rightChild);
-		if (!packedNodes.contains(newPackedNode)) {
-			children.add(newPackedNode);
-			packedNodes.add(newPackedNode);
+		if (!packedNodes.contains(packedNode)) {
+			children.add(packedNode);
+			packedNode.addChild(leftChild);
+			packedNode.addChild(rightChild);
+			packedNodes.add(packedNode);
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean addPackedNode(PackedNode packedNode, NonPackedNode child) {
+		if (!packedNodes.contains(packedNode)) {
+			children.add(packedNode);
+			packedNode.addChild(child);
+			packedNodes.add(packedNode);
+			return true;
+		}
+		return false;	
 	}
 	
 }

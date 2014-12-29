@@ -93,22 +93,27 @@ public class GlobalSPPFLookupImpl implements SPPFLookup {
 	}
 	
 	@Override
-	public void addPackedNode(NonPackedNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		PackedNode packedNode = new PackedNode(slot, pivot, parent);
 		boolean ambiguousBefore = parent.isAmbiguous();
-		if (((NonterminalOrIntermediateNode) parent).addPackedNode(packedNode, leftChild, rightChild)) {
+		if (parent.addPackedNode(packedNode, leftChild, rightChild)) {
 			countPackedNodes++;
 			boolean ambiguousAfter = parent.isAmbiguous();
 			if (!ambiguousBefore && ambiguousAfter) {
-//				log.warning("Ambiguity at line: %d, column: %d \n %s\n %s \n %s",
-//						input.getLineNumber(parent.getLeftExtent()),
-//						input.getColumnNumber(parent.getLeftExtent()),
-//						grammar.getGrammarSlot(slot.getId()), 
-//						grammar.getGrammarSlot(parent.getFirstPackedNodeGrammarSlot()),
-//						input.subString(parent.getLeftExtent(), parent.getRightExtent()));
 				countAmbiguousNodes++;
-//				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", parent, grammar, input);
-//				System.exit(0);
+			}
+		}
+	}
+	
+	@Override
+	public void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode child) {
+		PackedNode packedNode = new PackedNode(slot, pivot, parent);
+		boolean ambiguousBefore = parent.isAmbiguous();
+		if (parent.addPackedNode(packedNode, child)) {
+			countPackedNodes++;
+			boolean ambiguousAfter = parent.isAmbiguous();
+			if (!ambiguousBefore && ambiguousAfter) {
+				countAmbiguousNodes++;
 			}
 		}
 	}

@@ -26,7 +26,11 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
-		return null;
+		return new StringBuilder()
+			.append("new EndGrammarSlot(")
+			.append(position)
+			.append("), slot" + registry.getId(nonterminal) + ")")
+			.toString();
 	}
 	
 	public Object getObject() {
@@ -45,6 +49,11 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public boolean addTransition(Transition transition) {
 		return false;
+	}
+	
+	@Override
+	public boolean isLast() {
+		return true;
 	}
 	
 }

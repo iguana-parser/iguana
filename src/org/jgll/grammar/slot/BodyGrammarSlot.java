@@ -6,7 +6,7 @@ import org.jgll.grammar.symbol.Position;
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {
 
-	private final Position position;
+	protected final Position position;
 
 	public BodyGrammarSlot(Position position) {
 		this.position = position;
@@ -23,4 +23,5 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public String toString() {
 		return position.toString();
 	}
+	
 }

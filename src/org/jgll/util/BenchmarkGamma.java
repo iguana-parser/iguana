@@ -1,7 +1,5 @@
 package org.jgll.util;
 
-import static org.jgll.util.CollectionsUtil.*;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -25,9 +23,9 @@ public class BenchmarkGamma {
 		Nonterminal S = Nonterminal.withName("S");
 		Character b = Character.from('b');
 		Grammar.Builder builder = new Grammar.Builder();
-		builder.addRule(new Rule(S, list(S, S, S)));
-		builder.addRule(new Rule(S, list(S, S)));
-		builder.addRule(new Rule(S, list(b)));
+		builder.addRule(Rule.builder(S).addSymbols(S, S, S).build());
+		builder.addRule(Rule.builder(S).addSymbols(S, S).build());
+		builder.addRule(Rule.builder(S).addSymbol(b).build());
 		return builder.build();
 	}
 	
@@ -39,8 +37,8 @@ public class BenchmarkGamma {
 		Character a = Character.from('a');
 		Character plus = Character.from('+');
 		Grammar.Builder builder = new Grammar.Builder();
-		builder.addRule(new Rule(E, list(E, plus, E)));
-		builder.addRule(new Rule(E, list(a)));
+		builder.addRule(Rule.builder(E).addSymbols(E, plus, E).build());
+		builder.addRule(Rule.builder(E).addSymbol(a).build());
 		return builder.build();
 	}
 	

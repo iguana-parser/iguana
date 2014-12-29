@@ -12,6 +12,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
+import org.jgll.grammar.slot.EndTerminalGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.EpsilonTransition;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -59,15 +60,9 @@ public class GrammarGraphBuilder implements Serializable {
 		return new GrammarGraph(this);
 	}
 	
-	private void convert(Nonterminal head) {
-		List<Rule> rules = grammar.getAlternatives(head);
-		
-		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(head, k -> {
-						NonterminalGrammarSlot n = new NonterminalGrammarSlot(head);
-						nonterminalsMap.put(n.getNonterminal(), n);
-						return n;
-					});
-		
+	private void convert(Nonterminal nonterminal) {
+		List<Rule> rules = grammar.getAlternatives(nonterminal);
+		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(nonterminal));
 		rules.forEach(r -> addAlternative(nonterminalSlot, r));
 	}
 	
@@ -89,7 +84,7 @@ public class GrammarGraphBuilder implements Serializable {
 				if (symbol instanceof RegularExpression) {
 					RegularExpression regex = (RegularExpression) symbol;
 					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
-					GrammarSlot slot = getBodyGrammarSlot(rule, i, head);
+					GrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					Set<Condition> postConditions = symbol.getPreConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
 					currentSlot.addTransition(new TerminalTransition(terminalSlot, currentSlot, slot, preConditions, postConditions));
@@ -98,7 +93,7 @@ public class GrammarGraphBuilder implements Serializable {
 				else if (symbol instanceof Nonterminal) {
 					Nonterminal nonterminal = (Nonterminal) symbol;
 					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(nonterminal));
-					GrammarSlot slot = getBodyGrammarSlot(rule, i, head);
+					GrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, preConditions));
 					currentSlot = slot;
@@ -113,7 +108,11 @@ public class GrammarGraphBuilder implements Serializable {
 		if (i == rule.size() - 1) {
 			return new BodyGrammarSlot(rule.getPosition(i));
 		} else {
-			return new EndGrammarSlot(rule.getPosition(i), nonterminal);
+			if (rule.size() == 1 && rule.symbolAt(0) instanceof RegularExpression) {
+				return new EndTerminalGrammarSlot(rule.getPosition(i), nonterminal);
+			} else {
+				return new EndGrammarSlot(rule.getPosition(i), nonterminal);
+			}
 		}
 	}
 	

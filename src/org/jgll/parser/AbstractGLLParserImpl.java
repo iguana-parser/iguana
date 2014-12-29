@@ -225,13 +225,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}	
 	
 	@Override
-	public final void pop() {
-		pop(cu, ci, (NonPackedNode) cn);
-	}
-	
-	protected abstract void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
-
-	@Override
 	public boolean hasNextDescriptor() {
 		return descriptorLookup.hasNextDescriptor();
 	}
@@ -275,11 +268,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return cn;
 	}
 
-	@Override
-	public void setCurrentSPPFNode(NonPackedNode node) {
-		this.cn = node;
-	}
-	
 	@Override
 	public Descriptor getCurrentDescriptor() {
 		return currentDescriptor;

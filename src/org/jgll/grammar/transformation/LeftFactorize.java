@@ -34,7 +34,7 @@ public class LeftFactorize implements GrammarTransformation {
 				trie.add(node, Epsilon.getInstance());
 			}
 
-			builder.addRule(new Rule(nonterminal, retrieve(trie.getRoot())));
+			builder.addRule(Rule.builder(nonterminal).addSymbols(retrieve(trie.getRoot())).build());
 		}
 		
 		return builder.build();

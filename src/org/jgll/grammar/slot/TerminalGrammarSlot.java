@@ -38,4 +38,5 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	public String toString() {
 		return regex.toString();
 	}
+
 }

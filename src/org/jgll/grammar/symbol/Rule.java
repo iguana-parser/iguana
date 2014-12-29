@@ -3,7 +3,6 @@ package org.jgll.grammar.symbol;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.jgll.parser.HashFunctions;
@@ -28,39 +27,11 @@ public class Rule implements Serializable {
 	 */
 	private final Serializable object;
 	
-	public Rule(Nonterminal head) {
-		this(head, Collections.<Symbol>emptyList(), null);
+	public Rule(Builder builder) {
+		this.body = builder.body;
+		this.head = builder.head;
+		this.object = builder.object;
 	}
-	
-	public Rule(Nonterminal head, Symbol...body) {
-		this(head, Arrays.asList(body), null);
-	}
-	
-	public Rule(Nonterminal head, List<? extends Symbol> body) {
-		this(head, body, null);
-	}
-	
-	public Rule(Nonterminal head, List<? extends Symbol> body, Serializable object) {
-		if(head == null) {
-			throw new IllegalArgumentException("head cannot be null.");
-		}
-		
-		this.head = head;
-		
-		if(body != null) {
-			for(Symbol s : body) {
-				if(s == null) {
-					throw new IllegalArgumentException("Body of a rule cannot have null symbols.");
-				}
-			}	
-			this.body = Collections.unmodifiableList(body);
-		} else {
-			this.body = null;
-		}
-		
-		this.object = object;
-	}
-		
 		
 	public Nonterminal getHead() {
 		return head;
@@ -75,26 +46,15 @@ public class Rule implements Serializable {
 	}
 	
 	public Symbol symbolAt(int i) {
+		if (i > body.size())
+			throw new IllegalArgumentException(i + " cannot be greater than " + body.size());
+		
 		return body.get(i);
 	}
 	
 	public Serializable getObject() {
 		return object;
 	}
-		
-	/**
-	 * Returns the symbols at the given  
-	 * 
-	 * @throws IllegalArgumentException if {@code index} is greater than the number of body symbols.
-	 */
-	public Symbol getSymbolAt(int index) {
-		if(index > body.size()) {
-			throw new IllegalArgumentException(index + " cannot be greater than " + body.size());
-		}
-		
-		return body.get(index);
-	}
-	
 		
 	@Override
 	public String toString() {
@@ -132,6 +92,9 @@ public class Rule implements Serializable {
 	}
 	
 	public Position getPosition(int i) {
+		if (i < 0)
+			throw new IllegalArgumentException("i cannot be less than zero.");
+		
 		if (i > size())
 			throw new IllegalArgumentException("i cannot be greater than the size.");
 		
@@ -158,13 +121,23 @@ public class Rule implements Serializable {
 			return this;
 		}
 		
+		public Builder addSymbols(Symbol...symbols) {
+			body.addAll(Arrays.asList(symbols));
+			return this;
+		}
+		
+		public Builder addSymbols(List<Symbol> symbols) {
+			body.addAll(symbols);
+			return this;
+		}
+		
 		public Builder setObject(Serializable object) {
 			this.object = object;
 			return this;
 		}
 		
 		public Rule build() {
-			return new Rule(head, body, object);
+			return new Rule(this);
 		}
 	}
 }
