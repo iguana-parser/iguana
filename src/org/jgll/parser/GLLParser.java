@@ -30,7 +30,7 @@ public interface GLLParser {
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 	
-	public NonterminalGrammarSlot create(GrammarSlot slot, NonterminalGrammarSlot head);
+	public NonterminalGrammarSlot create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node);
 	
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 

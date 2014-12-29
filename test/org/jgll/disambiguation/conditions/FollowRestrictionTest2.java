@@ -34,21 +34,16 @@ public class FollowRestrictionTest2 {
 	@Before
 	public void init() {
 		
-		Grammar.Builder builder = new Grammar.Builder();
-		
 		Nonterminal S = Nonterminal.withName("S");
 		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Keyword.from("8"))).build();
 		CharacterRange az = CharacterRange.in('a', 'z');
 		CharacterRange zero_nine = CharacterRange.in('0', '9');
 		Plus AZPlus = Plus.builder(az).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 		
-		Rule r1 = new Rule(S, Label, zero_nine);
-		
-		Rule r2 = new Rule(Label, AZPlus);
-		builder.addRule(r1);
-		builder.addRule(r2);
+		Rule r1 = Rule.builder(S).addSymbols(Label, zero_nine).build();
+		Rule r2 = Rule.builder(Label).addSymbol(AZPlus).build();
 
-		grammar = builder.build();
+		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 	}
 	
 	@Test

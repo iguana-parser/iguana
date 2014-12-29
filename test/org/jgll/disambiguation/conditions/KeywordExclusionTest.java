@@ -41,12 +41,8 @@ public class KeywordExclusionTest {
 		RegexAlt<Keyword> alt = RegexAlt.from(iff, when, doo, whilee);
 		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az)).addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
-		Grammar.Builder builder = new Grammar.Builder();
-		
-		Rule r1 = new Rule(Id, AZPlus);
-		builder.addRule(r1);
-		
-		grammar = builder.build();
+		Rule r1 = Rule.builder(Id).addSymbol(AZPlus).build();
+		grammar = Grammar.builder().addRule(r1).build();
 	}
 	
 	@Test

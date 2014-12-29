@@ -50,25 +50,12 @@ public class PrecedeRestrictionTest2 {
 
 	@Before
 	public void createGrammar() {
-		
-		Grammar.Builder builder = new Grammar.Builder();
+		Rule r1 = Rule.builder(S).addSymbols(forr, Opt.from(L), Id).build();
+		Rule r2 = Rule.builder(S).addSymbol(forall).build();
+		Rule r3 = Rule.builder(Id).addSymbol(AZPlus).build();
+		Rule r4 = Rule.builder(L).addSymbol(ws).build();
 
-		Rule r1 = new Rule(S, forr, Opt.from(L), Id);
-
-		Rule r2 = new Rule(S, forall);
-
-		Rule r3 = new Rule(Id, AZPlus);
-
-		Rule r4 = new Rule(L, ws);
-		
-		builder.addRule(r1);
-		builder.addRule(r2);
-		builder.addRule(r3);
-		builder.addRule(r4);
-		builder.addRule(forr.toRule());
-		builder.addRule(forall.toRule());
-
-		grammar = builder.build();
+		grammar = Grammar.builder().addRules(r1, r2, r3, r4, forr.toRule(), forall.toRule()).build();
 	}
 
 	@Test

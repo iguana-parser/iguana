@@ -172,27 +172,26 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
-	public NonterminalGrammarSlot create(GrammarSlot slot, NonterminalGrammarSlot head) {
-		
-		GSSNode gssNode = hasGSSNode(slot, head);
+	public NonterminalGrammarSlot create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
+		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
 			log.trace("GSSNode created: %s",  cu);
-			gssNode = createGSSNode(slot, head);
-			createGSSEdge(slot, cu, cn, gssNode);
+			gssNode = createGSSNode(returnSlot, nonterminal, i);
+			createGSSEdge(returnSlot, u, node, gssNode);
 			cu = gssNode;
-			return head;
+			return nonterminal;
 		}
 		
 		log.trace("GSSNode found: %s",  gssNode);
-		createGSSEdge(slot, cu, cn, gssNode);
+		createGSSEdge(returnSlot, u, node, gssNode);
 		return null;
 	}
-	
+		
 	public abstract void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
 	
-	public abstract GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot head);
+	public abstract GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
 	
-	public abstract GSSNode hasGSSNode(GrammarSlot slot, NonterminalGrammarSlot head);
+	public abstract GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
 
 	
 	/**

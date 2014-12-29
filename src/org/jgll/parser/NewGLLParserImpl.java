@@ -26,7 +26,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	
 	@Override
 	protected void initParserState(NonterminalGrammarSlot startSymbol) {
-		cu = createGSSNode(null, startSymbol);
+		cu = createGSSNode(null, startSymbol, ci);
 		cn = DummyNode.getInstance();
 		ci = 0;
 		errorSlot = null;
@@ -55,13 +55,13 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot head) {
-		return gssLookup.getGSSNode(head, ci);
+	public final GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+		return gssLookup.getGSSNode(nonterminal, i);
 	}
 	
 	@Override
-	public final GSSNode hasGSSNode(GrammarSlot slot, NonterminalGrammarSlot head) {
-		return gssLookup.hasGSSNode(head, ci);
+	public final GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+		return gssLookup.hasGSSNode(nonterminal, i);
 	}
 	
 	@Override

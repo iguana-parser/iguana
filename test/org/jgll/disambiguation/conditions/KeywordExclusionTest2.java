@@ -32,8 +32,6 @@ public class KeywordExclusionTest2 {
 	@Before
 	public void init() {
 		
-		Grammar.Builder builderr = new Grammar.Builder();
-		
 		Nonterminal Id = Nonterminal.withName("Id");
 		CharacterRange az = CharacterRange.in('a', 'z');
 		
@@ -45,11 +43,9 @@ public class KeywordExclusionTest2 {
 		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az))
 									  .addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
-		Rule r1 = new Rule(Id, AZPlus);
+		Rule r1 = Rule.builder(Id).addSymbol(AZPlus).build();
 		
-		builderr.addRule(r1);
-
-		grammar = builderr.build();
+		grammar = Grammar.builder().addRule(r1).build();
 	}
 	
 	@Test
