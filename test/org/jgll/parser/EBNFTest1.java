@@ -1,7 +1,5 @@
 package org.jgll.parser;
 
-import static org.jgll.util.CollectionsUtil.*;
-
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -33,9 +31,9 @@ public class EBNFTest1 {
 		Nonterminal A = Nonterminal.withName("A");
 		Character a = Character.from('a');
 		
-		Rule rule1 = new Rule(S, list(Plus.from(A)));
+		Rule rule1 = Rule.builder(S).addSymbols(Plus.from(A)).build();
 		builder.addRule(rule1);
-		Rule rule2 = new Rule(A, list(a));
+		Rule rule2 = Rule.builder(A).addSymbols(a).build();
 		builder.addRule(rule2);
 		
 		grammar = builder.build();

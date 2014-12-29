@@ -1,6 +1,5 @@
 package org.jgll.parser;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
@@ -40,13 +39,13 @@ public class DanglingElseGrammar4 {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule rule1 = new Rule(S, list(a, S, b));
+		Rule rule1 = Rule.builder(S).addSymbols(a, S, b).build();
 		builder.addRule(rule1);
 		
-		Rule rule2 = new Rule(S, list(a, S));
+		Rule rule2 = Rule.builder(S).addSymbols(a, S).build();
 		builder.addRule(rule2);
 		
-		Rule rule3 = new Rule(S, list(s));
+		Rule rule3 = Rule.builder(S).addSymbols(s).build();
 		builder.addRule(rule3);
 		
 		grammar = builder.build();

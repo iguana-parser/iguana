@@ -1,6 +1,5 @@
 package org.jgll.parser;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import java.io.PrintWriter;
@@ -44,13 +43,13 @@ public class Gamma2Test {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule rule1 = new Rule(S, list(S, S, S));
+		Rule rule1 = Rule.builder(S).addSymbols(S, S, S).build();
 		builder.addRule(rule1);
 		
-		Rule rule2 = new Rule(S, list(S, S));
+		Rule rule2 = Rule.builder(S).addSymbols(S, S).build();
 		builder.addRule(rule2);
 		
-		Rule rule3 = new Rule(S, list(b));
+		Rule rule3 = Rule.builder(S).addSymbols(b).build();
 		builder.addRule(rule3);
 		
 		grammar = builder.build();

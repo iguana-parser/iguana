@@ -31,16 +31,10 @@ public class KeywordTest2 {
 	@Before
 	public void init() {
 		
-		Rule r1 = new Rule(A, list(iff, B));
-		Rule r2 = new Rule(B, Character.from('b'));
+		Rule r1 = Rule.builder(A).addSymbols(iff, B).build();
+		Rule r2 = Rule.builder(B).addSymbol(Character.from('b')).build();
 		
-		Grammar.Builder builder = new Grammar.Builder();
-		
-		builder.addRule(r1);
-		builder.addRule(r2);
-		builder.addRule(iff.toRule());
-		
-		grammar = builder.build();
+		grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(iff.toRule()).build();
 	}
 	
 	@Test

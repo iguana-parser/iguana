@@ -48,14 +48,14 @@ public class LeftFactorizedArithmeticGrammarTest {
 
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule r1 = new Rule(E, list(T, E1));
-		Rule r2 = new Rule(E1, list(plus, T, E1));
-		Rule r3 = new Rule(E1);
-		Rule r4 = new Rule(T, list(F, T1));
-		Rule r5 = new Rule(T1, list(star, F, T1));
-		Rule r6 = new Rule(T1);
-		Rule r7 = new Rule(F, list(openPar, E, closePar));
-		Rule r8 = new Rule(F, list(a));
+		Rule r1 = Rule.builder(E).addSymbols(T, E1).build();
+		Rule r2 = Rule.builder(E1).addSymbols(plus, T, E1).build();
+		Rule r3 = Rule.builder(E1).build();
+		Rule r4 = Rule.builder(T).addSymbols(F, T1).build();
+		Rule r5 = Rule.builder(T1).addSymbols(star, F, T1).build();
+		Rule r6 = Rule.builder(T1).build();
+		Rule r7 = Rule.builder(F).addSymbols(openPar, E, closePar).build();
+		Rule r8 = Rule.builder(F).addSymbol(a).build();
 		
 		grammar = builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8).build();
 	}

@@ -1,6 +1,5 @@
 package org.jgll.parser;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
@@ -45,11 +44,11 @@ public class IndirectRecursion3Test {
 
 	@Before
 	public void init() {
-		Rule r1 = new Rule(A, list(B, c));
-		Rule r2 = new Rule(A, list(C, d));
-		Rule r3 = new Rule(A, list(e));
-		Rule r4 = new Rule(B, list(A, f));
-		Rule r5 = new Rule(C, list(A, g));
+		Rule r1 = Rule.builder(A).addSymbols(B, c).build();
+		Rule r2 = Rule.builder(A).addSymbols(C, d).build();
+		Rule r3 = Rule.builder(A).addSymbols(e).build();
+		Rule r4 = Rule.builder(B).addSymbols(A, f).build();
+		Rule r5 = Rule.builder(C).addSymbols(A, g).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3)
 								    .addRule(r4).addRule(r5).build();

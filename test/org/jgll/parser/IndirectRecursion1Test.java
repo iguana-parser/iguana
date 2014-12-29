@@ -43,11 +43,11 @@ public class IndirectRecursion1Test {
 
 	@Before
 	public void createGrammar() {
-		Rule r1 = new Rule(A, list(B, C));
-		Rule r2 = new Rule(A, list(a));
-		Rule r3 = new Rule(B, list(A));
-		Rule r4 = new Rule(B, list(b));
-		Rule r5 = new Rule(C, list(c));
+		Rule r1 = Rule.builder(A).addSymbols(B, C).build();
+		Rule r2 = Rule.builder(A).addSymbols(a).build();
+		Rule r3 = Rule.builder(B).addSymbols(A).build();
+		Rule r4 = Rule.builder(B).addSymbols(b).build();
+		Rule r5 = Rule.builder(C).addSymbols(c).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3)
 								  	   .addRule(r4).addRule(r5).build();

@@ -1,6 +1,5 @@
 package org.jgll.parser;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
@@ -35,10 +34,10 @@ public class Gamma2WithEpsilonTest {
         
         Grammar.Builder builder = new Grammar.Builder();
         
-        builder.addRule(new Rule(S, list(S, S, S)));
-        builder.addRule(new Rule(S, list(S, S)));
-        builder.addRule(new Rule(S, list(b)));
-        builder.addRule(new Rule(S));
+        builder.addRule(Rule.builder(S).addSymbols(S, S, S).build());
+        builder.addRule(Rule.builder(S).addSymbols(S, S).build());
+        builder.addRule(Rule.builder(S).addSymbols(b).build());
+        builder.addRule(Rule.builder(S).build());
         
         grammar = builder.build();
     }

@@ -1,7 +1,5 @@
 package org.jgll.parser;
 
-import static org.jgll.util.CollectionsUtil.*;
-
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -32,16 +30,16 @@ public class Gamma3Test {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule rule1 = new Rule(S, list(S, S, S, S, S));
+		Rule rule1 = Rule.builder(S).addSymbols(S, S, S, S, S).build();
 		builder.addRule(rule1);
 		
-		Rule rule2 = new Rule(S, list(S, S, S, S));
+		Rule rule2 = Rule.builder(S).addSymbols(S, S, S, S).build();
 		builder.addRule(rule2);
 		
-		Rule rule3 = new Rule(S, list(S, S, S));
+		Rule rule3 = Rule.builder(S).addSymbols(S, S, S).build();
 		builder.addRule(rule3);
 		
-		Rule rule4 = new Rule(S, list(b));
+		Rule rule4 = Rule.builder(S).addSymbols(b).build();
 		builder.addRule(rule4);
 		
 		grammar = builder.build();

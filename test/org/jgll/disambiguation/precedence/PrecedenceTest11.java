@@ -1,6 +1,5 @@
 package org.jgll.disambiguation.precedence;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
@@ -57,31 +56,31 @@ public class PrecedenceTest11 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E Y
-		Rule rule1 = new Rule(E, list(E, Y));
+		Rule rule1 = Rule.builder(E).addSymbols(E, Y).build();
 		builder.addRule(rule1);
 		
 		// E ::= E ; E
-		Rule rule2 = new Rule(E, list(E, semicolon, E));
+		Rule rule2 = Rule.builder(E).addSymbols(E, semicolon, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= - E
-		Rule rule3 = new Rule(E, list(min, E));
+		Rule rule3 = Rule.builder(E).addSymbols(min, E).build();
 		builder.addRule(rule3);
 		
 		// E ::= a
-		Rule rule4 = new Rule(E, list(a));
+		Rule rule4 = Rule.builder(E).addSymbols(a).build();
 		builder.addRule(rule4);
 		
 		// Y ::= X
-		Rule rule5 = new Rule(Y, list(X));
+		Rule rule5 = Rule.builder(Y).addSymbols(X).build();
 		builder.addRule(rule5);
 		
 		// X ::= X , E
-		Rule rule6 = new Rule(X, list(X, comma, E));
+		Rule rule6 = Rule.builder(X).addSymbols(X, comma, E).build();
 		builder.addRule(rule6);
 		
 		// X ::= , E
-		Rule rule7 = new Rule(X, list(comma, E));
+		Rule rule7 = Rule.builder(X).addSymbols(comma, E).build();
 		builder.addRule(rule7);
 		
 		

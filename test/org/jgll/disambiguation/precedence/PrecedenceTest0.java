@@ -1,6 +1,5 @@
 package org.jgll.disambiguation.precedence;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
@@ -48,16 +47,15 @@ public class PrecedenceTest0 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E * E
-		Rule rule1 = new Rule(E, list(E, star, E));
+		Rule rule1 = Rule.builder(E).addSymbols(E, star, E).build();
 		builder.addRule(rule1);
 		
-		
 		// E ::= E + E
-		Rule rule2 = new Rule(E, list(E, plus, E));
+		Rule rule2 = Rule.builder(E).addSymbols(E, plus, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= a
-		Rule rule3 = new Rule(E, list(a));
+		Rule rule3 = Rule.builder(E).addSymbol(a).build();
 		builder.addRule(rule3);
 
 		

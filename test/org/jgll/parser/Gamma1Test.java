@@ -46,25 +46,25 @@ public class Gamma1Test {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule r1 = new Rule(S, list(A, S, d));
+		Rule r1 = Rule.builder(S).addSymbols(A, S, d).build();
 		builder.addRule(r1);
 		
-		Rule r2 = new Rule(S, list(B, S));
+		Rule r2 = Rule.builder(S).addSymbols(B, S).build();
 		builder.addRule(r2);
 		
-		Rule r3 = new Rule(S);
+		Rule r3 = Rule.builder(S).build();
 		builder.addRule(r3);
 		
-		Rule r4 = new Rule(A, list(a));
+		Rule r4 = Rule.builder(A).addSymbols(a).build();
 		builder.addRule(r4);
 		
-		Rule r5 = new Rule(A, list(c));
+		Rule r5 = Rule.builder(A).addSymbols(c).build();
 		builder.addRule(r5);
 		
-		Rule r6 = new Rule(B, list(a));
+		Rule r6 = Rule.builder(B).addSymbols(a).build();
 		builder.addRule(r6);
 
-		Rule r7 = new Rule(B, list(b));
+		Rule r7 = Rule.builder(B).addSymbols(b).build();
 		builder.addRule(r7);
 		
 		grammar = builder.build();

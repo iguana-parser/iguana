@@ -1,6 +1,5 @@
 package org.jgll.disambiguation.precedence;
 
-import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
@@ -35,33 +34,26 @@ public class ManualArithmeticExpressionsTest {
 	@Before
 	public void createGrammar() {
 		
-		Grammar.Builder builder = new Grammar.Builder();
-
 		Nonterminal E = Nonterminal.withName("E");
 		Nonterminal T = Nonterminal.withName("T");
 		Nonterminal F = Nonterminal.withName("F");
 
 		// E ::= E + T
-		Rule rule1 = new Rule(E, list(E, Character.from('+'), T));
-		builder.addRule(rule1);
+		Rule rule1 = Rule.builder(E).addSymbols(E, Character.from('+'), T).build();
 		
 		// E ::= T
-		Rule rule2 = new Rule(E, list(T));
-		builder.addRule(rule2);
+		Rule rule2 = Rule.builder(E).addSymbol(T).build();
 		
 		// T ::= T * F
-		Rule rule3 = new Rule(T, list(T, Character.from('*'), F));
-		builder.addRule(rule3);
+		Rule rule3 = Rule.builder(T).addSymbols(T, Character.from('*'), F).build();
 		
 		// T ::= F
-		Rule rule4 = new Rule(T, list(F));
-		builder.addRule(rule4);
+		Rule rule4 = Rule.builder(T).addSymbol(F).build();
 		
 		// F ::= a
-		Rule rule5 = new Rule(F, list(Character.from('a')));
-		builder.addRule(rule5);
+		Rule rule5 = Rule.builder(F).addSymbol(Character.from('a')).build();
 
-		grammar = builder.build();
+		grammar = Grammar.builder().addRules(rule1, rule2, rule3, rule4, rule5).build();
 	}
 
 	@Test

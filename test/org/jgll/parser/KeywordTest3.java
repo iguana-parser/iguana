@@ -42,9 +42,9 @@ public class KeywordTest3 {
 
 	@Before
 	public void init() {
-		Rule r1 = new Rule(S, iff, L, S, L, then, L, S);
-		Rule r2 = new Rule(S, s);
-		Rule r3 = new Rule(L, ws);
+		Rule r1 = Rule.builder(S).addSymbols(iff, L, S, L, then, L, S).build();
+		Rule r2 = Rule.builder(S).addSymbol(s).build();
+		Rule r3 = Rule.builder(L).addSymbol(ws).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}

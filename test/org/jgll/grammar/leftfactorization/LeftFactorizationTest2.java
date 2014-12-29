@@ -1,7 +1,5 @@
 package org.jgll.grammar.leftfactorization;
 
-import static org.jgll.util.CollectionsUtil.*;
-
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -25,20 +23,20 @@ public class LeftFactorizationTest2 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E * E
-		Rule rule1 = new Rule(E, list(E, star, E));
+		Rule rule1 = Rule.builder(E).addSymbols(E, star, E).build();
 		builder.addRule(rule1);
 		
 		
 		// E ::= E + E
-		Rule rule2 = new Rule(E, list(E, plus, E));
+		Rule rule2 = Rule.builder(E).addSymbols(E, plus, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= E +
-		Rule rule3 = new Rule(E, list(E, plus));
+		Rule rule3 = Rule.builder(E).addSymbols(E, plus).build();
 		builder.addRule(rule3);
 		
 		// E ::= a
-		Rule rule4 = new Rule(E, list(a));
+		Rule rule4 = Rule.builder(E).addSymbols(a).build();
 		builder.addRule(rule4);
 		
 		grammar = builder.build();
