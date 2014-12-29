@@ -6,10 +6,14 @@ import java.util.Set;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.logging.LoggerWrapper;
 
 
 public class NonterminalTransition extends AbstractTransition {
+	
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(NonterminalTransition.class);
 
 	private final NonterminalGrammarSlot nonterminal;
 	
@@ -27,7 +31,9 @@ public class NonterminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		
+		log.trace("Processing %s", this);
 		
 		if (!nonterminal.test(parser.getInput().charAt(i))) {
 			parser.recordParseError(origin);
@@ -40,7 +46,7 @@ public class NonterminalTransition extends AbstractTransition {
 		NonterminalGrammarSlot n = parser.create(dest, nonterminal, parser.getCurrentGSSNode(), i, node);
 		
 		if (n != null) 
-			n.execute(parser, i, node);
+			n.execute(parser, u, i, node);
 	}
 	
 	@Override

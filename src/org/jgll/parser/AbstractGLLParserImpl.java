@@ -158,14 +158,14 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			return;
 		}
 		
-		startSymbol.execute(this, ci, cn);
+		startSymbol.execute(this, cu, ci, cn);
 		
 		while(hasNextDescriptor()) {
 			Descriptor descriptor = nextDescriptor();
 			GrammarSlot slot = descriptor.getGrammarSlot();
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
-			slot.execute(this, ci, descriptor.getSPPFNode());
+			slot.execute(this, cu, ci, descriptor.getSPPFNode());
 		}
 	}
 	
@@ -175,8 +175,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public NonterminalGrammarSlot create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
-			log.trace("GSSNode created: %s",  cu);
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
+			log.trace("GSSNode created: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);
 			cu = gssNode;
 			return nonterminal;
@@ -204,7 +204,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public void recordParseError(GrammarSlot slot) {
 		if (ci >= this.errorIndex) {
-			log.debug("Error recorded at %s %d", this, ci);
+			log.debug("Error recorded at %s %d", slot, ci);
 			this.errorIndex = ci;
 			this.errorSlot = slot;
 			this.errorGSSNode = cu;

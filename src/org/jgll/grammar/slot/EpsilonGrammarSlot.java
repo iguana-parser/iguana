@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 
@@ -13,10 +14,10 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	}
 	
 	@Override
-	public void execute(GLLParser parser, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (nonterminal.test(i)) {
 			TerminalNode epsilonNode = parser.getEpsilonNode(i);
-			parser.pop(parser.getCurrentGSSNode(), i, parser.getNonterminalNode(this, epsilonNode));
+			parser.pop(u, i, parser.getNonterminalNode(this, epsilonNode));
 		}
 	}
 	

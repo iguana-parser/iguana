@@ -24,8 +24,8 @@ import org.jgll.util.generator.ConstructorCode;
  */
 public interface GrammarSlot extends ConstructorCode {
 	
-	default void execute(GLLParser parser, int i, NonPackedNode node) {
-		getTransitions().forEach(t -> t.execute(parser, i, node));
+	default void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(parser, u, i, node));
 	}
 	
 	default Set<GrammarSlot> getReachableSlots() {

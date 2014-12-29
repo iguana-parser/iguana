@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 
 public class EpsilonTransition extends AbstractTransition {
@@ -12,8 +13,8 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, int i, NonPackedNode node) {
-		dest.execute(parser, i, node);
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		dest.execute(parser, u, i, node);
 	}
 	
 	@Override

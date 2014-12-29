@@ -6,12 +6,16 @@ import java.util.Set;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
+import org.jgll.util.logging.LoggerWrapper;
 
 
 public abstract class AbstractTerminalTransition extends AbstractTransition {
+	
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractTerminalTransition.class);
 
 	protected final TerminalGrammarSlot slot;
 	
@@ -32,7 +36,9 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		
+		log.trace("Processing %s", this);
 		
 		Input input = parser.getInput();
 
@@ -51,10 +57,10 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		
-		createNode(length, cr, parser, i, node);
+		createNode(length, cr, parser, u, i, node);
 	}
 	
-	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, int i, NonPackedNode node);
+	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node);
 	
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
@@ -66,11 +72,6 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			.append(getConstructorCode(preConditions, registry)).append(", ")
 			.append(getConstructorCode(postConditions, registry))
 			.toString();
-	}
-	
-	@Override
-	public String toString() {
-		return origin + " --[" + slot + "]--> " + dest;
 	}
 	
 }

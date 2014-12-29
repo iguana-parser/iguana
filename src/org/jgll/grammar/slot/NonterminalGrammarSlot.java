@@ -22,8 +22,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		this.gssNodes = new HashMap<>();
 	}
 	
-	public void execute(GLLParser parser, int i, NonPackedNode node) {
-		getTransitions().forEach(t -> t.execute(parser, i, DummyNode.getInstance()));
+	@Override
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(parser, u, i, DummyNode.getInstance()));
 	}
 	
 	public boolean test(int v)  {

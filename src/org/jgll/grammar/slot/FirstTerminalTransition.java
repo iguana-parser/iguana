@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 
@@ -15,8 +16,8 @@ public class FirstTerminalTransition extends AbstractTerminalTransition {
 	}
 	
 	@Override
-	protected void createNode(int length, TerminalNode cr, GLLParser parser, int i, NonPackedNode node) {
-		dest.execute(parser, i + length, cr);		
+	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		dest.execute(parser, u, i + length, cr);		
 	}
 
 }
