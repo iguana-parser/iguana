@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.parser.HashFunctions;
+import org.jgll.regex.Matcher;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -69,12 +71,12 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (!(obj instanceof CharacterRange)) {
+		
+		
+		if (!(obj instanceof CharacterRange))
 			return false;
-		}
 		
 		CharacterRange other = (CharacterRange) obj;
 		
@@ -87,6 +89,16 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		State finalState = new State(StateType.FINAL);
 //		startState.addTransition(new Transition(start, end, finalState);//.addTransitionAction(getPostActions(conditions)));
 		return new Automaton(startState, name);
+	}
+	
+	@Override
+	public Matcher getMatcher() {
+		return (input, i) -> i >= start && i <= end ? 1 : -1;
+	}
+	
+	@Override
+	public Matcher getBackwardsMatcher() {
+		return getMatcher();
 	}
 
 	@Override

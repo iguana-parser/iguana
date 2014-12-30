@@ -10,9 +10,15 @@ import org.jgll.util.generator.ConstructorCode;
 
 public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
 
-	public Matcher getMatcher();
+	default Matcher getMatcher() {
+		return getDFAMatcher();
+	}
+	
+	public Matcher getDFAMatcher();
 	
 	public Matcher getBackwardsMatcher();
+	
+	public Matcher getJavaRegexMatcher();
 	
 	public Automaton getAutomaton();
 	

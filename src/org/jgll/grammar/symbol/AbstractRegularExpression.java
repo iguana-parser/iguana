@@ -1,5 +1,7 @@
 package org.jgll.grammar.symbol;
 
+import java.util.regex.Pattern;
+
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
@@ -11,18 +13,34 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	
 	protected Automaton automaton;
 	
+	protected Pattern pattern;
+	
 	public AbstractRegularExpression(SymbolBuilder<? extends RegularExpression> builder) {
 		super(builder);
 	}
 	
 	@Override
-	public Matcher getMatcher() {
+	public Matcher getDFAMatcher() {
 		return (input, i) -> getAutomaton().getRunnableAutomaton().match(input, i);
 	}
 	
 	@Override
 	public Matcher getBackwardsMatcher() {
 		return (input, i) -> getAutomaton().getRunnableAutomaton().matchBackwards(input, i);
+	}
+	
+	@Override
+	public Matcher getJavaRegexMatcher() {
+		
+		if (pattern == null) {
+			pattern = Pattern.compile("");
+		}
+		
+		return (input, i) -> {
+								java.util.regex.Matcher matcher = pattern.matcher("");
+								matcher.find(i);
+								return matcher.end();
+							 };
 	}
 	
 	@Override

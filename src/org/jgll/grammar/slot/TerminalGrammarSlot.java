@@ -23,7 +23,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	public RegularExpression getRegularExpression() {
 		return regex;
 	}
-
+	
 	@Override
 	public Set<Transition> getTransitions() {
 		return Collections.emptySet();

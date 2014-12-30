@@ -59,13 +59,11 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
 
-		if (!(obj instanceof CharacterClass)) {
+		if (!(obj instanceof CharacterClass))
 			return false;
-		}
 		
 		CharacterClass other = (CharacterClass) obj;
 

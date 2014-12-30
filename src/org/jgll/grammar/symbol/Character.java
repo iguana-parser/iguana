@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -44,12 +45,13 @@ public class Character extends AbstractRegularExpression {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		
+		if (this == obj)
 			return true;
-		}
-		if (!(obj instanceof Character)) {
+
+		if (!(obj instanceof Character))
 			return false;
-		}
+		
 		Character other = (Character) obj;
 		
 		return c == other.c;
@@ -100,7 +102,17 @@ public class Character extends AbstractRegularExpression {
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
+	
+	@Override
+	public Matcher getMatcher() {
+		return (input, i) -> input.charAt(i) == c ? 1 : -1;
+	}
 
+	@Override
+	public Matcher getBackwardsMatcher() {
+		return getMatcher();
+	}
+	
 	public static class Builder extends SymbolBuilder<Character> {
 		
 		private int c;
