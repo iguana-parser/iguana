@@ -1,30 +1,50 @@
 package org.jgll.grammar.slot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 
 
+/**
+ * 
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	private final Nonterminal nonterminal;
+	
+	private final List<BodyGrammarSlot> firstSlots;
 	
 	private Map<Integer, GSSNode> gssNodes;
 
 	public NonterminalGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
 		this.gssNodes = new HashMap<>();
+		this.firstSlots = new ArrayList<>();
 	}
 	
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		getTransitions().forEach(t -> t.execute(parser, u, i, DummyNode.getInstance()));
+		firstSlots.forEach(s -> parser.scheduleDescriptor(new Descriptor(s, u, i, DummyNode.getInstance())));
+	}
+	
+	public void addFirstSlot(BodyGrammarSlot slot) {
+		firstSlots.add(slot);
+	}
+	
+	public List<BodyGrammarSlot> getFirstSlots() {
+		return firstSlots;
 	}
 	
 	public boolean test(int v)  {

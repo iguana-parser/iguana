@@ -179,9 +179,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			log.trace("GSSNode created: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);
 			nonterminal.execute(this, gssNode, i, node);
-//			for (Transition t : nonterminal.getTransitions()) {
-//				scheduleDescriptor(new Descriptor(t.destination(), gssNode, i, DummyNode.getInstance()));				
-//			}
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);			

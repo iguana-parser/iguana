@@ -11,16 +11,15 @@ import java.util.stream.Collectors;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.slot.AbstractTerminalTransition;
+import org.jgll.grammar.slot.BeforeLastTerminalTransition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
-import org.jgll.grammar.slot.EpsilonTransition;
 import org.jgll.grammar.slot.FirstAndLastTerminalTransition;
 import org.jgll.grammar.slot.FirstTerminalTransition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.NonterminalTransition;
-import org.jgll.grammar.slot.BeforeLastTerminalTransition;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalTransition;
 import org.jgll.grammar.symbol.Epsilon;
@@ -73,12 +72,15 @@ public class GrammarGraphBuilder implements Serializable {
 		
 		if (rule.size() == 0) {
 			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(rule.getPosition(0), head);
-			head.addTransition(new EpsilonTransition(head, epsilonSlot));
+			head.addFirstSlot(epsilonSlot);
 			slots.add(epsilonSlot);
 		} 
 		else {
 			
-			GrammarSlot currentSlot = head;
+			BodyGrammarSlot firstSlot = new BodyGrammarSlot(rule.getPosition(0));
+			head.addFirstSlot(firstSlot);
+			
+			GrammarSlot currentSlot = firstSlot;
 			
 			for (int i = 0; i < rule.size(); i++) {
 				Symbol symbol = rule.symbolAt(i);
