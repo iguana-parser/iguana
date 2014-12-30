@@ -48,7 +48,6 @@ public class Test2 {
 		assertFalse(grammar.isNullable(A));
 	}
 	
-	@Test
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));

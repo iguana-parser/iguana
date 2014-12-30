@@ -24,9 +24,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * A ::= B C
+ * A ::= B
  * B ::= 'b'
- * C ::= 'c'
  * 
  * @author Ali Afroozeh
  *
@@ -37,24 +36,19 @@ public class Test5 {
 
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
-	private Nonterminal C = Nonterminal.withName("C");
 	private Character b = Character.from('b');
-	private Character c = Character.from('c');
 	
 	@Before
 	public void init() {
-		Rule r1 = Rule.builder(A).addSymbols(B, C).build();
+		Rule r1 = Rule.builder(A).addSymbols(B).build();
 		Rule r2 = Rule.builder(B).addSymbol(b).build();
-		Rule r3 = Rule.builder(C).addSymbol(c).build();
-		
-		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).build();
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).build();
 	}
 	
 	@Test
 	public void testNullable() {
 		assertFalse(grammar.isNullable(A));
 		assertFalse(grammar.isNullable(B));
-		assertFalse(grammar.isNullable(C));
 	}
 	
 	@Test
@@ -64,19 +58,18 @@ public class Test5 {
 //		assertTrue(grammarGraph.isLL1SubGrammar(C));
 	}
 	
-	@Test
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(Input.fromString("bc"), grammar.toGrammarGraph(), "A");
+		ParseResult result = parser.parse(Input.fromString("b"), grammar.toGrammarGraph(), "A");
     	assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));
 	}
 	
 	@Test
 	public void testParser() {
-		Input input = Input.fromString("bc");
+		Input input = Input.fromString("b");
 		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
 		assertTrue(result.isParseSuccess());
@@ -85,20 +78,14 @@ public class Test5 {
 	
 	private SPPFNode getExpectedSPPF(GrammarSlotRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2).init();
-		PackedNode node2 = factory.createPackedNode("A ::= B C .", 1, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("B", 0, 1).init();
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 1).init();
+		PackedNode node2 = factory.createPackedNode("A ::= B .", 1, node1);
+		NonterminalNode node3 = factory.createNonterminalNode("B", 0, 0, 1).init();
 		PackedNode node4 = factory.createPackedNode("B ::= b .", 1, node3);
 		TerminalNode node5 = factory.createTerminalNode("b", 0, 1);
 		node4.addChild(node5);
 		node3.addChild(node4);
-		NonterminalNode node6 = factory.createNonterminalNode("C", 1, 2).init();
-		PackedNode node7 = factory.createPackedNode("C ::= c .", 2, node6);
-		TerminalNode node8 = factory.createTerminalNode("c", 1, 2);
-		node7.addChild(node8);
-		node6.addChild(node7);
 		node2.addChild(node3);
-		node2.addChild(node6);
 		node1.addChild(node2);
 		return node1;
 	}

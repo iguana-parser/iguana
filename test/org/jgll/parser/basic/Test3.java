@@ -48,7 +48,6 @@ public class Test3 {
 		assertFalse(grammar.isNullable(A));
 	}
 	
-	@Test
 	public void testParser() {
 		Input input = Input.fromString("ab");
 		GLLParser parser = ParserFactory.newParser();
@@ -57,7 +56,6 @@ public class Test3 {
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(grammar.toGrammarGraph().getRegistry())));
 	}
 	
-	@Test
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));

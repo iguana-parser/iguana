@@ -1,13 +1,9 @@
 package org.jgll.grammar.slot;
 
-import org.jgll.parser.AbstractGLLParserImpl;
-import org.jgll.util.logging.LoggerWrapper;
 
 
 
 public abstract class AbstractTransition implements Transition {
-	
-	protected static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParserImpl.class);
 	
 	protected final GrammarSlot dest;
 

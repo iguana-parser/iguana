@@ -172,19 +172,21 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
-	public NonterminalGrammarSlot create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
+	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
 			log.trace("GSSNode created: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);
-			cu = gssNode;
-			return nonterminal;
+			nonterminal.execute(this, gssNode, i, node);
+//			for (Transition t : nonterminal.getTransitions()) {
+//				scheduleDescriptor(new Descriptor(t.destination(), gssNode, i, DummyNode.getInstance()));				
+//			}
+		} else {
+			log.trace("GSSNode found: %s",  gssNode);
+			createGSSEdge(returnSlot, u, node, gssNode);			
 		}
-		
-		log.trace("GSSNode found: %s",  gssNode);
-		createGSSEdge(returnSlot, u, node, gssNode);
-		return null;
+		return gssNode;
 	}
 		
 	public abstract void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
@@ -245,16 +247,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return descriptor;
 	}
 	
-	@Override
-	public int getCurrentInputIndex() {
-		return ci;
-	}
-	
-	@Override
-	public GSSNode getCurrentGSSNode() {
-		return cu;
-	}
-
 	public SPPFLookup getSPPFLookup() {
 		return sppfLookup;
 	}
@@ -264,17 +256,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public NonPackedNode getCurrentSPPFNode() {
-		return cn;
-	}
-
-	@Override
 	public Input getInput() {
 		return input;
-	}
-	
-	public void setCurrentInputIndex(int inputIndex) {
-		this.ci = inputIndex;
 	}
 	
 	@Override
@@ -306,5 +289,4 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		return sppfLookup.getTerminalNode(slot, leftExtent, rightExtent);
 	}
-	
 }

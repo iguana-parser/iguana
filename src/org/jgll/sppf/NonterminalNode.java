@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
+import org.jgll.util.SPPFToJavaCode;
 
 /**
  * 
@@ -30,6 +31,10 @@ public class NonterminalNode extends NonterminalOrIntermediateNode {
 	@Override
 	public NonterminalGrammarSlot getGrammarSlot() {
 		return (NonterminalGrammarSlot) slot;
+	}
+
+	public String toJavaCode() {
+		return SPPFToJavaCode.toJavaCode(this);
 	}
 	
 }

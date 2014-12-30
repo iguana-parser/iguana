@@ -25,75 +25,86 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 
- * A ::=  B 'a' 'c'
- * B ::= 'b'
+ * S ::= A A b
+ *     
+ * A ::= 'a' | epsilon
  * 
  * @author Ali Afroozeh
+ *
  */
 public class Test11 {
 
 	private Grammar grammar;
-
+	
+	private Nonterminal S = Nonterminal.withName("S");
 	private Nonterminal A = Nonterminal.withName("A");
-	private Nonterminal B = Nonterminal.withName("B");
+	
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
-	private Character c = Character.from('c');
+
 	
 	@Before
 	public void init() {
-		Rule r1 = Rule.builder(A).addSymbols(B, a, c).build();
-		Rule r2 = Rule.builder(B).addSymbol(b).build();
 		
-		grammar = new Grammar.Builder().addRule(r1).addRule(r2).build();
-	}
-	
-	@Test
-	public void testNullable() {
-		assertFalse(grammar.isNullable(A));
-		assertFalse(grammar.isNullable(B));
+		Rule r1 = Rule.builder(S).addSymbols(A, A, b).build();
+		Rule r3 = Rule.builder(A).addSymbol(a).build();
+		Rule r4 = Rule.builder(A).build();
+		
+		grammar = new Grammar.Builder().addRule(r1).addRule(r3).addRule(r4).build();
 	}
 	
 	@Test
 	public void testParser() {
-		Input input = Input.fromString("bac");
+		Input input = Input.fromString("ab");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
+		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
 		assertTrue(result.isParseSuccess());
-		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
+		assertEquals(1, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 	
-	@Test
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
 		grammar.toGrammarGraph().generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(Input.fromString("bac"), grammar.toGrammarGraph(), "A");
+		ParseResult result = parser.parse(Input.fromString("ab"), grammar.toGrammarGraph(), "S");
     	assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 	
 	private SPPFNode getSPPF(GrammarSlotRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 3).init();
-		PackedNode node2 = factory.createPackedNode("A ::= B a c .", 2, node1);
-		IntermediateNode node3 = factory.createIntermediateNode("A ::= B a . c", 0, 2).init();
-		PackedNode node4 = factory.createPackedNode("A ::= B a . c", 1, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 1).init();
-		PackedNode node6 = factory.createPackedNode("B ::= b .", 0, node5);
-		TerminalNode node7 = factory.createTerminalNode("b", 0, 1);
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2).init();
+		PackedNode node2 = factory.createPackedNode("S ::= A A b .", 1, node1);
+		IntermediateNode node3 = factory.createIntermediateNode("S ::= A A . b", 0, 1).init();
+		PackedNode node4 = factory.createPackedNode("S ::= A A . b", 1, node3);
+		NonterminalNode node5 = factory.createNonterminalNode("A", 0, 0, 1).init();
+		PackedNode node6 = factory.createPackedNode("A ::= a .", 1, node5);
+		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		TerminalNode node8 = factory.createTerminalNode("a", 1, 2);
+		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 1, 1).init();
+		PackedNode node9 = factory.createPackedNode("A ::= .", 1, node8);
+		TerminalNode node10 = factory.createEpsilonNode(1);
+		node9.addChild(node10);
+		node8.addChild(node9);
 		node4.addChild(node5);
 		node4.addChild(node8);
+		PackedNode node11 = factory.createPackedNode("S ::= A A . b", 0, node3);
+		NonterminalNode node12 = factory.createNonterminalNode("A", 0, 0, 0).init();
+		PackedNode node13 = factory.createPackedNode("A ::= .", 0, node12);
+		TerminalNode node14 = factory.createEpsilonNode(0);
+		node13.addChild(node14);
+		node12.addChild(node13);
+		node11.addChild(node12);
+		node11.addChild(node5);
 		node3.addChild(node4);
-		TerminalNode node9 = factory.createTerminalNode("c", 2, 3);
+		node3.addChild(node11);
+		TerminalNode node16 = factory.createTerminalNode("b", 1, 2);
 		node2.addChild(node3);
-		node2.addChild(node9);
+		node2.addChild(node16);
 		node1.addChild(node2);
 		return node1;
 	}
 }
+	

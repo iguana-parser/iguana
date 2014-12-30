@@ -40,13 +40,10 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), i)))
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), u, i)))
 			return;
 		
-		NonterminalGrammarSlot n = parser.create(dest, nonterminal, parser.getCurrentGSSNode(), i, node);
-		
-		if (n != null) 
-			n.execute(parser, u, i, node);
+		parser.create(dest, nonterminal, u, i, node);
 	}
 	
 	@Override

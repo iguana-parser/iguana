@@ -5,6 +5,7 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
@@ -29,14 +30,18 @@ public interface SPPFLookup {
 	
 	default NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 
+		// A ::= \alpha .
+		if (slot.isLast()) {
+			if (leftChild == DummyNode.getInstance()) {
+				return getNonterminalNode((EndGrammarSlot) slot, rightChild);
+			} else {
+				return getNonterminalNode((EndGrammarSlot) slot, leftChild, rightChild);				
+			}
+		}
+		
 		// A ::= X . \alpha, in this case leftChild is the dummy node. 
 		if (slot.isFirst()) {
 			return rightChild;
-		}
-		
-		// A ::= \alpha .
-		if (slot.isLast()) {
-			return getNonterminalNode((EndGrammarSlot) slot, leftChild, rightChild);
 		}
 		
 		return getIntermediateNode(slot, leftChild, rightChild);

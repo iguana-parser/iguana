@@ -42,7 +42,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		
 		Input input = parser.getInput();
 
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(input, parser.getCurrentGSSNode(), i))) 
+		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(input, u, i))) 
 			return;
 
 		int length = slot.getRegularExpression().getMatcher().match(input, i);
@@ -52,7 +52,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			return;
 		}
 
-		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), parser.getCurrentGSSNode(), i + length))) 
+		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), u, i + length))) 
 			return;
 		
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
