@@ -81,7 +81,7 @@ public class IndirectRecursion2Test {
 		node6.addChild(node7);
 		node5.addChild(node6);
 		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 0, 1).init();
-		PackedNode node9 = factory.createPackedNode("A ::= a .", 0, node8);
+		PackedNode node9 = factory.createPackedNode("A ::= a .", 1, node8);
 		TerminalNode node10 = factory.createTerminalNode("a", 0, 1);
 		node9.addChild(node10);
 		node8.addChild(node9);

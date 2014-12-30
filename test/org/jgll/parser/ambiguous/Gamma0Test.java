@@ -1,4 +1,4 @@
-package org.jgll.parser;
+package org.jgll.parser.ambiguous;
 
 
 import static org.jgll.util.CollectionsUtil.*;
@@ -11,6 +11,9 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.ParseResult;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -39,22 +42,12 @@ public class Gamma0Test {
 
 	@Before
 	public void init() {
-		
-		Grammar.Builder builder = new Grammar.Builder();
-
 		Rule r1 = Rule.builder(S).addSymbols(a, S).build();
-		builder.addRule(r1);
-		
 		Rule r2 = Rule.builder(S).addSymbols(A, S, d).build();
-		builder.addRule(r2);
-		
 		Rule r3 = Rule.builder(S).build();
-		builder.addRule(r3);
-		
 		Rule r4 = Rule.builder(A).addSymbols(a).build();
-		builder.addRule(r4);
 		
-		grammar = builder.build();
+		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
 	}
 	
 	@Test
@@ -95,7 +88,7 @@ public class Gamma0Test {
 		IntermediateNode node6 = factory.createIntermediateNode("S ::= A S . d", 1, 2).init();
 		PackedNode node7 = factory.createPackedNode("S ::= A S . d", 2, node6);
 		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 1, 2).init();
-		PackedNode node9 = factory.createPackedNode("A ::= a .", 1, node8);
+		PackedNode node9 = factory.createPackedNode("A ::= a .", 2, node8);
 		TerminalNode node10 = factory.createTerminalNode("a", 1, 2);
 		node9.addChild(node10);
 		node8.addChild(node9);
@@ -117,7 +110,7 @@ public class Gamma0Test {
 		IntermediateNode node16 = factory.createIntermediateNode("S ::= A S . d", 0, 2).init();
 		PackedNode node17 = factory.createPackedNode("S ::= A S . d", 1, node16);
 		NonterminalNode node18 = factory.createNonterminalNode("A", 0, 0, 1).init();
-		PackedNode node19 = factory.createPackedNode("A ::= a .", 0, node18);
+		PackedNode node19 = factory.createPackedNode("A ::= a .", 1, node18);
 		node19.addChild(node3);
 		node18.addChild(node19);
 		NonterminalNode node21 = factory.createNonterminalNode("S", 0, 1, 2).init();

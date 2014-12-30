@@ -93,7 +93,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 		NonterminalNode node3 = factory.createNonterminalNode("T", 0, 0, 1).init();
 		PackedNode node4 = factory.createPackedNode("T ::= F T1 .", 1, node3);
 		NonterminalNode node5 = factory.createNonterminalNode("F", 0, 0, 1).init();
-		PackedNode node6 = factory.createPackedNode("F ::= a .", 0, node5);
+		PackedNode node6 = factory.createPackedNode("F ::= a .", 1, node5);
 		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
@@ -113,7 +113,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 		NonterminalNode node16 = factory.createNonterminalNode("T", 0, 2, 5).init();
 		PackedNode node17 = factory.createPackedNode("T ::= F T1 .", 3, node16);
 		NonterminalNode node18 = factory.createNonterminalNode("F", 0, 2, 3).init();
-		PackedNode node19 = factory.createPackedNode("F ::= a .", 2, node18);
+		PackedNode node19 = factory.createPackedNode("F ::= a .", 3, node18);
 		TerminalNode node20 = factory.createTerminalNode("a", 2, 3);
 		node19.addChild(node20);
 		node18.addChild(node19);
@@ -123,7 +123,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 		PackedNode node24 = factory.createPackedNode("T1 ::= * F . T1", 4, node23);
 		TerminalNode node25 = factory.createTerminalNode("*", 3, 4);
 		NonterminalNode node26 = factory.createNonterminalNode("F", 0, 4, 5).init();
-		PackedNode node27 = factory.createPackedNode("F ::= a .", 4, node26);
+		PackedNode node27 = factory.createPackedNode("F ::= a .", 5, node26);
 		TerminalNode node28 = factory.createTerminalNode("a", 4, 5);
 		node27.addChild(node28);
 		node26.addChild(node27);
@@ -152,7 +152,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 		NonterminalNode node37 = factory.createNonterminalNode("T", 0, 6, 7).init();
 		PackedNode node38 = factory.createPackedNode("T ::= F T1 .", 7, node37);
 		NonterminalNode node39 = factory.createNonterminalNode("F", 0, 6, 7).init();
-		PackedNode node40 = factory.createPackedNode("F ::= a .", 6, node39);
+		PackedNode node40 = factory.createPackedNode("F ::= a .", 7, node39);
 		TerminalNode node41 = factory.createTerminalNode("a", 6, 7);
 		node40.addChild(node41);
 		node39.addChild(node40);

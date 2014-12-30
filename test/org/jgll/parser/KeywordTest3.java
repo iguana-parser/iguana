@@ -80,7 +80,7 @@ public class KeywordTest3 {
 		PackedNode node12 = factory.createPackedNode("S ::= i f L . S L t h e n L S", 2, node11);
 		TerminalNode node13 = factory.createTerminalNode("i f", 0, 2);
 		NonterminalNode node14 = factory.createNonterminalNode("L", 0, 2, 3).init();
-		PackedNode node15 = factory.createPackedNode("L ::= \\u0020 .", 2, node14);
+		PackedNode node15 = factory.createPackedNode("L ::= \\u0020 .", 3, node14);
 		TerminalNode node16 = factory.createTerminalNode("\\u0020", 2, 3);
 		node15.addChild(node16);
 		node14.addChild(node15);
@@ -88,7 +88,7 @@ public class KeywordTest3 {
 		node12.addChild(node14);
 		node11.addChild(node12);
 		NonterminalNode node17 = factory.createNonterminalNode("S", 0, 3, 4).init();
-		PackedNode node18 = factory.createPackedNode("S ::= s .", 3, node17);
+		PackedNode node18 = factory.createPackedNode("S ::= s .", 4, node17);
 		TerminalNode node19 = factory.createTerminalNode("s", 3, 4);
 		node18.addChild(node19);
 		node17.addChild(node18);
@@ -96,7 +96,7 @@ public class KeywordTest3 {
 		node10.addChild(node17);
 		node9.addChild(node10);
 		NonterminalNode node20 = factory.createNonterminalNode("L", 0, 4, 5).init();
-		PackedNode node21 = factory.createPackedNode("L ::= \\u0020 .", 4, node20);
+		PackedNode node21 = factory.createPackedNode("L ::= \\u0020 .", 5, node20);
 		TerminalNode node22 = factory.createTerminalNode("\\u0020", 4, 5);
 		node21.addChild(node22);
 		node20.addChild(node21);
@@ -108,7 +108,7 @@ public class KeywordTest3 {
 		node6.addChild(node23);
 		node5.addChild(node6);
 		NonterminalNode node24 = factory.createNonterminalNode("L", 0, 9, 10).init();
-		PackedNode node25 = factory.createPackedNode("L ::= \\u0020 .", 9, node24);
+		PackedNode node25 = factory.createPackedNode("L ::= \\u0020 .", 10, node24);
 		TerminalNode node26 = factory.createTerminalNode("\\u0020", 9, 10);
 		node25.addChild(node26);
 		node24.addChild(node25);
@@ -116,7 +116,7 @@ public class KeywordTest3 {
 		node4.addChild(node24);
 		node3.addChild(node4);
 		NonterminalNode node27 = factory.createNonterminalNode("S", 0, 10, 11).init();
-		PackedNode node28 = factory.createPackedNode("S ::= s .", 10, node27);
+		PackedNode node28 = factory.createPackedNode("S ::= s .", 11, node27);
 		TerminalNode node29 = factory.createTerminalNode("s", 10, 11);
 		node28.addChild(node29);
 		node27.addChild(node28);

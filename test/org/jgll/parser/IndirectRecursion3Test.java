@@ -97,7 +97,7 @@ public class IndirectRecursion3Test {
 		NonterminalNode node7 = factory.createNonterminalNode("B", 0, 0, 2).init();
 		PackedNode node8 = factory.createPackedNode("B ::= A f .", 1, node7);
 		NonterminalNode node9 = factory.createNonterminalNode("A", 0, 0, 1).init();
-		PackedNode node10 = factory.createPackedNode("A ::= e .", 0, node9);
+		PackedNode node10 = factory.createPackedNode("A ::= e .", 1, node9);
 		TerminalNode node11 = factory.createTerminalNode("e", 0, 1);
 		node10.addChild(node11);
 		node9.addChild(node10);
@@ -135,7 +135,7 @@ public class IndirectRecursion3Test {
 		NonterminalNode node11 = factory.createNonterminalNode("C", 0, 0, 2).init();
 		PackedNode node12 = factory.createPackedNode("C ::= A g .", 1, node11);
 		NonterminalNode node13 = factory.createNonterminalNode("A", 0, 0, 1).init();
-		PackedNode node14 = factory.createPackedNode("A ::= e .", 0, node13);
+		PackedNode node14 = factory.createPackedNode("A ::= e .", 1, node13);
 		TerminalNode node15 = factory.createTerminalNode("e", 0, 1);
 		node14.addChild(node15);
 		node13.addChild(node14);
@@ -181,7 +181,7 @@ public class IndirectRecursion3Test {
 		NonterminalNode node11 = factory.createNonterminalNode("C", 0, 0, 2).init();
 		PackedNode node12 = factory.createPackedNode("C ::= A g .", 1, node11);
 		NonterminalNode node13 = factory.createNonterminalNode("A", 0, 0, 1).init();
-		PackedNode node14 = factory.createPackedNode("A ::= e .", 0, node13);
+		PackedNode node14 = factory.createPackedNode("A ::= e .", 1, node13);
 		TerminalNode node15 = factory.createTerminalNode("e", 0, 1);
 		node14.addChild(node15);
 		node13.addChild(node14);

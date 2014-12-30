@@ -1,4 +1,4 @@
-package org.jgll.parser;
+package org.jgll.parser.ambiguous;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,9 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.ParseResult;
+import org.jgll.parser.ParserFactory;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.junit.Before;
@@ -32,14 +35,12 @@ public class Gamma2WithEpsilonTest {
     @Before
     public void init() {
         
-        Grammar.Builder builder = new Grammar.Builder();
+        Rule r1 = Rule.builder(S).addSymbols(S, S, S).build();
+        Rule r2 = Rule.builder(S).addSymbols(S, S).build();
+        Rule r3 = Rule.builder(S).addSymbols(b).build();
+        Rule r4 = Rule.builder(S).build();
         
-        builder.addRule(Rule.builder(S).addSymbols(S, S, S).build());
-        builder.addRule(Rule.builder(S).addSymbols(S, S).build());
-        builder.addRule(Rule.builder(S).addSymbols(b).build());
-        builder.addRule(Rule.builder(S).build());
-        
-        grammar = builder.build();
+        grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
     }
     
     @Test

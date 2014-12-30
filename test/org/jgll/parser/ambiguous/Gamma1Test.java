@@ -1,4 +1,4 @@
-package org.jgll.parser;
+package org.jgll.parser.ambiguous;
 
 
 import static org.jgll.util.CollectionsUtil.*;
@@ -11,6 +11,9 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.ParseResult;
+import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -44,30 +47,15 @@ public class Gamma1Test {
 	@Before
 	public void createGrammar() {
 		
-		Grammar.Builder builder = new Grammar.Builder();
-		
 		Rule r1 = Rule.builder(S).addSymbols(A, S, d).build();
-		builder.addRule(r1);
-		
 		Rule r2 = Rule.builder(S).addSymbols(B, S).build();
-		builder.addRule(r2);
-		
 		Rule r3 = Rule.builder(S).build();
-		builder.addRule(r3);
-		
 		Rule r4 = Rule.builder(A).addSymbols(a).build();
-		builder.addRule(r4);
-		
 		Rule r5 = Rule.builder(A).addSymbols(c).build();
-		builder.addRule(r5);
-		
 		Rule r6 = Rule.builder(B).addSymbols(a).build();
-		builder.addRule(r6);
-
 		Rule r7 = Rule.builder(B).addSymbols(b).build();
-		builder.addRule(r7);
 		
-		grammar = builder.build();
+		grammar = Grammar.builder().addRules(r1, r2, r3, r4, r5, r6, r7).build();
 	}
 	
 	@Test
@@ -106,14 +94,14 @@ public class Gamma1Test {
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= A S . d", 0, 2).init();
 		PackedNode node4 = factory.createPackedNode("S ::= A S . d", 1, node3);
 		NonterminalNode node5 = factory.createNonterminalNode("A", 0, 0, 1).init();
-		PackedNode node6 = factory.createPackedNode("A ::= a .", 0, node5);
+		PackedNode node6 = factory.createPackedNode("A ::= a .", 1, node5);
 		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
 		NonterminalNode node8 = factory.createNonterminalNode("S", 0, 1, 2).init();
 		PackedNode node9 = factory.createPackedNode("S ::= B S .", 2, node8);
 		NonterminalNode node10 = factory.createNonterminalNode("B", 0, 1, 2).init();
-		PackedNode node11 = factory.createPackedNode("B ::= a .", 1, node10);
+		PackedNode node11 = factory.createPackedNode("B ::= a .", 2, node10);
 		TerminalNode node12 = factory.createTerminalNode("a", 1, 2);
 		node11.addChild(node12);
 		node10.addChild(node11);
@@ -133,7 +121,7 @@ public class Gamma1Test {
 		node2.addChild(node16);
 		PackedNode node17 = factory.createPackedNode("S ::= B S .", 1, node1);
 		NonterminalNode node18 = factory.createNonterminalNode("B", 0, 0, 1).init();
-		PackedNode node19 = factory.createPackedNode("B ::= a .", 0, node18);
+		PackedNode node19 = factory.createPackedNode("B ::= a .", 1, node18);
 		node19.addChild(node7);
 		node18.addChild(node19);
 		NonterminalNode node21 = factory.createNonterminalNode("S", 0, 1, 3).init();
@@ -141,7 +129,7 @@ public class Gamma1Test {
 		IntermediateNode node23 = factory.createIntermediateNode("S ::= A S . d", 1, 2).init();
 		PackedNode node24 = factory.createPackedNode("S ::= A S . d", 2, node23);
 		NonterminalNode node25 = factory.createNonterminalNode("A", 0, 1, 2).init();
-		PackedNode node26 = factory.createPackedNode("A ::= a .", 1, node25);
+		PackedNode node26 = factory.createPackedNode("A ::= a .", 2, node25);
 		node26.addChild(node12);
 		node25.addChild(node26);
 		node24.addChild(node25);

@@ -71,7 +71,7 @@ public class DanglingElseGrammar4 {
 		PackedNode node7 = factory.createPackedNode("S ::= a S .", 2, node6);
 		TerminalNode node8 = factory.createTerminalNode("a", 1, 2);
 		NonterminalNode node9 = factory.createNonterminalNode("S", 0, 2, 3).init();
-		PackedNode node10 = factory.createPackedNode("S ::= s .", 2, node9);
+		PackedNode node10 = factory.createPackedNode("S ::= s .", 3, node9);
 		TerminalNode node11 = factory.createTerminalNode("s", 2, 3);
 		node10.addChild(node11);
 		node9.addChild(node10);
