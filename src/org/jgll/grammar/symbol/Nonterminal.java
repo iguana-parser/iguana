@@ -12,7 +12,7 @@ public class Nonterminal extends AbstractSymbol {
 	private final int index;
 	
 	public static Nonterminal withName(String name) {
-		return new Builder(name).build();
+		return builder(name).build();
 	}
 	
 	private Nonterminal(Builder builder) {

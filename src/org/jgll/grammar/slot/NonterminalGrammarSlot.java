@@ -83,4 +83,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		return true;
 	}
 
+	@Override
+	public void reset() {
+		gssNodes = new HashMap<>();
+	}
+
 }

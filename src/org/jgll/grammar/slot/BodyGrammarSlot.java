@@ -28,5 +28,10 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public boolean isFirst() {
 		return position.isFirst();
 	}
+
+	@Override
+	public void reset() {
+		
+	}
 	
 }

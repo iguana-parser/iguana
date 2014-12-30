@@ -10,6 +10,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
+import org.jgll.parser.ParserFactory;
 import org.jgll.util.generator.CompilationUtil;
 
 import com.google.common.testing.GcFinalization;
@@ -44,22 +45,22 @@ public class BenchmarkGamma {
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
-		int warmupCount = 1;
+		int warmupCount = 5;
 		int runCount = 1;
 		
 		Grammar grammar = gamma2();
 		String startSymbol = "S";
 		GrammarGraph grammarGraph = grammar.toGrammarGraph();
 		
-		StringWriter writer = new StringWriter();
-		grammarGraph.generate(new PrintWriter(writer));
-		System.out.println(writer.toString());
-		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
+//		StringWriter writer = new StringWriter();
+//		grammarGraph.generate(new PrintWriter(writer));
+//		System.out.println(writer.toString());
+//		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {
-//			GLLParser parser = ParserFactory.newParser();
-			GLLParser parser = (GLLParser) clazz.newInstance();
+			GLLParser parser = ParserFactory.newParser();
+//			GLLParser parser = (GLLParser) clazz.newInstance();
 			parser.parse(Input.fromString(getBs(420)), grammarGraph, startSymbol);
 			grammarGraph.reset();
 		}
@@ -68,9 +69,9 @@ public class BenchmarkGamma {
 		System.out.println(BenchmarkUtil.header());
 		for (int i = 1; i <= 80; i++) {
 			for (int j = 0; j < runCount; j++) {
-//				GLLParser parser = ParserFactory.newParser();
+				GLLParser parser = ParserFactory.newParser();
 				
-				GLLParser parser = (GLLParser) clazz.newInstance();
+//				GLLParser parser = (GLLParser) clazz.newInstance();
 				
 				Input input = Input.fromString(getBs(i * 10));
 				ParseResult res = parser.parse(input, grammarGraph, startSymbol);

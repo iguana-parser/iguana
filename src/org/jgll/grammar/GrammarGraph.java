@@ -345,6 +345,7 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public void reset() {
+		headGrammarSlots.forEach(n -> n.reset());
 		slots.forEach(s -> s.reset());
 	}
 	

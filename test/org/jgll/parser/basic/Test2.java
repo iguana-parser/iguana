@@ -40,7 +40,7 @@ public class Test2 {
 	@Before
 	public void init() {
 		Rule r1 = Rule.builder(A).addSymbol(a).build();
-		grammar = new Grammar.Builder().addRule(r1).build();
+		grammar = Grammar.builder().addRule(r1).build();
 	}
 	
 	@Test

@@ -50,7 +50,7 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	default GSSNode hasGSSNode(int inputIndex) { return null; }
 	
-	default void reset() { }
+	public void reset();
 	
 	public boolean addTransition(Transition transition);
 	
