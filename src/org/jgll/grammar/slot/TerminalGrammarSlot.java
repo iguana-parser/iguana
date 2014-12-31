@@ -4,15 +4,19 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Input;
 
 
 public class TerminalGrammarSlot implements GrammarSlot {
 	
 	private RegularExpression regex;
+	private Matcher matcher;
 
 	public TerminalGrammarSlot(RegularExpression regex) {
 		this.regex = regex;
+		matcher = regex.getMatcher();
 	}
 
 	@Override
@@ -22,6 +26,10 @@ public class TerminalGrammarSlot implements GrammarSlot {
 
 	public RegularExpression getRegularExpression() {
 		return regex;
+	}
+	
+	public int match(Input input, int i) {
+		return matcher.match(input, i);
 	}
 	
 	@Override

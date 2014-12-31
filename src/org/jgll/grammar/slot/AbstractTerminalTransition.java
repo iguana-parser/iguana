@@ -42,18 +42,22 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		
 		Input input = parser.getInput();
 
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(input, u, i))) 
-			return;
+		for (Condition c : preConditions) {
+			if (c.getSlotAction().execute(input, u, i)) 
+				return;
+		}
 
-		int length = slot.getRegularExpression().getMatcher().match(input, i);
+		int length = slot.match(input, i);
 		
 		if (length < 0) {
 			parser.recordParseError(origin);
 			return;
 		}
 
-		if (postConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), u, i + length))) 
-			return;
+		for (Condition c : postConditions) {
+			if (c.getSlotAction().execute(input, u, i)) 
+				return;
+		}
 		
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		

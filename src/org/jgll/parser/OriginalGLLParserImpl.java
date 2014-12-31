@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
@@ -49,8 +50,10 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 
 			GrammarSlot returnSlot = gssNode.getGrammarSlot();
 
-			if (returnSlot.getConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
-				return;
+			for(Condition c : returnSlot.getConditions()) {
+				if (c.getSlotAction().execute(input, gssNode, inputIndex)) 
+					break;
+			}
 			
 			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 						
@@ -87,8 +90,10 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node
 				// stored in the popped elements.
-				if (returnSlot.getConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
-					continue;
+				for (Condition c : returnSlot.getConditions()) {
+					if (c.getSlotAction().execute(input, destination, z.getRightExtent())) 
+						break;
+				}
 				
 				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z);
 				addDescriptor(new Descriptor(returnSlot, destination, z.getRightExtent(), x));

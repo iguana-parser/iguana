@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
@@ -42,12 +43,13 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		if (!gssLookup.addToPoppedElements(gssNode, node))
 			return;
 		
-		label:
 		for(GSSEdge edge : gssNode.getGSSEdges()) {
 			GrammarSlot returnSlot = edge.getReturnSlot();
 			
-			if(returnSlot.getConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, gssNode, inputIndex)))
-				continue label;
+			for(Condition c : returnSlot.getConditions()) {
+				if (c.getSlotAction().execute(input, gssNode, inputIndex)) 
+					break;
+			}
 
 			NonPackedNode y = sppfLookup.getNode(returnSlot, edge.getNode(), node);
 			addDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
@@ -71,14 +73,15 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		if(gssLookup.getGSSEdge(source, edge)) {
 			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
 
-			label:
 			for (NonPackedNode z : source.getPoppedElements()) {
 				
 				// Execute pop actions for continuations, when the GSS node already
 				// exits. The input index will be the right extend of the node
 				// stored in the popped elements.
-				if (returnSlot.getConditions().stream().anyMatch(c -> c.getSlotAction().execute(input, destination, z.getRightExtent())))
-					continue label;
+				for (Condition c : returnSlot.getConditions()) {
+					if (c.getSlotAction().execute(input, destination, z.getRightExtent())) 
+						break;
+				}
 				
 				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z); 
 				addDescriptor(new Descriptor(returnSlot, destination, z.getRightExtent(), x));

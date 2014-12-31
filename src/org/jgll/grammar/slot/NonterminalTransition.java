@@ -40,8 +40,10 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		if (preConditions.stream().anyMatch(c -> c.getSlotAction().execute(parser.getInput(), u, i)))
-			return;
+		for (Condition c : preConditions) {
+			if (c.getSlotAction().execute(parser.getInput(), u, i)) 
+				return;
+		}
 		
 		parser.create(dest, nonterminal, u, i, node);
 	}
