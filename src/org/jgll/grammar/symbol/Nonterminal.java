@@ -65,6 +65,10 @@ public class Nonterminal extends AbstractSymbol {
 	public static Builder builder(String name) {
 		return new Builder(name);
 	}
+	
+	public static Builder builder(Nonterminal nonterminal) {
+		return new Builder(nonterminal);
+	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
 
