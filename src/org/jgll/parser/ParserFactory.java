@@ -1,10 +1,10 @@
 package org.jgll.parser;
 
+import org.jgll.parser.gss.lookup.DistributedGSSLookupImpl;
+import org.jgll.parser.gss.lookup.GSSLookup;
+import org.jgll.parser.gss.lookup.GlobalHashGSSLookupImpl;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.parser.lookup.DistributedDescriptorLookupImpl;
-import org.jgll.parser.lookup.DistributedGSSLookupImpl;
-import org.jgll.parser.lookup.GSSLookup;
-import org.jgll.parser.lookup.GlobalHashGSSLookupImpl;
 import org.jgll.sppf.lookup.DistributedSPPFLookupImpl;
 import org.jgll.sppf.lookup.GlobalSPPFLookupImpl;
 import org.jgll.sppf.lookup.SPPFLookup;

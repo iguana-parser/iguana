@@ -1,11 +1,10 @@
-package org.jgll.parser.lookup;
+package org.jgll.sppf.lookup;
 
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.TerminalNode;
-import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.logging.LoggerWrapper;
 
 

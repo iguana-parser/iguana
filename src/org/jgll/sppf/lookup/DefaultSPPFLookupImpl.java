@@ -1,4 +1,4 @@
-package org.jgll.parser.lookup;
+package org.jgll.sppf.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -7,7 +7,6 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.OriginalIntermediateNode;
 import org.jgll.sppf.OriginalNonterminalNode;
-import org.jgll.sppf.lookup.GlobalSPPFLookupImpl;
 import org.jgll.util.hashing.ExternalHashEquals;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 

@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
-import org.jgll.parser.lookup.NodeAddedAction;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.lookup.NodeAddedAction;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {

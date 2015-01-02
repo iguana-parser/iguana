@@ -1,4 +1,4 @@
-package org.jgll.parser.lookup;
+package org.jgll.sppf.lookup;
 
 import org.jgll.sppf.SPPFNode;
 

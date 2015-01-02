@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.parser.lookup.NodeAddedAction;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.sppf.lookup.NodeAddedAction;
 import org.jgll.util.Input;
 
 
