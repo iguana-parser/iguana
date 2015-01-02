@@ -31,7 +31,7 @@ public class Star extends AbstractSymbol {
 	@Override
 	public String getConstructorCode(GrammarSlotRegistry registry) {
 		return new StringBuilder()
-		  .append("new Star.builder(" + s.getConstructorCode(registry) + ")")
+		  .append("Star.builder(" + s.getConstructorCode(registry) + ")")
 		  .append(".setLabel(" + label + ")")
 		  .append(".setObject(" + object + ")")
 		  .append(".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")

@@ -1,6 +1,7 @@
 package org.jgll.grammar.symbol;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
 public class Nonterminal extends AbstractSymbol {
@@ -11,6 +12,8 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final int index;
 	
+	private final String variable;
+	
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
 	}
@@ -19,6 +22,7 @@ public class Nonterminal extends AbstractSymbol {
 		super(builder);
 		this.ebnfList = builder.ebnfList;
 		this.index = builder.index;
+		this.variable = builder.variable;
 	}
 	
 	public boolean isEbnfList() {
@@ -37,6 +41,10 @@ public class Nonterminal extends AbstractSymbol {
 		return index;
 	}
 	
+	public String getVariable() {
+		return variable;
+	}
+	
 	@Override
 	public String toString() {
 		return index > 0 ? name + index : name;
@@ -44,13 +52,11 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(!(obj instanceof Nonterminal)) {
+		if(!(obj instanceof Nonterminal))
 			return false;
-		}
 		
 		Nonterminal other = (Nonterminal) obj;
 		
@@ -76,6 +82,8 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private int index;
 		
+		private String variable;
+		
 		public Builder(Nonterminal nonterminal) {
 			super(nonterminal);
 			this.name = nonterminal.name;
@@ -92,8 +100,49 @@ public class Nonterminal extends AbstractSymbol {
 			return this;
 		}
 		
+		public Builder setVariable(String variable) {
+			this.variable = variable;
+			return this;
+		}
+		
 		public Builder setEbnfList(boolean ebnfList) {
 			this.ebnfList = ebnfList;
+			return this;
+		}
+		
+		@Override
+		public Builder setLabel(String label) {
+			super.setLabel(label);
+			return this;
+		}
+		
+		@Override
+		public Builder addPreCondition(Condition condition) {
+			preConditions.add(condition);
+			return this;
+		}
+		
+		@Override
+		public Builder addPostCondition(Condition condition) {
+			postConditions.add(condition);
+			return this;
+		}	
+		
+		@Override
+		public Builder setObject(Object object) {
+			this.object = object;
+			return this;
+		}
+		
+		@Override
+	 	public Builder addPreConditions(Iterable<Condition> conditions) {
+	 		conditions.forEach(c -> preConditions.add(c));
+			return this;
+		}
+	 	
+		@Override
+	 	public Builder addPostConditions(Iterable<Condition> conditions) {
+	 		conditions.forEach(c -> postConditions.add(c));
 			return this;
 		}
 		
