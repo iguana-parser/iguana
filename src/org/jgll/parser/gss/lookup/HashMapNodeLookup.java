@@ -11,17 +11,6 @@ public class HashMapNodeLookup implements NodeLookup {
 
 	private Map<Integer, GSSNode> map = new HashMap<>();
 	
-	private static HashMapNodeLookup instance;
-	
-	public static HashMapNodeLookup getInstance() {
-		if (instance == null) 
-			instance = new HashMapNodeLookup();
-		
-		return instance;
-	}
-
-	private HashMapNodeLookup() {}
-	
 	@Override
 	public GSSNode getOrElseCreate(GrammarSlot slot, int i) {
 		return map.computeIfAbsent(i, k -> new GSSNode(slot, k));

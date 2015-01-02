@@ -8,16 +8,7 @@ public class ArrayNodeLookup implements NodeLookup {
 
 	private GSSNode[] gssNodes;
 	
-	private static ArrayNodeLookup instance;
-	
-	public static ArrayNodeLookup getInstance(Input input) {
-		if (instance == null) 
-			instance = new ArrayNodeLookup(input);
-		
-		return instance;
-	}
-	
-	private ArrayNodeLookup(Input input) {
+	public ArrayNodeLookup(Input input) {
 		gssNodes = new GSSNode[input.length()];
 	}
 	

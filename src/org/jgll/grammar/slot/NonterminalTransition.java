@@ -8,13 +8,10 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.logging.LoggerWrapper;
 
 
 public class NonterminalTransition extends AbstractTransition {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(NonterminalTransition.class);
-
 	private final NonterminalGrammarSlot nonterminal;
 	
 	private final Set<Condition> preConditions;
@@ -31,8 +28,6 @@ public class NonterminalTransition extends AbstractTransition {
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		
-		log.trace("Processing %s", this);
 		
 		if (!nonterminal.test(parser.getInput().charAt(i))) {
 			parser.recordParseError(origin);

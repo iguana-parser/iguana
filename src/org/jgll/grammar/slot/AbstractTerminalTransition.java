@@ -10,13 +10,10 @@ import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.logging.LoggerWrapper;
 
 
 public abstract class AbstractTerminalTransition extends AbstractTransition {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractTerminalTransition.class);
-
 	protected final TerminalGrammarSlot slot;
 	
 	private final Set<Condition> preConditions;
@@ -37,8 +34,6 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		
-		log.trace("Processing %s", this);
 		
 		Input input = parser.getInput();
 

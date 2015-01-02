@@ -122,9 +122,9 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	private NonterminalGrammarSlot getNonterminalGrammarSlot(Nonterminal nonterminal) {
 		if (config.getLookupImpl() == LookupImpl.HASH_MAP) {
-			return new NonterminalGrammarSlot(nonterminal, HashMapNodeLookup.getInstance());
+			return new NonterminalGrammarSlot(nonterminal, new HashMapNodeLookup());
 		} else {
-			return new NonterminalGrammarSlot(nonterminal, ArrayNodeLookup.getInstance(input));
+			return new NonterminalGrammarSlot(nonterminal, new ArrayNodeLookup(input));
 		}
 	}
 	
