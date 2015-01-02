@@ -51,7 +51,7 @@ public class Test12 {
 	public void test1() {
 		Input input = Input.fromString("");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
+		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 		
 		// TODO: stackoverflow bug due to the cycle in the SPPF. Fix it later!
@@ -59,10 +59,11 @@ public class Test12 {
 	}
 	
 	public void testGenerated1() {
+		Input input = Input.fromString("");
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(Input.fromString(""), grammar.toGrammarGraph(), "A");
+		ParseResult result = parser.parse(input, grammar, "A");
     	assertTrue(result.isParseSuccess());
 	}
 	
@@ -70,15 +71,16 @@ public class Test12 {
 	public void test2() {
 		Input input = Input.fromString("a");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
+		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 	}
 	
 	public void testGenerated2() {
+		Input input = Input.fromString("a");
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(Input.fromString("a"), grammar.toGrammarGraph(), "A");
+		ParseResult result = parser.parse(input, grammar, "A");
     	assertTrue(result.isParseSuccess());
 	}
 	

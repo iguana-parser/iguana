@@ -47,7 +47,7 @@ public class Gamma2WithEpsilonTest {
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
         GLLParser parser = ParserFactory.newParser();
-        ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+        ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 		assertEquals(129, parseStatistics.getDescriptorsCount());
@@ -61,7 +61,7 @@ public class Gamma2WithEpsilonTest {
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
         GLLParser parser = ParserFactory.newParser();
-        ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+        ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 		assertEquals(374, parseStatistics.getDescriptorsCount());
@@ -75,7 +75,7 @@ public class Gamma2WithEpsilonTest {
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
         GLLParser parser = ParserFactory.newParser();
-        ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+        ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 		assertEquals(26159, parseStatistics.getDescriptorsCount());

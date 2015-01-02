@@ -25,12 +25,14 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 	@Override
 	public void intermediateNodeAdded(IntermediateNode node) {
 		log.trace("Intermediate node created: %s", node);
+		node.init();
 		countIntermediateNodes++;
 	}
 	
 	@Override
 	public void nonterminalNodeAdded(NonterminalNode node) {
 		log.trace("Nonterminal node created: %s", node);
+		node.init();
 		countNonterminalNodes++;
 	}
 	

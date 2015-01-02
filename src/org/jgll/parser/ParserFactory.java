@@ -10,7 +10,7 @@ import org.jgll.sppf.lookup.GlobalSPPFLookupImpl;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Configuration;
 import org.jgll.util.Configuration.GSSType;
-import org.jgll.util.Configuration.LookupType;
+import org.jgll.util.Configuration.LookupStrategy;
 
 public class ParserFactory {
 	
@@ -35,7 +35,7 @@ public class ParserFactory {
 	}
 	
 	private static GSSLookup getGSSLookup(Configuration config) {
-		if (config.getLookupType() == LookupType.MAP_DISTRIBUTED) {
+		if (config.getLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 			return new DistributedGSSLookupImpl();
 		} else {
 			return new GlobalHashGSSLookupImpl();
@@ -43,7 +43,7 @@ public class ParserFactory {
 	}
 	
 	public static SPPFLookup getSPPFLookup(Configuration config) {
-		if (config.getLookupType() == LookupType.MAP_DISTRIBUTED) {
+		if (config.getLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 			return new DistributedSPPFLookupImpl(config.getHashFunction());
 		} else {
 			return new GlobalSPPFLookupImpl(config.getHashFunction());

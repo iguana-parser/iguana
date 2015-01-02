@@ -6,6 +6,7 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.lookup.NodeAddedAction;
+import org.jgll.util.Input;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {
@@ -45,7 +46,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	@Override
-	public void reset() {
+	public void reset(Input input) {
 		intermediateNodes = new HashMap<>();
 	}
 	

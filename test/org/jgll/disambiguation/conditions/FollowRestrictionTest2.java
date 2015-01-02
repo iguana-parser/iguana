@@ -50,7 +50,7 @@ public class FollowRestrictionTest2 {
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
 		parser =  ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseError());
 	}
 	
@@ -58,7 +58,7 @@ public class FollowRestrictionTest2 {
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
 		parser =  ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseError());
 	}
 

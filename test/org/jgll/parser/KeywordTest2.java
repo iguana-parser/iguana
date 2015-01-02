@@ -46,7 +46,7 @@ public class KeywordTest2 {
 	public void test() {
 		Input input = Input.fromString("ifb");
 		GLLParser parser = ParserFactory.newParser();
-		parser.parse(input, grammar.toGrammarGraph(), "A");
+		parser.parse(input, grammar, "A");
 	}
 	
 }

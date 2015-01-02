@@ -50,7 +50,7 @@ public class Gamma3Test {
 	public void test100bs() {
 		Input input = Input.fromString(get100b());		
 		GLLParser parser = ParserFactory.newParser();
-		parser.parse(input, grammar.toGrammarGraph(), "S");
+		parser.parse(input, grammar, "S");
 	}
 	
 	private String get100b() {

@@ -1,6 +1,6 @@
 package org.jgll.parser;
 
-import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
@@ -23,7 +23,7 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName);
+	public ParseResult parse(Input input, Grammar grammar, String startSymbolName);
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 	
@@ -63,5 +63,7 @@ public interface GLLParser {
 	public Input getInput();
 	
 	public GrammarSlotRegistry getRegistry();
+	
+	public void reset();
 	
 }

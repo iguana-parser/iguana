@@ -24,7 +24,7 @@ public class IntermediateNode extends NonterminalOrIntermediateNode {
 	
 	@Override
 	public IntermediateNode init() {
-		children = new ArrayList<>(2);
+		children = new ArrayList<>();
 		return this;
 	}
 

@@ -57,7 +57,7 @@ public class Test11 {
 	public void testParser() {
 		Input input = Input.fromString("ab");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		assertEquals(1, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
@@ -65,9 +65,10 @@ public class Test11 {
 	
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		Input input = Input.fromString("ab");
+		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(Input.fromString("ab"), grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
     	assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}

@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -35,8 +34,7 @@ import org.junit.Test;
 public class LL1Test {
 
 	private Grammar grammar;
-	private GrammarGraph grammarGraph;
-	
+
 	private Nonterminal S = Nonterminal.withName("S");
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
@@ -69,7 +67,6 @@ public class LL1Test {
 		builder.addRule(rule6);
 
 		grammar = builder.build();
-		grammarGraph = grammar.toGrammarGraph();
 	}
 	
 	@Test
@@ -107,7 +104,7 @@ public class LL1Test {
 	public void test1() {
 		Input input = Input.fromString("bda");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
@@ -140,7 +137,7 @@ public class LL1Test {
 	public void test2() {
 		Input input = Input.fromString("a");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
@@ -172,7 +169,7 @@ public class LL1Test {
 	public void test3() {
 		Input input = Input.fromString("ba");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
@@ -205,7 +202,7 @@ public class LL1Test {
 	public void test4() {
 		Input input = Input.fromString("da");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());

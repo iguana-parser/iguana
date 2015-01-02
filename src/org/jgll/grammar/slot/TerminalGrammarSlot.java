@@ -63,7 +63,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 
 	@Override
-	public void reset() {
+	public void reset(Input input) {
 		terminalNodes = new HashMap<>();
 	}
 

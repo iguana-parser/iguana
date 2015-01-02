@@ -9,12 +9,15 @@ public class Configuration {
 	
 	private final HashFunction hashFunction;
 	
-	private final LookupType lookupType;
+	private final LookupImpl lookupImpl;
+	
+	private LookupStrategy lookupStrategy;
 	
 	private Configuration(Builder builder) {
 		this.gssType = builder.gssType;
 		this.hashFunction = builder.hashFunction;
-		this.lookupType = builder.lookupType;
+		this.lookupImpl = builder.lookupImpl;
+		this.lookupStrategy = builder.lookupStrategy;
 	}
 	
 	public GSSType getGSSType() {
@@ -25,8 +28,12 @@ public class Configuration {
 		return hashFunction;
 	}
 	
-	public LookupType getLookupType() {
-		return lookupType;
+	public LookupImpl getLookupImpl() {
+		return lookupImpl;
+	}
+	
+	public LookupStrategy getLookupStrategy() {
+		return lookupStrategy;
 	}
 	
 	public static Builder builder() {
@@ -37,7 +44,8 @@ public class Configuration {
 		
 		private GSSType gssType = GSSType.NEW;
 		private HashFunction hashFunction = HashFunctions.primeMultiplication;
-		private LookupType lookupType = LookupType.MAP_DISTRIBUTED;
+		private LookupImpl lookupImpl = LookupImpl.HASH_MAP;
+		private LookupStrategy lookupStrategy = LookupStrategy.DISTRIBUTED;
 		
 		public Configuration build() {
 			return new Configuration(this);
@@ -53,10 +61,16 @@ public class Configuration {
 			return this;
 		}
 		
-		public Builder setLookupType(LookupType lookupType) {
-			this.lookupType = lookupType;
+		public Builder setLookupType(LookupImpl lookupType) {
+			this.lookupImpl = lookupType;
 			return this;
 		}
+		
+		public Builder setLookupStrategy(LookupStrategy lookupStrategy) {
+			this.lookupStrategy = lookupStrategy;
+			return this;
+		}
+		
 	}
 	
 	public static enum GSSType {
@@ -64,11 +78,14 @@ public class Configuration {
 		ORIGINAL
 	}
 	
-	public static enum LookupType {
-		ARRAY_DISTRIBUTED,
-		ARRAY_GLOBAL,
-		MAP_DISTRIBUTED,
-		MAP_GLOBAL
+	public static enum LookupImpl {
+		ARRAY,
+		HASH_MAP
+	}
+	
+	public static enum LookupStrategy {
+		GLOBAL,
+		DISTRIBUTED
 	}
 	
 }

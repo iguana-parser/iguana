@@ -54,7 +54,7 @@ public class Gamma2Test {
 	public void testParsers1() {
 		Input input = Input.fromString("bbb");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(31, parseStatistics.getDescriptorsCount());
@@ -68,9 +68,9 @@ public class Gamma2Test {
 	public void testGenerated1() {
 		Input input = Input.fromString("bbb");
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());		
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(31, parseStatistics.getDescriptorsCount());
@@ -85,7 +85,7 @@ public class Gamma2Test {
 	public void testParsers2() {
 		Input input = Input.fromString("bbbb");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(50, parseStatistics.getDescriptorsCount());
@@ -99,9 +99,9 @@ public class Gamma2Test {
 	public void testGenerated2() {
 		Input input = Input.fromString("bbbb");
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());		
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(31, parseStatistics.getDescriptorsCount());
@@ -116,7 +116,7 @@ public class Gamma2Test {
 	public void testParsers3() {
 		Input input = Input.fromString("bbbbb");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(74, parseStatistics.getDescriptorsCount());
@@ -130,9 +130,9 @@ public class Gamma2Test {
 	public void testGenerated3() {
 		Input input = Input.fromString("bbbbb");
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());		
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(74, parseStatistics.getDescriptorsCount());
@@ -147,7 +147,7 @@ public class Gamma2Test {
 	public void testParsers4() {
 		Input input = Input.fromString(getBs(100));
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(25154, parseStatistics.getDescriptorsCount());
@@ -160,9 +160,9 @@ public class Gamma2Test {
 	public void testGenerated4() {
 		Input input = Input.fromString(getBs(100));
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());		
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(25154, parseStatistics.getDescriptorsCount());

@@ -18,6 +18,8 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Configuration;
+import org.jgll.util.Input;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
@@ -99,10 +101,14 @@ public class Grammar implements Serializable {
 	public boolean isNullable(Nonterminal nonterminal) {
 		return firstSets.get(nonterminal).contains(Epsilon.getInstance());
 	}
-	 
-	public GrammarGraph toGrammarGraph() {
+	
+	public GrammarGraph toGrammarGraph(Input input) {
+		return toGrammarGraph(input, Configuration.builder().build());
+	}
+	
+	public GrammarGraph toGrammarGraph(Input input, Configuration config) {
 		if (grammarGraph == null) {
-			GrammarGraphBuilder builder = new GrammarGraphBuilder(this);
+			GrammarGraphBuilder builder = new GrammarGraphBuilder(this, input, config);
 			grammarGraph =  builder.build();
 		}
 		return grammarGraph;

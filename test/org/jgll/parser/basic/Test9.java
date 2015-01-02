@@ -55,16 +55,17 @@ public class Test9 {
 	public void test() {
 		Input input = Input.fromString("aab");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}	
 
 	public void testGenerated() {
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph().generate(new PrintWriter(writer));
+		Input input = Input.fromString("aab");
+		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
 		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(Input.fromString("aab"), grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
     	assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}

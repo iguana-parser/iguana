@@ -57,7 +57,7 @@ public class IndirectRecursion2Test {
 	public void testParser() {
 		Input input = Input.fromString("ad");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
+		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getRegistry())));
 	}

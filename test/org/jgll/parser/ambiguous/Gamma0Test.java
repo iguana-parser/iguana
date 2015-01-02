@@ -72,7 +72,7 @@ public class Gamma0Test {
 	public void test() {
 		Input input = Input.fromString("aad");
 		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		ParseResult result = parser.parse(input, grammar, "S");
 		assertEquals(1, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));

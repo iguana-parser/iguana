@@ -34,7 +34,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	@Override
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent) {
 		final TerminalNode key = new TerminalNode(slot, inputIndex, rightExtent, hashEquals);
-		return terminalNodes.computeIfAbsent(key, k -> { terminalNodeAdded(k);  return k; });
+		return terminalNodes.computeIfAbsent(key, k -> k);
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	@Override
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
 		final NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent, hashEquals);
-		return nonterminalNodes.computeIfAbsent(key, k -> { nonterminalNodeAdded(k); return k.init(); });
+		return nonterminalNodes.computeIfAbsent(key, k -> k.init());
 	}
 	
 	protected IntermediateNode createIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
@@ -62,7 +62,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
 		final IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
-		return intermediateNodes.computeIfAbsent(key, k -> { intermediateNodeAdded(key);  return k.init(); });
+		return intermediateNodes.computeIfAbsent(key, k -> k.init());
 	}
 
 	@Override

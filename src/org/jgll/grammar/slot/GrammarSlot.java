@@ -8,6 +8,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.Input;
 import org.jgll.util.generator.ConstructorCode;
 
 /**
@@ -50,7 +51,7 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	default GSSNode hasGSSNode(int inputIndex) { return null; }
 	
-	public void reset();
+	public void reset(Input input);
 	
 	public boolean addTransition(Transition transition);
 	

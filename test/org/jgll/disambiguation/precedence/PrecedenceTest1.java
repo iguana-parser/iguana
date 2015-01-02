@@ -70,7 +70,7 @@ public class PrecedenceTest1 {
 	public void testParser1() {
 		Input input = Input.fromString("a+-a+a");
 		parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
+		ParseResult result = parser.parse(input, grammar, "E");
         assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode(parser.getRegistry())));

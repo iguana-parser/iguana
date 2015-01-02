@@ -13,6 +13,7 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -340,9 +341,9 @@ public class GrammarGraph implements Serializable {
 		return grammar.getAlternatives(nonterminal).size();
 	}
 	
-	public void reset() {
-		headGrammarSlots.forEach(n -> n.reset());
-		slots.forEach(s -> s.reset());
+	public void reset(Input input) {
+		headGrammarSlots.forEach(n -> n.reset(input));
+		slots.forEach(s -> s.reset(input));
 	}
 	
 	public GrammarSlotRegistry getRegistry() {

@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -51,7 +52,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	/**
 	 * 
 	 */
-	protected GrammarGraph grammar;
+	protected GrammarGraph grammarGraph;
 	
 	/**
 	 * The grammar slot at which a parse error is occurred. 
@@ -77,9 +78,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName) {
+	public final ParseResult parse(Input input, Grammar grammar, String startSymbolName) {
 
-		this.grammar = grammar;
+		this.grammarGraph = grammar.toGrammarGraph(input);
 		this.input = input;
 		
 		NonterminalGrammarSlot startSymbol = getStartSymbol(startSymbolName);
@@ -136,7 +137,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected NonterminalGrammarSlot getStartSymbol(String name) {
-		return grammar.getRegistry().getHead(Nonterminal.withName(name));
+		return grammarGraph.getRegistry().getHead(Nonterminal.withName(name));
 	}
 	
 	protected void parse(NonterminalGrammarSlot startSymbol) {
@@ -244,8 +245,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
+	public void reset() {
+		grammarGraph.reset(input);
+		gssLookup.reset();
+		sppfLookup.reset();
+	}
+	
+	@Override
 	public GrammarSlotRegistry getRegistry() {
-		return grammar.getRegistry();
+		return grammarGraph.getRegistry();
 	}
 	
 	@Override
