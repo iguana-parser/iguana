@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -36,7 +37,7 @@ public interface GLLParser {
 	
 	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child);
 	
-	public IntermediateNode getIntermediateNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
 	public boolean hasDescriptor(Descriptor descriptor);
 	

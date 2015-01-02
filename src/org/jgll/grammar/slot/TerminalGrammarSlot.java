@@ -1,11 +1,15 @@
 package org.jgll.grammar.slot;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.parser.lookup.NodeAddedAction;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
+import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 
 
@@ -13,10 +17,13 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	
 	private RegularExpression regex;
 	private Matcher matcher;
+	private Map<TerminalNode, TerminalNode> terminalNodes;
 
 	public TerminalGrammarSlot(RegularExpression regex) {
 		this.regex = regex;
-		matcher = regex.getMatcher();
+		// TODO: add type of regex to config!
+		this.matcher = regex.getMatcher();
+		this.terminalNodes = new HashMap<>();
 	}
 
 	@Override
@@ -46,9 +53,18 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	public String toString() {
 		return regex.toString();
 	}
+	
+	public TerminalNode getTerminalNode(TerminalNode node, NodeAddedAction<TerminalNode> action) {
+		return terminalNodes.computeIfAbsent(node, k -> { action.execute(k); return k; });
+	}
+	
+	public TerminalNode findTerminalNode(TerminalNode node) {
+		return terminalNodes.get(node);
+	}
 
 	@Override
 	public void reset() {
+		terminalNodes = new HashMap<>();
 	}
 
 }

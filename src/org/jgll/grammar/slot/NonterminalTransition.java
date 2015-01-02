@@ -19,12 +19,11 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Set<Condition> preConditions;
 
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, GrammarSlot origin, GrammarSlot dest) {
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this(nonterminal, origin, dest, Collections.emptySet());
 	}	
 	
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, GrammarSlot origin,
-			                     GrammarSlot dest, Set<Condition> preConditions) {
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Set<Condition> preConditions) {
 		super(origin, dest);
 		this.nonterminal = nonterminal;
 		this.preConditions = preConditions;

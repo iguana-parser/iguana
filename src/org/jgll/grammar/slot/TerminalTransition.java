@@ -19,7 +19,7 @@ import org.jgll.sppf.TerminalNode;
  */
 public class TerminalTransition extends AbstractTerminalTransition {
 
-	public TerminalTransition(TerminalGrammarSlot slot, GrammarSlot origin, GrammarSlot dest, 
+	public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, 
 							  Set<Condition> preConditions, Set<Condition> postConditions) {
 		super(slot, origin, dest, preConditions, postConditions);
 	}

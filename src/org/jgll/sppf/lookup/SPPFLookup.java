@@ -1,5 +1,6 @@
-package org.jgll.parser.lookup;
+package org.jgll.sppf.lookup;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -7,9 +8,11 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.NonterminalOrIntermediateNode;
+import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.TerminalNode;
 
 public interface SPPFLookup {
@@ -44,7 +47,7 @@ public interface SPPFLookup {
 			return rightChild;
 		}
 		
-		return getIntermediateNode(slot, leftChild, rightChild);
+		return getIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild);
 	}
 	
 	default NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
@@ -59,7 +62,7 @@ public interface SPPFLookup {
 		return newNode;
 	}
 	
-	default IntermediateNode getIntermediateNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
 		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		return newNode;
@@ -77,6 +80,14 @@ public interface SPPFLookup {
 	 */
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
+	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
+		if(head.getNonterminal().isEbnfList()) {
+			return new ListSymbolNode(head, leftExtent, rightExtent);
+		} else {
+			return new NonterminalNode(head, leftExtent, rightExtent);
+		}
+	}
+	
 	/**
 	 * 
 	 * Returns the existing SPPF node with the given parameters if it exists, otherwise
@@ -91,14 +102,45 @@ public interface SPPFLookup {
 	 */
 	public NonterminalNode findNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent);
 	
-	public IntermediateNode getIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
-	public IntermediateNode findIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent);
+	public IntermediateNode findIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
-	void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild);
+	default void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		PackedNode packedNode = new PackedNode(slot, pivot, parent);
+		boolean ambiguousBefore = parent.isAmbiguous();
+		if (parent.addPackedNode(packedNode, leftChild, rightChild)) {
+			packedNodeAdded(packedNode);
+			boolean ambiguousAfter = parent.isAmbiguous();
+			if (!ambiguousBefore && ambiguousAfter) {
+				ambiguousNodeAdded(parent);
+			}
+		}
+	}
 	
-	void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode child);
-		
+	default void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode child) {
+		PackedNode packedNode = new PackedNode(slot, pivot, parent);
+		boolean ambiguousBefore = parent.isAmbiguous();
+		if (parent.addPackedNode(packedNode, child)) {
+			packedNodeAdded(packedNode);
+			boolean ambiguousAfter = parent.isAmbiguous();
+			if (!ambiguousBefore && ambiguousAfter) {
+				ambiguousNodeAdded(parent);
+			}
+		}
+	}
+
+	
+	void ambiguousNodeAdded(NonterminalOrIntermediateNode node);
+	
+	void packedNodeAdded(PackedNode packedNode);
+	
+	void intermediateNodeAdded(IntermediateNode node);
+	
+	void nonterminalNodeAdded(NonterminalNode node);
+	
+	void terminalNodeAdded(TerminalNode node);
+	
 	public NonterminalNode getStartSymbol(NonterminalGrammarSlot startSymbol, int inputSize);
 	
 	public int getNonterminalNodesCount();

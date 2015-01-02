@@ -3,6 +3,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -12,7 +13,6 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.parser.lookup.GSSLookup;
-import org.jgll.parser.lookup.SPPFLookup;
 import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
 import org.jgll.parser.lookup.factory.GSSLookupFactory;
 import org.jgll.parser.lookup.factory.SPPFLookupFactory;
@@ -21,6 +21,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
@@ -278,7 +279,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public IntermediateNode getIntermediateNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
 	}
 	

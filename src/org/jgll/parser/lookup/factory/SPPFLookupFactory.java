@@ -1,7 +1,7 @@
 package org.jgll.parser.lookup.factory;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.parser.lookup.SPPFLookup;
+import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Input;
 
 

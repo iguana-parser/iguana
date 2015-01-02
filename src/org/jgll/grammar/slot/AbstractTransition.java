@@ -5,11 +5,11 @@ package org.jgll.grammar.slot;
 
 public abstract class AbstractTransition implements Transition {
 	
-	protected final GrammarSlot dest;
+	protected final BodyGrammarSlot dest;
 
-	protected final GrammarSlot origin;
+	protected final BodyGrammarSlot origin;
 
-	public AbstractTransition(GrammarSlot origin, GrammarSlot dest) {
+	public AbstractTransition(BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this.origin = origin;
 		this.dest = dest;
 	}

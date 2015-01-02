@@ -80,7 +80,7 @@ public class GrammarGraphBuilder implements Serializable {
 			BodyGrammarSlot firstSlot = new BodyGrammarSlot(rule.getPosition(0));
 			head.addFirstSlot(firstSlot);
 			
-			GrammarSlot currentSlot = firstSlot;
+			BodyGrammarSlot currentSlot = firstSlot;
 			
 			for (int i = 0; i < rule.size(); i++) {
 				Symbol symbol = rule.symbolAt(i);
@@ -89,7 +89,7 @@ public class GrammarGraphBuilder implements Serializable {
 				if (symbol instanceof RegularExpression) {
 					RegularExpression regex = (RegularExpression) symbol;
 					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
-					GrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					Set<Condition> postConditions = symbol.getPreConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
 					currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
@@ -98,7 +98,7 @@ public class GrammarGraphBuilder implements Serializable {
 				else if (symbol instanceof Nonterminal) {
 					Nonterminal nonterminal = (Nonterminal) symbol;
 					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(nonterminal));
-					GrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, preConditions));
 					currentSlot = slot;
@@ -110,7 +110,7 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 	
 	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
-															 GrammarSlot origin, GrammarSlot dest,
+															 BodyGrammarSlot origin, BodyGrammarSlot dest,
 															 Set<Condition> preConditions, Set<Condition> postConditions) {
 		
 		if (i == 1 && rule.size() > 1) {
