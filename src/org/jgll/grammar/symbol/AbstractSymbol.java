@@ -22,10 +22,13 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	protected final String label;
 	
+	protected final String variable;
+	
 	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
 		this.name = builder.name;
 		this.label = builder.label;
 		this.object = builder.object;
+		this.variable = builder.variable;
 		this.preConditions = ImmutableSet.copyOf(builder.preConditions);
 		this.postConditions = ImmutableSet.copyOf(builder.postConditions);
 	}
@@ -53,6 +56,11 @@ public abstract class AbstractSymbol implements Symbol {
 	@Override
 	public String getLabel() {
 		return label;
+	}
+	
+	@Override
+	public String getVariable() {
+		return variable;
 	}
 	
 	@Override

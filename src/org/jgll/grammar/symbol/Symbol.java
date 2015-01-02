@@ -24,4 +24,6 @@ public interface Symbol extends ConstructorCode, Serializable {
 	
 	public String getLabel();
 	
+	public String getVariable();
+	
 }	
