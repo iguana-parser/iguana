@@ -3,6 +3,8 @@ package org.jgll.sppf;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.util.hashing.ExternalHashEquals;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 
 /**
@@ -23,10 +25,13 @@ public abstract class NonPackedNode implements SPPFNode {
 	
 	protected final int rightExtent;
 	
-	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+	private final ExternalHashEquals<NonPackedNode> hashEquals;
+	
+	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
 		this.slot = slot;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
+		this.hashEquals = hashEquals;
 	}
 
 	public int getLeftExtent() {
@@ -46,12 +51,12 @@ public abstract class NonPackedNode implements SPPFNode {
 		if (!(obj instanceof NonPackedNode)) 
 			return false;
 		
-		return SPPFUtil.getInstance().equals(this, (NonPackedNode) obj);
+		return hashEquals.equals(this, (NonPackedNode) obj);
 	}
 
 	@Override
 	public int hashCode() {
-		return SPPFUtil.getInstance().hash(this);
+		return hashEquals.hash(this);
 	}
 	
 	@Override
@@ -60,5 +65,52 @@ public abstract class NonPackedNode implements SPPFNode {
 	}
 	
 	public abstract List<PackedNode> getChildren();
+	
+    public static ExternalHashEquals<NonPackedNode> globalHashEquals(HashFunction f) {
+    	
+    	return new ExternalHashEquals<NonPackedNode>() {
+
+    		@Override
+    		public int hash(NonPackedNode n) {
+    			return hash(n, f);
+    		}
+    		
+			@Override
+			public int hash(NonPackedNode n, HashFunction f) {
+				return f.hash(n.getGrammarSlot().hashCode(), 
+						      n.getLeftExtent(), 
+						      n.getRightExtent());
+			}
+
+			@Override
+			public boolean equals(NonPackedNode n1, NonPackedNode n2) {
+				return  n1.getGrammarSlot() == n2.getGrammarSlot() && 
+                        n1.getLeftExtent()  == n2.getLeftExtent() && 
+                        n1.getRightExtent() == n2.getRightExtent();
+			}
+		};
+    }
+    
+    public static ExternalHashEquals<NonPackedNode> distributedHashEquals(HashFunction f) {
+    	
+    	return new ExternalHashEquals<NonPackedNode>() {
+
+    		@Override
+    		public int hash(NonPackedNode n) {
+    			return hash(n, f);
+    		}
+    		
+			@Override
+			public int hash(NonPackedNode n, HashFunction f) {
+				return f.hash(n.getLeftExtent(), n.getRightExtent());
+			}
+
+			@Override
+			public boolean equals(NonPackedNode n1, NonPackedNode n2) {
+				return  n1.getLeftExtent()  == n2.getLeftExtent() && 
+                        n1.getRightExtent() == n2.getRightExtent();
+			}
+		};
+    }    
 	
 }

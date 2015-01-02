@@ -13,9 +13,6 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.parser.lookup.GSSLookup;
-import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
-import org.jgll.parser.lookup.factory.GSSLookupFactory;
-import org.jgll.parser.lookup.factory.SPPFLookupFactory;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
@@ -37,11 +34,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 	protected static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParserImpl.class);
 	
-	protected GSSLookup gssLookup;
+	protected final GSSLookup gssLookup;
 	
-	protected SPPFLookup sppfLookup;
+	protected final SPPFLookup sppfLookup;
 	
-	protected DescriptorLookup descriptorLookup;
+	protected final DescriptorLookup descriptorLookup;
 
 	protected GSSNode cu;
 	
@@ -55,8 +52,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	 * 
 	 */
 	protected GrammarGraph grammar;
-	
-	protected Descriptor currentDescriptor;
 	
 	/**
 	 * The grammar slot at which a parse error is occurred. 
@@ -73,20 +68,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	 */
 	protected GSSNode errorGSSNode;
 	
-	protected GSSLookupFactory gssLookupFactory;
-
-	protected SPPFLookupFactory sppfLookupFactory;
-
-	protected DescriptorLookupFactory descriptorLookupFactory;
-	
 	protected int descriptorsCount;
 
-	public AbstractGLLParserImpl(GSSLookupFactory gssLookupFactory, 
-								 SPPFLookupFactory sppfLookupFactory, 
-								 DescriptorLookupFactory descriptorLookupFactory) {
-		this.gssLookupFactory = gssLookupFactory;
-		this.sppfLookupFactory = sppfLookupFactory;
-		this.descriptorLookupFactory = descriptorLookupFactory;
+	public AbstractGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
+		this.gssLookup = gssLookup;
+		this.sppfLookup = sppfLookup;
+		this.descriptorLookup = descriptorLookup;
 	}
 	
 	@Override
@@ -101,7 +88,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
 		}
 		
-		initLookups(grammar, input);
+		initLookups();
 
 		initParserState(startSymbol);
 	
@@ -211,10 +198,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 	}
 	
-	protected void initLookups(GrammarGraph grammar, Input input) {
-		gssLookup = gssLookupFactory.createGSSLookup(grammar, input);
-		sppfLookup = sppfLookupFactory.createSPPFLookup(grammar, input);
-		descriptorLookup = descriptorLookupFactory.createDescriptorLookup(grammar, input);
+	protected void initLookups() {
+		sppfLookup.reset();
+		gssLookup.reset();
 	}
 
 	@Override
@@ -240,7 +226,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		ci = descriptor.getInputIndex();
 		cu = descriptor.getGSSNode();
 		cn = descriptor.getSPPFNode();
-		currentDescriptor = descriptor;
 		log.trace("Processing %s", descriptor);
 		return descriptor;
 	}

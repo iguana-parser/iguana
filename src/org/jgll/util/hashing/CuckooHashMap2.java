@@ -69,20 +69,20 @@ public class CuckooHashMap2<K, V> implements IguanaMap<K, V>, Serializable {
 
 	protected int tableSize;
 	
-	private ExternalHasher<K> externalHasher;
+	private ExternalHashEquals<K> externalHasher;
 	
 	private int collisionsCount;
 		
-	public CuckooHashMap2(ExternalHasher<K> hasher) {
+	public CuckooHashMap2(ExternalHashEquals<K> hasher) {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
-	public CuckooHashMap2(int initalCapacity, ExternalHasher<K> hasher) {
+	public CuckooHashMap2(int initalCapacity, ExternalHashEquals<K> hasher) {
 		this(initalCapacity, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public CuckooHashMap2(int initialCapacity, float loadFactor, ExternalHasher<K> hasher) {
+	public CuckooHashMap2(int initialCapacity, float loadFactor, ExternalHashEquals<K> hasher) {
 		this.initialCapacity = initialCapacity;
 		this.externalHasher = hasher;
 		

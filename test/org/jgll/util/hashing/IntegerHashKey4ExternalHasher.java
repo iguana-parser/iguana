@@ -3,7 +3,7 @@ package org.jgll.util.hashing;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 
-public class IntegerHashKey4ExternalHasher implements ExternalHasher<IntegerHashKey4> {
+public class IntegerHashKey4ExternalHasher implements ExternalHashEquals<IntegerHashKey4> {
 
 	private static final long serialVersionUID = 1L;
 

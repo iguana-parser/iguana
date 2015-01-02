@@ -1,10 +1,13 @@
 package org.jgll.util.hashing;
 
-import java.io.Serializable;
-
+import org.jgll.parser.HashFunctions;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
-public interface ExternalHasher<T> extends Serializable {
+public interface ExternalHashEquals<T> {
+	
+	default public int hash(T t) {
+		return hash(t, HashFunctions.defaulFunction);
+	}
 	
 	public int hash(T t, HashFunction f);
 	

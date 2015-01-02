@@ -26,7 +26,7 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 	
 	private int collisionsCount;
 	
-	private ExternalHasher<T> hasher;
+	private ExternalHashEquals<T> hasher;
 	
 	private HashFunction hashFunction = HashFunctions.murmur3;
 	
@@ -39,7 +39,7 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 	private T[] table;
 	
  	@SafeVarargs
-	public static <T> OpenAddressingHashSet<T> from(ExternalHasher<T> hasher, T...elements) {
+	public static <T> OpenAddressingHashSet<T> from(ExternalHashEquals<T> hasher, T...elements) {
  		OpenAddressingHashSet<T> set = new OpenAddressingHashSet<>(hasher);
 		for(T e : elements) {
 			set.add(e);
@@ -47,16 +47,16 @@ public class OpenAddressingHashSet<T> implements IguanaSet<T> {
 		return set;
 	}
 
-	public OpenAddressingHashSet(ExternalHasher<T> hasher) {
+	public OpenAddressingHashSet(ExternalHashEquals<T> hasher) {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
-	public OpenAddressingHashSet(int initalCapacity, ExternalHasher<T> hasher) {
+	public OpenAddressingHashSet(int initalCapacity, ExternalHashEquals<T> hasher) {
 		this(initalCapacity, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public OpenAddressingHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> hasher) {
+	public OpenAddressingHashSet(int initialCapacity, float loadFactor, ExternalHashEquals<T> hasher) {
 		
 		this.initialCapacity = initialCapacity;
 		

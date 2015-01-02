@@ -5,10 +5,6 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
 
 public class Configuration {
 	
-	public static final Configuration DEFAULT = new Builder().setGSSType(GSSType.NEW)
-															 .setHashFunction(HashFunctions.primeMultiplication)
-															 .setLookupType(LookupType.MAP_GLOBAL).build(); 
-	
 	private final GSSType gssType;
 	
 	private final HashFunction hashFunction;
@@ -33,11 +29,15 @@ public class Configuration {
 		return lookupType;
 	}
 	
+	public static Builder builder() {
+		return new Builder();
+	}
+	
 	public static class Builder {
 		
-		private GSSType gssType;
-		private HashFunction hashFunction;
-		private LookupType lookupType;
+		private GSSType gssType = GSSType.NEW;
+		private HashFunction hashFunction = HashFunctions.primeMultiplication;
+		private LookupType lookupType = LookupType.MAP_DISTRIBUTED;
 		
 		public Configuration build() {
 			return new Configuration(this);

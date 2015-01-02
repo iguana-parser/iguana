@@ -3,18 +3,16 @@ package org.jgll.parser.lookup;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
-public class DescriptorLookupImpl implements DescriptorLookup {
+public class DistributedDescriptorLookupImpl implements DescriptorLookup {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(DescriptorLookupImpl.class);
+	private static final LoggerWrapper log = LoggerWrapper.getLogger(DistributedDescriptorLookupImpl.class);
 
 	private Deque<Descriptor> descriptorsStack;
 
-	public DescriptorLookupImpl(GrammarGraph grammar, Input input) {
+	public DistributedDescriptorLookupImpl() {
 		long start = System.nanoTime();
 		descriptorsStack = new ArrayDeque<>();
 		long end = System.nanoTime();

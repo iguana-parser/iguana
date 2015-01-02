@@ -2,13 +2,13 @@ package org.jgll.util.hashing;
 
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
-public class StringExternalHasher implements ExternalHasher<String> {
+public class StringExternalHasher implements ExternalHashEquals<String> {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static ExternalHasher<String> instance;
+	private static ExternalHashEquals<String> instance;
 	
-	public static ExternalHasher<String> getInstance() {
+	public static ExternalHashEquals<String> getInstance() {
 		if(instance == null) {
 			instance = new StringExternalHasher();
 		}

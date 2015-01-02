@@ -2,6 +2,7 @@ package org.jgll.sppf;
 
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
+import org.jgll.util.hashing.ExternalHashEquals;
 
 /**
  * Represents an intermediary node resulting from EBNF to BNF conversion of 
@@ -12,8 +13,8 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class ListSymbolNode extends NonterminalNode {
 
-	public ListSymbolNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		super(slot, leftExtent, rightExtent);
+	public ListSymbolNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
+		super(slot, leftExtent, rightExtent, hashEquals);
 	}
 	
 	@Override

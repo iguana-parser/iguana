@@ -3,6 +3,7 @@ package org.jgll.sppf;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.util.hashing.ExternalHashEquals;
 
 
 public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
@@ -11,8 +12,8 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	
 	public abstract NonterminalOrIntermediateNode init();
 	
-	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		super(slot, leftExtent, rightExtent);
+	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
+		super(slot, leftExtent, rightExtent, hashEquals);
 	}
 
 	public void addChild(PackedNode node) {

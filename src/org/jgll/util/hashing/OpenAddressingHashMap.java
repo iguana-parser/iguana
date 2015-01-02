@@ -18,11 +18,11 @@ public class OpenAddressingHashMap<K, V> implements MultiHashMap<K, V> {
 	
 	private OpenAddressingHashSet<MapEntry<K, V>> set;
 
-	public OpenAddressingHashMap(ExternalHasher<K> hasher) {
+	public OpenAddressingHashMap(ExternalHashEquals<K> hasher) {
 		set = new OpenAddressingHashSet<>(new MapEntryExternalHasher(hasher));
 	}
 	
-	public OpenAddressingHashMap(int initialCapacity, ExternalHasher<K> hasher) {
+	public OpenAddressingHashMap(int initialCapacity, ExternalHashEquals<K> hasher) {
 		set = new OpenAddressingHashSet<>(initialCapacity, new MapEntryExternalHasher(hasher));
 	}
 	
@@ -127,13 +127,13 @@ public class OpenAddressingHashMap<K, V> implements MultiHashMap<K, V> {
 		}
 	}
 	
-	public class MapEntryExternalHasher implements ExternalHasher<MapEntry<K, V>> {
+	public class MapEntryExternalHasher implements ExternalHashEquals<MapEntry<K, V>> {
 
 		private static final long serialVersionUID = 1L;
 		
-		private ExternalHasher<K> hasher;
+		private ExternalHashEquals<K> hasher;
 
-		public MapEntryExternalHasher(ExternalHasher<K> hasher) {
+		public MapEntryExternalHasher(ExternalHashEquals<K> hasher) {
 			this.hasher = hasher;
 		}
 		

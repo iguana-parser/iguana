@@ -62,12 +62,12 @@ public class CuckooHashSet<T> implements IguanaSet<T> {
 
 	protected int tableSize;
 	
-	private ExternalHasher<T> externalHasher;
+	private ExternalHashEquals<T> externalHasher;
 	
 	private int collisionsCount;
 	
  	@SafeVarargs
-	public static <T> CuckooHashSet<T> from(ExternalHasher<T> hasher, T...elements) {
+	public static <T> CuckooHashSet<T> from(ExternalHashEquals<T> hasher, T...elements) {
 		CuckooHashSet<T> set = new CuckooHashSet<>(hasher);
 		for(T e : elements) {
 			set.add(e);
@@ -75,16 +75,16 @@ public class CuckooHashSet<T> implements IguanaSet<T> {
 		return set;
 	}
 	
-	public CuckooHashSet(ExternalHasher<T> hasher) {
+	public CuckooHashSet(ExternalHashEquals<T> hasher) {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
-	public CuckooHashSet(int initalCapacity, ExternalHasher<T> hasher) {
+	public CuckooHashSet(int initalCapacity, ExternalHashEquals<T> hasher) {
 		this(initalCapacity, DEFAULT_LOAD_FACTOR, hasher);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public CuckooHashSet(int initialCapacity, float loadFactor, ExternalHasher<T> hasher) {
+	public CuckooHashSet(int initialCapacity, float loadFactor, ExternalHashEquals<T> hasher) {
 		this.initialCapacity = initialCapacity;
 		this.externalHasher = hasher;
 		

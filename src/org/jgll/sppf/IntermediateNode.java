@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
+import org.jgll.util.hashing.ExternalHashEquals;
 
 /**
  * 
@@ -12,8 +13,8 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class IntermediateNode extends NonterminalOrIntermediateNode {
 	
-	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		super(slot, leftExtent, rightExtent);
+	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
+		super(slot, leftExtent, rightExtent, hashEquals);
 	}
 	
 	@Override

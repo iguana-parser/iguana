@@ -4,13 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.util.hashing.ExternalHashEquals;
 
 public class OriginalIntermediateNode extends IntermediateNode {
 	
 	private Set<PackedNode> packedNodes;
 
-	public OriginalIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		super(slot, leftExtent, rightExtent);
+	public OriginalIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
+		super(slot, leftExtent, rightExtent, hashEquals);
 	}
 	
 	@Override

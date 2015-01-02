@@ -7,7 +7,6 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.Input;
 
 /**
  * 
@@ -15,14 +14,14 @@ import org.jgll.util.Input;
  * @author Ali Afroozeh
  * 
  */
-public class HashGSSLookupImpl implements GSSLookup {
+public class GlobalHashGSSLookupImpl implements GSSLookup {
 
 	/**
 	 * Elements indexed by GSS nodes (Nonterminal index and input index)
 	 */
 	private Map<GSSNode, GSSNode> gssNodes;
 	
-	public HashGSSLookupImpl(Input input, int size) {
+	public GlobalHashGSSLookupImpl() {
 		gssNodes = new HashMap<>();
 	}
 
@@ -50,6 +49,7 @@ public class HashGSSLookupImpl implements GSSLookup {
 
 	@Override
 	public int getGSSEdgesCount() {
+		
 		int count = 0;
 		
 		for (GSSNode gssNode : gssNodes.values()) {
@@ -67,6 +67,11 @@ public class HashGSSLookupImpl implements GSSLookup {
 	@Override
 	public boolean getGSSEdge(GSSNode gssNode, GSSEdge edge) {
 		return gssNode.getGSSEdge(edge);
+	}
+	
+	@Override
+	public void reset() {
+		gssNodes = new HashMap<>();
 	}
 
 }

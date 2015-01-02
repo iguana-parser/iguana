@@ -20,7 +20,6 @@ Export-Package:
  org.jgll.parser.descriptor,
  org.jgll.parser.gss,
  org.jgll.parser.lookup,
- org.jgll.parser.lookup.factory,
  org.jgll.regex,
  org.jgll.regex.automaton,
  org.jgll.sppf,

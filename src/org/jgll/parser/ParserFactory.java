@@ -1,16 +1,14 @@
 package org.jgll.parser;
 
-import org.jgll.parser.lookup.factory.DefaultDescriptorLookupFactory;
-import org.jgll.parser.lookup.factory.DefaultSPPFLookupFactory;
-import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
-import org.jgll.parser.lookup.factory.DistributedGSSLookupFactory;
-import org.jgll.parser.lookup.factory.GSSLookupFactory;
-import org.jgll.parser.lookup.factory.HashGSSLookupFactory;
-import org.jgll.parser.lookup.factory.NewSPPFLookupFactory;
-import org.jgll.parser.lookup.factory.SPPFLookupFactory;
-import org.jgll.sppf.SPPFUtil;
+import org.jgll.parser.lookup.DescriptorLookup;
+import org.jgll.parser.lookup.DistributedDescriptorLookupImpl;
+import org.jgll.parser.lookup.DistributedGSSLookupImpl;
+import org.jgll.parser.lookup.GSSLookup;
+import org.jgll.parser.lookup.GlobalHashGSSLookupImpl;
+import org.jgll.sppf.lookup.DistributedSPPFLookupImpl;
+import org.jgll.sppf.lookup.GlobalSPPFLookupImpl;
+import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Configuration;
-import org.jgll.util.Configuration.Builder;
 import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Configuration.LookupType;
 
@@ -20,24 +18,40 @@ public class ParserFactory {
 		return newParser();
 	}
 	
+	public static GLLParser newParser(Configuration config) {
+		return new NewGLLParserImpl(getGSSLookup(config), getSPPFLookup(config), getDescriptorLookup(config));		
+	}
+	
 	public static GLLParser newParser() {
-		SPPFUtil.init(Configuration.DEFAULT);
-		GSSLookupFactory gssLookupFactory = new DistributedGSSLookupFactory();
-		SPPFLookupFactory sppfLookupFactory = new NewSPPFLookupFactory();
-		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();
-		return new NewGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
+		return newParser(Configuration.builder().build());
+	}
+	
+	public static GLLParser originalParser(Configuration config) {
+		return new OriginalGLLParserImpl(getGSSLookup(config), getSPPFLookup(config), getDescriptorLookup(config));
 	}
 
 	public static GLLParser originalParser() {
-		
-		Configuration config = new Builder().setGSSType(GSSType.ORIGINAL)
-											.setHashFunction(HashFunctions.primeMultiplication)
-											.setLookupType(LookupType.MAP_GLOBAL).build();
-		SPPFUtil.init(config);
-		GSSLookupFactory gssLookupFactory = new HashGSSLookupFactory();
-		SPPFLookupFactory sppfLookupFactory = new DefaultSPPFLookupFactory();
-		DescriptorLookupFactory descriptorLookupFactory = new DefaultDescriptorLookupFactory();
-		return new OriginalGLLParserImpl(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
+		return originalParser(Configuration.builder().setGSSType(GSSType.ORIGINAL).build());
+	}
+	
+	private static GSSLookup getGSSLookup(Configuration config) {
+		if (config.getLookupType() == LookupType.MAP_DISTRIBUTED) {
+			return new DistributedGSSLookupImpl();
+		} else {
+			return new GlobalHashGSSLookupImpl();
+		}
+	}
+	
+	public static SPPFLookup getSPPFLookup(Configuration config) {
+		if (config.getLookupType() == LookupType.MAP_DISTRIBUTED) {
+			return new DistributedSPPFLookupImpl(config.getHashFunction());
+		} else {
+			return new GlobalSPPFLookupImpl(config.getHashFunction());
+		}
+	}
+	
+	public static DescriptorLookup getDescriptorLookup(Configuration config) {
+		return new DistributedDescriptorLookupImpl();
 	}
 
 }

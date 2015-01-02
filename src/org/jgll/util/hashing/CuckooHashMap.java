@@ -17,11 +17,11 @@ public class CuckooHashMap<K, V> implements MultiHashMap<K, V> {
 	
 	private CuckooHashSet<MapEntry<K, V>> set;
 
-	public CuckooHashMap(ExternalHasher<K> decomposer) {
+	public CuckooHashMap(ExternalHashEquals<K> decomposer) {
 		set = new CuckooHashSet<>(new MapEntryExternalHasher(decomposer));
 	}
 	
-	public CuckooHashMap(int initialCapacity, ExternalHasher<K> decomposer) {
+	public CuckooHashMap(int initialCapacity, ExternalHashEquals<K> decomposer) {
 		set = new CuckooHashSet<>(initialCapacity, new MapEntryExternalHasher(decomposer));
 	}
 	
@@ -148,13 +148,13 @@ public class CuckooHashMap<K, V> implements MultiHashMap<K, V> {
 		}
 	}
 	
-	public class MapEntryExternalHasher implements ExternalHasher<MapEntry<K, V>> {
+	public class MapEntryExternalHasher implements ExternalHashEquals<MapEntry<K, V>> {
 
 		private static final long serialVersionUID = 1L;
 		
-		private ExternalHasher<K> hasher;
+		private ExternalHashEquals<K> hasher;
 
-		public MapEntryExternalHasher(ExternalHasher<K> hasher) {
+		public MapEntryExternalHasher(ExternalHashEquals<K> hasher) {
 			this.hasher = hasher;
 		}
 		

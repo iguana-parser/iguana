@@ -8,11 +8,11 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.NewGSSEdgeImpl;
-import org.jgll.parser.lookup.factory.DescriptorLookupFactory;
-import org.jgll.parser.lookup.factory.GSSLookupFactory;
-import org.jgll.parser.lookup.factory.SPPFLookupFactory;
+import org.jgll.parser.lookup.DescriptorLookup;
+import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.sppf.lookup.SPPFLookup;
 
 /**
  *
@@ -21,8 +21,8 @@ import org.jgll.sppf.NonPackedNode;
  */
 public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		
-	public NewGLLParserImpl(GSSLookupFactory gssLookupFactory, SPPFLookupFactory sppfLookupFactory, DescriptorLookupFactory descriptorLookupFactory) {
-		super(gssLookupFactory, sppfLookupFactory, descriptorLookupFactory);
+	public NewGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptor) {
+		super(gssLookup, sppfLookup, descriptor);
 	}
 	
 	@Override

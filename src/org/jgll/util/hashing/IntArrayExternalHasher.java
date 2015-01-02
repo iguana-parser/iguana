@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
-public class IntArrayExternalHasher implements ExternalHasher<int[]>{
+public class IntArrayExternalHasher implements ExternalHashEquals<int[]>{
 
 	private static final long serialVersionUID = 1L;
 	
-	private static ExternalHasher<int[]> instance;
+	private static ExternalHashEquals<int[]> instance;
 	
-	public static ExternalHasher<int[]> getInstance() {
+	public static ExternalHashEquals<int[]> getInstance() {
 		if(instance == null) {
 			instance = new IntArrayExternalHasher();
 		}

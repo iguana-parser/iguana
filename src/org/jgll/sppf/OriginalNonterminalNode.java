@@ -4,14 +4,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.util.hashing.ExternalHashEquals;
 
 
 public class OriginalNonterminalNode extends NonterminalNode {
 
 	private Set<PackedNode> packedNodes;
 	
-	public OriginalNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
-		super(head, leftExtent, rightExtent);
+	public OriginalNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
+		super(head, leftExtent, rightExtent, hashEquals);
 	}	
 	
 	@Override
