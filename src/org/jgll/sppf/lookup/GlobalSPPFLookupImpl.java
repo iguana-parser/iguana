@@ -53,7 +53,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 		NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent, hashEquals);
 		NonterminalNode val;
 		if ((val = nonterminalNodes.get(key)) == null) {
-			val = key.init();
+			nonterminalNodeAdded(val);
 			nonterminalNodes.put(key, val);
 		}
 		return val;
@@ -74,7 +74,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 		IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
 		IntermediateNode val;
 		if ((val = intermediateNodes.get(key)) == null) {
-			val = key.init();
+			intermediateNodeAdded(val);
 			intermediateNodes.put(key, val);
 		}
 		return val;
