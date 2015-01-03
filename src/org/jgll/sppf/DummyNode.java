@@ -2,7 +2,6 @@ package org.jgll.sppf;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.util.hashing.ExternalHashEquals;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 
@@ -21,8 +20,7 @@ public class DummyNode extends TerminalNode {
 		if(instance == null) {
 			instance = new DummyNode(null, -1, -1, new ExternalHashEquals<NonPackedNode>() {
 
-				@Override
-				public int hash(NonPackedNode t, HashFunction f) {
+				public int hash(NonPackedNode t) {
 					return 0;
 				}
 

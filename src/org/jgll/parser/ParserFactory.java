@@ -51,13 +51,13 @@ public class ParserFactory {
 	
 	private static SPPFLookup getSPPFLookup(Configuration config) {
 		if (config.getGSSType() == GSSType.NEW) {
-			if (config.getGSSLookupStrategy() == LookupStrategy.DISTRIBUTED) {
+			if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 				return new DistributedSPPFLookupImpl(config.getHashFunction());
 			} else {
 				return new GlobalSPPFLookupImpl(config.getHashFunction());
 			}			
 		} else {
-			if (config.getGSSLookupStrategy() == LookupStrategy.DISTRIBUTED) {
+			if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 				return new OriginalDistributedSPPFLookupImpl(config.getHashFunction());
 			} else {
 				return new OriginalGlobalSPPFLookupImpl(config.getHashFunction());

@@ -28,7 +28,6 @@ Export-Package:
  org.jgll.util.generator,
  org.jgll.util.hashing,
  org.jgll.util.hashing.hashfunction,
- org.jgll.util.hashing.specialized,
  org.jgll.util.logging,
  org.jgll.util.trie,
  org.jgll.util.unicode,

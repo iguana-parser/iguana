@@ -70,13 +70,8 @@ public abstract class NonPackedNode implements SPPFNode {
     	
     	return new ExternalHashEquals<NonPackedNode>() {
 
-    		@Override
-    		public int hash(NonPackedNode n) {
-    			return hash(n, f);
-    		}
-    		
 			@Override
-			public int hash(NonPackedNode n, HashFunction f) {
+			public int hash(NonPackedNode n) {
 				return f.hash(n.getGrammarSlot().hashCode(), 
 						      n.getLeftExtent(), 
 						      n.getRightExtent());
@@ -95,13 +90,8 @@ public abstract class NonPackedNode implements SPPFNode {
     	
     	return new ExternalHashEquals<NonPackedNode>() {
 
-    		@Override
-    		public int hash(NonPackedNode n) {
-    			return hash(n, f);
-    		}
-    		
 			@Override
-			public int hash(NonPackedNode n, HashFunction f) {
+			public int hash(NonPackedNode n) {
 				return f.hash(n.getLeftExtent(), n.getRightExtent());
 			}
 

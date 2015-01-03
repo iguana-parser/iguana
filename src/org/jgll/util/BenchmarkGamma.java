@@ -40,7 +40,7 @@ public class BenchmarkGamma {
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
-		int warmupCount = 0;
+		int warmupCount = 5;
 		int runCount = 3;
 		
 		Grammar grammar = gamma2();
