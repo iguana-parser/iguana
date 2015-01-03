@@ -38,7 +38,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();
-		this.nonterminalNodes = new HashMap<>();
+		this.nonterminalNodes = new HashMap<>(1000);
 	}
 	
 	@Override

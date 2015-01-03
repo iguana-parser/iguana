@@ -21,8 +21,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 
 	public BodyGrammarSlot(Position position, NodeLookup nodeLookup) {
 		this.position = position;
-		this.intermediateNodes = new HashMap<>();
 		this.nodeLookup = nodeLookup;
+		this.intermediateNodes = new HashMap<>(1000);
 	}
 	
 	@Override

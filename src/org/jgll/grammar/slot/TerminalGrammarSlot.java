@@ -23,7 +23,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
 		this.regex = regex;
 		// TODO: add type of regex to config!
 		this.matcher = regex.getMatcher();
-		this.terminalNodes = new HashMap<>();
+		this.terminalNodes = new HashMap<>(1000);
 	}
 
 	@Override
