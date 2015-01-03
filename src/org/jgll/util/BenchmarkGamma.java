@@ -1,7 +1,6 @@
 package org.jgll.util;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -41,7 +40,7 @@ public class BenchmarkGamma {
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
-		int warmupCount = 5;
+		int warmupCount = 0;
 		int runCount = 3;
 		
 		Grammar grammar = gamma2();
@@ -57,14 +56,14 @@ public class BenchmarkGamma {
 		for (int i = 1; i <= warmupCount; i++) {
 			GLLParser parser = ParserFactory.getParser(config);
 //			GLLParser parser = (GLLParser) clazz.newInstance();
-			Input input = Input.fromString(getBs(420));
+			Input input = Input.fromString(getBs(300));
 			parser.parse(input, grammar, startSymbol);
 			parser.reset();
 		}
 		GcFinalization.awaitFullGc();
 		
 		System.out.println(BenchmarkUtil.header());
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 30; i++) {
 			for (int j = 0; j < runCount; j++) {
 				GLLParser parser = ParserFactory.getParser(config);
 				
@@ -80,7 +79,6 @@ public class BenchmarkGamma {
 				}
 				parser = null;
 				res = null;
-				parser.reset();
 				GcFinalization.awaitFullGc();
 			}
 		}

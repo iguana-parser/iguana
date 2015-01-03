@@ -58,7 +58,7 @@ public class Configuration {
 		
 		private GSSType gssType = GSSType.NEW;
 		private HashFunction hashFunction = HashFunctions.primeMultiplication;
-		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
+		private LookupImpl gssLookupImpl = LookupImpl.ARRAY;
 		private LookupImpl sppfLookupImpl = LookupImpl.HASH_MAP;
 		private LookupStrategy gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 		private LookupStrategy sppfLookupStrategy = LookupStrategy.DISTRIBUTED;

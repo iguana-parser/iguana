@@ -44,8 +44,6 @@ public class Grammar implements Serializable {
 	
 	private final SetMultimap<Nonterminal, RegularExpression> followSets;
 	
-	private GrammarGraph grammarGraph;
-	
 	public Grammar(ListMultimap<Nonterminal, Rule> definitions,
 				   SetMultimap<Nonterminal, RegularExpression> firstSets,
 				   SetMultimap<Nonterminal, RegularExpression> followSets) {
@@ -103,11 +101,7 @@ public class Grammar implements Serializable {
 	}
 	
 	public GrammarGraph toGrammarGraph(Input input, Configuration config) {
-		if (grammarGraph == null) {
-			GrammarGraphBuilder builder = new GrammarGraphBuilder(this, input, config);
-			grammarGraph =  builder.build();
-		}
-		return grammarGraph;
+		return new GrammarGraphBuilder(this, input, config).build();
 	}
 	
 	private static Set<RuntimeException> validate(ListMultimap<Nonterminal, Rule> definitions) {
