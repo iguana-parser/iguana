@@ -110,13 +110,11 @@ public class GSSNode {
 	
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 
-		if (!(obj instanceof GSSNode)) {
+		if (!(obj instanceof GSSNode))
 			return false;
-		}
 		
 		GSSNode other = (GSSNode) obj;
 
