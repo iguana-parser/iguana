@@ -42,8 +42,14 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return position.isFirst();
 	}
 	
-	public IntermediateNode getIntermediateNode(IntermediateNode node, NodeAddedAction<IntermediateNode> action) {
-		return intermediateNodes.computeIfAbsent(node, k -> { action.execute(k); return k.init(); });
+	public IntermediateNode getIntermediateNode(IntermediateNode key, NodeAddedAction<IntermediateNode> action) {
+		IntermediateNode val;
+		if ((val = intermediateNodes.get(key)) == null) {
+			val = key.init();
+			action.execute(val);
+			intermediateNodes.put(key, val);
+		}
+		return val;
 	}
 	
 	public IntermediateNode findIntermediateNode(IntermediateNode node) {

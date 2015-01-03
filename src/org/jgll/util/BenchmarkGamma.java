@@ -7,6 +7,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.Configuration.LookupStrategy;
 
 import com.google.common.testing.GcFinalization;
 
@@ -41,7 +42,7 @@ public class BenchmarkGamma {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
 		int warmupCount = 5;
-		int runCount = 3;
+		int runCount = 10;
 		
 		Grammar grammar = gamma2();
 		String startSymbol = "S";
@@ -51,19 +52,19 @@ public class BenchmarkGamma {
 //		System.out.println(writer.toString());
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
-		Configuration config = Configuration.builder().build();
+		Configuration config = Configuration.builder().setSPPFLookupStrategy(LookupStrategy.GLOBAL).build();
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {
 			GLLParser parser = ParserFactory.getParser(config);
 //			GLLParser parser = (GLLParser) clazz.newInstance();
-			Input input = Input.fromString(getBs(300));
+			Input input = Input.fromString(getBs(420));
 			parser.parse(input, grammar, startSymbol);
 			parser.reset();
 		}
 		GcFinalization.awaitFullGc();
 		
 		System.out.println(BenchmarkUtil.header());
-		for (int i = 1; i <= 30; i++) {
+		for (int i = 1; i <= 50; i++) {
 			for (int j = 0; j < runCount; j++) {
 				GLLParser parser = ParserFactory.getParser(config);
 				

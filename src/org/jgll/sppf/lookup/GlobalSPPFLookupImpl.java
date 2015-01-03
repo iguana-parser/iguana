@@ -28,13 +28,18 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 		this.nonterminalNodes = new HashMap<>();
 		this.intermediateNodes = new HashMap<>();
 		this.terminalNodes = new HashMap<>();
-		this.hashEquals = NonPackedNode.distributedHashEquals(f);
+		this.hashEquals = NonPackedNode.globalHashEquals(f);
 	}
 	
 	@Override
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int inputIndex, int rightExtent) {
-		final TerminalNode key = new TerminalNode(slot, inputIndex, rightExtent, hashEquals);
-		return terminalNodes.computeIfAbsent(key, k -> k);
+		TerminalNode key = new TerminalNode(slot, inputIndex, rightExtent, hashEquals);
+		TerminalNode val;
+		if ((val = terminalNodes.get(key)) == null) {
+			val = key;
+			terminalNodes.put(key, val);
+		}
+		return val;
 	}
 	
 	@Override
@@ -45,8 +50,13 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 
 	@Override
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
-		final NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent, hashEquals);
-		return nonterminalNodes.computeIfAbsent(key, k -> k.init());
+		NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent, hashEquals);
+		NonterminalNode val;
+		if ((val = nonterminalNodes.get(key)) == null) {
+			val = key.init();
+			nonterminalNodes.put(key, val);
+		}
+		return val;
 	}
 	
 	protected IntermediateNode createIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
@@ -61,8 +71,13 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		final IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
-		return intermediateNodes.computeIfAbsent(key, k -> k.init());
+		IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
+		IntermediateNode val;
+		if ((val = intermediateNodes.get(key)) == null) {
+			val = key.init();
+			intermediateNodes.put(key, val);
+		}
+		return val;
 	}
 
 	@Override

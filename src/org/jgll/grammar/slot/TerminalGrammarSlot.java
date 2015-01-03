@@ -54,8 +54,13 @@ public class TerminalGrammarSlot implements GrammarSlot {
 		return regex.toString();
 	}
 	
-	public TerminalNode getTerminalNode(TerminalNode node, NodeAddedAction<TerminalNode> action) {
-		return terminalNodes.computeIfAbsent(node, k -> { action.execute(k); return k; });
+	public TerminalNode getTerminalNode(TerminalNode key, NodeAddedAction<TerminalNode> action) {
+		TerminalNode val;
+		if ((val = terminalNodes.get(key)) == null) {
+			val = key;
+			terminalNodes.put(key, val);
+		}
+		return val;
 	}
 	
 	public TerminalNode findTerminalNode(TerminalNode node) {
