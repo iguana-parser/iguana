@@ -67,7 +67,7 @@ public class PrecedeRestrictionTest1 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("forall");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));

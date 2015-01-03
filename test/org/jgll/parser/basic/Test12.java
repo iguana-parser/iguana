@@ -1,9 +1,10 @@
 package org.jgll.parser.basic;
 
+import static org.jgll.util.Configurations.*;
 import static org.junit.Assert.*;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlotRegistry;
@@ -19,9 +20,12 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.generator.CompilationUtil;
+import org.jgll.util.function.ExpectedSPPF;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 /**
  * 
@@ -31,61 +35,63 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
+@RunWith(Parameterized.class)
 public class Test12 {
 	
 	private Nonterminal A = Nonterminal.withName("A");
 	
 	private Grammar grammar;
+	
+	private GLLParser parser;
+	
+	private Input input;
+	
+	private ExpectedSPPF expectedSPPF;
+	
+	public Test12(GLLParser parser, Input input, ExpectedSPPF expectedSPPF) {
+		this.parser = parser;
+		this.input = input;
+		this.expectedSPPF = expectedSPPF;
+	}
+	
+	@Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+        		{ ParserFactory.getParser(DEFAULT),  Input.empty(), (ExpectedSPPF) Test12::expectedSPPF1 },
+        		{ ParserFactory.getParser(CONFIG_1), Input.empty(), (ExpectedSPPF) Test12::expectedSPPF1 },
+        		{ ParserFactory.getParser(CONFIG_2), Input.empty(), (ExpectedSPPF) Test12::expectedSPPF1 },
+        		{ ParserFactory.getParser(CONFIG_3), Input.empty(), (ExpectedSPPF) Test12::expectedSPPF1 },
+        		{ ParserFactory.getParser(DEFAULT),  Input.fromString("a"), (ExpectedSPPF) Test12::expectedSPPF1 },
+        		{ ParserFactory.getParser(CONFIG_1), Input.fromString("a"), (ExpectedSPPF) Test12::expectedSPPF1 },
+        		{ ParserFactory.getParser(CONFIG_2), Input.fromString("a"), (ExpectedSPPF) Test12::expectedSPPF1 },
+        		{ ParserFactory.getParser(CONFIG_3), Input.fromString("a"), (ExpectedSPPF) Test12::expectedSPPF1 }
+           });
+    }
+
 
 	@Before
 	public void init() {
-		
 		Rule r1 = Rule.builder(A).addSymbols(A, A).build();
 		Rule r2 = Rule.builder(A).addSymbol(Character.from('a')).build();
 		Rule r3 = Rule.builder(A).build();
-
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
 	@Test
-	public void test1() {
-		Input input = Input.fromString("");
-		GLLParser parser = ParserFactory.newParser();
+	public void testParser1() {
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
-		
 		// TODO: stackoverflow bug due to the cycle in the SPPF. Fix it later!
 //		assertTrue(sppf.deepEquals(getSPPF1()));
 	}
-	
-	public void testGenerated1() {
-		Input input = Input.fromString("");
-		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
-		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(input, grammar, "A");
-    	assertTrue(result.isParseSuccess());
-	}
-	
+		
 	@Test
-	public void test2() {
-		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser();
+	public void testParser2() {
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 	}
 	
-	public void testGenerated2() {
-		Input input = Input.fromString("a");
-		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
-		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(input, grammar, "A");
-    	assertTrue(result.isParseSuccess());
-	}
-	
-	@SuppressWarnings("unused")
-	private SPPFNode getSPPF1(GrammarSlotRegistry registry) {
+	private static SPPFNode expectedSPPF1(GrammarSlotRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 1).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a .", 0, node1);

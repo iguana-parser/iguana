@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.lookup.NodeAddedAction;
 import org.jgll.util.Input;
@@ -14,10 +16,13 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	protected final Position position;
 	
 	private HashMap<IntermediateNode, IntermediateNode> intermediateNodes;
+	
+	private final NodeLookup nodeLookup;
 
-	public BodyGrammarSlot(Position position) {
+	public BodyGrammarSlot(Position position, NodeLookup nodeLookup) {
 		this.position = position;
 		this.intermediateNodes = new HashMap<>();
+		this.nodeLookup = nodeLookup;
 	}
 	
 	@Override
@@ -44,10 +49,20 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public IntermediateNode findIntermediateNode(IntermediateNode node) {
 		return intermediateNodes.get(node);
 	}
+	
+	@Override
+	public GSSNode getGSSNode(int inputIndex) {
+		return nodeLookup.getOrElseCreate(this, inputIndex);
+	}
+	
+	@Override
+	public GSSNode hasGSSNode(int inputIndex) { 
+		return nodeLookup.get(inputIndex);
+	}
 
 	@Override
 	public void reset(Input input) {
 		intermediateNodes = new HashMap<>();
+		nodeLookup.reset(input);
 	}
-	
 }

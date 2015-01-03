@@ -102,10 +102,6 @@ public class Grammar implements Serializable {
 		return firstSets.get(nonterminal).contains(Epsilon.getInstance());
 	}
 	
-	public GrammarGraph toGrammarGraph(Input input) {
-		return toGrammarGraph(input, Configuration.builder().build());
-	}
-	
 	public GrammarGraph toGrammarGraph(Input input, Configuration config) {
 		if (grammarGraph == null) {
 			GrammarGraphBuilder builder = new GrammarGraphBuilder(this, input, config);

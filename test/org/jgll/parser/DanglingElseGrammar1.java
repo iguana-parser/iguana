@@ -61,14 +61,14 @@ public class DanglingElseGrammar1 {
 	
 	public void test1() {
 		Input input = Input.fromString("aasbs");
-		parser = ParserFactory.newParser();
+		parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF1(parser.getRegistry())));
 	}
 	
 	public void test2() {
-		parser = ParserFactory.newParser();
+		parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(Input.fromString("aaaaasbsbsbs"), grammar, "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF2(parser.getRegistry())));

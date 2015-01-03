@@ -38,7 +38,7 @@ public class KeywordTest1 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("if");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		parser.parse(input, grammar, "A");
 	}
 	

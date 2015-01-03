@@ -7,50 +7,65 @@ import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.parser.lookup.DistributedDescriptorLookupImpl;
 import org.jgll.sppf.lookup.DistributedSPPFLookupImpl;
 import org.jgll.sppf.lookup.GlobalSPPFLookupImpl;
+import org.jgll.sppf.lookup.OriginalDistributedSPPFLookupImpl;
+import org.jgll.sppf.lookup.OriginalGlobalSPPFLookupImpl;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Configuration;
 import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Configuration.LookupStrategy;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class ParserFactory {
 	
 	public static GLLParser getParser() {
-		return newParser();
+		return getParser(Configuration.builder().build());
+	}
+
+	public static GLLParser getParser(Configuration config) {
+		if (config.getGSSType() == GSSType.NEW) {
+			return newParser(config);
+		} else {
+			return originalParser(config);
+		}
 	}
 	
-	public static GLLParser newParser(Configuration config) {
+	private static GLLParser newParser(Configuration config) {
 		return new NewGLLParserImpl(getGSSLookup(config), getSPPFLookup(config), getDescriptorLookup(config));		
 	}
 	
-	public static GLLParser newParser() {
-		return newParser(Configuration.builder().build());
-	}
-	
-	public static GLLParser originalParser(Configuration config) {
+	private static GLLParser originalParser(Configuration config) {
 		return new OriginalGLLParserImpl(getGSSLookup(config), getSPPFLookup(config), getDescriptorLookup(config));
 	}
 
-	public static GLLParser originalParser() {
-		return originalParser(Configuration.builder().setGSSType(GSSType.ORIGINAL).build());
-	}
-	
 	private static GSSLookup getGSSLookup(Configuration config) {
-		if (config.getLookupStrategy() == LookupStrategy.DISTRIBUTED) {
+		if (config.getGSSLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 			return new DistributedGSSLookupImpl();
 		} else {
 			return new GlobalHashGSSLookupImpl();
 		}
 	}
 	
-	public static SPPFLookup getSPPFLookup(Configuration config) {
-		if (config.getLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-			return new DistributedSPPFLookupImpl(config.getHashFunction());
+	private static SPPFLookup getSPPFLookup(Configuration config) {
+		if (config.getGSSType() == GSSType.NEW) {
+			if (config.getGSSLookupStrategy() == LookupStrategy.DISTRIBUTED) {
+				return new DistributedSPPFLookupImpl(config.getHashFunction());
+			} else {
+				return new GlobalSPPFLookupImpl(config.getHashFunction());
+			}			
 		} else {
-			return new GlobalSPPFLookupImpl(config.getHashFunction());
+			if (config.getGSSLookupStrategy() == LookupStrategy.DISTRIBUTED) {
+				return new OriginalDistributedSPPFLookupImpl(config.getHashFunction());
+			} else {
+				return new OriginalGlobalSPPFLookupImpl(config.getHashFunction());
+			}
 		}
 	}
 	
-	public static DescriptorLookup getDescriptorLookup(Configuration config) {
+	private static DescriptorLookup getDescriptorLookup(Configuration config) {
 		return new DistributedDescriptorLookupImpl();
 	}
 

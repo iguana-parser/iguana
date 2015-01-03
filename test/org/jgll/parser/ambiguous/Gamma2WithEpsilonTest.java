@@ -46,7 +46,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
-        GLLParser parser = ParserFactory.newParser();
+        GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
@@ -60,7 +60,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
-        GLLParser parser = ParserFactory.newParser();
+        GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
@@ -74,7 +74,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
-        GLLParser parser = ParserFactory.newParser();
+        GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();

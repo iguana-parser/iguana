@@ -21,6 +21,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.BenchmarkUtil;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.jgll.util.logging.LoggerWrapper;
@@ -78,9 +79,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, Grammar grammar, String startSymbolName) {
+	public final ParseResult parse(Input input, Grammar grammar, String startSymbolName, Configuration config) {
 
-		this.grammarGraph = grammar.toGrammarGraph(input);
+		this.grammarGraph = grammar.toGrammarGraph(input, config);
 		this.input = input;
 		
 		NonterminalGrammarSlot startSymbol = getStartSymbol(startSymbolName);

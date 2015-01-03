@@ -81,7 +81,7 @@ public class Gamma1Test {
 	@Test
 	public void testSPPF() {
 		Input input = Input.fromString("aad");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));

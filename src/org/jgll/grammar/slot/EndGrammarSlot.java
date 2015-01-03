@@ -7,14 +7,15 @@ import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.NonPackedNode;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal) {
-		super(position);
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup) {
+		super(position, nodeLookup);
 		this.nonterminal = nonterminal;
 	}
 

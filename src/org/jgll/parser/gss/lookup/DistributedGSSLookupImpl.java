@@ -14,8 +14,8 @@ public class DistributedGSSLookupImpl extends AbstractGSSLookup {
 	}
 
 	@Override
-	public GSSNode hasGSSNode(GrammarSlot head, int inputIndex) {
-		return head.hasGSSNode(inputIndex);
+	public GSSNode hasGSSNode(GrammarSlot slot, int inputIndex) {
+		return slot.hasGSSNode(inputIndex);
 	}
 
 	@Override

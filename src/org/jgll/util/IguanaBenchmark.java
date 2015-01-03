@@ -18,7 +18,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -222,7 +221,7 @@ public class IguanaBenchmark {
 
 	private static void warmup(String startSymbol, Grammar grammar, int warmupCount) throws IOException{
 		for (int i = 0; i < warmupCount; i++) {
-			GLLParser parser = ParserFactory.newParser();
+			GLLParser parser = ParserFactory.getParser();
 			Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
 			ParseResult result = parser.parse(input, grammar, startSymbol);
 			System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
@@ -231,10 +230,8 @@ public class IguanaBenchmark {
 	
 	private static void parse(String startSymbol, int runCount, Grammar grammar, Input input) throws IOException {
 		System.out.println(input.getURI());
-		GrammarGraph grammarGraph = grammar.toGrammarGraph(input);
-
 		for (int i = 0; i < runCount; i++) {
-			GLLParser parser = ParserFactory.newParser();
+			GLLParser parser = ParserFactory.getParser();
 			ParseResult result = parser.parse(input, grammar, startSymbol);
 			if (result.isParseSuccess()) {
 				System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
@@ -246,13 +243,12 @@ public class IguanaBenchmark {
 				break;
 //				System.exit(0);
 			}
-			grammarGraph.reset(input);
+			parser.reset();
 			parser = null;
 			result = null;
 			GcFinalization.awaitFullGc();
 		}
 		
-		grammarGraph.reset(input);
 		GcFinalization.awaitFullGc();
 	}
 	

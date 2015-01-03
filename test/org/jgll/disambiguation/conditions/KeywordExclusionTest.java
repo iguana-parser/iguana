@@ -48,7 +48,7 @@ public class KeywordExclusionTest {
 	@Test
 	public void testWhen() {
 		Input input = Input.fromString("when");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "Id");
 		assertTrue(result.isParseError());
 	}
@@ -56,7 +56,7 @@ public class KeywordExclusionTest {
 	@Test
 	public void testIf() {
 		Input input = Input.fromString("if");		
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "Id");
 		assertTrue(result.isParseError());
 	}
@@ -64,7 +64,7 @@ public class KeywordExclusionTest {
 	@Test
 	public void testDo() {
 		Input input = Input.fromString("do");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "Id");
 		assertTrue(result.isParseError());
 	}
@@ -72,7 +72,7 @@ public class KeywordExclusionTest {
 	@Test
 	public void testWhile() {
 		Input input = Input.fromString("while");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "Id");
 		assertTrue(result.isParseError());
 	}

@@ -78,7 +78,7 @@ public class PrecedenceTest4 {
 	@Test
 	public void testAssociativityAndPriority() {
 		Input input = Input.fromString("xawz");
-		parser = ParserFactory.newParser();
+		parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "E");
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());

@@ -13,6 +13,7 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 
 /**
@@ -23,7 +24,11 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, Grammar grammar, String startSymbolName);
+	public ParseResult parse(Input input, Grammar grammar, String startSymbolName, Configuration config);
+	
+	default ParseResult parse(Input input, Grammar grammar, String startSymbolName) {
+		return parse(input, grammar, startSymbolName, Configuration.builder().build());
+	}
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 	

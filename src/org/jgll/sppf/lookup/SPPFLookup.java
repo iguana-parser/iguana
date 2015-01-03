@@ -8,13 +8,11 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.TerminalNode;
-import org.jgll.util.hashing.ExternalHashEquals;
 
 public interface SPPFLookup {
 
@@ -80,14 +78,6 @@ public interface SPPFLookup {
 	 * @return
 	 */
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot grammarSlot, int leftExtent, int rightExtent);
-	
-	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
-		if(head.getNonterminal().isEbnfList()) {
-			return new ListSymbolNode(head, leftExtent, rightExtent, hashEquals);
-		} else {
-			return new NonterminalNode(head, leftExtent, rightExtent, hashEquals);
-		}
-	}
 	
 	/**
 	 * 

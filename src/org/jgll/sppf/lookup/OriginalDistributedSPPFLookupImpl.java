@@ -10,9 +10,9 @@ import org.jgll.sppf.OriginalNonterminalNode;
 import org.jgll.util.hashing.ExternalHashEquals;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
-public class DefaultSPPFLookupImpl extends GlobalSPPFLookupImpl {
+public class OriginalDistributedSPPFLookupImpl extends DistributedSPPFLookupImpl {
 
-	public DefaultSPPFLookupImpl(HashFunction f) {
+	public OriginalDistributedSPPFLookupImpl(HashFunction f) {
 		super(f);
 	}
 	
@@ -25,5 +25,5 @@ public class DefaultSPPFLookupImpl extends GlobalSPPFLookupImpl {
 	protected IntermediateNode createIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		return new OriginalIntermediateNode(slot, leftExtent, rightExtent, hashEquals);
 	}
-
+	
 }

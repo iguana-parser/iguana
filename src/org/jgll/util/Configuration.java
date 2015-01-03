@@ -9,15 +9,21 @@ public class Configuration {
 	
 	private final HashFunction hashFunction;
 	
-	private final LookupImpl lookupImpl;
+	private final LookupImpl gssLookupImpl;
 	
-	private LookupStrategy lookupStrategy;
+	private final LookupImpl sppfLookupImpl;
+	
+	private LookupStrategy gssLookupStrategy;
+	
+	private LookupStrategy sppfLookupStrategy;
 	
 	private Configuration(Builder builder) {
 		this.gssType = builder.gssType;
 		this.hashFunction = builder.hashFunction;
-		this.lookupImpl = builder.lookupImpl;
-		this.lookupStrategy = builder.lookupStrategy;
+		this.gssLookupImpl = builder.gssLookupImpl;
+		this.sppfLookupImpl = builder.sppfLookupImpl;
+		this.gssLookupStrategy = builder.gssLookupStrategy;
+		this.sppfLookupStrategy = builder.sppfLookupStrategy;
 	}
 	
 	public GSSType getGSSType() {
@@ -28,12 +34,20 @@ public class Configuration {
 		return hashFunction;
 	}
 	
-	public LookupImpl getLookupImpl() {
-		return lookupImpl;
+	public LookupImpl getGSSLookupImpl() {
+		return gssLookupImpl;
 	}
 	
-	public LookupStrategy getLookupStrategy() {
-		return lookupStrategy;
+	public LookupImpl getSPPFLookupImpl() {
+		return sppfLookupImpl;
+	}
+	
+	public LookupStrategy getGSSLookupStrategy() {
+		return gssLookupStrategy;
+	}
+	
+	public LookupStrategy getSPPFLookupStrategy() {
+		return sppfLookupStrategy;
 	}
 	
 	public static Builder builder() {
@@ -44,8 +58,10 @@ public class Configuration {
 		
 		private GSSType gssType = GSSType.NEW;
 		private HashFunction hashFunction = HashFunctions.primeMultiplication;
-		private LookupImpl lookupImpl = LookupImpl.HASH_MAP;
-		private LookupStrategy lookupStrategy = LookupStrategy.DISTRIBUTED;
+		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
+		private LookupImpl sppfLookupImpl = LookupImpl.HASH_MAP;
+		private LookupStrategy gssLookupStrategy = LookupStrategy.DISTRIBUTED;
+		private LookupStrategy sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
 		
 		public Configuration build() {
 			return new Configuration(this);
@@ -61,13 +77,23 @@ public class Configuration {
 			return this;
 		}
 		
-		public Builder setLookupType(LookupImpl lookupType) {
-			this.lookupImpl = lookupType;
+		public Builder setGSSLookupImpl(LookupImpl gssLookupImpl) {
+			this.gssLookupImpl = gssLookupImpl;
 			return this;
 		}
 		
-		public Builder setLookupStrategy(LookupStrategy lookupStrategy) {
-			this.lookupStrategy = lookupStrategy;
+		public Builder setSPPFLookupImpl(LookupImpl sppfLookupImpl) {
+			this.sppfLookupImpl = sppfLookupImpl;
+			return this;
+		}
+		
+		public Builder setGSSLookupStrategy(LookupStrategy gssLookupStrategy) {
+			this.gssLookupStrategy = gssLookupStrategy;
+			return this;
+		}
+		
+		public Builder setSPPFLookupStrategy(LookupStrategy sppfLookupStrategy) {
+			this.sppfLookupStrategy = sppfLookupStrategy;
 			return this;
 		}
 		
@@ -86,6 +112,18 @@ public class Configuration {
 	public static enum LookupStrategy {
 		GLOBAL,
 		DISTRIBUTED
+	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder()
+			.append("GSS Type: ").append(gssType).append("\n")
+			.append("Hash Function: ").append(hashFunction).append("\n")
+			.append("GSSLookup Impl: ").append(sppfLookupImpl).append("\n")
+			.append("GSSLookup Strategy: ").append(gssLookupStrategy).append("\n")
+			.append("SPPFLookup Impl: ").append(sppfLookupImpl).append("\n")
+			.append("SPPFLookup Strategy: ").append(sppfLookupStrategy)
+			.toString();
 	}
 	
 }

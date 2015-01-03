@@ -61,6 +61,11 @@ public class Input {
 		throw new RuntimeException("unexpected implementation exception");
 		
 	}
+	
+	public static Input empty() {
+		return fromString("");
+	}
+	
 	public static Input fromString(String s) {
 		return fromString(s, URI.create("dummy:///"));
 	}

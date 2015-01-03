@@ -50,7 +50,7 @@ public class FollowRestrictionTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("abc:");
-		parser =  ParserFactory.newParser();
+		parser =  ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseError());
 	}

@@ -98,7 +98,7 @@ public class PrecedenceTest7 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("aaa+aaaa+aaaa");
-		parser = ParserFactory.newParser();
+		parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "E");
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());

@@ -63,7 +63,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("xca");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode1(parser.getRegistry())));
@@ -72,7 +72,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("ycb");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode2(parser.getRegistry())));
@@ -81,7 +81,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test3() {
 		Input input = Input.fromString("cababaab");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode3(parser.getRegistry())));
@@ -90,7 +90,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test4() {
 		Input input = Input.fromString("xcabbbbb");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode4(parser.getRegistry())));
@@ -99,7 +99,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test5() {
 		Input input = Input.fromString("ycaaaabaaaa");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode5(parser.getRegistry())));

@@ -1,9 +1,10 @@
 package org.jgll.parser.basic;
 
+import static org.jgll.util.Configurations.*;
 import static org.junit.Assert.*;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarSlotRegistry;
@@ -20,9 +21,12 @@ import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.generator.CompilationUtil;
+import org.jgll.util.function.ExpectedSPPF;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 /**
  * A ::= 'a' B 'c'
@@ -36,6 +40,7 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
+@RunWith(Parameterized.class)
 public class Test8 {
 
 	private Nonterminal A = Nonterminal.withName("A");
@@ -46,16 +51,40 @@ public class Test8 {
 	private Character c = Character.from('c');
 	private Grammar grammar;
 	
+	private GLLParser parser;
+	
+	private Input input;
+	
+	private ExpectedSPPF expectedSPPF;
+	
+	public Test8(GLLParser parser, Input input, ExpectedSPPF expectedSPPF) {
+		this.parser = parser;
+		this.input = input;
+		this.expectedSPPF = expectedSPPF;
+	}
+
+    @Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+        		{ ParserFactory.getParser(DEFAULT),  Input.fromString("abc"), (ExpectedSPPF) Test8::expectedSPPF1 },
+        		{ ParserFactory.getParser(CONFIG_1), Input.fromString("abc"), (ExpectedSPPF) Test8::expectedSPPF1 },
+        		{ ParserFactory.getParser(CONFIG_2), Input.fromString("abc"), (ExpectedSPPF) Test8::expectedSPPF1 },
+        		{ ParserFactory.getParser(DEFAULT), Input.fromString("abc"), (ExpectedSPPF) Test8::expectedSPPF1 },
+        		{ ParserFactory.getParser(DEFAULT),  Input.fromString("aaaac"), (ExpectedSPPF) Test8::expectedSPPF2 },
+        		{ ParserFactory.getParser(CONFIG_1), Input.fromString("aaaac"), (ExpectedSPPF) Test8::expectedSPPF2 },
+        		{ ParserFactory.getParser(CONFIG_2), Input.fromString("aaaac"), (ExpectedSPPF) Test8::expectedSPPF2 },
+        		{ ParserFactory.getParser(CONFIG_3), Input.fromString("aaaac"), (ExpectedSPPF) Test8::expectedSPPF2 }
+           });
+    }
+	
 	@Before
 	public void init() {
-		
 		Rule r1 = Rule.builder(A).addSymbols(a, B, c).build();
 		Rule r2 = Rule.builder(A).addSymbol(C).build();
 		Rule r3 = Rule.builder(B).addSymbol(b).build();
 		Rule r4 = Rule.builder(C).addSymbols(a, C).build();
 		Rule r5 = Rule.builder(C).addSymbol(c).build();
-		
-		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
+		grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 	}
 	
 	@Test
@@ -72,45 +101,21 @@ public class Test8 {
 //		assertTrue(grammarGraph.isLL1SubGrammar(C));
 	}
 	
-	public void testGenerated1() {
-		StringWriter writer = new StringWriter();
-		Input input = Input.fromString("abc");
-		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
-		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(input, grammar, "A");
-    	assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1(parser.getRegistry())));
-	}
-	
 	@Test
 	public void testParser1() {
-		Input input = Input.fromString("abc");
-		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF.get(parser.getRegistry())));
 	}
 	
 	@Test
 	public void testParser2() {
-		Input input = Input.fromString("aaaac");
-		GLLParser parser = ParserFactory.newParser();
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF.get(parser.getRegistry())));
 	}
 	
-	public void testGenerated2() {
-		StringWriter writer = new StringWriter();
-		Input input = Input.fromString("aaaac");
-		grammar.toGrammarGraph(input).generate(new PrintWriter(writer));
-		GLLParser parser = CompilationUtil.getParser(writer.toString());
-		ParseResult result = parser.parse(input, grammar, "A");
-    	assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2(parser.getRegistry())));
-	}
-	
-	private SPPFNode getSPPF1(GrammarSlotRegistry registry) {
+	private static SPPFNode expectedSPPF1(GrammarSlotRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 3).init();
 		PackedNode node2 = factory.createPackedNode("A ::= a B c .", 2, node1);
@@ -132,7 +137,7 @@ public class Test8 {
 		return node1;
 	}
 	
-	private SPPFNode getSPPF2(GrammarSlotRegistry registry) {
+	private static SPPFNode expectedSPPF2(GrammarSlotRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 5).init();
 		PackedNode node2 = factory.createPackedNode("A ::= C .", 5, node1);

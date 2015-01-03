@@ -103,7 +103,7 @@ public class LL1Test {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("bda");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 
@@ -136,7 +136,7 @@ public class LL1Test {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		
@@ -168,7 +168,7 @@ public class LL1Test {
 	@Test
 	public void test3() {
 		Input input = Input.fromString("ba");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		
@@ -201,7 +201,7 @@ public class LL1Test {
 	@Test
 	public void test4() {
 		Input input = Input.fromString("da");
-		GLLParser parser = ParserFactory.newParser();
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		
