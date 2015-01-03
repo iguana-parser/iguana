@@ -52,7 +52,7 @@ public class BenchmarkGamma {
 //		System.out.println(writer.toString());
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
-		Configuration config = Configuration.builder().setSPPFLookupStrategy(LookupStrategy.GLOBAL).build();
+		Configuration config = Configuration.builder().build();
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {
 			GLLParser parser = ParserFactory.getParser(config);

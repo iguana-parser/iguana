@@ -58,6 +58,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
 		TerminalNode val;
 		if ((val = terminalNodes.get(key)) == null) {
 			val = key;
+			action.execute(val);
 			terminalNodes.put(key, val);
 		}
 		return val;

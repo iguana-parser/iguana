@@ -93,7 +93,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	public NonterminalNode getNonterminalNode(NonterminalNode key, NodeAddedAction<NonterminalNode> action) {
 		NonterminalNode val;
 		if ((val = nonterminalNodes.get(key)) == null) {
-			val = key.init();
+			val = key;
 			action.execute(val);
 			nonterminalNodes.put(key, val);
 		}

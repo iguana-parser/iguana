@@ -61,7 +61,7 @@ public abstract class NonPackedNode implements SPPFNode {
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getRightExtent());
+		return String.format("(%s, %d, %d)", slot, leftExtent, rightExtent);
 	}
 	
 	public abstract List<PackedNode> getChildren();
