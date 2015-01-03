@@ -13,7 +13,11 @@ public class HashMapNodeLookup implements NodeLookup {
 	
 	@Override
 	public GSSNode getOrElseCreate(GrammarSlot slot, int i) {
-		return map.computeIfAbsent(i, k -> new GSSNode(slot, k));
+		GSSNode v;
+		if ((v = map.get(i)) == null) {
+			v = new GSSNode(slot, i);
+		}
+		return v;
 	}
 
 	@Override
