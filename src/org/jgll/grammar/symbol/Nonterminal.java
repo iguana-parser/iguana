@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import org.jgll.datadependent.exp.Expression;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
@@ -14,6 +15,8 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final String variable;
 	
+	private final Expression[] arguments;
+	
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
 	}
@@ -23,6 +26,7 @@ public class Nonterminal extends AbstractSymbol {
 		this.ebnfList = builder.ebnfList;
 		this.index = builder.index;
 		this.variable = builder.variable;
+		this.arguments = builder.arguments;
 	}
 	
 	public boolean isEbnfList() {
@@ -47,7 +51,10 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return index > 0 ? name + index : name;
+		return (variable != null? variable + " = " : "")
+			    + (label != null? label + ":" : "")
+			    + name + (index > 0 ? index : "")
+		        + (arguments != null? "(" + "..." + ")" : "");
 	}
 	
 	@Override
@@ -84,11 +91,14 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private String variable;
 		
+		private Expression[] arguments;
+		
 		public Builder(Nonterminal nonterminal) {
 			super(nonterminal);
 			this.name = nonterminal.name;
 			this.ebnfList = nonterminal.ebnfList;
 			this.index = nonterminal.index;
+			this.arguments = nonterminal.arguments;
 		}
 
 		public Builder(String name) {
@@ -107,6 +117,11 @@ public class Nonterminal extends AbstractSymbol {
 		
 		public Builder setEbnfList(boolean ebnfList) {
 			this.ebnfList = ebnfList;
+			return this;
+		}
+		
+		public Builder applyTo(Expression... arguments) {
+			this.arguments = arguments;
 			return this;
 		}
 		
