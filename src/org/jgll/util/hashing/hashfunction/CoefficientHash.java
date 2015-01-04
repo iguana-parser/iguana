@@ -41,17 +41,17 @@ public class CoefficientHash implements HashFunction {
 
 	@Override
 	public int hash(int k1, int k2, int k3) {
-		return k1 * coef1 + k2 * coef2 + k3;
+		return (k1 * coef1 + k2) * coef2 + k3;
 	}
 
 	@Override
 	public int hash(int k1, int k2, int k3, int k4) {
-		return k1 * coef1 + k2 * coef2 + k3 * coef3 + k4;
+		return ((k1 * coef1 + k2) * coef2 + k3) * coef3 + k4;
 	}
 
 	@Override
 	public int hash(int k1, int k2, int k3, int k4, int k5) {
-		return k1 * coef1 + k2 * coef2 + k3 * coef3 + k4 * coef4 + k5;
+		return (((k1 * coef1 + k2) * coef2 + k3) * coef3 + k4) * coef4 + k5;
 	}
 
 	@Override

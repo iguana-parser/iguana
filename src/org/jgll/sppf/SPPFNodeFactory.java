@@ -1,14 +1,14 @@
 package org.jgll.sppf;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 
 public class SPPFNodeFactory {
 
-	private GrammarSlotRegistry registry;
+	private GrammarRegistry registry;
 	
-	public SPPFNodeFactory(GrammarSlotRegistry registry) {
+	public SPPFNodeFactory(GrammarRegistry registry) {
 		this.registry = registry;
 	}
 	

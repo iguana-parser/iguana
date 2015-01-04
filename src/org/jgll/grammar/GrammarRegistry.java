@@ -21,7 +21,7 @@ import com.google.common.collect.HashBiMap;
  * @author Ali Afroozeh
  *
  */
-public class GrammarSlotRegistry {
+public class GrammarRegistry {
 
 	private AtomicInteger nextId = new AtomicInteger(1);
 	
@@ -33,17 +33,17 @@ public class GrammarSlotRegistry {
 	
 	private Map<String, RegularExpression> regularExpressions = new HashMap<>();
 	
-	public static GrammarSlotRegistry from(Collection<NonterminalGrammarSlot> heads, 
+	public static GrammarRegistry from(Collection<NonterminalGrammarSlot> heads, 
 							   Collection<TerminalGrammarSlot> terminals, 
 							   Collection<GrammarSlot> slots) {
 
-		return new GrammarSlotRegistry(
+		return new GrammarRegistry(
 			 heads.stream().collect(Collectors.toMap(x -> x.getNonterminal(), x -> x)),
 		     terminals.stream().collect(Collectors.toMap(x -> x.getRegularExpression(), x -> x)),
 		     slots.stream().collect(Collectors.toMap(x -> x.toString(), x -> x)));
 	}
 	
-	public GrammarSlotRegistry(Map<Nonterminal, NonterminalGrammarSlot> heads, 
+	public GrammarRegistry(Map<Nonterminal, NonterminalGrammarSlot> heads, 
 			 				   Map<RegularExpression, TerminalGrammarSlot> terminals, 
 			 				   Map<String, GrammarSlot> slots) {
 

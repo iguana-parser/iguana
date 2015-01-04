@@ -1,16 +1,15 @@
 package org.jgll.util;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.parser.HashFunctions;
-import org.jgll.util.hashing.hashfunction.HashFunction;
-
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class Configuration {
 	
+	public static final Configuration DEFAULT = builder().build();
+	
 	private final GSSType gssType;
-	
-	private final HashFunction sppfHashFunction;
-	
-	private final HashFunction descriptorHashFunction;
 	
 	private final LookupImpl gssLookupImpl;
 	
@@ -22,8 +21,6 @@ public class Configuration {
 	
 	private Configuration(Builder builder) {
 		this.gssType = builder.gssType;
-		this.sppfHashFunction = builder.sppfHashFunction;
-		this.descriptorHashFunction = builder.descriptorHashFunction;
 		this.gssLookupImpl = builder.gssLookupImpl;
 		this.sppfLookupImpl = builder.sppfLookupImpl;
 		this.gssLookupStrategy = builder.gssLookupStrategy;
@@ -50,16 +47,8 @@ public class Configuration {
 		return sppfLookupStrategy;
 	}
 	
-	public HashFunction getSppfHashFunction() {
-		return sppfHashFunction;
-	}
-	
-	public HashFunction getDescriptorHashFunction() {
-		return descriptorHashFunction;
-	}
-	
-	public static Builder builder(Grammar grammar, Input input) {
-		return new Builder(grammar, input);
+	public static Builder builder() {
+		return new Builder();
 	}
 	
 	public static class Builder {
@@ -70,18 +59,12 @@ public class Configuration {
 		private LookupStrategy gssLookupStrategy;
 		private LookupStrategy sppfLookupStrategy;
 		
-		private HashFunction sppfHashFunction;
-		private HashFunction descriptorHashFunction;
-		
-		public Builder(Grammar grammar, Input input) {
+		public Builder() {
 			this.gssType = GSSType.NEW;
 			this.gssLookupImpl = LookupImpl.ARRAY;
 			this.sppfLookupImpl = LookupImpl.HASH_MAP;
 			this.gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 			this.sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
-			
-			this.sppfHashFunction = HashFunctions.coefficientHash(input.length(), input.length(), grammar.size());
-			this.descriptorHashFunction = HashFunctions.coefficientHash(grammar.size(), input.length(), grammar.size(), input.length());
 		}
 		
 		public Configuration build() {
@@ -91,14 +74,6 @@ public class Configuration {
 		public Builder setGSSType(GSSType gssType) {
 			this.gssType = gssType;
 			return this;
-		}
-
-		public void setSPPFHashFunction(HashFunction sppfHashFunction) {
-			this.sppfHashFunction = sppfHashFunction;
-		}
-
-		public void setDescriptorHashFunction(HashFunction descriptorHashFunction) {
-			this.descriptorHashFunction = descriptorHashFunction;
 		}
 		
 		public Builder setGSSLookupImpl(LookupImpl gssLookupImpl) {
@@ -120,7 +95,6 @@ public class Configuration {
 			this.sppfLookupStrategy = sppfLookupStrategy;
 			return this;
 		}
-		
 	}
 	
 	public static enum GSSType {
@@ -142,7 +116,6 @@ public class Configuration {
 	public String toString() {
 		return new StringBuilder()
 			.append("GSS Type: ").append(gssType).append("\n")
-			.append("Hash Function: ").append(sppfHashFunction).append("\n")
 			.append("GSSLookup Impl: ").append(sppfLookupImpl).append("\n")
 			.append("GSSLookup Strategy: ").append(gssLookupStrategy).append("\n")
 			.append("SPPFLookup Impl: ").append(sppfLookupImpl).append("\n")

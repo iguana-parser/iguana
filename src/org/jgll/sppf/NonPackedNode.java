@@ -66,39 +66,4 @@ public abstract class NonPackedNode implements SPPFNode {
 	
 	public abstract List<PackedNode> getChildren();
 	
-//    public static ExternalHashEquals<NonPackedNode> globalHashEquals(HashFunction f) {
-//    	
-//    	return new ExternalHashEquals<NonPackedNode>() {
-//
-//			@Override
-//			public int hash(NonPackedNode n) {
-//				return f.hash(n.slot.getId(), n.leftExtent, n.rightExtent);
-//			}
-//
-//			@Override
-//			public boolean equals(NonPackedNode n1, NonPackedNode n2) {
-//				return  n1.slot == n2.slot && 
-//                        n1.leftExtent  == n2.leftExtent && 
-//                        n1.rightExtent == n2.rightExtent;
-//			}
-//		};
-//    }
-//    
-//    public static ExternalHashEquals<NonPackedNode> distributedHashEquals(HashFunction f) {
-//    	
-//    	return new ExternalHashEquals<NonPackedNode>() {
-//
-//			@Override
-//			public int hash(NonPackedNode n) {
-//				return f.hash(n.getLeftExtent(), n.getRightExtent());
-//			}
-//
-//			@Override
-//			public boolean equals(NonPackedNode n1, NonPackedNode n2) {
-//				return  n1.getLeftExtent()  == n2.getLeftExtent() && 
-//                        n1.getRightExtent() == n2.getRightExtent();
-//			}
-//		};
-//    }    
-	
 }

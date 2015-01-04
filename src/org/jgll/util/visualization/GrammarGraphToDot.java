@@ -1,7 +1,7 @@
 package org.jgll.util.visualization;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -22,7 +22,7 @@ public class GrammarGraphToDot {
 		return sb.toString();
 	}
 	
-	private static void toDot(GrammarSlot slot, StringBuilder sb, GrammarSlotRegistry r) {
+	private static void toDot(GrammarSlot slot, StringBuilder sb, GrammarRegistry r) {
 
 		if (slot instanceof NonterminalGrammarSlot) {
 			sb.append("\"" + r.getId(slot) + "\"" + String.format(NONTERMINAL_NODE, escape(slot.toString())) + "\n");			

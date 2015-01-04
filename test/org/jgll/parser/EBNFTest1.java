@@ -5,6 +5,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class EBNFTest1 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("aaaaaa");
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		parser.parse(input, grammar, "S");
 	}
 

@@ -52,11 +52,11 @@ public class BenchmarkGamma {
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
 		Input input = Input.fromString(getBs(420));
-		Configuration config = Configurations.DEFAULT(grammar, input);
+		Configuration config = Configurations.DEFAULT;
 		
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {
-			GLLParser parser = ParserFactory.getParser(config);
+			GLLParser parser = ParserFactory.getParser(config, input, grammar);
 //			GLLParser parser = (GLLParser) clazz.newInstance();
 			parser.parse(input, grammar, startSymbol);
 			parser.reset();
@@ -67,7 +67,7 @@ public class BenchmarkGamma {
 		for (int i = 1; i <= 50; i++) {
 			for (int j = 0; j < runCount; j++) {
 				input = Input.fromString(getBs(i * 10));
-				GLLParser parser = ParserFactory.getParser(config);
+				GLLParser parser = ParserFactory.getParser(config, input, grammar);
 				
 //				GLLParser parser = (GLLParser) clazz.newInstance();
 				

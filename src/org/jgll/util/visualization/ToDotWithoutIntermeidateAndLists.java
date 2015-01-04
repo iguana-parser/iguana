@@ -2,7 +2,7 @@ package org.jgll.util.visualization;
 
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -12,7 +12,7 @@ import org.jgll.util.Input;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	
-	public ToDotWithoutIntermeidateAndLists(GrammarSlotRegistry registry, Input input) {
+	public ToDotWithoutIntermeidateAndLists(GrammarRegistry registry, Input input) {
 		super(registry, input);
 	}
 

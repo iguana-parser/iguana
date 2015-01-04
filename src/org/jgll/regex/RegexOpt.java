@@ -3,7 +3,7 @@ package org.jgll.regex;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -91,7 +91,7 @@ public class RegexOpt extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexOpt(")
 		  .append(regex.getConstructorCode(registry) + ", ")

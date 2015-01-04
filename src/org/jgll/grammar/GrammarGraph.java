@@ -27,7 +27,7 @@ public class GrammarGraph implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private GrammarSlotRegistry registry;
+	private GrammarRegistry registry;
 
 	private List<NonterminalGrammarSlot> headGrammarSlots;
 	
@@ -42,7 +42,7 @@ public class GrammarGraph implements Serializable {
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
 		Map<String, GrammarSlot> slotsMap = builder.slots.stream().collect(Collectors.toMap(s -> s.toString(), s -> s));
-		this.registry = new GrammarSlotRegistry(builder.nonterminalsMap, builder.terminalsMap, slotsMap);
+		this.registry = new GrammarRegistry(builder.nonterminalsMap, builder.terminalsMap, slotsMap);
 		this.headGrammarSlots = new ArrayList<>(builder.nonterminalsMap.values());
 		this.slots = new LinkedHashSet<>(builder.slots);
 		grammar = builder.grammar;
@@ -346,7 +346,7 @@ public class GrammarGraph implements Serializable {
 		slots.forEach(s -> s.reset(input));
 	}
 	
-	public GrammarSlotRegistry getRegistry() {
+	public GrammarRegistry getRegistry() {
 		return registry;
 	}
 	

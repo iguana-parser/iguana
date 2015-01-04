@@ -13,6 +13,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.regex.RegexAlt;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +52,7 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testWhen() {
 		Input input = Input.fromString("when");
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "Id");
 		assertTrue(result.isParseError());
 	}
@@ -59,7 +60,7 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testIf() {
 		Input input = Input.fromString("if");		
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "Id");
 		assertTrue(result.isParseError());
 	}
@@ -67,7 +68,7 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testDo() {
 		Input input = Input.fromString("do");
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "Id");
 		assertTrue(result.isParseError());
 	}
@@ -75,7 +76,7 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testWhile() {
 		Input input = Input.fromString("while");
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "Id");
 		assertTrue(result.isParseError());
 	}

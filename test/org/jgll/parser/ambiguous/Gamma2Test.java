@@ -3,7 +3,7 @@ package org.jgll.parser.ambiguous;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -113,7 +113,7 @@ public class Gamma2Test {
 		return sb.toString();
 	}
 	
-	private SPPFNode getSPPF1(GrammarSlotRegistry registry) {
+	private SPPFNode getSPPF1(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3).init();
 		PackedNode node2 = factory.createPackedNode("S ::= S S S .", 2, node1);
@@ -161,7 +161,7 @@ public class Gamma2Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPF2(GrammarSlotRegistry registry) {
+	private SPPFNode getSPPF2(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 4).init();
 		PackedNode node2 = factory.createPackedNode("S ::= S S S .", 3, node1);
@@ -267,7 +267,7 @@ public class Gamma2Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPF3(GrammarSlotRegistry registry) {
+	private SPPFNode getSPPF3(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 5).init();
 		PackedNode node2 = factory.createPackedNode("S ::= S S .", 1, node1);

@@ -9,6 +9,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,7 @@ public class ManualArithmeticExpressionsTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a*a+a");
-		parser = ParserFactory.getParser();
+		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "E");
 		assertTrue(result.isParseSuccess());
 		// TODO: add tree comparison text here.

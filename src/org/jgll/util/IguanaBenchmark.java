@@ -222,7 +222,7 @@ public class IguanaBenchmark {
 	private static void warmup(String startSymbol, Grammar grammar, int warmupCount) throws IOException{
 		for (int i = 0; i < warmupCount; i++) {
 			Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
-			GLLParser parser = ParserFactory.getParser(Configurations.DEFAULT(grammar, input));
+			GLLParser parser = ParserFactory.getParser(Configurations.DEFAULT, input, grammar);
 			ParseResult result = parser.parse(input, grammar, startSymbol);
 			System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
 		}
@@ -231,7 +231,7 @@ public class IguanaBenchmark {
 	private static void parse(String startSymbol, int runCount, Grammar grammar, Input input) throws IOException {
 		System.out.println(input.getURI());
 		for (int i = 0; i < runCount; i++) {
-			GLLParser parser = ParserFactory.getParser(Configurations.DEFAULT(grammar, input));
+			GLLParser parser = ParserFactory.getParser(Configurations.DEFAULT, input, grammar);
 			ParseResult result = parser.parse(input, grammar, startSymbol);
 			if (result.isParseSuccess()) {
 				System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));

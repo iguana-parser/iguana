@@ -1,5 +1,6 @@
 package org.jgll.parser;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.parser.gss.lookup.DistributedGSSLookupImpl;
 import org.jgll.parser.gss.lookup.GSSLookup;
 import org.jgll.parser.gss.lookup.GlobalHashGSSLookupImpl;
@@ -11,8 +12,10 @@ import org.jgll.sppf.lookup.OriginalDistributedSPPFLookupImpl;
 import org.jgll.sppf.lookup.OriginalGlobalSPPFLookupImpl;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Configuration;
+import org.jgll.util.Input;
 import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Configuration.LookupStrategy;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 
@@ -21,23 +24,27 @@ import org.jgll.util.Configuration.LookupStrategy;
  */
 public class ParserFactory {
 	
-	public static GLLParser getParser(Configuration config) {
+	public static GLLParser getParser(Configuration config, Input input, Grammar grammar) {
 		if (config.getGSSType() == GSSType.NEW) {
-			return newParser(config);
+			return newParser(config, input, grammar);
 		} else {
-			return originalParser(config);
+			return originalParser(config, input, grammar);
 		}
 	}
 	
-	private static GLLParser newParser(Configuration config) {
-		return new NewGLLParserImpl(getGSSLookup(config), getSPPFLookup(config), getDescriptorLookup(config));		
+	private static GLLParser newParser(Configuration config, Input input, Grammar grammar) {
+		return new NewGLLParserImpl(getGSSLookup(config, input, grammar), 
+								    getSPPFLookup(config, input, grammar), 
+								    getDescriptorLookup(config, input, grammar));		
 	}
 	
-	private static GLLParser originalParser(Configuration config) {
-		return new OriginalGLLParserImpl(getGSSLookup(config), getSPPFLookup(config), getDescriptorLookup(config));
+	private static GLLParser originalParser(Configuration config, Input input, Grammar grammar) {
+		return new OriginalGLLParserImpl(getGSSLookup(config, input, grammar), 
+				 					     getSPPFLookup(config, input, grammar), 
+				 					     getDescriptorLookup(config, input, grammar));
 	}
 
-	private static GSSLookup getGSSLookup(Configuration config) {
+	private static GSSLookup getGSSLookup(Configuration config, Input input, Grammar grammar) {
 		if (config.getGSSLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 			return new DistributedGSSLookupImpl();
 		} else {
@@ -45,24 +52,29 @@ public class ParserFactory {
 		}
 	}
 	
-	private static SPPFLookup getSPPFLookup(Configuration config) {
-		if (config.getGSSType() == GSSType.NEW) {
-			if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-				return new DistributedSPPFLookupImpl(config.getSppfHashFunction());
+	private static SPPFLookup getSPPFLookup(Configuration config, Input input, Grammar grammar) {
+		HashFunction hash; 
+		
+		if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
+			hash = HashFunctions.coefficientHash(input.length(), input.length());
+			if (config.getGSSType() == GSSType.NEW) {
+				return new DistributedSPPFLookupImpl(hash);
 			} else {
-				return new GlobalSPPFLookupImpl(config.getSppfHashFunction());
-			}			
-		} else {
-			if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-				return new OriginalDistributedSPPFLookupImpl(config.getSppfHashFunction());
-			} else {
-				return new OriginalGlobalSPPFLookupImpl(config.getSppfHashFunction());
+				return new OriginalDistributedSPPFLookupImpl(hash);
 			}
-		}
+		} else {
+			hash = HashFunctions.coefficientHash(input.length(), input.length(), grammar.size());
+			if (config.getGSSType() == GSSType.NEW) {
+				return new GlobalSPPFLookupImpl(hash);				
+			} else {
+				return new OriginalGlobalSPPFLookupImpl(hash);
+			}			
+		}		
 	}
 	
-	private static DescriptorLookup getDescriptorLookup(Configuration config) {
-		return new DistributedDescriptorLookupImpl(config.getDescriptorHashFunction());
+	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
+		HashFunction hash = HashFunctions.coefficientHash(input.length(), grammar.size());
+		return new DistributedDescriptorLookupImpl(hash);
 	}
 
 }

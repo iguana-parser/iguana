@@ -3,7 +3,7 @@ package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -253,7 +253,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public GrammarSlotRegistry getRegistry() {
+	public GrammarRegistry getRegistry() {
 		return grammarGraph.getRegistry();
 	}
 	

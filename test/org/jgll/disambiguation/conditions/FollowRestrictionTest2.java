@@ -12,6 +12,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class FollowRestrictionTest2 {
 	@Test
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
-		parser =  ParserFactory.getParser();
+		parser =  ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseError());
 	}
@@ -57,7 +58,7 @@ public class FollowRestrictionTest2 {
 	@Test
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
-		parser =  ParserFactory.getParser();
+		parser =  ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseError());
 	}

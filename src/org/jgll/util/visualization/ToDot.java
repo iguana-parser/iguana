@@ -1,15 +1,15 @@
 package org.jgll.util.visualization;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 
 public abstract class ToDot {
 	
-	private GrammarSlotRegistry registry;
+	private GrammarRegistry registry;
 	
-	public ToDot(GrammarSlotRegistry registry) {
+	public ToDot(GrammarRegistry registry) {
 		this.registry = registry;
 	}
 	

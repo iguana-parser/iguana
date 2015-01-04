@@ -5,7 +5,7 @@ import static org.jgll.util.visualization.GraphVizUtil.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
@@ -36,11 +36,11 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	
 	protected Set<NonPackedNode> visited = new HashSet<>();
 
-	public SPPFToDot(GrammarSlotRegistry registry, Input input) {
+	public SPPFToDot(GrammarRegistry registry, Input input) {
 		this(input, registry, false);
 	}
 	
-	public SPPFToDot(Input input, GrammarSlotRegistry registry, boolean showPackedNodeLabel) {
+	public SPPFToDot(Input input, GrammarRegistry registry, boolean showPackedNodeLabel) {
 		super(registry);
 		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;

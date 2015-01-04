@@ -4,7 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -15,6 +15,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,28 +59,28 @@ public class KeywordTest3 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("if s then s");
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 		
-	private SPPFNode getSPPF(GrammarSlotRegistry registry) {
+	private SPPFNode getSPPF(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 11).init();
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 11);
 		PackedNode node2 = factory.createPackedNode("S ::= i f L S L t h e n L S .", 10, node1);
-		IntermediateNode node3 = factory.createIntermediateNode("S ::= i f L S L t h e n L . S", 0, 10).init();
+		IntermediateNode node3 = factory.createIntermediateNode("S ::= i f L S L t h e n L . S", 0, 10);
 		PackedNode node4 = factory.createPackedNode("S ::= i f L S L t h e n L . S", 9, node3);
-		IntermediateNode node5 = factory.createIntermediateNode("S ::= i f L S L t h e n . L S", 0, 9).init();
+		IntermediateNode node5 = factory.createIntermediateNode("S ::= i f L S L t h e n . L S", 0, 9);
 		PackedNode node6 = factory.createPackedNode("S ::= i f L S L t h e n . L S", 5, node5);
-		IntermediateNode node7 = factory.createIntermediateNode("S ::= i f L S L . t h e n L S", 0, 5).init();
+		IntermediateNode node7 = factory.createIntermediateNode("S ::= i f L S L . t h e n L S", 0, 5);
 		PackedNode node8 = factory.createPackedNode("S ::= i f L S L . t h e n L S", 4, node7);
-		IntermediateNode node9 = factory.createIntermediateNode("S ::= i f L S . L t h e n L S", 0, 4).init();
+		IntermediateNode node9 = factory.createIntermediateNode("S ::= i f L S . L t h e n L S", 0, 4);
 		PackedNode node10 = factory.createPackedNode("S ::= i f L S . L t h e n L S", 3, node9);
-		IntermediateNode node11 = factory.createIntermediateNode("S ::= i f L . S L t h e n L S", 0, 3).init();
+		IntermediateNode node11 = factory.createIntermediateNode("S ::= i f L . S L t h e n L S", 0, 3);
 		PackedNode node12 = factory.createPackedNode("S ::= i f L . S L t h e n L S", 2, node11);
 		TerminalNode node13 = factory.createTerminalNode("i f", 0, 2);
-		NonterminalNode node14 = factory.createNonterminalNode("L", 0, 2, 3).init();
+		NonterminalNode node14 = factory.createNonterminalNode("L", 0, 2, 3);
 		PackedNode node15 = factory.createPackedNode("L ::= \\u0020 .", 3, node14);
 		TerminalNode node16 = factory.createTerminalNode("\\u0020", 2, 3);
 		node15.addChild(node16);
@@ -87,7 +88,7 @@ public class KeywordTest3 {
 		node12.addChild(node13);
 		node12.addChild(node14);
 		node11.addChild(node12);
-		NonterminalNode node17 = factory.createNonterminalNode("S", 0, 3, 4).init();
+		NonterminalNode node17 = factory.createNonterminalNode("S", 0, 3, 4);
 		PackedNode node18 = factory.createPackedNode("S ::= s .", 4, node17);
 		TerminalNode node19 = factory.createTerminalNode("s", 3, 4);
 		node18.addChild(node19);
@@ -95,7 +96,7 @@ public class KeywordTest3 {
 		node10.addChild(node11);
 		node10.addChild(node17);
 		node9.addChild(node10);
-		NonterminalNode node20 = factory.createNonterminalNode("L", 0, 4, 5).init();
+		NonterminalNode node20 = factory.createNonterminalNode("L", 0, 4, 5);
 		PackedNode node21 = factory.createPackedNode("L ::= \\u0020 .", 5, node20);
 		TerminalNode node22 = factory.createTerminalNode("\\u0020", 4, 5);
 		node21.addChild(node22);
@@ -107,7 +108,7 @@ public class KeywordTest3 {
 		node6.addChild(node7);
 		node6.addChild(node23);
 		node5.addChild(node6);
-		NonterminalNode node24 = factory.createNonterminalNode("L", 0, 9, 10).init();
+		NonterminalNode node24 = factory.createNonterminalNode("L", 0, 9, 10);
 		PackedNode node25 = factory.createPackedNode("L ::= \\u0020 .", 10, node24);
 		TerminalNode node26 = factory.createTerminalNode("\\u0020", 9, 10);
 		node25.addChild(node26);
@@ -115,7 +116,7 @@ public class KeywordTest3 {
 		node4.addChild(node5);
 		node4.addChild(node24);
 		node3.addChild(node4);
-		NonterminalNode node27 = factory.createNonterminalNode("S", 0, 10, 11).init();
+		NonterminalNode node27 = factory.createNonterminalNode("S", 0, 10, 11);
 		PackedNode node28 = factory.createPackedNode("S ::= s .", 11, node27);
 		TerminalNode node29 = factory.createTerminalNode("s", 10, 11);
 		node28.addChild(node29);
