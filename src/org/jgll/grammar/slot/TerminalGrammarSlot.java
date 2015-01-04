@@ -4,20 +4,22 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.TerminalNode;
-import org.jgll.sppf.lookup.NodeAddedAction;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.Key;
 
 
 public class TerminalGrammarSlot implements GrammarSlot {
 	
 	private RegularExpression regex;
 	private Matcher matcher;
-	private Map<TerminalNode, TerminalNode> terminalNodes;
+	private Map<Key, TerminalNode> terminalNodes;
 
 	public TerminalGrammarSlot(RegularExpression regex) {
 		this.regex = regex;
@@ -54,18 +56,18 @@ public class TerminalGrammarSlot implements GrammarSlot {
 		return regex.toString();
 	}
 	
-	public TerminalNode getTerminalNode(TerminalNode key, NodeAddedAction<TerminalNode> action) {
+	public TerminalNode getTerminalNode(Key key, Supplier<TerminalNode> s, Consumer<TerminalNode> c) {
 		TerminalNode val;
 		if ((val = terminalNodes.get(key)) == null) {
-			val = key;
-			action.execute(val);
+			val = s.get();
+			c.accept(val);
 			terminalNodes.put(key, val);
 		}
 		return val;
 	}
 	
-	public TerminalNode findTerminalNode(TerminalNode node) {
-		return terminalNodes.get(node);
+	public TerminalNode findTerminalNode(Key key) {
+		return terminalNodes.get(key);
 	}
 
 	@Override

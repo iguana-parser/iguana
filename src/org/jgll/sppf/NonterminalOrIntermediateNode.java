@@ -1,19 +1,18 @@
 package org.jgll.sppf;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.util.hashing.ExternalHashEquals;
 
 
 public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
 	protected List<PackedNode> children;
 	
-	public abstract NonterminalOrIntermediateNode init();
-	
-	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
-		super(slot, leftExtent, rightExtent, hashEquals);
+	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
+		children = new ArrayList<>();
 	}
 
 	public void addChild(PackedNode node) {

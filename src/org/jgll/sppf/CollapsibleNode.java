@@ -1,7 +1,6 @@
 package org.jgll.sppf;
 
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.util.hashing.ExternalHashEquals;
 
 
 
@@ -18,14 +17,8 @@ import org.jgll.util.hashing.ExternalHashEquals;
  */
 public class CollapsibleNode extends NonterminalNode {
 
-	public CollapsibleNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
-		super(head, leftExtent, rightExtent, hashEquals);
-	}
-	
-	@Override
-	public NonterminalNode init() {
-		super.init();
-		return this;
+	public CollapsibleNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
+		super(head, leftExtent, rightExtent);
 	}
 
 }

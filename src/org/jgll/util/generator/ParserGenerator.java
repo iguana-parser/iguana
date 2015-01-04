@@ -19,10 +19,6 @@ import com.google.common.truth.codegen.CompilingClassLoader.CompilerException;
  */
 public class ParserGenerator {
 	
-	public static GLLParser generateParser(Grammar grammar, Input input) {
-		return getParser(grammar, input, Configuration.builder().build());
-	}
-	
 	public static GLLParser getParser(Grammar grammar, Input input, Configuration config) {
 		
 		Class<?> clazz = getClass("test", "Test", getParserCode(grammar, input, config));

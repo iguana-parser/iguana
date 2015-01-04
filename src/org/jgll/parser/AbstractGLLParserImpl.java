@@ -213,9 +213,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public boolean hasDescriptor(Descriptor descriptor) {
-		return descriptorLookup.addDescriptor(descriptor);
-	}	
+	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
+		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode);
+    }
 	
 	@Override
 	public boolean hasNextDescriptor() {

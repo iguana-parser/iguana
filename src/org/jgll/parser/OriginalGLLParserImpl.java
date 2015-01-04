@@ -4,7 +4,6 @@ package org.jgll.parser;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.OriginalGSSEdgeImpl;
@@ -57,7 +56,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 						
 			for (GSSEdge edge : gssNode.getGSSEdges()) {
 				NonPackedNode y = sppfLookup.getNode(returnSlot, edge.getNode(), node);
-				addDescriptor(new Descriptor(returnSlot, edge.getDestination(), inputIndex, y));
+				addDescriptor(returnSlot, edge.getDestination(), inputIndex, y);
 			}
 		}
 	}
@@ -94,7 +93,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				}
 				
 				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z);
-				addDescriptor(new Descriptor(returnSlot, destination, z.getRightExtent(), x));
+				addDescriptor(returnSlot, destination, z.getRightExtent(), x);
 			}
 		}
 	}

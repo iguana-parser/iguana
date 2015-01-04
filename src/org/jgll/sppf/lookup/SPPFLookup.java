@@ -124,7 +124,7 @@ public interface SPPFLookup {
 	
 	void ambiguousNodeAdded(NonterminalOrIntermediateNode node);
 	
-	void packedNodeAdded(PackedNode packedNode);
+	void packedNodeAdded(PackedNode node);
 	
 	void intermediateNodeAdded(IntermediateNode node);
 	

@@ -3,20 +3,26 @@ package org.jgll.parser.lookup;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.util.logging.LoggerWrapper;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.hashing.IntKey2;
+import org.jgll.util.hashing.hashfunction.HashFunction;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class DistributedDescriptorLookupImpl implements DescriptorLookup {
-	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(DistributedDescriptorLookupImpl.class);
 
 	private Deque<Descriptor> descriptorsStack;
+	private HashFunction f;
 
-	public DistributedDescriptorLookupImpl() {
-		long start = System.nanoTime();
+	public DistributedDescriptorLookupImpl(HashFunction f) {
+		this.f = f;
 		descriptorsStack = new ArrayDeque<>();
-		long end = System.nanoTime();
-		log.info("Descriptor lookup initialization: %d ms", (end - start) / 1000_000);
 	}
 	
 	@Override
@@ -30,8 +36,8 @@ public class DistributedDescriptorLookupImpl implements DescriptorLookup {
 	}
 	
 	@Override
-	public boolean addDescriptor(Descriptor descriptor) {
-		return descriptor.getGSSNode().hasDescriptor(descriptor);
+	public boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
+		return gssNode.hasDescriptor(IntKey2.from(slot.getId(), inputIndex, f));
 	}
 
 	@Override

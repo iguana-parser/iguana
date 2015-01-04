@@ -7,7 +7,6 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.util.Configuration.LookupStrategy;
 
 import com.google.common.testing.GcFinalization;
 
@@ -52,12 +51,13 @@ public class BenchmarkGamma {
 //		System.out.println(writer.toString());
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
-		Configuration config = Configuration.builder().build();
+		Input input = Input.fromString(getBs(420));
+		Configuration config = Configurations.DEFAULT(grammar, input);
+		
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {
 			GLLParser parser = ParserFactory.getParser(config);
 //			GLLParser parser = (GLLParser) clazz.newInstance();
-			Input input = Input.fromString(getBs(420));
 			parser.parse(input, grammar, startSymbol);
 			parser.reset();
 		}
@@ -66,11 +66,11 @@ public class BenchmarkGamma {
 		System.out.println(BenchmarkUtil.header());
 		for (int i = 1; i <= 50; i++) {
 			for (int j = 0; j < runCount; j++) {
+				input = Input.fromString(getBs(i * 10));
 				GLLParser parser = ParserFactory.getParser(config);
 				
 //				GLLParser parser = (GLLParser) clazz.newInstance();
 				
-				Input input = Input.fromString(getBs(i * 10));
 				ParseResult res = parser.parse(input, grammar, startSymbol);
 
 				if (res.isParseSuccess()) {

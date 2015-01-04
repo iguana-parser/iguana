@@ -1,7 +1,6 @@
 package org.jgll.sppf;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.util.hashing.ExternalHashEquals;
 
 /**
  * 
@@ -10,25 +9,15 @@ import org.jgll.util.hashing.ExternalHashEquals;
  */
 public class DummyNode extends TerminalNode {
 
-	private DummyNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
-		super(slot, leftExtent, rightExtent, hashEquals);
+	private DummyNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 
 	private static DummyNode instance;
 	
 	public static DummyNode getInstance() {
 		if(instance == null) {
-			instance = new DummyNode(null, -1, -1, new ExternalHashEquals<NonPackedNode>() {
-
-				public int hash(NonPackedNode t) {
-					return 0;
-				}
-
-				@Override
-				public boolean equals(NonPackedNode t1, NonPackedNode t2) {
-					return false;
-				}
-			});
+			instance = new DummyNode(null, -1, -1);
 		}
 		return instance;
 	}

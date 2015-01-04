@@ -21,10 +21,6 @@ import org.jgll.util.Configuration.LookupStrategy;
  */
 public class ParserFactory {
 	
-	public static GLLParser getParser() {
-		return getParser(Configuration.builder().build());
-	}
-
 	public static GLLParser getParser(Configuration config) {
 		if (config.getGSSType() == GSSType.NEW) {
 			return newParser(config);
@@ -52,21 +48,21 @@ public class ParserFactory {
 	private static SPPFLookup getSPPFLookup(Configuration config) {
 		if (config.getGSSType() == GSSType.NEW) {
 			if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-				return new DistributedSPPFLookupImpl(config.getHashFunction());
+				return new DistributedSPPFLookupImpl(config.getSppfHashFunction());
 			} else {
-				return new GlobalSPPFLookupImpl(config.getHashFunction());
+				return new GlobalSPPFLookupImpl(config.getSppfHashFunction());
 			}			
 		} else {
 			if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-				return new OriginalDistributedSPPFLookupImpl(config.getHashFunction());
+				return new OriginalDistributedSPPFLookupImpl(config.getSppfHashFunction());
 			} else {
-				return new OriginalGlobalSPPFLookupImpl(config.getHashFunction());
+				return new OriginalGlobalSPPFLookupImpl(config.getSppfHashFunction());
 			}
 		}
 	}
 	
 	private static DescriptorLookup getDescriptorLookup(Configuration config) {
-		return new DistributedDescriptorLookupImpl();
+		return new DistributedDescriptorLookupImpl(config.getDescriptorHashFunction());
 	}
 
 }

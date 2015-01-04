@@ -1,11 +1,8 @@
 package org.jgll.sppf;
 
-import java.util.ArrayList;
-
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.util.SPPFToJavaCode;
-import org.jgll.util.hashing.ExternalHashEquals;
 
 /**
  * 
@@ -14,19 +11,13 @@ import org.jgll.util.hashing.ExternalHashEquals;
  */
 public class NonterminalNode extends NonterminalOrIntermediateNode {
 	
-	public NonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
-		super(slot, leftExtent, rightExtent, hashEquals);
+	public NonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
-	}
-	
-	@Override
-	public NonterminalNode init() {
-		children = new ArrayList<>();
-		return this;
 	}
 	
 	@Override

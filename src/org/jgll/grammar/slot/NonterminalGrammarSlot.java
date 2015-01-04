@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -14,8 +16,8 @@ import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.lookup.NodeAddedAction;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.Key;
 
 
 /**
@@ -32,7 +34,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final NodeLookup nodeLookup;
 
-	private Map<NonterminalNode, NonterminalNode> nonterminalNodes;
+	private Map<Key, NonterminalNode> nonterminalNodes;
 
 	public NonterminalGrammarSlot(Nonterminal nonterminal, NodeLookup nodeLookup) {
 		this.nonterminal = nonterminal;
@@ -90,18 +92,19 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		return true;
 	}
 	
-	public NonterminalNode getNonterminalNode(NonterminalNode key, NodeAddedAction<NonterminalNode> action) {
+	
+	public NonterminalNode getNonterminalNode(Key key, Supplier<NonterminalNode> s, Consumer<NonterminalNode> c) {
 		NonterminalNode val;
 		if ((val = nonterminalNodes.get(key)) == null) {
-			val = key;
-			action.execute(val);
+			val = s.get();
+			c.accept(val);
 			nonterminalNodes.put(key, val);
 		}
 		return val;
 	}
 	
-	public NonterminalNode findNonterminalNode(NonterminalNode node) {
-		return nonterminalNodes.get(node);
+	public NonterminalNode findNonterminalNode(Key key) {
+		return nonterminalNodes.get(key);
 	}
 
 	@Override

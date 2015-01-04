@@ -195,4 +195,15 @@ public class Grammar implements Serializable {
 		}
 	}
 	
+	/**
+	 * Returns the size of this grammar, which is equal to the number of nonterminals +
+	 * number of terminals + grammar slots.
+	 * 
+	 */
+	public int size() {
+		return  definitions.size() +
+				(int) definitions.values().stream().flatMap(r -> r.getBody().stream()).filter(s -> s instanceof RegularExpression).count() +
+				definitions.values().stream().map(r -> r.size() + 1).reduce(0, (a, b) -> a + b);
+	}
+	
 }

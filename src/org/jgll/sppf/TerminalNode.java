@@ -6,7 +6,6 @@ import java.util.List;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.ExternalHashEquals;
 
 /**
  * 
@@ -15,8 +14,8 @@ import org.jgll.util.hashing.ExternalHashEquals;
  */
 public class TerminalNode extends NonPackedNode {
 	
-	public TerminalNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
-		super(slot, leftExtent, rightExtent, hashEquals);
+	public TerminalNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override

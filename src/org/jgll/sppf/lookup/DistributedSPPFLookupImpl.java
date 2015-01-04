@@ -5,58 +5,63 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
-import org.jgll.util.hashing.ExternalHashEquals;
+import org.jgll.util.hashing.IntKey2;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 
 public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	
-	protected final ExternalHashEquals<NonPackedNode> hashEquals; 
-	
+	private HashFunction f;
+
 	public DistributedSPPFLookupImpl(HashFunction f) {
-		this.hashEquals = NonPackedNode.distributedHashEquals(f);
+		this.f = f;
 	}
 	
 	@Override
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.getTerminalNode(new TerminalNode(slot, leftExtent, rightExtent, hashEquals), this::terminalNodeAdded);
+		return slot.getTerminalNode(IntKey2.from(leftExtent, rightExtent, f), 
+				                    () -> new TerminalNode(slot, leftExtent, rightExtent),
+				                    this::terminalNodeAdded);
 	}
 
 	@Override
 	public TerminalNode findTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.findTerminalNode(new TerminalNode(slot, leftExtent, rightExtent, hashEquals));
+		return slot.findTerminalNode(IntKey2.from(leftExtent, rightExtent, f));
 	}
 
 	@Override
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.getNonterminalNode(createNonterminalNode(slot, leftExtent, rightExtent, hashEquals), this::nonterminalNodeAdded);
+		return slot.getNonterminalNode(IntKey2.from(leftExtent, rightExtent, f), 
+												   () -> createNonterminalNode(slot, leftExtent, rightExtent),
+												   this::nonterminalNodeAdded);
 	}
 
 	@Override
 	public NonterminalNode findNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.findNonterminalNode(createNonterminalNode(slot, leftExtent, rightExtent, hashEquals));
+		return slot.findNonterminalNode(IntKey2.from(leftExtent, rightExtent, f));
 	}
 
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.getIntermediateNode(new IntermediateNode(slot, leftExtent, rightExtent, hashEquals), this::intermediateNodeAdded);
+		return slot.getIntermediateNode(IntKey2.from(leftExtent, rightExtent, f), 
+				 						() -> createIntermediateNode(slot, leftExtent, rightExtent),
+				 						this::intermediateNodeAdded);
 	}
 
 	@Override
 	public IntermediateNode findIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.findIntermediateNode(new IntermediateNode(slot, leftExtent, rightExtent, hashEquals));
+		return slot.findIntermediateNode(IntKey2.from(leftExtent, rightExtent, f));
 	}
 
 	@Override
 	public NonterminalNode getStartSymbol(NonterminalGrammarSlot startSymbol, int inputSize) {
-		return startSymbol.findNonterminalNode(createNonterminalNode(startSymbol, 0, inputSize - 1, hashEquals));
+		return startSymbol.findNonterminalNode(IntKey2.from(0, inputSize - 1, f));
 	}
 
 	protected IntermediateNode createIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return new IntermediateNode(grammarSlot, leftExtent, rightExtent, hashEquals);
+		return new IntermediateNode(grammarSlot, leftExtent, rightExtent);
 	}
 
 }

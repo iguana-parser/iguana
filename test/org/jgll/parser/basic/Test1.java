@@ -18,9 +18,9 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.function.ExpectedSPPF;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -39,16 +39,15 @@ public class Test1 {
 	
 	private Grammar grammar;
 
-	private Nonterminal A = Nonterminal.withName("A");
-	
 	private GLLParser parser;
 	
 	private Input input;
 	
 	private ExpectedSPPF expectedSPPF;
 	
-	public Test1(GLLParser parser, Input input, ExpectedSPPF expectedSPPF) {
-		this.parser = parser;
+	public Test1(Configuration config, Grammar grammar, Input input, ExpectedSPPF expectedSPPF) {
+		this.parser = ParserFactory.getParser(config);
+		this.grammar = grammar;
 		this.input = input;
 		this.expectedSPPF = expectedSPPF;
 	}
@@ -56,22 +55,22 @@ public class Test1 {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-        		{ ParserFactory.getParser(DEFAULT), Input.empty(), (ExpectedSPPF) Test1::expectedSPPF },
-        		{ ParserFactory.getParser(CONFIG_1), Input.empty(), (ExpectedSPPF) Test1::expectedSPPF },
-        		{ ParserFactory.getParser(CONFIG_2), Input.empty(), (ExpectedSPPF) Test1::expectedSPPF },
-        		{ ParserFactory.getParser(CONFIG_3), Input.empty(), (ExpectedSPPF) Test1::expectedSPPF }
+        		{ DEFAULT(getGrammar(),  Input.empty()), getGrammar(), Input.empty(), (ExpectedSPPF) Test1::expectedSPPF },
+        		{ CONFIG_1(getGrammar(), Input.empty()), getGrammar(), Input.empty(), (ExpectedSPPF) Test1::expectedSPPF },
+        		{ CONFIG_2(getGrammar(), Input.empty()), getGrammar(), Input.empty(), (ExpectedSPPF) Test1::expectedSPPF },
+        		{ CONFIG_3(getGrammar(), Input.empty()), getGrammar(), Input.empty(), (ExpectedSPPF) Test1::expectedSPPF }
            });
     }
 	
-	@Before
-	public void init() {
+	public static Grammar getGrammar() {
+		Nonterminal A = Nonterminal.withName("A");
 		Rule r1 = Rule.builder(A).build();
-		grammar = new Grammar.Builder().addRule(r1).build();
+		return Grammar.builder().addRule(r1).build();
 	}
 	
 	@Test
 	public void testNullable() {
-		assertTrue(grammar.isNullable(A));
+		assertTrue(grammar.isNullable(Nonterminal.withName("A")));
 	}
 	
 	@Test
@@ -83,7 +82,7 @@ public class Test1 {
 	
 	private static SPPFNode expectedSPPF(GrammarSlotRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 0).init();
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 0);
 		PackedNode node2 = factory.createPackedNode("A ::= .", 0, node1);
 		TerminalNode node3 = factory.createEpsilonNode(0);
 		node2.addChild(node3);

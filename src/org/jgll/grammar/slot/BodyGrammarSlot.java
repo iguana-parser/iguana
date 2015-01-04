@@ -1,21 +1,23 @@
 package org.jgll.grammar.slot;
 
 import java.util.HashMap;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.lookup.NodeAddedAction;
 import org.jgll.util.Input;
+import org.jgll.util.hashing.Key;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	protected final Position position;
 	
-	private HashMap<IntermediateNode, IntermediateNode> intermediateNodes;
+	private HashMap<Key, IntermediateNode> intermediateNodes;
 	
 	private final NodeLookup nodeLookup;
 
@@ -42,18 +44,18 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return position.isFirst();
 	}
 	
-	public IntermediateNode getIntermediateNode(IntermediateNode key, NodeAddedAction<IntermediateNode> action) {
+	public IntermediateNode getIntermediateNode(Key key, Supplier<IntermediateNode> s, Consumer<IntermediateNode> c) {
 		IntermediateNode val;
 		if ((val = intermediateNodes.get(key)) == null) {
-			val = key;
-			action.execute(val);
+			val = s.get();
+			c.accept(val);
 			intermediateNodes.put(key, val);
 		}
 		return val;
 	}
 	
-	public IntermediateNode findIntermediateNode(IntermediateNode node) {
-		return intermediateNodes.get(node);
+	public IntermediateNode findIntermediateNode(Key key) {
+		return intermediateNodes.get(key);
 	}
 	
 	@Override
