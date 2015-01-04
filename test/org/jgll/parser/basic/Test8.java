@@ -5,24 +5,23 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Function;
 
+import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
-import org.jgll.util.function.ExpectedSPPF;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -41,57 +40,47 @@ import org.junit.runners.Parameterized.Parameters;
  *
  */
 @RunWith(Parameterized.class)
-public class Test8 {
+public class Test8 extends AbstractParserTest {
 
-	private Nonterminal A = Nonterminal.withName("A");
-	private Nonterminal B = Nonterminal.withName("B");
-	private Nonterminal C = Nonterminal.withName("C");
-	private Character a = Character.from('a');
-	private Character b = Character.from('b');
-	private Character c = Character.from('c');
-	private Grammar grammar;
-	
-	private GLLParser parser;
-	
-	private Input input;
-	
-	private ExpectedSPPF expectedSPPF;
-	
-	public Test8(GLLParser parser, Input input, ExpectedSPPF expectedSPPF) {
-		this.parser = parser;
-		this.input = input;
-		this.expectedSPPF = expectedSPPF;
+    public Test8(Configuration config, Input input, Grammar grammar,
+			Function<GrammarRegistry, SPPFNode> expectedSPPF) {
+		super(config, input, grammar, expectedSPPF);
 	}
 
-    @Parameters
+	@Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-        		{ ParserFactory.getParser(DEFAULT),  Input.fromString("abc"), (ExpectedSPPF) Test8::expectedSPPF1 },
-        		{ ParserFactory.getParser(CONFIG_1), Input.fromString("abc"), (ExpectedSPPF) Test8::expectedSPPF1 },
-        		{ ParserFactory.getParser(CONFIG_2), Input.fromString("abc"), (ExpectedSPPF) Test8::expectedSPPF1 },
-        		{ ParserFactory.getParser(DEFAULT), Input.fromString("abc"), (ExpectedSPPF) Test8::expectedSPPF1 },
-        		{ ParserFactory.getParser(DEFAULT),  Input.fromString("aaaac"), (ExpectedSPPF) Test8::expectedSPPF2 },
-        		{ ParserFactory.getParser(CONFIG_1), Input.fromString("aaaac"), (ExpectedSPPF) Test8::expectedSPPF2 },
-        		{ ParserFactory.getParser(CONFIG_2), Input.fromString("aaaac"), (ExpectedSPPF) Test8::expectedSPPF2 },
-        		{ ParserFactory.getParser(CONFIG_3), Input.fromString("aaaac"), (ExpectedSPPF) Test8::expectedSPPF2 }
+        		{ DEFAULT,  Input.fromString("abc"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test8::expectedSPPF1 },
+        		{ CONFIG_1, Input.fromString("abc"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test8::expectedSPPF1 },
+        		{ CONFIG_2, Input.fromString("abc"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test8::expectedSPPF1 },
+        		{ DEFAULT, Input.fromString("abc"),  getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test8::expectedSPPF1 },
+        		{ DEFAULT,  Input.fromString("aaaac"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test8::expectedSPPF2 },
+        		{ CONFIG_1, Input.fromString("aaaac"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test8::expectedSPPF2 },
+        		{ CONFIG_2, Input.fromString("aaaac"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test8::expectedSPPF2 },
+        		{ CONFIG_3, Input.fromString("aaaac"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test8::expectedSPPF2 }
            });
     }
 	
-	@Before
-	public void init() {
+	private static Grammar getGrammar() {
+		Nonterminal A = Nonterminal.withName("A");
+		Nonterminal B = Nonterminal.withName("B");
+		Nonterminal C = Nonterminal.withName("C");
+		Character a = Character.from('a');
+		Character b = Character.from('b');
+		Character c = Character.from('c');
 		Rule r1 = Rule.builder(A).addSymbols(a, B, c).build();
 		Rule r2 = Rule.builder(A).addSymbol(C).build();
 		Rule r3 = Rule.builder(B).addSymbol(b).build();
 		Rule r4 = Rule.builder(C).addSymbols(a, C).build();
 		Rule r5 = Rule.builder(C).addSymbol(c).build();
-		grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
+		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 	}
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammar.isNullable(A));
-		assertFalse(grammar.isNullable(B));
-		assertFalse(grammar.isNullable(C));
+		assertFalse(grammar.isNullable(Nonterminal.withName("A")));
+		assertFalse(grammar.isNullable(Nonterminal.withName("B")));
+		assertFalse(grammar.isNullable(Nonterminal.withName("C")));
 	}
 	
 	@Test
@@ -102,27 +91,20 @@ public class Test8 {
 	}
 	
 	@Test
-	public void testParser1() {
+	public void testParser() {
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF.get(parser.getRegistry())));
-	}
-	
-	@Test
-	public void testParser2() {
-		ParseResult result = parser.parse(input, grammar, "A");
-		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF.get(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF.apply(parser.getRegistry())));
 	}
 	
 	private static SPPFNode expectedSPPF1(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 3).init();
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 3);
 		PackedNode node2 = factory.createPackedNode("A ::= a B c .", 2, node1);
-		IntermediateNode node3 = factory.createIntermediateNode("A ::= a B . c", 0, 2).init();
+		IntermediateNode node3 = factory.createIntermediateNode("A ::= a B . c", 0, 2);
 		PackedNode node4 = factory.createPackedNode("A ::= a B . c", 1, node3);
 		TerminalNode node5 = factory.createTerminalNode("a", 0, 1);
-		NonterminalNode node6 = factory.createNonterminalNode("B", 1, 2).init();
+		NonterminalNode node6 = factory.createNonterminalNode("B", 1, 2);
 		PackedNode node7 = factory.createPackedNode("B ::= b .", 2, node6);
 		TerminalNode node8 = factory.createTerminalNode("b", 1, 2);
 		node7.addChild(node8);
@@ -139,21 +121,21 @@ public class Test8 {
 	
 	private static SPPFNode expectedSPPF2(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 5).init();
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 5);
 		PackedNode node2 = factory.createPackedNode("A ::= C .", 5, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("C", 0, 5).init();
+		NonterminalNode node3 = factory.createNonterminalNode("C", 0, 5);
 		PackedNode node4 = factory.createPackedNode("C ::= a C .", 1, node3);
 		TerminalNode node5 = factory.createTerminalNode("a", 0, 1);
-		NonterminalNode node6 = factory.createNonterminalNode("C", 1, 5).init();
+		NonterminalNode node6 = factory.createNonterminalNode("C", 1, 5);
 		PackedNode node7 = factory.createPackedNode("C ::= a C .", 2, node6);
 		TerminalNode node8 = factory.createTerminalNode("a", 1, 2);
-		NonterminalNode node9 = factory.createNonterminalNode("C", 2, 5).init();
+		NonterminalNode node9 = factory.createNonterminalNode("C", 2, 5);
 		PackedNode node10 = factory.createPackedNode("C ::= a C .", 3, node9);
 		TerminalNode node11 = factory.createTerminalNode("a", 2, 3);
-		NonterminalNode node12 = factory.createNonterminalNode("C", 3, 5).init();
+		NonterminalNode node12 = factory.createNonterminalNode("C", 3, 5);
 		PackedNode node13 = factory.createPackedNode("C ::= a C .", 4, node12);
 		TerminalNode node14 = factory.createTerminalNode("a", 3, 4);
-		NonterminalNode node15 = factory.createNonterminalNode("C", 4, 5).init();
+		NonterminalNode node15 = factory.createNonterminalNode("C", 4, 5);
 		PackedNode node16 = factory.createPackedNode("C ::= c .", 5, node15);
 		TerminalNode node17 = factory.createTerminalNode("c", 4, 5);
 		node16.addChild(node17);

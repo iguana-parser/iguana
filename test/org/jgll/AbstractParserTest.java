@@ -1,5 +1,7 @@
 package org.jgll;
 
+import java.util.function.Function;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.GLLParser;
@@ -7,8 +9,6 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
-
-import com.google.common.base.Function;
 
 public class AbstractParserTest {
 

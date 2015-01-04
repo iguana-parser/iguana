@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
@@ -24,8 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import com.google.common.base.Function;
 
 /**
  * 

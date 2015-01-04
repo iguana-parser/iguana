@@ -20,6 +20,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,7 +72,7 @@ public class Gamma0Test {
 	@Test
 	public void test() {
 		Input input = Input.fromString("aad");
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertEquals(1, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.isParseSuccess());
@@ -80,19 +81,19 @@ public class Gamma0Test {
 	
 	public SPPFNode getSPPF(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3).init();
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3);
 		PackedNode node2 = factory.createPackedNode("S ::= a S .", 1, node1);
 		TerminalNode node3 = factory.createTerminalNode("a", 0, 1);
-		NonterminalNode node4 = factory.createNonterminalNode("S", 0, 1, 3).init();
+		NonterminalNode node4 = factory.createNonterminalNode("S", 0, 1, 3);
 		PackedNode node5 = factory.createPackedNode("S ::= A S d .", 2, node4);
-		IntermediateNode node6 = factory.createIntermediateNode("S ::= A S . d", 1, 2).init();
+		IntermediateNode node6 = factory.createIntermediateNode("S ::= A S . d", 1, 2);
 		PackedNode node7 = factory.createPackedNode("S ::= A S . d", 2, node6);
-		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 1, 2).init();
+		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 1, 2);
 		PackedNode node9 = factory.createPackedNode("A ::= a .", 2, node8);
 		TerminalNode node10 = factory.createTerminalNode("a", 1, 2);
 		node9.addChild(node10);
 		node8.addChild(node9);
-		NonterminalNode node11 = factory.createNonterminalNode("S", 0, 2, 2).init();
+		NonterminalNode node11 = factory.createNonterminalNode("S", 0, 2, 2);
 		PackedNode node12 = factory.createPackedNode("S ::= .", 2, node11);
 		TerminalNode node13 = factory.createEpsilonNode(2);
 		node12.addChild(node13);
@@ -107,13 +108,13 @@ public class Gamma0Test {
 		node2.addChild(node3);
 		node2.addChild(node4);
 		PackedNode node15 = factory.createPackedNode("S ::= A S d .", 2, node1);
-		IntermediateNode node16 = factory.createIntermediateNode("S ::= A S . d", 0, 2).init();
+		IntermediateNode node16 = factory.createIntermediateNode("S ::= A S . d", 0, 2);
 		PackedNode node17 = factory.createPackedNode("S ::= A S . d", 1, node16);
-		NonterminalNode node18 = factory.createNonterminalNode("A", 0, 0, 1).init();
+		NonterminalNode node18 = factory.createNonterminalNode("A", 0, 0, 1);
 		PackedNode node19 = factory.createPackedNode("A ::= a .", 1, node18);
 		node19.addChild(node3);
 		node18.addChild(node19);
-		NonterminalNode node21 = factory.createNonterminalNode("S", 0, 1, 2).init();
+		NonterminalNode node21 = factory.createNonterminalNode("S", 0, 1, 2);
 		PackedNode node22 = factory.createPackedNode("S ::= a S .", 2, node21);
 		node22.addChild(node10);
 		node22.addChild(node11);

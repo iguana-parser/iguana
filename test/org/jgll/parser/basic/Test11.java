@@ -5,15 +5,15 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Function;
 
+import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -22,7 +22,6 @@ import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
-import org.jgll.util.function.ExpectedSPPF;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -37,30 +36,23 @@ import org.junit.runners.Parameterized.Parameters;
  *
  */
 @RunWith(Parameterized.class)
-public class Test11 {
+public class Test11 extends AbstractParserTest {
 
-	private Grammar grammar;
-	
-	private GLLParser parser;
-	
-	private Input input;
-	
-	private ExpectedSPPF expectedSPPF;
-	
-	public Test11(Configuration config, Grammar grammar, Input input, ExpectedSPPF expectedSPPF) {
-		this.parser = ParserFactory.getParser(config, input, grammar);
-		this.grammar = grammar;
-		this.input = input;
-		this.expectedSPPF = expectedSPPF;
+	public Test11(
+			Configuration config,
+			Input input,
+			Grammar grammar,
+			Function<GrammarRegistry, SPPFNode> expectedSPPF) {
+		super(config, input, grammar, expectedSPPF);
 	}
-	
+
 	@Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-        		{ DEFAULT,  getGrammar(), Input.fromString("ab"), (ExpectedSPPF) Test11::expectedSPPF },
-        		{ CONFIG_1, getGrammar(), Input.fromString("ab"), (ExpectedSPPF) Test11::expectedSPPF },
-        		{ CONFIG_2, getGrammar(), Input.fromString("ab"), (ExpectedSPPF) Test11::expectedSPPF },
-        		{ CONFIG_3, getGrammar(), Input.fromString("ab"), (ExpectedSPPF) Test11::expectedSPPF }
+        		{ DEFAULT,  getGrammar(), Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
+        		{ CONFIG_1, getGrammar(), Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
+        		{ CONFIG_2, getGrammar(), Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
+        		{ CONFIG_3, getGrammar(), Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF }
            });
     }
 	
@@ -80,7 +72,7 @@ public class Test11 {
 		ParseResult result = parser.parse(input, grammar, "S");
 		assertTrue(result.isParseSuccess());
 		assertEquals(1, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF.get(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF.apply(parser.getRegistry())));
 	}
 	
 	private static SPPFNode expectedSPPF(GrammarRegistry registry) {

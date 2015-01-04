@@ -9,6 +9,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.junit.Before;
@@ -46,7 +47,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
-        GLLParser parser = ParserFactory.getParser();
+        GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
         ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
@@ -60,7 +61,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
-        GLLParser parser = ParserFactory.getParser();
+        GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
         ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
@@ -74,7 +75,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
-        GLLParser parser = ParserFactory.getParser();
+        GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
         ParseResult result = parser.parse(input, grammar, "S");
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();

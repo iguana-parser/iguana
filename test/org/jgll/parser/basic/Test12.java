@@ -5,23 +5,22 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Function;
 
+import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
-import org.jgll.util.function.ExpectedSPPF;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -36,69 +35,54 @@ import org.junit.runners.Parameterized.Parameters;
  *
  */
 @RunWith(Parameterized.class)
-public class Test12 {
+public class Test12 extends AbstractParserTest {
 	
-	private Nonterminal A = Nonterminal.withName("A");
-	
-	private Grammar grammar;
-	
-	private GLLParser parser;
-	
-	private Input input;
-	
-	private ExpectedSPPF expectedSPPF;
-	
-	public Test12(GLLParser parser, Input input, ExpectedSPPF expectedSPPF) {
-		this.parser = parser;
-		this.input = input;
-		this.expectedSPPF = expectedSPPF;
+	public Test12(
+			Configuration config,
+			Input input,
+			Grammar grammar,
+			Function<GrammarRegistry, SPPFNode> expectedSPPF) {
+		super(config, input, grammar, expectedSPPF);
 	}
-	
+
+
 	@Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-        		{ ParserFactory.getParser(DEFAULT),  Input.empty(), (ExpectedSPPF) Test12::expectedSPPF1 },
-        		{ ParserFactory.getParser(CONFIG_1), Input.empty(), (ExpectedSPPF) Test12::expectedSPPF1 },
-        		{ ParserFactory.getParser(CONFIG_2), Input.empty(), (ExpectedSPPF) Test12::expectedSPPF1 },
-        		{ ParserFactory.getParser(CONFIG_3), Input.empty(), (ExpectedSPPF) Test12::expectedSPPF1 },
-        		{ ParserFactory.getParser(DEFAULT),  Input.fromString("a"), (ExpectedSPPF) Test12::expectedSPPF1 },
-        		{ ParserFactory.getParser(CONFIG_1), Input.fromString("a"), (ExpectedSPPF) Test12::expectedSPPF1 },
-        		{ ParserFactory.getParser(CONFIG_2), Input.fromString("a"), (ExpectedSPPF) Test12::expectedSPPF1 },
-        		{ ParserFactory.getParser(CONFIG_3), Input.fromString("a"), (ExpectedSPPF) Test12::expectedSPPF1 }
+        		{ DEFAULT,  Input.empty(), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test12::expectedSPPF1 },
+        		{ CONFIG_1, Input.empty(), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test12::expectedSPPF1 },
+        		{ CONFIG_2, Input.empty(), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test12::expectedSPPF1 },
+        		{ CONFIG_3, Input.empty(), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test12::expectedSPPF1 },
+        		{ DEFAULT,  Input.fromString("a"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test12::expectedSPPF1 },
+        		{ CONFIG_1, Input.fromString("a"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test12::expectedSPPF1 },
+        		{ CONFIG_2, Input.fromString("a"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test12::expectedSPPF1 },
+        		{ CONFIG_3, Input.fromString("a"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test12::expectedSPPF1 }
            });
     }
 
 
-	@Before
-	public void init() {
+	private static Grammar getGrammar() {
+		Nonterminal A = Nonterminal.withName("A");
 		Rule r1 = Rule.builder(A).addSymbols(A, A).build();
 		Rule r2 = Rule.builder(A).addSymbol(Character.from('a')).build();
 		Rule r3 = Rule.builder(A).build();
-		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).build();
+		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
 	@Test
-	public void testParser1() {
-		ParseResult result = parser.parse(input, grammar, "A");
-		assertTrue(result.isParseSuccess());
-		// TODO: stackoverflow bug due to the cycle in the SPPF. Fix it later!
-//		assertTrue(sppf.deepEquals(getSPPF1()));
-	}
-		
-	@Test
-	public void testParser2() {
+	public void testParser() {
 		ParseResult result = parser.parse(input, grammar, "A");
 		assertTrue(result.isParseSuccess());
 	}
 	
 	private static SPPFNode expectedSPPF1(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 1).init();
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 1);
 		PackedNode node2 = factory.createPackedNode("A ::= a .", 0, node1);
 		TerminalNode node3 = factory.createTerminalNode("a", 0, 1);
 		node2.addChild(node3);
 		PackedNode node4 = factory.createPackedNode("A ::= A A .", 1, node1);
-		NonterminalNode node5 = factory.createNonterminalNode("A", 1, 1).init();
+		NonterminalNode node5 = factory.createNonterminalNode("A", 1, 1);
 		PackedNode node6 = factory.createPackedNode("A ::= .", 1, node5);
 		PackedNode node7 = factory.createPackedNode("A ::= A A .", 1, node5);
 		node7.addChild(node5);
@@ -108,7 +92,7 @@ public class Test12 {
 		node4.addChild(node1);
 		node4.addChild(node5);
 		PackedNode node8 = factory.createPackedNode("A ::= A A .", 0, node1);
-		NonterminalNode node9 = factory.createNonterminalNode("A", 0, 0).init();
+		NonterminalNode node9 = factory.createNonterminalNode("A", 0, 0);
 		PackedNode node10 = factory.createPackedNode("A ::= .", 0, node9);
 		PackedNode node11 = factory.createPackedNode("A ::= A A .", 0, node9);
 		node11.addChild(node9);
