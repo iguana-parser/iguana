@@ -97,9 +97,7 @@ public abstract class Expression {
 		}
 	}
 	
-	static class Call extends Expression {
-		
-		static public final int PRINTLN = 0;
+	static public abstract class Call extends Expression {
 		
 		private final java.lang.String fun;
 		private final Expression[] arguments;
@@ -109,7 +107,7 @@ public abstract class Expression {
 			this.arguments = arguments;
 		}
 		
-		public Object interpret(Environment env) {
+		protected Object[] interpretArguments(Environment env) {
 			Object[] values = new Object[arguments.length];
 			
 			int i = 0;
@@ -118,9 +116,9 @@ public abstract class Expression {
 				i++;
 			}
 			
-			return null;
+			return values;
 		}
-		
+				
 	}
 	
 
