@@ -15,6 +15,8 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final String variable;
 	
+	private final String[] parameters;
+	
 	private final Expression[] arguments;
 	
 	public static Nonterminal withName(String name) {
@@ -26,6 +28,7 @@ public class Nonterminal extends AbstractSymbol {
 		this.ebnfList = builder.ebnfList;
 		this.index = builder.index;
 		this.variable = builder.variable;
+		this.parameters = builder.parameters;
 		this.arguments = builder.arguments;
 	}
 	
@@ -49,11 +52,20 @@ public class Nonterminal extends AbstractSymbol {
 		return variable;
 	}
 	
+	public String[] getParameters() {
+		return parameters;
+	}
+	
+	public Expression[] getArguments() {
+		return arguments;
+	}
+	
 	@Override
 	public String toString() {
 		return (variable != null? variable + " = " : "")
 			    + (label != null? label + ":" : "")
 			    + name + (index > 0 ? index : "")
+			    + (parameters != null? "(" + "..." + ")" : "")
 		        + (arguments != null? "(" + "..." + ")" : "");
 	}
 	
@@ -91,6 +103,8 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private String variable;
 		
+		private String[] parameters;
+		
 		private Expression[] arguments;
 		
 		public Builder(Nonterminal nonterminal) {
@@ -98,6 +112,7 @@ public class Nonterminal extends AbstractSymbol {
 			this.name = nonterminal.name;
 			this.ebnfList = nonterminal.ebnfList;
 			this.index = nonterminal.index;
+			this.parameters = nonterminal.parameters;
 			this.arguments = nonterminal.arguments;
 		}
 
@@ -117,6 +132,11 @@ public class Nonterminal extends AbstractSymbol {
 		
 		public Builder setEbnfList(boolean ebnfList) {
 			this.ebnfList = ebnfList;
+			return this;
+		}
+		
+		public Builder addParameters(String... parameters) {
+			this.parameters = parameters;
 			return this;
 		}
 		
