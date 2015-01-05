@@ -1,6 +1,6 @@
 package org.jgll.datadependent.exp;
 
-import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.env.EvalContext;
 import org.jgll.datadependent.exp.Expression;
 
 public class Expressions {
@@ -26,9 +26,9 @@ public class Expressions {
 	
 	static public Expression println(Expression... args) {
 		return new Expression.Call("", args) {
-	
-					public Object interpret(Environment env) {
-						Object[] arguments = interpretArguments(env);
+					@Override
+					public Object interpret(EvalContext ctx) {
+						Object[] arguments = interpretArguments(ctx);
 						for (Object argument : arguments) {
 							System.out.print(argument);
 							System.out.print("; ");

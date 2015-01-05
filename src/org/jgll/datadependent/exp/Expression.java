@@ -1,10 +1,10 @@
 package org.jgll.datadependent.exp;
 
-import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.env.EvalContext;
 
 public abstract class Expression {
 	
-	public abstract Object interpret(Environment env);
+	public abstract Object interpret(EvalContext ctx);
 	
 	public boolean isBoolean() {
 		return false;
@@ -16,16 +16,16 @@ public abstract class Expression {
 			return true;
 		}
 		
-		static public final Boolean TRUE = new Boolean() {
-
-			public Object interpret(Environment env) {
+		static public final Boolean TRUE = new Boolean() {		
+			@Override
+			public Object interpret(EvalContext ctx) {
 				return true;
 			}
 		};
 		
 		static public final Boolean FALSE = new Boolean() {
-
-			public Object interpret(Environment env) {
+			@Override
+			public Object interpret(EvalContext ctx) {
 				return false;
 			}
 		};
@@ -48,7 +48,8 @@ public abstract class Expression {
 			return true;
 		}
 		
-        public Object interpret(Environment env) {
+		@Override
+        public Object interpret(EvalContext ctx) {
 			return value;
 		}
 		
@@ -70,7 +71,8 @@ public abstract class Expression {
 			return true;
 		}
 		
-		public Object interpret(Environment env) {
+		@Override
+		public Object interpret(EvalContext ctx) {
 			return value;
 		}
 		
@@ -92,7 +94,8 @@ public abstract class Expression {
 			return true;
 		}
 
-		public Object interpret(Environment env) {
+		@Override
+		public Object interpret(EvalContext ctx) {
 			return value;
 		}
 	}
@@ -107,8 +110,9 @@ public abstract class Expression {
 			this.exp = exp;
 		}
 
-		public Object interpret(Environment env) {
-			env.storeVariableLocally(id, exp.interpret(env));
+		@Override
+		public Object interpret(EvalContext ctx) {
+			ctx.setCurrentEnv(ctx.getCurrentEnv().storeVariableLocally(id, exp.interpret(ctx)));
 			return null;
 		}
 		
@@ -125,12 +129,12 @@ public abstract class Expression {
 			this.arguments = arguments;
 		}
 		
-		protected Object[] interpretArguments(Environment env) {
+		protected Object[] interpretArguments(EvalContext ctx) {
 			Object[] values = new Object[arguments.length];
 			
 			int i = 0;
 			while(i < arguments.length) {
-				values[i] = arguments[i].interpret(env);
+				values[i] = arguments[i].interpret(ctx);
 				i++;
 			}
 			
