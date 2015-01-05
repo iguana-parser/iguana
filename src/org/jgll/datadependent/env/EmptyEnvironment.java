@@ -3,11 +3,11 @@ package org.jgll.datadependent.env;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EmptyEnvironment extends Environment {
+public final class EmptyEnvironment extends Environment {
 	
 	public static EmptyEnvironment instance = new EmptyEnvironment(); 
 	
-	protected EmptyEnvironment() {}
+	private EmptyEnvironment() {}
 
 	public boolean isEmpty() {
 		return true;
@@ -29,6 +29,11 @@ public class EmptyEnvironment extends Environment {
 		Map<String, Object> variables = new HashMap<>();
 		variables.put(name, value);
 		return new NonEmptyEnvironment(this, variables);
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return this == other;
 	}
 
 }

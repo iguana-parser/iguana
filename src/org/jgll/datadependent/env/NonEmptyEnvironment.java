@@ -15,7 +15,7 @@ public class NonEmptyEnvironment extends Environment {
 		this.parent = parent;
 		this.variables = variables;
 	}
-
+	
 	public boolean isEmpty() {
 		return false;
 	}
@@ -36,6 +36,20 @@ public class NonEmptyEnvironment extends Environment {
 		if(variables == null) variables = new HashMap<>();
 		variables.put(name, value);
 		return this;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(this == other) return true;
+		if(!(other instanceof NonEmptyEnvironment)) return false;
+		NonEmptyEnvironment that = (NonEmptyEnvironment) other;
+		if(this.parent == that.parent) {
+			if(this.variables != null 
+					&& this.variables.equals(that.variables)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
