@@ -1,26 +1,35 @@
 package org.jgll.grammar.slot;
 
 import java.util.HashMap;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Position;
-import org.jgll.parser.lookup.NodeAddedAction;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.util.Input;
+import org.jgll.util.collections.Key;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	protected final Position position;
 	
-	private HashMap<IntermediateNode, IntermediateNode> intermediateNodes;
+	private HashMap<Key, IntermediateNode> intermediateNodes;
+	
+	private final NodeLookup nodeLookup;
 
-	public BodyGrammarSlot(Position position) {
+	public BodyGrammarSlot(int id, Position position, NodeLookup nodeLookup) {
+		super(id);
 		this.position = position;
-		this.intermediateNodes = new HashMap<>();
+		this.nodeLookup = nodeLookup;
+		this.intermediateNodes = new HashMap<>(1000);
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
     	  .append("new BodyGrammarSlot(")
     	  .append(")").toString();
@@ -36,17 +45,33 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return position.isFirst();
 	}
 	
-	public IntermediateNode getIntermediateNode(IntermediateNode node, NodeAddedAction<IntermediateNode> action) {
-		return intermediateNodes.computeIfAbsent(node, k -> { action.execute(k); return k.init(); });
+	public IntermediateNode getIntermediateNode(Key key, Supplier<IntermediateNode> s, Consumer<IntermediateNode> c) {
+		IntermediateNode val;
+		if ((val = intermediateNodes.get(key)) == null) {
+			val = s.get();
+			c.accept(val);
+			intermediateNodes.put(key, val);
+		}
+		return val;
 	}
 	
-	public IntermediateNode findIntermediateNode(IntermediateNode node) {
-		return intermediateNodes.get(node);
+	public IntermediateNode findIntermediateNode(Key key) {
+		return intermediateNodes.get(key);
+	}
+	
+	@Override
+	public GSSNode getGSSNode(int inputIndex) {
+		return nodeLookup.getOrElseCreate(this, inputIndex);
+	}
+	
+	@Override
+	public GSSNode hasGSSNode(int inputIndex) { 
+		return nodeLookup.get(inputIndex);
 	}
 
 	@Override
-	public void reset() {
+	public void reset(Input input) {
 		intermediateNodes = new HashMap<>();
+		nodeLookup.reset(input);
 	}
-	
 }

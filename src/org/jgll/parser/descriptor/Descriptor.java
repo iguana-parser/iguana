@@ -1,7 +1,6 @@
 package org.jgll.parser.descriptor;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.HashFunctions;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 
@@ -9,15 +8,19 @@ import org.jgll.sppf.NonPackedNode;
  * @author Ali Afroozeh
  * 
  */
-
+// The label of SPPFNode is the same as the slot
 public class Descriptor {
 	
+	// L
 	private final GrammarSlot slot;
 	
+	// (L1, i)
 	private final GSSNode gssNode;
 	
+	// j
 	private final int inputIndex;
 	
+	// (L, i, j)
 	private final NonPackedNode sppfNode;
 
 	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
@@ -46,27 +49,6 @@ public class Descriptor {
 
 	public NonPackedNode getSPPFNode() {
 		return sppfNode;
-	}
-	
-	@Override
-	public int hashCode() {
-		// The label of SPPFNode is the same as the slot
-		return HashFunctions.defaulFunction.hash(slot.hashCode(), inputIndex);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) { 
-			return true;
-		}
-		
-		if(! (obj instanceof Descriptor)) {
-			return false;
-		}
-		
-		Descriptor other = (Descriptor) obj;
-		
-		return slot == other.slot && inputIndex == other.inputIndex;
 	}
 	
 	@Override

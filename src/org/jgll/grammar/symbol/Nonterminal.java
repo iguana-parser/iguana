@@ -1,7 +1,7 @@
 package org.jgll.grammar.symbol;
 
 import org.jgll.datadependent.ast.Expression;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
@@ -188,7 +188,7 @@ public class Nonterminal extends AbstractSymbol {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 		  .append("Nonterminal.builder(\"" + name + "\")")
 		  .append(label == null? "" : ".setLabel(" + label + ")")

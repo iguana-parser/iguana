@@ -1,18 +1,12 @@
 package org.jgll.util;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.util.Configuration.LookupType;
-import org.jgll.util.generator.CompilationUtil;
 
 import com.google.common.testing.GcFinalization;
 
@@ -47,45 +41,45 @@ public class BenchmarkGamma {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
 		int warmupCount = 3;
-		int runCount = 3;
+		int runCount = 5;
 		
 		Grammar grammar = gamma2();
-		String startSymbol = "S";
-		GrammarGraph grammarGraph = grammar.toGrammarGraph();
+		Nonterminal startSymbol = Nonterminal.withName("S");
 		
 //		StringWriter writer = new StringWriter();
 //		grammarGraph.generate(new PrintWriter(writer));
 //		System.out.println(writer.toString());
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
-		Configuration config = Configuration.builder().setLookupType(LookupType.MAP_GLOBAL).build();
+		Input input = Input.fromString(getBs(300));
+		Configuration config = Configuration.DEFAULT;
+		
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {
-			GLLParser parser = ParserFactory.newParser(config);
+			GLLParser parser = ParserFactory.getParser(config, input, grammar);
 //			GLLParser parser = (GLLParser) clazz.newInstance();
-			parser.parse(Input.fromString(getBs(300)), grammarGraph, startSymbol);
-			grammarGraph.reset();
+			parser.parse(input, grammar, startSymbol);
+			parser.reset();
 		}
 		GcFinalization.awaitFullGc();
 		
 		System.out.println(BenchmarkUtil.header());
 		for (int i = 1; i <= 30; i++) {
 			for (int j = 0; j < runCount; j++) {
-				GLLParser parser = ParserFactory.newParser(config);
+				input = Input.fromString(getBs(i * 10));
+				GLLParser parser = ParserFactory.getParser(config, input, grammar);
 				
 //				GLLParser parser = (GLLParser) clazz.newInstance();
 				
-				Input input = Input.fromString(getBs(i * 10));
-				ParseResult res = parser.parse(input, grammarGraph, startSymbol);
+				ParseResult res = parser.parse(input, grammar, startSymbol);
 
 				if (res.isParseSuccess()) {
-					System.out.println(BenchmarkUtil.format(res.asParseSuccess().getParseStatistics()));
+					System.out.println(BenchmarkUtil.format(input, res.asParseSuccess().getParseStatistics()));
 				} else {
 					System.out.println("Parse error");
 				}
 				parser = null;
 				res = null;
-				grammarGraph.reset();
 				GcFinalization.awaitFullGc();
 			}
 		}

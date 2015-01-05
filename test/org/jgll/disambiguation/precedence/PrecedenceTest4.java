@@ -3,7 +3,7 @@ package org.jgll.disambiguation.precedence;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -16,6 +16,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,23 +79,23 @@ public class PrecedenceTest4 {
 	@Test
 	public void testAssociativityAndPriority() {
 		Input input = Input.fromString("xawz");
-		parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "E");
+		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
 	}
 	
-	private SPPFNode getSPPF(GrammarSlotRegistry registry) {
+	private SPPFNode getSPPF(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 4).init();
+		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 4);
 		PackedNode node2 = factory.createPackedNode("E ::= E1 z .", 3, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("E", 1, 0, 3).init();
+		NonterminalNode node3 = factory.createNonterminalNode("E", 1, 0, 3);
 		PackedNode node4 = factory.createPackedNode("E1 ::= E w .", 2, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("E", 0, 0, 2).init();
+		NonterminalNode node5 = factory.createNonterminalNode("E", 0, 0, 2);
 		PackedNode node6 = factory.createPackedNode("E ::= x E2 .", 1, node5);
 		TerminalNode node7 = factory.createTerminalNode("x", 0, 1);
-		NonterminalNode node8 = factory.createNonterminalNode("E", 2, 1, 2).init();
+		NonterminalNode node8 = factory.createNonterminalNode("E", 2, 1, 2);
 		PackedNode node9 = factory.createPackedNode("E2 ::= a .", 1, node8);
 		TerminalNode node10 = factory.createTerminalNode("a", 1, 2);
 		node9.addChild(node10);

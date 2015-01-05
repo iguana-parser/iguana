@@ -1,5 +1,7 @@
 package org.jgll.util;
 
+import org.jgll.parser.HashFunctions;
+
 
 public class ParseStatistics {
 
@@ -17,14 +19,11 @@ public class ParseStatistics {
 	private final int packedNodesCount;
 	private final int ambiguousNodesCount;
 	
-	private final Input input;
-	
-	public ParseStatistics(Input input, long nanoTime, long userTime, long systemTime,
+	public ParseStatistics(long nanoTime, long userTime, long systemTime,
 						   int memoryUsed, int descriptorsCount, int gssNodesCount,
 						   int gssEdgesCount, int nonterminalNodesCount, int terminalNodesCount,
 						   int intermediateNodesCount, int packedNodesCount,
 						   int ambiguousNodesCount) {
-		this.input = input;
 		this.nanoTime = nanoTime;
 		this.systemTime = systemTime;
 		this.userTime = userTime;
@@ -87,25 +86,132 @@ public class ParseStatistics {
 		return ambiguousNodesCount;
 	}
 	
-	public Input getInput() {
-		return input;
+	public static Builder builder() {
+		return new Builder();
+	}
+	
+	@Override
+	public int hashCode() {
+		return HashFunctions.defaulFunction.hash(descriptorsCount,
+				gssNodesCount, gssEdgesCount, nonterminalNodesCount,
+				terminalNodesCount, intermediateNodesCount, packedNodesCount,
+				ambiguousNodesCount);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof ParseStatistics)) 
+			return false;
+		
+		ParseStatistics other = (ParseStatistics) obj;
+		
+		return descriptorsCount == other.descriptorsCount &&
+			   gssNodesCount == other.gssNodesCount &&
+			   gssEdgesCount == other.gssEdgesCount &&
+			   nonterminalNodesCount == other.nonterminalNodesCount &&
+			   terminalNodesCount == other.terminalNodesCount &&
+			   intermediateNodesCount == other.intermediateNodesCount &&
+			   packedNodesCount == other.packedNodesCount &&
+			   ambiguousNodesCount == other.ambiguousNodesCount;
 	}
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Input size: ").append(input.length()).append(", ").append(input.getLineCount()).append("\n");
-		sb.append("Parsing Time (nano time): ").append(nanoTime / 1000_000).append(" ms").append("\n");
-		sb.append("Parsing Time (user time): ").append(userTime / 1000_000).append(" ms").append("\n");
-		sb.append("Parsing Time (system time): ").append(systemTime / 1000_000).append(" ms").append("\n");
-		sb.append("Memory used: ").append(memoryUsed).append(" mb").append("\n");
-		sb.append("Descriptors: ").append(descriptorsCount).append("\n");
-		sb.append("GSS Nodes: ").append(gssNodesCount).append("\n");
-		sb.append("GSS Edges: ").append(gssEdgesCount).append("\n");
-		sb.append("Nonterminal nodes: ").append(nonterminalNodesCount).append("\n");
-		sb.append("Intermediate nodes: ").append(intermediateNodesCount).append("\n");
-		sb.append("Packed nodes: ").append(packedNodesCount).append("\n");
-		sb.append("Ambiguities: ").append(ambiguousNodesCount).append("\n");
-		return sb.toString();
+		return  "Parsing Time (nano time): " + nanoTime / 1000_000 + " ms" + "\n" +
+				"Parsing Time (user time): " + userTime / 1000_000 + " ms" + "\n" +
+				"Parsing Time (system time): " + systemTime / 1000_000 + " ms" + "\n" +
+				"Memory used: " + memoryUsed + " mb" + "\n" +
+				"Descriptors: " + descriptorsCount + "\n" +
+				"GSS Nodes: " + gssNodesCount + "\n" +
+				"GSS Edges: " + gssEdgesCount + "\n" +
+				"Nonterminal nodes: " + nonterminalNodesCount + "\n" +
+				"Terminal nodes: " + terminalNodesCount + "\n" +
+				"Intermediate nodes: " + intermediateNodesCount + "\n" +
+				"Packed nodes: " + packedNodesCount + "\n" +
+				"Ambiguities: " + ambiguousNodesCount + "\n";
+	}
+	
+	public static class Builder {
+		long nanoTime;
+		long systemTime;
+		long userTime;
+		int memoryUsed;
+		
+		int descriptorsCount;
+		int gssNodesCount;
+		int gssEdgesCount;
+		int nonterminalNodesCount;
+		int terminalNodesCount;
+		int intermediateNodesCount;
+		int packedNodesCount;
+		int ambiguousNodesCount;
+		
+		public Builder setNanoTime(long nanoTime) {
+			this.nanoTime = nanoTime;
+			return this;
+		}
+		
+		public Builder setSystemTime(long systemTime) {
+			this.systemTime = systemTime;
+			return this;
+		}
+
+		public Builder setUserTime(long userTime) {
+			this.userTime = userTime;
+			return this;
+		}
+
+		public Builder setMemoryUsed(int memoryUsed) {
+			this.memoryUsed = memoryUsed;
+			return this;
+		}
+
+		public Builder setDescriptorsCount(int descriptorsCount) {
+			this.descriptorsCount = descriptorsCount;
+			return this;
+		}
+
+		public Builder setGSSNodesCount(int gssNodesCount) {
+			this.gssNodesCount = gssNodesCount;
+			return this;
+		}
+
+		public Builder setGSSEdgesCount(int gssEdgesCount) {
+			this.gssEdgesCount = gssEdgesCount;
+			return this;
+		}
+
+		public Builder setNonterminalNodesCount(int nonterminalNodesCount) {
+			this.nonterminalNodesCount = nonterminalNodesCount;
+			return this;
+		}
+
+		public Builder setTerminalNodesCount(int terminalNodesCount) {
+			this.terminalNodesCount = terminalNodesCount;
+			return this;
+		}
+
+		public Builder setIntermediateNodesCount(int intermediateNodesCount) {
+			this.intermediateNodesCount = intermediateNodesCount;
+			return this;
+		}
+
+		public Builder setPackedNodesCount(int packedNodesCount) {
+			this.packedNodesCount = packedNodesCount;
+			return this;
+		}
+
+		public Builder setAmbiguousNodesCount(int ambiguousNodesCount) {
+			this.ambiguousNodesCount = ambiguousNodesCount;
+			return this;
+		}
+		
+		public ParseStatistics build() {
+			return new ParseStatistics(nanoTime, userTime, systemTime, memoryUsed, descriptorsCount, gssNodesCount, gssEdgesCount, nonterminalNodesCount, nonterminalNodesCount, intermediateNodesCount, packedNodesCount, ambiguousNodesCount);
+		}
+
 	}
 }

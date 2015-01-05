@@ -4,7 +4,6 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -16,6 +15,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,8 +35,7 @@ import org.junit.Test;
 public class LL1Test {
 
 	private Grammar grammar;
-	private GrammarGraph grammarGraph;
-	
+
 	private Nonterminal S = Nonterminal.withName("S");
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
@@ -69,7 +68,6 @@ public class LL1Test {
 		builder.addRule(rule6);
 
 		grammar = builder.build();
-		grammarGraph = grammar.toGrammarGraph();
 	}
 	
 	@Test
@@ -106,21 +104,21 @@ public class LL1Test {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("bda");
-		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
-		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3).init();
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3);
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 2, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 2).init();
+		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 2);
 		PackedNode node4 = factory.createPackedNode("A ::= B D .", 1, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 1).init();
+		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 1);
 		PackedNode node6 = factory.createPackedNode("B ::= b .", 0, node5);
 		TerminalNode node7 = factory.createTerminalNode("b", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		NonterminalNode node8 = factory.createNonterminalNode("D", 0, 1, 2).init();
+		NonterminalNode node8 = factory.createNonterminalNode("D", 0, 1, 2);
 		PackedNode node9 = factory.createPackedNode("D ::= d .", 1, node8);
 		TerminalNode node10 = factory.createTerminalNode("d", 1, 1);
 		node9.addChild(node10);
@@ -139,21 +137,21 @@ public class LL1Test {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("a");
-		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
-		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 1).init();
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 1);
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 0, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 0).init();
+		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 0);
 		PackedNode node4 = factory.createPackedNode("A ::= B D .", 0, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 0).init();
+		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 0);
 		PackedNode node6 = factory.createPackedNode("B ::= .", 0, node5);
 		TerminalNode node7 = factory.createTerminalNode("epsilon", 0, 0);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		NonterminalNode node8 = factory.createNonterminalNode("D", 0, 0, 0).init();
+		NonterminalNode node8 = factory.createNonterminalNode("D", 0, 0, 0);
 		PackedNode node9 = factory.createPackedNode("D ::= .", 0, node8);
 		node9.addChild(node7);
 		node8.addChild(node9);
@@ -171,21 +169,21 @@ public class LL1Test {
 	@Test
 	public void test3() {
 		Input input = Input.fromString("ba");
-		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
-		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2).init();
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2);
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 1, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 1).init();
+		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 1);
 		PackedNode node4 = factory.createPackedNode("A ::= B D .", 1, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 1).init();
+		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 1);
 		PackedNode node6 = factory.createPackedNode("B ::= b .", 0, node5);
 		TerminalNode node7 = factory.createTerminalNode("b", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		NonterminalNode node8 = factory.createNonterminalNode("D", 0, 1, 1).init();
+		NonterminalNode node8 = factory.createNonterminalNode("D", 0, 1, 1);
 		PackedNode node9 = factory.createPackedNode("D ::= .", 1, node8);
 		TerminalNode node10 = factory.createTerminalNode("epsilon", 1, 0);
 		node9.addChild(node10);
@@ -204,21 +202,21 @@ public class LL1Test {
 	@Test
 	public void test4() {
 		Input input = Input.fromString("da");
-		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammarGraph, "S");
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
-		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2).init();
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2);
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 1, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 1).init();
+		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 1);
 		PackedNode node4 = factory.createPackedNode("A ::= B D .", 0, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 0).init();
+		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 0);
 		PackedNode node6 = factory.createPackedNode("B ::= .", 0, node5);
 		TerminalNode node7 = factory.createTerminalNode("epsilon", 0, 0);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		NonterminalNode node8 = factory.createNonterminalNode("D", 0, 0, 1).init();
+		NonterminalNode node8 = factory.createNonterminalNode("D", 0, 0, 1);
 		PackedNode node9 = factory.createPackedNode("D ::= d .", 0, node8);
 		TerminalNode node10 = factory.createTerminalNode("d", 0, 1);
 		node9.addChild(node10);

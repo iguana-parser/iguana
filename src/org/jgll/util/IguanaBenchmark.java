@@ -18,7 +18,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -97,7 +97,6 @@ public class IguanaBenchmark {
 		String startSymbol = null;
 
 		Grammar grammar = null;
-		GrammarGraph grammarGraph = null;
 		Class<?> clazz = null;
 		
 		
@@ -116,7 +115,6 @@ public class IguanaBenchmark {
 //					if (line.hasOption("n")) {
 //						grammarGraph = grammar.toGrammarGraphWithoutFirstFollowChecks();
 //					} else {
-						grammarGraph = grammar.toGrammarGraph();	
 //					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -150,7 +148,7 @@ public class IguanaBenchmark {
 			}
 			
 			try {
-				warmup(startSymbol, grammarGraph, warmupCount);
+				warmup(startSymbol, grammar, warmupCount);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -159,7 +157,7 @@ public class IguanaBenchmark {
 	        if (line.hasOption("i")) {
 	        	String inputPath = line.getOptionValue("i");
 	        	try {
-					parse(startSymbol, runCount, grammar, grammarGraph, Input.fromPath(inputPath));
+					parse(startSymbol, runCount, grammar, Input.fromPath(inputPath));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -198,7 +196,7 @@ public class IguanaBenchmark {
 	    		try {
 	    			for (String inputPath : inputPaths) {								
 	    				if (!ignore(ignorePaths, inputPath)) {
-	    					parse(startSymbol, runCount, grammar, grammarGraph, Input.fromPath(inputPath));
+	    					parse(startSymbol, runCount, grammar, Input.fromPath(inputPath));
 	    				}
 	    			}
 	    		} catch (Exception e) {
@@ -210,7 +208,7 @@ public class IguanaBenchmark {
 	        	try {
 					String commandLineInput = in.readLine();
 					System.out.println(commandLineInput);
-					parse(startSymbol, runCount, grammar, grammarGraph, Input.fromString(commandLineInput));
+					parse(startSymbol, runCount, grammar, Input.fromString(commandLineInput));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -222,28 +220,22 @@ public class IguanaBenchmark {
 		
 	}
 
-	private static void warmup(String startSymbol, GrammarGraph grammarGraph, int warmupCount) throws IOException{
+	private static void warmup(String startSymbol, Grammar grammar, int warmupCount) throws IOException{
 		for (int i = 0; i < warmupCount; i++) {
-			GLLParser parser = ParserFactory.newParser();
 			Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
-			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
-//			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
-			System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
-			grammarGraph.reset();
-//			GcFinalization.awaitFullGc();
+			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+			ParseResult result = parser.parse(input, grammar, Nonterminal.withName(startSymbol));
+			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getParseStatistics()));
 		}
 	}
 	
-	private static void parse(String startSymbol, int runCount,
- 							  Grammar grammar, GrammarGraph grammarGraph,
-							  Input input) throws IOException {
-		
+	private static void parse(String startSymbol, int runCount, Grammar grammar, Input input) throws IOException {
 		System.out.println(input.getURI());
 		for (int i = 0; i < runCount; i++) {
-			GLLParser parser = ParserFactory.newParser();
-			ParseResult result = parser.parse(input, grammarGraph, startSymbol);
+			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+			ParseResult result = parser.parse(input, grammar, Nonterminal.withName(startSymbol));
 			if (result.isParseSuccess()) {
-				System.out.println(BenchmarkUtil.format(result.asParseSuccess().getParseStatistics()));
+				System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getParseStatistics()));
 //				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);
 //				System.exit(0);
 			} else {
@@ -252,13 +244,12 @@ public class IguanaBenchmark {
 				break;
 //				System.exit(0);
 			}
-			grammarGraph.reset();
+			parser.reset();
 			parser = null;
 			result = null;
 			GcFinalization.awaitFullGc();
 		}
 		
-		grammarGraph.reset();
 		GcFinalization.awaitFullGc();
 	}
 	

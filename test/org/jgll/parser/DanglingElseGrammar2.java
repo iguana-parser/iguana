@@ -3,7 +3,7 @@ package org.jgll.parser;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Group;
@@ -15,6 +15,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 
@@ -57,27 +58,27 @@ public class DanglingElseGrammar2 {
 
 	public void test() {
 		Input input = Input.fromString("aasbs");
-		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "S");
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));
 	}
 
-	private SPPFNode getExpectedSPPF(GrammarSlotRegistry registry) {
+	private SPPFNode getExpectedSPPF(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 5).init();
+		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 5);
 		PackedNode node2 = factory.createPackedNode("S ::= (a S) .", 0, node1);
-		NonterminalNode node3 = factory.createNonterminalNode("(a S)", 0, 0, 5).init();
+		NonterminalNode node3 = factory.createNonterminalNode("(a S)", 0, 0, 5);
 		PackedNode node4 = factory.createPackedNode("(a S) ::= a S .", 1, node3);
 		TerminalNode node5 = factory.createTerminalNode("a", 0, 1);
-		NonterminalNode node6 = factory.createNonterminalNode("S", 0, 1, 5).init();
+		NonterminalNode node6 = factory.createNonterminalNode("S", 0, 1, 5);
 		PackedNode node7 = factory.createPackedNode("S ::= a S b S .", 4, node6);
-		IntermediateNode node8 = factory.createIntermediateNode("S ::= a S b . S", 1, 4).init();
+		IntermediateNode node8 = factory.createIntermediateNode("S ::= a S b . S", 1, 4);
 		PackedNode node9 = factory.createPackedNode("S ::= a S b . S", 3, node8);
-		IntermediateNode node10 = factory.createIntermediateNode("S ::= a S . b S", 1, 3).init();
+		IntermediateNode node10 = factory.createIntermediateNode("S ::= a S . b S", 1, 3);
 		PackedNode node11 = factory.createPackedNode("S ::= a S . b S", 2, node10);
 		TerminalNode node12 = factory.createTerminalNode("a", 1, 1);
-		NonterminalNode node13 = factory.createNonterminalNode("S", 0, 2, 3).init();
+		NonterminalNode node13 = factory.createNonterminalNode("S", 0, 2, 3);
 		PackedNode node14 = factory.createPackedNode("S ::= s .", 2, node13);
 		TerminalNode node15 = factory.createTerminalNode("s", 2, 1);
 		node14.addChild(node15);
@@ -89,7 +90,7 @@ public class DanglingElseGrammar2 {
 		node9.addChild(node10);
 		node9.addChild(node16);
 		node8.addChild(node9);
-		NonterminalNode node17 = factory.createNonterminalNode("S", 0, 4, 5).init();
+		NonterminalNode node17 = factory.createNonterminalNode("S", 0, 4, 5);
 		PackedNode node18 = factory.createPackedNode("S ::= s .", 4, node17);
 		TerminalNode node19 = factory.createTerminalNode("s", 4, 1);
 		node18.addChild(node19);
@@ -102,13 +103,13 @@ public class DanglingElseGrammar2 {
 		node3.addChild(node4);
 		node2.addChild(node3);
 		PackedNode node20 = factory.createPackedNode("S ::= a S b S .", 4, node1);
-		IntermediateNode node21 = factory.createIntermediateNode("S ::= a S b . S", 0, 4).init();
+		IntermediateNode node21 = factory.createIntermediateNode("S ::= a S b . S", 0, 4);
 		PackedNode node22 = factory.createPackedNode("S ::= a S b . S", 3, node21);
-		IntermediateNode node23 = factory.createIntermediateNode("S ::= a S . b S", 0, 3).init();
+		IntermediateNode node23 = factory.createIntermediateNode("S ::= a S . b S", 0, 3);
 		PackedNode node24 = factory.createPackedNode("S ::= a S . b S", 1, node23);
-		NonterminalNode node25 = factory.createNonterminalNode("S", 0, 1, 3).init();
+		NonterminalNode node25 = factory.createNonterminalNode("S", 0, 1, 3);
 		PackedNode node26 = factory.createPackedNode("S ::= (a S) .", 1, node25);
-		NonterminalNode node27 = factory.createNonterminalNode("(a S)", 0, 1, 3).init();
+		NonterminalNode node27 = factory.createNonterminalNode("(a S)", 0, 1, 3);
 		PackedNode node28 = factory.createPackedNode("(a S) ::= a S .", 2, node27);
 		node28.addChild(node12);
 		node28.addChild(node13);

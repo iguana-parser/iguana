@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.lookup.NodeAddedAction;
+import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
+import org.jgll.util.Input;
+import org.jgll.util.collections.Key;
 
 
 /**
@@ -28,15 +32,16 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final List<BodyGrammarSlot> firstSlots;
 	
-	private Map<Integer, GSSNode> gssNodes;
-	
-	private Map<NonterminalNode, NonterminalNode> nonterminalNodes;
+	private final NodeLookup nodeLookup;
 
-	public NonterminalGrammarSlot(Nonterminal nonterminal) {
+	private Map<Key, NonterminalNode> nonterminalNodes;
+
+	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, NodeLookup nodeLookup) {
+		super(id);
 		this.nonterminal = nonterminal;
-		this.gssNodes = new HashMap<>();
+		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();
-		this.nonterminalNodes = new HashMap<>();
+		this.nonterminalNodes = new HashMap<>(1000);
 	}
 	
 	@Override
@@ -66,7 +71,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 		           .append("new NonterminalGrammarSlot(")
 		           .append(nonterminal.getConstructorCode(registry))
@@ -75,12 +80,12 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public GSSNode getGSSNode(int inputIndex) {
-		return gssNodes.computeIfAbsent(inputIndex, k -> new GSSNode(this, inputIndex));
+		return nodeLookup.getOrElseCreate(this, inputIndex);
 	}
 	
 	@Override
 	public GSSNode hasGSSNode(int inputIndex) { 
-		return gssNodes.get(inputIndex); 
+		return nodeLookup.get(inputIndex);
 	}
 
 	@Override
@@ -88,17 +93,23 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		return true;
 	}
 	
-	public NonterminalNode getNonterminalNode(NonterminalNode node, NodeAddedAction<NonterminalNode> action) {
-		return nonterminalNodes.computeIfAbsent(node, k -> { action.execute(k); return k.init(); });
+	public NonterminalNode getNonterminalNode(Key key, Supplier<NonterminalNode> s, Consumer<NonterminalNode> c) {
+		NonterminalNode val;
+		if ((val = nonterminalNodes.get(key)) == null) {
+			val = s.get();
+			c.accept(val);
+			nonterminalNodes.put(key, val);
+		}
+		return val;
 	}
 	
-	public NonterminalNode findNonterminalNode(NonterminalNode node) {
-		return nonterminalNodes.get(node);
+	public NonterminalNode findNonterminalNode(Key key) {
+		return nonterminalNodes.get(key);
 	}
 
 	@Override
-	public void reset() {
-		gssNodes = new HashMap<>();
+	public void reset(Input input) {
+		nodeLookup.reset(input);
 		nonterminalNodes = new HashMap<>();
 	}
 

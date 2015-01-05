@@ -4,30 +4,32 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-import org.jgll.grammar.GrammarSlotRegistry;
-import org.jgll.parser.lookup.NodeAddedAction;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
+import org.jgll.util.collections.Key;
 
 
 public class TerminalGrammarSlot implements GrammarSlot {
 	
 	private RegularExpression regex;
 	private Matcher matcher;
-	private Map<TerminalNode, TerminalNode> terminalNodes;
+	private Map<Key, TerminalNode> terminalNodes;
 
 	public TerminalGrammarSlot(RegularExpression regex) {
 		this.regex = regex;
 		// TODO: add type of regex to config!
 		this.matcher = regex.getMatcher();
-		this.terminalNodes = new HashMap<>();
+		this.terminalNodes = new HashMap<>(1000);
 	}
 
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return null;
 	}
 
@@ -54,16 +56,22 @@ public class TerminalGrammarSlot implements GrammarSlot {
 		return regex.toString();
 	}
 	
-	public TerminalNode getTerminalNode(TerminalNode node, NodeAddedAction<TerminalNode> action) {
-		return terminalNodes.computeIfAbsent(node, k -> { action.execute(k); return k; });
+	public TerminalNode getTerminalNode(Key key, Supplier<TerminalNode> s, Consumer<TerminalNode> c) {
+		TerminalNode val;
+		if ((val = terminalNodes.get(key)) == null) {
+			val = s.get();
+			c.accept(val);
+			terminalNodes.put(key, val);
+		}
+		return val;
 	}
 	
-	public TerminalNode findTerminalNode(TerminalNode node) {
-		return terminalNodes.get(node);
+	public TerminalNode findTerminalNode(Key key) {
+		return terminalNodes.get(key);
 	}
 
 	@Override
-	public void reset() {
+	public void reset(Input input) {
 		terminalNodes = new HashMap<>();
 	}
 

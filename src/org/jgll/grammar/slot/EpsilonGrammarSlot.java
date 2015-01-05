@@ -1,16 +1,17 @@
 package org.jgll.grammar.slot;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
-	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal) {
-		super(position, nonterminal);
+	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup) {
+		super(id, position, nonterminal, nodeLookup);
 	}
 	
 	@Override
@@ -22,7 +23,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return "new EpsilonGrammarSlot(slot" + registry.getId(nonterminal) + ")";
 	}
 

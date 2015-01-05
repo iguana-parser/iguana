@@ -1,6 +1,6 @@
 package org.jgll.grammar.condition;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 
 public class DataDependentCondition extends Condition {
 	
@@ -21,7 +21,7 @@ public class DataDependentCondition extends Condition {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return null;
 	}
 

@@ -1,10 +1,7 @@
 package org.jgll.sppf;
 
-import java.util.ArrayList;
-
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.hashing.ExternalHashEquals;
 
 /**
  * 
@@ -13,8 +10,8 @@ import org.jgll.util.hashing.ExternalHashEquals;
  */
 public class IntermediateNode extends NonterminalOrIntermediateNode {
 	
-	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
-		super(slot, leftExtent, rightExtent, hashEquals);
+	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 	
 	@Override
@@ -22,12 +19,6 @@ public class IntermediateNode extends NonterminalOrIntermediateNode {
 		visitAction.visit(this);
 	}
 	
-	@Override
-	public IntermediateNode init() {
-		children = new ArrayList<>(2);
-		return this;
-	}
-
 	@Override
 	public GrammarSlot getGrammarSlot() {
 		return (GrammarSlot) slot;

@@ -1,4 +1,4 @@
-package org.jgll.parser.lookup;
+package org.jgll.parser.gss.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
@@ -33,5 +33,5 @@ public interface GSSLookup {
 	
 	public Iterable<GSSNode> getGSSNodes();
 	
-	default void reset() { }
+	default void reset() {}
 }	

@@ -1,6 +1,6 @@
 package org.jgll.grammar.symbol;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 
 
 public class Opt extends AbstractSymbol {
@@ -23,7 +23,7 @@ public class Opt extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 		  .append("new Alt.builder(" + s.getConstructorCode(registry) + ")")
 		  .append(".setLabel(" + label + ")")

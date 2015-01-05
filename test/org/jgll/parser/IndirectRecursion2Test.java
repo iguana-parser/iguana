@@ -3,7 +3,7 @@ package org.jgll.parser;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -13,6 +13,7 @@ import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,8 +57,8 @@ public class IndirectRecursion2Test {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("ad");
-		GLLParser parser = ParserFactory.newParser();
-		ParseResult result = parser.parse(input, grammar.toGrammarGraph(), "A");
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getRegistry())));
 	}
@@ -69,18 +70,18 @@ public class IndirectRecursion2Test {
 //		assertTrue(set.contains(grammarGraph.getHeadGrammarSlot("B")));
 	}
 	
-	private SPPFNode expectedSPPF(GrammarSlotRegistry registry) {		
+	private SPPFNode expectedSPPF(GrammarRegistry registry) {		
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 2).init();
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 2);
 		PackedNode node2 = factory.createPackedNode("A ::= B A d .", 1, node1);
-		IntermediateNode node3 = factory.createIntermediateNode("A ::= B A . d", 0, 1).init();
+		IntermediateNode node3 = factory.createIntermediateNode("A ::= B A . d", 0, 1);
 		PackedNode node4 = factory.createPackedNode("A ::= B A . d", 0, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 0).init();
+		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 0, 0);
 		PackedNode node6 = factory.createPackedNode("B ::= .", 0, node5);
 		TerminalNode node7 = factory.createEpsilonNode(0);
 		node6.addChild(node7);
 		node5.addChild(node6);
-		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 0, 1).init();
+		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 0, 1);
 		PackedNode node9 = factory.createPackedNode("A ::= a .", 1, node8);
 		TerminalNode node10 = factory.createTerminalNode("a", 0, 1);
 		node9.addChild(node10);

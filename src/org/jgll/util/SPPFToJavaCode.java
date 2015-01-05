@@ -61,7 +61,7 @@ public class SPPFToJavaCode implements SPPFVisitor {
 				"\"" + node.getGrammarSlot().getNonterminal().getName() + "\", " + 
 				node.getGrammarSlot().getNonterminal().getIndex() + ", " +
 				node.getLeftExtent() + ", " + 
-				node.getRightExtent() + ").init();\n");
+				node.getRightExtent() + ");\n");
 		
 		visitChildren(node);
 		
@@ -77,7 +77,7 @@ public class SPPFToJavaCode implements SPPFVisitor {
 		sb.append("IntermediateNode node" + idsMap.get(node) + " = factory.createIntermediateNode(" +
 				  "\"" + escape(node.getGrammarSlot().toString()) + "\", " + 
 				  node.getLeftExtent() + ", " + 
-				  node.getRightExtent() + ").init();\n");
+				  node.getRightExtent() + ");\n");
 		
 		visitChildren(node);
 		
@@ -108,7 +108,7 @@ public class SPPFToJavaCode implements SPPFVisitor {
 				  "\"" + node.getGrammarSlot().getNonterminal().getName() + "\", " +
 				  node.getGrammarSlot().getNonterminal().getIndex() + ", " +
 				  node.getLeftExtent() + ", " + 
-				  node.getRightExtent() + ").init();\n");
+				  node.getRightExtent() + ");\n");
 		
 		visitChildren(node);
 			

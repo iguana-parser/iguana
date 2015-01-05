@@ -40,5 +40,27 @@ public class ParseSuccess implements ParseResult {
 	public ParseStatistics getParseStatistics() {
 		return parseStatistics;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return HashFunctions.defaulFunction.hash(parseStatistics.hashCode(), sppfNode.hashCode());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof ParseSuccess))
+			return false;
+		
+		ParseSuccess other = (ParseSuccess) obj;
+		return parseStatistics.equals(other.parseStatistics) && sppfNode.deepEquals(other.sppfNode);
+	}
+	
+	@Override
+	public String toString() {
+		return sppfNode + "\n" + parseStatistics;
+	}
+	
 }

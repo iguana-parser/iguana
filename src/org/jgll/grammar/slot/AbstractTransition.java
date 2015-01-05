@@ -1,8 +1,6 @@
 package org.jgll.grammar.slot;
 
 
-
-
 public abstract class AbstractTransition implements Transition {
 	
 	protected final BodyGrammarSlot dest;

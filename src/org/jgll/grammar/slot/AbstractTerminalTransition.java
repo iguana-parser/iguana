@@ -3,20 +3,17 @@ package org.jgll.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.logging.LoggerWrapper;
 
 
 public abstract class AbstractTerminalTransition extends AbstractTransition {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractTerminalTransition.class);
-
 	protected final TerminalGrammarSlot slot;
 	
 	private final Set<Condition> preConditions;
@@ -37,8 +34,6 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		
-		log.trace("Processing %s", this);
 		
 		Input input = parser.getInput();
 
@@ -67,7 +62,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node);
 	
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 			.append("new NonterminalTransition(")
 			.append("slot" + registry.getId(slot)).append(", ")

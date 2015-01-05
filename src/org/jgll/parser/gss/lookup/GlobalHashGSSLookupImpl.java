@@ -1,4 +1,4 @@
-package org.jgll.parser.lookup;
+package org.jgll.parser.gss.lookup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,11 +14,8 @@ import org.jgll.sppf.NonPackedNode;
  * @author Ali Afroozeh
  * 
  */
-public class GlobalHashGSSLookupImpl implements GSSLookup {
+public class GlobalHashGSSLookupImpl extends AbstractGSSLookup {
 
-	/**
-	 * Elements indexed by GSS nodes (Nonterminal index and input index)
-	 */
 	private Map<GSSNode, GSSNode> gssNodes;
 	
 	public GlobalHashGSSLookupImpl() {
@@ -27,6 +24,7 @@ public class GlobalHashGSSLookupImpl implements GSSLookup {
 
 	@Override
 	public GSSNode getGSSNode(GrammarSlot head, int inputIndex) {
+		countGSSNodes++;
 		GSSNode gssNode = new GSSNode(head, inputIndex);
 		gssNodes.put(gssNode, gssNode);		
 		return gssNode;
@@ -38,25 +36,8 @@ public class GlobalHashGSSLookupImpl implements GSSLookup {
 	}
 
 	@Override
-	public int getGSSNodesCount() {
-		return gssNodes.size();
-	}
-
-	@Override
 	public Iterable<GSSNode> getGSSNodes() {
 		return gssNodes.values();
-	}
-
-	@Override
-	public int getGSSEdgesCount() {
-		
-		int count = 0;
-		
-		for (GSSNode gssNode : gssNodes.values()) {
-			count += gssNode.getCountGSSEdges();
-		}
-
-		return count;
 	}
 
 	@Override
@@ -66,6 +47,7 @@ public class GlobalHashGSSLookupImpl implements GSSLookup {
 
 	@Override
 	public boolean getGSSEdge(GSSNode gssNode, GSSEdge edge) {
+		countGSSEdges++;
 		return gssNode.getGSSEdge(edge);
 	}
 	

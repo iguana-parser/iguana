@@ -3,7 +3,7 @@ package org.jgll.grammar.symbol;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 
 public class CodeBlock implements Symbol {
@@ -25,7 +25,7 @@ public class CodeBlock implements Symbol {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return null;
 	}
 

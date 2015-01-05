@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
@@ -42,11 +42,11 @@ public class SPPFToDotUnpacked extends ToDot {
 
 	private Input input;
 
-	public SPPFToDotUnpacked(Input input, GrammarSlotRegistry registry) {
+	public SPPFToDotUnpacked(Input input, GrammarRegistry registry) {
 		this(input, registry, false);
 	}
 	
-	public SPPFToDotUnpacked(Input input, GrammarSlotRegistry registry, boolean showPackedNodeLabel) {
+	public SPPFToDotUnpacked(Input input, GrammarRegistry registry, boolean showPackedNodeLabel) {
 		super(registry);
 		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;

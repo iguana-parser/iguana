@@ -1,18 +1,20 @@
 package org.jgll.parser;
 
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 
 /**
@@ -23,7 +25,11 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName);
+	public ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config);
+	
+	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
+		return parse(input, grammar, startSymbol, Configuration.DEFAULT);
+	}
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 	
@@ -39,13 +45,13 @@ public interface GLLParser {
 	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
-	public boolean hasDescriptor(Descriptor descriptor);
+	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode);
 	
 	public void scheduleDescriptor(Descriptor descriptor);
 	
-	default boolean addDescriptor(Descriptor descriptor) {
-		if (!hasDescriptor(descriptor)) {
-			scheduleDescriptor(descriptor);
+	default boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
+		if (!hasDescriptor(slot, gssNode, inputIndex, sppfNode)) {
+			scheduleDescriptor(new Descriptor(slot, gssNode, inputIndex, sppfNode));
 			return true;
 		}
 		return false;
@@ -62,6 +68,8 @@ public interface GLLParser {
 	
 	public Input getInput();
 	
-	public GrammarSlotRegistry getRegistry();
+	public GrammarRegistry getRegistry();
+	
+	public void reset();
 	
 }

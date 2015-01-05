@@ -11,7 +11,7 @@ import org.jgll.sppf.TerminalNode;
 
 /**
  * 
- * Corresponds to grammar slots of the form A ::= b .
+ * Corresponds to grammar slots of the form A ::= . b
  * 
  * @author Ali Afroozeh
  *

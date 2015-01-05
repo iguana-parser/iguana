@@ -1,8 +1,9 @@
 package org.jgll.parser;
 
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -11,8 +12,8 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.lookup.GSSLookup;
 import org.jgll.parser.lookup.DescriptorLookup;
-import org.jgll.parser.lookup.GSSLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
@@ -20,6 +21,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.BenchmarkUtil;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.jgll.util.logging.LoggerWrapper;
@@ -51,7 +53,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	/**
 	 * 
 	 */
-	protected GrammarGraph grammar;
+	protected GrammarGraph grammarGraph;
 	
 	/**
 	 * The grammar slot at which a parse error is occurred. 
@@ -77,15 +79,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, GrammarGraph grammar, String startSymbolName) {
+	public final ParseResult parse(Input input, Grammar grammar, Nonterminal nonterminal, Configuration config) {
 
-		this.grammar = grammar;
+		this.grammarGraph = grammar.toGrammarGraph(input, config);
 		this.input = input;
 		
-		NonterminalGrammarSlot startSymbol = getStartSymbol(startSymbolName);
+		NonterminalGrammarSlot startSymbol = getStartSymbol(nonterminal);
 		
 		if(startSymbol == null) {
-			throw new RuntimeException("No nonterminal named " + startSymbolName + " found");
+			throw new RuntimeException("No nonterminal named " + nonterminal + " found");
 		}
 		
 		initLookups();
@@ -114,18 +116,19 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			parseResult = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 			log.info("Parse error:\n %s", parseResult);
 		} else {
-			ParseStatistics parseStatistics = new ParseStatistics(input, end - start,
-					  endUserTime - startUserTime,
-					  endSystemTime - startSystemTime, 
-					  BenchmarkUtil.getMemoryUsed(),
-					  descriptorsCount, 
-					  gssLookup.getGSSNodesCount(), 
-					  gssLookup.getGSSEdgesCount(), 
-					  sppfLookup.getNonterminalNodesCount(),
-					  sppfLookup.getTokenNodesCount(),
-					  sppfLookup.getIntermediateNodesCount(), 
-					  sppfLookup.getPackedNodesCount(), 
-					  sppfLookup.getAmbiguousNodesCount());
+			ParseStatistics parseStatistics = ParseStatistics.builder()
+					.setNanoTime(end - start)
+					.setUserTime(endUserTime - startUserTime)
+					.setSystemTime(endSystemTime - startSystemTime) 
+					.setMemoryUsed(BenchmarkUtil.getMemoryUsed())
+					.setDescriptorsCount(descriptorsCount) 
+					.setGSSNodesCount(gssLookup.getGSSNodesCount()) 
+					.setGSSEdgesCount(gssLookup.getGSSEdgesCount()) 
+					.setNonterminalNodesCount(sppfLookup.getNonterminalNodesCount())
+					.setTerminalNodesCount(sppfLookup.getTokenNodesCount())
+					.setIntermediateNodesCount(sppfLookup.getIntermediateNodesCount()) 
+					.setPackedNodesCount(sppfLookup.getPackedNodesCount()) 
+					.setAmbiguousNodesCount(sppfLookup.getAmbiguousNodesCount()).build();
 
 			parseResult = new ParseSuccess(root, parseStatistics);
 			log.info("Parsing finished successfully.");			
@@ -135,8 +138,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return parseResult;
 	}
 	
-	protected NonterminalGrammarSlot getStartSymbol(String name) {
-		return grammar.getRegistry().getHead(Nonterminal.withName(name));
+	protected NonterminalGrammarSlot getStartSymbol(Nonterminal nonterminal) {
+		return grammarGraph.getRegistry().getHead(nonterminal);
 	}
 	
 	protected void parse(NonterminalGrammarSlot startSymbol) {
@@ -211,9 +214,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public boolean hasDescriptor(Descriptor descriptor) {
-		return descriptorLookup.addDescriptor(descriptor);
-	}	
+	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
+		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode);
+    }
 	
 	@Override
 	public boolean hasNextDescriptor() {
@@ -244,8 +247,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public GrammarSlotRegistry getRegistry() {
-		return grammar.getRegistry();
+	public void reset() {
+		grammarGraph.reset(input);
+		gssLookup.reset();
+		sppfLookup.reset();
+	}
+	
+	@Override
+	public GrammarRegistry getRegistry() {
+		return grammarGraph.getRegistry();
 	}
 	
 	@Override

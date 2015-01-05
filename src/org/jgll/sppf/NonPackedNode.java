@@ -3,8 +3,7 @@ package org.jgll.sppf;
 import java.util.List;
 
 import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.util.hashing.ExternalHashEquals;
-import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.parser.HashFunctions;
 
 
 /**
@@ -25,13 +24,10 @@ public abstract class NonPackedNode implements SPPFNode {
 	
 	protected final int rightExtent;
 	
-	private final ExternalHashEquals<NonPackedNode> hashEquals;
-	
-	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent, ExternalHashEquals<NonPackedNode> hashEquals) {
+	public NonPackedNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		this.slot = slot;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
-		this.hashEquals = hashEquals;
 	}
 
 	public int getLeftExtent() {
@@ -51,66 +47,23 @@ public abstract class NonPackedNode implements SPPFNode {
 		if (!(obj instanceof NonPackedNode)) 
 			return false;
 		
-		return hashEquals.equals(this, (NonPackedNode) obj);
+		NonPackedNode other = (NonPackedNode) obj;
+		
+		return slot == other.slot && 
+			   leftExtent == other.leftExtent && 
+			   rightExtent == other.rightExtent;
 	}
 
 	@Override
 	public int hashCode() {
-		return hashEquals.hash(this);
+		return HashFunctions.defaulFunction.hash(slot.getId(), leftExtent, rightExtent);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getRightExtent());
+		return String.format("(%s, %d, %d)", slot, leftExtent, rightExtent);
 	}
 	
 	public abstract List<PackedNode> getChildren();
-	
-    public static ExternalHashEquals<NonPackedNode> globalHashEquals(HashFunction f) {
-    	
-    	return new ExternalHashEquals<NonPackedNode>() {
-
-    		@Override
-    		public int hash(NonPackedNode n) {
-    			return hash(n, f);
-    		}
-    		
-			@Override
-			public int hash(NonPackedNode n, HashFunction f) {
-				return f.hash(n.getGrammarSlot().hashCode(), 
-						      n.getLeftExtent(), 
-						      n.getRightExtent());
-			}
-
-			@Override
-			public boolean equals(NonPackedNode n1, NonPackedNode n2) {
-				return  n1.getGrammarSlot() == n2.getGrammarSlot() && 
-                        n1.getLeftExtent()  == n2.getLeftExtent() && 
-                        n1.getRightExtent() == n2.getRightExtent();
-			}
-		};
-    }
-    
-    public static ExternalHashEquals<NonPackedNode> distributedHashEquals(HashFunction f) {
-    	
-    	return new ExternalHashEquals<NonPackedNode>() {
-
-    		@Override
-    		public int hash(NonPackedNode n) {
-    			return hash(n, f);
-    		}
-    		
-			@Override
-			public int hash(NonPackedNode n, HashFunction f) {
-				return f.hash(n.getLeftExtent(), n.getRightExtent());
-			}
-
-			@Override
-			public boolean equals(NonPackedNode n1, NonPackedNode n2) {
-				return  n1.getLeftExtent()  == n2.getLeftExtent() && 
-                        n1.getRightExtent() == n2.getRightExtent();
-			}
-		};
-    }    
 	
 }

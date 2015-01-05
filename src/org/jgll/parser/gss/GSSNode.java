@@ -7,8 +7,8 @@ import java.util.Set;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
-import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.collections.IntKey2;
 
 /**
  *
@@ -38,7 +38,7 @@ public class GSSNode {
 	// the way they are added, so we need a hashset with ordering.
 	private final List<GSSEdge> gssEdges;
 
-	private Set<Descriptor> descriptors;
+	private Set<IntKey2> descriptors;
 	
 	/**
 	 * Creates a new {@code GSSNode} with the given {@code label},
@@ -110,13 +110,11 @@ public class GSSNode {
 	
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 
-		if (!(obj instanceof GSSNode)) {
+		if (!(obj instanceof GSSNode))
 			return false;
-		}
 		
 		GSSNode other = (GSSNode) obj;
 
@@ -136,8 +134,8 @@ public class GSSNode {
 		return gssEdges.size();
 	}
 
-	public boolean hasDescriptor(Descriptor descriptor) {
-		return !descriptors.add(descriptor);
+	public boolean hasDescriptor(IntKey2 key) {
+		return !descriptors.add(key);
 	}
 
 	public void clearDescriptors() {

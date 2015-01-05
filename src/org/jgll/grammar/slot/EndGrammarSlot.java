@@ -3,18 +3,19 @@ package org.jgll.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.NonPackedNode;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal) {
-		super(position);
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup) {
+		super(id, position, nodeLookup);
 		this.nonterminal = nonterminal;
 	}
 
@@ -25,7 +26,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 			.append("new EndGrammarSlot(")
 			.append(position)

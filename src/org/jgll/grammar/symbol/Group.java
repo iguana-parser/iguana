@@ -3,7 +3,7 @@ package org.jgll.grammar.symbol;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.util.generator.GeneratorUtil;
 
 import com.google.common.collect.ImmutableList;
@@ -33,7 +33,7 @@ public class Group extends AbstractSymbol {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 		  .append("new Group.builder(" + getConstructorCode(symbols, registry) + ")")
 		  .append(".setLabel(" + label + ")")

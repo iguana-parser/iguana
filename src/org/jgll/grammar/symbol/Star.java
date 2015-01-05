@@ -1,6 +1,6 @@
 package org.jgll.grammar.symbol;
 
-import org.jgll.grammar.GrammarSlotRegistry;
+import org.jgll.grammar.GrammarRegistry;
 
 
 /**
@@ -29,7 +29,7 @@ public class Star extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarSlotRegistry registry) {
+	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 		  .append("Star.builder(" + s.getConstructorCode(registry) + ")")
 		  .append(".setLabel(" + label + ")")

@@ -18,6 +18,8 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Configuration;
+import org.jgll.util.Input;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
@@ -41,8 +43,6 @@ public class Grammar implements Serializable {
 	private final SetMultimap<Nonterminal, RegularExpression> firstSets;
 	
 	private final SetMultimap<Nonterminal, RegularExpression> followSets;
-	
-	private GrammarGraph grammarGraph;
 	
 	public Grammar(ListMultimap<Nonterminal, Rule> definitions,
 				   SetMultimap<Nonterminal, RegularExpression> firstSets,
@@ -99,13 +99,9 @@ public class Grammar implements Serializable {
 	public boolean isNullable(Nonterminal nonterminal) {
 		return firstSets.get(nonterminal).contains(Epsilon.getInstance());
 	}
-	 
-	public GrammarGraph toGrammarGraph() {
-		if (grammarGraph == null) {
-			GrammarGraphBuilder builder = new GrammarGraphBuilder(this);
-			grammarGraph =  builder.build();
-		}
-		return grammarGraph;
+	
+	public GrammarGraph toGrammarGraph(Input input, Configuration config) {
+		return new GrammarGraphBuilder(this, input, config).build();
 	}
 	
 	private static Set<RuntimeException> validate(ListMultimap<Nonterminal, Rule> definitions) {
@@ -197,6 +193,17 @@ public class Grammar implements Serializable {
 			addRules(Arrays.asList(rules));
 			return this;
 		}
+	}
+	
+	/**
+	 * Returns the size of this grammar, which is equal to the number of nonterminals +
+	 * number of terminals + grammar slots.
+	 * 
+	 */
+	public int size() {
+		return  definitions.size() +
+				(int) definitions.values().stream().flatMap(r -> r.getBody().stream()).filter(s -> s instanceof RegularExpression).count() +
+				definitions.values().stream().map(r -> r.size() + 1).reduce(0, (a, b) -> a + b);
 	}
 	
 }
