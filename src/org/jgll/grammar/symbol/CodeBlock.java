@@ -16,8 +16,8 @@ public class CodeBlock implements Symbol {
 		this.statements = statements;
 	}
 	
-	public static CodeBlock code(org.jgll.datadependent.ast.Statement... expressions) {
-		return new CodeBlock(expressions);
+	public static CodeBlock code(org.jgll.datadependent.ast.Statement... statements) {
+		return new CodeBlock(statements);
 	}
 	
 	public  org.jgll.datadependent.ast.Statement[] getStatements() {
