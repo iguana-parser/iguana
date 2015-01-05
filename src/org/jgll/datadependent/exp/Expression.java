@@ -1,5 +1,6 @@
 package org.jgll.datadependent.exp;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.datadependent.env.EvalContext;
 
 public abstract class Expression {
@@ -112,7 +113,8 @@ public abstract class Expression {
 
 		@Override
 		public Object interpret(EvalContext ctx) {
-			ctx.setCurrentEnv(ctx.getCurrentEnv().storeVariableLocally(id, exp.interpret(ctx)));
+			Environment env = ctx.getCurrentEnv().storeVariableLocally(id, exp.interpret(ctx));
+			ctx.setCurrentEnv(env);
 			return null;
 		}
 		
