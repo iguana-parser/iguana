@@ -113,9 +113,10 @@ public abstract class Expression {
 
 		@Override
 		public Object interpret(EvalContext ctx) {
-			Environment env = ctx.getCurrentEnv().storeVariableLocally(id, exp.interpret(ctx));
+			Object value = exp.interpret(ctx);
+			Environment env = ctx.getCurrentEnv().storeVariableLocally(id, value);
 			ctx.setCurrentEnv(env);
-			return null;
+			return value;
 		}
 		
 	}
