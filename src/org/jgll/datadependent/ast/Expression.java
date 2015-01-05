@@ -1,11 +1,8 @@
 package org.jgll.datadependent.ast;
 
-import org.jgll.datadependent.env.Environment;
 import org.jgll.datadependent.env.EvalContext;
 
-public abstract class Expression {
-	
-	public abstract Object interpret(EvalContext ctx);
+public abstract class Expression extends AbstractAST {
 	
 	public boolean isBoolean() {
 		return false;
@@ -99,26 +96,6 @@ public abstract class Expression {
 		public Object interpret(EvalContext ctx) {
 			return value;
 		}
-	}
-	
-	static public class Assignment extends Expression {
-		
-		private final java.lang.String id;
-		private final Expression exp;
-		
-		Assignment(java.lang.String id, Expression exp) {
-			this.id = id;
-			this.exp = exp;
-		}
-
-		@Override
-		public Object interpret(EvalContext ctx) {
-			Object value = exp.interpret(ctx);
-			Environment env = ctx.getCurrentEnv().storeVariableLocally(id, value);
-			ctx.setCurrentEnv(env);
-			return value;
-		}
-		
 	}
 	
 	static public abstract class Call extends Expression {

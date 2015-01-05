@@ -20,10 +20,6 @@ public class AST {
 		return new Expression.String(value);
 	}
 	
-	static public Expression assign(java.lang.String id, Expression exp) {
-		return new Expression.Assignment(id, exp);
-	}
-	
 	static public Expression println(Expression... args) {
 		return new Expression.Call("", args) {
 					@Override
@@ -37,6 +33,14 @@ public class AST {
 						return null;
 					}
 		};
+	}
+	
+	static public Statement assign(java.lang.String id, Expression exp) {
+		return new Statement.Assignment(id, exp);
+	}
+	
+	static public Statement stat(Expression exp) {
+		return new Statement.Expression(exp);
 	}
 
 }
