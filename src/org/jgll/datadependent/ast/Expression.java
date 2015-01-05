@@ -98,6 +98,25 @@ public abstract class Expression extends AbstractAST {
 		}
 	}
 	
+	static public class Name extends Expression {
+		
+		private final java.lang.String name;
+		
+		Name(java.lang.String name) {
+			this.name = name;
+		}
+
+		@Override
+		public Object interpret(EvalContext ctx) {
+			Object value = ctx.getCurrentEnv().lookupVariable(name);
+			if (value == null) {
+				throw new RuntimeException("Undeclared variable: " + name);
+			}
+			return value;
+		}
+		
+	}
+	
 	static public abstract class Call extends Expression {
 		
 		@SuppressWarnings("unused")

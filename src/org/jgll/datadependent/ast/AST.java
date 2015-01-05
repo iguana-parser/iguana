@@ -5,6 +5,10 @@ import org.jgll.datadependent.env.EvalContext;
 
 public class AST {
 	
+	/**
+	 * 		Expressions
+	 */
+	
 	static public final Expression TRUE = Expression.Boolean.TRUE;
 	static public final Expression FALSE = Expression.Boolean.FALSE;
 	
@@ -18,6 +22,10 @@ public class AST {
 	
 	static public Expression string(java.lang.String value) {
 		return new Expression.String(value);
+	}
+	
+	static public Expression var(java.lang.String name) {
+		return new Expression.Name(name);
 	}
 	
 	static public Expression println(Expression... args) {
@@ -34,6 +42,12 @@ public class AST {
 					}
 		};
 	}
+	
+	
+	/**
+	 * 
+	 * 		Statements
+	 */
 	
 	static public Statement assign(java.lang.String id, Expression exp) {
 		return new Statement.Assignment(id, exp);
