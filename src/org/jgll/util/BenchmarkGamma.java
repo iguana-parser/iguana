@@ -74,7 +74,7 @@ public class BenchmarkGamma {
 				ParseResult res = parser.parse(input, grammar, startSymbol);
 
 				if (res.isParseSuccess()) {
-					System.out.println(BenchmarkUtil.format(res.asParseSuccess().getParseStatistics()));
+					System.out.println(BenchmarkUtil.format(input, res.asParseSuccess().getParseStatistics()));
 				} else {
 					System.out.println("Parse error");
 				}

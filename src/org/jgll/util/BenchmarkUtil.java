@@ -51,9 +51,9 @@ public class BenchmarkUtil {
 	    		   				"ambiguous_nodes");
 		}
 		
-	public static String format(ParseStatistics statistics) {
+	public static String format(Input input, ParseStatistics statistics) {
     	return String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
-    			statistics.getInput().length() - 1, 
+    			input.length() - 1, 
     			statistics.getUserTime() / 1000_000,
     			statistics.getSystemTime() / 1000_000, 
     			statistics.getNanoTime() / 1000_000,

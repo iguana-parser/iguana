@@ -116,18 +116,19 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			parseResult = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
 			log.info("Parse error:\n %s", parseResult);
 		} else {
-			ParseStatistics parseStatistics = new ParseStatistics(input, end - start,
-					  endUserTime - startUserTime,
-					  endSystemTime - startSystemTime, 
-					  BenchmarkUtil.getMemoryUsed(),
-					  descriptorsCount, 
-					  gssLookup.getGSSNodesCount(), 
-					  gssLookup.getGSSEdgesCount(), 
-					  sppfLookup.getNonterminalNodesCount(),
-					  sppfLookup.getTokenNodesCount(),
-					  sppfLookup.getIntermediateNodesCount(), 
-					  sppfLookup.getPackedNodesCount(), 
-					  sppfLookup.getAmbiguousNodesCount());
+			ParseStatistics parseStatistics = ParseStatistics.builder()
+					.setNanoTime(end - start)
+					.setUserTime(endUserTime - startUserTime)
+					.setSystemTime(endSystemTime - startSystemTime) 
+					.setMemoryUsed(BenchmarkUtil.getMemoryUsed())
+					.setDescriptorsCount(descriptorsCount) 
+					.setGSSNodesCount(gssLookup.getGSSNodesCount()) 
+					.setGSSEdgesCount(gssLookup.getGSSEdgesCount()) 
+					.setNonterminalNodesCount(sppfLookup.getNonterminalNodesCount())
+					.setTerminalNodesCount(sppfLookup.getTokenNodesCount())
+					.setIntermediateNodesCount(sppfLookup.getIntermediateNodesCount()) 
+					.setPackedNodesCount(sppfLookup.getPackedNodesCount()) 
+					.setAmbiguousNodesCount(sppfLookup.getAmbiguousNodesCount()).build();
 
 			parseResult = new ParseSuccess(root, parseStatistics);
 			log.info("Parsing finished successfully.");			

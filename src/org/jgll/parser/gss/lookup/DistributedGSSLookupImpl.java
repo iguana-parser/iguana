@@ -8,9 +8,9 @@ import org.jgll.sppf.NonPackedNode;
 public class DistributedGSSLookupImpl extends AbstractGSSLookup {
 	
 	@Override
-	public GSSNode getGSSNode(GrammarSlot head, int inputIndex) {
+	public GSSNode getGSSNode(GrammarSlot slot, int inputIndex) {
 		countGSSNodes++;
-		return head.getGSSNode(inputIndex);
+		return slot.getGSSNode(inputIndex);
 	}
 
 	@Override
