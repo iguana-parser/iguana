@@ -97,8 +97,26 @@ public abstract class Expression {
 		}
 	}
 	
+	static public class Assignment extends Expression {
+		
+		private final java.lang.String id;
+		private final Expression exp;
+		
+		Assignment(java.lang.String id, Expression exp) {
+			this.id = id;
+			this.exp = exp;
+		}
+
+		public Object interpret(Environment env) {
+			env.storeVariableLocally(id, exp.interpret(env));
+			return null;
+		}
+		
+	}
+	
 	static public abstract class Call extends Expression {
 		
+		@SuppressWarnings("unused")
 		private final java.lang.String fun;
 		private final Expression[] arguments;
 		

@@ -20,6 +20,10 @@ public class Expressions {
 		return new Expression.String(value);
 	}
 	
+	static public Expression assign(java.lang.String id, Expression exp) {
+		return new Expression.Assignment(id, exp);
+	}
+	
 	static public Expression println(Expression... args) {
 		return new Expression.Call("", args) {
 	
@@ -34,6 +38,5 @@ public class Expressions {
 					}
 		};
 	}
-	
 
 }
