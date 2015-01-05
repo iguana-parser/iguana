@@ -6,22 +6,22 @@ import java.util.Set;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 
-public class Expression implements Symbol {
+public class CodeBlock implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final org.jgll.datadependent.ast.Expression[] expressions;
+	private final org.jgll.datadependent.ast.Statement[] statements;
 	
-	Expression(org.jgll.datadependent.ast.Expression[] expressions) {
-		this.expressions = expressions;
+	CodeBlock(org.jgll.datadependent.ast.Statement[] statements) {
+		this.statements = statements;
 	}
 	
-	public static Expression code(org.jgll.datadependent.ast.Expression... expressions) {
-		return new Expression(expressions);
+	public static CodeBlock code(org.jgll.datadependent.ast.Statement... expressions) {
+		return new CodeBlock(expressions);
 	}
 	
-	public  org.jgll.datadependent.ast.Expression[] getExpressions() {
-		return expressions;
+	public  org.jgll.datadependent.ast.Statement[] getStatements() {
+		return statements;
 	}
 
 	@Override
