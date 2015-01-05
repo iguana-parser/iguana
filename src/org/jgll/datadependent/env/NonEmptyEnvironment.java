@@ -29,7 +29,7 @@ public class NonEmptyEnvironment extends Environment {
 	}
 
 	protected Object lookupVariableLocally(String name) {
-		return variables.get(name);
+		return variables != null? variables.get(name) : null;
 	}
 
 	public Environment storeVariableLocally(String name, Object value) {
