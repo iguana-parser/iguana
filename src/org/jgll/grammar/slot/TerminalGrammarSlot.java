@@ -12,7 +12,7 @@ import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.Key;
+import org.jgll.util.collections.Key;
 
 
 public class TerminalGrammarSlot implements GrammarSlot {

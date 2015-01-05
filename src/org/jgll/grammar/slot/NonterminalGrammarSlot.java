@@ -17,7 +17,7 @@ import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.Key;
+import org.jgll.util.collections.Key;
 
 
 /**
@@ -92,7 +92,6 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	public boolean isFirst() {
 		return true;
 	}
-	
 	
 	public NonterminalNode getNonterminalNode(Key key, Supplier<NonterminalNode> s, Consumer<NonterminalNode> c) {
 		NonterminalNode val;

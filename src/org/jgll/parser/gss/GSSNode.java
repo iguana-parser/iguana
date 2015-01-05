@@ -8,7 +8,7 @@ import java.util.Set;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.hashing.IntKey2;
+import org.jgll.util.collections.IntKey2;
 
 /**
  *

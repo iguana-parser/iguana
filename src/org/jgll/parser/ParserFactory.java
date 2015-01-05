@@ -6,6 +6,7 @@ import org.jgll.parser.gss.lookup.GSSLookup;
 import org.jgll.parser.gss.lookup.GlobalHashGSSLookupImpl;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.parser.lookup.DistributedDescriptorLookupImpl;
+import org.jgll.parser.lookup.GlobalDescriptorLookupImpl;
 import org.jgll.sppf.lookup.DistributedSPPFLookupImpl;
 import org.jgll.sppf.lookup.GlobalSPPFLookupImpl;
 import org.jgll.sppf.lookup.OriginalDistributedSPPFLookupImpl;
@@ -77,8 +78,16 @@ public class ParserFactory {
 	
 	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
 		int grammarSize = getSmallestPowerTwo(grammar.size());
-		HashFunction hash = HashFunctions.coefficientHash(grammarSize);
-		return new DistributedDescriptorLookupImpl(hash);
+		int inputSize = getSmallestPowerTwo(input.length());
+		
+		HashFunction hash;
+		if (config.getDescriptorLookupStrategy() == LookupStrategy.DISTRIBUTED) {
+			hash = HashFunctions.coefficientHash(grammarSize);
+			return new DistributedDescriptorLookupImpl(hash);			
+		} else {
+			hash = HashFunctions.coefficientHash(grammarSize, inputSize, grammarSize, inputSize);
+			return new GlobalDescriptorLookupImpl(hash);
+		}
 	}
 	
 	private static int getSmallestPowerTwo(int n) {

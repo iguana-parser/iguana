@@ -52,7 +52,7 @@ public class BenchmarkGamma {
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
 		Input input = Input.fromString(getBs(300));
-		Configuration config = Configurations.DEFAULT;
+		Configuration config = Configuration.DEFAULT;
 		
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {

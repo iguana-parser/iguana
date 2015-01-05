@@ -93,19 +93,17 @@ public class ParseStatistics {
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Input size: ").append(input.length()).append(", ").append(input.getLineCount()).append("\n");
-		sb.append("Parsing Time (nano time): ").append(nanoTime / 1000_000).append(" ms").append("\n");
-		sb.append("Parsing Time (user time): ").append(userTime / 1000_000).append(" ms").append("\n");
-		sb.append("Parsing Time (system time): ").append(systemTime / 1000_000).append(" ms").append("\n");
-		sb.append("Memory used: ").append(memoryUsed).append(" mb").append("\n");
-		sb.append("Descriptors: ").append(descriptorsCount).append("\n");
-		sb.append("GSS Nodes: ").append(gssNodesCount).append("\n");
-		sb.append("GSS Edges: ").append(gssEdgesCount).append("\n");
-		sb.append("Nonterminal nodes: ").append(nonterminalNodesCount).append("\n");
-		sb.append("Intermediate nodes: ").append(intermediateNodesCount).append("\n");
-		sb.append("Packed nodes: ").append(packedNodesCount).append("\n");
-		sb.append("Ambiguities: ").append(ambiguousNodesCount).append("\n");
-		return sb.toString();
+		return  "Input size: " + input.length() + ", " + input.getLineCount() + "\n" +
+				"Parsing Time (nano time): " + nanoTime / 1000_000 + " ms" + "\n" +
+				"Parsing Time (user time): " + userTime / 1000_000 + " ms" + "\n" +
+				"Parsing Time (system time): " + systemTime / 1000_000 + " ms" + "\n" +
+				"Memory used: " + memoryUsed + " mb" + "\n" +
+				"Descriptors: " + descriptorsCount + "\n" +
+				"GSS Nodes: " + gssNodesCount + "\n" +
+				"GSS Edges: " + gssEdgesCount + "\n" +
+				"Nonterminal nodes: " + nonterminalNodesCount + "\n" +
+				"Intermediate nodes: " + intermediateNodesCount + "\n" +
+				"Packed nodes: " + packedNodesCount + "\n" +
+				"Ambiguities: " + ambiguousNodesCount + "\n";
 	}
 }

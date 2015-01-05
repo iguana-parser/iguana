@@ -10,8 +10,8 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
-import org.jgll.util.hashing.IntKey3;
-import org.jgll.util.hashing.Key;
+import org.jgll.util.collections.IntKey3;
+import org.jgll.util.collections.Key;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {

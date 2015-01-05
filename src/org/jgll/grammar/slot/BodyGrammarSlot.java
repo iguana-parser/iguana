@@ -10,7 +10,7 @@ import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.Key;
+import org.jgll.util.collections.Key;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {

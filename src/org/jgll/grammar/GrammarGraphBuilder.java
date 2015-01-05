@@ -52,7 +52,7 @@ public class GrammarGraphBuilder implements Serializable {
 
 	private Input input;
 	
-	private int id;
+	private int id = 1;
 	
 	public GrammarGraphBuilder(Grammar grammar, Input input, Configuration config) {
 		this("no-name", grammar, input, config);

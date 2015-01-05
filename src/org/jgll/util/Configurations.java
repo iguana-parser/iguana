@@ -6,14 +6,6 @@ import static org.jgll.util.Configuration.LookupStrategy.*;
 
 
 public class Configurations {
-
-	public static final Configuration DEFAULT = Configuration.builder()
-													.setGSSType(NEW)
-													.setGSSLookupStrategy(DISTRIBUTED)
-													.setGSSLookupImpl(ARRAY)
-													.setSPPFLookupStrategy(DISTRIBUTED)
-													.setSPPFLookupImpl(HASH_MAP)
-													.build();
 	
 	public static final Configuration CONFIG_1 = Configuration.builder()
 													.setGSSType(NEW)

@@ -1,6 +1,7 @@
 package org.jgll.parser.basic;
 
 import static org.jgll.util.Configurations.*;
+import static org.jgll.util.Configuration.*;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;

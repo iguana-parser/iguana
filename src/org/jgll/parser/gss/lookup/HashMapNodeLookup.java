@@ -16,6 +16,7 @@ public class HashMapNodeLookup implements NodeLookup {
 		GSSNode v;
 		if ((v = map.get(i)) == null) {
 			v = new GSSNode(slot, i);
+			map.put(i, v);
 		}
 		return v;
 	}

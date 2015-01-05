@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
@@ -20,7 +21,7 @@ import org.jgll.sppf.lookup.SPPFLookup;
  */
 public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	
-	protected static final GSSNode u0 = new GSSNode(null, 0);
+	protected static final GSSNode u0 = new GSSNode(new DummySlot(), 0);
 		
 	public OriginalGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
 		super(gssLookup, sppfLookup, descriptorLookup);

@@ -15,16 +15,22 @@ public class Configuration {
 	
 	private final LookupImpl sppfLookupImpl;
 	
-	private LookupStrategy gssLookupStrategy;
+	private final LookupImpl descriptorLookupImpl;
 	
-	private LookupStrategy sppfLookupStrategy;
+	private final LookupStrategy gssLookupStrategy;
+	
+	private final LookupStrategy sppfLookupStrategy;
+	
+	private final LookupStrategy descriptorLookupStrategy;
 	
 	private Configuration(Builder builder) {
 		this.gssType = builder.gssType;
 		this.gssLookupImpl = builder.gssLookupImpl;
 		this.sppfLookupImpl = builder.sppfLookupImpl;
+		this.descriptorLookupImpl = builder.descriptorLookupImpl;
 		this.gssLookupStrategy = builder.gssLookupStrategy;
 		this.sppfLookupStrategy = builder.sppfLookupStrategy;
+		this.descriptorLookupStrategy = builder.descriptorLookupStrategy;
 	}
 	
 	public GSSType getGSSType() {
@@ -38,6 +44,10 @@ public class Configuration {
 	public LookupImpl getSPPFLookupImpl() {
 		return sppfLookupImpl;
 	}
+
+	public LookupImpl getDescriptorLookupImpl() {
+		return descriptorLookupImpl;
+	}
 	
 	public LookupStrategy getGSSLookupStrategy() {
 		return gssLookupStrategy;
@@ -45,6 +55,10 @@ public class Configuration {
 	
 	public LookupStrategy getSPPFLookupStrategy() {
 		return sppfLookupStrategy;
+	}
+	
+	public LookupStrategy getDescriptorLookupStrategy() {
+		return descriptorLookupStrategy;
 	}
 	
 	public static Builder builder() {
@@ -56,15 +70,19 @@ public class Configuration {
 		private GSSType gssType;
 		private LookupImpl gssLookupImpl;
 		private LookupImpl sppfLookupImpl;
+		private LookupImpl descriptorLookupImpl;
 		private LookupStrategy gssLookupStrategy;
 		private LookupStrategy sppfLookupStrategy;
+		private LookupStrategy descriptorLookupStrategy;
 		
 		public Builder() {
 			this.gssType = GSSType.NEW;
 			this.gssLookupImpl = LookupImpl.ARRAY;
 			this.sppfLookupImpl = LookupImpl.HASH_MAP;
+			this.descriptorLookupImpl = LookupImpl.HASH_MAP;
 			this.gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 			this.sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
+			this.descriptorLookupStrategy = LookupStrategy.GLOBAL;
 		}
 		
 		public Configuration build() {
@@ -86,6 +104,11 @@ public class Configuration {
 			return this;
 		}
 		
+		public Builder setDescriptorLookupImpl(LookupImpl descriptorLookupImpl) {
+			this.descriptorLookupImpl = descriptorLookupImpl;
+			return this;
+		}
+		
 		public Builder setGSSLookupStrategy(LookupStrategy gssLookupStrategy) {
 			this.gssLookupStrategy = gssLookupStrategy;
 			return this;
@@ -93,6 +116,11 @@ public class Configuration {
 		
 		public Builder setSPPFLookupStrategy(LookupStrategy sppfLookupStrategy) {
 			this.sppfLookupStrategy = sppfLookupStrategy;
+			return this;
+		}
+		
+		public Builder setDescriptorLookupStrategy(LookupStrategy descriptorLookupStrategy) {
+			this.descriptorLookupStrategy = descriptorLookupStrategy;
 			return this;
 		}
 	}

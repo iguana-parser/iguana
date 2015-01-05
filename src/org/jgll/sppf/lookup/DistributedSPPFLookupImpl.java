@@ -7,7 +7,7 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
-import org.jgll.util.hashing.IntKey2;
+import org.jgll.util.collections.IntKey2;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 

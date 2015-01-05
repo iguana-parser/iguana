@@ -1,4 +1,4 @@
-package org.jgll.util.hashing;
+package org.jgll.util.collections;
 
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
