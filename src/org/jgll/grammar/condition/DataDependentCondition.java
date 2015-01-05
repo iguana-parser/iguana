@@ -6,17 +6,17 @@ public class DataDependentCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final org.jgll.datadependent.exp.Expression expression;
+	private final org.jgll.datadependent.ast.Expression expression;
 	
 	private transient final SlotAction action;
 
-	DataDependentCondition(ConditionType type, org.jgll.datadependent.exp.Expression expression) {
+	DataDependentCondition(ConditionType type, org.jgll.datadependent.ast.Expression expression) {
 		super(type);
 		this.expression = expression;
 		this.action = null; // TODO 
 	}
 	
-	public org.jgll.datadependent.exp.Expression getExpression() {
+	public org.jgll.datadependent.ast.Expression getExpression() {
 		return expression;
 	}
 
@@ -30,7 +30,7 @@ public class DataDependentCondition extends Condition {
 		return null;
 	}
 	
-	static public DataDependentCondition predicate(org.jgll.datadependent.exp.Expression expression) {
+	static public DataDependentCondition predicate(org.jgll.datadependent.ast.Expression expression) {
 		return new DataDependentCondition(ConditionType.DATA_DEPENDENT, expression);
 	}
 

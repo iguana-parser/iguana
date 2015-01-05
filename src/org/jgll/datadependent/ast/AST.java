@@ -1,9 +1,9 @@
-package org.jgll.datadependent.exp;
+package org.jgll.datadependent.ast;
 
+import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.EvalContext;
-import org.jgll.datadependent.exp.Expression;
 
-public class Expressions {
+public class AST {
 	
 	static public final Expression TRUE = Expression.Boolean.TRUE;
 	static public final Expression FALSE = Expression.Boolean.FALSE;

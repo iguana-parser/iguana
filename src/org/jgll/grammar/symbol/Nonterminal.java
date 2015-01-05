@@ -1,6 +1,6 @@
 package org.jgll.grammar.symbol;
 
-import org.jgll.datadependent.exp.Expression;
+import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.GrammarSlotRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;

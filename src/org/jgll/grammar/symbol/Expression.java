@@ -10,17 +10,17 @@ public class Expression implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final org.jgll.datadependent.exp.Expression[] expressions;
+	private final org.jgll.datadependent.ast.Expression[] expressions;
 	
-	Expression(org.jgll.datadependent.exp.Expression[] expressions) {
+	Expression(org.jgll.datadependent.ast.Expression[] expressions) {
 		this.expressions = expressions;
 	}
 	
-	public static Expression block(org.jgll.datadependent.exp.Expression... expressions) {
+	public static Expression code(org.jgll.datadependent.ast.Expression... expressions) {
 		return new Expression(expressions);
 	}
 	
-	public  org.jgll.datadependent.exp.Expression[] getExpressions() {
+	public  org.jgll.datadependent.ast.Expression[] getExpressions() {
 		return expressions;
 	}
 
