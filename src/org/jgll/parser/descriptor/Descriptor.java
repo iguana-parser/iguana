@@ -56,40 +56,4 @@ public class Descriptor {
 		return String.format("(%s, %d, %s, %s)", slot, inputIndex, gssNode, sppfNode);
 	}
 	
-//    public static ExternalHashEquals<Descriptor> globalHashEquals(HashFunction f) {
-//    	
-//    	return new ExternalHashEquals<Descriptor>() {
-//
-//			@Override
-//			public int hash(Descriptor d) {
-//				return f.hash(d.slot.getId(), d.inputIndex, d.gssNode.getGrammarSlot().getId(), d.getGSSNode().getInputIndex());
-//			}
-//
-//			@Override
-//			public boolean equals(Descriptor d1, Descriptor d2) {
-//				return d1.slot == d2.slot &&
-//					   d1.inputIndex == d2.inputIndex &&
-//					   d1.gssNode.getGrammarSlot() == d2.gssNode.getGrammarSlot() &&
-//					   d1.getGSSNode().getInputIndex() == d2.getGSSNode().getInputIndex();
-//			}
-//		};
-//    }
-//    
-//    public static ExternalHashEquals<Descriptor> distributedHashEquals(HashFunction f) {
-//    	
-//    	return new ExternalHashEquals<Descriptor>() {
-//
-//			@Override
-//			public int hash(Descriptor d) {
-//				return f.hash(d.slot.getId(), d.inputIndex);
-//			}
-//
-//			@Override
-//			public boolean equals(Descriptor d1, Descriptor d2) {
-//				return d1.slot.getId() == d2.slot.getId() &&
-//					   d1.inputIndex == d2.inputIndex;
-//			}
-//		};
-//    }
-	
 }

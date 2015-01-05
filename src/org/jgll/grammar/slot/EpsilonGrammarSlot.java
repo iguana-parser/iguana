@@ -10,8 +10,8 @@ import org.jgll.sppf.TerminalNode;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
-	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup) {
-		super(position, nonterminal, nodeLookup);
+	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup) {
+		super(id, position, nonterminal, nodeLookup);
 	}
 	
 	@Override

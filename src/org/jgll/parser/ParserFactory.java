@@ -63,7 +63,7 @@ public class ParserFactory {
 				return new OriginalDistributedSPPFLookupImpl(hash);
 			}
 		} else {
-			hash = HashFunctions.coefficientHash(input.length(), input.length(), grammar.size());
+			hash = HashFunctions.coefficientHash(grammar.size(), input.length(), input.length());
 			if (config.getGSSType() == GSSType.NEW) {
 				return new GlobalSPPFLookupImpl(hash);				
 			} else {
@@ -73,7 +73,7 @@ public class ParserFactory {
 	}
 	
 	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
-		HashFunction hash = HashFunctions.coefficientHash(input.length(), grammar.size());
+		HashFunction hash = HashFunctions.coefficientHash(grammar.size(), input.length());
 		return new DistributedDescriptorLookupImpl(hash);
 	}
 

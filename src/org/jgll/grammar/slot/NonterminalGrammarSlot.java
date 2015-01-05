@@ -36,7 +36,8 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	private Map<Key, NonterminalNode> nonterminalNodes;
 
-	public NonterminalGrammarSlot(Nonterminal nonterminal, NodeLookup nodeLookup) {
+	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, NodeLookup nodeLookup) {
+		super(id);
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();

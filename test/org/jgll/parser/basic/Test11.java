@@ -49,10 +49,10 @@ public class Test11 extends AbstractParserTest {
 	@Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-        		{ DEFAULT,  getGrammar(), Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
-        		{ CONFIG_1, getGrammar(), Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
-        		{ CONFIG_2, getGrammar(), Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
-        		{ CONFIG_3, getGrammar(), Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF }
+        		{ DEFAULT,  Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
+        		{ CONFIG_1, Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
+        		{ CONFIG_2, Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF },
+        		{ CONFIG_3, Input.fromString("ab"), getGrammar(), (Function<GrammarRegistry, SPPFNode>) Test11::expectedSPPF }
            });
     }
 	
@@ -62,9 +62,9 @@ public class Test11 extends AbstractParserTest {
 		Character a = Character.from('a');
 		Character b = Character.from('b');
 		Rule r1 = Rule.builder(S).addSymbols(A, A, b).build();
-		Rule r3 = Rule.builder(A).addSymbol(a).build();
-		Rule r4 = Rule.builder(A).build();
-		return Grammar.builder().addRule(r1).addRule(r3).addRule(r4).build();
+		Rule r2 = Rule.builder(A).addSymbol(a).build();
+		Rule r3 = Rule.builder(A).build();
+		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
 	@Test
