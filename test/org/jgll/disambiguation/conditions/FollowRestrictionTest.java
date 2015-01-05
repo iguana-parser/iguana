@@ -52,7 +52,7 @@ public class FollowRestrictionTest {
 	public void testParser() {
 		Input input = Input.fromString("abc:");
 		parser =  ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 

@@ -91,7 +91,7 @@ public class PrecedenceTest8 {
 	public void test1() {
 		Input input = Input.fromString("a+a[a+a]");
 		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "E");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getParseStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1(parser.getRegistry())));
@@ -101,7 +101,7 @@ public class PrecedenceTest8 {
 	public void test2() {
 		Input input = Input.fromString("a+a*a+[a+a]");
 		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "E");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseError());
 	}
 	
@@ -109,7 +109,7 @@ public class PrecedenceTest8 {
 	public void test3() {
 		Input input = Input.fromString("a[a][a+a]");
 		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "E");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseError());
 	}	
 

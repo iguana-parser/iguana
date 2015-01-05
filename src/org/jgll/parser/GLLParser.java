@@ -7,6 +7,7 @@ import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.IntermediateNode;
@@ -24,10 +25,10 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, Grammar grammar, String startSymbolName, Configuration config);
+	public ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config);
 	
-	default ParseResult parse(Input input, Grammar grammar, String startSymbolName) {
-		return parse(input, grammar, startSymbolName, Configuration.DEFAULT);
+	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
+		return parse(input, grammar, startSymbol, Configuration.DEFAULT);
 	}
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);

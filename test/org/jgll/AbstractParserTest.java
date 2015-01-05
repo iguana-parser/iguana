@@ -1,30 +1,39 @@
 package org.jgll;
 
+import static org.junit.Assert.*;
+
 import java.util.function.Function;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
-import org.jgll.util.Configuration;
 import org.jgll.util.Input;
+import org.junit.Test;
+import org.junit.runners.Parameterized.Parameter;
 
 public class AbstractParserTest {
 
-	protected Grammar grammar;
+	@Parameter(value = 0)
+	public Input input;
 	
-	protected GLLParser parser;
+	@Parameter(value = 1)
+	public Grammar grammar;
 	
-	protected Input input;
+	@Parameter(value = 2)
+	public Nonterminal startSymbol;
+
+	@Parameter(value = 3)
+	public GLLParser parser;
+
+	@Parameter(value = 4)
+	public Function<GrammarRegistry, ParseResult> expectedResult;
 	
-	protected Function<GrammarRegistry, ParseResult> expectedResult;
-	
-	public AbstractParserTest(Configuration config, Input input, Grammar grammar, Function<GrammarRegistry, ParseResult> result) {
-		this.parser = ParserFactory.getParser(config, input, grammar);
-		this.input = input;
-		this.grammar = grammar;
-		this.expectedResult = result;
+	@Test
+	public void testParser() {
+		ParseResult result = parser.parse(input, grammar, startSymbol);
+		assertEquals(expectedResult.apply(parser.getRegistry()), result);
 	}
 	
 }

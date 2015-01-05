@@ -50,7 +50,7 @@ public class KeywordExclusionTest {
 	public void testWhen() {
 		Input input = Input.fromString("when");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "Id");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
@@ -58,7 +58,7 @@ public class KeywordExclusionTest {
 	public void testIf() {
 		Input input = Input.fromString("if");		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "Id");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
@@ -66,7 +66,7 @@ public class KeywordExclusionTest {
 	public void testDo() {
 		Input input = Input.fromString("do");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "Id");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
@@ -74,7 +74,7 @@ public class KeywordExclusionTest {
 	public void testWhile() {
 		Input input = Input.fromString("while");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "Id");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 

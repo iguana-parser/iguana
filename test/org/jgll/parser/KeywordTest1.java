@@ -40,7 +40,7 @@ public class KeywordTest1 {
 	public void test() {
 		Input input = Input.fromString("if");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		parser.parse(input, grammar, "A");
+		parser.parse(input, grammar, Nonterminal.withName("A"));
 	}
 	
 }

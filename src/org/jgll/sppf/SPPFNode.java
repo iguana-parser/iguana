@@ -1,7 +1,9 @@
 package org.jgll.sppf;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
@@ -45,58 +47,36 @@ public interface SPPFNode {
 	// TODO: doesn't work in case SPPF has a cycle
 	// TODO: create a set of packed nodes and then compare them instead of iterator stuff below.
 	default boolean deepEquals(SPPFNode node) {
+		return deepEquals(this, node, new HashSet<>());
+	}
+	
+	static boolean deepEquals(SPPFNode node1, SPPFNode node2, Set<SPPFNode> visited) {
+
+		if (visited.contains(node1)) 
+			return true;
 		
-		if(!this.equals(node))
+		visited.add(node1);
+				
+		if (!node1.equals(node2))
 			return false;
 		
-		if(this.childrenCount() != node.childrenCount())
+		if (node1.childrenCount() != node2.childrenCount())
 			return false;
 		
-		if(this.isAmbiguous() ^ node.isAmbiguous())
+		if (node1.isAmbiguous() ^ node2.isAmbiguous())
 			return false;
 		
-		if(this.isAmbiguous() && node.isAmbiguous()) {
-			return compareAmbiguousNodes(this, node);
-		}
+		Iterator<? extends SPPFNode> node1It = node1.getChildren().iterator();		
+		Iterator<? extends SPPFNode> node2It = node2.getChildren().iterator();
 		
-		Iterator<? extends SPPFNode> thisIt = getChildren().iterator();		
-		Iterator<? extends SPPFNode> otherIt = node.getChildren().iterator();
-		
-		while(thisIt.hasNext() && otherIt.hasNext()) {
-			SPPFNode thisChild = thisIt.next();
-			SPPFNode otherChild = otherIt.next();
-			if(!thisChild.deepEquals(otherChild)) {
+		while (node1It.hasNext() && node2It.hasNext()) {
+			SPPFNode node1Child = node1It.next();
+			SPPFNode node2Child = node2It.next();
+			if (!deepEquals(node1Child, node2Child, visited)) {
 				return false;
 			}
 		}
 		
 		return true;
-	}
-	
-	
-	// Packed nodes are not ordered, so we have to search
-	// through the packed nodes of the given node to match
-	// a packed node. This implementation may not be efficient for
-	// ambiguous nodes having many packed nodes.
-	static boolean compareAmbiguousNodes(SPPFNode node1, SPPFNode node2) {
-		
-		Iterator<? extends SPPFNode> thisIt = node1.getChildren().iterator();
-
-		outer:
-		while(thisIt.hasNext()) {
-			SPPFNode thisChild = thisIt.next();
-			Iterator<? extends SPPFNode> otherIt = node2.getChildren().iterator();
-			while(otherIt.hasNext()) {
-				SPPFNode otherChild = otherIt.next();
-				if(thisChild.deepEquals(otherChild)) {
-					continue outer;
-				}
-			} 
-			return false;
-		}
-		
-		return true;
-		
-	}
-	
+	}	
 }

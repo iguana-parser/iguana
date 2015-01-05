@@ -44,7 +44,7 @@ public class BenchmarkGamma {
 		int runCount = 5;
 		
 		Grammar grammar = gamma2();
-		String startSymbol = "S";
+		Nonterminal startSymbol = Nonterminal.withName("S");
 		
 //		StringWriter writer = new StringWriter();
 //		grammarGraph.generate(new PrintWriter(writer));

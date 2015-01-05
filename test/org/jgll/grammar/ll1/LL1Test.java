@@ -105,7 +105,7 @@ public class LL1Test {
 	public void test1() {
 		Input input = Input.fromString("bda");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
@@ -138,7 +138,7 @@ public class LL1Test {
 	public void test2() {
 		Input input = Input.fromString("a");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
@@ -170,7 +170,7 @@ public class LL1Test {
 	public void test3() {
 		Input input = Input.fromString("ba");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
@@ -203,7 +203,7 @@ public class LL1Test {
 	public void test4() {
 		Input input = Input.fromString("da");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
 		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());

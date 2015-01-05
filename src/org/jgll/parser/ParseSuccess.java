@@ -58,4 +58,9 @@ public class ParseSuccess implements ParseResult {
 		return parseStatistics.equals(other.parseStatistics) && sppfNode.deepEquals(other.sppfNode);
 	}
 	
+	@Override
+	public String toString() {
+		return sppfNode + "\n" + parseStatistics;
+	}
+	
 }

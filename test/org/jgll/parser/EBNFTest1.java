@@ -44,7 +44,7 @@ public class EBNFTest1 {
 	public void test() {
 		Input input = Input.fromString("aaaaaa");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		parser.parse(input, grammar, "S");
+		parser.parse(input, grammar, Nonterminal.withName("S"));
 	}
 
 }

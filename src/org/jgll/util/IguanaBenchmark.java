@@ -18,6 +18,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -223,7 +224,7 @@ public class IguanaBenchmark {
 		for (int i = 0; i < warmupCount; i++) {
 			Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
 			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-			ParseResult result = parser.parse(input, grammar, startSymbol);
+			ParseResult result = parser.parse(input, grammar, Nonterminal.withName(startSymbol));
 			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getParseStatistics()));
 		}
 	}
@@ -232,7 +233,7 @@ public class IguanaBenchmark {
 		System.out.println(input.getURI());
 		for (int i = 0; i < runCount; i++) {
 			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-			ParseResult result = parser.parse(input, grammar, startSymbol);
+			ParseResult result = parser.parse(input, grammar, Nonterminal.withName(startSymbol));
 			if (result.isParseSuccess()) {
 				System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getParseStatistics()));
 //				Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), grammarGraph, input);

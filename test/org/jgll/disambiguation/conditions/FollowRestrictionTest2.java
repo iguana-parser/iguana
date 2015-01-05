@@ -51,7 +51,7 @@ public class FollowRestrictionTest2 {
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
 		parser =  ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 	
@@ -59,7 +59,7 @@ public class FollowRestrictionTest2 {
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
 		parser =  ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 

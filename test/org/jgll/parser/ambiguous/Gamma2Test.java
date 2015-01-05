@@ -51,7 +51,7 @@ public class Gamma2Test {
 	public void testParsers1() {
 		Input input = Input.fromString("bbb");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(31, parseStatistics.getDescriptorsCount());
@@ -66,7 +66,7 @@ public class Gamma2Test {
 	public void testParsers2() {
 		Input input = Input.fromString("bbbb");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(50, parseStatistics.getDescriptorsCount());
@@ -81,7 +81,7 @@ public class Gamma2Test {
 	public void testParsers3() {
 		Input input = Input.fromString("bbbbb");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(74, parseStatistics.getDescriptorsCount());
@@ -96,7 +96,7 @@ public class Gamma2Test {
 	public void testParsers4() {
 		Input input = Input.fromString(getBs(100));
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, "S");
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
 //		assertEquals(25154, parseStatistics.getDescriptorsCount());
