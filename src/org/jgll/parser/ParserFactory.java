@@ -53,17 +53,20 @@ public class ParserFactory {
 	}
 	
 	private static SPPFLookup getSPPFLookup(Configuration config, Input input, Grammar grammar) {
+		int inputSize = getSmallestPowerTwo(input.length());
+		int grammarSize = getSmallestPowerTwo(grammar.size());
+
 		HashFunction hash; 
 		
 		if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-			hash = HashFunctions.coefficientHash(input.length(), input.length());
+			hash = HashFunctions.coefficientHash(inputSize);
 			if (config.getGSSType() == GSSType.NEW) {
 				return new DistributedSPPFLookupImpl(hash);
 			} else {
 				return new OriginalDistributedSPPFLookupImpl(hash);
 			}
 		} else {
-			hash = HashFunctions.coefficientHash(grammar.size(), input.length(), input.length());
+			hash = HashFunctions.coefficientHash(grammarSize, inputSize);
 			if (config.getGSSType() == GSSType.NEW) {
 				return new GlobalSPPFLookupImpl(hash);				
 			} else {
@@ -73,8 +76,13 @@ public class ParserFactory {
 	}
 	
 	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
-		HashFunction hash = HashFunctions.coefficientHash(grammar.size(), input.length());
+		int grammarSize = getSmallestPowerTwo(grammar.size());
+		HashFunction hash = HashFunctions.coefficientHash(grammarSize);
 		return new DistributedDescriptorLookupImpl(hash);
+	}
+	
+	private static int getSmallestPowerTwo(int n) {
+		return (int) Math.pow(2, Math.ceil(Math.log(n) / Math.log(2)));
 	}
 
 }

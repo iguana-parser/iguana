@@ -40,8 +40,8 @@ public class BenchmarkGamma {
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
-		int warmupCount = 5;
-		int runCount = 10;
+		int warmupCount = 3;
+		int runCount = 5;
 		
 		Grammar grammar = gamma2();
 		String startSymbol = "S";
@@ -51,7 +51,7 @@ public class BenchmarkGamma {
 //		System.out.println(writer.toString());
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
-		Input input = Input.fromString(getBs(420));
+		Input input = Input.fromString(getBs(300));
 		Configuration config = Configurations.DEFAULT;
 		
 		// Warmup
@@ -64,7 +64,7 @@ public class BenchmarkGamma {
 		GcFinalization.awaitFullGc();
 		
 		System.out.println(BenchmarkUtil.header());
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 30; i++) {
 			for (int j = 0; j < runCount; j++) {
 				input = Input.fromString(getBs(i * 10));
 				GLLParser parser = ParserFactory.getParser(config, input, grammar);
