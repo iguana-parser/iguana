@@ -9,7 +9,9 @@ public enum ConditionType {
 	MATCH(" & "),
 	NOT_MATCH(" \\ "),
 	END_OF_LINE("$"),
-	START_OF_LINE("^")
+	START_OF_LINE("^"),
+	
+	DATA_DEPENDENT(" ? ")
 	;
 	
 	private String symbol;
