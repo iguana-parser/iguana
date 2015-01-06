@@ -81,7 +81,7 @@ public class GrammarGraphBuilder implements Serializable {
 	private void convert(Nonterminal nonterminal) {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup()));
-		// Nonterminal formal parameters can be accessed as nonterminalSlot.getNonTerminal().getParameters();
+		// Nonterminal formal parameters can be accessed as nonterminalSlot.getNonterminal().getParameters();
 		rules.forEach(r -> addAlternative(nonterminalSlot, r));
 	}
 	

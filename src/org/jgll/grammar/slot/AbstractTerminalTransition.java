@@ -39,7 +39,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		Input input = parser.getInput();
 
 		for (Condition c : preConditions) {
-			if (c.getSlotAction().execute(input, u, i)) 
+			if (c.getSlotAction().execute(input, u, i, env)) 
 				return;
 		}
 
@@ -51,7 +51,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		}
 
 		for (Condition c : postConditions) {
-			if (c.getSlotAction().execute(input, u, i)) 
+			if (c.getSlotAction().execute(input, u, i, env)) 
 				return;
 		}
 		

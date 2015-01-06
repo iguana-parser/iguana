@@ -51,7 +51,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			GrammarSlot returnSlot = gssNode.getGrammarSlot();
 
 			for(Condition c : returnSlot.getConditions()) {
-				if (c.getSlotAction().execute(input, gssNode, inputIndex)) 
+				// FIXME: Data-dependent GLL
+				if (c.getSlotAction().execute(input, gssNode, inputIndex, EmptyEnvironment.instance)) 
 					break;
 			}
 			
@@ -59,7 +60,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 						
 			for (GSSEdge edge : gssNode.getGSSEdges()) {
 				NonPackedNode y = sppfLookup.getNode(returnSlot, edge.getNode(), node);
-				// TODO: Data-dependent GLL
+				// FIXME: Data-dependent GLL
 				addDescriptor(returnSlot, edge.getDestination(), inputIndex, y, EmptyEnvironment.instance);
 			}
 		}
@@ -92,7 +93,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 				// exits. The input index will be the right extend of the node
 				// stored in the popped elements.
 				for (Condition c : returnSlot.getConditions()) {
-					if (c.getSlotAction().execute(input, destination, z.getRightExtent())) 
+					// FIXME: Data-dependent GLL
+					if (c.getSlotAction().execute(input, destination, z.getRightExtent(), env)) 
 						break;
 				}
 				
