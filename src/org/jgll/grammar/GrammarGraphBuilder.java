@@ -81,7 +81,7 @@ public class GrammarGraphBuilder implements Serializable {
 	private void convert(Nonterminal nonterminal) {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup()));
-		// TODO: add parameters
+		// Nonterminal formal parameters can be accessed as nonterminalSlot.getNonTerminal().getParameters();
 		rules.forEach(r -> addAlternative(nonterminalSlot, r));
 	}
 	
@@ -117,8 +117,8 @@ public class GrammarGraphBuilder implements Serializable {
 					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id, nonterminal, getNodeLookup()));
 					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
-					// TODO: add label, variable, and arguments
-					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, preConditions));
+					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, 
+							nonterminal.getLabel(), nonterminal.getVariable(), nonterminal.getArguments(), preConditions));
 					currentSlot = slot;
 				}
 				else if (symbol instanceof CodeBlock) {
