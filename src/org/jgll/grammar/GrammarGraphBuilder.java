@@ -13,6 +13,7 @@ import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.slot.AbstractTerminalTransition;
 import org.jgll.grammar.slot.BeforeLastTerminalTransition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.CodeBlockTransition;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.FirstAndLastTerminalTransition;
@@ -22,6 +23,7 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.NonterminalTransition;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalTransition;
+import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -79,6 +81,7 @@ public class GrammarGraphBuilder implements Serializable {
 	private void convert(Nonterminal nonterminal) {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup()));
+		// TODO: add parameters
 		rules.forEach(r -> addAlternative(nonterminalSlot, r));
 	}
 	
@@ -114,7 +117,14 @@ public class GrammarGraphBuilder implements Serializable {
 					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id, nonterminal, getNodeLookup()));
 					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
+					// TODO: add label, variable, and arguments
 					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, preConditions));
+					currentSlot = slot;
+				}
+				else if (symbol instanceof CodeBlock) {
+					CodeBlock code = (CodeBlock) symbol;
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
+					currentSlot.addTransition(new CodeBlockTransition(code, currentSlot, slot));
 					currentSlot = slot;
 				}
 				

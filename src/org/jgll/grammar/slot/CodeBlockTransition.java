@@ -8,6 +8,7 @@ import org.jgll.sppf.NonPackedNode;
 
 public class CodeBlockTransition extends AbstractTransition {
 	
+	@SuppressWarnings("unused")
 	private final CodeBlock code;
 
 	public CodeBlockTransition(CodeBlock code, BodyGrammarSlot origin, BodyGrammarSlot dest) {
@@ -18,6 +19,7 @@ public class CodeBlockTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		// TODO
+		return;
 	}
 
 	@Override

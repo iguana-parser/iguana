@@ -8,12 +8,13 @@ public class DataDependentCondition extends Condition {
 	
 	private final org.jgll.datadependent.ast.Expression expression;
 	
+	@SuppressWarnings("unused")
 	private transient final SlotAction action;
 
 	DataDependentCondition(ConditionType type, org.jgll.datadependent.ast.Expression expression) {
 		super(type);
 		this.expression = expression;
-		this.action = null; // TODO 
+		this.action = null; // TODO: define an action 
 	}
 	
 	public org.jgll.datadependent.ast.Expression getExpression() {
