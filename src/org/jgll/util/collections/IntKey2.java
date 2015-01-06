@@ -3,7 +3,7 @@ package org.jgll.util.collections;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 
-public class IntKey2 implements Key, Comparable<IntKey2> {
+public class IntKey2 implements Key {
 	
 	private final int k1;
 	private final int k2;
@@ -41,10 +41,10 @@ public class IntKey2 implements Key, Comparable<IntKey2> {
 		return new int[] {k1, k2};
 	}
 
-	@Override
-	public int compareTo(IntKey2 o) {
-		return k1 - o.k2 > 0 ? 1 : k2 - o.k2;
-	}
+//	@Override
+//	public int compareTo(IntKey2 o) {
+//		return k1 - o.k1 > 0 ? 1 : k2 - o.k2;
+//	}
 	
 	@Override
 	public String toString() {

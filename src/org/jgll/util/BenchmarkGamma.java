@@ -41,7 +41,7 @@ public class BenchmarkGamma {
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
-		int warmupCount = 0;
+		int warmupCount = 5;
 		int runCount = 5;
 		
 		Grammar grammar = gamma2();
@@ -53,7 +53,7 @@ public class BenchmarkGamma {
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
 		Input input = Input.fromString(getBs(300));
-		Configuration config = Configuration.builder().setDescriptorLookupStrategy(LookupStrategy.GLOBAL).build();
+		Configuration config = Configuration.builder().build();
 		
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {

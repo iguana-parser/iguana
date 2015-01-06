@@ -123,7 +123,7 @@ public class GSSNode {
 	}
 
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.hashCode(), inputIndex);
+		return HashFunctions.defaulFunction.hash(slot.getId(), inputIndex);
 	}
 	
 	public String toString() {

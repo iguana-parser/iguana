@@ -1,7 +1,5 @@
 package org.jgll.parser.ambiguous;
 
-import static org.jgll.util.Configurations.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +16,7 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParseSuccess;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.junit.runners.Parameterized.Parameters;
@@ -26,13 +25,13 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 	
 	@Parameters
     public static Collection<Object> data() {
-		List<Object> parameters = Stream.iterate(1, n -> ++n).limit(6).flatMap(i -> newConfigs.stream().map(c -> new Object[] {
+		List<Object> parameters = Stream.iterate(1, n -> ++n).limit(6).map(i -> new Object[] {
 	    		getInput(i * 50), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput(i * 50), getGrammar()),
+	    		ParserFactory.getParser(Configuration.DEFAULT, getInput(i * 50), getGrammar()),
 	    		getNewParseResult(i - 1)
-	    	})).collect(Collectors.toList());
+	    	}).collect(Collectors.toList());
 		
 		return parameters;
     }
