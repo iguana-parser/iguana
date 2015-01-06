@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 
+import org.jgll.datadependent.env.EmptyEnvironment;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -150,14 +151,16 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			return;
 		}
 		
-		startSymbol.execute(this, cu, ci, cn);
+		// FIXME: Data-dependent GLL
+		startSymbol.execute(this, cu, ci, cn, EmptyEnvironment.instance);
 		
 		while(hasNextDescriptor()) {
 			Descriptor descriptor = nextDescriptor();
 			GrammarSlot slot = descriptor.getGrammarSlot();
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
-			slot.execute(this, cu, ci, descriptor.getSPPFNode());
+			// FIXME: Data-dependent GLL
+			slot.execute(this, cu, ci, descriptor.getSPPFNode(), EmptyEnvironment.instance);
 		}
 	}
 	
@@ -169,10 +172,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		if (gssNode == null) {
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
 			log.trace("GSSNode created: %s",  gssNode);
+			// FIXME: Data-dependent GLL
 			createGSSEdge(returnSlot, u, node, gssNode, env);
-			nonterminal.execute(this, gssNode, i, node);
+			nonterminal.execute(this, gssNode, i, node, env);
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
+			// FIXME: Data-dependent GLL
 			createGSSEdge(returnSlot, u, node, gssNode, env);			
 		}
 		return gssNode;

@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
@@ -20,7 +21,8 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		// TODO: Data-dependent GLL, check
 		if (nonterminal.test(i))
 			parser.pop(u, i, node);
 	}

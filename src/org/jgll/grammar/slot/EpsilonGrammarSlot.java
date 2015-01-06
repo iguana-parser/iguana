@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
@@ -15,7 +16,8 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	}
 	
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		// FIXME: Data-dependent GLL
 		if (nonterminal.test(i)) {
 			TerminalNode epsilonNode = parser.getEpsilonNode(i);
 			parser.pop(u, i, parser.getNonterminalNode(this, epsilonNode));

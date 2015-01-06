@@ -57,10 +57,11 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		
-		createNode(length, cr, parser, u, i, node);
+		// FIXME: Data-dependent GLL
+		createNode(length, cr, parser, u, i, node, env);
 	}
 	
-	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node);
+	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);
 	
 	@Override
 	public String getConstructorCode(GrammarRegistry registry) {
