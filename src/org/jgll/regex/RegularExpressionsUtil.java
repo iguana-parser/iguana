@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;

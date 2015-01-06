@@ -1,13 +1,13 @@
 package org.jgll.util.visualization;
 
+import static org.jgll.util.generator.GeneratorUtil.*;
+import static org.jgll.util.visualization.GraphVizUtil.*;
+
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
-
-import static org.jgll.util.visualization.GraphVizUtil.*;
-import static org.jgll.util.generator.GeneratorUtil.*;
 
 public class GrammarGraphToDot {
 

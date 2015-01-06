@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.EOF;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.Input;
 

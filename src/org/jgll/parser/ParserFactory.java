@@ -13,9 +13,9 @@ import org.jgll.sppf.lookup.OriginalDistributedSPPFLookupImpl;
 import org.jgll.sppf.lookup.OriginalGlobalSPPFLookupImpl;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Configuration;
-import org.jgll.util.Input;
 import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Configuration.LookupStrategy;
+import org.jgll.util.Input;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
