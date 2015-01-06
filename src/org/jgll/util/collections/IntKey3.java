@@ -46,7 +46,7 @@ public class IntKey3 implements Key, Comparable<IntKey3> {
 
 	@Override
 	public int compareTo(IntKey3 o) {
-		return k1 - o.k2 > 0 ? 1 : k2 - o.k2 > 0 ? 1 : k3 - o.k3;
+		return k1 - o.k1 > 0 ? 1 : k2 - o.k2 > 0 ? 1 : k3 - o.k3;
 	}
 	
 	@Override

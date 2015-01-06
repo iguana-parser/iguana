@@ -178,7 +178,8 @@ public class Grammar implements Serializable {
 				
 				// Adding rules in reverse order so that descriptors are created
 				// in the right order while parsing.
-				definitions.get(r.getHead()).add(0, r);
+//				definitions.get(r.getHead()).add(0, r);
+				definitions.put(r.getHead(), r);
 			}
 			
 			return this;

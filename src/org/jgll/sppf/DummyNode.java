@@ -1,5 +1,6 @@
 package org.jgll.sppf;
 
+import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.GrammarSlot;
 
 /**
@@ -17,7 +18,7 @@ public class DummyNode extends TerminalNode {
 	
 	public static DummyNode getInstance() {
 		if(instance == null) {
-			instance = new DummyNode(null, -1, -1);
+			instance = new DummyNode(DummySlot.getInstance(), -1, -1);
 		}
 		return instance;
 	}

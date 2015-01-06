@@ -82,7 +82,7 @@ public class Configuration {
 			this.descriptorLookupImpl = LookupImpl.HASH_MAP;
 			this.gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 			this.sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
-			this.descriptorLookupStrategy = LookupStrategy.GLOBAL;
+			this.descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;
 		}
 		
 		public Configuration build() {

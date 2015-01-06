@@ -10,7 +10,13 @@ import org.jgll.util.Input;
 
 public class DummySlot extends BodyGrammarSlot {
 
-	public DummySlot() {
+	private static final DummySlot instance = new DummySlot();
+	
+	public static DummySlot getInstance() {
+		return instance;
+	}
+	
+	private DummySlot() {
 		super(0, null, new HashMapNodeLookup());
 	}
 

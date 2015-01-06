@@ -85,7 +85,7 @@ public class ParserFactory {
 			hash = HashFunctions.coefficientHash(grammarSize);
 			return new DistributedDescriptorLookupImpl(hash);			
 		} else {
-			hash = HashFunctions.coefficientHash(grammarSize, inputSize, grammarSize, inputSize);
+			hash = HashFunctions.coefficientHash(grammarSize, inputSize, grammarSize);
 			return new GlobalDescriptorLookupImpl(hash);
 		}
 	}
