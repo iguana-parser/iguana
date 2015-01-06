@@ -176,7 +176,9 @@ public class Grammar implements Serializable {
 				if (addedRules.contains(r))
 					continue;
 				
-				definitions.put(r.getHead(), r);
+				// Adding rules in reverse order so that descriptors are created
+				// in the right order while parsing.
+				definitions.get(r.getHead()).add(0, r);
 			}
 			
 			return this;

@@ -3,6 +3,7 @@ package org.jgll.parser.basic;
 import static org.jgll.util.Configurations.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,13 +40,21 @@ public class Test11 extends AbstractParserTest {
 	
 	@Parameters
     public static Collection<Object[]> data() {
-		return configurations.stream().map(c -> new Object[] {
+		 List<Object[]> parameters = newConfigs.stream().map(c -> new Object[] {
 	    		getInput(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Test11::getParseResult
+	    		(Function<GrammarRegistry, ParseResult>) Test11::getNewParseResult
 	    	}).collect(Collectors.toList());
+		 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
+		    		getInput(), 
+		    		getGrammar(), 
+		    		getStartSymbol(),
+		    		ParserFactory.getParser(c, getInput(), getGrammar()),
+		    		(Function<GrammarRegistry, ParseResult>) Test11::getOriginalParseResult
+		    	}).collect(Collectors.toList()));
+		 return parameters;
     }
     
     private static Input getInput() {
@@ -67,10 +76,23 @@ public class Test11 extends AbstractParserTest {
 		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
-	private static ParseSuccess getParseResult(GrammarRegistry registry) {
+	private static ParseSuccess getNewParseResult(GrammarRegistry registry) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(9)
 				.setGSSNodesCount(3)
+				.setGSSEdgesCount(3)
+				.setNonterminalNodesCount(4)
+				.setTerminalNodesCount(4)
+				.setIntermediateNodesCount(2)
+				.setPackedNodesCount(7)
+				.setAmbiguousNodesCount(1).build();
+		return new ParseSuccess(expectedSPPF(registry), statistics);
+	}
+	
+	private static ParseSuccess getOriginalParseResult(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(11)
+				.setGSSNodesCount(4)
 				.setGSSEdgesCount(3)
 				.setNonterminalNodesCount(4)
 				.setTerminalNodesCount(4)

@@ -59,7 +59,7 @@ public class Test12 extends AbstractParserTest {
     	    	getInput1(), 
     	    	getGrammar(), 
     	    	getStartSymbol(),
-    	    	ParserFactory.getParser(c, getInput1(), getGrammar()),
+    	    	ParserFactory.getParser(c, getInput2(), getGrammar()),
     	    	(Function<GrammarRegistry, ParseResult>) Test12::getParseResult3
     	    	}).collect(Collectors.toList()));
     	parameters.addAll(    		
@@ -144,7 +144,6 @@ public class Test12 extends AbstractParserTest {
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF2(registry), statistics);
 	}
-
 	
 	private static NonterminalNode expectedSPPF1(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);

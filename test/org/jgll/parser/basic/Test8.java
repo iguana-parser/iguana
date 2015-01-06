@@ -48,14 +48,14 @@ public class Test8 extends AbstractParserTest {
 	@Parameters
     public static Collection<Object[]> data() {
 		List<Object[]> parameters = 
-			configurations.stream().map(c -> new Object[] {
+			all_configs.stream().map(c -> new Object[] {
 	    		getInput1(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
 	    		(Function<GrammarRegistry, ParseResult>) Test8::getParseResult1
 	    	}).collect(Collectors.toList());
-		parameters.addAll(configurations.stream().map(c -> new Object[] {
+		parameters.addAll(all_configs.stream().map(c -> new Object[] {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
