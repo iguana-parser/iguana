@@ -33,7 +33,8 @@ public class AbstractParserTest {
 	@Test
 	public void testParser() {
 		ParseResult result = parser.parse(input, grammar, startSymbol);
-		assertEquals(expectedResult.apply(parser.getRegistry()), result);
+		if (expectedResult != null)
+			assertEquals(expectedResult.apply(parser.getRegistry()), result);
 	}
 	
 }
