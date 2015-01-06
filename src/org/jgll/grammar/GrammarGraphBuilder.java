@@ -8,8 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.ConditionType;
+import org.jgll.grammar.exception.IncorrectNumberOfArgumentsException;
 import org.jgll.grammar.slot.AbstractTerminalTransition;
 import org.jgll.grammar.slot.BeforeLastTerminalTransition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -116,9 +118,15 @@ public class GrammarGraphBuilder implements Serializable {
 					Nonterminal nonterminal = (Nonterminal) symbol;
 					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id, nonterminal, getNodeLookup()));
 					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
+					
+					String label = nonterminal.getLabel();
+					String variable = nonterminal.getVariable();				
+					Expression[] arguments = nonterminal.getArguments();
+					
+					validateNumberOfArguments(nonterminal, arguments);
+					
 					Set<Condition> preConditions = symbol.getPreConditions();
-					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, 
-							nonterminal.getLabel(), nonterminal.getVariable(), nonterminal.getArguments(), preConditions));
+					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, label, variable, arguments, preConditions));
 					currentSlot = slot;
 				}
 				else if (symbol instanceof CodeBlock) {
@@ -165,6 +173,17 @@ public class GrammarGraphBuilder implements Serializable {
 		} else {
 			return new ArrayNodeLookup(input);
 		}
+	}
+	
+	static private void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
+		String[] parameters = nonterminal.getParameters();
+		if (parameters == null && arguments == null) {
+			return;
+		}
+		if (parameters != null && arguments != null && parameters.length == arguments.length) {
+			return;
+		}
+		throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
 	}
 	
 }
