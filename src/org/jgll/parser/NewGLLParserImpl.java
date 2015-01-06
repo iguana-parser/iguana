@@ -1,6 +1,8 @@
 package org.jgll.parser;
 
 
+import org.jgll.datadependent.env.EmptyEnvironment;
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -51,7 +53,8 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 			}
 
 			NonPackedNode y = sppfLookup.getNode(returnSlot, edge.getNode(), node);
-			addDescriptor(returnSlot, edge.getDestination(), inputIndex, y);
+			// TODO: Data-dependent GLL, check
+			addDescriptor(returnSlot, edge.getDestination(), inputIndex, y, EmptyEnvironment.instance);
 		}
 	}
 	
@@ -66,7 +69,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source) {
+	public void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		
 		if(gssLookup.getGSSEdge(source, edge)) {
@@ -83,7 +86,8 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				}
 				
 				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z); 
-				addDescriptor(returnSlot, destination, z.getRightExtent(), x);
+				// TODO: Data-dependent GLL, check
+				addDescriptor(returnSlot, destination, z.getRightExtent(), x, env);
 			}
 		}
 	}

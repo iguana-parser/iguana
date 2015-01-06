@@ -54,7 +54,7 @@ public class NonterminalTransition extends AbstractTransition {
 				return;
 		}
 		
-		parser.create(dest, nonterminal, u, i, node);
+		parser.create(dest, nonterminal, u, i, node, env);
 	}
 	
 	@Override

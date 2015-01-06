@@ -1,5 +1,6 @@
 package org.jgll.parser;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -33,7 +34,7 @@ public interface GLLParser {
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 	
-	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node);
+	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Environment env);
 	
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 
@@ -49,9 +50,9 @@ public interface GLLParser {
 	
 	public void scheduleDescriptor(Descriptor descriptor);
 	
-	default boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
+	default boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
 		if (!hasDescriptor(slot, gssNode, inputIndex, sppfNode)) {
-			scheduleDescriptor(new Descriptor(slot, gssNode, inputIndex, sppfNode));
+			scheduleDescriptor(new Descriptor(slot, gssNode, inputIndex, sppfNode, env));
 			return true;
 		}
 		return false;

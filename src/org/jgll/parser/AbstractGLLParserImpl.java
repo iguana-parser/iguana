@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
@@ -163,21 +164,21 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
-	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
+	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node, Environment env) {
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
 			log.trace("GSSNode created: %s",  gssNode);
-			createGSSEdge(returnSlot, u, node, gssNode);
+			createGSSEdge(returnSlot, u, node, gssNode, env);
 			nonterminal.execute(this, gssNode, i, node);
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
-			createGSSEdge(returnSlot, u, node, gssNode);			
+			createGSSEdge(returnSlot, u, node, gssNode, env);			
 		}
 		return gssNode;
 	}
 		
-	public abstract void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
+	public abstract void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env);
 	
 	public abstract GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
 	
