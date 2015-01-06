@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.datadependent.ast.Expression;
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
@@ -41,7 +42,7 @@ public class NonterminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
 		if (!nonterminal.test(parser.getInput().charAt(i))) {
 			parser.recordParseError(origin);

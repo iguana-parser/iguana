@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
@@ -33,7 +34,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
 		Input input = parser.getInput();
 

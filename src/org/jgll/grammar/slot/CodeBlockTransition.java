@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.parser.GLLParser;
@@ -17,7 +18,7 @@ public class CodeBlockTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		// TODO
 		return;
 	}
