@@ -128,7 +128,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 					.setGSSNodesCount(gssLookup.getGSSNodesCount()) 
 					.setGSSEdgesCount(gssLookup.getGSSEdgesCount()) 
 					.setNonterminalNodesCount(sppfLookup.getNonterminalNodesCount())
-					.setTerminalNodesCount(sppfLookup.getTokenNodesCount())
+					.setTerminalNodesCount(sppfLookup.getTerminalNodesCount())
 					.setIntermediateNodesCount(sppfLookup.getIntermediateNodesCount()) 
 					.setPackedNodesCount(sppfLookup.getPackedNodesCount()) 
 					.setAmbiguousNodesCount(sppfLookup.getAmbiguousNodesCount()).build();

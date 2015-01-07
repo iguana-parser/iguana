@@ -40,8 +40,8 @@ public class BenchmarkGamma {
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
-		int warmupCount = 5;
-		int runCount = 5;
+		int warmupCount = 0;
+		int runCount = 1;
 		
 		Grammar grammar = gamma2();
 		Nonterminal startSymbol = Nonterminal.withName("S");
@@ -64,7 +64,7 @@ public class BenchmarkGamma {
 		GcFinalization.awaitFullGc();
 		
 		System.out.println(BenchmarkUtil.header());
-		for (int i = 1; i <= 60; i++) {
+		for (int i = 1; i <= 1; i++) {
 			for (int j = 0; j < runCount; j++) {
 				input = Input.fromString(getBs(i * 10));
 				GLLParser parser = ParserFactory.getParser(config, input, grammar);

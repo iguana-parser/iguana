@@ -138,7 +138,7 @@ public interface SPPFLookup {
 	
 	public int getIntermediateNodesCount();
 	
-	public int getTokenNodesCount();
+	public int getTerminalNodesCount();
 	
 	public int getPackedNodesCount();
 	

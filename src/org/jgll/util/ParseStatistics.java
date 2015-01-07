@@ -19,23 +19,19 @@ public class ParseStatistics {
 	private final int packedNodesCount;
 	private final int ambiguousNodesCount;
 	
-	public ParseStatistics(long nanoTime, long userTime, long systemTime,
-						   int memoryUsed, int descriptorsCount, int gssNodesCount,
-						   int gssEdgesCount, int nonterminalNodesCount, int terminalNodesCount,
-						   int intermediateNodesCount, int packedNodesCount,
-						   int ambiguousNodesCount) {
-		this.nanoTime = nanoTime;
-		this.systemTime = systemTime;
-		this.userTime = userTime;
-		this.memoryUsed = memoryUsed;
-		this.descriptorsCount = descriptorsCount;
-		this.gssNodesCount = gssNodesCount;
-		this.gssEdgesCount = gssEdgesCount;
-		this.nonterminalNodesCount = nonterminalNodesCount;
-		this.terminalNodesCount = terminalNodesCount;
-		this.intermediateNodesCount = intermediateNodesCount;
-		this.packedNodesCount = packedNodesCount;
-		this.ambiguousNodesCount = ambiguousNodesCount;
+	public ParseStatistics(Builder builder) {
+		this.nanoTime = builder.nanoTime;
+		this.systemTime = builder.systemTime;
+		this.userTime = builder.userTime;
+		this.memoryUsed = builder.memoryUsed;
+		this.descriptorsCount = builder.descriptorsCount;
+		this.gssNodesCount = builder.gssNodesCount;
+		this.gssEdgesCount = builder.gssEdgesCount;
+		this.nonterminalNodesCount = builder.nonterminalNodesCount;
+		this.terminalNodesCount = builder.terminalNodesCount;
+		this.intermediateNodesCount = builder.intermediateNodesCount;
+		this.packedNodesCount = builder.packedNodesCount;
+		this.ambiguousNodesCount = builder.ambiguousNodesCount;
 	}
 
 	public long getNanoTime() {
@@ -210,7 +206,7 @@ public class ParseStatistics {
 		}
 		
 		public ParseStatistics build() {
-			return new ParseStatistics(nanoTime, userTime, systemTime, memoryUsed, descriptorsCount, gssNodesCount, gssEdgesCount, nonterminalNodesCount, nonterminalNodesCount, intermediateNodesCount, packedNodesCount, ambiguousNodesCount);
+			return new ParseStatistics(this);
 		}
 
 	}

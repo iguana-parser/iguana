@@ -60,7 +60,7 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 		return countIntermediateNodes;
 	}
 	
-	public int getTokenNodesCount() {
+	public int getTerminalNodesCount() {
 		return countTerminalNodes;
 	}
 	
