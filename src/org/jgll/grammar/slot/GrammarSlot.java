@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.datadependent.env.EmptyEnvironment;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
