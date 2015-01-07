@@ -1,8 +1,12 @@
 package org.jgll.datadependent.env;
 
-public class EvalContext {
+public class EvaluatorContext {
 	
 	private Environment env;
+	
+	public EvaluatorContext(Environment env) {
+		this.env = env;
+	}
 	
 	public Environment getCurrentEnv() {
 		return env;

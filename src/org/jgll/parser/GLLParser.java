@@ -1,13 +1,16 @@
 package org.jgll.parser;
 
+import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
@@ -32,9 +35,18 @@ public interface GLLParser {
 		return parse(input, grammar, startSymbol, Configuration.DEFAULT);
 	}
 	
+	/**
+	 * Data-dependent GLL parsing
+	 */
+	public Object eval(CodeBlock code, Environment env);
+	
+	public Object eval(DataDependentCondition condition, Environment env);
+	
+	public Object[] eval(Expression[] arguments, Environment env);
+	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 	
-	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Environment env);
+	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Expression[] arguments, Environment env);
 	
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 
@@ -70,7 +82,7 @@ public interface GLLParser {
 	public Input getInput();
 	
 	public GrammarRegistry getRegistry();
-	
+		
 	public void reset();
 	
 }

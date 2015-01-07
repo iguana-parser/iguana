@@ -1,16 +1,21 @@
 package org.jgll.parser;
 
 
+import org.jgll.datadependent.ast.Expression;
+import org.jgll.datadependent.ast.Statement;
 import org.jgll.datadependent.env.EmptyEnvironment;
 import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.env.EvaluatorContext;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
@@ -49,6 +54,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected NonPackedNode cn = DummyNode.getInstance();
 	
 	protected int ci = 0;
+	
+	protected final EvaluatorContext ctx = new EvaluatorContext(EmptyEnvironment.instance);
 	
 	protected Input input;
 	
@@ -167,7 +174,64 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
-	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public Object eval(CodeBlock code, Environment env) {
+		Statement[] statements = code.getStatements();
+		
+		if (statements.length == 0) return null;
+		
+		ctx.setCurrentEnv(env);
+		
+		int i = 0;
+		while (i < statements.length) {
+			statements[i].interpret(ctx);
+			i++;
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public Object eval(DataDependentCondition condition, Environment env) {
+		ctx.setCurrentEnv(env);
+		
+		return condition.getExpression().interpret(ctx);
+	}
+	
+	@Override
+	public Object[] eval(Expression[] arguments, Environment env) {
+		if (arguments == null) return null;
+		
+		ctx.setCurrentEnv(env);
+		
+		Object[] values = new Object[arguments.length];
+		
+		int i = 0;
+		while (i < arguments.length) {
+			values[i] = arguments[i].interpret(ctx);
+			i++;
+		}
+		
+		return values;
+	}
+	
+	
+	@Override
+	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node, Expression[] arguments, Environment env) {
+		
+		String[] parameters = nonterminal.getNonterminal().getParameters();
+		
+		Environment newEnv = EmptyEnvironment.instance;
+		
+		if (parameters != null) { // The number of arguments has been already checked
+			Object[] values = eval(arguments, env);
+			
+			int j = 0;
+			while (j < parameters.length) {
+				newEnv = newEnv.storeVariableLocally(parameters[j], values[j]);
+			}
+			
+		}
+		
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
@@ -288,4 +352,5 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		return sppfLookup.getTerminalNode(slot, leftExtent, rightExtent);
 	}
+		
 }

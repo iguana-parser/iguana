@@ -1,6 +1,6 @@
 package org.jgll.datadependent.ast;
 
-import org.jgll.datadependent.env.EvalContext;
+import org.jgll.datadependent.env.EvaluatorContext;
 
 public abstract class Expression extends AbstractAST {
 	
@@ -16,14 +16,14 @@ public abstract class Expression extends AbstractAST {
 		
 		static public final Boolean TRUE = new Boolean() {		
 			@Override
-			public Object interpret(EvalContext ctx) {
+			public Object interpret(EvaluatorContext ctx) {
 				return true;
 			}
 		};
 		
 		static public final Boolean FALSE = new Boolean() {
 			@Override
-			public Object interpret(EvalContext ctx) {
+			public Object interpret(EvaluatorContext ctx) {
 				return false;
 			}
 		};
@@ -47,7 +47,7 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
-        public Object interpret(EvalContext ctx) {
+        public Object interpret(EvaluatorContext ctx) {
 			return value;
 		}
 		
@@ -70,7 +70,7 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
-		public Object interpret(EvalContext ctx) {
+		public Object interpret(EvaluatorContext ctx) {
 			return value;
 		}
 		
@@ -93,7 +93,7 @@ public abstract class Expression extends AbstractAST {
 		}
 
 		@Override
-		public Object interpret(EvalContext ctx) {
+		public Object interpret(EvaluatorContext ctx) {
 			return value;
 		}
 	}
@@ -107,7 +107,7 @@ public abstract class Expression extends AbstractAST {
 		}
 
 		@Override
-		public Object interpret(EvalContext ctx) {
+		public Object interpret(EvaluatorContext ctx) {
 			Object value = ctx.getCurrentEnv().lookupVariable(name);
 			if (value == null) {
 				throw new RuntimeException("Undeclared variable: " + name);
@@ -128,7 +128,7 @@ public abstract class Expression extends AbstractAST {
 			this.arguments = arguments;
 		}
 		
-		protected Object[] interpretArguments(EvalContext ctx) {
+		protected Object[] interpretArguments(EvaluatorContext ctx) {
 			Object[] values = new Object[arguments.length];
 			
 			int i = 0;

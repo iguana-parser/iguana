@@ -18,13 +18,10 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Set<Condition> preConditions;
 	
-	@SuppressWarnings("unused")
 	private final String label;
 	
-	@SuppressWarnings("unused")
 	private final String variable;
 	
-	@SuppressWarnings("unused")
 	private final Expression[] arguments;
 
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
@@ -53,8 +50,16 @@ public class NonterminalTransition extends AbstractTransition {
 			if (c.getSlotAction().execute(parser.getInput(), u, i, env)) 
 				return;
 		}
-		
-		parser.create(dest, nonterminal, u, i, node, env);
+				
+		parser.create(dest, nonterminal, u, i, node, arguments, env);
+	}
+	
+	public String getLabel() {
+		return label;
+	}
+	
+	public String getVariable() {
+		return variable;
 	}
 	
 	@Override
