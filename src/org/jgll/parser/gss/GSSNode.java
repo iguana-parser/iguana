@@ -50,11 +50,13 @@ public class GSSNode {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		children = new ArrayList<>();
-		poppedElements = new ArrayList<>();
-		addedPoppedElements = new HashSet<>();
-		gssEdges = new ArrayList<>();
-		descriptors = new HashSet<>();
+		
+		this.children = new ArrayList<>();
+		this.poppedElements = new ArrayList<>();
+		this.gssEdges = new ArrayList<>();
+		
+		this.addedPoppedElements = new HashSet<>();
+		this.descriptors = new HashSet<>(1024);
 	}
 	
 	public boolean addToPoppedElements(NonPackedNode node) {
@@ -104,6 +106,10 @@ public class GSSNode {
 		return poppedElements.size();
 	}
 	
+	public int countDescriptors() {
+		return descriptors.size();
+	}
+	
 	public Iterable<GSSEdge> getGSSEdges() {
 		return gssEdges;
 	}
@@ -145,5 +151,6 @@ public class GSSNode {
 		gssEdges.clear();
 		descriptors.clear();;
 	}
+	
 	
 }

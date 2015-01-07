@@ -290,4 +290,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public Configuration getConfiguration() {
 		return config;
 	}
+	
+	@Override
+	public Iterable<GSSNode> getGSSNodes() {
+		return gssLookup.getGSSNodes();
+	}
 }

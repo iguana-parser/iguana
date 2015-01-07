@@ -54,8 +54,8 @@ public class ParserFactory {
 	}
 	
 	private static SPPFLookup getSPPFLookup(Configuration config, Input input, Grammar grammar) {
-		int inputSize = input.length(); // getSmallestPowerTwo(input.length());
-		int grammarSize = grammar.size(); // getSmallestPowerTwo(grammar.size());
+		int inputSize =  getSize(input.length());
+		int grammarSize = getSize(grammar.size());
 
 		HashFunction hash; 
 		
@@ -77,8 +77,8 @@ public class ParserFactory {
 	}
 	
 	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
-		int grammarSize = grammar.size(); //getSmallestPowerTwo(grammar.size());
-		int inputSize =   input.length(); //getSmallestPowerTwo(input.length());
+		int inputSize =   getSize(input.length());
+		int grammarSize = getSize(grammar.size());
 		
 		HashFunction hash;
 		if (config.getDescriptorLookupStrategy() == LookupStrategy.DISTRIBUTED) {
@@ -90,8 +90,9 @@ public class ParserFactory {
 		}
 	}
 	
-	private static int getSmallestPowerTwo(int n) {
-		return (int) Math.pow(2, Math.ceil(Math.log(n) / Math.log(2)));
+	private static int getSize(int n) {
+		return n + 1;
+//		return (int) Math.pow(2, Math.ceil(Math.log(n) / Math.log(2)));
 	}
 
 }
