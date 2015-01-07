@@ -4,10 +4,13 @@ import java.util.Iterator;
 
 public class GSSNodeData<T> implements Iterable<T> {
 	
-	private final T[] data;
+	private final T[] elements;
 	
-	public GSSNodeData(T[] data) {
-		this.data = data;
+	public final int size;
+	
+	public GSSNodeData(T[] elements) {
+		this.elements = elements;
+		this.size = elements == null? 0 : elements.length;
 	}
 	
 	@Override
@@ -20,8 +23,29 @@ public class GSSNodeData<T> implements Iterable<T> {
 		
 		GSSNodeData<?> that = (GSSNodeData<?>) other;
 		
+		if (this.size != that.size) return false;
 		
-		return false;
+		Iterator<T> iter1 = iterator();
+		Iterator<?> iter2 = that.iterator();
+		
+		while (iter1.hasNext()) {
+			if (!iter1.next().equals(iter2.next())) {
+				return false;
+			};
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 17;
+		
+		for (T element : elements) {
+			result = 31 * result + element.hashCode();
+		}
+		return result;
+		
 	}
 
 	@Override
@@ -34,21 +58,19 @@ public class GSSNodeData<T> implements Iterable<T> {
 		private GSSNodeData<T> data;
 		
 		private int i = 0;
-		private final int length;
 		
 		GSSNodeDataIterator(GSSNodeData<T> data) {
 			this.data = data;
-			this.length = data.data.length;
 		}
 
 		@Override
 		public boolean hasNext() {
-			return false;
+			return i < data.size;
 		}
 
 		@Override
 		public T next() {
-			return null;
+			return data.elements[i++];
 		}
 		
 	}
