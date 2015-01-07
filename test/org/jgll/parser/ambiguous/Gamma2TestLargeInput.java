@@ -16,22 +16,23 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParseSuccess;
 import org.jgll.parser.ParserFactory;
-import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.junit.runners.Parameterized.Parameters;
+
+import static org.jgll.util.Configurations.*;
 
 public class Gamma2TestLargeInput extends AbstractParserTest {
 	
 	@Parameters
     public static Collection<Object> data() {
-		List<Object> parameters = Stream.iterate(1, n -> ++n).limit(6).map(i -> new Object[] {
+		List<Object> parameters = Stream.iterate(1, n -> ++n).limit(4).flatMap(i -> newConfigs.stream().map(c -> new Object[] {
 	    		getInput(i * 50), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
-	    		ParserFactory.getParser(Configuration.DEFAULT, getInput(i * 50), getGrammar()),
+	    		ParserFactory.getParser(c, getInput(i * 50), getGrammar()),
 	    		getNewParseResult(i - 1)
-	    	}).collect(Collectors.toList());
+	    	})).collect(Collectors.toList());
 		
 		return parameters;
     }
@@ -107,54 +108,6 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 							   .setPackedNodesCount(3980200) 
 							   .setAmbiguousNodesCount(39402) 
 							   .build()));
-
-		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
-				ParseStatistics.builder()
-							   .setDescriptorsCount(156629)
-							   .setGSSNodesCount(251)
-							   .setGSSEdgesCount(94377)
-							   .setNonterminalNodesCount(31375)
-							   .setTerminalNodesCount(31375)
-							   .setIntermediateNodesCount(31125)
-							   .setPackedNodesCount(7781500) 
-							   .setAmbiguousNodesCount(61752) 
-							   .build()));
-
-		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
-				ParseStatistics.builder()
-							   .setDescriptorsCount(225454)
-							   .setGSSNodesCount(301)
-							   .setGSSEdgesCount(135752)
-							   .setNonterminalNodesCount(45150)
-							   .setTerminalNodesCount(45150)
-							   .setIntermediateNodesCount(44850)
-							   .setPackedNodesCount(13455300) 
-							   .setAmbiguousNodesCount(89102)
-							   .build()));
-
-//		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
-//				ParseStatistics.builder()
-//							   .setDescriptorsCount(306779)
-//							   .setGSSNodesCount(351)
-//							   .setGSSEdgesCount(184627)
-//							   .setNonterminalNodesCount(61425)
-//							   .setTerminalNodesCount(61425)
-//							   .setIntermediateNodesCount(61075)
-//							   .setPackedNodesCount(21376600) 
-//							   .setAmbiguousNodesCount(121452) 
-//							   .build()));
-//
-//		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
-//				ParseStatistics.builder()
-//							   .setDescriptorsCount(400604)
-//							   .setGSSNodesCount(401)
-//							   .setGSSEdgesCount(241002)
-//							   .setNonterminalNodesCount(80200)
-//							   .setTerminalNodesCount(80200)
-//							   .setIntermediateNodesCount(79800)
-//							   .setPackedNodesCount(31920400) 
-//							   .setAmbiguousNodesCount(158802) 
-//							   .build()));
 
 	}
 }

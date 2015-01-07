@@ -35,7 +35,11 @@ public class AbstractParserTest {
 	
 	@Test
 	public void testParser() {
+				
 		ParseResult result = parser.parse(input, grammar, startSymbol);
+		System.out.println(input.length());
+		System.out.println(parser.getConfiguration());
+		System.out.println();
 		assertTrue(result.isParseSuccess());
 		
 		// Checking the parse tree if it exists

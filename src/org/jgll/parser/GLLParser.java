@@ -71,5 +71,7 @@ public interface GLLParser {
 	public GrammarRegistry getRegistry();
 	
 	public void reset();
+
+	public Configuration getConfiguration();
 	
 }
