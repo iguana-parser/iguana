@@ -23,7 +23,7 @@ import org.jgll.sppf.lookup.SPPFLookup;
  */
 public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	
-	protected final GSSNode u0 = gssLookup.getGSSNode(new DummySlot(), 0);
+	protected final GSSNode u0 = gssLookup.getGSSNode(DummySlot.getInstance(), 0);
 		
 	public OriginalGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
 		super(gssLookup, sppfLookup, descriptorLookup);

@@ -40,7 +40,7 @@ public class Test4 extends AbstractParserTest {
 
 	@Parameters
     public static Collection<Object[]> data() {
-		return configurations.stream().map(c -> new Object[] {
+		return all_configs.stream().map(c -> new Object[] {
 	    		getInput(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),

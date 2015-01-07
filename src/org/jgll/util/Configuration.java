@@ -65,6 +65,32 @@ public class Configuration {
 		return new Builder();
 	}
 	
+	public static enum GSSType {
+		NEW,
+		ORIGINAL
+	}
+	
+	public static enum LookupImpl {
+		ARRAY,
+		HASH_MAP
+	}
+	
+	public static enum LookupStrategy {
+		GLOBAL,
+		DISTRIBUTED
+	}
+	
+	@Override
+	public String toString() {
+		return "GSS Type: " + gssType + "\n" +
+			   "GSS Lookup Strategy: " + gssLookupStrategy + "\n" +
+			   "Descriptor Lookup Strategy: " + descriptorLookupStrategy + "\n" +
+			   "SPPF Lookup Strategy: " + sppfLookupStrategy + "\n" +
+			   "GSS Lookup Impl: " + gssLookupImpl + "\n" +
+			   "Descriptor Lookup Impl: " + descriptorLookupImpl + "\n" +
+			   "SPPF Lookup Impl: " + sppfLookupStrategy;
+	}
+	
 	public static class Builder {
 		
 		private GSSType gssType;
@@ -82,7 +108,7 @@ public class Configuration {
 			this.descriptorLookupImpl = LookupImpl.HASH_MAP;
 			this.gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 			this.sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
-			this.descriptorLookupStrategy = LookupStrategy.GLOBAL;
+			this.descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;
 		}
 		
 		public Configuration build() {
@@ -124,31 +150,4 @@ public class Configuration {
 			return this;
 		}
 	}
-	
-	public static enum GSSType {
-		NEW,
-		ORIGINAL
-	}
-	
-	public static enum LookupImpl {
-		ARRAY,
-		HASH_MAP
-	}
-	
-	public static enum LookupStrategy {
-		GLOBAL,
-		DISTRIBUTED
-	}
-	
-	@Override
-	public String toString() {
-		return new StringBuilder()
-			.append("GSS Type: ").append(gssType).append("\n")
-			.append("GSSLookup Impl: ").append(sppfLookupImpl).append("\n")
-			.append("GSSLookup Strategy: ").append(gssLookupStrategy).append("\n")
-			.append("SPPFLookup Impl: ").append(sppfLookupImpl).append("\n")
-			.append("SPPFLookup Strategy: ").append(sppfLookupStrategy)
-			.toString();
-	}
-	
 }

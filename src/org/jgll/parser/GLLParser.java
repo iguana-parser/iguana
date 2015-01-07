@@ -81,8 +81,12 @@ public interface GLLParser {
 	
 	public Input getInput();
 	
+	public Iterable<GSSNode> getGSSNodes();
+	
 	public GrammarRegistry getRegistry();
 		
 	public void reset();
+
+	public Configuration getConfiguration();
 	
 }

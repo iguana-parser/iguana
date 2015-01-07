@@ -3,6 +3,7 @@ package org.jgll.parser.basic;
 import static org.jgll.util.Configurations.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -44,13 +45,21 @@ public class Test10 extends AbstractParserTest {
 	
 	@Parameters
     public static Collection<Object[]> data() {
-		return configurations.stream().map(c -> new Object[] {
+		List<Object[]> parameters = newConfigs.stream().map(c -> new Object[] {
 	    		getInput(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Test10::getParseResult
+	    		(Function<GrammarRegistry, ParseResult>) Test10::getNewParseResult
 	    	}).collect(Collectors.toList());
+		parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
+	    		getInput(), 
+	    		getGrammar(), 
+	    		getStartSymbol(),
+	    		ParserFactory.getParser(c, getInput(), getGrammar()),
+	    		(Function<GrammarRegistry, ParseResult>) Test10::getOriginalParseResult
+	    	}).collect(Collectors.toList()));
+		return parameters;
     }
 	
     private static Input getInput() {
@@ -81,7 +90,7 @@ public class Test10 extends AbstractParserTest {
 		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).build();
 	}
 	
-	private static ParseSuccess getParseResult(GrammarRegistry registry) {
+	private static ParseSuccess getNewParseResult(GrammarRegistry registry) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(12)
 				.setGSSNodesCount(5)
@@ -93,6 +102,20 @@ public class Test10 extends AbstractParserTest {
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF(registry), statistics);
 	}
+	
+	private static ParseSuccess getOriginalParseResult(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(14)
+				.setGSSNodesCount(7)
+				.setGSSEdgesCount(6)
+				.setNonterminalNodesCount(5)
+				.setTerminalNodesCount(5)
+				.setIntermediateNodesCount(2)
+				.setPackedNodesCount(8)
+				.setAmbiguousNodesCount(1).build();
+		return new ParseSuccess(expectedSPPF(registry), statistics);
+	}
+
 	
 	private static NonterminalNode expectedSPPF(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);

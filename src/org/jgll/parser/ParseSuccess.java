@@ -37,7 +37,7 @@ public class ParseSuccess implements ParseResult {
 		return sppfNode;
 	}
 	
-	public ParseStatistics getParseStatistics() {
+	public ParseStatistics getStatistics() {
 		return parseStatistics;
 	}
 	

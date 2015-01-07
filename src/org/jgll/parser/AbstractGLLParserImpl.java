@@ -81,6 +81,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected int descriptorsCount;
 
+	private Configuration config;
+
 	public AbstractGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
 		this.gssLookup = gssLookup;
 		this.sppfLookup = sppfLookup;
@@ -90,6 +92,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public final ParseResult parse(Input input, Grammar grammar, Nonterminal nonterminal, Configuration config) {
 
+		this.config = config;
 		this.grammarGraph = grammar.toGrammarGraph(input, config);
 		this.input = input;
 		
@@ -352,5 +355,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		return sppfLookup.getTerminalNode(slot, leftExtent, rightExtent);
 	}
-		
+
+	@Override
+	public Configuration getConfiguration() {
+		return config;
+	}
+	
+	@Override
+	public Iterable<GSSNode> getGSSNodes() {
+		return gssLookup.getGSSNodes();
+	}
+
 }

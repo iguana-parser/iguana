@@ -7,7 +7,6 @@ import java.util.Set;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Matcher;
-import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
