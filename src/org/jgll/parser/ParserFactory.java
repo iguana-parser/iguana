@@ -13,9 +13,9 @@ import org.jgll.sppf.lookup.OriginalDistributedSPPFLookupImpl;
 import org.jgll.sppf.lookup.OriginalGlobalSPPFLookupImpl;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Configuration;
-import org.jgll.util.Input;
 import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Configuration.LookupStrategy;
+import org.jgll.util.Input;
 import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
@@ -54,8 +54,8 @@ public class ParserFactory {
 	}
 	
 	private static SPPFLookup getSPPFLookup(Configuration config, Input input, Grammar grammar) {
-		int inputSize = getSmallestPowerTwo(input.length());
-		int grammarSize = getSmallestPowerTwo(grammar.size());
+		int inputSize =  getSize(input.length());
+		int grammarSize = getSize(grammar.size());
 
 		HashFunction hash; 
 		
@@ -77,21 +77,22 @@ public class ParserFactory {
 	}
 	
 	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
-		int grammarSize = getSmallestPowerTwo(grammar.size());
-		int inputSize = getSmallestPowerTwo(input.length());
+		int inputSize =   getSize(input.length());
+		int grammarSize = getSize(grammar.size());
 		
 		HashFunction hash;
 		if (config.getDescriptorLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 			hash = HashFunctions.coefficientHash(grammarSize);
 			return new DistributedDescriptorLookupImpl(hash);			
 		} else {
-			hash = HashFunctions.coefficientHash(grammarSize, inputSize, grammarSize, inputSize);
+			hash = HashFunctions.coefficientHash(grammarSize, inputSize, grammarSize);
 			return new GlobalDescriptorLookupImpl(hash);
 		}
 	}
 	
-	private static int getSmallestPowerTwo(int n) {
-		return (int) Math.pow(2, Math.ceil(Math.log(n) / Math.log(2)));
+	private static int getSize(int n) {
+		return n + 1;
+//		return (int) Math.pow(2, Math.ceil(Math.log(n) / Math.log(2)));
 	}
 
 }

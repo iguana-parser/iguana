@@ -40,7 +40,7 @@ public class BenchmarkGamma {
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		
-		int warmupCount = 3;
+		int warmupCount = 5;
 		int runCount = 5;
 		
 		Grammar grammar = gamma2();
@@ -52,7 +52,7 @@ public class BenchmarkGamma {
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
 		Input input = Input.fromString(getBs(300));
-		Configuration config = Configuration.DEFAULT;
+		Configuration config = Configuration.builder().build();
 		
 		// Warmup
 		for (int i = 1; i <= warmupCount; i++) {
@@ -64,7 +64,7 @@ public class BenchmarkGamma {
 		GcFinalization.awaitFullGc();
 		
 		System.out.println(BenchmarkUtil.header());
-		for (int i = 1; i <= 30; i++) {
+		for (int i = 1; i <= 60; i++) {
 			for (int j = 0; j < runCount; j++) {
 				input = Input.fromString(getBs(i * 10));
 				GLLParser parser = ParserFactory.getParser(config, input, grammar);
@@ -72,9 +72,10 @@ public class BenchmarkGamma {
 //				GLLParser parser = (GLLParser) clazz.newInstance();
 				
 				ParseResult res = parser.parse(input, grammar, startSymbol);
-
+//				parser.getGSSNodes().forEach(n -> System.out.println(n.countDescriptors() + ", " + n.countPoppedElements() + ", " + n.countGSSEdges()));
+				
 				if (res.isParseSuccess()) {
-					System.out.println(BenchmarkUtil.format(input, res.asParseSuccess().getParseStatistics()));
+					System.out.println(BenchmarkUtil.format(input, res.asParseSuccess().getStatistics()));
 				} else {
 					System.out.println("Parse error");
 				}

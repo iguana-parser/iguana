@@ -1,26 +1,31 @@
 package org.jgll.parser.ambiguous;
 
-import static org.junit.Assert.*;
+import static org.jgll.util.Configurations.*;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
+import org.jgll.parser.ParseSuccess;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
 import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
-import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 /**
  * 
@@ -31,90 +36,160 @@ import org.junit.Test;
  * @author Ali Afroozeh
  *
  */
-public class Gamma2Test {
+@RunWith(Parameterized.class)
+public class Gamma2Test extends AbstractParserTest {
 
-	private Grammar grammar;
+	@Parameters
+    public static Collection<Object[]> data() {
+		 List<Object[]> parameters = newConfigs.stream().map(c -> new Object[] {
+	    		getInput1(), 
+	    		getGrammar(), 
+	    		getStartSymbol(),
+	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
+	    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getNewParseResult1
+	    	}).collect(Collectors.toList());
+		 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
+	    		getInput1(), 
+	    		getGrammar(), 
+	    		getStartSymbol(),
+	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
+	    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getOriginalParseResult1
+	    	}).collect(Collectors.toList()));
+		 parameters.addAll(newConfigs.stream().map(c -> new Object[] {
+	    		getInput2(), 
+	    		getGrammar(), 
+	    		getStartSymbol(),
+	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
+	    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getNewParseResult2
+	    	}).collect(Collectors.toList()));
+		 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
+	    		getInput2(), 
+	    		getGrammar(), 
+	    		getStartSymbol(),
+	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
+	    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getOriginalParseResult2
+	    	}).collect(Collectors.toList()));
+		 parameters.addAll(newConfigs.stream().map(c -> new Object[] {
+		    		getInput3(), 
+		    		getGrammar(), 
+		    		getStartSymbol(),
+		    		ParserFactory.getParser(c, getInput3(), getGrammar()),
+		    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getNewParseResult3
+		    	}).collect(Collectors.toList()));
+			 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
+		    		getInput3(), 
+		    		getGrammar(), 
+		    		getStartSymbol(),
+		    		ParserFactory.getParser(c, getInput3(), getGrammar()),
+		    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getOriginalParseResult3
+		    	}).collect(Collectors.toList()));
+		 return parameters;
+    }
 	
-	private Nonterminal S = Nonterminal.withName("S");
-	private Character b = Character.from('b');
-	
-	@Before
-	public void init() {
+	private static Grammar getGrammar() {
+		Nonterminal S = Nonterminal.withName("S");
+		Character b = Character.from('b');
 		Rule rule1 = Rule.builder(S).addSymbols(S, S, S).build();
 		Rule rule2 = Rule.builder(S).addSymbols(S, S).build();
 		Rule rule3 = Rule.builder(S).addSymbols(b).build();
-		
-		grammar = Grammar.builder().addRules(rule1, rule2, rule3).build();
+		return Grammar.builder().addRules(rule1, rule2, rule3).build();
 	}
 	
-	@Test
-	public void testParsers1() {
-		Input input = Input.fromString("bbb");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
-		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
-//		assertEquals(31, parseStatistics.getDescriptorsCount());
-		assertEquals(6, parseStatistics.getNonterminalNodesCount());
-		assertEquals(3, parseStatistics.getIntermediateNodesCount());
-		assertEquals(12, parseStatistics.getPackedNodesCount());
-		assertEquals(3, parseStatistics.getTerminalNodesCount());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF1(parser.getRegistry())));
+	private static Nonterminal getStartSymbol() {
+		return Nonterminal.withName("S");
 	}
 	
-	@Test
-	public void testParsers2() {
-		Input input = Input.fromString("bbbb");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
-		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
-//		assertEquals(50, parseStatistics.getDescriptorsCount());
-		assertEquals(10, parseStatistics.getNonterminalNodesCount());
-		assertEquals(6, parseStatistics.getIntermediateNodesCount());
-		assertEquals(28, parseStatistics.getPackedNodesCount());
-		assertEquals(4, parseStatistics.getTerminalNodesCount());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF2(parser.getRegistry())));
+	private static Input getInput1() {
+		return Input.fromString("bbb");
 	}
 	
-	@Test
-	public void testParsers3() {
-		Input input = Input.fromString("bbbbb");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
-		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
-//		assertEquals(74, parseStatistics.getDescriptorsCount());
-		assertEquals(15, parseStatistics.getNonterminalNodesCount());
-		assertEquals(10, parseStatistics.getIntermediateNodesCount());
-		assertEquals(55, parseStatistics.getPackedNodesCount());
-		assertEquals(5, parseStatistics.getTerminalNodesCount());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF3(parser.getRegistry())));
+	private static Input getInput2() {
+		return Input.fromString("bbbb");
 	}
 	
-	@Test
-	public void testParsers4() {
-		Input input = Input.fromString(getBs(100));
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
-		ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
-//		assertEquals(25154, parseStatistics.getDescriptorsCount());
-		assertEquals(5050, parseStatistics.getNonterminalNodesCount());
-		assertEquals(4950, parseStatistics.getIntermediateNodesCount());
-		assertEquals(100, parseStatistics.getTerminalNodesCount());
-		assertEquals(495100, parseStatistics.getPackedNodesCount());
+	private static Input getInput3() {
+		return Input.fromString("bbbbb");
 	}
 	
-	private String getBs(int size) {
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < size; i++) {
-			sb.append("b");
-		}
-		return sb.toString();
+	private static ParseSuccess getNewParseResult1(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(31)
+				.setGSSNodesCount(4)
+				.setGSSEdgesCount(23)
+				.setNonterminalNodesCount(6)
+				.setTerminalNodesCount(6)
+				.setIntermediateNodesCount(3)
+				.setPackedNodesCount(12)
+				.setAmbiguousNodesCount(2).build();
+		return new ParseSuccess(expectedSPPF1(registry), statistics);
 	}
 	
-	private SPPFNode getSPPF1(GrammarRegistry registry) {
+	private static ParseSuccess getOriginalParseResult1(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(118)
+				.setGSSNodesCount(17)
+				.setGSSEdgesCount(88)
+				.setNonterminalNodesCount(6)
+				.setTerminalNodesCount(6)
+				.setIntermediateNodesCount(3)
+				.setPackedNodesCount(12)
+				.setAmbiguousNodesCount(2).build();
+		return new ParseSuccess(expectedSPPF1(registry), statistics);
+	}
+	
+	private static ParseSuccess getNewParseResult2(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(50)
+				.setGSSNodesCount(5)
+				.setGSSEdgesCount(36)
+				.setNonterminalNodesCount(10)
+				.setTerminalNodesCount(10)
+				.setIntermediateNodesCount(6)
+				.setPackedNodesCount(28)
+				.setAmbiguousNodesCount(6).build();
+		return new ParseSuccess(expectedSPPF2(registry), statistics);
+	}
+	
+	private static ParseSuccess getOriginalParseResult2(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(198)
+				.setGSSNodesCount(22)
+				.setGSSEdgesCount(144)
+				.setNonterminalNodesCount(10)
+				.setTerminalNodesCount(10)
+				.setIntermediateNodesCount(6)
+				.setPackedNodesCount(28)
+				.setAmbiguousNodesCount(6).build();
+		return new ParseSuccess(expectedSPPF2(registry), statistics);
+	}
+	
+	private static ParseSuccess getNewParseResult3(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(74)
+				.setGSSNodesCount(6)
+				.setGSSEdgesCount(52)
+				.setNonterminalNodesCount(15)
+				.setTerminalNodesCount(15)
+				.setIntermediateNodesCount(10)
+				.setPackedNodesCount(55)
+				.setAmbiguousNodesCount(12).build();
+		return new ParseSuccess(expectedSPPF3(registry), statistics);
+	}
+	
+	private static ParseSuccess getOriginalParseResult3(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(303)
+				.setGSSNodesCount(27)
+				.setGSSEdgesCount(215)
+				.setNonterminalNodesCount(15)
+				.setTerminalNodesCount(15)
+				.setIntermediateNodesCount(10)
+				.setPackedNodesCount(55)
+				.setAmbiguousNodesCount(12).build();
+		return new ParseSuccess(expectedSPPF3(registry), statistics);
+	}
+	
+	private static NonterminalNode expectedSPPF1(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3);
 		PackedNode node2 = factory.createPackedNode("S ::= S S S .", 2, node1);
@@ -162,7 +237,7 @@ public class Gamma2Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPF2(GrammarRegistry registry) {
+	private static NonterminalNode expectedSPPF2(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 4);
 		PackedNode node2 = factory.createPackedNode("S ::= S S S .", 3, node1);
@@ -268,7 +343,7 @@ public class Gamma2Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPF3(GrammarRegistry registry) {
+	private static NonterminalNode expectedSPPF3(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 5);
 		PackedNode node2 = factory.createPackedNode("S ::= S S .", 1, node1);

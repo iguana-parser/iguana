@@ -30,7 +30,6 @@ import org.junit.runners.Parameterized.Parameters;
  * 
  * A ::= A A | a | epsilon
  * 
- * 
  * @author Ali Afroozeh
  *
  */
@@ -40,7 +39,7 @@ public class Test12 extends AbstractParserTest {
 	@Parameters
     public static Collection<Object[]> data() {
     	List<Object[]> parameters = 
-    		configurations.stream().map(c -> new Object[] {
+    		newConfigs.stream().map(c -> new Object[] {
 	    		getInput1(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
@@ -48,12 +47,28 @@ public class Test12 extends AbstractParserTest {
 	    		(Function<GrammarRegistry, ParseResult>) Test12::getParseResult1
 	    	}).collect(Collectors.toList());
     	parameters.addAll(    		
-    		configurations.stream().map(c -> new Object[] {
+    		newConfigs.stream().map(c -> new Object[] {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
 	    		(Function<GrammarRegistry, ParseResult>) Test12::getParseResult2
+	    	}).collect(Collectors.toList()));
+    	parameters.addAll(    		
+        	originalConfigs.stream().map(c -> new Object[] {
+    	    	getInput1(), 
+    	    	getGrammar(), 
+    	    	getStartSymbol(),
+    	    	ParserFactory.getParser(c, getInput2(), getGrammar()),
+    	    	(Function<GrammarRegistry, ParseResult>) Test12::getParseResult3
+    	    	}).collect(Collectors.toList()));
+    	parameters.addAll(    		
+    		originalConfigs.stream().map(c -> new Object[] {
+	    		getInput2(), 
+	    		getGrammar(), 
+	    		getStartSymbol(),
+	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
+	    		(Function<GrammarRegistry, ParseResult>) Test12::getParseResult4
 	    	}).collect(Collectors.toList()));
     	return parameters;
     }
@@ -96,6 +111,32 @@ public class Test12 extends AbstractParserTest {
 				.setDescriptorsCount(5)
 				.setGSSNodesCount(1)
 				.setGSSEdgesCount(2)
+				.setNonterminalNodesCount(1)
+				.setTerminalNodesCount(1)
+				.setIntermediateNodesCount(0)
+				.setPackedNodesCount(2)
+				.setAmbiguousNodesCount(1).build();
+		return new ParseSuccess(expectedSPPF2(registry), statistics);
+	}
+	
+	private static ParseSuccess getParseResult3(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(31)
+				.setGSSNodesCount(5)
+				.setGSSEdgesCount(13)
+				.setNonterminalNodesCount(3)
+				.setTerminalNodesCount(3)
+				.setIntermediateNodesCount(0)
+				.setPackedNodesCount(7)
+				.setAmbiguousNodesCount(3).build();
+		return new ParseSuccess(expectedSPPF1(registry), statistics);
+	}
+	
+	private static ParseSuccess getParseResult4(GrammarRegistry registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(15)
+				.setGSSNodesCount(3)
+				.setGSSEdgesCount(6)
 				.setNonterminalNodesCount(1)
 				.setTerminalNodesCount(1)
 				.setIntermediateNodesCount(0)

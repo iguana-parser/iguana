@@ -1,45 +1,51 @@
 package org.jgll.util;
 
 import static org.jgll.util.Configuration.GSSType.*;
-import static org.jgll.util.Configuration.LookupImpl.*;
-import static org.jgll.util.Configuration.LookupStrategy.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgll.util.Configuration.LookupImpl;
+import org.jgll.util.Configuration.LookupStrategy;
+
 
 public class Configurations {
 	
-	public static final List<Configuration> configurations = new ArrayList<>();
+	public static final List<Configuration> all_configs = new ArrayList<>();
+	public static final List<Configuration> newConfigs = new ArrayList<>();
+	public static final List<Configuration> originalConfigs = new ArrayList<>();
 	
 	static {
 		
-		configurations.add(Configuration.DEFAULT);
+		for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
+			for (LookupImpl gssLookupImpl : LookupImpl.values()) {
+				for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
+					for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
+						newConfigs.add(Configuration.builder().setGSSType(NEW)
+											   .setGSSLookupStrategy(gssLookupStrategy)
+											   .setGSSLookupImpl(gssLookupImpl)
+											   .setSPPFLookupStrategy(sppfLookupStrategy)
+											   .setSPPFLookupImpl(sppfLookupImpl).build());
+					}
+				}
+			}
+		}
 		
-		configurations.add(Configuration.builder()
-				.setGSSType(NEW)
-			    .setGSSLookupStrategy(DISTRIBUTED)
-			    .setGSSLookupImpl(HASH_MAP)
-			    .setSPPFLookupStrategy(DISTRIBUTED)
-			    .setSPPFLookupImpl(HASH_MAP)
-			    .build());
-
-//		configurations.add(Configuration.builder()
-//				.setGSSType(ORIGINAL)
-//				.setGSSLookupStrategy(DISTRIBUTED)
-//				.setGSSLookupImpl(ARRAY)
-//				.setSPPFLookupStrategy(DISTRIBUTED)
-//				.setSPPFLookupImpl(HASH_MAP)
-//				.build());
-//
-//		configurations.add(Configuration.builder()
-//				.setGSSType(ORIGINAL)
-//			    .setGSSLookupStrategy(DISTRIBUTED)
-//			    .setGSSLookupImpl(HASH_MAP)
-//			    .setSPPFLookupStrategy(DISTRIBUTED)
-//			    .setSPPFLookupImpl(HASH_MAP)
-//			    .build());
-	
+		for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
+			for (LookupImpl gssLookupImpl : LookupImpl.values()) {
+				for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
+					for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
+						originalConfigs.add(Configuration.builder().setGSSType(ORIGINAL)
+											   .setGSSLookupStrategy(gssLookupStrategy)
+											   .setGSSLookupImpl(gssLookupImpl)
+											   .setSPPFLookupStrategy(sppfLookupStrategy)
+											   .setSPPFLookupImpl(sppfLookupImpl).build());
+					}
+				}
+			}
+		}
+		
+		all_configs.addAll(newConfigs);
+		all_configs.addAll(originalConfigs);
 	}
-		
 }

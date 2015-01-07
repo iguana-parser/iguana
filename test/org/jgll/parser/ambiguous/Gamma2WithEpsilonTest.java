@@ -50,7 +50,7 @@ public class Gamma2WithEpsilonTest {
         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
         ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
-        ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+        ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(129, parseStatistics.getDescriptorsCount());
 		assertEquals(21, parseStatistics.getNonterminalNodesCount());
 		assertEquals(21, parseStatistics.getIntermediateNodesCount());
@@ -64,7 +64,7 @@ public class Gamma2WithEpsilonTest {
         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
         ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
-        ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+        ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(374, parseStatistics.getDescriptorsCount());
 		assertEquals(66, parseStatistics.getNonterminalNodesCount());
 		assertEquals(66, parseStatistics.getIntermediateNodesCount());
@@ -78,7 +78,7 @@ public class Gamma2WithEpsilonTest {
         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
         ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
-        ParseStatistics parseStatistics = result.asParseSuccess().getParseStatistics();
+        ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(26159, parseStatistics.getDescriptorsCount());
 		assertEquals(5151, parseStatistics.getNonterminalNodesCount());
 		assertEquals(5151, parseStatistics.getIntermediateNodesCount());

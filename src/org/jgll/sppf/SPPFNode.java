@@ -13,7 +13,6 @@ import org.jgll.traversal.SPPFVisitor;
  * @author Ali Afroozeh
  * 
  */
-
 public interface SPPFNode {
 	
 	public SPPFNode getChildAt(int index);
@@ -42,10 +41,7 @@ public interface SPPFNode {
 	 * 		 but for comparing parse trees, the client should use deepEquals.
 	 * 		 The deepEquals method is mainly meant for testing of the parser output
 	 *       and should not be used while parsing.
-	 * 
 	 */
-	// TODO: doesn't work in case SPPF has a cycle
-	// TODO: create a set of packed nodes and then compare them instead of iterator stuff below.
 	default boolean deepEquals(SPPFNode node) {
 		return deepEquals(this, node, new HashSet<>());
 	}
@@ -66,6 +62,9 @@ public interface SPPFNode {
 		if (node1.isAmbiguous() ^ node2.isAmbiguous())
 			return false;
 		
+		if (node1.isAmbiguous() && node2.isAmbiguous())
+			return compareAmbiguousNodes(node1, node2, visited);
+		
 		Iterator<? extends SPPFNode> node1It = node1.getChildren().iterator();		
 		Iterator<? extends SPPFNode> node2It = node2.getChildren().iterator();
 		
@@ -79,4 +78,25 @@ public interface SPPFNode {
 		
 		return true;
 	}	
+	
+	static boolean compareAmbiguousNodes(SPPFNode node1, SPPFNode node2, Set<SPPFNode> visited) {
+		
+		Iterator<? extends SPPFNode> thisIt = node1.getChildren().iterator();
+
+		outer:
+		while(thisIt.hasNext()) {
+			SPPFNode thisChild = thisIt.next();
+			Iterator<? extends SPPFNode> otherIt = node2.getChildren().iterator();
+			while(otherIt.hasNext()) {
+				SPPFNode otherChild = otherIt.next();
+				if(deepEquals(thisChild, otherChild, visited)) {
+					continue outer;
+				}
+			} 
+			return false;
+		}
+		
+		return true;
+	}
+
 }
