@@ -25,7 +25,9 @@ public class GlobalDescriptorLookupImpl implements DescriptorLookup {
 	private final IntHash4 f;
 	
 	public GlobalDescriptorLookupImpl(int inputSize, int grammarSize) {
-		this.f = (x, y, z, w) -> (((x * grammarSize + y) * inputSize + z) * grammarSize) + w;
+		this.f = (x, y, z, w) -> x * inputSize * grammarSize * inputSize +
+								 y * grammarSize * inputSize +
+								 z * inputSize;
 		set = new HashSet<>();
 		descriptorsStack = new ArrayDeque<>();
 	}

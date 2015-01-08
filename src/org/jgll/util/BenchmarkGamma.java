@@ -51,7 +51,7 @@ public class BenchmarkGamma {
 //		System.out.println(writer.toString());
 //		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
 		
-		Input input = Input.fromString(getBs(300));
+		Input input = Input.fromString(getBs(500));
 		Configuration config = Configuration.builder().build();
 		
 		// Warmup

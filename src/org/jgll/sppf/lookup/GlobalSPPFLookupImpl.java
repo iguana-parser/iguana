@@ -25,7 +25,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	private IntHash3 f;	
 
 	public GlobalSPPFLookupImpl(int inputSize, int grammarSize) {
-		this.f = (x, y, z) -> ((x * grammarSize + y) * inputSize) + z;
+		this.f = (x, y, z) -> x * inputSize * inputSize + y * inputSize + z;
 		this.nonterminalNodes = new HashMap<>();
 		this.intermediateNodes = new HashMap<>();
 		this.terminalNodes = new HashMap<>();
