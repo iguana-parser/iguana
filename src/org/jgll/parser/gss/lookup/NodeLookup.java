@@ -16,4 +16,6 @@ public interface NodeLookup {
 	public GSSNode get(int i);
 	
 	public void reset(Input input);
+	
+	public Iterable<GSSNode> getNodes();
 }

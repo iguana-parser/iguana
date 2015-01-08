@@ -1,5 +1,8 @@
 package org.jgll.parser.gss.lookup;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
@@ -30,6 +33,11 @@ public class ArrayNodeLookup implements NodeLookup {
 	@Override
 	public void reset(Input input) {
 		gssNodes = new GSSNode[input.length()];		
+	}
+	
+	@Override
+	public Iterable<GSSNode> getNodes() {
+		return Arrays.stream(gssNodes).filter(n -> n != null).collect(Collectors.toList());
 	}
 
 }

@@ -106,6 +106,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	public NonterminalNode findNonterminalNode(Key key) {
 		return nonterminalNodes.get(key);
 	}
+	
+	public Iterable<GSSNode> getGSSNodes() {
+		return nodeLookup.getNodes();
+	}
 
 	@Override
 	public void reset(Input input) {

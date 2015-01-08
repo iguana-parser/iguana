@@ -1,6 +1,9 @@
 package org.jgll.parser;
 
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
@@ -13,6 +16,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.lookup.GSSLookup;
+import org.jgll.parser.gss.lookup.GlobalHashGSSLookupImpl;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
@@ -22,6 +26,7 @@ import org.jgll.sppf.TerminalNode;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Configuration;
+import org.jgll.util.Configuration.LookupStrategy;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.jgll.util.logging.LoggerWrapper;
@@ -293,6 +298,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public Iterable<GSSNode> getGSSNodes() {
-		return gssLookup.getGSSNodes();
+		if (config.getGSSLookupStrategy() == LookupStrategy.GLOBAL) {
+			return ((GlobalHashGSSLookupImpl) gssLookup).getGSSNodes();
+		} else {
+			return grammarGraph.getNonterminals().stream().flatMap(s -> StreamSupport.stream(s.getGSSNodes().spliterator(), false)).collect(Collectors.toList());
+		}
 	}
 }

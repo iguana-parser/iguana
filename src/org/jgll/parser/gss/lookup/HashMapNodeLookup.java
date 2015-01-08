@@ -31,4 +31,9 @@ public class HashMapNodeLookup implements NodeLookup {
 		map = new HashMap<>();
 	}
 
+	@Override
+	public Iterable<GSSNode> getNodes() {
+		return map.values();
+	}
+
 }

@@ -32,7 +32,7 @@ public class GSSNode {
 	 * to compare their right extent. This bit set is used for this purpose. 
 	 * Maybe Hashset implementations are faster. We should figure it out.
 	 */
-	private Set<Integer> addedPoppedElements;
+	private Set<Integer> poppedElementsSet;
 	
 	// TODO: for recursive descent ordering, we need to traverse the GSS edges
 	// the way they are added, so we need a hashset with ordering.
@@ -40,13 +40,6 @@ public class GSSNode {
 
 	private Set<IntKey2> descriptors;
 	
-	/**
-	 * Creates a new {@code GSSNode} with the given {@code label},
-	 * {@code position} and {@code index}
-	 * 
-	 * @param slot
-	 * @param inputIndex
-	 */
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
@@ -55,17 +48,15 @@ public class GSSNode {
 		this.poppedElements = new ArrayList<>();
 		this.gssEdges = new ArrayList<>();
 		
-		this.addedPoppedElements = new HashSet<>();
+		this.poppedElementsSet = new HashSet<>();
 		this.descriptors = new HashSet<>(1024);
 	}
 	
 	public boolean addToPoppedElements(NonPackedNode node) {
-		if(!addedPoppedElements.contains(node.getRightExtent())) {
-			poppedElements.add(node);
-			addedPoppedElements.add(node.getRightExtent());
+		if (poppedElementsSet.add(node.getRightExtent())) {
+			poppedElements.add(node);			
 			return true;
-		} 
-		
+		}
 		return false;
 	}
 	
@@ -147,7 +138,7 @@ public class GSSNode {
 	public void clearDescriptors() {
 		children.clear();;
 		poppedElements.clear();;
-		addedPoppedElements.clear();
+		poppedElementsSet.clear();
 		gssEdges.clear();
 		descriptors.clear();;
 	}

@@ -35,7 +35,6 @@ public class GlobalHashGSSLookupImpl extends AbstractGSSLookup {
 		return gssNodes.get(new GSSNode(head, inputIndex));
 	}
 
-	@Override
 	public Iterable<GSSNode> getGSSNodes() {
 		return gssNodes.values();
 	}
