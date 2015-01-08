@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
@@ -25,7 +26,11 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config);
+	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol, Configuration config);
+	
+	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config) {
+		return parse(input, grammar.toGrammarGraph(input, config), startSymbol, config);
+	}
 	
 	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
 		return parse(input, grammar, startSymbol, Configuration.DEFAULT);

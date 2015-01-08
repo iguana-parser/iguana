@@ -4,7 +4,6 @@ package org.jgll.parser;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -86,10 +85,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, Grammar grammar, Nonterminal nonterminal, Configuration config) {
+	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Configuration config) {
 
 		this.config = config;
-		this.grammarGraph = grammar.toGrammarGraph(input, config);
+		this.grammarGraph = grammarGraph;
 		this.input = input;
 		
 		NonterminalGrammarSlot startSymbol = getStartSymbol(nonterminal);
