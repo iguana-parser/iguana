@@ -10,7 +10,7 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.collections.IntKey4;
-import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.IntHash4;
 
 
 /**
@@ -22,10 +22,10 @@ public class GlobalDescriptorLookupImpl implements DescriptorLookup {
 
 	private final Set<IntKey4> set;
 	private final Deque<Descriptor> descriptorsStack;
-	private final HashFunction f;
+	private final IntHash4 f;
 	
-	public GlobalDescriptorLookupImpl(HashFunction f) {
-		this.f = f;
+	public GlobalDescriptorLookupImpl(int inputSize, int grammarSize) {
+		this.f = (x, y, z, w) -> (((x * grammarSize + y) * inputSize + z) * grammarSize) + w;
 		set = new HashSet<>();
 		descriptorsStack = new ArrayDeque<>();
 	}

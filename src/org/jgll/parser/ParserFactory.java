@@ -16,7 +16,6 @@ import org.jgll.util.Configuration;
 import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Configuration.LookupStrategy;
 import org.jgll.util.Input;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
 /**
  * 
@@ -57,36 +56,29 @@ public class ParserFactory {
 		int inputSize =  getSize(input.length());
 		int grammarSize = getSize(grammar.size());
 
-		HashFunction hash; 
-		
 		if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-			hash = HashFunctions.coefficientHash(inputSize);
 			if (config.getGSSType() == GSSType.NEW) {
-				return new DistributedSPPFLookupImpl(hash);
+				return new DistributedSPPFLookupImpl(inputSize);
 			} else {
-				return new OriginalDistributedSPPFLookupImpl(hash);
+				return new OriginalDistributedSPPFLookupImpl(inputSize);
 			}
 		} else {
-			hash = HashFunctions.coefficientHash(grammarSize, inputSize);
 			if (config.getGSSType() == GSSType.NEW) {
-				return new GlobalSPPFLookupImpl(hash);				
+				return new GlobalSPPFLookupImpl(inputSize, grammarSize);				
 			} else {
-				return new OriginalGlobalSPPFLookupImpl(hash);
+				return new OriginalGlobalSPPFLookupImpl(inputSize, grammarSize);
 			}			
 		}		
 	}
 	
 	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
-		int inputSize =   getSize(input.length());
 		int grammarSize = getSize(grammar.size());
+		int inputSize = getSize(input.length());
 		
-		HashFunction hash;
 		if (config.getDescriptorLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-			hash = HashFunctions.coefficientHash(grammarSize);
-			return new DistributedDescriptorLookupImpl(hash);			
+			return new DistributedDescriptorLookupImpl(inputSize, grammarSize);			
 		} else {
-			hash = HashFunctions.coefficientHash(grammarSize, inputSize, grammarSize);
-			return new GlobalDescriptorLookupImpl(hash);
+			return new GlobalDescriptorLookupImpl(inputSize, grammarSize);
 		}
 	}
 	

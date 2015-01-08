@@ -12,7 +12,7 @@ import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.collections.IntKey3;
 import org.jgll.util.collections.Key;
-import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.IntHash3;
 
 public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	
@@ -22,10 +22,10 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 
 	private Map<Key, IntermediateNode> intermediateNodes;
 
-	private HashFunction f;	
+	private IntHash3 f;	
 
-	public GlobalSPPFLookupImpl(HashFunction f) {
-		this.f = f;
+	public GlobalSPPFLookupImpl(int inputSize, int grammarSize) {
+		this.f = (x, y, z) -> ((x * grammarSize + y) * inputSize) + z;
 		this.nonterminalNodes = new HashMap<>();
 		this.intermediateNodes = new HashMap<>();
 		this.terminalNodes = new HashMap<>();

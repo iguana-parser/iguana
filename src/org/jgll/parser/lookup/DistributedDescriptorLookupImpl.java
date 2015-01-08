@@ -8,7 +8,7 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.collections.IntKey2;
-import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.IntHash2;
 
 /**
  * 
@@ -18,10 +18,10 @@ import org.jgll.util.hashing.hashfunction.HashFunction;
 public class DistributedDescriptorLookupImpl implements DescriptorLookup {
 
 	private Deque<Descriptor> descriptorsStack;
-	private HashFunction f;
+	private IntHash2 f;
 
-	public DistributedDescriptorLookupImpl(HashFunction f) {
-		this.f = f;
+	public DistributedDescriptorLookupImpl(int inputSize, int grammarSize) {
+		this.f = (x, y) -> x * grammarSize + inputSize;
 		descriptorsStack = new ArrayDeque<>();
 	}
 	

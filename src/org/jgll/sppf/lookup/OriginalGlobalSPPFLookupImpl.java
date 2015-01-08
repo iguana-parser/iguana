@@ -6,12 +6,11 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.OriginalIntermediateNode;
 import org.jgll.sppf.OriginalNonterminalNode;
-import org.jgll.util.hashing.hashfunction.HashFunction;
 
 public class OriginalGlobalSPPFLookupImpl extends GlobalSPPFLookupImpl {
 
-	public OriginalGlobalSPPFLookupImpl(HashFunction f) {
-		super(f);
+	public OriginalGlobalSPPFLookupImpl(int inputSize, int grammarSize) {
+		super(inputSize, grammarSize);
 	}
 	
 	@Override

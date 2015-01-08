@@ -8,15 +8,15 @@ import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.collections.IntKey2;
-import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.IntHash2;
 
 
 public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	
-	private HashFunction f;
+	private IntHash2 f;
 
-	public DistributedSPPFLookupImpl(HashFunction f) {
-		this.f = f;
+	public DistributedSPPFLookupImpl(int inputSize) {
+		this.f = (x, y) -> x * inputSize + y;
 	}
 	
 	@Override
