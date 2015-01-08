@@ -19,6 +19,7 @@ import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.lookup.GSSLookup;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.sppf.DummyNode;
@@ -223,28 +224,37 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		String[] parameters = nonterminal.getNonterminal().getParameters();
 		
-		Environment newEnv = EmptyEnvironment.instance;
+		Object[] values = null;
 		
 		if (parameters != null) { // The number of arguments has been already checked
-			Object[] values = eval(arguments, env);
-			
-			int j = 0;
-			while (j < parameters.length) {
-				newEnv = newEnv.storeVariableLocally(parameters[j], values[j]);
-			}
-			
+			values = eval(arguments, env);
 		}
+		
+		GSSNodeData<Object> data = new GSSNodeData<>(values);
+		
+		// TODO: Data-dependent GLL, what to do with data
 		
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
+			
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
 			log.trace("GSSNode created: %s",  gssNode);
-			// FIXME: Data-dependent GLL
+			
 			createGSSEdge(returnSlot, u, node, gssNode, env);
-			nonterminal.execute(this, gssNode, i, node, env);
+			
+			Environment newEnv = EmptyEnvironment.instance;
+			if (parameters != null) {
+				int j = 0;
+				while (j < parameters.length) {
+					newEnv = newEnv.storeVariableLocally(parameters[j], values[j]);
+				}
+			}
+			
+			nonterminal.execute(this, gssNode, i, node, newEnv);
+			
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
-			// FIXME: Data-dependent GLL
+			
 			createGSSEdge(returnSlot, u, node, gssNode, env);			
 		}
 		return gssNode;

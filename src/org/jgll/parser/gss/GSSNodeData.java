@@ -44,6 +44,7 @@ public class GSSNodeData<T> implements Iterable<T> {
 		for (T element : elements) {
 			result = 31 * result + element.hashCode();
 		}
+		
 		return result;
 		
 	}
