@@ -21,7 +21,7 @@ public class DistributedDescriptorLookupImpl implements DescriptorLookup {
 	private IntHash2 f;
 
 	public DistributedDescriptorLookupImpl(int inputSize, int grammarSize) {
-		this.f = (x, y) -> x * grammarSize + inputSize;
+		this.f = (x, y) -> x * grammarSize + y;
 		descriptorsStack = new ArrayDeque<>();
 	}
 	
