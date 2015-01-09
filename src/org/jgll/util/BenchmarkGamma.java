@@ -1,15 +1,35 @@
 package org.jgll.util;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.annotations.Mode;
+
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.testing.GcFinalization;
 
+@State(Scope.Benchmark)
+@Warmup(iterations=10, timeUnit=TimeUnit.MILLISECONDS)
+@Measurement(iterations=10, timeUnit=TimeUnit.MILLISECONDS)
+@Fork(1)
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class BenchmarkGamma {
 	
 	/**
@@ -36,6 +56,28 @@ public class BenchmarkGamma {
 		builder.addRule(Rule.builder(E).addSymbols(E, plus, E).build());
 		builder.addRule(Rule.builder(E).addSymbol(a).build());
 		return builder.build();
+	}
+	
+	Input input;
+	Configuration config;
+	Grammar grammar;
+	Nonterminal startSymbol;
+	GrammarGraph grammarGraph;
+	GLLParser parser;
+	
+	@Setup(Level.Iteration)
+	public void setup() {
+		input = Input.fromString(getBs(300));
+		config = Configuration.builder().build();
+		grammar = gamma2();
+		startSymbol = Nonterminal.withName("S");
+		grammarGraph = gamma2().toGrammarGraph(Input.fromString(getBs(500)), Configuration.builder().build());
+		parser = ParserFactory.getParser(config, input, grammar);
+	}
+	
+	@Benchmark
+	public void test() {
+		parser.parse(input, grammarGraph, startSymbol, config);
 	}
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
