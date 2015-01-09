@@ -55,8 +55,6 @@ public class GrammarRegistry {
 		this.slots = new HashMap<>(slots);
 		this.terminals = new HashMap<>(terminals);
 		
-		ids.put(Epsilon.TOKEN_ID, 0);
-		
 		heads.values().stream().forEach(h -> ids.put(h, nextId.incrementAndGet()));
 		terminals.values().stream().forEach(t -> ids.put(t, nextId.incrementAndGet()));
 		slots.values().stream().forEach(s -> ids.put(s, nextId.incrementAndGet()));

@@ -42,7 +42,7 @@ public class SPPFToJavaCode implements SPPFVisitor {
 		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null)
 			return;
 		
-		if (node.getGrammarSlot() == Epsilon.TOKEN_ID) {
+		if (node.getGrammarSlot().getRegularExpression() == Epsilon.getInstance()) {
 			sb.append("TerminalNode node" + idsMap.get(node) + " = factory.createEpsilonNode(" + node.getLeftExtent() + ");\n");
 		} else {
 			sb.append("TerminalNode node" + idsMap.get(node) + " = factory.createTerminalNode(" +

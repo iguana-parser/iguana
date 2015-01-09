@@ -94,14 +94,11 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public NonterminalNode getNonterminalNode(Key key, Supplier<NonterminalNode> s, Consumer<NonterminalNode> c) {
-		NonterminalNode val;
-		if ((val = nonterminalNodes.get(key)) == null) {
-			val = s.get();
-			c.accept(val);
-			nonterminalNodes.put(key, val);
+		return nonterminalNodes.computeIfAbsent(key, k -> { NonterminalNode val = s.get();
+															c.accept(val);
+															return val; 
+														  });
 		}
-		return val;
-	}
 	
 	public NonterminalNode findNonterminalNode(Key key) {
 		return nonterminalNodes.get(key);

@@ -5,7 +5,6 @@ import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
@@ -26,8 +25,8 @@ public interface SPPFLookup {
 	
 	public TerminalNode findTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 	
-	default TerminalNode getEpsilonNode(int inputIndex) {
-		return getTerminalNode(Epsilon.TOKEN_ID, inputIndex, inputIndex);
+	default TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {
+		return getTerminalNode(slot, inputIndex, inputIndex);
 	}
 	
 	default NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {

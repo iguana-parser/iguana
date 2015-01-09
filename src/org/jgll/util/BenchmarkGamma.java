@@ -1,5 +1,8 @@
 package org.jgll.util;
 
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
@@ -13,22 +16,29 @@ import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
-import org.openjdk.jmh.annotations.Mode;
-
-import java.util.concurrent.TimeUnit;
 
 import com.google.common.testing.GcFinalization;
 
+/**
+ * java -Xms14g -Xmx14g -jar target/benchmark.jar -v EXTRA -gc true -rf csv -rff target/result.csv -o output.txt
+ * 
+ * @author Ali Afroozeh
+ *
+ */
+
 @State(Scope.Benchmark)
-@Warmup(iterations=10, timeUnit=TimeUnit.MILLISECONDS)
-@Measurement(iterations=10, timeUnit=TimeUnit.MILLISECONDS)
+@Warmup(iterations=10)
+@Measurement(iterations=20)
 @Fork(1)
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class BenchmarkGamma {
 	
@@ -44,40 +54,45 @@ public class BenchmarkGamma {
 		builder.addRule(Rule.builder(S).addSymbol(b).build());
 		return builder.build();
 	}
-	
-	/**
-	 * E ::= E + E | a
-	 */
-	private static Grammar expressions() {
-		Nonterminal E = Nonterminal.withName("E");
-		Character a = Character.from('a');
-		Character plus = Character.from('+');
-		Grammar.Builder builder = new Grammar.Builder();
-		builder.addRule(Rule.builder(E).addSymbols(E, plus, E).build());
-		builder.addRule(Rule.builder(E).addSymbol(a).build());
-		return builder.build();
-	}
-	
+
+//    @Param({"10",  "20",  "30",  "40",  "50",  "60",  "70",  "80",  "90",  "100", 
+//    		"110", "120", "130", "140", "150", "160", "170", "180", "190", "200",
+//    		"210", "220", "230", "240", "250", "260", "270", "280", "290", "300",
+//    		"310", "320", "330", "340", "350", "360", "370", "380", "390", "400",
+//    		"410", "420", "430", "440", "450", "460", "470", "480", "490", "500"})
+	@Param({ "300" })
+	int inputSize;
+    
+    
 	Input input;
 	Configuration config;
 	Grammar grammar;
 	Nonterminal startSymbol;
 	GrammarGraph grammarGraph;
 	GLLParser parser;
+	ParseResult result;
 	
 	@Setup(Level.Iteration)
 	public void setup() {
-		input = Input.fromString(getBs(300));
+		input = Input.fromString(getBs(inputSize));
 		config = Configuration.builder().build();
 		grammar = gamma2();
 		startSymbol = Nonterminal.withName("S");
-		grammarGraph = gamma2().toGrammarGraph(Input.fromString(getBs(500)), Configuration.builder().build());
+		grammarGraph = gamma2().toGrammarGraph(input, config);
 		parser = ParserFactory.getParser(config, input, grammar);
 	}
 	
 	@Benchmark
 	public void test() {
-		parser.parse(input, grammarGraph, startSymbol, config);
+		result = parser.parse(input, grammarGraph, startSymbol, config);
+	}
+	
+	@TearDown(Level.Iteration)
+	public void cleanUp() {
+		result = null;
+		grammarGraph = null;
+		parser = null;
+		input = null;
 	}
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {

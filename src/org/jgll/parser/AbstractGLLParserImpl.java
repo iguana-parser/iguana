@@ -266,8 +266,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public TerminalNode getEpsilonNode(int inputIndex) {
-		return sppfLookup.getEpsilonNode(inputIndex);
+	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {
+		return sppfLookup.getEpsilonNode(slot, inputIndex);
 	}
 	
 	@Override

@@ -54,6 +54,8 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	private int id = 1;
 	
+	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(Epsilon.getInstance());
+	
 	public GrammarGraphBuilder(Grammar grammar, Input input, Configuration config) {
 		this("no-name", grammar, input, config);
 	}
@@ -66,7 +68,7 @@ public class GrammarGraphBuilder implements Serializable {
 		this.slots = new ArrayList<>();
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
-		terminalsMap.put(Epsilon.getInstance(), new TerminalGrammarSlot(Epsilon.getInstance()));
+		terminalsMap.put(Epsilon.getInstance(), epsilon);
 	}
 
 	public GrammarGraph build() {
@@ -85,7 +87,7 @@ public class GrammarGraphBuilder implements Serializable {
 	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
 		
 		if (rule.size() == 0) {
-			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id, rule.getPosition(0), head, getNodeLookup());
+			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id, rule.getPosition(0), head, epsilon, getNodeLookup());
 			head.addFirstSlot(epsilonSlot);
 			slots.add(epsilonSlot);
 		} 

@@ -7,15 +7,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarRegistry;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 
 
 public class Epsilon extends AbstractRegularExpression {
-
-	public static final TerminalGrammarSlot TOKEN_ID = new TerminalGrammarSlot(Epsilon.getInstance());
 
 	private static final long serialVersionUID = 1L;
 	

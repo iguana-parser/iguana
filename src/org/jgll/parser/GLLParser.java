@@ -42,7 +42,7 @@ public interface GLLParser {
 	
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 
-	public TerminalNode getEpsilonNode(int inputIndex);
+	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex);
 	
 	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	

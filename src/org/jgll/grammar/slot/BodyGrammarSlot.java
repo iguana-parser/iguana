@@ -46,13 +46,10 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public IntermediateNode getIntermediateNode(Key key, Supplier<IntermediateNode> s, Consumer<IntermediateNode> c) {
-		IntermediateNode val;
-		if ((val = intermediateNodes.get(key)) == null) {
-			val = s.get();
-			c.accept(val);
-			intermediateNodes.put(key, val);
-		}
-		return val;
+		return intermediateNodes.computeIfAbsent(key, k -> { IntermediateNode val = s.get();
+															 c.accept(val);
+															 return val; 
+														   });
 	}
 	
 	public IntermediateNode findIntermediateNode(Key key) {

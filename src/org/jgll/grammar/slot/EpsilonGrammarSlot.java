@@ -10,14 +10,17 @@ import org.jgll.sppf.TerminalNode;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
-	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup) {
+	private TerminalGrammarSlot epsilonSlot;
+
+	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, NodeLookup nodeLookup) {
 		super(id, position, nonterminal, nodeLookup);
+		this.epsilonSlot = epsilonSlot;
 	}
 	
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (nonterminal.test(i)) {
-			TerminalNode epsilonNode = parser.getEpsilonNode(i);
+			TerminalNode epsilonNode = parser.getEpsilonNode(epsilonSlot, i);
 			parser.pop(u, i, parser.getNonterminalNode(this, epsilonNode));
 		}
 	}

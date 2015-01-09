@@ -57,13 +57,10 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 	
 	public TerminalNode getTerminalNode(Key key, Supplier<TerminalNode> s, Consumer<TerminalNode> c) {
-		TerminalNode val;
-		if ((val = terminalNodes.get(key)) == null) {
-			val = s.get();
-			c.accept(val);
-			terminalNodes.put(key, val);
-		}
-		return val;
+		return terminalNodes.computeIfAbsent(key, k -> { TerminalNode val = s.get();
+														 c.accept(val);
+														 return val; 
+													   });
 	}
 	
 	public TerminalNode findTerminalNode(Key key) {
