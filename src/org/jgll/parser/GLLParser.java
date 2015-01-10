@@ -26,14 +26,10 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol, Configuration config);
-	
-	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config) {
-		return parse(input, grammar.toGrammarGraph(input, config), startSymbol, config);
-	}
+	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol);
 	
 	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
-		return parse(input, grammar, startSymbol, Configuration.DEFAULT);
+		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol);
 	}
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);

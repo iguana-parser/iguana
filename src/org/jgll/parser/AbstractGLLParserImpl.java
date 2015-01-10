@@ -76,18 +76,17 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected int descriptorsCount;
 
-	private Configuration config;
+	private final Configuration config;
 
-	public AbstractGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
+	public AbstractGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
+		this.config = config;
 		this.gssLookup = gssLookup;
 		this.sppfLookup = sppfLookup;
 		this.descriptorLookup = descriptorLookup;
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Configuration config) {
-
-		this.config = config;
+	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal) {
 		this.grammarGraph = grammarGraph;
 		this.input = input;
 		

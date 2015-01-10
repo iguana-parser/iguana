@@ -21,11 +21,11 @@ public class Configurations {
 			for (LookupImpl gssLookupImpl : LookupImpl.values()) {
 				for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
 					for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
-//						newConfigs.add(Configuration.builder().setGSSType(NEW)
-//											   .setGSSLookupStrategy(gssLookupStrategy)
-//											   .setGSSLookupImpl(gssLookupImpl)
-//											   .setSPPFLookupStrategy(sppfLookupStrategy)
-//											   .setSPPFLookupImpl(sppfLookupImpl).build());
+						newConfigs.add(Configuration.builder().setGSSType(NEW)
+															  .setGSSLookupStrategy(gssLookupStrategy)
+															  .setGSSLookupImpl(gssLookupImpl)
+															  .setSPPFLookupStrategy(sppfLookupStrategy)
+															  .setSPPFLookupImpl(sppfLookupImpl).build());
 					}
 				}
 			}
@@ -36,17 +36,15 @@ public class Configurations {
 				for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
 					for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
 						originalConfigs.add(Configuration.builder().setGSSType(ORIGINAL)
-											   .setGSSLookupStrategy(gssLookupStrategy)
-											   .setGSSLookupImpl(gssLookupImpl)
-											   .setSPPFLookupStrategy(sppfLookupStrategy)
-											   .setSPPFLookupImpl(sppfLookupImpl).build());
+											   						.setGSSLookupStrategy(gssLookupStrategy)
+											   						.setGSSLookupImpl(gssLookupImpl)
+											   						.setSPPFLookupStrategy(sppfLookupStrategy)
+											   						.setSPPFLookupImpl(sppfLookupImpl).build());
 					}
 				}
 			}
 		}
 		
-		newConfigs.add(Configuration.DEFAULT);
-		newConfigs.add(Configuration.DEFAULT);
 		all_configs.addAll(newConfigs);
 		all_configs.addAll(originalConfigs);
 	}

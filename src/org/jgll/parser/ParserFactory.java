@@ -33,13 +33,15 @@ public class ParserFactory {
 	}
 	
 	private static GLLParser newParser(Configuration config, Input input, Grammar grammar) {
-		return new NewGLLParserImpl(getGSSLookup(config, input, grammar), 
+		return new NewGLLParserImpl(config,
+									getGSSLookup(config, input, grammar), 
 								    getSPPFLookup(config, input, grammar), 
 								    getDescriptorLookup(config, input, grammar));		
 	}
 	
 	private static GLLParser originalParser(Configuration config, Input input, Grammar grammar) {
-		return new OriginalGLLParserImpl(getGSSLookup(config, input, grammar), 
+		return new OriginalGLLParserImpl(config,
+										 getGSSLookup(config, input, grammar), 
 				 					     getSPPFLookup(config, input, grammar), 
 				 					     getDescriptorLookup(config, input, grammar));
 	}

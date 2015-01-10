@@ -94,7 +94,7 @@ public class Test7 extends AbstractParserTest {
 				.setGSSNodesCount(4)
 				.setGSSEdgesCount(3)
 				.setNonterminalNodesCount(4)
-				.setTerminalNodesCount(4)
+				.setTerminalNodesCount(3)
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(5)
 				.setAmbiguousNodesCount(0).build();

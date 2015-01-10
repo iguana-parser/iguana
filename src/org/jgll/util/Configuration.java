@@ -84,11 +84,11 @@ public class Configuration {
 	public String toString() {
 		return "GSS Type: " + gssType + "\n" +
 			   "GSS Lookup Strategy: " + gssLookupStrategy + "\n" +
-			   "Descriptor Lookup Strategy: " + descriptorLookupStrategy + "\n" +
-			   "SPPF Lookup Strategy: " + sppfLookupStrategy + "\n" +
 			   "GSS Lookup Impl: " + gssLookupImpl + "\n" +
+			   "Descriptor Lookup Strategy: " + descriptorLookupStrategy + "\n" +
 			   "Descriptor Lookup Impl: " + descriptorLookupImpl + "\n" +
-			   "SPPF Lookup Impl: " + sppfLookupStrategy;
+			   "SPPF Lookup Strategy: " + sppfLookupStrategy + "\n" +
+			   "SPPF Lookup Impl: " + sppfLookupImpl;
 	}
 	
 	public static class Builder {

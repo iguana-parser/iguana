@@ -33,31 +33,25 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	
 	@Override
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		IntKey3 key = IntKey3.from(slot.getId(), leftExtent, rightExtent, f);
-		TerminalNode val;
-		if ((val = terminalNodes.get(key)) == null) {
-			val = new TerminalNode(slot, leftExtent, rightExtent);
-			terminalNodes.put(key, val);
-		}
-		return val;
+		return terminalNodes.computeIfAbsent(IntKey3.from(slot.getId(), leftExtent, rightExtent, f), k -> {
+			TerminalNode val = new TerminalNode(slot, leftExtent, rightExtent);
+			terminalNodeAdded(val);
+			return val;
+		});
 	}
 	
 	@Override
 	public TerminalNode findTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		TerminalNode key = new TerminalNode(slot, leftExtent, rightExtent);
-		return terminalNodes.get(key);
+		return terminalNodes.get(IntKey3.from(slot.getId(), leftExtent, rightExtent, f));
 	}
 
 	@Override
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
-		IntKey3 key = IntKey3.from(head.getId(), leftExtent, rightExtent, f); 
-		NonterminalNode val;
-		if ((val = nonterminalNodes.get(key)) == null) {
-			val = createNonterminalNode(head, leftExtent, rightExtent);;
+		return nonterminalNodes.computeIfAbsent(IntKey3.from(head.getId(), leftExtent, rightExtent, f), k -> {
+			NonterminalNode val = createNonterminalNode(head, leftExtent, rightExtent);
 			nonterminalNodeAdded(val);
-			nonterminalNodes.put(key, val);
-		}
-		return val;
+			return val;
+		});
 	}
 	
 	protected IntermediateNode createIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
@@ -66,26 +60,21 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 
 	@Override
 	public NonterminalNode findNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {		
-		NonterminalNode key = createNonterminalNode(head, leftExtent, rightExtent);
-		return nonterminalNodes.get(key);
+		return nonterminalNodes.get(IntKey3.from(head.getId(), leftExtent, rightExtent, f));
 	}
 
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		IntKey3 key = IntKey3.from(slot.getId(), leftExtent, rightExtent, f); 
-		IntermediateNode val;
-		if ((val = intermediateNodes.get(key)) == null) {
-			val = createIntermediateNode(slot, leftExtent, rightExtent);
+		return intermediateNodes.computeIfAbsent(IntKey3.from(slot.getId(), leftExtent, rightExtent, f), k -> {
+			IntermediateNode val = createIntermediateNode(slot, leftExtent, rightExtent);
 			intermediateNodeAdded(val);
-			intermediateNodes.put(key, val);
-		}
-		return val;
+			return val;
+		});
 	}
 
 	@Override
-	public IntermediateNode findIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		IntermediateNode key = createIntermediateNode(grammarSlot, leftExtent, rightExtent);
-		return intermediateNodes.get(key);
+	public IntermediateNode findIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
+		return intermediateNodes.get(IntKey3.from(slot.getId(), leftExtent, rightExtent, f));
 	}
 		
 	@Override

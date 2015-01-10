@@ -12,6 +12,7 @@ import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.lookup.SPPFLookup;
+import org.jgll.util.Configuration;
 
 /**
  *
@@ -20,8 +21,8 @@ import org.jgll.sppf.lookup.SPPFLookup;
  */
 public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		
-	public NewGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptor) {
-		super(gssLookup, sppfLookup, descriptor);
+	public NewGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptor) {
+		super(config, gssLookup, sppfLookup, descriptor);
 	}
 	
 	@Override

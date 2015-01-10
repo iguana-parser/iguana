@@ -61,49 +61,54 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 	static List<Function<GrammarRegistry, ParseResult>> results = new ArrayList<>();
 	
 	static {
+		
+		// 50
 		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
 				ParseStatistics.builder()
 							   .setDescriptorsCount(6329)
 							   .setGSSNodesCount(51)
 							   .setGSSEdgesCount(3877)
 							   .setNonterminalNodesCount(1275)
-							   .setTerminalNodesCount(1275)
+							   .setTerminalNodesCount(50)
 							   .setIntermediateNodesCount(1225)
 							   .setPackedNodesCount(61300) 
 							   .setAmbiguousNodesCount(2352) 
 							   .build()));
 		
+		// 100
 		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
 				ParseStatistics.builder()
 							   .setDescriptorsCount(25154)
 							   .setGSSNodesCount(101)
 							   .setGSSEdgesCount(15252)
 							   .setNonterminalNodesCount(5050)
-							   .setTerminalNodesCount(5050)
+							   .setTerminalNodesCount(100)
 							   .setIntermediateNodesCount(4950)
 							   .setPackedNodesCount(495100) 
 							   .setAmbiguousNodesCount(9702) 
 							   .build()));
 
+		// 150
 		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
 				ParseStatistics.builder()
 							   .setDescriptorsCount(56479)
 							   .setGSSNodesCount(151)
 							   .setGSSEdgesCount(34127)
 							   .setNonterminalNodesCount(11325)
-							   .setTerminalNodesCount(11325)
+							   .setTerminalNodesCount(150)
 							   .setIntermediateNodesCount(11175)
 							   .setPackedNodesCount(1676400) 
 							   .setAmbiguousNodesCount(22052)
 							   .build()));
 
+		// 200
 		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
 				ParseStatistics.builder()
 							   .setDescriptorsCount(100304)
 							   .setGSSNodesCount(201)
 							   .setGSSEdgesCount(60502)
 							   .setNonterminalNodesCount(20100)
-							   .setTerminalNodesCount(20100)
+							   .setTerminalNodesCount(200)
 							   .setIntermediateNodesCount(19900)
 							   .setPackedNodesCount(3980200) 
 							   .setAmbiguousNodesCount(39402) 

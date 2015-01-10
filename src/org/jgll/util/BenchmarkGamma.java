@@ -83,7 +83,7 @@ public class BenchmarkGamma {
 	
 	@Benchmark
 	public void test() {
-		result = parser.parse(input, grammarGraph, startSymbol, config);
+		result = parser.parse(input, grammarGraph, startSymbol);
 	}
 	
 	@TearDown(Level.Iteration)
