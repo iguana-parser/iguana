@@ -1,6 +1,7 @@
 package org.jgll.util;
 
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jgll.grammar.Grammar;
@@ -24,11 +25,15 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
-
-import com.google.common.testing.GcFinalization;
+import org.openjdk.jmh.results.format.ResultFormatType;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
- * java -Xms14g -Xmx14g -jar target/benchmark.jar -v EXTRA -gc true -rf csv -rff target/result.csv -o output.txt
+ * 
+ * java -Xms4g -Xmx4g -cp target/benchmark.jar org.jgll.util.BenchmarkGamma
  * 
  * @author Ali Afroozeh
  *
@@ -55,14 +60,8 @@ public class BenchmarkGamma {
 		return builder.build();
 	}
 
-//    @Param({"10",  "20",  "30",  "40",  "50",  "60",  "70",  "80",  "90",  "100", 
-//    		"110", "120", "130", "140", "150", "160", "170", "180", "190", "200",
-//    		"210", "220", "230", "240", "250", "260", "270", "280", "290", "300",
-//    		"310", "320", "330", "340", "350", "360", "370", "380", "390", "400",
-//    		"410", "420", "430", "440", "450", "460", "470", "480", "490", "500"})
 	@Param({ "300" })
 	int inputSize;
-    
     
 	Input input;
 	Configuration config;
@@ -95,70 +94,23 @@ public class BenchmarkGamma {
 		input = null;
 	}
 	
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
-		
-		int warmupCount = 0;
-		int runCount = 20;
-		
-		Grammar grammar = gamma2();
-		Nonterminal startSymbol = Nonterminal.withName("S");
-		
-//		StringWriter writer = new StringWriter();
-//		grammarGraph.generate(new PrintWriter(writer));
-//		System.out.println(writer.toString());
-//		Class<?> clazz = CompilationUtil.getClass("test", "Test", writer.toString());
-		
-		Input input = Input.fromString(getBs(500));
-		Configuration config = Configuration.builder().build();
-		
-		// Warmup
-		for (int i = 1; i <= warmupCount; i++) {
-			GLLParser parser = ParserFactory.getParser(config, input, grammar);
-//			GLLParser parser = (GLLParser) clazz.newInstance();
-			parser.parse(input, grammar, startSymbol);
-			parser.reset();
-		}
-		GcFinalization.awaitFullGc();
-		
-		System.out.println(BenchmarkUtil.header());
-		for (int i = 40; i <= 40; i++) {
-			for (int j = 0; j < runCount; j++) {
-				input = Input.fromString(getBs(i * 10));
-				GLLParser parser = ParserFactory.getParser(config, input, grammar);
-				
-//				GLLParser parser = (GLLParser) clazz.newInstance();
-				
-				ParseResult res = parser.parse(input, grammar, startSymbol);
-//				parser.getGSSNodes().forEach(n -> System.out.println(n.countDescriptors() + ", " + n.countPoppedElements() + ", " + n.countGSSEdges()));
-				
-				if (res.isParseSuccess()) {
-					System.out.println(BenchmarkUtil.format(input, res.asParseSuccess().getStatistics()));
-				} else {
-					System.out.println("Parse error");
-				}
-				parser = null;
-				res = null;
-				GcFinalization.awaitFullGc();
-			}
-		}
+	public static void main(String[] args) throws RunnerException {
+		int limit = 10;
+		String[] params = Stream.iterate(10, i -> i + 10).limit(limit).map(j -> j.toString()).toArray(s -> new String[limit]);
+		Options opt = new OptionsBuilder()
+				          .include(BenchmarkGamma.class.getSimpleName())
+				          .param("inputSize", params)
+				          .detectJvmArgs()
+				          .resultFormat(ResultFormatType.CSV)		// -rf csv
+				          .result("target/result.csv") 				// -rff target/result.csv 
+				          .output("target/output.txt")				// -o target/output.txt
+				          .shouldDoGC(true) 						// -gc true
+				          .build();
+		new Runner(opt).run();
 	}
-	
-	
+		
 	private static String getBs(int size) {
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < size; i++) {
-			sb.append("b");
-		}
-		return sb.toString();
-	}
-	
-	private static String getAs(int size) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("a");
-		for(int i = 0; i < size; i++) {
-			sb.append("+a");
-		}
-		return sb.toString();
+		return Stream.generate(() -> "b").limit(size).collect(Collectors.joining());
 	}
 
 }
