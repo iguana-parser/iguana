@@ -23,6 +23,8 @@ public class Configuration {
 	
 	private final LookupStrategy descriptorLookupStrategy;
 	
+	private final int lookAheadCount;
+	
 	private Configuration(Builder builder) {
 		this.gssType = builder.gssType;
 		this.gssLookupImpl = builder.gssLookupImpl;
@@ -31,6 +33,7 @@ public class Configuration {
 		this.gssLookupStrategy = builder.gssLookupStrategy;
 		this.sppfLookupStrategy = builder.sppfLookupStrategy;
 		this.descriptorLookupStrategy = builder.descriptorLookupStrategy;
+		this.lookAheadCount = builder.lookaheadCount;
 	}
 	
 	public GSSType getGSSType() {
@@ -59,6 +62,10 @@ public class Configuration {
 	
 	public LookupStrategy getDescriptorLookupStrategy() {
 		return descriptorLookupStrategy;
+	}
+	
+	public int getLookAheadCount() {
+		return lookAheadCount;
 	}
 	
 	public static Builder builder() {
@@ -100,6 +107,7 @@ public class Configuration {
 		private LookupStrategy gssLookupStrategy;
 		private LookupStrategy sppfLookupStrategy;
 		private LookupStrategy descriptorLookupStrategy;
+		private int lookaheadCount;
 		
 		public Builder() {
 			this.gssType = GSSType.NEW;
@@ -109,6 +117,7 @@ public class Configuration {
 			this.gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 			this.sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
 			this.descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;
+			this.lookaheadCount = 0;
 		}
 		
 		public Configuration build() {
@@ -149,5 +158,11 @@ public class Configuration {
 			this.descriptorLookupStrategy = descriptorLookupStrategy;
 			return this;
 		}
+		
+		public Builder setLookaheadCount(int lookaheadCount) {
+			this.lookaheadCount = lookaheadCount;
+			return this;
+		}
+		
 	}
 }

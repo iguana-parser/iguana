@@ -1,4 +1,4 @@
-package org.jgll.util;
+package org.jgll.util.benchmark;
 
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -12,6 +12,8 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.Configuration;
+import org.jgll.util.Input;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -47,6 +49,17 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class BenchmarkGamma {
 	
+	@Param({ "300" })
+	int inputSize;
+    
+	Input input;
+	Configuration config;
+	Grammar grammar;
+	Nonterminal startSymbol;
+	GrammarGraph grammarGraph;
+	GLLParser parser;
+	ParseResult result;	
+	
 	/**
 	 * S ::= S S S | S S | b
 	 */
@@ -60,17 +73,6 @@ public class BenchmarkGamma {
 		return builder.build();
 	}
 
-	@Param({ "300" })
-	int inputSize;
-    
-	Input input;
-	Configuration config;
-	Grammar grammar;
-	Nonterminal startSymbol;
-	GrammarGraph grammarGraph;
-	GLLParser parser;
-	ParseResult result;
-	
 	@Setup(Level.Iteration)
 	public void setup() {
 		input = Input.fromString(getBs(inputSize));
