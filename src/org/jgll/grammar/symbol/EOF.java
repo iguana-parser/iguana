@@ -76,4 +76,9 @@ public class EOF extends AbstractRegularExpression {
 		return "EOF.getInstance()";
 	}
 	
+    @Override
+    public SymbolBuilder<? extends Symbol> copyBuilder() {
+        throw new UnsupportedOperationException();
+    }
+	
 }

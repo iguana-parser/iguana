@@ -53,6 +53,11 @@ public class Group extends AbstractSymbol {
 		return new Builder(Arrays.asList(symbols));
 	}	
 	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+	
 	public static class Builder extends SymbolBuilder<Group> {
 		
 		private List<? extends Symbol> symbols;

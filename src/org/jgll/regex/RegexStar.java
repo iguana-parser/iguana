@@ -5,6 +5,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -73,6 +74,28 @@ public class RegexStar extends AbstractRegularExpression {
 	public Set<CharacterRange> getNotFollowSet() {
 		return regex.getFirstSet();
 	}
+	
+	public static Builder builder(RegularExpression regex) {
+		return new Builder(regex);
+	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+	
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new RegexStar(")
+		  .append(regex.getConstructorCode(registry) + ", ")
+		  .append(label + ", ")
+		  .append("new HashSet<>(), ")
+		  .append("null")
+		  .append(")")
+		  ;
+		return sb.toString();
+	}
 
 	public static class Builder extends SymbolBuilder<RegexStar> {
 
@@ -93,18 +116,4 @@ public class RegexStar extends AbstractRegularExpression {
 			return new RegexStar(this);
 		}
 	}
-
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("new RegexStar(")
-		  .append(regex.getConstructorCode(registry) + ", ")
-		  .append(label + ", ")
-		  .append("new HashSet<>(), ")
-		  .append("null")
-		  .append(")")
-		  ;
-		return sb.toString();
-	}
-
 }

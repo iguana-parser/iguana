@@ -65,6 +65,24 @@ public class Nonterminal extends AbstractSymbol {
 	public static Builder builder(String name) {
 		return new Builder(name);
 	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+	
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		return new StringBuilder()
+		  .append("Nonterminal.builder(\"" + name + "\")")
+		  .append(label == null? "" : ".setLabel(" + label + ")")
+		  .append(object == null? "" : ".setObject(" + object + ")")
+		  .append(preConditions.isEmpty()? "" : ".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
+		  .append(postConditions.isEmpty()? "" : ".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
+		  .append(index == 0 ? "" : ".setIndex(" + index + ")")
+		  .append(ebnfList == false? "" : ".setEbnfList(" + ebnfList + ")")
+		  .append(".build()").toString();
+	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
 
@@ -99,17 +117,4 @@ public class Nonterminal extends AbstractSymbol {
 		}
 	}
 
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return new StringBuilder()
-		  .append("Nonterminal.builder(\"" + name + "\")")
-		  .append(label == null? "" : ".setLabel(" + label + ")")
-		  .append(object == null? "" : ".setObject(" + object + ")")
-		  .append(preConditions.isEmpty()? "" : ".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
-		  .append(postConditions.isEmpty()? "" : ".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
-		  .append(index == 0 ? "" : ".setIndex(" + index + ")")
-		  .append(ebnfList == false? "" : ".setEbnfList(" + ebnfList + ")")
-		  .append(".build()").toString();
-	}
-	
 }

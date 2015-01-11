@@ -126,6 +126,31 @@ public class CharacterClass extends AbstractRegularExpression {
 		return alt.get(index);
 	}
 	
+	public static Builder builder(CharacterRange...ranges) {
+		return new Builder(ranges);
+	}
+	
+	public static Builder builder(List<CharacterRange> ranges) {
+		return new Builder(ranges);
+	}
+
+    @Override
+    public SymbolBuilder<? extends Symbol> copyBuilder() {
+        return new Builder(this);
+    }
+
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new CharacterClass(")
+		  .append(alt.getConstructorCode(registry) + ", ")
+		  .append("\"" + escape(label) + "\", ")
+		  .append("new HashSet<Condition>(), ")
+		  .append("null")
+		  .append(")");
+		return sb.toString();
+	}
+	
 	public static class Builder extends SymbolBuilder<CharacterClass> {
 
 		private RegexAlt<CharacterRange> alt;
@@ -154,25 +179,4 @@ public class CharacterClass extends AbstractRegularExpression {
 		}
 		
 	}
-
-	public static Builder builder(CharacterRange...ranges) {
-		return new Builder(ranges);
-	}
-	
-	public static Builder builder(List<CharacterRange> ranges) {
-		return new Builder(ranges);
-	}
-
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("new CharacterClass(")
-		  .append(alt.getConstructorCode(registry) + ", ")
-		  .append("\"" + escape(label) + "\", ")
-		  .append("new HashSet<Condition>(), ")
-		  .append("null")
-		  .append(")");
-		return sb.toString();
-	}
-	
 }

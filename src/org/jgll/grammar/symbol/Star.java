@@ -42,6 +42,11 @@ public class Star extends AbstractSymbol {
 	public static Builder builder(Symbol s) {
 		return new Builder(s);
 	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
 
 	public static class Builder extends SymbolBuilder<Star> {
 

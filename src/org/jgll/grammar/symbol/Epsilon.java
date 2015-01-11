@@ -72,4 +72,8 @@ public class Epsilon extends AbstractRegularExpression {
 		return "Epsilon.getInstance()";
 	}
 	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		throw new UnsupportedOperationException();
+	}
 }

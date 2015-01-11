@@ -15,7 +15,6 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.util.Configuration;
 import org.jgll.util.GrammarUtil;
-import org.jgll.util.Input;
 import org.openjdk.jmh.annotations.Param;
 
 public class AbstractBenchmark {
@@ -35,13 +34,12 @@ public class AbstractBenchmark {
 	
 	protected ParseResult result;
 	
-	protected static List<Input> find(String dir, String ext) throws IOException {
-		List<Input> inputs = new ArrayList<>();
+	protected static List<File> find(String dir, String ext) throws IOException {
+		List<File> inputs = new ArrayList<>();
 		Collection<?> files = FileUtils.listFiles(new File(dir), new String[] {ext}, true);
 		Iterator<?> it = files.iterator();
 		while(it.hasNext()) {
-			String path = ((File) it.next()).getPath();
-			inputs.add(Input.fromPath(path));							
+			inputs.add((File) it.next());							
 		}
 		return inputs;
 	}

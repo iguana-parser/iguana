@@ -23,6 +23,11 @@ public class Opt extends AbstractSymbol {
 	}
 	
 	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+	
+	@Override
 	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 		  .append("new Alt.builder(" + s.getConstructorCode(registry) + ")")

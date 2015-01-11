@@ -99,6 +99,30 @@ public class Keyword extends AbstractRegularExpression {
 		return builder.build();
 	}
 	
+	public static Builder builder(Sequence<Character> seq) {
+		return new Builder(seq);
+	}
+	
+	public static Builder builder(String s) {
+		return new Builder(toCharSequence(Input.toIntArray(s)));
+	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+	
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new Keyword(")
+		  .append(seq.getConstructorCode(registry) + ", ")
+		  .append(label + ", ")
+		  .append("null")
+		  .append(")");
+		return sb.toString();
+	}
+	
 	public static class Builder extends SymbolBuilder<Keyword> {
 		
 		private Sequence<Character> seq;
@@ -122,26 +146,6 @@ public class Keyword extends AbstractRegularExpression {
 		public Keyword build() {
 			return new Keyword(this);
 		}
-		
-	}
-
-	public static Builder builder(Sequence<Character> seq) {
-		return new Builder(seq);
-	}
-	
-	public static Builder builder(String s) {
-		return new Builder(toCharSequence(Input.toIntArray(s)));
-	}
-	
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("new Keyword(")
-		  .append(seq.getConstructorCode(registry) + ", ")
-		  .append(label + ", ")
-		  .append("null")
-		  .append(")");
-		return sb.toString();
 	}
 
 }

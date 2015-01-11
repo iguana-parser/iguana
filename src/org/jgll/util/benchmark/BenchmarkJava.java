@@ -1,5 +1,7 @@
 package org.jgll.util.benchmark;
 
+import java.io.File;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
@@ -20,13 +22,15 @@ public class BenchmarkJava extends AbstractBenchmark {
 	private static Nonterminal startSymbol = Nonterminal.withName("start[CompilationUnit]"); 
 	
 	public static void main(String[] args) throws Exception {
-		for (Input input : find("/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19", "java")) {
+		for (File f : find("/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19", "java")) {
+			Input input = Input.fromFile(f);
 			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 			ParseResult result = parser.parse(input, grammar, startSymbol);
 			if (result.isParseSuccess()) {
 				System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
 			} else {
-				System.out.println("Parse error.");
+				System.out.println("Parse error: " + result.asParseError());
+				System.exit(0);
 			}
 		}
 	}

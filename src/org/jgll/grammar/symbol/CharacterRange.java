@@ -126,6 +126,20 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		return Collections.emptySet();
 	}
 
+	public static Builder builder(int start, int end) {
+		return new Builder(start, end);
+	}
+	
+    @Override
+    public SymbolBuilder<? extends Symbol> copyBuilder() {
+        return new Builder(this);
+    }
+	
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		return "Range.in(" + start + ", " + end + ")";
+	}
+	
 	public static class Builder extends SymbolBuilder<CharacterRange> {
 
 		private int start;
@@ -147,16 +161,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		public CharacterRange build() {
 			return new CharacterRange(this);
 		}
-		
-	}
-
-	public static Builder builder(int start, int end) {
-		return new Builder(start, end);
-	}
-	
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "Range.in(" + start + ", " + end + ")";
 	}
 	
 }

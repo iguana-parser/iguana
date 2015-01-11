@@ -6,6 +6,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -65,6 +66,28 @@ public class RegexOpt extends AbstractRegularExpression {
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
+	
+	public static Builder builder(RegularExpression regex) {
+		return new Builder(regex);
+	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("new RegexOpt(")
+		  .append(regex.getConstructorCode(registry) + ", ")
+		  .append(label + ", ")
+		  .append("new HashSet<>(), ")
+		  .append("null")
+		  .append(")")
+		  ;
+		return sb.toString();
+	}
 
 	public static class Builder extends SymbolBuilder<RegexOpt> {
 
@@ -84,23 +107,6 @@ public class RegexOpt extends AbstractRegularExpression {
 		public RegexOpt build() {
 			return new RegexOpt(this);
 		}
-	}
-
-	public static Builder builder(RegularExpression regex) {
-		return new Builder(regex);
-	}
-
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("new RegexOpt(")
-		  .append(regex.getConstructorCode(registry) + ", ")
-		  .append(label + ", ")
-		  .append("new HashSet<>(), ")
-		  .append("null")
-		  .append(")")
-		  ;
-		return sb.toString();
 	}
 	
 }

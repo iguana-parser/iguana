@@ -13,6 +13,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -138,6 +139,32 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		return Collections.emptySet();
 	}
 
+	@SafeVarargs
+	public static <T extends RegularExpression> Builder<T> builder(T...regularExpressions) {
+		return builder(Arrays.asList(regularExpressions));
+	}
+	
+	public static <T extends RegularExpression> Builder<T> builder(List<T> regularExpressions) {
+		return new Builder<>(regularExpressions);
+	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder<>(this);
+	}
+
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		StringBuilder sb = new StringBuilder();
+		
+		for (RegularExpression regex : regularExpressions) {
+			 sb.append(regex.getConstructorCode(registry) + ", ");
+		}
+		sb.delete(sb.length() - 2, sb.length());
+		
+		return "new RegexAlt(list(" + sb.toString() + "), \"" + escape(label) + "\", new HashSet<Condition>(), null)";
+	}
+
 	public static class Builder<T extends RegularExpression> extends SymbolBuilder<RegexAlt<T>> {
 		
 		private List<T> regularExpressions;
@@ -163,24 +190,4 @@ public class RegexAlt<T extends RegularExpression> extends AbstractRegularExpres
 		}
 	}
 
-	@SafeVarargs
-	public static <T extends RegularExpression> Builder<T> builder(T...regularExpressions) {
-		return builder(Arrays.asList(regularExpressions));
-	}
-	
-	public static <T extends RegularExpression> Builder<T> builder(List<T> regularExpressions) {
-		return new Builder<>(regularExpressions);
-	}
-
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		StringBuilder sb = new StringBuilder();
-		
-		for (RegularExpression regex : regularExpressions) {
-			 sb.append(regex.getConstructorCode(registry) + ", ");
-		}
-		sb.delete(sb.length() - 2, sb.length());
-		
-		return "new RegexAlt(list(" + sb.toString() + "), \"" + escape(label) + "\", new HashSet<Condition>(), null)";
-	} 
 }

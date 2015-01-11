@@ -14,6 +14,7 @@ Export-Package:
  org.jgll.grammar.patterns,
  org.jgll.grammar.precedence,
  org.jgll.grammar.slot,
+ org.jgll.grammar.symbol,
  org.jgll.grammar.transformation,
  org.jgll.parser,
  org.jgll.parser.basic,

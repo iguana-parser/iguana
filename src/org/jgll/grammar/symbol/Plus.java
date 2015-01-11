@@ -2,8 +2,6 @@ package org.jgll.grammar.symbol;
 
 import org.jgll.grammar.GrammarRegistry;
 
-
-
 public class Plus extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
@@ -36,6 +34,11 @@ public class Plus extends AbstractSymbol {
 		  .append(".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
 		  .append(".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
 		  .append(".build()").toString();
+	}
+
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
 	}
 	
 	public static class Builder extends SymbolBuilder<Plus> {

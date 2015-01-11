@@ -60,6 +60,11 @@ public class Alt extends AbstractSymbol {
 	}
 	
 	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+	
+	@Override
 	public String getConstructorCode(GrammarRegistry registry) {
 		return new StringBuilder()
 		  .append("new Alt.builder(" + getConstructorCode(symbols, registry) + ")")

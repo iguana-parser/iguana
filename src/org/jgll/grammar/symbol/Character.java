@@ -113,6 +113,20 @@ public class Character extends AbstractRegularExpression {
 		return getMatcher();
 	}
 	
+	public static Builder builder(int c) {
+		return new Builder(c);
+	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		return "Character.from(" + c + ")";
+	}
+	
 	public static class Builder extends SymbolBuilder<Character> {
 		
 		private int c;
@@ -132,14 +146,4 @@ public class Character extends AbstractRegularExpression {
 			return new Character(this);
 		}
 	}
-
-	public static Builder builder(int c) {
-		return new Builder(c);
-	}
-
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "Character.from(" + c + ")";
-	}
-
 }

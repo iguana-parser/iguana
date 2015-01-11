@@ -5,6 +5,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 
@@ -46,24 +47,14 @@ public class RegexPlus extends AbstractRegularExpression {
 	public Set<CharacterRange> getNotFollowSet() {
 		return regex.getFirstSet();
 	}
-
-	public static class Builder extends SymbolBuilder<RegexPlus> {
-
-		private RegularExpression regex;
-		
-		public Builder(RegularExpression regex) {
-			super(getName(regex));
-			this.regex = regex;
-		}
-		
-		@Override
-		public RegexPlus build() {
-			return new RegexPlus(this);
-		}
-	}
-
+	
 	public static Builder builder(RegularExpression regex) {
 		return new Builder(regex);
+	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
 	}
 
 	@Override
@@ -79,4 +70,18 @@ public class RegexPlus extends AbstractRegularExpression {
 		return sb.toString();
 	}
 
+	public static class Builder extends SymbolBuilder<RegexPlus> {
+
+		private RegularExpression regex;
+		
+		public Builder(RegularExpression regex) {
+			super(getName(regex));
+			this.regex = regex;
+		}
+		
+		@Override
+		public RegexPlus build() {
+			return new RegexPlus(this);
+		}
+	}
 }
