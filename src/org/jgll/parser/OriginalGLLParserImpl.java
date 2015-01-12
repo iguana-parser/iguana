@@ -84,7 +84,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			for (NonPackedNode z : source.getPoppedElements()) {
 
 				if (returnSlot.getConditions().execute(input, destination, z.getRightExtent())) 
-					break;
+					continue;
 				
 				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z);
 				addDescriptor(returnSlot, destination, z.getRightExtent(), x);

@@ -20,10 +20,10 @@ public class ConditionsFactory {
 	        for (Condition c : list) {
 	            if (c.getSlotAction().execute(input, u, i)) {
 	                log.trace("Condition " + c + " executed");
-	                return false;
+	                return true;
 	            }
 	        }
-	        return true;
+	        return false;
 		};
 	}
 
