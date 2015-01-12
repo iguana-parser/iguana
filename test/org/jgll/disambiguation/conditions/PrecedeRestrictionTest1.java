@@ -49,7 +49,7 @@ public class PrecedeRestrictionTest1 {
 	private CharacterRange az = CharacterRange.in('a', 'z');
 	
 	private Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az))
-			                              .addPostCondition(RegularExpressionCondition.notPrecede(az)).build();
+			                              .addPreCondition(RegularExpressionCondition.notPrecede(az)).build();
 
 	@Before
 	public void createParser() {
