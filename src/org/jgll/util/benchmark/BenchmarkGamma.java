@@ -13,6 +13,7 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.util.Configuration;
+import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Input;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -35,15 +36,15 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * 
- * java -Xms4g -Xmx4g -cp target/benchmark.jar org.jgll.util.BenchmarkGamma
+ * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.BenchmarkGamma
  * 
  * @author Ali Afroozeh
  *
  */
 
 @State(Scope.Benchmark)
-@Warmup(iterations=10)
-@Measurement(iterations=20)
+@Warmup(iterations=3)
+@Measurement(iterations=10)
 @Fork(1)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -76,7 +77,7 @@ public class BenchmarkGamma {
 	@Setup(Level.Iteration)
 	public void setup() {
 		input = Input.fromString(getBs(inputSize));
-		config = Configuration.builder().build();
+		config = Configuration.builder().setGSSType(GSSType.ORIGINAL).build();
 		grammar = gamma2();
 		startSymbol = Nonterminal.withName("S");
 		grammarGraph = gamma2().toGrammarGraph(input, config);
@@ -97,7 +98,7 @@ public class BenchmarkGamma {
 	}
 	
 	public static void main(String[] args) throws RunnerException {
-		int limit = 10;
+		int limit = 60;
 		String[] params = Stream.iterate(10, i -> i + 10).limit(limit).map(j -> j.toString()).toArray(s -> new String[limit]);
 		Options opt = new OptionsBuilder()
 				          .include(BenchmarkGamma.class.getSimpleName())
