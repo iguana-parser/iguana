@@ -3,6 +3,7 @@ package org.jgll.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
@@ -30,7 +31,7 @@ public interface GrammarSlot extends ConstructorCode {
 	}
 	
 	default Set<GrammarSlot> getReachableSlots() {
-		return getTransitions().stream().map(t -> t.destination()).collect(Collectors.toSet());
+		return StreamSupport.stream(getTransitions().spliterator(), false).map(t -> t.destination()).collect(Collectors.toSet());
 	}
 	
 	/**
@@ -55,7 +56,7 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	public boolean addTransition(Transition transition);
 	
-	public Set<Transition> getTransitions();
+	public Iterable<Transition> getTransitions();
 	
 	default GrammarSlot withId(int id) { return this; }
 	

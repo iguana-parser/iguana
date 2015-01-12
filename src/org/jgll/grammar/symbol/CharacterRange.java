@@ -10,6 +10,7 @@ import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
+import org.jgll.regex.automaton.Transition;
 import org.jgll.util.unicode.UnicodeUtil;
 
 
@@ -86,7 +87,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
-//		startState.addTransition(new Transition(start, end, finalState);//.addTransitionAction(getPostActions(conditions)));
+		startState.addTransition(new Transition(start, end, finalState));//.addTransitionAction(getPostActions(conditions)));
 		return new Automaton(startState, name);
 	}
 	

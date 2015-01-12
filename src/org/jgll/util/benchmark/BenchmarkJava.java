@@ -1,6 +1,7 @@
 package org.jgll.util.benchmark;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -22,16 +23,21 @@ public class BenchmarkJava extends AbstractBenchmark {
 	private static Nonterminal startSymbol = Nonterminal.withName("start[CompilationUnit]"); 
 	
 	public static void main(String[] args) throws Exception {
-		for (File f : find("/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19", "java")) {
-			Input input = Input.fromFile(f);
-			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-			ParseResult result = parser.parse(input, grammar, startSymbol);
-			if (result.isParseSuccess()) {
-				System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
-			} else {
-				System.out.println("Parse error: " + result.asParseError());
-				System.exit(0);
-			}
+		parseFile(new File("/Users/aliafroozeh/test.java"));
+//		for (File f : find("/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19", "java")) {
+//			parseFile(f);
+//		}
+	}
+
+	private static void parseFile(File f) throws IOException {
+		Input input = Input.fromFile(f);
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, startSymbol);
+		if (result.isParseSuccess()) {
+			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
+		} else {
+			System.out.println("Parse error: " + result.asParseError());
+			System.exit(0);
 		}
 	}
 	

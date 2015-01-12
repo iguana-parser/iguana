@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarRegistry;
+import org.jgll.regex.Matcher;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.Input;
@@ -48,13 +49,11 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(!(obj instanceof Keyword)) {
+		if(!(obj instanceof Keyword))
 			return false;
-		}
 		
 		Keyword other = (Keyword) obj;
 		
@@ -99,6 +98,10 @@ public class Keyword extends AbstractRegularExpression {
 		return builder.build();
 	}
 	
+	public static Builder builder(List<Character> seq) {
+		return new Builder(Sequence.from(seq));
+	}
+	
 	public static Builder builder(Sequence<Character> seq) {
 		return new Builder(seq);
 	}
@@ -122,6 +125,20 @@ public class Keyword extends AbstractRegularExpression {
 		  .append(")");
 		return sb.toString();
 	}
+	
+	@Override
+	public Matcher getMatcher() {
+		return (input, i) -> {
+			int length = -1;
+			for (Character c : seq) {
+				if (c.getValue() == input.charAt(i++)) {
+					length++;
+				}
+			}
+			return length;
+		};
+	}
+
 	
 	public static class Builder extends SymbolBuilder<Keyword> {
 		

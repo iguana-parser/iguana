@@ -24,7 +24,7 @@ public class OptTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regexp = new RegexOpt.Builder(Character.from('a')).addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		RegularExpression regexp = new RegexOpt.Builder(Character.from('a')).addPostCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();

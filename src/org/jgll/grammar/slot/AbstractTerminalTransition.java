@@ -25,7 +25,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	}
 	
 	public AbstractTerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-							  Set<Condition> preConditions, Set<Condition> postConditions) {
+							  		  Set<Condition> preConditions, Set<Condition> postConditions) {
 		super(origin, dest);
 		this.slot = slot;
 		this.preConditions = preConditions;

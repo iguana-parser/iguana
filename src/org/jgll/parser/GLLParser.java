@@ -57,14 +57,7 @@ public interface GLLParser {
 		}
 		return false;
 	}
-	
-	public boolean hasNextDescriptor();
-	
-	/**
-	 * Reads the next descriptor and sets the state of the parser to it.
-	 */
-	public Descriptor nextDescriptor();
-	
+
 	public void recordParseError(GrammarSlot slot);
 	
 	public Input getInput();

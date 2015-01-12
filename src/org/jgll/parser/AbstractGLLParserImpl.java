@@ -157,12 +157,14 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		startSymbol.execute(this, cu, ci, cn);
 		
-		while(hasNextDescriptor()) {
-			Descriptor descriptor = nextDescriptor();
+		while(descriptorLookup.hasNextDescriptor()) {
+			Descriptor descriptor = descriptorLookup.nextDescriptor();
 			GrammarSlot slot = descriptor.getGrammarSlot();
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
-			slot.execute(this, cu, ci, descriptor.getSPPFNode());
+			cn = descriptor.getSPPFNode();
+			log.trace("Processing %s", descriptor);
+			slot.execute(this, cu, ci, cn);
 		}
 	}
 	
@@ -223,21 +225,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
 		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode);
     }
-	
-	@Override
-	public boolean hasNextDescriptor() {
-		return descriptorLookup.hasNextDescriptor();
-	}
-	
-	@Override
-	public Descriptor nextDescriptor() {
-		Descriptor descriptor = descriptorLookup.nextDescriptor();
-		ci = descriptor.getInputIndex();
-		cu = descriptor.getGSSNode();
-		cn = descriptor.getSPPFNode();
-		log.trace("Processing %s", descriptor);
-		return descriptor;
-	}
 	
 	public SPPFLookup getSPPFLookup() {
 		return sppfLookup;
