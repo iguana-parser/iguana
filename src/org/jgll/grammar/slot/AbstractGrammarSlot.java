@@ -1,9 +1,7 @@
 package org.jgll.grammar.slot;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 public abstract class AbstractGrammarSlot implements GrammarSlot {
@@ -13,10 +11,10 @@ public abstract class AbstractGrammarSlot implements GrammarSlot {
 	protected final List<Transition> transitions;
 
 	public AbstractGrammarSlot(int id) {
-		this(id, new HashSet<>());
+		this(id, new ArrayList<>());
 	}
 	
-	public AbstractGrammarSlot(int id, Set<Transition> transitions) {
+	public AbstractGrammarSlot(int id, List<Transition> transitions) {
 		this.id = id;
 		this.transitions = new ArrayList<>(transitions);
 	}
