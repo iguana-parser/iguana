@@ -1,5 +1,8 @@
 package org.jgll.grammar.condition;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.regex.RegularExpression;
 
@@ -14,7 +17,7 @@ public class RegularExpressionCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private transient final SlotAction action;
+	private transient SlotAction action;
 
 	private RegularExpression regularExpression;
 	
@@ -33,6 +36,11 @@ public class RegularExpressionCondition extends Condition {
 		return type.toString() + " " + regularExpression;
 	}
 	
+	// Reading the transiet action field
+	private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
+		in.defaultReadObject();
+		action = createSlotAction(regularExpression);
+	}
 	
 	public SlotAction createSlotAction(RegularExpression r) {
 		

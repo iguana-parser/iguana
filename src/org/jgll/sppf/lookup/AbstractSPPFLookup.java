@@ -38,6 +38,7 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 	
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
+		log.trace("Ambiguous node added: %s", node);
 		countAmbiguousNodes++;
 	}
 	
