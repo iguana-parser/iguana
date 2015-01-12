@@ -6,6 +6,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.Conditions;
+import org.jgll.grammar.condition.ConditionsFactory;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -29,8 +30,8 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 							  		  Set<Condition> preConditions, Set<Condition> postConditions) {
 		super(origin, dest);
 		this.slot = slot;
-		this.preConditions = new Conditions(preConditions);
-		this.postConditions = new Conditions(postConditions);
+		this.preConditions = ConditionsFactory.getConditions(preConditions);
+		this.postConditions = ConditionsFactory.getConditions(postConditions);
 	}
 
 	@Override
@@ -65,8 +66,6 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			.append("slot" + registry.getId(slot)).append(", ")
 			.append("slot" + registry.getId(origin)).append(", ")
 			.append("slot" + registry.getId(dest)).append(", ")
-			.append(preConditions.getConstructorCode(registry)).append(", ")
-			.append(postConditions.getConstructorCode(registry))
 			.toString();
 	}
 	

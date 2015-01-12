@@ -1,6 +1,9 @@
 package org.jgll.grammar.slot;
 
+import java.util.Set;
+
 import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -12,8 +15,8 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
 
-	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, NodeLookup nodeLookup) {
-		super(id, position, nonterminal, nodeLookup);
+	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, NodeLookup nodeLookup, Set<Condition> conditions) {
+		super(id, position, nonterminal, nodeLookup, conditions);
 		this.epsilonSlot = epsilonSlot;
 	}
 	

@@ -1,10 +1,14 @@
 package org.jgll.grammar.slot;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.Conditions;
+import org.jgll.grammar.condition.ConditionsFactory;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.lookup.NodeLookup;
@@ -20,11 +24,14 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	private HashMap<Key, IntermediateNode> intermediateNodes;
 	
 	private final NodeLookup nodeLookup;
+	
+	private final Conditions conditions;
 
-	public BodyGrammarSlot(int id, Position position, NodeLookup nodeLookup) {
+	public BodyGrammarSlot(int id, Position position, NodeLookup nodeLookup, Set<Condition> conditions) {
 		super(id);
 		this.position = position;
 		this.nodeLookup = nodeLookup;
+		this.conditions = ConditionsFactory.getConditions(conditions);
 		this.intermediateNodes = new HashMap<>(1000);
 	}
 	
@@ -64,6 +71,10 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	@Override
 	public GSSNode hasGSSNode(int inputIndex) { 
 		return nodeLookup.get(inputIndex);
+	}
+	
+	public Conditions getConditions() {
+		return conditions;
 	}
 
 	@Override

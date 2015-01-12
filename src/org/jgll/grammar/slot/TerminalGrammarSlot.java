@@ -15,13 +15,14 @@ import org.jgll.util.Input;
 import org.jgll.util.collections.Key;
 
 
-public class TerminalGrammarSlot implements GrammarSlot {
+public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private RegularExpression regex;
 	private Matcher matcher;
 	private Map<Key, TerminalNode> terminalNodes;
 
-	public TerminalGrammarSlot(RegularExpression regex) {
+	public TerminalGrammarSlot(int id, RegularExpression regex) {
+		super(id, Collections.emptyList());
 		this.regex = regex;
 		// TODO: add type of regex to config!
 		this.matcher = regex.getMatcher();

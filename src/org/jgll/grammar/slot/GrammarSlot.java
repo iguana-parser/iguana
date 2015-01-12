@@ -1,11 +1,9 @@
 package org.jgll.grammar.slot;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.jgll.grammar.condition.Conditions;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -44,10 +42,6 @@ public interface GrammarSlot extends ConstructorCode {
 	 */
 	default boolean isLast() { return false; }
 
-	default Conditions getConditions() {
-		return new Conditions(Collections.emptySet());
-	}
-	
 	default GSSNode getGSSNode(int inputIndex) { return null; }
 	
 	default GSSNode hasGSSNode(int inputIndex) { return null; }
@@ -60,6 +54,6 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	default GrammarSlot withId(int id) { return this; }
 	
-	default int getId() { return 0; }
+	public int getId();
 
 }

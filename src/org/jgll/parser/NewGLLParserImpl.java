@@ -1,7 +1,7 @@
 package org.jgll.parser;
 
 
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
@@ -43,7 +43,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 			return;
 		
 		for(GSSEdge edge : gssNode.getGSSEdges()) {
-			GrammarSlot returnSlot = edge.getReturnSlot();
+			BodyGrammarSlot returnSlot = edge.getReturnSlot();
 			
 			if (returnSlot.getConditions().execute(input, gssNode, inputIndex))
 				break;
@@ -54,17 +54,17 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+	public final GSSNode createGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
 		return gssLookup.getGSSNode(nonterminal, i);
 	}
 	
 	@Override
-	public final GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+	public final GSSNode hasGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
 		return gssLookup.hasGSSNode(nonterminal, i);
 	}
 	
 	@Override
-	public void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source) {
+	public void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		
 		if(gssLookup.getGSSEdge(source, edge)) {

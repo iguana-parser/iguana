@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -14,8 +15,8 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup) {
-		super(id, position, nodeLookup);
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup, Set<Condition> conditions) {
+		super(id, position, nodeLookup, conditions);
 		this.nonterminal = nonterminal;
 	}
 

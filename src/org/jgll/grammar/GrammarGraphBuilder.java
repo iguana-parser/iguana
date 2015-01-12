@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	private int id = 1;
 	
-	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(Epsilon.getInstance());
+	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(0, Epsilon.getInstance());
 	
 	public GrammarGraphBuilder(Grammar grammar, Input input, Configuration config) {
 		this("no-name", grammar, input, config);
@@ -87,13 +88,13 @@ public class GrammarGraphBuilder implements Serializable {
 	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
 		
 		if (rule.size() == 0) {
-			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id, rule.getPosition(0), head, epsilon, getNodeLookup());
+			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id, rule.getPosition(0), head, epsilon, getNodeLookup(), Collections.emptySet());
 			head.addFirstSlot(epsilonSlot);
 			slots.add(epsilonSlot);
 		} 
 		else {
 			
-			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id, rule.getPosition(0), getNodeLookup());
+			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id, rule.getPosition(0), getNodeLookup(), Collections.emptySet());
 			head.addFirstSlot(firstSlot);
 			
 			BodyGrammarSlot currentSlot = firstSlot;
@@ -104,7 +105,7 @@ public class GrammarGraphBuilder implements Serializable {
 				// Terminal
 				if (symbol instanceof RegularExpression) {
 					RegularExpression regex = (RegularExpression) symbol;
-					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
+					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(id++, regex));
 					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					Set<Condition> postConditions = symbol.getPreConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
@@ -145,9 +146,9 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, NonterminalGrammarSlot nonterminal) {
 		if (i == rule.size()) {
-			return new EndGrammarSlot(id++, rule.getPosition(i), nonterminal, getNodeLookup());
+			return new EndGrammarSlot(id++, rule.getPosition(i), nonterminal, getNodeLookup(), rule.symbolAt(i - 1).getPostConditions());
 		} else {
-			return new BodyGrammarSlot(id++, rule.getPosition(i), getNodeLookup());
+			return new BodyGrammarSlot(id++, rule.getPosition(i), getNodeLookup(), rule.symbolAt(i - 1).getPostConditions());
 		}
 	}
 	
