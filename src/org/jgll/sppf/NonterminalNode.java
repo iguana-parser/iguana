@@ -1,5 +1,6 @@
 package org.jgll.sppf;
 
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.traversal.SPPFVisitor;
 import org.jgll.util.SPPFToJavaCode;
@@ -11,10 +12,10 @@ import org.jgll.util.SPPFToJavaCode;
  */
 public class NonterminalNode extends NonterminalOrIntermediateNode {
 	
-	public NonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		super(slot, leftExtent, rightExtent);
+	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set) {
+		super(slot, leftExtent, rightExtent, set);
 	}
-	
+
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);
@@ -27,6 +28,10 @@ public class NonterminalNode extends NonterminalOrIntermediateNode {
 
 	public String toJavaCode() {
 		return SPPFToJavaCode.toJavaCode(this);
+	}
+	
+	public boolean isListNode() {
+		return getGrammarSlot().getNonterminal().isEbnfList();
 	}
 	
 }

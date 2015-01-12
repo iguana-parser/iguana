@@ -21,17 +21,13 @@ public class PackedNode implements SPPFNode {
 
 	private final NonPackedNode parent;
 	
-	private List<NonPackedNode> children;
+	private final List<NonPackedNode> children;
 	
 	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
-		assert slot != null;
-		assert pivot >= 0;
-		assert parent != null;
-		
 		this.slot = slot;
 		this.pivot = pivot;
 		this.parent = parent;
-		this.children = new ArrayList<>(2);
+		this.children = new ArrayList<>();
 	}
 			
 	@Override
@@ -44,12 +40,14 @@ public class PackedNode implements SPPFNode {
 		
 		PackedNode other = (PackedNode) obj;
 		
-		return  slot == other.slot && pivot == other.pivot;
+		return  slot == other.slot && 
+				pivot == other.pivot &&
+				parent.equals(other.parent);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.hashCode(), pivot);
+		return HashFunctions.defaulFunction.hash(slot.getId(), pivot, parent.hashCode());
 	}
 	
 	public int getPivot() {

@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -203,18 +202,10 @@ public class SPPFToDotUnpacked extends ToDot {
 		return s.replace("\\", "\\\\").replace("\t", "\\\\t").replace("\n", "\\\\n").replace("\r", "\\\\r").replace("\"", "\\\"");
 	}
 
-	public void visit(ListSymbolNode node) {
-		visit((NonterminalNode) node);
-	}
 	
 	private void createPermutationMaps(SPPFNode node) {
 		map = new HashMap<>();
 		SPPFVisitor sppfVisitor = new SPPFVisitor() {
-			
-			@Override
-			public void visit(ListSymbolNode node) {
-				SPPFVisitorUtil.visitChildren(node, this);
-			}
 			
 			@Override
 			public void visit(PackedNode node) {

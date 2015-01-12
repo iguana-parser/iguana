@@ -1,7 +1,5 @@
 package org.jgll.traversal;
 
-import org.jgll.sppf.CollapsibleNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -151,17 +149,6 @@ public class SPPFVisitorUtil {
 //		}
 	}
 
-	public static void removeListSymbolNode(ListSymbolNode node) {
-//		if(!node.isAmbiguous()) {
-//			removeIntermediateNode(node);
-//			if(node.getChildAt(0) instanceof ListSymbolNode) {
-//				ListSymbolNode child = (ListSymbolNode) node.getChildAt(0);
-//				node.replaceWithChildren(child);
-//				removeListSymbolNode(node);
-//			}
-//		}
-	}
-	
 	public static void removeCollapsibleNode(NonterminalNode node) {
 		
 		// Check for keyword nodes that their children are not yet created.
@@ -182,28 +169,6 @@ public class SPPFVisitorUtil {
 //				removeCollapsibleNode(node);
 //			}
 //		}
-	}
-	
-	public static void removeCollapsibleNode(PackedNode node) {
-		if(node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
-			CollapsibleNode child = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
-			removeIntermediateNode(child);
-//			node.replaceWithChildren(child);		
-			
-//			LastGrammarSlot slot = (LastGrammarSlot) child.getFirstPackedNodeGrammarSlot();
-//			((LastGrammarSlot)node.getGrammarSlot()).setObject(slot.getObject());
-			
-			removeCollapsibleNode(node);
-		}
-	}
-	
-	public static void removeListSymbolNode(PackedNode node) {
-		removeIntermediateNode(node);
-		if(node.getChildAt(0) instanceof ListSymbolNode) {
-			ListSymbolNode child = (ListSymbolNode) node.getChildAt(0);
-//			node.replaceWithChildren(child);
-			removeListSymbolNode(node);
-		}
 	}
 	
 }

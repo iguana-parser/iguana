@@ -1,7 +1,6 @@
 package org.jgll.sppf.lookup;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
@@ -34,7 +33,7 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	@Override
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		return slot.getNonterminalNode(IntKey2.from(leftExtent, rightExtent, f), 
-												   () -> createNonterminalNode(slot, leftExtent, rightExtent),
+												   () -> new NonterminalNode(slot, leftExtent, rightExtent, (x, y) -> true),
 												   this::nonterminalNodeAdded);
 	}
 
@@ -58,10 +57,6 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	@Override
 	public NonterminalNode getStartSymbol(NonterminalGrammarSlot startSymbol, int inputSize) {
 		return startSymbol.findNonterminalNode(IntKey2.from(0, inputSize - 1, f));
-	}
-
-	protected IntermediateNode createIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return new IntermediateNode(grammarSlot, leftExtent, rightExtent);
 	}
 
 }

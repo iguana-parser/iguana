@@ -10,10 +10,10 @@ import org.jgll.traversal.SPPFVisitor;
  */
 public class IntermediateNode extends NonterminalOrIntermediateNode {
 	
-	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
-		super(slot, leftExtent, rightExtent);
+	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set) {
+		super(slot, leftExtent, rightExtent, set);
 	}
-	
+
 	@Override
 	public void accept(SPPFVisitor visitAction) {
 		visitAction.visit(this);

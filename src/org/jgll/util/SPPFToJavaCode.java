@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -97,22 +96,6 @@ public class SPPFToJavaCode implements SPPFVisitor {
 		visitChildren(node);
 		
 		addChildren(node);			
-	}
-
-	@Override
-	public void visit(ListSymbolNode node) {
-
-		if (idsMap.putIfAbsent(node, id.getAndIncrement()) != null) return;
-		
-		sb.append("ListSymbolNode node" + idsMap.get(node) + " = factory.createListNode(" +
-				  "\"" + node.getGrammarSlot().getNonterminal().getName() + "\", " +
-				  node.getGrammarSlot().getNonterminal().getIndex() + ", " +
-				  node.getLeftExtent() + ", " + 
-				  node.getRightExtent() + ");\n");
-		
-		visitChildren(node);
-			
-		addChildren(node);
 	}
 	
 	private void visitChildren(SPPFNode node) {

@@ -1,8 +1,9 @@
 package org.jgll.sppf.lookup;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
@@ -73,11 +74,12 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 		return countAmbiguousNodes;
 	}
 	
-	protected NonterminalNode createNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
-		if(head.getNonterminal().isEbnfList()) {
-			return new ListSymbolNode(head, leftExtent, rightExtent);
-		} else {
-			return new NonterminalNode(head, leftExtent, rightExtent);
-		}
+	protected IntermediateNode createIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		return new IntermediateNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true);
 	}
+	
+	protected NonterminalNode createNonterminalNode(NonterminalGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		return new NonterminalNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true);
+	}
+	
 }

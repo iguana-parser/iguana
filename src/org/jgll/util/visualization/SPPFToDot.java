@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -125,11 +124,6 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		return s.replace("\\", "\\\\").replace("\t", "\\\\t").replace("\n", "\\\\n").replace("\r", "\\\\r").replace("\"", "\\\"");
 	}
 
-	@Override
-	public void visit(ListSymbolNode node) {
-		visit((NonterminalNode) node);
-	}
-	
 	public String getString() {
 		return sb.toString();
 	}

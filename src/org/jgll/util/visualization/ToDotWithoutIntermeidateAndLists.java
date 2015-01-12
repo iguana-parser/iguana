@@ -3,7 +3,6 @@ package org.jgll.util.visualization;
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
 import org.jgll.grammar.GrammarRegistry;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -51,12 +50,6 @@ public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNo
 			  child.accept(this);
 			}
 		}
-	}
-	
-	@Override
-	public void visit(ListSymbolNode node) {
-		SPPFVisitorUtil.removeListSymbolNode(node);
-		visit((NonterminalNode)node);
 	}
 	
 }
