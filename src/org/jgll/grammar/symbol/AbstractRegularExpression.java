@@ -75,10 +75,4 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 //		return result;
 //	}
 	
-	@Override
-	public String toString() {
-		if (label != null) return label;
-		return super.toString();
-	}
-
 }

@@ -7,6 +7,7 @@ import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.generator.ConstructorCode;
+import org.jgll.grammar.symbol.Character;
 
 public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
 
@@ -31,4 +32,11 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	 */
 	public Set<CharacterRange> getNotFollowSet();
 	
+	default boolean isSingleChar() {
+		return false;
+	}
+
+	default Character asSingleChar() {
+		return Character.from(0);
+	}
 }

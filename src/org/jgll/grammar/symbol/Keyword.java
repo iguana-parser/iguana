@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.regex.Matcher;
@@ -129,28 +130,30 @@ public class Keyword extends AbstractRegularExpression {
 	@Override
 	public Matcher getMatcher() {
 		return (input, i) -> {
-			int length = -1;
 			for (Character c : seq) {
-				if (c.getValue() == input.charAt(i++)) {
-					length++;
+				if (c.getValue() != input.charAt(i++)) {
+					return -1;
 				}
 			}
-			return length;
+			return seq.size();
 		};
 	}
-
+	
+	private static String getName(Sequence<Character> seq) {
+		return "\"" + seq.stream().map(c -> c.getName()).collect(Collectors.joining()) + "\"";
+	}
 	
 	public static class Builder extends SymbolBuilder<Keyword> {
 		
 		private Sequence<Character> seq;
 				
 		public Builder(String s) {
-			super(toCharSequence(Input.toIntArray(s)).getName());
+			super(s);
 			this.seq = toCharSequence(Input.toIntArray(s));
 		}
 		
 		public Builder(Sequence<Character> seq) {
-			super(seq.getName());
+			super(getName(seq));
 			this.seq = seq;
 		}
 		

@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
@@ -97,13 +99,11 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == this) {
+		if(obj == this)
 			return true;
-		}
 		
-		if(!(obj instanceof Sequence)) {
+		if(!(obj instanceof Sequence))
 			return false;
-		}
 		
 		@SuppressWarnings("unchecked")
 		Sequence<T> other = (Sequence<T>) obj;
@@ -119,6 +119,10 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	@Override
 	public Iterator<T> iterator() {
 		return regularExpressions.iterator();
+	}
+	
+	public Stream<T> stream() {
+		return StreamSupport.stream(regularExpressions.spliterator(), false);
 	}
 	
 	@Override

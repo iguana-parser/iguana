@@ -146,4 +146,14 @@ public class Character extends AbstractRegularExpression {
 			return new Character(this);
 		}
 	}
+	
+	@Override
+	public boolean isSingleChar() {
+		return true;
+	}
+	
+	@Override
+	public Character asSingleChar() {
+		return this;
+	}
 }

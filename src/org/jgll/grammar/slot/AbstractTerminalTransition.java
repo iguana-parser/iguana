@@ -43,7 +43,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			parser.recordParseError(origin);
 			return;
 		}
-
+		
 		if (postConditions.execute(input, u, i + length))
 			return;
 		

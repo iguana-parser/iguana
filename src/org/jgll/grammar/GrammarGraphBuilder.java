@@ -108,7 +108,7 @@ public class GrammarGraphBuilder implements Serializable {
 					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(id++, regex));
 					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
 					Set<Condition> preConditions = symbol.getPreConditions();
-					Set<Condition> postConditions = symbol.getPostConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
+					Set<Condition> postConditions = symbol.getPostConditions();
 					currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
 					currentSlot = slot;
 				} 

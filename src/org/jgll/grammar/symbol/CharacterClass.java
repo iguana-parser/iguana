@@ -56,6 +56,16 @@ public class CharacterClass extends AbstractRegularExpression {
 	public int hashCode() {
 		return alt.hashCode();
 	}
+	
+	@Override
+	public boolean isSingleChar() {
+		return alt.size() == 1 && alt.get(0).isSingleChar();
+	}
+	
+	@Override
+	public Character asSingleChar() {
+		return alt.get(0).asSingleChar();
+	}
 
 	@Override
 	public boolean equals(Object obj) {

@@ -105,6 +105,16 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	public boolean isNullable() {
 		return false;
 	}
+	
+	@Override
+	public boolean isSingleChar() {
+		return start == end;
+	}
+	
+	@Override
+	public Character asSingleChar() {
+		return Character.from(start);
+	}
 
 	public CharacterClass not() {
 		return UnicodeUtil.reverse(this);
