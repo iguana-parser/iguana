@@ -23,10 +23,11 @@ public class BenchmarkJava extends AbstractBenchmark {
 	private static Nonterminal startSymbol = Nonterminal.withName("start[CompilationUnit]"); 
 	
 	public static void main(String[] args) throws Exception {
-		parseFile(new File("/Users/aliafroozeh/test.java"));
-//		for (File f : find("/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19", "java")) {
-//			parseFile(f);
-//		}
+//		parseFile(new File("/Users/aliafroozeh/test.java"));
+		for (File f : find("/Users/aliafroozeh/corpus/Java", "java")) {
+			System.out.println(f);
+			parseFile(f);
+		}
 	}
 
 	private static void parseFile(File f) throws IOException {

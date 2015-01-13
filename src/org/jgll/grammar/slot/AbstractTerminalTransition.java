@@ -1,6 +1,5 @@
 package org.jgll.grammar.slot;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.GrammarRegistry;
@@ -21,10 +20,6 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	private final Conditions preConditions;
 	
 	private final Conditions postConditions;
-	
-	public AbstractTerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(slot, origin, dest, Collections.emptySet(), Collections.emptySet());
-	}
 	
 	public AbstractTerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, 
 							  		  Set<Condition> preConditions, Set<Condition> postConditions) {
@@ -49,7 +44,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			return;
 		}
 
-		if (postConditions.execute(input, u, i))
+		if (postConditions.execute(input, u, i + length))
 			return;
 		
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);

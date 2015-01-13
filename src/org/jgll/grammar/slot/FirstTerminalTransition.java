@@ -11,7 +11,7 @@ import org.jgll.sppf.TerminalNode;
 public class FirstTerminalTransition extends AbstractTerminalTransition {
 
 	public FirstTerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, Set<Condition> preConditions, Set<Condition> postConditions) {
-		super(slot, origin, dest);
+		super(slot, origin, dest, preConditions, postConditions);
 	}
 	
 	@Override
