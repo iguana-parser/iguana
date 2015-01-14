@@ -35,4 +35,14 @@ public class DummyNodeLookup implements GSSNodeLookup {
 		return Collections.emptyList();
 	}
 
+	@Override
+	public DummyNodeLookup init() {
+		return this;
+	}
+
+	@Override
+	public boolean isInitialized() {
+		return true;
+	}
+
 }

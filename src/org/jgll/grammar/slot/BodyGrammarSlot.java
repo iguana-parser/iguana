@@ -70,7 +70,12 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public GSSNode hasGSSNode(int inputIndex) { 
-		return nodeLookup.get(inputIndex);
+		if (nodeLookup.isInitialized()) {
+			return nodeLookup.get(inputIndex);
+		} else {
+			nodeLookup.init();			
+			return null;
+		}
 	}
 	
 	public Conditions getConditions() {
@@ -82,4 +87,5 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		intermediateNodes = new HashMap<>();
 		nodeLookup.reset(input);
 	}
+
 }

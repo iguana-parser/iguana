@@ -55,5 +55,5 @@ public interface GrammarSlot extends ConstructorCode {
 	default GrammarSlot withId(int id) { return this; }
 	
 	public int getId();
-
+	
 }

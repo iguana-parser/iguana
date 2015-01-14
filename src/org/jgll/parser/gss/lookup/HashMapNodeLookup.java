@@ -9,7 +9,7 @@ import org.jgll.util.Input;
 
 public class HashMapNodeLookup implements GSSNodeLookup {
 
-	private Map<Integer, GSSNode> map = new HashMap<>();
+	private Map<Integer, GSSNode> map;
 	
 	@Override
 	public GSSNode getOrElseCreate(GrammarSlot slot, int i) {
@@ -34,6 +34,17 @@ public class HashMapNodeLookup implements GSSNodeLookup {
 	@Override
 	public Iterable<GSSNode> getNodes() {
 		return map.values();
+	}
+
+	@Override
+	public GSSNodeLookup init() {
+		map = new HashMap<>();
+		return this;
+	}
+
+	@Override
+	public boolean isInitialized() {
+		return map != null;
 	}
 
 }

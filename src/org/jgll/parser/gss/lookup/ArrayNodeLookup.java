@@ -10,9 +10,10 @@ import org.jgll.util.Input;
 public class ArrayNodeLookup implements GSSNodeLookup {
 
 	private GSSNode[] gssNodes;
+	private int length;
 	
 	public ArrayNodeLookup(Input input) {
-		gssNodes = new GSSNode[input.length()];
+		length = input.length();
 	}
 	
 	@Override
@@ -32,12 +33,24 @@ public class ArrayNodeLookup implements GSSNodeLookup {
 
 	@Override
 	public void reset(Input input) {
-		gssNodes = new GSSNode[input.length()];		
+		length = input.length();
+		gssNodes = null;		
 	}
 	
 	@Override
 	public Iterable<GSSNode> getNodes() {
 		return Arrays.stream(gssNodes).filter(n -> n != null).collect(Collectors.toList());
+	}
+
+	@Override
+	public ArrayNodeLookup init() {
+		gssNodes = new GSSNode[length];
+		return this;
+	}
+
+	@Override
+	public boolean isInitialized() {
+		return gssNodes != null;
 	}
 
 }

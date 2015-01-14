@@ -18,4 +18,8 @@ public interface GSSNodeLookup {
 	public void reset(Input input);
 	
 	public Iterable<GSSNode> getNodes();
+	
+	public GSSNodeLookup init();
+	
+	public boolean isInitialized();
 }

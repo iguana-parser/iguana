@@ -85,7 +85,12 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public GSSNode hasGSSNode(int inputIndex) { 
-		return nodeLookup.get(inputIndex);
+		if (nodeLookup.isInitialized()) {
+			return nodeLookup.get(inputIndex);
+		} else {
+			nodeLookup.init();
+			return null;
+		}
 	}
 
 	@Override
@@ -112,6 +117,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	public void reset(Input input) {
 		nodeLookup.reset(input);
 		nonterminalNodes = new HashMap<>();
+	}
+	
+	public void initGSSLookup() {
+		nodeLookup.init();
 	}
 
 }

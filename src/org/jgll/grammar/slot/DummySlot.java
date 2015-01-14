@@ -17,7 +17,7 @@ public class DummySlot extends BodyGrammarSlot {
 	}
 	
 	private DummySlot() {
-		super(0, null, new HashMapNodeLookup(), Collections.emptySet());
+		super(0, null, new HashMapNodeLookup().init(), Collections.emptySet());
 	}
 
 	@Override

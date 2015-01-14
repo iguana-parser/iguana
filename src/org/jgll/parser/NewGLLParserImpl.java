@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
@@ -26,7 +27,8 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	
 	@Override
 	protected void initParserState(NonterminalGrammarSlot startSymbol) {
-		cu = createGSSNode(null, startSymbol, ci);
+		startSymbol.initGSSLookup();
+		cu = createGSSNode(DummySlot.getInstance(), startSymbol, ci);
 		cn = DummyNode.getInstance();
 		ci = 0;
 		errorSlot = null;
