@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
@@ -147,7 +146,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
     }
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return "Range.in(" + start + ", " + end + ")";
 	}
 	

@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.HashFunctions;
 import org.jgll.util.generator.ConstructorCode;
 
@@ -149,8 +148,8 @@ public class Rule implements ConstructorCode, Serializable {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "Rule.withHead(" + head.getConstructorCode(registry) + ")" + (body == null ? "" :
-				body.stream().map(s -> ".addSymbol(" + s.getConstructorCode(registry) + ")").collect(Collectors.joining())) + ".build()";
+	public String getConstructorCode() {
+		return "Rule.withHead(" + head.getConstructorCode() + ")" + (body == null ? "" :
+				body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) + ".build()";
 	}
 }

@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.gss.lookup.HashMapNodeLookup;
 import org.jgll.util.Input;
 
@@ -21,7 +20,7 @@ public class DummySlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return "new DummySlot()";
 	}
 

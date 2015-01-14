@@ -2,7 +2,6 @@ package org.jgll.regex;
 
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
@@ -58,10 +57,10 @@ public class RegexPlus extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new RegexPlus(")
-		  .append(regex.getConstructorCode(registry) + ", ")
+		  .append(regex.getConstructorCode() + ", ")
 		  .append(label + ", ")
 		  .append("new HashSet<>(), ")
 		  .append("null")

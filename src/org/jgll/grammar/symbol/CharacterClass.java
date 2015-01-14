@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
 
@@ -150,10 +149,10 @@ public class CharacterClass extends AbstractRegularExpression {
     }
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new CharacterClass(")
-		  .append(alt.getConstructorCode(registry) + ", ")
+		  .append(alt.getConstructorCode() + ", ")
 		  .append("\"" + escape(label) + "\", ")
 		  .append("new HashSet<Condition>(), ")
 		  .append("null")

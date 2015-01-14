@@ -3,7 +3,6 @@ package org.jgll.grammar.condition;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.regex.RegularExpression;
 
 /**
@@ -92,8 +91,8 @@ public class RegularExpressionCondition extends Condition {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "new RegularExpressionCondition(" + type.name() + ", " + regularExpression.getConstructorCode(registry) + ")";
+	public String getConstructorCode() {
+		return "new RegularExpressionCondition(" + type.name() + ", " + regularExpression.getConstructorCode() + ")";
 	}
 	
 	public static RegularExpressionCondition notMatch(RegularExpression regularExpression) {

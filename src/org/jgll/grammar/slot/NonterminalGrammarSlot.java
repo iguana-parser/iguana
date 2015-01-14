@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
@@ -71,10 +70,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
 		           .append("new NonterminalGrammarSlot(")
-		           .append(nonterminal.getConstructorCode(registry))
+		           .append(nonterminal.getConstructorCode())
 		           .append(")").toString();
 	}
 	

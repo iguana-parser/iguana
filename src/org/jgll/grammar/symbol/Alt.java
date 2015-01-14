@@ -3,7 +3,6 @@ package org.jgll.grammar.symbol;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.util.generator.GeneratorUtil;
 
 import com.google.common.collect.ImmutableList;
@@ -65,13 +64,13 @@ public class Alt extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
-		  .append("new Alt.builder(" + getConstructorCode(symbols, registry) + ")")
+		  .append("new Alt.builder(" + getConstructorCode(symbols) + ")")
 		  .append(".setLabel(" + label + ")")
 		  .append(".setObject(" + object + ")")
-		  .append(".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
-		  .append(".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
+		  .append(".setPreConditions(" + getConstructorCode(preConditions) + ")")
+		  .append(".setPostConditions(" + getConstructorCode(postConditions) + ")")
 		  .append(".build()").toString();
 	}
 
