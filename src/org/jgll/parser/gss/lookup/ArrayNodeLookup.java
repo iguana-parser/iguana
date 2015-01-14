@@ -7,7 +7,7 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
 
-public class ArrayNodeLookup implements NodeLookup {
+public class ArrayNodeLookup implements GSSNodeLookup {
 
 	private GSSNode[] gssNodes;
 	

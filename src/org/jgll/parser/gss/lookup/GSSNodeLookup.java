@@ -9,7 +9,7 @@ import org.jgll.util.Input;
  * @author Ali Afroozeh
  *
  */
-public interface NodeLookup {
+public interface GSSNodeLookup {
 	
 	public GSSNode getOrElseCreate(GrammarSlot slot, int i);
 	

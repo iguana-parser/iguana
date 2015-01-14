@@ -8,14 +8,14 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.lookup.NodeLookup;
+import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.NonPackedNode;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup, Set<Condition> conditions) {
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, Set<Condition> conditions) {
 		super(id, position, nodeLookup, conditions);
 		this.nonterminal = nonterminal;
 	}

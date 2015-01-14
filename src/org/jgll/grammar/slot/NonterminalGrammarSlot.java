@@ -12,7 +12,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.lookup.NodeLookup;
+import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
@@ -32,11 +32,11 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final List<BodyGrammarSlot> firstSlots;
 	
-	private final NodeLookup nodeLookup;
+	private final GSSNodeLookup nodeLookup;
 
 	private Map<Key, NonterminalNode> nonterminalNodes;
 
-	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, NodeLookup nodeLookup) {
+	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup) {
 		super(id);
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;

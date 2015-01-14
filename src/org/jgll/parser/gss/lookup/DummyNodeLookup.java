@@ -1,39 +1,38 @@
 package org.jgll.parser.gss.lookup;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
 
-public class HashMapNodeLookup implements GSSNodeLookup {
-
-	private Map<Integer, GSSNode> map = new HashMap<>();
+public class DummyNodeLookup implements GSSNodeLookup {
 	
+	private final static DummyNodeLookup instance = new DummyNodeLookup();
+	
+	public static DummyNodeLookup getInstance() {
+		return instance;
+	}
+	
+	private DummyNodeLookup() {}
+
 	@Override
 	public GSSNode getOrElseCreate(GrammarSlot slot, int i) {
-		GSSNode v;
-		if ((v = map.get(i)) == null) {
-			v = new GSSNode(slot, i);
-			map.put(i, v);
-		}
-		return v;
+		return null;
 	}
 
 	@Override
 	public GSSNode get(int i) {
-		return map.get(i);
+		return null;
 	}
 
 	@Override
 	public void reset(Input input) {
-		map = new HashMap<>();
 	}
 
 	@Override
 	public Iterable<GSSNode> getNodes() {
-		return map.values();
+		return Collections.emptyList();
 	}
 
 }

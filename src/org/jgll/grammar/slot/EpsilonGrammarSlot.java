@@ -7,7 +7,7 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.lookup.NodeLookup;
+import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 
@@ -15,7 +15,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
 
-	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, NodeLookup nodeLookup, Set<Condition> conditions) {
+	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, GSSNodeLookup nodeLookup, Set<Condition> conditions) {
 		super(id, position, nonterminal, nodeLookup, conditions);
 		this.epsilonSlot = epsilonSlot;
 	}
