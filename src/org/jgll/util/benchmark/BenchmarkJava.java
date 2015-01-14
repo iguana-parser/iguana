@@ -36,7 +36,6 @@ public class BenchmarkJava extends AbstractBenchmark {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, startSymbol);
 		if (result.isParseSuccess()) {
-			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), parser.getRegistry(), input);
 			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
 		} else {
 			System.out.println("Parse error: " + result.asParseError());
