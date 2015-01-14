@@ -226,7 +226,9 @@ public class Grammar implements ConstructorCode, Serializable {
 
 	@Override
 	public String getConstructorCode() {
-		return "Grammar.builder()" + definitions.values().stream().map(r -> "\n.addRule(" + r.getConstructorCode() + ")").collect(Collectors.joining()) + "\n.build()";
+		return "Grammar.builder()" + definitions.values().stream()
+				.map(r -> "\n//" + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
+				.collect(Collectors.joining()) + "\n.build()";
 	}
 	
 }
