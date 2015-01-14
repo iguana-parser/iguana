@@ -12,6 +12,8 @@ import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.Visualization;
 
+import com.google.common.testing.GcFinalization;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -24,11 +26,15 @@ public class BenchmarkJava extends AbstractBenchmark {
 	private static Nonterminal startSymbol = Nonterminal.withName("start[CompilationUnit]"); 
 	
 	public static void main(String[] args) throws Exception {
-		parseFile(new File("/Users/aliafroozeh/test.cs"));
-//		for (File f : find("/Users/aliafroozeh/corpus/CSharp/output", "cs")) {
-//			System.out.println(f);
-//			parseFile(f);
+//		System.out.println(BenchmarkUtil.header());
+//		for (int i = 0; i < 10; i++) {
+//			parseFile(new File("/Users/aliafroozeh/test.cs"));
 //		}
+		for (File f : find("/Users/aliafroozeh/corpus/CSharp/output", "cs")) {
+			System.out.println(f);
+			GcFinalization.awaitFullGc();
+			parseFile(f);
+		}
 	}
 
 	private static void parseFile(File f) throws IOException {

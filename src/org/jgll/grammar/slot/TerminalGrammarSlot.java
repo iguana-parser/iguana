@@ -26,7 +26,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 		this.regex = regex;
 		// TODO: add type of regex to config!
 		this.matcher = regex.getMatcher();
-		this.terminalNodes = new HashMap<>(1000);
+		this.terminalNodes = new HashMap<>();
 	}
 
 	@Override

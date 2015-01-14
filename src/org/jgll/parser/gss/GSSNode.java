@@ -49,7 +49,7 @@ public class GSSNode {
 		this.gssEdges = new ArrayList<>();
 		
 		this.poppedElementsSet = new HashSet<>();
-		this.descriptors = new HashSet<>(1024);
+		this.descriptors = new HashSet<>();
 	}
 	
 	public boolean addToPoppedElements(NonPackedNode node) {

@@ -7,10 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.slot.AbstractTerminalTransition;
 import org.jgll.grammar.slot.BeforeLastTerminalTransition;
 import org.jgll.grammar.slot.BodyGrammarSlot;

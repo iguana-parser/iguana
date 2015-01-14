@@ -32,7 +32,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		this.position = position;
 		this.nodeLookup = nodeLookup;
 		this.conditions = ConditionsFactory.getConditions(conditions);
-		this.intermediateNodes = new HashMap<>(1000);
+		this.intermediateNodes = new HashMap<>();
 	}
 	
 	@Override
