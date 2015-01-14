@@ -84,11 +84,11 @@ public class Test8 extends AbstractParserTest {
 		Character a = Character.from('a');
 		Character b = Character.from('b');
 		Character c = Character.from('c');
-		Rule r1 = Rule.builder(A).addSymbols(a, B, c).build();
-		Rule r2 = Rule.builder(A).addSymbol(C).build();
-		Rule r3 = Rule.builder(B).addSymbol(b).build();
-		Rule r4 = Rule.builder(C).addSymbols(a, C).build();
-		Rule r5 = Rule.builder(C).addSymbol(c).build();
+		Rule r1 = Rule.withHead(A).addSymbols(a, B, c).build();
+		Rule r2 = Rule.withHead(A).addSymbol(C).build();
+		Rule r3 = Rule.withHead(B).addSymbol(b).build();
+		Rule r4 = Rule.withHead(C).addSymbols(a, C).build();
+		Rule r5 = Rule.withHead(C).addSymbol(c).build();
 		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 	}
 	

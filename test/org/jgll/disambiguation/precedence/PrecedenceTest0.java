@@ -19,6 +19,7 @@ import org.jgll.sppf.SPPFNodeFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,15 +49,15 @@ public class PrecedenceTest0 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E * E
-		Rule rule1 = Rule.builder(E).addSymbols(E, star, E).build();
+		Rule rule1 = Rule.withHead(E).addSymbols(E, star, E).build();
 		builder.addRule(rule1);
 		
 		// E ::= E + E
-		Rule rule2 = Rule.builder(E).addSymbols(E, plus, E).build();
+		Rule rule2 = Rule.withHead(E).addSymbols(E, plus, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= a
-		Rule rule3 = Rule.builder(E).addSymbol(a).build();
+		Rule rule3 = Rule.withHead(E).addSymbol(a).build();
 		builder.addRule(rule3);
 
 		
@@ -82,9 +83,25 @@ public class PrecedenceTest0 {
 		Input input = Input.fromString("a+a*a");
 		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
+		System.out.println(grammar.getConstructorCode(parser.getRegistry()));
+		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), parser.getRegistry(), input);
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode(parser.getRegistry())));
+	}
+	
+	private Grammar getGrammar() {
+		return Grammar.builder()
+				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(42)).addSymbol(Nonterminal.builder("E").setIndex(1).build()).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Character.from(43)).addSymbol(Nonterminal.builder("E").setIndex(2).build()).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Character.from(97)).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Character.from(97)).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(42)).addSymbol(Nonterminal.builder("E").setIndex(1).build()).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(97)).build())
+				.build();
 	}
 	
 	private SPPFNode getSPPFNode(GrammarRegistry registry) {

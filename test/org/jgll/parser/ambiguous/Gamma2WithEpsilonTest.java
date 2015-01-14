@@ -36,10 +36,10 @@ public class Gamma2WithEpsilonTest {
     @Before
     public void init() {
         
-        Rule r1 = Rule.builder(S).addSymbols(S, S, S).build();
-        Rule r2 = Rule.builder(S).addSymbols(S, S).build();
-        Rule r3 = Rule.builder(S).addSymbols(b).build();
-        Rule r4 = Rule.builder(S).build();
+        Rule r1 = Rule.withHead(S).addSymbols(S, S, S).build();
+        Rule r2 = Rule.withHead(S).addSymbols(S, S).build();
+        Rule r3 = Rule.withHead(S).addSymbols(b).build();
+        Rule r4 = Rule.withHead(S).build();
         
         grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
     }

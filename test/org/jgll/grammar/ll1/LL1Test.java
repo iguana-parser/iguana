@@ -49,22 +49,22 @@ public class LL1Test {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 
-		Rule rule1 = Rule.builder(S).addSymbols(A, a).build();
+		Rule rule1 = Rule.withHead(S).addSymbols(A, a).build();
 		builder.addRule(rule1);
 
-		Rule rule2 = Rule.builder(A).addSymbols(B, D).build();
+		Rule rule2 = Rule.withHead(A).addSymbols(B, D).build();
 		builder.addRule(rule2);
 
-		Rule rule3 = Rule.builder(B).addSymbols(b).build();
+		Rule rule3 = Rule.withHead(B).addSymbols(b).build();
 		builder.addRule(rule3);
 
-		Rule rule4 = Rule.builder(B).build();
+		Rule rule4 = Rule.withHead(B).build();
 		builder.addRule(rule4);
 
-		Rule rule5 = Rule.builder(D).addSymbols(d).build();
+		Rule rule5 = Rule.withHead(D).addSymbols(d).build();
 		builder.addRule(rule5);
 
-		Rule rule6 = Rule.builder(D).build();
+		Rule rule6 = Rule.withHead(D).build();
 		builder.addRule(rule6);
 
 		grammar = builder.build();
@@ -89,16 +89,16 @@ public class LL1Test {
 	@Test
 	public void testPredictSets() {
 		// S ::= . A [a]
-		assertEquals(set(d, b, a), grammar.getPredictionSet(Rule.builder(S).addSymbols(A, a).build(), 0));
+		assertEquals(set(d, b, a), grammar.getPredictionSet(Rule.withHead(S).addSymbols(A, a).build(), 0));
 		
 		// A ::= . B D
-		assertEquals(set(d, b, a, EOF.getInstance()), grammar.getPredictionSet(Rule.builder(A).addSymbols(B, D).build(), 0));
+		assertEquals(set(d, b, a, EOF.getInstance()), grammar.getPredictionSet(Rule.withHead(A).addSymbols(B, D).build(), 0));
 		
 		// B ::= . [b]
-		assertEquals(set(b), grammar.getPredictionSet(Rule.builder(B).addSymbols(b).build(), 0));
+		assertEquals(set(b), grammar.getPredictionSet(Rule.withHead(B).addSymbols(b).build(), 0));
 
 		// A ::= epsilon
-		assertEquals(set(d, a, EOF.getInstance()), grammar.getPredictionSet(Rule.builder(B).build(), 1));
+		assertEquals(set(d, a, EOF.getInstance()), grammar.getPredictionSet(Rule.withHead(B).build(), 1));
 	}
 
 	@Test

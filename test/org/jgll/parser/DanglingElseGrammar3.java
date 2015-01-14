@@ -41,13 +41,13 @@ public class DanglingElseGrammar3 {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule rule1 = Rule.builder(S).addSymbols(a, Nonterminal.builder("S").addPreCondition(RegularExpressionCondition.notFollow(Character.from('b'))).build()).build();
+		Rule rule1 = Rule.withHead(S).addSymbols(a, Nonterminal.builder("S").addPreCondition(RegularExpressionCondition.notFollow(Character.from('b'))).build()).build();
 		builder.addRule(rule1);
 		
-		Rule rule2 = Rule.builder(S).addSymbols(a, S, b, S).build();
+		Rule rule2 = Rule.withHead(S).addSymbols(a, S, b, S).build();
 		builder.addRule(rule2);
 		
-		Rule rule3 = Rule.builder(S).addSymbols(s).build();
+		Rule rule3 = Rule.withHead(S).addSymbols(s).build();
 		builder.addRule(rule3);
 		
 		grammar = builder.build();

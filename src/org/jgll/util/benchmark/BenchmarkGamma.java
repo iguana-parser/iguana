@@ -68,9 +68,9 @@ public class BenchmarkGamma {
 		Nonterminal S = Nonterminal.withName("S");
 		Character b = Character.from('b');
 		Grammar.Builder builder = new Grammar.Builder();
-		builder.addRule(Rule.builder(S).addSymbols(S, S, S).build());
-		builder.addRule(Rule.builder(S).addSymbols(S, S).build());
-		builder.addRule(Rule.builder(S).addSymbol(b).build());
+		builder.addRule(Rule.withHead(S).addSymbols(S, S, S).build());
+		builder.addRule(Rule.withHead(S).addSymbols(S, S).build());
+		builder.addRule(Rule.withHead(S).addSymbol(b).build());
 		return builder.build();
 	}
 

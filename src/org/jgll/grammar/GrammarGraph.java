@@ -41,7 +41,7 @@ public class GrammarGraph implements Serializable {
 	
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
-		Map<String, GrammarSlot> slotsMap = builder.slots.stream().collect(Collectors.toMap(s -> s.toString(), s -> s));
+		Map<String, GrammarSlot> slotsMap = builder.slots.stream().collect(Collectors.toMap(s -> s.toString(), s -> s, (a, b) -> a));
 		this.registry = new GrammarRegistry(builder.nonterminalsMap, builder.terminalsMap, slotsMap);
 		this.headGrammarSlots = new ArrayList<>(builder.nonterminalsMap.values());
 		this.slots = new LinkedHashSet<>(builder.slots);

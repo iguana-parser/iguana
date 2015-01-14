@@ -52,19 +52,19 @@ public class PrecedenceTest2 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E ^ E
-		Rule rule0 = Rule.builder(E).addSymbols(E, hat, E).build();
+		Rule rule0 = Rule.withHead(E).addSymbols(E, hat, E).build();
 		builder.addRule(rule0);
 		
 		// E ::= E + E
-		Rule rule1 = Rule.builder(E).addSymbols(E, plus, E).build();
+		Rule rule1 = Rule.withHead(E).addSymbols(E, plus, E).build();
 		builder.addRule(rule1);
 		
 		// E ::= E - E
-		Rule rule2 = Rule.builder(E).addSymbols(minus, E).build();
+		Rule rule2 = Rule.withHead(E).addSymbols(minus, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= a
-		Rule rule3 = Rule.builder(E).addSymbols(a).build();
+		Rule rule3 = Rule.withHead(E).addSymbols(a).build();
 		builder.addRule(rule3);
 		
 		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();

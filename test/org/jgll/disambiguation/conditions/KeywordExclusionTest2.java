@@ -44,7 +44,7 @@ public class KeywordExclusionTest2 {
 		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az))
 									  .addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
-		Rule r1 = Rule.builder(Id).addSymbol(AZPlus).build();
+		Rule r1 = Rule.withHead(Id).addSymbol(AZPlus).build();
 		
 		grammar = Grammar.builder().addRule(r1).build();
 	}

@@ -67,15 +67,15 @@ public class Test15 extends AbstractParserTest {
 		Nonterminal C = Nonterminal.withName("C");
 		Nonterminal D = Nonterminal.withName("D");
 		Character a = Character.from('a');
-		Rule r1 = Rule.builder(S).addSymbols(A, B, C, D).build();
-		Rule r2 = Rule.builder(A).addSymbol(a).build();
-		Rule r3 = Rule.builder(A).build();
-		Rule r4 = Rule.builder(B).addSymbol(a).build();
-		Rule r5 = Rule.builder(B).build();
-		Rule r6 = Rule.builder(C).addSymbol(a).build();
-		Rule r7 = Rule.builder(C).build();
-		Rule r8 = Rule.builder(D).addSymbol(a).build();
-		Rule r9 = Rule.builder(D).build();
+		Rule r1 = Rule.withHead(S).addSymbols(A, B, C, D).build();
+		Rule r2 = Rule.withHead(A).addSymbol(a).build();
+		Rule r3 = Rule.withHead(A).build();
+		Rule r4 = Rule.withHead(B).addSymbol(a).build();
+		Rule r5 = Rule.withHead(B).build();
+		Rule r6 = Rule.withHead(C).addSymbol(a).build();
+		Rule r7 = Rule.withHead(C).build();
+		Rule r8 = Rule.withHead(D).addSymbol(a).build();
+		Rule r9 = Rule.withHead(D).build();
 
 		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).
 													   addRule(r4).addRule(r5).addRule(r6).

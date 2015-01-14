@@ -41,8 +41,8 @@ public class FollowRestrictionTest {
 
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule r1 = Rule.builder(S).addSymbol(Label).build();		
-		Rule r2 = Rule.builder(Label).addSymbol(AZPlus).build();
+		Rule r1 = Rule.withHead(S).addSymbol(Label).build();		
+		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
 		builder.addRule(r1).addRule(r2);
 		
 		grammar = builder.build();

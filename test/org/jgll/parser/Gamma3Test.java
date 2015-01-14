@@ -31,16 +31,16 @@ public class Gamma3Test {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule rule1 = Rule.builder(S).addSymbols(S, S, S, S, S).build();
+		Rule rule1 = Rule.withHead(S).addSymbols(S, S, S, S, S).build();
 		builder.addRule(rule1);
 		
-		Rule rule2 = Rule.builder(S).addSymbols(S, S, S, S).build();
+		Rule rule2 = Rule.withHead(S).addSymbols(S, S, S, S).build();
 		builder.addRule(rule2);
 		
-		Rule rule3 = Rule.builder(S).addSymbols(S, S, S).build();
+		Rule rule3 = Rule.withHead(S).addSymbols(S, S, S).build();
 		builder.addRule(rule3);
 		
-		Rule rule4 = Rule.builder(S).addSymbols(b).build();
+		Rule rule4 = Rule.withHead(S).addSymbols(b).build();
 		builder.addRule(rule4);
 		
 		grammar = builder.build();

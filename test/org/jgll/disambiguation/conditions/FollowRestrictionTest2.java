@@ -41,8 +41,8 @@ public class FollowRestrictionTest2 {
 		CharacterRange zero_nine = CharacterRange.in('0', '9');
 		Plus AZPlus = Plus.builder(az).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 		
-		Rule r1 = Rule.builder(S).addSymbols(Label, zero_nine).build();
-		Rule r2 = Rule.builder(Label).addSymbol(AZPlus).build();
+		Rule r1 = Rule.withHead(S).addSymbols(Label, zero_nine).build();
+		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
 
 		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 	}

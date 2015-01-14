@@ -80,27 +80,27 @@ public class EBNFToBNF implements GrammarTransformation {
 		if(s instanceof Plus) {
 			Symbol in = ((Plus) s).getSymbol();
 			newNt = new Nonterminal.Builder(s.getName()).setEbnfList(true).addPreConditions(s.getPreConditions()).build();
-			rules.add(Rule.builder(newNt).addSymbols(newNt, rewrite(in, rules)).build());
-			rules.add(Rule.builder(newNt).addSymbol(rewrite(in, rules)).build());
+			rules.add(Rule.withHead(newNt).addSymbols(newNt, rewrite(in, rules)).build());
+			rules.add(Rule.withHead(newNt).addSymbol(rewrite(in, rules)).build());
 		} 
 		
 		else if (s instanceof Opt) {
 			Symbol in = ((Opt) s).getSymbol();
 			newNt = new Nonterminal.Builder(s.getName()).setEbnfList(true).addPreConditions(s.getPreConditions()).build();
-			rules.add(Rule.builder(newNt).addSymbol(rewrite(in, rules)).build());
-			rules.add(Rule.builder(newNt).build());
+			rules.add(Rule.withHead(newNt).addSymbol(rewrite(in, rules)).build());
+			rules.add(Rule.withHead(newNt).build());
 		} 
 		
 		else if (s instanceof Group) {
 			List<Symbol> symbols = ((Group) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
 			newNt = new Nonterminal.Builder(s.getName()).addPreConditions(s.getPreConditions()).build();
-			rules.add(Rule.builder(newNt).addSymbols(symbols).build());
+			rules.add(Rule.withHead(newNt).addSymbols(symbols).build());
 		} 
 		
 		else if (s instanceof Alt) {
 			newNt = new Nonterminal.Builder(s.getName()).addPreConditions(s.getPreConditions()).build();
 			List<Symbol> symbols = ((Alt) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
-			symbols.forEach(x -> rules.add(Rule.builder(newNt).addSymbol(x).build()));
+			symbols.forEach(x -> rules.add(Rule.withHead(newNt).addSymbol(x).build()));
 		}
 		
 		else {

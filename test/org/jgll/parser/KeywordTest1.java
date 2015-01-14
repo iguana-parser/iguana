@@ -27,7 +27,7 @@ public class KeywordTest1 {
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.builder(A).addSymbol(ifKeyword).build();
+		Rule r1 = Rule.withHead(A).addSymbol(ifKeyword).build();
 		grammar = Grammar.builder().addRule(r1).build();
 	}
 	

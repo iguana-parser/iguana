@@ -54,7 +54,7 @@ public class Test1 extends AbstractParserTest {
 	
 	public static Grammar getGrammar() {
 		Nonterminal A = Nonterminal.withName("A");
-		Rule r1 = Rule.builder(A).build();
+		Rule r1 = Rule.withHead(A).build();
 		return Grammar.builder().addRule(r1).build();
 	}
 	

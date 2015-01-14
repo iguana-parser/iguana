@@ -70,9 +70,9 @@ public class Test11 extends AbstractParserTest {
 		Nonterminal A = Nonterminal.withName("A");
 		Character a = Character.from('a');
 		Character b = Character.from('b');
-		Rule r1 = Rule.builder(S).addSymbols(A, A, b).build();
-		Rule r2 = Rule.builder(A).addSymbol(a).build();
-		Rule r3 = Rule.builder(A).build();
+		Rule r1 = Rule.withHead(S).addSymbols(A, A, b).build();
+		Rule r2 = Rule.withHead(A).addSymbol(a).build();
+		Rule r3 = Rule.withHead(A).build();
 		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	

@@ -20,6 +20,7 @@ import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
+import org.jgll.util.generator.ConstructorCode;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
@@ -34,7 +35,7 @@ import com.google.common.collect.SetMultimap;
  * @author Ali Afroozeh
  *
  */
-public class Grammar implements Serializable {
+public class Grammar implements ConstructorCode, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -198,6 +199,20 @@ public class Grammar implements Serializable {
 		}
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof Grammar))
+			return false;
+		
+		Grammar other = (Grammar) obj;
+		
+		return definitions.equals(other.definitions);
+	}
+	
 	/**
 	 * Returns the size of this grammar, which is equal to the number of nonterminals +
 	 * number of terminals + grammar slots.
@@ -205,8 +220,13 @@ public class Grammar implements Serializable {
 	 */
 	public int size() {
 		return  definitions.size() +
-				(int) definitions.values().stream().flatMap(r -> r.getBody().stream()).filter(s -> s instanceof RegularExpression).count() +
+				(int) definitions.values().stream().filter(r -> r.getBody() != null).flatMap(r -> r.getBody().stream()).filter(s -> s instanceof RegularExpression).count() +
 				definitions.values().stream().map(r -> r.size() + 1).reduce(0, (a, b) -> a + b);
+	}
+
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		return "Grammar.builder()" + definitions.values().stream().map(r -> "\n.addRule(" + r.getConstructorCode(registry) + ")").collect(Collectors.joining()) + "\n.build()";
 	}
 	
 }

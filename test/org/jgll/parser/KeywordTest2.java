@@ -32,8 +32,8 @@ public class KeywordTest2 {
 	@Before
 	public void init() {
 		
-		Rule r1 = Rule.builder(A).addSymbols(iff, B).build();
-		Rule r2 = Rule.builder(B).addSymbol(Character.from('b')).build();
+		Rule r1 = Rule.withHead(A).addSymbols(iff, B).build();
+		Rule r2 = Rule.withHead(B).addSymbol(Character.from('b')).build();
 		
 		grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(iff.toRule()).build();
 	}

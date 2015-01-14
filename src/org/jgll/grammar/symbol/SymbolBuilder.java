@@ -50,6 +50,12 @@ public abstract class SymbolBuilder<T extends Symbol> {
 		return this;
 	}
 	
+	public SymbolBuilder<T> addConditions(Symbol s) {
+		addPreConditions(s.getPreConditions());
+		addPostConditions(s.getPostConditions());
+		return this;
+	}
+	
  	public SymbolBuilder<T> addPreConditions(Iterable<Condition> conditions) {
  		conditions.forEach(c -> preConditions.add(c));
 		return this;

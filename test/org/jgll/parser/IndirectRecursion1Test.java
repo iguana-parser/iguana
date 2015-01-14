@@ -44,11 +44,11 @@ public class IndirectRecursion1Test {
 
 	@Before
 	public void createGrammar() {
-		Rule r1 = Rule.builder(A).addSymbols(B, C).build();
-		Rule r2 = Rule.builder(A).addSymbols(a).build();
-		Rule r3 = Rule.builder(B).addSymbols(A).build();
-		Rule r4 = Rule.builder(B).addSymbols(b).build();
-		Rule r5 = Rule.builder(C).addSymbols(c).build();
+		Rule r1 = Rule.withHead(A).addSymbols(B, C).build();
+		Rule r2 = Rule.withHead(A).addSymbols(a).build();
+		Rule r3 = Rule.withHead(B).addSymbols(A).build();
+		Rule r4 = Rule.withHead(B).addSymbols(b).build();
+		Rule r5 = Rule.withHead(C).addSymbols(c).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3)
 								  	   .addRule(r4).addRule(r5).build();

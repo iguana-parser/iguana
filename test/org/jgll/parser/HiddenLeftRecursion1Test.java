@@ -48,13 +48,13 @@ public class HiddenLeftRecursion1Test {
 
 	@Before
 	public void init() {		
-		Rule r1 = Rule.builder(A).addSymbols(B, A, a).build();
-		Rule r2 = Rule.builder(A).addSymbols(D, A, b).build();
-		Rule r3 = Rule.builder(A).addSymbols(c).build();
-		Rule r4 = Rule.builder(B).addSymbols(x).build();
-		Rule r5 = Rule.builder(B).build();
-		Rule r6 = Rule.builder(D).addSymbols(y).build();
-		Rule r7 = Rule.builder(D).build();
+		Rule r1 = Rule.withHead(A).addSymbols(B, A, a).build();
+		Rule r2 = Rule.withHead(A).addSymbols(D, A, b).build();
+		Rule r3 = Rule.withHead(A).addSymbols(c).build();
+		Rule r4 = Rule.withHead(B).addSymbols(x).build();
+		Rule r5 = Rule.withHead(B).build();
+		Rule r6 = Rule.withHead(D).addSymbols(y).build();
+		Rule r7 = Rule.withHead(D).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4)
 									.addRule(r5).addRule(r6).addRule(r7).build();

@@ -4,15 +4,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.HashFunctions;
+import org.jgll.util.generator.ConstructorCode;
 
 /**
  * 
  * @author Ali Afroozeh
  *
  */
-public class Rule implements Serializable {
+public class Rule implements ConstructorCode, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -42,7 +45,7 @@ public class Rule implements Serializable {
 	}
 	
 	public int size() {
-		return body.size();
+		return body == null ? 0 : body.size();
 	}
 	
 	public Symbol symbolAt(int i) {
@@ -101,7 +104,7 @@ public class Rule implements Serializable {
 		return new Position(this, i);
 	}
 	
-	public static Builder builder(Nonterminal nonterminal) {
+	public static Builder withHead(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
 	
@@ -127,7 +130,11 @@ public class Rule implements Serializable {
 		}
 		
 		public Builder addSymbols(List<Symbol> symbols) {
-			body.addAll(symbols);
+			if (symbols == null) {
+				body = null;
+			} else {
+				body.addAll(symbols);				
+			}
 			return this;
 		}
 		
@@ -139,5 +146,11 @@ public class Rule implements Serializable {
 		public Rule build() {
 			return new Rule(this);
 		}
+	}
+
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		return "Rule.withHead(" + head.getConstructorCode(registry) + ")" + (body == null ? "" :
+				body.stream().map(s -> ".addSymbol(" + s.getConstructorCode(registry) + ")").collect(Collectors.joining())) + ".build()";
 	}
 }

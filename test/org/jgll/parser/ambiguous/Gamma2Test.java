@@ -89,9 +89,9 @@ public class Gamma2Test extends AbstractParserTest {
 	private static Grammar getGrammar() {
 		Nonterminal S = Nonterminal.withName("S");
 		Character b = Character.from('b');
-		Rule rule1 = Rule.builder(S).addSymbols(S, S, S).build();
-		Rule rule2 = Rule.builder(S).addSymbols(S, S).build();
-		Rule rule3 = Rule.builder(S).addSymbols(b).build();
+		Rule rule1 = Rule.withHead(S).addSymbols(S, S, S).build();
+		Rule rule2 = Rule.withHead(S).addSymbols(S, S).build();
+		Rule rule3 = Rule.withHead(S).addSymbols(b).build();
 		return Grammar.builder().addRules(rule1, rule2, rule3).build();
 	}
 	

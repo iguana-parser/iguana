@@ -54,13 +54,13 @@ public class PrecedeRestrictionTest1 {
 	@Before
 	public void createParser() {
 		
-		Rule r1 = Rule.builder(S).addSymbols(forr, Opt.from(L), Id).build();
+		Rule r1 = Rule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
 
-		Rule r2 = Rule.builder(S).addSymbol(forall).build();
+		Rule r2 = Rule.withHead(S).addSymbol(forall).build();
 
-		Rule r3 = Rule.builder(Id).addSymbol(AZPlus).build();
+		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
 
-		Rule r4 = Rule.builder(L).addSymbol(ws).build();
+		Rule r4 = Rule.withHead(L).addSymbol(ws).build();
 
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4, forr.toRule(), forall.toRule()).build();
 	}

@@ -43,10 +43,10 @@ public class Gamma0Test {
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.builder(S).addSymbols(a, S).build();
-		Rule r2 = Rule.builder(S).addSymbols(A, S, d).build();
-		Rule r3 = Rule.builder(S).build();
-		Rule r4 = Rule.builder(A).addSymbols(a).build();
+		Rule r1 = Rule.withHead(S).addSymbols(a, S).build();
+		Rule r2 = Rule.withHead(S).addSymbols(A, S, d).build();
+		Rule r3 = Rule.withHead(S).build();
+		Rule r4 = Rule.withHead(A).addSymbols(a).build();
 		
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
 	}

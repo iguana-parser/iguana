@@ -54,27 +54,27 @@ public class PrecedenceTest10 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E X
-		Rule rule1 = Rule.builder(E).addSymbols(E, X).build();
+		Rule rule1 = Rule.withHead(E).addSymbols(E, X).build();
 		builder.addRule(rule1);
 		
 		// E ::= E ; E
-		Rule rule2 = Rule.builder(E).addSymbols(E, semicolon, E).build();
+		Rule rule2 = Rule.withHead(E).addSymbols(E, semicolon, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= - E
-		Rule rule3 = Rule.builder(E).addSymbols(min, E).build();
+		Rule rule3 = Rule.withHead(E).addSymbols(min, E).build();
 		builder.addRule(rule3);
 		
 		// E ::= a
-		Rule rule4 = Rule.builder(E).addSymbol(a).build();
+		Rule rule4 = Rule.withHead(E).addSymbol(a).build();
 		builder.addRule(rule4);
 		
 		// X ::= X , E
-		Rule rule5 = Rule.builder(X).addSymbols(X, comma, E).build();
+		Rule rule5 = Rule.withHead(X).addSymbols(X, comma, E).build();
 		builder.addRule(rule5);
 		
 		// X ::= , E
-		Rule rule6 = Rule.builder(X).addSymbols(comma, E).build();
+		Rule rule6 = Rule.withHead(X).addSymbols(comma, E).build();
 		builder.addRule(rule6);
 		
 		

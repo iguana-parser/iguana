@@ -94,7 +94,7 @@ public class Keyword extends AbstractRegularExpression {
 	 * 
 	 */
 	public Rule toRule() {
-		Rule.Builder builder = Rule.builder(Nonterminal.withName(name));
+		Rule.Builder builder = Rule.withHead(Nonterminal.withName(name));
 		seq.forEach(c -> builder.addSymbol(c));
 		return builder.build();
 	}

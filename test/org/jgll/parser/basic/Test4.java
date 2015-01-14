@@ -62,7 +62,7 @@ public class Test4 extends AbstractParserTest {
 		Character a = Character.from('a');
 		Character b = Character.from('b');
 		Character c = Character.from('c');
-		Rule r1 = Rule.builder(A).addSymbols(a, b, c).build();
+		Rule r1 = Rule.withHead(A).addSymbols(a, b, c).build();
 		return Grammar.builder().addRule(r1).build();
 	}
 	

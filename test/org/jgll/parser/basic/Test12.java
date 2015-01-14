@@ -87,9 +87,9 @@ public class Test12 extends AbstractParserTest {
     
 	private static Grammar getGrammar() {
 		Nonterminal A = Nonterminal.withName("A");
-		Rule r1 = Rule.builder(A).addSymbols(A, A).build();
-		Rule r2 = Rule.builder(A).addSymbol(Character.from('a')).build();
-		Rule r3 = Rule.builder(A).build();
+		Rule r1 = Rule.withHead(A).addSymbols(A, A).build();
+		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
+		Rule r3 = Rule.withHead(A).build();
 		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
