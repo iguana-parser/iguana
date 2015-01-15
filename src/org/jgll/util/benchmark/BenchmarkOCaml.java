@@ -19,20 +19,20 @@ import com.google.common.testing.GcFinalization;
  * @author Ali Afroozeh
  *
  */
-public class BenchmarkJava extends AbstractBenchmark {
+public class BenchmarkOCaml extends AbstractBenchmark {
 	
-	private static Grammar grammar = getGrammar("grammars/csharp/specification/csharp");
+	private static Grammar grammar = getGrammar("grammars/ocaml/ocaml");
 	
-	private static Nonterminal startSymbol = Nonterminal.withName("start[CompilationUnit]"); 
+	private static Nonterminal startSymbol = Nonterminal.withName("TopLevel"); 
 	
 	public static void main(String[] args) throws Exception {
 //		System.out.println(BenchmarkUtil.header());
-		parseFile(new File("/Users/aliafroozeh/test.cs"));
-//		for (File f : find("/Users/aliafroozeh/corpus/CSharp/output", "cs")) {
-//			System.out.println(f);
-//			GcFinalization.awaitFullGc();
-//			parseFile(f);
-//		}
+//		parseFile(new File("/Users/aliafroozeh/test.ml"));
+		for (File f : find("/Users/aliafroozeh/corpus/ocaml", "ml")) {
+			System.out.println(f);
+			GcFinalization.awaitFullGc();
+			parseFile(f);
+		}
 	}
 
 	private static void parseFile(File f) throws IOException {
@@ -44,7 +44,7 @@ public class BenchmarkJava extends AbstractBenchmark {
 //			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), parser.getRegistry(), input); 
 		} else {
 			System.out.println("Parse error: " + result.asParseError());
-			System.exit(0);
+//			System.exit(0);
 		}
 		
 	}

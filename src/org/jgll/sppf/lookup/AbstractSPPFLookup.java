@@ -46,14 +46,14 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 	
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
-		log.trace("Ambiguous node added: %s", node);
-		log.warning("Ambiguous node: %s %s", node, input.getNodeInfo(node));
-		for (PackedNode packedNode : node.getChildren()) {
-			log.warning("   Packed node: " + packedNode.toString());
-			for (NonPackedNode child : packedNode.getChildren()) {
-				log.warning("       %s %s", child, input.getNodeInfo(child));
-			}
-		}
+//		log.trace("Ambiguous node added: %s", node);
+//		log.warning("Ambiguous node: %s %s", node, input.getNodeInfo(node));
+//		for (PackedNode packedNode : node.getChildren()) {
+//			log.warning("   Packed node: " + packedNode.toString());
+//			for (NonPackedNode child : packedNode.getChildren()) {
+//				log.warning("       %s %s", child, input.getNodeInfo(child));
+//			}
+//		}
 		countAmbiguousNodes++;
 		
 	}
