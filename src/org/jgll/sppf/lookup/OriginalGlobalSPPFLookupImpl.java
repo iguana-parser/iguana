@@ -5,14 +5,15 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.OriginalPackedNodeSet;
+import org.jgll.util.Input;
 
 public class OriginalGlobalSPPFLookupImpl extends GlobalSPPFLookupImpl {
 
 	private int inputSize;
 
-	public OriginalGlobalSPPFLookupImpl(int inputSize, int grammarSize) {
-		super(inputSize, grammarSize);
-		this.inputSize = inputSize;
+	public OriginalGlobalSPPFLookupImpl(Input input) {
+		super(input);
+		this.inputSize = input.length() + 1;
 	}
 	
 	@Override

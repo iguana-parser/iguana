@@ -55,38 +55,27 @@ public class ParserFactory {
 	}
 	
 	private static SPPFLookup getSPPFLookup(Configuration config, Input input, Grammar grammar) {
-		int inputSize =  getSize(input.length());
-		int grammarSize = getSize(grammar.size());
-
 		if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 			if (config.getGSSType() == GSSType.NEW) {
-				return new DistributedSPPFLookupImpl(inputSize);
+				return new DistributedSPPFLookupImpl(input);
 			} else {
-				return new OriginalDistributedSPPFLookupImpl(inputSize);
+				return new OriginalDistributedSPPFLookupImpl(input);
 			}
 		} else {
 			if (config.getGSSType() == GSSType.NEW) {
-				return new GlobalSPPFLookupImpl(inputSize, grammarSize);				
+				return new GlobalSPPFLookupImpl(input);				
 			} else {
-				return new OriginalGlobalSPPFLookupImpl(inputSize, grammarSize);
+				return new OriginalGlobalSPPFLookupImpl(input);
 			}			
 		}		
 	}
 	
 	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
-		int grammarSize = getSize(grammar.size());
-		int inputSize = getSize(input.length());
-		
 		if (config.getDescriptorLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-			return new DistributedDescriptorLookupImpl(inputSize, grammarSize);			
+			return new DistributedDescriptorLookupImpl(input, grammar);			
 		} else {
-			return new GlobalDescriptorLookupImpl(inputSize, grammarSize);
+			return new GlobalDescriptorLookupImpl(input, grammar);
 		}
-	}
-	
-	private static int getSize(int n) {
-		return n + 1;
-//		return (int) Math.pow(2, Math.ceil(Math.log(n) / Math.log(2)));
 	}
 
 }

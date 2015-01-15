@@ -5,10 +5,12 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.Input;
 import org.jgll.util.collections.IntKey4;
 import org.jgll.util.hashing.hashfunction.IntHash4;
 
@@ -24,7 +26,9 @@ public class GlobalDescriptorLookupImpl implements DescriptorLookup {
 	private final Deque<Descriptor> descriptorsStack;
 	private final IntHash4 f;
 	
-	public GlobalDescriptorLookupImpl(int inputSize, int grammarSize) {
+	public GlobalDescriptorLookupImpl(Input input, Grammar grammar) {
+		int inputSize = input.length() + 1; 
+		int grammarSize = grammar.size() + 1;
 		this.f = (x, y, z, w) -> x * inputSize * grammarSize * inputSize +
 								 y * grammarSize * inputSize +
 								 z * inputSize +

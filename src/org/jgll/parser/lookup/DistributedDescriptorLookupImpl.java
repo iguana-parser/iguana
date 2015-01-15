@@ -3,10 +3,12 @@ package org.jgll.parser.lookup;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.Input;
 import org.jgll.util.collections.IntKey2;
 import org.jgll.util.hashing.hashfunction.IntHash2;
 
@@ -20,7 +22,8 @@ public class DistributedDescriptorLookupImpl implements DescriptorLookup {
 	private Deque<Descriptor> descriptorsStack;
 	private IntHash2 f;
 
-	public DistributedDescriptorLookupImpl(int inputSize, int grammarSize) {
+	public DistributedDescriptorLookupImpl(Input input, Grammar grammar) {
+		int inputSize = input.length() + 1;
 		this.f = (x, y) -> x * inputSize + y;
 		descriptorsStack = new ArrayDeque<>();
 	}

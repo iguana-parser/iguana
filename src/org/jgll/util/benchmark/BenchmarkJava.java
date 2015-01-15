@@ -10,6 +10,7 @@ import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
+import org.jgll.util.Visualization;
 
 import com.google.common.testing.GcFinalization;
 
@@ -25,10 +26,8 @@ public class BenchmarkJava extends AbstractBenchmark {
 	private static Nonterminal startSymbol = Nonterminal.withName("start[CompilationUnit]"); 
 	
 	public static void main(String[] args) throws Exception {
-		System.out.println(BenchmarkUtil.header());
-		for (int i = 0; i < 10; i++) {
-			parseFile(new File("/Users/aliafroozeh/test.cs"));
-		}
+//		System.out.println(BenchmarkUtil.header());
+		parseFile(new File("/Users/aliafroozeh/test.cs"));
 //		for (File f : find("/Users/aliafroozeh/corpus/CSharp/output", "cs")) {
 //			System.out.println(f);
 //			GcFinalization.awaitFullGc();
@@ -42,6 +41,7 @@ public class BenchmarkJava extends AbstractBenchmark {
 		ParseResult result = parser.parse(input, grammar, startSymbol);
 		if (result.isParseSuccess()) {
 			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
+			Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), parser.getRegistry(), input); 
 		} else {
 			System.out.println("Parse error: " + result.asParseError());
 			System.exit(0);

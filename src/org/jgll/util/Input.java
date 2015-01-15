@@ -17,6 +17,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.jgll.grammar.symbol.EOF;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.traversal.PositionInfo;
 
 /**
@@ -222,6 +223,13 @@ public class Input {
 			return 0;
 		}
 		return lineColumns[index].getLineNumber();
+	}
+	
+	public String getNodeInfo(NonPackedNode node) {
+		return String.format("(%d:%d-%d:%d)", getLineNumber(node.getLeftExtent()),
+				  getColumnNumber(node.getLeftExtent()),
+				  getLineNumber(node.getRightExtent()),
+				  getColumnNumber(node.getRightExtent()));
 	}
 	
 	public int getColumnNumber(int index) {

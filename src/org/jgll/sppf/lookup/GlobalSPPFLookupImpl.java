@@ -9,6 +9,7 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Input;
 import org.jgll.util.collections.IntKey3;
 import org.jgll.util.collections.Key;
 import org.jgll.util.hashing.hashfunction.IntHash3;
@@ -23,7 +24,9 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 
 	private IntHash3 f;	
 
-	public GlobalSPPFLookupImpl(int inputSize, int grammarSize) {
+	public GlobalSPPFLookupImpl(Input input) {
+		super(input);
+		int inputSize = input.length() + 1;
 		this.f = (x, y, z) -> x * inputSize * inputSize + y * inputSize + z;
 		this.nonterminalNodes = new HashMap<>();
 		this.intermediateNodes = new HashMap<>();

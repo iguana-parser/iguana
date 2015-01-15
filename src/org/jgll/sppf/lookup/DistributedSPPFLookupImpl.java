@@ -6,6 +6,7 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Input;
 import org.jgll.util.collections.IntKey2;
 import org.jgll.util.hashing.hashfunction.IntHash2;
 
@@ -14,7 +15,9 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	
 	private IntHash2 f;
 
-	public DistributedSPPFLookupImpl(int inputSize) {
+	public DistributedSPPFLookupImpl(Input input) {
+		super(input);
+		int inputSize = input.length() + 1;
 		this.f = (x, y) -> x * inputSize + y;
 	}
 	
