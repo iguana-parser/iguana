@@ -9,31 +9,10 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.util.Configuration;
 import org.jgll.util.GrammarUtil;
-import org.openjdk.jmh.annotations.Param;
 
 public class AbstractBenchmark {
 
-	@Param({""})
-	protected String inputString;
-	
-	protected Configuration config;
-	
-	protected Grammar grammar;
-	
-	protected Nonterminal startSymbol;
-	
-	protected GrammarGraph grammarGraph;
-	
-	protected GLLParser parser;
-	
-	protected ParseResult result;
-	
 	protected static List<File> find(String dir, String ext) throws IOException {
 		List<File> inputs = new ArrayList<>();
 		Collection<?> files = FileUtils.listFiles(new File(dir), new String[] {ext}, true);

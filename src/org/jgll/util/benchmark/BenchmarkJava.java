@@ -10,9 +10,6 @@ import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
-
-import com.google.common.testing.GcFinalization;
 
 /**
  * 

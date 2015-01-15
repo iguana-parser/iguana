@@ -7,12 +7,12 @@ public class IntKey2 implements Key, Comparable<IntKey2> {
 	
 	private final int k1;
 	private final int k2;
-	private final IntHash2 f;
+	private final int hash;
 
 	private IntKey2(int k1, int k2, IntHash2 f) {
 		this.k1 = k1;
 		this.k2 = k2;
-		this.f = f;
+		this.hash = f.hash(k1, k2);
 	}
 	
 	public static IntKey2 from(int k1, int k2, IntHash2 f) {
@@ -33,7 +33,7 @@ public class IntKey2 implements Key, Comparable<IntKey2> {
 	
 	@Override
 	public int hashCode() {
-		return f.hash(k1, k2);
+		return hash;
 	}
 
 	@Override

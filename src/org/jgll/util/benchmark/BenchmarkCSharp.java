@@ -1,14 +1,13 @@
 package org.jgll.util.benchmark;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -36,22 +35,24 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * 
- * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.BenchmarkGamma
+ * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.benchmark.BenchmarkCSharp
  * 
  * @author Ali Afroozeh
  *
  */
 
 @State(Scope.Benchmark)
-@Warmup(iterations=3)
+@Warmup(iterations=5)
 @Measurement(iterations=10)
 @Fork(1)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class BenchmarkGamma {
+public class BenchmarkCSharp extends AbstractBenchmark {
 	
-	@Param({ "300" })
-	int inputSize;
+	private static Grammar CSharpGrammar = getGrammar("grammars/csharp/specification/csharp");
+	
+	@Param({ "/Users/aliafroozeh/test.cs" })
+	String inputPath;
     
 	Input input;
 	Configuration config;
@@ -60,27 +61,15 @@ public class BenchmarkGamma {
 	GrammarGraph grammarGraph;
 	GLLParser parser;
 	ParseResult result;	
-	
-	/**
-	 * S ::= S S S | S S | b
-	 */
-	private static Grammar gamma2() {
-		Nonterminal S = Nonterminal.withName("S");
-		Character b = Character.from('b');
-		Grammar.Builder builder = new Grammar.Builder();
-		builder.addRule(Rule.withHead(S).addSymbols(S, S, S).build());
-		builder.addRule(Rule.withHead(S).addSymbols(S, S).build());
-		builder.addRule(Rule.withHead(S).addSymbol(b).build());
-		return builder.build();
-	}
+
 
 	@Setup(Level.Iteration)
-	public void setup() {
-		input = Input.fromString(getBs(inputSize));
-		config = Configuration.builder().setGSSType(GSSType.ORIGINAL).build();
-		grammar = gamma2();
-		startSymbol = Nonterminal.withName("S");
-		grammarGraph = gamma2().toGrammarGraph(input, config);
+	public void setup() throws IOException {
+		input = Input.fromPath(inputPath);
+		config = Configuration.builder().build();
+		grammar = CSharpGrammar;
+		startSymbol = Nonterminal.withName("start[CompilationUnit]");
+		grammarGraph = CSharpGrammar.toGrammarGraph(input, config);
 		parser = ParserFactory.getParser(config, input, grammar);
 	}
 	
@@ -97,12 +86,12 @@ public class BenchmarkGamma {
 		input = null;
 	}
 	
-	public static void main(String[] args) throws RunnerException {
-		int limit = 50;
-		String[] params = Stream.iterate(10, i -> i + 10).limit(limit).map(j -> j.toString()).toArray(s -> new String[limit]);
+	public static void main(String[] args) throws RunnerException, IOException {
+		List<File> files = find("/Users/aliafroozeh/corpus/CSharp/output", "cs");
+		String[] params = files.stream().map(f -> f.getAbsolutePath()).toArray(String[]::new);
 		Options opt = new OptionsBuilder()
-				          .include(BenchmarkGamma.class.getSimpleName())
-				          .param("inputSize", params)
+				          .include(BenchmarkCSharp.class.getSimpleName())
+				          .param("inputPath", params)
 				          .detectJvmArgs()
 				          .resultFormat(ResultFormatType.CSV)		// -rf csv
 				          .result("target/result.csv") 				// -rff target/result.csv 
@@ -112,8 +101,4 @@ public class BenchmarkGamma {
 		new Runner(opt).run();
 	}
 		
-	private static String getBs(int size) {
-		return Stream.generate(() -> "b").limit(size).collect(Collectors.joining());
-	}
-
 }
