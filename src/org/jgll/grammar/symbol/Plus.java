@@ -1,6 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import org.jgll.grammar.GrammarRegistry;
 
 public class Plus extends AbstractSymbol {
 
@@ -26,13 +25,13 @@ public class Plus extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
-		  .append("new Plus.builder(" + s.getConstructorCode(registry) + ")")
+		  .append("new Plus.builder(" + s.getConstructorCode() + ")")
 		  .append(".setLabel(" + label + ")")
 		  .append(".setObject(" + object + ")")
-		  .append(".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
-		  .append(".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
+		  .append(".setPreConditions(" + getConstructorCode(preConditions) + ")")
+		  .append(".setPostConditions(" + getConstructorCode(postConditions) + ")")
 		  .append(".build()").toString();
 	}
 

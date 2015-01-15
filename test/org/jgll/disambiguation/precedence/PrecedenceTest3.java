@@ -93,6 +93,7 @@ public class PrecedenceTest3 {
 		operatorPrecedence.addExceptPattern(EPlus, rule5, 0, rule2);
 		
 		grammar = operatorPrecedence.transform(builder.build());
+		System.out.println(grammar.getConstructorCode());
 	}
 
 	@Test
@@ -103,6 +104,42 @@ public class PrecedenceTest3 {
 		assertTrue(result.isParseSuccess());
         assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
+	}
+	
+	@Test
+	public void testGrammar() {
+		assertEquals(getGrammar(), grammar);
+	}
+	
+	private Grammar getGrammar() {
+		return Grammar.builder()
+				//E+ ::= E+ E3 
+				.addRule(Rule.withHead(Nonterminal.builder("E+").setEbnfList(true).build()).addSymbol(Nonterminal.builder("E+").setEbnfList(true).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
+				//E+ ::= E3 
+				.addRule(Rule.withHead(Nonterminal.builder("E+").setEbnfList(true).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
+				//E ::= E1 E+1 
+				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Nonterminal.builder("E+").setIndex(1).setEbnfList(true).build()).build())
+				//E ::= E + E2 
+				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Character.from(43)).addSymbol(Nonterminal.builder("E").setIndex(2).build()).build())
+				//E ::= a 
+				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Character.from(97)).build())
+				//E+2 ::= E+ E3 
+				.addRule(Rule.withHead(Nonterminal.builder("E+").setIndex(2).setEbnfList(true).build()).addSymbol(Nonterminal.builder("E+").setEbnfList(true).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
+				//E+2 ::= E3 
+				.addRule(Rule.withHead(Nonterminal.builder("E+").setIndex(2).setEbnfList(true).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
+				//E+1 ::= E+ E3 
+				.addRule(Rule.withHead(Nonterminal.builder("E+").setIndex(1).setEbnfList(true).build()).addSymbol(Nonterminal.builder("E+").setEbnfList(true).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
+				//E+1 ::= E3 
+				.addRule(Rule.withHead(Nonterminal.builder("E+").setIndex(1).setEbnfList(true).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
+				//E1 ::= a 
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Character.from(97)).build())
+				//E2 ::= E1 E+2 
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Nonterminal.builder("E+").setIndex(2).setEbnfList(true).build()).build())
+				//E2 ::= a 
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(97)).build())
+				//E3 ::= a 
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Character.from(97)).build())
+				.build();
 	}
 	
 	private NonterminalNode getSPPF(GrammarRegistry registry) {

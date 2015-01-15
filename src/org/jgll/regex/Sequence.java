@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
@@ -157,11 +156,11 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		
 		for (RegularExpression regex : regularExpressions) {
-			 sb.append(regex.getConstructorCode(registry) + ", ");
+			 sb.append(regex.getConstructorCode() + ", ");
 		}
 		sb.delete(sb.length() - 2, sb.length());
 		

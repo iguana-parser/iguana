@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -44,13 +43,13 @@ public class NonterminalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
 			.append("new NonterminalTransition(")
-			.append("slot" + registry.getId(nonterminal)).append(", ")
-			.append("slot" + registry.getId(origin)).append(", ")
-			.append("slot" + registry.getId(dest)).append(", ")
-			.append(getConstructorCode(preConditions, registry))
+			.append("slot" + nonterminal.getId()).append(", ")
+			.append("slot" + origin.getId()).append(", ")
+			.append("slot" + dest.getId()).append(", ")
+			.append(getConstructorCode(preConditions))
 			.toString();
 	}
 

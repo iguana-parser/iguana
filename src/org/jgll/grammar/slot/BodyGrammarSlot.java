@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.Conditions;
 import org.jgll.grammar.condition.ConditionsFactory;
@@ -36,7 +35,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
     	  .append("new BodyGrammarSlot(")
     	  .append(")").toString();

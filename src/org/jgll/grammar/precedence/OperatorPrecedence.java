@@ -68,7 +68,8 @@ public class OperatorPrecedence {
 		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
 			for (List<Symbol> list : e.getValue()) {
 				Rule rule = Rule.withHead(e.getKey()).addSymbols(list).build();
-				builder.addRule(rule);
+				if (rule.getBody() != null)
+					builder.addRule(rule);
 			}
 		}
 
@@ -411,8 +412,6 @@ public class OperatorPrecedence {
 			List<List<Symbol>> alternates = deepCopy(without(head, patterns.get(pattern)), pattern.getNonterminal());
 			definitions.put(freshNonterminal, alternates);
 		}
-		
-		System.out.println("Hi!");
 		
 	}
 	

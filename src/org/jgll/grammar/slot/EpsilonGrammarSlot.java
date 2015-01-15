@@ -2,7 +2,6 @@ package org.jgll.grammar.slot;
 
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
@@ -29,8 +28,8 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "new EpsilonGrammarSlot(slot" + registry.getId(nonterminal) + ")";
+	public String getConstructorCode() {
+		return "new EpsilonGrammarSlot(slot" + nonterminal.getId() + ")";
 	}
 
 }

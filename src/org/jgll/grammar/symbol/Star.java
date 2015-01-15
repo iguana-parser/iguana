@@ -1,6 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import org.jgll.grammar.GrammarRegistry;
 
 
 /**
@@ -29,13 +28,13 @@ public class Star extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
-		  .append("new Star.builder(" + s.getConstructorCode(registry) + ")")
+		  .append("new Star.builder(" + s.getConstructorCode() + ")")
 		  .append(".setLabel(" + label + ")")
 		  .append(".setObject(" + object + ")")
-		  .append(".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
-		  .append(".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
+		  .append(".setPreConditions(" + getConstructorCode(preConditions) + ")")
+		  .append(".setPostConditions(" + getConstructorCode(postConditions) + ")")
 		  .append(".build()").toString();
 	}
 	

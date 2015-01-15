@@ -3,7 +3,6 @@ package org.jgll.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
@@ -27,11 +26,11 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
 			.append("new EndGrammarSlot(")
 			.append(position)
-			.append("), slot" + registry.getId(nonterminal) + ")")
+			.append("), slot" + nonterminal.getId() + ")")
 			.toString();
 	}
 	

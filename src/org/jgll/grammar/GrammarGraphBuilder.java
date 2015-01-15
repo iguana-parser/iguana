@@ -87,9 +87,6 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
 		
-		if (rule.getBody() == null)
-			return;
-		
 		if (rule.size() == 0) {
 			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id, rule.getPosition(0), head, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
 			head.addFirstSlot(epsilonSlot);

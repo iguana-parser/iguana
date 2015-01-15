@@ -2,7 +2,6 @@ package org.jgll.grammar.slot;
 
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.Conditions;
 import org.jgll.grammar.condition.ConditionsFactory;
@@ -55,12 +54,12 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node);
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
 			.append("new NonterminalTransition(")
-			.append("slot" + registry.getId(slot)).append(", ")
-			.append("slot" + registry.getId(origin)).append(", ")
-			.append("slot" + registry.getId(dest)).append(", ")
+			.append("slot" + slot.getId()).append(", ")
+			.append("slot" + origin.getId()).append(", ")
+			.append("slot" + dest.getId()).append(", ")
 			.toString();
 	}
 	
