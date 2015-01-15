@@ -23,7 +23,7 @@ public class BenchmarkOCaml extends AbstractBenchmark {
 	
 	private static Grammar grammar = getGrammar("grammars/ocaml/ocaml");
 	
-	private static Nonterminal startSymbol = Nonterminal.withName("Implementation"); 
+	private static Nonterminal startSymbol = Nonterminal.withName("start[Implementation]"); 
 	
 	public static void main(String[] args) throws Exception {
 //		System.out.println(BenchmarkUtil.header());

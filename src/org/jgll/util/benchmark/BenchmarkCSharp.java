@@ -54,6 +54,9 @@ public class BenchmarkCSharp extends AbstractBenchmark {
 	@Param({ "/Users/aliafroozeh/test.cs" })
 	String inputPath;
     
+	@Param({ "NEW" })
+	GSSType gssType;
+	
 	Input input;
 	Configuration config;
 	Grammar grammar;
@@ -66,7 +69,7 @@ public class BenchmarkCSharp extends AbstractBenchmark {
 	@Setup(Level.Iteration)
 	public void setup() throws IOException {
 		input = Input.fromPath(inputPath);
-		config = Configuration.builder().build();
+		config = Configuration.builder().setGSSType(gssType).build();
 		grammar = CSharpGrammar;
 		startSymbol = Nonterminal.withName("start[CompilationUnit]");
 		grammarGraph = CSharpGrammar.toGrammarGraph(input, config);
@@ -80,6 +83,9 @@ public class BenchmarkCSharp extends AbstractBenchmark {
 	
 	@TearDown(Level.Iteration)
 	public void cleanUp() {
+		if (result.isParseSuccess()) {
+			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
+		}
 		result = null;
 		grammarGraph = null;
 		parser = null;
@@ -89,13 +95,15 @@ public class BenchmarkCSharp extends AbstractBenchmark {
 	public static void main(String[] args) throws RunnerException, IOException {
 		List<File> files = find("/Users/aliafroozeh/corpus/CSharp/output", "cs");
 		String[] params = files.stream().map(f -> f.getAbsolutePath()).toArray(String[]::new);
+		String[] gssParams = new String[] { GSSType.NEW.toString(), GSSType.ORIGINAL.toString() };
 		Options opt = new OptionsBuilder()
 				          .include(BenchmarkCSharp.class.getSimpleName())
 				          .param("inputPath", params)
+				          .param("gssType", gssParams)
 				          .detectJvmArgs()
 				          .resultFormat(ResultFormatType.CSV)		// -rf csv
 				          .result("target/result.csv") 				// -rff target/result.csv 
-				          .output("target/output.txt")				// -o target/output.txt
+//				          .output("target/output.txt")				// -o target/output.txt
 				          .shouldDoGC(true) 						// -gc true
 				          .build();
 		new Runner(opt).run();

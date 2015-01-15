@@ -36,14 +36,14 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * 
- * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.BenchmarkGamma
+ * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.benchmark.BenchmarkGamma
  * 
  * @author Ali Afroozeh
  *
  */
 
 @State(Scope.Benchmark)
-@Warmup(iterations=3)
+@Warmup(iterations=5)
 @Measurement(iterations=10)
 @Fork(1)
 @BenchmarkMode(Mode.SingleShotTime)
@@ -52,7 +52,10 @@ public class BenchmarkGamma {
 	
 	@Param({ "300" })
 	int inputSize;
-    
+
+	@Param({ "NEW" })
+	GSSType gssType;
+	
 	Input input;
 	Configuration config;
 	Grammar grammar;
@@ -77,7 +80,7 @@ public class BenchmarkGamma {
 	@Setup(Level.Iteration)
 	public void setup() {
 		input = Input.fromString(getBs(inputSize));
-		config = Configuration.builder().setGSSType(GSSType.ORIGINAL).build();
+		config = Configuration.builder().setGSSType(gssType).build();
 		grammar = gamma2();
 		startSymbol = Nonterminal.withName("S");
 		grammarGraph = gamma2().toGrammarGraph(input, config);
@@ -98,15 +101,17 @@ public class BenchmarkGamma {
 	}
 	
 	public static void main(String[] args) throws RunnerException {
-		int limit = 50;
-		String[] params = Stream.iterate(10, i -> i + 10).limit(limit).map(j -> j.toString()).toArray(s -> new String[limit]);
+		int limit = 10;
+		String[] inputParams = Stream.iterate(10, i -> i + 10).limit(limit).map(j -> j.toString()).toArray(s -> new String[limit]);
+		String[] gssParams = new String[] { GSSType.NEW.toString(), GSSType.ORIGINAL.toString() };
 		Options opt = new OptionsBuilder()
 				          .include(BenchmarkGamma.class.getSimpleName())
-				          .param("inputSize", params)
+				          .param("inputSize", inputParams)
+				          .param("gssType", gssParams)
 				          .detectJvmArgs()
 				          .resultFormat(ResultFormatType.CSV)		// -rf csv
 				          .result("target/result.csv") 				// -rff target/result.csv 
-				          .output("target/output.txt")				// -o target/output.txt
+//				          .output("target/output.txt")				// -o target/output.txt
 				          .shouldDoGC(true) 						// -gc true
 				          .build();
 		new Runner(opt).run();
