@@ -58,10 +58,18 @@ public class RegularExpressionCondition extends Condition {
 				return (input, node, i) -> r.getMatcher().match(input, node.getInputIndex(), i);
 				
 			case NOT_PRECEDE:
-				return (input, node, i) -> r.getBackwardsMatcher().match(input, i - 1) >= 0;
+				return (input, node, i) -> {
+					if (i == 0)
+						return false;
+					return r.getBackwardsMatcher().match(input, i - 1) >= 0;
+				};
 				
 			case PRECEDE:
-				return (input, node, i) -> r.getBackwardsMatcher().match(input, i - 1) == -1;
+				return (input, node, i) -> {
+					if (i == 0)
+						return false;
+					return r.getBackwardsMatcher().match(input, i - 1) == -1;
+				};
 				
 			default:
 				throw new RuntimeException("Unexpected error occured.");
