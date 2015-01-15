@@ -101,7 +101,7 @@ public class BenchmarkGamma {
 	}
 	
 	public static void main(String[] args) throws RunnerException {
-		int limit = 10;
+		int limit = 50;
 		String[] inputParams = Stream.iterate(10, i -> i + 10).limit(limit).map(j -> j.toString()).toArray(s -> new String[limit]);
 		String[] gssParams = new String[] { GSSType.NEW.toString(), GSSType.ORIGINAL.toString() };
 		Options opt = new OptionsBuilder()
@@ -111,7 +111,7 @@ public class BenchmarkGamma {
 				          .detectJvmArgs()
 				          .resultFormat(ResultFormatType.CSV)		// -rf csv
 				          .result("target/result.csv") 				// -rff target/result.csv 
-//				          .output("target/output.txt")				// -o target/output.txt
+				          .output("target/output.txt")				// -o target/output.txt
 				          .shouldDoGC(true) 						// -gc true
 				          .build();
 		new Runner(opt).run();
