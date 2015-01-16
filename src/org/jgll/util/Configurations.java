@@ -17,32 +17,38 @@ public class Configurations {
 	
 	static {
 		
-		for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
-			for (LookupImpl gssLookupImpl : LookupImpl.values()) {
-				for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
-					for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
-						newConfigs.add(Configuration.builder().setGSSType(NEW)
-															  .setGSSLookupStrategy(gssLookupStrategy)
-															  .setGSSLookupImpl(gssLookupImpl)
-															  .setSPPFLookupStrategy(sppfLookupStrategy)
-															  .setSPPFLookupImpl(sppfLookupImpl).build());
+		for (LookupStrategy descriLookupStrategy : LookupStrategy.values()) {
+			for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
+				for (LookupImpl gssLookupImpl : LookupImpl.values()) {
+					for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
+						for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
+							newConfigs.add(Configuration.builder().setGSSType(NEW)
+																  .setDescriptorLookupStrategy(descriLookupStrategy)
+																  .setGSSLookupStrategy(gssLookupStrategy)
+																  .setGSSLookupImpl(gssLookupImpl)
+																  .setSPPFLookupStrategy(sppfLookupStrategy)
+																  .setSPPFLookupImpl(sppfLookupImpl).build());
+						}
 					}
 				}
-			}
+			}			
 		}
 		
-		for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
-			for (LookupImpl gssLookupImpl : LookupImpl.values()) {
-				for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
-					for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
-						originalConfigs.add(Configuration.builder().setGSSType(ORIGINAL)
-											   						.setGSSLookupStrategy(gssLookupStrategy)
-											   						.setGSSLookupImpl(gssLookupImpl)
-											   						.setSPPFLookupStrategy(sppfLookupStrategy)
-											   						.setSPPFLookupImpl(sppfLookupImpl).build());
+		for (LookupStrategy descriLookupStrategy : LookupStrategy.values()) {
+			for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
+				for (LookupImpl gssLookupImpl : LookupImpl.values()) {
+					for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
+						for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
+							originalConfigs.add(Configuration.builder().setGSSType(ORIGINAL)
+																	   .setDescriptorLookupStrategy(descriLookupStrategy)
+												   					   .setGSSLookupStrategy(gssLookupStrategy)
+												   					   .setGSSLookupImpl(gssLookupImpl)
+												   					   .setSPPFLookupStrategy(sppfLookupStrategy)
+												   					   .setSPPFLookupImpl(sppfLookupImpl).build());
+						}
 					}
 				}
-			}
+			}			
 		}
 		
 		all_configs.addAll(newConfigs);
