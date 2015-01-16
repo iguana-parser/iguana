@@ -97,7 +97,7 @@ public class BenchmarkJava extends AbstractBenchmark {
 		String[] params = files.stream().map(f -> f.getAbsolutePath()).toArray(String[]::new);
 		String[] gssParams = new String[] { GSSType.NEW.toString(), GSSType.ORIGINAL.toString() };
 		Options opt = new OptionsBuilder()
-				          .include(BenchmarkCSharp.class.getSimpleName())
+				          .include(BenchmarkJava.class.getSimpleName())
 				          .param("inputPath", params)
 				          .param("gssType", gssParams)
 				          .detectJvmArgs()
