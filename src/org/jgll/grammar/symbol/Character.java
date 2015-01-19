@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
@@ -136,8 +137,7 @@ public class Character extends AbstractRegularExpression {
 		}
 
 		public Builder(Character character) {
-			super(character);
-			this.c = character.c;
+			this(character.c);
 		}
 		
 		@Override
@@ -154,5 +154,10 @@ public class Character extends AbstractRegularExpression {
 	@Override
 	public Character asSingleChar() {
 		return this;
+	}
+
+	@Override
+	public Pattern getPattern() {
+		throw new UnsupportedOperationException();
 	}
 }

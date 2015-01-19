@@ -7,8 +7,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import org.jgll.regex.RegexAlt;
 import org.jgll.regex.automaton.Automaton;
 
 
@@ -24,11 +25,11 @@ public class CharacterClass extends AbstractRegularExpression {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final RegexAlt<CharacterRange> alt;
+	private final List<CharacterRange> ranges;
 	
 	private CharacterClass(Builder builder) {
 		super(builder);
-		this.alt = builder.alt;
+		this.ranges = builder.ranges;
 	}
 	
 	public static CharacterClass fromChars(Character...chars) {
@@ -47,23 +48,23 @@ public class CharacterClass extends AbstractRegularExpression {
 		return new Builder(ranges).build();
 	}
 	
-	private static String getName(RegexAlt<CharacterRange> alt) {
-		return "[" + listToString(alt.getRegularExpressions()) + "]";
+	private static String getName(List<CharacterRange> ranges) {
+		return "[" + listToString(ranges) + "]";
 	}
 	
 	@Override
 	public int hashCode() {
-		return alt.hashCode();
+		return ranges.hashCode();
 	}
 	
 	@Override
 	public boolean isSingleChar() {
-		return alt.size() == 1 && alt.get(0).isSingleChar();
+		return ranges.size() == 1 && ranges.get(0).isSingleChar();
 	}
 	
 	@Override
 	public Character asSingleChar() {
-		return alt.get(0).asSingleChar();
+		return ranges.get(0).asSingleChar();
 	}
 
 	@Override
@@ -76,12 +77,12 @@ public class CharacterClass extends AbstractRegularExpression {
 		
 		CharacterClass other = (CharacterClass) obj;
 
-		return alt.equals(other.alt);
+		return ranges.equals(other.ranges);
 	}
 
 	@Override
 	protected Automaton createAutomaton() {
-		return alt.getAutomaton();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -94,24 +95,23 @@ public class CharacterClass extends AbstractRegularExpression {
 		
 		int i = 0;
 		
-		CharacterRange[] ranges = alt.getRegularExpressions().toArray(new CharacterRange[] {});
-		Arrays.sort(ranges);
+		Collections.sort(ranges);
 		
-		if(ranges[i].getStart() >= 1) {
-			newRanges.add(CharacterRange.in(1, ranges[i].getStart() - 1));
+		if(ranges.get(i).getStart() >= 1) {
+			newRanges.add(CharacterRange.in(1, ranges.get(i).getStart() - 1));
 		}
 		
-		for(; i < ranges.length - 1; i++) {
-			CharacterRange r1 = ranges[i];
-			CharacterRange r2 = ranges[i + 1];
+		for(; i < ranges.size() - 1; i++) {
+			CharacterRange r1 = ranges.get(i);
+			CharacterRange r2 = ranges.get(i + i);
 			
 			if(r2.getStart() > r1.getEnd() + 1) {
 				newRanges.add(CharacterRange.in(r1.getEnd() + 1, r2.getStart() - 1));
 			}
 		}
 		
-		if(ranges[i].getEnd() < Constants.MAX_UTF32_VAL) {
-			newRanges.add(CharacterRange.in(ranges[i].getEnd() + 1, Constants.MAX_UTF32_VAL));
+		if(ranges.get(i).getEnd() < Constants.MAX_UTF32_VAL) {
+			newRanges.add(CharacterRange.in(ranges.get(i).getEnd() + 1, Constants.MAX_UTF32_VAL));
 		}
 		
 		return new Builder(newRanges).addPreConditions(preConditions).build();
@@ -119,7 +119,7 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		return alt.getFirstSet();
+		return ranges.stream().flatMap(r -> r.getFirstSet().stream()).collect(Collectors.toSet());
 	}
 	
 	@Override
@@ -128,11 +128,11 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 	
 	public int size() {
-		return alt.size();
+		return ranges.size();
 	}
 	
 	public CharacterRange get(int index) {
-		return alt.get(index);
+		return ranges.get(index);
 	}
 	
 	public static Builder builder(CharacterRange...ranges) {
@@ -152,40 +152,44 @@ public class CharacterClass extends AbstractRegularExpression {
 	public String getConstructorCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("new CharacterClass(")
-		  .append(alt.getConstructorCode() + ", ")
+		  .append(getConstructorCode(ranges) + ", ")
 		  .append("\"" + escape(label) + "\", ")
 		  .append("new HashSet<Condition>(), ")
 		  .append("null")
 		  .append(")");
 		return sb.toString();
 	}
+
+	@Override
+	public Pattern getPattern() {
+		throw new UnsupportedOperationException();
+	}
 	
 	public static class Builder extends SymbolBuilder<CharacterClass> {
 
-		private RegexAlt<CharacterRange> alt;
+		private List<CharacterRange> ranges;
+		
+		public Builder() {
+			ranges = new ArrayList<>();
+		}
 		
 		public Builder(CharacterRange...ranges) {
 			this(Arrays.asList(ranges));
 		}
 		
 		public Builder(List<CharacterRange> ranges) {
-			this(RegexAlt.from(ranges));
-		}
-		
-		public Builder(RegexAlt<CharacterRange> alt) {
-			super(getName(alt));
-			this.alt = alt;
+			this.ranges = ranges;
 		}
 		
 		public Builder(CharacterClass charClass) {
-			super(charClass);
-			this.alt = charClass.alt;
+			this(charClass.ranges);
 		}
 		
 		@Override
 		public CharacterClass build() {
+			this.name = getName(ranges);
 			return new CharacterClass(this);
 		}
-		
 	}
+
 }

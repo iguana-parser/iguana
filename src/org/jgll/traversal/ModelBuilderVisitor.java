@@ -13,8 +13,8 @@ import java.util.Set;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.symbol.CharacterClass;
+import org.jgll.regex.Group;
 import org.jgll.regex.RegularExpression;
-import org.jgll.regex.Sequence;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -215,14 +215,15 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			
 			RegularExpression regex = node.getGrammarSlot().getRegularExpression();
 			
-			if (regex instanceof Sequence) {
-				Sequence<CharacterClass> sequence = (Sequence<CharacterClass>) regex;
+			if (regex instanceof Group) {
+				Group sequence = (Group) regex;
 				Object object = regex.getObject();
 				listener.startNode((T) object);
 				
 				List<U> childrenVal = new ArrayList<>();
-				for (int i = 0; i < sequence.getRegularExpressions().size(); i++) {
-					int c = sequence.get(i).get(0).getStart();
+				for (int i = 0; i < sequence.getSymbols().size(); i++) {
+					CharacterClass symbol = (CharacterClass) sequence.get(i);
+					int c =symbol.get(0).getStart();
 					Result<U> t = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
 					childrenVal.add(t.getObject());
 				}

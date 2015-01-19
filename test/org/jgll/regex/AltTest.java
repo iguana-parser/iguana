@@ -19,7 +19,7 @@ public class AltTest {
 		Character a = Character.from('a');
 		Character b = Character.from('b');
 		
-		RegularExpression regexp = RegexAlt.from(a, b);
+		RegularExpression regexp = Alt.from(a, b);
 		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
@@ -43,7 +43,7 @@ public class AltTest {
 	
 	@Test
 	public void test3() {
-		RegularExpression regexp = RegexAlt.from(Keyword.from("when"), Keyword.from("if"));
+		RegularExpression regexp = Alt.from(Keyword.from("when"), Keyword.from("if"));
 
 		Automaton automaton = regexp.getAutomaton();
 
@@ -59,7 +59,7 @@ public class AltTest {
 		RegularExpression a = new Character.Builder('a').addPreCondition(RegularExpressionCondition.notFollow(Character.from('c'))).build();
 		Character b = Character.from('b');
 		
-		RegularExpression regexp = new RegexAlt.Builder<>(a, b).addPreCondition(RegularExpressionCondition.notFollow(Character.from('d'))).build();
+		RegularExpression regexp = Alt.builder(a, b).addPreCondition(RegularExpressionCondition.notFollow(Character.from('d'))).build();
 		System.out.println(regexp);
 		Automaton nfa = regexp.getAutomaton();
 		

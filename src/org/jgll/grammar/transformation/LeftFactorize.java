@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.Alt;
 import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.Alt;
+import org.jgll.regex.Group;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
 import org.jgll.util.trie.Trie;
@@ -58,7 +58,7 @@ public class LeftFactorize implements GrammarTransformation {
 			if (inner.size() == 1){
 				outer.add(inner.get(0));
 			} else {
-				outer.add(Group.of(inner));
+				outer.add(Group.from(inner));
 			}
 		}
 		if (outer.size() == 1){

@@ -5,13 +5,13 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.SymbolBuilder;
-import org.jgll.regex.RegexAlt;
-import org.jgll.regex.RegexStar;
+import org.jgll.regex.Alt;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
+import org.jgll.regex.Star;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -67,7 +67,7 @@ public class FollowRestrictionTest {
 		// (![*] | [*] !>> [/])*
 		CharacterClass r1 = Character.from('*').not();
 		Character r2 = new Character.Builder('*').addPreCondition(RegularExpressionCondition.notFollow(Character.from('/'))).build();
-		RegexStar star = RegexStar.from(RegexAlt.from(r1, r2));
+		Star star = Star.from(Alt.from(r1, r2));
 		
 		RunnableAutomaton m = star.getAutomaton().getRunnableAutomaton();
 		

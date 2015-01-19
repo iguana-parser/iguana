@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.grammar.symbol.Alt;
-import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Opt;
-import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.Alt;
+import org.jgll.regex.Group;
+import org.jgll.regex.Opt;
+import org.jgll.regex.Plus;
 
 public class EBNFToBNF implements GrammarTransformation {
 	
@@ -92,14 +92,16 @@ public class EBNFToBNF implements GrammarTransformation {
 		} 
 		
 		else if (s instanceof Group) {
-			List<Symbol> symbols = ((Group) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
+			@SuppressWarnings("unchecked")
+			List<Symbol> symbols = ((Group<Symbol>) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
 			newNt = new Nonterminal.Builder(s.getName()).addPreConditions(s.getPreConditions()).build();
 			rules.add(Rule.withHead(newNt).addSymbols(symbols).build());
 		} 
 		
 		else if (s instanceof Alt) {
 			newNt = new Nonterminal.Builder(s.getName()).addPreConditions(s.getPreConditions()).build();
-			List<Symbol> symbols = ((Alt) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
+			@SuppressWarnings("unchecked")
+			List<Symbol> symbols = ((Alt<Symbol>) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
 			symbols.forEach(x -> rules.add(Rule.withHead(newNt).addSymbol(x).build()));
 		}
 		

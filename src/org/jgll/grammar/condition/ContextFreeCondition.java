@@ -5,8 +5,8 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.Group;
 
 public class ContextFreeCondition extends Condition {
 	

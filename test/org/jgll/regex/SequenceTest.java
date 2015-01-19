@@ -13,13 +13,13 @@ import org.junit.Test;
 public class SequenceTest {
 	
 	// ab
-	private Sequence.Builder<Character> seq1 = Sequence.builder(Character.from('a'), Character.from('b'));
+	private Group.Builder<Character> seq1 = Group.builder(Character.from('a'), Character.from('b'));
 	
 	// [a-z][0-9]
-	private Sequence.Builder<CharacterRange> seq2 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('0', '9'));
+	private Group.Builder<CharacterRange> seq2 = Group.builder(CharacterRange.in('a', 'z'), CharacterRange.in('0', '9'));
 	
 	// [a-z][b-m]
-	private Sequence.Builder<CharacterRange> seq3 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm'));
+	private Group.Builder<CharacterRange> seq3 = Group.builder(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm'));
 
 	@Test
 	public void test1() {
@@ -68,14 +68,14 @@ public class SequenceTest {
 	@Test
 	public void test1WithPostCondition() {
 		// [a][b] !>> [c]
-		Sequence<Character> r = seq1.addPostCondition(RegularExpressionCondition.notFollow(Character.from('c'))).build();
+		Group<Character> r = seq1.addPostCondition(RegularExpressionCondition.notFollow(Character.from('c'))).build();
 		RunnableAutomaton dfa = r.getAutomaton().getRunnableAutomaton();
 		assertEquals(-1, dfa.match(Input.fromString("abc"), 0));
 	}
 	
 	@Test
 	public void test2WithPostConditions() {
-		Sequence<CharacterRange> r = seq2.addPostCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		Group<CharacterRange> r = seq2.addPostCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 
 		RunnableAutomaton dfa = r.getAutomaton().getRunnableAutomaton();
 		

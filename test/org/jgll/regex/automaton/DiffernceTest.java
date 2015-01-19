@@ -4,7 +4,7 @@ import static org.jgll.regex.automaton.AutomatonOperations.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Keyword;
-import org.jgll.regex.RegexAlt;
+import org.jgll.regex.Alt;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
 import org.jgll.util.Input;
@@ -36,7 +36,7 @@ public class DiffernceTest {
 	
 	@Test
 	public void test3() {
-		RegexAlt<Keyword> alt = RegexAlt.from(k1, k2, k3);
+		Alt alt = Alt.from(k1, k2, k3);
 		
 		Automaton a = difference(id.getAutomaton(), alt.getAutomaton());
 		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));

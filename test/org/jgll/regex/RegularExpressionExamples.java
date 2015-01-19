@@ -17,7 +17,7 @@ public class RegularExpressionExamples {
 	public static SymbolBuilder<? extends RegularExpression> getId() {
 		CharacterClass c1 = CharacterClass.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'));
 		CharacterClass c2 = CharacterClass.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'), CharacterRange.in('0', '9'));
-		return Sequence.builder(c1, RegexStar.from(c2));
+		return Group.builder(c1, Star.from(c2));
 	}
 	
 	/**
@@ -25,7 +25,7 @@ public class RegularExpressionExamples {
 	 */
 	public static SymbolBuilder<? extends RegularExpression> getFloat() {
 		CharacterClass c = CharacterClass.from(CharacterRange.in('0', '9'));
-		return Sequence.builder(RegexPlus.from(c), Character.from('.'), RegexPlus.from(c));
+		return Group.builder(Plus.from(c), Character.from('.'), Plus.from(c));
 	}
 	
 	/**
@@ -36,7 +36,7 @@ public class RegularExpressionExamples {
 
 		regularExpressions.add(Keyword.from("\\"));
 		
-		regularExpressions.add(RegexPlus.from(Character.from('u')));
+		regularExpressions.add(Plus.from(Character.from('u')));
 		
 		CharacterClass c = CharacterClass.from(CharacterRange.in('0', '9'), CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'));
 		regularExpressions.add(c);
@@ -44,7 +44,7 @@ public class RegularExpressionExamples {
 		regularExpressions.add(c);
 		regularExpressions.add(c);
 		
-		return Sequence.builder(regularExpressions);
+		return Group.builder(regularExpressions);
 	}
 	
 	/**
@@ -55,9 +55,9 @@ public class RegularExpressionExamples {
 	public static SymbolBuilder<? extends RegularExpression> getCharacter() {
 		List<RegularExpression> regularExpressions = new ArrayList<>();
 		regularExpressions.add(Character.from('\''));
-		regularExpressions.add(RegexPlus.from(Character.from('\'').not()));
+		regularExpressions.add(Plus.from(Character.from('\'').not()));
 		regularExpressions.add(Character.from('\''));
-		return Sequence.builder(regularExpressions);
+		return Group.builder(regularExpressions);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class RegularExpressionExamples {
 		CharacterClass c = CharacterClass.fromChars(c1, c2);
 		Keyword newline = Keyword.from("\\n");
 
-		return RegexAlt.builder(RegexPlus.from(c.not()), newline);
+		return Alt.builder(Plus.from(c.not()), newline);
 	}
 	
 	// "/*" (![*] | [*] !>> [/])* "*/"
@@ -79,11 +79,11 @@ public class RegularExpressionExamples {
 		Character star = Character.from('*');
 		Character slash = Character.from('/');
 
-		RegularExpression r2 = RegexStar.from(Sequence.from(star, slash));
+		RegularExpression r2 = Star.from(Group.from(star, slash));
 		
 		Keyword r3 = Keyword.from("*/");
 		
-		return Sequence.builder(r1, r2, r3);
+		return Group.builder(r1, r2, r3);
 	}
 	 
 }

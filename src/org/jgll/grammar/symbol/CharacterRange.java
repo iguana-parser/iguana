@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Matcher;
@@ -162,15 +163,18 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		}
 		
 		public Builder(CharacterRange range) {
-			super(range);
-			this.start = range.start;
-			this.end = range.end;
+			this(range.start, range.end);
 		}
 		
 		@Override
 		public CharacterRange build() {
 			return new CharacterRange(this);
 		}
+	}
+
+	@Override
+	public Pattern getPattern() {
+		throw new UnsupportedOperationException();
 	}
 	
 }

@@ -15,7 +15,7 @@ public class PrefixAnalysisTest {
 		Keyword k1 = Keyword.from("while");
 		Keyword k2 = Keyword.from("if");
 		Keyword k3 = Keyword.from("public");
-		RegularExpression id = RegexPlus.from(CharacterClass.from(CharacterRange.in('a', 'z')));
+		RegularExpression id = Plus.from(CharacterClass.from(CharacterRange.in('a', 'z')));
 		
 		List<RegularExpression> list = CollectionsUtil.list(k1, k2, k3, id);
 		

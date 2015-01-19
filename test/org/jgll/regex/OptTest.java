@@ -13,7 +13,7 @@ public class OptTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regexp = RegexOpt.from(Character.from('a'));
+		RegularExpression regexp = Opt.from(Character.from('a'));
 		Automaton nfa = regexp.getAutomaton();
 		assertEquals(4, nfa.getCountStates());
 
@@ -24,7 +24,7 @@ public class OptTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regexp = new RegexOpt.Builder(Character.from('a')).addPostCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		RegularExpression regexp = Opt.builder(Character.from('a')).addPostCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
