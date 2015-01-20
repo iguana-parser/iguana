@@ -20,8 +20,6 @@ import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 
-import com.google.common.base.Verify;
-
 public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpression, Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
@@ -47,8 +45,8 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 	}
 	
 	private static <T> String getName(List<T> elements) {
-		Verify.verify(elements != null, "Elements cannot be null");
-		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
+//		Verify.verify(elements != null, "Elements cannot be null");
+//		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
 		return "(" + listToString(elements, " | ") + ")";
 	}
 	
@@ -161,6 +159,11 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 		return new Builder<>();
 	}
 
+	
+	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
+		return new Builder<T>().add(symbols);
+	}
+	
 	@SafeVarargs
 	public static <T extends Symbol> Builder<T> builder(T...symbols) {
 		return new Builder<T>().add(Arrays.asList(symbols));
@@ -182,7 +185,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 
 		@Override
 		public Alt<T> build() {
-			Verify.verify(elements.size() > 2, "The number of elements in an alternative should be at least two");
+//			Verify.verify(elements.size() > 2, "The number of elements in an alternative should be at least two");
 			this.name = getName(elements);
 			return new Alt<>(this);
 		}

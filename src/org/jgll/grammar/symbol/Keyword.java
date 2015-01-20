@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.jgll.regex.Group;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.util.Input;
@@ -58,7 +59,7 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	protected Automaton createAutomaton() {
-		throw new UnsupportedOperationException();
+		return Group.from(characters).getAutomaton();
 	}
 	
 	@Override

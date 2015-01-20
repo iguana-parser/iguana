@@ -65,7 +65,7 @@ public class CharacterClassTest {
 	}
 	
 	public void test1WithPostConditions() {
-		RegularExpression regexp = new CharacterClass.Builder(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'))
+		RegularExpression regexp = CharacterClass.builder(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'))
 								       .addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Automaton nfa = regexp.getAutomaton();
 		
@@ -83,7 +83,7 @@ public class CharacterClassTest {
 	
 	@Test
 	public void test2WithPostConditions() {
-		RegularExpression regexp = new CharacterClass.Builder(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'))
+		RegularExpression regexp = CharacterClass.builder(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'))
 								   .addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		
 		Automaton nfa = regexp.getAutomaton();

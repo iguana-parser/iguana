@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.jgll.regex.Alt;
 import org.jgll.regex.automaton.Automaton;
 
 
@@ -82,7 +83,7 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	protected Automaton createAutomaton() {
-		throw new UnsupportedOperationException();
+		return Alt.from(ranges).getAutomaton();
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public class CharacterClass extends AbstractRegularExpression {
 			newRanges.add(CharacterRange.in(ranges.get(i).getEnd() + 1, Constants.MAX_UTF32_VAL));
 		}
 		
-		return new Builder(newRanges).addPreConditions(preConditions).build();
+		return new Builder(newRanges).build();
 	}
 
 	@Override
@@ -136,7 +137,7 @@ public class CharacterClass extends AbstractRegularExpression {
 	}
 	
 	public static Builder builder(CharacterRange...ranges) {
-		return new Builder(ranges);
+		return builder(Arrays.asList(ranges));
 	}
 	
 	public static Builder builder(List<CharacterRange> ranges) {
@@ -150,14 +151,7 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	public String getConstructorCode() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("new CharacterClass(")
-		  .append(getConstructorCode(ranges) + ", ")
-		  .append("\"" + escape(label) + "\", ")
-		  .append("new HashSet<Condition>(), ")
-		  .append("null")
-		  .append(")");
-		return sb.toString();
+		return CharacterClass.class.getName() + ".builder(" + getConstructorCode(ranges) + ").build()";
 	}
 
 	@Override
@@ -171,10 +165,6 @@ public class CharacterClass extends AbstractRegularExpression {
 		
 		public Builder() {
 			ranges = new ArrayList<>();
-		}
-		
-		public Builder(CharacterRange...ranges) {
-			this(Arrays.asList(ranges));
 		}
 		
 		public Builder(List<CharacterRange> ranges) {

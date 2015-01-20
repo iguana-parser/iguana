@@ -22,8 +22,6 @@ import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 
-import com.google.common.base.Verify;
-
 public class Group<T extends Symbol> extends AbstractSymbol implements RegularExpression, Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
@@ -47,8 +45,8 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 	}
 	
 	private static <T> String getName(List<T> elements) {
-		Verify.verify(elements != null, "Elements cannot be null");
-		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
+//		Verify.verify(elements != null, "Elements cannot be null");
+//		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
 		return listToString(elements, " ");
 	}
 		

@@ -9,8 +9,6 @@ import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 
-import com.google.common.base.Verify;
-
 public class Plus extends AbstractSymbol implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
@@ -30,7 +28,7 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	}
 	
 	private static String getName(Symbol s) {
-		Verify.verifyNotNull(s);
+//		Verify.verifyNotNull(s);
 		return s.getName() + "+";
 	}
 	

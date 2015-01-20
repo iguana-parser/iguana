@@ -13,8 +13,6 @@ import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 
-import com.google.common.base.Verify;
-
 public class Opt extends AbstractSymbol implements RegularExpression {
 
 	private static final long serialVersionUID = 1L;
@@ -40,7 +38,7 @@ public class Opt extends AbstractSymbol implements RegularExpression {
 	}
 
 	private static String getName(Symbol s) {
-		Verify.verifyNotNull(s);
+//		Verify.verifyNotNull(s);
 		return s.getName() + "?";
 	}
 	
