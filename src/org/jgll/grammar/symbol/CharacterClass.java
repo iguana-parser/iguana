@@ -151,7 +151,7 @@ public class CharacterClass extends AbstractRegularExpression {
 
 	@Override
 	public String getConstructorCode() {
-		return CharacterClass.class.getName() + ".builder(" + getConstructorCode(ranges) + ").build()";
+		return CharacterClass.class.getName() + ".builder(" + getConstructorCode(ranges) + ")" + super.getConstructorCode() + ".build()";
 	}
 
 	@Override

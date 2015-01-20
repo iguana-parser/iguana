@@ -138,7 +138,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 
 	@Override
 	public String getConstructorCode() {
-		return Alt.class.getName() + ".from(" + getConstructorCode(symbols) + ")";
+		return Alt.class.getName() + ".builder(" + getConstructorCode(symbols) + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	@Override

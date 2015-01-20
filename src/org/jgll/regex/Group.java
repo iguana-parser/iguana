@@ -47,7 +47,7 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 	private static <T> String getName(List<T> elements) {
 //		Verify.verify(elements != null, "Elements cannot be null");
 //		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
-		return listToString(elements, " ");
+		return "(" + listToString(elements, " ") + ")";
 	}
 		
 	@Override
@@ -142,7 +142,7 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		
 	@Override
 	public String getConstructorCode() {
-		return Group.class.getName() + ".from(" + getConstructorCode(symbols) + ")";
+		return Group.class.getName() + ".builder(" + getConstructorCode(symbols) + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	@Override
@@ -182,7 +182,7 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		}
 		
 		public Builder<T> add(List<T> symbols) {
-			symbols.addAll(symbols);
+			this.symbols.addAll(symbols);
 			return this;
 		}
 		

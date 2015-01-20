@@ -124,7 +124,7 @@ public class Character extends AbstractRegularExpression {
 
 	@Override
 	public String getConstructorCode() {
-		return Character.class.getSimpleName() + ".from(" + c + ")";
+		return Character.class.getSimpleName() + ".builder(" + c + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	public static class Builder extends SymbolBuilder<Character> {

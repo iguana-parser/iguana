@@ -90,8 +90,8 @@ public class Keyword extends AbstractRegularExpression {
 		return builder.build();
 	}
 	
-	public static Builder builder(List<Character> seq) {
-		return new Builder(seq);
+	public static Builder builder(List<Character> characters) {
+		return new Builder(characters);
 	}
 	
 	public static Builder builder(String s) {
@@ -105,7 +105,7 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	public String getConstructorCode() {
-		return Keyword.class.getSimpleName() + ".builder()" + ".build()";
+		return Keyword.class.getSimpleName() + ".builder(" + getConstructorCode(characters) + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	@Override

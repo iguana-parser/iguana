@@ -92,7 +92,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public String getConstructorCode() {
-		return Star.class.getName() + ".from(" + s.getConstructorCode() + ")";
+		return Star.class.getName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 

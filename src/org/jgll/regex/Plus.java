@@ -63,7 +63,7 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public String getConstructorCode() {
-		return Plus.class.getName() + ".from(" + s.getConstructorCode() + ")";
+		return Plus.class.getName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	@Override

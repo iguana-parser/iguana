@@ -91,7 +91,7 @@ public class Opt extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public String getConstructorCode() {
-		return Opt.class.getName() + ".from(" + s.getConstructorCode() + ")";
+		return Opt.class.getName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	@Override
