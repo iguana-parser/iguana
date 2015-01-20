@@ -105,7 +105,7 @@ public class Keyword extends AbstractRegularExpression {
 	
 	@Override
 	public String getConstructorCode() {
-		return Keyword.class.getName() + ".builder()" + ".build()";
+		return Keyword.class.getSimpleName() + ".builder()" + ".build()";
 	}
 	
 	@Override
