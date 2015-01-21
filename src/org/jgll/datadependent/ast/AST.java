@@ -1,7 +1,7 @@
 package org.jgll.datadependent.ast;
 
 import org.jgll.datadependent.ast.Expression;
-import org.jgll.datadependent.env.EvaluatorContext;
+import org.jgll.datadependent.env.IEvaluatorContext;
 
 public class AST {
 	
@@ -31,7 +31,7 @@ public class AST {
 	static public Expression println(Expression... args) {
 		return new Expression.Call("", args) {
 					@Override
-					public Object interpret(EvaluatorContext ctx) {
+					public Object interpret(IEvaluatorContext ctx) {
 						Object[] arguments = interpretArguments(ctx);
 						for (Object argument : arguments) {
 							System.out.print(argument);

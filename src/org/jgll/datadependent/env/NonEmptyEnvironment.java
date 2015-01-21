@@ -3,15 +3,15 @@ package org.jgll.datadependent.env;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NonEmptyEnvironment extends Environment {
+public class NonEmptyEnvironment extends AbstractEnvironment {
 	
 	private Map<String, Object> variables;
 	
-	protected NonEmptyEnvironment(Environment parent) {
+	protected NonEmptyEnvironment(AbstractEnvironment parent) {
 		this.parent = parent;
 	}
 	
-	protected NonEmptyEnvironment(Environment parent, Map<String, Object> variables) {
+	protected NonEmptyEnvironment(AbstractEnvironment parent, Map<String, Object> variables) {
 		this.parent = parent;
 		this.variables = variables;
 	}
@@ -24,18 +24,31 @@ public class NonEmptyEnvironment extends Environment {
 		return new NonEmptyEnvironment(this);
 	}
 	
-	public Environment push(Map<String, Object> variables) {
-		return new NonEmptyEnvironment(this, variables);
-	}
-
-	protected Object lookupVariableLocally(String name) {
-		return variables != null? variables.get(name) : null;
-	}
-
-	public Environment storeVariableLocally(String name, Object value) {
+	@Override
+	public Environment store(String name, Object value) {
 		if(variables == null) variables = new HashMap<>();
 		variables.put(name, value);
 		return this;
+	}
+	
+	@Override
+    public Environment pushAndStore(String name, Object value) {
+    	return this.push().store(name, value);
+    }
+	
+	@Override
+	public Environment pushAndStore(Object... bindings) {
+		if (bindings.length == 0) return this.push();
+		Map<String, Object> variables = new HashMap<>();
+		for (int i = 0; i < bindings.length; i += 2) {
+			variables.put((String) bindings[i], bindings[i + 1]);
+		}
+		return new NonEmptyEnvironment(this, variables);
+	}
+	
+	@Override
+	protected Object lookupLocally(String name) {
+		return variables != null? variables.get(name) : null;
 	}
 	
 	@Override

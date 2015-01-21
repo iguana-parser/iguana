@@ -1,7 +1,6 @@
 package org.jgll.parser;
 
 
-import org.jgll.datadependent.env.EmptyEnvironment;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.DummySlot;
@@ -52,7 +51,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 
 			for(Condition c : returnSlot.getConditions()) {
 				// FIXME: Data-dependent GLL
-				if (c.getSlotAction().execute(input, gssNode, inputIndex, EmptyEnvironment.instance)) 
+				if (c.getSlotAction().execute(input, gssNode, inputIndex, ctx.getEmptyEnvironment())) 
 					break;
 			}
 			
@@ -61,7 +60,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			for (GSSEdge edge : gssNode.getGSSEdges()) {
 				NonPackedNode y = sppfLookup.getNode(returnSlot, edge.getNode(), node);
 				// FIXME: Data-dependent GLL
-				addDescriptor(returnSlot, edge.getDestination(), inputIndex, y, EmptyEnvironment.instance);
+				addDescriptor(returnSlot, edge.getDestination(), inputIndex, y, ctx.getEmptyEnvironment());
 			}
 		}
 	}

@@ -3,9 +3,9 @@ package org.jgll.parser;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.ast.Statement;
-import org.jgll.datadependent.env.EmptyEnvironment;
 import org.jgll.datadependent.env.Environment;
-import org.jgll.datadependent.env.EvaluatorContext;
+import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
@@ -56,7 +56,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected int ci = 0;
 	
-	protected final EvaluatorContext ctx = new EvaluatorContext(EmptyEnvironment.instance);
+	public final PersistentEvaluatorContext ctx = new PersistentEvaluatorContext();
 	
 	protected Input input;
 	
@@ -163,7 +163,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 		
 		// FIXME: Data-dependent GLL
-		startSymbol.execute(this, cu, ci, cn, EmptyEnvironment.instance);
+		startSymbol.execute(this, cu, ci, cn, ctx.getEmptyEnvironment());
 		
 		while(hasNextDescriptor()) {
 			Descriptor descriptor = nextDescriptor();
@@ -171,7 +171,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
 			// FIXME: Data-dependent GLL
-			slot.execute(this, cu, ci, descriptor.getSPPFNode(), EmptyEnvironment.instance);
+			slot.execute(this, cu, ci, descriptor.getSPPFNode(), ctx.getEmptyEnvironment());
 		}
 	}
 	
@@ -183,7 +183,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		if (statements.length == 0) return null;
 		
-		ctx.setCurrentEnv(env);
+		ctx.setEnvironment(env);
 		
 		int i = 0;
 		while (i < statements.length) {
@@ -196,7 +196,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public Object eval(DataDependentCondition condition, Environment env) {
-		ctx.setCurrentEnv(env);
+		ctx.setEnvironment(env);
 		
 		return condition.getExpression().interpret(ctx);
 	}
@@ -205,7 +205,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public Object[] eval(Expression[] arguments, Environment env) {
 		if (arguments == null) return null;
 		
-		ctx.setCurrentEnv(env);
+		ctx.setEnvironment(env);
 		
 		Object[] values = new Object[arguments.length];
 		
@@ -218,6 +218,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return values;
 	}
 	
+	@Override
+	public IEvaluatorContext getEvaluatorContext() {
+		return ctx;
+	}
 	
 	@Override
 	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node, Expression[] arguments, Environment env) {
@@ -242,11 +246,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			
 			createGSSEdge(returnSlot, u, node, gssNode, env);
 			
-			Environment newEnv = EmptyEnvironment.instance;
+			Environment newEnv = ctx.getEmptyEnvironment();
 			if (parameters != null) {
 				int j = 0;
 				while (j < parameters.length) {
-					newEnv = newEnv.storeVariableLocally(parameters[j], values[j]);
+					newEnv = newEnv.store(parameters[j], values[j]);
 				}
 			}
 			

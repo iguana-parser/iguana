@@ -1,7 +1,6 @@
 package org.jgll.datadependent.ast;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.datadependent.env.EvaluatorContext;
+import org.jgll.datadependent.env.IEvaluatorContext;
 
 public abstract class Statement extends AbstractAST {
 	
@@ -16,9 +15,8 @@ public abstract class Statement extends AbstractAST {
 		}
 
 		@Override
-		public Object interpret(EvaluatorContext ctx) {
-			Environment env = ctx.getCurrentEnv().storeVariableLocally(id, exp.interpret(ctx));
-			ctx.setCurrentEnv(env);
+		public Object interpret(IEvaluatorContext ctx) {
+			ctx.storeInEnvironment(id, exp.interpret(ctx));
 			return null;
 		}
 		
@@ -33,7 +31,7 @@ public abstract class Statement extends AbstractAST {
 		}
 		
 		@Override
-		public Object interpret(EvaluatorContext ctx) {
+		public Object interpret(IEvaluatorContext ctx) {
 			exp.interpret(ctx);
 			return null;
 		}

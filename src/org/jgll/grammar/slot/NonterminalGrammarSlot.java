@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.datadependent.env.EmptyEnvironment;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -49,7 +48,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		// FIXME: Data-dependent GLL
-		firstSlots.forEach(s -> parser.scheduleDescriptor(new Descriptor(s, u, i, DummyNode.getInstance(), EmptyEnvironment.instance)));
+		firstSlots.forEach(s -> parser.scheduleDescriptor(new Descriptor(s, u, i, DummyNode.getInstance(), parser.getEvaluatorContext().getEmptyEnvironment())));
 	}
 	
 	public void addFirstSlot(BodyGrammarSlot slot) {

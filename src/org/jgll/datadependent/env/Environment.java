@@ -1,27 +1,18 @@
 package org.jgll.datadependent.env;
 
-import java.util.Map;
 
-public abstract class Environment {
+public interface Environment {
 	
-	protected Environment parent;
+	public boolean isEmpty();
 	
-	public abstract boolean isEmpty();
+	public Environment push();
 	
-	public abstract Environment push();
+	public Environment store(String name, Object value);
 	
-	public abstract Environment push(Map<String, Object> variables);
+	public Environment pushAndStore(String name, Object value);
 	
-	protected abstract Object lookupVariableLocally(String name);
+	public Environment pushAndStore(Object... bindings);
 	
-	public Object lookupVariable(String name) {
-		if(this.isEmpty()) return null;
-		
-		Object value = lookupVariableLocally(name);
-		
-		return (value != null) ? value : parent.lookupVariable(name);
-	}
-	
-	public abstract Environment storeVariableLocally(String name, Object value);
+	public Object lookup(String name);
 
 }

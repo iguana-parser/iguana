@@ -1,6 +1,7 @@
 package org.jgll.datadependent.ast;
 
-import org.jgll.datadependent.env.EvaluatorContext;
+import org.jgll.datadependent.env.IEvaluatorContext;
+
 
 public abstract class Expression extends AbstractAST {
 	
@@ -16,14 +17,14 @@ public abstract class Expression extends AbstractAST {
 		
 		static public final Boolean TRUE = new Boolean() {		
 			@Override
-			public Object interpret(EvaluatorContext ctx) {
+			public Object interpret(IEvaluatorContext ctx) {
 				return true;
 			}
 		};
 		
 		static public final Boolean FALSE = new Boolean() {
 			@Override
-			public Object interpret(EvaluatorContext ctx) {
+			public Object interpret(IEvaluatorContext ctx) {
 				return false;
 			}
 		};
@@ -47,7 +48,7 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
-        public Object interpret(EvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx) {
 			return value;
 		}
 		
@@ -70,7 +71,7 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
-		public Object interpret(EvaluatorContext ctx) {
+		public Object interpret(IEvaluatorContext ctx) {
 			return value;
 		}
 		
@@ -93,7 +94,7 @@ public abstract class Expression extends AbstractAST {
 		}
 
 		@Override
-		public Object interpret(EvaluatorContext ctx) {
+		public Object interpret(IEvaluatorContext ctx) {
 			return value;
 		}
 	}
@@ -107,8 +108,8 @@ public abstract class Expression extends AbstractAST {
 		}
 
 		@Override
-		public Object interpret(EvaluatorContext ctx) {
-			Object value = ctx.getCurrentEnv().lookupVariable(name);
+		public Object interpret(IEvaluatorContext ctx) {
+			Object value = ctx.lookupInEnvironment(name);
 			if (value == null) {
 				throw new RuntimeException("Undeclared variable: " + name);
 			}
@@ -128,7 +129,7 @@ public abstract class Expression extends AbstractAST {
 			this.arguments = arguments;
 		}
 		
-		protected Object[] interpretArguments(EvaluatorContext ctx) {
+		protected Object[] interpretArguments(IEvaluatorContext ctx) {
 			Object[] values = new Object[arguments.length];
 			
 			int i = 0;

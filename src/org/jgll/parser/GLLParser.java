@@ -2,6 +2,7 @@ package org.jgll.parser;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.DataDependentCondition;
@@ -43,6 +44,8 @@ public interface GLLParser {
 	public Object eval(DataDependentCondition condition, Environment env);
 	
 	public Object[] eval(Expression[] arguments, Environment env);
+	
+	public IEvaluatorContext getEvaluatorContext();
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 	
