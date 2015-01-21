@@ -49,7 +49,7 @@ public class NonterminalTransition extends AbstractTransition {
 			.append("slot" + nonterminal.getId()).append(", ")
 			.append("slot" + origin.getId()).append(", ")
 			.append("slot" + dest.getId()).append(", ")
-			.append(getConstructorCode(preConditions))
+			.append(asSet(preConditions))
 			.toString();
 	}
 

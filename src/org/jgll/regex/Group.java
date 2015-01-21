@@ -142,7 +142,7 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		
 	@Override
 	public String getConstructorCode() {
-		return Group.class.getSimpleName() + ".builder(" + getConstructorCode(symbols) + ")" + super.getConstructorCode() + ".build()";
+		return Group.class.getSimpleName() + ".builder(" + asArray(symbols) + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	@Override

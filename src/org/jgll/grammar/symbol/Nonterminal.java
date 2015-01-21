@@ -72,15 +72,11 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public String getConstructorCode() {
-		return new StringBuilder()
-		  .append("Nonterminal.builder(\"" + name + "\")")
-		  .append(label == null? "" : ".setLabel(" + label + ")")
-		  .append(object == null? "" : ".setObject(" + object + ")")
-		  .append(preConditions.isEmpty()? "" : ".setPreConditions(" + getConstructorCode(preConditions) + ")")
-		  .append(postConditions.isEmpty()? "" : ".setPostConditions(" + getConstructorCode(postConditions) + ")")
-		  .append(index == 0 ? "" : ".setIndex(" + index + ")")
-		  .append(ebnfList == false? "" : ".setEbnfList(" + ebnfList + ")")
-		  .append(".build()").toString();
+		return Nonterminal.class.getSimpleName() + ".builder(\"" + name + "\")"
+													+ super.getConstructorCode() 
+													+ (index > 0 ?  ".setIndex(" + index + ")" : "")
+													+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
+													+ ".build()";
 	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
