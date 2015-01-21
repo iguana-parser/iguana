@@ -84,9 +84,11 @@ public class RegularExpressionCondition extends Condition {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) return true;
+		if(this == obj) 
+			return true;
 		
-		if(!(obj instanceof RegularExpressionCondition)) return false;
+		if(!(obj instanceof RegularExpressionCondition)) 
+			return false;
 		
 		RegularExpressionCondition other = (RegularExpressionCondition) obj;
 		
@@ -100,7 +102,7 @@ public class RegularExpressionCondition extends Condition {
 
 	@Override
 	public String getConstructorCode() {
-		return "new RegularExpressionCondition(" + type.name() + ", " + regularExpression.getConstructorCode() + ")";
+		return "new " + RegularExpressionCondition.class.getSimpleName() + "(ConditionType." + type.name() + ", " + regularExpression.getConstructorCode() + ")";
 	}
 	
 	public static RegularExpressionCondition notMatch(RegularExpression regularExpression) {

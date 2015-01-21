@@ -5,6 +5,7 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,12 +22,15 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.generator.ConstructorCode;
+import org.openjdk.jmh.util.HashsetMultimap;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 
 
@@ -164,24 +168,27 @@ public class Grammar implements ConstructorCode, Serializable {
 			if (!exceptions.isEmpty()) {
 				throw new GrammarValidationException(exceptions);
 			}
-			GrammarOperations op = new GrammarOperations(definitions);
-			return new Grammar(definitions, op.getFirstSets(), op.getFollowSets());
+//			GrammarOperations op = new GrammarOperations(definitions);
+//			return new Grammar(definitions, op.getFirstSets(), op.getFollowSets());
+			
+			return new Grammar(definitions, HashMultimap.create(), HashMultimap.create());
 		}
 		
 		public Builder addRule(Rule rule) {
+			definitions.put(rule.getHead(), rule);
 			
-			Iterable<Rule> newRules = ebnfToBNF.transform(rule);
-			
-			for (Rule r : newRules) {
-				
-				if (addedRules.contains(r))
-					continue;
-				
-				// Adding rules in reverse order so that descriptors are created
-				// in the right order while parsing.
-//				definitions.get(r.getHead()).add(0, r);
-				definitions.put(r.getHead(), r);
-			}
+//			Iterable<Rule> newRules = ebnfToBNF.transform(rule);
+//			
+//			for (Rule r : newRules) {
+//				
+//				if (addedRules.contains(r))
+//					continue;
+//				
+//				// Adding rules in reverse order so that descriptors are created
+//				// in the right order while parsing.
+////				definitions.get(r.getHead()).add(0, r);
+//				definitions.put(r.getHead(), r);
+//			}
 			
 			return this;
 		}

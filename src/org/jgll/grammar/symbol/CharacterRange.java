@@ -148,7 +148,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	
 	@Override
 	public String getConstructorCode() {
-		return CharacterRange.class.getSimpleName() + ".builder(" + start + ", " + end + ")" + super.getConstructorCode() + ").build()";
+		return CharacterRange.class.getSimpleName() + ".builder(" + start + ", " + end + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	public static class Builder extends SymbolBuilder<CharacterRange> {
