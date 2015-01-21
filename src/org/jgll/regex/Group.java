@@ -10,10 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -159,6 +161,39 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		return symbols;
 	}
 	
+	private boolean isCharSequence() {
+		return symbols.stream().allMatch(s -> s instanceof RegularExpression && ((RegularExpression)s).isSingleChar());
+	}
+	
+	private List<Character> asCharacters() {
+		return symbols.stream().map(s -> ((RegularExpression)s).asSingleChar()).collect(Collectors.toList());
+	}
+	
+	@Override
+	public Matcher getMatcher() {
+		if (isCharSequence()) {
+			List<Character> characters = asCharacters();
+			return (input, i) -> {
+				for (Character c : characters) {
+					if (c.getValue() != input.charAt(i++)) {
+						return -1;
+					}
+				}
+				return characters.size();
+			};
+		}
+		return RegularExpression.super.getMatcher();
+	}
+	
+	@Override
+	public String toString() {
+		
+		if (isCharSequence()) 
+			return "\"" + asCharacters().stream().map(c -> c.getName()).collect(Collectors.joining()) + "\"";
+		
+		return super.toString();
+	}
+	
 	public static <T extends Symbol> Builder<T> builder() {
 		return new Builder<>();
 	}
@@ -192,4 +227,5 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 			return new Group<>(this);
 		}
 	}
+	
 }

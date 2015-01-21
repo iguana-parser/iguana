@@ -26,6 +26,10 @@ public class Keyword extends AbstractRegularExpression {
 		return new Builder(toCharSequence(chars)).build();
 	}
 	
+	public static Keyword from(List<Character> characters) {
+		return new Builder(characters).build();
+	}
+	
 	private Keyword(Builder builder) {
 		super(builder);
 		this.characters = builder.seq;
