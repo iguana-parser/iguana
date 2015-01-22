@@ -73,7 +73,9 @@ public class GrammarGraphBuilder implements Serializable {
 		this.terminalsMap = new LinkedHashMap<>();
 		terminalsMap.put(Epsilon.getInstance(), epsilon);
 
-		convertLayout(grammar.getLayout().keySet().iterator().next());
+		if (!grammar.getLayout().isEmpty()) { 
+			convertLayout(grammar.getLayout().keySet().iterator().next());
+		}
 	}
 
 	public GrammarGraph build() {
@@ -100,13 +102,13 @@ public class GrammarGraphBuilder implements Serializable {
 	private void addRule(NonterminalGrammarSlot head, Rule rule) {
 		
 		if (rule.size() == 0) {
-			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id, rule.getPosition(0), head, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
+			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id++, rule.getPosition(0), head, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
 			head.addFirstSlot(epsilonSlot);
 			slots.add(epsilonSlot);
 		} 
 		
 		else {
-			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id, rule.getPosition(0), getNodeLookup(), Collections.emptySet());
+			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id++, rule.getPosition(0), getNodeLookup(), Collections.emptySet());
 			head.addFirstSlot(firstSlot);
 			
 			BodyGrammarSlot currentSlot = firstSlot;

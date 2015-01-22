@@ -28,9 +28,7 @@ public class GrammarGraphToDot {
 	}
 	
 	private static void toDot(GrammarSlot slot, StringBuilder sb) {
-
 		sb.append("\"" + slot.getId() + "\"" + BODY_SLOT + "\n");
-		
 		slot.getTransitions().forEach(t -> sb.append(String.format(TRANSITION, t.getSlot()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n"));
 		slot.getTransitions().forEach(t -> toDot(t.destination(), sb));
 	}
