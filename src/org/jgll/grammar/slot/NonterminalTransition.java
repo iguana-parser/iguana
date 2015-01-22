@@ -42,6 +42,10 @@ public class NonterminalTransition extends AbstractTransition {
 		parser.create(dest, nonterminal, u, i, node);
 	}
 	
+	public NonterminalGrammarSlot getSlot() {
+		return nonterminal;
+	}
+	
 	@Override
 	public String getConstructorCode() {
 		return new StringBuilder()

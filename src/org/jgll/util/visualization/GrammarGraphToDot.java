@@ -4,8 +4,6 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarRegistry;
-import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 
@@ -16,22 +14,25 @@ public class GrammarGraphToDot {
 		final StringBuilder sb = new StringBuilder();
 		
 		for (NonterminalGrammarSlot nonterminal : g.getNonterminals()) {
-			toDot(nonterminal, sb, g.getRegistry());
+			toDot(nonterminal, sb);
 		}
 		
 		return sb.toString();
 	}
 	
-	private static void toDot(GrammarSlot slot, StringBuilder sb, GrammarRegistry r) {
-
-		if (slot instanceof NonterminalGrammarSlot) {
-			sb.append("\"" + r.getId(slot) + "\"" + String.format(NONTERMINAL_NODE, escape(slot.toString())) + "\n");			
-		} else if (slot instanceof EndGrammarSlot) {
-			sb.append("\"" + r.getId(slot) + "\"" + String.format(END_NODE, escape(slot.toString())) + "\n");
-		}
+	private static void toDot(NonterminalGrammarSlot slot, StringBuilder sb) {
+		sb.append("\"" + slot.getId() + "\"" + String.format(NONTERMINAL_SLOT, escape(slot.getNonterminal().getName())) + "\n");
 		
-		slot.getTransitions().forEach(t -> sb.append(String.format(TRANSITION, t.toString()) + "\"" + r.getId(slot) + "\"" + "->" + "{\"" + r.getId(t.destination()) + "\"}" + "\n"));
-		slot.getTransitions().forEach(t -> toDot(t.destination(), sb, r));
+		slot.getFirstSlots().forEach(s -> sb.append(EPSILON_TRANSITION + "\"" + slot.getId() + "\"" + "->" + "{\"" + s.getId() + "\"}" + "\n"));
+		slot.getFirstSlots().forEach(s -> toDot(s, sb));
+	}
+	
+	private static void toDot(GrammarSlot slot, StringBuilder sb) {
+
+		sb.append("\"" + slot.getId() + "\"" + BODY_SLOT + "\n");
+		
+		slot.getTransitions().forEach(t -> sb.append(String.format(TRANSITION, t.getSlot()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n"));
+		slot.getTransitions().forEach(t -> toDot(t.destination(), sb));
 	}
 	
 }

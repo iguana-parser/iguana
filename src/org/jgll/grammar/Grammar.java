@@ -5,7 +5,6 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +21,6 @@ import org.jgll.regex.RegularExpression;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.generator.ConstructorCode;
-import org.openjdk.jmh.util.HashsetMultimap;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
@@ -30,7 +28,6 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 
 
@@ -42,7 +39,9 @@ import com.google.common.collect.SetMultimap;
 public class Grammar implements ConstructorCode, Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private final ListMultimap<Nonterminal, Rule> layout;
+	
 	private final ListMultimap<Nonterminal, Rule> definitions;
 
 	private final SetMultimap<Nonterminal, RegularExpression> firstSets;
@@ -50,9 +49,11 @@ public class Grammar implements ConstructorCode, Serializable {
 	private final SetMultimap<Nonterminal, RegularExpression> followSets;
 	
 	public Grammar(ListMultimap<Nonterminal, Rule> definitions,
+				   ListMultimap<Nonterminal, Rule> layout,
 				   SetMultimap<Nonterminal, RegularExpression> firstSets,
 				   SetMultimap<Nonterminal, RegularExpression> followSets) {
 		this.definitions = ImmutableListMultimap.copyOf(definitions);
+		this.layout = ImmutableListMultimap.copyOf(layout);
 		this.firstSets = ImmutableSetMultimap.copyOf(firstSets);
 		this.followSets = ImmutableSetMultimap.copyOf(followSets);
 	}
@@ -146,13 +147,24 @@ public class Grammar implements ConstructorCode, Serializable {
 		return definitions.get(nonterminal).get(alternateIndex).getObject();
 	}
 	
+	public ListMultimap<Nonterminal, Rule> getLayout() {
+		return layout;
+	}
+	
+	public List<Rule> getLayoutAlternatives(Nonterminal nonterminal) {
+		return layout.get(nonterminal);
+	}
+	
 	public static Builder builder() {
 		return new Builder();
 	}
  	
 	public static class Builder {
 		
+		private ListMultimap<Nonterminal, Rule> layout;
+		
 		private Set<Rule> addedRules;
+		
 		private final ListMultimap<Nonterminal, Rule> definitions;
 		
 		private final EBNFToBNF ebnfToBNF;
@@ -160,6 +172,7 @@ public class Grammar implements ConstructorCode, Serializable {
 		public Builder() {
 			this.addedRules = new HashSet<>();
 			this.definitions = ArrayListMultimap.create();
+			this.layout = ArrayListMultimap.create();
 			this.ebnfToBNF = new EBNFToBNF();
 		}
 		
@@ -171,7 +184,7 @@ public class Grammar implements ConstructorCode, Serializable {
 //			GrammarOperations op = new GrammarOperations(definitions);
 //			return new Grammar(definitions, op.getFirstSets(), op.getFollowSets());
 			
-			return new Grammar(definitions, HashMultimap.create(), HashMultimap.create());
+			return new Grammar(definitions, layout, HashMultimap.create(), HashMultimap.create());
 		}
 		
 		public Builder addRule(Rule rule) {
@@ -202,6 +215,11 @@ public class Grammar implements ConstructorCode, Serializable {
 		
 		public Builder addRules(Rule...rules) {
 			addRules(Arrays.asList(rules));
+			return this;
+		}
+
+		public Builder addLayout(Rule rule) {
+			layout.put(rule.getHead(), rule);
 			return this;
 		}
 	}

@@ -14,4 +14,6 @@ public interface Transition extends ConstructorCode {
 	
 	public GrammarSlot origin();
 	
+	public GrammarSlot getSlot();
+	
 }

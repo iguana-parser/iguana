@@ -27,8 +27,8 @@ import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.gss.lookup.ArrayNodeLookup;
 import org.jgll.parser.gss.lookup.DummyNodeLookup;
-import org.jgll.parser.gss.lookup.HashMapNodeLookup;
 import org.jgll.parser.gss.lookup.GSSNodeLookup;
+import org.jgll.parser.gss.lookup.HashMapNodeLookup;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Configuration;
 import org.jgll.util.Configuration.GSSType;
@@ -53,6 +53,8 @@ public class GrammarGraphBuilder implements Serializable {
 
 	private Input input;
 	
+	private NonterminalGrammarSlot layout;
+	
 	private int id = 1;
 	
 	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(0, Epsilon.getInstance());
@@ -70,6 +72,8 @@ public class GrammarGraphBuilder implements Serializable {
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
 		terminalsMap.put(Epsilon.getInstance(), epsilon);
+
+		convertLayout(grammar.getLayout().keySet().iterator().next());
 	}
 
 	public GrammarGraph build() {
@@ -79,21 +83,29 @@ public class GrammarGraphBuilder implements Serializable {
 		return new GrammarGraph(this);
 	}
 	
+	private void convertLayout(Nonterminal nonterminal) {
+		List<Rule> rules = grammar.getLayoutAlternatives(nonterminal);
+		if (rules.isEmpty()) 
+			return;
+		layout = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());
+		rules.forEach(r -> addRule(layout, r));
+	}
+	
 	private void convert(Nonterminal nonterminal) {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup()));
-		rules.forEach(r -> addAlternative(nonterminalSlot, r));
+		rules.forEach(r -> addRule(nonterminalSlot, r));
 	}
 	
-	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
+	private void addRule(NonterminalGrammarSlot head, Rule rule) {
 		
 		if (rule.size() == 0) {
 			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id, rule.getPosition(0), head, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
 			head.addFirstSlot(epsilonSlot);
 			slots.add(epsilonSlot);
 		} 
+		
 		else {
-			
 			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id, rule.getPosition(0), getNodeLookup(), Collections.emptySet());
 			head.addFirstSlot(firstSlot);
 			
@@ -121,9 +133,20 @@ public class GrammarGraphBuilder implements Serializable {
 					currentSlot = slot;
 				}
 				
+				currentSlot = addLayout(currentSlot, rule, i);
+				
 				slots.add(currentSlot);
 			}		
 		}
+	}
+
+	private BodyGrammarSlot addLayout(BodyGrammarSlot currentSlot, Rule rule, int i) {
+		if (rule.size() > 1 && layout != null) {		
+			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, layout);
+			currentSlot.addTransition(new NonterminalTransition(layout, currentSlot, slot, Collections.emptySet()));
+			return slot;
+		}
+		return currentSlot;
 	}
 
 	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 

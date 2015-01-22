@@ -51,6 +51,10 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		createNode(length, cr, parser, u, i, node);
 	}
 	
+	public TerminalGrammarSlot getSlot() {
+		return slot;
+	}
+	
 	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node);
 	
 	@Override
