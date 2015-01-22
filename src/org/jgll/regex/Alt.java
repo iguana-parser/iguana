@@ -12,7 +12,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Constants;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
@@ -24,13 +26,13 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<T> symbols;
+	protected final List<T> symbols;
 	
 	private boolean allRegularExpression;
 
 	public Alt(Builder<T> builder) {
 		super(builder);
-		this.symbols = builder.elements;
+		this.symbols = builder.symbols;
 		if (symbols.stream().allMatch(x -> x instanceof RegularExpression))
 			allRegularExpression = true;
 	}	
@@ -100,7 +102,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 		return symbols.size();
 	}
 	
-	public Symbol get(int index) {
+	public T get(int index) {
 		return symbols.get(index);
 	}
 	
@@ -154,11 +156,50 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 	public List<T> getSymbols() {
 		return symbols;
 	}
+
+	public static Alt<CharacterRange> not(Character...chars) {
+		List<CharacterRange> ranges = Arrays.stream(chars).map(c -> CharacterRange.in(c.getValue(), c.getValue())).collect(Collectors.toList());
+		return not(ranges);
+	}
+	
+	public static Alt<CharacterRange> not(CharacterRange...ranges) {
+		return not(Arrays.asList(ranges));
+	}
+	
+	public static Alt<CharacterRange> not(Alt<CharacterRange> alt) {
+		return not(alt.symbols);
+	}
+	
+	public static Alt<CharacterRange> not(List<CharacterRange> ranges) {
+		List<CharacterRange> newRanges = new ArrayList<>();
+		
+		int i = 0;
+		
+		Collections.sort(ranges);
+		
+		if(ranges.get(i).getStart() >= 1) {
+			newRanges.add(CharacterRange.in(1, ranges.get(i).getStart() - 1));
+		}
+		
+		for(; i < ranges.size() - 1; i++) {
+			CharacterRange r1 = ranges.get(i);
+			CharacterRange r2 = ranges.get(i + i);
+			
+			if(r2.getStart() > r1.getEnd() + 1) {
+				newRanges.add(CharacterRange.in(r1.getEnd() + 1, r2.getStart() - 1));
+			}
+		}
+		
+		if(ranges.get(i).getEnd() < Constants.MAX_UTF32_VAL) {
+			newRanges.add(CharacterRange.in(ranges.get(i).getEnd() + 1, Constants.MAX_UTF32_VAL));
+		}
+		
+		return builder(newRanges).build();
+	}
 	
 	public static <T extends Symbol> Builder<T> builder() {
 		return new Builder<>();
 	}
-
 	
 	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
 		return new Builder<T>().add(symbols);
@@ -171,22 +212,22 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 	
 	public static class Builder<T extends Symbol> extends SymbolBuilder<Alt<T>> {
 
-		private List<T> elements = new ArrayList<>();
+		List<T> symbols = new ArrayList<>();
 		
 		public Builder<T> add(T symbol) {
-			elements.add(symbol);
+			symbols.add(symbol);
 			return this;
 		}
 				
 		public Builder<T> add(List<T> l) {
-			elements.addAll(l);
+			symbols.addAll(l);
 			return this;
 		}
 
 		@Override
 		public Alt<T> build() {
 //			Verify.verify(elements.size() > 2, "The number of elements in an alternative should be at least two");
-			this.name = getName(elements);
+			this.name = getName(symbols);
 			return new Alt<>(this);
 		}
 	}

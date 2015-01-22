@@ -11,7 +11,6 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
-import org.jgll.util.unicode.UnicodeUtil;
 
 
 /**
@@ -114,10 +113,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	@Override
 	public Character asSingleChar() {
 		return Character.from(start);
-	}
-
-	public CharacterClass not() {
-		return UnicodeUtil.reverse(this);
 	}
 
 	@Override

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.regex.Alt;
 
 /**
  * 
@@ -29,7 +29,7 @@ public class UnicodeUtil {
 		return categoriesMap.get(categoryName);
 	}
 	
-	public static CharacterClass getCharacterClassInCategory(String categoryName) {
+	public static Alt<CharacterRange> getCharacterClassInCategory(String categoryName) {
 		List<Integer> vals = new ArrayList<>(categoriesMap.get(categoryName));
 		Collections.sort(vals);
 
@@ -46,14 +46,14 @@ public class UnicodeUtil {
 			end = vals.get(i);
 		}
 		
-		return CharacterClass.from(ranges);
+		return Alt.from(ranges);
 	}
 	
 	public static boolean isPrintableAscii(int codePoint) {
 		return '\u0020' < codePoint && codePoint < '\u007f';
 	}
 	
-	public static CharacterClass reverse(CharacterRange range) {
+	public static Alt<CharacterRange> reverse(CharacterRange range) {
 		List<CharacterRange> ranges = new ArrayList<>();
 		if(range.getStart() >= 1) {
 			ranges.add(CharacterRange.in(1, range.getStart() - 1));
@@ -61,7 +61,7 @@ public class UnicodeUtil {
 		if(range.getEnd() < MAX_UTF32_VAL) {
 			ranges.add(CharacterRange.in(range.getEnd() + 1, MAX_UTF32_VAL));
 		}
-		return CharacterClass.from(ranges);
+		return Alt.from(ranges);
 	}
 	
 	private static Map<Byte, String> categoryNames = new HashMap<>();

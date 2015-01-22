@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.Alt;
@@ -53,7 +52,7 @@ public class FollowRestrictionTest {
 	public void test3() {
 		
 		// id !>> [a-z]
-		RegularExpression r3 = idBuilder.addPreCondition(RegularExpressionCondition.notFollow(CharacterClass.from(CharacterRange.in('a', 'z')))).build();
+		RegularExpression r3 = idBuilder.addPreCondition(RegularExpressionCondition.notFollow(Alt.from(CharacterRange.in('a', 'z')))).build();
 
 		RunnableAutomaton matcher = r3.getAutomaton().getRunnableAutomaton();
 		
@@ -65,7 +64,7 @@ public class FollowRestrictionTest {
 	@Test
 	public void test4() {
 		// (![*] | [*] !>> [/])*
-		CharacterClass r1 = Character.from('*').not();
+		Alt<CharacterRange> r1 = Alt.not(Character.from('*'));
 		Character r2 = new Character.Builder('*').addPreCondition(RegularExpressionCondition.notFollow(Character.from('/'))).build();
 		Star star = Star.from(Alt.from(r1, r2));
 		

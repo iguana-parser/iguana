@@ -1,9 +1,7 @@
 package org.jgll.grammar.symbol;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -79,18 +77,6 @@ public class Character extends AbstractRegularExpression {
 		return false;
 	}
 	
-	public CharacterClass not() {
-		List<CharacterRange> ranges = new ArrayList<>();
-		if(c >= 1) {
-			ranges.add(CharacterRange.in(1, c - 1));
-		}
-		if(c < Constants.MAX_UTF32_VAL) {
-			ranges.add(CharacterRange.in(c + 1, Constants.MAX_UTF32_VAL));
-		}
-		CharacterClass c = CharacterClass.from(ranges);
-		return c;
-	}
-
 	@Override
 	public Set<CharacterRange> getFirstSet() {
 		Set<CharacterRange> firstSet = new HashSet<>();
