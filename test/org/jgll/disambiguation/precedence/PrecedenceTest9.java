@@ -6,12 +6,12 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.regex.Sequence;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -39,7 +39,7 @@ public class PrecedenceTest9 {
 	private Character a = Character.from('a');
 	private Character comma = Character.from(',');
 	private Character semicolon = Character.from(';');
-	private Keyword min = Keyword.from("-");
+	private Sequence<Character> min = Sequence.from("-");
 	
 	private GLLParser parser;
 	private Grammar grammar;

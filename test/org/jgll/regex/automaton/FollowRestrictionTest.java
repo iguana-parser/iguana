@@ -6,11 +6,11 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.Alt;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
+import org.jgll.regex.Sequence;
 import org.jgll.regex.Star;
 import org.jgll.util.Input;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class FollowRestrictionTest {
 		
 		// id !>> [:]
 		RegularExpression r1 = idBuilder.addPostCondition(RegularExpressionCondition.notFollow(Character.from(':')))				
-								 .addPreCondition(RegularExpressionCondition.notMatch(Keyword.from("set"))).build();
+								 .addPreCondition(RegularExpressionCondition.notMatch(Sequence.from("set"))).build();
 		
 		
 		RunnableAutomaton matcher = r1.getAutomaton().getRunnableAutomaton();
@@ -40,7 +40,7 @@ public class FollowRestrictionTest {
 	public void test2() {
 		
 		// id !>> "<>"
-		RegularExpression r2 = idBuilder.addPreCondition(RegularExpressionCondition.notFollow(Keyword.from("<>"))).build();
+		RegularExpression r2 = idBuilder.addPreCondition(RegularExpressionCondition.notFollow(Sequence.from("<>"))).build();
 		RunnableAutomaton matcher = r2.getAutomaton().getRunnableAutomaton();
 		
 		assertEquals(-1, matcher.match(Input.fromString("test<>"), 0));

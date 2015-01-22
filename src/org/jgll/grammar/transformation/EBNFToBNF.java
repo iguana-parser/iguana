@@ -11,7 +11,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Alt;
-import org.jgll.regex.Group;
+import org.jgll.regex.Sequence;
 import org.jgll.regex.Opt;
 import org.jgll.regex.Plus;
 
@@ -44,7 +44,7 @@ public class EBNFToBNF implements GrammarTransformation {
 	private boolean isEBNF(Symbol s) {
 		return s instanceof Plus ||
 			   s instanceof Opt ||
-			   s instanceof Group ||
+			   s instanceof Sequence ||
 			   s instanceof Alt;
 	}
 	
@@ -91,9 +91,9 @@ public class EBNFToBNF implements GrammarTransformation {
 			rules.add(Rule.withHead(newNt).build());
 		} 
 		
-		else if (s instanceof Group) {
+		else if (s instanceof Sequence) {
 			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Group<Symbol>) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
+			List<Symbol> symbols = ((Sequence<Symbol>) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
 			newNt = new Nonterminal.Builder(s.getName()).addPreConditions(s.getPreConditions()).build();
 			rules.add(Rule.withHead(newNt).addSymbols(symbols).build());
 		} 

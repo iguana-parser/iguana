@@ -2,7 +2,6 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
@@ -28,7 +27,7 @@ public class ExamplesTest {
 	@Test
 	public void testIntersectionKeywordId() {
 		Automaton idAutomaton = RegularExpressionExamples.getId().build().getAutomaton().determinize();
-		Automaton forAutomaton = Keyword.from("for").getAutomaton().determinize();
+		Automaton forAutomaton = Sequence.from("for").getAutomaton().determinize();
 		
 		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
 	}

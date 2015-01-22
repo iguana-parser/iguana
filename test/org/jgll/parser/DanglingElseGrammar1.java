@@ -8,7 +8,7 @@ import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
-import org.jgll.regex.Group;
+import org.jgll.regex.Sequence;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -38,7 +38,7 @@ public class DanglingElseGrammar1 {
 	private Character s = Character.from('s');
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
-	private Group group = Group.builder(a, S, b, S).addPreCondition(ContextFreeCondition.notMatch(a, S)).build();
+	private Sequence group = Sequence.builder(a, S, b, S).addPreCondition(ContextFreeCondition.notMatch(a, S)).build();
 
 	private Grammar grammar;
 	

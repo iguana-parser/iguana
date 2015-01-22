@@ -4,14 +4,14 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.regex.Plus;
+import org.jgll.regex.Sequence;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -36,7 +36,7 @@ public class FollowRestrictionTest2 {
 	public void init() {
 		
 		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Keyword.from("8"))).build();
+		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Sequence.from("8"))).build();
 		CharacterRange az = CharacterRange.in('a', 'z');
 		CharacterRange zero_nine = CharacterRange.in('0', '9');
 		Plus AZPlus = Plus.builder(az).addPreCondition(RegularExpressionCondition.notFollow(az)).build();

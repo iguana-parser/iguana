@@ -9,7 +9,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Alt;
-import org.jgll.regex.Group;
+import org.jgll.regex.Sequence;
 import org.jgll.util.trie.Edge;
 import org.jgll.util.trie.Node;
 import org.jgll.util.trie.Trie;
@@ -58,7 +58,7 @@ public class LeftFactorize implements GrammarTransformation {
 			if (inner.size() == 1){
 				outer.add(inner.get(0));
 			} else {
-				outer.add(Group.from(inner));
+				outer.add(Sequence.from(inner));
 			}
 		}
 		if (outer.size() == 1){

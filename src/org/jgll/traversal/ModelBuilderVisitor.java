@@ -13,7 +13,7 @@ import java.util.Set;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.symbol.CharacterClass;
-import org.jgll.regex.Group;
+import org.jgll.regex.Sequence;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
@@ -215,8 +215,8 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			
 			RegularExpression regex = node.getGrammarSlot().getRegularExpression();
 			
-			if (regex instanceof Group) {
-				Group sequence = (Group) regex;
+			if (regex instanceof Sequence) {
+				Sequence sequence = (Sequence) regex;
 				Object object = regex.getObject();
 				listener.startNode((T) object);
 				

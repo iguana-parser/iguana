@@ -5,9 +5,10 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.regex.Sequence;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class KeywordTest2 {
 
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
-	private Keyword iff = Keyword.from("if");
+	private Sequence<Character> iff = Sequence.from("if");
 
 	@Before
 	public void init() {

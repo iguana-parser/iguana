@@ -2,9 +2,10 @@ package org.jgll.regex.automaton;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
+import org.jgll.regex.Sequence;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -52,8 +53,8 @@ public class IntersectionTest {
 	
 	@Test
 	public void test3() {
-		Keyword k1 = Keyword.from("for");
-		Keyword k2 = Keyword.from("forall");
+		Sequence<Character> k1 = Sequence.from("for");
+		Sequence<Character> k2 = Sequence.from("forall");
 
 		assertTrue(AutomatonOperations.prefix(k1.getAutomaton(), k2.getAutomaton()));
 		assertFalse(AutomatonOperations.prefix(k2.getAutomaton(), k1.getAutomaton()));

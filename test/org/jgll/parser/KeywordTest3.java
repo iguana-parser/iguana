@@ -6,9 +6,9 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.regex.Sequence;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -35,8 +35,8 @@ public class KeywordTest3 {
 	private Grammar grammar;
 
 	private Nonterminal S = Nonterminal.withName("S");
-	private Keyword iff = Keyword.from("if");
-	private Keyword then = Keyword.from("then");
+	private Sequence<Character> iff = Sequence.from("if");
+	private Sequence<Character> then = Sequence.from("then");
 	private Nonterminal L = Nonterminal.withName("L");
 	private Character s = Character.from('s');
 	private Character ws = Character.from(' ');

@@ -17,33 +17,44 @@ import java.util.stream.StreamSupport;
 import org.jgll.grammar.symbol.AbstractSymbol;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.Input;
 
-public class Group<T extends Symbol> extends AbstractSymbol implements RegularExpression, Iterable<T> {
+public class Sequence<T extends Symbol> extends AbstractSymbol implements RegularExpression, Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
 	private final List<T> symbols;
 	
 	private boolean allRegularExpression;
-
-	private Group(Builder<T> builder) {
-		super(builder);
-		this.symbols = builder.symbols;
+	
+	public static Sequence<Character> from(String s) {
+		return from(Input.toIntArray(s));
 	}
 	
-	public static <T extends Symbol> Group<T> from(List<T> symbols) {
+	public static Sequence<Character> from(int[] chars) {
+		return builder(Arrays.stream(chars).mapToObj(Character::from).collect(Collectors.toList())).build();
+	}
+	
+	public static <T extends Symbol> Sequence<T> from(List<T> symbols) {
 		return new Builder<T>().add(symbols).build();
 	}
 	
 	@SafeVarargs
-	public static <T extends Symbol> Group<T> from(T...elements) {
+	public static <T extends Symbol> Sequence<T> from(T...elements) {
 		return from(Arrays.asList(elements));
+	}
+	
+	private Sequence(Builder<T> builder) {
+		super(builder);
+		this.symbols = builder.symbols;
 	}
 	
 	private static <T> String getName(List<T> elements) {
@@ -99,10 +110,10 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		if(obj == this)
 			return true;
 		
-		if(!(obj instanceof Group))
+		if(!(obj instanceof Sequence))
 			return false;
 		
-		Group<?> other = (Group<?>) obj;
+		Sequence<?> other = (Sequence<?>) obj;
 		
 		return symbols.equals(other.symbols);
 	}
@@ -144,7 +155,7 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		
 	@Override
 	public String getConstructorCode() {
-		return Group.class.getSimpleName() + ".builder(" + asArray(symbols) + ")" + super.getConstructorCode() + ".build()";
+		return Sequence.class.getSimpleName() + ".builder(" + asArray(symbols) + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	@Override
@@ -185,6 +196,12 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		return RegularExpression.super.getMatcher();
 	}
 	
+	public Rule toRule() {
+		Rule.Builder builder = Rule.withHead(Nonterminal.withName(name));
+		symbols.forEach(s -> builder.addSymbol(s));
+		return builder.build();
+	}
+	
 	@Override
 	public String toString() {
 		
@@ -207,7 +224,7 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		return builder(Arrays.asList(symbols));
 	}
 	
-	public static class Builder<T extends Symbol> extends SymbolBuilder<Group<T>> {
+	public static class Builder<T extends Symbol> extends SymbolBuilder<Sequence<T>> {
 
 		private List<T> symbols = new ArrayList<>();
 		
@@ -222,9 +239,9 @@ public class Group<T extends Symbol> extends AbstractSymbol implements RegularEx
 		}
 		
 		@Override
-		public Group<T> build() {
+		public Sequence<T> build() {
 			this.name = getName(symbols);
-			return new Group<>(this);
+			return new Sequence<>(this);
 		}
 	}
 	

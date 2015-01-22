@@ -34,7 +34,7 @@ public class StarTest {
 	@Test
 	public void test2() {
 		// ([a-a]+)*
-		RegularExpression regexp = Star.from(Group.from(Plus.from(CharacterClass.from(CharacterRange.in('a', 'a')))));
+		RegularExpression regexp = Star.from(Sequence.from(Plus.from(CharacterClass.from(CharacterRange.in('a', 'a')))));
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();

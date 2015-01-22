@@ -3,19 +3,20 @@ package org.jgll.regex.automaton;
 import static org.jgll.regex.automaton.AutomatonOperations.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.Alt;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
+import org.jgll.regex.Sequence;
 import org.jgll.util.Input;
 import org.junit.Test;
 
 public class DiffernceTest {
 	
 	private RegularExpression id = RegularExpressionExamples.getId().build();
-	private Keyword k1 = Keyword.from("if");
-	private Keyword k2 = Keyword.from("when");
-	private Keyword k3 = Keyword.from("new");
+	private Sequence<Character> k1 = Sequence.from("if");
+	private Sequence<Character> k2 = Sequence.from("when");
+	private Sequence<Character> k3 = Sequence.from("new");
 
 	@Test
 	public void test1() {		
