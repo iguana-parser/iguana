@@ -36,6 +36,16 @@ public class PersistentEnvironment implements Environment {
 	public Environment store(String name, Object value) {
 		return new PersistentEnvironment(bindings.__put(name, value));
 	}
+	
+	@Override 
+	public Environment store(String[] names, Object[] values) {
+		ImmutableMap<String, Object> __bindings = bindings;
+		int i = 0;
+		while (i < names.length) {
+			__bindings = __bindings.__put(names[i], values[i]);
+		}
+		return new PersistentEnvironment(__bindings);
+	}
 
 	@Override
 	public Environment pushAndStore(String name, Object value) {

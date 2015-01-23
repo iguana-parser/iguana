@@ -39,7 +39,7 @@ public class NonterminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		
 		if (!nonterminal.test(parser.getInput().charAt(i))) {
 			parser.recordParseError(origin);
@@ -47,11 +47,11 @@ public class NonterminalTransition extends AbstractTransition {
 		}
 		
 		for (Condition c : preConditions) {
-			if (c.getSlotAction().execute(parser.getInput(), u, i, env)) 
+			if (c.getSlotAction().execute(parser.getInput(), u, i)) 
 				return;
 		}
 				
-		parser.create(dest, nonterminal, u, i, node, arguments, env);
+		parser.create(dest, nonterminal, u, i, node);
 	}
 	
 	public String getLabel() {
@@ -71,6 +71,28 @@ public class NonterminalTransition extends AbstractTransition {
 			.append("slot" + registry.getId(dest)).append(", ")
 			.append(getConstructorCode(preConditions, registry))
 			.toString();
+	}
+
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		
+		if (!nonterminal.test(parser.getInput().charAt(i))) {
+			parser.recordParseError(origin);
+			return;
+		}
+		
+		for (Condition c : preConditions) {
+			if (c.getSlotAction().execute(parser.getInput(), u, i, env)) 
+				return;
+		}
+				
+		parser.create(dest, nonterminal, u, i, node, arguments, env);
+		
 	}
 
 }

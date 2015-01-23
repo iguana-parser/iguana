@@ -1,6 +1,6 @@
 package org.jgll.parser.gss;
 
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.NonPackedNode;
 
@@ -19,7 +19,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 	}
 
 	@Override
-	public GrammarSlot getReturnSlot() {
+	public BodyGrammarSlot getReturnSlot() {
 		return null;
 	}
 

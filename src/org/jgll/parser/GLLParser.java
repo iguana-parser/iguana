@@ -36,20 +36,9 @@ public interface GLLParser {
 		return parse(input, grammar, startSymbol, Configuration.DEFAULT);
 	}
 	
-	/**
-	 * Data-dependent GLL parsing
-	 */
-	public Object eval(CodeBlock code, Environment env);
-	
-	public Object eval(DataDependentCondition condition, Environment env);
-	
-	public Object[] eval(Expression[] arguments, Environment env);
-	
-	public IEvaluatorContext getEvaluatorContext();
-	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
 	
-	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Expression[] arguments, Environment env);
+	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node);
 	
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 
@@ -65,9 +54,9 @@ public interface GLLParser {
 	
 	public void scheduleDescriptor(Descriptor descriptor);
 	
-	default boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
+	default boolean addDescriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
 		if (!hasDescriptor(slot, gssNode, inputIndex, sppfNode)) {
-			scheduleDescriptor(new Descriptor(slot, gssNode, inputIndex, sppfNode, env));
+			scheduleDescriptor(new Descriptor(slot, gssNode, inputIndex, sppfNode));
 			return true;
 		}
 		return false;
@@ -91,5 +80,28 @@ public interface GLLParser {
 	public void reset();
 
 	public Configuration getConfiguration();
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public Object evaluate(CodeBlock code, Environment env);
+	
+	public Object evaluate(DataDependentCondition condition, Environment env);
+	
+	public Object[] evaluate(Expression[] arguments, Environment env);
+	
+	public IEvaluatorContext getEvaluatorContext();
+	
+	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Expression[] arguments, Environment env);
+	
+	default boolean addDescriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
+		if (!hasDescriptor(slot, gssNode, inputIndex, sppfNode)) {
+			scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(slot, gssNode, inputIndex, sppfNode, env));
+			return true;
+		}
+		return false;
+	}
 	
 }

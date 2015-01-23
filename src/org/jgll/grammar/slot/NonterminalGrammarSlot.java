@@ -7,15 +7,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.lookup.NodeLookup;
-import org.jgll.sppf.DummyNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.util.Input;
 import org.jgll.util.collections.Key;
@@ -43,12 +38,6 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();
 		this.nonterminalNodes = new HashMap<>(1000);
-	}
-	
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// FIXME: Data-dependent GLL
-		firstSlots.forEach(s -> parser.scheduleDescriptor(new Descriptor(s, u, i, DummyNode.getInstance(), parser.getEvaluatorContext().getEmptyEnvironment())));
 	}
 	
 	public void addFirstSlot(BodyGrammarSlot slot) {

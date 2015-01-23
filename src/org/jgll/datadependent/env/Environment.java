@@ -9,6 +9,8 @@ public interface Environment {
 	
 	public Environment store(String name, Object value);
 	
+	public Environment store(String[] names, Object[] values);
+	
 	public Environment pushAndStore(String name, Object value);
 	
 	public Environment pushAndStore(Object... bindings);

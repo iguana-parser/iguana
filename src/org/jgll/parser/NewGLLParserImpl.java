@@ -3,6 +3,7 @@ package org.jgll.parser;
 
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
@@ -44,7 +45,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 			return;
 		
 		for(GSSEdge edge : gssNode.getGSSEdges()) {
-			GrammarSlot returnSlot = edge.getReturnSlot();
+			BodyGrammarSlot returnSlot = edge.getReturnSlot();
 			
 			for(Condition c : returnSlot.getConditions()) {
 				// FIXME: Data-dependent GLL
@@ -69,7 +70,35 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
+	public void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source) {
+		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
+		
+		if(gssLookup.getGSSEdge(source, edge)) {
+			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
+
+			for (NonPackedNode z : source.getPoppedElements()) {
+				
+				// Execute pop actions for continuations, when the GSS node already
+				// exits. The input index will be the right extend of the node
+				// stored in the popped elements.
+				for (Condition c : returnSlot.getConditions()) {
+					if (c.getSlotAction().execute(input, destination, z.getRightExtent())) 
+						break;
+				}
+				
+				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z); 
+				addDescriptor(returnSlot, destination, z.getRightExtent(), x);
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		
 		if(gssLookup.getGSSEdge(source, edge)) {

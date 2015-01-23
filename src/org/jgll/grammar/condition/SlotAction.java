@@ -6,5 +6,9 @@ import org.jgll.util.Input;
 
 @FunctionalInterface
 public interface SlotAction {
-	public boolean execute(Input input, GSSNode gssNode, int inputIndex, Environment env);
+	public boolean execute(Input input, GSSNode gssNode, int inputIndex);
+	
+	default boolean execute(Input input, GSSNode gssNode, int inputIndex, Environment env) {
+		return execute(input, gssNode, inputIndex);
+	}
 }

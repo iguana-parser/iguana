@@ -32,6 +32,17 @@ public class NonEmptyEnvironment extends AbstractEnvironment {
 	}
 	
 	@Override
+	public Environment store(String[] names, Object[] values) {
+		if(variables == null) variables = new HashMap<>();
+		int i = 0;
+		while (i < names.length) {
+			variables.put(names[i], values[i]);
+			i++;
+		}
+		return this;
+	}
+	
+	@Override
     public Environment pushAndStore(String name, Object value) {
     	return this.push().store(name, value);
     }

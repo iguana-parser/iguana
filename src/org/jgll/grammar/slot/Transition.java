@@ -9,10 +9,17 @@ import org.jgll.util.generator.ConstructorCode;
 
 public interface Transition extends ConstructorCode {
 	
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node);
 	
 	public GrammarSlot destination();
 	
 	public GrammarSlot origin();
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);
 	
 }

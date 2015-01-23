@@ -14,10 +14,20 @@ public class FirstTerminalTransition extends AbstractTerminalTransition {
 	public FirstTerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, Set<Condition> preConditions, Set<Condition> postConditions) {
 		super(slot, origin, dest);
 	}
+
+	@Override
+	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		dest.execute(parser, u, i + length, cr);
+	}
 	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// FIXME: Data-dependent GLL
+		// FIXME: Can environment change at this point of parsing? 
 		dest.execute(parser, u, i + length, cr, env);		
 	}
 

@@ -56,8 +56,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected int ci = 0;
 	
-	public final PersistentEvaluatorContext ctx = new PersistentEvaluatorContext();
-	
 	protected Input input;
 	
 	/**
@@ -162,109 +160,36 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			return;
 		}
 		
-		// FIXME: Data-dependent GLL
-		startSymbol.execute(this, cu, ci, cn, ctx.getEmptyEnvironment());
+		startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance())));
 		
 		while(hasNextDescriptor()) {
 			Descriptor descriptor = nextDescriptor();
-			GrammarSlot slot = descriptor.getGrammarSlot();
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
-			// FIXME: Data-dependent GLL
-			slot.execute(this, cu, ci, descriptor.getSPPFNode(), ctx.getEmptyEnvironment());
+			cn = descriptor.getSPPFNode();
+			log.trace("Processing %s", descriptor);
+			descriptor.execute(this);
 		}
 	}
 	
 	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
-	public Object eval(CodeBlock code, Environment env) {
-		Statement[] statements = code.getStatements();
-		
-		if (statements.length == 0) return null;
-		
-		ctx.setEnvironment(env);
-		
-		int i = 0;
-		while (i < statements.length) {
-			statements[i].interpret(ctx);
-			i++;
-		}
-		
-		return null;
-	}
-	
-	@Override
-	public Object eval(DataDependentCondition condition, Environment env) {
-		ctx.setEnvironment(env);
-		
-		return condition.getExpression().interpret(ctx);
-	}
-	
-	@Override
-	public Object[] eval(Expression[] arguments, Environment env) {
-		if (arguments == null) return null;
-		
-		ctx.setEnvironment(env);
-		
-		Object[] values = new Object[arguments.length];
-		
-		int i = 0;
-		while (i < arguments.length) {
-			values[i] = arguments[i].interpret(ctx);
-			i++;
-		}
-		
-		return values;
-	}
-	
-	@Override
-	public IEvaluatorContext getEvaluatorContext() {
-		return ctx;
-	}
-	
-	@Override
-	public GSSNode create(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node, Expression[] arguments, Environment env) {
-		
-		String[] parameters = nonterminal.getNonterminal().getParameters();
-		
-		Object[] values = null;
-		
-		if (parameters != null) { // The number of arguments has been already checked
-			values = eval(arguments, env);
-		}
-		
-		GSSNodeData<Object> data = new GSSNodeData<>(values);
-		
-		// TODO: Data-dependent GLL, what to do with data
-		
+	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {	
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
-		if (gssNode == null) {
-			
-			gssNode = createGSSNode(returnSlot, nonterminal, i);
-			log.trace("GSSNode created: %s",  gssNode);
-			
-			createGSSEdge(returnSlot, u, node, gssNode, env);
-			
-			Environment newEnv = ctx.getEmptyEnvironment();
-			if (parameters != null) {
-				int j = 0;
-				while (j < parameters.length) {
-					newEnv = newEnv.store(parameters[j], values[j]);
-				}
-			}
-			
-			nonterminal.execute(this, gssNode, i, node, newEnv);
-			
+		if (gssNode == null) {			
+			final GSSNode createdGSSNode = createGSSNode(returnSlot, nonterminal, i);
+			log.trace("GSSNode created: %s",  createdGSSNode);
+			createGSSEdge(returnSlot, u, node, createdGSSNode);
+			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, createdGSSNode, i, DummyNode.getInstance())));
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
-			
-			createGSSEdge(returnSlot, u, node, gssNode, env);			
+			createGSSEdge(returnSlot, u, node, gssNode);			
 		}
 		return gssNode;
 	}
 		
-	public abstract void createGSSEdge(GrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env);
+	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
 	
 	public abstract GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
 	
@@ -379,5 +304,101 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public Iterable<GSSNode> getGSSNodes() {
 		return gssLookup.getGSSNodes();
 	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public final IEvaluatorContext ctx = new PersistentEvaluatorContext();
+	
+	@Override
+	public IEvaluatorContext getEvaluatorContext() {
+		return ctx;
+	}
+	
+	@Override
+	public Object evaluate(CodeBlock code, Environment env) {
+		Statement[] statements = code.getStatements();
+		
+		if (statements.length == 0) return null;
+		
+		ctx.setEnvironment(env);
+		
+		int i = 0;
+		while (i < statements.length) {
+			statements[i].interpret(ctx);
+			i++;
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public Object evaluate(DataDependentCondition condition, Environment env) {
+		ctx.setEnvironment(env);
+		
+		return condition.getExpression().interpret(ctx);
+	}
+	
+	@Override
+	public Object[] evaluate(Expression[] arguments, Environment env) {
+		if (arguments == null) return null;
+		
+		ctx.setEnvironment(env);
+		
+		Object[] values = new Object[arguments.length];
+		
+		int i = 0;
+		while (i < arguments.length) {
+			values[i] = arguments[i].interpret(ctx);
+			i++;
+		}
+		
+		return values;
+	}
+	
+	@Override
+	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node, Expression[] arguments, Environment env) {
+		// FIXME: Data-dependent GLL, what to do with data
+		
+		String[] parameters = nonterminal.getNonterminal().getParameters();
+		
+		Object[] values = null;
+		
+		if (parameters != null) { // The number of arguments has been already checked
+			values = evaluate(arguments, env);
+		}
+		
+		@SuppressWarnings("unused")
+		GSSNodeData<Object> data = new GSSNodeData<>(values);
+		
+		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
+		if (gssNode == null) {
+			
+			final GSSNode createdGSSNode = createGSSNode(returnSlot, nonterminal, i);
+			log.trace("GSSNode created: %s",  createdGSSNode);
+			createGSSEdge(returnSlot, u, node, createdGSSNode, env);
+			
+			Environment newEnv = ctx.getEmptyEnvironment();
+			if (parameters != null) {
+				int j = 0;
+				while (j < parameters.length) {
+					newEnv = newEnv.store(parameters[j], values[j]);
+				}
+			}
+			
+			final Environment finalNewEnv = newEnv;
+			
+			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, createdGSSNode, i, DummyNode.getInstance(), finalNewEnv)));
+			
+		} else {
+			log.trace("GSSNode found: %s",  gssNode);
+			createGSSEdge(returnSlot, u, node, gssNode, env);			
+		}
+		return gssNode;
+	}
+	
+	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env);
 
 }

@@ -1,16 +1,16 @@
 package org.jgll.parser.gss;
 
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.HashFunctions;
 import org.jgll.sppf.NonPackedNode;
 
 public class NewGSSEdgeImpl implements GSSEdge {
 	
-	private GrammarSlot returnSlot;
+	private BodyGrammarSlot returnSlot;
 	private NonPackedNode node;
 	private GSSNode destination;
 
-	public NewGSSEdgeImpl(GrammarSlot slot, NonPackedNode node, GSSNode destination) {
+	public NewGSSEdgeImpl(BodyGrammarSlot slot, NonPackedNode node, GSSNode destination) {
 		this.returnSlot = slot;
 		this.node = node;
 		this.destination = destination;
@@ -20,7 +20,7 @@ public class NewGSSEdgeImpl implements GSSEdge {
 		return node;
 	}
 
-	public GrammarSlot getReturnSlot() {
+	public BodyGrammarSlot getReturnSlot() {
 		return returnSlot;
 	}
 

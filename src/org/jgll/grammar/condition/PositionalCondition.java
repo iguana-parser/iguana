@@ -47,10 +47,10 @@ public class PositionalCondition extends Condition {
 		switch (type) {
 		
 			case START_OF_LINE:
-		    	return (input, node, i, env) -> !input.isStartOfLine(i);
+		    	return (input, node, i) -> !input.isStartOfLine(i);
 		    
 			case END_OF_LINE:
-				return (input, node, i, env) -> !input.isEndOfLine(i);
+				return (input, node, i) -> !input.isEndOfLine(i);
 		
 		    default: 
 		    	throw new RuntimeException();

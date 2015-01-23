@@ -1,7 +1,7 @@
 package org.jgll.parser.descriptor;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 
@@ -13,7 +13,7 @@ import org.jgll.sppf.NonPackedNode;
 public class Descriptor {
 	
 	// L
-	private final GrammarSlot slot;
+	private final BodyGrammarSlot slot;
 	
 	// (L1, i)
 	private final GSSNode gssNode;
@@ -24,24 +24,19 @@ public class Descriptor {
 	// (L, i, j)
 	private final NonPackedNode sppfNode;
 	
-	// Env
-	private final Environment env;
-
-	public Descriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
+	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
 		assert slot != null;
 		assert gssNode != null;
 		assert inputIndex >= 0;
 		assert sppfNode != null;
-		assert env != null;
 		
 		this.slot = slot;
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
-		this.env = env;
 	}
 	
-	public GrammarSlot getGrammarSlot() {
+	public BodyGrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
@@ -57,8 +52,8 @@ public class Descriptor {
 		return sppfNode;
 	}
 	
-	public Environment getEnvironment() {
-		return env;
+	public void execute(GLLParser parser) {
+		slot.execute(parser, gssNode, inputIndex, sppfNode);
 	}
 	
 	@Override

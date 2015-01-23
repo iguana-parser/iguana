@@ -34,6 +34,52 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	}
 
 	@Override
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		
+		Input input = parser.getInput();
+
+		for (Condition c : preConditions) {
+			if (c.getSlotAction().execute(input, u, i)) 
+				return;
+		}
+
+		int length = slot.match(input, i);
+		
+		if (length < 0) {
+			parser.recordParseError(origin);
+			return;
+		}
+
+		for (Condition c : postConditions) {
+			if (c.getSlotAction().execute(input, u, i)) 
+				return;
+		}
+		
+		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
+		
+		createNode(length, cr, parser, u, i, node);
+	}
+	
+	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node);
+	
+	@Override
+	public String getConstructorCode(GrammarRegistry registry) {
+		return new StringBuilder()
+			.append("new NonterminalTransition(")
+			.append("slot" + registry.getId(slot)).append(", ")
+			.append("slot" + registry.getId(origin)).append(", ")
+			.append("slot" + registry.getId(dest)).append(", ")
+			.append(getConstructorCode(preConditions, registry)).append(", ")
+			.append(getConstructorCode(postConditions, registry))
+			.toString();
+	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
 		Input input = parser.getInput();
@@ -62,17 +108,5 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	}
 	
 	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);
-	
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return new StringBuilder()
-			.append("new NonterminalTransition(")
-			.append("slot" + registry.getId(slot)).append(", ")
-			.append("slot" + registry.getId(origin)).append(", ")
-			.append("slot" + registry.getId(dest)).append(", ")
-			.append(getConstructorCode(preConditions, registry)).append(", ")
-			.append(getConstructorCode(postConditions, registry))
-			.toString();
-	}
 	
 }

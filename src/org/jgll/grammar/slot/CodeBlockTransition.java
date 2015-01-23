@@ -9,7 +9,6 @@ import org.jgll.sppf.NonPackedNode;
 
 public class CodeBlockTransition extends AbstractTransition {
 	
-	@SuppressWarnings("unused")
 	private final CodeBlock code;
 
 	public CodeBlockTransition(CodeBlock code, BodyGrammarSlot origin, BodyGrammarSlot dest) {
@@ -18,14 +17,37 @@ public class CodeBlockTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// TODO
-		return;
+	public String getConstructorCode(GrammarRegistry registry) {
+		return null;
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return null;
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		
+		// FIXME: Temporarily ignore preconditions and postconditions
+		
+		parser.evaluate(code, parser.getEvaluatorContext().getEmptyEnvironment());
+		
+		if (parser.getEvaluatorContext().getEnvironment().isEmpty()) {
+			dest.execute(parser, u, i, node);
+		} else {
+			dest.execute(parser, u, i, node, parser.getEvaluatorContext().getEnvironment());
+		}
+	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		
+		// FIXME: Temporarily ignore preconditions and postconditions
+		
+		parser.evaluate(code, env);
+		dest.execute(parser, u, i, node, parser.getEvaluatorContext().getEnvironment());
+		
 	}
 
 }

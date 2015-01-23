@@ -28,6 +28,17 @@ public final class EmptyEnvironment extends AbstractEnvironment {
 	}
 	
 	@Override
+	public Environment store(String[] names, Object[] values) {
+		Map<String, Object> bindings = new HashMap<>();
+		int i = 0;
+		while (i < names.length) {
+			bindings.put(names[i], values[i]);
+			i++;
+		}
+		return new NonEmptyEnvironment(this, bindings);
+	}
+	
+	@Override
 	public Environment pushAndStore(String name, Object value) {
 		return this.store(name, value);
 	}

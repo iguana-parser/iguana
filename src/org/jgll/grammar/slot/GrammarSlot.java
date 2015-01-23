@@ -4,11 +4,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
-import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 import org.jgll.util.generator.ConstructorCode;
 
@@ -25,11 +22,6 @@ import org.jgll.util.generator.ConstructorCode;
  *
  */
 public interface GrammarSlot extends ConstructorCode {
-	
-	default void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// TODO: Data-dependent GLL, check
-		getTransitions().forEach(t -> t.execute(parser, u, i, node, env));
-	}
 	
 	default Set<GrammarSlot> getReachableSlots() {
 		return getTransitions().stream().map(t -> t.destination()).collect(Collectors.toSet());

@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Position;
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 import org.jgll.util.collections.Key;
 
@@ -73,5 +76,18 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public void reset(Input input) {
 		intermediateNodes = new HashMap<>();
 		nodeLookup.reset(input);
+	}
+	
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(parser, u, i, node));
+	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		getTransitions().forEach(t -> t.execute(parser, u, i, node, env));
 	}
 }

@@ -3,6 +3,7 @@ package org.jgll.parser;
 
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -47,7 +48,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 			if (!gssLookup.addToPoppedElements(gssNode, node))
 				return;
 
-			GrammarSlot returnSlot = gssNode.getGrammarSlot();
+			BodyGrammarSlot returnSlot = (BodyGrammarSlot) gssNode.getGrammarSlot();
 
 			for(Condition c : returnSlot.getConditions()) {
 				// FIXME: Data-dependent GLL
@@ -74,15 +75,46 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	public final GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
 		return gssLookup.hasGSSNode(returnSlot, ci);
 	}
-	
+
 	@Override
-	public void createGSSEdge(GrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
+	public void createGSSEdge(BodyGrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source) {		
+		GSSEdge edge = new OriginalGSSEdgeImpl(w, destination);
+		
+		if(gssLookup.getGSSEdge(source, edge)) {
+			
+			BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
+			
+			log.trace("GSS Edge created from %s to %s", source, destination);
+			
+			for (NonPackedNode z : source.getPoppedElements()) {
+				
+				// Execute pop actions for continuations, when the GSS node already
+				// exits. The input index will be the right extend of the node
+				// stored in the popped elements.
+				for (Condition c : returnSlot.getConditions()) {
+					if (c.getSlotAction().execute(input, destination, z.getRightExtent())) 
+						break;
+				}
+				
+				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z);
+				addDescriptor(returnSlot, destination, z.getRightExtent(), x);
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public void createGSSEdge(BodyGrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
 		
 		GSSEdge edge = new OriginalGSSEdgeImpl(w, destination);
 		
 		if(gssLookup.getGSSEdge(source, edge)) {
 			
-			GrammarSlot returnSlot = source.getGrammarSlot();
+			BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 			
 			log.trace("GSS Edge created from %s to %s", source, destination);
 			

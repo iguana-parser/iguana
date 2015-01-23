@@ -24,7 +24,17 @@ public class TerminalTransition extends AbstractTerminalTransition {
 							  Set<Condition> preConditions, Set<Condition> postConditions) {
 		super(slot, origin, dest, preConditions, postConditions);
 	}
+
+	@Override
+	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		dest.execute(parser, u, i + length, parser.getIntermediateNode(dest, node, cr));
+	}
 	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		// FIXME: Data-dependent GLL
