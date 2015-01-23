@@ -11,6 +11,12 @@ import org.junit.Test;
 public class ExamplesTest {
 	
 	@Test
+	public void test() {
+		RegularExpression id = RegularExpressionExamples.getId().build();
+		System.out.println(id);
+	}
+	
+	@Test
 	public void testId() {
 		Automaton nfa = RegularExpressionExamples.getId().build().getAutomaton();
 		

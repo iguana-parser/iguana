@@ -31,13 +31,16 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	}
 	
 	default Matcher getJavaRegexMatcher() {
+		Pattern pattern = Pattern.compile(getPattern());
+		java.util.regex.Matcher matcher = pattern.matcher("");
+		
 		return (input, i) -> {
-								Pattern pattern = Pattern.compile(getPattern());
-								java.util.regex.Matcher matcher = pattern.matcher("");
+			                    matcher.reset();
 								matcher.find(i);
 								return matcher.end();
 							 };
-	}	
+	}
+	
 	/**
 	 * The set of characters (ranges) that cannot follow this regular expressions. 
 	 */

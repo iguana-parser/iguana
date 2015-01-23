@@ -54,6 +54,8 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Regula
 	private Sequence(Builder<T> builder) {
 		super(builder);
 		this.symbols = builder.symbols;
+		if (symbols.stream().allMatch(x -> x instanceof RegularExpression))
+			allRegularExpression = true;
 	}
 	
 	private static <T> String getName(List<T> elements) {
