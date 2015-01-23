@@ -1,19 +1,20 @@
 package org.jgll.grammar.transformation;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Alt;
-import org.jgll.regex.Sequence;
 import org.jgll.regex.Opt;
 import org.jgll.regex.Plus;
+import org.jgll.regex.Sequence;
 
 public class EBNFToBNF implements GrammarTransformation {
 	
@@ -24,19 +25,19 @@ public class EBNFToBNF implements GrammarTransformation {
 	}
 	
 	@Override
-	public Iterable<Rule> transform(Iterable<Rule> rules) {
-		Set<Rule> newRules = new HashSet<>();
+	public Grammar transform(Grammar grammar) {
 		
-		for(Rule rule : rules) {
-			newRules.add(rewrite(rule, newRules));
+		Set<Rule> newRules = new LinkedHashSet<>();
+		
+		for (Rule rule : grammar.getDefinitions().values()) {
+			newRules.addAll(transform(rule));
 		}
 		
-		return newRules;
+		return null;
 	}
 	
-	@Override
-	public Iterable<Rule> transform(Rule rule) {
-		Set<Rule> newRules = new HashSet<>();
+	public Set<Rule> transform(Rule rule) {
+		Set<Rule> newRules = new LinkedHashSet<>();
 		newRules.add(rewrite(rule, newRules));
 		return newRules;
 	}
@@ -70,36 +71,48 @@ public class EBNFToBNF implements GrammarTransformation {
 		if (cache.get(s) != null) 
 			return cache.get(s);
 		
+		
+		final Nonterminal newNt;
+
 		/**
 		 * S+ ::= S+ S
 		 *      | S
 		 */
-		
-		final Nonterminal newNt;
-		
 		if(s instanceof Plus) {
 			Symbol in = ((Plus) s).getSymbol();
-			newNt = new Nonterminal.Builder(s.getName()).setEbnfList(true).addPreConditions(s.getPreConditions()).build();
+			newNt = Nonterminal.withName(s.getName());
 			rules.add(Rule.withHead(newNt).addSymbols(newNt, rewrite(in, rules)).build());
 			rules.add(Rule.withHead(newNt).addSymbol(rewrite(in, rules)).build());
 		} 
 		
+		/**
+		 * S? ::= S 
+		 *      | epsilon
+		 */
 		else if (s instanceof Opt) {
 			Symbol in = ((Opt) s).getSymbol();
-			newNt = new Nonterminal.Builder(s.getName()).setEbnfList(true).addPreConditions(s.getPreConditions()).build();
+			newNt = Nonterminal.withName(s.getName());
 			rules.add(Rule.withHead(newNt).addSymbol(rewrite(in, rules)).build());
 			rules.add(Rule.withHead(newNt).build());
 		} 
 		
+		/**
+		 * (S) ::= S
+		 * 
+		 */
 		else if (s instanceof Sequence) {
 			@SuppressWarnings("unchecked")
 			List<Symbol> symbols = ((Sequence<Symbol>) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
-			newNt = new Nonterminal.Builder(s.getName()).addPreConditions(s.getPreConditions()).build();
+			newNt = Nonterminal.withName(s.getName());
 			rules.add(Rule.withHead(newNt).addSymbols(symbols).build());
 		} 
 		
+		/**
+		 * (A | B) ::= A 
+		 *           | B
+		 */
 		else if (s instanceof Alt) {
-			newNt = new Nonterminal.Builder(s.getName()).addPreConditions(s.getPreConditions()).build();
+			newNt = Nonterminal.withName(s.getName());
 			@SuppressWarnings("unchecked")
 			List<Symbol> symbols = ((Alt<Symbol>) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
 			symbols.forEach(x -> rules.add(Rule.withHead(newNt).addSymbol(x).build()));

@@ -27,6 +27,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.gss.lookup.ArrayNodeLookup;
 import org.jgll.parser.gss.lookup.DummyNodeLookup;
 import org.jgll.parser.gss.lookup.GSSNodeLookup;
@@ -81,7 +82,9 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 
 	public GrammarGraph build() {
-		for (Nonterminal nonterminal : grammar.getNonterminals()) {
+		EBNFToBNF ebnfToBNF = new EBNFToBNF();
+		Grammar bnfGrammar = ebnfToBNF.transform(grammar);
+		for (Nonterminal nonterminal : bnfGrammar.getNonterminals()) {
 			convert(nonterminal);
 		}
 		return new GrammarGraph(this);
@@ -136,10 +139,11 @@ public class GrammarGraphBuilder implements Serializable {
 					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, preConditions));
 					currentSlot = slot;
 				}
+
+				slots.add(currentSlot);
 				
 				currentSlot = addLayout(currentSlot, rule, i);
 				
-				slots.add(currentSlot);
 			}		
 		}
 	}
@@ -148,11 +152,12 @@ public class GrammarGraphBuilder implements Serializable {
 		if (rule.size() > 1 && layout != null) {		
 			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, new LayoutPosition(rule.getPosition(i + 1)), layout);
 			currentSlot.addTransition(new NonterminalTransition(layout, currentSlot, slot, Collections.emptySet()));
+			slots.add(slot);
 			return slot;
 		}
 		return currentSlot;
 	}
-
+	
 	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
 															 BodyGrammarSlot origin, BodyGrammarSlot dest,
 															 Set<Condition> preConditions, Set<Condition> postConditions) {

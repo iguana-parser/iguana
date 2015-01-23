@@ -16,7 +16,6 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
@@ -163,17 +162,11 @@ public class Grammar implements ConstructorCode, Serializable {
 		
 		private ListMultimap<Nonterminal, Rule> layout;
 		
-		private Set<Rule> addedRules;
-		
 		private final ListMultimap<Nonterminal, Rule> definitions;
 		
-		private final EBNFToBNF ebnfToBNF;
-
 		public Builder() {
-			this.addedRules = new HashSet<>();
 			this.definitions = ArrayListMultimap.create();
 			this.layout = ArrayListMultimap.create();
-			this.ebnfToBNF = new EBNFToBNF();
 		}
 		
 		public Grammar build() {
@@ -189,20 +182,6 @@ public class Grammar implements ConstructorCode, Serializable {
 		
 		public Builder addRule(Rule rule) {
 			definitions.put(rule.getHead(), rule);
-			
-//			Iterable<Rule> newRules = ebnfToBNF.transform(rule);
-//			
-//			for (Rule r : newRules) {
-//				
-//				if (addedRules.contains(r))
-//					continue;
-//				
-//				// Adding rules in reverse order so that descriptors are created
-//				// in the right order while parsing.
-////				definitions.get(r.getHead()).add(0, r);
-//				definitions.put(r.getHead(), r);
-//			}
-			
 			return this;
 		}
 		

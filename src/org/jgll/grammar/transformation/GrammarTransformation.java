@@ -1,11 +1,8 @@
 package org.jgll.grammar.transformation;
 
-import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.Grammar;
 
+@FunctionalInterface
 public interface GrammarTransformation {
-	
-	public Iterable<Rule> transform(Iterable<Rule> rules);
-	
-	public Iterable<Rule> transform(Rule rule);
-
+	public Grammar transform(Grammar grammar);
 }
