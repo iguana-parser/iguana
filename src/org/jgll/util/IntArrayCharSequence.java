@@ -3,8 +3,15 @@ package org.jgll.util;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class IntArrayCharSequence implements CharSequence {
 	
+	private final int[] input;
+
 	private final char[] chars;
 
 	private final int[] indices;
@@ -12,12 +19,13 @@ public class IntArrayCharSequence implements CharSequence {
 	private final int logicalLength;
 	
 	public IntArrayCharSequence(int[] input) {
+		this.input = input;
 		List<Integer> indicesList = new ArrayList<>();
 		List<Character> charsList = new ArrayList<>();
 		
 		int logicalIndex = 0;
 		
-		for (int i = 0; i < input.length - 1; i++) {
+		for (int i = 0; i < input.length; i++) {
 			if (Character.isBmpCodePoint(input[i])) {
 				charsList.add((char) input[i]);
 				indicesList.add(logicalIndex++);
@@ -60,7 +68,9 @@ public class IntArrayCharSequence implements CharSequence {
 
 	@Override
 	public CharSequence subSequence(int start, int end) {
-		return null;
+		int[] dest = new int[end - start + 1];
+		System.arraycopy(input, start, dest, end, end - start + 1);
+		return new IntArrayCharSequence(dest);
 	}
 
 }

@@ -41,6 +41,8 @@ public class Input {
 	 */
 	private int lineCount;
 	
+	private final IntArrayCharSequence charSequence;
+	
 	private URI uri;
 	
 	public static Input fromString(String s, URI uri) {
@@ -125,10 +127,11 @@ public class Input {
 		return new Input(fromStream(new FileInputStream(file)), file.toURI());
 	}
 
-	private Input(int[] input, URI uri) {
-		this.characters = input;
+	private Input(int[] characters, URI uri) {
+		this.characters = characters;
 		this.uri = uri;
-		lineColumns = new LineColumn[input.length];
+		this.charSequence = new IntArrayCharSequence(characters);
+		lineColumns = new LineColumn[characters.length];
 		calculateLineLengths();
 	}
 	
@@ -212,7 +215,7 @@ public class Input {
 	}
 	
 	public IntArrayCharSequence asCharSequence() {
-		return new IntArrayCharSequence(characters);
+		return charSequence;
 	}
 	
 	public LineColumn getLineColumn(int index) {
