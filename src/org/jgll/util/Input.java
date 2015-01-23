@@ -45,7 +45,7 @@ public class Input {
 	
 	public static Input fromString(String s, URI uri) {
 		try {
-			return new Input(fromStream(IOUtils.toInputStream(s, "UTF-8")), uri);
+			return new Input(fromStream(IOUtils.toInputStream(s)), uri);
 		} catch (IOException e) {
 			assert false : "this should not happen from a string";
 			e.printStackTrace();
@@ -211,6 +211,10 @@ public class Input {
 		return array;
 	}
 	
+	public IntArrayCharSequence asCharSequence() {
+		return new IntArrayCharSequence(characters);
+	}
+	
 	public LineColumn getLineColumn(int index) {
 		if(index < 0 || index >= lineColumns.length) {
 			return new LineColumn(0, 0);
@@ -242,13 +246,11 @@ public class Input {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(! (obj instanceof Input)) {
+		if(! (obj instanceof Input)) 
 			return false;
-		}
 		
 		Input other = (Input) obj;
 		
@@ -264,7 +266,6 @@ public class Input {
 								getColumnNumber(rightExtent),
 								uri);
 	}
-	
 	
 
 	private void calculateLineLengths() {
@@ -319,13 +320,11 @@ public class Input {
 		
 		@Override
 		public boolean equals(Object obj) {
-			if(this == obj) {
+			if(this == obj)
 				return true;
-			}
 			
-			if(!(obj instanceof LineColumn)) {
+			if(!(obj instanceof LineColumn))
 				return false;
-			}
 			
 			LineColumn other = (LineColumn) obj;
 			return lineNumber == other.lineNumber && columnNumber == other.columnNumber;
