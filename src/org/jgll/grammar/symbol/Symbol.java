@@ -25,4 +25,5 @@ public interface Symbol extends ConstructorCode, Serializable {
 	public String getLabel();
 	
 	public SymbolBuilder<? extends Symbol> copyBuilder();
+	
 }	

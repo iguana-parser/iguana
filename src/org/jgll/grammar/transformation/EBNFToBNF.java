@@ -26,14 +26,13 @@ public class EBNFToBNF implements GrammarTransformation {
 	
 	@Override
 	public Grammar transform(Grammar grammar) {
-		
 		Set<Rule> newRules = new LinkedHashSet<>();
+		Set<Rule> newLayout = new LinkedHashSet<>();
 		
-		for (Rule rule : grammar.getDefinitions().values()) {
-			newRules.addAll(transform(rule));
-		}
+		grammar.getDefinitions().values().forEach(r -> newRules.addAll(transform(r)));
+		grammar.getLayout().values().forEach(r -> newLayout.addAll(transform(r)));
 		
-		return null;
+		return Grammar.builder().addRules(newRules).addLayouts(newLayout).build();
 	}
 	
 	public Set<Rule> transform(Rule rule) {

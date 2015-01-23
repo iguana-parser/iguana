@@ -3,7 +3,6 @@ package org.jgll.grammar.symbol;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
@@ -143,7 +142,7 @@ public class Character extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Pattern getPattern() {
-		throw new UnsupportedOperationException();
+	public String getPattern() {
+		return getName();
 	}
 }

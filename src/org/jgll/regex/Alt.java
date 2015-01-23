@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.jgll.grammar.symbol.AbstractSymbol;
@@ -149,8 +148,11 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 	}
 	
 	@Override
-	public Pattern getPattern() {
-		throw new UnsupportedOperationException();
+	public String getPattern() {
+		if (!allRegularExpression)
+			throw new RuntimeException("Only applicable if all arguments are regular expressions");
+		
+		return "(" +  symbols.stream().map(s -> ((RegularExpression)s).getPattern()).collect(Collectors.joining("|")) + ")";
 	}
 
 	public List<T> getSymbols() {

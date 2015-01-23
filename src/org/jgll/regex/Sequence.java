@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -164,8 +163,11 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Regula
 	}
 
 	@Override
-	public Pattern getPattern() {
-		throw new UnsupportedOperationException();
+	public String getPattern() {
+		if (!allRegularExpression)
+			throw new RuntimeException("Only applicable if all arguments are regular expressions");
+
+		return "(" +  symbols.stream().map(s -> ((RegularExpression)s).getPattern()).collect(Collectors.joining(" ")) + ")";
 	}
 	
 	public List<T> getSymbols() {

@@ -186,9 +186,7 @@ public class Grammar implements ConstructorCode, Serializable {
 		}
 		
 		public Builder addRules(Iterable<Rule> rules) {
-			for (Rule rule : rules) {
-				addRule(rule);
-			}
+			rules.forEach(r -> addRule(r));
 			return this;
 		}
 		
@@ -199,6 +197,11 @@ public class Grammar implements ConstructorCode, Serializable {
 
 		public Builder addLayout(Rule rule) {
 			layout.put(rule.getHead(), rule);
+			return this;
+		}
+		
+		public Builder addLayouts(Iterable<Rule> rules) {
+			rules.forEach(r -> addLayout(r));
 			return this;
 		}
 	}

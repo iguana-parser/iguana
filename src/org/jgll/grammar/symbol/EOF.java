@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -82,7 +81,7 @@ public class EOF extends AbstractRegularExpression {
     }
 
 	@Override
-	public Pattern getPattern() {
+	public String getPattern() {
 		throw new UnsupportedOperationException();
 	}
 	

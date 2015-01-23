@@ -32,7 +32,8 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	
 	default Matcher getJavaRegexMatcher() {
 		return (input, i) -> {
-								java.util.regex.Matcher matcher = getPattern().matcher("");
+								Pattern pattern = Pattern.compile(getPattern());
+								java.util.regex.Matcher matcher = pattern.matcher("");
 								matcher.find(i);
 								return matcher.end();
 							 };
@@ -42,7 +43,7 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	 */
 	public Set<CharacterRange> getNotFollowSet();
 	
-	public Pattern getPattern();
+	public String getPattern();
 	
 	default boolean isSingleChar() {
 		return false;

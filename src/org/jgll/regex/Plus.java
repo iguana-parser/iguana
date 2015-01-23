@@ -1,7 +1,6 @@
 package org.jgll.regex;
 
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.jgll.grammar.symbol.AbstractSymbol;
 import org.jgll.grammar.symbol.CharacterRange;
@@ -72,8 +71,11 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	}
 
 	@Override
-	public Pattern getPattern() {
-		throw new UnsupportedOperationException();
+	public String getPattern() {
+		if (!isRegularExpression)
+			throw new RuntimeException("Only applicable to regular expressions");
+		
+		return ((RegularExpression) s).getPattern() + "+";
 	}
 	
 	public Symbol getSymbol() {
