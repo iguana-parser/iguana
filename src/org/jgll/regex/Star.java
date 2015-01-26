@@ -1,6 +1,7 @@
 package org.jgll.regex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 
+import com.google.common.collect.ImmutableList;
+
 
 public class Star extends AbstractSymbol implements RegularExpression {
 
@@ -22,7 +25,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	
 	private final boolean isRegularExpression;
 	
-	private List<Symbol> separators;
+	private final List<Symbol> separators;
 	
 	private Automaton automaton;
 	
@@ -33,6 +36,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	private Star(Builder builder) {
 		super(builder);
 		this.s = builder.s;
+		this.separators = ImmutableList.copyOf(builder.separators);
 		this.isRegularExpression = s instanceof RegularExpression;
 	}
 	
@@ -98,6 +102,9 @@ public class Star extends AbstractSymbol implements RegularExpression {
 		return Star.class.getSimpleName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
 	}
 	
+	public List<Symbol> getSeparators() {
+		return separators;
+	}
 
 	@Override
 	public Builder copyBuilder() {
@@ -130,15 +137,24 @@ public class Star extends AbstractSymbol implements RegularExpression {
 			this.s = s;
 		}
 		
-		@Override
-		public Star build() {
-			return new Star(this);
-		}
-		
 		public Builder addSeparator(Symbol symbol) {
 			separators.add(symbol);
 			return this;
 		}
 		
+		public Builder addSeparators(List<Symbol> symbols) {
+			separators.addAll(symbols);
+			return this;
+		}
+		
+		public Builder addSeparators(Symbol...symbols) {
+			separators.addAll(Arrays.asList(symbols));
+			return this;
+		}
+		
+		@Override
+		public Star build() {
+			return new Star(this);
+		}
 	}
 }

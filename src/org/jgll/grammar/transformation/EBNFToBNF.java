@@ -15,6 +15,7 @@ import org.jgll.regex.Alt;
 import org.jgll.regex.Opt;
 import org.jgll.regex.Plus;
 import org.jgll.regex.Sequence;
+import org.jgll.regex.Star;
 
 public class EBNFToBNF implements GrammarTransformation {
 	
@@ -62,66 +63,86 @@ public class EBNFToBNF implements GrammarTransformation {
 		return builder.build();
 	}
 	
-	public Symbol rewrite(Symbol s, Set<Rule> rules) {
+	public Symbol rewrite(Symbol symbol, Set<Rule> addedRules) {
 		
-		if(!isEBNF(s))
-			return s;
+		if (!isEBNF(symbol))
+			return symbol;
 		
-		if (cache.get(s) != null) 
-			return cache.get(s);
-		
+		if (cache.get(symbol) != null) 
+			return cache.get(symbol);
 		
 		final Nonterminal newNt;
-
+		
+		
+		/**
+		 * S* ::= S+ 
+		 *      | epsilon
+		 *        
+		 */
+		if (symbol instanceof Star) {
+			Star star = (Star) symbol;
+			Symbol S = star.getSymbol();
+			newNt = Nonterminal.withName(star.getName());
+			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules)).build());
+			addedRules.add(Rule.withHead(newNt).build());
+		}
+		
 		/**
 		 * S+ ::= S+ S
 		 *      | S
+		 *      
+		 * in case of separators:
+		 * 
+		 * (S sep)+ ::= (S sep)+ sep S
+		 *            | S
+		 *      
 		 */
-		if(s instanceof Plus) {
-			Symbol in = ((Plus) s).getSymbol();
-			newNt = Nonterminal.withName(s.getName());
-			rules.add(Rule.withHead(newNt).addSymbols(newNt, rewrite(in, rules)).build());
-			rules.add(Rule.withHead(newNt).addSymbol(rewrite(in, rules)).build());
+		else if (symbol instanceof Plus) {
+			Plus plus = (Plus) symbol;
+			Symbol S = plus.getSymbol();
+			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules)).collect(Collectors.toList());
+			newNt = Nonterminal.withName(symbol.getName());
+			addedRules.add(Rule.withHead(newNt).addSymbol(newNt).addSymbols(seperators).addSymbols(rewrite(S, addedRules)).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(S, addedRules)).build());
 		} 
 		
 		/**
 		 * S? ::= S 
 		 *      | epsilon
 		 */
-		else if (s instanceof Opt) {
-			Symbol in = ((Opt) s).getSymbol();
-			newNt = Nonterminal.withName(s.getName());
-			rules.add(Rule.withHead(newNt).addSymbol(rewrite(in, rules)).build());
-			rules.add(Rule.withHead(newNt).build());
+		else if (symbol instanceof Opt) {
+			Symbol in = ((Opt) symbol).getSymbol();
+			newNt = Nonterminal.withName(symbol.getName());
+			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(in, addedRules)).build());
+			addedRules.add(Rule.withHead(newNt).build());
 		} 
 		
 		/**
 		 * (S) ::= S
-		 * 
 		 */
-		else if (s instanceof Sequence) {
+		else if (symbol instanceof Sequence) {
 			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Sequence<Symbol>) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
-			newNt = Nonterminal.withName(s.getName());
-			rules.add(Rule.withHead(newNt).addSymbols(symbols).build());
+			List<Symbol> symbols = ((Sequence<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules)).collect(Collectors.toList());
+			newNt = Nonterminal.withName(symbol.getName());
+			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).build());
 		} 
 		
 		/**
 		 * (A | B) ::= A 
 		 *           | B
 		 */
-		else if (s instanceof Alt) {
-			newNt = Nonterminal.withName(s.getName());
+		else if (symbol instanceof Alt) {
+			newNt = Nonterminal.withName(symbol.getName());
 			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Alt<Symbol>) s).getSymbols().stream().map(x -> rewrite(x, rules)).collect(Collectors.toList());
-			symbols.forEach(x -> rules.add(Rule.withHead(newNt).addSymbol(x).build()));
+			List<Symbol> symbols = ((Alt<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules)).collect(Collectors.toList());
+			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).build()));
 		}
 		
 		else {
 			throw new IllegalStateException("Unknown symbol type.");			
 		}
 		
-		cache.put(s, newNt);
+		cache.put(symbol, newNt);
 		return newNt;
 	}
 
