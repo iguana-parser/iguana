@@ -25,13 +25,15 @@ public class Epsilon extends AbstractRegularExpression {
 		return instance;
 	}
 	
+	private static SymbolBuilder<Epsilon> builder = 
+			new SymbolBuilder<Epsilon>("epsilon") {
+					@Override
+					public Epsilon build() {
+						return Epsilon.getInstance();
+					}};
+	
 	private Epsilon() {
-		super(new SymbolBuilder<Epsilon>("epsilon") {
-			@Override
-			public Epsilon build() {
-				return Epsilon.getInstance();
-			}
-		});
+		super(builder);
 	}
 	
 	private Object readResolve()  {
@@ -73,7 +75,7 @@ public class Epsilon extends AbstractRegularExpression {
 	
 	@Override
 	public SymbolBuilder<? extends Symbol> copyBuilder() {
-		throw new UnsupportedOperationException();
+		return builder;
 	}
 
 	@Override
