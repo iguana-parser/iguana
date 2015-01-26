@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.util.IntArrayCharSequence;
 import org.jgll.util.generator.ConstructorCode;
-import org.jgll.grammar.symbol.Character;
 
 public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
 
@@ -35,9 +36,13 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 		java.util.regex.Matcher matcher = pattern.matcher("");
 		
 		return (input, i) -> {
-			                    matcher.reset();
-								matcher.find(i);
-								return matcher.end();
+			                    IntArrayCharSequence charSeq = input.asCharSequence();
+								matcher.reset(charSeq);
+								if (matcher.find(i)) {
+									int end = i + matcher.end();
+									return charSeq.logicalIndexAt(end - 1);									
+								}
+								return -1;
 							 };
 	}
 	

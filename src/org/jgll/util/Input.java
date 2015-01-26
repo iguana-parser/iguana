@@ -102,8 +102,6 @@ public class Input {
 			}
 		}
 		
-		input.add(EOF.VALUE);
-
 		reader.close();
 		
 		int[] intInput = new int[input.size()];
@@ -127,10 +125,16 @@ public class Input {
 		return new Input(fromStream(new FileInputStream(file)), file.toURI());
 	}
 
-	private Input(int[] characters, URI uri) {
-		this.characters = characters;
+	private Input(int[] input, URI uri) {
 		this.uri = uri;
-		this.charSequence = new IntArrayCharSequence(characters);
+		this.charSequence = new IntArrayCharSequence(input);
+		
+		// Add EOF (-1) to the end of characters array
+		int length = input.length + 1;
+		this.characters = new int[length];
+		System.arraycopy(input, 0, characters, 0, length - 1);
+		this.characters[input.length] = EOF.VALUE;
+		
 		lineColumns = new LineColumn[characters.length];
 		calculateLineLengths();
 	}

@@ -169,7 +169,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Regula
 		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable if all arguments are regular expressions");
 
-		return "(" +  symbols.stream().map(s -> ((RegularExpression)s).getPattern()).collect(Collectors.joining(" ")) + ")";
+		return "(" +  symbols.stream().map(s -> ((RegularExpression)s).getPattern()).collect(Collectors.joining()) + ")";
 	}
 	
 	public List<T> getSymbols() {

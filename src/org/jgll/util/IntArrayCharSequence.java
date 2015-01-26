@@ -72,5 +72,10 @@ public class IntArrayCharSequence implements CharSequence {
 		System.arraycopy(input, start, dest, end, end - start + 1);
 		return new IntArrayCharSequence(dest);
 	}
+	
+	@Override
+	public String toString() {
+		return new String(chars);
+	}
 
 }
