@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.AbstractSymbol;
@@ -19,6 +21,8 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	private final Symbol s;
 	
 	private final boolean isRegularExpression;
+	
+	private List<Symbol> separators;
 	
 	private Automaton automaton;
 	
@@ -119,6 +123,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	public static class Builder extends SymbolBuilder<Star> {
 
 		private Symbol s;
+		private List<Symbol> separators = new ArrayList<>();
 		
 		public Builder(Symbol s) {
 			this.name = getName(s);
@@ -128,6 +133,11 @@ public class Star extends AbstractSymbol implements RegularExpression {
 		@Override
 		public Star build() {
 			return new Star(this);
+		}
+		
+		public Builder addSeparator(Symbol symbol) {
+			separators.add(symbol);
+			return this;
 		}
 		
 	}
