@@ -218,7 +218,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		gssLookup.reset();
 	}
 
-	@Override
 	public final void scheduleDescriptor(Descriptor descriptor) {
 		descriptorLookup.scheduleDescriptor(descriptor);
 		log.trace("Descriptor created: %s", descriptor);
@@ -293,6 +292,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		return sppfLookup.getTerminalNode(slot, leftExtent, rightExtent);
+	}
+	
+	@Override 
+	public NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		return sppfLookup.getNode(slot, leftChild, rightChild);
 	}
 
 	@Override

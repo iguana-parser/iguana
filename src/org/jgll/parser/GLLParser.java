@@ -50,17 +50,9 @@ public interface GLLParser {
 	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
+	public NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
+	
 	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode);
-	
-	public void scheduleDescriptor(Descriptor descriptor);
-	
-	default boolean addDescriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
-		if (!hasDescriptor(slot, gssNode, inputIndex, sppfNode)) {
-			scheduleDescriptor(new Descriptor(slot, gssNode, inputIndex, sppfNode));
-			return true;
-		}
-		return false;
-	}
 	
 	public boolean hasNextDescriptor();
 	
@@ -95,13 +87,5 @@ public interface GLLParser {
 	public IEvaluatorContext getEvaluatorContext();
 	
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Expression[] arguments, Environment env);
-	
-	default boolean addDescriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
-		if (!hasDescriptor(slot, gssNode, inputIndex, sppfNode)) {
-			scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(slot, gssNode, inputIndex, sppfNode, env));
-			return true;
-		}
-		return false;
-	}
 	
 }

@@ -2,10 +2,10 @@ package org.jgll.parser;
 
 
 import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.NewGSSEdgeImpl;
@@ -39,23 +39,16 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	@Override
 	public final void pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
 		
-		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
-		
 		if (!gssLookup.addToPoppedElements(gssNode, node))
 			return;
 		
-		for(GSSEdge edge : gssNode.getGSSEdges()) {
-			BodyGrammarSlot returnSlot = edge.getReturnSlot();
-			
-			for(Condition c : returnSlot.getConditions()) {
-				// FIXME: Data-dependent GLL
-				if (c.getSlotAction().execute(input, gssNode, inputIndex, ctx.getEmptyEnvironment())) 
-					break;
+		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
+		
+		for(GSSEdge edge : gssNode.getGSSEdges()) {			
+			Descriptor descriptor = edge.addDescriptor(this, gssNode, inputIndex, node);
+			if (descriptor != null) {
+				scheduleDescriptor(descriptor);
 			}
-
-			NonPackedNode y = sppfLookup.getNode(returnSlot, edge.getNode(), node);
-			// // FIXME: Data-dependent GLL
-			addDescriptor(returnSlot, edge.getDestination(), inputIndex, y, ctx.getEmptyEnvironment());
 		}
 	}
 	
@@ -76,18 +69,11 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		if(gssLookup.getGSSEdge(source, edge)) {
 			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
 
-			for (NonPackedNode z : source.getPoppedElements()) {
-				
-				// Execute pop actions for continuations, when the GSS node already
-				// exits. The input index will be the right extend of the node
-				// stored in the popped elements.
-				for (Condition c : returnSlot.getConditions()) {
-					if (c.getSlotAction().execute(input, destination, z.getRightExtent())) 
-						break;
+			for (NonPackedNode z : source.getPoppedElements()) {			
+				Descriptor descriptor = edge.addDescriptor(this, source, z.getRightExtent(), z);
+				if (descriptor != null) {
+					scheduleDescriptor(descriptor);
 				}
-				
-				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z); 
-				addDescriptor(returnSlot, destination, z.getRightExtent(), x);
 			}
 		}
 	}
@@ -99,25 +85,16 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	 */
 	@Override
 	public void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
-		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
+		NewGSSEdgeImpl edge = new org.jgll.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
 		
 		if(gssLookup.getGSSEdge(source, edge)) {
-			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
+			log.trace("GSS Edge created: %s from %s to %s with %s", returnSlot, source, destination, env);
 
 			for (NonPackedNode z : source.getPoppedElements()) {
-				
-				// Execute pop actions for continuations, when the GSS node already
-				// exits. The input index will be the right extend of the node
-				// stored in the popped elements.
-				for (Condition c : returnSlot.getConditions()) {
-					// FIXME: Data-dependent GLL
-					if (c.getSlotAction().execute(input, destination, z.getRightExtent(), env)) 
-						break;
-				}
-				
-				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z); 
-				// // FIXME: Data-dependent GLL
-				addDescriptor(returnSlot, destination, z.getRightExtent(), x, env);
+				Descriptor descriptor = edge.addDescriptor(this, source, z.getRightExtent(), z);
+				if (descriptor != null) {
+					scheduleDescriptor(descriptor);
+				}				
 			}
 		}
 	}

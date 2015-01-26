@@ -1,7 +1,10 @@
 package org.jgll.parser.gss;
 
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.HashFunctions;
+import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.sppf.NonPackedNode;
 
 public class OriginalGSSEdgeImpl implements GSSEdge {
@@ -50,6 +53,27 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 	@Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction.hash(destination.getInputIndex(), destination.getGrammarSlot().hashCode());
+	}
+
+	@Override
+	public Descriptor addDescriptor(GLLParser parser, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
+		
+		BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
+		
+		// FIXME: Bug here, fixed in the master branch of iguana
+		
+		for(Condition c : returnSlot.getConditions()) {
+			if (c.getSlotAction().execute(parser.getInput(), source, inputIndex)) 
+				break;
+		}
+		
+		NonPackedNode y = parser.getNode(returnSlot, node, sppfNode);
+		
+		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y)) {
+			return new Descriptor(returnSlot, destination, inputIndex, y);
+		}
+		
+		return null;
 	}
 
 }
