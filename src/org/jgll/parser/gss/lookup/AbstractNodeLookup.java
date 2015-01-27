@@ -25,21 +25,22 @@ public abstract class AbstractNodeLookup implements NodeLookup {
 	
 	@Override
 	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data) {
+		Tuple<Integer, GSSNodeData<?>> elem = new Tuple<>(i, data);
 		GSSNode v;
-		if ((v = map.get(data)) == null) {
+		if ((v = map.get(elem)) == null) {
 			// FIXME:
 			v = new GSSNode(slot, i);
 			if (map == null) {
 				map = new HashMap<>();
 			}
-			map.put(new Tuple<Integer, GSSNodeData<?>>(i, data), v);
+			map.put(elem, v);
 		}
 		return v;
 	}
 
 	@Override
 	public <T> GSSNode get(int i, GSSNodeData<T> data) {
-		return map == null? null : map.get(new Tuple<Integer, GSSNodeData<?>>(i, data));
+		return map == null? null : map.get(new Tuple<>(i, data));
 	}
 
 }
