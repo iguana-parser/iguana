@@ -28,8 +28,7 @@ public abstract class AbstractNodeLookup implements NodeLookup {
 		Tuple<Integer, GSSNodeData<?>> elem = new Tuple<>(i, data);
 		GSSNode v;
 		if ((v = map.get(elem)) == null) {
-			// FIXME:
-			v = new GSSNode(slot, i);
+			v = new org.jgll.datadependent.gss.GSSNode<T>(slot, i, data);
 			if (map == null) {
 				map = new HashMap<>();
 			}
