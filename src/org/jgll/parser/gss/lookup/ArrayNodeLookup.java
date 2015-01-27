@@ -2,6 +2,7 @@ package org.jgll.parser.gss.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.util.Input;
 
 public class ArrayNodeLookup implements NodeLookup {
@@ -30,6 +31,23 @@ public class ArrayNodeLookup implements NodeLookup {
 	@Override
 	public void reset(Input input) {
 		gssNodes = new GSSNode[input.length()];		
+	}
+
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data) {
+		// FIXME:
+		return null;
+	}
+
+	@Override
+	public <T> GSSNode get(int i, GSSNodeData<T> data) {
+		// FIXME:
+		return null;
 	}
 
 }
