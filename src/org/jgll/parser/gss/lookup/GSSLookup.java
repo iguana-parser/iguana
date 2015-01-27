@@ -45,6 +45,4 @@ public interface GSSLookup {
 	
 	public <T> GSSNode hasGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data);
 	
-	public <T> boolean getGSSEdge(GSSNode gssNode, GSSEdge edge, GSSNodeData<T> data);
-	
 }	

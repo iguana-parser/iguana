@@ -74,10 +74,4 @@ public class GlobalHashGSSLookupImpl extends AbstractGSSLookup {
 		return null;
 	}
 
-	@Override
-	public <T> boolean getGSSEdge(GSSNode gssNode, GSSEdge edge, GSSNodeData<T> data) {
-		
-		return false;
-	}
-
 }
