@@ -56,6 +56,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		return nonterminal;
 	}
 	
+	public String[] getParameters() {
+		return nonterminal.getParameters();
+	}
+	
 	@Override
 	public String toString() {
 		return nonterminal.getName();

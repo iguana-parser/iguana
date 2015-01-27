@@ -86,6 +86,8 @@ public interface GLLParser {
 	
 	public IEvaluatorContext getEvaluatorContext();
 	
+	public Environment getEmptyEnvironment();
+	
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Expression[] arguments, Environment env);
 	
 }

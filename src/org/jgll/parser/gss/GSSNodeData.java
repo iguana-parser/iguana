@@ -13,6 +13,10 @@ public class GSSNodeData<T> implements Iterable<T> {
 		this.size = elements == null? 0 : elements.length;
 	}
 	
+	public T[] getValues() {
+		return elements;
+	}
+	
 	@Override
 	public boolean equals(Object other) {
 		if (this == other) return true;

@@ -177,12 +177,9 @@ public class GrammarGraphBuilder implements Serializable {
 	
 	static private void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
 		String[] parameters = nonterminal.getParameters();
-		if (parameters == null && arguments == null) {
-			return;
-		}
-		if (parameters != null && arguments != null && parameters.length == arguments.length) {
-			return;
-		}
+		if ((parameters == null && arguments == null) 
+				|| (parameters.length == arguments.length)) return;
+		
 		throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
 	}
 	

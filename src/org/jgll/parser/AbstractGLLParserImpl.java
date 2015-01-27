@@ -177,11 +177,14 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {	
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
-		if (gssNode == null) {			
-			final GSSNode createdGSSNode = createGSSNode(returnSlot, nonterminal, i);
-			log.trace("GSSNode created: %s",  createdGSSNode);
-			createGSSEdge(returnSlot, u, node, createdGSSNode);
-			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, createdGSSNode, i, DummyNode.getInstance())));
+		if (gssNode == null) {
+			
+			gssNode = createGSSNode(returnSlot, nonterminal, i);
+			log.trace("GSSNode created: %s",  gssNode);
+			createGSSEdge(returnSlot, u, node, gssNode);
+			
+			final GSSNode __gssNode = gssNode;
+			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);			
@@ -322,6 +325,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
+	public Environment getEmptyEnvironment() {
+		return ctx.getEmptyEnvironment();
+	}
+	
+	@Override
 	public Object evaluate(CodeBlock code, Environment env) {
 		Statement[] statements = code.getStatements();
 		
@@ -364,41 +372,56 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node, Expression[] arguments, Environment env) {
-		// FIXME: Data-dependent GLL, what to do with data
+		assert !(env.isEmpty() && arguments == null);
 		
-		String[] parameters = nonterminal.getNonterminal().getParameters();
-		
-		Object[] values = null;
-		
-		if (parameters != null) { // The number of arguments has been already checked
-			values = evaluate(arguments, env);
+		if (arguments == null) {
+			
+			GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
+			if (gssNode == null) {
+				
+				gssNode = createGSSNode(returnSlot, nonterminal, i);
+				log.trace("GSSNode created: %s", gssNode);
+				
+				createGSSEdge(returnSlot, u, node, gssNode, env);
+				
+				final GSSNode __gssNode = gssNode;
+				nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
+				
+			} else {
+				log.trace("GSSNode found: %s",  gssNode);
+				createGSSEdge(returnSlot, u, node, gssNode, env);			
+			}
+			return gssNode;
 		}
 		
-		@SuppressWarnings("unused")
-		GSSNodeData<Object> data = new GSSNodeData<>(values);
+		GSSNodeData<Object> data = new GSSNodeData<>(evaluate(arguments, env));
+		// FIXME: Account for data when searching for a GSS node
 		
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
 			
-			final GSSNode createdGSSNode = createGSSNode(returnSlot, nonterminal, i);
-			log.trace("GSSNode created: %s",  createdGSSNode);
-			createGSSEdge(returnSlot, u, node, createdGSSNode, env);
+			gssNode = createGSSNode(returnSlot, nonterminal, i);
+			log.trace("GSSNode created: %s",  gssNode);
 			
-			Environment newEnv = ctx.getEmptyEnvironment();
-			if (parameters != null) {
-				int j = 0;
-				while (j < parameters.length) {
-					newEnv = newEnv.store(parameters[j], values[j]);
-				}
+			if (env.isEmpty()) {
+				createGSSEdge(returnSlot, u, node, gssNode);
+			} else {
+				createGSSEdge(returnSlot, u, node, gssNode, env);
 			}
 			
-			final Environment finalNewEnv = newEnv;
+			Environment newEnv = getEmptyEnvironment().store(nonterminal.getParameters(), data.getValues());
 			
-			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, createdGSSNode, i, DummyNode.getInstance(), finalNewEnv)));
+			final GSSNode __gssNode = gssNode;
+			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), newEnv)));
 			
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
-			createGSSEdge(returnSlot, u, node, gssNode, env);			
+			if (env.isEmpty()) {
+				createGSSEdge(returnSlot, u, node, gssNode);
+			} else {
+				createGSSEdge(returnSlot, u, node, gssNode, env);
+			}
+						
 		}
 		return gssNode;
 	}

@@ -50,8 +50,14 @@ public class NonterminalTransition extends AbstractTransition {
 			if (c.getSlotAction().execute(parser.getInput(), u, i)) 
 				return;
 		}
-				
-		parser.create(dest, nonterminal, u, i, node);
+		
+		if (nonterminal.getParameters() == null) {
+			parser.create(dest, nonterminal, u, i, node);
+		} else { 
+			// Non-empty argument list case
+			parser.create(dest, nonterminal, u, i, node, arguments, parser.getEmptyEnvironment());
+		}
+		
 	}
 	
 	public String getLabel() {

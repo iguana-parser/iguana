@@ -136,12 +136,16 @@ public class Nonterminal extends AbstractSymbol {
 		}
 		
 		public Builder addParameters(String... parameters) {
-			this.parameters = parameters;
+			if (parameters.length != 0) {
+				this.parameters = parameters;
+			} // otherwise, keep null
 			return this;
 		}
 		
 		public Builder applyTo(Expression... arguments) {
-			this.arguments = arguments;
+			if (arguments.length != 0) {
+				this.arguments = arguments;
+			} // otherwise, keep null
 			return this;
 		}
 		
