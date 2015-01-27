@@ -64,14 +64,15 @@ public class GlobalHashGSSLookupImpl extends AbstractGSSLookup {
 	 */
 	@Override
 	public <T> GSSNode getGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
-		
-		return null;
+		countGSSNodes++;
+		GSSNode gssNode = new org.jgll.datadependent.gss.GSSNode<T>(slot, inputIndex, data);
+		gssNodes.put(gssNode, gssNode);		
+		return gssNode;
 	}
 
 	@Override
 	public <T> GSSNode hasGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
-		
-		return null;
+		return gssNodes.get(new org.jgll.datadependent.gss.GSSNode<T>(slot, inputIndex, data));
 	}
 
 }
