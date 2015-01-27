@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.util.Input;
 import org.jgll.util.generator.ConstructorCode;
 
@@ -54,5 +55,14 @@ public interface GrammarSlot extends ConstructorCode {
 	default GrammarSlot withId(int id) { return this; }
 	
 	default int getId() { return 0; }
-
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	default <T> GSSNode getGSSNode(int inputIndex, GSSNodeData<T> data) { return null; }
+	
+	default <T> GSSNode hasGSSNode(int inputIndex, GSSNodeData<T> data) { return null; }
+	
 }

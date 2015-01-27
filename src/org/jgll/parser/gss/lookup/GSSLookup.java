@@ -3,6 +3,7 @@ package org.jgll.parser.gss.lookup;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.sppf.NonPackedNode;
 /**
  * 
@@ -34,4 +35,16 @@ public interface GSSLookup {
 	public Iterable<GSSNode> getGSSNodes();
 	
 	default void reset() {}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public <T> GSSNode getGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data);
+	
+	public <T> GSSNode hasGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data);
+	
+	public <T> boolean getGSSEdge(GSSNode gssNode, GSSEdge edge, GSSNodeData<T> data);
+	
 }	

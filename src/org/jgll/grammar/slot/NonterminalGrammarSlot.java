@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.util.Input;
@@ -106,6 +107,23 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	public void reset(Input input) {
 		nodeLookup.reset(input);
 		nonterminalNodes = new HashMap<>();
+	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public <T> GSSNode getGSSNode(int inputIndex, GSSNodeData<T> data) {
+		// FIXME:
+		return nodeLookup.getOrElseCreate(this, inputIndex);
+	}
+	
+	@Override
+	public <T> GSSNode hasGSSNode(int inputIndex, GSSNodeData<T> data) {
+		// FIXME:
+		return nodeLookup.get(inputIndex);
 	}
 
 }

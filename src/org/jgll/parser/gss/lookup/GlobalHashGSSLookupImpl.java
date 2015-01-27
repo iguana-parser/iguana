@@ -6,6 +6,7 @@ import java.util.Map;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.sppf.NonPackedNode;
 
 /**
@@ -54,6 +55,29 @@ public class GlobalHashGSSLookupImpl extends AbstractGSSLookup {
 	@Override
 	public void reset() {
 		gssNodes = new HashMap<>();
+	}
+
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public <T> GSSNode getGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
+		
+		return null;
+	}
+
+	@Override
+	public <T> GSSNode hasGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
+		
+		return null;
+	}
+
+	@Override
+	public <T> boolean getGSSEdge(GSSNode gssNode, GSSEdge edge, GSSNodeData<T> data) {
+		
+		return false;
 	}
 
 }

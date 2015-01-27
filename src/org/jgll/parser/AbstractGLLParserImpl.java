@@ -382,32 +382,28 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 				gssNode = createGSSNode(returnSlot, nonterminal, i);
 				log.trace("GSSNode created: %s", gssNode);
 				
-				createGSSEdge(returnSlot, u, node, gssNode, env);
+				createGSSEdge(returnSlot, u, node, gssNode, env); // Record environment on the edge
 				
 				final GSSNode __gssNode = gssNode;
 				nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 				
 			} else {
 				log.trace("GSSNode found: %s",  gssNode);
-				createGSSEdge(returnSlot, u, node, gssNode, env);			
+				createGSSEdge(returnSlot, u, node, gssNode, env); // Record environment on the edge
 			}
 			return gssNode;
 		}
 		
 		GSSNodeData<Object> data = new GSSNodeData<>(evaluate(arguments, env));
-		// FIXME: Account for data when searching for a GSS node
 		
-		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
+		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i, data);
 		if (gssNode == null) {
 			
-			gssNode = createGSSNode(returnSlot, nonterminal, i);
+			gssNode = createGSSNode(returnSlot, nonterminal, i, data);
 			log.trace("GSSNode created: %s",  gssNode);
 			
-			if (env.isEmpty()) {
-				createGSSEdge(returnSlot, u, node, gssNode);
-			} else {
-				createGSSEdge(returnSlot, u, node, gssNode, env);
-			}
+			if (env.isEmpty()) createGSSEdge(returnSlot, u, node, gssNode);
+			else createGSSEdge(returnSlot, u, node, gssNode, env);
 			
 			Environment newEnv = getEmptyEnvironment().store(nonterminal.getParameters(), data.getValues());
 			
@@ -416,12 +412,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
-			if (env.isEmpty()) {
-				createGSSEdge(returnSlot, u, node, gssNode);
-			} else {
-				createGSSEdge(returnSlot, u, node, gssNode, env);
-			}
-						
+			if (env.isEmpty()) createGSSEdge(returnSlot, u, node, gssNode);
+			else createGSSEdge(returnSlot, u, node, gssNode, env);		
 		}
 		return gssNode;
 	}

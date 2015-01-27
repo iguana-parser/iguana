@@ -9,6 +9,7 @@ import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
@@ -90,4 +91,22 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		getTransitions().forEach(t -> t.execute(parser, u, i, node, env));
 	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public <T> GSSNode getGSSNode(int inputIndex, GSSNodeData<T> data) {
+		// FIXME:
+		return nodeLookup.getOrElseCreate(this, inputIndex);
+	}
+	
+	@Override
+	public <T> GSSNode hasGSSNode(int inputIndex, GSSNodeData<T> data) {
+		// FIXME:
+		return nodeLookup.get(inputIndex);
+	}
+	
 }
