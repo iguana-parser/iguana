@@ -158,6 +158,14 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 	public List<T> getSymbols() {
 		return symbols;
 	}
+	
+	@Override
+	public boolean isSingleChar() {
+		if (!allRegularExpression)
+			return false;
+		
+		return false;
+	}
 
 	public static Alt<CharacterRange> not(Character...chars) {
 		List<CharacterRange> ranges = Arrays.stream(chars).map(c -> CharacterRange.in(c.getValue(), c.getValue())).collect(Collectors.toList());

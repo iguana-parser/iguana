@@ -132,7 +132,7 @@ public class Rule implements ConstructorCode, Serializable {
 			if (symbols == null) {
 				body = null;
 			} else {
-				body.addAll(symbols);				
+				body.addAll(symbols);
 			}
 			return this;
 		}

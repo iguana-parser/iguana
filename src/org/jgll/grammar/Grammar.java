@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.jgll.grammar.exception.GrammarValidationException;
 import org.jgll.grammar.exception.NonterminalNotDefinedException;
@@ -233,9 +234,20 @@ public class Grammar implements ConstructorCode, Serializable {
 
 	@Override
 	public String getConstructorCode() {
-		return "Grammar.builder()" + definitions.values().stream()
-				.map(r -> "\n//" + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
-				.collect(Collectors.joining()) + "\n.build()";
+		return "Grammar.builder()" + rulesToString(definitions.values()) + layoutsToString(layout.values()) + "\n.build()";
 	}
+	
+	private static String rulesToString(Iterable<Rule> rules) {
+		return StreamSupport.stream(rules.spliterator(), false)
+				.map(r -> "\n//" + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
+				.collect(Collectors.joining());
+	}
+	
+	private static String layoutsToString(Iterable<Rule> rules) {
+		return StreamSupport.stream(rules.spliterator(), false)
+				.map(r -> "\n//" + r.toString() + "\n.addLayout(" + r.getConstructorCode() + ")")
+				.collect(Collectors.joining());
+	}
+
 	
 }

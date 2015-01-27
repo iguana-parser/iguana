@@ -14,7 +14,7 @@ import org.jgll.regex.Star;
 import com.google.common.collect.Sets;
 
 public class Python {
-
+	
 	public static Grammar grammar = 
 			Grammar.builder()
 			//ShortBytesChar ::= (\u0001-\u10FFFF) 
