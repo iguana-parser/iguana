@@ -8,6 +8,7 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.NewGSSEdgeImpl;
 import org.jgll.parser.gss.lookup.GSSLookup;
 import org.jgll.parser.lookup.DescriptorLookup;
@@ -97,5 +98,19 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 				}				
 			}
 		}
+	}
+
+	@Override
+	public <T> GSSNode createGSSNode(GrammarSlot returnSlot,
+			NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
+		
+		return null;
+	}
+
+	@Override
+	public <T> GSSNode hasGSSNode(GrammarSlot returnSlot,
+			NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
+		
+		return null;
 	}
 }
