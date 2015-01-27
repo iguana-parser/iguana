@@ -5,10 +5,9 @@ import java.util.Map;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.util.Input;
 
-public class HashMapNodeLookup implements NodeLookup {
+public class HashMapNodeLookup extends AbstractNodeLookup {
 
 	private Map<Integer, GSSNode> map = new HashMap<>();
 	
@@ -30,23 +29,6 @@ public class HashMapNodeLookup implements NodeLookup {
 	@Override
 	public void reset(Input input) {
 		map = new HashMap<>();
-	}
-
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
-	@Override
-	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data) {
-		// FIXME:
-		return null;
-	}
-
-	@Override
-	public <T> GSSNode get(int i, GSSNodeData<T> data) {
-		// FIXME:
-		return null;
 	}
 
 }
