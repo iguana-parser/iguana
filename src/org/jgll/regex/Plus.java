@@ -9,7 +9,6 @@ import org.jgll.grammar.symbol.AbstractSymbol;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
-import org.jgll.regex.Star.Builder;
 import org.jgll.regex.automaton.Automaton;
 
 import com.google.common.collect.ImmutableList;

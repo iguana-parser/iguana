@@ -164,7 +164,12 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 		if (!allRegularExpression)
 			return false;
 		
-		return false;
+		return symbols.stream().allMatch(s -> ((RegularExpression) s).isSingleChar());
+	}
+	
+	@Override
+	public Character asSingleChar() {
+		return ((RegularExpression) symbols.get(0)).asSingleChar();
 	}
 
 	public static Alt<CharacterRange> not(Character...chars) {
