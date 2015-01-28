@@ -11,6 +11,7 @@ import org.jgll.grammar.condition.ConditionsFactory;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.generator.GeneratorUtil;
 
 
 public class NonterminalTransition extends AbstractTransition {
@@ -19,6 +20,7 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Conditions preConditions;
 	
+	@SuppressWarnings("unused")
 	private final String label;
 	
 	private final String variable;
@@ -56,8 +58,7 @@ public class NonterminalTransition extends AbstractTransition {
 		
 		if (nonterminal.getParameters() == null) {
 			parser.create(dest, nonterminal, u, i, node);
-		} else { 
-			// Non-empty argument list case
+		} else { // Non-empty argument list
 			parser.create(dest, nonterminal, u, i, node, arguments, parser.getEmptyEnvironment());
 		}
 		
@@ -84,7 +85,7 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	@Override
 	public String getLabel() {
-		return getSlot().toString();
+		return String.format("%s(%s)", getSlot().toString(), arguments != null? GeneratorUtil.listToString(arguments, ",") : "");
 	}
 
 	/**

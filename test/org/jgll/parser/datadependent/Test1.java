@@ -58,8 +58,7 @@ public class Test1 {
 	public void test() {
 		System.out.println(grammar);
 		GrammarGraph graph = grammar.toGrammarGraph(Input.fromString("ab"), Configuration.DEFAULT);
-		System.out.println(graph);
-		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
 	}
 
 }

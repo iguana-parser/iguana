@@ -124,7 +124,7 @@ public class GrammarGraphBuilder implements Serializable {
 				else if (symbol instanceof Nonterminal) {
 					Nonterminal nonterminal = (Nonterminal) symbol;
 
-					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> getNonterminalGrammarSlot(nonterminal));
+					NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
 					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head);
 					
 					String label = nonterminal.getLabel();
