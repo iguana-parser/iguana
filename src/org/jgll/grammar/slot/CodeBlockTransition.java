@@ -44,7 +44,8 @@ public class CodeBlockTransition extends AbstractTransition {
 	}
 
 	@Override
-	public GrammarSlot getSlot() {
+	public String getLabel() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
