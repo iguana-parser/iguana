@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.Conditions;
+import org.jgll.grammar.condition.ConditionsFactory;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -13,8 +15,8 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final NonterminalGrammarSlot nonterminal;
 	
-	private final Set<Condition> preConditions;
-
+	private final Conditions preConditions;
+	
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this(nonterminal, origin, dest, Collections.emptySet());
 	}	
@@ -22,7 +24,7 @@ public class NonterminalTransition extends AbstractTransition {
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Set<Condition> preConditions) {
 		super(origin, dest);
 		this.nonterminal = nonterminal;
-		this.preConditions = preConditions;
+		this.preConditions = ConditionsFactory.getConditions(preConditions);
 	}
 
 	@Override
@@ -33,11 +35,8 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		for (Condition c : preConditions) {
-			if (c.getSlotAction().execute(parser.getInput(), u, i)) {
-				return;
-			}
-		}
+		if (preConditions.execute(parser.getInput(), u, i))
+			return;
 		
 		parser.create(dest, nonterminal, u, i, node);
 	}
@@ -53,7 +52,7 @@ public class NonterminalTransition extends AbstractTransition {
 			.append("slot" + nonterminal.getId()).append(", ")
 			.append("slot" + origin.getId()).append(", ")
 			.append("slot" + dest.getId()).append(", ")
-			.append(asSet(preConditions))
+			.append(preConditions)
 			.toString();
 	}
 

@@ -27,7 +27,7 @@ public class IntKey3 implements Key, Comparable<IntKey3> {
 		if (this == obj)
 			return true;
 		
-		if (!(this instanceof IntKey3))
+		if (!(obj instanceof IntKey3))
 			return false;
 		
 		IntKey3 other = (IntKey3) obj;
