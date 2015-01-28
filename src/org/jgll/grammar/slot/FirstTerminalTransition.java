@@ -27,7 +27,6 @@ public class FirstTerminalTransition extends AbstractTerminalTransition {
 	 */
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// FIXME: Can environment change at this point of parsing? 
 		dest.execute(parser, u, i + length, cr, env);		
 	}
 

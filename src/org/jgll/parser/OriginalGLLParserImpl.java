@@ -110,14 +110,12 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 
 	@Override
 	public <T> GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
-		// FIXME:
-		return null;
+		return gssLookup.getGSSNode(returnSlot, ci, data);
 	}
 
 	@Override
 	public <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
-		// FIXME:
-		return null;
+		return gssLookup.hasGSSNode(returnSlot, ci, data);
 	}
 
 }

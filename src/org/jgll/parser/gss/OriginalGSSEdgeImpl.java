@@ -57,8 +57,6 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 		
 		BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 		
-		// FIXME: Bug here, fixed in the master branch of iguana
-		
 		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex)) {
 			return null;
 		}

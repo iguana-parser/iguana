@@ -24,11 +24,10 @@ public class OriginalGSSEdgeImpl extends org.jgll.parser.gss.OriginalGSSEdgeImpl
 		GSSNode destination = getDestination();
 		BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 		
-		// FIXME: Bug here, fixed in the master branch of iguana
-		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
+		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, env))
 			return null;
 		
-		// FIXME: Account for environment in SPPF lookup
+		// FIXME: SPPF
 		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode);
 		
 		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env)) {

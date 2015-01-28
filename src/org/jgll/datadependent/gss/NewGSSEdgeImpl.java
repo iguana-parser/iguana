@@ -24,11 +24,10 @@ public class NewGSSEdgeImpl extends org.jgll.parser.gss.NewGSSEdgeImpl {
 		BodyGrammarSlot returnSlot = getReturnSlot();
 		GSSNode destination = getDestination();
 		
-		// FIXME: 
-		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
+		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, env))
 			return null;
 		
-		// FIXME: Account for environment in SPPF lookup
+		// FIXME: SPPF
 		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode);
 		
 		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env)) {

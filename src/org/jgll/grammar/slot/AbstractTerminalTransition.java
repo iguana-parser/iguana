@@ -78,8 +78,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		
 		Input input = parser.getInput();
 
-		// FIXME: 
-		if (preConditions.execute(input, u, i))
+		if (preConditions.execute(input, u, i, env))
 			return;
 		
 		int length = slot.match(input, i);
@@ -89,12 +88,12 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			return;
 		}
 
-		if (postConditions.execute(input, u, i + length))
+		if (postConditions.execute(input, u, i + length, env))
 			return;
 		
+		// FIXME: SPPF
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		
-		// FIXME: Data-dependent GLL
 		createNode(length, cr, parser, u, i, node, env);
 	}
 	

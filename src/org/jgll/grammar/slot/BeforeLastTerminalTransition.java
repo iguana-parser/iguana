@@ -35,7 +35,7 @@ public class BeforeLastTerminalTransition extends AbstractTerminalTransition {
 	 */
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// FIXME: Data-dependent GLL
+		// FIXME: SPPF
 		dest.execute(parser, u, i + length, parser.getNonterminalNode((EndGrammarSlot) dest, node, cr), env);
 	}
 	

@@ -46,15 +46,18 @@ public class DummyNodeLookup implements GSSNodeLookup {
 		return true;
 	}
 
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
 	@Override
 	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data) {
-		// FIXME
 		return null;
 	}
 
 	@Override
 	public <T> GSSNode get(int i, GSSNodeData<T> data) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

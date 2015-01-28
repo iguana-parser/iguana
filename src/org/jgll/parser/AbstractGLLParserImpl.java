@@ -418,8 +418,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
-		// FIXME:
-		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode);
+		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode, env);
     }
 	
 	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env);

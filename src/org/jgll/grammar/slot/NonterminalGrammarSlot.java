@@ -125,13 +125,11 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	 */
 	@Override
 	public <T> GSSNode getGSSNode(int inputIndex, GSSNodeData<T> data) {
-		// FIXME:
-		return nodeLookup.getOrElseCreate(this, inputIndex);
+		return nodeLookup.getOrElseCreate(this, inputIndex, data);
 	}
 	
 	@Override
 	public <T> GSSNode hasGSSNode(int inputIndex, GSSNodeData<T> data) {
-		// FIXME:
-		return nodeLookup.get(inputIndex);
+		return nodeLookup.get(inputIndex, data);
 	}
 }
