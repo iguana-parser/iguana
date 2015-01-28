@@ -45,8 +45,7 @@ public class CodeBlockTransition extends AbstractTransition {
 
 	@Override
 	public String getLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		return code.toString();
 	}
 
 }

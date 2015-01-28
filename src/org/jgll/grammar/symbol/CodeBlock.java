@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.generator.GeneratorUtil;
 
 public class CodeBlock implements Symbol {
 
@@ -60,7 +61,7 @@ public class CodeBlock implements Symbol {
 	
 	@Override
 	public String toString() {
-		return "code";
+		return GeneratorUtil.listToString(statements, ";");
 	}
 
 }
