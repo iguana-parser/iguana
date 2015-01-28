@@ -34,7 +34,8 @@ public class IntKey4PlusEnv implements Key {
 		if (!(other instanceof IntKey4PlusEnv)) return false;
 		
 		IntKey4PlusEnv that = (IntKey4PlusEnv) other;
-		return hash == that.hash && k1 == that.k1 && k2 == that.k2 
+		return hash == that.hash 
+				&& k1 == that.k1 && k2 == that.k2 
 				&& k3 == that.k3 && k4 == that.k4
 				&& env.equals(that.env);
 	}

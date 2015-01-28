@@ -30,7 +30,8 @@ public class IntKey2PlusEnv implements Key {
 		if (!(other instanceof IntKey2PlusEnv)) return false;
 		
 		IntKey2PlusEnv that = (IntKey2PlusEnv) other;
-		return hash == that.hash && k1 == that.k1 && k2 == that.k2 
+		return hash == that.hash 
+				&& k1 == that.k1 && k2 == that.k2 
 				&& env.equals(that.env);
 	}
 	
