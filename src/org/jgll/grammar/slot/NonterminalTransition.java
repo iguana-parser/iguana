@@ -1,10 +1,13 @@
 package org.jgll.grammar.slot;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.Conditions;
+import org.jgll.grammar.condition.ConditionsFactory;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -14,7 +17,7 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final NonterminalGrammarSlot nonterminal;
 	
-	private final Set<Condition> preConditions;
+	private final Conditions preConditions;
 	
 	private final String label;
 	
@@ -24,16 +27,20 @@ public class NonterminalTransition extends AbstractTransition {
 
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Set<Condition> preConditions) {
 		this(nonterminal, origin, dest, null, null, new Expression[0], preConditions);
+	}
+	
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+		this(nonterminal, origin, dest, Collections.emptySet());
 	}	
 	
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, 
 			String label, String variable, Expression[] arguments, Set<Condition> preConditions) {
 		super(origin, dest);
 		this.nonterminal = nonterminal;
-		this.preConditions = preConditions;
 		this.label = label;
 		this.variable = variable;
 		this.arguments = arguments;
+		this.preConditions = ConditionsFactory.getConditions(preConditions);
 	}
 
 	@Override
@@ -44,11 +51,8 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		for (Condition c : preConditions) {
-			if (c.getSlotAction().execute(parser.getInput(), u, i)) {
-				return;
-			}
-		}
+		if (preConditions.execute(parser.getInput(), u, i))
+			return;
 		
 		if (nonterminal.getParameters() == null) {
 			parser.create(dest, nonterminal, u, i, node);
@@ -57,10 +61,6 @@ public class NonterminalTransition extends AbstractTransition {
 			parser.create(dest, nonterminal, u, i, node, arguments, parser.getEmptyEnvironment());
 		}
 		
-	}
-	
-	public String getLabel() {
-		return label;
 	}
 	
 	public String getVariable() {
@@ -78,8 +78,13 @@ public class NonterminalTransition extends AbstractTransition {
 			.append("slot" + nonterminal.getId()).append(", ")
 			.append("slot" + origin.getId()).append(", ")
 			.append("slot" + dest.getId()).append(", ")
-			.append(asSet(preConditions))
+			.append(preConditions)
 			.toString();
+	}
+	
+	@Override
+	public String getLabel() {
+		return getSlot().toString();
 	}
 
 	/**
@@ -95,11 +100,9 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		for (Condition c : preConditions) {
-			if (c.getSlotAction().execute(parser.getInput(), u, i, env)) 
-				return;
-		}
-				
+		if (preConditions.execute(parser.getInput(), u, i, env))
+			return;
+						
 		parser.create(dest, nonterminal, u, i, node, arguments, env);
 		
 	}

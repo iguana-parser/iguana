@@ -30,7 +30,7 @@ public class IntKey4 implements Key, Comparable<IntKey4> {
 		if (this == obj)
 			return true;
 		
-		if (!(this instanceof IntKey4))
+		if (!(obj instanceof IntKey4))
 			return false;
 		
 		IntKey4 other = (IntKey4) obj;

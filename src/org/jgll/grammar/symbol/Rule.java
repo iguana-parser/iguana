@@ -64,6 +64,10 @@ public class Rule implements ConstructorCode, Serializable {
 	public Nonterminal getLayout() {
 		return layout;
 	}
+	
+	public boolean hasLayout() {
+		return layout != null;
+	}
 		
 	@Override
 	public String toString() {
@@ -160,7 +164,9 @@ public class Rule implements ConstructorCode, Serializable {
 
 	@Override
 	public String getConstructorCode() {
-		return "Rule.withHead(" + head.getConstructorCode() + ")" + (body == null ? "" :
-				body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) + ".build()";
+		return Rule.class.getSimpleName() + ".withHead(" + head.getConstructorCode() + ")" + 
+				(body == null ? "" : body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) +
+				(layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
+				".build()";
 	}
 }
