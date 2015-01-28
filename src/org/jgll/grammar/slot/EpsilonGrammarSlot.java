@@ -20,8 +20,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	}
 	
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// FIXME: Data-dependent GLL
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (nonterminal.test(i)) {
 			TerminalNode epsilonNode = parser.getEpsilonNode(epsilonSlot, i);
 			parser.pop(u, i, parser.getNonterminalNode(this, epsilonNode));
@@ -31,6 +30,19 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	@Override
 	public String getConstructorCode() {
 		return "new EpsilonGrammarSlot(slot" + nonterminal.getId() + ")";
+	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		if (nonterminal.test(i)) {
+			TerminalNode epsilonNode = parser.getEpsilonNode(epsilonSlot, i);
+			parser.pop(u, i, parser.getNonterminalNode(this, epsilonNode));
+		}
 	}
 
 }

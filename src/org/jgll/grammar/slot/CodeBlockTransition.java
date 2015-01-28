@@ -23,14 +23,12 @@ public class CodeBlockTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		
-		// FIXME: Temporarily ignore preconditions and postconditions
+		parser.evaluate(code, parser.getEmptyEnvironment());
 		
-		parser.evaluate(code, parser.getEvaluatorContext().getEmptyEnvironment());
-		
-		if (parser.getEvaluatorContext().getEnvironment().isEmpty()) {
+		if (parser.getEnvironment().isEmpty()) {
 			dest.execute(parser, u, i, node);
 		} else {
-			dest.execute(parser, u, i, node, parser.getEvaluatorContext().getEnvironment());
+			dest.execute(parser, u, i, node, parser.getEnvironment());
 		}
 	}
 	
@@ -41,18 +39,12 @@ public class CodeBlockTransition extends AbstractTransition {
 	 */
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		
-		// FIXME: Temporarily ignore preconditions and postconditions
-		
 		parser.evaluate(code, env);
-		dest.execute(parser, u, i, node, parser.getEvaluatorContext().getEnvironment());
-		
+		dest.execute(parser, u, i, node, parser.getEnvironment());
 	}
 
 	@Override
 	public GrammarSlot getSlot() {
-		// FIXME
-		// TODO Auto-generated method stub
 		return null;
 	}
 

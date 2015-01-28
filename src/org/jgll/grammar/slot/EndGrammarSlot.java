@@ -21,8 +21,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// TODO: Data-dependent GLL, check
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (nonterminal.test(i))
 			parser.pop(u, i, node);
 	}
@@ -59,4 +58,15 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		if (nonterminal.test(i))
+			parser.pop(u, i, node);
+	}
+
 }

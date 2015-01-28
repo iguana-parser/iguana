@@ -318,6 +318,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
+	public Environment getEnvironment() {
+		return ctx.getEnvironment();
+	}
+	
+	@Override
 	public Environment getEmptyEnvironment() {
 		return ctx.getEmptyEnvironment();
 	}
