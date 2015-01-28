@@ -26,8 +26,9 @@ public class OriginalGSSEdgeImpl extends org.jgll.parser.gss.OriginalGSSEdgeImpl
 		BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 		
 		// FIXME: Bug here, fixed in the master branch of iguana
+		
 		for(Condition c : returnSlot.getConditions()) {
-			if (c.getSlotAction().execute(parser.getInput(), source, inputIndex)) 
+			if (c.getSlotAction().execute(parser.getInput(), source, inputIndex, env)) 
 				break;
 		}
 		

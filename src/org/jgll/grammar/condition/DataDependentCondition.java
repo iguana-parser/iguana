@@ -1,6 +1,11 @@
 package org.jgll.grammar.condition;
 
+import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.jgll.grammar.GrammarRegistry;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.util.Input;
 
 public class DataDependentCondition extends Condition {
 	
@@ -14,7 +19,27 @@ public class DataDependentCondition extends Condition {
 	DataDependentCondition(ConditionType type, org.jgll.datadependent.ast.Expression expression) {
 		super(type);
 		this.expression = expression;
-		this.action = null; // TODO: define an action 
+		this.action = new SlotAction() {
+			
+			@Override
+			public boolean execute(Input input, GSSNode gssNode, int inputIndex) {
+				Object value = expression.interpret(new PersistentEvaluatorContext());
+				if (!(value instanceof Boolean)) 
+					throw new RuntimeException("Data dependent condition should evaluate to a boolean value."); 
+				return (!(Boolean) value);
+			}
+			
+			@Override
+			public boolean execute(Input input, GSSNode gssNode, int inputIndex, Environment env) {
+				IEvaluatorContext ctx = new PersistentEvaluatorContext();
+				ctx.setEnvironment(env);
+				Object value = expression.interpret(ctx);
+				if (!(value instanceof Boolean)) 
+					throw new RuntimeException("Data dependent condition should evaluate to a boolean value."); 
+				return (!(Boolean) value);
+			}
+			
+		};
 	}
 	
 	public org.jgll.datadependent.ast.Expression getExpression() {
