@@ -34,8 +34,7 @@ public class NewGSSEdgeImpl extends org.jgll.parser.gss.NewGSSEdgeImpl {
 		// FIXME: Account for environment in SPPF lookup
 		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode);
 		
-		// FIXME: Account for environment in descriptor lookup
-		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y)) {
+		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env)) {
 			return new org.jgll.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
 		}
 		

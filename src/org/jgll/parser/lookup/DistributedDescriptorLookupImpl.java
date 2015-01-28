@@ -3,6 +3,8 @@ package org.jgll.parser.lookup;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.util.collections.IntKey2PlusEnv;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
@@ -43,6 +45,11 @@ public class DistributedDescriptorLookupImpl implements DescriptorLookup {
 	@Override
 	public void scheduleDescriptor(Descriptor descriptor) {
 		descriptorsStack.push(descriptor);
+	}
+
+	@Override
+	public boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
+		return gssNode.hasDescriptor(IntKey2PlusEnv.from(slot.getId(), inputIndex, env, f));
 	}
 	
 }
