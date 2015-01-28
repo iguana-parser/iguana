@@ -75,30 +75,31 @@ public class GrammarGraphBuilder implements Serializable {
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
 		terminalsMap.put(Epsilon.getInstance(), epsilon);
-
-		if (!grammar.getLayout().isEmpty()) { 
-			convertLayout(grammar.getLayout().keySet().iterator().next());
-		}
 	}
 
 	public GrammarGraph build() {
 		EBNFToBNF ebnfToBNF = new EBNFToBNF();
 		Grammar bnfGrammar = ebnfToBNF.transform(grammar);
+		
+		if (bnfGrammar.hasLayout()) { 
+			convertLayout(bnfGrammar.getLayout(), bnfGrammar);
+		}
+		
 		for (Nonterminal nonterminal : bnfGrammar.getNonterminals()) {
-			convert(nonterminal);
+			convert(nonterminal, bnfGrammar);
 		}
 		return new GrammarGraph(this);
 	}
 	
-	private void convertLayout(Nonterminal nonterminal) {
-		List<Rule> rules = grammar.getLayoutAlternatives(nonterminal);
+	private void convertLayout(Nonterminal nonterminal, Grammar grammar) {
+		List<Rule> rules = grammar.getLayoutRules();
 		if (rules.isEmpty()) 
 			return;
 		layout = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());
 		rules.forEach(r -> addRule(layout, r));
 	}
 	
-	private void convert(Nonterminal nonterminal) {
+	private void convert(Nonterminal nonterminal, Grammar grammar) {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup()));
 		rules.forEach(r -> addRule(nonterminalSlot, r));
@@ -144,7 +145,7 @@ public class GrammarGraphBuilder implements Serializable {
 				
 				currentSlot = addLayout(currentSlot, rule, i);
 				
-			}		
+			}
 		}
 	}
 

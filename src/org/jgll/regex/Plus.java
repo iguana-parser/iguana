@@ -21,7 +21,7 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	
 	private final List<Symbol> separators;
 	
-	private final boolean isRegularExpression;
+	private final boolean allRegularExpression;
 	
 	public static Plus from(Symbol s) {
 		return builder(s).build();
@@ -31,7 +31,7 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 		super(builder);
 		this.s = builder.s;
 		this.separators = ImmutableList.copyOf(builder.separators);
-		this.isRegularExpression = s instanceof RegularExpression;
+		this.allRegularExpression = s instanceof RegularExpression;
 	}
 	
 	private static String getName(Symbol s) {
@@ -46,7 +46,7 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public boolean isNullable() {
-		if (!isRegularExpression)
+		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
 
 		return ((RegularExpression) s).isNullable();
@@ -54,7 +54,7 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		if (!isRegularExpression)
+		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
 
 		return ((RegularExpression) s).getFirstSet();
@@ -62,7 +62,7 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
-		if (!isRegularExpression)
+		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
 
 		return ((RegularExpression) s).getFirstSet();
@@ -70,6 +70,10 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	
 	public List<Symbol> getSeparators() {
 		return separators;
+	}
+	
+	public boolean isAllRegularExpression() {
+		return allRegularExpression;
 	}
 	
 	@Override
@@ -84,7 +88,7 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public String getPattern() {
-		if (!isRegularExpression)
+		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
 		
 		return ((RegularExpression) s).getPattern() + "+";

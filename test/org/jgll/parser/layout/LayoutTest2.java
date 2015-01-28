@@ -46,7 +46,7 @@ public class LayoutTest2 {
 		Rule layout1 = Rule.withHead(L).addSymbol(Character.from(' ')).build();
 		Rule layout2 = Rule.withHead(L).build();
 		
-		return Grammar.builder().addLayout(layout1).addLayout(layout2).addRules(r1, r2, r3, r4).build();
+		return Grammar.builder().addRules(r1, r2, r3, r4).addLayoutRules(layout1, layout2).setLayoutNonterminal(L).build();
 	}
 	
 	@Test

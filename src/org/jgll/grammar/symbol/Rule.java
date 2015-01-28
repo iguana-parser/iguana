@@ -29,10 +29,13 @@ public class Rule implements ConstructorCode, Serializable {
 	 */
 	private final Serializable object;
 	
+	private final Nonterminal layout;
+	
 	public Rule(Builder builder) {
 		this.body = builder.body;
 		this.head = builder.head;
 		this.object = builder.object;
+		this.layout = builder.layout;
 	}
 		
 	public Nonterminal getHead() {
@@ -57,6 +60,10 @@ public class Rule implements ConstructorCode, Serializable {
 	public Serializable getObject() {
 		return object;
 	}
+	
+	public Nonterminal getLayout() {
+		return layout;
+	}
 		
 	@Override
 	public String toString() {
@@ -75,13 +82,11 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(!(obj instanceof Rule)) {
+		if(!(obj instanceof Rule))
 			return false;
-		}
 		
 		Rule other = (Rule) obj;
 		
@@ -112,6 +117,7 @@ public class Rule implements ConstructorCode, Serializable {
 		private Nonterminal head;
 		private List<Symbol> body;
 		private Serializable object;
+		private Nonterminal layout;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -139,6 +145,11 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		public Builder setObject(Serializable object) {
 			this.object = object;
+			return this;
+		}
+		
+		public Builder setLayout(Nonterminal layout) {
+			this.layout = layout;
 			return this;
 		}
 		

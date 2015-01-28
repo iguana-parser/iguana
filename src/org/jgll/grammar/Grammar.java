@@ -24,6 +24,7 @@ import org.jgll.util.generator.ConstructorCode;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ListMultimap;
@@ -40,7 +41,9 @@ public class Grammar implements ConstructorCode, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final ListMultimap<Nonterminal, Rule> layout;
+	private final Nonterminal layout;
+	
+	private final List<Rule> layoutDefinitions;
 	
 	private final ListMultimap<Nonterminal, Rule> definitions;
 
@@ -49,11 +52,13 @@ public class Grammar implements ConstructorCode, Serializable {
 	private final SetMultimap<Nonterminal, RegularExpression> followSets;
 	
 	public Grammar(ListMultimap<Nonterminal, Rule> definitions,
-				   ListMultimap<Nonterminal, Rule> layout,
+				   Nonterminal layout,
+				   List<Rule> layoutDefinitions,
 				   SetMultimap<Nonterminal, RegularExpression> firstSets,
 				   SetMultimap<Nonterminal, RegularExpression> followSets) {
 		this.definitions = ImmutableListMultimap.copyOf(definitions);
-		this.layout = ImmutableListMultimap.copyOf(layout);
+		this.layout = layout;
+		this.layoutDefinitions = ImmutableList.copyOf(layoutDefinitions);
 		this.firstSets = ImmutableSetMultimap.copyOf(firstSets);
 		this.followSets = ImmutableSetMultimap.copyOf(followSets);
 	}
@@ -147,12 +152,16 @@ public class Grammar implements ConstructorCode, Serializable {
 		return definitions.get(nonterminal).get(alternateIndex).getObject();
 	}
 	
-	public ListMultimap<Nonterminal, Rule> getLayout() {
+	public Nonterminal getLayout() {
 		return layout;
 	}
 	
-	public List<Rule> getLayoutAlternatives(Nonterminal nonterminal) {
-		return layout.get(nonterminal);
+	public boolean hasLayout() {
+		return layout != null;
+	}
+	
+	public List<Rule> getLayoutRules() {
+		return layoutDefinitions;
 	}
 	
 	public static Builder builder() {
@@ -161,24 +170,27 @@ public class Grammar implements ConstructorCode, Serializable {
  	
 	public static class Builder {
 		
-		private ListMultimap<Nonterminal, Rule> layout;
+		private Nonterminal layout;
 		
-		private final ListMultimap<Nonterminal, Rule> definitions;
+		private final ListMultimap<Nonterminal, Rule> definitions = ArrayListMultimap.create();
 		
-		public Builder() {
-			this.definitions = ArrayListMultimap.create();
-			this.layout = ArrayListMultimap.create();
-		}
+		private final List<Rule> layoutDefinitions = new ArrayList<>();
 		
 		public Grammar build() {
 			Set<RuntimeException> exceptions = validate(definitions);
+			
 			if (!exceptions.isEmpty()) {
 				throw new GrammarValidationException(exceptions);
 			}
+			
+			if (!layoutDefinitions.stream().allMatch(x -> x.getHead().equals(layout))) {
+				throw new RuntimeException("Layout rules should have the same head as the layout nonterminal.");
+			}
+			
 //			GrammarOperations op = new GrammarOperations(definitions);
 //			return new Grammar(definitions, op.getFirstSets(), op.getFollowSets());
 			
-			return new Grammar(definitions, layout, HashMultimap.create(), HashMultimap.create());
+			return new Grammar(definitions, layout, layoutDefinitions, HashMultimap.create(), HashMultimap.create());
 		}
 		
 		public Builder addRule(Rule rule) {
@@ -196,15 +208,26 @@ public class Grammar implements ConstructorCode, Serializable {
 			return this;
 		}
 
-		public Builder addLayout(Rule rule) {
-			layout.put(rule.getHead(), rule);
+		public Builder setLayoutNonterminal(Nonterminal layout) {
+			this.layout = layout;
 			return this;
 		}
 		
-		public Builder addLayouts(Iterable<Rule> rules) {
-			rules.forEach(r -> addLayout(r));
+		public Builder addLayoutRule(Rule rule) {
+			layoutDefinitions.add(rule);
 			return this;
 		}
+		
+		public Builder addLayoutRules(Rule...rules) {
+			addLayoutRules(Arrays.asList(rules));
+			return this;
+		}
+		
+		public Builder addLayoutRules(List<Rule> rules) {
+			rules.forEach(r -> addLayoutRule(r));
+			return this;
+		}
+		
 	}
 	
 	@Override
@@ -234,7 +257,7 @@ public class Grammar implements ConstructorCode, Serializable {
 
 	@Override
 	public String getConstructorCode() {
-		return "Grammar.builder()" + rulesToString(definitions.values()) + layoutsToString(layout.values()) + "\n.build()";
+		return "Grammar.builder()" + rulesToString(definitions.values()) + ".setLayout(" + layout.getConstructorCode() + ")" + "\n.build()";
 	}
 	
 	private static String rulesToString(Iterable<Rule> rules) {
@@ -242,12 +265,5 @@ public class Grammar implements ConstructorCode, Serializable {
 				.map(r -> "\n//" + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
 				.collect(Collectors.joining());
 	}
-	
-	private static String layoutsToString(Iterable<Rule> rules) {
-		return StreamSupport.stream(rules.spliterator(), false)
-				.map(r -> "\n//" + r.toString() + "\n.addLayout(" + r.getConstructorCode() + ")")
-				.collect(Collectors.joining());
-	}
-
 	
 }
