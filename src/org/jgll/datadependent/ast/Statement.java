@@ -20,6 +20,11 @@ public abstract class Statement extends AbstractAST {
 			return null;
 		}
 		
+		@Override
+		public String toString() {
+			return String.format("%s = %s", id, exp);
+		}
+		
 	}
 	
 	static public class Expression extends Statement {
@@ -34,6 +39,11 @@ public abstract class Statement extends AbstractAST {
 		public Object interpret(IEvaluatorContext ctx) {
 			exp.interpret(ctx);
 			return null;
+		}
+		
+		@Override
+		public String toString() {
+			return exp.toString();
 		}
 		
 	}

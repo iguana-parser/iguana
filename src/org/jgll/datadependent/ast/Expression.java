@@ -20,6 +20,11 @@ public abstract class Expression extends AbstractAST {
 			public Object interpret(IEvaluatorContext ctx) {
 				return true;
 			}
+			
+			@Override
+			public java.lang.String toString() {
+				return "true";
+			}
 		};
 		
 		static public final Boolean FALSE = new Boolean() {
@@ -27,6 +32,12 @@ public abstract class Expression extends AbstractAST {
 			public Object interpret(IEvaluatorContext ctx) {
 				return false;
 			}
+			
+			@Override
+			public java.lang.String toString() {
+				return "false";
+			}
+			
 		};
 		
 	}
@@ -52,6 +63,11 @@ public abstract class Expression extends AbstractAST {
 			return value;
 		}
 		
+		@Override
+		public java.lang.String toString() {
+			return value.toString();
+		}
+		
 	}
 	
 	public boolean isReal() {
@@ -73,6 +89,11 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
 			return value;
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return value.toString();
 		}
 		
 	}
@@ -97,6 +118,11 @@ public abstract class Expression extends AbstractAST {
 		public Object interpret(IEvaluatorContext ctx) {
 			return value;
 		}
+		
+		@Override
+		public java.lang.String toString() {
+			return value;
+		}
 	}
 	
 	static public class Name extends Expression {
@@ -114,6 +140,11 @@ public abstract class Expression extends AbstractAST {
 				throw new RuntimeException("Undeclared variable: " + name);
 			}
 			return value;
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return name;
 		}
 		
 	}
