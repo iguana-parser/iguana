@@ -9,54 +9,71 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import org.jgll.grammar.GrammarRegistry;
-import org.jgll.grammar.symbol.AbstractRegularExpression;
+import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.util.Input;
 
-public class Sequence<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
+public class Sequence<T extends Symbol> extends AbstractSymbol implements RegularExpression, Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<T> regularExpressions;
-
-	public Sequence(Builder<T> builder) {
-		super(builder);
-		
-		if(builder.regularExpressions.size() == 0) throw new IllegalArgumentException("The number of regular expressions in a sequence should be at least one.");
-		
-		this.regularExpressions = new ArrayList<>(builder.regularExpressions);
+	private final List<T> symbols;
+	
+	private boolean allRegularExpression;
+	
+	public static Sequence<Character> from(String s) {
+		return from(Input.toIntArray(s));
 	}
 	
-	public static <T extends RegularExpression> Sequence<T> from(List<T> regularExpressions) {
-		return new Builder<>(regularExpressions).build();
+	public static Sequence<Character> from(int[] chars) {
+		return builder(Arrays.stream(chars).mapToObj(Character::from).collect(Collectors.toList())).build();
+	}
+	
+	public static <T extends Symbol> Sequence<T> from(List<T> symbols) {
+		return new Builder<T>().add(symbols).build();
 	}
 	
 	@SafeVarargs
-	public static <T extends RegularExpression> Sequence<T> from(T...regularExpressions) {
-		return from(Arrays.asList(regularExpressions));
+	public static <T extends Symbol> Sequence<T> from(T...elements) {
+		return from(Arrays.asList(elements));
 	}
 	
-	private static <T> String getName(List<T> regularExpressions) {
-		return listToString(regularExpressions, " ");
+	private Sequence(Builder<T> builder) {
+		super(builder);
+		this.symbols = builder.symbols;
+		if (symbols.stream().allMatch(x -> x instanceof RegularExpression))
+			allRegularExpression = true;
+	}
+	
+	private static <T> String getName(List<T> elements) {
+//		Verify.verify(elements != null, "Elements cannot be null");
+//		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
+		return "(" + listToString(elements, " ") + ")";
 	}
 		
-	public List<T> getRegularExpressions() {
-		return regularExpressions;
-	}
-
 	@Override
-	protected Automaton createAutomaton() {
+	public Automaton getAutomaton() {
+		
+		if (!allRegularExpression)
+			throw new RuntimeException("Only applicable if all arguments are regular expressions");
 		
 		List<Automaton> automatons = new ArrayList<>();
 		
-		for(int i = 0; i < regularExpressions.size(); i++) {
-			automatons.add(regularExpressions.get(i).getAutomaton().copy());
+		for(int i = 0; i < symbols.size(); i++) {
+			automatons.add(((RegularExpression) symbols.get(i)).getAutomaton().copy());
 		}
 				
 		Automaton result = automatons.get(0);
@@ -78,54 +95,54 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	
 	@Override
 	public boolean isNullable() {
-		for(RegularExpression regex : regularExpressions) {
-			if(!regex.isNullable()) {
-				return false;
-			}
-		}
-		return true;
+		return allRegularExpression && symbols.stream().allMatch(e -> ((RegularExpression)e).isNullable()); 
 	}
 	
 	public int size() {
-		return regularExpressions.size();
+		return symbols.size();
 	}
 	
-	public T get(int index) {
-		return regularExpressions.get(index);
+	public Symbol get(int index) {
+		return symbols.get(index);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == this) {
+		if(obj == this)
 			return true;
-		}
 		
-		if(!(obj instanceof Sequence)) {
+		if(!(obj instanceof Sequence))
 			return false;
-		}
 		
-		@SuppressWarnings("unchecked")
-		Sequence<T> other = (Sequence<T>) obj;
+		Sequence<?> other = (Sequence<?>) obj;
 		
-		return regularExpressions.equals(other.regularExpressions);
+		return symbols.equals(other.symbols);
 	}
 	
 	@Override
 	public int hashCode() {
-		return regularExpressions.hashCode();
+		return symbols.hashCode();
 	}
 
 	@Override
 	public Iterator<T> iterator() {
-		return regularExpressions.iterator();
+		return symbols.iterator();
+	}
+	
+	public Stream<T> stream() {
+		return StreamSupport.stream(symbols.spliterator(), false);
 	}
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
+		if (!allRegularExpression)
+			throw new RuntimeException("Only applicable if all arguments are regular expressions");
+		
 		Set<CharacterRange> firstSet = new HashSet<>();
-		for(T t : regularExpressions) {
-			firstSet.addAll(t.getFirstSet());
-			if(!t.isNullable()) {
+		for(Symbol e : symbols) {
+			RegularExpression regex = (RegularExpression) e;
+			firstSet.addAll(regex.getFirstSet());
+			if(!regex.isNullable()) {
 				break;
 			}
 		}
@@ -136,46 +153,100 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
+		
+	@Override
+	public String getConstructorCode() {
+		return Sequence.class.getSimpleName() + ".builder(" + asArray(symbols) + ")" + super.getConstructorCode() + ".build()";
+	}
+	
+	@Override
+	public Builder<T> copyBuilder() {
+		return new Builder<T>().add(symbols);
+	}
 
-	public static class Builder<T extends RegularExpression> extends SymbolBuilder<Sequence<T>> {
+	@Override
+	public String getPattern() {
+		if (!allRegularExpression)
+			throw new RuntimeException("Only applicable if all arguments are regular expressions");
 
-		private List<T> regularExpressions;
+		return "(" +  symbols.stream().map(s -> ((RegularExpression)s).getPattern()).collect(Collectors.joining()) + ")";
+	}
+	
+	public List<T> getSymbols() {
+		return symbols;
+	}
+	
+	private boolean isCharSequence() {
+		return symbols.stream().allMatch(s -> s instanceof RegularExpression && ((RegularExpression)s).isSingleChar());
+	}
+	
+	private List<Character> asCharacters() {
+		return symbols.stream().map(s -> ((RegularExpression)s).asSingleChar()).collect(Collectors.toList());
+	}
+	
+	@Override
+	public Matcher getMatcher() {
+		if (isCharSequence()) {
+			List<Character> characters = asCharacters();
+			return (input, i) -> {
+				for (Character c : characters) {
+					if (c.getValue() != input.charAt(i++)) {
+						return -1;
+					}
+				}
+				return characters.size();
+			};
+		}
+		return RegularExpression.super.getMatcher();
+	}
+	
+	public Rule toRule() {
+		Rule.Builder builder = Rule.withHead(Nonterminal.withName(name));
+		symbols.forEach(s -> builder.addSymbol(s));
+		return builder.build();
+	}
+	
+	@Override
+	public String toString() {
+		
+		if (isCharSequence()) 
+			return "\"" + asCharacters().stream().map(c -> c.getName()).collect(Collectors.joining()) + "\"";
+		
+		return super.toString();
+	}
+	
+	public static <T extends Symbol> Builder<T> builder() {
+		return new Builder<>();
+	}
+	
+	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
+		return new Builder<T>().add(symbols);
+	}
+	
+	@SafeVarargs
+	public static <T extends Symbol> Builder<T> builder(T...symbols) {
+		return builder(Arrays.asList(symbols));
+	}
+	
+	public static class Builder<T extends Symbol> extends SymbolBuilder<Sequence<T>> {
 
-		public Builder(List<T> regularExpressions) {
-			super(getName(regularExpressions));
-			this.regularExpressions = regularExpressions;
+		private List<T> symbols = new ArrayList<>();
+		
+		public Builder<T> add(T s) {
+			symbols.add(s);
+			return this;
 		}
 		
-		public Builder(Sequence<T> seq) {
-			super(seq);
-			this.regularExpressions = seq.regularExpressions;
+		public Builder<T> add(List<T> symbols) {
+			this.symbols.addAll(symbols);
+			return this;
 		}
 		
 		@Override
 		public Sequence<T> build() {
+			this.name = getName(symbols);
 			return new Sequence<>(this);
 		}
-	}
-
-	@SafeVarargs
-	public static <T extends RegularExpression> Builder<T> builder(T...regularExpressions) {
-		return new Builder<>(Arrays.asList(regularExpressions));
-	}
-	
-	public static <T extends RegularExpression> Builder<T> builder(List<T> regularExpressions) {
-		return new Builder<>(regularExpressions);
-	}
-	
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		StringBuilder sb = new StringBuilder();
-		
-		for (RegularExpression regex : regularExpressions) {
-			 sb.append(regex.getConstructorCode(registry) + ", ");
-		}
-		sb.delete(sb.length() - 2, sb.length());
-		
-		return "new Sequence(list(" + sb.toString() + "), \"" + escape(label) + "\", new HashSet<>(), null)";
 	}
 	
 }

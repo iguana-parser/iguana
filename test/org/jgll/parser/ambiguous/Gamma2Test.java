@@ -89,9 +89,9 @@ public class Gamma2Test extends AbstractParserTest {
 	private static Grammar getGrammar() {
 		Nonterminal S = Nonterminal.withName("S");
 		Character b = Character.from('b');
-		Rule rule1 = Rule.builder(S).addSymbols(S, S, S).build();
-		Rule rule2 = Rule.builder(S).addSymbols(S, S).build();
-		Rule rule3 = Rule.builder(S).addSymbols(b).build();
+		Rule rule1 = Rule.withHead(S).addSymbols(S, S, S).build();
+		Rule rule2 = Rule.withHead(S).addSymbols(S, S).build();
+		Rule rule3 = Rule.withHead(S).addSymbols(b).build();
 		return Grammar.builder().addRules(rule1, rule2, rule3).build();
 	}
 	
@@ -117,7 +117,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setGSSNodesCount(4)
 				.setGSSEdgesCount(23)
 				.setNonterminalNodesCount(6)
-				.setTerminalNodesCount(6)
+				.setTerminalNodesCount(3)
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(12)
 				.setAmbiguousNodesCount(2).build();
@@ -130,7 +130,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setGSSNodesCount(17)
 				.setGSSEdgesCount(88)
 				.setNonterminalNodesCount(6)
-				.setTerminalNodesCount(6)
+				.setTerminalNodesCount(3)
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(12)
 				.setAmbiguousNodesCount(2).build();
@@ -143,7 +143,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setGSSNodesCount(5)
 				.setGSSEdgesCount(36)
 				.setNonterminalNodesCount(10)
-				.setTerminalNodesCount(10)
+				.setTerminalNodesCount(4)
 				.setIntermediateNodesCount(6)
 				.setPackedNodesCount(28)
 				.setAmbiguousNodesCount(6).build();
@@ -156,7 +156,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setGSSNodesCount(22)
 				.setGSSEdgesCount(144)
 				.setNonterminalNodesCount(10)
-				.setTerminalNodesCount(10)
+				.setTerminalNodesCount(4)
 				.setIntermediateNodesCount(6)
 				.setPackedNodesCount(28)
 				.setAmbiguousNodesCount(6).build();
@@ -169,7 +169,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setGSSNodesCount(6)
 				.setGSSEdgesCount(52)
 				.setNonterminalNodesCount(15)
-				.setTerminalNodesCount(15)
+				.setTerminalNodesCount(5)
 				.setIntermediateNodesCount(10)
 				.setPackedNodesCount(55)
 				.setAmbiguousNodesCount(12).build();
@@ -182,7 +182,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setGSSNodesCount(27)
 				.setGSSEdgesCount(215)
 				.setNonterminalNodesCount(15)
-				.setTerminalNodesCount(15)
+				.setTerminalNodesCount(5)
 				.setIntermediateNodesCount(10)
 				.setPackedNodesCount(55)
 				.setAmbiguousNodesCount(12).build();

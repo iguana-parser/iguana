@@ -1,6 +1,5 @@
 package org.jgll.parser.gss;
 
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.HashFunctions;
@@ -34,13 +33,11 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	@Override
 	public boolean equals(Object obj) {
 
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
 
-		if (!(obj instanceof GSSEdge)) {
+		if (!(obj instanceof GSSEdge))
 			return false;
-		}
 
 		GSSEdge other = (GSSEdge) obj;
 
@@ -66,11 +63,8 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	@Override
 	public Descriptor addDescriptor(GLLParser parser, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
 		
-		// FIXME: Bug here, fixed in the master branch of iguana
-		
-		for(Condition c : returnSlot.getConditions()) {
-			if (c.getSlotAction().execute(parser.getInput(), source, inputIndex)) 
-				break;
+		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex)) {
+			return null;
 		}
 		
 		NonPackedNode y = parser.getNode(returnSlot, node, sppfNode);

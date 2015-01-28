@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.RunnableAutomaton;
@@ -19,7 +18,7 @@ public class AltTest {
 		Character a = Character.from('a');
 		Character b = Character.from('b');
 		
-		RegularExpression regexp = RegexAlt.from(a, b);
+		RegularExpression regexp = Alt.from(a, b);
 		Automaton nfa = regexp.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
@@ -31,8 +30,8 @@ public class AltTest {
 	
 	@Test
 	public void test2() {
-		Keyword k1 = Keyword.from("for");
-		Keyword k2 = Keyword.from("forall");
+		Sequence<Character> k1 = Sequence.from("for");
+		Sequence<Character> k2 = Sequence.from("forall");
 		
 		Automaton result = AutomatonOperations.or(k1.getAutomaton(), k2.getAutomaton());
 
@@ -43,7 +42,7 @@ public class AltTest {
 	
 	@Test
 	public void test3() {
-		RegularExpression regexp = RegexAlt.from(Keyword.from("when"), Keyword.from("if"));
+		RegularExpression regexp = Alt.from(Sequence.from("when"), Sequence.from("if"));
 
 		Automaton automaton = regexp.getAutomaton();
 
@@ -59,7 +58,7 @@ public class AltTest {
 		RegularExpression a = new Character.Builder('a').addPreCondition(RegularExpressionCondition.notFollow(Character.from('c'))).build();
 		Character b = Character.from('b');
 		
-		RegularExpression regexp = new RegexAlt.Builder<>(a, b).addPreCondition(RegularExpressionCondition.notFollow(Character.from('d'))).build();
+		RegularExpression regexp = Alt.builder(a, b).addPreCondition(RegularExpressionCondition.notFollow(Character.from('d'))).build();
 		System.out.println(regexp);
 		Automaton nfa = regexp.getAutomaton();
 		
@@ -71,8 +70,8 @@ public class AltTest {
 	
 	@Test
 	public void test2WithPostConditions() {
-		Keyword k1 = new Keyword.Builder("for").addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
-		Keyword k2 = Keyword.from("forall");
+		Sequence<Character> k1 = Sequence.from("for").copyBuilder().addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		Sequence<Character> k2 = Sequence.from("forall");
 		
 		Automaton result = AutomatonOperations.or(k1.getAutomaton(), k2.getAutomaton());
 

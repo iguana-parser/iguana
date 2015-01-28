@@ -1,6 +1,5 @@
 package org.jgll.grammar.condition;
 
-import org.jgll.grammar.GrammarRegistry;
 
 
 
@@ -38,7 +37,7 @@ public class PositionalCondition extends Condition {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return "new PositionalCondition(" + type.name() + ")";
 	}
 

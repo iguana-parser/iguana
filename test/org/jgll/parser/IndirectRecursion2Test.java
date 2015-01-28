@@ -40,10 +40,10 @@ public class IndirectRecursion2Test {
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.builder(A).addSymbols(B, A, d).build();
-		Rule r2 = Rule.builder(A).addSymbols(a).build();
-		Rule r3 = Rule.builder(B).build();
-		Rule r4 = Rule.builder(B).addSymbols(b).build();
+		Rule r1 = Rule.withHead(A).addSymbols(B, A, d).build();
+		Rule r2 = Rule.withHead(A).addSymbols(a).build();
+		Rule r3 = Rule.withHead(B).build();
+		Rule r4 = Rule.withHead(B).addSymbols(b).build();
 
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
 	}

@@ -4,6 +4,7 @@ package org.jgll.parser;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
@@ -15,6 +16,7 @@ import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.lookup.SPPFLookup;
+import org.jgll.util.Configuration;
 
 /**
  *
@@ -23,13 +25,14 @@ import org.jgll.sppf.lookup.SPPFLookup;
  */
 public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		
-	public NewGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptor) {
-		super(gssLookup, sppfLookup, descriptor);
+	public NewGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptor) {
+		super(config, gssLookup, sppfLookup, descriptor);
 	}
 	
 	@Override
 	protected void initParserState(NonterminalGrammarSlot startSymbol) {
-		cu = createGSSNode(null, startSymbol, ci);
+		startSymbol.initGSSLookup();
+		cu = createGSSNode(DummySlot.getInstance(), startSymbol, ci);
 		cn = DummyNode.getInstance();
 		ci = 0;
 		errorSlot = null;
@@ -54,12 +57,12 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+	public final GSSNode createGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
 		return gssLookup.getGSSNode(nonterminal, i);
 	}
 	
 	@Override
-	public final GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+	public final GSSNode hasGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
 		return gssLookup.hasGSSNode(nonterminal, i);
 	}
 	

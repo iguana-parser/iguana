@@ -1,6 +1,8 @@
 package org.jgll.grammar.condition;
 
-import org.jgll.grammar.GrammarRegistry;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import org.jgll.regex.RegularExpression;
 
 /**
@@ -14,7 +16,7 @@ public class RegularExpressionCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private transient final SlotAction action;
+	private transient SlotAction action;
 
 	private RegularExpression regularExpression;
 	
@@ -33,6 +35,11 @@ public class RegularExpressionCondition extends Condition {
 		return type.toString() + " " + regularExpression;
 	}
 	
+	// Reading the transiet action field
+	private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
+		in.defaultReadObject();
+		action = createSlotAction(regularExpression);
+	}
 	
 	public SlotAction createSlotAction(RegularExpression r) {
 		
@@ -51,10 +58,18 @@ public class RegularExpressionCondition extends Condition {
 				return (input, node, i) -> r.getMatcher().match(input, node.getInputIndex(), i);
 				
 			case NOT_PRECEDE:
-				return (input, node, i) -> r.getBackwardsMatcher().match(input, i - 1) >= 0;
+				return (input, node, i) -> {
+					if (i == 0)
+						return false;
+					return r.getBackwardsMatcher().match(input, i - 1) >= 0;
+				};
 				
 			case PRECEDE:
-				return (input, node, i) -> r.getBackwardsMatcher().match(input, i - 1) == -1;
+				return (input, node, i) -> {
+					if (i == 0)
+						return false;
+					return r.getBackwardsMatcher().match(input, i - 1) == -1;
+				};
 				
 			default:
 				throw new RuntimeException("Unexpected error occured.");
@@ -69,9 +84,11 @@ public class RegularExpressionCondition extends Condition {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) return true;
+		if(this == obj) 
+			return true;
 		
-		if(!(obj instanceof RegularExpressionCondition)) return false;
+		if(!(obj instanceof RegularExpressionCondition)) 
+			return false;
 		
 		RegularExpressionCondition other = (RegularExpressionCondition) obj;
 		
@@ -84,8 +101,8 @@ public class RegularExpressionCondition extends Condition {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "new RegularExpressionCondition(" + type.name() + ", " + regularExpression.getConstructorCode(registry) + ")";
+	public String getConstructorCode() {
+		return "new " + RegularExpressionCondition.class.getSimpleName() + "(ConditionType." + type.name() + ", " + regularExpression.getConstructorCode() + ")";
 	}
 	
 	public static RegularExpressionCondition notMatch(RegularExpression regularExpression) {

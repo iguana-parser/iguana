@@ -6,9 +6,9 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.regex.Sequence;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -35,17 +35,17 @@ public class KeywordTest3 {
 	private Grammar grammar;
 
 	private Nonterminal S = Nonterminal.withName("S");
-	private Keyword iff = Keyword.from("if");
-	private Keyword then = Keyword.from("then");
+	private Sequence<Character> iff = Sequence.from("if");
+	private Sequence<Character> then = Sequence.from("then");
 	private Nonterminal L = Nonterminal.withName("L");
 	private Character s = Character.from('s');
 	private Character ws = Character.from(' ');
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.builder(S).addSymbols(iff, L, S, L, then, L, S).build();
-		Rule r2 = Rule.builder(S).addSymbol(s).build();
-		Rule r3 = Rule.builder(L).addSymbol(ws).build();
+		Rule r1 = Rule.withHead(S).addSymbols(iff, L, S, L, then, L, S).build();
+		Rule r2 = Rule.withHead(S).addSymbol(s).build();
+		Rule r3 = Rule.withHead(L).addSymbol(ws).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}

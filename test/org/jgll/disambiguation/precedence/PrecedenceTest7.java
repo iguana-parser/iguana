@@ -12,7 +12,6 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNodeFactory;
@@ -51,23 +50,23 @@ public class PrecedenceTest7 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= EPlus E
-		Rule rule1 = Rule.builder(E).addSymbols(EPlus, E).build();
+		Rule rule1 = Rule.withHead(E).addSymbols(EPlus, E).build();
 		builder.addRule(rule1);
 		
 		// E ::=  E + E
-		Rule rule2 = Rule.builder(E).addSymbols(E, plus, E).build();
+		Rule rule2 = Rule.withHead(E).addSymbols(E, plus, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= a
-		Rule rule3 = Rule.builder(E).addSymbols(a).build();
+		Rule rule3 = Rule.withHead(E).addSymbols(a).build();
 		builder.addRule(rule3);
 		
 		// EPlus ::= EPlus E
-		Rule rule4 = Rule.builder(EPlus).addSymbols(EPlus, E).build();
+		Rule rule4 = Rule.withHead(EPlus).addSymbols(EPlus, E).build();
 		builder.addRule(rule4);
 		
 		// EPlus ::= E
-		Rule rule5 = Rule.builder(EPlus).addSymbols(E).build();
+		Rule rule5 = Rule.withHead(EPlus).addSymbols(E).build();
 		builder.addRule(rule5);
 		
 		
@@ -118,9 +117,9 @@ public class PrecedenceTest7 {
 		PackedNode node8 = factory.createPackedNode("E ::= E + . E2", 3, node7);
 		NonterminalNode node9 = factory.createNonterminalNode("E", 0, 0, 3);
 		PackedNode node10 = factory.createPackedNode("E ::= EPlus1 E1 .", 2, node9);
-		ListSymbolNode node11 = factory.createListNode("EPlus", 1, 0, 2);
+		NonterminalNode node11 = factory.createNonterminalNode("EPlus", 1, 0, 2);
 		PackedNode node12 = factory.createPackedNode("EPlus1 ::= EPlus1 E3 .", 1, node11);
-		ListSymbolNode node13 = factory.createListNode("EPlus", 1, 0, 1);
+		NonterminalNode node13 = factory.createNonterminalNode("EPlus", 1, 0, 1);
 		PackedNode node14 = factory.createPackedNode("EPlus1 ::= E3 .", 0, node13);
 		NonterminalNode node15 = factory.createNonterminalNode("E", 3, 0, 1);
 		PackedNode node16 = factory.createPackedNode("E3 ::= a .", 0, node15);
@@ -151,11 +150,11 @@ public class PrecedenceTest7 {
 		node7.addChild(node8);
 		NonterminalNode node25 = factory.createNonterminalNode("E", 2, 4, 8);
 		PackedNode node26 = factory.createPackedNode("E2 ::= EPlus2 E1 .", 7, node25);
-		ListSymbolNode node27 = factory.createListNode("EPlus", 2, 4, 7);
+		NonterminalNode node27 = factory.createNonterminalNode("EPlus", 2, 4, 7);
 		PackedNode node28 = factory.createPackedNode("EPlus2 ::= EPlus2 E3 .", 6, node27);
-		ListSymbolNode node29 = factory.createListNode("EPlus", 2, 4, 6);
+		NonterminalNode node29 = factory.createNonterminalNode("EPlus", 2, 4, 6);
 		PackedNode node30 = factory.createPackedNode("EPlus2 ::= EPlus2 E3 .", 5, node29);
-		ListSymbolNode node31 = factory.createListNode("EPlus", 2, 4, 5);
+		NonterminalNode node31 = factory.createNonterminalNode("EPlus", 2, 4, 5);
 		PackedNode node32 = factory.createPackedNode("EPlus2 ::= E3 .", 4, node31);
 		NonterminalNode node33 = factory.createNonterminalNode("E", 3, 4, 5);
 		PackedNode node34 = factory.createPackedNode("E3 ::= a .", 4, node33);
@@ -197,11 +196,11 @@ public class PrecedenceTest7 {
 		node3.addChild(node4);
 		NonterminalNode node46 = factory.createNonterminalNode("E", 2, 9, 13);
 		PackedNode node47 = factory.createPackedNode("E2 ::= EPlus2 E1 .", 12, node46);
-		ListSymbolNode node48 = factory.createListNode("EPlus", 2, 9, 12);
+		NonterminalNode node48 = factory.createNonterminalNode("EPlus", 2, 9, 12);
 		PackedNode node49 = factory.createPackedNode("EPlus2 ::= EPlus2 E3 .", 11, node48);
-		ListSymbolNode node50 = factory.createListNode("EPlus", 2, 9, 11);
+		NonterminalNode node50 = factory.createNonterminalNode("EPlus", 2, 9, 11);
 		PackedNode node51 = factory.createPackedNode("EPlus2 ::= EPlus2 E3 .", 10, node50);
-		ListSymbolNode node52 = factory.createListNode("EPlus", 2, 9, 10);
+		NonterminalNode node52 = factory.createNonterminalNode("EPlus", 2, 9, 10);
 		PackedNode node53 = factory.createPackedNode("EPlus2 ::= E3 .", 9, node52);
 		NonterminalNode node54 = factory.createNonterminalNode("E", 3, 9, 10);
 		PackedNode node55 = factory.createPackedNode("E3 ::= a .", 9, node54);

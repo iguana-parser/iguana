@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -20,11 +19,6 @@ public class AmbiguousNodesVisitor implements SPPFVisitor {
 	public AmbiguousNodesVisitor() {
 		visitedNodes = new HashSet<>();
 		ambiguousNodes = new HashSet<>();
-	}
-
-	@Override
-	public void visit(ListSymbolNode node) {
-		countAmbiguousNodes(node);
 	}
 
 	@Override

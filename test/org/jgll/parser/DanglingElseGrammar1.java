@@ -6,9 +6,9 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.regex.Sequence;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -38,7 +38,7 @@ public class DanglingElseGrammar1 {
 	private Character s = Character.from('s');
 	private Character a = Character.from('a');
 	private Character b = Character.from('b');
-	private Group group = Group.builder(a, S, b, S).addPreCondition(ContextFreeCondition.notMatch(a, S)).build();
+	private Sequence group = Sequence.builder(a, S, b, S).addPreCondition(ContextFreeCondition.notMatch(a, S)).build();
 
 	private Grammar grammar;
 	
@@ -48,13 +48,13 @@ public class DanglingElseGrammar1 {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule rule1 = Rule.builder(S).addSymbols(a, S).build();
+		Rule rule1 = Rule.withHead(S).addSymbols(a, S).build();
 		builder.addRule(rule1);
 		
-		Rule rule2 = Rule.builder(S).addSymbols(group).build();
+		Rule rule2 = Rule.withHead(S).addSymbols(group).build();
 		builder.addRule(rule2);
 		
-		Rule rule3 = Rule.builder(S).addSymbols(s).build();
+		Rule rule3 = Rule.withHead(S).addSymbols(s).build();
 		builder.addRule(rule3);
 		
 		grammar = builder.build();

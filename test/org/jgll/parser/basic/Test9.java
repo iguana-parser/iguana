@@ -72,9 +72,9 @@ public class Test9 extends AbstractParserTest {
 		Character a = Character.from('a');
 		Character b = Character.from('b');
 		Character c = Character.from('c');
-		Rule r1 = Rule.builder(S).addSymbols(a, A, c).build();
-		Rule r2 = Rule.builder(S).addSymbols(a, A, b).build();
-		Rule r3 = Rule.builder(A).addSymbol(a).build();
+		Rule r1 = Rule.withHead(S).addSymbols(a, A, c).build();
+		Rule r2 = Rule.withHead(S).addSymbols(a, A, b).build();
+		Rule r3 = Rule.withHead(A).addSymbol(a).build();
 		return Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
 	}
 	
@@ -84,7 +84,7 @@ public class Test9 extends AbstractParserTest {
 				.setGSSNodesCount(2)
 				.setGSSEdgesCount(2)
 				.setNonterminalNodesCount(2)
-				.setTerminalNodesCount(2)
+				.setTerminalNodesCount(3)
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
@@ -97,7 +97,7 @@ public class Test9 extends AbstractParserTest {
 				.setGSSNodesCount(3)
 				.setGSSEdgesCount(2)
 				.setNonterminalNodesCount(2)
-				.setTerminalNodesCount(2)
+				.setTerminalNodesCount(3)
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();

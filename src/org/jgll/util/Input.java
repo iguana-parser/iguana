@@ -17,6 +17,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.jgll.grammar.symbol.EOF;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.traversal.PositionInfo;
 
 /**
@@ -40,11 +41,13 @@ public class Input {
 	 */
 	private int lineCount;
 	
+	private final IntArrayCharSequence charSequence;
+	
 	private URI uri;
 	
 	public static Input fromString(String s, URI uri) {
 		try {
-			return new Input(fromStream(IOUtils.toInputStream(s, "UTF-8")), uri);
+			return new Input(fromStream(IOUtils.toInputStream(s)), uri);
 		} catch (IOException e) {
 			assert false : "this should not happen from a string";
 			e.printStackTrace();
@@ -99,8 +102,6 @@ public class Input {
 			}
 		}
 		
-		input.add(EOF.VALUE);
-
 		reader.close();
 		
 		int[] intInput = new int[input.size()];
@@ -125,9 +126,16 @@ public class Input {
 	}
 
 	private Input(int[] input, URI uri) {
-		this.characters = input;
 		this.uri = uri;
-		lineColumns = new LineColumn[input.length];
+		this.charSequence = new IntArrayCharSequence(input);
+		
+		// Add EOF (-1) to the end of characters array
+		int length = input.length + 1;
+		this.characters = new int[length];
+		System.arraycopy(input, 0, characters, 0, length - 1);
+		this.characters[input.length] = EOF.VALUE;
+		
+		lineColumns = new LineColumn[characters.length];
 		calculateLineLengths();
 	}
 	
@@ -210,6 +218,10 @@ public class Input {
 		return array;
 	}
 	
+	public IntArrayCharSequence asCharSequence() {
+		return charSequence;
+	}
+	
 	public LineColumn getLineColumn(int index) {
 		if(index < 0 || index >= lineColumns.length) {
 			return new LineColumn(0, 0);
@@ -224,6 +236,13 @@ public class Input {
 		return lineColumns[index].getLineNumber();
 	}
 	
+	public String getNodeInfo(NonPackedNode node) {
+		return String.format("(%d:%d-%d:%d)", getLineNumber(node.getLeftExtent()),
+				  getColumnNumber(node.getLeftExtent()),
+				  getLineNumber(node.getRightExtent()),
+				  getColumnNumber(node.getRightExtent()));
+	}
+	
 	public int getColumnNumber(int index) {
 		if(index < 0 || index >= lineColumns.length) {
 			return 0;
@@ -234,13 +253,11 @@ public class Input {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(! (obj instanceof Input)) {
+		if(! (obj instanceof Input)) 
 			return false;
-		}
 		
 		Input other = (Input) obj;
 		
@@ -256,7 +273,6 @@ public class Input {
 								getColumnNumber(rightExtent),
 								uri);
 	}
-	
 	
 
 	private void calculateLineLengths() {
@@ -311,13 +327,11 @@ public class Input {
 		
 		@Override
 		public boolean equals(Object obj) {
-			if(this == obj) {
+			if(this == obj)
 				return true;
-			}
 			
-			if(!(obj instanceof LineColumn)) {
+			if(!(obj instanceof LineColumn))
 				return false;
-			}
 			
 			LineColumn other = (LineColumn) obj;
 			return lineNumber == other.lineNumber && columnNumber == other.columnNumber;

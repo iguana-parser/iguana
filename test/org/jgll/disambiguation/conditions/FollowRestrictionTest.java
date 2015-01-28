@@ -5,13 +5,13 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Keyword;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.regex.Plus;
+import org.jgll.regex.Sequence;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -35,14 +35,14 @@ public class FollowRestrictionTest {
 	@Before
 	public void init() {
 		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Keyword.from(":"))).build();
+		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Sequence.from(":"))).build();
 		CharacterRange az = CharacterRange.in('a', 'z');
 		Plus AZPlus = Plus.builder(az).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 
 		Grammar.Builder builder = new Grammar.Builder();
 		
-		Rule r1 = Rule.builder(S).addSymbol(Label).build();		
-		Rule r2 = Rule.builder(Label).addSymbol(AZPlus).build();
+		Rule r1 = Rule.withHead(S).addSymbol(Label).build();		
+		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
 		builder.addRule(r1).addRule(r2);
 		
 		grammar = builder.build();

@@ -24,7 +24,7 @@ public class CharacterTest {
 	@Test
 	public void test2() {
 		// [a] !>> [b]
-		RegularExpression regexp = new Character.Builder('a').addPreCondition(RegularExpressionCondition.notFollow(Character.from('b'))).build();
+		RegularExpression regexp = new Character.Builder('a').addPostCondition(RegularExpressionCondition.notFollow(Character.from('b'))).build();
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton dfa = nfa.getRunnableAutomaton();

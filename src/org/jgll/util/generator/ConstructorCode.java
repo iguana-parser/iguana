@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.grammar.GrammarRegistry;
-
 /**
  * 
  * 
@@ -14,15 +12,18 @@ import org.jgll.grammar.GrammarRegistry;
  */
 public interface ConstructorCode {
 	
-	public String getConstructorCode(GrammarRegistry registry);
+	public String getConstructorCode();
 	
-	default String getConstructorCode(Set<? extends ConstructorCode> set, GrammarRegistry registry) {
-		return "Sets.newHashSet(" + set.stream().map(a -> a.getConstructorCode(registry)).collect(Collectors.joining(", ")) + ")";
+	default String asSet(Set<? extends ConstructorCode> set) {
+		return "Sets.newHashSet(" + set.stream().map(a -> a.getConstructorCode()).collect(Collectors.joining(", ")) + ")";
 	}
 	
-	default String getConstructorCode(List<? extends ConstructorCode> list, GrammarRegistry registry) {
-		return "Arrays.asList(" + list.stream().map(a -> a.getConstructorCode(registry)).collect(Collectors.joining(", ")) + ")";
+	default String asList(List<? extends ConstructorCode> list) {
+		return "Arrays.asList(" + list.stream().map(a -> a.getConstructorCode()).collect(Collectors.joining(", ")) + ")";
 	}
-
+	
+	default String asArray(List<? extends ConstructorCode> list) {
+		return list.stream().map(a -> a.getConstructorCode()).collect(Collectors.joining(", "));
+	}
 	
 }

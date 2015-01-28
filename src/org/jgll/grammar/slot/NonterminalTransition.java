@@ -1,11 +1,9 @@
 package org.jgll.grammar.slot;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -24,8 +22,8 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Expression[] arguments;
 
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(nonterminal, origin, dest, null, null, new Expression[0], Collections.emptySet());
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Set<Condition> preConditions) {
+		this(nonterminal, origin, dest, null, null, new Expression[0], preConditions);
 	}	
 	
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, 
@@ -47,8 +45,9 @@ public class NonterminalTransition extends AbstractTransition {
 		}
 		
 		for (Condition c : preConditions) {
-			if (c.getSlotAction().execute(parser.getInput(), u, i)) 
+			if (c.getSlotAction().execute(parser.getInput(), u, i)) {
 				return;
+			}
 		}
 		
 		if (nonterminal.getParameters() == null) {
@@ -68,14 +67,18 @@ public class NonterminalTransition extends AbstractTransition {
 		return variable;
 	}
 	
+	public NonterminalGrammarSlot getSlot() {
+		return nonterminal;
+	}
+	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
 			.append("new NonterminalTransition(")
-			.append("slot" + registry.getId(nonterminal)).append(", ")
-			.append("slot" + registry.getId(origin)).append(", ")
-			.append("slot" + registry.getId(dest)).append(", ")
-			.append(getConstructorCode(preConditions, registry))
+			.append("slot" + nonterminal.getId()).append(", ")
+			.append("slot" + origin.getId()).append(", ")
+			.append("slot" + dest.getId()).append(", ")
+			.append(asSet(preConditions))
 			.toString();
 	}
 

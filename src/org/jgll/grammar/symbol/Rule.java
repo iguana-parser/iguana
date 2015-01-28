@@ -4,15 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jgll.parser.HashFunctions;
+import org.jgll.util.generator.ConstructorCode;
 
 /**
  * 
  * @author Ali Afroozeh
  *
  */
-public class Rule implements Serializable {
+public class Rule implements ConstructorCode, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -27,10 +29,13 @@ public class Rule implements Serializable {
 	 */
 	private final Serializable object;
 	
+	private final Nonterminal layout;
+	
 	public Rule(Builder builder) {
 		this.body = builder.body;
 		this.head = builder.head;
 		this.object = builder.object;
+		this.layout = builder.layout;
 	}
 		
 	public Nonterminal getHead() {
@@ -42,7 +47,7 @@ public class Rule implements Serializable {
 	}
 	
 	public int size() {
-		return body.size();
+		return body == null ? 0 : body.size();
 	}
 	
 	public Symbol symbolAt(int i) {
@@ -54,6 +59,10 @@ public class Rule implements Serializable {
 	
 	public Serializable getObject() {
 		return object;
+	}
+	
+	public Nonterminal getLayout() {
+		return layout;
 	}
 		
 	@Override
@@ -73,13 +82,11 @@ public class Rule implements Serializable {
 	
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(!(obj instanceof Rule)) {
+		if(!(obj instanceof Rule))
 			return false;
-		}
 		
 		Rule other = (Rule) obj;
 		
@@ -101,7 +108,7 @@ public class Rule implements Serializable {
 		return new Position(this, i);
 	}
 	
-	public static Builder builder(Nonterminal nonterminal) {
+	public static Builder withHead(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
 	
@@ -110,6 +117,7 @@ public class Rule implements Serializable {
 		private Nonterminal head;
 		private List<Symbol> body;
 		private Serializable object;
+		private Nonterminal layout;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -127,7 +135,11 @@ public class Rule implements Serializable {
 		}
 		
 		public Builder addSymbols(List<Symbol> symbols) {
-			body.addAll(symbols);
+			if (symbols == null) {
+				body = null;
+			} else {
+				body.addAll(symbols);
+			}
 			return this;
 		}
 		
@@ -136,8 +148,19 @@ public class Rule implements Serializable {
 			return this;
 		}
 		
+		public Builder setLayout(Nonterminal layout) {
+			this.layout = layout;
+			return this;
+		}
+		
 		public Rule build() {
 			return new Rule(this);
 		}
+	}
+
+	@Override
+	public String getConstructorCode() {
+		return "Rule.withHead(" + head.getConstructorCode() + ")" + (body == null ? "" :
+				body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) + ".build()";
 	}
 }

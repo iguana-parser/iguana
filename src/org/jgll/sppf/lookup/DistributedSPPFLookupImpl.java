@@ -1,22 +1,24 @@
 package org.jgll.sppf.lookup;
 
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Input;
 import org.jgll.util.collections.IntKey2;
-import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.IntHash2;
 
 
 public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	
-	private HashFunction f;
+	private IntHash2 f;
 
-	public DistributedSPPFLookupImpl(HashFunction f) {
-		this.f = f;
+	public DistributedSPPFLookupImpl(Input input) {
+		super(input);
+		int inputSize = input.length() + 1;
+		this.f = (x, y) -> x * inputSize + y;
 	}
 	
 	@Override
@@ -58,10 +60,6 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	@Override
 	public NonterminalNode getStartSymbol(NonterminalGrammarSlot startSymbol, int inputSize) {
 		return startSymbol.findNonterminalNode(IntKey2.from(0, inputSize - 1, f));
-	}
-
-	protected IntermediateNode createIntermediateNode(GrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return new IntermediateNode(grammarSlot, leftExtent, rightExtent);
 	}
 
 }

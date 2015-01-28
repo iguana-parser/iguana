@@ -6,16 +6,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 
 
 public class Epsilon extends AbstractRegularExpression {
-
-	public static final TerminalGrammarSlot TOKEN_ID = new TerminalGrammarSlot(Epsilon.getInstance());
 
 	private static final long serialVersionUID = 1L;
 	
@@ -29,13 +25,15 @@ public class Epsilon extends AbstractRegularExpression {
 		return instance;
 	}
 	
+	private static SymbolBuilder<Epsilon> builder = 
+			new SymbolBuilder<Epsilon>("epsilon") {
+					@Override
+					public Epsilon build() {
+						return Epsilon.getInstance();
+					}};
+	
 	private Epsilon() {
-		super(new SymbolBuilder<Epsilon>("epsilon") {
-			@Override
-			public Epsilon build() {
-				return Epsilon.getInstance();
-			}
-		});
+		super(builder);
 	}
 	
 	private Object readResolve()  {
@@ -71,8 +69,17 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "Epsilon.getInstance()";
+	public String getConstructorCode() {
+		return Epsilon.class.getSimpleName() + ".getInstance()";
 	}
 	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return builder;
+	}
+
+	@Override
+	public String getPattern() {
+		throw new UnsupportedOperationException();
+	}
 }

@@ -60,4 +60,11 @@ public abstract class AbstractSymbol implements Symbol {
 		return preConditions.isEmpty() ? name :  "(" + name + listToString(preConditions) + ")";
 	}
 	
+	@Override
+	public String getConstructorCode() {
+		return (label == null ? "" : ".setLabel(" + label + ")") + 
+			   (preConditions.isEmpty() ? "" : ".addPreConditions(" + asSet(preConditions) + ")") +
+			   (postConditions.isEmpty() ? "" : ".addPostConditions(" + asSet(postConditions) + ")");
+	}
+	
 }

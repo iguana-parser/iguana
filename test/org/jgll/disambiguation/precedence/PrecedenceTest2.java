@@ -52,19 +52,19 @@ public class PrecedenceTest2 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E ^ E
-		Rule rule0 = Rule.builder(E).addSymbols(E, hat, E).build();
+		Rule rule0 = Rule.withHead(E).addSymbols(E, hat, E).build();
 		builder.addRule(rule0);
 		
 		// E ::= E + E
-		Rule rule1 = Rule.builder(E).addSymbols(E, plus, E).build();
+		Rule rule1 = Rule.withHead(E).addSymbols(E, plus, E).build();
 		builder.addRule(rule1);
 		
 		// E ::= E - E
-		Rule rule2 = Rule.builder(E).addSymbols(minus, E).build();
+		Rule rule2 = Rule.withHead(E).addSymbols(minus, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= a
-		Rule rule3 = Rule.builder(E).addSymbols(a).build();
+		Rule rule3 = Rule.withHead(E).addSymbols(a).build();
 		builder.addRule(rule3);
 		
 		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
@@ -87,15 +87,51 @@ public class PrecedenceTest2 {
 		
 		grammar = operatorPrecedence.transform(builder.build());
 	}
+	
+	@Test
+	public void testGrammar() {
+		assertEquals(getGrammar(), grammar);
+	}
 
 	@Test
-	public void test() {
+	public void testParser() {
 		Input input = Input.fromString("a+a^a^-a+a");
 		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
+	}
+	
+	private Grammar getGrammar() {
+		return Grammar.builder()
+		//E4 ::= E3 ^ E4 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(4).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Character.from(94)).addSymbol(Nonterminal.builder("E").setIndex(4).build()).build())
+		//E4 ::= a 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(4).build()).addSymbol(Character.from(97)).build())
+		//E ::= E3 ^ E1 
+		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Character.from(94)).addSymbol(Nonterminal.builder("E").setIndex(1).build()).build())
+		//E ::= E2 + E1 
+		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(43)).addSymbol(Nonterminal.builder("E").setIndex(1).build()).build())
+		//E ::= - E 
+		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Character.from(45)).addSymbol(Nonterminal.builder("E").build()).build())
+		//E ::= a 
+		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Character.from(97)).build())
+		//E1 ::= E3 ^ E1 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Character.from(94)).addSymbol(Nonterminal.builder("E").setIndex(1).build()).build())
+		//E1 ::= - E 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Character.from(45)).addSymbol(Nonterminal.builder("E").build()).build())
+		//E1 ::= a 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Character.from(97)).build())
+		//E2 ::= E3 ^ E4 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Character.from(94)).addSymbol(Nonterminal.builder("E").setIndex(4).build()).build())
+		//E2 ::= E2 + E4 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(43)).addSymbol(Nonterminal.builder("E").setIndex(4).build()).build())
+		//E2 ::= a 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(97)).build())
+		//E3 ::= a 
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Character.from(97)).build())
+		.build();
 	}
 	
 	private SPPFNode getSPPF(GrammarRegistry registry) {
@@ -105,7 +141,7 @@ public class PrecedenceTest2 {
 		IntermediateNode node3 = factory.createIntermediateNode("E ::= E2 + . E1", 0, 2);
 		PackedNode node4 = factory.createPackedNode("E ::= E2 + . E1", 1, node3);
 		NonterminalNode node5 = factory.createNonterminalNode("E", 2, 0, 1);
-		PackedNode node6 = factory.createPackedNode("E2 ::= a .", 0, node5);
+		PackedNode node6 = factory.createPackedNode("E2 ::= a .", 1, node5);
 		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
@@ -118,7 +154,7 @@ public class PrecedenceTest2 {
 		IntermediateNode node11 = factory.createIntermediateNode("E1 ::= E3 ^ . E1", 2, 4);
 		PackedNode node12 = factory.createPackedNode("E1 ::= E3 ^ . E1", 3, node11);
 		NonterminalNode node13 = factory.createNonterminalNode("E", 3, 2, 3);
-		PackedNode node14 = factory.createPackedNode("E3 ::= a .", 2, node13);
+		PackedNode node14 = factory.createPackedNode("E3 ::= a .", 3, node13);
 		TerminalNode node15 = factory.createTerminalNode("a", 2, 3);
 		node14.addChild(node15);
 		node13.addChild(node14);
@@ -131,7 +167,7 @@ public class PrecedenceTest2 {
 		IntermediateNode node19 = factory.createIntermediateNode("E1 ::= E3 ^ . E1", 4, 6);
 		PackedNode node20 = factory.createPackedNode("E1 ::= E3 ^ . E1", 5, node19);
 		NonterminalNode node21 = factory.createNonterminalNode("E", 3, 4, 5);
-		PackedNode node22 = factory.createPackedNode("E3 ::= a .", 4, node21);
+		PackedNode node22 = factory.createPackedNode("E3 ::= a .", 5, node21);
 		TerminalNode node23 = factory.createTerminalNode("a", 4, 5);
 		node22.addChild(node23);
 		node21.addChild(node22);
@@ -147,7 +183,7 @@ public class PrecedenceTest2 {
 		IntermediateNode node30 = factory.createIntermediateNode("E ::= E2 + . E1", 7, 9);
 		PackedNode node31 = factory.createPackedNode("E ::= E2 + . E1", 8, node30);
 		NonterminalNode node32 = factory.createNonterminalNode("E", 2, 7, 8);
-		PackedNode node33 = factory.createPackedNode("E2 ::= a .", 7, node32);
+		PackedNode node33 = factory.createPackedNode("E2 ::= a .", 8, node32);
 		TerminalNode node34 = factory.createTerminalNode("a", 7, 8);
 		node33.addChild(node34);
 		node32.addChild(node33);
@@ -156,7 +192,7 @@ public class PrecedenceTest2 {
 		node31.addChild(node35);
 		node30.addChild(node31);
 		NonterminalNode node36 = factory.createNonterminalNode("E", 1, 9, 10);
-		PackedNode node37 = factory.createPackedNode("E1 ::= a .", 9, node36);
+		PackedNode node37 = factory.createPackedNode("E1 ::= a .", 10, node36);
 		TerminalNode node38 = factory.createTerminalNode("a", 9, 10);
 		node37.addChild(node38);
 		node36.addChild(node37);

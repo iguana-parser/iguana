@@ -3,8 +3,8 @@ package org.jgll.parser;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.regex.Plus;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -32,9 +32,9 @@ public class EBNFTest1 {
 		Nonterminal A = Nonterminal.withName("A");
 		Character a = Character.from('a');
 		
-		Rule rule1 = Rule.builder(S).addSymbols(Plus.from(A)).build();
+		Rule rule1 = Rule.withHead(S).addSymbols(Plus.from(A)).build();
 		builder.addRule(rule1);
-		Rule rule2 = Rule.builder(A).addSymbols(a).build();
+		Rule rule2 = Rule.withHead(A).addSymbols(a).build();
 		builder.addRule(rule2);
 		
 		grammar = builder.build();

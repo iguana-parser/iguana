@@ -14,7 +14,7 @@ import org.jgll.util.Tuple;
  *
  */
 
-public abstract class AbstractNodeLookup implements NodeLookup {
+public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	
 	/**
 	 * 

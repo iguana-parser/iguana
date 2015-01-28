@@ -6,11 +6,26 @@ import org.junit.Test;
 
 public class InputTest {
 	
-	private Input input;
-
+	@Test
+	public void testLogicalLine() {
+		String s = "\uD83C\uDF55abc\uD83C\uDF55";
+		
+		IntArrayCharSequence seq = Input.fromString(s).asCharSequence();
+		
+		assertEquals(5, seq.logicalLength());
+		
+		assertEquals(0, seq.logicalIndexAt(0));
+		assertEquals(0, seq.logicalIndexAt(1));
+		assertEquals(1, seq.logicalIndexAt(2));
+		assertEquals(2, seq.logicalIndexAt(3));
+		assertEquals(3, seq.logicalIndexAt(4));
+		assertEquals(4, seq.logicalIndexAt(5));
+		assertEquals(4, seq.logicalIndexAt(6));
+	}
+	
 	@Test
 	public void testLineColumnNumber1() {
-		input = Input.fromString("big\n brother");
+		Input input = Input.fromString("big\n brother");
 		assertEquals(1, input.getLineNumber(0));
 		assertEquals(1, input.getColumnNumber(0));
 		
@@ -26,7 +41,7 @@ public class InputTest {
 	
 	@Test
 	public void testLineColumnNumber2() {
-		input = Input.fromString("big\r\n brother");
+		Input input = Input.fromString("big\r\n brother");
 
 		assertEquals(1, input.getLineNumber(0));
 		assertEquals(1, input.getColumnNumber(0));
@@ -43,7 +58,7 @@ public class InputTest {
 	
 	@Test
 	public void testMatch1() {
-		input = Input.fromString("We are just another brick in the wall");
+		Input input = Input.fromString("We are just another brick in the wall");
 		
 		assertTrue(input.match(0, "We"));
 		assertTrue(input.match(33, "wall"));
@@ -52,7 +67,7 @@ public class InputTest {
 	
 	@Test
 	public void testMatch2() {
-		input = Input.fromString("We are just another brick in the wall");
+		Input input = Input.fromString("We are just another brick in the wall");
 		
 		assertTrue(input.match(0, 2, "We"));
 		assertTrue(input.match(3, 11, "are just"));
@@ -60,7 +75,7 @@ public class InputTest {
 	
 	@Test
 	public void testMatch3() {
-		input = Input.fromString("We are just another brick in the wall");
+		Input input = Input.fromString("We are just another brick in the wall");
 		
 		assertTrue(input.matchBackward(2, "We"));
 		assertTrue(input.matchBackward(37, "wall"));

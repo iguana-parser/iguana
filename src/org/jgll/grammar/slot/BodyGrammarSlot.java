@@ -1,16 +1,19 @@
 package org.jgll.grammar.slot;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.Conditions;
+import org.jgll.grammar.condition.ConditionsFactory;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.parser.gss.lookup.NodeLookup;
+import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
@@ -23,17 +26,20 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	private HashMap<Key, IntermediateNode> intermediateNodes;
 	
-	private final NodeLookup nodeLookup;
+	private final GSSNodeLookup nodeLookup;
+	
+	private final Conditions conditions;
 
-	public BodyGrammarSlot(int id, Position position, NodeLookup nodeLookup) {
+	public BodyGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, Set<Condition> conditions) {
 		super(id);
 		this.position = position;
 		this.nodeLookup = nodeLookup;
-		this.intermediateNodes = new HashMap<>(1000);
+		this.conditions = ConditionsFactory.getConditions(conditions);
+		this.intermediateNodes = new HashMap<>();
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
     	  .append("new BodyGrammarSlot(")
     	  .append(")").toString();
@@ -50,13 +56,10 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public IntermediateNode getIntermediateNode(Key key, Supplier<IntermediateNode> s, Consumer<IntermediateNode> c) {
-		IntermediateNode val;
-		if ((val = intermediateNodes.get(key)) == null) {
-			val = s.get();
-			c.accept(val);
-			intermediateNodes.put(key, val);
-		}
-		return val;
+		return intermediateNodes.computeIfAbsent(key, k -> { IntermediateNode val = s.get();
+															 c.accept(val);
+															 return val; 
+														   });
 	}
 	
 	public IntermediateNode findIntermediateNode(Key key) {
@@ -70,7 +73,16 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public GSSNode hasGSSNode(int inputIndex) { 
-		return nodeLookup.get(inputIndex);
+		if (nodeLookup.isInitialized()) {
+			return nodeLookup.get(inputIndex);
+		} else {
+			nodeLookup.init();			
+			return null;
+		}
+	}
+	
+	public Conditions getConditions() {
+		return conditions;
 	}
 
 	@Override

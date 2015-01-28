@@ -8,22 +8,19 @@ import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
-import org.junit.Before;
 import org.junit.Test;
 
 public class SequenceTest {
 	
-	private Sequence.Builder<Character> seq1;
-	private Sequence.Builder<CharacterRange> seq2;
-	private Sequence.Builder<CharacterRange> seq3;
-
-	@Before
-	public void init() {
-		seq1 = Sequence.builder(Character.from('a'), Character.from('b'));		
-		seq2 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('0', '9'));
-		seq3 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm'));
-	}
+	// ab
+	private Sequence.Builder<Character> seq1 = Sequence.builder(Character.from('a'), Character.from('b'));
 	
+	// [a-z][0-9]
+	private Sequence.Builder<CharacterRange> seq2 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('0', '9'));
+	
+	// [a-z][b-m]
+	private Sequence.Builder<CharacterRange> seq3 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm'));
+
 	@Test
 	public void test1() {
 		Automaton nfa = seq1.build().getAutomaton();

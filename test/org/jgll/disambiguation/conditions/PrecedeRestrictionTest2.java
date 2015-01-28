@@ -6,15 +6,15 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Keyword;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Opt;
-import org.jgll.grammar.symbol.Plus;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.regex.Opt;
+import org.jgll.regex.Plus;
+import org.jgll.regex.Sequence;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -39,8 +39,8 @@ import org.junit.Test;
 public class PrecedeRestrictionTest2 {
 	
 	private Nonterminal S = Nonterminal.withName("S");
-	private Keyword forr = Keyword.from("for");
-	private Keyword forall = Keyword.from("forall");
+	private Sequence<Character> forr = Sequence.from("for");
+	private Sequence<Character> forall = Sequence.from("forall");
 	private Nonterminal L = Nonterminal.withName("L");
 	private Nonterminal Id = Nonterminal.withName("Id");
 	private Character ws = Character.from(' ');
@@ -51,10 +51,10 @@ public class PrecedeRestrictionTest2 {
 
 	@Before
 	public void createGrammar() {
-		Rule r1 = Rule.builder(S).addSymbols(forr, Opt.from(L), Id).build();
-		Rule r2 = Rule.builder(S).addSymbol(forall).build();
-		Rule r3 = Rule.builder(Id).addSymbol(AZPlus).build();
-		Rule r4 = Rule.builder(L).addSymbol(ws).build();
+		Rule r1 = Rule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
+		Rule r2 = Rule.withHead(S).addSymbol(forall).build();
+		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
+		Rule r4 = Rule.withHead(L).addSymbol(ws).build();
 
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4, forr.toRule(), forall.toRule()).build();
 	}

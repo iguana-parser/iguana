@@ -10,7 +10,7 @@ import org.jgll.util.Input;
  * @author Ali Afroozeh
  *
  */
-public interface NodeLookup {
+public interface GSSNodeLookup {
 	
 	public GSSNode getOrElseCreate(GrammarSlot slot, int i);
 	
@@ -18,6 +18,12 @@ public interface NodeLookup {
 	
 	public void reset(Input input);
 	
+	public Iterable<GSSNode> getNodes();
+	
+	public GSSNodeLookup init();
+	
+	public boolean isInitialized();
+
 	/**
 	 * 
 	 * Data-dependent GLL parsing
@@ -26,4 +32,5 @@ public interface NodeLookup {
 	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data);
 	
 	public <T> GSSNode get(int i, GSSNodeData<T> data);
+
 }

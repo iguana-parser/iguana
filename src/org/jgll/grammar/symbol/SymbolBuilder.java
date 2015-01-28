@@ -13,22 +13,14 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	
 	protected Object object;
 	
-	protected Set<Condition> preConditions;
+	protected Set<Condition> preConditions = new HashSet<>();
 	
-	protected Set<Condition> postConditions;
+	protected Set<Condition> postConditions = new HashSet<>();
+
+	public SymbolBuilder() {}
 	
 	public SymbolBuilder(String name) {
 		this.name = name;
-		this.preConditions = new HashSet<>();
-		this.postConditions = new HashSet<>();
-	}
-	
-	public SymbolBuilder(T t) {
-		this(t.getName());
-		this.label = t.getLabel();
-		this.object = t.getObject();
-		this.preConditions = t.getPreConditions() == null ? new HashSet<Condition>() : new HashSet<>(t.getPreConditions());
-		this.postConditions = t.getPostConditions() == null ? new HashSet<Condition>() : new HashSet<>(t.getPostConditions());
 	}
 	
 	public SymbolBuilder<T> setLabel(String label) {
@@ -48,6 +40,12 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	
 	public SymbolBuilder<T> setObject(Object object) {
 		this.object = object;
+		return this;
+	}
+	
+	public SymbolBuilder<T> addConditions(Symbol s) {
+		addPreConditions(s.getPreConditions());
+		addPostConditions(s.getPostConditions());
 		return this;
 	}
 	

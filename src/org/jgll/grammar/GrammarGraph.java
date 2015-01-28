@@ -41,7 +41,7 @@ public class GrammarGraph implements Serializable {
 	
 	public GrammarGraph(GrammarGraphBuilder builder) {
 		this.name = builder.name;
-		Map<String, GrammarSlot> slotsMap = builder.slots.stream().collect(Collectors.toMap(s -> s.toString(), s -> s));
+		Map<String, GrammarSlot> slotsMap = builder.slots.stream().collect(Collectors.toMap(s -> s.toString(), s -> s, (a, b) -> a));
 		this.registry = new GrammarRegistry(builder.nonterminalsMap, builder.terminalsMap, slotsMap);
 		this.headGrammarSlots = new ArrayList<>(builder.nonterminalsMap.values());
 		this.slots = new LinkedHashSet<>(builder.slots);
@@ -352,8 +352,8 @@ public class GrammarGraph implements Serializable {
 	
 	public void toJavaCode(PrintWriter writer) {
 		
-		headGrammarSlots.forEach(n -> writer.println("NonterminalGrammarSlot slot" + registry.getId(n) + " = " + n.getConstructorCode(registry) + ";"));
-		slots.forEach(s -> writer.println("GrammarSlot slot"+ registry.getId(s) + " = " + s.getConstructorCode(registry) + ";"));
+		headGrammarSlots.forEach(n -> writer.println("NonterminalGrammarSlot slot" + registry.getId(n) + " = " + n.getConstructorCode() + ";"));
+		slots.forEach(s -> writer.println("GrammarSlot slot"+ registry.getId(s) + " = " + s.getConstructorCode() + ";"));
 		
 		for (NonterminalGrammarSlot n : headGrammarSlots) {
 			toJavaCode(n, writer);
@@ -361,7 +361,7 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	private void toJavaCode(GrammarSlot slot, PrintWriter writer) {
-		slot.getTransitions().forEach(t -> writer.println("slot" + registry.getId(slot) + ".addTransition(" + t.getConstructorCode(registry) + "));"));
+		slot.getTransitions().forEach(t -> writer.println("slot" + registry.getId(slot) + ".addTransition(" + t.getConstructorCode() + "));"));
  	}
 	
 }

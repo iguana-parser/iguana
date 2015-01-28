@@ -1,12 +1,9 @@
 package org.jgll.grammar.symbol;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -69,7 +66,7 @@ public class Character extends AbstractRegularExpression {
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
-		Transition transition = new Transition(c, finalState); //.addTransitionAction(getPostActions(conditions));
+		Transition transition = new Transition(c, finalState);
 		startState.addTransition(transition);
 		return new Automaton(startState, name);
 	}
@@ -79,18 +76,6 @@ public class Character extends AbstractRegularExpression {
 		return false;
 	}
 	
-	public CharacterClass not() {
-		List<CharacterRange> ranges = new ArrayList<>();
-		if(c >= 1) {
-			ranges.add(CharacterRange.in(1, c - 1));
-		}
-		if(c < Constants.MAX_UTF32_VAL) {
-			ranges.add(CharacterRange.in(c + 1, Constants.MAX_UTF32_VAL));
-		}
-		CharacterClass c = CharacterClass.from(ranges);
-		return c;
-	}
-
 	@Override
 	public Set<CharacterRange> getFirstSet() {
 		Set<CharacterRange> firstSet = new HashSet<>();
@@ -113,6 +98,20 @@ public class Character extends AbstractRegularExpression {
 		return getMatcher();
 	}
 	
+	public static Builder builder(int c) {
+		return new Builder(c);
+	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+
+	@Override
+	public String getConstructorCode() {
+		return Character.class.getSimpleName() + ".builder(" + c + ")" + super.getConstructorCode() + ".build()";
+	}
+	
 	public static class Builder extends SymbolBuilder<Character> {
 		
 		private int c;
@@ -123,8 +122,7 @@ public class Character extends AbstractRegularExpression {
 		}
 
 		public Builder(Character character) {
-			super(character);
-			this.c = character.c;
+			this(character.c);
 		}
 		
 		@Override
@@ -132,14 +130,19 @@ public class Character extends AbstractRegularExpression {
 			return new Character(this);
 		}
 	}
-
-	public static Builder builder(int c) {
-		return new Builder(c);
+	
+	@Override
+	public boolean isSingleChar() {
+		return true;
+	}
+	
+	@Override
+	public Character asSingleChar() {
+		return this;
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "Character.from(" + c + ")";
+	public String getPattern() {
+		return getName();
 	}
-
 }

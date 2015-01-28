@@ -48,13 +48,13 @@ public class Gamma1Test {
 	@Before
 	public void createGrammar() {
 		
-		Rule r1 = Rule.builder(S).addSymbols(A, S, d).build();
-		Rule r2 = Rule.builder(S).addSymbols(B, S).build();
-		Rule r3 = Rule.builder(S).build();
-		Rule r4 = Rule.builder(A).addSymbols(a).build();
-		Rule r5 = Rule.builder(A).addSymbols(c).build();
-		Rule r6 = Rule.builder(B).addSymbols(a).build();
-		Rule r7 = Rule.builder(B).addSymbols(b).build();
+		Rule r1 = Rule.withHead(S).addSymbols(A, S, d).build();
+		Rule r2 = Rule.withHead(S).addSymbols(B, S).build();
+		Rule r3 = Rule.withHead(S).build();
+		Rule r4 = Rule.withHead(A).addSymbols(a).build();
+		Rule r5 = Rule.withHead(A).addSymbols(c).build();
+		Rule r6 = Rule.withHead(B).addSymbols(a).build();
+		Rule r7 = Rule.withHead(B).addSymbols(b).build();
 		
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4, r5, r6, r7).build();
 	}

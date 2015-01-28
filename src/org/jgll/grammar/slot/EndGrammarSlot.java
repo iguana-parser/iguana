@@ -4,19 +4,19 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.lookup.NodeLookup;
+import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.NonPackedNode;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, NodeLookup nodeLookup) {
-		super(id, position, nodeLookup);
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, Set<Condition> conditions) {
+		super(id, position, nodeLookup, conditions);
 		this.nonterminal = nonterminal;
 	}
 
@@ -28,11 +28,11 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
 			.append("new EndGrammarSlot(")
 			.append(position)
-			.append("), slot" + registry.getId(nonterminal) + ")")
+			.append("), slot" + nonterminal.getId() + ")")
 			.toString();
 	}
 	

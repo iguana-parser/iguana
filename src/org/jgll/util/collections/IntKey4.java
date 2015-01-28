@@ -1,6 +1,6 @@
 package org.jgll.util.collections;
 
-import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.jgll.util.hashing.hashfunction.IntHash4;
 
 
 
@@ -11,17 +11,17 @@ public class IntKey4 implements Key, Comparable<IntKey4> {
 	private final int k3;
 	private final int k4;
 	
-	private final HashFunction f;
+	private final int hash;
 
-	private IntKey4(int k1, int k2, int k3, int k4, HashFunction f) {
+	private IntKey4(int k1, int k2, int k3, int k4, IntHash4 f) {
 		this.k1 = k1;
 		this.k2 = k2;
 		this.k3 = k3;
 		this.k4 = k4;
-		this.f = f;
+		this.hash = f.hash(k1, k2, k3, k4);
 	}
 	
-	public static IntKey4 from(int k1, int k2, int k3, int k4, HashFunction f) {
+	public static IntKey4 from(int k1, int k2, int k3, int k4, IntHash4 f) {
 		return new IntKey4(k1, k2, k3, k4, f);
 	}
 	
@@ -42,7 +42,7 @@ public class IntKey4 implements Key, Comparable<IntKey4> {
 	
 	@Override
 	public int hashCode() {
-		return f.hash(k1, k2, k3, k4);
+		return hash;
 	}
 
 	@Override

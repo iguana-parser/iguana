@@ -12,12 +12,7 @@ import java.util.Set;
 
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.EndGrammarSlot;
-import org.jgll.grammar.symbol.CharacterClass;
-import org.jgll.regex.RegularExpression;
-import org.jgll.regex.Sequence;
-import org.jgll.sppf.CollapsibleNode;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.SPPFNode;
@@ -99,22 +94,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		return grammarSlot.getObject();
 	}
 	
-	// TODO: does not work for collapsible nodes which are ambiguous.
-	// They should be lifted, similar to intermediate nodes.
-	private Object getObject(CollapsibleNode node) {
-		
-//		CollapsibleNode collapsibleNode = node;
-//		if(collapsibleNode.childrenCount() > 0) {
-//			while(collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1) instanceof CollapsibleNode) {
-//				collapsibleNode = (CollapsibleNode) collapsibleNode.getChildAt(collapsibleNode.childrenCount() - 1);
-//				if(collapsibleNode.childrenCount() == 0) {
-//					break;
-//				}
-//			}			
-//		}
-		
-		return getObject(node);
-	}
 
 	private void buildAmbiguityNode(NonterminalNode nonterminalSymbolNode) {
 		
@@ -128,24 +107,12 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 			PackedNode node = (PackedNode) child;
 			
 			Result<U> result;
-			
-			if(node.childrenCount() > 0 && node.getChildAt(node.childrenCount() - 1) instanceof CollapsibleNode) {
-				CollapsibleNode lastChild = (CollapsibleNode) node.getChildAt(node.childrenCount() - 1);
-				Object object = getObject(lastChild);
-				listener.startNode((T) object);
-				
-				removeCollapsibleNode(node);
-				
-				node.accept(this);
-				result = listener.endNode((T) object, getChildrenValues(node), input.getPositionInfo(node.getParent().getLeftExtent(), node.getParent().getRightExtent()));
-				objects.put(node, result);
-			} else {
-				T object = (T) getObject(nonterminalSymbolNode);
-				listener.startNode(object);
-				node.accept(this);
-				result = listener.endNode(object, getChildrenValues(node), input.getPositionInfo(node.getParent().getLeftExtent(), node.getParent().getRightExtent()));
-				objects.put(node, result);
-			}
+
+			T object = (T) getObject(nonterminalSymbolNode);
+			listener.startNode(object);
+			node.accept(this);
+			result = listener.endNode(object, getChildrenValues(node), input.getPositionInfo(node.getParent().getLeftExtent(), node.getParent().getRightExtent()));
+			objects.put(node, result);
 			
 			if(result != Result.filter()) {
 				nPackedNodes++;
@@ -168,7 +135,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 	@Override
 	public void visit(PackedNode node) {
 		removeIntermediateNode(node);
-		removeListSymbolNode(node);
 
 		if (!visited.contains(node)) {
 			visited.add(node);
@@ -176,27 +142,6 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 		}
 	}
 
-	@Override
-	public void visit(ListSymbolNode node) {
-		removeListSymbolNode(node);
-		
-		if (!visited.contains(node)) {
-			visited.add(node);
-
-			if(node.isAmbiguous()) {
-				buildAmbiguityNode(node);
-			}	
-			else {
-				T object = (T) getObject(node);
-				listener.startNode(object);
-				visitChildren(node, this);
-				Result<U> result = listener.endNode(object, getChildrenValues(node), 
-						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				objects.put(node, result);
-			}
-		}
-	}
-	
 	private Iterable<U> getChildrenValues(final SPPFNode node) {
 
 		final Iterator<? extends SPPFNode> iterator = node.getChildren().iterator();
@@ -262,39 +207,40 @@ public class ModelBuilderVisitor<T, U> implements SPPFVisitor {
 
 	@Override
 	public void visit(TerminalNode node) {
-		if (!visited.contains(node)) {
-			visited.add(node);
-			
-			RegularExpression regex = node.getGrammarSlot().getRegularExpression();
-			
-			if (regex instanceof Sequence) {
-				Sequence<CharacterClass> sequence = (Sequence<CharacterClass>) regex;
-				Object object = regex.getObject();
-				listener.startNode((T) object);
-				
-				List<U> childrenVal = new ArrayList<>();
-				for (int i = 0; i < sequence.getRegularExpressions().size(); i++) {
-					int c = sequence.get(i).get(0).getStart();
-					Result<U> t = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-					childrenVal.add(t.getObject());
-				}
-				
-				Result<U> result = listener.endNode((T) object, childrenVal, 
-						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				objects.put(node, result);
-			}
-			
-			// For now we only support parse tree generation for character class
-			else if (regex instanceof CharacterClass) {
-				int c = input.charAt(node.getLeftExtent());
-				Result<U> result = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
-				objects.put(node, result);
-			}
-			
-			else {
-				throw new RuntimeException("Should not come here!");
-			}
-		}	
+//		if (!visited.contains(node)) {
+//			visited.add(node);
+//			
+//			RegularExpression regex = node.getGrammarSlot().getRegularExpression();
+//			
+//			if (regex instanceof Sequence) {
+//				Sequence sequence = (Sequence) regex;
+//				Object object = regex.getObject();
+//				listener.startNode((T) object);
+//				
+//				List<U> childrenVal = new ArrayList<>();
+//				for (int i = 0; i < sequence.getSymbols().size(); i++) {
+//					CharacterClass symbol = (CharacterClass) sequence.get(i);
+//					int c =symbol.get(0).getStart();
+//					Result<U> t = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+//					childrenVal.add(t.getObject());
+//				}
+//				
+//				Result<U> result = listener.endNode((T) object, childrenVal, 
+//						input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+//				objects.put(node, result);
+//			}
+//			
+//			// For now we only support parse tree generation for character class
+//			else if (regex instanceof CharacterClass) {
+//				int c = input.charAt(node.getLeftExtent());
+//				Result<U> result = listener.terminal(c, input.getPositionInfo(node.getLeftExtent(), node.getRightExtent()));
+//				objects.put(node, result);
+//			}
+//			
+//			else {
+//				throw new RuntimeException("Should not come here!");
+//			}
+//		}	
 	}
 	
 }

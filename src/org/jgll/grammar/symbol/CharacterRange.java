@@ -4,13 +4,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.HashFunctions;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
-import org.jgll.util.unicode.UnicodeUtil;
+import org.jgll.regex.automaton.Transition;
 
 
 /**
@@ -86,7 +85,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
-//		startState.addTransition(new Transition(start, end, finalState);//.addTransitionAction(getPostActions(conditions)));
+		startState.addTransition(new Transition(start, end, finalState));//.addTransitionAction(getPostActions(conditions)));
 		return new Automaton(startState, name);
 	}
 	
@@ -104,9 +103,15 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	public boolean isNullable() {
 		return false;
 	}
-
-	public CharacterClass not() {
-		return UnicodeUtil.reverse(this);
+	
+	@Override
+	public boolean isSingleChar() {
+		return start == end;
+	}
+	
+	@Override
+	public Character asSingleChar() {
+		return Character.from(start);
 	}
 
 	@Override
@@ -126,6 +131,20 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		return Collections.emptySet();
 	}
 
+	public static Builder builder(int start, int end) {
+		return new Builder(start, end);
+	}
+	
+    @Override
+    public SymbolBuilder<? extends Symbol> copyBuilder() {
+        return new Builder(this);
+    }
+	
+	@Override
+	public String getConstructorCode() {
+		return CharacterRange.class.getSimpleName() + ".builder(" + start + ", " + end + ")" + super.getConstructorCode() + ".build()";
+	}
+	
 	public static class Builder extends SymbolBuilder<CharacterRange> {
 
 		private int start;
@@ -138,25 +157,18 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		}
 		
 		public Builder(CharacterRange range) {
-			super(range);
-			this.start = range.start;
-			this.end = range.end;
+			this(range.start, range.end);
 		}
 		
 		@Override
 		public CharacterRange build() {
 			return new CharacterRange(this);
 		}
-		
 	}
 
-	public static Builder builder(int start, int end) {
-		return new Builder(start, end);
-	}
-	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return "Range.in(" + start + ", " + end + ")";
+	public String getPattern() {
+		return "[" + getName() + "]";
 	}
 	
 }

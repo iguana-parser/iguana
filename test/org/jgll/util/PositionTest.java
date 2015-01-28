@@ -15,7 +15,7 @@ public class PositionTest {
 	
 	@Test
 	public void test1() {
-		Rule rule = Rule.builder(Nonterminal.withName("A")).build();
+		Rule rule = Rule.withHead(Nonterminal.withName("A")).build();
 		assertEquals("A ::= .", rule.getPosition(0).toString());
 		
 		exception.expect(IllegalArgumentException.class);
@@ -25,7 +25,7 @@ public class PositionTest {
 	@Test
 	public void test2() {
 		// A ::= B
-		Rule rule = Rule.builder(Nonterminal.withName("A")).addSymbol(Nonterminal.withName("B")).build();
+		Rule rule = Rule.withHead(Nonterminal.withName("A")).addSymbol(Nonterminal.withName("B")).build();
 		assertEquals("A ::= . B", rule.getPosition(0).toString());
 		assertEquals("A ::= B .", rule.getPosition(1).toString());
 		

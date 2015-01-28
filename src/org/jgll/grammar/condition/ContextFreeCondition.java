@@ -5,9 +5,8 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.GrammarRegistry;
-import org.jgll.grammar.symbol.Group;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.Sequence;
 
 public class ContextFreeCondition extends Condition {
 	
@@ -15,7 +14,7 @@ public class ContextFreeCondition extends Condition {
 	
 	private List<? extends Symbol> symbols;
 	
-	public ContextFreeCondition(ConditionType type, Group group) {
+	public ContextFreeCondition(ConditionType type, Sequence group) {
 		super(type);
 		this.symbols = group.getSymbols();
 	}
@@ -105,7 +104,7 @@ public class ContextFreeCondition extends Condition {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		throw new UnsupportedOperationException();
 	}
 

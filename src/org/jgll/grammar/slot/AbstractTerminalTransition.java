@@ -1,11 +1,11 @@
 package org.jgll.grammar.slot;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.Conditions;
+import org.jgll.grammar.condition.ConditionsFactory;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -17,20 +17,16 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	
 	protected final TerminalGrammarSlot slot;
 	
-	private final Set<Condition> preConditions;
+	private final Conditions preConditions;
 	
-	private final Set<Condition> postConditions;
-	
-	public AbstractTerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(slot, origin, dest, Collections.emptySet(), Collections.emptySet());
-	}
+	private final Conditions postConditions;
 	
 	public AbstractTerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-							  Set<Condition> preConditions, Set<Condition> postConditions) {
+							  		  Set<Condition> preConditions, Set<Condition> postConditions) {
 		super(origin, dest);
 		this.slot = slot;
-		this.preConditions = preConditions;
-		this.postConditions = postConditions;
+		this.preConditions = ConditionsFactory.getConditions(preConditions);
+		this.postConditions = ConditionsFactory.getConditions(postConditions);
 	}
 
 	@Override
@@ -38,39 +34,37 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		
 		Input input = parser.getInput();
 
-		for (Condition c : preConditions) {
-			if (c.getSlotAction().execute(input, u, i)) 
-				return;
-		}
-
+		if (preConditions.execute(input, u, i))
+			return;
+		
 		int length = slot.match(input, i);
 		
 		if (length < 0) {
 			parser.recordParseError(origin);
 			return;
 		}
-
-		for (Condition c : postConditions) {
-			if (c.getSlotAction().execute(input, u, i)) 
-				return;
-		}
+		
+		if (postConditions.execute(input, u, i + length))
+			return;
 		
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		
 		createNode(length, cr, parser, u, i, node);
 	}
 	
+	public TerminalGrammarSlot getSlot() {
+		return slot;
+	}
+	
 	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node);
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
 			.append("new NonterminalTransition(")
-			.append("slot" + registry.getId(slot)).append(", ")
-			.append("slot" + registry.getId(origin)).append(", ")
-			.append("slot" + registry.getId(dest)).append(", ")
-			.append(getConstructorCode(preConditions, registry)).append(", ")
-			.append(getConstructorCode(postConditions, registry))
+			.append("slot" + slot.getId()).append(", ")
+			.append("slot" + origin.getId()).append(", ")
+			.append("slot" + dest.getId()).append(", ")
 			.toString();
 	}
 	
@@ -84,11 +78,10 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		
 		Input input = parser.getInput();
 
-		for (Condition c : preConditions) {
-			if (c.getSlotAction().execute(input, u, i, env)) 
-				return;
-		}
-
+		// FIXME: 
+		if (preConditions.execute(input, u, i))
+			return;
+		
 		int length = slot.match(input, i);
 		
 		if (length < 0) {
@@ -96,10 +89,8 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			return;
 		}
 
-		for (Condition c : postConditions) {
-			if (c.getSlotAction().execute(input, u, i, env)) 
-				return;
-		}
+		if (postConditions.execute(input, u, i + length))
+			return;
 		
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		

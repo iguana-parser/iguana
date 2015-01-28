@@ -1,12 +1,14 @@
 package org.jgll.parser;
 
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.ast.Statement;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
-import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.DataDependentCondition;
@@ -21,6 +23,7 @@ import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.lookup.GSSLookup;
+import org.jgll.parser.gss.lookup.GlobalHashGSSLookupImpl;
 import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.IntermediateNode;
@@ -28,10 +31,11 @@ import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.sppf.lookup.SPPFLookup;
-import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Configuration;
+import org.jgll.util.Configuration.LookupStrategy;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
+import org.jgll.util.benchmark.BenchmarkUtil;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -80,19 +84,18 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected int descriptorsCount;
 
-	private Configuration config;
+	private final Configuration config;
 
-	public AbstractGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
+	public AbstractGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
+		this.config = config;
 		this.gssLookup = gssLookup;
 		this.sppfLookup = sppfLookup;
 		this.descriptorLookup = descriptorLookup;
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, Grammar grammar, Nonterminal nonterminal, Configuration config) {
-
-		this.config = config;
-		this.grammarGraph = grammar.toGrammarGraph(input, config);
+	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal) {
+		this.grammarGraph = grammarGraph;
 		this.input = input;
 		
 		NonterminalGrammarSlot startSymbol = getStartSymbol(nonterminal);
@@ -136,7 +139,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 					.setGSSNodesCount(gssLookup.getGSSNodesCount()) 
 					.setGSSEdgesCount(gssLookup.getGSSEdgesCount()) 
 					.setNonterminalNodesCount(sppfLookup.getNonterminalNodesCount())
-					.setTerminalNodesCount(sppfLookup.getTokenNodesCount())
+					.setTerminalNodesCount(sppfLookup.getTerminalNodesCount())
 					.setIntermediateNodesCount(sppfLookup.getIntermediateNodesCount()) 
 					.setPackedNodesCount(sppfLookup.getPackedNodesCount()) 
 					.setAmbiguousNodesCount(sppfLookup.getAmbiguousNodesCount()).build();
@@ -162,8 +165,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance())));
 		
-		while(hasNextDescriptor()) {
-			Descriptor descriptor = nextDescriptor();
+		while(descriptorLookup.hasNextDescriptor()) {
+			Descriptor descriptor = descriptorLookup.nextDescriptor();
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
 			cn = descriptor.getSPPFNode();
@@ -175,7 +178,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
-	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {	
+	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
+
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
 			
@@ -194,9 +198,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
 	
-	public abstract GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
+	public abstract GSSNode createGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
 	
-	public abstract GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
+	public abstract GSSNode hasGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
 
 	
 	/**
@@ -232,21 +236,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode);
     }
 	
-	@Override
-	public boolean hasNextDescriptor() {
-		return descriptorLookup.hasNextDescriptor();
-	}
-	
-	@Override
-	public Descriptor nextDescriptor() {
-		Descriptor descriptor = descriptorLookup.nextDescriptor();
-		ci = descriptor.getInputIndex();
-		cu = descriptor.getGSSNode();
-		cn = descriptor.getSPPFNode();
-		log.trace("Processing %s", descriptor);
-		return descriptor;
-	}
-	
 	public SPPFLookup getSPPFLookup() {
 		return sppfLookup;
 	}
@@ -273,8 +262,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public TerminalNode getEpsilonNode(int inputIndex) {
-		return sppfLookup.getEpsilonNode(inputIndex);
+	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {
+		return sppfLookup.getEpsilonNode(slot, inputIndex);
 	}
 	
 	@Override
@@ -309,7 +298,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public Iterable<GSSNode> getGSSNodes() {
-		return gssLookup.getGSSNodes();
+		if (config.getGSSLookupStrategy() == LookupStrategy.GLOBAL) {
+			return ((GlobalHashGSSLookupImpl) gssLookup).getGSSNodes();
+		} else {
+			return grammarGraph.getNonterminals().stream().flatMap(s -> StreamSupport.stream(s.getGSSNodes().spliterator(), false)).collect(Collectors.toList());
+		}
 	}
 	
 	/**

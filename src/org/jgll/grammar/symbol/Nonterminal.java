@@ -1,7 +1,6 @@
 package org.jgll.grammar.symbol;
 
 import org.jgll.datadependent.ast.Expression;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
 
@@ -94,6 +93,20 @@ public class Nonterminal extends AbstractSymbol {
 	public static Builder builder(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
+	
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(this);
+	}
+	
+	@Override
+	public String getConstructorCode() {
+		return Nonterminal.class.getSimpleName() + ".builder(\"" + name + "\")"
+													+ super.getConstructorCode() 
+													+ (index > 0 ?  ".setIndex(" + index + ")" : "")
+													+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
+													+ ".build()";
+	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
 
@@ -108,8 +121,7 @@ public class Nonterminal extends AbstractSymbol {
 		private Expression[] arguments;
 		
 		public Builder(Nonterminal nonterminal) {
-			super(nonterminal);
-			this.name = nonterminal.name;
+			this(nonterminal.getName());
 			this.ebnfList = nonterminal.ebnfList;
 			this.index = nonterminal.index;
 			this.parameters = nonterminal.parameters;
@@ -191,17 +203,4 @@ public class Nonterminal extends AbstractSymbol {
 		}
 	}
 
-	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
-		return new StringBuilder()
-		  .append("Nonterminal.builder(\"" + name + "\")")
-		  .append(label == null? "" : ".setLabel(" + label + ")")
-		  .append(object == null? "" : ".setObject(" + object + ")")
-		  .append(preConditions.isEmpty()? "" : ".setPreConditions(" + getConstructorCode(preConditions, registry) + ")")
-		  .append(postConditions.isEmpty()? "" : ".setPostConditions(" + getConstructorCode(postConditions, registry) + ")")
-		  .append(index == 0 ? "" : ".setIndex(" + index + ")")
-		  .append(ebnfList == false? "" : ".setEbnfList(" + ebnfList + ")")
-		  .append(".build()").toString();
-	}
-	
 }

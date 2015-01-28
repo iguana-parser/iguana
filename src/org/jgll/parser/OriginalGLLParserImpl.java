@@ -16,6 +16,7 @@ import org.jgll.parser.lookup.DescriptorLookup;
 import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.lookup.SPPFLookup;
+import org.jgll.util.Configuration;
 
 /**
  *
@@ -26,8 +27,8 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	
 	protected final GSSNode u0 = gssLookup.getGSSNode(DummySlot.getInstance(), 0);
 		
-	public OriginalGLLParserImpl(GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
-		super(gssLookup, sppfLookup, descriptorLookup);
+	public OriginalGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
+		super(config, gssLookup, sppfLookup, descriptorLookup);
 	}
 	
 	@Override
@@ -61,12 +62,12 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+	public final GSSNode createGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
 		return gssLookup.getGSSNode(returnSlot, ci);
 	}
 	
 	@Override
-	public final GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+	public final GSSNode hasGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
 		return gssLookup.hasGSSNode(returnSlot, ci);
 	}
 
@@ -109,13 +110,13 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 
 	@Override
 	public <T> GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
-		
+		// FIXME:
 		return null;
 	}
 
 	@Override
 	public <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
-		
+		// FIXME:
 		return null;
 	}
 

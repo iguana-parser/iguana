@@ -1,7 +1,6 @@
 package org.jgll.grammar.slot;
 
 import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
@@ -17,7 +16,7 @@ public class CodeBlockTransition extends AbstractTransition {
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return null;
 	}
 
@@ -48,6 +47,13 @@ public class CodeBlockTransition extends AbstractTransition {
 		parser.evaluate(code, env);
 		dest.execute(parser, u, i, node, parser.getEvaluatorContext().getEnvironment());
 		
+	}
+
+	@Override
+	public GrammarSlot getSlot() {
+		// FIXME
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

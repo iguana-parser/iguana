@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterClass;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.RunnableAutomaton;
@@ -15,7 +14,7 @@ public class StarTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regexp = RegexStar.from(Character.from('a'));
+		RegularExpression regexp = Star.from(Character.from('a'));
 		Automaton nfa = regexp.getAutomaton();
 				
 		assertEquals(4, nfa.getCountStates());
@@ -34,7 +33,7 @@ public class StarTest {
 	@Test
 	public void test2() {
 		// ([a-a]+)*
-		RegularExpression regexp = RegexStar.from(Sequence.from(RegexPlus.from(CharacterClass.from(CharacterRange.in('a', 'a')))));
+		RegularExpression regexp = Star.from(Sequence.from(Plus.from(Alt.from(CharacterRange.in('a', 'a')))));
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();
@@ -48,16 +47,16 @@ public class StarTest {
 	@Test
 	public void test3() {
 		// ([a-z]+ | [(-)] | "*")*
-		CharacterClass c1 = CharacterClass.from(CharacterRange.in('a', 'z'));
-		CharacterClass c2 = CharacterClass.from(CharacterRange.in('(', ')'));
+		Alt<CharacterRange> c1 = Alt.from(CharacterRange.in('a', 'z'));
+		Alt<CharacterRange> c2 = Alt.from(CharacterRange.in('(', ')'));
 		Character c3 = Character.from('*');
 		
-		RegularExpression regex = RegexAlt.from(RegexPlus.from(c1), c2, c3);
+		RegularExpression regex = Alt.from(Plus.from(c1), c2, c3);
 	}
 	
 	@Test
 	public void test1WithPreConditions() {
-		RegexStar regexp = new RegexStar.Builder(Character.from('a')).addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
+		Star regexp = new Star.Builder(Character.from('a')).addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		Automaton nfa = regexp.getAutomaton();
 		
 		RunnableAutomaton matcher = nfa.getRunnableAutomaton();

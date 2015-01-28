@@ -1,12 +1,14 @@
 package org.jgll.sppf.lookup;
 
+import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.TerminalNode;
+import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
 
@@ -23,6 +25,12 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 	private int countPackedNodes;
 	
 	private int countTerminalNodes;
+
+	private Input input;
+	
+	public AbstractSPPFLookup(Input input) {
+		this.input = input;
+	}
 	
 	@Override
 	public void intermediateNodeAdded(IntermediateNode node) {
@@ -38,7 +46,16 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 	
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
+//		log.trace("Ambiguous node added: %s", node);
+//		log.warning("Ambiguous node: %s %s", node, input.getNodeInfo(node));
+//		for (PackedNode packedNode : node.getChildren()) {
+//			log.warning("   Packed node: " + packedNode.toString());
+//			for (NonPackedNode child : packedNode.getChildren()) {
+//				log.warning("       %s %s", child, input.getNodeInfo(child));
+//			}
+//		}
 		countAmbiguousNodes++;
+		
 	}
 	
 	@Override
@@ -60,7 +77,7 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 		return countIntermediateNodes;
 	}
 	
-	public int getTokenNodesCount() {
+	public int getTerminalNodesCount() {
 		return countTerminalNodes;
 	}
 	
@@ -72,11 +89,12 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 		return countAmbiguousNodes;
 	}
 	
-	protected NonterminalNode createNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
-		if(head.getNonterminal().isEbnfList()) {
-			return new ListSymbolNode(head, leftExtent, rightExtent);
-		} else {
-			return new NonterminalNode(head, leftExtent, rightExtent);
-		}
+	protected IntermediateNode createIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		return new IntermediateNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true);
 	}
+	
+	protected NonterminalNode createNonterminalNode(NonterminalGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
+		return new NonterminalNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true);
+	}
+	
 }

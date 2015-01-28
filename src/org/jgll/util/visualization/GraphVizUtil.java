@@ -24,9 +24,11 @@ public class GraphVizUtil {
 	public static final String GSS_NODE = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	public static final String GSS_EDGE = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
 	
-	public static final String NONTERMINAL_NODE = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
+	public static final String NONTERMINAL_SLOT = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
+	public static final String BODY_SLOT = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, fontsize=10, label=\"\"];";
 	public static final String END_NODE = "[shape=doublecircle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	public static final String TRANSITION = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
+	public static final String EPSILON_TRANSITION = "edge [color=black, style=dashed, penwidth=0.5, arrowsize=0.7, label=\"\"];";
 	
 	public static final int TOP_DOWN = 0;
 	public static final int LEFT_TO_RIGHT = 1;

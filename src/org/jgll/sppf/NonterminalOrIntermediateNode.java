@@ -9,9 +9,11 @@ import org.jgll.grammar.slot.GrammarSlot;
 public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
 	protected List<PackedNode> children;
+	private PackedNodeSet set;
 	
-	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set) {
 		super(slot, leftExtent, rightExtent);
+		this.set = set;
 		children = new ArrayList<>();
 	}
 
@@ -24,17 +26,23 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 		children.remove(node);
 	}
 	
-	public boolean addPackedNode(PackedNode packedNode, NonPackedNode child) {
-		packedNode.addChild(child);
-		children.add(packedNode);
-		return true;
+	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
+		if (set.addPackedNode(packedNode.getGrammarSlot(), packedNode.getPivot())) {
+			children.add(packedNode);
+			packedNode.addChild(leftChild);
+			packedNode.addChild(rightChild);
+			return true;
+		}
+		return false;
 	}
 	
-	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
-		packedNode.addChild(leftChild);
-		packedNode.addChild(rightChild);
-		children.add(packedNode);
-		return true;
+	public boolean addPackedNode(PackedNode packedNode, NonPackedNode child) {
+		if (set.addPackedNode(packedNode.getGrammarSlot(), packedNode.getPivot())) {
+			children.add(packedNode);
+			packedNode.addChild(child);
+			return true;
+		}
+		return false;	
 	}
 	
 	@Override

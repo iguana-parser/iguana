@@ -1,7 +1,6 @@
 package org.jgll.traversal;
 
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.ListSymbolNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
 import org.jgll.sppf.TerminalNode;
@@ -24,7 +23,5 @@ public interface SPPFVisitor {
 	public void visit(IntermediateNode node);
 	
 	public void visit(PackedNode node);
-	
-	public void visit(ListSymbolNode node);
 	
 }

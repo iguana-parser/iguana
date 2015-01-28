@@ -1,7 +1,10 @@
-package org.jgll.util;
+package org.jgll.util.benchmark;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+
+import org.jgll.util.Input;
+import org.jgll.util.ParseStatistics;
 
 public class BenchmarkUtil {
 	

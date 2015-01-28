@@ -4,6 +4,7 @@ import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
@@ -13,7 +14,6 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonPackedNode;
@@ -30,10 +30,10 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config);
+	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol);
 	
 	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
-		return parse(input, grammar, startSymbol, Configuration.DEFAULT);
+		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol);
 	}
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
@@ -42,7 +42,7 @@ public interface GLLParser {
 	
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 
-	public TerminalNode getEpsilonNode(int inputIndex);
+	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex);
 	
 	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
@@ -53,13 +53,6 @@ public interface GLLParser {
 	public NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
 	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode);
-	
-	public boolean hasNextDescriptor();
-	
-	/**
-	 * Reads the next descriptor and sets the state of the parser to it.
-	 */
-	public Descriptor nextDescriptor();
 	
 	public void recordParseError(GrammarSlot slot);
 	

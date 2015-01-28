@@ -25,8 +25,8 @@ public class Test1 {
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal S = Nonterminal.builder("S").addParameters("a", "b").build();
 		
-		Rule r1 = Rule.builder(A).addSymbol(Character.from('a')).build();
-		Rule r2 = Rule.builder(S).addSymbol(Nonterminal.builder(A).applyTo().setLabel("l").setVariable("x").build()).build();
+		Rule r1 = Rule.withHead(A).addSymbol(Character.from('a')).build();
+		Rule r2 = Rule.withHead(S).addSymbol(Nonterminal.builder(A).applyTo().setLabel("l").setVariable("x").build()).build();
 		
 		grammar = Grammar.builder().addRules(r1, r2).build();
 	}

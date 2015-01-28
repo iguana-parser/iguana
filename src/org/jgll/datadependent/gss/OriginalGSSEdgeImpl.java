@@ -1,7 +1,6 @@
 package org.jgll.datadependent.gss;
 
 import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.descriptor.Descriptor;
@@ -26,11 +25,8 @@ public class OriginalGSSEdgeImpl extends org.jgll.parser.gss.OriginalGSSEdgeImpl
 		BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 		
 		// FIXME: Bug here, fixed in the master branch of iguana
-		
-		for(Condition c : returnSlot.getConditions()) {
-			if (c.getSlotAction().execute(parser.getInput(), source, inputIndex, env)) 
-				break;
-		}
+		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
+			return null;
 		
 		// FIXME: Account for environment in SPPF lookup
 		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode);

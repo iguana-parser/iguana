@@ -26,7 +26,7 @@ public class AbstractParserTest {
 	
 	@Parameter(value = 2)
 	public Nonterminal startSymbol;
-
+	
 	@Parameter(value = 3)
 	public GLLParser parser;
 
@@ -37,9 +37,6 @@ public class AbstractParserTest {
 	public void testParser() {
 				
 		ParseResult result = parser.parse(input, grammar, startSymbol);
-		System.out.println(input.length());
-		System.out.println(parser.getConfiguration());
-		System.out.println();
 		assertTrue(result.isParseSuccess());
 		
 		// Checking the parse tree if it exists

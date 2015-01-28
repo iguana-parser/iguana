@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
 import org.jgll.sppf.TerminalNode;
@@ -15,21 +14,22 @@ import org.jgll.util.Input;
 import org.jgll.util.collections.Key;
 
 
-public class TerminalGrammarSlot implements GrammarSlot {
+public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private RegularExpression regex;
 	private Matcher matcher;
 	private Map<Key, TerminalNode> terminalNodes;
 
-	public TerminalGrammarSlot(RegularExpression regex) {
+	public TerminalGrammarSlot(int id, RegularExpression regex) {
+		super(id, Collections.emptyList());
 		this.regex = regex;
 		// TODO: add type of regex to config!
 		this.matcher = regex.getMatcher();
-		this.terminalNodes = new HashMap<>(1000);
+		this.terminalNodes = new HashMap<>();
 	}
 
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return null;
 	}
 
@@ -57,13 +57,10 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	}
 	
 	public TerminalNode getTerminalNode(Key key, Supplier<TerminalNode> s, Consumer<TerminalNode> c) {
-		TerminalNode val;
-		if ((val = terminalNodes.get(key)) == null) {
-			val = s.get();
-			c.accept(val);
-			terminalNodes.put(key, val);
-		}
-		return val;
+		return terminalNodes.computeIfAbsent(key, k -> { TerminalNode val = s.get();
+														 c.accept(val);
+														 return val; 
+													   });
 	}
 	
 	public TerminalNode findTerminalNode(Key key) {

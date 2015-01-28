@@ -4,9 +4,10 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.Keyword;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.regex.Sequence;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Before;
@@ -22,12 +23,12 @@ public class KeywordTest1 {
 	
 	private Grammar grammar;
 	
-	private Keyword ifKeyword = Keyword.from("if");
+	private Sequence<Character> ifKeyword = Sequence.from("if");
 	private Nonterminal A = Nonterminal.withName("A");
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.builder(A).addSymbol(ifKeyword).build();
+		Rule r1 = Rule.withHead(A).addSymbol(ifKeyword).build();
 		grammar = Grammar.builder().addRule(r1).build();
 	}
 	

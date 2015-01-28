@@ -7,11 +7,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.parser.gss.lookup.NodeLookup;
+import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.util.Input;
 import org.jgll.util.collections.Key;
@@ -29,16 +28,16 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final List<BodyGrammarSlot> firstSlots;
 	
-	private final NodeLookup nodeLookup;
+	private final GSSNodeLookup nodeLookup;
 
 	private Map<Key, NonterminalNode> nonterminalNodes;
 
-	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, NodeLookup nodeLookup) {
+	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup) {
 		super(id);
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();
-		this.nonterminalNodes = new HashMap<>(1000);
+		this.nonterminalNodes = new HashMap<>();
 	}
 	
 	public void addFirstSlot(BodyGrammarSlot slot) {
@@ -67,10 +66,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	@Override
-	public String getConstructorCode(GrammarRegistry registry) {
+	public String getConstructorCode() {
 		return new StringBuilder()
 		           .append("new NonterminalGrammarSlot(")
-		           .append(nonterminal.getConstructorCode(registry))
+		           .append(nonterminal.getConstructorCode())
 		           .append(")").toString();
 	}
 	
@@ -81,7 +80,12 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public GSSNode hasGSSNode(int inputIndex) { 
-		return nodeLookup.get(inputIndex);
+		if (nodeLookup.isInitialized()) {
+			return nodeLookup.get(inputIndex);
+		} else {
+			nodeLookup.init();
+			return null;
+		}
 	}
 
 	@Override
@@ -90,17 +94,18 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public NonterminalNode getNonterminalNode(Key key, Supplier<NonterminalNode> s, Consumer<NonterminalNode> c) {
-		NonterminalNode val;
-		if ((val = nonterminalNodes.get(key)) == null) {
-			val = s.get();
-			c.accept(val);
-			nonterminalNodes.put(key, val);
+		return nonterminalNodes.computeIfAbsent(key, k -> { NonterminalNode val = s.get();
+															c.accept(val);
+															return val; 
+														  });
 		}
-		return val;
-	}
 	
 	public NonterminalNode findNonterminalNode(Key key) {
 		return nonterminalNodes.get(key);
+	}
+	
+	public Iterable<GSSNode> getGSSNodes() {
+		return nodeLookup.getNodes();
 	}
 
 	@Override
@@ -109,6 +114,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		nonterminalNodes = new HashMap<>();
 	}
 	
+	public void initGSSLookup() {
+		nodeLookup.init();
+	}
+
 	/**
 	 * 
 	 * Data-dependent GLL parsing
@@ -125,5 +134,4 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		// FIXME:
 		return nodeLookup.get(inputIndex);
 	}
-
 }

@@ -2,15 +2,14 @@ package org.jgll.grammar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.exception.IncorrectNumberOfArgumentsException;
 import org.jgll.grammar.slot.AbstractTerminalTransition;
 import org.jgll.grammar.slot.BeforeLastTerminalTransition;
@@ -27,14 +26,19 @@ import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalTransition;
 import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.LayoutPosition;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Position;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.gss.lookup.ArrayNodeLookup;
+import org.jgll.parser.gss.lookup.DummyNodeLookup;
+import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.parser.gss.lookup.HashMapNodeLookup;
-import org.jgll.parser.gss.lookup.NodeLookup;
 import org.jgll.regex.RegularExpression;
 import org.jgll.util.Configuration;
+import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Configuration.LookupImpl;
 import org.jgll.util.Input;
 
@@ -56,7 +60,11 @@ public class GrammarGraphBuilder implements Serializable {
 
 	private Input input;
 	
+	private NonterminalGrammarSlot layout;
+	
 	private int id = 1;
+	
+	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(0, Epsilon.getInstance());
 	
 	public GrammarGraphBuilder(Grammar grammar, Input input, Configuration config) {
 		this("no-name", grammar, input, config);
@@ -70,33 +78,47 @@ public class GrammarGraphBuilder implements Serializable {
 		this.slots = new ArrayList<>();
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
-		terminalsMap.put(Epsilon.getInstance(), new TerminalGrammarSlot(Epsilon.getInstance()));
+		terminalsMap.put(Epsilon.getInstance(), epsilon);
 	}
 
 	public GrammarGraph build() {
-		for (Nonterminal nonterminal : grammar.getNonterminals()) {
-			convert(nonterminal);
+		EBNFToBNF ebnfToBNF = new EBNFToBNF();
+		Grammar bnfGrammar = ebnfToBNF.transform(grammar);
+		
+		if (bnfGrammar.hasLayout()) { 
+			convertLayout(bnfGrammar.getLayout(), bnfGrammar);
+		}
+		
+		for (Nonterminal nonterminal : bnfGrammar.getNonterminals()) {
+			convert(nonterminal, bnfGrammar);
 		}
 		return new GrammarGraph(this);
 	}
 	
-	private void convert(Nonterminal nonterminal) {
-		List<Rule> rules = grammar.getAlternatives(nonterminal);
-		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup()));
-		// Nonterminal formal parameters can be accessed as nonterminalSlot.getNonterminal().getParameters();
-		rules.forEach(r -> addAlternative(nonterminalSlot, r));
+	private void convertLayout(Nonterminal nonterminal, Grammar grammar) {
+		List<Rule> rules = grammar.getLayoutRules();
+		if (rules.isEmpty()) 
+			return;
+		layout = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());
+		rules.forEach(r -> addRule(layout, r));
 	}
 	
-	private void addAlternative(NonterminalGrammarSlot head, Rule rule) {
+	private void convert(Nonterminal nonterminal, Grammar grammar) {
+		List<Rule> rules = grammar.getAlternatives(nonterminal);
+		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup()));
+		rules.forEach(r -> addRule(nonterminalSlot, r));
+	}
+	
+	private void addRule(NonterminalGrammarSlot head, Rule rule) {
 		
 		if (rule.size() == 0) {
-			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id, rule.getPosition(0), head, getNodeLookup());
+			EpsilonGrammarSlot epsilonSlot = new EpsilonGrammarSlot(id++, rule.getPosition(0), head, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
 			head.addFirstSlot(epsilonSlot);
 			slots.add(epsilonSlot);
 		} 
+		
 		else {
-			
-			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id, rule.getPosition(0), getNodeLookup());
+			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id++, rule.getPosition(0), getNodeLookup(), Collections.emptySet());
 			head.addFirstSlot(firstSlot);
 			
 			BodyGrammarSlot currentSlot = firstSlot;
@@ -107,17 +129,18 @@ public class GrammarGraphBuilder implements Serializable {
 				// Terminal
 				if (symbol instanceof RegularExpression) {
 					RegularExpression regex = (RegularExpression) symbol;
-					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(regex));
-					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
+					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(id++, regex));
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head);
 					Set<Condition> preConditions = symbol.getPreConditions();
-					Set<Condition> postConditions = symbol.getPreConditions().stream().filter(c -> c.getType() != ConditionType.NOT_MATCH).collect(Collectors.toSet());
+					Set<Condition> postConditions = symbol.getPostConditions();
 					currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
 					currentSlot = slot;
 				} 
 				else if (symbol instanceof Nonterminal) {
 					Nonterminal nonterminal = (Nonterminal) symbol;
-					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id, nonterminal, getNodeLookup()));
-					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
+
+					NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> getNonterminalGrammarSlot(nonterminal));
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head);
 					
 					String label = nonterminal.getLabel();
 					String variable = nonterminal.getVariable();				
@@ -131,14 +154,27 @@ public class GrammarGraphBuilder implements Serializable {
 				}
 				else if (symbol instanceof CodeBlock) {
 					CodeBlock code = (CodeBlock) symbol;
-					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, head);
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head);
 					currentSlot.addTransition(new CodeBlockTransition(code, currentSlot, slot));
 					currentSlot = slot;
 				}
-				
+
 				slots.add(currentSlot);
-			}		
+				
+				currentSlot = addLayout(currentSlot, rule, i);
+				
+			}
 		}
+	}
+
+	private BodyGrammarSlot addLayout(BodyGrammarSlot currentSlot, Rule rule, int i) {
+		if (rule.size() > 1 && layout != null) {		
+			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, new LayoutPosition(rule.getPosition(i + 1)), layout);
+			currentSlot.addTransition(new NonterminalTransition(layout, currentSlot, slot, Collections.emptySet()));
+			slots.add(slot);
+			return slot;
+		}
+		return currentSlot;
 	}
 	
 	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
@@ -159,15 +195,32 @@ public class GrammarGraphBuilder implements Serializable {
 		}
 	}
 	
-	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, NonterminalGrammarSlot nonterminal) {
-		if (i == rule.size()) {
-			return new EndGrammarSlot(id++, rule.getPosition(i), nonterminal, getNodeLookup());
+	private NonterminalGrammarSlot getNonterminalGrammarSlot(Nonterminal nonterminal) {
+		if (config.getGSSType() == GSSType.NEW) {
+			return new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());			
 		} else {
-			return new BodyGrammarSlot(id++, rule.getPosition(i), getNodeLookup());
+			return new NonterminalGrammarSlot(id++, nonterminal, DummyNodeLookup.getInstance());
 		}
 	}
 	
-	private NodeLookup getNodeLookup() {
+	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal) {
+		if (i == rule.size()) {
+			if (config.getGSSType() == GSSType.NEW) {
+				return new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), rule.symbolAt(i - 1).getPostConditions());				
+			} else {
+				return new EndGrammarSlot(id++, position, nonterminal, getNodeLookup(), rule.symbolAt(i - 1).getPostConditions());
+			}
+		} else {
+			if (config.getGSSType() == GSSType.NEW) {
+				// With new GSS we don't lookup in body grammarSlots
+				return new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), rule.symbolAt(i - 1).getPostConditions());
+			} else {
+				return new BodyGrammarSlot(id++, position, getNodeLookup(), rule.symbolAt(i - 1).getPostConditions());				
+			}
+		}
+	}
+	
+	private GSSNodeLookup getNodeLookup() {
 		if (config.getGSSLookupImpl() == LookupImpl.HASH_MAP) {
 			return new HashMapNodeLookup();
 		} else {

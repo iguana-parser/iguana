@@ -55,7 +55,7 @@ public class Test3 extends AbstractParserTest {
 		Nonterminal A = Nonterminal.withName("A");
 		Character a = Character.from('a');
 		Character b = Character.from('b');
-		Rule r1 = Rule.builder(A).addSymbols(a, b).build();
+		Rule r1 = Rule.withHead(A).addSymbols(a, b).build();
 		return Grammar.builder().addRule(r1).build();
 	}
 	
@@ -74,7 +74,7 @@ public class Test3 extends AbstractParserTest {
 				.setGSSNodesCount(1)
 				.setGSSEdgesCount(0)
 				.setNonterminalNodesCount(1)
-				.setTerminalNodesCount(1)
+				.setTerminalNodesCount(2)
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();

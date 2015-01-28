@@ -23,20 +23,20 @@ public class LeftFactorizationTest2 {
 		Grammar.Builder builder = new Grammar.Builder();
 		
 		// E ::= E * E
-		Rule rule1 = Rule.builder(E).addSymbols(E, star, E).build();
+		Rule rule1 = Rule.withHead(E).addSymbols(E, star, E).build();
 		builder.addRule(rule1);
 		
 		
 		// E ::= E + E
-		Rule rule2 = Rule.builder(E).addSymbols(E, plus, E).build();
+		Rule rule2 = Rule.withHead(E).addSymbols(E, plus, E).build();
 		builder.addRule(rule2);
 		
 		// E ::= E +
-		Rule rule3 = Rule.builder(E).addSymbols(E, plus).build();
+		Rule rule3 = Rule.withHead(E).addSymbols(E, plus).build();
 		builder.addRule(rule3);
 		
 		// E ::= a
-		Rule rule4 = Rule.builder(E).addSymbols(a).build();
+		Rule rule4 = Rule.withHead(E).addSymbols(a).build();
 		builder.addRule(rule4);
 		
 		grammar = builder.build();
