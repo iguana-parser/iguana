@@ -45,7 +45,8 @@ public class EBNFToBNF implements GrammarTransformation {
 	}
 	
 	private boolean isEBNF(Symbol s) {
-		return s instanceof Plus ||
+		return s instanceof Star ||
+			   s instanceof Plus ||
 			   s instanceof Opt ||
 			   s instanceof Sequence ||
 			   s instanceof Alt;

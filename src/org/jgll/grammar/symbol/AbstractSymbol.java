@@ -62,7 +62,7 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	@Override
 	public String getConstructorCode() {
-		return (label == null ? "" : ".setLabel(" + label + ")") + 
+		return (label == null ? "" : ".setLabel(\"" + label + "\")") + 
 			   (preConditions.isEmpty() ? "" : ".addPreConditions(" + asSet(preConditions) + ")") +
 			   (postConditions.isEmpty() ? "" : ".addPostConditions(" + asSet(postConditions) + ")");
 	}

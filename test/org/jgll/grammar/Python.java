@@ -501,6 +501,8 @@ public class Python {
 			.addRule(Rule.withHead(Nonterminal.builder("String").build()).addSymbol(Nonterminal.builder("StringLiteral").build()).build())
 			//String ::= BytesLiteral 
 			.addRule(Rule.withHead(Nonterminal.builder("String").build()).addSymbol(Nonterminal.builder("BytesLiteral").build()).build())
+			// ::= 
+			.addRule(Rule.withHead(Nonterminal.builder("").build()).build())
 			//TypedArgsList ::= "*" Tfpdef? ("," Tfpdef ("=" Test)?)* ("," "**" Tfpdef)? 
 			.addRule(Rule.withHead(Nonterminal.builder("TypedArgsList").build()).addSymbol(Sequence.builder(Character.builder(42).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Nonterminal.builder("Tfpdef").build()).build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(44).build()).build(), Nonterminal.builder("Tfpdef").build(), org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(61).build()).build(), Nonterminal.builder("Test").build()).build()).build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(44).build()).build(), Sequence.builder(Character.builder(42).build(), Character.builder(42).build()).build(), Nonterminal.builder("Tfpdef").build()).build()).build()).build())
 			//TypedArgsList ::= Tfpdef ("=" Test)? ("," Tfpdef ("=" Test)?)* ("," (("**" Tfpdef) | ("*" Tfpdef? ("," Tfpdef ("=" Test)?)* ("," "**" Tfpdef)?))?)? 
@@ -553,7 +555,5 @@ public class Python {
 			.addRule(Rule.withHead(Nonterminal.builder("ExprStmt").build()).addSymbol(Nonterminal.builder("TestlistStarExpr").build()).addSymbol(Alt.builder(Sequence.builder(Nonterminal.builder("Augassign").build(), Alt.builder(Nonterminal.builder("TestList").build(), Nonterminal.builder("YieldExpr").build()).build()).build(), Star.builder(Sequence.builder(Sequence.builder(Character.builder(61).build()).build(), Alt.builder(Nonterminal.builder("TestlistStarExpr").build(), Nonterminal.builder("YieldExpr").build()).build()).build()).build()).build()).build())
 			//Name ::= (A-Z | _ | a-z) (0-9 | A-Z | _ | a-z)* 
 			.addRule(Rule.withHead(Nonterminal.builder("Name").build()).addSymbol(Alt.builder(CharacterRange.builder(65, 90).build(), CharacterRange.builder(95, 95).build(), CharacterRange.builder(97, 122).build()).build()).addSymbol(Star.builder(Alt.builder(CharacterRange.builder(48, 57).build(), CharacterRange.builder(65, 90).build(), CharacterRange.builder(95, 95).build(), CharacterRange.builder(97, 122).build()).build()).build()).build())
-			//layout["$default$"] ::= 
-			.addLayout(Rule.withHead(Nonterminal.builder("layout[\"$default$\"]").build()).build())
 			.build();
 }
