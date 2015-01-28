@@ -20,7 +20,6 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Conditions preConditions;
 	
-	@SuppressWarnings("unused")
 	private final String label;
 	
 	private final String variable;
@@ -85,7 +84,9 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	@Override
 	public String getLabel() {
-		return String.format("%s(%s)", getSlot().toString(), arguments != null? GeneratorUtil.listToString(arguments, ",") : "");
+		return (variable != null? variable + "=" : "") 
+				+ (label != null? label + ":"  : "")
+				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), GeneratorUtil.listToString(arguments, ",")) : getSlot().toString());
 	}
 
 	/**
