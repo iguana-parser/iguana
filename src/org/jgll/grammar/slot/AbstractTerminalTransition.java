@@ -67,4 +67,9 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			.toString();
 	}
 	
+	@Override
+	public String getLabel() {
+		return getSlot().toString();
+	}
+	
 }

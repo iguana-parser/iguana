@@ -13,7 +13,7 @@ public interface Transition extends ConstructorCode {
 	public GrammarSlot destination();
 	
 	public GrammarSlot origin();
-	
-	public GrammarSlot getSlot();
+
+	public String getLabel();
 	
 }

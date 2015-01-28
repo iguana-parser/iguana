@@ -55,5 +55,10 @@ public class NonterminalTransition extends AbstractTransition {
 			.append(preConditions)
 			.toString();
 	}
+	
+	@Override
+	public String getLabel() {
+		return getSlot().toString();
+	}
 
 }
