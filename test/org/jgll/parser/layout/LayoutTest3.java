@@ -38,14 +38,14 @@ public class LayoutTest3 {
 		
 		Nonterminal L = Nonterminal.withName("L");
 		
-		Rule r1 = Rule.withHead(S).addSymbols(A, Plus.from(B), C).build();
-		Rule r2 = Rule.withHead(A).addSymbol(a).build();
-		Rule r3 = Rule.withHead(B).addSymbol(b).build();
-		Rule r4 = Rule.withHead(C).addSymbol(c).build();
+		Rule r1 = Rule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
+		Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
+		Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
+		Rule r4 = Rule.withHead(C).addSymbol(c).setLayout(L).build();
 		
 		Rule layout = Rule.withHead(L).addSymbol(Character.from(' ')).build();
 		
-		return Grammar.builder().addRules(r1, r2, r3, r4).setLayoutNonterminal(L).addLayoutRule(layout).build();
+		return Grammar.builder().addRules(r1, r2, r3, r4, layout).build();
 	}
 	
 	@Test

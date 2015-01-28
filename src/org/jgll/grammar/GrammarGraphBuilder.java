@@ -56,8 +56,6 @@ public class GrammarGraphBuilder implements Serializable {
 
 	private Input input;
 	
-	private NonterminalGrammarSlot layout;
-	
 	private int id = 1;
 	
 	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(0, Epsilon.getInstance());
@@ -80,28 +78,15 @@ public class GrammarGraphBuilder implements Serializable {
 	public GrammarGraph build() {
 		EBNFToBNF ebnfToBNF = new EBNFToBNF();
 		Grammar bnfGrammar = ebnfToBNF.transform(grammar);
-		
-		if (bnfGrammar.hasLayout()) { 
-			convertLayout(bnfGrammar.getLayout(), bnfGrammar);
-		}
-		
 		for (Nonterminal nonterminal : bnfGrammar.getNonterminals()) {
 			convert(nonterminal, bnfGrammar);
 		}
 		return new GrammarGraph(this);
 	}
-	
-	private void convertLayout(Nonterminal nonterminal, Grammar grammar) {
-		List<Rule> rules = grammar.getLayoutRules();
-		if (rules.isEmpty()) 
-			return;
-		layout = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());
-		rules.forEach(r -> addRule(layout, r));
-	}
-	
+		
 	private void convert(Nonterminal nonterminal, Grammar grammar) {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
-		NonterminalGrammarSlot nonterminalSlot = nonterminalsMap.computeIfAbsent(nonterminal, k -> new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup()));
+		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
 		rules.forEach(r -> addRule(nonterminalSlot, r));
 	}
 	
@@ -150,7 +135,8 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 
 	private BodyGrammarSlot addLayout(BodyGrammarSlot currentSlot, Rule rule, int i) {
-		if (rule.size() > 1 && layout != null) {		
+		if (rule.hasLayout() && rule.size() > 1) {
+			NonterminalGrammarSlot layout = getNonterminalGrammarSlot(rule.getLayout());
 			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, new LayoutPosition(rule.getPosition(i + 1)), layout);
 			currentSlot.addTransition(new NonterminalTransition(layout, currentSlot, slot, Collections.emptySet()));
 			slots.add(slot);
@@ -178,11 +164,13 @@ public class GrammarGraphBuilder implements Serializable {
 	}
 	
 	private NonterminalGrammarSlot getNonterminalGrammarSlot(Nonterminal nonterminal) {
-		if (config.getGSSType() == GSSType.NEW) {
-			return new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());			
-		} else {
-			return new NonterminalGrammarSlot(id++, nonterminal, DummyNodeLookup.getInstance());
-		}
+		return nonterminalsMap.computeIfAbsent(nonterminal, k -> {
+			if (config.getGSSType() == GSSType.NEW) {
+				return new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());			
+			} else {
+				return new NonterminalGrammarSlot(id++, nonterminal, DummyNodeLookup.getInstance());
+			}
+		});
 	}
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal) {

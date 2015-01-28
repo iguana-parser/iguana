@@ -1,6 +1,5 @@
 package org.jgll.grammar.transformation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -35,12 +34,8 @@ public class EBNFToBNF implements GrammarTransformation {
 	@Override
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
-		List<Rule> newLayoutRules = new ArrayList<>();
-		
 		grammar.getDefinitions().values().forEach(r -> newRules.addAll(transform(r)));
-		grammar.getLayoutRules().forEach(r -> newLayoutRules.addAll(transform(r)));
-		
-		return Grammar.builder().addRules(newRules).setLayoutNonterminal(grammar.getLayout()).addLayoutRules(newLayoutRules).build();
+		return Grammar.builder().addRules(newRules).build();
 	}
 	
 	private Set<Rule> transform(Rule rule) {
@@ -67,7 +62,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			builder.addSymbol(rewrite(s, newRules, rule.getLayout()));
 		}
 		
-		return builder.build();
+		return builder.setLayout(rule.getLayout()).build();
 	}
 	
 	private Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout) {
@@ -90,7 +85,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Star star = (Star) symbol;
 			Symbol S = star.getSymbol();
 			newNt = Nonterminal.withName(getName(S, star.getSeparators(), layout) + "*");
-			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules, layout)).build());
+			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules, layout)).setLayout(layout).build());
 			addedRules.add(Rule.withHead(newNt).build());
 		}
 		
@@ -109,7 +104,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol S = plus.getSymbol();
 			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules, layout)).collect(Collectors.toList());
 			newNt = Nonterminal.withName(getName(S, plus.getSeparators(), layout) + "+");
-			addedRules.add(Rule.withHead(newNt).addSymbol(newNt).addSymbols(seperators).addSymbols(rewrite(S, addedRules, layout)).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(newNt).addSymbols(seperators).addSymbols(rewrite(S, addedRules, layout)).setLayout(layout).build());
 			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(S, addedRules, layout)).build());
 		} 
 		

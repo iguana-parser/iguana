@@ -64,6 +64,10 @@ public class Rule implements ConstructorCode, Serializable {
 	public Nonterminal getLayout() {
 		return layout;
 	}
+	
+	public boolean hasLayout() {
+		return layout != null;
+	}
 		
 	@Override
 	public String toString() {
