@@ -1,6 +1,9 @@
 package org.jgll.parser.datadependent;
 
+import static org.jgll.datadependent.ast.AST.*;
+
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Rule;
@@ -11,8 +14,11 @@ import org.junit.Test;
  * 
  * @author Anastasia Izmaylova
  * 
+ * X ::= S(1,2)
+ * 
+ * S(a,b) ::= l:A print(l,a,b) B
  * A ::= 'a'
- * S(a,b) ::= x = l:A
+ * B ::= 'b'
  *
  */
 
@@ -22,13 +28,25 @@ public class Test1 {
 
 	@Before
 	public void init() {
-		Nonterminal A = Nonterminal.withName("A");
+		
+		Nonterminal X = Nonterminal.withName("X");
+		
 		Nonterminal S = Nonterminal.builder("S").addParameters("a", "b").build();
+		Nonterminal A = Nonterminal.withName("A");
+		Nonterminal B = Nonterminal.withName("B");
 		
-		Rule r1 = Rule.withHead(A).addSymbol(Character.from('a')).build();
-		Rule r2 = Rule.withHead(S).addSymbol(Nonterminal.builder(A).applyTo().setLabel("l").setVariable("x").build()).build();
 		
-		grammar = Grammar.builder().addRules(r1, r2).build();
+		Rule r0 = Rule.withHead(X).addSymbol(Nonterminal.builder(S).apply(integer(1), integer(2)).build()).build();
+		
+		Rule r1 = Rule.withHead(S)
+				.addSymbol(Nonterminal.builder(A).setLabel("l").setVariable("x").build())
+				.addSymbol(CodeBlock.code(stat(println(var("l"), var("a"), var("b")))))
+				.addSymbol(B).build();
+		
+		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
+		Rule r3 = Rule.withHead(B).addSymbol(Character.from('b')).build();
+		
+		grammar = Grammar.builder().addRules(r0, r1, r2, r3).build();
 	}
 	
 	@Test

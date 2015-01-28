@@ -57,5 +57,10 @@ public class CodeBlock implements Symbol {
 	public SymbolBuilder<? extends Symbol> copyBuilder() {
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		return "code";
+	}
 
 }

@@ -154,7 +154,7 @@ public class Nonterminal extends AbstractSymbol {
 			return this;
 		}
 		
-		public Builder applyTo(Expression... arguments) {
+		public Builder apply(Expression... arguments) {
 			if (arguments.length != 0) {
 				this.arguments = arguments;
 			} // otherwise, keep null
