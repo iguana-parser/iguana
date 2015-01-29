@@ -20,26 +20,20 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Conditions preConditions;
 	
-	private final String label;
-	
-	private final String variable;
-	
 	private final Expression[] arguments;
 
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Set<Condition> preConditions) {
-		this(nonterminal, origin, dest, null, null, new Expression[0], preConditions);
+		this(nonterminal, origin, dest, null, preConditions);
 	}
 	
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(nonterminal, origin, dest, Collections.emptySet());
+		this(nonterminal, origin, dest, null, Collections.emptySet());
 	}	
 	
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-			String label, String variable, Expression[] arguments, Set<Condition> preConditions) {
+			Expression[] arguments, Set<Condition> preConditions) {
 		super(origin, dest);
 		this.nonterminal = nonterminal;
-		this.label = label;
-		this.variable = variable;
 		this.arguments = arguments;
 		this.preConditions = ConditionsFactory.getConditions(preConditions);
 	}
@@ -63,10 +57,6 @@ public class NonterminalTransition extends AbstractTransition {
 		
 	}
 	
-	public String getVariable() {
-		return variable;
-	}
-	
 	public NonterminalGrammarSlot getSlot() {
 		return nonterminal;
 	}
@@ -84,8 +74,8 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	@Override
 	public String getLabel() {
-		return (variable != null? variable + "=" : "") 
-				+ (label != null? label + ":"  : "")
+		return (dest.getVariable() != null? dest.getVariable() + "=" : "") 
+				+ (dest.getLabel() != null? dest.getLabel() + ":"  : "")
 				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), GeneratorUtil.listToString(arguments, ",")) : getSlot().toString());
 	}
 

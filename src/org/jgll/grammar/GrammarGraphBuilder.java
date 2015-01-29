@@ -103,7 +103,7 @@ public class GrammarGraphBuilder implements Serializable {
 		} 
 		
 		else {
-			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id++, rule.getPosition(0), getNodeLookup(), Collections.emptySet());
+			BodyGrammarSlot firstSlot = new BodyGrammarSlot(id++, rule.getPosition(0), getNodeLookup(), null, null, Collections.emptySet());
 			head.addFirstSlot(firstSlot);
 			
 			BodyGrammarSlot currentSlot = firstSlot;
@@ -115,7 +115,7 @@ public class GrammarGraphBuilder implements Serializable {
 				if (symbol instanceof RegularExpression) {
 					RegularExpression regex = (RegularExpression) symbol;
 					TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(regex, k -> new TerminalGrammarSlot(id++, regex));
-					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head);
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 					Set<Condition> preConditions = symbol.getPreConditions();
 					Set<Condition> postConditions = symbol.getPostConditions();
 					currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
@@ -125,21 +125,20 @@ public class GrammarGraphBuilder implements Serializable {
 					Nonterminal nonterminal = (Nonterminal) symbol;
 
 					NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
-					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head);
 					
-					String label = nonterminal.getLabel();
-					String variable = nonterminal.getVariable();				
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, nonterminal.getLabel(), nonterminal.getVariable());
+					
 					Expression[] arguments = nonterminal.getArguments();
 					
 					validateNumberOfArguments(nonterminal, arguments);
 					
 					Set<Condition> preConditions = symbol.getPreConditions();
-					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, label, variable, arguments, preConditions));
+					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, preConditions));
 					currentSlot = slot;
 				}
 				else if (symbol instanceof CodeBlock) {
 					CodeBlock code = (CodeBlock) symbol;
-					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head);
+					BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 					currentSlot.addTransition(new CodeBlockTransition(code, currentSlot, slot));
 					currentSlot = slot;
 				}
@@ -155,7 +154,7 @@ public class GrammarGraphBuilder implements Serializable {
 	private BodyGrammarSlot addLayout(BodyGrammarSlot currentSlot, Rule rule, int i) {
 		if (rule.hasLayout() && rule.size() > 1) {
 			NonterminalGrammarSlot layout = getNonterminalGrammarSlot(rule.getLayout());
-			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, new LayoutPosition(rule.getPosition(i + 1)), layout);
+			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, new LayoutPosition(rule.getPosition(i + 1)), layout, null, null);
 			currentSlot.addTransition(new NonterminalTransition(layout, currentSlot, slot, Collections.emptySet()));
 			slots.add(slot);
 			return slot;
@@ -191,19 +190,19 @@ public class GrammarGraphBuilder implements Serializable {
 		});
 	}
 	
-	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal) {
+	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable) {
 		if (i == rule.size()) {
 			if (config.getGSSType() == GSSType.NEW) {
-				return new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), rule.symbolAt(i - 1).getPostConditions());				
+				return new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
 			} else {
-				return new EndGrammarSlot(id++, position, nonterminal, getNodeLookup(), rule.symbolAt(i - 1).getPostConditions());
+				return new EndGrammarSlot(id++, position, nonterminal, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());
 			}
 		} else {
 			if (config.getGSSType() == GSSType.NEW) {
 				// With new GSS we don't lookup in body grammarSlots
-				return new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), rule.symbolAt(i - 1).getPostConditions());
+				return new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());
 			} else {
-				return new BodyGrammarSlot(id++, position, getNodeLookup(), rule.symbolAt(i - 1).getPostConditions());				
+				return new BodyGrammarSlot(id++, position, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
 			}
 		}
 	}

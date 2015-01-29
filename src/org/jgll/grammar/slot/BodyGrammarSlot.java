@@ -29,12 +29,19 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	private final GSSNodeLookup nodeLookup;
 	
 	private final Conditions conditions;
-
-	public BodyGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, Set<Condition> conditions) {
+	
+	private final String label;
+	
+	private final String variable;
+	
+	public BodyGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
+			String label, String variable, Set<Condition> conditions) {
 		super(id);
 		this.position = position;
 		this.nodeLookup = nodeLookup;
 		this.conditions = ConditionsFactory.getConditions(conditions);
+		this.label = label;
+		this.variable = variable;
 		this.intermediateNodes = new HashMap<>();
 	}
 	
@@ -100,6 +107,14 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	 * Data-dependent GLL parsing
 	 * 
 	 */
+	public String getLabel() {
+		return label;
+	}
+	
+	public String getVariable() {
+		return variable;
+	}
+	
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		getTransitions().forEach(t -> t.execute(parser, u, i, node, env));
 	}

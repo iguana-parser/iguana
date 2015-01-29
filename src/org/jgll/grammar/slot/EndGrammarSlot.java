@@ -15,8 +15,9 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, Set<Condition> conditions) {
-		super(id, position, nodeLookup, conditions);
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, 
+			String label, String variable, Set<Condition> conditions) {
+		super(id, position, nodeLookup, label, variable, conditions);
 		this.nonterminal = nonterminal;
 	}
 
