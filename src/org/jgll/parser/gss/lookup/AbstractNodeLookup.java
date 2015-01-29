@@ -25,13 +25,12 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	
 	@Override
 	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data) {
+		if (map == null) map = new HashMap<>();
+		
 		Tuple<Integer, GSSNodeData<?>> elem = new Tuple<>(i, data);
 		GSSNode v;
 		if ((v = map.get(elem)) == null) {
 			v = new org.jgll.datadependent.gss.GSSNode<T>(slot, i, data);
-			if (map == null) {
-				map = new HashMap<>();
-			}
 			map.put(elem, v);
 		}
 		return v;
