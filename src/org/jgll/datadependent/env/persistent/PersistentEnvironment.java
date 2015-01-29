@@ -39,12 +39,13 @@ public class PersistentEnvironment implements Environment {
 	
 	@Override 
 	public Environment store(String[] names, Object[] values) {
-		ImmutableMap<String, Object> __bindings = bindings;
+		ImmutableMap<String, Object> bindings = this.bindings;
 		int i = 0;
 		while (i < names.length) {
-			__bindings = __bindings.__put(names[i], values[i]);
+			bindings = bindings.__put(names[i], values[i]);
+			i++;
 		}
-		return new PersistentEnvironment(__bindings);
+		return new PersistentEnvironment(bindings);
 	}
 
 	@Override

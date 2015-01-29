@@ -2,6 +2,8 @@ package org.jgll.parser.gss;
 
 import java.util.Iterator;
 
+import org.jgll.util.generator.GeneratorUtil;
+
 public class GSSNodeData<T> implements Iterable<T> {
 	
 	private final T[] elements;
@@ -56,6 +58,11 @@ public class GSSNodeData<T> implements Iterable<T> {
 	@Override
 	public Iterator<T> iterator() {
 		return new GSSNodeDataIterator<T>(this);
+	}
+	
+	@Override
+	public String toString() {
+		return GeneratorUtil.listToString(elements, ",");
 	}
 	
 	static private class GSSNodeDataIterator<T> implements Iterator<T> {

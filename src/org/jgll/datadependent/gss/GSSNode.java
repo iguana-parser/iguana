@@ -33,7 +33,7 @@ public class GSSNode<T> extends org.jgll.parser.gss.GSSNode {
 	
 	@Override
 	public String toString() {
-		return super.toString();
+		return super.toString() + String.format("(%s)", data);
 	}
 
 }
