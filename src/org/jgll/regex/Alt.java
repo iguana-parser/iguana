@@ -196,7 +196,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 			newRanges.add(CharacterRange.in(1, ranges.get(i).getStart() - 1));
 		}
 		
-		for(; i < ranges.size() - 1; i++) {
+		for (; i < ranges.size() - 1; i++) {
 			CharacterRange r1 = ranges.get(i);
 			CharacterRange r2 = ranges.get(i + i);
 			

@@ -177,11 +177,16 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Regula
 	}
 	
 	private boolean isCharSequence() {
-		return symbols.stream().allMatch(s -> s instanceof RegularExpression && ((RegularExpression)s).isSingleChar());
+		return symbols.stream().allMatch(s -> (s instanceof Character || s instanceof CharacterRange));
 	}
 	
 	private List<Character> asCharacters() {
 		return symbols.stream().map(s -> ((RegularExpression)s).asSingleChar()).collect(Collectors.toList());
+	}
+	
+	@Override
+	public boolean isTerminal() {
+		return isCharSequence();
 	}
 	
 	@Override

@@ -24,6 +24,10 @@ public interface Symbol extends ConstructorCode, Serializable {
 	
 	public String getLabel();
 	
+	default boolean isTerminal() {
+		return false;
+	}
+	
 	public SymbolBuilder<? extends Symbol> copyBuilder();
 	
 }	

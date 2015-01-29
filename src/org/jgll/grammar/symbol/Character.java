@@ -140,6 +140,11 @@ public class Character extends AbstractRegularExpression {
 	public Character asSingleChar() {
 		return this;
 	}
+	
+	@Override
+	public boolean isTerminal() {
+		return true;
+	}
 
 	@Override
 	public String getPattern() {
