@@ -6,6 +6,7 @@ import static org.jgll.util.visualization.GraphVizUtil.*;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.util.generator.GeneratorUtil;
 
 public class GrammarGraphToDot {
 
@@ -21,7 +22,10 @@ public class GrammarGraphToDot {
 	}
 	
 	private static void toDot(NonterminalGrammarSlot slot, StringBuilder sb) {
-		sb.append("\"" + slot.getId() + "\"" + String.format(NONTERMINAL_SLOT, escape(slot.getNonterminal().getName())) + "\n");
+		sb.append("\"" + slot.getId() + "\"" + String.format(NONTERMINAL_SLOT, 
+				escape(slot.getNonterminal().getParameters() != null? 
+						String.format("%s(%s)", slot.getNonterminal().getName(), GeneratorUtil.listToString(slot.getNonterminal().getParameters(), ",")) 
+						: slot.getNonterminal().getName())) + "\n");
 		
 		slot.getFirstSlots().forEach(s -> sb.append(EPSILON_TRANSITION + "\"" + slot.getId() + "\"" + "->" + "{\"" + s.getId() + "\"}" + "\n"));
 		slot.getFirstSlots().forEach(s -> toDot(s, sb));
