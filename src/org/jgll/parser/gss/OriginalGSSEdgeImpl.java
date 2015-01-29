@@ -1,5 +1,6 @@
 package org.jgll.parser.gss;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.HashFunctions;
@@ -62,6 +63,21 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 		}
 		
 		NonPackedNode y = parser.getNode(returnSlot, node, sppfNode);
+		
+		/**
+		 * 
+		 * Data-dependent GLL parsing
+		 * 
+		 */
+		if (returnSlot.requiresBinding()) {
+			Environment env =  returnSlot.doBinding(sppfNode, parser.getEmptyEnvironment());
+			
+			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env)) {
+				return new org.jgll.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
+			}
+			
+			return null;
+		}
 		
 		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y)) {
 			return new Descriptor(returnSlot, destination, inputIndex, y);

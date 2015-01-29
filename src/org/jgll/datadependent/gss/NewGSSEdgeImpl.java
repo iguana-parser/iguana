@@ -27,6 +27,12 @@ public class NewGSSEdgeImpl extends org.jgll.parser.gss.NewGSSEdgeImpl {
 		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, env))
 			return null;
 		
+		Environment env = this.env;
+		
+		if (returnSlot.requiresBinding()) {
+			env = returnSlot.doBinding(sppfNode, env);
+		}
+		
 		// FIXME: SPPF
 		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode);
 		

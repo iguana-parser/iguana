@@ -129,4 +129,18 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return nodeLookup.get(inputIndex, data);
 	}
 	
+	public boolean requiresBinding() {
+		return !(label == null && variable == null); 
+	}
+	
+	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
+		if (label != null) {
+			env = env.store(label, sppfNode);
+		}
+		
+		// TODO: Support for return values
+		
+		return env;
+	}
+	
 }
