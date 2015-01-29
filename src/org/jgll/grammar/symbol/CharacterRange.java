@@ -85,13 +85,13 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
-		startState.addTransition(new Transition(start, end, finalState));//.addTransitionAction(getPostActions(conditions)));
+		startState.addTransition(new Transition(start, end, finalState));
 		return new Automaton(startState, name);
 	}
 	
 	@Override
 	public Matcher getMatcher() {
-		return (input, i) -> i >= start && i <= end ? 1 : -1;
+		return (input, i) -> input.charAt(i) >= start && input.charAt(i) <= end ? 1 : -1;
 	}
 	
 	@Override
