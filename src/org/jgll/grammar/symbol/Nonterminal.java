@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
+import org.jgll.util.generator.GeneratorUtil;
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -64,8 +65,8 @@ public class Nonterminal extends AbstractSymbol {
 		return (variable != null? variable + " = " : "")
 			    + (label != null? label + ":" : "")
 			    + name + (index > 0 ? index : "")
-			    + (parameters != null? "(" + "..." + ")" : "")
-		        + (arguments != null? "(" + "..." + ")" : "");
+			    + (arguments == null && parameters != null? "(" + GeneratorUtil.listToString(parameters, ",") + ")" : "")
+		        + (arguments != null? "(" + GeneratorUtil.listToString(arguments, ",") + ")" : "");
 	}
 	
 	@Override
