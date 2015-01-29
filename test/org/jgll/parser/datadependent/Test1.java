@@ -8,6 +8,8 @@ import org.jgll.grammar.symbol.CodeBlock;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.ParserFactory;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.Visualization;
@@ -57,8 +59,15 @@ public class Test1 {
 	@Test
 	public void test() {
 		System.out.println(grammar);
-		GrammarGraph graph = grammar.toGrammarGraph(Input.fromString("ab"), Configuration.DEFAULT);
+		
+		Input input = Input.fromString("ab");
+		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+		
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		parser.parse(input, graph, Nonterminal.withName("X"));
+		
 		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+		
 	}
 
 }

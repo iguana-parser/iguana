@@ -51,7 +51,7 @@ public class NonterminalTransition extends AbstractTransition {
 		
 		if (nonterminal.getParameters() == null) {
 			parser.create(dest, nonterminal, u, i, node);
-		} else { // Non-empty argument list
+		} else {
 			parser.create(dest, nonterminal, u, i, node, arguments, parser.getEmptyEnvironment());
 		}
 		
