@@ -8,7 +8,6 @@ import org.jgll.sppf.NonPackedNode;
 
 public class Descriptor extends org.jgll.parser.descriptor.Descriptor {
 	
-	@SuppressWarnings("unused")
 	private final Environment env;
 	
 	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
@@ -20,6 +19,6 @@ public class Descriptor extends org.jgll.parser.descriptor.Descriptor {
 
 	@Override
 	public void execute(GLLParser parser) {
-		getGrammarSlot().execute(parser, getGSSNode(), getInputIndex(), getSPPFNode());
+		getGrammarSlot().execute(parser, getGSSNode(), getInputIndex(), getSPPFNode(), env);
 	}
 }
