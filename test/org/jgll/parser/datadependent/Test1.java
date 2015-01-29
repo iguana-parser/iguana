@@ -9,6 +9,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
+import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
@@ -64,9 +65,14 @@ public class Test1 {
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		parser.parse(input, graph, Nonterminal.withName("X"));
+		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
 		
 		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+		
+		if (result.isParseSuccess()) {
+			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
+					result.asParseSuccess().getRoot(), parser.getRegistry(), input);
+		}
 		
 	}
 
