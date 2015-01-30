@@ -21,4 +21,13 @@ public abstract class Condition implements Serializable, ConstructorCode {
 
 	public abstract SlotAction getSlotAction();
 	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public boolean isDataDependent() {
+		return false;
+	}
+	
 }

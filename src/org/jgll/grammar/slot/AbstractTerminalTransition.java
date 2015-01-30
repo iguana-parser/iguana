@@ -82,8 +82,10 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
 		Input input = parser.getInput();
+		
+		parser.setEnvironment(env);
 
-		if (preConditions.execute(input, u, i, env))
+		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
 			return;
 		
 		int length = slot.match(input, i);
@@ -93,13 +95,13 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			return;
 		}
 
-		if (postConditions.execute(input, u, i + length, env))
+		if (postConditions.execute(input, u, i + length, parser.getEvaluatorContext()))
 			return;
 		
 		// FIXME: SPPF
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		
-		createNode(length, cr, parser, u, i, node, env);
+		createNode(length, cr, parser, u, i, node, parser.getEnvironment());
 	}
 	
 	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);

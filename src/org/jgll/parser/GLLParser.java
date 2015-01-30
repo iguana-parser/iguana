@@ -81,6 +81,8 @@ public interface GLLParser {
 	
 	public Environment getEnvironment();
 	
+	public void setEnvironment(Environment env);
+	
 	public Environment getEmptyEnvironment();
 	
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Expression[] arguments, Environment env);

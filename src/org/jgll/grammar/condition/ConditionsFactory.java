@@ -15,7 +15,27 @@ public class ConditionsFactory {
 			return (input, u, i) -> false;
 		
 		List<Condition> list = new ArrayList<>(conditions);
-			
+		
+		boolean requiresEnvironment = false;
+		for (Condition c : list) {
+			if (c.isDataDependent()) {
+				requiresEnvironment = true;
+				break;
+			}
+		}
+		
+		if (requiresEnvironment) {
+			return (input, u, i) -> {
+		        for (Condition c : list) {
+		            if (c.getSlotAction().execute(input, u, i)) {
+		                log.trace("Condition " + c + " executed");
+		                return true;
+		            }
+		        }
+		        return false;
+			};
+		}
+		
 		return (input, u, i) -> {
 	        for (Condition c : list) {
 	            if (c.getSlotAction().execute(input, u, i)) {

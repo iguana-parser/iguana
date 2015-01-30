@@ -1,6 +1,5 @@
 package org.jgll.grammar.condition;
 
-import org.jgll.datadependent.env.Environment;
 import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.jgll.parser.gss.GSSNode;
@@ -12,7 +11,6 @@ public class DataDependentCondition extends Condition {
 	
 	private final org.jgll.datadependent.ast.Expression expression;
 	
-	@SuppressWarnings("unused")
 	private transient final SlotAction action;
 
 	DataDependentCondition(ConditionType type, org.jgll.datadependent.ast.Expression expression) {
@@ -22,16 +20,11 @@ public class DataDependentCondition extends Condition {
 			
 			@Override
 			public boolean execute(Input input, GSSNode gssNode, int inputIndex) {
-				Object value = expression.interpret(new PersistentEvaluatorContext());
-				if (!(value instanceof Boolean)) 
-					throw new RuntimeException("Data dependent condition should evaluate to a boolean value."); 
-				return (!(Boolean) value);
+				return execute(input, gssNode, inputIndex, new PersistentEvaluatorContext());
 			}
 			
 			@Override
-			public boolean execute(Input input, GSSNode gssNode, int inputIndex, Environment env) {
-				IEvaluatorContext ctx = new PersistentEvaluatorContext();
-				ctx.setEnvironment(env);
+			public boolean execute(Input input, GSSNode gssNode, int inputIndex, IEvaluatorContext ctx) {
 				Object value = expression.interpret(ctx);
 				if (!(value instanceof Boolean)) 
 					throw new RuntimeException("Data dependent condition should evaluate to a boolean value."); 
@@ -44,6 +37,11 @@ public class DataDependentCondition extends Condition {
 	public org.jgll.datadependent.ast.Expression getExpression() {
 		return expression;
 	}
+	
+	@Override
+	public boolean isDataDependent() {
+		return true;
+	}
 
 	@Override
 	public String getConstructorCode() {
@@ -52,7 +50,7 @@ public class DataDependentCondition extends Condition {
 
 	@Override
 	public SlotAction getSlotAction() {
-		return null;
+		return action;
 	}
 	
 	static public DataDependentCondition predicate(org.jgll.datadependent.ast.Expression expression) {

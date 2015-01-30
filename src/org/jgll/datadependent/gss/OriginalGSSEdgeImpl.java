@@ -24,10 +24,12 @@ public class OriginalGSSEdgeImpl extends org.jgll.parser.gss.OriginalGSSEdgeImpl
 		GSSNode destination = getDestination();
 		BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 		
-		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, env))
+		parser.setEnvironment(env);
+		
+		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, parser.getEvaluatorContext()))
 			return null;
 		
-		Environment env = this.env;
+		Environment env = parser.getEnvironment();
 		
 		if (returnSlot.requiresBinding()) {
 			env = returnSlot.doBinding(sppfNode, env);

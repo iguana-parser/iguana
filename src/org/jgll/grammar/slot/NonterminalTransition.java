@@ -92,10 +92,12 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		if (preConditions.execute(parser.getInput(), u, i, env))
+		parser.setEnvironment(env);
+		
+		if (preConditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
 			return;
 						
-		parser.create(dest, nonterminal, u, i, node, arguments, env);
+		parser.create(dest, nonterminal, u, i, node, arguments, parser.getEnvironment());
 		
 	}
 

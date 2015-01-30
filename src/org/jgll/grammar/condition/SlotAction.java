@@ -1,6 +1,6 @@
 package org.jgll.grammar.condition;
 
-import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
 
@@ -8,7 +8,7 @@ import org.jgll.util.Input;
 public interface SlotAction {
 	public boolean execute(Input input, GSSNode gssNode, int inputIndex);
 	
-	default boolean execute(Input input, GSSNode gssNode, int inputIndex, Environment env) {
+	default boolean execute(Input input, GSSNode gssNode, int inputIndex, IEvaluatorContext ctx) {
 		return execute(input, gssNode, inputIndex);
 	}
 }
