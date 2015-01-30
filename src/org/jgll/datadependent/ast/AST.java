@@ -63,5 +63,13 @@ public class AST {
 	static public Statement stat(Expression exp) {
 		return new Statement.Expression(exp);
 	}
+	
+	static public Statement varDecl(String name) {
+		return new Statement.VariableDeclaration(new VariableDeclaration(name));
+	}
+	
+	static public Statement varDecl(String name, Expression exp) {
+		return new Statement.VariableDeclaration(new VariableDeclaration(name, exp));
+	}
 
 }
