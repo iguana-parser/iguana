@@ -3,6 +3,7 @@ package org.jgll.util.collections;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.util.collections.RangeTree.Node;
@@ -38,43 +39,50 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		return node.val;
 	}
 	
-	public void insert(CharacterRange key, T val) {
-		insert(key, val, root, new ArrayList<>());
+	public void insert(CharacterRange range, T val) {
+		insert(range, val, root);
 	}
 	
-	private void insert(CharacterRange range, T val, Node<T> node, List<Node<T>> insertionPath) {		
-		insertionPath.add(node);
+	private void insert(CharacterRange range, T val, Node<T> node) {		
 		if (range.getStart() < node.start) {
 			if (node.left == null) {
-				node.left = new Node<>(range.getStart(), range.getEnd(), val);
-				countNodes++;
-				if (insertionPath.size() > 1)
-					balance(insertionPath);
+				addToLeft(node, new Node<>(range.getStart(), range.getEnd(), val));
+				balance(node);
 			} else {
-				insert(range, val, node.left, insertionPath);
+				insert(range, val, node.left);
 			}
 		} 
 		else if (range.getEnd() > node.end) {
 			if (node.right == null) {
-				node.right = new Node<>(range.getStart(), range.getEnd(), val);
-				countNodes++;
-				if (insertionPath.size() > 1) 
-					balance(insertionPath);
+				addToRight(node, new Node<>(range.getStart(), range.getEnd(), val));
+				balance(node);
 			} else {
-				insert(range, val, node.right, insertionPath);					
+				insert(range, val, node.right);					
 			}
 		} 
 	}
+	
+	private void addToLeft(Node<T> parent, Node<T> newNode) {
+		countNodes++;
+		parent.left = newNode;
+		newNode.parent = parent;
+	}
+	
+	private void addToRight(Node<T> parent, Node<T> newNode) {
+		countNodes++;
+		parent.right = newNode;
+		newNode.parent = parent;
+	}
 	 
-	private void balance(List<Node<T>> insertionPath) {
-		for (int i = insertionPath.size() - 1; i >= 0; i--) {
-			Node<T> node = insertionPath.get(i);
-			node.updateHeight();
-			if (!node.isBalanced()) {
-				if (node.isRightHeavy()) {
-					leftRotate(node);
-				}
+	private void balance(Node<T> node) {
+		node.updateHeight();
+		if (!node.isBalanced()) {
+			if (node.right.isRightHeavy() || node.right.isBalanced()) {
+				leftRotate(node);
 			}
+		}
+		if (node.parent != null) {
+			balance(node.parent);
 		}
 	}
 
@@ -90,6 +98,16 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		Node<T> B = y.left;
 		y.left = x;
 		x.right = B;
+		
+		if (x.parent != null) {
+			x.parent.replaceChild(x, y);
+		} else {
+			root = y;
+		}
+		
+		x.updateHeight();
+		y.updateHeight();
+		
 		return y;
 	}
 	
@@ -106,23 +124,37 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		Node<T> B = y.right;
 		y.right = x;
 		x.left = B;
+
+		if (x.parent != null) {
+			x.parent.replaceChild(x, y);
+		} else {
+			root = y;
+		}
+		
+		x.updateHeight();
+		y.updateHeight();
+		
 		return x;
+	}
+	
+	public boolean isBalanced() {
+		return inOrder(root).stream().allMatch(n -> n.isBalanced());
 	}
 
 	private List<Node<T>> inOrder(Node<T> node) {
 		List<Node<T>> list = new ArrayList<>();
-		inOrder(node, list);
+		inOrder(node, (n) -> list.add(n));
 		return list;
 	}
 	
-	private void inOrder(Node<T> node, List<Node<T>> nodes) {
+	private void inOrder(Node<T> node, Consumer<Node<T>> consumer) {
 		if (node.left != null)
-			inOrder(node.left, nodes);
+			inOrder(node.left, consumer);
 		
-		nodes.add(node);
+		consumer.accept(node);
 		
 		if(node.right != null) 
-			inOrder(node.right, nodes);
+			inOrder(node.right, consumer);
 	}
 	
 	@Override
@@ -138,11 +170,22 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		Node<T> right;
 		int height;
 		
+		Node<T> parent;
+		
 		public Node(int start, int end, T val) {
 			this.start = start;
 			this.end = end;
 			this.val = val;
 			updateHeight();
+		}
+		
+		public void replaceChild(Node<T> child, Node<T> replacement) {
+			// Fix the pointers of the parents
+			if (left == child) {
+				left = replacement;
+			} else {
+				right = replacement;
+			}		
 		}
 		
 		public void updateHeight() {

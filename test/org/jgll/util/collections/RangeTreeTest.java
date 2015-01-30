@@ -3,8 +3,6 @@ package org.jgll.util.collections;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.util.Visualization;
-import org.jgll.util.collections.RangeTree.Node;
 import org.junit.Test;
 
 public class RangeTreeTest {
@@ -26,12 +24,8 @@ public class RangeTreeTest {
 		assertEquals("c",  rangeTree.get(18));
 		assertEquals("c",  rangeTree.get(101));
 		assertEquals(null, rangeTree.get(121));
-		
-		Visualization.generateRangeTree("/Users/aliafroozeh/output", rangeTree);
-		
-		for (Node<String> node : rangeTree) {
-			System.out.println(node);
-		}
+
+		assertTrue(rangeTree.isBalanced());
 	}
 	
 }
