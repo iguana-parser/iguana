@@ -50,6 +50,10 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		return node.val;
 	}
 	
+	public void insert(int key) {
+		insert(CharacterRange.in(key, key));
+	}
+	
 	public void insert(CharacterRange range) {
 		insert(range, null);
 	}

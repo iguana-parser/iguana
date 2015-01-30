@@ -3,7 +3,6 @@ package org.jgll.util.collections;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class RangeTreeTest {
@@ -47,16 +46,30 @@ public class RangeTreeTest {
 	@Test
 	public void test5() {
 		RangeTree<Void> rangeTree = new RangeTree<>();
-		rangeTree.insert(CharacterRange.in(44, 44));
-		rangeTree.insert(CharacterRange.in(17, 17));
-		rangeTree.insert(CharacterRange.in(32, 32));
-		rangeTree.insert(CharacterRange.in(78, 78));
-		rangeTree.insert(CharacterRange.in(50, 50));
-		rangeTree.insert(CharacterRange.in(48, 48));
-		rangeTree.insert(CharacterRange.in(62, 62));
-		rangeTree.insert(CharacterRange.in(54, 54));
-		rangeTree.insert(CharacterRange.in(88, 88));
+		rangeTree.insert(44);
+		rangeTree.insert(17);
+		rangeTree.insert(32);
+		rangeTree.insert(78);
+		rangeTree.insert(50);
+		rangeTree.insert(48);
+		rangeTree.insert(62);
+		rangeTree.insert(54);
+		rangeTree.insert(88);
 		assertEquals(9, rangeTree.size());
+		assertEquals(3, rangeTree.getRoot().getHeight());
+	}
+	
+	@Test
+	public void test6() {
+		RangeTree<Void> rangeTree = new RangeTree<>();
+		rangeTree.insert(14);
+		rangeTree.insert(17);
+		rangeTree.insert(11);
+		rangeTree.insert(7);
+		rangeTree.insert(53);
+		rangeTree.insert(4);
+		rangeTree.insert(13);
+		assertEquals(7, rangeTree.size());
 		assertEquals(3, rangeTree.getRoot().getHeight());
 	}
 	
