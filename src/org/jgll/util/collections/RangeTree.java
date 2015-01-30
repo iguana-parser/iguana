@@ -17,6 +17,10 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		this.root = new Node<>(range.getStart(), range.getEnd(), val);;
 	}
 	
+	public Node<T> getRoot() {
+		return root;
+	}
+	
 	public T get(int key) {
 		return get(key, root);
 	}
@@ -39,15 +43,13 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	}
 	
 	private void insert(CharacterRange range, T val, Node<T> node, List<Node<T>> insertionPath) {		
+		insertionPath.add(node);
 		if (range.getStart() < node.start) {
 			if (node.left == null) {
 				node.left = new Node<>(range.getStart(), range.getEnd(), val);
 				countNodes++;
-				if (!node.isBalanced()) {
-					if (node.right.isRightHeavy() || node.right.isBalanced()) {
-						leftRotate(node);
-					}
-				}
+				if (insertionPath.size() > 1)
+					balance(insertionPath);
 			} else {
 				insert(range, val, node.left, insertionPath);
 			}
@@ -56,12 +58,26 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			if (node.right == null) {
 				node.right = new Node<>(range.getStart(), range.getEnd(), val);
 				countNodes++;
+				if (insertionPath.size() > 1) 
+					balance(insertionPath);
 			} else {
 				insert(range, val, node.right, insertionPath);					
 			}
 		} 
 	}
 	 
+	private void balance(List<Node<T>> insertionPath) {
+		for (int i = insertionPath.size() - 1; i >= 0; i--) {
+			Node<T> node = insertionPath.get(i);
+			node.updateHeight();
+			if (!node.isBalanced()) {
+				if (node.isRightHeavy()) {
+					leftRotate(node);
+				}
+			}
+		}
+	}
+
 	/**
 	 *      x                y
 	 *     / \              / \
@@ -126,27 +142,31 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			this.start = start;
 			this.end = end;
 			this.val = val;
-			height = height() + 1;
+			updateHeight();
+		}
+		
+		public void updateHeight() {
+			this.height = height();
 		}
 		
 		public boolean isBalanced() {
-			return Math.abs(left.height - right.height) <= 1;
+			return Math.abs(heightLeft() - heightRight()) <= 1;
 		}
 		
 		public boolean isRightHeavy() {
-			return right.height > left.height;
+			return heightRight() > heightLeft();
 		}
 		
 		public boolean isLeftHeavy() {
-			return left.height > right.height;
+			return heightLeft() > heightRight();
 		}
 		
 		private int height() {
 			int max;
-			if (heightLeft() > heightRgiht())
+			if (heightLeft() > heightRight())
 				max = heightLeft();
 			else
-				max = heightRgiht();
+				max = heightRight();
 			
 			return max + 1;
 		}
@@ -155,13 +175,21 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			return left == null ? -1 : left.height;
 		}
 		
-		private int heightRgiht() {
+		private int heightRight() {
 			return right == null ? -1 : right.height;
+		}
+		
+		public Node<T> getLeft() {
+			return left;
+		}
+		
+		public Node<T> getRight() {
+			return right;
 		}
 		
 		@Override
 		public String toString() {
-			return String.format("(%d, %d, %s)", start, end, val);
+			return String.format("[%d-%d]", start, end);
 		}
 	}
 

@@ -6,11 +6,13 @@ import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.collections.RangeTree;
 import org.jgll.util.trie.Trie;
 import org.jgll.util.visualization.AutomatonToDot;
 import org.jgll.util.visualization.GSSToDot;
 import org.jgll.util.visualization.GrammarGraphToDot;
 import org.jgll.util.visualization.GraphVizUtil;
+import org.jgll.util.visualization.RangeTreeToDot;
 import org.jgll.util.visualization.SPPFToDot;
 import org.jgll.util.visualization.SPPFToDotUnpacked;
 import org.jgll.util.visualization.ToDotWithoutIntermediateNodes;
@@ -60,6 +62,10 @@ public class Visualization {
 	public static void generateAutomatonGraph(String outputDir, State startState) {
 		String dot = AutomatonToDot.toDot(startState);
 		GraphVizUtil.generateGraph(dot, outputDir, "automaton");
+	}
+	
+	public static <T> void generateRangeTree(String outputDir, RangeTree<T> t) {
+		GraphVizUtil.generateGraph(RangeTreeToDot.toDot(t), outputDir, "rangeTree");
 	}
 	
 	public static void generateGrammarGraph(String outputDir, GrammarGraph graph) {
