@@ -8,6 +8,13 @@ import java.util.function.Consumer;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.util.collections.RangeTree.Node;
 
+/**
+ * 
+ * An implementaion of AVL trees for fast range search
+ * 
+ * @author Ali Afroozeh
+ *
+ */
 public class RangeTree<T> implements Iterable<Node<T>>{	
 
 	private Node<T> root;
@@ -16,6 +23,14 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	
 	public Node<T> getRoot() {
 		return root;
+	}
+	
+	public int size() {
+		return countNodes;
+	}
+	
+	public boolean contains(int key) {
+		return get(key) != null;
 	}
 	
 	public T get(int key) {
@@ -35,6 +50,10 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		return node.val;
 	}
 	
+	public void insert(CharacterRange range) {
+		insert(range, null);
+	}
+	
 	public void insert(CharacterRange range, T val) {
 		insert(range, val, root);
 	}
@@ -44,6 +63,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		
 		if (root == null) {
 			root = newNode;
+			countNodes++;
 			return;
 		}
 		
@@ -57,7 +77,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		} 
 		else if (range.getEnd() > node.end) {
 			if (node.right == null) {
-				addToRight(node, new Node<>(range.getStart(), range.getEnd(), val));
+				addToRight(node, newNode);
 				balance(node);
 			} else {
 				insert(range, val, node.right);					
@@ -79,14 +99,28 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	 
 	private void balance(Node<T> node) {
 		node.updateHeight();
+		
 		if (!node.isBalanced()) {
-			if (node.right != null && (node.right.isRightHeavy() || node.right.isBalanced())) {
-				leftRotate(node);
+			if (node.right != null) {
+				if (node.right.isRightHeavy()) {
+					leftRotate(node);
+				} 
+				else if (node.right.isLeftHeavy()) {
+					rightRotate(node.right);
+					leftRotate(node);
+				}
 			}
-			if (node.left != null && (node.left.isLeftHeavy() || node.left.isBalanced())) {
-				rightRotate(node);
+			if (node.left != null) {
+				if (node.left.isLeftHeavy()) {
+					rightRotate(node);					
+				} 
+				else if (node.left.isRightHeavy()) {
+					leftRotate(node.left);
+					rightRotate(node);
+				}
 			}
 		}
+		
 		if (node.parent != null) {
 			balance(node.parent);
 		}
@@ -100,13 +134,19 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	 *      B   C        A   B
 	 */
 	private void leftRotate(Node<T> x) {
+		Node<T> parent = x.parent;
+		
 		Node<T> y = x.right;
 		Node<T> B = y.left;
 		y.left = x;
+		x.parent = y;
 		x.right = B;
+		if (B != null)
+			B.parent = x;
 		
-		if (x.parent != null) {
-			x.parent.replaceChild(x, y);
+		y.parent = parent;
+		if (parent != null) {
+			parent.replaceChild(x, y);
 		} else {
 			root = y;
 		}
@@ -124,13 +164,20 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	 *      
 	 */
 	private void rightRotate(Node<T> x) {
+		Node<T> parent = x.parent;
+		
 		Node<T> y = x.left;
 		Node<T> B = y.right;
 		y.right = x;
+		x.parent = y;
 		x.left = B;
+		
+		if (B != null)
+			B.parent = x;
 
-		if (x.parent != null) {
-			x.parent.replaceChild(x, y);
+		y.parent = parent;
+		if (parent != null) {
+			parent.replaceChild(x, y);
 		} else {
 			root = y;
 		}
@@ -204,6 +251,10 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		
 		public boolean isLeftHeavy() {
 			return heightLeft() > heightRight();
+		}
+		
+		public int getHeight() {
+			return height;
 		}
 		
 		private int height() {
