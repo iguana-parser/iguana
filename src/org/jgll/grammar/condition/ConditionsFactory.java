@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
+import org.jgll.parser.gss.GSSNode;
+import org.jgll.util.Input;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class ConditionsFactory {
@@ -25,14 +29,24 @@ public class ConditionsFactory {
 		}
 		
 		if (requiresEnvironment) {
-			return (input, u, i) -> {
-		        for (Condition c : list) {
-		            if (c.getSlotAction().execute(input, u, i)) {
-		                log.trace("Condition " + c + " executed");
-		                return true;
-		            }
-		        }
-		        return false;
+			return new Conditions() {
+
+				@Override
+				public boolean execute(Input input, GSSNode u, int i) {
+					return execute(input, u, i, new PersistentEvaluatorContext());
+				}
+				
+				@Override
+				public boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
+					for (Condition c : list) {
+			            if (c.getSlotAction().execute(input, u, i, ctx)) {
+			                log.trace("Condition " + c + " executed");
+			                return true;
+			            }
+			        }
+			        return false;
+				}
+				
 			};
 		}
 		

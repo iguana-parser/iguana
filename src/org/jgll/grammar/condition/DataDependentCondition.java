@@ -1,7 +1,6 @@
 package org.jgll.grammar.condition;
 
 import org.jgll.datadependent.env.IEvaluatorContext;
-import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
 
@@ -20,7 +19,7 @@ public class DataDependentCondition extends Condition {
 			
 			@Override
 			public boolean execute(Input input, GSSNode gssNode, int inputIndex) {
-				return execute(input, gssNode, inputIndex, new PersistentEvaluatorContext());
+				throw new UnsupportedOperationException();
 			}
 			
 			@Override
