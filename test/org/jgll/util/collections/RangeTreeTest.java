@@ -73,6 +73,23 @@ public class RangeTreeTest {
 		assertEquals(3, rangeTree.getRoot().getHeight());
 	}
 	
+	@Test
+	public void test7() {
+		RangeTree<Void> rangeTree = new RangeTree<>();
+		rangeTree.insert(3);
+		rangeTree.insert(2);
+		rangeTree.insert(1);
+		rangeTree.insert(4);
+		rangeTree.insert(5);
+		rangeTree.insert(6);
+		rangeTree.insert(7);
+		rangeTree.insert(16);
+		rangeTree.insert(15);
+		rangeTree.insert(14);
+		assertEquals(10, rangeTree.size());
+		assertEquals(3, rangeTree.getRoot().getHeight());
+	}
+	
 	private static <T> void checkAsserts(RangeTree<T> rangeTree) {
 		assertEquals(null, rangeTree.get(0));
 		assertEquals("a",  rangeTree.get(1));
