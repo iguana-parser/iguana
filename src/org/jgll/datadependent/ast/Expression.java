@@ -174,5 +174,27 @@ public abstract class Expression extends AbstractAST {
 				
 	}
 	
+	static public class Assignment extends Expression {
+		
+		private final java.lang.String id;
+		private final Expression exp;
+		
+		Assignment(java.lang.String id, Expression exp) {
+			this.id = id;
+			this.exp = exp;
+		}
 
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			ctx.storeInEnvironment(id, exp.interpret(ctx));
+			return null;
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s = %s", id, exp);
+		}
+		
+	}
+	
 }

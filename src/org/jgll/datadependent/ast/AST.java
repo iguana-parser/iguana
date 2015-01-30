@@ -56,8 +56,8 @@ public class AST {
 	 * 		Statements
 	 */
 	
-	static public Statement assign(java.lang.String id, Expression exp) {
-		return new Statement.Assignment(id, exp);
+	static public Expression assign(java.lang.String id, Expression exp) {
+		return new Expression.Assignment(id, exp);
 	}
 	
 	static public Statement stat(Expression exp) {
