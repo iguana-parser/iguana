@@ -8,8 +8,9 @@ import org.junit.Test;
 public class RangeTreeTest {
 
 	@Test
-	public void test() {
-		RangeTree<String> rangeTree = new RangeTree<>(CharacterRange.in(1, 4), "a");
+	public void test1() {
+		RangeTree<String> rangeTree = new RangeTree<>();
+		rangeTree.insert(CharacterRange.in(1, 4), "a");
 		rangeTree.insert(CharacterRange.in(7, 13), "b");
 		rangeTree.insert(CharacterRange.in(18, 101), "c");
 		
@@ -25,6 +26,15 @@ public class RangeTreeTest {
 		assertEquals("c",  rangeTree.get(101));
 		assertEquals(null, rangeTree.get(121));
 
+		assertTrue(rangeTree.isBalanced());
+	}
+	
+	@Test
+	public void test2() {
+		RangeTree<String> rangeTree = new RangeTree<>();
+		rangeTree.insert(CharacterRange.in(18, 101), "c");
+		rangeTree.insert(CharacterRange.in(7, 13), "b");
+		rangeTree.insert(CharacterRange.in(1, 4), "a");
 		assertTrue(rangeTree.isBalanced());
 	}
 	

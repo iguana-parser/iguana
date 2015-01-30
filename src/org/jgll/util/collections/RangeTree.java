@@ -14,10 +14,6 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	
 	private int countNodes;
 	
-	public RangeTree(CharacterRange range, T val) {
-		this.root = new Node<>(range.getStart(), range.getEnd(), val);;
-	}
-	
 	public Node<T> getRoot() {
 		return root;
 	}
@@ -44,9 +40,16 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	}
 	
 	private void insert(CharacterRange range, T val, Node<T> node) {		
+		Node<T> newNode = new Node<>(range.getStart(), range.getEnd(), val);
+		
+		if (root == null) {
+			root = newNode;
+			return;
+		}
+		
 		if (range.getStart() < node.start) {
 			if (node.left == null) {
-				addToLeft(node, new Node<>(range.getStart(), range.getEnd(), val));
+				addToLeft(node, newNode);
 				balance(node);
 			} else {
 				insert(range, val, node.left);
@@ -59,7 +62,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			} else {
 				insert(range, val, node.right);					
 			}
-		} 
+		}
 	}
 	
 	private void addToLeft(Node<T> parent, Node<T> newNode) {
@@ -77,8 +80,11 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	private void balance(Node<T> node) {
 		node.updateHeight();
 		if (!node.isBalanced()) {
-			if (node.right.isRightHeavy() || node.right.isBalanced()) {
+			if (node.right != null && (node.right.isRightHeavy() || node.right.isBalanced())) {
 				leftRotate(node);
+			}
+			if (node.left != null && (node.left.isLeftHeavy() || node.left.isBalanced())) {
+				rightRotate(node);
 			}
 		}
 		if (node.parent != null) {
@@ -93,7 +99,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	 *       / \          / \
 	 *      B   C        A   B
 	 */
-	private Node<T> leftRotate(Node<T> x) {
+	private void leftRotate(Node<T> x) {
 		Node<T> y = x.right;
 		Node<T> B = y.left;
 		y.left = x;
@@ -107,8 +113,6 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		
 		x.updateHeight();
 		y.updateHeight();
-		
-		return y;
 	}
 	
 	/**
@@ -119,7 +123,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	 *  A   B                B   C
 	 *      
 	 */
-	private Node<T> rightRotate(Node<T> x) {
+	private void rightRotate(Node<T> x) {
 		Node<T> y = x.left;
 		Node<T> B = y.right;
 		y.right = x;
@@ -133,8 +137,6 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		
 		x.updateHeight();
 		y.updateHeight();
-		
-		return x;
 	}
 	
 	public boolean isBalanced() {
