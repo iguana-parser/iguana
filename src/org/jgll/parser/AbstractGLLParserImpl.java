@@ -408,7 +408,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			if (env.isEmpty()) createGSSEdge(returnSlot, u, node, gssNode);
 			else createGSSEdge(returnSlot, u, node, gssNode, env);
 			
-			Environment newEnv = getEmptyEnvironment().store(nonterminal.getParameters(), data.getValues());
+			Environment newEnv = getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
 			
 			final GSSNode __gssNode = gssNode;
 			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), newEnv)));

@@ -6,21 +6,24 @@ public interface IEvaluatorContext {
 	
 	public void setEnvironment(Environment env);
 	
+	public Environment getEmptyEnvironment();
+	
+	
 	/**
 	 * 
 	 * Operations on environment
+	 * 
 	 */
-	
-	public Object lookupInEnvironment(String name);
+	public void popEnvironment();
 	
 	public void pushEnvironment();
 	
-	public void storeInEnvironment(String name, Object value);
+	public void declareVariable(String name, Object value);
 	
-	public void pushAndStoreInEnvironment(String name, Object value);
+	public void declareVariables(String[] names, Object[] values);
 	
-	public void pushAndStoreInEnvironment(Object... bindings);
+	public void storeVariable(String name, Object value);
 	
-	public Environment getEmptyEnvironment();
+	public Object lookupVariable(String name);
 
 }

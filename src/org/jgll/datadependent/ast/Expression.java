@@ -135,7 +135,7 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
-			Object value = ctx.lookupInEnvironment(name);
+			Object value = ctx.lookupVariable(name);
 			if (value == null) {
 				throw new RuntimeException("Undeclared variable: " + name);
 			}
@@ -186,7 +186,7 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
-			ctx.storeInEnvironment(id, exp.interpret(ctx));
+			ctx.storeVariable(id, exp.interpret(ctx));
 			return null;
 		}
 		

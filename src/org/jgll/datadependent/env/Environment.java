@@ -5,15 +5,15 @@ public interface Environment {
 	
 	public boolean isEmpty();
 	
+	public Environment pop();
+	
 	public Environment push();
 	
+	public Environment declare(String name, Object value);
+	
+	public Environment declare(String[] names, Object[] values);
+	
 	public Environment store(String name, Object value);
-	
-	public Environment store(String[] names, Object[] values);
-	
-	public Environment pushAndStore(String name, Object value);
-	
-	public Environment pushAndStore(Object... bindings);
 	
 	public Object lookup(String name);
 

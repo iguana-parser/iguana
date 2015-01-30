@@ -135,7 +135,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
 		if (label != null) {
-			env = env.store(label, sppfNode);
+			env = env.declare(label, sppfNode);
 		}
 		
 		// TODO: Support for return values

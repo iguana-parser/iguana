@@ -24,7 +24,7 @@ public class VariableDeclaration extends AbstractAST {
 		if (expression != null) {
 			value = expression.interpret(ctx);
 		}
-		ctx.storeInEnvironment(name, value);
+		ctx.declareVariable(name, value);
 		return null;
 	}
 	

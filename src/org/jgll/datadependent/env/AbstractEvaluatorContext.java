@@ -13,15 +13,11 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 	public void setEnvironment(Environment env) {
 		this.env = env;
 	}
-	
-	/**
-	 * 
-	 * Operations on environment
-	 */
+
 
 	@Override
-	public Object lookupInEnvironment(String name) {
-		return env.lookup(name);
+	public void popEnvironment() {
+		env = env.pop();
 	}
 
 	@Override
@@ -30,18 +26,23 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 	}
 
 	@Override
-	public void storeInEnvironment(String name, Object value) {
+	public void declareVariable(String name, Object value) {
+		env = env.declare(name, value);
+	}
+
+	@Override
+	public void declareVariables(String[] names, Object[] values) {
+		env = env.declare(names, values);
+	}
+
+	@Override
+	public void storeVariable(String name, Object value) {
 		env = env.store(name, value);
 	}
 
 	@Override
-	public void pushAndStoreInEnvironment(String name, Object value) {
-		env = env.pushAndStore(name, value);
+	public Object lookupVariable(String name) {
+		return env.lookup(name);
 	}
-
-	@Override
-	public void pushAndStoreInEnvironment(Object... bindings) {
-		env = env.pushAndStore(bindings);
-	}
-
+	
 }

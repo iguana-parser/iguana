@@ -6,12 +6,12 @@ import org.jgll.datadependent.env.Environment;
 public class PersistentEvaluatorContext extends AbstractEvaluatorContext {
 	
 	public PersistentEvaluatorContext() {
-		setEnvironment(PersistentEnvironment.empty);
+		setEnvironment(PersistentEnvironment.EMPTY);
 	}
 
 	@Override
 	public Environment getEmptyEnvironment() {
-		return PersistentEnvironment.empty;
+		return PersistentEnvironment.EMPTY;
 	}
 
 }
