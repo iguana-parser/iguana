@@ -1,7 +1,10 @@
 package org.jgll.grammar.symbol;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jgll.parser.HashFunctions;
@@ -32,13 +35,13 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	private CharacterRange(Builder builder) {
 		super(builder);
 		
-		if(builder.end < builder.start) throw new IllegalArgumentException("Start cannot be less than end.");
+		if (builder.end < builder.start) throw new IllegalArgumentException("Start cannot be less than end.");
 		
 		this.start = builder.start;
 		this.end = builder.end;
 	}
 
-	private static String getName(int start, int end) {
+	public static String getName(int start, int end) {
 		if (start == end) {
 			return Character.getName(start);
 		} else {
@@ -54,12 +57,16 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		return end;
 	}
 	
+	public boolean contains(int c) {
+		return start <= c && c <= end;
+	}
+	
 	public boolean contains(CharacterRange other) {
 		return start <= other.start && end >= other.end;
 	}
 	
 	public boolean overlaps(CharacterRange other) {
-		return end > other.start || other.end > start;
+		return !(end < other.start || other.end < start);
 	}
 
 	@Override
@@ -135,6 +142,60 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
+	
+	public static List<CharacterRange> toNonOverlapping(CharacterRange...ranges) {
+		return toNonOverlapping(Arrays.asList(ranges));
+	}
+	
+	public static List<CharacterRange> toNonOverlapping(List<CharacterRange> ranges) {
+		
+		if (ranges.size() < 2)
+			return ranges;
+		
+		Collections.sort(ranges);
+
+		List<CharacterRange> result = new ArrayList<>();
+		
+		Set<CharacterRange> overlapping = new HashSet<>();
+		
+		for (int i = 0; i < ranges.size(); i++) {
+			CharacterRange current = ranges.get(i);
+
+			if (i + 1 < ranges.size()) {
+				CharacterRange next = ranges.get(i + 1);
+				if (current.overlaps(next)) {
+					overlapping.add(current);
+					overlapping.add(next);
+				}
+			}
+			 else {
+				result.addAll(convertOverlapping(overlapping));
+				overlapping.clear();
+				result.add(current);
+			}
+		}
+
+		return result;
+	}
+	
+	private static List<CharacterRange> convertOverlapping(Set<CharacterRange> list) {
+		List<Integer> l = new ArrayList<>();
+		for (CharacterRange r : list) {
+			l.add(r.start);
+			l.add(r.end);
+		}
+		Collections.sort(l);
+		
+		List<CharacterRange> result = new ArrayList<>();
+		
+		int start = l.get(0);
+		for (int i = 1; i < l.size(); i++) {
+			result.add(CharacterRange.in(start, l.get(i)));
+			start = l.get(i) + 1;
+		}
+		
+		return result;
+	}
 
 	public static Builder builder(int start, int end) {
 		return new Builder(start, end);
@@ -144,7 +205,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
     public SymbolBuilder<? extends Symbol> copyBuilder() {
         return new Builder(this);
     }
-	
+    
 	@Override
 	public String getConstructorCode() {
 		return CharacterRange.class.getSimpleName() + ".builder(" + start + ", " + end + ")" + super.getConstructorCode() + ".build()";

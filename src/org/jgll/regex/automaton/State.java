@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.Input;
 
 public class State implements Serializable {
 
@@ -38,27 +37,16 @@ public class State implements Serializable {
 	
 	private int id;
 	
-	private Set<Action> actions;
-	
 	public State() {
-		this(StateType.NORMAL, new HashSet<Action>());
+		this(StateType.NORMAL);
 	}
 	
 	public State(StateType stateType) {
-		this(stateType, new HashSet<Action>());
-	}
-	
-	public State(Set<Action> actions) {
-		this(StateType.NORMAL, actions);
-	}
-	
-	public State(StateType stateType, Set<Action> actions) {
 		this.transitions = new HashSet<>();
 		this.transitionsMap = new HashMap<>();
 		this.stateType = stateType;
 		this.epsilonClosure = new HashSet<>();
 		this.regularExpressions = new HashSet<>();
-		this.actions = actions;
 	}
 	
 	public Set<Transition> getTransitions() {
@@ -157,31 +145,7 @@ public class State implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "State" + id + " " + (actions.isEmpty() ? "" : actions);
+		return "State" + id;
 	}
-	
-	public void addAction(Action action) {
-		if (action != null) {
-			actions.add(action);
-		}
-	}
-	
-	public void addActions(Set<Action> actions) {
-		this.actions.addAll(actions);
-	}
-	
-	public boolean executeActions(Input input, int index) {
-		
-		for (Action action : actions) {
-			if(action.execute(input, index)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public Set<Action> getActions() {
-		return actions;
-	}
+
 }

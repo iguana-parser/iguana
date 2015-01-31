@@ -3,8 +3,10 @@ package org.jgll.regex.automaton;
 import static org.jgll.util.generator.GeneratorUtil.*;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,7 +63,7 @@ public class AutomatonOperations {
 				// The state should have been created before.
 				assert source != null;
 				
-				Transition transition = new Transition(r.start, r.end, newState, r.actions);
+				Transition transition = new Transition(r.start, r.end, newState);
 				source.addTransition(transition);
 				
 				if(!visitedStates.contains(newStatesSet)) {
@@ -121,56 +123,47 @@ public class AutomatonOperations {
 		
 		return new Automaton(startState, automaton.getName());
 	}
+	
+	private List<Transition> doit(List<Transition> transitions) {
+		
+		if (transitions.size() < 2)
+			return transitions;
+		
+		Collections.sort(transitions);
+
+		List<Transition> result = new ArrayList<>();
+		
+		Set<Transition> overlapping = new HashSet<>();
+		
+		for (int i = 0; i < transitions.size(); i++) {
+			Transition current = transitions.get(i);
+
+			if (i + 1 < transitions.size()) {
+				Transition next = transitions.get(i + 1);
+				if (current.overlaps(next)) {
+					overlapping.add(next);
+					overlapping.add(next);
+				}
+			}
+			 else {
+				result.addAll(convertOverlapping(overlapping));
+				overlapping.clear();
+				result.add(current);
+			}
+			i++;
+		}
+
+		return result;
+	}
+	
+	private List<Transition> convertOverlapping(Set<Transition> list) {
+		return null;
+	}
 
 	private static void addProperties(Set<State> initialState, State newState) {
 		for (State s : initialState) {
-			newState.addActions(s.getActions());
 			newState.addRegularExpressions(s.getRegularExpressions());
 		}
-	}
-	
-	public static RunnableAutomaton createRunnableAutomaton(Automaton a) {
-		
-		final Map<State, RunnableState> map = new HashMap<>();
-		
-		// Create a new runnable state for each state
-		for (State state : a.getAllStates()) {
-			if (state.getCountTransitions() > 0) {
-				map.put(state, new RunnableState(state.getId(), state.getStateType(), state.getActions()));
-			} else {
-				map.put(state, new FinalRunnableState(state.getId(), state.getStateType()));
-			}
-		}
-		
-		final Map<Transition, RunnableState> transitionsMap = new HashMap<>();
-		
-		AutomatonVisitor.visit(a, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				for (Transition t : state.getTransitions()) {
-					transitionsMap.put(t, map.get(t.getDestination()));
-				}
-			}
-		});
-
-		for (Entry<State, RunnableState> e : map.entrySet()) {
-			Transition[] sortedTransitions = e.getKey().getSortedTransitions();
-			
-			if (sortedTransitions.length > 0) {
-				Transitions transitions;
-				
-				if (sortedTransitions[sortedTransitions.length - 1].getEnd() - sortedTransitions[0].getStart() <= Character.MAX_VALUE) {
-					transitions = new ShortIntervalTransitions(sortedTransitions, transitionsMap);
-				} else {
-					transitions = new LargeIntervalTransitions(sortedTransitions, transitionsMap);
-				}
-				
-				e.getValue().setTransitions(transitions);				
-			}
-		}
-		
-		return new DefaultRunnableAutomaton(map.get(a.getStartState()));
 	}
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
@@ -192,26 +185,22 @@ public class AutomatonOperations {
 		int start;
 		int end;
 		Set<State> states;
-		Set<Action> actions;
 		
-		public MoveResult(int start, int end, Set<State> states, Set<Action> actions) {
+		public MoveResult(int start, int end, Set<State> states) {
 			this.start = start;
 			this.end = end;
 			this.states = states;
-			this.actions = actions;
 		}
 		
 		@Override
 		public String toString() {
-			return String.format("(%d, %d, %s, %s)", start, end, states, actions);
+			return String.format("(%d, %d, %s, %s)", start, end, states);
 		}
 	}
 	
 	private static Set<MoveResult> move(Set<State> states, Map<Tuple<State, Integer>, Set<State>> cache) {
 		
-		Map<Integer, Set<Action>> transitionActions = new HashMap<>();
-		
-		int[] intervals = getIntervalsOfStates(states, transitionActions);
+		int[] intervals = getIntervalsOfStates(states);
 		
 		Set<MoveResult> resultSet = new HashSet<>();
 		
@@ -239,13 +228,11 @@ public class AutomatonOperations {
 			
 			// Creating the transitions for the reachable states based on the transition intervals.
 			if(!reachableStates.isEmpty()) {
-				Set<Action> actions = transitionActions.get(intervals[i]);
-				actions = actions == null ? new HashSet<Action>() : actions;
 				if(i + 1 < intervals.length) {
-					resultSet.add(new MoveResult(intervals[i], intervals[i + 1] - 1, reachableStates, actions));
+					resultSet.add(new MoveResult(intervals[i], intervals[i + 1] - 1, reachableStates));
 				} 
 				if(i + 1 == intervals.length) {
-					resultSet.add(new MoveResult(intervals[i] - 1, intervals[i] - 1, reachableStates, actions));
+					resultSet.add(new MoveResult(intervals[i] - 1, intervals[i] - 1, reachableStates));
 				}
 			}			
 		}
@@ -511,18 +498,18 @@ public class AutomatonOperations {
 		return merged;
 	}
 	
-	public static int[] getIntervalsOfStates(Set<State> states, Map<Integer, Set<Action>> map) {
+	public static int[] getIntervalsOfStates(Set<State> states) {
 		
 		Set<Transition> transitions = new HashSet<>();
 		for (State state : states) {
 			transitions.addAll(state.getTransitions());
 		}
 		
-		return getIntervals(transitions, map);
+		return getIntervals(transitions);
 		
 	}
 	
-	public static int[] getIntervals(Set<Transition> transitions, Map<Integer, Set<Action>> map) {
+	public static int[] getIntervals(Set<Transition> transitions) {
 		
 		Set<Integer> set = new HashSet<>();
 		
@@ -541,54 +528,16 @@ public class AutomatonOperations {
 			result[i] = array[i];
 		}
 		
-		for (Transition transition : transitions) {
-			for (int i : result) {
-
-				if (transition.getStart() <= i && i <= transition.getEnd() ) {
-					Set<Action> s = map.get(i);
-					if (s == null) {
-						s = new HashSet<>();
-						map.put(i, s);
-					}
-					s.addAll(transition.getActions());
-				} else {
-					Set<Action> s = map.get(i);
-					if (s == null) {
-						s = new HashSet<>();
-						map.put(i, s);
-					}
-				}
-			}
-			
-			if (result.length > 0) {
-				int last = result[result.length - 1] - 1;
-				if (transition.getStart() <= last && last <= transition.getEnd()) {
-					Set<Action> s = map.get(last);
-					if (s == null) {
-						s = new HashSet<>();
-						map.put(last, s);
-					}
-					s.addAll(transition.getActions());
-				} else {
-					Set<Action> s = map.get(last);
-					if (s == null) {
-						s = new HashSet<>();
-						map.put(last, s);
-					}
-				}
-			}
- 		}
-		
 		return result;
 	}
 
 	
 	public static int[] getIntervals(Automaton automaton) {		
-		return getIntervals(getAllTransitions(automaton.getStartState()), new HashMap<Integer, Set<Action>>());
+		return getIntervals(getAllTransitions(automaton.getStartState()));
 	}
 	
 	public static int[] getIntervals(State startState) {		
-		return getIntervals(getAllTransitions(startState), new HashMap<Integer, Set<Action>>());
+		return getIntervals(getAllTransitions(startState));
 	}	
 	
 	public static Set<Transition> getAllTransitions(Automaton a) {
@@ -898,13 +847,12 @@ public class AutomatonOperations {
 		
 		System.out.println("diff " + a1 + " " + a2);
 		
-		Map<Integer, Set<Action>> transitionActionsMap = new HashMap<>();
 		Set<Transition> transitions = getAllTransitions(a1);
 		transitions.addAll(getAllTransitions(a2));
-		int[] intervals = getIntervals(transitions, transitionActionsMap);
+		int[] intervals = getIntervals(transitions);
 		
-		a1 = makeComplete(a1, intervals, transitionActionsMap);
-		a2 = makeComplete(a2, intervals, transitionActionsMap);
+		a1 = makeComplete(a1, intervals);
+		a2 = makeComplete(a2, intervals);
 		
 		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
 		
@@ -959,17 +907,14 @@ public class AutomatonOperations {
 		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
-				Set<Action> actions = states1[i].getActions();
-				actions.addAll(states2[j].getActions());
-				newStates.put(Tuple.of(i, j), new State(actions));
+				newStates.put(Tuple.of(i, j), new State());
 			}
 		}
 		
 		Set<Transition> transitions = getAllTransitions(a1);
 		transitions.addAll(getAllTransitions(a2));
 		
-		Map<Integer, Set<Action>> map = new HashMap<>();
-		int[] intervals = getIntervals(transitions, map);
+		int[] intervals = getIntervals(transitions);
 		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
@@ -995,8 +940,7 @@ public class AutomatonOperations {
 					State s2 = reachableStates2.iterator().next();
 					state.addTransition(new Transition(intervals[t], 
 													   intervals[t + 1] - 1, 
-													   newStates.get(Tuple.of(s1.getId(), s2.getId())),
-													   map.get(intervals[t])));
+													   newStates.get(Tuple.of(s1.getId(), s2.getId()))));
 				}
 				
 			}
@@ -1015,7 +959,7 @@ public class AutomatonOperations {
 			
 			@Override
 			public void visit(State state) {
-				State newState = new State(state.getActions());
+				State newState = new State();
 				
 				newState.addRegularExpressions(state.getRegularExpressions());
 				
@@ -1036,8 +980,7 @@ public class AutomatonOperations {
 					State newState = newStates.get(state);
 					newState.addTransition(new Transition(transition.getStart(), 
 														  transition.getEnd(), 
-														  newStates.get(transition.getDestination()),
-														  transition.getActions()));
+														  newStates.get(transition.getDestination())));
 				}
 			}
 		});
@@ -1113,7 +1056,7 @@ public class AutomatonOperations {
 	 * Makes the transition function complete, i.e., from each state 
 	 * there will be all outgoing transitions.
 	 */
-	public static Automaton makeComplete(Automaton a, final int[] intervals, final Map<Integer, Set<Action>> map) {
+	public static Automaton makeComplete(Automaton a, final int[] intervals) {
 		
 		a.determinize();
 		a = a.copy();
@@ -1127,9 +1070,9 @@ public class AutomatonOperations {
 				for(int i = 0; i < intervals.length; i++) {
 					if(!state.hasTransition(intervals[i])) {
 						if(i + 1 == intervals.length) {
-							state.addTransition(new Transition(intervals[i] - 1, intervals[i] - 1, dummyState, map.get(intervals[i] - 1)));
+							state.addTransition(new Transition(intervals[i] - 1, intervals[i] - 1, dummyState));
 						} else {
-							state.addTransition(new Transition(intervals[i], intervals[i + 1] - 1 , dummyState, map.get(intervals[i])));
+							state.addTransition(new Transition(intervals[i], intervals[i + 1] - 1 , dummyState));
 						}
 					}
 				}

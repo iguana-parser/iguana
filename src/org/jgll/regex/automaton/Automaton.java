@@ -257,7 +257,7 @@ public class Automaton implements Serializable {
 			return runnableAutomaton;
 		
 		determinize();
-		runnableAutomaton = AutomatonOperations.createRunnableAutomaton(this);
+//		runnableAutomaton = AutomatonOperations.createRunnableAutomaton(this);
 		return runnableAutomaton;
 	}
 	
