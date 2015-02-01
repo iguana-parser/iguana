@@ -55,5 +55,10 @@ public class DataDependentCondition extends Condition {
 	static public DataDependentCondition predicate(org.jgll.datadependent.ast.Expression expression) {
 		return new DataDependentCondition(ConditionType.DATA_DEPENDENT, expression);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("[%s]", expression);
+	}
 
 }
