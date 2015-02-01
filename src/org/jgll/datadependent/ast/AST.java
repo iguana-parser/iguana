@@ -50,6 +50,17 @@ public class AST {
 		};
 	}
 	
+	static public Expression less(Expression lhs, Expression rhs) {
+		return new Expression.Less(lhs, rhs);
+	}
+	
+	static public Expression greater(Expression lhs, Expression rhs) {
+		return new Expression.Greater(lhs, rhs);
+	}
+	
+	static public Expression equal(Expression lhs, Expression rhs) {
+		return new Expression.Equal(lhs, rhs);
+	}
 	
 	/**
 	 * 
