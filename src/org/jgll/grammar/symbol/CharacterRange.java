@@ -35,7 +35,8 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	private CharacterRange(Builder builder) {
 		super(builder);
 		
-		if (builder.end < builder.start) throw new IllegalArgumentException("Start cannot be less than end.");
+		if (builder.end < builder.start) 
+			throw new IllegalArgumentException("Start cannot be less than end.");
 		
 		this.start = builder.start;
 		this.end = builder.end;
@@ -159,30 +160,34 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		Set<CharacterRange> overlapping = new HashSet<>();
 		
 		for (int i = 0; i < ranges.size(); i++) {
+			
 			CharacterRange current = ranges.get(i);
+			overlapping.add(current);
 
 			if (i + 1 < ranges.size()) {
 				CharacterRange next = ranges.get(i + 1);
-				if (current.overlaps(next)) {
-					overlapping.add(current);
-					overlapping.add(next);
+				if (!current.overlaps(next)) {
+					result.addAll(convertOverlapping(overlapping));
+					overlapping.clear();
 				}
 			}
-			 else {
-				result.addAll(convertOverlapping(overlapping));
-				overlapping.clear();
-				result.add(current);
-			}
 		}
-
+		
+		result.addAll(convertOverlapping(overlapping));
+		
 		return result;
 	}
 	
-	private static List<CharacterRange> convertOverlapping(Set<CharacterRange> list) {
+	private static List<CharacterRange> convertOverlapping(Set<CharacterRange> ranges) {
+		
+		if (ranges.isEmpty())
+			return Collections.emptyList();
+		
 		List<Integer> l = new ArrayList<>();
-		for (CharacterRange r : list) {
-			l.add(r.start);
-			l.add(r.end);
+		for (CharacterRange r : ranges) {
+			l.add(r.start - 1);
+			if (r.end > r.start)
+				l.add(r.end);
 		}
 		Collections.sort(l);
 		

@@ -30,9 +30,18 @@ public class RangeTest {
 		assertTrue(r1.overlaps(r2));
 		assertTrue(r2.overlaps(r1));
 	}
-	
+
 	@Test
 	public void overlappingToNonOverlapping1() {
+		// 1-5 3-7
+		CharacterRange r1 = CharacterRange.in(1, 5);
+		CharacterRange r2 = CharacterRange.in(3, 7);
+		List<CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2);
+		System.out.println(nonOverlapping);
+	}
+	
+	@Test
+	public void overlappingToNonOverlapping2() {
 		// 1-7 5-13 6-12 17-21
 		CharacterRange r2 = CharacterRange.in(5, 13);
 		CharacterRange r4 = CharacterRange.in(17, 21);
@@ -46,7 +55,7 @@ public class RangeTest {
 	}
 	
 	@Test
-	public void overlappingToNonOverlapping2() {
+	public void overlappingToNonOverlapping3() {
 		// 1-7 3-5 4-4
 		CharacterRange r1 = CharacterRange.in(1, 7);
 		CharacterRange r2 = CharacterRange.in(3, 5);
@@ -57,6 +66,37 @@ public class RangeTest {
 		assertEquals(Arrays.asList(CharacterRange.in(1, 3), CharacterRange.in(4, 4), 
 								   CharacterRange.in(5, 5), CharacterRange.in(6, 7)), nonOverlapping);
 	}
+	
+	@Test
+	public void overlappingToNonOverlapping4() {
+		// 11-12 1-3 5-7
+		CharacterRange r1 = CharacterRange.in(11, 12);
+		CharacterRange r2 = CharacterRange.in(1, 3);
+		CharacterRange r3 = CharacterRange.in(5, 7);
+		List<CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3);
+		
+		// 1-3 5-7 11-12
+		assertEquals(Arrays.asList(CharacterRange.in(1, 3), CharacterRange.in(5, 7), 
+								   CharacterRange.in(11, 12)), nonOverlapping);
+	}
+	
+	@Test
+	public void overlappingToNonOverlapping5() {
+		// 7-9 4-11 4-10 1-12 3-6 1-2
+		CharacterRange r1 = CharacterRange.in(7, 9);
+		CharacterRange r2 = CharacterRange.in(4, 11);
+		CharacterRange r3 = CharacterRange.in(4, 10);
+		CharacterRange r4 = CharacterRange.in(1, 12);
+		CharacterRange r5 = CharacterRange.in(3, 6);
+		CharacterRange r6 = CharacterRange.in(1, 2);
+		List<CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3, r4, r5, r6);
+		
+		// 1-3 5-7 11-12
+		assertEquals(Arrays.asList(CharacterRange.in(1, 3), 
+								   CharacterRange.in(5, 7), 
+								   CharacterRange.in(11, 12)), nonOverlapping);
+	}
+
 	
 	@Test
 	public void test() {
