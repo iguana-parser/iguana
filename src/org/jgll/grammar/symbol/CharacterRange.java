@@ -183,17 +183,17 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		if (ranges.isEmpty())
 			return Collections.emptyList();
 		
-		List<Integer> l = new ArrayList<>();
+		Set<Integer> set = new HashSet<>();
 		for (CharacterRange r : ranges) {
-			l.add(r.start - 1);
-			if (r.end > r.start)
-				l.add(r.end);
+			set.add(r.start - 1);
+			set.add(r.end);
 		}
+		List<Integer> l = new ArrayList<>(set);
 		Collections.sort(l);
 		
 		List<CharacterRange> result = new ArrayList<>();
 		
-		int start = l.get(0);
+		int start = l.get(0) + 1;
 		for (int i = 1; i < l.size(); i++) {
 			result.add(CharacterRange.in(start, l.get(i)));
 			start = l.get(i) + 1;

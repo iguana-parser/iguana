@@ -37,7 +37,9 @@ public class RangeTest {
 		CharacterRange r1 = CharacterRange.in(1, 5);
 		CharacterRange r2 = CharacterRange.in(3, 7);
 		List<CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2);
-		System.out.println(nonOverlapping);
+		
+		// 1-2 3-5 6-7
+		assertEquals(Arrays.asList(CharacterRange.in(1, 2), CharacterRange.in(3, 5), CharacterRange.in(6, 7)), nonOverlapping);
 	}
 	
 	@Test
@@ -49,8 +51,8 @@ public class RangeTest {
 		CharacterRange r3 = CharacterRange.in(6, 12);
 		List<CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3, r4);
 		
-		// 1-5 6-6 7-7 8-12 13-13 17-21
-		assertEquals(Arrays.asList(CharacterRange.in(1, 5), CharacterRange.in(6, 6), CharacterRange.in(7, 7),
+		// 1-4 5-5 6-7 8-12 13-13 17-21
+		assertEquals(Arrays.asList(CharacterRange.in(1, 4), CharacterRange.in(5, 5), CharacterRange.in(6, 7),
 					  CharacterRange.in(8, 12), CharacterRange.in(13, 13), CharacterRange.in(17, 21)), nonOverlapping);
 	}
 	
@@ -62,8 +64,8 @@ public class RangeTest {
 		CharacterRange r3 = CharacterRange.in(4, 4);
 		List<CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3);
 		
-		// 1-3 4-4 5-5 6-7
-		assertEquals(Arrays.asList(CharacterRange.in(1, 3), CharacterRange.in(4, 4), 
+		// 1-2 3-3 4-4 5-5 6-7
+		assertEquals(Arrays.asList(CharacterRange.in(1, 2), CharacterRange.in(3, 3), CharacterRange.in(4, 4), 
 								   CharacterRange.in(5, 5), CharacterRange.in(6, 7)), nonOverlapping);
 	}
 	
@@ -91,10 +93,11 @@ public class RangeTest {
 		CharacterRange r6 = CharacterRange.in(1, 2);
 		List<CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3, r4, r5, r6);
 		
-		// 1-3 5-7 11-12
-		assertEquals(Arrays.asList(CharacterRange.in(1, 3), 
-								   CharacterRange.in(5, 7), 
-								   CharacterRange.in(11, 12)), nonOverlapping);
+		// 1-2 3-3 4-6 7-9 10-10 11-11 12-12
+		assertEquals(Arrays.asList(CharacterRange.in(1, 2), CharacterRange.in(3, 3),
+								   CharacterRange.in(4, 6), CharacterRange.in(7, 9),
+								   CharacterRange.in(10, 10), CharacterRange.in(11, 11),
+								   CharacterRange.in(12, 12)), nonOverlapping);
 	}
 
 	
