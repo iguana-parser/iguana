@@ -1,6 +1,5 @@
 package org.jgll.parser.datadependent;
 
-import static org.jgll.datadependent.ast.AST.equal;
 import static org.jgll.datadependent.ast.AST.greater;
 import static org.jgll.datadependent.ast.AST.integer;
 import static org.jgll.datadependent.ast.AST.var;
@@ -25,11 +24,17 @@ import org.junit.Test;
  * @author Anastasia Izmaylova
  * 
  * 
- * S ::= E(3)
+ * S ::= E(0,0)
  * 
- * E(p) ::= [p > 2] E(3) '*' E(2) left
- *        > [p > 1] E(2) '+' E(1) left 
- *        | 'a'
+ * E(l,r) ::= [4 > l, 4 > r] E(4,r) '^' E(l,3)
+ *          | [3 > r] E(l,r) '-'
+ *          | 'a'
+ *          
+ *******
+ *          
+ * E(l,r) ::= [4 > l] [4 > r] E(3,r) '+' E(l,4)
+ *          | [3 > l] '-' E(l,r)
+ *          | 'a'
  *        
  *
  */
@@ -43,19 +48,21 @@ public class Test4 {
 		
 		Nonterminal S = Nonterminal.withName("S");
 		
-		Nonterminal E = Nonterminal.builder("E").addParameters("p").build();
+		Nonterminal E = Nonterminal.builder("E").addParameters("l", "r").build();
 		
-		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(3)).build()).build();
+		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
 		Rule r1_1 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(3)).addPreCondition(predicate(greater(var("p"), integer(2)))).build())
-					.addSymbol(Character.from('*'))
-					.addSymbol(Nonterminal.builder(E).apply(integer(2)).build()).build();
+					.addSymbol(Nonterminal.builder(E).apply(integer(4), var("r"))
+							.addPreCondition(predicate(greater(integer(4), var("l"))))
+							.addPreCondition(predicate(greater(integer(4), var("r")))).build())
+					.addSymbol(Character.from('^'))
+					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(3)).build()).build();
 		
 		Rule r1_2 = Rule.withHead(E)
-				.addSymbol(Nonterminal.builder(E).apply(integer(2)).addPreCondition(predicate(greater(var("p"), integer(1)))).build())
-				.addSymbol(Character.from('+'))
-				.addSymbol(Nonterminal.builder(E).apply(integer(1)).build()).build();
+				.addSymbol(Nonterminal.builder(E).apply(var("l"), var("r"))
+						.addPreCondition(predicate(greater(integer(3), var("r")))).build())
+				.addSymbol(Character.from('-')).build();
 		
 		Rule r1_3 = Rule.withHead(E).addSymbol(Character.from('a')).build();
 		
@@ -67,7 +74,7 @@ public class Test4 {
 	public void test() {
 		System.out.println(grammar);
 		
-		Input input = Input.fromString("a+a*a+a");
+		Input input = Input.fromString("a^a-^a");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
