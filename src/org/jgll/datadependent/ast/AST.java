@@ -58,6 +58,10 @@ public class AST {
 		return new Expression.Greater(lhs, rhs);
 	}
 	
+	static public Expression greaterEq(Expression lhs, Expression rhs) {
+		return new Expression.GreaterThanEqual(lhs, rhs);
+	}
+	
 	static public Expression equal(Expression lhs, Expression rhs) {
 		return new Expression.Equal(lhs, rhs);
 	}

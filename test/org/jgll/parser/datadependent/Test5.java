@@ -30,16 +30,13 @@ import org.junit.Test;
  * 
  * S ::= E(0,0)
  * 
- * E(l,r) ::= [3 >= l, 3 >= r] E(4,r) '^' E(0,3)
- *          | [2 >= r] E(0,0) '-'
+ * E(l,r) ::= [3 >= l, 3 >= r] E(3,0) '+' E(l,4)
+ *          | [2 >= l] '-' E(0,0)
  *          | 'a'
- *
- * 1st alternative: 
- * 		E(4,r): right (3 - left), r - can be changed by a parent
- * 		E(0,3): right (4 - left)
+ * 
  */
 
-public class Test4 {
+public class Test5 {
 	
 	private Grammar grammar;
 
@@ -53,16 +50,16 @@ public class Test4 {
 		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
 		Rule r1_1 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(4), var("r"))
+					.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
 							.addPreCondition(predicate(greaterEq(integer(3), var("l"))))
 							.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
-					.addSymbol(Character.from('^'))
-					.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(3)).build()).build();
+					.addSymbol(Character.from('+'))
+					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
 		
 		Rule r1_2 = Rule.withHead(E)
-				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0))
-						.addPreCondition(predicate(greaterEq(integer(2), var("r")))).build())
-				.addSymbol(Character.from('-')).build();
+				.addSymbol(Character.builder('-')
+					.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
+				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
 		Rule r1_3 = Rule.withHead(E).addSymbol(Character.from('a')).build();
 		
@@ -74,7 +71,8 @@ public class Test4 {
 	public void test() {
 		System.out.println(grammar);
 		
-		Input input = Input.fromString("a^a-^a");
+		Input input = Input.fromString("a+-a+a");
+		// Input input = Input.fromString("a+a+a");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
