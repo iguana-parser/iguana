@@ -17,20 +17,22 @@ public class Transition implements Comparable<Transition>, Serializable {
 	private int id;
 	
 	public Transition(int start, int end, State destination) {
-		
-		if(end < start) 		
-			throw new IllegalArgumentException("start cannot be less than end.");
-		
-		if(destination == null) 
-			throw new IllegalArgumentException("Destination cannot be null.");
-		
-		
-		this.range = CharacterRange.in(start, end);
-		this.destination = destination;
+		this(CharacterRange.in(start, end), destination);
 	}
 	
 	public Transition(int c, State destination) {
 		this(c, c, destination);
+	}
+	
+	public Transition(CharacterRange range, State destination) {
+		if (range.getEnd() < range.getStart())
+			throw new IllegalArgumentException("start cannot be less than end.");
+		
+		if (destination == null) 
+			throw new IllegalArgumentException("Destination cannot be null.");
+
+		this.range = range;
+		this.destination = destination;
 	}
 	
 	public static Transition epsilonTransition(State destination) {
@@ -84,13 +86,11 @@ public class Transition implements Comparable<Transition>, Serializable {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(!(obj instanceof Transition)) {
+		if(!(obj instanceof Transition))
 			return false;
-		}
 		
 		Transition other = (Transition) obj;
 		

@@ -3,8 +3,10 @@ package org.jgll.regex.automaton;
 import static org.jgll.util.generator.GeneratorUtil.*;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.util.Tuple;
 
 import com.google.common.collect.Multimap;
@@ -467,14 +470,38 @@ public class AutomatonOperations {
 	}
 	
 	public static int[] getIntervalsOfStates(Set<State> states) {
-		
 		Set<Transition> transitions = new HashSet<>();
 		for (State state : states) {
 			transitions.addAll(state.getTransitions());
 		}
 		
 		return getIntervals(transitions);
+	}
+	
+	private static Multimap<CharacterRange, CharacterRange> getNonOverlappingRanges(Set<Transition> transitions) {
+		Set<CharacterRange> characterRanges = new HashSet<>();
+		for (Transition t : transitions) {
+			characterRanges.add(t.getRange());
+		}
 		
+		return CharacterRange.toNonOverlapping(new ArrayList<>(characterRanges));
+	}
+	
+	private static Automaton convert(Automaton automaton) {
+		Multimap<CharacterRange, CharacterRange> nonOverlappingRanges = getNonOverlappingRanges(AutomatonOperations.getAllTransitions(automaton));
+		
+		Set<State> states = getAllStates(automaton);
+		
+		for (State state : states) {
+			for (Transition transition : state.getTransitions()) {
+				state.removeTransition(transition);
+				for (CharacterRange range : nonOverlappingRanges.get(transition.getRange())) {
+					state.addTransition(new Transition(range, transition.getDestination()));
+				}
+			}
+		}
+		
+		return new Automaton(automaton.getStartState());
 	}
 	
 	public static int[] getIntervals(Set<Transition> transitions) {
