@@ -30,7 +30,7 @@ import org.junit.Test;
  * 
  * S ::= E(0,0)
  * 
- * E(l,r) ::= [3 >= l, 3 >= r] E(4,r) '^' E(0,3)
+ * E(l,r) ::= [3 >= l, 3 >= r] E(4,r) '^' E(l,3)
  *          | [2 >= r] E(0,0) '-'
  *          | 'a'
  *
@@ -80,7 +80,11 @@ public class Test4 {
 	public void test() {
 		System.out.println(grammar);
 		
-		Input input = Input.fromString("a^a-^a");
+		 Input input = Input.fromString("a^a-^a");
+		// Input input = Input.fromString("a^a^a");
+		// Input input = Input.fromString("a^a-");
+		// Input input = Input.fromString("a-^a");
+		
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
