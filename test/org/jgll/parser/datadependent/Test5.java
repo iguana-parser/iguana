@@ -34,6 +34,12 @@ import org.junit.Test;
  *          | [2 >= l] '-' E(0,0)
  *          | 'a'
  * 
+ * 			  E(0,0)
+ *           /   |   \
+ *       E(3,0)  +  E(0,4)
+ *      /   |   \
+ *  E(3,0)  +  E(3,4)
+ * 
  */
 
 public class Test5 {

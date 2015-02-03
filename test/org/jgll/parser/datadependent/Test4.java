@@ -36,7 +36,13 @@ import org.junit.Test;
  *
  * 1st alternative: 
  * 		E(4,r): right (3 - left), r - can be changed by a parent
- * 		E(0,3): right (4 - left)
+ * 		E(0,3): right (4 - left), i.e.,
+ * 			  E(0,0)
+ *           /   |   \
+ *       E(4,0)  ^  E(0,3)
+ *                 /   |   \
+ *             E(4,3)  ^  E(0,3)
+ *
  */
 
 public class Test4 {
