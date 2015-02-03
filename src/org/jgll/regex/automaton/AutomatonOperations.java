@@ -3,10 +3,8 @@ package org.jgll.regex.automaton;
 import static org.jgll.util.generator.GeneratorUtil.*;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +14,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.util.Tuple;
+
+import com.google.common.collect.Multimap;
 
 public class AutomatonOperations {
 	
@@ -124,42 +124,6 @@ public class AutomatonOperations {
 		return new Automaton(startState, automaton.getName());
 	}
 	
-	private List<Transition> doit(List<Transition> transitions) {
-		
-		if (transitions.size() < 2)
-			return transitions;
-		
-		Collections.sort(transitions);
-
-		List<Transition> result = new ArrayList<>();
-		
-		Set<Transition> overlapping = new HashSet<>();
-		
-		for (int i = 0; i < transitions.size(); i++) {
-			Transition current = transitions.get(i);
-
-			if (i + 1 < transitions.size()) {
-				Transition next = transitions.get(i + 1);
-				if (current.overlaps(next)) {
-					overlapping.add(next);
-					overlapping.add(next);
-				}
-			}
-			 else {
-				result.addAll(convertOverlapping(overlapping));
-				overlapping.clear();
-				result.add(current);
-			}
-			i++;
-		}
-
-		return result;
-	}
-	
-	private List<Transition> convertOverlapping(Set<Transition> list) {
-		return null;
-	}
-
 	private static void addProperties(Set<State> initialState, State newState) {
 		for (State s : initialState) {
 			newState.addRegularExpressions(s.getRegularExpressions());
@@ -496,6 +460,10 @@ public class AutomatonOperations {
 		Arrays.sort(merged);
 		
 		return merged;
+	}
+	
+	public Multimap<Transition, Transition> toNonOverlapping(Iterable<Transition> transitions) {
+		return null;
 	}
 	
 	public static int[] getIntervalsOfStates(Set<State> states) {

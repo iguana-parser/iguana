@@ -14,6 +14,10 @@ import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.Multimap;
+
 
 /**
  * 
@@ -144,18 +148,21 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		return Collections.emptySet();
 	}
 	
-	public static List<CharacterRange> toNonOverlapping(CharacterRange...ranges) {
+	public static Multimap<CharacterRange, CharacterRange> toNonOverlapping(CharacterRange...ranges) {
 		return toNonOverlapping(Arrays.asList(ranges));
 	}
 	
-	public static List<CharacterRange> toNonOverlapping(List<CharacterRange> ranges) {
+	public static Multimap<CharacterRange, CharacterRange> toNonOverlapping(List<CharacterRange> ranges) {
 		
-		if (ranges.size() < 2)
-			return ranges;
+		if (ranges.size() == 0)
+			return ImmutableListMultimap.of();
+		
+		if (ranges.size() == 1) 
+			return ImmutableListMultimap.of(ranges.get(0), ranges.get(0));
 		
 		Collections.sort(ranges);
 
-		List<CharacterRange> result = new ArrayList<>();
+		Multimap<CharacterRange, CharacterRange> result = ArrayListMultimap.create();
 		
 		Set<CharacterRange> overlapping = new HashSet<>();
 		
@@ -167,21 +174,21 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 			if (i + 1 < ranges.size()) {
 				CharacterRange next = ranges.get(i + 1);
 				if (!current.overlaps(next)) {
-					result.addAll(convertOverlapping(overlapping));
+					result.putAll(convertOverlapping(overlapping));
 					overlapping.clear();
 				}
 			}
 		}
 		
-		result.addAll(convertOverlapping(overlapping));
+		result.putAll(convertOverlapping(overlapping));
 		
 		return result;
 	}
 	
-	private static List<CharacterRange> convertOverlapping(Set<CharacterRange> ranges) {
+	private static Multimap<CharacterRange, CharacterRange> convertOverlapping(Set<CharacterRange> ranges) {
 		
 		if (ranges.isEmpty())
-			return Collections.emptyList();
+			return ImmutableListMultimap.of();
 		
 		Set<Integer> set = new HashSet<>();
 		for (CharacterRange r : ranges) {
@@ -199,7 +206,15 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 			start = l.get(i) + 1;
 		}
 		
-		return result;
+		Multimap<CharacterRange, CharacterRange> rangesMap = ArrayListMultimap.create();
+		for (CharacterRange r1 : ranges) {
+			for (CharacterRange r2 : result) {
+				if (r1.contains(r2))
+					rangesMap.put(r1, r2);
+			}
+		}
+		
+		return rangesMap;
 	}
 
 	public static Builder builder(int start, int end) {
