@@ -1,12 +1,9 @@
 package org.jgll.regex.automaton;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,21 +11,94 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.util.Tuple;
-
-import com.google.common.collect.Multimap;
 
 public class AutomatonOperations {
 	
-	public static Automaton makeDeterministic(Automaton automaton) {
+	private State startState;
+	
+	private boolean deterministic;
+	
+	private boolean minimized;
+	
+	private CharacterRange[] alphabet;
+	
+	private State[] states;
+	
+	private Set<State> finalStates;
+	
+	public AutomatonOperations(Automaton automaton) {
 		
+		this.deterministic = automaton.isDeterministic();
+		this.minimized = automaton.isMinimized();
+		
+		if (!deterministic) {
+			this.startState = convertToNonOverlapping(automaton.getStartState(), automaton.getAllStates());
+		} else {
+			this.startState = automaton.getStartState();
+		}
+		alphabet = getAlphabet(startState);
+		states = getAllStates();
+		finalStates = computeFinalStates();
+	}
+	
+	public AutomatonOperations(State startState) {
+		this.startState = convertToNonOverlapping(startState, getAllStates());
+		alphabet = getAlphabet(startState);
+		states = getAllStates();
+		finalStates = computeFinalStates();
+	}
+	
+	public Automaton build() {
+		return new Automaton(this);
+	}
+	 
+	public CharacterRange[] getAlphabet() {
+		return alphabet;
+	}
+	
+	public Set<State> getFinalStates() {
+		return finalStates;
+	}
+	
+	public State getStartState() {
+		return startState;
+	}
+	
+	public State[] getStates() {
+		return states;
+	}
+	
+	public boolean isMinimized() {
+		return minimized;
+	}
+	
+	public boolean isDeterministic() {
+		return deterministic;
+	}
+	
+	private CharacterRange[] getAlphabet(State startState) {
+		List<CharacterRange> ranges = getAllRanges();
+		CharacterRange[] alphabet = new CharacterRange[ranges.size()];
+		int i = 0;
+		for (CharacterRange r : ranges) {
+			alphabet[i++] = r;
+		}
+		return alphabet;
+	}
+	
+	public AutomatonOperations makeDeterministic() {
+		
+		if (deterministic)
+			return this;
+
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
 		
 		Set<State> initialState = new HashSet<>();
-		initialState.add(automaton.getStartState());
+		initialState.add(startState);
 		initialState = epsilonClosure(initialState);
 		visitedStates.add(initialState);
 		processList.add(initialState);
@@ -40,43 +110,33 @@ public class AutomatonOperations {
 		Map<Set<State>, State> newStatesMap = new HashMap<>();
 		
 		State startState = new State();
-		addProperties(initialState, startState);
 		
 		newStatesMap.put(initialState, startState);
 		
-		Map<Tuple<State, Integer>, Set<State>> cache = new HashMap<>();
-		
-		while(!processList.isEmpty()) {
+		while (!processList.isEmpty()) {
 			Set<State> stateSet = processList.poll();
-			
-			Set<MoveResult> transitionsSet = move(stateSet, cache);
 
-			for(MoveResult r : transitionsSet) {
-				Set<State> newStatesSet = epsilonClosure(r.states);
-				
-				State newState = newStatesMap.get(newStatesSet);
-				if(newState == null) {
-					newState = new State();
-					addProperties(newStatesSet, newState);
-					newStatesMap.put(newStatesSet, newState);
+			Set<State> destState = new HashSet<>();
+			for (CharacterRange r : alphabet) {
+				for (State state : stateSet) {
+					destState.add(state.getState(r));
 				}
 				
-				State source = newStatesMap.get(stateSet);
-				
-				// The state should have been created before.
-				assert source != null;
-				
-				Transition transition = new Transition(r.start, r.end, newState);
-				source.addTransition(transition);
-				
-				if(!visitedStates.contains(newStatesSet)) {
-					visitedStates.add(newStatesSet);
-					processList.add(newStatesSet);
+				destState = epsilonClosure(destState);
+				if (!destState.isEmpty()) {
+					State source = newStatesMap.get(stateSet);
+					State dest = newStatesMap.computeIfAbsent(destState, s -> new State());
+					source.addTransition(new Transition(r, dest));
 				}
+			}
+							
+			if (!visitedStates.contains(destState)) {
+				visitedStates.add(destState);
+				processList.add(destState);
 			}
 		}
 		
-		setStateIDs(startState);
+		setStateIDs();
 		
 		// Setting the final states.
 		outer:
@@ -88,56 +148,17 @@ public class AutomatonOperations {
 				}
 			}			
 		}
+				
+		deterministic = true;
 		
-		// Setting the reject states. If during the process of making a DFA deterministic,
-		// a reject and a final state are merged, consider it as a final state.
-		outer:
-		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-			for (State s : e.getKey()) {
-				if (s.getStateType() == StateType.REJECT) {
-					State state = e.getValue();
-					if (state.getStateType() != StateType.FINAL) {
-						state.setStateType(StateType.REJECT);
-					}
-					continue outer;					
-				}
-			}			
-		}
-		
-		outer:
-		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-			for (State s : e.getKey()) {
-				if (s.getStateType() == StateType.LOOKAHEAD_REJECT) {
-					State state = e.getValue();
-					state.setStateType(StateType.LOOKAHEAD_REJECT);
-					continue outer;					
-				} 
-			}
-		}
-
-
-		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-			for (State state : e.getKey()) {
-				if (state.getStateType() == StateType.LOOKAHEAD_ACCEPT) {
-					state.setStateType(StateType.LOOKAHEAD_ACCEPT);
-				}
-			}
-		}
-		
-		return new Automaton(startState, automaton.getName());
+		return this;
 	}
-	
-	private static void addProperties(Set<State> initialState, State newState) {
-		for (State s : initialState) {
-			newState.addRegularExpressions(s.getRegularExpressions());
-		}
-	}
-	
+		
 	private static Set<State> epsilonClosure(Set<State> states) {
 		Set<State> newStates = new HashSet<>(states);
 		
 		for(State state : states) {
-			Set<State> s = state.getEpsilonClosure();
+			Set<State> s = state.getEpsilonStates();
 			if(!s.isEmpty()) {
 				newStates.addAll(s);
 				newStates.addAll(epsilonClosure(s));
@@ -145,66 +166,6 @@ public class AutomatonOperations {
 		}
 		
 		return newStates;
-	}
-	
-	private static class MoveResult {
-
-		int start;
-		int end;
-		Set<State> states;
-		
-		public MoveResult(int start, int end, Set<State> states) {
-			this.start = start;
-			this.end = end;
-			this.states = states;
-		}
-		
-		@Override
-		public String toString() {
-			return String.format("(%d, %d, %s, %s)", start, end, states);
-		}
-	}
-	
-	private static Set<MoveResult> move(Set<State> states, Map<Tuple<State, Integer>, Set<State>> cache) {
-		
-		int[] intervals = getIntervalsOfStates(states);
-		
-		Set<MoveResult> resultSet = new HashSet<>();
-		
-		for(int i = 0; i < intervals.length; i++) {
-			
-			Set<State> reachableStates = new HashSet<>();
-
-			for(State state : states) {
-				
-				Tuple<State, Integer> key = new Tuple<>(state, intervals[i]);
-				Set<State> set = cache.get(key);
-				
-				if(set == null) {
-					set = new HashSet<>();
-					for(Transition transition : state.getTransitions()) {
-						if(transition.canMove(intervals[i])) {
-							set.add(transition.getDestination());						
-						}
-					}
-					cache.put(key, set);
-				}
-				
-				reachableStates.addAll(set);
-			}
-			
-			// Creating the transitions for the reachable states based on the transition intervals.
-			if(!reachableStates.isEmpty()) {
-				if(i + 1 < intervals.length) {
-					resultSet.add(new MoveResult(intervals[i], intervals[i + 1] - 1, reachableStates));
-				} 
-				if(i + 1 == intervals.length) {
-					resultSet.add(new MoveResult(intervals[i] - 1, intervals[i] - 1, reachableStates));
-				}
-			}			
-		}
-		
-		return resultSet;
 	}
 	
 	/**
@@ -215,9 +176,13 @@ public class AutomatonOperations {
 	 * @param automaton
 	 * @return
 	 */
-	public static Automaton minimize(Automaton automaton) {
+	public AutomatonOperations minimize() {
 		
-		int[][] table = new int[automaton.getCountStates()][automaton.getCountStates()];
+		if (minimized)
+			return this;
+		
+		int size = states.length;
+		int[][] table = new int[size][size];
 		
 		final int EMPTY = -2;
 		final int EPSILON = -1;
@@ -230,22 +195,20 @@ public class AutomatonOperations {
 		
 		for (int i = 0; i < table.length; i++) {
 			for (int j = 0; j < i; j++) {
-				if(automaton.getState(i).isFinalState() && !automaton.getState(j).isFinalState()) {
+				if(states[i].isFinalState() && !states[j].isFinalState()) {
 					table[i][j] = EPSILON;
 				}
-				if(automaton.getState(j).isFinalState() && !automaton.getState(i).isFinalState()) {
+				if(states[j].isFinalState() && !states[i].isFinalState()) {
 					table[i][j] = EPSILON;
 				}
 				
 				// Differentiate between final states
-				if(automaton.getState(i).isFinalState() && 
-				   automaton.getState(j).isFinalState()) {
+				if(states[i].isFinalState() && 
+				   states[j].isFinalState()) {
 					table[i][j] = EPSILON;
 				}
 			}
 		}
-		
-		int[] intervals = automaton.getIntervals();
 		
 		boolean changed = true;
 		
@@ -257,9 +220,9 @@ public class AutomatonOperations {
 						
 						// If two states i and j are distinct
 						if(table[i][j] == EMPTY) {
-							for(int t = 0; t < intervals.length; t++) {
-								State q1 = moveTransition(automaton.getState(i), intervals[t]);
-								State q2 = moveTransition(automaton.getState(j), intervals[t]);
+							for (int t = 0; t < alphabet.length; t++) {
+								State q1 = states[i].getState(alphabet[t]);
+								State q2 = states[j].getState(alphabet[t]);
 
 								// If both states i and j have no outgoing transitions on the interval t, continue with the
 								// next transition.
@@ -306,8 +269,8 @@ public class AutomatonOperations {
 		for (int i = 0; i < table.length; i++) {
 			for (int j = 0; j < i; j++) {
 				if(table[i][j] == EMPTY) {
-					State stateI = automaton.getState(i);
-					State stateJ = automaton.getState(j);
+					State stateI = states[i];
+					State stateJ = states[j];
 					
 					Set<State> partitionI = partitionsMap.get(stateI);
 					Set<State> partitionJ = partitionsMap.get(stateJ);
@@ -339,7 +302,7 @@ public class AutomatonOperations {
 		
 		State startState = null;
 		
-		for(State state : automaton.getAllStates()) {
+		for(State state : states) {
 			if(partitionsMap.get(state) == null) {
 				Set<State> set = new HashSet<>();
 				set.add(state);
@@ -355,7 +318,7 @@ public class AutomatonOperations {
 				
 				newState.addRegularExpressions(state.getRegularExpressions());
 				
-				if(automaton.getStartState() == state) {
+				if(startState == state) {
 					startState = newState;
 				}
 				if(state.isFinalState()) {
@@ -365,13 +328,13 @@ public class AutomatonOperations {
 			}
 		}
 		
-		for(State state : automaton.getAllStates()) {
+		for(State state : states) {
 			for(Transition t : state.getTransitions()) {
 				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));;				
 			}
 		}
 		
-		return new Automaton(startState, automaton.getName());
+		return this;
 	}
 
 	/**
@@ -385,16 +348,6 @@ public class AutomatonOperations {
 			}
 			System.out.println("\n");
 		}
-	}
-
-
-	private static State moveTransition(State state, int i) {
-		for(Transition transition : state.getTransitions()) {
-			if(transition.canMove(i)) {
-				return transition.getDestination();				
-			}
-		}
-		return null;
 	}
 	
 	public static String toJavaCode(Automaton automaton) {
@@ -465,96 +418,30 @@ public class AutomatonOperations {
 		return merged;
 	}
 	
-	public Multimap<Transition, Transition> toNonOverlapping(Iterable<Transition> transitions) {
-		return null;
-	}
-	
-	public static int[] getIntervalsOfStates(Set<State> states) {
-		Set<Transition> transitions = new HashSet<>();
-		for (State state : states) {
-			transitions.addAll(state.getTransitions());
-		}
-		
-		return getIntervals(transitions);
-	}
-	
-	private static Multimap<CharacterRange, CharacterRange> getNonOverlappingRanges(Set<Transition> transitions) {
-		Set<CharacterRange> characterRanges = new HashSet<>();
-		for (Transition t : transitions) {
-			characterRanges.add(t.getRange());
-		}
-		
-		return CharacterRange.toNonOverlapping(new ArrayList<>(characterRanges));
-	}
-	
-	private static Automaton convert(Automaton automaton) {
-		Multimap<CharacterRange, CharacterRange> nonOverlappingRanges = getNonOverlappingRanges(AutomatonOperations.getAllTransitions(automaton));
-		
-		Set<State> states = getAllStates(automaton);
-		
+	private State convertToNonOverlapping(State startState, State[] states) {
 		for (State state : states) {
 			for (Transition transition : state.getTransitions()) {
 				state.removeTransition(transition);
-				for (CharacterRange range : nonOverlappingRanges.get(transition.getRange())) {
+				for (CharacterRange range : alphabet) {
 					state.addTransition(new Transition(range, transition.getDestination()));
 				}
 			}
-		}
-		
-		return new Automaton(automaton.getStartState());
+		}	
+		return startState;
 	}
-	
-	public static int[] getIntervals(Set<Transition> transitions) {
 		
-		Set<Integer> set = new HashSet<>();
-		
-		for(Transition transition : transitions) {
-			if(!transition.isEpsilonTransition()) {
-				set.add(transition.getStart());
-				set.add(transition.getEnd() + 1);
-			}
-		}
-		
-		Integer[] array = set.toArray(new Integer[] {});
-		Arrays.sort(array);
-		
-		int[] result = new int[array.length];
-		for(int i = 0; i < array.length; i++) {
-			result[i] = array[i];
-		}
-		
-		return result;
-	}
+	public List<CharacterRange> getAllRanges() {
+		final Set<CharacterRange> ranges = new HashSet<>();
 
-	
-	public static int[] getIntervals(Automaton automaton) {		
-		return getIntervals(getAllTransitions(automaton.getStartState()));
-	}
-	
-	public static int[] getIntervals(State startState) {		
-		return getIntervals(getAllTransitions(startState));
-	}	
-	
-	public static Set<Transition> getAllTransitions(Automaton a) {
-		return getAllTransitions(a.getStartState());
-	}
-	
-	public static Set<Transition> getAllTransitions(State startState) {
-		final Set<Transition> transitions = new HashSet<>();
-
-		AutomatonVisitor.visit(startState, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				for(Transition transition : state.getTransitions()) {
-					if(!transition.isEpsilonTransition()) {
-						transitions.add(transition);
+		AutomatonVisitor.visit(startState, state -> {
+				for (Transition transition : state.getTransitions()) {
+					if (!transition.isEpsilonTransition()) {
+						ranges.add(transition.getRange());
 					}
 				}
-			}
-		});
+			});
 		
-		return transitions;
+		return new ArrayList<>(ranges);
 	}
  	
 	public static int getCountStates(Automaton automaton) {
@@ -572,158 +459,34 @@ public class AutomatonOperations {
 		return count[0];
 	}
 	
-	public static Set<State> getAllStates(Automaton automaton) {
-		return getAllStates(automaton.getStartState());
-	}
-	
-	public static Set<State> getAllStates(State startState) {
-		final Set<State> states = new HashSet<>();
+	public State[] getAllStates() {
+		final Set<State> set = new HashSet<>();
+		AutomatonVisitor.visit(startState, s -> set.add(s));
 		
-		AutomatonVisitor.visit(startState, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				states.add(state);
-			}
-		});
-		
+		State[] states = new State[set.size()];
+		int i = 0;
+		for (State s : states) {
+			states[i++] = s; 
+		}
 		return states;
 	}
 	
-	public static void setStateIDs(State startState) {
-				
-		AutomatonVisitor.visit(startState, new VisitAction() {
-			
-			int id = 0;
-
-			@Override
-			public void visit(State state) {
-				state.setId(id++);
-			}
-		});
+	public void setStateIDs() {
+		AtomicInteger id = new AtomicInteger();
+		AutomatonVisitor.visit(startState, s -> s.setId(id.getAndIncrement()));
 	}
 	
-	public static void setTransitionIDs(Automaton automaton) {
-		int[] intervals = automaton.getIntervals();
-		
-		/*
-		 * A map from each interval's start to the interval id.
-		 */
-		final Map<Integer, Integer> intervalIds = new HashMap<>();
-		
-		for(int i = 0; i < intervals.length; i++) {
-			intervalIds.put(intervals[i], i);
-		}
-		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				for(Transition transition : state.getTransitions()) {
-					if(transition.isEpsilonTransition()) {
-						transition.setId(-1);
-					} else {
-						transition.setId(intervalIds.get(transition.getStart()));
-					}
-				}
-			}
-		});
-	}
-	
-	public static void setStateIDs(Automaton automaton) {
-		setStateIDs(automaton.getStartState());
-	}
-
-	public static Set<State> getFinalStates(Automaton nfa) {
+	private Set<State> computeFinalStates() {
 		
 		final Set<State> finalStates = new HashSet<>();
 		
-		AutomatonVisitor.visit(nfa, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				if(state.isFinalState()) {
-					finalStates.add(state);
+		AutomatonVisitor.visit(startState, s -> {
+				if (s.isFinalState()) {
+					finalStates.add(s);
 				}
-			} 
-		});
+			});
 		
 		return finalStates;
-	}
-	
-	public static Set<State> getRejectStates(Automaton automaton) {
-		
-		final Set<State> rejectStates = new HashSet<>();
-		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				if(state.getStateType() == StateType.REJECT) {
-					rejectStates.add(state);
-				}
-			} 
-		});
-		
-		return rejectStates;
-	}	
-	
-	/**
-	 * Merges consecutive outgoing transitions of a state that are of the form\
-	 * [a - b] and [b+1 - c] to [a - c]. 
-	 * 
-	 * Note: This method should be used with caution because it may break the 
-	 * working of Matchers in case of overlapping transitions in different states.
-	 * Transitions are indexed globally, not per state. Therefore, during the working
-	 * of the matcher, because of overlapping, a wrong transition that does not exist
-	 * at a state may be chosen.  
-	 * 
-	 */
-	public static Automaton mergeTransitions(final Automaton automaton) {
-		
-		final State[] startStates = new State[1];
-		
-		final Map<State, State> newStates = new HashMap<>();
-		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-
-			@Override
-			public void visit(State state) {
-				State newState;
-				if(state.isFinalState()) {
-					newState = new State(StateType.FINAL);
-				} else {
-					newState = new State();					
-				}
-				newStates.put(state, newState);
-				
-				if(automaton.getStartState() == state) {
-					startStates[0] = newState;
-				}
- 			}
-		});
-		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-
-			@Override
-			public void visit(State state) {
-				Transition[] t = state.getSortedTransitions();
-				int i = 0;
-				while(i < t.length) {
-					int j = i;
-					while(i < t.length - 1 && 
-						  t[i + 1].getStart() == t[i].getEnd() + 1 &&
-						  t[i].getDestination() == t[i + 1].getDestination()) {
-						i++;
-					}
-					State newState = newStates.get(state);
-					newState.addTransition(new Transition(t[j].getStart(), t[i].getEnd(), newStates.get(t[j].getDestination())));
-					i++;
-				}
-			}
-		});
-		
-		return new Automaton(startStates[0], automaton.getName());
 	}
 	
 	/**
@@ -734,72 +497,32 @@ public class AutomatonOperations {
 	 * only final state.
 	 * 
 	 */
-	public static Automaton reverse(Automaton automaton) {
+	public AutomatonOperations reverse() {
 
 		// 0. creating new states for each state of the original automaton
 		final Map<State, State> newStates = new HashMap<>();
 		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				newStates.put(state, new State());
-			}
-		});
+		AutomatonVisitor.visit(startState, state -> newStates.put(state, new State()));
 		
 		// 1. creating a new start state and adding epsilon transitions to the final
 		// states of the original automata
 		State startState = new State();
 		
-		for(State finalState : automaton.getFinalStates()) {
+		for(State finalState : finalStates) {
 			startState.addTransition(Transition.epsilonTransition(newStates.get(finalState)));
 		}
 		
 		// 2. Reversing the transitions
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
+		AutomatonVisitor.visit(startState, state -> {
 				for(Transition t : state.getTransitions()) {
 					newStates.get(t.getDestination()).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(state)));
 				}
-			}
 		});
 		
 		// 2. making the start state final
-		newStates.get(automaton.getStartState()).setStateType(StateType.FINAL);
+		newStates.get(startState).setStateType(StateType.FINAL);
 		 
-		return new Automaton(startState, automaton.getName());
-	}
-	
-	/**
-	 * Union(a1, a2) = a1 | a2 
-	 */
-	public static Automaton union(Automaton a1, Automaton a2) {
-		return union(new Automaton[] {a1, a2});
-	}
-	
-	public static Automaton union(Iterable<Automaton> automatons) {
-		
-		State startState = new State();
-		State finalState = new State(StateType.FINAL);
-		
-		for(Automaton automaton : automatons) {
-			automaton = automaton.copy();
-			startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
-			
-			Set<State> finalStates = automaton.getFinalStates();
-			for(State s : finalStates) {
-				s.setStateType(StateType.NORMAL);
-				s.addTransition(Transition.epsilonTransition(finalState));				
-			}
-		}
-		
-		return new Automaton(startState, listToString(automatons, " | "));
-	}
-	
-	public static Automaton union(Automaton...automatons) {
-		return union(Arrays.asList(automatons));
+		return this;
 	}
 	
 	/**
@@ -807,273 +530,105 @@ public class AutomatonOperations {
 	 *  if all its composing states are final. 
 	 * 
 	 */
-	public static Automaton intersection(Automaton a1, Automaton a2) {
+	public AutomatonOperations intersect(Automaton other) {
 		
 		State startState = null;
 		
-		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
+		State[][] product = product(other);
 		
-		for(Entry<Tuple<Integer, Integer>, State> e : map.entrySet()) {
-			int i = e.getKey().getFirst();
-			int j = e.getKey().getSecond();
-			State state = e.getValue();
-			
-			State state1 = a1.getState(i);
-			State state2 = a2.getState(j);
-			
-			if(state1.isFinalState() && state2.isFinalState()) {
-				state.setStateType(StateType.FINAL);
-			}
-			
-			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
-				startState = state;
-			}
+		for (int i = 0; i < product.length; i++) {
+			 for (int j = 0; j < product[i].length; j++) {
+				State state = product[i][j];
+				
+				State state1 = getState(i);
+				State state2 = other.getState(j);
+				
+				if (state1.isFinalState() && state2.isFinalState()) {
+					state.setStateType(StateType.FINAL);
+				}
+				
+				if (state1 == startState && state2 == other.getStartState()) {
+					startState = state;
+				}
+			 }
 		}
 		
-		return new Automaton(startState, a1.toString() + "/\\" + a2.toString());
+		return this;
 	}
-	
-	/**
-	 *  A state in the resulting intersection automata is final
-	 *  if the first state is final but the second one is not. 
-	 * 
-	 */
-	public static Automaton difference(Automaton a1, Automaton a2) {
 		
-		System.out.println("diff " + a1 + " " + a2);
-		
-		Set<Transition> transitions = getAllTransitions(a1);
-		transitions.addAll(getAllTransitions(a2));
-		int[] intervals = getIntervals(transitions);
-		
-		a1 = makeComplete(a1, intervals);
-		a2 = makeComplete(a2, intervals);
-		
-		Map<Tuple<Integer, Integer>, State> map = product(a1, a2);
-		
-		State startState = null;
-		
-		for(Entry<Tuple<Integer, Integer>, State> e : map.entrySet()) {
-			int i = e.getKey().getFirst();
-			int j = e.getKey().getSecond();
-			State state = e.getValue();
-			
-			State state1 = a1.getState(i);
-			State state2 = a2.getState(j);
-			
-			
-			if(state1.getStateType() == StateType.REJECT || state2.getStateType() == StateType.REJECT) {
-				state.setStateType(StateType.REJECT);
-			}
-			else if (state1.isFinalState() && !state2.isFinalState()) {
-				state.setStateType(StateType.FINAL);
-			}
-			else if (state1.getStateType() == StateType.LOOKAHEAD_REJECT || state2.getStateType() == StateType.LOOKAHEAD_REJECT) {
-				state.setStateType(StateType.LOOKAHEAD_REJECT);
-			}
-			else if (state1.getStateType() == StateType.LOOKAHEAD_ACCEPT || state2.getStateType() == StateType.LOOKAHEAD_ACCEPT) {
-				state.setStateType(StateType.LOOKAHEAD_ACCEPT);
-			}
-			//TODO: put a comment to document these conditions
-			else if (state1.isFinalState() && state2.isFinalState()) {
-				state.setStateType(StateType.REJECT);
-			} 
-			
-			if(state1 == a1.getStartState() && state2 == a2.getStartState()) {
-				startState = state;
-			}
-		}
-		
-		return new Automaton(startState, a1.toString() + "-" + a2.toString());
-	}
-	
 	/**
 	 * Produces the Cartesian product of the states of an automata.
 	 */
-	private static Map<Tuple<Integer, Integer>, State> product(Automaton a1, Automaton a2) {
+	private State[][] product(Automaton a2) {
 		
-		a1.determinize();
-		a2.determinize();
-		
-		State[] states1 = a1.getAllStates();
+		State[] states1 = states;
 		State[] states2 = a2.getAllStates();
 		
-		Map<Tuple<Integer, Integer>, State> newStates = new HashMap<>();
+		State[][] newStates = new State[states1.length][states2.length];
 		
-		for(int i = 0; i < states1.length; i++) {
+		for(int i = 0; i < states.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
-				newStates.put(Tuple.of(i, j), new State());
+				newStates[i][j] = new State();
 			}
 		}
+
 		
-		Set<Transition> transitions = getAllTransitions(a1);
-		transitions.addAll(getAllTransitions(a2));
-		
-		int[] intervals = getIntervals(transitions);
+		a2.getAlphabet();
+//		CharacterRange[] joinAlphabet = new 
+		List<CharacterRange> ranges = getAllRanges();
+		ranges.addAll(a2.builder().getAllRanges());
 		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
 				
-				State state = newStates.get(Tuple.of(i, j));
+				State state = newStates[i][j];
 				State state1 = states1[i];
 				State state2 = states2[j];
 				
-				for(int t = 0; t < intervals.length - 1; t++) {
-					Set<State> reachableStates1 = state1.move(intervals[t]);
-					Set<State> reachableStates2 = state2.move(intervals[t]);
-					
-					// If one of the states is a dead state
-					if(reachableStates1.size() == 0 || reachableStates2.size() == 0) {
-						continue;
-					}
-					
-					// Automatons are already determinized.
-					assert reachableStates1.size() == 1; 
-					assert reachableStates2.size() == 1;
-
-					State s1 = reachableStates1.iterator().next();
-					State s2 = reachableStates2.iterator().next();
-					state.addTransition(new Transition(intervals[t], 
-													   intervals[t + 1] - 1, 
-													   newStates.get(Tuple.of(s1.getId(), s2.getId()))));
+				for (CharacterRange r : alphabet) {
+					State s1 = state1.getState(r);
+					State s2 = state2.getState(r);
+					state.addTransition(new Transition(r, newStates[s1.getId()][s2.getId()]));
 				}
-				
 			}
 		}
 		
 		return newStates;
 	}
 	
-	public static Automaton copy(final Automaton automaton) {
-		
-		final Map<State, State> newStates = new HashMap<>();
-		
-		final State[] startState = new State[1];
-		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				State newState = new State();
-				
-				newState.addRegularExpressions(state.getRegularExpressions());
-				
-				newStates.put(state, newState);
-				newState.setStateType(state.getStateType());
-				
-				if(state == automaton.getStartState()) {
-					startState[0] = newState;
-				}
-			}
-		});
-		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				for(Transition transition : state.getTransitions()) {
-					State newState = newStates.get(state);
-					newState.addTransition(new Transition(transition.getStart(), 
-														  transition.getEnd(), 
-														  newStates.get(transition.getDestination())));
-				}
-			}
-		});
-		
-		return new Automaton(startState[0], automaton.getName());
+	public State getState(int i) {
+		return states[i];
 	}
 	
-	public static Automaton or(Automaton...automatons) {
-		return or(Arrays.asList(automatons));
-	}
-	
-	/**
-	 * Creates an automaton which is the result of applying the or operator to the list
-	 * of automatons. 
-	 */
-	public static Automaton or(List<Automaton> automatons) {
-		State startState = new State();
-		
-		for(Automaton a : automatons) {
-			Automaton c = a.copy();
-			startState.addTransition(Transition.epsilonTransition(c.getStartState()));
-		}
-		
-		return new Automaton(startState, listToString(automatons, " | "));
-	}
-	
-	public static Automaton addCondition(Automaton main, Automaton condition) {
-		
-		main = main.copy();
-		condition = condition.copy();
-		
-		State startState = main.getStartState();
-		
-		for (State state : main.getFinalStates()) {
-			state.addTransition(Transition.epsilonTransition(condition.getStartState()));
-		}
-		
-		for (State state : condition.getFinalStates()) {
-			state.setStateType(StateType.LOOKAHEAD_REJECT);
-		}
-		
-		return new Automaton(startState);		
-	}	
-	
-	/**
-	 * Returns true if there is a sentence accepted by the automaton a1 which is is a prefix of
-	 * a sentence accepted by the automaton a2. 
-	 */
-	public static boolean prefix(final Automaton a1, final Automaton a2) {
-		Automaton copy = makeAllStatesFinal(a2);
-		return !copy.intersection(a1).isLanguageEmpty();
-	}
-	
-	/**
-	 * Returns a copy of the given automaton where all its states are set to final. 
-	 */
-	private static Automaton makeAllStatesFinal(final Automaton a) {
-		
-		Automaton copy = a.copy();
-		
-		AutomatonVisitor.visit(copy, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				state.setStateType(StateType.FINAL);
-			}
-		});
-		
-		return copy;
+	public CharacterRange[] merge(CharacterRange[] alphabet1, CharacterRange[] alphabet2) {
+		Set<CharacterRange> alphabets = new HashSet<>();
+		for (CharacterRange r : alphabet1) { alphabets.add(r); }
+		for (CharacterRange r : alphabet2) { alphabets.add(r); }
+		CharacterRange[] merged = new CharacterRange[alphabets.size()];
+		int i = 0;
+		for (CharacterRange r : alphabets) { merged[i++] = r; };
+		return merged;
 	}
 	
 	/**
 	 * Makes the transition function complete, i.e., from each state 
 	 * there will be all outgoing transitions.
 	 */
-	public static Automaton makeComplete(Automaton a, final int[] intervals) {
+	public AutomatonOperations makeComplete() {
 		
-		a.determinize();
-		a = a.copy();
+		makeDeterministic();
 		
-		final State dummyState = new State();
+		State dummyState = new State();
 		
-		AutomatonVisitor.visit(a.getStartState(), new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				for(int i = 0; i < intervals.length; i++) {
-					if(!state.hasTransition(intervals[i])) {
-						if(i + 1 == intervals.length) {
-							state.addTransition(new Transition(intervals[i] - 1, intervals[i] - 1, dummyState));
-						} else {
-							state.addTransition(new Transition(intervals[i], intervals[i + 1] - 1 , dummyState));
-						}
-					}
+		AutomatonVisitor.visit(startState, s -> {
+			for (CharacterRange r : alphabet) {
+				if (!s.hasTransition(r)) {
+					s.addTransition(new Transition(r, dummyState));
 				}
 			}
 		});
-		
-		return new Automaton(a.getStartState(), a.getName());
+			
+		return this;
 	}
+
 }

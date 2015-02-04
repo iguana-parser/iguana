@@ -87,7 +87,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Regula
 				s.addTransition(Transition.epsilonTransition(next.getStartState()));
 			}
 			
-			result = new Automaton(startState, this.name);
+			result = Automaton.builder(startState).makeDeterministic().build();
 		}
 		
 		return result;

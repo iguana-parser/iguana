@@ -17,6 +17,7 @@ import org.jgll.grammar.symbol.Constants;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
@@ -82,7 +83,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 			}
 		}
 		
-		automaton = new Automaton(startState, name); 
+		automaton = new AutomatonOperations(startState).makeDeterministic().build(); 
 		
 		return automaton;
 	}

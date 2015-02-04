@@ -98,7 +98,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
 		startState.addTransition(new Transition(start, end, finalState));
-		return new Automaton(startState, name);
+		return Automaton.builder(startState).build();
 	}
 	
 	@Override

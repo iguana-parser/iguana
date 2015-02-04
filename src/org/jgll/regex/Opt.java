@@ -20,8 +20,6 @@ public class Opt extends AbstractSymbol implements RegularExpression {
 	
 	private final boolean isRegularExpression;
 	
-	private Automaton automaton;
-	
 	private Opt(Builder builder) {
 		super(builder);
 		this.s = builder.s;
@@ -44,9 +42,6 @@ public class Opt extends AbstractSymbol implements RegularExpression {
 	@Override
 	public Automaton getAutomaton() {
 		
-		if (automaton != null)
-			return automaton;
-		
 		if (!isRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");		
 		
@@ -65,9 +60,7 @@ public class Opt extends AbstractSymbol implements RegularExpression {
 		
 		startState.addTransition(Transition.epsilonTransition(finalState));
 		
-		automaton = new Automaton(startState, name);
-		
-		return automaton;
+		return Automaton.builder(startState).makeDeterministic().build();
 	}
 
 	@Override

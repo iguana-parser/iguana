@@ -27,8 +27,6 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	
 	private final List<Symbol> separators;
 	
-	private Automaton automaton;
-	
 	public static Star from(Symbol s) {
 		return builder(s).build();
 	}
@@ -46,9 +44,6 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public Automaton getAutomaton() {
-		
-		if (automaton != null)
-			return automaton;
 		
 		if (!isRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
@@ -71,9 +66,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 		
 		startState.addTransition(Transition.epsilonTransition(finalState));
 		
-		automaton = new Automaton(startState, name);
-		
-		return automaton;
+		return Automaton.builder(startState).makeDeterministic().build();
 	}
 	
 	@Override
