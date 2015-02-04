@@ -30,7 +30,7 @@ import org.junit.Test;
  * 
  * S ::= E(0,0)
  * 
- * E(l,r) ::= [3 >= l, 3 >= r] E(3,r) '+' E(l,4)
+ * E(l,r) ::= [3 >= l, 3 >= r] E(3,0) '+' E(l,4) // propagate only l to the right as '+' is defined as left associative
  *          | [2 >= l] '-' E(0,0)
  *          | 'a'
  * 
