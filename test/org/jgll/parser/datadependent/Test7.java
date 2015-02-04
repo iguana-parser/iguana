@@ -23,21 +23,16 @@ import org.junit.Test;
  * 
  * @author Anastasia Izmaylova
  * 
- * Operator precedence
+ * S ::= E(0,0)
  * 
- * l - by left recursive E
- * r - by right recursive E
- * 
- * S ::= E(0)
- * 
- * E(p) ::= [4 >= p] E(5) '^' E(4) // right
- *        | [3 >= p] E(3) '*' E(4) // left
- *        | [2 >= p] E(2) '+' E(3) // left
- *        | 'a'
- *  
+ * E(l,r) ::= [4 >= l, 4 >= r] E(5,0) '^' E(l,4) // right
+ *          | [3 >= l, 3 >= r] E(3,0) '+' E(l,4) // left
+ *          | [2 >= l] '-' E(0,0)
+ *          | a
+ *
  */
 
-public class Test6 {
+public class Test7 {
 	
 	private Grammar grammar;
 
@@ -46,31 +41,31 @@ public class Test6 {
 		
 		Nonterminal S = Nonterminal.withName("S");
 		
-		Nonterminal E = Nonterminal.builder("E").addParameters("p").build();
+		Nonterminal E = Nonterminal.builder("E").addParameters("l", "r").build();
 		
 		Character hat = Character.from('^');
-		Character star = Character.from('*');
 		Character plus = Character.from('+');
 		
-		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
+		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
 		Rule r1_1 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(5))
-							.addPreCondition(predicate(greaterEq(integer(4), var("p")))).build())
+					.addSymbol(Nonterminal.builder(E).apply(integer(5), integer(0))
+							.addPreCondition(predicate(greaterEq(integer(4), var("l"))))
+							.addPreCondition(predicate(greaterEq(integer(4), var("r")))).build())
 					.addSymbol(hat)
-					.addSymbol(Nonterminal.builder(E).apply(integer(4)).build()).build();
+					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
 		
 		Rule r1_2 = Rule.withHead(E)
-						.addSymbol(Nonterminal.builder(E).apply(integer(3))
-								.addPreCondition(predicate(greaterEq(integer(3), var("p")))).build())
-						.addSymbol(star)
-						.addSymbol(Nonterminal.builder(E).apply(integer(4)).build()).build();
+				.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
+						.addPreCondition(predicate(greaterEq(integer(3), var("l"))))
+						.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
+				.addSymbol(plus)
+				.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
 		
 		Rule r1_3 = Rule.withHead(E)
-				.addSymbol(Nonterminal.builder(E).apply(integer(2))
-						.addPreCondition(predicate(greaterEq(integer(2), var("p")))).build())
-				.addSymbol(plus)
-				.addSymbol(Nonterminal.builder(E).apply(integer(3)).build()).build();
+				.addSymbol(Character.builder('-')
+					.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
+				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
 		Rule r1_4 = Rule.withHead(E).addSymbol(Character.from('a')).build();
 		
@@ -82,7 +77,7 @@ public class Test6 {
 	public void test() {
 		System.out.println(grammar);
 		
-		Input input = Input.fromString("a+a^a^a*a");
+		Input input = Input.fromString("a+a^a^-a+a");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
