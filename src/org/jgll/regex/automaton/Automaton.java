@@ -118,7 +118,7 @@ public class Automaton implements Serializable {
 				}
 			});
 		
-		return new Automaton(newStartState[0]);
+		return builder(newStartState[0]).build();
 	}
 
 	

@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jgll.grammar.symbol.CharacterRange;
 
+import com.google.common.collect.Multimap;
+
 public class AutomatonOperations {
 	
 	private State startState;
@@ -29,26 +31,29 @@ public class AutomatonOperations {
 	
 	private Set<State> finalStates;
 	
+	/**
+	 * From transitions to non-overlapping transitions
+	 */
+	private Multimap<CharacterRange, CharacterRange> rangeMap;
+	
 	public AutomatonOperations(Automaton automaton) {
-		
 		this.deterministic = automaton.isDeterministic();
 		this.minimized = automaton.isMinimized();
+		this.states = automaton.getAllStates();
+		this.startState = automaton.getStartState();
+		this.finalStates = automaton.getFinalStates();
+		this.alphabet = automaton.getAlphabet();
 		
 		if (!deterministic) {
-			this.startState = convertToNonOverlapping(automaton.getStartState(), automaton.getAllStates());
-		} else {
-			this.startState = automaton.getStartState();
+			convertToNonOverlapping(automaton.getStartState());
 		}
-		alphabet = getAlphabet(startState);
-		states = getAllStates();
-		finalStates = computeFinalStates();
 	}
 	
 	public AutomatonOperations(State startState) {
-		this.startState = convertToNonOverlapping(startState, getAllStates());
-		alphabet = getAlphabet(startState);
-		states = getAllStates();
-		finalStates = computeFinalStates();
+		this.states = getAllStates(startState);
+		this.startState = startState;
+		this.finalStates = computeFinalStates();
+		convertToNonOverlapping(startState);
 	}
 	
 	public Automaton build() {
@@ -79,11 +84,14 @@ public class AutomatonOperations {
 		return deterministic;
 	}
 	
-	private CharacterRange[] getAlphabet(State startState) {
-		List<CharacterRange> ranges = getAllRanges();
-		CharacterRange[] alphabet = new CharacterRange[ranges.size()];
+	private static Multimap<CharacterRange, CharacterRange> getRangeMap(State startState) {
+		return CharacterRange.toNonOverlapping(getAllRanges(startState));
+	}
+	
+	private static CharacterRange[] getAlphabet(State startState, Multimap<CharacterRange, CharacterRange> rangeMap) {
+		CharacterRange[] alphabet = new CharacterRange[rangeMap.values().size()];
 		int i = 0;
-		for (CharacterRange r : ranges) {
+		for (CharacterRange r : rangeMap.values()) {
 			alphabet[i++] = r;
 		}
 		return alphabet;
@@ -418,19 +426,21 @@ public class AutomatonOperations {
 		return merged;
 	}
 	
-	private State convertToNonOverlapping(State startState, State[] states) {
+	private void convertToNonOverlapping(State startState) {
+		this.rangeMap = getRangeMap(startState);
 		for (State state : states) {
 			for (Transition transition : state.getTransitions()) {
 				state.removeTransition(transition);
-				for (CharacterRange range : alphabet) {
+				for (CharacterRange range : rangeMap.get(transition.getRange())) {
 					state.addTransition(new Transition(range, transition.getDestination()));
 				}
 			}
-		}	
-		return startState;
+		}
+		this.alphabet = getAlphabet(startState, rangeMap);
+		setStateIDs();
 	}
 		
-	public List<CharacterRange> getAllRanges() {
+	private static List<CharacterRange> getAllRanges(State startState) {
 		final Set<CharacterRange> ranges = new HashSet<>();
 
 		AutomatonVisitor.visit(startState, state -> {
@@ -445,27 +455,20 @@ public class AutomatonOperations {
 	}
  	
 	public static int getCountStates(Automaton automaton) {
-		
 		final int[] count = new int[1];
 		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
-				count[0]++;
-			}
-		});
-
+		AutomatonVisitor.visit(automaton, s -> count[0]++);
+		
 		return count[0];
 	}
 	
-	public State[] getAllStates() {
+	private static State[] getAllStates(State startState) {
 		final Set<State> set = new HashSet<>();
 		AutomatonVisitor.visit(startState, s -> set.add(s));
 		
 		State[] states = new State[set.size()];
 		int i = 0;
-		for (State s : states) {
+		for (State s : set) {
 			states[i++] = s; 
 		}
 		return states;
@@ -572,11 +575,7 @@ public class AutomatonOperations {
 			}
 		}
 
-		
-		a2.getAlphabet();
-//		CharacterRange[] joinAlphabet = new 
-		List<CharacterRange> ranges = getAllRanges();
-		ranges.addAll(a2.builder().getAllRanges());
+		CharacterRange[] joinAlphabet = merge(alphabet, a2.getAlphabet()); 
 		
 		for(int i = 0; i < states1.length; i++) {
 			for(int j = 0; j < states2.length; j++) {
@@ -585,7 +584,7 @@ public class AutomatonOperations {
 				State state1 = states1[i];
 				State state2 = states2[j];
 				
-				for (CharacterRange r : alphabet) {
+				for (CharacterRange r : joinAlphabet) {
 					State s1 = state1.getState(r);
 					State s2 = state2.getState(r);
 					state.addTransition(new Transition(r, newStates[s1.getId()][s2.getId()]));
