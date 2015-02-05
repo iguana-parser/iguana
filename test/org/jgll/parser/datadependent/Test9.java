@@ -25,14 +25,16 @@ import org.junit.Test;
  * 
  * S ::= E(0,0)
  * 
- * E(l,r) ::=[4 >= r] E(4,r) z // propagate r down as this is a deep case: x ( ( a w ) z )
- *         | [3 >= l] x E(0,3) // can be affected by left E  => constraint on l
- *         | [2 >= r] E(0,0) w // can be affected by right E => constraint on r
+ * E(l,r) ::=[5 >= r] E(5,r) z // propagate r down
+ *         | [4 >= l] x E(l,4) // propagate l down
+ *         | [3 >= r] E(3,0) w
+ *         | [2 >= l] y E(0,0)
  *         | a
  *
+ * tricky inputs: see Test8 and: (x (y a)) w
  */
 
-public class Test8 {
+public class Test9 {
 	
 	private Grammar grammar;
 
@@ -49,23 +51,28 @@ public class Test8 {
 		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
 		Rule r1_1 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(4), var("r"))
-						.addPreCondition(predicate(greaterEq(integer(4), var("r")))).build())
+					.addSymbol(Nonterminal.builder(E).apply(integer(5), var("r"))
+						.addPreCondition(predicate(greaterEq(integer(5), var("r")))).build())
 					.addSymbol(z).build();
 		
 		Rule r1_2 = Rule.withHead(E)
 					.addSymbol(Character.builder('x')
-							.addPreCondition(predicate(greaterEq(integer(3), var("l")))).build())
-					.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(3)).build()).build();
+							.addPreCondition(predicate(greaterEq(integer(4), var("l")))).build())
+					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
 		
 		Rule r1_3 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0))
-						.addPreCondition(predicate(greaterEq(integer(2), var("r")))).build())
+					.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
+						.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
 					.addSymbol(w).build();
 		
-		Rule r1_4 = Rule.withHead(E).addSymbol(Character.from('a')).build();
+		Rule r1_4 = Rule.withHead(E)
+					.addSymbol(Character.builder('y')
+						.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
+					.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
-		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
+		Rule r1_5 = Rule.withHead(E).addSymbol(Character.from('a')).build();
+		
+		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4, r1_5).build();
 		
 	}
 	
@@ -73,7 +80,8 @@ public class Test8 {
 	public void test() {
 		System.out.println(grammar);
 		
-		Input input = Input.fromString("xawz");
+		// Input input = Input.fromString("xawz");
+		Input input = Input.fromString("xyaw");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
