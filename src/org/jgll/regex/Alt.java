@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Constants;
@@ -22,7 +22,7 @@ import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 
-public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpression, Iterable<T> {
+public class Alt<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -52,14 +52,9 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 		return "(" + listToString(elements, " | ") + ")";
 	}
 	
-	private Automaton automaton;
-
 	@Override
-	public Automaton getAutomaton() {
+	public Automaton createAutomaton() {
 		
-		if (automaton != null)
-			return automaton;
-
 		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable if all arguments are regular expressions");
 		
@@ -83,9 +78,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements RegularExpr
 			}
 		}
 		
-		automaton = new AutomatonOperations(startState).makeDeterministic().build(); 
-		
-		return automaton;
+		return new AutomatonOperations(startState).makeDeterministic().build(); 
 	}
 
 	@Override

@@ -4,20 +4,25 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 
 public class CharacterTest {
+
+	Character c = Character.from('a');
 	
 	@Test
-	public void test1() {
-		RegularExpression regexp = Character.from('a');
-		Automaton nfa = regexp.getAutomaton();
-		RunnableAutomaton dfa = nfa.getRunnableAutomaton();
-		assertEquals(2, nfa.getCountStates());
-		assertTrue(dfa.match(Input.fromString("a")));
-		assertEquals(1, dfa.match(Input.fromString("a"), 0));
+	public void testAutomaton() {
+		Automaton a = c.getAutomaton();
+		assertEquals(2, a.getCountStates());
+	}
+	
+	@Test
+	public void testMatcher() {
+		Matcher matcher = c.getMatcher();
+		Input input = Input.fromString("a");
+		assertTrue(matcher.match(input));
+		assertEquals(1, matcher.match(input, 0));
 	}
 
 }

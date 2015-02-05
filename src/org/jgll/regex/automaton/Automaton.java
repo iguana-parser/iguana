@@ -24,8 +24,6 @@ public class Automaton implements Serializable {
 	
 	private final Set<State> finalStates;
 	
-	private RunnableAutomaton runnableAutomaton;
-	
 	private final boolean minimized;
 	
 	private final boolean deterministic;
@@ -201,13 +199,6 @@ public class Automaton implements Serializable {
 	
 	public static AutomatonOperations builder(State startState) {
 		return new AutomatonOperations(startState);
-	}
-	
-	public RunnableAutomaton getRunnableAutomaton() {
-		if (runnableAutomaton != null)
-			return runnableAutomaton;
-		
-		return runnableAutomaton;
 	}
 	
 	public String toJavaCode() {

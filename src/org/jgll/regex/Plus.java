@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -13,7 +13,7 @@ import org.jgll.regex.automaton.Automaton;
 
 import com.google.common.collect.ImmutableList;
 
-public class Plus extends AbstractSymbol implements RegularExpression {
+public class Plus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -40,8 +40,12 @@ public class Plus extends AbstractSymbol implements RegularExpression {
 	}
 	
 	@Override
-	public Automaton getAutomaton() {
-		throw new RuntimeException("Not completed.");
+	protected Automaton createAutomaton() {
+		
+		if (!allRegularExpression)
+			throw new RuntimeException("Only applicable to regular expressions");
+
+		return Sequence.from(s, Star.from(s)).getAutomaton();		
 	}
 	
 	@Override

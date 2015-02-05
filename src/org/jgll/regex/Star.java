@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -17,13 +17,13 @@ import org.jgll.regex.automaton.Transition;
 import com.google.common.collect.ImmutableList;
 
 
-public class Star extends AbstractSymbol implements RegularExpression {
+public class Star extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final Symbol s;
 	
-	private final boolean isRegularExpression;
+	private final boolean allRegularExpression;
 	
 	private final List<Symbol> separators;
 	
@@ -35,7 +35,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 		super(builder);
 		this.s = builder.s;
 		this.separators = ImmutableList.copyOf(builder.separators);
-		this.isRegularExpression = s instanceof RegularExpression;
+		this.allRegularExpression = s instanceof RegularExpression;
 	}
 	
 	private static String getName(Symbol s) {
@@ -43,11 +43,12 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	}
 	
 	@Override
-	public Automaton getAutomaton() {
+	protected Automaton createAutomaton() {
 		
-		if (!isRegularExpression)
+		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
 		
+		//TODO: add separators to the DFA
 		State startState = new State();
 		
 		State finalState = new State(StateType.FINAL);
@@ -76,7 +77,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		if (!isRegularExpression)
+		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
 		
 		return ((RegularExpression) s).getFirstSet();
@@ -84,7 +85,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 	
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
-		if (!isRegularExpression)
+		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
 		
 		return ((RegularExpression) s).getFirstSet();
@@ -106,7 +107,7 @@ public class Star extends AbstractSymbol implements RegularExpression {
 
 	@Override
 	public String getPattern() {
-		if (!isRegularExpression)
+		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");
 		
 		return ((RegularExpression) s).getPattern() + "*"; 

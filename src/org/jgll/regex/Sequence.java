@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -26,7 +26,7 @@ import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
 
-public class Sequence<T extends Symbol> extends AbstractSymbol implements RegularExpression, Iterable<T> {
+public class Sequence<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,7 +65,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Regula
 	}
 		
 	@Override
-	public Automaton getAutomaton() {
+	public Automaton createAutomaton() {
 		
 		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable if all arguments are regular expressions");
@@ -202,7 +202,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Regula
 				return characters.size();
 			};
 		}
-		return RegularExpression.super.getMatcher();
+		return super.getMatcher();
 	}
 	
 	public Rule toRule() {

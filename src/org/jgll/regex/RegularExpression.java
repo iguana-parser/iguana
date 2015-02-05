@@ -8,6 +8,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.DFAMatcher;
 import org.jgll.util.IntArrayCharSequence;
 import org.jgll.util.generator.ConstructorCode;
 
@@ -24,11 +25,11 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	public Set<CharacterRange> getFirstSet();
 	
 	default Matcher getDFAMatcher() {
-		return (input, i) -> getAutomaton().getRunnableAutomaton().match(input, i);
+		return new DFAMatcher(getAutomaton());
 	}
 	
 	default Matcher getBackwardsMatcher() {
-		return (input, i) -> getAutomaton().getRunnableAutomaton().matchBackwards(input, i);
+		throw new UnsupportedOperationException();
 	}
 	
 	default Matcher getJavaRegexMatcher() {

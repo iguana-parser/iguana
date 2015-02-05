@@ -3,7 +3,7 @@ package org.jgll.regex;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.AbstractSymbol;
+import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
@@ -12,7 +12,7 @@ import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
 
-public class Opt extends AbstractSymbol implements RegularExpression {
+public class Opt extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 
@@ -40,7 +40,7 @@ public class Opt extends AbstractSymbol implements RegularExpression {
 	}
 	
 	@Override
-	public Automaton getAutomaton() {
+	public Automaton createAutomaton() {
 		
 		if (!isRegularExpression)
 			throw new RuntimeException("Only applicable to regular expressions");		
