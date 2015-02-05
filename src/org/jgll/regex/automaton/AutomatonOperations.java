@@ -4,9 +4,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -89,9 +91,10 @@ public class AutomatonOperations {
 	}
 	
 	private static CharacterRange[] getAlphabet(State startState, Multimap<CharacterRange, CharacterRange> rangeMap) {
-		CharacterRange[] alphabet = new CharacterRange[rangeMap.values().size()];
+		Set<CharacterRange> values = new LinkedHashSet<>(rangeMap.values());
+		CharacterRange[] alphabet = new CharacterRange[values.size()];
 		int i = 0;
-		for (CharacterRange r : rangeMap.values()) {
+		for (CharacterRange r : values) {
 			alphabet[i++] = r;
 		}
 		return alphabet;
@@ -127,7 +130,9 @@ public class AutomatonOperations {
 			Set<State> destState = new HashSet<>();
 			for (CharacterRange r : alphabet) {
 				for (State state : stateSet) {
-					destState.add(state.getState(r));
+					State dest = state.getState(r);
+					if (dest != null)
+						destState.add(dest);
 				}
 				
 				destState = epsilonClosure(destState);
