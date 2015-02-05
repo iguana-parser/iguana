@@ -30,7 +30,7 @@ public class Automaton implements Serializable {
 	
 	private CharacterRange[] alphabet;
 	
-	public Automaton(AutomatonOperations builder) {
+	public Automaton(AutomatonBuilder builder) {
 		this.startState = builder.getStartState();
 		this.states = builder.getStates();
 		this.finalStates = builder.getFinalStates();
@@ -74,7 +74,7 @@ public class Automaton implements Serializable {
 	 * All characters accepted by this NFA.
 	 */
 	public BitSet getCharacters() {
-		return AutomatonOperations.getCharacters(this);
+		return AutomatonBuilder.getCharacters(this);
 	}
 	
 	/**
@@ -197,11 +197,11 @@ public class Automaton implements Serializable {
 		return getFinalStates().size() == 0;
 	}
 	
-	public static AutomatonOperations builder(State startState) {
-		return new AutomatonOperations(startState);
+	public static AutomatonBuilder builder(State startState) {
+		return new AutomatonBuilder(startState);
 	}
 	
 	public String toJavaCode() {
-		return AutomatonOperations.toJavaCode(this);
+		return AutomatonBuilder.toJavaCode(this);
 	}	
 }

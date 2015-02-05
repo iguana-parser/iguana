@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.AutomatonOperations;
+import org.jgll.regex.automaton.AutomatonBuilder;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -31,7 +31,7 @@ public class AltTest {
 		Sequence<Character> k1 = Sequence.from("for");
 		Sequence<Character> k2 = Sequence.from("forall");
 		
-		Automaton result = AutomatonOperations.or(k1.getAutomaton(), k2.getAutomaton());
+		Automaton result = AutomatonBuilder.or(k1.getAutomaton(), k2.getAutomaton());
 
 		Matcher dfa = result.getRunnableAutomaton();
 		assertEquals(3, dfa.match(Input.fromString("for"), 0));

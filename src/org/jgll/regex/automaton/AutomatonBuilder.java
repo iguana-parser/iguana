@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,7 +18,7 @@ import org.jgll.grammar.symbol.CharacterRange;
 
 import com.google.common.collect.Multimap;
 
-public class AutomatonOperations {
+public class AutomatonBuilder {
 	
 	private State startState;
 	
@@ -38,7 +37,7 @@ public class AutomatonOperations {
 	 */
 	private Multimap<CharacterRange, CharacterRange> rangeMap;
 	
-	public AutomatonOperations(Automaton automaton) {
+	public AutomatonBuilder(Automaton automaton) {
 		this.deterministic = automaton.isDeterministic();
 		this.minimized = automaton.isMinimized();
 		this.states = automaton.getAllStates();
@@ -51,7 +50,7 @@ public class AutomatonOperations {
 		}
 	}
 	
-	public AutomatonOperations(State startState) {
+	public AutomatonBuilder(State startState) {
 		this.states = getAllStates(startState);
 		this.startState = startState;
 		this.finalStates = computeFinalStates();
@@ -100,7 +99,7 @@ public class AutomatonOperations {
 		return alphabet;
 	}
 	
-	public AutomatonOperations makeDeterministic() {
+	public AutomatonBuilder makeDeterministic() {
 		
 		if (deterministic)
 			return this;
@@ -189,7 +188,7 @@ public class AutomatonOperations {
 	 * @param automaton
 	 * @return
 	 */
-	public AutomatonOperations minimize() {
+	public AutomatonBuilder minimize() {
 		
 		if (minimized)
 			return this;
@@ -505,7 +504,7 @@ public class AutomatonOperations {
 	 * only final state.
 	 * 
 	 */
-	public AutomatonOperations reverse() {
+	public AutomatonBuilder reverse() {
 
 		// 0. creating new states for each state of the original automaton
 		final Map<State, State> newStates = new HashMap<>();
@@ -538,7 +537,7 @@ public class AutomatonOperations {
 	 *  if all its composing states are final. 
 	 * 
 	 */
-	public AutomatonOperations intersect(Automaton other) {
+	public AutomatonBuilder intersect(Automaton other) {
 		
 		State startState = null;
 		
@@ -618,7 +617,7 @@ public class AutomatonOperations {
 	 * Makes the transition function complete, i.e., from each state 
 	 * there will be all outgoing transitions.
 	 */
-	public AutomatonOperations makeComplete() {
+	public AutomatonBuilder makeComplete() {
 		
 		makeDeterministic();
 		

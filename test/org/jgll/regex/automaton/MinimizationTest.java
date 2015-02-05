@@ -42,7 +42,7 @@ public class MinimizationTest {
 		
 		Automaton nfa = new Automaton(q0);
 		
-		Automaton minimized = AutomatonOperations.minimize(nfa);
+		Automaton minimized = AutomatonBuilder.minimize(nfa);
 	
 		assertEquals(getAutomaton1(), minimized);
 	}
@@ -83,7 +83,7 @@ public class MinimizationTest {
 		
 		Automaton nfa = new Automaton(a);
 		
-		Automaton minimized = AutomatonOperations.minimize(nfa);
+		Automaton minimized = AutomatonBuilder.minimize(nfa);
 		
 		assertEquals(getAutomaton2(), minimized);
 	}
@@ -122,7 +122,7 @@ public class MinimizationTest {
 		
 		Automaton nfa = new Automaton(a);
 		
-		Automaton minimized = AutomatonOperations.minimize(nfa);
+		Automaton minimized = AutomatonBuilder.minimize(nfa);
 		
 		assertEquals(getAutomaton3(), minimized);
 	}
@@ -167,7 +167,7 @@ public class MinimizationTest {
 		
 		Automaton nfa = new Automaton(a);
 		
-		Automaton minimized = AutomatonOperations.minimize(nfa);
+		Automaton minimized = AutomatonBuilder.minimize(nfa);
 		
 		assertEquals(getAutomaton4(), minimized);
 	}
