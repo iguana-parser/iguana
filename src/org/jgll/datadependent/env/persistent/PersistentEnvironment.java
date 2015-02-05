@@ -123,5 +123,11 @@ public class PersistentEnvironment implements Environment {
 		
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return (parent != null? parent.toString() + " -> " : "() -> ")
+				+ (bindings != null? bindings.toString(): "()");
+	}
 
 }
