@@ -1,7 +1,6 @@
 package org.jgll.util;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
@@ -22,32 +21,32 @@ import org.jgll.util.visualization.TrieToDot;
 
 public class Visualization {
 	
-	public static void generateSPPFGraphWithoutIntermeiateNodes(String outputDir, SPPFNode sppf, GrammarRegistry registry, Input input) {
-		SPPFToDot toDot = new ToDotWithoutIntermediateNodes(registry, input);
+	public static void generateSPPFGraphWithoutIntermeiateNodes(String outputDir, SPPFNode sppf, Input input) {
+		SPPFToDot toDot = new ToDotWithoutIntermediateNodes(input);
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	public static void generateSPPFGraph(String outputDir, SPPFNode sppf, GrammarRegistry registry, Input input) {
-		SPPFToDot toDot = new SPPFToDot(registry, input);
+	public static void generateSPPFGraph(String outputDir, SPPFNode sppf, Input input) {
+		SPPFToDot toDot = new SPPFToDot(input);
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	public static void generateSPPFWithNonterminalNodesOnly(String outputDir, SPPFNode sppf, GrammarRegistry registry, Input input) {
-		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists(registry, input);
+	public static void generateSPPFWithNonterminalNodesOnly(String outputDir, SPPFNode sppf, Input input) {
+		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists(input);
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
 	
-	public static void generateGSSGraph(String outputDir, GrammarRegistry registry, Iterable<GSSNode> gssNodes) {
-		GSSToDot toDot = new GSSToDot(registry);
+	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> gssNodes) {
+		GSSToDot toDot = new GSSToDot();
 		toDot.execute(gssNodes);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "gss");
 	}
 	
-	public static void generateSPPFNodesUnPacked(String outputDir, SPPFNode node, GrammarRegistry registry, Input input) {
-		SPPFToDotUnpacked toDot = new SPPFToDotUnpacked(input, registry);
+	public static void generateSPPFNodesUnPacked(String outputDir, SPPFNode node, Input input) {
+		SPPFToDotUnpacked toDot = new SPPFToDotUnpacked(input);
 		toDot.visit(node);
 		int i = 0;
 		for(String s : toDot.getResult()) {
