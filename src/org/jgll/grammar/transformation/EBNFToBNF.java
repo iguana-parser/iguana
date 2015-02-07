@@ -146,7 +146,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		}
 		
 		cache.put(symbol, newNt);
-		return newNt;
+		return newNt.copyBuilder().addConditions(symbol).build();
 	}
 	
 	private String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
