@@ -366,8 +366,16 @@ public class Python {
 			.addRule(Rule.withHead(Nonterminal.builder("Number").build()).addSymbol(Nonterminal.builder("Integer").build()).build())
 			//BytesLiteral ::= BytesPrefix (ShortBytes | LongBytes) 
 			.addRule(Rule.withHead(Nonterminal.builder("BytesLiteral").build()).addSymbol(Nonterminal.builder("BytesPrefix").build()).addSymbol(Alt.builder(Nonterminal.builder("ShortBytes").build(), Nonterminal.builder("LongBytes").build()).build()).build())
-			//SimpleStmt ::= SmallStmt (";" SmallStmt)* (;)? NewLine 
-			.addRule(Rule.withHead(Nonterminal.builder("SimpleStmt").build()).addSymbol(Nonterminal.builder("SmallStmt").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(59).build()).build(), Nonterminal.builder("SmallStmt").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Character.builder(59).build()).build()).build()).addSymbol(Nonterminal.builder("NewLine").build()).build())
+			
+			/**
+			 * Data-dependent
+			 * 
+			 * @layout(L)
+			 * SimpleStmt ::= SmallStmt (";" SmallStmt)* (;)? NL
+			 */
+			.addRule(Rule.withHead(Nonterminal.builder("SimpleStmt").build()).addSymbol(Nonterminal.builder("SmallStmt").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(59).build()).build(), Nonterminal.builder("SmallStmt").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Character.builder(59).build()).build()).build()).addSymbol(Nonterminal.builder("NL").build())
+							.setLayout(Nonterminal.builder("L").build()).build())
+			
 			//Tfpdef ::= Name (":" Test)? 
 			.addRule(Rule.withHead(Nonterminal.builder("Tfpdef").build()).addSymbol(Nonterminal.builder("Name").build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Test").build()).build()).build()).build())
 			//CompIf ::= "if" TestNocond CompIter? 
@@ -450,14 +458,30 @@ public class Python {
 			.addRule(Rule.withHead(Nonterminal.builder("LongBytesItem").build()).addSymbol(Nonterminal.builder("BytesEscapeSeq").build()).build())
 			//LongBytesItem ::= LongBytesChar 
 			.addRule(Rule.withHead(Nonterminal.builder("LongBytesItem").build()).addSymbol(Nonterminal.builder("LongBytesChar").build()).build())
-			//IfStmt ::= "if" Test ":" Suite ("elif" Test ":" Suite)* ("else" ":" Suite)? 
-			.addRule(Rule.withHead(Nonterminal.builder("IfStmt").build()).addSymbol(Sequence.builder(Character.builder(105).build(), Character.builder(102).build()).build()).addSymbol(Nonterminal.builder("Test").build()).addSymbol(Sequence.builder(Character.builder(58).build()).build()).addSymbol(Nonterminal.builder("Suite").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(105).build(), Character.builder(102).build()).build(), Nonterminal.builder("Test").build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(115).build(), Character.builder(101).build()).build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build()).build())
+			
+			/**
+			 * Data-dependent
+			 * 
+			 * @layout(L)
+			 * IfStmt ::= "if" Test ":" Suite ("elif" Test ":" Suite)* ("else" ":" Suite)?
+			 */ 
+			.addRule(Rule.withHead(Nonterminal.builder("IfStmt").build()).addSymbol(Sequence.builder(Character.builder(105).build(), Character.builder(102).build()).build()).addSymbol(Nonterminal.builder("Test").build()).addSymbol(Sequence.builder(Character.builder(58).build()).build()).addSymbol(Nonterminal.builder("Suite").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(105).build(), Character.builder(102).build()).build(), Nonterminal.builder("Test").build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(115).build(), Character.builder(101).build()).build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build())
+							.setLayout(Nonterminal.builder("L").build()).build())
+			
 			//ReturnStmt ::= "return" TestList? 
 			.addRule(Rule.withHead(Nonterminal.builder("ReturnStmt").build()).addSymbol(Sequence.builder(Character.builder(114).build(), Character.builder(101).build(), Character.builder(116).build(), Character.builder(117).build(), Character.builder(114).build(), Character.builder(110).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Nonterminal.builder("TestList").build()).build()).build())
 			//Vfpdef ::= Name 
 			.addRule(Rule.withHead(Nonterminal.builder("Vfpdef").build()).addSymbol(Nonterminal.builder("Name").build()).build())
-			//Suite ::= NewLine Stmt+ 
-			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("NewLine").build()).addSymbol(Plus.builder(Nonterminal.builder("Stmt").build()).build()).build())
+			
+			/**
+			 * Data-dependent
+			 * 
+			 * @layout(L)
+			 * Suite ::= NL Stmt+
+			 */
+			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("NL").build()).addSymbol(Plus.builder(Nonterminal.builder("Stmt").build()).build())
+						.setLayout(Nonterminal.builder("L").build()).build())
+			
 			//Suite ::= SimpleStmt 
 			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("SimpleStmt").build()).build())
 			//TestNocond ::= OrTest 
@@ -564,18 +588,39 @@ public class Python {
 			.addRule(Rule.withHead(Nonterminal.builder("ExprStmt").build()).addSymbol(Nonterminal.builder("TestlistStarExpr").build()).addSymbol(Alt.builder(Sequence.builder(Nonterminal.builder("Augassign").build(), Alt.builder(Nonterminal.builder("TestList").build(), Nonterminal.builder("YieldExpr").build()).build()).build(), Star.builder(Sequence.builder(Sequence.builder(Character.builder(61).build()).build(), Alt.builder(Nonterminal.builder("TestlistStarExpr").build(), Nonterminal.builder("YieldExpr").build()).build()).build()).build()).build()).build())
 			//Name ::= (A-Z | _ | a-z) (0-9 | A-Z | _ | a-z)* 
 			.addRule(Rule.withHead(Nonterminal.builder("Name").build()).addSymbol(Alt.builder(CharacterRange.builder(65, 90).build(), CharacterRange.builder(95, 95).build(), CharacterRange.builder(97, 122).build()).build()).addSymbol(Star.builder(Alt.builder(CharacterRange.builder(48, 57).build(), CharacterRange.builder(65, 90).build(), CharacterRange.builder(95, 95).build(), CharacterRange.builder(97, 122).build()).build()).build()).build())
+			
+			// NoNL ::= (' ' | '\t')*
+			.addRule(Rule.withHead(Nonterminal.builder("NoNL").build()).addSymbol(Star.from(Alt.from(Character.from(' '), Character.from('\t')))).build())
+			
+			// L ::= (' ' | '\t' | '\r' | '\n')* !>> ' ' !>> '\t' !>> '\r' !>> '\n'
+			.addRule(Rule.withHead(Nonterminal.builder("L").build()).addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\r'), Character.from('\n')))
+						.addPostCondition(RegularExpressionCondition.notFollow(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\r'), Character.from('\n')))).build()).build())
+			
+			// *** LOGICAL NEW LINE:
+			// NL ::= ('\n' | '\r') !>> '\n' !>> '\r' 
+			//      | ('\n' | '\r') (' ' | '\t' | '\n' | '\r')* ('\n' | '\r') !>> '\n' !>> '\r' 
+			.addRule(Rule.withHead(Nonterminal.builder("NL").build())
+						.addSymbol(Alt.builder(Character.from('\n'), Character.from('\r'))
+										.addPostCondition(RegularExpressionCondition.notFollow(Alt.from(Character.from('\n'), Character.from('\r')))).build()).build())
+			.addRule(Rule.withHead(Nonterminal.builder("NL").build())
+						.addSymbol(Alt.from(Character.from('\n'), Character.from('\r')))
+						.addSymbol(Star.from(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\n'), Character.from('\r'))))
+						.addSymbol(Alt.builder(Character.from('\n'), Character.from('\r'))
+										.addPostCondition(RegularExpressionCondition.notFollow(Alt.from(Character.from('\n'), Character.from('\r')))).build()).build())
+										
 			.build();
 
 	
 	@Test
 	public void test() {
 		
-		Input input = Input.fromString("a");
+		Input input = Input.fromString("if (x==1)  :  \n"
+				                     + "y=0\n");
 		
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		
-		ParseResult result = parser.parse(input, graph, Nonterminal.withName("Name"));
+		ParseResult result = parser.parse(input, graph, Nonterminal.withName("IfStmt"));
 		
 		if (result.isParseSuccess()) {
 			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
