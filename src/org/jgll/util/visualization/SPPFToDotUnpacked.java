@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.sppf.IntermediateNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -41,12 +40,11 @@ public class SPPFToDotUnpacked extends ToDot {
 
 	private Input input;
 
-	public SPPFToDotUnpacked(Input input, GrammarRegistry registry) {
-		this(input, registry, false);
+	public SPPFToDotUnpacked(Input input) {
+		this(input, false);
 	}
 	
-	public SPPFToDotUnpacked(Input input, GrammarRegistry registry, boolean showPackedNodeLabel) {
-		super(registry);
+	public SPPFToDotUnpacked(Input input, boolean showPackedNodeLabel) {
 		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;
 		this.parseTrees = new HashSet<>();

@@ -2,16 +2,11 @@ package org.jgll.util.visualization;
 
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
 
 public class GSSToDot extends ToDot {
 	
-	public GSSToDot(GrammarRegistry registry) {
-		super(registry);
-	}
-
 	private StringBuilder sb = new StringBuilder();
 	
 	public void execute(Iterable<GSSNode> set) {
