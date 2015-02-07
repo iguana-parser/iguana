@@ -40,11 +40,9 @@ public class MinimizationTest {
 		q7.addTransition(new Transition('0', q2));
 		q7.addTransition(new Transition('1', q2));
 		
-		Automaton nfa = new Automaton(q0);
+		Automaton nfa = Automaton.builder(q0).minimize().build();
 		
-		Automaton minimized = AutomatonBuilder.minimize(nfa);
-	
-		assertEquals(getAutomaton1(), minimized);
+		assertEquals(getAutomaton1(), nfa);
 	}
 	
 	private Automaton getAutomaton1() {
@@ -63,7 +61,7 @@ public class MinimizationTest {
 		state2.addTransition(new Transition(49, 49, state3));
 		state1.addTransition(new Transition(48, 48, state2));
 		
-		return new Automaton(state1);
+		return Automaton.builder(state1).build();
 	}
 	
 	
@@ -81,9 +79,7 @@ public class MinimizationTest {
 		c.addTransition(new Transition('0', '1', d));
 		d.addTransition(new Transition('0', '1', e));
 		
-		Automaton nfa = new Automaton(a);
-		
-		Automaton minimized = AutomatonBuilder.minimize(nfa);
+		Automaton minimized = Automaton.builder(a).minimize().build();
 		
 		assertEquals(getAutomaton2(), minimized);
 	}
@@ -97,7 +93,7 @@ public class MinimizationTest {
 		state2.addTransition(new Transition(48, 49, state3));
 		state1.addTransition(new Transition(49, 49, state2));
 		state1.addTransition(new Transition(48, 48, state2));
-		return new Automaton(state1);
+		return Automaton.builder(state1).build();
 	}
 	
 	
@@ -120,9 +116,7 @@ public class MinimizationTest {
 		e.addTransition(new Transition('0', e));
 		e.addTransition(new Transition('1', e));
 		
-		Automaton nfa = new Automaton(a);
-		
-		Automaton minimized = AutomatonBuilder.minimize(nfa);
+		Automaton minimized = Automaton.builder(a).minimize().build();
 		
 		assertEquals(getAutomaton3(), minimized);
 	}
@@ -137,7 +131,7 @@ public class MinimizationTest {
 		state2.addTransition(new Transition(48, 48, state3));
 		state2.addTransition(new Transition(49, 49, state2));
 		state1.addTransition(new Transition(49, 49, state2));
-		return new Automaton(state1);
+		return Automaton.builder(state1).build();
 	}
 	
 	@Test
@@ -165,9 +159,7 @@ public class MinimizationTest {
 		g.addTransition(new Transition('1', '3', i));
 		h.addTransition(new Transition('1', i));
 		
-		Automaton nfa = new Automaton(a);
-		
-		Automaton minimized = AutomatonBuilder.minimize(nfa);
+		Automaton minimized = Automaton.builder(a).minimize().build();
 		
 		assertEquals(getAutomaton4(), minimized);
 	}
@@ -188,12 +180,7 @@ public class MinimizationTest {
 		state1.addTransition(new Transition(50, 50, state2));
 		state1.addTransition(new Transition(49, 49, state2));
 		state1.addTransition(new Transition(51, 51, state2));
-		return new Automaton(state1);
-	}
-	
-	@Test
-	public void test5() {
-		
+		return Automaton.builder(state1).build();
 	}
 	
 }

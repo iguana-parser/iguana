@@ -1,6 +1,5 @@
 package org.jgll.regex.automaton;
 
-import static org.jgll.regex.automaton.AutomatonBuilder.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
@@ -20,30 +19,33 @@ public class DiffernceTest {
 
 	@Test
 	public void test1() {		
-		Automaton a = difference(id.getAutomaton(), k1.getAutomaton());
-		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));
-		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if"), 0));
-		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if:"), 0));
-		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first:"), 0));
+		Automaton a = id.getAutomaton().builder().difference(k1.getAutomaton()).build();
+		DFAMatcher matcher = new DFAMatcher(a);
+		assertEquals(5, matcher.match(Input.fromString("first"), 0));
+		assertEquals(-1, matcher.match(Input.fromString("if"), 0));
+		assertEquals(-1, matcher.match(Input.fromString("if:"), 0));
+		assertEquals(5, matcher.match(Input.fromString("first:"), 0));
 	}
 	
 	@Test
 	public void test2() {
-		Automaton a = difference(id.getAutomaton(), union(k1.getAutomaton(), k2.getAutomaton()));
-		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));
-		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if"), 0));
-		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("when"), 0));
+		Automaton union = k1.getAutomaton().builder().union(k2.getAutomaton()).build();
+		Automaton a = id.getAutomaton().builder().difference(union).build();
+		DFAMatcher matcher = new DFAMatcher(a);
+		assertEquals(5, matcher.match(Input.fromString("first"), 0));
+		assertEquals(-1, matcher.match(Input.fromString("if"), 0));
+		assertEquals(-1, matcher.match(Input.fromString("when"), 0));
 	}
 	
 	@Test
 	public void test3() {
-		Alt alt = Alt.from(k1, k2, k3);
-		
-		Automaton a = difference(id.getAutomaton(), alt.getAutomaton());
-		assertEquals(5, a.getRunnableAutomaton().match(Input.fromString("first"), 0));
-		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("if"), 0));
-		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("when"), 0));
-		assertEquals(-1, a.getRunnableAutomaton().match(Input.fromString("new"), 0));
+		Alt<Sequence<Character>> alt = Alt.from(k1, k2, k3);
+		Automaton a = id.getAutomaton().builder().difference(alt.getAutomaton()).build();
+		DFAMatcher matcher = new DFAMatcher(a);
+		assertEquals(5, matcher.match(Input.fromString("first"), 0));
+		assertEquals(-1, matcher.match(Input.fromString("if"), 0));
+		assertEquals(-1, matcher.match(Input.fromString("when"), 0));
+		assertEquals(-1, matcher.match(Input.fromString("new"), 0));
 	}
 
 }

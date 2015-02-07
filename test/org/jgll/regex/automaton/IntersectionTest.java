@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
-import org.jgll.regex.Sequence;
-import org.jgll.grammar.symbol.Character;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -23,7 +21,7 @@ public class IntersectionTest {
 		x1.addTransition(new Transition('1', x0));
 		
 		// Matches an odd number of 1's.
-		Automaton a1 = new Automaton(x0, "a1");
+		Automaton a1 = Automaton.builder(x0).build();
 		
 		State y0 = new State(StateType.FINAL);
 		State y1 = new State();
@@ -34,12 +32,12 @@ public class IntersectionTest {
 		y1.addTransition(new Transition('1', y0));
 		
 		// Matches an string of even length.
-		Automaton a2 = new Automaton(y0, "a2");
+		Automaton a2 = Automaton.builder(y0).build();
 		
-		a1.intersection(a2);
-
+		DFAMatcher matcher = new DFAMatcher(a1.builder().intersect(a2).build());
+		
 		assertFalse(a1.isLanguageEmpty());
-		assertTrue(a1.getRunnableAutomaton().match(Input.fromString("111001110001")));
+		assertTrue(matcher.match(Input.fromString("111001110001")));
 	}
 	
 	@Test
@@ -47,17 +45,10 @@ public class IntersectionTest {
 		RegularExpression f = RegularExpressionExamples.getFloat().build();
 		RegularExpression id = RegularExpressionExamples.getId().build();
 		
+		Automaton intersect = f.getAutomaton().builder().intersect(id.getAutomaton()).build();
+		
 		// Should not overlap, therefore the intersection should be empty.
-		assertTrue(f.getAutomaton().intersection(id.getAutomaton()).isLanguageEmpty());
+		assertTrue(intersect.isLanguageEmpty());
 	}
-	
-	@Test
-	public void test3() {
-		Sequence<Character> k1 = Sequence.from("for");
-		Sequence<Character> k2 = Sequence.from("forall");
-
-		assertTrue(AutomatonBuilder.prefix(k1.getAutomaton(), k2.getAutomaton()));
-		assertFalse(AutomatonBuilder.prefix(k2.getAutomaton(), k1.getAutomaton()));
-	}
-	
+		
 }

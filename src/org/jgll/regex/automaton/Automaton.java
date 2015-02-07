@@ -197,6 +197,10 @@ public class Automaton implements Serializable {
 		return getFinalStates().size() == 0;
 	}
 	
+	public AutomatonBuilder builder() {
+		return new AutomatonBuilder(this);
+	}
+	
 	public static AutomatonBuilder builder(State startState) {
 		return new AutomatonBuilder(startState);
 	}

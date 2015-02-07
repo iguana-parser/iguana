@@ -1,6 +1,5 @@
 package org.jgll.regex.automaton;
 
-import static org.jgll.regex.automaton.AutomatonBuilder.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
@@ -16,19 +15,21 @@ public class UnionTest {
 
 	@Test
 	public void test1() {
-		Automaton a = union(k1.getAutomaton(), k2.getAutomaton());
-		assertTrue(a.getRunnableAutomaton().match(Input.fromString("if")));
-		assertTrue(a.getRunnableAutomaton().match(Input.fromString("when")));
-		assertFalse(a.getRunnableAutomaton().match(Input.fromString("else")));
+		Automaton a = k1.getAutomaton().builder().union(k2.getAutomaton()).build();
+		DFAMatcher matcher = new DFAMatcher(a);
+		assertTrue(matcher.match(Input.fromString("if")));
+		assertTrue(matcher.match(Input.fromString("when")));
+		assertFalse(matcher.match(Input.fromString("else")));
 	}
 	
 	@Test
 	public void test3() {
-		Automaton a = union(k1.getAutomaton(), union(k2.getAutomaton(), k3.getAutomaton()));
-		assertTrue(a.getRunnableAutomaton().match(Input.fromString("if")));
-		assertTrue(a.getRunnableAutomaton().match(Input.fromString("when")));
-		assertTrue(a.getRunnableAutomaton().match(Input.fromString("new")));
-		assertFalse(a.getRunnableAutomaton().match(Input.fromString("else")));
+		Automaton a = k1.getAutomaton().builder().union(k2.getAutomaton(), k3.getAutomaton()).build();
+		DFAMatcher matcher = new DFAMatcher(a);
+		assertTrue(matcher.match(Input.fromString("if")));
+		assertTrue(matcher.match(Input.fromString("when")));
+		assertTrue(matcher.match(Input.fromString("new")));
+		assertFalse(matcher.match(Input.fromString("else")));
 	}
 
 }

@@ -562,6 +562,14 @@ public class AutomatonBuilder {
 		
 		return this;
 	}
+	
+	public AutomatonBuilder union(Automaton...automatons) {
+		throw new UnsupportedOperationException();
+	}
+	
+	public AutomatonBuilder difference(Automaton...automaton) {
+		throw new UnsupportedOperationException();
+	}
 		
 	/**
 	 * Produces the Cartesian product of the states of an automata.

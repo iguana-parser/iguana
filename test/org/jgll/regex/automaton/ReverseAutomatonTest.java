@@ -12,8 +12,9 @@ public class ReverseAutomatonTest {
 	@Test
 	public void test() {
 		Sequence<Character> r = Sequence.from("test");
-		Automaton a = r.getAutomaton().reverse();
-		assertTrue(a.getRunnableAutomaton().match(Input.fromString("tset")));
+		Automaton a = r.getAutomaton().builder().reverse().build();
+		DFAMatcher matcher = new DFAMatcher(a);
+		assertTrue(matcher.match(Input.fromString("tset")));
 	}
 
 }
