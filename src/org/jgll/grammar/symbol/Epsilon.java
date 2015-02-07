@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -76,6 +77,11 @@ public class Epsilon extends AbstractRegularExpression {
 	@Override
 	public SymbolBuilder<? extends Symbol> copyBuilder() {
 		return builder;
+	}
+	
+	@Override
+	public Matcher getMatcher() {
+		return (input, i) -> 0;
 	}
 
 	@Override
