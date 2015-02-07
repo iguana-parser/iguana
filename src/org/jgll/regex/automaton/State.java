@@ -1,15 +1,14 @@
 package org.jgll.regex.automaton;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.RegularExpression;
-import org.jgll.util.Input;
 
 public class State implements Serializable {
 
@@ -18,17 +17,12 @@ public class State implements Serializable {
 	private final Set<Transition> transitions;
 	
 	/**
-	 * Epsilon closure set for this set, i.e., the set of states reachable 
-	 * from epsilon transitions from this state.
+	 * The state that is reachable using the epsilon transition
 	 */
-	private Set<State> epsilonClosure;
+	private final Set<State> epsilonStates;
 	
-	/**
-	 * A map from the start interval of each transition to the transition.
-	 * This map is used for fast lookup of transitions.
-	 */
-	private Map<Integer, Transition> transitionsMap;
-	
+	private final Map<CharacterRange, State> reachableStates;
+			
 	/**
 	 * The set of regular expressions whose final state is this state.
 	 */
@@ -38,55 +32,34 @@ public class State implements Serializable {
 	
 	private int id;
 	
-	private Set<Action> actions;
-	
 	public State() {
-		this(StateType.NORMAL, new HashSet<Action>());
+		this(StateType.NORMAL);
 	}
 	
 	public State(StateType stateType) {
-		this(stateType, new HashSet<Action>());
-	}
-	
-	public State(Set<Action> actions) {
-		this(StateType.NORMAL, actions);
-	}
-	
-	public State(StateType stateType, Set<Action> actions) {
 		this.transitions = new HashSet<>();
-		this.transitionsMap = new HashMap<>();
+		this.epsilonStates = new HashSet<>();
+		this.reachableStates = new HashMap<>();
 		this.stateType = stateType;
-		this.epsilonClosure = new HashSet<>();
 		this.regularExpressions = new HashSet<>();
-		this.actions = actions;
 	}
 	
 	public Set<Transition> getTransitions() {
 		return transitions;
 	}
 	
-	/**
-	 * Transitions sorted based on their start index.
-	 */
-	public Transition[] getSortedTransitions() {
-		Transition[] array = transitions.toArray(new Transition[] {});
-		Arrays.sort(array);
-		return array;
+	public State getState(CharacterRange r) {
+		return reachableStates.get(r);
 	}
-	
-	/**
-	 * Returns all the reachable states by consuming the given input character. 
-	 */
-	public Set<State> move(int c) {
-		Set<State> set = new HashSet<>();
-		for(Transition t : transitions) {
-			if(t.canMove(c)) {
-				set.add(t.getDestination());
-			}
-		}
-		return set;
+
+	public boolean hasTransition(CharacterRange r) {
+		return reachableStates.get(r) != null;
 	}
-	
+
+	public Set<State> getEpsilonStates() {
+		return epsilonStates;
+	}
+		
 	public StateType getStateType() {
 		return stateType;
 	}
@@ -100,11 +73,12 @@ public class State implements Serializable {
 	}
 	
 	public void addTransition(Transition transition) {
-		transitionsMap.put(transition.getStart(), transition);
-		transitions.add(transition);
-		
-		if(transition.isEpsilonTransition()) {
-			epsilonClosure.add(transition.getDestination());
+		if (transitions.add(transition)) {
+			if (transition.isEpsilonTransition()) {
+				epsilonStates.add(transition.getDestination());
+			} else {
+				reachableStates.put(transition.getRange(), transition.getDestination());
+			}
 		}
 	}
 	
@@ -113,9 +87,8 @@ public class State implements Serializable {
 	}
 	
 	public void removeTransitions(Collection<Transition> c) {
-		transitions.removeAll(c);
+		c.forEach(t -> transitions.remove(t));
 	}
-	
 	
 	public void setId(int id) {
 		this.id = id;
@@ -142,46 +115,10 @@ public class State implements Serializable {
 	public int getCountTransitions() {
 		return transitions.size();
 	}
-	
-	public Set<State> getEpsilonClosure() {
-		return epsilonClosure;
-	}
-	
-	public Transition getTransition(int start) {
-		return transitionsMap.get(start);
-	}
-	
-	public boolean hasTransition(int start) {
-		return transitionsMap.containsKey(start);
-	}
-	
+		
 	@Override
 	public String toString() {
-		return "State" + id + " " + (actions.isEmpty() ? "" : actions);
+		return "State" + id;
 	}
-	
-	public void addAction(Action action) {
-		if (action != null) {
-			actions.add(action);
-		}
-	}
-	
-	public void addActions(Set<Action> actions) {
-		this.actions.addAll(actions);
-	}
-	
-	public boolean executeActions(Input input, int index) {
-		
-		for (Action action : actions) {
-			if(action.execute(input, index)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public Set<Action> getActions() {
-		return actions;
-	}
+
 }

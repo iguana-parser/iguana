@@ -56,8 +56,8 @@ public class IntersectionTest {
 		Sequence<Character> k1 = Sequence.from("for");
 		Sequence<Character> k2 = Sequence.from("forall");
 
-		assertTrue(AutomatonOperations.prefix(k1.getAutomaton(), k2.getAutomaton()));
-		assertFalse(AutomatonOperations.prefix(k2.getAutomaton(), k1.getAutomaton()));
+		assertTrue(AutomatonBuilder.prefix(k1.getAutomaton(), k2.getAutomaton()));
+		assertFalse(AutomatonBuilder.prefix(k2.getAutomaton(), k1.getAutomaton()));
 	}
 	
 }

@@ -15,7 +15,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	}
 	
 	@Override
-	public Automaton getAutomaton() {
+	public final Automaton getAutomaton() {
 		if (automaton == null) {
 			automaton = createAutomaton();
 		}

@@ -3,7 +3,6 @@ package org.jgll.regex;
 import static org.junit.Assert.*;
 
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.RunnableAutomaton;
 import org.jgll.util.Input;
 import org.junit.Test;
 

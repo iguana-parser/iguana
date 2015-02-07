@@ -1,6 +1,6 @@
 package org.jgll.regex.automaton;
 
-import static org.jgll.regex.automaton.AutomatonOperations.*;
+import static org.jgll.regex.automaton.AutomatonBuilder.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;

@@ -1,46 +1,38 @@
 package org.jgll.regex.automaton;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.parser.HashFunctions;
-import org.jgll.util.Input;
 
 public class Transition implements Comparable<Transition>, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private int start;
-	
-	private int end;
+	private CharacterRange range;
 	
 	private State destination;
 	
 	private int id;
 	
-	private Set<Action> actions;
-	
-	public Transition(int start, int end, State destination, Set<Action> actions) {
-		
-		if(end < start) 		throw new IllegalArgumentException("start cannot be less than end.");
-		if(destination == null) throw new IllegalArgumentException("Destination cannot be null.");
-		if (actions == null)    throw new IllegalArgumentException("Transition actions cannot be null.");
-		
-		this.start = start;
-		this.end = end;
-		this.destination = destination;
-		this.actions = actions;		
+	public Transition(int start, int end, State destination) {
+		this(CharacterRange.in(start, end), destination);
 	}
 	
 	public Transition(int c, State destination) {
 		this(c, c, destination);
 	}
 	
-	public Transition(int start, int end, State destination) {
-		this(start, end, destination, new HashSet<Action>());
+	public Transition(CharacterRange range, State destination) {
+		if (range.getEnd() < range.getStart())
+			throw new IllegalArgumentException("start cannot be less than end.");
+		
+		if (destination == null) 
+			throw new IllegalArgumentException("Destination cannot be null.");
+
+		this.range = range;
+		this.destination = destination;
 	}
 	
 	public static Transition epsilonTransition(State destination) {
@@ -52,15 +44,15 @@ public class Transition implements Comparable<Transition>, Serializable {
 	}
 	
 	public int getStart() {
-		return start;
+		return range.getStart();
 	}
 	
 	public int getEnd() {
-		return end;
+		return range.getEnd();
 	}
 	
 	public CharacterRange getRange() {
-		return CharacterRange.in(start, end);
+		return range;
 	}
 	
 	public void setId(int id) {
@@ -76,7 +68,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 	}
 	
 	public boolean isEpsilonTransition() {
-		return start == -1;
+		return range.getStart() == -1;
 	}
 	
 	public boolean isLoop(State source) {
@@ -84,30 +76,30 @@ public class Transition implements Comparable<Transition>, Serializable {
 	}
 	
 	public boolean canMove(int c) {
-		return start <= c && c <= end;
+		return range.contains(c);
+	}
+	
+	public boolean overlaps(Transition t) {
+		return range.overlaps(t.range);
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(!(obj instanceof Transition)) {
+		if(!(obj instanceof Transition))
 			return false;
-		}
 		
 		Transition other = (Transition) obj;
 		
-		return destination == other.destination &&
-			   start == other.start &&
-			   end == other.end;
+		return range.equals(other.range);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(start, end, destination.hashCode());
+		return HashFunctions.defaulFunction.hash(range.getStart(), range.getEnd());
 	}
 	
 	@Override
@@ -117,34 +109,12 @@ public class Transition implements Comparable<Transition>, Serializable {
 			return "-1";
 		}
 		
-		return CharacterRange.in(start, end).toString() + " " + (actions.isEmpty() ? "" : actions.toString());
+		return range.toString();
 	}
 
 	@Override
 	public int compareTo(Transition t) {
-		return this.start - t.getStart();
-	}
-
-	public Transition addTransitionAction(Action action) {
-		if (action != null) {
-			actions.add(action);			
-		}
-		return this;
-	}
-	
-	public Set<Action> getActions() {
-		return actions;
-	}
-	
-	public boolean executeActions(Input input, int index) {
-		
-		for (Action action : actions) {
-			if (action.execute(input, index)) {
-				return true;
-			}
-		}
-		
-		return false;
+		return range.compareTo(t.range);
 	}
 		
 }

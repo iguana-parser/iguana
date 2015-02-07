@@ -66,9 +66,8 @@ public class Character extends AbstractRegularExpression {
 	protected Automaton createAutomaton() {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
-		Transition transition = new Transition(c, finalState);
-		startState.addTransition(transition);
-		return new Automaton(startState, name);
+		startState.addTransition(new Transition(c, finalState));
+		return Automaton.builder(startState).build();
 	}
 
 	@Override
@@ -139,6 +138,11 @@ public class Character extends AbstractRegularExpression {
 	@Override
 	public Character asSingleChar() {
 		return this;
+	}
+	
+	@Override
+	public boolean isTerminal() {
+		return true;
 	}
 
 	@Override

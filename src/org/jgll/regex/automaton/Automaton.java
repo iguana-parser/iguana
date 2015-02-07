@@ -1,11 +1,12 @@
 package org.jgll.regex.automaton;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.BitSet;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
+import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.RegularExpression;
 
 /**
@@ -17,61 +18,24 @@ public class Automaton implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private State startState;
+	private final State startState;
 	
-	private int[] intervals;
+	private final State[] states;
 	
-	private State[] states;
+	private final Set<State> finalStates;
 	
-	private boolean deterministic;
+	private final boolean minimized;
 	
-	private boolean minimized;
+	private final boolean deterministic;
 	
-	private Set<State> finalStates;
+	private CharacterRange[] alphabet;
 	
-	private Set<State> rejectStates;
-	
-	private String name;
-
-	private RunnableAutomaton runnableAutomaton;
-	
-	public Automaton(State startState) {
-		this(startState, "no-name");
-	}
-
-	public Automaton(State startState, String name) {
-
-		if(startState == null) {
-			throw new IllegalArgumentException("Start symbol cannot be null.");
-		}
-		
-		this.startState = startState;
-		this.name = name;
-		init(this);
-	}
-
-	private void init(Automaton newAutomaton) {
-		startState = newAutomaton.getStartState();
-		
-		deterministic = newAutomaton.deterministic;
-
-		minimized = newAutomaton.minimized;
-		
-		intervals = AutomatonOperations.getIntervals(this);
-		
-		AutomatonOperations.setStateIDs(this);
-		AutomatonOperations.setTransitionIDs(this);
-		
-		Set<State> set = AutomatonOperations.getAllStates(this);
-		this.states = new State[set.size()];
-		
-		for(State s : set) {
-			states[s.getId()]  = s;
-		}
-		
-		finalStates = AutomatonOperations.getFinalStates(this);
-		
-		rejectStates = AutomatonOperations.getRejectStates(this);
+	public Automaton(AutomatonBuilder builder) {
+		this.startState = builder.getStartState();
+		this.states = builder.getStates();
+		this.finalStates = builder.getFinalStates();
+		this.minimized = builder.isMinimized();
+		this.deterministic = builder.isDeterministic();
 	}
 	
 	public State getStartState() {
@@ -80,10 +44,6 @@ public class Automaton implements Serializable {
 	
 	public Set<State> getFinalStates() {
 		return finalStates;
-	}
-	
-	public Set<State> getRejectStates() {
-		return rejectStates;
 	}
 	
 	public int getCountStates() {
@@ -98,15 +58,23 @@ public class Automaton implements Serializable {
 		return states[id];
 	}
 	
+	public CharacterRange[] getAlphabet() {
+		return alphabet;
+	}
+	
+	public boolean isDeterministic() {
+		return deterministic;
+	}
+	
+	public boolean isMinimized() {
+		return minimized;
+	}
+	
 	/**
 	 * All characters accepted by this NFA.
 	 */
 	public BitSet getCharacters() {
-		return AutomatonOperations.getCharacters(this);
-	}
-	
-	public int[] getIntervals() {
-		return intervals;
+		return AutomatonBuilder.getCharacters(this);
 	}
 	
 	/**
@@ -122,73 +90,90 @@ public class Automaton implements Serializable {
 		return this;
 	}
 	
+	public Automaton copy() {
+		
+		final Map<State, State> newStates = new HashMap<>();
+		
+		final State[] newStartState = new State[1];
+		
+		AutomatonVisitor.visit(startState, state -> {
+			State newState = new State();
+			
+			newStates.put(state, newState);
+			newState.setStateType(state.getStateType());
+			
+			if(state == startState) {
+				newStartState[0] = newState;
+			}
+		});
+		
+		AutomatonVisitor.visit(startState, state -> {
+				for(Transition transition : state.getTransitions()) {
+					State newState = newStates.get(state);
+					newState.addTransition(new Transition(transition.getStart(), 
+														  transition.getEnd(), 
+														  newStates.get(transition.getDestination())));
+				}
+			});
+		
+		return builder(newStartState[0]).build();
+	}
+
+	
 	/**
 	 * Determines whether two NFAs are isomorphic. 
 	 * The NFAs are first made deterministic before performing the equality check.
 	 */
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(obj == this) {
-			return true;
-		}
-		
-		if(!(obj instanceof Automaton)) {
-			return false;
-		}
-		
-		Automaton other = (Automaton) obj;
-		
-		// Checks whether two NFAs accept the same alphabet (ranges of intervals here) 
-		if(!Arrays.equals(intervals, other.intervals)) {
-			return false;
-		}
-		
-		Automaton thisNFA = AutomatonOperations.makeDeterministic(this);
-		Automaton otherNFA = AutomatonOperations.makeDeterministic(other);
-		
-		Set<State> visitedStates = new HashSet<>();
-		
-		return isEqual(thisNFA.getStartState(), otherNFA.getStartState(), visitedStates);
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		
+//		if(obj == this) {
+//			return true;
+//		}
+//		
+//		if(!(obj instanceof Automaton)) {
+//			return false;
+//		}
+//		
+//		Automaton other = (Automaton) obj;
+//		
+//		Automaton thisNFA = AutomatonOperations.makeDeterministic(this);
+//		Automaton otherNFA = AutomatonOperations.makeDeterministic(other);
+//		
+//		Set<State> visitedStates = new HashSet<>();
+//		
+//		return isEqual(thisNFA.getStartState(), otherNFA.getStartState(), visitedStates);
+//	}
 	
-	private boolean isEqual(State thisState, State otherState, Set<State> visitedStates) {
+//	private boolean isEqual(State thisState, State otherState, Set<State> visitedStates) {
 		
-		if(thisState.getCountTransitions() != otherState.getCountTransitions()) {
-			return false;
-		}
+//		if(thisState.getCountTransitions() != otherState.getCountTransitions()) {
+//			return false;
+//		}
+//		
+//		int i = 0;
+//		Transition[] t1 = thisState.getSortedTransitions();
+//		Transition[] t2 = otherState.getSortedTransitions();
+//		while(i < thisState.getCountTransitions()) {
+//			if(t1[i].getStart() == t2[i].getStart() && t1[i].getEnd() == t2[i].getEnd()) {
+//				
+//				State d1 = t1[i].getDestination();
+//				State d2 = t2[i].getDestination();
+//
+//				// Avoid infinite loop
+//				if(!(visitedStates.contains(d1) && visitedStates.contains(d2))) {
+//					visitedStates.add(d1);
+//					visitedStates.add(d2);
+//					if(!isEqual(d1, d2, visitedStates)) {
+//						return false;
+//					}
+//				}
+//			}
+//			i++;
+//		}
 		
-		int i = 0;
-		Transition[] t1 = thisState.getSortedTransitions();
-		Transition[] t2 = otherState.getSortedTransitions();
-		while(i < thisState.getCountTransitions()) {
-			if(t1[i].getStart() == t2[i].getStart() && t1[i].getEnd() == t2[i].getEnd()) {
-				
-				State d1 = t1[i].getDestination();
-				State d2 = t2[i].getDestination();
-
-				// Avoid infinite loop
-				if(!(visitedStates.contains(d1) && visitedStates.contains(d2))) {
-					visitedStates.add(d1);
-					visitedStates.add(d2);
-					if(!isEqual(d1, d2, visitedStates)) {
-						return false;
-					}
-				}
-			}
-			i++;
-		}
-		
-		return true;
-	}
-	
-	public boolean isDeterministic() {
-		return deterministic;
-	}
-	
-	public boolean isMinimized() {
-		return minimized;
-	}
+//		return true;
+//	}
 	
 	/**
 	 * Returns true if the language accepted by this automaton is empty. 
@@ -212,78 +197,11 @@ public class Automaton implements Serializable {
 		return getFinalStates().size() == 0;
 	}
 	
-	public Automaton determinize() {
-		
-		if(deterministic) {
-			return this;
-		}
-		
-		init(AutomatonOperations.makeDeterministic(this));
-		deterministic = true;
-		return this;
-	}
-	public Automaton reverse() {
-		init(AutomatonOperations.reverse(this));
-		return this;
-	}
-	
-	public Automaton intersection(Automaton a) {
-		init(AutomatonOperations.intersection(this, a));
-		return this;
-	}
-	
-	public Automaton union(Automaton a) {
-		init(AutomatonOperations.union(this, a));
-		return this;
-	}
-	
-	public Automaton minimize() {
-		
-		if(!deterministic) {
-			determinize();
-		}
-		
-		if(minimized) {
-			return this;
-		}
-		
-		init(AutomatonOperations.minimize(this));
-		this.minimized = true;
-		return this;
-	}
-	
-	public RunnableAutomaton getRunnableAutomaton() {
-		if (runnableAutomaton != null)
-			return runnableAutomaton;
-		
-		determinize();
-		runnableAutomaton = AutomatonOperations.createRunnableAutomaton(this);
-		return runnableAutomaton;
+	public static AutomatonBuilder builder(State startState) {
+		return new AutomatonBuilder(startState);
 	}
 	
 	public String toJavaCode() {
-		return AutomatonOperations.toJavaCode(this);
-	}
-	
-	public Automaton copy() {
-		Automaton copy = AutomatonOperations.copy(this);
-		copy.deterministic = deterministic;
-		copy.minimized = minimized;
-		copy.name = name;
-		return copy;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public Automaton setName(String name) {
-		this.name = name;
-		return this;
-	}
-	
-	@Override
-	public String toString() {
-		return name;
-	}
+		return AutomatonBuilder.toJavaCode(this);
+	}	
 }
