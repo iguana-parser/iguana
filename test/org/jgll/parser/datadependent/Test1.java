@@ -71,7 +71,7 @@ public class Test1 {
 		
 		if (result.isParseSuccess()) {
 			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), parser.getRegistry(), input);
+					result.asParseSuccess().getRoot(), input);
 		}
 		
 	}
