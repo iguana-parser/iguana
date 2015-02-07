@@ -374,7 +374,7 @@ public class Python {
 			 * SimpleStmt ::= SmallStmt (";" SmallStmt)* (;)? NL
 			 */
 			.addRule(Rule.withHead(Nonterminal.builder("SimpleStmt").build()).addSymbol(Nonterminal.builder("SmallStmt").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(59).build()).build(), Nonterminal.builder("SmallStmt").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Character.builder(59).build()).build()).build()).addSymbol(Nonterminal.builder("NL").build())
-							.setLayout(Nonterminal.builder("L").build()).build())
+							.setLayout(Nonterminal.builder("NoNL").build()).build())
 			
 			//Tfpdef ::= Name (":" Test)? 
 			.addRule(Rule.withHead(Nonterminal.builder("Tfpdef").build()).addSymbol(Nonterminal.builder("Name").build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Test").build()).build()).build()).build())
@@ -466,7 +466,7 @@ public class Python {
 			 * IfStmt ::= "if" Test ":" Suite ("elif" Test ":" Suite)* ("else" ":" Suite)?
 			 */ 
 			.addRule(Rule.withHead(Nonterminal.builder("IfStmt").build()).addSymbol(Sequence.builder(Character.builder(105).build(), Character.builder(102).build()).build()).addSymbol(Nonterminal.builder("Test").build()).addSymbol(Sequence.builder(Character.builder(58).build()).build()).addSymbol(Nonterminal.builder("Suite").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(105).build(), Character.builder(102).build()).build(), Nonterminal.builder("Test").build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(115).build(), Character.builder(101).build()).build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build())
-							.setLayout(Nonterminal.builder("L").build()).build())
+							.setLayout(Nonterminal.builder("NoNL").build()).build())
 			
 			//ReturnStmt ::= "return" TestList? 
 			.addRule(Rule.withHead(Nonterminal.builder("ReturnStmt").build()).addSymbol(Sequence.builder(Character.builder(114).build(), Character.builder(101).build(), Character.builder(116).build(), Character.builder(117).build(), Character.builder(114).build(), Character.builder(110).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Nonterminal.builder("TestList").build()).build()).build())
@@ -480,7 +480,7 @@ public class Python {
 			 * Suite ::= NL Stmt+
 			 */
 			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("NL").build()).addSymbol(Plus.builder(Nonterminal.builder("Stmt").build()).build())
-						.setLayout(Nonterminal.builder("L").build()).build())
+						.setLayout(Nonterminal.builder("NoNL").build()).build())
 			
 			//Suite ::= SimpleStmt 
 			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("SimpleStmt").build()).build())
@@ -589,19 +589,39 @@ public class Python {
 			//Name ::= (A-Z | _ | a-z) (0-9 | A-Z | _ | a-z)* 
 			.addRule(Rule.withHead(Nonterminal.builder("Name").build()).addSymbol(Alt.builder(CharacterRange.builder(65, 90).build(), CharacterRange.builder(95, 95).build(), CharacterRange.builder(97, 122).build()).build()).addSymbol(Star.builder(Alt.builder(CharacterRange.builder(48, 57).build(), CharacterRange.builder(65, 90).build(), CharacterRange.builder(95, 95).build(), CharacterRange.builder(97, 122).build()).build()).build()).build())
 			
-			// NoNL ::= (' ' | '\t')*
-			.addRule(Rule.withHead(Nonterminal.builder("NoNL").build()).addSymbol(Star.from(Alt.from(Character.from(' '), Character.from('\t')))).build())
 			
-			// L ::= (' ' | '\t' | '\r' | '\n')* !>> (' ' | '\t' | '\r' | '\n')
-			.addRule(Rule.withHead(Nonterminal.builder("L").build()).addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\r'), Character.from('\n')))
-						.addPostCondition(RegularExpressionCondition.notFollow(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\r'), Character.from('\n')))).build()).build())
+			/**
+			 * Data-dependent
+			 * 
+			 *  NoNL ::= (' ' | '\t')* !>> (' ' | '\t')
+			 */
+			.addRule(Rule.withHead(Nonterminal.builder("NoNL").build())
+						.addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t')))
+								.addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
+								.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\t'))).build()).build())
 			
-			// *** LOGICAL NEW LINE:
-			// NL ::= ('\n' | '\r') !>> '\n' !>> '\r' 
-			//      | ('\n' | '\r') (' ' | '\t' | '\n' | '\r')* ('\n' | '\r') !>> '\n' !>> '\r' 
+			/**
+			 *  L ::= (' ' | '\t' | '\r' | '\n')* !>> (' ' | '\t' | '\r' | '\n')
+			 */
+			.addRule(Rule.withHead(Nonterminal.builder("L").build())
+						.addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\r'), Character.from('\n')))
+								.addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
+								.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\t')))
+								.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\r')))
+								.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\n'))).build()).build())
+			
+			/**
+			 ********** LOGICAL NEW LINE:
+			 *
+			 * NL ::= ('\n' | '\r') !>> ('\n' | '\r') 
+			 *      | ('\n' | '\r') (' ' | '\t' | '\n' | '\r')* ('\n' | '\r') !>> ('\n' | '\r' | ' ' | '\t')
+			 */
 			.addRule(Rule.withHead(Nonterminal.builder("NL").build())
 						.addSymbol(Alt.builder(Character.from('\n'), Character.from('\r'))
-										.addPostCondition(RegularExpressionCondition.notFollow(Alt.from(Character.from('\n'), Character.from('\r')))).build()).build())
+										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\n')))
+										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\r')))
+										.addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
+										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\t'))).build()).build())
 			.addRule(Rule.withHead(Nonterminal.builder("NL").build())
 						.addSymbol(Alt.from(Character.from('\n'), Character.from('\r')))
 						.addSymbol(Star.from(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\n'), Character.from('\r'))))
