@@ -592,7 +592,7 @@ public class Python {
 			// NoNL ::= (' ' | '\t')*
 			.addRule(Rule.withHead(Nonterminal.builder("NoNL").build()).addSymbol(Star.from(Alt.from(Character.from(' '), Character.from('\t')))).build())
 			
-			// L ::= (' ' | '\t' | '\r' | '\n')* !>> ' ' !>> '\t' !>> '\r' !>> '\n'
+			// L ::= (' ' | '\t' | '\r' | '\n')* !>> (' ' | '\t' | '\r' | '\n')
 			.addRule(Rule.withHead(Nonterminal.builder("L").build()).addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\r'), Character.from('\n')))
 						.addPostCondition(RegularExpressionCondition.notFollow(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\r'), Character.from('\n')))).build()).build())
 			
