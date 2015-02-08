@@ -2,6 +2,7 @@ package org.jgll.datadependent.ast;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.jgll.util.generator.GeneratorUtil;
 
 public class AST {
@@ -46,6 +47,26 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("%s(%s)", "println", GeneratorUtil.listToString(args, ","));
+					}
+		};
+	}
+	
+	static public Expression indent(Expression arg) {
+		return new Expression.Call("", arg) {
+			
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg.interpret(ctx);
+						if (!(value instanceof java.lang.Integer)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						return ctx.getInput().getColumnNumber((java.lang.Integer) value);
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("indent(%s)", arg);
 					}
 		};
 	}
