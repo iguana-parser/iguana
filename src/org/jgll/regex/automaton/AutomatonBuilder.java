@@ -58,6 +58,8 @@ public class AutomatonBuilder {
 	}
 	
 	public Automaton build() {
+		System.out.println("Hi!");
+		setStateIDs();
 		return new Automaton(this);
 	}
 	 
@@ -147,8 +149,6 @@ public class AutomatonBuilder {
 				processList.add(destState);
 			}
 		}
-		
-		setStateIDs();
 		
 		// Setting the final states.
 		outer:
@@ -441,7 +441,6 @@ public class AutomatonBuilder {
 			}
 		}
 		this.alphabet = getAlphabet(startState, rangeMap);
-		setStateIDs();
 	}
 		
 	private static List<CharacterRange> getAllRanges(State startState) {

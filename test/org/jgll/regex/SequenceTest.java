@@ -11,13 +11,13 @@ import org.junit.Test;
 public class SequenceTest {
 	
 	// ab
-	private Sequence<Character> seq1 = Sequence.builder(Character.from('a'), Character.from('b')).build();
+	private Sequence<Character> seq1 = null;// Sequence.builder(Character.from('a'), Character.from('b')).build();
 	
 	// [a-z][0-9]
 	private Sequence<CharacterRange> seq2 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('0', '9')).build();
 	
 	// [a-z][b-m]
-	private Sequence<CharacterRange> seq3 = Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm')).build();
+	private Sequence<CharacterRange> seq3 = null;// Sequence.builder(CharacterRange.in('a', 'z'), CharacterRange.in('b', 'm')).build();
 
 	@Test
 	public void testAutomaton1() {

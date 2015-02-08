@@ -75,22 +75,22 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		for(int i = 0; i < symbols.size(); i++) {
 			automatons.add(((RegularExpression) symbols.get(i)).getAutomaton().copy());
 		}
-				
-		Automaton result = automatons.get(0);
-		State startState = result.getStartState();
+		
+		Automaton current = automatons.get(0);
+		State startState = current.getStartState();
 		
 		for (int i = 1; i < automatons.size(); i++) {
 			Automaton next = automatons.get(i);
 			
-			for(State s : result.getFinalStates()) {
+			for(State s : current.getFinalStates()) {
 				s.setStateType(StateType.NORMAL);
 				s.addTransition(Transition.epsilonTransition(next.getStartState()));
 			}
 			
-			result = Automaton.builder(startState).makeDeterministic().build();
+			current = next;
 		}
 		
-		return result;
+		return Automaton.builder(startState).makeDeterministic().build();
 	}
 	
 	@Override
@@ -177,7 +177,7 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	}
 	
 	private boolean isCharSequence() {
-		return symbols.stream().allMatch(s -> (s instanceof Character || s instanceof CharacterRange));
+		return symbols.stream().allMatch(s -> (s instanceof Character));
 	}
 	
 	private List<Character> asCharacters() {
