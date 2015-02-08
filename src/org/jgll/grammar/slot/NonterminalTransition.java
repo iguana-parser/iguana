@@ -46,13 +46,24 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		if (preConditions.execute(parser.getInput(), u, i))
-			return;
-		
-		if (nonterminal.getParameters() == null) {
+		if (nonterminal.getParameters() == null && dest.getLabel() != null) {
+			if (preConditions.execute(parser.getInput(), u, i))
+				return;
+			
 			parser.create(dest, nonterminal, u, i, node);
 		} else {
-			parser.create(dest, nonterminal, u, i, node, arguments, parser.getEmptyEnvironment());
+			Environment env = parser.getEmptyEnvironment();
+			
+			if (dest.getLabel() != null) {
+				env = env.declare(dest.getLabel() + ".lExt", i);
+			}
+			
+			parser.setEnvironment(env);
+			
+			if (preConditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+				return;
+			
+			parser.create(dest, nonterminal, u, i, node, arguments, parser.getEnvironment());
 		}
 		
 	}
@@ -90,6 +101,10 @@ public class NonterminalTransition extends AbstractTransition {
 		if (!nonterminal.test(parser.getInput().charAt(i))) {
 			parser.recordParseError(origin);
 			return;
+		}
+		
+		if (dest.getLabel() != null) {
+			env = env.declare(dest.getLabel() + ".lExt", i);
 		}
 		
 		parser.setEnvironment(env);
