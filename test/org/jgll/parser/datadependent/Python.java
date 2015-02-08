@@ -462,8 +462,8 @@ public class Python {
 			/**
 			 * Data-dependent
 			 * 
-			 * @layout(L)
-			 * IfStmt ::= "if" Test ":" Suite ("elif" Test ":" Suite)* ("else" ":" Suite)?
+			 * @layout(NoNL)
+			 * IfStmt ::= l:"if" Test ":" Suite(indent(l@lExt)) ("elif" Test ":" Suite)* ("else" ":" Suite)?
 			 */ 
 			.addRule(Rule.withHead(Nonterminal.builder("IfStmt").build()).addSymbol(Sequence.builder(Character.builder(105).build(), Character.builder(102).build()).build()).addSymbol(Nonterminal.builder("Test").build()).addSymbol(Sequence.builder(Character.builder(58).build()).build()).addSymbol(Nonterminal.builder("Suite").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(105).build(), Character.builder(102).build()).build(), Nonterminal.builder("Test").build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(115).build(), Character.builder(101).build()).build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build())
 							.setLayout(Nonterminal.builder("NoNL").build()).build())
@@ -476,14 +476,16 @@ public class Python {
 			/**
 			 * Data-dependent
 			 * 
-			 * @layout(L)
-			 * Suite ::= NL Stmt+
+			 * @layout(NoNL)
+			 * Suite(ind) ::= SimpleStmt
+			 *              | NL l1:Stmt (l2:Stmt [ indent(l2@lExt) > indent(l1@Ext) ])* [ indent(l1@lExt) > ind ]
 			 */
 			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("NL").build()).addSymbol(Plus.builder(Nonterminal.builder("Stmt").build()).build())
 						.setLayout(Nonterminal.builder("NoNL").build()).build())
 			
-			//Suite ::= SimpleStmt 
 			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("SimpleStmt").build()).build())
+			
+			
 			//TestNocond ::= OrTest 
 			.addRule(Rule.withHead(Nonterminal.builder("TestNocond").build()).addSymbol(Nonterminal.builder("OrTest").build()).build())
 			//TestNocond ::= LambdefNocond 
@@ -614,14 +616,12 @@ public class Python {
 			 ********** LOGICAL NEW LINE:
 			 *
 			 * NL ::= ('\n' | '\r') !>> ('\n' | '\r') 
-			 *      | ('\n' | '\r') (' ' | '\t' | '\n' | '\r')* ('\n' | '\r') !>> ('\n' | '\r' | ' ' | '\t')
+			 *      | ('\n' | '\r') (' ' | '\t' | '\n' | '\r')* ('\n' | '\r') !>> ('\n' | '\r')
 			 */
 			.addRule(Rule.withHead(Nonterminal.builder("NL").build())
 						.addSymbol(Alt.builder(Character.from('\n'), Character.from('\r'))
 										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\n')))
-										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\r')))
-										.addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
-										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\t'))).build()).build())
+										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\r'))).build()).build())
 			.addRule(Rule.withHead(Nonterminal.builder("NL").build())
 						.addSymbol(Alt.from(Character.from('\n'), Character.from('\r')))
 						.addSymbol(Star.from(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\n'), Character.from('\r'))))
@@ -634,8 +634,10 @@ public class Python {
 	@Test
 	public void test() {
 		
-		Input input = Input.fromString("if (x==1)  :  \n"
-				                     + "y=0\n");
+		Input input = Input.fromString("if b  :  \n"
+				                     + "\n    "
+				                     + "\n"
+				                     + "  y=0\n");
 		
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
