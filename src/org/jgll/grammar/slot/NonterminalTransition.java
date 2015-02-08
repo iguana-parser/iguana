@@ -46,7 +46,7 @@ public class NonterminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		if (nonterminal.getParameters() == null && dest.getLabel() != null) {
+		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
 			if (preConditions.execute(parser.getInput(), u, i))
 				return;
 			
