@@ -1,7 +1,9 @@
 package org.jgll.datadependent.ast;
 
 import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.grammar.exception.UndeclaredVariableException;
 import org.jgll.grammar.exception.UnexpectedTypeOfArgumentException;
+import org.jgll.sppf.NonPackedNode;
 
 
 public abstract class Expression extends AbstractAST {
@@ -326,6 +328,59 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public java.lang.String toString() {
 			return java.lang.String.format("%s == %s", lhs, rhs);
+		}
+		
+	}
+	
+	static public class LeftExtent extends Expression {
+		
+		private final java.lang.String label;
+		
+		LeftExtent(java.lang.String label) {
+			this.label = label;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			Object value = ctx.lookupVariable(label + "." + "lExt");
+			if (value == null) {
+				throw new UndeclaredVariableException(label + "." + "lExt");
+			}
+			return value;
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s.rExt", label);
+		}
+		
+	}
+	
+	static public class RightExtent extends Expression {
+		
+		private final java.lang.String label;
+		
+		RightExtent(java.lang.String label) {
+			this.label = label;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			Object value = ctx.lookupVariable(label);
+			if (value == null) {
+				throw new UndeclaredVariableException(label);
+			}
+			
+			if (!(value instanceof NonPackedNode)) {
+				throw new UnexpectedTypeOfArgumentException(this);
+			}
+			
+			return ((NonPackedNode) value).getRightExtent();
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s.rExt", label);
 		}
 		
 	}

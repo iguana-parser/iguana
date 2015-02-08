@@ -66,6 +66,14 @@ public class AST {
 		return new Expression.Equal(lhs, rhs);
 	}
 	
+	static public Expression lExt(String label) {
+		return new Expression.LeftExtent(label);
+	}
+	
+	static public Expression rExt(String label) {
+		return new Expression.RightExtent(label);
+	}
+	
 	/**
 	 * 
 	 * 		Statements

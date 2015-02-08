@@ -477,8 +477,8 @@ public class Python {
 			 * Data-dependent
 			 * 
 			 * @layout(NoNL)
-			 * Suite(ind) ::= SimpleStmt
-			 *              | NL l1:Stmt (l2:Stmt [ indent(l2@lExt) > indent(l1@Ext) ])* [ indent(l1@lExt) > ind ]
+			 * Suite(IND) ::= SimpleStmt
+			 *              | NL l1:(l2:Stmt [indent(l1.lExt) == indent(l2.lExt)])+ [ IND < indent(l1.lExt) ]
 			 */
 			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("NL").build()).addSymbol(Plus.builder(Nonterminal.builder("Stmt").build()).build())
 						.setLayout(Nonterminal.builder("NoNL").build()).build())
