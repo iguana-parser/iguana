@@ -1,6 +1,10 @@
 package org.jgll.datadependent.env;
 
+import org.jgll.util.Input;
+
 public interface IEvaluatorContext {
+	
+	public Input getInput();
 	
 	public Environment getEnvironment();
 	

@@ -1,8 +1,21 @@
 package org.jgll.datadependent.env;
 
+import org.jgll.util.Input;
+
 public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 	
+	private final Input input;
+	
 	private Environment env;
+	
+	public AbstractEvaluatorContext(Input input) {
+		this.input = input;
+	}
+	
+	@Override
+	public Input getInput() {
+		return this.input;
+	}
 
 	@Override
 	public Environment getEnvironment() {

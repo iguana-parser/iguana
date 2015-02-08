@@ -98,6 +98,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		this.grammarGraph = grammarGraph;
 		this.input = input;
 		
+		/**
+		 * Data-dependent GLL parsing
+		 */
+		this.ctx = new PersistentEvaluatorContext(input);
+		
 		NonterminalGrammarSlot startSymbol = getStartSymbol(nonterminal);
 		
 		if(startSymbol == null) {
@@ -310,7 +315,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	 * Data-dependent GLL parsing
 	 * 
 	 */
-	public final IEvaluatorContext ctx = new PersistentEvaluatorContext();
+	private IEvaluatorContext ctx;
 	
 	@Override
 	public IEvaluatorContext getEvaluatorContext() {

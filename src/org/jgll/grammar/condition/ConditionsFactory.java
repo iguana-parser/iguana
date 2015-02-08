@@ -33,7 +33,7 @@ public class ConditionsFactory {
 
 				@Override
 				public boolean execute(Input input, GSSNode u, int i) {
-					return execute(input, u, i, new PersistentEvaluatorContext());
+					return execute(input, u, i, new PersistentEvaluatorContext(input));
 				}
 				
 				@Override
