@@ -334,6 +334,8 @@ public abstract class Expression extends AbstractAST {
 	
 	static public class LeftExtent extends Expression {
 		
+		static public java.lang.String format = "%s.lExt";
+		
 		private final java.lang.String label;
 		
 		LeftExtent(java.lang.String label) {
@@ -342,7 +344,7 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
-			Object value = ctx.lookupVariable(label + "." + "lExt");
+			Object value = ctx.lookupVariable(java.lang.String.format(format, label));
 			if (value == null) {
 				throw new UndeclaredVariableException(label + "." + "lExt");
 			}
@@ -357,6 +359,8 @@ public abstract class Expression extends AbstractAST {
 	}
 	
 	static public class RightExtent extends Expression {
+		
+		static public java.lang.String format = "%s.rExt";
 		
 		private final java.lang.String label;
 		
