@@ -16,6 +16,9 @@ public class DFAMatcher implements Matcher {
 			throw new RuntimeException("The automaton should be deterministic.");
 
 		table = new IntRangeTree[automaton.getCountStates()];
+		for (int i = 0; i < table.length; i++) {
+			table[i] = new IntRangeTree();
+		}
 
 		for (State state : automaton.getAllStates()) {
 			for (Transition transition : state.getTransitions()) {
@@ -27,15 +30,18 @@ public class DFAMatcher implements Matcher {
 	}
 	
 	@Override
-	public int match(Input input, int i) {
+	public int match(Input input, int inputIndex) {
 		
-		int length = -1;
+		int length = 0;
 		int state = start;
 		
-		for (int j = i; j < input.length(); j++) {
-			state = table[state].get(input.charAt(j));
+		for (int i = inputIndex; i < input.length(); i++) {
+			state = table[state].get(input.charAt(i));
+
 			if (state == -1)
 				break;
+			
+			length++;
 		}
 		
 		return length;

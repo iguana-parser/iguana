@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jgll.grammar.symbol.CharacterRange;
 
@@ -58,7 +57,6 @@ public class AutomatonBuilder {
 	}
 	
 	public Automaton build() {
-		System.out.println("Hi!");
 		setStateIDs();
 		return new Automaton(this);
 	}
@@ -466,7 +464,7 @@ public class AutomatonBuilder {
 	}
 	
 	private static State[] getAllStates(State startState) {
-		final Set<State> set = new HashSet<>();
+		final Set<State> set = new LinkedHashSet<>();
 		AutomatonVisitor.visit(startState, s -> set.add(s));
 		
 		State[] states = new State[set.size()];
@@ -478,8 +476,9 @@ public class AutomatonBuilder {
 	}
 	
 	public void setStateIDs() {
-		AtomicInteger id = new AtomicInteger();
-		AutomatonVisitor.visit(startState, s -> s.setId(id.getAndIncrement()));
+		for (int i = 0; i < states.length; i++) {
+			states[i].setId(i);
+		}
 	}
 	
 	private Set<State> computeFinalStates() {

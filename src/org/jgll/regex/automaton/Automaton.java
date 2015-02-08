@@ -28,7 +28,7 @@ public class Automaton implements Serializable {
 	
 	private final boolean deterministic;
 	
-	private CharacterRange[] alphabet;
+	private final CharacterRange[] alphabet;
 	
 	public Automaton(AutomatonBuilder builder) {
 		this.startState = builder.getStartState();
@@ -36,6 +36,7 @@ public class Automaton implements Serializable {
 		this.finalStates = builder.getFinalStates();
 		this.minimized = builder.isMinimized();
 		this.deterministic = builder.isDeterministic();
+		this.alphabet = builder.getAlphabet();
 	}
 	
 	public State getStartState() {
