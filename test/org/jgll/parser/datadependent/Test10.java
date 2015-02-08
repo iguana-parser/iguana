@@ -28,7 +28,7 @@ import org.junit.Test;
  * X ::= S
  * 
  * @layout(NoNL)
- * S ::= a:A [a.lExt == 0] print(a.rExt) b:B [b.lExt == 5] print(b.rExt)
+ * S ::= a:A [a.lExt == 0] print(a.rExt, indent(a.rExt)) b:B [b.lExt == 5] print(b.rExt, indent(b.rExt))
  *  
  * A ::= 'a'
  * B ::= 'b'
@@ -56,10 +56,10 @@ public class Test10 {
 		Rule r1 = Rule.withHead(S)
 					.addSymbol(Nonterminal.builder(A).setLabel("a")
 							.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build())
-					.addSymbol(CodeBlock.code(stat(println(rExt("a")))))
+					.addSymbol(CodeBlock.code(stat(println(rExt("a"), indent(rExt("a"))))))
 					.addSymbol(Nonterminal.builder(B).setLabel("b")
 							.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build())
-					.addSymbol(CodeBlock.code(stat(println(rExt("b")))))
+					.addSymbol(CodeBlock.code(stat(println(rExt("b"), indent(rExt("b"))))))
 					
 					.setLayout(NoNL).build();
 		
