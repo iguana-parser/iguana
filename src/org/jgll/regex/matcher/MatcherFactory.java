@@ -24,7 +24,7 @@ public class MatcherFactory {
 		if (regex instanceof CharacterRange)
 			return characterRangeMatcher((CharacterRange) regex);
 			
-		return new DFAMatcher(regex.getAutomaton());
+		return createMatcher(regex);
 	}
 	
 	public static Matcher getBackwardsMatcher(RegularExpression regex) {
@@ -38,7 +38,7 @@ public class MatcherFactory {
 		if (regex instanceof CharacterRange)
 			return characterRangeBackwardsMatcher((CharacterRange) regex);
 		
-		return new DFABackwardsMatcher(regex.getAutomaton());
+		return createMatcher(regex);
 	}
 
 	private static Matcher sequenceMatcher(Sequence<?> seq) {
@@ -53,7 +53,7 @@ public class MatcherFactory {
 				return characters.size();
 			};
 		}
-		return getMatcher(seq);
+		return createMatcher(seq);
 	}
 	
 	private static Matcher sequenceBackwardsMatcher(Sequence<?> seq) {
@@ -70,7 +70,7 @@ public class MatcherFactory {
 				return characters.size();
 			};
 		}
-		return getMatcher(seq);
+		return createMatcher(seq);
 	}
 	
 	private static Matcher characterMatcher(Character c) {
@@ -87,6 +87,10 @@ public class MatcherFactory {
 	
 	private static Matcher characterRangeBackwardsMatcher(CharacterRange range) {
 		return (input, i) -> i == 0 ? -1 : ( input.charAt(i - 1) >= range.getStart() && input.charAt(i - 1) <= range.getEnd() ? 1 : -1 );
+	}
+	
+	private static Matcher createMatcher(RegularExpression regex) {
+		return new DFAMatcher(regex.getAutomaton());
 	}
 	
 }
