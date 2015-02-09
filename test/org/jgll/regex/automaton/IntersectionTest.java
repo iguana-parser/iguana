@@ -43,8 +43,8 @@ public class IntersectionTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression f = RegularExpressionExamples.getFloat().build();
-		RegularExpression id = RegularExpressionExamples.getId().build();
+		RegularExpression f = RegularExpressionExamples.getFloat();
+		RegularExpression id = RegularExpressionExamples.getId();
 		
 		Automaton intersect = f.getAutomaton().builder().intersect(id.getAutomaton()).build();
 		

@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Constants;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.matcher.Matcher;
 import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
@@ -15,10 +16,13 @@ public class CharacterClassTest {
 	@Test
 	public void test1() {
 		RegularExpression regex = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'));
-		Automaton automaton = regex.getAutomaton();
-		
-		assertEquals(2, automaton.getCountStates());
 
+		Automaton automaton = regex.getAutomaton();
+		assertEquals(6, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(3, automaton.getCountStates());
+		
 		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
 		assertTrue(matcher.match(Input.fromChar('a')));
@@ -36,9 +40,12 @@ public class CharacterClassTest {
 	@Test
 	public void test2() {
 		RegularExpression regex = Alt.from(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'));
+
 		Automaton automaton = regex.getAutomaton();
+		assertEquals(8, automaton.getCountStates());
 		
-		assertEquals(2, automaton.getCountStates());
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(5, automaton.getCountStates());
 
 		Matcher matcher = MatcherFactory.getMatcher(regex);
 		

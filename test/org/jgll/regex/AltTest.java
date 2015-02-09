@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.AutomatonOperations;
+import org.jgll.regex.matcher.DFAMatcher;
 import org.jgll.regex.matcher.Matcher;
 import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
@@ -18,11 +20,14 @@ public class AltTest {
 		Character b = Character.from('b');
 		
 		RegularExpression regex = Alt.from(a, b);
+		
 		Automaton automaton = regex.getAutomaton();
+		assertEquals(6, automaton.getCountStates());
 		
-		assertEquals(2, automaton.getCountStates());
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(3, automaton.getCountStates());
 		
-		Matcher dfa = MatcherFactory.getMatcher(regex);
+		Matcher dfa = new DFAMatcher(automaton);
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));
 		assertEquals(1, dfa.match(Input.fromString("b"), 0));
 	}

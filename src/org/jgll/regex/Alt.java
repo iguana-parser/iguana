@@ -57,6 +57,9 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable if all arguments are regular expressions");
 		
+		if (symbols.size() == 1)
+			return ((RegularExpression) symbols.get(0)).getAutomaton();
+		
 		List<Automaton> automatons = new ArrayList<>();
 				
 		for (Symbol e : symbols) {
@@ -77,7 +80,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 			}
 		}
 		
-		return new AutomatonBuilder(startState).makeDeterministic().build(); 
+		return new AutomatonBuilder(startState).build(); 
 	}
 
 	@Override

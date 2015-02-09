@@ -1,6 +1,7 @@
 package org.jgll.regex.matcher;
 
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
@@ -15,9 +16,7 @@ public class DFAMatcher implements Matcher {
 	protected final int start;
 
 	public DFAMatcher(Automaton automaton) {
-		
-		if (!automaton.isDeterministic()) 
-			throw new RuntimeException("The automaton should be deterministic.");
+		automaton = AutomatonOperations.makeDeterministic(automaton);
 
 		table = new IntRangeTree[automaton.getCountStates()];
 		for (int i = 0; i < table.length; i++) {

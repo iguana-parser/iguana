@@ -13,7 +13,7 @@ public class PlusTest {
 	@Test
 	public void testAutomaton() {
 		RegularExpression regex = Plus.from(Character.from('a'));
-		assertEquals(3, regex.getAutomaton().getCountStates());
+		assertEquals(5, regex.getAutomaton().getCountStates());
 		
 		Matcher matcher = MatcherFactory.getMatcher(regex);
 		

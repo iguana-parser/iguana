@@ -49,7 +49,6 @@ public class Star extends AbstractRegularExpression {
 		
 		//TODO: add separators to the DFA
 		State startState = new State();
-		
 		State finalState = new State(StateType.FINAL);
 		
 		Automaton automaton = ((RegularExpression) s).getAutomaton().copy();
@@ -66,7 +65,7 @@ public class Star extends AbstractRegularExpression {
 		
 		startState.addEpsilonTransition(finalState);
 		
-		return Automaton.builder(startState).makeDeterministic().build();
+		return Automaton.builder(startState).build();
 	}
 	
 	@Override

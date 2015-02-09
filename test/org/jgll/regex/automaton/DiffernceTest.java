@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class DiffernceTest {
 	
-	private RegularExpression id = RegularExpressionExamples.getId().build();
+	private RegularExpression id = RegularExpressionExamples.getId();
 	private Sequence<Character> k1 = Sequence.from("if");
 	private Sequence<Character> k2 = Sequence.from("when");
 	private Sequence<Character> k3 = Sequence.from("new");

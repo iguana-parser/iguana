@@ -5,8 +5,9 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.AutomatonOperations;
+import org.jgll.regex.matcher.DFAMatcher;
 import org.jgll.regex.matcher.Matcher;
-import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -15,11 +16,14 @@ public class StarTest {
 	@Test
 	public void test1() {
 		RegularExpression regex = Star.from(Character.from('a'));
+
 		Automaton automaton = regex.getAutomaton();
-				
+		assertEquals(4, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(2, automaton.getCountStates());
 		
-		Matcher matcher = MatcherFactory.getMatcher(regex);
+		Matcher matcher = new DFAMatcher(automaton);
 		
 		assertEquals(0, matcher.match(Input.fromString(""), 0));
 		assertEquals(1, matcher.match(Input.fromString("a"), 0));
@@ -34,8 +38,13 @@ public class StarTest {
 	public void test2() {
 		// ([a-a]+)*
 		RegularExpression regex = Star.from(Sequence.from(Plus.from(Alt.from(CharacterRange.in('a', 'a')))));
+		Automaton automaton = regex.getAutomaton();
+		assertEquals(7, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(3, automaton.getCountStates());
 
-		Matcher matcher = MatcherFactory.getMatcher(regex);
+		Matcher matcher = new DFAMatcher(automaton);
 		
 		assertEquals(0, matcher.match(Input.fromString(""), 0));
 		assertEquals(1, matcher.match(Input.fromString("a"), 0));
@@ -46,11 +55,28 @@ public class StarTest {
 	@Test
 	public void test3() {
 		// ([a-z]+ | [(-)] | "*")*
-		Alt<CharacterRange> c1 = Alt.from(CharacterRange.in('a', 'z'));
-		Alt<CharacterRange> c2 = Alt.from(CharacterRange.in('(', ')'));
-		Character c3 = Character.from('*');
+		RegularExpression r1 = Plus.from(Alt.from(CharacterRange.in('a', 'z')));
+		RegularExpression r2 = Plus.from(Alt.from(CharacterRange.in('(', ')')));
+		RegularExpression r3 = Character.from('*');
 		
-		RegularExpression regex = Alt.from(Plus.from(c1), c2, c3);
+		Automaton automaton = Star.from(Alt.from(r1, r2, r3)).getAutomaton();
+		assertEquals(16, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(6, automaton.getCountStates());
+		
+		Matcher matcher = new DFAMatcher(automaton);
+		assertEquals(0, matcher.match(Input.fromString(""), 0));
+		assertEquals(1, matcher.match(Input.fromString("a"), 0));
+		assertEquals(1, matcher.match(Input.fromString("m"), 0));
+		assertEquals(1, matcher.match(Input.fromString("z"), 0));
+		assertEquals(1, matcher.match(Input.fromString("*"), 0));
+		assertEquals(1, matcher.match(Input.fromString("("), 0));
+		assertEquals(1, matcher.match(Input.fromString(")"), 0));
+		assertEquals(3, matcher.match(Input.fromString("a)*"), 0));
+		assertEquals(3, matcher.match(Input.fromString("*(a"), 0));
+		assertEquals(3, matcher.match(Input.fromString(")*a"), 0));
+		assertEquals(11, matcher.match(Input.fromString("ab(*za()((a"), 0));
 	}
 	
 

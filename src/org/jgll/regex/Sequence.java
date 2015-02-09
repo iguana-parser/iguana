@@ -23,6 +23,7 @@ import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
+import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
 
 public class Sequence<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
@@ -71,7 +72,7 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		
 		List<Automaton> automatons = new ArrayList<>();
 		
-		for(int i = 0; i < symbols.size(); i++) {
+		for (int i = 0; i < symbols.size(); i++) {
 			automatons.add(((RegularExpression) symbols.get(i)).getAutomaton().copy());
 		}
 		
@@ -83,13 +84,16 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 			
 			for (State s : current.getFinalStates()) {
 				s.setStateType(StateType.NORMAL);
-				s.addEpsilonTransition(next.getStartState());
+				// Merge the end state with the start state of the next automaton
+				for (Transition t : next.getStartState().getTransitions()) {
+					s.addTransition(new Transition(t.getRange(), t.getDestination()));
+				}
 			}
 			
 			current = next;
 		}
 		
-		return Automaton.builder(startState).makeDeterministic().build();
+		return Automaton.builder(startState).build();
 	}
 	
 	@Override
