@@ -51,7 +51,7 @@ public class Automaton implements Serializable {
 		return states.length;
 	}
 	
-	public State[] getAllStates() {
+	public State[] getStates() {
 		return states;
 	}
 	

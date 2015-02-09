@@ -8,9 +8,11 @@ import org.jgll.util.collections.IntRangeTree;
 
 public class DFAMatcher implements Matcher {
 
-	private final IntRangeTree[] table;
+	protected final IntRangeTree[] table;
+
+	protected final boolean[] finalStates;
 	
-	private final int start;
+	protected final int start;
 
 	public DFAMatcher(Automaton automaton) {
 		
@@ -22,10 +24,16 @@ public class DFAMatcher implements Matcher {
 			table[i] = new IntRangeTree();
 		}
 
-		for (State state : automaton.getAllStates()) {
+		finalStates = new boolean[automaton.getStates().length];
+		int i = 0;
+		for (State state : automaton.getStates()) {
+			
 			for (Transition transition : state.getTransitions()) {
 				table[state.getId()].insert(transition.getRange(), transition.getDestination().getId());
 			}
+			
+			if (state.isFinalState())
+				finalStates[i++] = true;
 		}
 		
 		this.start = automaton.getStartState().getId();
@@ -35,6 +43,7 @@ public class DFAMatcher implements Matcher {
 	public int match(Input input, int inputIndex) {
 		
 		int length = 0;
+		int maximumMatched = -1;
 		int state = start;
 		
 		for (int i = inputIndex; i < input.length(); i++) {
@@ -44,9 +53,12 @@ public class DFAMatcher implements Matcher {
 				break;
 			
 			length++;
+
+			if (finalStates[state])
+				maximumMatched = length;
 		}
-		
-		return length;
+
+		return maximumMatched;
 	}
 	
 }

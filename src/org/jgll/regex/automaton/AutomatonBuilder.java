@@ -39,7 +39,7 @@ public class AutomatonBuilder {
 	public AutomatonBuilder(Automaton automaton) {
 		this.deterministic = automaton.isDeterministic();
 		this.minimized = automaton.isMinimized();
-		this.states = automaton.getAllStates();
+		this.states = automaton.getStates();
 		this.startState = automaton.getStartState();
 		this.finalStates = automaton.getFinalStates();
 		this.alphabet = automaton.getAlphabet();
@@ -575,7 +575,7 @@ public class AutomatonBuilder {
 	private State[][] product(Automaton a2) {
 		
 		State[] states1 = states;
-		State[] states2 = a2.getAllStates();
+		State[] states2 = a2.getStates();
 		
 		State[][] newStates = new State[states1.length][states2.length];
 		
