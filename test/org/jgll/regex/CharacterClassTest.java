@@ -2,8 +2,6 @@ package org.jgll.regex;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Constants;
 import org.jgll.regex.automaton.Automaton;
@@ -14,11 +12,12 @@ import org.junit.Test;
 
 public class CharacterClassTest {
 	
+	@Test
 	public void test1() {
 		RegularExpression regex = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'));
-		Automaton nfa = regex.getAutomaton();
+		Automaton automaton = regex.getAutomaton();
 		
-		assertEquals(6, nfa.getCountStates());
+		assertEquals(2, automaton.getCountStates());
 
 		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
@@ -34,11 +33,12 @@ public class CharacterClassTest {
 		assertFalse(matcher.match(Input.fromChar('*')));
 	}
 	
+	@Test
 	public void test2() {
 		RegularExpression regex = Alt.from(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'));
-		Automaton nfa = regex.getAutomaton();
-
-		assertEquals(8, nfa.getCountStates());
+		Automaton automaton = regex.getAutomaton();
+		
+		assertEquals(2, automaton.getCountStates());
 
 		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
@@ -63,42 +63,5 @@ public class CharacterClassTest {
 		
 		assertEquals(expected, Alt.not(c));
 	}
-	
-	public void test1WithPostConditions() {
-		RegularExpression regex = Alt.builder(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'))
-								       .addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
-		Automaton nfa = regex.getAutomaton();
-		
-		assertEquals(6, nfa.getCountStates());
-
-		Matcher matcher = MatcherFactory.getMatcher(regex);
-		
-		assertEquals(-1, matcher.match(Input.fromString("a:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("f:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("z:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("1:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("5:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("8:"), 0));
-	}
-	
-	@Test
-	public void test2WithPostConditions() {
-		RegularExpression regex = Alt.builder(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'))
-								   .addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
-		
-		Automaton nfa = regex.getAutomaton();
-		
-		Matcher matcher = MatcherFactory.getMatcher(regex);
-		
-		assertEquals(-1, matcher.match(Input.fromString("1:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("2:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("3:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("4:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("5:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("6:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("7:"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("8:"), 0));
-	}
-
 	
 }

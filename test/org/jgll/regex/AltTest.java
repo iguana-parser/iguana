@@ -18,9 +18,9 @@ public class AltTest {
 		Character b = Character.from('b');
 		
 		RegularExpression regex = Alt.from(a, b);
-		Automaton nfa = regex.getAutomaton();
+		Automaton automaton = regex.getAutomaton();
 		
-		assertEquals(6, nfa.getCountStates());
+		assertEquals(2, automaton.getCountStates());
 		
 		Matcher dfa = MatcherFactory.getMatcher(regex);
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));
@@ -29,23 +29,19 @@ public class AltTest {
 	
 	@Test
 	public void test2() {
-		Sequence<Character> k1 = Sequence.from("for");
-		Sequence<Character> k2 = Sequence.from("forall");
-		
-//		Automaton result = AutomatonBuilder.or(k1.getAutomaton(), k2.getAutomaton());
-
-//		Matcher dfa = result.getRunnableAutomaton();
-//		assertEquals(3, dfa.match(Input.fromString("for"), 0));
-//		assertEquals(6, dfa.match(Input.fromString("forall"), 0));
+		Alt<Sequence<Character>> alt = Alt.from(Sequence.from("for"), Sequence.from("forall"));
+		Matcher matcher = MatcherFactory.getMatcher(alt);
+		assertEquals(3, matcher.match(Input.fromString("for"), 0));
+		assertEquals(6, matcher.match(Input.fromString("forall"), 0));
 	}
 	
 	@Test
 	public void test3() {
 		RegularExpression regex = Alt.from(Sequence.from("when"), Sequence.from("if"));
-
-		Matcher dfa = MatcherFactory.getMatcher(regex);
+		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
-		assertEquals(4, dfa.match(Input.fromString("when"), 0));
-		assertEquals(2, dfa.match(Input.fromString("if"), 0));
+		assertEquals(4, matcher.match(Input.fromString("when"), 0));
+		assertEquals(2, matcher.match(Input.fromString("if"), 0));
 	}
+	
 }

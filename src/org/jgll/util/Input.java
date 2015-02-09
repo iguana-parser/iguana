@@ -74,9 +74,8 @@ public class Input {
 	}
 	
 	public static Input fromChar(char c) {
-		int[] input = new int[2];
+		int[] input = new int[1];
 		input[0] = c;
-		input[1] = EOF.VALUE;
 		return new Input(input, URI.create("dummy:///"));
 	}
 	

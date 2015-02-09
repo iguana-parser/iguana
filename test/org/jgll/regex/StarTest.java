@@ -8,7 +8,6 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.matcher.Matcher;
 import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class StarTest {
@@ -17,9 +16,8 @@ public class StarTest {
 	public void test1() {
 		RegularExpression regex = Star.from(Character.from('a'));
 		Automaton automaton = regex.getAutomaton();
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", automaton);
 				
-		assertEquals(4, automaton.getCountStates());
+		assertEquals(2, automaton.getCountStates());
 		
 		Matcher matcher = MatcherFactory.getMatcher(regex);
 		

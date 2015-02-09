@@ -66,7 +66,7 @@ public class Star extends AbstractRegularExpression {
 		
 		startState.addEpsilonTransition(finalState);
 		
-		return Automaton.builder(startState).build();
+		return Automaton.builder(startState).makeDeterministic().build();
 	}
 	
 	@Override

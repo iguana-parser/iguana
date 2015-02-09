@@ -44,6 +44,9 @@ public class DFAMatcher implements Matcher {
 		int maximumMatched = -1;
 		int state = start;
 		
+		if (finalStates[state])
+			maximumMatched = 0;
+		
 		for (int i = inputIndex; i < input.length(); i++) {
 			state = table[state].get(input.charAt(i));
 
