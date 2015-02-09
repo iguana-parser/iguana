@@ -67,7 +67,9 @@ public class Nonterminal extends AbstractSymbol {
 			    + (label != null? label + ":" : "")
 			    + name + (index > 0 ? index : "")
 			    + (arguments == null && parameters != null? "(" + GeneratorUtil.listToString(parameters, ",") + ")" : "")
-		        + (arguments != null? "(" + GeneratorUtil.listToString(arguments, ",") + ")" : "");
+		        + (arguments != null? "(" + GeneratorUtil.listToString(arguments, ",") + ")" : "")
+		        + (getPreConditions().isEmpty()? "" : GeneratorUtil.listToString(getPreConditions(), ","))
+		        + (getPostConditions().isEmpty()? "" : GeneratorUtil.listToString(getPostConditions(), ","));
 	}
 	
 	@Override
