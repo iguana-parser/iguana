@@ -7,8 +7,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.regex.Matcher;
 import org.jgll.regex.RegularExpression;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.sppf.TerminalNode;
 import org.jgll.util.Input;
 import org.jgll.util.collections.Key;
@@ -23,8 +24,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	public TerminalGrammarSlot(int id, RegularExpression regex) {
 		super(id, Collections.emptyList());
 		this.regex = regex;
-		// TODO: add type of regex to config!
-		this.matcher = regex.getMatcher();
+		this.matcher = MatcherFactory.getMatcher(regex);
 		this.terminalNodes = new HashMap<>();
 	}
 

@@ -7,18 +7,20 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Constants;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
 import org.junit.Test;
 
 public class CharacterClassTest {
 	
 	public void test1() {
-		RegularExpression regexp = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'));
-		Automaton nfa = regexp.getAutomaton();
+		RegularExpression regex = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'));
+		Automaton nfa = regex.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
 
-		Matcher matcher = regexp.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
 		assertTrue(matcher.match(Input.fromChar('a')));
 		assertTrue(matcher.match(Input.fromChar('f')));
@@ -33,12 +35,12 @@ public class CharacterClassTest {
 	}
 	
 	public void test2() {
-		RegularExpression regexp = Alt.from(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'));
-		Automaton nfa = regexp.getAutomaton();
+		RegularExpression regex = Alt.from(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'));
+		Automaton nfa = regex.getAutomaton();
 
 		assertEquals(8, nfa.getCountStates());
 
-		Matcher matcher = regexp.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
 		assertTrue(matcher.match(Input.fromChar('1')));
 		assertTrue(matcher.match(Input.fromChar('2')));
@@ -63,13 +65,13 @@ public class CharacterClassTest {
 	}
 	
 	public void test1WithPostConditions() {
-		RegularExpression regexp = Alt.builder(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'))
+		RegularExpression regex = Alt.builder(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'))
 								       .addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
-		Automaton nfa = regexp.getAutomaton();
+		Automaton nfa = regex.getAutomaton();
 		
 		assertEquals(6, nfa.getCountStates());
 
-		Matcher matcher = regexp.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
 		assertEquals(-1, matcher.match(Input.fromString("a:"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("f:"), 0));
@@ -81,12 +83,12 @@ public class CharacterClassTest {
 	
 	@Test
 	public void test2WithPostConditions() {
-		RegularExpression regexp = Alt.builder(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'))
+		RegularExpression regex = Alt.builder(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'))
 								   .addPreCondition(RegularExpressionCondition.notFollow(Character.from(':'))).build();
 		
-		Automaton nfa = regexp.getAutomaton();
+		Automaton nfa = regex.getAutomaton();
 		
-		Matcher matcher = regexp.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
 		assertEquals(-1, matcher.match(Input.fromString("1:"), 0));
 		assertEquals(-1, matcher.match(Input.fromString("2:"), 0));

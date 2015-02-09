@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -85,16 +84,6 @@ public class Character extends AbstractRegularExpression {
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
-	}
-	
-	@Override
-	public Matcher getMatcher() {
-		return (input, i) -> input.charAt(i) == c ? 1 : -1;
-	}
-
-	@Override
-	public Matcher getBackwardsMatcher() {
-		return getMatcher();
 	}
 	
 	public static Builder builder(int c) {

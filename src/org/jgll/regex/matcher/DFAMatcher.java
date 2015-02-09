@@ -1,6 +1,8 @@
-package org.jgll.regex.automaton;
+package org.jgll.regex.matcher;
 
-import org.jgll.regex.Matcher;
+import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.State;
+import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
 import org.jgll.util.collections.IntRangeTree;
 

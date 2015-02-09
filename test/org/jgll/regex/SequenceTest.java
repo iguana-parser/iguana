@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -27,19 +29,11 @@ public class SequenceTest {
 	
 	@Test
 	public void testDFAMatcher1() {
-		Matcher matcher = seq1.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(seq1);
 		assertTrue(matcher.match(Input.fromString("ab")));
 		assertFalse(matcher.match(Input.fromString("ac")));
 		assertFalse(matcher.match(Input.fromString("da")));
 	}
-	
-	@Test
-	public void testJavaRegexMatcher1() {
-		Matcher matcher = seq1.getJavaRegexMatcher();
-		assertTrue(matcher.match(Input.fromString("ab")));
-		assertFalse(matcher.match(Input.fromString("ac")));
-		assertFalse(matcher.match(Input.fromString("da")));
-	}	
 	
 	@Test
 	public void testAutomaton2() {
@@ -49,7 +43,7 @@ public class SequenceTest {
 	
 	@Test
 	public void testDFAMatcher2() {
-		Matcher matcher = seq2.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(seq2);
 		
 		assertTrue(matcher.match(Input.fromString("a0")));
 		assertTrue(matcher.match(Input.fromString("a5")));
@@ -64,7 +58,7 @@ public class SequenceTest {
 	
 	@Test
 	public void testJavaRegexMatcher2() {
-		Matcher dfa = seq2.getJavaRegexMatcher();
+		Matcher dfa = MatcherFactory.getMatcher(seq2);
 		
 		assertTrue(dfa.match(Input.fromString("a0")));
 		assertTrue(dfa.match(Input.fromString("a5")));
@@ -89,15 +83,8 @@ public class SequenceTest {
 	
 	@Test
 	public void testDFAMatcher3() {
-		Matcher matcher = seq2.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(seq1);
 		assertTrue(matcher.match(Input.fromString("dm")));
 	}
-	
-	@Test
-	public void testJavaRegexMatcher3() {
-		Matcher matcher = seq2.getJavaRegexMatcher();
-		assertTrue(matcher.match(Input.fromString("dm")));
-	}
-
 	
 }

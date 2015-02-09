@@ -5,7 +5,9 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.DFAMatcher;
+import org.jgll.regex.matcher.DFAMatcher;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -22,7 +24,7 @@ public class CharacterTest {
 	
 	@Test
 	public void testMatcher() {
-		Matcher matcher = c.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(c);
 		Input input = Input.fromString("a");
 		assertTrue(matcher.match(input));
 		assertEquals(1, matcher.match(input, 0));

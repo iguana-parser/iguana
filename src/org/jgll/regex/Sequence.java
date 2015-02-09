@@ -176,33 +176,17 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		return symbols;
 	}
 	
-	private boolean isCharSequence() {
+	public boolean isCharSequence() {
 		return symbols.stream().allMatch(s -> (s instanceof Character));
 	}
 	
-	private List<Character> asCharacters() {
+	public List<Character> asCharacters() {
 		return symbols.stream().map(s -> ((RegularExpression)s).asSingleChar()).collect(Collectors.toList());
 	}
 	
 	@Override
 	public boolean isTerminal() {
 		return isCharSequence();
-	}
-	
-	@Override
-	public Matcher getMatcher() {
-		if (isCharSequence()) {
-			List<Character> characters = asCharacters();
-			return (input, i) -> {
-				for (Character c : characters) {
-					if (c.getValue() != input.charAt(i++)) {
-						return -1;
-					}
-				}
-				return characters.size();
-			};
-		}
-		return super.getMatcher();
 	}
 	
 	public Rule toRule() {

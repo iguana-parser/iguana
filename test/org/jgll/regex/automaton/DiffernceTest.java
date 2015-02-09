@@ -7,6 +7,7 @@ import org.jgll.regex.Alt;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
 import org.jgll.regex.Sequence;
+import org.jgll.regex.matcher.DFAMatcher;
 import org.jgll.util.Input;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package org.jgll.regex;
+package org.jgll.regex.matcher;
 
 import org.jgll.util.Input;
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.Sequence;
+import org.jgll.regex.matcher.DFAMatcher;
 import org.jgll.util.Input;
 import org.junit.Test;
 

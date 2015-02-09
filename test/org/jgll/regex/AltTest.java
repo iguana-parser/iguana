@@ -4,7 +4,8 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.AutomatonBuilder;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class AltTest {
 		
 		assertEquals(6, nfa.getCountStates());
 		
-		Matcher dfa = regex.getMatcher();
+		Matcher dfa = MatcherFactory.getMatcher(regex);
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));
 		assertEquals(1, dfa.match(Input.fromString("b"), 0));
 	}
@@ -42,7 +43,7 @@ public class AltTest {
 	public void test3() {
 		RegularExpression regex = Alt.from(Sequence.from("when"), Sequence.from("if"));
 
-		Matcher dfa = regex.getMatcher();
+		Matcher dfa = MatcherFactory.getMatcher(regex);
 		
 		assertEquals(4, dfa.match(Input.fromString("when"), 0));
 		assertEquals(2, dfa.match(Input.fromString("if"), 0));

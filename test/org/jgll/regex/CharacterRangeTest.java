@@ -4,13 +4,15 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimap;
 
-public class RangeTest {
+public class CharacterRangeTest {
 	
 	@Test
 	public void overlappingTest1() {
@@ -151,7 +153,7 @@ public class RangeTest {
 		CharacterRange range = CharacterRange.in('0', '9');
 		Automaton automaton = range.getAutomaton();
 		assertEquals(2, automaton.getCountStates());
-		Matcher dfa = range.getMatcher();
+		Matcher dfa = MatcherFactory.getMatcher(range);
 		
 		assertEquals(1, dfa.match(Input.fromString("0"), 0));
 		assertEquals(1, dfa.match(Input.fromString("3"), 0));

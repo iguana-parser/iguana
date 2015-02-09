@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.parser.HashFunctions;
-import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -99,16 +98,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		State finalState = new State(StateType.FINAL);
 		startState.addTransition(new Transition(start, end, finalState));
 		return Automaton.builder(startState).build();
-	}
-	
-	@Override
-	public Matcher getMatcher() {
-		return (input, i) -> input.charAt(i) >= start && input.charAt(i) <= end ? 1 : -1;
-	}
-	
-	@Override
-	public Matcher getBackwardsMatcher() {
-		return getMatcher();
 	}
 
 	@Override

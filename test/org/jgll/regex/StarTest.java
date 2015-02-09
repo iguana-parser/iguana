@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.MatcherFactory;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -12,12 +14,12 @@ public class StarTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regexp = Star.from(Character.from('a'));
-		Automaton nfa = regexp.getAutomaton();
+		RegularExpression regex = Star.from(Character.from('a'));
+		Automaton nfa = regex.getAutomaton();
 				
 		assertEquals(4, nfa.getCountStates());
 		
-		Matcher matcher = regexp.getMatcher();
+		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
 		assertEquals(0, matcher.match(Input.fromString(""), 0));
 		assertEquals(1, matcher.match(Input.fromString("a"), 0));
@@ -31,10 +33,9 @@ public class StarTest {
 	@Test
 	public void test2() {
 		// ([a-a]+)*
-		RegularExpression regexp = Star.from(Sequence.from(Plus.from(Alt.from(CharacterRange.in('a', 'a')))));
-		Automaton nfa = regexp.getAutomaton();
-		
-		Matcher matcher = regexp.getMatcher();
+		RegularExpression regex = Star.from(Sequence.from(Plus.from(Alt.from(CharacterRange.in('a', 'a')))));
+
+		Matcher matcher = MatcherFactory.getMatcher(regex);
 		
 		assertEquals(0, matcher.match(Input.fromString(""), 0));
 		assertEquals(1, matcher.match(Input.fromString("a"), 0));
