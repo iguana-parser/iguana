@@ -80,10 +80,10 @@ public class EBNFToBNF implements GrammarTransformation {
 		final Nonterminal newNt;
 		
 		Set<String> freeVars = new LinkedHashSet<>();
-		String[] parameters = null;
-		Expression[] arguments = null;
 		FreeVariableVisitor visitor = new FreeVariableVisitor(freeVars);
 		
+		String[] parameters = null;
+		Expression[] arguments = null;
 		
 		/**
 		 * S* ::= S+ 
@@ -97,9 +97,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			S.accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
-				parameters = new String[freeVars.size()];
-				freeVars.toArray(parameters);
-				
+				parameters = freeVars.stream().toArray(String[]::new);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
@@ -128,9 +126,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			S.accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
-				parameters = new String[freeVars.size()];
-				freeVars.toArray(parameters);
-				
+				parameters = freeVars.stream().toArray(String[]::new);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
@@ -153,7 +149,14 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			in.accept(visitor);
 			
-			newNt = Nonterminal.withName(symbol.getName());
+			if (!freeVars.isEmpty()) {
+				parameters = freeVars.stream().toArray(String[]::new);
+				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
+			}
+			
+			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build() 
+						: Nonterminal.withName(symbol.getName());
+			
 			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(in, addedRules, layout)).setLayout(layout).build());
 			addedRules.add(Rule.withHead(newNt).build());
 		} 
@@ -167,7 +170,14 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			Sequence.builder(symbols).build().accept(visitor);
 			
-			newNt = Nonterminal.withName(symbol.getName());
+			if (!freeVars.isEmpty()) {
+				parameters = freeVars.stream().toArray(String[]::new);
+				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
+			}
+			
+			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build()
+						: Nonterminal.withName(symbol.getName());
+			
 			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).build());
 		} 
 		
@@ -176,11 +186,18 @@ public class EBNFToBNF implements GrammarTransformation {
 		 *           | B
 		 */
 		else if (symbol instanceof Alt) {
-			newNt = Nonterminal.withName(symbol.getName());
 			@SuppressWarnings("unchecked")
 			List<Symbol> symbols = ((Alt<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
 			
 			Alt.builder(symbols).build().accept(visitor);
+			
+			if (!freeVars.isEmpty()) {
+				parameters = freeVars.stream().toArray(String[]::new);
+				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
+			}
+			
+			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build()
+						: Nonterminal.withName(symbol.getName());
 			
 			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).build()));
 		}
@@ -190,7 +207,9 @@ public class EBNFToBNF implements GrammarTransformation {
 		}
 		
 		cache.put(symbol, newNt);
-		return newNt.copyBuilder().addConditions(symbol).setLabel(symbol.getLabel()).build();
+		
+		return arguments != null? ((Nonterminal.Builder) newNt.copyBuilder()).apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build()
+					: newNt.copyBuilder().addConditions(symbol).setLabel(symbol.getLabel()).build();
 	}
 	
 	private String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
