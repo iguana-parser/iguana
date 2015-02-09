@@ -127,17 +127,22 @@ public class AutomatonBuilder {
 			Set<State> stateSet = processList.poll();
 
 			Set<State> destState = new HashSet<>();
+			Set<CharacterRange> ranges = new HashSet<>();
 			for (CharacterRange r : alphabet) {
 				for (State state : stateSet) {
 					State dest = state.getState(r);
-					if (dest != null)
+					if (dest != null) {
 						destState.add(dest);
+						ranges.add(r);
+					}
 				}
+			}
 				
-				destState = epsilonClosure(destState);
-				if (!destState.isEmpty()) {
-					State source = newStatesMap.get(stateSet);
-					State dest = newStatesMap.computeIfAbsent(destState, s -> new State());
+			destState = epsilonClosure(destState);
+			if (!destState.isEmpty()) {
+				State source = newStatesMap.get(stateSet);
+				State dest = newStatesMap.computeIfAbsent(destState, s -> new State());
+				for (CharacterRange r : ranges) {
 					source.addTransition(new Transition(r, dest));
 				}
 			}
@@ -159,6 +164,10 @@ public class AutomatonBuilder {
 			}			
 		}
 				
+		this.startState = startState;
+		this.finalStates = getFinalStates();
+		this.states = getAllStates(startState);
+		
 		deterministic = true;
 		
 		return this;
@@ -432,9 +441,11 @@ public class AutomatonBuilder {
 		this.rangeMap = getRangeMap(startState);
 		for (State state : states) {
 			for (Transition transition : state.getTransitions()) {
-				state.removeTransition(transition);
-				for (CharacterRange range : rangeMap.get(transition.getRange())) {
-					state.addTransition(new Transition(range, transition.getDestination()));
+				if (!transition.isEpsilonTransition()) {
+					state.removeTransition(transition);
+					for (CharacterRange range : rangeMap.get(transition.getRange())) {
+						state.addTransition(new Transition(range, transition.getDestination()));
+					}					
 				}
 			}
 		}
@@ -445,12 +456,12 @@ public class AutomatonBuilder {
 		final Set<CharacterRange> ranges = new HashSet<>();
 
 		AutomatonVisitor.visit(startState, state -> {
-				for (Transition transition : state.getTransitions()) {
-					if (!transition.isEpsilonTransition()) {
-						ranges.add(transition.getRange());
-					}
+			for (Transition transition : state.getTransitions()) {
+				if (!transition.isEpsilonTransition()) {
+					ranges.add(transition.getRange());
 				}
-			});
+			}
+		});
 		
 		return new ArrayList<>(ranges);
 	}

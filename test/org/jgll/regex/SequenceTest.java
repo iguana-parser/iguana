@@ -24,7 +24,7 @@ public class SequenceTest {
 	@Test
 	public void testAutomaton1() {
 		Automaton automaton = seq1.getAutomaton();
-		assertEquals(4, automaton.getCountStates());
+		assertEquals(3, automaton.getCountStates());
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class SequenceTest {
 	
 	@Test
 	public void testDFAMatcher3() {
-		Matcher matcher = MatcherFactory.getMatcher(seq1);
+		Matcher matcher = MatcherFactory.getMatcher(seq3);
 		assertTrue(matcher.match(Input.fromString("dm")));
 	}
 	

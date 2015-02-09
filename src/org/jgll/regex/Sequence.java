@@ -82,7 +82,7 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		for (int i = 1; i < automatons.size(); i++) {
 			Automaton next = automatons.get(i);
 			
-			for(State s : current.getFinalStates()) {
+			for (State s : current.getFinalStates()) {
 				s.setStateType(StateType.NORMAL);
 				s.addTransition(Transition.epsilonTransition(next.getStartState()));
 			}
