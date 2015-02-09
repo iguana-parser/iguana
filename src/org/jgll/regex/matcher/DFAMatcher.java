@@ -25,15 +25,13 @@ public class DFAMatcher implements Matcher {
 		}
 
 		finalStates = new boolean[automaton.getStates().length];
-		int i = 0;
 		for (State state : automaton.getStates()) {
 			
 			for (Transition transition : state.getTransitions()) {
 				table[state.getId()].insert(transition.getRange(), transition.getDestination().getId());
 			}
-			
-			if (state.isFinalState())
-				finalStates[i++] = true;
+
+			finalStates[state.getId()] = state.isFinalState();
 		}
 		
 		this.start = automaton.getStartState().getId();
