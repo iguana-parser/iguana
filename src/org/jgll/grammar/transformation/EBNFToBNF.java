@@ -94,6 +94,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Star star = (Star) symbol;
 			Symbol S = star.getSymbol();
 			
+			S.setEmpty();
 			S.accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
@@ -123,6 +124,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol S = plus.getSymbol();
 			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules, layout)).collect(Collectors.toList());
 			
+			S.setEmpty();
 			S.accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
@@ -133,11 +135,13 @@ public class EBNFToBNF implements GrammarTransformation {
 			newNt = parameters != null? Nonterminal.builder(getName(S, plus.getSeparators(), layout) + "+").addParameters(parameters).build()
 						: Nonterminal.withName(getName(S, plus.getSeparators(), layout) + "+");
 			
+			S = rewrite(S, addedRules, layout);
+			
 			addedRules.add(Rule.withHead(newNt)
 							.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
 							.addSymbols(seperators)
-							.addSymbols(rewrite(S, addedRules, layout)).setLayout(layout).build());
-			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(S, addedRules, layout)).build());
+							.addSymbols(S).setLayout(layout).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(S).build());
 		} 
 		
 		/**
@@ -147,6 +151,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		else if (symbol instanceof Opt) {
 			Symbol in = ((Opt) symbol).getSymbol();
 			
+			in.setEmpty();
 			in.accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
@@ -165,10 +170,13 @@ public class EBNFToBNF implements GrammarTransformation {
 		 * (S) ::= S
 		 */
 		else if (symbol instanceof Sequence) {
+			
 			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Sequence<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
+			List<Symbol> symbols = ((Sequence<Symbol>) symbol).getSymbols();
 			
 			Sequence.builder(symbols).build().accept(visitor);
+			
+			symbols = symbols.stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
 			
 			if (!freeVars.isEmpty()) {
 				parameters = freeVars.stream().toArray(String[]::new);
@@ -187,9 +195,11 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		else if (symbol instanceof Alt) {
 			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Alt<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
+			List<Symbol> symbols = ((Alt<Symbol>) symbol).getSymbols();
 			
 			Alt.builder(symbols).build().accept(visitor);
+			
+			symbols = symbols.stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
 			
 			if (!freeVars.isEmpty()) {
 				parameters = freeVars.stream().toArray(String[]::new);

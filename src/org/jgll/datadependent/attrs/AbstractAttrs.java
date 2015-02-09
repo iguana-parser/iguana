@@ -16,5 +16,10 @@ public abstract class AbstractAttrs implements Attr {
 	public void setEnv(ImmutableSet<String> env) {
 		this.env = env;
 	}
+	
+	@Override
+	public void setEmpty() {
+		this.env = TrieSet.of();
+	}
 
 }

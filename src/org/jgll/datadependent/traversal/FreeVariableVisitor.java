@@ -145,8 +145,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(LeftExtent expression) {
-		if (!expression.getEnv().contains(expression.getLabel())) {
-			freeVariables.add(expression.getLabel());
+		java.lang.String variable = java.lang.String.format(org.jgll.datadependent.ast.Expression.LeftExtent.format, expression.getLabel());
+		if (!expression.getEnv().contains(variable)) {
+			freeVariables.add(variable);
 		}
 		return null;
 	}
