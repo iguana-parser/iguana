@@ -466,7 +466,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String toString() {
-			return java.lang.String.format("%s.rExt", label);
+			return java.lang.String.format("%s.lExt", label);
 		}
 
 		@Override
