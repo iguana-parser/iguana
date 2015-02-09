@@ -440,14 +440,16 @@ public class AutomatonBuilder {
 	private void convertToNonOverlapping(State startState) {
 		this.rangeMap = getRangeMap(startState);
 		for (State state : states) {
+			List<Transition> removeList = new ArrayList<>();
 			for (Transition transition : state.getTransitions()) {
 				if (!transition.isEpsilonTransition()) {
-					state.removeTransition(transition);
+					removeList.add(transition);
 					for (CharacterRange range : rangeMap.get(transition.getRange())) {
 						state.addTransition(new Transition(range, transition.getDestination()));
 					}					
 				}
 			}
+			state.removeTransitions(removeList);
 		}
 		this.alphabet = getAlphabet(startState, rangeMap);
 	}

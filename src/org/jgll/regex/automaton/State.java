@@ -84,7 +84,7 @@ public class State implements Serializable {
 	}
 	
 	public void removeTransitions(Collection<Transition> c) {
-		c.forEach(t -> transitions.remove(t));
+		c.removeAll(c);
 	}
 	
 	public void setId(int id) {
