@@ -1,6 +1,7 @@
 package org.jgll.datadependent.attrs;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
+import org.eclipse.imp.pdb.facts.util.TrieSet;
 
 public abstract class AbstractAttrs implements Attr {
 	
@@ -8,7 +9,7 @@ public abstract class AbstractAttrs implements Attr {
 
 	@Override
 	public ImmutableSet<String> getEnv() {
-		return env;
+		return env == null? TrieSet.of() : env;
 	}
 
 	@Override

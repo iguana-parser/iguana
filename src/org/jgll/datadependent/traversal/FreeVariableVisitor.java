@@ -1,7 +1,6 @@
 package org.jgll.datadependent.traversal;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.jgll.datadependent.ast.Expression.Assignment;
@@ -43,7 +42,11 @@ import org.jgll.traversal.ISymbolVisitor;
 
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
 	
-	private final List<java.lang.String> freeVariables = new ArrayList<>();
+	private final Set<java.lang.String> freeVariables;
+	
+	public FreeVariableVisitor(Set<java.lang.String> freeVariables) {
+		this.freeVariables = freeVariables;
+	}
 
 	@Override
 	public Void visit(Boolean expression) {
