@@ -262,7 +262,29 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Terminal symbol) {
-		// FIXME: terminal can also be labeled and have conditions
+		
+		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		
+		if (symbol.getLabel() != null) {
+			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
+		}
+		
+		for (Condition condition : symbol.getPreConditions()) {
+			condition.setEnv(env);
+			condition.accept(this);
+		}
+		
+		if (symbol.getLabel() != null) {
+			env = env.__insert(symbol.getLabel());
+		}
+		
+		for (Condition condition : symbol.getPostConditions()) {
+			condition.setEnv(env);
+			condition.accept(this);
+		}
+		
+		symbol.setEnv(env);
+		
 		return null;
 	}
 
