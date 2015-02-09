@@ -47,11 +47,14 @@ public class NonterminalTransition extends AbstractTransition {
 		}
 		
 		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
+			
 			if (preConditions.execute(parser.getInput(), u, i))
 				return;
 			
 			parser.create(dest, nonterminal, u, i, node);
+			
 		} else {
+			
 			Environment env = parser.getEmptyEnvironment();
 			
 			if (dest.getLabel() != null) {
@@ -64,6 +67,7 @@ public class NonterminalTransition extends AbstractTransition {
 				return;
 			
 			parser.create(dest, nonterminal, u, i, node, arguments, parser.getEnvironment());
+			
 		}
 		
 	}

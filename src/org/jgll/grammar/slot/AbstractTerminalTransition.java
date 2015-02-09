@@ -2,6 +2,7 @@ package org.jgll.grammar.slot;
 
 import java.util.Set;
 
+import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.Conditions;
@@ -33,23 +34,53 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		
 		Input input = parser.getInput();
-
-		if (preConditions.execute(input, u, i))
-			return;
 		
-		int length = slot.match(input, i);
-		
-		if (length < 0) {
-			parser.recordParseError(origin);
-			return;
+		if (dest.getLabel() == null) {
+			
+			if (preConditions.execute(input, u, i))
+				return;
+			
+			int length = slot.match(input, i);
+			
+			if (length < 0) {
+				parser.recordParseError(origin);
+				return;
+			}
+			
+			if (postConditions.execute(input, u, i + length))
+				return;
+			
+			TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
+			
+			createNode(length, cr, parser, u, i, node);
+			
+		} else {
+			
+			Environment env = parser.getEmptyEnvironment().declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+			parser.setEnvironment(env);
+			
+			if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
+				return;
+			
+			int length = slot.match(input, i);
+			
+			if (length < 0) {
+				parser.recordParseError(origin);
+				return;
+			}
+			
+			// FIXME: SPPF
+			TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
+			
+			parser.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+			
+			if (postConditions.execute(input, u, i + length, parser.getEvaluatorContext()))
+				return;
+			
+			createNode(length, cr, parser, u, i, node, parser.getEnvironment());
+			
 		}
-		
-		if (postConditions.execute(input, u, i + length))
-			return;
-		
-		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
-		
-		createNode(length, cr, parser, u, i, node);
+
 	}
 	
 	public TerminalGrammarSlot getSlot() {
@@ -84,6 +115,8 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		Input input = parser.getInput();
 		
 		parser.setEnvironment(env);
+		
+		parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
 		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
 			return;
@@ -94,12 +127,14 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			parser.recordParseError(origin);
 			return;
 		}
-
-		if (postConditions.execute(input, u, i + length, parser.getEvaluatorContext()))
-			return;
 		
 		// FIXME: SPPF
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
+		
+		parser.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+
+		if (postConditions.execute(input, u, i + length, parser.getEvaluatorContext()))
+			return;
 		
 		createNode(length, cr, parser, u, i, node, parser.getEnvironment());
 	}
