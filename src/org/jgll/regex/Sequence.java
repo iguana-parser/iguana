@@ -24,6 +24,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.Input;
 
 public class Sequence<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
@@ -252,6 +253,11 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 			this.name = getName(symbols);
 			return new Sequence<>(this);
 		}
+	}
+
+	@Override
+	public <E> E accept(ISymbolVisitor<E> visitor) {
+		return visitor.visit(this);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package org.jgll.grammar.condition;
 
+import org.jgll.traversal.IConditionVisitor;
+
 
 
 
@@ -59,6 +61,11 @@ public class PositionalCondition extends Condition {
 	@Override
 	public SlotAction getSlotAction() {
 		return action;
+	}
+
+	@Override
+	public <T> T accept(IConditionVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

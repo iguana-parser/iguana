@@ -1,6 +1,7 @@
 package org.jgll.datadependent.ast;
 
 import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.datadependent.traversal.IAbstractASTVisitor;
 
 public abstract class Statement extends AbstractAST {
 	
@@ -10,6 +11,10 @@ public abstract class Statement extends AbstractAST {
 		
 		Expression(org.jgll.datadependent.ast.Expression exp) {
 			this.exp = exp;
+		}
+		
+		public org.jgll.datadependent.ast.Expression getExpression() {
+			return exp;
 		}
 		
 		@Override
@@ -22,6 +27,11 @@ public abstract class Statement extends AbstractAST {
 		public String toString() {
 			return exp.toString();
 		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
 		
 	}
 	
@@ -31,6 +41,10 @@ public abstract class Statement extends AbstractAST {
 		
 		VariableDeclaration(org.jgll.datadependent.ast.VariableDeclaration decl) {
 			this.decl = decl;
+		}
+		
+		public org.jgll.datadependent.ast.VariableDeclaration getDeclaration() {
+			return decl;
 		}
 
 		@Override
@@ -42,6 +56,11 @@ public abstract class Statement extends AbstractAST {
 		@Override
 		public String toString() {
 			return decl.toString();
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
 		}
 		
 	}

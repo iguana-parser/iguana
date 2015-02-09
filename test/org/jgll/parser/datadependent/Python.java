@@ -463,7 +463,7 @@ public class Python {
 			 * Data-dependent
 			 * 
 			 * @layout(NoNL)
-			 * IfStmt ::= l:"if" Test ":" Suite(indent(l@lExt)) ("elif" Test ":" Suite)* ("else" ":" Suite)?
+			 * IfStmt ::= a:"if" Test ":" Suite(indent(a.lExt)) (b:"elif" Test ":" Suite(indent(b.lExt)))* (c:"else" ":" Suite(indent(c.lExt)))?
 			 */ 
 			.addRule(Rule.withHead(Nonterminal.builder("IfStmt").build()).addSymbol(Sequence.builder(Character.builder(105).build(), Character.builder(102).build()).build()).addSymbol(Nonterminal.builder("Test").build()).addSymbol(Sequence.builder(Character.builder(58).build()).build()).addSymbol(Nonterminal.builder("Suite").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(105).build(), Character.builder(102).build()).build(), Nonterminal.builder("Test").build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(115).build(), Character.builder(101).build()).build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build())
 							.setLayout(Nonterminal.builder("NoNL").build()).build())
@@ -478,7 +478,7 @@ public class Python {
 			 * 
 			 * @layout(NoNL)
 			 * Suite(IND) ::= SimpleStmt
-			 *              | NL l1:(l2:Stmt [indent(l1.lExt) == indent(l2.lExt)])+ [ IND < indent(l1.lExt) ]
+			 *              | NL a:(b:Stmt [indent(a.lExt) == indent(b.lExt)])+ [ IND < indent(a.lExt) ]
 			 */
 			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("NL").build()).addSymbol(Plus.builder(Nonterminal.builder("Stmt").build()).build())
 						.setLayout(Nonterminal.builder("NoNL").build()).build())

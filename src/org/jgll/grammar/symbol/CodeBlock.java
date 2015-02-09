@@ -3,10 +3,12 @@ package org.jgll.grammar.symbol;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.datadependent.attrs.AbstractAttrs;
 import org.jgll.grammar.condition.Condition;
+import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.generator.GeneratorUtil;
 
-public class CodeBlock implements Symbol {
+public class CodeBlock extends AbstractAttrs implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -62,6 +64,11 @@ public class CodeBlock implements Symbol {
 	@Override
 	public String toString() {
 		return GeneratorUtil.listToString(statements, ";");
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

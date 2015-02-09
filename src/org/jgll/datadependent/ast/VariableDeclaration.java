@@ -1,6 +1,7 @@
 package org.jgll.datadependent.ast;
 
 import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.datadependent.traversal.IAbstractASTVisitor;
 
 public class VariableDeclaration extends AbstractAST {
 	
@@ -17,6 +18,14 @@ public class VariableDeclaration extends AbstractAST {
 	VariableDeclaration(String name) {
 		this(name, null);
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public Expression getExpression() {
+		return expression;
+	}
 
 	@Override
 	public Object interpret(IEvaluatorContext ctx) {
@@ -32,6 +41,11 @@ public class VariableDeclaration extends AbstractAST {
 	public String toString() {
 		return expression != null? String.format( "var %s = %s", name, expression) 
 				: String.format("var %s", name);
+	}
+
+	@Override
+	public <T> T accept(IAbstractASTVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

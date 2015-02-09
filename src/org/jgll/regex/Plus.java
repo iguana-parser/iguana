@@ -10,6 +10,7 @@ import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.traversal.ISymbolVisitor;
 
 import com.google.common.collect.ImmutableList;
 
@@ -136,6 +137,11 @@ public class Plus extends AbstractRegularExpression {
 		public Plus build() {
 			return new Plus(this);
 		}
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 	
 }

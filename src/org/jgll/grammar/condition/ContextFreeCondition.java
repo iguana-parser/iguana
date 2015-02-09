@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.Sequence;
+import org.jgll.traversal.IConditionVisitor;
 
 public class ContextFreeCondition extends Condition {
 	
@@ -111,5 +112,10 @@ public class ContextFreeCondition extends Condition {
 	@Override
 	public SlotAction getSlotAction() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T> T accept(IConditionVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import org.jgll.regex.RegularExpression;
+import org.jgll.traversal.IConditionVisitor;
 
 /**
  * Conditions relating to the keyword exclusions or follow restrictions. 
@@ -127,6 +128,11 @@ public class RegularExpressionCondition extends Condition {
 	
 	public static RegularExpressionCondition notPrecede(RegularExpression regularExpression) {
 		return new RegularExpressionCondition(ConditionType.NOT_PRECEDE, regularExpression);
+	}
+
+	@Override
+	public <T> T accept(IConditionVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 	
 }

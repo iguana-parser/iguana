@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
+import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.generator.GeneratorUtil;
 
 public class Nonterminal extends AbstractSymbol {
@@ -202,6 +203,11 @@ public class Nonterminal extends AbstractSymbol {
 		public Nonterminal build() {
 			return new Nonterminal(this);
 		}
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

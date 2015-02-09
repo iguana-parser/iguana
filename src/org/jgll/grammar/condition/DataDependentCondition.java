@@ -2,6 +2,7 @@ package org.jgll.grammar.condition;
 
 import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.traversal.IConditionVisitor;
 import org.jgll.util.Input;
 
 public class DataDependentCondition extends Condition {
@@ -59,6 +60,11 @@ public class DataDependentCondition extends Condition {
 	@Override
 	public String toString() {
 		return String.format("[%s]", expression);
+	}
+
+	@Override
+	public <T> T accept(IConditionVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

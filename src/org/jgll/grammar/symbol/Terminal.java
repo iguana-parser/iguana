@@ -1,6 +1,7 @@
 package org.jgll.grammar.symbol;
 
 import org.jgll.regex.RegularExpression;
+import org.jgll.traversal.ISymbolVisitor;
 
 public class Terminal extends AbstractSymbol {
 
@@ -34,6 +35,11 @@ public class Terminal extends AbstractSymbol {
 		public Terminal build() {
 			return null;
 		}
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

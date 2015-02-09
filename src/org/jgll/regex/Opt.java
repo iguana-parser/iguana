@@ -11,6 +11,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.traversal.ISymbolVisitor;
 
 public class Opt extends AbstractRegularExpression {
 
@@ -117,6 +118,11 @@ public class Opt extends AbstractRegularExpression {
 			return new Opt(this);
 		}
 		
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 	
 }

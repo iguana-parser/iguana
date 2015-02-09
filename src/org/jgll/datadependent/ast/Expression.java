@@ -1,6 +1,7 @@
 package org.jgll.datadependent.ast;
 
 import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.datadependent.traversal.IAbstractASTVisitor;
 import org.jgll.grammar.exception.UndeclaredVariableException;
 import org.jgll.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.jgll.sppf.NonPackedNode;
@@ -28,6 +29,11 @@ public abstract class Expression extends AbstractAST {
 			public java.lang.String toString() {
 				return "true";
 			}
+
+			@Override
+			public <T> T accept(IAbstractASTVisitor<T> visitor) {
+				return visitor.visit(this);
+			}
 		};
 		
 		static public final Boolean FALSE = new Boolean() {
@@ -39,6 +45,11 @@ public abstract class Expression extends AbstractAST {
 			@Override
 			public java.lang.String toString() {
 				return "false";
+			}
+
+			@Override
+			public <T> T accept(IAbstractASTVisitor<T> visitor) {
+				return visitor.visit(this);
 			}
 			
 		};
@@ -70,6 +81,11 @@ public abstract class Expression extends AbstractAST {
 		public java.lang.String toString() {
 			return value.toString();
 		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
 		
 	}
 	
@@ -97,6 +113,11 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public java.lang.String toString() {
 			return value.toString();
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
 		}
 		
 	}
@@ -126,6 +147,11 @@ public abstract class Expression extends AbstractAST {
 		public java.lang.String toString() {
 			return value;
 		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
 	}
 	
 	static public class Name extends Expression {
@@ -135,12 +161,16 @@ public abstract class Expression extends AbstractAST {
 		Name(java.lang.String name) {
 			this.name = name;
 		}
+		
+		public java.lang.String getName() {
+			return name;
+		}
 
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
 			Object value = ctx.lookupVariable(name);
 			if (value == null) {
-				throw new RuntimeException("Undeclared variable: " + name);
+				throw new UndeclaredVariableException(name);
 			}
 			return value;
 		}
@@ -148,6 +178,11 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public java.lang.String toString() {
 			return name;
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
 		}
 		
 	}
@@ -163,6 +198,10 @@ public abstract class Expression extends AbstractAST {
 			this.arguments = arguments;
 		}
 		
+		public Expression[] getArguments() {
+			return this.arguments;
+		}
+		
 		protected Object[] interpretArguments(IEvaluatorContext ctx) {
 			Object[] values = new Object[arguments.length];
 			
@@ -173,6 +212,11 @@ public abstract class Expression extends AbstractAST {
 			}
 			
 			return values;
+		}
+		
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
 		}
 				
 	}
@@ -186,6 +230,14 @@ public abstract class Expression extends AbstractAST {
 			this.id = id;
 			this.exp = exp;
 		}
+		
+		public java.lang.String getId() {
+			return id;
+		}
+		
+		public Expression getExpression() {
+			return exp;
+		}
 
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
@@ -196,6 +248,11 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public java.lang.String toString() {
 			return java.lang.String.format("%s = %s", id, exp);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
 		}
 		
 	}
@@ -208,6 +265,14 @@ public abstract class Expression extends AbstractAST {
 		Less(Expression lhs, Expression rhs) {
 			this.lhs = lhs;
 			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
 		}
 
 		@Override
@@ -230,6 +295,11 @@ public abstract class Expression extends AbstractAST {
 		public java.lang.String toString() {
 			return java.lang.String.format("%s < %s", lhs, rhs);
 		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
 		
 	}
 	
@@ -241,6 +311,14 @@ public abstract class Expression extends AbstractAST {
 		Greater(Expression lhs, Expression rhs) {
 			this.lhs = lhs;
 			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
 		}
 
 		@Override
@@ -263,6 +341,11 @@ public abstract class Expression extends AbstractAST {
 		public java.lang.String toString() {
 			return java.lang.String.format("%s > %s", lhs, rhs);
 		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
 		
 	}
 	
@@ -274,6 +357,14 @@ public abstract class Expression extends AbstractAST {
 		GreaterThanEqual(Expression lhs, Expression rhs) {
 			this.lhs = lhs;
 			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
 		}
 
 		@Override
@@ -296,6 +387,11 @@ public abstract class Expression extends AbstractAST {
 		public java.lang.String toString() {
 			return java.lang.String.format("%s >= %s", lhs, rhs);
 		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
 		
 	}
 	
@@ -307,6 +403,14 @@ public abstract class Expression extends AbstractAST {
 		Equal(Expression lhs, Expression rhs) {
 			this.lhs = lhs;
 			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
 		}
 
 		@Override
@@ -329,6 +433,11 @@ public abstract class Expression extends AbstractAST {
 		public java.lang.String toString() {
 			return java.lang.String.format("%s == %s", lhs, rhs);
 		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
 		
 	}
 	
@@ -340,6 +449,10 @@ public abstract class Expression extends AbstractAST {
 		
 		LeftExtent(java.lang.String label) {
 			this.label = label;
+		}
+		
+		public java.lang.String getLabel() {
+			return label;
 		}
 
 		@Override
@@ -355,6 +468,11 @@ public abstract class Expression extends AbstractAST {
 		public java.lang.String toString() {
 			return java.lang.String.format("%s.rExt", label);
 		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
 		
 	}
 	
@@ -366,6 +484,10 @@ public abstract class Expression extends AbstractAST {
 		
 		RightExtent(java.lang.String label) {
 			this.label = label;
+		}
+		
+		public java.lang.String getLabel() {
+			return label;
 		}
 
 		@Override
@@ -385,6 +507,11 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public java.lang.String toString() {
 			return java.lang.String.format("%s.rExt", label);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
 		}
 		
 	}
