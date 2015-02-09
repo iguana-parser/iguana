@@ -10,7 +10,6 @@ import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
-import org.jgll.regex.automaton.Transition;
 
 public class Opt extends AbstractRegularExpression {
 
@@ -50,15 +49,15 @@ public class Opt extends AbstractRegularExpression {
 		State finalState = new State(StateType.FINAL);
 
 		Automaton automaton = ((RegularExpression) s).getAutomaton().copy();
-		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
+		startState.addEpsilonTransition(automaton.getStartState());
 		
 		Set<State> finalStates = automaton.getFinalStates();
 		for(State s : finalStates) {
 			s.setStateType(StateType.NORMAL);
-			s.addTransition(Transition.epsilonTransition(finalState));			
+			s.addEpsilonTransition(finalState);			
 		}
 		
-		startState.addTransition(Transition.epsilonTransition(finalState));
+		startState.addEpsilonTransition(finalState);
 		
 		return Automaton.builder(startState).makeDeterministic().build();
 	}

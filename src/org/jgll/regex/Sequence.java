@@ -23,7 +23,6 @@ import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
-import org.jgll.regex.automaton.Transition;
 import org.jgll.util.Input;
 
 public class Sequence<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
@@ -84,7 +83,7 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 			
 			for (State s : current.getFinalStates()) {
 				s.setStateType(StateType.NORMAL);
-				s.addTransition(Transition.epsilonTransition(next.getStartState()));
+				s.addEpsilonTransition(next.getStartState());
 			}
 			
 			current = next;

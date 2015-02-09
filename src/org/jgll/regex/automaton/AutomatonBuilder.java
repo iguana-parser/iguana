@@ -177,7 +177,7 @@ public class AutomatonBuilder {
 		Set<State> newStates = new HashSet<>(states);
 		
 		for(State state : states) {
-			Set<State> s = state.getEpsilonStates();
+			Set<State> s = state.getEpsilonSates();
 			if(!s.isEmpty()) {
 				newStates.addAll(s);
 				newStates.addAll(epsilonClosure(s));
@@ -525,7 +525,7 @@ public class AutomatonBuilder {
 		State startState = new State();
 		
 		for(State finalState : finalStates) {
-			startState.addTransition(Transition.epsilonTransition(newStates.get(finalState)));
+			startState.addEpsilonTransition(newStates.get(finalState));
 		}
 		
 		// 2. Reversing the transitions

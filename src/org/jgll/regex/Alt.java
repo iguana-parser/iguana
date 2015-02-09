@@ -20,7 +20,6 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonBuilder;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
-import org.jgll.regex.automaton.Transition;
 
 public class Alt<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
 
@@ -69,12 +68,12 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		State finalState = new State(StateType.FINAL);
 		
 		for (Automaton automaton : automatons) {
-			startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
+			startState.addEpsilonTransition(automaton.getStartState());
 			
 			Set<State> finalStates = automaton.getFinalStates();
 			for (State s : finalStates) {
 				s.setStateType(StateType.NORMAL);
-				s.addTransition(Transition.epsilonTransition(finalState));				
+				s.addEpsilonTransition(finalState);				
 			}
 		}
 		
