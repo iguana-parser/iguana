@@ -82,9 +82,15 @@ public class GrammarGraphBuilder implements Serializable {
 	public GrammarGraph build() {
 		EBNFToBNF ebnfToBNF = new EBNFToBNF();
 		Grammar bnfGrammar = ebnfToBNF.transform(grammar);
+		
+		for (Nonterminal nonterminal : bnfGrammar.getNonterminals()) {
+			getNonterminalGrammarSlot(nonterminal);
+		}
+		
 		for (Nonterminal nonterminal : bnfGrammar.getNonterminals()) {
 			convert(nonterminal, bnfGrammar);
 		}
+		
 		return new GrammarGraph(this);
 	}
 		
@@ -130,7 +136,7 @@ public class GrammarGraphBuilder implements Serializable {
 					
 					Expression[] arguments = nonterminal.getArguments();
 					
-					validateNumberOfArguments(nonterminal, arguments);
+					// validateNumberOfArguments(nonterminal, arguments);
 					
 					Set<Condition> preConditions = symbol.getPreConditions();
 					currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, preConditions));
