@@ -157,7 +157,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	
 	@Override
 	public boolean isSingleChar() {
-		if (!allRegularExpression)
+		if (!allRegularExpression || symbols.size() == 0)
 			return false;
 		
 		return symbols.stream().allMatch(s -> ((RegularExpression) s).isSingleChar());
@@ -227,10 +227,12 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		
 		public Builder(List<T> symbols) {
 			super(getName(symbols));
+			this.symbols = symbols;
 		}
 		
 		public Builder(Alt<T> alt) {
 			super(alt);
+			this.symbols = alt.getSymbols();
 		}
 		
 		public Builder<T> add(T symbol) {

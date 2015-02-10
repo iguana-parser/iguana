@@ -21,8 +21,8 @@ public abstract class SymbolBuilder<T extends Symbol> {
 		this.name = symbol.getName();
 		this.label = symbol.getLabel();
 		this.object = symbol.getObject();
-		this.preConditions = symbol.getPreConditions();
-		this.postConditions = symbol.getPostConditions();
+		this.preConditions = new HashSet<>(symbol.getPreConditions());
+		this.postConditions = new HashSet<>(symbol.getPostConditions());
 	}
 	
 	public SymbolBuilder(String name) {
