@@ -654,10 +654,14 @@ public class Python {
 	@Test
 	public void test() {
 		
-		Input input = Input.fromString("if b  :  \n"
-				                     + "\n    "
-				                     + "\n"
-				                     + "  y=0\n");
+		Input input = Input.fromString("if b  :  " + "\n"
+				                     + "    "      + "\n"
+				                     + "  "        + "\n"
+				                     + "   x=0"    + "\n"
+				                     + "        "  + "\n"
+				                     + "  "        + "\n"
+				                     + "   y=0  "  + "\n"
+				                     + "   z=0   " + "\n");
 		
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
