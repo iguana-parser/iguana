@@ -34,10 +34,11 @@ public class ExamplesTest {
 	
 	@Test
 	public void testIntersectionKeywordId() {
-//		Automaton idAutomaton = RegularExpressionExamples.getId().build().getAutomaton().determinize();
-//		Automaton forAutomaton = Sequence.from("for").getAutomaton().determinize();
-//		
-//		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
+		Automaton a1 = RegularExpressionExamples.getId().getAutomaton();
+		Automaton a2 = Sequence.from("for").getAutomaton();
+		
+		Automaton intersect = AutomatonOperations.intersect(a1, a2);		
+		assertFalse(intersect.isLanguageEmpty());
 	}
 	
 	@Test

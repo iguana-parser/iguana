@@ -70,6 +70,12 @@ public class State implements Serializable {
 		epsilonSates.add(dest);
 	}
 	
+	public void addTransitions(Iterable<Transition> transitions) {
+		for (Transition t : transitions) {
+			addTransition(t);
+		}
+	}
+	
 	public void addTransition(Transition transition) {
 		if (transition.isEpsilonTransition())
 			epsilonSates.add(transition.getDestination());

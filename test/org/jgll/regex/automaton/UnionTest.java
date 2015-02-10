@@ -1,5 +1,6 @@
 package org.jgll.regex.automaton;
 
+import static org.jgll.regex.automaton.AutomatonOperations.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.symbol.Character;
@@ -16,7 +17,7 @@ public class UnionTest {
 
 	@Test
 	public void test1() {
-		Automaton a = k1.getAutomaton().builder().union(k2.getAutomaton()).build();
+		Automaton a = union(k1.getAutomaton(), k2.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("if")));
 		assertTrue(matcher.match(Input.fromString("when")));
@@ -25,7 +26,7 @@ public class UnionTest {
 	
 	@Test
 	public void test3() {
-		Automaton a = k1.getAutomaton().builder().union(k2.getAutomaton(), k3.getAutomaton()).build();
+		Automaton a = union(k1.getAutomaton(), union(k2.getAutomaton(), k3.getAutomaton()));
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("if")));
 		assertTrue(matcher.match(Input.fromString("when")));

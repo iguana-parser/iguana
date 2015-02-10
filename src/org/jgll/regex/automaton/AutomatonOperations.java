@@ -1,14 +1,19 @@
 package org.jgll.regex.automaton;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.util.Visualization;
+
+import com.google.common.collect.Multimap;
 
 public class AutomatonOperations {
 	
@@ -75,18 +80,127 @@ public class AutomatonOperations {
 		return Automaton.builder(startState).setDeterministic(true).build();
 	}
 	
-	private static Set<State> move(Set<State> state, CharacterRange r) {
-		Set<State> result = new HashSet<>();
-		for (State s: state) {
-			State dest = s.getState(r);
-			if (dest != null) {
-				result.add(dest);
+	public static Automaton union(Automaton a1, Automaton a2) {
+		return op(a1, a2, (s1, s2) -> s1.isFinalState() || s2.isFinalState());
+	}
+	
+	public static Automaton intersect(Automaton a1, Automaton a2) {
+		return op(a1, a2, (s1, s2) -> s1.isFinalState() && s2.isFinalState());
+	}
+	
+	public static Automaton difference(Automaton a1, Automaton a2) {
+		return op(a1, a2, (s1, s2) -> s1.isFinalState() && !s2.isFinalState());
+	}
+	
+	private static Automaton op(Automaton a1, Automaton a2, Op op) {
+		a1 = makeDeterministic(a1);
+		a2 = makeDeterministic(a2);
+		
+		State startState = null;
+		
+		State[][] product = product(a1, a2);
+		
+		for (int i = 0; i < product.length; i++) {
+			 for (int j = 0; j < product[i].length; j++) {
+				State state = product[i][j];
+				
+				State state1 = a1.getStates()[i];
+				State state2 = a2.getStates()[j];
+				
+				if (op.execute(state1, state2)) {
+					state.setStateType(StateType.FINAL);
+				}
+				
+				if (state1 == a1.getStartState() && state2 == a2.getStartState()) {
+					startState = state;
+				}
+			 }
+		}
+		
+		return new AutomatonBuilder(startState).makeDeterministic().build();
+	}
+	
+	/**
+	 * Produces the Cartesian product of the states of an automata.
+	 */
+	private static State[][] product(Automaton a1, Automaton a2) {
+		
+		State[] states1 = a1.getStates();
+		State[] states2 = a2.getStates();
+		
+		State[][] newStates = new State[states1.length][states2.length];
+		
+		for (int i = 0; i < states1.length; i++) {
+			for (int j = 0; j < states2.length; j++) {
+				newStates[i][j] = new State();
+			}
+		}
+
+		Multimap<CharacterRange, CharacterRange> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
+		convertToNonOverlapping(a1, rangeMap);
+		makeComplete(a1, rangeMap.values());
+		
+		convertToNonOverlapping(a2, rangeMap);
+		makeComplete(a2, rangeMap.values());
+		
+		for (int i = 0; i < states1.length; i++) {
+			for (int j = 0; j < states2.length; j++) {
+				
+				State state = newStates[i][j];
+				State state1 = states1[i];
+				State state2 = states2[j];
+				
+				for (CharacterRange r : rangeMap.values()) {
+					State s1 = state1.getState(r);
+					State s2 = state2.getState(r);
+					if (s1 != null && s2 != null) {
+						state.addTransition(new Transition(r, newStates[s1.getId()][s2.getId()]));
+					}
+				}
 			}
 		}
 		
-		return epsilonClosure(result);
+		return newStates;
 	}
-
+	
+	public static void convertToNonOverlapping(Automaton a, Multimap<CharacterRange, CharacterRange> rangeMap) {
+		for (State state : a.getStates()) {
+			List<Transition> removeList = new ArrayList<>();
+			for (Transition transition : state.getTransitions()) {
+				if (!transition.isEpsilonTransition()) {
+					removeList.add(transition);
+					for (CharacterRange range : rangeMap.get(transition.getRange())) {
+						state.addTransition(new Transition(range, transition.getDestination()));
+					}					
+				}
+			}
+			state.removeTransitions(removeList);
+		}
+	}
+	
+	
+	public static void makeComplete(Automaton automaton, Iterable<CharacterRange> alphabet) {
+		
+		State dummyState = new State();
+		
+		for (State state : automaton.getStates()) {
+			for (CharacterRange r : alphabet) {
+				if (!state.hasTransition(r)) {
+					state.addTransition(new Transition(r, dummyState));
+				}
+			}			
+		}
+	}
+	
+	private static Multimap<CharacterRange, CharacterRange> merge(CharacterRange[] alphabet1, CharacterRange[] alphabet2) {
+		List<CharacterRange> alphabets = new ArrayList<>();
+		for (CharacterRange r : alphabet1) { alphabets.add(r); }
+		for (CharacterRange r : alphabet2) { alphabets.add(r); }
+		
+		return CharacterRange.toNonOverlapping(alphabets);
+	}
+	
+	
 	public static Automaton minimize(Automaton automaton) {
 		if (automaton.isMinimized())
 			return automaton;
@@ -273,6 +387,36 @@ public class AutomatonOperations {
 		
 		return newStates;
 	}
-
+	
+	private static Set<State> move(Set<State> state, CharacterRange r) {
+		Set<State> result = new HashSet<>();
+		for (State s: state) {
+			State dest = s.getState(r);
+			if (dest != null) {
+				result.add(dest);
+			}
+		}
+		
+		return epsilonClosure(result);
+	}
+	
+	private static List<CharacterRange> getRanges(State[] states) {
+		final Set<CharacterRange> ranges = new HashSet<>();
+		
+		for (State state : states) {
+			for (Transition transition : state.getTransitions()) {
+				if (!transition.isEpsilonTransition()) {
+					ranges.add(transition.getRange());
+				}
+			}
+		}
+		
+		return new ArrayList<>(ranges);
+	}
+	
+	@FunctionalInterface
+	private static interface Op {
+		public boolean execute(State s1, State s2);
+	}
 	
 }

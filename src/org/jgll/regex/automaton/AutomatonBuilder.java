@@ -220,14 +220,16 @@ public class AutomatonBuilder {
 		this.rangeMap = getRangeMap(startState);
 		for (State state : states) {
 			List<Transition> removeList = new ArrayList<>();
+			List<Transition> addList = new ArrayList<>();
 			for (Transition transition : state.getTransitions()) {
 				if (!transition.isEpsilonTransition()) {
 					removeList.add(transition);
 					for (CharacterRange range : rangeMap.get(transition.getRange())) {
-						state.addTransition(new Transition(range, transition.getDestination()));
+						addList.add(new Transition(range, transition.getDestination()));
 					}					
 				}
 			}
+			state.addTransitions(addList);
 			state.removeTransitions(removeList);
 		}
 		this.alphabet = getAlphabet(startState, rangeMap);
@@ -321,94 +323,9 @@ public class AutomatonBuilder {
 		 
 		return this;
 	}
-	
-	/**
-	 *  A state in the resulting intersection automata is final
-	 *  if all its composing states are final. 
-	 * 
-	 */
-	public AutomatonBuilder intersect(Automaton other) {
 		
-		State startState = null;
-		
-		State[][] product = product(other);
-		
-		for (int i = 0; i < product.length; i++) {
-			 for (int j = 0; j < product[i].length; j++) {
-				State state = product[i][j];
-				
-				State state1 = getState(i);
-				State state2 = other.getState(j);
-				
-				if (state1.isFinalState() && state2.isFinalState()) {
-					state.setStateType(StateType.FINAL);
-				}
-				
-				if (state1 == startState && state2 == other.getStartState()) {
-					startState = state;
-				}
-			 }
-		}
-		
-		return this;
-	}
-	
-	public AutomatonBuilder union(Automaton...automatons) {
-		throw new UnsupportedOperationException();
-	}
-	
-	public AutomatonBuilder difference(Automaton...automaton) {
-		throw new UnsupportedOperationException();
-	}
-		
-	/**
-	 * Produces the Cartesian product of the states of an automata.
-	 */
-	private State[][] product(Automaton a2) {
-		
-		State[] states1 = states;
-		State[] states2 = a2.getStates();
-		
-		State[][] newStates = new State[states1.length][states2.length];
-		
-		for(int i = 0; i < states.length; i++) {
-			for(int j = 0; j < states2.length; j++) {
-				newStates[i][j] = new State();
-			}
-		}
-
-		CharacterRange[] joinAlphabet = merge(alphabet, a2.getAlphabet()); 
-		
-		for(int i = 0; i < states1.length; i++) {
-			for(int j = 0; j < states2.length; j++) {
-				
-				State state = newStates[i][j];
-				State state1 = states1[i];
-				State state2 = states2[j];
-				
-				for (CharacterRange r : joinAlphabet) {
-					State s1 = state1.getState(r);
-					State s2 = state2.getState(r);
-					state.addTransition(new Transition(r, newStates[s1.getId()][s2.getId()]));
-				}
-			}
-		}
-		
-		return newStates;
-	}
-	
 	public State getState(int i) {
 		return states[i];
-	}
-	
-	public CharacterRange[] merge(CharacterRange[] alphabet1, CharacterRange[] alphabet2) {
-		Set<CharacterRange> alphabets = new HashSet<>();
-		for (CharacterRange r : alphabet1) { alphabets.add(r); }
-		for (CharacterRange r : alphabet2) { alphabets.add(r); }
-		CharacterRange[] merged = new CharacterRange[alphabets.size()];
-		int i = 0;
-		for (CharacterRange r : alphabets) { merged[i++] = r; };
-		return merged;
 	}
 	
 	/**

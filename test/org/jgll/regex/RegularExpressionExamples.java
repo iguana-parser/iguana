@@ -63,7 +63,6 @@ public class RegularExpressionExamples {
 	public static RegularExpression getStringPart() {
 		Character c1 = Character.from('"');
 		Character c2 = Character.from('\\');
-		Alt<Character> c = Alt.from(c1, c2);
 		Sequence<Character> newline = Sequence.from("\\n");
 
 		return Alt.builder(Plus.from(Alt.not(c1, c2)), newline).build();
