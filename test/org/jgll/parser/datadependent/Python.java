@@ -1,8 +1,11 @@
 package org.jgll.parser.datadependent;
 
+import static org.jgll.datadependent.ast.AST.*;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.ConditionType;
+import static org.jgll.grammar.condition.DataDependentCondition.predicate;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
@@ -370,7 +373,7 @@ public class Python {
 			/**
 			 * Data-dependent
 			 * 
-			 * @layout(L)
+			 * @layout(NoNL)
 			 * SimpleStmt ::= SmallStmt (";" SmallStmt)* (;)? NL
 			 */
 			.addRule(Rule.withHead(Nonterminal.builder("SimpleStmt").build()).addSymbol(Nonterminal.builder("SmallStmt").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(59).build()).build(), Nonterminal.builder("SmallStmt").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Character.builder(59).build()).build()).build()).addSymbol(Nonterminal.builder("NL").build())
@@ -463,9 +466,21 @@ public class Python {
 			 * Data-dependent
 			 * 
 			 * @layout(NoNL)
-			 * IfStmt ::= a:"if" Test ":" Suite(indent(a.lExt)) (b:"elif" Test ":" Suite(indent(b.lExt)))* (c:"else" ":" Suite(indent(c.lExt)))?
+			 * IfStmt ::= a:"if" Test ":" Suite(a.lExt) (b:"elif" Test ":" Suite(b.lExt))* (c:"else" ":" Suite(c.lExt))?
 			 */ 
-			.addRule(Rule.withHead(Nonterminal.builder("IfStmt").build()).addSymbol(Sequence.builder(Character.builder(105).build(), Character.builder(102).build()).build()).addSymbol(Nonterminal.builder("Test").build()).addSymbol(Sequence.builder(Character.builder(58).build()).build()).addSymbol(Nonterminal.builder("Suite").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(105).build(), Character.builder(102).build()).build(), Nonterminal.builder("Test").build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(115).build(), Character.builder(101).build()).build(), Sequence.builder(Character.builder(58).build()).build(), Nonterminal.builder("Suite").build()).build()).build())
+			.addRule(Rule.withHead(Nonterminal.builder("IfStmt").build())
+									.addSymbol(Sequence.builder(Character.builder(105).build(), Character.builder(102).build()).setLabel("a").build())
+									.addSymbol(Nonterminal.builder("Test").build())
+									.addSymbol(Sequence.builder(Character.builder(58).build()).build())
+									.addSymbol(Nonterminal.builder("Suite").apply(lExt("a")).build())
+									.addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(105).build(), Character.builder(102).build()).setLabel("b").build(), 
+																							  Nonterminal.builder("Test").build(), 
+																							  Sequence.builder(Character.builder(58).build()).build(), 
+																							  Nonterminal.builder("Suite").apply(lExt("b")).build()).build()).build())
+									.addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Sequence.builder(Character.builder(101).build(), Character.builder(108).build(), Character.builder(115).build(), Character.builder(101).build()).setLabel("c").build(), 
+																						   Sequence.builder(Character.builder(58).build()).build(), 
+																						   Nonterminal.builder("Suite").apply(lExt("c")).build()).build()).build())
+									
 							.setLayout(Nonterminal.builder("NoNL").build()).build())
 			
 			//ReturnStmt ::= "return" TestList? 
@@ -477,13 +492,17 @@ public class Python {
 			 * Data-dependent
 			 * 
 			 * @layout(NoNL)
-			 * Suite(IND) ::= SimpleStmt
-			 *              | NL a:(b:Stmt [indent(a.lExt) == indent(b.lExt)])+ [ IND < indent(a.lExt) ]
+			 * Suite(lExt) ::= SimpleStmt
+			 *               | NL a:(b:Stmt [indent(a.lExt) == indent(b.lExt)])+ [indent(lExt) < indent(a.lExt)]
 			 */
-			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("NL").build()).addSymbol(Plus.builder(Nonterminal.builder("Stmt").build()).build())
-						.setLayout(Nonterminal.builder("NoNL").build()).build())
+			.addRule(Rule.withHead(Nonterminal.builder("Suite").addParameters("lExt").build()).addSymbol(Nonterminal.builder("SimpleStmt").build()).build())
 			
-			.addRule(Rule.withHead(Nonterminal.builder("Suite").build()).addSymbol(Nonterminal.builder("SimpleStmt").build()).build())
+			.addRule(Rule.withHead(Nonterminal.builder("Suite").addParameters("lExt").build())
+									.addSymbol(Nonterminal.builder("NL").build())
+									.addSymbol(Plus.builder(Nonterminal.builder("Stmt").setLabel("b")
+																.addPreCondition(predicate(equal(indent(lExt("a")), indent(lExt("b"))))).build()).setLabel("a")
+													.addPreCondition(predicate(less(indent(var("lExt")), indent(lExt("a"))))).build())
+						.setLayout(Nonterminal.builder("NoNL").build()).build())
 			
 			
 			//TestNocond ::= OrTest 
@@ -626,7 +645,8 @@ public class Python {
 						.addSymbol(Alt.from(Character.from('\n'), Character.from('\r')))
 						.addSymbol(Star.from(Alt.from(Character.from(' '), Character.from('\t'), Character.from('\n'), Character.from('\r'))))
 						.addSymbol(Alt.builder(Character.from('\n'), Character.from('\r'))
-										.addPostCondition(RegularExpressionCondition.notFollow(Alt.from(Character.from('\n'), Character.from('\r')))).build()).build())
+										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\n')))
+										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\r'))).build()).build())
 										
 			.build();
 
