@@ -74,8 +74,9 @@ public class EBNFToBNF implements GrammarTransformation {
 		if (!isEBNF(symbol))
 			return symbol;
 		
-		if (cache.get(symbol) != null) 
-			return cache.get(symbol);
+//		TODO:		
+//		if (cache.get(symbol) != null) 
+//			return cache.get(symbol);
 		
 		final Nonterminal newNt;
 		
@@ -216,7 +217,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			throw new IllegalStateException("Unknown symbol type.");			
 		}
 		
-		cache.put(symbol, newNt);
+//		cache.put(symbol, newNt);
 		
 		return arguments != null? ((Nonterminal.Builder) newNt.copyBuilder()).apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build()
 					: newNt.copyBuilder().addConditions(symbol).setLabel(symbol.getLabel()).build();
