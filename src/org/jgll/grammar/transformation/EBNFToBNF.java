@@ -28,6 +28,7 @@ import org.jgll.regex.Star;
  */
 public class EBNFToBNF implements GrammarTransformation {
 	
+	@SuppressWarnings("unused")
 	private Map<Symbol, Nonterminal> cache;
 	
 	public EBNFToBNF() {
