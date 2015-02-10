@@ -14,6 +14,7 @@ public class AutomatonToDot {
 	private static final String LOOKAHEAD_ACCEPT_NODE = "[shape=diamond, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	private static final String FINAL_NODE = "[shape=doublecircle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	private static final String TRANSITION = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
+	private static final String EPSILON_TRANSITION = "edge [color=black, style=dashed, penwidth=0.5, arrowsize=0.7, label=\"&epsilon;\"];";
 	
 	public static String toDot(State startState) {
 		
@@ -51,9 +52,14 @@ public class AutomatonToDot {
 				
 				sb.append("\"state" + state.getId() + "\"" + String.format(s, state.toString()) + "\n");					
 				
-				for(Transition transition : state.getTransitions()) {
-					sb.append(String.format(TRANSITION, transition.toString().replace("\\", "\\\\")) + "\"state" + state.getId() + "\"" + "->" + "{\"state" + transition.getDestination().getId() + "\"}" + "\n");										
+				for (Transition transition : state.getTransitions()) {
+					if (transition.isEpsilonTransition()) {
+						sb.append(EPSILON_TRANSITION + "\"state" + state.getId() + "\"" + "->" + "{\"state" + transition.getDestination().getId() + "\"}" + "\n");
+					} else {
+						sb.append(String.format(TRANSITION, transition.toString().replace("\\", "\\\\")) + "\"state" + state.getId() + "\"" + "->" + "{\"state" + transition.getDestination().getId() + "\"}" + "\n");
+					}
 				}
+				
 			}
 		});
 		

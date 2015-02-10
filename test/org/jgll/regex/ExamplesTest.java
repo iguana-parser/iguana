@@ -3,6 +3,9 @@ package org.jgll.regex;
 import static org.junit.Assert.*;
 
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.AutomatonOperations;
+import org.jgll.regex.matcher.DFAMatcher;
+import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -11,10 +14,15 @@ public class ExamplesTest {
 	
 	@Test
 	public void testId() {
-		RegularExpression id = RegularExpressionExamples.getId().build();
+		RegularExpression id = RegularExpressionExamples.getId();
+		Automaton automaton = id.getAutomaton();
 		
-		Matcher matcher = id.getMatcher();
-		Matcher matcher2 = id.getJavaRegexMatcher();
+		assertEquals(15, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(6, automaton.getCountStates());
+		
+		Matcher matcher = new DFAMatcher(automaton);
 		
 		assertTrue(matcher.match(Input.fromString("a")));
 		assertFalse(matcher.match(Input.fromString("9")));
@@ -22,29 +30,28 @@ public class ExamplesTest {
 		assertTrue(matcher.match(Input.fromString("Identifier")));
 		assertTrue(matcher.match(Input.fromString("Identifier12")));
 		assertTrue(matcher.match(Input.fromString("Identifier12Assdfd")));
-		
-		assertTrue(matcher2.match(Input.fromString("a")));
-		assertFalse(matcher2.match(Input.fromString("9")));
-		assertTrue(matcher2.match(Input.fromString("abc")));
-		assertTrue(matcher2.match(Input.fromString("Identifier")));
-		assertTrue(matcher2.match(Input.fromString("Identifier12")));
-		assertTrue(matcher2.match(Input.fromString("Identifier12Assdfd")));
 	}
 	
 	@Test
 	public void testIntersectionKeywordId() {
-//		Automaton idAutomaton = RegularExpressionExamples.getId().build().getAutomaton().determinize();
-//		Automaton forAutomaton = Sequence.from("for").getAutomaton().determinize();
-//		
-//		assertFalse(idAutomaton.intersection(forAutomaton).isLanguageEmpty());
+		Automaton a1 = RegularExpressionExamples.getId().getAutomaton();
+		Automaton a2 = Sequence.from("for").getAutomaton();
+		
+		Automaton intersect = AutomatonOperations.intersect(a1, a2);		
+		assertFalse(intersect.isLanguageEmpty());
 	}
 	
 	@Test
 	public void testFloat() {
-		RegularExpression _float = RegularExpressionExamples.getFloat().build();
+		RegularExpression _float = RegularExpressionExamples.getFloat();
 		
-		Matcher matcher = _float.getMatcher();
-		Matcher matcher2 = _float.getJavaRegexMatcher();
+		Automaton automaton = _float.getAutomaton();
+		assertEquals(10, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(6, automaton.getCountStates());
+		
+		Matcher matcher = new DFAMatcher(automaton);
 
 		assertTrue(matcher.match(Input.fromString("1.2")));
 		assertTrue(matcher.match(Input.fromString("1.2"), 0, 3));
@@ -54,35 +61,44 @@ public class ExamplesTest {
 		assertTrue(matcher.match(Input.fromString("12.2")));
 		assertTrue(matcher.match(Input.fromString("1342343.27890")));
 		assertTrue(matcher.match(Input.fromString("908397439483.278902433")));
-		
-		assertTrue(matcher2.match(Input.fromString("1.2")));
-		assertTrue(matcher2.match(Input.fromString("1.2"), 0, 3));
-		assertFalse(matcher2.match(Input.fromString("9")));
-		assertFalse(matcher2.match(Input.fromString(".9")));
-		assertFalse(matcher2.match(Input.fromString("123.")));
-		assertTrue(matcher2.match(Input.fromString("12.2")));
-		assertTrue(matcher2.match(Input.fromString("1342343.27890")));
-		assertTrue(matcher2.match(Input.fromString("908397439483.278902433")));
 	}
 	
 	@Test
 	public void testJavaUnicodeEscape() {
-		RegularExpression regex = RegularExpressionExamples.getJavaUnicodeEscape().build();
-		Matcher dfa = regex.getMatcher();
-		assertTrue(dfa.match(Input.fromString("\\u0123")));
+		RegularExpression regex = RegularExpressionExamples.getJavaUnicodeEscape();
+		Automaton automaton = regex.getAutomaton();
+		assertEquals(34, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(37, automaton.getCountStates());
+		
+		Matcher matcher = new DFAMatcher(automaton);
+		assertTrue(matcher.match(Input.fromString("\\u0123")));
 	}
 	
 	@Test
 	public void testCharacter() {
-		RegularExpression regex = RegularExpressionExamples.getCharacter().build();
-		Matcher matcher = regex.getMatcher();
+		RegularExpression regex = RegularExpressionExamples.getCharacter();
+		Automaton automaton = regex.getAutomaton();
+		assertEquals(15, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(7, automaton.getCountStates());
+		
+		Matcher matcher = new DFAMatcher(automaton);
 		assertTrue(matcher.match(Input.fromString("'ab'")));
 	}
 	
 	@Test
 	public void testStringPart() {
-		RegularExpression regex = RegularExpressionExamples.getStringPart().build();
-		Matcher matcher = regex.getMatcher();
+		RegularExpression regex = RegularExpressionExamples.getStringPart();
+		Automaton automaton = regex.getAutomaton();
+		assertEquals(18, automaton.getCountStates());
+		
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+		assertEquals(7, automaton.getCountStates());
+		
+		Matcher matcher = new DFAMatcher(automaton);
 		
 		assertTrue(matcher.match(Input.fromString("abcd")));
 		assertFalse(matcher.match(Input.fromString("\\aa")));
@@ -91,7 +107,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testMultilineComment() {
-		Automaton a = RegularExpressionExamples.getMultilineComment().build().getAutomaton();
+		Automaton a = RegularExpressionExamples.getMultilineComment().getAutomaton();
 		
 //		assertTrue(matcher.match(Input.fromString("/*a*/")));
 	}	

@@ -1,5 +1,7 @@
 package org.jgll.grammar.condition;
 
+import static org.jgll.regex.matcher.MatcherFactory.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
@@ -47,29 +49,25 @@ public class RegularExpressionCondition extends Condition {
 		switch (type) {
 		
 		    case FOLLOW:
-		    	return (input, node, i) -> r.getMatcher().match(input, i) == -1;
+		    	return (input, node, i) -> getMatcher(r).match(input, i) == -1;
 		    	
 		    case NOT_FOLLOW:
-		    	return (input, node, i) -> r.getMatcher().match(input, i) >= 0;
+		    	return (input, node, i) -> getMatcher(r).match(input, i) >= 0;
 		    	
 		    case MATCH:
 		    	throw new RuntimeException("Unsupported");
 		
 			case NOT_MATCH: 
-				return (input, node, i) -> r.getMatcher().match(input, node.getInputIndex(), i);
+				return (input, node, i) -> getMatcher(r).match(input, node.getInputIndex(), i);
 				
 			case NOT_PRECEDE:
 				return (input, node, i) -> {
-					if (i == 0)
-						return false;
-					return r.getBackwardsMatcher().match(input, i - 1) >= 0;
+					return getBackwardsMatcher(r).match(input, i - 1) >= 0;
 				};
 				
 			case PRECEDE:
 				return (input, node, i) -> {
-					if (i == 0)
-						return false;
-					return r.getBackwardsMatcher().match(input, i - 1) == -1;
+					return getBackwardsMatcher(r).match(input, i - 1) == -1;
 				};
 				
 			default:

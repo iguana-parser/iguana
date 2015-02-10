@@ -125,7 +125,7 @@ public class Nonterminal extends AbstractSymbol {
 		private Expression[] arguments;
 		
 		public Builder(Nonterminal nonterminal) {
-			this(nonterminal.getName());
+			super(nonterminal);
 			this.ebnfList = nonterminal.ebnfList;
 			this.index = nonterminal.index;
 			this.parameters = nonterminal.parameters;

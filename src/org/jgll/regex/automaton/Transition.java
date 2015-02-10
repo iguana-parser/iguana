@@ -35,10 +35,6 @@ public class Transition implements Comparable<Transition>, Serializable {
 		this.destination = destination;
 	}
 	
-	public static Transition epsilonTransition(State destination) {
-		return new Transition(-1, destination);
-	}
-	
 	public static Transition EOFTransition(State destination) {
 		return new Transition(EOF.VALUE, destination);
 	}
@@ -94,11 +90,15 @@ public class Transition implements Comparable<Transition>, Serializable {
 		
 		Transition other = (Transition) obj;
 		
-		return range.equals(other.range);
+		return isEpsilonTransition() ? other.isEpsilonTransition() && this == other : range.equals(other.range);
 	}
 	
 	@Override
 	public int hashCode() {
+		
+		if (isEpsilonTransition())
+			return super.hashCode();
+		
 		return HashFunctions.defaulFunction.hash(range.getStart(), range.getEnd());
 	}
 	

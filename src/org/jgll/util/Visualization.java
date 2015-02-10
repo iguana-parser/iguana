@@ -60,7 +60,7 @@ public class Visualization {
 	
 	public static void generateAutomatonGraph(String outputDir, State startState) {
 		String dot = AutomatonToDot.toDot(startState);
-		GraphVizUtil.generateGraph(dot, outputDir, "automaton");
+		GraphVizUtil.generateGraph(dot, outputDir, "automaton", GraphVizUtil.LEFT_TO_RIGHT);
 	}
 	
 	public static <T> void generateRangeTree(String outputDir, RangeTree<T> t) {

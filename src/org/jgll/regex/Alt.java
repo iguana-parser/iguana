@@ -20,7 +20,6 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonBuilder;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
-import org.jgll.regex.automaton.Transition;
 import org.jgll.traversal.ISymbolVisitor;
 
 public class Alt<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
@@ -44,7 +43,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	}
 	
 	public static <T extends Symbol> Alt<T> from(List<T> list) {
-		return new Builder<T>().add(list).build();
+		return builder(list).build();
 	}
 	
 	private static <T> String getName(List<T> elements) {
@@ -59,6 +58,9 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		if (!allRegularExpression)
 			throw new RuntimeException("Only applicable if all arguments are regular expressions");
 		
+		if (symbols.size() == 1)
+			return ((RegularExpression) symbols.get(0)).getAutomaton();
+		
 		List<Automaton> automatons = new ArrayList<>();
 				
 		for (Symbol e : symbols) {
@@ -70,16 +72,16 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		State finalState = new State(StateType.FINAL);
 		
 		for (Automaton automaton : automatons) {
-			startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
+			startState.addEpsilonTransition(automaton.getStartState());
 			
 			Set<State> finalStates = automaton.getFinalStates();
 			for (State s : finalStates) {
 				s.setStateType(StateType.NORMAL);
-				s.addTransition(Transition.epsilonTransition(finalState));				
+				s.addEpsilonTransition(finalState);				
 			}
 		}
 		
-		return new AutomatonBuilder(startState).makeDeterministic().build(); 
+		return new AutomatonBuilder(startState).build(); 
 	}
 
 	@Override
@@ -139,7 +141,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	
 	@Override
 	public Builder<T> copyBuilder() {
-		return new Builder<T>().add(symbols);
+		return new Builder<T>(this);
 	}
 	
 	@Override
@@ -156,7 +158,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	
 	@Override
 	public boolean isSingleChar() {
-		if (!allRegularExpression)
+		if (!allRegularExpression || symbols.size() == 0)
 			return false;
 		
 		return symbols.stream().allMatch(s -> ((RegularExpression) s).isSingleChar());
@@ -207,22 +209,32 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		return builder(newRanges).build();
 	}
 	
-	public static <T extends Symbol> Builder<T> builder() {
-		return new Builder<>();
+	public static <T extends Symbol> Builder<T> builder(Symbol s1, Symbol s2) {
+		return builder(s1, s2);
 	}
 	
 	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
-		return new Builder<T>().add(symbols);
+		return new Builder<T>(symbols);
 	}
 	
 	@SafeVarargs
 	public static <T extends Symbol> Builder<T> builder(T...symbols) {
-		return new Builder<T>().add(Arrays.asList(symbols));
+		return new Builder<T>(Arrays.asList(symbols));
 	}
 	
 	public static class Builder<T extends Symbol> extends SymbolBuilder<Alt<T>> {
 
 		List<T> symbols = new ArrayList<>();
+		
+		public Builder(List<T> symbols) {
+			super(getName(symbols));
+			this.symbols = symbols;
+		}
+		
+		public Builder(Alt<T> alt) {
+			super(alt);
+			this.symbols = alt.getSymbols();
+		}
 		
 		public Builder<T> add(T symbol) {
 			symbols.add(symbol);
@@ -236,8 +248,6 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 
 		@Override
 		public Alt<T> build() {
-//			Verify.verify(elements.size() > 2, "The number of elements in an alternative should be at least two");
-			this.name = getName(symbols);
 			return new Alt<>(this);
 		}
 	}

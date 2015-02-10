@@ -16,12 +16,9 @@ public class State implements Serializable {
 
 	private final Set<Transition> transitions;
 	
-	/**
-	 * The state that is reachable using the epsilon transition
-	 */
-	private final Set<State> epsilonStates;
-	
 	private final Map<CharacterRange, State> reachableStates;
+	
+	private final Set<State> epsilonSates;
 			
 	/**
 	 * The set of regular expressions whose final state is this state.
@@ -38,10 +35,10 @@ public class State implements Serializable {
 	
 	public State(StateType stateType) {
 		this.transitions = new HashSet<>();
-		this.epsilonStates = new HashSet<>();
 		this.reachableStates = new HashMap<>();
 		this.stateType = stateType;
 		this.regularExpressions = new HashSet<>();
+		this.epsilonSates = new HashSet<>();
 	}
 	
 	public Set<Transition> getTransitions() {
@@ -56,10 +53,6 @@ public class State implements Serializable {
 		return reachableStates.get(r) != null;
 	}
 
-	public Set<State> getEpsilonStates() {
-		return epsilonStates;
-	}
-		
 	public StateType getStateType() {
 		return stateType;
 	}
@@ -72,13 +65,23 @@ public class State implements Serializable {
 		this.stateType = stateType;
 	}
 	
+	public void addEpsilonTransition(State dest) {
+		transitions.add(new Transition(-1, dest));
+		epsilonSates.add(dest);
+	}
+	
+	public void addTransitions(Iterable<Transition> transitions) {
+		for (Transition t : transitions) {
+			addTransition(t);
+		}
+	}
+	
 	public void addTransition(Transition transition) {
+		if (transition.isEpsilonTransition())
+			epsilonSates.add(transition.getDestination());
+		
 		if (transitions.add(transition)) {
-			if (transition.isEpsilonTransition()) {
-				epsilonStates.add(transition.getDestination());
-			} else {
-				reachableStates.put(transition.getRange(), transition.getDestination());
-			}
+			reachableStates.put(transition.getRange(), transition.getDestination());
 		}
 	}
 	
@@ -87,7 +90,7 @@ public class State implements Serializable {
 	}
 	
 	public void removeTransitions(Collection<Transition> c) {
-		c.forEach(t -> transitions.remove(t));
+		transitions.removeAll(c);
 	}
 	
 	public void setId(int id) {
@@ -100,6 +103,10 @@ public class State implements Serializable {
 	
 	public Set<RegularExpression> getRegularExpressions() {
 		return regularExpressions;
+	}
+	
+	public Set<State> getEpsilonSates() {
+		return epsilonSates;
 	}
 	
 	public State addRegularExpression(RegularExpression regex) {

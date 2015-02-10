@@ -114,8 +114,13 @@ public class Plus extends AbstractRegularExpression {
 		private final List<Symbol> separators = new ArrayList<>();
 
 		public Builder(Symbol s) {
+			super(getName(s));
 			this.s = s;
-			this.name = getName(s);
+		}
+		
+		public Builder(Plus plus) {
+			super(plus);
+			this.s = plus.s;
 		}
 		
 		public Builder addSeparator(Symbol symbol) {

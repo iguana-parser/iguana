@@ -1,18 +1,14 @@
 package org.jgll.regex.automaton;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jgll.grammar.symbol.CharacterRange;
 
@@ -40,7 +36,7 @@ public class AutomatonBuilder {
 	public AutomatonBuilder(Automaton automaton) {
 		this.deterministic = automaton.isDeterministic();
 		this.minimized = automaton.isMinimized();
-		this.states = automaton.getAllStates();
+		this.states = automaton.getStates();
 		this.startState = automaton.getStartState();
 		this.finalStates = automaton.getFinalStates();
 		this.alphabet = automaton.getAlphabet();
@@ -58,6 +54,7 @@ public class AutomatonBuilder {
 	}
 	
 	public Automaton build() {
+		setStateIDs();
 		return new Automaton(this);
 	}
 	 
@@ -100,84 +97,17 @@ public class AutomatonBuilder {
 	}
 	
 	public AutomatonBuilder makeDeterministic() {
-		
-		if (deterministic)
-			return this;
-
-		Set<Set<State>> visitedStates = new HashSet<>();
-		Deque<Set<State>> processList = new ArrayDeque<>();
-		
-		Set<State> initialState = new HashSet<>();
-		initialState.add(startState);
-		initialState = epsilonClosure(initialState);
-		visitedStates.add(initialState);
-		processList.add(initialState);
-		
-		/**
-		 * A map from the set of NFA states to the new state in the produced DFA.
-		 * This map is used for sharing DFA states.
-		 */
-		Map<Set<State>, State> newStatesMap = new HashMap<>();
-		
-		State startState = new State();
-		
-		newStatesMap.put(initialState, startState);
-		
-		while (!processList.isEmpty()) {
-			Set<State> stateSet = processList.poll();
-
-			Set<State> destState = new HashSet<>();
-			for (CharacterRange r : alphabet) {
-				for (State state : stateSet) {
-					State dest = state.getState(r);
-					if (dest != null)
-						destState.add(dest);
-				}
-				
-				destState = epsilonClosure(destState);
-				if (!destState.isEmpty()) {
-					State source = newStatesMap.get(stateSet);
-					State dest = newStatesMap.computeIfAbsent(destState, s -> new State());
-					source.addTransition(new Transition(r, dest));
-				}
-			}
-							
-			if (!visitedStates.contains(destState)) {
-				visitedStates.add(destState);
-				processList.add(destState);
-			}
-		}
-		
-		setStateIDs();
-		
-		// Setting the final states.
-		outer:
-		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
-			for (State s : e.getKey()) {
-				if (s.getStateType() == StateType.FINAL) {
-					e.getValue().setStateType(StateType.FINAL);
-					continue outer;
-				}
-			}			
-		}
-				
-		deterministic = true;
-		
+		Automaton dfa = AutomatonOperations.makeDeterministic(startState, alphabet);
+		this.startState = dfa.getStartState();
+		this.finalStates = dfa.getFinalStates();
+		this.states = dfa.getStates();
+		this.deterministic = true;
 		return this;
 	}
-		
-	private static Set<State> epsilonClosure(Set<State> states) {
-		Set<State> newStates = new HashSet<>(states);
-		
-		for(State state : states) {
-			Set<State> s = state.getEpsilonStates();
-			if(!s.isEmpty()) {
-				newStates.addAll(s);
-				newStates.addAll(epsilonClosure(s));
-			}
-		}
-		
-		return newStates;
+	
+	public AutomatonBuilder setDeterministic(boolean deterministic) {
+		this.deterministic = deterministic;
+		return this;
 	}
 	
 	/**
@@ -189,163 +119,19 @@ public class AutomatonBuilder {
 	 * @return
 	 */
 	public AutomatonBuilder minimize() {
+		if (!deterministic)
+			makeDeterministic();
 		
-		if (minimized)
-			return this;
-		
-		int size = states.length;
-		int[][] table = new int[size][size];
-		
-		final int EMPTY = -2;
-		final int EPSILON = -1;
-		
-		for (int i = 0; i < table.length; i++) {
-			for (int j = 0; j < i; j++) {
-				table[i][j] = EMPTY;
-			}
- 		}
-		
-		for (int i = 0; i < table.length; i++) {
-			for (int j = 0; j < i; j++) {
-				if(states[i].isFinalState() && !states[j].isFinalState()) {
-					table[i][j] = EPSILON;
-				}
-				if(states[j].isFinalState() && !states[i].isFinalState()) {
-					table[i][j] = EPSILON;
-				}
-				
-				// Differentiate between final states
-				if(states[i].isFinalState() && 
-				   states[j].isFinalState()) {
-					table[i][j] = EPSILON;
-				}
-			}
-		}
-		
-		boolean changed = true;
-		
-		while(changed) {
-			changed = false;
-
-				for (int i = 0; i < table.length; i++) {
-					for (int j = 0; j < i; j++) {
-						
-						// If two states i and j are distinct
-						if(table[i][j] == EMPTY) {
-							for (int t = 0; t < alphabet.length; t++) {
-								State q1 = states[i].getState(alphabet[t]);
-								State q2 = states[j].getState(alphabet[t]);
-
-								// If both states i and j have no outgoing transitions on the interval t, continue with the
-								// next transition.
-								if(q1 == null && q2 == null) {
-									continue;
-								}
-
-								// If the transition t can be applied on state i but not on state j, two states are
-								// disjoint. Continue with the next pair of states.
-								if((q1 == null && q2 != null) || (q2 == null && q1 != null)) {
-									table[i][j] = t;
-									changed = true;
-									break;
-								}
-								
-								if(q1.getId() == q2.getId()) {
-									continue;
-								}
-								
-								int a;
-								int b;
-								if(q1.getId() > q2.getId()) {
-									a = q1.getId();
-									b = q2.getId();
-								} else {
-									a = q2.getId();
-									b = q1.getId();
-								}
-								
-								if(table[a][b] != EMPTY) {
-									table[i][j] = t;
-									changed = true;
-									break;
-								}
-							}
-						}
-					}
-				}
-		}
-		
-		
-		Map<State, Set<State>> partitionsMap = new HashMap<>();
-		
-		for (int i = 0; i < table.length; i++) {
-			for (int j = 0; j < i; j++) {
-				if(table[i][j] == EMPTY) {
-					State stateI = states[i];
-					State stateJ = states[j];
-					
-					Set<State> partitionI = partitionsMap.get(stateI);
-					Set<State> partitionJ = partitionsMap.get(stateJ);
-					
-					if(partitionI == null && partitionJ == null) {
-						Set<State> set = new HashSet<>();
-						set.add(stateI);
-						set.add(stateJ);
-						partitionsMap.put(stateI, set);
-						partitionsMap.put(stateJ, set);
-					}
-					else if(partitionI == null && partitionJ != null) {
-						partitionJ.add(stateI);
-						partitionsMap.put(stateI, partitionJ);
-					} 
-					else if(partitionJ == null && partitionI != null) {
-						partitionI.add(stateJ);
-						partitionsMap.put(stateJ, partitionI);
-					}
-					else { 
-						partitionJ.addAll(partitionI);
-						partitionI.addAll(partitionJ);
-					}
-				}
-			}
-		}
-		
-		HashSet<Set<State>> partitions = new HashSet<Set<State>>(partitionsMap.values());
-		
-		State startState = null;
-		
-		for(State state : states) {
-			if(partitionsMap.get(state) == null) {
-				Set<State> set = new HashSet<>();
-				set.add(state);
-				partitions.add(set);
-			}
-		} 
-		
-		Map<State, State> newStates = new HashMap<>();
-
-		for(Set<State> set : partitions) {
-			State newState = new State();
-			for(State state : set) {
-				
-				newState.addRegularExpressions(state.getRegularExpressions());
-				
-				if(startState == state) {
-					startState = newState;
-				}
-				if(state.isFinalState()) {
-					newState.setStateType(StateType.FINAL);
-				}
-				newStates.put(state, newState);
-			}
-		}
-		
-		for(State state : states) {
-			for(Transition t : state.getTransitions()) {
-				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));;				
-			}
-		}
-		
+		Automaton automaton = AutomatonOperations.minimize(alphabet, states);
+		this.startState = automaton.getStartState();
+		this.finalStates = automaton.getFinalStates();
+		this.states = automaton.getStates();
+		this.minimized = true;
+		return this;
+	}
+	
+	public AutomatonBuilder setMinimized(boolean minimized) {
+		this.minimized = minimized;
 		return this;
 	}
 
@@ -433,27 +219,32 @@ public class AutomatonBuilder {
 	private void convertToNonOverlapping(State startState) {
 		this.rangeMap = getRangeMap(startState);
 		for (State state : states) {
+			List<Transition> removeList = new ArrayList<>();
+			List<Transition> addList = new ArrayList<>();
 			for (Transition transition : state.getTransitions()) {
-				state.removeTransition(transition);
-				for (CharacterRange range : rangeMap.get(transition.getRange())) {
-					state.addTransition(new Transition(range, transition.getDestination()));
+				if (!transition.isEpsilonTransition()) {
+					removeList.add(transition);
+					for (CharacterRange range : rangeMap.get(transition.getRange())) {
+						addList.add(new Transition(range, transition.getDestination()));
+					}					
 				}
 			}
+			state.removeTransitions(removeList);
+			state.addTransitions(addList);
 		}
 		this.alphabet = getAlphabet(startState, rangeMap);
-		setStateIDs();
 	}
 		
 	private static List<CharacterRange> getAllRanges(State startState) {
 		final Set<CharacterRange> ranges = new HashSet<>();
 
 		AutomatonVisitor.visit(startState, state -> {
-				for (Transition transition : state.getTransitions()) {
-					if (!transition.isEpsilonTransition()) {
-						ranges.add(transition.getRange());
-					}
+			for (Transition transition : state.getTransitions()) {
+				if (!transition.isEpsilonTransition()) {
+					ranges.add(transition.getRange());
 				}
-			});
+			}
+		});
 		
 		return new ArrayList<>(ranges);
 	}
@@ -467,7 +258,7 @@ public class AutomatonBuilder {
 	}
 	
 	private static State[] getAllStates(State startState) {
-		final Set<State> set = new HashSet<>();
+		final Set<State> set = new LinkedHashSet<>();
 		AutomatonVisitor.visit(startState, s -> set.add(s));
 		
 		State[] states = new State[set.size()];
@@ -479,8 +270,9 @@ public class AutomatonBuilder {
 	}
 	
 	public void setStateIDs() {
-		AtomicInteger id = new AtomicInteger();
-		AutomatonVisitor.visit(startState, s -> s.setId(id.getAndIncrement()));
+		for (int i = 0; i < states.length; i++) {
+			states[i].setId(i);
+		}
 	}
 	
 	private Set<State> computeFinalStates() {
@@ -516,7 +308,7 @@ public class AutomatonBuilder {
 		State startState = new State();
 		
 		for(State finalState : finalStates) {
-			startState.addTransition(Transition.epsilonTransition(newStates.get(finalState)));
+			startState.addEpsilonTransition(newStates.get(finalState));
 		}
 		
 		// 2. Reversing the transitions
@@ -531,94 +323,9 @@ public class AutomatonBuilder {
 		 
 		return this;
 	}
-	
-	/**
-	 *  A state in the resulting intersection automata is final
-	 *  if all its composing states are final. 
-	 * 
-	 */
-	public AutomatonBuilder intersect(Automaton other) {
 		
-		State startState = null;
-		
-		State[][] product = product(other);
-		
-		for (int i = 0; i < product.length; i++) {
-			 for (int j = 0; j < product[i].length; j++) {
-				State state = product[i][j];
-				
-				State state1 = getState(i);
-				State state2 = other.getState(j);
-				
-				if (state1.isFinalState() && state2.isFinalState()) {
-					state.setStateType(StateType.FINAL);
-				}
-				
-				if (state1 == startState && state2 == other.getStartState()) {
-					startState = state;
-				}
-			 }
-		}
-		
-		return this;
-	}
-	
-	public AutomatonBuilder union(Automaton...automatons) {
-		throw new UnsupportedOperationException();
-	}
-	
-	public AutomatonBuilder difference(Automaton...automaton) {
-		throw new UnsupportedOperationException();
-	}
-		
-	/**
-	 * Produces the Cartesian product of the states of an automata.
-	 */
-	private State[][] product(Automaton a2) {
-		
-		State[] states1 = states;
-		State[] states2 = a2.getAllStates();
-		
-		State[][] newStates = new State[states1.length][states2.length];
-		
-		for(int i = 0; i < states.length; i++) {
-			for(int j = 0; j < states2.length; j++) {
-				newStates[i][j] = new State();
-			}
-		}
-
-		CharacterRange[] joinAlphabet = merge(alphabet, a2.getAlphabet()); 
-		
-		for(int i = 0; i < states1.length; i++) {
-			for(int j = 0; j < states2.length; j++) {
-				
-				State state = newStates[i][j];
-				State state1 = states1[i];
-				State state2 = states2[j];
-				
-				for (CharacterRange r : joinAlphabet) {
-					State s1 = state1.getState(r);
-					State s2 = state2.getState(r);
-					state.addTransition(new Transition(r, newStates[s1.getId()][s2.getId()]));
-				}
-			}
-		}
-		
-		return newStates;
-	}
-	
 	public State getState(int i) {
 		return states[i];
-	}
-	
-	public CharacterRange[] merge(CharacterRange[] alphabet1, CharacterRange[] alphabet2) {
-		Set<CharacterRange> alphabets = new HashSet<>();
-		for (CharacterRange r : alphabet1) { alphabets.add(r); }
-		for (CharacterRange r : alphabet2) { alphabets.add(r); }
-		CharacterRange[] merged = new CharacterRange[alphabets.size()];
-		int i = 0;
-		for (CharacterRange r : alphabets) { merged[i++] = r; };
-		return merged;
 	}
 	
 	/**

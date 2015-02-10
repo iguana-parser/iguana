@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgll.parser.HashFunctions;
-import org.jgll.regex.Matcher;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
@@ -101,16 +100,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		startState.addTransition(new Transition(start, end, finalState));
 		return Automaton.builder(startState).build();
 	}
-	
-	@Override
-	public Matcher getMatcher() {
-		return (input, i) -> input.charAt(i) >= start && input.charAt(i) <= end ? 1 : -1;
-	}
-	
-	@Override
-	public Matcher getBackwardsMatcher() {
-		return getMatcher();
-	}
 
 	@Override
 	public boolean isNullable() {
@@ -174,7 +163,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 
 			if (i + 1 < ranges.size()) {
 				CharacterRange next = ranges.get(i + 1);
-				if (!current.overlaps(next)) {
+				if (!overlaps(overlapping, next)) {
 					result.putAll(convertOverlapping(overlapping));
 					overlapping.clear();
 				}
@@ -184,6 +173,15 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		result.putAll(convertOverlapping(overlapping));
 		
 		return result;
+	}
+	
+	private static boolean overlaps(Set<CharacterRange> set, CharacterRange r) {
+		for (CharacterRange c : set) {
+			if (c.overlaps(r)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private static Multimap<CharacterRange, CharacterRange> convertOverlapping(Set<CharacterRange> ranges) {
@@ -244,7 +242,9 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		}
 		
 		public Builder(CharacterRange range) {
-			this(range.start, range.end);
+			super(range);
+			this.start = range.start;
+			this.end = range.end;
 		}
 		
 		@Override

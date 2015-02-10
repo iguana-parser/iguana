@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.RegularExpressionExamples;
+import org.jgll.regex.matcher.DFAMatcher;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -34,18 +35,21 @@ public class IntersectionTest {
 		// Matches an string of even length.
 		Automaton a2 = Automaton.builder(y0).build();
 		
-		DFAMatcher matcher = new DFAMatcher(a1.builder().intersect(a2).build());
+		Automaton intersect = AutomatonOperations.intersect(a1, a2);
+		DFAMatcher matcher = new DFAMatcher(intersect);
 		
-		assertFalse(a1.isLanguageEmpty());
+		assertFalse(intersect.isLanguageEmpty());
 		assertTrue(matcher.match(Input.fromString("111001110001")));
+		assertFalse(matcher.match(Input.fromString("111001010001")));
+		assertFalse(matcher.match(Input.fromString("1110011100010")));
 	}
 	
 	@Test
 	public void test2() {
-		RegularExpression f = RegularExpressionExamples.getFloat().build();
-		RegularExpression id = RegularExpressionExamples.getId().build();
+		RegularExpression f = RegularExpressionExamples.getFloat();
+		RegularExpression id = RegularExpressionExamples.getId();
 		
-		Automaton intersect = f.getAutomaton().builder().intersect(id.getAutomaton()).build();
+		Automaton intersect = AutomatonOperations.intersect(f.getAutomaton(), id.getAutomaton());
 		
 		// Should not overlap, therefore the intersection should be empty.
 		assertTrue(intersect.isLanguageEmpty());

@@ -72,6 +72,11 @@ public class Configuration {
 		return new Builder();
 	}
 	
+	public static enum MatcherType {
+		DFA,
+		JAVA_REGEX
+	}
+	
 	public static enum GSSType {
 		NEW,
 		ORIGINAL

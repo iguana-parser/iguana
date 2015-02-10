@@ -12,7 +12,6 @@ import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
-import org.jgll.regex.automaton.Transition;
 import org.jgll.traversal.ISymbolVisitor;
 
 import com.google.common.collect.ImmutableList;
@@ -51,24 +50,23 @@ public class Star extends AbstractRegularExpression {
 		
 		//TODO: add separators to the DFA
 		State startState = new State();
-		
 		State finalState = new State(StateType.FINAL);
 		
 		Automaton automaton = ((RegularExpression) s).getAutomaton().copy();
 		
-		startState.addTransition(Transition.epsilonTransition(automaton.getStartState()));
+		startState.addEpsilonTransition(automaton.getStartState());
 		
 		Set<State> finalStates = automaton.getFinalStates();
 		
 		for(State s : finalStates) {
 			s.setStateType(StateType.NORMAL);
-			s.addTransition(Transition.epsilonTransition(finalState));
-			s.addTransition(Transition.epsilonTransition(automaton.getStartState()));
+			s.addEpsilonTransition(finalState);
+			s.addEpsilonTransition(automaton.getStartState());
 		}
 		
-		startState.addTransition(Transition.epsilonTransition(finalState));
+		startState.addEpsilonTransition(finalState);
 		
-		return Automaton.builder(startState).makeDeterministic().build();
+		return Automaton.builder(startState).build();
 	}
 	
 	@Override
@@ -128,8 +126,13 @@ public class Star extends AbstractRegularExpression {
 		private List<Symbol> separators = new ArrayList<>();
 		
 		public Builder(Symbol s) {
-			this.name = getName(s);
+			super(getName(s));
 			this.s = s;
+		}
+		
+		public Builder(Star star) {
+			super(star);
+			this.s = star.s;
 		}
 		
 		public Builder addSeparator(Symbol symbol) {
