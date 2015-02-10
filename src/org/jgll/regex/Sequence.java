@@ -208,8 +208,8 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		return super.toString();
 	}
 	
-	public static <T extends Symbol> Builder<T> builder(Symbol s) {
-		return builder(s);
+	public static <T extends Symbol> Builder<T> builder(T s) {
+		return builder(Arrays.asList(s));
 	}
 	
 	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {

@@ -209,8 +209,8 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		return builder(newRanges).build();
 	}
 	
-	public static <T extends Symbol> Builder<T> builder(Symbol s1, Symbol s2) {
-		return builder(s1, s2);
+	public static <T extends Symbol> Builder<T> builder(T t1, T t2) {
+		return builder(Arrays.asList(t1, t2));
 	}
 	
 	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
