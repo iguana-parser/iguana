@@ -162,7 +162,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 
 			if (i + 1 < ranges.size()) {
 				CharacterRange next = ranges.get(i + 1);
-				if (!current.overlaps(next)) {
+				if (!overlaps(overlapping, next)) {
 					result.putAll(convertOverlapping(overlapping));
 					overlapping.clear();
 				}
@@ -172,6 +172,15 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		result.putAll(convertOverlapping(overlapping));
 		
 		return result;
+	}
+	
+	private static boolean overlaps(Set<CharacterRange> set, CharacterRange r) {
+		for (CharacterRange c : set) {
+			if (c.overlaps(r)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private static Multimap<CharacterRange, CharacterRange> convertOverlapping(Set<CharacterRange> ranges) {

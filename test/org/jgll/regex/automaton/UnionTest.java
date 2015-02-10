@@ -21,6 +21,11 @@ public class UnionTest {
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("if")));
 		assertTrue(matcher.match(Input.fromString("when")));
+		assertFalse(matcher.match(Input.fromString("i")));
+		assertFalse(matcher.match(Input.fromString("w")));
+		assertFalse(matcher.match(Input.fromString("wh")));
+		assertFalse(matcher.match(Input.fromString("whe")));
+		assertFalse(matcher.match(Input.fromString("whenever")));
 		assertFalse(matcher.match(Input.fromString("else")));
 	}
 	
@@ -31,6 +36,11 @@ public class UnionTest {
 		assertTrue(matcher.match(Input.fromString("if")));
 		assertTrue(matcher.match(Input.fromString("when")));
 		assertTrue(matcher.match(Input.fromString("new")));
+		assertFalse(matcher.match(Input.fromString("i")));
+		assertFalse(matcher.match(Input.fromString("w")));
+		assertFalse(matcher.match(Input.fromString("n")));
+		assertFalse(matcher.match(Input.fromString("ne")));
+		assertFalse(matcher.match(Input.fromString("news")));
 		assertFalse(matcher.match(Input.fromString("else")));
 	}
 

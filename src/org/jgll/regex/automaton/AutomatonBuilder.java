@@ -229,8 +229,8 @@ public class AutomatonBuilder {
 					}					
 				}
 			}
-			state.addTransitions(addList);
 			state.removeTransitions(removeList);
+			state.addTransitions(addList);
 		}
 		this.alphabet = getAlphabet(startState, rangeMap);
 	}

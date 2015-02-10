@@ -90,7 +90,7 @@ public class State implements Serializable {
 	}
 	
 	public void removeTransitions(Collection<Transition> c) {
-		c.removeAll(c);
+		transitions.removeAll(c);
 	}
 	
 	public void setId(int id) {

@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.util.Visualization;
 
 import com.google.common.collect.Multimap;
 
@@ -96,9 +95,17 @@ public class AutomatonOperations {
 		a1 = makeDeterministic(a1);
 		a2 = makeDeterministic(a2);
 		
+		Multimap<CharacterRange, CharacterRange> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
+		convertToNonOverlapping(a1, rangeMap);
+		convertToNonOverlapping(a2, rangeMap);
+		
+		Set<CharacterRange> values = new HashSet<>(rangeMap.values());
+		a1 = makeComplete(a1, values);		
+		a2 = makeComplete(a2, values);
+		
 		State startState = null;
 		
-		State[][] product = product(a1, a2);
+		State[][] product = product(a1, a2, values);
 		
 		for (int i = 0; i < product.length; i++) {
 			 for (int j = 0; j < product[i].length; j++) {
@@ -123,7 +130,7 @@ public class AutomatonOperations {
 	/**
 	 * Produces the Cartesian product of the states of an automata.
 	 */
-	private static State[][] product(Automaton a1, Automaton a2) {
+	private static State[][] product(Automaton a1, Automaton a2, Set<CharacterRange> values) {
 		
 		State[] states1 = a1.getStates();
 		State[] states2 = a2.getStates();
@@ -136,13 +143,6 @@ public class AutomatonOperations {
 			}
 		}
 
-		Multimap<CharacterRange, CharacterRange> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
-		convertToNonOverlapping(a1, rangeMap);
-		makeComplete(a1, rangeMap.values());
-		
-		convertToNonOverlapping(a2, rangeMap);
-		makeComplete(a2, rangeMap.values());
-		
 		for (int i = 0; i < states1.length; i++) {
 			for (int j = 0; j < states2.length; j++) {
 				
@@ -150,7 +150,7 @@ public class AutomatonOperations {
 				State state1 = states1[i];
 				State state2 = states2[j];
 				
-				for (CharacterRange r : rangeMap.values()) {
+				for (CharacterRange r : values) {
 					State s1 = state1.getState(r);
 					State s2 = state2.getState(r);
 					if (s1 != null && s2 != null) {
@@ -166,20 +166,22 @@ public class AutomatonOperations {
 	public static void convertToNonOverlapping(Automaton a, Multimap<CharacterRange, CharacterRange> rangeMap) {
 		for (State state : a.getStates()) {
 			List<Transition> removeList = new ArrayList<>();
+			List<Transition> addList = new ArrayList<>();
 			for (Transition transition : state.getTransitions()) {
 				if (!transition.isEpsilonTransition()) {
 					removeList.add(transition);
 					for (CharacterRange range : rangeMap.get(transition.getRange())) {
-						state.addTransition(new Transition(range, transition.getDestination()));
+						addList.add(new Transition(range, transition.getDestination()));
 					}					
 				}
 			}
 			state.removeTransitions(removeList);
+			state.addTransitions(addList);
 		}
 	}
 	
 	
-	public static void makeComplete(Automaton automaton, Iterable<CharacterRange> alphabet) {
+	public static Automaton makeComplete(Automaton automaton, Iterable<CharacterRange> alphabet) {
 		
 		State dummyState = new State();
 		
@@ -190,6 +192,8 @@ public class AutomatonOperations {
 				}
 			}			
 		}
+		
+		return Automaton.builder(automaton.getStartState()).build();
 	}
 	
 	private static Multimap<CharacterRange, CharacterRange> merge(CharacterRange[] alphabet1, CharacterRange[] alphabet2) {

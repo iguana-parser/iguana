@@ -24,17 +24,20 @@ public class DiffernceTest {
 	@Test
 	public void test1() {
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), k1.getAutomaton());
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a);
+
 		DFAMatcher matcher = new DFAMatcher(a);
-		assertEquals(5, matcher.match(Input.fromString("first"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("if"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("if:"), 0));
-		assertEquals(5, matcher.match(Input.fromString("first:"), 0));
+		assertTrue(matcher.match(Input.fromString("i")));
+		assertTrue(matcher.match(Input.fromString("iif")));
+		assertTrue(matcher.match(Input.fromString("first")));
+		assertFalse(matcher.match(Input.fromString("if")));
+		assertFalse(matcher.match(Input.fromString("if:")));
+		assertFalse(matcher.match(Input.fromString("first:")));
 	}
 	
 	@Test
 	public void test2() {
 		Automaton union = AutomatonOperations.union(k1.getAutomaton(), k2.getAutomaton());
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", union);
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), union);
 
 		DFAMatcher matcher = new DFAMatcher(a);
