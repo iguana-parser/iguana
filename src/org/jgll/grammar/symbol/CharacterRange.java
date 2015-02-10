@@ -232,7 +232,9 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		}
 		
 		public Builder(CharacterRange range) {
-			this(range.start, range.end);
+			super(range);
+			this.start = range.start;
+			this.end = range.end;
 		}
 		
 		@Override

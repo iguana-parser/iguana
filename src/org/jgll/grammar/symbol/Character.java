@@ -110,7 +110,8 @@ public class Character extends AbstractRegularExpression {
 		}
 
 		public Builder(Character character) {
-			this(character.c);
+			super(character);
+			this.c = character.c;
 		}
 		
 		@Override

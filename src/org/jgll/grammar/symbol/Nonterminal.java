@@ -86,7 +86,7 @@ public class Nonterminal extends AbstractSymbol {
 		private int index;
 		
 		public Builder(Nonterminal nonterminal) {
-			this(nonterminal.getName());
+			super(nonterminal);
 			this.ebnfList = nonterminal.ebnfList;
 			this.index = nonterminal.index;
 		}
