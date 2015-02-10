@@ -42,7 +42,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	}
 	
 	public static <T extends Symbol> Alt<T> from(List<T> list) {
-		return new Builder<T>().add(list).build();
+		return builder(list).build();
 	}
 	
 	private static <T> String getName(List<T> elements) {
@@ -140,7 +140,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	
 	@Override
 	public Builder<T> copyBuilder() {
-		return new Builder<T>().add(symbols);
+		return new Builder<T>(this);
 	}
 	
 	@Override
@@ -208,22 +208,30 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		return builder(newRanges).build();
 	}
 	
-	public static <T extends Symbol> Builder<T> builder() {
-		return new Builder<>();
+	public static <T extends Symbol> Builder<T> builder(Symbol s1, Symbol s2) {
+		return builder(s1, s2);
 	}
 	
 	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
-		return new Builder<T>().add(symbols);
+		return new Builder<T>(symbols);
 	}
 	
 	@SafeVarargs
 	public static <T extends Symbol> Builder<T> builder(T...symbols) {
-		return new Builder<T>().add(Arrays.asList(symbols));
+		return new Builder<T>(Arrays.asList(symbols));
 	}
 	
 	public static class Builder<T extends Symbol> extends SymbolBuilder<Alt<T>> {
 
 		List<T> symbols = new ArrayList<>();
+		
+		public Builder(List<T> symbols) {
+			super(getName(symbols));
+		}
+		
+		public Builder(Alt<T> alt) {
+			super(alt);
+		}
 		
 		public Builder<T> add(T symbol) {
 			symbols.add(symbol);
@@ -237,8 +245,6 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 
 		@Override
 		public Alt<T> build() {
-//			Verify.verify(elements.size() > 2, "The number of elements in an alternative should be at least two");
-			this.name = getName(symbols);
 			return new Alt<>(this);
 		}
 	}

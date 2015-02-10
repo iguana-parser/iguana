@@ -107,15 +107,19 @@ public class Opt extends AbstractRegularExpression {
 		private Symbol s;
 
 		public Builder(Symbol s) {
+			super(getName(s));
 			this.s = s;
+		}
+		
+		public Builder(Opt opt) {
+			super(opt);
+			this.s = opt.s;
 		}
 		
 		@Override
 		public Opt build() {
-			this.name = getName(s);
 			return new Opt(this);
 		}
-		
 	}
 	
 }

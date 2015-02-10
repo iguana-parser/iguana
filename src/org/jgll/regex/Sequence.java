@@ -43,7 +43,7 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	}
 	
 	public static <T extends Symbol> Sequence<T> from(List<T> symbols) {
-		return new Builder<T>().add(symbols).build();
+		return builder(symbols).build();
 	}
 	
 	@SafeVarargs
@@ -164,7 +164,7 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	
 	@Override
 	public Builder<T> copyBuilder() {
-		return new Builder<T>().add(symbols);
+		return new Builder<T>(this);
 	}
 
 	@Override
@@ -207,12 +207,12 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		return super.toString();
 	}
 	
-	public static <T extends Symbol> Builder<T> builder() {
-		return new Builder<>();
+	public static <T extends Symbol> Builder<T> builder(Symbol s) {
+		return builder(s);
 	}
 	
 	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
-		return new Builder<T>().add(symbols);
+		return new Builder<T>(symbols);
 	}
 	
 	@SafeVarargs
@@ -223,6 +223,16 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	public static class Builder<T extends Symbol> extends SymbolBuilder<Sequence<T>> {
 
 		private List<T> symbols = new ArrayList<>();
+		
+		public Builder(List<T> symbols) {
+			super(getName(symbols));
+			this.symbols = symbols;
+		}
+		
+		public Builder(Sequence<T> seq) {
+			super(seq);
+			this.symbols = seq.symbols;
+		}
 		
 		public Builder<T> add(T s) {
 			symbols.add(s);
@@ -236,7 +246,6 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		
 		@Override
 		public Sequence<T> build() {
-			this.name = getName(symbols);
 			return new Sequence<>(this);
 		}
 	}

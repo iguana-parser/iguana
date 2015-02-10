@@ -125,8 +125,13 @@ public class Star extends AbstractRegularExpression {
 		private List<Symbol> separators = new ArrayList<>();
 		
 		public Builder(Symbol s) {
-			this.name = getName(s);
+			super(getName(s));
 			this.s = s;
+		}
+		
+		public Builder(Star star) {
+			super(star);
+			this.s = star.s;
 		}
 		
 		public Builder addSeparator(Symbol symbol) {

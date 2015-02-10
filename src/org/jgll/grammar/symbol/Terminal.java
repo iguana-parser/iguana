@@ -27,6 +27,7 @@ public class Terminal extends AbstractSymbol {
 		private RegularExpression regex;
 
 		public Builder(RegularExpression regex) {
+			super(regex.getName());
 			this.regex = regex;
 		}
 		

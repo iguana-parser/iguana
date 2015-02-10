@@ -17,7 +17,13 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	
 	protected Set<Condition> postConditions = new HashSet<>();
 
-	public SymbolBuilder() {}
+	public SymbolBuilder(T symbol) {
+		this.name = symbol.getName();
+		this.label = symbol.getLabel();
+		this.object = symbol.getObject();
+		this.preConditions = symbol.getPreConditions();
+		this.postConditions = symbol.getPostConditions();
+	}
 	
 	public SymbolBuilder(String name) {
 		this.name = name;
@@ -28,7 +34,7 @@ public abstract class SymbolBuilder<T extends Symbol> {
 		return this;
 	}
 	
-	public <X extends Symbol> SymbolBuilder<T> addPreCondition(Condition condition) {
+	public SymbolBuilder<T> addPreCondition(Condition condition) {
 		preConditions.add(condition);
 		return this;
 	}
