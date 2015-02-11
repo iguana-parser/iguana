@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.util.Visualization;
 
 import com.google.common.collect.Multimap;
 
@@ -100,19 +101,47 @@ public class AutomatonOperations {
 		convertToNonOverlapping(a2, rangeMap);
 		
 		Set<CharacterRange> values = new HashSet<>(rangeMap.values());
-		a1 = makeComplete(a1, values);		
-		a2 = makeComplete(a2, values);
+//		a1 = makeComplete(a1, values);
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a1);
+
+//		a2 = makeComplete(a2, values);
+		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a2);
+
+		return product(a1, a2, values, op);
+	}
+	
+	/**
+	 * Produces the Cartesian product of the states of an automata.
+	 */
+	private static Automaton product(Automaton a1, Automaton a2, Set<CharacterRange> values, Op op) {
+		
+		State[] states1 = a1.getStates();
+		State[] states2 = a2.getStates();
+		
+		State[][] newStates = new State[states1.length][states2.length];
 		
 		State startState = null;
-		
-		State[][] product = product(a1, a2, values);
-		
-		for (int i = 0; i < product.length; i++) {
-			 for (int j = 0; j < product[i].length; j++) {
-				State state = product[i][j];
+
+		for (int i = 0; i < states1.length; i++) {
+			for (int j = i; j < states2.length; j++) {
 				
-				State state1 = a1.getStates()[i];
-				State state2 = a2.getStates()[j];
+				State state = getState(newStates, i, j);
+				State state1 = states1[i];
+				State state2 = states2[j];
+				
+				for (CharacterRange r : values) {
+					State s1 = state1.getState(r);
+					State s2 = state2.getState(r);
+					if (s1 != null && s2 != null) {
+						State dest;
+						if (s1.getId() > s2.getId()) {
+							dest = getState(newStates, s2.getId(), s1.getId());
+						} else {
+							dest = getState(newStates, s1.getId(), s2.getId());							
+						}
+						state.addTransition(new Transition(r, dest));
+					}
+				}
 				
 				if (op.execute(state1, state2)) {
 					state.setStateType(StateType.FINAL);
@@ -121,46 +150,19 @@ public class AutomatonOperations {
 				if (state1 == a1.getStartState() && state2 == a2.getStartState()) {
 					startState = state;
 				}
-			 }
+			}
 		}
 		
-		return new AutomatonBuilder(startState).makeDeterministic().build();
+		return Automaton.builder(startState).build();
 	}
-	
-	/**
-	 * Produces the Cartesian product of the states of an automata.
-	 */
-	private static State[][] product(Automaton a1, Automaton a2, Set<CharacterRange> values) {
-		
-		State[] states1 = a1.getStates();
-		State[] states2 = a2.getStates();
-		
-		State[][] newStates = new State[states1.length][states2.length];
-		
-		for (int i = 0; i < states1.length; i++) {
-			for (int j = 0; j < states2.length; j++) {
-				newStates[i][j] = new State();
-			}
-		}
 
-		for (int i = 0; i < states1.length; i++) {
-			for (int j = 0; j < states2.length; j++) {
-				
-				State state = newStates[i][j];
-				State state1 = states1[i];
-				State state2 = states2[j];
-				
-				for (CharacterRange r : values) {
-					State s1 = state1.getState(r);
-					State s2 = state2.getState(r);
-					if (s1 != null && s2 != null) {
-						state.addTransition(new Transition(r, newStates[s1.getId()][s2.getId()]));
-					}
-				}
-			}
+	private static State getState(State[][] newStates, int i, int j) {
+		State state = newStates[i][j];
+		if (state == null) {
+			state = new State();
+			newStates[i][j] = state;
 		}
-		
-		return newStates;
+		return state;
 	}
 	
 	public static void convertToNonOverlapping(Automaton a, Multimap<CharacterRange, CharacterRange> rangeMap) {

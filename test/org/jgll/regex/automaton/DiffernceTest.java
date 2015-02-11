@@ -17,7 +17,7 @@ import org.junit.Test;
 public class DiffernceTest {
 	
 	private RegularExpression id = RegularExpressionExamples.getId();
-	private Sequence<Character> k1 = Sequence.from("if");
+	private Sequence<Character> k1 = Sequence.from("aa");
 	private Sequence<Character> k2 = Sequence.from("when");
 	private Sequence<Character> k3 = Sequence.from("new");
 
@@ -25,7 +25,7 @@ public class DiffernceTest {
 	public void test1() {
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), k1.getAutomaton());
 		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a);
-
+		
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("i")));
 		assertTrue(matcher.match(Input.fromString("iif")));
