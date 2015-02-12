@@ -9,11 +9,13 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.regex.Opt;
 import org.jgll.regex.Plus;
+import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.PackedNode;
@@ -39,8 +41,8 @@ import org.junit.Test;
 public class PrecedeRestrictionTest2 {
 	
 	private Nonterminal S = Nonterminal.withName("S");
-	private Sequence<Character> forr = Sequence.from("for");
-	private Sequence<Character> forall = Sequence.from("forall");
+	private RegularExpression forr = Terminal.from(Sequence.from("for"));
+	private RegularExpression forall = Terminal.from(Sequence.from("forall"));
 	private Nonterminal L = Nonterminal.withName("L");
 	private Nonterminal Id = Nonterminal.withName("Id");
 	private Character ws = Character.from(' ');
@@ -56,7 +58,7 @@ public class PrecedeRestrictionTest2 {
 		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
 		Rule r4 = Rule.withHead(L).addSymbol(ws).build();
 
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4, forr.toRule(), forall.toRule()).build();
+		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
 	}
 
 	@Test
@@ -71,8 +73,8 @@ public class PrecedeRestrictionTest2 {
 	private SPPFNode getExpectedSPPF(GrammarRegistry registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6);
-		PackedNode node2 = factory.createPackedNode("S ::= f o r a l l .", 0, node1);
-		TerminalNode node3 = factory.createTerminalNode("f o r a l l", 0, 6);
+		PackedNode node2 = factory.createPackedNode("S ::= (f o r a l l) .", 6, node1);
+		TerminalNode node3 = factory.createTerminalNode("(f o r a l l)", 0, 6);
 		node2.addChild(node3);
 		node1.addChild(node2);
 		return node1;

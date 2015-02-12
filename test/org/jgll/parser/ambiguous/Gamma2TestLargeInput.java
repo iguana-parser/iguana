@@ -89,30 +89,30 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 							   .build()));
 
 		// 150
-		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
-				ParseStatistics.builder()
-							   .setDescriptorsCount(56479)
-							   .setGSSNodesCount(151)
-							   .setGSSEdgesCount(34127)
-							   .setNonterminalNodesCount(11325)
-							   .setTerminalNodesCount(150)
-							   .setIntermediateNodesCount(11175)
-							   .setPackedNodesCount(1676400) 
-							   .setAmbiguousNodesCount(22052)
-							   .build()));
+//		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
+//				ParseStatistics.builder()
+//							   .setDescriptorsCount(56479)
+//							   .setGSSNodesCount(151)
+//							   .setGSSEdgesCount(34127)
+//							   .setNonterminalNodesCount(11325)
+//							   .setTerminalNodesCount(150)
+//							   .setIntermediateNodesCount(11175)
+//							   .setPackedNodesCount(1676400) 
+//							   .setAmbiguousNodesCount(22052)
+//							   .build()));
 
 		// 200
-		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
-				ParseStatistics.builder()
-							   .setDescriptorsCount(100304)
-							   .setGSSNodesCount(201)
-							   .setGSSEdgesCount(60502)
-							   .setNonterminalNodesCount(20100)
-							   .setTerminalNodesCount(200)
-							   .setIntermediateNodesCount(19900)
-							   .setPackedNodesCount(3980200) 
-							   .setAmbiguousNodesCount(39402) 
-							   .build()));
+//		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
+//				ParseStatistics.builder()
+//							   .setDescriptorsCount(100304)
+//							   .setGSSNodesCount(201)
+//							   .setGSSEdgesCount(60502)
+//							   .setNonterminalNodesCount(20100)
+//							   .setTerminalNodesCount(200)
+//							   .setIntermediateNodesCount(19900)
+//							   .setPackedNodesCount(3980200) 
+//							   .setAmbiguousNodesCount(39402) 
+//							   .build()));
 
 	}
 }

@@ -16,7 +16,7 @@ import org.junit.Test;
 public class DiffernceTest {
 	
 	private RegularExpression id = RegularExpressionExamples.getId();
-	private Sequence<Character> k1 = Sequence.from("aa");
+	private Sequence<Character> k1 = Sequence.from("if");
 	private Sequence<Character> k2 = Sequence.from("when");
 	private Sequence<Character> k3 = Sequence.from("new");
 
@@ -41,9 +41,9 @@ public class DiffernceTest {
 		DFAMatcher matcher = new DFAMatcher(a);
 		System.out.println(matcher.match(Input.fromString("f"), 0));
 		
-		assertEquals(5, matcher.match(Input.fromString("first"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("if"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("when"), 0));
+		assertTrue(matcher.match(Input.fromString("first")));
+		assertFalse(matcher.match(Input.fromString("if")));
+		assertFalse(matcher.match(Input.fromString("when")));
 	}
 	
 	@Test
@@ -51,10 +51,10 @@ public class DiffernceTest {
 		Alt<Sequence<Character>> alt = Alt.from(k1, k2, k3);
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), alt.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
-		assertEquals(5, matcher.match(Input.fromString("first"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("if"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("when"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("new"), 0));
+		assertTrue(matcher.match(Input.fromString("first")));
+		assertFalse(matcher.match(Input.fromString("if")));
+		assertFalse(matcher.match(Input.fromString("when")));
+		assertFalse(matcher.match(Input.fromString("new")));
 	}
 
 }
