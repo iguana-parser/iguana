@@ -14,7 +14,7 @@ public class RegularExpressionExamples {
 	public static RegularExpression getId() {
 		Alt<CharacterRange> c1 = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'));
 		Alt<CharacterRange> c2 = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'), CharacterRange.in('0', '9'));
-		return Plus.from(Character.from('a'));//Sequence.builder(c1, Star.from(c2)).build();
+		return Sequence.builder(c1, Star.from(c2)).build();
 	}
 	
 	/**

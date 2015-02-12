@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.util.Visualization;
 
 import com.google.common.collect.Multimap;
 
@@ -101,11 +100,8 @@ public class AutomatonOperations {
 		convertToNonOverlapping(a2, rangeMap);
 		
 		Set<CharacterRange> values = new HashSet<>(rangeMap.values());
-//		a1 = makeComplete(a1, values);
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a1);
-
-//		a2 = makeComplete(a2, values);
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a2);
+		a1 = makeComplete(a1, values);
+		a2 = makeComplete(a2, values);
 
 		return product(a1, a2, values, op);
 	}
@@ -123,22 +119,17 @@ public class AutomatonOperations {
 		State startState = null;
 
 		for (int i = 0; i < states1.length; i++) {
-			for (int j = i; j < states2.length; j++) {
+			for (int j = 0; j < states2.length; j++) {
 				
 				State state = getState(newStates, i, j);
 				State state1 = states1[i];
 				State state2 = states2[j];
 				
 				for (CharacterRange r : values) {
-					State s1 = state1.getState(r);
-					State s2 = state2.getState(r);
-					if (s1 != null && s2 != null) {
-						State dest;
-						if (s1.getId() > s2.getId()) {
-							dest = getState(newStates, s2.getId(), s1.getId());
-						} else {
-							dest = getState(newStates, s1.getId(), s2.getId());							
-						}
+					State dest1 = state1.getState(r);
+					State dest2 = state2.getState(r);
+					if (dest1 != null && dest2 != null) {
+						State dest = getState(newStates, dest1.getId(), dest2.getId());							
 						state.addTransition(new Transition(r, dest));
 					}
 				}
@@ -186,6 +177,7 @@ public class AutomatonOperations {
 	public static Automaton makeComplete(Automaton automaton, Iterable<CharacterRange> alphabet) {
 		
 		State dummyState = new State();
+		alphabet.forEach(r -> dummyState.addTransition(new Transition(r, dummyState)));
 		
 		for (State state : automaton.getStates()) {
 			for (CharacterRange r : alphabet) {
@@ -404,20 +396,6 @@ public class AutomatonOperations {
 		}
 		
 		return epsilonClosure(result);
-	}
-	
-	private static List<CharacterRange> getRanges(State[] states) {
-		final Set<CharacterRange> ranges = new HashSet<>();
-		
-		for (State state : states) {
-			for (Transition transition : state.getTransitions()) {
-				if (!transition.isEpsilonTransition()) {
-					ranges.add(transition.getRange());
-				}
-			}
-		}
-		
-		return new ArrayList<>(ranges);
 	}
 	
 	@FunctionalInterface

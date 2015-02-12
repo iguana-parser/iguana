@@ -9,7 +9,6 @@ import org.jgll.regex.RegularExpressionExamples;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.matcher.DFAMatcher;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 
@@ -24,7 +23,6 @@ public class DiffernceTest {
 	@Test
 	public void test1() {
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), k1.getAutomaton());
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a);
 		
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("i")));

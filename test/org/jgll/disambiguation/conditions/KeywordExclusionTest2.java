@@ -41,7 +41,7 @@ public class KeywordExclusionTest2 {
 		Sequence<Character> when = Sequence.from("when");
 		Sequence<Character> doo = Sequence.from("do");
 		Sequence<Character> whilee = Sequence.from("while");
-		Alt alt = Alt.from(iff, when, doo, whilee);		
+		Alt<?> alt = Alt.from(iff, when, doo, whilee);		
 		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az))
 									  .addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
