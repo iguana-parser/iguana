@@ -29,11 +29,6 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 
 	@Override
-	public TerminalNode findTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.findTerminalNode(IntKey2.from(leftExtent, rightExtent, f));
-	}
-
-	@Override
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		return slot.getNonterminalNode(IntKey2.from(leftExtent, rightExtent, f), 
 												   () -> createNonterminalNode(slot, leftExtent, rightExtent),
@@ -41,20 +36,10 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 
 	@Override
-	public NonterminalNode findNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.findNonterminalNode(IntKey2.from(leftExtent, rightExtent, f));
-	}
-
-	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
 		return slot.getIntermediateNode(IntKey2.from(leftExtent, rightExtent, f), 
 				 						() -> createIntermediateNode(slot, leftExtent, rightExtent),
 				 						this::intermediateNodeAdded);
-	}
-
-	@Override
-	public IntermediateNode findIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.findIntermediateNode(IntKey2.from(leftExtent, rightExtent, f));
 	}
 
 	@Override
