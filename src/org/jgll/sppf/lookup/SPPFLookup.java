@@ -23,8 +23,6 @@ public interface SPPFLookup {
 	 */
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
 	
-	public TerminalNode findTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
-	
 	default TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {
 		return getTerminalNode(slot, inputIndex, inputIndex);
 	}
@@ -78,23 +76,7 @@ public interface SPPFLookup {
 	 */
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot grammarSlot, int leftExtent, int rightExtent);
 	
-	/**
-	 * 
-	 * Returns the existing SPPF node with the given parameters if it exists, otherwise
-	 * return null.
-	 * 
-	 * @param grammarSlot
-	 * @param leftExtent
-	 * @param rightExtent
-	 * 
-	 * @return null if no nonterminal node is found with the given parameters
-	 * 
-	 */
-	public NonterminalNode findNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent);
-	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
-	
-	public IntermediateNode findIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	default void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		PackedNode packedNode = new PackedNode(slot, pivot, parent);

@@ -43,11 +43,6 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 	
 	@Override
-	public TerminalNode findTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return terminalNodes.get(IntKey3.from(slot.getId(), leftExtent, rightExtent, f));
-	}
-
-	@Override
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
 		return nonterminalNodes.computeIfAbsent(IntKey3.from(head.getId(), leftExtent, rightExtent, f), k -> {
 			NonterminalNode val = createNonterminalNode(head, leftExtent, rightExtent);
@@ -57,11 +52,6 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 	
 	@Override
-	public NonterminalNode findNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {		
-		return nonterminalNodes.get(IntKey3.from(head.getId(), leftExtent, rightExtent, f));
-	}
-
-	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
 		return intermediateNodes.computeIfAbsent(IntKey3.from(slot.getId(), leftExtent, rightExtent, f), k -> {
 			IntermediateNode val = createIntermediateNode(slot, leftExtent, rightExtent);
@@ -70,11 +60,6 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 		});
 	}
 
-	@Override
-	public IntermediateNode findIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		return intermediateNodes.get(IntKey3.from(slot.getId(), leftExtent, rightExtent, f));
-	}
-		
 	@Override
 	public NonterminalNode getStartSymbol(NonterminalGrammarSlot startSymbol, int inputSize) {
 		return nonterminalNodes.get(IntKey3.from(startSymbol.getId(), 0, inputSize - 1, f));

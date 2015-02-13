@@ -3,7 +3,6 @@ package org.jgll.sppf.lookup;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.sppf.NonterminalOrIntermediateNode;
 import org.jgll.sppf.PackedNode;
