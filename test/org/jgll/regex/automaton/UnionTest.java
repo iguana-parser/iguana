@@ -19,6 +19,7 @@ public class UnionTest {
 	public void test1() {
 		Automaton a = union(k1.getAutomaton(), k2.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
+
 		assertTrue(matcher.match(Input.fromString("if")));
 		assertTrue(matcher.match(Input.fromString("when")));
 		assertFalse(matcher.match(Input.fromString("i")));

@@ -8,7 +8,7 @@ public class DFABackwardsMatcher extends DFAMatcher {
 	public DFABackwardsMatcher(Automaton automaton) {
 		super(automaton.builder().reverse().build());
 	}
-	
+
 	@Override
 	public int match(Input input, int inputIndex) {
 		
@@ -16,7 +16,11 @@ public class DFABackwardsMatcher extends DFAMatcher {
 			return -1;
 		
 		int length = 0;
+		int maximumMatched = -1;
 		int state = start;
+		
+		if (finalStates[state])
+			maximumMatched = 0;
 		
 		for (int i = inputIndex - 1; i >= 0; i--) {
 			state = table[state].get(input.charAt(i));
@@ -25,9 +29,12 @@ public class DFABackwardsMatcher extends DFAMatcher {
 				break;
 			
 			length++;
+
+			if (finalStates[state])
+				maximumMatched = length;
 		}
-		
-		return length;
+
+		return maximumMatched;
 	}
 
 }

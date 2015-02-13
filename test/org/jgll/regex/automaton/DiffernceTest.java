@@ -9,7 +9,6 @@ import org.jgll.regex.RegularExpressionExamples;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.matcher.DFAMatcher;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 
@@ -24,8 +23,7 @@ public class DiffernceTest {
 	@Test
 	public void test1() {
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), k1.getAutomaton());
-		Visualization.generateAutomatonGraph("/Users/aliafroozeh/output", a);
-
+		
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("i")));
 		assertTrue(matcher.match(Input.fromString("iif")));
@@ -43,9 +41,9 @@ public class DiffernceTest {
 		DFAMatcher matcher = new DFAMatcher(a);
 		System.out.println(matcher.match(Input.fromString("f"), 0));
 		
-		assertEquals(5, matcher.match(Input.fromString("first"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("if"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("when"), 0));
+		assertTrue(matcher.match(Input.fromString("first")));
+		assertFalse(matcher.match(Input.fromString("if")));
+		assertFalse(matcher.match(Input.fromString("when")));
 	}
 	
 	@Test
@@ -53,10 +51,10 @@ public class DiffernceTest {
 		Alt<Sequence<Character>> alt = Alt.from(k1, k2, k3);
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), alt.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
-		assertEquals(5, matcher.match(Input.fromString("first"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("if"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("when"), 0));
-		assertEquals(-1, matcher.match(Input.fromString("new"), 0));
+		assertTrue(matcher.match(Input.fromString("first")));
+		assertFalse(matcher.match(Input.fromString("if")));
+		assertFalse(matcher.match(Input.fromString("when")));
+		assertFalse(matcher.match(Input.fromString("new")));
 	}
 
 }

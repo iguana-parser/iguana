@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.Sequence;
 
@@ -15,6 +16,10 @@ import org.jgll.regex.Sequence;
 public class MatcherFactory {
 	
 	public static Matcher getMatcher(RegularExpression regex) {
+		
+		if (regex instanceof Terminal)
+			return getMatcher(((Terminal) regex).getRegularExpression());
+		
 		if (regex instanceof Sequence<?>)
 			return sequenceMatcher((Sequence<?>) regex);
 			
@@ -28,6 +33,9 @@ public class MatcherFactory {
 	}
 	
 	public static Matcher getBackwardsMatcher(RegularExpression regex) {
+		
+		if (regex instanceof Terminal)
+			return getBackwardsMatcher(((Terminal) regex).getRegularExpression());
 		
 		if (regex instanceof Sequence<?>)
 			return sequenceBackwardsMatcher((Sequence<?>) regex);
@@ -78,7 +86,7 @@ public class MatcherFactory {
 	}
 	
 	private static Matcher characterBackwardsMatcher(Character c) {
-		return (input, i) -> i == 0 ? -1 : ( input.charAt(i - 1) == c.getValue() ? 1 : -1 );
+		return (input, i) ->  i == 0 ? -1 : ( input.charAt(i - 1) == c.getValue() ? 1 : -1 );
 	}
 	
 	private static Matcher characterRangeMatcher(CharacterRange range) {
