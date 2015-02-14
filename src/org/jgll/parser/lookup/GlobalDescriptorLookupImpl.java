@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jgll.datadependent.env.Environment;
-import org.jgll.datadependent.util.collections.IntKey4PlusEnv;
+import org.jgll.datadependent.util.collections.IntKey4PlusObject;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
@@ -73,7 +73,7 @@ public class GlobalDescriptorLookupImpl implements DescriptorLookup {
 
 	@Override
 	public boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
-		return !set.add(IntKey4PlusEnv.from(slot.getId(), inputIndex, gssNode.getGrammarSlot().getId(), gssNode.getInputIndex(), env, f5));
+		return !set.add(IntKey4PlusObject.from(env, slot.getId(), inputIndex, gssNode.getGrammarSlot().getId(), gssNode.getInputIndex(), f5));
 	}
 	
 }

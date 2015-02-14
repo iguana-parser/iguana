@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 import org.jgll.datadependent.env.Environment;
-import org.jgll.datadependent.util.collections.IntKey2PlusEnv;
+import org.jgll.datadependent.util.collections.IntKey2PlusObject;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
@@ -55,7 +55,7 @@ public class DistributedDescriptorLookupImpl implements DescriptorLookup {
 
 	@Override
 	public boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
-		return gssNode.hasDescriptor(IntKey2PlusEnv.from(slot.getId(), inputIndex, env, f3));
+		return gssNode.hasDescriptor(IntKey2PlusObject.from(env, slot.getId(), inputIndex, f3));
 	}
 	
 }
