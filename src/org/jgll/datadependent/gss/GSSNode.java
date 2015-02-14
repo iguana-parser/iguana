@@ -26,6 +26,10 @@ public class GSSNode<T> extends org.jgll.parser.gss.GSSNode {
 				&& data.equals(that.data);
 	}
 	
+	public GSSNodeData<T> getData() {
+		return data;
+	}
+	
 	@Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction.hash(getGrammarSlot().getId(), getInputIndex(), data.hashCode());
