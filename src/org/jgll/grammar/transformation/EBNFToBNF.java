@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -60,13 +61,13 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		Rule.Builder builder = new Rule.Builder(rule.getHead());		
 		for(Symbol s : rule.getBody()) {
-			builder.addSymbol(rewrite(s, newRules, rule.getLayout()));
+			builder.addSymbol(rewrite(s, newRules, rule.getLayout(), rule.getLayoutStrategy()));
 		}
 		
 		return builder.setLayout(rule.getLayout()).build();
 	}
 	
-	private Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout) {
+	private Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
 		
 		if (!isEBNF(symbol))
 			return symbol;
@@ -86,7 +87,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Star star = (Star) symbol;
 			Symbol S = star.getSymbol();
 			newNt = Nonterminal.withName(getName(S, star.getSeparators(), layout) + "*");
-			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules, layout)).setLayout(layout).build());
+			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
 			addedRules.add(Rule.withHead(newNt).build());
 		}
 		
@@ -103,10 +104,10 @@ public class EBNFToBNF implements GrammarTransformation {
 		else if (symbol instanceof Plus) {
 			Plus plus = (Plus) symbol;
 			Symbol S = plus.getSymbol();
-			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules, layout)).collect(Collectors.toList());
+			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules, layout, strategy)).collect(Collectors.toList());
 			newNt = Nonterminal.withName(getName(S, plus.getSeparators(), layout) + "+");
-			addedRules.add(Rule.withHead(newNt).addSymbol(newNt).addSymbols(seperators).addSymbols(rewrite(S, addedRules, layout)).setLayout(layout).build());
-			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(S, addedRules, layout)).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(newNt).addSymbols(seperators).addSymbols(rewrite(S, addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(S, addedRules, layout, strategy)).build());
 		} 
 		
 		/**
@@ -116,7 +117,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		else if (symbol instanceof Opt) {
 			Symbol in = ((Opt) symbol).getSymbol();
 			newNt = Nonterminal.withName(symbol.getName());
-			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(in, addedRules, layout)).setLayout(layout).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(in, addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
 			addedRules.add(Rule.withHead(newNt).build());
 		} 
 		
@@ -125,9 +126,9 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		else if (symbol instanceof Sequence) {
 			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Sequence<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
+			List<Symbol> symbols = ((Sequence<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules, layout, strategy)).collect(Collectors.toList());
 			newNt = Nonterminal.withName(symbol.getName());
-			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).build());
+			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy).build());
 		} 
 		
 		/**
@@ -137,8 +138,8 @@ public class EBNFToBNF implements GrammarTransformation {
 		else if (symbol instanceof Alt) {
 			newNt = Nonterminal.withName(symbol.getName());
 			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Alt<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
-			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).build()));
+			List<Symbol> symbols = ((Alt<Symbol>) symbol).getSymbols().stream().map(x -> rewrite(x, addedRules, layout, strategy)).collect(Collectors.toList());
+			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy).build()));
 		}
 		
 		else {
