@@ -82,7 +82,11 @@ public class Plus extends AbstractRegularExpression {
 	
 	@Override
 	public String getConstructorCode() {
-		return Plus.class.getSimpleName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
+		return Plus.class.getSimpleName() + 
+			   ".builder(" + s.getConstructorCode() + ")" + 
+			   super.getConstructorCode() + 
+			   (separators.isEmpty() ? "" : ".addSeparators(" + asList(separators) + ")") +
+			   ".build()";
 	}
 	
 	@Override
