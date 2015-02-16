@@ -155,8 +155,9 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
-		public void setLayoutStrategy(LayoutStrategy layoutStrategy) {
+		public Builder setLayoutStrategy(LayoutStrategy layoutStrategy) {
 			this.layoutStrategy = layoutStrategy;
+			return this;
 		}
 		
 		public Builder setObject(Serializable object) {
@@ -179,7 +180,7 @@ public class Rule implements ConstructorCode, Serializable {
 		return Rule.class.getSimpleName() + ".withHead(" + head.getConstructorCode() + ")" + 
 				(body == null ? "" : body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) +
 				(layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
-				(layoutStrategy != LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
+				(layoutStrategy == LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
 				".build()";
 	}
 }

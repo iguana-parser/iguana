@@ -35,7 +35,7 @@ public class EBNFToBNF implements GrammarTransformation {
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
 		grammar.getDefinitions().values().forEach(r -> newRules.addAll(transform(r)));
-		return Grammar.builder().addRules(newRules).build();
+		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
 	}
 	
 	private Set<Rule> transform(Rule rule) {

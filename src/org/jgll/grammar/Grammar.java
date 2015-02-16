@@ -218,12 +218,14 @@ public class Grammar implements ConstructorCode, Serializable {
 
 	@Override
 	public String getConstructorCode() {
-		return "Grammar.builder()" + rulesToString(definitions.values()) + "\n.build()";
+		return "Grammar.builder()\n" +
+			   ".setLayout(" + layout.getConstructorCode() + ")" +
+			   rulesToString(definitions.values()) + "\n.build()";
 	}
 	
 	private static String rulesToString(Iterable<Rule> rules) {
 		return StreamSupport.stream(rules.spliterator(), false)
-				.map(r -> "\n//" + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
+				.map(r -> "\n// " + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
 				.collect(Collectors.joining());
 	}
 	

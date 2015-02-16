@@ -15,6 +15,10 @@ public class LayoutWeaver implements GrammarTransformation {
 		Grammar.Builder builder = Grammar.builder();
 		
 		for (Rule rule : grammar.getRules()) {
+			
+			if (rule.size() == 0)
+				continue;
+			
 			Rule.Builder ruleBuilder = Rule.withHead(rule.getHead());
 			
 			for (int i = 0; i < rule.size() - 1; i++) {
