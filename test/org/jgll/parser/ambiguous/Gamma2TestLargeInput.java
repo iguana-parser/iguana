@@ -1,5 +1,7 @@
 package org.jgll.parser.ambiguous;
 
+import static org.jgll.util.Configurations.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.stream.Stream;
 
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -19,8 +21,6 @@ import org.jgll.parser.ParserFactory;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
 import org.junit.runners.Parameterized.Parameters;
-
-import static org.jgll.util.Configurations.*;
 
 public class Gamma2TestLargeInput extends AbstractParserTest {
 	
@@ -54,16 +54,16 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 		return Nonterminal.withName("S");
 	}
 	
-	private static Function<GrammarRegistry, ParseResult> getNewParseResult(int i) {
+	private static Function<GrammarGraph, ParseResult> getNewParseResult(int i) {
 		return results.get(i);
 	}
 	
-	static List<Function<GrammarRegistry, ParseResult>> results = new ArrayList<>();
+	static List<Function<GrammarGraph, ParseResult>> results = new ArrayList<>();
 	
 	static {
 		
 		// 50
-		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
+		results.add((GrammarGraph registry) -> new ParseSuccess(null, 
 				ParseStatistics.builder()
 							   .setDescriptorsCount(6329)
 							   .setGSSNodesCount(51)
@@ -76,7 +76,7 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 							   .build()));
 		
 		// 100
-		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
+		results.add((GrammarGraph registry) -> new ParseSuccess(null, 
 				ParseStatistics.builder()
 							   .setDescriptorsCount(25154)
 							   .setGSSNodesCount(101)

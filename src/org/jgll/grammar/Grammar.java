@@ -103,7 +103,7 @@ public class Grammar implements ConstructorCode, Serializable {
 	}
 	
 	public GrammarGraph toGrammarGraph(Input input, Configuration config) {
-		return new GrammarGraphBuilder(this, input, config).build();
+		return new GrammarGraph(this, input, config);
 	}
 	
 	private static Set<RuntimeException> validate(ListMultimap<Nonterminal, Rule> definitions) {

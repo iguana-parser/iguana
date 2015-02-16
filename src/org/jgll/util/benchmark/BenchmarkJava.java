@@ -43,8 +43,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
  */
 
 @State(Scope.Benchmark)
-@Warmup(iterations=5)
-@Measurement(iterations=10)
+@Warmup(iterations=1)
+@Measurement(iterations=1)
 @Fork(0)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)

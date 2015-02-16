@@ -3,7 +3,7 @@ package org.jgll.disambiguation.conditions;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
@@ -68,11 +68,11 @@ public class PrecedeRestrictionTest1 {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
 	}
 
-	private SPPFNode getExpectedSPPF(GrammarRegistry registry) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+	private SPPFNode getExpectedSPPF(GrammarGraph graph) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6);
 		PackedNode node2 = factory.createPackedNode("S ::= (f o r a l l) .", 6, node1);
 		TerminalNode node3 = factory.createTerminalNode("(f o r a l l)", 0, 6);

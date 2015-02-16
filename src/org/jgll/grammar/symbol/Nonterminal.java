@@ -14,7 +14,7 @@ public class Nonterminal extends AbstractSymbol {
 		return builder(name).build();
 	}
 	
-	private Nonterminal(Builder builder) {
+	protected Nonterminal(Builder builder) {
 		super(builder);
 		this.ebnfList = builder.ebnfList;
 		this.index = builder.index;

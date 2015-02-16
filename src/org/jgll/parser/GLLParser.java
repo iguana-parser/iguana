@@ -2,7 +2,6 @@ package org.jgll.parser;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -64,10 +63,10 @@ public interface GLLParser {
 	
 	public Iterable<GSSNode> getGSSNodes();
 	
-	public GrammarRegistry getRegistry();
-	
 	public void reset();
 
 	public Configuration getConfiguration();
+	
+	public GrammarGraph getGrammarGraph();
 	
 }

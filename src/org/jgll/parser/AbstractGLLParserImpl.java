@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
@@ -145,7 +144,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected NonterminalGrammarSlot getStartSymbol(Nonterminal nonterminal) {
-		return grammarGraph.getRegistry().getHead(nonterminal);
+		return grammarGraph.getHead(nonterminal);
 	}
 	
 	protected void parse(NonterminalGrammarSlot startSymbol) {
@@ -241,14 +240,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public void reset() {
-		grammarGraph.reset(input);
 		gssLookup.reset();
 		sppfLookup.reset();
-	}
-	
-	@Override
-	public GrammarRegistry getRegistry() {
-		return grammarGraph.getRegistry();
 	}
 	
 	@Override
@@ -288,5 +281,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		} else {
 			return grammarGraph.getNonterminals().stream().flatMap(s -> StreamSupport.stream(s.getGSSNodes().spliterator(), false)).collect(Collectors.toList());
 		}
+	}
+	
+	@Override
+	public GrammarGraph getGrammarGraph() {
+		return grammarGraph;
 	}
 }

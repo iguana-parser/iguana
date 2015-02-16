@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -46,42 +46,42 @@ public class Gamma2Test extends AbstractParserTest {
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getNewParseResult1
+	    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getNewParseResult1
 	    	}).collect(Collectors.toList());
 		 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
 	    		getInput1(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getOriginalParseResult1
+	    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getOriginalParseResult1
 	    	}).collect(Collectors.toList()));
 		 parameters.addAll(newConfigs.stream().map(c -> new Object[] {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getNewParseResult2
+	    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getNewParseResult2
 	    	}).collect(Collectors.toList()));
 		 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getOriginalParseResult2
+	    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getOriginalParseResult2
 	    	}).collect(Collectors.toList()));
 		 parameters.addAll(newConfigs.stream().map(c -> new Object[] {
 		    		getInput3(), 
 		    		getGrammar(), 
 		    		getStartSymbol(),
 		    		ParserFactory.getParser(c, getInput3(), getGrammar()),
-		    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getNewParseResult3
+		    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getNewParseResult3
 		    	}).collect(Collectors.toList()));
 			 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
 		    		getInput3(), 
 		    		getGrammar(), 
 		    		getStartSymbol(),
 		    		ParserFactory.getParser(c, getInput3(), getGrammar()),
-		    		(Function<GrammarRegistry, ParseResult>) Gamma2Test::getOriginalParseResult3
+		    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getOriginalParseResult3
 		    	}).collect(Collectors.toList()));
 		 return parameters;
     }
@@ -111,7 +111,7 @@ public class Gamma2Test extends AbstractParserTest {
 		return Input.fromString("bbbbb");
 	}
 	
-	private static ParseSuccess getNewParseResult1(GrammarRegistry registry) {
+	private static ParseSuccess getNewParseResult1(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(31)
 				.setGSSNodesCount(4)
@@ -121,10 +121,10 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(12)
 				.setAmbiguousNodesCount(2).build();
-		return new ParseSuccess(expectedSPPF1(registry), statistics);
+		return new ParseSuccess(expectedSPPF1(graph), statistics);
 	}
 	
-	private static ParseSuccess getOriginalParseResult1(GrammarRegistry registry) {
+	private static ParseSuccess getOriginalParseResult1(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(118)
 				.setGSSNodesCount(17)
@@ -134,10 +134,10 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(12)
 				.setAmbiguousNodesCount(2).build();
-		return new ParseSuccess(expectedSPPF1(registry), statistics);
+		return new ParseSuccess(expectedSPPF1(graph), statistics);
 	}
 	
-	private static ParseSuccess getNewParseResult2(GrammarRegistry registry) {
+	private static ParseSuccess getNewParseResult2(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(50)
 				.setGSSNodesCount(5)
@@ -147,10 +147,10 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(6)
 				.setPackedNodesCount(28)
 				.setAmbiguousNodesCount(6).build();
-		return new ParseSuccess(expectedSPPF2(registry), statistics);
+		return new ParseSuccess(expectedSPPF2(graph), statistics);
 	}
 	
-	private static ParseSuccess getOriginalParseResult2(GrammarRegistry registry) {
+	private static ParseSuccess getOriginalParseResult2(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(198)
 				.setGSSNodesCount(22)
@@ -160,10 +160,10 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(6)
 				.setPackedNodesCount(28)
 				.setAmbiguousNodesCount(6).build();
-		return new ParseSuccess(expectedSPPF2(registry), statistics);
+		return new ParseSuccess(expectedSPPF2(graph), statistics);
 	}
 	
-	private static ParseSuccess getNewParseResult3(GrammarRegistry registry) {
+	private static ParseSuccess getNewParseResult3(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(74)
 				.setGSSNodesCount(6)
@@ -173,10 +173,10 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(10)
 				.setPackedNodesCount(55)
 				.setAmbiguousNodesCount(12).build();
-		return new ParseSuccess(expectedSPPF3(registry), statistics);
+		return new ParseSuccess(expectedSPPF3(graph), statistics);
 	}
 	
-	private static ParseSuccess getOriginalParseResult3(GrammarRegistry registry) {
+	private static ParseSuccess getOriginalParseResult3(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(303)
 				.setGSSNodesCount(27)
@@ -186,11 +186,11 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(10)
 				.setPackedNodesCount(55)
 				.setAmbiguousNodesCount(12).build();
-		return new ParseSuccess(expectedSPPF3(registry), statistics);
+		return new ParseSuccess(expectedSPPF3(graph), statistics);
 	}
 	
-	private static NonterminalNode expectedSPPF1(GrammarRegistry registry) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+	private static NonterminalNode expectedSPPF1(GrammarGraph graph) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3);
 		PackedNode node2 = factory.createPackedNode("S ::= S S S .", 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= S S . S", 0, 2);
@@ -237,8 +237,8 @@ public class Gamma2Test extends AbstractParserTest {
 		return node1;
 	}
 	
-	private static NonterminalNode expectedSPPF2(GrammarRegistry registry) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+	private static NonterminalNode expectedSPPF2(GrammarGraph graph) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 4);
 		PackedNode node2 = factory.createPackedNode("S ::= S S S .", 3, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= S S . S", 0, 3);
@@ -343,8 +343,8 @@ public class Gamma2Test extends AbstractParserTest {
 		return node1;
 	}
 	
-	private static NonterminalNode expectedSPPF3(GrammarRegistry registry) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+	private static NonterminalNode expectedSPPF3(GrammarGraph graph) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 5);
 		PackedNode node2 = factory.createPackedNode("S ::= S S .", 1, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("S", 0, 0, 1);

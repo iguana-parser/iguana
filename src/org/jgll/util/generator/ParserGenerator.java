@@ -37,7 +37,8 @@ public class ParserGenerator {
 	
 	public static String getParserCode(Grammar grammar, Input input, Configuration config) {
 		StringWriter writer = new StringWriter();
-		grammar.toGrammarGraph(input, config).generate(new  PrintWriter(writer));
+		// TODO: fix the generation
+//		grammar.toGrammarGraph(input, config).generate(new  PrintWriter(writer));
 		return writer.toString();
 	}
 	
