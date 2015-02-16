@@ -14,7 +14,7 @@ public class TestJava {
 	
 	@Test
 	public void test1() {
-		Input input = Input.fromString("public class Test {}");
+		Input input = Input.fromString("class Test {}");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("CompilationUnit"));
 		System.out.println(result);

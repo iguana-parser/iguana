@@ -67,7 +67,7 @@ public class GrammarGraph {
 		Grammar bnfGrammar = ebnfToBNF.transform(grammar);
 		for (Nonterminal nonterminal : bnfGrammar.getNonterminals()) {
 			convert(nonterminal, bnfGrammar);
-		}		
+		}
 	}
 	
 	public NonterminalGrammarSlot getHead(Nonterminal nt) {

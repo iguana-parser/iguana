@@ -24,8 +24,6 @@ import org.jgll.util.generator.ConstructorCode;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
@@ -46,12 +44,14 @@ public class Grammar implements ConstructorCode, Serializable {
 	
 	private final SetMultimap<Nonterminal, RegularExpression> followSets;
 	
-	public Grammar(ListMultimap<Nonterminal, Rule> definitions,
-				   SetMultimap<Nonterminal, RegularExpression> firstSets,
-				   SetMultimap<Nonterminal, RegularExpression> followSets) {
-		this.definitions = ImmutableListMultimap.copyOf(definitions);
-		this.firstSets = ImmutableSetMultimap.copyOf(firstSets);
-		this.followSets = ImmutableSetMultimap.copyOf(followSets);
+	private final Nonterminal layout;
+	
+	public Grammar(Builder builder) {
+		this.definitions = builder.definitions;
+		this.layout = builder.layout;
+		// TODO: replace them with calculation
+		this.firstSets = HashMultimap.create();
+		this.followSets = HashMultimap.create();
 	}
 	
 	public Multimap<Nonterminal, Rule> getDefinitions() {
@@ -124,6 +124,10 @@ public class Grammar implements ConstructorCode, Serializable {
 		return validationExceptions;
 	}
 	
+	public Nonterminal getLayout() {
+		return layout;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -150,6 +154,7 @@ public class Grammar implements ConstructorCode, Serializable {
 	public static class Builder {
 		
 		private final ListMultimap<Nonterminal, Rule> definitions = ArrayListMultimap.create();
+		private Nonterminal layout;
 		
 		public Grammar build() {
 			Set<RuntimeException> exceptions = validate(definitions);
@@ -161,7 +166,7 @@ public class Grammar implements ConstructorCode, Serializable {
 //			GrammarOperations op = new GrammarOperations(definitions);
 //			return new Grammar(definitions, op.getFirstSets(), op.getFollowSets());
 			
-			return new Grammar(definitions, HashMultimap.create(), HashMultimap.create());
+			return new Grammar(this);
 		}
 		
 		public Builder addRule(Rule rule) {
@@ -176,6 +181,11 @@ public class Grammar implements ConstructorCode, Serializable {
 		
 		public Builder addRules(Rule...rules) {
 			addRules(Arrays.asList(rules));
+			return this;
+		}
+		
+		public Builder setLayout(Nonterminal layout) {
+			this.layout = layout;
 			return this;
 		}
 		
