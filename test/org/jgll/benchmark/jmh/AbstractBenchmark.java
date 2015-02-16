@@ -1,4 +1,4 @@
-package org.jgll.util.benchmark;
+package org.jgll.benchmark.jmh;
 
 import java.io.File;
 import java.io.IOException;

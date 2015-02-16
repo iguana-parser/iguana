@@ -1,4 +1,4 @@
-package org.jgll.util.benchmark;
+package org.jgll.benchmark.jmh;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.Visualization;

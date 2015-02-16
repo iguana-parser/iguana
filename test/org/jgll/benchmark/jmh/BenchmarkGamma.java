@@ -1,13 +1,14 @@
-package org.jgll.util.benchmark;
+package org.jgll.benchmark.jmh;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -35,7 +36,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * 
- * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.benchmark.BenchmarkCSharp
+ * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.benchmark.BenchmarkGamma
  * 
  * @author Ali Afroozeh
  *
@@ -47,13 +48,11 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @Fork(1)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class BenchmarkCSharp extends AbstractBenchmark {
+public class BenchmarkGamma {
 	
-	private static Grammar CSharpGrammar = getGrammar("grammars/csharp/specification/csharp");
-	
-	@Param({ "/Users/aliafroozeh/test.cs" })
-	String inputPath;
-    
+	@Param({ "300" })
+	int inputSize;
+
 	@Param({ "NEW" })
 	GSSType gssType;
 	
@@ -64,15 +63,27 @@ public class BenchmarkCSharp extends AbstractBenchmark {
 	GrammarGraph grammarGraph;
 	GLLParser parser;
 	ParseResult result;	
-
+	
+	/**
+	 * S ::= S S S | S S | b
+	 */
+	private static Grammar gamma2() {
+		Nonterminal S = Nonterminal.withName("S");
+		Character b = Character.from('b');
+		Grammar.Builder builder = new Grammar.Builder();
+		builder.addRule(Rule.withHead(S).addSymbols(S, S, S).build());
+		builder.addRule(Rule.withHead(S).addSymbols(S, S).build());
+		builder.addRule(Rule.withHead(S).addSymbol(b).build());
+		return builder.build();
+	}
 
 	@Setup(Level.Iteration)
-	public void setup() throws IOException {
-		input = Input.fromPath(inputPath);
+	public void setup() {
+		input = Input.fromString(getBs(inputSize));
 		config = Configuration.builder().setGSSType(gssType).build();
-		grammar = CSharpGrammar;
-		startSymbol = Nonterminal.withName("start[CompilationUnit]");
-		grammarGraph = CSharpGrammar.toGrammarGraph(input, config);
+		grammar = gamma2();
+		startSymbol = Nonterminal.withName("S");
+		grammarGraph = gamma2().toGrammarGraph(input, config);
 		parser = ParserFactory.getParser(config, input, grammar);
 	}
 	
@@ -83,30 +94,31 @@ public class BenchmarkCSharp extends AbstractBenchmark {
 	
 	@TearDown(Level.Iteration)
 	public void cleanUp() {
-		if (result.isParseSuccess()) {
-			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
-		}
 		result = null;
 		grammarGraph = null;
 		parser = null;
 		input = null;
 	}
 	
-	public static void main(String[] args) throws RunnerException, IOException {
-		List<File> files = find("/Users/aliafroozeh/corpus/CSharp/output", "cs");
-		String[] params = files.stream().map(f -> f.getAbsolutePath()).toArray(String[]::new);
+	public static void main(String[] args) throws RunnerException {
+		int limit = 50;
+		String[] inputParams = Stream.iterate(10, i -> i + 10).limit(limit).map(j -> j.toString()).toArray(s -> new String[limit]);
 		String[] gssParams = new String[] { GSSType.NEW.toString(), GSSType.ORIGINAL.toString() };
 		Options opt = new OptionsBuilder()
-				          .include(BenchmarkCSharp.class.getSimpleName())
-				          .param("inputPath", params)
+				          .include(BenchmarkGamma.class.getSimpleName())
+				          .param("inputSize", inputParams)
 				          .param("gssType", gssParams)
 				          .detectJvmArgs()
 				          .resultFormat(ResultFormatType.CSV)		// -rf csv
 				          .result("target/result.csv") 				// -rff target/result.csv 
-//				          .output("target/output.txt")				// -o target/output.txt
+				          .output("target/output.txt")				// -o target/output.txt
 				          .shouldDoGC(true) 						// -gc true
 				          .build();
 		new Runner(opt).run();
 	}
 		
+	private static String getBs(int size) {
+		return Stream.generate(() -> "b").limit(size).collect(Collectors.joining());
+	}
+
 }

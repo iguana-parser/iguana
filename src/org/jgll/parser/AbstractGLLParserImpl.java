@@ -24,9 +24,9 @@ import org.jgll.sppf.TerminalNode;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Configuration;
 import org.jgll.util.Configuration.LookupStrategy;
+import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
-import org.jgll.util.benchmark.BenchmarkUtil;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**

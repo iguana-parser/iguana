@@ -1,4 +1,4 @@
-package org.jgll.util.benchmark;
+package org.jgll.benchmark.jmh;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +11,9 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Configuration;
 import org.jgll.util.Configuration.GSSType;
-import org.jgll.util.grammar.JavaCharacterLevel;
 import org.jgll.util.Input;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -36,24 +36,23 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * 
- * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.benchmark.BenchmarkJava
+ * java -Xms14g -Xmx14g -cp target/benchmark.jar org.jgll.util.benchmark.BenchmarkCSharp
  * 
  * @author Ali Afroozeh
  *
  */
 
 @State(Scope.Benchmark)
-@Warmup(iterations=1)
-@Measurement(iterations=1)
-@Fork(0)
+@Warmup(iterations=5)
+@Measurement(iterations=10)
+@Fork(1)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class BenchmarkJava extends AbstractBenchmark {
+public class BenchmarkCSharp extends AbstractBenchmark {
 	
-	private static String sourceDir = "/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19";
-	private static Grammar javaGrammar = JavaCharacterLevel.grammar;
+	private static Grammar CSharpGrammar = getGrammar("grammars/csharp/specification/csharp");
 	
-	@Param({ "/Users/aliafroozeh/test.java" })
+	@Param({ "/Users/aliafroozeh/test.cs" })
 	String inputPath;
     
 	@Param({ "NEW" })
@@ -72,9 +71,9 @@ public class BenchmarkJava extends AbstractBenchmark {
 	public void setup() throws IOException {
 		input = Input.fromPath(inputPath);
 		config = Configuration.builder().setGSSType(gssType).build();
-		grammar = javaGrammar;
+		grammar = CSharpGrammar;
 		startSymbol = Nonterminal.withName("start[CompilationUnit]");
-		grammarGraph = javaGrammar.toGrammarGraph(input, config);
+		grammarGraph = CSharpGrammar.toGrammarGraph(input, config);
 		parser = ParserFactory.getParser(config, input, grammar);
 	}
 	
@@ -95,11 +94,11 @@ public class BenchmarkJava extends AbstractBenchmark {
 	}
 	
 	public static void main(String[] args) throws RunnerException, IOException {
-		List<File> files = find(sourceDir, "java");
+		List<File> files = find("/Users/aliafroozeh/corpus/CSharp/output", "cs");
 		String[] params = files.stream().map(f -> f.getAbsolutePath()).toArray(String[]::new);
 		String[] gssParams = new String[] { GSSType.NEW.toString(), GSSType.ORIGINAL.toString() };
 		Options opt = new OptionsBuilder()
-				          .include(BenchmarkJava.class.getSimpleName())
+				          .include(BenchmarkCSharp.class.getSimpleName())
 				          .param("inputPath", params)
 				          .param("gssType", gssParams)
 				          .detectJvmArgs()
