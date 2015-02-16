@@ -72,5 +72,13 @@ public class Terminal extends AbstractRegularExpression {
 	protected Automaton createAutomaton() {
 		return regex.getAutomaton();
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		return Terminal.class.getSimpleName() + ".builder(" + regex.getConstructorCode() + ")"
+											  + super.getConstructorCode() 
+											  + ".build()";
+	}
+
 
 }
