@@ -25,6 +25,7 @@ import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.grammar.transformation.LayoutWeaver;
@@ -50,6 +51,8 @@ public class GrammarGraph {
 
 	private Input input;
 	
+	private final Nonterminal layout;
+	
 	private int id = 1;
 	
 	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(0, Epsilon.getInstance());
@@ -60,6 +63,7 @@ public class GrammarGraph {
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
 		this.names = new HashMap<>();
+		this.layout = grammar.getLayout();
 		
 		terminalsMap.put(Epsilon.getInstance(), epsilon);
 		names.put(Epsilon.getInstance().getName(), epsilon);
@@ -73,8 +77,22 @@ public class GrammarGraph {
 		}
 	}
 	
-	public NonterminalGrammarSlot getHead(Nonterminal nt) {
-		return nonterminalsMap.get(nt);
+	public NonterminalGrammarSlot getHead(Nonterminal start) {
+		if (start instanceof Start) {
+			Nonterminal nt = ((Start)start).getNonterminal();
+
+			if (layout == null) {
+				return nonterminalsMap.get(nt);
+			}
+			
+			Rule startRule = Rule.withHead(start)
+								 .addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
+			NonterminalGrammarSlot nonterminalGrammarSlot = getNonterminalGrammarSlot(start);
+			addRule(nonterminalGrammarSlot, startRule);
+			return nonterminalGrammarSlot;
+		}
+		
+		return nonterminalsMap.get(start);
 	}	
 	
 	public TerminalGrammarSlot getTerminal(RegularExpression regex) {

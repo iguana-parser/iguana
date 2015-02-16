@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Start;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -16,7 +17,7 @@ public class TestJava {
 	public void test1() {
 		Input input = Input.fromString("public class Test {}");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("CompilationUnit"));
+		ParseResult result = parser.parse(input, grammar, Start.from(Nonterminal.withName("CompilationUnit")));
 		System.out.println(result);
 	}
 }

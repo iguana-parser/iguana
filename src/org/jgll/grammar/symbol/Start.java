@@ -20,6 +20,10 @@ public class Start extends Nonterminal {
 		return builder(nonterminal);
 	}
 	
+	public Nonterminal getNonterminal() {
+		return nonterminal;
+	}
+	
 	public static Builder builder(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
