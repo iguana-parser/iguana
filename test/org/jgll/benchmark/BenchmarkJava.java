@@ -31,7 +31,9 @@ public class BenchmarkJava extends AbstractBenchmark {
 	public static void main(String[] args) throws IOException {
 
 		List<File> files = find(sourceDir, "java");
-
+		
+		System.out.println(BenchmarkUtil.header());
+		
 		for (File f : files) {
 			Input input = Input.fromFile(f);
 			

@@ -61,12 +61,12 @@ public class RegularExpressionCondition extends Condition {
 				
 			case NOT_PRECEDE:
 				return (input, node, i) -> {
-					return getBackwardsMatcher(r).match(input, i - 1) >= 0;
+					return getBackwardsMatcher(r).match(input, i) >= 0;
 				};
 				
 			case PRECEDE:
 				return (input, node, i) -> {
-					return getBackwardsMatcher(r).match(input, i - 1) == -1;
+					return getBackwardsMatcher(r).match(input, i) == -1;
 				};
 				
 			default:

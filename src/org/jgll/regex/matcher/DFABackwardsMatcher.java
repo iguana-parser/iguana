@@ -1,12 +1,13 @@
 package org.jgll.regex.matcher;
 
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.automaton.AutomatonOperations;
 import org.jgll.util.Input;
 
 public class DFABackwardsMatcher extends DFAMatcher {
 
 	public DFABackwardsMatcher(Automaton automaton) {
-		super(automaton.builder().reverse().build());
+		super(AutomatonOperations.reverse(automaton));
 	}
 
 	@Override

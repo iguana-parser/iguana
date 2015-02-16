@@ -14,6 +14,16 @@ import org.junit.Test;
 public class TestJava {
 
 	Grammar grammar = JavaCharacterLevel.grammar;
+
+	Configuration config = Configuration.DEFAULT;
+	
+	@Test
+	public void testKeywordExclusion() {
+		Input input = Input.fromString("boolean");
+		GLLParser parser = ParserFactory.getParser(config, input, grammar);
+		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Identifier"));
+		System.out.println(result);
+	}
 	
 	@Test
 	public void test1() throws IOException {

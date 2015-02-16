@@ -206,6 +206,45 @@ public class AutomatonOperations {
 		return minimize(automaton.getAlphabet(), automaton.getStates());
 	}
 	
+	
+	/**
+	 * Creates the reverse of the given automaton. A reverse automaton 
+	 * accept the reverse language accepted by the original automaton. To construct
+	 * a reverse automaton, all final states of the original automaton are becoming 
+	 * start states, transitions are reversed and the start state becomes the
+	 * only final state.
+	 * 
+	 */
+	public static Automaton reverse(Automaton automaton) {
+
+		// 1. Creating new states for each state of the original automaton
+		final Map<State, State> newStates = new HashMap<>();
+		
+		for (State s : automaton.getStates()) {
+			newStates.put(s, new State());
+		}
+		
+		// 2. Creating a new start state and adding epsilon transitions to the final
+		// states of the original automata
+		State startState = new State();
+		
+		for (State finalState : automaton.getFinalStates()) {
+			startState.addEpsilonTransition(newStates.get(finalState));
+		}
+		
+		// 3. Reversing the transitions
+		for (State state : automaton.getStates()) {
+			for (Transition t : state.getTransitions()) {
+				newStates.get(t.getDestination()).addTransition(new Transition(t.getRange(), newStates.get(state)));
+			}
+		}
+		
+		// 4. Making the start state final
+		newStates.get(automaton.getStartState()).setStateType(StateType.FINAL);
+		 
+		return Automaton.builder(startState).build();
+	}
+	
 	/**
 	 * 
 	 * Note: unreachable states are already removed as we gather the states
