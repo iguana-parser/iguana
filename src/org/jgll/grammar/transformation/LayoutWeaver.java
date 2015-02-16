@@ -16,10 +16,12 @@ public class LayoutWeaver implements GrammarTransformation {
 		
 		for (Rule rule : grammar.getRules()) {
 			
-			if (rule.size() == 0)
-				continue;
-			
 			Rule.Builder ruleBuilder = Rule.withHead(rule.getHead());
+
+			if (rule.size() == 0) {
+				builder.addRule(ruleBuilder.build());
+				continue;
+			}
 			
 			for (int i = 0; i < rule.size() - 1; i++) {
 				Symbol s = rule.symbolAt(i);
