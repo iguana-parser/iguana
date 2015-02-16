@@ -16,8 +16,6 @@ import java.util.stream.StreamSupport;
 import org.jgll.grammar.symbol.AbstractRegularExpression;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
@@ -190,12 +188,6 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	@Override
 	public boolean isTerminal() {
 		return isCharSequence();
-	}
-	
-	public Rule toRule() {
-		Rule.Builder builder = Rule.withHead(Nonterminal.withName(name));
-		symbols.forEach(s -> builder.addSymbol(s));
-		return builder.build();
 	}
 	
 	@Override
