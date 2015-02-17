@@ -1,9 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.jgll.grammar.condition.Condition;
 import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.generator.GeneratorUtil;
 
@@ -29,43 +25,13 @@ public class Code extends AbstractSymbol {
 	}
 
 	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-
-	@Override
-	public String getName() {
-		return null;
-	}
-
-	@Override
-	public Set<Condition> getPreConditions() {
-		return new HashSet<>();
-	}
-
-	@Override
-	public Set<Condition> getPostConditions() {
-		return new HashSet<>();
-	}
-
-	@Override
-	public Object getObject() {
-		return null;
-	}
-
-	@Override
-	public String getLabel() {
-		return null;
-	}
-
-	@Override
 	public SymbolBuilder<? extends Symbol> copyBuilder() {
 		return new Builder(this);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("%s do %s", symbol.toString(), GeneratorUtil.listToString(statements, ";"));
+		return String.format("%s do %s;", symbol.toString(), GeneratorUtil.listToString(statements, ";"));
 	}
 		
 	public static Builder builder(Symbol symbol, org.jgll.datadependent.ast.Statement... statements) {
