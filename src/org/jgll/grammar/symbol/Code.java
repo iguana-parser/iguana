@@ -25,7 +25,7 @@ public class Code extends AbstractSymbol {
 	}
 
 	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
+	public Builder copyBuilder() {
 		return new Builder(this);
 	}
 	
@@ -35,7 +35,6 @@ public class Code extends AbstractSymbol {
 	}
 		
 	public static Builder builder(Symbol symbol, org.jgll.datadependent.ast.Statement... statements) {
-		assert statements.length != 0;
 		return new Builder(symbol, statements);
 	}
 	
