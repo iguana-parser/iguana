@@ -25,7 +25,7 @@ public class JavaCharacterLevel {
 		Grammar.builder()
 		.setLayout(Nonterminal.builder("Layout").build())
 		// InputCharacter ::= UnicodeInputCharacter 
-		.addRule(Rule.withHead(Nonterminal.builder("InputCharacter").build()).addSymbol(Nonterminal.builder("UnicodeInputCharacter").addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(10).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
+		.addRule(Rule.withHead(Nonterminal.builder("InputCharacter").build()).addSymbol(Nonterminal.builder("UnicodeInputCharacter").addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Alt.builder(CharacterRange.builder(10, 10).build(), CharacterRange.builder(13, 13).build()).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// InputCharacter ::= \u0000 
 		.addRule(Rule.withHead(Nonterminal.builder("InputCharacter").build()).addSymbol(Character.builder(0).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// TypeName ::= QualifiedIdentifier 
@@ -194,8 +194,8 @@ public class JavaCharacterLevel {
 		.addRule(Rule.withHead(Nonterminal.builder("TypeArgumentsOrDiamond").build()).addSymbol(Nonterminal.builder("TypeArguments").build()).build())
 		// Backslash ::= \ 
 		.addRule(Rule.withHead(Nonterminal.builder("Backslash").build()).addSymbol(Character.builder(92).build()).setLayoutStrategy(NO_LAYOUT).build())
-		// Backslash ::= \ u+ (0 0 5) C 
-		.addRule(Rule.withHead(Nonterminal.builder("Backslash").build()).addSymbol(Character.builder(92).build()).addSymbol(Plus.builder(Character.builder(117).build()).build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(48).build(), Character.builder(48).build(), Character.builder(53).build()).build()).build()).addSymbol(Character.builder(67).build()).setLayoutStrategy(NO_LAYOUT).build())
+		// Backslash ::= \ u+ (0 0 5) (C | c) 
+		.addRule(Rule.withHead(Nonterminal.builder("Backslash").build()).addSymbol(Character.builder(92).build()).addSymbol(Plus.builder(Character.builder(117).build()).build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(48).build(), Character.builder(48).build(), Character.builder(53).build()).build()).build()).addSymbol(Alt.builder(CharacterRange.builder(67, 67).build(), CharacterRange.builder(99, 99).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// ArgumentList ::= Expression+ 
 		.addRule(Rule.withHead(Nonterminal.builder("ArgumentList").build()).addSymbol(Plus.builder(Nonterminal.builder("Expression").build()).addSeparators(Arrays.asList(Terminal.builder(Sequence.builder(Character.builder(44).build()).build()).build())).build()).build())
 		// BinaryNumeral ::= 0 b BinaryDigits 
@@ -295,7 +295,7 @@ public class JavaCharacterLevel {
 		// ForUpdate ::= StatementExpression+ 
 		.addRule(Rule.withHead(Nonterminal.builder("ForUpdate").build()).addSymbol(Plus.builder(Nonterminal.builder("StatementExpression").build()).addSeparators(Arrays.asList(Terminal.builder(Sequence.builder(Character.builder(44).build()).build()).build())).build()).build())
 		// NotStarNotSlash ::= InputCharacter 
-		.addRule(Rule.withHead(Nonterminal.builder("NotStarNotSlash").build()).addSymbol(Nonterminal.builder("InputCharacter").addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(42).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
+		.addRule(Rule.withHead(Nonterminal.builder("NotStarNotSlash").build()).addSymbol(Nonterminal.builder("InputCharacter").addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Alt.builder(CharacterRange.builder(42, 42).build(), CharacterRange.builder(47, 47).build()).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// NotStarNotSlash ::= LineTerminator 
 		.addRule(Rule.withHead(Nonterminal.builder("NotStarNotSlash").build()).addSymbol(Nonterminal.builder("LineTerminator").build()).setLayoutStrategy(NO_LAYOUT).build())
 		// ForStatement ::= (f o r) (() FormalParameter (:) Expression ()) Statement 
@@ -330,7 +330,7 @@ public class JavaCharacterLevel {
 		.addRule(Rule.withHead(Nonterminal.builder("ConstantModifier").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(112).build(), Character.builder(117).build(), Character.builder(98).build(), Character.builder(108).build(), Character.builder(105).build(), Character.builder(99).build()).build()).build()).build())
 		// ConstantModifier ::= (s t a t i c) 
 		.addRule(Rule.withHead(Nonterminal.builder("ConstantModifier").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(115).build(), Character.builder(116).build(), Character.builder(97).build(), Character.builder(116).build(), Character.builder(105).build(), Character.builder(99).build()).build()).build()).build())
-		// WhiteSpace ::= 
+		// WhiteSpace ::=  
 		.addRule(Rule.withHead(Nonterminal.builder("WhiteSpace").build()).addSymbol(Alt.builder(CharacterRange.builder(9, 10).build(), CharacterRange.builder(12, 13).build(), CharacterRange.builder(26, 26).build(), CharacterRange.builder(32, 32).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// TypeParameter ::= TypeVariable TypeBound? 
 		.addRule(Rule.withHead(Nonterminal.builder("TypeParameter").build()).addSymbol(Nonterminal.builder("TypeVariable").build()).addSymbol(org.jgll.regex.Opt.builder(Nonterminal.builder("TypeBound").build()).build()).build())
@@ -394,8 +394,8 @@ public class JavaCharacterLevel {
 		.addRule(Rule.withHead(Nonterminal.builder("ConstructorDeclaration").build()).addSymbol(Star.builder(Nonterminal.builder("ConstructorModifier").build()).build()).addSymbol(Nonterminal.builder("ConstructorDeclarator").build()).addSymbol(org.jgll.regex.Opt.builder(Nonterminal.builder("Throws").build()).build()).addSymbol(Nonterminal.builder("ConstructorBody").build()).build())
 		// LocalVariableDeclarationStatement ::= VariableModifier* Type VariableDeclarators (;) 
 		.addRule(Rule.withHead(Nonterminal.builder("LocalVariableDeclarationStatement").build()).addSymbol(Star.builder(Nonterminal.builder("VariableModifier").build()).build()).addSymbol(Nonterminal.builder("Type").build()).addSymbol(Nonterminal.builder("VariableDeclarators").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(59).build()).build()).build()).build())
-		// ExponentIndicator ::= E 
-		.addRule(Rule.withHead(Nonterminal.builder("ExponentIndicator").build()).addSymbol(Character.builder(69).build()).setLayoutStrategy(NO_LAYOUT).build())
+		// ExponentIndicator ::= (E | e) 
+		.addRule(Rule.withHead(Nonterminal.builder("ExponentIndicator").build()).addSymbol(Alt.builder(CharacterRange.builder(69, 69).build(), CharacterRange.builder(101, 101).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// RelationalExpression ::= ShiftExpression 
 		.addRule(Rule.withHead(Nonterminal.builder("RelationalExpression").build()).addSymbol(Nonterminal.builder("ShiftExpression").build()).build())
 		// RelationalExpression ::= RelationalExpression (< =) ShiftExpression 
@@ -505,7 +505,7 @@ public class JavaCharacterLevel {
 		// RawInputCharacter ::= (\u0001-[ | ]-\u10FFFF) 
 		.addRule(Rule.withHead(Nonterminal.builder("RawInputCharacter").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 91).build(), CharacterRange.builder(93, 1114111).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// RawInputCharacter ::= \ 
-		.addRule(Rule.withHead(Nonterminal.builder("RawInputCharacter").build()).addSymbol(Character.builder(92).addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Character.builder(92).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
+		.addRule(Rule.withHead(Nonterminal.builder("RawInputCharacter").build()).addSymbol(Character.builder(92).addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Alt.builder(CharacterRange.builder(92, 92).build(), CharacterRange.builder(117, 117).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// RawInputCharacter ::= \ \ 
 		.addRule(Rule.withHead(Nonterminal.builder("RawInputCharacter").build()).addSymbol(Character.builder(92).build()).addSymbol(Character.builder(92).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// TypeDeclaration ::= InterfaceDeclaration 
@@ -540,8 +540,8 @@ public class JavaCharacterLevel {
 		.addRule(Rule.withHead(Nonterminal.builder("StringLiteral").build()).addSymbol(Character.builder(34).build()).addSymbol(Star.builder(Nonterminal.builder("StringCharacter").build()).build()).addSymbol(Character.builder(34).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// EnumBodyDeclarations ::= (;) ClassBodyDeclaration* 
 		.addRule(Rule.withHead(Nonterminal.builder("EnumBodyDeclarations").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(59).build()).build()).build()).addSymbol(Star.builder(Nonterminal.builder("ClassBodyDeclaration").build()).build()).build())
-		// LineTerminator ::= \u000A 
-		.addRule(Rule.withHead(Nonterminal.builder("LineTerminator").build()).addSymbol(Character.builder(10).build()).setLayoutStrategy(NO_LAYOUT).build())
+		// LineTerminator ::=  
+		.addRule(Rule.withHead(Nonterminal.builder("LineTerminator").build()).addSymbol(Alt.builder(CharacterRange.builder(10, 10).build(), CharacterRange.builder(13, 13).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// ClassModifier ::= Annotation 
 		.addRule(Rule.withHead(Nonterminal.builder("ClassModifier").build()).addSymbol(Nonterminal.builder("Annotation").build()).build())
 		// ClassModifier ::= (p r o t e c t e d) 
@@ -653,7 +653,7 @@ public class JavaCharacterLevel {
 		// StringCharacter ::= EscapeSequence 
 		.addRule(Rule.withHead(Nonterminal.builder("StringCharacter").build()).addSymbol(Nonterminal.builder("EscapeSequence").build()).setLayoutStrategy(NO_LAYOUT).build())
 		// StringCharacter ::= InputCharacter 
-		.addRule(Rule.withHead(Nonterminal.builder("StringCharacter").build()).addSymbol(Nonterminal.builder("InputCharacter").addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(34).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
+		.addRule(Rule.withHead(Nonterminal.builder("StringCharacter").build()).addSymbol(Nonterminal.builder("InputCharacter").addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Alt.builder(CharacterRange.builder(34, 34).build(), CharacterRange.builder(92, 92).build()).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// EqualityExpression ::= RelationalExpression 
 		.addRule(Rule.withHead(Nonterminal.builder("EqualityExpression").build()).addSymbol(Nonterminal.builder("RelationalExpression").build()).build())
 		// EqualityExpression ::= EqualityExpression (! =) RelationalExpression 
@@ -668,16 +668,16 @@ public class JavaCharacterLevel {
 		.addRule(Rule.withHead(Nonterminal.builder("HexSignificand").build()).addSymbol(Character.builder(48).build()).addSymbol(Character.builder(88).build()).addSymbol(org.jgll.regex.Opt.builder(Nonterminal.builder("HexDigits").build()).build()).addSymbol(Character.builder(46).build()).addSymbol(Nonterminal.builder("HexDigits").build()).setLayoutStrategy(NO_LAYOUT).build())
 		// HexSignificand ::= HexNumeral . 
 		.addRule(Rule.withHead(Nonterminal.builder("HexSignificand").build()).addSymbol(Nonterminal.builder("HexNumeral").build()).addSymbol(Character.builder(46).build()).setLayoutStrategy(NO_LAYOUT).build())
-		// FloatTypeSuffix ::= D 
-		.addRule(Rule.withHead(Nonterminal.builder("FloatTypeSuffix").build()).addSymbol(Character.builder(68).build()).setLayoutStrategy(NO_LAYOUT).build())
+		// FloatTypeSuffix ::= (D | F | d | f) 
+		.addRule(Rule.withHead(Nonterminal.builder("FloatTypeSuffix").build()).addSymbol(Alt.builder(CharacterRange.builder(68, 68).build(), CharacterRange.builder(70, 70).build(), CharacterRange.builder(100, 100).build(), CharacterRange.builder(102, 102).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// BinaryIntegerLiteral ::= BinaryNumeral IntegerTypeSuffix? 
 		.addRule(Rule.withHead(Nonterminal.builder("BinaryIntegerLiteral").build()).addSymbol(Nonterminal.builder("BinaryNumeral").build()).addSymbol(org.jgll.regex.Opt.builder(Nonterminal.builder("IntegerTypeSuffix").build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// HexDigits ::= HexDigit HexDigitOrUnderscore* HexDigit 
 		.addRule(Rule.withHead(Nonterminal.builder("HexDigits").build()).addSymbol(Nonterminal.builder("HexDigit").build()).addSymbol(Star.builder(Nonterminal.builder("HexDigitOrUnderscore").build()).build()).addSymbol(Nonterminal.builder("HexDigit").build()).setLayoutStrategy(NO_LAYOUT).build())
 		// HexDigits ::= HexDigit 
 		.addRule(Rule.withHead(Nonterminal.builder("HexDigits").build()).addSymbol(Nonterminal.builder("HexDigit").build()).setLayoutStrategy(NO_LAYOUT).build())
-		// EscapeSequence ::= \ u+ (0 0 5) C \ u+ (0 0 5) C 
-		.addRule(Rule.withHead(Nonterminal.builder("EscapeSequence").build()).addSymbol(Character.builder(92).build()).addSymbol(Plus.builder(Character.builder(117).build()).build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(48).build(), Character.builder(48).build(), Character.builder(53).build()).build()).build()).addSymbol(Character.builder(67).build()).addSymbol(Character.builder(92).build()).addSymbol(Plus.builder(Character.builder(117).build()).build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(48).build(), Character.builder(48).build(), Character.builder(53).build()).build()).build()).addSymbol(Character.builder(67).build()).setLayoutStrategy(NO_LAYOUT).build())
+		// EscapeSequence ::= \ u+ (0 0 5) (C | c) \ u+ (0 0 5) (C | c) 
+		.addRule(Rule.withHead(Nonterminal.builder("EscapeSequence").build()).addSymbol(Character.builder(92).build()).addSymbol(Plus.builder(Character.builder(117).build()).build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(48).build(), Character.builder(48).build(), Character.builder(53).build()).build()).build()).addSymbol(Alt.builder(CharacterRange.builder(67, 67).build(), CharacterRange.builder(99, 99).build()).build()).addSymbol(Character.builder(92).build()).addSymbol(Plus.builder(Character.builder(117).build()).build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(48).build(), Character.builder(48).build(), Character.builder(53).build()).build()).build()).addSymbol(Alt.builder(CharacterRange.builder(67, 67).build(), CharacterRange.builder(99, 99).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// EscapeSequence ::= OctalEscape 
 		.addRule(Rule.withHead(Nonterminal.builder("EscapeSequence").build()).addSymbol(Nonterminal.builder("OctalEscape").build()).setLayoutStrategy(NO_LAYOUT).build())
 		// EscapeSequence ::= Backslash n 
@@ -694,8 +694,8 @@ public class JavaCharacterLevel {
 		.addRule(Rule.withHead(Nonterminal.builder("EscapeSequence").build()).addSymbol(Nonterminal.builder("Backslash").build()).addSymbol(Character.builder(114).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// EscapeSequence ::= Backslash b 
 		.addRule(Rule.withHead(Nonterminal.builder("EscapeSequence").build()).addSymbol(Nonterminal.builder("Backslash").build()).addSymbol(Character.builder(98).build()).setLayoutStrategy(NO_LAYOUT).build())
-		// Sign ::= + 
-		.addRule(Rule.withHead(Nonterminal.builder("Sign").build()).addSymbol(Character.builder(43).build()).setLayoutStrategy(NO_LAYOUT).build())
+		// Sign ::= (+ | -) 
+		.addRule(Rule.withHead(Nonterminal.builder("Sign").build()).addSymbol(Alt.builder(CharacterRange.builder(43, 43).build(), CharacterRange.builder(45, 45).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// InstanceInitializer ::= Block 
 		.addRule(Rule.withHead(Nonterminal.builder("InstanceInitializer").build()).addSymbol(Nonterminal.builder("Block").build()).build())
 		// MultiplicativeExpression ::= MultiplicativeExpression (%) UnaryExpression 
@@ -722,8 +722,8 @@ public class JavaCharacterLevel {
 		.addRule(Rule.withHead(Nonterminal.builder("TypeArgument").build()).addSymbol(Nonterminal.builder("Type").build()).build())
 		// VariableDeclarator ::= VariableDeclaratorId ((=) VariableInitializer)? 
 		.addRule(Rule.withHead(Nonterminal.builder("VariableDeclarator").build()).addSymbol(Nonterminal.builder("VariableDeclaratorId").build()).addSymbol(org.jgll.regex.Opt.builder(Sequence.builder(Terminal.builder(Sequence.builder(Character.builder(61).build()).build()).build(), Nonterminal.builder("VariableInitializer").build()).build()).build()).build())
-		// BinaryExponentIndicator ::= P 
-		.addRule(Rule.withHead(Nonterminal.builder("BinaryExponentIndicator").build()).addSymbol(Character.builder(80).build()).setLayoutStrategy(NO_LAYOUT).build())
+		// BinaryExponentIndicator ::= (P | p) 
+		.addRule(Rule.withHead(Nonterminal.builder("BinaryExponentIndicator").build()).addSymbol(Alt.builder(CharacterRange.builder(80, 80).build(), CharacterRange.builder(112, 112).build()).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// Type ::= ReferenceType 
 		.addRule(Rule.withHead(Nonterminal.builder("Type").build()).addSymbol(Nonterminal.builder("ReferenceType").build()).build())
 		// Type ::= PrimitiveType 
@@ -739,7 +739,7 @@ public class JavaCharacterLevel {
 		// HexNumeral ::= 0 x HexDigits 
 		.addRule(Rule.withHead(Nonterminal.builder("HexNumeral").build()).addSymbol(Character.builder(48).build()).addSymbol(Character.builder(120).build()).addSymbol(Nonterminal.builder("HexDigits").build()).setLayoutStrategy(NO_LAYOUT).build())
 		// Layout ::= (WhiteSpace | Comment)* 
-		.addRule(Rule.withHead(Nonterminal.builder("Layout").build()).addSymbol(Star.builder(Alt.builder(Nonterminal.builder("WhiteSpace").build(), Nonterminal.builder("Comment").build()).build()).addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Terminal.builder(Sequence.builder(Character.builder(47).build(), Character.builder(42).build()).build()).build()), new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Terminal.builder(Sequence.builder(Character.builder(47).build(), Character.builder(47).build()).build()).build()), new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Alt.builder(CharacterRange.builder(9, 10).build(), CharacterRange.builder(12, 13).build(), CharacterRange.builder(32, 32).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
+		.addRule(Rule.withHead(Nonterminal.builder("Layout").build()).addSymbol(Star.builder(Alt.builder(Nonterminal.builder("WhiteSpace").build(), Nonterminal.builder("Comment").build()).build()).addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Alt.builder(CharacterRange.builder(9, 10).build(), CharacterRange.builder(12, 13).build(), CharacterRange.builder(32, 32).build()).build()), new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Terminal.builder(Sequence.builder(Character.builder(47).build(), Character.builder(47).build()).build()).build()), new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Terminal.builder(Sequence.builder(Character.builder(47).build(), Character.builder(42).build()).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// ArrayAccess ::= PrimaryNoNewArray ([) Expression (]) 
 		.addRule(Rule.withHead(Nonterminal.builder("ArrayAccess").build()).addSymbol(Nonterminal.builder("PrimaryNoNewArray").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(91).build()).build()).build()).addSymbol(Nonterminal.builder("Expression").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(93).build()).build()).build()).build())
 		// ArrayAccess ::= ExpressionName ([) Expression (]) 
@@ -895,7 +895,7 @@ public class JavaCharacterLevel {
 		// PostfixExpression ::= ExpressionName 
 		.addRule(Rule.withHead(Nonterminal.builder("PostfixExpression").build()).addSymbol(Nonterminal.builder("ExpressionName").build()).build())
 		// SingleCharacter ::= InputCharacter 
-		.addRule(Rule.withHead(Nonterminal.builder("SingleCharacter").build()).addSymbol(Nonterminal.builder("InputCharacter").addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(39).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
+		.addRule(Rule.withHead(Nonterminal.builder("SingleCharacter").build()).addSymbol(Nonterminal.builder("InputCharacter").addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Alt.builder(CharacterRange.builder(39, 39).build(), CharacterRange.builder(92, 92).build()).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).build())
 		// InterfaceMemberDeclaration ::= InterfaceDeclaration 
 		.addRule(Rule.withHead(Nonterminal.builder("InterfaceMemberDeclaration").build()).addSymbol(Nonterminal.builder("InterfaceDeclaration").build()).build())
 		// InterfaceMemberDeclaration ::= ConstantDeclaration 

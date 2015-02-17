@@ -160,7 +160,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		if (!allRegularExpression || symbols.size() == 0)
 			return false;
 		
-		return symbols.stream().allMatch(s -> ((RegularExpression) s).isSingleChar());
+		return symbols.size() == 1 && ((RegularExpression)symbols.get(0)).isSingleChar();
 	}
 	
 	@Override

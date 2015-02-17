@@ -64,7 +64,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			builder.addSymbol(rewrite(s, newRules, rule.getLayout(), rule.getLayoutStrategy()));
 		}
 		
-		return builder.setLayout(rule.getLayout()).build();
+		return builder.setLayout(rule.getLayout()).setLayoutStrategy(rule.getLayoutStrategy()).build();
 	}
 	
 	private Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {

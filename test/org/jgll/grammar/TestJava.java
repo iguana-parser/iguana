@@ -1,5 +1,7 @@
 package org.jgll.grammar;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 
 import org.jgll.grammar.symbol.Nonterminal;
@@ -22,7 +24,7 @@ public class TestJava {
 		Input input = Input.fromString("boolean");
 		GLLParser parser = ParserFactory.getParser(config, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Identifier"));
-		System.out.println(result);
+		assertTrue(result.isParseError());
 	}
 	
 	@Test
