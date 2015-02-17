@@ -27,8 +27,6 @@ import org.jgll.grammar.symbol.Position;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.transformation.EBNFToBNF;
-import org.jgll.grammar.transformation.LayoutWeaver;
 import org.jgll.parser.gss.lookup.ArrayNodeLookup;
 import org.jgll.parser.gss.lookup.DummyNodeLookup;
 import org.jgll.parser.gss.lookup.GSSNodeLookup;
@@ -68,12 +66,8 @@ public class GrammarGraph {
 		terminalsMap.put(Epsilon.getInstance(), epsilon);
 		names.put(Epsilon.getInstance().getName(), epsilon);
 		
-		EBNFToBNF ebnfToBNF = new EBNFToBNF();
-		Grammar bnfGrammar = ebnfToBNF.transform(grammar);
-		bnfGrammar = new LayoutWeaver().transform(bnfGrammar);
-
-		for (Nonterminal nonterminal : bnfGrammar.getNonterminals()) {
-			convert(nonterminal, bnfGrammar);
+		for (Nonterminal nonterminal : grammar.getNonterminals()) {
+			convert(nonterminal, grammar);
 		}
 	}
 	
