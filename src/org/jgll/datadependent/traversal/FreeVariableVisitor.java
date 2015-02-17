@@ -24,14 +24,21 @@ import org.jgll.grammar.condition.ContextFreeCondition;
 import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.condition.PositionalCondition;
 import org.jgll.grammar.condition.RegularExpressionCondition;
+import org.jgll.grammar.symbol.Align;
+import org.jgll.grammar.symbol.Block;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Code;
+import org.jgll.grammar.symbol.Conditional;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.IfThen;
+import org.jgll.grammar.symbol.IfThenElse;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Offside;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
+import org.jgll.grammar.symbol.While;
 import org.jgll.regex.Alt;
 import org.jgll.regex.Opt;
 import org.jgll.regex.Plus;
@@ -192,6 +199,18 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		statement.getExpression().accept(this);
 		return null;
 	}
+	
+	@Override
+	public Void visit(Align symbol) {
+		// FIXME: EBNF
+		return null;
+	}
+
+	@Override
+	public Void visit(Block symbol) {
+		// FIXME: EBNF
+		return null;
+	}
 
 	@Override
 	public Void visit(Character symbol) {
@@ -221,6 +240,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		return null;
 	}
+	
+	@Override
+	public Void visit(Conditional symbol) {
+		// FIXME: EBNF
+		return null;
+	}
 
 	@Override
 	public Void visit(EOF symbol) {
@@ -229,6 +254,18 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Epsilon symbol) {
+		return null;
+	}
+	
+	@Override
+	public Void visit(IfThen symbol) {
+		// FIXME: EBNF
+		return null;
+	}
+
+	@Override
+	public Void visit(IfThenElse symbol) {
+		// FIXME: EBNF
 		return null;
 	}
 
@@ -265,6 +302,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 
 	@Override
+	public Void visit(Offside symbol) {
+		// FIXME: EBNF
+		return null;
+	}
+	
+	@Override
 	public Void visit(Terminal symbol) {
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
@@ -289,6 +332,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		symbol.setEnv(env);
 		
+		return null;
+	}
+	
+	@Override
+	public Void visit(While symbol) {
+		// FIXME: EBNF
 		return null;
 	}
 

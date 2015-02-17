@@ -54,8 +54,7 @@ public class Offside extends AbstractSymbol {
 
 	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
-		// FIXME:
-		return null;
+		return visitor.visit(this);
 	}
 
 }

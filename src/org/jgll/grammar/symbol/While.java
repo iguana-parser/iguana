@@ -60,8 +60,7 @@ public class While extends AbstractSymbol {
 
 	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
-		// FIXME:
-		return null;
+		return visitor.visit(this);
 	}
 
 }
