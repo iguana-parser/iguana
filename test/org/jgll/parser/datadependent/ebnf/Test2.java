@@ -51,8 +51,8 @@ public class Test2 {
 		Rule r1 = Rule.withHead(X)
 					.addSymbol(Nonterminal.builder(A).build())
 					.addSymbol(Star.builder(Alt.builder(Nonterminal.builder(B).setLabel("b").build(),
-														Sequence.builder(Nonterminal.builder(C).setLabel("c").build(),
-																         Code.code(stat(println(lExt("s")))),
+														Sequence.builder(Code.code(Nonterminal.builder(C).setLabel("c").build(),
+																				   stat(println(lExt("s")))),
 																         Nonterminal.builder(D).setLabel("d").build()).build()).build())
 									.setLabel("s").build()).build();
 		
@@ -69,18 +69,20 @@ public class Test2 {
 	public void test() {
 		System.out.println(grammar);
 		
-		Input input = Input.fromString("acdbcd");
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+// 		FIXME: Graph builder for Code symbol + EBNF translation
 		
-		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-		
-		if (result.isParseSuccess()) {
-			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), input);
-		}
+//		Input input = Input.fromString("acdbcd");
+//		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+//		
+//		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+//		
+//		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+//		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+//		
+//		if (result.isParseSuccess()) {
+//			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
+//					result.asParseSuccess().getRoot(), input);
+//		}
 		
 	}
 

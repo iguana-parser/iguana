@@ -47,11 +47,12 @@ public class Test4 {
 		
 		Rule r1 = Rule.withHead(X)
 					.addSymbol(Nonterminal.builder(A).setLabel("a").build())
-					.addSymbol(Star.builder(Sequence.builder(Nonterminal.builder(B)
-																.addPreCondition(predicate(equal(rExt("a"), lExt("b")))).build(),
-															 Code.code(stat(println(lExt("b")))),
-															 Nonterminal.builder(C).setLabel("b").build(),
-															 Code.code(stat(println(var("b"))))).build())
+					.addSymbol(Star.builder(Sequence.builder(Code.code(Nonterminal.builder(B)
+																			.addPreCondition(predicate(equal(rExt("a"), lExt("b")))).build(),
+																	   stat(println(lExt("b")))),
+															 
+															 Code.code(Nonterminal.builder(C).setLabel("b").build(),
+																	 stat(println(var("b"))))).build())
 									.setLabel("b").build()).build();
 		
 		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
@@ -66,18 +67,20 @@ public class Test4 {
 	public void test() {
 		System.out.println(grammar);
 		
-		Input input = Input.fromString("abcbcbc");
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+// 		FIXME: Graph builder for Code symbol + EBNF translation
 		
-		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-		
-		if (result.isParseSuccess()) {
-			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), input);
-		}
+//		Input input = Input.fromString("abcbcbc");
+//		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+//		
+//		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+//		
+//		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+//		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+//		
+//		if (result.isParseSuccess()) {
+//			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
+//					result.asParseSuccess().getRoot(), input);
+//		}
 		
 	}
 

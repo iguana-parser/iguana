@@ -46,8 +46,8 @@ public class Test1 {
 		Rule r0 = Rule.withHead(X).addSymbol(Nonterminal.builder(S).apply(integer(1), integer(2)).build()).build();
 		
 		Rule r1 = Rule.withHead(S)
-					.addSymbol(Nonterminal.builder(A).setLabel("l").setVariable("x").build())
-					.addSymbol(Code.code(stat(println(var("l"), var("a"), var("b")))))
+					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l").setVariable("x").build(), 
+											stat(println(var("l"), var("a"), var("b")))))
 					.addSymbol(B).build();
 		
 		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
@@ -61,18 +61,20 @@ public class Test1 {
 	public void test() {
 		System.out.println(grammar);
 		
-		Input input = Input.fromString("ab");
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+// 		FIXME: Graph builder for Code symbol
 		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-		
-		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		if (result.isParseSuccess()) {
-			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), input);
-		}
+//		Input input = Input.fromString("ab");
+//		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+//		
+//		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+//		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+//		
+//		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+//		
+//		if (result.isParseSuccess()) {
+//			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
+//					result.asParseSuccess().getRoot(), input);
+//		}
 		
 	}
 
