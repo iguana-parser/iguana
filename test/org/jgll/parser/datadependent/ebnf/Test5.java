@@ -6,7 +6,7 @@ import static org.jgll.grammar.condition.DataDependentCondition.predicate;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -49,9 +49,9 @@ public class Test5 {
 					.addSymbol(Nonterminal.builder(A).setLabel("a").build())
 					.addSymbol(Star.builder(Sequence.builder(Nonterminal.builder(B).setLabel("b")
 																.addPreCondition(predicate(greaterEq(lExt("b"), rExt("a")))).build(),
-															 CodeBlock.code(stat(println(lExt("b")))),
+															 Code.code(stat(println(lExt("b")))),
 															 Nonterminal.builder(C).setLabel("c").build(),
-															 CodeBlock.code(stat(println(var("c"))))).build())
+															 Code.code(stat(println(var("c"))))).build())
 									.setLabel("b").build()).build();
 		
 		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();

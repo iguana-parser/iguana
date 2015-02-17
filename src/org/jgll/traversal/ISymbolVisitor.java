@@ -1,7 +1,7 @@
 package org.jgll.traversal;
 
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -19,7 +19,7 @@ public interface ISymbolVisitor<T> {
 	
 	public T visit(CharacterRange symbol);
 	
-	public T visit(CodeBlock symbol);
+	public T visit(Code symbol);
 	
 	public T visit(EOF symbol);
 	

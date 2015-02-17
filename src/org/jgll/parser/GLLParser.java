@@ -12,7 +12,7 @@ import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.GSSNodeData;
@@ -72,7 +72,7 @@ public interface GLLParser {
 	 * Data-dependent GLL parsing
 	 * 
 	 */
-	public Object evaluate(CodeBlock code, Environment env);
+	public Object evaluate(Code code, Environment env);
 	
 	public Object evaluate(DataDependentCondition condition, Environment env);
 	

@@ -26,7 +26,7 @@ import org.jgll.grammar.condition.PositionalCondition;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -204,7 +204,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 
 	@Override
-	public Void visit(CodeBlock symbol) {
+	public Void visit(Code symbol) {
 		
 		assert symbol.getPreConditions().isEmpty();
 		assert symbol.getPostConditions().isEmpty();

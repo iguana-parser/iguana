@@ -17,7 +17,7 @@ import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
@@ -338,7 +338,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public Object evaluate(CodeBlock code, Environment env) {
+	public Object evaluate(Code code, Environment env) {
 		Statement[] statements = code.getStatements();
 		
 		if (statements.length == 0) return null;

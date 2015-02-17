@@ -8,18 +8,18 @@ import org.jgll.grammar.condition.Condition;
 import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.generator.GeneratorUtil;
 
-public class CodeBlock extends AbstractAttrs implements Symbol {
+public class Code extends AbstractAttrs implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final org.jgll.datadependent.ast.Statement[] statements;
 	
-	CodeBlock(org.jgll.datadependent.ast.Statement[] statements) {
+	Code(org.jgll.datadependent.ast.Statement[] statements) {
 		this.statements = statements;
 	}
 	
-	public static CodeBlock code(org.jgll.datadependent.ast.Statement... statements) {
-		return new CodeBlock(statements);
+	public static Code code(org.jgll.datadependent.ast.Statement... statements) {
+		return new Code(statements);
 	}
 	
 	public  org.jgll.datadependent.ast.Statement[] getStatements() {

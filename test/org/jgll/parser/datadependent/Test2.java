@@ -9,7 +9,7 @@ import static org.jgll.datadependent.ast.AST.var;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -59,13 +59,13 @@ public class Test2 {
 		
 		Rule r1_1 = Rule.withHead(S)
 					.addSymbol(Nonterminal.builder(A).setLabel("l").setVariable("x").build())
-					.addSymbol(CodeBlock.code(stat(println(string("PRINT1: "), var("l"), var("a"), var("b")))))
+					.addSymbol(Code.code(stat(println(string("PRINT1: "), var("l"), var("a"), var("b")))))
 					.addSymbol(B).build();
 		
 		Rule r1_2 = Rule.withHead(S)
 				.addSymbol(Nonterminal.builder(C).setLabel("l1").build())
 				.addSymbol(Nonterminal.builder(A).setLabel("l2").build())
-				.addSymbol(CodeBlock.code(stat(println(string("PRINT2: "), var("l1"), var("l2"), var("a"), var("b")))))
+				.addSymbol(Code.code(stat(println(string("PRINT2: "), var("l1"), var("l2"), var("a"), var("b")))))
 				.addSymbol(D).build();
 		
 		Rule r2_1 = Rule.withHead(A).addSymbol(Character.from('a')).addSymbol(Character.from('a')).build();

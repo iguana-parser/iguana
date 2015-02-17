@@ -4,7 +4,7 @@ import static org.jgll.datadependent.ast.AST.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Rule;
@@ -47,7 +47,7 @@ public class Test1 {
 		
 		Rule r1 = Rule.withHead(S)
 					.addSymbol(Nonterminal.builder(A).setLabel("l").setVariable("x").build())
-					.addSymbol(CodeBlock.code(stat(println(var("l"), var("a"), var("b")))))
+					.addSymbol(Code.code(stat(println(var("l"), var("a"), var("b")))))
 					.addSymbol(B).build();
 		
 		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();

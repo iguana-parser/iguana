@@ -5,7 +5,7 @@ import static org.jgll.datadependent.ast.AST.*;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -52,7 +52,7 @@ public class Test2 {
 					.addSymbol(Nonterminal.builder(A).build())
 					.addSymbol(Star.builder(Alt.builder(Nonterminal.builder(B).setLabel("b").build(),
 														Sequence.builder(Nonterminal.builder(C).setLabel("c").build(),
-																         CodeBlock.code(stat(println(lExt("s")))),
+																         Code.code(stat(println(lExt("s")))),
 																         Nonterminal.builder(D).setLabel("d").build()).build()).build())
 									.setLabel("s").build()).build();
 		

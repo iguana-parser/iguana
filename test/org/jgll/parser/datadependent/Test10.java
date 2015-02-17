@@ -7,7 +7,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CodeBlock;
+import org.jgll.grammar.symbol.Code;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.GLLParser;
@@ -56,10 +56,10 @@ public class Test10 {
 		Rule r1 = Rule.withHead(S)
 					.addSymbol(Nonterminal.builder(A).setLabel("a")
 							.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build())
-					.addSymbol(CodeBlock.code(stat(println(rExt("a"), indent(rExt("a"))))))
+					.addSymbol(Code.code(stat(println(rExt("a"), indent(rExt("a"))))))
 					.addSymbol(Nonterminal.builder(B).setLabel("b")
 							.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build())
-					.addSymbol(CodeBlock.code(stat(println(rExt("b"), indent(rExt("b"))))))
+					.addSymbol(Code.code(stat(println(rExt("b"), indent(rExt("b"))))))
 					
 					.setLayout(NoNL).build();
 		
