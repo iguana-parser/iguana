@@ -8,16 +8,16 @@ public class IfThen extends AbstractSymbol {
 	private static final long serialVersionUID = 1L;
 	
 	private final Expression expression;
-	private final Symbol symbol;
+	private final Symbol thenPart;
 
 	IfThen(Builder builder) {
 		super(builder);
 		this.expression = builder.expression;
-		this.symbol = builder.symbol;
+		this.thenPart = builder.thenPart;
 	}
 	
-	public static IfThen ifThen(Expression expression, Symbol symbol) {
-		return builder(expression, symbol).build();
+	public static IfThen ifThen(Expression expression, Symbol thenPart) {
+		return builder(expression, thenPart).build();
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class IfThen extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return String.format("if (%s) %s", expression.toString(), symbol.toString());
+		return String.format("if (%s) %s", expression.toString(), thenPart.toString());
 	}
 	
 	public static Builder builder(Expression expression, Symbol symbol) {
@@ -37,18 +37,18 @@ public class IfThen extends AbstractSymbol {
 	public static class Builder extends SymbolBuilder<IfThen> {
 		
 		private final Expression expression;
-		private final Symbol symbol;
+		private final Symbol thenPart;
 
 		public Builder(IfThen ifThen) {
 			super(ifThen);
 			this.expression = ifThen.expression;
-			this.symbol = ifThen.symbol;
+			this.thenPart = ifThen.thenPart;
 		}
 		
-		public Builder(Expression expression, Symbol symbol) {
-			super(String.format("if (%s) %s", expression.toString(), symbol.toString()));
+		public Builder(Expression expression, Symbol thenPart) {
+			super(String.format("if (%s) %s", expression.toString(), thenPart.toString()));
 			this.expression = expression;
-			this.symbol = symbol;
+			this.thenPart = thenPart;
 		}
 
 		@Override
