@@ -12,6 +12,22 @@ import org.jgll.util.generator.ConstructorCode;
  * 
  * 
  * @author Ali Afroozeh
+ * @author Anastasia Izmaylova
+ * 
+ * Symbol ::= Label ':' Symbol
+ *          | Nonterminal '(' {Expression ','}+ ')'
+ *          
+ *          | ...
+ *          
+ *          | '{' Symbol+ '}'
+ *          > "align" Symbol
+ *          | "offside" Symbol 
+ *          > Symbol "do" Statement
+ *          | Symbol "when" Expression
+ *          > "if" '(' Expression ')' Symbol
+ *          | "if" '(' Expression ')' Symbol "else" Symbol
+ *          | "while" '(' Expression ')' Symbol
+ *          
  *
  */
 public interface Symbol extends ConstructorCode, Serializable, Attr {
