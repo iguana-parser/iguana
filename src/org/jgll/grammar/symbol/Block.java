@@ -9,9 +9,13 @@ public class Block extends AbstractSymbol {
 	
 	private final Symbol[] symbols;
 
-	public Block(Builder builder) {
+	Block(Builder builder) {
 		super(builder);
 		this.symbols = builder.symbols;
+	}
+	
+	public static Block block(Symbol... symbols) {
+		return builder(symbols).build();
 	}
 
 	@Override
