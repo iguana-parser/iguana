@@ -77,28 +77,35 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Name expression) {
-		if (!expression.getEnv().contains(expression.getName())) {
-			freeVariables.add(expression.getName());
-		} 
+		java.lang.String name = expression.getName();
+		
+		if (!expression.getEnv().contains(name)) {
+			freeVariables.add(name);
+		}
+		
 		return null;
 	}
 
 	@Override
 	public Void visit(Call expression) {
+		
 		for (org.jgll.datadependent.ast.Expression argument : expression.getArguments()) {
 			argument.setEnv(expression.getEnv());
 			argument.accept(this);
 		}
+		
 		return null;
 	}
 
 	@Override
 	public Void visit(Assignment expression) {
-		if (!expression.getEnv().contains(expression.getId())) {
-			freeVariables.add(expression.getId());
-		}
 		
+		java.lang.String id = expression.getId();
 		org.jgll.datadependent.ast.Expression exp = expression.getExpression();
+		
+		if (!expression.getEnv().contains(id)) {
+			freeVariables.add(id);
+		}
 		
 		exp.setEnv(expression.getEnv());
 		exp.accept(this);
@@ -108,67 +115,93 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Less expression) {
-		expression.getLhs().setEnv(expression.getEnv());
-		expression.getLhs().accept(this);
 		
-		expression.getRhs().setEnv(expression.getEnv());
-		expression.getRhs().accept(this);
+		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		
+		lhs.setEnv(expression.getEnv());
+		lhs.accept(this);
+		
+		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		
+		rhs.setEnv(expression.getEnv());
+		rhs.accept(this);
 		
 		return null;
 	}
 
 	@Override
 	public Void visit(Greater expression) {
-		expression.getLhs().setEnv(expression.getEnv());
-		expression.getLhs().accept(this);
 		
-		expression.getRhs().setEnv(expression.getEnv());
-		expression.getRhs().accept(this);
+		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
 		
-		return null;
-	}
-
-	@Override
-	public Void visit(GreaterThanEqual expression) {		
-		expression.getLhs().setEnv(expression.getEnv());
-		expression.getLhs().accept(this);
+		lhs.setEnv(expression.getEnv());
+		lhs.accept(this);
 		
-		expression.getRhs().setEnv(expression.getEnv());
-		expression.getRhs().accept(this);
+		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		
+		rhs.setEnv(expression.getEnv());
+		rhs.accept(this);
 		
 		return null;
 	}
 
 	@Override
-	public Void visit(Equal expression) {	
-		expression.getLhs().setEnv(expression.getEnv());
-		expression.getLhs().accept(this);
+	public Void visit(GreaterThanEqual expression) {	
 		
-		expression.getRhs().setEnv(expression.getEnv());
-		expression.getRhs().accept(this);
+		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		
+		lhs.setEnv(expression.getEnv());
+		lhs.accept(this);
+		
+		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		
+		rhs.setEnv(expression.getEnv());
+		rhs.accept(this);
+		
+		return null;
+	}
+
+	@Override
+	public Void visit(Equal expression) {
+		
+		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		
+		lhs.setEnv(expression.getEnv());
+		lhs.accept(this);
+		
+		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		
+		rhs.setEnv(expression.getEnv());
+		rhs.accept(this);
 		
 		return null;
 	}
 
 	@Override
 	public Void visit(LeftExtent expression) {
-		java.lang.String variable = java.lang.String.format(org.jgll.datadependent.ast.Expression.LeftExtent.format, expression.getLabel());
-		if (!expression.getEnv().contains(variable)) {
-			freeVariables.add(variable);
+		
+		java.lang.String name = java.lang.String.format(org.jgll.datadependent.ast.Expression.LeftExtent.format, expression.getLabel());
+		
+		if (!expression.getEnv().contains(name)) {
+			freeVariables.add(name);
 		}
 		return null;
 	}
 
 	@Override
 	public Void visit(RightExtent expression) {
-		if (!expression.getEnv().contains(expression.getLabel())) {
-			freeVariables.add(expression.getLabel());
+		
+		java.lang.String label = expression.getLabel();
+		
+		if (!expression.getEnv().contains(label)) {
+			freeVariables.add(label);
 		}
 		return null;
 	}
 
 	@Override
 	public Void visit(VariableDeclaration declaration) {
+		
 		org.jgll.datadependent.ast.Expression expression = declaration.getExpression();
 		
 		if (expression != null) {
@@ -183,6 +216,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(org.jgll.datadependent.ast.Statement.VariableDeclaration statement) {
+		
 		VariableDeclaration declaration = statement.getDeclaration();
 		
 		declaration.setEnv(statement.getEnv());
@@ -195,8 +229,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Expression statement) {
-		statement.getExpression().setEnv(statement.getEnv());
-		statement.getExpression().accept(this);
+		
+		org.jgll.datadependent.ast.Expression expression = statement.getExpression();
+		
+		expression.setEnv(statement.getEnv());
+		expression.accept(this);
+		
 		return null;
 	}
 	
@@ -225,6 +263,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Code symbol) {
 		
+		// FIXME: EBNF
 		assert symbol.getPreConditions().isEmpty();
 		assert symbol.getPostConditions().isEmpty();
 		
