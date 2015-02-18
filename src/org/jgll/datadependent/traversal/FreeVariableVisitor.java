@@ -47,6 +47,7 @@ import org.jgll.regex.Star;
 import org.jgll.traversal.IConditionVisitor;
 import org.jgll.traversal.ISymbolVisitor;
 
+
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
 	
 	private final Set<java.lang.String> freeVariables;
@@ -327,13 +328,35 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	
 	@Override
 	public Void visit(IfThen symbol) {
-		// FIXME: EBNF
+		
+		org.jgll.datadependent.ast.Expression expression = symbol.getExpression();
+		Symbol thenPart = symbol.getThenPart();
+		
+		expression.setEnv(symbol.getEnv());
+		expression.accept(this);
+		
+		thenPart.setEnv(symbol.getEnv());
+		visitSymbol(thenPart);
+		
 		return null;
 	}
 
 	@Override
 	public Void visit(IfThenElse symbol) {
-		// FIXME: EBNF
+		
+		org.jgll.datadependent.ast.Expression expression = symbol.getExpression();
+		Symbol thenPart = symbol.getThenPart();
+		Symbol elsePart = symbol.getElsePart();
+		
+		expression.setEnv(symbol.getEnv());
+		expression.accept(this);
+		
+		thenPart.setEnv(symbol.getEnv());
+		visitSymbol(thenPart);
+		
+		elsePart.setEnv(symbol.getEnv());
+		visitSymbol(thenPart);
+		
 		return null;
 	}
 

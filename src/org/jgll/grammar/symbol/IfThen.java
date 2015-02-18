@@ -19,6 +19,14 @@ public class IfThen extends AbstractSymbol {
 	public static IfThen ifThen(Expression expression, Symbol thenPart) {
 		return builder(expression, thenPart).build();
 	}
+	
+	public Expression getExpression() {
+		return expression;
+	}
+	
+	public Symbol getThenPart() {
+		return thenPart;
+	}
 
 	@Override
 	public Builder copyBuilder() {

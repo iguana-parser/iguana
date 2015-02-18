@@ -21,6 +21,18 @@ public class IfThenElse extends AbstractSymbol {
 	public static IfThenElse ifThenElse(Expression expression, Symbol thenPart, Symbol elsePart) {
 		return builder(expression, thenPart, elsePart).build();
 	}
+	
+	public Expression getExpression() {
+		return expression;
+	}
+	
+	public Symbol getThenPart() {
+		return thenPart;
+	}
+	
+	public Symbol getElsePart() {
+		return elsePart;
+	}
 
 	@Override
 	public Builder copyBuilder() {
