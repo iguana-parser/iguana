@@ -6,11 +6,11 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 
-public class CodeBlockTransition extends AbstractTransition {
+public class CodeBlock extends AbstractTransition {
 	
 	private final Code code;
 
-	public CodeBlockTransition(Code code, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+	public CodeBlock(Code code, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
 		this.code = code;
 	}

@@ -15,7 +15,7 @@ import org.jgll.grammar.exception.IncorrectNumberOfArgumentsException;
 import org.jgll.grammar.slot.AbstractTerminalTransition;
 import org.jgll.grammar.slot.BeforeLastTerminalTransition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.CodeBlockTransition;
+import org.jgll.grammar.slot.CodeBlock;
 import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.EpsilonGrammarSlot;
 import org.jgll.grammar.slot.FirstAndLastTerminalTransition;
@@ -166,7 +166,7 @@ public class GrammarGraph implements Serializable {
 			else if (symbol instanceof Code) {
 				Code code = (Code) symbol;
 				BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new CodeBlockTransition(code, currentSlot, slot));
+				currentSlot.addTransition(new CodeBlock(code, currentSlot, slot));
 				currentSlot = slot;
 			}
 
