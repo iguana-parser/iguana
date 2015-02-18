@@ -240,13 +240,27 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	
 	@Override
 	public Void visit(Align symbol) {
-		// FIXME: EBNF
+		Symbol sym = symbol.getSymbol();
+		
+		sym.setEnv(symbol.getEnv());
+		visitSymbol(sym);
+		
+		symbol.setEnv(sym.getEnv());
+		
 		return null;
 	}
 
 	@Override
 	public Void visit(Block symbol) {
-		// FIXME: EBNF
+		
+		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		
+		for (Symbol sym : symbol.getSymbols()) {
+			sym.setEnv(env);
+			visitSymbol(sym);
+			env = sym.getEnv();
+		}
+		
 		return null;
 	}
 
@@ -263,11 +277,13 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Code symbol) {
 		
-		// FIXME: EBNF
-		assert symbol.getPreConditions().isEmpty();
-		assert symbol.getPostConditions().isEmpty();
-		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		
+		Symbol sym = symbol.getSymbol();
+		
+		sym.setEnv(env);
+		visitSymbol(sym);
+		env = sym.getEnv();
 		
 		for (Statement statement : symbol.getStatements()) {
 			statement.setEnv(env);
@@ -282,7 +298,20 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	
 	@Override
 	public Void visit(Conditional symbol) {
-		// FIXME: EBNF
+		
+		Symbol sym = symbol.getSymbol();
+		org.jgll.datadependent.ast.Expression expression = symbol.getExpression();
+		
+		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		
+		sym.setEnv(env);
+		visitSymbol(sym);
+		
+		env = sym.getEnv();
+		
+		expression.setEnv(env);
+		expression.accept(this);
+		
 		return null;
 	}
 
@@ -313,26 +342,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
-		}
-		
-		for (Condition condition : symbol.getPreConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(symbol.getLabel());
-		}
-		
 		if (symbol.getVariable() != null) {
 			env = env.__insert(symbol.getVariable());
-		}
-		
-		for (Condition condition : symbol.getPostConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
 		}
 		
 		symbol.setEnv(env);
@@ -348,29 +359,6 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	
 	@Override
 	public Void visit(Terminal symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
-		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
-		}
-		
-		for (Condition condition : symbol.getPreConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(symbol.getLabel());
-		}
-		
-		for (Condition condition : symbol.getPostConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
-		symbol.setEnv(env);
-		
 		return null;
 	}
 	
@@ -385,32 +373,10 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
-		}
-		
-		for (Condition condition : symbol.getPreConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
 		for (Symbol sym : symbol.getSymbols()) {
 			sym.setEnv(env);
 			sym.accept(this);
 		}
-		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(symbol.getLabel());
-		}
-		
-		// TODO: Return values
-		
-		for (Condition condition : symbol.getPostConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
-		symbol.setEnv(env);
 		
 		return null;
 	}
@@ -418,32 +384,10 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Opt symbol) {
 		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		Symbol sym = symbol.getSymbol();
 		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
-		}
-		
-		for (Condition condition : symbol.getPreConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
-		symbol.getSymbol().setEnv(env);
-		symbol.getSymbol().accept(this);
-		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(symbol.getLabel());
-		}
-		
-		// TODO: Return values
-		
-		for (Condition condition : symbol.getPostConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
-		symbol.setEnv(env);
+		sym.setEnv(symbol.getEnv());
+		sym.accept(this);
 		
 		return null;
 	}
@@ -451,32 +395,10 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Plus symbol) {
 		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		Symbol sym = symbol.getSymbol();
 		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
-		}
-		
-		for (Condition condition : symbol.getPreConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
-		symbol.getSymbol().setEnv(env);
-		symbol.getSymbol().accept(this);
-		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(symbol.getLabel());
-		}
-		
-		// TODO: Return values
-		
-		for (Condition condition : symbol.getPostConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
-		symbol.setEnv(env);
+		sym.setEnv(symbol.getEnv());
+		sym.accept(this);
 		
 		return null;
 	}
@@ -486,6 +408,34 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		
+		for (E sym : symbol.getSymbols()) {
+			sym.setEnv(env);
+			sym.accept(this);
+			env = sym.getEnv();
+		}
+		
+		return null;
+	}
+
+	@Override
+	public Void visit(Star symbol) {
+		
+		Symbol sym = symbol.getSymbol();
+		
+		sym.setEnv(symbol.getEnv());
+		sym.accept(this);
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * Accounts for optional label and preconditions and postconditions
+	 */
+	private Void visitSymbol(Symbol symbol) {
+		
+		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		
 		if (symbol.getLabel() != null) {
 			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
 		}
@@ -495,45 +445,14 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 			condition.accept(this);
 		}
 		
-		for (E sym : symbol.getSymbols()) {
-			sym.setEnv(env);
-			sym.accept(this);
-			env = sym.getEnv();
-		}
-		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(symbol.getLabel());
-		}
-		
-		// TODO: Return values
-		
-		for (Condition condition : symbol.getPostConditions()) {
-			condition.setEnv(env);
-			condition.accept(this);
-		}
-		
 		symbol.setEnv(env);
+		symbol.accept(this);
 		
-		return null;
-	}
-
-	@Override
-	public Void visit(Star symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
-		
-		if (symbol.getLabel() != null) {
-			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
-		}
-		
-		symbol.getSymbol().setEnv(env);
-		symbol.getSymbol().accept(this);
+		env = symbol.getEnv();
 		
 		if (symbol.getLabel() != null) {
 			env = env.__insert(symbol.getLabel());
 		}
-		
-		// TODO: Return values
 		
 		for (Condition condition : symbol.getPostConditions()) {
 			condition.setEnv(env);

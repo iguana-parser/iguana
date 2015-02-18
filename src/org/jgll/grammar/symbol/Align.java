@@ -16,6 +16,10 @@ public class Align extends AbstractSymbol {
 	public static Align align(Symbol symbol) {
 		return builder(symbol).build();
 	}
+	
+	public Symbol getSymbol() {
+		return symbol;
+	}
 
 	@Override
 	public Builder copyBuilder() {

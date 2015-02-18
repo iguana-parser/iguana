@@ -17,6 +17,10 @@ public class Block extends AbstractSymbol {
 	public static Block block(Symbol... symbols) {
 		return builder(symbols).build();
 	}
+	
+	public Symbol[] getSymbols() {
+		return symbols;
+	}
 
 	@Override
 	public Builder copyBuilder() {

@@ -20,6 +20,10 @@ public class Code extends AbstractSymbol {
 		return builder(symbol, statements).build();
 	}
 	
+	public Symbol getSymbol() {
+		return symbol;
+	}
+	
 	public  org.jgll.datadependent.ast.Statement[] getStatements() {
 		return statements;
 	}

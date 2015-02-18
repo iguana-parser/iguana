@@ -19,6 +19,14 @@ public class Conditional extends AbstractSymbol {
 	public static Conditional when(Symbol symbol, Expression expression) {
 		return builder(symbol, expression).build();
 	}
+	
+	public Symbol getSymbol() {
+		return symbol;
+	}
+	
+	public Expression getExpression() {
+		return expression;
+	}
 
 	@Override
 	public Builder copyBuilder() {
