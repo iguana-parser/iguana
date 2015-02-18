@@ -552,8 +552,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(DataDependentCondition condition) {
-		condition.getExpression().setEnv(condition.getEnv());
-		condition.getExpression().accept(this);
+		
+		org.jgll.datadependent.ast.Expression expression = condition.getExpression();
+		
+		expression.setEnv(condition.getEnv());
+		expression.accept(this);
+		
 		return null;
 	}
 
