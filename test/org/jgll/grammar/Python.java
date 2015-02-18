@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.condition.ConditionType;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;

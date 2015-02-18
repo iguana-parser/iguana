@@ -11,6 +11,7 @@ import org.jgll.datadependent.ast.AST;
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.traversal.FreeVariableVisitor;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -39,7 +40,7 @@ public class EBNFToBNF implements GrammarTransformation {
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
 		grammar.getDefinitions().values().forEach(r -> newRules.addAll(transform(r)));
-		return Grammar.builder().addRules(newRules).build();
+		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
 	}
 	
 	private Set<Rule> transform(Rule rule) {
@@ -64,13 +65,13 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		Rule.Builder builder = new Rule.Builder(rule.getHead());		
 		for(Symbol s : rule.getBody()) {
-			builder.addSymbol(rewrite(s, newRules, rule.getLayout()));
+			builder.addSymbol(rewrite(s, newRules, rule.getLayout(), rule.getLayoutStrategy()));
 		}
 		
-		return builder.setLayout(rule.getLayout()).build();
+		return builder.setLayout(rule.getLayout()).setLayoutStrategy(rule.getLayoutStrategy()).build();
 	}
 	
-	private Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout) {
+	private Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
 		
 		if (!isEBNF(symbol))
 			return symbol;
@@ -107,7 +108,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			newNt = parameters != null? Nonterminal.builder(getName(S, star.getSeparators(), layout) + "*").addParameters(parameters).build()
 						: Nonterminal.withName(getName(S, star.getSeparators(), layout) + "*");
 			
-			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules, layout)).setLayout(layout).build());
+			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
 			addedRules.add(Rule.withHead(newNt).build());
 		}
 		
@@ -124,7 +125,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		else if (symbol instanceof Plus) {
 			Plus plus = (Plus) symbol;
 			Symbol S = plus.getSymbol();
-			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules, layout)).collect(Collectors.toList());
+			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules, layout, strategy)).collect(Collectors.toList());
 			
 			S.setEmpty();
 			S.accept(visitor);
@@ -137,13 +138,14 @@ public class EBNFToBNF implements GrammarTransformation {
 			newNt = parameters != null? Nonterminal.builder(getName(S, plus.getSeparators(), layout) + "+").addParameters(parameters).build()
 						: Nonterminal.withName(getName(S, plus.getSeparators(), layout) + "+");
 			
-			S = rewrite(S, addedRules, layout);
+			S = rewrite(S, addedRules, layout, strategy);
 			
 			addedRules.add(Rule.withHead(newNt)
 							.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
 							.addSymbols(seperators)
-							.addSymbols(S).setLayout(layout).build());
+							.addSymbols(S).setLayout(layout).setLayoutStrategy(strategy).build());
 			addedRules.add(Rule.withHead(newNt).addSymbol(S).build());
+
 		} 
 		
 		/**
@@ -152,7 +154,6 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		else if (symbol instanceof Opt) {
 			Symbol in = ((Opt) symbol).getSymbol();
-			
 			in.setEmpty();
 			in.accept(visitor);
 			
@@ -164,7 +165,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build() 
 						: Nonterminal.withName(symbol.getName());
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(in, addedRules, layout)).setLayout(layout).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(in, addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
 			addedRules.add(Rule.withHead(newNt).build());
 		} 
 		
@@ -178,7 +179,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			Sequence.builder(symbols).build().accept(visitor);
 			
-			symbols = symbols.stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
+			symbols = symbols.stream().map(x -> rewrite(x, addedRules, layout, strategy)).collect(Collectors.toList());
 			
 			if (!freeVars.isEmpty()) {
 				parameters = freeVars.stream().toArray(String[]::new);
@@ -188,7 +189,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build()
 						: Nonterminal.withName(symbol.getName());
 			
-			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).build());
+			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy).build());
 		} 
 		
 		/**
@@ -196,12 +197,13 @@ public class EBNFToBNF implements GrammarTransformation {
 		 *           | B
 		 */
 		else if (symbol instanceof Alt) {
+
 			@SuppressWarnings("unchecked")
 			List<Symbol> symbols = ((Alt<Symbol>) symbol).getSymbols();
 			
 			Alt.builder(symbols).build().accept(visitor);
 			
-			symbols = symbols.stream().map(x -> rewrite(x, addedRules, layout)).collect(Collectors.toList());
+			symbols = symbols.stream().map(x -> rewrite(x, addedRules, layout, strategy)).collect(Collectors.toList());
 			
 			if (!freeVars.isEmpty()) {
 				parameters = freeVars.stream().toArray(String[]::new);
@@ -211,7 +213,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build()
 						: Nonterminal.withName(symbol.getName());
 			
-			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).build()));
+			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy).build()));
 		}
 		
 		else {

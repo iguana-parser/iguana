@@ -5,7 +5,6 @@ import org.jgll.datadependent.env.Environment;
 import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
@@ -61,8 +60,7 @@ public interface GLLParser {
 	
 	public Iterable<GSSNode> getGSSNodes();
 	
-	public GrammarRegistry getRegistry();
-		
+
 	public void reset();
 
 	public Configuration getConfiguration();
@@ -97,5 +95,7 @@ public interface GLLParser {
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
 	
 	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data);
+
+	public GrammarGraph getGrammarGraph();
 	
 }

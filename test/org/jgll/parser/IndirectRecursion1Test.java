@@ -4,7 +4,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -70,10 +70,10 @@ public class IndirectRecursion1Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getGrammarGraph())));
 	}
 	
-	private SPPFNode expectedSPPF(GrammarRegistry registry) {
+	private SPPFNode expectedSPPF(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 2);
 		PackedNode node2 = factory.createPackedNode("A ::= B C .", 1, node1);

@@ -46,7 +46,7 @@ public class MatcherFactory {
 		if (regex instanceof CharacterRange)
 			return characterRangeBackwardsMatcher((CharacterRange) regex);
 		
-		return createMatcher(regex);
+		return createBackwardsMatcher(regex);
 	}
 
 	private static Matcher sequenceMatcher(Sequence<?> seq) {
@@ -78,7 +78,7 @@ public class MatcherFactory {
 				return characters.size();
 			};
 		}
-		return createMatcher(seq);
+		return createBackwardsMatcher(seq);
 	}
 	
 	private static Matcher characterMatcher(Character c) {
@@ -99,6 +99,10 @@ public class MatcherFactory {
 	
 	private static Matcher createMatcher(RegularExpression regex) {
 		return new DFAMatcher(regex.getAutomaton());
+	}
+	
+	private static Matcher createBackwardsMatcher(RegularExpression regex) {
+		return new DFABackwardsMatcher(regex.getAutomaton());
 	}
 	
 }

@@ -4,9 +4,9 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.regex.Sequence;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
@@ -23,7 +23,7 @@ public class KeywordTest1 {
 	
 	private Grammar grammar;
 	
-	private Sequence<Character> ifKeyword = Sequence.from("if");
+	private Terminal ifKeyword = Terminal.from(Sequence.from("if"));
 	private Nonterminal A = Nonterminal.withName("A");
 
 	@Before

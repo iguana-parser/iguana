@@ -288,42 +288,7 @@ public class AutomatonBuilder {
 		return finalStates;
 	}
 	
-	/**
-	 * Creates the reverse of the given automaton. A reverse automaton 
-	 * accept the reverse language accepted by the original automaton. To construct
-	 * a reverse automaton, all final states of the original automaton are becoming 
-	 * start states, transitions are reversed and the start state becomes the
-	 * only final state.
-	 * 
-	 */
-	public AutomatonBuilder reverse() {
-
-		// 0. creating new states for each state of the original automaton
-		final Map<State, State> newStates = new HashMap<>();
-		
-		AutomatonVisitor.visit(startState, state -> newStates.put(state, new State()));
-		
-		// 1. creating a new start state and adding epsilon transitions to the final
-		// states of the original automata
-		State startState = new State();
-		
-		for(State finalState : finalStates) {
-			startState.addEpsilonTransition(newStates.get(finalState));
-		}
-		
-		// 2. Reversing the transitions
-		AutomatonVisitor.visit(startState, state -> {
-				for(Transition t : state.getTransitions()) {
-					newStates.get(t.getDestination()).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(state)));
-				}
-		});
-		
-		// 2. making the start state final
-		newStates.get(startState).setStateType(StateType.FINAL);
-		 
-		return this;
-	}
-		
+	
 	public State getState(int i) {
 		return states[i];
 	}

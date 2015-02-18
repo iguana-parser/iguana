@@ -5,7 +5,7 @@ import static org.jgll.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -76,11 +76,11 @@ public class Gamma0Test {
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertEquals(1, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}
 	
-	public SPPFNode getSPPF(GrammarRegistry registry) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+	public SPPFNode getSPPF(GrammarGraph graph) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3);
 		PackedNode node2 = factory.createPackedNode("S ::= a S .", 1, node1);
 		TerminalNode node3 = factory.createTerminalNode("a", 0, 1);

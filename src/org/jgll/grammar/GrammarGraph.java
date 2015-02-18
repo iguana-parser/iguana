@@ -1,367 +1,262 @@
 package org.jgll.grammar;
 
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+import org.jgll.datadependent.ast.Expression;
+import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.exception.IncorrectNumberOfArgumentsException;
+import org.jgll.grammar.slot.AbstractTerminalTransition;
+import org.jgll.grammar.slot.BeforeLastTerminalTransition;
+import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.CodeBlockTransition;
+import org.jgll.grammar.slot.EndGrammarSlot;
+import org.jgll.grammar.slot.EpsilonGrammarSlot;
+import org.jgll.grammar.slot.FirstAndLastTerminalTransition;
+import org.jgll.grammar.slot.FirstTerminalTransition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.grammar.slot.NonterminalTransition;
+import org.jgll.grammar.slot.TerminalGrammarSlot;
+import org.jgll.grammar.slot.TerminalTransition;
+import org.jgll.grammar.symbol.Code;
+import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Position;
+import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Start;
+import org.jgll.grammar.symbol.Symbol;
+import org.jgll.parser.gss.lookup.ArrayNodeLookup;
+import org.jgll.parser.gss.lookup.DummyNodeLookup;
+import org.jgll.parser.gss.lookup.GSSNodeLookup;
+import org.jgll.parser.gss.lookup.HashMapNodeLookup;
 import org.jgll.regex.RegularExpression;
+import org.jgll.util.Configuration;
+import org.jgll.util.Configuration.GSSType;
+import org.jgll.util.Configuration.LookupImpl;
 import org.jgll.util.Input;
-import org.jgll.util.logging.LoggerWrapper;
 
-/**
- * 
- * @author Ali Afroozeh
- *
- */
 public class GrammarGraph implements Serializable {
-	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(GrammarGraph.class);
-	
-	private static final long serialVersionUID = 1L;
-	
-	private GrammarRegistry registry;
 
-	private List<NonterminalGrammarSlot> headGrammarSlots;
+	private static final long serialVersionUID = 1L;
+
+	Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
 	
-	private Set<GrammarSlot> slots;
+	Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
 	
-	private String name;
+	private Map<String, GrammarSlot> names;
 	
-	private Map<Nonterminal, Set<RegularExpression>> followSets;
+	Grammar grammar;
+
+	private Configuration config;
+
+	private Input input;
 	
-	private Grammar grammar;
+	private final Nonterminal layout;
 	
-	public GrammarGraph(GrammarGraphBuilder builder) {
-		this.name = builder.name;
-		Map<String, GrammarSlot> slotsMap = builder.slots.stream().collect(Collectors.toMap(s -> s.toString(), s -> s, (a, b) -> a));
-		this.registry = new GrammarRegistry(builder.nonterminalsMap, builder.terminalsMap, slotsMap);
-		this.headGrammarSlots = new ArrayList<>(builder.nonterminalsMap.values());
-		this.slots = new LinkedHashSet<>(builder.slots);
-		grammar = builder.grammar;
-		printGrammarStatistics();
-	}
+	private int id = 1;
 	
-	public void printGrammarStatistics() {
-		log.info("Grammar information:");
-		log.info("Nonterminals: %d", headGrammarSlots.size());
-		log.info("Production rules: %d", grammar.sizeRules());
-		log.info("Grammar slots: %d", slots.size());
-	}
+	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(0, Epsilon.getInstance());
 	
-	public void generate(PrintWriter writer) {
-		generate("test", "Test", writer);
-	}
-	
-	public void generate(String packageName, String className, PrintWriter writer) {
+	public GrammarGraph(Grammar grammar, Input input, Configuration config) {
+		this.grammar = grammar;
+		this.input = input;
+		this.config = config;
+		this.layout = grammar.getLayout();
+		this.nonterminalsMap = new LinkedHashMap<>();
+		this.terminalsMap = new LinkedHashMap<>();
+		this.names = new HashMap<>();
 		
-//		writer.println("package " + packageName + ";");
-//		writer.println();
-//		
-//		// Imports
-//		writer.println("import java.util.*;");
-//		writer.println("import org.jgll.grammar.slot.*;");
-//		writer.println("import org.jgll.grammar.slot.nodecreator.*;");
-//		writer.println("import org.jgll.grammar.slot.test.*;");
-//		writer.println("import org.jgll.grammar.symbol.Character;");
-//		writer.println("import org.jgll.grammar.symbol.*;");
-//		writer.println("import org.jgll.regex.*;");
-//		writer.println("import org.jgll.parser.NewGLLParserImpl;");
-//		writer.println("import org.jgll.parser.descriptor.Descriptor;");
-//		writer.println("import org.jgll.parser.lookup.factory.*;");
-//		writer.println("import org.jgll.sppf.*;");
-//		writer.println("import org.jgll.grammar.condition.*;");
-//		writer.println("import org.jgll.util.logging.LoggerWrapper;");
-//		writer.println("import com.google.common.collect.Sets;");
-//		writer.println("import static org.jgll.grammar.condition.ConditionType.*;");
-//		writer.println("import static org.jgll.util.CollectionsUtil.*;");
-//		writer.println("import org.jgll.util.*;");
-//		writer.println("import org.jgll.grammar.GrammarSlotRegistry;");
-//		writer.println();
-//
-//		// Class definition
-//		writer.println("@SuppressWarnings(\"unchecked\")");
-//		writer.println("public class " + className + " extends NewGLLParserImpl {");
-//		writer.println();
-//		
-//		writer.println("private static final LoggerWrapper log = LoggerWrapper.getLogger(" + className + ".class);");
-//		writer.println("private static final int L0 = -1;");
-//		
-//		writer.println("private GrammarSlotRegistry registry;");
-//		writer.println();
-//		
-//		// GLL fields
-//		writer.println("private int cs; // Current grammar slot");
-//		writer.println();
-//		
-//		writer.println("private Map<String, HeadGrammarSlot> startSymbols = new HashMap<>();");
-//		writer.println();
-//		
-//		// Generate Head grammar slots
-//		for (NonterminalGrammarSlot head : headGrammarSlots) {
-//			writer.println("private HeadGrammarSlot slot" + registry.getId(head) + ";");
-//		}
-//		
-//		// Generate Terminal grammar slots
-//		for (TerminalGrammarSlot terminal : terminals) {
-//			writer.println("private TerminalGrammarSlot slot" + registry.getId(terminal) + ";");
-//		}
-//		
-//		// Generate body grammar slots
-//		for (NonterminalGrammarSlot head : headGrammarSlots) {
-//			for (GrammarSlot slot : head.getReachableSlots()) {
-//				GrammarSlot current = slot;
-//				while (current != null) {
-//					writer.println("private BodyGrammarSlot slot" + registry.getId(current) + ";");
-//					current = current.next();
-//				}
-//			}
-//		}
-//		
-//		writer.println();
-//		
-//		// Init body grammar slot method
-//		ArrayList<GrammarSlot> bodyGrammarSlots = new ArrayList<>(slots);
-//		int n = slots.size() / 200;
-//		int r = slots.size() % 200;
-//		
-//		// Constructor
-//		writer.println("public " + className + "() {");
-//		writer.println("  super(new DistributedGSSLookupFactory(), new NewSPPFLookupFactory(), new DefaultDescriptorLookupFactory());");
-//		writer.println("  SPPFUtil.init(Configuration.DEFAULT);");
-//		writer.println("  initHeadGrammarSlots();");
-//		writer.println("  initTerminalGrammarSlots();");
-//		
-//        for (int i = 0; i < n; i++) {
-//            writer.println("  initBodyGrammarSlots" + i + "();");
-//        }
-//        if (r > 0) {
-//            writer.println("  initBodyGrammarSlots" + n + "();");
-//        }
-//		
-//		// Create alternative links
-//		for (GrammarSlot head : headGrammarSlots) {
-//			int i = 0;
-//			for (GrammarSlot slot : head.getFirstSlots()) {
-//				writer.println("  slot" + registry.getId(head) + ".setFirstGrammarSlotForAlternate(slot" + registry.getId(slot) + ", " + i++ + ");");
-//			}
-//		}
-//		
-//		// Add start symbols
-//		for (HeadGrammarSlot head : headGrammarSlots) {
-//			writer.println("  startSymbols.put(\"" + escape(head.getNonterminal().getName()) + "\", slot" + registry.getId(head) + ");");
-//		}
-//		
-//		// initialize Registry
-//		writer.println("  initializeRegistry();");
-//		writer.println();
-//		
-//		writer.println("}");
-//		writer.println();
-//		// End constructor
-//		
-//		// Init heads method
-//		writer.println("private void initHeadGrammarSlots() {");
-//		for (HeadGrammarSlot head : headGrammarSlots) {
-//			writer.println("  slot" + registry.getId(head) + " = " + head.getConstructorCode(registry) + ";");
-//		}
-//		writer.println("}");
-//		writer.println();
-//		// end init heads
-//		
-//		// Init terminals
-//		writer.println("private void initTerminalGrammarSlots() {");
-//		for (TerminalGrammarSlot terminal : terminals) {
-//			writer.println("  slot" + registry.getId(terminal) + " = " + terminal.getConstructorCode(registry) + ";");
-//		}
-//		writer.println("}");
-//		writer.println();
-//		
-//		
-//		for (int i = 0; i < n; i++) {
-//			writer.println("private void initBodyGrammarSlots" + i + "() {");
-//			// Generate body grammar slots
-//			
-//			for (int j = i * 200; j < (i + 1) * 200; j++ ) {
-//				BodyGrammarSlot current = bodyGrammarSlots.get(j);
-//				writer.println("  slot" + registry.getId(current) + " = " + current.getConstructorCode(registry) + ";");
-//			}
-//			
-//			writer.println("}");
-//			writer.println();
-//		}
-//		
-//		// The remaining
-//		writer.println("private void initBodyGrammarSlots" + n + "() {");
-//		for (int j = n * 200; j < bodyGrammarSlots.size(); j++ ) {
-//			BodyGrammarSlot current = bodyGrammarSlots.get(j);
-//			writer.println("  slot" + registry.getId(current) + " = " + current.getConstructorCode(registry) + ";");
-//		}
-//		writer.println("}");
-//		writer.println();
-//		
-//		// end init
-//
-//
-//		// Overriding the getStartSymbol method
-//		writer.println("@Override");
-//		writer.println("protected HeadGrammarSlot getStartSymbol(String name) {");
-//		writer.println("  HeadGrammarSlot startSymbol = startSymbols.get(name);");
-//		writer.println("  cs = startSymbol.getId();");
-//		writer.println("  return startSymbol;");
-//		writer.println("}");
-//
-//		writer.println();
-//		
-//		String arg1 = "Arrays.asList(" + headGrammarSlots.stream().map(h -> "slot" + registry.getId(h)).collect(Collectors.joining(", ")) + ")";
-//		String arg2 = "Arrays.asList(" + terminals.stream().map(h -> "slot" + registry.getId(h)).collect(Collectors.joining(", ")) + ")";
-//		String arg3 = "Arrays.asList(" + slots.stream().map(h -> "slot" + registry.getId(h)).collect(Collectors.joining(", ")) + ")";
-//
-//		// Initializing the registry
-//		writer.println("private void initializeRegistry() {");
-//		writer.println("  registry = GrammarSlotRegistry.from(" + arg1 + ", " + arg2 + ", " + arg3 + ");");		
-//		writer.println("}");
-//		writer.println();
-//		
-//		// Get registry
-//		writer.println("@Override");
-//		writer.println("public GrammarSlotRegistry getRegistry() {");
-//		writer.println("	return registry;");
-//		writer.println("}");
-//		
-//		writer.println("@Override");
-//		writer.println("protected void parse(HeadGrammarSlot startSymbolName) {");
-//		writer.println("  while (true) {");
-//		writer.println("    switch (cs) {");
-//
-//		writer.println("case L0:");
-//		writer.println("  if (hasNextDescriptor()) {");
-//		writer.println("    Descriptor descriptor = nextDescriptor();");
-//		writer.println("    log.trace(\"Processing %s\", descriptor);");
-//		writer.println("    cu = descriptor.getGSSNode();");
-//		writer.println("    ci = descriptor.getInputIndex();");
-//		writer.println("    cn = descriptor.getSPPFNode();");
-//		writer.println("    cs = descriptor.getGrammarSlot().getId();");
-//		writer.println("    break;");
-//		writer.println("  } else {");
-//		writer.println("    return;");
-//		writer.println("  }");
-//		writer.println();
-//		
-//		// Generate the body of switch case
-//		for (HeadGrammarSlot head : headGrammarSlots) {
-//			writer.println("// " + escape(head.toString()));
-//			writer.println("case " + registry.getId(head) + ":");
-//			writer.println("  cs = slot" + registry.getId(head) + "();");
-//			writer.println("  break;");
-//			writer.println();
-//		}
-//		
-//		if (bodyGrammarSlots.size() > 2500) {
-//			int mainLoops = bodyGrammarSlots.size() / 2500;
-//		} else {
-//			generateCases(writer, bodyGrammarSlots, 0, bodyGrammarSlots.size());
-//		}
-//				
-//		writer.println("    }");
-//		writer.println("  }");
-//		writer.println("}");
-//		writer.println();
-//		// End parse method
-//		
-//		// Grammar slot methods
-//		for (HeadGrammarSlot head : headGrammarSlots) {
-//				
-//			head.code(writer, registry);
-//			writer.println();
-//						
-//			for (BodyGrammarSlot slot : head.getFirstSlots()) {
-//				BodyGrammarSlot current = slot;
-//				while (current != null) {
-//					current.code(writer, registry);
-//					writer.println();
-//					current = current.next();
-//				}
-//			}
-//		}
-//		
-//		writer.println("}");
-	}
-	
-//	private void generateCases(PrintWriter writer, List<BodyGrammarSlot> slots, int start, int end) {
-//		
-//		for (int i = start; i < end; i++) {
-//			BodyGrammarSlot current = slots.get(i);
-//			
-//			writer.println("// " + escape(current.toString()));
-//			writer.println("case " + registry.getId(current) + ":");
-//			if (current.getClass() == TokenGrammarSlot.class) {
-//				writer.println("  slot" + registry.getId(current) + "();");
-//			} else {
-//				writer.println("  cs = slot" + registry.getId(current) + "();");
-//				writer.println("  break;");						
-//			}
-//			writer.println();
-//		}
-//	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public GrammarSlot getHeadGrammarSlot(int id) {
-		return headGrammarSlots.get(id);
-	}
-	
-	public List<NonterminalGrammarSlot> getNonterminals() {
-		return headGrammarSlots;
-	}
+		terminalsMap.put(Epsilon.getInstance(), epsilon);
+		names.put(Epsilon.getInstance().getName(), epsilon);
 		
-	@Override
-	public String toString() {
-		return "";
-	}
-	
-	public Set<GrammarSlot> getGrammarSlots() {
-		return slots;
-	}
-	
-	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
-		return followSets.get(nonterminal);
-	}
+		for (Nonterminal nonterminal : grammar.getNonterminals()) {
+			getNonterminalGrammarSlot(nonterminal);
+		}
 		
-	public int getCountAlternates(Nonterminal nonterminal) {
-		return grammar.getAlternatives(nonterminal).size();
-	}
-	
-	public void reset(Input input) {
-		headGrammarSlots.forEach(n -> n.reset(input));
-		slots.forEach(s -> s.reset(input));
-	}
-	
-	public GrammarRegistry getRegistry() {
-		return registry;
-	}
-	
-	public void toJavaCode(PrintWriter writer) {
-		
-		headGrammarSlots.forEach(n -> writer.println("NonterminalGrammarSlot slot" + registry.getId(n) + " = " + n.getConstructorCode() + ";"));
-		slots.forEach(s -> writer.println("GrammarSlot slot"+ registry.getId(s) + " = " + s.getConstructorCode() + ";"));
-		
-		for (NonterminalGrammarSlot n : headGrammarSlots) {
-			toJavaCode(n, writer);
+		for (Nonterminal nonterminal : grammar.getNonterminals()) {
+			convert(nonterminal, grammar);
 		}
 	}
 	
-	private void toJavaCode(GrammarSlot slot, PrintWriter writer) {
-		slot.getTransitions().forEach(t -> writer.println("slot" + registry.getId(slot) + ".addTransition(" + t.getConstructorCode() + "));"));
- 	}
+	public NonterminalGrammarSlot getHead(Nonterminal start) {
+		if (start instanceof Start) {
+			Nonterminal nt = ((Start)start).getNonterminal();
+
+			if (layout == null) {
+				return nonterminalsMap.get(nt);
+			}
+			
+			Rule startRule = Rule.withHead(start)
+								 .addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
+			NonterminalGrammarSlot nonterminalGrammarSlot = getNonterminalGrammarSlot(start);
+			addRule(nonterminalGrammarSlot, startRule);
+			return nonterminalGrammarSlot;
+		}
+		
+		return nonterminalsMap.get(start);
+	}	
+	
+	public TerminalGrammarSlot getTerminal(RegularExpression regex) {
+		return terminalsMap.get(regex);
+	}
+
+	public GrammarSlot getGrammarSlot(String s) {
+		return names.get(s);
+	}
+	
+	public Collection<NonterminalGrammarSlot> getNonterminals() {
+		return nonterminalsMap.values();
+	}
+	
+	public RegularExpression getRegularExpression(String s) {
+		GrammarSlot slot = names.get(s);
+		if (!(slot instanceof TerminalGrammarSlot))
+			throw new RuntimeException("No regular expression for " + s + " found.");
+		return ((TerminalGrammarSlot) names.get(s)).getRegularExpression();
+	}
+		
+	private void convert(Nonterminal nonterminal, Grammar grammar) {
+		List<Rule> rules = grammar.getAlternatives(nonterminal);
+		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
+		rules.forEach(r -> addRule(nonterminalSlot, r));
+	}
+	
+	private void addRule(NonterminalGrammarSlot head, Rule rule) {
+		
+		BodyGrammarSlot firstSlot = getFirstGrammarSlot(rule, head);
+		head.addFirstSlot(firstSlot);
+		
+		BodyGrammarSlot currentSlot = firstSlot;
+		
+		for (int i = 0; i < rule.size(); i++) {
+			Symbol symbol = rule.symbolAt(i);
+			
+			// Terminal
+			if (symbol instanceof RegularExpression) {
+				RegularExpression regex = (RegularExpression) symbol;
+				TerminalGrammarSlot terminalSlot = getTerminalGrammarSlot(regex);
+				BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), null);
+				Set<Condition> preConditions = symbol.getPreConditions();
+				Set<Condition> postConditions = symbol.getPostConditions();
+				currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
+				currentSlot = slot;
+			} 
+			else if (symbol instanceof Nonterminal) {
+				Nonterminal nonterminal = (Nonterminal) symbol;
+
+				NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
+				
+				BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, nonterminal.getLabel(), nonterminal.getVariable());
+				
+				Expression[] arguments = nonterminal.getArguments();
+				
+				// validateNumberOfArguments(nonterminal, arguments);
+				
+				Set<Condition> preConditions = symbol.getPreConditions();
+				currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, preConditions));
+				currentSlot = slot;
+			}
+			else if (symbol instanceof Code) {
+				Code code = (Code) symbol;
+				BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				currentSlot.addTransition(new CodeBlockTransition(code, currentSlot, slot));
+				currentSlot = slot;
+			}
+
+		}
+	}
+	
+	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
+															 BodyGrammarSlot origin, BodyGrammarSlot dest,
+															 Set<Condition> preConditions, Set<Condition> postConditions) {
+		
+		if (i == 1 && rule.size() > 1) {
+			return new FirstTerminalTransition(slot, origin, dest, preConditions, postConditions);
+		} 
+		else if (i == 1 && rule.size() == 1) {
+			return new FirstAndLastTerminalTransition(slot, origin, dest, preConditions, postConditions);
+		} 
+		else if (i == rule.size())  {
+			return new BeforeLastTerminalTransition(slot, origin, dest, preConditions, postConditions);
+		} 
+		else {
+			return new TerminalTransition(slot, origin, dest, preConditions, postConditions);
+		}
+	}
+	
+	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex) {
+		TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex);
+		names.put(terminalSlot.toString(), terminalSlot);
+		return terminalsMap.computeIfAbsent(regex, k -> terminalSlot);
+	}
+	
+	private NonterminalGrammarSlot getNonterminalGrammarSlot(Nonterminal nonterminal) {
+		return nonterminalsMap.computeIfAbsent(nonterminal, k -> {
+			NonterminalGrammarSlot ntSlot;
+			if (config.getGSSType() == GSSType.NEW) {
+				ntSlot = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());			
+			} else {
+				ntSlot = new NonterminalGrammarSlot(id++, nonterminal, DummyNodeLookup.getInstance());
+			}
+			names.put(ntSlot.toString(), ntSlot);
+			return ntSlot;
+		});
+	}
+	
+	private BodyGrammarSlot getFirstGrammarSlot(Rule rule,  NonterminalGrammarSlot nonterminal) {
+		BodyGrammarSlot slot;
+		
+		if (rule.size() == 0) {
+			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0), nonterminal, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
+		} else {
+			slot = new BodyGrammarSlot(id++, rule.getPosition(0), DummyNodeLookup.getInstance(), null, null, rule.symbolAt(0).getPostConditions());
+		}
+		
+		names.put(slot.toString(), slot);
+		return slot;
+	}
+	
+	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable) {
+		BodyGrammarSlot slot;
+		if (i == rule.size()) {
+			if (config.getGSSType() == GSSType.NEW) {
+				slot = new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
+			} else {
+				slot = new EndGrammarSlot(id++, position, nonterminal, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());
+			}
+		} else {
+			if (config.getGSSType() == GSSType.NEW) {
+				// With new GSS we don't lookup in body grammarSlots
+				slot = new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());
+			} else {
+				slot = new BodyGrammarSlot(id++, position, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
+			}
+		}
+		names.put(slot.toString(), slot);
+		return slot;
+	}
+	
+	private GSSNodeLookup getNodeLookup() {
+		if (config.getGSSLookupImpl() == LookupImpl.HASH_MAP) {
+			return new HashMapNodeLookup();
+		} else {
+			return new ArrayNodeLookup(input);
+		}
+	}
+	
+	static private void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
+		String[] parameters = nonterminal.getParameters();
+		if ((parameters == null && arguments == null) 
+				|| (parameters.length == arguments.length)) return;
+		
+		throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
+	}
 	
 }

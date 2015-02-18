@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -36,7 +36,7 @@ public class Test16 extends AbstractParserTest {
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Test16::getOriginalParseResult
+	    		(Function<GrammarGraph, ParseResult>) Test16::getOriginalParseResult
 	    	}).collect(Collectors.toList());
     }
     
@@ -64,7 +64,7 @@ public class Test16 extends AbstractParserTest {
 		return Input.fromString("aaabb");
 	}
 		
-	public static ParseSuccess getOriginalParseResult(GrammarRegistry registry) {
+	public static ParseSuccess getOriginalParseResult(GrammarGraph registry) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(29)
 				.setGSSNodesCount(7)

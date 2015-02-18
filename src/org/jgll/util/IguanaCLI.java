@@ -21,7 +21,6 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.util.benchmark.BenchmarkUtil;
 
 public class IguanaCLI {
 
@@ -115,7 +114,8 @@ public class IguanaCLI {
 		GLLParser parser = ParserFactory.getParser(config, input, grammar);
 		ParseResult result = parser.parse(input, grammar, startSymbol);
 		if (result.isParseSuccess()) {
-			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
+			// TODO: fix it!
+//			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
 		} else {
 			System.out.println("Parse error.");
 		}

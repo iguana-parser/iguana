@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -45,7 +45,7 @@ public class Test6 extends AbstractParserTest {
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Test6::getParseResult
+	    		(Function<GrammarGraph, ParseResult>) Test6::getParseResult
 	    	}).collect(Collectors.toList());
     }
     
@@ -78,7 +78,7 @@ public class Test6 extends AbstractParserTest {
 		return Nonterminal.withName("A");
 	}
 	
-	private static ParseSuccess getParseResult(GrammarRegistry registry) {
+	private static ParseSuccess getParseResult(GrammarGraph registry) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(5)
 				.setGSSNodesCount(3)
@@ -98,7 +98,7 @@ public class Test6 extends AbstractParserTest {
 //		assertTrue(grammarGraph.isLL1SubGrammar(C));
 	}
 		
-	private static NonterminalNode expectedSPPF(GrammarRegistry registry) {
+	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 2);
 		PackedNode node2 = factory.createPackedNode("A ::= B C .", 1, node1);

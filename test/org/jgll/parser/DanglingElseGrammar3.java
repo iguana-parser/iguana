@@ -3,7 +3,7 @@ package org.jgll.parser;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -59,10 +59,10 @@ public class DanglingElseGrammar3 {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
 	}
 	
-	private SPPFNode getExpectedSPPF(GrammarRegistry registry) {
+	private SPPFNode getExpectedSPPF(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 5);
 		PackedNode node2 = factory.createPackedNode("S ::= a S b S .", 4, node1);

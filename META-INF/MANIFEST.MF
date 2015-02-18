@@ -75,3 +75,4 @@ Export-Package:
 Require-Bundle: com.google.guava,
  org.apache.commons.io;bundle-version="2.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.jgll.grammar

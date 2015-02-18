@@ -1,16 +1,19 @@
-package org.jgll.util.benchmark;
+package org.jgll.benchmark.jmh;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.jgll.benchmark.AbstractBenchmark;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.JavaCharacterLevel;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Configuration;
 import org.jgll.util.Configuration.GSSType;
 import org.jgll.util.Input;
@@ -42,14 +45,15 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
  */
 
 @State(Scope.Benchmark)
-@Warmup(iterations=5)
-@Measurement(iterations=10)
-@Fork(1)
+@Warmup(iterations=1)
+@Measurement(iterations=1)
+@Fork(0)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class BenchmarkJava extends AbstractBenchmark {
 	
-	private static Grammar CSharpGrammar = getGrammar("grammars/java/specification/java");
+	private static String sourceDir = "/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19";
+	private static Grammar javaGrammar = JavaCharacterLevel.grammar;
 	
 	@Param({ "/Users/aliafroozeh/test.java" })
 	String inputPath;
@@ -70,9 +74,9 @@ public class BenchmarkJava extends AbstractBenchmark {
 	public void setup() throws IOException {
 		input = Input.fromPath(inputPath);
 		config = Configuration.builder().setGSSType(gssType).build();
-		grammar = CSharpGrammar;
+		grammar = javaGrammar;
 		startSymbol = Nonterminal.withName("start[CompilationUnit]");
-		grammarGraph = CSharpGrammar.toGrammarGraph(input, config);
+		grammarGraph = javaGrammar.toGrammarGraph(input, config);
 		parser = ParserFactory.getParser(config, input, grammar);
 	}
 	
@@ -93,7 +97,7 @@ public class BenchmarkJava extends AbstractBenchmark {
 	}
 	
 	public static void main(String[] args) throws RunnerException, IOException {
-		List<File> files = find("/Users/aliafroozeh/charStreams", "java");
+		List<File> files = find(sourceDir, "java");
 		String[] params = files.stream().map(f -> f.getAbsolutePath()).toArray(String[]::new);
 		String[] gssParams = new String[] { GSSType.NEW.toString(), GSSType.ORIGINAL.toString() };
 		Options opt = new OptionsBuilder()

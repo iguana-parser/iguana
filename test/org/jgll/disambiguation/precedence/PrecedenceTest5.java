@@ -3,7 +3,7 @@ package org.jgll.disambiguation.precedence;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -93,11 +93,11 @@ public class PrecedenceTest5 {
 		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}
 	
-	private SPPFNode getSPPF(GrammarRegistry registry) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+	private SPPFNode getSPPF(GrammarGraph graph) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
 		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 4);
 		PackedNode node2 = factory.createPackedNode("E ::= E1 z .", 3, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("E", 1, 0, 3);

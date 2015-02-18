@@ -1,4 +1,4 @@
-package org.jgll.util.benchmark;
+package org.jgll.benchmark.jmh;
 
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
