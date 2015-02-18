@@ -76,7 +76,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		if (!isEBNF(symbol))
 			return symbol;
 		
-//		TODO:		
+//		TODO: currently breaks the EBNF translation
 //		if (cache.get(symbol) != null) 
 //			return cache.get(symbol);
 		
@@ -106,7 +106,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			newNt = parameters != null? Nonterminal.builder(getName(S, star.getSeparators(), layout) + "*").addParameters(parameters).build()
-						: Nonterminal.withName(getName(S, star.getSeparators(), layout) + "*");
+						              : Nonterminal.withName(getName(S, star.getSeparators(), layout) + "*");
 			
 			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
 			addedRules.add(Rule.withHead(newNt).build());
@@ -125,6 +125,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		else if (symbol instanceof Plus) {
 			Plus plus = (Plus) symbol;
 			Symbol S = plus.getSymbol();
+			
 			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules, layout, strategy)).collect(Collectors.toList());
 			
 			S.setEmpty();
@@ -136,7 +137,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			newNt = parameters != null? Nonterminal.builder(getName(S, plus.getSeparators(), layout) + "+").addParameters(parameters).build()
-						: Nonterminal.withName(getName(S, plus.getSeparators(), layout) + "+");
+						              : Nonterminal.withName(getName(S, plus.getSeparators(), layout) + "+");
 			
 			S = rewrite(S, addedRules, layout, strategy);
 			
@@ -163,7 +164,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build() 
-						: Nonterminal.withName(symbol.getName());
+						              : Nonterminal.withName(symbol.getName());
 			
 			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(in, addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
 			addedRules.add(Rule.withHead(newNt).build());
@@ -187,7 +188,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build()
-						: Nonterminal.withName(symbol.getName());
+						              : Nonterminal.withName(symbol.getName());
 			
 			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy).build());
 		} 
@@ -211,7 +212,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build()
-						: Nonterminal.withName(symbol.getName());
+						              : Nonterminal.withName(symbol.getName());
 			
 			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy).build()));
 		}
@@ -223,7 +224,7 @@ public class EBNFToBNF implements GrammarTransformation {
 //		cache.put(symbol, newNt);
 		
 		return arguments != null? ((Nonterminal.Builder) newNt.copyBuilder()).apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build()
-					: newNt.copyBuilder().addConditions(symbol).setLabel(symbol.getLabel()).build();
+					            : newNt.copyBuilder().addConditions(symbol).setLabel(symbol.getLabel()).build();
 	}
 	
 	private String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
