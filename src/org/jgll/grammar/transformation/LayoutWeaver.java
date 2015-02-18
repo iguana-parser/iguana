@@ -11,7 +11,7 @@ public class LayoutWeaver implements GrammarTransformation {
 	public Grammar transform(Grammar grammar) {
 		Nonterminal layout = grammar.getLayout();
 		
-		Grammar.Builder builder = Grammar.builder();
+		Grammar.Builder builder = Grammar.builder().setLayout(layout);
 		
 		for (Rule rule : grammar.getRules()) {
 			
