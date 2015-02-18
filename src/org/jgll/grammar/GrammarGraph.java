@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgll.datadependent.ast.Expression;
+import org.jgll.datadependent.ast.Statement;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.exception.IncorrectNumberOfArgumentsException;
 import org.jgll.grammar.slot.AbstractTerminalTransition;
@@ -165,8 +166,13 @@ public class GrammarGraph implements Serializable {
 			}
 			else if (symbol instanceof Code) {
 				Code code = (Code) symbol;
+				Symbol sym = code.getSymbol();
+				Statement[] statements = code.getStatements();
+				
+				// FIXME
+				
 				BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new CodeTransition(code, currentSlot, slot));
+				currentSlot.addTransition(new CodeTransition(statements, currentSlot, slot));
 				currentSlot = slot;
 			}
 

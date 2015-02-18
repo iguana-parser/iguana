@@ -1,18 +1,18 @@
 package org.jgll.grammar.slot;
 
+import org.jgll.datadependent.ast.Statement;
 import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.symbol.Code;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 
 public class CodeTransition extends AbstractTransition {
 	
-	private final Code code;
+	private final Statement[] statements;
 
-	public CodeTransition(Code code, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+	public CodeTransition(Statement[] statements, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
-		this.code = code;
+		this.statements = statements;
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class CodeTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		
-		parser.evaluate(code, parser.getEmptyEnvironment());
+		parser.evaluate(statements, parser.getEmptyEnvironment());
 		
 		if (parser.getEnvironment().isEmpty()) {
 			dest.execute(parser, u, i, node);
@@ -39,13 +39,13 @@ public class CodeTransition extends AbstractTransition {
 	 */
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		parser.evaluate(code, env);
+		parser.evaluate(statements, env);
 		dest.execute(parser, u, i, node, parser.getEnvironment());
 	}
 
 	@Override
 	public String getLabel() {
-		return code.toString();
+		return statements.toString();
 	}
-
+	
 }
