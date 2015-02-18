@@ -92,7 +92,11 @@ public class Star extends AbstractRegularExpression {
 	
 	@Override
 	public String getConstructorCode() {
-		return Star.class.getSimpleName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
+		return Star.class.getSimpleName() + 
+			   ".builder(" + s.getConstructorCode() + ")" + 
+			   super.getConstructorCode() +
+			   (separators.isEmpty() ? "" : ".addSeparators(" + asList(separators) + ")") +
+			   ".build()";
 	}
 	
 	public List<Symbol> getSeparators() {

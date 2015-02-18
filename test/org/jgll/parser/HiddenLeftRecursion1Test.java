@@ -3,7 +3,7 @@ package org.jgll.parser;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -67,7 +67,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode1(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode1(parser.getGrammarGraph())));
 	}
 	
 	@Test
@@ -76,7 +76,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode2(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode2(parser.getGrammarGraph())));
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode3(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode3(parser.getGrammarGraph())));
 	}
 	
 	@Test
@@ -94,7 +94,7 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode4(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode4(parser.getGrammarGraph())));
 	}
 	
 	@Test
@@ -103,10 +103,10 @@ public class HiddenLeftRecursion1Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode5(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode5(parser.getGrammarGraph())));
 	}
 	
-	private SPPFNode getSPPFNode1(GrammarRegistry registry) {
+	private SPPFNode getSPPFNode1(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 3);
 		PackedNode node2 = factory.createPackedNode("A ::= B A a .", 2, node1);
@@ -132,7 +132,7 @@ public class HiddenLeftRecursion1Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPFNode2(GrammarRegistry registry) {
+	private SPPFNode getSPPFNode2(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 3);
 		PackedNode node2 = factory.createPackedNode("A ::= D A b .", 2, node1);
@@ -158,7 +158,7 @@ public class HiddenLeftRecursion1Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPFNode3(GrammarRegistry registry) {
+	private SPPFNode getSPPFNode3(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 8);
 		PackedNode node2 = factory.createPackedNode("A ::= D A b .", 7, node1);
@@ -254,7 +254,7 @@ public class HiddenLeftRecursion1Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPFNode4(GrammarRegistry registry) {
+	private SPPFNode getSPPFNode4(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 8);
 		PackedNode node2 = factory.createPackedNode("A ::= D A b .", 7, node1);
@@ -340,7 +340,7 @@ public class HiddenLeftRecursion1Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPFNode5(GrammarRegistry registry) {
+	private SPPFNode getSPPFNode5(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 11);
 		PackedNode node2 = factory.createPackedNode("A ::= B A a .", 10, node1);

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.ParseResult;
@@ -44,7 +44,7 @@ public class Test1 extends AbstractParserTest {
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Test1::getParseResult
+	    		(Function<GrammarGraph, ParseResult>) Test1::getParseResult
 	    	}).collect(Collectors.toList());
     }
     
@@ -67,7 +67,7 @@ public class Test1 extends AbstractParserTest {
 		assertTrue(grammar.isNullable(Nonterminal.withName("A")));
 	}
 		
-	public static ParseSuccess getParseResult(GrammarRegistry registry) {
+	public static ParseSuccess getParseResult(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(1)
 				.setGSSNodesCount(1)
@@ -77,11 +77,11 @@ public class Test1 extends AbstractParserTest {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(registry), statistics);
+		return new ParseSuccess(expectedSPPF(graph), statistics);
 	}
 	
-	public static NonterminalNode expectedSPPF(GrammarRegistry registry) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+	public static NonterminalNode expectedSPPF(GrammarGraph graph) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 0);
 		PackedNode node2 = factory.createPackedNode("A ::= .", 0, node1);
 		TerminalNode node3 = factory.createEpsilonNode(0);

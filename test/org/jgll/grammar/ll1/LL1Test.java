@@ -108,7 +108,7 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 
-		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
+		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 3);
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 2, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 2);
@@ -141,7 +141,7 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
-		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
+		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 1);
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 0, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 0);
@@ -173,7 +173,7 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
-		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
+		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2);
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 1, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 1);
@@ -206,7 +206,7 @@ public class LL1Test {
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		
-		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getRegistry());
+		SPPFNodeFactory factory = new SPPFNodeFactory(parser.getGrammarGraph());
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2);
 		PackedNode node2 = factory.createPackedNode("S ::= A a .", 1, node1);
 		NonterminalNode node3 = factory.createNonterminalNode("A", 0, 0, 1);

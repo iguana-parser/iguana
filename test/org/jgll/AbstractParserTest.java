@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.function.Function;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
@@ -31,7 +31,7 @@ public class AbstractParserTest {
 	public GLLParser parser;
 
 	@Parameter(value = 4)
-	public Function<GrammarRegistry, ParseResult> expectedResult;
+	public Function<GrammarGraph, ParseResult> expectedResult;
 	
 	@Test
 	public void testParser() {
@@ -40,7 +40,7 @@ public class AbstractParserTest {
 		assertTrue(result.isParseSuccess());
 		
 		// Checking the parse tree if it exists
-		ParseResult expected = expectedResult.apply(parser.getRegistry());
+		ParseResult expected = expectedResult.apply(parser.getGrammarGraph());
 		
 		if (expected.asParseSuccess().getRoot() == null) {
 			assertEquals(expected.asParseSuccess().getStatistics(), result.asParseSuccess().getStatistics());

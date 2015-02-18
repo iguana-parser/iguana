@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -53,14 +53,14 @@ public class Test8 extends AbstractParserTest {
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Test8::getParseResult1
+	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult1
 	    	}).collect(Collectors.toList());
 		parameters.addAll(all_configs.stream().map(c -> new Object[] {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
-	    		(Function<GrammarRegistry, ParseResult>) Test8::getParseResult2
+	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult2
 	    	}).collect(Collectors.toList()));
 		return parameters;
     }
@@ -106,7 +106,7 @@ public class Test8 extends AbstractParserTest {
 //		assertTrue(grammarGraph.isLL1SubGrammar(C));
 	}
 	
-	private static ParseSuccess getParseResult1(GrammarRegistry registry) {
+	private static ParseSuccess getParseResult1(GrammarGraph registry) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(8)
 				.setGSSNodesCount(4)
@@ -119,7 +119,7 @@ public class Test8 extends AbstractParserTest {
 		return new ParseSuccess(expectedSPPF1(registry), statistics);
 	}
 	
-	private static ParseSuccess getParseResult2(GrammarRegistry registry) {
+	private static ParseSuccess getParseResult2(GrammarGraph registry) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(18)
 				.setGSSNodesCount(7)
@@ -132,7 +132,7 @@ public class Test8 extends AbstractParserTest {
 		return new ParseSuccess(expectedSPPF2(registry), statistics);
 	}
 	
-	private static NonterminalNode expectedSPPF1(GrammarRegistry registry) {
+	private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 3);
 		PackedNode node2 = factory.createPackedNode("A ::= a B c .", 2, node1);
@@ -154,7 +154,7 @@ public class Test8 extends AbstractParserTest {
 		return node1;
 	}
 	
-	private static NonterminalNode expectedSPPF2(GrammarRegistry registry) {
+	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 5);
 		PackedNode node2 = factory.createPackedNode("A ::= C .", 5, node1);

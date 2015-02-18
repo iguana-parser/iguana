@@ -3,7 +3,7 @@ package org.jgll.disambiguation.precedence;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -100,7 +100,7 @@ public class PrecedenceTest2 {
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}
 	
 	private Grammar getGrammar() {
@@ -134,8 +134,8 @@ public class PrecedenceTest2 {
 		.build();
 	}
 	
-	private SPPFNode getSPPF(GrammarRegistry registry) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+	private SPPFNode getSPPF(GrammarGraph graph) {
+		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
 		NonterminalNode node1 = factory.createNonterminalNode("E", 0, 0, 10);
 		PackedNode node2 = factory.createPackedNode("E ::= E2 + E1 .", 2, node1);
 		IntermediateNode node3 = factory.createIntermediateNode("E ::= E2 + . E1", 0, 2);

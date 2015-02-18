@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.regex.Sequence;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
@@ -28,7 +28,7 @@ public class KeywordTest2 {
 
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
-	private Sequence<Character> iff = Sequence.from("if");
+	private Terminal iff = Terminal.from(Sequence.from("if"));
 
 	@Before
 	public void init() {
@@ -36,7 +36,7 @@ public class KeywordTest2 {
 		Rule r1 = Rule.withHead(A).addSymbols(iff, B).build();
 		Rule r2 = Rule.withHead(B).addSymbol(Character.from('b')).build();
 		
-		grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(iff.toRule()).build();
+		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 	}
 	
 	@Test

@@ -31,11 +31,14 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final Nonterminal layout;
 	
+	private final LayoutStrategy layoutStrategy;
+	
 	public Rule(Builder builder) {
 		this.body = builder.body;
 		this.head = builder.head;
 		this.object = builder.object;
 		this.layout = builder.layout;
+		this.layoutStrategy = builder.layoutStrategy;
 	}
 		
 	public Nonterminal getHead() {
@@ -63,6 +66,10 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	public Nonterminal getLayout() {
 		return layout;
+	}
+	
+	public LayoutStrategy getLayoutStrategy() {
+		return layoutStrategy;
 	}
 	
 	public boolean hasLayout() {
@@ -121,6 +128,7 @@ public class Rule implements ConstructorCode, Serializable {
 		private Nonterminal head;
 		private List<Symbol> body;
 		private Serializable object;
+		private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
 		private Nonterminal layout;
 
 		public Builder(Nonterminal head) {
@@ -147,6 +155,11 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder setLayoutStrategy(LayoutStrategy layoutStrategy) {
+			this.layoutStrategy = layoutStrategy;
+			return this;
+		}
+		
 		public Builder setObject(Serializable object) {
 			this.object = object;
 			return this;
@@ -167,6 +180,7 @@ public class Rule implements ConstructorCode, Serializable {
 		return Rule.class.getSimpleName() + ".withHead(" + head.getConstructorCode() + ")" + 
 				(body == null ? "" : body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) +
 				(layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
+				(layoutStrategy == LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
 				".build()";
 	}
 }

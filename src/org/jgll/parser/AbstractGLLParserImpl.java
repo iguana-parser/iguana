@@ -10,7 +10,6 @@ import org.jgll.datadependent.env.Environment;
 import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.GrammarRegistry;
 import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.EndGrammarSlot;
@@ -33,9 +32,9 @@ import org.jgll.sppf.TerminalNode;
 import org.jgll.sppf.lookup.SPPFLookup;
 import org.jgll.util.Configuration;
 import org.jgll.util.Configuration.LookupStrategy;
+import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Input;
 import org.jgll.util.ParseStatistics;
-import org.jgll.util.benchmark.BenchmarkUtil;
 import org.jgll.util.logging.LoggerWrapper;
 
 /**
@@ -158,7 +157,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	protected NonterminalGrammarSlot getStartSymbol(Nonterminal nonterminal) {
-		return grammarGraph.getRegistry().getHead(nonterminal);
+		return grammarGraph.getHead(nonterminal);
 	}
 	
 	protected void parse(NonterminalGrammarSlot startSymbol) {
@@ -256,14 +255,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public void reset() {
-		grammarGraph.reset(input);
 		gssLookup.reset();
 		sppfLookup.reset();
-	}
-	
-	@Override
-	public GrammarRegistry getRegistry() {
-		return grammarGraph.getRegistry();
 	}
 	
 	@Override
@@ -453,4 +446,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return sppfLookup.getNode(slot, leftChild, rightChild, env, data);
 	}
 
+	@Override
+	public GrammarGraph getGrammarGraph() {
+		return grammarGraph;
+	}
 }

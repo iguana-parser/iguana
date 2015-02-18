@@ -30,6 +30,25 @@ public class Terminal extends AbstractRegularExpression {
 		return regex;
 	}
 	
+	@Override
+	public int hashCode() {
+		return regex.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj == this)
+			return true;
+		
+		if (!(obj instanceof Terminal))
+			return false;
+		
+		Terminal other = (Terminal) obj;
+		
+		return regex.equals(other.regex);
+	}
+	
 	public static Builder builder(RegularExpression regex) {
 		return new Builder(regex);
 	}
@@ -76,6 +95,12 @@ public class Terminal extends AbstractRegularExpression {
 	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
+	}
+	
+	public String getConstructorCode() {
+		return Terminal.class.getSimpleName() + ".builder(" + regex.getConstructorCode() + ")"
+											  + super.getConstructorCode() 
+											  + ".build()";
 	}
 
 }

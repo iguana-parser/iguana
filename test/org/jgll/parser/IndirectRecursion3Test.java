@@ -3,7 +3,7 @@ package org.jgll.parser;
 import static org.junit.Assert.*;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarRegistry;
+import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -67,7 +67,7 @@ public class IndirectRecursion3Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode1(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode1(parser.getGrammarGraph())));
 	}
 	
 	@Test
@@ -76,7 +76,7 @@ public class IndirectRecursion3Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode2(parser.getRegistry())));		
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode2(parser.getGrammarGraph())));		
 	}
 	
 	@Test
@@ -85,10 +85,10 @@ public class IndirectRecursion3Test {
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode3(parser.getRegistry())));
+		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode3(parser.getGrammarGraph())));
 	}
 	
-	private SPPFNode getSPPFNode1(GrammarRegistry registry) {
+	private SPPFNode getSPPFNode1(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 5);
 		PackedNode node2 = factory.createPackedNode("A ::= B c .", 4, node1);
@@ -122,7 +122,7 @@ public class IndirectRecursion3Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPFNode2(GrammarRegistry registry) {
+	private SPPFNode getSPPFNode2(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 7);
 		PackedNode node2 = factory.createPackedNode("A ::= C d .", 6, node1);
@@ -168,7 +168,7 @@ public class IndirectRecursion3Test {
 		return node1;
 	}
 	
-	private SPPFNode getSPPFNode3(GrammarRegistry registry) {
+	private SPPFNode getSPPFNode3(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 7);
 		PackedNode node2 = factory.createPackedNode("A ::= C d .", 6, node1);
