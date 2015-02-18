@@ -376,7 +376,14 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Offside symbol) {
-		// FIXME: EBNF
+		
+		Symbol sym = symbol.getSymbol();
+		
+		sym.setEnv(symbol.getEnv());
+		visitSymbol(sym);
+		
+		symbol.setEnv(sym.getEnv());
+		
 		return null;
 	}
 	
@@ -387,7 +394,16 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	
 	@Override
 	public Void visit(While symbol) {
-		// FIXME: EBNF
+		
+		org.jgll.datadependent.ast.Expression expression = symbol.getExpression();
+		Symbol body = symbol.getBody();
+		
+		expression.setEnv(symbol.getEnv());
+		expression.accept(this);
+		
+		body.setEnv(symbol.getEnv());
+		visitSymbol(body);
+		
 		return null;
 	}
 
@@ -398,7 +414,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		for (Symbol sym : symbol.getSymbols()) {
 			sym.setEnv(env);
-			sym.accept(this);
+			visitSymbol(sym);
 		}
 		
 		return null;
@@ -410,7 +426,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		Symbol sym = symbol.getSymbol();
 		
 		sym.setEnv(symbol.getEnv());
-		sym.accept(this);
+		visitSymbol(sym);
 		
 		return null;
 	}
@@ -421,7 +437,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		Symbol sym = symbol.getSymbol();
 		
 		sym.setEnv(symbol.getEnv());
-		sym.accept(this);
+		visitSymbol(sym);
 		
 		return null;
 	}
@@ -433,7 +449,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		for (E sym : symbol.getSymbols()) {
 			sym.setEnv(env);
-			sym.accept(this);
+			visitSymbol(sym);
 			env = sym.getEnv();
 		}
 		
@@ -446,16 +462,16 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		Symbol sym = symbol.getSymbol();
 		
 		sym.setEnv(symbol.getEnv());
-		sym.accept(this);
+		visitSymbol(sym);
 		
 		return null;
 	}
 	
 	/**
 	 * 
-	 * Accounts for optional label and preconditions and postconditions
+	 * Accounts for optional label and optional preconditions and postconditions
 	 */
-	private Void visitSymbol(Symbol symbol) {
+	public Void visitSymbol(Symbol symbol) {
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		

@@ -16,6 +16,10 @@ public class Offside extends AbstractSymbol {
 	public static Offside offside(Symbol symbol) {
 		return builder(symbol).build();
 	}
+	
+	public Symbol getSymbol() {
+		return symbol;
+	}
 
 	@Override
 	public Builder copyBuilder() {

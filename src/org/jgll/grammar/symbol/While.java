@@ -19,6 +19,14 @@ public class While extends AbstractSymbol {
 	public static While whileLoop(Expression expression, Symbol body) {
 		return builder(expression, body).build();
 	}
+	
+	public Expression getExpression() {
+		return expression;
+	}
+	
+	public Symbol getBody() {
+		return body; 
+	}
 
 	@Override
 	public Builder copyBuilder() {
