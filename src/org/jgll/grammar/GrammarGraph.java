@@ -26,13 +26,18 @@ import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.NonterminalTransition;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalTransition;
+import org.jgll.grammar.symbol.Block;
 import org.jgll.grammar.symbol.Code;
+import org.jgll.grammar.symbol.Conditional;
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.IfThen;
+import org.jgll.grammar.symbol.IfThenElse;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.While;
 import org.jgll.parser.gss.lookup.ArrayNodeLookup;
 import org.jgll.parser.gss.lookup.DummyNodeLookup;
 import org.jgll.parser.gss.lookup.GSSNodeLookup;
@@ -132,52 +137,125 @@ public class GrammarGraph implements Serializable {
 	private void addRule(NonterminalGrammarSlot head, Rule rule) {
 		
 		BodyGrammarSlot firstSlot = getFirstGrammarSlot(rule, head);
-		head.addFirstSlot(firstSlot);
-		
+		head.addFirstSlot(firstSlot);	
 		BodyGrammarSlot currentSlot = firstSlot;
 		
-		for (int i = 0; i < rule.size(); i++) {
-			Symbol symbol = rule.symbolAt(i);
-			
-			// Terminal
-			if (symbol instanceof RegularExpression) {
-				RegularExpression regex = (RegularExpression) symbol;
-				TerminalGrammarSlot terminalSlot = getTerminalGrammarSlot(regex);
-				BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), null);
-				Set<Condition> preConditions = symbol.getPreConditions();
-				Set<Condition> postConditions = symbol.getPostConditions();
-				currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
-				currentSlot = slot;
-			} 
-			else if (symbol instanceof Nonterminal) {
-				Nonterminal nonterminal = (Nonterminal) symbol;
-
-				NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
-				
-				BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, nonterminal.getLabel(), nonterminal.getVariable());
-				
-				Expression[] arguments = nonterminal.getArguments();
-				
-				// validateNumberOfArguments(nonterminal, arguments);
-				
-				Set<Condition> preConditions = symbol.getPreConditions();
-				currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, preConditions));
-				currentSlot = slot;
-			}
-			else if (symbol instanceof Code) {
-				Code code = (Code) symbol;
-				Symbol sym = code.getSymbol();
-				Statement[] statements = code.getStatements();
-				
-				// FIXME
-				
-				BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new CodeTransition(statements, currentSlot, slot));
-				currentSlot = slot;
-			}
-
-		}
+		GrammarGraphSymbolVisitor rule2graph = new GrammarGraphSymbolVisitor(head, rule, currentSlot);
+		
+		while (rule2graph.hasNext()) rule2graph.nextSymbol();
 	}
+	
+	private class GrammarGraphSymbolVisitor extends  AbstractGrammarGraphSymbolVisitor {
+		
+		private final NonterminalGrammarSlot head;
+		private final Rule rule;
+		
+		private BodyGrammarSlot currentSlot;
+		private int i = 0;
+		
+		private int j;
+		
+		public GrammarGraphSymbolVisitor(NonterminalGrammarSlot head, Rule rule, BodyGrammarSlot currentSlot) {
+			this.head = head;
+			this.rule = rule;
+			this.currentSlot = currentSlot;
+		}
+		
+		public boolean hasNext() {
+			return i < rule.size();
+		}
+		
+		public void nextSymbol() {
+			j = -1;
+			rule.symbolAt(i).accept(this);
+			i++;
+		}
+		
+		@Override
+		public Void visit(While symbol) {
+			if (j == -1) j++;
+			
+			return null;
+		}
+		
+		@Override
+		public Void visit(Nonterminal symbol) {
+			
+			NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(symbol);
+			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j), head, symbol.getLabel(), symbol.getVariable());
+			
+			Expression[] arguments = symbol.getArguments();
+			
+			// FIXME: Uncomment validateNumberOfArguments(nonterminal, arguments);
+			
+			Set<Condition> preConditions = symbol.getPreConditions();
+			currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, preConditions));
+			currentSlot = slot;
+			j++;
+			
+			return null;
+		}
+		
+		@Override
+		public Void visit(IfThenElse symbol) {
+			if (j == -1) j++;
+			
+			return null;
+		}
+		
+		@Override
+		public Void visit(IfThen symbol) {
+			if (j == -1) j++;
+			
+			return null;
+		}
+		
+		@Override
+		public Void visit(Conditional symbol) {
+			if (j == -1) j++;
+			
+			return null;
+		}
+		
+		@Override
+		public Void visit(Code symbol) {
+			
+			if (j == -1) j++;
+			
+			Symbol sym = symbol.getSymbol();
+			Statement[] statements = symbol.getStatements();
+			
+			sym.accept(this);
+			
+			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j), head, null, null);
+			currentSlot.addTransition(new CodeTransition(statements, currentSlot, slot));
+			
+			currentSlot = slot;
+			
+			return null;
+		}
+		
+		@Override
+		public Void visit(Block symbol) {
+			if (j == -1) j++;
+			
+			return null;
+		}
+		
+		@Override
+		public Void visit(RegularExpression symbol) {
+			TerminalGrammarSlot terminalSlot = getTerminalGrammarSlot(symbol);
+			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j), head, symbol.getLabel(), null);
+			Set<Condition> preConditions = symbol.getPreConditions();
+			Set<Condition> postConditions = symbol.getPostConditions();
+			currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
+			
+			currentSlot = slot;
+			j++;
+			
+			return null;
+		}
+	}; 
 	
 	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
 															 BodyGrammarSlot origin, BodyGrammarSlot dest,
@@ -257,6 +335,7 @@ public class GrammarGraph implements Serializable {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	static private void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
 		String[] parameters = nonterminal.getParameters();
 		if ((parameters == null && arguments == null) 

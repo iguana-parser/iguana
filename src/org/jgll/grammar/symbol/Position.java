@@ -9,11 +9,18 @@ public class Position {
 	
 	private final Rule rule;
 	
-	private final int position;
+	private final int posInRule;
 	
-	public Position(Rule rule, int position) {
+	private final int posInSymbol;
+	
+	public Position(Rule rule, int posInRule) {
+		this(rule, posInRule, -1);
+	}
+	
+	public Position(Rule rule, int posInRule, int posInSymbol) {
 		this.rule = rule;
-		this.position = position;
+		this.posInRule = posInRule;
+		this.posInSymbol = posInSymbol;
 	}
 	
 	public Rule getRule() {
@@ -21,15 +28,15 @@ public class Position {
 	}
 	
 	public int getPosition() {
-		return position;
+		return posInRule;
 	}
 	
 	public boolean isFirst() {
-		return position == 1;
+		return posInRule == 1;
 	}
 	
 	public boolean isLast() {
-		return position == rule.size();
+		return posInRule == rule.size();
 	}
 	
 	@Override
@@ -42,11 +49,14 @@ public class Position {
 		
 		Position other = (Position) obj;
 		
-		return rule.equals(other.rule) && position == other.position;
+		return rule.equals(other.rule) && posInRule == other.posInRule && posInSymbol == other.posInSymbol;
 	}
 	
 	@Override
 	public String toString() {
+		
+		// FIXME: account for position in a symbol
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append(rule.getHead()).append(" ::= ");
 		
@@ -55,13 +65,13 @@ public class Position {
 		} else {
 			int i;
 			for (i = 0; i < rule.size(); i++) {
-				if (i == position) {
+				if (i == posInRule) {
 					sb.append(". ");
 				}
 				sb.append(rule.symbolAt(i) + " ");
 			}
 			
-			if (position == rule.size()) {
+			if (posInRule == rule.size()) {
 				sb.append(".");
 			}
 		}

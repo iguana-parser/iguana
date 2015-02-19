@@ -119,6 +119,16 @@ public class Rule implements ConstructorCode, Serializable {
 		return new Position(this, i);
 	}
 	
+	public Position getPosition(int i, int j) {
+		if (i < 0)
+			throw new IllegalArgumentException("i cannot be less than zero.");
+		
+		if (i > size())
+			throw new IllegalArgumentException("i cannot be greater than the size.");
+		
+		return new Position(this, i, j);
+	}
+	
 	public static Builder withHead(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
