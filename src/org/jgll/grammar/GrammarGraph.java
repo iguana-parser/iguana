@@ -225,12 +225,15 @@ public class GrammarGraph implements Serializable {
 			Symbol sym = symbol.getSymbol();
 			Statement[] statements = symbol.getStatements();
 			
+			// FIXME: declare labels before and after
+			
 			sym.accept(this);
 			
-			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j), head, null, null);
+			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j), head, symbol.getLabel(), null);
 			currentSlot.addTransition(new CodeTransition(statements, currentSlot, slot));
 			
 			currentSlot = slot;
+			j++;
 			
 			return null;
 		}
@@ -238,6 +241,14 @@ public class GrammarGraph implements Serializable {
 		@Override
 		public Void visit(Block symbol) {
 			if (j == -1) j++;
+			
+			Symbol[] symbols = symbol.getSymbols();
+			
+			// FIXME: preconditions and postconditions
+			
+			for (Symbol sym : symbols) {
+				sym.accept(this);
+			}
 			
 			return null;
 		}

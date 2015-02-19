@@ -347,8 +347,13 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override
 	public Object evaluate(DataDependentCondition condition, Environment env) {
 		ctx.setEnvironment(env);
-		
 		return condition.getExpression().interpret(ctx);
+	}
+	
+	@Override
+	public Object evaluate(Expression expression, Environment env) {
+		ctx.setEnvironment(env);
+		return expression.interpret(ctx);
 	}
 	
 	@Override

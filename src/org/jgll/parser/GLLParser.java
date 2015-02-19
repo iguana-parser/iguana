@@ -69,10 +69,12 @@ public interface GLLParser {
 	 * 
 	 * Data-dependent GLL parsing
 	 * 
-	 */
+	 */	
 	public Object evaluate(Statement[] statements, Environment env);
 	
 	public Object evaluate(DataDependentCondition condition, Environment env);
+	
+	public Object evaluate(Expression expression, Environment env);
 	
 	public Object[] evaluate(Expression[] arguments, Environment env);
 	
