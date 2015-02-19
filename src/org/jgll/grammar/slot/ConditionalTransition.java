@@ -38,11 +38,11 @@ public class ConditionalTransition extends AbstractTransition {
 		
 		boolean isTrue = ((Boolean) value) == true;
 		
-		if (isTrue) {
+		if (isTrue)
 			dest.execute(parser, u, i, node);
-		} else {
+		else if (ifFalse != null)
 			ifFalse.execute(parser, u, i, node);
-		}
+		
 	}
 
 	@Override
@@ -61,11 +61,10 @@ public class ConditionalTransition extends AbstractTransition {
 		
 		boolean isTrue = ((Boolean) value) == true;
 		
-		if (isTrue) {
+		if (isTrue)
 			dest.execute(parser, u, i, node, env);
-		} else {
+		else if (ifFalse != null)
 			ifFalse.execute(parser, u, i, node, env);
-		}
 	}
 
 	@Override
