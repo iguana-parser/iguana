@@ -23,6 +23,10 @@ public class ConditionalTransition extends AbstractTransition {
 		this.ifFalse = ifFalse;
 	}
 
+	public BodyGrammarSlot ifFalseDestination() {
+		return ifFalse;
+	}
+	
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		

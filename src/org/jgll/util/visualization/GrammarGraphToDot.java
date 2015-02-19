@@ -4,6 +4,7 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.slot.ConditionalTransition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.util.generator.GeneratorUtil;
@@ -33,7 +34,13 @@ public class GrammarGraphToDot {
 	
 	private static void toDot(GrammarSlot slot, StringBuilder sb) {
 		sb.append("\"" + slot.getId() + "\"" + BODY_SLOT + "\n");
-		slot.getTransitions().forEach(t -> sb.append(String.format(TRANSITION, t.getLabel()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n"));
+		// TODO: improve this code
+		slot.getTransitions().forEach(t -> { 
+			if(t instanceof ConditionalTransition) 
+				sb.append(String.format(TRANSITION, t.getLabel() + ", true") + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n")
+				  .append(String.format(TRANSITION, t.getLabel() + ", false") + "\"" + slot.getId() + "\"" + "->" + "{\"" + ((ConditionalTransition) t).ifFalseDestination().getId() + "\"}" + "\n");
+			else sb.append(String.format(TRANSITION, t.getLabel()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n"); 
+		});
 		slot.getTransitions().forEach(t -> toDot(t.destination(), sb));
 	}
 	
