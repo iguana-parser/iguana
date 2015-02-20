@@ -34,8 +34,22 @@ public class IfThen extends AbstractSymbol {
 	}
 	
 	@Override
+	public int size() {
+		return thenPart.size();
+	}
+	
+	@Override
 	public String toString() {
 		return String.format("if (%s) %s", expression.toString(), thenPart.toString());
+	}
+	
+	@Override
+	public String toString(int j) {
+		if (j - thenPart.size() <= 0){
+			return String.format("if (%s) { %s }", expression.toString(), thenPart.toString(j - thenPart.size()));
+		} else {
+			return String.format("if (%s) %s", expression.toString(), thenPart.toString());
+		}
 	}
 	
 	public static Builder builder(Expression expression, Symbol symbol) {

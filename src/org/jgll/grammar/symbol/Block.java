@@ -28,8 +28,20 @@ public class Block extends AbstractSymbol {
 	}
 	
 	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return super.size();
+	}
+	
+	@Override
 	public String toString() {
 		return String.format("{ %s }", GeneratorUtil.listToString(symbols, " "));
+	}
+	
+	@Override
+	public String toString(int j) {
+		// TODO Auto-generated method stub
+		return super.toString(j);
 	}
 	
 	public static Builder builder(Symbol... symbols) {

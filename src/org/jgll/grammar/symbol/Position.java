@@ -55,6 +55,9 @@ public class Position {
 	@Override
 	public String toString() {
 		
+		if (posInSymbol == -1) 
+			throw new RuntimeException("Slot does not correspond to any grammar position.");
+		
 		// FIXME: account for position in a symbol
 		
 		StringBuilder sb = new StringBuilder();

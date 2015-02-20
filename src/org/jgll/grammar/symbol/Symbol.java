@@ -48,6 +48,10 @@ public interface Symbol extends ConstructorCode, Serializable, Attr {
 	
 	public SymbolBuilder<? extends Symbol> copyBuilder();
 	
+	public int size();
+	
+	public String toString(int j);
+	
 	public <T> T accept(ISymbolVisitor<T> visitor);
 	
 }	

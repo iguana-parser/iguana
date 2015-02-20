@@ -44,6 +44,22 @@ public class IfThenElse extends AbstractSymbol {
 		return String.format("if (%s) %s else %s", expression.toString(), thenPart.toString(), elsePart.toString());
 	}
 	
+	@Override
+	public int size() {
+		return thenPart.size() + elsePart.size();
+	}
+	
+	@Override
+	public String toString(int j) {
+		if (j - thenPart.size() <= 0){
+			return String.format("if (%s) { %s } else { %s }", expression.toString(), thenPart.toString(j), elsePart.toString());
+		} else if (j - thenPart.size() - elsePart.size() <= 0) {
+			return String.format("if (%s) { %s } else { %s }", expression.toString(), thenPart.toString(), elsePart.toString(j - thenPart.size()));
+		} else {
+			return String.format("if (%s) { %s } else { %s }", expression.toString(), thenPart.toString(), elsePart.toString());
+		}
+	}
+	
 	public static Builder builder(Expression expression, Symbol thenPart, Symbol elsePart) {
 		return new Builder(expression, thenPart, elsePart);
 	}

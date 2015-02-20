@@ -34,8 +34,26 @@ public class Conditional extends AbstractSymbol {
 	}
 	
 	@Override
+	public int size() {
+		return 1 + symbol.size();
+	}
+	
+	@Override
 	public String toString() {
-		return String.format("%s when %s;", symbol.toString(), expression.toString());
+		return String.format("%s when %s", symbol.toString(), expression.toString());
+	}
+	
+	@Override
+	public String toString(int j) {
+		if (j == 0) {
+			return String.format(" . %s when %s", symbol.toString(), expression.toString());
+		} else if (j - 1 - symbol.size() < 0){
+			return String.format("%s when %s", symbol.toString(j - 1 - symbol.size()), expression.toString());
+		} else if (j - 1 - symbol.size() == 0) {
+			return String.format("%s when . %s", symbol.toString(j - 1 - symbol.size()), expression.toString());
+		} else {
+			return String.format("%s when %s;", symbol.toString(), expression.toString());
+		}
 	}
 	
 	public static Builder builder(Symbol symbol, Expression expression) {
