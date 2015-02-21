@@ -362,7 +362,8 @@ public class GrammarGraph implements Serializable {
 				
 				while (!elseSlots.isEmpty()) {
 					BodyGrammarSlot slot = elseSlots.pop();
-					slot.addTransition(new EpsilonTransition(slot, currentSlot));
+					// FIXME:
+					// slot.addTransition(new EpsilonTransition(slot, currentSlot));
 				}
 			} else {
 				throw new RuntimeException("Something wrong with the logic of the grammar graph builder.");
