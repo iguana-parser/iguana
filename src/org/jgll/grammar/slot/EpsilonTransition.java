@@ -59,29 +59,40 @@ public class EpsilonTransition extends AbstractTransition {
 		switch(type) {
 		
 		case DUMMY:
-			conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext());
+			
+			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+				return;
+			
 			break;
 			
 		case CLEAR_LABEL: // TODO: Decide if this case is needed
 			break;
 			
-		case OPEN:
+		case OPEN: 
 			
-			conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext());
+			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext())) 
+				return;
+			
 			parser.getEvaluatorContext().pushEnvironment();
 			break;
 			
 		case CLOSE:
 			
 			parser.getEvaluatorContext().popEnvironment();
-			conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext());
+			
+			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+				return;
+			
 			break;
 			
 		case DECLARE_LABEL:
 			
 			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
 			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
-			conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext());
+			
+			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+				return;
+			
 			break;
 			
 		case STORE_LABEL:
@@ -96,7 +107,9 @@ public class EpsilonTransition extends AbstractTransition {
 			}
 			
 			parser.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
-			conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext());
+			
+			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+				return;
 			
 			break;
 			
