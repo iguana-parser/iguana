@@ -175,7 +175,7 @@ public class GrammarGraph implements Serializable {
 		public void nextSymbol() {
 			j = 0;
 			if (i == rule.size() - 1) isLast = true;
-			rule.symbolAt(i).accept(this);
+			visitSymbol(rule.symbolAt(i));
 			i++;
 		}
 		
@@ -184,16 +184,6 @@ public class GrammarGraph implements Serializable {
 			
 			Expression expression = symbol.getExpression();
 			Symbol body = symbol.getBody();
-			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), symbol.getPreConditions(), currentSlot, declared));
-				currentSlot = declared;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPreConditions(), currentSlot, checked));
-				currentSlot = checked;
-			}
 			
 			BodyGrammarSlot thenSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			BodyGrammarSlot elseSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
@@ -207,7 +197,7 @@ public class GrammarGraph implements Serializable {
 			currentSlot.addTransition(new EpsilonTransition(Type.OPEN, new HashSet<>(), currentSlot, opened));
 			currentSlot = opened;
 			
-			body.accept(this);
+			visitSymbol(body);
 			
 			BodyGrammarSlot closed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, new HashSet<>(), currentSlot, closed));
@@ -217,20 +207,10 @@ public class GrammarGraph implements Serializable {
 			
 			currentSlot = elseSlot;
 			
-			BodyGrammarSlot elsed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, null, null);
+			BodyGrammarSlot ended = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, null, null);
 			j++;
-			currentSlot.addTransition(getTerminalTransition(rule, i, getTerminalGrammarSlot(Epsilon.getInstance()), currentSlot, elsed, new HashSet<>(), new HashSet<>()));
-			currentSlot = elsed;
-			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
-				currentSlot = stored;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPostConditions(), currentSlot, checked));
-				currentSlot = checked;
-			}
+			currentSlot.addTransition(getTerminalTransition(rule, i, getTerminalGrammarSlot(Epsilon.getInstance()), currentSlot, ended, new HashSet<>(), new HashSet<>()));
+			currentSlot = ended;
 						
 			return null;
 		}
@@ -239,7 +219,16 @@ public class GrammarGraph implements Serializable {
 		public Void visit(Nonterminal symbol) {
 			
 			NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(symbol);
-			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, symbol.getLabel(), symbol.getVariable());
+			
+			BodyGrammarSlot slot;
+			
+			if (isLast && symbol == rule.symbolAt(i)) {
+				slot = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, symbol.getLabel(), symbol.getVariable());
+			} else if (isLast) {
+				slot = getLastSymbolGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, symbol.getLabel(), symbol.getVariable());
+			} else {
+				slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, symbol.getLabel(), symbol.getVariable());
+			}
 			
 			Expression[] arguments = symbol.getArguments();
 			
@@ -261,16 +250,6 @@ public class GrammarGraph implements Serializable {
 			Symbol thenPart = symbol.getThenPart();
 			Symbol elsePart = symbol.getElsePart();
 			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), symbol.getPreConditions(), currentSlot, declared));
-				currentSlot = declared;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPreConditions(), currentSlot, checked));
-				currentSlot = checked;
-			}
-			
 			BodyGrammarSlot thenSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			BodyGrammarSlot elseSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			
@@ -281,36 +260,22 @@ public class GrammarGraph implements Serializable {
 			currentSlot.addTransition(new EpsilonTransition(Type.OPEN, new HashSet<>(), currentSlot, opened));
 			currentSlot = opened;
 			
-			thenPart.accept(this);
+			visitSymbol(thenPart);
 			
 			BodyGrammarSlot closed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, new HashSet<>(), currentSlot, closed));
 			currentSlot = closed;
 			
-			BodyGrammarSlot ended;
-			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
-				currentSlot = stored;
-				ended = stored;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPostConditions(), currentSlot, checked));
-				currentSlot = checked;
-				ended = checked;
-			}
-			
 			currentSlot = elseSlot;
+			
 			opened = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			currentSlot.addTransition(new EpsilonTransition(Type.OPEN, new HashSet<>(), currentSlot, opened));
 			currentSlot = opened;
 			
-			elsePart.accept(this);
+			visitSymbol(elsePart);
 			
 			currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, new HashSet<>(), currentSlot, closed));
-			
-			currentSlot = ended;
+			currentSlot = closed;
 			
 			return null;
 		}
@@ -321,16 +286,6 @@ public class GrammarGraph implements Serializable {
 			Expression expression = symbol.getExpression();
 			Symbol thenPart = symbol.getThenPart();
 			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), symbol.getPreConditions(), currentSlot, declared));
-				currentSlot = declared;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPreConditions(), currentSlot, checked));
-				currentSlot = checked;
-			}
-			
 			BodyGrammarSlot thenSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			BodyGrammarSlot elseSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			
@@ -341,35 +296,17 @@ public class GrammarGraph implements Serializable {
 			currentSlot.addTransition(new EpsilonTransition(Type.OPEN, new HashSet<>(), currentSlot, opened));
 			currentSlot = opened;
 			
-			thenPart.accept(this);
+			visitSymbol(thenPart);
 			
 			BodyGrammarSlot closed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, new HashSet<>(), currentSlot, closed));
-			currentSlot = closed;
-			
-			BodyGrammarSlot ended;
-			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
-				currentSlot = stored;
-				ended = stored;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPostConditions(), currentSlot, checked));
-				currentSlot = checked;
-				ended = checked;
-			}
 			
 			currentSlot = elseSlot;
 			
-			BodyGrammarSlot elsed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, null, null);
-			j++;
-			currentSlot.addTransition(getTerminalTransition(rule, i, getTerminalGrammarSlot(Epsilon.getInstance()), currentSlot, elsed, new HashSet<>(), new HashSet<>()));
-			currentSlot = elsed;
-			currentSlot.addTransition(new EpsilonTransition(new HashSet<>(), currentSlot, closed));
+			visitSymbol(Epsilon.getInstance());
 			
-			currentSlot = ended;
+			currentSlot.addTransition(new EpsilonTransition(new HashSet<>(), currentSlot, closed));
+			currentSlot = closed;
 			
 			return null;
 			
@@ -381,31 +318,11 @@ public class GrammarGraph implements Serializable {
 			Symbol sym = symbol.getSymbol();
 			Expression expression = symbol.getExpression();
 			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), symbol.getPreConditions(), currentSlot, declared));
-				currentSlot = declared;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPreConditions(), currentSlot, checked));
-				currentSlot = checked;
-			}
-			
-			sym.accept(this);
+			visitSymbol(sym);
 			
 			BodyGrammarSlot thenSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			currentSlot.addTransition(new ConditionalTransition(expression, currentSlot, thenSlot));
 			currentSlot = thenSlot;
-			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
-				currentSlot = stored;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPostConditions(), currentSlot, checked));
-				currentSlot = checked;
-			}
 			
 			return null;
 		}
@@ -416,31 +333,11 @@ public class GrammarGraph implements Serializable {
 			Symbol sym = symbol.getSymbol();
 			Statement[] statements = symbol.getStatements();
 			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), symbol.getPreConditions(), currentSlot, declared));
-				currentSlot = declared;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPreConditions(), currentSlot, checked));
-				currentSlot = checked;
-			}
-			
-			sym.accept(this);
+			visitSymbol(sym);
 			
 			BodyGrammarSlot done = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			currentSlot.addTransition(new CodeTransition(statements, currentSlot, done));
 			currentSlot = done;
-			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
-				currentSlot = stored;
-			} else {
-				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(symbol.getPostConditions(), currentSlot, checked));
-				currentSlot = checked;
-			}
 			
 			return null;
 		}
@@ -453,43 +350,21 @@ public class GrammarGraph implements Serializable {
 			
 			Symbol[] symbols = symbol.getSymbols();
 			
-			BodyGrammarSlot opened;
-			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), symbol.getPreConditions(), currentSlot, declared));
-				currentSlot = declared;
-				
-				opened = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.OPEN, new HashSet<>(), currentSlot, opened));
-			} else {
-				opened = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.OPEN, symbol.getPreConditions(), currentSlot, opened));
-			}
-			
+			BodyGrammarSlot opened = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+			currentSlot.addTransition(new EpsilonTransition(Type.OPEN, new HashSet<>(), currentSlot, opened));
 			currentSlot = opened;
 			
 			int n = 0;
 			for (Symbol sym : symbols) {
 				if (n == symbols.length - 1 && isLast) this.isLast = true;
-				sym.accept(this);
+				visitSymbol(sym);
 				n++;
 			}
 			
-			if (symbol.getLabel() != null) {
-				BodyGrammarSlot closed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, new HashSet<>(), currentSlot, closed));
-				currentSlot = closed;
+			BodyGrammarSlot closed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+			currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, new HashSet<>(), currentSlot, closed));
+			currentSlot = closed;
 				
-				BodyGrammarSlot stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
-				currentSlot = stored;
-			} else {
-				BodyGrammarSlot closed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, symbol.getPostConditions(), currentSlot, closed));
-				currentSlot = closed;
-			}
-			
 			this.isLast = isLast;
 			
 			return null;
@@ -499,7 +374,16 @@ public class GrammarGraph implements Serializable {
 		public Void visit(RegularExpression symbol) {
 			TerminalGrammarSlot terminalSlot = getTerminalGrammarSlot(symbol);
 			
-			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, symbol.getLabel(), null);
+			BodyGrammarSlot slot;
+			
+			if (isLast && symbol == rule.symbolAt(i)) {
+				slot = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, symbol.getLabel(), null);
+			} else if (isLast) {
+				slot = getLastSymbolGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, symbol.getLabel(), null);
+			} else {
+				slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, symbol.getLabel(), null);
+			}
+			
 			Set<Condition> preConditions = symbol.getPreConditions();
 			Set<Condition> postConditions = symbol.getPostConditions();
 			currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
@@ -508,6 +392,53 @@ public class GrammarGraph implements Serializable {
 			j++;
 			
 			return null;
+		}
+		
+		/**
+		 *  Introduces epsilon transitions to handle labels and preconditions/postconditions
+		 */
+		private void visitSymbol(Symbol symbol) {
+			
+			if (symbol instanceof Nonterminal || symbol instanceof RegularExpression) { // TODO: I think this can be unified
+				symbol.accept(this);
+				return;
+			}
+			
+			if (symbol.getLabel() != null) {
+				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), symbol.getPreConditions(), currentSlot, declared));
+				currentSlot = declared;
+			} else {
+				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				currentSlot.addTransition(new EpsilonTransition(symbol.getPreConditions(), currentSlot, checked));
+				currentSlot = checked;
+			}
+			
+			symbol.accept(this);
+			
+			if (symbol.getLabel() != null) {
+				BodyGrammarSlot stored;
+				
+				if (isLast && symbol == rule.symbolAt(i)) {
+					stored = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				} else {
+					stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				}
+				
+				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
+				currentSlot = stored;
+			} else {
+				BodyGrammarSlot checked;
+				
+				if (isLast && symbol == rule.symbolAt(i)) {
+					checked = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				} else {
+					checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				}
+				
+				currentSlot.addTransition(new EpsilonTransition(symbol.getPostConditions(), currentSlot, checked));
+				currentSlot = checked;
+			}
 		}
 		
 	}; 
@@ -577,7 +508,6 @@ public class GrammarGraph implements Serializable {
 		return slot;
 	}
 	
-	@SuppressWarnings("unused")
 	private BodyGrammarSlot getLastSymbolGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable) {
 		assert i == rule.size();
 		
@@ -592,7 +522,6 @@ public class GrammarGraph implements Serializable {
 		return slot;
 	}
 	
-	@SuppressWarnings("unused")
 	private BodyGrammarSlot getEndGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable) {
 		assert i == rule.size();
 		
