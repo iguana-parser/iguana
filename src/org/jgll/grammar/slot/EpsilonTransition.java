@@ -13,12 +13,15 @@ import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Tuple;
+import org.jgll.util.generator.GeneratorUtil;
 
 public class EpsilonTransition extends AbstractTransition {
 	
 	private final Type type;
 	private final String label;
 	private final Conditions conditions;
+	
+	private final String conditions2string;
 
 	public EpsilonTransition(Set<Condition> conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this(Type.DUMMY, conditions, origin, dest);
@@ -29,6 +32,7 @@ public class EpsilonTransition extends AbstractTransition {
 		this.type = type;
 		this.label = null;
 		this.conditions = ConditionsFactory.getConditions(conditions);
+		this.conditions2string = conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
 	}
 	
 	public EpsilonTransition(Type type, String label, Set<Condition> conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
@@ -39,6 +43,7 @@ public class EpsilonTransition extends AbstractTransition {
 		this.type = type;
 		this.label = label;
 		this.conditions = ConditionsFactory.getConditions(conditions);
+		this.conditions2string = conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
 	}
 
 	@Override
@@ -48,7 +53,21 @@ public class EpsilonTransition extends AbstractTransition {
 
 	@Override
 	public String getLabel() {
-		return "";
+		switch(type) {
+		case CLEAR_LABEL:
+			return "?";
+		case CLOSE:
+			return "} " + conditions2string;
+		case DECLARE_LABEL:
+			return "declare: " + label + " " + conditions2string;
+		case DUMMY:
+			return conditions2string;
+		case OPEN:
+			return conditions2string + " {";
+		case STORE_LABEL:
+			return "store: " + label + " " + conditions2string;
+		}
+		throw new RuntimeException("Unknown type of an epsilon transition.");
 	}
 
 	@Override
