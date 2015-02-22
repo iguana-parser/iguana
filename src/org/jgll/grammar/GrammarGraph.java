@@ -26,6 +26,7 @@ import org.jgll.grammar.slot.EpsilonTransition.Type;
 import org.jgll.grammar.slot.FirstAndLastTerminalTransition;
 import org.jgll.grammar.slot.FirstTerminalTransition;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastSymbolGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.NonterminalTransition;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
@@ -173,8 +174,7 @@ public class GrammarGraph implements Serializable {
 		
 		public void nextSymbol() {
 			j = 0;
-			if (i == rule.size() - 1) 
-				isLast = true;
+			if (i == rule.size() - 1) isLast = true;
 			rule.symbolAt(i).accept(this);
 			i++;
 		}
@@ -471,9 +471,7 @@ public class GrammarGraph implements Serializable {
 			
 			int n = 0;
 			for (Symbol sym : symbols) {
-				if (n == symbols.length - 1 && isLast) {
-					this.isLast = true;
-				}
+				if (n == symbols.length - 1 && isLast) this.isLast = true;
 				sym.accept(this);
 				n++;
 			}
@@ -565,21 +563,46 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable) {
+		assert i < rule.size();
+		
 		BodyGrammarSlot slot;
-		if (i == rule.size()) {
-			if (config.getGSSType() == GSSType.NEW) {
-				slot = new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
-			} else {
-				slot = new EndGrammarSlot(id++, position, nonterminal, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());
-			}
+		if (config.getGSSType() == GSSType.NEW) {
+			// With new GSS we don't lookup in body grammarSlots
+			slot = new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());
 		} else {
-			if (config.getGSSType() == GSSType.NEW) {
-				// With new GSS we don't lookup in body grammarSlots
-				slot = new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());
-			} else {
-				slot = new BodyGrammarSlot(id++, position, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
-			}
+			slot = new BodyGrammarSlot(id++, position, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
 		}
+		
+		names.put(slot.toString(), slot);
+		return slot;
+	}
+	
+	@SuppressWarnings("unused")
+	private BodyGrammarSlot getLastSymbolGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable) {
+		assert i == rule.size();
+		
+		BodyGrammarSlot slot;
+		if (config.getGSSType() == GSSType.NEW) {
+			slot = new LastSymbolGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
+		} else {
+			slot = new LastSymbolGrammarSlot(id++, position, nonterminal, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());
+		}
+		
+		names.put(slot.toString(), slot);
+		return slot;
+	}
+	
+	@SuppressWarnings("unused")
+	private BodyGrammarSlot getEndGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable) {
+		assert i == rule.size();
+		
+		BodyGrammarSlot slot;
+		if (config.getGSSType() == GSSType.NEW) {
+			slot = new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
+		} else {
+			slot = new EndGrammarSlot(id++, position, nonterminal, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());
+		}
+		
 		names.put(slot.toString(), slot);
 		return slot;
 	}
