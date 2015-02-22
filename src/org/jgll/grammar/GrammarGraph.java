@@ -159,6 +159,8 @@ public class GrammarGraph implements Serializable {
 		
 		private int j;
 		
+		private boolean isLast = false;
+		
 		public GrammarGraphSymbolVisitor(NonterminalGrammarSlot head, Rule rule, BodyGrammarSlot currentSlot) {
 			this.head = head;
 			this.rule = rule;
@@ -171,6 +173,8 @@ public class GrammarGraph implements Serializable {
 		
 		public void nextSymbol() {
 			j = 0;
+			if (i == rule.size() - 1) 
+				isLast = true;
 			rule.symbolAt(i).accept(this);
 			i++;
 		}
@@ -444,6 +448,9 @@ public class GrammarGraph implements Serializable {
 		@Override
 		public Void visit(Block symbol) {
 			
+			boolean isLast = (i == rule.size() - 1) && this.isLast;
+			this.isLast = false;
+			
 			Symbol[] symbols = symbol.getSymbols();
 			
 			BodyGrammarSlot opened;
@@ -462,8 +469,13 @@ public class GrammarGraph implements Serializable {
 			
 			currentSlot = opened;
 			
+			int n = 0;
 			for (Symbol sym : symbols) {
+				if (n == symbols.length - 1 && isLast) {
+					this.isLast = true;
+				}
 				sym.accept(this);
+				n++;
 			}
 			
 			if (symbol.getLabel() != null) {
@@ -479,6 +491,8 @@ public class GrammarGraph implements Serializable {
 				currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, symbol.getPostConditions(), currentSlot, closed));
 				currentSlot = closed;
 			}
+			
+			this.isLast = isLast;
 			
 			return null;
 		}
@@ -578,7 +592,6 @@ public class GrammarGraph implements Serializable {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	static private void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
 		String[] parameters = nonterminal.getParameters();
 		if ((parameters == null && arguments == null) 
