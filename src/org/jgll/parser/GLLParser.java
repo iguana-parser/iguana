@@ -8,8 +8,8 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastSymbolGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -44,9 +44,9 @@ public interface GLLParser {
 
 	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex);
 	
-	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
+	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
-	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child);
+	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child);
 	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
@@ -90,9 +90,9 @@ public interface GLLParser {
 	
 	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env);
 	
-	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data);
+	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data);
 	
-	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data);
+	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data);
 	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
 	

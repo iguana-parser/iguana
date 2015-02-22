@@ -10,7 +10,7 @@ import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 
-public class EpsilonGrammarSlot extends EndGrammarSlot {
+public class EpsilonGrammarSlot extends LastSymbolAndEndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
 

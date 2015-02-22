@@ -10,19 +10,11 @@ import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.NonPackedNode;
 
-public class LastSymbolGrammarSlot extends BodyGrammarSlot {
-	
-	protected final NonterminalGrammarSlot nonterminal;
+public class LastSymbolAndEndGrammarSlot extends LastSymbolGrammarSlot {
 
-	public LastSymbolGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, 
+	public LastSymbolAndEndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup,
 			String label, String variable, Set<Condition> conditions) {
-		super(id, position, nodeLookup, label, variable, conditions);
-		this.nonterminal = nonterminal;
-	}
-	
-	@Override
-	public boolean isLast() {
-		return true;
+		super(id, position, nonterminal, nodeLookup, label, variable, conditions);
 	}
 	
 	@Override
@@ -30,21 +22,17 @@ public class LastSymbolGrammarSlot extends BodyGrammarSlot {
 		return null;
 	}
 	
-	public NonterminalGrammarSlot getNonterminal() {
-		return nonterminal;
-	}
-	
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (nonterminal.test(i)) {
-			super.execute(parser, u, i, node);
+			parser.pop(u, i, node);
 		}
 	}
 	
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (nonterminal.test(i)) {
-			super.execute(parser, u, i, node, env);
+			parser.pop(u, i, node);
 		}
 	}
 

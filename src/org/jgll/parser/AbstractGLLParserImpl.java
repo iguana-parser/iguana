@@ -12,8 +12,8 @@ import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastSymbolGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -264,12 +264,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
+	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child) {
 		return sppfLookup.getNonterminalNode(slot, child);
 	}
 	
 	@Override
-	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild);
 	}
 	
@@ -432,11 +432,13 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	public abstract <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
 	
-	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data) {
+	@Override
+	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data) {
 		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild, env, data);
 	}
 	
-	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data) {
+	@Override
+	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data) {
 		return sppfLookup.getNonterminalNode(slot, child, env, data);
 	}
 	

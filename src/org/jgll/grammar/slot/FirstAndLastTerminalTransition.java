@@ -25,7 +25,7 @@ public class FirstAndLastTerminalTransition extends AbstractTerminalTransition {
 
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		dest.execute(parser, u, i + length, parser.getNonterminalNode((EndGrammarSlot) dest, cr));
+		dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr));
 	}
 	
 	/**
@@ -35,6 +35,6 @@ public class FirstAndLastTerminalTransition extends AbstractTerminalTransition {
 	 */
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		dest.execute(parser, u, i + length, parser.getNonterminalNode((EndGrammarSlot) dest, cr), env);
+		dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr), env);
 	}
 }

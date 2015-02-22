@@ -25,7 +25,7 @@ public class BeforeLastTerminalTransition extends AbstractTerminalTransition {
 	
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		dest.execute(parser, u, i + length, parser.getNonterminalNode((EndGrammarSlot) dest, node, cr));
+		dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr));
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class BeforeLastTerminalTransition extends AbstractTerminalTransition {
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		// FIXME: SPPF
-		dest.execute(parser, u, i + length, parser.getNonterminalNode((EndGrammarSlot) dest, node, cr), env);
+		dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr), env);
 	}
 	
 }

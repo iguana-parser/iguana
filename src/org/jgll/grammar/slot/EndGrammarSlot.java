@@ -12,38 +12,26 @@ import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.NonPackedNode;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
-	
-	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, 
+	public EndGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
 			String label, String variable, Set<Condition> conditions) {
 		super(id, position, nodeLookup, label, variable, conditions);
-		this.nonterminal = nonterminal;
 	}
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		if (nonterminal == null || nonterminal.test(i))
-			parser.pop(u, i, node);
+		parser.pop(u, i, node);
 	}
 	
 	@Override
 	public String getConstructorCode() {
-		return new StringBuilder()
-			.append("new EndGrammarSlot(")
-			.append(position)
-			.append("), slot" + nonterminal.getId() + ")")
-			.toString();
+		return null;
 	}
 	
 	public Object getObject() {
 		return null;
 	}
 	
-	public NonterminalGrammarSlot getNonterminal() {
-		return nonterminal;
-	}
-
 	@Override
 	public Set<Transition> getTransitions() {
 		return Collections.emptySet();
@@ -66,8 +54,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	 */
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		if (nonterminal == null || nonterminal.test(i))
-			parser.pop(u, i, node);
+		parser.pop(u, i, node);
 	}
 
 }
