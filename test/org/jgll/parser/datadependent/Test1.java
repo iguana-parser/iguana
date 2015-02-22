@@ -61,20 +61,18 @@ public class Test1 {
 	public void test() {
 		System.out.println(grammar);
 		
-// 		FIXME: Graph builder for Code symbol
+		Input input = Input.fromString("ab");
+		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
-//		Input input = Input.fromString("ab");
-//		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-//		
-//		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-//		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-//		
-//		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-//		
-//		if (result.isParseSuccess()) {
-//			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-//					result.asParseSuccess().getRoot(), input);
-//		}
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+		
+		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+		
+		if (result.isParseSuccess()) {
+			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
+					result.asParseSuccess().getRoot(), input);
+		}
 		
 	}
 

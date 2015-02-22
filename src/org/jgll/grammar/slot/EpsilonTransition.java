@@ -59,13 +59,13 @@ public class EpsilonTransition extends AbstractTransition {
 		case CLOSE:
 			return "} " + conditions2string;
 		case DECLARE_LABEL:
-			return "declare: " + label + " " + conditions2string;
+			return label + ".lExt " + conditions2string;
 		case DUMMY:
-			return conditions2string;
+			return conditions2string.isEmpty()? String.valueOf('\u2205') : conditions2string;
 		case OPEN:
 			return conditions2string + " {";
 		case STORE_LABEL:
-			return "store: " + label + " " + conditions2string;
+			return label + ".rExt " + conditions2string;
 		}
 		throw new RuntimeException("Unknown type of an epsilon transition.");
 	}

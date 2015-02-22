@@ -5,6 +5,7 @@ import org.jgll.datadependent.env.Environment;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
+import org.jgll.util.generator.GeneratorUtil;
 
 public class CodeTransition extends AbstractTransition {
 	
@@ -45,7 +46,7 @@ public class CodeTransition extends AbstractTransition {
 
 	@Override
 	public String getLabel() {
-		return statements.toString();
+		return GeneratorUtil.listToString(statements, ";");
 	}
 	
 }
