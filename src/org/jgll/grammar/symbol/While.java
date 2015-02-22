@@ -34,8 +34,18 @@ public class While extends AbstractSymbol {
 	}
 	
 	@Override
+	public int size() {
+		return body.size();
+	}
+	
+	@Override
 	public String toString() {
 		return String.format("while (%s) %s", expression.toString(), body.toString());
+	}
+	
+	@Override
+	public String toString(int j) {
+		return String.format("while (%s) %s", expression.toString(), body.toString(j));
 	}
 	
 	public static Builder builder(Expression expression, Symbol body) {

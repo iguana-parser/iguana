@@ -56,9 +56,7 @@ public class Position {
 	public String toString() {
 		
 		if (posInSymbol == -1) 
-			throw new RuntimeException("Slot does not correspond to any grammar position.");
-		
-		// FIXME: account for position in a symbol
+			return "-";
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(rule.getHead()).append(" ::= ");
@@ -68,15 +66,13 @@ public class Position {
 		} else {
 			int i;
 			for (i = 0; i < rule.size(); i++) {
-				if (i == posInRule) {
-					sb.append(". ");
+				if (i + 1 == posInRule) {
+					sb.append(rule.symbolAt(i).toString(posInSymbol) + " ");
+				} else {
+					sb.append(rule.symbolAt(i) + " ");
 				}
-				sb.append(rule.symbolAt(i) + " ");
 			}
 			
-			if (posInRule == rule.size()) {
-				sb.append(".");
-			}
 		}
 		
 		return sb.toString().trim();

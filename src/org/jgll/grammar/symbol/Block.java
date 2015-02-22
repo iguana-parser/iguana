@@ -29,8 +29,10 @@ public class Block extends AbstractSymbol {
 	
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return super.size();
+		int size = 0;
+		for (Symbol symbol: symbols)
+			size = size + symbol.size();
+		return size;
 	}
 	
 	@Override
@@ -40,8 +42,16 @@ public class Block extends AbstractSymbol {
 	
 	@Override
 	public String toString(int j) {
-		// TODO Auto-generated method stub
-		return super.toString(j);
+		String[] strings = new String[symbols.length];
+		
+		int k = 0;
+		for (Symbol symbol : symbols) {
+			strings[k] = j <= 1? symbol.toString(j) : symbol.toString();
+			j = j - symbol.size();
+			k++;
+		}
+		
+		return String.format("{ %s }", GeneratorUtil.listToString(strings, " "));
 	}
 	
 	public static Builder builder(Symbol... symbols) {

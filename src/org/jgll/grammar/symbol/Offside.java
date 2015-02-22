@@ -27,8 +27,18 @@ public class Offside extends AbstractSymbol {
 	}
 	
 	@Override
+	public int size() {
+		return symbol.size();
+	}
+	
+	@Override
 	public String toString() {
 		return String.format("offside %s", symbol.toString());
+	}
+	
+	@Override
+	public String toString(int j) {
+		return String.format("offside %s", symbol.toString(j));
 	}
 	
 	public static Builder builder(Symbol symbol) {

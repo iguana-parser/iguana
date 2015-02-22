@@ -35,7 +35,7 @@ public class IfThen extends AbstractSymbol {
 	
 	@Override
 	public int size() {
-		return thenPart.size();
+		return thenPart.size() + 1;
 	}
 	
 	@Override
@@ -45,11 +45,11 @@ public class IfThen extends AbstractSymbol {
 	
 	@Override
 	public String toString(int j) {
-		if (j - thenPart.size() <= 0){
-			return String.format("if (%s) { %s }", expression.toString(), thenPart.toString(j - thenPart.size()));
-		} else {
-			return String.format("if (%s) %s", expression.toString(), thenPart.toString());
-		}
+		return String.format("if (%s) { %s } else %s", 
+								expression.toString(), 
+								thenPart.toString(j), 
+								j - thenPart.size() <= 1? Epsilon.getInstance().toString(j - thenPart.size()) 
+														  : Epsilon.getInstance().toString());
 	}
 	
 	public static Builder builder(Expression expression, Symbol symbol) {
