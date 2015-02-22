@@ -9,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.ast.Statement;
@@ -182,15 +181,52 @@ public class GrammarGraph implements Serializable {
 			Expression expression = symbol.getExpression();
 			Symbol body = symbol.getBody();
 			
-			BodyGrammarSlot thenSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, null, null);
-			j++;
-			BodyGrammarSlot elseSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, null, null);
-			j++;
-						
-			BodyGrammarSlot currentSlot = this.currentSlot;
+			if (symbol.getLabel() != null) {
+				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), symbol.getPreConditions(), currentSlot, declared));
+				currentSlot = declared;
+			} else {
+				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				currentSlot.addTransition(new EpsilonTransition(symbol.getPreConditions(), currentSlot, checked));
+				currentSlot = checked;
+			}
 			
-			this.currentSlot = thenSlot;
+			BodyGrammarSlot thenSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+			BodyGrammarSlot elseSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+			
+			BodyGrammarSlot loop = currentSlot;
+			
+			currentSlot.addTransition(new ConditionalTransition(expression, currentSlot, thenSlot, elseSlot));
+			currentSlot = thenSlot;
+			
+			BodyGrammarSlot opened = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+			currentSlot.addTransition(new EpsilonTransition(Type.OPEN, new HashSet<>(), currentSlot, opened));
+			currentSlot = opened;
+			
 			body.accept(this);
+			
+			BodyGrammarSlot closed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+			currentSlot.addTransition(new EpsilonTransition(Type.CLOSE, new HashSet<>(), currentSlot, closed));
+			currentSlot = closed;
+			
+			currentSlot.addTransition(new EpsilonTransition(new HashSet<>(), currentSlot, loop));
+			
+			currentSlot = elseSlot;
+			
+			BodyGrammarSlot elsed = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1, j + 1), head, null, null);
+			j++;
+			currentSlot.addTransition(getTerminalTransition(rule, i, getTerminalGrammarSlot(Epsilon.getInstance()), currentSlot, elsed, new HashSet<>(), new HashSet<>()));
+			currentSlot = elsed;
+			
+			if (symbol.getLabel() != null) {
+				BodyGrammarSlot stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
+				currentSlot = stored;
+			} else {
+				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+				currentSlot.addTransition(new EpsilonTransition(symbol.getPostConditions(), currentSlot, checked));
+				currentSlot = checked;
+			}
 						
 			return null;
 		}
