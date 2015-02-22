@@ -6,7 +6,10 @@ import static org.jgll.util.visualization.GraphVizUtil.*;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.ConditionalTransition;
+import org.jgll.grammar.slot.EndGrammarSlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastSymbolAndEndGrammarSlot;
+import org.jgll.grammar.slot.LastSymbolGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.util.generator.GeneratorUtil;
 
@@ -34,7 +37,16 @@ public class GrammarGraphToDot {
 	}
 	
 	private static void toDot(GrammarSlot slot, StringBuilder sb) {
-		sb.append("\"" + slot.getId() + "\"" + BODY_SLOT + "\n");
+		if (slot instanceof LastSymbolAndEndGrammarSlot) {
+			sb.append("\"" + slot.getId() + "\"" + String.format(LAST_SYMBOL_AND_END_SLOT, "") + "\n");
+		} else if (slot instanceof LastSymbolGrammarSlot) {
+			sb.append("\"" + slot.getId() + "\"" + String.format(LAST_SYMBOL_SLOT, "") + "\n");
+		} else if (slot instanceof EndGrammarSlot) {
+			sb.append("\"" + slot.getId() + "\"" + String.format(END_SLOT, "") + "\n");
+		} else {
+			sb.append("\"" + slot.getId() + "\"" + BODY_SLOT + "\n");
+		}
+		
 		// TODO: improve this code
 		slot.getTransitions().forEach(t -> { 
 			if(t instanceof ConditionalTransition) {

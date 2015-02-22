@@ -8,8 +8,10 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Code;
+import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -57,11 +59,12 @@ public class Test10 {
 					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("a")
 											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(), 
 										 stat(println(rExt("a"), indent(rExt("a"))))))
+					.addSymbol(NoNL) // TODO: Should be removed
 					.addSymbol(Code.code(Nonterminal.builder(B).setLabel("b")
 											.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
 										 stat(println(rExt("b"), indent(rExt("b"))))))
 					
-					.setLayout(NoNL).build();
+					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
 		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
 		Rule r3 = Rule.withHead(B).addSymbol(Character.from('b')).build();
@@ -78,6 +81,8 @@ public class Test10 {
 	@Test
 	public void test() {
 		System.out.println(grammar);
+		
+		grammar = new EBNFToBNF().transform(grammar);
 		
 		Input input = Input.fromString("a    b");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
