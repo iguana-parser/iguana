@@ -38,6 +38,11 @@ public class VariableDeclaration extends AbstractAST {
 	}
 	
 	@Override
+	public String getConstructorCode() {
+		return "";
+	}
+	
+	@Override
 	public String toString() {
 		return expression != null? String.format( "var %s = %s", name, expression) 
 				: String.format("var %s", name);

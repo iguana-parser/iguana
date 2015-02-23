@@ -4,6 +4,7 @@ Bundle-Name: iguana
 Bundle-SymbolicName: iguana
 Bundle-Version: 1.0.0.qualifier
 Export-Package: 
+ org.jgll.datadependent.ast,
  org.jgll.disambiguation.conditions,
  org.jgll.disambiguation.precedence;uses:="org.jgll.sppf,org.jgll.grammar",
  org.jgll.grammar;

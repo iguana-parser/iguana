@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import org.jgll.datadependent.ast.Statement;
 import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.generator.GeneratorUtil;
 
@@ -8,7 +9,7 @@ public class Code extends AbstractSymbol {
 	private static final long serialVersionUID = 1L;
 	
 	private final Symbol symbol;
-	private final org.jgll.datadependent.ast.Statement[] statements;
+	private final Statement[] statements;
 	
 	Code(Builder builder) {
 		super(builder);
@@ -16,7 +17,7 @@ public class Code extends AbstractSymbol {
 		this.statements = builder.statements;
 	}
 	
-	public static Code code(Symbol symbol, org.jgll.datadependent.ast.Statement... statements) {
+	public static Code code(Symbol symbol, Statement... statements) {
 		return builder(symbol, statements).build();
 	}
 	
@@ -24,8 +25,22 @@ public class Code extends AbstractSymbol {
 		return symbol;
 	}
 	
-	public  org.jgll.datadependent.ast.Statement[] getStatements() {
+	public Statement[] getStatements() {
 		return statements;
+	}
+	
+	@Override
+	public String getConstructorCode() {
+		String[] stats = new String[statements.length];
+		
+		int j = 0;
+		for (Statement statement : statements) {
+			stats[j] = statement.getConstructorCode();
+		}
+		
+		return "Code.builder(" + symbol.getConstructorCode() + "," + GeneratorUtil.listToString(stats, ",") + ")" 
+							   + super.getConstructorCode()
+							   + ".build()";
 	}
 
 	@Override
@@ -45,7 +60,7 @@ public class Code extends AbstractSymbol {
 	public static class Builder extends SymbolBuilder<Code> {
 		
 		private final Symbol symbol;
-		private final org.jgll.datadependent.ast.Statement[] statements;
+		private final Statement[] statements;
 
 		public Builder(Code code) {
 			super(code);
@@ -53,7 +68,7 @@ public class Code extends AbstractSymbol {
 			this.statements = code.statements;
 		}
 		
-		public Builder(Symbol symbol, org.jgll.datadependent.ast.Statement... statements) {
+		public Builder(Symbol symbol, Statement... statements) {
 			super(String.format("%s do %s", symbol.toString(), GeneratorUtil.listToString(statements, ";")));
 			
 			assert statements.length != 0;

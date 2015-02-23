@@ -13,6 +13,11 @@ public abstract class Expression extends AbstractAST {
 		return false;
 	}
 	
+	@Override
+	public java.lang.String getConstructorCode() {
+		return "";
+	}
+	
 	static public abstract class Boolean extends Expression {
 		
 		public boolean isBoolean() {
@@ -23,6 +28,11 @@ public abstract class Expression extends AbstractAST {
 			@Override
 			public Object interpret(IEvaluatorContext ctx) {
 				return true;
+			}
+			
+			@Override
+			public java.lang.String getConstructorCode() {
+				return "AST.TRUE";
 			}
 			
 			@Override

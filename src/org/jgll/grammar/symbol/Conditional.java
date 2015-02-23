@@ -27,6 +27,13 @@ public class Conditional extends AbstractSymbol {
 	public Expression getExpression() {
 		return expression;
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		return "Conditional.builder(" + symbol.getConstructorCode() + "," + expression.getConstructorCode() + ")" 
+									  + super.getConstructorCode()
+									  + ".build()";
+	}
 
 	@Override
 	public Builder copyBuilder() {

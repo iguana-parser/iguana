@@ -21,6 +21,21 @@ public class Block extends AbstractSymbol {
 	public Symbol[] getSymbols() {
 		return symbols;
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		String[] codes = new String[symbols.length];
+		
+		int j = 0;
+		for (Symbol symbol : symbols) {
+			codes[j] = symbol.getConstructorCode();
+			j++;
+		}
+		
+		return "Block.builder(" + GeneratorUtil.listToString(codes, ",") + ")" 
+							    + super.getConstructorCode()
+								+ ".build()";
+	}
 
 	@Override
 	public Builder copyBuilder() {

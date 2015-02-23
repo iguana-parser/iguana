@@ -20,6 +20,13 @@ public class Align extends AbstractSymbol {
 	public Symbol getSymbol() {
 		return symbol;
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		return "Align.builder(" + symbol.getConstructorCode() + ")" 
+								+ super.getConstructorCode()
+								+ ".build()";
+	}
 
 	@Override
 	public Builder copyBuilder() {

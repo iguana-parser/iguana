@@ -27,6 +27,13 @@ public class IfThen extends AbstractSymbol {
 	public Symbol getThenPart() {
 		return thenPart;
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		return "IfThen.builder(" + expression.getConstructorCode() + "," + thenPart.getConstructorCode() + ")" 
+								 + super.getConstructorCode()
+								 + ".build()";
+	}
 
 	@Override
 	public Builder copyBuilder() {

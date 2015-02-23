@@ -27,6 +27,13 @@ public class While extends AbstractSymbol {
 	public Symbol getBody() {
 		return body; 
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		return "While.builder(" + expression.getConstructorCode() + "," + body.getConstructorCode() + ")" 
+								+ super.getConstructorCode()
+								+ ".build()";
+	}
 
 	@Override
 	public Builder copyBuilder() {

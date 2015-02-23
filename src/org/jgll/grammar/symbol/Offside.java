@@ -20,6 +20,13 @@ public class Offside extends AbstractSymbol {
 	public Symbol getSymbol() {
 		return symbol;
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		return "Offside.builder(" + symbol.getConstructorCode() + ")" 
+								  + super.getConstructorCode()
+								  + ".build()";
+	}
 
 	@Override
 	public Builder copyBuilder() {
