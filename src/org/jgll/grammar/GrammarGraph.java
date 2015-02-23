@@ -176,6 +176,8 @@ public class GrammarGraph implements Serializable {
 		
 		public void nextSymbol() {
 			j = 0;
+			isFirst = false;
+			isLast = false;
 			if (i == 0) isFirst = true;
 			if (i == rule.size() - 1) isLast = true;
 			visitSymbol(rule.symbolAt(i));

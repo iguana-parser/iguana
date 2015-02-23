@@ -14,8 +14,10 @@ import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Code;
+import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
@@ -57,12 +59,12 @@ public class Test11 {
 					.addSymbol(Code.code(Character.builder('a').setLabel("a")
 											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(),
 										 stat(println(rExt("a"), indent(rExt("a"))))))
-					
+					.addSymbol(NoNL) // TODO: Should be removed
 					.addSymbol(Code.code(Character.builder('b').setLabel("b")
 												.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
 										 stat(println(rExt("b"), indent(rExt("b"))))))
 					
-					.setLayout(NoNL).build();
+					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
 		Rule r2 = Rule.withHead(Nonterminal.builder("NoNL").build())
 						.addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t')))
@@ -77,20 +79,20 @@ public class Test11 {
 	public void test() {
 		System.out.println(grammar);
 		
-// 		FIXME: Graph builder for Code symbol
-
-//		Input input = Input.fromString("a   b");
-//		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-//		
-//		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-//		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-//		
-//		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-//		
-//		if (result.isParseSuccess()) {
-//			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-//					result.asParseSuccess().getRoot(), input);
-//		}
+		grammar = new EBNFToBNF().transform(grammar);
+		
+		Input input = Input.fromString("a    b");
+		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+		
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+		
+		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+		
+		if (result.isParseSuccess()) {
+			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
+					result.asParseSuccess().getRoot(), input);
+		}
 		
 	}
 

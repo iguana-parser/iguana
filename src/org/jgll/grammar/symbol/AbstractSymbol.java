@@ -58,7 +58,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	
 	@Override
 	public String toString() {
-		return preConditions.isEmpty() ? name :  "(" + name + listToString(preConditions) + ")";
+		return (getLabel() != null? getLabel() + ":": "") + name + listToString(preConditions);
 	}
 	
 	@Override

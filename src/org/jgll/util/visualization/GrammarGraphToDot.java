@@ -4,9 +4,12 @@ import static org.jgll.util.generator.GeneratorUtil.*;
 import static org.jgll.util.visualization.GraphVizUtil.*;
 
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.slot.BeforeLastTerminalTransition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.ConditionalTransition;
 import org.jgll.grammar.slot.EndGrammarSlot;
+import org.jgll.grammar.slot.FirstAndLastTerminalTransition;
+import org.jgll.grammar.slot.FirstTerminalTransition;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.LastSymbolAndEndGrammarSlot;
 import org.jgll.grammar.slot.LastSymbolGrammarSlot;
@@ -56,6 +59,10 @@ public class GrammarGraphToDot {
 				
 				if (ifFalse != null)
 					sb.append(String.format(TRANSITION, t.getLabel() + ", false") + "\"" + slot.getId() + "\"" + "->" + "{\"" + ifFalse.getId() + "\"}" + "\n");
+			} else if (t instanceof FirstAndLastTerminalTransition
+						|| t instanceof FirstTerminalTransition
+						|| t instanceof BeforeLastTerminalTransition) {
+				sb.append(String.format(SPECIAL_TERMINAL_TRANSITION, t.getLabel()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n");
 			}
 			else sb.append(String.format(TRANSITION, t.getLabel()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n"); 
 		});

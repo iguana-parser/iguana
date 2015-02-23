@@ -30,6 +30,7 @@ public class GraphVizUtil {
 	public static final String LAST_SYMBOL_AND_END_SLOT = "[shape=doublecircle, height=0.1, width=0.1, color=red, fontcolor=black, fontsize=10, label=\"%s\"];";
 	public static final String END_SLOT = "[shape=doublecircle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	public static final String TRANSITION = "edge [color=black, style=solid, penwidth=0.5, arrowsize=0.7, label=\"%s\"];";
+	public static final String SPECIAL_TERMINAL_TRANSITION = "edge [color=black, style=dotted, penwidth=1.5, arrowsize=0.7, label=\"%s\"];";
 	public static final String EPSILON_TRANSITION = "edge [color=black, style=dashed, penwidth=0.5, arrowsize=0.7, label=\"\"];";
 	
 	public static final String NODE = "[shape=circle, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
