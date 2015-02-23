@@ -491,9 +491,9 @@ public class GrammarGraph implements Serializable {
 		BodyGrammarSlot slot;
 		
 		if (rule.size() == 0) {
-			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0), nonterminal, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
+			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
 		} else {
-			slot = new BodyGrammarSlot(id++, rule.getPosition(0), DummyNodeLookup.getInstance(), null, null, rule.symbolAt(0).getPostConditions());
+			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), null, null, rule.symbolAt(0).getPostConditions());
 		}
 		
 		names.put(slot.toString(), slot);

@@ -65,6 +65,9 @@ public class Position {
 			sb.append(".");
 		} else {
 			int i;
+			if (posInRule == 0 && posInSymbol == 0) {
+				sb.append(" . ");
+			}
 			for (i = 0; i < rule.size(); i++) {
 				if (i + 1 == posInRule) {
 					sb.append(rule.symbolAt(i).toString(posInSymbol) + " ");
