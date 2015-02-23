@@ -73,6 +73,12 @@ public class GrammarGraph {
 	
 	public NonterminalGrammarSlot getHead(Nonterminal start) {
 		if (start instanceof Start) {
+			
+			NonterminalGrammarSlot s = nonterminalsMap.get(start);
+			if (s != null) {
+				return s;
+			}
+			
 			Nonterminal nt = ((Start)start).getNonterminal();
 
 			if (layout == null) {
@@ -234,5 +240,10 @@ public class GrammarGraph {
 			return new ArrayNodeLookup(input);
 		}
 	}
+
+	public void reset(Input input) {
+		names.values().forEach(n -> n.reset(input));
+	}
+
 
 }

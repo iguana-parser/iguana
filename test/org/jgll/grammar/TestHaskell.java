@@ -11,7 +11,6 @@ import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class TestHaskell {
@@ -25,9 +24,10 @@ public class TestHaskell {
 	@Test
 	public void test() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/Haskall/src/Main.hs");
+		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, startSymbol);
-//		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
+		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
+//			org.jgll.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		System.out.println(result);
 	}
 	

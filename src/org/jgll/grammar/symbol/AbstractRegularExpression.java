@@ -2,6 +2,8 @@ package org.jgll.grammar.symbol;
 
 import org.jgll.regex.RegularExpression;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.matcher.Matcher;
+import org.jgll.regex.matcher.MatcherFactory;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
@@ -9,6 +11,10 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	private static final long serialVersionUID = 1L;
 	
 	protected Automaton automaton;
+	
+	protected Matcher matcher;
+	
+	protected Matcher backwardsMatcher;
 	
 	public AbstractRegularExpression(SymbolBuilder<? extends RegularExpression> builder) {
 		super(builder);
@@ -20,6 +26,22 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 			automaton = createAutomaton();
 		}
 		return automaton;
+	}
+	
+	@Override
+	public Matcher getMatcher() {
+		if (matcher == null) {
+			matcher = MatcherFactory.getMatcher(this);
+		}
+		return matcher;
+	}
+	
+	@Override
+	public Matcher getBackwardsMatcher() {
+		if (backwardsMatcher == null) {
+			backwardsMatcher = MatcherFactory.getBackwardsMatcher(this);
+		}
+		return backwardsMatcher;
 	}
 	
 	protected abstract Automaton createAutomaton();
