@@ -219,7 +219,7 @@ public class Grammar implements ConstructorCode, Serializable {
 	@Override
 	public String getConstructorCode() {
 		return "Grammar.builder()\n" +
-			   ".setLayout(" + layout.getConstructorCode() + ")" +
+			   (layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
 			   rulesToString(definitions.values()) + "\n.build()";
 	}
 	
