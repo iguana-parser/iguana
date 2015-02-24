@@ -99,7 +99,7 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
+	public Builder copyBuilder() {
 		return new Builder(this);
 	}
 	
