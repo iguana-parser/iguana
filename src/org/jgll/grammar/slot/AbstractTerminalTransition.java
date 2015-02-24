@@ -101,7 +101,7 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 
 	@Override
 	public String getLabel() {
-		return getSlot().toString();
+		return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getSlot();
 	}
 	
 	/**

@@ -1,7 +1,5 @@
 package org.jgll.grammar.symbol;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
 import java.util.Set;
 
 import org.jgll.datadependent.attrs.AbstractAttrs;
@@ -58,7 +56,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	
 	@Override
 	public String toString() {
-		return (getLabel() != null? getLabel() + ":": "") + name + listToString(preConditions);
+		return name;
 	}
 	
 	@Override

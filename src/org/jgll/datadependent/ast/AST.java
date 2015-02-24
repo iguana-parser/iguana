@@ -31,7 +31,7 @@ public class AST {
 	}
 	
 	static public Expression println(Expression... args) {
-		return new Expression.Call("", args) {
+		return new Expression.Call("println", args) {
 					
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
@@ -65,7 +65,7 @@ public class AST {
 	}
 	
 	static public Expression indent(Expression arg) {
-		return new Expression.Call("", arg) {
+		return new Expression.Call("indent", arg) {
 			
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
