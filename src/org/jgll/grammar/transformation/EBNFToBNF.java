@@ -21,6 +21,7 @@ import org.jgll.grammar.symbol.IfThen;
 import org.jgll.grammar.symbol.IfThenElse;
 import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Nonterminal.Builder;
 import org.jgll.grammar.symbol.Offside;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -54,179 +55,24 @@ public class EBNFToBNF implements GrammarTransformation {
 		return newRules;
 	}
 	
-	private boolean isEBNF(Symbol s) {
-		return s instanceof Star ||
-			   s instanceof Plus ||
-			   s instanceof Opt ||
-			   s instanceof Sequence ||
-			   s instanceof Alt;
-	}
-	
 	private Rule rewrite(Rule rule, Set<Rule> newRules) {
 
 		if (rule.getBody() == null) {
 			return rule;
 		}
 		
-		Rule.Builder builder = new Rule.Builder(rule.getHead());		
+		Rule.Builder builder = new Rule.Builder(rule.getHead());
+		
+		EBNFVisitor visitor = new EBNFVisitor(newRules, rule.getLayout(), rule.getLayoutStrategy());
+		
 		for(Symbol s : rule.getBody()) {
-			builder.addSymbol(rewrite(s, newRules, rule.getLayout(), rule.getLayoutStrategy()));
+			builder.addSymbol(s.accept(visitor));
 		}
 		
 		return builder.setLayout(rule.getLayout()).setLayoutStrategy(rule.getLayoutStrategy()).build();
 	}
 	
-	private Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
-		
-		if (!isEBNF(symbol))
-			return symbol;
-		
-		final Nonterminal newNt;
-		
-		Set<String> freeVars = new LinkedHashSet<>();
-		FreeVariableVisitor visitor = new FreeVariableVisitor(freeVars);
-		
-		String[] parameters = null;
-		Expression[] arguments = null;
-		
-		/**
-		 * S* ::= S+ 
-		 *      | epsilon
-		 *        
-		 */
-		if (symbol instanceof Star) {
-			Star star = (Star) symbol;
-			Symbol S = star.getSymbol();
-			
-			S.setEmpty();
-			S.accept(visitor);
-			
-			if (!freeVars.isEmpty()) {
-				parameters = freeVars.stream().toArray(String[]::new);
-				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
-			}
-			
-			newNt = parameters != null? Nonterminal.builder(getName(S, star.getSeparators(), layout) + "*").addParameters(parameters).build()
-						              : Nonterminal.withName(getName(S, star.getSeparators(), layout) + "*");
-			
-			addedRules.add(Rule.withHead(newNt).addSymbols(rewrite(Plus.builder(S).addSeparators(star.getSeparators()).build(), addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
-			addedRules.add(Rule.withHead(newNt).build());
-		}
-		
-		/**
-		 * S+ ::= S+ S
-		 *      | S
-		 *      
-		 * in case of separators:
-		 * 
-		 * (S sep)+ ::= (S sep)+ sep S
-		 *            | S
-		 *      
-		 */
-		else if (symbol instanceof Plus) {
-			Plus plus = (Plus) symbol;
-			Symbol S = plus.getSymbol();
-			
-			List<Symbol> seperators = plus.getSeparators().stream().map(sep -> rewrite(sep, addedRules, layout, strategy)).collect(Collectors.toList());
-			
-			S.setEmpty();
-			S.accept(visitor);
-			
-			if (!freeVars.isEmpty()) {
-				parameters = freeVars.stream().toArray(String[]::new);
-				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
-			}
-			
-			newNt = parameters != null? Nonterminal.builder(getName(S, plus.getSeparators(), layout) + "+").addParameters(parameters).build()
-						              : Nonterminal.withName(getName(S, plus.getSeparators(), layout) + "+");
-			
-			S = rewrite(S, addedRules, layout, strategy);
-			
-			addedRules.add(Rule.withHead(newNt)
-							.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
-							.addSymbols(seperators)
-							.addSymbols(S).setLayout(layout).setLayoutStrategy(strategy).build());
-			addedRules.add(Rule.withHead(newNt).addSymbol(S).build());
-
-		} 
-		
-		/**
-		 * S? ::= S 
-		 *      | epsilon
-		 */
-		else if (symbol instanceof Opt) {
-			Symbol in = ((Opt) symbol).getSymbol();
-			in.setEmpty();
-			in.accept(visitor);
-			
-			if (!freeVars.isEmpty()) {
-				parameters = freeVars.stream().toArray(String[]::new);
-				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
-			}
-			
-			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build() 
-						              : Nonterminal.withName(symbol.getName());
-			
-			addedRules.add(Rule.withHead(newNt).addSymbol(rewrite(in, addedRules, layout, strategy)).setLayout(layout).setLayoutStrategy(strategy).build());
-			addedRules.add(Rule.withHead(newNt).build());
-		} 
-		
-		/**
-		 * (S) ::= S
-		 */
-		else if (symbol instanceof Sequence) {
-			
-			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Sequence<Symbol>) symbol).getSymbols();
-			
-			Sequence.builder(symbols).build().accept(visitor);
-			
-			symbols = symbols.stream().map(x -> rewrite(x, addedRules, layout, strategy)).collect(Collectors.toList());
-			
-			if (!freeVars.isEmpty()) {
-				parameters = freeVars.stream().toArray(String[]::new);
-				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
-			}
-			
-			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build()
-						              : Nonterminal.withName(symbol.getName());
-			
-			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy).build());
-		} 
-		
-		/**
-		 * (A | B) ::= A 
-		 *           | B
-		 */
-		else if (symbol instanceof Alt) {
-
-			@SuppressWarnings("unchecked")
-			List<Symbol> symbols = ((Alt<Symbol>) symbol).getSymbols();
-			
-			Alt.builder(symbols).build().accept(visitor);
-			
-			symbols = symbols.stream().map(x -> rewrite(x, addedRules, layout, strategy)).collect(Collectors.toList());
-			
-			if (!freeVars.isEmpty()) {
-				parameters = freeVars.stream().toArray(String[]::new);
-				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
-			}
-			
-			newNt = parameters != null? Nonterminal.builder(symbol.getName()).addParameters(parameters).build()
-						              : Nonterminal.withName(symbol.getName());
-			
-			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy).build()));
-		}
-		
-		else {
-			throw new IllegalStateException("Unknown symbol type.");			
-		}
-		
-		return arguments != null? ((Nonterminal.Builder) newNt.copyBuilder()).apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build()
-					            : newNt.copyBuilder().addConditions(symbol).setLabel(symbol.getLabel()).build();
-	}
-	
-	private String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
+	private static String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
 		if (separators.isEmpty() && layout == null) {
 			return symbol.getName();
 		} else {
@@ -237,8 +83,196 @@ public class EBNFToBNF implements GrammarTransformation {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	private static class EBNFVisitor implements ISymbolVisitor<Symbol> {
+		
+		private final Set<Rule> addedRules;
+		private final Nonterminal layout;
+		private final LayoutStrategy strategy;
+		
+		public EBNFVisitor(Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
+			this.addedRules = addedRules;
+			this.layout = layout;
+			this.strategy = strategy;
+		}
+		
+		/**
+		 *  Target cases:
+		 */
+		
+		private Set<String> freeVars;
+		private FreeVariableVisitor visitor;
+		
+		private void init() {
+			freeVars = new LinkedHashSet<>();
+			visitor = new FreeVariableVisitor(freeVars);			
+		}
+		
+		/**
+		 * (A | B) ::= A 
+		 *           | B
+		 */
+		@Override
+		public <E extends Symbol> Symbol visit(Alt<E> symbol) {	
+			List<? extends Symbol> symbols = symbol.getSymbols();
+			
+			init();
+			String[] parameters = null;
+			Expression[] arguments = null;
+			
+			Alt.builder(symbols).build().accept(visitor);
+			
+			if (!freeVars.isEmpty()) {
+				parameters = freeVars.stream().toArray(String[]::new);
+				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
+			}
+			
+			symbols = symbols.stream().map(x -> x.accept(this)).collect(Collectors.toList());
+			
+			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName()) 
+					            		: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
+			
+			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy).build()));
+			
+			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
+		}
+
+		/**
+		 * S? ::= S 
+		 *      | epsilon
+		 */
+		@Override
+		public Symbol visit(Opt symbol) {
+			Symbol in = symbol.getSymbol();
+			
+			init();
+			String[] parameters = null;
+			Expression[] arguments = null;
+			
+			in.setEmpty();
+			in.accept(visitor);
+			
+			if (!freeVars.isEmpty()) {
+				parameters = freeVars.stream().toArray(String[]::new);
+				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
+			}
+			
+			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName())
+									: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
+			
+			addedRules.add(Rule.withHead(newNt).addSymbol(in.accept(this)).setLayout(layout).setLayoutStrategy(strategy).build());
+			addedRules.add(Rule.withHead(newNt).build());
+			
+			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
+		}
+
+		/**
+		 * S+ ::= S+ S
+		 *      | S
+		 *      
+		 * in case of separators:
+		 * 
+		 * (S sep)+ ::= (S sep)+ sep S
+		 *            | S
+		 *      
+		 */
+		@Override
+		public Symbol visit(Plus symbol) {
+			Symbol S = symbol.getSymbol();
+			
+			init();
+			String[] parameters = null;
+			Expression[] arguments = null;
+			
+			S.setEmpty();
+			S.accept(visitor);
+			
+			if (!freeVars.isEmpty()) {
+				parameters = freeVars.stream().toArray(String[]::new);
+				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
+			}
+			
+			List<Symbol> seperators = symbol.getSeparators().stream().map(sep -> sep.accept(this)).collect(Collectors.toList());
+			
+			Nonterminal newNt = parameters == null? Nonterminal.withName(getName(S, symbol.getSeparators(), layout) + "+")
+									: Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").addParameters(parameters).build();
+			
+			S = S.accept(this);
+			
+			addedRules.add(Rule.withHead(newNt)
+							.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
+							.addSymbols(seperators)
+							.addSymbols(S).setLayout(layout).setLayoutStrategy(strategy).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(S).build());
+			
+			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
+		}
+
+		/**
+		 * (S) ::= S
+		 */
+		@Override
+		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+			List<? extends Symbol> symbols = symbol.getSymbols();
+			
+			init();
+			String[] parameters = null;
+			Expression[] arguments = null;
+			
+			Sequence.builder(symbols).build().accept(visitor);
+			
+			if (!freeVars.isEmpty()) {
+				parameters = freeVars.stream().toArray(String[]::new);
+				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
+			}
+			
+			List<Symbol> syms = symbols.stream().map(x -> x.accept(this)).collect(Collectors.toList());
+			
+			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName())
+									: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
+			
+			addedRules.add(Rule.withHead(newNt).addSymbols(syms).setLayout(layout).setLayoutStrategy(strategy).build());
+			
+			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
+		}
+
+		/**
+		 * S* ::= S+ 
+		 *      | epsilon
+		 *        
+		 */
+		@Override
+		public Symbol visit(Star symbol) {
+			Symbol S = symbol.getSymbol();
+			
+			init();
+			String[] parameters = null;
+			Expression[] arguments = null;
+			
+			S.setEmpty();
+			S.accept(visitor);
+			
+			if (!freeVars.isEmpty()) {
+				parameters = freeVars.stream().toArray(String[]::new);
+				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
+			}
+			
+			Nonterminal newNt = parameters != null? Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "*").addParameters(parameters).build()
+						              : Nonterminal.withName(getName(S, symbol.getSeparators(), layout) + "*");
+			
+			addedRules.add(Rule.withHead(newNt).addSymbols(Plus.builder(S).addSeparators(symbol.getSeparators()).build().accept(this)).setLayout(layout).setLayoutStrategy(strategy).build());
+			addedRules.add(Rule.withHead(newNt).build());
+			
+			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
+		}
+		
+		/**
+		 *  The rest:
+		 */
 
 		@Override
 		public Symbol visit(Align symbol) {
@@ -305,12 +339,22 @@ public class EBNFToBNF implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(IfThen symbol) {
-			return null;
+			Symbol sym = symbol.getThenPart().accept(this);
+			if (sym == symbol.getThenPart())
+				return symbol;
+			
+			return IfThen.builder(symbol.getExpression(), sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
 		public Symbol visit(IfThenElse symbol) {
-			return null;
+			Symbol thenPart = symbol.getThenPart().accept(this);
+			Symbol elsePart = symbol.getElsePart().accept(this);
+			if (thenPart == symbol.getThenPart() 
+					&& elsePart == symbol.getElsePart())
+				return symbol;
+			
+			return IfThenElse.builder(symbol.getExpression(), thenPart, elsePart).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -320,7 +364,10 @@ public class EBNFToBNF implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Offside symbol) {
-			return null;
+			Symbol sym = symbol.getSymbol().accept(this);
+			
+			return sym == symbol.getSymbol()? symbol 
+					: Offside.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -330,32 +377,11 @@ public class EBNFToBNF implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(While symbol) {
-			return null;
-		}
-
-		@Override
-		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
-			return null;
-		}
-
-		@Override
-		public Symbol visit(Opt symbol) {
-			return null;
-		}
-
-		@Override
-		public Symbol visit(Plus symbol) {
-			return null;
-		}
-
-		@Override
-		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
-			return null;
-		}
-
-		@Override
-		public Symbol visit(Star symbol) {
-			return null;
+			Symbol body = symbol.getBody().accept(this);
+			if (body == symbol.getBody()) 
+				return symbol;
+			
+			return While.builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 		
 	}
