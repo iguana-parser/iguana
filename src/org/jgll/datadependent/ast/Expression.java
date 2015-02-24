@@ -13,11 +13,6 @@ public abstract class Expression extends AbstractAST {
 		return false;
 	}
 	
-	@Override
-	public java.lang.String getConstructorCode() {
-		return "";
-	}
-	
 	static public abstract class Boolean extends Expression {
 		
 		public boolean isBoolean() {
@@ -50,6 +45,11 @@ public abstract class Expression extends AbstractAST {
 			@Override
 			public Object interpret(IEvaluatorContext ctx) {
 				return false;
+			}
+			
+			@Override
+			public java.lang.String getConstructorCode() {
+				return "AST.FALSE";
 			}
 			
 			@Override
@@ -88,6 +88,11 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.integer(" + value + ")";
+		}
+		
+		@Override
 		public java.lang.String toString() {
 			return value.toString();
 		}
@@ -118,6 +123,11 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
 			return value;
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.real(" + value + ")";
 		}
 		
 		@Override
@@ -154,6 +164,11 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.string(" + value + ")";
+		}
+		
+		@Override
 		public java.lang.String toString() {
 			return value;
 		}
@@ -183,6 +198,11 @@ public abstract class Expression extends AbstractAST {
 				throw new UndeclaredVariableException(name);
 			}
 			return value;
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.var(" + "\"" + name + "\"" + ")";
 		}
 		
 		@Override
@@ -256,6 +276,11 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.assign(" + "\"" + id + "\"" + "," + exp.getConstructorCode() + ")";
+		}
+		
+		@Override
 		public java.lang.String toString() {
 			return java.lang.String.format("%s = %s", id, exp);
 		}
@@ -299,6 +324,11 @@ public abstract class Expression extends AbstractAST {
 			}
 						
 			throw new UnexpectedTypeOfArgumentException(this);
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.less(" + lhs.getConstructorCode() + "," + lhs.getConstructorCode() + ")";
 		}
 		
 		@Override
@@ -348,6 +378,11 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.greater(" + lhs.getConstructorCode() + "," + lhs.getConstructorCode() + ")";
+		}
+		
+		@Override
 		public java.lang.String toString() {
 			return java.lang.String.format("%s > %s", lhs, rhs);
 		}
@@ -391,6 +426,11 @@ public abstract class Expression extends AbstractAST {
 			}
 						
 			throw new UnexpectedTypeOfArgumentException(this);
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.greaterEq(" + lhs.getConstructorCode() + "," + lhs.getConstructorCode() + ")";
 		}
 		
 		@Override
@@ -440,6 +480,11 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.equal(" + lhs.getConstructorCode() + "," + lhs.getConstructorCode() + ")";
+		}
+		
+		@Override
 		public java.lang.String toString() {
 			return java.lang.String.format("%s == %s", lhs, rhs);
 		}
@@ -472,6 +517,11 @@ public abstract class Expression extends AbstractAST {
 				throw new UndeclaredVariableException(label + "." + "lExt");
 			}
 			return value;
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.lExt(" + "\"" + label + "\"" + ")";
 		}
 		
 		@Override
@@ -512,6 +562,11 @@ public abstract class Expression extends AbstractAST {
 			}
 			
 			return ((NonPackedNode) value).getRightExtent();
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.rExt(" + "\"" + label + "\"" + ")";
 		}
 		
 		@Override

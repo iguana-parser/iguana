@@ -45,6 +45,19 @@ public class AST {
 					}
 					
 					@Override
+					public java.lang.String getConstructorCode() {
+						java.lang.String[] codes = new java.lang.String[args.length];
+						
+						int j = 0;
+						for (Expression arg : args) {
+							codes[j] = arg.getConstructorCode();
+							j++;
+						}
+						
+						return "AST.println(" + GeneratorUtil.listToString(codes, ",") + ")";
+					}
+					
+					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("%s(%s)", "println", GeneratorUtil.listToString(args, ","));
 					}
@@ -62,6 +75,11 @@ public class AST {
 						}
 						
 						return ctx.getInput().getColumnNumber((java.lang.Integer) value);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.indent(" + arg.getConstructorCode() + ")";
 					}
 					
 					@Override
