@@ -5,11 +5,6 @@ import org.jgll.datadependent.traversal.IAbstractASTVisitor;
 
 public abstract class Statement extends AbstractAST {
 	
-	@Override
-	public String getConstructorCode() {
-		return "";
-	}
-	
 	static public class Expression extends Statement {
 
 		private final org.jgll.datadependent.ast.Expression exp;
@@ -26,6 +21,11 @@ public abstract class Statement extends AbstractAST {
 		public Object interpret(IEvaluatorContext ctx) {
 			exp.interpret(ctx);
 			return null;
+		}
+		
+		@Override
+		public String getConstructorCode() {
+			return "AST.stat(" + exp.getConstructorCode() + ")";
 		}
 		
 		@Override
@@ -56,6 +56,11 @@ public abstract class Statement extends AbstractAST {
 		public Object interpret(IEvaluatorContext ctx) {
 			decl.interpret(ctx);
 			return null;
+		}
+		
+		@Override
+		public String getConstructorCode() {
+			return "AST.varDeclStat(" + decl.getConstructorCode() + ")";
 		}
 		
 		@Override

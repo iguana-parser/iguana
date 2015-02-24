@@ -126,12 +126,24 @@ public class AST {
 		return new Statement.Expression(exp);
 	}
 	
-	static public Statement varDecl(String name) {
+	static public Statement varDeclStat(String name) {
 		return new Statement.VariableDeclaration(new VariableDeclaration(name));
 	}
 	
-	static public Statement varDecl(String name, Expression exp) {
+	static public Statement varDeclStat(String name, Expression exp) {
 		return new Statement.VariableDeclaration(new VariableDeclaration(name, exp));
+	}
+	
+	static public Statement varDeclStat(VariableDeclaration varDecl) {
+		return new Statement.VariableDeclaration(varDecl);
+	}
+	
+	static public VariableDeclaration varDecl(String name) {
+		return new VariableDeclaration(name);
+	}
+	
+	static public VariableDeclaration varDecl(String name, Expression exp) {
+		return new VariableDeclaration(name, exp);
 	}
 
 }

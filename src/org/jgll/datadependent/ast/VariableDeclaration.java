@@ -39,7 +39,7 @@ public class VariableDeclaration extends AbstractAST {
 	
 	@Override
 	public String getConstructorCode() {
-		return "";
+		return "AST.varDecl(" + "\"" + name + "\"" + (expression != null? "," + expression.getConstructorCode() : "") + ")";
 	}
 	
 	@Override
