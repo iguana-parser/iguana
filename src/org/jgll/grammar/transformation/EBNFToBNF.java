@@ -1,9 +1,7 @@
 package org.jgll.grammar.transformation;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,14 +26,7 @@ import org.jgll.regex.Star;
  *
  */
 public class EBNFToBNF implements GrammarTransformation {
-	
-	@SuppressWarnings("unused")
-	private Map<Symbol, Nonterminal> cache;
-	
-	public EBNFToBNF() {
-		cache = new HashMap<>();
-	}
-	
+		
 	@Override
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
@@ -75,10 +66,6 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		if (!isEBNF(symbol))
 			return symbol;
-		
-//		TODO: currently breaks the EBNF translation
-//		if (cache.get(symbol) != null) 
-//			return cache.get(symbol);
 		
 		final Nonterminal newNt;
 		
@@ -220,8 +207,6 @@ public class EBNFToBNF implements GrammarTransformation {
 		else {
 			throw new IllegalStateException("Unknown symbol type.");			
 		}
-		
-//		cache.put(symbol, newNt);
 		
 		return arguments != null? ((Nonterminal.Builder) newNt.copyBuilder()).apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build()
 					            : newNt.copyBuilder().addConditions(symbol).setLabel(symbol.getLabel()).build();
