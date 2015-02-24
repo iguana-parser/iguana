@@ -9,20 +9,34 @@ import org.jgll.datadependent.ast.AST;
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.traversal.FreeVariableVisitor;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.symbol.Align;
+import org.jgll.grammar.symbol.Block;
+import org.jgll.grammar.symbol.Character;
+import org.jgll.grammar.symbol.CharacterRange;
+import org.jgll.grammar.symbol.Code;
+import org.jgll.grammar.symbol.Conditional;
+import org.jgll.grammar.symbol.EOF;
+import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.IfThen;
+import org.jgll.grammar.symbol.IfThenElse;
 import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
+import org.jgll.grammar.symbol.Offside;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.symbol.Terminal;
+import org.jgll.grammar.symbol.While;
 import org.jgll.regex.Alt;
 import org.jgll.regex.Opt;
 import org.jgll.regex.Plus;
 import org.jgll.regex.Sequence;
 import org.jgll.regex.Star;
+import org.jgll.traversal.ISymbolVisitor;
 
 /**
  * 
  * 
- * @author Ali Afroozeh
+ * @authors Ali Afroozeh, Anastasia Izmaylova
  *
  */
 public class EBNFToBNF implements GrammarTransformation {
@@ -221,6 +235,129 @@ public class EBNFToBNF implements GrammarTransformation {
 					  ", " + layout + 
 				   "}";			
 		}
+	}
+	
+	@SuppressWarnings("unused")
+	private static class EBNFVisitor implements ISymbolVisitor<Symbol> {
+
+		@Override
+		public Symbol visit(Align symbol) {
+			Symbol sym = symbol.getSymbol().accept(this);
+			
+			return sym == symbol.getSymbol()? symbol 
+					: Align.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+		}
+
+		@Override
+		public Symbol visit(Block symbol) {
+			Symbol[] symbols = symbol.getSymbols();
+			Symbol[] syms = new Symbol[symbols.length];
+			
+			int j = 0;
+			boolean modified = false;
+			for (Symbol sym : symbols) {
+				syms[j] = sym.accept(this);
+				if (sym != syms[j])
+					modified = true;
+				j++;
+			}
+			return modified? Block.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
+					: symbol;
+		}
+
+		@Override
+		public Symbol visit(Character symbol) {
+			return symbol;
+		}
+
+		@Override
+		public Symbol visit(CharacterRange symbol) {
+			return symbol;
+		}
+
+		@Override
+		public Symbol visit(Code symbol) {
+			Symbol sym = symbol.getSymbol().accept(this);
+			if (sym == symbol.getSymbol())
+				return symbol;
+			
+			return Code.builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+		}
+
+		@Override
+		public Symbol visit(Conditional symbol) {
+			Symbol sym = symbol.getSymbol().accept(this);
+			if (sym == symbol.getSymbol())
+				return symbol;
+			
+			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+		}
+
+		@Override
+		public Symbol visit(EOF symbol) {
+			return symbol;
+		}
+
+		@Override
+		public Symbol visit(Epsilon symbol) {
+			return symbol;
+		}
+
+		@Override
+		public Symbol visit(IfThen symbol) {
+			return null;
+		}
+
+		@Override
+		public Symbol visit(IfThenElse symbol) {
+			return null;
+		}
+
+		@Override
+		public Symbol visit(Nonterminal symbol) {
+			return symbol;
+		}
+
+		@Override
+		public Symbol visit(Offside symbol) {
+			return null;
+		}
+
+		@Override
+		public Symbol visit(Terminal symbol) {
+			return symbol;
+		}
+
+		@Override
+		public Symbol visit(While symbol) {
+			return null;
+		}
+
+		@Override
+		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+			return null;
+		}
+
+		@Override
+		public Symbol visit(Opt symbol) {
+			return null;
+		}
+
+		@Override
+		public Symbol visit(Plus symbol) {
+			return null;
+		}
+
+		@Override
+		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+			return null;
+		}
+
+		@Override
+		public Symbol visit(Star symbol) {
+			return null;
+		}
+		
 	}
 
 }
