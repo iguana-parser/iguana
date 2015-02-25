@@ -50,20 +50,15 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		return node.val;
 	}
 	
-	public void insert(int key) {
-		insert(CharacterRange.in(key, key));
-	}
-	
-	public void insert(CharacterRange range) {
-		insert(range, null);
+	public void insert(int key, T val) {
+		insert(CharacterRange.in(key, key), val);
 	}
 	
 	public void insert(CharacterRange range, T val) {
-		insert(range, val, root);
+		insert(range, val, root, new Node<T>(range.getStart(), range.getEnd(), val));
 	}
 	
-	private void insert(CharacterRange range, T val, Node<T> node) {		
-		Node<T> newNode = new Node<>(range.getStart(), range.getEnd(), val);
+	private void insert(CharacterRange range, T val, Node<T> parent, Node<T> newNode) {		
 		
 		if (root == null) {
 			root = newNode;
@@ -71,20 +66,24 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			return;
 		}
 		
-		if (range.getStart() < node.start) {
-			if (node.left == null) {
-				addToLeft(node, newNode);
-				balance(node);
+		if (range.getStart() < parent.start) {
+			if (parent.left == null) {
+				addToLeft(parent, newNode);
+				updateHeight(newNode);
+				if (parent.parent != null) 
+					balance(parent.parent, parent);
 			} else {
-				insert(range, val, node.left);
+				insert(range, val, parent.left, newNode);
 			}
 		} 
-		else if (range.getEnd() > node.end) {
-			if (node.right == null) {
-				addToRight(node, newNode);
-				balance(node);
+		else if (range.getEnd() > parent.end) {
+			if (parent.right == null) {
+				addToRight(parent, newNode);
+				updateHeight(newNode);
+				if (parent.parent != null)
+					balance(parent.parent, parent);
 			} else {
-				insert(range, val, node.right);					
+				insert(range, val, parent.right, newNode);					
 			}
 		}
 	}
@@ -101,34 +100,49 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		newNode.parent = parent;
 	}
 	 
-	private void balance(Node<T> node) {
-		node.updateHeight();
-		
-		if (!node.isBalanced()) {
-			if (node.right != null) {
-				if (node.right.isRightHeavy()) {
-					leftRotate(node);
-				} 
-				else if (node.right.isLeftHeavy()) {
-					rightRotate(node.right);
-					leftRotate(node);
-				}
-			}
-			if (node.left != null) {
-				if (node.left.isLeftHeavy()) {
-					rightRotate(node);					
-				} 
-				else if (node.left.isRightHeavy()) {
-					leftRotate(node.left);
-					rightRotate(node);
-				}
-			}
-		}
-		
-		if (node.parent != null) {
-			balance(node.parent);
+	private void updateHeight(Node<T> node) {
+		while (node != null) {
+			node.updateHeight();
+			node = node.parent;
 		}
 	}
+
+	/**
+	 * x         x           x      x
+	 *  \         \         /      /
+	 *   y         y       y      y
+	 *    \       /       /        \
+	 *     z     z       z          z
+	 * 
+	 */
+	private void balance(Node<T> x, Node<T> y) {
+		
+		if (!x.isBalanced()) {
+			if (x.right != null && x.right == y) {
+				if (y.isRightHeavy()) {
+					leftRotate(x);
+				} 
+				else if (y.isLeftHeavy()) {
+					rightRotate(y);
+					leftRotate(x);				
+				}
+			} 
+			
+			if (x.left != null & x.left == y) {
+				if (y.isLeftHeavy()) {
+					rightRotate(x);
+				} 
+				else if (y.isRightHeavy()){
+					leftRotate(y);
+					rightRotate(x);
+				}
+			}
+		}
+		
+		if (x.parent != null)
+			balance(x.parent, x);
+	}
+	
 
 	/**
 	 *      x                y

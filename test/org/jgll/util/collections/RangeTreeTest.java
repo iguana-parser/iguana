@@ -42,54 +42,7 @@ public class RangeTreeTest {
 		rangeTree.insert(CharacterRange.in(1, 4), "a");
 		checkAsserts(rangeTree);
 	}
-	
-	@Test
-	public void test5() {
-		RangeTree<Void> rangeTree = new RangeTree<>();
-		rangeTree.insert(44);
-		rangeTree.insert(17);
-		rangeTree.insert(32);
-		rangeTree.insert(78);
-		rangeTree.insert(50);
-		rangeTree.insert(48);
-		rangeTree.insert(62);
-		rangeTree.insert(54);
-		rangeTree.insert(88);
-		assertEquals(9, rangeTree.size());
-		assertEquals(3, rangeTree.getRoot().getHeight());
-	}
-	
-	@Test
-	public void test6() {
-		RangeTree<Void> rangeTree = new RangeTree<>();
-		rangeTree.insert(14);
-		rangeTree.insert(17);
-		rangeTree.insert(11);
-		rangeTree.insert(7);
-		rangeTree.insert(53);
-		rangeTree.insert(4);
-		rangeTree.insert(13);
-		assertEquals(7, rangeTree.size());
-		assertEquals(3, rangeTree.getRoot().getHeight());
-	}
-	
-	@Test
-	public void test7() {
-		RangeTree<Void> rangeTree = new RangeTree<>();
-		rangeTree.insert(3);
-		rangeTree.insert(2);
-		rangeTree.insert(1);
-		rangeTree.insert(4);
-		rangeTree.insert(5);
-		rangeTree.insert(6);
-		rangeTree.insert(7);
-		rangeTree.insert(16);
-		rangeTree.insert(15);
-		rangeTree.insert(14);
-		assertEquals(10, rangeTree.size());
-		assertEquals(3, rangeTree.getRoot().getHeight());
-	}
-	
+		
 	private static <T> void checkAsserts(RangeTree<T> rangeTree) {
 		assertEquals(null, rangeTree.get(0));
 		assertEquals("a",  rangeTree.get(1));

@@ -91,7 +91,9 @@ public class IntRangeTree implements Iterable<IntNode>{
 		if (range.getStart() < parent.start) {
 			if (parent.left == null) {
 				addToLeft(parent, newNode);
-				balance(parent);
+				updateHeight(newNode);
+				if (parent.parent != null) 
+					balance(parent.parent, parent);
 			} else {
 				insert(range, val, parent.left, newNode);
 			}
@@ -99,7 +101,9 @@ public class IntRangeTree implements Iterable<IntNode>{
 		else if (range.getEnd() > parent.end) {
 			if (parent.right == null) {
 				addToRight(parent, newNode);
-				balance(parent);
+				updateHeight(newNode);
+				if (parent.parent != null)
+					balance(parent.parent, parent);
 			} else {
 				insert(range, val, parent.right, newNode);					
 			}
@@ -117,36 +121,51 @@ public class IntRangeTree implements Iterable<IntNode>{
 		parent.right = newNode;
 		newNode.parent = parent;
 	}
-	 
-	private void balance(IntNode node) {
-		node.updateHeight();
-		
-		if (!node.isBalanced()) {
-			if (node.right != null) {
-				if (node.right.isRightHeavy()) {
-					leftRotate(node);
-				} 
-				else if (node.right.isLeftHeavy()) {
-					rightRotate(node.right);
-					leftRotate(node);
-				}
-			}
-			if (node.left != null) {
-				if (node.left.isLeftHeavy()) {
-					rightRotate(node);					
-				} 
-				else if (node.left.isRightHeavy()) {
-					leftRotate(node.left);
-					rightRotate(node);
-				}
-			}
-		}
-		
-		if (node.parent != null) {
-			balance(node.parent);
+	
+	private void updateHeight(IntNode node) {
+		while (node != null) {
+			node.updateHeight();
+			node = node.parent;
 		}
 	}
 
+	/**
+	 * x         x           x      x
+	 *  \         \         /      /
+	 *   y         y       y      y
+	 *    \       /       /        \
+	 *     z     z       z          z
+	 * 
+	 */
+	private void balance(IntNode x, IntNode y) {
+		
+		if (!x.isBalanced()) {
+			if (x.right != null && x.right == y) {
+				if (y.isRightHeavy()) {
+					leftRotate(x);
+				} 
+				else if (y.isLeftHeavy()) {
+					rightRotate(y);
+					leftRotate(x);				
+				}
+			} 
+			
+			if (x.left != null & x.left == y) {
+				if (y.isLeftHeavy()) {
+					rightRotate(x);
+				} 
+				else if (y.isRightHeavy()){
+					leftRotate(y);
+					rightRotate(x);
+				}
+			}
+		}
+		
+		if (x.parent != null)
+			balance(x.parent, x);
+	}
+	
+	
 	/**
 	 *      x                y
 	 *     / \              / \
@@ -166,14 +185,13 @@ public class IntRangeTree implements Iterable<IntNode>{
 			B.parent = x;
 		
 		y.parent = parent;
-		if (parent != null) {
-			parent.replaceChild(x, y);
-		} else {
-			root = y;
-		}
 		
-		x.updateHeight();
-		y.updateHeight();
+		if (parent != null)
+			parent.replaceChild(x, y);
+		else
+			root = y;
+		
+		updateHeight(x);
 	}
 	
 	/**
@@ -197,14 +215,12 @@ public class IntRangeTree implements Iterable<IntNode>{
 			B.parent = x;
 
 		y.parent = parent;
-		if (parent != null) {
+		if (parent != null) 
 			parent.replaceChild(x, y);
-		} else {
+		else 
 			root = y;
-		}
 		
-		x.updateHeight();
-		y.updateHeight();
+		updateHeight(x);
 	}
 	
 	public boolean isBalanced() {
@@ -250,7 +266,7 @@ public class IntRangeTree implements Iterable<IntNode>{
 		}
 		
 		public void replaceChild(IntNode child, IntNode replacement) {
-			// Fix the pointers of the parents
+			// Fixes the pointers of the parents
 			if (left == child) {
 				left = replacement;
 			} else {
