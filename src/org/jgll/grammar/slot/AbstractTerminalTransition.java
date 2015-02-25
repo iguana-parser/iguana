@@ -116,7 +116,8 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		
 		parser.setEnvironment(env);
 		
-		parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+		if (dest.getLabel() != null)
+			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
 		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
 			return;
@@ -131,7 +132,8 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 		// FIXME: SPPF
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		
-		parser.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+		if (dest.getLabel() != null)
+			parser.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
 		if (postConditions.execute(input, u, i + length, parser.getEvaluatorContext()))
 			return;
