@@ -328,7 +328,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String getConstructorCode() {
-			return "AST.less(" + lhs.getConstructorCode() + "," + lhs.getConstructorCode() + ")";
+			return "AST.less(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
 		}
 		
 		@Override
@@ -379,7 +379,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String getConstructorCode() {
-			return "AST.greater(" + lhs.getConstructorCode() + "," + lhs.getConstructorCode() + ")";
+			return "AST.greater(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
 		}
 		
 		@Override
@@ -430,7 +430,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String getConstructorCode() {
-			return "AST.greaterEq(" + lhs.getConstructorCode() + "," + lhs.getConstructorCode() + ")";
+			return "AST.greaterEq(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
 		}
 		
 		@Override
@@ -481,7 +481,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String getConstructorCode() {
-			return "AST.equal(" + lhs.getConstructorCode() + "," + lhs.getConstructorCode() + ")";
+			return "AST.equal(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
 		}
 		
 		@Override
