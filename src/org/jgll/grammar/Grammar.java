@@ -54,7 +54,7 @@ public class Grammar implements ConstructorCode, Serializable {
 		this.followSets = HashMultimap.create();
 	}
 	
-	public Multimap<Nonterminal, Rule> getDefinitions() {
+	public ListMultimap<Nonterminal, Rule> getDefinitions() {
 		return definitions;
 	}
 	
@@ -219,7 +219,7 @@ public class Grammar implements ConstructorCode, Serializable {
 	@Override
 	public String getConstructorCode() {
 		return "Grammar.builder()\n" +
-			   ".setLayout(" + layout.getConstructorCode() + ")" +
+			   (layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
 			   rulesToString(definitions.values()) + "\n.build()";
 	}
 	

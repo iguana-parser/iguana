@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.util.collections.IntRangeTree.IntNode;
 
@@ -34,6 +35,26 @@ public class IntRangeTree implements Iterable<IntNode>{
 		return get(key) != -1;
 	}
 	
+	public boolean contains(CharacterRange range) {
+		return getNode(range, root) != null;
+	}
+	
+	private IntNode getNode(CharacterRange range, IntNode node) {
+		if (node == null)
+			return null;
+		
+		if (range.getStart() == node.start && range.getEnd() == node.end)
+			return node;
+		
+		if (range.getStart() < node.start)
+			return getNode(range, node.left);
+		
+		if (range.getEnd() > node.end)
+			return getNode(range, node.right);
+		
+		throw new RuntimeException("Should not reach here!");
+	}
+	
 	public int get(int key) {
 		return get(key, root);
 	}
@@ -51,20 +72,15 @@ public class IntRangeTree implements Iterable<IntNode>{
 		return node.val;
 	}
 	
-	public void insert(int key) {
-		insert(CharacterRange.in(key, key));
-	}
-	
-	public void insert(CharacterRange range) {
-		insert(range, -1);
+	public void insert(int key, int val) {
+		insert(CharacterRange.in(key, key), val);
 	}
 	
 	public void insert(CharacterRange range, int val) {
-		insert(range, val, root);
+		insert(range, val, root, new IntNode(range.getStart(), range.getEnd(), val));
 	}
 	
-	private void insert(CharacterRange range, int val, IntNode node) {		
-		IntNode newNode = new IntNode(range.getStart(), range.getEnd(), val);
+	private void insert(CharacterRange range, int val, IntNode parent, IntNode newNode) {		
 		
 		if (root == null) {
 			root = newNode;
@@ -72,20 +88,20 @@ public class IntRangeTree implements Iterable<IntNode>{
 			return;
 		}
 		
-		if (range.getStart() < node.start) {
-			if (node.left == null) {
-				addToLeft(node, newNode);
-				balance(node);
+		if (range.getStart() < parent.start) {
+			if (parent.left == null) {
+				addToLeft(parent, newNode);
+				balance(parent);
 			} else {
-				insert(range, val, node.left);
+				insert(range, val, parent.left, newNode);
 			}
 		} 
-		else if (range.getEnd() > node.end) {
-			if (node.right == null) {
-				addToRight(node, newNode);
-				balance(node);
+		else if (range.getEnd() > parent.end) {
+			if (parent.right == null) {
+				addToRight(parent, newNode);
+				balance(parent);
 			} else {
-				insert(range, val, node.right);					
+				insert(range, val, parent.right, newNode);					
 			}
 		}
 	}
@@ -290,7 +306,7 @@ public class IntRangeTree implements Iterable<IntNode>{
 		
 		@Override
 		public String toString() {
-			return String.format("[%d-%d]", start, end);
+			return String.format("%s-%s", Character.getName(start), Character.getName(end));
 		}
 	}
 

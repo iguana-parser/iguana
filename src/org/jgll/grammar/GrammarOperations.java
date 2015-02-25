@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jgll.grammar.symbol.CharacterRange;
@@ -13,11 +14,16 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Position;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.regex.Opt;
+import org.jgll.regex.Plus;
 import org.jgll.regex.RegularExpression;
+import org.jgll.regex.Sequence;
+import org.jgll.regex.Star;
 import org.jgll.util.Tuple;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 
 /**
@@ -41,14 +47,15 @@ public class GrammarOperations {
 
 	private final Set<Nonterminal> nullableNonterminals;
 	
-	public GrammarOperations(ListMultimap<Nonterminal, Rule> definitions) {
-		this.definitions = definitions;
+	public GrammarOperations(Grammar grammar) {
+		this.definitions = grammar.getDefinitions();
 		this.firstSets = HashMultimap.create();
 		this.nullableNonterminals = new HashSet<>();
 		this.followSets = HashMultimap.create();
 		this.reachabilityGraph = HashMultimap.create();
 		this.predictionSets = HashMultimap.create();
 		
+		calculateReachabilityGraph();
 		calculateFirstSets();
 		calculateFollowSets();
 		calcualtePredictionSets();
@@ -60,6 +67,14 @@ public class GrammarOperations {
 	
 	public SetMultimap<Nonterminal, RegularExpression> getFollowSets() {
 		return followSets;
+	}
+	
+	private void calculateNullables() {
+		for (Entry<Nonterminal, Rule> e : definitions.entries()) {
+			if (e.getValue().getBody().isEmpty()) {
+				nullableNonterminals.add(e.getValue().getHead());
+			}
+		}
 	}
 	
 	private void calculateFirstSets() {
@@ -383,15 +398,11 @@ public class GrammarOperations {
 	 * nonterminals.
 	 * 
 	 */
-	public static Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph(Grammar grammar) {
+	public Multimap<Nonterminal, Nonterminal> calculateReachabilityGraph() {
 		
-		Set<Nonterminal> nonterminals = grammar.getNonterminals();
+		SetMultimap<Nonterminal, Nonterminal> reachabilityGraph = HashMultimap.create();
 		
-		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = new HashMap<>();
-		
-		for (Nonterminal head : nonterminals) {
-			reachabilityGraph.put(head, new HashSet<Nonterminal>());
-		}
+		Set<Nonterminal> nonterminals = definitions.keySet();
 		
 		boolean changed = true;
 		
@@ -400,26 +411,58 @@ public class GrammarOperations {
 			changed = false;
 			
 			for (Nonterminal head : nonterminals) {
-				Set<Nonterminal> set = reachabilityGraph.get(head);
-				for (Rule rule : grammar.getAlternatives(head)) {
+				reachabilityGraph.get(head);
+				
+				for (Rule rule : definitions.get(head)) {
 					
 					List<Symbol> alternate = rule.getBody();
 					
-					if(alternate == null) {
+					if (alternate == null) {
 						continue;
 					}
 					
-					for(Symbol symbol : alternate) {
-						if(symbol instanceof Nonterminal) {
-							Nonterminal nonterminal = (Nonterminal) symbol;
-							changed |= set.add(nonterminal);
-							changed |= set.addAll(reachabilityGraph.get(nonterminal));
-						} 
+					for (Symbol symbol : alternate) {
+						
+						if (symbol instanceof Nonterminal)
+							changed = add(head, (Nonterminal) symbol, reachabilityGraph);
+						
+						if (symbol instanceof Star) {
+							Star star = (Star) symbol;
+							if (star.getSymbol() instanceof Nonterminal)
+								changed = add(head, (Nonterminal) star.getSymbol(), reachabilityGraph);
+						}
+						
+						if (symbol instanceof Plus) {
+							Plus plus = (Plus) symbol;
+							if (plus.getSymbol() instanceof Nonterminal)
+								changed = add(head, (Nonterminal) plus.getSymbol(), reachabilityGraph);
+						}
+						
+						if (symbol instanceof Sequence<?>) {
+							Sequence<?> seq = (Sequence<?>) symbol;
+							for (Symbol s : seq.getSymbols()) {
+								if (s instanceof Nonterminal)
+									changed = add(head, (Nonterminal)s, reachabilityGraph);
+							}
+						}
+						
+						if (symbol instanceof Opt) {
+							Opt opt = (Opt) symbol;
+							if (opt.getSymbol() instanceof Nonterminal)
+								changed = add(head, (Nonterminal) opt.getSymbol(), reachabilityGraph);
+						}						
 					}
 				}
 			}
 		}
 		
 		return reachabilityGraph;
+	}
+	
+	private static boolean add(Nonterminal a, Nonterminal nonterminal, SetMultimap<Nonterminal, Nonterminal> reachabilityGraph) {
+		boolean changed = false;
+		changed |= reachabilityGraph.put(a, nonterminal);
+		changed |= reachabilityGraph.putAll(a, reachabilityGraph.get(nonterminal));
+		return changed;
 	}
 }

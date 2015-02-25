@@ -46,4 +46,10 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	
 	protected abstract Automaton createAutomaton();
 
+	
+	@Override
+	public void initMatcher() {
+		backwardsMatcher = MatcherFactory.getBackwardsMatcher(this);
+		matcher = MatcherFactory.getMatcher(this);
+	}
 }

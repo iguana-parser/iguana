@@ -36,4 +36,6 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	public Matcher getMatcher();
 	
 	public Matcher getBackwardsMatcher();
+	
+	public void initMatcher();
 }
