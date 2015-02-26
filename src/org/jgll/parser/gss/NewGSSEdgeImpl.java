@@ -2,16 +2,18 @@ package org.jgll.parser.gss;
 
 import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.DummySlot;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.HashFunctions;
 import org.jgll.parser.descriptor.Descriptor;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 
 public class NewGSSEdgeImpl implements GSSEdge {
 	
-	private BodyGrammarSlot returnSlot;
-	private NonPackedNode node;
-	private GSSNode destination;
+	private final BodyGrammarSlot returnSlot;
+	private final NonPackedNode node;
+	private final GSSNode destination;
 
 	public NewGSSEdgeImpl(BodyGrammarSlot slot, NonPackedNode node, GSSNode destination) {
 		this.returnSlot = slot;
@@ -68,22 +70,48 @@ public class NewGSSEdgeImpl implements GSSEdge {
 			return null;
 		}
 		
-		NonPackedNode y = parser.getNode(returnSlot, node, sppfNode);
-		
 		/**
 		 * 
 		 * Data-dependent GLL parsing
 		 * 
 		 */
+		
+		NonPackedNode y;	 // FIXME: SPPF
+		BodyGrammarSlot returnSlot = this.returnSlot;
+		
 		if (returnSlot.requiresBinding()) {
 			Environment env = returnSlot.doBinding(sppfNode, parser.getEmptyEnvironment());
 			
-			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env)) {
+			if (returnSlot.isLast() && !returnSlot.isEnd()) {
+				parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
+				returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex), env);
+				
+				if (parser.getCurrentEndGrammarSlot().isEnd()) {
+					y = parser.getNode(returnSlot, node, sppfNode); // use the original slot to create a node
+					returnSlot = parser.getCurrentEndGrammarSlot();
+					env = parser.getEnvironment();
+				} else 
+					return null;
+			} else
+				y = parser.getNode(returnSlot, node, sppfNode);
+				
+			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 				return new org.jgll.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
-			}
-			
+				
 			return null;
 		}
+		
+		if (returnSlot.isLast() && !returnSlot.isEnd()) {
+			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
+			returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex));
+			
+			if (parser.getCurrentEndGrammarSlot().isEnd()) {
+				y = parser.getNode(returnSlot, node, sppfNode); // use the original slot to create a node
+				returnSlot = parser.getCurrentEndGrammarSlot();
+			} else 
+				return null;
+		} else
+			y = parser.getNode(returnSlot, node, sppfNode);
 		
 		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y)) {
 			return new Descriptor(returnSlot, destination, inputIndex, y);

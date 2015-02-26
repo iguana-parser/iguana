@@ -12,6 +12,7 @@ import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
+import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.LastSymbolGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
@@ -308,10 +309,21 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	 * 
 	 */
 	private IEvaluatorContext ctx;
+	private BodyGrammarSlot currentEndGrammarSlot = DummySlot.getInstance();
 	
 	@Override
 	public IEvaluatorContext getEvaluatorContext() {
 		return ctx;
+	}
+	
+	@Override
+	public BodyGrammarSlot getCurrentEndGrammarSlot() {
+		return currentEndGrammarSlot;
+	}
+	
+	@Override
+	public void setCurrentEndGrammarSlot(BodyGrammarSlot slot) {
+		currentEndGrammarSlot = slot;
 	}
 	
 	@Override

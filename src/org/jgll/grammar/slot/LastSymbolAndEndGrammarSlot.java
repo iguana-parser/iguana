@@ -18,6 +18,11 @@ public class LastSymbolAndEndGrammarSlot extends LastSymbolGrammarSlot {
 	}
 	
 	@Override
+	public boolean isEnd() {
+		return true;
+	}
+	
+	@Override
 	public String getConstructorCode() {
 		return null;
 	}

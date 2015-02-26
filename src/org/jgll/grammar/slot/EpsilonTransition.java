@@ -48,6 +48,66 @@ public class EpsilonTransition extends AbstractTransition {
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		switch(type) {
+		
+		case DUMMY:
+			if (conditions.execute(parser.getInput(), u, i))
+				return;	
+			break;
+			
+		case CLEAR_LABEL: // TODO: Decide if this case is needed
+			break;
+			
+		case OPEN: 
+			if (conditions.execute(parser.getInput(), u, i)) 
+				return;
+			
+			parser.setEnvironment(parser.getEmptyEnvironment());
+			parser.getEvaluatorContext().pushEnvironment();
+			
+			dest.execute(parser, u, i, node, parser.getEnvironment());
+			return;
+			
+		case CLOSE:
+			if (conditions.execute(parser.getInput(), u, i))
+				return;
+			break;
+			
+		case DECLARE_LABEL:
+			
+			parser.setEnvironment(parser.getEmptyEnvironment());
+			
+			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
+			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
+			
+			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+				return;
+			
+			dest.execute(parser, u, i, node, parser.getEnvironment());
+			return;
+			
+		case STORE_LABEL:
+			
+			parser.setEnvironment(parser.getEmptyEnvironment());
+			
+			Object value = parser.getEvaluatorContext().lookupVariable(label);
+			
+			Integer lhs;
+			if (!(value instanceof Tuple)) {
+				lhs = (Integer) ((Tuple<?,?>) value).getFirst();
+			} else {
+				throw new UnexpectedRuntimeTypeException(AST.var(label));
+			}
+			
+			parser.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
+			
+			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+				return;
+			
+			dest.execute(parser, u, i, node, parser.getEnvironment());	
+			return;
+		}
+		
 		dest.execute(parser, u, i, node);
 	}
 
@@ -78,40 +138,31 @@ public class EpsilonTransition extends AbstractTransition {
 		switch(type) {
 		
 		case DUMMY:
-			
 			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
-				return;
-			
+				return;	
 			break;
 			
 		case CLEAR_LABEL: // TODO: Decide if this case is needed
 			break;
 			
 		case OPEN: 
-			
 			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext())) 
 				return;
-			
 			parser.getEvaluatorContext().pushEnvironment();
 			break;
 			
 		case CLOSE:
-			
 			parser.getEvaluatorContext().popEnvironment();
-			
 			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
 				return;
-			
 			break;
 			
 		case DECLARE_LABEL:
-			
 			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
 			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
 			
 			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
 				return;
-			
 			break;
 			
 		case STORE_LABEL:
@@ -129,9 +180,7 @@ public class EpsilonTransition extends AbstractTransition {
 			
 			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
 				return;
-			
 			break;
-			
 		}
 		
 		dest.execute(parser, u, i, node, parser.getEnvironment());

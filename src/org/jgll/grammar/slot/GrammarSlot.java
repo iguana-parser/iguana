@@ -33,9 +33,11 @@ public interface GrammarSlot extends ConstructorCode {
 	default boolean isFirst() { return false; }
 	
 	/**
-	 * Corresponds to a grammar position A ::= \alpha . 
+	 * Corresponds to a grammar position after the last terminal or nonterminal symbol 
 	 */
 	default boolean isLast() { return false; }
+	
+	default boolean isEnd() { return false; }
 
 	default GSSNode getGSSNode(int inputIndex) { return null; }
 	

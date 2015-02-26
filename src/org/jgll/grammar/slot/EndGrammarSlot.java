@@ -20,7 +20,16 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		if (node.isDummy()) {
+			parser.setCurrentEndGrammarSlot(this);
+			return;
+		}
 		parser.pop(u, i, node);
+	}
+	
+	@Override
+	public boolean isEnd() {
+		return true;
 	}
 	
 	@Override
@@ -42,11 +51,6 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 		return false;
 	}
 	
-	@Override
-	public boolean isLast() {
-		return true;
-	}
-	
 	/**
 	 * 
 	 * Data-dependent GLL parsing
@@ -54,6 +58,11 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	 */
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		if (node.isDummy()) {
+			parser.setEnvironment(env);
+			parser.setCurrentEndGrammarSlot(this);
+			return;
+		}
 		parser.pop(u, i, node);
 	}
 

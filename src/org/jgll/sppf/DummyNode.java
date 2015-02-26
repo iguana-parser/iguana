@@ -23,6 +23,15 @@ public class DummyNode extends TerminalNode {
 		return instance;
 	}
 	
+	public static DummyNode getInstance(int leftExtent, int rightExtent) {
+		return new DummyNode(DummySlot.getInstance(), leftExtent, rightExtent);
+	}
+	
+	@Override
+	public boolean isDummy() {
+		return true;
+	}
+	
 	@Override
 	public String toString() {
 		return "$";

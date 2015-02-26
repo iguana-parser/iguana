@@ -6,6 +6,7 @@ import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.sppf.DummyNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.TerminalNode;
 
@@ -25,7 +26,15 @@ public class FirstAndLastTerminalTransition extends AbstractTerminalTransition {
 
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr));
+		if (dest.isEnd())
+			dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr));
+		else {
+			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
+			dest.execute(parser, u, i + length, DummyNode.getInstance(cr.getLeftExtent(), i + length));
+			
+			if (parser.getCurrentEndGrammarSlot().isEnd())
+				parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr));
+		}
 	}
 	
 	/**
@@ -35,6 +44,14 @@ public class FirstAndLastTerminalTransition extends AbstractTerminalTransition {
 	 */
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr), env);
+		if (dest.isEnd())
+			dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr), env);
+		else {
+			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
+			dest.execute(parser, u, i + length, DummyNode.getInstance(cr.getLeftExtent(), i + length), env);
+			
+			if (parser.getCurrentEndGrammarSlot().isEnd())
+				parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr), parser.getEnvironment());
+		}
 	}
 }

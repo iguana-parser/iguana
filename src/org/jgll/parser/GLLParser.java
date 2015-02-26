@@ -80,6 +80,10 @@ public interface GLLParser {
 	
 	public IEvaluatorContext getEvaluatorContext();
 	
+	public BodyGrammarSlot getCurrentEndGrammarSlot();
+	
+	public void setCurrentEndGrammarSlot(BodyGrammarSlot slot);
+	
 	public Environment getEnvironment();
 	
 	public void setEnvironment(Environment env);
