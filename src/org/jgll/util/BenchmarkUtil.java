@@ -1,7 +1,15 @@
 package org.jgll.util;
 
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.jgll.grammar.Grammar;
 
 public class BenchmarkUtil {
 	
@@ -21,6 +29,24 @@ public class BenchmarkUtil {
 		ThreadMXBean bean = ManagementFactory.getThreadMXBean();
 		return bean.isCurrentThreadCpuTimeSupported() ? 
 				(bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime()): 0L;
+	}
+	
+	public static List<File> find(String dir, String ext, boolean recursive) {
+		List<File> inputs = new ArrayList<>();
+		Collection<?> files = FileUtils.listFiles(new File(dir), new String[] {ext}, recursive);
+		Iterator<?> it = files.iterator();
+		while(it.hasNext()) {
+			inputs.add((File) it.next());							
+		}
+		return inputs;
+	}
+	
+	public static Grammar getGrammar(String path) {
+		try {
+			return GrammarUtil.load(new File(path).toURI());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**

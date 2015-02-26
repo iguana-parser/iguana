@@ -1,11 +1,12 @@
 package org.jgll.benchmark.jmh;
 
+import static org.jgll.util.BenchmarkUtil.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.jgll.benchmark.AbstractBenchmark;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.JavaCharacterLevel;
@@ -50,7 +51,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @Fork(0)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class BenchmarkJava extends AbstractBenchmark {
+public class BenchmarkJava {
 	
 	private static String sourceDir = "/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19";
 	private static Grammar javaGrammar = JavaCharacterLevel.grammar;
@@ -97,7 +98,7 @@ public class BenchmarkJava extends AbstractBenchmark {
 	}
 	
 	public static void main(String[] args) throws RunnerException, IOException {
-		List<File> files = find(sourceDir, "java");
+		List<File> files = find(sourceDir, "java", true);
 		String[] params = files.stream().map(f -> f.getAbsolutePath()).toArray(String[]::new);
 		String[] gssParams = new String[] { GSSType.NEW.toString(), GSSType.ORIGINAL.toString() };
 		Options opt = new OptionsBuilder()
