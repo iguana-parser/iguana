@@ -42,7 +42,6 @@ public class RegularExpressionCondition extends Condition {
 	}
 	
 	public SlotAction createSlotAction(RegularExpression r) {
-		System.out.println(r);
 		r.initMatcher();
 		
 		switch (type) {
