@@ -34,6 +34,16 @@ public class OperatorPrecedence {
 	
 	private Map<List<List<Symbol>>, Nonterminal> existingAlternates;
 	
+	public OperatorPrecedence(Set<PrecedencePattern> precedencePatterns, Set<ExceptPattern> exceptPatterns) {
+		this.newNonterminals = new HashMap<>();
+		this.precednecePatterns = new HashMap<>();
+		this.existingAlternates = new HashMap<>();
+		this.exceptPatterns = new ArrayList<>();
+		
+		precedencePatterns.forEach(x -> add(x));
+		exceptPatterns.forEach(x -> add(x));
+	}
+	
 	public OperatorPrecedence() {
 		this.newNonterminals = new HashMap<>();
 		this.precednecePatterns = new HashMap<>();
@@ -73,7 +83,7 @@ public class OperatorPrecedence {
 			}
 		}
 
-		return builder.build();
+		return builder.setLayout(grammar.getLayout()).build();
 	}
 	
 	private void rewriteExceptPatterns() {
@@ -111,8 +121,11 @@ public class OperatorPrecedence {
 
 	
 	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
-		PrecedencePattern pattern = new PrecedencePattern(nonterminal, parent.getBody(), position, child.getBody());
-
+		add(new PrecedencePattern(nonterminal, parent.getBody(), position, child.getBody()));
+	}
+	
+	public void add(PrecedencePattern pattern) {
+		Nonterminal nonterminal = pattern.getNonterminal();
 		if (precednecePatterns.containsKey(nonterminal)) {
 			precednecePatterns.get(nonterminal).add(pattern);
 		} else {
@@ -120,13 +133,14 @@ public class OperatorPrecedence {
 			set.add(pattern);
 			precednecePatterns.put(nonterminal, set);
 		}
-		log.debug("Precedence pattern added %s", pattern);
 	}
 	
 	public void addExceptPattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
-		ExceptPattern pattern = new ExceptPattern(nonterminal, parent.getBody(), position, child.getBody());
+		add(new ExceptPattern(nonterminal, parent.getBody(), position, child.getBody()));
+	}
+	
+	public void add(ExceptPattern pattern) {
 		exceptPatterns.add(pattern);
-		log.debug("Except pattern added %s", pattern);
 	}
 	
 	/**

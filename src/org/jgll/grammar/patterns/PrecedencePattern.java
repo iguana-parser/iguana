@@ -5,9 +5,10 @@ import java.util.List;
 
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.util.generator.ConstructorCode;
 
 
-public class PrecedencePattern extends AbstractPattern implements Serializable {
+public class PrecedencePattern extends AbstractPattern implements Serializable, ConstructorCode {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -38,5 +39,10 @@ public class PrecedencePattern extends AbstractPattern implements Serializable {
 	
 	public boolean isRightMost() {
 		return position == parent.size() - 1;
+	}
+
+	@Override
+	public String getConstructorCode() {
+		return "new " + PrecedencePattern.class.getSimpleName() + "(" + super.getConstructorCode() + ")";
 	}
 }

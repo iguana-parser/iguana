@@ -50,6 +50,7 @@ public class RegularExpressionCondition extends Condition {
 		    	return (input, node, i) -> r.getMatcher().match(input, i) == -1;
 		    	
 		    case NOT_FOLLOW:
+		    case NOT_FOLLOW_IGNORE_LAYOUT:
 		    	return (input, node, i) -> r.getMatcher().match(input, i) >= 0;
 		    	
 		    case MATCH:
@@ -112,6 +113,10 @@ public class RegularExpressionCondition extends Condition {
 	
 	public static RegularExpressionCondition notFollow(RegularExpression regularExpression) {
 		return new RegularExpressionCondition(ConditionType.NOT_FOLLOW, regularExpression);
+	}
+	
+	public static RegularExpressionCondition notFollowIgnoreLayout(RegularExpression regularExpression) {
+		return new RegularExpressionCondition(ConditionType.NOT_FOLLOW_IGNORE_LAYOUT, regularExpression);
 	}
 	
 	public static RegularExpressionCondition follow(RegularExpression regularExpression) {

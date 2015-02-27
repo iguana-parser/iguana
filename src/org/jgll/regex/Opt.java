@@ -82,7 +82,7 @@ public class Opt extends AbstractRegularExpression {
 
 	@Override
 	public String getConstructorCode() {
-		return Opt.class.getName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
+		return Opt.class.getSimpleName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
 	}
 	
 	@Override

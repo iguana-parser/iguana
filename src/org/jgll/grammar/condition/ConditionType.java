@@ -4,6 +4,7 @@ public enum ConditionType {
 	
  	FOLLOW(" >> "),
 	NOT_FOLLOW(" !>> "),
+	NOT_FOLLOW_IGNORE_LAYOUT(" !>>> "),
 	PRECEDE(" << "),
 	NOT_PRECEDE(" !<< "),
 	MATCH(" & "),
