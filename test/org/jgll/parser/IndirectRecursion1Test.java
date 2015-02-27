@@ -55,14 +55,14 @@ public class IndirectRecursion1Test {
 	}
 	
 	
-	@Test
-	public void testFirstFollowSets() {
-		assertEquals(set(a, b), grammar.getFirstSet(A));
-		assertEquals(set(a, b), grammar.getFirstSet(B));
-		assertEquals(set(c), grammar.getFirstSet(C));
-		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(A));
-		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(B));
-	}
+//	@Test
+//	public void testFirstFollowSets() {
+//		assertEquals(set(a, b), grammar.getFirstSet(A));
+//		assertEquals(set(a, b), grammar.getFirstSet(B));
+//		assertEquals(set(c), grammar.getFirstSet(C));
+//		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(A));
+//		assertEquals(set(c, EOF.getInstance()), grammar.getFollowSet(B));
+//	}
 	
 	@Test
 	public void testParser() {

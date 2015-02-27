@@ -52,10 +52,10 @@ public class KeywordTest3 {
 	}
 	
 	
-	@Test
-	public void testFirstSet() {
-		assertEquals(set(iff, s), grammar.getFirstSet(S));
-	}
+//	@Test
+//	public void testFirstSet() {
+//		assertEquals(set(iff, s), grammar.getFirstSet(S));
+//	}
 	
 	@Test
 	public void testParser() {

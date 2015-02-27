@@ -17,7 +17,7 @@ import org.junit.runners.Parameterized.Parameter;
 
 @RunWith(Parameterized.class)
 public class AbstractParserTest {
-
+	
 	@Parameter(value = 0)
 	public Input input;
 	

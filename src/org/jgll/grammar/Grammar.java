@@ -13,7 +13,6 @@ import java.util.stream.StreamSupport;
 
 import org.jgll.grammar.exception.GrammarValidationException;
 import org.jgll.grammar.exception.NonterminalNotDefinedException;
-import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -23,10 +22,7 @@ import org.jgll.util.Input;
 import org.jgll.util.generator.ConstructorCode;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.SetMultimap;
 
 
 /**
@@ -39,19 +35,12 @@ public class Grammar implements ConstructorCode, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private final ListMultimap<Nonterminal, Rule> definitions;
-
-	private final SetMultimap<Nonterminal, RegularExpression> firstSets;
-	
-	private final SetMultimap<Nonterminal, RegularExpression> followSets;
 	
 	private final Nonterminal layout;
-	
+		
 	public Grammar(Builder builder) {
 		this.definitions = builder.definitions;
 		this.layout = builder.layout;
-		// TODO: replace them with calculation
-		this.firstSets = HashMultimap.create();
-		this.followSets = HashMultimap.create();
 	}
 	
 	public ListMultimap<Nonterminal, Rule> getDefinitions() {
@@ -78,28 +67,8 @@ public class Grammar implements ConstructorCode, Serializable {
 		return num;
 	}
 	
-	public Set<RegularExpression> getFirstSet(Nonterminal nonterminal) {
-		return firstSets.get(nonterminal);
-	}
-	
-	public Set<RegularExpression> getFollowSet(Nonterminal nonterminal) {
-		return followSets.get(nonterminal);
-	}
-	
-	public Set<RegularExpression> getPredictionSet(Nonterminal nonterminal) {
-		Set<RegularExpression> set = getFirstSet(nonterminal);
-		if (set.contains(Epsilon.getInstance())) {
-			set.addAll(getFollowSet(nonterminal));
-		}
-		return set;
-	}
-	
 	public Set<RegularExpression> getPredictionSet(Rule rule, int index) {
 		return null;
-	}
-	
-	public boolean isNullable(Nonterminal nonterminal) {
-		return firstSets.get(nonterminal).contains(Epsilon.getInstance());
 	}
 	
 	public GrammarGraph toGrammarGraph(Input input, Configuration config) {

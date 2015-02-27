@@ -61,22 +61,22 @@ public class LeftFactorizedArithmeticGrammarTest {
 		grammar = builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8).build();
 	}
 	
-	@Test
-	public void testFirstSets() {
-		assertEquals(set(openPar, a), grammar.getFirstSet(E));
-		assertEquals(set(plus, Epsilon.getInstance()), grammar.getFirstSet(E1));
-		assertEquals(set(star, Epsilon.getInstance()), grammar.getFirstSet(T1));
-		assertEquals(set(openPar, a), grammar.getFirstSet(T));
-		assertEquals(set(openPar, a), grammar.getFirstSet(F));
-	}
-	
-	public void testFollowSets() {
-		assertEquals(set(closePar, EOF.getInstance()), grammar.getFollowSet(E));
-		assertEquals(set(closePar, EOF.getInstance()), grammar.getFollowSet(E1));
-		assertEquals(set(plus, closePar, EOF.getInstance()), grammar.getFollowSet(T1));
-		assertEquals(set(plus, closePar, EOF.getInstance()), grammar.getFollowSet(T));
-		assertEquals(set(plus, star, closePar, EOF.getInstance()), grammar.getFollowSet(F));
-	}
+//	@Test
+//	public void testFirstSets() {
+//		assertEquals(set(openPar, a), grammar.getFirstSet(E));
+//		assertEquals(set(plus, Epsilon.getInstance()), grammar.getFirstSet(E1));
+//		assertEquals(set(star, Epsilon.getInstance()), grammar.getFirstSet(T1));
+//		assertEquals(set(openPar, a), grammar.getFirstSet(T));
+//		assertEquals(set(openPar, a), grammar.getFirstSet(F));
+//	}
+//	
+//	public void testFollowSets() {
+//		assertEquals(set(closePar, EOF.getInstance()), grammar.getFollowSet(E));
+//		assertEquals(set(closePar, EOF.getInstance()), grammar.getFollowSet(E1));
+//		assertEquals(set(plus, closePar, EOF.getInstance()), grammar.getFollowSet(T1));
+//		assertEquals(set(plus, closePar, EOF.getInstance()), grammar.getFollowSet(T));
+//		assertEquals(set(plus, star, closePar, EOF.getInstance()), grammar.getFollowSet(F));
+//	}
 	
 	@Test
 	public void testParser() {

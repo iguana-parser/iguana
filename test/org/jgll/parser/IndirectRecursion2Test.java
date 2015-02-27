@@ -48,11 +48,11 @@ public class IndirectRecursion2Test {
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
 	}
 	
-	@Test
-	public void testNullable() {
-		assertFalse(grammar.isNullable(A));
-		assertTrue(grammar.isNullable(B));
-	}
+//	@Test
+//	public void testNullable() {
+//		assertFalse(grammar.isNullable(A));
+//		assertTrue(grammar.isNullable(B));
+//	}
 	
 	@Test
 	public void testParser() {

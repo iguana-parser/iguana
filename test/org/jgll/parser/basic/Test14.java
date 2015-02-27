@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.operations.FirstFollowSets;
+import org.jgll.grammar.operations.ReachabilityGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -27,6 +29,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * 
  * A ::=  B 'a'
@@ -36,6 +40,11 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(Parameterized.class)
 public class Test14 extends AbstractParserTest {
+
+	static Nonterminal A = Nonterminal.withName("A");
+	static Nonterminal B = Nonterminal.withName("B");
+	static Character a = Character.from('a');
+	static Character b = Character.from('b');
 	
 	@Parameters
     public static Collection<Object[]> data() {
@@ -57,10 +66,6 @@ public class Test14 extends AbstractParserTest {
 	}
 	
 	private static Grammar getGrammar() {
-		Nonterminal A = Nonterminal.withName("A");
-		Nonterminal B = Nonterminal.withName("B");
-		Character a = Character.from('a');
-		Character b = Character.from('b');
 		Rule r1 = Rule.withHead(A).addSymbols(B, a).build();
 		Rule r2 = Rule.withHead(B).addSymbol(b).build();
 		return Grammar.builder().addRule(r1).addRule(r2).build();
@@ -68,8 +73,16 @@ public class Test14 extends AbstractParserTest {
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammar.isNullable(Nonterminal.withName("A")));
-		assertFalse(grammar.isNullable(Nonterminal.withName("A")));
+		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
+		assertFalse(firstFollowSets.isNullable(A));
+		assertFalse(firstFollowSets.isNullable(B));
+	}
+
+	@Test
+	public void testReachableNonterminals() {
+		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
+		assertEquals(ImmutableSet.of(B), reachabilityGraph.getReachableNonterminals(A));
+		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(B));
 	}
 	
 	private static ParseSuccess getParseResult(GrammarGraph registry) {

@@ -39,10 +39,10 @@ public class KeywordTest2 {
 		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 	}
 	
-	@Test
-	public void testFirstSet() {
-		assertEquals(set(iff), grammar.getFirstSet(A));
-	}
+//	@Test
+//	public void testFirstSet() {
+//		assertEquals(set(iff), grammar.getFirstSet(A));
+//	}
 	
 	@Test
 	public void test() {

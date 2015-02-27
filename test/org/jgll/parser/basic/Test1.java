@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.operations.FirstFollowSets;
+import org.jgll.grammar.operations.ReachabilityGraph;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.parser.ParseResult;
@@ -26,6 +28,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * 
  * A ::= epsilon
@@ -36,6 +40,8 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class Test1 extends AbstractParserTest {
+	
+	private static Nonterminal A = Nonterminal.withName("A");
 
 	@Parameters
     public static Collection<Object[]> data() {
@@ -49,11 +55,10 @@ public class Test1 extends AbstractParserTest {
     }
     
     private static Nonterminal getStartSymbol() {
-    	return Nonterminal.withName("A");
+    	return A;
     }
 	
 	public static Grammar getGrammar() {
-		Nonterminal A = Nonterminal.withName("A");
 		Rule r1 = Rule.withHead(A).build();
 		return Grammar.builder().addRule(r1).build();
 	}
@@ -64,7 +69,14 @@ public class Test1 extends AbstractParserTest {
 		
 	@Test
 	public void testNullable() {
-		assertTrue(grammar.isNullable(Nonterminal.withName("A")));
+		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
+		assertTrue(firstFollowSets.isNullable(A));
+	}
+	
+	@Test
+	public void testReachableNonterminals() {
+		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
+		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(A));
 	}
 		
 	public static ParseSuccess getParseResult(GrammarGraph graph) {

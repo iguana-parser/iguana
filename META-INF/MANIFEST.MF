@@ -20,7 +20,6 @@ Export-Package:
    org.jgll.parser.gss",
  org.jgll.grammar.exception;uses:="org.jgll.grammar.symbol",
  org.jgll.grammar.leftfactorization,
- org.jgll.grammar.ll1,
  org.jgll.grammar.patterns;uses:="org.jgll.grammar.symbol",
  org.jgll.grammar.precedence;uses:="org.jgll.grammar,org.jgll.grammar.symbol",
  org.jgll.grammar.slot;

@@ -10,9 +10,12 @@ import java.util.stream.Collectors;
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.operations.FirstFollowSets;
+import org.jgll.grammar.operations.ReachabilityGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
+import org.jgll.grammar.symbol.Terminal;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParseSuccess;
 import org.jgll.parser.ParserFactory;
@@ -28,6 +31,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * 
  * A ::= 'a' 'b' 'c'
@@ -37,6 +42,11 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(Parameterized.class)
 public class Test4 extends AbstractParserTest {
+	
+	static Nonterminal A = Nonterminal.withName("A");
+	static Terminal a = Terminal.from(Character.from('a'));
+	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal c = Terminal.from(Character.from('c'));
 
 	@Parameters
     public static Collection<Object[]> data() {
@@ -58,17 +68,20 @@ public class Test4 extends AbstractParserTest {
     }
 	
 	private static Grammar getGrammar() {
-		Nonterminal A = Nonterminal.withName("A");
-		Character a = Character.from('a');
-		Character b = Character.from('b');
-		Character c = Character.from('c');
 		Rule r1 = Rule.withHead(A).addSymbols(a, b, c).build();
 		return Grammar.builder().addRule(r1).build();
 	}
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammar.isNullable(Nonterminal.withName("A")));
+		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
+		assertFalse(firstFollowSets.isNullable(Nonterminal.withName("A")));
+	}
+	
+	@Test
+	public void testReachableNonterminals() {
+		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
+		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(A));
 	}
 	
 	private static ParseSuccess getParseResult(GrammarGraph registry) {
