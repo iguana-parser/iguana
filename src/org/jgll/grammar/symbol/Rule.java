@@ -33,12 +33,18 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final LayoutStrategy layoutStrategy;
 	
+	private final Associativity associativity;
+	
+	private final Precedence precedence;
+	
 	public Rule(Builder builder) {
 		this.body = builder.body;
 		this.head = builder.head;
 		this.object = builder.object;
 		this.layout = builder.layout;
 		this.layoutStrategy = builder.layoutStrategy;
+		this.associativity = builder.associativity;
+		this.precedence = builder.precedence;
 	}
 		
 	public Nonterminal getHead() {
@@ -72,6 +78,14 @@ public class Rule implements ConstructorCode, Serializable {
 		return layoutStrategy;
 	}
 	
+	public Associativity getAssociativity() {
+		return associativity;
+	}
+	
+	public Precedence getPrecedence() {
+		return precedence;
+	}
+	
 	public boolean hasLayout() {
 		return layout != null;
 	}
@@ -88,7 +102,7 @@ public class Rule implements ConstructorCode, Serializable {
 		for(Symbol s : body) {
 			sb.append(s).append(" ");
 		}
-		return sb.toString();
+		return sb.toString() + " {" + associativity + "," + precedence + "}";
 	} 
 	
 	public boolean equals(Object obj) {
@@ -140,6 +154,9 @@ public class Rule implements ConstructorCode, Serializable {
 		private Serializable object;
 		private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
 		private Nonterminal layout;
+		
+		private Associativity associativity;
+		private Precedence precedence;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -177,6 +194,16 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		public Builder setLayout(Nonterminal layout) {
 			this.layout = layout;
+			return this;
+		}
+		
+		public Builder setAssociativity(Associativity associativity) {
+			this.associativity = associativity;
+			return this;
+		}
+		
+		public Builder setPrecedence(Precedence precedence) {
+			this.precedence = precedence;
 			return this;
 		}
 		
