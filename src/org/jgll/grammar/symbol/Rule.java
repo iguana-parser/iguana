@@ -33,6 +33,8 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final LayoutStrategy layoutStrategy;
 	
+	private final Recursion recursion;
+	
 	private final Associativity associativity;
 	private final AssociativityGroup associativityGroup;
 	
@@ -45,6 +47,7 @@ public class Rule implements ConstructorCode, Serializable {
 		this.object = builder.object;
 		this.layout = builder.layout;
 		this.layoutStrategy = builder.layoutStrategy;
+		this.recursion = builder.recursion;
 		this.associativity = builder.associativity;
 		this.associativityGroup = builder.associativityGroup;
 		this.precedence = builder.precedence;
@@ -80,6 +83,14 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	public LayoutStrategy getLayoutStrategy() {
 		return layoutStrategy;
+	}
+	
+	public boolean isLeftRecursive() {
+		return recursion == Recursion.LEFT;
+	}
+	
+	public boolean isRightRecursive() {
+		return recursion == Recursion.RIGHT;
 	}
 	
 	public Associativity getAssociativity() {
@@ -167,6 +178,8 @@ public class Rule implements ConstructorCode, Serializable {
 		private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
 		private Nonterminal layout;
 		
+		private Recursion recursion = Recursion.NON_REC;
+		
 		private Associativity associativity;
 		private AssociativityGroup associativityGroup;
 		
@@ -209,6 +222,11 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		public Builder setLayout(Nonterminal layout) {
 			this.layout = layout;
+			return this;
+		}
+		
+		public Builder setRecursion(Recursion recursion) {
+			this.recursion = recursion;
 			return this;
 		}
 		
