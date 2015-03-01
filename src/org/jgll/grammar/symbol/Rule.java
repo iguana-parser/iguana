@@ -35,7 +35,7 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final Associativity associativity;
 	
-	private final Precedence precedence;
+	private final int precedence;
 	
 	public Rule(Builder builder) {
 		this.body = builder.body;
@@ -82,7 +82,7 @@ public class Rule implements ConstructorCode, Serializable {
 		return associativity;
 	}
 	
-	public Precedence getPrecedence() {
+	public int getPrecedence() {
 		return precedence;
 	}
 	
@@ -156,7 +156,7 @@ public class Rule implements ConstructorCode, Serializable {
 		private Nonterminal layout;
 		
 		private Associativity associativity;
-		private Precedence precedence;
+		private int precedence;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -202,7 +202,7 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
-		public Builder setPrecedence(Precedence precedence) {
+		public Builder setPrecedence(int precedence) {
 			this.precedence = precedence;
 			return this;
 		}

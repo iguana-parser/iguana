@@ -2,20 +2,27 @@ package org.jgll.grammar.symbol;
 
 public abstract class Group {
 	
-	private final Precedence lhs;
-	private final Precedence rhs;
+	private final int lhs;
+	private int rhs;
 	
-	public Group(Precedence lhs, Precedence rhs) {
+	public Group(int lhs, int rhs) {
 		this.lhs = lhs;
 		this.rhs = rhs;
 	}
 	
-	public Precedence getLhs() {
+	public int getLhs() {
 		return lhs;
 	}
 	
-	public Precedence getRhs() {
+	public int getRhs() {
 		return rhs;
+	}
+	
+	public void setRhs(int level) {
+		if (rhs == -1)
+			rhs = level;
+		else
+			throw new RuntimeException("Should not reset the upper bound when it is not -1!");
 	}
 
 }

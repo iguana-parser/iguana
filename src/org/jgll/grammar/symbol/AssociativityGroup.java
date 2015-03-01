@@ -1,9 +1,21 @@
 package org.jgll.grammar.symbol;
 
 public class AssociativityGroup extends Group {
+	
+	private final Associativity associativity;
 
-	public AssociativityGroup(Precedence lhs, Precedence rhs) {
+	public AssociativityGroup(Associativity associativity, int lhs, int rhs) {
 		super(lhs, rhs);
+		this.associativity = associativity;
+	}
+	
+	public AssociativityGroup(Associativity associativity, int lhs) {
+		super(lhs, -1);
+		this.associativity = associativity;
+	}
+	
+	public Associativity getAssociativity() {
+		return associativity;
 	}
 
 }
