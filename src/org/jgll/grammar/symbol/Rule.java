@@ -11,7 +11,7 @@ import org.jgll.util.generator.ConstructorCode;
 
 /**
  * 
- * @author Ali Afroozeh
+ * @authors Ali Afroozeh, Anastasia Izmaylova
  *
  */
 public class Rule implements ConstructorCode, Serializable {
@@ -34,8 +34,10 @@ public class Rule implements ConstructorCode, Serializable {
 	private final LayoutStrategy layoutStrategy;
 	
 	private final Associativity associativity;
+	private final AssociativityGroup associativityGroup;
 	
 	private final int precedence;
+	private final PrecedenceGroup precedenceGroup;
 	
 	public Rule(Builder builder) {
 		this.body = builder.body;
@@ -44,7 +46,9 @@ public class Rule implements ConstructorCode, Serializable {
 		this.layout = builder.layout;
 		this.layoutStrategy = builder.layoutStrategy;
 		this.associativity = builder.associativity;
+		this.associativityGroup = builder.associativityGroup;
 		this.precedence = builder.precedence;
+		this.precedenceGroup = builder.precedenceGroup;
 	}
 		
 	public Nonterminal getHead() {
@@ -82,8 +86,16 @@ public class Rule implements ConstructorCode, Serializable {
 		return associativity;
 	}
 	
+	public AssociativityGroup getAssociativityGroup() {
+		return associativityGroup;
+	}
+	
 	public int getPrecedence() {
 		return precedence;
+	}
+	
+	public PrecedenceGroup getPrecedenceGroup() {
+		return precedenceGroup;
 	}
 	
 	public boolean hasLayout() {
@@ -156,7 +168,10 @@ public class Rule implements ConstructorCode, Serializable {
 		private Nonterminal layout;
 		
 		private Associativity associativity;
+		private AssociativityGroup associativityGroup;
+		
 		private int precedence;
+		private PrecedenceGroup precedenceGroup;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -202,8 +217,18 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder setAssociativityGroup(AssociativityGroup associativityGroup) {
+			this.associativityGroup = associativityGroup;
+			return this;
+		}
+		
 		public Builder setPrecedence(int precedence) {
 			this.precedence = precedence;
+			return this;
+		}
+		
+		public Builder setPrecedenceGroup(PrecedenceGroup precedenceGroup) {
+			this.precedenceGroup = precedenceGroup;
 			return this;
 		}
 		
