@@ -1,7 +1,5 @@
 package org.jgll.regex;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,10 +43,10 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		return builder(list).build();
 	}
 	
-	private static <T> String getName(List<T> elements) {
+	private static <T extends Symbol> String getName(List<T> elements) {
 //		Verify.verify(elements != null, "Elements cannot be null");
 //		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
-		return "(" + listToString(elements, " | ") + ")";
+		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" | ")) + ")";
 	}
 	
 	@Override

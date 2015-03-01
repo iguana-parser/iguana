@@ -57,7 +57,12 @@ public abstract class AbstractSymbol implements Symbol {
 	
 	@Override
 	public String toString() {
-		return preConditions.isEmpty() ? name :  "(" + name + listToString(preConditions) + ")";
+		String s = label == null ? name : label + ":" + name;
+		if (!preConditions.isEmpty())
+			s += listToString(preConditions) + " " + name;
+		if (!postConditions.isEmpty())
+			s += listToString(postConditions);
+		return s;
 	}
 	
 	@Override

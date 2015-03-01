@@ -73,6 +73,7 @@ public class IguanaBenchmark {
 				try {
 					result = run(parser, grammarGraph, input, start);
 				} catch (Exception e) {
+					e.printStackTrace();
 					System.out.println("Time out");
 					continue;
 				}

@@ -56,7 +56,7 @@ public class LayoutWeaver implements GrammarTransformation {
 				break;
 				
 			case FIXED:
-				ruleBuilder.addSymbol(layout);
+				ruleBuilder.addSymbol(rule.getLayout());
 //				ruleBuilder.addSymbol(rule.getLayout().copyBuilder().addPostConditions(getNotFollowIgnoreLayout(s)).build());
 				break;
 		}

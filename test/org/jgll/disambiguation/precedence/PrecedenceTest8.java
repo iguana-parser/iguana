@@ -2,8 +2,13 @@ package org.jgll.disambiguation.precedence;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.patterns.ExceptPattern;
+import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -70,20 +75,25 @@ public class PrecedenceTest8 {
 		Rule rule5 = Rule.withHead(E).addSymbols(a).build();
 		builder.addRule(rule5);
 		
-		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
+		
+		List<PrecedencePattern> precedence = new ArrayList<>();
+		
 		// (E, .E [ E ], E + E)
-		operatorPrecedence.addPrecedencePattern(E, rule1, 0, rule4);
+		precedence.add(PrecedencePattern.from(rule1, 0, rule4));
 		
 		// (E, .E *, E + E)
-		operatorPrecedence.addPrecedencePattern(E, rule2, 0, rule4);
+		precedence.add(PrecedencePattern.from(rule2, 0, rule4));
 		
 		// (E, .E +, E + E)
-		operatorPrecedence.addPrecedencePattern(E, rule3, 0, rule4);
+		precedence.add(PrecedencePattern.from(rule3, 0, rule4));
 
-		operatorPrecedence.addExceptPattern(E, rule1, 0, rule1);
-		operatorPrecedence.addExceptPattern(E, rule1, 0, rule2);
-		operatorPrecedence.addExceptPattern(E, rule1, 0, rule3);
+		
+		List<ExceptPattern> except = new ArrayList<>();
+		except.add(ExceptPattern.from(rule1, 0, rule1));
+		except.add(ExceptPattern.from(rule1, 0, rule2));
+		except.add(ExceptPattern.from(rule1, 0, rule3));
 
+		OperatorPrecedence operatorPrecedence = new OperatorPrecedence(precedence, except);
 		grammar = operatorPrecedence.transform(builder.build());
 	}
 	
@@ -120,7 +130,7 @@ public class PrecedenceTest8 {
 		IntermediateNode node3 = factory.createIntermediateNode("E ::= E + . E", 0, 2);
 		PackedNode node4 = factory.createPackedNode("E ::= E + . E", 1, node3);
 		NonterminalNode node5 = factory.createNonterminalNode("E", 0, 0, 1);
-		PackedNode node6 = factory.createPackedNode("E ::= a .", 0, node5);
+		PackedNode node6 = factory.createPackedNode("E ::= a .", 1, node5);
 		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
 		node6.addChild(node7);
 		node5.addChild(node6);
@@ -135,7 +145,7 @@ public class PrecedenceTest8 {
 		IntermediateNode node13 = factory.createIntermediateNode("E ::= E2 [ . E ]", 2, 4);
 		PackedNode node14 = factory.createPackedNode("E ::= E2 [ . E ]", 3, node13);
 		NonterminalNode node15 = factory.createNonterminalNode("E", 2, 2, 3);
-		PackedNode node16 = factory.createPackedNode("E2 ::= a .", 2, node15);
+		PackedNode node16 = factory.createPackedNode("E2 ::= a .", 3, node15);
 		TerminalNode node17 = factory.createTerminalNode("a", 2, 3);
 		node16.addChild(node17);
 		node15.addChild(node16);
@@ -148,7 +158,7 @@ public class PrecedenceTest8 {
 		IntermediateNode node21 = factory.createIntermediateNode("E ::= E + . E", 4, 6);
 		PackedNode node22 = factory.createPackedNode("E ::= E + . E", 5, node21);
 		NonterminalNode node23 = factory.createNonterminalNode("E", 0, 4, 5);
-		PackedNode node24 = factory.createPackedNode("E ::= a .", 4, node23);
+		PackedNode node24 = factory.createPackedNode("E ::= a .", 5, node23);
 		TerminalNode node25 = factory.createTerminalNode("a", 4, 5);
 		node24.addChild(node25);
 		node23.addChild(node24);
@@ -157,7 +167,7 @@ public class PrecedenceTest8 {
 		node22.addChild(node26);
 		node21.addChild(node22);
 		NonterminalNode node27 = factory.createNonterminalNode("E", 0, 6, 7);
-		PackedNode node28 = factory.createPackedNode("E ::= a .", 6, node27);
+		PackedNode node28 = factory.createPackedNode("E ::= a .", 7, node27);
 		TerminalNode node29 = factory.createTerminalNode("a", 6, 7);
 		node28.addChild(node29);
 		node27.addChild(node28);

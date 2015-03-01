@@ -1,6 +1,7 @@
 package org.jgll.grammar.precedence;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -15,6 +16,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.patterns.AbstractPattern;
 import org.jgll.grammar.patterns.ExceptPattern;
 import org.jgll.grammar.patterns.PrecedencePattern;
+import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -34,7 +36,11 @@ public class OperatorPrecedence {
 	
 	private Map<List<List<Symbol>>, Nonterminal> existingAlternates;
 	
-	public OperatorPrecedence(Set<PrecedencePattern> precedencePatterns, Set<ExceptPattern> exceptPatterns) {
+	public OperatorPrecedence(Iterable<PrecedencePattern> precedencePatterns) {
+		this(precedencePatterns, Collections.emptyList());
+	}
+		
+	public OperatorPrecedence(Iterable<PrecedencePattern> precedencePatterns, Iterable<ExceptPattern> exceptPatterns) {
 		this.newNonterminals = new HashMap<>();
 		this.precednecePatterns = new HashMap<>();
 		this.existingAlternates = new HashMap<>();
@@ -42,13 +48,6 @@ public class OperatorPrecedence {
 		
 		precedencePatterns.forEach(x -> add(x));
 		exceptPatterns.forEach(x -> add(x));
-	}
-	
-	public OperatorPrecedence() {
-		this.newNonterminals = new HashMap<>();
-		this.precednecePatterns = new HashMap<>();
-		this.existingAlternates = new HashMap<>();
-		this.exceptPatterns = new ArrayList<>();
 	}
 	
 	public Grammar transform(Grammar grammar) {
@@ -76,8 +75,12 @@ public class OperatorPrecedence {
 		
 		Grammar.Builder builder = new Grammar.Builder();
 		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
-			for (List<Symbol> list : e.getValue()) {
-				Rule rule = Rule.withHead(e.getKey()).addSymbols(list).build();
+			Nonterminal head = e.getKey();
+			for (int i = 0; i < e.getValue().size(); i++) {
+				List<Symbol> list = definitions.get(head).get(i);
+				Nonterminal layout = grammar.getDefinitions().get((Nonterminal) plain(head)).get(i).getLayout();
+				LayoutStrategy strategy = grammar.getDefinitions().get((Nonterminal) plain(head)).get(i).getLayoutStrategy();
+				Rule rule = Rule.withHead(head).addSymbols(list).setLayout(layout).setLayoutStrategy(strategy).build();
 				if (rule.getBody() != null)
 					builder.addRule(rule);
 			}
@@ -120,11 +123,7 @@ public class OperatorPrecedence {
 	}
 
 	
-	public void addPrecedencePattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
-		add(new PrecedencePattern(nonterminal, parent.getBody(), position, child.getBody()));
-	}
-	
-	public void add(PrecedencePattern pattern) {
+	private void add(PrecedencePattern pattern) {
 		Nonterminal nonterminal = pattern.getNonterminal();
 		if (precednecePatterns.containsKey(nonterminal)) {
 			precednecePatterns.get(nonterminal).add(pattern);
@@ -135,11 +134,7 @@ public class OperatorPrecedence {
 		}
 	}
 	
-	public void addExceptPattern(Nonterminal nonterminal, Rule parent, int position, Rule child) {
-		add(new ExceptPattern(nonterminal, parent.getBody(), position, child.getBody()));
-	}
-	
-	public void add(ExceptPattern pattern) {
+	private void add(ExceptPattern pattern) {
 		exceptPatterns.add(pattern);
 	}
 	

@@ -20,13 +20,15 @@ public class TestOCaml {
 
 	static Configuration config = Configuration.DEFAULT;
 	
-	static Start startSymbol = Start.from(Nonterminal.withName("TopLevel"));
+	static Start startSymbol = Start.from(Nonterminal.withName("CompiliationUnit"));
 	
 	@Test
 	public void test() throws IOException {
-		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
+		Input input = Input.fromPath("/Users/aliafroozeh/corpus/ocaml/asmcomp/amd64/arch.ml");
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		parser.reset();
+		grammarGraph.reset(input);
 		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 //			org.jgll.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		System.out.println(result);

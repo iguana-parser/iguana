@@ -2,8 +2,12 @@ package org.jgll.disambiguation.precedence;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -67,24 +71,27 @@ public class PrecedenceTest2 {
 		Rule rule3 = Rule.withHead(E).addSymbols(a).build();
 		builder.addRule(rule3);
 		
-		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
+		List<PrecedencePattern> list = new ArrayList<>();
 		
 		// left associative E + E
-		operatorPrecedence.addPrecedencePattern(E, rule1, 2, rule1);
+		list.add(PrecedencePattern.from(rule1, 2, rule1));
 		
 		// + has higher priority than -
-		operatorPrecedence.addPrecedencePattern(E, rule1, 0, rule2);
+		list.add(PrecedencePattern.from(rule1, 0, rule2));
 		
 		// right associative E ^ E
-		operatorPrecedence.addPrecedencePattern(E, rule0, 0, rule0);
+		list.add(PrecedencePattern.from(rule0, 0, rule0));
 		
 		// ^ has higher priority than -
-		operatorPrecedence.addPrecedencePattern(E, rule0, 0, rule2);
+		list.add(PrecedencePattern.from(rule0, 0, rule2));
 		
 		// ^ has higher priority than +
-		operatorPrecedence.addPrecedencePattern(E, rule0, 0, rule1);
-		operatorPrecedence.addPrecedencePattern(E, rule0, 2, rule1);
+		list.add(PrecedencePattern.from(rule0, 0, rule1));
+		list.add(PrecedencePattern.from(rule0, 2, rule1));
 		
+		
+		OperatorPrecedence operatorPrecedence = new OperatorPrecedence(list);
+
 		grammar = operatorPrecedence.transform(builder.build());
 	}
 	
