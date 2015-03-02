@@ -93,6 +93,10 @@ public class Rule implements ConstructorCode, Serializable {
 		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.RIGHT;
 	}
 	
+	public boolean isLeftOrRightRecursive() {
+		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.LEFT || recursion == Recursion.RIGHT;
+	}
+	
 	public Associativity getAssociativity() {
 		return associativity;
 	}

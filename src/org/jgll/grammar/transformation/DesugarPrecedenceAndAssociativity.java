@@ -1,7 +1,19 @@
 package org.jgll.grammar.transformation;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static org.jgll.grammar.symbol.Associativity.*;
+
+import org.jgll.datadependent.ast.AST;
+import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.condition.Condition;
+import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.symbol.Align;
+import org.jgll.grammar.symbol.Associativity;
+import org.jgll.grammar.symbol.AssociativityGroup;
 import org.jgll.grammar.symbol.Block;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
@@ -13,6 +25,7 @@ import org.jgll.grammar.symbol.IfThen;
 import org.jgll.grammar.symbol.IfThenElse;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Offside;
+import org.jgll.grammar.symbol.PrecedenceGroup;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
@@ -63,8 +76,15 @@ import org.jgll.traversal.ISymbolVisitor;
 
 public class DesugarPrecedenceAndAssociativity implements GrammarTransformation {
 	
+	private Set<String> leftOrRightRecursiveNonterminals;
+	
 	@Override
 	public Grammar transform(Grammar grammar) {
+		
+		for (Map.Entry<Nonterminal, Rule> entry : grammar.getDefinitions().entries())
+			if (entry.getValue().isLeftOrRightRecursive())
+				leftOrRightRecursiveNonterminals.add(entry.getKey().getName());
+		
 		return grammar;
 	}
 	
@@ -81,8 +101,85 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		
 		private final Rule rule;
 		
-		public Visitor(Rule rule) {
+		private final Set<String> leftOrRightRecursiveNonterminals;
+		
+		private Expression l1;
+		private Expression r2;
+		
+		private Set<Condition> preconditions;
+		
+		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals) {
 			this.rule = rule;
+			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
+			
+			AssociativityGroup associativityGroup = rule.getAssociativityGroup();
+			PrecedenceGroup precedenceGroup = rule.getPrecedenceGroup();
+			
+			if (associativityGroup != null) {
+				
+				Associativity associativity = associativityGroup.getAssociativity();
+				
+				if (precedenceGroup.getLhs() == associativityGroup.getLhs()
+						&& precedenceGroup.getRhs() == associativityGroup.getRhs()
+						&& associativity == rule.getAssociativity()) { // Use precedence climbing
+					
+					switch(associativity) {
+						case LEFT:
+							l1 = AST.integer(precedenceGroup.getRhs() + 1);
+							r2 = AST.integer(precedenceGroup.getRhs());
+							break;
+						case RIGHT:
+							l1 = AST.integer(precedenceGroup.getRhs());
+							r2 = AST.integer(precedenceGroup.getRhs() + 1);
+							break;
+						case NON_ASSOC:
+							l1 = AST.integer(precedenceGroup.getRhs() + 1);
+							r2 = AST.integer(precedenceGroup.getRhs() + 1);
+							break;
+						default: throw new RuntimeException("Unexpected associativity: " + associativity);
+					}
+					
+					preconditions = new HashSet<>();
+					
+					if (rule.isLeftRecursive())
+						preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("r"))));
+					
+					if (rule.isRightRecursive())
+						preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("l"))));
+					
+				} else {
+					l1 = AST.integer(precedenceGroup.getRhs());
+					r2 = AST.integer(precedenceGroup.getRhs());
+					
+					preconditions = new HashSet<>();
+					
+					if (rule.isLeftRecursive())
+						preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("r"))));
+					
+					if (rule.isRightRecursive())
+						preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("l"))));
+					
+					switch(associativity) {
+					case LEFT:
+						for (int i = associativityGroup.getLhs(); i <= associativityGroup.getRhs(); i++) {
+							if (i != rule.getPrecedence()) {
+								
+							}
+						}
+						break;
+					case RIGHT:
+						break;
+					case NON_ASSOC:
+						break;
+					default: throw new RuntimeException("Unexpected associativity: " + associativity);
+				}
+				}
+				
+			} else {
+				if (precedenceGroup.getLhs() == precedenceGroup.getRhs()) {
+					
+				}
+			}
 		}
 		
 		public Rule transform() {
@@ -122,14 +219,28 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Symbol[] symbols = symbol.getSymbols();
 			Symbol[] syms = new Symbol[symbols.length];
 			
+			boolean isFirst = this.isFirst;
+			boolean isLast = this.isLast;
+			
 			int j = 0;
 			boolean modified = false;
 			for (Symbol sym : symbols) {
+				
+				if (isFirst && j == 0) this.isFirst = true;
+				else this.isFirst = false;
+				
+				if (isLast && j == symbols.length - 1) this.isLast = true;
+				else this.isLast = false;
+				
 				syms[j] = sym.accept(this);
 				if (sym != syms[j])
 					modified = true;
 				j++;
 			}
+			
+			this.isFirst = isFirst;
+			this.isLast = isLast;
+			
 			return modified? Block.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
 					: symbol;
 		}
@@ -194,6 +305,35 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
 		@Override
 		public Symbol visit(Nonterminal symbol) {
+			
+			boolean isUseOfLeftOrRight = leftOrRightRecursiveNonterminals.contains(symbol.getName());
+			boolean isRecursiveUseOfLeftOrRight = isUseOfLeftOrRight && symbol.getName().equals(rule.getHead().getName());
+			
+			Expression[] arguments = symbol.getArguments();
+			
+			if (isRecursiveUseOfLeftOrRight && isFirst) {
+				
+				if (arguments == null)
+					arguments = new Expression[] { AST.integer(0), AST.var("r") };
+				else {
+					Expression[] args = new Expression[arguments.length + 2];
+					
+					int i = 0;
+					for (Expression argument : arguments) {
+						args[i] = arguments[i];
+						i++;
+					}
+					
+					args[i++] = AST.integer(0);
+					args[i++] = AST.var("r");
+				}
+				
+			} else if (isRecursiveUseOfLeftOrRight && isLast) {
+				
+			} else if (isUseOfLeftOrRight) {
+				
+			}
+			
 			return symbol;
 		}
 
