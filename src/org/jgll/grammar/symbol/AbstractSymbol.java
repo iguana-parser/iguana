@@ -61,7 +61,7 @@ public abstract class AbstractSymbol implements Symbol {
 		if (!preConditions.isEmpty())
 			s += listToString(preConditions) + " " + name;
 		if (!postConditions.isEmpty())
-			s += listToString(postConditions);
+			s += " " + listToString(postConditions);
 		return s;
 	}
 	

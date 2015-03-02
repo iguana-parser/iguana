@@ -1,5 +1,6 @@
 package org.jgll.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,31 @@ public class CollectionsUtil {
 		set.addAll(set1);
 		set.addAll(set2);
 		return set;
+	}
+	
+	public static <T> List<List<T>> split(List<T> list, int size) {
+		List<List<T>> result = new ArrayList<>();
+		
+		int n = list.size() / size;
+		int r = list.size() % size;
+		
+		for (int i = 0; i < n; i++) {
+			List<T> split = new ArrayList<>();
+			for (int j = i * size; j < i * size + size; j++) {
+				split.add(list.get(j));
+			}
+			result.add(split);
+		}
+
+		if (r > 0) {
+			List<T> rest = new ArrayList<>();
+			for (int i = n * size; i < list.size(); i++) {
+				rest.add(list.get(i));
+			}
+			result.add(rest);			
+		}
+		
+		return result;
 	}
 
 }

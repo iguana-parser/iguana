@@ -98,6 +98,24 @@ public class Opt extends AbstractRegularExpression {
 		return ((RegularExpression) s).getPattern() + "?";
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof Opt))
+			return false;
+		
+		Opt other = (Opt) obj;
+		return s.equals(other.s);
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	
 	public static Builder builder(Symbol s) {
 		return new Builder(s);
 	}

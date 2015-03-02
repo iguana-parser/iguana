@@ -15,8 +15,8 @@ import org.jgll.util.Input;
 import org.junit.Test;
 
 public class TestOCaml {
-	
-	static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(OCaml.precedencePatterns(), OCaml.exceptPatterns()).transform(new EBNFToBNF().transform(OCaml.grammar)));
+
+	Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(new OperatorPrecedence(OCaml.precedencePatterns(), OCaml.exceptPatterns()).transform(OCaml.grammar)));
 
 	static Configuration config = Configuration.DEFAULT;
 	
@@ -25,6 +25,7 @@ public class TestOCaml {
 	@Test
 	public void test() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/corpus/ocaml/asmcomp/amd64/arch.ml");
+		System.out.println(grammar.getConstructorCode());
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		parser.reset();

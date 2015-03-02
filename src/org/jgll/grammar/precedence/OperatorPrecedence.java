@@ -39,13 +39,16 @@ public class OperatorPrecedence {
 	public OperatorPrecedence(Iterable<PrecedencePattern> precedencePatterns) {
 		this(precedencePatterns, Collections.emptyList());
 	}
-		
-	public OperatorPrecedence(Iterable<PrecedencePattern> precedencePatterns, Iterable<ExceptPattern> exceptPatterns) {
+
+	public OperatorPrecedence() {
 		this.newNonterminals = new HashMap<>();
 		this.precednecePatterns = new HashMap<>();
 		this.existingAlternates = new HashMap<>();
 		this.exceptPatterns = new ArrayList<>();
-		
+	}
+	
+	public OperatorPrecedence(Iterable<PrecedencePattern> precedencePatterns, Iterable<ExceptPattern> exceptPatterns) {
+		this();		
 		precedencePatterns.forEach(x -> add(x));
 		exceptPatterns.forEach(x -> add(x));
 	}
@@ -123,7 +126,7 @@ public class OperatorPrecedence {
 	}
 
 	
-	private void add(PrecedencePattern pattern) {
+	public void add(PrecedencePattern pattern) {
 		Nonterminal nonterminal = pattern.getNonterminal();
 		if (precednecePatterns.containsKey(nonterminal)) {
 			precednecePatterns.get(nonterminal).add(pattern);
@@ -134,7 +137,7 @@ public class OperatorPrecedence {
 		}
 	}
 	
-	private void add(ExceptPattern pattern) {
+	public void add(ExceptPattern pattern) {
 		exceptPatterns.add(pattern);
 	}
 	
@@ -377,9 +380,9 @@ public class OperatorPrecedence {
 		// Replacing nonterminals with their fresh ones
 		for(Entry<PrecedencePattern, List<List<Symbol>>> e : patterns.entrySet()) {
 			
+			PrecedencePattern pattern = e.getKey();
+
 			for(List<Symbol> alt : definitions.get(head)) {
-				
-				PrecedencePattern pattern = e.getKey();
 				
 				if(!match(plain(alt), pattern.getParent())) {
 					continue;

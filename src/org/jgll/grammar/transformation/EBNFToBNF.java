@@ -26,10 +26,10 @@ import org.jgll.regex.Star;
  */
 public class EBNFToBNF implements GrammarTransformation {
 	
-	private Map<Symbol, Nonterminal> cache;
+//	private Map<Symbol, Nonterminal> cache;
 	
 	public EBNFToBNF() {
-		cache = new HashMap<>();
+//		cache = new HashMap<>();
 	}
 	
 	@Override
@@ -53,7 +53,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			   s instanceof Alt;
 	}
 	
-	private Rule rewrite(Rule rule, Set<Rule> newRules) {
+	public Rule rewrite(Rule rule, Set<Rule> newRules) {
 
 		if (rule.getBody() == null) {
 			return rule;
@@ -72,8 +72,8 @@ public class EBNFToBNF implements GrammarTransformation {
 		if (!isEBNF(symbol))
 			return symbol;
 		
-		if (cache.get(symbol) != null) 
-			return cache.get(symbol);
+//		if (cache.get(symbol) != null) 
+//			return cache.get(symbol);
 		
 		final Nonterminal newNt;
 		
@@ -146,7 +146,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			throw new IllegalStateException("Unknown symbol type.");			
 		}
 		
-		cache.put(symbol, newNt);
+//		cache.put(symbol, newNt);
 		return newNt.copyBuilder().addConditions(symbol).build();
 	}
 	

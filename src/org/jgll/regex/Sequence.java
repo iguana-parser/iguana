@@ -120,7 +120,7 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	
 	@Override
 	public int hashCode() {
-		return symbols.hashCode();
+		return name.hashCode();
 	}
 
 	@Override
