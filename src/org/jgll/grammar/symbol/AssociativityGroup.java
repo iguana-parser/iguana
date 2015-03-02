@@ -22,5 +22,10 @@ public class AssociativityGroup extends Group {
 	public String getConstructorCode() {
 		return "new " + getClass().getSimpleName() + "(" + associativity.getConstructorCode() + "," + getLhs() + "," + getRhs() + ")";
 	}
+	
+	@Override
+	public String toString() {
+		return associativity.name() + "(" + getLhs() + "," + getRhs() + ")";
+	}
 
 }

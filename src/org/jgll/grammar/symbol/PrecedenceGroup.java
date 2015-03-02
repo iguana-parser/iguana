@@ -15,4 +15,8 @@ public class PrecedenceGroup extends Group {
 		return "new " + getClass().getSimpleName() + "(" + getLhs() + "," + getRhs() + ")";
 	}
 	
+	@Override
+	public String toString() {
+		return "(" + getLhs() + "," + getRhs() + ")";
+	}
 }
