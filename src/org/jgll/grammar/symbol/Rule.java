@@ -126,9 +126,9 @@ public class Rule implements ConstructorCode, Serializable {
 			sb.append(s).append(" ");
 		}
 		return sb.toString() + 
-				" {" + associativity.name() + "," + precedence + "} " + 
-				(associativityGroup != null? associativityGroup.toString() : "") +
-				(precedenceGroup != null? precedenceGroup.toString() : "");
+				" {" + associativity.name() + "," + precedence + "," + recursion + "} " + 
+				(associativityGroup != null? associativityGroup + " " : "") +
+				(precedenceGroup != null? precedenceGroup : "");
 	} 
 	
 	public boolean equals(Object obj) {

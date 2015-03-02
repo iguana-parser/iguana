@@ -7,4 +7,9 @@ public enum Recursion {
 	public String getConstructorCode() {
 		return this.getClass().getSimpleName() + "." + this.name();
 	}
+	
+	@Override
+	public String toString() {
+		return "REC(" + this.name() + ")";
+	}
 }
