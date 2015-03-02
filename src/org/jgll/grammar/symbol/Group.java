@@ -24,5 +24,7 @@ public abstract class Group {
 		else
 			throw new RuntimeException("Should not reset the upper bound when it is not -1!");
 	}
+	
+	public abstract String getConstructorCode();
 
 }

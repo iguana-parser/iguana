@@ -86,11 +86,11 @@ public class Rule implements ConstructorCode, Serializable {
 	}
 	
 	public boolean isLeftRecursive() {
-		return recursion == Recursion.LEFT;
+		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.LEFT;
 	}
 	
 	public boolean isRightRecursive() {
-		return recursion == Recursion.RIGHT;
+		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.RIGHT;
 	}
 	
 	public Associativity getAssociativity() {
@@ -261,6 +261,15 @@ public class Rule implements ConstructorCode, Serializable {
 				(body == null ? "" : body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) +
 				(layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
 				(layoutStrategy == LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
+				
+				".setRecursion(" + recursion.getConstructorCode() + ")" +
+				
+				".setAssociativity(" + associativity.getConstructorCode() + ")" +
+				".setPrecedence(" + precedence + ")" +
+				
+				(associativityGroup != null? ".setAssociativityGroup(" + associativityGroup.getConstructorCode() + ")" : "") +
+				(precedenceGroup != null? ".setPrecedenceGroup(" + precedenceGroup.getConstructorCode() + ")" : "") +
+				
 				".build()";
 	}
 }

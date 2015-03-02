@@ -17,5 +17,10 @@ public class AssociativityGroup extends Group {
 	public Associativity getAssociativity() {
 		return associativity;
 	}
+	
+	@Override
+	public String getConstructorCode() {
+		return "new " + getClass().getSimpleName() + "(" + associativity.getConstructorCode() + "," + getLhs() + "," + getRhs() + ")";
+	}
 
 }
