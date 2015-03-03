@@ -16,8 +16,6 @@ public class AssociativityGroup {
 	
 	private int precedence = -1;
 	
-	private int undefined = -1;
-	
 	private int lhs = -1;
 	
 	private int rhs = -1;
@@ -32,7 +30,6 @@ public class AssociativityGroup {
 	public AssociativityGroup(Associativity associativity, PrecedenceLevel precedenceLevel, int lhs, int rhs, int precedence, int undefined) {
 		this(associativity, precedenceLevel);
 		this.precedence = precedence;
-		this.undefined = undefined;
 		this.lhs = lhs;
 		this.rhs = rhs;
 	}
@@ -58,9 +55,8 @@ public class AssociativityGroup {
 	}
 	
 	public AssociativityGroup add(int precedence, Associativity associativity) {
-		if (precedence == this.precedence 
-				|| precedence == undefined)
-			return this;
+		
+		if (precedence == this.precedence) return this;
 		
 		map.put(precedence, associativity);
 		return this;
@@ -77,12 +73,14 @@ public class AssociativityGroup {
 				precedence = precedenceLevel.getPrecedence(rule);
 				return precedence;
 			}
-		} if (rule.getAssociativity() == Associativity.UNDEFINED) {
-			if (undefined != -1)
-				return undefined;
+		} 
+		
+		if (rule.getAssociativity() == Associativity.UNDEFINED) {
+			if (precedence != -1)
+				return precedence;
 			else {
-				undefined = precedenceLevel.getPrecedenceFromAssociativityGroup(rule);
-				return undefined;
+				precedence = precedenceLevel.getPrecedenceFromAssociativityGroup(rule);
+				return precedence;
 			}
 		}
 		
@@ -105,8 +103,7 @@ public class AssociativityGroup {
 														 + precedenceLevel.getConstructorCode() + ","
 														 + lhs + ","
 														 + rhs + ","
-														 + precedence + ","
-														 + undefined + ")" + elements;
+														 + precedence + ")" + elements;
 	}
 	
 	@Override
@@ -115,8 +112,7 @@ public class AssociativityGroup {
 					+ lhs + ","
 					+ rhs + ","
 					+ (precedence != -1? precedence + "," : "") 
-					+ (undefined != -1? undefined + "," : "")
-				    + GeneratorUtil.listToString(map.keySet(), ",") + ")";
+					+ GeneratorUtil.listToString(map.keySet(), ",") + ")";
 	}
 
 }
