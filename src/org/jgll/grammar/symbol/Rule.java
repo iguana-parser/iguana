@@ -86,6 +86,10 @@ public class Rule implements ConstructorCode, Serializable {
 		return layoutStrategy;
 	}
 	
+	public boolean isUnary() {
+		return recursion == Recursion.LEFT || recursion == Recursion.RIGHT;
+	}
+	
 	public boolean isLeftRecursive() {
 		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.LEFT;
 	}
@@ -96,10 +100,6 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	public boolean isLeftOrRightRecursive() {
 		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.LEFT || recursion == Recursion.RIGHT;
-	}
-	
-	public boolean isUnary() {
-		return recursion == Recursion.LEFT || recursion == Recursion.RIGHT;
 	}
 	
 	public Associativity getAssociativity() {

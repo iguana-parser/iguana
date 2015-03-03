@@ -10,16 +10,43 @@ public class AssociativityGroup {
 	
 	private final Associativity associativity;
 	
-	private final PrecedenceLevel precedenceGroup;
+	private final PrecedenceLevel precedenceLevel;
 	
 	private final Map<Integer, Associativity> map;
 	
 	private int precedence = -1;
+	
+	private int undefined = -1;
+	
+	private int lhs = -1;
+	
+	private int rhs = -1;
 
-	public AssociativityGroup(Associativity associativity, PrecedenceLevel precedenceGroup) {
+	public AssociativityGroup(Associativity associativity, PrecedenceLevel precedenceLevel) {
 		this.associativity = associativity;
-		this.precedenceGroup = precedenceGroup;
+		this.precedenceLevel = precedenceLevel;
 		this.map = new HashMap<>();
+		this.lhs = precedenceLevel.getLhs();
+	}
+	
+	public AssociativityGroup(Associativity associativity, PrecedenceLevel precedenceLevel, int lhs, int rhs, int precedence, int undefined) {
+		this(associativity, precedenceLevel);
+		this.precedence = precedence;
+		this.undefined = undefined;
+		this.lhs = lhs;
+		this.rhs = rhs;
+	}
+	
+	public Associativity getAssociativity() {
+		return associativity;
+	}
+	
+	public int getLhs() {
+		return lhs;
+	}
+	
+	public int getRhs() {
+		return rhs;
 	}
 	
 	public int getPrecedence() {
@@ -28,6 +55,15 @@ public class AssociativityGroup {
 	
 	public Map<Integer, Associativity> getAssocMap() {
 		return map;
+	}
+	
+	public AssociativityGroup add(int precedence, Associativity associativity) {
+		if (precedence == this.precedence 
+				|| precedence == undefined)
+			return this;
+		
+		map.put(precedence, associativity);
+		return this;
 	}
 		
 	public int getPrecedence(Rule rule) {
@@ -38,27 +74,49 @@ public class AssociativityGroup {
 			if (precedence != -1)
 				return precedence;
 			else {
-				precedence = precedenceGroup.getPrecedence(rule);
+				precedence = precedenceLevel.getPrecedence(rule);
 				return precedence;
+			}
+		} if (rule.getAssociativity() == Associativity.UNDEFINED) {
+			if (undefined != -1)
+				return undefined;
+			else {
+				undefined = precedenceLevel.getPrecedenceFromAssociativityGroup(rule);
+				return undefined;
 			}
 		}
 		
-		int precedence = precedenceGroup.getPrecedence(rule);
+		int precedence = precedenceLevel.getPrecedence(rule);
 		map.put(precedence, rule.getAssociativity());
 		return precedence;
 	}
 	
-	public Associativity getAssociativity() {
-		return associativity;
+	public void done() {
+		rhs = precedenceLevel.getCurrent();
 	}
 	
 	public String getConstructorCode() {
-		return "new " + getClass().getSimpleName() + "(" + associativity.getConstructorCode() + "," + precedenceGroup.getConstructorCode() + ")";
+		String elements = "";
+		
+		for (Map.Entry<Integer, Associativity> entry : map.entrySet())
+			elements += ".add(" + entry.getKey() + "," + entry.getValue().getConstructorCode() + ")";
+		
+		return "new " + getClass().getSimpleName() + "(" + associativity.getConstructorCode() + "," 
+														 + precedenceLevel.getConstructorCode() + ","
+														 + lhs + ","
+														 + rhs + ","
+														 + precedence + ","
+														 + undefined + ")" + elements;
 	}
 	
 	@Override
 	public String toString() {
-		return associativity.name() + "(" + precedence + "," + GeneratorUtil.listToString(map.keySet(), ",") + ")";
+		return associativity.name() + "(" 
+					+ lhs + ","
+					+ rhs + ","
+					+ (precedence != -1? precedence + "," : "") 
+					+ (undefined != -1? undefined + "," : "")
+				    + GeneratorUtil.listToString(map.keySet(), ",") + ")";
 	}
 
 }

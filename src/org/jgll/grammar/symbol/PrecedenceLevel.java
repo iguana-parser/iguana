@@ -21,6 +21,14 @@ public class PrecedenceLevel {
 		return new PrecedenceLevel(lhs);
 	}
 	
+	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasUnaryBelow) {
+		PrecedenceLevel level = PrecedenceLevel.from(lhs);
+		level.rhs = rhs;
+		level.undefined = undefined;
+		level.hasUnaryBelow = hasUnaryBelow;
+		return level;
+	}
+	
 	public PrecedenceLevel getNext() {
 		this.done();
 		
@@ -57,21 +65,32 @@ public class PrecedenceLevel {
 			return index++;
 	}
 	
+	int getPrecedenceFromAssociativityGroup(Rule rule) {
+		if (rule.isUnary()) hasUnary = true;
+		
+		if (!rule.isLeftOrRightRecursive()) return -1;
+		else return index++;
+	}
+	
 	public boolean isUndefined(int precedence) {
-		return this.undefined == precedence;
+		return this.undefined != -1 && this.undefined == precedence;
 	}
 	
 	public void done() {
 		assert rhs != -1;
 		rhs = index == 0? index : index - 1;
 	}
+	
+	int getCurrent() {
+		return index == 0? index : index - 1;
+	}
 		
 	public String getConstructorCode() {
-		return "new " + getClass().getSimpleName() + "(" + lhs + "," + rhs + ")";
+		return getClass().getSimpleName() + "from(" + lhs + "," + rhs + "," + undefined + "," + hasUnaryBelow + ")";
 	}
 	
 	@Override
 	public String toString() {
-		return "(" + lhs + "," + rhs + ")";
+		return "PREC(" + lhs + "," + rhs + ")";
 	}
 }

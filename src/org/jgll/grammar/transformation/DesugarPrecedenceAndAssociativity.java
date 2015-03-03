@@ -1,10 +1,7 @@
 package org.jgll.grammar.transformation;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static org.jgll.grammar.symbol.Associativity.*;
 
 import org.jgll.datadependent.ast.AST;
 import org.jgll.datadependent.ast.Expression;
