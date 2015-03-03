@@ -25,7 +25,7 @@ import org.jgll.grammar.symbol.IfThen;
 import org.jgll.grammar.symbol.IfThenElse;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Offside;
-import org.jgll.grammar.symbol.PrecedenceGroup;
+import org.jgll.grammar.symbol.PrecedenceLevel;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
@@ -106,80 +106,89 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private Expression l1;
 		private Expression r2;
 		
+		private Expression l2;
+		private Expression r1;
+		
 		private Set<Condition> preconditions;
 		
 		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
 			
-			AssociativityGroup associativityGroup = rule.getAssociativityGroup();
-			PrecedenceGroup precedenceGroup = rule.getPrecedenceGroup();
+			if (this.rule.getPrecedence() == -1)
+				return;
 			
-			if (associativityGroup != null) {
-				
-				Associativity associativity = associativityGroup.getAssociativity();
-				
-				if (precedenceGroup.getLhs() == associativityGroup.getLhs()
-						&& precedenceGroup.getRhs() == associativityGroup.getRhs()
-						&& associativity == rule.getAssociativity()) { // Use precedence climbing
-					
-					switch(associativity) {
-						case LEFT:
-							l1 = AST.integer(precedenceGroup.getRhs() + 1);
-							r2 = AST.integer(precedenceGroup.getRhs());
-							break;
-						case RIGHT:
-							l1 = AST.integer(precedenceGroup.getRhs());
-							r2 = AST.integer(precedenceGroup.getRhs() + 1);
-							break;
-						case NON_ASSOC:
-							l1 = AST.integer(precedenceGroup.getRhs() + 1);
-							r2 = AST.integer(precedenceGroup.getRhs() + 1);
-							break;
-						default: throw new RuntimeException("Unexpected associativity: " + associativity);
-					}
-					
-					preconditions = new HashSet<>();
-					
-					if (rule.isLeftRecursive())
-						preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("r"))));
-					
-					if (rule.isRightRecursive())
-						preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("l"))));
-					
-				} else {
-					l1 = AST.integer(precedenceGroup.getRhs());
-					r2 = AST.integer(precedenceGroup.getRhs());
-					
-					preconditions = new HashSet<>();
-					
-					if (rule.isLeftRecursive())
-						preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("r"))));
-					
-					if (rule.isRightRecursive())
-						preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("l"))));
-					
-					switch(associativity) {
-					case LEFT:
-						for (int i = associativityGroup.getLhs(); i <= associativityGroup.getRhs(); i++) {
-							if (i != rule.getPrecedence()) {
-								
-							}
-						}
-						break;
-					case RIGHT:
-						break;
-					case NON_ASSOC:
-						break;
-					default: throw new RuntimeException("Unexpected associativity: " + associativity);
-				}
-				}
-				
-			} else {
-				if (precedenceGroup.getLhs() == precedenceGroup.getRhs()) {
-					
-				}
-			}
+			AssociativityGroup associativityGroup = rule.getAssociativityGroup();
+			PrecedenceLevel precedenceGroup = rule.getPrecedenceLevel();
+			
+			// Expressions for the left and right recursive uses
+			
+//			if (associativityGroup != null) {
+//				
+//				Associativity associativity = associativityGroup.getAssociativity();
+//				
+//				if (precedenceGroup.getLhs() == associativityGroup.getLhs() 
+//					&& precedenceGroup.getRhs() == associativityGroup.getRhs()
+//						&& rule.getPrecedence() == precedenceGroup.getLhs()) {
+//					
+//					switch(associativity) {
+//						case LEFT:
+//							l1 = AST.integer(precedenceGroup.getRhs() + 1);
+//							r2 = AST.integer(precedenceGroup.getRhs());
+//							break;
+//						case RIGHT:
+//							l1 = AST.integer(precedenceGroup.getRhs());
+//							r2 = AST.integer(precedenceGroup.getRhs() + 1);
+//							break;
+//						case NON_ASSOC:
+//							l1 = AST.integer(precedenceGroup.getRhs() + 1);
+//							r2 = AST.integer(precedenceGroup.getRhs() + 1);
+//							break;
+//						default: throw new RuntimeException("Unexpected associativity: " + associativity);
+//					}
+//					
+//				} else {
+//					l1 = AST.integer(precedenceGroup.getRhs());
+//					r2 = AST.integer(precedenceGroup.getRhs());
+//				}
+//				
+//			} else {
+//				if (precedenceGroup.getLhs() == precedenceGroup.getRhs()) {
+//					
+//				} else {
+//					l1 = AST.integer(precedenceGroup.getRhs());
+//					r2 = AST.integer(precedenceGroup.getRhs());
+//				}
+//			}
+			
+//			preconditions = new HashSet<>();
+//			
+//			if (rule.isLeftRecursive())
+//				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("r"))));
+//			
+//			if (rule.isRightRecursive())
+//				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("l"))));
+//			
+//			if (rule.isLeftRecursive())
+//				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("r"))));
+//			
+//			if (rule.isRightRecursive())
+//				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("l"))));
+//			
+//			switch(associativity) {
+//			case LEFT:
+//				for (int i = associativityGroup.getLhs(); i <= associativityGroup.getRhs(); i++) {
+//					if (i != rule.getPrecedence()) {
+//						
+//					}
+//				}
+//				break;
+//			case RIGHT:
+//				break;
+//			case NON_ASSOC:
+//				break;
+//			default: throw new RuntimeException("Unexpected associativity: " + associativity);
+//		}
 		}
 		
 		public Rule transform() {

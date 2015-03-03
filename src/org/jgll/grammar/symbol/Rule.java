@@ -39,7 +39,7 @@ public class Rule implements ConstructorCode, Serializable {
 	private final AssociativityGroup associativityGroup;
 	
 	private final int precedence;
-	private final PrecedenceGroup precedenceGroup;
+	private final PrecedenceLevel precedenceLevel;
 	
 	public Rule(Builder builder) {
 		this.body = builder.body;
@@ -49,9 +49,10 @@ public class Rule implements ConstructorCode, Serializable {
 		this.layoutStrategy = builder.layoutStrategy;
 		this.recursion = builder.recursion;
 		this.associativity = builder.associativity;
+		
 		this.associativityGroup = builder.associativityGroup;
 		this.precedence = builder.precedence;
-		this.precedenceGroup = builder.precedenceGroup;
+		this.precedenceLevel = builder.precedenceLevel;
 	}
 		
 	public Nonterminal getHead() {
@@ -97,6 +98,10 @@ public class Rule implements ConstructorCode, Serializable {
 		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.LEFT || recursion == Recursion.RIGHT;
 	}
 	
+	public boolean isUnary() {
+		return recursion == Recursion.LEFT || recursion == Recursion.RIGHT;
+	}
+	
 	public Associativity getAssociativity() {
 		return associativity;
 	}
@@ -109,8 +114,8 @@ public class Rule implements ConstructorCode, Serializable {
 		return precedence;
 	}
 	
-	public PrecedenceGroup getPrecedenceGroup() {
-		return precedenceGroup;
+	public PrecedenceLevel getPrecedenceLevel() {
+		return precedenceLevel;
 	}
 	
 	public boolean hasLayout() {
@@ -132,7 +137,7 @@ public class Rule implements ConstructorCode, Serializable {
 		return sb.toString() + 
 				" {" + associativity.name() + "," + precedence + "," + recursion + "} " + 
 				(associativityGroup != null? associativityGroup + " " : "") +
-				(precedenceGroup != null? precedenceGroup : "");
+				(precedenceLevel != null? precedenceLevel : "");
 	} 
 	
 	public boolean equals(Object obj) {
@@ -173,6 +178,10 @@ public class Rule implements ConstructorCode, Serializable {
 		return new Position(this, i, j);
 	}
 	
+	public Builder copyBuilder() {
+		return new Builder(this);
+	}
+	
 	public static Builder withHead(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
@@ -185,17 +194,31 @@ public class Rule implements ConstructorCode, Serializable {
 		private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
 		private Nonterminal layout;
 		
-		private Recursion recursion = Recursion.NON_REC;
+		private Recursion recursion;
 		
 		private Associativity associativity;
 		private AssociativityGroup associativityGroup;
 		
 		private int precedence;
-		private PrecedenceGroup precedenceGroup;
+		private PrecedenceLevel precedenceLevel;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
 			this.body = new ArrayList<>();
+		}
+		
+		public Builder(Rule rule) {
+			this.head = rule.head;
+			this.body = rule.body;
+			this.object = rule.object;
+			this.layoutStrategy = rule.layoutStrategy;
+			this.layout = rule.layout;
+			this.recursion = rule.recursion;
+			this.associativity = rule.associativity;
+			
+			this.associativityGroup = rule.associativityGroup;
+			this.precedence = rule.precedence;
+			this.precedenceLevel = rule.precedenceLevel;
 		}
 		
 		public Builder addSymbol(Symbol symbol) {
@@ -252,8 +275,8 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
-		public Builder setPrecedenceGroup(PrecedenceGroup precedenceGroup) {
-			this.precedenceGroup = precedenceGroup;
+		public Builder setPrecedenceLevel(PrecedenceLevel precedenceLevel) {
+			this.precedenceLevel = precedenceLevel;
 			return this;
 		}
 		
@@ -275,7 +298,7 @@ public class Rule implements ConstructorCode, Serializable {
 				".setPrecedence(" + precedence + ")" +
 				
 				(associativityGroup != null? ".setAssociativityGroup(" + associativityGroup.getConstructorCode() + ")" : "") +
-				(precedenceGroup != null? ".setPrecedenceGroup(" + precedenceGroup.getConstructorCode() + ")" : "") +
+				(precedenceLevel != null? ".setPrecedenceGroup(" + precedenceLevel.getConstructorCode() + ")" : "") +
 				
 				".build()";
 	}
