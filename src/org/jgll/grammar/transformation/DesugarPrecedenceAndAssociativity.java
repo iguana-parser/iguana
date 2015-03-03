@@ -119,76 +119,103 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				return;
 			
 			AssociativityGroup associativityGroup = rule.getAssociativityGroup();
-			PrecedenceLevel precedenceGroup = rule.getPrecedenceLevel();
+			PrecedenceLevel precedenceLevel = rule.getPrecedenceLevel();
 			
 			// Expressions for the left and right recursive uses
+			int precedence = rule.getPrecedence();
+			Associativity associativity = rule.getAssociativity();
 			
-//			if (associativityGroup != null) {
-//				
-//				Associativity associativity = associativityGroup.getAssociativity();
-//				
-//				if (precedenceGroup.getLhs() == associativityGroup.getLhs() 
-//					&& precedenceGroup.getRhs() == associativityGroup.getRhs()
-//						&& rule.getPrecedence() == precedenceGroup.getLhs()) {
-//					
-//					switch(associativity) {
-//						case LEFT:
-//							l1 = AST.integer(precedenceGroup.getRhs() + 1);
-//							r2 = AST.integer(precedenceGroup.getRhs());
-//							break;
-//						case RIGHT:
-//							l1 = AST.integer(precedenceGroup.getRhs());
-//							r2 = AST.integer(precedenceGroup.getRhs() + 1);
-//							break;
-//						case NON_ASSOC:
-//							l1 = AST.integer(precedenceGroup.getRhs() + 1);
-//							r2 = AST.integer(precedenceGroup.getRhs() + 1);
-//							break;
-//						default: throw new RuntimeException("Unexpected associativity: " + associativity);
-//					}
-//					
-//				} else {
-//					l1 = AST.integer(precedenceGroup.getRhs());
-//					r2 = AST.integer(precedenceGroup.getRhs());
-//				}
-//				
-//			} else {
-//				if (precedenceGroup.getLhs() == precedenceGroup.getRhs()) {
-//					
-//				} else {
-//					l1 = AST.integer(precedenceGroup.getRhs());
-//					r2 = AST.integer(precedenceGroup.getRhs());
-//				}
-//			}
+			if (precedenceLevel.getLhs() == precedenceLevel.getRhs()) {
+				
+				switch(associativity) {
+					case LEFT:
+						l1 = AST.integer(precedence + 1);
+						r2 = AST.integer(precedence);
+						break;
+						
+					case RIGHT:
+						l1 = AST.integer(precedence);
+						r2 = AST.integer(precedence + 1);
+						break;
+						
+					case NON_ASSOC:
+						l1 = AST.integer(precedence + 1);
+						r2 = AST.integer(precedence + 1);
+						break;
+						
+					case UNDEFINED:
+						l1 = AST.integer(precedence);
+						r2 = AST.integer(precedence);
+						break;
+						
+					default: throw new RuntimeException("Unexpected associativity: " + associativity);
+				}
+			} else {
+				l1 = AST.integer(precedence);
+				r2 = AST.integer(precedence);
+			}
 			
-//			preconditions = new HashSet<>();
-//			
-//			if (rule.isLeftRecursive())
-//				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("r"))));
-//			
-//			if (rule.isRightRecursive())
-//				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("l"))));
-//			
-//			if (rule.isLeftRecursive())
-//				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("r"))));
-//			
-//			if (rule.isRightRecursive())
-//				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceGroup.getRhs()), AST.var("l"))));
-//			
-//			switch(associativity) {
-//			case LEFT:
-//				for (int i = associativityGroup.getLhs(); i <= associativityGroup.getRhs(); i++) {
-//					if (i != rule.getPrecedence()) {
-//						
-//					}
-//				}
-//				break;
-//			case RIGHT:
-//				break;
-//			case NON_ASSOC:
-//				break;
-//			default: throw new RuntimeException("Unexpected associativity: " + associativity);
-//		}
+			// Rule for propagation of a precedence level
+			
+			if (precedenceLevel.hasUnaryBelow()) {
+				r1 = AST.var("r");
+				l2 = AST.var("l");
+			} else {
+				r1 = AST.integer(0);
+				l2 = AST.integer(0);
+			}
+			
+			// Constraints
+			
+			if (rule.isLeftRecursive())
+				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceLevel.getRhs()), AST.var("r"))));
+			
+			if (rule.isRightRecursive())
+				preconditions.add(DataDependentCondition.predicate(AST.greaterEq(AST.integer(precedenceLevel.getRhs()), AST.var("l"))));
+			
+			if (precedenceLevel.getLhs() != precedenceLevel.getRhs()) {
+				if (associativityGroup != null) {
+					
+					if (precedence == associativityGroup.getPrecedence())
+						switch(associativityGroup.getAssociativity()) {
+							case LEFT:
+								preconditions.add(DataDependentCondition.predicate(AST.equal(AST.integer(associativityGroup.getPrecedence()), AST.var("r"))));
+								break;						
+							case RIGHT:
+								preconditions.add(DataDependentCondition.predicate(AST.equal(AST.integer(associativityGroup.getPrecedence()), AST.var("l"))));
+								break;
+							case NON_ASSOC:
+								preconditions.add(DataDependentCondition.predicate(AST.equal(AST.integer(associativityGroup.getPrecedence()), AST.var("l"))));
+								preconditions.add(DataDependentCondition.predicate(AST.equal(AST.integer(associativityGroup.getPrecedence()), AST.var("r"))));
+								break;
+							default: throw new RuntimeException("Unexpected associativity: " + associativity);
+						}
+					
+					if(!associativityGroup.getAssocMap().isEmpty()) {
+						// TODO:
+						throw new RuntimeException("Unsupported!");
+					}
+					
+				} else {	
+					switch(associativity) {
+						case LEFT:
+							preconditions.add(DataDependentCondition.predicate(AST.equal(AST.integer(precedence), AST.var("r"))));
+							break;						
+						case RIGHT:
+							preconditions.add(DataDependentCondition.predicate(AST.equal(AST.integer(precedence), AST.var("l"))));
+							break;
+						case NON_ASSOC:
+							preconditions.add(DataDependentCondition.predicate(AST.equal(AST.integer(precedence), AST.var("l"))));
+							preconditions.add(DataDependentCondition.predicate(AST.equal(AST.integer(precedence), AST.var("r"))));
+							break;
+						case UNDEFINED:
+							break;
+						default: throw new RuntimeException("Unexpected associativity: " + associativity);
+					}
+				}
+				
+			}
+			
 		}
 		
 		public Rule transform() {
@@ -316,34 +343,47 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Symbol visit(Nonterminal symbol) {
 			
 			boolean isUseOfLeftOrRight = leftOrRightRecursiveNonterminals.contains(symbol.getName());
+			
+			if (!isUseOfLeftOrRight) return symbol;
+			
 			boolean isRecursiveUseOfLeftOrRight = isUseOfLeftOrRight && symbol.getName().equals(rule.getHead().getName());
 			
 			Expression[] arguments = symbol.getArguments();
 			
-			if (isRecursiveUseOfLeftOrRight && isFirst) {
+			if (arguments == null)
+				arguments = new Expression[2];
+			else {
+				Expression[] args = new Expression[arguments.length + 2];
 				
-				if (arguments == null)
-					arguments = new Expression[] { AST.integer(0), AST.var("r") };
-				else {
-					Expression[] args = new Expression[arguments.length + 2];
-					
-					int i = 0;
-					for (Expression argument : arguments) {
-						args[i] = arguments[i];
-						i++;
-					}
-					
-					args[i++] = AST.integer(0);
-					args[i++] = AST.var("r");
+				int i = 0;
+				for (Expression argument : arguments) {
+					args[i] = arguments[i];
+					i++;
 				}
 				
-			} else if (isRecursiveUseOfLeftOrRight && isLast) {
-				
-			} else if (isUseOfLeftOrRight) {
-				
+				arguments = args;
 			}
 			
-			return symbol;
+			if (rule.getPrecedence() == -1 && isUseOfLeftOrRight) {
+				arguments[arguments.length] = AST.integer(0);
+				arguments[arguments.length + 1] = AST.integer(0);
+				return symbol.copyBuilder().apply(arguments).build();
+			}
+			
+			if (isRecursiveUseOfLeftOrRight && isFirst) {
+				arguments[arguments.length] = l1;
+				arguments[arguments.length + 1] = r1;
+				return symbol.copyBuilder().apply(arguments).addPreConditions(preconditions).build();
+			} else if (isRecursiveUseOfLeftOrRight && isLast) {
+				arguments[arguments.length] = l2;
+				arguments[arguments.length + 1] = r2;
+				return symbol.copyBuilder().apply(arguments).build();
+			} else {
+				arguments[arguments.length] = AST.integer(0);
+				arguments[arguments.length + 1] = AST.integer(0);
+				return symbol.copyBuilder().apply(arguments).build();
+			}
+			
 		}
 
 		@Override

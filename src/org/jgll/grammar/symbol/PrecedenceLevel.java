@@ -40,6 +40,10 @@ public class PrecedenceLevel {
 		return rhs;
 	}
 	
+	public boolean hasUnaryBelow() {
+		return hasUnaryBelow;
+	}
+	
 	public int getPrecedence(Rule rule) {
 		
 		if (rule.isUnary()) hasUnary = true;

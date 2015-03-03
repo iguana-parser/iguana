@@ -21,6 +21,14 @@ public class AssociativityGroup {
 		this.precedenceGroup = precedenceGroup;
 		this.map = new HashMap<>();
 	}
+	
+	public int getPrecedence() {
+		return precedence;
+	}
+	
+	public Map<Integer, Associativity> getAssocMap() {
+		return map;
+	}
 		
 	public int getPrecedence(Rule rule) {
 		if (!rule.isLeftOrRightRecursive())
