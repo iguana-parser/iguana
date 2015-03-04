@@ -280,7 +280,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				return rule;
 			
 			List<Symbol> symbols = new ArrayList<>();
-			Rule.Builder builder = rule.copyBuilder().setSymbols(symbols);
+			Rule.Builder builder;
+			if (leftOrRightRecursiveNonterminals.contains(rule.getHead().getName()))
+				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("l","r").build()).setSymbols(symbols);
+			else builder = rule.copyBuilder().setSymbols(symbols);
 			
 			int i = 0;
 			for (Symbol symbol : rule.getBody()) {

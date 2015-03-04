@@ -234,7 +234,7 @@ public class GrammarGraph implements Serializable {
 			
 			Expression[] arguments = symbol.getArguments();
 			
-			validateNumberOfArguments(symbol, arguments);
+			validateNumberOfArguments(nonterminalSlot.getNonterminal(), arguments);
 			
 			Set<Condition> preConditions = symbol.getPreConditions();
 			currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, preConditions));

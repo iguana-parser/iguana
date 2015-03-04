@@ -182,6 +182,12 @@ public class Rule implements ConstructorCode, Serializable {
 		return new Builder(this);
 	}
 	
+	public Builder copyBuilderButWithHead(Nonterminal nonterminal) {
+		Builder builder = new Builder(this);
+		builder.head = nonterminal;
+		return builder;
+	}
+	
 	public static Builder withHead(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
