@@ -5,8 +5,11 @@ public class PrecedenceLevel {
 	private final int lhs;
 	private int rhs = -1;
 	
-	private boolean hasUnary = false;
-	private boolean hasUnaryBelow = false;
+	private boolean hasPrefixUnary = false;
+	private boolean hasPrefixUnaryBelow = false;
+	
+	private boolean hasPostfixUnary = false;
+	private boolean hasPostfixUnaryBelow = false;
 	
 	private int undefined = -1;
 	
@@ -21,11 +24,12 @@ public class PrecedenceLevel {
 		return new PrecedenceLevel(lhs);
 	}
 	
-	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasUnaryBelow) {
+	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnaryBelow, boolean hasPostfixUnaryBelow) {
 		PrecedenceLevel level = PrecedenceLevel.from(lhs);
 		level.rhs = rhs;
 		level.undefined = undefined;
-		level.hasUnaryBelow = hasUnaryBelow;
+		level.hasPrefixUnaryBelow = hasPrefixUnaryBelow;
+		level.hasPostfixUnaryBelow = hasPostfixUnaryBelow;
 		return level;
 	}
 	
@@ -34,8 +38,11 @@ public class PrecedenceLevel {
 		
 		PrecedenceLevel next = new PrecedenceLevel(index);
 		
-		if (hasUnary || hasUnaryBelow)
-			next.hasUnaryBelow = true;
+		if (hasPrefixUnary || hasPrefixUnaryBelow)
+			next.hasPrefixUnaryBelow = true;
+		
+		if (hasPostfixUnary || hasPostfixUnaryBelow)
+			next.hasPostfixUnaryBelow = true;
 		
 		return next;
 	}
@@ -48,13 +55,18 @@ public class PrecedenceLevel {
 		return rhs;
 	}
 	
-	public boolean hasUnaryBelow() {
-		return hasUnaryBelow;
+	public boolean hasPrefixUnaryBelow() {
+		return hasPrefixUnaryBelow;
+	}
+	
+	public boolean hasPostfixUnaryBelow() {
+		return hasPostfixUnaryBelow;
 	}
 	
 	public int getPrecedence(Rule rule) {
 		
-		if (rule.isUnary()) hasUnary = true;
+		if (rule.isUnary() && rule.isRightRecursive()) hasPrefixUnary = true;
+		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		
 		if (!rule.isLeftOrRightRecursive()) return -1;
 		
@@ -66,7 +78,8 @@ public class PrecedenceLevel {
 	}
 	
 	int getPrecedenceFromAssociativityGroup(Rule rule) {
-		if (rule.isUnary()) hasUnary = true;
+		if (rule.isUnary() && rule.isRightRecursive()) hasPrefixUnary = true;
+		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		
 		if (!rule.isLeftOrRightRecursive()) return -1;
 		else return index++;
@@ -86,7 +99,7 @@ public class PrecedenceLevel {
 	}
 		
 	public String getConstructorCode() {
-		return getClass().getSimpleName() + "from(" + lhs + "," + rhs + "," + undefined + "," + hasUnaryBelow + ")";
+		return getClass().getSimpleName() + "from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnaryBelow + "," + hasPostfixUnaryBelow + ")";
 	}
 	
 	@Override
