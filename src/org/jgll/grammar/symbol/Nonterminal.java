@@ -86,6 +86,10 @@ public class Nonterminal extends AbstractSymbol {
 		return labels.get(label);
 	}
 	
+	public boolean hasLabels() {
+		return labels != null;
+	}
+	
 	public Set<String> getExcepts() {
 		return excepts;
 	}
@@ -242,9 +246,15 @@ public class Nonterminal extends AbstractSymbol {
 			return this;
 		}
 		
-		public Builder addExcepts(String... labels) {
-			if (excepts == null) excepts = new HashSet<>();
-			for (String label : labels) excepts.add(label);
+		public Builder addExcepts(Set<String> labels) {
+			if (labels.isEmpty()) 
+				return this;
+			
+			if (excepts == null) 
+				excepts = new HashSet<>();
+			
+			excepts.addAll(labels);
+			
 			return this;
 		}
 		
