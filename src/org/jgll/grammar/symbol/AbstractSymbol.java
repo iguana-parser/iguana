@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.jgll.datadependent.attrs.AbstractAttrs;
 import org.jgll.grammar.condition.Condition;
+import org.jgll.util.generator.GeneratorUtil;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -56,7 +57,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	
 	@Override
 	public String toString() {
-		return name;
+		return name + GeneratorUtil.listToString(preConditions, ",");
 	}
 	
 	@Override

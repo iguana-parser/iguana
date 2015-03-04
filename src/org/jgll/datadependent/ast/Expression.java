@@ -496,6 +496,57 @@ public abstract class Expression extends AbstractAST {
 		
 	}
 	
+	static public class NotEqual extends Expression {
+		
+		private final Expression lhs;
+		private final Expression rhs;
+		
+		NotEqual(Expression lhs, Expression rhs) {
+			this.lhs = lhs;
+			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			Object lhs = this.lhs.interpret(ctx);
+			Object rhs = this.rhs.interpret(ctx);
+			
+			if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
+				return ((java.lang.Integer) lhs) != ((java.lang.Integer) rhs);
+			}
+			
+			if (lhs instanceof java.lang.Float && rhs instanceof java.lang.Float) {
+				return ((java.lang.Float) lhs) != ((java.lang.Float) rhs);
+			}
+						
+			throw new UnexpectedTypeOfArgumentException(this);
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.notEqual(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s != %s", lhs, rhs);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
+		
+	}
+	
 	static public class LeftExtent extends Expression {
 		
 		static public java.lang.String format = "%s.lExt";

@@ -13,6 +13,7 @@ import org.jgll.datadependent.ast.Expression.Integer;
 import org.jgll.datadependent.ast.Expression.LeftExtent;
 import org.jgll.datadependent.ast.Expression.Less;
 import org.jgll.datadependent.ast.Expression.Name;
+import org.jgll.datadependent.ast.Expression.NotEqual;
 import org.jgll.datadependent.ast.Expression.Real;
 import org.jgll.datadependent.ast.Expression.RightExtent;
 import org.jgll.datadependent.ast.Expression.String;
@@ -164,6 +165,22 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Equal expression) {
+		
+		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		
+		lhs.setEnv(expression.getEnv());
+		lhs.accept(this);
+		
+		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		
+		rhs.setEnv(expression.getEnv());
+		rhs.accept(this);
+		
+		return null;
+	}
+	
+	@Override
+	public Void visit(NotEqual expression) {
 		
 		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
 		

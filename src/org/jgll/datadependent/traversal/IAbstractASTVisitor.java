@@ -10,6 +10,7 @@ import org.jgll.datadependent.ast.Expression.Integer;
 import org.jgll.datadependent.ast.Expression.LeftExtent;
 import org.jgll.datadependent.ast.Expression.Less;
 import org.jgll.datadependent.ast.Expression.Name;
+import org.jgll.datadependent.ast.Expression.NotEqual;
 import org.jgll.datadependent.ast.Expression.Real;
 import org.jgll.datadependent.ast.Expression.RightExtent;
 import org.jgll.datadependent.ast.Expression.String;
@@ -39,6 +40,8 @@ public interface IAbstractASTVisitor<T> {
 	public T visit(GreaterThanEqual expression);
 	
 	public T visit(Equal expression);
+	
+	public T visit(NotEqual expression);
 	
 	public T visit(LeftExtent expression);
 	

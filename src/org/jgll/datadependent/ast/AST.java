@@ -105,6 +105,10 @@ public class AST {
 		return new Expression.Equal(lhs, rhs);
 	}
 	
+	static public Expression notEqual(Expression lhs, Expression rhs) {
+		return new Expression.NotEqual(lhs, rhs);
+	}
+	
 	static public Expression lExt(String label) {
 		return new Expression.LeftExtent(label);
 	}
