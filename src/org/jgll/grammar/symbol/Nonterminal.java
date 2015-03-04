@@ -1,5 +1,10 @@
 package org.jgll.grammar.symbol;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
@@ -16,9 +21,13 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final String variable;
 	
-	private final String[] parameters;
+	private final String[] parameters; // Only head
 	
 	private final Expression[] arguments;
+	
+	private Map<String, Integer> labels; // Only head
+	
+	private Set<String> excepts;
 	
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
@@ -31,6 +40,8 @@ public class Nonterminal extends AbstractSymbol {
 		this.variable = builder.variable;
 		this.parameters = builder.parameters;
 		this.arguments = builder.arguments;
+		this.labels = builder.labels;
+		this.excepts = builder.excepts;
 	}
 	
 	public boolean isEbnfList() {
@@ -59,6 +70,24 @@ public class Nonterminal extends AbstractSymbol {
 	
 	public Expression[] getArguments() {
 		return arguments;
+	}
+	
+	public void addLabel(String label) {
+		if (labels == null) labels = new HashMap<>();
+		
+		if (labels.containsKey(label)) return;
+		
+		labels.put(label, labels.size());
+	}
+	
+	public int getLabel(String label) {
+		if (labels == null || !labels.containsKey(label))
+			throw new RuntimeException("Production label has not been found: " + label);
+		return labels.get(label);
+	}
+	
+	public Set<String> getExcepts() {
+		return excepts;
 	}
 	
 	@Override
@@ -120,9 +149,13 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private String variable;
 		
-		private String[] parameters;
+		private String[] parameters; // Only head
 		
 		private Expression[] arguments;
+		
+		private Map<String, Integer> labels; // Only head
+		
+		private Set<String> excepts;
 		
 		public Builder(Nonterminal nonterminal) {
 			super(nonterminal);
@@ -130,6 +163,8 @@ public class Nonterminal extends AbstractSymbol {
 			this.index = nonterminal.index;
 			this.parameters = nonterminal.parameters;
 			this.arguments = nonterminal.arguments;
+			this.labels = nonterminal.labels;
+			this.excepts = nonterminal.excepts;
 		}
 
 		public Builder(String name) {
@@ -198,6 +233,18 @@ public class Nonterminal extends AbstractSymbol {
 		@Override
 	 	public Builder addPostConditions(Iterable<Condition> conditions) {
 	 		conditions.forEach(c -> postConditions.add(c));
+			return this;
+		}
+		
+		public Builder addExcept(String label) {
+			if (excepts == null) excepts = new HashSet<>();
+			excepts.add(label);
+			return this;
+		}
+		
+		public Builder addExcepts(String... labels) {
+			if (excepts == null) excepts = new HashSet<>();
+			for (String label : labels) excepts.add(label);
 			return this;
 		}
 		
