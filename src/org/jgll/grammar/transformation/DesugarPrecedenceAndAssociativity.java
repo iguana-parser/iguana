@@ -1,5 +1,6 @@
 package org.jgll.grammar.transformation;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -80,6 +81,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 	@Override
 	public Grammar transform(Grammar grammar) {
 		
+		leftOrRightRecursiveNonterminals = new HashSet<>();
+		
 		for (Map.Entry<Nonterminal, Rule> entry : grammar.getDefinitions().entries())
 			if (entry.getValue().isLeftOrRightRecursive())
 				leftOrRightRecursiveNonterminals.add(entry.getKey().getName());
@@ -95,7 +98,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		return new Visitor(rule, leftOrRightRecursiveNonterminals).transform();
 	}
 
-	@SuppressWarnings("unused")
 	private static class Visitor implements ISymbolVisitor<Symbol> {
 		
 		private final Rule rule;
@@ -121,6 +123,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			AssociativityGroup associativityGroup = rule.getAssociativityGroup();
 			PrecedenceLevel precedenceLevel = rule.getPrecedenceLevel();
+			
+			preconditions = new HashSet<>();
 			
 			int precedence = rule.getPrecedence();
 			Associativity associativity = rule.getAssociativity();
@@ -396,33 +400,36 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			Expression[] arguments = symbol.getArguments();
 			
-			if (arguments == null)
+			int length;
+			
+			if (arguments == null) {
+				length = 0;
 				arguments = new Expression[2];
-			else {
+			} else {
 				Expression[] args = new Expression[arguments.length + 2];
-				
+				length = arguments.length;
 				int i = 0;
 				for (Expression argument : arguments) {
-					args[i] = arguments[i];
+					args[i] = argument;
 					i++;
 				}
 				
 				arguments = args;
 			}
 			
-			arguments[arguments.length] = integer(0);
-			arguments[arguments.length + 1] = integer(0);
+			arguments[length] = integer(0);
+			arguments[length + 1] = integer(0);
 			
 			if (rule.getPrecedence() == -1)
 				return symbol.copyBuilder().apply(arguments).build();
 			
 			if (isRecursiveUseOfLeftOrRight && isFirst) {
-				arguments[arguments.length] = l1;
-				arguments[arguments.length + 1] = r1;
+				arguments[length] = l1;
+				arguments[length + 1] = r1;
 				return symbol.copyBuilder().apply(arguments).addPreConditions(preconditions).build();
 			} else if (isRecursiveUseOfLeftOrRight && isLast) {
-				arguments[arguments.length] = l2;
-				arguments[arguments.length + 1] = r2;
+				arguments[length] = l2;
+				arguments[length + 1] = r2;
 				return symbol.copyBuilder().apply(arguments).build();
 			}
 			
