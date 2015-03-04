@@ -1,5 +1,6 @@
 package org.jgll.grammar.transformation;
 
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -83,12 +84,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (entry.getValue().isLeftOrRightRecursive())
 				leftOrRightRecursiveNonterminals.add(entry.getKey().getName());
 		
-		return grammar;
+		Set<Rule> rules = new LinkedHashSet<>();
+		for (Rule rule :grammar.getDefinitions().values())
+			rules.add(transform(rule));
+		
+		return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
 	}
 	
 	public Rule transform(Rule rule) {
-		
-		return rule;
+		return new Visitor(rule, leftOrRightRecursiveNonterminals).transform();
 	}
 
 	@SuppressWarnings("unused")
