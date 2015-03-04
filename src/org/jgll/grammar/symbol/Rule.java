@@ -87,19 +87,19 @@ public class Rule implements ConstructorCode, Serializable {
 	}
 	
 	public boolean isUnary() {
-		return recursion == Recursion.LEFT || recursion == Recursion.RIGHT;
+		return recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
 	}
 	
 	public boolean isLeftRecursive() {
-		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.LEFT;
+		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC;
 	}
 	
 	public boolean isRightRecursive() {
-		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.RIGHT;
+		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.RIGHT_REC;
 	}
 	
 	public boolean isLeftOrRightRecursive() {
-		return recursion == Recursion.LEFT_RIGHT || recursion == Recursion.LEFT || recursion == Recursion.RIGHT;
+		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
 	}
 	
 	public Associativity getAssociativity() {

@@ -99,7 +99,7 @@ public class PrecedenceLevel {
 	}
 		
 	public String getConstructorCode() {
-		return getClass().getSimpleName() + "from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnaryBelow + "," + hasPostfixUnaryBelow + ")";
+		return getClass().getSimpleName() + ".from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnaryBelow + "," + hasPostfixUnaryBelow + ")";
 	}
 	
 	@Override
