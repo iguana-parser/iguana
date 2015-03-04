@@ -64,11 +64,11 @@ public class Nonterminal extends AbstractSymbol {
 	@Override
 	public String toString() {
 		return (variable != null? variable + " = " : "")
+				+ (getPreConditions().isEmpty()? "" : GeneratorUtil.listToString(getPreConditions(), ","))
 			    + (label != null? label + ":" : "")
 			    + name + (index > 0 ? index : "")
 			    + (arguments == null && parameters != null? "(" + GeneratorUtil.listToString(parameters, ",") + ")" : "")
 		        + (arguments != null? "(" + GeneratorUtil.listToString(arguments, ",") + ")" : "")
-		        + (getPreConditions().isEmpty()? "" : GeneratorUtil.listToString(getPreConditions(), ","))
 		        + (getPostConditions().isEmpty()? "" : GeneratorUtil.listToString(getPostConditions(), ","));
 	}
 	

@@ -240,6 +240,11 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder setSymbols(List<Symbol> symbols) {
+			body = symbols;
+			return this;
+		}
+		
 		public Builder setLayoutStrategy(LayoutStrategy layoutStrategy) {
 			this.layoutStrategy = layoutStrategy;
 			return this;

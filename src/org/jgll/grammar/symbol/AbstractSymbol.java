@@ -57,7 +57,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	
 	@Override
 	public String toString() {
-		return name + GeneratorUtil.listToString(preConditions, ",");
+		return GeneratorUtil.listToString(preConditions, ",") + name;
 	}
 	
 	@Override

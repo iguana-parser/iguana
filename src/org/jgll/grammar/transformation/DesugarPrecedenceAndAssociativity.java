@@ -1,7 +1,9 @@
 package org.jgll.grammar.transformation;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -200,7 +202,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("r"))));
 								if (!associativityGroup.getAssocMap().isEmpty())
 									for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet())
-										preconditions.add(predicate(notEqual(integer(entry.getKey()), var("r"))));
+										if (precedence != entry.getKey())
+											preconditions.add(predicate(notEqual(integer(entry.getKey()), var("r"))));
 							}
 							break;						
 						case RIGHT:
@@ -208,7 +211,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("l"))));
 								if (!associativityGroup.getAssocMap().isEmpty())
 									for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet())
-										preconditions.add(predicate(notEqual(integer(entry.getKey()), var("l"))));
+										if (precedence != entry.getKey())
+											preconditions.add(predicate(notEqual(integer(entry.getKey()), var("l"))));
 							}
 							break;
 						case NON_ASSOC:
@@ -216,8 +220,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("l"))));
 							if (!associativityGroup.getAssocMap().isEmpty()) {
 								for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet()) {
-									preconditions.add(predicate(notEqual(integer(entry.getKey()), var("r"))));
-									preconditions.add(predicate(notEqual(integer(entry.getKey()), var("l"))));
+									if (precedence != entry.getKey()) {
+										preconditions.add(predicate(notEqual(integer(entry.getKey()), var("r"))));
+										preconditions.add(predicate(notEqual(integer(entry.getKey()), var("l"))));
+									}
 								}
 							}
 							break;
@@ -273,7 +279,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (rule.getBody() == null)
 				return rule;
 			
-			Rule.Builder builder = new Rule.Builder(rule.getHead());
+			List<Symbol> symbols = new ArrayList<>();
+			Rule.Builder builder = rule.copyBuilder().setSymbols(symbols);
 			
 			int i = 0;
 			for (Symbol symbol : rule.getBody()) {
@@ -285,13 +292,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				else isLast = false;
 				
 				if (rule.getPrecedence() != -1 && i == 0)
-					builder.addSymbol(symbol.accept(this).copyBuilder().addPreConditions(preconditions).build());
+					symbols.add(symbol.accept(this).copyBuilder().addPreConditions(preconditions).build());
 				else 
-					builder.addSymbol(symbol.accept(this));
+					symbols.add(symbol.accept(this));
 				i++;
 			}
 			
-			return builder.setLayout(rule.getLayout()).setLayoutStrategy(rule.getLayoutStrategy()).build();
+			return builder.build();
 		}
 		
 		@Override
