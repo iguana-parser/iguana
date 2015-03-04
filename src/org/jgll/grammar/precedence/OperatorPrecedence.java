@@ -20,6 +20,7 @@ import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
+import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.util.logging.LoggerWrapper;
 
 public class OperatorPrecedence {
@@ -103,7 +104,7 @@ public class OperatorPrecedence {
 			for (List<Symbol> alt : definitions.get(pattern.getNonterminal())) {
 				if (match(plain(alt), pattern.getParent())) {
 					Nonterminal newNonterminal = createNewNonterminal(alt, pattern.getPosition(), e.getValue());
-					alt.set(pattern.getPosition(), newNonterminal);
+					set(alt, pattern.getPosition(), newNonterminal);
 				}
 			}
 			
@@ -116,7 +117,7 @@ public class OperatorPrecedence {
 						if(alt != null) {
 							if (match(plain(alt), pattern.getParent())) {
 								Nonterminal newNonterminal = createNewNonterminal(alt, pattern.getPosition(), e.getValue());
-								alt.set(pattern.getPosition(), newNonterminal);
+								set(alt, pattern.getPosition(), newNonterminal);
 							}
 						}						
 					}					
@@ -127,6 +128,10 @@ public class OperatorPrecedence {
 
 	
 	public void add(PrecedencePattern pattern) {
+		pattern = new PrecedencePattern(pattern.getNonterminal(), 
+										EBNFToBNF.rewrite(pattern.getParent(), null), 
+										pattern.getPosition(), 
+										EBNFToBNF.rewrite(pattern.getChild(), null));
 		Nonterminal nonterminal = pattern.getNonterminal();
 		if (precednecePatterns.containsKey(nonterminal)) {
 			precednecePatterns.get(nonterminal).add(pattern);
@@ -138,6 +143,10 @@ public class OperatorPrecedence {
 	}
 	
 	public void add(ExceptPattern pattern) {
+		pattern = new ExceptPattern(pattern.getNonterminal(), 
+				EBNFToBNF.rewrite(pattern.getParent(), null), 
+				pattern.getPosition(), 
+				EBNFToBNF.rewrite(pattern.getChild(), null));
 		exceptPatterns.add(pattern);
 	}
 	
@@ -227,7 +236,7 @@ public class OperatorPrecedence {
 			if (plainEqual(first, pattern.getNonterminal())) {
 				if(contains(first, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, 0, children);
-					alternate.set(0, newNonterminal);
+					set(alternate, 0, newNonterminal);
 					rewriteLeftEnds(newNonterminal, pattern, children, visited);
 				}				
 			}
@@ -258,7 +267,7 @@ public class OperatorPrecedence {
 			if (plainEqual(first, pattern.getNonterminal())) {
 				if(contains(first, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, 0, children);
-					alternate.set(0, newNonterminal);
+					set(alternate, 0, newNonterminal);
 					rewriteLeftEnds(newNonterminal, pattern, children, visited);
 				}				
 			} else {
@@ -291,7 +300,7 @@ public class OperatorPrecedence {
 			if (plainEqual(last, pattern.getNonterminal())) {
 				if(contains(last, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, children);
-					alternate.set(alternate.size() - 1, newNonterminal);
+					set(alternate, alternate.size() - 1, newNonterminal);
 					rewriteRightEnds(newNonterminal, pattern, children, visited);
 				}				
 			}
@@ -321,7 +330,7 @@ public class OperatorPrecedence {
 			if (plainEqual(last, pattern.getNonterminal())) {
 				if(contains(last, children)) {
 					Nonterminal newNonterminal = createNewNonterminal(alternate, alternate.size() - 1, children);
-					alternate.set(alternate.size() - 1, newNonterminal);
+					set(alternate, alternate.size() - 1, newNonterminal);
 					rewriteRightEnds(newNonterminal, pattern, children, visited);
 				}				
 			} else {
@@ -399,20 +408,20 @@ public class OperatorPrecedence {
 						copy = copyIndirectAtLeft((Nonterminal) alt.get(pattern.getPosition()), pattern.getNonterminal());
 						getLeftEnds(copy, pattern.getNonterminal(), alternates);
 						for(List<Symbol> a : alternates) {
-							a.set(0, new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(a.get(0)).build());
+							set(a, 0, new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(a.get(0)).build());
 						}
 					} else {
 						copy = copyIndirectAtRight((Nonterminal) alt.get(pattern.getPosition()), pattern.getNonterminal());
 						getRightEnds(copy, pattern.getNonterminal(), alternates);
 						for(List<Symbol> a : alternates) {
-							a.set(a.size() - 1, new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(a.get(a.size() - 1)).build());
+							set(a, a.size() - 1, new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(a.get(a.size() - 1)).build());
 						}
 					}
 					
-					alt.set(pattern.getPosition(), new Nonterminal.Builder(copy).addConditions(alt.get(pattern.getPosition())).build());
-					
+					set(alt, pattern.getPosition(), new Nonterminal.Builder(copy).addConditions(alt.get(pattern.getPosition())).build());
+
 				} else {
-					alt.set(pattern.getPosition(), new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(alt.get(pattern.getPosition())).build());
+					set(alt, pattern.getPosition(), new Nonterminal.Builder(freshNonterminals.get(pattern)).addConditions(alt.get(pattern.getPosition())).build());
 				}
 			}
 		}
@@ -425,6 +434,10 @@ public class OperatorPrecedence {
 			definitions.put(freshNonterminal, alternates);
 		}
 		
+	}
+	
+	private void set(List<Symbol> alt, int position, Symbol newSymbol) {
+		alt.set(position, newSymbol);
 	}
 	
 	/**
@@ -530,7 +543,7 @@ public class OperatorPrecedence {
 				Nonterminal nonterminal = (Nonterminal) alt.get(0);
 				// Leave the direct nonterminal, copy indirect ones
 				if(!nonterminal.equals(directName)) {
-					alt.set(0, copyIndirectAtLeft(nonterminal, directName, map));
+					set(alt, 0, copyIndirectAtLeft(nonterminal, directName, map));
 				}
 			}
 		}
@@ -557,7 +570,7 @@ public class OperatorPrecedence {
 				
 				// Leave the direct nonterminal, copy indirect ones
 				if(!nonterminal.equals(directNonterminal)) {
-					alt.set(alt.size() - 1, copyIndirectAtLeft(nonterminal, directNonterminal, map));
+					set(alt, alt.size() - 1, copyIndirectAtLeft(nonterminal, directNonterminal, map));
 				}
 			}
 		}

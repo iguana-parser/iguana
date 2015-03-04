@@ -16,15 +16,15 @@ import org.junit.Test;
 
 public class TestOCaml {
 
-	Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(new OperatorPrecedence(OCaml.precedencePatterns(), OCaml.exceptPatterns()).transform(OCaml.grammar)));
+	Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(OCaml.precedencePatterns(), OCaml.exceptPatterns()).transform(new EBNFToBNF().transform(OCaml.grammar)));
 
 	static Configuration config = Configuration.DEFAULT;
 	
-	static Start startSymbol = Start.from(Nonterminal.withName("CompiliationUnit"));
+	static Start startSymbol = Start.from(Nonterminal.withName("CompilationUnit"));
 	
 	@Test
 	public void test() throws IOException {
-		Input input = Input.fromPath("/Users/aliafroozeh/corpus/ocaml/asmcomp/amd64/arch.ml");
+		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
 		System.out.println(grammar.getConstructorCode());
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);

@@ -34,10 +34,13 @@ public class LayoutWeaver implements GrammarTransformation {
 			}
 			
 			Symbol last = rule.symbolAt(rule.size() - 1);
-			builder.addRule(ruleBuilder.addSymbol(last).build());
+			ruleBuilder.addSymbol(last);
+			
 			if (!getNotFollowIgnoreLayout(last).isEmpty()) {
 				addLayout(layout, rule, ruleBuilder, last);
 			}
+			
+			builder.addRule(ruleBuilder.build());
 		}
 		
 		return builder.build();
@@ -51,13 +54,11 @@ public class LayoutWeaver implements GrammarTransformation {
 				break;
 				
 			case INHERITED:
-				ruleBuilder.addSymbol(layout);
-//				ruleBuilder.addSymbol(layout.copyBuilder().addPostConditions(getNotFollowIgnoreLayout(s)).build());
+				ruleBuilder.addSymbol(layout.copyBuilder().addPostConditions(getNotFollowIgnoreLayout(s)).build());
 				break;
 				
 			case FIXED:
-				ruleBuilder.addSymbol(rule.getLayout());
-//				ruleBuilder.addSymbol(rule.getLayout().copyBuilder().addPostConditions(getNotFollowIgnoreLayout(s)).build());
+				ruleBuilder.addSymbol(rule.getLayout().copyBuilder().addPostConditions(getNotFollowIgnoreLayout(s)).build());
 				break;
 		}
 	}

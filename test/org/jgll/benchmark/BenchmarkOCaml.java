@@ -16,7 +16,7 @@ public class BenchmarkOCaml {
 
 	static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(OCaml.precedencePatterns(), OCaml.exceptPatterns()).transform(new EBNFToBNF().transform(OCaml.grammar)));
 
-	static Start startSymbol = Start.from(Nonterminal.withName("CompiliationUnit"));
+	static Start startSymbol = Start.from(Nonterminal.withName("CompilationUnit"));
 		
 	public static void main(String[] args) throws IOException {
 		IguanaBenchmark.builder(grammar, startSymbol).addDirectory(sourceDir, "ml", true).build().run();

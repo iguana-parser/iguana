@@ -1,9 +1,8 @@
 package org.jgll.grammar.transformation;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,7 +44,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		return newRules;
 	}
 	
-	private boolean isEBNF(Symbol s) {
+	public static boolean isEBNF(Symbol s) {
 		return s instanceof Star ||
 			   s instanceof Plus ||
 			   s instanceof Opt ||
@@ -67,7 +66,11 @@ public class EBNFToBNF implements GrammarTransformation {
 		return builder.setLayout(rule.getLayout()).setLayoutStrategy(rule.getLayoutStrategy()).build();
 	}
 	
-	private Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
+	public static List<Symbol> rewrite(List<Symbol> list, Nonterminal layout) {
+		return list.stream().map(s -> rewrite(s, new HashSet<>(), layout, LayoutStrategy.INHERITED)).collect(Collectors.toList());
+	}
+	
+	private static Symbol rewrite(Symbol symbol, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
 		
 		if (!isEBNF(symbol))
 			return symbol;
@@ -150,7 +153,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		return newNt.copyBuilder().addConditions(symbol).build();
 	}
 	
-	private String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
+	private static String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
 		if (separators.isEmpty() && layout == null) {
 			return symbol.getName();
 		} else {

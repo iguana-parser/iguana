@@ -17,8 +17,7 @@ public class BenchmarkJava {
 	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(JavaCharacterLevel.grammar));
 	private static Nonterminal start = Start.from(Nonterminal.withName("CompilationUnit"));
 	
-	
-	private static Grammar grammar2 = new LayoutWeaver().transform(new EBNFToBNF().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns()).transform(JavaNaturalCharacterLevel.grammar)));
+	private static Grammar grammar2 = new LayoutWeaver().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns(), JavaNaturalCharacterLevel.exceptPatterns()).transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar)));
 	
 	public static void main(String[] args) throws IOException {
 		IguanaBenchmark.builder(grammar2, start).addDirectory(sourceDir, "java", true).build().run();
