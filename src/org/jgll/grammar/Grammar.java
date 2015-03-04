@@ -161,7 +161,8 @@ public class Grammar implements ConstructorCode, Serializable {
 						sb.append(listToString(rule.getBody())).append(" {" + rule.getPrecedence() + "}" + "\n");
 					}
 				}
-				precedence++;
+				if (precedence == -1) precedence += 2;
+				else precedence++;
 			}
 			
 		}

@@ -91,11 +91,11 @@ public class PrecedenceLevel {
 	
 	public void done() {
 		assert rhs != -1;
-		rhs = index == 0? index : index - 1;
+		rhs = index == lhs? index : index - 1;
 	}
 	
 	int getCurrent() {
-		return index == 0? index : index - 1;
+		return index == lhs? index : index - 1;
 	}
 		
 	public String getConstructorCode() {
