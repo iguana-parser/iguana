@@ -565,12 +565,16 @@ public class OperatorPrecedence {
 		definitions.put(copy, copyAlternates);
 		
 		for(List<Symbol> alt : copyAlternates) {
+			
+			if (alt.size() == 0)
+				continue;
+			
 			if(alt.get(alt.size() - 1) instanceof Nonterminal) {
 				Nonterminal nonterminal = (Nonterminal) alt.get(alt.size() - 1);
 				
 				// Leave the direct nonterminal, copy indirect ones
 				if(!nonterminal.equals(directNonterminal)) {
-					set(alt, alt.size() - 1, copyIndirectAtLeft(nonterminal, directNonterminal, map));
+					set(alt, alt.size() - 1, copyIndirectAtRight(nonterminal, directNonterminal, map));
 				}
 			}
 		}

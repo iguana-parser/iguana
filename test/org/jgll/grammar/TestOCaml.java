@@ -25,7 +25,7 @@ public class TestOCaml {
 	@Test
 	public void test() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
-		System.out.println(grammar.getConstructorCode());
+//		System.out.println(grammar.getConstructorCode());
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		parser.reset();
