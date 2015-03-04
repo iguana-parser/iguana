@@ -298,7 +298,7 @@ public class Rule implements ConstructorCode, Serializable {
 				".setPrecedence(" + precedence + ")" +
 				
 				(associativityGroup != null? ".setAssociativityGroup(" + associativityGroup.getConstructorCode() + ")" : "") +
-				(precedenceLevel != null? ".setPrecedenceGroup(" + precedenceLevel.getConstructorCode() + ")" : "") +
+				(precedenceLevel != null? ".setPrecedenceLevel(" + precedenceLevel.getConstructorCode() + ")" : "") +
 				
 				".build()";
 	}
