@@ -103,7 +103,6 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			return;
 		}
 		
-		// FIXME: SPPF
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 		
 		if (dest.getLabel() != null)

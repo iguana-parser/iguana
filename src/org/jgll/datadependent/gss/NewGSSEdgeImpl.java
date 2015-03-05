@@ -36,20 +36,31 @@ public class NewGSSEdgeImpl extends org.jgll.parser.gss.NewGSSEdgeImpl {
 		if (returnSlot.requiresBinding())
 			env = returnSlot.doBinding(sppfNode, env);
 		
-		NonPackedNode y; // FIXME: SPPF
+		NonPackedNode y;
 		
 		if (returnSlot.isLast() && !returnSlot.isEnd()) {
 			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
 			returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex), env);
 			
 			if (parser.getCurrentEndGrammarSlot().isEnd()) {
-				y = parser.getNode(returnSlot, getNode(), sppfNode); // use the original slot to create a node
+				if (destination instanceof org.jgll.datadependent.gss.GSSNode<?>) {
+					org.jgll.datadependent.gss.GSSNode<?> dest = (org.jgll.datadependent.gss.GSSNode<?>) destination;
+					y = parser.getNode(returnSlot, getNode(), sppfNode, env, dest.getData()); // use the original slot to create a node
+				} else {
+					y = parser.getNode(returnSlot, getNode(), sppfNode, env, null); // use the original slot to create a node
+				}
 				returnSlot = parser.getCurrentEndGrammarSlot();
 				env = parser.getEnvironment();
 			} else
 				return null;
-		} else
-			y = parser.getNode(returnSlot, getNode(), sppfNode);
+		} else {
+			if (destination instanceof org.jgll.datadependent.gss.GSSNode<?>) {
+				org.jgll.datadependent.gss.GSSNode<?> dest = (org.jgll.datadependent.gss.GSSNode<?>) destination;
+				y = parser.getNode(returnSlot, getNode(), sppfNode, env, dest.getData());
+			} else {
+				y = parser.getNode(returnSlot, getNode(), sppfNode, env, null);
+			}
+		}
 		
 		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 			return new org.jgll.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);

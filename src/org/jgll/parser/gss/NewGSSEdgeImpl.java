@@ -66,9 +66,8 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	@Override
 	public Descriptor addDescriptor(GLLParser parser, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
 		
-		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex)) {
+		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
 			return null;
-		}
 		
 		/**
 		 * 
@@ -76,7 +75,7 @@ public class NewGSSEdgeImpl implements GSSEdge {
 		 * 
 		 */
 		
-		NonPackedNode y;	 // FIXME: SPPF
+		NonPackedNode y;
 		BodyGrammarSlot returnSlot = this.returnSlot;
 		
 		if (returnSlot.requiresBinding()) {
@@ -87,13 +86,24 @@ public class NewGSSEdgeImpl implements GSSEdge {
 				returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex), env);
 				
 				if (parser.getCurrentEndGrammarSlot().isEnd()) {
-					y = parser.getNode(returnSlot, node, sppfNode); // use the original slot to create a node
+					if (destination instanceof org.jgll.datadependent.gss.GSSNode<?>) {
+						org.jgll.datadependent.gss.GSSNode<?> dest = (org.jgll.datadependent.gss.GSSNode<?>) destination;
+						y = parser.getNode(returnSlot, node, sppfNode, env, dest.getData()); // use the original slot to create a node
+					} else {
+						y = parser.getNode(returnSlot, node, sppfNode, env, null); // use the original slot to create a node
+					}
 					returnSlot = parser.getCurrentEndGrammarSlot();
 					env = parser.getEnvironment();
 				} else 
 					return null;
-			} else
-				y = parser.getNode(returnSlot, node, sppfNode);
+			} else {
+				if (destination instanceof org.jgll.datadependent.gss.GSSNode<?>) {
+					org.jgll.datadependent.gss.GSSNode<?> dest = (org.jgll.datadependent.gss.GSSNode<?>) destination;
+					y = parser.getNode(returnSlot, node, sppfNode, env, dest.getData());
+				} else {
+					y = parser.getNode(returnSlot, node, sppfNode, env, null);
+				}
+			}
 				
 			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 				return new org.jgll.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);

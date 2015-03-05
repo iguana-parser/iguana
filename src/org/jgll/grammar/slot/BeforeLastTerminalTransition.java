@@ -45,15 +45,23 @@ public class BeforeLastTerminalTransition extends AbstractTerminalTransition {
 	 */
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		// FIXME: SPPF
-		if (dest.isEnd())
-			dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr), env);
-		else {
+		if (dest.isEnd()) {
+			if (u instanceof org.jgll.datadependent.gss.GSSNode<?>) {
+				org.jgll.datadependent.gss.GSSNode<?> gssNode = (org.jgll.datadependent.gss.GSSNode<?>) u;
+				dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr, gssNode.getData()), env);
+			} else
+				dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr), env);
+		} else {
 			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
 			dest.execute(parser, u, i + length, DummyNode.getInstance(node.getLeftExtent(), i + length), env);
 			
-			if (parser.getCurrentEndGrammarSlot().isEnd())
-				parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr), parser.getEnvironment());
+			if (parser.getCurrentEndGrammarSlot().isEnd()) {
+				if (u instanceof org.jgll.datadependent.gss.GSSNode<?>) {
+					org.jgll.datadependent.gss.GSSNode<?> gssNode = (org.jgll.datadependent.gss.GSSNode<?>) u;
+					parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr, gssNode.getData()), parser.getEnvironment());
+				} else
+					parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr), parser.getEnvironment());
+			}
 		}
 	}
 	
