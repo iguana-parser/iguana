@@ -62,7 +62,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public String toString() {
-		return nonterminal.getName();
+		return nonterminal.toString();
 	}
 	
 	@Override

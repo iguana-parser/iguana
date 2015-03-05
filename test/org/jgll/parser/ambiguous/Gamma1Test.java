@@ -59,25 +59,25 @@ public class Gamma1Test {
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4, r5, r6, r7).build();
 	}
 	
-	@Test
-	public void testNullables() {
-		assertTrue(grammar.isNullable(S));
-		assertFalse(grammar.isNullable(A));
-		assertFalse(grammar.isNullable(B));
-	}
-	
-	@Test
-	public void testFirstSets() {
-		assertEquals(set(a, b, c, Epsilon.getInstance()), grammar.getFirstSet(S));
-		assertEquals(set(a, c), grammar.getFirstSet(A));
-		assertEquals(set(a, b), grammar.getFirstSet(B));
-	}
-
-	@Test
-	public void testFollowSets() {
-		assertEquals(set(a, b, c, d, EOF.getInstance()), grammar.getFollowSet(A));
-		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(S));
-	}
+//	@Test
+//	public void testNullables() {
+//		assertTrue(grammar.isNullable(S));
+//		assertFalse(grammar.isNullable(A));
+//		assertFalse(grammar.isNullable(B));
+//	}
+//	
+//	@Test
+//	public void testFirstSets() {
+//		assertEquals(set(a, b, c, Epsilon.getInstance()), grammar.getFirstSet(S));
+//		assertEquals(set(a, c), grammar.getFirstSet(A));
+//		assertEquals(set(a, b), grammar.getFirstSet(B));
+//	}
+//
+//	@Test
+//	public void testFollowSets() {
+//		assertEquals(set(a, b, c, d, EOF.getInstance()), grammar.getFollowSet(A));
+//		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(S));
+//	}
 	
 	@Test
 	public void testSPPF() {

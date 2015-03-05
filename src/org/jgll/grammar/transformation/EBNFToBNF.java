@@ -41,7 +41,8 @@ import org.jgll.traversal.ISymbolVisitor;
  *
  */
 public class EBNFToBNF implements GrammarTransformation {
-		
+	
+
 	@Override
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
@@ -55,7 +56,16 @@ public class EBNFToBNF implements GrammarTransformation {
 		return newRules;
 	}
 	
-	private Rule rewrite(Rule rule, Set<Rule> newRules) {
+	public static boolean isEBNF(Symbol s) {
+		return s instanceof Star ||
+			   s instanceof Plus ||
+			   s instanceof Opt ||
+			   s instanceof Sequence ||
+			   s instanceof Alt;
+	}
+
+	
+	public Rule rewrite(Rule rule, Set<Rule> newRules) {
 
 		if (rule.getBody() == null) {
 			return rule;
@@ -72,6 +82,11 @@ public class EBNFToBNF implements GrammarTransformation {
 		return builder.setLayout(rule.getLayout()).setLayoutStrategy(rule.getLayoutStrategy()).build();
 	}
 	
+	public static List<Symbol> rewrite(List<Symbol> list, Nonterminal layout) {
+		return list; // TODO: fix it later!
+	}
+
+	
 	private static String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
 		if (separators.isEmpty() && layout == null) {
 			return symbol.getName();
@@ -79,10 +94,10 @@ public class EBNFToBNF implements GrammarTransformation {
 			return "{" + symbol.getName() +
 					  ", " + separators.stream().map(s -> s.getName()).collect(Collectors.joining(", ")) + 
 					  ", " + layout + 
-				   "}";			
+				   "}";	
 		}
 	}
-	
+		
 	private static class EBNFVisitor implements ISymbolVisitor<Symbol> {
 		
 		private final Set<Rule> addedRules;

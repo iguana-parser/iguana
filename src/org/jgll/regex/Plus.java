@@ -107,6 +107,23 @@ public class Plus extends AbstractRegularExpression {
 		return s;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof Plus))
+			return false;
+		
+		Plus other = (Plus) obj;
+		return s.equals(other.s) && separators.equals(other.separators);
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
 	public static Builder builder(Symbol s) {
 		return new Builder(s);
 	}

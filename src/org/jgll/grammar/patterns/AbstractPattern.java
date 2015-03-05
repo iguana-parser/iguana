@@ -7,8 +7,9 @@ import java.util.List;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.parser.HashFunctions;
+import org.jgll.util.generator.ConstructorCode;
 
-public class AbstractPattern implements Serializable {
+public class AbstractPattern implements Serializable, ConstructorCode {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -24,7 +25,12 @@ public class AbstractPattern implements Serializable {
 		}
 		
 		this.parent = new ArrayList<>(parent);
-		this.position = position;
+		
+		if (position != 0) {
+			this.position = parent.size() - 1;
+		} else {
+			this.position = 0;
+		}
 		this.child = new ArrayList<>(child);
 		this.nonterminal = nonteriminal;
 	}
@@ -107,5 +113,13 @@ public class AbstractPattern implements Serializable {
 
 		sb.append(")");
 		return sb.toString();
+	}
+
+	@Override
+	public String getConstructorCode() {
+		return nonterminal.getConstructorCode() + ", " + 
+			   asList(parent) + ", " +
+			   position + ", " +
+			   asList(child);
 	}
 }

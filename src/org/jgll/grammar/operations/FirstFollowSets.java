@@ -1,11 +1,11 @@
-package org.jgll.grammar;
+package org.jgll.grammar.operations;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
@@ -27,7 +27,7 @@ import com.google.common.collect.SetMultimap;
  * @author Ali Afroozeh
  *
  */
-public class GrammarOperations {
+public class FirstFollowSets {
 	
 	private final ListMultimap<Nonterminal, Rule> definitions;
 
@@ -37,16 +37,13 @@ public class GrammarOperations {
 	
 	private final SetMultimap<Position, RegularExpression> predictionSets;
 
-	private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
-
 	private final Set<Nonterminal> nullableNonterminals;
 	
-	public GrammarOperations(ListMultimap<Nonterminal, Rule> definitions) {
-		this.definitions = definitions;
+	public FirstFollowSets(Grammar grammar) {
+		this.definitions = grammar.getDefinitions();
 		this.firstSets = HashMultimap.create();
 		this.nullableNonterminals = new HashSet<>();
 		this.followSets = HashMultimap.create();
-		this.reachabilityGraph = HashMultimap.create();
 		this.predictionSets = HashMultimap.create();
 		
 		calculateFirstSets();
@@ -136,7 +133,7 @@ public class GrammarOperations {
 		return changed;
 	}
 	
-	private boolean isNullable(Nonterminal nt) {
+	public boolean isNullable(Nonterminal nt) {
 		return nullableNonterminals.contains(nt);
 	}
 	
@@ -276,65 +273,65 @@ public class GrammarOperations {
 		predictionSets.remove(position, Epsilon.getInstance());
 	}
 	
-	public Set<Nonterminal> calculateLLNonterminals() {
-
-		Set<Nonterminal> nonterminals = definitions.keySet();
-		
-		Set<Nonterminal> ll1Nonterminals = new HashSet<>();
-		
-		Set<Nonterminal> ll1SubGrammarNonterminals = new HashSet<>();
-		
-		// Calculating character level predictions
-		Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions = new HashMap<>();
-		
-		for (Nonterminal head : nonterminals) {
-
-			int alternateIndex = 0;
-			for(Rule rule : definitions.get(head)) {
-				
-				List<Symbol> alt = rule.getBody();
-			
-				// Calculate the prediction set for the alternate
-				Set<RegularExpression> s = new HashSet<>();
-				addFirstSet(head, s, alt, 0);
-				if(s.contains(Epsilon.getInstance())) {
-					s.addAll(followSets.get(head));
-				}
-
-				// Expand ranges into integers
-				Set<Integer> set = new HashSet<>();
-				for(RegularExpression r : s) {
-					set.addAll(convert(r.getFirstSet()));
-				}
-				
-				predictions.put(Tuple.of(head, alternateIndex), set);
-				
-				alternateIndex++;
-			}			
-		}
-		
-		for (Nonterminal head : nonterminals) {
-			if(isLL1(head, predictions)) {
-				ll1Nonterminals.add(head);
-			}
-		}
-		
-		for (Nonterminal head : nonterminals) {
-			if(ll1Nonterminals.contains(head)) {
-				boolean ll1SubGrammar = true;
-				for(Nonterminal reachableHead : reachabilityGraph.get(head)) {
-					if(!ll1Nonterminals.contains(reachableHead)) {
-						ll1SubGrammar = false;
-					}
-				}
-				if(ll1SubGrammar) {
-					ll1SubGrammarNonterminals.add(head);
-				}
-			}
-		}
-		
-		return ll1SubGrammarNonterminals;
-	}
+//	public Set<Nonterminal> calculateLLNonterminals() {
+//
+//		Set<Nonterminal> nonterminals = definitions.keySet();
+//		
+//		Set<Nonterminal> ll1Nonterminals = new HashSet<>();
+//		
+//		Set<Nonterminal> ll1SubGrammarNonterminals = new HashSet<>();
+//		
+//		// Calculating character level predictions
+//		Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions = new HashMap<>();
+//		
+//		for (Nonterminal head : nonterminals) {
+//
+//			int alternateIndex = 0;
+//			for(Rule rule : definitions.get(head)) {
+//				
+//				List<Symbol> alt = rule.getBody();
+//			
+//				// Calculate the prediction set for the alternate
+//				Set<RegularExpression> s = new HashSet<>();
+//				addFirstSet(head, s, alt, 0);
+//				if(s.contains(Epsilon.getInstance())) {
+//					s.addAll(followSets.get(head));
+//				}
+//
+//				// Expand ranges into integers
+//				Set<Integer> set = new HashSet<>();
+//				for(RegularExpression r : s) {
+//					set.addAll(convert(r.getFirstSet()));
+//				}
+//				
+//				predictions.put(Tuple.of(head, alternateIndex), set);
+//				
+//				alternateIndex++;
+//			}			
+//		}
+//		
+//		for (Nonterminal head : nonterminals) {
+//			if(isLL1(head, predictions)) {
+//				ll1Nonterminals.add(head);
+//			}
+//		}
+//		
+//		for (Nonterminal head : nonterminals) {
+//			if(ll1Nonterminals.contains(head)) {
+//				boolean ll1SubGrammar = true;
+//				for(Nonterminal reachableHead : reachabilityGraph.get(head)) {
+//					if(!ll1Nonterminals.contains(reachableHead)) {
+//						ll1SubGrammar = false;
+//					}
+//				}
+//				if(ll1SubGrammar) {
+//					ll1SubGrammarNonterminals.add(head);
+//				}
+//			}
+//		}
+//		
+//		return ll1SubGrammarNonterminals;
+//	}
 	
 	/**
 	 * Converts a 
@@ -375,51 +372,4 @@ public class GrammarOperations {
         return true;
     }
 		
-	/**
-	 * 
-	 * Calculate the set of nonterminals that are reachable via the alternates of A.
-	 * In other words, if A is a nonterminal, reachable nonterminals are all the B's such as
-	 * A =>* alpha B gamma. Note that this method does not calculate direct-nullable reachable
-	 * nonterminals.
-	 * 
-	 */
-	public static Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph(Grammar grammar) {
-		
-		Set<Nonterminal> nonterminals = grammar.getNonterminals();
-		
-		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = new HashMap<>();
-		
-		for (Nonterminal head : nonterminals) {
-			reachabilityGraph.put(head, new HashSet<Nonterminal>());
-		}
-		
-		boolean changed = true;
-		
-		while (changed) {
-			
-			changed = false;
-			
-			for (Nonterminal head : nonterminals) {
-				Set<Nonterminal> set = reachabilityGraph.get(head);
-				for (Rule rule : grammar.getAlternatives(head)) {
-					
-					List<Symbol> alternate = rule.getBody();
-					
-					if(alternate == null) {
-						continue;
-					}
-					
-					for(Symbol symbol : alternate) {
-						if(symbol instanceof Nonterminal) {
-							Nonterminal nonterminal = (Nonterminal) symbol;
-							changed |= set.add(nonterminal);
-							changed |= set.addAll(reachabilityGraph.get(nonterminal));
-						} 
-					}
-				}
-			}
-		}
-		
-		return reachabilityGraph;
-	}
 }

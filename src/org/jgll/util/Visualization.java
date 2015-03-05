@@ -5,6 +5,7 @@ import org.jgll.parser.gss.GSSNode;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.sppf.SPPFNode;
+import org.jgll.util.collections.IntRangeTree;
 import org.jgll.util.collections.RangeTree;
 import org.jgll.util.trie.Trie;
 import org.jgll.util.visualization.AutomatonToDot;
@@ -64,6 +65,10 @@ public class Visualization {
 	}
 	
 	public static <T> void generateRangeTree(String outputDir, RangeTree<T> t) {
+		GraphVizUtil.generateGraph(RangeTreeToDot.toDot(t), outputDir, "rangeTree");
+	}
+	
+	public static <T> void generateRangeTree(String outputDir, IntRangeTree t) {
 		GraphVizUtil.generateGraph(RangeTreeToDot.toDot(t), outputDir, "rangeTree");
 	}
 	

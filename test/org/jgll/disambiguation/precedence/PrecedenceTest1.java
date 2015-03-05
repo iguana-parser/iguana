@@ -2,8 +2,12 @@ package org.jgll.disambiguation.precedence;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -60,9 +64,10 @@ public class PrecedenceTest1 {
 		Rule rule3 = Rule.withHead(E).addSymbol(a).build();
 		builder.addRule(rule3);
 		
-		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
-		operatorPrecedence.addPrecedencePattern(E, rule1, 2, rule1);
-		operatorPrecedence.addPrecedencePattern(E, rule1, 0, rule2);
+		List<PrecedencePattern> list = Arrays.asList(PrecedencePattern.from(rule1, 2, rule1), 
+													 PrecedencePattern.from(rule1, 0, rule2));
+		
+		OperatorPrecedence operatorPrecedence = new OperatorPrecedence(list);
 		
 		grammar = operatorPrecedence.transform(builder.build());
 	}

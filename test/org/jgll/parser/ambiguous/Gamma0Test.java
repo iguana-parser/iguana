@@ -51,23 +51,23 @@ public class Gamma0Test {
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
 	}
 	
-	@Test
-	public void testNullables() {
-		assertTrue(grammar.isNullable(S));
-		assertFalse(grammar.isNullable(A));
-	}
-	
-	@Test
-	public void testFirstSets() {
-		assertEquals(set(a, Epsilon.getInstance()), grammar.getFirstSet(S));
-		assertEquals(set(a), grammar.getFirstSet(A));
-	}
-
-	@Test
-	public void testFollowSets() {
-		assertEquals(set(a, d, EOF.getInstance()), grammar.getFollowSet(A));
-		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(S));
-	}
+//	@Test
+//	public void testNullables() {
+//		assertTrue(grammar.isNullable(S));
+//		assertFalse(grammar.isNullable(A));
+//	}
+//	
+//	@Test
+//	public void testFirstSets() {
+//		assertEquals(set(a, Epsilon.getInstance()), grammar.getFirstSet(S));
+//		assertEquals(set(a), grammar.getFirstSet(A));
+//	}
+//
+//	@Test
+//	public void testFollowSets() {
+//		assertEquals(set(a, d, EOF.getInstance()), grammar.getFollowSet(A));
+//		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(S));
+//	}
 	
 	@Test
 	public void test() {

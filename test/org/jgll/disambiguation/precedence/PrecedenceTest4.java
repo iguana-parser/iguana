@@ -2,8 +2,12 @@ package org.jgll.disambiguation.precedence;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -65,13 +69,15 @@ public class PrecedenceTest4 {
 		Rule rule4 = Rule.withHead(E).addSymbols(a).build();
 		builder.addRule(rule4);
 		
-		OperatorPrecedence operatorPrecedence = new OperatorPrecedence();
+		List<PrecedencePattern> list = new ArrayList<>();
 		
 		// (E, .E z, x E) 
-		operatorPrecedence.addPrecedencePattern(E, rule1, 0, rule2);
+		list.add(PrecedencePattern.from(rule1, 0, rule2));
 		
 		// (E, x .E, E w)
-		operatorPrecedence.addPrecedencePattern(E, rule2, 1, rule3);
+		list.add(PrecedencePattern.from(rule2, 1, rule3));
+		
+		OperatorPrecedence operatorPrecedence = new OperatorPrecedence(list);
 		
 		grammar = operatorPrecedence.transform(builder.build());
 	}
@@ -96,7 +102,7 @@ public class PrecedenceTest4 {
 		PackedNode node6 = factory.createPackedNode("E ::= x E2 .", 1, node5);
 		TerminalNode node7 = factory.createTerminalNode("x", 0, 1);
 		NonterminalNode node8 = factory.createNonterminalNode("E", 2, 1, 2);
-		PackedNode node9 = factory.createPackedNode("E2 ::= a .", 1, node8);
+		PackedNode node9 = factory.createPackedNode("E2 ::= a .", 2, node8);
 		TerminalNode node10 = factory.createTerminalNode("a", 1, 2);
 		node9.addChild(node10);
 		node8.addChild(node9);

@@ -7,6 +7,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.regex.automaton.Automaton;
+import org.jgll.regex.matcher.Matcher;
 import org.jgll.util.generator.ConstructorCode;
 
 public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
@@ -31,4 +32,10 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	default Character asSingleChar() {
 		return Character.from(0);
 	}
+	
+	public Matcher getMatcher();
+	
+	public Matcher getBackwardsMatcher();
+	
+	public void initMatcher();
 }

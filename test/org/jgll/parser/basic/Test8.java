@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.operations.FirstFollowSets;
+import org.jgll.grammar.operations.ReachabilityGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -29,6 +31,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * A ::= 'a' B 'c'
  *     | C
@@ -44,6 +48,12 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class Test8 extends AbstractParserTest {
 
+	static Nonterminal A = Nonterminal.withName("A");
+	static Nonterminal B = Nonterminal.withName("B");
+	static Nonterminal C = Nonterminal.withName("C");
+	static Character a = Character.from('a');
+	static Character b = Character.from('b');
+	static Character c = Character.from('c');
 
 	@Parameters
     public static Collection<Object[]> data() {
@@ -76,14 +86,16 @@ public class Test8 extends AbstractParserTest {
     private static Nonterminal getStartSymbol() {
     	return Nonterminal.withName("A");
     }
+    
+	@Test
+	public void testReachableNonterminals() {
+		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
+		assertEquals(ImmutableSet.of(B, C), reachabilityGraph.getReachableNonterminals(A));
+		assertEquals(ImmutableSet.of(C), reachabilityGraph.getReachableNonterminals(C));
+		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(B));
+	}
 	
 	private static Grammar getGrammar() {
-		Nonterminal A = Nonterminal.withName("A");
-		Nonterminal B = Nonterminal.withName("B");
-		Nonterminal C = Nonterminal.withName("C");
-		Character a = Character.from('a');
-		Character b = Character.from('b');
-		Character c = Character.from('c');
 		Rule r1 = Rule.withHead(A).addSymbols(a, B, c).build();
 		Rule r2 = Rule.withHead(A).addSymbol(C).build();
 		Rule r3 = Rule.withHead(B).addSymbol(b).build();
@@ -94,9 +106,10 @@ public class Test8 extends AbstractParserTest {
 	
 	@Test
 	public void testNullable() {
-		assertFalse(grammar.isNullable(Nonterminal.withName("A")));
-		assertFalse(grammar.isNullable(Nonterminal.withName("B")));
-		assertFalse(grammar.isNullable(Nonterminal.withName("C")));
+		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
+		assertFalse(firstFollowSets.isNullable(Nonterminal.withName("A")));
+		assertFalse(firstFollowSets.isNullable(Nonterminal.withName("B")));
+		assertFalse(firstFollowSets.isNullable(Nonterminal.withName("C")));
 	}
 	
 	@Test

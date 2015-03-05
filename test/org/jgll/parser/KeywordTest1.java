@@ -32,10 +32,10 @@ public class KeywordTest1 {
 		grammar = Grammar.builder().addRule(r1).build();
 	}
 	
-	@Test
-	public void testFirstSet() {
-		assertEquals(set(ifKeyword), grammar.getFirstSet(A));
-	}
+//	@Test
+//	public void testFirstSet() {
+//		assertEquals(set(ifKeyword), grammar.getFirstSet(A));
+//	}
 	
 	@Test
 	public void test() {

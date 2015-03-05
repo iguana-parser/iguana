@@ -55,11 +55,11 @@ public class IndirectRecursion3Test {
 								    .addRule(r4).addRule(r5).build();
 	}
 	
-	@Test
-	public void testNullable() {
-		assertFalse(grammar.isNullable(A));
-		assertFalse(grammar.isNullable(B));
-	}
+//	@Test
+//	public void testNullable() {
+//		assertFalse(grammar.isNullable(A));
+//		assertFalse(grammar.isNullable(B));
+//	}
 	
 	@Test
 	public void test1() {

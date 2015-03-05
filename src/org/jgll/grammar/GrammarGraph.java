@@ -99,6 +99,12 @@ public class GrammarGraph implements Serializable {
 	
 	public NonterminalGrammarSlot getHead(Nonterminal start) {
 		if (start instanceof Start) {
+			
+			NonterminalGrammarSlot s = nonterminalsMap.get(start);
+			if (s != null) {
+				return s;
+			}
+			
 			Nonterminal nt = ((Start)start).getNonterminal();
 
 			if (layout == null) {
@@ -572,5 +578,11 @@ public class GrammarGraph implements Serializable {
 		
 		throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
 	}
-	
+
+	public void reset(Input input) {
+		names.values().forEach(n -> n.reset(input));
+	}
+
+
+
 }

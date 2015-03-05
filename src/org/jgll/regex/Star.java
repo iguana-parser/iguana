@@ -120,6 +120,23 @@ public class Star extends AbstractRegularExpression {
 		return s;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof Star))
+			return false;
+		
+		Star other = (Star) obj;
+		return s.equals(other.s) && separators.equals(other.separators);
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
 	public static Builder builder(Symbol s) {
 		return new Builder(s);
 	}

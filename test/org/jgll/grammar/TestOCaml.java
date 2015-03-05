@@ -2,6 +2,7 @@ package org.jgll.grammar;
 
 import java.io.IOException;
 
+import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.transformation.EBNFToBNF;
@@ -13,19 +14,22 @@ import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Test;
 
-public class TestHaskell {
-	
-	static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Haskell.grammar));
+public class TestOCaml {
+
+	Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(OCaml.precedencePatterns(), OCaml.exceptPatterns()).transform(new EBNFToBNF().transform(OCaml.grammar)));
 
 	static Configuration config = Configuration.DEFAULT;
 	
-	static Start startSymbol = Start.from(Nonterminal.withName("Module"));
+	static Start startSymbol = Start.from(Nonterminal.withName("CompilationUnit"));
 	
 	@Test
 	public void test() throws IOException {
-		Input input = Input.fromPath("/Users/aliafroozeh/Haskall/src/Main.hs");
+		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
+//		System.out.println(grammar.getConstructorCode());
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		parser.reset();
+		grammarGraph.reset(input);
 		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 //			org.jgll.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		System.out.println(result);

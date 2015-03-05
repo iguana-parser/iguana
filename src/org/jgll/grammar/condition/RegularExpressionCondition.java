@@ -1,7 +1,5 @@
 package org.jgll.grammar.condition;
 
-import static org.jgll.regex.matcher.MatcherFactory.*;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
@@ -45,29 +43,31 @@ public class RegularExpressionCondition extends Condition {
 	}
 	
 	public SlotAction createSlotAction(RegularExpression r) {
+		r.initMatcher();
 		
 		switch (type) {
 		
 		    case FOLLOW:
-		    	return (input, node, i) -> getMatcher(r).match(input, i) == -1;
+		    	return (input, node, i) -> r.getMatcher().match(input, i) == -1;
 		    	
 		    case NOT_FOLLOW:
-		    	return (input, node, i) -> getMatcher(r).match(input, i) >= 0;
+		    case NOT_FOLLOW_IGNORE_LAYOUT:
+		    	return (input, node, i) -> r.getMatcher().match(input, i) >= 0;
 		    	
 		    case MATCH:
 		    	throw new RuntimeException("Unsupported");
 		
 			case NOT_MATCH: 
-				return (input, node, i) -> getMatcher(r).match(input, node.getInputIndex(), i);
+				return (input, node, i) -> r.getMatcher().match(input, node.getInputIndex(), i);
 				
 			case NOT_PRECEDE:
 				return (input, node, i) -> {
-					return getBackwardsMatcher(r).match(input, i) >= 0;
+					return r.getBackwardsMatcher().match(input, i) >= 0;
 				};
 				
 			case PRECEDE:
 				return (input, node, i) -> {
-					return getBackwardsMatcher(r).match(input, i) == -1;
+					return r.getBackwardsMatcher().match(input, i) == -1;
 				};
 				
 			default:
@@ -114,6 +114,10 @@ public class RegularExpressionCondition extends Condition {
 	
 	public static RegularExpressionCondition notFollow(RegularExpression regularExpression) {
 		return new RegularExpressionCondition(ConditionType.NOT_FOLLOW, regularExpression);
+	}
+	
+	public static RegularExpressionCondition notFollowIgnoreLayout(RegularExpression regularExpression) {
+		return new RegularExpressionCondition(ConditionType.NOT_FOLLOW_IGNORE_LAYOUT, regularExpression);
 	}
 	
 	public static RegularExpressionCondition follow(RegularExpression regularExpression) {

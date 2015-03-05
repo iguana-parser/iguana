@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.jgll.AbstractParserTest;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.operations.FirstFollowSets;
+import org.jgll.grammar.operations.ReachabilityGraph;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
@@ -28,6 +30,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * 
  * S ::= A B C D
@@ -40,6 +44,12 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(Parameterized.class)
 public class Test15 extends AbstractParserTest {
+
+	static Nonterminal S = Nonterminal.withName("S");
+	static Nonterminal A = Nonterminal.withName("A");
+	static Nonterminal B = Nonterminal.withName("B");
+	static Nonterminal C = Nonterminal.withName("C");
+	static Nonterminal D = Nonterminal.withName("D");
 	
 	@Parameters
     public static Collection<Object[]> data() {
@@ -53,7 +63,7 @@ public class Test15 extends AbstractParserTest {
     }
     
     private static Nonterminal getStartSymbol() {
-    	return Nonterminal.withName("S");
+    	return S;
     }
     
     private static Input getInput() {
@@ -61,11 +71,6 @@ public class Test15 extends AbstractParserTest {
     }
 	
 	private static Grammar getGrammar() {
-		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal A = Nonterminal.withName("A");
-		Nonterminal B = Nonterminal.withName("B");
-		Nonterminal C = Nonterminal.withName("C");
-		Nonterminal D = Nonterminal.withName("D");
 		Character a = Character.from('a');
 		Rule r1 = Rule.withHead(S).addSymbols(A, B, C, D).build();
 		Rule r2 = Rule.withHead(A).addSymbol(a).build();
@@ -84,16 +89,22 @@ public class Test15 extends AbstractParserTest {
 	
 	@Test
 	public void testNullable() {
-		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal A = Nonterminal.withName("A");
-		Nonterminal B = Nonterminal.withName("B");
-		Nonterminal C = Nonterminal.withName("C");
-		Nonterminal D = Nonterminal.withName("D");
-		assertTrue(grammar.isNullable(S));
-		assertTrue(grammar.isNullable(A));
-		assertTrue(grammar.isNullable(B));
-		assertTrue(grammar.isNullable(C));
-		assertTrue(grammar.isNullable(D));
+		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
+		assertTrue(firstFollowSets.isNullable(S));
+		assertTrue(firstFollowSets.isNullable(A));
+		assertTrue(firstFollowSets.isNullable(B));
+		assertTrue(firstFollowSets.isNullable(C));
+		assertTrue(firstFollowSets.isNullable(D));
+	}
+	
+	@Test
+	public void testReachableNonterminals() {
+		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
+		assertEquals(ImmutableSet.of(A, B, C, D), reachabilityGraph.getReachableNonterminals(S));
+		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(A));
+		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(B));
+		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(C));
+		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(D));
 	}
 	
 	private static ParseSuccess getParseResult(GrammarGraph registry) {
