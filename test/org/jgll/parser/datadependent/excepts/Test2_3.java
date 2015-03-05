@@ -63,6 +63,6 @@ Grammar.builder()
          // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/excepts/",
          //                   result.asParseSuccess().getRoot(), input);
 
-         assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() != 0);
+         assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 3);
     }
 }

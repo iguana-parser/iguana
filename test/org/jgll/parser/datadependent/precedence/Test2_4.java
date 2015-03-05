@@ -4,7 +4,9 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.*;
 import org.jgll.grammar.symbol.Character;
+
 import static org.jgll.grammar.symbol.LayoutStrategy.*;
+
 import org.jgll.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
@@ -14,8 +16,9 @@ import org.jgll.regex.*;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.Visualization;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 @SuppressWarnings("unused")
 public class Test2_4 {
@@ -51,14 +54,11 @@ Grammar.builder()
          GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
-         if (result.isParseSuccess()) {
-             System.out.println("Success");
+         assertTrue(result.isParseSuccess());
+         
+         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/",
+         //                   result.asParseSuccess().getRoot(), input);
 
-             // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/",
-             //                   result.asParseSuccess().getRoot(), input);
-
-         } else {
-             System.out.println("Parse error!");
-        }
+         assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }
 }
