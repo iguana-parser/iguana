@@ -106,6 +106,10 @@ public class Rule implements ConstructorCode, Serializable {
 		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
 	}
 	
+	public Recursion getRecursion() {
+		return recursion;
+	}
+	
 	public Associativity getAssociativity() {
 		return associativity;
 	}

@@ -20,17 +20,17 @@ public class PrecedenceLevel {
 		this.index = lhs;
 	}
 	
-	public static PrecedenceLevel from(int lhs) {
-		return new PrecedenceLevel(lhs);
-	}
-	
 	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnaryBelow, boolean hasPostfixUnaryBelow) {
-		PrecedenceLevel level = PrecedenceLevel.from(lhs);
+		PrecedenceLevel level = new PrecedenceLevel(lhs);
 		level.rhs = rhs;
 		level.undefined = undefined;
 		level.hasPrefixUnaryBelow = hasPrefixUnaryBelow;
 		level.hasPostfixUnaryBelow = hasPostfixUnaryBelow;
 		return level;
+	}
+	
+	public static PrecedenceLevel getFirst() {
+		return new PrecedenceLevel(1);
 	}
 	
 	public PrecedenceLevel getNext() {
@@ -69,7 +69,6 @@ public class PrecedenceLevel {
 		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		
 		if (!rule.isLeftOrRightRecursive()) return -1;
-		
 		else if (rule.getAssociativity() == Associativity.UNDEFINED) {	
 			if (undefined == -1) undefined = index++;
 			return undefined;
