@@ -7,6 +7,7 @@ import org.jgll.datadependent.ast.Expression.Equal;
 import org.jgll.datadependent.ast.Expression.Greater;
 import org.jgll.datadependent.ast.Expression.GreaterThanEqual;
 import org.jgll.datadependent.ast.Expression.Integer;
+import org.jgll.datadependent.ast.Expression.LShiftANDEqZero;
 import org.jgll.datadependent.ast.Expression.LeftExtent;
 import org.jgll.datadependent.ast.Expression.Less;
 import org.jgll.datadependent.ast.Expression.Name;
@@ -32,6 +33,8 @@ public interface IAbstractASTVisitor<T> {
 	public T visit(Call expression);
 	
 	public T visit(Assignment expression);
+	
+	public T visit(LShiftANDEqZero expression);
 	
 	public T visit(Less expression);
 	

@@ -292,6 +292,52 @@ public abstract class Expression extends AbstractAST {
 		
 	}
 	
+	static public class LShiftANDEqZero extends Expression {
+		
+		private final Expression lhs;
+		private final Expression rhs;
+
+		LShiftANDEqZero(Expression lhs, Expression rhs) {
+			this.lhs = lhs;
+			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
+		}
+		
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			Object lhs = this.lhs.interpret(ctx);
+			Object rhs = this.rhs.interpret(ctx);
+			
+			if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer)
+				return (((java.lang.Integer) lhs) & (1 << ((java.lang.Integer) rhs))) == 0;
+			
+			throw new UnexpectedTypeOfArgumentException(this);
+		}
+
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.lShiftANDEqZero(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s &(1<< %s )==0", lhs, rhs);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
+		
+	}
+		
 	static public class Less extends Expression {
 		
 		private final Expression lhs;

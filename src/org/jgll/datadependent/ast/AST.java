@@ -89,6 +89,10 @@ public class AST {
 		};
 	}
 	
+	static public Expression lShiftANDEqZero(Expression lhs, Expression rhs) {
+		return new Expression.LShiftANDEqZero(lhs, rhs);
+	}
+	
 	static public Expression less(Expression lhs, Expression rhs) {
 		return new Expression.Less(lhs, rhs);
 	}

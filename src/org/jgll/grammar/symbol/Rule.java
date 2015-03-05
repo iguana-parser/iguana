@@ -41,6 +41,8 @@ public class Rule implements ConstructorCode, Serializable {
 	private final int precedence;
 	private final PrecedenceLevel precedenceLevel;
 	
+	private final String label;
+	
 	public Rule(Builder builder) {
 		this.body = builder.body;
 		this.head = builder.head;
@@ -53,6 +55,8 @@ public class Rule implements ConstructorCode, Serializable {
 		this.associativityGroup = builder.associativityGroup;
 		this.precedence = builder.precedence;
 		this.precedenceLevel = builder.precedenceLevel;
+		
+		this.label = builder.label;
 	}
 		
 	public Nonterminal getHead() {
@@ -120,6 +124,10 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	public boolean hasLayout() {
 		return layout != null;
+	}
+	
+	public int getIntegerForLabel() {
+		return label == null? -1 : head.getLabel(label);
 	}
 		
 	@Override
@@ -207,6 +215,8 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		private int precedence;
 		private PrecedenceLevel precedenceLevel;
+		
+		private String label;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -225,6 +235,8 @@ public class Rule implements ConstructorCode, Serializable {
 			this.associativityGroup = rule.associativityGroup;
 			this.precedence = rule.precedence;
 			this.precedenceLevel = rule.precedenceLevel;
+			
+			this.label = rule.label;
 		}
 		
 		public Builder addSymbol(Symbol symbol) {
@@ -288,6 +300,11 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		public Builder setPrecedenceLevel(PrecedenceLevel precedenceLevel) {
 			this.precedenceLevel = precedenceLevel;
+			return this;
+		}
+		
+		public Builder setLabel(String label) {
+			this.label = label;
 			return this;
 		}
 		
