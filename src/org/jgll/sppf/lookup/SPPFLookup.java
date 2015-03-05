@@ -47,9 +47,11 @@ public interface SPPFLookup {
 		// A ::= \alpha .
 		if (slot.isLast()) {
 			if (leftChild == DummyNode.getInstance()) {
-				return getNonterminalNode((LastSymbolGrammarSlot) slot, rightChild, data);
+				return data == null? getNonterminalNode((LastSymbolGrammarSlot) slot, rightChild) 
+								   : getNonterminalNode((LastSymbolGrammarSlot) slot, rightChild, data);
 			} else {
-				return getNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild, data);				
+				return data == null? getNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild) 
+						           : getNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild, data);				
 			}
 		}
 		
