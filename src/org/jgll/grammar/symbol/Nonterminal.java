@@ -191,16 +191,44 @@ public class Nonterminal extends AbstractSymbol {
 		}
 		
 		public Builder addParameters(String... parameters) {
-			if (parameters.length != 0) {
+			if (parameters.length == 0)
+				return this;
+			
+			if (this.parameters == null) {
 				this.parameters = parameters;
-			} // otherwise, keep null
+				return this;
+			}
+			
+			String[] params = new String[this.parameters.length + parameters.length];
+			int i = 0;
+			for (String parameter : this.parameters)
+				params[i++] = parameter;
+			
+			for (String parameter : parameters)
+				params[i++] = parameter;
+			
+			this.parameters = params;
 			return this;
 		}
 		
 		public Builder apply(Expression... arguments) {
-			if (arguments.length != 0) {
+			if (arguments.length == 0)
+				return this;
+			
+			if (this.arguments == null) {
 				this.arguments = arguments;
-			} // otherwise, keep null
+				return this;
+			}
+			
+			Expression[] args = new Expression[this.arguments.length + arguments.length];
+			int i = 0;
+			for (Expression argument : this.arguments)
+				args[i++] = argument;
+			
+			for (Expression argument : arguments)
+				args[i++] = argument;
+
+			this.arguments = args;			
 			return this;
 		}
 		
