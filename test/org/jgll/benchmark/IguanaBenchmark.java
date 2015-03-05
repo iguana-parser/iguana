@@ -90,8 +90,6 @@ public class IguanaBenchmark {
 	private ParseResult run(GLLParser parser, GrammarGraph grammarGraph, Input input, Nonterminal start) throws Exception {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<ParseResult> future = executor.submit(() -> {
-			parser.reset();
-			grammarGraph.reset(input);
 			return parser.parse(input, grammarGraph, start);
         });
         ParseResult result = future.get(timeout, TimeUnit.SECONDS);
@@ -162,7 +160,6 @@ public class IguanaBenchmark {
 				throw new RuntimeException("No file for benchmarking added.");
 			return new IguanaBenchmark(this);
 		}
-		 
 	}
 	
 }

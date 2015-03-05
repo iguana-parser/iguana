@@ -67,6 +67,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	
 	@Override
 	public void reset() {
+		super.reset();
 		nonterminalNodes = new HashMap<>();
 		intermediateNodes = new HashMap<>();
 		terminalNodes = new HashMap<>();

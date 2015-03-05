@@ -97,6 +97,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		initLookups();
 
+		reset();
+		grammarGraph.reset(input);
 		initParserState(startSymbol);
 	
 		log.info("Parsing %s:", input.getURI());
@@ -240,6 +242,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public void reset() {
+		descriptorsCount = 0;
 		gssLookup.reset();
 		sppfLookup.reset();
 	}

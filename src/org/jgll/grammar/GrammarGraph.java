@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,7 +44,9 @@ public class GrammarGraph {
 	
 	private Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
 	
-	private Map<String, GrammarSlot> names;
+	private final Map<String, GrammarSlot> names;
+	
+	private List<GrammarSlot> slots;
 	
 	private Configuration config;
 
@@ -61,10 +64,12 @@ public class GrammarGraph {
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
 		this.names = new HashMap<>();
+		this.slots = new ArrayList<>();
 		this.layout = grammar.getLayout();
 		
 		terminalsMap.put(Epsilon.getInstance(), epsilon);
-		names.put(Epsilon.getInstance().getName(), epsilon);
+
+		add(epsilon);
 		
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
 			convert(nonterminal, grammar);
@@ -148,20 +153,8 @@ public class GrammarGraph {
 				currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, preConditions));
 				currentSlot = slot;
 			}
-
-//				currentSlot = addLayout(currentSlot, rule, i);
 		}
 	}
-
-//	private BodyGrammarSlot addLayout(BodyGrammarSlot currentSlot, Rule rule, int i) {
-//		if (rule.hasLayout() && rule.size() > 1) {
-//			NonterminalGrammarSlot layout = getNonterminalGrammarSlot(rule.getLayout());
-//			BodyGrammarSlot slot = getBodyGrammarSlot(rule, i + 1, new LayoutPosition(rule.getPosition(i + 1)), layout);
-//			currentSlot.addTransition(new NonterminalTransition(layout, currentSlot, slot, Collections.emptySet()));
-//			return slot;
-//		}
-//		return currentSlot;
-//	}
 	
 	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
 															 BodyGrammarSlot origin, BodyGrammarSlot dest,
@@ -183,7 +176,7 @@ public class GrammarGraph {
 	
 	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex) {
 		TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex);
-		names.put(terminalSlot.toString(), terminalSlot);
+		add(terminalSlot);
 		return terminalsMap.computeIfAbsent(regex, k -> terminalSlot);
 	}
 	
@@ -195,7 +188,7 @@ public class GrammarGraph {
 			} else {
 				ntSlot = new NonterminalGrammarSlot(id++, nonterminal, DummyNodeLookup.getInstance());
 			}
-			names.put(ntSlot.toString(), ntSlot);
+			add(ntSlot);
 			return ntSlot;
 		});
 	}
@@ -208,8 +201,7 @@ public class GrammarGraph {
 		} else {
 			slot = new BodyGrammarSlot(id++, rule.getPosition(0), DummyNodeLookup.getInstance(), rule.symbolAt(0).getPostConditions());
 		}
-		
-		names.put(slot.toString(), slot);
+		add(slot);
 		return slot;
 	}
 	
@@ -229,8 +221,13 @@ public class GrammarGraph {
 				slot = new BodyGrammarSlot(id++, position, getNodeLookup(), rule.symbolAt(i - 1).getPostConditions());				
 			}
 		}
-		names.put(slot.toString(), slot);
+		add(slot);
 		return slot;
+	}
+
+	private void add(GrammarSlot slot) {
+		names.put(slot.toString(), slot);
+		slots.add(slot);
 	}
 	
 	private GSSNodeLookup getNodeLookup() {
@@ -242,8 +239,7 @@ public class GrammarGraph {
 	}
 
 	public void reset(Input input) {
-		names.values().forEach(n -> n.reset(input));
+		slots.forEach(s -> s.reset(input));
 	}
-
 
 }
