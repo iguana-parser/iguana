@@ -115,7 +115,7 @@ public class IguanaBenchmark {
 		private int warmupCount = 0;
 		private int runCount = 1;
 		private boolean runGCInBetween = false;
-		private int timeout = 60;
+		private int timeout = 30;
 		
 		public Builder(Grammar grammar, Nonterminal start) {
 			this.grammar = grammar;
