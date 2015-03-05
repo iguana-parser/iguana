@@ -47,9 +47,9 @@ public interface SPPFLookup {
 		// A ::= \alpha .
 		if (slot.isLast()) {
 			if (leftChild == DummyNode.getInstance()) {
-				return getNonterminalNode((LastSymbolGrammarSlot) slot, rightChild, env, data);
+				return getNonterminalNode((LastSymbolGrammarSlot) slot, rightChild, data);
 			} else {
-				return getNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild, env, data);				
+				return getNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild, data);				
 			}
 		}
 		
@@ -67,9 +67,9 @@ public interface SPPFLookup {
 		return newNode;
 	}
 	
-	default <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data) {
+	default <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data) {
 		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), leftChild.getLeftExtent(), rightChild.getRightExtent(), data);
-		addPackedNode(newNode, slot, leftChild.getRightExtent(), leftChild, rightChild, env);
+		addPackedNode(newNode, slot, leftChild.getRightExtent(), leftChild, rightChild);
 		return newNode;
 	}
 
@@ -79,9 +79,9 @@ public interface SPPFLookup {
 		return newNode;
 	}
 	
-	default <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data) {
+	default <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data) {
 		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent(), data);
-		addPackedNode(newNode, slot, child.getRightExtent(), child, env);
+		addPackedNode(newNode, slot, child.getRightExtent(), child);
 		return newNode;
 	}
 	
@@ -93,7 +93,7 @@ public interface SPPFLookup {
 	
 	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env);
-		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild, env);
+		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		return newNode;
 	}
 	
@@ -110,11 +110,6 @@ public interface SPPFLookup {
 		addPackedNode(parent, leftChild, rightChild, packedNode);
 	}
 	
-	default void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		PackedNode packedNode = new org.jgll.datadependent.sppf.PackedNode(slot, pivot, parent, env);
-		addPackedNode(parent, leftChild, rightChild, packedNode);
-	}
-
 	default void addPackedNode(NonterminalOrIntermediateNode parent, NonPackedNode leftChild, NonPackedNode rightChild, PackedNode packedNode) {
 		boolean ambiguousBefore = parent.isAmbiguous();
 		if (parent.addPackedNode(packedNode, leftChild, rightChild)) {
@@ -131,11 +126,6 @@ public interface SPPFLookup {
 		addPackedNode(parent, child, packedNode);
 	}
 	
-	default void addPackedNode(NonterminalOrIntermediateNode parent, GrammarSlot slot, int pivot, NonPackedNode child, Environment env) {
-		PackedNode packedNode = new org.jgll.datadependent.sppf.PackedNode(slot, pivot, parent, env);
-		addPackedNode(parent, child, packedNode);
-	}
-
 	default void addPackedNode(NonterminalOrIntermediateNode parent, NonPackedNode child, PackedNode packedNode) {
 		boolean ambiguousBefore = parent.isAmbiguous();
 		if (parent.addPackedNode(packedNode, child)) {
