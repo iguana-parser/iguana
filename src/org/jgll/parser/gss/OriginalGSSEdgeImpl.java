@@ -69,7 +69,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 		 * Data-dependent GLL parsing
 		 * 
 		 */
-		NonPackedNode y; // FIXME: SPPF
+		NonPackedNode y;
 		
 		if (returnSlot.requiresBinding()) {
 			Environment env =  returnSlot.doBinding(sppfNode, parser.getEmptyEnvironment());
@@ -79,13 +79,25 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 				returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex), env);
 				
 				if (parser.getCurrentEndGrammarSlot().isEnd()) {
-					y = parser.getNode(returnSlot, node, sppfNode); // use the original slot to create a node
+					if (destination instanceof org.jgll.datadependent.gss.GSSNode<?>) { // TODO: Ugly
+						org.jgll.datadependent.gss.GSSNode<?> dest = (org.jgll.datadependent.gss.GSSNode<?>) destination;
+						y = parser.getNode(returnSlot, node, sppfNode, env, dest.getData()); // use the original slot to create a node
+					} else {
+						y = parser.getNode(returnSlot, node, sppfNode, env, null); // use the original slot to create a node
+					}
 					returnSlot = parser.getCurrentEndGrammarSlot();
 					env = parser.getEnvironment();
-				} else
+				} else {
 					return null;
-			} else
-				y = parser.getNode(returnSlot, node, sppfNode);
+				}
+			} else {
+				if (destination instanceof org.jgll.datadependent.gss.GSSNode<?>) { // TODO: Ugly
+					org.jgll.datadependent.gss.GSSNode<?> dest = (org.jgll.datadependent.gss.GSSNode<?>) destination;
+					y = parser.getNode(returnSlot, node, sppfNode, env, dest.getData());
+				} else {
+					y = parser.getNode(returnSlot, node, sppfNode, env, null);
+				}
+			}
 			
 			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 				return new org.jgll.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
@@ -103,7 +115,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 			} else
 				return null;
 		} else
-			y = parser.getNode(returnSlot, node, sppfNode);
+			y = parser.getNode(returnSlot, node, sppfNode); 
 		
 		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y)) {
 			return new Descriptor(returnSlot, destination, inputIndex, y);

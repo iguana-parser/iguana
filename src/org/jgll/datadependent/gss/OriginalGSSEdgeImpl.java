@@ -36,7 +36,7 @@ public class OriginalGSSEdgeImpl extends org.jgll.parser.gss.OriginalGSSEdgeImpl
 		if (returnSlot.requiresBinding())
 			env = returnSlot.doBinding(sppfNode, env);
 		
-		NonPackedNode y; // FIXME: SPPF
+		NonPackedNode y;
 		
 		if (returnSlot.isLast() && !returnSlot.isEnd()) {
 			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
