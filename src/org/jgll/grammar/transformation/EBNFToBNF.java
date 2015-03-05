@@ -10,6 +10,7 @@ import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.traversal.FreeVariableVisitor;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Align;
+import org.jgll.grammar.symbol.Associativity;
 import org.jgll.grammar.symbol.Block;
 import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
@@ -23,6 +24,8 @@ import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Nonterminal.Builder;
 import org.jgll.grammar.symbol.Offside;
+import org.jgll.grammar.symbol.PrecedenceLevel;
+import org.jgll.grammar.symbol.Recursion;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
@@ -79,7 +82,15 @@ public class EBNFToBNF implements GrammarTransformation {
 			builder.addSymbol(s.accept(visitor));
 		}
 		
-		return builder.setLayout(rule.getLayout()).setLayoutStrategy(rule.getLayoutStrategy()).build();
+		return builder.setLayout(rule.getLayout())
+				.setLayoutStrategy(rule.getLayoutStrategy())
+				.setRecursion(rule.getRecursion())
+				.setAssociativity(rule.getAssociativity())
+				.setAssociativityGroup(rule.getAssociativityGroup())
+				.setPrecedence(rule.getPrecedence())
+				.setPrecedenceLevel(rule.getPrecedenceLevel())
+				.setLabel(rule.getLabel())
+				.build();
 	}
 	
 	public static List<Symbol> rewrite(List<Symbol> list, Nonterminal layout) {
@@ -146,7 +157,9 @@ public class EBNFToBNF implements GrammarTransformation {
 			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName()) 
 					            		: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
 			
-			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy).build()));
+			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy)
+														.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+														.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build()));
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
@@ -175,8 +188,12 @@ public class EBNFToBNF implements GrammarTransformation {
 			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName())
 									: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(in.accept(this)).setLayout(layout).setLayoutStrategy(strategy).build());
-			addedRules.add(Rule.withHead(newNt).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(in.accept(this)).setLayout(layout).setLayoutStrategy(strategy)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+			addedRules.add(Rule.withHead(newNt)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
@@ -216,10 +233,14 @@ public class EBNFToBNF implements GrammarTransformation {
 			S = S.accept(this);
 			
 			addedRules.add(Rule.withHead(newNt)
-							.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
-							.addSymbols(seperators)
-							.addSymbols(S).setLayout(layout).setLayoutStrategy(strategy).build());
-			addedRules.add(Rule.withHead(newNt).addSymbol(S).build());
+									.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
+									.addSymbols(seperators)
+									.addSymbols(S).setLayout(layout).setLayoutStrategy(strategy)
+									.setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+			addedRules.add(Rule.withHead(newNt).addSymbol(S)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
@@ -248,7 +269,9 @@ public class EBNFToBNF implements GrammarTransformation {
 			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName())
 									: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbols(syms).setLayout(layout).setLayoutStrategy(strategy).build());
+			addedRules.add(Rule.withHead(newNt).addSymbols(syms).setLayout(layout).setLayoutStrategy(strategy)
+								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
@@ -278,8 +301,13 @@ public class EBNFToBNF implements GrammarTransformation {
 			Nonterminal newNt = parameters != null? Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "*").addParameters(parameters).build()
 						              : Nonterminal.withName(getName(S, symbol.getSeparators(), layout) + "*");
 			
-			addedRules.add(Rule.withHead(newNt).addSymbols(Plus.builder(S).addSeparators(symbol.getSeparators()).build().accept(this)).setLayout(layout).setLayoutStrategy(strategy).build());
-			addedRules.add(Rule.withHead(newNt).build());
+			addedRules.add(Rule.withHead(newNt).addSymbols(Plus.builder(S).addSeparators(symbol.getSeparators()).build().accept(this))
+									.setLayout(layout).setLayoutStrategy(strategy)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+			addedRules.add(Rule.withHead(newNt)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();

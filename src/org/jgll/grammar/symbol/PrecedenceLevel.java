@@ -33,6 +33,12 @@ public class PrecedenceLevel {
 		return new PrecedenceLevel(1);
 	}
 	
+	public static PrecedenceLevel getFirstAndDone() {
+		PrecedenceLevel level = new PrecedenceLevel(1);
+		level.done();
+		return level;
+	}
+	
 	public PrecedenceLevel getNext() {
 		this.done();
 		
