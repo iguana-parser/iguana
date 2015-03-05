@@ -90,18 +90,25 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		headsWithLabeledRules = new HashMap<>();
 		
 		for (Map.Entry<Nonterminal, Rule> entry : grammar.getDefinitions().entries()) {
-			if (entry.getValue().isLeftOrRightRecursive())
-				leftOrRightRecursiveNonterminals.add(entry.getKey().getName());
+			Nonterminal head = entry.getKey();
+			Rule rule = entry.getValue();
+			// 1.
+			if (rule.getPrecedenceLevel().getRhs() != 1 || 
+					(rule.getPrecedence() == 1 && rule.getAssociativity() != Associativity.UNDEFINED))
+				leftOrRightRecursiveNonterminals.add(head.getName());
+			// else: all the rules have a precedence -1 (non-recursive) or 1, and
+			// undefined associativity; therefore, precedence does not apply
 			
+			// 2.
 			if (entry.getValue().getLabel() != null) {
-				Map<String, Integer> head = headsWithLabeledRules.get(entry.getKey().getName());
-				if (head != null) {
-					if(!head.containsKey(entry.getValue().getLabel()))
-						head.put(entry.getValue().getLabel(), head.size());
+				Map<String, Integer> labels = headsWithLabeledRules.get(head.getName());
+				if (labels != null) {
+					if(!labels.containsKey(rule.getLabel()))
+						labels.put(rule.getLabel(), labels.size());
 				} else {
-					head = new HashMap<>();
-					head.put(entry.getValue().getLabel(), head.size());
-					headsWithLabeledRules.put(entry.getKey().getName(), head);
+					labels = new HashMap<>();
+					labels.put(rule.getLabel(), labels.size());
+					headsWithLabeledRules.put(head.getName(), labels);
 				}
 			}
 		}
@@ -141,12 +148,25 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
 			this.headsWithLabeledRules = headsWithLabeledRules;
 			
+			// 1. Excepts
+			if (rule.getLabel() != null) {
+				preconditions = new HashSet<>();
+				
+				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
+				preconditions.add(predicate(lShiftANDEqZero(var("_not"), integer(l))));
+			}
+			
+			// 2. Precedence and associativity
 			if (this.rule.getPrecedence() == -1) return; // Precedence does not apply
+			
+			if (!this.leftOrRightRecursiveNonterminals
+					.contains(this.rule.getHead().getName())) return; // Precedence does not apply
+			
+			if (preconditions == null)
+				preconditions = new HashSet<>();
 			
 			AssociativityGroup associativityGroup = rule.getAssociativityGroup();
 			PrecedenceLevel precedenceLevel = rule.getPrecedenceLevel();
-			
-			preconditions = new HashSet<>();
 			
 			int precedence = rule.getPrecedence();
 			Associativity associativity = rule.getAssociativity();
@@ -204,7 +224,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				}
 			}
 			
-			// Constraints
+			// Constraints (preconditions) for the grammar rule
 			
 			if (rule.isLeftRecursive())
 				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("r"))));
@@ -292,11 +312,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 			}
 			
-			if (rule.getLabel() != null) {
-				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
-				preconditions.add(predicate(lShiftANDEqZero(var("_not"), integer(l))));
-			}
-			
 		}
 		
 		public Rule transform() {
@@ -331,7 +346,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				if (i == rule.getBody().size() - 1) isLast = true;
 				else isLast = false;
 				
-				if (rule.getPrecedence() != -1 && i == 0)
+				if (preconditions != null && i == 0)
 					symbols.add(symbol.accept(this).copyBuilder().addPreConditions(preconditions).build());
 				else 
 					symbols.add(symbol.accept(this));
