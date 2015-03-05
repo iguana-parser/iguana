@@ -17,6 +17,8 @@ import org.jgll.util.Visualization;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 @SuppressWarnings("unused")
 public class Test1_1 {
 
@@ -50,15 +52,14 @@ Grammar.builder()
 
          GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
+         
+         assertTrue(result.isParseSuccess());
 
-         if (result.isParseSuccess()) {
-             System.out.println("Success");
+         System.out.println("Success");
 
-             Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/excepts/",
-                               result.asParseSuccess().getRoot(), input);
+         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/excepts/",
+         //                   result.asParseSuccess().getRoot(), input);
 
-         } else {
-             System.out.println("Parse error!");
-        }
+         assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }
 }
