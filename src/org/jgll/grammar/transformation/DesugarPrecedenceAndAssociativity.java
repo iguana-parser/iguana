@@ -96,7 +96,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (entry.getValue().getLabel() != null) {
 				Map<String, Integer> head = headsWithLabeledRules.get(entry.getKey().getName());
 				if (head != null) {
-					if(head.containsKey(entry.getValue().getLabel()))
+					if(!head.containsKey(entry.getValue().getLabel()))
 						head.put(entry.getValue().getLabel(), head.size());
 				} else {
 					head = new HashMap<>();
