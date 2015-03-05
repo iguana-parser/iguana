@@ -328,7 +328,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String toString() {
-			return java.lang.String.format("%s &(1<< %s )==0", lhs, rhs);
+			return java.lang.String.format("%s&(1<<%s) == 0", lhs, rhs);
 		}
 
 		@Override

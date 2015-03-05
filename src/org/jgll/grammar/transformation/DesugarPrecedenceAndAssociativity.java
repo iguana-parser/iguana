@@ -79,9 +79,9 @@ import org.jgll.traversal.ISymbolVisitor;
 
 public class DesugarPrecedenceAndAssociativity implements GrammarTransformation {
 	
-	private Set<String> leftOrRightRecursiveNonterminals;
+	private Set<String> leftOrRightRecursiveNonterminals; // operator precedence and associativity
 	
-	private Map<String, Nonterminal> headsWithLabeledRules;
+	private Map<String, Map<String, Integer>> headsWithLabeledRules; // excepts
 	
 	@Override
 	public Grammar transform(Grammar grammar) {
@@ -93,8 +93,17 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (entry.getValue().isLeftOrRightRecursive())
 				leftOrRightRecursiveNonterminals.add(entry.getKey().getName());
 			
-			if (entry.getKey().hasLabels())
-				headsWithLabeledRules.put(entry.getKey().getName(), entry.getKey());
+			if (entry.getValue().getLabel() != null) {
+				Map<String, Integer> head = headsWithLabeledRules.get(entry.getKey().getName());
+				if (head != null) {
+					if(head.containsKey(entry.getValue().getLabel()))
+						head.put(entry.getValue().getLabel(), head.size());
+				} else {
+					head = new HashMap<>();
+					head.put(entry.getValue().getLabel(), head.size());
+					headsWithLabeledRules.put(entry.getKey().getName(), head);
+				}
+			}
 		}
 		
 		Set<Rule> rules = new LinkedHashSet<>();
@@ -114,7 +123,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		
 		private final Set<String> leftOrRightRecursiveNonterminals;
 		
-		private final Map<String, Nonterminal> headsWithLabeledRules;
+		private final Map<String, Map<String, Integer>> headsWithLabeledRules;
 		
 		private Expression l1;
 		private Expression r2;
@@ -127,7 +136,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private boolean isFirst;
 		private boolean isLast;
 		
-		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Nonterminal> headsWithLabeledRules) {
+		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
 			this.headsWithLabeledRules = headsWithLabeledRules;
@@ -265,15 +274,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					switch(associativity) {
 						case LEFT:
 							if (rule.isLeftRecursive())
-								preconditions.add(predicate(equal(integer(precedence), var("r"))));
+								preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
 							break;						
 						case RIGHT:
 							if (rule.isRightRecursive())
-								preconditions.add(predicate(equal(integer(precedence), var("l"))));
+								preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
 							break;
 						case NON_ASSOC:
-							preconditions.add(predicate(equal(integer(precedence), var("l"))));
-							preconditions.add(predicate(equal(integer(precedence), var("r"))));
+							preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
+							preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
 							break;
 						case UNDEFINED:
 							break;
@@ -283,9 +292,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 			}
 			
-			int l = rule.getIntegerForLabel();
-			if (l != -1)
-				preconditions.add(predicate(lShiftANDEqZero(var("_except"), integer(l))));
+			if (rule.getLabel() != null) {
+				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
+				preconditions.add(predicate(lShiftANDEqZero(var("_not"), integer(l))));
+			}
 			
 		}
 		
@@ -303,11 +313,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			boolean isHeadWithLabeledRules = headsWithLabeledRules.containsKey(head);
 			
 			if (isLeftOrRightRecursiveNonterminal && isHeadWithLabeledRules)
-				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("l","r", "_except").build());
+				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("l","r", "_not").build());
 			else if (isLeftOrRightRecursiveNonterminal)
 				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("l","r").build());
 			else if (isHeadWithLabeledRules)
-				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_except").build());
+				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_not").build());
 			else builder = rule.copyBuilder();
 			
 			builder = builder.setSymbols(symbols);
@@ -432,38 +442,46 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Symbol visit(Nonterminal symbol) {
 			
 			boolean isUseOfLeftOrRight = leftOrRightRecursiveNonterminals.contains(symbol.getName());
+			Map<String, Integer> labels = headsWithLabeledRules.get(symbol.getName());
 			
-			if (!isUseOfLeftOrRight) return symbol;
+			if (!isUseOfLeftOrRight && labels == null) return symbol;
 			
 			boolean isRecursiveUseOfLeftOrRight = isUseOfLeftOrRight && symbol.getName().equals(rule.getHead().getName());
 			
-			Expression[] arguments = new Expression[] { integer(0), integer(0) };
+			Expression[] arguments = null;
 			
-			if (rule.getPrecedence() == -1)
-				return symbol.copyBuilder().apply(arguments).build();
+			if (isUseOfLeftOrRight)
+				arguments = new Expression[] { integer(0), integer(0) };
 			
 			if (isRecursiveUseOfLeftOrRight && isFirst)
 				arguments = new Expression[] { l1, r1 };
 			else if (isRecursiveUseOfLeftOrRight && isLast)
 				arguments = new Expression[] { l2, r2 };
 			
-			Expression _except = null;
+			Expression _not = null;
 			
-			Nonterminal nonterminal = headsWithLabeledRules.get(symbol.getName());
-			
-			if (nonterminal != null) {
+			if (labels != null) {
 				int n = 0;
-				if (symbol.hasLabels()) {
-					Set<String> excepts = symbol.getExcepts();
-					if (excepts != null)
-						for (String except : excepts)
-							n += 1 << nonterminal.getLabel(except);
-				}
-				_except = integer(n);
+				Set<String> excepts = symbol.getExcepts();
+				if (excepts != null)
+					for (String except : excepts) {
+						Integer i = labels.get(except);
+						
+						if (i == null)
+							throw new RuntimeException("Undeclared label: " + except);
+						
+						n += 1 << i;
+					}
+				
+				_not = integer(n);
 			}
 			
-			return _except == null? symbol.copyBuilder().apply(arguments).build()
-					              : symbol.copyBuilder().apply(arguments).apply(_except).build();
+			if (arguments != null && _not != null)
+				return symbol.copyBuilder().apply(arguments).apply(_not).build();
+			else if (arguments != null)
+				return symbol.copyBuilder().apply(arguments).build();
+			else 
+				return symbol.copyBuilder().apply(_not).build();
 			
 		}
 

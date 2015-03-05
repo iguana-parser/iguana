@@ -1,9 +1,8 @@
 package org.jgll.grammar.symbol;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.condition.Condition;
@@ -25,9 +24,7 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final Expression[] arguments;
 	
-	private Map<String, Integer> labels; // Only head
-	
-	private Set<String> excepts;
+	private final Set<String> excepts;
 	
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
@@ -40,7 +37,6 @@ public class Nonterminal extends AbstractSymbol {
 		this.variable = builder.variable;
 		this.parameters = builder.parameters;
 		this.arguments = builder.arguments;
-		this.labels = builder.labels;
 		this.excepts = builder.excepts;
 	}
 	
@@ -70,24 +66,6 @@ public class Nonterminal extends AbstractSymbol {
 	
 	public Expression[] getArguments() {
 		return arguments;
-	}
-	
-	public void addLabel(String label) {
-		if (labels == null) labels = new HashMap<>();
-		
-		if (labels.containsKey(label)) return;
-		
-		labels.put(label, labels.size());
-	}
-	
-	public int getLabel(String label) {
-		if (labels == null || !labels.containsKey(label))
-			throw new RuntimeException("Production label has not been found: " + label);
-		return labels.get(label);
-	}
-	
-	public boolean hasLabels() {
-		return labels != null;
 	}
 	
 	public Set<String> getExcepts() {
@@ -137,11 +115,17 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode() {	
+		
+		String excepts = "";
+		if (this.excepts != null)
+			excepts = GeneratorUtil.listToString(this.excepts.stream().map(l -> ".addExcept(\"" + l + "\")").collect(Collectors.toSet()));
+		
 		return Nonterminal.class.getSimpleName() + ".builder(\"" + name + "\")"
 													+ super.getConstructorCode() 
 													+ (index > 0 ?  ".setIndex(" + index + ")" : "")
 													+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
+													+ excepts
 													+ ".build()";
 	}
 
@@ -157,8 +141,6 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private Expression[] arguments;
 		
-		private Map<String, Integer> labels; // Only head
-		
 		private Set<String> excepts;
 		
 		public Builder(Nonterminal nonterminal) {
@@ -167,7 +149,6 @@ public class Nonterminal extends AbstractSymbol {
 			this.index = nonterminal.index;
 			this.parameters = nonterminal.parameters;
 			this.arguments = nonterminal.arguments;
-			this.labels = nonterminal.labels;
 			this.excepts = nonterminal.excepts;
 		}
 
@@ -281,8 +262,7 @@ public class Nonterminal extends AbstractSymbol {
 			if (excepts == null) 
 				excepts = new HashSet<>();
 			
-			excepts.addAll(labels);
-			
+			excepts.addAll(labels);			
 			return this;
 		}
 		

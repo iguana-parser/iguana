@@ -122,14 +122,14 @@ public class Rule implements ConstructorCode, Serializable {
 		return precedenceLevel;
 	}
 	
+	public String getLabel() {
+		return label;
+	}
+	
 	public boolean hasLayout() {
 		return layout != null;
 	}
 	
-	public int getIntegerForLabel() {
-		return label == null? -1 : head.getLabel(label);
-	}
-		
 	@Override
 	public String toString() {
 		
@@ -145,7 +145,8 @@ public class Rule implements ConstructorCode, Serializable {
 		return sb.toString() + 
 				" {" + associativity.name() + "," + precedence + "," + recursion + "} " + 
 				(associativityGroup != null? associativityGroup + " " : "") +
-				(precedenceLevel != null? precedenceLevel : "");
+				(precedenceLevel != null? precedenceLevel + " ": "") +
+				(label != null? label : "");
 	} 
 	
 	public boolean equals(Object obj) {
@@ -327,6 +328,8 @@ public class Rule implements ConstructorCode, Serializable {
 				
 				(associativityGroup != null? ".setAssociativityGroup(" + associativityGroup.getConstructorCode() + ")" : "") +
 				(precedenceLevel != null? ".setPrecedenceLevel(" + precedenceLevel.getConstructorCode() + ")" : "") +
+				
+				(label != null? ".setLabel(\"" + label + "\")" : "") +
 				
 				".build()";
 	}

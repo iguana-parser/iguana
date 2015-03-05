@@ -1,4 +1,4 @@
-package org.jgll.parser.datadependent.precedence;
+package org.jgll.parser.datadependent.excepts;
 import org.jgll.datadependent.ast.AST;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -26,15 +26,15 @@ public class Test1_1 {
 
 Grammar.builder()
 
-// $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1)
+// $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
-// E ::= (a)  {UNDEFINED,-1,NON_REC} PREC(1,1)
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,false)).build())
-// E ::= E (-)  {UNDEFINED,1,LEFT_REC} PREC(1,1)
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(45).build()).build()).build()).setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,false)).build())
-// E ::= E (^) E  {RIGHT,2,LEFT_RIGHT_REC} PREC(2,2)
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(94).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.RIGHT).setPrecedence(2).setPrecedenceLevel(PrecedenceLevel.from(2,2,-1,false,true)).build())
-// S ::= E  {UNDEFINED,-1,NON_REC} PREC(1,1)
+// E ::= (a)  {UNDEFINED,-1,NON_REC} PREC(1,2) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,2,2,false,false)).build())
+// E ::= E (+) E  {LEFT,1,LEFT_RIGHT_REC} PREC(1,2) a
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(43).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.LEFT).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,2,2,false,false)).setLabel("a").build())
+// E ::= E (-)  {UNDEFINED,2,LEFT_REC} PREC(1,2) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").addExcept("a").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(45).build()).build()).build()).setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(2).setPrecedenceLevel(PrecedenceLevel.from(1,2,2,false,false)).build())
+// S ::= E  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
 .build();
          // grammar = new EBNFToBNF().transform(grammar);
@@ -43,10 +43,10 @@ Grammar.builder()
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
-         Input input = Input.fromString("a^a-^a");
+         Input input = Input.fromString("a+a-");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/", graph);
+         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/excepts/", graph);
 
          GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
@@ -54,7 +54,7 @@ Grammar.builder()
          if (result.isParseSuccess()) {
              System.out.println("Success");
 
-             Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/",
+             Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/excepts/",
                                result.asParseSuccess().getRoot(), input);
 
          } else {
