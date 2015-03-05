@@ -18,7 +18,7 @@ import org.jgll.util.Visualization;
 import org.junit.Test;
 
 @SuppressWarnings("unused")
-public class Test2_5 {
+public class Test3_1 {
 
     @Test
     public void test() {
@@ -33,10 +33,10 @@ E(l,r,_not) ::= (a) {-1}
               | [_not&(1<<1) == 0],[1 >= l],[1 >= r]E(1,0,4) (*) E(0,1,3) {1}
               | [_not&(1<<2) == 0],[1 >= l](+) E(0,1,0) {1}
               | [_not&(1<<3) == 0],[1 >= l](-) E(0,1,0) {1}
-              
-S ::= E(0,0,0) {-1} 
 
-*/
+S ::= E(0,0,2) {-1}
+
+ */
 
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
@@ -51,7 +51,7 @@ S ::= E(0,0,0) {-1}
 // E ::= (-) E  {UNDEFINED,1,RIGHT_REC} PREC(1,1) minus
 .addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(45).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.RIGHT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,false)).setLabel("minus").build())
 // S ::= E  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
+.addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").addExcept("star").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
 .build();
          // grammar = new EBNFToBNF().transform(grammar);
          System.out.println(grammar);
@@ -59,7 +59,7 @@ S ::= E(0,0,0) {-1}
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
-         Input input = Input.fromString("a*a^a");
+         Input input = Input.fromString("a^+a*a");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/excepts/", graph);
