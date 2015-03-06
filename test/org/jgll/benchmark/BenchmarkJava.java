@@ -20,6 +20,7 @@ public class BenchmarkJava {
 	private static Grammar grammar2 = new LayoutWeaver().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns(), JavaNaturalCharacterLevel.exceptPatterns()).transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar)));
 	
 	public static void main(String[] args) throws IOException {
-		IguanaBenchmark.builder(grammar2, start).addDirectory(sourceDir, "java", true).build().run();
+//		IguanaBenchmark.builder(grammar2, start).addDirectory(sourceDir, "java", true).build().run();
+		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(10).build().run();
 	}
 }

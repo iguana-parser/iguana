@@ -19,7 +19,7 @@ public class ConditionsFactory {
 		return (input, u, i) -> {
 	        for (Condition c : list) {
 	            if (c.getSlotAction().execute(input, u, i)) {
-	                log.trace("Condition " + c + " executed");
+	                log.trace("Condition %s executed", c);
 	                return true;
 	            }
 	        }
