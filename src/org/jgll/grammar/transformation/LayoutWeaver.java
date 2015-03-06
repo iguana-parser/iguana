@@ -20,7 +20,13 @@ public class LayoutWeaver implements GrammarTransformation {
 		
 		for (Rule rule : grammar.getRules()) {
 			
-			Rule.Builder ruleBuilder = Rule.withHead(rule.getHead());
+			Rule.Builder ruleBuilder = Rule.withHead(rule.getHead())
+												.setRecursion(rule.getRecursion())
+												.setAssociativity(rule.getAssociativity())
+												.setAssociativityGroup(rule.getAssociativityGroup())
+												.setPrecedence(rule.getPrecedence())
+												.setPrecedenceLevel(rule.getPrecedenceLevel())
+												.setLabel(rule.getLabel());
 
 			if (rule.size() == 0) {
 				builder.addRule(ruleBuilder.build());
