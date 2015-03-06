@@ -504,7 +504,14 @@ public class GrammarGraph implements Serializable {
 		if (rule.size() == 0) {
 			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
 		} else {
-			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), null, null, rule.symbolAt(0).getPostConditions());
+			// TODO: this is a temporarily solution, which should be re-thought; 
+			//       in particular, not any precondition of the first symbol can be moved to the first slot.  
+			Set<Condition> preConditions = new HashSet<>();
+			preConditions.addAll(rule.symbolAt(0).getPreConditions());
+			 
+			rule.symbolAt(0).getPreConditions().clear();
+			
+			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), null, null, preConditions);
 		}
 		add(slot);
 		return slot;

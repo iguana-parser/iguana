@@ -27,7 +27,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 		this.name = builder.name;
 		this.label = builder.label;
 		this.object = builder.object;
-		this.preConditions = ImmutableSet.copyOf(builder.preConditions);
+		this.preConditions = builder.preConditions; // TODO: Dangerous move: ImmutableSet.copyOf(builder.preConditions);
 		this.postConditions = ImmutableSet.copyOf(builder.postConditions);
 	}
 	

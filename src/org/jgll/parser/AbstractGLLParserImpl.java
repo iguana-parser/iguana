@@ -194,7 +194,13 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			createGSSEdge(returnSlot, u, node, gssNode);
 			
 			final GSSNode __gssNode = gssNode;
-			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
+			
+			for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+				if (!s.getConditions().execute(getInput(), __gssNode, i))
+					scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
+			}
+			
+			// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);			
@@ -403,7 +409,13 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 				createGSSEdge(returnSlot, u, node, gssNode, env); // Record environment on the edge
 				
 				final GSSNode __gssNode = gssNode;
-				nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
+				
+				for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+					if (!s.getConditions().execute(getInput(), __gssNode, i))
+						scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
+				}
+				
+				// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 				
 			} else {
 				log.trace("GSSNode found: %s",  gssNode);
@@ -426,7 +438,14 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			Environment newEnv = getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
 			
 			final GSSNode __gssNode = gssNode;
-			nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), newEnv)));
+			
+			setEnvironment(newEnv);
+			for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+				if (!s.getConditions().execute(getInput(), __gssNode, i, getEvaluatorContext()))
+					scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), getEnvironment()));
+			}
+			
+			// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), newEnv)));
 			
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
