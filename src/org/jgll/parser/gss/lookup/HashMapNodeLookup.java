@@ -28,6 +28,7 @@ public class HashMapNodeLookup extends AbstractNodeLookup {
 
 	@Override
 	public void reset(Input input) {
+		super.reset(input);
 		map = new HashMap<>();
 	}
 
@@ -38,6 +39,7 @@ public class HashMapNodeLookup extends AbstractNodeLookup {
 
 	@Override
 	public GSSNodeLookup init() {
+		super.init();
 		map = new HashMap<>();
 		return this;
 	}

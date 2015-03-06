@@ -33,6 +33,7 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 
 	@Override
 	public void reset(Input input) {
+		super.reset(input);
 		length = input.length();
 		gssNodes = null;		
 	}
@@ -44,6 +45,7 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 
 	@Override
 	public ArrayNodeLookup init() {
+		super.init();
 		gssNodes = new GSSNode[length];
 		return this;
 	}

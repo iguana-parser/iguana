@@ -25,7 +25,7 @@ public class BenchmarkJava {
 	private static Grammar grammar = new DesugarPrecedenceAndAssociativity().transform(new LayoutWeaver().transform(new EBNFToBNF().transform(Java.grammar)));
 	
 	public static void main(String[] args) throws IOException {
-		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(10).build().run();
+		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(20).build().run();
 //		IguanaBenchmark.builder(grammar, start).addDirectory(sourceDir, "java", true).build().run();
 	}
 }
