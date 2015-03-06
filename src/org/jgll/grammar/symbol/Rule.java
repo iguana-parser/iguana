@@ -213,9 +213,9 @@ public class Rule implements ConstructorCode, Serializable {
 		private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
 		private Nonterminal layout;
 		
-		private Recursion recursion;
+		private Recursion recursion = Recursion.UNDEFINED;
 		
-		private Associativity associativity;
+		private Associativity associativity = Associativity.UNDEFINED;
 		private AssociativityGroup associativityGroup;
 		
 		private int precedence;
