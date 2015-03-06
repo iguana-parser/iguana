@@ -48,7 +48,7 @@ public class IguanaBenchmark {
 	
 	public void run() throws IOException {
 
-		GrammarGraph grammarGraph = grammar.toGrammarGraph(Input.empty(), config);
+		final GrammarGraph grammarGraph = grammar.toGrammarGraph(Input.empty(), config);
 		
 		System.out.println(BenchmarkUtil.header());
 		
