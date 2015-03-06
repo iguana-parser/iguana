@@ -346,10 +346,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				if (i == rule.getBody().size() - 1) isLast = true;
 				else isLast = false;
 				
+				Symbol sym = symbol.accept(this);
 				if (preconditions != null && i == 0)
-					symbols.add(symbol.accept(this).copyBuilder().addPreConditions(preconditions).build());
+					symbols.add(sym.copyBuilder().addPreConditions(preconditions).build());
 				else 
-					symbols.add(symbol.accept(this));
+					symbols.add(sym);
 				i++;
 			}
 			

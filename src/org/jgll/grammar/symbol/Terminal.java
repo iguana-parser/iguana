@@ -23,7 +23,7 @@ public class Terminal extends AbstractRegularExpression {
 
 	@Override
 	public Builder copyBuilder() {
-		return new Builder(regex);
+		return new Builder(this);
 	}
 	
 	public RegularExpression getRegularExpression() {
@@ -60,6 +60,11 @@ public class Terminal extends AbstractRegularExpression {
 		public Builder(RegularExpression regex) {
 			super(regex.getName());
 			this.regex = regex;
+		}
+		
+		public Builder(Terminal terminal) {
+			super(terminal);
+			this.regex = terminal.regex;
 		}
 		
 		@Override
