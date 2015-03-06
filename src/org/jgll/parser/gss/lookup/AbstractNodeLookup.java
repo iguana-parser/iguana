@@ -6,6 +6,7 @@ import java.util.Map;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.parser.gss.GSSNodeData;
+import org.jgll.util.Input;
 import org.jgll.util.Tuple;
 
 /**
@@ -25,8 +26,6 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	
 	@Override
 	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data) {
-		if (map == null) map = new HashMap<>();
-		
 		Tuple<Integer, GSSNodeData<?>> elem = new Tuple<>(i, data);
 		GSSNode v;
 		if ((v = map.get(elem)) == null) {
@@ -39,6 +38,17 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	@Override
 	public <T> GSSNode get(int i, GSSNodeData<T> data) {
 		return map == null? null : map.get(new Tuple<>(i, data));
+	}
+	
+	@Override
+	public void reset(Input input) {
+		map = null;
+	}
+	
+	@Override
+	public GSSNodeLookup init() {
+		map = new HashMap<>();
+		return this;
 	}
 
 }
