@@ -98,4 +98,12 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 		return new NonterminalNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true);
 	}
 	
+	@Override
+	public void reset() {
+		countAmbiguousNodes = 0;
+		countNonterminalNodes = 0;
+		countIntermediateNodes = 0;
+		countPackedNodes = 0;
+		countTerminalNodes = 0;
+	}
 }

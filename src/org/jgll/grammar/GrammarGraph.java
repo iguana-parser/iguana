@@ -1,6 +1,7 @@
 package org.jgll.grammar;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -62,7 +63,9 @@ public class GrammarGraph implements Serializable {
 	
 	Map<RegularExpression, TerminalGrammarSlot> terminalsMap;
 	
-	private Map<String, GrammarSlot> names;
+	private final Map<String, GrammarSlot> names;
+	
+	private List<GrammarSlot> slots;
 	
 	Grammar grammar;
 
@@ -84,9 +87,11 @@ public class GrammarGraph implements Serializable {
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
 		this.names = new HashMap<>();
+		this.slots = new ArrayList<>();
 		
 		terminalsMap.put(Epsilon.getInstance(), epsilon);
-		names.put(Epsilon.getInstance().getName(), epsilon);
+
+		add(epsilon);
 		
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
 			getNonterminalGrammarSlot(nonterminal);
@@ -454,7 +459,7 @@ public class GrammarGraph implements Serializable {
 			}
 		}
 		
-	}; 
+	}
 	
 	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
 															 BodyGrammarSlot origin, BodyGrammarSlot dest,
@@ -476,7 +481,7 @@ public class GrammarGraph implements Serializable {
 	
 	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex) {
 		TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex);
-		names.put(terminalSlot.toString(), terminalSlot);
+		add(terminalSlot);
 		return terminalsMap.computeIfAbsent(regex, k -> terminalSlot);
 	}
 	
@@ -488,7 +493,7 @@ public class GrammarGraph implements Serializable {
 			} else {
 				ntSlot = new NonterminalGrammarSlot(id++, nonterminal, DummyNodeLookup.getInstance());
 			}
-			names.put(ntSlot.toString(), ntSlot);
+			add(ntSlot);
 			return ntSlot;
 		});
 	}
@@ -501,8 +506,7 @@ public class GrammarGraph implements Serializable {
 		} else {
 			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), null, null, rule.symbolAt(0).getPostConditions());
 		}
-		
-		names.put(slot.toString(), slot);
+		add(slot);
 		return slot;
 	}
 	
@@ -517,7 +521,7 @@ public class GrammarGraph implements Serializable {
 			slot = new BodyGrammarSlot(id++, position, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());				
 		}
 		
-		names.put(slot.toString(), slot);
+		add(slot);
 		return slot;
 	}
 	
@@ -531,7 +535,7 @@ public class GrammarGraph implements Serializable {
 			slot = new LastSymbolGrammarSlot(id++, position, nonterminal, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());
 		}
 		
-		names.put(slot.toString(), slot);
+		add(slot);
 		return slot;
 	}
 	
@@ -545,7 +549,7 @@ public class GrammarGraph implements Serializable {
 			slot = new LastSymbolAndEndGrammarSlot(id++, position, nonterminal, getNodeLookup(), label, variable, rule.symbolAt(i - 1).getPostConditions());
 		}
 		
-		names.put(slot.toString(), slot);
+		add(slot);
 		return slot;
 	}
 	
@@ -559,8 +563,13 @@ public class GrammarGraph implements Serializable {
 			slot = new EndGrammarSlot(id++, position, getNodeLookup(), null, null, new HashSet<>());
 		}
 		
-		names.put(slot.toString(), slot);
+		add(slot);
 		return slot;
+	}
+
+	private void add(GrammarSlot slot) {
+		names.put(slot.toString(), slot);
+		slots.add(slot);
 	}
 	
 	private GSSNodeLookup getNodeLookup() {
@@ -580,9 +589,7 @@ public class GrammarGraph implements Serializable {
 	}
 
 	public void reset(Input input) {
-		names.values().forEach(n -> n.reset(input));
+		slots.forEach(s -> s.reset(input));
 	}
-
-
 
 }

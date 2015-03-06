@@ -2,6 +2,7 @@ package org.jgll.parser.datadependent.java;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.jgll.benchmark.IguanaBenchmark;
 import org.jgll.datadependent.ast.AST;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -31,7 +32,7 @@ import com.google.common.collect.Sets;
 public class Java {
 
     @Test
-    public void test() {
+    public void test() throws IOException {
          Grammar grammar =
 
 Grammar.builder()
@@ -915,28 +916,35 @@ Grammar.builder()
          
          Input input = Input.fromString("public class A { public int i = 1 + 1; }");
          
+         
+//         IguanaBenchmark.builder(grammar, Start.from(Nonterminal.withName("CompilationUnit")))
+//         .addFile("/Users/aliafroozeh/workspace/diguana/src/org/jgll/datadependent/ast/Expression.java")
+//         .setRunCount(10)
+//         .build().run();
+         
          try {
-        	 
-			input = Input.fromPath("/Users/anastasiaizmaylova/git/diguana/src/org/jgll/datadependent/ast/Expression.java");
-			
+			input = Input.fromPath("/Users/aliafroozeh/workspace/diguana/src/org/jgll/datadependent/ast/Expression.java");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/java/", graph);
-
-         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-         ParseResult result = parser.parse(input, graph, Start.from(Nonterminal.withName("CompilationUnit")));
          
-         Assert.assertTrue(result.isParseSuccess());
+         for (int i = 0; i < 100; i++) {
+             GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
-//          Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/java/",
-//                            result.asParseSuccess().getRoot(), input);
+             // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/java/", graph);
 
-         System.out.println(result.toString());
+             GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+             ParseResult result = parser.parse(input, graph, Start.from(Nonterminal.withName("CompilationUnit")));
+             
+//             Assert.assertTrue(result.isParseSuccess());
+
+//              Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/java/",
+//                                result.asParseSuccess().getRoot(), input);
+
+             System.out.println(result.toString());        	 
+         }
          
     }
 }

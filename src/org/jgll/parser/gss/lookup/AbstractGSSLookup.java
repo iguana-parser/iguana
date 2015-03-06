@@ -15,4 +15,10 @@ public abstract class AbstractGSSLookup implements GSSLookup {
 	public int getGSSEdgesCount() {
 		return countGSSEdges;
 	}
+	
+	@Override
+	public void reset() {
+		countGSSEdges = 0;
+		countGSSNodes = 0;
+	}
 }

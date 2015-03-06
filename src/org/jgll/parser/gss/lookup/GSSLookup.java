@@ -32,7 +32,7 @@ public interface GSSLookup {
 	
 	public int getGSSEdgesCount();
 	
-	default void reset() {}
+	public void reset();
 	
 	/**
 	 * 

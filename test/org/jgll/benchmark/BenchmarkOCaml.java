@@ -12,7 +12,7 @@ import org.jgll.grammar.transformation.LayoutWeaver;
 
 public class BenchmarkOCaml {
 	
-	private static String sourceDir = "/Users/aliafroozeh/corpus/ocaml";
+	private static String sourceDir = "/Users/aliafroozeh/corpus/ocaml/testsuite";
 
 	static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(OCaml.precedencePatterns(), OCaml.exceptPatterns()).transform(new EBNFToBNF().transform(OCaml.grammar)));
 

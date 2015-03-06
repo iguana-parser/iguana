@@ -161,6 +161,6 @@ public interface SPPFLookup {
 	
 	public int getAmbiguousNodesCount();
 	
-	default void reset() {}
+	public void reset();
 	
 }
