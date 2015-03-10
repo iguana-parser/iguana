@@ -173,11 +173,53 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			// Expressions for the left and/or right recursive uses
 			
-			if (precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can use precedence climbing
-
-				Associativity assoc = associativityGroup != null? associativityGroup.getAssociativity() : associativity;
+			if (associativityGroup != null 
+					&& precedenceLevel.getLhs() == associativityGroup.getLhs() 
+						&& precedenceLevel.getRhs() == associativityGroup.getRhs()) {
 				
-				switch(assoc) {
+				if (precedence == associativityGroup.getPrecedence()) { // Can use precedence climbing
+					switch(associativityGroup.getAssociativity()) {
+						case LEFT:
+							l1 = integer(precedence);
+							r2 = integer(precedenceLevel.getRhs() + 1);
+							break;
+						case RIGHT:
+							l1 = integer(precedenceLevel.getRhs() + 1);
+							r2 = integer(precedence);
+							break;
+						case NON_ASSOC:
+							l1 = integer(precedenceLevel.getRhs() + 1);
+							r2 = integer(precedenceLevel.getRhs() + 1);
+							break;
+						default: throw new RuntimeException("Unexpected associativity: " + associativityGroup.getAssociativity());
+					}
+					
+					// Rule for propagation of a precedence level
+					if (precedenceLevel.hasPostfixUnaryBelow())
+						r1 = var("r");
+					else if (precedenceLevel.hasPostfixUnary())
+						r1 = integer(precedence);
+					else 
+						r1 = l1;
+					
+					if (precedenceLevel.hasPrefixUnaryBelow())
+						l2 = var("l");
+					else if (precedenceLevel.hasPrefixUnary())
+						l2 = integer(precedence);
+					else 
+						l2 = r2;
+					
+				} else {
+					l1 = integer(precedence);
+					r2 = integer(precedence);
+					
+					// Rule for propagation of a precedence level
+					l2 = precedenceLevel.hasPrefixUnaryBelow()? var("l") : integer(0);
+					r1 = precedenceLevel.hasPostfixUnaryBelow()? var("r") : integer(0);
+				}
+				
+			} else if (associativityGroup == null && precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can use precedence climbing
+				switch(associativity) {
 					case LEFT:
 						l1 = integer(precedence);
 						r2 = integer(precedence + 1);
@@ -194,36 +236,65 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						l1 = integer(precedence);
 						r2 = integer(precedence);
 						break;
-					default: throw new RuntimeException("Unexpected associativity: " + assoc);
+					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
 				
+				// Rule for propagation of a precedence level
+				if (precedenceLevel.hasPostfixUnaryBelow())
+					r1 = var("r");
+				else if (precedenceLevel.hasPostfixUnary())
+					r1 = integer(precedence);
+				else 
+					r1 = l1;
 				
-			} else {
-				l1 = integer(precedence);
-				r2 = integer(precedence);
-			}
-			
-			// Rule for propagation of a precedence level
-			
-			if (rule.isLeftRecursive() || rule.isRightRecursive()) {
+				if (precedenceLevel.hasPrefixUnaryBelow())
+					l2 = var("l");
+				else if (precedenceLevel.hasPrefixUnary())
+					l2 = integer(precedence);
+				else 
+					l2 = r2;
+				
+			} else { // No precedence climbing
+				int undefined = precedenceLevel.getUndefined();
 				switch(associativity) {
+					case LEFT:
+						l1 = integer(undefined != -1? undefined : precedence);
+						r2 = integer(precedence);
+						
+						// Rule for propagation of a precedence level
+						l2 = precedenceLevel.hasPostfixUnaryBelow()? var("l"): integer(0);
+						r1 = precedenceLevel.hasPostfixUnaryBelow()? var("r") : integer(undefined != -1? undefined : 0);
+						break;
+					case RIGHT:
+						l1 = integer(precedence);
+						r1 = integer(undefined != -1? undefined : precedence);
+						
+						// Rule for propagation of a precedence level
+						l2 = precedenceLevel.hasPostfixUnaryBelow()? var("l") : integer(undefined != -1? undefined : 0);
+						r2 = precedenceLevel.hasPostfixUnaryBelow()? var("r") : integer(0);
+						break;
 					case NON_ASSOC:
-						r1 = integer(0);
-						l2 = integer(0);
-						break;
-					default:
-						if (precedenceLevel.hasPostfixUnaryBelow()) 
-							r1 = var("r");
-						else r1 = integer(0);
+						l1 = integer(precedence);
+						r2 = integer(precedence);
 						
-						if (precedenceLevel.hasPrefixUnaryBelow()) 
-							l2 = var("l");
-						else l2 = integer(0);
-						
+						// Rule for propagation of a precedence level
+						l2 = precedenceLevel.hasPostfixUnaryBelow()? var("l") : integer(0);
+						r1 = precedenceLevel.hasPostfixUnaryBelow()? var("r") : integer(0);
 						break;
+					case UNDEFINED:
+						assert precedence == undefined;
+						
+						l1 = integer(precedence);
+						r2 = integer(precedence);
+						
+						// Rule for propagation of a precedence level
+						l2 = precedenceLevel.hasPostfixUnaryBelow()? var("l") : integer(undefined);
+						r1 = precedenceLevel.hasPostfixUnaryBelow()? var("r") : integer(undefined);
+						break;
+					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
 			}
-			
+						
 			// Constraints (preconditions) for the grammar rule
 			
 			if (rule.isLeftRecursive())

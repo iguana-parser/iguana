@@ -20,10 +20,13 @@ public class PrecedenceLevel {
 		this.index = lhs;
 	}
 	
-	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnaryBelow, boolean hasPostfixUnaryBelow) {
+	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary, 
+										boolean hasPrefixUnaryBelow, boolean hasPostfixUnaryBelow) {
 		PrecedenceLevel level = new PrecedenceLevel(lhs);
 		level.rhs = rhs;
 		level.undefined = undefined;
+		level.hasPrefixUnary = hasPrefixUnary;
+		level.hasPostfixUnary = hasPostfixUnary;
 		level.hasPrefixUnaryBelow = hasPrefixUnaryBelow;
 		level.hasPostfixUnaryBelow = hasPostfixUnaryBelow;
 		return level;
@@ -61,6 +64,14 @@ public class PrecedenceLevel {
 		return rhs;
 	}
 	
+	public boolean hasPrefixUnary() {
+		return hasPrefixUnary;
+	}
+	
+	public boolean hasPostfixUnary() {
+		return hasPostfixUnary;
+	}
+	
 	public boolean hasPrefixUnaryBelow() {
 		return hasPrefixUnaryBelow;
 	}
@@ -75,8 +86,13 @@ public class PrecedenceLevel {
 		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		
 		if (!rule.isLeftOrRightRecursive()) return -1;
-		else if (rule.getAssociativity() == Associativity.UNDEFINED) {	
-			if (undefined == -1) undefined = index++;
+		else if (rule.getAssociativity() == Associativity.UNDEFINED) {
+			if (undefined == -1) {
+				if (lhs == 1)
+					undefined = 0;
+				else 
+					undefined = index++;
+			}
 			return undefined;
 		} else
 			return index++;
@@ -90,8 +106,24 @@ public class PrecedenceLevel {
 		else return index++;
 	}
 	
+	public void setUndefinedIfNeeded() {
+		if (undefined == -1) {
+			int rhs = index == lhs? index : index - 1;
+			if (lhs != rhs) {
+				if (lhs == 1)
+					undefined = 0;
+				else 
+					undefined = index++;
+			}
+		} 
+	}
+	
 	public boolean isUndefined(int precedence) {
 		return this.undefined != -1 && this.undefined == precedence;
+	}
+	
+	public int getUndefined() {
+		return undefined;
 	}
 	
 	public void done() {
@@ -104,7 +136,8 @@ public class PrecedenceLevel {
 	}
 		
 	public String getConstructorCode() {
-		return getClass().getSimpleName() + ".from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnaryBelow + "," + hasPostfixUnaryBelow + ")";
+		return getClass().getSimpleName() + ".from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnary + "," + hasPostfixUnary + "," 
+														+ hasPrefixUnaryBelow + "," + hasPostfixUnaryBelow + ")";
 	}
 	
 	@Override
