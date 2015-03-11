@@ -28,18 +28,18 @@ public class BenchmarkJava {
 	
 	private static String sourceDir = "/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19";
 //	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(JavaCharacterLevel.grammar));
-	private static Nonterminal start = Start.from(Nonterminal.withName("CompilationUnit"));
+	private static Nonterminal start = Start.from(Nonterminal.withName("E"));
 	
 	
 //	private static Grammar grammar = Test2.grammar;
 
-	private static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns(), JavaNaturalCharacterLevel.exceptPatterns()).transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar)));
+//	private static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(Test1.precedencePatterns(), Test1.exceptPatterns()).transform(new EBNFToBNF().transform(Test1.grammar)));
 
-//	private static Grammar grammar = new DesugarPrecedenceAndAssociativity().transform(new LayoutWeaver().transform(new EBNFToBNF().transform(Java.grammar)));
+	private static Grammar grammar = new DesugarPrecedenceAndAssociativity().transform(new LayoutWeaver().transform(new EBNFToBNF().transform(Test2.grammar)));
 
 	
 	public static void main(String[] args) throws IOException {
-//		System.out.println(grammar);
+		System.out.println(grammar.toStringWithOrderByPrecedence());
 		
 //		Input input = Input.fromString("1+2*3");
 //        GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
@@ -51,7 +51,7 @@ public class BenchmarkJava {
 //        
 //        System.out.println(result.toString());
 		
-		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(5).build().run();
+		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(1).build().run();
 //		IguanaBenchmark.builder(grammar, start).addDirectory(sourceDir, "java", true).build().run();
 	}
 }
