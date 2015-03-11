@@ -178,14 +178,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						&& precedenceLevel.getRhs() == associativityGroup.getRhs()) {
 				
 				if (precedence == associativityGroup.getPrecedence()) { // Can use precedence climbing
+					boolean first = precedenceLevel.getUndefined() == 0;
 					switch(associativityGroup.getAssociativity()) {
 						case LEFT:
-							l1 = integer(precedence);
+							l1 = integer(first? 0 : precedence);
 							r2 = integer(precedenceLevel.getRhs() + 1);
 							break;
 						case RIGHT:
 							l1 = integer(precedenceLevel.getRhs() + 1);
-							r2 = integer(precedence);
+							r2 = integer(first? 0 : precedence);
 							break;
 						case NON_ASSOC:
 							l1 = integer(precedenceLevel.getRhs() + 1);
@@ -198,14 +199,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					if (precedenceLevel.hasPostfixUnaryBelow())
 						r1 = var("r");
 					else if (precedenceLevel.hasPostfixUnary())
-						r1 = integer(precedence);
+						r1 = integer(first? 0 : precedence);
 					else 
 						r1 = l1;
 					
 					if (precedenceLevel.hasPrefixUnaryBelow())
 						l2 = var("l");
 					else if (precedenceLevel.hasPrefixUnary())
-						l2 = integer(precedence);
+						l2 = integer(first? 0 : precedence);
 					else 
 						l2 = r2;
 					
@@ -219,22 +220,23 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				}
 				
 			} else if (associativityGroup == null && precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can use precedence climbing
+				boolean first = precedenceLevel.getUndefined() == 0;
 				switch(associativity) {
 					case LEFT:
-						l1 = integer(precedence);
+						l1 = integer(first? 0 : precedence);
 						r2 = integer(precedence + 1);
 						break;
 					case RIGHT:
 						l1 = integer(precedence + 1);
-						r2 = integer(precedence);
+						r2 = integer(first? 0 : precedence);
 						break;
 					case NON_ASSOC:
 						l1 = integer(precedence + 1);
 						r2 = integer(precedence + 1);
 						break;
 					case UNDEFINED:
-						l1 = integer(precedence);
-						r2 = integer(precedence);
+						l1 = integer(first? 0 : precedence);
+						r2 = integer(first? 0 : precedence);
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
@@ -243,14 +245,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				if (precedenceLevel.hasPostfixUnaryBelow())
 					r1 = var("r");
 				else if (precedenceLevel.hasPostfixUnary())
-					r1 = integer(precedence);
+					r1 = integer(first? 0 : precedence);
 				else 
 					r1 = l1;
 				
 				if (precedenceLevel.hasPrefixUnaryBelow())
 					l2 = var("l");
 				else if (precedenceLevel.hasPrefixUnary())
-					l2 = integer(precedence);
+					l2 = integer(first? 0 : precedence);
 				else 
 					l2 = r2;
 				
@@ -295,10 +297,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						
 			// Constraints (preconditions) for the grammar rule
 			
-			if (precedence != 0 && rule.isLeftRecursive())
+			if (rule.isLeftRecursive())
 				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("r"))));
 			
-			if (precedence != 0 && rule.isRightRecursive())
+			if (rule.isRightRecursive())
 				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("l"))));
 			
 			if (precedenceLevel.getLhs() != precedenceLevel.getRhs()) {

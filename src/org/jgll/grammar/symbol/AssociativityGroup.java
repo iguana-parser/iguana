@@ -76,9 +76,15 @@ public class AssociativityGroup {
 		} 
 		
 		if (rule.getAssociativity() == Associativity.UNDEFINED) {
-			if (precedence != -1)
+			if (precedence != -1) {
+				
+				if (rule.isUnary() && rule.isRightRecursive()) 
+					precedenceLevel.setHasPrefixUnaryFromAssociativityGroup();
+				if (rule.isUnary() && rule.isLeftRecursive()) 
+					precedenceLevel.setHasPostfixUnaryFromAssociativityGroup();
+				
 				return precedence;
-			else {
+			} else {
 				precedence = precedenceLevel.getPrecedenceFromAssociativityGroup(rule);
 				return precedence;
 			}

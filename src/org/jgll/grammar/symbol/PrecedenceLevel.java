@@ -15,6 +15,10 @@ public class PrecedenceLevel {
 	
 	private int index;
 	
+	private boolean containsAssociativityGroup = false;
+	private int assoc_lhs = -1;
+	private int assoc_rhs = -1;
+	
 	PrecedenceLevel(int lhs) {
 		this.lhs = lhs;
 		this.index = lhs;
@@ -87,12 +91,8 @@ public class PrecedenceLevel {
 		
 		if (!rule.isLeftOrRightRecursive()) return -1;
 		else if (rule.getAssociativity() == Associativity.UNDEFINED) {
-			if (undefined == -1) {
-				if (lhs == 1)
-					undefined = 0;
-				else 
-					undefined = index++;
-			}
+			if (undefined == -1)
+				undefined = index++;
 			return undefined;
 		} else
 			return index++;
@@ -106,15 +106,19 @@ public class PrecedenceLevel {
 		else return index++;
 	}
 	
+	void setHasPrefixUnaryFromAssociativityGroup() {
+		this.hasPrefixUnary = true;
+	}
+	
+	void setHasPostfixUnaryFromAssociativityGroup() {
+		this.hasPostfixUnary = true;
+	}
+	
 	public void setUndefinedIfNeeded() {
 		if (undefined == -1) {
 			int rhs = index == lhs? index : index - 1;
-			if (lhs != rhs) {
-				if (lhs == 1)
-					undefined = 0;
-				else 
-					undefined = index++;
-			}
+			if (lhs != rhs && !(containsAssociativityGroup && lhs == assoc_lhs && rhs == assoc_rhs)) 
+				undefined = index++;
 		} 
 	}
 	
@@ -123,6 +127,8 @@ public class PrecedenceLevel {
 	}
 	
 	public int getUndefined() {
+		if (lhs == 1)
+			return 0;
 		return undefined;
 	}
 	
@@ -133,6 +139,12 @@ public class PrecedenceLevel {
 	
 	int getCurrent() {
 		return index == lhs? index : index - 1;
+	}
+	
+	public void containsAssociativityGroup(int l, int r) {
+		this.containsAssociativityGroup = true;
+		this.assoc_lhs = l;
+		this.assoc_rhs = r;
 	}
 		
 	public String getConstructorCode() {
