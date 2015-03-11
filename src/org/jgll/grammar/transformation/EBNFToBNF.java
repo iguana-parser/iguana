@@ -1,5 +1,6 @@
 package org.jgll.grammar.transformation;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -94,7 +95,8 @@ public class EBNFToBNF implements GrammarTransformation {
 	}
 	
 	public static List<Symbol> rewrite(List<Symbol> list, Nonterminal layout) {
-		return list; // TODO: fix it later!
+		EBNFVisitor visitor = new EBNFVisitor(new HashSet<>(), layout, LayoutStrategy.INHERITED);
+		return list.stream().map(s -> s.accept(visitor)).collect(Collectors.toList());
 	}
 
 	
