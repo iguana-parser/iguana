@@ -4,9 +4,7 @@ import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
 import org.jgll.grammar.symbol.*;
 import org.jgll.grammar.symbol.Character;
-
 import static org.jgll.grammar.symbol.LayoutStrategy.*;
-
 import org.jgll.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.parser.GLLParser;
@@ -16,9 +14,9 @@ import org.jgll.regex.*;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.Visualization;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.Assert;
+import org.junit.Test;
 
 @SuppressWarnings("unused")
 public class Test8_2 {
@@ -30,19 +28,19 @@ public class Test8_2 {
 Grammar.builder()
 
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
-// E ::= E (^) E  {LEFT,1,LEFT_RIGHT_REC} LEFT(1,1,1) PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(94).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.LEFT).setPrecedence(1).setAssociativityGroup(new AssociativityGroup(Associativity.LEFT,PrecedenceLevel.from(1,1,-1,false,false),1,1,1)).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
-// E ::= (-) E  {UNDEFINED,1,RIGHT_REC} LEFT(1,1,1) PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(45).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.RIGHT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setAssociativityGroup(new AssociativityGroup(Associativity.LEFT,PrecedenceLevel.from(1,1,-1,false,false),1,1,1)).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
-// E ::= (+) E  {UNDEFINED,1,RIGHT_REC} LEFT(1,1,1) PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(43).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.RIGHT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setAssociativityGroup(new AssociativityGroup(Associativity.LEFT,PrecedenceLevel.from(1,1,-1,false,false),1,1,1)).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
-// E ::= (a)  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
-// E ::= E (*) E  {UNDEFINED,2,LEFT_RIGHT_REC} PREC(2,2) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(42).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(2).setPrecedenceLevel(PrecedenceLevel.from(2,2,2,false,false)).build())
+.addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+// E ::= E ('^') E  {LEFT,1,LEFT_RIGHT_REC} LEFT(1,1,1) PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(94).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.LEFT).setPrecedence(1).setAssociativityGroup(new AssociativityGroup(Associativity.LEFT,PrecedenceLevel.from(1,1,-1,true,false,false,false),1,1,1)).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,true,false,false,false)).build())
+// E ::= ('-') E  {UNDEFINED,1,RIGHT_REC} LEFT(1,1,1) PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(45).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.RIGHT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setAssociativityGroup(new AssociativityGroup(Associativity.LEFT,PrecedenceLevel.from(1,1,-1,true,false,false,false),1,1,1)).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,true,false,false,false)).build())
+// E ::= ('+') E  {UNDEFINED,1,RIGHT_REC} LEFT(1,1,1) PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(43).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.RIGHT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setAssociativityGroup(new AssociativityGroup(Associativity.LEFT,PrecedenceLevel.from(1,1,-1,true,false,false,false),1,1,1)).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,true,false,false,false)).build())
+// E ::= ('a')  {UNDEFINED,-1,NON_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,true,false,false,false)).build())
+// E ::= E ('*') E  {UNDEFINED,2,LEFT_RIGHT_REC} PREC(2,2) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(42).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(2).setPrecedenceLevel(PrecedenceLevel.from(2,2,2,false,false,true,false)).build())
 // S ::= E  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false)).build())
+.addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 .build();
          // grammar = new EBNFToBNF().transform(grammar);
          System.out.println(grammar);
@@ -58,11 +56,11 @@ Grammar.builder()
          GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
-         assertTrue(result.isParseSuccess());
-         
+         Assert.assertTrue(result.isParseSuccess());
+
          // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/",
          //                   result.asParseSuccess().getRoot(), input);
 
-         assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }
 }

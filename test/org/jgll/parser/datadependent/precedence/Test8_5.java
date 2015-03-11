@@ -19,7 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("unused")
-public class Test8_3 {
+public class Test8_5 {
 
     @Test
     public void test() {
@@ -48,7 +48,7 @@ Grammar.builder()
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
-         Input input = Input.fromString("-+a");
+         Input input = Input.fromString("a^-a");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/", graph);
