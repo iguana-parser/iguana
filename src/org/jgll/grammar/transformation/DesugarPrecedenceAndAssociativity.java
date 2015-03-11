@@ -284,12 +284,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						l2 = precedenceLevel.hasPostfixUnaryBelow()? var("l") : integer(0);
 						r1 = precedenceLevel.hasPostfixUnaryBelow()? var("r") : integer(0);
 						break;
-					case UNDEFINED:
-						l1 = integer(precedence);
-						r2 = integer(precedence);
+					case UNDEFINED: // Not in the associativity group
+						l1 = integer(undefined);
+						r2 = integer(undefined);
 						// Rule for propagation of a precedence level
-						l2 = precedenceLevel.hasPostfixUnaryBelow()? var("l") : integer(useUndefined? undefined : 0);
-						r1 = precedenceLevel.hasPostfixUnaryBelow()? var("r") : integer(useUndefined? undefined : 0);
+						l2 = precedenceLevel.hasPostfixUnaryBelow()? var("l") : integer(undefined);
+						r1 = precedenceLevel.hasPostfixUnaryBelow()? var("r") : integer(undefined);
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
