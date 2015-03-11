@@ -130,8 +130,11 @@ public class Grammar implements ConstructorCode, Serializable {
 						sb.append(listToString(rule.getBody())).append(" {" + rule.getPrecedence() + "}" + "\n");
 					}
 				}
-				if (precedence == -1) precedence += 2;
-				else precedence++;
+				
+				if (precedence == 0) {
+					found = true;
+					precedence++;
+				} else precedence++;
 			}
 			
 		}
