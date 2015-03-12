@@ -173,21 +173,21 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					Plus plus = (Plus) sym;
 					
 					Symbol s = plus.getSymbol();
-					String l2 = s.getLabel() == null? s.getLabel() : "l" + j++;
+					String l2 = s.getLabel() != null? s.getLabel() : "l" + j++;
 					
 					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
 					
-					return Plus.builder(s).setLabel(l1).addConditions(plus).addConditions(symbol).build();
+					return Plus.builder(s).addSeparators(plus.getSeparators()).setLabel(l1).addConditions(plus).addConditions(symbol).build();
 					
 				} else if (sym instanceof Star) {
 					Star star = (Star) sym;
 					
 					Symbol s = star.getSymbol();
-					String l2 = s.getLabel() == null? s.getLabel() : "l" + j++;
+					String l2 = s.getLabel() != null? s.getLabel() : "l" + j++;
 					
 					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
 					
-					return Star.builder(s).setLabel(l1).addConditions(star).addConditions(symbol).build();
+					return Star.builder(s).addSeparators(star.getSeparators()).setLabel(l1).addConditions(star).addConditions(symbol).build();
 				} else if (sym instanceof Sequence) {
 					
 					@SuppressWarnings("unchecked")
@@ -197,7 +197,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					List<Symbol> syms = new ArrayList<>();
 					
 					for (Symbol s : symbols) {
-						String l2 = s.getLabel() == null? s.getLabel() : "l" + j++;
+						String l2 = s.getLabel() != null? s.getLabel() : "l" + j++;
 						syms.add(getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2));
 					}
 					
@@ -471,17 +471,17 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			if (symbol instanceof Offside) {
 				Offside sym = (Offside) symbol;
 				String l = sym.getSymbol().getLabel();
-				return l != null? l : "l1" + j++;
+				return l != null? l : "l" + j++;
 			}
 			
-			return symbol.getLabel() != null? symbol.getLabel() : "l1" + j++;
+			return symbol.getLabel() != null? symbol.getLabel() : "l" + j++;
 		}
 		
 		private Symbol getSymbol(Symbol symbol, Condition precondition, String label) {
 			
 			if (symbol instanceof Offside) {
 				Offside sym = (Offside) symbol;
-				return Offside.builder(sym.copyBuilder().addPreCondition(precondition).setLabel(label).build())
+				return Offside.builder(sym.getSymbol().copyBuilder().addPreCondition(precondition).setLabel(label).build())
 									.addConditions(symbol).setLabel(symbol.getLabel()).build();
 			}
 			
