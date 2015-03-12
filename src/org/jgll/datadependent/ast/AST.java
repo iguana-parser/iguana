@@ -101,6 +101,10 @@ public class AST {
 		return new Expression.AndIndent(index, first, lExt);
 	}
 	
+	static public Expression andIndent(Expression index, Expression first, Expression lExt, boolean returnIndex) {
+		return new Expression.AndIndent(index, first, lExt, returnIndex);
+	}
+	
 	static public Expression less(Expression lhs, Expression rhs) {
 		return new Expression.Less(lhs, rhs);
 	}

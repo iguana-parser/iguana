@@ -141,11 +141,11 @@ public class DesugarOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(Character symbol) {
 			if (isOffsided) {
-				String label = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				String l = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
 				return symbol.copyBuilder()
-								.setLabel(label)
+								.setLabel(l)
 								.addConditions(symbol)
-								.addPreCondition(predicate(greater(indent(lExt(label)), var("ind"))))
+								.addPreCondition(predicate(orIndent(index_exp, ind_exp, first_exp, lExt(l))))
 								.build();
 			}
 			return symbol;
@@ -154,11 +154,11 @@ public class DesugarOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(CharacterRange symbol) {
 			if (isOffsided) {
-				String label = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				String l = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
 				return symbol.copyBuilder()
-								.setLabel(label)
+								.setLabel(l)
 								.addConditions(symbol)
-								.addPreCondition(predicate(greater(indent(lExt(label)), var("ind"))))
+								.addPreCondition(predicate(orIndent(index_exp, ind_exp, first_exp, lExt(l))))
 								.build();
 			}
 			return symbol;
@@ -215,10 +215,16 @@ public class DesugarOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(Nonterminal symbol) {
 			if (isOffsided) { // The rule has a parameter for indentation, and therefore, also all reachable nonterminals
-				return symbol.copyBuilder().apply(var("ind")).build();
+				String l = symbol.getLabel() != null? symbol.getLabel() : symbol.getName().toLowerCase();
+				return symbol.copyBuilder().apply(// (first && l.lExt - index == 0)?index
+						                          andIndent(index_exp, first_exp, lExt(l), true), 
+												  ind_exp,
+												  // first && l.lExt - index == 0
+												  andIndent(index_exp, first_exp, lExt(l)))
+												  .setLabel(l).build();
 			} else {
 				if (offsided.contains(symbol.getName()))
-					return symbol.copyBuilder().apply(integer(0)).build();
+					return symbol.copyBuilder().apply(integer(0), integer(0), integer(0)).build();
 				else
 					return symbol;
 			}
@@ -227,21 +233,21 @@ public class DesugarOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(Offside symbol) {
 			Symbol sym = symbol.getSymbol();
-			// [ ind == 0 || first && l.lext - i == 0 || indent(l.lext) > ind]
-			// argument: first && l.lext - i == 0
+			
 			if (sym instanceof Nonterminal) {
 				Nonterminal s = (Nonterminal) sym;
 				String l = s.getLabel() != null? s.getLabel() : s.getName().toLowerCase();
 				if (isOffsided) { // Offside inside a rule that has a parameter for indentation
 					return s.copyBuilder()
-							.apply(indent(lExt(l)), integer(1))
+							.apply(lExt(l), indent(lExt(l)), integer(1))
 							.setLabel(l)
 							.addConditions(sym)
-							.addPreCondition(predicate(greater(indent(lExt(l)), ind_exp)))
+							// [ ind == 0 || (first && l.lExt - index == 0) || indent(l.lExt) > ind]
+							.addPreCondition(predicate(orIndent(index_exp, ind_exp, first_exp, lExt(l))))
 							.build();
 				} else {
 					return s.copyBuilder()
-							.apply(indent(lExt(l)))
+							.apply(lExt(l), indent(lExt(l)), integer(1))
 							.setLabel(l)
 							.addConditions(sym)
 							.build();
@@ -255,11 +261,11 @@ public class DesugarOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(Terminal symbol) {
 			if (isOffsided) {
-				String label = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				String l = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
 				return symbol.copyBuilder()
-								.setLabel(label)
+								.setLabel(l)
 								.addConditions(symbol)
-								.addPreCondition(predicate(greater(indent(lExt(label)), var("ind"))))
+								.addPreCondition(predicate(orIndent(index_exp, ind_exp, first_exp, lExt(l))))
 								.build();
 			}
 			return symbol;

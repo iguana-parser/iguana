@@ -377,18 +377,25 @@ public abstract class Expression extends AbstractAST {
 				return true;
 			
 			int first = (java.lang.Integer) this.first.interpret(ctx);
+			int lExt = -1;
 			if (first == 1) {
 				
 				int index = (java.lang.Integer) this.index.interpret(ctx);
-				int lExt = (java.lang.Integer) this.lExt.interpret(ctx);
+				lExt = (java.lang.Integer) this.lExt.interpret(ctx);
 				
 				if(lExt - index == 0) 
 					return true;
+				else {
+					int indent = ctx.getInput().getColumnNumber(lExt);
+					return indent > ind;
+				}
 				
-				return lExt > ind;
+			} else {
+				lExt = (java.lang.Integer) this.lExt.interpret(ctx);
+				int indent = ctx.getInput().getColumnNumber(lExt);
+				return indent > ind;
 			}
 			
-			return false;
 		}
 
 		@Override
@@ -398,7 +405,7 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public java.lang.String toString() {
-			return ind + " == 0 || (" + first + " && " + lExt + " - " + index + " == 0) || " + lExt + " > " + ind;
+			return ind + " == 0 || (" + first + " && " + lExt + " - " + index + " == 0) || indent(" + lExt + ") > " + ind;
 		}
 		
 		@Override
@@ -414,10 +421,20 @@ public abstract class Expression extends AbstractAST {
 		private final Expression first;
 		private final Expression lExt;
 		
+		private final boolean returnIndex;
+		
 		AndIndent(Expression index, Expression first, Expression lExt) {
 			this.index = index;
 			this.first = first;
 			this.lExt = lExt;
+			this.returnIndex = false;
+		}
+		
+		AndIndent(Expression index, Expression first, Expression lExt, boolean returnIndex) {
+			this.index = index;
+			this.first = first;
+			this.lExt = lExt;
+			this.returnIndex = returnIndex;
 		}
 		
 		public Expression getIndext() {
@@ -441,7 +458,7 @@ public abstract class Expression extends AbstractAST {
 				int lExt = (java.lang.Integer) this.lExt.interpret(ctx);
 				
 				if(lExt - index == 0) 
-					return 1;
+					return returnIndex? index : 1;
 			}
 			
 			return 0;
@@ -449,12 +466,13 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public java.lang.String getConstructorCode() {
-			return "AST.andIndent(" + index.getConstructorCode() + "," + first.getConstructorCode() + lExt.getConstructorCode() + ")";
+			return "AST.andIndent(" + index.getConstructorCode() + "," + first.getConstructorCode() + lExt.getConstructorCode() + "," + returnIndex + ")";
 		}
 		
 		@Override
 		public java.lang.String toString() {
-			return first + " && " + lExt + " - " + index + " == 0";
+			return returnIndex? "(" +first + " && " + lExt + " - " + index + " == 0)?" + index
+					          : first + " && " + lExt + " - " + index + " == 0";
 		}
 
 		@Override

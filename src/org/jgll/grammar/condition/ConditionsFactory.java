@@ -40,7 +40,7 @@ public class ConditionsFactory {
 				public boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
 					for (Condition c : list) {
 			            if (c.getSlotAction().execute(input, u, i, ctx)) {
-			                log.trace("Condition %s executed", c);
+			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
 			                return true;
 			            }
 			        }
