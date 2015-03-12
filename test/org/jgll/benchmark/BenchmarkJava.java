@@ -35,13 +35,13 @@ public class BenchmarkJava {
 
 //	private static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(Test1.precedencePatterns(), Test1.exceptPatterns()).transform(new EBNFToBNF().transform(Test1.grammar)));
 
-	private static Grammar grammar = new DesugarPrecedenceAndAssociativity().transform(new LayoutWeaver().transform(new EBNFToBNF().transform(Test2.grammar)));
+	private static Grammar grammar = new DesugarPrecedenceAndAssociativity().transform(new LayoutWeaver().transform(new EBNFToBNF().transform(Java.grammar)));
 
 	
 	public static void main(String[] args) throws IOException {
 		System.out.println(grammar.toStringWithOrderByPrecedence());
 		
-//		Input input = Input.fromString("1+2*3");
+//		Input input = Input.fromString("a+a*-a");
 //        GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/excepts/", graph);
@@ -51,7 +51,8 @@ public class BenchmarkJava {
 //        
 //        System.out.println(result.toString());
 		
-		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(1).build().run();
+//		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(1).build().run();
 //		IguanaBenchmark.builder(grammar, start).addDirectory(sourceDir, "java", true).build().run();
+		
 	}
 }
