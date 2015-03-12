@@ -93,6 +93,14 @@ public class AST {
 		return new Expression.LShiftANDEqZero(lhs, rhs);
 	}
 	
+	static public Expression orIndent(Expression index, Expression ind, Expression first, Expression lExt) {
+		return new Expression.OrIndent(index, ind, first, lExt);
+	}
+	
+	static public Expression andIndent(Expression index, Expression first, Expression lExt) {
+		return new Expression.AndIndent(index, first, lExt);
+	}
+	
 	static public Expression less(Expression lhs, Expression rhs) {
 		return new Expression.Less(lhs, rhs);
 	}

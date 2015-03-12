@@ -1,5 +1,6 @@
 package org.jgll.datadependent.traversal;
 
+import org.jgll.datadependent.ast.Expression.AndIndent;
 import org.jgll.datadependent.ast.Expression.Assignment;
 import org.jgll.datadependent.ast.Expression.Boolean;
 import org.jgll.datadependent.ast.Expression.Call;
@@ -12,6 +13,7 @@ import org.jgll.datadependent.ast.Expression.LeftExtent;
 import org.jgll.datadependent.ast.Expression.Less;
 import org.jgll.datadependent.ast.Expression.Name;
 import org.jgll.datadependent.ast.Expression.NotEqual;
+import org.jgll.datadependent.ast.Expression.OrIndent;
 import org.jgll.datadependent.ast.Expression.Real;
 import org.jgll.datadependent.ast.Expression.RightExtent;
 import org.jgll.datadependent.ast.Expression.String;
@@ -35,6 +37,10 @@ public interface IAbstractASTVisitor<T> {
 	public T visit(Assignment expression);
 	
 	public T visit(LShiftANDEqZero expression);
+	
+	public T visit(OrIndent expression);
+	
+	public T visit(AndIndent expression);
 	
 	public T visit(Less expression);
 	

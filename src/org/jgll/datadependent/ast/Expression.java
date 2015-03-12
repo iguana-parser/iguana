@@ -337,6 +337,135 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 	}
+	
+	static public class OrIndent extends Expression {
+		
+		private final Expression index;
+		private final Expression ind;
+		private final Expression first;
+		private final Expression lExt;
+		
+		OrIndent(Expression index, Expression ind, Expression first, Expression lExt) {
+			this.index = index;
+			this.ind = ind;
+			this.first = first;
+			this.lExt = lExt;
+		}
+		
+		public Expression getIndext() {
+			return index;
+		}
+		
+		public Expression getIndent() {
+			return ind;
+		}
+		
+		public Expression getFirst() {
+			return first;
+		}
+		
+		public Expression getLExt() {
+			return lExt;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			
+			int ind = (java.lang.Integer) this.ind.interpret(ctx);
+			
+			if (ind == 0)
+				return true;
+			
+			int first = (java.lang.Integer) this.first.interpret(ctx);
+			if (first == 1) {
+				
+				int index = (java.lang.Integer) this.index.interpret(ctx);
+				int lExt = (java.lang.Integer) this.lExt.interpret(ctx);
+				
+				if(lExt - index == 0) 
+					return true;
+				
+				return lExt > ind;
+			}
+			
+			return false;
+		}
+
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.orIndent(" + index.getConstructorCode() + "," + ind.getConstructorCode() + "," + first.getConstructorCode() + lExt.getConstructorCode() + ")";
+		}
+
+		@Override
+		public java.lang.String toString() {
+			return ind + " == 0 || (" + first + " && " + lExt + " - " + index + " == 0) || " + lExt + " > " + ind;
+		}
+		
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	
+	static public class AndIndent extends Expression {
+		
+		private final Expression index;
+		private final Expression first;
+		private final Expression lExt;
+		
+		AndIndent(Expression index, Expression first, Expression lExt) {
+			this.index = index;
+			this.first = first;
+			this.lExt = lExt;
+		}
+		
+		public Expression getIndext() {
+			return index;
+		}
+		
+		public Expression getFirst() {
+			return first;
+		}
+		
+		public Expression getLExt() {
+			return lExt;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			int first = (java.lang.Integer) this.first.interpret(ctx);
+			if (first == 1) {
+				
+				int index = (java.lang.Integer) this.index.interpret(ctx);
+				int lExt = (java.lang.Integer) this.lExt.interpret(ctx);
+				
+				if(lExt - index == 0) 
+					return 1;
+			}
+			
+			return 0;
+		}
+
+		@Override
+		public java.lang.String getConstructorCode() {
+			// TODO Auto-generated method stub
+			return "AST.andIndent(" + index.getConstructorCode() + "," + first.getConstructorCode() + lExt.getConstructorCode() + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return first + " && " + lExt + " - " + index + " == 0";
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
 		
 	static public class Less extends Expression {
 		

@@ -10,6 +10,7 @@ import java.util.Set;
 import static org.jgll.datadependent.ast.AST.*;
 import static org.jgll.grammar.condition.DataDependentCondition.predicate;
 
+import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.operations.ReachabilityGraph;
 import org.jgll.grammar.symbol.Align;
@@ -68,6 +69,14 @@ public class DesugarOffside implements GrammarTransformation {
 	
 	private static class DesugarOffsideVisitor implements ISymbolVisitor<Symbol> {
 		
+		private static final String ind = "ind";
+		private static final String first = "fst";
+		private static final String index = "i";
+		
+		private static final Expression ind_exp = var(ind);
+		private static final Expression first_exp = var(first);
+		private static final Expression index_exp = var(index);
+		
 		private final Set<String> offsided;
 		
 		private Rule rule;
@@ -87,7 +96,7 @@ public class DesugarOffside implements GrammarTransformation {
 			Rule.Builder builder;
 			
 			if (isOffsided)
-				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("ind").build());
+				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(index, ind, first).build());
 			else
 				builder = rule.copyBuilder();
 			
@@ -218,21 +227,22 @@ public class DesugarOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(Offside symbol) {
 			Symbol sym = symbol.getSymbol();
-			
+			// [ ind == 0 || first && l.lext - i == 0 || indent(l.lext) > ind]
+			// argument: first && l.lext - i == 0
 			if (sym instanceof Nonterminal) {
 				Nonterminal s = (Nonterminal) sym;
-				String label = s.getLabel() != null? s.getLabel() : s.getName().toLowerCase();
+				String l = s.getLabel() != null? s.getLabel() : s.getName().toLowerCase();
 				if (isOffsided) { // Offside inside a rule that has a parameter for indentation
 					return s.copyBuilder()
-							.apply(indent(lExt(label)))
-							.setLabel(label)
+							.apply(indent(lExt(l)), integer(1))
+							.setLabel(l)
 							.addConditions(sym)
-							.addPreCondition(predicate(greater(indent(lExt(label)), var("ind"))))
+							.addPreCondition(predicate(greater(indent(lExt(l)), ind_exp)))
 							.build();
 				} else {
 					return s.copyBuilder()
-							.apply(indent(lExt(label)))
-							.setLabel(label)
+							.apply(indent(lExt(l)))
+							.setLabel(l)
 							.addConditions(sym)
 							.build();
 				}

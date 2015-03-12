@@ -3,6 +3,7 @@ package org.jgll.datadependent.traversal;
 import java.util.Set;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
+import org.jgll.datadependent.ast.Expression.AndIndent;
 import org.jgll.datadependent.ast.Expression.Assignment;
 import org.jgll.datadependent.ast.Expression.Boolean;
 import org.jgll.datadependent.ast.Expression.Call;
@@ -15,6 +16,7 @@ import org.jgll.datadependent.ast.Expression.LeftExtent;
 import org.jgll.datadependent.ast.Expression.Less;
 import org.jgll.datadependent.ast.Expression.Name;
 import org.jgll.datadependent.ast.Expression.NotEqual;
+import org.jgll.datadependent.ast.Expression.OrIndent;
 import org.jgll.datadependent.ast.Expression.Real;
 import org.jgll.datadependent.ast.Expression.RightExtent;
 import org.jgll.datadependent.ast.Expression.String;
@@ -128,6 +130,53 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
+		
+		return null;
+	}
+	
+	@Override
+	public Void visit(OrIndent expression) {
+		
+		org.jgll.datadependent.ast.Expression index = expression.getIndext();
+		
+		index.setEnv(expression.getEnv());
+		index.accept(this);
+		
+		org.jgll.datadependent.ast.Expression ind = expression.getIndent();
+		
+		ind.setEnv(expression.getEnv());
+		ind.accept(this);
+		
+		org.jgll.datadependent.ast.Expression first = expression.getFirst();
+		
+		first.setEnv(expression.getEnv());
+		first.accept(this);
+		
+		org.jgll.datadependent.ast.Expression lExt = expression.getLExt();
+		
+		lExt.setEnv(expression.getEnv());
+		lExt.accept(this);
+		
+		return null;
+	}
+	
+	@Override
+	public Void visit(AndIndent expression) {
+		
+		org.jgll.datadependent.ast.Expression index = expression.getIndext();
+		
+		index.setEnv(expression.getEnv());
+		index.accept(this);
+		
+		org.jgll.datadependent.ast.Expression first = expression.getFirst();
+		
+		first.setEnv(expression.getEnv());
+		first.accept(this);
+		
+		org.jgll.datadependent.ast.Expression lExt = expression.getLExt();
+		
+		lExt.setEnv(expression.getEnv());
+		lExt.accept(this);
 		
 		return null;
 	}
