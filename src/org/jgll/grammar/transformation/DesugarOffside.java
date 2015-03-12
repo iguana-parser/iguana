@@ -10,9 +10,7 @@ import java.util.Set;
 import static org.jgll.datadependent.ast.AST.*;
 import static org.jgll.grammar.condition.DataDependentCondition.predicate;
 
-import org.jgll.datadependent.ast.AST;
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.symbol.Align;
 import org.jgll.grammar.symbol.Block;
 import org.jgll.grammar.symbol.Character;
