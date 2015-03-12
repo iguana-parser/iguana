@@ -4,9 +4,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import static org.jgll.datadependent.ast.AST.*;
+import static org.jgll.grammar.condition.DataDependentCondition.predicate;
+
+import org.jgll.datadependent.ast.AST;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.symbol.Align;
 import org.jgll.grammar.symbol.Block;
 import org.jgll.grammar.symbol.Character;
@@ -36,7 +42,7 @@ public class DesugarOffside implements GrammarTransformation {
 	
 	private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
 	
-	private Set<Nonterminal> offsided;
+	private Set<String> offsided;
 	
 	public DesugarOffside(SetMultimap<Nonterminal, Nonterminal> reachabilityGraph) {
 		this.reachabilityGraph = reachabilityGraph;
@@ -49,7 +55,11 @@ public class DesugarOffside implements GrammarTransformation {
 		findOffsides.find(grammar);
 		offsided = findOffsides.getOffsides();
 		
-		DesugarOffsideVisitor desugarOffsides = new DesugarOffsideVisitor(reachabilityGraph, offsided);
+		for (Map.Entry<Nonterminal, Nonterminal> entry : reachabilityGraph.entries())
+			if (offsided.contains(entry.getKey().getName()))
+				offsided.add(entry.getValue().getName());
+		
+		DesugarOffsideVisitor desugarOffsides = new DesugarOffsideVisitor(offsided);
 		
 		Set<Rule> rules = new LinkedHashSet<>();
 		
@@ -61,20 +71,21 @@ public class DesugarOffside implements GrammarTransformation {
 	
 	private static class DesugarOffsideVisitor implements ISymbolVisitor<Symbol> {
 		
-		private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
-		private final Set<Nonterminal> offsided;
+		private final Set<String> offsided;
 		
 		private Rule rule;
 		private boolean isOffsided;
 		
-		public DesugarOffsideVisitor(SetMultimap<Nonterminal, Nonterminal> reachabilityGraph, Set<Nonterminal> offsided) {
-			this.reachabilityGraph = reachabilityGraph;
+		private int i;
+		
+		public DesugarOffsideVisitor(Set<String> offsided) {
 			this.offsided = offsided;
 		}
 		
 		public Rule transform(Rule rule) {
 			this.rule = rule;
 			isOffsided = offsided.contains(this.rule.getHead());
+			i = 0;
 			
 			Rule.Builder builder;
 			
@@ -123,14 +134,28 @@ public class DesugarOffside implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Character symbol) {
-			// TODO:
-			return null;
+			if (isOffsided) {
+				String label = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				return symbol.copyBuilder()
+								.setLabel(label)
+								.addConditions(symbol)
+								.addPreCondition(predicate(greater(indent(lExt(label)), var("ind"))))
+								.build();
+			}
+			return symbol;
 		}
 
 		@Override
 		public Symbol visit(CharacterRange symbol) {
-			// TODO:
-			return null;
+			if (isOffsided) {
+				String label = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				return symbol.copyBuilder()
+								.setLabel(label)
+								.addConditions(symbol)
+								.addPreCondition(predicate(greater(indent(lExt(label)), var("ind"))))
+								.build();
+			}
+			return symbol;
 		}
 
 		@Override
@@ -183,20 +208,54 @@ public class DesugarOffside implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Nonterminal symbol) {
-			// TODO:
-			return null;
+			if (isOffsided) { // The rule has a parameter for indentation, and therefore, also all reachable nonterminals
+				return symbol.copyBuilder().apply(var("ind")).build();
+			} else {
+				if (offsided.contains(symbol.getName()))
+					return symbol.copyBuilder().apply(integer(0)).build();
+				else
+					return symbol;
+			}
 		}
 
 		@Override
 		public Symbol visit(Offside symbol) {
-			// TODO:
-			return null;
+			Symbol sym = symbol.getSymbol();
+			
+			if (sym instanceof Nonterminal) {
+				Nonterminal s = (Nonterminal) sym;
+				String label = s.getLabel() != null? s.getLabel() : s.getName().toLowerCase();
+				if (isOffsided) { // Offside inside a rule that has a parameter for indentation
+					return s.copyBuilder()
+							.apply(indent(lExt(label)))
+							.setLabel(label)
+							.addConditions(sym)
+							.addPreCondition(predicate(greater(indent(lExt(label)), var("ind"))))
+							.build();
+				} else {
+					return s.copyBuilder()
+							.apply(indent(lExt(label)))
+							.setLabel(label)
+							.addConditions(sym)
+							.build();
+				}
+			} 
+			
+			// Otherwise, ignore offside
+			return symbol.accept(this);
 		}
 
 		@Override
 		public Symbol visit(Terminal symbol) {
-			// TODO:
-			return null;
+			if (isOffsided) {
+				String label = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				return symbol.copyBuilder()
+								.setLabel(label)
+								.addConditions(symbol)
+								.addPreCondition(predicate(greater(indent(lExt(label)), var("ind"))))
+								.build();
+			}
+			return symbol;
 		}
 
 		@Override
@@ -295,13 +354,13 @@ public class DesugarOffside implements GrammarTransformation {
 	
 	private static class FindOffsidesVisitor implements ISymbolVisitor<Void> {
 		
-		private final Set<Nonterminal> offsided;
+		private final Set<String> offsided;
 		
 		public FindOffsidesVisitor() {
 			this.offsided = new HashSet<>();
 		}
 		
-		public Set<Nonterminal> getOffsides() {
+		public Set<String> getOffsides() {
 			return offsided;
 		}
 		
@@ -322,7 +381,7 @@ public class DesugarOffside implements GrammarTransformation {
 			
 			// Offside will only be applied to nonterminals 
 			if (sym instanceof Nonterminal)
-				offsided.add((Nonterminal) sym);
+				offsided.add(((Nonterminal) sym).getName());
 			
 			return sym.accept(this);
 		}
