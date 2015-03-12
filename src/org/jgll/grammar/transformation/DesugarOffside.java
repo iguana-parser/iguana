@@ -11,6 +11,7 @@ import static org.jgll.datadependent.ast.AST.*;
 import static org.jgll.grammar.condition.DataDependentCondition.predicate;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.operations.ReachabilityGraph;
 import org.jgll.grammar.symbol.Align;
 import org.jgll.grammar.symbol.Block;
 import org.jgll.grammar.symbol.Character;
@@ -38,16 +39,14 @@ import com.google.common.collect.SetMultimap;
 
 public class DesugarOffside implements GrammarTransformation {
 	
-	private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
+	private SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
 	
 	private Set<String> offsided;
 	
-	public DesugarOffside(SetMultimap<Nonterminal, Nonterminal> reachabilityGraph) {
-		this.reachabilityGraph = reachabilityGraph;
-	}
-	
 	@Override
 	public Grammar transform(Grammar grammar) {
+		
+		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();
 		
 		FindOffsidesVisitor findOffsides = new FindOffsidesVisitor();
 		findOffsides.find(grammar);
