@@ -9,7 +9,7 @@ import org.jgll.grammar.condition.RegularExpressionCondition;
 import org.jgll.grammar.symbol.*;
 import org.jgll.grammar.symbol.Character;
 import static org.jgll.grammar.symbol.LayoutStrategy.*;
-import org.jgll.grammar.transformation.DesugarOffside;
+import org.jgll.grammar.transformation.DesugarAlignAndOffside;
 import org.jgll.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.grammar.transformation.LayoutWeaver;
@@ -56,7 +56,10 @@ Grammar.builder()
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
          //System.out.println(grammar.toStringWithOrderByPrecedence());
 
-         grammar = new DesugarOffside().transform(grammar);
+         DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
+         desugarAlignAndOffside.doOffside();
+         
+		 grammar = desugarAlignAndOffside.transform(grammar);
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          grammar = new LayoutWeaver().transform(grammar);
@@ -74,8 +77,8 @@ Grammar.builder()
 
          Assert.assertTrue(result.isParseSuccess());
 
-          Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/",
-                            result.asParseSuccess().getRoot(), input);
+         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/",
+         //                   result.asParseSuccess().getRoot(), input);
 
          Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }
