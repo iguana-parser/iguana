@@ -81,7 +81,7 @@ public class DesugarOffside implements GrammarTransformation {
 		
 		public Rule transform(Rule rule) {
 			this.rule = rule;
-			isOffsided = offsided.contains(this.rule.getHead());
+			isOffsided = offsided.contains(this.rule.getHead().getName());
 			i = 0;
 			
 			Rule.Builder builder;
@@ -239,7 +239,7 @@ public class DesugarOffside implements GrammarTransformation {
 			} 
 			
 			// Otherwise, ignore offside
-			return symbol.accept(this);
+			return sym.accept(this);
 		}
 
 		@Override
