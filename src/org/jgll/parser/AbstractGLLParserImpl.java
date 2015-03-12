@@ -441,6 +441,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			
 			setEnvironment(newEnv);
 			for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+				if (s.getLabel() != null)
+					this.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
+				
 				if (!s.getConditions().execute(getInput(), __gssNode, i, getEvaluatorContext()))
 					scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), getEnvironment()));
 			}

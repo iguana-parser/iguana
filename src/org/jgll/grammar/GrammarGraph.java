@@ -511,7 +511,7 @@ public class GrammarGraph implements Serializable {
 			 
 			rule.symbolAt(0).getPreConditions().clear();
 			
-			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), null, null, preConditions);
+			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), rule.symbolAt(0).getLabel(), null, preConditions);
 		}
 		add(slot);
 		return slot;

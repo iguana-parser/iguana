@@ -66,7 +66,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	public String toString() {
 		String s = label == null ? name : label + ":" + name;
 		if (!preConditions.isEmpty())
-			s += listToString(preConditions) + " " + name;
+			s += " " + listToString(preConditions);
 		if (!postConditions.isEmpty())
 			s += " " + listToString(postConditions);
 		return s;
