@@ -12,6 +12,7 @@ import static org.jgll.grammar.condition.DataDependentCondition.predicate;
 
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.operations.ReachabilityGraph;
 import org.jgll.grammar.symbol.Align;
 import org.jgll.grammar.symbol.Block;
@@ -108,6 +109,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		private boolean isOffsided;
 		
 		private int i;
+		private int j;
 		
 		public DesugarAlignAndOffsideVisitor(Set<String> offsided) {
 			this.offsided = offsided;
@@ -137,6 +139,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			isOffsided = offsided.contains(this.rule.getHead().getName());
 			i = 0;
+			j = 0;
 			
 			Rule.Builder builder;
 			
@@ -162,7 +165,45 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		public Symbol visit(Align symbol) {
 			
 			if (doAlign) {
+				Symbol sym = symbol.getSymbol().accept(this);
 				
+				String l1 = getLabel(sym);
+				
+				if (sym instanceof Plus) {
+					Plus plus = (Plus) sym;
+					
+					Symbol s = plus.getSymbol();
+					String l2 = s.getLabel() == null? s.getLabel() : "l" + j++;
+					
+					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
+					
+					return Plus.builder(s).setLabel(l1).addConditions(plus).addConditions(symbol).build();
+					
+				} else if (sym instanceof Star) {
+					Star star = (Star) sym;
+					
+					Symbol s = star.getSymbol();
+					String l2 = s.getLabel() == null? s.getLabel() : "l" + j++;
+					
+					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
+					
+					return Star.builder(s).setLabel(l1).addConditions(star).addConditions(symbol).build();
+				} else if (sym instanceof Sequence) {
+					
+					@SuppressWarnings("unchecked")
+					Sequence<Symbol> seq = (Sequence<Symbol>) sym;
+					
+					List<Symbol> symbols = seq.getSymbols();
+					List<Symbol> syms = new ArrayList<>();
+					
+					for (Symbol s : symbols) {
+						String l2 = s.getLabel() == null? s.getLabel() : "l" + j++;
+						syms.add(getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2));
+					}
+					
+					return Sequence.builder(syms).setLabel(l1).addConditions(seq).addConditions(symbol).build();
+				} else 
+					return sym;
 			}
 			
 			Symbol sym = symbol.getSymbol().accept(this);
@@ -424,6 +465,27 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			return modified? Star.builder(sym).addSeparators(seps).setLabel(symbol.getLabel()).addConditions(symbol).build()
 					       : symbol;
+		}
+		
+		private String getLabel(Symbol symbol) {
+			if (symbol instanceof Offside) {
+				Offside sym = (Offside) symbol;
+				String l = sym.getSymbol().getLabel();
+				return l != null? l : "l1" + j++;
+			}
+			
+			return symbol.getLabel() != null? symbol.getLabel() : "l1" + j++;
+		}
+		
+		private Symbol getSymbol(Symbol symbol, Condition precondition, String label) {
+			
+			if (symbol instanceof Offside) {
+				Offside sym = (Offside) symbol;
+				return Offside.builder(sym.copyBuilder().addPreCondition(precondition).setLabel(label).build())
+									.addConditions(symbol).setLabel(symbol.getLabel()).build();
+			}
+			
+			return symbol.copyBuilder().addPreCondition(precondition).setLabel(label).build();
 		}
 		
 	}
