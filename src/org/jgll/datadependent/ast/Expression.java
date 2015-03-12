@@ -403,8 +403,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public <T> T accept(IAbstractASTVisitor<T> visitor) {
-			// TODO Auto-generated method stub
-			return null;
+			return visitor.visit(this);
 		}
 		
 	}
@@ -450,7 +449,6 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public java.lang.String getConstructorCode() {
-			// TODO Auto-generated method stub
 			return "AST.andIndent(" + index.getConstructorCode() + "," + first.getConstructorCode() + lExt.getConstructorCode() + ")";
 		}
 		
@@ -461,8 +459,7 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public <T> T accept(IAbstractASTVisitor<T> visitor) {
-			// TODO Auto-generated method stub
-			return null;
+			return visitor.visit(this);
 		}
 		
 	}
