@@ -84,7 +84,7 @@ public class ReachabilityGraph {
 						continue;
 					
 					for (Symbol symbol : alternate)
-						changed = symbol.accept(visitor);
+						changed |= symbol.accept(visitor);
 					
 				}
 			}
