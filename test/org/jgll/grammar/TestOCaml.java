@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.jgll.grammar.precedence.OperatorPrecedence;
@@ -16,7 +17,8 @@ import org.junit.Test;
 
 public class TestOCaml {
 
-	Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(OCaml.precedencePatterns(), OCaml.exceptPatterns()).transform(new EBNFToBNF().transform(OCaml.grammar)));
+	Grammar originalGrammar = Grammar.load(new File(""));
+	Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(originalGrammar.getPrecedencePatterns(), originalGrammar.getExceptPatterns()).transform(new EBNFToBNF().transform(originalGrammar)));
 
 	static Configuration config = Configuration.DEFAULT;
 	
@@ -24,6 +26,7 @@ public class TestOCaml {
 	
 	@Test
 	public void test() throws IOException {
+		
 		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
 //		System.out.println(grammar.getConstructorCode());
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);

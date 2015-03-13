@@ -2,7 +2,16 @@ package org.jgll.grammar;
 
 import static org.jgll.util.generator.GeneratorUtil.*;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,6 +22,8 @@ import java.util.stream.StreamSupport;
 
 import org.jgll.grammar.exception.GrammarValidationException;
 import org.jgll.grammar.exception.NonterminalNotDefinedException;
+import org.jgll.grammar.patterns.ExceptPattern;
+import org.jgll.grammar.patterns.PrecedencePattern;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Rule;
 import org.jgll.grammar.symbol.Symbol;
@@ -36,10 +47,16 @@ public class Grammar implements ConstructorCode, Serializable {
 	
 	private final ListMultimap<Nonterminal, Rule> definitions;
 	
+	private final List<PrecedencePattern> precedencePatterns;
+	
+	private final List<ExceptPattern> exceptPatterns;
+	
 	private final Nonterminal layout;
 		
 	public Grammar(Builder builder) {
 		this.definitions = builder.definitions;
+		this.precedencePatterns = builder.precedencePatterns;
+		this.exceptPatterns = builder.exceptPatterns;
 		this.layout = builder.layout;
 	}
 	
@@ -65,6 +82,14 @@ public class Grammar implements ConstructorCode, Serializable {
 			num += definitions.get(head).size();
 		}
 		return num;
+	}
+	
+	public List<PrecedencePattern> getPrecedencePatterns() {
+		return precedencePatterns;
+	}
+	
+	public List<ExceptPattern> getExceptPatterns() {
+		return exceptPatterns;
 	}
 	
 	public Set<RegularExpression> getPredictionSet(Rule rule, int index) {
@@ -153,6 +178,8 @@ public class Grammar implements ConstructorCode, Serializable {
 	public static class Builder {
 		
 		private final ListMultimap<Nonterminal, Rule> definitions = ArrayListMultimap.create();
+		private final List<PrecedencePattern> precedencePatterns = new ArrayList<>();
+		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
 		private Nonterminal layout;
 		
 		public Grammar build() {
@@ -161,9 +188,6 @@ public class Grammar implements ConstructorCode, Serializable {
 			if (!exceptions.isEmpty()) {
 				throw new GrammarValidationException(exceptions);
 			}
-			
-//			GrammarOperations op = new GrammarOperations(definitions);
-//			return new Grammar(definitions, op.getFirstSets(), op.getFollowSets());
 			
 			return new Grammar(this);
 		}
@@ -188,6 +212,49 @@ public class Grammar implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder addPrecedencePattern(PrecedencePattern pattern) {
+			precedencePatterns.add(pattern);
+			return this;
+		}
+		
+		public Builder addExceptPattern(ExceptPattern pattern) {
+			exceptPatterns.add(pattern);
+			return this;
+		}
+	}
+	
+	public void save(URI uri) {
+		save(new File(uri));
+	}
+	
+	public void save(File file) {
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		
+		try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
+			out.writeObject(this);			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static Grammar load(URI uri) {
+		return load(new File(uri));
+	}
+	
+	public static Grammar load(File file) {
+		Grammar grammar;
+		try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
+			grammar = (Grammar) in.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+		return grammar;
 	}
 	
 	@Override

@@ -92,7 +92,13 @@ public class IguanaBenchmark {
         Future<ParseResult> future = executor.submit(() -> {
 			return parser.parse(input, grammarGraph, start);
         });
-        ParseResult result = future.get(timeout, TimeUnit.SECONDS);
+        
+        ParseResult result;
+        if (timeout > 0)
+        	result = future.get(timeout, TimeUnit.SECONDS);
+        else 
+        	result = future.get();
+        
         executor.shutdownNow();
 
         if (runGCInBetween)
@@ -113,7 +119,7 @@ public class IguanaBenchmark {
 		private int warmupCount = 0;
 		private int runCount = 1;
 		private boolean runGCInBetween = false;
-		private int timeout = 30;
+		private int timeout = 0;
 		
 		public Builder(Grammar grammar, Nonterminal start) {
 			this.grammar = grammar;
