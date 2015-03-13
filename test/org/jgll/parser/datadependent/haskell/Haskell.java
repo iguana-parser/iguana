@@ -950,7 +950,7 @@ Grammar.builder()
 
          grammar = new LayoutWeaver().transform(grammar);
 
-         Input input = Input.fromPath("/Users/anastasiaizmaylova/git/ghc/testsuite/tests/programs/Queens/queens.hs");
+         Input input = Input.fromPath("/Users/aliafroozeh/corpus/ghc/testsuite/tests/programs/Queens/queens.hs");
          
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 

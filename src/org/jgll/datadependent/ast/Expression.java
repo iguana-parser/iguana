@@ -405,7 +405,8 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public java.lang.String toString() {
-			return ind + " == 0 || (" + first + " && " + lExt + " - " + index + " == 0) || indent(" + lExt + ") > " + ind;
+			// return ind + " == 0 || (" + first + " && " + lExt + " - " + index + " == 0) || indent(" + lExt + ") > " + ind;
+			return java.lang.String.format("f(%s,%s,%s,%s)", index, ind, first, lExt);
 		}
 		
 		@Override
@@ -471,8 +472,10 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String toString() {
-			return returnIndex? "(" +first + " && " + lExt + " - " + index + " == 0)?" + index
-					          : first + " && " + lExt + " - " + index + " == 0";
+//			return returnIndex? "(" +first + " && " + lExt + " - " + index + " == 0)?" + index
+//					          : first + " && " + lExt + " - " + index + " == 0";
+			return returnIndex? java.lang.String.format("g(%s,%s,%s,%s)", index, first, lExt, 1)
+					          : java.lang.String.format("g(%s,%s,%s,%s)", index, first, lExt, 0);
 		}
 
 		@Override
