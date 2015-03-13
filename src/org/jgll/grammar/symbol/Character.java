@@ -60,7 +60,7 @@ public class Character extends AbstractRegularExpression {
 		} else {
 			String s = "\\u" + String.format("%04X", c);
 			// Escape newline inside strings
-			return s.equals("\\u000D") || s.equals("\\u000A") ? "\\" + s : s;
+			return s.equals("\\u000D") || s.equals("\\u000A") ? "\\" + s  : s;
 		}
 	}
 	

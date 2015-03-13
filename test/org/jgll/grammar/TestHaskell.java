@@ -1,5 +1,6 @@
 package org.jgll.grammar;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.jgll.grammar.symbol.Nonterminal;
@@ -15,7 +16,7 @@ import org.junit.Test;
 
 public class TestHaskell {
 	
-	static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Haskell.grammar));
+	static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Grammar.load(new File(""))));
 
 	static Configuration config = Configuration.DEFAULT;
 	

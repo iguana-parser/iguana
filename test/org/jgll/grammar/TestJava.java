@@ -20,7 +20,7 @@ import org.junit.Test;
 public class TestJava {
 
 //	private static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns(), JavaNaturalCharacterLevel.exceptPatterns()).transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar)));
-	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(JavaCharacterLevel.grammar));
+	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar));
 
 	Configuration config = Configuration.DEFAULT;
 	

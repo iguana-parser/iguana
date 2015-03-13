@@ -1,9 +1,9 @@
 package org.jgll.benchmark;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.Haskell;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.transformation.EBNFToBNF;
@@ -13,7 +13,9 @@ public class BenchmarkHaskell {
 	
 	private static String sourceDir = "/Users/aliafroozeh/corpus/ghc-output";
 
-	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Haskell.grammar));
+//	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Haskell.grammar));
+	
+	static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Grammar.load(new File(""))));
 	
 	private static Nonterminal start = Start.from(Nonterminal.withName("Module"));
 		

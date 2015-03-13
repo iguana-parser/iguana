@@ -10,11 +10,11 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 
 	private static final long serialVersionUID = 1L;
 	
-	protected Automaton automaton;
+	protected transient Automaton automaton;
 	
-	protected Matcher matcher;
+	protected transient Matcher matcher;
 	
-	protected Matcher backwardsMatcher;
+	protected transient Matcher backwardsMatcher;
 	
 	public AbstractRegularExpression(SymbolBuilder<? extends RegularExpression> builder) {
 		super(builder);
@@ -45,7 +45,6 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 	}
 	
 	protected abstract Automaton createAutomaton();
-
 	
 	@Override
 	public void initMatcher() {
