@@ -2,9 +2,9 @@ package org.jgll.grammar;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 
-import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.transformation.EBNFToBNF;
@@ -14,13 +14,13 @@ import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
-import org.jgll.util.Visualization;
 import org.junit.Test;
 
 public class TestJava {
 
-	private static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns(), JavaNaturalCharacterLevel.exceptPatterns()).transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar)));
-//	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(JavaCharacterLevel.grammar));
+	static Grammar originalGrammar = Grammar.load(new File(""));
+//	private static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns(), JavaNaturalCharacterLevel.exceptPatterns()).transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar)));
+	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
 
 	Configuration config = Configuration.DEFAULT;
 	
