@@ -45,6 +45,8 @@ public class Input {
 	
 	private URI uri;
 	
+	private int tabWidth = 8;
+	
 	public static Input fromString(String s, URI uri) {
 		try {
 			return new Input(fromStream(IOUtils.toInputStream(s)), uri);
@@ -290,9 +292,14 @@ public class Input {
 				lineCount++;
 				lineNumber++;
 				columnNumber = 1;
-			} else if (characters[i] == '\r') {
+			} 
+			else if (characters[i] == '\r') {
 				columnNumber = 1;
-			} else {
+			} 
+			else if (characters[i] == '\t') { 
+			  columnNumber += tabWidth;
+			} 
+			else {
 				columnNumber++;
 			}
 		}
@@ -377,6 +384,10 @@ public class Input {
 	
 	public URI getURI() {
 		return uri;
+	}
+	
+	public void setTabWidth(int tabWidth) {
+		this.tabWidth = tabWidth;
 	}
 
 	public boolean isEndOfLine(int currentInputIndex) {

@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.JavaCharacterLevel;
 import org.jgll.grammar.JavaNaturalCharacterLevel;
 import org.jgll.parser.datadependent.java.Java;
 import org.jgll.grammar.Test1;
@@ -20,7 +19,6 @@ import org.jgll.grammar.transformation.LayoutWeaver;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
-import org.jgll.parser.datadependent.java.Java;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 
