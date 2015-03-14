@@ -101,6 +101,9 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		private static final Expression first_exp = var(first);
 		private static final Expression index_exp = var(index);
 		
+		private static final String l_align = "a";
+		private static final String l_offside = "o";
+		
 		private boolean doAlign;
 		
 		private final Set<String> offsided;
@@ -109,7 +112,6 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		private boolean isOffsided;
 		
 		private int i;
-		private int j;
 		
 		public DesugarAlignAndOffsideVisitor(Set<String> offsided) {
 			this.offsided = offsided;
@@ -139,7 +141,6 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			isOffsided = offsided.contains(this.rule.getHead().getName());
 			i = 0;
-			j = 0;
 			
 			Rule.Builder builder;
 			
@@ -173,7 +174,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					Plus plus = (Plus) sym;
 					
 					Symbol s = plus.getSymbol();
-					String l2 = s.getLabel() != null? s.getLabel() : "l" + j++;
+					String l2 = s.getLabel() != null? s.getLabel() : l_align + i++;
 					
 					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
 					
@@ -183,7 +184,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					Star star = (Star) sym;
 					
 					Symbol s = star.getSymbol();
-					String l2 = s.getLabel() != null? s.getLabel() : "l" + j++;
+					String l2 = s.getLabel() != null? s.getLabel() : l_align + i++;
 					
 					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
 					
@@ -197,7 +198,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					List<Symbol> syms = new ArrayList<>();
 					
 					for (Symbol s : symbols) {
-						String l2 = s.getLabel() != null? s.getLabel() : "l" + j++;
+						String l2 = s.getLabel() != null? s.getLabel() : l_align + i++;
 						syms.add(getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2));
 					}
 					
@@ -223,7 +224,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				
 				syms[j] = sym.accept(this);
 				if (sym != syms[j])
-					modified = true;
+					modified |= true;
 				j++;
 			}
 			
@@ -234,7 +235,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(Character symbol) {
 			if (isOffsided) {
-				String l = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
 				return symbol.copyBuilder()
 								.setLabel(l)
 								.addConditions(symbol)
@@ -247,7 +248,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(CharacterRange symbol) {
 			if (isOffsided) {
-				String l = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
 				return symbol.copyBuilder()
 								.setLabel(l)
 								.addConditions(symbol)
@@ -308,7 +309,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(Nonterminal symbol) {
 			if (isOffsided) { // The rule has a parameter for indentation, and therefore, also all reachable nonterminals
-				String l = symbol.getLabel() != null? symbol.getLabel() : symbol.getName().toLowerCase();
+				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
 				return symbol.copyBuilder().apply(// (first && l.lExt - index == 0)?index
 						                          andIndent(index_exp, first_exp, lExt(l), true), 
 												  ind_exp,
@@ -337,7 +338,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			if (sym instanceof Nonterminal) {
 				Nonterminal s = (Nonterminal) sym;
-				String l = s.getLabel() != null? s.getLabel() : s.getName().toLowerCase();
+				String l = s.getLabel() != null? s.getLabel() : l_offside + i++;
 				if (isOffsided) { // Offside inside a rule that has a parameter for indentation
 					return s.copyBuilder()
 							.apply(lExt(l), indent(lExt(l)), integer(1))
@@ -365,7 +366,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		@Override
 		public Symbol visit(Terminal symbol) {
 			if (isOffsided) {
-				String l = symbol.getLabel() != null? symbol.getLabel() : "t" + i++;
+				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
 				return symbol.copyBuilder()
 								.setLabel(l)
 								.addConditions(symbol)
@@ -395,7 +396,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				Symbol s = sym.accept(this);
 				syms.add(s);
 				if (sym != s)
-					modified = true;
+					modified |= true;
 			}
 			
 			return modified? Alt.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build() 
@@ -423,7 +424,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				Symbol s = sep.accept(this);
 				seps.add(s);
 				if (s != sep)
-					modified = true;
+					modified |= true;
 			}
 			
 			return modified? Plus.builder(sym).addSeparators(seps).setLabel(symbol.getLabel()).addConditions(symbol).build()
@@ -441,7 +442,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				Symbol s = sym.accept(this);
 				syms.add(s);
 				if (sym != s)
-					modified = true;
+					modified |= true;
 			}
 			
 			return modified? Sequence.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build() 
@@ -460,7 +461,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				Symbol s = sep.accept(this);
 				seps.add(s);
 				if (s != sep)
-					modified = true;
+					modified |= true;
 			}
 			
 			return modified? Star.builder(sym).addSeparators(seps).setLabel(symbol.getLabel()).addConditions(symbol).build()
@@ -471,10 +472,10 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			if (symbol instanceof Offside) {
 				Offside sym = (Offside) symbol;
 				String l = sym.getSymbol().getLabel();
-				return l != null? l : "l" + j++;
+				return l != null? l : l_align + i++;
 			}
 			
-			return symbol.getLabel() != null? symbol.getLabel() : "l" + j++;
+			return symbol.getLabel() != null? symbol.getLabel() : l_align + i++;
 		}
 		
 		private Symbol getSymbol(Symbol symbol, Condition precondition, String label) {

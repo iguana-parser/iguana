@@ -337,7 +337,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			for (Symbol sym : symbols) {
 				syms[j] = sym.accept(this);
 				if (sym != syms[j])
-					modified = true;
+					modified |= true;
 				j++;
 			}
 			return modified? Block.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()

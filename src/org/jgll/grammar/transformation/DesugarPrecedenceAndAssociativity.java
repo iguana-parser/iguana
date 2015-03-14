@@ -466,7 +466,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 				syms[j] = sym.accept(this);
 				if (sym != syms[j])
-					modified = true;
+					modified |= true;
 				j++;
 			}
 			
@@ -606,32 +606,27 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
 		@Override
 		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
-			// TODO: EBNF
-			return symbol;
+			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 
 		@Override
 		public Symbol visit(Opt symbol) {
-			// TODO: EBNF
-			return symbol;
+			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 
 		@Override
 		public Symbol visit(Plus symbol) {
-			// TODO: EBNF
-			return symbol;
+			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 
 		@Override
 		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
-			// TODO: EBNF
-			return symbol;
+			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 
 		@Override
 		public Symbol visit(Star symbol) {
-			// TODO: EBNF
-			return symbol;
+			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 		
 	}
