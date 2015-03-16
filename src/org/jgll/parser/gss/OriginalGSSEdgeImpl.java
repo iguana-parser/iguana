@@ -60,10 +60,6 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 		
 		BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
 		
-		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex)) {
-			return null;
-		}
-		
 		/**
 		 * 
 		 * Data-dependent GLL parsing
@@ -73,6 +69,13 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 		
 		if (returnSlot.requiresBinding()) {
 			Environment env =  returnSlot.doBinding(sppfNode, parser.getEmptyEnvironment());
+			
+			parser.setEnvironment(env);
+			
+			if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, parser.getEvaluatorContext()))
+				return null;
+			
+			env = parser.getEnvironment();
 			
 			if (returnSlot.isLast() && !returnSlot.isEnd()) {
 				parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
@@ -104,6 +107,9 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 			
 			return null;
 		}
+		
+		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
+			return null;
 		
 		if (returnSlot.isLast() && !returnSlot.isEnd()) {
 			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());

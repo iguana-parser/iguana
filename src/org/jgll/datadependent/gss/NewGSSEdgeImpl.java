@@ -26,15 +26,17 @@ public class NewGSSEdgeImpl extends org.jgll.parser.gss.NewGSSEdgeImpl {
 		BodyGrammarSlot returnSlot = getReturnSlot();
 		GSSNode destination = getDestination();
 		
+		Environment env = this.env; 
+				
+		if (returnSlot.requiresBinding())
+			env = returnSlot.doBinding(sppfNode, env);
+		
 		parser.setEnvironment(env);
 		
 		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, parser.getEvaluatorContext()))
 			return null;
 		
-		Environment env = parser.getEnvironment();
-		
-		if (returnSlot.requiresBinding())
-			env = returnSlot.doBinding(sppfNode, env);
+		env = parser.getEnvironment();
 		
 		NonPackedNode y;
 		
