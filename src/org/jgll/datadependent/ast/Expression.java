@@ -484,6 +484,50 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 	}
+	
+	static public class Or extends Expression {
+		
+		private final Expression lhs;
+		private final Expression rhs;
+		
+		Or(Expression lhs, Expression rhs) {
+			this.lhs = lhs;
+			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			boolean lhs = (java.lang.Boolean) this.lhs.interpret(ctx);
+			if (lhs == true)
+				return lhs;
+			
+			return (java.lang.Boolean) this.rhs.interpret(ctx);
+		}
+
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.or(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s || %s", lhs, rhs);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
+		
+	}
 		
 	static public class Less extends Expression {
 		
@@ -527,6 +571,57 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public java.lang.String toString() {
 			return java.lang.String.format("%s < %s", lhs, rhs);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
+		
+	}
+	
+	static public class LessThanEqual extends Expression {
+		
+		private final Expression lhs;
+		private final Expression rhs;
+		
+		LessThanEqual(Expression lhs, Expression rhs) {
+			this.lhs = lhs;
+			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			Object lhs = this.lhs.interpret(ctx);
+			Object rhs = this.rhs.interpret(ctx);
+			
+			if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
+				return ((java.lang.Integer) lhs) <= ((java.lang.Integer) rhs);
+			}
+			
+			if (lhs instanceof java.lang.Float && rhs instanceof java.lang.Float) {
+				return ((java.lang.Float) lhs) <= ((java.lang.Float) rhs);
+			}
+						
+			throw new UnexpectedTypeOfArgumentException(this);
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.lessEq(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s <= %s", lhs, rhs);
 		}
 
 		@Override
@@ -816,6 +911,42 @@ public abstract class Expression extends AbstractAST {
 		@Override
 		public java.lang.String toString() {
 			return java.lang.String.format("%s.rExt", label);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
+		
+	}
+	
+	static public class EndOfFile extends Expression {
+		
+		private final Expression index;
+		
+		EndOfFile(Expression index) {
+			this.index = index;
+		}
+		
+		public Expression getIndex() {
+			return index;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			int index = (java.lang.Integer) this.index.interpret(ctx);
+			int length = ctx.getInput().length();
+			return length == index + 1;
+		}
+
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.endOfFile(" + index.getConstructorCode() + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("$(%s)", index);
 		}
 
 		@Override

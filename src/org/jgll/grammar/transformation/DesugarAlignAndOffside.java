@@ -158,7 +158,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 								Symbol s = symbol.accept(this);
 								String l3 = l_align + i++;
 								Nonterminal longest = getLayout().copyBuilder().setLabel(l3)
-														.addPostCondition(predicate(less(indent(rExt(l3)), indent(lExt(s.getLabel())))))
+														.addPostCondition(predicate(or(endOfFile(rExt(l3)), lessEq(indent(rExt(l3)), indent(lExt(s.getLabel()))))))
 														.build();
 								symbols.add(s);
 								symbols.add(longest);

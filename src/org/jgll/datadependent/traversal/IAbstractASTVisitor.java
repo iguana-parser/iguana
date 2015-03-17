@@ -4,6 +4,7 @@ import org.jgll.datadependent.ast.Expression.AndIndent;
 import org.jgll.datadependent.ast.Expression.Assignment;
 import org.jgll.datadependent.ast.Expression.Boolean;
 import org.jgll.datadependent.ast.Expression.Call;
+import org.jgll.datadependent.ast.Expression.EndOfFile;
 import org.jgll.datadependent.ast.Expression.Equal;
 import org.jgll.datadependent.ast.Expression.Greater;
 import org.jgll.datadependent.ast.Expression.GreaterThanEqual;
@@ -11,8 +12,10 @@ import org.jgll.datadependent.ast.Expression.Integer;
 import org.jgll.datadependent.ast.Expression.LShiftANDEqZero;
 import org.jgll.datadependent.ast.Expression.LeftExtent;
 import org.jgll.datadependent.ast.Expression.Less;
+import org.jgll.datadependent.ast.Expression.LessThanEqual;
 import org.jgll.datadependent.ast.Expression.Name;
 import org.jgll.datadependent.ast.Expression.NotEqual;
+import org.jgll.datadependent.ast.Expression.Or;
 import org.jgll.datadependent.ast.Expression.OrIndent;
 import org.jgll.datadependent.ast.Expression.Real;
 import org.jgll.datadependent.ast.Expression.RightExtent;
@@ -42,7 +45,11 @@ public interface IAbstractASTVisitor<T> {
 	
 	public T visit(AndIndent expression);
 	
+	public T visit(Or expression);
+	
 	public T visit(Less expression);
+	
+	public T visit(LessThanEqual expression);
 	
 	public T visit(Greater expression);
 	
@@ -55,6 +62,8 @@ public interface IAbstractASTVisitor<T> {
 	public T visit(LeftExtent expression);
 	
 	public T visit(RightExtent expression);
+	
+	public T visit(EndOfFile expression);
 	
 	public T visit(VariableDeclaration declaration);
 	

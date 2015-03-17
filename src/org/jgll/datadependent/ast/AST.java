@@ -105,8 +105,16 @@ public class AST {
 		return new Expression.AndIndent(index, first, lExt, returnIndex);
 	}
 	
+	static public Expression or(Expression lhs, Expression rhs) {
+		return new Expression.Or(lhs, rhs);
+	}
+	
 	static public Expression less(Expression lhs, Expression rhs) {
 		return new Expression.Less(lhs, rhs);
+	}
+	
+	static public Expression lessEq(Expression lhs, Expression rhs) {
+		return new Expression.LessThanEqual(lhs, rhs);
 	}
 	
 	static public Expression greater(Expression lhs, Expression rhs) {
@@ -131,6 +139,10 @@ public class AST {
 	
 	static public Expression rExt(String label) {
 		return new Expression.RightExtent(label);
+	}
+	
+	static public Expression endOfFile(Expression index) {
+		return new Expression.EndOfFile(index);
 	}
 	
 	/**
