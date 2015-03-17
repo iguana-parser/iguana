@@ -436,11 +436,11 @@ lexical DPpConditional
       ;
 
 lexical DPpIfSection 
-      = "#"   Whitespace?   "if"   Whitespace   DPpExpression exp if(true) Layout else (Input (DPpElifSection | DPpElseSection))
+      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(true) Layout else (Input (DPpElifSection | DPpElseSection))
       ;
 
 lexical DPpElifSection
-      = "#"   Whitespace?   "elif"   Whitespace   DPpExpression exp if(true) Layout else (Input (DPpElifSection | DPpElseSection))
+      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(true) Layout else (Input (DPpElifSection | DPpElseSection))
       ;
 
 lexical DPpElseSection
