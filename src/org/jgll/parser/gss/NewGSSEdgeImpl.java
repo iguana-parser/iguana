@@ -66,9 +66,6 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	@Override
 	public Descriptor addDescriptor(GLLParser parser, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
 		
-		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
-			return null;
-		
 		/**
 		 * 
 		 * Data-dependent GLL parsing
@@ -81,9 +78,16 @@ public class NewGSSEdgeImpl implements GSSEdge {
 		if (returnSlot.requiresBinding()) {
 			Environment env = returnSlot.doBinding(sppfNode, parser.getEmptyEnvironment());
 			
+			parser.setEnvironment(env);
+			
+			if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, parser.getEvaluatorContext()))
+				return null;
+			
+			env = parser.getEnvironment();
+			
 			if (returnSlot.isLast() && !returnSlot.isEnd()) {
 				parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
-				returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex), env);
+				returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex), parser.getEnvironment());
 				
 				if (parser.getCurrentEndGrammarSlot().isEnd()) {
 					if (destination instanceof org.jgll.datadependent.gss.GSSNode<?>) {
@@ -110,6 +114,9 @@ public class NewGSSEdgeImpl implements GSSEdge {
 				
 			return null;
 		}
+		
+		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
+			return null;
 		
 		if (returnSlot.isLast() && !returnSlot.isEnd()) {
 			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());

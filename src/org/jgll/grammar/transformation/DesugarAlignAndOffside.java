@@ -65,7 +65,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			Set<Rule> rules = new LinkedHashSet<>();
 			
 			for (Rule rule : grammar.getDefinitions().values())
-				rules.add(desugarAligns.transform(rule));
+				rules.add(desugarAligns.transform(rule, grammar.getLayout()));
 			
 			return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
 		}
@@ -76,9 +76,23 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		findOffsides.find(grammar);
 		offsided = findOffsides.getOffsides();
 		
-		for (Map.Entry<Nonterminal, Nonterminal> entry : reachabilityGraph.entries())
+		Set<String> layouts = new HashSet<>();
+		
+		if (grammar.getLayout() != null)
+			layouts.add(grammar.getLayout().getName());
+		
+		for (Rule rule : grammar.getDefinitions().values())
+			if (rule.getLayout() != null)
+				layouts.add(rule.getLayout().getName());
+		
+		for (Map.Entry<Nonterminal, Nonterminal> entry : reachabilityGraph.entries()) {
+			
+			if (layouts.contains(entry.getValue().getName()))
+				continue;
+			
 			if (offsided.contains(entry.getKey().getName()))
 				offsided.add(entry.getValue().getName());
+		}
 		
 		DesugarAlignAndOffsideVisitor desugarOffsides = new DesugarAlignAndOffsideVisitor(offsided);
 		desugarOffsides.doAlign(doAlign);
@@ -86,7 +100,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		Set<Rule> rules = new LinkedHashSet<>();
 		
 		for (Rule rule : grammar.getDefinitions().values())
-			rules.add(desugarOffsides.transform(rule));
+			rules.add(desugarOffsides.transform(rule, grammar.getLayout()));
 		
 		return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
 	}
@@ -109,6 +123,8 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		private final Set<String> offsided;
 		
 		private Rule rule;
+		private Nonterminal layout;
+		
 		private boolean isOffsided;
 		
 		private int i;
@@ -121,8 +137,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			this.doAlign = doAlign;
 		}
 		
-		public Rule transform(Rule rule) {
+		public Rule transform(Rule rule, Nonterminal layout) {
 			this.rule = rule;
+			this.layout = layout;
+			this.isOffsided = false;
+			i = 0;
 			
 			if (doAlign) {
 				List<Symbol> symbols = new ArrayList<>();
@@ -132,15 +151,28 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					
 					builder = builder.setSymbols(symbols);
 					
-					for (Symbol symbol : this.rule.getBody())
+					for (Symbol symbol : this.rule.getBody()) {
+						if (symbol instanceof Align) {
+							Symbol sym = ((Align) symbol).getSymbol();
+							if (sym instanceof Plus || sym instanceof Star || sym instanceof Sequence) {
+								Symbol s = symbol.accept(this);
+								String l3 = l_align + i++;
+								Nonterminal longest = getLayout().copyBuilder().setLabel(l3)
+														.addPostCondition(predicate(or(endOfFile(rExt(l3)), lessEq(indent(rExt(l3)), indent(lExt(s.getLabel()))))))
+														.build();
+								symbols.add(s);
+								symbols.add(longest);
+								continue;
+							}
+						}
 						symbols.add(symbol.accept(this));
+					}
 				}
 				
 				return builder.build();
 			}
 			
 			isOffsided = offsided.contains(this.rule.getHead().getName());
-			i = 0;
 			
 			Rule.Builder builder;
 			
@@ -155,8 +187,9 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				
 				builder = builder.setSymbols(symbols);
 				
-				for (Symbol symbol : this.rule.getBody())
+				for (Symbol symbol : this.rule.getBody()) {
 					symbols.add(symbol.accept(this));
+				}
 			}
 			
 			return builder.build();
@@ -168,28 +201,31 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			if (doAlign) {
 				Symbol sym = symbol.getSymbol().accept(this);
 				
-				String l1 = getLabel(sym);
-				
 				if (sym instanceof Plus) {
+					String l1 = getLabel(symbol, sym);
+					
 					Plus plus = (Plus) sym;
 					
 					Symbol s = plus.getSymbol();
-					String l2 = s.getLabel() != null? s.getLabel() : l_align + i++;
+					String l2 = s.getLabel() != null? s.getLabel() : l_align + i++; // TODO: conflicting labels
 					
 					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
 					
 					return Plus.builder(s).addSeparators(plus.getSeparators()).setLabel(l1).addConditions(plus).addConditions(symbol).build();
 					
 				} else if (sym instanceof Star) {
+					String l1 = getLabel(symbol, sym);
+					
 					Star star = (Star) sym;
 					
 					Symbol s = star.getSymbol();
-					String l2 = s.getLabel() != null? s.getLabel() : l_align + i++;
+					String l2 = s.getLabel() != null? s.getLabel() : l_align + i++; // TODO: conflicting labels
 					
 					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
 					
 					return Star.builder(s).addSeparators(star.getSeparators()).setLabel(l1).addConditions(star).addConditions(symbol).build();
 				} else if (sym instanceof Sequence) {
+					String l1 = getLabel(symbol, sym);
 					
 					@SuppressWarnings("unchecked")
 					Sequence<Symbol> seq = (Sequence<Symbol>) sym;
@@ -198,11 +234,12 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					List<Symbol> syms = new ArrayList<>();
 					
 					for (Symbol s : symbols) {
-						String l2 = s.getLabel() != null? s.getLabel() : l_align + i++;
+						String l2 = s.getLabel() != null? s.getLabel() : l_align + i++; // TODO: conflicting labels
 						syms.add(getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2));
 					}
 					
-					return Sequence.builder(syms).setLabel(l1).addConditions(seq).addConditions(symbol).build();
+					return Sequence.builder(syms).setLabel(l1)
+							.addConditions(seq).addConditions(symbol).build();
 				} else 
 					return sym;
 			}
@@ -308,7 +345,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Nonterminal symbol) {
-			if (isOffsided) { // The rule has a parameter for indentation, and therefore, also all reachable nonterminals
+			if (isOffsided && offsided.contains(symbol.getName())) { // The rule has a parameter for indentation, and therefore, also all reachable nonterminals
 				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
 				return symbol.copyBuilder().apply(// (first && l.lExt - index == 0)?index
 						                          andIndent(index_exp, first_exp, lExt(l), true), 
@@ -316,12 +353,10 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 												  // first && l.lExt - index == 0
 												  andIndent(index_exp, first_exp, lExt(l)))
 												  .setLabel(l).build();
-			} else {
-				if (offsided.contains(symbol.getName()))
-					return symbol.copyBuilder().apply(integer(0), integer(0), integer(0)).build();
-				else
-					return symbol;
-			}
+			} else if (offsided.contains(symbol.getName()))
+				return symbol.copyBuilder().apply(integer(0), integer(0), integer(0)).build();
+			else
+				return symbol;
 		}
 
 		@Override
@@ -468,14 +503,20 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					       : symbol;
 		}
 		
-		private String getLabel(Symbol symbol) {
-			if (symbol instanceof Offside) {
-				Offside sym = (Offside) symbol;
-				String l = sym.getSymbol().getLabel();
-				return l != null? l : l_align + i++;
-			}
+		private String getLabel(Align align, Symbol symbol) {
+			String label = null;
 			
-			return symbol.getLabel() != null? symbol.getLabel() : l_align + i++;
+			if (align.getLabel() != null && symbol.getLabel() != null) {
+				if (align.getLabel() != symbol.getLabel())
+					throw new RuntimeException("Two conflicting labels: " + align);
+				else 
+					label = align.getLabel();
+			} else if (align.getLabel() != null)
+				label = align.getLabel();
+			else if (symbol.getLabel() != null)
+				label = symbol.getLabel();
+			
+			return label != null? label : l_align + i++;
 		}
 		
 		private Symbol getSymbol(Symbol symbol, Condition precondition, String label) {
@@ -487,6 +528,18 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			}
 			
 			return symbol.copyBuilder().addPreCondition(precondition).setLabel(label).build();
+		}
+		
+		private Nonterminal getLayout() {
+			switch(rule.getLayoutStrategy()) {
+				case NO_LAYOUT:
+					throw new RuntimeException("Align should not be part of lexicals.");
+				case INHERITED:
+					return layout;
+				case FIXED:
+					return rule.getLayout();
+			}
+			return layout;
 		}
 		
 	}
@@ -504,8 +557,8 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		}
 		
 		public void find(Grammar grammar) {
+			
 			for (Rule rule : grammar.getDefinitions().values()) {
-				
 				if (rule.getBody() == null)
 					continue;
 				
