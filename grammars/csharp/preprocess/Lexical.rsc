@@ -22,10 +22,10 @@ lexical InputElement
 lexical Token
      = Identifier
      | Keyword
-     | [A-Za-z] !<< IntegerLiteral
-     | [A-Za-z] !<< RealLiteral
-     | CharacterLiteral
-     | StringLiteral
+     | [A-Za-z] !<< IntegerLiteral_
+     | [A-Za-z] !<< RealLiteral_
+     | CharacterLiteral_
+     | StringLiteral_
      | OperatorOrPunctuator
      ;     
 
@@ -228,23 +228,23 @@ lexical Keyword
       //| "await"
       ;
 
-// Literals      
+// Literals
       
-lexical Literal
-     = BooleanLiteral
-     | IntegerLiteral
-     | RealLiteral
-     | CharacterLiteral
-     | StringLiteral
-     | NullLiteral
+lexical Literal_
+     = BooleanLiteral_
+     | IntegerLiteral_
+     | RealLiteral_
+     | CharacterLiteral_
+     | StringLiteral_
+     | NullLiteral_
      ;
      
-lexical BooleanLiteral
+lexical BooleanLiteral_
       = "true"
       | "false"
       ;
      
-lexical IntegerLiteral
+lexical IntegerLiteral_
      = DecimalIntegerLiteral
      | HexadecimalIntegerLiteral
      ;
@@ -271,7 +271,7 @@ lexical HexDigit
       = [0-9  A-F  a-f]
       ;
       
-lexical RealLiteral
+lexical RealLiteral_
      = DecimalDigit+  "."   DecimalDigit+   ExponentPart?   RealTypeSuffix
      | DecimalDigit+  "."   DecimalDigit+  !>> [0-9]  ExponentPart?   !>> [F  f  D  d  M  m]
      | [0-9] !<< "."  DecimalDigit+ !>> [0-9]  ExponentPart?   !>> [F  f  D  d  M  m]
@@ -292,7 +292,7 @@ lexical RealTypeSuffix
       = [F  f  D  d  M  m]
       ;
       
-lexical CharacterLiteral
+lexical CharacterLiteral_
      = [\']   Character   [\']
      ;
      
@@ -328,7 +328,7 @@ lexical HexadecimalEscapeSequence
      | "\\x"   HexDigit   HexDigit   HexDigit    HexDigit
      ;
      
-lexical StringLiteral
+lexical StringLiteral_
       = RegularStringLiteral
       | VerbatimStringLiteral
       ;
@@ -365,7 +365,7 @@ lexical QuoteEscapeSequence
       = [\"][\"]
       ;
 
-lexical NullLiteral
+lexical NullLiteral_
       = "null"
       ;
       
