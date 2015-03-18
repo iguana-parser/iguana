@@ -31,9 +31,8 @@ lexical Token
 
 
 layout Layout 
-     = (Whitespace | Comment | DPpConditional | DPpGarbage)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//"
+     = (Whitespace | Comment | DPpConditional | DPpGarbage)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//" !>> "#"
      ; 
-       // hack: CPP outpus pragmas to the file and I haven't found a way to get rid of it yet. 
 
 /* 
  * Carriage return character (U+000D)
@@ -59,8 +58,8 @@ lexical SingleLineComment
       ;      
       
 lexical InputCharacter 
-	      = ![] \ [\r \n] 		                    // ![] \ [\r \n \u0085 \u2028 \u2029]    // Any Unicode character Except NewLine
-	      | [\a00]                            // to match zero        
+	  = ![] \ [\r \n] 		              // ![] \ [\r \n \u0085 \u2028 \u2029]    // Any Unicode character Except NewLine
+	  | [\a00]                            // to match zero        
       ;
       
 lexical DelimitedComment
@@ -431,6 +430,10 @@ lexical RightShiftAssignment
      
 // Conditional directives with evalutation
 
+syntax A 
+     = Identifier+
+     ;
+
 lexical DPpConditional 
       = DPpIfSection
       ;
@@ -458,7 +461,7 @@ lexical DPpElif
 lexical DPpElse 
       = "#"   Whitespace?   "else" Input
       ;
-
+      
 // Pre-processing directives
 
 lexical PpDirective
@@ -475,7 +478,7 @@ lexical ConditionalSymbol
       ;
       
 lexical PpExpression
-      = Whitespace?  PpOrExpression   Whitespace?
+      = PpOrExpression
       ;
 
 lexical PpOrExpression
@@ -540,18 +543,15 @@ lexical ConditionalSection
      ;
 
 lexical SkippedSectionPart 
-      = SkippedCharacters?   NewLine
+      = SkippedCharacters
+      | Whitespace
       | PpDirective
       ;
 
 lexical SkippedCharacters
-     = NoHash+
+     = ![#] \ [\ \t \f \r \n]
      ;
      
-lexical NoHash
-      = ![#] \ [\r\n]
-      ;     
-
 lexical PpDiagnostic
      = "#"   Whitespace?   ("error" | "warning")   PpMessage
      ;
