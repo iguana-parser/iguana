@@ -3,6 +3,7 @@ package org.jgll.datadependent.ast;
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.grammar.exception.UnexpectedTypeOfArgumentException;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.generator.GeneratorUtil;
 
 public class AST {
@@ -85,6 +86,33 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("indent(%s)", arg);
+					}
+		};
+	}
+	
+	static public Expression ppLookup(Expression arg) {
+		return new Expression.Call("ppLookup", arg) {
+			
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg.interpret(ctx);
+						if (!(value instanceof NonPackedNode)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						NonPackedNode node = (NonPackedNode) value;
+						
+						return ctx.lookupGlobalVariable(ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent()));
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.ppLookup(" + arg.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("ppLookup(%s)", arg);
 					}
 		};
 	}

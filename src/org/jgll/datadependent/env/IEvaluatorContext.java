@@ -29,5 +29,14 @@ public interface IEvaluatorContext {
 	public void storeVariable(String name, Object value);
 	
 	public Object lookupVariable(String name);
+	
+	/**
+	 * 
+	 * Global parser environment
+	 * 
+	 */
+	public void declareGlobalVariables(String[] names, Object[] values);
+	
+	public Object lookupGlobalVariable(String name);
 
 }

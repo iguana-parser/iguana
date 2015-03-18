@@ -1,5 +1,9 @@
 package org.jgll.datadependent.env;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jgll.grammar.exception.UndeclaredVariableException;
 import org.jgll.util.Input;
 
 public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
@@ -7,6 +11,8 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 	private final Input input;
 	
 	private Environment env;
+	
+	private Map<String, Object> global;
 	
 	public AbstractEvaluatorContext(Input input) {
 		this.input = input;
@@ -56,6 +62,36 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 	@Override
 	public Object lookupVariable(String name) {
 		return env.lookup(name);
+	}
+	
+	@Override
+	public void declareGlobalVariables(String[] names, Object[] values) {
+		assert names.length == values.length;
+		
+		if (names.length == 0)
+			return;
+		
+		if (global == null)
+			global = new HashMap<>();
+		
+		int i = 0;
+		while (i < names.length) {
+			global.put(names[i], values[i]);
+			i++;
+		}
+	}
+	
+	@Override
+	public Object lookupGlobalVariable(String name) {
+		if (global == null)
+			return null;
+		
+		Object value = global.get(name);
+		
+		if (value == null) 
+			throw new UndeclaredVariableException(name);
+		
+		return value;
 	}
 	
 }
