@@ -1,5 +1,10 @@
 package org.jgll.parser.datadependent.preprocess;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jgll.benchmark.IguanaBenchmark;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.symbol.Nonterminal;
@@ -9,6 +14,12 @@ import org.jgll.grammar.transformation.LayoutWeaver;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.NonterminalNode;
+import org.jgll.sppf.PackedNode;
+import org.jgll.sppf.TerminalNode;
+import org.jgll.traversal.NonterminalNodeVisitor;
+import org.jgll.traversal.SPPFVisitor;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.jgll.util.Visualization;
@@ -32,5 +43,18 @@ public class TestPreprocessor {
 		ParseResult result = parser.parse(input, grammar, start);
 		System.out.println(result);
 		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
+		
+		
+		Map<String, NonterminalNode> nodes = new HashMap<>();
+		
+		NonterminalNodeVisitor.create(n -> {
+			if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
+				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+				nodes.put(yield, n);
+			}
+		}).visit(result.asParseSuccess().getRoot());
+		
+		System.out.println(nodes.keySet());
+		
 	}
 }
