@@ -1,5 +1,6 @@
 package org.jgll.grammar.operations;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,13 +35,25 @@ import com.google.common.collect.SetMultimap;
 
 public class ReachabilityGraph {
 
-	private ListMultimap<Nonterminal, Rule> definitions;
+	private final ListMultimap<Nonterminal, Rule> definitions;
 	
 	private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
-
+	
+	private final Set<String> layouts;
+	
 	public ReachabilityGraph(Grammar grammar) {
 		this.reachabilityGraph = HashMultimap.create();
 		this.definitions = grammar.getDefinitions();
+		
+		this.layouts = new HashSet<>();
+		
+		if (grammar.getLayout() != null)
+			layouts.add(grammar.getLayout().getName());
+		
+		for (Rule rule : grammar.getDefinitions().values())
+			if (rule.getLayout() != null)
+				layouts.add(rule.getLayout().getName());
+		
 		calculateReachabilityGraph();
 	}
 	
@@ -62,7 +75,7 @@ public class ReachabilityGraph {
 	 */
 	public Multimap<Nonterminal, Nonterminal> calculateReachabilityGraph() {
 		
-		Visitor visitor = new Visitor(reachabilityGraph);
+		Visitor visitor = new Visitor(reachabilityGraph, layouts);
 		
 		Set<Nonterminal> nonterminals = definitions.keySet();
 		
@@ -73,6 +86,10 @@ public class ReachabilityGraph {
 			changed = false;
 			
 			for (Nonterminal head : nonterminals) {
+				
+				// Skips layout
+				if (layouts.contains(head.getName()))
+					continue;
 				
 				visitor.setHead(head);
 				
@@ -96,11 +113,13 @@ public class ReachabilityGraph {
 	private static class Visitor implements ISymbolVisitor<Boolean> {
 		
 		private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
+		private final Set<String> layouts;
 		
 		private Nonterminal head;
 		
-		public Visitor(SetMultimap<Nonterminal, Nonterminal> reachabilityGraph) {
+		public Visitor(SetMultimap<Nonterminal, Nonterminal> reachabilityGraph, Set<String> layouts) {
 			this.reachabilityGraph = reachabilityGraph;
+			this.layouts = layouts;
 		}
 		
 		public void setHead(Nonterminal head) {
@@ -162,6 +181,9 @@ public class ReachabilityGraph {
 
 		@Override
 		public Boolean visit(Nonterminal symbol) {
+			// Skips layout
+			if (layouts.contains(symbol.getName()))
+				return false;
 			return add(head, symbol, reachabilityGraph);
 		}
 
