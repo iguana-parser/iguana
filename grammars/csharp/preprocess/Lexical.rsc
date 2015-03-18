@@ -443,11 +443,11 @@ lexical DPpConditional
       ;
 
 lexical DPpIfSection 
-      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (Input (DPpElifSection | DPpElseSection))
+      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (Input (DPpElifSection | DPpElseSection | PpEndif))
       ;
 
 lexical DPpElifSection
-      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (Input (DPpElifSection | DPpElseSection))
+      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (Input (DPpElifSection | DPpElseSection | PpEndif))
       ;
 
 lexical DPpElseSection
