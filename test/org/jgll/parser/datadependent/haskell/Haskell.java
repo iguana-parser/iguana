@@ -970,8 +970,8 @@ Grammar.builder()
          
          Assert.assertTrue(result.isParseSuccess());
 
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/",
-         //                   result.asParseSuccess().getRoot(), input);
+          Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/",
+                            result.asParseSuccess().getRoot(), input);
 
          Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }

@@ -70,29 +70,16 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
 		}
 		
+		// After EBNF translation
 		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();
 		
 		FindOffsidesVisitor findOffsides = new FindOffsidesVisitor();
 		findOffsides.find(grammar);
 		offsided = findOffsides.getOffsides();
-		
-		Set<String> layouts = new HashSet<>();
-		
-		if (grammar.getLayout() != null)
-			layouts.add(grammar.getLayout().getName());
-		
-		for (Rule rule : grammar.getDefinitions().values())
-			if (rule.getLayout() != null)
-				layouts.add(rule.getLayout().getName());
-		
-		for (Map.Entry<Nonterminal, Nonterminal> entry : reachabilityGraph.entries()) {
-			
-			if (layouts.contains(entry.getValue().getName()))
-				continue;
-			
+				
+		for (Map.Entry<Nonterminal, Nonterminal> entry : reachabilityGraph.entries())			
 			if (offsided.contains(entry.getKey().getName()))
 				offsided.add(entry.getValue().getName());
-		}
 		
 		DesugarAlignAndOffsideVisitor desugarOffsides = new DesugarAlignAndOffsideVisitor(offsided);
 		desugarOffsides.doAlign(doAlign);
@@ -580,7 +567,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 
 		@Override
 		public Void visit(Align symbol) {
-			return symbol.accept(this);
+			return symbol.getSymbol().accept(this);
 		}
 
 		@Override
@@ -656,7 +643,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 
 		@Override
 		public Void visit(Opt symbol) {
-			return symbol.accept(this);
+			return symbol.getSymbol().accept(this);
 		}
 
 		@Override
