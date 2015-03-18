@@ -431,7 +431,7 @@ lexical RightShiftAssignment
 // Conditional directives with evalutation
 
 syntax A 
-     = Identifier+
+     = Identifier*
      ;
 
 lexical DPpConditional 
