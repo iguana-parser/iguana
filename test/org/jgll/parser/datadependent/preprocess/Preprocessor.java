@@ -2,8 +2,6 @@ package org.jgll.parser.datadependent.preprocess;
 
 import static org.jgll.grammar.symbol.LayoutStrategy.*;
 
-import java.util.Arrays;
-
 import org.jgll.datadependent.ast.AST;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.condition.ConditionType;
@@ -25,7 +23,7 @@ import org.jgll.regex.Star;
 
 import com.google.common.collect.Sets;
 
-public class CSharp {
+public class Preprocessor {
 	public static Grammar grammar =
 		Grammar.builder()
 		.setLayout(Nonterminal.builder("Layout").build())
