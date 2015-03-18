@@ -3,7 +3,6 @@ package org.jgll.datadependent.env;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jgll.grammar.exception.UndeclaredVariableException;
 import org.jgll.util.Input;
 
 public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
@@ -65,6 +64,14 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 	}
 	
 	@Override
+	public void declareGlobalVariable(String name, Object value) {
+		if (global == null)
+			global = new HashMap<>();
+		
+		global.put(name, value);
+	}
+	
+	@Override
 	public void declareGlobalVariables(String[] names, Object[] values) {
 		assert names.length == values.length;
 		
@@ -86,12 +93,7 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 		if (global == null)
 			return null;
 		
-		Object value = global.get(name);
-		
-		if (value == null) 
-			throw new UndeclaredVariableException(name);
-		
-		return value;
+		return global.get(name);
 	}
 	
 }

@@ -25,6 +25,9 @@ import org.jgll.util.Input;
 import org.jgll.util.Visualization;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+
 public class TestPreprocessor {
 
 	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(CSharp.grammar));
@@ -39,10 +42,11 @@ public class TestPreprocessor {
 		
 
 		Input input = Input.fromPath("/Users/aliafroozeh/input.cs");
+		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, start);
+		ParseResult result = parser.parse(input, grammar, start, ImmutableMap.of("DEBUG", true));
 		System.out.println(result);
-		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
+//		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		
 		
 		Map<String, NonterminalNode> nodes = new HashMap<>();

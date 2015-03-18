@@ -1,5 +1,8 @@
 package org.jgll.parser;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.ast.Statement;
 import org.jgll.datadependent.env.Environment;
@@ -30,10 +33,18 @@ import org.jgll.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol);
+	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol, Map<String, Object> map);
+	
+	default ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol) {
+		return parse(input, grammarGraph, startSymbol, Collections.emptyMap());
+	}
 	
 	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
 		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol);
+	}
+	
+	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Map<String, Object> map) {
+		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol, map);
 	}
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);

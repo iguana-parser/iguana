@@ -431,19 +431,23 @@ lexical RightShiftAssignment
 // Conditional directives with evalutation
 
 syntax A 
-     = Identifier*
+     = Id*
      ;
+
+lexical Id
+      = [A-Z _ a-z] !<< IdentifierOrKeyword !>> [0-9 A-Z _ a-z] \ Keyword
+      ;     
 
 lexical DPpConditional 
       = DPpIfSection
       ;
 
 lexical DPpIfSection 
-      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(true) Layout else (Input (DPpElifSection | DPpElseSection))
+      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (Input (DPpElifSection | DPpElseSection))
       ;
 
 lexical DPpElifSection
-      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(true) Layout else (Input (DPpElifSection | DPpElseSection))
+      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (Input (DPpElifSection | DPpElseSection))
       ;
 
 lexical DPpElseSection
@@ -474,7 +478,7 @@ lexical PpDirective
       ;
       
 lexical ConditionalSymbol
-      = IdentifierOrKeyword \ "true" \ "false"
+      = IdentifierOrKeyword !>> [0-9 A-Z _ a-z] \ "true" \ "false"
       ;
       
 lexical PpExpression

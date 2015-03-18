@@ -1,6 +1,7 @@
 package org.jgll.parser;
 
 
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -93,7 +94,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal) {
+	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, Object> map) {
 		this.grammarGraph = grammarGraph;
 		this.input = input;
 		
@@ -101,6 +102,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		 * Data-dependent GLL parsing
 		 */
 		this.ctx = new PersistentEvaluatorContext(input);
+		map.forEach((k,v) -> ctx.declareGlobalVariable(k, v));
 		
 		NonterminalGrammarSlot startSymbol = getStartSymbol(nonterminal);
 		
