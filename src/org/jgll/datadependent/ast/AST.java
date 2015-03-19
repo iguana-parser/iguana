@@ -118,6 +118,74 @@ public class AST {
 		};
 	}
 	
+	static public Expression endsWith(Expression index, Expression character) {
+		return new Expression.Call("endsWith", index, character) {
+			
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object i = index.interpret(ctx);
+						if (!(i instanceof java.lang.Integer)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						int j = (java.lang.Integer) i;
+						
+						Object c = character.interpret(ctx);
+						
+						if (!(c instanceof java.lang.String)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						Object obj = ctx.getInput().subString(j - 1, j);
+						return obj.equals(c);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.endsWith(" + index.getConstructorCode() + "," + character.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("endsWith(%s,\"%s\")", index, character);
+					}
+		};
+	}
+	
+	static public Expression startsWith(Expression index, Expression string) {
+		return new Expression.Call("startsWith", index, string) {
+			
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object i = index.interpret(ctx);
+						if (!(i instanceof java.lang.Integer)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						int j = (java.lang.Integer) i;
+						
+						Object str = string.interpret(ctx);
+						
+						if (!(str instanceof java.lang.String)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						Object obj = ctx.getInput().subString(j, j + ((java.lang.String) str).length());
+						return obj.equals(str);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.startsWith(" + index.getConstructorCode() + "," + string.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("startsWith(%s,\"%s\")", index, string);
+					}
+		};
+	}
+	
 	static public Expression lShiftANDEqZero(Expression lhs, Expression rhs) {
 		return new Expression.LShiftANDEqZero(lhs, rhs);
 	}
