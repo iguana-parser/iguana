@@ -31,7 +31,7 @@ lexical Token
 
 
 layout Layout 
-     = (Whitespace | Comment | DPpConditional | DPpGarbage)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//" !>> "#"
+     = (Whitespace | Comment | DPpConditional | DPpGarbage | PpDeclaration | PpLine | PpDiagnostic | PpRegion  | PpPragma)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//" !>> "#"
      ; 
 
 /* 
@@ -92,7 +92,7 @@ lexical WhitespaceNoNL
 // B.1.5 Unicode character escape sequences       
  
 lexical UnicodeEscapeSequence
-      = "\\u"   HexDigit   HexDigit   HexDigit   HexDigit   !>> HexDigit
+      = "\\u"   HexDigit   HexDigit   HexDigit   HexDigit   
       | "\\U"   HexDigit   HexDigit   HexDigit   HexDigit   HexDigit   HexDigit   HexDigit   HexDigit
       ;
       
@@ -518,7 +518,7 @@ lexical PpDeclaration
       ;
       
 lexical PpNewLine 
-      = WhitespaceNoNL? NewLine
+      = WhitespaceNoNL? SingleLineComment? NewLine
       ; //Whitespace?   SingleLineComment   NewLine
 
 lexical PpConditional 
@@ -526,34 +526,36 @@ lexical PpConditional
       ;
 
 lexical PpIfSection 
-      = "#"   Whitespace?   "if"   Whitespace   PpExpression   PpNewLine   ConditionalSection?
+      = "#"   Whitespace?   "if"   Whitespace   PpExpression   PpNewLine   SkippedSection?
       ;
 
 lexical PpElifSection
-      = "#"   Whitespace?   "elif"   Whitespace   PpExpression   PpNewLine   ConditionalSection?
+      = "#"   Whitespace?   "elif"   Whitespace   PpExpression   PpNewLine   SkippedSection?
       ;
 
 lexical PpElseSection
-      = "#"   Whitespace?   "else"   PpNewLine   ConditionalSection?
+      = "#"   Whitespace?   "else"   PpNewLine   SkippedSection?
       ;
 
 lexical PpEndif
       = "#"   Whitespace?   "endif"   PpNewLine
       ;
 
-lexical ConditionalSection 
-     = //InputSection
-       SkippedSectionPart+
+lexical SkippedSection 
+     = SkippedSectionPart+
      ;
 
 lexical SkippedSectionPart 
       = SkippedCharacters
-      | Whitespace
+      | WhitespaceNoNL
+      | SingleLineComment
       | PpDirective
+      | NewLine
       ;
 
 lexical SkippedCharacters
-     = ![#] \ [\ \t \f \r \n]
+     = ![#] \ [\ \t \f \r \n /]
+     | [/] !>> [/] 
      ;
      
 lexical PpDiagnostic
@@ -565,7 +567,7 @@ lexical PpMessage
       ;
 
 lexical PpRegion 
-      = PpStartRegion   ConditionalSection? WhitespaceNoNL?  PpEndRegion
+      = PpStartRegion 	InputSection*  PpEndRegion
       ;
 
 lexical PpStartRegion 
