@@ -11,6 +11,7 @@ public enum ConditionType {
 	NOT_MATCH(" \\ "),
 	END_OF_LINE("$"),
 	START_OF_LINE("^"),
+	END_OF_FILE("$$"),
 	
 	DATA_DEPENDENT(" ? ")
 	;

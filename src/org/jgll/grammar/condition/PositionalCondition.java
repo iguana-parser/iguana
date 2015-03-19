@@ -52,6 +52,9 @@ public class PositionalCondition extends Condition {
 		    
 			case END_OF_LINE:
 				return (input, node, i) -> !input.isEndOfLine(i);
+				
+			case END_OF_FILE:
+				return (input, node, i) -> !input.isEndOfFile(i);
 		
 		    default: 
 		    	throw new RuntimeException();

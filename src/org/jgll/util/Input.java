@@ -394,6 +394,10 @@ public class Input {
 		return characters[currentInputIndex] == 0 || lineColumns[currentInputIndex + 1].columnNumber == 1;
 	}
 	
+	public boolean isEndOfFile(int currentInputIndex) {
+		return characters[currentInputIndex] == -1;
+	}
+	
 	public int[] getCharacters() {
 		return characters;
 	}
