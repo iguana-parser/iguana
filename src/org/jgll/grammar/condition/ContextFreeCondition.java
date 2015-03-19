@@ -15,7 +15,7 @@ public class ContextFreeCondition extends Condition {
 	
 	private List<? extends Symbol> symbols;
 	
-	public ContextFreeCondition(ConditionType type, Sequence group) {
+	public ContextFreeCondition(ConditionType type, Sequence<?> group) {
 		super(type);
 		this.symbols = group.getSymbols();
 	}

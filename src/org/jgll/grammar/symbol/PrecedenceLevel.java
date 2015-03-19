@@ -1,6 +1,10 @@
 package org.jgll.grammar.symbol;
 
-public class PrecedenceLevel {
+import java.io.Serializable;
+
+public class PrecedenceLevel implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private final int lhs;
 	private int rhs = -1;

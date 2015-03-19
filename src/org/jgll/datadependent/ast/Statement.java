@@ -5,8 +5,12 @@ import org.jgll.datadependent.traversal.IAbstractASTVisitor;
 
 public abstract class Statement extends AbstractAST {
 	
+	private static final long serialVersionUID = 1L;
+
 	static public class Expression extends Statement {
 
+		private static final long serialVersionUID = 1L;
+		
 		private final org.jgll.datadependent.ast.Expression exp;
 		
 		Expression(org.jgll.datadependent.ast.Expression exp) {
@@ -41,6 +45,8 @@ public abstract class Statement extends AbstractAST {
 	}
 	
 	static public class VariableDeclaration extends Statement {
+		
+		private static final long serialVersionUID = 1L;
 		
 		private final org.jgll.datadependent.ast.VariableDeclaration decl;
 		
