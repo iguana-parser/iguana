@@ -34,6 +34,8 @@ public class AST {
 	static public Expression println(Expression... args) {
 		return new Expression.Call("println", args) {
 					
+			private static final long serialVersionUID = 1L;
+
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
 						Object[] arguments = interpretArguments(ctx);
@@ -68,6 +70,8 @@ public class AST {
 	static public Expression indent(Expression arg) {
 		return new Expression.Call("indent", arg) {
 			
+			private static final long serialVersionUID = 1L;
+
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
 						Object value = arg.interpret(ctx);
@@ -93,6 +97,8 @@ public class AST {
 	static public Expression ppLookup(Expression arg) {
 		return new Expression.Call("ppLookup", arg) {
 			
+			private static final long serialVersionUID = 1L;
+
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
 						Object value = arg.interpret(ctx);
