@@ -180,7 +180,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Expression[] arguments = null;
 			
 			in.setEmpty();
-			in.accept(visitor);
+			visitor.visitSymbol(in);
 			
 			if (!freeVars.isEmpty()) {
 				parameters = freeVars.stream().toArray(String[]::new);
@@ -220,7 +220,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Expression[] arguments = null;
 			
 			S.setEmpty();
-			S.accept(visitor);
+			visitor.visitSymbol(S);
 			
 			if (!freeVars.isEmpty()) {
 				parameters = freeVars.stream().toArray(String[]::new);
@@ -293,7 +293,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Expression[] arguments = null;
 			
 			S.setEmpty();
-			S.accept(visitor);
+			visitor.visitSymbol(S);
 			
 			if (!freeVars.isEmpty()) {
 				parameters = freeVars.stream().toArray(String[]::new);
