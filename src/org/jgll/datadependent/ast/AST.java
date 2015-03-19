@@ -94,6 +94,39 @@ public class AST {
 		};
 	}
 	
+	static public Expression ppDeclare(Expression variable, Expression value) {
+		return new Expression.Call("ppDeclare", variable, value) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						
+						Object var = variable.interpret(ctx);
+						
+						if (!(var instanceof NonPackedNode))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						NonPackedNode node = (NonPackedNode) var;
+						
+						ctx.declareGlobalVariable(ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent()), 
+								                  value.interpret(ctx));
+						
+						return null;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.ppDeclare(" + variable.getConstructorCode() + ", " + value.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("ppDeclare(%s,%s)", variable, value);
+					}
+		};
+	}
+	
 	static public Expression ppLookup(Expression arg) {
 		return new Expression.Call("ppLookup", arg) {
 			
@@ -120,6 +153,78 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("ppLookup(%s)", arg);
+					}
+		};
+	}
+	
+	static public Expression endsWith(Expression index, Expression character) {
+		return new Expression.Call("endsWith", index, character) {
+			
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object i = index.interpret(ctx);
+						if (!(i instanceof java.lang.Integer)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						int j = (java.lang.Integer) i;
+						
+						Object c = character.interpret(ctx);
+						
+						if (!(c instanceof java.lang.String)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						Object obj = ctx.getInput().subString(j - 1, j);
+						return obj.equals(c);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.endsWith(" + index.getConstructorCode() + "," + character.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("endsWith(%s,\"%s\")", index, character);
+					}
+		};
+	}
+	
+	static public Expression startsWith(Expression index, Expression string) {
+		return new Expression.Call("startsWith", index, string) {
+			
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object i = index.interpret(ctx);
+						if (!(i instanceof java.lang.Integer)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						int j = (java.lang.Integer) i;
+						
+						Object str = string.interpret(ctx);
+						
+						if (!(str instanceof java.lang.String)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						Object obj = ctx.getInput().subString(j, j + ((java.lang.String) str).length());
+						return obj.equals(str);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.startsWith(" + index.getConstructorCode() + "," + string.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("startsWith(%s,\"%s\")", index, string);
 					}
 		};
 	}

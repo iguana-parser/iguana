@@ -42,7 +42,6 @@ public class ConditionalTransition extends AbstractTransition {
 			dest.execute(parser, u, i, node);
 		else if (ifFalse != null)
 			ifFalse.execute(parser, u, i, node);
-		
 	}
 
 	@Override

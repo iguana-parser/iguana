@@ -139,19 +139,19 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					builder = builder.setSymbols(symbols);
 					
 					for (Symbol symbol : this.rule.getBody()) {
-						if (symbol instanceof Align) {
-							Symbol sym = ((Align) symbol).getSymbol();
-							if (sym instanceof Plus || sym instanceof Star || sym instanceof Sequence) {
-								Symbol s = symbol.accept(this);
-								String l3 = l_align + i++;
-								Nonterminal longest = getLayout().copyBuilder().setLabel(l3)
-														.addPostCondition(predicate(or(endOfFile(rExt(l3)), lessEq(indent(rExt(l3)), indent(lExt(s.getLabel()))))))
-														.build();
-								symbols.add(s);
-								symbols.add(longest);
-								continue;
-							}
-						}
+//						if (symbol instanceof Align) {
+//							Symbol sym = ((Align) symbol).getSymbol();
+//							if (sym instanceof Plus || sym instanceof Star || sym instanceof Sequence) {
+//								Symbol s = symbol.accept(this);
+//								String l3 = l_align + i++;
+//								Nonterminal longest = getLayout().copyBuilder().setLabel(l3)
+//														.addPostCondition(predicate(or(endOfFile(rExt(l3)), lessEq(indent(rExt(l3)), indent(lExt(s.getLabel()))))))
+//														.build();
+//								symbols.add(s);
+//								symbols.add(longest);
+//								continue;
+//							}
+//						}
 						symbols.add(symbol.accept(this));
 					}
 				}
@@ -360,7 +360,16 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			if (sym instanceof Nonterminal) {
 				Nonterminal s = (Nonterminal) sym;
-				String l = s.getLabel() != null? s.getLabel() : l_offside + i++;
+				
+				String l = symbol.getLabel();
+				if (l != null && s.getLabel() != null) {
+					if (!l.equals(s.getLabel()))
+						throw new RuntimeException("Conflicting labels: " + symbol);
+				} else if (s.getLabel() != null)
+					l = s.getLabel();
+				else if (l == null && s.getLabel() == null)
+				    l = l_offside + i++;
+				
 				if (isOffsided) { // Offside inside a rule that has a parameter for indentation
 					return s.copyBuilder()
 							.apply(lExt(l), indent(lExt(l)), integer(1))
@@ -517,6 +526,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			return symbol.copyBuilder().addPreCondition(precondition).setLabel(label).build();
 		}
 		
+		@SuppressWarnings("unused")
 		private Nonterminal getLayout() {
 			switch(rule.getLayoutStrategy()) {
 				case NO_LAYOUT:
