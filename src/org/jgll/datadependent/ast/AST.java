@@ -94,6 +94,39 @@ public class AST {
 		};
 	}
 	
+	static public Expression ppDeclare(Expression variable, Expression value) {
+		return new Expression.Call("ppDeclare", variable, value) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						
+						Object var = variable.interpret(ctx);
+						
+						if (!(var instanceof NonPackedNode))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						NonPackedNode node = (NonPackedNode) var;
+						
+						ctx.declareGlobalVariable(ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent()), 
+								                  value.interpret(ctx));
+						
+						return null;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.ppDeclare(" + variable.getConstructorCode() + ", " + value.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("ppDeclare(%s,%s)", variable, value);
+					}
+		};
+	}
+	
 	static public Expression ppLookup(Expression arg) {
 		return new Expression.Call("ppLookup", arg) {
 			
@@ -127,6 +160,8 @@ public class AST {
 	static public Expression endsWith(Expression index, Expression character) {
 		return new Expression.Call("endsWith", index, character) {
 			
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
 						Object i = index.interpret(ctx);
@@ -161,6 +196,8 @@ public class AST {
 	static public Expression startsWith(Expression index, Expression string) {
 		return new Expression.Call("startsWith", index, string) {
 			
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
 						Object i = index.interpret(ctx);
