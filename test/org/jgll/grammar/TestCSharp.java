@@ -8,6 +8,10 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.grammar.transformation.LayoutWeaver;
+import org.jgll.parser.GLLParser;
+import org.jgll.parser.ParseResult;
+import org.jgll.parser.ParserFactory;
+import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Test;
 
@@ -19,7 +23,6 @@ public class TestCSharp {
 
 	@Test
 	public void test() throws IOException {
-		Input input = Input.fromPath(getClass().getResource("examples/Test1").getPath());
 //		Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
 //		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 //		ParseResult result = parser.parse(input, grammar, start);

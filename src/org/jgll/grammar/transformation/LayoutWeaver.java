@@ -35,14 +35,25 @@ public class LayoutWeaver implements GrammarTransformation {
 			
 			for (int i = 0; i < rule.size() - 1; i++) {
 				Symbol s = rule.symbolAt(i);
-				ruleBuilder.addSymbol(s);
+				Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(s);
+				
+				if (ignoreLayoutConditions.isEmpty())
+					ruleBuilder.addSymbol(s);
+				else 
+					ruleBuilder.addSymbol(s.copyBuilder().removePostConditions(ignoreLayoutConditions).build());
+				
 				addLayout(layout, rule, ruleBuilder, s);
 			}
 			
 			Symbol last = rule.symbolAt(rule.size() - 1);
-			ruleBuilder.addSymbol(last);
+			Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(last);
+
+			if (ignoreLayoutConditions.isEmpty())
+				ruleBuilder.addSymbol(last);
+			else 
+				ruleBuilder.addSymbol(last.copyBuilder().removePostConditions(ignoreLayoutConditions).build());
 			
-			if (!getNotFollowIgnoreLayout(last).isEmpty()) {
+			if (!ignoreLayoutConditions.isEmpty()) {
 				addLayout(layout, rule, ruleBuilder, last);
 			}
 			
@@ -60,17 +71,19 @@ public class LayoutWeaver implements GrammarTransformation {
 				break;
 				
 			case INHERITED:
-				ruleBuilder.addSymbol(layout.copyBuilder().addPostConditions(getNotFollowIgnoreLayout(s)).build());
+				ruleBuilder.addSymbol(layout.copyBuilder().addPostConditions(getIgnoreLayoutConditions(s)).build());
 				break;
 				
 			case FIXED:
-				ruleBuilder.addSymbol(rule.getLayout().copyBuilder().addPostConditions(getNotFollowIgnoreLayout(s)).build());
+				ruleBuilder.addSymbol(rule.getLayout().copyBuilder().addPostConditions(getIgnoreLayoutConditions(s)).build());
 				break;
 		}
 	}
 	
-	private Set<Condition> getNotFollowIgnoreLayout(Symbol s) {
-		return s.getPostConditions().stream().filter(c -> c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT).collect(Collectors.toSet());
+	private Set<Condition> getIgnoreLayoutConditions(Symbol s) {
+		return s.getPostConditions().stream()
+				.filter(c -> c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT || c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT)
+				.collect(Collectors.toSet());
 	}
 	
 }
