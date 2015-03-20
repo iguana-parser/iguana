@@ -141,7 +141,14 @@ public class AST {
 						
 						NonPackedNode node = (NonPackedNode) value;
 						
-						Object obj = ctx.lookupGlobalVariable(ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent()));
+						java.lang.String subString = ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent());
+						
+						if (subString.equals("true"))
+							return true;
+						else if (subString.equals("false"))
+							return false;
+						
+						Object obj = ctx.lookupGlobalVariable(subString);
 						return obj != null? obj : false;
 					}
 					
