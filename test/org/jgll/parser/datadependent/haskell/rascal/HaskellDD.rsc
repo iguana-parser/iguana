@@ -13,7 +13,7 @@ syntax Body
 	 | "{" ";"* TopDecls "}"
 	 | "{" ";"* "}"
 	 
-	 | DImpDecls DTopDecls
+	 | align (DImpDecls DTopDecls)
 	 ; 
 
 syntax ImpDecls	
@@ -83,9 +83,11 @@ syntax Decls
      | align DDeclsLngstMtch*
      ;
      
-syntax DDeclsLngstMtch
-     = (offside DDecls) ds Whitespace w when(endOfInput(w.rExt) || startsWith(w.rExt, "in") || indent(w.rExt) <= indent(ds.lExt) || endsWith(ds.rExt,";"))
-     ;
+lexical DDeclsLngstMtch
+      = (offside DDecls) ds Whitespace wsp 
+      		when(endsWith(ds.rExt,";") || 
+      			   endOfFile(wsp.rExt) || startsWith(wsp.rExt, "in") || indent(wsp.rExt) <= indent(ds.lExt))
+      ;
 
 /*
 syntax DDecls 
@@ -112,9 +114,11 @@ syntax CDecls
      | align CDDeclsLngstMtch*
      ;
      
-syntax CDDeclsLngstMtch
-     = (offside DCDecls) ds Whitespace w when(endOfInput(w.rExt) || indent(w.rExt) <= indent(ds.lExt) || endsWith(ds.rExt,";"))
-     ;
+lexical CDDeclsLngstMtch
+      = (offside DCDecls) ds Whitespace wsp 
+      		when(endsWith(ds.rExt,";") ||
+      			   endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(ds.lExt))
+      ;
 
 /*     
 syntax DCDecls
@@ -146,9 +150,11 @@ syntax GADTDecls
      | align DGADTDeclsLngstMtch+
      ;
 
-syntax DGADTDeclsLngstMtch
-     = (offside DGADTDecls) ds Whitespace w when(endOfInput(w.rExt) || indent(w.rExt) <= indent(ds.lExt) || endsWith(ds.rExt,";"))
-     ;
+lexical DGADTDeclsLngstMtch
+      = (offside DGADTDecls) ds Whitespace wsp 
+      		when(endsWith(ds.rExt,";") || 
+     			   endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(ds.lExt))
+      ;
 
 syntax DGADTDecls
      = DGADTDecls ";" GADTDecl
@@ -444,9 +450,11 @@ syntax Alts
      | align DAltsLngstMtch*
      ;
      
-syntax DAltsLngstMtch
-     = (offside DAlts) as Whitespace w when(endOfInput(w.rExt) || indent(w.rExt) <= indent(as.lExt) || endsWith(as.rExt,";"))
-     ;
+lexical DAltsLngstMtch
+      = (offside DAlts) as Whitespace wsp 
+      		when(endsWith(as.rExt,";") || 
+     			   endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(as.lExt) || startsWith(wsp.rExt,")"))
+      ;
 
 /*
 syntax DAlts
@@ -474,20 +482,33 @@ syntax GDPat
 syntax Stmts	
      = "{" Stmt* Exp ";"? "}"
      | align (align (offside DStmts)* DExpLngstMtch)
+     | offside((align (offside DStmts)*) stmts when(endsWith(stmts.rExt, ";")) (Exp ";"?)) body Whitespace wsp
+     			when(endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(body.lExt) || startsWith(wsp.rExt,")"))
      ;
 
 syntax Stmt
      = Qual? ";"
      | "rec" Stmts				// Arrow notation extension
 	 ;
-	 
-syntax DExpLngstMtch
-     = (offside (Exp ";"?)) e Whitespace w when(endOfInput(w.rExt) || indent(w.rExt) <= indent(e.lExt) || endsWith(e.rExt,";"))
-     ;
-     
+	 	 
+lexical DExpLngstMtch
+      = (offside (Exp ";"?)) exp Whitespace wsp 
+      		when(endsWith(exp.rExt,";") || 
+      			    endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(exp.lExt) || startsWith(wsp.rExt,")"))
+      ;
+
+/*  
 syntax DStmts
      = DStmt (";" DStmt?)*
      | (";" DStmt?)+
+     ;
+*/
+syntax DStmts
+     = DStmts ";" DStmt
+     | DStmts ";"
+     | ";" DStmt
+     | DStmt
+     | ";"
      ;
 
 syntax DStmt
