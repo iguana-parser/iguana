@@ -31,7 +31,7 @@ lexical Token
 
 
 layout Layout 
-     = (Whitespace | Comment | DPpConditional | DPpGarbage | PpDeclaration | PpLine | PpDiagnostic | PpRegion  | PpPragma)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//" !>> "#"
+     = (Whitespace | Comment | DPpConditional | DPpGarbage | PpDeclaration | PpLine | PpDiagnostic | PpStartRegion | PpEndRegion  | PpPragma)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//" !>> "#"
      ; 
 
 /* 
@@ -443,11 +443,11 @@ lexical DPpConditional
       ;
 
 lexical DPpIfSection 
-      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (Input (DPpElifSection | DPpElseSection | PpEndif))
+      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (SkippedSection (DPpElifSection | DPpElseSection | PpEndif))
       ;
 
 lexical DPpElifSection
-      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (Input (DPpElifSection | DPpElseSection | PpEndif))
+      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (SkippedSection (DPpElifSection | DPpElseSection | PpEndif))
       ;
 
 lexical DPpElseSection
@@ -459,11 +459,11 @@ lexical DPpGarbage
       ;
       
 lexical DPpElif 
-      = "#"   Whitespace?   "elif" Input
+      = "#"   Whitespace?   "elif" SkippedSection
       ;
       
 lexical DPpElse 
-      = "#"   Whitespace?   "else" Input
+      = "#"   Whitespace?   "else" SkippedSection
       ;
       
 // Pre-processing directives
