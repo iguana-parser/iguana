@@ -24,6 +24,7 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.IfThen;
 import org.jgll.grammar.symbol.IfThenElse;
+import org.jgll.grammar.symbol.Ignore;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Offside;
 import org.jgll.grammar.symbol.Rule;
@@ -345,6 +346,12 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			else
 				return symbol;
 		}
+		
+		@Override
+		public Symbol visit(Ignore symbol) {
+			// TODO: Ignore
+			return null;
+		}
 
 		@Override
 		public Symbol visit(Offside symbol) {
@@ -627,6 +634,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			symbol.getThenPart().accept(this);
 			symbol.getElsePart().accept(this);
 			return null;
+		}
+		
+		@Override
+		public Void visit(Ignore symbol) {
+			return symbol.getSymbol().accept(this);
 		}
 
 		@Override

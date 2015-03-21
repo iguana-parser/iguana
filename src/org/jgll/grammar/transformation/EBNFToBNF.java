@@ -21,6 +21,7 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.IfThen;
 import org.jgll.grammar.symbol.IfThenElse;
+import org.jgll.grammar.symbol.Ignore;
 import org.jgll.grammar.symbol.LayoutStrategy;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Nonterminal.Builder;
@@ -400,6 +401,14 @@ public class EBNFToBNF implements GrammarTransformation {
 				return symbol;
 			
 			return IfThenElse.builder(symbol.getExpression(), thenPart, elsePart).setLabel(symbol.getLabel()).addConditions(symbol).build();
+		}
+		
+		@Override
+		public Symbol visit(Ignore symbol) {
+			Symbol sym = symbol.getSymbol().accept(this);
+			
+			return sym == symbol.getSymbol()? symbol 
+					: Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
