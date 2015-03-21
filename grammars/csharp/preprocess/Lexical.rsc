@@ -33,6 +33,10 @@ lexical Token
 layout Layout 
      = (Whitespace | Comment | DPpConditional | DPpGarbage | PpDeclaration | PpLine | PpDiagnostic | PpStartRegion | PpEndRegion  | PpPragma)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//" !>> "#"
      ; 
+     
+lexical Layout1 
+     = (Whitespace | Comment | DPpConditional | DPpGarbage | PpDeclaration | PpLine | PpDiagnostic | PpStartRegion | PpEndRegion  | PpPragma)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//" !>> "#"
+     ;       
 
 /* 
  * Carriage return character (U+000D)
@@ -443,15 +447,15 @@ lexical DPpConditional
       ;
 
 lexical DPpIfSection 
-      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (SkippedSection (DPpElifSection | DPpElseSection | PpEndif))
+      = "#"   Whitespace?   "if"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout1 else (SkippedSection (DPpElifSection | DPpElseSection | PpEndif))
       ;
 
 lexical DPpElifSection
-      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout else (SkippedSection (DPpElifSection | DPpElseSection | PpEndif))
+      = "#"   Whitespace?   "elif"   Whitespace   PpExpression exp if(ppLookup(exp)) Layout1 else (SkippedSection (DPpElifSection | DPpElseSection | PpEndif))
       ;
 
 lexical DPpElseSection
-      = "#"   Whitespace?   "else"   Layout
+      = "#"   Whitespace?   "else"   Layout1
       ;
       
 lexical DPpGarbage
@@ -514,12 +518,14 @@ lexical PpPrimaryExpression
      ;
      
 lexical PpDeclaration
-      = "#"   Whitespace?   ("define" | "undef")   Whitespace   ConditionalSymbol   PpNewLine
+      = "#"   Whitespace?   "define"  Whitespace   ConditionalSymbol sym do ppDeclare(sym, true);  PpNewLine
+      | "#"   Whitespace?   "undef"   Whitespace   ConditionalSymbol sym do ppDeclare(sym, false); PpNewLine
       ;
       
 lexical PpNewLine 
       = WhitespaceNoNL? SingleLineComment? NewLine
-      ; //Whitespace?   SingleLineComment   NewLine
+      | WhitespaceNoNL? SingleLineComment? $$
+      ;
 
 lexical PpConditional 
       = PpIfSection   PpElifSection*   PpElseSection?   PpEndif
