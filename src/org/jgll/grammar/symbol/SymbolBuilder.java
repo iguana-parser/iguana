@@ -1,5 +1,6 @@
 package org.jgll.grammar.symbol;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,7 +65,17 @@ public abstract class SymbolBuilder<T extends Symbol> {
  		conditions.forEach(c -> postConditions.add(c));
 		return this;
 	}
-	
+ 	
+ 	public SymbolBuilder<T> removePreConditions(Collection<Condition> conditions) {
+ 		preConditions.removeAll(conditions);
+ 		return this;
+ 	}
+ 	
+ 	public SymbolBuilder<T> removePostConditions(Collection<Condition> conditions) {
+ 		postConditions.removeAll(conditions);
+ 		return this;
+ 	} 	
+ 	
 	public abstract T build();
 	
 }
