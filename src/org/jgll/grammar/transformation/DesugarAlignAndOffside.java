@@ -341,7 +341,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 												  // first && l.lExt - index == 0
 												  andIndent(index_exp, first_exp, lExt(l)))
 												  .setLabel(l).build();
-			} else if (offsided.contains(symbol.getName()))
+			} else if (offsided.contains(symbol.getName())) // A ::= offside B; B ::= D; C ::= B or C ::= D
 				return symbol.copyBuilder().apply(integer(0), integer(0), integer(0)).build();
 			else
 				return symbol;
@@ -349,8 +349,30 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		
 		@Override
 		public Symbol visit(Ignore symbol) {
-			// TODO: Ignore
-			return null;
+			if (doAlign) {
+				Symbol sym = symbol.getSymbol().accept(this);
+				
+				return sym == symbol.getSymbol()? symbol 
+						: Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			}
+			
+			Symbol sym = symbol.getSymbol();
+			
+			if (sym instanceof Nonterminal) {
+				Nonterminal s = (Nonterminal) sym;
+				
+				if (offsided.contains(symbol.getName())) { // TODO: too general
+					return s.copyBuilder()
+							.apply(integer(0), integer(0), integer(0))
+							.addConditions(symbol)
+							.addConditions(sym)
+							.build();
+				}
+			}
+				
+			// Otherwise, ignore 'ignore'
+			sym = sym.accept(this);
+			return sym.copyBuilder().addConditions(symbol).build();
 		}
 
 		@Override
