@@ -1003,7 +1003,7 @@ Grammar.builder()
 
          grammar = new LayoutWeaver().transform(grammar);
 
-         Input input = Input.fromPath(SelectedFiles.files[13]);
+         Input input = Input.fromPath(SelectedFiles.files[25]);
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/", graph);
