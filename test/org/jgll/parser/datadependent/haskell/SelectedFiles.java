@@ -11,6 +11,13 @@ public class SelectedFiles {
 	
 	public static final String test = "/Users/anastasiaizmaylova/git/diguana/testH.hs";
 	
+	public static final String test1 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test1.hs";
+	public static final String test2 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test2.hs";
+	public static final String test3 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test3.hs";
+	public static final String test4 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test4.hs";
+	public static final String test5 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test5.hs";
+	public static final String test6 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test6.hs";
+	
 	private static final String ghc = "/Users/anastasiaizmaylova/git/ghc/";
 	public final static String[] files = new String[] {
 									ghc + "compiler/utils/Bag.hs",            // check #0
@@ -42,7 +49,7 @@ public class SelectedFiles {
 									ghc + "compiler/ghci/Debugger.hs",        //       #25
 								};
 	
-	private static final Set<String> target = ImmutableSet.of("Decls", "CDecls", "GADTDecls", "Alts", "Stmts");
+	private static final Set<String> target = ImmutableSet.of("Decls", "CDecls", "GADTDecls", "Alts", "DAlts", "Stmts");
 	
 	public static NonterminalNodeVisitor getVisitor(Input input) {
 		return NonterminalNodeVisitor.create(n -> {

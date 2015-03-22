@@ -63,11 +63,11 @@ syntax DTopDecls
 
 syntax TopDecl	
      = "data" (Context "=\>")? Type ("=" Constrs)? Deriving?
-	 | "data" (Context "=\>")? Type ("::" Kind)? "where" GADTDecls      			// Generalized Abstarct Data Types extension
+	 | "data" (Context "=\>")? Type ("::" Kind)? "where" GADTDecls   // Generalized Abstarct Data Types extension
 	 | "newtype" (Context "=\>")? Type "=" NewConstr Deriving?
 	 | "class" (Context "=\>")? Type Fds? ("where" CDecls)?
-	 | "instance" CType ("where" CDecls)?            // Flexible instances
-	 | "deriving" "instance" (Context "=\>")? QTyCls Inst 				// Extension
+	 | "instance" CType ("where" CDecls)?                            // Flexible instances
+	 | "deriving" "instance" (Context "=\>")? QTyCls Inst 			// Extension
 	 | "default" {Type ","}*
 	 | "foreign" FDecl
 	 | Decl
@@ -79,30 +79,17 @@ syntax Fds
      ;                                        
  
 syntax Decls	
-     = "{" {Decl? ";"}+ "}"
-     | align DDeclsLngstMtch*
+     = ignore("{" {Decl? ";"}+ "}")
+     | align (offside DDecls)*
      ;
-     
-lexical DDeclsLngstMtch
-      = (offside DDecls) ds Whitespace wsp 
-      		when(endsWith(ds.rExt,";") || 
-      			   endOfFile(wsp.rExt) || startsWith(wsp.rExt, "in") || indent(wsp.rExt) <= indent(ds.lExt))
-      ;
 
-/*
 syntax DDecls 
-     = Decl (";" Decl?)*
-     | (";" Decl?)+
+     = Decl (";" Decl?)* next 
+     		when(ind == 0 || endOfFile(next.rExt) || !startsWith(next.rExt,";") || indent(next.rExt) <= ind)
+     | ";" Decl? (";" Decl?)* next 
+     		when(ind == 0 || endOfFile(next.rExt) || !startsWith(next.rExt,";") || indent(next.rExt) <= ind)
      ;
-*/     
-syntax DDecls
-     = DDecls ";" Decl 
-     | DDecls ";"
-     | ";" Decl
-     | Decl
-     | ";"
-     ;
-     
+
 syntax Decl	
      = GenDecl
 	 | FunLHS RHS
@@ -110,28 +97,15 @@ syntax Decl
 	 ;
 
 syntax CDecls
-     = "{" {CDecl? ";"}+ "}"
-     | align CDDeclsLngstMtch*
+     = ignore("{" {CDecl? ";"}+ "}")
+     | align (offside DCDecls)*
      ;
-     
-lexical CDDeclsLngstMtch
-      = (offside DCDecls) ds Whitespace wsp 
-      		when(endsWith(ds.rExt,";") ||
-      			   endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(ds.lExt))
-      ;
 
-/*     
 syntax DCDecls
-     = CDecl (";" CDecl?)*
-     | (";" CDecl?)+
-     ;
-*/
-syntax DCDecls
-     = DCDecls ";" CDecl
-     | DCDecls ";"
-     | ";" CDecl
-     | CDecl
-     | ";"
+     = CDecl (";" CDecl?)* next 
+     		when(ind == 0 || endOfFile(next.rExt) || !startsWith(next.rExt,";") || indent(next.rExt) <= ind)
+     | ";" CDecl? (";" CDecl?)* next 
+     		when(ind == 0 || endOfFile(next.rExt) || !startsWith(next.rExt,";") || indent(next.rExt) <= ind)
      ;
 
 syntax CDecl	
@@ -146,23 +120,17 @@ syntax GenDecl
 	 ;
 
 syntax GADTDecls
-     = "{" {GADTDecl ";"}+ "}"
-     | align DGADTDeclsLngstMtch+
+     = ignore("{" {GADTDecl ";"}+ "}")
+     | align (offside DGADTDecls)*
      ;
-
-lexical DGADTDeclsLngstMtch
-      = (offside DGADTDecls) ds Whitespace wsp 
-      		when(endsWith(ds.rExt,";") || 
-     			   endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(ds.lExt))
-      ;
 
 syntax DGADTDecls
-     = DGADTDecls ";" GADTDecl
-     | DGADTDecls ";"
-     | ";" GADTDecl
-     | GADTDecl
-     | ";"
+     = GADTDecl (";" GADTDecl?)* next 
+     		when(ind == 0 || endOfFile(next.rExt) || !startsWith(next.rExt,";") || indent(next.rExt) <= ind)
+     | ";" GADTDecl? (";" GADTDecl?)* next 
+     		when(ind == 0 || endOfFile(next.rExt) || !startsWith(next.rExt,";") || indent(next.rExt) <= ind)
      ;
+
 
 syntax GADTDecl
      = TyCon "::" CType
@@ -281,13 +249,13 @@ syntax Constrs
 syntax Constr	
      = Con ("!"? AType)*                                   
 	 | BType ConOp BType	    
-	 | ("forall" TVBinder* ".")? Con "{" { FieldDecl ","}* "}"
+	 | ("forall" TVBinder* ".")? Con ignore("{" {FieldDecl ","}* "}")
 	 | "forall" TVBinder* "." CType
 	 ;
 
 syntax NewConstr	
      = Con AType
-	 | Con "{" Var "::" CType "}"
+	 | Con ignore("{" Var "::" CType "}")
 	 ;
 
 syntax FieldDecl	
@@ -360,12 +328,21 @@ syntax FunLHS
 	 ;
  
 syntax RHS	
-     = "=" Exp ("where" Decls)?
-	 | GDRHS ("where" Decls)?
+     = "=" Exp ("where" Decls)? opt
+            when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) || !startsWith(opt.rExt, "where") || indent(opt.rExt) <= ind)
+     		when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) || 
+     			 startsWith(opt.rExt, "}", ")", ";", "in", "of", "then", "else", "where") ||
+     			 indent(opt.rExt) <= ind)
+
+	 | GDRHS ("where" Decls)? opt
+	 		when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) || !startsWith(opt.rExt, "where") || indent(opt.rExt) <= ind)
 	 ;
  
 syntax GDRHS
-     = Guards "=" Exp GDRHS?
+     = Guards "=" Exp GDRHS? opt 
+     		when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) || 
+     			   startsWith(opt.rExt, "}", ")", ";", "in", "of", "then", "else", "where", "|") ||
+     			   indent(opt.rExt) <= ind)
      ;
  
 syntax Guards	
@@ -446,69 +423,58 @@ syntax Qual
 	 ;
  
 syntax Alts	
-     = "{" {Alt? ";"}+ "}"
-     | align DAltsLngstMtch*
+     = ignore("{" {Alt? ";"}+ "}")
+     | align (offside DAlts)*
      ;
-     
-lexical DAltsLngstMtch
-      = (offside DAlts) as Whitespace wsp 
-      		when(endsWith(as.rExt,";") || 
-     			   endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(as.lExt) || startsWith(wsp.rExt,")"))
-      ;
 
-/*
 syntax DAlts
-     = Alt (";" Alt?)*
-     | (";" Alt?)+
+     = Alt (";" Alt?)* next 
+     		when(ind == 0 || endOfFile(next.rExt) || !startsWith(next.rExt, ";") || indent(next.rExt) <= ind)
+     | ";" Alt? (";" Alt?)* next 
+     		when(ind == 0 || endOfFile(next.rExt) || !startsWith(next.rExt, ";") || indent(next.rExt) <= ind)
      ;
-*/
-syntax DAlts
-     = DAlts ";" Alt
-     | DAlts ";"
-     | ";" Alt
-     | Alt
-     | ";"
-     ; 
-    
+
 syntax Alt
-     = Pat "-\>" Exp ("where" Decls)?
-	 | Pat GDPat ("where" Decls)?
+     = Pat "-\>" Exp ("where" Decls)? opt
+            when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) || !startsWith(opt.rExt, "where") || indent(opt.rExt) <= ind)
+     		when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) ||
+     			 startsWith(opt.rExt, "}", ")", ";", "in", "of", "then", "else", "where") ||
+     			 indent(opt.rExt) <= ind)
+     			 
+	 | Pat GDPat ("where" Decls)? opt
+	 		when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) || !startsWith(opt.rExt, "where") || indent(opt.rExt) <= ind)
 	 ;
  
 syntax GDPat	
-     = Guards "-\>" Exp GDPat?
+     = Guards "-\>" Exp GDPat? opt
+     		when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) || !startsWith(opt.rExt, "|") || indent(opt.rExt) <= ind)
+     		when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) || 
+     			   startsWith(opt.rExt, "}", ")", ";", "in", "of", "then", "else", "where", "|") ||
+     			   indent(opt.rExt) <= ind)
      ;
 
 syntax Stmts	
-     = "{" Stmt* Exp ";"? "}"
-     | align (align (offside DStmts)* DExpLngstMtch)
-     | offside((align (offside DStmts)*) stmts when(endsWith(stmts.rExt, ";")) (Exp ";"?)) body Whitespace wsp
-     			when(endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(body.lExt) || startsWith(wsp.rExt,")"))
+     = ignore("{" Stmt* Exp ";"? "}")
+     | align (align (offside DStmts)* offside DExp)
+     | offside((align (offside DStmts)*) ";" DExp)
      ;
 
 syntax Stmt
      = Qual? ";"
      | "rec" Stmts				// Arrow notation extension
 	 ;
-	 	 
-lexical DExpLngstMtch
-      = (offside (Exp ";"?)) exp Whitespace wsp 
-      		when(endsWith(exp.rExt,";") || 
-      			    endOfFile(wsp.rExt) || indent(wsp.rExt) <= indent(exp.lExt) || startsWith(wsp.rExt,")"))
-      ;
 
-/*  
+syntax DExp
+     = Exp ";"? opt
+            when(ind == 0 || endOfFile(opt.rExt) || !startsWith(opt.rExt, ";") || indent(opt.rExt) <= ind)
+     		when(ind == 0 || len(opt) > 0 || endOfFile(opt.rExt) ||
+     			 startsWith(opt.rExt, "}", ")", "in", "of", "then", "else", "where") ||
+     			 indent(opt.rExt) <= ind)
+     ;
+  
 syntax DStmts
      = DStmt (";" DStmt?)*
-     | (";" DStmt?)+
-     ;
-*/
-syntax DStmts
-     = DStmts ";" DStmt
-     | DStmts ";"
-     | ";" DStmt
-     | DStmt
-     | ";"
+     | ";" DStmt? (";" DStmt?)*
      ;
 
 syntax DStmt
