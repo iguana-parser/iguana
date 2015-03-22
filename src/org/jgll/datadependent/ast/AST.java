@@ -1,5 +1,8 @@
 package org.jgll.datadependent.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jgll.datadependent.ast.Expression;
 import org.jgll.datadependent.env.IEvaluatorContext;
 import org.jgll.grammar.exception.UnexpectedTypeOfArgumentException;
@@ -200,38 +203,104 @@ public class AST {
 		};
 	}
 	
-	static public Expression startsWith(Expression index, Expression string) {
-		return new Expression.Call("startsWith", index, string) {
+	static public Expression startsWith(Expression... args) {
+		return new Expression.Call("startsWith", args) {
 			
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
-						Object i = index.interpret(ctx);
+						Object i = args[0].interpret(ctx);
 						if (!(i instanceof java.lang.Integer)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
 						
 						int j = (java.lang.Integer) i;
 						
-						Object str = string.interpret(ctx);
-						
-						if (!(str instanceof java.lang.String)) {
-							throw new UnexpectedTypeOfArgumentException(this);
+						for (int k = 1; k < args.length; k++) {
+							Object str = args[k].interpret(ctx);
+							
+							if (!(str instanceof java.lang.String)) {
+								throw new UnexpectedTypeOfArgumentException(this);
+							}
+							
+							int len = j + ((java.lang.String) str).length();
+							if (len < ctx.getInput().length()) {
+								Object obj = ctx.getInput().subString(j, len);
+								if (obj.equals(str))
+									return true;
+							}
 						}
-						
-						Object obj = ctx.getInput().subString(j, j + ((java.lang.String) str).length());
-						return obj.equals(str);
+						return false;
 					}
 					
 					@Override
 					public java.lang.String getConstructorCode() {
-						return "AST.startsWith(" + index.getConstructorCode() + "," + string.getConstructorCode() + ")";
+						List<java.lang.String> code = new ArrayList<>();
+						for (Expression arg : args)
+							code.add(arg.getConstructorCode());
+						return "AST.startsWith(" + GeneratorUtil.listToString(code, ",") + ")";
 					}
 					
 					@Override
 					public java.lang.String toString() {
-						return java.lang.String.format("startsWith(%s,\"%s\")", index, string);
+						return "startsWith(" + GeneratorUtil.listToString(args, ",") + ")";
+					}
+		};
+	}
+	
+	static public Expression not(Expression arg) {
+		return new Expression.Call("not", arg) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg.interpret(ctx);
+						if (!(value instanceof java.lang.Boolean)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						return !((java.lang.Boolean) value);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.not(" + arg.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("not(%s)", arg);
+					}
+		};
+	}
+	
+	static public Expression len(Expression arg) {
+		return new Expression.Call("len", arg) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg.interpret(ctx);
+						if (!(value instanceof NonPackedNode)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						
+						NonPackedNode node = (NonPackedNode) value;
+						
+						return  node.getRightExtent() - node.getLeftExtent();
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.len(" + arg.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("len(%s)", arg);
 					}
 		};
 	}
