@@ -361,7 +361,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			if (sym instanceof Nonterminal) {
 				Nonterminal s = (Nonterminal) sym;
 				
-				if (offsided.contains(symbol.getName())) { // TODO: too general
+				if (offsided.contains(s.getName())) { // TODO: too general
 					return s.copyBuilder()
 							.apply(integer(0), integer(0), integer(0))
 							.addConditions(symbol)
