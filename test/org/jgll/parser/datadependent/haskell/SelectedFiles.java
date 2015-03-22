@@ -17,6 +17,7 @@ public class SelectedFiles {
 	public static final String test4 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test4.hs";
 	public static final String test5 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test5.hs";
 	public static final String test6 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test6.hs";
+	public static final String test7 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test7.hs";
 	
 	private static final String ghc = "/Users/anastasiaizmaylova/git/ghc/";
 	public final static String[] files = new String[] {
@@ -43,10 +44,10 @@ public class SelectedFiles {
 									ghc + "compiler/main/HscStats.hs",        //       #20
 									ghc + "compiler/main/PipelineMonad.hs",   //       #21
 									
-									ghc + "compiler/ghci/ByteCodeItbls.hs",   //       #22
-									ghc + "compiler/ghci/ByteCodeAsm.hs",     //       #23
-									ghc + "compiler/ghci/ByteCodeGen.hs",     //       #24
-									ghc + "compiler/ghci/Debugger.hs",        //       #25
+									ghc + "compiler/ghci/ByteCodeItbls.hs",   // check #22
+									ghc + "compiler/ghci/ByteCodeAsm.hs",     // check #23
+									ghc + "compiler/ghci/ByteCodeGen.hs",     // check #24
+									ghc + "compiler/ghci/Debugger.hs",        // check #25
 								};
 	
 	private static final Set<String> target = ImmutableSet.of("Decls", "CDecls", "GADTDecls", "Alts", "DAlts", "Stmts");

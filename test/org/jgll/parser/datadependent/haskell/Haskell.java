@@ -962,7 +962,7 @@ Grammar.builder()
 
          grammar = new LayoutWeaver().transform(grammar);
 
-         Input input = Input.fromPath(SelectedFiles.test6);
+         Input input = Input.fromPath(SelectedFiles.test7);
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/", graph);
@@ -976,8 +976,8 @@ Grammar.builder()
          
          SelectedFiles.getVisitor(input).visit(result.asParseSuccess().getRoot());
 
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/",
-         //                   result.asParseSuccess().getRoot(), input);
+          Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/",
+                            result.asParseSuccess().getRoot(), input);
 
          Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }
