@@ -335,10 +335,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		public Symbol visit(Nonterminal symbol) {
 			if (isOffsided && offsided.contains(symbol.getName())) { // The rule has a parameter for indentation, and therefore, also all reachable nonterminals
 				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
-				return symbol.copyBuilder().apply(// (first && l.lExt - index == 0)?index
+				return symbol.copyBuilder().apply(// (fst & (lExt - index == 0)) == 1? index : 0 or fst == 1? index : 0 
+						                          //     after non-nullable (0 as only indentation will be needed)
 						                          andIndent(index_exp, first_exp, lExt(l), true), 
 												  ind_exp,
-												  // first && l.lExt - index == 0
+												  // fst & (lExt - index == 0) or 0 after non-nullable
 												  andIndent(index_exp, first_exp, lExt(l)))
 												  .setLabel(l).build();
 			} else if (offsided.contains(symbol.getName())) // A ::= offside B; B ::= D; C ::= B or C ::= D
