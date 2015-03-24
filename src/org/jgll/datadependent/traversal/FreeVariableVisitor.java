@@ -41,6 +41,7 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.IfThen;
 import org.jgll.grammar.symbol.IfThenElse;
+import org.jgll.grammar.symbol.Ignore;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Offside;
 import org.jgll.grammar.symbol.Symbol;
@@ -485,6 +486,18 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		elsePart.setEnv(symbol.getEnv());
 		visitSymbol(thenPart);
+		
+		return null;
+	}
+	
+	@Override
+	public Void visit(Ignore symbol) {
+		Symbol sym = symbol.getSymbol();
+		
+		sym.setEnv(symbol.getEnv());
+		visitSymbol(sym);
+		
+		symbol.setEnv(sym.getEnv());
 		
 		return null;
 	}

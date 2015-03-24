@@ -24,6 +24,7 @@ import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
 import org.jgll.grammar.symbol.IfThen;
 import org.jgll.grammar.symbol.IfThenElse;
+import org.jgll.grammar.symbol.Ignore;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Offside;
 import org.jgll.grammar.symbol.Rule;
@@ -334,16 +335,45 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		public Symbol visit(Nonterminal symbol) {
 			if (isOffsided && offsided.contains(symbol.getName())) { // The rule has a parameter for indentation, and therefore, also all reachable nonterminals
 				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
-				return symbol.copyBuilder().apply(// (first && l.lExt - index == 0)?index
+				return symbol.copyBuilder().apply(// (fst & (lExt - index == 0)) == 1? index : 0 or fst == 1? index : 0 
+						                          //     after non-nullable (0 as only indentation will be needed)
 						                          andIndent(index_exp, first_exp, lExt(l), true), 
 												  ind_exp,
-												  // first && l.lExt - index == 0
+												  // fst & (lExt - index == 0) or 0 after non-nullable
 												  andIndent(index_exp, first_exp, lExt(l)))
 												  .setLabel(l).build();
-			} else if (offsided.contains(symbol.getName()))
+			} else if (offsided.contains(symbol.getName())) // A ::= offside B; B ::= D; C ::= B or C ::= D
 				return symbol.copyBuilder().apply(integer(0), integer(0), integer(0)).build();
 			else
 				return symbol;
+		}
+		
+		@Override
+		public Symbol visit(Ignore symbol) {
+			if (doAlign) {
+				Symbol sym = symbol.getSymbol().accept(this);
+				
+				return sym == symbol.getSymbol()? symbol 
+						: Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			}
+			
+			Symbol sym = symbol.getSymbol();
+			
+			if (sym instanceof Nonterminal) {
+				Nonterminal s = (Nonterminal) sym;
+				
+				if (offsided.contains(s.getName())) { // TODO: too general
+					return s.copyBuilder()
+							.apply(integer(0), integer(0), integer(0))
+							.addConditions(symbol)
+							.addConditions(sym)
+							.build();
+				}
+			}
+				
+			// Otherwise, ignore 'ignore'
+			sym = sym.accept(this);
+			return sym.copyBuilder().addConditions(symbol).build();
 		}
 
 		@Override
@@ -627,6 +657,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			symbol.getThenPart().accept(this);
 			symbol.getElsePart().accept(this);
 			return null;
+		}
+		
+		@Override
+		public Void visit(Ignore symbol) {
+			return symbol.getSymbol().accept(this);
 		}
 
 		@Override

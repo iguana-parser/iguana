@@ -5,6 +5,7 @@ import org.jgll.grammar.symbol.Character;
 import org.jgll.grammar.symbol.CharacterRange;
 import org.jgll.grammar.symbol.EOF;
 import org.jgll.grammar.symbol.Epsilon;
+import org.jgll.grammar.symbol.Ignore;
 import org.jgll.grammar.symbol.Offside;
 import org.jgll.grammar.symbol.Symbol;
 import org.jgll.grammar.symbol.Terminal;
@@ -48,6 +49,11 @@ public abstract class AbstractGrammarGraphSymbolVisitor implements ISymbolVisito
 	@Override
 	public Void visit(Terminal symbol) {
 		return visit((RegularExpression) symbol);
+	}
+	
+	@Override
+	public Void visit(Ignore symbol) {
+		return null;
 	}
 	
 	@Override
