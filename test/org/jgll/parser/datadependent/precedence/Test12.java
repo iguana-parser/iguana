@@ -50,7 +50,7 @@ Grammar.builder()
 .build();
 
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
-         // System.out.println(grammar.toStringWithOrderByPrecedence());
+         System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("-*a+"); // -(*(a+))
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
