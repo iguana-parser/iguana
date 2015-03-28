@@ -57,7 +57,7 @@ Grammar.builder()
          // System.out.println(grammar);
 
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
-         // System.out.println(grammar.toStringWithOrderByPrecedence());
+         System.out.println(grammar.toStringWithOrderByPrecedence());
 
          grammar = new LayoutWeaver().transform(grammar);
 
