@@ -1,13 +1,16 @@
 package org.jgll.grammar.symbol;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.jgll.util.generator.GeneratorUtil;
 
 
-public class AssociativityGroup {
+public class AssociativityGroup implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private final Associativity associativity;
 	
 	private final PrecedenceLevel precedenceLevel;

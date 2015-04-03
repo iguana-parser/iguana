@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.GrammarGraph;
@@ -17,6 +18,7 @@ import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.ParseResult;
 import org.jgll.parser.ParserFactory;
+import org.jgll.traversal.GeneralNodeVisitor;
 import org.jgll.util.BenchmarkUtil;
 import org.jgll.util.Configuration;
 import org.jgll.util.Input;
@@ -84,7 +86,32 @@ public class IguanaBenchmark {
 					System.out.println("Parse error " + result.asParseError());
 				}
 			}
+			
+//			ParseResult result;
+//            try {
+//                result = run(parser, grammarGraph, input, start);
+//                if (result.isParseSuccess()) {
+//                    AtomicInteger countNonterminals = new AtomicInteger();
+//                    AtomicInteger countTerminals = new AtomicInteger();
+//                    AtomicInteger countIntermediates = new AtomicInteger();
+//                    
+//                    GeneralNodeVisitor visitor = new GeneralNodeVisitor(
+//                    			(t) -> countTerminals.incrementAndGet(), 
+//                    			(n) -> countNonterminals.incrementAndGet(),
+//                    			(i) -> countIntermediates.incrementAndGet());
+//                    
+//                    visitor.visit(result.asParseSuccess().getRoot());
+//                    System.out.println(String.format("Actual nodes: %d, %d, %d",
+//                    								 countTerminals.get(),
+//                    								 countNonterminals.get(),
+//                    								 countIntermediates.get()));
+//                }
+//            } catch (Exception e) {
+//            	System.out.println("Time out");
+//            }
+            
 		}
+		
 	}
 	
 	private ParseResult run(GLLParser parser, GrammarGraph grammarGraph, Input input, Nonterminal start) throws Exception {
@@ -153,6 +180,11 @@ public class IguanaBenchmark {
 		
 		public Builder setRunGCInBetween(boolean runGCInBetween) {
 			this.runGCInBetween = runGCInBetween;
+			return this;
+		}
+		
+		public Builder ignore(String s) {
+			files.remove(new File(s));
 			return this;
 		}
 		

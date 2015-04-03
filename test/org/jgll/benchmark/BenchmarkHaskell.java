@@ -4,23 +4,48 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jgll.grammar.Grammar;
+import org.jgll.grammar.JavaNaturalCharacterLevel;
+import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Start;
+import org.jgll.grammar.transformation.DesugarAlignAndOffside;
+import org.jgll.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.grammar.transformation.LayoutWeaver;
 
 public class BenchmarkHaskell {
 	
-	private static String sourceDir = "/Users/aliafroozeh/corpus/ghc-output";
-
-//	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Haskell.grammar));
+	private static Grammar originalGrammar = Grammar.load(new File("grammars/haskell/haskell"));
 	
-	static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Grammar.load(new File(""))));
-	
+	private static String sourceDir = "/Users/aliafroozeh/corpus/ghc-output/ghc";
 	private static Nonterminal start = Start.from(Nonterminal.withName("Module"));
-		
-	public static void main(String[] args) throws IOException {
-		IguanaBenchmark.builder(grammar, start).addDirectory(sourceDir, "hs", true).build().run();
+	
+	private static Grammar grammar;
+
+	
+	static {
+        DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
+        desugarAlignAndOffside.doAlign();
+
+        grammar = desugarAlignAndOffside.transform(originalGrammar);
+
+        grammar = new EBNFToBNF().transform(grammar);
+
+        desugarAlignAndOffside.doOffside();
+        grammar = desugarAlignAndOffside.transform(grammar);
+
+        grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
+
+        grammar = new LayoutWeaver().transform(grammar);
 	}
 	
+	public static void main(String[] args) throws IOException {
+//		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(1).build().run();
+		IguanaBenchmark.builder(grammar, start)
+				       .addDirectory(sourceDir, "hs", true)
+				       .setRunCount(1)
+				       .setTimeout(60)
+				       .build().run();
+		
+	}
 }
