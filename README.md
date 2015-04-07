@@ -12,5 +12,5 @@ execute `save(#startSymbol, path)` method in the Rascal console.
 
 Contributers
 ======
-Ali Afroozeh
-Anastasia Izmaylova
+-Ali Afroozeh
+-Anastasia Izmaylova
