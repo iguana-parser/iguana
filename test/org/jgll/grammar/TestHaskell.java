@@ -20,7 +20,6 @@ public class TestHaskell {
 	
 	private static Grammar originalGrammar = Grammar.load(new File("grammars/haskell/haskell"));
 	
-	private static String sourceDir = "/Users/aliafroozeh/corpus/ghc-output/ghc";
 	private static Nonterminal start = Start.from(Nonterminal.withName("Module"));
 	
 	private static Grammar grammar;

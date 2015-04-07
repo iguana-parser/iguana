@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jgll.grammar.Grammar;
-import org.jgll.grammar.JavaNaturalCharacterLevel;
-import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.transformation.DesugarAlignAndOffside;
@@ -21,7 +19,6 @@ public class BenchmarkHaskell {
 	private static Nonterminal start = Start.from(Nonterminal.withName("Module"));
 	
 	private static Grammar grammar;
-
 	
 	static {
         DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
@@ -40,7 +37,6 @@ public class BenchmarkHaskell {
 	}
 	
 	public static void main(String[] args) throws IOException {
-//		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(1).build().run();
 		IguanaBenchmark.builder(grammar, start)
 				       .addDirectory(sourceDir, "hs", true)
 				       .setRunCount(1)

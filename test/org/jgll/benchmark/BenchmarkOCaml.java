@@ -21,7 +21,6 @@ public class BenchmarkOCaml {
 
 	
 	public static void main(String[] args) throws IOException {
-//		IguanaBenchmark.builder(grammar, start).addFile("/Users/aliafroozeh/test.java").setRunCount(1).build().run();
 		IguanaBenchmark.builder(ddGrammar, start)
 				       .addDirectory(sourceDir, "ml", true)
 				       .setRunCount(1)
