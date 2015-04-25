@@ -14,22 +14,17 @@ import org.jgll.util.Configuration;
 import org.jgll.util.Input;
 import org.junit.Test;
 
-public class TestHaskell {
+public class TestCSharp {
 	
-	static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Haskell.grammar));
+	private static Grammar originalGrammar = Grammar.load(new File("/Users/aliafroozeh/csharp"));
+	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
+	private static Start start = Start.from(Nonterminal.withName("CompilationUnit"));
 
-	static Configuration config = Configuration.DEFAULT;
-	
-	static Start startSymbol = Start.from(Nonterminal.withName("Module"));
-	
 	@Test
 	public void test() throws IOException {
-		Input input = Input.fromPath("/Users/aliafroozeh/Haskall/src/Main.hs");
-		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
+		Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
-//			org.jgll.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
+		ParseResult result = parser.parse(input, grammar, start);
 		System.out.println(result);
 	}
-	
 }
