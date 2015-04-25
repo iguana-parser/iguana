@@ -7,7 +7,7 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
 
-public class ArrayNodeLookup implements GSSNodeLookup {
+public class ArrayNodeLookup extends AbstractNodeLookup {
 
 	private GSSNode[] gssNodes;
 	private int length;
@@ -33,6 +33,7 @@ public class ArrayNodeLookup implements GSSNodeLookup {
 
 	@Override
 	public void reset(Input input) {
+		super.reset(input);
 		length = input.length();
 		gssNodes = null;		
 	}
@@ -44,6 +45,7 @@ public class ArrayNodeLookup implements GSSNodeLookup {
 
 	@Override
 	public ArrayNodeLookup init() {
+		super.init();
 		gssNodes = new GSSNode[length];
 		return this;
 	}

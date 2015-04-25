@@ -10,6 +10,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.traversal.ISymbolVisitor;
 
 public class EOF extends AbstractRegularExpression {
 	
@@ -83,6 +84,11 @@ public class EOF extends AbstractRegularExpression {
 	@Override
 	public String getPattern() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 	
 }

@@ -3,16 +3,34 @@ package org.jgll.grammar.symbol;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.jgll.datadependent.attrs.Attr;
 import org.jgll.grammar.condition.Condition;
+import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.generator.ConstructorCode;
 
 /**
  * 
  * 
  * @author Ali Afroozeh
+ * @author Anastasia Izmaylova
+ * 
+ * Symbol ::= Label ':' Symbol
+ *          | Nonterminal '(' {Expression ','}+ ')'
+ *          
+ *          | ...
+ *          
+ *          | '{' Symbol+ '}'
+ *          > "align" Symbol
+ *          | "offside" Symbol 
+ *          > Symbol "do" Statement
+ *          | Symbol "when" Expression
+ *          > "if" '(' Expression ')' Symbol
+ *          | "if" '(' Expression ')' Symbol "else" Symbol
+ *          | "while" '(' Expression ')' Symbol
+ *          
  *
  */
-public interface Symbol extends ConstructorCode, Serializable {
+public interface Symbol extends ConstructorCode, Serializable, Attr {
 	
 	public String getName();
 	
@@ -29,5 +47,11 @@ public interface Symbol extends ConstructorCode, Serializable {
 	}
 	
 	public SymbolBuilder<? extends Symbol> copyBuilder();
+	
+	public int size();
+	
+	public String toString(int j);
+	
+	public <T> T accept(ISymbolVisitor<T> visitor);
 	
 }	

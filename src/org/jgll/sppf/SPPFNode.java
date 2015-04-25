@@ -98,5 +98,9 @@ public interface SPPFNode {
 		
 		return true;
 	}
+	
+	default boolean isDummy() {
+		return false;
+	}
 
 }

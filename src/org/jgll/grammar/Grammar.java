@@ -137,6 +137,36 @@ public class Grammar implements ConstructorCode, Serializable {
 		return sb.toString();
 	}
 	
+	public String toStringWithOrderByPrecedence() {
+		StringBuilder sb = new StringBuilder();
+		
+		for (Nonterminal nonterminal : definitions.keySet()) {
+			sb.append(nonterminal).append(" ::= ");
+			
+			int precedence = -1;
+			List<Rule> rules = definitions.get(nonterminal);
+			
+			boolean found = true;
+			while(found) {
+				found = false;
+				for (Rule rule : rules) {
+					if (rule.getPrecedence() == precedence) {
+						found = true;
+						sb.append(listToString(rule.getBody())).append(" {" + rule.getPrecedence() + "}" + "\n");
+					}
+				}
+				
+				if (precedence == 0) {
+					found = true;
+					precedence++;
+				} else precedence++;
+			}
+			
+		}
+		
+		return sb.toString();
+	}
+	
 	public Object getObject(Nonterminal nonterminal, int alternateIndex) {
 		return definitions.get(nonterminal).get(alternateIndex).getObject();
 	}

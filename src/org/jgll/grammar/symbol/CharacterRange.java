@@ -12,6 +12,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.traversal.ISymbolVisitor;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
@@ -255,6 +256,11 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	@Override
 	public String getPattern() {
 		return "[" + getName() + "]";
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 	
 }

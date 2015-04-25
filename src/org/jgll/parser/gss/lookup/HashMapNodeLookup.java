@@ -7,7 +7,7 @@ import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.util.Input;
 
-public class HashMapNodeLookup implements GSSNodeLookup {
+public class HashMapNodeLookup extends AbstractNodeLookup {
 
 	private Map<Integer, GSSNode> map;
 	
@@ -28,6 +28,7 @@ public class HashMapNodeLookup implements GSSNodeLookup {
 
 	@Override
 	public void reset(Input input) {
+		super.reset(input);
 		map = new HashMap<>();
 	}
 
@@ -38,6 +39,7 @@ public class HashMapNodeLookup implements GSSNodeLookup {
 
 	@Override
 	public GSSNodeLookup init() {
+		super.init();
 		map = new HashMap<>();
 		return this;
 	}

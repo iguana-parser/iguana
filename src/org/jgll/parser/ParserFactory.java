@@ -63,9 +63,9 @@ public class ParserFactory {
 			}
 		} else {
 			if (config.getGSSType() == GSSType.NEW) {
-				return new GlobalSPPFLookupImpl(input);				
+				return new GlobalSPPFLookupImpl(input, grammar);				
 			} else {
-				return new OriginalGlobalSPPFLookupImpl(input);
+				return new OriginalGlobalSPPFLookupImpl(input, grammar);
 			}			
 		}		
 	}

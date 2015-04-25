@@ -45,6 +45,8 @@ public class Input {
 	
 	private URI uri;
 	
+	private int tabWidth = 8;
+	
 	public static Input fromString(String s, URI uri) {
 		try {
 			return new Input(fromStream(IOUtils.toInputStream(s)), uri);
@@ -72,7 +74,7 @@ public class Input {
 	public static Input fromString(String s) {
 		return fromString(s, URI.create("dummy:///"));
 	}
-	
+		
 	public static Input fromChar(char c) {
 		int[] input = new int[1];
 		input[0] = c;
@@ -290,9 +292,14 @@ public class Input {
 				lineCount++;
 				lineNumber++;
 				columnNumber = 1;
-			} else if (characters[i] == '\r') {
+			} 
+			else if (characters[i] == '\r') {
 				columnNumber = 1;
-			} else {
+			} 
+			else if (characters[i] == '\t') { 
+			  columnNumber += tabWidth;
+			} 
+			else {
 				columnNumber++;
 			}
 		}
@@ -378,9 +385,17 @@ public class Input {
 	public URI getURI() {
 		return uri;
 	}
+	
+	public void setTabWidth(int tabWidth) {
+		this.tabWidth = tabWidth;
+	}
 
 	public boolean isEndOfLine(int currentInputIndex) {
 		return characters[currentInputIndex] == 0 || lineColumns[currentInputIndex + 1].columnNumber == 1;
+	}
+	
+	public boolean isEndOfFile(int currentInputIndex) {
+		return characters[currentInputIndex] == -1;
 	}
 	
 	public int[] getCharacters() {

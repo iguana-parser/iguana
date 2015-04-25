@@ -1,5 +1,6 @@
 package org.jgll.sppf.lookup;
 
+import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.sppf.IntermediateNode;
@@ -11,8 +12,8 @@ public class OriginalGlobalSPPFLookupImpl extends GlobalSPPFLookupImpl {
 
 	private int inputSize;
 
-	public OriginalGlobalSPPFLookupImpl(Input input) {
-		super(input);
+	public OriginalGlobalSPPFLookupImpl(Input input, Grammar grammar) {
+		super(input, grammar);
 		this.inputSize = input.length() + 1;
 	}
 	

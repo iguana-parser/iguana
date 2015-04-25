@@ -1,5 +1,6 @@
 package org.jgll.parser.lookup;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
@@ -14,5 +15,12 @@ public interface DescriptorLookup {
 	public void scheduleDescriptor(Descriptor descriptor);
 	
 	public boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode);
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env);
 
 }

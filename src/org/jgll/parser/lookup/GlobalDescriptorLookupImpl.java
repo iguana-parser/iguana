@@ -5,6 +5,8 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.util.collections.IntKey4PlusObject;
 import org.jgll.grammar.Grammar;
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.descriptor.Descriptor;
@@ -12,7 +14,9 @@ import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 import org.jgll.util.collections.IntKey4;
+import org.jgll.util.collections.Key;
 import org.jgll.util.hashing.hashfunction.IntHash4;
+import org.jgll.util.hashing.hashfunction.IntHash5;
 
 
 /**
@@ -22,9 +26,12 @@ import org.jgll.util.hashing.hashfunction.IntHash4;
  */
 public class GlobalDescriptorLookupImpl implements DescriptorLookup {
 
-	private final Set<IntKey4> set;
+	private final Set<Key> set;
 	private final Deque<Descriptor> descriptorsStack;
+	
 	private final IntHash4 f;
+	
+	private final IntHash5 f5;
 	
 	public GlobalDescriptorLookupImpl(Input input, Grammar grammar) {
 		int inputSize = input.length() + 1; 
@@ -33,6 +40,13 @@ public class GlobalDescriptorLookupImpl implements DescriptorLookup {
 								 y * grammarSize * inputSize +
 								 z * inputSize +
 								 w;
+		
+		this.f5 = (x, y, z, w, v) -> x * grammarSize * inputSize * grammarSize * inputSize +
+		                             y * inputSize * grammarSize * inputSize +
+									 z * grammarSize * inputSize +
+									 w * inputSize +
+									 v;
+		
 		set = new HashSet<>();
 		descriptorsStack = new ArrayDeque<>();
 	}
@@ -55,6 +69,11 @@ public class GlobalDescriptorLookupImpl implements DescriptorLookup {
 	@Override
 	public void scheduleDescriptor(Descriptor descriptor) {
 		descriptorsStack.push(descriptor);
+	}
+
+	@Override
+	public boolean addDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
+		return !set.add(IntKey4PlusObject.from(env, slot.getId(), inputIndex, gssNode.getGrammarSlot().getId(), gssNode.getInputIndex(), f5));
 	}
 	
 }

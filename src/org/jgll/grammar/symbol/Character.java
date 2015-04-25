@@ -8,6 +8,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.unicode.UnicodeUtil;
 
 /**
@@ -140,5 +141,10 @@ public class Character extends AbstractRegularExpression {
 	@Override
 	public String getPattern() {
 		return getName();
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 }

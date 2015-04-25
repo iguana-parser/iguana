@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.util.Input;
 
 public class DummyNodeLookup implements GSSNodeLookup {
@@ -43,6 +44,21 @@ public class DummyNodeLookup implements GSSNodeLookup {
 	@Override
 	public boolean isInitialized() {
 		return true;
+	}
+
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data) {
+		return null;
+	}
+
+	@Override
+	public <T> GSSNode get(int i, GSSNodeData<T> data) {
+		return null;
 	}
 
 }

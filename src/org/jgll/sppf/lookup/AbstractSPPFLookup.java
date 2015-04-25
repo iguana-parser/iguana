@@ -55,7 +55,7 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 				log.warning("       %s %s", child, input.getNodeInfo(child));
 			}
 		}
-		System.exit(0);
+//		 System.exit(0);
 		countAmbiguousNodes++;
 	}
 	

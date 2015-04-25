@@ -18,6 +18,7 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.AutomatonBuilder;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
+import org.jgll.traversal.ISymbolVisitor;
 
 public class Alt<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
 
@@ -247,6 +248,11 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		public Alt<T> build() {
 			return new Alt<>(this);
 		}
+	}
+
+	@Override
+	public <E> E accept(ISymbolVisitor<E> visitor) {
+		return visitor.visit(this);
 	}
 	
 }

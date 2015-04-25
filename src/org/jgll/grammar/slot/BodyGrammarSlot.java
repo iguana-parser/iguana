@@ -5,13 +5,17 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.Conditions;
 import org.jgll.grammar.condition.ConditionsFactory;
 import org.jgll.grammar.symbol.Position;
+import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.lookup.GSSNodeLookup;
 import org.jgll.sppf.IntermediateNode;
+import org.jgll.sppf.NonPackedNode;
 import org.jgll.util.Input;
 import org.jgll.util.collections.Key;
 
@@ -25,12 +29,19 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	private final GSSNodeLookup nodeLookup;
 	
 	private final Conditions conditions;
-
-	public BodyGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, Set<Condition> conditions) {
+	
+	private final String label;
+	
+	private final String variable;
+	
+	public BodyGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
+			String label, String variable, Set<Condition> conditions) {
 		super(id);
 		this.position = position;
 		this.nodeLookup = nodeLookup;
 		this.conditions = ConditionsFactory.getConditions(conditions);
+		this.label = label;
+		this.variable = variable;
 		this.intermediateNodes = new HashMap<>();
 	}
 	
@@ -86,5 +97,50 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		intermediateNodes = new HashMap<>();
 		nodeLookup.reset(input);
 	}
-
+	
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(parser, u, i, node));
+	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public String getLabel() {
+		return label;
+	}
+	
+	public String getVariable() {
+		return variable;
+	}
+	
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		getTransitions().forEach(t -> t.execute(parser, u, i, node, env));
+	}
+	
+	@Override
+	public <T> GSSNode getGSSNode(int inputIndex, GSSNodeData<T> data) {
+		return nodeLookup.getOrElseCreate(this, inputIndex, data);
+	}
+	
+	@Override
+	public <T> GSSNode hasGSSNode(int inputIndex, GSSNodeData<T> data) {
+		return nodeLookup.get(inputIndex, data);
+	}
+	
+	public boolean requiresBinding() {
+		return !(label == null && variable == null); 
+	}
+	
+	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
+		if (label != null) {
+			env = env.declare(label, sppfNode);
+		}
+		
+		// TODO: Support for return values
+		
+		return env;
+	}
+	
 }

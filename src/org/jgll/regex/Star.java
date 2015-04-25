@@ -12,6 +12,7 @@ import org.jgll.grammar.symbol.SymbolBuilder;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
+import org.jgll.traversal.ISymbolVisitor;
 
 import com.google.common.collect.ImmutableList;
 
@@ -174,5 +175,10 @@ public class Star extends AbstractRegularExpression {
 		public Star build() {
 			return new Star(this);
 		}
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 }

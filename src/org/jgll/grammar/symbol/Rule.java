@@ -11,7 +11,7 @@ import org.jgll.util.generator.ConstructorCode;
 
 /**
  * 
- * @author Ali Afroozeh
+ * @authors Ali Afroozeh, Anastasia Izmaylova
  *
  */
 public class Rule implements ConstructorCode, Serializable {
@@ -33,12 +33,30 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final LayoutStrategy layoutStrategy;
 	
+	private final Recursion recursion;
+	
+	private final Associativity associativity;
+	private final AssociativityGroup associativityGroup;
+	
+	private final int precedence;
+	private final PrecedenceLevel precedenceLevel;
+	
+	private final String label;
+	
 	public Rule(Builder builder) {
 		this.body = builder.body;
 		this.head = builder.head;
 		this.object = builder.object;
 		this.layout = builder.layout;
 		this.layoutStrategy = builder.layoutStrategy;
+		this.recursion = builder.recursion;
+		this.associativity = builder.associativity;
+		
+		this.associativityGroup = builder.associativityGroup;
+		this.precedence = builder.precedence;
+		this.precedenceLevel = builder.precedenceLevel;
+		
+		this.label = builder.label;
 	}
 		
 	public Nonterminal getHead() {
@@ -72,10 +90,50 @@ public class Rule implements ConstructorCode, Serializable {
 		return layoutStrategy;
 	}
 	
+	public boolean isUnary() {
+		return recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
+	}
+	
+	public boolean isLeftRecursive() {
+		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC;
+	}
+	
+	public boolean isRightRecursive() {
+		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.RIGHT_REC;
+	}
+	
+	public boolean isLeftOrRightRecursive() {
+		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
+	}
+	
+	public Recursion getRecursion() {
+		return recursion;
+	}
+	
+	public Associativity getAssociativity() {
+		return associativity;
+	}
+	
+	public AssociativityGroup getAssociativityGroup() {
+		return associativityGroup;
+	}
+	
+	public int getPrecedence() {
+		return precedence;
+	}
+	
+	public PrecedenceLevel getPrecedenceLevel() {
+		return precedenceLevel;
+	}
+	
+	public String getLabel() {
+		return label;
+	}
+	
 	public boolean hasLayout() {
 		return layout != null;
 	}
-		
+	
 	@Override
 	public String toString() {
 		
@@ -88,7 +146,11 @@ public class Rule implements ConstructorCode, Serializable {
 		for(Symbol s : body) {
 			sb.append(s).append(" ");
 		}
-		return sb.toString();
+		return sb.toString() + 
+				" {" + associativity.name() + "," + precedence + "," + recursion + "} " + 
+				(associativityGroup != null? associativityGroup + " " : "") +
+				(precedenceLevel != null? precedenceLevel + " ": "") +
+				(label != null? label : "");
 	} 
 	
 	public boolean equals(Object obj) {
@@ -119,6 +181,26 @@ public class Rule implements ConstructorCode, Serializable {
 		return new Position(this, i);
 	}
 	
+	public Position getPosition(int i, int j) {
+		if (i < 0)
+			throw new IllegalArgumentException("i cannot be less than zero.");
+		
+		if (i > size())
+			throw new IllegalArgumentException("i cannot be greater than the size.");
+		
+		return new Position(this, i, j);
+	}
+	
+	public Builder copyBuilder() {
+		return new Builder(this);
+	}
+	
+	public Builder copyBuilderButWithHead(Nonterminal nonterminal) {
+		Builder builder = new Builder(this);
+		builder.head = nonterminal;
+		return builder;
+	}
+	
 	public static Builder withHead(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
@@ -130,10 +212,36 @@ public class Rule implements ConstructorCode, Serializable {
 		private Serializable object;
 		private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
 		private Nonterminal layout;
+		
+		private Recursion recursion = Recursion.UNDEFINED;
+		
+		private Associativity associativity = Associativity.UNDEFINED;
+		private AssociativityGroup associativityGroup;
+		
+		private int precedence;
+		private PrecedenceLevel precedenceLevel;
+		
+		private String label;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
 			this.body = new ArrayList<>();
+		}
+		
+		public Builder(Rule rule) {
+			this.head = rule.head;
+			this.body = rule.body;
+			this.object = rule.object;
+			this.layoutStrategy = rule.layoutStrategy;
+			this.layout = rule.layout;
+			this.recursion = rule.recursion;
+			this.associativity = rule.associativity;
+			
+			this.associativityGroup = rule.associativityGroup;
+			this.precedence = rule.precedence;
+			this.precedenceLevel = rule.precedenceLevel;
+			
+			this.label = rule.label;
 		}
 		
 		public Builder addSymbol(Symbol symbol) {
@@ -155,6 +263,11 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder setSymbols(List<Symbol> symbols) {
+			body = symbols;
+			return this;
+		}
+		
 		public Builder setLayoutStrategy(LayoutStrategy layoutStrategy) {
 			this.layoutStrategy = layoutStrategy;
 			return this;
@@ -170,6 +283,36 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder setRecursion(Recursion recursion) {
+			this.recursion = recursion;
+			return this;
+		}
+		
+		public Builder setAssociativity(Associativity associativity) {
+			this.associativity = associativity;
+			return this;
+		}
+		
+		public Builder setAssociativityGroup(AssociativityGroup associativityGroup) {
+			this.associativityGroup = associativityGroup;
+			return this;
+		}
+		
+		public Builder setPrecedence(int precedence) {
+			this.precedence = precedence;
+			return this;
+		}
+		
+		public Builder setPrecedenceLevel(PrecedenceLevel precedenceLevel) {
+			this.precedenceLevel = precedenceLevel;
+			return this;
+		}
+		
+		public Builder setLabel(String label) {
+			this.label = label;
+			return this;
+		}
+		
 		public Rule build() {
 			return new Rule(this);
 		}
@@ -181,6 +324,17 @@ public class Rule implements ConstructorCode, Serializable {
 				(body == null ? "" : body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) +
 				(layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
 				(layoutStrategy == LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
+				
+				".setRecursion(" + recursion.getConstructorCode() + ")" +
+				
+				".setAssociativity(" + associativity.getConstructorCode() + ")" +
+				".setPrecedence(" + precedence + ")" +
+				
+				(associativityGroup != null? ".setAssociativityGroup(" + associativityGroup.getConstructorCode() + ")" : "") +
+				(precedenceLevel != null? ".setPrecedenceLevel(" + precedenceLevel.getConstructorCode() + ")" : "") +
+				
+				(label != null? ".setLabel(\"" + label + "\")" : "") +
+				
 				".build()";
 	}
 }

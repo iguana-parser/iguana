@@ -8,12 +8,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.lookup.GSSNodeLookup;
-import org.jgll.sppf.DummyNode;
-import org.jgll.sppf.NonPackedNode;
 import org.jgll.sppf.NonterminalNode;
 import org.jgll.util.Input;
 import org.jgll.util.collections.Key;
@@ -43,11 +40,6 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		this.nonterminalNodes = new HashMap<>();
 	}
 	
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		firstSlots.forEach(s -> parser.scheduleDescriptor(new Descriptor(s, u, i, DummyNode.getInstance())));
-	}
-	
 	public void addFirstSlot(BodyGrammarSlot slot) {
 		firstSlots.add(slot);
 	}
@@ -62,6 +54,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	public Nonterminal getNonterminal() {
 		return nonterminal;
+	}
+	
+	public String[] getParameters() {
+		return nonterminal.getParameters();
 	}
 	
 	@Override
@@ -122,4 +118,23 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		nodeLookup.init();
 	}
 
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public <T> GSSNode getGSSNode(int inputIndex, GSSNodeData<T> data) {
+		return nodeLookup.getOrElseCreate(this, inputIndex, data);
+	}
+	
+	@Override
+	public <T> GSSNode hasGSSNode(int inputIndex, GSSNodeData<T> data) {
+		if (nodeLookup.isInitialized()) {
+			return nodeLookup.get(inputIndex, data);
+		} else {
+			nodeLookup.init();
+			return null;
+		}
+	}
 }

@@ -4,6 +4,7 @@ Bundle-Name: iguana
 Bundle-SymbolicName: iguana
 Bundle-Version: 1.0.0.qualifier
 Export-Package: 
+ org.jgll.datadependent.ast,
  org.jgll.disambiguation.conditions,
  org.jgll.disambiguation.precedence;uses:="org.jgll.sppf,org.jgll.grammar",
  org.jgll.grammar;
@@ -72,5 +73,7 @@ Export-Package:
    org.jgll.regex.automaton,
    org.jgll.util.trie"
 Require-Bundle: com.google.guava,
- org.apache.commons.io;bundle-version="2.0.1"
+ org.apache.commons.io;bundle-version="2.0.1",
+ org.eclipse.imp.pdb.values;bundle-version="0.4.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.jgll.grammar

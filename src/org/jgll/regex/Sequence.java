@@ -1,5 +1,7 @@
 package org.jgll.regex;
 
+import static org.jgll.util.generator.GeneratorUtil.listToString;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,7 +22,9 @@ import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
 import org.jgll.regex.automaton.Transition;
+import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.util.Input;
+import org.jgll.util.generator.GeneratorUtil;
 
 public class Sequence<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
 
@@ -194,7 +198,14 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		if (isCharSequence()) 
 			return "\"" + asCharacters().stream().map(c -> c.getName()).collect(Collectors.joining()) + "\"";
 		
-		return super.toString();
+		String body = "(" + GeneratorUtil.listToString(symbols, " ") + ")";
+		
+		String s = label == null ? body : label + ":" + body;
+		if (!preConditions.isEmpty())
+			s += " " + listToString(preConditions);
+		if (!postConditions.isEmpty())
+			s += " " + listToString(postConditions);
+		return s;
 	}
 	
 	public static <T extends Symbol> Builder<T> builder(T s) {
@@ -238,6 +249,11 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		public Sequence<T> build() {
 			return new Sequence<>(this);
 		}
+	}
+
+	@Override
+	public <E> E accept(ISymbolVisitor<E> visitor) {
+		return visitor.visit(this);
 	}
 	
 }

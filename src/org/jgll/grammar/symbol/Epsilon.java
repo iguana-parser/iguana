@@ -9,6 +9,7 @@ import java.util.Set;
 import org.jgll.regex.automaton.Automaton;
 import org.jgll.regex.automaton.State;
 import org.jgll.regex.automaton.StateType;
+import org.jgll.traversal.ISymbolVisitor;
 
 
 public class Epsilon extends AbstractRegularExpression {
@@ -81,5 +82,10 @@ public class Epsilon extends AbstractRegularExpression {
 	@Override
 	public String getPattern() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 }

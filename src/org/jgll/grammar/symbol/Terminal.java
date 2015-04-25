@@ -3,6 +3,7 @@ package org.jgll.grammar.symbol;
 import java.util.Set;
 
 import org.jgll.regex.RegularExpression;
+import org.jgll.traversal.ISymbolVisitor;
 import org.jgll.regex.automaton.Automaton;
 
 public class Terminal extends AbstractRegularExpression {
@@ -72,7 +73,6 @@ public class Terminal extends AbstractRegularExpression {
 		}
 	}
 
-	@Override
 	public boolean isNullable() {
 		return regex.isNullable();
 	}
@@ -98,6 +98,10 @@ public class Terminal extends AbstractRegularExpression {
 	}
 	
 	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+	
 	public String getConstructorCode() {
 		return Terminal.class.getSimpleName() + ".builder(" + regex.getConstructorCode() + ")"
 											  + super.getConstructorCode() 

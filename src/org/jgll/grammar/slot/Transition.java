@@ -1,5 +1,6 @@
 package org.jgll.grammar.slot;
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.parser.GLLParser;
 import org.jgll.parser.gss.GSSNode;
 import org.jgll.sppf.NonPackedNode;
@@ -15,5 +16,12 @@ public interface Transition extends ConstructorCode {
 	public GrammarSlot origin();
 
 	public String getLabel();
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);
 	
 }

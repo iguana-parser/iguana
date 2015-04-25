@@ -1,11 +1,15 @@
 package org.jgll.parser;
 
 
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.slot.BodyGrammarSlot;
 import org.jgll.grammar.slot.DummySlot;
+import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
+import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSEdge;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.OriginalGSSEdgeImpl;
 import org.jgll.parser.gss.lookup.GSSLookup;
 import org.jgll.parser.lookup.DescriptorLookup;
@@ -45,17 +49,14 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 
 			if (!gssLookup.addToPoppedElements(gssNode, node))
 				return;
-
-			BodyGrammarSlot returnSlot = (BodyGrammarSlot) gssNode.getGrammarSlot();
-
-			if (returnSlot.getConditions().execute(input, gssNode, inputIndex))
-				return;
 			
 			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
-						
+
 			for (GSSEdge edge : gssNode.getGSSEdges()) {
-				NonPackedNode y = sppfLookup.getNode(returnSlot, edge.getNode(), node);
-				addDescriptor(returnSlot, edge.getDestination(), inputIndex, y);
+				Descriptor descriptor = edge.addDescriptor(this, gssNode, inputIndex, node);
+				if (descriptor != null) {
+					scheduleDescriptor(descriptor);
+				}				
 			}
 		}
 	}
@@ -69,27 +70,52 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	public final GSSNode hasGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
 		return gssLookup.hasGSSNode(returnSlot, ci);
 	}
-	
+
 	@Override
-	public void createGSSEdge(BodyGrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source) {
-		
+	public void createGSSEdge(BodyGrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source) {		
 		GSSEdge edge = new OriginalGSSEdgeImpl(w, destination);
 		
-		if(gssLookup.getGSSEdge(source, edge)) {
-			
-			BodyGrammarSlot returnSlot = (BodyGrammarSlot) source.getGrammarSlot();
-			
+		if(gssLookup.getGSSEdge(source, edge)) {		
 			log.trace("GSS Edge created from %s to %s", source, destination);
 			
 			for (NonPackedNode z : source.getPoppedElements()) {
-
-				if (returnSlot.getConditions().execute(input, destination, z.getRightExtent())) 
-					continue;
-				
-				NonPackedNode x = sppfLookup.getNode(returnSlot, w, z);
-				addDescriptor(returnSlot, destination, z.getRightExtent(), x);
+				Descriptor descriptor = edge.addDescriptor(this, source, z.getRightExtent(), z);
+				if (descriptor != null) {
+					scheduleDescriptor(descriptor);
+				}
 			}
 		}
+	}
+
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public void createGSSEdge(BodyGrammarSlot slot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
+		GSSEdge edge = new org.jgll.datadependent.gss.OriginalGSSEdgeImpl(w, destination, env);
+		
+		if(gssLookup.getGSSEdge(source, edge)) {
+			log.trace("GSS Edge created from %s to %s", source, destination);
+			
+			for (NonPackedNode z : source.getPoppedElements()) {
+				Descriptor descriptor = edge.addDescriptor(this, source, z.getRightExtent(), z);
+				if (descriptor != null) {
+					scheduleDescriptor(descriptor);
+				}
+			}
+		}
+	}
+
+	@Override
+	public <T> GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
+		return gssLookup.getGSSNode(returnSlot, ci, data);
+	}
+
+	@Override
+	public <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
+		return gssLookup.hasGSSNode(returnSlot, ci, data);
 	}
 
 }

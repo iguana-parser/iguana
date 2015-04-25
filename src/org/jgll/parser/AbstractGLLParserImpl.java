@@ -1,18 +1,27 @@
 package org.jgll.parser;
 
 
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.jgll.datadependent.ast.Expression;
+import org.jgll.datadependent.ast.Statement;
+import org.jgll.datadependent.env.Environment;
+import org.jgll.datadependent.env.IEvaluatorContext;
+import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.jgll.grammar.GrammarGraph;
+import org.jgll.grammar.condition.DataDependentCondition;
 import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.EndGrammarSlot;
+import org.jgll.grammar.slot.DummySlot;
 import org.jgll.grammar.slot.GrammarSlot;
+import org.jgll.grammar.slot.LastSymbolGrammarSlot;
 import org.jgll.grammar.slot.NonterminalGrammarSlot;
 import org.jgll.grammar.slot.TerminalGrammarSlot;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.parser.descriptor.Descriptor;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.parser.gss.lookup.GSSLookup;
 import org.jgll.parser.gss.lookup.GlobalHashGSSLookupImpl;
 import org.jgll.parser.lookup.DescriptorLookup;
@@ -85,9 +94,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal) {
+	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, Object> map) {
 		this.grammarGraph = grammarGraph;
 		this.input = input;
+		
+		/**
+		 * Data-dependent GLL parsing
+		 */
+		this.ctx = new PersistentEvaluatorContext(input);
+		map.forEach((k,v) -> ctx.declareGlobalVariable(k, v));
 		
 		NonterminalGrammarSlot startSymbol = getStartSymbol(nonterminal);
 		
@@ -156,16 +171,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			return;
 		}
 		
-		startSymbol.execute(this, cu, ci, cn);
+		startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance())));
 		
 		while(descriptorLookup.hasNextDescriptor()) {
 			Descriptor descriptor = descriptorLookup.nextDescriptor();
-			GrammarSlot slot = descriptor.getGrammarSlot();
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
 			cn = descriptor.getSPPFNode();
 			log.trace("Processing %s", descriptor);
-			slot.execute(this, cu, ci, cn);
+			descriptor.execute(this);
 		}
 	}
 	
@@ -173,12 +187,22 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
+
 		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
 		if (gssNode == null) {
+			
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
 			log.trace("GSSNode created: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);
-			nonterminal.execute(this, gssNode, i, node);
+			
+			final GSSNode __gssNode = gssNode;
+			
+			for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+				if (!s.getConditions().execute(getInput(), __gssNode, i))
+					scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
+			}
+			
+			// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 		} else {
 			log.trace("GSSNode found: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);			
@@ -215,7 +239,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		gssLookup.reset();
 	}
 
-	@Override
 	public final void scheduleDescriptor(Descriptor descriptor) {
 		descriptorLookup.scheduleDescriptor(descriptor);
 		log.trace("Descriptor created: %s", descriptor);
@@ -253,12 +276,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
+	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child) {
 		return sppfLookup.getNonterminalNode(slot, child);
 	}
 	
 	@Override
-	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild);
 	}
 	
@@ -272,6 +295,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return sppfLookup.getTerminalNode(slot, leftExtent, rightExtent);
 	}
 	
+	@Override 
+	public NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		return sppfLookup.getNode(slot, leftChild, rightChild);
+	}
+
 	@Override
 	public Configuration getConfiguration() {
 		return config;
@@ -286,6 +314,181 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 	}
 	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	private IEvaluatorContext ctx;
+	private BodyGrammarSlot currentEndGrammarSlot = DummySlot.getInstance();
+	
+	@Override
+	public IEvaluatorContext getEvaluatorContext() {
+		return ctx;
+	}
+	
+	@Override
+	public BodyGrammarSlot getCurrentEndGrammarSlot() {
+		return currentEndGrammarSlot;
+	}
+	
+	@Override
+	public void setCurrentEndGrammarSlot(BodyGrammarSlot slot) {
+		currentEndGrammarSlot = slot;
+	}
+	
+	@Override
+	public Environment getEnvironment() {
+		return ctx.getEnvironment();
+	}
+	
+	@Override
+	public void setEnvironment(Environment env) {
+		ctx.setEnvironment(env);
+	}
+	
+	@Override
+	public Environment getEmptyEnvironment() {
+		return ctx.getEmptyEnvironment();
+	}
+	
+	@Override
+	public Object evaluate(Statement[] statements, Environment env) {
+		assert statements.length > 1;
+		
+		ctx.setEnvironment(env);
+		
+		int i = 0;
+		while (i < statements.length) {
+			statements[i].interpret(ctx);
+			i++;
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public Object evaluate(DataDependentCondition condition, Environment env) {
+		ctx.setEnvironment(env);
+		return condition.getExpression().interpret(ctx);
+	}
+	
+	@Override
+	public Object evaluate(Expression expression, Environment env) {
+		ctx.setEnvironment(env);
+		return expression.interpret(ctx);
+	}
+	
+	@Override
+	public Object[] evaluate(Expression[] arguments, Environment env) {
+		if (arguments == null) return null;
+		
+		ctx.setEnvironment(env);
+		
+		Object[] values = new Object[arguments.length];
+		
+		int i = 0;
+		while (i < arguments.length) {
+			values[i] = arguments[i].interpret(ctx);
+			i++;
+		}
+		
+		return values;
+	}
+	
+	@Override
+	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node, Expression[] arguments, Environment env) {
+		assert !(env.isEmpty() && arguments == null);
+		
+		if (arguments == null) {
+			
+			GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
+			if (gssNode == null) {
+				
+				gssNode = createGSSNode(returnSlot, nonterminal, i);
+				log.trace("GSSNode created: %s", gssNode);
+				
+				createGSSEdge(returnSlot, u, node, gssNode, env); // Record environment on the edge
+				
+				final GSSNode __gssNode = gssNode;
+				
+				for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+					if (!s.getConditions().execute(getInput(), __gssNode, i))
+						scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
+				}
+				
+				// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
+				
+			} else {
+				log.trace("GSSNode found: %s",  gssNode);
+				createGSSEdge(returnSlot, u, node, gssNode, env); // Record environment on the edge
+			}
+			return gssNode;
+		}
+		
+		GSSNodeData<Object> data = new GSSNodeData<>(evaluate(arguments, env));
+		
+		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i, data);
+		if (gssNode == null) {
+			
+			gssNode = createGSSNode(returnSlot, nonterminal, i, data);
+			log.trace("GSSNode created: %s(%s)",  gssNode, data);
+			
+			if (env.isEmpty()) createGSSEdge(returnSlot, u, node, gssNode);
+			else createGSSEdge(returnSlot, u, node, gssNode, env);
+			
+			Environment newEnv = getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
+			
+			final GSSNode __gssNode = gssNode;
+			
+			setEnvironment(newEnv);
+			for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+				if (s.getLabel() != null)
+					this.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
+				
+				if (!s.getConditions().execute(getInput(), __gssNode, i, getEvaluatorContext()))
+					scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), getEnvironment()));
+			}
+			
+			// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), newEnv)));
+			
+		} else {
+			log.trace("GSSNode found: %s",  gssNode);
+			if (env.isEmpty()) createGSSEdge(returnSlot, u, node, gssNode);
+			else createGSSEdge(returnSlot, u, node, gssNode, env);		
+		}
+		return gssNode;
+	}
+	
+	@Override
+	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
+		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode, env);
+    }
+	
+	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env);
+	
+	public abstract <T> GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
+	
+	public abstract <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
+	
+	@Override
+	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data) {
+		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild, data);
+	}
+	
+	@Override
+	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data) {
+		return sppfLookup.getNonterminalNode(slot, child, data);
+	}
+	
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
+		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild, env);
+	}
+	
+	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data) {
+		return sppfLookup.getNode(slot, leftChild, rightChild, env, data);
+	}
+
 	@Override
 	public GrammarGraph getGrammarGraph() {
 		return grammarGraph;

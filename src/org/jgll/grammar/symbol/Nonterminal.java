@@ -1,6 +1,14 @@
 package org.jgll.grammar.symbol;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.jgll.datadependent.ast.Expression;
+import org.jgll.grammar.condition.Condition;
 import org.jgll.parser.HashFunctions;
+import org.jgll.traversal.ISymbolVisitor;
+import org.jgll.util.generator.GeneratorUtil;
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -10,6 +18,14 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final int index;
 	
+	private final String variable;
+	
+	private final String[] parameters; // Only head
+	
+	private final Expression[] arguments;
+	
+	private final Set<String> excepts;
+	
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
 	}
@@ -18,6 +34,10 @@ public class Nonterminal extends AbstractSymbol {
 		super(builder);
 		this.ebnfList = builder.ebnfList;
 		this.index = builder.index;
+		this.variable = builder.variable;
+		this.parameters = builder.parameters;
+		this.arguments = builder.arguments;
+		this.excepts = builder.excepts;
 	}
 	
 	public boolean isEbnfList() {
@@ -36,20 +56,40 @@ public class Nonterminal extends AbstractSymbol {
 		return index;
 	}
 	
+	public String getVariable() {
+		return variable;
+	}
+	
+	public String[] getParameters() {
+		return parameters;
+	}
+	
+	public Expression[] getArguments() {
+		return arguments;
+	}
+	
+	public Set<String> getExcepts() {
+		return excepts;
+	}
+	
 	@Override
 	public String toString() {
-		return index > 0 ? name + index : name;
+		return (variable != null? variable + " = " : "")
+				+ (getPreConditions().isEmpty()? "" : GeneratorUtil.listToString(getPreConditions(), ","))
+			    + (label != null? label + ":" : "")
+			    + name + (index > 0 ? index : "")
+			    + (arguments == null && parameters != null? "(" + GeneratorUtil.listToString(parameters, ",") + ")" : "")
+		        + (arguments != null? "(" + GeneratorUtil.listToString(arguments, ",") + ")" : "")
+		        + (getPostConditions().isEmpty()? "" : GeneratorUtil.listToString(getPostConditions(), ","));
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
 		
-		if(!(obj instanceof Nonterminal)) {
+		if(!(obj instanceof Nonterminal))
 			return false;
-		}
 		
 		Nonterminal other = (Nonterminal) obj;
 		
@@ -65,17 +105,27 @@ public class Nonterminal extends AbstractSymbol {
 		return new Builder(name);
 	}
 	
+	public static Builder builder(Nonterminal nonterminal) {
+		return new Builder(nonterminal);
+	}
+	
 	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
+	public Builder copyBuilder() {
 		return new Builder(this);
 	}
 	
 	@Override
-	public String getConstructorCode() {
+	public String getConstructorCode() {	
+		
+		String excepts = "";
+		if (this.excepts != null)
+			excepts = GeneratorUtil.listToString(this.excepts.stream().map(l -> ".addExcept(\"" + l + "\")").collect(Collectors.toSet()));
+		
 		return Nonterminal.class.getSimpleName() + ".builder(\"" + name + "\")"
 													+ super.getConstructorCode() 
 													+ (index > 0 ?  ".setIndex(" + index + ")" : "")
 													+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
+													+ excepts
 													+ ".build()";
 	}
 
@@ -85,10 +135,21 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private int index;
 		
+		private String variable;
+		
+		private String[] parameters; // Only head
+		
+		private Expression[] arguments;
+		
+		private Set<String> excepts;
+		
 		public Builder(Nonterminal nonterminal) {
 			super(nonterminal);
 			this.ebnfList = nonterminal.ebnfList;
 			this.index = nonterminal.index;
+			this.parameters = nonterminal.parameters;
+			this.arguments = nonterminal.arguments;
+			this.excepts = nonterminal.excepts;
 		}
 
 		public Builder(String name) {
@@ -100,8 +161,108 @@ public class Nonterminal extends AbstractSymbol {
 			return this;
 		}
 		
+		public Builder setVariable(String variable) {
+			this.variable = variable;
+			return this;
+		}
+		
 		public Builder setEbnfList(boolean ebnfList) {
 			this.ebnfList = ebnfList;
+			return this;
+		}
+		
+		public Builder addParameters(String... parameters) {
+			if (parameters.length == 0)
+				return this;
+			
+			if (this.parameters == null) {
+				this.parameters = parameters;
+				return this;
+			}
+			
+			String[] params = new String[this.parameters.length + parameters.length];
+			int i = 0;
+			for (String parameter : this.parameters)
+				params[i++] = parameter;
+			
+			for (String parameter : parameters)
+				params[i++] = parameter;
+			
+			this.parameters = params;
+			return this;
+		}
+		
+		public Builder apply(Expression... arguments) {
+			if (arguments.length == 0)
+				return this;
+			
+			if (this.arguments == null) {
+				this.arguments = arguments;
+				return this;
+			}
+			
+			Expression[] args = new Expression[this.arguments.length + arguments.length];
+			int i = 0;
+			for (Expression argument : this.arguments)
+				args[i++] = argument;
+			
+			for (Expression argument : arguments)
+				args[i++] = argument;
+
+			this.arguments = args;			
+			return this;
+		}
+		
+		@Override
+		public Builder setLabel(String label) {
+			super.setLabel(label);
+			return this;
+		}
+		
+		@Override
+		public Builder addPreCondition(Condition condition) {
+			preConditions.add(condition);
+			return this;
+		}
+		
+		@Override
+		public Builder addPostCondition(Condition condition) {
+			postConditions.add(condition);
+			return this;
+		}	
+		
+		@Override
+		public Builder setObject(Object object) {
+			this.object = object;
+			return this;
+		}
+		
+		@Override
+	 	public Builder addPreConditions(Iterable<Condition> conditions) {
+	 		conditions.forEach(c -> preConditions.add(c));
+			return this;
+		}
+	 	
+		@Override
+	 	public Builder addPostConditions(Iterable<Condition> conditions) {
+	 		conditions.forEach(c -> postConditions.add(c));
+			return this;
+		}
+		
+		public Builder addExcept(String label) {
+			if (excepts == null) excepts = new HashSet<>();
+			excepts.add(label);
+			return this;
+		}
+		
+		public Builder addExcepts(Set<String> labels) {
+			if (labels.isEmpty()) 
+				return this;
+			
+			if (excepts == null) 
+				excepts = new HashSet<>();
+			
+			excepts.addAll(labels);			
 			return this;
 		}
 		
@@ -109,6 +270,11 @@ public class Nonterminal extends AbstractSymbol {
 		public Nonterminal build() {
 			return new Nonterminal(this);
 		}
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

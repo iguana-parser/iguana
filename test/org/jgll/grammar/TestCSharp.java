@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class TestCSharp {
 	
-	private static Grammar originalGrammar = Grammar.load(new File("/Users/aliafroozeh/csharp"));
+	private static Grammar originalGrammar = Grammar.load(new File("grammars/csharp/csharp"));
 	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
 	private static Start start = Start.from(Nonterminal.withName("CompilationUnit"));
 

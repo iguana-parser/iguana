@@ -1,14 +1,15 @@
 package org.jgll.grammar.symbol;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-
 import java.util.Set;
 
+import org.jgll.datadependent.attrs.AbstractAttrs;
 import org.jgll.grammar.condition.Condition;
 
 import com.google.common.collect.ImmutableSet;
 
-public abstract class AbstractSymbol implements Symbol {
+import static org.jgll.util.generator.GeneratorUtil.*;
+
+public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -26,7 +27,7 @@ public abstract class AbstractSymbol implements Symbol {
 		this.name = builder.name;
 		this.label = builder.label;
 		this.object = builder.object;
-		this.preConditions = ImmutableSet.copyOf(builder.preConditions);
+		this.preConditions = builder.preConditions; // TODO: Dangerous move: ImmutableSet.copyOf(builder.preConditions);
 		this.postConditions = ImmutableSet.copyOf(builder.postConditions);
 	}
 	
@@ -54,15 +55,27 @@ public abstract class AbstractSymbol implements Symbol {
 	public String getLabel() {
 		return label;
 	}
+
+	@Override
+	public int size() {
+		return 1;
+	}
+
 	
 	@Override
 	public String toString() {
 		String s = label == null ? name : label + ":" + name;
 		if (!preConditions.isEmpty())
-			s += listToString(preConditions) + " " + name;
+			s += " " + listToString(preConditions);
 		if (!postConditions.isEmpty())
 			s += " " + listToString(postConditions);
 		return s;
+	}
+	
+	
+	@Override
+	public String toString(int j) {
+		return this.toString() + (j == 1? " . " : "");
 	}
 	
 	@Override

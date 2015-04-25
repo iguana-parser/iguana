@@ -2,6 +2,8 @@ package org.jgll.grammar.slot;
 
 import java.util.Set;
 
+import org.jgll.datadependent.ast.Expression;
+import org.jgll.datadependent.env.Environment;
 import org.jgll.grammar.condition.Condition;
 import org.jgll.grammar.condition.Conditions;
 import org.jgll.grammar.condition.ConditionsFactory;
@@ -31,24 +33,28 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		
+		if (dest.getLabel() != null)
+			execute(parser, u, i, node, parser.getEmptyEnvironment());
+		
 		Input input = parser.getInput();
-
+			
 		if (preConditions.execute(input, u, i))
 			return;
-		
+			
 		int length = slot.match(input, i);
-		
+			
 		if (length < 0) {
 			parser.recordParseError(origin);
 			return;
 		}
-		
+			
 		if (postConditions.execute(input, u, i + length))
 			return;
-		
+			
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
-		
+			
 		createNode(length, cr, parser, u, i, node);
+		
 	}
 	
 	public TerminalGrammarSlot getSlot() {
@@ -66,10 +72,48 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 			.append("slot" + dest.getId()).append(", ")
 			.toString();
 	}
-	
+
 	@Override
 	public String getLabel() {
-		return getSlot().toString();
+		return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getSlot();
 	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	@Override
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+		
+		Input input = parser.getInput();
+		
+		parser.setEnvironment(env);
+		
+		if (dest.getLabel() != null)
+			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+
+		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
+			return;
+		
+		int length = slot.match(input, i);
+		
+		if (length < 0) {
+			parser.recordParseError(origin);
+			return;
+		}
+		
+		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
+		
+		if (dest.getLabel() != null)
+			parser.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+
+		if (postConditions.execute(input, u, i + length, parser.getEvaluatorContext()))
+			return;
+		
+		createNode(length, cr, parser, u, i, node, parser.getEnvironment());
+	}
+	
+	protected abstract void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);
 	
 }

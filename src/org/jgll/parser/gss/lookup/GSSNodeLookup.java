@@ -2,6 +2,7 @@ package org.jgll.parser.gss.lookup;
 
 import org.jgll.grammar.slot.GrammarSlot;
 import org.jgll.parser.gss.GSSNode;
+import org.jgll.parser.gss.GSSNodeData;
 import org.jgll.util.Input;
 
 /**
@@ -22,4 +23,14 @@ public interface GSSNodeLookup {
 	public GSSNodeLookup init();
 	
 	public boolean isInitialized();
+
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data);
+	
+	public <T> GSSNode get(int i, GSSNodeData<T> data);
+
 }

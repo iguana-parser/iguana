@@ -2,9 +2,9 @@ package org.jgll.grammar;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.IOException;
 
+import org.jgll.grammar.precedence.OperatorPrecedence;
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Start;
 import org.jgll.grammar.transformation.EBNFToBNF;
@@ -18,13 +18,10 @@ import org.junit.Test;
 
 public class TestJava {
 
-	static Grammar originalGrammar = Grammar.load(new File(""));
-//	private static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns(), JavaNaturalCharacterLevel.exceptPatterns()).transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar)));
-	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
+	private static Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(JavaNaturalCharacterLevel.precedencePatterns(), JavaNaturalCharacterLevel.exceptPatterns()).transform(new EBNFToBNF().transform(JavaNaturalCharacterLevel.grammar)));
 
 	Configuration config = Configuration.DEFAULT;
 	
-	@Test
 	public void testKeywordExclusion() {
 		Input input = Input.fromString("boolean");
 		GLLParser parser = ParserFactory.getParser(config, input, grammar);
@@ -35,10 +32,8 @@ public class TestJava {
 	@Test
 	public void test1() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/test.java");
-		System.out.println(grammar.getConstructorCode());
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Start.from(Nonterminal.withName("CompilationUnit")));
-//		Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		System.out.println(result);
 	}
 }
