@@ -21,6 +21,9 @@ public class SelectedFiles {
 	public static final String test8 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test8.hs";
 	public static final String test9 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test9.hs";
 	public static final String test10 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test10.hs";
+	public static final String test11_1 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test11_1.hs";
+	public static final String test11_2 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test11_2.hs";
+	public static final String test11_3 = "/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/test11_3.hs";
 	
 	private static final String ghc = "/Users/anastasiaizmaylova/git/ghc/";
 	public final static String[] files = new String[] {

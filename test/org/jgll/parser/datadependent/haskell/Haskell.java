@@ -962,7 +962,7 @@ Grammar.builder()
 
          grammar = new LayoutWeaver().transform(grammar);
 
-         Input input = Input.fromPath(SelectedFiles.test10);
+         Input input = Input.fromPath(SelectedFiles.test11_3);
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/", graph);

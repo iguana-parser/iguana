@@ -26,6 +26,42 @@ import org.junit.Test;
 
 import com.google.common.collect.Sets;
 
+/**
+ * After align
+
+Decls ::= ignore({ Decl (; Decl)* })
+        | a0:(offside [indent(a1.lExt) == indent(a0.lExt)] a1:Decl)*
+
+Decl ::= FunLHS RHS
+
+RHS ::= '=' Exp 'where' Decls
+
+ * After offside and ignore
+ 
+({ Decl (; Decl)* })(i,ind,fst) ::= o0:{ [f(i,ind,fst,o0.lExt)] o1:Decl(g(i,fst,o1.lExt,1),ind,g(i,fst,o1.lExt,0)) o2:Star#1(g(i,fst,o2.lExt,1),ind,g(i,fst,o2.lExt,0)) o3:} [f(i,ind,fst,o3.lExt)]
+
+Decl(i,ind,fst) ::= o0:FunLHS(g(i,fst,o0.lExt,1),ind,g(i,fst,o0.lExt,0)) o1:RHS(g(i,fst,o1.lExt,1),ind,g(i,fst,o1.lExt,0))
+
+Decls(i,ind,fst) ::= ({ Decl (; Decl)* })(0,0,0)
+                   | a0:Star#2(a0.lExt,g(i,fst,a0.lExt,1),ind,g(i,fst,a0.lExt,0))
+
+RHS(i,ind,fst) ::= o0:= [f(i,ind,fst,o0.lExt)] o1:Exp(g(i,fst,o1.lExt,1),ind,g(i,fst,o1.lExt,0)) o2:where [f(i,ind,fst,o2.lExt)] o3:Decls(g(i,fst,o3.lExt,1),ind,g(i,fst,o3.lExt,0))
+
+Plus#2(a0.lExt,i,ind,fst) ::= [f(i,ind,fst,a1.lExt)],[indent(a1.lExt) == indent(a0.lExt)] a1:Decl(a1.lExt,indent(a1.lExt),1)
+                            | Plus#2(a0.lExt,g(i,fst,o0.lExt,1),ind,g(i,fst,o0.lExt,0)) [f(i,ind,fst,a1.lExt)],[indent(a1.lExt) == indent(a0.lExt)] a1:Decl(a1.lExt,indent(a1.lExt),1)
+
+Star#2(a0.lExt,i,ind,fst) ::= Plus#2(a0.lExt,g(i,fst,o0.lExt,1),ind,g(i,fst,o0.lExt,0))
+                            | epsilon
+
+Star#2(i,ind,fst) ::= Plus#2(g(i,fst,o0.lExt,1),ind,g(i,fst,o0.lExt,0))
+                    | epsilon
+
+Seq#1(i,ind,fst) ::= o0:';' [f(i,ind,fst,o0.lExt)] o1:Decl(g(i,fst,o1.lExt,1),ind,g(i,fst,o1.lExt,0))
+Plus#1(i,ind,fst) ::= o0:Seq#1(g(i,fst,o0.lExt,1),ind,g(i,fst,o0.lExt,0))
+                    | o0:Plus#1(g(i,fst,o0.lExt,1),ind,g(i,fst,o0.lExt,0)) o1:Seq#1(g(i,fst,o1.lExt,1),ind,g(i,fst,o1.lExt,0))
+
+ */
+
 @SuppressWarnings("unused")
 public class HaskellPaper1 {
 
