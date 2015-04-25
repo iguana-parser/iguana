@@ -84,7 +84,32 @@ public class IguanaBenchmark {
 					System.out.println("Parse error " + result.asParseError());
 				}
 			}
+			
+//			ParseResult result;
+//            try {
+//                result = run(parser, grammarGraph, input, start);
+//                if (result.isParseSuccess()) {
+//                    AtomicInteger countNonterminals = new AtomicInteger();
+//                    AtomicInteger countTerminals = new AtomicInteger();
+//                    AtomicInteger countIntermediates = new AtomicInteger();
+//                    
+//                    GeneralNodeVisitor visitor = new GeneralNodeVisitor(
+//                    			(t) -> countTerminals.incrementAndGet(), 
+//                    			(n) -> countNonterminals.incrementAndGet(),
+//                    			(i) -> countIntermediates.incrementAndGet());
+//                    
+//                    visitor.visit(result.asParseSuccess().getRoot());
+//                    System.out.println(String.format("Actual nodes: %d, %d, %d",
+//                    								 countTerminals.get(),
+//                    								 countNonterminals.get(),
+//                    								 countIntermediates.get()));
+//                }
+//            } catch (Exception e) {
+//            	System.out.println("Time out");
+//            }
+            
 		}
+		
 	}
 	
 	private ParseResult run(GLLParser parser, GrammarGraph grammarGraph, Input input, Nonterminal start) throws Exception {
@@ -153,6 +178,11 @@ public class IguanaBenchmark {
 		
 		public Builder setRunGCInBetween(boolean runGCInBetween) {
 			this.runGCInBetween = runGCInBetween;
+			return this;
+		}
+		
+		public Builder ignore(String s) {
+			files.remove(new File(s));
 			return this;
 		}
 		

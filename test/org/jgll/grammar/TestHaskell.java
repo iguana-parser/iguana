@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.jgll.grammar.symbol.Nonterminal;
 import org.jgll.grammar.symbol.Start;
+import org.jgll.grammar.transformation.DesugarAlignAndOffside;
+import org.jgll.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.jgll.grammar.transformation.EBNFToBNF;
 import org.jgll.grammar.transformation.LayoutWeaver;
 import org.jgll.parser.GLLParser;
@@ -16,19 +18,36 @@ import org.junit.Test;
 
 public class TestHaskell {
 	
-	static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Grammar.load(new File(""))));
-
-	static Configuration config = Configuration.DEFAULT;
+	private static Grammar originalGrammar = Grammar.load(new File("grammars/haskell/haskell"));
 	
-	static Start startSymbol = Start.from(Nonterminal.withName("Module"));
+	private static Nonterminal start = Start.from(Nonterminal.withName("Module"));
+	
+	private static Grammar grammar;
+
+	
+	static {
+        DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
+        desugarAlignAndOffside.doAlign();
+
+        grammar = desugarAlignAndOffside.transform(originalGrammar);
+
+        grammar = new EBNFToBNF().transform(grammar);
+
+        desugarAlignAndOffside.doOffside();
+        grammar = desugarAlignAndOffside.transform(grammar);
+
+        grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
+
+        grammar = new LayoutWeaver().transform(grammar);
+	}
 	
 	@Test
 	public void test() throws IOException {
-		Input input = Input.fromPath("/Users/aliafroozeh/Haskall/src/Main.hs");
-		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
+		Input input = Input.fromPath("/Users/aliafroozeh/Test.hs");
+		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
-//			org.jgll.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
+		ParseResult result = parser.parse(input, grammarGraph, start);
+		org.jgll.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		System.out.println(result);
 	}
 	

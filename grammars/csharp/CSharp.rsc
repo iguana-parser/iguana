@@ -141,7 +141,7 @@ syntax PrimaryExpression
      ;
 
 syntax PrimaryNoArrayCreationExpression
-     = Literal
+     = Literal_
      | SimpleName
      | ParenthesizedExpression
      | MemberAccess
@@ -361,9 +361,10 @@ syntax PreDecrementExpression
      ;
 
 syntax CastExpression
-     = "("   Type   ")"   UnaryExpression
+     = "(" (TypeName | ArrayType | PointerType) ")" >>> [~ ! ( A-Z _ a-z 0-9 \" \' @]  UnaryExpression
+     | "(" (PredefinedType | NullableType) ")" UnaryExpression
      ;
-
+     
 syntax MultiplicativeExpression
      = UnaryExpression
      | MultiplicativeExpression   "*"   UnaryExpression
@@ -385,10 +386,18 @@ syntax ShiftExpression
 
 syntax RelationalExpression
      = ShiftExpression
-     | RelationalExpression   "\<"   ShiftExpression
-     | RelationalExpression   "\>"   ShiftExpression
-     | RelationalExpression   "\<="   ShiftExpression
-     | RelationalExpression   "\>="   ShiftExpression
+     | RelationalExpression1   "\<"   ShiftExpression
+     | RelationalExpression1   "\>"   ShiftExpression
+     | RelationalExpression1   "\<="  ShiftExpression
+     | RelationalExpression1   "\>="  ShiftExpression
+     | RelationalExpression    "is"   Type
+     | RelationalExpression    "as"   Type
+     ;
+     
+// Disallowing nesting relational expressions such as A<B> C as it is a type error anyway
+// and leads to an ambiguity with generic types     
+syntax RelationalExpression1
+     = ShiftExpression
      | RelationalExpression   "is"   Type
      | RelationalExpression   "as"   Type
      ;

@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class TestOCaml {
 
-	Grammar originalGrammar = Grammar.load(new File(""));
+	private static Grammar originalGrammar = Grammar.load(new File("grammars/ocaml/ocaml"));
 	Grammar grammar = new LayoutWeaver().transform(new OperatorPrecedence(originalGrammar.getPrecedencePatterns(), originalGrammar.getExceptPatterns()).transform(new EBNFToBNF().transform(originalGrammar)));
 
 	static Configuration config = Configuration.DEFAULT;
@@ -26,15 +26,12 @@ public class TestOCaml {
 	
 	@Test
 	public void test() throws IOException {
-		
 		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
-//		System.out.println(grammar.getConstructorCode());
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		parser.reset();
 		grammarGraph.reset(input);
 		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
-//			org.jgll.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		System.out.println(result);
 	}
 	
