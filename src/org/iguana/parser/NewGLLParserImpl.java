@@ -1,22 +1,22 @@
-package org.jgll.parser;
+package org.iguana.parser;
 
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.DummySlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.parser.gss.GSSEdge;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.parser.gss.NewGSSEdgeImpl;
-import org.jgll.parser.gss.lookup.GSSLookup;
-import org.jgll.parser.lookup.DescriptorLookup;
-import org.jgll.sppf.DummyNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.lookup.SPPFLookup;
-import org.jgll.util.Configuration;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.DummySlot;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.parser.gss.GSSEdge;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.parser.gss.NewGSSEdgeImpl;
+import org.iguana.parser.gss.lookup.GSSLookup;
+import org.iguana.parser.lookup.DescriptorLookup;
+import org.iguana.sppf.DummyNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.lookup.SPPFLookup;
+import org.iguana.util.Configuration;
 
 /**
  *
@@ -89,7 +89,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	 */
 	@Override
 	public void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
-		NewGSSEdgeImpl edge = new org.jgll.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
+		NewGSSEdgeImpl edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
 		
 		if(gssLookup.getGSSEdge(source, edge)) {
 			log.trace("GSS Edge created: %s from %s to %s with %s", returnSlot, source, destination, env);

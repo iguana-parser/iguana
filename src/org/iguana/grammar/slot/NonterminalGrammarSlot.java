@@ -1,4 +1,4 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.parser.gss.lookup.GSSNodeLookup;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.util.Input;
-import org.jgll.util.collections.Key;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.parser.gss.lookup.GSSNodeLookup;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.util.Input;
+import org.iguana.util.collections.Key;
 
 
 /**

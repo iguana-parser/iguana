@@ -1,9 +1,9 @@
-package org.jgll.parser;
+package org.iguana.parser;
 
-import org.jgll.util.hashing.hashfunction.HashFunction;
-import org.jgll.util.hashing.hashfunction.MurmurHash3;
-import org.jgll.util.hashing.hashfunction.PrimeMultiplication;
-import org.jgll.util.hashing.hashfunction.XXHash;
+import org.iguana.util.hashing.hashfunction.HashFunction;
+import org.iguana.util.hashing.hashfunction.MurmurHash3;
+import org.iguana.util.hashing.hashfunction.PrimeMultiplication;
+import org.iguana.util.hashing.hashfunction.XXHash;
 
 public class HashFunctions {
 

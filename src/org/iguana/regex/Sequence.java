@@ -1,6 +1,6 @@
-package org.jgll.regex;
+package org.iguana.regex;
 
-import static org.jgll.util.generator.GeneratorUtil.listToString;
+import static org.iguana.util.generator.GeneratorUtil.listToString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,18 +13,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.jgll.grammar.symbol.AbstractRegularExpression;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.SymbolBuilder;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.StateType;
-import org.jgll.regex.automaton.Transition;
-import org.jgll.traversal.ISymbolVisitor;
-import org.jgll.util.Input;
-import org.jgll.util.generator.GeneratorUtil;
+import org.iguana.grammar.symbol.AbstractRegularExpression;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.SymbolBuilder;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.StateType;
+import org.iguana.regex.automaton.Transition;
+import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.util.Input;
+import org.iguana.util.generator.GeneratorUtil;
 
 public class Sequence<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
 

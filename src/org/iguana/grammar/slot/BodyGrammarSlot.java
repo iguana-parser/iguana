@@ -1,23 +1,23 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.HashMap;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.Conditions;
-import org.jgll.grammar.condition.ConditionsFactory;
-import org.jgll.grammar.symbol.Position;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.parser.gss.lookup.GSSNodeLookup;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.Input;
-import org.jgll.util.collections.Key;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.Conditions;
+import org.iguana.grammar.condition.ConditionsFactory;
+import org.iguana.grammar.symbol.Position;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.parser.gss.lookup.GSSNodeLookup;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.util.Input;
+import org.iguana.util.collections.Key;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {

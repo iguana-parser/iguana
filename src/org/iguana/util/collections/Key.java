@@ -1,6 +1,6 @@
-package org.jgll.util.collections;
+package org.iguana.util.collections;
 
-import org.jgll.util.hashing.hashfunction.HashFunction;
+import org.iguana.util.hashing.hashfunction.HashFunction;
 
 public interface Key {
 

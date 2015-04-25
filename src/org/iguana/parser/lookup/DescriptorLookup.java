@@ -1,10 +1,10 @@
-package org.jgll.parser.lookup;
+package org.iguana.parser.lookup;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.NonPackedNode;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
 
 public interface DescriptorLookup {
 

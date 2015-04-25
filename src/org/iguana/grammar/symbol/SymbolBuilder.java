@@ -1,10 +1,10 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.condition.Condition;
+import org.iguana.grammar.condition.Condition;
 
 public abstract class SymbolBuilder<T extends Symbol> {
 	

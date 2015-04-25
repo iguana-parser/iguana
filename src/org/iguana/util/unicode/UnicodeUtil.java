@@ -1,4 +1,4 @@
-package org.jgll.util.unicode;
+package org.iguana.util.unicode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.regex.Alt;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.regex.Alt;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jgll.parser.HashFunctions;
-import org.jgll.util.generator.ConstructorCode;
+import org.iguana.parser.HashFunctions;
+import org.iguana.util.generator.ConstructorCode;
 
 /**
  * 

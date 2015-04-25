@@ -1,4 +1,4 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,12 +7,12 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jgll.regex.RegularExpression;
-import org.jgll.regex.matcher.Matcher;
-import org.jgll.regex.matcher.MatcherFactory;
-import org.jgll.sppf.TerminalNode;
-import org.jgll.util.Input;
-import org.jgll.util.collections.Key;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.matcher.Matcher;
+import org.iguana.regex.matcher.MatcherFactory;
+import org.iguana.sppf.TerminalNode;
+import org.iguana.util.Input;
+import org.iguana.util.collections.Key;
 
 
 public class TerminalGrammarSlot extends AbstractGrammarSlot {

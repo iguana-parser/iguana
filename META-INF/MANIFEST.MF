@@ -4,26 +4,26 @@ Bundle-Name: iguana
 Bundle-SymbolicName: iguana
 Bundle-Version: 1.0.0.qualifier
 Export-Package: 
- org.jgll.datadependent.ast,
- org.jgll.disambiguation.conditions,
- org.jgll.disambiguation.precedence;uses:="org.jgll.sppf,org.jgll.grammar",
- org.jgll.grammar;
+ org.iguana.datadependent.ast,
+ org.iguana.disambiguation.conditions,
+ org.iguana.disambiguation.precedence;uses:="org.jgll.sppf,org.jgll.grammar",
+ org.iguana.grammar;
   uses:="org.jgll.util.generator,
    org.jgll.grammar.symbol,
    org.jgll.util,
    org.jgll.grammar.slot,
    org.jgll.regex,
    com.google.common.collect",
- org.jgll.grammar.condition;
+ org.iguana.grammar.condition;
   uses:="org.jgll.util.generator,
    org.jgll.util,
    org.jgll.regex,
    org.jgll.parser.gss",
- org.jgll.grammar.exception;uses:="org.jgll.grammar.symbol",
- org.jgll.grammar.leftfactorization,
- org.jgll.grammar.patterns;uses:="org.jgll.grammar.symbol",
- org.jgll.grammar.precedence;uses:="org.jgll.grammar,org.jgll.grammar.symbol",
- org.jgll.grammar.slot;
+ org.iguana.grammar.exception;uses:="org.jgll.grammar.symbol",
+ org.iguana.grammar.leftfactorization,
+ org.iguana.grammar.patterns;uses:="org.jgll.grammar.symbol",
+ org.iguana.grammar.precedence;uses:="org.jgll.grammar,org.jgll.grammar.symbol",
+ org.iguana.grammar.slot;
   uses:="org.jgll.sppf,
    org.jgll.util.generator,
    org.jgll.grammar.symbol,
@@ -34,38 +34,38 @@ Export-Package:
    org.jgll.parser,
    org.jgll.parser.gss,
    org.jgll.regex",
- org.jgll.grammar.symbol;
+ org.iguana.grammar.symbol;
   uses:="org.jgll.util.generator,
    org.jgll.regex.automaton,
    org.jgll.grammar.condition,
    org.jgll.regex",
- org.jgll.grammar.transformation;uses:="org.jgll.grammar,org.jgll.grammar.symbol",
- org.jgll.parser;uses:="org.jgll.grammar.symbol",
- org.jgll.parser.basic;
+ org.iguana.grammar.transformation;uses:="org.jgll.grammar,org.jgll.grammar.symbol",
+ org.iguana.parser;uses:="org.jgll.grammar.symbol",
+ org.iguana.parser.basic;
   uses:="org.jgll.sppf,
    org.jgll,
    org.jgll.grammar,
    org.jgll.parser",
- org.jgll.parser.descriptor;uses:="org.jgll.sppf,org.jgll.grammar.slot,org.jgll.parser.gss",
- org.jgll.parser.gss;uses:="org.jgll.sppf,org.jgll.util.collections,org.jgll.grammar.slot",
- org.jgll.parser.lookup;
+ org.iguana.parser.descriptor;uses:="org.jgll.sppf,org.jgll.grammar.slot,org.jgll.parser.gss",
+ org.iguana.parser.gss;uses:="org.jgll.sppf,org.jgll.util.collections,org.jgll.grammar.slot",
+ org.iguana.parser.lookup;
   uses:="org.jgll.parser.descriptor,
    org.jgll.sppf,
    org.jgll.grammar,
    org.jgll.util,
    org.jgll.grammar.slot,
    org.jgll.parser.gss",
- org.jgll.regex;uses:="org.jgll.grammar.symbol",
- org.jgll.regex.automaton;uses:="org.jgll.grammar.symbol",
- org.jgll.sppf;uses:="org.jgll.traversal,org.jgll.grammar,org.jgll.grammar.slot",
- org.jgll.traversal;uses:="org.jgll.sppf,org.jgll.grammar,org.jgll.util",
- org.jgll.util;uses:="org.junit.rules",
- org.jgll.util.generator;uses:="org.jgll.grammar,org.jgll.util,org.jgll.parser",
- org.jgll.util.hashing.hashfunction,
- org.jgll.util.logging,
- org.jgll.util.trie,
- org.jgll.util.unicode,
- org.jgll.util.visualization;
+ org.iguana.regex;uses:="org.jgll.grammar.symbol",
+ org.iguana.regex.automaton;uses:="org.jgll.grammar.symbol",
+ org.iguana.sppf;uses:="org.jgll.traversal,org.jgll.grammar,org.jgll.grammar.slot",
+ org.iguana.traversal;uses:="org.jgll.sppf,org.jgll.grammar,org.jgll.util",
+ org.iguana.util;uses:="org.junit.rules",
+ org.iguana.util.generator;uses:="org.jgll.grammar,org.jgll.util,org.jgll.parser",
+ org.iguana.util.hashing.hashfunction,
+ org.iguana.util.logging,
+ org.iguana.util.trie,
+ org.iguana.util.unicode,
+ org.iguana.util.visualization;
   uses:="org.jgll.sppf,
    org.jgll.traversal,
    org.jgll.grammar,
@@ -76,4 +76,4 @@ Require-Bundle: com.google.guava,
  org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.imp.pdb.values;bundle-version="0.4.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.jgll.grammar
+Import-Package: org.iguana.grammar

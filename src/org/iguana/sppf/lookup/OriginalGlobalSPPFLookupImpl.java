@@ -1,12 +1,12 @@
-package org.jgll.sppf.lookup;
+package org.iguana.sppf.lookup;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.OriginalPackedNodeSet;
-import org.jgll.util.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.OriginalPackedNodeSet;
+import org.iguana.util.Input;
 
 public class OriginalGlobalSPPFLookupImpl extends GlobalSPPFLookupImpl {
 

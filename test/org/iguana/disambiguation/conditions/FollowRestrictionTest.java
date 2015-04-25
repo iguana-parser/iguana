@@ -1,19 +1,19 @@
-package org.jgll.disambiguation.conditions;
+package org.iguana.disambiguation.conditions;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
-import org.jgll.regex.Plus;
-import org.jgll.regex.Sequence;
-import org.jgll.util.Configuration;
-import org.jgll.util.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParserFactory;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Sequence;
+import org.iguana.util.Configuration;
+import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
 

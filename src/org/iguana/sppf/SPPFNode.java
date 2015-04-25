@@ -1,12 +1,12 @@
-package org.jgll.sppf;
+package org.iguana.sppf;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.traversal.SPPFVisitor;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.traversal.SPPFVisitor;
 
 /**
  * 

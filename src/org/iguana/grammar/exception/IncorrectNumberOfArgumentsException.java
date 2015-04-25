@@ -1,7 +1,7 @@
-package org.jgll.grammar.exception;
+package org.iguana.grammar.exception;
 
-import org.jgll.datadependent.ast.Expression;
-import org.jgll.grammar.symbol.Nonterminal;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.grammar.symbol.Nonterminal;
 
 public class IncorrectNumberOfArgumentsException extends RuntimeException {
 

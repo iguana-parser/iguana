@@ -1,4 +1,4 @@
-package org.jgll.grammar.exception;
+package org.iguana.grammar.exception;
 
 import java.util.Set;
 

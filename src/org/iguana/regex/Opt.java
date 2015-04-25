@@ -1,16 +1,16 @@
-package org.jgll.regex;
+package org.iguana.regex;
 
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.AbstractRegularExpression;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.SymbolBuilder;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.StateType;
-import org.jgll.traversal.ISymbolVisitor;
+import org.iguana.grammar.symbol.AbstractRegularExpression;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.SymbolBuilder;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.StateType;
+import org.iguana.traversal.ISymbolVisitor;
 
 public class Opt extends AbstractRegularExpression {
 

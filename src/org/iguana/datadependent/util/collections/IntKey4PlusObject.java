@@ -1,7 +1,7 @@
-package org.jgll.datadependent.util.collections;
+package org.iguana.datadependent.util.collections;
 
-import org.jgll.util.collections.Key;
-import org.jgll.util.hashing.hashfunction.IntHash5;
+import org.iguana.util.collections.Key;
+import org.iguana.util.hashing.hashfunction.IntHash5;
 
 public class IntKey4PlusObject implements Key {
 	

@@ -1,4 +1,4 @@
-package org.jgll.regex.automaton;
+package org.iguana.regex.automaton;
 
 @FunctionalInterface
 public interface VisitAction{

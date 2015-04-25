@@ -1,9 +1,9 @@
-package org.jgll.traversal;
+package org.iguana.traversal;
 
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.TerminalNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.TerminalNode;
 
 /**
  * Provides a standard interface based on the command pattern for

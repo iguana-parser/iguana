@@ -1,10 +1,10 @@
-package org.jgll.regex.automaton;
+package org.iguana.regex.automaton;
 
 import java.io.Serializable;
 
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.parser.HashFunctions;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.parser.HashFunctions;
 
 public class Transition implements Comparable<Transition>, Serializable {
 	

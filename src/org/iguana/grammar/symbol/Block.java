@@ -1,7 +1,7 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
-import org.jgll.traversal.ISymbolVisitor;
-import org.jgll.util.generator.GeneratorUtil;
+import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.util.generator.GeneratorUtil;
 
 public class Block extends AbstractSymbol {
 

@@ -1,6 +1,6 @@
-package org.jgll.grammar;
+package org.iguana.grammar;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.*;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -20,17 +20,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.jgll.grammar.exception.GrammarValidationException;
-import org.jgll.grammar.exception.NonterminalNotDefinedException;
-import org.jgll.grammar.patterns.ExceptPattern;
-import org.jgll.grammar.patterns.PrecedencePattern;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.RegularExpression;
-import org.jgll.util.Configuration;
-import org.jgll.util.Input;
-import org.jgll.util.generator.ConstructorCode;
+import org.iguana.grammar.exception.GrammarValidationException;
+import org.iguana.grammar.exception.NonterminalNotDefinedException;
+import org.iguana.grammar.patterns.ExceptPattern;
+import org.iguana.grammar.patterns.PrecedencePattern;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.regex.RegularExpression;
+import org.iguana.util.Configuration;
+import org.iguana.util.Input;
+import org.iguana.util.generator.ConstructorCode;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;

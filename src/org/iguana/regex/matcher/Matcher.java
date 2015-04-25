@@ -1,6 +1,6 @@
-package org.jgll.regex.matcher;
+package org.iguana.regex.matcher;
 
-import org.jgll.util.Input;
+import org.iguana.util.Input;
 
 /**
  * 

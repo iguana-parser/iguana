@@ -1,13 +1,13 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.util.Input;
-import org.jgll.util.generator.ConstructorCode;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.util.Input;
+import org.iguana.util.generator.ConstructorCode;
 
 /**
  * A GrammarSlot is a position immediately before or after

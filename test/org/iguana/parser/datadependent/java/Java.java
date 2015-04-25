@@ -1,27 +1,25 @@
-package org.jgll.parser.datadependent.java;
+package org.iguana.parser.datadependent.java;
+import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+
 import java.util.Arrays;
 
-import org.jgll.datadependent.ast.AST;
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.condition.ConditionType;
-import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.symbol.*;
-import org.jgll.grammar.symbol.Character;
-
-import static org.jgll.grammar.symbol.LayoutStrategy.*;
-
-import org.jgll.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.jgll.grammar.transformation.EBNFToBNF;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
-import org.jgll.regex.*;
-import org.jgll.util.Configuration;
-import org.jgll.util.Input;
-import org.jgll.util.Visualization;
-import org.junit.Assert;
-import org.junit.Test;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.ConditionType;
+import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.symbol.Associativity;
+import org.iguana.grammar.symbol.AssociativityGroup;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.PrecedenceLevel;
+import org.iguana.grammar.symbol.Recursion;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
 
 import com.google.common.collect.Sets;
 

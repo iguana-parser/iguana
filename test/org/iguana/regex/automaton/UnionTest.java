@@ -1,12 +1,13 @@
-package org.jgll.regex.automaton;
+package org.iguana.regex.automaton;
 
-import static org.jgll.regex.automaton.AutomatonOperations.*;
+import static org.iguana.regex.automaton.AutomatonOperations.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.Character;
-import org.jgll.regex.Sequence;
-import org.jgll.regex.matcher.DFAMatcher;
-import org.jgll.util.Input;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.matcher.DFAMatcher;
+import org.iguana.util.Input;
 import org.junit.Test;
 
 public class UnionTest {

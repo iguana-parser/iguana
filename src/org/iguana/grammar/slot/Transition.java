@@ -1,10 +1,10 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.generator.ConstructorCode;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.util.generator.ConstructorCode;
 
 
 public interface Transition extends ConstructorCode {

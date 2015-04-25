@@ -1,11 +1,11 @@
-package org.jgll.sppf;
+package org.iguana.sppf;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.util.collections.IntKey2;
-import org.jgll.util.hashing.hashfunction.IntHash2;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.util.collections.IntKey2;
+import org.iguana.util.hashing.hashfunction.IntHash2;
 
 
 public class OriginalPackedNodeSet implements PackedNodeSet {

@@ -1,14 +1,14 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.Set;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.DummyNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.TerminalNode;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.DummyNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.TerminalNode;
 
 
 /**
@@ -45,8 +45,8 @@ public class FirstAndLastTerminalTransition extends AbstractTerminalTransition {
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (dest.isEnd()) {
-			if (u instanceof org.jgll.datadependent.gss.GSSNode<?>) {
-				org.jgll.datadependent.gss.GSSNode<?> gssNode = (org.jgll.datadependent.gss.GSSNode<?>) u;
+			if (u instanceof org.iguana.datadependent.gss.GSSNode<?>) {
+				org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) u;
 				dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr, gssNode.getData()), env);
 			} else
 				dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr), env);
@@ -55,8 +55,8 @@ public class FirstAndLastTerminalTransition extends AbstractTerminalTransition {
 			dest.execute(parser, u, i + length, DummyNode.getInstance(cr.getLeftExtent(), i + length), env);
 			
 			if (parser.getCurrentEndGrammarSlot().isEnd()) {
-				if (u instanceof org.jgll.datadependent.gss.GSSNode<?>) {
-					org.jgll.datadependent.gss.GSSNode<?> gssNode = (org.jgll.datadependent.gss.GSSNode<?>) u;
+				if (u instanceof org.iguana.datadependent.gss.GSSNode<?>) {
+					org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) u;
 					parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr, gssNode.getData()), parser.getEnvironment());
 				} else
 					parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, cr), parser.getEnvironment());

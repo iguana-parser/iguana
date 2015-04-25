@@ -1,17 +1,16 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
-import org.jgll.datadependent.env.Environment;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.symbol.Position;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.parser.gss.lookup.GSSNodeLookup;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.TerminalNode;
 
 import java.util.Set;
-
-import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.symbol.Position;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.lookup.GSSNodeLookup;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.TerminalNode;
 
 public class EpsilonGrammarSlot extends LastSymbolAndEndGrammarSlot {
 
@@ -46,8 +45,8 @@ public class EpsilonGrammarSlot extends LastSymbolAndEndGrammarSlot {
 			TerminalNode epsilonNode = parser.getEpsilonNode(epsilonSlot, i);
 			
 			NonterminalNode nonterminalNode;
-			if (u instanceof org.jgll.datadependent.gss.GSSNode<?>) {
-				org.jgll.datadependent.gss.GSSNode<?> gssNode = (org.jgll.datadependent.gss.GSSNode<?>) u;
+			if (u instanceof org.iguana.datadependent.gss.GSSNode<?>) {
+				org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) u;
 				nonterminalNode = parser.getNonterminalNode(this, epsilonNode, gssNode.getData());
 			} else 
 				nonterminalNode = parser.getNonterminalNode(this, epsilonNode);

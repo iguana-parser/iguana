@@ -1,4 +1,4 @@
-package org.jgll.util;
+package org.iguana.util;
 
 import java.io.BufferedReader;
 import java.io.CharArrayReader;
@@ -16,9 +16,9 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.io.input.ReaderInputStream;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.traversal.PositionInfo;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.traversal.PositionInfo;
 
 /**
  * 

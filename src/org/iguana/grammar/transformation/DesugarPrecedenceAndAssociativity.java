@@ -1,4 +1,4 @@
-package org.jgll.grammar.transformation;
+package org.iguana.grammar.transformation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,38 +8,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.jgll.datadependent.ast.AST.*;
-import static org.jgll.grammar.condition.DataDependentCondition.predicate;
+import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
-import org.jgll.datadependent.ast.Expression;
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.symbol.Align;
-import org.jgll.grammar.symbol.Associativity;
-import org.jgll.grammar.symbol.AssociativityGroup;
-import org.jgll.grammar.symbol.Block;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Code;
-import org.jgll.grammar.symbol.Conditional;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.IfThen;
-import org.jgll.grammar.symbol.IfThenElse;
-import org.jgll.grammar.symbol.Ignore;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Offside;
-import org.jgll.grammar.symbol.PrecedenceLevel;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
-import org.jgll.grammar.symbol.While;
-import org.jgll.regex.Alt;
-import org.jgll.regex.Opt;
-import org.jgll.regex.Plus;
-import org.jgll.regex.Sequence;
-import org.jgll.regex.Star;
-import org.jgll.traversal.ISymbolVisitor;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.symbol.Align;
+import org.iguana.grammar.symbol.Associativity;
+import org.iguana.grammar.symbol.AssociativityGroup;
+import org.iguana.grammar.symbol.Block;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Conditional;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.grammar.symbol.IfThen;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.Ignore;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.PrecedenceLevel;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.While;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
+import org.iguana.traversal.ISymbolVisitor;
 
 /**
  * 

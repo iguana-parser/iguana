@@ -1,4 +1,4 @@
-package org.jgll.traversal;
+package org.iguana.traversal;
 
 import java.net.URI;
 

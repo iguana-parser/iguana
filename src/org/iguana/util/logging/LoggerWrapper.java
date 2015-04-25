@@ -1,4 +1,4 @@
-package org.jgll.util.logging;
+package org.iguana.util.logging;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;

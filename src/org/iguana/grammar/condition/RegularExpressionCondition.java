@@ -1,10 +1,10 @@
-package org.jgll.grammar.condition;
+package org.iguana.grammar.condition;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import org.jgll.regex.RegularExpression;
-import org.jgll.traversal.IConditionVisitor;
+import org.iguana.regex.RegularExpression;
+import org.iguana.traversal.IConditionVisitor;
 
 /**
  * Conditions relating to the keyword exclusions or follow restrictions. 

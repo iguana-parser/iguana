@@ -1,4 +1,4 @@
-package org.jgll.regex.automaton;
+package org.iguana.regex.automaton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.CharacterRange;
 
 import com.google.common.collect.Multimap;
 

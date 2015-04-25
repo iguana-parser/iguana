@@ -1,59 +1,59 @@
-package org.jgll.datadependent.traversal;
+package org.iguana.datadependent.traversal;
 
 import java.util.Set;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
-import org.jgll.datadependent.ast.Expression.AndIndent;
-import org.jgll.datadependent.ast.Expression.Assignment;
-import org.jgll.datadependent.ast.Expression.Boolean;
-import org.jgll.datadependent.ast.Expression.Call;
-import org.jgll.datadependent.ast.Expression.EndOfFile;
-import org.jgll.datadependent.ast.Expression.Equal;
-import org.jgll.datadependent.ast.Expression.Greater;
-import org.jgll.datadependent.ast.Expression.GreaterThanEqual;
-import org.jgll.datadependent.ast.Expression.Integer;
-import org.jgll.datadependent.ast.Expression.LShiftANDEqZero;
-import org.jgll.datadependent.ast.Expression.LeftExtent;
-import org.jgll.datadependent.ast.Expression.Less;
-import org.jgll.datadependent.ast.Expression.LessThanEqual;
-import org.jgll.datadependent.ast.Expression.Name;
-import org.jgll.datadependent.ast.Expression.NotEqual;
-import org.jgll.datadependent.ast.Expression.Or;
-import org.jgll.datadependent.ast.Expression.OrIndent;
-import org.jgll.datadependent.ast.Expression.Real;
-import org.jgll.datadependent.ast.Expression.RightExtent;
-import org.jgll.datadependent.ast.Expression.String;
-import org.jgll.datadependent.ast.Statement;
-import org.jgll.datadependent.ast.Statement.Expression;
-import org.jgll.datadependent.ast.VariableDeclaration;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.ContextFreeCondition;
-import org.jgll.grammar.condition.DataDependentCondition;
-import org.jgll.grammar.condition.PositionalCondition;
-import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.symbol.Align;
-import org.jgll.grammar.symbol.Block;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Code;
-import org.jgll.grammar.symbol.Conditional;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.IfThen;
-import org.jgll.grammar.symbol.IfThenElse;
-import org.jgll.grammar.symbol.Ignore;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Offside;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
-import org.jgll.grammar.symbol.While;
-import org.jgll.regex.Alt;
-import org.jgll.regex.Opt;
-import org.jgll.regex.Plus;
-import org.jgll.regex.Sequence;
-import org.jgll.regex.Star;
-import org.jgll.traversal.IConditionVisitor;
-import org.jgll.traversal.ISymbolVisitor;
+import org.iguana.datadependent.ast.Statement;
+import org.iguana.datadependent.ast.VariableDeclaration;
+import org.iguana.datadependent.ast.Expression.AndIndent;
+import org.iguana.datadependent.ast.Expression.Assignment;
+import org.iguana.datadependent.ast.Expression.Boolean;
+import org.iguana.datadependent.ast.Expression.Call;
+import org.iguana.datadependent.ast.Expression.EndOfFile;
+import org.iguana.datadependent.ast.Expression.Equal;
+import org.iguana.datadependent.ast.Expression.Greater;
+import org.iguana.datadependent.ast.Expression.GreaterThanEqual;
+import org.iguana.datadependent.ast.Expression.Integer;
+import org.iguana.datadependent.ast.Expression.LShiftANDEqZero;
+import org.iguana.datadependent.ast.Expression.LeftExtent;
+import org.iguana.datadependent.ast.Expression.Less;
+import org.iguana.datadependent.ast.Expression.LessThanEqual;
+import org.iguana.datadependent.ast.Expression.Name;
+import org.iguana.datadependent.ast.Expression.NotEqual;
+import org.iguana.datadependent.ast.Expression.Or;
+import org.iguana.datadependent.ast.Expression.OrIndent;
+import org.iguana.datadependent.ast.Expression.Real;
+import org.iguana.datadependent.ast.Expression.RightExtent;
+import org.iguana.datadependent.ast.Expression.String;
+import org.iguana.datadependent.ast.Statement.Expression;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.ContextFreeCondition;
+import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.condition.PositionalCondition;
+import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.symbol.Align;
+import org.iguana.grammar.symbol.Block;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Conditional;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.grammar.symbol.IfThen;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.Ignore;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.While;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
+import org.iguana.traversal.IConditionVisitor;
+import org.iguana.traversal.ISymbolVisitor;
 
 
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
@@ -98,7 +98,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Call expression) {
 		
-		for (org.jgll.datadependent.ast.Expression argument : expression.getArguments()) {
+		for (org.iguana.datadependent.ast.Expression argument : expression.getArguments()) {
 			argument.setEnv(expression.getEnv());
 			argument.accept(this);
 		}
@@ -110,7 +110,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	public Void visit(Assignment expression) {
 		
 		java.lang.String id = expression.getId();
-		org.jgll.datadependent.ast.Expression exp = expression.getExpression();
+		org.iguana.datadependent.ast.Expression exp = expression.getExpression();
 		
 		if (!expression.getEnv().contains(id)) {
 			freeVariables.add(id);
@@ -125,12 +125,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(LShiftANDEqZero expression) {
 		
-		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
 		
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
 		
-		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
@@ -141,22 +141,22 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(OrIndent expression) {
 		
-		org.jgll.datadependent.ast.Expression index = expression.getIndext();
+		org.iguana.datadependent.ast.Expression index = expression.getIndext();
 		
 		index.setEnv(expression.getEnv());
 		index.accept(this);
 		
-		org.jgll.datadependent.ast.Expression ind = expression.getIndent();
+		org.iguana.datadependent.ast.Expression ind = expression.getIndent();
 		
 		ind.setEnv(expression.getEnv());
 		ind.accept(this);
 		
-		org.jgll.datadependent.ast.Expression first = expression.getFirst();
+		org.iguana.datadependent.ast.Expression first = expression.getFirst();
 		
 		first.setEnv(expression.getEnv());
 		first.accept(this);
 		
-		org.jgll.datadependent.ast.Expression lExt = expression.getLExt();
+		org.iguana.datadependent.ast.Expression lExt = expression.getLExt();
 		
 		lExt.setEnv(expression.getEnv());
 		lExt.accept(this);
@@ -167,17 +167,17 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(AndIndent expression) {
 		
-		org.jgll.datadependent.ast.Expression index = expression.getIndext();
+		org.iguana.datadependent.ast.Expression index = expression.getIndext();
 		
 		index.setEnv(expression.getEnv());
 		index.accept(this);
 		
-		org.jgll.datadependent.ast.Expression first = expression.getFirst();
+		org.iguana.datadependent.ast.Expression first = expression.getFirst();
 		
 		first.setEnv(expression.getEnv());
 		first.accept(this);
 		
-		org.jgll.datadependent.ast.Expression lExt = expression.getLExt();
+		org.iguana.datadependent.ast.Expression lExt = expression.getLExt();
 		
 		lExt.setEnv(expression.getEnv());
 		lExt.accept(this);
@@ -188,12 +188,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Or expression) {
 		
-		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
 		
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
 		
-		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
@@ -204,12 +204,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Less expression) {
 		
-		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
 		
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
 		
-		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
@@ -220,12 +220,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(LessThanEqual expression) {
 		
-		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
 		
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
 		
-		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
@@ -236,12 +236,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Greater expression) {
 		
-		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
 		
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
 		
-		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
@@ -252,12 +252,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(GreaterThanEqual expression) {	
 		
-		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
 		
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
 		
-		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
@@ -268,12 +268,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Equal expression) {
 		
-		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
 		
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
 		
-		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
@@ -284,12 +284,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(NotEqual expression) {
 		
-		org.jgll.datadependent.ast.Expression lhs = expression.getLhs();
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
 		
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
 		
-		org.jgll.datadependent.ast.Expression rhs = expression.getRhs();
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
@@ -300,7 +300,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(LeftExtent expression) {
 		
-		java.lang.String name = java.lang.String.format(org.jgll.datadependent.ast.Expression.LeftExtent.format, expression.getLabel());
+		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.LeftExtent.format, expression.getLabel());
 		
 		if (!expression.getEnv().contains(name)) {
 			freeVariables.add(name);
@@ -322,7 +322,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(EndOfFile expression) {
 		
-		org.jgll.datadependent.ast.Expression index = expression.getIndex();
+		org.iguana.datadependent.ast.Expression index = expression.getIndex();
 		
 		index.setEnv(expression.getEnv());
 		index.accept(this);
@@ -333,7 +333,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(VariableDeclaration declaration) {
 		
-		org.jgll.datadependent.ast.Expression expression = declaration.getExpression();
+		org.iguana.datadependent.ast.Expression expression = declaration.getExpression();
 		
 		if (expression != null) {
 			expression.setEnv(declaration.getEnv());
@@ -346,7 +346,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 
 	@Override
-	public Void visit(org.jgll.datadependent.ast.Statement.VariableDeclaration statement) {
+	public Void visit(org.iguana.datadependent.ast.Statement.VariableDeclaration statement) {
 		
 		VariableDeclaration declaration = statement.getDeclaration();
 		
@@ -361,7 +361,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Expression statement) {
 		
-		org.jgll.datadependent.ast.Expression expression = statement.getExpression();
+		org.iguana.datadependent.ast.Expression expression = statement.getExpression();
 		
 		expression.setEnv(statement.getEnv());
 		expression.accept(this);
@@ -431,7 +431,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	public Void visit(Conditional symbol) {
 		
 		Symbol sym = symbol.getSymbol();
-		org.jgll.datadependent.ast.Expression expression = symbol.getExpression();
+		org.iguana.datadependent.ast.Expression expression = symbol.getExpression();
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		
@@ -459,7 +459,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(IfThen symbol) {
 		
-		org.jgll.datadependent.ast.Expression expression = symbol.getExpression();
+		org.iguana.datadependent.ast.Expression expression = symbol.getExpression();
 		Symbol thenPart = symbol.getThenPart();
 		
 		expression.setEnv(symbol.getEnv());
@@ -474,7 +474,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(IfThenElse symbol) {
 		
-		org.jgll.datadependent.ast.Expression expression = symbol.getExpression();
+		org.iguana.datadependent.ast.Expression expression = symbol.getExpression();
 		Symbol thenPart = symbol.getThenPart();
 		Symbol elsePart = symbol.getElsePart();
 		
@@ -537,7 +537,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(While symbol) {
 		
-		org.jgll.datadependent.ast.Expression expression = symbol.getExpression();
+		org.iguana.datadependent.ast.Expression expression = symbol.getExpression();
 		Symbol body = symbol.getBody();
 		
 		expression.setEnv(symbol.getEnv());
@@ -653,7 +653,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(DataDependentCondition condition) {
 		
-		org.jgll.datadependent.ast.Expression expression = condition.getExpression();
+		org.iguana.datadependent.ast.Expression expression = condition.getExpression();
 		
 		expression.setEnv(condition.getEnv());
 		expression.accept(this);

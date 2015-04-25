@@ -1,23 +1,26 @@
-package org.jgll.parser;
+package org.iguana.parser;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.iguana.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.SPPFNodeFactory;
-import org.jgll.sppf.TerminalNode;
-import org.jgll.util.Configuration;
-import org.jgll.util.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParserFactory;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNode;
+import org.iguana.sppf.SPPFNodeFactory;
+import org.iguana.sppf.TerminalNode;
+import org.iguana.util.Configuration;
+import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
 

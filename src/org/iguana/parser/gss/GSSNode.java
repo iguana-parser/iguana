@@ -1,14 +1,14 @@
-package org.jgll.parser.gss;
+package org.iguana.parser.gss;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.HashFunctions;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.collections.Key;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.HashFunctions;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.util.collections.Key;
 
 /**
  *

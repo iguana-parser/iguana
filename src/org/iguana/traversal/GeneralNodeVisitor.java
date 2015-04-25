@@ -1,14 +1,14 @@
-package org.jgll.traversal;
+package org.iguana.traversal;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNode;
+import org.iguana.sppf.TerminalNode;
 
 public class GeneralNodeVisitor implements SPPFVisitor {
 

@@ -1,13 +1,16 @@
-package org.jgll.parser;
+package org.iguana.parser;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.util.Configuration;
-import org.jgll.util.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParserFactory;
+import org.iguana.util.Configuration;
+import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
-import org.jgll.traversal.ISymbolVisitor;
+import org.iguana.traversal.ISymbolVisitor;
 
 public class Align extends AbstractSymbol {
 	

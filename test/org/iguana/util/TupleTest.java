@@ -1,7 +1,9 @@
-package org.jgll.util;
+package org.iguana.util;
 
 import static org.junit.Assert.*;
 
+import org.iguana.util.Tuple;
+import org.iguana.util.UnOrderedTuple;
 import org.junit.Test;
 
 public class TupleTest {

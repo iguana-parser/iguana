@@ -1,4 +1,4 @@
-package org.jgll.util.hashing.hashfunction;
+package org.iguana.util.hashing.hashfunction;
 
 @FunctionalInterface
 public interface IntHash4 {

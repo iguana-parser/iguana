@@ -1,9 +1,9 @@
-package org.jgll.regex.matcher;
+package org.iguana.regex.matcher;
 
 import java.util.regex.Pattern;
 
-import org.jgll.util.Input;
-import org.jgll.util.IntArrayCharSequence;
+import org.iguana.util.Input;
+import org.iguana.util.IntArrayCharSequence;
 
 /**
  * 

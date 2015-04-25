@@ -1,6 +1,6 @@
-package org.jgll.benchmark;
+package org.iguana.benchmark;
 
-import static org.jgll.util.BenchmarkUtil.*;
+import static org.iguana.util.BenchmarkUtil.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,15 +11,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
-import org.jgll.util.BenchmarkUtil;
-import org.jgll.util.Configuration;
-import org.jgll.util.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParserFactory;
+import org.iguana.util.BenchmarkUtil;
+import org.iguana.util.Configuration;
+import org.iguana.util.Input;
 
 import com.google.common.testing.GcFinalization;
 

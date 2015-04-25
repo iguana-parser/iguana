@@ -1,4 +1,4 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.StateType;
-import org.jgll.traversal.ISymbolVisitor;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.StateType;
+import org.iguana.traversal.ISymbolVisitor;
 
 
 public class Epsilon extends AbstractRegularExpression {

@@ -1,4 +1,4 @@
-package org.jgll.util.logging;
+package org.iguana.util.logging;
 
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;

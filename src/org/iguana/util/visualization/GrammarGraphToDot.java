@@ -1,20 +1,20 @@
-package org.jgll.util.visualization;
+package org.iguana.util.visualization;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-import static org.jgll.util.visualization.GraphVizUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.*;
+import static org.iguana.util.visualization.GraphVizUtil.*;
 
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.slot.BeforeLastTerminalTransition;
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.ConditionalTransition;
-import org.jgll.grammar.slot.EndGrammarSlot;
-import org.jgll.grammar.slot.FirstAndLastTerminalTransition;
-import org.jgll.grammar.slot.FirstTerminalTransition;
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.LastSymbolAndEndGrammarSlot;
-import org.jgll.grammar.slot.LastSymbolGrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.util.generator.GeneratorUtil;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.slot.BeforeLastTerminalTransition;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.ConditionalTransition;
+import org.iguana.grammar.slot.EndGrammarSlot;
+import org.iguana.grammar.slot.FirstAndLastTerminalTransition;
+import org.iguana.grammar.slot.FirstTerminalTransition;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.LastSymbolAndEndGrammarSlot;
+import org.iguana.grammar.slot.LastSymbolGrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.util.generator.GeneratorUtil;
 
 public class GrammarGraphToDot {
 

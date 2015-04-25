@@ -1,15 +1,15 @@
-package org.jgll;
+package org.iguana;
 
 import static org.junit.Assert.*;
 
 import java.util.function.Function;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.util.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParseResult;
+import org.iguana.util.Input;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

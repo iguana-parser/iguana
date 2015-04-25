@@ -1,9 +1,9 @@
-package org.jgll.util.visualization;
+package org.iguana.util.visualization;
 
 import java.io.FileWriter;
 import java.io.Writer;
 
-import org.jgll.util.logging.LoggerWrapper;
+import org.iguana.util.logging.LoggerWrapper;
 
 /**
  * 

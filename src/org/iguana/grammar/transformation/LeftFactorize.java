@@ -1,18 +1,18 @@
-package org.jgll.grammar.transformation;
+package org.iguana.grammar.transformation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.Alt;
-import org.jgll.regex.Sequence;
-import org.jgll.util.trie.Edge;
-import org.jgll.util.trie.Node;
-import org.jgll.util.trie.Trie;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Sequence;
+import org.iguana.util.trie.Edge;
+import org.iguana.util.trie.Node;
+import org.iguana.util.trie.Trie;
 
 public class LeftFactorize implements GrammarTransformation {
 	

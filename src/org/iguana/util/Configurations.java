@@ -1,12 +1,12 @@
-package org.jgll.util;
+package org.iguana.util;
 
-import static org.jgll.util.Configuration.GSSType.*;
+import static org.iguana.util.Configuration.GSSType.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.util.Configuration.LookupImpl;
-import org.jgll.util.Configuration.LookupStrategy;
+import org.iguana.util.Configuration.LookupImpl;
+import org.iguana.util.Configuration.LookupStrategy;
 
 
 public class Configurations {

@@ -1,4 +1,4 @@
-package org.jgll.datadependent.attrs;
+package org.iguana.datadependent.attrs;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 

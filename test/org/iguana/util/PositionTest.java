@@ -1,9 +1,9 @@
-package org.jgll.util;
+package org.iguana.util;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 

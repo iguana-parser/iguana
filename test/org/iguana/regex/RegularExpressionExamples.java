@@ -1,10 +1,15 @@
-package org.jgll.regex;
+package org.iguana.regex;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
 
 public class RegularExpressionExamples {
 

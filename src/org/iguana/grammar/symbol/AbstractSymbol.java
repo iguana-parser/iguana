@@ -1,13 +1,13 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 import java.util.Set;
 
-import org.jgll.datadependent.attrs.AbstractAttrs;
-import org.jgll.grammar.condition.Condition;
+import org.iguana.datadependent.attrs.AbstractAttrs;
+import org.iguana.grammar.condition.Condition;
 
 import com.google.common.collect.ImmutableSet;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.*;
 
 public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 

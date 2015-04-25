@@ -1,8 +1,8 @@
-package org.jgll.util.visualization;
+package org.iguana.util.visualization;
 
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNode;
 
 public abstract class ToDot {
 	

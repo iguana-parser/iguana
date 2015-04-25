@@ -1,9 +1,9 @@
-package org.jgll.traversal;
+package org.iguana.traversal;
 
-import org.jgll.grammar.condition.ContextFreeCondition;
-import org.jgll.grammar.condition.DataDependentCondition;
-import org.jgll.grammar.condition.PositionalCondition;
-import org.jgll.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.condition.ContextFreeCondition;
+import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.condition.PositionalCondition;
+import org.iguana.grammar.condition.RegularExpressionCondition;
 
 public interface IConditionVisitor<T> {
 	

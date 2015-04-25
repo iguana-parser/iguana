@@ -1,14 +1,17 @@
-package org.jgll.regex;
+package org.iguana.regex;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.Character;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.AutomatonOperations;
-import org.jgll.regex.matcher.DFAMatcher;
-import org.jgll.regex.matcher.Matcher;
-import org.jgll.regex.matcher.MatcherFactory;
-import org.jgll.util.Input;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Opt;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.AutomatonOperations;
+import org.iguana.regex.matcher.DFAMatcher;
+import org.iguana.regex.matcher.Matcher;
+import org.iguana.regex.matcher.MatcherFactory;
+import org.iguana.util.Input;
 import org.junit.Test;
 
 public class OptTest {

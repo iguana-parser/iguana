@@ -1,6 +1,6 @@
-package org.jgll.util;
+package org.iguana.util;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.*;
 
 import java.util.ArrayList;
 import java.util.List;

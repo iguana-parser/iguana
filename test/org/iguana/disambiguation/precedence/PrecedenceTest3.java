@@ -1,29 +1,29 @@
-package org.jgll.disambiguation.precedence;
+package org.iguana.disambiguation.precedence;
 
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.patterns.ExceptPattern;
-import org.jgll.grammar.patterns.PrecedencePattern;
-import org.jgll.grammar.precedence.OperatorPrecedence;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNodeFactory;
-import org.jgll.sppf.TerminalNode;
-import org.jgll.util.Configuration;
-import org.jgll.util.Input;
-import org.jgll.util.Visualization;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.patterns.ExceptPattern;
+import org.iguana.grammar.patterns.PrecedencePattern;
+import org.iguana.grammar.precedence.OperatorPrecedence;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParserFactory;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNodeFactory;
+import org.iguana.sppf.TerminalNode;
+import org.iguana.util.Configuration;
+import org.iguana.util.Input;
+import org.iguana.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 

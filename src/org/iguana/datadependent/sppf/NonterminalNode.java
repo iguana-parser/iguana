@@ -1,10 +1,10 @@
-package org.jgll.datadependent.sppf;
+package org.iguana.datadependent.sppf;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.sppf.PackedNodeSet;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.sppf.PackedNodeSet;
 
-public class NonterminalNode<T> extends org.jgll.sppf.NonterminalNode {
+public class NonterminalNode<T> extends org.iguana.sppf.NonterminalNode {
 
 	private GSSNodeData<T> data;
 

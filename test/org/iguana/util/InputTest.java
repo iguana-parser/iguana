@@ -1,7 +1,9 @@
-package org.jgll.util;
+package org.iguana.util;
 
 import static org.junit.Assert.*;
 
+import org.iguana.util.Input;
+import org.iguana.util.IntArrayCharSequence;
 import org.junit.Test;
 
 public class InputTest {

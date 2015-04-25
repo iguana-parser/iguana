@@ -1,4 +1,4 @@
-package org.jgll.util.hashing.hashfunction;
+package org.iguana.util.hashing.hashfunction;
 
 public class PrimeMultiplication implements HashFunction {
 

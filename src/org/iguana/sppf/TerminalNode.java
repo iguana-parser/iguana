@@ -1,11 +1,11 @@
-package org.jgll.sppf;
+package org.iguana.sppf;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.TerminalGrammarSlot;
-import org.jgll.traversal.SPPFVisitor;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.traversal.SPPFVisitor;
 
 /**
  * 

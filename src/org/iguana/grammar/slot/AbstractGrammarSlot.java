@@ -1,4 +1,4 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.ArrayList;
 import java.util.Collections;

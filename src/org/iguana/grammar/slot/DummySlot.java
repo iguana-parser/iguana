@@ -1,10 +1,10 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.parser.gss.lookup.HashMapNodeLookup;
-import org.jgll.util.Input;
+import org.iguana.parser.gss.lookup.HashMapNodeLookup;
+import org.iguana.util.Input;
 
 
 public class DummySlot extends BodyGrammarSlot {

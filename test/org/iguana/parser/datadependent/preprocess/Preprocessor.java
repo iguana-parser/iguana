@@ -1,25 +1,25 @@
-package org.jgll.parser.datadependent.preprocess;
+package org.iguana.parser.datadependent.preprocess;
 
-import static org.jgll.grammar.symbol.LayoutStrategy.*;
+import static org.iguana.grammar.symbol.LayoutStrategy.*;
 
-import org.jgll.datadependent.ast.AST;
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.condition.ConditionType;
-import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.symbol.Associativity;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.IfThenElse;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.PrecedenceLevel;
-import org.jgll.grammar.symbol.Recursion;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Terminal;
-import org.jgll.regex.Alt;
-import org.jgll.regex.Opt;
-import org.jgll.regex.Plus;
-import org.jgll.regex.Sequence;
-import org.jgll.regex.Star;
+import org.iguana.datadependent.ast.AST;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.ConditionType;
+import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.symbol.Associativity;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.PrecedenceLevel;
+import org.iguana.grammar.symbol.Recursion;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
 
 import com.google.common.collect.Sets;
 

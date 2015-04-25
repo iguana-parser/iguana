@@ -1,12 +1,12 @@
-package org.jgll.util.collections;
+package org.iguana.util.collections;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.util.collections.RangeTree.Node;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.util.collections.RangeTree.Node;
 
 /**
  * 

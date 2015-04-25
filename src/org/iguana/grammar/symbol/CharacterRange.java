@@ -1,4 +1,4 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,12 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.parser.HashFunctions;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.StateType;
-import org.jgll.regex.automaton.Transition;
-import org.jgll.traversal.ISymbolVisitor;
+import org.iguana.parser.HashFunctions;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.StateType;
+import org.iguana.regex.automaton.Transition;
+import org.iguana.traversal.ISymbolVisitor;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;

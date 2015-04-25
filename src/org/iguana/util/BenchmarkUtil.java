@@ -1,4 +1,4 @@
-package org.jgll.util;
+package org.iguana.util;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.jgll.grammar.Grammar;
+import org.iguana.grammar.Grammar;
 
 public class BenchmarkUtil {
 	

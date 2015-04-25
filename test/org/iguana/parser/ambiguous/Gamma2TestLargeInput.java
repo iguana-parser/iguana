@@ -1,6 +1,6 @@
-package org.jgll.parser.ambiguous;
+package org.iguana.parser.ambiguous;
 
-import static org.jgll.util.Configurations.*;
+import static org.iguana.util.Configurations.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,17 +9,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jgll.AbstractParserTest;
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParseSuccess;
-import org.jgll.parser.ParserFactory;
-import org.jgll.util.Input;
-import org.jgll.util.ParseStatistics;
+import org.iguana.AbstractParserTest;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParseSuccess;
+import org.iguana.parser.ParserFactory;
+import org.iguana.util.Input;
+import org.iguana.util.ParseStatistics;
 import org.junit.runners.Parameterized.Parameters;
 
 public class Gamma2TestLargeInput extends AbstractParserTest {

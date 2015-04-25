@@ -1,9 +1,9 @@
-package org.jgll.util.visualization;
+package org.iguana.util.visualization;
 
-import static org.jgll.util.visualization.GraphVizUtil.*;
+import static org.iguana.util.visualization.GraphVizUtil.*;
 
-import org.jgll.parser.gss.GSSEdge;
-import org.jgll.parser.gss.GSSNode;
+import org.iguana.parser.gss.GSSEdge;
+import org.iguana.parser.gss.GSSNode;
 
 public class GSSToDot extends ToDot {
 	

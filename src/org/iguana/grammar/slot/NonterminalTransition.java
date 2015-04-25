@@ -1,17 +1,17 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.Collections;
 import java.util.Set;
 
-import org.jgll.datadependent.ast.Expression;
-import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.Conditions;
-import org.jgll.grammar.condition.ConditionsFactory;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.generator.GeneratorUtil;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.Conditions;
+import org.iguana.grammar.condition.ConditionsFactory;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.util.generator.GeneratorUtil;
 
 
 public class NonterminalTransition extends AbstractTransition {

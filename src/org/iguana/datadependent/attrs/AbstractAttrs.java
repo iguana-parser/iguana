@@ -1,4 +1,4 @@
-package org.jgll.datadependent.attrs;
+package org.iguana.datadependent.attrs;
 
 import java.io.Serializable;
 

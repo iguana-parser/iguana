@@ -1,6 +1,6 @@
-package org.jgll.sppf;
+package org.iguana.sppf;
 
-import org.jgll.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.GrammarSlot;
 
 @FunctionalInterface
 public interface PackedNodeSet {

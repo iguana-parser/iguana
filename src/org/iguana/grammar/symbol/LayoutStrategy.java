@@ -1,4 +1,4 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 public enum LayoutStrategy {
 	NO_LAYOUT,

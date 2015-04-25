@@ -1,9 +1,9 @@
-package org.jgll.parser.gss;
+package org.iguana.parser.gss;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.sppf.NonPackedNode;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.sppf.NonPackedNode;
 
 public interface GSSEdge {
 

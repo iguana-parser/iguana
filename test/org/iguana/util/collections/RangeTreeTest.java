@@ -1,8 +1,9 @@
-package org.jgll.util.collections;
+package org.iguana.util.collections;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.util.collections.RangeTree;
 import org.junit.Test;
 
 public class RangeTreeTest {

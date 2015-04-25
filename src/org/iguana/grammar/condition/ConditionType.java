@@ -1,4 +1,4 @@
-package org.jgll.grammar.condition;
+package org.iguana.grammar.condition;
 
 public enum ConditionType {
 	

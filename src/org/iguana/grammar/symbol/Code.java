@@ -1,8 +1,8 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
-import org.jgll.datadependent.ast.Statement;
-import org.jgll.traversal.ISymbolVisitor;
-import org.jgll.util.generator.GeneratorUtil;
+import org.iguana.datadependent.ast.Statement;
+import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.util.generator.GeneratorUtil;
 
 public class Code extends AbstractSymbol {
 
@@ -53,7 +53,7 @@ public class Code extends AbstractSymbol {
 		return String.format("%s do %s;", symbol.toString(), GeneratorUtil.listToString(statements, ";"));
 	}
 		
-	public static Builder builder(Symbol symbol, org.jgll.datadependent.ast.Statement... statements) {
+	public static Builder builder(Symbol symbol, org.iguana.datadependent.ast.Statement... statements) {
 		return new Builder(symbol, statements);
 	}
 	

@@ -1,10 +1,10 @@
-package org.jgll.grammar.condition;
+package org.iguana.grammar.condition;
 
 import java.io.Serializable;
 
-import org.jgll.datadependent.attrs.AbstractAttrs;
-import org.jgll.traversal.IConditionVisitor;
-import org.jgll.util.generator.ConstructorCode;
+import org.iguana.datadependent.attrs.AbstractAttrs;
+import org.iguana.traversal.IConditionVisitor;
+import org.iguana.util.generator.ConstructorCode;
 
 
 public abstract class Condition extends AbstractAttrs implements Serializable, ConstructorCode {

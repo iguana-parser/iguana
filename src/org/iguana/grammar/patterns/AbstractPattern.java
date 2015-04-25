@@ -1,13 +1,13 @@
-package org.jgll.grammar.patterns;
+package org.iguana.grammar.patterns;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.parser.HashFunctions;
-import org.jgll.util.generator.ConstructorCode;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.parser.HashFunctions;
+import org.iguana.util.generator.ConstructorCode;
 
 public class AbstractPattern implements Serializable, ConstructorCode {
 	

@@ -1,6 +1,6 @@
-package org.jgll.util;
+package org.iguana.util;
 
-import org.jgll.parser.HashFunctions;
+import org.iguana.parser.HashFunctions;
 
 
 public class ParseStatistics {

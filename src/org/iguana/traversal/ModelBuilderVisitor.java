@@ -1,6 +1,6 @@
-package org.jgll.traversal;
+package org.iguana.traversal;
 
-import static org.jgll.traversal.SPPFVisitorUtil.*;
+import static org.iguana.traversal.SPPFVisitorUtil.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.slot.EndGrammarSlot;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalNode;
-import org.jgll.util.Input;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.slot.EndGrammarSlot;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNode;
+import org.iguana.sppf.TerminalNode;
+import org.iguana.util.Input;
 
 /**
  * ModelBuilderVisitor builds a data model by visiting an SPPF and 

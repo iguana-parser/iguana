@@ -1,22 +1,22 @@
-package org.jgll.parser.lookup;
+package org.iguana.parser.lookup;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.datadependent.util.collections.IntKey4PlusObject;
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.descriptor.Descriptor;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.util.Input;
-import org.jgll.util.collections.IntKey4;
-import org.jgll.util.collections.Key;
-import org.jgll.util.hashing.hashfunction.IntHash4;
-import org.jgll.util.hashing.hashfunction.IntHash5;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.util.collections.IntKey4PlusObject;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.util.Input;
+import org.iguana.util.collections.IntKey4;
+import org.iguana.util.collections.Key;
+import org.iguana.util.hashing.hashfunction.IntHash4;
+import org.iguana.util.hashing.hashfunction.IntHash5;
 
 
 /**

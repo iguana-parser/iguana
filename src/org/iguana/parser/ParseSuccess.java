@@ -1,7 +1,7 @@
-package org.jgll.parser;
+package org.iguana.parser;
 
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.util.ParseStatistics;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.util.ParseStatistics;
 
 public class ParseSuccess implements ParseResult {
 

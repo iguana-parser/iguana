@@ -1,13 +1,13 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 import java.util.Set;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.TerminalNode;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.TerminalNode;
 
 public class FirstTerminalTransition extends AbstractTerminalTransition {
 

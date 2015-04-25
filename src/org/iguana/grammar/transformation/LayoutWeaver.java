@@ -1,14 +1,14 @@
-package org.jgll.grammar.transformation;
+package org.iguana.grammar.transformation;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.grammar.condition.ConditionType;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Symbol;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.ConditionType;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Symbol;
 
 public class LayoutWeaver implements GrammarTransformation {
 

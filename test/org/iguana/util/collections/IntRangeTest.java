@@ -1,7 +1,8 @@
-package org.jgll.util.collections;
+package org.iguana.util.collections;
 
 import static org.junit.Assert.*;
 
+import org.iguana.util.collections.IntRangeTree;
 import org.junit.Test;
 
 public class IntRangeTest {

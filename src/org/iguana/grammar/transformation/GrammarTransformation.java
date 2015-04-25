@@ -1,6 +1,6 @@
-package org.jgll.grammar.transformation;
+package org.iguana.grammar.transformation;
 
-import org.jgll.grammar.Grammar;
+import org.iguana.grammar.Grammar;
 
 @FunctionalInterface
 public interface GrammarTransformation {

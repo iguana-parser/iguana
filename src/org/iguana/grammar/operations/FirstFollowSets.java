@@ -1,20 +1,20 @@
-package org.jgll.grammar.operations;
+package org.iguana.grammar.operations;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Position;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.RegularExpression;
-import org.jgll.util.Tuple;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Position;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.regex.RegularExpression;
+import org.iguana.util.Tuple;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;

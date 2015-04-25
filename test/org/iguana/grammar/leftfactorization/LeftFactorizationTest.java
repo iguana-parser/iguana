@@ -1,10 +1,10 @@
-package org.jgll.grammar.leftfactorization;
+package org.iguana.grammar.leftfactorization;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.transformation.LeftFactorize;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.transformation.LeftFactorize;
 import org.junit.Test;
 
 

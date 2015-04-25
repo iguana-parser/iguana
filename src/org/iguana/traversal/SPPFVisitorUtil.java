@@ -1,8 +1,8 @@
-package org.jgll.traversal;
+package org.iguana.traversal;
 
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNode;
 
 /**
  * 

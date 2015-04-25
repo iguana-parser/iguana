@@ -1,7 +1,7 @@
-package org.jgll.sppf;
+package org.iguana.sppf;
 
-import org.jgll.grammar.slot.DummySlot;
-import org.jgll.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.DummySlot;
+import org.iguana.grammar.slot.GrammarSlot;
 
 /**
  * 

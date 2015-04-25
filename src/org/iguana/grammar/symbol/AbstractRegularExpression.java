@@ -1,9 +1,9 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
-import org.jgll.regex.RegularExpression;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.matcher.Matcher;
-import org.jgll.regex.matcher.MatcherFactory;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.matcher.Matcher;
+import org.iguana.regex.matcher.MatcherFactory;
 
 
 public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {

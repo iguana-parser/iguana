@@ -1,10 +1,10 @@
-package org.jgll.datadependent.sppf;
+package org.iguana.datadependent.sppf;
 
-import org.jgll.datadependent.env.Environment;
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.sppf.PackedNodeSet;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.sppf.PackedNodeSet;
 
-public class IntermediateNode extends org.jgll.sppf.IntermediateNode {
+public class IntermediateNode extends org.iguana.sppf.IntermediateNode {
 
 	private Environment env;
 

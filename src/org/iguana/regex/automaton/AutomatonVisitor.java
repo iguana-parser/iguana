@@ -1,4 +1,4 @@
-package org.jgll.regex.automaton;
+package org.iguana.regex.automaton;
 
 import java.util.HashSet;
 import java.util.Set;

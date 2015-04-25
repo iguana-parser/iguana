@@ -1,13 +1,13 @@
-package org.jgll.parser.gss.lookup;
+package org.iguana.parser.gss.lookup;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.gss.GSSEdge;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.sppf.NonPackedNode;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.gss.GSSEdge;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.sppf.NonPackedNode;
 
 /**
  * 
@@ -64,14 +64,14 @@ public class GlobalHashGSSLookupImpl extends AbstractGSSLookup {
 	@Override
 	public <T> GSSNode getGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
 		countGSSNodes++;
-		GSSNode gssNode = new org.jgll.datadependent.gss.GSSNode<T>(slot, inputIndex, data);
+		GSSNode gssNode = new org.iguana.datadependent.gss.GSSNode<T>(slot, inputIndex, data);
 		gssNodes.put(gssNode, gssNode);		
 		return gssNode;
 	}
 
 	@Override
 	public <T> GSSNode hasGSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
-		return gssNodes.get(new org.jgll.datadependent.gss.GSSNode<T>(slot, inputIndex, data));
+		return gssNodes.get(new org.iguana.datadependent.gss.GSSNode<T>(slot, inputIndex, data));
 	}
 
 }

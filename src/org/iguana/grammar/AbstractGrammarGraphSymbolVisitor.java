@@ -1,21 +1,21 @@
-package org.jgll.grammar;
+package org.iguana.grammar;
 
-import org.jgll.grammar.symbol.Align;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.Ignore;
-import org.jgll.grammar.symbol.Offside;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
-import org.jgll.regex.Alt;
-import org.jgll.regex.Opt;
-import org.jgll.regex.Plus;
-import org.jgll.regex.RegularExpression;
-import org.jgll.regex.Sequence;
-import org.jgll.regex.Star;
-import org.jgll.traversal.ISymbolVisitor;
+import org.iguana.grammar.symbol.Align;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.grammar.symbol.Ignore;
+import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
+import org.iguana.traversal.ISymbolVisitor;
 
 public abstract class AbstractGrammarGraphSymbolVisitor implements ISymbolVisitor<Void> {
 	

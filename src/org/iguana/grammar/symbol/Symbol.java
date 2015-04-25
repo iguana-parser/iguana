@@ -1,12 +1,12 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 import java.io.Serializable;
 import java.util.Set;
 
-import org.jgll.datadependent.attrs.Attr;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.traversal.ISymbolVisitor;
-import org.jgll.util.generator.ConstructorCode;
+import org.iguana.datadependent.attrs.Attr;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.util.generator.ConstructorCode;
 
 /**
  * 

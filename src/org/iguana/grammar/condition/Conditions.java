@@ -1,8 +1,8 @@
-package org.jgll.grammar.condition;
+package org.iguana.grammar.condition;
 
-import org.jgll.datadependent.env.IEvaluatorContext;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.util.Input;
+import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.util.Input;
 
 
 /**

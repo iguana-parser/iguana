@@ -1,9 +1,9 @@
-package org.jgll.parser.gss.lookup;
+package org.iguana.parser.gss.lookup;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.util.Input;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.util.Input;
 
 /**
  * 

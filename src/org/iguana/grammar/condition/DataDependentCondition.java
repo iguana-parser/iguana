@@ -1,19 +1,19 @@
-package org.jgll.grammar.condition;
+package org.iguana.grammar.condition;
 
-import org.jgll.datadependent.env.IEvaluatorContext;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.traversal.IConditionVisitor;
-import org.jgll.util.Input;
+import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.traversal.IConditionVisitor;
+import org.iguana.util.Input;
 
 public class DataDependentCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final org.jgll.datadependent.ast.Expression expression;
+	private final org.iguana.datadependent.ast.Expression expression;
 	
 	private transient final SlotAction action;
 
-	DataDependentCondition(ConditionType type, org.jgll.datadependent.ast.Expression expression) {
+	DataDependentCondition(ConditionType type, org.iguana.datadependent.ast.Expression expression) {
 		super(type);
 		this.expression = expression;
 		this.action = new SlotAction() {
@@ -34,7 +34,7 @@ public class DataDependentCondition extends Condition {
 		};
 	}
 	
-	public org.jgll.datadependent.ast.Expression getExpression() {
+	public org.iguana.datadependent.ast.Expression getExpression() {
 		return expression;
 	}
 	
@@ -53,7 +53,7 @@ public class DataDependentCondition extends Condition {
 		return action;
 	}
 	
-	static public DataDependentCondition predicate(org.jgll.datadependent.ast.Expression expression) {
+	static public DataDependentCondition predicate(org.iguana.datadependent.ast.Expression expression) {
 		return new DataDependentCondition(ConditionType.DATA_DEPENDENT, expression);
 	}
 	

@@ -1,13 +1,13 @@
-package org.jgll.parser.gss.lookup;
+package org.iguana.parser.gss.lookup;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.parser.gss.GSSNodeData;
-import org.jgll.util.Input;
-import org.jgll.util.Tuple;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.util.Input;
+import org.iguana.util.Tuple;
 
 /**
  * 
@@ -29,7 +29,7 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 		Tuple<Integer, GSSNodeData<?>> elem = new Tuple<>(i, data);
 		GSSNode v;
 		if ((v = map.get(elem)) == null) {
-			v = new org.jgll.datadependent.gss.GSSNode<T>(slot, i, data);
+			v = new org.iguana.datadependent.gss.GSSNode<T>(slot, i, data);
 			map.put(elem, v);
 		}
 		return v;

@@ -1,7 +1,7 @@
-package org.jgll.sppf;
+package org.iguana.sppf;
 
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.grammar.symbol.Nonterminal;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.symbol.Nonterminal;
 
 public class SPPFNodeFactory {
 

@@ -1,8 +1,8 @@
-package org.jgll.parser.gss;
+package org.iguana.parser.gss;
 
 import java.util.Iterator;
 
-import org.jgll.util.generator.GeneratorUtil;
+import org.iguana.util.generator.GeneratorUtil;
 
 public class GSSNodeData<T> implements Iterable<T> {
 	

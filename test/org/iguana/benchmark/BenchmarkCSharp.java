@@ -1,14 +1,14 @@
-package org.jgll.benchmark;
+package org.iguana.benchmark;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Start;
-import org.jgll.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.jgll.grammar.transformation.EBNFToBNF;
-import org.jgll.grammar.transformation.LayoutWeaver;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.grammar.transformation.LayoutWeaver;
 
 public class BenchmarkCSharp {
 

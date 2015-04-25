@@ -1,6 +1,6 @@
-package org.jgll.grammar.exception;
+package org.iguana.grammar.exception;
 
-import org.jgll.datadependent.ast.Expression;
+import org.iguana.datadependent.ast.Expression;
 
 public class UnexpectedRuntimeTypeException extends RuntimeException {
 

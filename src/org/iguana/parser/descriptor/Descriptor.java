@@ -1,9 +1,9 @@
-package org.jgll.parser.descriptor;
+package org.iguana.parser.descriptor;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.sppf.NonPackedNode;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
 
 /**
  * @author Ali Afroozeh

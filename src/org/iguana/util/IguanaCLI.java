@@ -1,4 +1,4 @@
-package org.jgll.util;
+package org.iguana.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,11 +16,11 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParserFactory;
 
 public class IguanaCLI {
 

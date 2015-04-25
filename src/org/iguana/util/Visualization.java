@@ -1,23 +1,23 @@
-package org.jgll.util;
+package org.iguana.util;
 
-import org.jgll.grammar.GrammarGraph;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.State;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.util.collections.IntRangeTree;
-import org.jgll.util.collections.RangeTree;
-import org.jgll.util.trie.Trie;
-import org.jgll.util.visualization.AutomatonToDot;
-import org.jgll.util.visualization.GSSToDot;
-import org.jgll.util.visualization.GrammarGraphToDot;
-import org.jgll.util.visualization.GraphVizUtil;
-import org.jgll.util.visualization.RangeTreeToDot;
-import org.jgll.util.visualization.SPPFToDot;
-import org.jgll.util.visualization.SPPFToDotUnpacked;
-import org.jgll.util.visualization.ToDotWithoutIntermediateNodes;
-import org.jgll.util.visualization.ToDotWithoutIntermeidateAndLists;
-import org.jgll.util.visualization.TrieToDot;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.State;
+import org.iguana.sppf.SPPFNode;
+import org.iguana.util.collections.IntRangeTree;
+import org.iguana.util.collections.RangeTree;
+import org.iguana.util.trie.Trie;
+import org.iguana.util.visualization.AutomatonToDot;
+import org.iguana.util.visualization.GSSToDot;
+import org.iguana.util.visualization.GrammarGraphToDot;
+import org.iguana.util.visualization.GraphVizUtil;
+import org.iguana.util.visualization.RangeTreeToDot;
+import org.iguana.util.visualization.SPPFToDot;
+import org.iguana.util.visualization.SPPFToDotUnpacked;
+import org.iguana.util.visualization.ToDotWithoutIntermediateNodes;
+import org.iguana.util.visualization.ToDotWithoutIntermeidateAndLists;
+import org.iguana.util.visualization.TrieToDot;
 
 
 public class Visualization {

@@ -1,21 +1,21 @@
-package org.jgll.parser;
+package org.iguana.parser;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.parser.gss.lookup.DistributedGSSLookupImpl;
-import org.jgll.parser.gss.lookup.GSSLookup;
-import org.jgll.parser.gss.lookup.GlobalHashGSSLookupImpl;
-import org.jgll.parser.lookup.DescriptorLookup;
-import org.jgll.parser.lookup.DistributedDescriptorLookupImpl;
-import org.jgll.parser.lookup.GlobalDescriptorLookupImpl;
-import org.jgll.sppf.lookup.DistributedSPPFLookupImpl;
-import org.jgll.sppf.lookup.GlobalSPPFLookupImpl;
-import org.jgll.sppf.lookup.OriginalDistributedSPPFLookupImpl;
-import org.jgll.sppf.lookup.OriginalGlobalSPPFLookupImpl;
-import org.jgll.sppf.lookup.SPPFLookup;
-import org.jgll.util.Configuration;
-import org.jgll.util.Configuration.GSSType;
-import org.jgll.util.Configuration.LookupStrategy;
-import org.jgll.util.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.parser.gss.lookup.DistributedGSSLookupImpl;
+import org.iguana.parser.gss.lookup.GSSLookup;
+import org.iguana.parser.gss.lookup.GlobalHashGSSLookupImpl;
+import org.iguana.parser.lookup.DescriptorLookup;
+import org.iguana.parser.lookup.DistributedDescriptorLookupImpl;
+import org.iguana.parser.lookup.GlobalDescriptorLookupImpl;
+import org.iguana.sppf.lookup.DistributedSPPFLookupImpl;
+import org.iguana.sppf.lookup.GlobalSPPFLookupImpl;
+import org.iguana.sppf.lookup.OriginalDistributedSPPFLookupImpl;
+import org.iguana.sppf.lookup.OriginalGlobalSPPFLookupImpl;
+import org.iguana.sppf.lookup.SPPFLookup;
+import org.iguana.util.Configuration;
+import org.iguana.util.Input;
+import org.iguana.util.Configuration.GSSType;
+import org.iguana.util.Configuration.LookupStrategy;
 
 /**
  * 

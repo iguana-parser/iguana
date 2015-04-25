@@ -1,9 +1,9 @@
-package org.jgll.parser.datadependent.haskell;
+package org.iguana.parser.datadependent.haskell;
 
 import java.util.Set;
 
-import org.jgll.traversal.NonterminalNodeVisitor;
-import org.jgll.util.Input;
+import org.iguana.traversal.NonterminalNodeVisitor;
+import org.iguana.util.Input;
 
 import com.google.common.collect.ImmutableSet;
 

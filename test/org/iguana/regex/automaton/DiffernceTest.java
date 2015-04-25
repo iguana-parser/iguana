@@ -1,14 +1,16 @@
-package org.jgll.regex.automaton;
+package org.iguana.regex.automaton;
 
 import static org.junit.Assert.*;
 
-import org.jgll.grammar.symbol.Character;
-import org.jgll.regex.Alt;
-import org.jgll.regex.RegularExpression;
-import org.jgll.regex.RegularExpressionExamples;
-import org.jgll.regex.Sequence;
-import org.jgll.regex.matcher.DFAMatcher;
-import org.jgll.util.Input;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Alt;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.RegularExpressionExamples;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.AutomatonOperations;
+import org.iguana.regex.matcher.DFAMatcher;
+import org.iguana.util.Input;
 import org.junit.Test;
 
 

@@ -1,11 +1,16 @@
-package org.jgll.regex.automaton;
+package org.iguana.regex.automaton;
 
 import static org.junit.Assert.*;
 
-import org.jgll.regex.RegularExpression;
-import org.jgll.regex.RegularExpressionExamples;
-import org.jgll.regex.matcher.DFAMatcher;
-import org.jgll.util.Input;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.RegularExpressionExamples;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.AutomatonOperations;
+import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.StateType;
+import org.iguana.regex.automaton.Transition;
+import org.iguana.regex.matcher.DFAMatcher;
+import org.iguana.util.Input;
 import org.junit.Test;
 
 public class IntersectionTest {

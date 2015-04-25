@@ -1,4 +1,4 @@
-package org.jgll.util.trie;
+package org.iguana.util.trie;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,14 +1,14 @@
-package org.jgll.sppf.lookup;
+package org.iguana.sppf.lookup;
 
-import org.jgll.grammar.slot.BodyGrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.NonterminalOrIntermediateNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.TerminalNode;
-import org.jgll.util.Input;
-import org.jgll.util.logging.LoggerWrapper;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalOrIntermediateNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.TerminalNode;
+import org.iguana.util.Input;
+import org.iguana.util.logging.LoggerWrapper;
 
 
 public abstract class AbstractSPPFLookup implements SPPFLookup {
@@ -48,10 +48,10 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 		System.out.println("Ambiguous node added: " + node.toString() + " " + input.getNodeInfo(node));
 		log.trace("Ambiguous node added: %s", node);
 		log.warning("Ambiguous node: %s %s", node, input.getNodeInfo(node));
-		org.jgll.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", node, input);
+		org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", node, input);
 		for (PackedNode packedNode : node.getChildren()) {
 			log.warning("   Packed node: " + packedNode.toString());
-			for (org.jgll.sppf.NonPackedNode child : packedNode.getChildren()) {
+			for (org.iguana.sppf.NonPackedNode child : packedNode.getChildren()) {
 				log.warning("       %s %s", child, input.getNodeInfo(child));
 			}
 		}

@@ -1,4 +1,4 @@
-package org.jgll.parser.gss.lookup;
+package org.iguana.parser.gss.lookup;
 
 public abstract class AbstractGSSLookup implements GSSLookup {
 

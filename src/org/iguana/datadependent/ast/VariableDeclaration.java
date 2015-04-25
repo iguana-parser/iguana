@@ -1,7 +1,7 @@
-package org.jgll.datadependent.ast;
+package org.iguana.datadependent.ast;
 
-import org.jgll.datadependent.env.IEvaluatorContext;
-import org.jgll.datadependent.traversal.IAbstractASTVisitor;
+import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
 public class VariableDeclaration extends AbstractAST {
 	

@@ -1,14 +1,14 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.datadependent.ast.Expression;
-import org.jgll.grammar.condition.Condition;
-import org.jgll.parser.HashFunctions;
-import org.jgll.traversal.ISymbolVisitor;
-import org.jgll.util.generator.GeneratorUtil;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.parser.HashFunctions;
+import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.util.generator.GeneratorUtil;
 
 public class Nonterminal extends AbstractSymbol {
 

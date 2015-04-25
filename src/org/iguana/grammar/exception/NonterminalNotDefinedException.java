@@ -1,6 +1,6 @@
-package org.jgll.grammar.exception;
+package org.iguana.grammar.exception;
 
-import org.jgll.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Nonterminal;
 
 public class NonterminalNotDefinedException extends RuntimeException {
 

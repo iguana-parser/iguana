@@ -1,7 +1,7 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
-import org.jgll.datadependent.ast.Expression;
-import org.jgll.traversal.ISymbolVisitor;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.traversal.ISymbolVisitor;
 
 public class IfThenElse extends AbstractSymbol {
 

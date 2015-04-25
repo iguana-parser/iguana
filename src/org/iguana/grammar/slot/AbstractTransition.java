@@ -1,4 +1,4 @@
-package org.jgll.grammar.slot;
+package org.iguana.grammar.slot;
 
 
 public abstract class AbstractTransition implements Transition {

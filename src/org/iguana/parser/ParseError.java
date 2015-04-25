@@ -1,4 +1,4 @@
-package org.jgll.parser;
+package org.iguana.parser;
 
 import java.io.PrintStream;
 import java.util.ArrayDeque;
@@ -6,9 +6,9 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.util.Input;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.util.Input;
 
 
 /**

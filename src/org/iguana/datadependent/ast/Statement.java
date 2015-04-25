@@ -1,7 +1,7 @@
-package org.jgll.datadependent.ast;
+package org.iguana.datadependent.ast;
 
-import org.jgll.datadependent.env.IEvaluatorContext;
-import org.jgll.datadependent.traversal.IAbstractASTVisitor;
+import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
 public abstract class Statement extends AbstractAST {
 	
@@ -11,13 +11,13 @@ public abstract class Statement extends AbstractAST {
 
 		private static final long serialVersionUID = 1L;
 		
-		private final org.jgll.datadependent.ast.Expression exp;
+		private final org.iguana.datadependent.ast.Expression exp;
 		
-		Expression(org.jgll.datadependent.ast.Expression exp) {
+		Expression(org.iguana.datadependent.ast.Expression exp) {
 			this.exp = exp;
 		}
 		
-		public org.jgll.datadependent.ast.Expression getExpression() {
+		public org.iguana.datadependent.ast.Expression getExpression() {
 			return exp;
 		}
 		
@@ -48,13 +48,13 @@ public abstract class Statement extends AbstractAST {
 		
 		private static final long serialVersionUID = 1L;
 		
-		private final org.jgll.datadependent.ast.VariableDeclaration decl;
+		private final org.iguana.datadependent.ast.VariableDeclaration decl;
 		
-		VariableDeclaration(org.jgll.datadependent.ast.VariableDeclaration decl) {
+		VariableDeclaration(org.iguana.datadependent.ast.VariableDeclaration decl) {
 			this.decl = decl;
 		}
 		
-		public org.jgll.datadependent.ast.VariableDeclaration getDeclaration() {
+		public org.iguana.datadependent.ast.VariableDeclaration getDeclaration() {
 			return decl;
 		}
 

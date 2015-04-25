@@ -1,12 +1,12 @@
-package org.jgll.util.visualization;
+package org.iguana.util.visualization;
 
-import static org.jgll.util.visualization.GraphVizUtil.*;
+import static org.iguana.util.visualization.GraphVizUtil.*;
 
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.traversal.SPPFVisitorUtil;
-import org.jgll.util.Input;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNode;
+import org.iguana.traversal.SPPFVisitorUtil;
+import org.iguana.util.Input;
 
 public class ToDotWithoutIntermeidateAndLists extends ToDotWithoutIntermediateNodes {
 	

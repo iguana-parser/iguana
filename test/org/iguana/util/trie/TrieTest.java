@@ -1,8 +1,10 @@
-package org.jgll.util.trie;
+package org.iguana.util.trie;
 
-import static org.jgll.util.CollectionsUtil.*;
+import static org.iguana.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
+import org.iguana.util.trie.Node;
+import org.iguana.util.trie.Trie;
 import org.junit.Test;
 
 public class TrieTest {

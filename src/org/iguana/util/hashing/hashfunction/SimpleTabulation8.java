@@ -1,6 +1,6 @@
-package org.jgll.util.hashing.hashfunction;
+package org.iguana.util.hashing.hashfunction;
 
-import org.jgll.util.RandomUtil;
+import org.iguana.util.RandomUtil;
 
 
 public class SimpleTabulation8 implements HashFunction {

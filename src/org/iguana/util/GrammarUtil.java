@@ -1,4 +1,4 @@
-package org.jgll.util;
+package org.iguana.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URI;
 
-import org.jgll.grammar.Grammar;
+import org.iguana.grammar.Grammar;
 
 
 public class GrammarUtil {

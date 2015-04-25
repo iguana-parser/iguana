@@ -1,14 +1,14 @@
-package org.jgll.grammar.condition;
+package org.iguana.grammar.condition;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jgll.datadependent.env.IEvaluatorContext;
-import org.jgll.datadependent.env.persistent.PersistentEvaluatorContext;
-import org.jgll.parser.gss.GSSNode;
-import org.jgll.util.Input;
-import org.jgll.util.logging.LoggerWrapper;
+import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.util.Input;
+import org.iguana.util.logging.LoggerWrapper;
 
 public class ConditionsFactory {
 	

@@ -1,4 +1,4 @@
-package org.jgll.regex.automaton;
+package org.iguana.regex.automaton;
 
 import java.io.Serializable;
 import java.util.BitSet;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.regex.RegularExpression;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.regex.RegularExpression;
 
 /**
  * 

@@ -1,19 +1,20 @@
-package org.jgll.grammar;
+package org.iguana.grammar;
 
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import org.jgll.grammar.precedence.OperatorPrecedence;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Start;
-import org.jgll.grammar.transformation.EBNFToBNF;
-import org.jgll.grammar.transformation.LayoutWeaver;
-import org.jgll.parser.GLLParser;
-import org.jgll.parser.ParseResult;
-import org.jgll.parser.ParserFactory;
-import org.jgll.util.Configuration;
-import org.jgll.util.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.precedence.OperatorPrecedence;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.grammar.transformation.LayoutWeaver;
+import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParserFactory;
+import org.iguana.util.Configuration;
+import org.iguana.util.Input;
 import org.junit.Test;
 
 public class TestJava {

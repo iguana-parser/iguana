@@ -1,13 +1,13 @@
-package org.jgll.grammar.condition;
+package org.iguana.grammar.condition;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.Sequence;
-import org.jgll.traversal.IConditionVisitor;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.regex.Sequence;
+import org.iguana.traversal.IConditionVisitor;
 
 public class ContextFreeCondition extends Condition {
 	

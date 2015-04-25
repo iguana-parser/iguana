@@ -1,14 +1,14 @@
-package org.jgll.regex;
+package org.iguana.regex;
 
 import java.io.Serializable;
 import java.util.Set;
 
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.matcher.Matcher;
-import org.jgll.util.generator.ConstructorCode;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.matcher.Matcher;
+import org.iguana.util.generator.ConstructorCode;
 
 public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
 

@@ -1,4 +1,4 @@
-package org.jgll.parser;
+package org.iguana.parser;
 
 public interface ParseResult {
 

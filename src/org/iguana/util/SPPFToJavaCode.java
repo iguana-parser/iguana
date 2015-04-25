@@ -1,19 +1,19 @@
-package org.jgll.util;
+package org.iguana.util;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.sppf.IntermediateNode;
-import org.jgll.sppf.NonPackedNode;
-import org.jgll.sppf.NonterminalNode;
-import org.jgll.sppf.PackedNode;
-import org.jgll.sppf.SPPFNode;
-import org.jgll.sppf.TerminalNode;
-import org.jgll.traversal.SPPFVisitor;
+import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNode;
+import org.iguana.sppf.TerminalNode;
+import org.iguana.traversal.SPPFVisitor;
 
 public class SPPFToJavaCode implements SPPFVisitor {
 	

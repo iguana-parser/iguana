@@ -1,4 +1,4 @@
-package org.jgll.traversal;
+package org.iguana.traversal;
 
 public class Result<T> {
 	

@@ -1,12 +1,12 @@
-package org.jgll.util.visualization;
+package org.iguana.util.visualization;
 
-import static org.jgll.util.generator.GeneratorUtil.*;
-import static org.jgll.util.visualization.GraphVizUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.*;
+import static org.iguana.util.visualization.GraphVizUtil.*;
 
-import org.jgll.util.collections.IntRangeTree;
-import org.jgll.util.collections.IntRangeTree.IntNode;
-import org.jgll.util.collections.RangeTree;
-import org.jgll.util.collections.RangeTree.Node;
+import org.iguana.util.collections.IntRangeTree;
+import org.iguana.util.collections.RangeTree;
+import org.iguana.util.collections.IntRangeTree.IntNode;
+import org.iguana.util.collections.RangeTree.Node;
 
 public class RangeTreeToDot {
 		

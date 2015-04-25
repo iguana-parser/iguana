@@ -1,10 +1,11 @@
-package org.jgll.util;
+package org.iguana.util;
 
 import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.iguana.util.CollectionsUtil;
 import org.junit.Test;
 
 public class CollectionsUtilTest {

@@ -1,6 +1,6 @@
-package org.jgll.datadependent.env;
+package org.iguana.datadependent.env;
 
-import org.jgll.util.Input;
+import org.iguana.util.Input;
 
 public interface IEvaluatorContext {
 	

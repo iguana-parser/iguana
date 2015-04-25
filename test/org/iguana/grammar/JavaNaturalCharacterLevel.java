@@ -1,25 +1,26 @@
-package org.jgll.grammar;
+package org.iguana.grammar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jgll.grammar.condition.ConditionType;
-import org.jgll.grammar.condition.RegularExpressionCondition;
-import org.jgll.grammar.patterns.ExceptPattern;
-import org.jgll.grammar.patterns.PrecedencePattern;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Character;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Terminal;
-import org.jgll.regex.Alt;
-import org.jgll.regex.Opt;
-import org.jgll.regex.Plus;
-import org.jgll.regex.Sequence;
-import org.jgll.regex.Star;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.ConditionType;
+import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.patterns.ExceptPattern;
+import org.iguana.grammar.patterns.PrecedencePattern;
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
 
-import static org.jgll.grammar.symbol.LayoutStrategy.*;
+import static org.iguana.grammar.symbol.LayoutStrategy.*;
 
 import com.google.common.collect.Sets;
 

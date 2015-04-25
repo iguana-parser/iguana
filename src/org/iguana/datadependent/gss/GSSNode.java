@@ -1,10 +1,10 @@
-package org.jgll.datadependent.gss;
+package org.iguana.datadependent.gss;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.parser.HashFunctions;
-import org.jgll.parser.gss.GSSNodeData;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.HashFunctions;
+import org.iguana.parser.gss.GSSNodeData;
 
-public class GSSNode<T> extends org.jgll.parser.gss.GSSNode {
+public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {
 	
 	private final GSSNodeData<T> data;
 

@@ -1,9 +1,9 @@
-package org.jgll.sppf;
+package org.iguana.sppf;
 
-import org.jgll.grammar.slot.GrammarSlot;
-import org.jgll.grammar.slot.NonterminalGrammarSlot;
-import org.jgll.traversal.SPPFVisitor;
-import org.jgll.util.SPPFToJavaCode;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.traversal.SPPFVisitor;
+import org.iguana.util.SPPFToJavaCode;
 
 /**
  * 

@@ -1,9 +1,9 @@
-package org.jgll.util.visualization;
+package org.iguana.util.visualization;
 
-import org.jgll.regex.automaton.AutomatonVisitor;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.Transition;
-import org.jgll.regex.automaton.VisitAction;
+import org.iguana.regex.automaton.AutomatonVisitor;
+import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.Transition;
+import org.iguana.regex.automaton.VisitAction;
 
 
 public class AutomatonToDot {

@@ -1,25 +1,25 @@
-package org.jgll.traversal;
+package org.iguana.traversal;
 
-import org.jgll.grammar.symbol.Align;
-import org.jgll.grammar.symbol.Block;
-import org.jgll.grammar.symbol.CharacterRange;
-import org.jgll.grammar.symbol.Code;
-import org.jgll.grammar.symbol.Conditional;
-import org.jgll.grammar.symbol.EOF;
-import org.jgll.grammar.symbol.Epsilon;
-import org.jgll.grammar.symbol.IfThen;
-import org.jgll.grammar.symbol.IfThenElse;
-import org.jgll.grammar.symbol.Ignore;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Offside;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.symbol.Terminal;
-import org.jgll.grammar.symbol.While;
-import org.jgll.regex.Alt;
-import org.jgll.regex.Opt;
-import org.jgll.regex.Plus;
-import org.jgll.regex.Sequence;
-import org.jgll.regex.Star;
+import org.iguana.grammar.symbol.Align;
+import org.iguana.grammar.symbol.Block;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Conditional;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.grammar.symbol.IfThen;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.Ignore;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.While;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
 
 public interface ISymbolVisitor<T> {
 	
@@ -27,7 +27,7 @@ public interface ISymbolVisitor<T> {
 	
 	public T visit(Block symbol);
 	
-	public T visit(org.jgll.grammar.symbol.Character symbol);
+	public T visit(org.iguana.grammar.symbol.Character symbol);
 	
 	public T visit(CharacterRange symbol);
 	

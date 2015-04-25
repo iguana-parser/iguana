@@ -1,11 +1,11 @@
-package org.jgll.util.visualization;
+package org.iguana.util.visualization;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jgll.util.trie.Edge;
-import org.jgll.util.trie.Node;
-import org.jgll.util.trie.Trie;
+import org.iguana.util.trie.Edge;
+import org.iguana.util.trie.Node;
+import org.iguana.util.trie.Trie;
 
 
 public class TrieToDot<T> {

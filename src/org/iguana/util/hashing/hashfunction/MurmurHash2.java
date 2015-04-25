@@ -1,4 +1,4 @@
-package org.jgll.util.hashing.hashfunction;
+package org.iguana.util.hashing.hashfunction;
 
 public class MurmurHash2 implements HashFunction {
 

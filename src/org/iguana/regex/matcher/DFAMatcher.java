@@ -1,11 +1,11 @@
-package org.jgll.regex.matcher;
+package org.iguana.regex.matcher;
 
-import org.jgll.regex.automaton.Automaton;
-import org.jgll.regex.automaton.AutomatonOperations;
-import org.jgll.regex.automaton.State;
-import org.jgll.regex.automaton.Transition;
-import org.jgll.util.Input;
-import org.jgll.util.collections.IntRangeTree;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.AutomatonOperations;
+import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.Transition;
+import org.iguana.util.Input;
+import org.iguana.util.collections.IntRangeTree;
 
 public class DFAMatcher implements Matcher {
 

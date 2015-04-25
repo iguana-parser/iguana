@@ -1,4 +1,4 @@
-package org.jgll.util.generator;
+package org.iguana.util.generator;
 
 import java.util.List;
 import java.util.Set;

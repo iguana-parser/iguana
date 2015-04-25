@@ -1,10 +1,10 @@
-package org.jgll.grammar.symbol;
+package org.iguana.grammar.symbol;
 
 import java.util.Set;
 
-import org.jgll.regex.RegularExpression;
-import org.jgll.traversal.ISymbolVisitor;
-import org.jgll.regex.automaton.Automaton;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.traversal.ISymbolVisitor;
 
 public class Terminal extends AbstractRegularExpression {
 

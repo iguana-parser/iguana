@@ -1,4 +1,4 @@
-package org.jgll.grammar.precedence;
+package org.iguana.grammar.precedence;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,16 +12,16 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgll.grammar.Grammar;
-import org.jgll.grammar.patterns.AbstractPattern;
-import org.jgll.grammar.patterns.ExceptPattern;
-import org.jgll.grammar.patterns.PrecedencePattern;
-import org.jgll.grammar.symbol.LayoutStrategy;
-import org.jgll.grammar.symbol.Nonterminal;
-import org.jgll.grammar.symbol.Rule;
-import org.jgll.grammar.symbol.Symbol;
-import org.jgll.grammar.transformation.EBNFToBNF;
-import org.jgll.util.logging.LoggerWrapper;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.patterns.AbstractPattern;
+import org.iguana.grammar.patterns.ExceptPattern;
+import org.iguana.grammar.patterns.PrecedencePattern;
+import org.iguana.grammar.symbol.LayoutStrategy;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.util.logging.LoggerWrapper;
 
 public class OperatorPrecedence {
 	
