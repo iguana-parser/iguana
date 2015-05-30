@@ -60,6 +60,7 @@ import org.iguana.grammar.slot.NonterminalTransition;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalTransition;
 import org.iguana.grammar.slot.EpsilonTransition.Type;
+import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Block;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Conditional;
@@ -81,6 +82,7 @@ import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.Configuration.GSSType;
 import org.iguana.util.Configuration.LookupImpl;
+import org.iguana.util.collections.RangeTree;
 
 public class GrammarGraph implements Serializable {
 
@@ -176,6 +178,12 @@ public class GrammarGraph implements Serializable {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
 		rules.forEach(r -> addRule(nonterminalSlot, r));
+		nonterminalSlot.setLookAheadTest(getLookAheadTest());
+	}
+
+	private LookAheadTest getLookAheadTest() {
+		RangeTree<List<BodyGrammarSlot>> alternatives = new RangeTree<>();
+		return i -> alternatives.get(i);
 	}
 	
 	private void addRule(NonterminalGrammarSlot head, Rule rule) {

@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
@@ -59,6 +60,8 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	private Map<Key, NonterminalNode> nonterminalNodes;
 
+	private LookAheadTest lookAheadTest;
+
 	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup) {
 		super(id);
 		this.nonterminal = nonterminal;
@@ -75,8 +78,12 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		return firstSlots;
 	}
 	
+	public void setLookAheadTest(LookAheadTest lookAheadTest) {
+		this.lookAheadTest = lookAheadTest;
+	}
+	
 	public boolean test(int v)  {
-		return true;
+		return lookAheadTest.test(v);
 	}
 	
 	public Nonterminal getNonterminal() {
