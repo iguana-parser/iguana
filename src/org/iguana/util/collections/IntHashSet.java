@@ -206,7 +206,7 @@ public class IntHashSet implements Serializable {
 		size = 0;
 	}
 
-	public boolean addAll(IntegerHashSet set) {
+	public boolean addAll(IntHashSet set) {
 		boolean added = false;
 		IntIterator it = set.iterator();
 		while(it.hasNext()) {

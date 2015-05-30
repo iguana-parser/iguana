@@ -37,12 +37,16 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.util.SemanticAction;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 
+	private SemanticAction action;
+
 	public EndGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
-			String label, String variable, Set<Condition> conditions) {
+            			  String label, String variable, Set<Condition> conditions, SemanticAction action) {
 		super(id, position, nodeLookup, label, variable, conditions);
+		this.action = action;
 	}
 
 	@Override
@@ -76,6 +80,10 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public boolean addTransition(Transition transition) {
 		return false;
+	}
+	
+	public SemanticAction getAction() {
+		return action;
 	}
 	
 	/**

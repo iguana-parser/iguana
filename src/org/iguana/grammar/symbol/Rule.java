@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.iguana.parser.HashFunctions;
+import org.iguana.util.SemanticAction;
 import org.iguana.util.generator.ConstructorCode;
 
 /**
@@ -70,6 +71,8 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final String label;
 	
+	private final SemanticAction action;
+	
 	public Rule(Builder builder) {
 		this.body = builder.body;
 		this.head = builder.head;
@@ -84,6 +87,8 @@ public class Rule implements ConstructorCode, Serializable {
 		this.precedenceLevel = builder.precedenceLevel;
 		
 		this.label = builder.label;
+		
+		this.action = builder.action;
 	}
 		
 	public Nonterminal getHead() {
@@ -159,6 +164,10 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	public boolean hasLayout() {
 		return layout != null;
+	}
+	
+	public SemanticAction getAction() {
+		return action;
 	}
 	
 	@Override
@@ -249,6 +258,8 @@ public class Rule implements ConstructorCode, Serializable {
 		private PrecedenceLevel precedenceLevel;
 		
 		private String label;
+		
+		private SemanticAction action = SemanticAction.Unit;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -269,6 +280,8 @@ public class Rule implements ConstructorCode, Serializable {
 			this.precedenceLevel = rule.precedenceLevel;
 			
 			this.label = rule.label;
+			
+			this.action = rule.action;
 		}
 		
 		public Builder addSymbol(Symbol symbol) {
@@ -340,6 +353,11 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder setAction(SemanticAction action) {
+			this.action = action;
+			return this;
+		}
+		
 		public Rule build() {
 			return new Rule(this);
 		}
@@ -348,20 +366,21 @@ public class Rule implements ConstructorCode, Serializable {
 	@Override
 	public String getConstructorCode() {
 		return Rule.class.getSimpleName() + ".withHead(" + head.getConstructorCode() + ")" + 
-				(body == null ? "" : body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) +
-				(layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
-				(layoutStrategy == LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
-				
-				".setRecursion(" + recursion.getConstructorCode() + ")" +
-				
-				".setAssociativity(" + associativity.getConstructorCode() + ")" +
-				".setPrecedence(" + precedence + ")" +
-				
-				(associativityGroup != null? ".setAssociativityGroup(" + associativityGroup.getConstructorCode() + ")" : "") +
-				(precedenceLevel != null? ".setPrecedenceLevel(" + precedenceLevel.getConstructorCode() + ")" : "") +
-				
-				(label != null? ".setLabel(\"" + label + "\")" : "") +
-				
-				".build()";
+			(body == null ? "" : body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) +
+			(layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
+			(layoutStrategy == LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
+			
+			".setRecursion(" + recursion.getConstructorCode() + ")" +
+			
+			".setAssociativity(" + associativity.getConstructorCode() + ")" +
+			".setPrecedence(" + precedence + ")" +
+			
+			(associativityGroup != null? ".setAssociativityGroup(" + associativityGroup.getConstructorCode() + ")" : "") +
+			(precedenceLevel != null? ".setPrecedenceLevel(" + precedenceLevel.getConstructorCode() + ")" : "") +
+			
+			(label != null? ".setLabel(\"" + label + "\")" : "") +
+			
+			".build()";
 	}
+	
 }

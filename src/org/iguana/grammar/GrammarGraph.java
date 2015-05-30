@@ -592,9 +592,9 @@ public class GrammarGraph implements Serializable {
 		
 		BodyGrammarSlot slot;
 		if (config.getGSSType() == GSSType.NEW) {
-			slot = new EndGrammarSlot(id++, position, DummyNodeLookup.getInstance(), null, null, new HashSet<>());				
+			slot = new EndGrammarSlot(id++, position, DummyNodeLookup.getInstance(), null, null, new HashSet<>(), rule.getAction());				
 		} else {
-			slot = new EndGrammarSlot(id++, position, getNodeLookup(), null, null, new HashSet<>());
+			slot = new EndGrammarSlot(id++, position, getNodeLookup(), null, null, new HashSet<>(), rule.getAction());
 		}
 		
 		add(slot);
