@@ -38,6 +38,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.util.CharacterRanges;
 
 import com.google.common.collect.Multimap;
 
@@ -222,7 +223,7 @@ public class AutomatonOperations {
 		for (CharacterRange r : alphabet1) { alphabets.add(r); }
 		for (CharacterRange r : alphabet2) { alphabets.add(r); }
 		
-		return CharacterRange.toNonOverlapping(alphabets);
+		return CharacterRanges.toNonOverlapping(alphabets);
 	}
 	
 	

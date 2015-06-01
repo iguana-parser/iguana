@@ -30,7 +30,6 @@ package org.iguana.grammar.symbol;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.iguana.regex.automaton.Automaton;
@@ -38,10 +37,14 @@ import org.iguana.regex.automaton.State;
 import org.iguana.regex.automaton.StateType;
 import org.iguana.traversal.ISymbolVisitor;
 
+import com.google.common.collect.ImmutableSet;
+
 
 public class Epsilon extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Set<CharacterRange> firstSet = ImmutableSet.of(CharacterRange.in(-1, -1));
 	
 	private static Epsilon instance;
 	
@@ -86,8 +89,6 @@ public class Epsilon extends AbstractRegularExpression {
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		HashSet<CharacterRange> firstSet = new HashSet<>();
-		firstSet.add(CharacterRange.in(-1, -1));
 		return firstSet;
 	}
 	

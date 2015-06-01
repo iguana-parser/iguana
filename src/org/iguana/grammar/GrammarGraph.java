@@ -42,6 +42,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.exception.IncorrectNumberOfArgumentsException;
+import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.slot.AbstractTerminalTransition;
 import org.iguana.grammar.slot.BeforeLastTerminalTransition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -96,6 +97,8 @@ public class GrammarGraph implements Serializable {
 	
 	private List<GrammarSlot> slots;
 	
+	private final FirstFollowSets firstFollow;
+	
 	Grammar grammar;
 
 	private Configuration config;
@@ -106,7 +109,7 @@ public class GrammarGraph implements Serializable {
 	
 	private int id = 1;
 	
-	private TerminalGrammarSlot epsilon = new TerminalGrammarSlot(0, Epsilon.getInstance());
+	private TerminalGrammarSlot epsilonSlot = new TerminalGrammarSlot(0, Epsilon.getInstance());
 	
 	public GrammarGraph(Grammar grammar, Input input, Configuration config) {
 		this.grammar = grammar;
@@ -117,10 +120,11 @@ public class GrammarGraph implements Serializable {
 		this.terminalsMap = new LinkedHashMap<>();
 		this.names = new HashMap<>();
 		this.slots = new ArrayList<>();
+		this.firstFollow = new FirstFollowSets(grammar);
 		
-		terminalsMap.put(Epsilon.getInstance(), epsilon);
+		terminalsMap.put(Epsilon.getInstance(), epsilonSlot);
 
-		add(epsilon);
+		add(epsilonSlot);
 		
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
 			getNonterminalGrammarSlot(nonterminal);
@@ -178,11 +182,12 @@ public class GrammarGraph implements Serializable {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
 		rules.forEach(r -> addRule(nonterminalSlot, r));
-		nonterminalSlot.setLookAheadTest(getLookAheadTest());
+		nonterminalSlot.setLookAheadTest(getLookAheadTest(nonterminal));
 	}
 
-	private LookAheadTest getLookAheadTest() {
+	private LookAheadTest getLookAheadTest(Nonterminal nonterminal) {
 		RangeTree<List<BodyGrammarSlot>> alternatives = new RangeTree<>();
+		
 		return i -> alternatives.get(i);
 	}
 	
@@ -537,7 +542,7 @@ public class GrammarGraph implements Serializable {
 		BodyGrammarSlot slot;
 		
 		if (rule.size() == 0) {
-			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilon, DummyNodeLookup.getInstance(), Collections.emptySet());
+			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilonSlot, DummyNodeLookup.getInstance(), Collections.emptySet());
 		} else {
 			// TODO: this is a temporarily solution, which should be re-thought; 
 			//       in particular, not any precondition of the first symbol can be moved to the first slot.  

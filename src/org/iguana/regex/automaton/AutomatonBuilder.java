@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.util.CharacterRanges;
 
 import com.google.common.collect.Multimap;
 
@@ -110,7 +111,7 @@ public class AutomatonBuilder {
 	}
 	
 	private static Multimap<CharacterRange, CharacterRange> getRangeMap(State startState) {
-		return CharacterRange.toNonOverlapping(getAllRanges(startState));
+		return CharacterRanges.toNonOverlapping(getAllRanges(startState));
 	}
 	
 	private static CharacterRange[] getAlphabet(State startState, Multimap<CharacterRange, CharacterRange> rangeMap) {

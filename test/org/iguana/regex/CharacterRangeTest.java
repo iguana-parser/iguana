@@ -39,6 +39,8 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimap;
 
+import static org.iguana.util.CharacterRanges.*;
+
 public class CharacterRangeTest {
 	
 	@Test
@@ -62,7 +64,7 @@ public class CharacterRangeTest {
 		// 1-5 3-7
 		CharacterRange r1 = CharacterRange.in(1, 5);
 		CharacterRange r2 = CharacterRange.in(3, 7);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2);
+		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2);
 		
 		// 1-2 3-5 6-7
 		CharacterRange t1 = CharacterRange.in(1, 2);
@@ -81,7 +83,7 @@ public class CharacterRangeTest {
 		CharacterRange r4 = CharacterRange.in(17, 21);
 		CharacterRange r1 = CharacterRange.in(1, 7);
 		CharacterRange r3 = CharacterRange.in(6, 12);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3, r4);
+		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2, r3, r4);
 		
 		// 1-4 5-5 6-7 8-12 13-13 17-21
 		CharacterRange t1 = CharacterRange.in(1, 4);
@@ -106,7 +108,7 @@ public class CharacterRangeTest {
 		CharacterRange r1 = CharacterRange.in(1, 7);
 		CharacterRange r2 = CharacterRange.in(3, 5);
 		CharacterRange r3 = CharacterRange.in(4, 4);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3);
+		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2, r3);
 		
 		// 1-2 3-3 4-4 5-5 6-7
 		CharacterRange t1 = CharacterRange.in(1, 2);
@@ -128,7 +130,7 @@ public class CharacterRangeTest {
 		CharacterRange r1 = CharacterRange.in(11, 12);
 		CharacterRange r2 = CharacterRange.in(1, 3);
 		CharacterRange r3 = CharacterRange.in(5, 7);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3);
+		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2, r3);
 		
 		// 1-3 5-7 11-12
 		CharacterRange t1 = CharacterRange.in(1, 3);
@@ -152,7 +154,7 @@ public class CharacterRangeTest {
 		CharacterRange r4 = CharacterRange.in(1, 12);
 		CharacterRange r5 = CharacterRange.in(3, 6);
 		CharacterRange r6 = CharacterRange.in(1, 2);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = CharacterRange.toNonOverlapping(r1, r2, r3, r4, r5, r6);
+		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2, r3, r4, r5, r6);
 		
 		// 1-2 3-3 4-6 7-9 10-10 11-11 12-12
 		CharacterRange t1 = CharacterRange.in(1, 2);

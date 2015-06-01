@@ -37,7 +37,6 @@ import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.EOF;
 import org.iguana.grammar.symbol.Epsilon;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Position;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
@@ -56,11 +55,11 @@ public class FirstFollowSets {
 	
 	private final ListMultimap<Nonterminal, Rule> definitions;
 
-	private final SetMultimap<Nonterminal, RegularExpression> firstSets;
+	private final SetMultimap<Nonterminal, CharacterRange> firstSets;
 	
-	private final SetMultimap<Nonterminal, RegularExpression> followSets;
+	private final SetMultimap<Nonterminal, CharacterRange> followSets;
 	
-	private final SetMultimap<Position, RegularExpression> predictionSets;
+	private final SetMultimap<Tuple<Rule, Integer>, CharacterRange> predictionSets;
 
 	private final Set<Nonterminal> nullableNonterminals;
 	
@@ -76,11 +75,11 @@ public class FirstFollowSets {
 		calcualtePredictionSets();
 	}
 	
-	public SetMultimap<Nonterminal, RegularExpression> getFirstSets() {
+	public SetMultimap<Nonterminal, CharacterRange> getFirstSets() {
 		return firstSets;
 	}
 	
-	public SetMultimap<Nonterminal, RegularExpression> getFollowSets() {
+	public SetMultimap<Nonterminal, CharacterRange> getFollowSets() {
 		return followSets;
 	}
 	
@@ -95,7 +94,7 @@ public class FirstFollowSets {
 			changed = false;
 			
 			for (Nonterminal head : nonterminals) {
-				Set<RegularExpression> firstSet = firstSets.get(head);
+				Set<CharacterRange> firstSet = firstSets.get(head);
 				for (Rule alternate : definitions.get(head)) {
 					changed |= addFirstSet(head, firstSet, alternate.getBody(), 0);
 				}
@@ -112,7 +111,7 @@ public class FirstFollowSets {
 	 * 
 	 * @return true if adding any new terminals are added to the first set.
 	 */
-	private boolean addFirstSet(Nonterminal head, Set<RegularExpression> firstSet, List<Symbol> alternate, int index) {
+	private boolean addFirstSet(Nonterminal head, Set<CharacterRange> firstSet, List<Symbol> alternate, int index) {
 
 		boolean changed = false;
 		
@@ -123,7 +122,7 @@ public class FirstFollowSets {
 		//TODO: check if it is allowed or is it a good idea to enforce the instantiation of Epsilon.
 		if (alternate.size() == 0) {
 			nullableNonterminals.add(head);
-			return firstSet.add(Epsilon.getInstance());
+			return firstSet.addAll(Epsilon.getInstance().getFirstSet());
 		}
 		
 		for(int i = index; i < alternate.size(); i++) {
@@ -131,7 +130,7 @@ public class FirstFollowSets {
 
 			if (symbol instanceof RegularExpression) {
 				RegularExpression regularExpression = (RegularExpression) symbol;
-				changed |= firstSet.add(regularExpression);
+				changed |= firstSet.addAll(regularExpression.getFirstSet());
 				if (!regularExpression.isNullable()) {
 					break;
 				}
@@ -141,7 +140,7 @@ public class FirstFollowSets {
 			else if (symbol instanceof Nonterminal) {
 				Nonterminal nonterminal = (Nonterminal) symbol;
 				
-				Set<RegularExpression> set = new HashSet<>(firstSets.get(nonterminal));
+				Set<CharacterRange> set = new HashSet<>(firstSets.get(nonterminal));
 				set.remove(Epsilon.getInstance());
 				changed |= firstSet.addAll(set);
 				if (!isNullable(nonterminal)) {
@@ -152,7 +151,7 @@ public class FirstFollowSets {
 		
 		if (isChainNullable(alternate, 0)) {
 			nullableNonterminals.add(head);
-			changed |= firstSet.add(Epsilon.getInstance());
+			changed |= firstSet.addAll(Epsilon.getInstance().getFirstSet());
 		}
 		
 		return changed;
@@ -221,7 +220,7 @@ public class FirstFollowSets {
 							// For rules of the form X ::= alpha B beta, add the
 							// first set of beta to
 							// the follow set of B.
-							Set<RegularExpression> followSet = followSets.get(nonterminal);
+							Set<CharacterRange> followSet = followSets.get(nonterminal);
 							changed |= addFirstSet(nonterminal, followSet, alternative, i + 1);
 
 							// If beta is nullable, then add the follow set of X
@@ -242,7 +241,7 @@ public class FirstFollowSets {
 
 			// Add the EOF to all nonterminals as each nonterminal can be used
 			// as the start symbol.
-			followSets.get(head).add(EOF.getInstance());
+			followSets.get(head).addAll(EOF.getInstance().getFirstSet());
 		}
 	}
 	
@@ -253,18 +252,16 @@ public class FirstFollowSets {
 			
 			for (Rule rule : rules) {
 				for (int i = 0; i <= rule.size(); i++) {
-					calculatePredictionSet(rule.getPosition(i));
+					calculatePredictionSet(rule, i);
 				}
 			}
 		}
 	}
 	
 	
-	private void calculatePredictionSet(Position position) {
+	private void calculatePredictionSet(Rule rule, int index) {
 		
-		Rule rule = position.getRule();
-		int index = position.getPosition();
-		
+		Tuple<Rule, Integer> position = Tuple.of(rule, index);
 		List<Symbol> alternate = rule.getBody();
 		
 		if (alternate == null)
@@ -284,7 +281,7 @@ public class FirstFollowSets {
 			} 
 			else if (symbol instanceof RegularExpression) {
 				RegularExpression regex = (RegularExpression) symbol;
-				predictionSets.put(position, regex);
+				predictionSets.putAll(position, regex.getFirstSet());
 				if(!regex.isNullable()) {
 					break;
 				}
