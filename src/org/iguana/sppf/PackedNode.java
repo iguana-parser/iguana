@@ -27,7 +27,7 @@
 
 package org.iguana.sppf;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.iguana.grammar.slot.GrammarSlot;
@@ -44,17 +44,15 @@ public class PackedNode implements SPPFNode {
 	
 	private final GrammarSlot slot;
 
-	private final int pivot;
-
 	private final NonPackedNode parent;
 	
-	private final List<NonPackedNode> children;
+	private NonPackedNode leftChild;
+	
+	private NonPackedNode rightChild;
 	
 	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
 		this.slot = slot;
-		this.pivot = pivot;
 		this.parent = parent;
-		this.children = new ArrayList<>();
 	}
 			
 	@Override
@@ -68,17 +66,16 @@ public class PackedNode implements SPPFNode {
 		PackedNode other = (PackedNode) obj;
 		
 		return  slot == other.slot && 
-				pivot == other.pivot &&
 				parent.equals(other.parent);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.getId(), pivot, parent.hashCode());
+		return HashFunctions.defaulFunction.hash(slot.getId(), parent.hashCode());
 	}
 	
 	public int getPivot() {
-		return pivot;
+		return leftChild.rightExtent;
 	}
 
 	@Override
@@ -91,11 +88,12 @@ public class PackedNode implements SPPFNode {
 	}
 	
 	public void addChild(NonPackedNode node) {
-		children.add(node);
-	}
-
-	public void removeChild(SPPFNode node) {
-		children.remove(node);
+		if (leftChild == null)
+			leftChild = node;
+		else if (rightChild == null)
+			rightChild = node;
+		else 
+			throw new RuntimeException();
 	}
 
 	@Override
@@ -109,21 +107,29 @@ public class PackedNode implements SPPFNode {
 	}
 
 	@Override
-	public SPPFNode getChildAt(int index) {
-		if(children.size() > index) {
-			return children.get(index);
-		}
-		return null;
+	public NonPackedNode getChildAt(int index) {
+		if (index == 0)
+			return leftChild;
+		else if (index == 1)
+			return rightChild;
+		else 
+			throw new RuntimeException("index should be only 0 or 1.");
 	}
 
 	@Override
 	public int childrenCount() {
-		return children.size();
+		if (rightChild == null)
+			return 1;
+		else 
+			return 2;
 	}
 
 	@Override
 	public List<NonPackedNode> getChildren() {
-		return children;
+		if (rightChild == null)
+			return Arrays.asList(leftChild);
+		else 
+			return Arrays.asList(leftChild, rightChild);
 	}
 
 	@Override

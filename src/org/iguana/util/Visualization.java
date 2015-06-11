@@ -41,47 +41,23 @@ import org.iguana.util.visualization.GrammarGraphToDot;
 import org.iguana.util.visualization.GraphVizUtil;
 import org.iguana.util.visualization.RangeTreeToDot;
 import org.iguana.util.visualization.SPPFToDot;
-import org.iguana.util.visualization.SPPFToDotUnpacked;
-import org.iguana.util.visualization.ToDotWithoutIntermediateNodes;
-import org.iguana.util.visualization.ToDotWithoutIntermeidateAndLists;
 import org.iguana.util.visualization.TrieToDot;
 
 
 public class Visualization {
-	
-	public static void generateSPPFGraphWithoutIntermeiateNodes(String outputDir, SPPFNode sppf, Input input) {
-		SPPFToDot toDot = new ToDotWithoutIntermediateNodes(input);
-		sppf.accept(toDot);
-		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
-	}
-	
+		
 	public static void generateSPPFGraph(String outputDir, SPPFNode sppf, Input input) {
 		SPPFToDot toDot = new SPPFToDot(input);
 		sppf.accept(toDot);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
 	}
-	
-	public static void generateSPPFWithNonterminalNodesOnly(String outputDir, SPPFNode sppf, Input input) {
-		SPPFToDot toDot = new ToDotWithoutIntermeidateAndLists(input);
-		sppf.accept(toDot);
-		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
-	}
-	
+		
 	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> gssNodes) {
 		GSSToDot toDot = new GSSToDot();
 		toDot.execute(gssNodes);
 		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "gss");
 	}
-	
-	public static void generateSPPFNodesUnPacked(String outputDir, SPPFNode node, Input input) {
-		SPPFToDotUnpacked toDot = new SPPFToDotUnpacked(input);
-		toDot.visit(node);
-		int i = 0;
-		for(String s : toDot.getResult()) {
-			GraphVizUtil.generateGraph(s, outputDir, "sppf-" + ++i);
-		}
-	}
-	
+		
 	public static void generateAutomatonGraph(String outputDir, Automaton automaton) {
 		generateAutomatonGraph(outputDir, automaton.getStartState());
 	}
