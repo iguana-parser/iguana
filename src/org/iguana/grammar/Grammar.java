@@ -41,8 +41,10 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -72,7 +74,7 @@ public class Grammar implements ConstructorCode, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final ListMultimap<Nonterminal, Rule> definitions;
+	private final Map<Nonterminal, List<Rule>> definitions;
 	
 	private final List<PrecedencePattern> precedencePatterns;
 	
@@ -87,7 +89,7 @@ public class Grammar implements ConstructorCode, Serializable {
 		this.layout = builder.layout;
 	}
 	
-	public ListMultimap<Nonterminal, Rule> getDefinitions() {
+	public Map<Nonterminal, List<Rule>> getDefinitions() {
 		return definitions;
 	}
 	
@@ -100,7 +102,9 @@ public class Grammar implements ConstructorCode, Serializable {
 	}
 	
 	public List<Rule> getRules() {
-		return new ArrayList<>(definitions.values());
+		List<Rule> rules = new ArrayList<>();
+		definitions.values().forEach(rules::addAll);
+		return rules;
 	}
 	
 	public int sizeRules() {
@@ -127,21 +131,24 @@ public class Grammar implements ConstructorCode, Serializable {
 		return new GrammarGraph(this, input, config);
 	}
 	
-	private static Set<RuntimeException> validate(ListMultimap<Nonterminal, Rule> definitions) {
+	private static Set<RuntimeException> validate(Map<Nonterminal, List<Rule>> definitions) {
 		
 		Set<RuntimeException> validationExceptions = new HashSet<>();
 		
-		for (Rule rule : definitions.values()) {
-			if (rule.getBody() == null) continue; // Rewritten priority alternatives
-			for (Symbol s : rule.getBody()) {
-				if (s instanceof Nonterminal) {
-					if (!definitions.containsKey(s)) {
-						validationExceptions.add(new NonterminalNotDefinedException((Nonterminal) s));
-					}						
-				}
-			}
-		}
+		definitions.values().stream().flatMap(l -> l.stream().filter(r -> r.getBody() != null));
 		
+		definitions.values().forEach(l -> l.forEach(
+				rule -> {
+					if (rule.getBody() == null) continue; // Rewritten priority alternatives
+					for (Symbol s : rule.getBody()) {
+						if (s instanceof Nonterminal) {
+							if (!definitions.containsKey(s)) {
+								validationExceptions.add(new NonterminalNotDefinedException((Nonterminal) s));
+							}						
+						}
+					}
+				}
+				));		
 		return validationExceptions;
 	}
 	
@@ -204,7 +211,7 @@ public class Grammar implements ConstructorCode, Serializable {
  	
 	public static class Builder {
 		
-		private final ListMultimap<Nonterminal, Rule> definitions = ArrayListMultimap.create();
+		private final Map<Nonterminal, List<Rule>> definitions = new HashMap<>();
 		private final List<PrecedencePattern> precedencePatterns = new ArrayList<>();
 		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
 		private Nonterminal layout;
@@ -304,16 +311,20 @@ public class Grammar implements ConstructorCode, Serializable {
 	 * 
 	 */
 	public int size() {
-		return  definitions.size() +
-				(int) definitions.values().stream().filter(r -> r.getBody() != null).flatMap(r -> r.getBody().stream()).filter(s -> s instanceof RegularExpression).count() +
-				definitions.values().stream().map(r -> r.size() + 1).reduce(0, (a, b) -> a + b);
+		int heads = definitions.size();
+		int bodySymbols = definitions.values().stream()
+											  .flatMap(l -> l.stream())
+											  .filter(r -> r.getBody() != null)
+											  .mapToInt(r -> r.size())
+											  .sum();
+		return heads + bodySymbols;
 	}
 
 	@Override
 	public String getConstructorCode() {
 		return "Grammar.builder()\n" +
 			   (layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
-			   rulesToString(definitions.values()) + "\n.build()";
+			   definitions.values().stream().map(l -> rulesToString(l)) + "\n.build()";
 	}
 	
 	private static String rulesToString(Iterable<Rule> rules) {

@@ -53,7 +53,7 @@ import com.google.common.collect.SetMultimap;
  */
 public class FirstFollowSets {
 	
-	private final ListMultimap<Nonterminal, Rule> definitions;
+	private final Map<Nonterminal, List<Rule>> definitions;
 
 	private final SetMultimap<Nonterminal, CharacterRange> firstSets;
 	
@@ -257,7 +257,6 @@ public class FirstFollowSets {
 			}
 		}
 	}
-	
 	
 	private void calculatePredictionSet(Rule rule, int index) {
 		
