@@ -29,7 +29,9 @@ package org.iguana.grammar.operations;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Align;
@@ -57,13 +59,12 @@ import org.iguana.regex.Star;
 import org.iguana.traversal.ISymbolVisitor;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 
 public class ReachabilityGraph {
 
-	private final ListMultimap<Nonterminal, Rule> definitions;
+	private final Map<Nonterminal, List<Rule>> definitions;
 	
 	private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
 	
@@ -78,9 +79,10 @@ public class ReachabilityGraph {
 		if (grammar.getLayout() != null)
 			layouts.add(grammar.getLayout().getName());
 		
-		for (Rule rule : grammar.getDefinitions().values())
-			if (rule.getLayout() != null)
-				layouts.add(rule.getLayout().getName());
+		layouts.addAll(grammar.getRules().stream()
+						                 .filter(r -> r.getLayout() != null)
+                                         .map(r -> r.getLayout().getName())
+						                 .collect(Collectors.toSet()));
 		
 		calculateReachabilityGraph();
 	}

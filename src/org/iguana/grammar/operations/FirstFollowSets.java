@@ -43,7 +43,6 @@ import org.iguana.regex.RegularExpression;
 import org.iguana.util.Tuple;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ListMultimap;
 import com.google.common.collect.SetMultimap;
 
 /**

@@ -92,7 +92,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			Set<Rule> rules = new LinkedHashSet<>();
 			
-			for (Rule rule : grammar.getDefinitions().values())
+			for (Rule rule : grammar.getRules())
 				rules.add(desugarAligns.transform(rule, grammar.getLayout()));
 			
 			return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
@@ -114,7 +114,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		
 		Set<Rule> rules = new LinkedHashSet<>();
 		
-		for (Rule rule : grammar.getDefinitions().values())
+		for (Rule rule : grammar.getRules())
 			rules.add(desugarOffsides.transform(rule, grammar.getLayout()));
 		
 		return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
@@ -612,7 +612,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		
 		public void find(Grammar grammar) {
 			
-			for (Rule rule : grammar.getDefinitions().values()) {
+			for (Rule rule : grammar.getRules()) {
 				if (rule.getBody() == null)
 					continue;
 				

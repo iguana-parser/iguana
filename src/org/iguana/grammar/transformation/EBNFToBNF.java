@@ -78,7 +78,7 @@ public class EBNFToBNF implements GrammarTransformation {
 	@Override
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
-		grammar.getDefinitions().values().forEach(r -> newRules.addAll(transform(r)));
+		grammar.getRules().forEach(r -> newRules.addAll(transform(r)));
 		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
 	}
 	

@@ -83,7 +83,7 @@ public class OperatorPrecedence {
 	
 	public Grammar transform(Grammar grammar) {
 		
-		Map<Nonterminal, List<Rule>> l = grammar.getDefinitions().values().stream().collect(Collectors.groupingBy(x -> x.getHead()));
+		Map<Nonterminal, List<Rule>> l = grammar.getDefinitions();
 		
 		this.definitions = new HashMap<>();
 		for (Entry<Nonterminal, List<Rule>> e : l.entrySet()) {
