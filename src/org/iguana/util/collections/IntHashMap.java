@@ -2,8 +2,9 @@ package org.iguana.util.collections;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Set;
  * @author Ali Afroozeh
  *
  */
-public class IntHashSet implements Set<Integer>, Serializable {
+public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -38,26 +39,19 @@ public class IntHashSet implements Set<Integer>, Serializable {
 	 */
 	private int bitMask;
 	
-	private int[] table;
+	private int[] keys;
+	private T[] values;
 	
- 	@SafeVarargs
-	public static IntHashSet from(int...elements) {
- 		IntHashSet set = new IntHashSet();
-		for(int e : elements) {
-			set.add(e);
-		}
-		return set;
-	}
-
-	public IntHashSet() {
+	public IntHashMap() {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
 	}
 	
-	public IntHashSet(int initalCapacity) {
+	public IntHashMap(int initalCapacity) {
 		this(initalCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
-	public IntHashSet(int initialCapacity, float loadFactor) {
+	@SuppressWarnings("unchecked")
+	public IntHashMap(int initialCapacity, float loadFactor) {
 		
 		this.initialCapacity = initialCapacity;
 		
@@ -71,33 +65,33 @@ public class IntHashSet implements Set<Integer>, Serializable {
 		bitMask = capacity - 1;
 		
 		threshold = (int) (loadFactor * capacity);
-		table = new int[capacity];
+		keys = new int[capacity];
+		values = (T[]) new Object[capacity];
 		
-		for(int i = 0; i < table.length; i++) {
-			table[i] = -1;
-		}
+		Arrays.fill(keys, -1);
 	}
 	
-	public boolean contains(int key) {
-		return get(key) != -1;
+	public boolean containsKey(int key) {
+		return get(key) != null;
 	}
 	
-	public int add(int key) {
+	public T put(int key, T value) {
 		
 		int index = hash(key);
 
 		do {
-			if(table[index] == -1) {
-				table[index] = key;
+			if(keys[index] == -1) {
+				keys[index] = key;
+				values[index] = value;
 				size++;
 				if (size >= threshold) {
 					rehash();
 				}
-				return -1;
+				return null;
 			}
 			
-			else if(table[index] == key) {
-				return table[index];
+			else if(keys[index] == key) {
+				return values[index];
 			}
 			
 			collisionsCount++;
@@ -113,17 +107,24 @@ public class IntHashSet implements Set<Integer>, Serializable {
 		
 		bitMask = capacity - 1;
 		
-		int[] newTable = new int[capacity];
+		int[] newKeys = new int[capacity];
+		Arrays.fill(newKeys, -1);
+		@SuppressWarnings("unchecked")
+		T[] newValues = (T[]) new Object[capacity];
 		
 		label:
-		for(int key : table) {
+	    for(int i = 0; i < keys.length; i++) {
+	    	int key = keys[i];
+	    	T value = values[i];
+	    	
 			if(key != -1) {
 				
 				int index = hash(key);
 
 				do {
-					if(newTable[index] == -1) {
-						newTable[index] = key;
+					if(newKeys[index] == -1) {
+						newKeys[index] = key;
+						newValues[index] = value;
 						continue label;
 					}
 					
@@ -131,9 +132,10 @@ public class IntHashSet implements Set<Integer>, Serializable {
 					
 				} while(true);
 			}
-		}
+	    }
 		
-		table = newTable;
+		keys = newKeys;
+		values = newValues;
 		
 		threshold = (int) (loadFactor * capacity);
 		rehashCount++;
@@ -143,15 +145,15 @@ public class IntHashSet implements Set<Integer>, Serializable {
 		return key * 31 & bitMask;
 	}
 
-	public int get(int key) {
+	public T get(int key) {
 		
 		int index = hash(key);
 		
-		while(table[index] != key) {			
+		while(keys[index] != key) {			
 			index = (index + 1) & bitMask;
 		}
 		
-		return table[index];
+		return values[index];
 	}
 
 	public int size() {
@@ -175,11 +177,19 @@ public class IntHashSet implements Set<Integer>, Serializable {
 	}
 
 	public void clear() {
-		for(int i = 0; i < table.length; i++) {
-			table[i] = -1;
-		}
+		Arrays.fill(values, -1);
+		Arrays.fill(values, null);
 		size = 0;
 	}
+
+//	public boolean addAll(IntHashMap set) {
+//		boolean added = false;
+//		IntIterator it = set.iterator();
+//		while(it.hasNext()) {
+//			added = add(it.next()) == -1;
+//		}
+//		return added;
+//	}
 	
 	public int getCollisionCount() {
 		return collisionsCount++;
@@ -190,7 +200,7 @@ public class IntHashSet implements Set<Integer>, Serializable {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		
-		for(int t : table) {
+		for(int t : keys) {
 			if(t != -1) { 
 				sb.append(t).append(", ");
 			}
@@ -205,52 +215,47 @@ public class IntHashSet implements Set<Integer>, Serializable {
 	}
 
 	@Override
-	public boolean contains(Object o) {
-		return contains((int) o);
+	public boolean containsKey(Object key) {
+		return containsKey((int) key);
 	}
 
 	@Override
-	public Iterator<Integer> iterator() {
+	public boolean containsValue(Object value) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object[] toArray() {
+	public T get(Object key) {
+		return get((int)key);
+	}
+
+	@Override
+	public T put(Integer key, T value) {
+		return put((int)key, value);
+	}
+
+	@Override
+	public T remove(Object key) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public void putAll(Map<? extends Integer, ? extends T> m) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean add(Integer e) {
-		return add((int) e) != -1;
-	}
-
-	@Override
-	public boolean remove(Object o) {
+	public Set<Integer> keySet() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c) {
+	public Collection<T> values() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends Integer> c) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
+	public Set<java.util.Map.Entry<Integer, T>> entrySet() {
 		throw new UnsupportedOperationException();
 	}
 	
