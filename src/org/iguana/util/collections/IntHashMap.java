@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * 
@@ -16,8 +18,8 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int DEFAULT_INITIAL_CAPACITY = 64;
-	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
+	private static final int DEFAULT_INITIAL_CAPACITY = 16;
+	private static final float DEFAULT_LOAD_FACTOR = 0.6f;
 	
 	private int initialCapacity;
 	
@@ -40,6 +42,7 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 	private int bitMask;
 	
 	private int[] keys;
+	
 	private T[] values;
 	
 	public IntHashMap() {
@@ -75,19 +78,27 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 		return get(key) != null;
 	}
 	
+	public T putIfAbsent(int key, T value) {
+		T val = get(key);
+		if (val == null)
+			return put(key, value);
+		
+		return val;
+	}
+	
 	public T put(int key, T value) {
 		
 		int index = hash(key);
 
 		do {
 			if(keys[index] == -1) {
-				keys[index] = key;
-				values[index] = value;
-				size++;
-				if (size >= threshold) {
-					rehash();
-				}
-				return null;
+			   keys[index] = key;
+			   values[index] = value;
+			   size++;
+			   if (size >= threshold) {
+				  rehash();
+			   }
+			   return null;
 			}
 			
 			else if(keys[index] == key) {
@@ -99,6 +110,14 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 			index = (index + 1) & bitMask;
 			
 		} while(true);
+	}
+	
+	public T remove(int key) {
+		int index = hash(key);
+		T v = values[index];
+		values[index] = null;
+		keys[index] = -1;
+		return v;
 	}
 	
 	private void rehash() {
@@ -142,18 +161,11 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 	}
 	
 	private int hash(int key) {
-		return key * 31 & bitMask;
+		return key & bitMask;
 	}
 
 	public T get(int key) {
-		
-		int index = hash(key);
-		
-		while(keys[index] != key) {			
-			index = (index + 1) & bitMask;
-		}
-		
-		return values[index];
+		return values[hash(key)];
 	}
 
 	public int size() {
@@ -221,7 +233,7 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 
 	@Override
 	public boolean containsValue(Object value) {
-		throw new UnsupportedOperationException();
+		return values().contains(value);
 	}
 
 	@Override
@@ -236,27 +248,47 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 
 	@Override
 	public T remove(Object key) {
-		throw new UnsupportedOperationException();
+		return remove((int) key);
 	}
 
 	@Override
 	public void putAll(Map<? extends Integer, ? extends T> m) {
-		throw new UnsupportedOperationException();
+		m.entrySet().forEach(e -> put(e.getKey(), e.getValue()));
 	}
 
 	@Override
 	public Set<Integer> keySet() {
-		throw new UnsupportedOperationException();
+		return Arrays.stream(keys).filter(i -> i != -1).boxed().collect(Collectors.toSet());
 	}
 
 	@Override
 	public Collection<T> values() {
-		throw new UnsupportedOperationException();
+		return Arrays.stream(values).filter(v -> v != null).collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<java.util.Map.Entry<Integer, T>> entrySet() {
-		throw new UnsupportedOperationException();
+		return IntStream.range(0, size)
+				        .filter(i -> keys[i] != -1)
+				        .mapToObj(i -> new IntMapEntry<>(keys[i], values[i]))
+				        .collect(Collectors.toSet());
 	}
 	
+	
+	private static class IntMapEntry<V> implements java.util.Map.Entry<Integer, V> {
+
+		private final int k;
+		private final V v;
+		
+		public IntMapEntry(int k, V v) { this.k = k; this.v = v; }
+		
+		@Override
+		public Integer getKey() { return k; }
+
+		@Override
+		public V getValue() { return v; }
+
+		@Override
+		public V setValue(V value) { return v; }
+	}
 }

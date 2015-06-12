@@ -2,9 +2,16 @@ package org.iguana.util.collections;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * 
@@ -144,14 +151,7 @@ public class IntHashSet implements Set<Integer>, Serializable {
 	}
 
 	public int get(int key) {
-		
-		int index = hash(key);
-		
-		while(table[index] != key) {			
-			index = (index + 1) & bitMask;
-		}
-		
-		return table[index];
+		return table[hash(key)];
 	}
 
 	public int size() {
@@ -211,12 +211,12 @@ public class IntHashSet implements Set<Integer>, Serializable {
 
 	@Override
 	public Iterator<Integer> iterator() {
-		throw new UnsupportedOperationException();
+		return Arrays.stream(table).boxed().iterator();
 	}
 
 	@Override
 	public Object[] toArray() {
-		throw new UnsupportedOperationException();
+		return stream().collect(Collectors.toList()).toArray();
 	}
 
 	@Override
@@ -231,7 +231,9 @@ public class IntHashSet implements Set<Integer>, Serializable {
 
 	@Override
 	public boolean remove(Object o) {
-		throw new UnsupportedOperationException();
+		int v = table[hash((int)o)];
+		table[hash((int)o)] = -1;  
+		return v != -1;
 	}
 
 	@Override
