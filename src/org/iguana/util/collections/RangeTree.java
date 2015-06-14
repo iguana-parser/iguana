@@ -82,10 +82,10 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	}
 	
 	public void insert(CharacterRange range, T val) {
-		insert(range, val, root, new Node<T>(range.getStart(), range.getEnd(), val));
+		insert(range, root, new Node<T>(range.getStart(), range.getEnd(), val));
 	}
 	
-	private void insert(CharacterRange range, T val, Node<T> parent, Node<T> newNode) {		
+	private void insert(CharacterRange range, Node<T> parent, Node<T> newNode) {		
 		
 		if (root == null) {
 			root = newNode;
@@ -100,7 +100,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 				if (parent.parent != null) 
 					balance(parent.parent, parent);
 			} else {
-				insert(range, val, parent.left, newNode);
+				insert(range, parent.left, newNode);
 			}
 		} 
 		else if (range.getEnd() > parent.end) {
@@ -110,7 +110,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 				if (parent.parent != null)
 					balance(parent.parent, parent);
 			} else {
-				insert(range, val, parent.right, newNode);					
+				insert(range, parent.right, newNode);					
 			}
 		}
 	}

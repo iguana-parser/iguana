@@ -77,12 +77,16 @@ public class FirstFollowSets {
 		calcualtePredictionSets();
 	}
 	
-	public Map<Nonterminal, Set<CharacterRange>> getFirstSets() {
-		return firstSets;
+	public Set<CharacterRange> getFirstSet(Nonterminal nonterminal) {
+		return firstSets.get(nonterminal);
 	}
 	
-	public Map<Nonterminal, Set<CharacterRange>> getFollowSets() {
-		return followSets;
+	public Set<CharacterRange> getFollowSets(Nonterminal nonterminal) {
+		return followSets.get(nonterminal);
+	}
+	
+	public Set<CharacterRange> getPredictionSet(Rule rule, int index) {
+		return predictionSets.get(Tuple.of(rule, index));
 	}
 	
 	private void calculateFirstSets() {

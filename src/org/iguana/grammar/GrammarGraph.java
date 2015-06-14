@@ -63,6 +63,7 @@ import org.iguana.grammar.slot.TerminalTransition;
 import org.iguana.grammar.slot.EpsilonTransition.Type;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Block;
+import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Conditional;
 import org.iguana.grammar.symbol.Epsilon;
@@ -182,13 +183,26 @@ public class GrammarGraph implements Serializable {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
 		rules.forEach(r -> addRule(nonterminalSlot, r));
-		nonterminalSlot.setLookAheadTest(getLookAheadTest(nonterminal));
+		nonterminalSlot.setLookAheadTest(getLookAheadTest(nonterminal, nonterminalSlot));
 	}
 
-	private LookAheadTest getLookAheadTest(Nonterminal nonterminal) {
-		RangeTree<List<BodyGrammarSlot>> alternatives = new RangeTree<>();
+	private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
+		RangeTree<List<BodyGrammarSlot>> rangeTree = new RangeTree<>();
 		
-		return i -> alternatives.get(i);
+		Map<CharacterRange, List<BodyGrammarSlot>> map = new HashMap<>();
+		
+		List<Rule> alternatives = grammar.getAlternatives(nonterminal);
+		
+		for (int i = 0; i < alternatives.size(); i++) {
+			Rule rule = alternatives.get(i);
+			BodyGrammarSlot firstSlot = nonterminalSlot.getFirstSlots().get(i);
+			Set<CharacterRange> set = firstFollow.getPredictionSet(rule, 0);
+			set.forEach(cr -> map.computeIfAbsent(cr, k -> new ArrayList<>()).add(firstSlot));			
+		}
+		
+		map.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue()));
+		
+		return i -> rangeTree.get(i);
 	}
 	
 	private void addRule(NonterminalGrammarSlot head, Rule rule) {

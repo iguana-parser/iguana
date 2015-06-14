@@ -8,7 +8,7 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 public interface LookAheadTest {
 	
 	default boolean test(int v) {
-		return !get(v).isEmpty();
+		return get(v) != null && !get(v).isEmpty();
 	}
 	
 	/**
