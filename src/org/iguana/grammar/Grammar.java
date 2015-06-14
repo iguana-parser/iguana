@@ -202,13 +202,14 @@ public class Grammar implements ConstructorCode, Serializable {
 		private Nonterminal layout;
 		
 		public Grammar build() {
+			rules = definitions.values().stream().flatMap(l -> l.stream()).collect(Collectors.toList());
+			
 			Set<RuntimeException> exceptions = validate(rules, definitions);
 			
 			if (!exceptions.isEmpty()) {
 				throw new GrammarValidationException(exceptions);
 			}
 			
-			rules = definitions.values().stream().flatMap(l -> l.stream()).collect(Collectors.toList());
 			return new Grammar(this);
 		}
 		

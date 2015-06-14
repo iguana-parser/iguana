@@ -27,6 +27,7 @@
 
 package org.iguana.grammar.operations;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -54,9 +55,9 @@ public class FirstFollowSets {
 	
 	private final Map<Nonterminal, List<Rule>> definitions;
 
-	private final SetMultimap<Nonterminal, CharacterRange> firstSets;
+	private final Map<Nonterminal, Set<CharacterRange>> firstSets;
 	
-	private final SetMultimap<Nonterminal, CharacterRange> followSets;
+	private final Map<Nonterminal, Set<CharacterRange>> followSets;
 	
 	private final SetMultimap<Tuple<Rule, Integer>, CharacterRange> predictionSets;
 
@@ -64,21 +65,23 @@ public class FirstFollowSets {
 	
 	public FirstFollowSets(Grammar grammar) {
 		this.definitions = grammar.getDefinitions();
-		this.firstSets = HashMultimap.create();
+		this.firstSets = new HashMap<>();
 		this.nullableNonterminals = new HashSet<>();
-		this.followSets = HashMultimap.create();
+		this.followSets = new HashMap<>();
 		this.predictionSets = HashMultimap.create();
+		
+		definitions.keySet().forEach(k -> { firstSets.put(k, new HashSet<>()); followSets.put(k, new HashSet<>()); });
 		
 		calculateFirstSets();
 		calculateFollowSets();
 		calcualtePredictionSets();
 	}
 	
-	public SetMultimap<Nonterminal, CharacterRange> getFirstSets() {
+	public Map<Nonterminal, Set<CharacterRange>> getFirstSets() {
 		return firstSets;
 	}
 	
-	public SetMultimap<Nonterminal, CharacterRange> getFollowSets() {
+	public Map<Nonterminal, Set<CharacterRange>> getFollowSets() {
 		return followSets;
 	}
 	
@@ -219,7 +222,7 @@ public class FirstFollowSets {
 							// For rules of the form X ::= alpha B beta, add the
 							// first set of beta to
 							// the follow set of B.
-							Set<CharacterRange> followSet = followSets.get(nonterminal);
+							Set<CharacterRange> followSet =  followSets.get(nonterminal);
 							changed |= addFirstSet(nonterminal, followSet, alternative, i + 1);
 
 							// If beta is nullable, then add the follow set of X
@@ -236,7 +239,7 @@ public class FirstFollowSets {
 		for (Nonterminal head : nonterminals) {
 			// Remove the epsilon which may have been added from nullable
 			// nonterminals
-			followSets.get(head).remove(Epsilon.getInstance());
+			followSets.get(head).removeAll(Epsilon.getInstance().getFirstSet());
 
 			// Add the EOF to all nonterminals as each nonterminal can be used
 			// as the start symbol.
@@ -353,21 +356,6 @@ public class FirstFollowSets {
 //		return ll1SubGrammarNonterminals;
 //	}
 	
-	/**
-	 * Converts a 
-	 * @param set
-	 * @return
-	 */
-	private static Set<Integer> convert(Set<CharacterRange> set) {
-		Set<Integer> integerSet = new HashSet<>();
-		for(CharacterRange range : set) {
-			for(int i = range.getStart(); i < range.getEnd(); i++) {
-				integerSet.add(i);
-			}
-		}
-		return integerSet;
-	}
-	
     private boolean isLL1(Nonterminal nonterminal, Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions) {
     	
     	int size = definitions.get(nonterminal).size();
@@ -391,5 +379,5 @@ public class FirstFollowSets {
 
         return true;
     }
-		
+    		
 }
