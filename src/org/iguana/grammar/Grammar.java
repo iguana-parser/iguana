@@ -130,10 +130,11 @@ public class Grammar implements ConstructorCode, Serializable {
 	
 	private static Set<RuntimeException> validate(List<Rule> rules, Map<Nonterminal, List<Rule>> definitions) {
 		return rules.stream().filter(r -> r.getBody() != null)
-					         .<RuntimeException>flatMap(r -> r.getBody().stream()
+		   .<RuntimeException>flatMap(r -> r.getBody().stream()
 		                                              .filter(s -> !definitions.containsKey(s))
+		                                              .filter(s -> s instanceof Nonterminal)
 		                                              .map(s -> new NonterminalNotDefinedException((Nonterminal)s)))
-						    .collect(Collectors.toSet());		
+						     .collect(Collectors.toSet());		
 	}
 	
 	public Nonterminal getLayout() {
