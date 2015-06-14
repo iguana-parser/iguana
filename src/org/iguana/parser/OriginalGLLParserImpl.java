@@ -52,7 +52,7 @@ import org.iguana.util.Configuration;
  */
 public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	
-	protected final GSSNode u0 = gssLookup.getGSSNode(DummySlot.getInstance(), 0);
+	protected GSSNode u0;
 		
 	public OriginalGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
 		super(config, gssLookup, sppfLookup, descriptorLookup);
@@ -60,6 +60,7 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	
 	@Override
 	protected void initParserState(NonterminalGrammarSlot startSymbol) {
+		u0 = gssLookup.getGSSNode(DummySlot.getInstance(), 0);
 		u0.clearDescriptors();
 		cu = u0;
 		cn = DummyNode.getInstance();
