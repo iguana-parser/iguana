@@ -54,7 +54,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	}
 	
 	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
-		if (set.addPackedNode(packedNode.getGrammarSlot(), packedNode.getPivot())) {
+		if (set.addPackedNode(packedNode.getGrammarSlot(), leftChild.getRightExtent())) {
 			children.add(packedNode);
 			packedNode.addChild(leftChild);
 			packedNode.addChild(rightChild);
@@ -64,7 +64,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	}
 	
 	public boolean addPackedNode(PackedNode packedNode, NonPackedNode child) {
-		if (set.addPackedNode(packedNode.getGrammarSlot(), packedNode.getPivot())) {
+		if (set.addPackedNode(packedNode.getGrammarSlot(), child.getRightExtent())) {
 			children.add(packedNode);
 			packedNode.addChild(child);
 			return true;
