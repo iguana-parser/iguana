@@ -93,11 +93,11 @@ public class Position {
 		} else {
 			int i;
 			if (posInRule == 0 && posInSymbol == 0) {
-				sb.append(" . ");
+				sb.append(". ");
 			}
 			for (i = 0; i < rule.size(); i++) {
 				if (i + 1 == posInRule) {
-					sb.append(rule.symbolAt(i).toString(posInSymbol) + " ");
+					sb.append(rule.symbolAt(i).toString(posInSymbol).trim() + " ");
 				} else {
 					sb.append(rule.symbolAt(i) + " ");
 				}
