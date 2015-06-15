@@ -137,8 +137,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			throw new RuntimeException("No nonterminal named " + nonterminal + " found");
 		}
 		
-		resetParser(startSymbol);
 		grammarGraph.reset(input);
+		resetParser(startSymbol);
 	
 		log.info("Parsing %s:", input.getURI());
 
