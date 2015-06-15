@@ -58,7 +58,6 @@ public class TestOCaml {
 		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		parser.reset();
 		grammarGraph.reset(input);
 		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 		System.out.println(result);

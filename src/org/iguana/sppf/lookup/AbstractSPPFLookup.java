@@ -72,9 +72,9 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 	
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
-		System.out.println("Ambiguous node added: " + node.toString() + " " + input.getNodeInfo(node));
 		log.trace("Ambiguous node added: %s", node);
 		log.warning("Ambiguous node: %s %s", node, input.getNodeInfo(node));
+//		System.out.println("Ambiguous node added: " + node.toString() + " " + input.getNodeInfo(node));
 //		org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", node, input);
 //		for (PackedNode packedNode : node.getChildren()) {
 //			log.warning("   Packed node: " + packedNode.toString());

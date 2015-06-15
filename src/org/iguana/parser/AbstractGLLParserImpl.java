@@ -137,11 +137,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			throw new RuntimeException("No nonterminal named " + nonterminal + " found");
 		}
 		
-		initLookups();
-
-		reset();
+		resetParser(startSymbol);
 		grammarGraph.reset(input);
-		initParserState(startSymbol);
 	
 		log.info("Parsing %s:", input.getURI());
 
@@ -210,8 +207,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 	}
 	
-	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
-	
 	@Override
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
 
@@ -219,7 +214,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		if (gssNode == null) {
 			
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
-			log.trace("GSSNode created: %s",  gssNode);
 			createGSSEdge(returnSlot, u, node, gssNode);
 			
 			final GSSNode __gssNode = gssNode;
@@ -261,11 +255,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 	}
 	
-	protected void initLookups() {
-		sppfLookup.reset();
-		gssLookup.reset();
-	}
-
 	public final void scheduleDescriptor(Descriptor descriptor) {
 		descriptorLookup.scheduleDescriptor(descriptor);
 		log.trace("Descriptor created: %s", descriptor);
@@ -290,12 +279,14 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return input;
 	}
 	
-	@Override
-	public void reset() {
+	private void resetParser(NonterminalGrammarSlot startSymbol) {
 		descriptorsCount = 0;
 		gssLookup.reset();
 		sppfLookup.reset();
+		initParserState(startSymbol);
 	}
+	
+	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
 	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {

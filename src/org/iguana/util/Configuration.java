@@ -149,7 +149,7 @@ public class Configuration {
 			this.gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 			this.sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
 			this.descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;
-			this.lookaheadCount = 1;
+			this.lookaheadCount = 0;
 		}
 		
 		public Configuration build() {

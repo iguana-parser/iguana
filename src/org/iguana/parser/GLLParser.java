@@ -98,9 +98,6 @@ public interface GLLParser {
 	
 	public Iterable<GSSNode> getGSSNodes();
 	
-
-	public void reset();
-
 	public Configuration getConfiguration();
 	
 	/**

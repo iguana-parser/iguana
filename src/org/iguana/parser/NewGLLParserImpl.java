@@ -85,6 +85,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	
 	@Override
 	public final GSSNode createGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
+		log.trace("GSSNode created: (%s, %d)",  nonterminal, i);
 		return gssLookup.getGSSNode(nonterminal, i);
 	}
 	
