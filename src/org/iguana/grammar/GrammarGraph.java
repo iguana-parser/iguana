@@ -190,6 +190,10 @@ public class GrammarGraph implements Serializable {
 	}
 
 	private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
+		
+		if (config.getLookAheadCount() == 0)
+			return LookAheadTest.NO_LOOKAYOUT;
+		
 		RangeTree<List<BodyGrammarSlot>> rangeTree = new RangeTree<>();
 		
 		Map<CharacterRange, List<BodyGrammarSlot>> map = new HashMap<>();
@@ -209,6 +213,10 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	private FollowTest getFollowTest(Nonterminal nonterminal) {
+		
+		if (config.getLookAheadCount() == 0)
+			return FollowTest.NO_FOLLOW;
+		
 		Set<CharacterRange> followSet = firstFollow.getFollowSet(nonterminal);
 		IntRangeTree rangeTree = new IntRangeTree();
 		followSet.forEach(cr -> rangeTree.insert(cr, 1));

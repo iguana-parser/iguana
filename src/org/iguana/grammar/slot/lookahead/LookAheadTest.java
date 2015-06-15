@@ -1,5 +1,6 @@
 package org.iguana.grammar.slot.lookahead;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -17,4 +18,12 @@ public interface LookAheadTest {
 	 */
 	public List<BodyGrammarSlot> get(int v);
 	
+	public static final LookAheadTest NO_LOOKAYOUT = new LookAheadTest() {
+		
+		@Override
+		public boolean test(int v) { return true; };
+		
+		@Override
+		public List<BodyGrammarSlot> get(int v) { return Collections.emptyList(); }
+	};
 }
