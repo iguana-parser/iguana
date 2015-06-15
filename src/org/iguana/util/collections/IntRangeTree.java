@@ -44,7 +44,7 @@ import org.iguana.util.collections.IntRangeTree.IntNode;
  * @author Ali Afroozeh
  *
  */
-public class IntRangeTree implements Iterable<IntNode>{	
+public class IntRangeTree implements Iterable<IntNode> {	
 
 	private IntNode root;
 	
@@ -104,10 +104,10 @@ public class IntRangeTree implements Iterable<IntNode>{
 	}
 	
 	public void insert(CharacterRange range, int val) {
-		insert(range, val, root, new IntNode(range.getStart(), range.getEnd(), val));
+		insert(range, root, new IntNode(range.getStart(), range.getEnd(), val));
 	}
 	
-	private void insert(CharacterRange range, int val, IntNode parent, IntNode newNode) {		
+	private void insert(CharacterRange range, IntNode parent, IntNode newNode) {		
 		
 		if (root == null) {
 			root = newNode;
@@ -122,7 +122,7 @@ public class IntRangeTree implements Iterable<IntNode>{
 				if (parent.parent != null) 
 					balance(parent.parent, parent);
 			} else {
-				insert(range, val, parent.left, newNode);
+				insert(range, parent.left, newNode);
 			}
 		} 
 		else if (range.getEnd() > parent.end) {
@@ -132,7 +132,7 @@ public class IntRangeTree implements Iterable<IntNode>{
 				if (parent.parent != null)
 					balance(parent.parent, parent);
 			} else {
-				insert(range, val, parent.right, newNode);					
+				insert(range, parent.right, newNode);					
 			}
 		}
 	}

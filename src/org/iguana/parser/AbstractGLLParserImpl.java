@@ -193,7 +193,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected void parse(NonterminalGrammarSlot startSymbol) {
 		
-		if(!startSymbol.test(input.charAt(ci))) {
+		if(!startSymbol.testPredict(input.charAt(ci))) {
 			recordParseError(startSymbol);
 			return;
 		}

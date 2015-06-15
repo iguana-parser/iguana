@@ -68,7 +68,7 @@ public class NonterminalTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		
-		if (!nonterminal.test(parser.getInput().charAt(i))) {
+		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 			parser.recordParseError(origin);
 			return;
 		}
@@ -129,7 +129,7 @@ public class NonterminalTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
-		if (!nonterminal.test(parser.getInput().charAt(i))) {
+		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 			parser.recordParseError(origin);
 			return;
 		}

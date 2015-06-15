@@ -61,6 +61,7 @@ import org.iguana.grammar.slot.NonterminalTransition;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalTransition;
 import org.iguana.grammar.slot.EpsilonTransition.Type;
+import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Block;
 import org.iguana.grammar.symbol.CharacterRange;
@@ -84,6 +85,7 @@ import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.Configuration.GSSType;
 import org.iguana.util.Configuration.LookupImpl;
+import org.iguana.util.collections.IntRangeTree;
 import org.iguana.util.collections.RangeTree;
 
 public class GrammarGraph implements Serializable {
@@ -184,6 +186,7 @@ public class GrammarGraph implements Serializable {
 		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
 		rules.forEach(r -> addRule(nonterminalSlot, r));
 		nonterminalSlot.setLookAheadTest(getLookAheadTest(nonterminal, nonterminalSlot));
+		nonterminalSlot.setFollowTest(getFollowTest(nonterminal));
 	}
 
 	private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
@@ -203,6 +206,14 @@ public class GrammarGraph implements Serializable {
 		map.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue()));
 		
 		return i -> rangeTree.get(i);
+	}
+	
+	private FollowTest getFollowTest(Nonterminal nonterminal) {
+		Set<CharacterRange> followSet = firstFollow.getFollowSet(nonterminal);
+		IntRangeTree rangeTree = new IntRangeTree();
+		followSet.forEach(cr -> rangeTree.insert(cr, 1));
+		
+		return i -> rangeTree.get(i) == 1;
 	}
 	
 	private void addRule(NonterminalGrammarSlot head, Rule rule) {

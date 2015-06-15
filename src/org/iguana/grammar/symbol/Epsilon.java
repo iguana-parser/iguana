@@ -44,14 +44,15 @@ public class Epsilon extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Set<CharacterRange> firstSet = ImmutableSet.of(CharacterRange.in(-1, -1));
+	public static int VALUE = -2;
+	
+	private static final Set<CharacterRange> firstSet = ImmutableSet.of(CharacterRange.in(VALUE, VALUE));
 	
 	private static Epsilon instance;
 	
 	public static Epsilon getInstance() {
-		if(instance == null) {
+		if(instance == null)
 			instance = new Epsilon();
-		}
 		
 		return instance;
 	}

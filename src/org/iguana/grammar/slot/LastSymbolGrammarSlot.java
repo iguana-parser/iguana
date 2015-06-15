@@ -63,14 +63,14 @@ public class LastSymbolGrammarSlot extends BodyGrammarSlot {
 	
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		if (nonterminal.test(i)) {
+		if (nonterminal.testPredict(i)) {
 			super.execute(parser, u, i, node);
 		}
 	}
 	
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		if (nonterminal.test(i)) {
+		if (nonterminal.testPredict(i)) {
 			super.execute(parser, u, i, node, env);
 		}
 	}

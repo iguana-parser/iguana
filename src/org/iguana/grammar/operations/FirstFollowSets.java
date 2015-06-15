@@ -59,7 +59,7 @@ public class FirstFollowSets {
 	
 	private final Map<Nonterminal, Set<CharacterRange>> followSets;
 	
-	private final SetMultimap<Tuple<Rule, Integer>, CharacterRange> predictionSets;
+	private final Map<Tuple<Rule, Integer>, Set<CharacterRange>> predictionSets;
 
 	private final Set<Nonterminal> nullableNonterminals;
 	
@@ -68,7 +68,7 @@ public class FirstFollowSets {
 		this.firstSets = new HashMap<>();
 		this.nullableNonterminals = new HashSet<>();
 		this.followSets = new HashMap<>();
-		this.predictionSets = HashMultimap.create();
+		this.predictionSets = new HashMap<>();
 		
 		definitions.keySet().forEach(k -> { firstSets.put(k, new HashSet<>()); followSets.put(k, new HashSet<>()); });
 		
@@ -81,7 +81,7 @@ public class FirstFollowSets {
 		return firstSets.get(nonterminal);
 	}
 	
-	public Set<CharacterRange> getFollowSets(Nonterminal nonterminal) {
+	public Set<CharacterRange> getFollowSet(Nonterminal nonterminal) {
 		return followSets.get(nonterminal);
 	}
 	
@@ -278,15 +278,15 @@ public class FirstFollowSets {
 			
 			if (symbol instanceof Nonterminal) {
 				Nonterminal nonterminal = (Nonterminal) symbol;
-				predictionSets.putAll(position, firstSets.get(nonterminal));
+				predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(firstSets.get(nonterminal));
 				
-				if (!firstSets.get(nonterminal).contains(Epsilon.getInstance())) {
+				if (!firstSets.get(nonterminal).containsAll(Epsilon.getInstance().getFirstSet())) {
 					break;
 				}
 			} 
 			else if (symbol instanceof RegularExpression) {
 				RegularExpression regex = (RegularExpression) symbol;
-				predictionSets.putAll(position, regex.getFirstSet());
+				predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(regex.getFirstSet());
 				if(!regex.isNullable()) {
 					break;
 				}
@@ -294,7 +294,7 @@ public class FirstFollowSets {
 		}
 		
 		if (isChainNullable(alternate, 0)) {
-			predictionSets.putAll(position, followSets.get(rule.getHead()));
+			predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(followSets.get(rule.getHead()));
 		}
 		
 		predictionSets.remove(position, Epsilon.getInstance());

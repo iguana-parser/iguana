@@ -40,6 +40,8 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.EOF;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.ParseResult;
@@ -56,7 +58,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.google.common.collect.ImmutableSet;
+import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * A ::= B
@@ -71,14 +73,17 @@ public class Test5 extends AbstractParserTest {
 	static Nonterminal A = Nonterminal.withName("A");
 	static Nonterminal B = Nonterminal.withName("B");
 	static Character b = Character.from('b');
+	static Rule r1 = Rule.withHead(A).addSymbols(B).build();
+	static Rule r2 = Rule.withHead(B).addSymbol(b).build();
+	static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 
 	@Parameters
     public static Collection<Object[]> data() {
 		return all_configs.stream().map(c -> new Object[] {
 	    		getInput(), 
-	    		getGrammar(), 
+	    		grammar, 
 	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput(), getGrammar()),
+	    		ParserFactory.getParser(c, getInput(), grammar),
 	    		(Function<GrammarGraph, ParseResult>) Test5::getParseResult
 	    	}).collect(Collectors.toList());
     }
@@ -91,24 +96,25 @@ public class Test5 extends AbstractParserTest {
     	return Nonterminal.withName("A");
     }
 	
-	private static Grammar getGrammar() {
-		Rule r1 = Rule.withHead(A).addSymbols(B).build();
-		Rule r2 = Rule.withHead(B).addSymbol(b).build();
-		return Grammar.builder().addRule(r1).addRule(r2).build();
-	}
-	
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
+		
 		assertFalse(firstFollowSets.isNullable(A));
 		assertFalse(firstFollowSets.isNullable(B));
+		
+		assertEquals(set(CharacterRange.from('b')), firstFollowSets.getFirstSet(A));
+		assertEquals(set(CharacterRange.from('b')), firstFollowSets.getFirstSet(B));
+		
+		assertEquals(set(CharacterRange.from(EOF.VALUE)), firstFollowSets.getFollowSet(A));
+		assertEquals(set(CharacterRange.from(EOF.VALUE)), firstFollowSets.getFollowSet(B));
 	}
-	
+		
 	@Test
 	public void testReachableNonterminals() {
 		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
-		assertEquals(ImmutableSet.of(B), reachabilityGraph.getReachableNonterminals(A));
-		assertEquals(ImmutableSet.of(), reachabilityGraph.getReachableNonterminals(B));
+		assertEquals(set(B), reachabilityGraph.getReachableNonterminals(A));
+		assertEquals(set(), reachabilityGraph.getReachableNonterminals(B));
 	}
 	
 	@Test

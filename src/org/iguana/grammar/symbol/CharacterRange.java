@@ -55,6 +55,10 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	
 	private final Set<CharacterRange> firstSet;
 	
+	public static CharacterRange from(int c) {
+		return in(c, c);
+	}
+	
 	public static CharacterRange in(int start, int end) {
 		return new Builder(start, end).build();
 	}

@@ -30,7 +30,6 @@ package org.iguana.grammar.symbol;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.iguana.regex.automaton.Automaton;
@@ -39,6 +38,8 @@ import org.iguana.regex.automaton.StateType;
 import org.iguana.regex.automaton.Transition;
 import org.iguana.traversal.ISymbolVisitor;
 
+import com.google.common.collect.ImmutableSet;
+
 public class EOF extends AbstractRegularExpression {
 	
 	private static final long serialVersionUID = 1L;
@@ -46,6 +47,8 @@ public class EOF extends AbstractRegularExpression {
 	public static final int TOKEN_ID = 1;
 	
 	public static int VALUE = -1;
+	
+	private static final Set<CharacterRange> firstSet = ImmutableSet.of(CharacterRange.in(VALUE, VALUE));
 	
 	private static EOF instance;
 	
@@ -88,8 +91,6 @@ public class EOF extends AbstractRegularExpression {
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		Set<CharacterRange> firstSet = new HashSet<>();
-		firstSet.add(CharacterRange.in(VALUE, VALUE));
 		return firstSet;
 	}
 
