@@ -28,14 +28,11 @@
 package org.iguana.parser.ambiguous;
 
 
-import static org.iguana.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;

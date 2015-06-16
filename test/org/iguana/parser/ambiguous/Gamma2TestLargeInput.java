@@ -51,9 +51,14 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class Gamma2TestLargeInput extends AbstractParserTest {
 	
+	private static int runCount = 2;
+	
 	@Parameters
     public static Collection<Object> data() {
-		List<Object> parameters = Stream.iterate(1, n -> ++n).limit(4).flatMap(i -> newConfigs.stream().map(c -> new Object[] {
+		List<Object> parameters = Stream.iterate(1, n -> ++n)
+				                        .limit(runCount)
+				                        .flatMap(
+             i -> newConfigs.stream().map(c -> new Object[] {
 	    		getInput(i * 50), 
 	    		getGrammar(), 
 	    		getStartSymbol(),

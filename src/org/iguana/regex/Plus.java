@@ -29,6 +29,7 @@ package org.iguana.regex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -38,8 +39,6 @@ import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.SymbolBuilder;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.traversal.ISymbolVisitor;
-
-import com.google.common.collect.ImmutableList;
 
 public class Plus extends AbstractRegularExpression {
 
@@ -58,12 +57,11 @@ public class Plus extends AbstractRegularExpression {
 	private Plus(Builder builder) {
 		super(builder);
 		this.s = builder.s;
-		this.separators = ImmutableList.copyOf(builder.separators);
+		this.separators = Collections.unmodifiableList(builder.separators);
 		this.allRegularExpression = s instanceof RegularExpression;
 	}
 	
 	private static String getName(Symbol s) {
-//		Verify.verifyNotNull(s);
 		return s.getName() + "+";
 	}
 	

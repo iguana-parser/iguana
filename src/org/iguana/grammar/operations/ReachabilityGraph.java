@@ -27,6 +27,7 @@
 
 package org.iguana.grammar.operations;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -58,26 +59,24 @@ import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.traversal.ISymbolVisitor;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.SetMultimap;
-
 public class ReachabilityGraph {
 
 	private final Map<Nonterminal, List<Rule>> definitions;
 	
-	private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
+	private final Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
 	
 	private final Set<String> layouts;
 	
 	public ReachabilityGraph(Grammar grammar) {
-		this.reachabilityGraph = HashMultimap.create();
+		this.reachabilityGraph = new HashMap<>();
 		this.definitions = grammar.getDefinitions();
 		
 		this.layouts = new HashSet<>();
 		
 		if (grammar.getLayout() != null)
 			layouts.add(grammar.getLayout().getName());
+		
+		grammar.getNonterminals().forEach(n -> reachabilityGraph.put(n, new HashSet<>()));
 		
 		layouts.addAll(grammar.getRules().stream()
 						                 .filter(r -> r.getLayout() != null)
@@ -87,7 +86,7 @@ public class ReachabilityGraph {
 		calculateReachabilityGraph();
 	}
 	
-	public SetMultimap<Nonterminal, Nonterminal> getReachabilityGraph() {
+	public Map<Nonterminal, Set<Nonterminal>> getReachabilityGraph() {
 		return reachabilityGraph;
 	}
 	
@@ -103,7 +102,7 @@ public class ReachabilityGraph {
 	 * nonterminals.
 	 * 
 	 */
-	public Multimap<Nonterminal, Nonterminal> calculateReachabilityGraph() {
+	public Map<Nonterminal, Set<Nonterminal>> calculateReachabilityGraph() {
 		
 		Visitor visitor = new Visitor(reachabilityGraph, layouts);
 		
@@ -142,12 +141,12 @@ public class ReachabilityGraph {
 	
 	private static class Visitor implements ISymbolVisitor<Boolean> {
 		
-		private final SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
+		private final Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
 		private final Set<String> layouts;
 		
 		private Nonterminal head;
 		
-		public Visitor(SetMultimap<Nonterminal, Nonterminal> reachabilityGraph, Set<String> layouts) {
+		public Visitor(Map<Nonterminal, Set<Nonterminal>> reachabilityGraph, Set<String> layouts) {
 			this.reachabilityGraph = reachabilityGraph;
 			this.layouts = layouts;
 		}
@@ -276,10 +275,10 @@ public class ReachabilityGraph {
 
 	}
 	
-	private static boolean add(Nonterminal a, Nonterminal nonterminal, SetMultimap<Nonterminal, Nonterminal> reachabilityGraph) {
+	private static boolean add(Nonterminal a, Nonterminal nonterminal, Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
 		boolean changed = false;
-		changed |= reachabilityGraph.put(a, nonterminal);
-		changed |= reachabilityGraph.putAll(a, reachabilityGraph.get(nonterminal));
+		changed |= reachabilityGraph.get(a).add(nonterminal);
+		changed |= reachabilityGraph.get(a).addAll(reachabilityGraph.get(nonterminal));
 		return changed;
 	}
 	

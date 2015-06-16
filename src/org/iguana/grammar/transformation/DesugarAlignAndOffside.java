@@ -27,15 +27,15 @@
 
 package org.iguana.grammar.transformation;
 
+import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.grammar.condition.DataDependentCondition.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static org.iguana.datadependent.ast.AST.*;
-import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.Grammar;
@@ -65,11 +65,9 @@ import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.traversal.ISymbolVisitor;
 
-import com.google.common.collect.SetMultimap;
-
 public class DesugarAlignAndOffside implements GrammarTransformation {
 	
-	private SetMultimap<Nonterminal, Nonterminal> reachabilityGraph;
+	private Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
 	
 	private Set<String> offsided;
 	
@@ -104,11 +102,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		FindOffsidesVisitor findOffsides = new FindOffsidesVisitor();
 		findOffsides.find(grammar);
 		offsided = findOffsides.getOffsides();
-				
-		for (Map.Entry<Nonterminal, Nonterminal> entry : reachabilityGraph.entries())			
-			if (offsided.contains(entry.getKey().getName()))
-				offsided.add(entry.getValue().getName());
 		
+		reachabilityGraph.entrySet().forEach(e -> { if (offsided.contains(e.getKey().getName())) {
+			e.getValue().forEach(n -> offsided.add(n.getName()));
+		}});
+				
 		DesugarAlignAndOffsideVisitor desugarOffsides = new DesugarAlignAndOffsideVisitor(offsided);
 		desugarOffsides.doAlign(doAlign);
 		

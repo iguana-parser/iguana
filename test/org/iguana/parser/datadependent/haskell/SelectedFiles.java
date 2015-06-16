@@ -32,7 +32,7 @@ import java.util.Set;
 import org.iguana.traversal.NonterminalNodeVisitor;
 import org.iguana.util.Input;
 
-import com.google.common.collect.ImmutableSet;
+import static org.iguana.util.CollectionsUtil.*;
 
 public class SelectedFiles {
 	
@@ -83,7 +83,7 @@ public class SelectedFiles {
 									ghc + "compiler/ghci/Debugger.hs",        // check #25
 								};
 	
-	private static final Set<String> target = ImmutableSet.of("Decls", "CDecls", "GADTDecls", "Alts", "DAlts", "Stmts");
+	private static final Set<String> target = immutableSet("Decls", "CDecls", "GADTDecls", "Alts", "DAlts", "Stmts");
 	
 	public static NonterminalNodeVisitor getVisitor(Input input) {
 		return NonterminalNodeVisitor.create(n -> {

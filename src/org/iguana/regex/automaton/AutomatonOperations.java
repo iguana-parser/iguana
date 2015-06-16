@@ -36,11 +36,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.CharacterRanges;
-
-import com.google.common.collect.Multimap;
 
 public class AutomatonOperations {
 	
@@ -123,11 +122,14 @@ public class AutomatonOperations {
 		a1 = makeDeterministic(a1);
 		a2 = makeDeterministic(a2);
 		
-		Multimap<CharacterRange, CharacterRange> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
+		Map<CharacterRange, List<CharacterRange>> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
 		convertToNonOverlapping(a1, rangeMap);
 		convertToNonOverlapping(a2, rangeMap);
 		
-		Set<CharacterRange> values = new HashSet<>(rangeMap.values());
+		Set<CharacterRange> values = rangeMap.values().stream()
+				                                      .flatMap(List::stream)
+				                                      .collect(Collectors.toSet());
+		
 		a1 = makeComplete(a1, values);
 		a2 = makeComplete(a2, values);
 
@@ -184,7 +186,7 @@ public class AutomatonOperations {
 		return state;
 	}
 	
-	public static void convertToNonOverlapping(Automaton a, Multimap<CharacterRange, CharacterRange> rangeMap) {
+	public static void convertToNonOverlapping(Automaton a, Map<CharacterRange, List<CharacterRange>> rangeMap) {
 		for (State state : a.getStates()) {
 			List<Transition> removeList = new ArrayList<>();
 			List<Transition> addList = new ArrayList<>();
@@ -218,7 +220,7 @@ public class AutomatonOperations {
 		return Automaton.builder(automaton.getStartState()).build();
 	}
 	
-	private static Multimap<CharacterRange, CharacterRange> merge(CharacterRange[] alphabet1, CharacterRange[] alphabet2) {
+	private static Map<CharacterRange, List<CharacterRange>> merge(CharacterRange[] alphabet1, CharacterRange[] alphabet2) {
 		List<CharacterRange> alphabets = new ArrayList<>();
 		for (CharacterRange r : alphabet1) { alphabets.add(r); }
 		for (CharacterRange r : alphabet2) { alphabets.add(r); }

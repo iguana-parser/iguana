@@ -60,7 +60,7 @@ import org.iguana.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol, Map<String, Object> map);
+	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol, Map<String, ? extends Object> map);
 	
 	default ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol) {
 		return parse(input, grammarGraph, startSymbol, Collections.emptyMap());
@@ -70,7 +70,7 @@ public interface GLLParser {
 		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol);
 	}
 	
-	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Map<String, Object> map) {
+	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Map<String, ? extends Object> map) {
 		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol, map);
 	}
 	

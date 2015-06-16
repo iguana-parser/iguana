@@ -37,8 +37,8 @@ import org.iguana.regex.automaton.StateType;
 import org.iguana.regex.automaton.Transition;
 import org.iguana.traversal.ISymbolVisitor;
 
-import com.google.common.collect.ImmutableSet;
 
+import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * 
@@ -72,7 +72,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		this.start = builder.start;
 		this.end = builder.end;
 		
-		firstSet = ImmutableSet.of(this);
+		firstSet = immutableSet(this);
 	}
 
 	public static String getName(int start, int end) {

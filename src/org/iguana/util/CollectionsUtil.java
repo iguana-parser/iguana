@@ -29,14 +29,23 @@ package org.iguana.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.Stream.Builder;
 
 public class CollectionsUtil {
 
 	@SafeVarargs
 	public static <T> Set<T> set(T...objects) {
+		if (objects.length == 0) return Collections.emptySet();
+		
 		Set<T>  set = new HashSet<>();
 		for(T t : objects) {
 			set.add(t);
@@ -45,9 +54,47 @@ public class CollectionsUtil {
 	}
 	
 	@SafeVarargs
+	public static <T> Set<T> immutableSet(T...objects) {
+		return Collections.unmodifiableSet(set(objects));
+	}
+	
+	@SafeVarargs
 	public static <T> List<T> list(T...objects){
+		if (objects.length == 0) return Collections.emptyList();
+		
 		return Arrays.asList(objects);
 	}
+	
+	@SafeVarargs
+	public static <T> List<T> immutableList(T...objects){
+		return Collections.unmodifiableList(list(objects));
+	}
+	
+	public static <K, V> Tuple<K, V> tuple(K k, V v) {
+		return Tuple.of(k, v);
+	}
+	
+	public static <K, V> Map<K, V> map(List<Tuple<K, V>> mappings) {
+		return mappings.stream().collect(Collectors.toMap(t -> t.getFirst(), t -> t.getSecond()));
+	}
+	
+	public static <K, V> Map<K, V> map(List<K> keys, List<V> values) {	
+		return zip(keys.stream(), values.stream(), (k, v) -> tuple(k, v)).collect(Collectors.toMap(t -> t.getFirst(), t -> t.getSecond()));		
+	}
+	
+	public static <A, B, C> Stream<C> zip(Stream<A> as, Stream<B> bs, BiFunction<A, B, C> f) {
+		Iterator<A> asIterator = as.iterator();
+		Iterator<B> bsIterator = bs.iterator();
+		
+		Builder<C> builder = Stream.builder();
+		
+		while(asIterator.hasNext() && bsIterator.hasNext()) {
+			builder.add(f.apply(asIterator.next(), bsIterator.next()));
+		}
+		
+		return builder.build();
+	}
+
 	
 	public static <T> Set<T> union(Set<T> set1, Set<T> set2) {
 		Set<T> set = new HashSet<>();

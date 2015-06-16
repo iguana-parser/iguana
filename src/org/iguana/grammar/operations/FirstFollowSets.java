@@ -43,9 +43,6 @@ import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
 import org.iguana.util.Tuple;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
-
 /**
  * 
  * @author Ali Afroozeh

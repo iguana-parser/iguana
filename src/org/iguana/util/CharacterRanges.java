@@ -3,33 +3,34 @@ package org.iguana.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.iguana.grammar.symbol.CharacterRange;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.Multimap;
-
 public class CharacterRanges {
 	
-	public static Multimap<CharacterRange, CharacterRange> toNonOverlapping(CharacterRange...ranges) {
+	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping(CharacterRange...ranges) {
 		return toNonOverlapping(Arrays.asList(ranges));
 	}
 	
-	public static Multimap<CharacterRange, CharacterRange> toNonOverlapping(List<CharacterRange> ranges) {
+	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping(List<CharacterRange> ranges) {
 		
 		if (ranges.size() == 0)
-			return ImmutableListMultimap.of();
+			return Collections.emptyMap();
 		
-		if (ranges.size() == 1) 
-			return ImmutableListMultimap.of(ranges.get(0), ranges.get(0));
+		if (ranges.size() == 1) {
+			Map<CharacterRange, List<CharacterRange>> map = new HashMap<>();
+			map.computeIfAbsent(ranges.get(0), k -> new ArrayList<>()).add(ranges.get(0));
+			return map;
+		}
 		
 		Collections.sort(ranges);
 
-		Multimap<CharacterRange, CharacterRange> result = ArrayListMultimap.create();
+		Map<CharacterRange, List<CharacterRange>> result = new HashMap<>();
 		
 		Set<CharacterRange> overlapping = new HashSet<>();
 		
@@ -61,10 +62,10 @@ public class CharacterRanges {
 		return false;
 	}
 	
-	private static Multimap<CharacterRange, CharacterRange> convertOverlapping(Set<CharacterRange> ranges) {
+	private static Map<CharacterRange, List<CharacterRange>> convertOverlapping(Set<CharacterRange> ranges) {
 		
 		if (ranges.isEmpty())
-			return ImmutableListMultimap.of();
+			return Collections.emptyMap();
 		
 		Set<Integer> set = new HashSet<>();
 		for (CharacterRange r : ranges) {
@@ -82,11 +83,11 @@ public class CharacterRanges {
 			start = l.get(i) + 1;
 		}
 		
-		Multimap<CharacterRange, CharacterRange> rangesMap = ArrayListMultimap.create();
+		Map<CharacterRange, List<CharacterRange>> rangesMap = new HashMap<>();
 		for (CharacterRange r1 : ranges) {
 			for (CharacterRange r2 : result) {
 				if (r1.contains(r2))
-					rangesMap.put(r1, r2);
+					rangesMap.computeIfAbsent(r1, k -> new ArrayList<>()).add(r2);
 			}
 		}
 		

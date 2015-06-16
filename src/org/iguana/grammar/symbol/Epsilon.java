@@ -37,8 +37,7 @@ import org.iguana.regex.automaton.State;
 import org.iguana.regex.automaton.StateType;
 import org.iguana.traversal.ISymbolVisitor;
 
-import com.google.common.collect.ImmutableSet;
-
+import static org.iguana.util.CollectionsUtil.*;
 
 public class Epsilon extends AbstractRegularExpression {
 
@@ -46,7 +45,7 @@ public class Epsilon extends AbstractRegularExpression {
 	
 	public static int VALUE = -2;
 	
-	private static final Set<CharacterRange> firstSet = ImmutableSet.of(CharacterRange.in(VALUE, VALUE));
+	private static final Set<CharacterRange> firstSet = immutableSet(CharacterRange.in(VALUE, VALUE));
 	
 	private static Epsilon instance;
 	

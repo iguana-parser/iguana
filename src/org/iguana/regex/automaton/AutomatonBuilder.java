@@ -36,11 +36,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.CharacterRanges;
-
-import com.google.common.collect.Multimap;
 
 public class AutomatonBuilder {
 	
@@ -59,7 +58,7 @@ public class AutomatonBuilder {
 	/**
 	 * From transitions to non-overlapping transitions
 	 */
-	private Multimap<CharacterRange, CharacterRange> rangeMap;
+	private Map<CharacterRange, List<CharacterRange>> rangeMap;
 	
 	public AutomatonBuilder(Automaton automaton) {
 		this.deterministic = automaton.isDeterministic();
@@ -110,12 +109,15 @@ public class AutomatonBuilder {
 		return deterministic;
 	}
 	
-	private static Multimap<CharacterRange, CharacterRange> getRangeMap(State startState) {
+	private static Map<CharacterRange, List<CharacterRange>> getRangeMap(State startState) {
 		return CharacterRanges.toNonOverlapping(getAllRanges(startState));
 	}
 	
-	private static CharacterRange[] getAlphabet(State startState, Multimap<CharacterRange, CharacterRange> rangeMap) {
-		Set<CharacterRange> values = new LinkedHashSet<>(rangeMap.values());
+	private static CharacterRange[] getAlphabet(State startState, Map<CharacterRange, List<CharacterRange>> rangeMap) {
+		Set<CharacterRange> values = rangeMap.values().stream()
+				                                      .flatMap(l -> l.stream())
+				                                      .collect(Collectors.toCollection(LinkedHashSet::new));
+		
 		CharacterRange[] alphabet = new CharacterRange[values.size()];
 		int i = 0;
 		for (CharacterRange r : values) {

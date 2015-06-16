@@ -50,20 +50,20 @@ import org.iguana.util.Input;
 import org.iguana.util.Visualization;
 import org.junit.Test;
 
-import com.google.common.collect.Sets;
+import static org.iguana.util.CollectionsUtil.*;
 
 public class Python {
 	
 	public static Grammar grammar = 
 			Grammar.builder()
 			//ShortBytesChar ::= (\u0001-\u10FFFF) 
-			.addRule(Rule.withHead(Nonterminal.builder("ShortBytesChar").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 1114111).build()).addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(10).build()).build()))).build()).build())
+			.addRule(Rule.withHead(Nonterminal.builder("ShortBytesChar").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 1114111).build()).addPostConditions(set(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(10).build()).build()))).build()).build())
 			//IntPart ::= Digit+ 
 			.addRule(Rule.withHead(Nonterminal.builder("IntPart").build()).addSymbol(Plus.builder(Nonterminal.builder("Digit").build()).build()).build())
 			//BinInteger ::= "0" ("b" | "B") BinDigit+ 
 			.addRule(Rule.withHead(Nonterminal.builder("BinInteger").build()).addSymbol(Sequence.builder(Character.builder(48).build()).build()).addSymbol(Alt.builder(Sequence.builder(Character.builder(98).build()).build(), Sequence.builder(Character.builder(66).build()).build()).build()).addSymbol(Plus.builder(Nonterminal.builder("BinDigit").build()).build()).build())
 			//LongBytesChar ::= (\u0001-\u10FFFF) 
-			.addRule(Rule.withHead(Nonterminal.builder("LongBytesChar").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 1114111).build()).addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(92).build()).build()))).build()).build())
+			.addRule(Rule.withHead(Nonterminal.builder("LongBytesChar").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 1114111).build()).addPostConditions(set(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(92).build()).build()))).build()).build())
 			//Term ::= Factor (("/" | "*" | "%" | "//") Factor)* 
 			.addRule(Rule.withHead(Nonterminal.builder("Term").build()).addSymbol(Nonterminal.builder("Factor").build()).addSymbol(Star.builder(Sequence.builder(Alt.builder(Sequence.builder(Character.builder(47).build()).build(), Sequence.builder(Character.builder(42).build()).build(), Sequence.builder(Character.builder(37).build()).build(), Sequence.builder(Character.builder(47).build(), Character.builder(47).build()).build()).build(), Nonterminal.builder("Factor").build()).build()).build()).build())
 			//ImportStmt ::= ImportName 
@@ -429,7 +429,7 @@ public class Python {
 			//AndTest ::= NotTest ("and" NotTest)* 
 			.addRule(Rule.withHead(Nonterminal.builder("AndTest").build()).addSymbol(Nonterminal.builder("NotTest").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(97).build(), Character.builder(110).build(), Character.builder(100).build()).build(), Nonterminal.builder("NotTest").build()).build()).build()).build())
 			//LongStringChar ::= (\u0001-\u10FFFF) 
-			.addRule(Rule.withHead(Nonterminal.builder("LongStringChar").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 1114111).build()).addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(92).build()).build()))).build()).build())
+			.addRule(Rule.withHead(Nonterminal.builder("LongStringChar").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 1114111).build()).addPostConditions(set(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(92).build()).build()))).build()).build())
 			//NonlocalStmt ::= "nonlocal" Name ("," Name)* 
 			.addRule(Rule.withHead(Nonterminal.builder("NonlocalStmt").build()).addSymbol(Sequence.builder(Character.builder(110).build(), Character.builder(111).build(), Character.builder(110).build(), Character.builder(108).build(), Character.builder(111).build(), Character.builder(99).build(), Character.builder(97).build(), Character.builder(108).build()).build()).addSymbol(Nonterminal.builder("Name").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(44).build()).build(), Nonterminal.builder("Name").build()).build()).build()).build())
 			//ContinueStmt ::= "continue" 
@@ -617,7 +617,7 @@ public class Python {
 			//SingleInput ::= SimpleStmt 
 			.addRule(Rule.withHead(Nonterminal.builder("SingleInput").build()).addSymbol(Nonterminal.builder("SimpleStmt").build()).build())
 			//ShortStringChar ::= (\u0001-\u10FFFF) 
-			.addRule(Rule.withHead(Nonterminal.builder("ShortStringChar").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 1114111).build()).addPostConditions(Sets.newHashSet(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(10).build()).build()))).build()).build())
+			.addRule(Rule.withHead(Nonterminal.builder("ShortStringChar").build()).addSymbol(Alt.builder(CharacterRange.builder(1, 1114111).build()).addPostConditions(set(new RegularExpressionCondition(ConditionType.NOT_MATCH, Alt.builder(Character.builder(10).build()).build()))).build()).build())
 			//WithStmt ::= "with" WithItem ("," WithItem)* ":" Suite 
 			.addRule(Rule.withHead(Nonterminal.builder("WithStmt").build()).addSymbol(Sequence.builder(Character.builder(119).build(), Character.builder(105).build(), Character.builder(116).build(), Character.builder(104).build()).build()).addSymbol(Nonterminal.builder("WithItem").build()).addSymbol(Star.builder(Sequence.builder(Sequence.builder(Character.builder(44).build()).build(), Nonterminal.builder("WithItem").build()).build()).build()).addSymbol(Sequence.builder(Character.builder(58).build()).build()).addSymbol(Nonterminal.builder("Suite").build()).build())
 			//ExponentFloat ::= (IntPart | PointFloat) Exponent 

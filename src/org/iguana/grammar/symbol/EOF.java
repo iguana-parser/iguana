@@ -38,7 +38,7 @@ import org.iguana.regex.automaton.StateType;
 import org.iguana.regex.automaton.Transition;
 import org.iguana.traversal.ISymbolVisitor;
 
-import com.google.common.collect.ImmutableSet;
+import static org.iguana.util.CollectionsUtil.*;
 
 public class EOF extends AbstractRegularExpression {
 	
@@ -48,7 +48,7 @@ public class EOF extends AbstractRegularExpression {
 	
 	public static int VALUE = -1;
 	
-	private static final Set<CharacterRange> firstSet = ImmutableSet.of(CharacterRange.in(VALUE, VALUE));
+	private static final Set<CharacterRange> firstSet = immutableSet(CharacterRange.in(VALUE, VALUE));
 	
 	private static EOF instance;
 	

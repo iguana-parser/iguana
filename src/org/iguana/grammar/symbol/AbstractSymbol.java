@@ -27,12 +27,11 @@
 
 package org.iguana.grammar.symbol;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.condition.Condition;
-
-import com.google.common.collect.ImmutableSet;
 
 import static org.iguana.util.generator.GeneratorUtil.*;
 
@@ -55,7 +54,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 		this.label = builder.label;
 		this.object = builder.object;
 		this.preConditions = builder.preConditions; // TODO: Dangerous move: ImmutableSet.copyOf(builder.preConditions);
-		this.postConditions = ImmutableSet.copyOf(builder.postConditions);
+		this.postConditions = Collections.unmodifiableSet(builder.postConditions);
 	}
 	
 	@Override

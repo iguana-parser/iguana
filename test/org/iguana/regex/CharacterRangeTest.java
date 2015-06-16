@@ -29,6 +29,9 @@ package org.iguana.regex;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.Map;
+
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.matcher.Matcher;
@@ -36,10 +39,9 @@ import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Input;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.Multimap;
-
 import static org.iguana.util.CharacterRanges.*;
+
+import static org.iguana.util.CollectionsUtil.*;
 
 public class CharacterRangeTest {
 	
@@ -64,15 +66,16 @@ public class CharacterRangeTest {
 		// 1-5 3-7
 		CharacterRange r1 = CharacterRange.in(1, 5);
 		CharacterRange r2 = CharacterRange.in(3, 7);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2);
+		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2);
 		
 		// 1-2 3-5 6-7
 		CharacterRange t1 = CharacterRange.in(1, 2);
 		CharacterRange t2 = CharacterRange.in(3, 5);
 		CharacterRange t3 = CharacterRange.in(6, 7);
-		ImmutableListMultimap<Object, Object> expected = 
-				ImmutableListMultimap.builder().put(r1, t1).put(r1, t2)
-			                                   .put(r2, t2).put(r2, t3).build();
+		
+		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t1, t2)), 
+				                                                      tuple(r2, list(t2, t3)))); 
+				
 		assertEquals(expected, nonOverlapping);
 	}
 	
@@ -83,7 +86,7 @@ public class CharacterRangeTest {
 		CharacterRange r4 = CharacterRange.in(17, 21);
 		CharacterRange r1 = CharacterRange.in(1, 7);
 		CharacterRange r3 = CharacterRange.in(6, 12);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2, r3, r4);
+		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2, r3, r4);
 		
 		// 1-4 5-5 6-7 8-12 13-13 17-21
 		CharacterRange t1 = CharacterRange.in(1, 4);
@@ -93,11 +96,10 @@ public class CharacterRangeTest {
 		CharacterRange t5 = CharacterRange.in(13, 13);
 		CharacterRange t6 = CharacterRange.in(17, 21);
 		
-		ImmutableListMultimap<Object, Object> expected = 
-				ImmutableListMultimap.builder().put(r1, t1).put(r1, t2).put(r1, t3)
-				                               .put(r2, t2).put(r2, t3).put(r2, t4).put(r2, t5)
-				                               .put(r3, t3).put(r3, t4)
-				                               .put(r4, t6).build();
+		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t1, t2, t3)),
+				                                                      tuple(r2, list(t2, t3, t4, t5)),
+				                                                      tuple(r3, list(t3, t4)),
+				                                                      tuple(r4, list(t6))));
 		
 		assertEquals(expected, nonOverlapping);
 	}
@@ -108,7 +110,7 @@ public class CharacterRangeTest {
 		CharacterRange r1 = CharacterRange.in(1, 7);
 		CharacterRange r2 = CharacterRange.in(3, 5);
 		CharacterRange r3 = CharacterRange.in(4, 4);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2, r3);
+		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2, r3);
 		
 		// 1-2 3-3 4-4 5-5 6-7
 		CharacterRange t1 = CharacterRange.in(1, 2);
@@ -117,10 +119,10 @@ public class CharacterRangeTest {
 		CharacterRange t4 = CharacterRange.in(5, 5);
 		CharacterRange t5 = CharacterRange.in(6, 7);
 		
-		ImmutableListMultimap<Object, Object> expected = 
-				ImmutableListMultimap.builder().put(r1, t1).put(r1, t2).put(r1, t3).put(r1, t4).put(r1, t5)
-											   .put(r2, t2).put(r2, t3).put(r2, t4)
-											   .put(r3, t3).build();
+		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t1, t2, t3, t4, t5)),
+				                                                      tuple(r2, list(t2, t3, t4)),
+				                                                      tuple(r3, list(t3))));
+		
 		assertEquals(expected, nonOverlapping);
 	}
 	
@@ -130,17 +132,16 @@ public class CharacterRangeTest {
 		CharacterRange r1 = CharacterRange.in(11, 12);
 		CharacterRange r2 = CharacterRange.in(1, 3);
 		CharacterRange r3 = CharacterRange.in(5, 7);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2, r3);
+		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2, r3);
 		
 		// 1-3 5-7 11-12
 		CharacterRange t1 = CharacterRange.in(1, 3);
 		CharacterRange t2 = CharacterRange.in(5, 7); 
 		CharacterRange t3 = CharacterRange.in(11, 12);
 		
-		ImmutableListMultimap<Object, Object> expected = 
-				ImmutableListMultimap.builder().put(r1, t3)
-				                               .put(r2, t1)
-				                               .put(r3, t2).build();
+		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t3)),
+				                                                      tuple(r2, list(t1)),
+				                                                      tuple(r3, list(t2))));
 		
 		assertEquals(expected, nonOverlapping);
 	}
@@ -154,7 +155,7 @@ public class CharacterRangeTest {
 		CharacterRange r4 = CharacterRange.in(1, 12);
 		CharacterRange r5 = CharacterRange.in(3, 6);
 		CharacterRange r6 = CharacterRange.in(1, 2);
-		Multimap<CharacterRange, CharacterRange> nonOverlapping = toNonOverlapping(r1, r2, r3, r4, r5, r6);
+		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2, r3, r4, r5, r6);
 		
 		// 1-2 3-3 4-6 7-9 10-10 11-11 12-12
 		CharacterRange t1 = CharacterRange.in(1, 2);
@@ -165,13 +166,12 @@ public class CharacterRangeTest {
 		CharacterRange t6 = CharacterRange.in(11, 11);
 		CharacterRange t7 = CharacterRange.in(12, 12);
 		
-		ImmutableListMultimap<Object, Object> expected = 
-				ImmutableListMultimap.builder().put(r1, t4)
-				 					           .put(r2, t3).put(r2, t4).put(r2, t5).put(r2, t6)
-				 					           .put(r3, t3).put(r3, t4).put(r3, t5)
-				 					           .put(r4, t1).put(r4, t2).put(r4, t3).put(r4, t4).put(r4, t5).put(r4, t6).put(r4, t7)
-				 					           .put(r5, t2).put(r5, t3)
-				 					           .put(r6, t1).build();
+		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t4)),
+				                                                      tuple(r2, list(t3, t4, t5, t6)),
+				                                                      tuple(r3, list(t3, t4, t5)),
+				                                                      tuple(r4, list(t1, t2, t3, t4, t5, t6, t7)),
+				                                                      tuple(r5, list(t2, t3)),
+				                                                      tuple(r6, list(t1))));
 		
 		assertEquals(expected, nonOverlapping);
 	}

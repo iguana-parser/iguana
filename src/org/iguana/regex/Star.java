@@ -29,6 +29,7 @@ package org.iguana.regex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -40,8 +41,6 @@ import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.State;
 import org.iguana.regex.automaton.StateType;
 import org.iguana.traversal.ISymbolVisitor;
-
-import com.google.common.collect.ImmutableList;
 
 
 public class Star extends AbstractRegularExpression {
@@ -61,7 +60,7 @@ public class Star extends AbstractRegularExpression {
 	private Star(Builder builder) {
 		super(builder);
 		this.s = builder.s;
-		this.separators = ImmutableList.copyOf(builder.separators);
+		this.separators = Collections.unmodifiableList(builder.separators);
 		this.allRegularExpression = s instanceof RegularExpression;
 	}
 	

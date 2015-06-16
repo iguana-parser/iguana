@@ -44,7 +44,7 @@ import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableSet;
+import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * 
@@ -79,7 +79,7 @@ public class EBNFTest1 {
 	@Test
 	public void testReachability() {
 		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
-		assertEquals(ImmutableSet.of(A, Nonterminal.withName("A+")), reachabilityGraph.getReachableNonterminals(S));
+		assertEquals(set(A, Nonterminal.withName("A+")), reachabilityGraph.getReachableNonterminals(S));
 	}
 	
 	@Test

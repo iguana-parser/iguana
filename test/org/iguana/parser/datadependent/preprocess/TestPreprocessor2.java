@@ -47,8 +47,7 @@ import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import static org.iguana.util.CollectionsUtil.*;
 
 public class TestPreprocessor2 {
 
@@ -61,144 +60,139 @@ public class TestPreprocessor2 {
 
 		Input input = Input.fromPath(getClass().getResource("examples/Example2.pp").getPath());
 		
-			Map<String, Object> variables = ImmutableMap.<String, Object>builder()
-					.put("v1", true)
-					.put("v2", true)
-					.put("v3", true)
-					.put("v4", false)
-					.put("v5", true)
-					.put("v6", true)
-					.put("v7", true)
-					.put("v8", true)
-					.put("v9", true)
-					.build();
-			Set<String> expected = ImmutableSet.of("v1", "v2", "v3", "v5");
-			
-			System.out.println(variables);
-			System.out.println(expected);
-			
-			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-			ParseResult result = parser.parse(input, grammar, start, variables);
+		Map<String, Boolean> variables = map(list(tuple("v1", true),
+												  tuple("v2", true),
+												  tuple("v3", true),
+												  tuple("v4", false),
+												  tuple("v5", true),
+												  tuple("v6", true),
+												  tuple("v7", true),
+												  tuple("v8", true),
+												  tuple("v9", true)));
+		
+		Set<String> expected = set("v1", "v2", "v3", "v5");
+		
+		System.out.println(variables);
+		System.out.println(expected);
+		
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, start, variables);
 
-			Map<String, NonterminalNode> nodes = new HashMap<>();
-			
-			NonterminalNodeVisitor.create(n -> {
-				if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
-					String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
-					nodes.put(yield, n);
-				}
-			}).visit(result.asParseSuccess().getRoot());
-			
-			assertEquals(expected, nodes.keySet());
-		}		
+		Map<String, NonterminalNode> nodes = new HashMap<>();
+		
+		NonterminalNodeVisitor.create(n -> {
+			if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
+				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+				nodes.put(yield, n);
+			}
+		}).visit(result.asParseSuccess().getRoot());
+		
+		assertEquals(expected, nodes.keySet());
+	}		
 
 	@Test
 	public void test2() throws Exception {
 
 		Input input = Input.fromPath(getClass().getResource("examples/Example2.pp").getPath());
 		
-			Map<String, Object> variables = ImmutableMap.<String, Object>builder()
-					.put("v1", true)
-					.put("v2", true)
-					.put("v3", true)
-					.put("v4", false)
-					.put("v5", false)
-					.put("v6", false)
-					.put("v7", true)
-					.put("v8", true)
-					.put("v9", true)
-					.build();
-			Set<String> expected = ImmutableSet.of("v1", "v2", "v3", "nv4", "nv5", "nv6");
-			
-			System.out.println(variables);
-			System.out.println(expected);
-			
-			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-			ParseResult result = parser.parse(input, grammar, start, variables);
+		Map<String, Boolean> variables = map(list(tuple("v1", true),
+												  tuple("v2", true),
+												  tuple("v3", true),
+												  tuple("v4", false),
+												  tuple("v5", false),
+												  tuple("v6", false),
+												  tuple("v7", true),
+												  tuple("v8", true),
+												  tuple("v9", true)));
+		
+		Set<String> expected = set("v1", "v2", "v3", "nv4", "nv5", "nv6");
+		
+		System.out.println(variables);
+		System.out.println(expected);
+		
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, start, variables);
 
-			Map<String, NonterminalNode> nodes = new HashMap<>();
-			
-			NonterminalNodeVisitor.create(n -> {
-				if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
-					String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
-					nodes.put(yield, n);
-				}
-			}).visit(result.asParseSuccess().getRoot());
-			
-			assertEquals(expected, nodes.keySet());
-		}		
+		Map<String, NonterminalNode> nodes = new HashMap<>();
+		
+		NonterminalNodeVisitor.create(n -> {
+			if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
+				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+				nodes.put(yield, n);
+			}
+		}).visit(result.asParseSuccess().getRoot());
+		
+		assertEquals(expected, nodes.keySet());
+	}		
 
 	@Test
 	public void test3() throws Exception {
 
 		Input input = Input.fromPath(getClass().getResource("examples/Example2.pp").getPath());
 		
-			Map<String, Object> variables = ImmutableMap.<String, Object>builder()
-					.put("v1", true)
-					.put("v2", false)
-					.put("v3", true)
-					.put("v4", true)
-					.put("v5", true)
-					.put("v6", true)
-					.put("v7", false)
-					.put("v8", false)
-					.put("v9", true)
-					.build();
-			Set<String> expected = ImmutableSet.of("v1", "v9", "nv2");
-			
-			System.out.println(variables);
-			System.out.println(expected);
-			
-			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-			ParseResult result = parser.parse(input, grammar, start, variables);
+		Map<String, Boolean> variables = map(list(tuple("v1", true),
+												  tuple("v2", false),
+												  tuple("v3", true),
+												  tuple("v4", true),
+												  tuple("v5", true),
+												  tuple("v6", true),
+												  tuple("v7", false),
+												  tuple("v8", false),
+												  tuple("v9", true)));
+		
+		Set<String> expected = set("v1", "v9", "nv2");
+		
+		System.out.println(variables);
+		System.out.println(expected);
+		
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, start, variables);
 
-			Map<String, NonterminalNode> nodes = new HashMap<>();
-			
-			NonterminalNodeVisitor.create(n -> {
-				if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
-					String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
-					nodes.put(yield, n);
-				}
-			}).visit(result.asParseSuccess().getRoot());
-			
-			assertEquals(expected, nodes.keySet());
-		}	
+		Map<String, NonterminalNode> nodes = new HashMap<>();
+		
+		NonterminalNodeVisitor.create(n -> {
+			if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
+				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+				nodes.put(yield, n);
+			}
+		}).visit(result.asParseSuccess().getRoot());
+		
+		assertEquals(expected, nodes.keySet());
+	}	
 	
 	@Test
 	public void test4() throws Exception {
 
 		Input input = Input.fromPath(getClass().getResource("examples/Example2.pp").getPath());
 		
-			Map<String, Object> variables = ImmutableMap.<String, Object>builder()
-					.put("v1", true)
-					.put("v2", false)
-					.put("v3", true)
-					.put("v4", true)
-					.put("v5", true)
-					.put("v6", true)
-					.put("v7", false)
-					.put("v8", false)
-					.put("v9", false)
-					.build();
-			Set<String> expected = ImmutableSet.of("v1", "nv2");
+		Map<String, Boolean> variables = map(list(tuple("v1", true),
+												  tuple("v2", false),
+												  tuple("v3", true),
+												  tuple("v4", true),
+												  tuple("v5", true),
+												  tuple("v6", true),
+												  tuple("v7", false),
+												  tuple("v8", false),
+												  tuple("v9", false)));
 			
-			System.out.println(variables);
-			System.out.println(expected);
+		Set<String> expected = set("v1", "nv2");
 			
-			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-			ParseResult result = parser.parse(input, grammar, start, variables);
+		System.out.println(variables);
+		System.out.println(expected);
+		
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, grammar, start, variables);
 
-			Map<String, NonterminalNode> nodes = new HashMap<>();
-			
-			NonterminalNodeVisitor.create(n -> {
-				if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
-					String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
-					nodes.put(yield, n);
-				}
-			}).visit(result.asParseSuccess().getRoot());
-			
-			assertEquals(expected, nodes.keySet());
-		}
-	
+		Map<String, NonterminalNode> nodes = new HashMap<>();
+		
+		NonterminalNodeVisitor.create(n -> {
+			if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
+				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+				nodes.put(yield, n);
+			}
+		}).visit(result.asParseSuccess().getRoot());
+		
+		assertEquals(expected, nodes.keySet());
+	}	
 	
 }

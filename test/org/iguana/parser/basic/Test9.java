@@ -58,7 +58,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.google.common.collect.ImmutableSet;
+import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * S ::= 'a' A 'c'
@@ -115,7 +115,7 @@ public class Test9 extends AbstractParserTest {
 	@Test
 	public void testReachableNonterminals() {
 		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
-		assertEquals(ImmutableSet.of(A), reachabilityGraph.getReachableNonterminals(S));
+		assertEquals(set(A), reachabilityGraph.getReachableNonterminals(S));
 	}
 	
 	@Test
