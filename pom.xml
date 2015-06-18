@@ -58,7 +58,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.imp.pdb.values</groupId>
+			<groupId>org.eclipse.imp</groupId>
 			<artifactId>org.eclipse.imp.pdb.values</artifactId>
 			<version>0.4.3.qualifier</version>
 		</dependency>
