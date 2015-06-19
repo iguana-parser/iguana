@@ -60,4 +60,8 @@ public class GeneratorUtil {
 		return stream.map(a -> a.toString()).collect(Collectors.joining(sep));
 	}
 	
+	public static String repeat(String s, int count) {
+		return Stream.generate(() -> s).limit(count).collect(Collectors.joining());
+	}
+	
 }

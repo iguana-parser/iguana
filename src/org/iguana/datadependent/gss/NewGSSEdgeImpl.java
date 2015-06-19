@@ -74,9 +74,9 @@ public class NewGSSEdgeImpl extends org.iguana.parser.gss.NewGSSEdgeImpl {
 			if (parser.getCurrentEndGrammarSlot().isEnd()) {
 				if (destination instanceof org.iguana.datadependent.gss.GSSNode<?>) {
 					org.iguana.datadependent.gss.GSSNode<?> dest = (org.iguana.datadependent.gss.GSSNode<?>) destination;
-					y = parser.getNode(returnSlot, getNode(), sppfNode, env, dest.getData()); // use the original slot to create a node
+					y = parser.hasNode(returnSlot, getNode(), sppfNode, env, dest.getData()); // use the original slot to create a node
 				} else {
-					y = parser.getNode(returnSlot, getNode(), sppfNode, env, null); // use the original slot to create a node
+					y = parser.hasNode(returnSlot, getNode(), sppfNode, env, null); // use the original slot to create a node
 				}
 				returnSlot = parser.getCurrentEndGrammarSlot();
 				env = parser.getEnvironment();
@@ -85,14 +85,16 @@ public class NewGSSEdgeImpl extends org.iguana.parser.gss.NewGSSEdgeImpl {
 		} else {
 			if (destination instanceof org.iguana.datadependent.gss.GSSNode<?>) {
 				org.iguana.datadependent.gss.GSSNode<?> dest = (org.iguana.datadependent.gss.GSSNode<?>) destination;
-				y = parser.getNode(returnSlot, getNode(), sppfNode, env, dest.getData());
+				y = parser.hasNode(returnSlot, getNode(), sppfNode, env, dest.getData());
 			} else {
-				y = parser.getNode(returnSlot, getNode(), sppfNode, env, null);
+				y = parser.hasNode(returnSlot, getNode(), sppfNode, env, null);
 			}
 		}
 		
-		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
+		
+		if (y == null) {
 			return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
+		}
 		
 		return null;
 	}

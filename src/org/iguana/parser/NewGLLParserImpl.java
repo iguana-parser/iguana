@@ -58,13 +58,14 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	
 	@Override
 	protected void initParserState(NonterminalGrammarSlot startSymbol) {
+		ci = 0;
+		
 		GSSNode gssNode = hasGSSNode(DummySlot.getInstance(), startSymbol, ci);
 		if (gssNode == null) {
 			cu = createGSSNode(DummySlot.getInstance(), startSymbol, ci);			
 		}
 		
 		cn = DummyNode.getInstance();
-		ci = 0;
 		errorSlot = null;
 		errorIndex = 0;
 		errorGSSNode = null;

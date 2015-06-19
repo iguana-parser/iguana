@@ -37,6 +37,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -53,7 +55,7 @@ import com.google.common.testing.GcFinalization;
 
 public class IguanaBenchmark {
 	
-	private final List<File> files;
+	private final List<Input> inputs;
 	private final Grammar grammar;
 	private final Configuration config;
 	private final int warmupCount;
@@ -61,9 +63,10 @@ public class IguanaBenchmark {
 	private final Nonterminal start;
 	private final boolean runGCInBetween;
 	private final int timeout;
+	private final boolean showInputURI;
 
 	public IguanaBenchmark(Builder builder) {
-		this.files = builder.files;
+		this.inputs = builder.inputs;
 		this.grammar = builder.grammar;
 		this.config = builder.config;
 		this.start = builder.start;
@@ -71,6 +74,7 @@ public class IguanaBenchmark {
 		this.runCount = builder.runCount;
 		this.runGCInBetween = builder.runGCInBetween;
 		this.timeout = builder.timeout;
+		this.showInputURI = builder.showInputURI;
 	}
 	
 	public void run() throws IOException {
@@ -79,9 +83,8 @@ public class IguanaBenchmark {
 		
 		System.out.println(BenchmarkUtil.header());
 		
-		for (File f : files) {
+		for (Input input : inputs) {
 			
-			Input input = Input.fromFile(f);
 			GLLParser parser = ParserFactory.getParser(config, input, grammar);
 			
 			for (int i = 0; i < warmupCount; i++) {
@@ -92,7 +95,8 @@ public class IguanaBenchmark {
 				}
 			}
 			
-			System.out.println(f);
+			if (showInputURI) 
+				System.out.println(input.getURI());
 			
 			for (int i = 0; i < runCount; i++) {
 				
@@ -166,12 +170,13 @@ public class IguanaBenchmark {
 
 		private final Grammar grammar;
 		private final Nonterminal start;
-		private final List<File> files = new ArrayList<>();
+		private final List<Input> inputs = new ArrayList<>();
 		private Configuration config = Configuration.DEFAULT;
 		private int warmupCount = 0;
 		private int runCount = 1;
 		private boolean runGCInBetween = false;
 		private int timeout = 0;
+		private boolean showInputURI = true;
 		
 		public Builder(Grammar grammar, Nonterminal start) {
 			this.grammar = grammar;
@@ -179,12 +184,22 @@ public class IguanaBenchmark {
 		}
 		
 		public Builder addDirectory(String dir, String ext, boolean recursive) {
-			files.addAll(find(dir, ext, recursive));
+			inputs.addAll(find(dir, ext, recursive).stream().map(Input::fromFile).collect(Collectors.toList()));
 			return this;
 		}
 		
 		public Builder addFile(String f) {
-			files.add(new File(f));
+			inputs.add(Input.fromFile(new File(f)));
+			return this;
+		}
+		
+		public Builder addString(String s) {
+			inputs.add(Input.fromString(s));
+			return this;
+		}
+		
+		public Builder addStrings(Iterable<String> strings) {
+			inputs.addAll(StreamSupport.stream(strings.spliterator(), false).map(Input::fromString).collect(Collectors.toList()));
 			return this;
 		}
 		
@@ -208,8 +223,13 @@ public class IguanaBenchmark {
 			return this;
 		}
 		
+		public Builder setShowInputURI(boolean showInputURI) {
+			this.showInputURI = showInputURI;
+			return this;
+		}
+		
 		public Builder ignore(String s) {
-			files.remove(new File(s));
+			inputs.remove(new File(s));
 			return this;
 		}
 		
@@ -219,8 +239,8 @@ public class IguanaBenchmark {
 		}
 		
 		public IguanaBenchmark build() {
-			if (files.isEmpty())
-				throw new RuntimeException("No file for benchmarking added.");
+			if (inputs.isEmpty())
+				throw new RuntimeException("No inputs for benchmarking added.");
 			return new IguanaBenchmark(this);
 		}
 	}

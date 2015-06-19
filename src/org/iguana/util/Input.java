@@ -145,12 +145,16 @@ public class Input {
 		return new Input(input, uri);
 	}
 	
-	public static Input fromPath(String path) throws IOException {
+	public static Input fromPath(String path) {
 		return fromFile(new File(path));
 	}
 	
-	public static Input fromFile(File file) throws IOException {
-		return new Input(fromStream(new FileInputStream(file)), file.toURI());
+	public static Input fromFile(File file) {
+		try {
+			return new Input(fromStream(new FileInputStream(file)), file.toURI());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private Input(int[] input, URI uri) {
