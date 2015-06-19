@@ -292,10 +292,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {
 		return sppfLookup.getEpsilonNode(slot, inputIndex);
 	}
-	
+		
 	@Override
 	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child) {
 		return sppfLookup.getNonterminalNode(slot, child);
+	}
+	
+	@Override
+	public NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child) {
+		return sppfLookup.hasNonterminalNode(slot, child);
 	}
 	
 	@Override
@@ -304,7 +309,17 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
+	public NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		return sppfLookup.hasNonterminalNode(slot, leftChild, rightChild);
+	}
+	
+	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
+	}
+	
+	@Override
+	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
 	}
 	
@@ -316,6 +331,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	@Override 
 	public NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getNode(slot, leftChild, rightChild);
+	}
+	
+	@Override
+	public NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		return sppfLookup.hasNode(slot, leftChild, rightChild);
 	}
 
 	@Override
@@ -495,16 +515,36 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
+	public <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data) {
+		return sppfLookup.hasNonterminalNode(slot, leftChild, rightChild, data);
+	}
+	
+	@Override
 	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data) {
 		return sppfLookup.getNonterminalNode(slot, child, data);
+	}
+	
+	@Override
+	public <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data) {
+		return sppfLookup.hasNonterminalNode(slot, child, data);
 	}
 	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild, env);
 	}
 	
+	@Override
+	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
+		return sppfLookup.hasIntermediateNode(slot, leftChild, rightChild, env);
+	}
+	
 	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data) {
 		return sppfLookup.getNode(slot, leftChild, rightChild, env, data);
+	}
+	
+	@Override
+	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data) {
+		return sppfLookup.hasNode(slot, leftChild, rightChild, env, data);
 	}
 
 	@Override

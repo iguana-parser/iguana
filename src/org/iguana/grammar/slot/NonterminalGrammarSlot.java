@@ -142,7 +142,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 															c.accept(val);
 															return val; 
 														  });
-		}
+	}
 	
 	public NonterminalNode findNonterminalNode(Key key) {
 		return nonterminalNodes.get(key);

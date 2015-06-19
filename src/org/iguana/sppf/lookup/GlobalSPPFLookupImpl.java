@@ -83,12 +83,22 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 	
 	@Override
-	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent) {
-		return nonterminalNodes.computeIfAbsent(IntKey3.from(head.getId(), leftExtent, rightExtent, f), k -> {
-			NonterminalNode val = createNonterminalNode(head, leftExtent, rightExtent);
+	public NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		return nonterminalNodes.get(IntKey3.from(slot.getId(), leftExtent, rightExtent, f));
+	}
+	
+	@Override
+	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		return nonterminalNodes.computeIfAbsent(IntKey3.from(slot.getId(), leftExtent, rightExtent, f), k -> {
+			NonterminalNode val = createNonterminalNode(slot, leftExtent, rightExtent);
 			nonterminalNodeAdded(val);
 			return val;
 		});
+	}
+	
+	@Override
+	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
+		return intermediateNodes.get(IntKey3.from(slot.getId(), leftExtent, rightExtent, f));
 	}
 	
 	@Override
@@ -112,14 +122,24 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 		intermediateNodes = new HashMap<>();
 		terminalNodes = new HashMap<>();
 	}
+	
+	@Override
+	public <T> NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data) {
+		return nonterminalNodes.get(IntKey3PlusObject.from(slot, slot.getId(), leftExtent, rightExtent, f4));
+	}
 
 	@Override
-	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot head, int leftExtent, int rightExtent, GSSNodeData<T> env) {
-		return nonterminalNodes.computeIfAbsent(IntKey3PlusObject.from(env, head.getId(), leftExtent, rightExtent, f4), k -> {
-			NonterminalNode val = createNonterminalNode(head, leftExtent, rightExtent);
+	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data) {
+		return nonterminalNodes.computeIfAbsent(IntKey3PlusObject.from(data, slot.getId(), leftExtent, rightExtent, f4), k -> {
+			NonterminalNode val = createNonterminalNode(slot, leftExtent, rightExtent);
 			nonterminalNodeAdded(val);
 			return val;
 		});
+	}
+	
+	@Override
+	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env) {
+		return intermediateNodes.get(IntKey3PlusObject.from(env, slot.getId(), leftExtent, rightExtent, f4));
 	}
 
 	@Override

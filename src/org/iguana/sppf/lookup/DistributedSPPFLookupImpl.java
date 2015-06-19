@@ -60,12 +60,22 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 				                    () -> new TerminalNode(slot, leftExtent, rightExtent),
 				                    this::terminalNodeAdded);
 	}
+	
+	@Override
+	public NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		return slot.findNonterminalNode(IntKey2.from(leftExtent, rightExtent, f));
+	}
 
 	@Override
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		return slot.getNonterminalNode(IntKey2.from(leftExtent, rightExtent, f), 
 									   () -> createNonterminalNode(slot, leftExtent, rightExtent),
 									   this::nonterminalNodeAdded);
+	}
+	
+	@Override
+	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
+		return slot.findIntermediateNode(IntKey2.from(leftExtent, rightExtent, f));
 	}
 
 	@Override
@@ -79,6 +89,11 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	public NonterminalNode getStartSymbol(NonterminalGrammarSlot startSymbol, int inputSize) {
 		return startSymbol.findNonterminalNode(IntKey2.from(0, inputSize - 1, f));
 	}
+	
+	@Override
+	public <T> NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data) {
+		return slot.findNonterminalNode(IntKey2PlusObject.from(data, leftExtent, rightExtent, f3));
+	}
 
 	@Override
 	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data) {
@@ -87,6 +102,11 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 									   this::nonterminalNodeAdded);
 	}
 
+	@Override
+	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env) {
+		return slot.findIntermediateNode(IntKey2PlusObject.from(env, leftExtent, rightExtent, f3));
+	}
+	
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env) {
 		return slot.getIntermediateNode(IntKey2PlusObject.from(env, leftExtent, rightExtent, f3), 
