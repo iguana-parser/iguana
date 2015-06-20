@@ -61,6 +61,8 @@
 			<groupId>org.eclipse.imp</groupId>
 			<artifactId>org.eclipse.imp.pdb.values</artifactId>
 			<version>0.4.3.qualifier</version>
+                        <scope>system</scope>
+                        <systemPath>${project.basedir}/lib/pdb.values.jar</systemPath>
 		</dependency>
 
 		<dependency>
