@@ -39,6 +39,7 @@ import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.grammar.symbol.Ignore;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.symbol.While;
@@ -79,6 +80,8 @@ public interface ISymbolVisitor<T> {
 	public T visit(Terminal symbol);
 	
 	public T visit(While symbol);
+	
+	public T visit(Return symbol);
 	
 	public <E extends Symbol> T visit(Alt<E> symbol);
 	

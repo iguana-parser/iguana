@@ -71,6 +71,7 @@ import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.grammar.symbol.Ignore;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.symbol.While;
@@ -573,6 +574,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		body.setEnv(symbol.getEnv());
 		visitSymbol(body);
 		
+		return null;
+	}
+	
+	@Override
+	public Void visit(Return symbol) {
+		// TODO: support for return
 		return null;
 	}
 

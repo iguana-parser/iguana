@@ -48,6 +48,7 @@ import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.grammar.symbol.Ignore;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
@@ -234,6 +235,12 @@ public class ReachabilityGraph {
 		@Override
 		public Boolean visit(While symbol) {
 			return symbol.getBody().accept(this);
+		}
+		
+		@Override
+		public Boolean visit(Return symbol) {
+			// TODO: support for return
+			return null;
 		}
 
 		@Override

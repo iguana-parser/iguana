@@ -57,6 +57,7 @@ import org.iguana.grammar.symbol.Ignore;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Offside;
 import org.iguana.grammar.symbol.PrecedenceLevel;
+import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
@@ -638,6 +639,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				return symbol;
 			
 			return While.builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
+		}
+		
+		@Override
+		public Symbol visit(Return symbol) {
+			// TODO: support for return
+			return null;
 		}
 
 		@Override
