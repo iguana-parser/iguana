@@ -532,23 +532,23 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public abstract <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
 	
 	@Override
-	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data) {
-		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild, data);
+	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data, Object value) {
+		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild, data, value);
 	}
 	
 	@Override
-	public <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data) {
-		return sppfLookup.hasNonterminalNode(slot, leftChild, rightChild, data);
+	public <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data, Object value) {
+		return sppfLookup.hasNonterminalNode(slot, leftChild, rightChild, data, value);
 	}
 	
 	@Override
-	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data) {
-		return sppfLookup.getNonterminalNode(slot, child, data);
+	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
+		return sppfLookup.getNonterminalNode(slot, child, data, value);
 	}
 	
 	@Override
-	public <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data) {
-		return sppfLookup.hasNonterminalNode(slot, child, data);
+	public <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
+		return sppfLookup.hasNonterminalNode(slot, child, data, value);
 	}
 	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
@@ -560,13 +560,13 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return sppfLookup.hasIntermediateNode(slot, leftChild, rightChild, env);
 	}
 	
-	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data) {
-		return sppfLookup.getNode(slot, leftChild, rightChild, env, data);
+	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data, Object value) {
+		return sppfLookup.getNode(slot, leftChild, rightChild, env, data, value);
 	}
 	
 	@Override
-	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data) {
-		return sppfLookup.hasNode(slot, leftChild, rightChild, env, data);
+	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data, Object value) {
+		return sppfLookup.hasNode(slot, leftChild, rightChild, env, data, value);
 	}
 
 	@Override

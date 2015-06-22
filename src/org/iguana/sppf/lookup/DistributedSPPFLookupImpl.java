@@ -37,10 +37,10 @@ import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Input;
+import org.iguana.util.Tuple;
 import org.iguana.util.collections.IntKey2;
 import org.iguana.util.hashing.hashfunction.IntHash2;
 import org.iguana.util.hashing.hashfunction.IntHash3;
-
 
 public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	
@@ -91,13 +91,13 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 	
 	@Override
-	public <T> NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data) {
-		return slot.findNonterminalNode(IntKey2PlusObject.from(data, leftExtent, rightExtent, f3));
+	public <T> NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data, Object value) {
+		return slot.findNonterminalNode(IntKey2PlusObject.from(Tuple.of(data, value), leftExtent, rightExtent, f3));
 	}
 
 	@Override
-	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data) {
-		return slot.getNonterminalNode(IntKey2PlusObject.from(data, leftExtent, rightExtent, f3), 
+	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data, Object value) {
+		return slot.getNonterminalNode(IntKey2PlusObject.from(Tuple.of(data, value), leftExtent, rightExtent, f3), 
 									   () -> createNonterminalNode(slot, leftExtent, rightExtent), 
 									   this::nonterminalNodeAdded);
 	}

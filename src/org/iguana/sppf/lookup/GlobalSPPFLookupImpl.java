@@ -41,6 +41,7 @@ import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Input;
+import org.iguana.util.Tuple;
 import org.iguana.util.collections.IntKey3;
 import org.iguana.util.collections.Key;
 import org.iguana.util.hashing.hashfunction.IntHash3;
@@ -124,13 +125,13 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 	
 	@Override
-	public <T> NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data) {
-		return nonterminalNodes.get(IntKey3PlusObject.from(slot, slot.getId(), leftExtent, rightExtent, f4));
+	public <T> NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data, Object value) {
+		return nonterminalNodes.get(IntKey3PlusObject.from(Tuple.of(data, value), slot.getId(), leftExtent, rightExtent, f4));
 	}
 
 	@Override
-	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data) {
-		return nonterminalNodes.computeIfAbsent(IntKey3PlusObject.from(data, slot.getId(), leftExtent, rightExtent, f4), k -> {
+	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data, Object value) {
+		return nonterminalNodes.computeIfAbsent(IntKey3PlusObject.from(Tuple.of(data, value), slot.getId(), leftExtent, rightExtent, f4), k -> {
 			NonterminalNode val = createNonterminalNode(slot, leftExtent, rightExtent);
 			nonterminalNodeAdded(val);
 			return val;

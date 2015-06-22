@@ -74,7 +74,8 @@ public class EpsilonGrammarSlot extends LastSymbolAndEndGrammarSlot {
 			NonterminalNode nonterminalNode;
 			if (u instanceof org.iguana.datadependent.gss.GSSNode<?>) {
 				org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) u;
-				nonterminalNode = parser.getNonterminalNode(this, epsilonNode, gssNode.getData());
+				// TODO: support for return values
+				nonterminalNode = parser.getNonterminalNode(this, epsilonNode, gssNode.getData(), null);
 			} else 
 				nonterminalNode = parser.getNonterminalNode(this, epsilonNode);
 			
