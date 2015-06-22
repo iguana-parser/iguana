@@ -135,13 +135,6 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 	}
 	
 	protected void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
-		
-		if (childNode instanceof PackedNode) {
-			if(!((PackedNode) childNode).getParent().equals(parentNode)) {
-				System.out.println("WTF?!");
-			}
-		}
-		
 		sb.append(EDGE + "\"" + getId(parentNode) + "\"" + "->" + "{\"" + getId(childNode) + "\"}" + "\n");
 	}
 	

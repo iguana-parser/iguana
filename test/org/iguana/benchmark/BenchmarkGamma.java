@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.iguana.datadependent.util.IguanaRunner;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -21,7 +22,7 @@ public class BenchmarkGamma {
 	static Grammar grammar = Grammar.builder().addRules(rule1, rule2, rule3).build();
 	
 	public static void main(String[] args) throws IOException {
-		IguanaBenchmark.builder(grammar, S)
+		IguanaRunner.builder(grammar, S)
 				       .addStrings(getStrings())
 				       .setRunCount(5)
 				       .setWarmupCount(3)

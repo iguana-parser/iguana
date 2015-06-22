@@ -30,6 +30,7 @@ package org.iguana.benchmark;
 import java.io.File;
 import java.io.IOException;
 
+import org.iguana.datadependent.util.IguanaRunner;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
@@ -48,7 +49,7 @@ public class BenchmarkOCaml {
 
 	
 	public static void main(String[] args) throws IOException {
-		IguanaBenchmark.builder(ddGrammar, start)
+		IguanaRunner.builder(ddGrammar, start)
 				       .addDirectory(sourceDir, "ml", true)
 				       .setRunCount(1)
 				       .setTimeout(100)
