@@ -54,6 +54,7 @@ import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.grammar.symbol.Ignore;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
@@ -470,6 +471,12 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			return While.builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
+		
+		@Override
+		public Symbol visit(Return symbol) {
+			// TODO:
+			return null;
+		}
 
 		@Override
 		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
@@ -702,6 +709,12 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		@Override
 		public Void visit(While symbol) {
 			return symbol.getBody().accept(this);
+		}
+		
+		@Override
+		public Void visit(Return symbol) {
+			// TODO: support for return
+			return null;
 		}
 
 		@Override

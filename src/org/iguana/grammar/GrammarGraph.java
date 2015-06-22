@@ -72,6 +72,7 @@ import org.iguana.grammar.symbol.IfThen;
 import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Position;
+import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
@@ -458,6 +459,11 @@ public class GrammarGraph implements Serializable {
 			this.isFirst = isFirst;
 			this.isLast = isLast;
 			
+			return null;
+		}
+		
+		public Void visit(Return symbol) {
+			// TODO: support for return
 			return null;
 		}
 		
