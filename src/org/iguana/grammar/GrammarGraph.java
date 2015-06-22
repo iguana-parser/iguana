@@ -155,6 +155,8 @@ public class GrammarGraph implements Serializable {
 			Rule startRule = Rule.withHead(start)
 								 .addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
 			NonterminalGrammarSlot nonterminalGrammarSlot = getNonterminalGrammarSlot(start);
+			nonterminalGrammarSlot.setFollowTest(FollowTest.NO_FOLLOW);
+			nonterminalGrammarSlot.setLookAheadTest(LookAheadTest.NO_LOOKAYOUT);
 			addRule(nonterminalGrammarSlot, startRule);
 			return nonterminalGrammarSlot;
 		}
