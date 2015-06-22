@@ -30,6 +30,7 @@ package org.iguana.benchmark;
 import java.io.File;
 import java.io.IOException;
 
+import org.iguana.datadependent.util.IguanaRunner;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
@@ -64,7 +65,7 @@ public class BenchmarkHaskell {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		IguanaBenchmark.builder(grammar, start)
+		IguanaRunner.builder(grammar, start)
 				       .addDirectory(sourceDir, "hs", true)
 				       .setRunCount(1)
 				       .setTimeout(60)

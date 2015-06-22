@@ -1,9 +1,10 @@
 package org.iguana.util;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 @FunctionalInterface
-public interface SemanticAction {
+public interface SemanticAction extends Serializable {
 	
 	public Object execute(Object o);
 	

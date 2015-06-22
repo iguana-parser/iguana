@@ -25,12 +25,11 @@
  *
  */
 
-package org.iguana.benchmark;
+package org.iguana.datadependent.util;
 
 import static org.iguana.util.BenchmarkUtil.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -52,8 +51,7 @@ import org.iguana.util.Input;
 
 import com.google.common.testing.GcFinalization;
 
-
-public class IguanaBenchmark {
+public class IguanaRunner {
 	
 	private final List<Input> inputs;
 	private final Grammar grammar;
@@ -65,7 +63,7 @@ public class IguanaBenchmark {
 	private final int timeout;
 	private final boolean showInputURI;
 
-	public IguanaBenchmark(Builder builder) {
+	public IguanaRunner(Builder builder) {
 		this.inputs = builder.inputs;
 		this.grammar = builder.grammar;
 		this.config = builder.config;
@@ -77,7 +75,7 @@ public class IguanaBenchmark {
 		this.showInputURI = builder.showInputURI;
 	}
 	
-	public void run() throws IOException {
+	public void run() {
 
 		final GrammarGraph grammarGraph = grammar.toGrammarGraph(Input.empty(), config);
 		
@@ -238,10 +236,10 @@ public class IguanaBenchmark {
 			return this;
 		}
 		
-		public IguanaBenchmark build() {
+		public IguanaRunner build() {
 			if (inputs.isEmpty())
 				throw new RuntimeException("No inputs for benchmarking added.");
-			return new IguanaBenchmark(this);
+			return new IguanaRunner(this);
 		}
 	}
 	
