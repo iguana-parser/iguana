@@ -35,6 +35,7 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.TerminalNode;
 
 
@@ -57,10 +58,14 @@ public class BeforeLastTerminalTransition extends AbstractTerminalTransition {
 			dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr));
 		else {
 			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
+			parser.resetCurrentValue();
 			dest.execute(parser, u, i + length, DummyNode.getInstance(node.getLeftExtent(), i + length));
 			
-			if (parser.getCurrentEndGrammarSlot().isEnd())
-				parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr));
+			if (parser.getCurrentEndGrammarSlot().isEnd()) {
+				// TODO: support for return values
+				NonterminalNode currentNode = parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr);
+				parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, currentNode);
+			}
 		}
 			
 	}
@@ -80,9 +85,11 @@ public class BeforeLastTerminalTransition extends AbstractTerminalTransition {
 				dest.execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr), env);
 		} else {
 			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
+			parser.resetCurrentValue();
 			dest.execute(parser, u, i + length, DummyNode.getInstance(node.getLeftExtent(), i + length), env);
 			
 			if (parser.getCurrentEndGrammarSlot().isEnd()) {
+				// TODO: support for return values
 				if (u instanceof org.iguana.datadependent.gss.GSSNode<?>) {
 					org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) u;
 					parser.getCurrentEndGrammarSlot().execute(parser, u, i + length, parser.getNonterminalNode((LastSymbolGrammarSlot) dest, node, cr, gssNode.getData()), parser.getEnvironment());

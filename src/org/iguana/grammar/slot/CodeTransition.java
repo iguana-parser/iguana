@@ -50,14 +50,11 @@ public class CodeTransition extends AbstractTransition {
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		
 		parser.evaluate(statements, parser.getEmptyEnvironment());
-		
-		if (parser.getEnvironment().isEmpty()) {
+		if (parser.getEnvironment().isEmpty())
 			dest.execute(parser, u, i, node);
-		} else {
+		else
 			dest.execute(parser, u, i, node, parser.getEnvironment());
-		}
 	}
 	
 	/**

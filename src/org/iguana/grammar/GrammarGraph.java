@@ -58,6 +58,7 @@ import org.iguana.grammar.slot.LastSymbolAndEndGrammarSlot;
 import org.iguana.grammar.slot.LastSymbolGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.NonterminalTransition;
+import org.iguana.grammar.slot.ReturnTransition;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalTransition;
 import org.iguana.grammar.slot.EpsilonTransition.Type;
@@ -463,7 +464,14 @@ public class GrammarGraph implements Serializable {
 		}
 		
 		public Void visit(Return symbol) {
-			// TODO: support for return
+			BodyGrammarSlot done = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
+			if (!done.isEnd()) {
+				// TODO: perform this check earlier, when validating a grammar
+				throw new RuntimeException("Return symbol can only be used at the end of a grammar rule!");
+			}
+			currentSlot.addTransition(new ReturnTransition(symbol.getExpression(), currentSlot, done));
+			currentSlot = done;
+			
 			return null;
 		}
 		

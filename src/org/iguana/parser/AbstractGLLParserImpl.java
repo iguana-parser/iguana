@@ -359,6 +359,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	 */
 	private IEvaluatorContext ctx;
 	private BodyGrammarSlot currentEndGrammarSlot = DummySlot.getInstance();
+	private final Object defaultValue = new Object();
+	private Object currentValue = defaultValue;
 	
 	@Override
 	public IEvaluatorContext getEvaluatorContext() {
@@ -371,8 +373,28 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
+	public Object getCurrentValue() {
+		return currentValue;
+	}
+	
+	@Override
+	public boolean hasCurrentValue() {
+		return currentValue != defaultValue;
+	}
+	
+	@Override
 	public void setCurrentEndGrammarSlot(BodyGrammarSlot slot) {
 		currentEndGrammarSlot = slot;
+	}
+	
+	@Override
+	public void setCurrentValue(Object value) {
+		currentValue = value;
+	}
+	
+	@Override
+	public void resetCurrentValue() {
+		currentValue = defaultValue;
 	}
 	
 	@Override

@@ -125,7 +125,15 @@ public interface GLLParser {
 	
 	public BodyGrammarSlot getCurrentEndGrammarSlot();
 	
+	public Object getCurrentValue();
+	
+	public boolean hasCurrentValue();
+	
 	public void setCurrentEndGrammarSlot(BodyGrammarSlot slot);
+	
+	public void setCurrentValue(Object value);
+	
+	public void resetCurrentValue();
 	
 	public Environment getEnvironment();
 	
