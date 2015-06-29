@@ -44,7 +44,7 @@ import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 
-public class ToJavaRegexVIsitor implements RegularExpressionVisitor<String> {
+public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 
 	public String visit(Character c) {
 		return c.getName() + getConditions(c);
