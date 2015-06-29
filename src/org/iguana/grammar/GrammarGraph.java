@@ -227,7 +227,8 @@ public class GrammarGraph implements Serializable {
 		
 		GrammarGraphSymbolVisitor rule2graph = new GrammarGraphSymbolVisitor(head, rule, currentSlot);
 		
-		while (rule2graph.hasNext()) rule2graph.nextSymbol();
+		while (rule2graph.hasNext()) 
+			rule2graph.nextSymbol();
 	}
 	
 	private class GrammarGraphSymbolVisitor extends  AbstractGrammarGraphSymbolVisitor {
@@ -237,9 +238,6 @@ public class GrammarGraph implements Serializable {
 		
 		private BodyGrammarSlot currentSlot;
 		private int i = 0;
-		
-		private boolean isLast = false;
-		private boolean isFirst = false;
 		
 		public GrammarGraphSymbolVisitor(NonterminalGrammarSlot head, Rule rule, BodyGrammarSlot currentSlot) {
 			this.head = head;
@@ -252,10 +250,6 @@ public class GrammarGraph implements Serializable {
 		}
 		
 		public void nextSymbol() {
-			isFirst = false;
-			isLast = false;
-			if (i == 0) isFirst = true;
-			if (i == rule.size() - 1) isLast = true;
 			visitSymbol(rule.symbolAt(i));
 			i++;
 		}
@@ -266,8 +260,7 @@ public class GrammarGraph implements Serializable {
 			NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(symbol);
 			
 			BodyGrammarSlot slot;
-			
-			if (isLast)
+			if (i == rule.size() - 1)
 				slot = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), symbol.getVariable());
 			else
 				slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), symbol.getVariable());
@@ -314,10 +307,11 @@ public class GrammarGraph implements Serializable {
 		}
 				
 		public Void visit(Return symbol) {
-			BodyGrammarSlot done = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
-			if (!done.isEnd()) {
-				// TODO: perform this check earlier, when validating a grammar
+			BodyGrammarSlot done;
+			if (i != rule.size() - 1) {
 				throw new RuntimeException("Return symbol can only be used at the end of a grammar rule!");
+			} else {
+				done = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 			}
 			currentSlot.addTransition(new ReturnTransition(symbol.getExpression(), currentSlot, done));
 			currentSlot = done;
@@ -331,14 +325,14 @@ public class GrammarGraph implements Serializable {
 			
 			BodyGrammarSlot slot;
 			
-			if (isLast)
+			if (i == rule.size() - 1)
 				slot = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), null);
 			else
 				slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), null);
 			
 			Set<Condition> preConditions = symbol.getPreConditions();
 			Set<Condition> postConditions = symbol.getPostConditions();
-			currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions, isFirst, isLast));
+			currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
 			currentSlot = slot;
 			
 			return null;
@@ -349,7 +343,7 @@ public class GrammarGraph implements Serializable {
 		 */
 		private void visitSymbol(Symbol symbol) {
 			
-			if (symbol instanceof Nonterminal || symbol instanceof RegularExpression) { // TODO: I think this can be unified
+			if (symbol instanceof Nonterminal || symbol instanceof RegularExpression || symbol instanceof Return) { // TODO: I think this can be unified
 				symbol.accept(this);
 				return;
 			}
@@ -367,9 +361,9 @@ public class GrammarGraph implements Serializable {
 			symbol.accept(this);
 			
 			if (symbol.getLabel() != null) {
-				BodyGrammarSlot stored;
 				
-				if (isLast)
+				BodyGrammarSlot stored;
+				if (i == rule.size() - 1)
 					stored = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 				else
 					stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
@@ -377,9 +371,9 @@ public class GrammarGraph implements Serializable {
 				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), symbol.getPostConditions(), currentSlot, stored));
 				currentSlot = stored;
 			} else {
-				BodyGrammarSlot checked;
 				
-				if (isLast)
+				BodyGrammarSlot checked;
+				if (i == rule.size() - 1)
 					checked = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 				else
 					checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
@@ -393,7 +387,7 @@ public class GrammarGraph implements Serializable {
 	
 	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
 															 BodyGrammarSlot origin, BodyGrammarSlot dest,
-															 Set<Condition> preConditions, Set<Condition> postConditions, boolean isFirst, boolean isLast) {
+															 Set<Condition> preConditions, Set<Condition> postConditions) {
 		
 		return new TerminalTransition(slot, origin, dest, preConditions, postConditions);
 	}
