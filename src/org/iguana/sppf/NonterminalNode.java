@@ -39,8 +39,19 @@ import org.iguana.util.SPPFToJavaCode;
  */
 public class NonterminalNode extends NonterminalOrIntermediateNode {
 	
+	private final Object value;
+	
 	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set) {
+		this(slot, leftExtent, rightExtent, set, null);
+	}
+	
+	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set, Object value) {
 		super(slot, leftExtent, rightExtent, set);
+		this.value = value;
+	}
+	
+	public Object getValue() {
+		return value;
 	}
 
 	@Override

@@ -109,7 +109,7 @@ public class NewGSSEdgeImpl implements GSSEdge {
 				return null;
 			
 			env = parser.getEnvironment();	
-			// TODO: support for return values
+			
 			y = parser.getNode(returnSlot, node, sppfNode, env);
 				
 			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))

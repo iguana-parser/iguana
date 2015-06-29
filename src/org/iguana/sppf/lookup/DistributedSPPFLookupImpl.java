@@ -98,7 +98,7 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	@Override
 	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data, Object value) {
 		return slot.getNonterminalNode(IntKey2PlusObject.from(Tuple.of(data, value), leftExtent, rightExtent, f3), 
-									   () -> createNonterminalNode(slot, leftExtent, rightExtent), 
+									   () -> createNonterminalNode(slot, leftExtent, rightExtent, value), 
 									   this::nonterminalNodeAdded);
 	}
 

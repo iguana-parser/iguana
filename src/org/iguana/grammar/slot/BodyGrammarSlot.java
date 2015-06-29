@@ -43,6 +43,7 @@ import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Input;
 import org.iguana.util.collections.Key;
 
@@ -161,11 +162,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
-		if (label != null) {
+		if (label != null)
 			env = env.declare(label, sppfNode);
-		}
 		
-		// TODO: Support for return values
+		if (variable != null)
+			env = env.declare(variable, ((NonterminalNode) sppfNode).getValue());
 		
 		return env;
 	}

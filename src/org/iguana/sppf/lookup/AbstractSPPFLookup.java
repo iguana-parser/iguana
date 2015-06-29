@@ -125,6 +125,10 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 		return new NonterminalNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true);
 	}
 	
+	protected NonterminalNode createNonterminalNode(NonterminalGrammarSlot grammarSlot, int leftExtent, int rightExtent, Object value) {
+		return new NonterminalNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true, value);
+	}
+	
 	@Override
 	public void reset() {
 		countAmbiguousNodes = 0;

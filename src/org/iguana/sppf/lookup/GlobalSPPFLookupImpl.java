@@ -132,7 +132,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	@Override
 	public <T> NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data, Object value) {
 		return nonterminalNodes.computeIfAbsent(IntKey3PlusObject.from(Tuple.of(data, value), slot.getId(), leftExtent, rightExtent, f4), k -> {
-			NonterminalNode val = createNonterminalNode(slot, leftExtent, rightExtent);
+			NonterminalNode val = createNonterminalNode(slot, leftExtent, rightExtent, value);
 			nonterminalNodeAdded(val);
 			return val;
 		});
