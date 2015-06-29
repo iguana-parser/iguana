@@ -541,13 +541,13 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return sppfLookup.hasIntermediateNode(slot, leftChild, rightChild, env);
 	}
 	
-	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data, Object value) {
-		return sppfLookup.getNode(slot, leftChild, rightChild, env, data, value);
+	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
+		return sppfLookup.getNode(slot, leftChild, rightChild, env);
 	}
 	
 	@Override
-	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data, Object value) {
-		return sppfLookup.hasNode(slot, leftChild, rightChild, env, data, value);
+	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
+		return sppfLookup.hasNode(slot, leftChild, rightChild, env);
 	}
 
 	@Override

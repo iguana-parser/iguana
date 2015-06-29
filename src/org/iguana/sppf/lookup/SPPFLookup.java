@@ -79,14 +79,14 @@ public interface SPPFLookup {
 		return hasNonterminalNode(slot, child, data, value);
 	}
 	
-	default <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data, Object value) {
+	default <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		if (slot.isFirst())
 			return rightChild;
 		
 		return getIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild, env);
 	}
 	
-	default <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data, Object value) {
+	default <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		if (slot.isFirst())
 			return rightChild;
 		

@@ -45,11 +45,7 @@ public class ReturnTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 	   Object value = parser.evaluate(expression, parser.getEmptyEnvironment());
-	   parser.setCurrentValue(value);
-	   if (parser.getEnvironment().isEmpty()) 
-		   dest.execute(parser, u, i, node);
-	   else
-		   dest.execute(parser, u, i, node, parser.getEnvironment());
+	   ((EndGrammarSlot) dest).execute(parser, u, i, node, value);
 	}
 
 	@Override
@@ -60,8 +56,7 @@ public class ReturnTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		Object value = parser.evaluate(expression, env);
-		parser.setCurrentValue(value);
-		dest.execute(parser, u, i, node, parser.getEnvironment());
+		((EndGrammarSlot) dest).execute(parser, u, i, node, value);
 	}
 
 	@Override
