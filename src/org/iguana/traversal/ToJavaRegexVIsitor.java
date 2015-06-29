@@ -29,6 +29,8 @@ package org.iguana.traversal;
 
 import java.util.stream.Collectors;
 
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.EOF;
@@ -38,17 +40,18 @@ import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Opt;
 import org.iguana.regex.Plus;
+import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 
 public class ToJavaRegexVIsitor implements RegularExpressionVisitor<String> {
 
 	public String visit(Character c) {
-		return c.getName();
+		return c.getName() + getConditions(c);
 	}
 	
 	public String visit(CharacterRange r) {
-		return "[" + r.getName() + "]";
+		return "[" + r.getName() + "]" + getConditions(r);
 	}
 	
 	public String visit(EOF eof) {
@@ -60,26 +63,46 @@ public class ToJavaRegexVIsitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public String visit(Terminal t) {
-		return t.getRegularExpression().accept(this);
+		return t.getRegularExpression().accept(this) + getConditions(t);
 	}
 	
 	public String visit(Star s) {
-		return s.accept(this) + "*";
+		return s.accept(this) + "*" + getConditions(s);
 	}
 	
 	public String visit(Plus p) {
-		return p.accept(this) + "+";
+		return p.accept(this) + "+" + getConditions(p);
 	}
 
 	public String visit(Opt o) {
-		return o.accept(this) + "?";
+		return o.accept(this) + "?" + getConditions(o);
 	}
 	
 	public <E extends Symbol> String visit(Sequence<E> seq) {
-		return "(?" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")";
+		return "(?" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")" + getConditions(seq);
 	}
 	
 	public <E extends Symbol> String visit(Alt<E> alt) {
-		return "(?" +  alt.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")";
+		return "(?" +  alt.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")" + getConditions(alt);
 	}
+	
+	private String getConditions(RegularExpression regex) {
+		return regex.getPostConditions().stream().map(c -> getCondition(c)).collect(Collectors.joining());
+	}
+	
+	private String getCondition(Condition condition) {
+		switch (condition.getType()) {
+			case NOT_FOLLOW: return "(?!" + getRegularExpression(condition).accept(this) + ")";
+				
+			default: return "";
+		}
+	}
+	
+	private static RegularExpression getRegularExpression(Condition condition) {
+		if (condition instanceof RegularExpressionCondition) {
+			return ((RegularExpressionCondition) condition).getRegularExpression();
+		}
+		throw new UnsupportedOperationException();
+	}
+	
 }
