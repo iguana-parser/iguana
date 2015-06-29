@@ -54,7 +54,7 @@ public class TerminalTransition extends AbstractTerminalTransition {
 
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		dest.execute(parser, u, i + length, parser.getIntermediateNode(dest, node, cr));
+		dest.execute(parser, u, i + length, parser.getNode(dest, node, cr));
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class TerminalTransition extends AbstractTerminalTransition {
 	 */
 	@Override
 	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		dest.execute(parser, u, i + length, parser.getIntermediateNode(dest, node, cr, env), env);
+		dest.execute(parser, u, i + length, parser.getNode(dest, node, cr, env), env);
 	}
 	
 }
