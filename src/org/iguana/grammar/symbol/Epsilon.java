@@ -108,11 +108,6 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getPattern() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

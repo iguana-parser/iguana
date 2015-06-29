@@ -166,11 +166,6 @@ public class Character extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getPattern() {
-		return getName();
-	}
-
-	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

@@ -25,42 +25,61 @@
  *
  */
 
-package org.iguana.regex;
+package org.iguana.traversal;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Epsilon;
 import org.iguana.grammar.symbol.Symbol;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.matcher.Matcher;
-import org.iguana.util.generator.ConstructorCode;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
 
-public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
+public class ToJavaRegexVIsitor implements RegularExpressionVisitor<String> {
 
-	public Automaton getAutomaton();
-	
-	public boolean isNullable();
-	
-	public Set<CharacterRange> getFirstSet();
-	
-	/**
-	 * The set of characters (ranges) that cannot follow this regular expressions. 
-	 */
-	public Set<CharacterRange> getNotFollowSet();
-	
-	default boolean isSingleChar() {
-		return false;
-	}
-
-	default Character asSingleChar() {
-		return Character.from(0);
+	public String visit(Character c) {
+		return c.getName();
 	}
 	
-	public Matcher getMatcher();
+	public String visit(CharacterRange r) {
+		return "[" + r.getName() + "]";
+	}
 	
-	public Matcher getBackwardsMatcher();
+	public String visit(EOF eof) {
+		throw new UnsupportedOperationException();
+	}
 	
-	public void initMatcher();
+	public String visit(Epsilon e) {
+		throw new UnsupportedOperationException();
+	}
+	
+	public String visit(Terminal t) {
+		return t.getRegularExpression().accept(this);
+	}
+	
+	public String visit(Star s) {
+		return s.accept(this) + "*";
+	}
+	
+	public String visit(Plus p) {
+		return p.accept(this) + "+";
+	}
+
+	public String visit(Opt o) {
+		return o.accept(this) + "?";
+	}
+	
+	public <E extends Symbol> String visit(Sequence<E> seq) {
+		return "(?" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")";
+	}
+	
+	public <E extends Symbol> String visit(Alt<E> alt) {
+		return "(?" +  alt.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")";
+	}
 }

@@ -117,14 +117,6 @@ public class Opt extends AbstractRegularExpression {
 	public SymbolBuilder<? extends Symbol> copyBuilder() {
 		return new Builder(s);
 	}
-
-	@Override
-	public String getPattern() {
-		if (!isRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-		
-		return ((RegularExpression) s).getPattern() + "?";
-	}
 	
 	@Override
 	public boolean equals(Object obj) {
