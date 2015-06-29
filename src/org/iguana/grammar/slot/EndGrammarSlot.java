@@ -41,21 +41,24 @@ import org.iguana.util.SemanticAction;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 
-	private SemanticAction action;
+	private final NonterminalGrammarSlot nonterminal;
+	private final SemanticAction action;
 
-	public EndGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, 
             			  String label, String variable, Set<Condition> conditions, SemanticAction action) {
 		super(id, position, nodeLookup, label, variable, conditions);
+		this.nonterminal = nonterminal;
 		this.action = action;
+	}
+	
+	public NonterminalGrammarSlot getNonterminal() {
+		return nonterminal;
 	}
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		if (node.isDummy()) {
-			parser.setCurrentEndGrammarSlot(this);
-			return;
-		}
-		parser.pop(u, i, node);
+		if (nonterminal.testFollow(parser.getInput().charAt(i)))
+			parser.pop(u, i, node);
 	}
 	
 	@Override
@@ -93,12 +96,8 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	 */
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		if (node.isDummy()) {
-			parser.setEnvironment(env);
-			parser.setCurrentEndGrammarSlot(this);
-			return;
-		}
-		parser.pop(u, i, node);
+		if (nonterminal.testFollow(parser.getInput().charAt(i)))
+			parser.pop(u, i, node);
 	}
 
 }

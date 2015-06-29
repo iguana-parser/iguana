@@ -37,7 +37,6 @@ public class Position {
 	private final Rule rule;
 	
 	private final int posInRule;
-	
 	private final int posInSymbol;
 	
 	public Position(Rule rule, int posInRule) {

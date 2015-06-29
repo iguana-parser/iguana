@@ -31,15 +31,10 @@ import static org.iguana.util.generator.GeneratorUtil.*;
 import static org.iguana.util.visualization.GraphVizUtil.*;
 
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.BeforeLastTerminalTransition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.ConditionalTransition;
 import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.slot.FirstAndLastTerminalTransition;
-import org.iguana.grammar.slot.FirstTerminalTransition;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.LastSymbolAndEndGrammarSlot;
-import org.iguana.grammar.slot.LastSymbolGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.util.generator.GeneratorUtil;
 
@@ -67,11 +62,7 @@ public class GrammarGraphToDot {
 	}
 	
 	private static void toDot(GrammarSlot slot, StringBuilder sb) {
-		if (slot instanceof LastSymbolAndEndGrammarSlot) {
-			sb.append("\"" + slot.getId() + "\"" + String.format(LAST_SYMBOL_AND_END_SLOT, "") + "\n");
-		} else if (slot instanceof LastSymbolGrammarSlot) {
-			sb.append("\"" + slot.getId() + "\"" + String.format(LAST_SYMBOL_SLOT, "") + "\n");
-		} else if (slot instanceof EndGrammarSlot) {
+		if (slot instanceof EndGrammarSlot) {
 			sb.append("\"" + slot.getId() + "\"" + String.format(END_SLOT, "") + "\n");
 		} else {
 			sb.append("\"" + slot.getId() + "\"" + BODY_SLOT + "\n");
@@ -86,10 +77,6 @@ public class GrammarGraphToDot {
 				
 				if (ifFalse != null)
 					sb.append(String.format(TRANSITION, t.getLabel() + ", false") + "\"" + slot.getId() + "\"" + "->" + "{\"" + ifFalse.getId() + "\"}" + "\n");
-			} else if (t instanceof FirstAndLastTerminalTransition
-						|| t instanceof FirstTerminalTransition
-						|| t instanceof BeforeLastTerminalTransition) {
-				sb.append(String.format(SPECIAL_TERMINAL_TRANSITION, t.getLabel()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n");
 			}
 			else sb.append(String.format(TRANSITION, t.getLabel()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n"); 
 		});

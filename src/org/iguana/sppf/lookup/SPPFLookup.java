@@ -29,12 +29,11 @@ package org.iguana.sppf.lookup;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.LastSymbolGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
@@ -50,118 +49,67 @@ public interface SPPFLookup {
 		return getTerminalNode(slot, inputIndex, inputIndex);
 	}
 	
+	default NonPackedNode getNode(EndGrammarSlot slot, NonPackedNode child) {
+		return getNonterminalNode(slot, child);
+	}
+	
+	default NonPackedNode hasNode(EndGrammarSlot slot, NonPackedNode child) {
+		return hasNonterminalNode(slot, child);
+	}
+	
 	default NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-
-		// A ::= \alpha .
-		if (slot.isLast()) {
-			if (leftChild == DummyNode.getInstance()) {
-				return getNonterminalNode((LastSymbolGrammarSlot) slot, rightChild);
-			} else {
-				return getNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild);				
-			}
-		}
-		
-		// A ::= X . \alpha, in this case leftChild is the dummy node. 
-		if (slot.isFirst()) {
+		if (slot.isFirst())
 			return rightChild;
-		}
 		
 		return getIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild);
 	}
 	
 	default NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-
-		// A ::= \alpha .
-		if (slot.isLast()) {
-			if (leftChild == DummyNode.getInstance()) {
-				return hasNonterminalNode((LastSymbolGrammarSlot) slot, rightChild);
-			} else {
-				return hasNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild);				
-			}
-		}
-		
-		// A ::= X . \alpha, in this case leftChild is the dummy node. 
-		if (slot.isFirst()) {
+		if (slot.isFirst())
 			return rightChild;
-		}
 		
 		return hasIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild);
 	}
 	
+	default <T> NonPackedNode getNode(EndGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data, Object value) {
+		return getNonterminalNode(slot, child, data, value);
+	}
+	
+	default <T> NonPackedNode hasNode(EndGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data, Object value) {
+		return hasNonterminalNode(slot, child, data, value);
+	}
 	
 	default <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data, Object value) {
-		// A ::= \alpha .
-		if (slot.isLast()) {
-			if (leftChild == DummyNode.getInstance()) {
-				return getNonterminalNode((LastSymbolGrammarSlot) slot, rightChild, data, value);
-			} else {
-				return getNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild, data, value);				
-			}
-		}
-		
-		// A ::= X . \alpha, in this case leftChild is the dummy node. 
-		if (slot.isFirst()) {
+		if (slot.isFirst())
 			return rightChild;
-		}
 		
 		return getIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild, env);
 	}
 	
 	default <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env, GSSNodeData<T> data, Object value) {
-		// A ::= \alpha .
-		if (slot.isLast()) {
-			if (leftChild == DummyNode.getInstance()) {
-				return hasNonterminalNode((LastSymbolGrammarSlot) slot, rightChild, data, value);
-			} else {
-				return hasNonterminalNode((LastSymbolGrammarSlot) slot, leftChild, rightChild, data, value);				
-			}
-		}
-		
-		// A ::= X . \alpha, in this case leftChild is the dummy node. 
-		if (slot.isFirst()) {
+		if (slot.isFirst())
 			return rightChild;
-		}
 		
 		return hasIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild, env);
 	}
 	
-	default NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), leftChild.getLeftExtent(), rightChild.getRightExtent());
-		addPackedNode(newNode, slot, leftChild.getRightExtent(), leftChild, rightChild);
-		return newNode;
-	}
-	
-	default NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return hasNonterminalNode(slot.getNonterminal(), leftChild.getLeftExtent(), rightChild.getRightExtent());
-	}
-	
-	default <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data, Object value) {
-		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), leftChild.getLeftExtent(), rightChild.getRightExtent(), data, value);
-		addPackedNode(newNode, slot, leftChild.getRightExtent(), leftChild, rightChild);
-		return newNode;
-	}
-	
-	default <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data, Object value) {
-		return hasNonterminalNode(slot.getNonterminal(), leftChild.getLeftExtent(), rightChild.getRightExtent(), data, value);
-	}
-	
-	default <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child) {
+	default <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
 		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent());
 		addPackedNode(newNode, slot, child.getRightExtent(), child);
 		return newNode;
 	}
 	
-	default <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child) {
+	default <T> NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
 		return hasNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent());
 	}
 	
-	default <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
+	default <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
 		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent(), data, value);
 		addPackedNode(newNode, slot, child.getRightExtent(), child);
 		return newNode;
 	}
 	
-	default <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
+	default <T> NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
 		return hasNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent(), data, value);
 	}
 	

@@ -41,8 +41,8 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.DummySlot;
+import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.LastSymbolGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -69,6 +69,7 @@ import org.iguana.util.logging.LoggerWrapper;
  * 
  * 
  * @author Ali Afroozeh
+ * @author Anastasia Izmaylova
  * 
  */
 public abstract class AbstractGLLParserImpl implements GLLParser {
@@ -294,23 +295,13 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 		
 	@Override
-	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child) {
+	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
 		return sppfLookup.getNonterminalNode(slot, child);
 	}
 	
 	@Override
-	public NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child) {
+	public NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
 		return sppfLookup.hasNonterminalNode(slot, child);
-	}
-	
-	@Override
-	public NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild);
-	}
-	
-	@Override
-	public NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.hasNonterminalNode(slot, leftChild, rightChild);
 	}
 	
 	@Override
@@ -532,22 +523,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public abstract <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
 	
 	@Override
-	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data, Object value) {
-		return sppfLookup.getNonterminalNode(slot, leftChild, rightChild, data, value);
-	}
-	
-	@Override
-	public <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, GSSNodeData<T> data, Object value) {
-		return sppfLookup.hasNonterminalNode(slot, leftChild, rightChild, data, value);
-	}
-	
-	@Override
-	public <T> NonterminalNode getNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
+	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
 		return sppfLookup.getNonterminalNode(slot, child, data, value);
 	}
 	
 	@Override
-	public <T> NonterminalNode hasNonterminalNode(LastSymbolGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
+	public <T> NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
 		return sppfLookup.hasNonterminalNode(slot, child, data, value);
 	}
 	
