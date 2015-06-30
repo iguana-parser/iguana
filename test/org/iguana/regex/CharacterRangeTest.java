@@ -34,16 +34,18 @@ import java.util.Map;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Input;
 import org.junit.Test;
 
 import static org.iguana.util.CharacterRanges.*;
-
 import static org.iguana.util.CollectionsUtil.*;
 
 public class CharacterRangeTest {
+	
+	MatcherFactory factory = new JavaRegexMatcherFactory();
 	
 	@Test
 	public void overlappingTest1() {
@@ -182,7 +184,7 @@ public class CharacterRangeTest {
 		CharacterRange range = CharacterRange.in('0', '9');
 		Automaton automaton = range.getAutomaton();
 		assertEquals(2, automaton.getCountStates());
-		Matcher dfa = MatcherFactory.getMatcher(range);
+		Matcher dfa = factory.getMatcher(range);
 		
 		assertEquals(1, dfa.match(Input.fromString("0"), 0));
 		assertEquals(1, dfa.match(Input.fromString("3"), 0));

@@ -33,12 +33,15 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Input;
 import org.junit.Test;
 
 public class SequenceTest {
+	
+	MatcherFactory factory = new JavaRegexMatcherFactory();
 	
 	// ab
 	private Sequence<Character> seq1 = Sequence.builder(Character.from('a'), Character.from('b')).build();
@@ -57,7 +60,7 @@ public class SequenceTest {
 	
 	@Test
 	public void testDFAMatcher1() {
-		Matcher matcher = MatcherFactory.getMatcher(seq1);
+		Matcher matcher = factory.getMatcher(seq1);
 		assertTrue(matcher.match(Input.fromString("ab")));
 		assertFalse(matcher.match(Input.fromString("ac")));
 		assertFalse(matcher.match(Input.fromString("da")));
@@ -71,7 +74,7 @@ public class SequenceTest {
 	
 	@Test
 	public void testDFAMatcher2() {
-		Matcher matcher = MatcherFactory.getMatcher(seq2);
+		Matcher matcher = factory.getMatcher(seq2);
 		
 		assertTrue(matcher.match(Input.fromString("a0")));
 		assertTrue(matcher.match(Input.fromString("a5")));
@@ -86,7 +89,7 @@ public class SequenceTest {
 	
 	@Test
 	public void testJavaRegexMatcher2() {
-		Matcher dfa = MatcherFactory.getMatcher(seq2);
+		Matcher dfa = factory.getMatcher(seq2);
 		
 		assertTrue(dfa.match(Input.fromString("a0")));
 		assertTrue(dfa.match(Input.fromString("a5")));
@@ -111,7 +114,7 @@ public class SequenceTest {
 	
 	@Test
 	public void testDFAMatcher3() {
-		Matcher matcher = MatcherFactory.getMatcher(seq3);
+		Matcher matcher = factory.getMatcher(seq3);
 		assertTrue(matcher.match(Input.fromString("dm")));
 	}
 	

@@ -48,10 +48,10 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	private Matcher matcher;
 	private Map<Key, TerminalNode> terminalNodes;
 
-	public TerminalGrammarSlot(int id, RegularExpression regex) {
+	public TerminalGrammarSlot(int id, RegularExpression regex, MatcherFactory factory) {
 		super(id, Collections.emptyList());
 		this.regex = regex;
-		this.matcher = MatcherFactory.getMatcher(regex);
+		this.matcher = factory.getMatcher(regex);
 		this.terminalNodes = new HashMap<>();
 	}
 

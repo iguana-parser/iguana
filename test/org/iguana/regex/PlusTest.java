@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.regex.Plus;
 import org.iguana.regex.RegularExpression;
+import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Input;
@@ -39,12 +40,14 @@ import org.junit.Test;
 
 public class PlusTest {
 	
+	MatcherFactory factory = new JavaRegexMatcherFactory();
+	
 	@Test
 	public void testAutomaton() {
 		RegularExpression regex = Plus.from(Character.from('a'));
 		assertEquals(5, regex.getAutomaton().getCountStates());
 		
-		Matcher matcher = MatcherFactory.getMatcher(regex);
+		Matcher matcher = factory.getMatcher(regex);
 		
 		assertEquals(1, matcher.match(Input.fromString("a"), 0));
 		assertEquals(2, matcher.match(Input.fromString("aa"), 0));

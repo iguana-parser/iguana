@@ -48,8 +48,6 @@ public abstract class Condition extends AbstractAttrs implements Serializable, C
 		return type;
 	}
 
-	public abstract SlotAction getSlotAction();
-	
 	public abstract <T> T accept(IConditionVisitor<T> visitor);
 	
 	/**

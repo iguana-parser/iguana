@@ -25,48 +25,44 @@
  *
  */
 
-package org.iguana.grammar.condition;
+package org.iguana.regex.matcher;
 
-import org.iguana.traversal.IConditionVisitor;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- *  
- * @author Ali Afroozeh
- *
- */
-public class PositionalCondition extends Condition {
-	
-	private static final long serialVersionUID = 1L;
-	
-	public PositionalCondition(ConditionType type) {
-		super(type);
-	}
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Sequence;
+
+public class JavaRegexMatcherFactory implements MatcherFactory {
+
+	private Map<RegularExpression, Matcher> cache = new HashMap<>();
+	private Map<RegularExpression, Matcher> backwardsCache = new HashMap<>();
 	
 	@Override
-	public String toString() {
-		return type.toString();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if(this == obj) return true;
-		
-		if(!(obj instanceof PositionalCondition)) return false;
-		
-		PositionalCondition other = (PositionalCondition) obj;
-		
-		return type == other.type;
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return "new PositionalCondition(" + type.name() + ")";
-	}
-	
-	@Override
-	public <T> T accept(IConditionVisitor<T> visitor) {
-		return visitor.visit(this);
+	public Matcher getMatcher(RegularExpression regex) {
+		return cache.computeIfAbsent(regex, JavaRegexMatcher::new);
 	}
 
+    public Matcher getBackwardsMatcher(RegularExpression regex) {
+    	return backwardsCache.computeIfAbsent(regex, this::createBackwardsMatcher);
+    }
+    
+    private Matcher createBackwardsMatcher(RegularExpression regex) {
+        if (regex instanceof Terminal)
+            return getBackwardsMatcher(((Terminal) regex).getRegularExpression());
+        
+        if (regex instanceof Sequence<?>)
+            return DFAMatcherFactory.sequenceBackwardsMatcher((Sequence<?>) regex);
+        
+        if (regex instanceof Character)
+            return DFAMatcherFactory.characterBackwardsMatcher((Character) regex);
+        
+        if (regex instanceof CharacterRange)
+            return DFAMatcherFactory.characterRangeBackwardsMatcher((CharacterRange) regex);
+        
+        return DFAMatcherFactory.createBackwardsMatcher(regex);
+    }
 }

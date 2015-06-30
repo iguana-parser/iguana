@@ -27,10 +27,8 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Set;
-
 import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.Conditions;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.NonPackedNode;
@@ -48,7 +46,7 @@ import org.iguana.sppf.TerminalNode;
 public class TerminalTransition extends AbstractTerminalTransition {
 
 	public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-							  Set<Condition> preConditions, Set<Condition> postConditions) {
+							  Conditions preConditions, Conditions postConditions) {
 		super(slot, origin, dest, preConditions, postConditions);
 	}
 

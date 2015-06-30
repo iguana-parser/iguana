@@ -28,14 +28,11 @@
 package org.iguana.grammar.slot;
 
 import java.util.HashMap;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.Conditions;
-import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
@@ -63,11 +60,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	private final String variable;
 	
 	public BodyGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
-			String label, String variable, Set<Condition> conditions) {
+			String label, String variable, Conditions conditions) {
 		super(id);
 		this.position = position;
 		this.nodeLookup = nodeLookup;
-		this.conditions = ConditionsFactory.getConditions(conditions);
+		this.conditions = conditions;
 		this.label = label;
 		this.variable = variable;
 		this.intermediateNodes = new HashMap<>();

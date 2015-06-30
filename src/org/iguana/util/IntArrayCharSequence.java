@@ -67,12 +67,15 @@ public class IntArrayCharSequence implements CharSequence {
 		
 		this.logicalLength = logicalIndex; 
 		
-		this.indices = new int[indicesList.size()];
+		this.indices = new int[indicesList.size() + 1];
 		this.chars = new char[charsList.size()];
 		for (int i = 0; i < indicesList.size(); i++) {
 			indices[i] = indicesList.get(i);
 			chars[i] = charsList.get(i);
 		}
+		
+		if (indices.length > 1)
+			indices[indices.length - 1] = indices[indices.length - 2] + 1;
 	}
 	
 	public int logicalLength() {

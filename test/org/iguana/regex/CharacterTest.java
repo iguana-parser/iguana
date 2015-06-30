@@ -33,12 +33,15 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.matcher.DFAMatcher;
+import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Input;
 import org.junit.Test;
 
 public class CharacterTest {
+	
+	MatcherFactory factory = new JavaRegexMatcherFactory();
 
 	Character c = Character.from('a');
 	
@@ -51,7 +54,7 @@ public class CharacterTest {
 	
 	@Test
 	public void testMatcher() {
-		Matcher matcher = MatcherFactory.getMatcher(c);
+		Matcher matcher = factory.getMatcher(c);
 		Input input = Input.fromString("a");
 		assertTrue(matcher.match(input));
 		assertEquals(1, matcher.match(input, 0));

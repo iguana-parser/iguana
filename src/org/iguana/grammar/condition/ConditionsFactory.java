@@ -30,18 +30,35 @@ package org.iguana.grammar.condition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.regex.matcher.MatcherFactory;
+import org.iguana.traversal.ToSlotActionConditionVisitor;
 import org.iguana.util.Input;
+import org.iguana.util.generator.GeneratorUtil;
 import org.iguana.util.logging.LoggerWrapper;
 
 public class ConditionsFactory {
 	
 	private static final LoggerWrapper log = LoggerWrapper.getLogger(ConditionsFactory.class);
+
+	public static Conditions DEFAULT = new Conditions() {
+		
+		@Override
+		public boolean execute(Input input, GSSNode u, int i) {
+			return false;
+		}
+		
+		@Override
+		public String toString() {
+			return "";
+		}
+	};
 	
-	public static Conditions getConditions(Set<Condition> conditions) {
+	public static Conditions getConditions(Set<Condition> conditions, MatcherFactory factory) {
 		if (conditions.size() == 0)
 			return (input, u, i) -> false;
 		
@@ -54,10 +71,13 @@ public class ConditionsFactory {
 				break;
 			}
 		}
+
+		ToSlotActionConditionVisitor visitor = new ToSlotActionConditionVisitor(factory);
+		List<SlotAction> actions = list.stream().map(c -> c.accept(visitor)).collect(Collectors.toList());
 		
 		if (requiresEnvironment) {
 			return new Conditions() {
-
+				
 				@Override
 				public boolean execute(Input input, GSSNode u, int i) {
 					return execute(input, u, i, new PersistentEvaluatorContext(input));
@@ -65,8 +85,8 @@ public class ConditionsFactory {
 				
 				@Override
 				public boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
-					for (Condition c : list) {
-			            if (c.getSlotAction().execute(input, u, i, ctx)) {
+					for (SlotAction c : actions) {
+			            if (c.execute(input, u, i, ctx)) {
 			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
 			                return true;
 			            }
@@ -74,18 +94,33 @@ public class ConditionsFactory {
 			        return false;
 				}
 				
+				@Override
+				public String toString() {
+					return conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
+				}
+				
 			};
 		}
 		
-		return (input, u, i) -> {
-	        for (Condition c : list) {
-	            if (c.getSlotAction().execute(input, u, i)) {
-	                log.trace("Condition %s executed", c);
-	                return true;
-	            }
-	        }
-	        return false;
+		return new Conditions() {
+			
+			@Override
+			public boolean execute(Input input, GSSNode u, int i) {
+		        for (SlotAction c : actions) {
+		            if (c.execute(input, u, i)) {
+		                log.trace("Condition %s executed", c);
+		                return true;
+		            }
+		        }
+				return false;
+			}
+			
+			@Override
+			public String toString() {
+				return conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
+			}
 		};
+
 	}
 
 }

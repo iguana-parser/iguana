@@ -28,7 +28,7 @@
 package org.iguana.grammar.slot;
 
 import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
@@ -38,14 +38,12 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.SemanticAction;
 
-import java.util.Set;
-
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
 
 	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, 
-			GSSNodeLookup nodeLookup, Set<Condition> conditions, SemanticAction action) {
+			GSSNodeLookup nodeLookup, Conditions conditions, SemanticAction action) {
 		super(id, position, nonterminal, nodeLookup, null, null, conditions, action);
 		this.epsilonSlot = epsilonSlot;
 	}

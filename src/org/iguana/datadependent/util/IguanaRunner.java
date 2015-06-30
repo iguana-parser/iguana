@@ -101,6 +101,7 @@ public class IguanaRunner {
 				ParseResult result;
 				try {
 					result = run(parser, grammarGraph, input, start);
+//					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("Time out");

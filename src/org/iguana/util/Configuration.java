@@ -50,6 +50,8 @@ public class Configuration {
 	
 	private final LookupStrategy descriptorLookupStrategy;
 	
+	private final MatcherType matcherType;
+	
 	private final int lookAheadCount;
 	
 	private Configuration(Builder builder) {
@@ -61,6 +63,7 @@ public class Configuration {
 		this.sppfLookupStrategy = builder.sppfLookupStrategy;
 		this.descriptorLookupStrategy = builder.descriptorLookupStrategy;
 		this.lookAheadCount = builder.lookaheadCount;
+		this.matcherType = builder.matcherType;
 	}
 	
 	public GSSType getGSSType() {
@@ -93,6 +96,10 @@ public class Configuration {
 	
 	public int getLookAheadCount() {
 		return lookAheadCount;
+	}
+	
+	public MatcherType getMatcherType() {
+		return matcherType;
 	}
 	
 	public static Builder builder() {
@@ -132,26 +139,16 @@ public class Configuration {
 	
 	public static class Builder {
 		
-		private GSSType gssType;
-		private LookupImpl gssLookupImpl;
-		private LookupImpl sppfLookupImpl;
-		private LookupImpl descriptorLookupImpl;
-		private LookupStrategy gssLookupStrategy;
-		private LookupStrategy sppfLookupStrategy;
-		private LookupStrategy descriptorLookupStrategy;
-		private int lookaheadCount;
-		
-		public Builder() {
-			this.gssType = GSSType.NEW;
-			this.gssLookupImpl = LookupImpl.ARRAY;
-			this.sppfLookupImpl = LookupImpl.HASH_MAP;
-			this.descriptorLookupImpl = LookupImpl.HASH_MAP;
-			this.gssLookupStrategy = LookupStrategy.DISTRIBUTED;
-			this.sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
-			this.descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;
-			this.lookaheadCount = 0;
-		}
-		
+		private GSSType gssType = GSSType.NEW;
+		private LookupImpl gssLookupImpl = LookupImpl.ARRAY;
+		private LookupImpl sppfLookupImpl = LookupImpl.HASH_MAP;
+		private LookupImpl descriptorLookupImpl = LookupImpl.HASH_MAP;
+		private LookupStrategy gssLookupStrategy = LookupStrategy.DISTRIBUTED;
+		private LookupStrategy sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
+		private LookupStrategy descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;;
+		private final MatcherType matcherType = MatcherType.DFA;
+		private int lookaheadCount = 0;
+				
 		public Configuration build() {
 			return new Configuration(this);
 		}
