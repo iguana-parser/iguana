@@ -27,12 +27,8 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Collections;
-import java.util.Set;
-
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.parser.GLLParser;
@@ -49,20 +45,20 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Expression[] arguments;
 
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Set<Condition> preConditions) {
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Conditions preConditions) {
 		this(nonterminal, origin, dest, null, preConditions);
 	}
 	
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(nonterminal, origin, dest, null, Collections.emptySet());
+		this(nonterminal, origin, dest, null, ConditionsFactory.DEFAULT);
 	}	
 	
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-			Expression[] arguments, Set<Condition> preConditions) {
+			Expression[] arguments, Conditions preConditions) {
 		super(origin, dest);
 		this.nonterminal = nonterminal;
 		this.arguments = arguments;
-		this.preConditions = ConditionsFactory.getConditions(preConditions);
+		this.preConditions = preConditions;
 	}
 
 	@Override

@@ -35,12 +35,15 @@ import org.iguana.regex.Alt;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
+import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Input;
 import org.junit.Test;
 
 public class CharacterClassTest {
+	
+	MatcherFactory factory = new JavaRegexMatcherFactory();
 	
 	@Test
 	public void test1() {
@@ -52,7 +55,7 @@ public class CharacterClassTest {
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(3, automaton.getCountStates());
 		
-		Matcher matcher = MatcherFactory.getMatcher(regex);
+		Matcher matcher = factory.getMatcher(regex);
 		
 		assertTrue(matcher.match(Input.fromChar('a')));
 		assertTrue(matcher.match(Input.fromChar('f')));
@@ -76,7 +79,7 @@ public class CharacterClassTest {
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(5, automaton.getCountStates());
 
-		Matcher matcher = MatcherFactory.getMatcher(regex);
+		Matcher matcher = factory.getMatcher(regex);
 		
 		assertTrue(matcher.match(Input.fromChar('1')));
 		assertTrue(matcher.match(Input.fromChar('2')));

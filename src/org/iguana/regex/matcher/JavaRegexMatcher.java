@@ -43,21 +43,19 @@ import org.iguana.util.IntArrayCharSequence;
 public class JavaRegexMatcher implements Matcher {
 	
 	private final Pattern pattern;
-	private final java.util.regex.Matcher matcher;
 	
 	public JavaRegexMatcher(RegularExpression regex) {
 		RegularExpressionVisitor<String> visitor = new ToJavaRegexVisitor();
 		this.pattern = Pattern.compile(regex.accept(visitor));
-		this.matcher = pattern.matcher(""); 
 	}
 	
 	@Override
 	public int match(Input input, int i) {
         IntArrayCharSequence charSeq = input.asCharSequence();
-		matcher.reset(charSeq);
-		if (matcher.find(i)) {
-			int end = i + matcher.end();
-			return charSeq.logicalIndexAt(end - 1);									
+        java.util.regex.Matcher matcher = pattern.matcher(charSeq);
+        matcher.region(i, charSeq.length());
+		if (matcher.lookingAt()) {
+			return charSeq.logicalIndexAt(matcher.end()) - i;									
 		}
 		return -1;
 	}

@@ -27,10 +27,9 @@
 
 package org.iguana.grammar.condition;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
 import org.iguana.regex.RegularExpression;
+import org.iguana.regex.matcher.Matcher;
+import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.traversal.IConditionVisitor;
 
 /**
@@ -44,8 +43,6 @@ public class RegularExpressionCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private transient SlotAction action;
-
 	private RegularExpression regularExpression;
 	
 	public RegularExpressionCondition(ConditionType type, RegularExpression regularExpression) {
@@ -54,48 +51,41 @@ public class RegularExpressionCondition extends Condition {
 		
 		if (regularExpression.getPreConditions().size() != 0)
 			throw new IllegalArgumentException("RegularExpression conditions cannot have conditions themselves.");
-		
-		action = createSlotAction(regularExpression);
 	}
 
 	@Override
 	public String toString() {
 		return type.toString() + " " + regularExpression;
 	}
-	
-	// Reading the transiet action field
-	private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
-		in.defaultReadObject();
-		action = createSlotAction(regularExpression);
-	}
-	
-	public SlotAction createSlotAction(RegularExpression r) {
-		r.initMatcher();
+
+	public static SlotAction createSlotAction(RegularExpressionCondition condition, MatcherFactory matcherFactory) {
 		
-		switch (type) {
+		Matcher matcher = matcherFactory.getMatcher(condition.getRegularExpression());
+		Matcher backwardsMatcher = matcherFactory.getBackwardsMatcher(condition.getRegularExpression());
 		
+		switch (condition.getType()) {
 		    case FOLLOW:
 		    case FOLLOW_IGNORE_LAYOUT:
-		    	return (input, node, i) -> r.getMatcher().match(input, i) == -1;
+		    	return (input, node, i) -> matcher.match(input, i) == -1;
 		    	
 		    case NOT_FOLLOW:
 		    case NOT_FOLLOW_IGNORE_LAYOUT:
-		    	return (input, node, i) -> r.getMatcher().match(input, i) >= 0;
+		    	return (input, node, i) -> matcher.match(input, i) >= 0;
 		    	
 		    case MATCH:
 		    	throw new RuntimeException("Unsupported");
 		
 			case NOT_MATCH: 
-				return (input, node, i) -> r.getMatcher().match(input, node.getInputIndex(), i);
+				return (input, node, i) -> matcher.match(input, node.getInputIndex(), i);
 				
 			case NOT_PRECEDE:
 				return (input, node, i) -> {
-					return r.getBackwardsMatcher().match(input, i) >= 0;
+					return backwardsMatcher.match(input, i) >= 0;
 				};
 				
 			case PRECEDE:
 				return (input, node, i) -> {
-					return r.getBackwardsMatcher().match(input, i) == -1;
+					return backwardsMatcher.match(input, i) == -1;
 				};
 				
 			default:
@@ -103,9 +93,40 @@ public class RegularExpressionCondition extends Condition {
 		}
 	}
 	
-	@Override
-	public SlotAction getSlotAction() {
-		return action;
+	public SlotAction createSlotAction(RegularExpression r, MatcherFactory matcherFactory) {
+		
+		Matcher matcher = matcherFactory.getMatcher(r);
+		Matcher backwardsMatcher = matcherFactory.getBackwardsMatcher(r);
+		
+		switch (type) {
+		
+		    case FOLLOW:
+		    case FOLLOW_IGNORE_LAYOUT:
+		    	return (input, node, i) -> matcher.match(input, i) == -1;
+		    	
+		    case NOT_FOLLOW:
+		    case NOT_FOLLOW_IGNORE_LAYOUT:
+		    	return (input, node, i) -> matcher.match(input, i) >= 0;
+		    	
+		    case MATCH:
+		    	throw new RuntimeException("Unsupported");
+		
+			case NOT_MATCH: 
+				return (input, node, i) -> matcher.match(input, node.getInputIndex(), i);
+				
+			case NOT_PRECEDE:
+				return (input, node, i) -> {
+					return backwardsMatcher.match(input, i) >= 0;
+				};
+				
+			case PRECEDE:
+				return (input, node, i) -> {
+					return backwardsMatcher.match(input, i) == -1;
+				};
+				
+			default:
+				throw new RuntimeException("Unexpected error occured.");
+		}
 	}
 	
 	public RegularExpression getRegularExpression() {

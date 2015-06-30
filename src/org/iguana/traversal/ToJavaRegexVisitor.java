@@ -59,7 +59,7 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public String visit(Epsilon e) {
-		throw new UnsupportedOperationException();
+		return "";
 	}
 	
 	public String visit(Terminal t) {

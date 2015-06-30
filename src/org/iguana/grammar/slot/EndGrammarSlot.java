@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
@@ -44,7 +44,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	private SemanticAction action;
 
 	public EndGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
-            			  String label, String variable, Set<Condition> conditions, SemanticAction action) {
+            			  String label, String variable, Conditions conditions, SemanticAction action) {
 		super(id, position, nodeLookup, label, variable, conditions);
 		this.action = action;
 	}

@@ -137,11 +137,6 @@ public class ContextFreeCondition extends Condition {
 	}
 
 	@Override
-	public SlotAction getSlotAction() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public <T> T accept(IConditionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

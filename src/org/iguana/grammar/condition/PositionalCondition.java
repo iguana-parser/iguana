@@ -27,13 +27,7 @@
 
 package org.iguana.grammar.condition;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
 import org.iguana.traversal.IConditionVisitor;
-
-
-
 
 /**
  *  
@@ -44,11 +38,8 @@ public class PositionalCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private transient SlotAction action;
-	
 	public PositionalCondition(ConditionType type) {
 		super(type);
-		action = createSlotAction();
 	}
 	
 	@Override
@@ -72,16 +63,10 @@ public class PositionalCondition extends Condition {
 	public String getConstructorCode() {
 		return "new PositionalCondition(" + type.name() + ")";
 	}
-	
-	// Reading the transiet action field
-	private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
-		in.defaultReadObject();
-		action = createSlotAction();
-	}
 
-	private SlotAction createSlotAction() {
+	public static SlotAction createSlotAction(PositionalCondition condition) {
 
-		switch (type) {
+		switch (condition.getType()) {
 		
 			case START_OF_LINE:
 		    	return (input, node, i) -> !input.isStartOfLine(i);
@@ -97,11 +82,6 @@ public class PositionalCondition extends Condition {
 		}
 	}
 	
-	@Override
-	public SlotAction getSlotAction() {
-		return action;
-	}
-
 	@Override
 	public <T> T accept(IConditionVisitor<T> visitor) {
 		return visitor.visit(this);

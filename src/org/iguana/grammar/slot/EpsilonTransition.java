@@ -27,50 +27,42 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Set;
 
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.Conditions;
-import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.Tuple;
-import org.iguana.util.generator.GeneratorUtil;
 
 public class EpsilonTransition extends AbstractTransition {
 	
 	private final Type type;
 	private final String label;
 	private final Conditions conditions;
-	
-	private final String conditions2string;
 
-	public EpsilonTransition(Set<Condition> conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+	public EpsilonTransition(Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this(Type.DUMMY, conditions, origin, dest);
 	}
 	
-	public EpsilonTransition(Type type, Set<Condition> conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+	public EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
 		this.type = type;
 		this.label = null;
-		this.conditions = ConditionsFactory.getConditions(conditions);
-		this.conditions2string = conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
+		this.conditions = conditions;
 	}
 	
-	public EpsilonTransition(Type type, String label, Set<Condition> conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
 		
 		assert label != null && (type == Type.DECLARE_LABEL || type == Type.STORE_LABEL);
 		
 		this.type = type;
 		this.label = label;
-		this.conditions = ConditionsFactory.getConditions(conditions);
-		this.conditions2string = conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
+		this.conditions = conditions;
 	}
 
 	@Override
@@ -144,15 +136,15 @@ public class EpsilonTransition extends AbstractTransition {
 		case CLEAR_LABEL:
 			return "?";
 		case CLOSE:
-			return "} " + conditions2string;
+			return "} " + conditions;
 		case DECLARE_LABEL:
-			return label + ".lExt " + conditions2string;
+			return label + ".lExt " + conditions;
 		case DUMMY:
-			return conditions2string.isEmpty()? String.valueOf('\u2205') : conditions2string;
+			return conditions.equals("") ? String.valueOf('\u2205') : conditions.toString();
 		case OPEN:
-			return conditions2string + " {";
+			return conditions + " {";
 		case STORE_LABEL:
-			return label + ".rExt " + conditions2string;
+			return label + ".rExt " + conditions;
 		}
 		throw new RuntimeException("Unknown type of an epsilon transition.");
 	}

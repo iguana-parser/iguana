@@ -25,44 +25,43 @@
  *
  */
 
-package org.iguana.grammar.slot;
+package org.iguana.regex.matcher;
 
-import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Conditions;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.TerminalNode;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Sequence;
 
-/**
- * 
- * Corresponds to grammar slots of the form A ::= alpha . b beta, 
- * where |alpha| > 2 or |alpha| = 1 and |beta| > 0.
- * 
- * @author Ali Afroozeh
- *
- */
-public class TerminalTransition extends AbstractTerminalTransition {
+public class JavaRegexMatcherFactory implements MatcherFactory {
 
-	public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-							  Conditions preConditions, Conditions postConditions) {
-		super(slot, origin, dest, preConditions, postConditions);
-	}
-
-	@Override
-	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		dest.execute(parser, u, i + length, parser.getIntermediateNode(dest, node, cr));
-	}
+	private Map<RegularExpression, Matcher> cache = new HashMap<>();
 	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
 	@Override
-	protected void createNode(int length, TerminalNode cr, GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		dest.execute(parser, u, i + length, parser.getIntermediateNode(dest, node, cr, env), env);
+	public Matcher getMatcher(RegularExpression regex) {
+		return cache.computeIfAbsent(regex, JavaRegexMatcher::new);
 	}
-	
+
+    public Matcher getBackwardsMatcher(RegularExpression regex) {
+    	return cache.computeIfAbsent(regex, this::createMatcher);
+    }
+    
+    private Matcher createMatcher(RegularExpression regex) {
+        if (regex instanceof Terminal)
+            return getBackwardsMatcher(((Terminal) regex).getRegularExpression());
+        
+        if (regex instanceof Sequence<?>)
+            return DFAMatcherFactory.sequenceBackwardsMatcher((Sequence<?>) regex);
+        
+        if (regex instanceof Character)
+            return DFAMatcherFactory.characterBackwardsMatcher((Character) regex);
+        
+        if (regex instanceof CharacterRange)
+            return DFAMatcherFactory.characterRangeBackwardsMatcher((CharacterRange) regex);
+        
+        return DFAMatcherFactory.createBackwardsMatcher(regex);
+    }
 }

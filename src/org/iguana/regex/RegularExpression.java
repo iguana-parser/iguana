@@ -34,7 +34,6 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.matcher.Matcher;
 import org.iguana.util.generator.ConstructorCode;
 
 public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
@@ -58,9 +57,4 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 		return Character.from(0);
 	}
 	
-	public Matcher getMatcher();
-	
-	public Matcher getBackwardsMatcher();
-	
-	public void initMatcher();
 }

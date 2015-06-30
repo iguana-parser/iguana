@@ -27,13 +27,9 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Set;
-
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.Conditions;
-import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.NonPackedNode;
@@ -50,11 +46,11 @@ public abstract class AbstractTerminalTransition extends AbstractTransition {
 	private final Conditions postConditions;
 	
 	public AbstractTerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-							  		  Set<Condition> preConditions, Set<Condition> postConditions) {
+			                          Conditions preConditions, Conditions postConditions) {
 		super(origin, dest);
 		this.slot = slot;
-		this.preConditions = ConditionsFactory.getConditions(preConditions);
-		this.postConditions = ConditionsFactory.getConditions(postConditions);
+		this.preConditions = preConditions;
+		this.postConditions = postConditions;
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import java.util.Set;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
@@ -42,7 +43,7 @@ public class LastSymbolGrammarSlot extends BodyGrammarSlot {
 	protected final NonterminalGrammarSlot nonterminal;
 
 	public LastSymbolGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, 
-			String label, String variable, Set<Condition> conditions) {
+			String label, String variable, Conditions conditions) {
 		super(id, position, nodeLookup, label, variable, conditions);
 		this.nonterminal = nonterminal;
 	}

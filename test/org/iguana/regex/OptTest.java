@@ -36,12 +36,15 @@ import org.iguana.regex.Sequence;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.DFAMatcher;
+import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Input;
 import org.junit.Test;
 
 public class OptTest {
+	
+	MatcherFactory factory = new JavaRegexMatcherFactory();
 	
 	@Test
 	public void test1() {
@@ -66,7 +69,7 @@ public class OptTest {
 		automaton = AutomatonOperations.makeDeterministic(automaton);		
 		assertEquals(8, automaton.getCountStates());
 
-		Matcher matcher = MatcherFactory.getMatcher(regex);
+		Matcher matcher = factory.getMatcher(regex);
 		assertTrue(matcher.match(Input.fromString("integer")));
 		assertFalse(matcher.match(Input.fromString("int")));
 		assertTrue(matcher.matchPrefix(Input.fromString("int")));
