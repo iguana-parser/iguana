@@ -71,11 +71,11 @@ public interface SPPFLookup {
 		return hasIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild);
 	}
 	
-	default <T> NonPackedNode getNode(EndGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data, Object value) {
+	default <T> NonPackedNode getNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
 		return getNonterminalNode(slot, child, data, value);
 	}
 	
-	default <T> NonPackedNode hasNode(EndGrammarSlot slot, NonPackedNode child, Environment env, GSSNodeData<T> data, Object value) {
+	default <T> NonPackedNode hasNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
 		return hasNonterminalNode(slot, child, data, value);
 	}
 	

@@ -40,7 +40,7 @@ public class Position {
 	private final int posInSymbol;
 	
 	public Position(Rule rule, int posInRule) {
-		this(rule, posInRule, -1);
+		this(rule, posInRule, 0);
 	}
 	
 	public Position(Rule rule, int posInRule, int posInSymbol) {
@@ -96,7 +96,7 @@ public class Position {
 			}
 			for (i = 0; i < rule.size(); i++) {
 				if (i + 1 == posInRule) {
-					sb.append(rule.symbolAt(i).toString(posInSymbol).trim() + " ");
+					sb.append(rule.symbolAt(i).toString().trim() + " .");
 				} else {
 					sb.append(rule.symbolAt(i) + " ");
 				}
