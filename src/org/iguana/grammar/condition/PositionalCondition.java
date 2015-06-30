@@ -63,24 +63,6 @@ public class PositionalCondition extends Condition {
 	public String getConstructorCode() {
 		return "new PositionalCondition(" + type.name() + ")";
 	}
-
-	public static SlotAction createSlotAction(PositionalCondition condition) {
-
-		switch (condition.getType()) {
-		
-			case START_OF_LINE:
-		    	return (input, node, i) -> !input.isStartOfLine(i);
-		    
-			case END_OF_LINE:
-				return (input, node, i) -> !input.isEndOfLine(i);
-				
-			case END_OF_FILE:
-				return (input, node, i) -> !input.isEndOfFile(i);
-		
-		    default: 
-		    	throw new RuntimeException();
-		}
-	}
 	
 	@Override
 	public <T> T accept(IConditionVisitor<T> visitor) {
