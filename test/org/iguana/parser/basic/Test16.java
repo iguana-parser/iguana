@@ -116,8 +116,8 @@ public class Test16 extends AbstractParserTest {
 				.setGSSEdgesCount(10)
 				.setNonterminalNodesCount(5)
 				.setTerminalNodesCount(5)
-				.setIntermediateNodesCount(6)
-				.setPackedNodesCount(11)
+				.setIntermediateNodesCount(8)
+				.setPackedNodesCount(13)
 				.setAmbiguousNodesCount(0).build();
 		return new ParseSuccess(null, statistics);
 	}

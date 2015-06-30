@@ -46,6 +46,7 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.parser.ParserFactory;
+import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.PackedNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -146,9 +147,9 @@ public class Test12 extends AbstractParserTest {
 				.setGSSEdgesCount(5)
 				.setNonterminalNodesCount(3)
 				.setTerminalNodesCount(3)
-				.setIntermediateNodesCount(0)
-				.setPackedNodesCount(7)
-				.setAmbiguousNodesCount(3).build();
+				.setIntermediateNodesCount(3)
+				.setPackedNodesCount(10)
+				.setAmbiguousNodesCount(4).build();
 		return new ParseSuccess(expectedSPPF1(registry), statistics);
 	}
 	
@@ -159,8 +160,8 @@ public class Test12 extends AbstractParserTest {
 				.setGSSEdgesCount(2)
 				.setNonterminalNodesCount(1)
 				.setTerminalNodesCount(1)
-				.setIntermediateNodesCount(0)
-				.setPackedNodesCount(2)
+				.setIntermediateNodesCount(1)
+				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF2(registry), statistics);
 	}
@@ -172,9 +173,9 @@ public class Test12 extends AbstractParserTest {
 				.setGSSEdgesCount(13)
 				.setNonterminalNodesCount(3)
 				.setTerminalNodesCount(3)
-				.setIntermediateNodesCount(0)
-				.setPackedNodesCount(7)
-				.setAmbiguousNodesCount(3).build();
+				.setIntermediateNodesCount(3)
+				.setPackedNodesCount(10)
+				.setAmbiguousNodesCount(4).build();
 		return new ParseSuccess(expectedSPPF1(registry), statistics);
 	}
 	
@@ -185,8 +186,8 @@ public class Test12 extends AbstractParserTest {
 				.setGSSEdgesCount(6)
 				.setNonterminalNodesCount(1)
 				.setTerminalNodesCount(1)
-				.setIntermediateNodesCount(0)
-				.setPackedNodesCount(2)
+				.setIntermediateNodesCount(1)
+				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF2(registry), statistics);
 	}
@@ -198,32 +199,44 @@ public class Test12 extends AbstractParserTest {
 		TerminalNode node3 = factory.createTerminalNode("a", 0, 1);
 		node2.addChild(node3);
 		PackedNode node4 = factory.createPackedNode("A ::= A A .", 1, node1);
-		NonterminalNode node6 = factory.createNonterminalNode("A", 0, 1, 1);
-		PackedNode node7 = factory.createPackedNode("A ::= .", 1, node6);
-		TerminalNode node8 = factory.createEpsilonNode(1);
-		node7.addChild(node8);
-		PackedNode node9 = factory.createPackedNode("A ::= A A .", 1, node6);
-		node9.addChild(node6);
-		node9.addChild(node6);
-		node6.addChild(node7);
-		node6.addChild(node9);
-		node4.addChild(node1);
-		node4.addChild(node6);
-		PackedNode node12 = factory.createPackedNode("A ::= A A .", 0, node1);
-		NonterminalNode node13 = factory.createNonterminalNode("A", 0, 0, 0);
-		PackedNode node14 = factory.createPackedNode("A ::= .", 0, node13);
-		TerminalNode node15 = factory.createEpsilonNode(0);
-		node14.addChild(node15);
-		PackedNode node16 = factory.createPackedNode("A ::= A A .", 0, node13);
-		node16.addChild(node13);
-		node16.addChild(node13);
-		node13.addChild(node14);
-		node13.addChild(node16);
+		IntermediateNode node5 = factory.createIntermediateNode("A ::= A A .", 0, 1);
+		PackedNode node6 = factory.createPackedNode("A ::= A A .", 1, node5);
+		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 1, 1);
+		PackedNode node9 = factory.createPackedNode("A ::= .", 1, node8);
+		TerminalNode node10 = factory.createEpsilonNode(1);
+		node9.addChild(node10);
+		PackedNode node11 = factory.createPackedNode("A ::= A A .", 1, node8);
+		IntermediateNode node12 = factory.createIntermediateNode("A ::= A A .", 1, 1);
+		PackedNode node13 = factory.createPackedNode("A ::= A A .", 1, node12);
+		node13.addChild(node8);
+		node13.addChild(node8);
 		node12.addChild(node13);
-		node12.addChild(node1);
+		node11.addChild(node12);
+		node8.addChild(node9);
+		node8.addChild(node11);
+		node6.addChild(node1);
+		node6.addChild(node8);
+		PackedNode node16 = factory.createPackedNode("A ::= A A .", 0, node5);
+		NonterminalNode node17 = factory.createNonterminalNode("A", 0, 0, 0);
+		PackedNode node18 = factory.createPackedNode("A ::= .", 0, node17);
+		TerminalNode node19 = factory.createEpsilonNode(0);
+		node18.addChild(node19);
+		PackedNode node20 = factory.createPackedNode("A ::= A A .", 0, node17);
+		IntermediateNode node21 = factory.createIntermediateNode("A ::= A A .", 0, 0);
+		PackedNode node22 = factory.createPackedNode("A ::= A A .", 0, node21);
+		node22.addChild(node17);
+		node22.addChild(node17);
+		node21.addChild(node22);
+		node20.addChild(node21);
+		node17.addChild(node18);
+		node17.addChild(node20);
+		node16.addChild(node17);
+		node16.addChild(node1);
+		node5.addChild(node16);
+		node5.addChild(node16);
+		node4.addChild(node5);
 		node1.addChild(node2);
 		node1.addChild(node4);
-		node1.addChild(node12);
 		return node1;
 	}
 	
@@ -234,8 +247,12 @@ public class Test12 extends AbstractParserTest {
 		TerminalNode node3 = factory.createEpsilonNode(0);
 		node2.addChild(node3);
 		PackedNode node4 = factory.createPackedNode("A ::= A A .", 0, node1);
-		node4.addChild(node1);
-		node4.addChild(node1);
+		IntermediateNode node5 = factory.createIntermediateNode("A ::= A A .", 0, 0);
+		PackedNode node6 = factory.createPackedNode("A ::= A A .", 0, node5);
+		node6.addChild(node1);
+		node6.addChild(node1);
+		node5.addChild(node6);
+		node4.addChild(node5);
 		node1.addChild(node2);
 		node1.addChild(node4);
 		return node1;

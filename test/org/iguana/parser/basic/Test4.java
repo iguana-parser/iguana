@@ -118,26 +118,30 @@ public class Test4 extends AbstractParserTest {
 				.setGSSEdgesCount(0)
 				.setNonterminalNodesCount(1)
 				.setTerminalNodesCount(3)
-				.setIntermediateNodesCount(1)
-				.setPackedNodesCount(2)
+				.setIntermediateNodesCount(2)
+				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(0).build();
 		return new ParseSuccess(expectedSPPF(registry), statistics);
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 3);
-		PackedNode node2 = factory.createPackedNode("A ::= a b c .", 2, node1);
-		IntermediateNode node3 = factory.createIntermediateNode("A ::= a b . c", 0, 2);
-		PackedNode node4 = factory.createPackedNode("A ::= a b . c", 1, node3);
-		TerminalNode node5 = factory.createTerminalNode("a", 0, 1);
-		TerminalNode node6 = factory.createTerminalNode("b", 1, 2);
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 3);
+		PackedNode node2 = factory.createPackedNode("A ::= a b c .", 3, node1);
+		IntermediateNode node3 = factory.createIntermediateNode("A ::= a b c .", 0, 3);
+		PackedNode node4 = factory.createPackedNode("A ::= a b c .", 2, node3);
+		IntermediateNode node5 = factory.createIntermediateNode("A ::= a b . c", 0, 2);
+		PackedNode node6 = factory.createPackedNode("A ::= a b . c", 1, node5);
+		TerminalNode node7 = factory.createTerminalNode("a", 0, 1);
+		TerminalNode node8 = factory.createTerminalNode("b", 1, 2);
+		node6.addChild(node7);
+		node6.addChild(node8);
+		node5.addChild(node6);
+		TerminalNode node9 = factory.createTerminalNode("c", 2, 3);
 		node4.addChild(node5);
-		node4.addChild(node6);
+		node4.addChild(node9);
 		node3.addChild(node4);
-		TerminalNode node7 = factory.createTerminalNode("c", 2, 3);
 		node2.addChild(node3);
-		node2.addChild(node7);
 		node1.addChild(node2);
 		return node1;
 	}
