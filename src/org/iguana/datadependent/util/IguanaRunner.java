@@ -28,15 +28,15 @@
 package org.iguana.datadependent.util;
 
 import static org.iguana.util.BenchmarkUtil.*;
+import static java.util.stream.Stream.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.iguana.grammar.Grammar;
@@ -53,7 +53,7 @@ import com.google.common.testing.GcFinalization;
 
 public class IguanaRunner {
 	
-	private final List<Input> inputs;
+	private final Stream<Input> inputs;
 	private final Grammar grammar;
 	private final Configuration config;
 	private final int warmupCount;
@@ -80,8 +80,12 @@ public class IguanaRunner {
 		final GrammarGraph grammarGraph = grammar.toGrammarGraph(Input.empty(), config);
 		
 		System.out.println(BenchmarkUtil.header());
+
+		Iterator<Input> it = inputs.iterator();
 		
-		for (Input input : inputs) {
+		while (it.hasNext()) {
+			
+			Input input = it.next();
 			
 			GLLParser parser = ParserFactory.getParser(config, input, grammar);
 			
@@ -169,7 +173,7 @@ public class IguanaRunner {
 
 		private final Grammar grammar;
 		private final Nonterminal start;
-		private final List<Input> inputs = new ArrayList<>();
+		private Stream<Input> inputs = empty();
 		private Configuration config = Configuration.DEFAULT;
 		private int warmupCount = 0;
 		private int runCount = 1;
@@ -183,22 +187,22 @@ public class IguanaRunner {
 		}
 		
 		public Builder addDirectory(String dir, String ext, boolean recursive) {
-			inputs.addAll(find(dir, ext, recursive).stream().map(Input::fromFile).collect(Collectors.toList()));
+			inputs = concat(inputs, find(dir, ext, recursive).stream().map(Input::fromFile));
 			return this;
 		}
 		
 		public Builder addFile(String f) {
-			inputs.add(Input.fromFile(new File(f)));
+			inputs = concat(inputs, Stream.of(Input.fromFile(new File(f))));
 			return this;
 		}
 		
 		public Builder addString(String s) {
-			inputs.add(Input.fromString(s));
+			inputs = concat(inputs, Stream.of(Input.fromString(s)));
 			return this;
 		}
 		
 		public Builder addStrings(Iterable<String> strings) {
-			inputs.addAll(StreamSupport.stream(strings.spliterator(), false).map(Input::fromString).collect(Collectors.toList()));
+			inputs = concat(inputs, StreamSupport.stream(strings.spliterator(), false).map(Input::fromString));
 			return this;
 		}
 		
@@ -226,20 +230,13 @@ public class IguanaRunner {
 			this.showInputURI = showInputURI;
 			return this;
 		}
-		
-		public Builder ignore(String s) {
-			inputs.remove(new File(s));
-			return this;
-		}
-		
+				
 		public Builder setTimeout(int timeout) {
 			this.timeout = timeout;
 			return this;
 		}
 		
 		public IguanaRunner build() {
-			if (inputs.isEmpty())
-				throw new RuntimeException("No inputs for benchmarking added.");
 			return new IguanaRunner(this);
 		}
 	}
