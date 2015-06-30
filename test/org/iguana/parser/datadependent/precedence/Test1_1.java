@@ -44,6 +44,7 @@ import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
+import org.iguana.util.Visualization;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -76,14 +77,14 @@ Grammar.builder()
          Input input = Input.fromString("a^a-^a");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/", graph);
+         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/", graph);
 
          GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
 
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/",
+         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/",
          //                   result.asParseSuccess().getRoot(), input);
 
          Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);

@@ -63,14 +63,10 @@ public class NewGSSEdgeImpl extends org.iguana.parser.gss.NewGSSEdgeImpl {
 		
 		env = parser.getEnvironment();
 		
-		NonPackedNode y;
+		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode, env);
 		
-		// TODO: support for return values
-		y = parser.hasNode(returnSlot, getNode(), sppfNode, env);
-		
-		if (y == null) {
+		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 			return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
-		}
 		
 		return null;
 	}

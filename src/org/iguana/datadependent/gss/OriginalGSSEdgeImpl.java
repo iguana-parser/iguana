@@ -63,10 +63,7 @@ public class OriginalGSSEdgeImpl extends org.iguana.parser.gss.OriginalGSSEdgeIm
 		
 		env = parser.getEnvironment();
 		
-		NonPackedNode y;
-		
-		// TODO: support for return values
-		y = parser.getNode(returnSlot, getNode(), sppfNode, env);
+		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode, env);
 		
 		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 			return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
