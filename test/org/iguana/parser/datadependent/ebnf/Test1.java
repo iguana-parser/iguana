@@ -32,6 +32,7 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
@@ -91,6 +92,8 @@ public class Test1 {
 	@Test
 	public void test() {
 		System.out.println(grammar);
+		
+		grammar = new EBNFToBNF().transform(grammar);
 		
 		Input input = Input.fromString("acd");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
