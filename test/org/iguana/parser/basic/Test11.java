@@ -130,8 +130,8 @@ public class Test11 extends AbstractParserTest {
 				.setGSSEdgesCount(3)
 				.setNonterminalNodesCount(4)
 				.setTerminalNodesCount(4)
-				.setIntermediateNodesCount(2)
-				.setPackedNodesCount(7)
+				.setIntermediateNodesCount(3)
+				.setPackedNodesCount(8)
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF(registry), statistics);
 	}
@@ -143,8 +143,8 @@ public class Test11 extends AbstractParserTest {
 				.setGSSEdgesCount(3)
 				.setNonterminalNodesCount(4)
 				.setTerminalNodesCount(4)
-				.setIntermediateNodesCount(2)
-				.setPackedNodesCount(7)
+				.setIntermediateNodesCount(3)
+				.setPackedNodesCount(8)
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF(registry), statistics);
 	}
@@ -152,34 +152,38 @@ public class Test11 extends AbstractParserTest {
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 2);
-		PackedNode node2 = factory.createPackedNode("S ::= A A b .", 1, node1);
-		IntermediateNode node3 = factory.createIntermediateNode("S ::= A A . b", 0, 1);
-		PackedNode node4 = factory.createPackedNode("S ::= A A . b", 0, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("A", 0, 0, 0);
-		PackedNode node6 = factory.createPackedNode("A ::= .", 0, node5);
-		TerminalNode node7 = factory.createEpsilonNode(0);
-		node6.addChild(node7);
-		node5.addChild(node6);
-		NonterminalNode node8 = factory.createNonterminalNode("A", 0, 0, 1);
-		PackedNode node9 = factory.createPackedNode("A ::= a .", 1, node8);
-		TerminalNode node10 = factory.createTerminalNode("a", 0, 1);
-		node9.addChild(node10);
+		PackedNode node2 = factory.createPackedNode("S ::= A A b .", 2, node1);
+		IntermediateNode node3 = factory.createIntermediateNode("S ::= A A b .", 0, 2);
+		PackedNode node4 = factory.createPackedNode("S ::= A A b .", 1, node3);
+		IntermediateNode node5 = factory.createIntermediateNode("S ::= A A . b", 0, 1);
+		PackedNode node6 = factory.createPackedNode("S ::= A A . b", 0, node5);
+		NonterminalNode node7 = factory.createNonterminalNode("A", 0, 0, 0);
+		PackedNode node8 = factory.createPackedNode("A ::= .", 0, node7);
+		TerminalNode node9 = factory.createEpsilonNode(0);
 		node8.addChild(node9);
+		node7.addChild(node8);
+		NonterminalNode node10 = factory.createNonterminalNode("A", 0, 0, 1);
+		PackedNode node11 = factory.createPackedNode("A ::= a .", 1, node10);
+		TerminalNode node12 = factory.createTerminalNode("a", 0, 1);
+		node11.addChild(node12);
+		node10.addChild(node11);
+		node6.addChild(node7);
+		node6.addChild(node10);
+		PackedNode node13 = factory.createPackedNode("S ::= A A . b", 1, node5);
+		NonterminalNode node15 = factory.createNonterminalNode("A", 0, 1, 1);
+		PackedNode node16 = factory.createPackedNode("A ::= .", 1, node15);
+		TerminalNode node17 = factory.createEpsilonNode(1);
+		node16.addChild(node17);
+		node15.addChild(node16);
+		node13.addChild(node10);
+		node13.addChild(node15);
+		node5.addChild(node13);
+		node5.addChild(node13);
+		TerminalNode node18 = factory.createTerminalNode("b", 1, 2);
 		node4.addChild(node5);
-		node4.addChild(node8);
-		PackedNode node11 = factory.createPackedNode("S ::= A A . b", 1, node3);
-		NonterminalNode node13 = factory.createNonterminalNode("A", 0, 1, 1);
-		PackedNode node14 = factory.createPackedNode("A ::= .", 1, node13);
-		TerminalNode node15 = factory.createEpsilonNode(1);
-		node14.addChild(node15);
-		node13.addChild(node14);
-		node11.addChild(node8);
-		node11.addChild(node13);
+		node4.addChild(node18);
 		node3.addChild(node4);
-		node3.addChild(node11);
-		TerminalNode node16 = factory.createTerminalNode("b", 1, 2);
 		node2.addChild(node3);
-		node2.addChild(node16);
 		node1.addChild(node2);
 		return node1;
 	}

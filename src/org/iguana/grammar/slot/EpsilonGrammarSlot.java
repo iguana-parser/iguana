@@ -36,19 +36,21 @@ import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.TerminalNode;
+import org.iguana.util.SemanticAction;
 
-public class EpsilonGrammarSlot extends LastSymbolAndEndGrammarSlot {
+public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
 
-	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, GSSNodeLookup nodeLookup, Conditions conditions) {
-		super(id, position, nonterminal, nodeLookup, null, null, conditions);
+	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, 
+			GSSNodeLookup nodeLookup, Conditions conditions, SemanticAction action) {
+		super(id, position, nonterminal, nodeLookup, null, null, conditions, action);
 		this.epsilonSlot = epsilonSlot;
 	}
 	
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
+		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = parser.getEpsilonNode(epsilonSlot, i);
 			parser.pop(u, i, parser.getNonterminalNode(this, epsilonNode));
 		}
@@ -56,7 +58,7 @@ public class EpsilonGrammarSlot extends LastSymbolAndEndGrammarSlot {
 	
 	@Override
 	public String getConstructorCode() {
-		return "new EpsilonGrammarSlot(slot" + nonterminal.getId() + ")";
+		return "new EpsilonGrammarSlot(slot" + getNonterminal().getId() + ")";
 	}
 	
 	/**
@@ -66,7 +68,7 @@ public class EpsilonGrammarSlot extends LastSymbolAndEndGrammarSlot {
 	 */
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
+		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = parser.getEpsilonNode(epsilonSlot, i);
 			
 			NonterminalNode nonterminalNode;

@@ -121,30 +121,34 @@ public class Test13 extends AbstractParserTest {
 				.setGSSEdgesCount(1)
 				.setNonterminalNodesCount(2)
 				.setTerminalNodesCount(3)
-				.setIntermediateNodesCount(1)
-				.setPackedNodesCount(3)
+				.setIntermediateNodesCount(2)
+				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
 		return new ParseSuccess(expectedSPPF(registry), statistics);
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 3);
-		PackedNode node2 = factory.createPackedNode("A ::= B a c .", 2, node1);
-		IntermediateNode node3 = factory.createIntermediateNode("A ::= B a . c", 0, 2);
-		PackedNode node4 = factory.createPackedNode("A ::= B a . c", 1, node3);
-		NonterminalNode node5 = factory.createNonterminalNode("B", 0, 1);
-		PackedNode node6 = factory.createPackedNode("B ::= b .", 1, node5);
-		TerminalNode node7 = factory.createTerminalNode("b", 0, 1);
+		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 3);
+		PackedNode node2 = factory.createPackedNode("A ::= B a c .", 3, node1);
+		IntermediateNode node3 = factory.createIntermediateNode("A ::= B a c .", 0, 3);
+		PackedNode node4 = factory.createPackedNode("A ::= B a c .", 2, node3);
+		IntermediateNode node5 = factory.createIntermediateNode("A ::= B a . c", 0, 2);
+		PackedNode node6 = factory.createPackedNode("A ::= B a . c", 1, node5);
+		NonterminalNode node7 = factory.createNonterminalNode("B", 0, 0, 1);
+		PackedNode node8 = factory.createPackedNode("B ::= b .", 1, node7);
+		TerminalNode node9 = factory.createTerminalNode("b", 0, 1);
+		node8.addChild(node9);
+		node7.addChild(node8);
+		TerminalNode node10 = factory.createTerminalNode("a", 1, 2);
 		node6.addChild(node7);
+		node6.addChild(node10);
 		node5.addChild(node6);
-		TerminalNode node8 = factory.createTerminalNode("a", 1, 2);
+		TerminalNode node11 = factory.createTerminalNode("c", 2, 3);
 		node4.addChild(node5);
-		node4.addChild(node8);
+		node4.addChild(node11);
 		node3.addChild(node4);
-		TerminalNode node9 = factory.createTerminalNode("c", 2, 3);
 		node2.addChild(node3);
-		node2.addChild(node9);
 		node1.addChild(node2);
 		return node1;
 	}

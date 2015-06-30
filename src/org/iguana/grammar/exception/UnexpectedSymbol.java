@@ -25,44 +25,16 @@
  *
  */
 
-package org.iguana.grammar.slot;
+package org.iguana.grammar.exception;
 
-import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.condition.Conditions;
-import org.iguana.grammar.symbol.Position;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.lookup.GSSNodeLookup;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.grammar.symbol.Symbol;
 
-public class LastSymbolAndEndGrammarSlot extends LastSymbolGrammarSlot {
+public class UnexpectedSymbol extends RuntimeException {
 
-	public LastSymbolAndEndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup,
-			String label, String variable, Conditions conditions) {
-		super(id, position, nonterminal, nodeLookup, label, variable, conditions);
-	}
+	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public boolean isEnd() {
-		return true;
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-	
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, node);
-	}
-	
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
-			parser.pop(u, i, node);
-		}
+	public UnexpectedSymbol(Symbol symbol, String phase) {
+		super(String.format("Unexpected symbol %s has been encountered in %s. This symbol must be desugared prior to this phase.", symbol, phase));
 	}
 
 }

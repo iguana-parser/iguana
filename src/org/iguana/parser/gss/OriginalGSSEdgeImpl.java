@@ -29,11 +29,9 @@ package org.iguana.parser.gss;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.DummySlot;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.HashFunctions;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.NonPackedNode;
 
 public class OriginalGSSEdgeImpl implements GSSEdge {
@@ -104,34 +102,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 			
 			env = parser.getEnvironment();
 			
-			if (returnSlot.isLast() && !returnSlot.isEnd()) {
-				parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
-				returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex), env);
-				
-				if (parser.getCurrentEndGrammarSlot().isEnd()) {
-					if (destination instanceof org.iguana.datadependent.gss.GSSNode<?>) { // TODO: Ugly
-						org.iguana.datadependent.gss.GSSNode<?> dest = (org.iguana.datadependent.gss.GSSNode<?>) destination;
-						// TODO: support for return values
-						y = parser.getNode(returnSlot, node, sppfNode, env, dest.getData(), null); // use the original slot to create a node
-					} else {
-						// TODO: support for return values
-						y = parser.getNode(returnSlot, node, sppfNode, env, null, null); // use the original slot to create a node
-					}
-					returnSlot = parser.getCurrentEndGrammarSlot();
-					env = parser.getEnvironment();
-				} else {
-					return null;
-				}
-			} else {
-				if (destination instanceof org.iguana.datadependent.gss.GSSNode<?>) { // TODO: Ugly
-					org.iguana.datadependent.gss.GSSNode<?> dest = (org.iguana.datadependent.gss.GSSNode<?>) destination;
-					// TODO: support for return values
-					y = parser.getNode(returnSlot, node, sppfNode, env, dest.getData(), null);
-				} else {
-					// TODO: support for return values
-					y = parser.getNode(returnSlot, node, sppfNode, env, null, null);
-				}
-			}
+			y = parser.getNode(returnSlot, node, sppfNode, env);
 			
 			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 				return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
@@ -142,21 +113,10 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
 			return null;
 		
-		if (returnSlot.isLast() && !returnSlot.isEnd()) {
-			parser.setCurrentEndGrammarSlot(DummySlot.getInstance());
-			returnSlot.execute(parser, destination, inputIndex, DummyNode.getInstance(sppfNode.getLeftExtent(), inputIndex));
-			
-			if (parser.getCurrentEndGrammarSlot().isEnd()) {
-				y = parser.getNode(returnSlot, node, sppfNode); // use the original slot to create a node
-				returnSlot = parser.getCurrentEndGrammarSlot();
-			} else
-				return null;
-		} else
-			y = parser.getNode(returnSlot, node, sppfNode); 
+		y = parser.getNode(returnSlot, node, sppfNode); 
 		
-		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y)) {
+		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
 			return new Descriptor(returnSlot, destination, inputIndex, y);
-		}
 		
 		return null;
 	}
