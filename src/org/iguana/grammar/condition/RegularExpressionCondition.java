@@ -108,6 +108,10 @@ public class RegularExpressionCondition extends Condition {
 		return action;
 	}
 	
+	public RegularExpression getRegularExpression() {
+		return regularExpression;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		

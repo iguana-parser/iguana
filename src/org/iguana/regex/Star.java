@@ -134,14 +134,6 @@ public class Star extends AbstractRegularExpression {
 		return builder(s);
 	}
 
-	@Override
-	public String getPattern() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-		
-		return ((RegularExpression) s).getPattern() + "*"; 
-	}
-	
 	public Symbol getSymbol() {
 		return s;
 	}

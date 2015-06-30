@@ -50,8 +50,6 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	 */
 	public Set<CharacterRange> getNotFollowSet();
 	
-	public String getPattern();
-	
 	default boolean isSingleChar() {
 		return false;
 	}

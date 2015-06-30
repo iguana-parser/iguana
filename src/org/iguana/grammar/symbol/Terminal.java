@@ -115,11 +115,6 @@ public class Terminal extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getPattern() {
-		return regex.getPattern();
-	}
-	
-	@Override
 	protected Automaton createAutomaton() {
 		return regex.getAutomaton();
 	}

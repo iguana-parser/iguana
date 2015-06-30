@@ -203,11 +203,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	}
 
 	@Override
-	public String getPattern() {
-		return "[" + getName() + "]";
-	}
-
-	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

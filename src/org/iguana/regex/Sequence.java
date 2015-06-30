@@ -193,14 +193,6 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	public Builder<T> copyBuilder() {
 		return new Builder<T>(this);
 	}
-
-	@Override
-	public String getPattern() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable if all arguments are regular expressions");
-
-		return "(" +  symbols.stream().map(s -> ((RegularExpression)s).getPattern()).collect(Collectors.joining()) + ")";
-	}
 	
 	public List<T> getSymbols() {
 		return symbols;

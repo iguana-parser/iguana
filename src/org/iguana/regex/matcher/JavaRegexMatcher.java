@@ -29,6 +29,9 @@ package org.iguana.regex.matcher;
 
 import java.util.regex.Pattern;
 
+import org.iguana.regex.RegularExpression;
+import org.iguana.traversal.RegularExpressionVisitor;
+import org.iguana.traversal.ToJavaRegexVisitor;
 import org.iguana.util.Input;
 import org.iguana.util.IntArrayCharSequence;
 
@@ -42,8 +45,9 @@ public class JavaRegexMatcher implements Matcher {
 	private final Pattern pattern;
 	private final java.util.regex.Matcher matcher;
 	
-	public JavaRegexMatcher(String str) {
-		this.pattern = Pattern.compile(str);
+	public JavaRegexMatcher(RegularExpression regex) {
+		RegularExpressionVisitor<String> visitor = new ToJavaRegexVisitor();
+		this.pattern = Pattern.compile(regex.accept(visitor));
 		this.matcher = pattern.matcher(""); 
 	}
 	
