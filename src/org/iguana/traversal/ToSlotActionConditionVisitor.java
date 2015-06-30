@@ -37,7 +37,7 @@ import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.condition.SlotAction;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.regex.RegularExpression;
+import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Input;
 
@@ -104,31 +104,66 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 	}
 	
 	private static SlotAction create(RegularExpressionCondition condition, MatcherFactory factory) {
-		RegularExpression r = condition.getRegularExpression();
 		
 		switch (condition.getType()) {		
 		    case FOLLOW:
-		    case FOLLOW_IGNORE_LAYOUT:
-		    	return (input, node, i) -> factory.getMatcher(r).match(input, i) == -1;
+		    case FOLLOW_IGNORE_LAYOUT:		    	
+		    	return new SlotAction() {
+		    		Matcher matcher = factory.getMatcher(condition.getRegularExpression());
+					
+					@Override
+					public boolean execute(Input input, GSSNode gssNode, int i) { return matcher.match(input, i) == -1; }
+					
+					@Override
+					public String toString() { return condition.toString(); }
+				};
 		    	
 		    case NOT_FOLLOW:
-		    case NOT_FOLLOW_IGNORE_LAYOUT:
-		    	return (input, node, i) -> factory.getMatcher(r).match(input, i) >= 0;
+		    case NOT_FOLLOW_IGNORE_LAYOUT: 
+			    return new SlotAction() {
+			    	Matcher matcher = factory.getMatcher(condition.getRegularExpression());
+			    	
+					@Override
+					public boolean execute(Input input, GSSNode gssNode, int i) { return matcher.match(input, i) >= 0; }
+					
+					@Override
+					public String toString() { return condition.toString(); }
+				};
 		    	
 		    case MATCH:
 		    	throw new RuntimeException("Unsupported");
 		
 			case NOT_MATCH: 
-				return (input, node, i) -> factory.getMatcher(r).match(input, node.getInputIndex(), i);
+				return new SlotAction() {
+					Matcher matcher = factory.getMatcher(condition.getRegularExpression());
+					
+					@Override
+					public boolean execute(Input input, GSSNode node, int i) { return matcher.match(input, node.getInputIndex(), i); }
+					
+					@Override
+					public String toString() { return condition.toString(); }
+				};
 				
-			case NOT_PRECEDE:
-				return (input, node, i) -> {
-					return factory.getBackwardsMatcher(r).match(input, i) >= 0;
+			case NOT_PRECEDE: 
+				return new SlotAction() {
+					Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
+					
+					@Override
+					public boolean execute(Input input, GSSNode gssNode, int i) { return matcher.match(input, i) >= 0; }
+					
+					@Override
+					public String toString() { return condition.toString(); }
 				};
 				
 			case PRECEDE:
-				return (input, node, i) -> {
-					return factory.getBackwardsMatcher(r).match(input, i) == -1;
+				return new SlotAction() {
+					Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
+					
+					@Override
+					public boolean execute(Input input, GSSNode node, int i) { return matcher.match(input, i) == -1; }
+					
+					@Override
+					public String toString() { return condition.toString(); }
 				};
 				
 			default:

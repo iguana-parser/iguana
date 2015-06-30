@@ -56,7 +56,6 @@ public class ConditionsFactory {
 		public String toString() {
 			return "";
 		}
-		
 	};
 	
 	public static Conditions getConditions(Set<Condition> conditions, MatcherFactory factory) {
@@ -120,7 +119,6 @@ public class ConditionsFactory {
 			public String toString() {
 				return conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
 			}
-
 		};
 
 	}

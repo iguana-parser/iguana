@@ -46,7 +46,8 @@ public class JavaRegexMatcher implements Matcher {
 	
 	public JavaRegexMatcher(RegularExpression regex) {
 		RegularExpressionVisitor<String> visitor = new ToJavaRegexVisitor();
-		this.pattern = Pattern.compile(regex.accept(visitor));
+		String pattern = regex.accept(visitor);
+		this.pattern = Pattern.compile(pattern);
 	}
 	
 	@Override

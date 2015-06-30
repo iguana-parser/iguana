@@ -43,15 +43,16 @@ import org.iguana.regex.Plus;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
+import org.iguana.util.unicode.UnicodeUtil;
 
 public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 
 	public String visit(Character c) {
-		return c.getName() + getConditions(c);
+		return getChar(c.getValue()) + getConditions(c);
 	}
 	
 	public String visit(CharacterRange r) {
-		return "[" + r.getName() + "]" + getConditions(r);
+		return getRange(r) + getConditions(r);
 	}
 	
 	public String visit(EOF eof) {
@@ -79,11 +80,11 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public <E extends Symbol> String visit(Sequence<E> seq) {
-		return "(?" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")" + getConditions(seq);
+		return "(:?" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")" + getConditions(seq);
 	}
 	
 	public <E extends Symbol> String visit(Alt<E> alt) {
-		return "(?" +  alt.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")" + getConditions(alt);
+		return "(:?" +  alt.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")" + getConditions(alt);
 	}
 	
 	private String getConditions(RegularExpression regex) {
@@ -103,6 +104,45 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 			return ((RegularExpressionCondition) condition).getRegularExpression();
 		}
 		throw new UnsupportedOperationException();
+	}
+
+	private String getChar(int c) {
+		if(UnicodeUtil.isPrintableAscii(c))
+			return escape((char) c + "");			
+		else
+			return escape(String.format("\\x{%04X}", c));
+	}
+	
+	private String getRange(CharacterRange r) {
+		return String.format("[%s-%s]", getChar(r.getStart()), getChar(r.getEnd()));
+	}
+	
+	private String escape(String s) {
+		String backslash = "\\";
+		
+		switch (s) {
+			case "(":
+			case ")":
+			case "[":
+			case "]":
+			case "{":
+			case "}":
+			case "\\":
+			case "^":
+			case "-":
+			case "=":
+			case "$":
+			case "!":
+			case "|":
+			case "?":
+			case "*":
+			case "+":
+			case ".":
+				return backslash + s;
+				
+			default:
+				return s;
+		}
 	}
 	
 }

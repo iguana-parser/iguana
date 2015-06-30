@@ -39,6 +39,7 @@ import org.iguana.regex.Sequence;
 public class JavaRegexMatcherFactory implements MatcherFactory {
 
 	private Map<RegularExpression, Matcher> cache = new HashMap<>();
+	private Map<RegularExpression, Matcher> backwardsCache = new HashMap<>();
 	
 	@Override
 	public Matcher getMatcher(RegularExpression regex) {
@@ -46,10 +47,10 @@ public class JavaRegexMatcherFactory implements MatcherFactory {
 	}
 
     public Matcher getBackwardsMatcher(RegularExpression regex) {
-    	return cache.computeIfAbsent(regex, this::createMatcher);
+    	return backwardsCache.computeIfAbsent(regex, this::createBackwardsMatcher);
     }
     
-    private Matcher createMatcher(RegularExpression regex) {
+    private Matcher createBackwardsMatcher(RegularExpression regex) {
         if (regex instanceof Terminal)
             return getBackwardsMatcher(((Terminal) regex).getRegularExpression());
         
