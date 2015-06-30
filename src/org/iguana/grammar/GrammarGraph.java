@@ -498,6 +498,8 @@ public class GrammarGraph implements Serializable {
 	}
 
 	private Conditions getConditions(Set<Condition> conditions) {
+		if (conditions.isEmpty())
+			return ConditionsFactory.DEFAULT;
 		return ConditionsFactory.getConditions(conditions, matcherFactory);
 	}
 	
