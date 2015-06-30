@@ -69,9 +69,9 @@ public class FirstFollowSets {
 		
 		definitions.keySet().forEach(k -> { firstSets.put(k, new HashSet<>()); followSets.put(k, new HashSet<>()); });
 		
-		calculateFirstSets();
-		calculateFollowSets();
-		calcualtePredictionSets();
+//		calculateFirstSets();
+//		calculateFollowSets();
+//		calcualtePredictionSets();
 	}
 	
 	public Set<CharacterRange> getFirstSet(Nonterminal nonterminal) {
@@ -180,7 +180,7 @@ public class FirstFollowSets {
 		for(int i = index; i < alternate.size(); i++) {
 			Symbol s = alternate.get(i);
 			
-			if(s instanceof RegularExpression) {
+			if (s instanceof RegularExpression) {
 				if(!((RegularExpression)s).isNullable()) {
 					return false;
 				}

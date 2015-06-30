@@ -59,8 +59,6 @@ public class ConditionsFactory {
 	};
 	
 	public static Conditions getConditions(Set<Condition> conditions, MatcherFactory factory) {
-		if (conditions.size() == 0)
-			return (input, u, i) -> false;
 		
 		List<Condition> list = new ArrayList<>(conditions);
 		

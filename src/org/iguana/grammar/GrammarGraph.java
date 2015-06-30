@@ -255,6 +255,8 @@ public class GrammarGraph implements Serializable {
 		private BodyGrammarSlot currentSlot;
 		private int i = 0;
 		
+		private int j = -1;
+		
 		public GrammarGraphSymbolVisitor(NonterminalGrammarSlot head, Rule rule, BodyGrammarSlot currentSlot) {
 			this.head = head;
 			this.rule = rule;
@@ -266,6 +268,7 @@ public class GrammarGraph implements Serializable {
 		}
 		
 		public void nextSymbol() {
+			j = -1;
 			visitSymbol(rule.symbolAt(i));
 			i++;
 		}
@@ -275,7 +278,7 @@ public class GrammarGraph implements Serializable {
 			NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(symbol);
 			
 			BodyGrammarSlot slot;
-			if (i == rule.size() - 1)
+			if (i == rule.size() - 1 && j == -1)
 				slot = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), symbol.getVariable());
 			else
 				slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), symbol.getVariable());
@@ -341,7 +344,7 @@ public class GrammarGraph implements Serializable {
 			
 			BodyGrammarSlot slot;
 			
-			if (i == rule.size() - 1)
+			if (i == rule.size() - 1 && j == -1)
 				slot = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), null);
 			else
 				slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), null);
@@ -363,6 +366,8 @@ public class GrammarGraph implements Serializable {
 				symbol.accept(this);
 				return;
 			}
+			
+			j = 0;
 			
 			if (symbol.getLabel() != null) {
 				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
@@ -498,6 +503,8 @@ public class GrammarGraph implements Serializable {
 	}
 
 	private Conditions getConditions(Set<Condition> conditions) {
+		if (conditions.isEmpty())
+			return ConditionsFactory.DEFAULT;
 		return ConditionsFactory.getConditions(conditions, matcherFactory);
 	}
 	

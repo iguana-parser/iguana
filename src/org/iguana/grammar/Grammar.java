@@ -317,7 +317,7 @@ public class Grammar implements ConstructorCode, Serializable {
 	public String getConstructorCode() {
 		return "Grammar.builder()\n" +
 			   (layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
-			   definitions.values().stream().map(l -> rulesToString(l)) + "\n.build()";
+			   definitions.values().stream().map(l -> rulesToString(l)).collect(Collectors.joining()) + "\n.build()";
 	}
 	
 	private static String rulesToString(Iterable<Rule> rules) {
