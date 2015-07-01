@@ -75,10 +75,11 @@ public interface Symbol extends ConstructorCode, Serializable, Attr {
 	
 	public SymbolBuilder<? extends Symbol> copyBuilder();
 	
-	public int size();
-	
+	default int size() {
+		return 1;
+	}
+		
 	public String toString(int j);
 	
 	public <T> T accept(ISymbolVisitor<T> visitor);
-	
 }	

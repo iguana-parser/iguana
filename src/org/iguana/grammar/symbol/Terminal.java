@@ -58,6 +58,11 @@ public class Terminal extends AbstractRegularExpression {
 	}
 	
 	@Override
+	public int length() {
+		return regex.length();
+	}
+	
+	@Override
 	public int hashCode() {
 		return regex.hashCode();
 	}
