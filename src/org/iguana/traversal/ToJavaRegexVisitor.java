@@ -80,11 +80,11 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public <E extends Symbol> String visit(Sequence<E> seq) {
-		return "(:?" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")" + getConditions(seq);
+		return "(?:" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")" + getConditions(seq);
 	}
 	
 	public <E extends Symbol> String visit(Alt<E> alt) {
-		return "(:?" +  alt.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")" + getConditions(alt);
+		return "(?:" +  alt.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")" + getConditions(alt);
 	}
 	
 	private String getConditions(RegularExpression regex) {
