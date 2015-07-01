@@ -169,7 +169,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(OrIndent expression) {
 		
-		org.iguana.datadependent.ast.Expression index = expression.getIndext();
+		org.iguana.datadependent.ast.Expression index = expression.getIndex();
 		
 		index.setEnv(expression.getEnv());
 		index.accept(this);
@@ -195,7 +195,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(AndIndent expression) {
 		
-		org.iguana.datadependent.ast.Expression index = expression.getIndext();
+		org.iguana.datadependent.ast.Expression index = expression.getIndex();
 		
 		index.setEnv(expression.getEnv());
 		index.accept(this);

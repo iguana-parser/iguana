@@ -405,7 +405,7 @@ public abstract class Expression extends AbstractAST {
 			this.lExt = lExt;
 		}
 		
-		public Expression getIndext() {
+		public Expression getIndex() {
 			return index;
 		}
 		
@@ -493,7 +493,7 @@ public abstract class Expression extends AbstractAST {
 			this.returnIndex = returnIndex;
 		}
 		
-		public Expression getIndext() {
+		public Expression getIndex() {
 			return index;
 		}
 		
