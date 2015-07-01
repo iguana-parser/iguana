@@ -27,6 +27,7 @@
 
 package org.iguana.grammar.symbol;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -149,11 +150,15 @@ public class Nonterminal extends AbstractSymbol {
 			excepts = GeneratorUtil.listToString(this.excepts.stream().map(l -> ".addExcept(\"" + l + "\")").collect(Collectors.toSet()));
 		
 		return Nonterminal.class.getSimpleName() + ".builder(\"" + name + "\")"
-													+ super.getConstructorCode() 
-													+ (index > 0 ?  ".setIndex(" + index + ")" : "")
-													+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
-													+ excepts
-													+ ".build()";
+				+ (parameters != null? ".addParameters(" 
+						+ GeneratorUtil.listToString(Arrays.asList(parameters).stream().map(param -> "\"" + param + "\"").collect(Collectors.toList()), ",") + ")" : "")
+				+ (arguments != null? ".apply(" 
+						+ GeneratorUtil.listToString(Arrays.asList(arguments).stream().map(arg -> arg.getConstructorCode()).collect(Collectors.toList()), ",") + ")" : "")
+				+ super.getConstructorCode() 
+				+ (index > 0 ?  ".setIndex(" + index + ")" : "")
+				+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
+				+ excepts
+				+ ".build()";
 	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
