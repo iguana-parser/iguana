@@ -468,8 +468,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		@Override
 		public Symbol visit(Return symbol) {
-			// TODO: support for return
-			return null;
+			return symbol;
 		}
 		
 	}

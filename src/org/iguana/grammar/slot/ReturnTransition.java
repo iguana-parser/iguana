@@ -50,7 +50,7 @@ public class ReturnTransition extends AbstractTransition {
 
 	@Override
 	public String getLabel() {
-		return null;
+		return expression.toString();
 	}
 
 	@Override

@@ -72,4 +72,11 @@ public class NonterminalNode extends NonterminalOrIntermediateNode {
 		return getGrammarSlot().getNonterminal().isEbnfList();
 	}
 	
+	@Override
+	public String toString() {
+		if (value != null)
+			return String.format("(%s, %d, %d, %s)", slot, leftExtent, rightExtent, value);
+		return String.format("(%s, %d, %d)", slot, leftExtent, rightExtent);
+	}
+	
 }
