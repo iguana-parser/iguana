@@ -367,8 +367,6 @@ public class GrammarGraph implements Serializable {
 				return;
 			}
 			
-			j = 0;
-			
 			if (symbol.getLabel() != null) {
 				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), getConditions(symbol.getPreConditions()), currentSlot, declared));
@@ -379,12 +377,16 @@ public class GrammarGraph implements Serializable {
 				currentSlot = checked;
 			}
 			
+			j += 1;
+			
 			symbol.accept(this);
+			
+			j -= 1;
 			
 			if (symbol.getLabel() != null) {
 				
 				BodyGrammarSlot stored;
-				if (i == rule.size() - 1)
+				if (i == rule.size() - 1 && j == -1)
 					stored = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 				else
 					stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
@@ -394,7 +396,7 @@ public class GrammarGraph implements Serializable {
 			} else {
 				
 				BodyGrammarSlot checked;
-				if (i == rule.size() - 1)
+				if (i == rule.size() - 1 && j == -1)
 					checked = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
 				else
 					checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null);
