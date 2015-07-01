@@ -146,7 +146,7 @@ public class Configuration {
 		private LookupStrategy gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 		private LookupStrategy sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
 		private LookupStrategy descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;;
-		private final MatcherType matcherType = MatcherType.DFA;
+		private final MatcherType matcherType = MatcherType.JAVA_REGEX;
 		private int lookaheadCount = 0;
 				
 		public Configuration build() {
@@ -192,6 +192,5 @@ public class Configuration {
 			this.lookaheadCount = lookaheadCount;
 			return this;
 		}
-		
 	}
 }
