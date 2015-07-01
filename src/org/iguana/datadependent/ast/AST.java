@@ -384,6 +384,14 @@ public class AST {
 		return new Expression.RightExtent(label);
 	}
 	
+	static public Expression yield(String label) {
+		return new Expression.Yield(label);
+	}
+	
+	static public Expression val(String label) {
+		return new Expression.Val(label);
+	}
+	
 	static public Expression endOfFile(Expression index) {
 		return new Expression.EndOfFile(index);
 	}

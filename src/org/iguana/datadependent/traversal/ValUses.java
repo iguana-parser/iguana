@@ -23,6 +23,8 @@ import org.iguana.datadependent.ast.Expression.OrIndent;
 import org.iguana.datadependent.ast.Expression.Real;
 import org.iguana.datadependent.ast.Expression.RightExtent;
 import org.iguana.datadependent.ast.Expression.String;
+import org.iguana.datadependent.ast.Expression.Val;
+import org.iguana.datadependent.ast.Expression.Yield;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.Statement.Expression;
 import org.iguana.datadependent.ast.VariableDeclaration;
@@ -59,7 +61,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
 	
-	public final Set<String> labels = new HashSet<>();
+	public final Set<java.lang.String> labels = new HashSet<>();
 	
 	@Override
 	public Void visit(ContextFreeCondition condition) {
@@ -331,6 +333,17 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 
 	@Override
 	public Void visit(EndOfFile expression) {
+		return null;
+	}
+	
+	@Override
+	public Void visit(Yield expression) {
+		return null;
+	}
+	
+	@Override
+	public Void visit(Val expression) {
+		labels.add(expression.getLabel());
 		return null;
 	}
 

@@ -32,6 +32,7 @@ import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
 
 
 public abstract class Expression extends AbstractAST {
@@ -991,6 +992,100 @@ public abstract class Expression extends AbstractAST {
 			return visitor.visit(this);
 		}
 		
+	}
+	
+	static public class Yield extends Expression {
+		private static final long serialVersionUID = 1L;
+
+		static public java.lang.String format = "%s.yield";
+		
+		private final java.lang.String label;
+		
+		Yield(java.lang.String label) {
+			this.label = label;
+		}
+		
+		public java.lang.String getLabel() {
+			return label;
+		}
+		
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			Object value = ctx.lookupVariable(label);
+			if (value == null) {
+				throw new UndeclaredVariableException(label);
+			}
+			
+			if (!(value instanceof NonPackedNode)) {
+				throw new UnexpectedTypeOfArgumentException(this);
+			}
+			
+			NonPackedNode node = (NonPackedNode) value;
+			return ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent());
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.yield(" + "\"" + label + "\"" + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s.yield", label);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			// return visitor.visit(this);
+			return null;
+		}
+	}
+	
+	static public class Val extends Expression {
+		private static final long serialVersionUID = 1L;
+
+		static public java.lang.String format = "%s.val";
+		
+		private final java.lang.String label;
+		
+		Val(java.lang.String label) {
+			this.label = label;
+		}
+		
+		public java.lang.String getLabel() {
+			return label;
+		}
+		
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			Object value = ctx.lookupVariable(label);
+			if (value == null) {
+				throw new UndeclaredVariableException(label);
+			}
+			
+			if (!(value instanceof NonterminalNode)) {
+				throw new UnexpectedTypeOfArgumentException(this);
+			}
+			
+			NonterminalNode node = (NonterminalNode) value;
+			return node.getValue();
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.val(" + "\"" + label + "\"" + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s.val", label);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			// return visitor.visit(this);
+			return null;
+		}
 	}
 	
 	static public class EndOfFile extends Expression {

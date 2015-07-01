@@ -52,6 +52,8 @@ import org.iguana.datadependent.ast.Expression.OrIndent;
 import org.iguana.datadependent.ast.Expression.Real;
 import org.iguana.datadependent.ast.Expression.RightExtent;
 import org.iguana.datadependent.ast.Expression.String;
+import org.iguana.datadependent.ast.Expression.Val;
+import org.iguana.datadependent.ast.Expression.Yield;
 import org.iguana.datadependent.ast.Statement.Expression;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ContextFreeCondition;
@@ -343,6 +345,28 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		if (!expression.getEnv().contains(label)) {
 			freeVariables.add(label);
+		}
+		return null;
+	}
+	
+	@Override
+	public Void visit(Yield expression) {
+		
+		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Yield.format, expression.getLabel());
+		
+		if (!expression.getEnv().contains(name)) {
+			freeVariables.add(name);
+		}
+		return null;
+	}
+	
+	@Override
+	public Void visit(Val expression) {
+		
+		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Val.format, expression.getLabel());
+		
+		if (!expression.getEnv().contains(name)) {
+			freeVariables.add(name);
 		}
 		return null;
 	}

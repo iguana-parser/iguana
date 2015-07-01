@@ -27,6 +27,8 @@
 
 package org.iguana.datadependent.traversal;
 
+import org.iguana.datadependent.ast.Expression.Val;
+import org.iguana.datadependent.ast.Expression.Yield;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.ast.Expression.AndIndent;
@@ -89,6 +91,10 @@ public interface IAbstractASTVisitor<T> {
 	public T visit(LeftExtent expression);
 	
 	public T visit(RightExtent expression);
+	
+	public T visit(Yield expression);
+	
+	public T visit(Val expression);
 	
 	public T visit(EndOfFile expression);
 	
