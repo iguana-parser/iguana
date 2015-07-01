@@ -28,6 +28,7 @@
 package org.iguana.regex;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Set;
 
 import org.iguana.grammar.symbol.Character;
@@ -57,4 +58,17 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 		return Character.from(0);
 	}
 	
+	default int length() {
+		return 1;
+	}
+	
+	public static <T> Comparator<T> lengthComparator() {
+		return (T o1, T o2) -> {
+			if (!(o1 instanceof RegularExpression) || !(o2 instanceof RegularExpression)) { return 0; }
+			
+			RegularExpression r1 = (RegularExpression) o1;
+			RegularExpression r2 = (RegularExpression) o2;
+			return r2.length() - r1.length();
+		};
+	}
 }

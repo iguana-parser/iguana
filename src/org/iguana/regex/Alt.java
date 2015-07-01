@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -72,8 +73,6 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	}
 	
 	private static <T extends Symbol> String getName(List<T> elements) {
-//		Verify.verify(elements != null, "Elements cannot be null");
-//		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
 		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" | ")) + ")";
 	}
 	
@@ -121,6 +120,16 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	
 	public int size() {
 		return symbols.size();
+	}
+	
+	@Override
+	public int length() {
+		if (allRegularExpression) {
+			Optional<T> max = symbols.stream().max(RegularExpression.lengthComparator());
+			if (max.isPresent()) 
+				return ((RegularExpression) max.get()).length();
+		}
+		return 0;
 	}
 	
 	public T get(int index) {

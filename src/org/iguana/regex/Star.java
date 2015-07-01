@@ -69,6 +69,13 @@ public class Star extends AbstractRegularExpression {
 	}
 	
 	@Override
+	public int length() {
+		if (allRegularExpression)
+			((RegularExpression)s).length();
+		return super.length();
+	}
+	
+	@Override
 	protected Automaton createAutomaton() {
 		
 		if (!allRegularExpression)

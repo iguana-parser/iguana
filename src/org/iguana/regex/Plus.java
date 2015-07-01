@@ -66,6 +66,14 @@ public class Plus extends AbstractRegularExpression {
 	}
 	
 	@Override
+	public int length() {
+		if (allRegularExpression) {
+			return ((RegularExpression) s).length();
+		}
+		return 0;
+	}
+	
+	@Override
 	protected Automaton createAutomaton() {
 		
 		if (!allRegularExpression)

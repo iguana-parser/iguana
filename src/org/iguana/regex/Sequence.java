@@ -86,9 +86,15 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	}
 	
 	private static <T extends Symbol> String getName(List<T> elements) {
-//		Verify.verify(elements != null, "Elements cannot be null");
-//		Verify.verify(elements.size() == 0, "Elements cannot be empty.");
 		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" ")) + ")";
+	}
+	
+	@Override
+	public int length() {
+		if (allRegularExpression) {
+			return symbols.stream().mapToInt(s -> ((RegularExpression)s).length()).sum();
+		}
+		return 0;
 	}
 		
 	@Override

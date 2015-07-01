@@ -83,12 +83,6 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	}
 
 	@Override
-	public int size() {
-		return 1;
-	}
-
-	
-	@Override
 	public String toString() {
 		String s = label == null ? name : label + ":" + name;
 		if (!preConditions.isEmpty())

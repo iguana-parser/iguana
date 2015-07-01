@@ -62,8 +62,15 @@ public class Opt extends AbstractRegularExpression {
 	}
 
 	private static String getName(Symbol s) {
-//		Verify.verifyNotNull(s);
 		return s.getName() + "?";
+	}
+	
+	@Override
+	public int length() {
+		if (isRegularExpression) {
+			return ((RegularExpression) s).length();
+		}
+		return 0;
 	}
 	
 	@Override
@@ -134,7 +141,6 @@ public class Opt extends AbstractRegularExpression {
 	public int hashCode() {
 		return name.hashCode();
 	}
-	
 	
 	public static Builder builder(Symbol s) {
 		return new Builder(s);
