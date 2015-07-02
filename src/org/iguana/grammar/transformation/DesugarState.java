@@ -35,7 +35,6 @@ import java.util.Set;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.eclipse.imp.pdb.facts.util.TrieSet;
-import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.operations.ReachabilityGraph;
@@ -50,12 +49,14 @@ import org.iguana.grammar.symbol.Symbol;
  */
 
 /*
- * phase: before ...
+ * phase: after EBNF transformation
  */
 public class DesugarState implements GrammarTransformation {
 	
 	private final Map<Nonterminal,Set<String>> uses = new HashMap<>();
 	private final Map<Nonterminal,Set<String>> updates = new HashMap<>();
+	
+	private final Map<Nonterminal, Set<String>> returns = new HashMap<>();
 	
 	private Set<String> current_uses;
 	private Set<String> current_updates;
@@ -82,7 +83,9 @@ public class DesugarState implements GrammarTransformation {
 			}
 			
 			for (Rule rule : grammar.getAlternatives(head)) {
+				
 				ImmutableSet<String> _env = env;
+				
 				for (Symbol symbol : rule.getBody()) {
 					symbol.setEnv(_env);
 					visitor.visitSymbol(symbol);
@@ -105,7 +108,33 @@ public class DesugarState implements GrammarTransformation {
 			}
 		}
 		
+		for (Nonterminal nonterminal : updates.keySet())
+			returns.put(nonterminal, new HashSet<>());
 		
+		for (Nonterminal head : grammar.getNonterminals()) {
+			FreeVariableVisitor visitor = new FreeVariableVisitor(updates, returns);
+			
+			ImmutableSet<String> env = TrieSet.of();
+			
+			String[] parameters = head.getParameters();
+			if (parameters != null) {
+				for (String parameter : parameters)
+					env.__insert(parameter);
+			}
+			
+			for (Rule rule : grammar.getAlternatives(head)) {
+				
+				ImmutableSet<String> _env = env;
+				visitor.init();
+				
+				for (Symbol symbol : rule.getBody()) {
+					symbol.setEnv(_env);
+					visitor.visitSymbol(symbol);
+					_env = symbol.getEnv();
+					symbol.setEmpty();
+				}
+			}
+		}
 		
 		Set<Rule> newRules = new LinkedHashSet<>();
 		grammar.getRules().forEach(r -> newRules.addAll(transform(r)));
