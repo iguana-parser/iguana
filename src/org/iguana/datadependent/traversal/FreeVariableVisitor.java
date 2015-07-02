@@ -103,14 +103,14 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		this.updates = updates;
 		this.nonterminal_updates = null;
 		this.nonterminal_returns = null;
-		this.nonterminal_local_returns = null;
+		this.nonterminal_bindings = null;
 		this.nonterminals = null;
 	}
 	
 	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_updates;
 	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns;
 	
-	private Map<Nonterminal, Set<java.lang.String>> nonterminal_local_returns;
+	private Map<Nonterminal, Set<java.lang.String>> nonterminal_bindings;
 	private Set<Nonterminal> nonterminals;
 	
 	public FreeVariableVisitor(Map<Nonterminal, Set<java.lang.String>> nonterminal_updates, Map<Nonterminal, Set<java.lang.String>> nonterminal_returns) {
@@ -118,17 +118,17 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		this.updates = null;
 		this.nonterminal_updates = nonterminal_updates;
 		this.nonterminal_returns = nonterminal_returns;
-		this.nonterminal_local_returns = new HashMap<>();
+		this.nonterminal_bindings = new HashMap<>();
 		this.nonterminals = new HashSet<>();
 	}
 	
 	public void init() {
 		this.nonterminals = new HashSet<>();
-		this.nonterminal_local_returns = new HashMap<>();
+		this.nonterminal_bindings = new HashMap<>();
 	}
 	
-	public Map<Nonterminal, Set<java.lang.String>> getLocalReturns() {
-		return nonterminal_local_returns;
+	public Map<Nonterminal, Set<java.lang.String>> getBindings() {
+		return nonterminal_bindings;
 	}
 	
 	@Override
@@ -169,12 +169,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 			for (Nonterminal nonterminal : nonterminals) {
 				if (nonterminal_updates.get(nonterminal).contains(name)) {
 					nonterminal_returns.get(nonterminal).add(name);
-					if (nonterminal_local_returns.containsKey(nonterminal))
-						nonterminal_local_returns.get(nonterminal).add(name);
+					if (nonterminal_bindings.containsKey(nonterminal))
+						nonterminal_bindings.get(nonterminal).add(name);
 					else {
 						Set<java.lang.String> names = new HashSet<>();
 						names.add(name);
-						nonterminal_local_returns.put(nonterminal, names);
+						nonterminal_bindings.put(nonterminal, names);
 					}
 						
 				}
