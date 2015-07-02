@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -59,14 +60,17 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	private final String variable;
 	
+	private final Set<String> state;
+	
 	public BodyGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
-			String label, String variable, Conditions conditions) {
+			String label, String variable, Set<String> state, Conditions conditions) {
 		super(id);
 		this.position = position;
 		this.nodeLookup = nodeLookup;
 		this.conditions = conditions;
 		this.label = label;
 		this.variable = variable;
+		this.state = state;
 		this.intermediateNodes = new HashMap<>();
 	}
 	
@@ -161,6 +165,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
 		if (label != null)
 			env = env.declare(label, sppfNode);
+		
+		// TODO: State variables;
 		
 		if (variable != null)
 			env = env.declare(variable, ((NonterminalNode) sppfNode).getValue());

@@ -46,8 +46,8 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	private final SemanticAction action;
 
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, 
-            			  String label, String variable, Conditions conditions, SemanticAction action) {
-		super(id, position, nodeLookup, label, variable, conditions);
+            			  String label, String variable, Set<String> state, Conditions conditions, SemanticAction action) {
+		super(id, position, nodeLookup, label, variable, state, conditions);
 		this.nonterminal = nonterminal;
 		this.action = action;
 	}
