@@ -27,6 +27,8 @@
 
 package org.iguana.datadependent.traversal;
 
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
@@ -89,11 +91,36 @@ import org.iguana.traversal.ISymbolVisitor;
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
 	
 	private final Set<java.lang.String> freeVariables;
+	private final Set<java.lang.String> updates;
 	
 	public FreeVariableVisitor(Set<java.lang.String> freeVariables) {
-		this.freeVariables = freeVariables;
+		this(freeVariables, null);
 	}
-
+	
+	public FreeVariableVisitor(Set<java.lang.String> freeVariables, Set<java.lang.String> updates) {
+		this.freeVariables = freeVariables;
+		this.updates = updates;
+		this.nonterminal_updates = null;
+		this.nonterminal_returns = null;
+		this.nonterminals = null;
+	}
+	
+	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_updates;
+	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns;
+	private Set<Nonterminal> nonterminals;
+	
+	public FreeVariableVisitor(Map<Nonterminal, Set<java.lang.String>> nonterminal_updates, Map<Nonterminal, Set<java.lang.String>> nonterminal_returns) {
+		this.freeVariables = null;
+		this.updates = null;
+		this.nonterminal_updates = nonterminal_updates;
+		this.nonterminal_returns = nonterminal_returns;
+		this.nonterminals = new HashSet<>();
+	}
+	
+	void init() {
+		this.nonterminals = new HashSet<>();
+	}
+	
 	@Override
 	public Void visit(Boolean expression) {
 		return null;
@@ -119,7 +146,18 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		java.lang.String name = expression.getName();
 		
 		if (!expression.getEnv().contains(name)) {
-			freeVariables.add(name);
+			
+			if (freeVariables != null)
+				freeVariables.add(name);
+			
+			if (nonterminals != null) {
+				for (Nonterminal nonterminal : nonterminals) {
+					if (nonterminal_updates.containsKey(nonterminal) 
+							&& nonterminal_updates.get(nonterminal).contains(name))
+						nonterminal_returns.get(nonterminal).add(name);
+				}
+			}
+				
 		}
 		
 		return null;
@@ -144,6 +182,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		if (!expression.getEnv().contains(id)) {
 			freeVariables.add(id);
+			if (updates != null)
+				updates.add(id);
 		}
 		
 		exp.setEnv(expression.getEnv());
