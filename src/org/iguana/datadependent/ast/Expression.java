@@ -831,6 +831,10 @@ public abstract class Expression extends AbstractAST {
 			if (lhs instanceof java.lang.Float && rhs instanceof java.lang.Float) {
 				return ((java.lang.Float) lhs) == ((java.lang.Float) rhs);
 			}
+			
+			if (lhs instanceof java.lang.String && rhs instanceof java.lang.String) {
+				return ((java.lang.String) lhs).equals((java.lang.String) rhs);
+			}
 						
 			throw new UnexpectedTypeOfArgumentException(this);
 		}
