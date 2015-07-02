@@ -106,7 +106,7 @@ public class GrammarGraph implements Serializable {
 
 	private Input input;
 	
-	private final Nonterminal layout;
+	private final Symbol layout;
 	
 	private int id = 1;
 	

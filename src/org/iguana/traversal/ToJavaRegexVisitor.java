@@ -76,7 +76,7 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 
 	public String visit(Opt o) {
-		return o.getSymbol().accept(this) + "+?" + getConditions(o);
+		return o.getSymbol().accept(this) + "?+" + getConditions(o);
 	}
 	
 	public <E extends Symbol> String visit(Sequence<E> seq) {

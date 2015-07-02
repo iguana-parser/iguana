@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
-import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 
@@ -41,7 +40,7 @@ public class LayoutWeaver implements GrammarTransformation {
 
 	@Override
 	public Grammar transform(Grammar grammar) {
-		Nonterminal layout = grammar.getLayout();
+		Symbol layout = grammar.getLayout();
 		
 		Grammar.Builder builder = Grammar.builder().setLayout(layout);
 		
@@ -90,7 +89,7 @@ public class LayoutWeaver implements GrammarTransformation {
 		return builder.build();
 	}
 
-	private void addLayout(Nonterminal layout, Rule rule, Rule.Builder ruleBuilder, Symbol s) {
+	private void addLayout(Symbol layout, Rule rule, Rule.Builder ruleBuilder, Symbol s) {
 		switch (rule.getLayoutStrategy()) {
 			
 			case NO_LAYOUT:
