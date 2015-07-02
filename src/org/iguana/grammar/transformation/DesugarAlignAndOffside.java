@@ -137,7 +137,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		private final Set<String> offsided;
 		
 		private Rule rule;
-		private Nonterminal layout;
+		private Symbol layout;
 		
 		private boolean isOffsided;
 		
@@ -151,7 +151,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			this.doAlign = doAlign;
 		}
 		
-		public Rule transform(Rule rule, Nonterminal layout) {
+		public Rule transform(Rule rule, Symbol layout) {
 			this.rule = rule;
 			this.layout = layout;
 			this.isOffsided = false;
@@ -589,7 +589,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		}
 		
 		@SuppressWarnings("unused")
-		private Nonterminal getLayout() {
+		private Symbol getLayout() {
 			switch(rule.getLayoutStrategy()) {
 				case NO_LAYOUT:
 					throw new RuntimeException("Align should not be part of lexicals.");

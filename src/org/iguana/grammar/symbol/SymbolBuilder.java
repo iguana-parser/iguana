@@ -62,6 +62,11 @@ public abstract class SymbolBuilder<T extends Symbol> {
 		return this;
 	}
 	
+	public SymbolBuilder<T> setName(String name) {
+		this.name = name;
+		return this;
+	}
+	
 	public SymbolBuilder<T> addPreCondition(Condition condition) {
 		preConditions.add(condition);
 		return this;

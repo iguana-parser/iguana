@@ -76,7 +76,7 @@ public class Grammar implements ConstructorCode, Serializable {
 	
 	private final List<ExceptPattern> exceptPatterns;
 	
-	private final Nonterminal layout;
+	private final Symbol layout;
 	
 	private final List<Rule> rules;
 		
@@ -137,7 +137,7 @@ public class Grammar implements ConstructorCode, Serializable {
 						     .collect(Collectors.toSet());		
 	}
 	
-	public Nonterminal getLayout() {
+	public Symbol getLayout() {
 		return layout;
 	}
 	
@@ -200,7 +200,7 @@ public class Grammar implements ConstructorCode, Serializable {
 		private final List<PrecedencePattern> precedencePatterns = new ArrayList<>();
 		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
 		private List<Rule> rules;
-		private Nonterminal layout;
+		private Symbol layout;
 		
 		public Grammar build() {
 			rules = definitions.values().stream().flatMap(l -> l.stream()).collect(Collectors.toList());
@@ -234,7 +234,7 @@ public class Grammar implements ConstructorCode, Serializable {
 			return this;
 		}
 		
-		public Builder setLayout(Nonterminal layout) {
+		public Builder setLayout(Symbol layout) {
 			this.layout = layout;
 			return this;
 		}
