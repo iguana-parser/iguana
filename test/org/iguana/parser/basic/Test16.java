@@ -119,7 +119,7 @@ public class Test16 extends AbstractParserTest {
 				.setIntermediateNodesCount(8)
 				.setPackedNodesCount(13)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(null, statistics);
+		return new ParseSuccess(null, statistics, getInput());
 	}
 	
 }

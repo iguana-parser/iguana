@@ -29,16 +29,16 @@ package org.iguana.parser;
 
 import org.iguana.util.Input;
 
-public interface ParseResult {
+public abstract class AbstractParseResult implements ParseResult {
+
+	protected final Input input;
 	
-	public boolean isParseError();
-	
-	public boolean isParseSuccess();
-	
-	public ParseError asParseError();
-	
-	public ParseSuccess asParseSuccess();
-	
-	public Input getInput();
-	
+	public AbstractParseResult(Input input) {
+		this.input = input;
+	}
+
+	@Override
+	public Input getInput() {
+		return input;
+	}
 }

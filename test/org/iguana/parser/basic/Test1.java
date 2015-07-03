@@ -116,7 +116,7 @@ public class Test1 extends AbstractParserTest {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(graph), statistics);
+		return new ParseSuccess(expectedSPPF(graph), statistics, getInput());
 	}
 	
 	public static NonterminalNode expectedSPPF(GrammarGraph graph) {

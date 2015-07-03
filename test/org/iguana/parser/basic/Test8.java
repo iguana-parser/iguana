@@ -96,7 +96,7 @@ public class Test8 extends AbstractParserTest {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
+	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
 	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult2
 	    	}).collect(Collectors.toList()));
 		return parameters;
@@ -156,7 +156,7 @@ public class Test8 extends AbstractParserTest {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF1(registry), statistics);
+		return new ParseSuccess(expectedSPPF1(registry), statistics, getInput1());
 	}
 	
 	private static ParseSuccess getParseResult2(GrammarGraph registry) {
@@ -169,7 +169,7 @@ public class Test8 extends AbstractParserTest {
 				.setIntermediateNodesCount(4)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF2(registry), statistics);
+		return new ParseSuccess(expectedSPPF2(registry), statistics, getInput2());
 	}
 	
 	private static NonterminalNode expectedSPPF1(GrammarGraph registry) {

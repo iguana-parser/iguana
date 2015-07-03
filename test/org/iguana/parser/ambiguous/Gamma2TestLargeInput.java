@@ -105,7 +105,7 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 							   .setIntermediateNodesCount(1225)
 							   .setPackedNodesCount(61300) 
 							   .setAmbiguousNodesCount(2352) 
-							   .build()));
+							   .build(), getInput(50)));
 		
 		// 100
 		results.add((GrammarGraph registry) -> new ParseSuccess(null, 
@@ -118,7 +118,7 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 							   .setIntermediateNodesCount(4950)
 							   .setPackedNodesCount(495100) 
 							   .setAmbiguousNodesCount(9702) 
-							   .build()));
+							   .build(), getInput(50)));
 
 		// 150
 //		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 

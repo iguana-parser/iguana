@@ -31,7 +31,9 @@ import static org.iguana.util.BenchmarkUtil.*;
 import static java.util.stream.Stream.*;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -45,7 +47,6 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
-import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 
@@ -75,11 +76,11 @@ public class IguanaRunner {
 		this.showInputURI = builder.showInputURI;
 	}
 	
-	public void run() {
+	public List<ParseResult> run() {
 
 		final GrammarGraph grammarGraph = grammar.toGrammarGraph(Input.empty(), config);
 		
-		System.out.println(BenchmarkUtil.header());
+		List<ParseResult> results = new ArrayList<>();
 
 		Iterator<Input> it = inputs.iterator();
 		
@@ -100,25 +101,21 @@ public class IguanaRunner {
 			if (showInputURI) 
 				System.out.println(input.getURI());
 			
-			for (int i = 0; i < runCount; i++) {
-				
-				ParseResult result;
+			for (int i = 0; i < runCount; i++) {				
 				try {
-					result = run(parser, grammarGraph, input, start);
+					ParseResult result = run(parser, grammarGraph, input, start);
+					results.add(result);
 //					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("Time out");
 					continue;
 				}
-				
-				if (result.isParseSuccess()) {
-					System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));
-				} else {
-					System.out.println("Parse error " + result.asParseError());
-				}
 			}
-			
+		}
+		
+		return results;
+
 //			ParseResult result;
 //            try {
 //                result = run(parser, grammarGraph, input, start);
@@ -142,8 +139,6 @@ public class IguanaRunner {
 //            	System.out.println("Time out");
 //            }
             
-		}
-		
 	}
 	
 	private ParseResult run(GLLParser parser, GrammarGraph grammarGraph, Input input, Nonterminal start) throws Exception {

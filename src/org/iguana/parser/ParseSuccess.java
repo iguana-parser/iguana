@@ -28,14 +28,16 @@
 package org.iguana.parser;
 
 import org.iguana.sppf.NonterminalNode;
+import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
 
-public class ParseSuccess implements ParseResult {
+public class ParseSuccess extends AbstractParseResult {
 
-	private NonterminalNode sppfNode;
-	private ParseStatistics parseStatistics;
+	private final NonterminalNode sppfNode;
+	private final ParseStatistics parseStatistics;
 
-	public ParseSuccess(NonterminalNode sppfNode, ParseStatistics parseStatistics) {
+	public ParseSuccess(NonterminalNode sppfNode, ParseStatistics parseStatistics, Input input) {
+		super(input);
 		this.sppfNode = sppfNode;
 		this.parseStatistics = parseStatistics;
 	}
@@ -89,5 +91,4 @@ public class ParseSuccess implements ParseResult {
 	public String toString() {
 		return sppfNode + "\n" + parseStatistics;
 	}
-	
 }

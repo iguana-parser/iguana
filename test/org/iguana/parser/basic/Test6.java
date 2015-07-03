@@ -127,7 +127,7 @@ public class Test6 extends AbstractParserTest {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(registry), statistics);
+		return new ParseSuccess(expectedSPPF(registry), statistics, getInput());
 	}
 	
 	@Test

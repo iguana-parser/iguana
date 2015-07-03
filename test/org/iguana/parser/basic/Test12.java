@@ -150,7 +150,7 @@ public class Test12 extends AbstractParserTest {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(4).build();
-		return new ParseSuccess(expectedSPPF1(registry), statistics);
+		return new ParseSuccess(expectedSPPF1(registry), statistics, getInput1());
 	}
 	
 	private static ParseSuccess getParseResult2(GrammarGraph registry) {
@@ -163,7 +163,7 @@ public class Test12 extends AbstractParserTest {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF2(registry), statistics);
+		return new ParseSuccess(expectedSPPF2(registry), statistics, getInput2());
 	}
 	
 	private static ParseSuccess getParseResult3(GrammarGraph registry) {
@@ -176,7 +176,7 @@ public class Test12 extends AbstractParserTest {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(4).build();
-		return new ParseSuccess(expectedSPPF1(registry), statistics);
+		return new ParseSuccess(expectedSPPF1(registry), statistics, getInput2());
 	}
 	
 	private static ParseSuccess getParseResult4(GrammarGraph registry) {
@@ -189,7 +189,7 @@ public class Test12 extends AbstractParserTest {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF2(registry), statistics);
+		return new ParseSuccess(expectedSPPF2(registry), statistics, getInput2());
 	}
 	
 	private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
