@@ -100,17 +100,18 @@ public class EBNFToBNF implements GrammarTransformation {
 	
 	public Rule rewrite(Rule rule, Set<Rule> newRules) {
 
-		if (rule.getBody() == null) {
+		if (rule.getBody() == null)
 			return rule;
-		}
 		
 		Rule.Builder builder = new Rule.Builder(rule.getHead());
 		
-		EBNFVisitor visitor = new EBNFVisitor(newRules, rule.getLayout(), rule.getLayoutStrategy());
+		Set<String> state = new HashSet<>();
+		new FreeVariableVisitor(state).compute(rule);
 		
-		for(Symbol s : rule.getBody()) {
-			builder.addSymbol(s.accept(visitor));
-		}
+		EBNFVisitor ebnf_visitor = new EBNFVisitor(state, newRules, rule.getLayout(), rule.getLayoutStrategy());
+		
+		for(Symbol s : rule.getBody())
+			builder.addSymbol(s.accept(ebnf_visitor));
 		
 		return builder.setLayout(rule.getLayout())
 				.setLayoutStrategy(rule.getLayoutStrategy())
@@ -124,7 +125,7 @@ public class EBNFToBNF implements GrammarTransformation {
 	}
 	
 	public static List<Symbol> rewrite(List<Symbol> list, Nonterminal layout) {
-		EBNFVisitor visitor = new EBNFVisitor(new HashSet<>(), layout, LayoutStrategy.INHERITED);
+		EBNFVisitor visitor = new EBNFVisitor(new HashSet<>(), new HashSet<>(), layout, LayoutStrategy.INHERITED);
 		return list.stream().map(s -> s.accept(visitor)).collect(Collectors.toList());
 	}
 
@@ -142,11 +143,13 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 	private static class EBNFVisitor implements ISymbolVisitor<Symbol> {
 		
+		private final Set<String> state;
 		private final Set<Rule> addedRules;
 		private final Nonterminal layout;
 		private final LayoutStrategy strategy;
 		
-		public EBNFVisitor(Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
+		public EBNFVisitor(Set<String> state, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
+			this.state = state;
 			this.addedRules = addedRules;
 			this.layout = layout;
 			this.strategy = strategy;
