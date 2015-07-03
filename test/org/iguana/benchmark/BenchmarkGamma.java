@@ -28,7 +28,6 @@ public class BenchmarkGamma {
 				       .setWarmupCount(3)
 				       .setTimeout(60)
 				       .setRunGCInBetween(true)
-				       .setShowInputURI(false)
 				       .build()
 				       .run();
 	}
