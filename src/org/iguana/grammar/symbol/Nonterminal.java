@@ -48,6 +48,8 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final String variable;
 	
+	private final Set<String> state;
+	
 	private final String[] parameters; // Only head
 	
 	private final Expression[] arguments;
@@ -63,6 +65,7 @@ public class Nonterminal extends AbstractSymbol {
 		this.ebnfList = builder.ebnfList;
 		this.index = builder.index;
 		this.variable = builder.variable;
+		this.state = builder.state;
 		this.parameters = builder.parameters;
 		this.arguments = builder.arguments;
 		this.excepts = builder.excepts;
@@ -88,6 +91,10 @@ public class Nonterminal extends AbstractSymbol {
 		return variable;
 	}
 	
+	public Set<String> getState() {
+		return state;
+	}
+	
 	public String[] getParameters() {
 		return parameters;
 	}
@@ -102,7 +109,7 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return (variable != null? variable + " = " : "")
+		return (variable != null? variable + (state != null? ":" + GeneratorUtil.listToString(state, ":"): "") + " = " : "")
 				+ (getPreConditions().isEmpty()? "" : GeneratorUtil.listToString(getPreConditions(), ","))
 			    + (label != null? label + ":" : "")
 			    + name + (index > 0 ? index : "")
@@ -169,6 +176,8 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private String variable;
 		
+		private Set<String> state;
+		
 		private String[] parameters; // Only head
 		
 		private Expression[] arguments;
@@ -179,6 +188,8 @@ public class Nonterminal extends AbstractSymbol {
 			super(nonterminal);
 			this.ebnfList = nonterminal.ebnfList;
 			this.index = nonterminal.index;
+			this.variable = nonterminal.variable;
+			this.state = nonterminal.state;
 			this.parameters = nonterminal.parameters;
 			this.arguments = nonterminal.arguments;
 			this.excepts = nonterminal.excepts;
@@ -195,6 +206,11 @@ public class Nonterminal extends AbstractSymbol {
 		
 		public Builder setVariable(String variable) {
 			this.variable = variable;
+			return this;
+		}
+		
+		public Builder setState(Set<String> state) {
+			this.state = state;
 			return this;
 		}
 		

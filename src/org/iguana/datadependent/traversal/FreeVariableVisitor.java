@@ -27,6 +27,9 @@
 
 package org.iguana.datadependent.traversal;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
@@ -89,11 +92,45 @@ import org.iguana.traversal.ISymbolVisitor;
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
 	
 	private final Set<java.lang.String> freeVariables;
+	private final Set<java.lang.String> updates;
 	
 	public FreeVariableVisitor(Set<java.lang.String> freeVariables) {
-		this.freeVariables = freeVariables;
+		this(freeVariables, null);
 	}
-
+	
+	public FreeVariableVisitor(Set<java.lang.String> freeVariables, Set<java.lang.String> updates) {
+		this.freeVariables = freeVariables;
+		this.updates = updates;
+		this.nonterminal_updates = null;
+		this.nonterminal_returns = null;
+		this.nonterminal_bindings = null;
+		this.nonterminals = null;
+	}
+	
+	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_updates;
+	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns;
+	
+	private Map<Nonterminal, Set<java.lang.String>> nonterminal_bindings;
+	private Set<Nonterminal> nonterminals;
+	
+	public FreeVariableVisitor(Map<Nonterminal, Set<java.lang.String>> nonterminal_updates, Map<Nonterminal, Set<java.lang.String>> nonterminal_returns) {
+		this.freeVariables = null;
+		this.updates = null;
+		this.nonterminal_updates = nonterminal_updates;
+		this.nonterminal_returns = nonterminal_returns;
+		this.nonterminal_bindings = new HashMap<>();
+		this.nonterminals = new HashSet<>();
+	}
+	
+	public void init() {
+		this.nonterminals = new HashSet<>();
+		this.nonterminal_bindings = new HashMap<>();
+	}
+	
+	public Map<Nonterminal, Set<java.lang.String>> getBindings() {
+		return nonterminal_bindings;
+	}
+	
 	@Override
 	public Void visit(Boolean expression) {
 		return null;
@@ -118,11 +155,31 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	public Void visit(Name expression) {
 		java.lang.String name = expression.getName();
 		
-		if (!expression.getEnv().contains(name)) {
-			freeVariables.add(name);
-		}
+		if (!expression.getEnv().contains(name))
+			use(name);
 		
 		return null;
+	}
+	
+	private void use(java.lang.String name) {
+		if (freeVariables != null)
+			freeVariables.add(name);
+		
+		if (nonterminals != null) {
+			for (Nonterminal nonterminal : nonterminals) {
+				if (nonterminal_updates.get(nonterminal).contains(name)) {
+					nonterminal_returns.get(nonterminal).add(name);
+					if (nonterminal_bindings.containsKey(nonterminal))
+						nonterminal_bindings.get(nonterminal).add(name);
+					else {
+						Set<java.lang.String> names = new HashSet<>();
+						names.add(name);
+						nonterminal_bindings.put(nonterminal, names);
+					}
+						
+				}
+			}
+		}
 	}
 
 	@Override
@@ -143,13 +200,19 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		org.iguana.datadependent.ast.Expression exp = expression.getExpression();
 		
 		if (!expression.getEnv().contains(id)) {
-			freeVariables.add(id);
+			use(id);
+			update(id);
 		}
 		
 		exp.setEnv(expression.getEnv());
 		exp.accept(this);
 		
 		return null;
+	}
+	
+	private void update(java.lang.String name) {
+		if (updates != null)
+			updates.add(name);
 	}
 	
 	@Override
@@ -332,9 +395,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.LeftExtent.format, expression.getLabel());
 		
-		if (!expression.getEnv().contains(name)) {
-			freeVariables.add(name);
-		}
+		if (!expression.getEnv().contains(name)) 
+			use(name);
+		
 		return null;
 	}
 
@@ -343,9 +406,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		java.lang.String label = expression.getLabel();
 		
-		if (!expression.getEnv().contains(label)) {
-			freeVariables.add(label);
-		}
+		if (!expression.getEnv().contains(label))
+			use(label);
+		
 		return null;
 	}
 	
@@ -354,9 +417,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Yield.format, expression.getLabel());
 		
-		if (!expression.getEnv().contains(name)) {
-			freeVariables.add(name);
-		}
+		if (!expression.getEnv().contains(name))
+			use(name);
+		
 		return null;
 	}
 	
@@ -365,9 +428,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Val.format, expression.getLabel());
 		
-		if (!expression.getEnv().contains(name)) {
-			freeVariables.add(name);
-		}
+		if (!expression.getEnv().contains(name))
+			use(name);
+		
 		return null;
 	}
 	
@@ -559,9 +622,11 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		
-		if (symbol.getVariable() != null) {
+		if (symbol.getVariable() != null)
 			env = env.__insert(symbol.getVariable());
-		}
+		
+		if (nonterminals != null && nonterminal_updates.containsKey(symbol) )
+			nonterminals.add(symbol);
 		
 		symbol.setEnv(env);
 		
@@ -603,7 +668,13 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	
 	@Override
 	public Void visit(Return symbol) {
-		// TODO: support for return
+		org.iguana.datadependent.ast.Expression expression = symbol.getExpression();
+		
+		expression.setEnv(symbol.getEnv());
+		expression.accept(this);
+		
+		symbol.setEnv(expression.getEnv());
+		
 		return null;
 	}
 
