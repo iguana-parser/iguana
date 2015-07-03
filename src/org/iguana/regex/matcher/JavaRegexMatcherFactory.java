@@ -34,7 +34,6 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.RegularExpression;
-import org.iguana.regex.Sequence;
 
 public class JavaRegexMatcherFactory implements MatcherFactory {
 
@@ -53,9 +52,6 @@ public class JavaRegexMatcherFactory implements MatcherFactory {
     private Matcher createBackwardsMatcher(RegularExpression regex) {
         if (regex instanceof Terminal)
             return getBackwardsMatcher(((Terminal) regex).getRegularExpression());
-        
-        if (regex instanceof Sequence<?>)
-            return DFAMatcherFactory.sequenceBackwardsMatcher((Sequence<?>) regex);
         
         if (regex instanceof Character)
             return DFAMatcherFactory.characterBackwardsMatcher((Character) regex);

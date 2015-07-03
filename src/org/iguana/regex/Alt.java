@@ -182,19 +182,6 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		return symbols;
 	}
 	
-	@Override
-	public boolean isSingleChar() {
-		if (!allRegularExpression || symbols.size() == 0)
-			return false;
-		
-		return symbols.size() == 1 && ((RegularExpression)symbols.get(0)).isSingleChar();
-	}
-	
-	@Override
-	public Character asSingleChar() {
-		return ((RegularExpression) symbols.get(0)).asSingleChar();
-	}
-
 	public static Alt<CharacterRange> not(Character...chars) {
 		List<CharacterRange> ranges = Arrays.stream(chars).map(c -> CharacterRange.in(c.getValue(), c.getValue())).collect(Collectors.toList());
 		return not(ranges);
