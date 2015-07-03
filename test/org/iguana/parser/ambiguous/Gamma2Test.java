@@ -148,7 +148,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(12)
 				.setAmbiguousNodesCount(2).build();
-		return new ParseSuccess(expectedSPPF1(graph), statistics);
+		return new ParseSuccess(expectedSPPF1(graph), statistics, getInput1());
 	}
 	
 	private static ParseSuccess getOriginalParseResult1(GrammarGraph graph) {
@@ -161,7 +161,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(12)
 				.setAmbiguousNodesCount(2).build();
-		return new ParseSuccess(expectedSPPF1(graph), statistics);
+		return new ParseSuccess(expectedSPPF1(graph), statistics, getInput1());
 	}
 	
 	private static ParseSuccess getNewParseResult2(GrammarGraph graph) {
@@ -174,7 +174,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(6)
 				.setPackedNodesCount(28)
 				.setAmbiguousNodesCount(6).build();
-		return new ParseSuccess(expectedSPPF2(graph), statistics);
+		return new ParseSuccess(expectedSPPF2(graph), statistics, getInput2());
 	}
 	
 	private static ParseSuccess getOriginalParseResult2(GrammarGraph graph) {
@@ -187,7 +187,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(6)
 				.setPackedNodesCount(28)
 				.setAmbiguousNodesCount(6).build();
-		return new ParseSuccess(expectedSPPF2(graph), statistics);
+		return new ParseSuccess(expectedSPPF2(graph), statistics, getInput2());
 	}
 	
 	private static ParseSuccess getNewParseResult3(GrammarGraph graph) {
@@ -200,7 +200,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(10)
 				.setPackedNodesCount(55)
 				.setAmbiguousNodesCount(12).build();
-		return new ParseSuccess(expectedSPPF3(graph), statistics);
+		return new ParseSuccess(expectedSPPF3(graph), statistics, getInput3());
 	}
 	
 	private static ParseSuccess getOriginalParseResult3(GrammarGraph graph) {
@@ -213,7 +213,7 @@ public class Gamma2Test extends AbstractParserTest {
 				.setIntermediateNodesCount(10)
 				.setPackedNodesCount(55)
 				.setAmbiguousNodesCount(12).build();
-		return new ParseSuccess(expectedSPPF3(graph), statistics);
+		return new ParseSuccess(expectedSPPF3(graph), statistics, getInput3());
 	}
 	
 	private static NonterminalNode expectedSPPF1(GrammarGraph graph) {

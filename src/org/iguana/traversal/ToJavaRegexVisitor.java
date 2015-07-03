@@ -68,15 +68,15 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public String visit(Star s) {
-		return s.getSymbol().accept(this) + "*+" + getConditions(s);
+		return s.getSymbol().accept(this) + "*" + getConditions(s);
 	}
 	
 	public String visit(Plus p) {
-		return p.getSymbol().accept(this) + "++" + getConditions(p);
+		return p.getSymbol().accept(this) + "+" + getConditions(p);
 	}
 
 	public String visit(Opt o) {
-		return o.getSymbol().accept(this) + "?+" + getConditions(o);
+		return o.getSymbol().accept(this) + "?" + getConditions(o);
 	}
 	
 	public <E extends Symbol> String visit(Sequence<E> seq) {
@@ -93,7 +93,8 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	
 	private String getCondition(Condition condition) {
 		switch (condition.getType()) {
-			case NOT_FOLLOW: return "(?!" + getRegularExpression(condition).accept(this) + ")";
+			case NOT_FOLLOW: 
+				return "(?!" + getRegularExpression(condition).accept(this) + ")";
 				
 			default: return "";
 		}

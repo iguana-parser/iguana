@@ -34,6 +34,8 @@ import java.util.stream.StreamSupport;
 
 public class GeneratorUtil {
 	
+	public static final String NewLine = System.getProperty("line.separator"); 
+	
 	public static String escape(String s) {
 		if (s == null) return "";
 		return s.replace("\\", "\\\\").replace("\"", "\\\"");

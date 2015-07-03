@@ -43,16 +43,15 @@ import org.iguana.util.Input;
  * @author Ali Afroozeh
  *
  */
-public class ParseError implements ParseResult {
+public class ParseError extends AbstractParseResult {
 
 	private final GSSNode currentNode;
 	private final GrammarSlot slot;
 	private final int inputIndex;
-	private Input input;
 	
 	public ParseError(GrammarSlot slot, Input input, int inputIndex, GSSNode curerntNode) {
+		super(input);
 		this.slot = slot;
-		this.input = input;
 		this.inputIndex = inputIndex;
 		this.currentNode = curerntNode;
 	}

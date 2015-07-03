@@ -160,7 +160,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		long endSystemTime = BenchmarkUtil.getSystemTime();
 		
 		if (root == null) {
-			parseResult = new ParseError(errorSlot, this.input, errorIndex, errorGSSNode);
+			parseResult = new ParseError(errorSlot, input, errorIndex, errorGSSNode);
 			log.info("Parse error:\n %s", parseResult);
 		} else {
 			ParseStatistics parseStatistics = ParseStatistics.builder()
@@ -177,7 +177,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 					.setPackedNodesCount(sppfLookup.getPackedNodesCount()) 
 					.setAmbiguousNodesCount(sppfLookup.getAmbiguousNodesCount()).build();
 
-			parseResult = new ParseSuccess(root, parseStatistics);
+			parseResult = new ParseSuccess(root, parseStatistics, input);
 			log.info("Parsing finished successfully.");			
 			log.info(parseStatistics.toString());
 		}
