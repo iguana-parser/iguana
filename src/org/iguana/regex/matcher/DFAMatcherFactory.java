@@ -27,13 +27,10 @@
 
 package org.iguana.regex.matcher;
 
-import java.util.List;
-
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.RegularExpression;
-import org.iguana.regex.Sequence;
 
 public class DFAMatcherFactory implements MatcherFactory {
 
@@ -42,9 +39,6 @@ public class DFAMatcherFactory implements MatcherFactory {
         if (regex instanceof Terminal)
             return getMatcher(((Terminal) regex).getRegularExpression());
         
-        if (regex instanceof Sequence<?>)
-            return sequenceMatcher((Sequence<?>) regex);
-            
         if (regex instanceof Character)
             return characterMatcher((Character) regex);
         
@@ -59,9 +53,6 @@ public class DFAMatcherFactory implements MatcherFactory {
         if (regex instanceof Terminal)
             return getBackwardsMatcher(((Terminal) regex).getRegularExpression());
         
-        if (regex instanceof Sequence<?>)
-            return sequenceBackwardsMatcher((Sequence<?>) regex);
-        
         if (regex instanceof Character)
             return characterBackwardsMatcher((Character) regex);
         
@@ -69,38 +60,6 @@ public class DFAMatcherFactory implements MatcherFactory {
             return characterRangeBackwardsMatcher((CharacterRange) regex);
         
         return createBackwardsMatcher(regex);
-    }
-
-    public static Matcher sequenceMatcher(Sequence<?> seq) {
-        if (seq.isCharSequence()) {
-            List<Character> characters = seq.asCharacters();
-            return (input, i) -> {
-                for (Character c : characters) {
-                    if (c.getValue() != input.charAt(i++)) {
-                        return -1;
-                    }
-                }
-                return characters.size();
-            };
-        }
-        return createMatcher(seq);
-    }
-    
-    public static Matcher sequenceBackwardsMatcher(Sequence<?> seq) {
-        if (seq.isCharSequence()) {
-            List<Character> characters = seq.asCharacters();
-            return (input, i) -> {
-                if (i == 0) return -1;
-                --i;
-                for (Character c : characters) {
-                    if (c.getValue() != input.charAt(i--)) {
-                        return -1;
-                    }
-                }
-                return characters.size();
-            };
-        }
-        return createBackwardsMatcher(seq);
     }
     
     public static Matcher characterMatcher(Character c) {

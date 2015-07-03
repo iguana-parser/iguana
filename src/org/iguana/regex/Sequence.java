@@ -27,7 +27,7 @@
 
 package org.iguana.regex;
 
-import static org.iguana.util.generator.GeneratorUtil.listToString;
+import static org.iguana.util.generator.GeneratorUtil.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,8 +37,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.iguana.grammar.symbol.AbstractRegularExpression;
 import org.iguana.grammar.symbol.Character;
@@ -165,10 +163,6 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		return symbols.iterator();
 	}
 	
-	public Stream<T> stream() {
-		return StreamSupport.stream(symbols.spliterator(), false);
-	}
-	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
 		if (!allRegularExpression)
@@ -204,25 +198,9 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 		return symbols;
 	}
 	
-	public boolean isCharSequence() {
-		return symbols.stream().allMatch(s -> (s instanceof Character));
-	}
-	
-	public List<Character> asCharacters() {
-		return symbols.stream().map(s -> ((RegularExpression)s).asSingleChar()).collect(Collectors.toList());
-	}
-	
-	@Override
-	public boolean isTerminal() {
-		return isCharSequence();
-	}
-	
 	@Override
 	public String toString() {
-		
-		if (isCharSequence()) 
-			return "\"" + asCharacters().stream().map(c -> c.getName()).collect(Collectors.joining()) + "\"";
-		
+				
 		String body = "(" + GeneratorUtil.listToString(symbols, " ") + ")";
 		
 		String s = label == null ? body : label + ":" + body;

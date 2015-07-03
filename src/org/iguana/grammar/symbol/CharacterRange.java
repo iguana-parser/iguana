@@ -136,16 +136,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	}
 	
 	@Override
-	public boolean isSingleChar() {
-		return start == end;
-	}
-	
-	@Override
-	public Character asSingleChar() {
-		return Character.from(start);
-	}
-	
-	@Override
 	public boolean isTerminal() {
 		return true;
 	}

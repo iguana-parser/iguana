@@ -151,16 +151,6 @@ public class Character extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public boolean isSingleChar() {
-		return true;
-	}
-	
-	@Override
-	public Character asSingleChar() {
-		return this;
-	}
-	
-	@Override
 	public boolean isTerminal() {
 		return true;
 	}

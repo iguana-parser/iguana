@@ -52,7 +52,7 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public String visit(CharacterRange r) {
-		return getRange(r) + getConditions(r);
+		return "[" + getRange(r) + "]" + getConditions(r);
 	}
 	
 	public String visit(EOF eof) {
@@ -84,9 +84,25 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public <E extends Symbol> String visit(Alt<E> alt) {
+		if (isCharClass(alt))
+			return "[" + alt.getSymbols().stream().map(s -> getCharClassElement(s)).collect(Collectors.joining()) + "]";
+		
 		return "(?:" +  alt.getSymbols().stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")" + getConditions(alt);
 	}
 	
+	private String getCharClassElement(Symbol s) {
+		if (s instanceof Character) return getChar(((Character) s).getValue());
+		if (s instanceof CharacterRange) return getRange((CharacterRange) s);
+		
+		throw new RuntimeException(s + " is not a character or character class.");
+	}
+	
+	private boolean isCharClass(Symbol s) {
+		if (s instanceof Character) return true;
+		if (s instanceof CharacterRange) return true;
+		return false;
+	}
+
 	private String getConditions(RegularExpression regex) {
 		return regex.getPostConditions().stream().map(c -> getCondition(c)).collect(Collectors.joining());
 	}
@@ -115,7 +131,7 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	private String getRange(CharacterRange r) {
-		return String.format("[%s-%s]", getChar(r.getStart()), getChar(r.getEnd()));
+		return getChar(r.getStart()) + "-" + getChar(r.getEnd());
 	}
 	
 	private String escape(String s) {

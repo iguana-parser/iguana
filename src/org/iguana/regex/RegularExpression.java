@@ -31,7 +31,6 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
 
-import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.automaton.Automaton;
@@ -49,15 +48,7 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 	 * The set of characters (ranges) that cannot follow this regular expressions. 
 	 */
 	public Set<CharacterRange> getNotFollowSet();
-	
-	default boolean isSingleChar() {
-		return false;
-	}
-
-	default Character asSingleChar() {
-		return Character.from(0);
-	}
-	
+		
 	default int length() {
 		return 1;
 	}
