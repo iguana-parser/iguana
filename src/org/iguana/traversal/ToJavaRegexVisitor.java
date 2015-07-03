@@ -84,7 +84,7 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public <E extends Symbol> String visit(Alt<E> alt) {
-		if (isCharClass(alt))
+		if (alt.getSymbols().stream().allMatch(s -> s instanceof Character || s instanceof CharacterRange))
 			return "[" + alt.getSymbols().stream().map(s -> getCharClassElement(s)).collect(Collectors.joining()) + "]";
 		
 		return "(?:" +  alt.getSymbols().stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")" + getConditions(alt);
@@ -97,12 +97,6 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 		throw new RuntimeException(s + " is not a character or character class.");
 	}
 	
-	private boolean isCharClass(Symbol s) {
-		if (s instanceof Character) return true;
-		if (s instanceof CharacterRange) return true;
-		return false;
-	}
-
 	private String getConditions(RegularExpression regex) {
 		return regex.getPostConditions().stream().map(c -> getCondition(c)).collect(Collectors.joining());
 	}
