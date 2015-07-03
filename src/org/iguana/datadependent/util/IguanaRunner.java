@@ -27,8 +27,8 @@
 
 package org.iguana.datadependent.util;
 
-import static org.iguana.util.BenchmarkUtil.*;
 import static java.util.stream.Stream.*;
+import static org.iguana.util.BenchmarkUtil.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +62,6 @@ public class IguanaRunner {
 	private final Nonterminal start;
 	private final boolean runGCInBetween;
 	private final int timeout;
-	private final boolean showInputURI;
 
 	public IguanaRunner(Builder builder) {
 		this.inputs = builder.inputs;
@@ -73,7 +72,6 @@ public class IguanaRunner {
 		this.runCount = builder.runCount;
 		this.runGCInBetween = builder.runGCInBetween;
 		this.timeout = builder.timeout;
-		this.showInputURI = builder.showInputURI;
 	}
 	
 	public List<ParseResult> run() {
@@ -87,24 +85,27 @@ public class IguanaRunner {
 		while (it.hasNext()) {
 			
 			Input input = it.next();
+			System.out.println(input.getURI());
 			
 			GLLParser parser = ParserFactory.getParser(config, input, grammar);
-			
+
+			System.out.print("Warming up:");
 			for (int i = 0; i < warmupCount; i++) {
 				try {
 					run(parser, grammarGraph, input, start);
+					System.out.print(" " + (i + 1));
 				} catch (Exception e) {
 					continue;
 				}
 			}
-			
-			if (showInputURI) 
-				System.out.println(input.getURI());
-			
-			for (int i = 0; i < runCount; i++) {				
+			System.out.println();
+						
+			System.out.print("Running:");
+			for (int i = 0; i < runCount; i++) {			
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
 					results.add(result);
+					System.out.print(" " + (i + 1));
 //					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -112,6 +113,7 @@ public class IguanaRunner {
 					continue;
 				}
 			}
+			System.out.println();
 		}
 		
 		return results;
@@ -174,7 +176,7 @@ public class IguanaRunner {
 		private int runCount = 1;
 		private boolean runGCInBetween = false;
 		private int timeout = 0;
-		private boolean showInputURI = true;
+		private int limit = Integer.MAX_VALUE;
 		
 		public Builder(Grammar grammar, Nonterminal start) {
 			this.grammar = grammar;
@@ -220,18 +222,19 @@ public class IguanaRunner {
 			this.runGCInBetween = runGCInBetween;
 			return this;
 		}
-		
-		public Builder setShowInputURI(boolean showInputURI) {
-			this.showInputURI = showInputURI;
-			return this;
-		}
 				
 		public Builder setTimeout(int timeout) {
 			this.timeout = timeout;
 			return this;
 		}
 		
+		public Builder setLimit(int limit) {
+			this.limit = limit;
+			return this;
+		}
+		
 		public IguanaRunner build() {
+			inputs = inputs.limit(limit);
 			return new IguanaRunner(this);
 		}
 	}
